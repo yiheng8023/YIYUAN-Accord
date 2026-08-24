@@ -27,16 +27,48 @@ Then read, in order:
 - Canonical identity: YIYUAN Accord / `yiyuan-accord` /
   `yiyuan_accord` / `https://github.com/yiheng8023/YIYUAN-Accord`.
 - Active line: v2.0. `program.status` is `ready`; the sole increment, work item
-  and four ordered work stages are retained as completed.
-- All R1–R4 and Q1–Q4 assessments are `verified` by the live verifier. The
-  fresh current-projection release sample contains six passes and one retained
-  GT-07 failure; its exact exclusions are public in `docs/releases/v2.0.md`.
-  The earlier GT-08 failure remains immutable historical counterevidence; the
-  current rerun passed after resolving current official host guidance.
+  and four ordered repository stages are `completed`. Recover the exact clean
+  local candidate from live Git rather than this navigation file. The stale
+  host Goal was cleared, then the final canonical objective was created
+  directly as the active host Goal without a token budget and compared
+  character-for-character.
+- R1–R4 and Q1–Q4 are `verified` from the deterministic lanes and the replayed
+  structured source bundle. The fresh sample has six passes and one retained
+  GT-07 failure: bounded source-to-destination continuity and reconciliation
+  passed, but configured host hooks created hidden `.remember` residue and the
+  initial source inventory missed it. The exact claim exclusion is
+  `GT-07:cleanup`; recovery does not convert the task into a pass. Historical
+  results remain counterevidence only.
+- The publishable source bundle now contains independently comparable material
+  messages, effects, exact human authority where applicable, official-source
+  locators, cleanup records, redactions and evidence boundaries. Its independent
+  comparison with the original host/session records still belongs to the exact
+  local verification gate and cannot be self-attested by repository data.
+- Treat the cleared stale Goal as possible process debt, not proven universal
+  causation. Replay from the earliest evidence-supported dependency boundary;
+  a later correction may reveal either debt or an earlier misjudgment, while
+  unrelated accepted facts remain stable.
+- Repeated multi-host identity-scanner corrections triggered the declared
+  premise/interface/deletion review. The reduced replacement uses the Git index
+  as its finite declaration source, one shared Python 3.10 AST grammar for
+  bounded identifier/literal/static-concatenation checks on supported Python
+  3.10-3.14 hosts, and exact NFKC/casefold lexical boundaries over strictly
+  decoded non-Python whole text without host escape interpretation. All owned
+  reads are bounded regular-file reads; unavailable or indeterminate surfaces
+  block conformance, while hidden checkout flags block clean-candidate
+  readiness. Only digest-bound Markdown research inputs under
+  `research/reviews/` are inert exceptions. Current checks must be recomputed
+  after every authority or evidence edit; working-tree results do not become
+  clean-candidate evidence until the candidate is committed and replayed.
+- For the Codex projection, resolve current official Agent architecture, App Server
+  and host documentation as high-weight dynamic evidence before relying on a
+  remembered host fact. Reuse official observation surfaces when useful, but do
+  not add their runtime or orchestration implementation to the portable core.
 - Determine the first incomplete gate from live Git, the exact candidate's
   local checks, hosted results, task-time human authority and public release
   state. Never infer a live gate from this navigation file. A ready repository
-  state grants no hosted, human or release authority.
+  state grants no hosted, human or release authority. No release gate may begin
+  while the repository stages above remain active or pending.
 - The immutable v1.2 revision is
   `6d857517455b6f3f86a4c9cbd79fc618febbbe00`. Its observations remain in Git
   history and must not be renamed or replayed as current evidence.
@@ -51,8 +83,9 @@ Then read, in order:
 
 ## Strict v2.0 route
 
-1. Complete the no-alias identity migration across authority, code, commands,
-   projection packages, docs, tests, repository URLs and public metadata.
+1. Complete the no-alias identity migration across authority, code, projection
+   packages, docs, tests, repository URLs and public metadata under the strict
+   tracked-surface static boundary; do not promote it into a runtime claim.
 2. Make the generic verifier compute deterministic conformance directly; run
    both host checks, full regressions, residue and identity scans, and diff
    checks. Repository observations cannot self-attest these results.
@@ -81,10 +114,13 @@ Then read, in order:
    zero-asset policy; clean task resources, verify zero residue and replay local
    checks before finite closeout.
 
-Do not start a later gate early. Failure returns to the smallest affected prior
-gate and invalidates later candidate-specific evidence. Reports, plans, tests,
-commits, pushes, transitions, hosted passes and authorization are supporting
-facts, not substitutes for the next effect or for completion.
+Do not start a later gate early. A failure, material correction, later rule or
+revision returns to the earliest affected dependency boundary. Prior passes
+remain historical facts, but their current-candidate validity and every
+downstream candidate-specific result are superseded until that boundary and all
+later gates are replayed; unrelated accepted truth remains stable. Reports,
+plans, tests, commits, pushes, transitions, hosted passes and authorization are
+supporting facts, not substitutes for the next effect or for completion.
 
 ## Continuity
 

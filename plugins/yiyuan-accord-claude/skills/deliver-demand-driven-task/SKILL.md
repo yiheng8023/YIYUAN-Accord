@@ -27,8 +27,12 @@ one-step native route, answer directly and do not mention this Skill.
 4. **K4 Continuous Reconciliation** — at material effects and phase changes,
    compare goal, authority, expected and observed state, evidence, resources and
    carrier fitness. On divergence, stop further effects, recover or roll back,
-   correct minimally and re-verify. A repeated same-purpose repair requires
-   premise review and a deletion or replacement attempt.
+   correct minimally and re-verify. A material correction, finding or later
+   rule traces to the earliest affected dependency boundary: the prior result
+   remains history but not current proof, so replay that boundary and every
+   downstream check while preserving unrelated accepted truth. A repeated
+   same-purpose repair requires premise review and a deletion or replacement
+   attempt.
 5. **K5 Close the Loop** — verify at the consequence level claimed, separate
    static checks from behavior, field value and release, disclose limits,
    release task-scoped exposure, and remove only task-owned residue.

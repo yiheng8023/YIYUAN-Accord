@@ -151,7 +151,7 @@
     "material side effects are attributable and are stopped, recovered or rolled back where the effect permits",
     "repository-stored assertions can request but cannot grant accountable human release authority; task-bound authorization stays external and binds the exact clean candidate",
     "exact-candidate hosted verification is task-time external evidence bound to the same clean revision; a repository observation or earlier hosted run cannot self-attest the final candidate",
-    "absence checks and host admission remain repository-scoped, package-complete and fail closed on undeclared installation, runtime or execution surfaces",
+    "static identity absence is limited to stage-zero regular files declared by the Git index: paths and strictly decoded non-Python whole text use exact NFKC/casefold lexical token boundaries without host escape interpretation, while .py, .pyi and .pyw identifiers and literal or bounded static-concatenation values use the shared Python 3.10 AST grammar across supported Python 3.10-3.14 hosts; unavailable index state, unmerged or non-regular entries, and unreadable, undecodable, oversized, out-of-grammar or over-budget surfaces block conformance, hidden checkout flags block clean-candidate readiness, digest-bound Markdown research inputs under research/reviews are inert exceptions, and no check claims absence from ignored or untracked files, Python comments, runtime-built or external dynamic content",
     "completion is supported by external criteria and observed effects rather than model self-assessment or artifact shape",
     "serious or repeated failure changes an evaluation, route, instruction or mechanism, while anecdotal failure alone cannot cause permanent accretion"
   ],
@@ -221,7 +221,7 @@
     ],
     "repairRule": "A second same-purpose repair generation triggers abstraction review and a deletion or replacement attempt before another mechanism is admitted.",
     "nonInterferenceRule": "When the host can already complete the task safely, reliably and with acceptable burden, YIYUAN Accord adds no question, instruction, tool, approval, state, topology, validation or persistent resource.",
-    "feedbackRule": "Material user correction, observed failure, host change, evidence conflict or phase boundary revalidates the affected plan, acceptance mapping and projection; unrelated accepted truth remains stable.",
+    "feedbackRule": "A material user correction, observed failure, host change, evidence conflict, later rule or phase boundary traces to the earliest affected dependency boundary; prior passes remain historical facts but are superseded as current-candidate evidence, the affected plan, acceptance mapping, projection and every downstream gate are replayed, and unrelated accepted truth remains stable.",
     "retirementRule": "A YIYUAN Accord mechanism is simplified, disabled or removed when its residual benefit is no longer demonstrated."
   },
   "authority": {

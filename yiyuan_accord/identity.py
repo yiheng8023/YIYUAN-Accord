@@ -1,11 +1,13 @@
 import ast
 import io
 import json
+import os
 from pathlib import Path
 import re
-import shlex
+import stat
 import subprocess
 import tokenize
+from unicodedata import normalize
 from urllib.parse import urlsplit
 
 
@@ -161,145 +163,207 @@ def operating_model_errors(constitution):
     return errors
 
 
-_FLAGS = "BbdEiIOPqRsSuvx"
-_COMMAND = re.compile(fr"^-[{_FLAGS}]*([mc])(.*)$")
-_YAML_C = re.compile(
-    fr"(?m)^( *)- *-[{_FLAGS}]*c *(?:#.*)?\r?\n"
-    r"(?: *(?:#.*)?\r?\n)*"
-    r"\1- *[|>][+-]? *(?:#.*)?\r?\n"
-    r"((?:\1 +[^\r\n]*(?:\r?\n|$))+)",
-)
+_SCAN_LIMIT = 1_000_000
+_LITERAL_PART_LIMIT = 4_096
+_PYTHON_AST_NODE_LIMIT = 100_000
 
 
-def _logical_shell_text(text):
-    logical, quote, comment, index = [], None, False, 0
-    while index < len(text):
-        char = text[index]
-        if char == "\\" and quote != "'":
-            if text.startswith("\\\r\n", index):
-                index += 3
-                continue
-            if text.startswith("\\\n", index):
-                index += 2
-                continue
-        if comment:
-            logical.append(char)
-            comment = char not in "\r\n"
-            index += 1
-            continue
-        if char == "#" and quote is None:
-            comment = True
-        if char == "\\" and quote != "'" and index + 1 < len(text):
-            logical.extend(text[index:index + 2])
-            index += 2
-            continue
-        if char in "'\"" and quote in (None, char):
-            quote = char if quote is None else None
-        logical.append(char)
-        index += 1
-    return "".join(logical)
+class _IdentityScanUnknown(ValueError):
+    pass
 
 
-def _lex(text):
-    lexer = shlex.shlex(_logical_shell_text(text), posix=True,
-                        punctuation_chars="[]{}(),=:")
-    lexer.wordchars += "&*!"
-    return list(lexer)
+def _folded_visible_text(value):
+    return normalize("NFKC", value).casefold()
 
 
-def _command_ref(text, module):
-    name = re.compile(fr"{re.escape(module)}(?=$|[.:;&|<>])")
-    if any(_python_ref(item[2], module) for item in _YAML_C.finditer(text)):
-        return True
-    try:
-        items = _lex(text)
-    except ValueError:
-        items = []
-        for line in text.splitlines():
-            try:
-                items.extend(_lex(line))
-            except ValueError:
-                items.extend(re.findall(r"\S+", line.partition("#")[0]))
-    items = [item for item in items
-             if re.search(r"\w", item) and item[:1] not in "&*!"]
-    for index, (item, following) in enumerate(zip(items, items[1:] + [""])):
-        if option := _COMMAND.fullmatch(item):
-            kind, attached = option.groups()
-            payload = attached or following
-            target = index if attached else index + 1
-            if kind == "m":
-                match = name.match(payload) or any(
-                    name.match(value) for value in items[target + 1:target + 3])
-            else:
-                match = _python_ref(payload, module)
-            if match:
-                return True
-            if kind == "c" and payload:
-                items[target] = ""
-    return any(
-        re.search(r"\s", item) and _command_ref(item, module) for item in items
+def _identity_word(value):
+    return re.compile(
+        rf"(?<!\w){re.escape(normalize('NFKC', value).casefold())}(?!\w)"
     )
 
 
-def _python_ref(source, module):
-    if len(source) > 1_000_000:
-        return True
-    token = re.compile(fr"(?<!\w){re.escape(module)}(?!\w)")
-    tokens, parts, size = [], [], 0
+def _identity_token(value):
+    folded = normalize("NFKC", value).casefold()
+    boundary = r"[\w-]" if re.fullmatch(
+        r"[a-z0-9]+(?:-[a-z0-9]+)+", folded
+    ) else r"\w"
+    return re.compile(
+        rf"(?<!{boundary}){re.escape(folded)}(?!{boundary})"
+    )
+
+
+def _python_ref(source, module, exact_tokens=()):
+    if len(source) > _SCAN_LIMIT:
+        raise _IdentityScanUnknown("Python identity surface exceeds scan budget")
+    target = _identity_word(module)
+    exact_matchers = tuple(_identity_token(token) for token in exact_tokens)
 
     def mentions(value):
-        return token.search(value) or _command_ref(value, module)
+        folded = normalize("NFKC", value).casefold()
+        return bool(
+            target.search(folded)
+            or any(matcher.search(folded) for matcher in exact_matchers)
+        )
 
-    def decoded(value):
+    def text_value(value):
+        if isinstance(value, str):
+            return value
         if isinstance(value, bytes):
-            try:
-                return value.decode()
-            except UnicodeDecodeError:
-                return None
-        return value if isinstance(value, str) else None
+            return value.decode("utf-8", errors="ignore")
+        return None
 
     try:
-        for item in tokenize.generate_tokens(io.StringIO(source).readline):
-            if item.type == tokenize.COMMENT:
-                continue
-            tokens.append(item)
-            if item.type == tokenize.NAME and item.string == module:
-                return True
-            elif item.type == tokenize.STRING:
-                try:
-                    value = decoded(ast.literal_eval(item.string))
-                except (SyntaxError, TypeError, ValueError):
-                    value = item.string
-                if value and mentions(value):
+        tree = ast.parse(source, feature_version=(3, 10))
+    except (MemoryError, RecursionError, SyntaxError, TypeError, ValueError) as exc:
+        raise _IdentityScanUnknown(
+            "Python source is outside the shared 3.10 grammar"
+        ) from exc
+
+    pending, nodes = [tree], []
+    while pending:
+        if len(nodes) >= _PYTHON_AST_NODE_LIMIT:
+            raise _IdentityScanUnknown("Python AST exceeds scan budget")
+        current = pending.pop()
+        nodes.append(current)
+        pending.extend(ast.iter_child_nodes(current))
+
+        for _field, value in ast.iter_fields(current):
+            candidates = value if isinstance(value, (list, tuple)) else (value,)
+            for candidate in candidates:
+                visible = text_value(candidate)
+                if visible is not None and mentions(visible):
                     return True
-                if value is not None:
-                    parts.append(value)
-                    size += len(value)
-                    if len(parts) > 4_096 or size > 1_000_000:
-                        return True
-            elif item.type == getattr(tokenize, "FSTRING_MIDDLE", -1):
-                if mentions(item.string):
-                    return True
-            elif not (item.type in (tokenize.INDENT, tokenize.DEDENT, tokenize.NL)
-                      or item.type == tokenize.OP and item.string in "+()"):
-                if parts and mentions("".join(parts)):
-                    return True
-                parts, size = [], 0
-    except IndentationError:
-        normalized = re.sub(r"(?m)^[ \t]+", "", source)
-        return _python_ref(normalized, module) if normalized != source else False
-    except (tokenize.TokenError, UnicodeError):
-        return bool(parts and mentions("".join(parts))
-                    or mentions(tokenize.untokenize(tokens)))
-    return bool(parts and mentions("".join(parts)))
+
+    static = {}
+    for current in reversed(nodes):
+        if isinstance(current, ast.Constant) and isinstance(
+            current.value, (str, bytes)
+        ):
+            static[id(current)] = (type(current.value), 1, len(current.value))
+            continue
+        if not (
+            isinstance(current, ast.BinOp) and isinstance(current.op, ast.Add)
+        ):
+            continue
+        left = static.get(id(current.left))
+        right = static.get(id(current.right))
+        if left is None or right is None or left[0] is not right[0]:
+            continue
+        parts = left[1] + right[1]
+        length = left[2] + right[2]
+        if parts > _LITERAL_PART_LIMIT or length > _SCAN_LIMIT:
+            raise _IdentityScanUnknown(
+                "Python literal expression exceeds scan budget"
+            )
+        static[id(current)] = (left[0], parts, length)
+
+    nested_static_adds = {
+        id(child)
+        for current in nodes
+        if id(current) in static
+        and isinstance(current, ast.BinOp)
+        and isinstance(current.op, ast.Add)
+        for child in (current.left, current.right)
+        if id(child) in static
+        and isinstance(child, ast.BinOp)
+        and isinstance(child.op, ast.Add)
+    }
+    for current in nodes:
+        if not (
+            id(current) in static
+            and isinstance(current, ast.BinOp)
+            and isinstance(current.op, ast.Add)
+            and id(current) not in nested_static_adds
+        ):
+            continue
+        leaves, pending = [], [current]
+        while pending:
+            item = pending.pop()
+            if isinstance(item, ast.BinOp) and id(item) in static:
+                pending.extend((item.right, item.left))
+            else:
+                leaves.append(item.value)
+        value = ("" if static[id(current)][0] is str else b"").join(leaves)
+        visible = text_value(value)
+        if visible is not None and mentions(visible):
+            return True
+    return False
 
 
-def active_tree_errors(root, locators, historical_revision):
+def _repository_text(source):
+    if source.startswith((b"\xff\xfe\x00\x00", b"\x00\x00\xfe\xff")):
+        return source.decode("utf-32")
+    if source.startswith((b"\xff\xfe", b"\xfe\xff")):
+        return source.decode("utf-16")
+    if source.startswith(b"\xef\xbb\xbf"):
+        return source.decode("utf-8-sig")
+    if b"\0" in source:
+        raise UnicodeError("unclassified NUL-bearing content")
+    return source.decode("utf-8")
+
+
+def _python_source_text(source):
+    encoding, _ = tokenize.detect_encoding(io.BytesIO(source).readline)
+    return source.decode(encoding)
+
+
+def _bounded_regular_bytes(path):
+    try:
+        before = path.lstat()
+    except OSError:
+        return None, "unreadable"
+    if not stat.S_ISREG(before.st_mode):
+        return None, "not-regular"
+    if before.st_size > _SCAN_LIMIT:
+        return None, "oversized"
+
+    descriptor = None
+    flags = os.O_RDONLY | getattr(os, "O_BINARY", 0)
+    flags |= getattr(os, "O_NONBLOCK", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+        opened = os.fstat(descriptor)
+        if not stat.S_ISREG(opened.st_mode):
+            return None, "not-regular"
+        if opened.st_size > _SCAN_LIMIT:
+            return None, "oversized"
+        chunks, remaining = [], _SCAN_LIMIT + 1
+        while remaining:
+            chunk = os.read(descriptor, min(65_536, remaining))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            remaining -= len(chunk)
+        source = b"".join(chunks)
+    except (MemoryError, OSError):
+        return None, "unreadable"
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+    if len(source) > _SCAN_LIMIT:
+        return None, "oversized"
+    return source, None
+
+
+def active_tree_errors(
+    root,
+    locators,
+    historical_revision,
+    historical_reference_locators=(),
+):
     locators = list(locators)
+    references = {
+        locator for locator in historical_reference_locators
+        if isinstance(locator, str)
+        and not Path(locator).is_absolute()
+        and Path(locator).parts[:2] == ("research", "reviews")
+        and ".." not in Path(locator).parts
+        and Path(locator).suffix.casefold() == ".md"
+    }
+    symlinks = {locator for locator in locators if (root / locator).is_symlink()}
     errors = [
         f"symbolic link is not admitted in active tree: {locator}"
-        for locator in locators
-        if (root / locator).is_symlink()
+        for locator in symlinks
     ]
     try:
         if not isinstance(historical_revision, str) or not re.fullmatch(
@@ -320,37 +384,65 @@ def active_tree_errors(root, locators, historical_revision):
         if not all(_nonempty_string(value) for value in (product_id, title, module)):
             raise ValueError
     except (OSError, ValueError, json.JSONDecodeError, subprocess.SubprocessError):
-        return errors + ["historical identity boundary is unavailable"]
-    exact_tokens = tuple(value.lower().encode() for value in (product_id, title))
-    module_re = re.escape(module.lower().encode())
-    context = re.compile(
-        rb"(?<![\w.-])" + module_re
-        + rb"(?:(?:\.[a-z_]\w*)*:[a-z_]\w*|[\\/]|\.pyi?(?![\w]))|(?<![\w])"
-        + rb"[\"']?(?:pythonmodule|python_module|module|entry|entrypoint|entry_point)"
-        rb"[\"']?\s*[:=]\s*[\"']?"
-        + module_re
-        + rb"(?:\.[a-z_]\w*)*(?::[a-z_]\w*)?[\"']?(?![\w.-])"
+        return sorted(errors + ["historical identity boundary is unavailable"])
+
+    exact_tokens = tuple(
+        normalize("NFKC", value).casefold() for value in (product_id, title)
     )
+    exact_matchers = tuple(_identity_token(token) for token in exact_tokens)
+    module_token = _identity_word(module)
     for locator in locators:
-        try:
-            raw = locator.encode() + b"\0" + (root / locator).read_bytes()
-        except OSError:
+        if locator in symlinks:
             continue
-        content = raw.lower()
-        source = raw.split(b"\0", 1)[1]
-        text = source.decode("utf-8", errors="ignore")
-        is_python = Path(locator).suffix.lower() in {".py", ".pyi"}
-        surface = locator.lower().encode() if is_python else content
-        if (
-            any(token in content for token in exact_tokens)
-            or context.search(re.sub(rb"(?m)#.*$", b"", surface))
-            or not is_python and _command_ref(
-                text, module
+        locator_text = _folded_visible_text(locator)
+        locator_has_identity = (
+            any(matcher.search(locator_text) for matcher in exact_matchers)
+            or module_token.search(locator_text)
+        )
+        source, read_state = _bounded_regular_bytes(root / locator)
+        if read_state == "unreadable":
+            errors.append(f"active tree file is unreadable: {locator}")
+            continue
+        if read_state == "not-regular":
+            errors.append(f"active tree path is not a regular file: {locator}")
+            continue
+        if read_state == "oversized":
+            errors.append(f"active tree identity scan is indeterminate: {locator}")
+            continue
+
+        suffix = Path(locator).suffix.casefold()
+        is_python = suffix in {".py", ".pyi", ".pyw"}
+        try:
+            text = (
+                _python_source_text(source)
+                if is_python
+                else _repository_text(source)
             )
-            or is_python and _python_ref(
-                text, module
-            )
-        ):
+        except (LookupError, SyntaxError, UnicodeError):
+            errors.append(f"active tree file is undecodable: {locator}")
+            continue
+
+        if locator_has_identity:
+            errors.append(f"superseded identity remains in active tree: {locator}")
+            continue
+        if locator in references:
+            continue
+
+        folded_text = _folded_visible_text(text)
+        try:
+            if is_python:
+                identity_present = _python_ref(
+                    text, module, exact_tokens
+                )
+            else:
+                identity_present = (
+                    any(matcher.search(folded_text) for matcher in exact_matchers)
+                    or bool(module_token.search(folded_text))
+                )
+        except _IdentityScanUnknown:
+            errors.append(f"active tree identity scan is indeterminate: {locator}")
+            continue
+        if identity_present:
             errors.append(f"superseded identity remains in active tree: {locator}")
     return sorted(errors)
 
@@ -367,7 +459,10 @@ def module_layout_errors(root, module, executing, test_markers, minimum_test_cou
     if not test_file.is_file():
         return errors + ["product control tests are missing"]
     try:
-        tree = ast.parse(test_file.read_text(encoding="utf-8"))
+        source, read_state = _bounded_regular_bytes(test_file)
+        if read_state is not None:
+            raise OSError(read_state)
+        tree = ast.parse(source.decode("utf-8"))
     except (OSError, UnicodeError, SyntaxError):
         tree = ast.Module(body=[], type_ignores=[])
     markers = test_markers or []

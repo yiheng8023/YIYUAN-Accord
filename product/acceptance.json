@@ -5,12 +5,12 @@
   "release": "v2.0",
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "1dae292d861f0f2073de8dde53a98f15d3e65cce65a49c042d8c61752e0d495d",
+  "canonicalGoalObjectiveSha256": "cb2871ce75ea6fc81747813aaa68f97c4aabf9e57d86e9aec11e466b43a57355",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": ["deterministic-conformance", "representative-behavior"],
     "continuingAfterRelease": ["field-effect", "cross-host-or-longitudinal"],
-    "rule": "A finite release closes only when every claimed R and Q criterion satisfies every applicable lane, the active goal carrier directly completes the exact local verification-and-review gate and then verifies the unchanged pushed candidate on every declared hosted system, a separate named human authorizes that exact candidate and claim ceiling, and the carrier directly verifies the tagged public release and final cleanup. Deterministic conformance is recomputed live by the canonical verifier and is never accepted from a repository observation; repository data cannot grant human authority or self-attest review, hosted, publication or field facts. Failed representative tasks remain failed and narrow the applicable claim."
+    "rule": "A finite release closes only when every claimed R and Q criterion satisfies every applicable lane, the active goal carrier directly completes the exact local verification-and-review gate and then verifies the unchanged pushed candidate on every declared hosted system, a separate named human authorizes that exact candidate and claim ceiling, and the carrier directly verifies the tagged public release and final cleanup. A material correction, finding, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary and requires that boundary and every downstream gate to be replayed; the old result remains historical only and unrelated accepted truth remains stable. Deterministic conformance is recomputed live by the canonical verifier and is never accepted from a repository observation; repository data cannot grant human authority or self-attest review, hosted, publication or field facts. Failed representative tasks remain failed and narrow the applicable claim."
   },
   "representativeBehaviorPolicy": {
     "requiredTaskIdsForRelease": ["GT-01", "GT-02", "GT-03", "GT-04", "GT-05", "GT-07", "GT-08"],
@@ -27,7 +27,7 @@
       "name": "canonical collaboration reliability contract",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "L1", "L2", "L3", "L4", "L7"],
       "statement": "YIYUAN Accord exposes one Agent-neutral, portable human-Agent collaboration reliability contract and evaluation framework with a single canonical identity, a bounded current product scope and an explicit broader human-AI mission.",
-      "passRule": "A clean checkout validates the three semantic authority files, CONTEXT.md and one generic data-driven verifier; intent, capability, authority and evidence remain aligned with state, effect, continuity and lifecycle, and no active compatibility alias or superseded product identity remains.",
+      "passRule": "A clean checkout validates the three semantic authority files, CONTEXT.md and one generic data-driven verifier; intent, capability, authority and evidence remain aligned with state, effect, continuity and lifecycle. The Git index is available and contains only merged stage-zero regular release files; their paths and strictly decoded non-Python whole text are free of exact NFKC/casefold lexical superseded identity tokens, and declared .py, .pyi and .pyw identifiers, literal values and bounded static concatenations are free of those tokens under one shared Python 3.10 AST grammar across supported Python 3.10-3.14 hosts. Indeterminate surfaces block conformance and hidden checkout flags block clean-candidate readiness. Digest-bound Markdown research inputs under research/reviews are inert exceptions, no compatibility alias is declared, and absence from ignored or untracked files, Python comments, runtime-built or external dynamic content is not claimed.",
       "requiredEvidenceClasses": ["deterministic-conformance"],
       "assessment": "verified",
       "evidence": []
@@ -55,50 +55,50 @@
       "evidence": [
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt01.json",
-          "sha256": "d370f38a6514b5d7cc022e4d1b57d733c115ca72b9f4a324457f6e911bf5c04f",
+          "sha256": "d8140219175e925538bc7103f3490d2889f526b336f73faeae73ef9449a55b83",
           "claim": "Passed only for this exact host, projection, prompt and no-op starting state.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt02.json",
-          "sha256": "59fc7c46ccb747f715a8390ae7f6f95da9b346028918856caaffcb8838ecab84",
-          "claim": "Passed only for the supplied disposable dirty repository and named defect; correct behavior is not attributed to Accord selection.",
+          "sha256": "f57767ff56f5a86cc391aecc6bd2967d93e4403b8bec94678fbce835d9d20073",
+          "claim": "Passed only for the supplied disposable dirty repository, named defect and exact Codex host; the invalid read-only preflight carrier is excluded from the decision and retained as setup counterevidence.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt03.json",
-          "sha256": "e72da25255b8274afcdccc4a711bf8edd7d1670ab51c00369a9db71a0e5fba3b",
-          "claim": "Passed only for the exact disposable candidate, fixture grant and local tag boundary; two no-effect host-permission retries are retained.",
+          "sha256": "495abbabf8fdd27729a82516a286929c6c5f41ea390023fa153be5f76304c1e5",
+          "claim": "Passed only for candidate 4f69c869aebe7897d001d75e742f1a22e28e68fd, its exact fixture grant and local lightweight tag boundary; the failed first post-tag verification command is retained and the corrected replay passed.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt04.json",
-          "sha256": "5991f626328017ca5f99219a1bf8e38dcfd66f23fa79447dc18eaf0a342f0666",
+          "sha256": "644bdfb20311c30e934fd92fb1ed76fcdc55ed2ac546bafd73e19616b7e497fa",
           "claim": "Passed only for the supplied report and disposable authority fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt05.json",
-          "sha256": "b529248407d9788cba8533fee8cf071d9bada94cada3c1af319ea8b6f7540727",
+          "sha256": "1322a1de10a9e4b0dc9e83f2baab634a739bd93ff344ee7de1b5ceb7e05c2144",
           "claim": "Passed only for the supplied disposable same-purpose validator fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-claude-gt07.json",
-          "sha256": "76070ef35f3b6ca377e2d382886193925f4ddd73fb5f14f32ec434b029da4bc0",
-          "claim": "Failed for this exact Claude Code and DeepSeek projection run; the four missing continuity behaviors remain excluded from release claims.",
+          "sha256": "804926f6096c01a8b722b26c891749b45bb59b0a669ab21bcd93e62688540e1e",
+          "claim": "Failed cleanup on this exact Claude Code 2.1.241 and DeepSeek route: bounded source-to-destination continuity and reconciliation passed, but configured host hooks created hidden .remember residue and the initial source inventory missed it; cleanup behavior is excluded.",
           "bindsProjection": "claude-code",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt08.json",
-          "sha256": "d5361393b5a34eebe193a33e4af06d30962943733d95a0d6ef34ad0990900083",
-          "claim": "Passed only for this exact current Codex host-admission run; instruction-Skill availability was observed, while comprehensive behavior and universal host support remain unverified.",
+          "sha256": "900212bd34ebae628493263fa9a5a7a102ebae4e8a18fd3b3339cfa8f8c08192",
+          "claim": "Passed only for this exact Codex 0.149.1 host-admission run; project-local instruction-Skill exposure was observed, while independent tool, Runtime, Hook, MCP, App, comprehensive behavior and universal host support remain unverified.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         }
@@ -127,8 +127,8 @@
       "evidence": [
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt03.json",
-          "sha256": "e72da25255b8274afcdccc4a711bf8edd7d1670ab51c00369a9db71a0e5fba3b",
-          "claim": "Passed only for the exact disposable candidate, fixture grant and local tag boundary; two no-effect host-permission retries are retained.",
+          "sha256": "495abbabf8fdd27729a82516a286929c6c5f41ea390023fa153be5f76304c1e5",
+          "claim": "Passed only for candidate 4f69c869aebe7897d001d75e742f1a22e28e68fd, its exact fixture grant and local lightweight tag boundary; the failed first post-tag verification command is retained and the corrected replay passed.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q1"
         }
@@ -149,15 +149,15 @@
       "evidence": [
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt04.json",
-          "sha256": "5991f626328017ca5f99219a1bf8e38dcfd66f23fa79447dc18eaf0a342f0666",
+          "sha256": "644bdfb20311c30e934fd92fb1ed76fcdc55ed2ac546bafd73e19616b7e497fa",
           "claim": "Passed only for the supplied report and disposable authority fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt08.json",
-          "sha256": "d5361393b5a34eebe193a33e4af06d30962943733d95a0d6ef34ad0990900083",
-          "claim": "Passed only for this exact current Codex host-admission run; instruction-Skill availability was observed, while comprehensive behavior and universal host support remain unverified.",
+          "sha256": "900212bd34ebae628493263fa9a5a7a102ebae4e8a18fd3b3339cfa8f8c08192",
+          "claim": "Passed only for this exact Codex 0.149.1 host-admission run; project-local instruction-Skill exposure was observed, while independent tool, Runtime, Hook, MCP, App, comprehensive behavior and universal host support remain unverified.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
         }
@@ -178,14 +178,14 @@
       "evidence": [
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt01.json",
-          "sha256": "d370f38a6514b5d7cc022e4d1b57d733c115ca72b9f4a324457f6e911bf5c04f",
+          "sha256": "d8140219175e925538bc7103f3490d2889f526b336f73faeae73ef9449a55b83",
           "claim": "Passed only for this exact host, projection, prompt and no-op starting state.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt05.json",
-          "sha256": "b529248407d9788cba8533fee8cf071d9bada94cada3c1af319ea8b6f7540727",
+          "sha256": "1322a1de10a9e4b0dc9e83f2baab634a739bd93ff344ee7de1b5ceb7e05c2144",
           "claim": "Passed only for the supplied disposable same-purpose validator fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q3"
@@ -204,22 +204,22 @@
       "evidence": [
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt02.json",
-          "sha256": "59fc7c46ccb747f715a8390ae7f6f95da9b346028918856caaffcb8838ecab84",
-          "claim": "Passed only for the supplied disposable dirty repository and named defect; correct behavior is not attributed to Accord selection.",
+          "sha256": "f57767ff56f5a86cc391aecc6bd2967d93e4403b8bec94678fbce835d9d20073",
+          "claim": "Passed only for the supplied disposable dirty repository, named defect and exact Codex host; the invalid read-only preflight carrier is excluded from the decision and retained as setup counterevidence.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt05.json",
-          "sha256": "b529248407d9788cba8533fee8cf071d9bada94cada3c1af319ea8b6f7540727",
+          "sha256": "1322a1de10a9e4b0dc9e83f2baab634a739bd93ff344ee7de1b5ceb7e05c2144",
           "claim": "Passed only for the supplied disposable same-purpose validator fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-claude-gt07.json",
-          "sha256": "76070ef35f3b6ca377e2d382886193925f4ddd73fb5f14f32ec434b029da4bc0",
-          "claim": "Failed for this exact Claude Code and DeepSeek projection run; the four missing continuity behaviors remain excluded from release claims.",
+          "sha256": "804926f6096c01a8b722b26c891749b45bb59b0a669ab21bcd93e62688540e1e",
+          "claim": "Failed cleanup on this exact Claude Code 2.1.241 and DeepSeek route: bounded source-to-destination continuity and reconciliation passed, but configured host hooks created hidden .remember residue and the initial source inventory missed it; cleanup behavior is excluded.",
           "bindsProjection": "claude-code",
           "supportsCriterion": "Q4"
         }
@@ -253,7 +253,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v2.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v2.0",
     "releaseNotes": "docs/releases/v2.0.md",
-    "releaseNotesSha256": "cf8245f67068cf1dff9cfac6f64eb30f19d98e6e4595d4f9b7632fe260ff8d8f",
+    "releaseNotesSha256": "99b20afd6b635d094ad9580bfcabe04f485660c70e8f78c511188a3789fd6782",
     "assetPolicy": "no-attached-assets",
     "rule": "Only after exact local review, exact hosted verification and named-human authorization may the active goal carrier create the lightweight v2.0 tag and public release. It then directly verifies the tag, release body and zero attached assets, removes task-created resources and replays local verification."
   },
@@ -275,11 +275,6 @@
       "production-deployment-safety",
       "every-golden-task-or-host-projection-passes"
     ],
-    "retainedBehaviorExclusions": [
-      "GT-07:required:prepare-and-verify-destination",
-      "GT-07:required:reconcile-before-source-release",
-      "GT-07:required:record-capacity-as-unknown",
-      "GT-07:required:use-a-conservative-task-bound-transition-rule"
-    ]
+    "retainedBehaviorExclusions": ["GT-07:cleanup"]
   }
 }

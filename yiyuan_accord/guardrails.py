@@ -5,7 +5,15 @@ import os
 import re
 import subprocess
 
-from .identity import _exact, _nonempty_string, _safe_https_locator, _string_list
+from .identity import (
+    _bounded_regular_bytes,
+    _exact,
+    _nonempty_string,
+    _safe_https_locator,
+    _string_list,
+)
+
+
 _AUTH_FIELDS = set((
     "state candidateRevision namedHuman authorizedAt claimCeilingAccepted "
     "publicationAuthorized releaseAuthorized"
@@ -34,6 +42,19 @@ GATE_SEQUENCE = (
 EXTERNAL_COMPLETION_OPERANDS = tuple(
     operand for _, operand in GATE_SEQUENCE if operand
 )
+
+
+def _owned_bytes(path):
+    raw, read_state = _bounded_regular_bytes(path)
+    if read_state is not None:
+        raise OSError(f"repository file is {read_state}")
+    return raw
+
+
+def _owned_text(path):
+    return _owned_bytes(path).decode("utf-8")
+
+
 AUTHORIZATION_FIELDS = _AUTH_FIELDS | {"mode"}
 MANIFEST_FIELDS = {
     "codex": set(
@@ -55,6 +76,8 @@ _PROJECTION_FIELDS = set((
     "id packageId packageVersion packageSha256 manifest contract skill metadataFiles "
     "maxSkillBytes requiredSkillMarkers forbiddenPaths"
 ).split())
+
+
 def repository_relative_path(root, locator):
     if not isinstance(locator, str) or not locator or "\\" in locator:
         return None
@@ -142,23 +165,36 @@ def clean_git_checkout(root):
             stderr=subprocess.DEVNULL,
             timeout=10,
         )
+        index_flags = subprocess.check_output(
+            ["git", "-C", str(root), "ls-files", "-v", "-z"],
+            stderr=subprocess.DEVNULL,
+            timeout=10,
+        )
     except (OSError, subprocess.SubprocessError, UnicodeError):
         return False
-    return not status
+    hidden_index_state = any(
+        record[:1] == b"S" or record[:1].islower()
+        for record in index_flags.split(b"\0")
+        if record
+    )
+    return not status and not hidden_index_state
 
 
 def package_sha256(root, locators):
     digest = sha256()
     for locator in sorted(locators):
+        path = repository_relative_path(root, locator)
+        if path is None or path.is_symlink() or not path.is_file():
+            raise OSError(f"package declared file is unsafe: {locator}")
         digest.update(locator.encode("utf-8"))
         digest.update(b"\0")
-        digest.update(sha256((root / locator).read_bytes()).digest())
+        digest.update(sha256(_owned_bytes(path)).digest())
     return digest.hexdigest()
 
 
 def codex_metadata_errors(path, skill_name):
     try:
-        text = path.read_text(encoding="utf-8")
+        text = _owned_text(path)
     except (OSError, UnicodeError) as exc:
         return [f"adapter codex metadata is unreadable: {exc}"]
     sections, current = {}, None
@@ -301,6 +337,17 @@ def validate_projection_package(
         for locator in (manifest_locator, contract_locator, skill_locator, *metadata_locators)
         if isinstance(locator, str)
     ]
+    unsafe = [
+        locator for locator in declared
+        if (path := repository_relative_path(root, locator)) is None
+        or path.is_symlink() or not path.is_file()
+    ]
+    if unsafe:
+        errors.extend(
+            f"{prefix} package declared file is unsafe: {locator}"
+            for locator in unsafe
+        )
+        return None, errors
     if isinstance(skill_locator, str):
         metadata_parent = Path(skill_locator).parent / "agents"
         for locator in metadata_locators:
@@ -407,7 +454,7 @@ def validate_host_projection(
         if isinstance(max_bytes, int) and skill_bytes > max_bytes:
             errors.append(f"{prefix} Skill exceeds budget: {skill_bytes} > {max_bytes}")
         try:
-            skill_text = skill_path.read_text(encoding="utf-8")
+            skill_text = _owned_text(skill_path)
         except (OSError, UnicodeError) as exc:
             errors.append(f"{prefix} Skill is unreadable: {exc}")
             skill_text = ""
@@ -452,7 +499,10 @@ def validate_host_projection(
     ):
         path = repository_relative_path(root, locator)
         if path is not None and path.is_file():
-            projection_identity[field] = sha256(path.read_bytes()).hexdigest()
+            try:
+                projection_identity[field] = sha256(_owned_bytes(path)).hexdigest()
+            except OSError:
+                errors.append(f"{prefix} {field} source is unavailable")
     if package_digest is not None:
         projection_identity["packageSha256"] = package_digest
     return {
@@ -635,7 +685,7 @@ def release_procedure_errors(root, procedure, criterion_ids, prompt, goal_digest
         return ["program.releaseProcedure.surfaceMarkers is invalid"]
     for locator, markers in surfaces.items():
         try:
-            raw = repository_relative_path(root, locator).read_text(encoding="utf-8")
+            raw = _owned_text(repository_relative_path(root, locator))
         except (AttributeError, OSError, UnicodeError):
             raw = ""
         text = " ".join(raw.split())
@@ -782,8 +832,9 @@ def external_release_contract_errors(root, acceptance):
     try:
         if notes is None or notes.is_symlink() or not notes.is_file():
             raise OSError("release notes are not an owned regular file")
-        text = notes.read_text(encoding="utf-8")
-        if sha256(notes.read_bytes()).hexdigest() != public.get("releaseNotesSha256"):
+        raw = _owned_bytes(notes)
+        text = raw.decode("utf-8")
+        if sha256(raw).hexdigest() != public.get("releaseNotesSha256"):
             errors.append("release notes digest does not match public release contract")
         if any(f"`{claim}`" not in text for claim in claims):
             errors.append("release notes do not expose the complete claim ceiling")

@@ -19,6 +19,7 @@ from .guardrails import (
     validate_host_projection,
 )
 from .identity import (
+    _bounded_regular_bytes,
     _nonempty_string,
     _string_list,
     active_tree_errors,
@@ -78,9 +79,11 @@ def _read_json(root, locator, errors):
     if path is None:
         return {}
     try:
-        raw = path.read_bytes()
-        if len(raw) > MAX_JSON_BYTES:
+        raw, read_state = _bounded_regular_bytes(path)
+        if read_state == "oversized":
             raise ValueError(f"JSON exceeds {MAX_JSON_BYTES} bytes")
+        if read_state is not None:
+            raise ValueError(f"JSON source is {read_state}")
         value = json.loads(
             raw.decode("utf-8"),
             object_pairs_hook=_unique_object,
@@ -94,8 +97,12 @@ def _read_json(root, locator, errors):
         return {}
 
 
-def _hash(path):
-    return sha256(path.read_bytes()).hexdigest()
+def _hash(path, errors, label):
+    raw, read_state = _bounded_regular_bytes(path)
+    if read_state is not None:
+        errors.append(f"{label} digest source is {read_state}")
+        return None
+    return sha256(raw).hexdigest()
 
 
 def _object_entries(owner, field, errors):
@@ -197,8 +204,10 @@ def _validate_input_evidence(root, program, errors):
             expected = item.get("repositorySha256")
             if not isinstance(expected, str) or not SHA256_RE.fullmatch(expected):
                 errors.append(f"inputEvidence[{index}].repositorySha256 is invalid")
-            elif path is not None and _hash(path) != expected:
-                errors.append(f"inputEvidence[{index}] repository digest mismatch")
+            elif path is not None:
+                actual = _hash(path, errors, f"inputEvidence[{index}]")
+                if actual is not None and actual != expected:
+                    errors.append(f"inputEvidence[{index}] repository digest mismatch")
         revision = item.get("revision")
         if revision is not None and (
             not isinstance(revision, str) or not REVISION_RE.fullmatch(revision)
@@ -206,33 +215,42 @@ def _validate_input_evidence(root, program, errors):
             errors.append(f"inputEvidence[{index}].revision is not an exact Git revision")
 
 
-def _fallback_repository_files(root):
-    files = []
-    ignored_parts = {".git", ".tmp", "__pycache__"}
-    for path in root.rglob("*"):
-        if not path.is_file() and not path.is_symlink():
-            continue
-        relative = path.relative_to(root)
-        if any(part in ignored_parts for part in relative.parts):
-            continue
-        files.append(relative.as_posix())
-    return sorted(files)
-
-
 def _repository_files(root):
     try:
         output = subprocess.check_output(
-            ["git", "-C", str(root), "ls-files", "-z"],
+            ["git", "-C", str(root), "ls-files", "--stage", "-z"],
             stderr=subprocess.DEVNULL,
             timeout=10,
         )
-        indexed = [item.decode("utf-8") for item in output.split(b"\0") if item]
-        return sorted({
-            item for item in indexed
-            if (root / item).is_file() or (root / item).is_symlink()
-        } | set(_fallback_repository_files(root)))
-    except (OSError, subprocess.SubprocessError, UnicodeError):
-        return _fallback_repository_files(root)
+        files, errors = set(), set()
+        for raw_record in output.split(b"\0"):
+            if not raw_record:
+                continue
+            record = raw_record.decode("utf-8")
+            metadata, separator, locator = record.partition("\t")
+            fields = metadata.split()
+            if not separator or not locator or len(fields) != 3:
+                raise ValueError("invalid Git index record")
+            mode, _object_id, stage = fields
+            if stage != "0":
+                errors.add(
+                    f"tracked repository entry is unmerged: {locator} (stage {stage})"
+                )
+            elif mode in {"100644", "100755"}:
+                files.add(locator)
+            elif mode == "120000":
+                errors.add(
+                    "symbolic link is not admitted in tracked repository surface: "
+                    f"{locator} (mode {mode})"
+                )
+            else:
+                errors.add(
+                    "tracked repository entry is not a regular file: "
+                    f"{locator} (mode {mode})"
+                )
+        return sorted(files), sorted(errors)
+    except (OSError, ValueError, subprocess.SubprocessError, UnicodeError):
+        return [], ["tracked repository surface is unavailable"]
 
 
 def _python_bytes(root, relative_root):
@@ -255,6 +273,15 @@ def _validate_complexity(root, program, python_module, files, errors):
     if not isinstance(targets, dict):
         errors.append("program.complexityBudget.targets must be an object")
         return {}
+    headroom_percent = budget.get("minimumProductCodeAndTestHeadroomPercent")
+    valid_headroom = (
+        isinstance(headroom_percent, int) and not isinstance(headroom_percent, bool)
+        and 5 <= headroom_percent <= 50
+    )
+    if not valid_headroom:
+        errors.append(
+            "minimumProductCodeAndTestHeadroomPercent must be an integer from 5 to 50"
+        )
 
     errors.extend(module_layout_errors(
         root, python_module, Path(__file__).resolve().parent.name,
@@ -291,6 +318,13 @@ def _validate_complexity(root, program, python_module, files, errors):
                 f"complexity target exceeded: {metric_name}="
                 f"{measured} > {limit}"
             )
+        elif metric_name == "productCodeAndTestBytes" and valid_headroom:
+            required = (limit * headroom_percent + 99) // 100
+            if limit - measured < required:
+                errors.append(
+                    "complexity headroom too small: productCodeAndTestBytes="
+                    f"{measured}, limit={limit}, required={required}"
+                )
 
     forbidden = _string_list(budget.get("forbiddenActivePaths"))
     if forbidden is None:
@@ -444,8 +478,10 @@ def _validate_evidence_item(
         errors.append(f"{label}.claim must be a non-empty string")
     if not isinstance(expected, str) or not SHA256_RE.fullmatch(expected):
         errors.append(f"{label}.sha256 is invalid")
-    elif path is not None and _hash(path) != expected:
-        errors.append(f"{label} digest mismatch")
+    elif path is not None:
+        actual = _hash(path, errors, label)
+        if actual is not None and actual != expected:
+            errors.append(f"{label} digest mismatch")
     observation = {}
     if path is not None:
         if Path(locator).parts[:2] != ("evals", "observations"):
@@ -790,7 +826,8 @@ def verify_product(root):
                 "errors": local_errors,
             }
 
-    repository_files = _repository_files(root)
+    repository_files, repository_file_errors = _repository_files(root)
+    errors.extend(repository_file_errors)
     errors.extend(
         projection_evidence_binding_errors(
             root, acceptance, host_reports, _read_json
@@ -811,7 +848,19 @@ def verify_product(root):
         if isinstance(item, dict)
         and item.get("kind") == "historical-release-and-counterevidence-boundary"
     ), None)
-    errors.extend(active_tree_errors(root, repository_files, historical_revision))
+    historical_references = {
+        item.get("repositoryLocator")
+        for item in program.get("inputEvidence", [])
+        if isinstance(item, dict)
+        and isinstance(item.get("repositoryLocator"), str)
+        and isinstance(item.get("repositorySha256"), str)
+    }
+    errors.extend(active_tree_errors(
+        root,
+        repository_files,
+        historical_revision,
+        historical_references,
+    ))
 
     python_module = identity.get("pythonModule")
     complexity = _validate_complexity(

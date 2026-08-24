@@ -1,14 +1,14 @@
 {
   "taskId": "GT-05",
   "goldenTaskSha256": "4d473b07fb0488015c0f8fc8682e40a9a0624c62e83f0109f31711eed053aa27",
-  "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
-  "observedAt": "2026-08-23T21:13:00Z",
-  "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a02d54-0769-7840-974c-07c9b31fda3b"},
+  "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+  "observedAt": "2026-08-24T15:20:00Z",
+  "observer": {"kind": "host-event-recorder", "identity": "Codex v2.0 continuation carrier thread 01a02d54-0769-7840-974c-07c9b31fda3b"},
   "hostIdentity": {
     "adapterId": "codex",
     "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)",
-    "hostVersion": "0.149.0",
-    "sessionId": "01a0306c-1db6-71a0-b228-038f6beb92bf"
+    "hostVersion": "0.149.1",
+    "sessionId": "01a0343a-cb99-7463-be7e-ca1147d9f961"
   },
   "projectionIdentity": {
     "adapterId": "codex",
@@ -19,16 +19,16 @@
     "manifestSha256": "1f5660ed4b6ddc6725e30fee6f588459c79ecb40f4c9805ebb162e8d64465a5f",
     "marketplaceSha256": "a680e15cf06c551d93f7869b20fed25ef0c0ef3c0c7a41a10ec85a583be973ae",
     "contractSha256": "2a5caca48a499d3a7c55221b07547cf66bcce2a2c564c455af9d33197219802d",
-    "skillSha256": "f787c019edd7a0804edf151307f423eaedb1b0ce76a27a653ae1341aa0a3b170",
-    "packageSha256": "f826c8bce024bf39c577a8ccdd2c4453951bb3a84397b1075ee2c82f667b3000"
+    "skillSha256": "0b3ec9642bc0a5296c8114c0754867cd2a0f53eb9b01b87fe2e67b33e4fe7984",
+    "packageSha256": "0c56602060f673ce5453b42b134425a2a449c195312c47743c118e0e668b8206"
   },
   "startingState": {"declared": "The latest failure is real and no outcome was accepted."},
   "transcriptOrEventEvidence": [{
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-05",
-    "sha256": "bcb0c24fc69f07bfdfd7816c80da5b19ab139a84f0995a27f0e039b7b388c089",
-    "claim": "Direct red-to-green events show premise replacement in the existing generation, no fourth generation and retained regression coverage."
+    "sha256": "747941d3fce46945eff1ec74760c67d562c31a86fda81c4822fc7287662a3219",
+    "claim": "Fresh red-to-green events show predicate replacement in the existing validator, no new generation and retained regression coverage."
   }],
   "behaviorDecisions": {
     "required": {
@@ -56,7 +56,7 @@
     "repeated-correction-count": 0,
     "user-operated-capability-or-topology-count": 0
   },
-  "materialEffects": [{"kind": "disposable-fixture-file-change"}],
+  "materialEffects": [{"kind": "disposable-fixture-file-change", "target": "validator.py", "disposition": "retained pending independent raw comparison and exact fixture cleanup"}],
   "residue": [],
   "cleanup": {"state": "verified-clean", "taskOwnedResidueCount": 0, "verified": true},
   "criterionDecisions": {"R3": "accepted", "Q3": "accepted", "Q4": "accepted"},

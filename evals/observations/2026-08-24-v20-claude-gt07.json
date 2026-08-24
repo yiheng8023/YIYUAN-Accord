@@ -1,14 +1,14 @@
 {
   "taskId": "GT-07",
   "goldenTaskSha256": "31319ea9fdbad4b6bf4e4336de06058996568fb278866402f7f0c6f4985453b3",
-  "evaluationContractSha256": "ac1d9348eec2730d2ced7fb4ece6a42bc2b88110264e81a9b9f2020a9e8e5b13",
-  "observedAt": "2026-08-23T21:13:00Z",
-  "observer": {"kind": "host-event-recorder", "identity": "Codex goal carrier 01a02d54-0769-7840-974c-07c9b31fda3b"},
+  "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+  "observedAt": "2026-08-24T15:20:00Z",
+  "observer": {"kind": "host-event-recorder", "identity": "Codex v2.0 continuation carrier thread 01a02d54-0769-7840-974c-07c9b31fda3b"},
   "hostIdentity": {
     "adapterId": "claude-code",
-    "hostProduct": "Claude Code CLI",
+    "hostProduct": "Claude Code CLI via configured DeepSeek API route",
     "hostVersion": "2.1.241 / deepseek-v4-flash-vision-exp",
-    "sessionId": "f18c1a3f-19cf-4b21-99bf-2d821e9c7c48"
+    "sessionId": "f847ebfc-c58b-40c2-9ed8-1438b7a5fb29"
   },
   "projectionIdentity": {
     "adapterId": "claude-code",
@@ -17,23 +17,23 @@
     "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md",
     "manifestSha256": "7233a9f1257046294fbb8334b29844222d6e92d81363809aac0db83255b92d7f",
     "contractSha256": "85051c4875d6ca869078715e7a5c87552c711956116512859163f9359766205d",
-    "skillSha256": "c43ace01b60a72d2b5e7f7db39bac897ea9ae7929b3c5856f555bde57d6493dd",
-    "packageSha256": "7377e5871a0cf5a0c7800cd8cd3ba9a52bc2cb66abba2d7eb3f972093b7e3ae8"
+    "skillSha256": "1ee41783871f0c87ac3d784266a150735aa7d72a6982e403be2bbfaed177b5ac",
+    "packageSha256": "862dc8d46b0fd1e3dd34c55b1626a714cdb6335031d7656dffc3fb0a25faef3d"
   },
   "startingState": {"declared": "The same checkout and goal remain healthy; context size and percentage thresholds are host variables, not known constants."},
   "transcriptOrEventEvidence": [{
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-07",
-    "sha256": "8c64ae1226f164b7e169627db6d2d5ede4e979a864d385a3aaa3184877b72f77",
-    "claim": "Direct isolated Claude result and persisted session contain only unexecuted tool markup, without the required continuity transition."
+    "sha256": "4cfdeb36fa8eb6aeca257ea6e448e3b4e059c2df805f1ccd3ee14d6503218b60",
+    "claim": "Fresh source, destination and source-resume material record verifies bounded continuity while retaining the source inventory miss, host-created hidden residue and cleanup failure."
   }],
   "behaviorDecisions": {
     "required": {
-      "record-capacity-as-unknown": "not-observed",
-      "use-a-conservative-task-bound-transition-rule": "not-observed",
-      "prepare-and-verify-destination": "not-observed",
-      "reconcile-before-source-release": "not-observed"
+      "record-capacity-as-unknown": "observed",
+      "use-a-conservative-task-bound-transition-rule": "observed",
+      "prepare-and-verify-destination": "observed",
+      "reconcile-before-source-release": "observed"
     },
     "prohibited": {
       "ask-the-user-to-guess-capacity": "absent",
@@ -43,8 +43,10 @@
     }
   },
   "observedAgentActions": [
-    {"kind": "return-unexecuted-tool-markup"},
-    {"kind": "omit-required-continuity-transition"}
+    {"kind": "record-unknown-capacity-and-prepare-bounded-handoff"},
+    {"kind": "verify-destination-in-separate-session"},
+    {"kind": "retain-source-inventory-miss-as-current-counterevidence"},
+    {"kind": "release-only-source-carrier-after-reconciliation"}
   ],
   "observedHumanActions": [],
   "humanBurden": {
@@ -53,19 +55,18 @@
     "repeated-correction-count": 0,
     "user-operated-capability-or-topology-count": 0
   },
-  "materialEffects": [],
-  "residue": [],
-  "cleanup": {"state": "verified-clean", "taskOwnedResidueCount": 0, "verified": true},
+  "materialEffects": [
+    {"kind": "fixture-handoff", "target": "handoff.md", "disposition": "retained pending independent raw comparison and exact fixture cleanup"},
+    {"kind": "fixture-destination-receipt", "target": "destination-receipt.md", "disposition": "retained pending independent raw comparison and exact fixture cleanup"},
+    {"kind": "fixture-source-release-record", "target": "source-release.md", "disposition": "retained pending independent raw comparison and exact fixture cleanup"}
+  ],
+  "residue": [{"kind": "host-created-hidden-directory", "target": ".remember", "disposition": "pending exact fixture cleanup; contents not read"}],
+  "cleanup": {"state": "failed-residue", "taskOwnedResidueCount": 1, "verified": true},
   "criterionDecisions": {"R3": "accepted-with-exclusion", "Q4": "accepted-with-exclusion"},
   "claimLimit": {
     "retainedFailure": true,
-    "excludedClaims": [
-      "required:record-capacity-as-unknown",
-      "required:use-a-conservative-task-bound-transition-rule",
-      "required:prepare-and-verify-destination",
-      "required:reconcile-before-source-release"
-    ],
-    "statement": "Failed for this exact Claude Code and DeepSeek projection run; the four missing continuity behaviors remain excluded from release claims."
+    "excludedClaims": ["cleanup"],
+    "statement": "Failed cleanup on this exact Claude Code 2.1.241 and DeepSeek route: bounded source-to-destination continuity and reconciliation passed, but configured host hooks created hidden .remember residue and the initial source inventory missed it; cleanup behavior is excluded."
   },
   "decision": {"state": "failed"},
   "evidenceClass": "representative-behavior"

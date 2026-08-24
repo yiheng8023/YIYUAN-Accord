@@ -46,6 +46,11 @@ For one concrete problem, counterexample, host drift or repeated correction:
 7. after publication, remove task exposure and residue and complete the final
    release closeout; the repository increment was already completed at freeze.
 
+A material correction, finding or later rule returns to the earliest affected
+dependency boundary. Prior results remain historical facts but not current
+proof; replay that boundary and every downstream check before reusing their
+candidate-specific conclusions, while unrelated accepted truth remains stable.
+
 A second same-purpose repair pauses addition for premise, interface,
 subtraction and replacement review. Static checks never qualify behavior;
 older projection observations never qualify a changed package. Context size,

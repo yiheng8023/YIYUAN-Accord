@@ -60,7 +60,7 @@
     "observedProblem": "The public repository display was renamed while the active module, package identifiers, commands, authority files, documentation and observations still carried a superseded technical identity. Staging aliases would preserve ambiguity, and relabeling v1.2 observations would manufacture evidence for a projection they never exercised. The accepted reports also require a clearer product category, explicit human-AI mission versus current human-Agent scope, tighter lifecycle evaluation and a finite path to closeout.",
     "hypothesis": "One complete breaking identity migration, a single collaboration reliability domain model, thin runtime-free projections, a generic verifier and fresh current-projection Golden Task observations can restore global consistency without adding a compatibility layer or turning the framework into a runtime, governance platform or universal correctness claim.",
     "falsifiers": [
-      "any superseded product name, slug, module, command, package path, repository URL or compatibility alias remains in the active tree",
+      "any exact NFKC/casefold lexical superseded product name, slug, module token, package path, repository URL or compatibility alias remains in a declared Git-indexed path or non-Python whole-text surface, or in a declared shared-grammar Python identifier, literal or bounded static-concatenation value",
       "historical observations are edited or relabeled as current v2.0 evidence",
       "plan, ordered work, acceptance criteria and goal prompt no longer map the same eight criteria",
       "the broader human-AI mission is presented as already verified by the current human-Agent product surface",
@@ -81,7 +81,7 @@
             "id": "canonical-identity-authority-and-projections",
             "state": "completed",
             "acceptanceIds": ["R1", "R2", "Q2", "Q3", "Q4"],
-            "stopCondition": "[canonical-identity-authority-and-projections] Every active local identity, authority, module, projection, command, document and test uses the canonical v2.0 terms; incompatible old observations are absent from the active tree and no alias remains."
+            "stopCondition": "[canonical-identity-authority-and-projections] Every stage-zero regular file declared by the Git index uses the canonical v2.0 identity inside the exact lexical non-Python path and whole-text boundary or shared-grammar Python identifier/literal boundary; indeterminate surfaces fail closed, digest-bound Markdown research inputs under research/reviews remain inert, incompatible old observations are not current evidence and no compatibility alias is declared."
           },
           {
             "id": "static-conformance-and-adversarial-regressions",
@@ -154,12 +154,14 @@
       "docs/architecture.md": [
         "one small semantic core and replaceable projections",
         "Skill-only package surfaces",
+        "strict static retired-identity boundary",
         "no YIYUAN Accord runtime, Hook, state store, MCP, App"
       ],
       "CONTRIBUTING.md": [
         "Codex and Claude Code as current reference hosts, not permanent product",
         "official version, maturity label",
         "retirement trigger",
+        "earliest affected dependency boundary",
         "exact local verification",
         "context-isolated, outcome-bound, identity-neutral"
       ],
@@ -213,24 +215,24 @@
         "condition": "The active goal carrier directly verifies the public release, remote and local tag, exact tracked release notes and zero-asset policy; it then removes task-created resources, confirms repository and evaluator residue are absent, and replays local validation."
       }
     ],
-    "rule": "Execute gates strictly in listed order. Failure returns to the smallest affected prior gate; no report, plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
+    "rule": "Execute gates strictly in listed order. A failure, material correction, later rule or revision returns to the earliest affected dependency boundary; affected current-candidate evidence and every downstream gate remain superseded until replayed. No report, plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
   },
   "goalModePrompt": {
     "state": "active-in-host",
     "authority": "derived-from-current-program-and-acceptance",
-    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 三份唯一语义权威下，按工业/商业生产级交付标准完成 YIYUAN Accord v2.0 的有限收官；保持开放、Agent 中立、无 Runtime/Hook/MCP/App，广义使命面向人类与 AI 协作，当前可验证范围仅为人类与 Agent 协作。计划、工序、R1-R4/Q1-Q4 验收、目标提示词、证据、投影和公开面必须持续映射。既有工作阶段保持为 canonical-identity-authority-and-projections → static-conformance-and-adversarial-regressions → fresh-representative-behavior → repository-candidate-freeze；保留历史 GT-08 失败作为反例并以当前重跑校准其状态，GT-07 保持失败并收窄主张。候选严格依次经过 repository-candidate → exact-local-verification-and-review → exact-candidate-hosted-verification → exact-human-release-authorization → exact-tagged-public-release → release-verification-and-cleanup。精确本地门必须在不变 clean SHA 上完成全量验证、独立规格、实现稳健性与标准符合性反审、可发布 source bundle 对原始宿主记录的独立对照，以及由与候选制作上下文隔离的评估者（可为用户、同事或第二观察面）从 clean state 完成 README 启用、确认、移除走查，效力取决于测试条件与观察结果而非作者身份；之后才可推送并验证 GitHub 三系统与普通 Codex Cloud，再请求该 SHA 的具名人类授权，创建不可移动的轻量 v2.0 tag 和无资产 release，最终复验公开面、清理任务资源并重放本地验证。报告、计划、测试、提交、推送、托管绿灯或授权都不是收官；真实场域、跨宿主和长期效果继续作为后续证据。前置门失败退回最小受影响步骤；仅在人类判断、账户、外部信任、发布或不可逆边界暂停，接管后继续至有限收官。",
+    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 三份唯一语义权威下，按工业/商业生产级交付标准完成 YIYUAN Accord v2.0 的有限收官；保持开放、Agent 中立、无 Runtime/Hook/MCP/App，广义使命面向人类与 AI 协作，当前可验证范围仅为人类与 Agent 协作。计划、工序、R1-R4/Q1-Q4 验收、目标提示词、证据、投影和公开面必须持续映射。既有工作阶段保持为 canonical-identity-authority-and-projections → static-conformance-and-adversarial-regressions → fresh-representative-behavior → repository-candidate-freeze；七项必需 Golden Tasks 已用完整、安全、可发布且可独立对照原始宿主记录的结构化 source bundle 重放，GT-01/02/03/04/05/08 通过，GT-07 的有界连续性交接与双向核验通过，但配置的宿主 Hook 产生隐藏 .remember 残留且初始源端清单漏检，故 GT-07 整体保持失败，retainedBehaviorExclusions 精确为 [\"GT-07:cleanup\"]；恢复与后续核验不得把该失败改写为通过。source bundle 的结构与发布安全性已建立，但它对原始宿主/session 记录的独立逐项对照仍属于 exact-local-verification-and-review，不得由仓库自证。Codex 投影优先使用当前官方 Agent 架构、App Server 与宿主资料作为一手动态事实和测试依据，但不把其实现引入便携核心或新增 Runtime/Hook/MCP/App。候选严格依次经过 repository-candidate → exact-local-verification-and-review → exact-candidate-hosted-verification → exact-human-release-authorization → exact-tagged-public-release → release-verification-and-cleanup。精确本地门必须在不变 clean SHA 上完成全量验证、独立规格、实现稳健性与标准符合性反审、可发布 source bundle 对原始宿主记录的独立对照，以及由与候选制作上下文隔离的评估者（可为用户、同事或第二观察面）从 clean state 完成 README 启用、确认、移除走查，效力取决于测试条件与观察结果而非作者身份；之后才可推送并验证 GitHub 三系统与普通 Codex Cloud，再请求该 SHA 的具名人类授权，创建不可移动的轻量 v2.0 tag 和无资产 release，最终复验公开面、清理任务资源并重放本地验证。已清除的不一致历史 Goal 及其可能影响作为过程债按证据审计，不预设它必然造成错误，也不据此整体推翻旧结果；任何实质补充、纠正、失败、误判或修订都从最早受影响依赖边界撤销旧结果对当前候选的效力，旧结果只保留为历史事实，并重放受影响步骤及全部后续门，无关已验事实保持稳定。报告、计划、测试、提交、推送、托管绿灯或授权都不是收官；真实场域、跨宿主和长期效果继续作为后续证据。仅在人类判断、账户、外部信任、发布或不可逆边界暂停，接管后继续至有限收官。",
     "workStageIds": ["canonical-identity-authority-and-projections", "static-conformance-and-adversarial-regressions", "fresh-representative-behavior", "repository-candidate-freeze"],
     "releaseGateIds": ["repository-candidate", "exact-local-verification-and-review", "exact-candidate-hosted-verification", "exact-human-release-authorization", "exact-tagged-public-release", "release-verification-and-cleanup"],
     "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "refreshTriggers": ["user-correction", "observed-failure-or-side-effect", "host-or-capability-drift", "evidence-conflict", "phase-or-authority-boundary", "repeated-same-purpose-repair"],
-    "hostLifecycleNote": "The accountable user authorized the identity migration, global consistency updates and push on 2026-08-21, then accepted the bounded 2026-08-23 independent-audit recalibration without changing the ordered work stages or release gates. The host goal remains active through those gates. Repository validity proves no hosted, human, publication, field or completion outcome."
+    "refreshTriggers": ["user-correction", "observed-failure-or-side-effect", "host-or-capability-drift", "evidence-conflict", "later-rule-or-revision", "phase-or-authority-boundary", "repeated-same-purpose-repair"],
+    "hostLifecycleNote": "The accountable user authorized the identity migration and global consistency work on 2026-08-21, then accepted the bounded 2026-08-23 independent-audit recalibration without changing the ordered work stages or release gates. On 2026-08-24 independent specification and standards review invalidated the summary-only representative bundle and returned the behavior stage to replay. The replay now preserves six passes and one GT-07 failure limited to cleanup: bounded continuity passed, while configured host hooks created hidden .remember residue and the source inventory initially missed it. The source bundle is structurally complete and publishable; independent comparison with original host or session records remains part of the exact local gate. The stale host Goal was cleared. Its possible influence is audited as process debt from the earliest affected dependency boundary, not presumed to be the cause of every error or grounds for blanket invalidation. The revised objective was created directly as the active host Goal without a token budget and compared character-for-character; repository validity proves no hosted, human, publication, field or completion outcome."
   },
   "hostProjections": [
     {
       "id": "codex",
       "packageId": "yiyuan-accord-codex",
       "packageVersion": "2.0.0",
-      "packageSha256": "f826c8bce024bf39c577a8ccdd2c4453951bb3a84397b1075ee2c82f667b3000",
+      "packageSha256": "0c56602060f673ce5453b42b134425a2a449c195312c47743c118e0e668b8206",
       "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "marketplace": ".agents/plugins/marketplace.json",
       "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -238,20 +240,20 @@
       "metadataFiles": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml"],
       "interfaceDefaultPrompt": ["Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."],
       "maxSkillBytes": 6000,
-      "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "H1–H10", "L1–L7", "Static readiness is not behavior"],
+      "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "earliest affected dependency boundary", "H1–H10", "L1–L7", "Static readiness is not behavior"],
       "forbiddenPaths": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references"]
     },
     {
       "id": "claude-code",
       "packageId": "yiyuan-accord-claude",
       "packageVersion": "2.0.0",
-      "packageSha256": "7377e5871a0cf5a0c7800cd8cd3ba9a52bc2cb66abba2d7eb3f972093b7e3ae8",
+      "packageSha256": "862dc8d46b0fd1e3dd34c55b1626a714cdb6335031d7656dffc3fb0a25faef3d",
       "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
       "contract": "plugins/yiyuan-accord-claude/adapter.json",
       "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md",
       "metadataFiles": [],
       "maxSkillBytes": 6000,
-      "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "H1–H10", "L1–L7", "Static readiness is not behavior"],
+      "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "earliest affected dependency boundary", "H1–H10", "L1–L7", "Static readiness is not behavior"],
       "forbiddenPaths": ["plugins/yiyuan-accord-claude/hooks", "plugins/yiyuan-accord-claude/scripts", "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/references"]
     }
   ],
@@ -267,9 +269,10 @@
     },
     "targets": {
       "maxTrackedFiles": 55,
-      "maxProductCodeAndTestBytes": 134000,
+      "maxProductCodeAndTestBytes": 164000,
       "maxPrimaryInstructionBytes": 26000
     },
+    "minimumProductCodeAndTestHeadroomPercent": 5,
     "primaryInstructionPaths": [
       "AGENTS.md",
       "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
@@ -290,8 +293,8 @@
       "def test_projection_package_and_admission_are_fail_closed",
       "def test_representative_sample_binds_projection_source_and_task",
       "def test_retired_residue_and_duplicate_json_fail_closed",
-      "def test_legitimate_host_language_and_additional_regressions_are_allowed",
-      "def test_retired_module_identity_contexts_are_rejected"
+      "def test_conservative_identity_boundary_allows_declared_safe_surfaces",
+      "def test_retired_identity_static_surfaces_are_rejected"
     ],
     "minimumTestCount": 13,
     "forbiddenActivePaths": [
@@ -307,7 +310,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. A failed target blocks Q3 rather than inviting a larger verifier. Independent specification and standards review required fail-closed release-surface checks and cross-authority goal projection binding. A subtraction pass replaced scope-sensitive alias and data-flow inference with a direct active-Python historical-module token ban covering identifiers, static imports and literal or compile-time strings while allowing comments and adjacent identifiers. Bounded linear literal scanning and an exact comment-normalized workflow profile close reproduced robustness gaps; the code-and-test cap is therefore 134000 and must retain at least five percent headroom without deleting coverage or compressing readability."
+    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. The former 134000-byte target remains a recorded failed target: reproduced Python-depth, suffix, shell, PowerShell, CMD, pipeline and descriptor-provenance counterexamples invalidated its simpler scanning premise. An intermediate 210000-byte multi-host lexical path was not accepted: repeated same-purpose option, encoding, execution-input and provenance findings plus its headroom breach triggered the required premise, interface and deletion review while Q3 remained blocked. The first reduced 150000-byte replacement and its 141151-byte measurement were then invalidated by reproduced deep literal-concatenation and marker-only workflow cases plus Git-index provenance, truly bounded owned-file I/O and exact-token-boundary regressions. The second deletion review removed the version-specific f/t-string parser, non-Python escape interpretation and fragment propagation. The retained mechanism now uses the Git index as its finite declaration source, one shared Python 3.10 AST grammar with linear bounded static-subtree summaries across supported Python 3.10-3.14 hosts, strict non-Python decoding with exact NFKC/casefold lexical boundaries, and one bounded regular-file read seam; it fails closed on indeterminate declared surfaces and exempts only digest-bound Markdown research inputs under research/reviews. It proves only this static declared-surface boundary, not ignored or untracked files, Python comments, runtime-built or external dynamic content. The exact comment-normalized workflow profile remains a separate narrow release constraint. The code-and-test ceiling remains 164000 bytes and every live candidate must retain at least the separately declared five percent headroom; no prose snapshot substitutes for the verifier's current measurement. Any future breach blocks Q3 and triggers another premise, interface and deletion review rather than automatic target growth; the scanner is simplified or retired when its residual value is no longer demonstrated."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,
@@ -316,7 +319,7 @@
     "prohibitedAgentWorkTransfer": 0,
     "taskResidueAtCheckpoint": 0,
     "carrierRule": "Use current source-bound host signals when reliable; if capacity is unavailable, record unknown and transition conservatively. No universal turn count, context size, token percentage or summary ratio is product authority.",
-    "correctionRule": "A repeated correction or failed same-purpose mechanism pauses further addition until the premise, interface and deletion option are reconsidered.",
+    "correctionRule": "A material correction, failure, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary and requires that boundary and every downstream gate to be replayed while unrelated accepted truth remains stable. A repeated correction or failed same-purpose mechanism pauses further addition until the premise, interface and deletion option are reconsidered.",
     "continuingCalibration": "Post-release failures may update Golden Tasks, narrow a claim, simplify or retire a projection, or open one new bounded increment; release status does not freeze learning."
   }
 }

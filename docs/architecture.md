@@ -73,6 +73,29 @@ Together they validate:
   repository-scoped absence paths and non-expansive marketplace policy;
 - the explicit complexity budget and retired proof-generation paths.
 
+The strict static retired-identity boundary is deliberately lexical, not a
+multi-host command interpreter. The Git index is the declaration source: every
+stage-zero `100644` or `100755` locator remains in scope even when its worktree
+file is missing, while an unavailable index, unmerged entry, symlink, gitlink
+or other non-regular mode blocks conformance. Ignored and untracked files are
+outside this identity claim; the separate clean-checkout gate rejects dirty or
+untracked state and hidden `skip-worktree` or `assume-unchanged` flags.
+
+All repository reads share one bounded regular-file path with pre-open and
+post-open type and size checks. Paths and strictly decoded non-Python whole text
+reject exact NFKC/casefold superseded name, slug and module tokens at their
+declared lexical boundaries; backslash escapes have no host-agnostic meaning.
+Declared `.py`, `.pyi` and `.pyw` files are parsed under the shared Python 3.10
+AST grammar on supported Python 3.10-3.14 hosts, then scan identifiers, literal
+values and bounded maximum static-concatenation subtrees while ignoring
+comments and not joining across runtime expressions. Syntax outside that shared
+grammar and any unreadable, undecodable, oversized or over-budget surface are
+indeterminate and fail closed. Only digest-bound Markdown research inputs under
+`research/reviews/` declared by the program are inert exceptions. This proves
+static absence on that finite declared surface, not absence from Python
+comments, ignored or untracked files, runtime-built or external dynamic
+content. The workflow profile remains a separate exact structural constraint.
+
 The verifier does not contain copies of the product's purpose, criterion
 statements or pass rules. It validates the contract supplied by the authority
 files. A valid report means only that the authority and projections are

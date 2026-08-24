@@ -6,15 +6,12 @@ import re
 from .identity import _exact, _nonempty_string as _text
 
 
-STATES = {
-    "passed", "failed", "failed-repeated-same-purpose",
-}
+STATES = {"passed", "failed", "failed-repeated-same-purpose"}
 
 
 def _records(value):
-    return isinstance(value, list) and all(
-        isinstance(item, dict) and _text(item.get("kind")) for item in value
-    )
+    return isinstance(value, list) and all(isinstance(x, dict) and
+        _text(x.get("kind")) for x in value)
 
 
 def _time(value):
@@ -26,9 +23,39 @@ def _time(value):
 
 
 def _digest(value):
-    return sha256(json.dumps(
-        value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    ).encode()).hexdigest()
+    return sha256(json.dumps(value, ensure_ascii=False, sort_keys=True,
+        separators=(",", ":")).encode()).hexdigest()
+
+
+def _publishable_payload(p, task, cleanup):
+    if not isinstance(p, dict):
+        return False
+    m, sources, evidence = (
+        p.get("messages"), p.get("officialSources"), p.get("cleanupEvidence")
+    )
+    required = task.get("required", [])
+    return (
+        p.get("captureProtocol") == "direct-host-material-events-v1"
+        and _records(m) and m
+        and {item.get("role") for item in m} == {"user", "assistant"}
+        and all(_text(item.get("phase")) and _text(item.get("text")) for item in m)
+        and _records(p.get("materialEvents")) and p["materialEvents"]
+        and _records(sources)
+        and all(_text(item.get("url")) and item["url"].startswith("https://")
+                and _time(item.get("retrievedAt")) is not None
+                for item in sources)
+        and ("resolve-current-official-guidance" not in required or len(sources) >= 2)
+        and isinstance(evidence, dict) and set(evidence) == {"state", "observations"}
+        and evidence["state"] == (cleanup or {}).get("state")
+        and _records(evidence["observations"]) and evidence["observations"]
+        and _records(p.get("redactions")) and _text(p.get("evidenceBoundary"))
+        and ("surface-only-the-exact-human-decision" not in required or any(
+            item["phase"] == "human-grant" and item["role"] == "user"
+            for item in m
+        ))
+    )
+
+
 def representative_contract_sha256(acceptance, golden):
     semantic_fields = (
         "id", "class", "name", "mapsTo", "statement", "passRule",
@@ -59,9 +86,9 @@ def _observation_errors(
     projection_id, evaluation_digest, read_json,
 ):
     errors = []
-    observed_at = _time(observation.get("observedAt"))
+    at=_time(observation.get("observedAt"))
     observer, host = observation.get("observer"), observation.get("hostIdentity")
-    if observed_at is None or observed_at > datetime.now().astimezone():
+    if at is None or at > datetime.now().astimezone():
         errors.append(f"{label} observedAt is invalid")
     if not _exact(observer, ("kind", "identity"), ("identity",)) or observer.get(
         "kind"
@@ -108,13 +135,16 @@ def _observation_errors(
             and _exact(record, (
                 "kind", "taskId", "goldenTaskSha256", "evaluationContractSha256",
                 "hostIdentity", "capturedAt", "payload",
-            ), ("payload",))
+            ))
             and record.get("kind") == source.get("kind")
             and record.get("taskId") == task.get("id")
             and record.get("goldenTaskSha256") == task_digest
             and record.get("evaluationContractSha256") == evaluation_digest
             and record.get("hostIdentity") == host
-            and captured is not None and observed_at is not None and captured <= observed_at
+            and captured is not None and at is not None and captured <= at
+            and _publishable_payload(
+                record.get("payload"), task, observation.get("cleanup")
+            )
             and source.get("sha256") == _digest(record)
         )
         if not valid:
