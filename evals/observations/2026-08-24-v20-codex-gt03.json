@@ -1,7 +1,7 @@
 {
   "taskId": "GT-03",
   "goldenTaskSha256": "e96ca57ca348a428c664324d45da40b831b32254ff7db54a602d0bea08c76f51",
-  "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+  "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
   "observedAt": "2026-08-24T15:20:00Z",
   "observer": {"kind": "host-event-recorder", "identity": "Codex v2.0 continuation carrier thread 01a02d54-0769-7840-974c-07c9b31fda3b"},
   "hostIdentity": {
@@ -27,7 +27,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-03",
-    "sha256": "0a1f7424631a74240730b9c7747839288f9976541097b97aa373c20fe63a9c6a",
+      "sha256": "08510e22ccf80828e7360395accdaa404abaa87f60343f484f5abb12395ae147",
     "claim": "Fresh multi-turn material record contains the exact candidate, claim ceiling, fixture-human grant, bounded local tag, failed first tag check and corrected verification."
   }],
   "behaviorDecisions": {

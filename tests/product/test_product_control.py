@@ -352,9 +352,42 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertIsNone(_postcapture_bundle(payload, task, _time(record['capturedAt'])))
 
-        self.assertIsNone(_postcapture_bundle({}, {
-            'required': [], 'prohibited': ['leave-task-residue']
-        }, _time('2026-08-24T00:00:00Z')))
+        for task_id in ('GT-02', 'GT-07'):
+            with self.subTest(policy_anchor=task_id), _fixture() as root:
+                golden = _read(root, G)
+                task = next(item for item in golden['tasks'] if item['id'] == task_id)
+                locator, bundle = OBS[int(task_id[-2:])], _read(root, SOURCE)
+                record, observation = bundle['records'][task_id], _read(root, locator)
+                payload = record['payload']
+                if task_id == 'GT-02':
+                    task.pop('postSessionBindingContract')
+                    payload.pop('postSessionBindingContract')
+                    payload['materialEvents'] = [
+                        event for event in payload['materialEvents']
+                        if event['kind'] != 'independent-poststate'
+                    ]
+                    observation['transcriptOrEventEvidence'][0].pop(
+                        'postSessionBindingsSha256'
+                    )
+                else:
+                    task['postSessionBindingContract'][0]['bindingCount'] = 1
+                    payload['postSessionBindingContract'][0]['bindingCount'] = 1
+                    bindings = payload['cleanupEvidence']['observations'][-1]['sourceBindings']
+                    payload['cleanupEvidence']['observations'][-1]['sourceBindings'] = bindings[:1]
+                digest = _digest(task)
+                record['goldenTaskSha256'] = observation['goldenTaskSha256'] = digest
+                _write(root, G, golden)
+                self.assert_has(
+                    _public_source_errors(root, locator, bundle, observation),
+                    'post-session binding contract does not match representative policy',
+                )
+
+        malformed = {'postSessionBindingContract': [{
+            'kind': 'independent-poststate', 'location': {}, 'bindingCount': 1
+        }]}
+        self.assertIsNone(_postcapture_bundle(
+            malformed, malformed, _time('2026-08-24T00:00:00Z')
+        ))
 
         source_cases = (
             (8, ('officialSources', 0, 'url'), 'https://github.com/openai/../x'),

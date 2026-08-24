@@ -606,7 +606,7 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
         if set(representative_policy) != {
             "requiredTaskIdsForRelease", "mustPassTaskIdsForRelease",
             "sampleRationale", "taskDecisionRule", "releaseDecisionRule",
-            "postReleaseTasks",
+            "postReleaseTasks", "postSessionBindingContracts",
         }:
             errors.append("acceptance.representativeBehaviorPolicy shape is invalid")
         required_sample = _string_list(
@@ -631,6 +631,25 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
             not must_pass or not set(must_pass).issubset(set(required_sample_ids))
         ):
             errors.append("representative must-pass tasks are invalid")
+        binding_contracts = representative_policy.get("postSessionBindingContracts")
+        if (
+            not isinstance(binding_contracts, dict) or not binding_contracts
+            or not set(binding_contracts).issubset(set(required_sample_ids))
+            or any(
+                not isinstance(contract, list) or not contract or any(
+                    not isinstance(spec, dict)
+                    or set(spec) != {"kind", "location", "bindingCount"}
+                    or not _nonempty_string(spec.get("kind"))
+                    or not _nonempty_string(spec.get("location"))
+                    or not isinstance(spec.get("bindingCount"), int)
+                    or isinstance(spec.get("bindingCount"), bool)
+                    or spec["bindingCount"] < 1
+                    for spec in contract
+                )
+                for contract in binding_contracts.values()
+            )
+        ):
+            errors.append("representative post-session binding contracts are invalid")
         _require_texts(representative_policy, (
             "sampleRationale", "taskDecisionRule", "releaseDecisionRule",
         ), "acceptance.representativeBehaviorPolicy", errors)

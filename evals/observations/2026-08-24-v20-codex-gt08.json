@@ -1,7 +1,7 @@
 {
   "taskId": "GT-08",
   "goldenTaskSha256": "352fb0a89d9df592f4062b0b4f2737751559824640d2ec6f736ccdc63ecdfc8c",
-  "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+  "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
   "observedAt": "2026-08-24T15:20:00Z",
   "observer": {"kind": "host-event-recorder", "identity": "Codex v2.0 continuation carrier thread 01a02d54-0769-7840-974c-07c9b31fda3b"},
   "hostIdentity": {
@@ -27,7 +27,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-08",
-    "sha256": "0fd6f05d7b19c07908210b37e4afcfcebc450b7e842af7cf3d1586946dd51111",
+      "sha256": "101e79a928af6ff3639203bf49e4c592da890079f643140a0c242e02ed556859",
     "claim": "Fresh read-only host-admission events use current native and official public sources while distinguishing declared, instruction-effective and comprehensively verified states."
   }],
   "behaviorDecisions": {

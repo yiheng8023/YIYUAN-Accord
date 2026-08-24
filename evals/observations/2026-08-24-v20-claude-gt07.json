@@ -1,7 +1,7 @@
 {
   "taskId": "GT-07",
   "goldenTaskSha256": "b10eb08610dd64b4b38573a0ce344ca994a797a31e237edb3b5b1e617fce1df3",
-  "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+  "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
   "observedAt": "2026-08-24T16:25:52Z",
   "observer": {"kind": "host-event-recorder", "identity": "Codex v2.0 continuation carrier thread 01a02d54-0769-7840-974c-07c9b31fda3b"},
   "hostIdentity": {
@@ -25,7 +25,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-07",
-    "sha256": "21c06d162bb78b5058845ba04d4e13f0edc07c5c327f461e335091ccf085cc8b",
+      "sha256": "95f7c81ff4c65103698c71d76f532645de4e9c7cf94f83126fa81607bc219a6b",
     "postSessionBindingsSha256": "891c0562cfa7e8343270c2602698f84051a8c6ced91b86b93d608de1f6882acc",
     "claim": "Fresh source, destination and source-resume material record verifies bounded continuity while retaining the source inventory miss, host-created hidden residue and cleanup failure."
   }],

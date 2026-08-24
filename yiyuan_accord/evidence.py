@@ -14,11 +14,6 @@ _OFFICIAL_HOSTS = {
 }
 _PROJECTION_FIELDS = ("adapterId", "skill", "skillSha256")
 _UNRESERVED = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~")
-_POST_SESSION_REQUIREMENTS = {
-    "leave-task-residue": ("independent-poststate", "materialEvents"),
-    "reconcile-before-source-release": ("post-capture-fixture-removal",
-                                         "cleanupEvidence.observations"),
-}
 
 
 def _records(value):
@@ -96,21 +91,12 @@ def _postcapture_bundle(payload, task, captured_at):
     special = [event for events in pools.values() if isinstance(events, list)
                for event in events if isinstance(event, dict)
                and _text(event.get("kind")) and event["kind"] in kinds]
-    behaviors = set()
-    for field in ("required", "prohibited"):
-        behaviors.update(_string_set(task.get(field)) or ())
-    required_events = {_POST_SESSION_REQUIREMENTS[item] for item in behaviors
-                       if item in _POST_SESSION_REQUIREMENTS}
     contract = task.get("postSessionBindingContract")
     if contract is None:
         return ({"contract": [], "events": []}
-                if not required_events
-                and "postSessionBindingContract" not in payload and not special else None)
+                if "postSessionBindingContract" not in payload and not special else None)
     if (payload.get("postSessionBindingContract") != contract
-            or not _records(contract) or not contract
-            or not required_events.issubset({
-                (spec.get("kind"), spec.get("location")) for spec in contract
-            })):
+            or not _records(contract) or not contract):
         return None
     selected = []
     for spec in contract:
@@ -401,6 +387,9 @@ def representative_sample_errors(
     }
     burden = golden.get("metrics", {}).get("humanBurden", [])
     evaluation = representative_contract_sha256(acceptance, golden)
+    policy = acceptance.get("representativeBehaviorPolicy")
+    binding_contracts = policy.get("postSessionBindingContracts", {}) \
+        if isinstance(policy, dict) else {}
     errors, observed, states, r3_locators, exclusions = [], {}, {}, {}, []
     exact_fields = set(fields) | {"evidenceClass"}
     for index, item in enumerate(representative.get("evidence", [])):
@@ -419,6 +408,10 @@ def representative_sample_errors(
         projection = item.get("bindsProjection")
         if task_id in required_task_ids and not _text(projection):
             errors.append(f"{label} required observation is not projection-bound")
+        if task.get("postSessionBindingContract") != binding_contracts.get(task_id):
+            errors.append(
+                f"{label} post-session binding contract does not match representative policy"
+            )
         local, state = _observation_errors(
             root, label, observation, task, burden, item["locator"],
             projection if _text(projection) else "", evaluation, read_json,

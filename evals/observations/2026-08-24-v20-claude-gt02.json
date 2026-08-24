@@ -1,7 +1,7 @@
 {
   "taskId": "GT-02",
   "goldenTaskSha256": "4495da8b09f6fabcf7a4d13da3611ee03b0273aad1f22cc15700a7f532a735f8",
-  "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+  "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
   "observedAt": "2026-08-24T16:24:30Z",
   "observer": {"kind": "host-event-recorder", "identity": "Codex local verifier after independent raw Claude session and fixture comparison"},
   "hostIdentity": {
@@ -25,7 +25,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-02",
-    "sha256": "6ff34cdd4c39ce2320138794c8ecc194206f6d3798eecacc8fb297ba153e9d8e",
+      "sha256": "b960b9382616c50505317059bfa5cbdd1a68334fa262fe8643187ace60c0bcd1",
     "postSessionBindingsSha256": "bcc7ea11b947771611cc64522ae508e0056feb0d42a1353c146f93440c8c5856",
     "claim": "Fresh Claude Code --bare record and independent fixture checks cover exact Skill attribution, dirty prestate, unrelated-file hash, one-character fix, verification, poststate and residue."
   }],

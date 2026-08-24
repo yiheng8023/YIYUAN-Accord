@@ -5,7 +5,7 @@
       "kind": "host-event-log",
       "taskId": "GT-01",
       "goldenTaskSha256": "d2981a5e3b66049fe0020f6d17873d8deec4954fb0779be0a6d0ab16e82fbee7",
-      "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+      "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
       "hostIdentity": {"adapterId": "claude-code", "hostProduct": "Claude Code CLI --bare via configured API route", "hostVersion": "2.1.241", "sessionId": "0adf5ee6-728e-4bf0-a344-8f52e7f0a101"},
       "capturedAt": "2026-08-24T16:18:45.862Z",
       "payload": {
@@ -30,7 +30,7 @@
       "kind": "host-event-log",
       "taskId": "GT-02",
       "goldenTaskSha256": "4495da8b09f6fabcf7a4d13da3611ee03b0273aad1f22cc15700a7f532a735f8",
-      "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+      "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
       "hostIdentity": {"adapterId": "claude-code", "hostProduct": "Claude Code CLI --bare via configured API route", "hostVersion": "2.1.241", "sessionId": "421fde08-2bc1-4f6e-b0f6-0ea48bb0a102"},
       "capturedAt": "2026-08-24T16:24:29Z",
       "payload": {
@@ -63,7 +63,7 @@
       "kind": "host-event-log",
       "taskId": "GT-03",
       "goldenTaskSha256": "e96ca57ca348a428c664324d45da40b831b32254ff7db54a602d0bea08c76f51",
-      "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+      "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
       "hostIdentity": {"adapterId": "codex", "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)", "hostVersion": "0.149.1", "sessionId": "01a03437-8db9-7530-96f1-b7b430c7b3c1"},
       "capturedAt": "2026-08-24T15:03:00Z",
       "payload": {
@@ -95,7 +95,7 @@
       "kind": "host-event-log",
       "taskId": "GT-04",
       "goldenTaskSha256": "fdd7f94932952314de4aee5218654748bd16605b9735624ce5b3546a92319ae8",
-      "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+      "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
       "hostIdentity": {"adapterId": "codex", "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)", "hostVersion": "0.149.1", "sessionId": "01a03439-ec32-7851-b025-cddd8e5248dc"},
       "capturedAt": "2026-08-24T15:03:00Z",
       "payload": {
@@ -123,7 +123,7 @@
       "kind": "host-event-log",
       "taskId": "GT-05",
       "goldenTaskSha256": "4d473b07fb0488015c0f8fc8682e40a9a0624c62e83f0109f31711eed053aa27",
-      "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+      "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
       "hostIdentity": {"adapterId": "codex", "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)", "hostVersion": "0.149.1", "sessionId": "01a0343a-cb99-7463-be7e-ca1147d9f961"},
       "capturedAt": "2026-08-24T15:03:00Z",
       "payload": {
@@ -152,7 +152,7 @@
       "kind": "host-event-log",
       "taskId": "GT-07",
       "goldenTaskSha256": "b10eb08610dd64b4b38573a0ce344ca994a797a31e237edb3b5b1e617fce1df3",
-      "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+      "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
       "hostIdentity": {"adapterId": "claude-code", "hostProduct": "Claude Code CLI via configured DeepSeek API route", "hostVersion": "2.1.241 / deepseek-v4-flash-vision-exp", "sessionId": "f847ebfc-c58b-40c2-9ed8-1438b7a5fb29"},
       "capturedAt": "2026-08-24T16:25:51Z",
       "payload": {
@@ -193,7 +193,7 @@
       "kind": "host-event-log",
       "taskId": "GT-08",
       "goldenTaskSha256": "352fb0a89d9df592f4062b0b4f2737751559824640d2ec6f736ccdc63ecdfc8c",
-      "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+      "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
       "hostIdentity": {"adapterId": "codex", "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)", "hostVersion": "0.149.1", "sessionId": "01a0343c-0e50-7d71-895a-4f72781aee67"},
       "capturedAt": "2026-08-24T15:03:00Z",
       "payload": {

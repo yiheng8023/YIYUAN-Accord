@@ -1,7 +1,7 @@
 {
   "taskId": "GT-05",
   "goldenTaskSha256": "4d473b07fb0488015c0f8fc8682e40a9a0624c62e83f0109f31711eed053aa27",
-  "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+  "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
   "observedAt": "2026-08-24T15:20:00Z",
   "observer": {"kind": "host-event-recorder", "identity": "Codex v2.0 continuation carrier thread 01a02d54-0769-7840-974c-07c9b31fda3b"},
   "hostIdentity": {
@@ -27,7 +27,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-05",
-    "sha256": "2c0d2ff4b40e861c4986a4476232bf2a98f069361673dd971b751264c4cd8960",
+      "sha256": "0b29412c67442dea8d4e31a34802bac5d547a794d26ce0c2995e686476253eaf",
     "claim": "Fresh red-to-green events show predicate replacement in the existing validator, no new generation and retained regression coverage."
   }],
   "behaviorDecisions": {

@@ -75,7 +75,7 @@ Then read, in order:
   after every authority or evidence edit; working-tree results do not become
   clean-candidate evidence until the candidate is committed and replayed. The
   reviewed complexity target is 178000 product code-and-test bytes; the stable
-  working measurement is 165692, leaving 12308 bytes of headroom against the
+  working measurement is 168261, leaving 9739 bytes of headroom against the
   separately required 8900-byte reserve after the recorded deletion review.
 - For the Codex projection, resolve current official Agent architecture, App Server
   and host documentation as high-weight dynamic evidence before relying on a

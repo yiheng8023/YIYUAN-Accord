@@ -1,7 +1,7 @@
 {
   "taskId": "GT-01",
   "goldenTaskSha256": "d2981a5e3b66049fe0020f6d17873d8deec4954fb0779be0a6d0ab16e82fbee7",
-  "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+  "evaluationContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
   "observedAt": "2026-08-24T16:18:46Z",
   "observer": {
     "kind": "host-event-recorder",
@@ -30,7 +30,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-01",
-      "sha256": "d44d6335a4d63045f7c70e8e217fcd1dbd38823125fc51cd6223a3942781e335",
+      "sha256": "b0043569e502ef8fb9a3f63fcc031a0f9f0ec4b00dde4bde2f564471c5957237",
     "claim": "Fresh Claude Code --bare event record contains exact Skill attribution, no model tool calls and the exact two-sentence answer."
   }],
   "behaviorDecisions": {
