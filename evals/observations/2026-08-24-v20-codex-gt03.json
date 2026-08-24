@@ -27,7 +27,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-03",
-    "sha256": "af9608cff6c51b342a077f22c2b5f1f3edb75a6ca7f8b2f826ec2f6ba1495238",
+    "sha256": "0a1f7424631a74240730b9c7747839288f9976541097b97aa373c20fe63a9c6a",
     "claim": "Fresh multi-turn material record contains the exact candidate, claim ceiling, fixture-human grant, bounded local tag, failed first tag check and corrected verification."
   }],
   "behaviorDecisions": {

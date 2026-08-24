@@ -6,6 +6,7 @@ import re
 import subprocess
 
 from .identity import (
+    _bounded_git_bytes,
     _bounded_regular_bytes,
     _exact,
     _nonempty_string,
@@ -145,31 +146,15 @@ def known_task_residue(root):
 
 def clean_git_checkout(root):
     try:
-        top_level = subprocess.check_output(
-            ["git", "-C", str(root), "rev-parse", "--show-toplevel"],
-            stderr=subprocess.DEVNULL,
-            text=True,
-            timeout=10,
-        ).strip()
+        top_level = _bounded_git_bytes(
+            root, ("rev-parse", "--show-toplevel"), 4_096
+        ).decode("utf-8").strip()
         if Path(top_level).resolve(strict=True) != root.resolve(strict=True):
             return False
-        status = subprocess.check_output(
-            [
-                "git",
-                "-C",
-                str(root),
-                "status",
-                "--porcelain=v1",
-                "--untracked-files=all",
-            ],
-            stderr=subprocess.DEVNULL,
-            timeout=10,
+        status = _bounded_git_bytes(
+            root, ("status", "--porcelain=v1", "--untracked-files=all")
         )
-        index_flags = subprocess.check_output(
-            ["git", "-C", str(root), "ls-files", "-v", "-z"],
-            stderr=subprocess.DEVNULL,
-            timeout=10,
-        )
+        index_flags = _bounded_git_bytes(root, ("ls-files", "-v", "-z"))
     except (OSError, subprocess.SubprocessError, UnicodeError):
         return False
     hidden_index_state = any(

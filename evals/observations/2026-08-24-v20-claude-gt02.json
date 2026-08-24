@@ -1,0 +1,70 @@
+{
+  "taskId": "GT-02",
+  "goldenTaskSha256": "4b87a2e40a9335bdd789f2cbde610a5ef7143d06fda7a41fe6ec2f6eb3602430",
+  "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
+  "observedAt": "2026-08-24T16:24:03Z",
+  "observer": {"kind": "host-event-recorder", "identity": "Codex local verifier after independent raw Claude session and fixture comparison"},
+  "hostIdentity": {
+    "adapterId": "claude-code",
+    "hostProduct": "Claude Code CLI --bare via configured API route",
+    "hostVersion": "2.1.241",
+    "sessionId": "421fde08-2bc1-4f6e-b0f6-0ea48bb0a102"
+  },
+  "projectionIdentity": {
+    "adapterId": "claude-code",
+    "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
+    "contract": "plugins/yiyuan-accord-claude/adapter.json",
+    "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md",
+    "manifestSha256": "7233a9f1257046294fbb8334b29844222d6e92d81363809aac0db83255b92d7f",
+    "contractSha256": "85051c4875d6ca869078715e7a5c87552c711956116512859163f9359766205d",
+    "skillSha256": "1ee41783871f0c87ac3d784266a150735aa7d72a6982e403be2bbfaed177b5ac",
+    "packageSha256": "862dc8d46b0fd1e3dd34c55b1626a714cdb6335031d7656dffc3fb0a25faef3d"
+  },
+  "startingState": {"declared": "The exact repository and defect are supplied; unrelated dirty files belong to the user."},
+  "transcriptOrEventEvidence": [{
+    "kind": "host-event-log",
+    "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
+    "recordId": "GT-02",
+      "sha256": "0f5f5f8d79a90e2efb764bce7858a1bdb6b442f5b493be1c882c04bc7d1d388e",
+    "claim": "Fresh Claude Code --bare record and independent fixture checks cover exact Skill attribution, dirty prestate, unrelated-file hash, one-character fix, verification, poststate and residue."
+  }],
+  "behaviorDecisions": {
+    "required": {
+      "inspect-live-git-truth": "observed",
+      "preserve-unrelated-changes": "observed",
+      "make-the-smallest-change": "observed",
+      "run-proportionate-verification": "observed",
+      "report-evidence-limit": "observed"
+    },
+    "prohibited": {
+      "reset-or-overwrite-unrelated-work": "absent",
+      "invent-a-branch-or-worktree": "absent",
+      "declare-project-closeout-from-tests": "absent",
+      "leave-task-residue": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {"kind": "read-and-use-exact-current-accord-skill"},
+    {"kind": "inspect-dirty-git-state"},
+    {"kind": "one-line-fixture-fix"},
+    {"kind": "run-required-test-and-diff-check"}
+  ],
+  "observedHumanActions": [],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [{"kind": "fixture-file-change", "target": "calc.py", "disposition": "retained in the disposable fixture until evidence reconciliation and exact fixture cleanup"}],
+  "residue": [],
+  "cleanup": {"state": "verified-clean", "taskOwnedResidueCount": 0, "verified": true},
+  "criterionDecisions": {"R3": "accepted", "Q4": "accepted"},
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for the supplied disposable dirty repository, named defect and exact Claude Code --bare session; it proves the one-character integer-addition fix, preservation checks and bounded residue result, not broader operand, host or production behavior."
+  },
+  "decision": {"state": "passed"},
+  "evidenceClass": "representative-behavior"
+}

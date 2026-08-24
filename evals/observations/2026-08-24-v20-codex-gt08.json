@@ -27,7 +27,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-08",
-    "sha256": "35f4076b2d1e6f78e5fc3ec8331fccdaffecd8decffe899d6a12121babab0d2f",
+    "sha256": "0fd6f05d7b19c07908210b37e4afcfcebc450b7e842af7cf3d1586946dd51111",
     "claim": "Fresh read-only host-admission events use current native and official public sources while distinguishing declared, instruction-effective and comprehensively verified states."
   }],
   "behaviorDecisions": {

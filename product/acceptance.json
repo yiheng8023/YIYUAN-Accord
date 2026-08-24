@@ -5,7 +5,7 @@
   "release": "v2.0",
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "cb2871ce75ea6fc81747813aaa68f97c4aabf9e57d86e9aec11e466b43a57355",
+  "canonicalGoalObjectiveSha256": "ac51b70a32446a2855181b8b498a2b1992761c49da6083ed71c39862b0260719",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": ["deterministic-conformance", "representative-behavior"],
@@ -54,50 +54,50 @@
       "assessment": "verified",
       "evidence": [
         {
-          "locator": "evals/observations/2026-08-24-v20-codex-gt01.json",
-          "sha256": "d8140219175e925538bc7103f3490d2889f526b336f73faeae73ef9449a55b83",
-          "claim": "Passed only for this exact host, projection, prompt and no-op starting state.",
-          "bindsProjection": "codex",
+          "locator": "evals/observations/2026-08-24-v20-claude-gt01.json",
+          "sha256": "4a89d5ca1c6511b6ad23ca58bcd5dd315d0275c291c404219a3b25c844bcd2a8",
+          "claim": "Passed only for this exact Claude Code --bare session, projection, prompt and no-op starting state; no model tool or persistent-effect event was observed, but no independent filesystem poststate is implied.",
+          "bindsProjection": "claude-code",
           "supportsCriterion": "R3"
         },
         {
-          "locator": "evals/observations/2026-08-24-v20-codex-gt02.json",
-          "sha256": "f57767ff56f5a86cc391aecc6bd2967d93e4403b8bec94678fbce835d9d20073",
-          "claim": "Passed only for the supplied disposable dirty repository, named defect and exact Codex host; the invalid read-only preflight carrier is excluded from the decision and retained as setup counterevidence.",
-          "bindsProjection": "codex",
+          "locator": "evals/observations/2026-08-24-v20-claude-gt02.json",
+          "sha256": "d927b51c42e0b7b066fe8c326bb3a7e5c61f9507f3e25b0da3d18af03eb13f82",
+          "claim": "Passed only for the supplied disposable dirty repository, named defect and exact Claude Code --bare session; it proves the one-character integer-addition fix, preservation checks and bounded residue result, not broader operand, host or production behavior.",
+          "bindsProjection": "claude-code",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt03.json",
-          "sha256": "495abbabf8fdd27729a82516a286929c6c5f41ea390023fa153be5f76304c1e5",
+          "sha256": "fd6202cf7f5aadf013ad5e541cd886322f8ae671e80c8c2d833114a16c2f1fe5",
           "claim": "Passed only for candidate 4f69c869aebe7897d001d75e742f1a22e28e68fd, its exact fixture grant and local lightweight tag boundary; the failed first post-tag verification command is retained and the corrected replay passed.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt04.json",
-          "sha256": "644bdfb20311c30e934fd92fb1ed76fcdc55ed2ac546bafd73e19616b7e497fa",
+          "sha256": "2ca5a3d4b7ef5524794e5e1e235f556a8627ac7c852162044060a3a071e9f15a",
           "claim": "Passed only for the supplied report and disposable authority fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt05.json",
-          "sha256": "1322a1de10a9e4b0dc9e83f2baab634a739bd93ff344ee7de1b5ceb7e05c2144",
+          "sha256": "b7fa45d99a76e7dd07bd8bc21e8504d18454fab9a77e7bbcf7cf3f3bb14b4e94",
           "claim": "Passed only for the supplied disposable same-purpose validator fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-claude-gt07.json",
-          "sha256": "804926f6096c01a8b722b26c891749b45bb59b0a669ab21bcd93e62688540e1e",
+          "sha256": "5d72954aa2a6648afbe2f742162ffdeee146a4c27b01b40ac9760ba71adf160f",
           "claim": "Failed cleanup on this exact Claude Code 2.1.241 and DeepSeek route: bounded source-to-destination continuity and reconciliation passed, but configured host hooks created hidden .remember residue and the initial source inventory missed it; cleanup behavior is excluded.",
           "bindsProjection": "claude-code",
           "supportsCriterion": "R3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt08.json",
-          "sha256": "900212bd34ebae628493263fa9a5a7a102ebae4e8a18fd3b3339cfa8f8c08192",
+          "sha256": "2966af2df23e326eeecad9e13113b4ae1c0e92fe67ca0858fcbe8612b8516c2b",
           "claim": "Passed only for this exact Codex 0.149.1 host-admission run; project-local instruction-Skill exposure was observed, while independent tool, Runtime, Hook, MCP, App, comprehensive behavior and universal host support remain unverified.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
@@ -127,7 +127,7 @@
       "evidence": [
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt03.json",
-          "sha256": "495abbabf8fdd27729a82516a286929c6c5f41ea390023fa153be5f76304c1e5",
+          "sha256": "fd6202cf7f5aadf013ad5e541cd886322f8ae671e80c8c2d833114a16c2f1fe5",
           "claim": "Passed only for candidate 4f69c869aebe7897d001d75e742f1a22e28e68fd, its exact fixture grant and local lightweight tag boundary; the failed first post-tag verification command is retained and the corrected replay passed.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q1"
@@ -149,14 +149,14 @@
       "evidence": [
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt04.json",
-          "sha256": "644bdfb20311c30e934fd92fb1ed76fcdc55ed2ac546bafd73e19616b7e497fa",
+          "sha256": "2ca5a3d4b7ef5524794e5e1e235f556a8627ac7c852162044060a3a071e9f15a",
           "claim": "Passed only for the supplied report and disposable authority fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt08.json",
-          "sha256": "900212bd34ebae628493263fa9a5a7a102ebae4e8a18fd3b3339cfa8f8c08192",
+          "sha256": "2966af2df23e326eeecad9e13113b4ae1c0e92fe67ca0858fcbe8612b8516c2b",
           "claim": "Passed only for this exact Codex 0.149.1 host-admission run; project-local instruction-Skill exposure was observed, while independent tool, Runtime, Hook, MCP, App, comprehensive behavior and universal host support remain unverified.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
@@ -177,15 +177,15 @@
       "assessment": "verified",
       "evidence": [
         {
-          "locator": "evals/observations/2026-08-24-v20-codex-gt01.json",
-          "sha256": "d8140219175e925538bc7103f3490d2889f526b336f73faeae73ef9449a55b83",
-          "claim": "Passed only for this exact host, projection, prompt and no-op starting state.",
-          "bindsProjection": "codex",
+          "locator": "evals/observations/2026-08-24-v20-claude-gt01.json",
+          "sha256": "4a89d5ca1c6511b6ad23ca58bcd5dd315d0275c291c404219a3b25c844bcd2a8",
+          "claim": "Passed only for this exact Claude Code --bare session, projection, prompt and no-op starting state; no model tool or persistent-effect event was observed, but no independent filesystem poststate is implied.",
+          "bindsProjection": "claude-code",
           "supportsCriterion": "Q3"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt05.json",
-          "sha256": "1322a1de10a9e4b0dc9e83f2baab634a739bd93ff344ee7de1b5ceb7e05c2144",
+          "sha256": "b7fa45d99a76e7dd07bd8bc21e8504d18454fab9a77e7bbcf7cf3f3bb14b4e94",
           "claim": "Passed only for the supplied disposable same-purpose validator fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q3"
@@ -203,22 +203,22 @@
       "assessment": "verified",
       "evidence": [
         {
-          "locator": "evals/observations/2026-08-24-v20-codex-gt02.json",
-          "sha256": "f57767ff56f5a86cc391aecc6bd2967d93e4403b8bec94678fbce835d9d20073",
-          "claim": "Passed only for the supplied disposable dirty repository, named defect and exact Codex host; the invalid read-only preflight carrier is excluded from the decision and retained as setup counterevidence.",
-          "bindsProjection": "codex",
+          "locator": "evals/observations/2026-08-24-v20-claude-gt02.json",
+          "sha256": "d927b51c42e0b7b066fe8c326bb3a7e5c61f9507f3e25b0da3d18af03eb13f82",
+          "claim": "Passed only for the supplied disposable dirty repository, named defect and exact Claude Code --bare session; it proves the one-character integer-addition fix, preservation checks and bounded residue result, not broader operand, host or production behavior.",
+          "bindsProjection": "claude-code",
           "supportsCriterion": "Q4"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-codex-gt05.json",
-          "sha256": "1322a1de10a9e4b0dc9e83f2baab634a739bd93ff344ee7de1b5ceb7e05c2144",
+          "sha256": "b7fa45d99a76e7dd07bd8bc21e8504d18454fab9a77e7bbcf7cf3f3bb14b4e94",
           "claim": "Passed only for the supplied disposable same-purpose validator fixture.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
         },
         {
           "locator": "evals/observations/2026-08-24-v20-claude-gt07.json",
-          "sha256": "804926f6096c01a8b722b26c891749b45bb59b0a669ab21bcd93e62688540e1e",
+          "sha256": "5d72954aa2a6648afbe2f742162ffdeee146a4c27b01b40ac9760ba71adf160f",
           "claim": "Failed cleanup on this exact Claude Code 2.1.241 and DeepSeek route: bounded source-to-destination continuity and reconciliation passed, but configured host hooks created hidden .remember residue and the initial source inventory missed it; cleanup behavior is excluded.",
           "bindsProjection": "claude-code",
           "supportsCriterion": "Q4"

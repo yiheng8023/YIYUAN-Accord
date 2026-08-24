@@ -27,7 +27,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-04",
-    "sha256": "81db5d1a1f21fba2a5aa4181711209d9f7e44db079d4113714930cd334e3aa99",
+    "sha256": "33918836d2856c6aef2ef8b749701af15fca43d80f146bb036870c0644a536fb",
     "claim": "Fresh full-report read, factual reconciliation, authority mapping and no-mutation event record."
   }],
   "behaviorDecisions": {

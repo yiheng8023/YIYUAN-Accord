@@ -27,23 +27,29 @@ Then read, in order:
 - Canonical identity: YIYUAN Accord / `yiyuan-accord` /
   `yiyuan_accord` / `https://github.com/yiheng8023/YIYUAN-Accord`.
 - Active line: v2.0. `program.status` is `ready`; the sole increment, work item
-  and four ordered repository stages are `completed`. Recover the exact clean
-  local candidate from live Git rather than this navigation file. The stale
-  host Goal was cleared, then the final canonical objective was created
-  directly as the active host Goal without a token budget and compared
-  character-for-character.
-- R1–R4 and Q1–Q4 are `verified` from the deterministic lanes and the replayed
-  structured source bundle. The fresh sample has six passes and one retained
-  GT-07 failure: bounded source-to-destination continuity and reconciliation
-  passed, but configured host hooks created hidden `.remember` residue and the
-  initial source inventory missed it. The exact claim exclusion is
-  `GT-07:cleanup`; recovery does not convert the task into a pass. Historical
-  results remain counterevidence only.
-- The publishable source bundle now contains independently comparable material
-  messages, effects, exact human authority where applicable, official-source
-  locators, cleanup records, redactions and evidence boundaries. Its independent
-  comparison with the original host/session records still belongs to the exact
-  local verification gate and cannot be self-attested by repository data.
+  and all four repository stages are `completed`. These lifecycle states become
+  a repository candidate only on their exact clean committed tree; live Git and
+  the canonical verifier decide that fact. The previous candidate was invalidated by the
+  bidirectional historical audit. The superseded host Goal was cleared on
+  2026-08-25; the current canonical objective is active after direct Goal API
+  creation without a token budget and a character-for-character comparison of
+  all 1546 Unicode code points.
+- R1–R4 and Q1–Q4 remain repository assessments. A clean local candidate grants
+  no hosted, human, publication, field or completion outcome. The current sample has six
+  passes and one retained GT-07 failure. GT-01/02 now use selected Claude Code
+  `--bare` sessions with exact runtime Skill attribution and independent
+  postchecks; the earlier Codex attribution is retained only as invalidated,
+  revision-and-digest-bound counterevidence at
+  `975fc7a6846dbcb89f819c2b091721b999bbb52e`. GT-07 continuity passed, while task-time cleanup failed on
+  hidden `.remember` residue and an initial inventory miss. Its fixture was
+  later removed after independent comparison without reading hidden contents;
+  `GT-07:cleanup` remains excluded and the task remains failed.
+- The publishable source bundle now binds each record to a structured
+  `projectionExposure`, validates official-source authority, URL and capture
+  time, and retains material messages, effects, human authority, cleanup,
+  redactions and claim boundaries. Development-time raw comparisons are
+  complete; the final bundle must still be compared again with original
+  host/session records on the unchanged clean candidate and cannot self-attest.
 - Treat the cleared stale Goal as possible process debt, not proven universal
   causation. Replay from the earliest evidence-supported dependency boundary;
   a later correction may reveal either debt or an earlier misjudgment, while
@@ -54,9 +60,11 @@ Then read, in order:
   bounded identifier/literal/static-concatenation checks on supported Python
   3.10-3.14 hosts, and exact NFKC/casefold lexical boundaries over strictly
   decoded non-Python whole text without host escape interpretation. All owned
-  reads are bounded regular-file reads; unavailable or indeterminate surfaces
-  block conformance, while hidden checkout flags block clean-candidate
-  readiness. Only digest-bound Markdown research inputs under
+  reads are descriptor-bound and checked for path and metadata stability; Git
+  index, status and historical captures are file-backed, time-bounded and
+  size-bounded. Unavailable or indeterminate surfaces block conformance, while
+  hidden checkout flags block clean-candidate readiness. Only digest-bound
+  Markdown research inputs under
   `research/reviews/` are inert exceptions. Current checks must be recomputed
   after every authority or evidence edit; working-tree results do not become
   clean-candidate evidence until the candidate is committed and replayed.
@@ -64,6 +72,12 @@ Then read, in order:
   and host documentation as high-weight dynamic evidence before relying on a
   remembered host fact. Reuse official observation surfaces when useful, but do
   not add their runtime or orchestration implementation to the portable core.
+- The existing YIYUAN NEXUS mark was evaluated for plugin presentation. Current
+  Codex manifests admit optional `composerIcon`/`logo` assets, while the Claude
+  Code manifest schema has no equivalent visual field. Adding a Codex-only mark
+  now would change package identity and replay current-projection evidence for
+  an optional presentation benefit, so v2.0 defers it to a separate bounded
+  post-release increment with an explicit trademark-use boundary.
 - Determine the first incomplete gate from live Git, the exact candidate's
   local checks, hosted results, task-time human authority and public release
   state. Never infer a live gate from this navigation file. A ready repository
@@ -93,7 +107,8 @@ Then read, in order:
    each decision, material effect, human burden and cleanup disposition; a
    failed task remains failed and narrows the claim.
 4. Mark criteria verified only from live-computed lanes and accepted behavior
-   evidence, retain the completed increment, and commit one clean local candidate.
+   evidence; only after every reopened stage passes may the increment become
+   completed and one clean local candidate be committed.
 5. On that unchanged local SHA, directly run the canonical verifier, both host
    checks, full product tests, diff, identity, link, workflow and residue checks
    plus independent specification, implementation-robustness and
@@ -141,7 +156,8 @@ git diff --check
 
 A routine green local check is deterministic conformance only. The exact local
 completion gate additionally requires the complete unchanged-candidate check
-set and independent dual-axis review observed by the active goal carrier.
+set and independent specification, implementation-robustness and
+standards-conformance review observed by the active goal carrier.
 Before a handoff, record the exact checkout, upstream relation, dirty paths,
 program and stage state, checks, residue, next external or human gate, and
 source-carrier release state.

@@ -19,6 +19,7 @@ from .guardrails import (
     validate_host_projection,
 )
 from .identity import (
+    _bounded_git_bytes,
     _bounded_regular_bytes,
     _nonempty_string,
     _string_list,
@@ -217,11 +218,7 @@ def _validate_input_evidence(root, program, errors):
 
 def _repository_files(root):
     try:
-        output = subprocess.check_output(
-            ["git", "-C", str(root), "ls-files", "--stage", "-z"],
-            stderr=subprocess.DEVNULL,
-            timeout=10,
-        )
+        output = _bounded_git_bytes(root, ("ls-files", "--stage", "-z"))
         files, errors = set(), set()
         for raw_record in output.split(b"\0"):
             if not raw_record:

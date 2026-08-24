@@ -6,6 +6,8 @@ from pathlib import Path
 import re
 import stat
 import subprocess
+import tempfile
+import time
 import tokenize
 from unicodedata import normalize
 from urllib.parse import urlsplit
@@ -28,6 +30,7 @@ ACCEPTANCE_FIELDS = set((
     "completionExpression evidenceLanes representativeBehaviorPolicy criteria "
     "candidateVerification releaseAuthorization publicRelease claimCeiling"
 ).split())
+_GIT_CAPTURE_LIMIT = 262_144
 
 
 def _nonempty_string(value):
@@ -59,6 +62,30 @@ def _safe_https_locator(value):
         and parsed.username is None and parsed.password is None
         and not parsed.query and not parsed.fragment
     )
+
+
+def _bounded_git_bytes(root, arguments, limit=_GIT_CAPTURE_LIMIT):
+    with tempfile.TemporaryFile() as output:
+        process = subprocess.Popen(
+            ["git", "-C", str(root), *arguments], stdout=output,
+            stderr=subprocess.DEVNULL,
+        )
+        try:
+            deadline = time.monotonic() + 10
+            while process.poll() is None:
+                if (os.fstat(output.fileno()).st_size > limit
+                        or time.monotonic() >= deadline):
+                    raise subprocess.SubprocessError("bounded Git capture failed")
+                time.sleep(.01)
+            if process.returncode or os.fstat(output.fileno()).st_size > limit:
+                raise subprocess.SubprocessError("bounded Git capture failed")
+        except BaseException:
+            if process.poll() is None:
+                process.kill()
+            process.wait()
+            raise
+        output.seek(0)
+        return output.read(limit + 1)
 
 
 def _ast_name(node):
@@ -323,8 +350,11 @@ def _bounded_regular_bytes(path):
     try:
         descriptor = os.open(path, flags)
         opened = os.fstat(descriptor)
+        state = lambda value: (value.st_size, value.st_mtime_ns, value.st_ctime_ns)
         if not stat.S_ISREG(opened.st_mode):
             return None, "not-regular"
+        if not os.path.samestat(before, opened):
+            return None, "unreadable"
         if opened.st_size > _SCAN_LIMIT:
             return None, "oversized"
         chunks, remaining = [], _SCAN_LIMIT + 1
@@ -335,6 +365,13 @@ def _bounded_regular_bytes(path):
             chunks.append(chunk)
             remaining -= len(chunk)
         source = b"".join(chunks)
+        after, current = os.fstat(descriptor), path.lstat()
+        if (
+            not os.path.samestat(after, current)
+            or state(opened) != state(after)
+            or state(before) != state(current)
+        ):
+            return None, "unreadable"
     except (MemoryError, OSError):
         return None, "unreadable"
     finally:
@@ -370,10 +407,12 @@ def active_tree_errors(
             r"[0-9a-f]{40}", historical_revision
         ):
             raise ValueError
-        history = [subprocess.check_output(
-            ["git", "-C", str(root), "show", f"{historical_revision}:{locator}"],
-            text=True, encoding="utf-8", timeout=10, stderr=subprocess.DEVNULL,
-        ) for locator in ("product/constitution.json", "README.md")]
+        history = [
+            _bounded_git_bytes(
+                root, ("show", f"{historical_revision}:{locator}"), _SCAN_LIMIT
+            ).decode("utf-8")
+            for locator in ("product/constitution.json", "README.md")
+        ]
         old, readme = json.loads(history[0]), history[1]
         command = old.get("authority", {}).get("executableVerifier", "")
         product_id = old.get("productId")

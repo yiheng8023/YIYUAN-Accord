@@ -3,10 +3,16 @@ from hashlib import sha256
 import json
 import re
 
-from .identity import _exact, _nonempty_string as _text
+from .identity import _exact, _nonempty_string as _text, _safe_https_locator
 
 
 STATES = {"passed", "failed", "failed-repeated-same-purpose"}
+_OFFICIAL_PREFIXES = (
+    "https://openai.com/", "https://help.openai.com/",
+    "https://platform.openai.com/", "https://developers.openai.com/",
+    "https://github.com/openai/",
+)
+_PROJECTION_FIELDS = ("adapterId", "skill", "skillSha256")
 
 
 def _records(value):
@@ -27,31 +33,52 @@ def _digest(value):
         separators=(",", ":")).encode()).hexdigest()
 
 
-def _publishable_payload(p, task, cleanup):
-    if not isinstance(p, dict):
+def _official_source(source, captured_at):
+    retrieved_at = _time(source.get("retrievedAt")) if isinstance(source, dict) else None
+    url = source.get("url") if isinstance(source, dict) else None
+    return (
+        _exact(source, ("kind", "url", "retrievedAt", "claim"),
+               ("url", "retrievedAt", "claim"))
+        and source.get("kind") == "official-source"
+        and _safe_https_locator(url)
+        and url.startswith(_OFFICIAL_PREFIXES)
+        and retrieved_at is not None and captured_at is not None
+        and retrieved_at <= captured_at
+    )
+
+
+def _publishable_payload(payload, task, cleanup, captured_at, projection):
+    if not isinstance(payload, dict):
         return False
-    m, sources, evidence = (
-        p.get("messages"), p.get("officialSources"), p.get("cleanupEvidence")
+    messages, sources, evidence, exposure = (
+        payload.get("messages"), payload.get("officialSources"),
+        payload.get("cleanupEvidence"), payload.get("projectionExposure")
     )
     required = task.get("required", [])
     return (
-        p.get("captureProtocol") == "direct-host-material-events-v1"
-        and _records(m) and m
-        and {item.get("role") for item in m} == {"user", "assistant"}
-        and all(_text(item.get("phase")) and _text(item.get("text")) for item in m)
-        and _records(p.get("materialEvents")) and p["materialEvents"]
+        payload.get("captureProtocol") == "direct-host-material-events-v1"
+        and _records(messages) and messages
+        and {item.get("role") for item in messages} == {"user", "assistant"}
+        and all(_text(item.get("phase")) and _text(item.get("text")) for item in messages)
+        and _records(payload.get("materialEvents")) and payload["materialEvents"]
+        and _exact(exposure, ("kind", *_PROJECTION_FIELDS), _PROJECTION_FIELDS)
+        and exposure["kind"] in {
+            "exact-skill-content-read", "host-runtime-attribution"
+        }
+        and isinstance(projection, dict)
+        and all(exposure[field] == projection.get(field)
+                for field in _PROJECTION_FIELDS)
         and _records(sources)
-        and all(_text(item.get("url")) and item["url"].startswith("https://")
-                and _time(item.get("retrievedAt")) is not None
-                for item in sources)
+        and all(_official_source(item, captured_at) for item in sources)
+        and len({item["url"] for item in sources}) == len(sources)
         and ("resolve-current-official-guidance" not in required or len(sources) >= 2)
         and isinstance(evidence, dict) and set(evidence) == {"state", "observations"}
         and evidence["state"] == (cleanup or {}).get("state")
         and _records(evidence["observations"]) and evidence["observations"]
-        and _records(p.get("redactions")) and _text(p.get("evidenceBoundary"))
+        and _records(payload.get("redactions")) and _text(payload.get("evidenceBoundary"))
         and ("surface-only-the-exact-human-decision" not in required or any(
             item["phase"] == "human-grant" and item["role"] == "user"
-            for item in m
+            for item in messages
         ))
     )
 
@@ -86,9 +113,9 @@ def _observation_errors(
     projection_id, evaluation_digest, read_json,
 ):
     errors = []
-    at=_time(observation.get("observedAt"))
+    observed_at = _time(observation.get("observedAt"))
     observer, host = observation.get("observer"), observation.get("hostIdentity")
-    if at is None or at > datetime.now().astimezone():
+    if observed_at is None or observed_at > datetime.now().astimezone():
         errors.append(f"{label} observedAt is invalid")
     if not _exact(observer, ("kind", "identity"), ("identity",)) or observer.get(
         "kind"
@@ -141,9 +168,10 @@ def _observation_errors(
             and record.get("goldenTaskSha256") == task_digest
             and record.get("evaluationContractSha256") == evaluation_digest
             and record.get("hostIdentity") == host
-            and captured is not None and at is not None and captured <= at
+            and captured is not None and observed_at is not None and captured <= observed_at
             and _publishable_payload(
-                record.get("payload"), task, observation.get("cleanup")
+                record.get("payload"), task, observation.get("cleanup"), captured,
+                observation.get("projectionIdentity"),
             )
             and source.get("sha256") == _digest(record)
         )

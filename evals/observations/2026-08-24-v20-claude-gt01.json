@@ -2,28 +2,26 @@
   "taskId": "GT-01",
   "goldenTaskSha256": "d2981a5e3b66049fe0020f6d17873d8deec4954fb0779be0a6d0ab16e82fbee7",
   "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
-  "observedAt": "2026-08-24T15:20:00Z",
+  "observedAt": "2026-08-24T16:18:46Z",
   "observer": {
     "kind": "host-event-recorder",
-    "identity": "Codex v2.0 continuation carrier thread 01a02d54-0769-7840-974c-07c9b31fda3b"
+    "identity": "Codex local verifier after independent raw Claude session comparison"
   },
   "hostIdentity": {
-    "adapterId": "codex",
-    "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)",
-    "hostVersion": "0.149.1",
-    "sessionId": "01a03434-f4c2-7ff3-8302-b681bfee64af"
+    "adapterId": "claude-code",
+    "hostProduct": "Claude Code CLI --bare via configured API route",
+    "hostVersion": "2.1.241",
+    "sessionId": "0adf5ee6-728e-4bf0-a344-8f52e7f0a101"
   },
   "projectionIdentity": {
-    "adapterId": "codex",
-    "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
-    "marketplace": ".agents/plugins/marketplace.json",
-    "contract": "plugins/yiyuan-accord-codex/adapter.json",
-    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
-    "manifestSha256": "1f5660ed4b6ddc6725e30fee6f588459c79ecb40f4c9805ebb162e8d64465a5f",
-    "marketplaceSha256": "a680e15cf06c551d93f7869b20fed25ef0c0ef3c0c7a41a10ec85a583be973ae",
-    "contractSha256": "2a5caca48a499d3a7c55221b07547cf66bcce2a2c564c455af9d33197219802d",
-    "skillSha256": "0b3ec9642bc0a5296c8114c0754867cd2a0f53eb9b01b87fe2e67b33e4fe7984",
-    "packageSha256": "0c56602060f673ce5453b42b134425a2a449c195312c47743c118e0e668b8206"
+    "adapterId": "claude-code",
+    "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
+    "contract": "plugins/yiyuan-accord-claude/adapter.json",
+    "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md",
+    "manifestSha256": "7233a9f1257046294fbb8334b29844222d6e92d81363809aac0db83255b92d7f",
+    "contractSha256": "85051c4875d6ca869078715e7a5c87552c711956116512859163f9359766205d",
+    "skillSha256": "1ee41783871f0c87ac3d784266a150735aa7d72a6982e403be2bbfaed177b5ac",
+    "packageSha256": "862dc8d46b0fd1e3dd34c55b1626a714cdb6335031d7656dffc3fb0a25faef3d"
   },
   "startingState": {
     "declared": "No repository inspection, external source, tool, installation, topology change or persistent state is needed."
@@ -32,8 +30,8 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-01",
-    "sha256": "ef877f2a688d2a49278569b706638f9130174014d83aa8f88b99b8ced8b9fe3c",
-    "claim": "Fresh direct no-tool Codex CLI event record and exact two-sentence answer."
+      "sha256": "d44d6335a4d63045f7c70e8e217fcd1dbd38823125fc51cd6223a3942781e335",
+    "claim": "Fresh Claude Code --bare event record contains exact Skill attribution, no model tool calls and the exact two-sentence answer."
   }],
   "behaviorDecisions": {
     "required": {
@@ -48,7 +46,10 @@
       "claim-production-acceptance": "absent"
     }
   },
-  "observedAgentActions": [{"kind": "direct-two-sentence-answer"}],
+  "observedAgentActions": [
+    {"kind": "exact-runtime-skill-attribution"},
+    {"kind": "direct-two-sentence-answer"}
+  ],
   "observedHumanActions": [],
   "humanBurden": {
     "avoidable-question-count": 0,
@@ -63,7 +64,7 @@
   "claimLimit": {
     "retainedFailure": false,
     "excludedClaims": [],
-    "statement": "Passed only for this exact host, projection, prompt and no-op starting state."
+    "statement": "Passed only for this exact Claude Code --bare session, projection, prompt and no-op starting state; no model tool or persistent-effect event was observed, but no independent filesystem poststate is implied."
   },
   "decision": {"state": "passed"},
   "evidenceClass": "representative-behavior"

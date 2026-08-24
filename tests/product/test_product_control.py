@@ -13,9 +13,18 @@ from yiyuan_accord.identity import active_tree_errors
 ROOT = Path(__file__).resolve().parents[2]
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
+OBS = {
+    1: 'evals/observations/2026-08-24-v20-claude-gt01.json',
+    3: 'evals/observations/2026-08-24-v20-codex-gt03.json',
+    7: 'evals/observations/2026-08-24-v20-claude-gt07.json',
+    8: 'evals/observations/2026-08-24-v20-codex-gt08.json',
+}
 CRITERIA = ['R1', 'R2', 'R3', 'R4', 'Q1', 'Q2', 'Q3', 'Q4']
 RETIRED = {'productId': 'retired-product',
            'authority': {'executableVerifier': 'python -B -m retired_module verify'}}
+
+def _retired_history():
+    return [json.dumps(RETIRED).encode(), b'# Retired Product\n']
 
 def _read(root, locator):
     return json.loads((root / locator).read_text(encoding='utf-8'))
@@ -24,6 +33,11 @@ def _write(root, locator, value):
     path = root / locator
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, separators=(',', ':')) + '\n', encoding='utf-8')
+
+def _git(root, *arguments, **options):
+    return subprocess.check_output(
+        ['git', '-C', str(root), *arguments], stderr=subprocess.DEVNULL, **options
+    )
 
 @contextmanager
 def _fixture():
@@ -46,17 +60,10 @@ def _indexed_fixture():
             dirs_exist_ok=True,
             ignore=shutil.ignore_patterns('.git', '.tmp', '__pycache__', '*.pyc'),
         )
-        subprocess.run(
-            ['git', '-C', str(target), 'add', '-A'],
-            check=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        subprocess.run([
-            'git', '-C', str(target), '-c', 'user.name=Accord Fixture',
-            '-c', 'user.email=fixture@example.invalid', 'commit', '--quiet',
-            '--allow-empty', '-m', 'current fixture',
-        ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        _git(target, 'add', '-A')
+        _git(target, '-c', 'user.name=Accord Fixture',
+             '-c', 'user.email=fixture@example.invalid', 'commit', '--quiet',
+             '--allow-empty', '-m', 'current fixture')
         yield target
 
 def _rehash(root, locator):
@@ -68,21 +75,6 @@ def _rehash(root, locator):
             item['sha256'] = digest
     _write(root, A, acceptance)
 
-def _attach_evidence(root, criterion_id, locator):
-    acceptance = _read(root, A)
-    observation = _read(root, locator)
-    criterion = next(
-        item for item in acceptance['criteria'] if item['id'] == criterion_id
-    )
-    criterion['evidence'].append({
-        'locator': locator,
-        'sha256': hashlib.sha256((root / locator).read_bytes()).hexdigest(),
-        'claim': observation['claimLimit']['statement'],
-        'bindsProjection': observation['projectionIdentity']['adapterId'],
-        'supportsCriterion': criterion_id,
-    })
-    _write(root, A, acceptance)
-
 def _observe(root, locator, observation=None, label='fixture observation'):
     golden, observed = _read(root, G), observation or _read(root, locator)
     task = next(item for item in golden['tasks'] if item['id'] == observed['taskId'])
@@ -91,6 +83,12 @@ def _observe(root, locator, observation=None, label='fixture observation'):
         observed['projectionIdentity']['adapterId'], observed['evaluationContractSha256'],
         lambda current_root, current_locator, _: _read(current_root, current_locator)
     )
+
+def _source_errors(root, locator, bundle, observation):
+    record = bundle['records'][observation['taskId']]
+    _write(root, SOURCE, bundle)
+    observation['transcriptOrEventEvidence'][0]['sha256'] = _digest(record)
+    return _observe(root, locator, observation)[0]
 
 def _balanced_add(terms):
     terms = list(terms)
@@ -107,12 +105,36 @@ def _retired_byte_errors(body, locator='sample.txt'):
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary)
         (root / locator).write_bytes(body)
-        history = [json.dumps(RETIRED), '# Retired Product\n']
-        with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=history):
-            return active_tree_errors(root, [locator], '0' * 40)
+        return _history_errors(root, [locator])
+
+def _history_errors(root, locators, research=None):
+    with patch('yiyuan_accord.identity._bounded_git_bytes',
+               side_effect=_retired_history()):
+        return active_tree_errors(root, locators, '0' * 40, research or set())
+
+def _active_file_errors(locator, body='safe\n', research=None):
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        path = root / locator
+        path.parent.mkdir(parents=True)
+        path.write_text(body, encoding='utf-8')
+        return _history_errors(root, [locator], research)
+
+@contextmanager
+def _deny_path(method, target):
+    original = getattr(Path, method)
+    def denied(path, *args, **kwargs):
+        if path == target:
+            raise AssertionError(f'unbounded Path.{method}')
+        return original(path, *args, **kwargs)
+    with patch.object(Path, method, denied):
+        yield
 
 def _lacks(errors, *fragments):
     return not any(fragment in error for error in errors for fragment in fragments)
+
+def _errors(root):
+    return verify_product(root)['errors']
 
 class ProductControlTests(unittest.TestCase):
 
@@ -125,7 +147,7 @@ class ProductControlTests(unittest.TestCase):
             value = _read(root, locator)
             mutate(value)
             _write(root, locator, value)
-            self.assert_has(verify_product(root)['errors'], message)
+            self.assert_has(_errors(root), message)
 
     def test_current_contract_is_valid_and_explicitly_incomplete(self):
         report = verify_product(ROOT)
@@ -222,32 +244,18 @@ class ProductControlTests(unittest.TestCase):
             target = root / projection['skill']
             with target.open('wb') as stream:
                 stream.truncate(2_000_000)
-            original_text, original_bytes = Path.read_text, Path.read_bytes
-
-            def reject_text(path, *args, **kwargs):
-                if path == target:
-                    raise AssertionError('oversized Skill was read without a bound')
-                return original_text(path, *args, **kwargs)
-
-            def reject_bytes(path):
-                if path == target:
-                    raise AssertionError('oversized package file was read without a bound')
-                return original_bytes(path)
-
-            with patch.object(Path, 'read_text', reject_text), \
-                    patch.object(Path, 'read_bytes', reject_bytes):
+            with _deny_path('read_text', target), _deny_path('read_bytes', target):
                 errors = host_check(root, 'codex')['errors']
             self.assert_has(errors, 'Skill exceeds budget', 'package identity is unavailable')
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         with _fixture() as root:
-            locator = 'evals/observations/2026-08-24-v20-codex-gt01.json'
-            _attach_evidence(root, 'R3', locator)
+            locator = OBS[1]
             observation = _read(root, locator)
             observation['projectionIdentity']['skillSha256'] = '0' * 64
             _write(root, locator, observation)
             _rehash(root, locator)
-            self.assert_has(verify_product(root)['errors'], 'skillSha256 does not match')
+            self.assert_has(_errors(root), 'skillSha256 does not match')
 
     def test_representative_sample_binds_projection_source_and_task(self):
         acceptance, golden = _read(ROOT, A), _read(ROOT, G)
@@ -266,13 +274,12 @@ class ProductControlTests(unittest.TestCase):
         )
 
         with _fixture() as root:
-            locator = 'evals/observations/2026-08-24-v20-codex-gt01.json'
+            locator = OBS[1]
             observation = _read(root, locator)
             source = _read(root, SOURCE)
             source['records']['GT-01']['payload'] = 'tampered'
-            _write(root, SOURCE, source)
             observation['goldenTaskSha256'] = '0' * 64
-            errors, _ = _observe(root, locator, observation)
+            errors = _source_errors(root, locator, source, observation)
             self.assert_has(
                 errors,
                 'Golden Task digest mismatch',
@@ -280,29 +287,43 @@ class ProductControlTests(unittest.TestCase):
             )
             record = source['records']['GT-01']
             observation['goldenTaskSha256'] = record['goldenTaskSha256']
-            observation['transcriptOrEventEvidence'][0]['sha256'] = _digest(record)
-            self.assert_has(_observe(root, locator, observation)[0],
+            self.assert_has(_source_errors(root, locator, source, observation),
                             'sourceEvidence[0] is invalid')
 
-        payload = _read(ROOT, SOURCE)['records']['GT-02']['payload']
-        self.assertEqual(payload['captureProtocol'], 'direct-host-material-events-v1')
-        current_gt08 = _read(
-            ROOT, 'evals/observations/2026-08-24-v20-codex-gt08.json'
-        )
-        self.assertEqual(current_gt08['decision'], {'state': 'passed'})
-        self.assertEqual(
-            current_gt08['behaviorDecisions']['required'][
-                'resolve-current-official-guidance'
-            ],
-            'observed',
-        )
+        with _fixture() as root:
+            locator = OBS[3]
+            observation = _read(root, locator)
+            source = _read(root, SOURCE)
+            record = source['records']['GT-03']
+            record['payload']['projectionExposure'] = {
+                'kind': 'exact-skill-content-read',
+                'adapterId': 'codex',
+                'skill': observation['projectionIdentity']['skill'],
+                'skillSha256': '0' * 64,
+            }
+            self.assert_has(_source_errors(root, locator, source, observation),
+                            'sourceEvidence[0] is invalid')
+
+        with _fixture() as root:
+            locator = OBS[8]
+            observation = _read(root, locator)
+            original = _read(root, SOURCE)
+            official = original['records']['GT-08']['payload']['officialSources']
+            invalid_sources = (
+                [official[0], official[0]],
+                [dict(official[0], kind='web-page'), official[1]],
+                [dict(official[0], url='https://example.invalid/source'), official[1]],
+                [dict(official[0], retrievedAt='2999-01-01T00:00:00Z'), official[1]],
+            )
+            for sources in invalid_sources:
+                bundle = json.loads(json.dumps(original))
+                record = bundle['records']['GT-08']
+                record['payload']['officialSources'] = sources
+                self.assert_has(_source_errors(root, locator, bundle, observation),
+                                'sourceEvidence[0] is invalid')
 
     def test_failed_sample_narrows_claim(self):
         with _fixture() as root:
-            _attach_evidence(
-                root, 'Q1',
-                'evals/observations/2026-08-24-v20-codex-gt03.json',
-            )
             acceptance = _read(root, A)
             criterion = next(
                 item for item in acceptance['criteria'] if item['id'] == 'Q1'
@@ -310,7 +331,7 @@ class ProductControlTests(unittest.TestCase):
             criterion['evidence'][0]['claim'] = 'overclaim'
             _write(root, A, acceptance)
             self.assert_has(
-                verify_product(root)['errors'],
+                _errors(root),
                 'claim must equal claimLimit.statement',
             )
         self.assertEqual(
@@ -320,7 +341,7 @@ class ProductControlTests(unittest.TestCase):
                       v['claimCeiling'].update(
                           retainedBehaviorExclusions=['GT-07:stale exclusion']))
         with _fixture() as root:
-            locator = 'evals/observations/2026-08-24-v20-claude-gt07.json'
+            locator = OBS[7]
             observation = _read(root, locator)
             observation['criterionDecisions']['Q4'] = 'accepted'
             observation['claimLimit'] = {'retainedFailure': False, 'excludedClaims': [], 'statement': 'all supported'}
@@ -332,7 +353,7 @@ class ProductControlTests(unittest.TestCase):
                 'claimLimit contradicts behavior',
                 'cleanup contradicts residue',
             )
-            locator = 'evals/observations/2026-08-24-v20-codex-gt01.json'
+            locator = OBS[1]
             observation = _read(root, locator)
             observation['decision'] = {'state': 'failed'}
             errors, state = _observe(root, locator, observation, 'must-pass fixture')
@@ -352,13 +373,13 @@ class ProductControlTests(unittest.TestCase):
             )
             for old, new in mutations:
                 workflow.write_bytes(body.replace(old, new))
-                self.assert_has(verify_product(root)['errors'],
+                self.assert_has(_errors(root),
                                 'derived surface markers or structure')
             workflow.write_bytes(body)
             readme = (root / 'README.md').read_text(encoding='utf-8')
             (root / 'README.md').write_text(
                 readme.replace('restart the desktop app', 'skip reload'), encoding='utf-8')
-            self.assert_has(verify_product(root)['errors'], 'derived surface markers')
+            self.assert_has(_errors(root), 'derived surface markers')
             (root / 'README.md').write_text(readme, encoding='utf-8')
             program['goalModePrompt']['mapsTo'].remove('Q4')
             increment = program['increment']
@@ -370,7 +391,7 @@ class ProductControlTests(unittest.TestCase):
             program['goalModePrompt']['objective'] = '先推送再审查'
             program['goalModePrompt']['workStageIds'] = ['wrong']
             _write(root, P, program)
-            self.assert_has(verify_product(root)['errors'], 'goalModePrompt.mapsTo',
+            self.assert_has(_errors(root), 'goalModePrompt.mapsTo',
                             'increment.acceptanceIds', 'workItems[0].acceptanceIds',
                             'closeoutSequence', 'required release gate sequence',
                             'workStageIds', 'objective is not the canonical projection',
@@ -405,228 +426,81 @@ class ProductControlTests(unittest.TestCase):
             acceptance['claimCeiling']['finiteReleaseClaims'].append(acceptance['claimCeiling']['notImplied'][0])
             _write(root, A, acceptance)
             (root / 'docs/releases/v2.0.md').write_text('# expanded\n', encoding='utf-8')
-            self.assert_has(verify_product(root)['errors'], 'systems do not match', 'publicRelease policy', 'release notes digest', 'claims and exclusions overlap')
+            self.assert_has(_errors(root), 'systems do not match', 'publicRelease policy',
+                            'release notes digest', 'claims and exclusions overlap')
 
     def test_complexity_identity_and_paths_fail_closed(self):
         with _fixture() as root:
             report = verify_product(root)
-            self.assert_has(
-                report['errors'],
-                'tracked repository surface is unavailable',
-            )
+            self.assert_has(report['errors'], 'tracked repository surface is unavailable')
             measured = report['complexity']['productCodeAndTestBytes']
             program = _read(root, P)
             percent = program['complexityBudget']['minimumProductCodeAndTestHeadroomPercent']
             valid_limit = (measured * 100 + 99 - percent) // (100 - percent)
             while valid_limit - measured < (valid_limit * percent + 99) // 100:
                 valid_limit += 1
-            program['complexityBudget']['targets']['maxProductCodeAndTestBytes'] = valid_limit - 1
-            _write(root, P, program)
-            self.assert_has(verify_product(root)['errors'], 'complexity headroom too small')
-            program['complexityBudget']['targets']['maxProductCodeAndTestBytes'] = valid_limit
-            _write(root, P, program)
-            self.assertTrue(_lacks(
-                verify_product(root)['errors'], 'complexity headroom too small'
-            ))
+            target = program['complexityBudget']['targets']
+            for limit, rejected in ((valid_limit - 1, True), (valid_limit, False)):
+                target['maxProductCodeAndTestBytes'] = limit
+                _write(root, P, program)
+                errors = _errors(root)
+                self.assertEqual(
+                    any('complexity headroom too small' in error for error in errors),
+                    rejected,
+                )
 
         with _indexed_fixture() as root:
-            revision = subprocess.check_output(
-                ['git', '-C', str(root), 'rev-parse', 'HEAD'],
-                text=True,
-            ).strip()
+            revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             (root / 'vendor').mkdir()
-            subprocess.run([
-                'git', '-C', str(root), 'update-index', '--add',
-                '--cacheinfo', '160000', revision, 'vendor',
-            ], check=True)
+            _git(root, 'update-index', '--add', '--cacheinfo', '160000', revision, 'vendor')
             self.assert_has(
-                verify_product(root)['errors'],
+                _errors(root),
                 'tracked repository entry is not a regular file: vendor (mode 160000)',
             )
 
-        with _indexed_fixture() as root:
-            (root / '.DS_Store').write_bytes(b'\0retired_module\0')
-            sparse_locator = 'docs/license-policy.md'
-            subprocess.run([
-                'git', '-C', str(root), 'update-index', '--skip-worktree',
-                sparse_locator,
-            ], check=True)
-            (root / sparse_locator).unlink()
-            status = subprocess.check_output([
-                'git', '-C', str(root), 'status', '--porcelain=v1',
-                '--untracked-files=all',
-            ])
-            self.assertEqual(status, b'')
-            report = verify_product(root)
-            errors = report['errors']
-            self.assert_has(
-                errors,
-                f'active tree file is unreadable: {sparse_locator}',
-            )
-            self.assertTrue(_lacks(errors, '.DS_Store'), errors)
-            self.assertFalse(report['checkoutClean'])
-            (root / sparse_locator).write_text('local hidden drift\n', encoding='utf-8')
-            self.assertEqual(subprocess.check_output([
-                'git', '-C', str(root), 'status', '--porcelain=v1',
-                '--untracked-files=all',
-            ]), b'')
-            hidden_report = verify_product(root)
-            self.assertFalse(hidden_report['checkoutClean'])
-            self.assertTrue(_lacks(
-                hidden_report['errors'], sparse_locator
-            ), hidden_report['errors'])
-            original = subprocess.check_output([
-                'git', '-C', str(root), 'show', f'HEAD:{sparse_locator}',
-            ])
-            (root / sparse_locator).write_bytes(original)
-            subprocess.run([
-                'git', '-C', str(root), 'update-index', '--no-skip-worktree',
-                '--assume-unchanged', sparse_locator,
-            ], check=True)
-            (root / sparse_locator).write_text('assumed local drift\n', encoding='utf-8')
-            self.assertEqual(subprocess.check_output([
-                'git', '-C', str(root), 'status', '--porcelain=v1',
-                '--untracked-files=all',
-            ]), b'')
-            self.assertFalse(verify_product(root)['checkoutClean'])
+        locator = 'docs/license-policy.md'
+        for flag in ('--skip-worktree', '--assume-unchanged'):
+            with self.subTest(index_flag=flag), _indexed_fixture() as root:
+                _git(root, 'update-index', flag, locator)
+                if flag == '--skip-worktree':
+                    (root / '.DS_Store').write_bytes(b'\0retired_module\0')
+                    (root / locator).unlink()
+                else:
+                    (root / locator).write_text('hidden drift\n', encoding='utf-8')
+                self.assertEqual(
+                    _git(root, 'status', '--porcelain=v1', '--untracked-files=all'), b''
+                )
+                report = verify_product(root)
+                self.assertFalse(report['checkoutClean'])
+                if flag == '--skip-worktree':
+                    self.assert_has(report['errors'], f'active tree file is unreadable: {locator}')
+                    self.assertTrue(_lacks(report['errors'], '.DS_Store'))
+                else:
+                    self.assertTrue(_lacks(report['errors'], locator))
 
         with _indexed_fixture() as root:
             locator = 'oversized-static-surface.bin'
             oversized = root / locator
             with oversized.open('wb') as stream:
                 stream.truncate(2_000_000)
-            subprocess.run([
-                'git', '-C', str(root), 'add', '-f', locator,
-            ], check=True)
-            unbounded_read = Path.read_bytes
-
-            def reject_unbounded_read(path):
-                if path == oversized:
-                    raise AssertionError('oversized tracked file was read without a bound')
-                return unbounded_read(path)
-
-            with patch.object(Path, 'read_bytes', reject_unbounded_read):
-                errors = verify_product(root)['errors']
-            self.assert_has(
-                errors,
-                f'active tree identity scan is indeterminate: {locator}',
-            )
+            _git(root, 'add', '-f', locator)
+            with _deny_path('read_bytes', oversized):
+                errors = _errors(root)
+            self.assert_has(errors, f'active tree identity scan is indeterminate: {locator}')
 
         with _indexed_fixture() as root:
             locator = 'docs/license-policy.md'
             (root / locator).unlink()
             (root / locator).mkdir()
-            self.assert_has(
-                verify_product(root)['errors'],
-                f'active tree path is not a regular file: {locator}',
-            )
-
-        for payload in (
-            b'\xff\xfeX', b'\xfe\xffX',
-            b'\xff\xfe\x00\x00X', b'\x00\x00\xfe\xffX',
-        ):
-            with self.subTest(malformed_utf16=payload[:2]):
-                self.assert_has(
-                    _retired_byte_errors(payload),
-                    'active tree file is undecodable: sample.txt',
-                )
-        historical_text = 'Retired Product and retired-product'
-        for payload in (
-            historical_text.encode('utf-16'),
-            b'\xfe\xff' + historical_text.encode('utf-16-be'),
-            historical_text.encode('utf-32'),
-            b'\x00\x00\xfe\xff' + historical_text.encode('utf-32-be'),
-            b'\xef\xbb\xbf' + historical_text.encode('utf-8'),
-            'Ｒｅｔｉｒｅｄ Ｐｒｏｄｕｃｔ and '
-            'ｒｅｔｉｒｅｄ－ｐｒｏｄｕｃｔ'.encode('utf-8'),
-        ):
-            with self.subTest(valid_utf16=payload[:2]):
-                self.assert_has(
-                    _retired_byte_errors(payload),
-                    'superseded identity remains in active tree: sample.txt',
-                )
-        encoded_python_cases = (
-            ('script', b'\xef\xbb\xbf' + (
-                '#!/usr/bin/env python\nimport @\n'.replace('@', 'retired_module')
-            ).encode()),
-            ('sample.py', (
-                '# -*- coding: gb18030 -*-\n'
-                'import ｒｅｔｉｒｅｄ＿ｍｏｄｕｌｅ\n'
-            ).encode('gb18030')),
-        )
-        for locator, payload in encoded_python_cases:
-            with self.subTest(encoded_python=locator):
-                self.assert_has(
-                    _retired_byte_errors(payload, locator),
-                    f'superseded identity remains in active tree: {locator}',
-                )
-        mixed_command = (
-            '汉字' * 100 + '\npython -m @\n'
-        ).replace('@', 'retired_module')
-        for encoding in ('utf-16-le', 'utf-16-be', 'utf-32-le', 'utf-32-be'):
-            with self.subTest(ambiguous_nul_text=encoding):
-                self.assert_has(
-                    _retired_byte_errors(mixed_command.encode(encoding), 'sample.sh'),
-                    'active tree file is undecodable: sample.sh',
-                )
-        safe_utf8 = ('汉字' * 100 + '\npython -m retired_module_other\n').encode()
-        self.assertTrue(_lacks(
-            _retired_byte_errors(safe_utf8, 'sample.sh'),
-            'superseded identity', 'undecodable',
-        ))
-        safe_gb18030 = (
-            '# -*- coding: gb18030 -*-\n'
-            '# import ｒｅｔｉｒｅｄ＿ｍｏｄｕｌｅ\n'
-        ).encode('gb18030')
-        self.assertTrue(_lacks(
-            _retired_byte_errors(safe_gb18030, 'sample.py'), 'superseded identity'
-        ))
-
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            locator = 'sample.txt'
-            target = root / locator
-            target.write_text('safe\n', encoding='utf-8')
-            history = [json.dumps(RETIRED), '# Retired Product\n']
-            original_open = __import__('os').open
-
-            def deny_target(path, flags):
-                if Path(path) == target:
-                    raise PermissionError('denied by fixture')
-                return original_open(path, flags)
-
-            with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=history), \
-                    patch('yiyuan_accord.identity.os.open', deny_target):
-                errors = active_tree_errors(root, [locator], '0' * 40)
-            self.assert_has(errors, 'active tree file is unreadable: sample.txt')
-
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            locator = 'sample.txt'
-            target = root / locator
-            target.write_text('safe\n', encoding='utf-8')
-            history = [json.dumps(RETIRED), '# Retired Product\n']
-            original_is_symlink = Path.is_symlink
-            original_open = __import__('os').open
-
-            def active_symlink(path):
-                return path == target or original_is_symlink(path)
-
-            def never_follow_active(path, flags):
-                if Path(path) == target:
-                    raise AssertionError('active-tree symlink target was read')
-                return original_open(path, flags)
-
-            with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=history), \
-                    patch.object(Path, 'is_symlink', active_symlink), \
-                    patch('yiyuan_accord.identity.os.open', never_follow_active):
-                errors = active_tree_errors(root, [locator], '0' * 40)
-            self.assertEqual(errors, ['symbolic link is not admitted in active tree: sample.txt'])
+            self.assert_has(_errors(root),
+                            f'active tree path is not a regular file: {locator}')
 
         with _fixture() as root, tempfile.TemporaryDirectory() as outside:
             program = _read(root, P)
-            program['complexityBudget']['primaryInstructionPaths'] = []
-            program['complexityBudget']['forbiddenActivePaths'] = [Path(outside).as_posix()]
+            program['complexityBudget'].update(
+                primaryInstructionPaths=[],
+                forbiddenActivePaths=[Path(outside).as_posix()],
+            )
             _write(root, P, program)
             constitution = _read(root, C)
             constitution['identity']['pythonModule'] = 'missing_module'
@@ -635,64 +509,178 @@ class ProductControlTests(unittest.TestCase):
             markers = program['complexityBudget']['requiredTestMarkers']
             body = '\n'.join(f'    {item}(self): pass' for item in markers
                              if item.startswith('def '))
-            for bad in ("@unittest.skip('x')\n",
-                        'def load_tests(*a): return unittest.TestSuite()\n',
-                        'from os import _exit as stop\nstop(0)\n'):
-                fake = f'import unittest\n{bad}class ProductControlTests(unittest.TestCase):\n{body}'
-                (root / 'tests/product/test_product_control.py').write_text(fake, encoding='utf-8')
-                self.assert_has(verify_product(root)['errors'], 'pythonModule does not match', 'primaryInstructionPaths', 'not a repository-relative path', 'test markers')
+            bad_prefixes = (
+                "@unittest.skip('x')\n",
+                'def load_tests(*a): return unittest.TestSuite()\n',
+                'from os import _exit as stop\nstop(0)\n',
+            )
+            for prefix in bad_prefixes:
+                fake = f'import unittest\n{prefix}class ProductControlTests(unittest.TestCase):\n{body}'
+                (root / 'tests/product/test_product_control.py').write_text(
+                    fake, encoding='utf-8'
+                )
+                self.assert_has(
+                    _errors(root), 'pythonModule does not match',
+                    'primaryInstructionPaths', 'not a repository-relative path',
+                    'test markers',
+                )
+
+    def test_identity_decoding_and_file_io_fail_closed(self):
+        historical = 'Retired Product and retired-product'
+        malformed = (b'\xff\xfeX', b'\xfe\xffX', b'\xff\xfe\x00\x00X', b'\x00\x00\xfe\xffX')
+        retired = (
+            historical.encode('utf-16'),
+            b'\xfe\xff' + historical.encode('utf-16-be'),
+            historical.encode('utf-32'),
+            b'\x00\x00\xfe\xff' + historical.encode('utf-32-be'),
+            b'\xef\xbb\xbf' + historical.encode(),
+            'Ｒｅｔｉｒｅｄ Ｐｒｏｄｕｃｔ and ｒｅｔｉｒｅｄ－ｐｒｏｄｕｃｔ'.encode(),
+        )
+        cases = [
+            *((payload, 'sample.txt', 'undecodable') for payload in malformed),
+            *((payload, 'sample.txt', 'superseded identity') for payload in retired),
+            (b'\xef\xbb\xbf#!/usr/bin/env python\nimport retired_module\n',
+             'script', 'superseded identity'),
+            (('# -*- coding: gb18030 -*-\nimport ｒｅｔｉｒｅｄ＿ｍｏｄｕｌｅ\n').encode('gb18030'),
+             'sample.py', 'superseded identity'),
+        ]
+        mixed = '汉字' * 100 + '\npython -m retired_module\n'
+        cases += [(mixed.encode(encoding), 'sample.sh', 'undecodable')
+                  for encoding in ('utf-16-le', 'utf-16-be', 'utf-32-le', 'utf-32-be')]
+        for payload, locator, message in cases:
+            with self.subTest(locator=locator, prefix=payload[:4]):
+                self.assert_has(_retired_byte_errors(payload, locator), message)
+
+        safe = (
+            (('汉字' * 100 + '\npython -m retired_module_other\n').encode(), 'sample.sh'),
+            (('# -*- coding: gb18030 -*-\n# import ｒｅｔｉｒｅｄ＿ｍｏｄｕｌｅ\n').encode('gb18030'),
+             'sample.py'),
+        )
+        for payload, locator in safe:
+            self.assertTrue(_lacks(
+                _retired_byte_errors(payload, locator), 'superseded identity', 'undecodable'
+            ))
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            locator = 'sample.txt'
+            target = root / locator
+            target.write_text('safe\n', encoding='utf-8')
+            original_open = __import__('os').open
+
+            def deny_target(path, flags, *args):
+                if Path(path) == target:
+                    raise PermissionError('denied by fixture')
+                return original_open(path, flags, *args)
+
+            with patch('yiyuan_accord.identity._bounded_git_bytes', side_effect=_retired_history()), \
+                    patch('yiyuan_accord.identity.os.open', deny_target):
+                errors = active_tree_errors(root, [locator], '0' * 40)
+            self.assert_has(errors, 'active tree file is unreadable: sample.txt')
+            original_is_symlink = Path.is_symlink
+
+            def active_symlink(path):
+                return path == target or original_is_symlink(path)
+
+            def never_follow_active(path, flags, *args):
+                if Path(path) == target:
+                    raise AssertionError('active-tree symlink target was read')
+                return original_open(path, flags, *args)
+
+            with patch('yiyuan_accord.identity._bounded_git_bytes', side_effect=_retired_history()), \
+                    patch.object(Path, 'is_symlink', active_symlink), \
+                    patch('yiyuan_accord.identity.os.open', never_follow_active):
+                errors = active_tree_errors(root, [locator], '0' * 40)
+            self.assertEqual(errors, ['symbolic link is not admitted in active tree: sample.txt'])
+
+    def test_active_tree_reads_are_descriptor_bound(self):
+        with _indexed_fixture() as root, tempfile.TemporaryDirectory() as outside:
+            locator = 'docs/license-policy.md'
+            target = root / locator
+            decoy = Path(outside) / 'same-size.md'
+            decoy.write_bytes(b'x' * target.stat().st_size)
+            original_open = __import__('os').open
+
+            def redirect(path, flags, *args):
+                return original_open(
+                    decoy if Path(path) == target else path, flags, *args
+                )
+
+            with patch('yiyuan_accord.identity.os.open', redirect):
+                self.assert_has(
+                    _errors(root),
+                    f'active tree file is unreadable: {locator}',
+                )
+
+    def test_git_metadata_capture_is_bounded(self):
+        with _indexed_fixture() as root:
+            blob = _git(root, 'hash-object', '-w', '--stdin', input=b'').strip()
+            records = b''.join(
+                b'100644 ' + blob + b'\tbulk/' + str(index).encode()
+                + b'-' + b'x' * 96 + b'.txt\n'
+                for index in range(2_500)
+            )
+            _git(root, 'update-index', '--index-info', input=records)
+            self.assertGreater(len(records), 262_144)
+            self.assert_has(
+                _errors(root),
+                'tracked repository surface is unavailable',
+            )
+
+    def test_historical_identity_capture_is_bounded(self):
+        with _indexed_fixture() as root:
+            constitution = _read(root, C)
+            constitution['oversizedFixture'] = 'x' * 1_000_001
+            _write(root, C, constitution)
+            _git(root, 'add', C)
+            _git(root, '-c', 'user.name=Accord Fixture',
+                 '-c', 'user.email=fixture@example.invalid', 'commit', '--quiet',
+                 '-m', 'oversized historical identity')
+            revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            self.assert_has(
+                active_tree_errors(root, [], revision),
+                'historical identity boundary is unavailable',
+            )
 
     def test_conservative_identity_boundary_allows_declared_safe_surfaces(self):
-        errors = verify_product(ROOT)['errors']
+        errors = _errors(ROOT)
         self.assertTrue(_lacks(
             errors, 'superseded identity', 'identity scan is indeterminate', 'test markers'
         ), errors)
 
-        safe_cases = (
-            ('sample.py', '# retired_module\n# import retired_module\nvalue = 1\n'),
-            ('sample.py', '# Retired Product\n# retired-product\nvalue = 1\n'),
-            ('sample.py', 'retired_module_other = "retired_module_other"\n'),
-            ('sample.py', 'value = "Retired Productive retired-product_other"\n'),
-            ('sample.py', 'value = "retired-product-other"\n'),
-            ('sample.py', 'value = f"retired_{name}module"\n'),
-            ('sample.py', 'value = rf"retired_\\u006dodule"\n'),
-            ('sample.py', 'value = fr"Retired\\x20Product"\n'),
-            ('sample.py', 'value = (' + "'safe' + " * 999 + "'safe')\n"),
-            ('sample.py', 'value = ' + _balanced_add(
-                ['name'] + ["'safe'"] * 5_000
-            ) + '\n'),
-            ('sample.py', 'value = ' + _balanced_add(["'safe'"] * 4_096) + '\n'),
-            ('sample.txt', 'retired_module_other xretired_module harnessed\n'),
-            ('sample.txt', 'Retired Productive retired-product_other\n'),
-            ('sample.txt', 'retired-product-other\n'),
-            ('sample.json', '{"module":"retired_module_other"}\n'),
-            ('sample.json', '{"module":"retired_\\u006dodule"}\n'),
-            ('sample.yaml', 'module: retired_module_other\n'),
-            ('sample.yaml', 'module: retired_\\x6dodule\n'),
-            ('sample.sh', 'printf %s retired_module_other\n'),
-        )
-        for locator, body in safe_cases:
-            with self.subTest(safe=locator):
-                self.assertTrue(_lacks(
-                    _retired_raw_errors(body, locator),
-                    'superseded identity', 'indeterminate',
-                ))
+        safe_cases = {
+            'sample.py': (
+                '# retired_module\n# import retired_module\nvalue = 1\n',
+                '# Retired Product\n# retired-product\nvalue = 1\n',
+                'retired_module_other = "retired_module_other"\n',
+                'value = "Retired Productive retired-product_other"\n',
+                'value = "retired-product-other"\n',
+                'value = f"retired_{name}module"\n',
+                'value = rf"retired_\\u006dodule"\n',
+                'value = fr"Retired\\x20Product"\n',
+                'value = (' + "'safe' + " * 999 + "'safe')\n",
+                'value = ' + _balanced_add(['name'] + ["'safe'"] * 5_000) + '\n',
+                'value = ' + _balanced_add(["'safe'"] * 4_096) + '\n',
+            ),
+            'sample.txt': ('retired_module_other xretired_module harnessed\n',
+                           'Retired Productive retired-product_other\n',
+                           'retired-product-other\n'),
+            'sample.json': ('{"module":"retired_module_other"}\n',
+                            '{"module":"retired_\\u006dodule"}\n'),
+            'sample.yaml': ('module: retired_module_other\n',
+                            'module: retired_\\x6dodule\n'),
+            'sample.sh': ('printf %s retired_module_other\n',),
+        }
+        for locator, bodies in safe_cases.items():
+            for body in bodies:
+                self.assertTrue(_lacks(_retired_raw_errors(body, locator),
+                                       'superseded identity', 'indeterminate'))
 
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            locator = 'research/reviews/reference.md'
-            path = root / locator
-            path.parent.mkdir(parents=True)
-            path.write_text('Historical retired_module reference.\n', encoding='utf-8')
-            history = [json.dumps(RETIRED), '# Retired Product\n']
-            with patch(
-                'yiyuan_accord.identity.subprocess.check_output',
-                side_effect=history,
-            ):
-                admitted = active_tree_errors(
-                    root, [locator], '0' * 40, {locator}
-                )
-            self.assertTrue(_lacks(admitted, 'superseded identity'))
+        locator = 'research/reviews/reference.md'
+        admitted = _active_file_errors(
+            locator, 'Historical retired_module reference.\n', {locator}
+        )
+        self.assertTrue(_lacks(admitted, 'superseded identity'))
 
     def test_retired_identity_static_surfaces_are_rejected(self):
         deep_retired = (
@@ -779,73 +767,35 @@ class ProductControlTests(unittest.TestCase):
             'active tree identity scan is indeterminate',
         )
 
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            locator = 'retired_module/config.txt'
-            path = root / locator
-            path.parent.mkdir(parents=True)
-            path.write_text('safe\n', encoding='utf-8')
-            history = [json.dumps(RETIRED), '# Retired Product\n']
-            with patch(
-                'yiyuan_accord.identity.subprocess.check_output',
-                side_effect=history,
-            ):
-                errors = active_tree_errors(root, [locator], '0' * 40)
-            self.assert_has(errors, 'superseded identity remains')
-
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            locator = 'docs/new-surface.txt'
-            path = root / locator
-            path.parent.mkdir(parents=True)
-            path.write_text('retired_module\n', encoding='utf-8')
-            history = [json.dumps(RETIRED), '# Retired Product\n']
-            with patch(
-                'yiyuan_accord.identity.subprocess.check_output',
-                side_effect=history,
-            ):
-                errors = active_tree_errors(root, [locator], '0' * 40)
-            self.assert_has(
-                errors,
-                'superseded identity remains in active tree: docs/new-surface.txt',
-            )
-            with patch(
-                'yiyuan_accord.identity.subprocess.check_output',
-                side_effect=history,
-            ):
-                still_active = active_tree_errors(
-                    root, [locator], '0' * 40, {locator}
-                )
-            self.assert_has(
-                still_active,
-                'superseded identity remains in active tree: docs/new-surface.txt',
-            )
+        self.assert_has(
+            _active_file_errors('retired_module/config.txt'),
+            'superseded identity remains',
+        )
+        locator = 'docs/new-surface.txt'
+        message = 'superseded identity remains in active tree: ' + locator
+        self.assert_has(_active_file_errors(locator, 'retired_module\n'), message)
+        self.assert_has(
+            _active_file_errors(locator, 'retired_module\n', {locator}), message
+        )
 
     def test_retired_residue_and_duplicate_json_fail_closed(self):
         with _fixture() as root:
             retired = 'yiyuan_accord/task_validator_o4_continuous_self_correction_v3.py'
             (root / retired).mkdir()
             (root / '.tmp').mkdir()
-            self.assert_has(verify_product(root)['errors'],
+            self.assert_has(_errors(root),
                             f'forbidden active path remains: {retired}', 'known task residue')
         self.assert_has(_retired_raw_errors('retired-product', 'README.md'),
                         'superseded identity remains')
         with _fixture() as root:
             (root / P).write_text('{"schema":2,"schema":2}\n', encoding='utf-8')
-            self.assert_has(verify_product(root)['errors'], 'duplicate JSON key')
+            self.assert_has(_errors(root), 'duplicate JSON key')
         with _fixture() as root:
             target = root / P
             with target.open('wb') as stream:
                 stream.truncate(2_000_000)
-            unbounded_read = Path.read_bytes
-
-            def reject_unbounded_json(path):
-                if path == target:
-                    raise AssertionError('oversized JSON was read without a bound')
-                return unbounded_read(path)
-
-            with patch.object(Path, 'read_bytes', reject_unbounded_json):
-                errors = verify_product(root)['errors']
+            with _deny_path('read_bytes', target):
+                errors = _errors(root)
             self.assert_has(errors, f'invalid JSON {P}', 'exceeds 1000000 bytes')
         with _fixture() as root:
             locator = 'research/reviews/oversized-input.md'
@@ -860,13 +810,6 @@ class ProductControlTests(unittest.TestCase):
                 'disposition': 'test-only',
             })
             _write(root, P, program)
-            unbounded_read = Path.read_bytes
-
-            def reject_unbounded_input(path):
-                if path == target:
-                    raise AssertionError('oversized input was hashed without a bound')
-                return unbounded_read(path)
-
-            with patch.object(Path, 'read_bytes', reject_unbounded_input):
-                errors = verify_product(root)['errors']
+            with _deny_path('read_bytes', target):
+                errors = _errors(root)
             self.assert_has(errors, 'inputEvidence[6] digest source is oversized')

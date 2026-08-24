@@ -27,7 +27,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-05",
-    "sha256": "747941d3fce46945eff1ec74760c67d562c31a86fda81c4822fc7287662a3219",
+    "sha256": "2c0d2ff4b40e861c4986a4476232bf2a98f069361673dd971b751264c4cd8960",
     "claim": "Fresh red-to-green events show predicate replacement in the existing validator, no new generation and retained regression coverage."
   }],
   "behaviorDecisions": {

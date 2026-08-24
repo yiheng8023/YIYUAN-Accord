@@ -25,7 +25,7 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-07",
-    "sha256": "4cfdeb36fa8eb6aeca257ea6e448e3b4e059c2df805f1ccd3ee14d6503218b60",
+    "sha256": "0ba06972561a35d98b02764e1d4a9b9dcea312419c372139b13234dbccdbe800",
     "claim": "Fresh source, destination and source-resume material record verifies bounded continuity while retaining the source inventory miss, host-created hidden residue and cleanup failure."
   }],
   "behaviorDecisions": {
@@ -56,11 +56,11 @@
     "user-operated-capability-or-topology-count": 0
   },
   "materialEffects": [
-    {"kind": "fixture-handoff", "target": "handoff.md", "disposition": "retained pending independent raw comparison and exact fixture cleanup"},
-    {"kind": "fixture-destination-receipt", "target": "destination-receipt.md", "disposition": "retained pending independent raw comparison and exact fixture cleanup"},
-    {"kind": "fixture-source-release-record", "target": "source-release.md", "disposition": "retained pending independent raw comparison and exact fixture cleanup"}
+    {"kind": "fixture-handoff", "target": "handoff.md", "disposition": "fixture removed after independent raw comparison; task-time result retained"},
+    {"kind": "fixture-destination-receipt", "target": "destination-receipt.md", "disposition": "fixture removed after independent raw comparison; task-time result retained"},
+    {"kind": "fixture-source-release-record", "target": "source-release.md", "disposition": "fixture removed after independent raw comparison; task-time result retained"}
   ],
-  "residue": [{"kind": "host-created-hidden-directory", "target": ".remember", "disposition": "pending exact fixture cleanup; contents not read"}],
+  "residue": [{"kind": "host-created-hidden-directory", "target": ".remember", "disposition": "fixture later removed without reading contents; task-time cleanup failure retained"}],
   "cleanup": {"state": "failed-residue", "taskOwnedResidueCount": 1, "verified": true},
   "criterionDecisions": {"R3": "accepted-with-exclusion", "Q4": "accepted-with-exclusion"},
   "claimLimit": {

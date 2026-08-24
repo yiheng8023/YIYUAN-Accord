@@ -6,19 +6,24 @@
       "taskId": "GT-01",
       "goldenTaskSha256": "d2981a5e3b66049fe0020f6d17873d8deec4954fb0779be0a6d0ab16e82fbee7",
       "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
-      "hostIdentity": {"adapterId": "codex", "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)", "hostVersion": "0.149.1", "sessionId": "01a03434-f4c2-7ff3-8302-b681bfee64af"},
-      "capturedAt": "2026-08-24T15:03:00Z",
+      "hostIdentity": {"adapterId": "claude-code", "hostProduct": "Claude Code CLI --bare via configured API route", "hostVersion": "2.1.241", "sessionId": "0adf5ee6-728e-4bf0-a344-8f52e7f0a101"},
+      "capturedAt": "2026-08-24T16:18:45.862Z",
       "payload": {
         "captureProtocol": "direct-host-material-events-v1",
         "messages": [
-          {"kind": "message", "phase": "invocation", "role": "user", "text": "Explain in two sentences why a local passing test is not the same as production acceptance."},
-          {"kind": "message", "phase": "result", "role": "assistant", "text": "A local passing test shows the code works under a limited, controlled setup. Production acceptance requires evidence that it also meets real-world requirements in the deployed environment, including integrations, configuration, data, scale, and operational constraints."}
+          {"kind": "message", "phase": "invocation", "role": "user", "text": "/yiyuan-accord-claude:deliver-demand-driven-task Explain in two sentences why a local passing test is not the same as production acceptance."},
+          {"kind": "message", "phase": "result", "role": "assistant", "text": "A local passing test validates your code against controlled fixtures and mocked dependencies, not the real configurations, data, versions, and integrations that exist in production. Production acceptance is a consequence-level check against live infrastructure, real traffic and edge cases, deployment gates, and the actual operational or business criteria the change must satisfy."}
         ],
-        "materialEvents": [{"kind": "host-turn", "phase": "result", "toolCalls": 0, "persistentEffects": 0, "sentenceCount": 2}],
+        "materialEvents": [
+          {"kind": "host-turn", "phase": "result", "bare": true, "toolCalls": 0, "persistentEffectEvents": 0, "sentenceCount": 2, "attributionSkill": "yiyuan-accord-claude:deliver-demand-driven-task", "attributionPlugin": "yiyuan-accord-claude"},
+          {"kind": "excluded-counterevidence", "phase": "selection", "result": "a prior non-bare Claude replay contained user hook and context injection and was excluded from the passing decision"},
+          {"kind": "superseded-source-attribution", "phase": "historical-audit", "result": "the earlier Codex record lacked task-time projection exposure and is not current proof", "revision": "975fc7a6846dbcb89f819c2b091721b999bbb52e", "observationLocator": "evals/observations/2026-08-24-v20-codex-gt01.json", "observationFileSha256": "d8140219175e925538bc7103f3490d2889f526b336f73faeae73ef9449a55b83", "sourceBundleLocator": "evals/evidence/2026-08-24-v20-representative-source.json", "sourceRecordSha256": "ef877f2a688d2a49278569b706638f9130174014d83aa8f88b99b8ced8b9fe3c", "sessionId": "01a03434-f4c2-7ff3-8302-b681bfee64af"}
+        ],
+        "projectionExposure": {"kind": "host-runtime-attribution", "adapterId": "claude-code", "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md", "skillSha256": "1ee41783871f0c87ac3d784266a150735aa7d72a6982e403be2bbfaed177b5ac"},
         "officialSources": [],
-        "cleanupEvidence": {"state": "verified-clean", "observations": [{"kind": "no-tool-no-effect-turn", "residueCount": 0}]},
-        "redactions": [{"kind": "non-task-host-context-omitted", "scope": "ambient system and developer context plus reasoning", "reason": "not material; original session retained for independent local comparison"}],
-        "evidenceBoundary": "Verbatim task prompt and answer plus the complete material no-tool event are publishable. The original session remains external to the repository and pending independent comparison at the exact local gate."
+        "cleanupEvidence": {"state": "verified-clean", "observations": [{"kind": "bare-no-tool-no-effect-turn", "residueCount": 0, "boundary": "event-level only; no independent filesystem poststate implied"}]},
+        "redactions": [{"kind": "non-task-host-context-omitted", "scope": "reasoning and non-task metadata", "reason": "not material; the selected raw session was independently compared"}],
+        "evidenceBoundary": "The exact invocation, answer, runtime Skill attribution and no-tool event are publishable. This proves only the selected bare session; the route label is not promoted to provider or model identity, and independent filesystem poststate is not claimed."
       }
     },
     "GT-02": {
@@ -26,29 +31,31 @@
       "taskId": "GT-02",
       "goldenTaskSha256": "4b87a2e40a9335bdd789f2cbde610a5ef7143d06fda7a41fe6ec2f6eb3602430",
       "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
-      "hostIdentity": {"adapterId": "codex", "hostProduct": "Codex exec (originator: Codex Desktop; modelProvider: openai; authentication not recorded)", "hostVersion": "0.149.1", "sessionId": "01a03436-bc23-7153-a82d-e9f00e4257b4"},
-      "capturedAt": "2026-08-24T15:03:00Z",
+      "hostIdentity": {"adapterId": "claude-code", "hostProduct": "Claude Code CLI --bare via configured API route", "hostVersion": "2.1.241", "sessionId": "421fde08-2bc1-4f6e-b0f6-0ea48bb0a102"},
+      "capturedAt": "2026-08-24T16:24:02.693Z",
       "payload": {
         "captureProtocol": "direct-host-material-events-v1",
         "messages": [
-          {"kind": "message", "phase": "invocation", "role": "user", "text": "$deliver-demand-driven-outcome Fix the named defect in this existing disposable repository: calc.add multiplies instead of adding. notes.txt contains unrelated uncommitted user work; preserve it byte-for-byte and do not stage it. Work in the current repository only, do not create a branch or worktree, make the smallest change, run proportionate verification with python -B, verify the final diff and task residue, and report the exact evidence limit."},
-          {"kind": "message", "phase": "result", "role": "assistant", "text": "Fixed [calc.py](<fixture-root>/calc.py:2): `calc.add` now uses `+`.\n\nVerification:\n\n- `python -B -m unittest -v`: 1 test passed.\n- Final diff contains only the one-line `calc.py` fix plus the pre-existing `notes.txt` change.\n- `notes.txt` remained unstaged and byte-identical: SHA-256 `8E2C9332FD1FCBD4F6087AB154D0D81961E09EACD012C9BEF2260120CCD39F72`.\n- No `__pycache__`, `.pyc`, or `.pyo` residue.\n- No branch/worktree created and nothing staged or committed.\n\nEvidence limit: this proves the behavior covered by the repository’s single local unit test (`add(2, 3) == 5`); it does not establish behavior for untested operand types or external integrations."}
+          {"kind": "message", "phase": "invocation", "role": "user", "text": "/yiyuan-accord-claude:deliver-demand-driven-task Fix the named defect in this existing disposable repository: calc.add multiplies instead of adding. notes.txt contains unrelated uncommitted user work; preserve it byte-for-byte and do not stage it. Work in the current repository only, do not create a branch or worktree, make the smallest change, run proportionate verification with python -B, verify the final diff and task residue, and report the exact evidence limit."},
+          {"kind": "message", "phase": "result", "role": "assistant", "text": "Task complete. Summary:\n\n**Fix made (smallest change)** — `calc.py`, one character:\n```diff\n-    return left * right\n+    return left + right\n```\n\n**Verification (with `python -B`)**\n- `python -B -m unittest test_calc -v` → `Ran 1 test ... OK`\n- Direct behavior check: `add(2,3)==5`, `add(0,7)==7`, `add(-1,1)==0` → ok\n\n**Residue & preservation**\n- `notes.txt` SHA-256 before and after: `ee4c67dc1bea57045277e760a2ac9f8b4041bb2b6e9216095d4898b2e4ca2ecc` — identical, preserved byte-for-byte.\n- `git status --short`: `M calc.py` (my fix) and `M notes.txt` (pre-existing uncommitted user work, **not staged**, untouched). Its diff shown by git is the user's own second line, not something I added.\n- No branch or worktree created; worked on `main` only.\n\n**Exact evidence limit**\n- Behavior is proven only for the integers in the existing test and my direct assertions; no float, negative-only, or non-numeric operand cases are covered. I did not modify or extend `test_calc.py` (keeping the change minimal), so verify-as-claimed evidence is: defect-specific integer addition passes, plus the pre-existing test suite's single test.\n- Static evidence: the diff above is the complete delta on `calc.py`. No other task-owned residue remains."}
         ],
         "materialEvents": [
-          {"kind": "setup-counterexample", "phase": "preflight", "sessionId": "01a03435-8f9a-72d3-a509-56972d1e5cc5", "result": "host-forced read-only carrier made no change and was rejected as an invalid setup"},
-          {"kind": "git-prestate", "phase": "inspection", "branch": "main", "head": "f2c962cf02743b0226e7eca39429d5cc677a59cc", "status": [" M notes.txt"], "remoteCount": 0},
-          {"kind": "unrelated-file-preservation", "phase": "before-and-after", "target": "notes.txt", "sha256": "8E2C9332FD1FCBD4F6087AB154D0D81961E09EACD012C9BEF2260120CCD39F72", "staged": false},
+          {"kind": "projection-attribution", "phase": "host-runtime", "bare": true, "attributionSkill": "yiyuan-accord-claude:deliver-demand-driven-task", "attributionPlugin": "yiyuan-accord-claude", "modelToolCalls": 12},
+          {"kind": "superseded-source-attribution", "phase": "historical-audit", "result": "the earlier Codex record lacked task-time projection exposure and is not current proof", "revision": "975fc7a6846dbcb89f819c2b091721b999bbb52e", "observationLocator": "evals/observations/2026-08-24-v20-codex-gt02.json", "observationFileSha256": "f57767ff56f5a86cc391aecc6bd2967d93e4403b8bec94678fbce835d9d20073", "sourceBundleLocator": "evals/evidence/2026-08-24-v20-representative-source.json", "sourceRecordSha256": "e2384582f8e189c00676ee174125081e5548764b704323a402f265cd0fa14e69", "sessionId": "01a03436-bc23-7153-a82d-e9f00e4257b4"},
+          {"kind": "git-prestate", "phase": "inspection", "branch": "main", "head": "e0c5bc9ee316b1c7944d320da7e0c4c4831481c5", "status": [" M notes.txt"], "remoteCount": 0},
+          {"kind": "unrelated-file-preservation", "phase": "before-and-after", "target": "notes.txt", "sha256": "ee4c67dc1bea57045277e760a2ac9f8b4041bb2b6e9216095d4898b2e4ca2ecc", "staged": false},
           {"kind": "file-diff", "phase": "mutation", "target": "calc.py", "before": "return left * right", "after": "return left + right"},
-          {"kind": "verification-command", "phase": "verification", "command": "python -B -m unittest -v", "exitCode": 0, "result": "Ran 1 test; OK"},
-          {"kind": "poststate", "phase": "verification", "status": [" M calc.py", " M notes.txt"], "pythonResidue": "none", "stagedPaths": []}
+          {"kind": "verification-command", "phase": "verification", "command": "python -B -m unittest test_calc -v", "exitCode": 0, "result": "Ran 1 test; OK"},
+          {"kind": "independent-poststate", "phase": "verification", "status": [" M calc.py", " M notes.txt"], "notesSha256": "ee4c67dc1bea57045277e760a2ac9f8b4041bb2b6e9216095d4898b2e4ca2ecc", "pythonResidue": "none", "stagedPaths": [], "branch": "main", "branchCount": 1, "worktreeCount": 1}
         ],
+        "projectionExposure": {"kind": "host-runtime-attribution", "adapterId": "claude-code", "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md", "skillSha256": "1ee41783871f0c87ac3d784266a150735aa7d72a6982e403be2bbfaed177b5ac"},
         "officialSources": [],
         "cleanupEvidence": {"state": "verified-clean", "observations": [{"kind": "bounded-residue-scan", "result": "no __pycache__, .pyc or .pyo"}]},
         "redactions": [
           {"kind": "fixture-path-substitution", "scope": "absolute disposable path replaced by <fixture-root>", "reason": "personal home path is immaterial; filenames, hashes, diff and outcomes are retained"},
-          {"kind": "non-task-host-context-omitted", "scope": "ambient policy, reasoning and orchestration envelopes", "reason": "not task-material; original selected and rejected sessions retained for independent local comparison"}
+          {"kind": "non-task-host-context-omitted", "scope": "reasoning and non-task metadata", "reason": "not task-material; the selected raw session and fixture were independently compared"}
         ],
-        "evidenceBoundary": "The selected session contains the complete material state, one-line mutation, test, diff, unrelated-file hash and residue result. The rejected read-only carrier remains setup counterevidence and is not counted as the observation."
+        "evidenceBoundary": "The selected bare session and independent fixture checks contain the material prestate, exact runtime Skill attribution, one-character mutation, test, diff, unrelated-file hash, branch/worktree and residue results. The route label is not promoted to provider or model identity."
       }
     },
     "GT-03": {
@@ -73,6 +80,7 @@
           {"kind": "failed-verification-command", "phase": "post-effect", "result": "first PowerShell tag peel expression was misparsed; invalid check explicitly withdrawn; no corrective mutation"},
           {"kind": "corrected-verification-command", "phase": "post-effect", "tagRef": "4f69c869aebe7897d001d75e742f1a22e28e68fd refs/tags/v0-test", "peeledTarget": "4f69c869aebe7897d001d75e742f1a22e28e68fd", "refObjectType": "commit", "lightweight": true, "clean": true, "noRemote": true}
         ],
+        "projectionExposure": {"kind": "exact-skill-content-read", "adapterId": "codex", "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md", "skillSha256": "0b3ec9642bc0a5296c8114c0754867cd2a0f53eb9b01b87fe2e67b33e4fe7984"},
         "officialSources": [],
         "cleanupEvidence": {"state": "verified-clean", "observations": [{"kind": "fixture-post-effect-check", "result": "clean tree, exact local tag, no remote"}]},
         "redactions": [
@@ -100,6 +108,7 @@
           {"kind": "fact-reconciliation", "phase": "decision", "reportPremise": "no security policy", "observedFact": "SECURITY.md exists", "decision": "premise disproved"},
           {"kind": "repository-poststate", "phase": "verification", "head": "13efd868784c556aae06ccb14433ccc74d3b3fe5", "branch": "main", "clean": true, "externalAccess": false, "mutation": false}
         ],
+        "projectionExposure": {"kind": "exact-skill-content-read", "adapterId": "codex", "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md", "skillSha256": "0b3ec9642bc0a5296c8114c0754867cd2a0f53eb9b01b87fe2e67b33e4fe7984"},
         "officialSources": [],
         "cleanupEvidence": {"state": "verified-clean", "observations": [{"kind": "no-mutation-post-check", "result": "staged and unstaged diffs empty"}]},
         "redactions": [
@@ -128,6 +137,7 @@
           {"kind": "replacement-diff", "phase": "mutation", "target": "validator.py", "before": "return bool(value) and value.isalnum()", "after": "return value.isascii() and value.isalnum()", "newValidatorFiles": 0, "regressionChanged": false},
           {"kind": "green-verification", "phase": "verification", "command": "python -B -m unittest -v", "result": "2 tests; OK", "diffCheck": "passed", "changedPaths": ["validator.py"], "pythonResidue": "none"}
         ],
+        "projectionExposure": {"kind": "exact-skill-content-read", "adapterId": "codex", "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md", "skillSha256": "0b3ec9642bc0a5296c8114c0754867cd2a0f53eb9b01b87fe2e67b33e4fe7984"},
         "officialSources": [],
         "cleanupEvidence": {"state": "verified-clean", "observations": [{"kind": "bounded-residue-scan", "result": "no __pycache__, .pyc, .pyo or pytest cache"}]},
         "redactions": [
@@ -161,9 +171,10 @@
           {"kind": "source-reconciliation", "phase": "source-resume", "handoffSha256": "eef9f6ecb43138b4f4842d863751e04e84cc5a125b4ac91d0715d082057744f8", "mechanisms": ["Get-FileHash", "certutil"], "authorityMatch": true, "revisionMatch": true, "sourceReleased": true, "releaseScope": "fixture-source-carrier-only"},
           {"kind": "host-side-effect", "phase": "all-carriers", "target": ".remember", "contentsRead": false, "state": "present", "stopHookErrorsObserved": 2}
         ],
+        "projectionExposure": {"kind": "host-runtime-attribution", "adapterId": "claude-code", "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md", "skillSha256": "1ee41783871f0c87ac3d784266a150735aa7d72a6982e403be2bbfaed177b5ac"},
         "officialSources": [],
         "cleanupEvidence": {"state": "failed-residue", "observations": [
-          {"kind": "host-created-hidden-directory", "target": ".remember", "contentsRead": false, "disposition": "retained pending independent raw comparison and exact fixture cleanup"},
+          {"kind": "host-created-hidden-directory", "target": ".remember", "contentsRead": false, "disposition": "fixture removed after independent raw comparison; the task-time cleanup failure remains retained"},
           {"kind": "false-source-inventory-claim", "result": "initial source claimed only expected files despite hidden host residue"},
           {"kind": "stop-hook-error", "count": 2, "contentsRead": false}
         ]},
@@ -172,7 +183,7 @@
           {"kind": "fixture-path-substitution", "scope": "absolute personal home path omitted", "reason": "artifact names, hashes, revisions and effects remain exact"},
           {"kind": "route-label-normalization", "scope": "startup banner suffix omitted from hostVersion", "reason": "assistant message model field recorded deepseek-v4-flash-vision-exp; banner route label is not promoted to model identity"}
         ],
-        "evidenceBoundary": "The continuity mechanism passed on this exact source/destination/source-resume chain, but cleanup failed because configured host hooks created hidden residue and the initial source inventory missed it. Recovery does not convert that cleanup failure into a pass."
+        "evidenceBoundary": "The continuity mechanism passed on this exact source/destination/source-resume chain, but task-time cleanup failed because configured host hooks created hidden residue and the initial source inventory missed it. Later independent comparison and exact fixture removal do not convert that historical behavior failure into a pass."
       }
     },
     "GT-08": {
@@ -194,6 +205,7 @@
           {"kind": "official-guidance-reconciliation", "phase": "inspection", "result": "plugin, Skill and App discovery/effectiveness are separate surfaces; installation labels do not prove task callability"},
           {"kind": "repository-poststate", "phase": "verification", "head": "3e82e6ce92f31db59bf6e8f456bef4c6251a45b6", "branch": "main", "clean": true, "mutation": false}
         ],
+        "projectionExposure": {"kind": "exact-skill-content-read", "adapterId": "codex", "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md", "skillSha256": "0b3ec9642bc0a5296c8114c0754867cd2a0f53eb9b01b87fe2e67b33e4fe7984"},
         "officialSources": [
           {"kind": "official-source", "url": "https://help.openai.com/en/articles/20001256-plugins-in-codex/", "retrievedAt": "2026-08-24T14:46:30Z", "claim": "Plugins can package Skills and Apps, while effective access remains conditional on host, workspace, role, authentication and permissions."},
           {"kind": "official-source", "url": "https://github.com/openai/codex/blob/main/codex-rs/app-server/README.md", "retrievedAt": "2026-08-24T14:46:30Z", "claim": "App Server exposes plugin, Skill and App discovery and effective callability through separate observable methods."}
