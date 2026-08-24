@@ -204,6 +204,8 @@ class ProductControlTests(unittest.TestCase):
             (G, 'static-suite-as-behavior',
              lambda v: v['evaluationProtocol'].update(staticSuiteIsNotBehaviorEvidence=False)),
             (G, 'humanBurden metrics', lambda v: v['metrics'].update(help=['self-claim'])),
+            (A, 'representative post-session binding contracts', lambda v: v[
+                'representativeBehaviorPolicy'].update(postSessionBindingContracts=[])),
             (A, 'finite-release evidence lanes', lambda v: (
                 v['evidenceLanes']['continuingAfterRelease'].append(
                     v['evidenceLanes']['requiredForFiniteRelease'].pop())))

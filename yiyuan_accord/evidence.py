@@ -390,6 +390,8 @@ def representative_sample_errors(
     policy = acceptance.get("representativeBehaviorPolicy")
     binding_contracts = policy.get("postSessionBindingContracts", {}) \
         if isinstance(policy, dict) else {}
+    if not isinstance(binding_contracts, dict):
+        binding_contracts = {}
     errors, observed, states, r3_locators, exclusions = [], {}, {}, {}, []
     exact_fields = set(fields) | {"evidenceClass"}
     for index, item in enumerate(representative.get("evidence", [])):
