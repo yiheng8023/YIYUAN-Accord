@@ -29,10 +29,10 @@
     "GT-02": {
       "kind": "host-event-log",
       "taskId": "GT-02",
-      "goldenTaskSha256": "4b87a2e40a9335bdd789f2cbde610a5ef7143d06fda7a41fe6ec2f6eb3602430",
+      "goldenTaskSha256": "4495da8b09f6fabcf7a4d13da3611ee03b0273aad1f22cc15700a7f532a735f8",
       "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
       "hostIdentity": {"adapterId": "claude-code", "hostProduct": "Claude Code CLI --bare via configured API route", "hostVersion": "2.1.241", "sessionId": "421fde08-2bc1-4f6e-b0f6-0ea48bb0a102"},
-      "capturedAt": "2026-08-24T16:24:02.693Z",
+      "capturedAt": "2026-08-24T16:24:29Z",
       "payload": {
         "captureProtocol": "direct-host-material-events-v1",
         "messages": [
@@ -42,12 +42,13 @@
         "materialEvents": [
           {"kind": "projection-attribution", "phase": "host-runtime", "bare": true, "attributionSkill": "yiyuan-accord-claude:deliver-demand-driven-task", "attributionPlugin": "yiyuan-accord-claude", "modelToolCalls": 12},
           {"kind": "superseded-source-attribution", "phase": "historical-audit", "result": "the earlier Codex record lacked task-time projection exposure and is not current proof", "revision": "975fc7a6846dbcb89f819c2b091721b999bbb52e", "observationLocator": "evals/observations/2026-08-24-v20-codex-gt02.json", "observationFileSha256": "f57767ff56f5a86cc391aecc6bd2967d93e4403b8bec94678fbce835d9d20073", "sourceBundleLocator": "evals/evidence/2026-08-24-v20-representative-source.json", "sourceRecordSha256": "e2384582f8e189c00676ee174125081e5548764b704323a402f265cd0fa14e69", "sessionId": "01a03436-bc23-7153-a82d-e9f00e4257b4"},
-          {"kind": "git-prestate", "phase": "inspection", "branch": "main", "head": "e0c5bc9ee316b1c7944d320da7e0c4c4831481c5", "status": [" M notes.txt"], "remoteCount": 0},
+          {"kind": "git-prestate", "phase": "inspection", "branch": "main", "head": "e0c5bc9ee316b1c7944d320da7e0c4c4831481c5", "status": [" M notes.txt"]},
           {"kind": "unrelated-file-preservation", "phase": "before-and-after", "target": "notes.txt", "sha256": "ee4c67dc1bea57045277e760a2ac9f8b4041bb2b6e9216095d4898b2e4ca2ecc", "staged": false},
           {"kind": "file-diff", "phase": "mutation", "target": "calc.py", "before": "return left * right", "after": "return left + right"},
           {"kind": "verification-command", "phase": "verification", "command": "python -B -m unittest test_calc -v", "exitCode": 0, "result": "Ran 1 test; OK"},
-          {"kind": "independent-poststate", "phase": "verification", "status": [" M calc.py", " M notes.txt"], "notesSha256": "ee4c67dc1bea57045277e760a2ac9f8b4041bb2b6e9216095d4898b2e4ca2ecc", "pythonResidue": "none", "stagedPaths": [], "branch": "main", "branchCount": 1, "worktreeCount": 1}
+          {"kind": "independent-poststate", "phase": "verification", "status": [" M calc.py", " M notes.txt"], "notesSha256": "ee4c67dc1bea57045277e760a2ac9f8b4041bb2b6e9216095d4898b2e4ca2ecc", "pythonResidue": "none", "stagedPaths": [], "branch": "main", "worktreeCount": 1, "sourceBindings": [{"kind": "observer-session-event", "sessionId": "01a02d54-0769-7840-974c-07c9b31fda3b", "eventLocator": "response_item/call_3DSfivnZ7QebfwWYQzVEWy9b", "observedAt": "2026-08-24T16:24:28.293Z", "claim": "Independent poststate checked status, exact diff, staged paths, unrelated-file hash, tests, current branch, worktree count and Python residue."}]}
         ],
+        "postSessionBindingContract": [{"kind": "independent-poststate", "location": "materialEvents", "bindingCount": 1}],
         "projectionExposure": {"kind": "host-runtime-attribution", "adapterId": "claude-code", "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md", "skillSha256": "1ee41783871f0c87ac3d784266a150735aa7d72a6982e403be2bbfaed177b5ac"},
         "officialSources": [],
         "cleanupEvidence": {"state": "verified-clean", "observations": [{"kind": "bounded-residue-scan", "result": "no __pycache__, .pyc or .pyo"}]},
@@ -150,10 +151,10 @@
     "GT-07": {
       "kind": "host-event-log",
       "taskId": "GT-07",
-      "goldenTaskSha256": "31319ea9fdbad4b6bf4e4336de06058996568fb278866402f7f0c6f4985453b3",
+      "goldenTaskSha256": "b10eb08610dd64b4b38573a0ce344ca994a797a31e237edb3b5b1e617fce1df3",
       "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
       "hostIdentity": {"adapterId": "claude-code", "hostProduct": "Claude Code CLI via configured DeepSeek API route", "hostVersion": "2.1.241 / deepseek-v4-flash-vision-exp", "sessionId": "f847ebfc-c58b-40c2-9ed8-1438b7a5fb29"},
-      "capturedAt": "2026-08-24T15:03:00Z",
+      "capturedAt": "2026-08-24T16:25:51Z",
       "payload": {
         "captureProtocol": "direct-host-material-events-v1",
         "messages": [
@@ -171,12 +172,14 @@
           {"kind": "source-reconciliation", "phase": "source-resume", "handoffSha256": "eef9f6ecb43138b4f4842d863751e04e84cc5a125b4ac91d0715d082057744f8", "mechanisms": ["Get-FileHash", "certutil"], "authorityMatch": true, "revisionMatch": true, "sourceReleased": true, "releaseScope": "fixture-source-carrier-only"},
           {"kind": "host-side-effect", "phase": "all-carriers", "target": ".remember", "contentsRead": false, "state": "present", "stopHookErrorsObserved": 2}
         ],
+        "postSessionBindingContract": [{"kind": "post-capture-fixture-removal", "location": "cleanupEvidence.observations", "bindingCount": 2}],
         "projectionExposure": {"kind": "host-runtime-attribution", "adapterId": "claude-code", "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md", "skillSha256": "1ee41783871f0c87ac3d784266a150735aa7d72a6982e403be2bbfaed177b5ac"},
         "officialSources": [],
         "cleanupEvidence": {"state": "failed-residue", "observations": [
           {"kind": "host-created-hidden-directory", "target": ".remember", "contentsRead": false, "disposition": "fixture removed after independent raw comparison; the task-time cleanup failure remains retained"},
           {"kind": "false-source-inventory-claim", "result": "initial source claimed only expected files despite hidden host residue"},
-          {"kind": "stop-hook-error", "count": 2, "contentsRead": false}
+          {"kind": "stop-hook-error", "count": 2, "contentsRead": false},
+          {"kind": "post-capture-fixture-removal", "result": "exact disposable fixture root removed and independently observed absent", "sourceBindings": [{"kind": "observer-session-event", "sessionId": "01a02d54-0769-7840-974c-07c9b31fda3b", "eventLocator": "response_item/call_h1UGfK74WA9F7AQTvGDWdPzq", "observedAt": "2026-08-24T16:25:43.074Z", "claim": "The resolved disposable GT-07 fixture root was removed after the task-time failure and independent comparison."}, {"kind": "observer-session-event", "sessionId": "01a02d54-0769-7840-974c-07c9b31fda3b", "eventLocator": "response_item/call_M8qMJqkmDj6TVrXhsuzj584b", "observedAt": "2026-08-24T16:25:50.144Z", "claim": "An exact-path existence check returned false after fixture removal."}]}
         ]},
         "redactions": [
           {"kind": "private-host-context-omitted", "scope": "ambient user configuration, plugin inventories, hook-injected text, reasoning and non-task metadata", "reason": "not required to evaluate the task and not safe public material; original new sessions retained for independent local comparison"},

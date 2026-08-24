@@ -6,6 +6,8 @@ from yiyuan_accord.control import host_check, verify_product
 from yiyuan_accord.evidence import (
     _digest,
     _observation_errors,
+    _postcapture_bundle,
+    _time,
     representative_contract_sha256,
 )
 from yiyuan_accord.guardrails import validate_projection_package
@@ -15,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 OBS = {
     1: 'evals/observations/2026-08-24-v20-claude-gt01.json',
+    2: 'evals/observations/2026-08-24-v20-claude-gt02.json',
     3: 'evals/observations/2026-08-24-v20-codex-gt03.json',
     7: 'evals/observations/2026-08-24-v20-claude-gt07.json',
     8: 'evals/observations/2026-08-24-v20-codex-gt08.json',
@@ -84,11 +87,23 @@ def _observe(root, locator, observation=None, label='fixture observation'):
         lambda current_root, current_locator, _: _read(current_root, current_locator)
     )
 
-def _source_errors(root, locator, bundle, observation):
+def _public_source_errors(root, locator, bundle, observation):
     record = bundle['records'][observation['taskId']]
     _write(root, SOURCE, bundle)
-    observation['transcriptOrEventEvidence'][0]['sha256'] = _digest(record)
-    return _observe(root, locator, observation)[0]
+    source = observation['transcriptOrEventEvidence'][0]
+    source['sha256'] = _digest(record)
+    task = next(item for item in _read(root, G)['tasks'] if item['id'] == observation['taskId'])
+    postcapture = _postcapture_bundle(record['payload'], task, _time(record['capturedAt']))
+    if postcapture is not None and 'postSessionBindingsSha256' in source:
+        source['postSessionBindingsSha256'] = _digest(postcapture)
+    _write(root, locator, observation)
+    _rehash(root, locator)
+    return _errors(root)
+
+def _source_error_fragment(root, locator):
+    items = next(item for item in _read(root, A)['criteria'] if item['id'] == 'R3')['evidence']
+    index = next(i for i, item in enumerate(items) if item['locator'] == locator)
+    return f'R3 evidence[{index}] sourceEvidence[0] is invalid'
 
 def _balanced_add(terms):
     terms = list(terms)
@@ -279,7 +294,7 @@ class ProductControlTests(unittest.TestCase):
             source = _read(root, SOURCE)
             source['records']['GT-01']['payload'] = 'tampered'
             observation['goldenTaskSha256'] = '0' * 64
-            errors = _source_errors(root, locator, source, observation)
+            errors = _public_source_errors(root, locator, source, observation)
             self.assert_has(
                 errors,
                 'Golden Task digest mismatch',
@@ -287,7 +302,7 @@ class ProductControlTests(unittest.TestCase):
             )
             record = source['records']['GT-01']
             observation['goldenTaskSha256'] = record['goldenTaskSha256']
-            self.assert_has(_source_errors(root, locator, source, observation),
+            self.assert_has(_public_source_errors(root, locator, source, observation),
                             'sourceEvidence[0] is invalid')
 
         with _fixture() as root:
@@ -301,7 +316,7 @@ class ProductControlTests(unittest.TestCase):
                 'skill': observation['projectionIdentity']['skill'],
                 'skillSha256': '0' * 64,
             }
-            self.assert_has(_source_errors(root, locator, source, observation),
+            self.assert_has(_public_source_errors(root, locator, source, observation),
                             'sourceEvidence[0] is invalid')
 
         with _fixture() as root:
@@ -319,8 +334,54 @@ class ProductControlTests(unittest.TestCase):
                 bundle = json.loads(json.dumps(original))
                 record = bundle['records']['GT-08']
                 record['payload']['officialSources'] = sources
-                self.assert_has(_source_errors(root, locator, bundle, observation),
+                self.assert_has(_public_source_errors(root, locator, bundle, observation),
                                 'sourceEvidence[0] is invalid')
+
+    def test_evidence_authority_bindings_and_types_fail_closed(self):
+        source_cases = (
+            (8, ('officialSources', 0, 'url'), 'https://github.com/openai/../x'),
+            (8, ('officialSources', 0, 'url'), 'https://github.com/openai/%2e%2e/x'),
+            (8, ('officialSources', 0, 'url'), 'https://github.com/\nopenai/x'),
+            (8, ('officialSources',), lambda x: [dict(x[0], url='https://github.com/openai/x'),
+                                                  dict(x[1], url='https://github.com/openai/%78')]),
+            (8, ('messages', 0, 'role'), {}),
+            (8, ('projectionExposure', 'kind'), {}),
+            (2, ('materialEvents',), lambda xs: [dict(x, sourceBindings=[])
+                                                  if x['kind'] == 'independent-poststate' else x for x in xs]),
+            (2, ('materialEvents',), lambda xs: [x for x in xs
+                                                  if x['kind'] != 'independent-poststate']),
+            (2, ('materialEvents',), None),
+            (7, ('cleanupEvidence', 'observations', -1, 'kind'), {}),
+            (7, ('cleanupEvidence', 'observations', -1, 'sourceBindings'), lambda x: x[:-1]),
+            (7, ('cleanupEvidence', 'observations', -1, 'sourceBindings'), lambda x: [x[0], x[0]]),
+        )
+        for task_id, path, value in source_cases:
+            with self.subTest(source=task_id), _fixture() as root:
+                locator, bundle = OBS[task_id], _read(root, SOURCE)
+                observation = _read(root, locator)
+                target = bundle['records'][observation['taskId']]['payload']
+                for part in path[:-1]:
+                    target = target[part]
+                target[path[-1]] = value(target[path[-1]]) if callable(value) else value
+                self.assert_has(_public_source_errors(root, locator, bundle, observation),
+                                _source_error_fragment(root, locator))
+
+        for section, error in (
+            ('behaviorDecisions', 'behaviorDecisions are incomplete'),
+            ('criterionDecisions', 'criterionDecisions contradict behavior'),
+            ('decision', 'has invalid decision'),
+        ):
+            with self.subTest(observation=section), _fixture() as root:
+                locator, observation = OBS[8], _read(root, OBS[8])
+                values = observation[section]
+                if section == 'decision':
+                    values['state'] = {}
+                else:
+                    values = values.get('required', values)
+                    values[next(iter(values))] = {}
+                _write(root, locator, observation)
+                _rehash(root, locator)
+                self.assert_has(_errors(root), error)
 
     def test_failed_sample_narrows_claim(self):
         with _fixture() as root:

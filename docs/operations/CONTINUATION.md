@@ -30,7 +30,9 @@ Then read, in order:
   and all four repository stages are `completed`. These lifecycle states become
   a repository candidate only on their exact clean committed tree; live Git and
   the canonical verifier decide that fact. The previous candidate was invalidated by the
-  bidirectional historical audit. The superseded host Goal was cleared on
+  bidirectional historical audit and then by fixed-SHA review that reproduced
+  official-URL path confusion, malformed-enum exceptions and post-session
+  evidence omission or overclaim. The superseded host Goal was cleared on
   2026-08-25; the current canonical objective is active after direct Goal API
   creation without a token budget and a character-for-character comparison of
   all 1546 Unicode code points.
@@ -45,11 +47,14 @@ Then read, in order:
   later removed after independent comparison without reading hidden contents;
   `GT-07:cleanup` remains excluded and the task remains failed.
 - The publishable source bundle now binds each record to a structured
-  `projectionExposure`, validates official-source authority, URL and capture
-  time, and retains material messages, effects, human authority, cleanup,
-  redactions and claim boundaries. Development-time raw comparisons are
-  complete; the final bundle must still be compared again with original
-  host/session records on the unchanged clean candidate and cannot self-attest.
+  `projectionExposure`, validates canonical official-source authority, URL and
+  capture time, and retains material messages, effects, human authority,
+  cleanup, redactions and claim boundaries. Post-session claims require a
+  task-declared contract mirrored by the payload, exact counts of distinct
+  completed observer-session outputs and a direct subset digest in addition to
+  the outer record digest. Development-time raw comparisons are complete; the
+  final bundle must still be compared again with original host/session records
+  on the unchanged clean candidate and cannot self-attest.
 - Treat the cleared stale Goal as possible process debt, not proven universal
   causation. Replay from the earliest evidence-supported dependency boundary;
   a later correction may reveal either debt or an earlier misjudgment, while
@@ -67,7 +72,10 @@ Then read, in order:
   Markdown research inputs under
   `research/reviews/` are inert exceptions. Current checks must be recomputed
   after every authority or evidence edit; working-tree results do not become
-  clean-candidate evidence until the candidate is committed and replayed.
+  clean-candidate evidence until the candidate is committed and replayed. The
+  reviewed complexity target is 174000 product code-and-test bytes; the stable
+  working measurement is 163895, leaving 10105 bytes of headroom against the
+  separately required 8700-byte reserve after the recorded deletion review.
 - For the Codex projection, resolve current official Agent architecture, App Server
   and host documentation as high-weight dynamic evidence before relying on a
   remembered host fact. Reuse official observation surfaces when useful, but do
@@ -151,6 +159,7 @@ python -B -m yiyuan_accord verify --root . --json
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['minimumTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun>=e and not r.skipped and not r.expectedFailures))"
+actionlint .github/workflows/validate.yml
 git diff --check
 ```
 

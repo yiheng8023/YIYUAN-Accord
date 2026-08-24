@@ -155,6 +155,17 @@ digest, the current projection identity, a typed host/session identity and a
 complete controlled transcript or host-event record held in a separate source
 bundle. Independence is established by the source record and direct task-time
 observation, not by a boolean written into the observation.
+An assertion collected after the primary host session must carry structured
+`sourceBindings` to the exact completed observer-session output, locator,
+completion time and bounded
+claim. That binding makes the later assertion independently locatable; it does
+not convert a task-time failure into a pass or make repository data authentic.
+The Golden Task declares every required post-session event, location and exact
+count of distinct observer-session locators. The
+publishable payload mirrors that contract, and its observation source entry
+hashes the complete selected event set. Omitting the contract, an event, a
+binding or that digest therefore fails closed instead of silently narrowing
+the claimed source.
 
 Before the exact local release gate passes, an independent human or second
 observation surface compares the publishable bundle with the original host or

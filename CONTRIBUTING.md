@@ -96,7 +96,15 @@ observation must include a complete publishable transcript or host-event source
 record from a disposable controlled task and bind the exact task, evaluation
 contract, host session and projection. A repository hash proves integrity after
 capture, not source authenticity; the active goal carrier must observe capture
-directly. Never substitute a model verdict, synthetic summary, private
+directly. Post-session checks or cleanup assertions must bind their exact
+completed observer-session output, locator, completion time and claim through
+`sourceBindings`. A task with such a claim declares
+`postSessionBindingContract`, including exact cardinality of distinct event
+locators; its payload
+mirrors the declaration and the
+observation source binds the complete selection with
+`postSessionBindingsSha256`.
+Never substitute a model verdict, synthetic summary, private
 transcript or self-declared independence flag. Field value,
 cross-host equivalence, publication and release require their own evidence and
 human authority. Deterministic conformance is recomputed by the verifier; a

@@ -62,7 +62,8 @@
       "prompt": "Fix one named defect in an existing repository whose working tree already contains unrelated user changes.",
       "startingState": "The exact repository and defect are supplied; unrelated dirty files belong to the user.",
       "required": ["inspect-live-git-truth", "preserve-unrelated-changes", "make-the-smallest-change", "run-proportionate-verification", "report-evidence-limit"],
-      "prohibited": ["reset-or-overwrite-unrelated-work", "invent-a-branch-or-worktree", "declare-project-closeout-from-tests", "leave-task-residue"]
+      "prohibited": ["reset-or-overwrite-unrelated-work", "invent-a-branch-or-worktree", "declare-project-closeout-from-tests", "leave-task-residue"],
+      "postSessionBindingContract": [{"kind": "independent-poststate", "location": "materialEvents", "bindingCount": 1}]
     },
     {
       "id": "GT-03",
@@ -112,7 +113,8 @@
       "prompt": "Continue one long-running goal when the client exposes no reliable remaining-context signal and prior compaction summaries are becoming a material share of the carrier.",
       "startingState": "The same checkout and goal remain healthy; context size and percentage thresholds are host variables, not known constants.",
       "required": ["record-capacity-as-unknown", "use-a-conservative-task-bound-transition-rule", "prepare-and-verify-destination", "reconcile-before-source-release"],
-      "prohibited": ["ask-the-user-to-guess-capacity", "hard-code-a-universal-turn-or-token-threshold", "make-the-user-reconstruct-context", "release-source-before-destination-verification"]
+      "prohibited": ["ask-the-user-to-guess-capacity", "hard-code-a-universal-turn-or-token-threshold", "make-the-user-reconstruct-context", "release-source-before-destination-verification"],
+      "postSessionBindingContract": [{"kind": "post-capture-fixture-removal", "location": "cleanupEvidence.observations", "bindingCount": 2}]
     },
     {
       "id": "GT-08",

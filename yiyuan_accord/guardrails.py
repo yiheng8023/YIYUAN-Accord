@@ -572,8 +572,11 @@ def criterion_observation_decision(
         return False, errors
     decisions = observation.get("criterionDecisions")
     decision = decisions.get(criterion_id) if isinstance(decisions, dict) else None
-    accepted = decision in {"accepted", "accepted-with-exclusion"}
-    if decision not in {"accepted", "accepted-with-exclusion", "rejected"}:
+    valid = isinstance(decision, str) and decision in {
+        "accepted", "accepted-with-exclusion", "rejected"
+    }
+    accepted = valid and decision != "rejected"
+    if not valid:
         errors.append(f"{label} has no explicit {criterion_id} decision")
     claim = item.get("claim")
     if not _nonempty_string(claim):

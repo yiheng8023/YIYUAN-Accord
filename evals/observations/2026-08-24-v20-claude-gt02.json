@@ -1,8 +1,8 @@
 {
   "taskId": "GT-02",
-  "goldenTaskSha256": "4b87a2e40a9335bdd789f2cbde610a5ef7143d06fda7a41fe6ec2f6eb3602430",
+  "goldenTaskSha256": "4495da8b09f6fabcf7a4d13da3611ee03b0273aad1f22cc15700a7f532a735f8",
   "evaluationContractSha256": "7332a2e7f3f2de4ea39a1103afa934706c03e0133e6ecc520d486824e90e9b49",
-  "observedAt": "2026-08-24T16:24:03Z",
+  "observedAt": "2026-08-24T16:24:30Z",
   "observer": {"kind": "host-event-recorder", "identity": "Codex local verifier after independent raw Claude session and fixture comparison"},
   "hostIdentity": {
     "adapterId": "claude-code",
@@ -25,7 +25,8 @@
     "kind": "host-event-log",
     "locator": "evals/evidence/2026-08-24-v20-representative-source.json",
     "recordId": "GT-02",
-      "sha256": "0f5f5f8d79a90e2efb764bce7858a1bdb6b442f5b493be1c882c04bc7d1d388e",
+    "sha256": "6ff34cdd4c39ce2320138794c8ecc194206f6d3798eecacc8fb297ba153e9d8e",
+    "postSessionBindingsSha256": "bcc7ea11b947771611cc64522ae508e0056feb0d42a1353c146f93440c8c5856",
     "claim": "Fresh Claude Code --bare record and independent fixture checks cover exact Skill attribution, dirty prestate, unrelated-file hash, one-character fix, verification, poststate and residue."
   }],
   "behaviorDecisions": {

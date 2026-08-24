@@ -2,22 +2,32 @@ from datetime import datetime
 from hashlib import sha256
 import json
 import re
+from urllib.parse import unquote, urlsplit
 
 from .identity import _exact, _nonempty_string as _text, _safe_https_locator
 
 
 STATES = {"passed", "failed", "failed-repeated-same-purpose"}
-_OFFICIAL_PREFIXES = (
-    "https://openai.com/", "https://help.openai.com/",
-    "https://platform.openai.com/", "https://developers.openai.com/",
-    "https://github.com/openai/",
-)
+_OFFICIAL_HOSTS = {
+    "openai.com", "help.openai.com", "platform.openai.com",
+    "developers.openai.com", "github.com",
+}
 _PROJECTION_FIELDS = ("adapterId", "skill", "skillSha256")
+_UNRESERVED = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~")
 
 
 def _records(value):
     return isinstance(value, list) and all(isinstance(x, dict) and
         _text(x.get("kind")) for x in value)
+
+
+def _string_set(value):
+    return set(value) if isinstance(value, list) and all(_text(x) for x in value) else None
+
+
+def _enum_map(value, expected, choices):
+    return (expected is not None and isinstance(value, dict) and set(value) == expected
+            and all(_text(item) and item in choices for item in value.values()))
 
 
 def _time(value):
@@ -33,6 +43,27 @@ def _digest(value):
         separators=(",", ":")).encode()).hexdigest()
 
 
+def _canonical_official_url(value):
+    if (not _safe_https_locator(value) or "\\" in value
+            or any(ord(char) < 32 or ord(char) == 127 for char in value)):
+        return None
+    try:
+        parsed = urlsplit(value)
+        host, path = parsed.hostname.lower(), parsed.path
+        escapes = re.findall(r"%([0-9a-fA-F]{2})", path)
+        if (parsed.port is not None or host not in _OFFICIAL_HOSTS
+                or not path.startswith("/") or "%" in re.sub(r"%[0-9a-fA-F]{2}", "", path)
+                or any(chr(int(code, 16)) not in _UNRESERVED for code in escapes)):
+            return None
+        path = unquote(path)
+    except (AttributeError, TypeError, ValueError):
+        return None
+    if (any(part in {".", ".."} or any(ord(char) < 32 or ord(char) == 127 for char in part)
+            for part in path.split("/")) or host == "github.com" and not path.startswith("/openai/")):
+        return None
+    return f"https://{host}{path}"
+
+
 def _official_source(source, captured_at):
     retrieved_at = _time(source.get("retrievedAt")) if isinstance(source, dict) else None
     url = source.get("url") if isinstance(source, dict) else None
@@ -40,11 +71,61 @@ def _official_source(source, captured_at):
         _exact(source, ("kind", "url", "retrievedAt", "claim"),
                ("url", "retrievedAt", "claim"))
         and source.get("kind") == "official-source"
-        and _safe_https_locator(url)
-        and url.startswith(_OFFICIAL_PREFIXES)
+        and _canonical_official_url(url) is not None
         and retrieved_at is not None and captured_at is not None
         and retrieved_at <= captured_at
     )
+
+
+def _postcapture_bundle(payload, task, captured_at):
+    if not isinstance(payload, dict):
+        return None
+    cleanup = payload.get("cleanupEvidence")
+    observations = cleanup.get("observations") if isinstance(cleanup, dict) else None
+    material = payload.get("materialEvents")
+    pools = {
+        "materialEvents": material if isinstance(material, list) else [],
+        "cleanupEvidence.observations": observations if isinstance(observations, list) else [],
+    }
+    kinds = {"independent-poststate", "post-capture-fixture-removal"}
+    special = [event for events in pools.values() if isinstance(events, list)
+               for event in events if isinstance(event, dict)
+               and _text(event.get("kind")) and event["kind"] in kinds]
+    contract = task.get("postSessionBindingContract")
+    if contract is None:
+        return ({"contract": [], "events": []}
+                if "postSessionBindingContract" not in payload and not special else None)
+    if (payload.get("postSessionBindingContract") != contract
+            or not _records(contract) or not contract):
+        return None
+    selected = []
+    for spec in contract:
+        location = spec.get("location")
+        count = spec.get("bindingCount")
+        if (not _exact(spec, ("kind", "location", "bindingCount"), ("kind", "location"))
+                or spec["kind"] not in kinds or location not in pools
+                or not isinstance(count, int) or isinstance(count, bool) or count < 1):
+            return None
+        matches = [event for event in pools[location]
+                   if isinstance(event, dict) and event.get("kind") == spec["kind"]]
+        if len(matches) != 1:
+            return None
+        event = matches[0]
+        bindings = event.get("sourceBindings")
+        if not _records(bindings) or len(bindings) != count or not all(
+            _exact(binding, ("kind", "sessionId", "eventLocator", "observedAt", "claim"),
+                   ("sessionId", "eventLocator", "observedAt", "claim"))
+            and binding["kind"] == "observer-session-event"
+            and re.fullmatch(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}", binding["sessionId"])
+            and re.fullmatch(r"response_item/call_[A-Za-z0-9]+", binding["eventLocator"])
+            and captured_at is not None and _time(binding["observedAt"]) is not None
+            and _time(binding["observedAt"]) <= captured_at
+            for binding in bindings
+        ) or len({(binding["sessionId"], binding["eventLocator"])
+                  for binding in bindings}) != count:
+            return None
+        selected.append({"location": location, "event": event})
+    return {"contract": contract, "events": selected} if len(special) == len(selected) else None
 
 
 def _publishable_payload(payload, task, cleanup, captured_at, projection):
@@ -58,10 +139,13 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
     return (
         payload.get("captureProtocol") == "direct-host-material-events-v1"
         and _records(messages) and messages
+        and all(_text(item.get(field)) for item in messages
+                for field in ("role", "phase", "text"))
         and {item.get("role") for item in messages} == {"user", "assistant"}
-        and all(_text(item.get("phase")) and _text(item.get("text")) for item in messages)
         and _records(payload.get("materialEvents")) and payload["materialEvents"]
+        and _postcapture_bundle(payload, task, captured_at) is not None
         and _exact(exposure, ("kind", *_PROJECTION_FIELDS), _PROJECTION_FIELDS)
+        and _text(exposure.get("kind"))
         and exposure["kind"] in {
             "exact-skill-content-read", "host-runtime-attribution"
         }
@@ -70,7 +154,7 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
                 for field in _PROJECTION_FIELDS)
         and _records(sources)
         and all(_official_source(item, captured_at) for item in sources)
-        and len({item["url"] for item in sources}) == len(sources)
+        and len({_canonical_official_url(item["url"]) for item in sources}) == len(sources)
         and ("resolve-current-official-guidance" not in required or len(sources) >= 2)
         and isinstance(evidence, dict) and set(evidence) == {"state", "observations"}
         and evidence["state"] == (cleanup or {}).get("state")
@@ -117,9 +201,11 @@ def _observation_errors(
     observer, host = observation.get("observer"), observation.get("hostIdentity")
     if observed_at is None or observed_at > datetime.now().astimezone():
         errors.append(f"{label} observedAt is invalid")
-    if not _exact(observer, ("kind", "identity"), ("identity",)) or observer.get(
-        "kind"
-    ) not in {"human-observer", "host-event-recorder"}:
+    if (
+        not _exact(observer, ("kind", "identity"), ("identity",))
+        or not _text(observer.get("kind"))
+        or observer["kind"] not in {"human-observer", "host-event-recorder"}
+    ):
         errors.append(f"{label} observer is invalid")
     if (
         not _exact(host, ("adapterId", "hostProduct", "hostVersion", "sessionId"),
@@ -154,10 +240,18 @@ def _observation_errors(
         records = bundle.get("records") if isinstance(bundle, dict) else None
         record = records.get(record_id) if isinstance(records, dict) else None
         captured = _time(record.get("capturedAt")) if isinstance(record, dict) else None
+        binding_contract = task.get("postSessionBindingContract")
+        source_fields = ("kind", "locator", "recordId", "sha256", "claim") + (
+            ("postSessionBindingsSha256",) if binding_contract else ()
+        )
+        postcapture = _postcapture_bundle(
+            record.get("payload", {}), task, captured
+        ) if isinstance(record, dict) else None
         valid = (
-            _exact(source, ("kind", "locator", "recordId", "sha256", "claim"),
+            _exact(source, source_fields,
                    ("locator", "recordId", "claim"))
-            and source.get("kind") in {"host-transcript", "host-event-log"}
+            and _text(source.get("kind"))
+            and source["kind"] in {"host-transcript", "host-event-log"}
             and _exact(bundle, ("schema", "records")) and bundle.get("schema") == 1
             and _exact(record, (
                 "kind", "taskId", "goldenTaskSha256", "evaluationContractSha256",
@@ -174,6 +268,8 @@ def _observation_errors(
                 observation.get("projectionIdentity"),
             )
             and source.get("sha256") == _digest(record)
+            and (not binding_contract or postcapture is not None and source.get(
+                "postSessionBindingsSha256") == _digest(postcapture))
         )
         if not valid:
             errors.append(f"{label} sourceEvidence[{index}] is invalid")
@@ -183,10 +279,8 @@ def _observation_errors(
     prohibited = behaviors.get("prohibited") if isinstance(behaviors, dict) else None
     behavior_valid = (
         isinstance(behaviors, dict) and set(behaviors) == {"required", "prohibited"}
-        and isinstance(required, dict) and set(required) == set(task.get("required", []))
-        and set(required.values()) <= {"observed", "not-observed"}
-        and isinstance(prohibited, dict) and set(prohibited) == set(task.get("prohibited", []))
-        and set(prohibited.values()) <= {"absent", "observed"}
+        and _enum_map(required, _string_set(task.get("required")), {"observed", "not-observed"})
+        and _enum_map(prohibited, _string_set(task.get("prohibited")), {"absent", "observed"})
     )
     if not behavior_valid:
         errors.append(f"{label} behaviorDecisions are incomplete")
@@ -195,15 +289,18 @@ def _observation_errors(
         *(f"prohibited:{key}" for key, value in prohibited.items() if value == "observed"),
     ]
     burden = observation.get("humanBurden")
+    expected_burden = _string_set(burden_metrics)
     if (
-        not isinstance(burden, dict) or set(burden) != set(burden_metrics)
+        expected_burden is None or not isinstance(burden, dict)
+        or set(burden) != expected_burden
         or any(not isinstance(value, int) or isinstance(value, bool) or value < 0 for value in burden.values())
     ):
         errors.append(f"{label} humanBurden is invalid")
     cleanup = observation.get("cleanup")
     cleanup_valid = (
         _exact(cleanup, ("state", "taskOwnedResidueCount", "verified"))
-        and cleanup.get("state") in {"verified-clean", "verified-foreign-state-preserved", "failed-residue"}
+        and _text(cleanup.get("state"))
+        and cleanup["state"] in {"verified-clean", "verified-foreign-state-preserved", "failed-residue"}
         and isinstance(cleanup.get("taskOwnedResidueCount"), int)
         and not isinstance(cleanup.get("taskOwnedResidueCount"), bool)
         and cleanup["taskOwnedResidueCount"] >= 0 and isinstance(cleanup.get("verified"), bool)
@@ -231,10 +328,7 @@ def _observation_errors(
     }
     decisions = observation.get("criterionDecisions")
     expected_decision = "accepted-with-exclusion" if failures else "accepted"
-    if (
-        not isinstance(decisions, dict) or set(decisions) != mapped
-        or set(decisions.values()) != {expected_decision}
-    ):
+    if not _enum_map(decisions, mapped, {expected_decision}):
         errors.append(f"{label} criterionDecisions contradict behavior")
     claim = observation.get("claimLimit")
     if (
@@ -251,8 +345,9 @@ def _observation_errors(
     ):
         errors.append(f"{label} claimLimit contradicts behavior")
     decision = observation.get("decision")
-    state = decision.get("state") if isinstance(decision, dict) else None
-    if state not in STATES:
+    raw_state = decision.get("state") if isinstance(decision, dict) else None
+    state = raw_state if _text(raw_state) and raw_state in STATES else None
+    if state is None:
         errors.append(f"{label} has invalid decision")
     elif state == "passed" and (failures or not clean):
         errors.append(f"{label} passed decision contradicts records")
