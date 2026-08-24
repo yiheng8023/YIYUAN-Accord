@@ -172,7 +172,8 @@ _YAML_C = re.compile(
 
 
 def _lex(text):
-    lexer = shlex.shlex(text, posix=True, punctuation_chars="[]{}(),=:")
+    logical = text.replace("\\\r\n", "").replace("\\\n", "")
+    lexer = shlex.shlex(logical, posix=True, punctuation_chars="[]{}(),=:")
     lexer.wordchars += "&*!"
     return list(lexer)
 

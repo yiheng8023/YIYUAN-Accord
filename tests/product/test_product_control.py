@@ -38,7 +38,7 @@ def _rehash(root, locator):
 def _retired_errors(body, locator='sample.txt'):
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary)
-        (root / locator).write_text(body.replace('@', 'retired_module'), encoding='utf-8')
+        (root / locator).write_bytes(body.replace('@', 'retired_module').encode('utf-8'))
         history = [json.dumps(RETIRED), '# Retired Product\n']
         with patch('yiyuan_accord.identity.subprocess.check_output', side_effect=history):
             return active_tree_errors(root, [locator], '0' * 40)
