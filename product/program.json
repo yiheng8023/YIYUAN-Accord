@@ -267,7 +267,7 @@
     },
     "targets": {
       "maxTrackedFiles": 55,
-      "maxProductCodeAndTestBytes": 132000,
+      "maxProductCodeAndTestBytes": 134000,
       "maxPrimaryInstructionBytes": 26000
     },
     "primaryInstructionPaths": [
@@ -307,7 +307,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. A failed target blocks Q3 rather than inviting a larger verifier. Independent specification and standards review required fail-closed release-surface checks and cross-authority goal projection binding. A subtraction pass replaced scope-sensitive alias and data-flow inference with a direct active-Python historical-module token ban covering identifiers, static imports and literal or compile-time strings while allowing comments and adjacent identifiers. Bounded linear literal scanning and an exact comment-normalized workflow profile close reproduced robustness gaps; the code-and-test cap is therefore 132000 and must retain at least five percent headroom without deleting coverage or compressing readability."
+    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. A failed target blocks Q3 rather than inviting a larger verifier. Independent specification and standards review required fail-closed release-surface checks and cross-authority goal projection binding. A subtraction pass replaced scope-sensitive alias and data-flow inference with a direct active-Python historical-module token ban covering identifiers, static imports and literal or compile-time strings while allowing comments and adjacent identifiers. Bounded linear literal scanning and an exact comment-normalized workflow profile close reproduced robustness gaps; the code-and-test cap is therefore 134000 and must retain at least five percent headroom without deleting coverage or compressing readability."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

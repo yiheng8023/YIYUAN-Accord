@@ -171,9 +171,38 @@ _YAML_C = re.compile(
 )
 
 
+def _logical_shell_text(text):
+    logical, quote, comment, index = [], None, False, 0
+    while index < len(text):
+        char = text[index]
+        if char == "\\" and quote != "'":
+            if text.startswith("\\\r\n", index):
+                index += 3
+                continue
+            if text.startswith("\\\n", index):
+                index += 2
+                continue
+        if comment:
+            logical.append(char)
+            comment = char not in "\r\n"
+            index += 1
+            continue
+        if char == "#" and quote is None:
+            comment = True
+        if char == "\\" and quote != "'" and index + 1 < len(text):
+            logical.extend(text[index:index + 2])
+            index += 2
+            continue
+        if char in "'\"" and quote in (None, char):
+            quote = char if quote is None else None
+        logical.append(char)
+        index += 1
+    return "".join(logical)
+
+
 def _lex(text):
-    logical = text.replace("\\\r\n", "").replace("\\\n", "")
-    lexer = shlex.shlex(logical, posix=True, punctuation_chars="[]{}(),=:")
+    lexer = shlex.shlex(_logical_shell_text(text), posix=True,
+                        punctuation_chars="[]{}(),=:")
     lexer.wordchars += "&*!"
     return list(lexer)
 

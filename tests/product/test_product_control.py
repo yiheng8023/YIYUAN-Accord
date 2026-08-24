@@ -274,6 +274,11 @@ class ProductControlTests(unittest.TestCase):
             ('sample.txt', 'python -Xm@\npython -c "print(\'@_other\')"\n'
              'python -c "# import @"\npython -c "x=1 # @"\n'
              'python -c "# module=\'@\'"\npython -c "# @.py"\n'),
+            ('sample.sh', "python -m 'retired_\\\nmodule'\n"
+             "python -m 'retired_\\\r\nmodule'\r\n"
+             "# comment \\\npython -m retired_module\n"
+             + "python -m retired_" + "\\" * 2 + "\nmodule\n"
+             + "python -m retired_" + "\\" * 3 + "\nmodule\n"),
         ):
             self.assertFalse(_retired_errors(body, locator))
 
@@ -321,7 +326,11 @@ class ProductControlTests(unittest.TestCase):
                 '    importlib.import_module("@")\n',
             ),
             'sample.sh': (
-                'python -m \\\n@\n', 'python -c "__import__(\'@\')"\n',
+                'python -m \\\n@\n', 'python -m \\\r\n@\r\n',
+                "# don't\npython -m \\\n@\n",
+                'python -m "retired_\\\nmodule"\n',
+                'python -m "retired_\\\r\nmodule"\r\n',
+                'python -c "__import__(\'@\')"\n',
                 'python -c "import runpy; runpy.run_module(\'@\')"\n',
                 "python -c 'import importlib\nimportlib.import_module(\"@\")'\n",
                 *(f'python -c "__import__(\'retired_\'{x}\'module\')"\n'
