@@ -24,147 +24,169 @@ Then read, in order:
 
 ## Current authority state
 
-- Canonical identity: YIYUAN Accord / `yiyuan-accord` /
-  `yiyuan_accord` / `https://github.com/yiheng8023/YIYUAN-Accord`.
-- Active line: v2.0. `program.status` is `ready`; the sole increment, work item
-  and all four repository stages are `completed`. These lifecycle states become
-  a repository candidate only on their exact clean committed tree; live Git and
-  the canonical verifier decide that fact. The previous candidate was invalidated by the
-  bidirectional historical audit, fixed-SHA review that reproduced official-URL
-  path confusion, malformed-enum exceptions and post-session evidence omission
-  or overclaim, and fixed-diff review that reproduced cross-event locator reuse
-  plus coordinated contract-and-event omission. The superseded host Goal was cleared on
-  2026-08-25; the current canonical objective is active after direct Goal API
-  creation without a token budget and a character-for-character comparison of
-  all 1546 Unicode code points.
-- R1–R4 and Q1–Q4 remain repository assessments. A clean local candidate grants
-  no hosted, human, publication, field or completion outcome. The current sample has six
-  passes and one retained GT-07 failure. GT-01/02 now use selected Claude Code
-  `--bare` sessions with exact runtime Skill attribution and independent
-  postchecks; the earlier Codex attribution is retained only as invalidated,
-  revision-and-digest-bound counterevidence at
-  `975fc7a6846dbcb89f819c2b091721b999bbb52e`. GT-07 continuity passed, while task-time cleanup failed on
-  hidden `.remember` residue and an initial inventory miss. Its fixture was
-  later removed after independent comparison without reading hidden contents;
-  `GT-07:cleanup` remains excluded and the task remains failed.
-- The publishable source bundle now binds each record to a structured
-  `projectionExposure`, validates canonical official-source authority, URL and
-  capture time, and retains material messages, effects, human authority,
-  cleanup, redactions and claim boundaries. Post-session claims require a
-  task-declared contract mirrored by the payload, exact counts of distinct
-  completed observer-session outputs and a direct subset digest in addition to
-  the outer record digest. Development-time raw comparisons are complete; the
-  final bundle must still be compared again with original host/session records
-  on the unchanged clean candidate and cannot self-attest.
-- Treat the cleared stale Goal as possible process debt, not proven universal
-  causation. Replay from the earliest evidence-supported dependency boundary;
-  a later correction may reveal either debt or an earlier misjudgment, while
-  unrelated accepted facts remain stable.
-- Hosted verification of `97671617ebad3f308127c0e6edd6b467622c177d`
-  reached and passed checkout, verifier and host-check execution on every
-  declared GitHub runner. Ubuntu completed, while Windows and macOS reproduced
-  a test-fixture defect: the simulated symlink target used a lexical temporary
-  root even though the package verifier canonicalizes that root. The regression
-  now deliberately enters through a lexical alias and binds the simulated
-  target to the verifier's canonical root. This invalidates candidate-specific
-  evidence from the exact local test-and-review boundary onward; replay it on a
-  new clean SHA before another push or hosted claim.
-- The next exact-local replay found an ignored project-root `.remember`
-  directory whose creation time fell inside the earlier Claude host-test
-  window. Git status did not expose it and the verifier's known-residue set did
-  not include it. The directory was resolved inside this checkout, confirmed
-  to be an ordinary directory, removed without reading any file contents and
-  verified absent. A public-verifier regression now requires `.remember` to
-  fail closed as known task residue. Follow-up independent robustness review
-  then reproduced that `os.walk` silently ignored an unreadable subtree. Its
-  error callback now records an unreadable residue sentinel without opening
-  subtree contents, and a second public-verifier regression requires that path
-  to fail closed. Replay the candidate boundary again.
-- Repeated multi-host identity-scanner corrections triggered the declared
-  premise/interface/deletion review. The reduced replacement uses the Git index
-  as its finite declaration source, one shared Python 3.10 AST grammar for
-  bounded identifier/literal/static-concatenation checks on supported Python
-  3.10-3.14 hosts, and exact NFKC/casefold lexical boundaries over strictly
-  decoded non-Python whole text without host escape interpretation. All owned
-  reads are descriptor-bound and checked for path and metadata stability; Git
-  index, status and historical captures are file-backed, time-bounded and
-  size-bounded. Unavailable or indeterminate surfaces block conformance, while
-  hidden checkout flags block clean-candidate readiness. Only digest-bound
-  Markdown research inputs under
-  `research/reviews/` are inert exceptions. Current checks must be recomputed
-  after every authority or evidence edit; working-tree results do not become
-  clean-candidate evidence until the candidate is committed and replayed. The
-  reviewed complexity target is 178000 product code-and-test bytes; the stable
-  working measurement is 169011, leaving 8989 bytes of headroom against the
-  separately required 8900-byte reserve after the recorded deletion review.
-- For the Codex projection, resolve current official Agent architecture, App Server
-  and host documentation as high-weight dynamic evidence before relying on a
-  remembered host fact. Reuse official observation surfaces when useful, but do
-  not add their runtime or orchestration implementation to the portable core.
-- The existing YIYUAN NEXUS mark was evaluated for plugin presentation. Current
-  Codex manifests admit optional `composerIcon`/`logo` assets, while the Claude
-  Code manifest schema has no equivalent visual field. Adding a Codex-only mark
-  now would change package identity and replay current-projection evidence for
-  an optional presentation benefit, so v2.0 defers it to a separate bounded
-  post-release increment with an explicit trademark-use boundary.
-- Determine the first incomplete gate from live Git, the exact candidate's
-  local checks, hosted results, task-time human authority and public release
-  state. Never infer a live gate from this navigation file. A ready repository
-  state grants no hosted, human or release authority. No release gate may begin
-  while the repository stages above remain active or pending.
-- The immutable v1.2 revision is
-  `6d857517455b6f3f86a4c9cbd79fc618febbbe00`. Its observations remain in Git
-  history and must not be renamed or replayed as current evidence.
-- The full project analysis and accepted lifecycle framework are retained under
-  `research/reviews/` as high-weight, non-authoritative inputs.
-- The shared human-AI collaboration shortfall corpus remains read-only in
-  YIYUAN-CALIBRATION at revision
-  `e060a08f05361cb4cc9a67be050236cdbbde1de5`.
-- Separately governed user-level Skills are not release dependencies. Add or
-  project one only for a reproduced residual gap with separate lifecycle
-  authority.
+- Canonical identity: YIYUAN Accord / `yiyuan-accord` / `yiyuan_accord` /
+  `https://github.com/yiheng8023/YIYUAN-Accord`.
+- The immutable v2.0 contract and public release are bound to
+  `71ff4a2687b54f26c8dbf3a94384257f1fc0f532`. Do not move, rewrite or reuse its
+  tag as authority for another revision.
+- The active distribution increment is `v2.0.1-preview.1`, a Public Preview
+  presentation and reader-path repair over that unchanged behavior contract.
+  `program.status` is ready; the increment and work item are completed. The
+  current stage sequence is:
+  `preview-presentation-and-authority-alignment` completed,
+  `preview-structured-constraints-and-regressions` completed,
+  `affected-distribution-and-reader-path-evidence` completed, then
+  `preview-candidate-freeze` completed. Live authority, not this snapshot, decides
+  the actual state.
+- The active no-budget Goal is the exact 1297-character canonical JSON
+  `program.goalModePrompt.objective`. Its SHA-256 is
+  `b9dde332faf21843d2507fc233f025a8d92bfbda40df4d14a39ea6984fe3b795`.
+  It contains one typed `execute-exactly-in-listed-order` route and a
+  `reviewable-versioned-current-set` authority object whose locators derive from
+  the current constitution declaration. User correction or material evidence
+  can challenge that set; merge, split, replacement or retirement requires an
+  explicit provenance-preserving schema/verifier migration and earliest-boundary
+  replay. Neither the judgment nor the count of the current three-file schema-v2
+  bootstrap is permanent. Coordinated free-text route overrides cannot become a
+  canonical projection. A later material correction may require clearing and
+  recreating the Goal.
+- Publisher identity is the individual GitHub account `yiheng8023`. No public
+  email is required. Author links point to the personal GitHub page; project,
+  homepage and website links point to the Accord repository.
+- The Codex projection declares the wordless YIYUAN NEXUS mark as a package
+  asset. Claude Code has no equivalent manifest field. The trademark boundary
+  remains separate in `NOTICE`; Apache-2.0 does not grant trademark rights.
+- Both READMEs identify the distribution as Public Preview, keep production and
+  broad-field claims out of scope, provide current Codex and Claude Code
+  activation/removal paths, and include optional WeChat Pay, Alipay and PayPal
+  support with an explicit no-SLA/no-influence boundary and disclaimer.
 
-## Strict v2.0 route
+## Distribution walkthrough evidence to replay
 
-1. Complete the no-alias identity migration across authority, code, projection
-   packages, docs, tests, repository URLs and public metadata under the strict
-   tracked-surface static boundary; do not promote it into a runtime claim.
-2. Make the generic verifier compute deterministic conformance directly; run
-   both host checks, full regressions, residue and identity scans, and diff
-   checks. Repository observations cannot self-attest these results.
-3. Run the required Golden Tasks against the exact current projections. Keep
-   each decision, material effect, human burden and cleanup disposition; a
-   failed task remains failed and narrows the claim.
-4. Mark criteria verified only from live-computed lanes and accepted behavior
-   evidence; only after every reopened stage passes may the increment become
-   completed and one clean local candidate be committed.
-5. On that unchanged local SHA, directly run the canonical verifier, both host
-   checks, full product tests, diff, identity, link, workflow and residue checks
-   plus independent specification, implementation-robustness and
-   standards-conformance review. Independently
-   compare the publishable source bundle with original host/session records,
-   and have one evaluator isolated from candidate-preparation context complete
-   the README activation, confirmation and removal path from a clean state. The
-   accountable user, a colleague or a second observation surface may execute
-   this context-isolated, outcome-bound, identity-neutral internal usability
-   sample. Resolve every P0/P1; only then push the same SHA.
-6. Verify the unchanged pushed SHA on GitHub Actions for Linux, Windows and
-   macOS plus ordinary Codex Cloud. Repository data cannot satisfy this gate.
-7. Only then request a named accountable human decision for that exact SHA and
-   complete claim ceiling. Do not write the decision into the candidate.
-8. After authorization, create the lightweight `v2.0` tag and public release
-   with no attached assets.
-9. Directly verify the release and tag APIs, exact tracked release notes and
-   zero-asset policy; clean task resources, verify zero residue and replay local
-   checks before finite closeout.
+- Earlier stage-3 tree `7d3e455c2a1f5e91e1c0dd924efdebbfe5167c56`
+  matched all 58 index blobs both as a raw Git archive and as a Windows
+  clean-filter checkout. Its public v2.0 observations and source bundle remained
+  byte-identical to `71ff4a2687b54f26c8dbf3a94384257f1fc0f532`. Final
+  dual-axis review then found a coordinated free-text Goal-order bypass and an
+  R1 omission of the already implemented digest-bound PNG exception. A later
+  user correction also rejected treating the current three-file authority
+  topology as unquestionable or permanent. Those corrections supersede this
+  tree as the complete preview source bundle and return the repository to the
+  structured-constraints stage.
+- Replayed stage-3 tree `794374ab97718f1c0c79fb51df7dfdab6abe9e4b`
+  matched all 58 index blobs in an explicit-LF archive and all 58 through a
+  Windows clean-filter checkout. The v2.0 evidence, adapter and Skill paths
+  remain byte-identical to `71ff4a2687b54f26c8dbf3a94384257f1fc0f532`.
+  Independent re-binding found both package trees and the README lifecycle
+  commands unchanged, so the earlier clean-state reader observations remain
+  bounded package-path evidence; README files as a whole are not byte-identical.
+- A context-isolated Codex 0.149.1 reader installed package digest
+  `a71847f3afed57c38781394c3305585a4107b078ba0703214406f25213e2dc21`,
+  found and executed its Skill, and correctly distinguished cloning from plugin
+  activation. A Claude Code 2.1.243 `--bare`, read-only, non-persistent DeepSeek
+  route likewise exercised package digest
+  `23d7560c4a6e5dd24cc8b3457576a4e35e8c7b44c7571d427a0669f5430e90e3`.
+- The user performed no walkthrough action. Temporary host entries, the exact
+  task-created Accord cache and fixture changes were zero after rollback.
+  Normal model calls were the observed cost. Because the projection package
+  digests and reader path did not change, this remains bounded package-path
+  evidence; the final complete source bundle and downstream stage must still be
+  replayed. Remote tag availability, Desktop
+  UI rendering, public installation, field value and production safety remain
+  unproved. This replay rechecked public derived records and bindings; it did
+  not reopen, read or re-authenticate private raw sessions.
+
+## Product and evidence boundary
+
+Accord improves the collaboration layer it can influence. It does not try to
+make an Agent imitate a person, replace a model provider, remove human
+limitations or recreate host-native infrastructure. People, Agents and their
+shared information are finite. Machine-native routes are valid when they
+deliver the human outcome with lower net burden, preserve authority and leave
+honest evidence.
+
+Thinness is an implementation constraint, not a feature-deletion KPI. Preserve
+goal anchoring, minimum sufficient routing, human authority, correction,
+continuity, recovery, verification and cleanup. Challenge premises, interfaces
+and representations while considering deletion, replacement, recomposition,
+native delegation and bounded addition. There is no universal add-or-subtract
+default; L2 still requires a deletion or replacement attempt before another
+same-purpose repair layer is admitted.
+Do not restore an always-on Runtime, Hook, MCP, App or state layer without a
+reproduced residual gap, insufficient native coverage, proportionate evidence,
+an owner and a retirement trigger.
+
+Behavior and distribution evidence are separate axes:
+
+- Existing v2.0 representative observations remain bound to the unchanged
+  adapter contract, Skill locator/content and exact exposure. `GT-07:cleanup`
+  remains a retained failure and claim exclusion; do not rename it or promote
+  it into success.
+- Publisher, version, manifest, marketplace, metadata, icon and complete
+  package bytes belong to v2.0.1-preview.1 distribution identity. They require
+  fresh deterministic package checks and current clean-state activation,
+  confirmation and removal evidence, but do not manufacture new behavior.
+- Binary distribution assets are admitted only by exact tracked path, PNG
+  signature and program-declared SHA-256. Undeclared, relocated or changed
+  binary content remains a conformance failure.
+- A changed adapter contract, Skill locator/content or exact exposure
+  invalidates dependent behavior evidence from that earliest boundary. A
+  presentation-only change replays its distribution and downstream release
+  gates while preserving unrelated accepted behavior truth.
+- Raw host/session records stay outside the public repository. Before the exact
+  local gate passes, compare the publishable source bundle independently with
+  those original records without treating repository assertions as
+  authentication. Private memory, credentials and unsanitized session content
+  are not release evidence and must not be opened or copied for this purpose.
+
+## Strict v2.0.1-preview.1 route
+
+Determine the first incomplete gate from live Git, authority state and direct
+evidence; never infer it from this navigation snapshot.
+
+1. Align the contract/distribution split, personal publisher, project URLs,
+   Public Preview maturity, wordless trademark asset, NOTICE boundary, bilingual
+   READMEs, sponsorship and disclaimer surfaces without changing Skill
+   semantics.
+2. Make the generic verifier and regressions fail closed for full SemVer,
+   maturity/channel disagreement, publisher or icon drift, asset tampering,
+   behavior-bearing contract/Skill drift, workflow structure and release
+   surfaces. Keep canonical verifier and full product tests serial.
+3. Recompute both package digests and host checks. Independently inspect the
+   complete publishable distribution, links, workflow, identity and residue
+   boundary. From a clean state, have a context-isolated evaluator follow the
+   current README activation, confirmation and removal path and record effects,
+   human burden, unknowns and residue.
+4. Complete all four repository stages and all R1-R4/Q1-Q4 assessments on one
+   tree. Commit one clean local candidate. A valid dirty-tree verifier report is
+   not a repository candidate.
+5. On that unchanged clean SHA, directly run the canonical verifier, both host
+   checks, full product tests, plugin/package checks, actionlint, diff, identity,
+   link, workflow and residue checks plus independent specification,
+   implementation-robustness and standards-conformance review. Compare the
+   publishable source bundle again with original host/session records. Resolve
+   every P0/P1; only then push the same SHA.
+6. After push, ordinary Codex Cloud is required for this Public Preview. Attempt
+   GitHub Actions on Linux, Windows and macOS when account quota is available.
+   Quota-limited absence is explicit external `unknown`: neither a pass, a
+   product failure nor a preview blocker. A later stable channel restores its
+   declared full hosted matrix.
+7. Only after required hosted verification, present the unchanged SHA, complete
+   claim ceiling, retained failures and continuing evidence lanes to a named
+   accountable human. Do not write that task-time decision into the candidate.
+8. After exact authorization, create only the lightweight
+   `v2.0.1-preview.1` tag and a GitHub prerelease with the tracked release body
+   and no attached assets.
+9. Directly verify remote/local tag parity, prerelease state, release body and
+   zero-asset policy. Release task resources, confirm evaluator and repository
+   residue are absent, and replay local validation before finite closeout.
 
 Do not start a later gate early. A failure, material correction, later rule or
-revision returns to the earliest affected dependency boundary. Prior passes
-remain historical facts, but their current-candidate validity and every
-downstream candidate-specific result are superseded until that boundary and all
-later gates are replayed; unrelated accepted truth remains stable. Reports,
-plans, tests, commits, pushes, transitions, hosted passes and authorization are
-supporting facts, not substitutes for the next effect or for completion.
+revision returns to the earliest affected dependency boundary. Supersede that
+boundary and its downstream candidate-specific evidence, not unrelated accepted
+truth. Reports, plans, tests, commits, pushes, hosted passes, authorization and
+publication are supporting facts, not substitutes for the next effect or for
+the broader mission.
 
 ## Continuity
 
@@ -179,15 +201,17 @@ The Agent owns destination verification, reconciliation and source release.
 python -B -m yiyuan_accord verify --root . --json
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
-python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['minimumTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun>=e and not r.skipped and not r.expectedFailures))"
+python -B -c `
+  "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['minimumTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun>=e and not r.skipped and not r.expectedFailures))"
 actionlint .github/workflows/validate.yml
 git diff --check
 ```
 
 A routine green local check is deterministic conformance only. The exact local
-completion gate additionally requires the complete unchanged-candidate check
-set and independent specification, implementation-robustness and
-standards-conformance review observed by the active goal carrier.
+gate additionally requires the complete unchanged-candidate check set,
+independent review, source-bundle comparison and clean-state reader-path
+walkthrough observed by the active goal carrier.
+
 Before a handoff, record the exact checkout, upstream relation, dirty paths,
 program and stage state, checks, residue, next external or human gate, and
 source-carrier release state.

@@ -1,9 +1,10 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "2.0.0",
+  "version": "2.0.1-preview.1",
   "description": "Thin Codex Skill projection for the YIYUAN Accord portable collaboration reliability contract.",
   "author": {
-    "name": "YIYUAN Accord contributors"
+    "name": "yiheng8023",
+    "url": "https://github.com/yiheng8023"
   },
   "homepage": "https://github.com/yiheng8023/YIYUAN-Accord",
   "repository": "https://github.com/yiheng8023/YIYUAN-Accord",
@@ -14,12 +15,15 @@
     "displayName": "YIYUAN Accord for Codex",
     "shortDescription": "Goal-first collaboration with bounded correction",
     "longDescription": "One progressively disclosed Skill. It relies on current Codex-native capabilities and adds no runtime, Hook, MCP, App, state store or fixed host-version dependency.",
-    "developerName": "YIYUAN Accord contributors",
+    "developerName": "yiheng8023",
     "category": "Developer Tools",
     "capabilities": ["Interactive", "Read"],
     "websiteURL": "https://github.com/yiheng8023/YIYUAN-Accord",
     "defaultPrompt": [
       "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
-    ]
+    ],
+    "brandColor": "#2F6BFF",
+    "composerIcon": "./assets/yiyuan-nexus-mark.png",
+    "logo": "./assets/yiyuan-nexus-mark.png"
   }
 }

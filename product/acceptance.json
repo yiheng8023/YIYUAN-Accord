@@ -3,9 +3,10 @@
   "id": "yiyuan-accord-product-acceptance-v2.0",
   "productId": "yiyuan-accord",
   "release": "v2.0",
+  "distributionVersion": "v2.0.1-preview.1",
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "ac51b70a32446a2855181b8b498a2b1992761c49da6083ed71c39862b0260719",
+  "canonicalGoalObjectiveSha256": "b9dde332faf21843d2507fc233f025a8d92bfbda40df4d14a39ea6984fe3b795",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": ["deterministic-conformance", "representative-behavior"],
@@ -31,7 +32,7 @@
       "name": "canonical collaboration reliability contract",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "L1", "L2", "L3", "L4", "L7"],
       "statement": "YIYUAN Accord exposes one Agent-neutral, portable human-Agent collaboration reliability contract and evaluation framework with a single canonical identity, a bounded current product scope and an explicit broader human-AI mission.",
-      "passRule": "A clean checkout validates the three semantic authority files, CONTEXT.md and one generic data-driven verifier; intent, capability, authority and evidence remain aligned with state, effect, continuity and lifecycle. The Git index is available and contains only merged stage-zero regular release files; their paths and strictly decoded non-Python whole text are free of exact NFKC/casefold lexical superseded identity tokens, and declared .py, .pyi and .pyw identifiers, literal values and bounded static concatenations are free of those tokens under one shared Python 3.10 AST grammar across supported Python 3.10-3.14 hosts. Indeterminate surfaces block conformance and hidden checkout flags block clean-candidate readiness. Digest-bound Markdown research inputs under research/reviews are inert exceptions, no compatibility alias is declared, and absence from ignored or untracked files, Python comments, runtime-built or external dynamic content is not claimed.",
+      "passRule": "A clean checkout validates the current declared semantic authority set, CONTEXT.md and one generic data-driven verifier; intent, capability, authority and evidence remain aligned with state, effect, continuity and lifecycle. Schema v2 currently bootstraps constitution, program and acceptance, but that topology is reviewable and may change only through an explicit schema, verifier and provenance-preserving migration rather than by silent file accretion or deletion. The Git index is available and contains only merged stage-zero regular release files; their paths and strictly decoded non-Python whole text are free of exact NFKC/casefold lexical superseded identity tokens, and declared .py, .pyi and .pyw identifiers, literal values and bounded static concatenations are free of those tokens under one shared Python 3.10 AST grammar across supported Python 3.10-3.14 hosts. Indeterminate surfaces block conformance and hidden checkout flags block clean-candidate readiness. Digest-bound Markdown research inputs under research/reviews and exact program-declared PNG distribution assets whose signature and complete bytes match their SHA-256 declarations are inert exceptions; no compatibility alias is declared, and absence from ignored or untracked files, Python comments, runtime-built or external dynamic content is not claimed.",
       "requiredEvidenceClasses": ["deterministic-conformance"],
       "assessment": "verified",
       "evidence": []
@@ -113,7 +114,7 @@
       "class": "release-result",
       "name": "release-ready reproducible public surface",
       "mapsTo": ["K5", "H6", "H7", "H9", "H10", "L1", "L7"],
-      "statement": "The candidate contains a reproducible v2.0 public-release surface for the finite contract, verifier, reference projections and accepted evidence under the canonical YIYUAN Accord identity, with an exact intended tag, release body, claim ceiling, asset policy and retirement path.",
+      "statement": "The candidate contains a reproducible v2.0.1-preview.1 Public Preview distribution of the immutable v2.0 contract, verifier, reference projections and accepted behavior evidence under the canonical YIYUAN Accord identity, with an exact intended tag, prerelease body, claim ceiling, asset policy and retirement path.",
       "passRule": "The live canonical verifier validates the complete intended release surface, deterministic reproduction instructions, accepted evidence bindings, explicit claim ceiling and ordered task-time gate contract. R4 does not assert that exact local review, hosted verification, named-human authorization, tagging, publication or final cleanup has occurred; those remain separate completion operands evaluated only by the active goal carrier.",
       "requiredEvidenceClasses": ["deterministic-conformance"],
       "assessment": "verified",
@@ -232,13 +233,11 @@
   ],
   "candidateVerification": {
     "mode": "task-time-live-observation",
-    "requiredSystems": {
-      "github-actions-ubuntu-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
-      "github-actions-windows-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
-      "github-actions-macos-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
+    "systems": {
       "codex-cloud": "https://chatgpt.com/codex/"
     },
-    "rule": "Only after the exact local verification-and-review gate passes may the final clean candidate be pushed. That local gate includes an independent comparison of the publishable source bundle with the original host or session records, plus one clean-state README activation, confirmation and removal walkthrough by an evaluator isolated from candidate-preparation context. The sample is context-isolated, outcome-bound, identity-neutral and internal only; the accountable user, a colleague or a second observation surface may execute it. Task-time hosted observation must then bind the unchanged HEAD and every required system. Repository data, an earlier revision and a caller-supplied receipt cannot satisfy either gate."
+    "requiredSystemIds": ["codex-cloud"],
+    "rule": "Only after the exact local verification-and-review gate passes may the final clean candidate be pushed. That local gate includes an independent comparison of the publishable source bundle with the original host or session records, plus one clean-state README activation, confirmation and removal walkthrough by an evaluator isolated from candidate-preparation context. The sample is context-isolated, outcome-bound, identity-neutral and internal only; the accountable user, a colleague or a second observation surface may execute it. Task-time hosted observation must then bind the unchanged HEAD on every required system. Ordinary Codex Cloud is required for this Public Preview; the three declared GitHub Actions systems are attempted when account quota is available, and quota-limited absence remains explicit unknown external state rather than a pass, product failure or preview blocker. Repository data, an earlier revision and a caller-supplied receipt cannot satisfy either gate."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",
@@ -252,14 +251,16 @@
   },
   "publicRelease": {
     "mode": "task-time-live-github-observation",
-    "tag": "v2.0",
-    "releaseLocator": "https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v2.0",
-    "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v2.0",
-    "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v2.0",
-    "releaseNotes": "docs/releases/v2.0.md",
-    "releaseNotesSha256": "99b20afd6b635d094ad9580bfcabe04f485660c70e8f78c511188a3789fd6782",
+    "tag": "v2.0.1-preview.1",
+    "releaseLocator": "https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v2.0.1-preview.1",
+    "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v2.0.1-preview.1",
+    "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v2.0.1-preview.1",
+    "releaseNotes": "docs/releases/v2.0.1-preview.1.md",
+    "releaseNotesSha256": "0fa8cb2fa21538d2d80f4985cc5033805fbe792e294abe59ab80972850596d66",
     "assetPolicy": "no-attached-assets",
-    "rule": "Only after exact local review, exact hosted verification and named-human authorization may the active goal carrier create the lightweight v2.0 tag and public release. It then directly verifies the tag, release body and zero attached assets, removes task-created resources and replays local verification."
+    "maturity": "public-preview",
+    "prerelease": true,
+    "rule": "Only after exact local review, required hosted verification and named-human authorization may the active goal carrier create the lightweight v2.0.1-preview.1 tag and GitHub prerelease. It then directly verifies the prerelease flag, tag, release body and zero attached assets, removes task-created resources and replays local verification."
   },
   "claimCeiling": {
     "finiteReleaseClaims": [

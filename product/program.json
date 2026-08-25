@@ -3,7 +3,8 @@
   "id": "yiyuan-accord-product-program-v2.0-global-identity",
   "productId": "yiyuan-accord",
   "release": "v2.0",
-  "releaseIntent": "Deliver one production-grade, openly reviewable v2.0 candidate under the canonical YIYUAN Accord identity, with fresh behavior evidence and no compatibility alias for the superseded identity.",
+  "distributionVersion": "v2.0.1-preview.1",
+  "releaseIntent": "Deliver an openly reviewable v2.0.1-preview.1 Public Preview distribution of the immutable v2.0 collaboration contract, with corrected personal publisher metadata, bounded trademark presentation, accurate installation documentation and no production-stability claim.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "maintenancePlan": "CONTRIBUTING.md",
@@ -54,52 +55,52 @@
     }
   ],
   "increment": {
-    "id": "increment.v20-global-identity-and-framework-alignment",
+    "id": "increment.v201-preview-presentation-and-stage-closeout",
     "state": "completed",
     "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "observedProblem": "The public repository display was renamed while the active module, package identifiers, commands, authority files, documentation and observations still carried a superseded technical identity. Staging aliases would preserve ambiguity, and relabeling v1.2 observations would manufacture evidence for a projection they never exercised. The accepted reports also require a clearer product category, explicit human-AI mission versus current human-Agent scope, tighter lifecycle evaluation and a finite path to closeout.",
-    "hypothesis": "One complete breaking identity migration, a single collaboration reliability domain model, thin runtime-free projections, a generic verifier and fresh current-projection Golden Task observations can restore global consistency without adding a compatibility layer or turning the framework into a runtime, governance platform or universal correctness claim.",
+    "observedProblem": "Immutable v2.0 closed the core contract but its public presentation still used collective publisher metadata, a generic icon, a dense reader path and a full-release label stronger than the finite test corpus supports. Treating those distribution-only changes as a new behavior contract would wastefully invalidate unchanged Skill evidence, while optimizing only for repository size could erase user-valued predecessor capabilities instead of reducing their implementation weight. The underlying long-lived problem is neither a missing simulated human nor a model that this project can replace: finite people and finite Agents still lose intent, context, initiative and shared state at their collaboration boundary.",
+    "hypothesis": "A Public Preview distribution can preserve the v2.0 behavior contract and evidence while independently binding the complete v2.0.1-preview.1 package, personal publisher identity, trademark asset, reader path and activation lifecycle. A thin progressively disclosed collaboration layer can retain goal anchoring, routing, authority, reconciliation, continuity, recovery, verification and cleanup without requiring the Agent to imitate a human or restoring an always-on Runtime, Hook, MCP, App or state layer. Its value is judged by reliable delivery and lower net human burden, not anthropomorphic behavior or mechanism count.",
     "falsifiers": [
-      "any exact NFKC/casefold lexical superseded product name, slug, module token, package path, repository URL or compatibility alias remains in a declared Git-indexed path or non-Python whole-text surface, or in a declared shared-grammar Python identifier, literal or bounded static-concatenation value",
-      "historical observations are edited or relabeled as current v2.0 evidence",
-      "plan, ordered work, acceptance criteria and goal prompt no longer map the same eight criteria",
-      "the broader human-AI mission is presented as already verified by the current human-Agent product surface",
-      "the rename adds a runtime, Hook, MCP, App, mandatory user-level Skill or undeclared installation authority",
-      "the generic verifier accepts an incomplete identity, stale projection evidence or repository self-authorization",
-      "a required host package no longer satisfies its native manifest shape",
-      "local, GitHub and public release metadata disagree after the candidate is pushed",
+      "publisher, author URL, homepage, repository, website, distribution version, maturity, release notes or trademark presentation disagree across authority and package surfaces",
+      "a behavior observation survives a changed adapter contract, Skill locator, Skill digest or exact exposed Skill content",
+      "a manifest, marketplace, package or presentation change bypasses deterministic package verification or the current clean-state activation, confirmation and removal walkthrough",
+      "historical v2.0 observations are edited, renamed or promoted beyond their task, behavior-bearing projection and claim limits",
+      "thinness removes a user-valued outcome capability without a sufficient native or replacement route and explicit claim narrowing",
+      "the preview adds an always-on Runtime, Hook, MCP, App, state layer, mandatory user-level Skill or undeclared installation authority",
+      "the public preview is described as production stable, broadly effective or cross-host equivalent",
+      "a quota-limited optional GitHub Actions system is reported as passed, failed product behavior or a required preview gate rather than unknown external state",
       "an unresolved P0 or P1 finding remains when exact local review completes"
     ],
-    "finiteStopCondition": "Stop this increment when one locally committed clean candidate has the canonical v2.0 identity and domain model aligned across the active tree, the live verifier computes every deterministic lane, every required current-projection Golden Task has substantive fresh evidence without hidden failure, all eight repository criteria are satisfied and no known validation defect or task residue remains. Exact local verification and independent review, push, hosted verification, named-human authorization, publication and post-release cleanup follow only through the ordered task-time gates.",
+    "finiteStopCondition": "Stop this increment when one locally committed clean candidate preserves the immutable v2.0 contract and unchanged behavior-bearing projection evidence, binds the complete v2.0.1-preview.1 distribution and Public Preview claim boundary, passes deterministic and regression checks, and completes the affected clean-state reader-path walkthrough with no known validation defect or task residue. Exact local review, push, required hosted verification, named-human authorization, prerelease publication and post-release cleanup follow only through the ordered task-time gates.",
     "workItems": [
       {
-        "id": "work.v20-global-identity-and-framework-alignment",
+        "id": "work.v201-preview-presentation-and-stage-closeout",
         "state": "completed",
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "closeoutSequence": [
           {
-            "id": "canonical-identity-authority-and-projections",
+            "id": "preview-presentation-and-authority-alignment",
             "state": "completed",
             "acceptanceIds": ["R1", "R2", "Q2", "Q3", "Q4"],
-            "stopCondition": "[canonical-identity-authority-and-projections] Every stage-zero regular file declared by the Git index uses the canonical v2.0 identity inside the exact lexical non-Python path and whole-text boundary or shared-grammar Python identifier/literal boundary; indeterminate surfaces fail closed, digest-bound Markdown research inputs under research/reviews remain inert, incompatible old observations are not current evidence and no compatibility alias is declared."
+            "stopCondition": "[preview-presentation-and-authority-alignment] The v2.0 contract line and v2.0.1-preview.1 distribution are explicit; personal publisher metadata, project URLs, wordless trademark asset, NOTICE boundary, bilingual Public Preview README with a prepublication clean source-bundle route, voluntary sponsorship and disclaimer surfaces agree without changing the portable Skill semantics."
           },
           {
-            "id": "static-conformance-and-adversarial-regressions",
+            "id": "preview-structured-constraints-and-regressions",
             "state": "completed",
             "acceptanceIds": ["R1", "R2", "R4", "Q2", "Q3", "Q4"],
-            "stopCondition": "[static-conformance-and-adversarial-regressions] The generic verifier computes deterministic conformance directly; complete projection-package checks, release-surface bindings, full regression tests and residue checks pass without a known validation defect. No repository observation may self-attest these results."
+            "stopCondition": "[preview-structured-constraints-and-regressions] Full SemVer distribution identity, prerelease maturity, publisher and icon fields, asset tampering, claim-relevant behavior identity, exact workflow structure and release surfaces fail closed under the generic verifier and product regressions."
           },
           {
-            "id": "fresh-representative-behavior",
+            "id": "affected-distribution-and-reader-path-evidence",
             "state": "completed",
             "acceptanceIds": ["R3", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[fresh-representative-behavior] Each required Golden Task has one fresh current-projection observation with independent source evidence, predeclared behavior decisions, human-burden metrics, material effects, cleanup disposition and an explicit claim limit; designated authority, evidence, no-op and subtraction guardrails pass, while any admissible failure remains failed and its exact exclusions are aggregated into the public claim ceiling."
+            "stopCondition": "[affected-distribution-and-reader-path-evidence] Unchanged contract, Skill and exact exposure keep their bounded v2.0 behavior observations; the complete preview package is independently checked and one context-isolated evaluator exercises the current README activation, confirmation and removal path from a clean state with effects, burden, unknowns and residue recorded."
           },
           {
-            "id": "repository-candidate-freeze",
+            "id": "preview-candidate-freeze",
             "state": "completed",
             "acceptanceIds": ["R4", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[repository-candidate-freeze] All eight repository criteria are satisfied on one clean tree, the release body is time-neutral and reproducible, no known blocker or task residue remains, the increment and work item are retained as completed, and the exact candidate is committed locally for the task-time verification-and-review gate."
+            "stopCondition": "[preview-candidate-freeze] All eight repository criteria are satisfied on one clean tree, the Public Preview release body is reproducible and claim-limited, no known blocker or task residue remains, and the exact candidate is committed locally for the ordered external gates."
           }
         ]
       }
@@ -112,7 +113,9 @@
       "github-actions-macos-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
       "codex-cloud": "https://chatgpt.com/codex/"
     },
+    "requiredCandidateVerificationSystemIds": ["codex-cloud"],
     "assetPolicy": "no-attached-assets",
+    "releaseChannel": "public-preview",
     "surfaceMarkers": {
       "AGENTS.md": [
         "Treat the user's latest bound goal",
@@ -124,25 +127,49 @@
       ],
       "README.md": [
         "python -B -m yiyuan_accord verify --root . --json",
-        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0",
+        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1",
+        "codex plugin marketplace add .",
         "codex plugin add yiyuan-accord-codex@yiyuan-accord",
         "restart the desktop app",
         "Start a new task",
         "Update, disable or remove",
         "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
         "claude --plugin-dir ./plugins/yiyuan-accord-claude",
-        "Rollback and Troubleshoot"
+        "Rollback and Troubleshoot",
+        "Voluntary sponsorship and support",
+        "docs/assets/sponsoring/wechat-pay.png",
+        "docs/assets/sponsoring/alipay.png",
+        "https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY",
+        "Disclaimer and compliance"
       ],
       "README.zh-CN.md": [
         "python -B -m yiyuan_accord verify --root . --json",
-        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0",
+        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1",
+        "codex plugin marketplace add .",
         "codex plugin add yiyuan-accord-codex@yiyuan-accord",
         "重启桌面端",
         "新建任务",
         "更新、禁用与移除",
         "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
         "claude --plugin-dir ./plugins/yiyuan-accord-claude",
-        "回滚与故障排查"
+        "回滚与故障排查",
+        "自愿赞助与支持",
+        "docs/assets/sponsoring/wechat-pay.png",
+        "docs/assets/sponsoring/alipay.png",
+        "https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY",
+        "免责声明与合规说明"
+      ],
+      "SPONSORING.md": [
+        "docs/assets/sponsoring/wechat-pay.png",
+        "docs/assets/sponsoring/alipay.png",
+        "https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY",
+        "does not purchase a support SLA"
+      ],
+      "SPONSORING.zh-CN.md": [
+        "docs/assets/sponsoring/wechat-pay.png",
+        "docs/assets/sponsoring/alipay.png",
+        "https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY",
+        "不购买支持服务等级"
       ],
       ".github/workflows/validate.yml": [
         "permissions: contents: read",
@@ -153,7 +180,7 @@
       ],
       "docs/architecture.md": [
         "one small semantic core and replaceable projections",
-        "Skill-only package surfaces",
+        "complete thin projection package surfaces",
         "strict static retired-identity boundary",
         "no YIYUAN Accord runtime, Hook, state store, MCP, App"
       ],
@@ -177,7 +204,7 @@
         "dependsOn": [],
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "completionOperand": null,
-        "condition": "One locally committed clean candidate aligns the canonical identity, domain model, authority, verifier, reference projections, documentation, tests and fresh representative evidence; all eight repository criteria are satisfied and no known blocker or task residue remains."
+        "condition": "One locally committed clean candidate preserves the v2.0 contract and claim-relevant representative evidence while aligning the complete v2.0.1-preview.1 distribution, authority, verifier, reference projections, documentation and tests; all eight repository criteria are satisfied and no known blocker or task residue remains."
       },
       {
         "id": "exact-local-verification-and-review",
@@ -191,7 +218,7 @@
         "dependsOn": ["exact-local-verification-and-review"],
         "acceptanceIds": ["R4", "Q2", "Q3"],
         "completionOperand": "exactCandidateHostedVerification",
-        "condition": "After push, the active goal carrier directly verifies the unchanged clean HEAD on GitHub Actions for Linux, Windows and macOS plus ordinary Codex Cloud; repository self-report and earlier revisions are insufficient."
+        "condition": "After push, the active goal carrier directly verifies the unchanged clean HEAD on every required hosted system. For this Public Preview ordinary Codex Cloud is required; Linux, Windows and macOS GitHub Actions are attempted when account quota is available, while quota-limited absence remains explicit unknown external state and is neither a pass nor a product failure. Repository self-report and earlier revisions are insufficient."
       },
       {
         "id": "exact-human-release-authorization",
@@ -205,34 +232,34 @@
         "dependsOn": ["exact-human-release-authorization"],
         "acceptanceIds": ["R4"],
         "completionOperand": "exactTaggedPublicRelease",
-        "condition": "Create the lightweight v2.0 tag and public release only after hosted verification and exact named-human authorization for the unchanged candidate; do not move the tag or attach assets."
+        "condition": "Create the lightweight v2.0.1-preview.1 tag and GitHub prerelease only after required hosted verification and exact named-human authorization for the unchanged candidate; do not move the tag or attach assets."
       },
       {
         "id": "release-verification-and-cleanup",
         "dependsOn": ["exact-tagged-public-release"],
         "acceptanceIds": ["R4", "Q4"],
         "completionOperand": "releaseVerificationAndCleanup",
-        "condition": "The active goal carrier directly verifies the public release, remote and local tag, exact tracked release notes and zero-asset policy; it then removes task-created resources, confirms repository and evaluator residue are absent, and replays local validation."
+        "condition": "The active goal carrier directly verifies the public prerelease flag, remote and local v2.0.1-preview.1 tag, exact tracked release notes and zero-asset policy; it then removes task-created resources, confirms repository and evaluator residue are absent, and replays local validation."
       }
     ],
-    "rule": "Execute gates strictly in listed order. A failure, material correction, later rule or revision returns to the earliest affected dependency boundary; affected current-candidate evidence and every downstream gate remain superseded until replayed. No report, plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
+    "rule": "Execute gates strictly in listed order. A failure, material correction, later rule or revision returns to the earliest affected dependency boundary; only evidence that depends on that boundary and its downstream gates is superseded, while unrelated accepted truth remains stable. Public Preview quota-limited optional hosted systems remain unknown, not passed or failed. No report, plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
   },
   "goalModePrompt": {
     "state": "active-in-host",
-    "authority": "derived-from-current-program-and-acceptance",
-    "objective": "在 product/constitution.json、product/program.json、product/acceptance.json 三份唯一语义权威下，以少数稳定常量驱动动态执行：用户当前目标与纠正优先，事实以可复验直接证据为准，后果性判断和发布权属于人类，优先最小充分路线，任何补充、失败、误判或修订都从最早受影响依赖边界撤销旧证明并重放全部下游门，同时保留无关已验事实。完成 YIYUAN Accord v2.0 的有限工业/商业级交付；保持开放、Agent 中立和无 Runtime/Hook/MCP/App，广义使命面向人类与 AI 协作，当前证明仅限声明的人类与 Agent 协作契约、参考投影和代表性样本，不推广为通用正确性、跨宿主或生产效果。现场证据决定首个未完成阶段，严格按 canonical-identity-authority-and-projections → static-conformance-and-adversarial-regressions → fresh-representative-behavior → repository-candidate-freeze 推进；每阶段以 R1-R4/Q1-Q4、停止条件和副作用边界验收，不让计划或旧 Goal 反向覆盖新证据。七项当前样本必须同时绑定任务、投影身份和结构化 projectionExposure；GT-01/02 采用 Claude Code --bare 的可复验运行时 Skill 归因与宿主外检查，GT-03/04/05/08 采用独立核对的精确 Codex Skill 内容，旧 Codex 归因只保留为失效历史；GT-07 连续性通过但任务时清理失败，retainedBehaviorExclusions 保持为 [\"GT-07:cleanup\"]，后续夹具清理不得改写行为结论。路由或模型标签只作为该次宿主观察，不作为普遍模型身份；配置、历史和安全软件属于可控宿主变量，环境中断与项目行为失败分开判定。涉及 Codex 宿主事实时优先核对当前官方一手资料，禁止账户门控的专用审查能力，不把官方实现复制进便携核心。候选严格依次经过 repository-candidate → exact-local-verification-and-review → exact-candidate-hosted-verification → exact-human-release-authorization → exact-tagged-public-release → release-verification-and-cleanup。推送前必须在同一 clean SHA 串行完成 canonical verifier、两个 host-check、全量 product tests、actionlint/diff/identity/link/workflow/residue 检查，独立规格、实现稳健性与标准符合性反审，可发布 source bundle 与原始宿主记录的独立对照，以及由与候选制作上下文隔离的评估者（可为用户、同事或第二观察面）从 clean state 完成 README 启用、确认、移除走查；效力取决于测试条件与结果，不取决于作者身份。之后才可推送并核验 GitHub 三系统与普通 Codex Cloud，再请求该 SHA 的新具名人类授权，创建轻量 v2.0 tag 和无资产 release，最后复验公开面、清理任务资源并重放本地验证。报告、计划、测试、提交、推送、托管绿灯或授权都不是收官；仅在人类判断、账户、外部信任、发布或不可逆边界暂停。",
-    "workStageIds": ["canonical-identity-authority-and-projections", "static-conformance-and-adversarial-regressions", "fresh-representative-behavior", "repository-candidate-freeze"],
+    "authority": "derived-from-current-reviewable-authority-set",
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\",\"topologyChange\":\"merge-split-replace-retire-with-explicit-migration-provenance-verifier-update-and-earliest-boundary-replay\"},\"completion\":\"current-authority-through-release-verification-and-cleanup\",\"directive\":\"reconcile-current-authority-with-user-corrections-and-evidence\",\"mission\":[\"yiyuan-accord\",\"v2.0\",\"v2.0.1-preview.1\",\"public-preview\"],\"pause\":[\"human-judgment\",\"new-account-or-trust\",\"material-cost\",\"publication\",\"irreversible-effect\"],\"route\":{\"gates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"semantics\":\"execute-exactly-in-listed-order\",\"work\":[\"preview-presentation-and-authority-alignment\",\"preview-structured-constraints-and-regressions\",\"affected-distribution-and-reader-path-evidence\",\"preview-candidate-freeze\"]},\"schema\":\"yiyuan-accord-goal/v1\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"same-checkout\",\"immutable-v2.0-tag-and-historical-evidence\",\"no-new-branch-worktree-or-repository-fork\"]}",
+    "workStageIds": ["preview-presentation-and-authority-alignment", "preview-structured-constraints-and-regressions", "affected-distribution-and-reader-path-evidence", "preview-candidate-freeze"],
     "releaseGateIds": ["repository-candidate", "exact-local-verification-and-review", "exact-candidate-hosted-verification", "exact-human-release-authorization", "exact-tagged-public-release", "release-verification-and-cleanup"],
     "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
     "refreshTriggers": ["user-correction", "observed-failure-or-side-effect", "host-or-capability-drift", "evidence-conflict", "later-rule-or-revision", "phase-or-authority-boundary", "repeated-same-purpose-repair"],
-    "hostLifecycleNote": "The accountable user authorized the identity migration and global consistency work on 2026-08-21 and accepted the ordered four-stage and six-gate structure. Independent specification and standards review first invalidated summary-only evidence, then the 2026-08-25 bidirectional historical audit invalidated the old candidate for both omitted controls and false conclusions: descriptor-bound file stability, bounded Git metadata/history capture, official-source authority/time validation and task-time projection exposure were missing or overclaimed. Those boundaries now have reproduced regressions and fixes; GT-01/02 were replayed in Claude Code --bare with exact runtime Skill attribution and independent host checks, GT-03/04/05/08 retain independently compared exact Codex Skill exposure, and the old GT-01/02 Codex attribution remains only revision-and-digest-bound counterevidence. GT-07 task-time cleanup remains failed although its independently compared fixture was later removed without reading hidden contents. Host configuration and endpoint protection are recorded as test variables rather than silently promoted into product behavior. On 2026-08-25 the accountable user cleared the superseded host Goal; the current canonical objective was then created directly through the Goal API without a token budget and compared character-for-character across all 1546 Unicode code points. Repository readiness applies only to an exact clean candidate and grants no hosted, human, publication, field or completion outcome."
+    "hostLifecycleNote": "Immutable v2.0 at 71ff4a2687b54f26c8dbf3a94384257f1fc0f532 retains its seven exact behavior observations and GT-07 cleanup exclusion. The Public Preview increment reopens only distribution, presentation, reader-path and release-channel dependencies because adapter contracts, Skills and exact source exposure are unchanged. The user clarified that the predecessor's purpose and outcome capabilities remain valid while its always-loaded implementation was too heavy for small-context Agents; the current review therefore challenges premises, interfaces and representations while considering deletion, replacement, recomposition, native delegation and bounded addition. There is no universal add-or-subtract default, while L2 retains its evidence-derived constraint that deletion or replacement is attempted before another same-purpose repair layer. The protected outcomes are goal anchoring, route selection, authority, correction, continuity, recovery, verification and cleanup. GitHub Actions account quota is an external optional preview variable, while ordinary Codex Cloud remains required. Repository readiness still applies only to an exact clean candidate and grants no hosted, human, publication, field or completion outcome. The current constitution, program and acceptance files are a reviewable schema-v2 authority topology rather than unquestionable truth or a permanent count; a user correction or material contradiction can challenge them, and any merge, split, replacement or retirement requires explicit migration and earliest-boundary replay."
   },
   "hostProjections": [
     {
       "id": "codex",
       "packageId": "yiyuan-accord-codex",
-      "packageVersion": "2.0.0",
-      "packageSha256": "0c56602060f673ce5453b42b134425a2a449c195312c47743c118e0e668b8206",
+      "packageVersion": "2.0.1-preview.1",
+      "packageSha256": "a71847f3afed57c38781394c3305585a4107b078ba0703214406f25213e2dc21",
       "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "marketplace": ".agents/plugins/marketplace.json",
       "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -246,8 +273,8 @@
     {
       "id": "claude-code",
       "packageId": "yiyuan-accord-claude",
-      "packageVersion": "2.0.0",
-      "packageSha256": "862dc8d46b0fd1e3dd34c55b1626a714cdb6335031d7656dffc3fb0a25faef3d",
+      "packageVersion": "2.0.1-preview.1",
+      "packageSha256": "23d7560c4a6e5dd24cc8b3457576a4e35e8c7b44c7571d427a0669f5430e90e3",
       "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
       "contract": "plugins/yiyuan-accord-claude/adapter.json",
       "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md",
@@ -268,8 +295,8 @@
       "primaryInstructionBytes": 18940
     },
     "targets": {
-      "maxTrackedFiles": 55,
-      "maxProductCodeAndTestBytes": 178000,
+      "maxTrackedFiles": 60,
+      "maxProductCodeAndTestBytes": 195000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -280,6 +307,11 @@
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
       "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md"
     ],
+    "digestBoundBinaryAssets": {
+      "docs/assets/sponsoring/alipay.png": "491ee27d52797818f1cca756560bc239cf6150fe3327b0fd31728f7ce53327cd",
+      "docs/assets/sponsoring/wechat-pay.png": "d8c213f1539cad6c9fd23099736aecd06c722129af24f77fe9f26563bbb9a05e",
+      "plugins/yiyuan-accord-codex/assets/yiyuan-nexus-mark.png": "6e407c1942ff86e8f751930bf5df1000579b9a37824e17dde336d26ea450a235"
+    },
     "requiredTestMarkers": [
       "class ProductControlTests",
       "def test_authority_and_static_suite_mutations_fail_closed",
@@ -310,7 +342,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. The former 134000-byte target remains a recorded failed target: reproduced Python-depth, suffix, shell, PowerShell, CMD, pipeline and descriptor-provenance counterexamples invalidated its simpler scanning premise. An intermediate 210000-byte multi-host lexical path was not accepted: repeated same-purpose option, encoding, execution-input and provenance findings plus its headroom breach triggered the required premise, interface and deletion review while Q3 remained blocked. The first reduced 150000-byte replacement and its 141151-byte measurement were then invalidated by reproduced deep literal-concatenation and marker-only workflow cases plus Git-index provenance, truly bounded owned-file I/O and exact-token-boundary regressions. The second deletion review removed the version-specific f/t-string parser, non-Python escape interpretation and fragment propagation. The retained mechanism now uses the Git index as its finite declaration source, one shared Python 3.10 AST grammar with linear bounded static-subtree summaries across supported Python 3.10-3.14 hosts, strict non-Python decoding with exact NFKC/casefold lexical boundaries, descriptor-bound pre/post-stable regular-file reads, and file-backed Git metadata/history capture with time and size limits; it fails closed on indeterminate declared surfaces and exempts only digest-bound Markdown research inputs under research/reviews. It proves only this static declared-surface boundary, not ignored or untracked files, Python comments, runtime-built or external dynamic content. The exact comment-normalized workflow profile and structured source-evidence constraints remain separate narrow release controls. The 164000-byte ceiling left only 302 bytes beyond its five-percent reserve on the prior clean candidate. Confirmed official-URL normalization, malformed-enum fail-closed and externally bound post-session evidence findings triggered another deletion review; the first implementation measured 164640 bytes and was consolidated to a 160509-byte checkpoint without dropping the public-seam regressions. Later review proved that binding only magic event kinds still allowed the whole claimed event to disappear. The next premise/interface/deletion review removed unproved remote and branch-count fields and reused one public-verifier adversarial matrix. It retained the task plus mirrored-payload contract because dropping either reopens that omission, and retained the subset digest as a direct public-review seam for the exact selected bindings while the outer source-record digest continues to provide overall integrity; exact cardinality and locator uniqueness reject partial or duplicate substitutions. Its stable 163895-byte measurement breached the 170000 ceiling's reserve, so that reviewed target was 174000 bytes: 10105 bytes of headroom against a separately required 8700-byte reserve. Subsequent fixed-diff review reproduced cross-event locator reuse and coordinated deletion of the task contract, mirrored payload contract and claimed event. The first 166976-byte repair was consolidated to 166260 bytes after premise, interface and deletion review. The acceptance-bound task-to-event contract prevents coordinated omission without task-ID branches, fixes exact cardinality in the release-sample authority, and contract-wide locator uniqueness prevents reusing one observer output across claims. The reviewed target is 178000 bytes, preserving the verifier-enforced five-percent reserve and remaining far below the rejected 210000-byte path. These are evidence-triggered recalibrations after deletion review, not automatic target growth; no prose snapshot substitutes for the verifier's current measurement. Any future breach again blocks Q3 and triggers premise, interface and deletion review; the scanner or binding mechanism is simplified or retired when its residual value is no longer demonstrated."
+    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. The pre-reshape baseline at 534a77aae9e1d191173e6e05b4327c80d22855d8 was 1551209 product-code-and-test bytes across 96 tracked files. The rejected 134000, 150000, 164000, 170000 and 210000 routes record why naive lexical scanning, unbounded concatenation, marker-only workflow checks, weak Git provenance and repeated additive repair were insufficient; exact intermediate measurements remain in Git history rather than active routing. The retained mechanism uses the Git index as its finite declaration source, shared Python 3.10 AST grammar, linear bounded static-subtree summaries, strict non-Python decoding, exact lexical identity boundaries, descriptor-bound stable regular-file reads, bounded Git capture, exact workflow structure and structured source-evidence constraints. It fails closed on indeterminate declared surfaces and exempts only digest-bound research Markdown plus exact tracked PNG paths whose signature and complete bytes match program-declared SHA-256 values. It proves only that declared static boundary, not ignored or untracked files, Python comments, runtime-built or external content. The Public Preview split first measured 176340 bytes; indexing its binary surfaces then exposed the undecodable-file boundary and required the narrow PNG admission. Fixed-diff review subsequently reproduced contract-line/distribution drift, coordinated Goal-order erasure, sponsorship-surface drift, required-versus-optional hosted-system ambiguity and cross-phase Goal-order ambiguity. Final dual-axis review then reproduced a semantic Goal-order bypass in which a correct list could be placed inside a negated example, and found that the narrow PNG exception had not reached R1. Premise and representation review rejected a large duplicated Python prompt model and retained a compact canonical JSON Goal projection that carries only the mission identity, semantic-authority locators, workspace boundary, exact typed route, pause boundary and completion target. Detailed dynamic policy remains single-sourced in the current declared semantic authority set. A later user correction rejected treating that set or its three-file schema-v2 bootstrap as unquestionable or permanent; the Goal projection now derives locators from the current reviewed set and binds explicit challenge plus merge, split, replacement and retirement migration semantics. The corrected checkpoint measures 184587 product-code-and-test bytes and 58 tracked files. The reviewed targets are 195000 bytes and 60 files, leaving 10413 bytes against the required 9750-byte reserve and two file slots. These are evidence-triggered recalibrations, not automatic growth. Any future breach blocks Q3 and triggers premise, interface and representation review across deletion, replacement, recomposition, native delegation and bounded addition. There is no universal add-or-subtract default; L2 still requires a deletion or replacement attempt before another same-purpose repair layer, and any mechanism is simplified or retired when its residual value is no longer demonstrated."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,
@@ -319,7 +351,7 @@
     "prohibitedAgentWorkTransfer": 0,
     "taskResidueAtCheckpoint": 0,
     "carrierRule": "Use current source-bound host signals when reliable; if capacity is unavailable, record unknown and transition conservatively. No universal turn count, context size, token percentage or summary ratio is product authority.",
-    "correctionRule": "A material correction, failure, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary and requires that boundary and every downstream gate to be replayed while unrelated accepted truth remains stable. A repeated correction or failed same-purpose mechanism pauses further addition until the premise, interface and deletion option are reconsidered.",
+    "correctionRule": "A material correction, failure, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary and requires that boundary and every downstream gate to be replayed while unrelated accepted truth remains stable. A repeated correction or failed same-purpose mechanism pauses the current shape until premise, interface and representation are reconsidered; deletion, replacement, recomposition, native-host delegation and bounded addition are all considered. There is no universal add-or-subtract default, while L2 requires a deletion or replacement attempt before another same-purpose repair layer. Authority surfaces form a reviewable versioned current set; their merge, split, replacement or retirement requires explicit provenance-preserving schema and verifier migration plus the same earliest-boundary replay.",
     "continuingCalibration": "Post-release failures may update Golden Tasks, narrow a claim, simplify or retire a projection, or open one new bounded increment; release status does not freeze learning."
   }
 }

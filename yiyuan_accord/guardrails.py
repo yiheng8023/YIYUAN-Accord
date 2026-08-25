@@ -19,14 +19,18 @@ _AUTH_FIELDS = set((
     "state candidateRevision namedHuman authorizedAt claimCeilingAccepted "
     "publicationAuthorized releaseAuthorized"
 ).split())
-PROCEDURE_FIELDS = "orderedGates candidateVerificationSystems assetPolicy surfaceMarkers rule".split()
+PROCEDURE_FIELDS = (
+    "orderedGates candidateVerificationSystems requiredCandidateVerificationSystemIds "
+    "assetPolicy releaseChannel surfaceMarkers rule"
+).split()
 CANDIDATE_SYSTEMS = set((
     "github-actions-ubuntu-latest github-actions-windows-latest "
     "github-actions-macos-latest codex-cloud"
 ).split())
 RELEASE_SURFACES = (
     "AGENTS.md CONTEXT.md README.md README.zh-CN.md .github/workflows/validate.yml "
-    "docs/architecture.md CONTRIBUTING.md docs/operations/CONTINUATION.md"
+    "docs/architecture.md CONTRIBUTING.md docs/operations/CONTINUATION.md "
+    "SPONSORING.md SPONSORING.zh-CN.md"
 ).split()
 _COMMENT_NORMALIZED_WORKFLOW_SHA256 = (
     "b0938e16c68a347bc04690df990c9f4b740d9bb781d19b2ba3d3a8d3b8319948"
@@ -43,6 +47,48 @@ GATE_SEQUENCE = (
 EXTERNAL_COMPLETION_OPERANDS = tuple(
     operand for _, operand in GATE_SEQUENCE if operand
 )
+
+
+def canonical_goal_objective(program, authority, work_stages, release_gates):
+    procedure = program.get("releaseProcedure", {}) if isinstance(program, dict) else {}
+    current_authority = authority.get("semantic", []) if isinstance(authority, dict) else []
+    projection = {
+        "schema": "yiyuan-accord-goal/v1",
+        "directive": "reconcile-current-authority-with-user-corrections-and-evidence",
+        "authority": {
+            "mode": "reviewable-versioned-current-set",
+            "locators": list(current_authority) if isinstance(current_authority, list) else [],
+            "challenge": "latest-bound-user-correction-or-material-evidence",
+            "topologyChange": (
+                "merge-split-replace-retire-with-explicit-migration-provenance-"
+                "verifier-update-and-earliest-boundary-replay"
+            ),
+        },
+        "mission": [
+            program.get("productId") if isinstance(program, dict) else None,
+            program.get("release") if isinstance(program, dict) else None,
+            program.get("distributionVersion") if isinstance(program, dict) else None,
+            procedure.get("releaseChannel"),
+        ],
+        "workspace": [
+            r"C:\Projects\YIYUAN-Accord", "main", "same-checkout",
+            "immutable-v2.0-tag-and-historical-evidence",
+            "no-new-branch-worktree-or-repository-fork",
+        ],
+        "route": {
+            "semantics": "execute-exactly-in-listed-order",
+            "work": list(work_stages) if isinstance(work_stages, list) else [],
+            "gates": list(release_gates) if isinstance(release_gates, list) else [],
+        },
+        "pause": [
+            "human-judgment", "new-account-or-trust", "material-cost",
+            "publication", "irreversible-effect",
+        ],
+        "completion": "current-authority-through-release-verification-and-cleanup",
+    }
+    return json.dumps(
+        projection, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
 
 
 def _owned_bytes(path):
@@ -67,7 +113,7 @@ MANIFEST_FIELDS = {
 }
 CODEX_INTERFACE_FIELDS = set((
     "displayName shortDescription longDescription developerName category capabilities "
-    "websiteURL defaultPrompt"
+    "websiteURL defaultPrompt brandColor composerIcon logo"
 ).split())
 CODEX_METADATA_FIELDS = {
     "interface": set("display_name short_description default_prompt".split()),
@@ -238,7 +284,16 @@ def manifest_shape_errors(
         errors.append(f"{prefix} manifest required text is invalid")
     if manifest.get("skills") != "./skills/":
         errors.append(f"{prefix} manifest skills locator is invalid")
-    if manifest.get("author") != {"name": f"{identity.get('displayName')} contributors"}:
+    repository = identity.get("repository")
+    publisher_match = re.fullmatch(
+        r"https://github\.com/([^/]+)/[^/]+", repository or ""
+    )
+    publisher = publisher_match.group(1) if publisher_match else None
+    expected_author = {
+        "name": publisher,
+        "url": f"https://github.com/{publisher}" if publisher else None,
+    }
+    if manifest.get("author") != expected_author:
         errors.append(f"{prefix} manifest author is not canonical")
     if manifest.get("license") != "Apache-2.0":
         errors.append(f"{prefix} manifest license is invalid")
@@ -259,12 +314,15 @@ def manifest_shape_errors(
                 "category", "websiteURL",
             ))
             or interface.get("displayName") != f"{identity.get('displayName')} for Codex"
-            or interface.get("developerName") != f"{identity.get('displayName')} contributors"
+            or interface.get("developerName") != publisher
             or interface.get("websiteURL") != identity.get("repository")
             or interface.get("capabilities") != ["Interactive", "Read"]
             or interface.get("defaultPrompt") != declared_prompt
             or not _string_list(declared_prompt)
             or any(len(value) > 128 for value in declared_prompt)
+            or interface.get("brandColor") != "#2F6BFF"
+            or interface.get("composerIcon") != "./assets/yiyuan-nexus-mark.png"
+            or interface.get("logo") != interface.get("composerIcon")
         ):
             errors.append("adapter codex manifest interface contract is invalid")
     elif adapter_id == "claude-code" and manifest.get("$schema") != (
@@ -316,13 +374,16 @@ def plugin_file_locators(root, plugin_root):
 
 def validate_projection_package(
     root, adapter_id, manifest_locator, contract_locator, skill_locator,
-    metadata_locators,
+    metadata_locators, asset_locators,
 ):
     errors = []
     prefix = f"adapter {adapter_id}"
     declared = [
         locator
-        for locator in (manifest_locator, contract_locator, skill_locator, *metadata_locators)
+        for locator in (
+            manifest_locator, contract_locator, skill_locator,
+            *metadata_locators, *asset_locators,
+        )
         if isinstance(locator, str)
     ]
     unsafe = [
@@ -410,6 +471,22 @@ def validate_host_projection(
     errors.extend(manifest_shape_errors(
         adapter_id, manifest, identity, product_id, projection.get("interfaceDefaultPrompt")
     ))
+    asset_locators = []
+    if adapter_id == "codex" and isinstance(manifest_locator, str):
+        interface = manifest.get("interface") if isinstance(manifest, dict) else None
+        for field in ("composerIcon", "logo"):
+            value = interface.get(field) if isinstance(interface, dict) else None
+            if isinstance(value, str) and value.startswith("./") and "\\" not in value:
+                relative = Path(value[2:])
+                if (
+                    not relative.is_absolute() and ".." not in relative.parts
+                    and relative.parts[:1] == ("assets",)
+                    and relative.suffix.lower() == ".png"
+                ):
+                    asset_locators.append(
+                        (Path(manifest_locator).parent.parent / relative).as_posix()
+                    )
+        asset_locators = sorted(set(asset_locators))
     if isinstance(marketplace_locator, str):
         marketplace = read_json(root, marketplace_locator, errors)
         if marketplace.get("name") != product_id or marketplace.get("interface") != {
@@ -465,7 +542,7 @@ def validate_host_projection(
 
     package_digest, package_errors = validate_projection_package(
         root, adapter_id, manifest_locator, contract_locator, skill_locator,
-        metadata_locators,
+        metadata_locators, asset_locators,
     )
     errors.extend(package_errors)
     if package_digest != projection.get("packageSha256"):
@@ -513,11 +590,19 @@ def projection_observation_errors(
     current = host_report.get("identity")
     if not isinstance(current, dict):
         return [f"{label} projection identity unavailable"]
+    # Representative behavior depends on the adapter contract and exposed Skill.
+    # Distribution identity (manifest, marketplace, package and presentation
+    # assets) is checked in full by static conformance and the current activation
+    # walkthrough instead of invalidating unchanged behavior observations.
     expected = {
         field: host_report[field]
-        for field in ("manifest", "marketplace", "contract", "skill")
+        for field in ("contract", "skill")
         if isinstance(host_report.get(field), str)
-    } | current
+    } | {
+        field: current[field]
+        for field in ("contractSha256", "skillSha256")
+        if isinstance(current.get(field), str)
+    }
     errors = []
     if observed.get("adapterId") != adapter_id:
         errors.append(f"{label} projection identity mismatch")
@@ -656,7 +741,8 @@ def closeout_sequence_errors(
     return errors
 
 
-def release_procedure_errors(root, procedure, criterion_ids, prompt, goal_digest):
+def release_procedure_errors(root, program, identity, criterion_ids, prompt, goal_digest):
+    procedure = program.get("releaseProcedure") if isinstance(program, dict) else None
     if not _exact(procedure, PROCEDURE_FIELDS):
         return ["program.releaseProcedure is invalid"]
     if not isinstance(procedure.get("rule"), str) or not procedure["rule"].strip():
@@ -669,8 +755,20 @@ def release_procedure_errors(root, procedure, criterion_ids, prompt, goal_digest
                for name, locator in systems.items())
     ):
         return ["program.releaseProcedure.candidateVerificationSystems is invalid"]
+    required_systems = _string_list(
+        procedure.get("requiredCandidateVerificationSystemIds")
+    )
+    expected_required = (
+        CANDIDATE_SYSTEMS
+        if procedure.get("releaseChannel") == "full-release"
+        else {"codex-cloud"}
+    )
+    if required_systems is None or set(required_systems) != expected_required:
+        return ["program.releaseProcedure required candidate systems are invalid"]
     if procedure.get("assetPolicy") != "no-attached-assets":
         return ["program.releaseProcedure.assetPolicy must be no-attached-assets"]
+    if procedure.get("releaseChannel") not in {"full-release", "public-preview"}:
+        return ["program.releaseProcedure.releaseChannel is invalid"]
     surfaces = procedure.get("surfaceMarkers")
     if not _exact(surfaces, RELEASE_SURFACES):
         return ["program.releaseProcedure.surfaceMarkers is invalid"]
@@ -716,10 +814,18 @@ def release_procedure_errors(root, procedure, criterion_ids, prompt, goal_digest
         or sha256(objective.encode("utf-8")).hexdigest() != goal_digest
     ):
         errors.append("program.goalModePrompt objective is not the canonical projection")
-    work_order = " → ".join(prompt.get("workStageIds", []))
-    release_order = " → ".join(gate_id for gate_id, _ in GATE_SEQUENCE)
-    if not work_order or work_order not in objective or release_order not in objective:
-        errors.append("program.goalModePrompt objective does not preserve release gate order")
+    work_stages = prompt.get("workStageIds")
+    release_gates = prompt.get("releaseGateIds")
+    if _string_list(work_stages) is None or _string_list(release_gates) is None:
+        errors.append(
+            "program.goalModePrompt route identifiers are invalid"
+        )
+    elif objective != canonical_goal_objective(
+        program, identity, work_stages, release_gates
+    ):
+        errors.append(
+            "program.goalModePrompt objective is not the deterministic structured projection"
+        )
     return errors
 
 
@@ -756,9 +862,11 @@ def repository_release_authorization_errors(authorization):
 def external_release_contract_errors(root, acceptance):
     errors = []
     candidate = acceptance.get("candidateVerification")
-    systems = candidate.get("requiredSystems") if isinstance(candidate, dict) else None
+    systems = candidate.get("systems") if isinstance(candidate, dict) else None
+    required_system_ids = candidate.get("requiredSystemIds") \
+        if isinstance(candidate, dict) else None
     if (
-        not _exact(candidate, {"mode", "requiredSystems", "rule"})
+        not _exact(candidate, {"mode", "systems", "requiredSystemIds", "rule"})
         or candidate.get("mode") != "task-time-live-observation"
         or not isinstance(systems, dict)
         or not systems
@@ -768,6 +876,8 @@ def external_release_contract_errors(root, acceptance):
             or not _safe_https_locator(locator)
             for system, locator in systems.items()
         )
+        or _string_list(required_system_ids) is None
+        or not set(required_system_ids).issubset(set(systems))
         or not isinstance(candidate.get("rule"), str)
         or not candidate["rule"].strip()
     ):
@@ -778,7 +888,8 @@ def external_release_contract_errors(root, acceptance):
     public = acceptance.get("publicRelease")
     public_fields = {
         "mode", "tag", "releaseLocator", "releaseApi", "tagApi",
-        "releaseNotes", "releaseNotesSha256", "assetPolicy", "rule",
+        "releaseNotes", "releaseNotesSha256", "assetPolicy", "maturity",
+        "prerelease", "rule",
     }
     if (
         not _exact(public, public_fields)
@@ -792,6 +903,8 @@ def external_release_contract_errors(root, acceptance):
         )
         or not isinstance(public.get("releaseNotes"), str)
         or public.get("assetPolicy") != "no-attached-assets"
+        or public.get("maturity") not in {"full-release", "public-preview"}
+        or not isinstance(public.get("prerelease"), bool)
         or not isinstance(public.get("releaseNotesSha256"), str)
         or re.fullmatch(r"[0-9a-f]{64}", public["releaseNotesSha256"]) is None
         or not isinstance(public.get("rule"), str)

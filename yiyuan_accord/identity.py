@@ -1,4 +1,5 @@
 import ast
+from hashlib import sha256
 import io
 import json
 import os
@@ -13,7 +14,19 @@ from unicodedata import normalize
 from urllib.parse import urlsplit
 
 
-RELEASE_RE = re.compile(r"^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:\.(0|[1-9][0-9]*))?$")
+_SEMVER_PRERELEASE = (
+    r"(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)"
+    r"(?:\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*"
+)
+_SEMVER_BUILD = r"[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*"
+RELEASE_RE = re.compile(
+    rf"^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\."
+    rf"(0|[1-9][0-9]*)(?:-({_SEMVER_PRERELEASE}))?"
+    rf"(?:\+({_SEMVER_BUILD}))?$"
+)
+CONTRACT_RELEASE_RE = re.compile(
+    r"^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$"
+)
 
 CONSTITUTION_FIELDS = set((
     "schema id productId identity domainModel purpose successDefinition kernel "
@@ -21,12 +34,12 @@ CONSTITUTION_FIELDS = set((
     "productBoundary evidenceBoundary evolutionPolicy authority"
 ).split())
 PROGRAM_FIELDS = set((
-    "schema id productId release releaseIntent constitution acceptance maintenancePlan "
+    "schema id productId release distributionVersion releaseIntent constitution acceptance maintenancePlan "
     "status inputEvidence increment releaseProcedure goalModePrompt hostProjections "
     "complexityBudget processLossControl"
 ).split())
 ACCEPTANCE_FIELDS = set((
-    "schema id productId release constitution program canonicalGoalObjectiveSha256 "
+    "schema id productId release distributionVersion constitution program canonicalGoalObjectiveSha256 "
     "completionExpression evidenceLanes representativeBehaviorPolicy criteria "
     "candidateVerification releaseAuthorization publicRelease claimCeiling"
 ).split())
@@ -387,8 +400,30 @@ def active_tree_errors(
     locators,
     historical_revision,
     historical_reference_locators=(),
+    digest_bound_binary_assets=None,
 ):
     locators = list(locators)
+    locator_set = set(locators)
+    binary_assets = {}
+    if digest_bound_binary_assets is None:
+        digest_bound_binary_assets = {}
+    if not isinstance(digest_bound_binary_assets, dict):
+        errors = ["digest-bound binary assets must be an object"]
+    else:
+        errors = []
+        for locator, digest in digest_bound_binary_assets.items():
+            relative = Path(locator) if isinstance(locator, str) else None
+            if (
+                relative is None or "\\" in locator or relative.is_absolute()
+                or ".." in relative.parts or relative.suffix.casefold() != ".png"
+                or not isinstance(digest, str)
+                or re.fullmatch(r"[0-9a-f]{64}", digest) is None
+            ):
+                errors.append("digest-bound binary asset declaration is invalid")
+            elif locator not in locator_set:
+                errors.append(f"digest-bound binary asset is not tracked: {locator}")
+            else:
+                binary_assets[locator] = digest
     references = {
         locator for locator in historical_reference_locators
         if isinstance(locator, str)
@@ -398,10 +433,10 @@ def active_tree_errors(
         and Path(locator).suffix.casefold() == ".md"
     }
     symlinks = {locator for locator in locators if (root / locator).is_symlink()}
-    errors = [
+    errors.extend(
         f"symbolic link is not admitted in active tree: {locator}"
         for locator in symlinks
-    ]
+    )
     try:
         if not isinstance(historical_revision, str) or not re.fullmatch(
             r"[0-9a-f]{40}", historical_revision
@@ -449,6 +484,17 @@ def active_tree_errors(
             errors.append(f"active tree identity scan is indeterminate: {locator}")
             continue
 
+        if locator_has_identity:
+            errors.append(f"superseded identity remains in active tree: {locator}")
+            continue
+        if locator in binary_assets:
+            if (
+                not source.startswith(b"\x89PNG\r\n\x1a\n")
+                or sha256(source).hexdigest() != binary_assets[locator]
+            ):
+                errors.append(f"digest-bound binary asset does not match: {locator}")
+            continue
+
         suffix = Path(locator).suffix.casefold()
         is_python = suffix in {".py", ".pyi", ".pyw"}
         try:
@@ -461,9 +507,6 @@ def active_tree_errors(
             errors.append(f"active tree file is undecodable: {locator}")
             continue
 
-        if locator_has_identity:
-            errors.append(f"superseded identity remains in active tree: {locator}")
-            continue
         if locator in references:
             continue
 
@@ -595,16 +638,27 @@ def release_identity_errors(
         errors.append("program top-level shape is invalid")
     if set(acceptance) != ACCEPTANCE_FIELDS:
         errors.append("acceptance top-level shape is invalid")
-    release = program.get("release")
-    match = RELEASE_RE.fullmatch(release) if isinstance(release, str) else None
+    contract_release = program.get("release")
+    contract_match = (
+        CONTRACT_RELEASE_RE.fullmatch(contract_release)
+        if isinstance(contract_release, str) else None
+    )
+    if contract_match is None or acceptance.get("release") != contract_release:
+        errors.append("program and acceptance release must name one v-prefixed contract line")
+    distribution = program.get("distributionVersion")
+    match = RELEASE_RE.fullmatch(distribution) if isinstance(distribution, str) else None
     if match is None:
-        return errors + ["program.release must be a v-prefixed semantic version"]
-    major, minor, patch = match.groups()
-    package_version = f"{major}.{minor}.{patch or '0'}"
+        return errors + ["program.distributionVersion must be a v-prefixed semantic version"]
+    major, minor, _patch, prerelease, _build = match.groups()
+    if contract_match is not None and (major, minor) != contract_match.groups():
+        errors.append("program.distributionVersion must belong to the contract release line")
+    package_version = distribution[1:]
+    if acceptance.get("distributionVersion") != distribution:
+        errors.append("acceptance.distributionVersion does not match program")
     for index, projection in enumerate(program.get("hostProjections", [])):
         if isinstance(projection, dict) and projection.get("packageVersion") != package_version:
             errors.append(
-                f"hostProjections[{index}].packageVersion does not match program.release"
+                f"hostProjections[{index}].packageVersion does not match program.distributionVersion"
             )
 
     repository = identity.get("repository")
@@ -615,23 +669,30 @@ def release_identity_errors(
         return errors + ["release identity requires a canonical GitHub repository"]
     owner, repo = parts
     expected = {
-        "tag": release,
-        "releaseLocator": f"{repository.rstrip('/')}/releases/tag/{release}",
-        "releaseApi": f"https://api.github.com/repos/{owner}/{repo}/releases/tags/{release}",
-        "tagApi": f"https://api.github.com/repos/{owner}/{repo}/git/ref/tags/{release}",
-        "releaseNotes": f"docs/releases/{release}.md",
+        "tag": distribution,
+        "releaseLocator": f"{repository.rstrip('/')}/releases/tag/{distribution}",
+        "releaseApi": f"https://api.github.com/repos/{owner}/{repo}/releases/tags/{distribution}",
+        "tagApi": f"https://api.github.com/repos/{owner}/{repo}/git/ref/tags/{distribution}",
+        "releaseNotes": f"docs/releases/{distribution}.md",
     }
     if not isinstance(public, dict) or any(public.get(k) != v for k, v in expected.items()):
         errors.append("acceptance.publicRelease does not match release and repository identity")
-    systems = acceptance.get("candidateVerification", {}).get("requiredSystems")
+    candidate = acceptance.get("candidateVerification", {})
+    systems = candidate.get("systems")
     procedure = program.get("releaseProcedure", {})
     planned_systems = procedure.get("candidateVerificationSystems")
-    if systems != planned_systems:
+    required_system_ids = procedure.get("requiredCandidateVerificationSystemIds")
+    expected_systems = (
+        {system: planned_systems.get(system) for system in required_system_ids}
+        if isinstance(planned_systems, dict)
+        and _string_list(required_system_ids) is not None else None
+    )
+    if systems != expected_systems:
         errors.append("candidateVerification systems do not match release procedure")
     github_runs = f"{repository.rstrip('/')}/actions/runs/"
-    if not isinstance(systems, dict) or any(
+    if not isinstance(planned_systems, dict) or any(
         locator != github_runs
-        for system, locator in systems.items()
+        for system, locator in planned_systems.items()
         if isinstance(system, str) and system.startswith("github-actions-")
     ):
         errors.append("candidate GitHub systems do not match repository identity")
@@ -639,4 +700,15 @@ def release_identity_errors(
         "assetPolicy"
     ):
         errors.append("public release asset policy does not match release procedure")
+    if candidate.get("requiredSystemIds") != required_system_ids:
+        errors.append("candidate required systems do not match release procedure")
+    expected_prerelease = prerelease is not None
+    expected_channel = "public-preview" if expected_prerelease else "full-release"
+    if (
+        not isinstance(public, dict)
+        or public.get("prerelease") is not expected_prerelease
+        or public.get("maturity") != expected_channel
+        or procedure.get("releaseChannel") != expected_channel
+    ):
+        errors.append("publicRelease maturity does not match semantic version")
     return errors

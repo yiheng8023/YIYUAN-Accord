@@ -6,7 +6,7 @@ YIYUAN Accord has one small semantic core and replaceable projections.
 latest bound user goal and corrections
                 |
                 v
- constitution + program + acceptance
+ immutable contract line + active distribution program
                 |
                 v
       generic contract verifier
@@ -27,9 +27,17 @@ latest bound user goal and corrections
  exact tagged release -> live public check + goal-carrier cleanup
 ~~~
 
-The arrows mean dependency, not authority promotion. Reports and observations
-can change a later program decision after review, but they do not become a
-fourth authority.
+The arrows mean dependency, not automatic authority promotion. Reports and
+observations do not become authority merely by being present, but they can
+challenge the current set and trigger a reviewed merge, split, replacement or
+retirement. Such a topology change requires an explicit schema and verifier
+migration, preserved provenance and replay from the earliest affected boundary.
+
+The collaboration layer is the product's controllable seam. It does not try to
+make an Agent imitate a person, replace a model provider, or remove human
+limitations. People, models and their shared information are finite, so a
+machine-native route is valid when it delivers the human outcome with lower net
+burden, preserves authority and leaves honest evidence.
 
 ## Portable interface
 
@@ -46,9 +54,10 @@ native capability, effective observation, unknown state, drift, verification,
 user burden, host-specific detail and retirement. L1–L7 are regression
 standards distilled from the project's two-month trial history.
 
-These identifiers and their full current statements live only in
-product/constitution.json. Derived prose may explain them but cannot redefine
-them.
+In schema v2 these identifiers and their full current statements live in
+product/constitution.json. Derived prose may explain them but cannot silently
+redefine them. This is a current source location, not an eternal ontology or
+permanent authority-file count.
 
 ## One deep verification seam
 
@@ -59,17 +68,20 @@ them.
 repository and projection-package checks.
 Together they validate:
 
-- the three authority schemas and their cross-file mappings;
+- the current schema-v2 authority set and its cross-file mappings;
 - at most one active increment and one active work item, with the completed
   increment and work item retained when a clean candidate enters task-time gates;
 - goal-mode prompt coverage;
 - evidence-lane separation and criterion-specific acceptance;
+- separation of the immutable behavior-contract line from the current
+  distribution version, maturity, publisher, assets and package identity;
 - a dependency-ordered release procedure, exact local verification and
-  independent review before push, task-time hosted verification bound to the
-  same candidate, a separate later human authorization, and five completion
-  gates that the active goal carrier, not repository evidence, must observe;
+  independent review before push, channel-specific required hosted verification
+  bound to the same candidate, a separate later human authorization, and five
+  completion gates that the active goal carrier, not repository evidence, must
+  observe; optional unavailable hosted systems remain explicit unknowns;
 - Golden Task coverage and its refusal to self-certify behavior;
-- complete projection identities, exact Skill-only package surfaces,
+- complete projection identities, complete thin projection package surfaces,
   repository-scoped absence paths and non-expansive marketplace policy;
 - the explicit complexity budget and retired proof-generation paths.
 
@@ -91,14 +103,20 @@ values and bounded maximum static-concatenation subtrees while ignoring
 comments and not joining across runtime expressions. Syntax outside that shared
 grammar and any unreadable, undecodable, oversized or over-budget surface are
 indeterminate and fail closed. Only digest-bound Markdown research inputs under
-`research/reviews/` declared by the program are inert exceptions. This proves
+`research/reviews/` and exact program-declared SHA-256-bound PNG distribution
+assets are inert exceptions. A PNG declaration must name a tracked `.png`,
+match its signature and bind its complete bytes; undeclared or changed binary
+content still fails closed. This proves
 static absence on that finite declared surface, not absence from Python
 comments, ignored or untracked files, runtime-built or external dynamic
 content. The workflow profile remains a separate exact structural constraint.
 
 The verifier does not contain copies of the product's purpose, criterion
-statements or pass rules. It validates the contract supplied by the authority
-files. A valid report means only that the authority and projections are
+statements or pass rules. It validates the contract supplied by the current
+reviewable authority set. The schema-v2 bootstrap currently consists of
+constitution, program and acceptance; changing that topology requires a
+versioned migration rather than treating three as a permanent constant. A valid
+report means only that the authority and projections are
 structurally conformant at their current declared lifecycle state. It is not
 evidence that the tree is a candidate. Candidate readiness additionally
 requires all applicable live-computed and representative criteria, a ready
@@ -110,11 +128,12 @@ release eligibility or completion.
 ## Host admission
 
 Each projection consists of one host-native manifest, one small YIYUAN Accord
-adapter contract and one progressively disclosed Skill. The native manifest
-contains only fields supported by that host; `adapter.json` carries the
-machine-readable K, H and L mapping used by the generic host check. There is no
-YIYUAN Accord runtime, Hook, state store, MCP, App, private capture protocol or
-fixed host-version dependency.
+adapter contract and one progressively disclosed Skill, plus only the
+host-native metadata or presentation assets declared by that manifest. The
+native manifest contains only fields supported by that host; `adapter.json`
+carries the machine-readable K, H and L mapping used by the generic host check.
+There is no YIYUAN Accord runtime, Hook, state store, MCP, App, private capture
+protocol or fixed host-version dependency.
 
 The two packages are semantic siblings, not byte-identical copies. Their K/H/L
 mapping and lifecycle boundary must agree; host-required names, manifests and
@@ -122,6 +141,12 @@ metadata may differ. Separately governed user-level Skills are outside the
 release package and stay unprojected by default. Their installation or
 visibility is neither a dependency nor evidence for these reference
 projections.
+
+Presentation remains host-specific. The Codex package may bind a declared
+trademark image as a deterministic package asset, while a host manifest without
+an equivalent visual field remains valid without one. Publisher, version,
+homepage, icon and complete package bytes belong to distribution identity; they
+do not rewrite the portable K/H/L behavior contract.
 
 The host-check command is deliberately two-level:
 
@@ -151,7 +176,8 @@ cases. A task declares required and prohibited behaviors before execution.
 Observations record Agent actions, human actions, effects, residue and claim
 limits independently of the model's own verdict. Each release observation
 binds the exact Golden Task digest, the evaluation protocol and burden metric
-digest, the current projection identity, a typed host/session identity and a
+digest, the behavior-bearing adapter contract and exposed Skill, a typed
+host/session identity and a
 complete controlled transcript or host-event record held in a separate source
 bundle. Independence is established by the source record and direct task-time
 observation, not by a boolean written into the observation.
@@ -186,6 +212,13 @@ and release evidence must come from disposable controlled tasks whose complete
 record is safe to publish. Private memory, account state and unsanitized host
 transcripts are not release evidence.
 
+A distribution-only change does not manufacture new behavior or invalidate an
+unchanged behavior observation. It must still replay deterministic validation
+of the complete manifest, marketplace, metadata, asset and package surface, and
+it must obtain current clean-state activation, confirmation and removal
+evidence. A contract or Skill locator/content change invalidates the dependent
+behavior observation from that earliest boundary.
+
 Task outcome and evaluator conformance are separate decisions. A prohibited
 behavior keeps the exact task failed and blocks that host or projection claim.
 YIYUAN Accord is conformant only if it preserves the failure, rejects stale
@@ -207,9 +240,14 @@ The program binds the pre-reshape baseline at revision
 cost includes code, instructions, evidence, state, topology, human cognition,
 recovery and retirement—not line count alone.
 
-A repeated same-purpose failure triggers replan and a deletion or replacement
-attempt. A new mechanism requires an observed residual gap, insufficient native
-or maintained coverage, benefit greater than total lifecycle cost,
-proportionate verification, and a retirement trigger. Finite release closes a
-bounded product version; later evidence can simplify, narrow, retire or open one
-new causal increment.
+A repeated same-purpose failure triggers replan and a premise, interface and
+representation review. Deletion, replacement, recomposition, native delegation
+and bounded addition are all considered; there is no universal add-or-subtract
+default. L2 retains one evidence-derived ordering constraint: try deletion or
+replacement before admitting another same-purpose repair layer. A new or
+retained mechanism requires an observed residual gap, insufficient native or
+maintained coverage, benefit greater than total lifecycle cost, proportionate
+verification, and a retirement trigger. Thinness constrains implementation
+weight and permanent exposure; it is not a feature-deletion KPI. Finite release
+closes a bounded product version, while later evidence can simplify, narrow,
+retire or open one new causal increment.

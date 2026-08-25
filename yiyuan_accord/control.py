@@ -33,7 +33,7 @@ from .identity import (
 )
 
 
-AUTHORITY_FILES = (
+V2_AUTHORITY_BOOTSTRAP = (
     "product/constitution.json",
     "product/program.json",
     "product/acceptance.json",
@@ -300,6 +300,9 @@ def _validate_complexity(root, program, python_module, files, errors):
         if path is not None:
             instruction_bytes += path.stat().st_size
 
+    if not isinstance(budget.get("digestBoundBinaryAssets"), dict):
+        errors.append("program.complexityBudget.digestBoundBinaryAssets must be an object")
+
     metrics = {
         "trackedFiles": len(files),
         "productCodeAndTestBytes": product_code_and_tests,
@@ -340,15 +343,16 @@ def _validate_complexity(root, program, python_module, files, errors):
 
 
 def _validate_program(
-    root, program, criterion_ids, all_contract_ids, identity, goal_digest, errors,
+    root, program, criterion_ids, all_contract_ids, identity, authority,
+    goal_digest, errors,
 ):
     if program.get("schema") != 2:
         errors.append("program.schema must be 2")
     _require_texts(program, ("id", "productId", "release", "releaseIntent", "maintenancePlan"),
                    "program", errors)
-    if program.get("constitution") != AUTHORITY_FILES[0]:
+    if program.get("constitution") != V2_AUTHORITY_BOOTSTRAP[0]:
         errors.append("program.constitution locator is invalid")
-    if program.get("acceptance") != AUTHORITY_FILES[2]:
+    if program.get("acceptance") != V2_AUTHORITY_BOOTSTRAP[2]:
         errors.append("program.acceptance locator is invalid")
     if program.get("status") not in PROGRAM_STATES:
         errors.append(f"program.status must be one of {sorted(PROGRAM_STATES)}")
@@ -383,7 +387,7 @@ def _validate_program(
 
     prompt = program.get("goalModePrompt")
     errors.extend(release_procedure_errors(
-        root, program.get("releaseProcedure"), set(criterion_ids), prompt, goal_digest,
+        root, program, authority, set(criterion_ids), prompt, goal_digest,
     ))
     if not isinstance(prompt, dict):
         errors.append("program.goalModePrompt must be an object")
@@ -505,9 +509,9 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
     if acceptance.get("schema") != 2:
         errors.append("acceptance.schema must be 2")
     _require_texts(acceptance, ("id", "productId", "release"), "acceptance", errors)
-    if acceptance.get("constitution") != AUTHORITY_FILES[0]:
+    if acceptance.get("constitution") != V2_AUTHORITY_BOOTSTRAP[0]:
         errors.append("acceptance.constitution locator is invalid")
-    if acceptance.get("program") != AUTHORITY_FILES[1]:
+    if acceptance.get("program") != V2_AUTHORITY_BOOTSTRAP[1]:
         errors.append("acceptance.program locator is invalid")
 
     criteria = _object_entries(acceptance, "criteria", errors)
@@ -748,9 +752,9 @@ def host_check(root, adapter_id):
 def verify_product(root):
     root = Path(root)
     errors = []
-    constitution = _read_json(root, AUTHORITY_FILES[0], errors)
-    program = _read_json(root, AUTHORITY_FILES[1], errors)
-    acceptance = _read_json(root, AUTHORITY_FILES[2], errors)
+    constitution = _read_json(root, V2_AUTHORITY_BOOTSTRAP[0], errors)
+    program = _read_json(root, V2_AUTHORITY_BOOTSTRAP[1], errors)
+    acceptance = _read_json(root, V2_AUTHORITY_BOOTSTRAP[2], errors)
 
     authority_product_id = constitution.get("productId")
     product_ids = {
@@ -794,8 +798,11 @@ def verify_product(root):
         errors,
     )
     all_ids = kernel_host_lesson_ids | set(criterion_ids)
-    _validate_program(root, program, criterion_ids, all_ids, identity,
-                      acceptance.get("canonicalGoalObjectiveSha256"), errors)
+    _validate_program(
+        root, program, criterion_ids, all_ids, identity,
+        constitution.get("authority"),
+        acceptance.get("canonicalGoalObjectiveSha256"), errors,
+    )
     maintenance_plan = program.get("maintenancePlan")
     release_notes = acceptance.get("publicRelease", {}).get("releaseNotes")
     errors.extend(
@@ -803,7 +810,7 @@ def verify_product(root):
             root,
             constitution.get("authority"),
             identity.get("pythonModule"),
-            AUTHORITY_FILES,
+            V2_AUTHORITY_BOOTSTRAP,
             (GOLDEN_TASKS_FILE, maintenance_plan, release_notes),
         )
     )
@@ -876,6 +883,8 @@ def verify_product(root):
         repository_files,
         historical_revision,
         historical_references,
+        program.get("complexityBudget", {}).get("digestBoundBinaryAssets")
+        if isinstance(program.get("complexityBudget"), dict) else None,
     ))
 
     python_module = identity.get("pythonModule")
