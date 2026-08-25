@@ -12,6 +12,14 @@ The broader mission is advancing human-AI collaboration. The current product sur
 
 [简体中文](README.zh-CN.md)
 
+> **Current recommendation:** install
+> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v2.0.1-preview.1),
+> an explicitly labeled Public Preview.
+
+> GitHub may still mark historical v2.0 as `Latest` because
+> [prereleases cannot receive that marker](https://docs.github.com/en/rest/releases/releases#update-a-release);
+> it is not the project's recommendation.
+
 ---
 
 ## Public Preview
@@ -30,6 +38,66 @@ Never include credentials or private session content.
 
 ---
 
+## Start in 30 seconds
+
+### Before you install
+
+For ordinary Codex use, you need:
+
+- Codex in the ChatGPT desktop app or Codex CLI with plugin support;
+- network access to the public GitHub repository and permission to change your
+  user-level plugin configuration; and
+- a new task or session after installation.
+
+The Codex IDE extension does not currently support plugins. A source checkout
+and Python are not required for ordinary use; they belong to the verification
+and contributor path below.
+
+No fixed host version is required by Accord. Record the version you actually
+used instead of treating one tested version as a permanent dependency.
+
+### Install in Codex
+
+Install the exact, immutable Preview tag:
+
+```powershell
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1
+codex plugin add yiyuan-accord-codex@yiyuan-accord
+```
+
+Restart the desktop app or start a new CLI session. Open **Plugins** or run
+`/plugins`, then confirm that `YIYUAN Accord for Codex` and the
+`deliver-demand-driven-outcome` Skill are present.
+
+Start a new task and describe the result normally. For example: *“Make this
+installation path accurate, preserve unrelated changes, verify it, and tell me
+what remains unproven.”*
+
+Select the Skill explicitly only when you need a deterministic activation
+check.
+
+### What installation changes
+
+Installation makes one progressively disclosed Skill available to new tasks.
+It does not add a Runtime, Hook, MCP server, App, background process, state
+store, or automatic project mutation.
+
+It does not retroactively affect the task that was open during installation.
+
+Cloning this repository is not plugin installation. Codex may read a checkout's
+`AGENTS.md` as local project guidance without installing Accord.
+
+During normal work, the Skill may be invoked implicitly and should stay silent
+when native behavior is already sufficient.
+
+The catalog is [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json),
+and the package is [`plugins/yiyuan-accord-codex`](plugins/yiyuan-accord-codex).
+
+See OpenAI's current documentation for [using plugins](https://learn.chatgpt.com/docs/plugins)
+and [building plugins](https://developers.openai.com/plugins/build/plugins).
+
+---
+
 ## What It Changes
 
 You describe the intended outcome in natural language.
@@ -38,8 +106,10 @@ Accord guides the Agent to own supported operational mechanics while reserving c
 
 Accord does not require an Agent to imitate a person. People, models, and their
 shared information are all finite; this project works only on the collaboration
-boundary it can actually influence. Different machine-native routes are welcome
-when they deliver the human outcome with less burden and honest evidence.
+boundary it can actually influence.
+
+Different machine-native routes are welcome when they deliver the human outcome
+with less burden and honest evidence.
 
 Its portable loop operates on five stable constants:
 
@@ -61,44 +131,12 @@ Everything else is activated on demand by the task and host environment. If the 
 - **Decision Boundaries**: The Agent should autonomously handle routine mechanics, but must strictly halt before genuine human decisions, privilege escalations, tangible costs, or irreversible mutations.
 - **Cascade Corrections**: A mid-flight fix or updated rule invalidates earlier evidence, requiring a bounded downstream replay.
 
-Accord is not a prompt template that users must study. A plain request is always sufficient—for example: *“Make this installation path accurate, preserve unrelated changes, verify it, and tell me what remains unproven.”*
+Accord is not a prompt template that users must study. A plain request is
+always sufficient.
 
 ---
 
-## Install and use
-
-Cloning is not plugin installation. Codex may read this checkout's `AGENTS.md` as local project guidance; that does not mean the YIYUAN Accord plugin is installed.
-
-### Codex
-
-Install the immutable v2.0.1-preview.1 public preview from its Git marketplace:
-
-```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1
-codex plugin add yiyuan-accord-codex@yiyuan-accord
-```
-
-Before that tag exists, release evaluators must exercise the exact clean source
-bundle instead of treating an unavailable remote ref as installed:
-
-```powershell
-codex plugin marketplace add .
-codex plugin add yiyuan-accord-codex@yiyuan-accord
-```
-
-This local route proves only activation of the candidate package in that source
-bundle. It does not verify a Git ref, GitHub availability, or the later public
-installation route. Use the removal commands below when the walkthrough ends.
-
-Then restart the desktop app to reload the catalog. Open **Plugins** (or run `/plugins` in the CLI), confirm that `YIYUAN Accord for Codex` and its `deliver-demand-driven-outcome` Skill are present, and Start a new task.
-
-For a deterministic activation check, select the Skill explicitly in the UI/CLI. For normal work, state the outcome naturally; the Skill permits implicit invocation, but must remain silent when native behavior is already sufficient.
-
-The repository-local catalog is [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json). The Codex package is [`plugins/yiyuan-accord-codex`](plugins/yiyuan-accord-codex).
-
-OpenAI's current documentation covers [plugin packaging](https://developers.openai.com/plugins/build/plugins) and [using plugins](https://learn.chatgpt.com/docs/plugins).
-
-### Claude Code
+## Claude Code reference path
 
 From the repository root, load the reference projection for one local session:
 
@@ -114,7 +152,14 @@ Changes to the checkout can be reloaded with `/reload-plugins`. To disable or re
 
 ## Update, disable or remove
 
-Inspect the effective Codex installation with `codex plugin list --json`. Refresh a configured Git marketplace with:
+Confirm installation on the same surface that performed it. For a CLI-managed
+installation, inspect `codex plugin list --json`. For a desktop-managed
+installation, inspect **Plugins** first.
+
+A cross-surface listing difference is host state to record, not automatic proof
+that the other installation failed.
+
+Refresh a configured Git marketplace with:
 
 ```powershell
 codex plugin marketplace upgrade yiyuan-accord
@@ -181,7 +226,11 @@ These checks validate repository and package conformance. They do not install a 
 
 The portable contract is **K1–K5**. Host rules **H1–H10** and learned-failure rules **L1–L7** keep host drift and trial history outside the core.
 
-Those three files are the current reviewable topology, not unquestionable truth or a permanent file count. A later merge, split, replacement, or retirement must preserve provenance and migrate the schema, verifier, mappings, and affected evidence explicitly.
+Those three files are the current reviewable topology, not unquestionable truth
+or a permanent file count.
+
+A later merge, split, replacement, or retirement must preserve provenance and
+migrate the schema, verifier, mappings, and affected evidence explicitly.
 
 ---
 

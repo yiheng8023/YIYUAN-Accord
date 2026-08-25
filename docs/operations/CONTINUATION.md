@@ -139,6 +139,33 @@ Behavior and distribution evidence are separate axes:
   authentication. Private memory, credentials and unsanitized session content
   are not release evidence and must not be opened or copied for this purpose.
 
+## Post-release reader-path correction
+
+The immutable v2.0.1-preview.1 release remains the current recommended public
+package. A later correction found that GitHub still presents historical v2.0 as
+`Latest`, because prereleases cannot receive that platform marker. The v2.0
+Release metadata now leads with a superseded notice and links to the Preview;
+neither tag was moved or deleted.
+
+The default-branch README correction separates a novice quick start, actual
+prerequisites, installation effects and advanced verification. It removes the
+obsolete prepublication source-bundle route from the public reader path. That
+route remains an internal release-evaluation mechanism when a future candidate
+needs it; it is not an ordinary-user prerequisite.
+
+On 2026-08-25, a user-managed desktop installation created an enabled
+`yiyuan-accord-codex@yiyuan-accord` entry and cached exact version
+`2.0.1-preview.1`. The already-open task did not expose the Accord Skill, and
+the contemporaneous CLI marketplace list did not enumerate the desktop-managed
+marketplace. These observations establish persistent installation only, not
+new-task Skill delivery or behavior.
+
+Confirm a desktop-managed installation in **Plugins** and a CLI-managed
+installation in the CLI first. Treat cross-surface listing disagreement as
+dated host state. Do not reinstall, narrow compatibility or claim failure until
+the persistent configuration, cache and a fresh-task observation are
+reconciled.
+
 ## Strict v2.0.1-preview.1 route
 
 Determine the first incomplete gate from live Git, authority state and direct

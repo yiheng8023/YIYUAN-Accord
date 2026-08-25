@@ -548,7 +548,8 @@ class ProductControlTests(unittest.TestCase):
             workflow.write_bytes(body)
             readme = (root / 'README.md').read_text(encoding='utf-8')
             (root / 'README.md').write_text(
-                readme.replace('restart the desktop app', 'skip reload'), encoding='utf-8')
+                readme.replace('## Start in 30 seconds', '## Start'),
+                encoding='utf-8')
             self.assert_has(_errors(root), 'derived surface markers')
             (root / 'README.md').write_text(readme, encoding='utf-8')
             program['goalModePrompt']['mapsTo'].remove('Q4')

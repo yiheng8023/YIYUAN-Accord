@@ -126,11 +126,15 @@
         "without adding semantic authority"
       ],
       "README.md": [
+        "Current recommendation",
+        "Start in 30 seconds",
+        "Before you install",
+        "Codex IDE extension does not currently support plugins",
+        "What installation changes",
         "python -B -m yiyuan_accord verify --root . --json",
         "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1",
-        "codex plugin marketplace add .",
         "codex plugin add yiyuan-accord-codex@yiyuan-accord",
-        "restart the desktop app",
+        "Restart the desktop app",
         "Start a new task",
         "Update, disable or remove",
         "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
@@ -143,9 +147,13 @@
         "Disclaimer and compliance"
       ],
       "README.zh-CN.md": [
+        "当前推荐版本",
+        "30 秒开始",
+        "安装前确认",
+        "Codex IDE 扩展目前不支持插件",
+        "安装改变什么",
         "python -B -m yiyuan_accord verify --root . --json",
         "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1",
-        "codex plugin marketplace add .",
         "codex plugin add yiyuan-accord-codex@yiyuan-accord",
         "重启桌面端",
         "新建任务",

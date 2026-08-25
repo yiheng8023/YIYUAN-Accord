@@ -10,6 +10,13 @@ YIYUAN Accord 是一个开放、Agent 中立的人机协作可靠性契约与评
 
 [English](README.md)
 
+> **当前推荐版本：**安装明确标记为公开预览版的
+> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v2.0.1-preview.1)。
+
+> GitHub 可能仍把历史 v2.0 标成“最新”，因为
+> [预发行版不能获得该标记](https://docs.github.com/en/rest/releases/releases#update-a-release)；
+> 它不是本项目给新用户的当前推荐版本。
+
 ---
 
 ## 公开预览版
@@ -19,6 +26,54 @@ YIYUAN Accord 是一个开放、Agent 中立的人机协作可靠性契约与评
 请在 [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues) 中提供精确 tag 与 revision、宿主与版本、安装方式、目标、初始状态、实际结果、人工介入、物质影响或残留，以及仍未知的内容。
 
 不得提交凭据或私密会话原文。
+
+---
+
+## 30 秒开始
+
+### 安装前确认
+
+普通 Codex 用户只需要：
+
+- 支持插件的 ChatGPT 桌面端 Codex 或 Codex CLI；
+- 能够访问公开 GitHub 仓库，并有权修改自己的用户级插件配置；
+- 安装后新建任务或会话。
+
+Codex IDE 扩展目前不支持插件。普通使用不需要检出源码或准备 Python；
+这些属于下文的验证与贡献者路径。Accord 不绑定固定宿主版本，因此应记录
+实际使用的版本，而不是把某次测试版本写成永久依赖。
+
+### 在 Codex 中安装
+
+安装精确、不可变的公开预览版 tag：
+
+```powershell
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1
+codex plugin add yiyuan-accord-codex@yiyuan-accord
+```
+
+重启桌面端或新开 CLI 会话。打开 **Plugins** 或运行 `/plugins`，确认
+`YIYUAN Accord for Codex` 与 `deliver-demand-driven-outcome` Skill 已出现。
+
+新建任务后，像平常一样说明想要的结果。例如：*“把这个安装路径改准确，
+保留无关改动，验证结果，并告诉我还有什么没被证明。”* 只有在需要确定性
+启用检查时，才显式选择该 Skill。
+
+### 安装改变什么
+
+安装只会让一个渐进披露的 Skill 可供新任务使用。它不会增加 Runtime、Hook、
+MCP server、App、后台进程、状态存储或自动项目修改，也不会追溯影响安装时
+已经打开的任务。
+
+克隆仓库不等于安装插件。Codex 可能把 checkout 中的 `AGENTS.md` 当作本地
+项目说明读取，但这不表示 Accord 已安装。正常工作时允许隐式调用 Skill；
+宿主原生行为已经充分时，它应保持安静。
+
+插件市场声明位于 [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json)，
+插件包位于 [`plugins/yiyuan-accord-codex`](plugins/yiyuan-accord-codex)。
+
+OpenAI 当前官方资料见[插件使用](https://learn.chatgpt.com/docs/plugins)与
+[插件打包](https://developers.openai.com/plugins/build/plugins)。
 
 ---
 
@@ -48,43 +103,11 @@ Accord 不要求 Agent 模拟人。人、模型以及双方掌握的信息都存
 - **决策边界控制**：Agent 应完成其能力范围内的工序，但在真实人类决策、新权限、明显成本或不可逆影响前必须停下。
 - **级联失效回放**：一次局部修补或新规则可能推翻旧证据，需要有界地重放下游结果。
 
-Accord 不是要求用户额外学习的提示词模板。普通请求就足够了，例如：*“把这个安装路径改准确，保留无关改动，验证结果，并告诉我还有什么没被证明。”*
+Accord 不是要求用户额外学习的提示词模板，普通请求就足够了。
 
 ---
 
-## 安装与使用
-
-克隆仓库不等于安装插件。Codex 可能把当前 checkout 的 `AGENTS.md` 当作项目说明读取，但这不表示 YIYUAN Accord 插件已经安装。
-
-### Codex
-
-从 Git 市场安装不可变的 v2.0.1-preview.1 公开预览版：
-
-```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1
-codex plugin add yiyuan-accord-codex@yiyuan-accord
-```
-
-在该 tag 尚未创建前，发布评估者必须改用精确的 clean source bundle
-完成走查，不能把不存在的远端 ref 冒充为已经安装：
-
-```powershell
-codex plugin marketplace add .
-codex plugin add yiyuan-accord-codex@yiyuan-accord
-```
-
-这条本地路线只证明候选包在该 source bundle 中能够启用，不证明 Git
-ref、GitHub 可用性或后续公开安装路线。走查结束后，使用下文命令完成移除。
-
-随后重启桌面端，让它重新加载目录。打开 **Plugins**（CLI 中运行 `/plugins`），确认 `YIYUAN Accord for Codex` 及其 `deliver-demand-driven-outcome` Skill 已出现，再新建任务。
-
-需要确定性检查时可显式选择 Skill。正常使用时只需自然地说明结果；Skill 允许隐式调用，但宿主原生行为已经充分时不得增加额外步骤。
-
-仓库本地市场声明是 [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json)，Codex 插件包是 [`plugins/yiyuan-accord-codex`](plugins/yiyuan-accord-codex)。
-
-OpenAI 当前官方资料见 [插件打包](https://developers.openai.com/plugins/build/plugins) 与 [插件使用](https://learn.chatgpt.com/docs/plugins)。
-
-### Claude Code
+## Claude Code 参考路径
 
 在仓库根目录为一个本地会话加载参考投影：
 
@@ -100,7 +123,11 @@ checkout 变化后可运行 `/reload-plugins`。要停用或移除这种直接�
 
 ## 更新、禁用与移除
 
-用 `codex plugin list --json` 检查实际安装状态。刷新已经配置的 Git 市场：
+先在执行安装的同一表面确认状态。CLI 管理的安装使用
+`codex plugin list --json`；桌面端管理的安装先查看 **Plugins**。
+两个表面的清单暂时不同属于需要记录的宿主状态，不能自动证明另一处安装失败。
+
+刷新已经配置的 Git 市场：
 
 ```powershell
 codex plugin marketplace upgrade yiyuan-accord
