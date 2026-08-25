@@ -234,8 +234,11 @@ class ProductControlTests(unittest.TestCase):
                             'package digest', 'unsupported fields', 'Skill frontmatter identity',
                             'AVAILABLE/ON_INSTALL', 'interface contract')
         with _fixture() as root:
+            # Preserve a lexical alias so the mock follows the verifier's
+            # canonical root on hosts whose temporary path resolves elsewhere.
+            root = root / '..' / root.name
             projection = _read(root, P)['hostProjections'][0]
-            target = root / projection['skill']
+            target = root.resolve(strict=True) / projection['skill']
             original_is_symlink = Path.is_symlink
             original_read_bytes = Path.read_bytes
 

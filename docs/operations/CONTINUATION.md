@@ -60,6 +60,15 @@ Then read, in order:
   causation. Replay from the earliest evidence-supported dependency boundary;
   a later correction may reveal either debt or an earlier misjudgment, while
   unrelated accepted facts remain stable.
+- Hosted verification of `97671617ebad3f308127c0e6edd6b467622c177d`
+  reached and passed checkout, verifier and host-check execution on every
+  declared GitHub runner. Ubuntu completed, while Windows and macOS reproduced
+  a test-fixture defect: the simulated symlink target used a lexical temporary
+  root even though the package verifier canonicalizes that root. The regression
+  now deliberately enters through a lexical alias and binds the simulated
+  target to the verifier's canonical root. This invalidates candidate-specific
+  evidence from the exact local test-and-review boundary onward; replay it on a
+  new clean SHA before another push or hosted claim.
 - Repeated multi-host identity-scanner corrections triggered the declared
   premise/interface/deletion review. The reduced replacement uses the Git index
   as its finite declaration source, one shared Python 3.10 AST grammar for
@@ -75,7 +84,7 @@ Then read, in order:
   after every authority or evidence edit; working-tree results do not become
   clean-candidate evidence until the candidate is committed and replayed. The
   reviewed complexity target is 178000 product code-and-test bytes; the stable
-  working measurement is 168507, leaving 9493 bytes of headroom against the
+  working measurement is 168724, leaving 9276 bytes of headroom against the
   separately required 8900-byte reserve after the recorded deletion review.
 - For the Codex projection, resolve current official Agent architecture, App Server
   and host documentation as high-weight dynamic evidence before relying on a
