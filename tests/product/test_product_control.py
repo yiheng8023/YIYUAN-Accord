@@ -900,8 +900,11 @@ class ProductControlTests(unittest.TestCase):
             retired = 'yiyuan_accord/task_validator_o4_continuous_self_correction_v3.py'
             (root / retired).mkdir()
             (root / '.tmp').mkdir()
-            self.assert_has(_errors(root),
-                            f'forbidden active path remains: {retired}', 'known task residue')
+            (root / '.remember').mkdir()
+            self.assert_has(
+                _errors(root), f'forbidden active path remains: {retired}',
+                'known task residue', '.remember',
+            )
         self.assert_has(_retired_raw_errors('retired-product', 'README.md'),
                         'superseded identity remains')
         with _fixture() as root:

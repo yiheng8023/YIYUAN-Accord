@@ -124,7 +124,9 @@ def known_task_residue(root):
     except OSError:
         return ["<unreadable-root>"]
     residue = []
-    residue_directories = {"__pycache__", ".tmp", ".pytest_cache", ".mypy_cache", ".ruff_cache"}
+    residue_directories = {
+        "__pycache__", ".tmp", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".remember",
+    }
     for current, directories, files in os.walk(resolved_root, followlinks=False):
         base = Path(current)
         for name in tuple(directories):
