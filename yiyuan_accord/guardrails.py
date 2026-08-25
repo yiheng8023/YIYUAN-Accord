@@ -124,23 +124,24 @@ def known_task_residue(root):
     except OSError:
         return ["<unreadable-root>"]
     residue = []
-    residue_directories = {
-        "__pycache__", ".tmp", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".remember",
-    }
-    for current, directories, files in os.walk(resolved_root, followlinks=False):
+    residue_names = {"__pycache__", ".tmp", ".pytest_cache", ".mypy_cache",
+                     ".ruff_cache", ".remember"}
+    for current, dirs, files in os.walk(
+        resolved_root, onerror=lambda _: residue.append("<unreadable>"),
+        followlinks=False,
+    ):
         base = Path(current)
-        for name in tuple(directories):
+        for name in tuple(dirs):
             path = base / name
-            relative = path.relative_to(resolved_root).as_posix()
-            if name in residue_directories:
-                residue.append(relative)
-            if name == ".git" or name in residue_directories or path.is_symlink():
-                directories.remove(name)
+            if name in residue_names:
+                residue.append(path.relative_to(resolved_root).as_posix())
+            if name == ".git" or name in residue_names or path.is_symlink():
+                dirs.remove(name)
         for name in files:
-            lowered_name = name.lower()
+            lowered = name.lower()
             if (
-                lowered_name in {"error.log", ".coverage"}
-                or lowered_name.endswith((".pyc", ".pyo"))
+                lowered in {"error.log", ".coverage"}
+                or lowered.endswith((".pyc", ".pyo"))
             ):
                 residue.append((base / name).relative_to(resolved_root).as_posix())
     return sorted(residue)

@@ -901,10 +901,11 @@ class ProductControlTests(unittest.TestCase):
             (root / retired).mkdir()
             (root / '.tmp').mkdir()
             (root / '.remember').mkdir()
-            self.assert_has(
-                _errors(root), f'forbidden active path remains: {retired}',
-                'known task residue', '.remember',
-            )
+            self.assert_has(_errors(root), f'forbidden active path remains: {retired}',
+                            'known task residue', '.remember')
+            with patch('yiyuan_accord.guardrails.os.walk', side_effect=lambda *_, onerror, **k:
+                       (onerror(OSError()), ())[1]):
+                self.assert_has(_errors(root), '<unreadable>')
         self.assert_has(_retired_raw_errors('retired-product', 'README.md'),
                         'superseded identity remains')
         with _fixture() as root:

@@ -75,7 +75,11 @@ Then read, in order:
   not include it. The directory was resolved inside this checkout, confirmed
   to be an ordinary directory, removed without reading any file contents and
   verified absent. A public-verifier regression now requires `.remember` to
-  fail closed as known task residue; replay the candidate boundary again.
+  fail closed as known task residue. Follow-up independent robustness review
+  then reproduced that `os.walk` silently ignored an unreadable subtree. Its
+  error callback now records an unreadable residue sentinel without opening
+  subtree contents, and a second public-verifier regression requires that path
+  to fail closed. Replay the candidate boundary again.
 - Repeated multi-host identity-scanner corrections triggered the declared
   premise/interface/deletion review. The reduced replacement uses the Git index
   as its finite declaration source, one shared Python 3.10 AST grammar for
@@ -91,7 +95,7 @@ Then read, in order:
   after every authority or evidence edit; working-tree results do not become
   clean-candidate evidence until the candidate is committed and replayed. The
   reviewed complexity target is 178000 product code-and-test bytes; the stable
-  working measurement is 168825, leaving 9175 bytes of headroom against the
+  working measurement is 169011, leaving 8989 bytes of headroom against the
   separately required 8900-byte reserve after the recorded deletion review.
 - For the Codex projection, resolve current official Agent architecture, App Server
   and host documentation as high-weight dynamic evidence before relying on a
