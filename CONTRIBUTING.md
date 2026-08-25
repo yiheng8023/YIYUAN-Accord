@@ -63,10 +63,12 @@ increment, add a Golden Task, narrow a claim, simplify a projection or retire a
 mechanism. Recheck security, compatibility and behavior whenever a host,
 permission boundary, projection, release surface or public claim changes.
 
-Treat Codex and Claude Code as current reference hosts, not permanent product
-authority or a ceiling on future hosts. Before a release, and whenever an
+Treat Codex and Claude Code as current behavior-reference hosts, not permanent
+product authority or a ceiling on future hosts. Treat Claude web chat, the
+Claude Desktop Chat tab and Cowork as distribution surfaces whose behavior must
+be observed separately. Before a release, and whenever an
 official version, maturity label, extension surface, permission model, cloud
-route or deprecation changes, review the official Codex and Claude Code indexes,
+route or deprecation changes, review the official Codex and Claude indexes,
 then probe the exact installed host before consequential use. Record in the
 bounded change or review: source and date, host/version, capability and surface,
 maturity and availability, trust/persistence/side effects, native equivalence or

@@ -29,18 +29,17 @@ Then read, in order:
 - The immutable v2.0 contract and public release are bound to
   `71ff4a2687b54f26c8dbf3a94384257f1fc0f532`. Do not move, rewrite or reuse its
   tag as authority for another revision.
-- The active distribution increment is `v2.0.1-preview.1`, a Public Preview
-  presentation and reader-path repair over that unchanged behavior contract.
-  `program.status` is ready; the increment and work item are completed. The
-  current stage sequence is:
-  `preview-presentation-and-authority-alignment` completed,
-  `preview-structured-constraints-and-regressions` completed,
-  `affected-distribution-and-reader-path-evidence` completed, then
-  `preview-candidate-freeze` completed. Live authority, not this snapshot, decides
-  the actual state.
-- The active no-budget Goal is the exact 1297-character canonical JSON
+- The active distribution increment is `v2.0.1-preview.2`, a Public Preview
+  Claude presentation, marketplace and reader-path repair over the unchanged
+  behavior contract. `program.status` is ready. All four repository stages are
+  completed through `preview2-candidate-freeze`; the exact local candidate is
+  awaiting the ordered external gates. Live authority, not this snapshot,
+  decides the actual state. The immutable `v2.0.1-preview.1` remains the
+  recommended public package until preview.2 is separately authorized and
+  published.
+- The active no-budget Goal is the exact 1282-character canonical JSON
   `program.goalModePrompt.objective`. Its SHA-256 is
-  `b9dde332faf21843d2507fc233f025a8d92bfbda40df4d14a39ea6984fe3b795`.
+  `09af8d87e1c40696fd882a8268aa4041f3713ae12290dd4cbf990809f9ae2309`.
   It contains one typed `execute-exactly-in-listed-order` route and a
   `reviewable-versioned-current-set` authority object whose locators derive from
   the current constitution declaration. User correction or material evidence
@@ -54,12 +53,39 @@ Then read, in order:
   email is required. Author links point to the personal GitHub page; project,
   homepage and website links point to the Accord repository.
 - The Codex projection declares the wordless YIYUAN NEXUS mark as a package
-  asset. Claude Code has no equivalent manifest field. The trademark boundary
-  remains separate in `NOTICE`; Apache-2.0 does not grant trademark rights.
+  asset. The Claude package uses the canonical human name `YIYUAN Accord for
+  Claude` and the repository-root `.claude-plugin/marketplace.json`; the package
+  directory itself is not the marketplace root. The trademark boundary remains
+  separate in `NOTICE`; Apache-2.0 does not grant trademark rights.
 - Both READMEs identify the distribution as Public Preview, keep production and
-  broad-field claims out of scope, provide current Codex and Claude Code
-  activation/removal paths, and include optional WeChat Pay, Alipay and PayPal
-  support with an explicit no-SLA/no-influence boundary and disclaimer.
+  broad-field claims out of scope, distinguish persistent Claude marketplace
+  installation from session-only `--plugin-dir`, and separate installation,
+  enablement, Skill visibility and effective behavior. Accord declares no
+  Claude Hook, so a host-reported Stop hook belongs to external host state until
+  direct evidence proves otherwise.
+
+## Active preview.2 route
+
+1. Keep the v2.0 adapter contracts and exact Skill content unchanged. Align the
+   Claude human display name, repository marketplace, bilingual lifecycle paths
+   and surface-bound evidence claims.
+2. Validate the repository marketplace and Claude package with
+   `claude plugin validate --strict`; make name, source, version and description
+   drift fail closed under the generic verifier and product regressions.
+3. At the explicit installation boundary, upload a temporary exact local
+   candidate package to one current Claude client, then register the repository
+   root rather than the plugin subdirectory for the local Claude Code
+   marketplace. Exercise that marketplace and the session-scoped direct-load
+   path from a clean state; record visibility, activation, removal, human burden,
+   external Hooks, unknowns and residue. Remove the temporary package and
+   task-only installations before leaving the gate; retain a persistent client
+   installation only when the user explicitly asks for that outcome and record
+   it separately from task residue.
+4. Only after the prepublication paths pass may the stage and candidate be
+   completed, committed and pushed through the existing ordered external gates.
+   After push, replay the README GitHub marketplace path in a current Claude
+   client before named-human release authorization. Do not create, move or
+   publish `v2.0.1-preview.2` early.
 
 ## Distribution walkthrough evidence to replay
 
@@ -95,6 +121,28 @@ Then read, in order:
   UI rendering, public installation, field value and production safety remain
   unproved. This replay rechecked public derived records and bindings; it did
   not reopen, read or re-authenticate private raw sessions.
+- The preview.2 prepublication replay used Claude Code 2.1.245 and Claude
+  Desktop 1.34493.1.0. The exact Claude package digest was
+  `d54f1f4d4e6a96ac8be761905293937334582c4b603b2523b08d5cdd8341b4ad`;
+  its local repository marketplace install was enabled with exact cache parity,
+  and its session-scoped ZIP direct load explicitly invoked
+  `/yiyuan-accord-claude:deliver-demand-driven-task` through the configured CC
+  Switch DeepSeek route. The route's underlying model is environment detail,
+  not an Accord product or conformance dependency.
+- Claude Desktop accepted the exact ZIP through **Cowork > Customize >
+  Plugins > Upload plugin**, displayed `YIYUAN Accord for Claude` version
+  `2.0.1-preview.2`, kept it enabled, and exposed
+  `/deliver-demand-driven-task` in slash discovery without sending a model
+  request. This proves local installation, enablement and Skill discovery on
+  that client, not implicit invocation, no-op behavior or cross-surface
+  equivalence. The user explicitly authorized retaining this desktop install.
+- The first non-bare Claude Code probe inherited external host Hooks, created a
+  hidden `.remember` directory and exhausted its USD 0.05 limit after reporting
+  USD 0.15391. A later bare direct-load probe succeeded at USD 0.01461; total
+  observed probe cost was USD 0.16852. The task-created `.remember`, ZIP,
+  temporary directory, CLI installation, marketplace entry and orphaned cache
+  were removed. The retained desktop installation is the requested outcome,
+  not task residue. The post-push GitHub marketplace replay remains pending.
 
 ## Product and evidence boundary
 
@@ -166,7 +214,10 @@ dated host state. Do not reinstall, narrow compatibility or claim failure until
 the persistent configuration, cache and a fresh-task observation are
 reconciled.
 
-## Strict v2.0.1-preview.1 route
+## Historical v2.0.1-preview.1 route
+
+The following route records the completed preview.1 process. It is not the
+active preview.2 stage list and must not override current authority.
 
 Determine the first incomplete gate from live Git, authority state and direct
 evidence; never infer it from this navigation snapshot.

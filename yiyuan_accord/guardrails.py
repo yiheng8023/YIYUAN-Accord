@@ -28,7 +28,8 @@ CANDIDATE_SYSTEMS = set((
     "github-actions-macos-latest codex-cloud"
 ).split())
 RELEASE_SURFACES = (
-    "AGENTS.md CONTEXT.md README.md README.zh-CN.md .github/workflows/validate.yml "
+    "AGENTS.md CONTEXT.md README.md README.zh-CN.md .claude-plugin/marketplace.json "
+    ".github/workflows/validate.yml "
     "docs/architecture.md CONTRIBUTING.md docs/operations/CONTINUATION.md "
     "SPONSORING.md SPONSORING.zh-CN.md"
 ).split()
@@ -108,7 +109,7 @@ MANIFEST_FIELDS = {
         "name version description author homepage repository license keywords skills interface".split()
     ),
     "claude-code": set(
-        "$schema name version description author homepage repository license keywords skills".split()
+        "$schema name displayName version description author homepage repository license keywords skills".split()
     ),
 }
 CODEX_INTERFACE_FIELDS = set((
@@ -325,41 +326,72 @@ def manifest_shape_errors(
             or interface.get("logo") != interface.get("composerIcon")
         ):
             errors.append("adapter codex manifest interface contract is invalid")
-    elif adapter_id == "claude-code" and manifest.get("$schema") != (
-        "https://json.schemastore.org/claude-code-plugin-manifest.json"
-    ):
-        errors.append("adapter claude-code manifest schema is invalid")
+    elif adapter_id == "claude-code":
+        if manifest.get("$schema") != (
+            "https://json.schemastore.org/claude-code-plugin-manifest.json"
+        ):
+            errors.append("adapter claude-code manifest schema is invalid")
+        if manifest.get("displayName") != f"{identity.get('displayName')} for Claude":
+            errors.append("adapter claude-code manifest displayName is invalid")
     return errors
 
 
 def marketplace_errors(
-    adapter_id, marketplace, manifest_name, expected_path,
+    adapter_id, marketplace, manifest, expected_path, product_id, identity,
 ):
     errors = []
     prefix = f"adapter {adapter_id}"
     entries = marketplace.get("plugins")
-    if (
-        not _exact(marketplace, {"name", "interface", "plugins"})
-        or not _exact(marketplace.get("interface"), {"displayName"})
-    ):
-        errors.append(f"{prefix} marketplace shape is invalid")
     if not isinstance(entries, list) or len(entries) != 1:
         errors.append(f"{prefix} marketplace entry is not unique")
         return errors
     entry = entries[0]
-    if not isinstance(entry, dict) or entry.get("name") != manifest_name:
+    if not isinstance(entry, dict) or entry.get("name") != manifest.get("name"):
         return errors + [f"{prefix} marketplace entry is not unique"]
-    if not _exact(entry, {"name", "source", "policy", "category"}):
-        errors.append(f"{prefix} marketplace entry shape is invalid")
-    if entry.get("source") != {"source": "local", "path": expected_path}:
-        errors.append(f"{prefix} marketplace source is invalid")
-    if entry.get("policy") != {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL",
-    }:
-        errors.append(
-            f"{prefix} marketplace policy must be AVAILABLE/ON_INSTALL"
+    if adapter_id == "codex":
+        if (
+            not _exact(marketplace, {"name", "interface", "plugins"})
+            or marketplace.get("name") != product_id
+            or marketplace.get("interface") != {
+                "displayName": identity.get("displayName")
+            }
+        ):
+            errors.append(f"{prefix} marketplace shape or identity is invalid")
+        if not _exact(entry, {"name", "source", "policy", "category"}):
+            errors.append(f"{prefix} marketplace entry shape is invalid")
+        if entry.get("source") != {"source": "local", "path": expected_path}:
+            errors.append(f"{prefix} marketplace source is invalid")
+        if entry.get("policy") != {
+            "installation": "AVAILABLE",
+            "authentication": "ON_INSTALL",
+        }:
+            errors.append(
+                f"{prefix} marketplace policy must be AVAILABLE/ON_INSTALL"
+            )
+    elif adapter_id == "claude-code":
+        repository = identity.get("repository")
+        publisher_match = re.fullmatch(
+            r"https://github\.com/([^/]+)/[^/]+", repository or ""
         )
+        publisher = publisher_match.group(1) if publisher_match else None
+        if (
+            not _exact(marketplace, {"name", "description", "owner", "plugins"})
+            or marketplace.get("name") != product_id
+            or marketplace.get("description") != (
+                f"Official {identity.get('displayName')} plugin marketplace."
+            )
+            or marketplace.get("owner") != {"name": publisher}
+        ):
+            errors.append(f"{prefix} marketplace shape or identity is invalid")
+        if not _exact(entry, {"name", "source", "description", "version"}):
+            errors.append(f"{prefix} marketplace entry shape is invalid")
+        if entry.get("source") != expected_path:
+            errors.append(f"{prefix} marketplace source is invalid")
+        if (
+            entry.get("description") != manifest.get("description")
+            or entry.get("version") != manifest.get("version")
+        ):
+            errors.append(f"{prefix} marketplace presentation is invalid")
     return errors
 
 
@@ -444,9 +476,11 @@ def validate_host_projection(
     initial_error_count = len(errors)
     adapter_id = projection.get("id")
     prefix = f"adapter {adapter_id}"
-    expected_shape = _PROJECTION_FIELDS | (
-        {"marketplace", "interfaceDefaultPrompt"} if adapter_id == "codex" else set()
-    )
+    projection_fields = {
+        "codex": {"marketplace", "interfaceDefaultPrompt"},
+        "claude-code": {"marketplace"},
+    }
+    expected_shape = _PROJECTION_FIELDS | projection_fields.get(adapter_id, set())
     if adapter_id not in {"codex", "claude-code"} or not _exact(projection, expected_shape):
         errors.append(f"{prefix} program projection shape is invalid")
     manifest_locator, marketplace_locator = projection.get("manifest"), projection.get("marketplace")
@@ -489,16 +523,12 @@ def validate_host_projection(
         asset_locators = sorted(set(asset_locators))
     if isinstance(marketplace_locator, str):
         marketplace = read_json(root, marketplace_locator, errors)
-        if marketplace.get("name") != product_id or marketplace.get("interface") != {
-            "displayName": identity.get("displayName")
-        }:
-            errors.append(f"{prefix} marketplace identity is not canonical")
         expected_path = (
             f"./{Path(manifest_locator).parent.parent.as_posix()}"
             if isinstance(manifest_locator, str) else None
         )
         errors.extend(marketplace_errors(
-            adapter_id, marketplace, manifest.get("name"), expected_path
+            adapter_id, marketplace, manifest, expected_path, product_id, identity
         ))
     expected_contract = {
         "schema": 1, "productId": product_id, "packageId": expected_package,

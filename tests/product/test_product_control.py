@@ -300,6 +300,33 @@ class ProductControlTests(unittest.TestCase):
                 'package digest is not approved by program',
             )
 
+        with _fixture() as root:
+            projection = _read(root, P)['hostProjections'][1]
+            manifest = _read(root, projection['manifest'])
+            manifest['displayName'] = 'YIYUAN Accord for Claude Code'
+            _write(root, projection['manifest'], manifest)
+            marketplace = _read(root, projection['marketplace'])
+            marketplace['plugins'][0]['source'] = './plugins/wrong'
+            marketplace['plugins'][0]['version'] = '2.0.1-preview.1'
+            _write(root, projection['marketplace'], marketplace)
+            self.assert_has(
+                host_check(root, 'claude-code')['errors'],
+                'manifest displayName is invalid',
+                'marketplace source is invalid',
+                'marketplace presentation is invalid',
+                'package digest is not approved by program',
+            )
+
+        with _fixture() as root:
+            projection = _read(root, P)['hostProjections'][1]
+            marketplace = _read(root, projection['marketplace'])
+            marketplace['plugins'][0]['description'] = 'Drifted description'
+            _write(root, projection['marketplace'], marketplace)
+            self.assert_has(
+                host_check(root, 'claude-code')['errors'],
+                'marketplace presentation is invalid',
+            )
+
     def test_projection_evidence_rejects_drift_and_relocation(self):
         observation = _read(ROOT, OBS[1])['projectionIdentity']
         current = host_check(ROOT, 'claude-code')['details']

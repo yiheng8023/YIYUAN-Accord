@@ -10,8 +10,9 @@ YIYUAN Accord 是一个开放、Agent 中立的人机协作可靠性契约与评
 
 [English](README.md)
 
-> **当前推荐版本：**安装明确标记为公开预览版的
-> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v2.0.1-preview.1)。
+> **当前推荐版本：**安装 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases)
+> 中最新发布的 v2.0.1 公开预览版。本源码树是 `v2.0.1-preview.2`
+> 分发；只有匹配的 GitHub 预发行版存在后，它才成为已发布推荐版本。
 
 > GitHub 可能仍把历史 v2.0 标成“最新”，因为
 > [预发行版不能获得该标记](https://docs.github.com/en/rest/releases/releases#update-a-release)；
@@ -48,7 +49,7 @@ Codex IDE 扩展目前不支持插件。普通使用不需要检出源码或准�
 安装精确、不可变的公开预览版 tag：
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.2
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
@@ -107,7 +108,27 @@ Accord 不是要求用户额外学习的提示词模板，普通请求就足够�
 
 ---
 
-## Claude Code 参考路径
+## Claude 客户端与 Claude Code
+
+Claude 网页聊天、Claude Desktop 的 **Chat** 页和 Cowork 当前都可使用插件中的
+Skill。持久安装时，在 **Customize > Plugins** 的 Personal plugins 区域选择
+**Add marketplace**，从 GitHub 仓库
+`https://github.com/yiheng8023/YIYUAN-Accord` 添加市场，再安装
+**YIYUAN Accord for Claude**。在新聊天中输入 `/`，确认
+`deliver-demand-driven-task` 可见。
+
+Claude Code 的持久 CLI 路线是：
+
+```powershell
+claude plugin marketplace add yiheng8023/YIYUAN-Accord@v2.0.1-preview.2
+claude plugin install yiyuan-accord-claude@yiyuan-accord
+```
+
+市场应注册仓库根；`plugins/yiyuan-accord-claude` 只是包目录，不是市场根。
+安装和启用只让宿主可按需发现 Skill，不表示每条消息都会调用，也不证明
+Claude Code、网页、Desktop 与 Cowork 的行为等价。
+
+### Claude Code 单会话参考路径
 
 在仓库根目录为一个本地会话加载参考投影：
 
@@ -117,14 +138,16 @@ claude --plugin-dir ./plugins/yiyuan-accord-claude
 
 在 `/help` 中确认 `/yiyuan-accord-claude:deliver-demand-driven-task` 已出现。该直接加载方式不会创建持久安装；参见 [Claude Code 官方插件说明](https://code.claude.com/docs/en/plugins)。
 
-checkout 变化后可运行 `/reload-plugins`。要停用或移除这种直接加载的插件，只需结束会话，下次不再传入 `--plugin-dir`。
+checkout 变化后可运行 `/reload-plugins`，它只重载当前会话。要停用这种直接加载的插件，结束会话并在下次启动时不再传入 `--plugin-dir`。这不会移除另行持久安装的插件。
 
 ---
 
 ## 更新、禁用与移除
 
-先在执行安装的同一表面确认状态。CLI 管理的安装使用
-`codex plugin list --json`；桌面端管理的安装先查看 **Plugins**。
+先在执行安装的同一表面确认状态。Codex CLI 安装使用
+`codex plugin list --json`，Claude CLI 安装使用
+`claude plugin list --json`；Claude 客户端安装先查看
+**Customize > Plugins**。
 两个表面的清单暂时不同属于需要记录的宿主状态，不能自动证明另一处安装失败。
 
 刷新已经配置的 Git 市场：
@@ -144,11 +167,25 @@ codex plugin add yiyuan-accord-codex@yiyuan-accord
 
 需要保留市场但暂时停用时，在 **Plugins** 中禁用或重新启用。上面前两条命令会彻底移除插件和市场记录。
 
+Claude CLI 管理的持久安装使用以下命令核对、刷新、更新或移除；客户端管理的安装则在 **Customize > Plugins** 中完成同样生命周期操作：
+
+```powershell
+claude plugin list --json
+claude plugin marketplace update yiyuan-accord
+claude plugin update yiyuan-accord-claude@yiyuan-accord
+claude plugin uninstall yiyuan-accord-claude@yiyuan-accord
+```
+
+移除 marketplace 也会卸载由它安装的插件。不要直接编辑 Claude 的全局配置文件来代替这些宿主命令。
+
 ### 回滚与故障排查
 
 回滚只选择更早的不可变 tag，绝不移动已有 tag。启用状态不清楚时，先检查宿主实际列出的插件或 Skill，再新建任务或会话，并运行对应的宿主检查。
 
-宿主没有列出插件或 Skill，就不能称为已启用。安全软件、宿主配置、模型路由和会话中断都是测试变量，应与项目行为分开记录。
+安装表面没有列出插件，只能说明该处尚未观察到安装。若插件被列为已启用、
+但当前会话没有暴露 Skill，应把 Skill 可见性或会话加载状态记为 unknown，
+再走宿主的 reload 或新会话路径；不要把这种差异改写成 `enabled=false`。
+安全软件、宿主配置、模型路由和会话中断都是测试变量，应与项目行为分开记录。
 
 报告仓库缺陷时，请提供精确 revision、宿主版本、相关配置边界和验证器输出。不得附带凭据或原始私密会话内容。
 
@@ -159,7 +196,7 @@ codex plugin add yiyuan-accord-codex@yiyuan-accord
 准备 Python 3.10–3.14，并克隆精确发布：
 
 ```powershell
-git clone --branch v2.0.1-preview.1 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
+git clone --branch v2.0.1-preview.2 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
 ```
 
 运行 canonical verifier：
@@ -188,7 +225,7 @@ python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 - **派生术语与边界**：[`CONTEXT.md`](CONTEXT.md)
 - **数据驱动的通用验证器**：
   [`yiyuan_accord/control.py`](yiyuan_accord/control.py)
-- **可替换、无运行时的 Skill 投影**：Codex 与 Claude Code 适配投影
+- **可替换、无运行时的 Skill 投影**：Codex 与 Claude 适配投影；现有行为证据仍分别绑定具体宿主表面
 - **帮助与干扰代表任务**：
   [`evals/golden-tasks.json`](evals/golden-tasks.json)
 
@@ -202,17 +239,17 @@ python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 
 Accord 不增加安装器、后台 Runtime、Hook、MCP 服务、App、状态库或自动用户配置写入。它依赖宿主当前能力，并把宿主专属生命周期工序留在可替换投影中。
 
-v2.0.1-preview.1 是基于不可变 v2.0 的公开预览版展示与易用性修补，不主张通用人机协作正确性、广泛真实场域有效性、跨宿主等价、对所有用户都降低负担或生产安全。
+v2.0.1-preview.2 是基于不可变 v2.0 的公开预览版分发与易用性修补，不主张通用人机协作正确性、广泛真实场域有效性、跨宿主或跨表面等价、对所有用户都降低负担或生产安全。
 
 验证器通过只证明该 checkout 的有限仓库契约。已接纳行为样本仍绑定具体任务、宿主、投影和 revision。保留的 `GT-07:cleanup` 失败继续收窄主张，不会被改写成成功。
 
-精确标准与发布门位于 [`product/acceptance.json`](product/acceptance.json)，有限发布主张见 [`docs/releases/v2.0.1-preview.1.md`](docs/releases/v2.0.1-preview.1.md)。
+精确标准与发布门位于 [`product/acceptance.json`](product/acceptance.json)，有限发布主张见 [`docs/releases/v2.0.1-preview.2.md`](docs/releases/v2.0.1-preview.2.md)。
 
 ---
 
 ## 本次发布之后
 
-v2.0.1-preview.1 是一个有限阶段，不是使命终点。后续工作只从已观察的残余缺口、真实任务证据或重大宿主变化中准入。当前持续证据通道包括真实场域效果、跨宿主或长期证据，以及代表任务 `GT-06`、`GT-09` 和 `GT-10`。
+v2.0.1-preview.2 是一个有限阶段，不是使命终点。后续工作只从已观察的残余缺口、真实任务证据或重大宿主变化中准入。当前持续证据通道包括 Claude 客户端实际行为、真实场域效果、跨宿主或长期证据，以及代表任务 `GT-06`、`GT-09` 和 `GT-10`。
 
 宿主能力增强后，Accord 可以简化或退役投影，而不是自动增加机制。缺失功能只有在用户价值、风险降低或恢复收益大于代码、认知、生命周期和运行成本时才恢复。
 

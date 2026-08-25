@@ -12,9 +12,10 @@ The broader mission is advancing human-AI collaboration. The current product sur
 
 [简体中文](README.zh-CN.md)
 
-> **Current recommendation:** install
-> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v2.0.1-preview.1),
-> an explicitly labeled Public Preview.
+> **Current recommendation:** install the newest published
+> [v2.0.1 Public Preview](https://github.com/yiheng8023/YIYUAN-Accord/releases).
+> This source tree is the `v2.0.1-preview.2` distribution; it becomes the
+> published recommendation only when the matching GitHub prerelease exists.
 
 > GitHub may still mark historical v2.0 as `Latest` because
 > [prereleases cannot receive that marker](https://docs.github.com/en/rest/releases/releases#update-a-release);
@@ -61,7 +62,7 @@ used instead of treating one tested version as a permanent dependency.
 Install the exact, immutable Preview tag:
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.1
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.2
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
@@ -136,7 +137,29 @@ always sufficient.
 
 ---
 
-## Claude Code reference path
+## Claude clients and Claude Code
+
+Plugin Skills are currently available in Claude web chat, the **Chat** tab in
+Claude Desktop, and Cowork. For a persistent installation, open
+**Customize > Plugins**, choose **Add marketplace** under Personal plugins, add
+`https://github.com/yiheng8023/YIYUAN-Accord`, and install
+**YIYUAN Accord for Claude**. Start a new chat, type `/`, and confirm
+`deliver-demand-driven-task` is visible.
+
+The persistent Claude Code CLI route is:
+
+```powershell
+claude plugin marketplace add yiheng8023/YIYUAN-Accord@v2.0.1-preview.2
+claude plugin install yiyuan-accord-claude@yiyuan-accord
+```
+
+Register the repository root as the marketplace. The
+`plugins/yiyuan-accord-claude` directory is the package, not the marketplace
+root. Installation and enablement make the Skill available for host-native,
+on-demand discovery; they do not mean every message invokes it or prove
+behavioral equivalence across Claude Code, web, Desktop, and Cowork.
+
+### Claude Code single-session reference path
 
 From the repository root, load the reference projection for one local session:
 
@@ -146,15 +169,16 @@ claude --plugin-dir ./plugins/yiyuan-accord-claude
 
 Confirm `/yiyuan-accord-claude:deliver-demand-driven-task` appears in `/help`. This direct-load route does not create a persistent installation. See the [official Claude Code plugin guide](https://code.claude.com/docs/en/plugins).
 
-Changes to the checkout can be reloaded with `/reload-plugins`. To disable or remove a direct-loaded package, end the session and omit `--plugin-dir` next time.
+Changes to the checkout can be reloaded with `/reload-plugins`, which affects only the current session. To disable a direct-loaded package, end the session and omit `--plugin-dir` next time. This does not remove a separately installed persistent plugin.
 
 ---
 
 ## Update, disable or remove
 
-Confirm installation on the same surface that performed it. For a CLI-managed
-installation, inspect `codex plugin list --json`. For a desktop-managed
-installation, inspect **Plugins** first.
+Confirm installation on the same surface that performed it. For a Codex CLI
+installation, inspect `codex plugin list --json`; for a Claude CLI installation,
+inspect `claude plugin list --json`. For a Claude-client installation, inspect
+**Customize > Plugins** first.
 
 A cross-surface listing difference is host state to record, not automatic proof
 that the other installation failed.
@@ -176,11 +200,32 @@ codex plugin add yiyuan-accord-codex@yiyuan-accord
 
 Use **Plugins** to disable or re-enable the plugin without removing its marketplace. The first two commands remove both entries completely.
 
+For a persistent Claude CLI installation, inspect, refresh, update, or remove it
+with the host commands below. Use **Customize > Plugins** for the equivalent
+lifecycle in a Claude client:
+
+```powershell
+claude plugin list --json
+claude plugin marketplace update yiyuan-accord
+claude plugin update yiyuan-accord-claude@yiyuan-accord
+claude plugin uninstall yiyuan-accord-claude@yiyuan-accord
+```
+
+Removing a marketplace also uninstalls plugins installed from it. Do not edit
+Claude's global configuration files directly as a substitute for these host
+commands.
+
 ### Rollback and Troubleshoot
 
 Rollback selects an earlier immutable tag; never move an existing tag. If activation is unclear, inspect the host's actual plugin or Skill list, then start a new task or session and run the matching host check.
 
-If the host does not list the package or Skill, it is not enabled. Endpoint protection, host configuration, model routes, and interrupted sessions are test variables; record them separately from product behavior.
+If the installation surface does not list the package, installation is not
+observed there. If it lists the package as enabled but the current session does
+not expose the Skill, record Skill visibility or session loading as unknown and
+use the host's reload or new-session path; do not rewrite that difference as
+`enabled=false`. Endpoint protection, host configuration, model routes, and
+interrupted sessions are test variables; record them separately from product
+behavior.
 
 For a repository defect, report the exact revision, host version, relevant configuration boundary, and verifier output. Never include credentials or raw private session content.
 
@@ -191,7 +236,7 @@ For a repository defect, report the exact revision, host version, relevant confi
 Clone the exact release with Python 3.10–3.14 available:
 
 ```powershell
-git clone --branch v2.0.1-preview.1 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
+git clone --branch v2.0.1-preview.2 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
 ```
 
 Run the canonical verifier:
@@ -220,7 +265,7 @@ These checks validate repository and package conformance. They do not install a 
 - **Derived Vocabulary & Boundary**: [`CONTEXT.md`](CONTEXT.md)
 - **Data-Driven Generic Verifier**:
   [`yiyuan_accord/control.py`](yiyuan_accord/control.py)
-- **Replaceable, Runtime-Free Skill Projections**: Reference adapter projections for Codex and Claude Code
+- **Replaceable, Runtime-Free Skill Projections**: Codex and Claude adapter projections whose behavior evidence remains bound to specific host surfaces
 - **Representative Help-and-Interference Tasks**:
   [`evals/golden-tasks.json`](evals/golden-tasks.json)
 
@@ -238,23 +283,23 @@ migrate the schema, verifier, mappings, and affected evidence explicitly.
 
 Accord adds no installer, background runtime, Hook, MCP server, App, state store, or automatic user-configuration mutation. It relies on current host capabilities and keeps host-specific lifecycle mechanics in replaceable projections.
 
-The v2.0.1-preview.1 line is a Public Preview presentation and usability repair over immutable v2.0.
+The v2.0.1-preview.2 line is a Public Preview distribution and usability repair over immutable v2.0.
 
-It does not claim universal human-AI correctness, broad field effectiveness, cross-host equivalence, lower burden for every user, or production safety.
+It does not claim universal human-AI correctness, broad field effectiveness, cross-host or cross-surface equivalence, lower burden for every user, or production safety.
 
 A valid verifier result proves only the finite repository contract for that checkout. Accepted behavior samples remain task-, host-, projection-, and revision-bound.
 
 The retained `GT-07:cleanup` failure continues to narrow the claim instead of being rewritten as success.
 
-Exact criteria and release gates are in [`product/acceptance.json`](product/acceptance.json). Finite release claims are summarized in [`docs/releases/v2.0.1-preview.1.md`](docs/releases/v2.0.1-preview.1.md).
+Exact criteria and release gates are in [`product/acceptance.json`](product/acceptance.json). Finite release claims are summarized in [`docs/releases/v2.0.1-preview.2.md`](docs/releases/v2.0.1-preview.2.md).
 
 ---
 
 ## After this release
 
-v2.0.1-preview.1 is a finite stage, not the end of the mission. Later work is admitted only from observed residual gaps, real-task evidence, or material host changes.
+v2.0.1-preview.2 is a finite stage, not the end of the mission. Later work is admitted only from observed residual gaps, real-task evidence, or material host changes.
 
-The continuing lanes include field effect, cross-host or longitudinal evidence, and representative tasks `GT-06`, `GT-09`, and `GT-10`.
+The continuing lanes include observed Claude-client behavior, field effect, cross-host or longitudinal evidence, and representative tasks `GT-06`, `GT-09`, and `GT-10`.
 
 Host improvements may let Accord simplify or retire a projection instead of adding machinery.
 

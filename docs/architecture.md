@@ -165,8 +165,10 @@ catalog: refresh it before release or after a material host, maturity,
 permission, extension, cloud-route or deprecation change. Each review binds an
 official source/date and exact host version to availability, maturity,
 trust/persistence/effect surface, native equivalence, residual gap, a live probe
-and a retirement trigger. Codex and Claude Code are current reference adapters
-and test hosts; neither defines the portable contract or future host scope.
+and a retirement trigger. Codex and Claude Code are current behavior-reference
+adapters and test hosts; neither defines the portable contract or future host
+scope. Claude web chat, the Claude Desktop Chat tab and Cowork are distribution
+surfaces for the same Claude package, not inherited behavior evidence.
 
 ## Evaluation
 

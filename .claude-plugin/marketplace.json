@@ -1,0 +1,15 @@
+{
+  "name": "yiyuan-accord",
+  "description": "Official YIYUAN Accord plugin marketplace.",
+  "owner": {
+    "name": "yiheng8023"
+  },
+  "plugins": [
+    {
+      "name": "yiyuan-accord-claude",
+      "source": "./plugins/yiyuan-accord-claude",
+      "description": "Thin Claude Skill projection for the YIYUAN Accord portable collaboration reliability contract.",
+      "version": "2.0.1-preview.2"
+    }
+  ]
+}

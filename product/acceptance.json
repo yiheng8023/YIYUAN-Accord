@@ -3,10 +3,10 @@
   "id": "yiyuan-accord-product-acceptance-v2.0",
   "productId": "yiyuan-accord",
   "release": "v2.0",
-  "distributionVersion": "v2.0.1-preview.1",
+  "distributionVersion": "v2.0.1-preview.2",
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "b9dde332faf21843d2507fc233f025a8d92bfbda40df4d14a39ea6984fe3b795",
+  "canonicalGoalObjectiveSha256": "09af8d87e1c40696fd882a8268aa4041f3713ae12290dd4cbf990809f9ae2309",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": ["deterministic-conformance", "representative-behavior"],
@@ -42,8 +42,8 @@
       "class": "release-result",
       "name": "thin host projections and admission",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "L6"],
-      "statement": "Codex and Claude Code receive progressively disclosed, runtime-free Skill projections of the same portable contract under the canonical package identity.",
-      "passRule": "The generic host check validates each complete package and keeps static readiness distinct from effective behavior. Manifests, metadata, adapter identity, commands and repository URLs use only the canonical identity; host-required format differences remain explicit and no undeclared installation, Hook, MCP, App or runtime surface is admitted.",
+      "statement": "Codex and Claude receive progressively disclosed, runtime-free Skill projections of the same portable contract under canonical host-qualified human names and stable technical package identities.",
+      "passRule": "The generic host check validates each complete package and keeps static readiness, distribution availability, installation, enablement and effective behavior distinct. Codex and Claude Code remain the behavior-reference adapters. The same Claude package may be distributed through current official Claude web chat, Desktop Chat and Cowork plugin surfaces, but those surfaces inherit no behavior claim until separately observed. Manifests, marketplaces, metadata, adapter identity, commands and repository URLs use only the canonical identity; host-required format differences remain explicit and no undeclared installation, Hook, MCP, App or runtime surface is admitted.",
       "requiredEvidenceClasses": ["deterministic-conformance"],
       "assessment": "verified",
       "evidence": []
@@ -57,6 +57,7 @@
       "passRule": "Every required task has exactly one current-projection observation bound to independent transcript or host-event evidence, an accountable observer and time, every predeclared required/prohibited behavior decision, mapped criterion decisions, human-burden metrics, material effects, residue and verified cleanup. A passed decision must agree with those records; any failure remains failed and narrows the exact behavior claim. Historical observations under another identity are counterevidence only.",
       "requiredEvidenceClasses": ["representative-behavior"],
       "assessment": "verified",
+      "assessmentScope": "The statement and pass rule above are the immutable capture-time evaluation contract for the exact v2.0 observations. Under the distribution-only rule, preview.2 preserves those bounded results because their complete behavior-bearing adapter contract and Skill identity is unchanged; this does not turn distribution activation into a new full preview.2 behavior replay. Current preview.2 package evidence is limited to installation, enablement, Skill discovery and one explicit direct-load invocation.",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-24-v20-claude-gt01.json",
@@ -114,7 +115,7 @@
       "class": "release-result",
       "name": "release-ready reproducible public surface",
       "mapsTo": ["K5", "H6", "H7", "H9", "H10", "L1", "L7"],
-      "statement": "The candidate contains a reproducible v2.0.1-preview.1 Public Preview distribution of the immutable v2.0 contract, verifier, reference projections and accepted behavior evidence under the canonical YIYUAN Accord identity, with an exact intended tag, prerelease body, claim ceiling, asset policy and retirement path.",
+      "statement": "The candidate contains a reproducible v2.0.1-preview.2 Public Preview distribution of the immutable v2.0 contract, verifier and reference projections alongside bounded representative behavior evidence preserved under the unchanged behavior-bearing adapter contract and Skill identity, with an exact intended tag, prerelease body, claim ceiling, asset policy and retirement path.",
       "passRule": "The live canonical verifier validates the complete intended release surface, deterministic reproduction instructions, accepted evidence bindings, explicit claim ceiling and ordered task-time gate contract. R4 does not assert that exact local review, hosted verification, named-human authorization, tagging, publication or final cleanup has occurred; those remain separate completion operands evaluated only by the active goal carrier.",
       "requiredEvidenceClasses": ["deterministic-conformance"],
       "assessment": "verified",
@@ -237,7 +238,7 @@
       "codex-cloud": "https://chatgpt.com/codex/"
     },
     "requiredSystemIds": ["codex-cloud"],
-    "rule": "Only after the exact local verification-and-review gate passes may the final clean candidate be pushed. That local gate includes an independent comparison of the publishable source bundle with the original host or session records, plus one clean-state README activation, confirmation and removal walkthrough by an evaluator isolated from candidate-preparation context. The sample is context-isolated, outcome-bound, identity-neutral and internal only; the accountable user, a colleague or a second observation surface may execute it. Task-time hosted observation must then bind the unchanged HEAD on every required system. Ordinary Codex Cloud is required for this Public Preview; the three declared GitHub Actions systems are attempted when account quota is available, and quota-limited absence remains explicit unknown external state rather than a pass, product failure or preview blocker. Repository data, an earlier revision and a caller-supplied receipt cannot satisfy either gate."
+    "rule": "Only after the exact local verification-and-review gate passes may the final clean candidate be pushed. That local gate includes an independent comparison of the publishable source bundle with the original host or session records, a temporary exact local Claude-client package walkthrough, and local-repository marketplace plus session-scoped direct-load Claude Code walkthroughs by an evaluator isolated from candidate-preparation context. The sample is context-isolated, outcome-bound, identity-neutral and internal only; the accountable user, a colleague or a second observation surface may execute it. Task-only installations and residue are removed; an explicitly user-authorized persistent client installation may remain when it is declared separately from task residue and repository evidence. Task-time hosted observation must then bind the unchanged HEAD on every required system and replay the README GitHub marketplace install, visibility and removal path in a current Claude client before named-human authorization. Ordinary Codex Cloud is required for this Public Preview; the three declared GitHub Actions systems are attempted when account quota is available, and quota-limited absence remains explicit unknown external state rather than a pass, product failure or preview blocker. Repository data, an earlier revision, local packaging and a caller-supplied receipt cannot satisfy the remote marketplace replay."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",
@@ -251,16 +252,16 @@
   },
   "publicRelease": {
     "mode": "task-time-live-github-observation",
-    "tag": "v2.0.1-preview.1",
-    "releaseLocator": "https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v2.0.1-preview.1",
-    "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v2.0.1-preview.1",
-    "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v2.0.1-preview.1",
-    "releaseNotes": "docs/releases/v2.0.1-preview.1.md",
-    "releaseNotesSha256": "0fa8cb2fa21538d2d80f4985cc5033805fbe792e294abe59ab80972850596d66",
+    "tag": "v2.0.1-preview.2",
+    "releaseLocator": "https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v2.0.1-preview.2",
+    "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v2.0.1-preview.2",
+    "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v2.0.1-preview.2",
+    "releaseNotes": "docs/releases/v2.0.1-preview.2.md",
+    "releaseNotesSha256": "2083b4efc09b76a2829725903127310ae615e124c4915d91e0a9f8620aaef583",
     "assetPolicy": "no-attached-assets",
     "maturity": "public-preview",
     "prerelease": true,
-    "rule": "Only after exact local review, required hosted verification and named-human authorization may the active goal carrier create the lightweight v2.0.1-preview.1 tag and GitHub prerelease. It then directly verifies the prerelease flag, tag, release body and zero attached assets, removes task-created resources and replays local verification."
+    "rule": "Only after exact local review, required hosted verification and named-human authorization may the active goal carrier create the lightweight v2.0.1-preview.2 tag and GitHub prerelease. It then directly verifies the prerelease flag, tag, release body and zero attached assets, removes task-created resources and replays local verification."
   },
   "claimCeiling": {
     "finiteReleaseClaims": [
