@@ -579,6 +579,13 @@ class ProductControlTests(unittest.TestCase):
                 encoding='utf-8')
             self.assert_has(_errors(root), 'derived surface markers')
             (root / 'README.md').write_text(readme, encoding='utf-8')
+            path = root / 'docs/operations/CONTINUATION.md'
+            text = path.read_text(encoding='utf-8')
+            v1, v2 = ('`v2.0.1-preview.1` tag', '`v2.0.1-preview.2` tag')
+            swapped = text.replace(v2, 'TAG', 1).replace(v1, v2, 1).replace('TAG', v1, 1)
+            path.write_text(swapped, encoding='utf-8')
+            self.assert_has(_errors(root), 'derived surface markers')
+            path.write_text(text, encoding='utf-8')
             program['goalModePrompt']['mapsTo'].remove('Q4')
             increment = program['increment']
             increment['acceptanceIds'].remove('R3')

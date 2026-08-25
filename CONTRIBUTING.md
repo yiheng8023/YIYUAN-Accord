@@ -53,10 +53,13 @@ candidate-specific conclusions, while unrelated accepted truth remains stable.
 
 A second same-purpose repair pauses addition for premise, interface,
 subtraction and replacement review. Static checks never qualify behavior;
-older projection observations never qualify a changed package. Context size,
-token percentage, summary ratio and turn count remain host variables, so use a
-reliable source-bound signal or record capacity as unknown. Local success,
-push, hosted verification, release and field use stay distinct.
+older projection observations never qualify a changed behavior-bearing adapter
+contract or Skill. A distribution-only change preserves unchanged
+contract-and-Skill behavior evidence but must replay distribution conformance
+and activation lifecycle evidence. Context size, token percentage, summary
+ratio and turn count remain host variables, so use a reliable source-bound
+signal or record capacity as unknown. Local success, push, hosted verification,
+release and field use stay distinct.
 
 After release, maintainer, colleague and external-user reports may open one new
 increment, add a Golden Task, narrow a claim, simplify a projection or retire a

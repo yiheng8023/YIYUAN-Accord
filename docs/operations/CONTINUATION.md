@@ -31,12 +31,14 @@ Then read, in order:
   tag as authority for another revision.
 - The active distribution increment is `v2.0.1-preview.2`, a Public Preview
   Claude presentation, marketplace and reader-path repair over the unchanged
-  behavior contract. `program.status` is ready. All four repository stages are
-  completed through `preview2-candidate-freeze`; the exact local candidate is
-  awaiting the ordered external gates. Live authority, not this snapshot,
-  decides the actual state. The immutable `v2.0.1-preview.1` remains the
-  recommended public package until preview.2 is separately authorized and
-  published.
+  behavior contract. `program.status` is ready and all four closeout stages are
+  completed. Pushed revision
+  `523437dbfdc76411bcda1b9b3d2db22f05dd0744` is superseded by the current
+  release-route correction and is not current hosted or release evidence. The
+  clean candidate containing this correction replaces it only after fresh push
+  and exact remote verification. Live authority, not this snapshot, decides the
+  actual state. The immutable `v2.0.1-preview.1` remains the recommended public
+  package until preview.2 is separately authorized and published.
 - The active no-budget Goal is the exact 1282-character canonical JSON
   `program.goalModePrompt.objective`. Its SHA-256 is
   `09af8d87e1c40696fd882a8268aa4041f3713ae12290dd4cbf990809f9ae2309`.
@@ -86,6 +88,9 @@ Then read, in order:
    After push, replay the README GitHub marketplace path in a current Claude
    client before named-human release authorization. Do not create, move or
    publish `v2.0.1-preview.2` early.
+5. Only after exact hosted verification and named-human authorization may the
+   active goal carrier create the lightweight `v2.0.1-preview.2` tag and a GitHub
+   prerelease with the tracked release body and no attached assets.
 
 ## Distribution walkthrough evidence to replay
 
@@ -171,9 +176,10 @@ Behavior and distribution evidence are separate axes:
   remains a retained failure and claim exclusion; do not rename it or promote
   it into success.
 - Publisher, version, manifest, marketplace, metadata, icon and complete
-  package bytes belong to v2.0.1-preview.1 distribution identity. They require
-  fresh deterministic package checks and current clean-state activation,
-  confirmation and removal evidence, but do not manufacture new behavior.
+  package bytes belong to the v2.0.1-preview.2 candidate distribution identity.
+  They require fresh deterministic package checks and current clean-state
+  activation, confirmation and removal evidence, but do not manufacture new
+  behavior.
 - Binary distribution assets are admitted only by exact tracked path, PNG
   signature and program-declared SHA-256. Undeclared, relocated or changed
   binary content remains a conformance failure.
