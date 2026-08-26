@@ -8,8 +8,8 @@
     {
       "name": "yiyuan-accord-claude",
       "source": "./plugins/yiyuan-accord-claude",
-      "description": "Thin Claude Skill projection for the YIYUAN Accord portable collaboration reliability contract.",
-      "version": "2.0.1-preview.2"
+      "description": "Adaptive Claude Skill projection for YIYUAN Accord outcome delivery.",
+      "version": "3.0.0"
     }
   ]
 }

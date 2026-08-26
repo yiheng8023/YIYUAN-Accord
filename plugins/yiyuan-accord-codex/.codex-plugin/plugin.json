@@ -1,7 +1,7 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "2.0.1-preview.2",
-  "description": "Thin Codex Skill projection for the YIYUAN Accord portable collaboration reliability contract.",
+  "version": "3.0.0",
+  "description": "Adaptive Codex Skill projection for YIYUAN Accord outcome delivery.",
   "author": {
     "name": "yiheng8023",
     "url": "https://github.com/yiheng8023"
@@ -13,8 +13,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "YIYUAN Accord for Codex",
-    "shortDescription": "Goal-first collaboration with bounded correction",
-    "longDescription": "One progressively disclosed Skill. It relies on current Codex-native capabilities and adds no runtime, Hook, MCP, App, state store or fixed host-version dependency.",
+    "shortDescription": "Adaptive outcome delivery with human authority",
+    "longDescription": "One progressively disclosed Skill that discovers live capabilities, selects a context-fit route, owns supported mechanics, recomputes on drift, and verifies cleanup without binding Accord to one host version or mechanism.",
     "developerName": "yiheng8023",
     "category": "Developer Tools",
     "capabilities": ["Interactive", "Read"],

@@ -10,20 +10,20 @@ YIYUAN Accord 是一个开放、Agent 中立、机制中立的人机协作系统
 
 [English](README.md)
 
-> **当前公开推荐版本：**使用不可变的
-> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1)
-> 公开预览版。当前 `main` 正在进行产品重塑，不是安装或发布候选；
-> 未发布的 preview.2 路线已经退役。
-
-> GitHub 可能仍把历史 v2.0 标成“最新”，因为
-> [预发行版不能获得该标记](https://docs.github.com/en/rest/releases/releases#update-a-release)；
-> 它不是本项目给新用户的当前推荐版本。
+> **当前版本：**当不可变的
+> [`v3.0.0`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v3.0.0)
+> tag 存在时，使用该正式版；在此之前，最后一个已发布、可安装版本仍是
+> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1)。
+> 不要从持续移动的 `main` checkout 安装。
 
 ---
 
-## 公开预览版
+## 发布成熟度与证据
 
-本次发布是公开预览版，不是生产稳定性声明。当前测试集有意保持有限，因此更多用户的代表性使用、反例和失败记录属于下一层证据。
+v3.0.0 是项目正式版，不再使用预发行标签。“正式版”只表示这个精确仓库、
+包、有限声明与已声明的本地/托管门禁通过，不表示普遍行为、生产安全或所有
+Agent 与客户端表面都已证明。测试集仍有意保持有限，因此代表性使用、反例
+与失败属于持续证据。
 
 请在 [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues) 中提供精确 tag 与 revision、宿主与版本、安装方式、目标、初始状态、实际结果、人工介入、物质影响或残留，以及仍未知的内容。
 
@@ -31,22 +31,56 @@ YIYUAN Accord 是一个开放、Agent 中立、机制中立的人机协作系统
 
 ---
 
-## 使用已发布预览版
+## 30 秒开始
 
-不要从当前 `main` 安装。当前公开推荐版本是不可变的
-[`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1)；
-请按该 tag 的
-[已发布 README](https://github.com/yiheng8023/YIYUAN-Accord/blob/v2.0.1-preview.1/README.zh-CN.md)
-执行精确的安装、验证、更新与移除路径。
+### 安装前确认
 
-`main` 中的 `v2.0.1-preview.2` 包只是未发布的历史检查点。其发布路线
-已在发布前退役；它不是新的推荐版本、滚动 tag 或面向普通用户的本地候选
-安装入口。
+使用当前支持插件的 Codex 或 Claude 表面，具备访问公开仓库的网络、修改
+用户级插件配置的权限，并在安装后新建任务或会话。Accord 不绑定某个固定
+宿主或模型版本；请记录实际使用的版本与路线。
 
-审查源码或参与贡献前，请先读
-`product/reshaping-guidance.json` 与
-`docs/operations/CONTINUATION.md`。当前仓库结构有效，但有意不满足候选
-就绪条件。
+### Codex
+
+安装精确、不可变的 tag：
+
+```powershell
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.0.0
+codex plugin add yiyuan-accord-codex@yiyuan-accord
+```
+
+重启桌面端或新建 CLI 会话，打开 **Plugins** 或运行 `/plugins`，确认
+`YIYUAN Accord for Codex` 与 `deliver-demand-driven-outcome` 已出现。
+
+### Claude 客户端与 Claude Code
+
+在 Claude Desktop Chat、Claude 网页聊天或 Cowork 中打开
+**Customize > Plugins**，把
+`https://github.com/yiheng8023/YIYUAN-Accord` 添加为个人 marketplace，
+安装 **YIYUAN Accord for Claude**，新建聊天并确认
+`deliver-demand-driven-outcome` 可见。
+
+Claude Code 持久安装：
+
+```powershell
+claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.0.0
+claude plugin install yiyuan-accord-claude@yiyuan-accord
+```
+
+仓库根目录是 marketplace，包子目录不是。仅用于单次开发会话时，从仓库
+根目录运行 `claude --plugin-dir ./plugins/yiyuan-accord-claude`，并在
+`/help` 中确认 `/yiyuan-accord-claude:deliver-demand-driven-outcome`。
+checkout 变化后使用 `/reload-plugins`。
+
+### 安装改变什么
+
+安装只会让一个渐进式披露的动态适配 Skill 可用。v3 包本身不新增 Runtime、
+Hook、MCP server、App、状态存储、后台进程或自动项目修改。这只是当前包
+的事实，不是产品的永久禁区；后续任务可在事实与权限成立时采用或提出其他
+有界机制。
+
+安装、启用和可见不等于激活。正常工作中，宿主可为相关的非简单任务隐式
+调用 Skill；原生路线健康充分时它应保持安静。只有确定性暴露检查才需要
+显式选择 Skill。
 
 ---
 
@@ -80,18 +114,37 @@ Accord 不是要求用户额外学习的提示词模板，普通请求就足够�
 
 ---
 
-## 当前开发 checkout
+## 更新、回滚、移除与源码验证
 
-当前 checkout 用于审查和重塑，不面向普通安装。其 Codex 与 Claude 包保留
-preview.2 检查点，以便继续核验精确分发内容与宿主观测；它们不定义未来
-机制集合。
+请在执行安装的同一表面确认生命周期状态：使用
+`codex plugin list --json`、`claude plugin list --json` 或
+**Customize > Plugins**。不同表面的列表差异是应记录的宿主状态，不是另一
+安装必然失败的证明。
 
-已经安装并启用的 preview.2 插件可以继续作为潜在能力存在。安装或可见不
-代表每条消息都会激活，也不证明有效行为或产品价值。不要从 `main`
-重新安装；也不要把禁用当成隔离干扰的唯一办法。未来有行为变化的候选必须
-证明适用性、隔离、热更新或原子替换、健康检查和回滚。
+不可变 ref 不会自动前进。Codex 更新或回滚时，先移除已安装包与
+marketplace，再安装目标精确 tag：
 
-贡献者可以运行：
+```powershell
+codex plugin remove yiyuan-accord-codex@yiyuan-accord
+codex plugin marketplace remove yiyuan-accord
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref VERSION_TAG
+codex plugin add yiyuan-accord-codex@yiyuan-accord
+```
+
+Claude Code 使用宿主生命周期命令；Claude 客户端使用
+**Customize > Plugins** 中的对应操作：
+
+```powershell
+claude plugin marketplace update yiyuan-accord
+claude plugin update yiyuan-accord-claude@yiyuan-accord
+claude plugin uninstall yiyuan-accord-claude@yiyuan-accord
+```
+
+宿主支持时优先使用原生热加载；否则采用原子化版本替换、健康检查，并在
+失败时恢复上一精确版本。不得移动已有 tag，也不得用直接编辑全局宿主配置
+代替受支持的生命周期命令。
+
+源码验证应 clone 精确 tag，并在 Python 3.10–3.14 下运行：
 
 ```powershell
 python -B -m yiyuan_accord verify --root . --json
@@ -99,8 +152,8 @@ python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 ```
 
-这些检查验证当前仓库结构和历史包的一致性，不会安装插件、证明有效行为、
-验证重塑后的产品、授予发布权限或证明生产安全。
+这些检查验证仓库与包的确定性一致性，不会安装插件、证明隐式激活、建立
+现场价值、授予发布权限或证明生产安全。
 
 ---
 
@@ -115,8 +168,8 @@ python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 - **派生术语与边界**：[`CONTEXT.md`](CONTEXT.md)
 - **数据驱动的通用验证器**：
   [`yiyuan_accord/control.py`](yiyuan_accord/control.py)
-- **历史 preview.2 参考投影**：Codex 与 Claude 包；其精确行为证据仍分别
-  绑定具体宿主表面，不限制未来机制选择
+- **v3 动态适配宿主投影**：Codex 与 Claude 包统一使用
+  `deliver-demand-driven-outcome` Skill 名，并保留宿主专用 manifest
 - **帮助与干扰代表任务**：
   [`evals/golden-tasks.json`](evals/golden-tasks.json)
 
@@ -128,7 +181,7 @@ python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 
 ---
 
-## 当前重塑边界
+## 动态适配产品边界
 
 Accord 不受 Codex、Claude 或任何具体 Agent 能力面的限制。每个具体 Agent
 及其宿主能力面都只是可替换适配器和带新鲜度边界的观测快照。可移植产品
@@ -141,14 +194,11 @@ Skill、插件、App、MCP、Hook、配置、状态、Runtime、云端载体或�
 没有不必要介入，存在残余缺口时则可以引入具备干扰、更新、回滚和退役控制
 的局部机制。
 
-当前验证器只证明本次活动重塑状态的结构一致性，以及保留历史包证据的完整
-性；它报告当前验收为 0/8、没有发布候选。不可变的 v2.0 与
-v2.0.1-preview.1 仍是公开历史事实；preview.2 未曾发布，不得打 tag。
-
-已完成的重塑增量把一个真实结果映射为计划、因地制宜的工序、验收和精简
-目标投影，并回放了最小动态适配纵向切片。下一项有界工作，是在不继承
-preview.2 权威或包就绪状态的前提下，把这份已接受的活动基线另行形成
-`v3.0.0` 正式发布候选。详见
+v3 仓库候选把一个真实结果映射为计划、因地制宜的工序、验收和精简目标
+投影；在有界 GT-11 切片上回放精确动态适配 Skill；并要求八项仓库验收
+全部满足。canonical verifier 不评估托管、人类、tag、公开 Release 或清理
+完成态；这些门禁仍对同一 SHA 保持外部、严格有序。不可变的 v2.0 与
+v2.0.1-preview.1 仍是公开历史事实；preview.2 未曾发布，不得打 tag。详见
 [`product/reshaping-guidance.json`](product/reshaping-guidance.json) 与
 [`docs/operations/CONTINUATION.md`](docs/operations/CONTINUATION.md)。
 
@@ -188,4 +238,4 @@ YIYUAN Accord 是独立的社区开源项目，不是 OpenAI、Anthropic、Codex
 
 用户仍需自行审查 Agent 输出，并遵守适用法律、合同、宿主条款、许可证和组织政策。
 
-本软件按 Apache-2.0 许可证以“按原样”方式提供，不附带任何保证或条件，详见 [`LICENSE`](LICENSE)。本公开预览版不证明生产安全或对特定用途的适用性。
+本软件按 Apache-2.0 许可证以“按原样”方式提供，不附带任何保证或条件，详见 [`LICENSE`](LICENSE)。项目正式发布不证明生产安全或对特定用途的适用性。

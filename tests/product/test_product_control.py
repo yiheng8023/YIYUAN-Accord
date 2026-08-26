@@ -268,16 +268,6 @@ class ProductControlTests(unittest.TestCase):
                     'id', 'state', 'dependsOn', 'acceptanceIds'
                 )} for step in mapping['process']['orderedSteps']],
             )
-            self.assertIn(
-                'suspended', acceptance['candidateVerification']['rule']
-            )
-            self.assertIn(
-                'No reshaped release candidate currently exists',
-                next(item for item in acceptance['criteria'] if item['id'] == 'R4')[
-                    'statement'
-                ],
-            )
-
     def test_authority_and_static_suite_mutations_fail_closed(self):
         cases = (
             (C, 'constitution top-level shape', lambda v: v.update(extra=True)),
@@ -407,8 +397,8 @@ class ProductControlTests(unittest.TestCase):
             )
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
-        observation = _read(ROOT, OBS[1])['projectionIdentity']
-        current = host_check(ROOT, 'claude-code')['details']
+        observation = _read(ROOT, CURRENT_GT11_OBSERVATION)['projectionIdentity']
+        current = host_check(ROOT, 'codex')['details']
         presentation_drift = dict(
             observation,
             manifestSha256='0' * 64,
@@ -416,7 +406,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             projection_observation_errors(
-                presentation_drift, current, 'presentation-only', 'claude-code'
+                presentation_drift, current, 'presentation-only', 'codex'
             ),
             [],
         )
@@ -424,12 +414,12 @@ class ProductControlTests(unittest.TestCase):
         changed_locator['skill'] = 'plugins/changed/SKILL.md'
         self.assert_has(
             projection_observation_errors(
-                observation, changed_locator, 'behavior-bearing', 'claude-code'
+                observation, changed_locator, 'behavior-bearing', 'codex'
             ),
             'skill does not match current adapter',
         )
         with _fixture() as root:
-            locator = OBS[1]
+            locator = CURRENT_GT11_OBSERVATION
             observation = _read(root, locator)
             observation['projectionIdentity']['skillSha256'] = '0' * 64
             _write(root, locator, observation)
@@ -696,7 +686,7 @@ class ProductControlTests(unittest.TestCase):
             readme = (root / 'README.md').read_text(encoding='utf-8')
             (root / 'README.md').write_text(
                 readme.replace(
-                    'Current public recommendation',
+                    'Current release',
                     'Current experimental recommendation',
                     1,
                 ),
@@ -707,8 +697,8 @@ class ProductControlTests(unittest.TestCase):
             text = path.read_text(encoding='utf-8')
             path.write_text(
                 text.replace(
-                    'No current release candidate',
-                    'A current release candidate exists',
+                    'v3.0.0 full-release candidate',
+                    'v3.0.0 draft only',
                     1,
                 ),
                 encoding='utf-8',
@@ -834,16 +824,16 @@ class ProductControlTests(unittest.TestCase):
                 self.assertIsNone(RELEASE_RE.fullmatch(invalid))
 
         self.rejected(
-            P, 'active reshaping must not select',
+            P, 'distributionVersion must be a v-prefixed semantic version',
             lambda v: v.update(distributionVersion='v2.0.01'),
         )
         self.rejected(
-            P, 'active reshaping must not select',
+            P, 'release must name one v-prefixed contract line',
             lambda v: v.update(release='v2.0.1'),
         )
         self.rejected(
-            P, 'active reshaping must not select',
-            lambda v: v.update(distributionVersion='v3.0.0'),
+            P, 'acceptance.distributionVersion does not match program',
+            lambda v: v.update(distributionVersion='v3.0.1'),
         )
         self.rejected(
             P, 'historicalRelease provenance is invalid',
@@ -858,15 +848,13 @@ class ProductControlTests(unittest.TestCase):
         self.rejected(
             P, 'required candidate systems are invalid',
             lambda v: v['releaseProcedure'].update(
-                requiredCandidateVerificationSystemIds=list(
-                    v['releaseProcedure']['candidateVerificationSystems']
-                )
+                requiredCandidateVerificationSystemIds=['codex-cloud']
             ),
         )
         self.rejected(
             A, 'publicRelease maturity does not match semantic version',
             lambda v: v['publicRelease'].update(
-                maturity='full-release', prerelease=False
+                maturity='public-preview', prerelease=True
             ),
         )
         with _fixture() as root:

@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "yiyuan-accord-claude",
   "displayName": "YIYUAN Accord for Claude",
-  "version": "2.0.1-preview.2",
-  "description": "Thin Claude Skill projection for the YIYUAN Accord portable collaboration reliability contract.",
+  "version": "3.0.0",
+  "description": "Adaptive Claude Skill projection for YIYUAN Accord outcome delivery.",
   "author": {
     "name": "yiheng8023",
     "url": "https://github.com/yiheng8023"

@@ -77,11 +77,11 @@ before releasing the source and keep one accountable writer for shared state.
 ## Host admission
 
 For evaluation or release, static-check this projection with
-`python -B -m yiyuan_accord host-check --adapter codex --json`, then run the
-declared representative tasks against the exact host and Skill. Static
-readiness, installation and enablement are not behavior or value evidence.
-**Static readiness is not behavior**. For
-ordinary work, do not impose that ceremony.
+`python -B -m yiyuan_accord host-check --adapter claude-code --json`, then run
+the declared representative tasks against the exact host, client surface and
+Skill. **Static readiness is not behavior**. Installation and enablement are not behavior or value
+evidence; Claude Code, Desktop, Chat and Cowork do not inherit one another's
+behavior claims. For ordinary work, do not impose that ceremony.
 
 Apply H1–H10: official guidance first but conditional; native first; capability
 over version; effective over declared; unknown is first-class; drift is normal;

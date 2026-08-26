@@ -29,78 +29,61 @@ Then read, in order:
 
 - Canonical identity remains YIYUAN Accord / `yiyuan-accord` /
   `yiyuan_accord` / `https://github.com/yiheng8023/YIYUAN-Accord`.
-- The immutable `v2.0` and `v2.0.1-preview.1` tags and their exact evidence are
-  historical facts. Do not move, rewrite or reuse either tag.
-- The `v2.0.1-preview.2` tree is an unreleased historical checkpoint. Its
-  distribution repair may be reused as bounded evidence, but its runtime-free
-  product premise and release route were retired before publication by the
-  2026-08-25 correction.
-- No current release candidate exists. The selected next distribution target is
-  `v3.0.0` as a full release, not another preview; the major version reflects
-  the corrected product category and boundary. Current task-bound authority may
-  advance an evidence-backed non-release `main` checkpoint and prepare that
-  candidate, but it does not move historical tags or skip the new candidate's
-  remapped projections, evidence, ordered gates and exact human release
-  decision. The still-present `public-preview` procedure is suspended
-  preview.2 schema provenance until the v3 candidate replaces it.
-- `product/reshaping-guidance.json` is accepted revisable guidance for the next
-  plan, process, acceptance contract and goal-mode projection. It is not
-  permanent truth and cannot grant side-effect or release authority.
-- `program.status` is `active`. The consensus record, authority and domain
-  remapping, four-surface mapping and minimum adaptive vertical slice are
-  complete for this bounded increment. The structured goal projection is
-  `retired`, binds
-  `outcome.agent-owned-repository-repair` and derives a route
-  from live conditions; it is not a release route. The product remains active
-  between increments without inventing another work item. A future bounded
-  candidate proposal or material correction opens a new current increment.
-- The lightweight dynamic relation-graph direction has passed its bounded PoC:
-  `research/PROTOTYPE-dynamic-relation-graph.html` exhaustively evaluates all
-  action sequences through depth three (1,885 sequences, 117 normalized states,
-  zero invariant failures) and recovers a temporarily blocked remote route after
-  its conditions change. This validates only the derived-graph direction; it is
-  not product-value, host, scale, production or release evidence, and its stated
-  reopening conditions remain active.
-- A fresh host probe now resolves the preview.2 Codex Skill from the on-disk
-  plugin cache. This closes the earlier cache-path inconsistency only;
-  installation or visibility is not per-message activation, behavior proof or
-  product-value proof. Isolate and compare its interference when a later
-  behavior-bearing candidate exists.
-- The seven old representative observations now live only under
-  `representativeBehaviorPolicy.historicalEvidence`. No current acceptance
-  criterion cites them. They remain replay inputs and counterevidence, not proof
-  for `outcome.agent-owned-repository-repair`.
-- GT-11 (`adaptive-agent-owned-repository-repair`) is the first current Golden
-  Task for that outcome. Derive its task and evaluation-contract digests from
-  the current JSON at observation time rather than duplicating them here.
-  The current Codex-local observation is bound to one direct independent
-  sub-Agent result chain plus a separate exact filesystem postcheck. It covers
-  the disposable repair, compatible correction, route refusal, local fallback,
-  unrelated-state preservation, no-op, bounded comparison, corrected atomic
-  update fixture and cleanup. Supplemental events retain one current Claude
-  Code replay: its corrected artifact passed the observer's 2/2 fallback check,
-  but the process hit the evaluator's USD 0.30 ceiling before returning that
-  tool result, so autonomous Claude Code closeout remains inconclusive. The
-  installed Claude Desktop client has an official local Code-tab plugin route
-  but no current Accord in-app replay. Official OpenAI documentation establishes
-  exact repository checkout, setup or maintenance scripts, `AGENTS.md` and
-  repository `.agents/skills` as Codex Cloud carrier surfaces; it does not
-  establish direct installation of the local Codex plugin in Cloud. Future Cloud
-  admission therefore discovers the effective projection dynamically instead
-  of requiring plugin installation. The dirty current projection is absent from
-  the remote exact SHA, so a read-only Codex Cloud run would test the old
-  baseline. All exact task-owned system-temp fixtures were removed and observed
-  absent. These condition decisions do not establish Claude Desktop, Cloud,
-  field, production or release behavior.
-- The authority carrier is schema v3. Current `release` and
-  `distributionVersion` are null; immutable v2.0 and preview history is bound
-  under matching `historicalRelease` provenance in program and acceptance.
-  The canonical verifier reports no current release, and fresh GT-11 contracts
-  no longer inherit the superseded release line.
-- The completed baseline occupies 64 tracked files. The reviewed ceiling is 68
-  so a mandatory v3 release-note surface can be added while at least three file
-  slots remain; this is still materially below the 96-file pre-reshape baseline
-  and is a guardrail, not a growth target.
+- Immutable `v2.0` and `v2.0.1-preview.1` tags remain historical public
+  facts. The `v2.0.1-preview.2` tree remains an unreleased historical
+  checkpoint. This continuation does not move historical tags or reuse their
+  release authority.
+- Current authority selects a `v3.0.0 full-release candidate`, not another
+  preview. The major version records the incompatible correction from a
+  runtime-free thin-contract premise to a small portable kernel plus an
+  adaptive, mechanism-neutral outcome-delivery system. Full release is not a
+  universal correctness, cross-host equivalence or production-safety claim.
+- `program.status` is `ready`; all eight repository criteria are declared
+  verified only when the canonical verifier accepts the current exact evidence
+  and a clean committed checkout. Dirty work, a passing unit test, a commit or a
+  push cannot satisfy later task-time gates.
+- Codex and Claude now expose the shared portable Skill name
+  `deliver-demand-driven-outcome` through host-qualified packages at version
+  `3.0.0`. The packages currently add no Runtime, Hook, MCP server, App or
+  state store; this is a versioned package fact, not a permanent prohibition.
+- Installation and enablement expose latent capability. They do not imply
+  per-message activation, behavior, value or cross-client equivalence. A
+  sufficient healthy native route is a valid no-op.
+- The local Codex cache may still expose the installed preview.2 package until
+  a supported post-release update is performed. That external host state does
+  not rewrite repository v3 identity and is not v3 behavior evidence.
+- GT-11 (`adaptive-agent-owned-repository-repair`) is the one required current
+  v3 representative task. Its observation must bind the exact current Codex
+  Skill, Golden Task, evaluation contract, independent poststate and complete
+  public source record. v2 observations and preview.2 probes remain exact
+  historical counterevidence; they are not rewritten to match v3. The retained
+  `GT-07:cleanup` failure continues to narrow the claim ceiling.
+- Current Claude behavior remains unclaimed. Claude Code, Desktop Chat, web Chat
+  and Cowork are separate evidence surfaces; installation, official support or
+  one surface's result cannot attest another.
+- Codex Cloud is a required hosted candidate system because the v3 finite claim
+  includes exact-revision reproducibility. It need not install the local plugin:
+  admission dynamically selects the lowest-cost effective exact-revision
+  projection among a repository Skill, `AGENTS.md`, setup or maintenance
+  bootstrap, established native plugin support or bounded degradation. A
+  condition-limited Cloud failure remains scoped evidence, not a permanent
+  product or future-host failure.
+- The lightweight dynamic relation-graph direction has passed only its bounded
+  PoC: `research/PROTOTYPE-dynamic-relation-graph.html` explored 1,885 action
+  sequences, 117 normalized states and zero invariant failures through depth
+  three. The graph remains a derived in-memory or ignored-cache view rather
+  than a second authority source or mandatory graph database.
+- The tracked-file ceiling is 68 against a 64-file candidate surface after the
+  v3 release note replaces no product capability. At least three slots and five
+  percent product-code/test headroom must remain; the guardrail is not a growth
+  target or deletion KPI.
+- Release order is fixed for the unchanged exact SHA: clean repository
+  candidate; exact local verification and independent review; push; Ubuntu,
+  Windows, macOS GitHub Actions and ordinary Codex Cloud verification; separate
+  named-human decision; lightweight `v3.0.0` tag and non-prerelease GitHub
+  Release with no assets; public verification, supported local plugin update,
+  cleanup and final local replay. See the canonical machine-readable gates for
+  the exact conditions.
 
 ## Product direction
 
@@ -153,28 +136,27 @@ for order and lifecycle. Its current single chain is:
 1. `migrate-version-neutral-active-carrier` — completed.
 2. `bind-current-gt11-contract` — completed.
 3. `build-disposable-repair-fixture` — completed.
-4. `run-codex-local-gt11` — completed; the fresh current-projection observation
-   uses a fail-closed direct-independent-Agent binding without reading private
-   session logs, and the exact fixture cleanup is verified.
+4. `run-codex-local-gt11` — completed only when the current v3 Skill's fresh
+   observation uses a fail-closed direct-independent-Agent binding without
+   reading private session logs and verifies exact fixture cleanup.
 5. `compare-noop-help-interference-and-update` — completed for the bounded local
    slice. The native-sufficient arm made zero changes; GT-11 supplies the
    residual-help arm. The first update fixture retained FC-02 byte drift, the
    corrected atomic version-pointer replay passed update, failed health,
    rollback and cleanup, and FC-03 retains one observer-cwd error. This is not
    evidence of live Codex hot update or causal comparative product value.
-6. `replay-condition-fit-carriers` — completed as a condition-fit decision, not
-   a cross-carrier PASS. Claude Code produced a correct postchecked artifact but
-   autonomous closeout remained budget-bounded; Claude Desktop and Codex Cloud
-   remain scoped current unknowns for the reasons recorded above. Cloud replay
-   selects among native plugin support if established, repository Skill,
-   `AGENTS.md`, setup or maintenance bootstrap and bounded degradation, then
-   verifies the exact revision, actual exposure, behavior and residue. A carrier's
-   current insufficiency is neither permanent retirement nor universal failure.
-7. `independent-review-and-bound-claim` — completed; independent review permits
-   a bounded future candidate proposal. No candidate or version is selected in
-   repository authority. A separately authorized non-release `main` checkpoint
-   may preserve this completed baseline; a later tag or Release must still bind
-   its exact candidate, hosted evidence, claim ceiling and human decision.
+6. `replay-condition-fit-carriers` — completed as a condition-fit scope
+   decision, not a cross-carrier PASS. Current Claude behavior remains
+   unclaimed. Codex Cloud is now an external exact-candidate gate rather than
+   repository evidence. Cloud replay selects among an established native plugin,
+   repository Skill, `AGENTS.md`, setup or maintenance bootstrap and bounded
+   degradation, then verifies the exact revision, actual exposure, behavior and
+   residue. A carrier's current insufficiency is neither permanent retirement
+   nor universal failure.
+7. `independent-review-and-bound-claim` — completed for selecting the bounded
+   v3 candidate shape and finite claim. The later exact-local gate still requires
+   an independent review of the final clean SHA before push; hosted evidence,
+   named-human authorization, tag, Release and cleanup remain downstream.
 
 ## Evidence replay
 
@@ -187,7 +169,7 @@ Recompute or replay:
 - representative outcome, no-op, correction, continuity, recovery and cleanup;
 - update, rollback and residue;
 - exact-revision local and Codex Cloud reproducibility;
-- any future release claim and lifecycle.
+- the current v3 release claim and lifecycle.
 
 Old observations remain exact historical facts only for their original adapter,
 Skill, prompt, model route, host, session and claim limit. Do not edit or rename

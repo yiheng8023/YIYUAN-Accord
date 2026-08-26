@@ -2,8 +2,8 @@
   "schema": 3,
   "id": "yiyuan-accord-adaptive-reshape-program",
   "productId": "yiyuan-accord",
-  "release": null,
-  "distributionVersion": null,
+  "release": "v3.0",
+  "distributionVersion": "v3.0.0",
   "historicalRelease": {
     "releaseLine": "v2.0",
     "releasedTags": ["v2.0", "v2.0.1-preview.1"],
@@ -15,7 +15,7 @@
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "maintenancePlan": "CONTRIBUTING.md",
-  "status": "active",
+  "status": "ready",
   "inputEvidence": [
     {
       "id": "project-refactor-audit-2026-08-20",
@@ -69,17 +69,17 @@
     }
   ],
   "increment": {
-    "id": "increment.product-premise-reset-and-adaptive-system-reshape",
+    "id": "increment.v3-full-release-candidate",
     "state": "completed",
     "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "observedProblem": "The preview.2 route repaired host presentation but preserved a product premise that treated runtime-free thin projections as correctness. That premise removed much of the intended near-zero-burden capability discovery, configuration, routing, topology, continuity and cross-carrier experience. It also risked turning subtraction, fixed file budgets and a small extension ecosystem into permanent product limits rather than revisable cost controls.",
-    "hypothesis": "A small portable invariant kernel plus a mechanism-neutral adaptive system can preserve authority, evidence honesty, continuous reconciliation and non-interference while restoring Agent-owned capability discovery, configuration, code and conversation topology, local and cloud carriers, dynamic route selection, recovery, hot update and retirement. Schema-validated JSON can carry stable semantics and ephemeral observations can generate an on-demand graph; a graph database remains unnecessary until representative query evidence proves otherwise.",
+    "observedProblem": "The adaptive reshape baseline corrected the product premise, but its public packages still carried the retired preview.2 version, thin-contract presentation and divergent Claude Skill name. Publishing that surface would under-deliver the intended Agent-owned capability discovery, configuration, routing, topology, continuity, update and recovery experience.",
+    "hypothesis": "A v3.0.0 full-release candidate can express the incompatible product-boundary correction honestly through one host-consistent, progressively disclosed adaptive Skill; preserve installation-as-latent-capability and demand-driven activation; keep mechanisms condition-bound; and pass exact local, independent, hosted, human, tag and cleanup gates without claiming universal or cross-host behavior.",
     "representativeOutcome": {
       "id": "outcome.agent-owned-repository-repair",
       "statement": "Given one bounded software change request and an accessible disposable repository, the Agent delivers the requested verified behavior while preserving unrelated work and requiring the user only for consequential judgment or genuinely unavailable authority.",
       "startingState": "The concrete Agent, local or cloud carrier, model route, repository state, installed extensions, configuration and available capabilities are observed at task time and may be sufficient, degraded, unavailable or unknown.",
       "completion": "The requested behavior is externally verified at the claimed level; unauthorized effects are zero; avoidable user-operated discovery, routing, configuration, continuity, verification and cleanup steps are zero; material effects, burden, interference, unknowns and residue are reconciled.",
-      "claimLimit": "This is one representative adaptive repair slice. It does not prove universal software correctness, every Agent or carrier, broad field value, production safety or release readiness.",
+      "claimLimit": "This v3 candidate has one Codex-local adaptive repair plus deterministic package conformance; it does not prove universal correctness, every Agent or carrier, Claude behavior equivalence, broad field value or production safety.",
       "firstEvidenceSurfaces": [
         "codex-local",
         "codex-cloud-when-current-conditions-fit",
@@ -153,7 +153,7 @@
             "state": "completed",
             "dependsOn": ["replay-condition-fit-carriers"],
             "acceptanceIds": ["R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "An independent review reconciles the plan, ordered process, observations, failures, interference, residue and claim ceiling, then decides only whether the slice justifies proposing a future candidate; it does not select a version, publish, tag or release."
+            "completion": "An independent review reconciles the v3 plan, adaptive Skill and package surfaces, observations, failures, interference, update path, residue and claim ceiling, then decides whether the exact clean repository is a release candidate; it cannot grant hosted, human, tag or release completion."
           }
         ],
         "degradationRule": "A failed or unavailable route remains scoped evidence, triggers re-observation or an eligible alternative, and does not become universal product failure or permanent retirement."
@@ -194,7 +194,7 @@
       "fresh reshaping evidence is bound to the superseded v2.0 release line or the unreleased preview.2 distribution placeholder",
       "representative A-B evidence shows net burden, interference, cost or recovery risk greater than the delivered outcome benefit"
     ],
-    "finiteStopCondition": "Stop this planning increment after the accepted correction is captured without pretending to be permanent truth; conflicting preview.2 premises and release readiness are retired from active navigation; the constitution, program, acceptance and deterministic goal projection describe one mechanism-neutral adaptive product direction; one smallest end-to-end discovery-and-routing slice and its local, Codex Cloud, Claude Code and available Claude-client evidence replay are specified; and a new candidate version is selected only after those boundaries pass independent review. No tag, push or release is part of this increment without fresh named authority.",
+    "finiteStopCondition": "Stop this repository increment when v3.0.0 is a clean full-release candidate with aligned authority, adaptive host packages, bilingual onboarding, exact current representative evidence, deterministic conformance, rollback and independent review. Hosted systems, human authorization, tag, public Release and cleanup remain ordered external gates for the unchanged SHA.",
     "workItems": [
       {
         "id": "work.product-premise-reset-and-adaptive-system-reshape",
@@ -223,7 +223,7 @@
             "id": "prove-minimum-adaptive-vertical-slice",
             "state": "completed",
             "acceptanceIds": ["R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[prove-minimum-adaptive-vertical-slice] Before fresh observation, the active evaluation carrier no longer binds reshaping evidence to the superseded v2.0 release line or unreleased preview.2 placeholder. Then one smallest end-to-end slice demonstrates live discovery, route selection, authorized execution, no-op or degradation, continuity, verification, cleanup and bounded learning across the condition-fit local, cloud and client surfaces with interference and update rollback evidence; only then may a future exact candidate and release route be proposed."
+            "stopCondition": "[prove-minimum-adaptive-vertical-slice] The exact v3 adaptive Skill is replayed on one current Codex-local end-to-end slice with live discovery, route selection, authorized execution, no-op or degradation, continuity, verification, cleanup and bounded update rollback evidence; independent review then freezes only the repository candidate while hosted and release gates remain external."
           }
         ]
       }
@@ -236,9 +236,9 @@
       "github-actions-macos-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
       "codex-cloud": "https://chatgpt.com/codex/"
     },
-    "requiredCandidateVerificationSystemIds": ["codex-cloud"],
+    "requiredCandidateVerificationSystemIds": ["github-actions-ubuntu-latest", "github-actions-windows-latest", "github-actions-macos-latest", "codex-cloud"],
     "assetPolicy": "no-attached-assets",
-    "releaseChannel": "public-preview",
+    "releaseChannel": "full-release",
     "surfaceMarkers": {
       "AGENTS.md": [
         "Treat the user's latest bound goal",
@@ -249,14 +249,15 @@
         "without adding semantic authority"
       ],
       "README.md": [
-        "Current public recommendation",
-        "Do not install from the current `main` checkout",
-        "v2.0.1-preview.1",
-        "unreleased historical checkpoint",
+        "Current release",
+        "Never install from a moving `main` checkout",
+        "v3.0.0",
+        "Start in 30 seconds",
+        "deliver-demand-driven-outcome",
         "product/reshaping-guidance.json",
         "python -B -m yiyuan_accord verify --root . --json",
         "any other concrete Agent",
-        "does not imply per-message activation",
+        "do not imply activation",
         "Voluntary sponsorship and support",
         "docs/assets/sponsoring/wechat-pay.png",
         "docs/assets/sponsoring/alipay.png",
@@ -264,14 +265,15 @@
         "Disclaimer and compliance"
       ],
       "README.zh-CN.md": [
-        "当前公开推荐版本",
-        "不要从当前 `main` 安装",
-        "v2.0.1-preview.1",
-        "未发布的历史检查点",
+        "当前版本",
+        "不要从持续移动的 `main` checkout 安装",
+        "v3.0.0",
+        "30 秒开始",
+        "deliver-demand-driven-outcome",
         "product/reshaping-guidance.json",
         "python -B -m yiyuan_accord verify --root . --json",
         "任何具体 Agent 能力面",
-        "每条消息",
+        "安装、启用和可见不等于激活",
         "自愿赞助与支持",
         "docs/assets/sponsoring/wechat-pay.png",
         "docs/assets/sponsoring/alipay.png",
@@ -300,7 +302,7 @@
       ".claude-plugin/marketplace.json": [
         "Official YIYUAN Accord plugin marketplace.",
         "./plugins/yiyuan-accord-claude",
-        "2.0.1-preview.2"
+        "3.0.0"
       ],
       "docs/architecture.md": [
         "one small portable kernel with an adaptive",
@@ -321,7 +323,7 @@
       "docs/operations/CONTINUATION.md": [
         "Recover live Git",
         "Codex Cloud reproducibility",
-        "No current release candidate",
+        "v3.0.0 full-release candidate",
         "does not move historical tags"
       ]
     },
@@ -331,62 +333,62 @@
         "dependsOn": [],
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "completionOperand": null,
-        "condition": "Suspended while the product premise is remapped. A future repository candidate must bind one new plan, context-tailored process, acceptance contract, goal projection, adaptive vertical slice, exact version and evidence set; the preview.2 checkpoint cannot satisfy this gate."
+        "condition": "One locally committed clean v3.0.0 full-release candidate aligns the schema-v3 authority, adaptive Codex and Claude packages, bilingual installation and lifecycle guidance, exact current GT-11 observation, release notes, verifier and tests; all eight repository criteria are verified, historical tags remain immutable and no known blocker or task residue remains."
       },
       {
         "id": "exact-local-verification-and-review",
         "dependsOn": ["repository-candidate"],
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "Reserved for a future exact candidate. Its local gate must be declared from the remapped claims and include canonical verification, full regression, independent specification and implementation review, source comparison, representative outcome and interference replay, update or replacement rollback, residue and claim control before any push is considered."
+        "condition": "On the unchanged clean v3 candidate, the goal carrier directly runs canonical verification, both host checks, all 18 product tests, Claude strict validation, actionlint, JSON, link, identity, diff and residue checks; compares the publishable GT-11 source with original host or session records; and obtains independent specification, implementation and standards review of the adaptive Skill, context-isolated, outcome-bound, identity-neutral representative behavior, interference, update or replacement rollback and claim ceiling. Any P0 or P1 blocks; only after this gate passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
         "dependsOn": ["exact-local-verification-and-review"],
         "acceptanceIds": ["R4", "Q2", "Q3"],
         "completionOperand": "exactCandidateHostedVerification",
-        "condition": "Reserved for a future exact pushed candidate. Required hosted systems and client surfaces are selected from the claim and current environment rather than inherited from preview.2; Codex Cloud is a first-class isolated carrier, and unavailable optional systems remain explicit unknowns."
+        "condition": "After push, the unchanged v3 SHA must pass Ubuntu, Windows and macOS GitHub Actions plus an ordinary Codex Cloud exact-revision run. Cloud dynamically uses an effective repository Skill, AGENTS.md, setup or maintenance bootstrap, native plugin support if established, or bounded degradation; setup success alone is not behavior proof. Claude client surfaces remain scoped unless separately observed and are not required for the finite v3 claim."
       },
       {
         "id": "exact-human-release-authorization",
         "dependsOn": ["exact-candidate-hosted-verification"],
         "acceptanceIds": ["R4", "Q1"],
         "completionOperand": "namedHumanReleaseAuthorization",
-        "condition": "Reserved for a future unchanged candidate after its declared hosted gate passes. Present the exact SHA, claim ceiling, failures, unknowns and continuing lanes to a named accountable human; the decision preserves a real veto and remains external to the candidate."
+        "condition": "After all four required hosted systems pass on the unchanged SHA, present the exact revision, finite claim ceiling, retained failures, Claude unknowns and continuing evidence lanes to the named accountable human; the decision preserves a real veto and remains external to the repository."
       },
       {
         "id": "exact-tagged-public-release",
         "dependsOn": ["exact-human-release-authorization"],
         "acceptanceIds": ["R4"],
         "completionOperand": "exactTaggedPublicRelease",
-        "condition": "The preview.2 tag and GitHub prerelease are prohibited. A future exact version may enter this gate only after its own hosted evidence and fresh named-human publication authority; existing tags remain immutable."
+        "condition": "After exact hosted verification and named-human authorization, create one lightweight v3.0.0 tag and a non-draft, non-prerelease GitHub Release with the tracked release body and no attached assets; never move or reuse an existing tag."
       },
       {
         "id": "release-verification-and-cleanup",
         "dependsOn": ["exact-tagged-public-release"],
         "acceptanceIds": ["R4", "Q4"],
         "completionOperand": "releaseVerificationAndCleanup",
-        "condition": "Reserved for a future authorized release. The goal carrier verifies its exact remote tag, maturity, body, asset policy and public claim, removes task-created resources, confirms residue is absent and replays the declared local checks."
+        "condition": "The goal carrier directly verifies the remote and local v3.0.0 tag SHA, non-prerelease maturity, Latest eligibility, tracked body, finite claim ceiling and zero-asset policy; removes task-created Cloud or evaluator resources, confirms repository and task residue are absent, and replays local verification."
       }
     ],
-    "rule": "This ordered gate shape is suspended provenance, not an active preview.2 route. A future candidate must remap its systems and conditions before use, then execute them in order. A failure, correction, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, unavailable optional systems remain unknown, and no artifact or earlier gate is promoted into a later effect."
+    "rule": "Execute the v3.0.0 full-release gates strictly in order. A failure, correction, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, optional unclaimed client surfaces remain explicit unknowns, and no plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
   },
   "goalModePrompt": {
     "state": "retired",
     "authority": "derived-from-current-reviewable-authority-set",
-    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"representative-outcome-observed-with-bounded-evidence-and-reconciled-effects\",\"directive\":\"Deliver the bound representative outcome through a live, minimum-sufficient and authorized route; own avoidable mechanics; refresh on material change; verify the consequence and leave reconciled state.\",\"evidenceSurfaces\":[\"codex-local\",\"codex-cloud-when-current-conditions-fit\",\"claude-code\",\"available-claude-client-when-effective\"],\"outcome\":{\"claimLimit\":\"This is one representative adaptive repair slice. It does not prove universal software correctness, every Agent or carrier, broad field value, production safety or release readiness.\",\"completion\":\"The requested behavior is externally verified at the claimed level; unauthorized effects are zero; avoidable user-operated discovery, routing, configuration, continuity, verification and cleanup steps are zero; material effects, burden, interference, unknowns and residue are reconciled.\",\"id\":\"outcome.agent-owned-repository-repair\",\"statement\":\"Given one bounded software change request and an accessible disposable repository, the Agent delivers the requested verified behavior while preserving unrelated work and requiring the user only for consequential judgment or genuinely unavailable authority.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"Q2\",\"Q4\"],\"dependsOn\":[],\"id\":\"migrate-version-neutral-active-carrier\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"migrate-version-neutral-active-carrier\"],\"id\":\"bind-current-gt11-contract\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"bind-current-gt11-contract\"],\"id\":\"build-disposable-repair-fixture\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"build-disposable-repair-fixture\"],\"id\":\"run-codex-local-gt11\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R2\",\"R3\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"run-codex-local-gt11\"],\"id\":\"compare-noop-help-interference-and-update\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R2\",\"R3\",\"Q2\",\"Q4\"],\"dependsOn\":[\"compare-noop-help-interference-and-update\"],\"id\":\"replay-condition-fit-carriers\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"replay-condition-fit-carriers\"],\"id\":\"independent-review-and-bound-claim\",\"state\":\"completed\"}],\"semantics\":\"At each material change, derive the lowest-net-burden route that satisfies the current outcome under observed capability, authority, trust, data, cost, topology and evidence conditions; a healthy sufficient native route is a passing no-op.\",\"work\":[\"record-revisable-reshaping-consensus\",\"remap-authority-domain-and-lifecycle\",\"map-plan-process-acceptance-and-goal-projection\",\"prove-minimum-adaptive-vertical-slice\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-fork\"]}",
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"representative-outcome-observed-with-bounded-evidence-and-reconciled-effects\",\"directive\":\"Deliver the bound representative outcome through a live, minimum-sufficient and authorized route; own avoidable mechanics; refresh on material change; verify the consequence and leave reconciled state.\",\"evidenceSurfaces\":[\"codex-local\",\"codex-cloud-when-current-conditions-fit\",\"claude-code\",\"available-claude-client-when-effective\"],\"outcome\":{\"claimLimit\":\"This v3 candidate has one Codex-local adaptive repair plus deterministic package conformance; it does not prove universal correctness, every Agent or carrier, Claude behavior equivalence, broad field value or production safety.\",\"completion\":\"The requested behavior is externally verified at the claimed level; unauthorized effects are zero; avoidable user-operated discovery, routing, configuration, continuity, verification and cleanup steps are zero; material effects, burden, interference, unknowns and residue are reconciled.\",\"id\":\"outcome.agent-owned-repository-repair\",\"statement\":\"Given one bounded software change request and an accessible disposable repository, the Agent delivers the requested verified behavior while preserving unrelated work and requiring the user only for consequential judgment or genuinely unavailable authority.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"Q2\",\"Q4\"],\"dependsOn\":[],\"id\":\"migrate-version-neutral-active-carrier\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"migrate-version-neutral-active-carrier\"],\"id\":\"bind-current-gt11-contract\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"bind-current-gt11-contract\"],\"id\":\"build-disposable-repair-fixture\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"build-disposable-repair-fixture\"],\"id\":\"run-codex-local-gt11\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R2\",\"R3\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"run-codex-local-gt11\"],\"id\":\"compare-noop-help-interference-and-update\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R2\",\"R3\",\"Q2\",\"Q4\"],\"dependsOn\":[\"compare-noop-help-interference-and-update\"],\"id\":\"replay-condition-fit-carriers\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"replay-condition-fit-carriers\"],\"id\":\"independent-review-and-bound-claim\",\"state\":\"completed\"}],\"semantics\":\"At each material change, derive the lowest-net-burden route that satisfies the current outcome under observed capability, authority, trust, data, cost, topology and evidence conditions; a healthy sufficient native route is a passing no-op.\",\"work\":[\"record-revisable-reshaping-consensus\",\"remap-authority-domain-and-lifecycle\",\"map-plan-process-acceptance-and-goal-projection\",\"prove-minimum-adaptive-vertical-slice\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-fork\"]}",
     "workStageIds": ["record-revisable-reshaping-consensus", "remap-authority-domain-and-lifecycle", "map-plan-process-acceptance-and-goal-projection", "prove-minimum-adaptive-vertical-slice"],
     "releaseGateIds": ["repository-candidate", "exact-local-verification-and-review", "exact-candidate-hosted-verification", "exact-human-release-authorization", "exact-tagged-public-release", "release-verification-and-cleanup"],
     "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
     "refreshTriggers": ["user-correction", "observed-failure-or-side-effect", "host-or-capability-drift", "dynamic-index-invalidation", "evidence-conflict", "later-rule-or-revision", "phase-or-authority-boundary", "repeated-same-purpose-repair"],
-    "hostLifecycleNote": "The v2.0.1-preview.2 packages and ordered release procedure remain an unreleased historical checkpoint; its runtime-free product premise and release route were retired before publication. Immutable v2.0 and v2.0.1-preview.1 tags and their exact observations remain bounded historical facts, not proof for the reshaped product. Installation or enablement exposes latent capability and does not prove per-message activation, value, no-op behavior or cross-surface equivalence. The prepared goal projection derives its route from live host, capability, authority, topology, cost and evidence conditions. On Codex Cloud the effective projection may be a native plugin if later established, a repository Skill, AGENTS.md, setup or maintenance bootstrap, or bounded degradation; no one carrier mechanism is a product prerequisite. Local, cloud and client carriers are attempted only when their current conditions fit the task; inability on one carrier remains scoped evidence and implies no future version, push, tag or release."
+    "hostLifecycleNote": "v3.0.0 is a full-release repository candidate, not a universal behavior claim. Installation and enablement expose latent capability and do not prove per-message activation, value, no-op behavior or cross-surface equivalence. The adaptive Skill derives its route from live host, capability, authority, topology, cost and evidence conditions; Skills, plugins, Apps, MCPs, Hooks, settings, state, runtimes and cloud carriers remain replaceable mechanisms. Codex Cloud uses the effective exact-revision projection available there rather than requiring local plugin installation. Claude Code, Desktop, Chat and Cowork remain separate evidence surfaces. Hosted, human, tag, Release and cleanup completion remain external for the unchanged SHA."
   },
   "hostProjections": [
     {
       "id": "codex",
       "packageId": "yiyuan-accord-codex",
-      "packageVersion": "2.0.1-preview.2",
-      "packageSha256": "5ec504d2dfb885f5b7d7e5638026ef6f253e59859f171fec48a1ea37c7fdfc14",
+      "packageVersion": "3.0.0",
+      "packageSha256": "8fe54553b937b03d101f9cc399420297c7f79f88f3f59daf8ce3ac6aba51c657",
       "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "marketplace": ".agents/plugins/marketplace.json",
       "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -400,16 +402,16 @@
     {
       "id": "claude-code",
       "packageId": "yiyuan-accord-claude",
-      "packageVersion": "2.0.1-preview.2",
-      "packageSha256": "d54f1f4d4e6a96ac8be761905293937334582c4b603b2523b08d5cdd8341b4ad",
+      "packageVersion": "3.0.0",
+      "packageSha256": "da51f154f40036b120a1ad7dcd6c3d4e390b8b8995bd75d8631b4d2c2490acf2",
       "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
       "marketplace": ".claude-plugin/marketplace.json",
       "contract": "plugins/yiyuan-accord-claude/adapter.json",
-      "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md",
+      "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
       "metadataFiles": [],
       "maxSkillBytes": 6000,
       "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "earliest affected dependency boundary", "H1–H10", "L1–L7", "Static readiness is not behavior"],
-      "forbiddenPaths": ["plugins/yiyuan-accord-claude/hooks", "plugins/yiyuan-accord-claude/scripts", "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/references"]
+      "forbiddenPaths": ["plugins/yiyuan-accord-claude/hooks", "plugins/yiyuan-accord-claude/scripts", "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/references"]
     }
   ],
   "complexityBudget": {
@@ -433,7 +435,7 @@
       "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
-      "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-task/SKILL.md"
+      "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md"
     ],
     "digestBoundBinaryAssets": {
       "docs/assets/sponsoring/alipay.png": "491ee27d52797818f1cca756560bc239cf6150fe3327b0fd31728f7ce53327cd",

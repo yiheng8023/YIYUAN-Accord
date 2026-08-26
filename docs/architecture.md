@@ -3,8 +3,8 @@
 YIYUAN Accord combines one small portable kernel with an adaptive,
 mechanism-neutral outcome-delivery system. The 2026-08-25 direction is
 revisable guidance. Its active authority has completed the first remapping and
-adaptive vertical-slice replay; preview.2 package and release structures remain
-historical reference projections until a later candidate replaces them.
+adaptive vertical-slice replay. The v3 package surfaces are the current
+candidate projections; preview.2 remains an unreleased historical checkpoint.
 
 ~~~text
 latest bound user goal and corrections
@@ -133,10 +133,11 @@ release eligibility or completion.
 
 ## Host admission
 
-The current preview.2 reference projection consists of one host-native manifest,
-one small YIYUAN Accord adapter contract and one progressively disclosed Skill,
-plus only the metadata or presentation assets declared by that manifest. This
-describes the historical package, not a permanent product shape.
+Each current v3 projection consists of one host-native manifest, one small
+YIYUAN Accord adapter contract and one progressively disclosed adaptive Skill,
+plus only the metadata or presentation assets declared by that manifest. The
+current packages add no runtime, Hook, MCP server, App or state store; that is a
+versioned package fact, not a permanent product shape or mechanism prohibition.
 
 A future host adapter may use a Skill, plugin, App, MCP, Hook, configuration,
 state, runtime, cloud carrier or composed mechanism when the current host

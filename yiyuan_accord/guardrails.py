@@ -666,10 +666,10 @@ def projection_evidence_binding_errors(
         evidence = criterion.get("evidence") if isinstance(criterion, dict) else None
         if isinstance(evidence, list):
             groups.append((f"criteria[{criterion_index}].evidence", evidence))
-    policy = acceptance.get("representativeBehaviorPolicy")
-    historical = policy.get("historicalEvidence") if isinstance(policy, dict) else None
-    if isinstance(historical, list):
-        groups.append(("historicalEvidence", historical))
+    # Historical observations retain the projection bytes recorded at capture.
+    # Comparing them with a later adapter would erase provenance on every
+    # behavior-bearing Skill change. Their source and projection identity are
+    # still checked by historical_representative_errors.
     for prefix, evidence in groups:
         for evidence_index, item in enumerate(evidence):
             label = f"{prefix}[{evidence_index}]"

@@ -516,8 +516,20 @@ def representative_sample_errors(
     ) if isinstance(must_pass, list) else []
     if require_complete and failed_must_pass:
         errors.append(f"must-pass tasks failed: {failed_must_pass}")
+    policy = acceptance.get("representativeBehaviorPolicy", {})
+    historical = policy.get("historicalEvidence", []) if isinstance(policy, dict) else []
+    for item in historical if isinstance(historical, list) else []:
+        locator = item.get("locator") if isinstance(item, dict) else None
+        observation = read_json(root, locator, []) if _text(locator) else {}
+        task_id = observation.get("taskId") if isinstance(observation, dict) else None
+        claim = observation.get("claimLimit") if isinstance(observation, dict) else None
+        if _text(task_id) and isinstance(claim, dict) and claim.get("retainedFailure") is True:
+            exclusions.extend(
+                f"{task_id}:{value}" for value in claim.get("excludedClaims", [])
+                if _text(value)
+            )
     declared = acceptance.get("claimCeiling", {}).get("retainedBehaviorExclusions")
-    if require_complete and declared != sorted(exclusions):
+    if require_complete and declared != sorted(set(exclusions)):
         errors.append("retained behavior exclusions mismatch")
     for criterion in users:
         criterion_id = criterion.get("id")

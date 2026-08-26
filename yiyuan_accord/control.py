@@ -785,7 +785,7 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
         binding_contracts = representative_policy.get("postSessionBindingContracts")
         if (
             not isinstance(binding_contracts, dict) or not binding_contracts
-            or not set(binding_contracts).issubset(set(required_sample_ids))
+            or not set(binding_contracts).issubset(set(task_mappings))
             or any(
                 not isinstance(contract, list) or not contract or any(
                     not isinstance(spec, dict)

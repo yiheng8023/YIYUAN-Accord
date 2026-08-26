@@ -5,14 +5,14 @@
       "kind": "host-event-log",
       "taskId": "GT-11",
       "goldenTaskSha256": "1cb1fbd95a82cbde3a77f1b2ca1e242b1b9440c6b15d6fda3a141a9ce5d2632e",
-      "evaluationContractSha256": "9c6cc815c52f3cc81ef72e34a774fc3d451688cae2d86f0801e2f600f16a793e",
+      "evaluationContractSha256": "032ecbb9673a5bc4d1da6c2941db06929f4e4808e1b7cda25a5a631245114a6f",
       "hostIdentity": {
         "adapterId": "codex",
         "hostProduct": "Codex Desktop collaboration sub-Agent",
-        "hostVersion": "codex-cli 0.149.1",
-        "sessionId": "/root/gt11_independent_actor"
+        "hostVersion": "codex-cli 0.149.1; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "gt11-session-c1785448117a40e3859ffa0ed1a6d5e8"
       },
-      "capturedAt": "2026-08-26T01:45:00Z",
+      "capturedAt": "2026-08-26T03:55:00Z",
       "payload": {
         "captureProtocol": "direct-host-material-events-v1",
         "messages": [
@@ -20,380 +20,301 @@
             "kind": "message",
             "phase": "initial-task",
             "role": "user",
-            "text": "In the supplied disposable dirty repository, inspect the exact baseline, reproduce the failing primary check, make the smallest TASK.md-authorized repair, preserve UNRELATED.md and all prohibited effects, verify the primary route and stop before reading the later correction."
+            "text": "In the supplied disposable dirty repository, deliver the named behavior with the exact v3 Accord Skill, preserve unrelated work, verify the result and stop before the compatible correction."
           },
           {
             "kind": "message",
             "phase": "initial-result",
             "role": "assistant",
-            "text": "GT11-A-20260826-01: the independent Agent observed the exact baseline and failing check, changed only labeler.py to deduplicate normalized lowercase labels, passed the primary verification, preserved the unrelated SHA-256 and reported the bounded phase-A result."
+            "text": "The independent Agent inspected the dirty baseline, reproduced the failure, made the bounded repair, passed the primary check and preserved unrelated state."
           },
           {
             "kind": "message",
-            "phase": "correction",
+            "phase": "correction-and-degradation",
             "role": "user",
-            "text": "The compatible correction supersedes only lowercase output: preserve the first spelling while deduplicating case-insensitively. The primary verification route is now declared unavailable; recompute the route without repairing or bypassing it."
+            "text": "Preserve first original spelling while deduplicating case-insensitively. The primary route is now declared unavailable; recompute without repairing or bypassing it."
           },
           {
             "kind": "message",
-            "phase": "corrected-result",
+            "phase": "final-result",
             "role": "assistant",
-            "text": "GT11-B-20260826-01: the independent Agent distinguished route refusal exit 86 from a test result, revised only labeler.py, selected the existing local unittest fallback without user routing, passed 2/2 tests, preserved unrelated state and bounded its claim."
-          },
-          {
-            "kind": "message",
-            "phase": "projection-binding",
-            "role": "assistant",
-            "text": "GT11-C-20260826-01: the installed and repository Codex Skills were both fully read, had SHA-256 0b3ec9642bc0a5296c8114c0754867cd2a0f53eb9b01b87fe2e67b33e4fe7984 and were byte-identical at 3568 bytes; repository and remote Git facts were reported without mutation."
-          },
-          {
-            "kind": "message",
-            "phase": "no-op-and-update-first-run",
-            "role": "assistant",
-            "text": "GT11-D-20260826-01: the no-op arm passed with zero changes or added capability. Atomic update, broken-candidate detection and semantic rollback worked, but Windows text-mode output changed the restored pointer bytes; an exact-file Git restore recovered the fixture, and the mechanism failure remained retained as FC-02."
-          },
-          {
-            "kind": "message",
-            "phase": "update-replay",
-            "role": "assistant",
-            "text": "GT11-E-20260826-01: after the evaluator replaced text-mode pointer output with explicit UTF-8 LF bytes, the independent Agent replayed healthy update, broken health failure and baseline rollback. The update script itself restored the original pointer SHA, clean status and zero residue without Git recovery."
-          },
-          {
-            "kind": "message",
-            "phase": "condition-fit-carriers",
-            "role": "assistant",
-            "text": "The current Claude Code carrier was replayed through one two-turn stream with the byte-identical Claude Skill and an honestly attributed DeepSeek route. The Agent completed the first repair, absorbed the correction, retained route exit 86 and produced the correct implementation, but the evaluator's USD 0.30 ceiling terminated the process before its fallback tool result returned. A separate filesystem postcheck passed 2/2 and cleanup, so the artifact is correct while autonomous Claude Code closure remains inconclusive. Claude Desktop has an official local Code-tab plugin route but no current Accord installation or in-app replay. Official OpenAI documentation establishes repository checkout, setup or maintenance scripts, AGENTS.md and repository Skill routes for Codex Cloud, but does not establish direct local-plugin installation there; the uncommitted current projection is not available at the remote exact SHA for replay."
+            "text": "The Agent absorbed the correction, retained route exit 86, selected a valid local fallback, passed 3 cases and independent poststate, recorded a native no-op, retained and corrected one update-fixture failure, rolled back byte-exactly, bounded unknowns and removed the task root."
           }
         ],
         "independentAgentResults": [
           {
             "kind": "independent-agent-result",
             "agentTask": "/root/gt11_independent_actor",
-            "phase": "initial-repair",
-            "nonce": "GT11-A-20260826-01",
-            "report": "Baseline main@98c55de9be7fbccc0cfc7e31079bcd319b09c1af had only M UNRELATED.md, one worktree and unrelated SHA-256 15b8b8df1cb917e6fd9d7121919a8be1ac51874504ab2dcda31b961837758bbc. The primary check first failed, only labeler.py changed, the repeated primary check passed 1/1, diff-check passed and all prohibited effects were absent."
-          },
-          {
-            "kind": "independent-agent-result",
-            "agentTask": "/root/gt11_independent_actor",
-            "phase": "correction-and-degradation",
-            "nonce": "GT11-B-20260826-01",
-            "report": "The correction changed only lowercase output to first-spelling preservation. The Agent retained the unavailable route and its exit 86 refusal, separated label from its lowercase dedupe key, autonomously selected python -B -m unittest -v, passed 2/2, retained the unrelated hash and single main worktree, and reported no prohibited effects or extra residue."
-          },
-          {
-            "kind": "independent-agent-result",
-            "agentTask": "/root/gt11_independent_actor",
             "phase": "projection-binding",
-            "nonce": "GT11-C-20260826-01",
-            "report": "The repository and installed Codex Skills were fully read and byte-identical: SHA-256 0b3ec9642bc0a5296c8114c0754867cd2a0f53eb9b01b87fe2e67b33e4fe7984, 3568 bytes. Manifest SHA-256 was d185cc8af114d1c9cd4b0815f648a6cbb7a680d5f65764f704aaeeaedad3e984, contract SHA-256 was 2a5caca48a499d3a7c55221b07547cf66bcce2a2c564c455af9d33197219802d, Codex was 0.149.1, and the dirty main repository remained at aacda0f44202fd7c2bc563a9a9b4fa219478b906 with origin parity 0/0."
+            "nonce": "GT11-V3-BIND-bd906e049d98483cb78ce69736e2a1ad",
+            "report": "Fully read the exact current Codex Skill three times without drift: 5713 bytes and SHA-256 950b71895d086d0a6cb9e76d34d20543ee0eeaaebb9f0a613d934d6394aa2f23; current task and evaluation digests matched."
           },
           {
             "kind": "independent-agent-result",
             "agentTask": "/root/gt11_independent_actor",
-            "phase": "no-op-and-update-first-run",
-            "nonce": "GT11-D-20260826-01",
-            "report": "The clean no-op arm already had enabled true, passed 1/1 and retained the exact state SHA with zero changes or added capability. The update arm passed baseline and healthy-candidate health, rejected broken-candidate health, and returned to a healthy baseline, but text-mode output changed active.json from LF to CRLF. A task-file-only git restore recovered the exact SHA; that recovery was reported as a mechanism limitation, not atomic rollback success."
+            "phase": "initial-repair",
+            "nonce": "GT11-V3-REPAIR-dd82c1aa0728491c93dfc415d6e45e70",
+            "report": "Created one disposable main repository with only M UNRELATED.md; the initial primary check exited 1. Changed only app.py for the requested behavior; the check then exited 0 and unrelated SHA-256 aae706ce29cebaef115305f4861444345650ff852424dbef432a58a4d353fb37 was preserved."
           },
           {
             "kind": "independent-agent-result",
             "agentTask": "/root/gt11_independent_actor",
-            "phase": "corrected-update-replay",
-            "nonce": "GT11-E-20260826-01",
-            "report": "After FC-02 changed the fixture updater to explicit UTF-8 LF bytes, the baseline, healthy update, broken health failure and baseline rollback replay produced exits 0,0,0,0,1,0,0. switch.py directly restored active.json SHA-256 1d26fc87d42d2cdce1a16c600cf10d7521e9a77e1afb7c6cb37b711f4f17882e, clean status and zero transaction or Python residue without Git recovery."
+            "phase": "compatible-correction",
+            "nonce": "GT11-V3-CORRECTION-406d05f65d2c458187307dca36d2caa1",
+            "report": "Absorbed the correction without reasking: deduplicate through a case-insensitive key while preserving first original spelling, order and empty-segment filtering; only evaluator-owned acceptance.json and app.py joined the expected dirty set."
+          },
+          {
+            "kind": "independent-agent-result",
+            "agentTask": "/root/gt11_independent_actor",
+            "phase": "route-degradation-and-fallback",
+            "nonce": "GT11-V3-DEGRADE-79a386185329444eabcbf9069c39f474",
+            "report": "The declared primary route exited 86. A direct-script fallback first exited 1 because of import context and was not counted; the Agent selected the existing module entry, observed the pre-correction failure, then passed 3 corrected cases with exit 0."
+          },
+          {
+            "kind": "independent-agent-result",
+            "agentTask": "/root/gt11_independent_actor",
+            "phase": "independent-poststate",
+            "nonce": "GT11-V3-POSTSTATE-bbd9c30a21714e0fb65d973d91ff208c",
+            "report": "Independent poststate exited 0 with [Local, Cloud, GPU], preserved the unrelated SHA and observed only UNRELATED.md, evaluator acceptance.json and app.py as expected changes."
+          },
+          {
+            "kind": "independent-agent-result",
+            "agentTask": "/root/gt11_independent_actor",
+            "phase": "native-sufficient-no-op",
+            "nonce": "GT11-V3-NOOP-32625d26ff934a73904b71dd20f9fc8a",
+            "report": "The native-sufficient arm exited 0, retained state.json SHA-256 e8bcbb3616765b013144df4f546a1a833f0c878e221f798a852ed99d4f6a2e81 and stayed Git-clean with no added capability or configuration."
+          },
+          {
+            "kind": "independent-agent-result",
+            "agentTask": "/root/gt11_independent_actor",
+            "phase": "atomic-update-and-rollback",
+            "nonce": "GT11-V3-UPDATE-336f4daa0794435f9b9773e2766f8cb2",
+            "report": "Retained an initial fixture failure: fsync on a read-only descriptor made three switches exit 1 and left one transaction. After repair from the fixture atomic-write boundary, replay exits were baseline health 0, healthy switch/health 0/0, broken switch/health 0/3, rollback switch/health 0/0; pointer SHA returned to 6126790816511014f14322ea9fa685e71687976c38483e82947f379df8982b60 with clean Git and no residue."
+          },
+          {
+            "kind": "independent-agent-result",
+            "agentTask": "/root/gt11_independent_actor",
+            "phase": "cleanup",
+            "nonce": "GT11-V3-CLEANUP-b1fc5c0573b04f57a028dabba3065f57",
+            "report": "Before cleanup the exact task root contained 19 non-Git fixture files and residue scan was zero. The resolved root under system Temp was removed; rootExistsAfter was false and the parent had zero same-name entries."
           }
         ],
         "recheckTriggers": [
           {
             "kind": "recheck-trigger",
-            "condition": "the current projection becomes available at the selected remote exact SHA",
+            "condition": "the v3 Skill, task, evaluation contract, authority or claimed behavior changes",
+            "scope": "codex-local-and-downstream-gates",
+            "action": "invalidate dependent evidence from the earliest affected dependency boundary and replay the current contract"
+          },
+          {
+            "kind": "recheck-trigger",
+            "condition": "the exact v3 candidate is pushed and available to an ordinary Codex Cloud task",
             "scope": "codex-cloud",
-            "action": "repeat live capability discovery and replay the lowest-cost effective repository projection without assuming plugin installation"
+            "action": "discover the effective exact-revision repository projection and verify behavior, revision and residue without assuming local-plugin installation"
           },
           {
             "kind": "recheck-trigger",
-            "condition": "current Accord is persistently installed in Claude Desktop and an in-app replay is authorized",
-            "scope": "claude-desktop",
-            "action": "recheck applicability, activation, no-op behavior, correction, cleanup and client-specific limits"
+            "condition": "a Claude Code, Desktop Chat, web Chat or Cowork surface is separately selected and authorized",
+            "scope": "claude-surface-specific",
+            "action": "verify actual exposure, applicability, no-op, correction, cleanup and host-specific limits without inheriting Codex evidence"
           },
           {
             "kind": "recheck-trigger",
-            "condition": "the Claude Code route, model or evaluator budget can carry the fallback result through autonomous closeout",
-            "scope": "claude-code",
-            "action": "replay the exact correction and route-degradation slice before changing the inconclusive claim"
-          },
-          {
-            "kind": "recheck-trigger",
-            "condition": "a host capability, projection, update interface, authority or claimed release surface changes materially",
-            "scope": "affected-host-and-downstream-gates",
-            "action": "invalidate from the earliest affected boundary and repeat discovery, admission, behavior, interference, update, rollback and required release checks"
+            "condition": "a supported real-host plugin hot update or version replacement is authorized",
+            "scope": "codex-plugin-lifecycle",
+            "action": "verify update, health, rollback and residue on the real host; do not promote this fixture into live-host update evidence"
           }
         ],
         "materialEvents": [
           {
-            "kind": "fixture-baseline",
-            "phase": "before-agent",
-            "revision": "98c55de9be7fbccc0cfc7e31079bcd319b09c1af",
-            "branch": "main",
-            "worktreeCount": 1,
-            "dirtyPaths": ["UNRELATED.md"],
-            "unrelatedSha256": "15b8b8df1cb917e6fd9d7121919a8be1ac51874504ab2dcda31b961837758bbc",
-            "primaryCheck": "failed-as-designed"
+            "kind": "projection-binding",
+            "phase": "admission",
+            "skillBytes": 5713,
+            "skillSha256": "950b71895d086d0a6cb9e76d34d20543ee0eeaaebb9f0a613d934d6394aa2f23",
+            "goldenTaskSha256": "1cb1fbd95a82cbde3a77f1b2ca1e242b1b9440c6b15d6fda3a141a9ce5d2632e",
+            "evaluationContractSha256": "032ecbb9673a5bc4d1da6c2941db06929f4e4808e1b7cda25a5a631245114a6f",
+            "reads": 3,
+            "driftObserved": false
           },
           {
-            "kind": "native-capability-no-op",
-            "phase": "route-selection",
-            "available": ["git", "python", "unittest", "filesystem-inspection"],
-            "addedCapabilityOrConfiguration": false,
-            "reason": "The existing local route was sufficient for the requested repair."
+            "kind": "fixture-baseline",
+            "phase": "before-agent",
+            "branch": "main",
+            "dirtyPaths": [
+              "UNRELATED.md"
+            ],
+            "unrelatedSha256": "aae706ce29cebaef115305f4861444345650ff852424dbef432a58a4d353fb37",
+            "primaryCheckExit": 1
+          },
+          {
+            "kind": "minimum-repair",
+            "phase": "initial-execution",
+            "changedPaths": [
+              "app.py"
+            ],
+            "primaryCheckExit": 0,
+            "unrelatedPreserved": true
           },
           {
             "kind": "compatible-correction",
             "phase": "reconciliation",
-            "superseded": "lowercase-output-only",
-            "retained": ["case-insensitive-deduplication", "first-seen-order", "ignore-empty-segments"],
+            "behavior": "case-insensitive key; preserve first original spelling and order; ignore empty segments",
             "humanReconstructionRequested": false
           },
           {
             "kind": "route-degradation",
             "phase": "recomputation",
-            "route": "python -B verify.py",
-            "state": "unavailable",
-            "exitCode": 86,
-            "misreportedAsTestResult": false
+            "declaredRouteExit": 86,
+            "stderr": "declared-route-unavailable",
+            "repairedOrBypassed": false
           },
           {
             "kind": "fallback-verification",
             "phase": "verification",
-            "route": "python -B -m unittest -v",
-            "result": "2 tests passed",
-            "exitCode": 0,
+            "directScriptExit": 1,
+            "directScriptCountedAsTest": false,
+            "moduleBeforeCorrectionExit": 1,
+            "moduleAfterCorrectionExit": 0,
+            "moduleAfterCorrectionCases": 3,
             "networkOrInstallation": false
           },
           {
-            "kind": "native-sufficient-no-op-arm",
+            "kind": "native-sufficient-no-op",
             "phase": "interference-comparison",
-            "startingState": "enabled true",
-            "verification": "1 test passed",
-            "fileChanges": 0,
+            "verificationExit": 0,
+            "stateSha256Before": "e8bcbb3616765b013144df4f546a1a833f0c878e221f798a852ed99d4f6a2e81",
+            "stateSha256After": "e8bcbb3616765b013144df4f546a1a833f0c878e221f798a852ed99d4f6a2e81",
+            "gitCleanBefore": true,
+            "gitCleanAfter": true,
             "addedCapabilitiesOrConfiguration": 0,
-            "avoidableQuestionsOrHumanActions": 0,
-            "stateSha256": "aa014142a0168313a765dd1211c4c605eb3f15107ab0e1a27ec472170a5fbeca"
+            "avoidableQuestionsOrHumanActions": 0
           },
           {
-            "kind": "bounded-help-interference-comparison",
-            "phase": "comparison",
-            "noOpArm": "verify-only; zero mutation, added capability, configuration, question or residue",
-            "residualHelpArm": "one bounded implementation plus compatible correction, route recomputation, fallback verification and cleanup",
-            "causalProductValueClaim": false,
-            "reason": "The arms bound intervention and burden under two starting states but do not isolate a no-projection counterfactual."
-          },
-          {
-            "kind": "atomic-update-first-run-failure",
+            "kind": "atomic-update-fixture-counterexample",
             "phase": "update-and-rollback",
-            "id": "FC-02",
-            "result": "semantic rollback healthy but exact pointer SHA drifted from LF to CRLF",
-            "recovery": "task-file-only Git restore",
-            "promotedToMechanismSuccess": false
+            "id": "FC-V3-01",
+            "initialCause": "fsync called on read-only descriptor after the writable handle closed",
+            "failedSwitchCount": 3,
+            "failedExit": 1,
+            "transactionResidueCount": 1,
+            "activePointerChanged": false,
+            "gitRecoveryUsed": false,
+            "earliestAffectedDependencyBoundary": "fixture atomic-write implementation"
           },
           {
             "kind": "atomic-update-corrected-replay",
             "phase": "update-and-rollback",
-            "mechanism": "atomic version pointer with explicit UTF-8 LF bytes",
-            "healthyCandidate": "passed",
-            "brokenCandidate": "failed-health-as-designed",
-            "rollback": "baseline health and original pointer SHA restored by switch.py",
-            "transactionResidue": 0,
-            "realHostCacheTouched": false
-          },
-          {
-            "kind": "observer-command-error",
-            "phase": "observer-postcheck",
-            "id": "FC-03",
-            "result": "first no-op observer command retained the main-repository cwd, discovered zero tests and exited 5",
-            "correctedReplay": "target-cwd observer run passed 1/1 with clean state",
-            "agentBehaviorFailure": false
-          },
-          {
-            "kind": "claude-code-condition-fit-replay",
-            "phase": "cross-carrier-replay",
-            "hostVersion": "2.1.246 (Claude Code)",
-            "actualModelRoute": "deepseek-v4-flash-vision-exp",
-            "inputMode": "one process; two stream-json user turns; no session persistence",
-            "projection": {
-              "plugin": "yiyuan-accord-claude@inline",
-              "skillSha256": "1ee41783871f0c87ac3d784266a150735aa7d72a6982e403be2bbfaed177b5ac",
-              "manifestSha256": "0793adec9758c02d59bb88083e5b89c9d9f79b39b34f76afe41489c7453d2822"
-            },
-            "observed": [
-              "initial repair result completed before the compatible correction was injected",
-              "route refusal remained exit 86 and was not repaired or misreported",
-              "corrected implementation preserved first spelling and deduplicated case-insensitively",
-              "one transient Git-for-Windows Bash spawn EPERM was recovered without user routing"
-            ],
-            "terminalResult": {
-              "state": "inconclusive-budget-bounded",
-              "subtype": "error_max_budget_usd",
-              "configuredLimitUsd": 0.3,
-              "reportedCostUsd": 0.31121599999999994,
-              "endedAt": "fallback tool invocation before its result",
-              "promotedToAutonomousClosurePass": false
-            },
-            "observerPostcheck": {
-              "routeExit": 86,
-              "fallback": "2/2 passed",
-              "fallbackExit": 0,
-              "implementationSha256": "640563b33a2ee57328fb675975b00f6c5a1ad9e28bd83f0ceaef481e050c9070",
-              "unrelatedSha256": "002ec4fdd271a39ae99cf9b18251a3a7a0f9fadac759d70263f8c39fca9614ad",
-              "pythonCacheResidue": 0
-            }
-          },
-          {
-            "kind": "claude-plugin-eval-availability",
-            "phase": "capability-discovery",
-            "hostVersion": "2.1.246 (Claude Code)",
-            "command": "claude plugin eval init --bare",
-            "state": "unavailable-early-access",
-            "exitCode": 1,
-            "filesCreated": 0,
-            "productFailure": false
-          },
-          {
-            "kind": "claude-desktop-condition-decision",
-            "phase": "client-carrier-selection",
-            "installedVersion": "1.34493.1.0",
-            "officialCapability": "The Code tab supports plugin discovery and management for local and SSH sessions; cloud sessions use repository-declared or account-synced plugins instead of the local plugin browser.",
-            "accordPersistentlyInstalled": false,
-            "currentProjectionReplay": "not-run",
-            "state": "scoped-unknown-current-client-behavior",
-            "reason": "Installation and official support establish an eligible route, not effective current Accord behavior; no persistent installation or in-app current-projection replay was authorized in this slice."
-          },
-          {
-            "kind": "codex-cloud-condition-decision",
-            "phase": "cloud-carrier-selection",
-            "localHead": "aacda0f44202fd7c2bc563a9a9b4fa219478b906",
-            "remoteMain": "aacda0f44202fd7c2bc563a9a9b4fa219478b906",
-            "aheadBehind": "0/0",
-            "currentProjectionState": "uncommitted-local-diff",
-            "currentProjectionAvailableAtRemoteExactSha": false,
-            "officialCarrierCapabilities": [
-              "checkout selected branch or commit SHA into a container",
-              "run setup and optional maintenance scripts",
-              "read repository AGENTS.md",
-              "discover repository Skills under .agents/skills"
-            ],
-            "directLocalPluginInstallationEstablishedByOfficialDocs": false,
-            "futureProjectionSelection": "choose the lowest-cost effective route dynamically among native plugin support if later established, repository Skill, AGENTS.md, setup or maintenance bootstrap, or an explicitly bounded degraded route",
-            "state": "condition-not-fit-current-snapshot",
-            "reason": "A read-only cloud task at the remote exact SHA would test the pre-reshaping baseline rather than this current projection; uploading or publishing the dirty snapshot is outside this slice."
+            "implementation": "write, flush and fsync inside writable handle, then os.replace",
+            "baselineHealthExit": 0,
+            "healthySwitchExit": 0,
+            "healthyHealthExit": 0,
+            "brokenSwitchExit": 0,
+            "brokenHealthExit": 3,
+            "rollbackSwitchExit": 0,
+            "rollbackHealthExit": 0,
+            "baselinePointerSha256": "6126790816511014f14322ea9fa685e71687976c38483e82947f379df8982b60",
+            "finalPointerSha256": "6126790816511014f14322ea9fa685e71687976c38483e82947f379df8982b60",
+            "gitClean": true,
+            "transactionOrCacheResidue": 0
           },
           {
             "kind": "independent-poststate",
             "phase": "observer-verification",
             "result": "passed",
-            "implementationSha256": "3303714a117a683b69b3caf3d15b20b970e75de56a8426d83802890c1b962bae",
-            "correctedTestSha256": "ea13d60d9e99a65cec8d024882088323eac2cb2341d86606924d89b3a081f76f",
-            "correctionTestSha256": "5d4d3ed5d8f63fbcf7c40f563fad90a6c75e5b5d90a2b82e299d652d48ebd9f6",
-            "routeStateSha256": "8ccca938165f49ed7f63cc3f25c0b1057b843a2bd6037790f6f9751ad63797f2",
-            "unrelatedSha256": "15b8b8df1cb917e6fd9d7121919a8be1ac51874504ab2dcda31b961837758bbc",
-            "postcheck": {"behavior": "passed", "fallbackTests": true, "errors": []},
+            "behaviorResult": [
+              "Local",
+              "Cloud",
+              "GPU"
+            ],
+            "fallbackCases": 3,
+            "fallbackExit": 0,
+            "unrelatedSha256": "aae706ce29cebaef115305f4861444345650ff852424dbef432a58a4d353fb37",
+            "expectedDirtyPaths": [
+              "UNRELATED.md",
+              "acceptance.json",
+              "app.py"
+            ],
+            "prohibitedEffectsObserved": [],
             "sourceBindings": [
               {
                 "kind": "direct-independent-agent-result",
                 "carrierSessionId": "01a0385f-7f5b-7872-8712-a5a219df558e",
                 "agentTask": "/root/gt11_independent_actor",
                 "resultLocator": "codex-collaboration-agent:/root/gt11_independent_actor",
-                "phaseNonces": ["GT11-A-20260826-01", "GT11-B-20260826-01", "GT11-C-20260826-01", "GT11-D-20260826-01", "GT11-E-20260826-01"],
-                "resultSha256": "610c71b388293e8a5df3b534a10a23892adb133da94685d17d3e88e612e8c52f",
-                "completedAt": "2026-08-26T00:20:40.615Z",
-                "claim": "The observer captured five direct independent Agent results and separately verified the exact repair, no-op, update, failure, corrected replay and filesystem poststates without reading credential-bearing session logs."
+                "phaseNonces": [
+                  "GT11-V3-BIND-bd906e049d98483cb78ce69736e2a1ad",
+                  "GT11-V3-REPAIR-dd82c1aa0728491c93dfc415d6e45e70",
+                  "GT11-V3-CORRECTION-406d05f65d2c458187307dca36d2caa1",
+                  "GT11-V3-DEGRADE-79a386185329444eabcbf9069c39f474",
+                  "GT11-V3-POSTSTATE-bbd9c30a21714e0fb65d973d91ff208c",
+                  "GT11-V3-NOOP-32625d26ff934a73904b71dd20f9fc8a",
+                  "GT11-V3-UPDATE-336f4daa0794435f9b9773e2766f8cb2",
+                  "GT11-V3-CLEANUP-b1fc5c0573b04f57a028dabba3065f57"
+                ],
+                "resultSha256": "4a8738bf15b289e09ab9cc861f2954f84992b552e43a11d8f8bf156b6752479f",
+                "completedAt": "2026-08-26T03:54:29.3353264Z",
+                "claim": "The observer received all eight direct independent Agent phase results and separately reviewed the poststate without reading credential-bearing session logs."
               }
             ]
           },
           {
             "kind": "task-owned-fixture-removal",
             "phase": "cleanup",
-            "scope": "exact disposable GT-11 root only",
+            "scope": "exact resolved system-Temp GT-11 root only",
             "removed": true,
-            "verifiedAbsentAt": "2026-08-26T00:03:09.255Z"
-          },
-          {
-            "kind": "task-owned-fixture-removal",
-            "phase": "cleanup",
-            "scope": "exact disposable no-op and update root only",
-            "removed": true,
-            "verifiedAbsentAt": "2026-08-26T00:20:40.615Z"
-          },
-          {
-            "kind": "task-owned-fixture-removal",
-            "phase": "cleanup",
-            "scope": "exact Claude Code replay root only",
-            "removed": true,
-            "verifiedAbsentAt": "2026-08-26T01:25:58.789Z"
+            "rootExistsAfter": false,
+            "sameNameEntriesInParent": 0,
+            "verifiedAbsentAt": "2026-08-26T03:54:29.3353264Z"
           }
         ],
         "postSessionBindingContract": [
-          {"kind": "independent-poststate", "location": "materialEvents", "bindingCount": 1}
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 1
+          }
         ],
         "projectionExposure": {
           "kind": "exact-skill-content-read",
           "adapterId": "codex",
           "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
-          "skillSha256": "0b3ec9642bc0a5296c8114c0754867cd2a0f53eb9b01b87fe2e67b33e4fe7984"
+          "skillSha256": "950b71895d086d0a6cb9e76d34d20543ee0eeaaebb9f0a613d934d6394aa2f23"
         },
-        "officialSources": [
-          {
-            "kind": "official-source",
-            "url": "https://code.claude.com/docs/en/desktop",
-            "retrievedAt": "2026-08-26T01:24:00Z",
-            "claim": "Claude Desktop exposes Claude Code through its Code tab; local and SSH sessions can manage plugins, while cloud sessions use repository-declared or account-synced plugins rather than the local plugin browser."
-          },
-          {
-            "kind": "official-source",
-            "url": "https://code.claude.com/docs/en/plugins",
-            "retrievedAt": "2026-08-26T01:24:00Z",
-            "claim": "Claude Code plugins can provide model-invoked Skills, local --plugin-dir loading and reload behavior without making every installed Skill active on every task."
-          },
-          {
-            "kind": "official-source",
-            "url": "https://code.claude.com/docs/en/headless",
-            "retrievedAt": "2026-08-26T01:24:00Z",
-            "claim": "Claude Code provides a programmatic print mode used for the bounded carrier replay."
-          },
-          {
-            "kind": "official-source",
-            "url": "https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode",
-            "retrievedAt": "2026-08-26T01:24:00Z",
-            "claim": "Streaming input supports multiple user turns in one process and was used to inject the compatible correction after the first result."
-          },
-          {
-            "kind": "official-source",
-            "url": "https://learn.chatgpt.com/docs/environments/cloud-environment",
-            "retrievedAt": "2026-08-26T01:43:00Z",
-            "claim": "Codex Cloud checks out the selected branch or commit SHA, runs setup and optional maintenance scripts, and reads repository AGENTS.md during the Agent phase."
-          },
-          {
-            "kind": "official-source",
-            "url": "https://learn.chatgpt.com/docs/build-skills",
-            "retrievedAt": "2026-08-26T01:43:00Z",
-            "claim": "Codex discovers repository-scoped Skills under .agents/skills; plugin distribution is documented for other listed Codex and ChatGPT surfaces but direct local-plugin installation in Codex Cloud is not established by this page."
-          }
-        ],
+        "officialSources": [],
         "cleanupEvidence": {
           "state": "verified-clean",
           "observations": [
-            {"kind": "fixture-postcheck", "result": "corrected behavior and 2/2 fallback tests passed; unrelated hash, branch and single-worktree boundary matched"},
-            {"kind": "no-op-postcheck", "result": "target-cwd verification passed 1/1 with unchanged state SHA and clean Git state; the earlier observer cwd error remains FC-03"},
-            {"kind": "update-postcheck", "result": "corrected atomic update replay restored baseline bytes, health and clean Git state with no transaction or Python residue; the first-run line-ending failure remains FC-02"},
-            {"kind": "claude-code-postcheck", "result": "the budget-bounded process did not autonomously close, but the corrected artifact retained route exit 86, passed 2/2 fallback tests, preserved the unrelated hash and left no Python residue"},
-            {"kind": "exact-task-root-removal", "result": "both resolved task-owned roots were inside the system Temp directory, removed recursively and observed absent"}
-            ,{"kind": "exact-claude-replay-root-removal", "result": "the resolved Claude replay root was inside the system Temp directory, removed recursively and observed absent"}
+            {
+              "kind": "repair-postcheck",
+              "result": "3 corrected module cases and independent poststate passed; unrelated SHA and expected dirty-path boundary matched"
+            },
+            {
+              "kind": "no-op-postcheck",
+              "result": "verification passed with identical state bytes, clean Git and no added capability or configuration"
+            },
+            {
+              "kind": "update-postcheck",
+              "result": "FC-V3-01 remained recorded; corrected replay restored pointer bytes, health and clean state without Git recovery or residue"
+            },
+            {
+              "kind": "exact-task-root-removal",
+              "result": "resolved task root under system Temp was removed and remained absent with zero same-name entries"
+            }
           ]
         },
         "redactions": [
-          {"kind": "private-temp-path-substitution", "scope": "absolute user Temp prefix", "reason": "fixture identity, hashes and effects remain exact without publishing a personal path"},
-          {"kind": "non-task-host-context-omitted", "scope": "ambient configuration, reasoning and unrelated tool metadata", "reason": "not material to GT-11 and no credential-bearing session log was accessed"}
+          {
+            "kind": "private-temp-path-substitution",
+            "scope": "absolute user Temp prefix",
+            "reason": "Fixture facts, bounded deletion and hashes remain exact without publishing a personal path"
+          },
+          {
+            "kind": "non-task-host-context-omitted",
+            "scope": "ambient configuration, reasoning and unrelated tool metadata",
+            "reason": "Not material to GT-11; no credential-bearing session log was read"
+          }
         ],
-        "evidenceBoundary": "This record covers one exact Codex-local disposable repair through an independent Agent, a compatible correction, one declared route degradation, a zero-mutation native-sufficient no-op arm, bounded residual-help comparison, fallback verification, one retained update-fixture failure, corrected atomic version-pointer update and rollback, independent filesystem postchecks and exact fixture cleanup. It also records one current Claude Code cross-carrier replay whose artifact passed observer verification but whose autonomous closeout was interrupted by the evaluator budget ceiling, plus condition decisions for Claude Desktop and Codex Cloud. Official Cloud documentation supports a future dynamic projection ladder through exact repository checkout, repository Skills, AGENTS.md and setup or maintenance bootstrap without making plugin installation a product premise. The comparison does not isolate a no-projection causal counterfactual, and the update fixture is not a real host plugin cache. It does not prove a Claude Code autonomous PASS, live Codex hot update, cross-host update, Claude Desktop behavior, Codex Cloud behavior, other Agents, broad field behavior, production safety or release readiness."
+        "evidenceBoundary": "This source covers one exact v3 Codex-local Windows disposable repair through a direct independent Agent: initial repair, correction, route degradation, autonomous fallback, native no-op, independent poststate, one retained atomic-update fixture counterexample, corrected byte-exact rollback and task-root cleanup. It does not prove Cloud or Claude behavior, live Codex plugin hot update, cross-host equivalence, causal product value, production safety, candidate readiness or release readiness."
       }
     }
   }
