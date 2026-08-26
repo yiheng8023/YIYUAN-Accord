@@ -171,7 +171,10 @@ replacement, verify health and restore the prior exact version on failure.
 Never move an existing tag or edit global host configuration as a substitute
 for supported lifecycle commands.
 
-For source verification, clone the exact tag with Python 3.10–3.14 and run:
+For source verification, clone the exact tag and use a Python interpreter with
+the required standard-library capabilities. The current release CI exercises
+CPython 3.10–3.14; that matrix is compatibility evidence, not a permanent
+version whitelist or part of Accord's product identity. Run:
 
 ```powershell
 python -B -m yiyuan_accord verify --root . --json

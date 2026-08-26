@@ -73,8 +73,8 @@ Then read, in order:
   sequences, 117 normalized states and zero invariant failures through depth
   three. The graph remains a derived in-memory or ignored-cache view rather
   than a second authority source or mandatory graph database.
-- The tracked-file ceiling is 68 against a 64-file candidate surface after the
-  v3 release note replaces no product capability. At least three slots and five
+- The current tree has 65 tracked files against a 68-file ceiling after the v3
+  release note. At least three slots and five
   percent product-code/test headroom must remain; the guardrail is not a growth
   target or deletion KPI.
 - Release order is fixed for the unchanged exact SHA: clean repository

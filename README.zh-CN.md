@@ -144,7 +144,9 @@ claude plugin uninstall yiyuan-accord-claude@yiyuan-accord
 失败时恢复上一精确版本。不得移动已有 tag，也不得用直接编辑全局宿主配置
 代替受支持的生命周期命令。
 
-源码验证应 clone 精确 tag，并在 Python 3.10–3.14 下运行：
+源码验证应 clone 精确 tag，并使用具备所需标准库能力的 Python 解释器。当前
+Release CI 覆盖 CPython 3.10–3.14；该矩阵只是当前兼容性证据，不是永久版本
+白名单，也不属于 Accord 的产品身份。运行：
 
 ```powershell
 python -B -m yiyuan_accord verify --root . --json

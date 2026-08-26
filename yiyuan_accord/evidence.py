@@ -32,9 +32,14 @@ def _enum_map(value, expected, choices):
 
 
 def _time(value):
+    normalized = value.replace("Z", "+00:00") if isinstance(value, str) else value
+    if isinstance(normalized, str):
+        normalized = re.sub(
+            r"(\.\d{6})\d+(?=[+-]\d{2}:\d{2}$)", r"\1", normalized
+        )
     try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except (AttributeError, ValueError):
+        parsed = datetime.fromisoformat(normalized)
+    except (TypeError, ValueError):
         return None
     return parsed if parsed.tzinfo is not None else None
 

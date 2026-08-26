@@ -103,12 +103,15 @@ All repository reads share one bounded regular-file path with pre-open and
 post-open type and size checks. Paths and strictly decoded non-Python whole text
 reject exact NFKC/casefold superseded name, slug and module tokens at their
 declared lexical boundaries; backslash escapes have no host-agnostic meaning.
-Declared `.py`, `.pyi` and `.pyw` files are parsed under the shared Python 3.10
-AST grammar on supported Python 3.10-3.14 hosts, then scan identifiers, literal
-values and bounded maximum static-concatenation subtrees while ignoring
-comments and not joining across runtime expressions. Syntax outside that shared
-grammar and any unreadable, undecodable, oversized or over-budget surface are
-indeterminate and fail closed. Only digest-bound Markdown research inputs under
+Declared `.py`, `.pyi` and `.pyw` files are parsed under the current release's
+declared Python 3.10-compatible AST grammar so identity semantics stay stable,
+then scan identifiers, literal values and bounded maximum static-concatenation
+subtrees while ignoring comments and not joining across runtime expressions.
+The grammar baseline and the CPython 3.10-3.14 matrix currently exercised by CI
+are reviewable compatibility decisions, not a permanent host whitelist or
+product identity. Syntax outside the shared grammar and any unreadable,
+undecodable, oversized or over-budget surface are indeterminate and fail
+closed. Only digest-bound Markdown research inputs under
 `research/reviews/` and exact program-declared SHA-256-bound PNG distribution
 assets are inert exceptions. A PNG declaration must name a tracked `.png`,
 match its signature and bind its complete bytes; undeclared or changed binary

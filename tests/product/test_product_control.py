@@ -492,6 +492,11 @@ class ProductControlTests(unittest.TestCase):
                                 'sourceEvidence[0] is invalid')
 
     def test_evidence_authority_bindings_and_types_fail_closed(self):
+        precise = _time('2026-08-26T03:54:29.3353264Z')
+        self.assertIsNotNone(precise)
+        self.assertEqual(precise.microsecond, 335326)
+        self.assertIsNone(_time('not-a-time'))
+
         tasks = {item['id']: item for item in _read(ROOT, G)['tasks']}
         bundle = _read(ROOT, SOURCE)
         record = bundle['records']['GT-07']
