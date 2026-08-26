@@ -101,9 +101,13 @@ observation must include a complete publishable transcript or host-event source
 record from a disposable controlled task and bind the exact task, evaluation
 contract, host session and projection. A repository hash proves integrity after
 capture, not source authenticity; the active goal carrier must observe capture
-directly. Post-session checks or cleanup assertions must bind their exact
-completed observer-session output, locator, completion time and claim through
-`sourceBindings`. A task with such a claim declares
+directly. Post-session checks or cleanup assertions must bind either their exact
+completed observer-session output and event locator, or a directly observed
+independent Agent result with its carrier session, task locator, full captured
+reports, phase nonces, digest, completion time and claim, through
+`sourceBindings`. Repository copies still cannot prove source authenticity;
+candidate review must compare the publishable record with original host or
+session records. A task with such a claim declares
 `postSessionBindingContract`, including exact cardinality of distinct event
 locators across the complete contract. The acceptance release-sample policy
 anchors the exact contract independently; the Golden Task and its payload

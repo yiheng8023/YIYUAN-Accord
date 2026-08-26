@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 import subprocess
 
-from .evidence import representative_sample_errors
+from .evidence import historical_representative_errors, representative_sample_errors
 from .guardrails import (
     EXTERNAL_COMPLETION_OPERANDS,
     clean_git_checkout,
@@ -33,7 +33,7 @@ from .identity import (
 )
 
 
-V2_AUTHORITY_BOOTSTRAP = (
+AUTHORITY_BOOTSTRAP = (
     "product/constitution.json",
     "product/program.json",
     "product/acceptance.json",
@@ -148,8 +148,8 @@ def _require_texts(owner, fields, label, errors):
 
 
 def _validate_constitution(constitution, errors):
-    if constitution.get("schema") != 2:
-        errors.append("constitution.schema must be 2")
+    if constitution.get("schema") != 3:
+        errors.append("constitution.schema must be 3")
     _require_texts(constitution, ("id", "productId", "purpose", "successDefinition"),
                    "constitution", errors)
     identity = constitution.get("identity")
@@ -342,17 +342,151 @@ def _validate_complexity(root, program, python_module, files, errors):
     return metrics
 
 
+def _validate_four_surface_mapping(increment, criterion_ids, errors):
+    outcome = increment.get("representativeOutcome")
+    outcome_fields = {
+        "id", "statement", "startingState", "completion", "claimLimit",
+        "firstEvidenceSurfaces",
+    }
+    if not isinstance(outcome, dict) or set(outcome) != outcome_fields:
+        errors.append("increment.representativeOutcome shape is invalid")
+        return
+    _require_texts(
+        outcome,
+        ("id", "statement", "startingState", "completion", "claimLimit"),
+        "increment.representativeOutcome",
+        errors,
+    )
+    if not _string_list(outcome.get("firstEvidenceSurfaces")):
+        errors.append("increment.representativeOutcome firstEvidenceSurfaces is invalid")
+
+    mapping = increment.get("fourSurfaceMapping")
+    if not isinstance(mapping, dict) or set(mapping) != {
+        "outcomeId", "plan", "process", "acceptance", "goalMode",
+    }:
+        errors.append("increment.fourSurfaceMapping shape is invalid")
+        return
+    if mapping.get("outcomeId") != outcome.get("id"):
+        errors.append("increment.fourSurfaceMapping outcomeId does not match")
+
+    plan = mapping.get("plan")
+    if not isinstance(plan, dict) or set(plan) != {
+        "hypothesis", "earliestAffectedBoundary", "slice", "stopCondition",
+    }:
+        errors.append("increment.fourSurfaceMapping.plan shape is invalid")
+    else:
+        _require_texts(
+            plan,
+            ("hypothesis", "earliestAffectedBoundary", "slice", "stopCondition"),
+            "increment.fourSurfaceMapping.plan",
+            errors,
+        )
+
+    process = mapping.get("process")
+    if not isinstance(process, dict) or set(process) != {
+        "routeRule", "phases", "orderedSteps", "degradationRule",
+    }:
+        errors.append("increment.fourSurfaceMapping.process shape is invalid")
+    else:
+        _require_texts(
+            process, ("routeRule", "degradationRule"),
+            "increment.fourSurfaceMapping.process", errors,
+        )
+        if not _string_list(process.get("phases")):
+            errors.append("increment.fourSurfaceMapping.process phases are invalid")
+        ordered = process.get("orderedSteps")
+        if not isinstance(ordered, list) or not ordered:
+            errors.append("increment.fourSurfaceMapping.process orderedSteps are invalid")
+        else:
+            seen, states = [], []
+            allowed = set(criterion_ids) - {"R4"}
+            for index, step in enumerate(ordered):
+                label = f"increment.fourSurfaceMapping.process.orderedSteps[{index}]"
+                if not isinstance(step, dict) or set(step) != {
+                    "id", "state", "dependsOn", "acceptanceIds", "completion",
+                }:
+                    errors.append(f"{label} shape is invalid")
+                    continue
+                _require_texts(step, ("id", "completion"), label, errors)
+                state = step.get("state")
+                if state not in {"completed", "active", "pending", "blocked"}:
+                    errors.append(f"{label}.state is invalid")
+                states.append(state)
+                if step.get("id") in seen:
+                    errors.append(f"{label}.id is duplicated")
+                expected_dependency = [] if index == 0 else [seen[-1]]
+                if step.get("dependsOn") != expected_dependency:
+                    errors.append(f"{label}.dependsOn must name only the previous step")
+                mapped_step = _string_list(step.get("acceptanceIds"))
+                if not mapped_step or not set(mapped_step).issubset(allowed):
+                    errors.append(f"{label}.acceptanceIds are invalid")
+                if _nonempty_string(step.get("id")):
+                    seen.append(step["id"])
+            current_state = increment.get("state")
+            current = [
+                index for index, state in enumerate(states)
+                if state == current_state
+            ]
+            if current_state == "completed":
+                expected_states = ["completed"] * len(states)
+            elif current_state in {"active", "blocked"} and len(current) == 1:
+                current_index = current[0]
+                expected_states = (
+                    ["completed"] * current_index + [current_state]
+                    + ["pending"] * (len(states) - current_index - 1)
+                )
+            else:
+                expected_states = None
+                errors.append(
+                    "increment.fourSurfaceMapping.process orderedSteps current state is invalid"
+                )
+            if expected_states is not None and states != expected_states:
+                errors.append(
+                    "increment.fourSurfaceMapping.process orderedSteps lifecycle is invalid"
+                )
+
+    acceptance = mapping.get("acceptance")
+    if not isinstance(acceptance, dict) or set(acceptance) != {
+        "criterionIds", "requiredObservations", "passRule",
+    }:
+        errors.append("increment.fourSurfaceMapping.acceptance shape is invalid")
+    else:
+        expected = set(criterion_ids) - {"R4"}
+        mapped = _string_list(acceptance.get("criterionIds"))
+        if mapped is None or set(mapped) != expected:
+            errors.append("increment.fourSurfaceMapping.acceptance criterionIds are invalid")
+        if not _string_list(acceptance.get("requiredObservations")):
+            errors.append("increment.fourSurfaceMapping.acceptance observations are invalid")
+        _require_texts(
+            acceptance, ("passRule",),
+            "increment.fourSurfaceMapping.acceptance", errors,
+        )
+
+    goal_mode = mapping.get("goalMode")
+    if not isinstance(goal_mode, dict) or set(goal_mode) != {
+        "directive", "completion", "pauseOnlyFor",
+    }:
+        errors.append("increment.fourSurfaceMapping.goalMode shape is invalid")
+    else:
+        _require_texts(
+            goal_mode, ("directive", "completion"),
+            "increment.fourSurfaceMapping.goalMode", errors,
+        )
+        if not _string_list(goal_mode.get("pauseOnlyFor")):
+            errors.append("increment.fourSurfaceMapping.goalMode pauseOnlyFor is invalid")
+
+
 def _validate_program(
     root, program, criterion_ids, all_contract_ids, identity, authority,
     goal_digest, errors,
 ):
-    if program.get("schema") != 2:
-        errors.append("program.schema must be 2")
-    _require_texts(program, ("id", "productId", "release", "releaseIntent", "maintenancePlan"),
+    if program.get("schema") != 3:
+        errors.append("program.schema must be 3")
+    _require_texts(program, ("id", "productId", "releaseIntent", "maintenancePlan"),
                    "program", errors)
-    if program.get("constitution") != V2_AUTHORITY_BOOTSTRAP[0]:
+    if program.get("constitution") != AUTHORITY_BOOTSTRAP[0]:
         errors.append("program.constitution locator is invalid")
-    if program.get("acceptance") != V2_AUTHORITY_BOOTSTRAP[2]:
+    if program.get("acceptance") != AUTHORITY_BOOTSTRAP[2]:
         errors.append("program.acceptance locator is invalid")
     if program.get("status") not in PROGRAM_STATES:
         errors.append(f"program.status must be one of {sorted(PROGRAM_STATES)}")
@@ -360,10 +494,14 @@ def _validate_program(
     _validate_input_evidence(root, program, errors)
     work_items = []
     increment = program.get("increment")
-    expected_state = {"active": "active", "ready": "completed", "blocked": "blocked"}.get(
-        program.get("status")
-    )
-    if not isinstance(increment, dict) or increment.get("state") != expected_state:
+    program_state = program.get("status")
+    allowed_increment_states = {
+        "active": {"active", "completed"},
+        "ready": {"completed"},
+        "blocked": {"blocked"},
+    }.get(program_state, set())
+    increment_state = increment.get("state") if isinstance(increment, dict) else None
+    if increment_state not in allowed_increment_states:
         errors.append("program.increment does not match program status")
     else:
         mapped = _string_list(increment.get("acceptanceIds"))
@@ -371,11 +509,12 @@ def _validate_program(
             errors.append("increment.acceptanceIds must map every criterion exactly")
         _require_texts(increment, ("id", "observedProblem", "hypothesis", "finiteStopCondition"),
                        "increment", errors)
+        _validate_four_surface_mapping(increment, set(criterion_ids), errors)
         if not _string_list(increment.get("falsifiers")):
             errors.append("increment.falsifiers must be non-empty")
         work_items = _object_entries(increment, "workItems", errors)
         _entry_ids(work_items, "increment.workItems", errors)
-        if len(work_items) != 1 or work_items[0].get("state") != expected_state:
+        if len(work_items) != 1 or work_items[0].get("state") != increment_state:
             errors.append("increment must retain one work item matching its lifecycle")
         for index, item in enumerate(work_items):
             mapped_item = _string_list(item.get("acceptanceIds"))
@@ -403,6 +542,13 @@ def _validate_program(
             "retired",
         }:
             errors.append("program.goalModePrompt.state is invalid")
+        goal_states = {
+            "active": {"prepared-host-goal-paused", "active-in-host"},
+            "blocked": {"prepared-host-goal-paused"},
+            "completed": {"retired"},
+        }.get(increment_state, set())
+        if prompt.get("state") not in goal_states:
+            errors.append("program.goalModePrompt does not match increment lifecycle")
         _require_texts(prompt, ("authority", "objective", "hostLifecycleNote"),
                        "program.goalModePrompt", errors)
         mapped = _string_list(prompt.get("mapsTo"))
@@ -506,12 +652,12 @@ def _validate_evidence_item(
 
 
 def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golden, errors):
-    if acceptance.get("schema") != 2:
-        errors.append("acceptance.schema must be 2")
-    _require_texts(acceptance, ("id", "productId", "release"), "acceptance", errors)
-    if acceptance.get("constitution") != V2_AUTHORITY_BOOTSTRAP[0]:
+    if acceptance.get("schema") != 3:
+        errors.append("acceptance.schema must be 3")
+    _require_texts(acceptance, ("id", "productId"), "acceptance", errors)
+    if acceptance.get("constitution") != AUTHORITY_BOOTSTRAP[0]:
         errors.append("acceptance.constitution locator is invalid")
-    if acceptance.get("program") != V2_AUTHORITY_BOOTSTRAP[1]:
+    if acceptance.get("program") != AUTHORITY_BOOTSTRAP[1]:
         errors.append("acceptance.program locator is invalid")
 
     criteria = _object_entries(acceptance, "criteria", errors)
@@ -611,6 +757,7 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
             "requiredTaskIdsForRelease", "mustPassTaskIdsForRelease",
             "sampleRationale", "taskDecisionRule", "releaseDecisionRule",
             "postReleaseTasks", "postSessionBindingContracts",
+            "historicalEvidenceContractSha256", "historicalEvidence",
         }:
             errors.append("acceptance.representativeBehaviorPolicy shape is invalid")
         required_sample = _string_list(
@@ -654,6 +801,37 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
             )
         ):
             errors.append("representative post-session binding contracts are invalid")
+        historical_contract = representative_policy.get(
+            "historicalEvidenceContractSha256"
+        )
+        historical = representative_policy.get("historicalEvidence")
+        if (
+            not isinstance(historical_contract, str)
+            or not SHA256_RE.fullmatch(historical_contract)
+            or not isinstance(historical, list)
+            or not historical
+            or any(not isinstance(item, dict) for item in historical)
+        ):
+            errors.append("representative historical evidence policy is invalid")
+        else:
+            locators = []
+            for index, item in enumerate(historical):
+                label = f"historicalEvidence[{index}]"
+                observation = _validate_evidence_item(
+                    root, item, label, errors, {"representative-behavior"}
+                )
+                locator = item.get("locator")
+                if isinstance(locator, str):
+                    locators.append(locator)
+                if (
+                    item.get("supportsCriterion") != "R3"
+                    or not _nonempty_string(item.get("bindsProjection"))
+                    or observation.get("evaluationContractSha256")
+                    != historical_contract
+                ):
+                    errors.append(f"{label} historical binding is invalid")
+            if len(locators) != len(set(locators)):
+                errors.append("representative historical evidence locators are duplicated")
         _require_texts(representative_policy, (
             "sampleRationale", "taskDecisionRule", "releaseDecisionRule",
         ), "acceptance.representativeBehaviorPolicy", errors)
@@ -752,9 +930,9 @@ def host_check(root, adapter_id):
 def verify_product(root):
     root = Path(root)
     errors = []
-    constitution = _read_json(root, V2_AUTHORITY_BOOTSTRAP[0], errors)
-    program = _read_json(root, V2_AUTHORITY_BOOTSTRAP[1], errors)
-    acceptance = _read_json(root, V2_AUTHORITY_BOOTSTRAP[2], errors)
+    constitution = _read_json(root, AUTHORITY_BOOTSTRAP[0], errors)
+    program = _read_json(root, AUTHORITY_BOOTSTRAP[1], errors)
+    acceptance = _read_json(root, AUTHORITY_BOOTSTRAP[2], errors)
 
     authority_product_id = constitution.get("productId")
     product_ids = {
@@ -810,7 +988,7 @@ def verify_product(root):
             root,
             constitution.get("authority"),
             identity.get("pythonModule"),
-            V2_AUTHORITY_BOOTSTRAP,
+            AUTHORITY_BOOTSTRAP,
             (GOLDEN_TASKS_FILE, maintenance_plan, release_notes),
         )
     )
@@ -857,12 +1035,21 @@ def verify_product(root):
         )
     )
     errors.extend(
+        historical_representative_errors(
+            root,
+            acceptance,
+            golden_suite,
+            _read_json,
+        )
+    )
+    errors.extend(
         representative_sample_errors(
             root,
             acceptance,
             required_release_task_ids,
             golden_suite,
             _read_json,
+            require_complete=program.get("status") == "ready",
         )
     )
 

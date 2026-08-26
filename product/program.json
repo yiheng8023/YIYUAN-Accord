@@ -1,14 +1,21 @@
 {
-  "schema": 2,
-  "id": "yiyuan-accord-product-program-v2.0-global-identity",
+  "schema": 3,
+  "id": "yiyuan-accord-adaptive-reshape-program",
   "productId": "yiyuan-accord",
-  "release": "v2.0",
-  "distributionVersion": "v2.0.1-preview.2",
-  "releaseIntent": "Deliver an openly reviewable v2.0.1-preview.2 Public Preview distribution of the immutable v2.0 collaboration contract, with host-consistent presentation, an official Claude marketplace path, bounded Claude Desktop and chat availability claims, accurate lifecycle documentation and no production-stability claim.",
+  "release": null,
+  "distributionVersion": null,
+  "historicalRelease": {
+    "releaseLine": "v2.0",
+    "releasedTags": ["v2.0", "v2.0.1-preview.1"],
+    "unreleasedCheckpoint": "v2.0.1-preview.2",
+    "authority": "docs/operations/HISTORY.md",
+    "rule": "These immutable releases and the retired unreleased checkpoint are provenance only. They are not the current candidate, do not bind fresh reshaping evidence and grant no push, tag or release authority."
+  },
+  "releaseIntent": "Preserve the completed 2026-08-25 adaptive reshape as a verified non-release main baseline, then form a separately replayed v3.0.0 full-release candidate. The major version reflects the changed product category and boundary; it does not inherit preview.2 authority, evidence or package readiness, and it may become a candidate only after its host projections, exact local review, all declared hosted systems, finite claim ceiling and release gates are remapped and passed.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "maintenancePlan": "CONTRIBUTING.md",
-  "status": "ready",
+  "status": "active",
   "inputEvidence": [
     {
       "id": "project-refactor-audit-2026-08-20",
@@ -52,55 +59,171 @@
       "kind": "historical-release-and-counterevidence-boundary",
       "revision": "6d857517455b6f3f86a4c9cbd79fc618febbbe00",
       "disposition": "immutable-history-not-current-projection-evidence"
+    },
+    {
+      "id": "product-premise-reset-2026-08-25",
+      "kind": "accepted-revisable-reshaping-guidance",
+      "repositoryLocator": "product/reshaping-guidance.json",
+      "repositorySha256": "cf42470c83b3c22eb6250aaa6966198aed379006cb9db17d414321da0463d3f6",
+      "disposition": "current-guidance-for-next-plan-process-acceptance-and-goal-projection-not-release-authority"
     }
   ],
   "increment": {
-    "id": "increment.v201-preview2-claude-surface-alignment",
+    "id": "increment.product-premise-reset-and-adaptive-system-reshape",
     "state": "completed",
     "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "observedProblem": "The published Claude package exposes a technical identifier but no human display name, documents only the session-scoped Claude Code direct-load route, and lacks the repository marketplace surface now used by Claude Code, Claude web chat, the Claude Desktop Chat tab and Cowork. That makes presentation inconsistent across hosts and can mislead users into treating clone, direct load and persistent installation as equivalent. Packaging availability still does not prove implicit activation, no-op behavior or cross-surface equivalence.",
-    "hypothesis": "A v2.0.1-preview.2 distribution-only repair can keep the immutable v2.0 contract, unchanged adapter contract and exact Skill content while adding the canonical human name YIYUAN Accord for Claude, one official Claude marketplace, separate persistent and session-scoped lifecycle paths, and explicit surface-bound evidence limits. The same runtime-free Claude package can be distributable to current official Claude plugin surfaces without duplicating the Skill or promoting packaging compatibility into behavior proof.",
+    "observedProblem": "The preview.2 route repaired host presentation but preserved a product premise that treated runtime-free thin projections as correctness. That premise removed much of the intended near-zero-burden capability discovery, configuration, routing, topology, continuity and cross-carrier experience. It also risked turning subtraction, fixed file budgets and a small extension ecosystem into permanent product limits rather than revisable cost controls.",
+    "hypothesis": "A small portable invariant kernel plus a mechanism-neutral adaptive system can preserve authority, evidence honesty, continuous reconciliation and non-interference while restoring Agent-owned capability discovery, configuration, code and conversation topology, local and cloud carriers, dynamic route selection, recovery, hot update and retirement. Schema-validated JSON can carry stable semantics and ephemeral observations can generate an on-demand graph; a graph database remains unnecessary until representative query evidence proves otherwise.",
+    "representativeOutcome": {
+      "id": "outcome.agent-owned-repository-repair",
+      "statement": "Given one bounded software change request and an accessible disposable repository, the Agent delivers the requested verified behavior while preserving unrelated work and requiring the user only for consequential judgment or genuinely unavailable authority.",
+      "startingState": "The concrete Agent, local or cloud carrier, model route, repository state, installed extensions, configuration and available capabilities are observed at task time and may be sufficient, degraded, unavailable or unknown.",
+      "completion": "The requested behavior is externally verified at the claimed level; unauthorized effects are zero; avoidable user-operated discovery, routing, configuration, continuity, verification and cleanup steps are zero; material effects, burden, interference, unknowns and residue are reconciled.",
+      "claimLimit": "This is one representative adaptive repair slice. It does not prove universal software correctness, every Agent or carrier, broad field value, production safety or release readiness.",
+      "firstEvidenceSurfaces": [
+        "codex-local",
+        "codex-cloud-when-current-conditions-fit",
+        "claude-code",
+        "available-claude-client-when-effective"
+      ]
+    },
+    "fourSurfaceMapping": {
+      "outcomeId": "outcome.agent-owned-repository-repair",
+      "plan": {
+        "hypothesis": "Live capability discovery plus a derived minimum-sufficient route can complete the repair with lower avoidable human burden and bounded interference than either an unconditional plugin route or a user-operated workflow. On Codex Cloud, effective projection is the goal: native plugin support, repository Skill, AGENTS.md, setup or maintenance bootstrap and bounded degradation are replaceable carrier mechanisms selected from current evidence.",
+        "earliestAffectedBoundary": "product/constitution.json",
+        "slice": "Bind one repair outcome and fixture; observe the live host, carrier, repository, capability, authority and evidence state; derive an authorized route; execute and reconcile the effect; compare help, no-op and interference; retain bounded counterevidence.",
+        "stopCondition": "The process, acceptance surface and compact goal projection name this same outcome, completion condition, claim limit and refresh boundary without fixing a host, model, mechanism or cloud requirement."
+      },
+      "process": {
+        "routeRule": "At each material change, derive the lowest-net-burden route that satisfies the current outcome under observed capability, authority, trust, data, cost, topology and evidence conditions; a healthy sufficient native route is a passing no-op.",
+        "phases": [
+          "bind-outcome-authority-and-prohibited-effects",
+          "observe-current-state-and-discover-capabilities",
+          "derive-and-select-minimum-sufficient-authorized-route",
+          "execute-with-continuous-reconciliation",
+          "verify-consequence-burden-interference-and-residue",
+          "recover-degrade-hand-off-or-close-with-bounded-learning"
+        ],
+        "orderedSteps": [
+          {
+            "id": "migrate-version-neutral-active-carrier",
+            "state": "completed",
+            "dependsOn": [],
+            "acceptanceIds": ["R1", "R2", "Q2", "Q4"],
+            "completion": "The active program, acceptance, verifier and tests can represent reshaping without selecting an exact release or distribution version; immutable released and unreleased historical identities remain provenance only, and canonical output cannot present them as the current candidate."
+          },
+          {
+            "id": "bind-current-gt11-contract",
+            "state": "completed",
+            "dependsOn": ["migrate-version-neutral-active-carrier"],
+            "acceptanceIds": ["R3", "Q1", "Q2", "Q3", "Q4"],
+            "completion": "GT-11 and its evaluation contract derive from the current version-neutral authority and outcome; old observations remain historical inputs, and the binding itself is not behavior proof."
+          },
+          {
+            "id": "build-disposable-repair-fixture",
+            "state": "completed",
+            "dependsOn": ["bind-current-gt11-contract"],
+            "acceptanceIds": ["R3", "Q1", "Q2", "Q3", "Q4"],
+            "completion": "A disposable repository supplies one exact repair, an unrelated dirty change, a compatible correction, a route-degradation event, independent poststate checks and exact task-residue ownership without user or production data."
+          },
+          {
+            "id": "run-codex-local-gt11",
+            "state": "completed",
+            "dependsOn": ["build-disposable-repair-fixture"],
+            "acceptanceIds": ["R2", "R3", "Q1", "Q2", "Q3", "Q4"],
+            "completion": "A fresh Codex-local GT-11 observation is bound to the exact current projection, host and contract; independent event and filesystem poststate evidence records the requested effect, route, burden, interference, correction, degradation, cleanup, unknowns and claim ceiling."
+          },
+          {
+            "id": "compare-noop-help-interference-and-update",
+            "state": "completed",
+            "dependsOn": ["run-codex-local-gt11"],
+            "acceptanceIds": ["R2", "R3", "Q2", "Q3", "Q4"],
+            "completion": "Native-sufficient no-op and residual-help paths are compared at bounded cost; unnecessary activation is absent, and supported hot update or atomic versioned update, health check and rollback are exercised without turning one mechanism into a product requirement."
+          },
+          {
+            "id": "replay-condition-fit-carriers",
+            "state": "completed",
+            "dependsOn": ["compare-noop-help-interference-and-update"],
+            "acceptanceIds": ["R2", "R3", "Q2", "Q4"],
+            "completion": "Claude Code, an available effective Claude client and Codex Cloud are replayed only when their current task conditions fit. Cloud admission discovers the lowest-cost effective current projection instead of requiring plugin installation, binds the exact remote revision and distinguishes repository Skill, AGENTS.md, setup or maintenance bootstrap, native plugin support if established, and bounded degradation. Unavailable or insufficient carriers remain scoped unknowns and do not invalidate the verified local result."
+          },
+          {
+            "id": "independent-review-and-bound-claim",
+            "state": "completed",
+            "dependsOn": ["replay-condition-fit-carriers"],
+            "acceptanceIds": ["R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
+            "completion": "An independent review reconciles the plan, ordered process, observations, failures, interference, residue and claim ceiling, then decides only whether the slice justifies proposing a future candidate; it does not select a version, publish, tag or release."
+          }
+        ],
+        "degradationRule": "A failed or unavailable route remains scoped evidence, triggers re-observation or an eligible alternative, and does not become universal product failure or permanent retirement."
+      },
+      "acceptance": {
+        "criterionIds": ["R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
+        "requiredObservations": [
+          "requested-behavior-at-the-claimed-level",
+          "selected-route-and-live-input-state",
+          "agent-and-human-actions",
+          "avoidable-human-burden",
+          "help-and-interference",
+          "material-effects-and-unauthorized-effects",
+          "correction-continuity-recovery-and-cleanup",
+          "unknowns-claim-limit-and-recheck-triggers"
+        ],
+        "passRule": "Pass only when the outcome completion condition is directly observed, prohibited effects remain absent, no required observation is missing, and every claim stays within the exact surface and carrier evidence. A sufficient native no-op may pass; an unavailable cloud or client surface remains a scoped unknown unless the claim requires it. Cloud evidence binds the exact checked-out revision, actual projection exposure and behavior; plugin installation, setup success, repository visibility or AGENTS.md loading alone cannot self-attest the outcome."
+      },
+      "goalMode": {
+        "directive": "Deliver the bound representative outcome through a live, minimum-sufficient and authorized route; own avoidable mechanics; refresh on material change; verify the consequence and leave reconciled state.",
+        "completion": "representative-outcome-observed-with-bounded-evidence-and-reconciled-effects",
+        "pauseOnlyFor": [
+          "consequential-human-judgment",
+          "new-trust-account-data-or-material-cost",
+          "publication-deployment-or-irreversible-effect"
+        ]
+      }
+    },
     "falsifiers": [
-      "publisher, human display name, author URL, homepage, repository, website, distribution version, maturity, release notes or marketplace presentation disagree across authority and package surfaces",
-      "a behavior observation survives a changed adapter contract, Skill locator, Skill digest or exact exposed Skill content",
-      "a manifest, marketplace, package or presentation change bypasses deterministic package verification or the affected clean-state activation, confirmation and removal walkthrough",
-      "historical v2.0 observations are edited, renamed or promoted beyond their task, behavior-bearing projection and claim limits",
-      "thinness removes a user-valued outcome capability without a sufficient native or replacement route and explicit claim narrowing",
-      "the preview adds an always-on Runtime, Hook, MCP, App, state layer, mandatory user-level Skill or undeclared installation authority",
-      "official Claude packaging availability is described as implicit activation, proven behavior or cross-surface equivalence",
-      "a quota-limited optional GitHub Actions system is reported as passed, failed product behavior or a required preview gate rather than unknown external state",
-      "an unresolved P0 or P1 finding remains when exact local review completes"
+      "the reshape merely restores historical files, validators or a universal control plane without proving current outcome value",
+      "a mechanism, host, model, provider, extension market, version, file count, graph database or workflow becomes permanent product identity without evidence",
+      "installation or global visibility is treated as mandatory per-message activation",
+      "dynamic indexing duplicates authority, commits transient host or account state, or cannot invalidate stale observations",
+      "Agent-owned discovery, configuration, routing, topology, continuity, verification or cleanup is transferred back to the user when the Agent can safely perform it",
+      "subtraction removes a required user outcome without a sufficient native or replacement path or an explicit product-scope correction",
+      "a learned task observation automatically grants authority, installation, publication or another consequential effect",
+      "the mapped plan, process, acceptance and goal projection cannot be traced to one current outcome and earliest affected evidence boundary",
+      "fresh reshaping evidence is bound to the superseded v2.0 release line or the unreleased preview.2 distribution placeholder",
+      "representative A-B evidence shows net burden, interference, cost or recovery risk greater than the delivered outcome benefit"
     ],
-    "finiteStopCondition": "Stop this increment when one locally committed clean candidate preserves the immutable v2.0 contract and representative behavior evidence bound to the unchanged behavior-bearing adapter contract and Skill, binds the complete v2.0.1-preview.2 distribution and Public Preview claim boundary, passes official format, deterministic and regression checks, and completes a prepublication local Claude-client package walkthrough plus the local Claude Code marketplace and direct-load paths with no known validation defect or task residue. The changed distribution package must not be described as a new full behavior replay. After push, the repository marketplace path must be replayed in a current Claude client before named-human release authorization; publication and post-release cleanup remain later ordered gates.",
+    "finiteStopCondition": "Stop this planning increment after the accepted correction is captured without pretending to be permanent truth; conflicting preview.2 premises and release readiness are retired from active navigation; the constitution, program, acceptance and deterministic goal projection describe one mechanism-neutral adaptive product direction; one smallest end-to-end discovery-and-routing slice and its local, Codex Cloud, Claude Code and available Claude-client evidence replay are specified; and a new candidate version is selected only after those boundaries pass independent review. No tag, push or release is part of this increment without fresh named authority.",
     "workItems": [
       {
-        "id": "work.v201-preview2-claude-surface-alignment",
+        "id": "work.product-premise-reset-and-adaptive-system-reshape",
         "state": "completed",
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "closeoutSequence": [
           {
-            "id": "claude-surface-authority-and-presentation",
+            "id": "record-revisable-reshaping-consensus",
             "state": "completed",
-            "acceptanceIds": ["R1", "R2", "Q2", "Q3", "Q4"],
-            "stopCondition": "[claude-surface-authority-and-presentation] Codex and Claude use canonical host-qualified human display names; Claude Code remains the behavior-evidence adapter while current official Claude chat, Desktop and Cowork distribution surfaces are declared separately from behavior proof."
+            "acceptanceIds": ["R1", "Q1", "Q2", "Q3", "Q4"],
+            "stopCondition": "[record-revisable-reshaping-consensus] One machine-readable record captures the north star, retained commitments, retired premises, adaptive factor taxonomy, dynamic index and graph decision, topology, discovery lanes, positive flywheel, anti-bloat controls and guidance for the next four mapped surfaces without granting release authority."
           },
           {
-            "id": "claude-marketplace-and-verifier-regressions",
+            "id": "remap-authority-domain-and-lifecycle",
             "state": "completed",
-            "acceptanceIds": ["R1", "R2", "R4", "Q2", "Q3", "Q4"],
-            "stopCondition": "[claude-marketplace-and-verifier-regressions] The official Claude marketplace and manifest pass the current strict host validator; canonical display name, source, version and description drift fail closed under the generic verifier and product regressions without adding Runtime, Hook, MCP, App or state."
+            "acceptanceIds": ["R1", "R2", "Q1", "Q2", "Q3", "Q4"],
+            "stopCondition": "[remap-authority-domain-and-lifecycle] The constitution and domain glossary define a small invariant kernel plus mechanism-neutral adaptive system, dynamic applicability and explicit retirement; no active authority treats runtime-free packaging, a fixed host version, marketplace, file count, topology or mechanism as product correctness."
           },
           {
-            "id": "affected-claude-reader-path-evidence",
+            "id": "map-plan-process-acceptance-and-goal-projection",
             "state": "completed",
-            "acceptanceIds": ["R3", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[affected-claude-reader-path-evidence] The immutable v2.0 representative observations remain bound to their exact adapter contract, Skill, projection and session; because this distribution-only repair leaves the behavior-bearing adapter contract and Skill unchanged, those bounded results remain applicable without becoming a new preview.2 behavior replay. One clean evaluator checks the exact preview.2 candidate package through a supported prepublication local Claude-client upload, the local repository marketplace in Claude Code and the session-scoped direct-load route, recording visibility, activation boundary, removal, burden, external Hooks, unknowns and residue without treating installation as behavior proof. The current-package replay proves installation, enablement, Skill discovery and one explicit direct-load invocation only; it does not establish the full representative behavior suite, implicit invocation, no-op behavior or cross-surface equivalence. A persistent client installation retained under explicit user authority is a declared outcome rather than task residue. The remote repository marketplace remains a post-push, pre-authorization replay."
+            "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+            "stopCondition": "[map-plan-process-acceptance-and-goal-projection] One current outcome maps to a revisable plan, context-tailored process, consequence-level acceptance and compact goal projection; the route queries live capability and environment state rather than hard-coding implementation means."
           },
           {
-            "id": "preview2-candidate-freeze",
+            "id": "prove-minimum-adaptive-vertical-slice",
             "state": "completed",
-            "acceptanceIds": ["R4", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[preview2-candidate-freeze] All eight repository criteria are satisfied on one clean tree, the v2.0.1-preview.2 Public Preview release body is reproducible and claim-limited, no known blocker or task residue remains, and the exact candidate is committed locally for the ordered external gates."
+            "acceptanceIds": ["R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+            "stopCondition": "[prove-minimum-adaptive-vertical-slice] Before fresh observation, the active evaluation carrier no longer binds reshaping evidence to the superseded v2.0 release line or unreleased preview.2 placeholder. Then one smallest end-to-end slice demonstrates live discovery, route selection, authorized execution, no-op or degradation, continuity, verification, cleanup and bounded learning across the condition-fit local, cloud and client surfaces with interference and update rollback evidence; only then may a future exact candidate and release route be proposed."
           }
         ]
       }
@@ -126,23 +249,14 @@
         "without adding semantic authority"
       ],
       "README.md": [
-        "Current recommendation",
-        "Start in 30 seconds",
-        "Before you install",
-        "Codex IDE extension does not currently support plugins",
-        "What installation changes",
+        "Current public recommendation",
+        "Do not install from the current `main` checkout",
+        "v2.0.1-preview.1",
+        "unreleased historical checkpoint",
+        "product/reshaping-guidance.json",
         "python -B -m yiyuan_accord verify --root . --json",
-        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.2",
-        "codex plugin add yiyuan-accord-codex@yiyuan-accord",
-        "Restart the desktop app",
-        "Start a new task",
-        "Update, disable or remove",
-        "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
-        "YIYUAN Accord for Claude",
-        "claude plugin marketplace add yiheng8023/YIYUAN-Accord@v2.0.1-preview.2",
-        "claude plugin install yiyuan-accord-claude@yiyuan-accord",
-        "claude --plugin-dir ./plugins/yiyuan-accord-claude",
-        "Rollback and Troubleshoot",
+        "any other concrete Agent",
+        "does not imply per-message activation",
         "Voluntary sponsorship and support",
         "docs/assets/sponsoring/wechat-pay.png",
         "docs/assets/sponsoring/alipay.png",
@@ -150,23 +264,14 @@
         "Disclaimer and compliance"
       ],
       "README.zh-CN.md": [
-        "当前推荐版本",
-        "30 秒开始",
-        "安装前确认",
-        "Codex IDE 扩展目前不支持插件",
-        "安装改变什么",
+        "当前公开推荐版本",
+        "不要从当前 `main` 安装",
+        "v2.0.1-preview.1",
+        "未发布的历史检查点",
+        "product/reshaping-guidance.json",
         "python -B -m yiyuan_accord verify --root . --json",
-        "codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.2",
-        "codex plugin add yiyuan-accord-codex@yiyuan-accord",
-        "重启桌面端",
-        "新建任务",
-        "更新、禁用与移除",
-        "codex plugin remove yiyuan-accord-codex@yiyuan-accord",
-        "YIYUAN Accord for Claude",
-        "claude plugin marketplace add yiheng8023/YIYUAN-Accord@v2.0.1-preview.2",
-        "claude plugin install yiyuan-accord-claude@yiyuan-accord",
-        "claude --plugin-dir ./plugins/yiyuan-accord-claude",
-        "回滚与故障排查",
+        "任何具体 Agent 能力面",
+        "每条消息",
         "自愿赞助与支持",
         "docs/assets/sponsoring/wechat-pay.png",
         "docs/assets/sponsoring/alipay.png",
@@ -198,10 +303,10 @@
         "2.0.1-preview.2"
       ],
       "docs/architecture.md": [
-        "one small semantic core and replaceable projections",
+        "one small portable kernel with an adaptive",
         "complete thin projection package surfaces",
         "strict static retired-identity boundary",
-        "no YIYUAN Accord runtime, Hook, state store, MCP, App"
+        "graph is derived in memory or an ignored cache"
       ],
       "CONTRIBUTING.md": [
         "Codex and Claude Code as current behavior-reference hosts, not permanent",
@@ -214,10 +319,10 @@
         "context-isolated, outcome-bound, identity-neutral"
       ],
       "docs/operations/CONTINUATION.md": [
-        "Determine the first incomplete gate from live Git",
-        "ordinary Codex Cloud",
-        "Only after exact hosted verification and named-human authorization may the active goal carrier create the lightweight `v2.0.1-preview.2` tag and a GitHub prerelease",
-        "Do not start a later gate early"
+        "Recover live Git",
+        "Codex Cloud reproducibility",
+        "No current release candidate",
+        "does not move historical tags"
       ]
     },
     "orderedGates": [
@@ -226,55 +331,55 @@
         "dependsOn": [],
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "completionOperand": null,
-        "condition": "One locally committed clean candidate preserves the v2.0 contract and claim-relevant representative evidence bound to the unchanged behavior-bearing adapter contract and Skill while aligning the complete v2.0.1-preview.2 distribution, authority, verifier, reference projections, documentation and tests; the distribution replay is not promoted into a new full behavior replay, all eight repository criteria are satisfied and no known blocker or task residue remains."
+        "condition": "Suspended while the product premise is remapped. A future repository candidate must bind one new plan, context-tailored process, acceptance contract, goal projection, adaptive vertical slice, exact version and evidence set; the preview.2 checkpoint cannot satisfy this gate."
       },
       {
         "id": "exact-local-verification-and-review",
         "dependsOn": ["repository-candidate"],
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "On the unchanged clean local candidate, the active goal carrier directly runs the canonical verifier, both host checks, full product tests, official Claude strict validation, diff, identity, link, workflow and residue checks plus independent specification, implementation-robustness and standards-conformance review. An independent human or second observation surface compares the publishable source bundle with the original host or session records. One evaluator isolated from candidate-preparation context checks a temporary exact local Claude-client package plus the local repository marketplace and direct-load Claude Code paths, then confirms removal and zero task residue. The sample is context-isolated, outcome-bound, identity-neutral and internal only; the accountable user, a colleague or a second observation surface may execute it. Any P0/P1 blocks the gate. Repository self-report cannot satisfy it, and only after it passes may the same SHA be pushed."
+        "condition": "Reserved for a future exact candidate. Its local gate must be declared from the remapped claims and include canonical verification, full regression, independent specification and implementation review, source comparison, representative outcome and interference replay, update or replacement rollback, residue and claim control before any push is considered."
       },
       {
         "id": "exact-candidate-hosted-verification",
         "dependsOn": ["exact-local-verification-and-review"],
         "acceptanceIds": ["R4", "Q2", "Q3"],
         "completionOperand": "exactCandidateHostedVerification",
-        "condition": "After push, the active goal carrier directly verifies the unchanged clean HEAD on every required hosted system and replays the README GitHub marketplace install, visibility and removal path in a current Claude client. For this Public Preview ordinary Codex Cloud is required; Linux, Windows and macOS GitHub Actions are attempted when account quota is available, while quota-limited absence remains explicit unknown external state and is neither a pass nor a product failure. The remote Claude-client replay must pass before named-human authorization; repository self-report, local packaging and earlier revisions are insufficient."
+        "condition": "Reserved for a future exact pushed candidate. Required hosted systems and client surfaces are selected from the claim and current environment rather than inherited from preview.2; Codex Cloud is a first-class isolated carrier, and unavailable optional systems remain explicit unknowns."
       },
       {
         "id": "exact-human-release-authorization",
         "dependsOn": ["exact-candidate-hosted-verification"],
         "acceptanceIds": ["R4", "Q1"],
         "completionOperand": "namedHumanReleaseAuthorization",
-        "condition": "Only after exact hosted verification, present the unchanged SHA, complete claim ceiling, retained failures and continuing evidence lanes to a named accountable human; the decision must preserve a real veto and is not written into the candidate."
+        "condition": "Reserved for a future unchanged candidate after its declared hosted gate passes. Present the exact SHA, claim ceiling, failures, unknowns and continuing lanes to a named accountable human; the decision preserves a real veto and remains external to the candidate."
       },
       {
         "id": "exact-tagged-public-release",
         "dependsOn": ["exact-human-release-authorization"],
         "acceptanceIds": ["R4"],
         "completionOperand": "exactTaggedPublicRelease",
-        "condition": "Create the lightweight v2.0.1-preview.2 tag and GitHub prerelease only after required hosted verification and exact named-human authorization for the unchanged candidate; do not move the tag or attach assets."
+        "condition": "The preview.2 tag and GitHub prerelease are prohibited. A future exact version may enter this gate only after its own hosted evidence and fresh named-human publication authority; existing tags remain immutable."
       },
       {
         "id": "release-verification-and-cleanup",
         "dependsOn": ["exact-tagged-public-release"],
         "acceptanceIds": ["R4", "Q4"],
         "completionOperand": "releaseVerificationAndCleanup",
-        "condition": "The active goal carrier directly verifies the public prerelease flag, remote and local v2.0.1-preview.2 tag, exact tracked release notes and zero-asset policy; it then removes task-created resources, confirms repository and evaluator residue are absent, and replays local validation."
+        "condition": "Reserved for a future authorized release. The goal carrier verifies its exact remote tag, maturity, body, asset policy and public claim, removes task-created resources, confirms residue is absent and replays the declared local checks."
       }
     ],
-    "rule": "Execute gates strictly in listed order. A failure, material correction, later rule or revision returns to the earliest affected dependency boundary; only evidence that depends on that boundary and its downstream gates is superseded, while unrelated accepted truth remains stable. Public Preview quota-limited optional hosted systems remain unknown, not passed or failed. No report, plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
+    "rule": "This ordered gate shape is suspended provenance, not an active preview.2 route. A future candidate must remap its systems and conditions before use, then execute them in order. A failure, correction, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, unavailable optional systems remain unknown, and no artifact or earlier gate is promoted into a later effect."
   },
   "goalModePrompt": {
-    "state": "active-in-host",
+    "state": "retired",
     "authority": "derived-from-current-reviewable-authority-set",
-    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\",\"topologyChange\":\"merge-split-replace-retire-with-explicit-migration-provenance-verifier-update-and-earliest-boundary-replay\"},\"completion\":\"current-authority-through-release-verification-and-cleanup\",\"directive\":\"reconcile-current-authority-with-user-corrections-and-evidence\",\"mission\":[\"yiyuan-accord\",\"v2.0\",\"v2.0.1-preview.2\",\"public-preview\"],\"pause\":[\"human-judgment\",\"new-account-or-trust\",\"material-cost\",\"publication\",\"irreversible-effect\"],\"route\":{\"gates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"semantics\":\"execute-exactly-in-listed-order\",\"work\":[\"claude-surface-authority-and-presentation\",\"claude-marketplace-and-verifier-regressions\",\"affected-claude-reader-path-evidence\",\"preview2-candidate-freeze\"]},\"schema\":\"yiyuan-accord-goal/v1\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"same-checkout\",\"immutable-v2.0-tag-and-historical-evidence\",\"no-new-branch-worktree-or-repository-fork\"]}",
-    "workStageIds": ["claude-surface-authority-and-presentation", "claude-marketplace-and-verifier-regressions", "affected-claude-reader-path-evidence", "preview2-candidate-freeze"],
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"representative-outcome-observed-with-bounded-evidence-and-reconciled-effects\",\"directive\":\"Deliver the bound representative outcome through a live, minimum-sufficient and authorized route; own avoidable mechanics; refresh on material change; verify the consequence and leave reconciled state.\",\"evidenceSurfaces\":[\"codex-local\",\"codex-cloud-when-current-conditions-fit\",\"claude-code\",\"available-claude-client-when-effective\"],\"outcome\":{\"claimLimit\":\"This is one representative adaptive repair slice. It does not prove universal software correctness, every Agent or carrier, broad field value, production safety or release readiness.\",\"completion\":\"The requested behavior is externally verified at the claimed level; unauthorized effects are zero; avoidable user-operated discovery, routing, configuration, continuity, verification and cleanup steps are zero; material effects, burden, interference, unknowns and residue are reconciled.\",\"id\":\"outcome.agent-owned-repository-repair\",\"statement\":\"Given one bounded software change request and an accessible disposable repository, the Agent delivers the requested verified behavior while preserving unrelated work and requiring the user only for consequential judgment or genuinely unavailable authority.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"Q2\",\"Q4\"],\"dependsOn\":[],\"id\":\"migrate-version-neutral-active-carrier\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"migrate-version-neutral-active-carrier\"],\"id\":\"bind-current-gt11-contract\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"bind-current-gt11-contract\"],\"id\":\"build-disposable-repair-fixture\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"build-disposable-repair-fixture\"],\"id\":\"run-codex-local-gt11\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R2\",\"R3\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"run-codex-local-gt11\"],\"id\":\"compare-noop-help-interference-and-update\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R2\",\"R3\",\"Q2\",\"Q4\"],\"dependsOn\":[\"compare-noop-help-interference-and-update\"],\"id\":\"replay-condition-fit-carriers\",\"state\":\"completed\"},{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"replay-condition-fit-carriers\"],\"id\":\"independent-review-and-bound-claim\",\"state\":\"completed\"}],\"semantics\":\"At each material change, derive the lowest-net-burden route that satisfies the current outcome under observed capability, authority, trust, data, cost, topology and evidence conditions; a healthy sufficient native route is a passing no-op.\",\"work\":[\"record-revisable-reshaping-consensus\",\"remap-authority-domain-and-lifecycle\",\"map-plan-process-acceptance-and-goal-projection\",\"prove-minimum-adaptive-vertical-slice\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-fork\"]}",
+    "workStageIds": ["record-revisable-reshaping-consensus", "remap-authority-domain-and-lifecycle", "map-plan-process-acceptance-and-goal-projection", "prove-minimum-adaptive-vertical-slice"],
     "releaseGateIds": ["repository-candidate", "exact-local-verification-and-review", "exact-candidate-hosted-verification", "exact-human-release-authorization", "exact-tagged-public-release", "release-verification-and-cleanup"],
     "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "refreshTriggers": ["user-correction", "observed-failure-or-side-effect", "host-or-capability-drift", "evidence-conflict", "later-rule-or-revision", "phase-or-authority-boundary", "repeated-same-purpose-repair"],
-    "hostLifecycleNote": "Immutable v2.0 at 71ff4a2687b54f26c8dbf3a94384257f1fc0f532 retains its seven exact behavior observations and GT-07 cleanup exclusion, each bound to its exact adapter contract, Skill, projection and session. Under the constitution's distribution-only rule, the v2.0.1-preview.2 increment reopens distribution, human presentation, Claude marketplace, affected reader-path and downstream release dependencies while preserving the bounded representative evidence because adapter contracts, Skills and exact source exposure are unchanged. The changed package identity receives separate lifecycle evidence and is not presented as a new full behavior replay. The preview.2 local replay proves exact-package installation, enablement, Skill discovery and one explicit direct-load invocation only. Claude Code remains the behavior-evidence adapter; official availability of the same package in Claude web chat, the Claude Desktop Chat tab and Cowork is static distribution evidence only until each affected path is observed. Installation or enablement exposes an on-demand Skill and does not prove per-message invocation, useful behavior, no-op behavior or cross-surface equivalence. The protected outcomes remain goal anchoring, route selection, authority, correction, continuity, recovery, verification and cleanup without an always-on Runtime, Hook, MCP, App or state layer. GitHub Actions account quota is an external optional preview variable, while ordinary Codex Cloud remains required. Repository readiness still applies only to an exact clean candidate and grants no hosted, human, publication, field or completion outcome."
+    "refreshTriggers": ["user-correction", "observed-failure-or-side-effect", "host-or-capability-drift", "dynamic-index-invalidation", "evidence-conflict", "later-rule-or-revision", "phase-or-authority-boundary", "repeated-same-purpose-repair"],
+    "hostLifecycleNote": "The v2.0.1-preview.2 packages and ordered release procedure remain an unreleased historical checkpoint; its runtime-free product premise and release route were retired before publication. Immutable v2.0 and v2.0.1-preview.1 tags and their exact observations remain bounded historical facts, not proof for the reshaped product. Installation or enablement exposes latent capability and does not prove per-message activation, value, no-op behavior or cross-surface equivalence. The prepared goal projection derives its route from live host, capability, authority, topology, cost and evidence conditions. On Codex Cloud the effective projection may be a native plugin if later established, a repository Skill, AGENTS.md, setup or maintenance bootstrap, or bounded degradation; no one carrier mechanism is a product prerequisite. Local, cloud and client carriers are attempted only when their current conditions fit the task; inability on one carrier remains scoped evidence and implies no future version, push, tag or release."
   },
   "hostProjections": [
     {
@@ -318,8 +423,8 @@
       "primaryInstructionBytes": 18940
     },
     "targets": {
-      "maxTrackedFiles": 60,
-      "maxProductCodeAndTestBytes": 198000,
+      "maxTrackedFiles": 68,
+      "maxProductCodeAndTestBytes": 225000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -365,7 +470,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Every retained mechanism must pay rent in observed help, risk reduction or recovery value after code, prompt, evidence, topology, cognition and lifecycle cost. The pre-reshape baseline at 534a77aae9e1d191173e6e05b4327c80d22855d8 was 1551209 product-code-and-test bytes across 96 tracked files. The rejected 134000, 150000, 164000, 170000 and 210000 routes record why naive lexical scanning, unbounded concatenation, marker-only workflow checks, weak Git provenance and repeated additive repair were insufficient; exact intermediate measurements remain in Git history rather than active routing. The retained mechanism uses the Git index as its finite declaration source, shared Python 3.10 AST grammar, linear bounded static-subtree summaries, strict non-Python decoding, exact lexical identity boundaries, descriptor-bound stable regular-file reads, bounded Git capture, exact workflow structure and structured source-evidence constraints. It fails closed on indeterminate declared surfaces and exempts only digest-bound research Markdown plus exact tracked PNG paths whose signature and complete bytes match program-declared SHA-256 values. It proves only that declared static boundary, not ignored or untracked files, Python comments, runtime-built or external content. The Public Preview split first measured 176340 bytes; indexing its binary surfaces then exposed the undecodable-file boundary and required the narrow PNG admission. Fixed-diff review subsequently reproduced contract-line/distribution drift, coordinated Goal-order erasure, sponsorship-surface drift, required-versus-optional hosted-system ambiguity and cross-phase Goal-order ambiguity. Final dual-axis review then reproduced a semantic Goal-order bypass in which a correct list could be placed inside a negated example, and found that the narrow PNG exception had not reached R1. Premise and representation review rejected a large duplicated Python prompt model and retained a compact canonical JSON Goal projection that carries only the mission identity, semantic-authority locators, workspace boundary, exact typed route, pause boundary and completion target. Detailed dynamic policy remains single-sourced in the current declared semantic authority set. A later user correction rejected treating that set or its three-file schema-v2 bootstrap as unquestionable or permanent; the Goal projection now derives locators from the current reviewed set and binds explicit challenge plus merge, split, replacement and retirement migration semantics. The preview.1 checkpoint measured 184587 product-code-and-test bytes and 58 tracked files against 195000 bytes and 60 files. Preview.2 first attempted reuse and subtraction: it keeps one unchanged Claude Skill and adapter contract, admits no Runtime, Hook, MCP, App or state, and adds only the official marketplace, release note and narrow dual-schema verifier regression required by observed host drift. The corrected checkpoint measures 187931 product-code-and-test bytes across 60 files. The evidence-triggered target is 198000 bytes and 60 files, leaving 10069 bytes against the required 9900-byte reserve and no unused file slot. This is a bounded recalibration, not automatic growth. Any future breach blocks Q3 and triggers premise, interface and representation review across deletion, replacement, recomposition, native delegation and bounded addition. There is no universal add-or-subtract default; L2 still requires a deletion or replacement attempt before another same-purpose repair layer, and any mechanism is simplified or retired when its residual value is no longer demonstrated."
+    "rule": "Complexity checkpoints are release guardrails, not permanent product invariants or permission to remove intended outcome capability. After independent review required fail-closed source binding, blocked-lifecycle coverage and preservation of one mandatory future release-note surface, the current reshaping checkpoint permits at most 68 tracked files, 225000 product-code-and-test bytes and 26000 primary-instruction bytes while preserving at least three tracked-file slots and five percent product-code-and-test headroom. The 68-file ceiling remains materially below the 96-file baseline and is not a growth target. Count code, prompts, context, evidence, state, topology, human cognition, latency, money, interference, recovery, maintenance and retirement. Durable semantic records remain single-sourced; transient environment snapshots and derived graphs are not committed. Any breach pauses candidate claims and triggers premise, interface and representation review across simplification, deletion, replacement, native delegation, recomposition and bounded addition. Historical intermediate measurements and rejected validator generations remain in Git and docs/operations/HISTORY.md rather than active routing."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

@@ -2,7 +2,7 @@
 
 把用户想要的结果推进到可验证、可恢复的闭环，同时不让用户管理 Agent 的工具、拓扑或内部工序。
 
-YIYUAN Accord 是一个开放、Agent 中立的人机协作可靠性契约与评估框架。它帮助 Agent 围绕用户当前目标，选择最小充分路径，并在真实决策边界保留人的权限。
+YIYUAN Accord 是一个开放、Agent 中立、机制中立的人机协作系统：由小型可移植可靠性内核与动态适配、可替换的结果交付行为组成。它帮助 Agent 围绕用户当前目标选择充分路径，并在真实决策边界保留人的权限。
 
 它根据用户纠正和实际观测效果持续校准，并以验证、明确未知和残留清理结束任务。
 
@@ -10,9 +10,10 @@ YIYUAN Accord 是一个开放、Agent 中立的人机协作可靠性契约与评
 
 [English](README.md)
 
-> **当前推荐版本：**安装 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases)
-> 中最新发布的 v2.0.1 公开预览版。本源码树是 `v2.0.1-preview.2`
-> 分发；只有匹配的 GitHub 预发行版存在后，它才成为已发布推荐版本。
+> **当前公开推荐版本：**使用不可变的
+> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1)
+> 公开预览版。当前 `main` 正在进行产品重塑，不是安装或发布候选；
+> 未发布的 preview.2 路线已经退役。
 
 > GitHub 可能仍把历史 v2.0 标成“最新”，因为
 > [预发行版不能获得该标记](https://docs.github.com/en/rest/releases/releases#update-a-release)；
@@ -30,51 +31,22 @@ YIYUAN Accord 是一个开放、Agent 中立的人机协作可靠性契约与评
 
 ---
 
-## 30 秒开始
+## 使用已发布预览版
 
-### 安装前确认
+不要从当前 `main` 安装。当前公开推荐版本是不可变的
+[`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1)；
+请按该 tag 的
+[已发布 README](https://github.com/yiheng8023/YIYUAN-Accord/blob/v2.0.1-preview.1/README.zh-CN.md)
+执行精确的安装、验证、更新与移除路径。
 
-普通 Codex 用户只需要：
+`main` 中的 `v2.0.1-preview.2` 包只是未发布的历史检查点。其发布路线
+已在发布前退役；它不是新的推荐版本、滚动 tag 或面向普通用户的本地候选
+安装入口。
 
-- 支持插件的 ChatGPT 桌面端 Codex 或 Codex CLI；
-- 能够访问公开 GitHub 仓库，并有权修改自己的用户级插件配置；
-- 安装后新建任务或会话。
-
-Codex IDE 扩展目前不支持插件。普通使用不需要检出源码或准备 Python；
-这些属于下文的验证与贡献者路径。Accord 不绑定固定宿主版本，因此应记录
-实际使用的版本，而不是把某次测试版本写成永久依赖。
-
-### 在 Codex 中安装
-
-安装精确、不可变的公开预览版 tag：
-
-```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.2
-codex plugin add yiyuan-accord-codex@yiyuan-accord
-```
-
-重启桌面端或新开 CLI 会话。打开 **Plugins** 或运行 `/plugins`，确认
-`YIYUAN Accord for Codex` 与 `deliver-demand-driven-outcome` Skill 已出现。
-
-新建任务后，像平常一样说明想要的结果。例如：*“把这个安装路径改准确，
-保留无关改动，验证结果，并告诉我还有什么没被证明。”* 只有在需要确定性
-启用检查时，才显式选择该 Skill。
-
-### 安装改变什么
-
-安装只会让一个渐进披露的 Skill 可供新任务使用。它不会增加 Runtime、Hook、
-MCP server、App、后台进程、状态存储或自动项目修改，也不会追溯影响安装时
-已经打开的任务。
-
-克隆仓库不等于安装插件。Codex 可能把 checkout 中的 `AGENTS.md` 当作本地
-项目说明读取，但这不表示 Accord 已安装。正常工作时允许隐式调用 Skill；
-宿主原生行为已经充分时，它应保持安静。
-
-插件市场声明位于 [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json)，
-插件包位于 [`plugins/yiyuan-accord-codex`](plugins/yiyuan-accord-codex)。
-
-OpenAI 当前官方资料见[插件使用](https://learn.chatgpt.com/docs/plugins)与
-[插件打包](https://developers.openai.com/plugins/build/plugins)。
+审查源码或参与贡献前，请先读
+`product/reshaping-guidance.json` 与
+`docs/operations/CONTINUATION.md`。当前仓库结构有效，但有意不满足候选
+就绪条件。
 
 ---
 
@@ -108,150 +80,77 @@ Accord 不是要求用户额外学习的提示词模板，普通请求就足够�
 
 ---
 
-## Claude 客户端与 Claude Code
+## 当前开发 checkout
 
-Claude 网页聊天、Claude Desktop 的 **Chat** 页和 Cowork 当前都可使用插件中的
-Skill。持久安装时，在 **Customize > Plugins** 的 Personal plugins 区域选择
-**Add marketplace**，从 GitHub 仓库
-`https://github.com/yiheng8023/YIYUAN-Accord` 添加市场，再安装
-**YIYUAN Accord for Claude**。在新聊天中输入 `/`，确认
-`deliver-demand-driven-task` 可见。
+当前 checkout 用于审查和重塑，不面向普通安装。其 Codex 与 Claude 包保留
+preview.2 检查点，以便继续核验精确分发内容与宿主观测；它们不定义未来
+机制集合。
 
-Claude Code 的持久 CLI 路线是：
+已经安装并启用的 preview.2 插件可以继续作为潜在能力存在。安装或可见不
+代表每条消息都会激活，也不证明有效行为或产品价值。不要从 `main`
+重新安装；也不要把禁用当成隔离干扰的唯一办法。未来有行为变化的候选必须
+证明适用性、隔离、热更新或原子替换、健康检查和回滚。
 
-```powershell
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@v2.0.1-preview.2
-claude plugin install yiyuan-accord-claude@yiyuan-accord
-```
-
-市场应注册仓库根；`plugins/yiyuan-accord-claude` 只是包目录，不是市场根。
-安装和启用只让宿主可按需发现 Skill，不表示每条消息都会调用，也不证明
-Claude Code、网页、Desktop 与 Cowork 的行为等价。
-
-### Claude Code 单会话参考路径
-
-在仓库根目录为一个本地会话加载参考投影：
-
-```powershell
-claude --plugin-dir ./plugins/yiyuan-accord-claude
-```
-
-在 `/help` 中确认 `/yiyuan-accord-claude:deliver-demand-driven-task` 已出现。该直接加载方式不会创建持久安装；参见 [Claude Code 官方插件说明](https://code.claude.com/docs/en/plugins)。
-
-checkout 变化后可运行 `/reload-plugins`，它只重载当前会话。要停用这种直接加载的插件，结束会话并在下次启动时不再传入 `--plugin-dir`。这不会移除另行持久安装的插件。
-
----
-
-## 更新、禁用与移除
-
-先在执行安装的同一表面确认状态。Codex CLI 安装使用
-`codex plugin list --json`，Claude CLI 安装使用
-`claude plugin list --json`；Claude 客户端安装先查看
-**Customize > Plugins**。
-两个表面的清单暂时不同属于需要记录的宿主状态，不能自动证明另一处安装失败。
-
-刷新已经配置的 Git 市场：
-
-```powershell
-codex plugin marketplace upgrade yiyuan-accord
-```
-
-不可变发布 ref 不会自动前进到新 tag。更新或回滚时，把 `VERSION_TAG` 替换成目标精确 tag，移除现有插件和市场，然后重新安装并新建任务：
-
-```powershell
-codex plugin remove yiyuan-accord-codex@yiyuan-accord
-codex plugin marketplace remove yiyuan-accord
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref VERSION_TAG
-codex plugin add yiyuan-accord-codex@yiyuan-accord
-```
-
-需要保留市场但暂时停用时，在 **Plugins** 中禁用或重新启用。上面前两条命令会彻底移除插件和市场记录。
-
-Claude CLI 管理的持久安装使用以下命令核对、刷新、更新或移除；客户端管理的安装则在 **Customize > Plugins** 中完成同样生命周期操作：
-
-```powershell
-claude plugin list --json
-claude plugin marketplace update yiyuan-accord
-claude plugin update yiyuan-accord-claude@yiyuan-accord
-claude plugin uninstall yiyuan-accord-claude@yiyuan-accord
-```
-
-移除 marketplace 也会卸载由它安装的插件。不要直接编辑 Claude 的全局配置文件来代替这些宿主命令。
-
-### 回滚与故障排查
-
-回滚只选择更早的不可变 tag，绝不移动已有 tag。启用状态不清楚时，先检查宿主实际列出的插件或 Skill，再新建任务或会话，并运行对应的宿主检查。
-
-安装表面没有列出插件，只能说明该处尚未观察到安装。若插件被列为已启用、
-但当前会话没有暴露 Skill，应把 Skill 可见性或会话加载状态记为 unknown，
-再走宿主的 reload 或新会话路径；不要把这种差异改写成 `enabled=false`。
-安全软件、宿主配置、模型路由和会话中断都是测试变量，应与项目行为分开记录。
-
-报告仓库缺陷时，请提供精确 revision、宿主版本、相关配置边界和验证器输出。不得附带凭据或原始私密会话内容。
-
----
-
-## 验证源码与投影包
-
-准备 Python 3.10–3.14，并克隆精确发布：
-
-```powershell
-git clone --branch v2.0.1-preview.2 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
-```
-
-运行 canonical verifier：
+贡献者可以运行：
 
 ```powershell
 python -B -m yiyuan_accord verify --root . --json
-```
-
-静态检查两个参考宿主投影：
-
-```powershell
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 ```
 
-这些检查只验证仓库与投影包的一致性，不会安装插件、证明宿主实际行为、满足真实场域验收、授予发布权限或证明生产安全。
+这些检查验证当前仓库结构和历史包的一致性，不会安装插件、证明有效行为、
+验证重塑后的产品、授予发布权限或证明生产安全。
 
 ---
 
 ## 仓库包含什么
 
-- **当前 schema-v2 权威集合**：
+- **当前 schema-v3 权威集合**：
   [`constitution.json`](product/constitution.json)、
   [`program.json`](product/program.json) 与
   [`acceptance.json`](product/acceptance.json)
+- **已接受、可修订的重塑与动态索引指导**：
+  [`reshaping-guidance.json`](product/reshaping-guidance.json)
 - **派生术语与边界**：[`CONTEXT.md`](CONTEXT.md)
 - **数据驱动的通用验证器**：
   [`yiyuan_accord/control.py`](yiyuan_accord/control.py)
-- **可替换、无运行时的 Skill 投影**：Codex 与 Claude 适配投影；现有行为证据仍分别绑定具体宿主表面
+- **历史 preview.2 参考投影**：Codex 与 Claude 包；其精确行为证据仍分别
+  绑定具体宿主表面，不限制未来机制选择
 - **帮助与干扰代表任务**：
   [`evals/golden-tasks.json`](evals/golden-tasks.json)
 
 可移植契约是 **K1–K5**。**H1–H10** 宿主规则和 **L1–L7** 试错标准把宿主漂移与历史失败留在核心之外。
 
-这三份文件只是当前可审查拓扑，并非不容置疑的真理或永久数量。未来的合并、拆分、替换或退役必须保留来源，并显式迁移 schema、验证器、映射与受影响证据。
+这三份权威文件只是当前可审查的启动拓扑，并非不容置疑的真理、永久数量，
+更不是由今天宿主可见能力决定的覆盖上限。未来的合并、拆分、替换或退役
+必须保留来源，并显式迁移 schema、验证器、映射与受影响证据。
 
 ---
 
-## 边界与证据
+## 当前重塑边界
 
-Accord 不增加安装器、后台 Runtime、Hook、MCP 服务、App、状态库或自动用户配置写入。它依赖宿主当前能力，并把宿主专属生命周期工序留在可替换投影中。
+Accord 不受 Codex、Claude 或任何具体 Agent 能力面的限制。每个具体 Agent
+及其宿主能力面都只是可替换适配器和带新鲜度边界的观测快照。可移植产品
+覆盖的是 Agent 中立的“需求—能力—权限—路线—实际效果—证据”动态关系；
+当现场事实与生命周期价值成立时，原生、官方、受维护、组合或受控新建的
+机制都可以进入路线。
 
-v2.0.1-preview.2 是基于不可变 v2.0 的公开预览版分发与易用性修补，不主张通用人机协作正确性、广泛真实场域有效性、跨宿主或跨表面等价、对所有用户都降低负担或生产安全。
+Skill、插件、App、MCP、Hook、配置、状态、Runtime、云端载体或其他机制，
+既不是必选项，也不是永久禁区。可见或安装不等于激活；原生路径充分时应当
+没有不必要介入，存在残余缺口时则可以引入具备干扰、更新、回滚和退役控制
+的局部机制。
 
-验证器通过只证明该 checkout 的有限仓库契约。已接纳行为样本仍绑定具体任务、宿主、投影和 revision。保留的 `GT-07:cleanup` 失败继续收窄主张，不会被改写成成功。
+当前验证器只证明本次活动重塑状态的结构一致性，以及保留历史包证据的完整
+性；它报告当前验收为 0/8、没有发布候选。不可变的 v2.0 与
+v2.0.1-preview.1 仍是公开历史事实；preview.2 未曾发布，不得打 tag。
 
-精确标准与发布门位于 [`product/acceptance.json`](product/acceptance.json)，有限发布主张见 [`docs/releases/v2.0.1-preview.2.md`](docs/releases/v2.0.1-preview.2.md)。
-
----
-
-## 本次发布之后
-
-v2.0.1-preview.2 是一个有限阶段，不是使命终点。后续工作只从已观察的残余缺口、真实任务证据或重大宿主变化中准入。当前持续证据通道包括 Claude 客户端实际行为、真实场域效果、跨宿主或长期证据，以及代表任务 `GT-06`、`GT-09` 和 `GT-10`。
-
-宿主能力增强后，Accord 可以简化或退役投影，而不是自动增加机制。缺失功能只有在用户价值、风险降低或恢复收益大于代码、认知、生命周期和运行成本时才恢复。
+已完成的重塑增量把一个真实结果映射为计划、因地制宜的工序、验收和精简
+目标投影，并回放了最小动态适配纵向切片。下一项有界工作，是在不继承
+preview.2 权威或包就绪状态的前提下，把这份已接受的活动基线另行形成
+`v3.0.0` 正式发布候选。详见
+[`product/reshaping-guidance.json`](product/reshaping-guidance.json) 与
+[`docs/operations/CONTINUATION.md`](docs/operations/CONTINUATION.md)。
 
 ---
 

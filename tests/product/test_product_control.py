@@ -2,16 +2,21 @@ from contextlib import contextmanager
 import hashlib, json, shutil, subprocess, tempfile, unittest
 from pathlib import Path
 from unittest.mock import patch
-from yiyuan_accord.control import host_check, verify_product
+from yiyuan_accord.control import (
+    _validate_four_surface_mapping, host_check, verify_product,
+)
 from yiyuan_accord.evidence import (
+    _canonical_official_url,
     _digest,
     _observation_errors,
     _postcapture_bundle,
+    _publishable_payload,
     _time,
     representative_contract_sha256,
 )
 from yiyuan_accord.guardrails import (
     canonical_goal_objective,
+    closeout_sequence_errors,
     projection_observation_errors,
     validate_projection_package,
 )
@@ -23,6 +28,8 @@ from yiyuan_accord.identity import (
 ROOT = Path(__file__).resolve().parents[2]
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
+CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-26-gt11-codex-local-source.json'
+CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-26-gt11-codex-local.json'
 OBS = {
     1: 'evals/observations/2026-08-24-v20-claude-gt01.json',
     2: 'evals/observations/2026-08-24-v20-claude-gt02.json',
@@ -80,8 +87,11 @@ def _indexed_fixture():
 def _rehash(root, locator):
     acceptance = _read(root, A)
     digest = hashlib.sha256((root / locator).read_bytes()).hexdigest()
-    for item in (item for criterion in acceptance['criteria']
-                 for item in criterion['evidence']):
+    items = [
+        item for criterion in acceptance['criteria']
+        for item in criterion['evidence']
+    ] + acceptance['representativeBehaviorPolicy']['historicalEvidence']
+    for item in items:
         if item['locator'] == locator:
             item['sha256'] = digest
     _write(root, A, acceptance)
@@ -109,9 +119,9 @@ def _public_source_errors(root, locator, bundle, observation):
     return _errors(root)
 
 def _source_error_fragment(root, locator):
-    items = next(item for item in _read(root, A)['criteria'] if item['id'] == 'R3')['evidence']
+    items = _read(root, A)['representativeBehaviorPolicy']['historicalEvidence']
     index = next(i for i, item in enumerate(items) if item['locator'] == locator)
-    return f'R3 evidence[{index}] sourceEvidence[0] is invalid'
+    return f'historicalEvidence[{index}] sourceEvidence[0] is invalid'
 
 def _balanced_add(terms):
     terms = list(terms)
@@ -179,7 +189,10 @@ class ProductControlTests(unittest.TestCase):
         if report['programStatus'] == 'active':
             program = _read(ROOT, P)
             stages = program['increment']['workItems'][0]['closeoutSequence']
-            self.assertFalse(all(stage['state'] == 'completed' for stage in stages))
+            self.assertEqual(
+                all(stage['state'] == 'completed' for stage in stages),
+                program['increment']['state'] == 'completed',
+            )
             self.assertFalse(report['repositoryCandidateReady'])
         else:
             self.assertEqual(report['programStatus'], 'ready')
@@ -187,17 +200,83 @@ class ProductControlTests(unittest.TestCase):
             self.assertEqual(report['repositoryCandidateReady'], report['checkoutClean'])
         self.assertTrue(all(host['staticReady'] for host in report['hostChecks'].values()))
         program, acceptance = _read(ROOT, P), _read(ROOT, A)
-        limit = program['complexityBudget']['targets']['maxProductCodeAndTestBytes']
+        constitution = _read(ROOT, C)
+        guidance = _read(ROOT, 'product/reshaping-guidance.json')
+        self.assertEqual(guidance['status'], 'accepted-revisable-guidance')
+        self.assertEqual(
+            guidance['dynamicIndex']['graphProjection']['implementation'],
+            'derived-in-memory-or-ignored-cache-first',
+        )
+        self.assertIn(
+            'preview2-is-a-current-release-candidate',
+            {item['id'] for item in guidance['retiredAsActivePremises']},
+        )
+        historical_notes = (
+            ROOT / 'docs/releases/v2.0.1-preview.2.md'
+        ).read_text(encoding='utf-8')
+        self.assertIn('Unreleased historical checkpoint', historical_notes)
+        self.assertNotIn('claude plugin marketplace add', historical_notes)
+        self.assertNotIn('The intended release is', historical_notes)
+        self.assertNotIn(
+            'universal-agent-runtime', constitution['productBoundary']['excludes']
+        )
+        self.assertIn(
+            'dynamic-index-and-route-derivation',
+            constitution['productBoundary']['includes'],
+        )
+        target = program['complexityBudget']['targets']
+        self.assertGreaterEqual(
+            target['maxTrackedFiles'] - report['complexity']['trackedFiles'], 3
+        )
+        limit = target['maxProductCodeAndTestBytes']
         percent = program['complexityBudget']['minimumProductCodeAndTestHeadroomPercent']
         self.assertGreaterEqual(limit - report['complexity']['productCodeAndTestBytes'],
                                 (limit * percent + 99) // 100)
         self.assertNotRegex((ROOT / 'CONTEXT.md').read_text(encoding='utf-8'),
                             r'#/[^`\n]+/[0-9]+(?:/|`)')
         self.assertNotIn('maxControlBytes', program['complexityBudget']['targets'])
-        gate = program['releaseProcedure']['orderedGates'][1]['condition']
-        for marker in ('original host or session records', 'context-isolated, outcome-bound, identity-neutral'):
-            self.assertIn(marker, gate)
-            self.assertIn(marker, acceptance['candidateVerification']['rule'])
+        if report['programStatus'] == 'ready':
+            gate = program['releaseProcedure']['orderedGates'][1]['condition']
+            for marker in (
+                'original host or session records',
+                'context-isolated, outcome-bound, identity-neutral',
+            ):
+                self.assertIn(marker, gate)
+                self.assertIn(marker, acceptance['candidateVerification']['rule'])
+        else:
+            prompt = program['goalModePrompt']
+            self.assertEqual(
+                prompt['state'],
+                'retired' if program['increment']['state'] == 'completed'
+                else 'active-in-host',
+            )
+            mapping = program['increment']['fourSurfaceMapping']
+            self.assertEqual(
+                mapping['outcomeId'],
+                program['increment']['representativeOutcome']['id'],
+            )
+            projection = json.loads(prompt['objective'])
+            self.assertEqual(projection['schema'], 'yiyuan-accord-goal/v2')
+            ordered = projection['route']['orderedSteps']
+            self.assertLessEqual(
+                len(prompt['objective']), 3600,
+                'canonical host goal must keep headroom below the Codex limit',
+            )
+            self.assertEqual(
+                ordered,
+                [{field: step[field] for field in (
+                    'id', 'state', 'dependsOn', 'acceptanceIds'
+                )} for step in mapping['process']['orderedSteps']],
+            )
+            self.assertIn(
+                'suspended', acceptance['candidateVerification']['rule']
+            )
+            self.assertIn(
+                'No reshaped release candidate currently exists',
+                next(item for item in acceptance['criteria'] if item['id'] == 'R4')[
+                    'statement'
+                ],
+            )
 
     def test_authority_and_static_suite_mutations_fail_closed(self):
         cases = (
@@ -474,6 +553,49 @@ class ProductControlTests(unittest.TestCase):
             malformed, malformed, _time('2026-08-24T00:00:00Z')
         ))
 
+        current = _read(ROOT, CURRENT_GT11_SOURCE)['records']['GT-11']
+        current_task = tasks['GT-11']
+        self.assertIsNotNone(_postcapture_bundle(
+            current['payload'], current_task, _time(current['capturedAt'])
+        ))
+        for mutation in (
+            'digest', 'nonce', 'agent-task', 'carrier', 'locator', 'completed',
+            'result', 'results-missing',
+        ):
+            payload = json.loads(json.dumps(current['payload']))
+            event = next(
+                item for item in payload['materialEvents']
+                if item['kind'] == 'independent-poststate'
+            )
+            binding = event['sourceBindings'][0]
+            if mutation == 'digest':
+                binding['resultSha256'] = '0' * 64
+            elif mutation == 'nonce':
+                binding['phaseNonces'][0] = 'unbound-phase'
+            elif mutation == 'agent-task':
+                binding['agentTask'] = '/root/different-agent'
+            elif mutation == 'carrier':
+                binding['carrierSessionId'] = 'wrong'
+            elif mutation == 'locator':
+                binding['resultLocator'] = 'codex-collaboration-agent:/wrong'
+            elif mutation == 'completed':
+                binding['completedAt'] = '2999-01-01T00:00:00Z'
+            elif mutation == 'result':
+                payload['independentAgentResults'][0]['report'] += ' drift'
+            else:
+                payload.pop('independentAgentResults')
+            with self.subTest(direct_independent_binding=mutation):
+                self.assertIsNone(_postcapture_bundle(
+                    payload, current_task, _time(current['capturedAt'])
+                ))
+        observation = _read(ROOT, CURRENT_GT11_OBSERVATION)
+        payload = json.loads(json.dumps(current['payload']))
+        payload.pop('recheckTriggers')
+        self.assertFalse(_publishable_payload(
+            payload, current_task, observation['cleanup'],
+            _time(current['capturedAt']), observation['projectionIdentity'],
+        ))
+
         source_cases = (
             (8, ('officialSources', 0, 'url'), 'https://github.com/openai/../x'),
             (8, ('officialSources', 0, 'url'), 'https://github.com/openai/%2e%2e/x'),
@@ -522,14 +644,12 @@ class ProductControlTests(unittest.TestCase):
     def test_failed_sample_narrows_claim(self):
         with _fixture() as root:
             acceptance = _read(root, A)
-            criterion = next(
-                item for item in acceptance['criteria'] if item['id'] == 'Q1'
-            )
-            criterion['evidence'][0]['claim'] = 'overclaim'
+            acceptance['representativeBehaviorPolicy']['historicalEvidence'][2][
+                'claim'
+            ] = 'overclaim'
             _write(root, A, acceptance)
             self.assert_has(
-                _errors(root),
-                'claim must equal claimLimit.statement',
+                _errors(root), 'historical claim binding is invalid'
             )
         self.assertEqual(
             _read(ROOT, A)['claimCeiling']['retainedBehaviorExclusions'], ['GT-07:cleanup']
@@ -575,15 +695,24 @@ class ProductControlTests(unittest.TestCase):
             workflow.write_bytes(body)
             readme = (root / 'README.md').read_text(encoding='utf-8')
             (root / 'README.md').write_text(
-                readme.replace('## Start in 30 seconds', '## Start'),
+                readme.replace(
+                    'Current public recommendation',
+                    'Current experimental recommendation',
+                    1,
+                ),
                 encoding='utf-8')
             self.assert_has(_errors(root), 'derived surface markers')
             (root / 'README.md').write_text(readme, encoding='utf-8')
             path = root / 'docs/operations/CONTINUATION.md'
             text = path.read_text(encoding='utf-8')
-            v1, v2 = ('`v2.0.1-preview.1` tag', '`v2.0.1-preview.2` tag')
-            swapped = text.replace(v2, 'TAG', 1).replace(v1, v2, 1).replace('TAG', v1, 1)
-            path.write_text(swapped, encoding='utf-8')
+            path.write_text(
+                text.replace(
+                    'No current release candidate',
+                    'A current release candidate exists',
+                    1,
+                ),
+                encoding='utf-8',
+            )
             self.assert_has(_errors(root), 'derived surface markers')
             path.write_text(text, encoding='utf-8')
             program['goalModePrompt']['mapsTo'].remove('Q4')
@@ -592,6 +721,11 @@ class ProductControlTests(unittest.TestCase):
             increment['workItems'][0]['acceptanceIds'].remove('Q1')
             increment['workItems'][0]['closeoutSequence'][0]['state'] = 'active'
             increment['workItems'][0]['closeoutSequence'][0]['stopCondition'] = 'opposite'
+            increment['fourSurfaceMapping']['outcomeId'] = 'wrong-outcome'
+            increment['fourSurfaceMapping']['process']['phases'] = []
+            increment['fourSurfaceMapping']['process']['orderedSteps'][1][
+                'dependsOn'
+            ] = []
             program['releaseProcedure']['orderedGates'][0]['id'] = ''
             program['goalModePrompt']['objective'] = '先推送再审查'
             program['goalModePrompt']['workStageIds'] = ['wrong']
@@ -600,6 +734,9 @@ class ProductControlTests(unittest.TestCase):
                             'increment.acceptanceIds', 'workItems[0].acceptanceIds',
                             'closeoutSequence', 'required release gate sequence',
                             'workStageIds', 'objective is not the canonical projection',
+                            'fourSurfaceMapping outcomeId',
+                            'fourSurfaceMapping.process phases',
+                            'orderedSteps[1].dependsOn',
                             )
 
         with _fixture() as root:
@@ -628,6 +765,19 @@ class ProductControlTests(unittest.TestCase):
             )
 
         program = _read(ROOT, P)
+        increment = program['increment']
+        increment['state'] = 'blocked'
+        item = increment['workItems'][0]
+        item['state'] = item['closeoutSequence'][-1]['state'] = 'blocked'
+        steps = increment['fourSurfaceMapping']['process']['orderedSteps']
+        steps[-1]['state'] = 'blocked'
+        blocked_errors = []
+        criteria = set(program['goalModePrompt']['mapsTo'])
+        _validate_four_surface_mapping(increment, criteria, blocked_errors)
+        blocked_errors.extend(closeout_sequence_errors(item, criteria))
+        self.assertFalse(blocked_errors)
+
+        program = _read(ROOT, P)
         prompt = program['goalModePrompt']
         locators = ['authority/root.json', 'authority/evidence.json']
         projection = json.loads(canonical_goal_objective(
@@ -637,6 +787,23 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(projection['authority']['locators'], locators)
         self.assertEqual(projection['authority']['mode'],
                          'reviewable-versioned-current-set')
+        self.assertEqual(
+            projection['outcome']['id'], 'outcome.agent-owned-repository-repair'
+        )
+        self.assertEqual(
+            _canonical_official_url('https://code.claude.com/docs/en/desktop'),
+            'https://code.claude.com/docs/en/desktop',
+        )
+        self.assertEqual(
+            _canonical_official_url(
+                'https://learn.chatgpt.com/docs/environments/cloud-environment'
+            ),
+            'https://learn.chatgpt.com/docs/environments/cloud-environment',
+        )
+        self.assertEqual(
+            projection['route']['semantics'],
+            program['increment']['fourSurfaceMapping']['process']['routeRule'],
+        )
 
     def test_evidence_cannot_self_verify_or_self_authorize(self):
         with _fixture() as root:
@@ -667,16 +834,26 @@ class ProductControlTests(unittest.TestCase):
                 self.assertIsNone(RELEASE_RE.fullmatch(invalid))
 
         self.rejected(
-            P, 'distributionVersion must be a v-prefixed semantic version',
+            P, 'active reshaping must not select',
             lambda v: v.update(distributionVersion='v2.0.01'),
         )
         self.rejected(
-            P, 'must name one v-prefixed contract line',
+            P, 'active reshaping must not select',
             lambda v: v.update(release='v2.0.1'),
         )
         self.rejected(
-            P, 'must belong to the contract release line',
+            P, 'active reshaping must not select',
             lambda v: v.update(distributionVersion='v3.0.0'),
+        )
+        self.rejected(
+            P, 'historicalRelease provenance is invalid',
+            lambda v: v['historicalRelease'].update(
+                unreleasedCheckpoint='v2.0.01'
+            ),
+        )
+        self.rejected(
+            A, 'historicalRelease provenance is invalid',
+            lambda v: v['historicalRelease'].update(releasedTags=[]),
         )
         self.rejected(
             P, 'required candidate systems are invalid',
@@ -1124,4 +1301,4 @@ class ProductControlTests(unittest.TestCase):
             _write(root, P, program)
             with _deny_path('read_bytes', target):
                 errors = _errors(root)
-            self.assert_has(errors, 'inputEvidence[6] digest source is oversized')
+            self.assert_has(errors, 'digest source is oversized')

@@ -51,41 +51,51 @@ EXTERNAL_COMPLETION_OPERANDS = tuple(
 
 
 def canonical_goal_objective(program, authority, work_stages, release_gates):
-    procedure = program.get("releaseProcedure", {}) if isinstance(program, dict) else {}
+    increment = program.get("increment", {}) if isinstance(program, dict) else {}
+    outcome = increment.get("representativeOutcome", {}) if isinstance(increment, dict) else {}
+    mapping = increment.get("fourSurfaceMapping", {}) if isinstance(increment, dict) else {}
+    process = mapping.get("process", {}) if isinstance(mapping, dict) else {}
+    goal_mode = mapping.get("goalMode", {}) if isinstance(mapping, dict) else {}
     current_authority = authority.get("semantic", []) if isinstance(authority, dict) else []
+    ordered = process.get("orderedSteps")
+    compact_steps = [
+        {
+            field: item.get(field)
+            for field in ("id", "state", "dependsOn", "acceptanceIds")
+        }
+        for item in ordered
+        if isinstance(item, dict)
+    ] if isinstance(ordered, list) else ordered
     projection = {
-        "schema": "yiyuan-accord-goal/v1",
-        "directive": "reconcile-current-authority-with-user-corrections-and-evidence",
+        "schema": "yiyuan-accord-goal/v2",
+        "directive": goal_mode.get("directive"),
         "authority": {
             "mode": "reviewable-versioned-current-set",
             "locators": list(current_authority) if isinstance(current_authority, list) else [],
             "challenge": "latest-bound-user-correction-or-material-evidence",
-            "topologyChange": (
-                "merge-split-replace-retire-with-explicit-migration-provenance-"
-                "verifier-update-and-earliest-boundary-replay"
-            ),
         },
-        "mission": [
-            program.get("productId") if isinstance(program, dict) else None,
-            program.get("release") if isinstance(program, dict) else None,
-            program.get("distributionVersion") if isinstance(program, dict) else None,
-            procedure.get("releaseChannel"),
-        ],
+        "product": program.get("productId") if isinstance(program, dict) else None,
+        "outcome": {
+            "id": outcome.get("id"),
+            "statement": outcome.get("statement"),
+            "completion": outcome.get("completion"),
+            "claimLimit": outcome.get("claimLimit"),
+        },
         "workspace": [
-            r"C:\Projects\YIYUAN-Accord", "main", "same-checkout",
-            "immutable-v2.0-tag-and-historical-evidence",
-            "no-new-branch-worktree-or-repository-fork",
+            r"C:\Projects\YIYUAN-Accord", "main",
+            "preserve-existing-tags-and-history", "no-branch-worktree-or-fork",
         ],
         "route": {
-            "semantics": "execute-exactly-in-listed-order",
+            "semantics": process.get("routeRule"),
+            "orderedSteps": compact_steps,
             "work": list(work_stages) if isinstance(work_stages, list) else [],
-            "gates": list(release_gates) if isinstance(release_gates, list) else [],
+            "futureReleaseGates": (
+                list(release_gates) if isinstance(release_gates, list) else []
+            ),
         },
-        "pause": [
-            "human-judgment", "new-account-or-trust", "material-cost",
-            "publication", "irreversible-effect",
-        ],
-        "completion": "current-authority-through-release-verification-and-cleanup",
+        "pause": goal_mode.get("pauseOnlyFor"),
+        "evidenceSurfaces": outcome.get("firstEvidenceSurfaces"),
+        "completion": goal_mode.get("completion"),
     }
     return json.dumps(
         projection, ensure_ascii=False, sort_keys=True, separators=(",", ":")
@@ -651,12 +661,18 @@ def projection_evidence_binding_errors(
     criteria = acceptance.get("criteria")
     if not isinstance(criteria, list):
         return errors
+    groups = []
     for criterion_index, criterion in enumerate(criteria):
         evidence = criterion.get("evidence") if isinstance(criterion, dict) else None
-        if not isinstance(evidence, list):
-            continue
+        if isinstance(evidence, list):
+            groups.append((f"criteria[{criterion_index}].evidence", evidence))
+    policy = acceptance.get("representativeBehaviorPolicy")
+    historical = policy.get("historicalEvidence") if isinstance(policy, dict) else None
+    if isinstance(historical, list):
+        groups.append(("historicalEvidence", historical))
+    for prefix, evidence in groups:
         for evidence_index, item in enumerate(evidence):
-            label = f"criteria[{criterion_index}].evidence[{evidence_index}]"
+            label = f"{prefix}[{evidence_index}]"
             if not isinstance(item, dict):
                 continue
             locator = item.get("locator")
@@ -751,22 +767,26 @@ def closeout_sequence_errors(
     for index, stage in enumerate(sequence):
         stage_id = stage.get("id")
         state = stage.get("state")
-        if state not in {"completed", "active", "pending"}:
+        if state not in {"completed", "active", "pending", "blocked"}:
             errors.append(f"closeoutSequence[{index}].state is invalid")
         else:
             states.append(state)
         stop = stage.get("stopCondition")
         if not isinstance(stop, str) or not stop.startswith(f"[{stage_id}] "):
             errors.append(f"closeoutSequence[{index}].stopCondition is not bound to its stage")
-    terminal = work_item.get("state") == "completed"
-    if terminal and any(state != "completed" for state in states):
-        errors.append("completed work item closeoutSequence must be completed")
-    elif not terminal and states.count("active") != 1:
-        errors.append("active work item closeoutSequence must contain one active stage")
-    ranks = {"completed": 0, "active": 1, "pending": 2}
-    if states and [ranks[state] for state in states] != sorted(
-        ranks[state] for state in states
-    ):
+    current = work_item.get("state")
+    positions = [index for index, state in enumerate(states) if state == current]
+    if current == "completed":
+        expected = ["completed"] * len(states)
+    elif current in {"active", "blocked"} and len(positions) == 1:
+        index = positions[0]
+        expected = ["completed"] * index + [current] + ["pending"] * (
+            len(states) - index - 1
+        )
+    else:
+        expected = None
+        errors.append("work item closeoutSequence current state is invalid")
+    if expected is not None and states != expected:
         errors.append("work item closeoutSequence order is invalid")
     return errors
 

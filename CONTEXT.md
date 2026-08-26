@@ -1,10 +1,10 @@
 # YIYUAN Accord
 
 YIYUAN Accord is the derived glossary for the domain model defined by
-`product/constitution.json`. It explains an open, Agent-neutral collaboration
-reliability contract and evaluation framework without adding semantic
-authority. Its broad mission concerns human-AI collaboration; its current
-product surface concerns human-Agent work.
+`product/constitution.json`. It explains an open, Agent-neutral and
+mechanism-neutral collaboration system without adding semantic authority. Its
+broad mission concerns human-AI collaboration; its current product surface
+concerns human-Agent work.
 `_Source_` selectors use stable IDs or exact declared values instead of array
 positions, so reordering authority data cannot silently retarget a definition.
 
@@ -28,26 +28,35 @@ tool-using Agents through host projections.
 _Source_: `product/constitution.json#/domainModel/currentProductScope`
 _Avoid_: universal human-AI coverage
 
-**Collaboration reliability contract**:
-The portable commitments that keep goals, routes, authority, evidence, state,
-effects and closure aligned without supplying a runtime or domain authority.
+**Adaptive collaboration system**:
+The portable reliability kernel plus context-tailored discovery, routing,
+carriers, topology, continuity, verification and lifecycle mechanics that turn
+a goal into a bounded outcome without becoming domain authority.
 _Source_: `product/constitution.json#/domainModel/productCategory`,
 `product/constitution.json#/purpose`
-_Avoid_: control plane, workflow engine, infrastructure platform
+_Avoid_: thin contract alone, universal runtime, fixed workflow
 
 **Host projection**:
-A thin, replaceable expression of the portable contract in one Agent host.
-_Source_: `product/constitution.json#/productBoundary/includes (value: thin-replaceable-host-projections)`,
+A replaceable, scoped expression of the portable kernel and adaptive behavior
+in a local, client or cloud Agent host.
+_Source_: `product/constitution.json#/productBoundary/includes (value: replaceable-host-local-cloud-and-client-projections)`,
 `product/constitution.json#/productBoundary/hostRule`
-_Avoid_: runtime, compatibility alias, permanent host integration
+_Avoid_: product identity, permanent host binding, universal behavior proof
 
 ## Decision dimensions
 
-**Intent**:
+**Goal**:
 The current versioned goal, priority, constraint and phase.
-_Source_: `product/constitution.json#/domainModel/decisionDimensions (value: intent)`,
+_Source_: `product/constitution.json#/domainModel/decisionDimensions (value: goal)`,
 `product/constitution.json#/kernel (id: K1)`
 _Avoid_: prompt, initial request
+
+**Requirement**:
+A condition that a feasible route or completed outcome must satisfy, including
+explicit constraints and material inferred omissions subject to correction.
+_Source_: `product/constitution.json#/domainModel/decisionDimensions (value: requirement)`,
+`product/constitution.json#/kernel (id: K1)`
+_Avoid_: implementation step, assumed preference
 
 **Capability**:
 An actor's observed fitness to perform a bounded part of the current goal.
@@ -67,7 +76,21 @@ _Source_: `product/constitution.json#/domainModel/decisionDimensions (value: evi
 `product/constitution.json#/evidenceBoundary/claimRule`
 _Avoid_: trace, artifact, confidence
 
+**Cost**:
+The combined code, prompt, context, latency, money, cognition, interference,
+recovery, maintenance and retirement burden of a route or mechanism.
+_Source_: `product/constitution.json#/domainModel/decisionDimensions (value: cost)`,
+`product/constitution.json#/learnedFailureStandards (id: L3)`
+_Avoid_: price alone, code size alone
+
 ## Cross-cutting objects
+
+**Context**:
+The current task, host, model route, environment, capability exposure and
+evidence conditions that can change which factors apply.
+_Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: context)`,
+`product/constitution.json#/productBoundary/hostRule`
+_Avoid_: transcript alone, permanent global setting
 
 **State**:
 The current source-bound facts, resources, constraints and unresolved items.
@@ -87,6 +110,13 @@ carriers and actors.
 _Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: continuity)`,
 `product/constitution.json#/learnedFailureStandards (id: L6)`
 _Avoid_: copied history, implicit handoff
+
+**Topology**:
+The selected code carriers and conversation carriers through which work and
+state move, including their synchronization, handoff and cleanup relations.
+_Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: topology)`,
+`product/constitution.json#/hostAdapterStandard (id: H8)`
+_Avoid_: branch alone, copied conversation alone, user-operated routing
 
 **Lifecycle**:
 The path from observed gap through admission, operation, evaluation,
@@ -109,6 +139,18 @@ _Source_: `product/constitution.json#/domainModel/roleDistinctions (value: accou
 `product/constitution.json#/humanAuthority/humanOwns (value: accountable-final-judgment)`
 _Avoid_: approval click, Agent self-assessment
 
+**Representative outcome**:
+A bounded real task used to test one complete goal-to-effect path and its claim
+limits without presenting the sample as universal product coverage.
+_Source_: `product/program.json#/increment/representativeOutcome`
+_Avoid_: demonstration artifact, test suite, universal use case
+
+**Route**:
+A current, derived path through capabilities, carriers and evidence that can
+satisfy a bound outcome within authority and total lifecycle cost.
+_Source_: `product/program.json#/increment/fourSurfaceMapping/process/routeRule`
+_Avoid_: fixed workflow, preferred product, installed capability
+
 **Residual gap**:
 A consequential collaboration problem not sufficiently covered by healthy
 native, maintained or accountable domain mechanisms.
@@ -117,11 +159,31 @@ _Source_: `product/constitution.json#/kernel (id: K2)`,
 _Avoid_: any inconvenience, missing feature
 
 **Mechanism**:
-A bounded intervention admitted for one evidenced residual gap with an owner,
-verification method, cost and retirement trigger.
+A bounded means for creating, observing, controlling, recovering or verifying
+an effect, admitted with scope, applicability, owner, evidence, cost, rollback
+and retirement semantics.
 _Source_: `product/constitution.json#/evolutionPolicy/mechanismAdmissionRequires`,
 `product/constitution.json#/evolutionPolicy/retirementRule`
-_Avoid_: permanent layer, default feature
+_Avoid_: product goal, automatically active feature, permanently forbidden carrier
+
+**Applicability**:
+The conditions under which a visible or installed factor becomes active for
+the current goal, plus its priority, override, degradation, expiry and
+retirement relations.
+_Source_: `product/reshaping-guidance.json#/factorApplicabilityContract`
+_Avoid_: global visibility, installation, unconditional SOP
+
+**Dynamic index**:
+A source- and freshness-bound query view that joins durable semantic records
+with current environment observations without turning a snapshot into truth.
+_Source_: `product/reshaping-guidance.json#/dynamicIndex`
+_Avoid_: manually duplicated catalog, committed host snapshot, authority replacement
+
+**Graph projection**:
+A derived node-and-edge view used to find feasible routes, affected evidence
+and retirement dependencies; it does not imply a graph database.
+_Source_: `product/reshaping-guidance.json#/dynamicIndex/graphProjection`
+_Avoid_: second source of truth, mandatory database
 
 **Closure**:
 A state transition supported by consequence-level evidence, reconciled effects

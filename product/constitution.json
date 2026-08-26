@@ -1,5 +1,5 @@
 {
-  "schema": 2,
+  "schema": 3,
   "id": "yiyuan-accord-product-constitution-v1",
   "productId": "yiyuan-accord",
   "identity": {
@@ -12,14 +12,14 @@
   "domainModel": {
     "missionScope": "human-ai-collaboration",
     "currentProductScope": "human-agent-collaboration",
-    "productCategory": "portable-collaboration-reliability-contract-and-evaluation-framework",
-    "decisionDimensions": ["intent", "capability", "authority", "evidence"],
-    "crossCuttingObjects": ["state", "effect", "continuity", "lifecycle"],
+    "productCategory": "portable-kernel-and-host-adaptive-human-agent-collaboration-system",
+    "decisionDimensions": ["goal", "requirement", "capability", "authority", "evidence", "cost"],
+    "crossCuttingObjects": ["context", "state", "effect", "continuity", "topology", "lifecycle"],
     "roleDistinctions": ["actor", "responsibility", "authority", "accountability"],
-    "rule": "The four decision dimensions are an initial diagnostic lens, not an exhaustive ontology. State, effect, continuity and lifecycle cross-cut them; authority, responsibility and accountability remain distinct."
+    "rule": "Decision dimensions are a revisable diagnostic lens, not an exhaustive ontology or fixed four-quadrant encoding. Context, state, effect, continuity, topology and lifecycle cross-cut them; authority, responsibility and accountability remain distinct. A named method is recovered and defined before it becomes executable product semantics."
   },
-  "purpose": "Provide an open, Agent-neutral portable human-Agent collaboration reliability contract and evaluation framework that starts from the user's goal, uses the minimum sufficient route, preserves accountable human authority, continuously reconciles intent, state and observed effects, and closes recovery and cleanup without duplicating sufficient host or domain capability.",
-  "successDefinition": "A finite release is successful when its portable kernel and thin reference projections measurably help or preserve outcome quality on representative human-Agent collaboration tasks, reduce unnecessary orchestration and recovery burden, remain silent when native behavior is sufficient, and honestly expose unsupported or continuing field claims. The broader mission concerns human-AI collaboration, but each release is a bounded contract and evaluation surface rather than a universal runtime, governance platform or proof that every human-AI collaboration problem is solved. Future host improvement, field evidence and failures may narrow, revise or retire YIYUAN Accord mechanisms.",
+  "purpose": "Provide an open, Agent-neutral and mechanism-neutral human-Agent collaboration system: keep a small portable reliability kernel while adapting discovery, routing, configuration, carriers, topology, continuity, verification and cleanup to the current goal, host and authority so the user does not have to operate avoidable Agent mechanics.",
+  "successDefinition": "A finite release is successful when representative users can reach bounded real outcomes with less avoidable orchestration and recovery burden, acceptable interference and recoverable effects across its claimed hosts. Healthy native behavior may produce a no-op; residual gaps may justify a Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier, composed route or another mechanism. Each mechanism and claim remains scoped, observable, replaceable and retireable. A release is neither a universal runtime nor proof that every human-AI collaboration problem is solved, and later facts may revise its premise, representation, route or product shape.",
   "kernel": [
     {
       "id": "K1",
@@ -29,7 +29,7 @@
     {
       "id": "K2",
       "name": "minimum-sufficient-route",
-      "commitment": "Use sufficient healthy native capability first, then suitable maintained capability, and add only the smallest evidenced residual; unknown capability remains unknown and sufficient native behavior produces no YIYUAN Accord intervention."
+      "commitment": "Discover and use sufficient healthy native or already-available capability first, then resolve official, maintained, composed or bounded authored routes for the evidenced residual. Select by current outcome fitness, authority and total lifecycle cost; unknown remains unknown, and sufficient native behavior produces no avoidable intervention."
     },
     {
       "id": "K3",
@@ -51,7 +51,7 @@
     {
       "id": "H1",
       "mapsTo": ["K2", "K4"],
-      "rule": "Resolve current official host guidance before authoring host-specific behavior; treat it as high-weight evidence rather than portable product authority."
+      "rule": "Resolve current official host guidance and observable host behavior before authoring host-specific behavior; treat both as high-weight, fallible host evidence rather than portable product authority."
     },
     {
       "id": "H2",
@@ -61,7 +61,7 @@
     {
       "id": "H3",
       "mapsTo": ["K2"],
-      "rule": "Select by supported capability and task fitness, not by a permanently preferred version, model, provider or label."
+      "rule": "Select by effective capability, task fitness, authority and lifecycle cost, not by a permanently preferred version, model, provider, extension market, mechanism or label."
     },
     {
       "id": "H4",
@@ -76,7 +76,7 @@
     {
       "id": "H6",
       "mapsTo": ["K4", "K5"],
-      "rule": "Treat host, protocol, model and context drift as normal evaluation variables and revalidate the affected projection."
+      "rule": "Treat host, client, cloud environment, protocol, model route, extension ecosystem, configuration and context drift as normal evaluation variables; invalidate the affected index snapshot and revalidate only dependent routes and claims."
     },
     {
       "id": "H7",
@@ -86,17 +86,17 @@
     {
       "id": "H8",
       "mapsTo": ["K1", "K3", "K5"],
-      "rule": "Do not make the user compensate for Agent-owned discovery, capability, topology, continuity, recovery, verification or cleanup mechanics."
+      "rule": "Do not make the user compensate for Agent-owned discovery, routing, configuration, capability, code or conversation topology, continuity, recovery, verification, update or cleanup mechanics."
     },
     {
       "id": "H9",
       "mapsTo": ["K2"],
-      "rule": "Keep host-specific instructions, formats, versions and lifecycle mechanics outside the portable kernel."
+      "rule": "Keep host-specific instructions, formats, versions, indexes, configuration and lifecycle mechanics in replaceable adaptive projections or derived state rather than freezing them into the portable kernel."
     },
     {
       "id": "H10",
       "mapsTo": ["K2", "K5"],
-      "rule": "Retire YIYUAN Accord host-specific logic when native improvement removes the residual gap."
+      "rule": "Degrade, replace or retire YIYUAN Accord host-specific logic when native improvement or a lower-cost route removes the residual gap; installation or visibility alone neither activates nor justifies removal of a healthy latent capability."
     }
   ],
   "learnedFailureStandards": [
@@ -154,7 +154,9 @@
     "representative behavior evidence binds the current behavior-bearing adapter contract, Skill and exact exposed Skill content, while deterministic conformance binds the complete current manifest, marketplace, metadata, asset and package distribution; a distribution-only change preserves unrelated behavior truth but must replay its own activation, confirmation, removal and downstream release gates",
     "static identity absence is limited to stage-zero regular files declared by the Git index: paths and strictly decoded non-Python whole text use exact NFKC/casefold lexical token boundaries without host escape interpretation, while .py, .pyi and .pyw identifiers and literal or bounded static-concatenation values use the shared Python 3.10 AST grammar across supported Python 3.10-3.14 hosts; unavailable index state, unmerged or non-regular entries, and unreadable, undecodable, oversized, out-of-grammar or over-budget surfaces block conformance, hidden checkout flags block clean-candidate readiness, digest-bound Markdown research inputs under research/reviews and exact program-declared SHA-256-bound PNG distribution assets are inert exceptions, and no check claims absence from ignored or untracked files, Python comments, runtime-built or external dynamic content",
     "completion is supported by external criteria and observed effects rather than model self-assessment or artifact shape",
-    "serious or repeated failure changes an evaluation, route, instruction or mechanism, while anecdotal failure alone cannot cause permanent accretion"
+    "serious or repeated failure changes an evaluation, route, instruction or mechanism, while anecdotal failure alone cannot cause permanent accretion",
+    "ideas, methodologies, standards, policies, rules, logic, mechanisms, processes, protocols, representations, carriers, capabilities and metrics declare scope, applicability, provenance, override, degradation, expiry and retirement semantics rather than becoming globally active by visibility",
+    "durable semantic records are separated from ephemeral environment snapshots and derived indexes; observed learning may update fitness and regression inputs but cannot grant authority or consequential effects"
   ],
   "humanAuthority": {
     "humanOwns": [
@@ -179,21 +181,23 @@
   "productBoundary": {
     "includes": [
       "portable-collaboration-kernel",
-      "minimum-quality-and-evidence-conformance-contract",
-      "representative-help-and-interference-evaluations",
-      "thin-replaceable-host-projections"
+      "goal-to-outcome-adaptive-orchestration",
+      "live-capability-and-environment-discovery",
+      "dynamic-index-and-route-derivation",
+      "agent-owned-configuration-code-and-conversation-topology-continuity-recovery-and-cleanup",
+      "replaceable-host-local-cloud-and-client-projections",
+      "minimum-quality-evidence-and-lifecycle-contract",
+      "representative-outcome-burden-interference-and-recovery-evaluation"
     ],
     "excludes": [
-      "universal-agent-runtime",
-      "capability-catalog-or-marketplace",
-      "user-level-skill-manager-or-default-capability-portfolio",
-      "model-provider-or-topology-router",
-      "identity-authorization-or-audit-system",
-      "generic-monitoring-or-incident-platform",
+      "self-authorizing-governance-or-accountability-substitute",
+      "unbounded-or-covert-data-trust-cost-or-irreversible-effect",
+      "mandatory-global-intervention-regardless-of-context",
+      "permanent-binding-to-one-host-model-provider-version-marketplace-or-mechanism",
       "domain-correctness-or-professional-authority",
-      "static-host-version-context-threshold-or-perfect-score"
+      "static-host-version-context-threshold-perfect-score-or-universal-effectiveness-claim"
     ],
-    "hostRule": "Host, model, provider, operating system, context, Skill, plugin, MCP, Hook, memory and tool details stay in replaceable projections or evidence and never define the portable core. Separately governed user-level Skills are not release dependencies and remain inactive unless a reproduced residual gap and separate lifecycle authority justify projection."
+    "hostRule": "A concrete Agent, host, client, cloud, model route, provider, operating system, context, Skill, plugin, App, MCP, Hook, memory, tool, configuration, state and runtime is a dynamic variable represented in replaceable adapters, scoped policy, ephemeral snapshots or evidence rather than portable identity. The capability surface of Codex, Claude or any other concrete Agent is a freshness-bound observation and first evidence surface, never the Agent-neutral product boundary or capability ceiling. Any supported future native, official, maintained, composed or bounded authored mechanism may be used when it is authorized, lower-net-cost than alternatives and independently bounded for activation, interference, update, rollback and retirement. Official host guidance is high-weight evidence, never product sovereignty."
   },
   "evidenceBoundary": {
     "classes": [
@@ -208,10 +212,15 @@
   "evolutionPolicy": {
     "principles": [
       "reality-first",
-      "subtraction",
-      "restraint",
-      "fallback",
-      "residual-gap-fill"
+      "outcome-completeness",
+      "context-tailoring",
+      "dynamic-adaptation",
+      "native-delegation",
+      "subtraction-of-negative-value",
+      "proportionate-restraint",
+      "graceful-degradation",
+      "residual-gap-fill",
+      "positive-flywheel"
     ],
     "mechanismAdmissionRequires": [
       "observed-or-strongly-evidenced-problem",
@@ -221,9 +230,9 @@
       "owner-and-retirement-trigger"
     ],
     "repairRule": "A second same-purpose repair generation triggers abstraction review and a deletion or replacement attempt before another mechanism is admitted.",
-    "nonInterferenceRule": "When the host can already complete the task safely, reliably and with acceptable burden, YIYUAN Accord adds no question, instruction, tool, approval, state, topology, validation or persistent resource.",
+    "nonInterferenceRule": "When the host can already complete the task safely, reliably and with acceptable burden, YIYUAN Accord adds no avoidable active question, instruction, tool call, approval, delay, state mutation, topology change or persistent effect. A healthy installed or enabled latent capability may remain available without intervening in every message; its continued presence must still satisfy isolation, update, rollback and retirement controls.",
     "feedbackRule": "A material user correction, observed failure, host change, evidence conflict, later rule or phase boundary traces to the earliest affected dependency boundary; prior passes remain historical facts but are superseded as current-candidate evidence, the affected plan, acceptance mapping, projection and every downstream gate are replayed, and unrelated accepted truth remains stable.",
-    "retirementRule": "A YIYUAN Accord mechanism is simplified, disabled or removed when its residual benefit is no longer demonstrated. Subtraction targets implementation weight and duplicated or permanently resident machinery; it may not silently remove a user-valued outcome capability unless a sufficient native or replacement route exists or the public claim is explicitly narrowed."
+    "retirementRule": "A YIYUAN Accord mechanism, standard, policy, representation or route is simplified, degraded, disabled, replaced or removed when its applicability expires or residual benefit is no longer demonstrated. Subtraction targets implementation weight, duplication, stale assumptions, unjustified permanence and negative-value machinery; it may not silently remove a user-valued outcome capability unless a sufficient native or replacement route exists or the product scope is explicitly reconsidered. Git preserves provenance while active navigation and authority stop routing through retired material."
   },
   "authority": {
     "semantic": [
@@ -242,6 +251,7 @@
       "docs/architecture.md",
       "CONTRIBUTING.md",
       "docs/operations/CONTINUATION.md",
+      "product/reshaping-guidance.json",
       "docs/releases/v2.0.md",
       "docs/releases/v2.0.1-preview.1.md",
       "docs/releases/v2.0.1-preview.2.md",
@@ -249,6 +259,6 @@
       "plugins/"
     ],
     "historicalAndResearchRole": "non-authoritative counterevidence and evolution input only",
-    "conflictRule": "The latest bound user direction governs goals, corrections and accountable judgment. The semantic list is the current reviewable schema-v2 authority topology, not unquestionable proof or a permanent file count. User correction, contradiction or material evidence may challenge it; merging, splitting, replacing or retiring an authority surface requires explicit migration, preserved provenance, a matching schema and verifier update, and replay from the earliest affected boundary. Derived projections are repaired or retired when they diverge."
+    "conflictRule": "The latest bound user direction governs goals, corrections and accountable judgment. The semantic list is the current reviewable schema-v3 authority topology, not unquestionable proof or a permanent file count. User correction, contradiction or material evidence may challenge it; merging, splitting, replacing or retiring an authority surface requires explicit migration, preserved provenance, a matching schema and verifier update, and replay from the earliest affected boundary. Derived projections are repaired or retired when they diverge."
   }
 }

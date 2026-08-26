@@ -1,0 +1,396 @@
+{
+  "schema": 1,
+  "id": "yiyuan-accord-reshaping-guidance-2026-08-25",
+  "productId": "yiyuan-accord",
+  "status": "accepted-revisable-guidance",
+  "authorityRole": "This record captures the current accountable product correction and guides the next plan, process, acceptance contract and goal-mode projection. It is not permanent truth, does not authorize side effects or release, and must yield to later user correction or stronger evidence.",
+  "problemStatement": "The preview line proved a small portable collaboration contract and disciplined evidence boundaries, but the active product premise narrowed implementation means so far that it no longer represented the intended near-zero-burden human-Agent collaboration system. Subtraction was incorrectly allowed to remove outcome capability and user experience instead of primarily removing duplication, unjustified permanence and negative-value machinery.",
+  "northStar": {
+    "mission": "Make human-Agent collaboration reliably useful in real work while requiring the user to provide the goal, consequential judgment and unavoidable authority rather than managing Agent tools, configuration, context, topology, continuity or cleanup.",
+    "productPosture": "agent-neutral, model-neutral, provider-neutral, host-adaptive, mechanism-neutral, open and independently governed",
+    "experience": [
+      "near-zero avoidable user orchestration",
+      "latent availability after supported installation or enablement without forced per-message intervention",
+      "context-tailored activation and no-op when no residual benefit exists",
+      "Agent-owned discovery, routing, execution, correction, continuity, verification and cleanup within granted authority",
+      "graceful degradation when a preferred capability or host surface is unavailable"
+    ],
+    "success": "Representative tasks show useful consequence-level outcomes with lower avoidable human burden, bounded interference and recoverable side effects across supported hosts; failures improve routing and retirement decisions without promoting learning artifacts into authority."
+  },
+  "retainedCommitments": [
+    "latest-bound-goal-and-correction-authority",
+    "requirements-process-result-alignment",
+    "continuous-reconciliation-and-process-loss-control",
+    "human-authority-for-consequential-boundaries",
+    "evidence-proportional-to-claim-and-consequence",
+    "unknown-remains-unknown",
+    "static-readiness-is-not-effective-behavior-or-value",
+    "native-capability-first-when-sufficient-and-healthy",
+    "non-interference-and-no-op-as-positive-results",
+    "total-lifecycle-cost-and-retirement",
+    "earliest-affected-boundary-replay",
+    "code-and-conversation-topology-as-agent-owned-orchestration",
+    "historical-failure-as-counterevidence-not-current-proof"
+  ],
+  "retiredAsActivePremises": [
+    {
+      "id": "runtime-free-is-product-correctness",
+      "reason": "Runtime, MCP, Hook, App, Skill, plugin, configuration, state and other carriers are possible implementation means. Their fitness depends on task, host, authority, lifecycle cost and observed interference."
+    },
+    {
+      "id": "thin-contract-is-the-complete-product",
+      "reason": "A thin portable kernel can remain valuable, but it does not by itself deliver the intended low-burden end-to-end experience."
+    },
+    {
+      "id": "subtraction-means-feature-removal",
+      "reason": "Subtraction targets duplication, stale assumptions, needless permanence and negative-value machinery; it must not silently discard an intended outcome without a sufficient native or replacement route or an explicit scope decision."
+    },
+    {
+      "id": "host-version-or-model-is-product-identity",
+      "reason": "Host versions, model routes, providers and extension ecosystems are observed environment variables and compatibility evidence, not portable product identity."
+    },
+    {
+      "id": "plugin-market-is-the-capability-boundary",
+      "reason": "Native capability, installed capability, official extensions, authoritative online sources, maintained third-party capability, composition and bounded authorship are all eligible discovery lanes."
+    },
+    {
+      "id": "fixed-file-count-or-fixed-authority-topology-is-an-invariant",
+      "reason": "File and size limits are revisable release checkpoints. Authority surfaces and representations may merge, split, move or retire through an explicit provenance-preserving migration and replay."
+    },
+    {
+      "id": "fixed-sop-is-the-default-control-model",
+      "reason": "A route is computed from the current goal, environment, authority, evidence and cost. A prior sequence remains reusable experience only while its applicability conditions hold."
+    },
+    {
+      "id": "preview2-is-a-current-release-candidate",
+      "reason": "The preview.2 checkout remains an unreleased historical checkpoint, but its runtime-free product premise and release route were superseded by this correction before publication."
+    }
+  ],
+  "factorTaxonomy": [
+    {"kind": "purpose", "meaning": "desired human or product outcome and accountable value"},
+    {"kind": "invariant", "meaning": "small portable condition that remains unless explicitly changed at the product-governance boundary"},
+    {"kind": "premise", "meaning": "falsifiable belief used to choose a design or route"},
+    {"kind": "principle", "meaning": "directional idea for judgment, not an executable command"},
+    {"kind": "methodology", "meaning": "reusable way to analyze or solve a class of problems"},
+    {"kind": "standard", "meaning": "minimum quality or interoperability threshold with a declared scope"},
+    {"kind": "policy", "meaning": "context-bound decision rule including authority, risk, data, trust or cost"},
+    {"kind": "logic", "meaning": "deterministic or probabilistic relation used to infer, rank or transition"},
+    {"kind": "mechanism", "meaning": "means that creates, observes, controls, recovers or verifies an effect"},
+    {"kind": "process", "meaning": "revisable sequence selected for the current task or phase"},
+    {"kind": "protocol", "meaning": "contract or interface between roles, carriers, tools or systems"},
+    {"kind": "representation", "meaning": "schema, prompt, index, graph, document or other projection of meaning"},
+    {"kind": "carrier", "meaning": "host, task, cloud environment, repository, branch, worktree, conversation or handoff that carries work or state"},
+    {"kind": "capability", "meaning": "observable ability exposed natively, by extension, by composition or by bounded authorship"},
+    {"kind": "evidence", "meaning": "source-bound observation supporting a limited fact, effect or claim"},
+    {"kind": "metric", "meaning": "measurement of outcome, burden, interference, cost, recovery or confidence"},
+    {"kind": "lifecycle", "meaning": "discovered, eligible, activated, healthy, degraded, superseded or retired state and transition"}
+  ],
+  "factorApplicabilityContract": {
+    "requiredFields": [
+      "id",
+      "kind",
+      "scope",
+      "status",
+      "source",
+      "appliesWhen",
+      "priority",
+      "overrides",
+      "degradesTo",
+      "expiresWhen",
+      "supersededBy",
+      "evidence",
+      "owner",
+      "rollbackOrRetirement"
+    ],
+    "statuses": [
+      "candidate",
+      "accepted",
+      "active",
+      "inactive",
+      "unknown",
+      "degraded",
+      "superseded",
+      "retired"
+    ],
+    "defaultRule": "Visibility or installation does not imply activation. Activation requires current applicability, authority and expected net value; deactivation does not require uninstalling a healthy latent capability."
+  },
+  "adaptiveSystem": {
+    "fewStableVariables": [
+      "current-user-goal-and-corrections",
+      "legal-and-policy-compliance",
+      "accountable-human-authority-boundaries",
+      "evidence-honesty",
+      "effect-attribution-and-recovery",
+      "requirements-process-result-alignment"
+    ],
+    "dynamicVariables": [
+      "task-and-domain",
+      "risk-reversibility-trust-data-and-cost",
+      "host-client-cli-cloud-and-operating-system",
+      "host-version-and-feature-set",
+      "model-provider-route-and-reasoning-mode",
+      "context-capacity-and-conversation-state",
+      "installed-and-effective-Skills-plugins-Apps-MCP-Hooks-tools-and-config",
+      "extension-markets-and-maintainer-health",
+      "network-and-authoritative-source-availability",
+      "code-and-conversation-topology",
+      "observed-outcome-burden-interference-and-residue",
+      "evidence-freshness-and-conflict"
+    ],
+    "tailoringRule": "Ideas, methodologies, standards, policies, rules, logic, mechanisms, processes, protocols, representations, carriers and metrics are scoped and activated by current facts. Only the few stable variables above are candidates for portable always-on treatment."
+  },
+  "capabilityDiscovery": {
+    "ownedBy": "Agent",
+    "coverageRule": "YIYUAN Accord covers the Agent-neutral dynamic relation from requirement to capability, authority, route, observed effect and evidence; it does not take the capability surface of Codex, Claude or any other concrete Agent as the product boundary. A concrete Agent and its current host capability are replaceable adapters plus freshness-bound evidence snapshots, never the product ceiling.",
+    "capabilityStates": [
+      "unknown",
+      "declared",
+      "discoverable",
+      "available",
+      "authorized",
+      "effective",
+      "degraded",
+      "unavailable",
+      "superseded",
+      "retired"
+    ],
+    "lanes": [
+      "healthy-effective-native-capability",
+      "already-installed-or-configured-capability",
+      "official-host-extension-and-marketplace",
+      "official-or-primary-source-online-discovery",
+      "maintained-trustworthy-third-party-capability",
+      "composition-of-existing-capabilities",
+      "bounded-authorship-or-adapter-implementation"
+    ],
+    "selectionConstraints": [
+      "goal-fitness",
+      "authority",
+      "compatibility",
+      "trust-and-data-exposure",
+      "cost-and-latency",
+      "context-consumption",
+      "side-effects-and-reversibility",
+      "maintenance-health",
+      "verification-and-retirement-cost"
+    ],
+    "refreshRule": "Refresh the affected snapshot and route when a host, version, official interface, extension ecosystem, model route, configuration, permission, network source or observed capability changes. A newly exposed capability can supersede Accord machinery; a removed capability can trigger degradation, alternative discovery, composition or bounded authorship.",
+    "failureRule": "Do not stop at today's host surface, a small marketplace or weak native feature when another compliant discovery or composition lane can satisfy the goal. Do not promise an unobserved capability, and do not install, connect, spend or cross a trust or data boundary without the authority required for that effect."
+  },
+  "topology": {
+    "code": [
+      "checkout",
+      "branch",
+      "worktree",
+      "repository-fork",
+      "cloud-environment",
+      "synchronization",
+      "merge",
+      "cleanup"
+    ],
+    "conversation": [
+      "current-task",
+      "compact",
+      "causal-fork",
+      "fresh-task-with-verified-handoff",
+      "conclusion-reconciliation",
+      "source-release",
+      "archive"
+    ],
+    "rule": "The Agent selects and verifies topology from host-native signals and current constraints. The user is asked only when a new authority, trust, data, cost, destructive, irreversible or publication boundary makes the choice genuinely human-owned.",
+    "codexCloud": "Codex Cloud is a first-class execution, comparison, verification and continuity carrier when its isolated environment, setup, secrets, network policy and source revision fit the task; it is not merely a release checker and does not inherit unverified local state."
+  },
+  "dynamicIndex": {
+    "decision": "required-as-a-lightweight-derived-system",
+    "sourceFormat": "schema-validated-versioned-JSON-records-with-stable-identifiers",
+    "sourceRule": "Store durable semantic facts, decisions and provenance; do not manually duplicate every derived edge or commit transient host state.",
+    "runtimeSnapshot": {
+      "persistence": "ephemeral-or-ignored-cache",
+      "requiredMetadata": ["capturedAt", "scope", "source", "freshness", "health", "unknowns"],
+      "invalidation": [
+        "goal-or-phase-change",
+        "user-correction",
+        "Git-HEAD-status-config-or-authority-change",
+        "host-version-feature-or-policy-change",
+        "Skill-plugin-App-MCP-Hook-tool-model-or-route-change",
+        "source-expiry-or-conflict",
+        "capability-install-update-disable-or-health-change",
+        "effect-evidence-acceptance-or-residue-change"
+      ]
+    },
+    "graphProjection": {
+      "implementation": "derived-in-memory-or-ignored-cache-first",
+      "nodeKinds": [
+        "goal",
+        "requirement",
+        "criterion",
+        "process-step",
+        "host",
+        "model-route",
+        "capability",
+        "source",
+        "policy",
+        "standard",
+        "mechanism",
+        "carrier",
+        "topology",
+        "effect",
+        "evidence",
+        "decision",
+        "release"
+      ],
+      "edgeKinds": [
+        "requires",
+        "supplies",
+        "applies-to",
+        "scoped-to",
+        "carried-by",
+        "verified-by",
+        "derived-from",
+        "invalidates",
+        "conflicts-with",
+        "overrides",
+        "degrades-to",
+        "supersedes",
+        "retires-when",
+        "observed-on",
+        "supports-outcome"
+      ],
+      "databaseGate": "Do not add a graph database until representative queries show that schema-validated JSON plus an in-memory projection fails on scale, query expressiveness, concurrency, durability or latency and the added lifecycle cost is justified.",
+      "feasibilityValidation": {
+        "status": "validated-as-bounded-prototype-direction",
+        "artifact": "research/PROTOTYPE-dynamic-relation-graph.html",
+        "method": "Pure in-memory derivation plus exhaustive enumeration of all action sequences through depth three.",
+        "observations": {
+          "evaluatedStateSequences": 1885,
+          "uniqueNormalizedStates": 117,
+          "failedInvariantChecks": 0,
+          "remoteRecoveryResult": "A currently blocked remote route became eligible and selected after its observed conditions and authority changed."
+        },
+        "supports": [
+          "derive a local relation graph from durable semantics and current observations without creating a second authority source",
+          "recompute affected routes after host, capability, evidence, authority, constraint or version changes",
+          "keep currently unavailable routes active with explicit recheck triggers instead of converting them into permanent retirement",
+          "retain a graph database as an evidence-gated future option rather than a current dependency"
+        ],
+        "doesNotProve": [
+          "production implementation fitness",
+          "representative user outcome value",
+          "host or cloud capability",
+          "performance or scale beyond this bounded state space",
+          "release readiness"
+        ],
+        "reopenWhen": [
+          "a representative vertical slice cannot express or recompute its required relations",
+          "derived and durable truth cannot be kept distinct",
+          "observed scale, concurrency, durability, latency or query needs exceed the lightweight projection",
+          "the projection creates more burden, interference or lifecycle cost than outcome value"
+        ]
+      }
+    },
+    "routeQuery": "Find feasible paths from the current goal through requirements, capabilities, carriers and evidence under authority, trust, data, cost, context, risk and compatibility constraints; rank by expected outcome fitness minus total burden, interference, uncertainty and lifecycle cost.",
+    "learningBoundary": "Observed task data may update health, fitness, confidence, regression and retirement inputs. It does not automatically change product authority, install capability, publish, or authorize a consequential effect."
+  },
+  "positiveFlywheel": [
+    "bind-current-goal-and-boundaries",
+    "discover-live-environment-and-capabilities",
+    "compute-a-minimum-sufficient-tailored-route",
+    "execute-within-authority",
+    "observe-effects-burden-interference-and-residue",
+    "bind-evidence-and-reconcile-divergence",
+    "update-fitness-health-regression-and-retirement-inputs",
+    "improve-later-routing-and-remove-redundancy"
+  ],
+  "antiBloatAndSideEffectControls": [
+    "single-source-durable-facts-and-derived-projections",
+    "selective-refresh-instead-of-universal-rescan",
+    "no-mandatory-always-on-graph-database",
+    "no-committed-transient-host-or-account-snapshot",
+    "optional-replaceable-host-adapters",
+    "measure-code-prompt-context-latency-cost-interference-recovery-and-retirement",
+    "sandbox-or-isolate-probes-when-consequences-justify-it",
+    "explicit-ownership-rollback-cleanup-and-retirement-trigger",
+    "A-B-observation-without-current-plugin-with-current-plugin-and-with-candidate-when-interference-is-material",
+    "prefer-native-hot-reload-or-atomic-versioned-update-with-health-check-and-rollback-over-session-fragility"
+  ],
+  "researchAndExperienceInputs": [
+    {
+      "id": "pre-accord-project-history",
+      "role": "provenance-counterevidence-and-recoverable-design-input",
+      "rule": "Recover concepts and failures by exact revision; do not roll back the tree or restore retired validator generations wholesale."
+    },
+    {
+      "id": "human-agent-collaboration-shortfall-research",
+      "role": "problem-and-evaluation-input",
+      "rule": "Use current evidence and representative tasks; do not turn a report into product truth."
+    },
+    {
+      "id": "four-quadrant-method",
+      "role": "analysis-input",
+      "rule": "Recover and define its exact axes before encoding or testing it; the name alone is not sufficient authority."
+    },
+    {
+      "id": "openai-official-host-material",
+      "role": "high-weight-Codex-host-input",
+      "rule": "Re-resolve current primary sources and source or repository behavior before adapting; OpenAI is neither portable authority nor product identity."
+    },
+    {
+      "id": "anthropic-official-sdlc-material",
+      "role": "high-weight-Claude-host-and-SDLC-input",
+      "rule": "Adopt only goal-relevant evidence-backed ideas after neutral comparison; Anthropic is neither portable authority nor product identity."
+    }
+  ],
+  "fourSurfaceGuidance": {
+    "plan": [
+      "start from the product outcome and observed collaboration gaps",
+      "inventory retained, retired, unknown and candidate premises",
+      "define the smallest end-to-end vertical slice that demonstrates user value",
+      "name earliest affected authority and evidence replay boundaries",
+      "budget outcome, burden, interference, context, cost, recovery and lifecycle"
+    ],
+    "process": [
+      "bind goal and authority",
+      "observe current host, model route, topology and capability state",
+      "query or derive feasible routes",
+      "execute the highest-fitness authorized route",
+      "continuously reconcile requirements, process, effects and evidence",
+      "degrade, recover, hand off or retire from explicit triggers",
+      "clean task effects and feed bounded learning into later routing"
+    ],
+    "acceptance": [
+      "evaluate real outcome and avoidable human burden together",
+      "separate static conformance, effective activation, behavior, field effect and portability",
+      "test helpful intervention, correct no-op, correction, context pressure, topology transition, recovery and cleanup",
+      "test current-plugin interference and update or rollback behavior",
+      "use local Codex, Codex Cloud, Claude Code and an available Claude client as the first evidence surfaces rather than the product capability ceiling, and test only the claim each observed surface can support",
+      "retain failure and unknowns without converting them into success or universal product failure"
+    ],
+    "goalModePrompt": [
+      "carry the desired outcome, authority, current phase and completion target",
+      "reference live discovery and the dynamic index instead of hard-coding a host route",
+      "make pause boundaries and irreversible effects explicit",
+      "own capability, configuration, topology, continuity, verification and cleanup mechanics",
+      "refresh on correction, drift, failure, evidence conflict, side effect or carrier pressure",
+      "remain short enough to preserve host reasoning capacity and defer detail by progressive disclosure"
+    ]
+  },
+  "nextAuthorityBoundary": {
+    "first": "product/constitution.json",
+    "then": [
+      "product/program.json",
+      "product/acceptance.json",
+      "goal-mode-projection-and-verifier",
+      "host-adapters-and-evaluations",
+      "documentation-and-release-route"
+    ],
+    "minimumNextSlice": "Rewrite the product constitution and domain model around the thin invariant kernel plus adaptive outcome-delivery system, then map one representative end-to-end capability-discovery and routing slice before choosing runtime machinery.",
+    "requiredReplay": [
+      "semantic-authority-and-derived-surface-conformance",
+      "plan-process-acceptance-goal-projection-alignment",
+      "host-admission-and-interference",
+      "representative-help-no-op-correction-continuity-recovery-and-cleanup",
+      "local-and-Codex-Cloud-exact-revision-reproducibility",
+      "release-claim-and-lifecycle-only-after-a-future-exact-candidate"
+    ]
+  }
+}

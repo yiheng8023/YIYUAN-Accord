@@ -1,8 +1,9 @@
 # History boundary and learned experience
 
-The current product is intentionally smaller than its history. Git is the
-durable provenance layer for superseded experiments; the current tree retains
-only the standards and counterexamples that affect present decisions.
+The active product direction is selected from, not constrained by, its history.
+Git is the durable provenance layer for superseded experiments and release
+routes; current navigation retains only the standards, counterexamples and
+explicit migrations that affect present decisions.
 
 ## Major boundaries
 
@@ -17,6 +18,22 @@ only the standards and counterexamples that affect present decisions.
 - The 2026-08-20 global reshape replaces that active proof architecture with
   K1–K5, H1–H10, L1–L7, R1–R4 and Q1–Q4. It does not rewrite Git history or
   inherit old outcome credit.
+- Revision `aacda0f44202fd7c2bc563a9a9b4fa219478b906` is the unreleased
+  `v2.0.1-preview.2` distribution checkpoint. Its Claude presentation and
+  lifecycle findings remain bounded evidence, but the 2026-08-25 correction
+  retired its runtime-free product premise and release route before any tag or
+  Release was created.
+- `product/reshaping-guidance.json` records the 2026-08-25 accepted but
+  revisable direction: retain the portable reliability kernel, restore the
+  intended adaptive outcome-delivery system, make most factors context-bound,
+  use JSON plus a derived graph before considering a graph database, and replay
+  product evidence from the premise boundary. It guides the next four-way
+  mapping but is not permanent truth or release authority.
+- After the first adaptive vertical slice completed, the next distribution
+  direction was selected as a separately replayed `v3.0.0` full release rather
+  than another preview. This records version and maturity intent only: it does
+  not turn the active reshape baseline into a candidate, inherit preview.2
+  evidence, or waive exact local, hosted, human, tag and cleanup gates.
 
 Use Git to inspect an exact historical file:
 
@@ -25,8 +42,11 @@ git show 534a77aae9e1d191173e6e05b4327c80d22855d8:<path>
 ~~~
 
 Do not restore an old package or validator merely because it existed or once
-passed. Reuse only the smallest counterexample or rule justified by a current
-gap.
+passed. Recover historical capabilities, both code and conversation topology,
+and failed design premises by exact revision; reuse or reimplement only what a
+current outcome, route and lifecycle case justifies. Retiring an active route
+means removing it from current navigation and authority, not deleting Git
+provenance or moving immutable tags.
 
 ## What the trials established
 

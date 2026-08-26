@@ -1,37 +1,42 @@
 # Architecture
 
-YIYUAN Accord has one small semantic core and replaceable projections.
+YIYUAN Accord combines one small portable kernel with an adaptive,
+mechanism-neutral outcome-delivery system. The 2026-08-25 direction is
+revisable guidance. Its active authority has completed the first remapping and
+adaptive vertical-slice replay; preview.2 package and release structures remain
+historical reference projections until a later candidate replaces them.
 
 ~~~text
 latest bound user goal and corrections
                 |
                 v
- immutable contract line + active distribution program
+ portable kernel + scoped authority and acceptance
                 |
                 v
-      generic contract verifier
-          /             \
-         v               v
-  Codex thin Skill   Claude thin Skill
-         \               /
-          v             v
-     representative Golden Tasks
+ durable semantic JSON + live environment snapshot
                 |
                 v
- exact local verification + independent review
+       derived capability/route graph
+        /          |          \
+       v           v           v
+ native route  maintained    bounded composed or
+               extension      authored mechanism
                 |
                 v
- push same SHA -> exact-HEAD hosted evidence -> named-human authority
+ authorized execution across local/client/cloud carrier
                 |
                 v
- exact tagged release -> live public check + goal-carrier cleanup
+ effect observation -> reconciliation -> recovery/cleanup
+                |
+                v
+ fitness, regression and retirement inputs
 ~~~
 
-The arrows mean dependency, not automatic authority promotion. Reports and
-observations do not become authority merely by being present, but they can
-challenge the current set and trigger a reviewed merge, split, replacement or
-retirement. Such a topology change requires an explicit schema and verifier
-migration, preserved provenance and replay from the earliest affected boundary.
+The arrows mean dependency, not automatic authority promotion. Reports,
+snapshots, graph edges and observations do not become authority merely by being
+present, but they can challenge the current set and invalidate dependent routes.
+An authority-topology change requires an explicit schema and verifier migration,
+preserved provenance and replay from the earliest affected boundary.
 
 The collaboration layer is the product's controllable seam. It does not try to
 make an Agent imitate a person, replace a model provider, or remove human
@@ -54,10 +59,11 @@ native capability, effective observation, unknown state, drift, verification,
 user burden, host-specific detail and retirement. L1–L7 are regression
 standards distilled from the project's two-month trial history.
 
-In schema v2 these identifiers and their full current statements live in
-product/constitution.json. Derived prose may explain them but cannot silently
-redefine them. This is a current source location, not an eternal ontology or
-permanent authority-file count.
+In schema v3 these identifiers and their full current statements live in
+product/constitution.json. `product/reshaping-guidance.json` records the current
+accepted but revisable reshape and dynamic-index direction. Derived prose may
+explain them but cannot silently redefine them. These are current source
+locations, not an eternal ontology or permanent authority-file count.
 
 ## One deep verification seam
 
@@ -68,7 +74,7 @@ permanent authority-file count.
 repository and projection-package checks.
 Together they validate:
 
-- the current schema-v2 authority set and its cross-file mappings;
+- the current schema-v3 authority set and its cross-file mappings;
 - at most one active increment and one active work item, with the completed
   increment and work item retained when a clean candidate enters task-time gates;
 - goal-mode prompt coverage;
@@ -113,7 +119,7 @@ content. The workflow profile remains a separate exact structural constraint.
 
 The verifier does not contain copies of the product's purpose, criterion
 statements or pass rules. It validates the contract supplied by the current
-reviewable authority set. The schema-v2 bootstrap currently consists of
+reviewable authority set. The schema-v3 bootstrap currently consists of
 constitution, program and acceptance; changing that topology requires a
 versioned migration rather than treating three as a permanent constant. A valid
 report means only that the authority and projections are
@@ -127,20 +133,24 @@ release eligibility or completion.
 
 ## Host admission
 
-Each projection consists of one host-native manifest, one small YIYUAN Accord
-adapter contract and one progressively disclosed Skill, plus only the
-host-native metadata or presentation assets declared by that manifest. The
-native manifest contains only fields supported by that host; `adapter.json`
-carries the machine-readable K, H and L mapping used by the generic host check.
-There is no YIYUAN Accord runtime, Hook, state store, MCP, App, private capture
-protocol or fixed host-version dependency.
+The current preview.2 reference projection consists of one host-native manifest,
+one small YIYUAN Accord adapter contract and one progressively disclosed Skill,
+plus only the metadata or presentation assets declared by that manifest. This
+describes the historical package, not a permanent product shape.
 
-The two packages are semantic siblings, not byte-identical copies. Their K/H/L
-mapping and lifecycle boundary must agree; host-required names, manifests and
-metadata may differ. Separately governed user-level Skills are outside the
-release package and stay unprojected by default. Their installation or
-visibility is neither a dependency nor evidence for these reference
-projections.
+A future host adapter may use a Skill, plugin, App, MCP, Hook, configuration,
+state, runtime, cloud carrier or composed mechanism when the current host
+supports it and the route is authorized, net-beneficial, observable, isolated
+for interference, updateable, recoverable and retireable. None of those means
+defines portable product identity, and none is forbidden merely because a thin
+projection once omitted it.
+
+The two current packages are semantic siblings, not byte-identical copies.
+Their K/H/L mapping and lifecycle boundary agree; host-required names,
+manifests and metadata may differ. Installation or visibility exposes latent
+capability but is neither per-message activation nor effective-behavior or
+product-value evidence. Deactivation is not synonymous with uninstalling a
+healthy latent capability.
 
 Presentation remains host-specific. The Codex package may bind a declared
 trademark image as a deterministic package asset, while a host manifest without
@@ -160,15 +170,21 @@ capability. Current official host guidance is high-weight task-time evidence,
 not permanent core authority. Host drift causes revalidation, and native
 improvement may retire projection logic.
 
-The host capability view is event-triggered and versioned, not an always-on
-catalog: refresh it before release or after a material host, maturity,
-permission, extension, cloud-route or deprecation change. Each review binds an
-official source/date and exact host version to availability, maturity,
-trust/persistence/effect surface, native equivalence, residual gap, a live probe
-and a retirement trigger. Codex and Claude Code are current behavior-reference
-adapters and test hosts; neither defines the portable contract or future host
-scope. Claude web chat, the Claude Desktop Chat tab and Cowork are distribution
-surfaces for the same Claude package, not inherited behavior evidence.
+The capability view is an event-triggered dynamic index, not a manually
+maintained global catalog. Durable schema-validated JSON identifies meanings,
+relations and provenance; task-time observations bind current host, client,
+cloud, model route, configuration, effective exposure, freshness, health and
+unknowns. A graph is derived in memory or an ignored cache for route and impact
+queries. Transient host or account state is not committed. A graph database is
+admitted only after representative queries prove that this smaller design is
+insufficient and its added lifecycle cost is justified.
+
+Codex local and Cloud plus Claude Code and available Claude clients are the
+first concrete-Agent remapping and evaluation surfaces; no concrete Agent or
+its capability surface defines the portable kernel, product boundary or future
+scope. Official material is re-resolved as high-weight host evidence and checked
+against observable behavior. The Agent, model/provider route and host remain
+test variables or adapters, not identity claims.
 
 ## Evaluation
 
@@ -237,19 +253,23 @@ continue after release unless the release explicitly claims them.
 
 ## Complexity and evolution
 
-The program binds the pre-reshape baseline at revision
-534a77aae9e1d191173e6e05b4327c80d22855d8 and numeric reduction targets. Total
-cost includes code, instructions, evidence, state, topology, human cognition,
-recovery and retirement—not line count alone.
+The program retains the pre-reshape baseline at revision
+534a77aae9e1d191173e6e05b4327c80d22855d8 and numeric checkpoint targets for
+comparison. Those targets can block a proposed release, but are not permanent
+product invariants or permission to delete intended outcome capability. Total
+cost includes code, instructions, context, evidence, state, topology, human
+cognition, latency, money, interference, recovery and retirement—not line or
+file count alone.
 
 A repeated same-purpose failure triggers replan and a premise, interface and
 representation review. Deletion, replacement, recomposition, native delegation
 and bounded addition are all considered; there is no universal add-or-subtract
 default. L2 retains one evidence-derived ordering constraint: try deletion or
 replacement before admitting another same-purpose repair layer. A new or
-retained mechanism requires an observed residual gap, insufficient native or
-maintained coverage, benefit greater than total lifecycle cost, proportionate
-verification, and a retirement trigger. Thinness constrains implementation
-weight and permanent exposure; it is not a feature-deletion KPI. Finite release
-closes a bounded product version, while later evidence can simplify, narrow,
-retire or open one new causal increment.
+retained mechanism requires an observed residual gap or end-to-end outcome need,
+insufficient current alternatives, benefit greater than total lifecycle cost,
+proportionate verification, and rollback or retirement semantics. Thinness
+constrains duplication, unjustified permanence and negative-value exposure; it
+is not a feature-deletion KPI. Finite release closes a bounded product version,
+while later evidence can simplify, narrow, replace, retire or open one new
+causal increment.

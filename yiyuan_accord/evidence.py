@@ -10,7 +10,8 @@ from .identity import _exact, _nonempty_string as _text, _safe_https_locator
 STATES = {"passed", "failed", "failed-repeated-same-purpose"}
 _OFFICIAL_HOSTS = {
     "openai.com", "help.openai.com", "platform.openai.com",
-    "developers.openai.com", "github.com",
+    "developers.openai.com", "github.com", "code.claude.com",
+    "learn.chatgpt.com",
 }
 _PROJECTION_FIELDS = ("adapterId", "skill", "skillSha256")
 _UNRESERVED = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~")
@@ -77,6 +78,71 @@ def _official_source(source, captured_at):
     )
 
 
+def _postcapture_binding(binding, payload, captured_at):
+    if not isinstance(binding, dict):
+        return False
+    if binding.get("kind") == "observer-session-event":
+        observed_at = _time(binding.get("observedAt"))
+        return (
+            _exact(binding, ("kind", "sessionId", "eventLocator", "observedAt", "claim"),
+                   ("sessionId", "eventLocator", "observedAt", "claim"))
+            and observed_at is not None and captured_at is not None
+            and observed_at <= captured_at
+            and re.fullmatch(
+                r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}",
+                binding["sessionId"],
+            ) is not None
+            and re.fullmatch(
+                r"response_item/call_[A-Za-z0-9]+", binding["eventLocator"]
+            ) is not None
+        )
+    if binding.get("kind") != "direct-independent-agent-result":
+        return False
+    nonces = binding.get("phaseNonces")
+    results = payload.get("independentAgentResults") if isinstance(payload, dict) else None
+    completed_at = _time(binding.get("completedAt"))
+    agent_task = binding.get("agentTask")
+    return (
+        _exact(
+            binding,
+            ("kind", "carrierSessionId", "agentTask", "resultLocator", "phaseNonces",
+             "resultSha256", "completedAt", "claim"),
+            ("carrierSessionId", "agentTask", "resultLocator",
+             "resultSha256", "completedAt", "claim"),
+        )
+        and _text(agent_task)
+        and re.fullmatch(
+            r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}",
+            binding["carrierSessionId"],
+        ) is not None
+        and binding["resultLocator"] == f"codex-collaboration-agent:{agent_task}"
+        and completed_at is not None and captured_at is not None
+        and completed_at <= captured_at
+        and isinstance(nonces, list) and nonces
+        and all(_text(value) for value in nonces)
+        and len(nonces) == len(set(nonces))
+        and _records(results) and results
+        and all(
+            _exact(result, ("kind", "agentTask", "phase", "nonce", "report"),
+                   ("agentTask", "phase", "nonce", "report"))
+            and result["kind"] == "independent-agent-result"
+            and result["agentTask"] == binding["agentTask"]
+            and _text(result["phase"]) and _text(result["nonce"])
+            and _text(result["report"])
+            for result in results
+        )
+        and [result["nonce"] for result in results] == nonces
+        and binding.get("resultSha256") == _digest(results)
+    )
+
+
+def _postcapture_binding_key(binding):
+    if binding.get("kind") == "observer-session-event":
+        return binding["kind"], binding.get("sessionId"), binding.get("eventLocator")
+    return (binding.get("kind"), binding.get("carrierSessionId"),
+            binding.get("resultLocator"), binding.get("resultSha256"))
+
+
 def _postcapture_bundle(payload, task, captured_at):
     if not isinstance(payload, dict):
         return None
@@ -112,20 +178,15 @@ def _postcapture_bundle(payload, task, captured_at):
             return None
         event = matches[0]
         bindings = event.get("sourceBindings")
-        if not _records(bindings) or len(bindings) != count or not all(
-            _exact(binding, ("kind", "sessionId", "eventLocator", "observedAt", "claim"),
-                   ("sessionId", "eventLocator", "observedAt", "claim"))
-            and binding["kind"] == "observer-session-event"
-            and re.fullmatch(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}", binding["sessionId"])
-            and re.fullmatch(r"response_item/call_[A-Za-z0-9]+", binding["eventLocator"])
-            and captured_at is not None and _time(binding["observedAt"]) is not None
-            and _time(binding["observedAt"]) <= captured_at
-            for binding in bindings
-        ) or len({(binding["sessionId"], binding["eventLocator"])
-                  for binding in bindings}) != count:
+        if (
+            not _records(bindings) or len(bindings) != count
+            or not all(_postcapture_binding(binding, payload, captured_at)
+                       for binding in bindings)
+            or len({_postcapture_binding_key(binding) for binding in bindings}) != count
+        ):
             return None
         selected.append({"location": location, "event": event})
-    locators = [(binding["sessionId"], binding["eventLocator"])
+    locators = [_postcapture_binding_key(binding)
                 for item in selected for binding in item["event"]["sourceBindings"]]
     return ({"contract": contract, "events": selected} if len(special) == len(selected)
             and len(locators) == len(set(locators)) else None)
@@ -138,6 +199,7 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
         payload.get("messages"), payload.get("officialSources"),
         payload.get("cleanupEvidence"), payload.get("projectionExposure")
     )
+    triggers = payload.get("recheckTriggers")
     required = task.get("required", [])
     return (
         payload.get("captureProtocol") == "direct-host-material-events-v1"
@@ -146,6 +208,16 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
                 for field in ("role", "phase", "text"))
         and {item.get("role") for item in messages} == {"user", "assistant"}
         and _records(payload.get("materialEvents")) and payload["materialEvents"]
+        and (
+            "report-scoped-unknowns-recheck-triggers-and-claim-limit" not in required
+            or _records(triggers) and triggers and all(
+                _exact(item, ("kind", "condition", "scope", "action"),
+                       ("kind", "condition", "scope", "action"))
+                and item["kind"] == "recheck-trigger"
+                and all(_text(item[field]) for field in item)
+                for item in triggers
+            )
+        )
         and _postcapture_bundle(payload, task, captured_at) is not None
         and _exact(exposure, ("kind", *_PROJECTION_FIELDS), _PROJECTION_FIELDS)
         and _text(exposure.get("kind"))
@@ -360,7 +432,7 @@ def _observation_errors(
 
 
 def representative_sample_errors(
-    root, acceptance, required_task_ids, golden, read_json,
+    root, acceptance, required_task_ids, golden, read_json, require_complete=False,
 ):
     criteria = acceptance.get("criteria")
     if not isinstance(criteria, list):
@@ -372,13 +444,15 @@ def representative_sample_errors(
         return ["acceptance must contain representative criterion R3"]
     users = [
         item for item in criteria if isinstance(item, dict)
-        and item.get("assessment") == "verified"
+        and item.get("assessment") in {"verified", "continuing"}
         and "representative-behavior" in item.get("requiredEvidenceClasses", [])
     ]
     if not users:
         return []
-    if representative.get("assessment") != "verified":
-        return ["verified representative evidence requires a verified R3 sample"]
+    if representative.get("assessment") not in {"verified", "continuing"}:
+        return [
+            "verified or continuing representative evidence requires a retained R3 sample"
+        ]
     protocol = golden.get("evaluationProtocol")
     fields = protocol.get("requiredObservationFields", []) if isinstance(protocol, dict) else []
     tasks = {
@@ -429,7 +503,7 @@ def representative_sample_errors(
     required = set(required_task_ids)
     missing = sorted(required - set(observed))
     duplicates = sorted(task for task in required if observed.get(task, 0) > 1)
-    if missing:
+    if require_complete and missing:
         errors.append(f"representative tasks missing: {missing}")
     if duplicates:
         errors.append(f"representative tasks duplicated: {duplicates}")
@@ -440,10 +514,10 @@ def representative_sample_errors(
         task_id for task_id in must_pass
         if states.get(task_id) != "passed"
     ) if isinstance(must_pass, list) else []
-    if failed_must_pass:
+    if require_complete and failed_must_pass:
         errors.append(f"must-pass tasks failed: {failed_must_pass}")
     declared = acceptance.get("claimCeiling", {}).get("retainedBehaviorExclusions")
-    if declared != sorted(exclusions):
+    if require_complete and declared != sorted(exclusions):
         errors.append("retained behavior exclusions mismatch")
     for criterion in users:
         criterion_id = criterion.get("id")
@@ -455,8 +529,66 @@ def representative_sample_errors(
             r3_locators.get(item.get("locator")) for item in criterion.get("evidence", [])
             if isinstance(item, dict)
         ]
-        if len(actual) != len(set(actual)) or set(actual) != expected:
+        invalid_coverage = (
+            len(actual) != len(set(actual))
+            or require_complete and set(actual) != expected
+            or not require_complete and not set(actual).issubset(expected)
+        )
+        if invalid_coverage:
             errors.append(
                 f"{criterion_id} representative coverage mismatch"
             )
+    return errors
+
+
+def historical_representative_errors(root, acceptance, golden, read_json):
+    policy = acceptance.get("representativeBehaviorPolicy")
+    if not isinstance(policy, dict):
+        return []
+    items = policy.get("historicalEvidence")
+    evaluation = policy.get("historicalEvidenceContractSha256")
+    protocol = golden.get("evaluationProtocol") if isinstance(golden, dict) else None
+    fields = protocol.get("requiredObservationFields", []) \
+        if isinstance(protocol, dict) else []
+    if not isinstance(items, list) or not _text(evaluation):
+        return []
+    tasks = {
+        item.get("id"): item for item in golden.get("tasks", [])
+        if isinstance(item, dict) and _text(item.get("id"))
+    }
+    burden = golden.get("metrics", {}).get("humanBurden", [])
+    binding_contracts = policy.get("postSessionBindingContracts", {})
+    if not isinstance(binding_contracts, dict):
+        binding_contracts = {}
+    exact_fields = set(fields) | {"evidenceClass"}
+    errors = []
+    for index, item in enumerate(items):
+        if not isinstance(item, dict) or not _text(item.get("locator")):
+            continue
+        label = f"historicalEvidence[{index}]"
+        observation = read_json(root, item["locator"], [])
+        if set(observation) != exact_fields:
+            errors.append(f"{label} observation shape invalid")
+        task_id = observation.get("taskId")
+        task = tasks.get(task_id)
+        if not isinstance(task, dict):
+            errors.append(f"{label} has unknown Golden Task")
+            continue
+        if task.get("postSessionBindingContract") != binding_contracts.get(task_id):
+            errors.append(
+                f"{label} post-session binding contract does not match representative policy"
+            )
+        projection = item.get("bindsProjection")
+        local, _ = _observation_errors(
+            root, label, observation, task, burden, item["locator"],
+            projection if _text(projection) else "", evaluation, read_json,
+        )
+        errors.extend(local)
+        claim = observation.get("claimLimit")
+        if (
+            item.get("supportsCriterion") != "R3"
+            or not isinstance(claim, dict)
+            or item.get("claim") != claim.get("statement")
+        ):
+            errors.append(f"{label} historical claim binding is invalid")
     return errors

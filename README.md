@@ -2,7 +2,9 @@
 
 Turn a desired outcome into a verified, recoverable finish—without forcing the user to manage the Agent's tools, topology, or internal mechanics.
 
-YIYUAN Accord is an open, Agent-neutral collaboration reliability contract and evaluation framework.
+YIYUAN Accord is an open, Agent-neutral and mechanism-neutral human-Agent
+collaboration system: a small portable reliability kernel plus adaptive,
+replaceable outcome-delivery behavior.
 
 It anchors the Agent to the user's current goal, selects the minimum sufficient route, and preserves human authority at real decision boundaries.
 
@@ -12,10 +14,10 @@ The broader mission is advancing human-AI collaboration. The current product sur
 
 [简体中文](README.zh-CN.md)
 
-> **Current recommendation:** install the newest published
-> [v2.0.1 Public Preview](https://github.com/yiheng8023/YIYUAN-Accord/releases).
-> This source tree is the `v2.0.1-preview.2` distribution; it becomes the
-> published recommendation only when the matching GitHub prerelease exists.
+> **Current public recommendation:** use the immutable
+> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1)
+> Public Preview. The current `main` tree is active reshaping work, not an
+> installation or release candidate. The unreleased preview.2 route is retired.
 
 > GitHub may still mark historical v2.0 as `Latest` because
 > [prereleases cannot receive that marker](https://docs.github.com/en/rest/releases/releases#update-a-release);
@@ -39,63 +41,24 @@ Never include credentials or private session content.
 
 ---
 
-## Start in 30 seconds
+## Use the published preview
 
-### Before you install
+Do not install from the current `main` checkout. The current public
+recommendation is the immutable
+[`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1).
+Follow that tag's
+[published README](https://github.com/yiheng8023/YIYUAN-Accord/blob/v2.0.1-preview.1/README.md)
+for its exact installation, verification, update and removal paths.
 
-For ordinary Codex use, you need:
+The `v2.0.1-preview.2` packages in `main` are an unreleased historical
+checkpoint. Their release route was retired before publication and they are not
+a replacement recommendation, rolling tag or local-candidate installation
+path.
 
-- Codex in the ChatGPT desktop app or Codex CLI with plugin support;
-- network access to the public GitHub repository and permission to change your
-  user-level plugin configuration; and
-- a new task or session after installation.
-
-The Codex IDE extension does not currently support plugins. A source checkout
-and Python are not required for ordinary use; they belong to the verification
-and contributor path below.
-
-No fixed host version is required by Accord. Record the version you actually
-used instead of treating one tested version as a permanent dependency.
-
-### Install in Codex
-
-Install the exact, immutable Preview tag:
-
-```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v2.0.1-preview.2
-codex plugin add yiyuan-accord-codex@yiyuan-accord
-```
-
-Restart the desktop app or start a new CLI session. Open **Plugins** or run
-`/plugins`, then confirm that `YIYUAN Accord for Codex` and the
-`deliver-demand-driven-outcome` Skill are present.
-
-Start a new task and describe the result normally. For example: *“Make this
-installation path accurate, preserve unrelated changes, verify it, and tell me
-what remains unproven.”*
-
-Select the Skill explicitly only when you need a deterministic activation
-check.
-
-### What installation changes
-
-Installation makes one progressively disclosed Skill available to new tasks.
-It does not add a Runtime, Hook, MCP server, App, background process, state
-store, or automatic project mutation.
-
-It does not retroactively affect the task that was open during installation.
-
-Cloning this repository is not plugin installation. Codex may read a checkout's
-`AGENTS.md` as local project guidance without installing Accord.
-
-During normal work, the Skill may be invoked implicitly and should stay silent
-when native behavior is already sufficient.
-
-The catalog is [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json),
-and the package is [`plugins/yiyuan-accord-codex`](plugins/yiyuan-accord-codex).
-
-See OpenAI's current documentation for [using plugins](https://learn.chatgpt.com/docs/plugins)
-and [building plugins](https://developers.openai.com/plugins/build/plugins).
+For source review or contribution, use the current checkout only after reading
+`product/reshaping-guidance.json` and
+`docs/operations/CONTINUATION.md`. The repository is structurally valid but
+intentionally not candidate-ready.
 
 ---
 
@@ -137,173 +100,92 @@ always sufficient.
 
 ---
 
-## Claude clients and Claude Code
+## Current development checkout
 
-Plugin Skills are currently available in Claude web chat, the **Chat** tab in
-Claude Desktop, and Cowork. For a persistent installation, open
-**Customize > Plugins**, choose **Add marketplace** under Personal plugins, add
-`https://github.com/yiheng8023/YIYUAN-Accord`, and install
-**YIYUAN Accord for Claude**. Start a new chat, type `/`, and confirm
-`deliver-demand-driven-task` is visible.
+The current checkout is for review and reshaping, not ordinary installation.
+Its Codex and Claude packages preserve the preview.2 checkpoint so their exact
+distribution and host observations remain inspectable. They do not define the
+future mechanism set.
 
-The persistent Claude Code CLI route is:
+An already installed and enabled preview.2 plugin may remain available as a
+latent capability. Installation or visibility does not imply per-message
+activation, effective behavior or product value. Do not reinstall it from
+`main`, and do not treat disabling it as the only way to prevent interference;
+a future behavior-bearing candidate must demonstrate applicability, isolation,
+update or atomic replacement, health checking and rollback.
 
-```powershell
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@v2.0.1-preview.2
-claude plugin install yiyuan-accord-claude@yiyuan-accord
-```
-
-Register the repository root as the marketplace. The
-`plugins/yiyuan-accord-claude` directory is the package, not the marketplace
-root. Installation and enablement make the Skill available for host-native,
-on-demand discovery; they do not mean every message invokes it or prove
-behavioral equivalence across Claude Code, web, Desktop, and Cowork.
-
-### Claude Code single-session reference path
-
-From the repository root, load the reference projection for one local session:
-
-```powershell
-claude --plugin-dir ./plugins/yiyuan-accord-claude
-```
-
-Confirm `/yiyuan-accord-claude:deliver-demand-driven-task` appears in `/help`. This direct-load route does not create a persistent installation. See the [official Claude Code plugin guide](https://code.claude.com/docs/en/plugins).
-
-Changes to the checkout can be reloaded with `/reload-plugins`, which affects only the current session. To disable a direct-loaded package, end the session and omit `--plugin-dir` next time. This does not remove a separately installed persistent plugin.
-
----
-
-## Update, disable or remove
-
-Confirm installation on the same surface that performed it. For a Codex CLI
-installation, inspect `codex plugin list --json`; for a Claude CLI installation,
-inspect `claude plugin list --json`. For a Claude-client installation, inspect
-**Customize > Plugins** first.
-
-A cross-surface listing difference is host state to record, not automatic proof
-that the other installation failed.
-
-Refresh a configured Git marketplace with:
-
-```powershell
-codex plugin marketplace upgrade yiyuan-accord
-```
-
-An immutable release ref never advances to a later tag. To update or roll back, replace `VERSION_TAG` with the intended exact tag, remove the installed plugin and marketplace, then install again and Start a new task:
-
-```powershell
-codex plugin remove yiyuan-accord-codex@yiyuan-accord
-codex plugin marketplace remove yiyuan-accord
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref VERSION_TAG
-codex plugin add yiyuan-accord-codex@yiyuan-accord
-```
-
-Use **Plugins** to disable or re-enable the plugin without removing its marketplace. The first two commands remove both entries completely.
-
-For a persistent Claude CLI installation, inspect, refresh, update, or remove it
-with the host commands below. Use **Customize > Plugins** for the equivalent
-lifecycle in a Claude client:
-
-```powershell
-claude plugin list --json
-claude plugin marketplace update yiyuan-accord
-claude plugin update yiyuan-accord-claude@yiyuan-accord
-claude plugin uninstall yiyuan-accord-claude@yiyuan-accord
-```
-
-Removing a marketplace also uninstalls plugins installed from it. Do not edit
-Claude's global configuration files directly as a substitute for these host
-commands.
-
-### Rollback and Troubleshoot
-
-Rollback selects an earlier immutable tag; never move an existing tag. If activation is unclear, inspect the host's actual plugin or Skill list, then start a new task or session and run the matching host check.
-
-If the installation surface does not list the package, installation is not
-observed there. If it lists the package as enabled but the current session does
-not expose the Skill, record Skill visibility or session loading as unknown and
-use the host's reload or new-session path; do not rewrite that difference as
-`enabled=false`. Endpoint protection, host configuration, model routes, and
-interrupted sessions are test variables; record them separately from product
-behavior.
-
-For a repository defect, report the exact revision, host version, relevant configuration boundary, and verifier output. Never include credentials or raw private session content.
-
----
-
-## Verify the source and packages
-
-Clone the exact release with Python 3.10–3.14 available:
-
-```powershell
-git clone --branch v2.0.1-preview.2 --single-branch https://github.com/yiheng8023/YIYUAN-Accord.git
-```
-
-Run the canonical verifier:
+Contributors can run:
 
 ```powershell
 python -B -m yiyuan_accord verify --root . --json
-```
-
-Check either reference projection statically:
-
-```powershell
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 ```
 
-These checks validate repository and package conformance. They do not install a plugin, prove effective host behavior, satisfy field acceptance, authorize a release, or establish production safety.
+These checks validate the current repository and historical package
+conformance. They do not install a plugin, prove effective behavior, qualify the
+reshaped product, authorize publication or establish production safety.
 
 ---
 
 ## What the repository contains
 
-- **Current schema-v2 authority set**:
+- **Current schema-v3 authority set**:
   [`constitution.json`](product/constitution.json),
   [`program.json`](product/program.json), and
   [`acceptance.json`](product/acceptance.json)
+- **Accepted, revisable reshape and dynamic-index guidance**:
+  [`reshaping-guidance.json`](product/reshaping-guidance.json)
 - **Derived Vocabulary & Boundary**: [`CONTEXT.md`](CONTEXT.md)
 - **Data-Driven Generic Verifier**:
   [`yiyuan_accord/control.py`](yiyuan_accord/control.py)
-- **Replaceable, Runtime-Free Skill Projections**: Codex and Claude adapter projections whose behavior evidence remains bound to specific host surfaces
+- **Historical preview.2 reference projections**: Codex and Claude packages
+  whose exact behavior evidence remains bound to specific host surfaces and
+  does not limit future mechanism choice
 - **Representative Help-and-Interference Tasks**:
   [`evals/golden-tasks.json`](evals/golden-tasks.json)
 
 The portable contract is **K1–K5**. Host rules **H1–H10** and learned-failure rules **L1–L7** keep host drift and trial history outside the core.
 
-Those three files are the current reviewable topology, not unquestionable truth
-or a permanent file count.
+Those three authority files are the current reviewable bootstrap, not
+unquestionable truth, a permanent file count or a ceiling defined by the
+capabilities visible in today's hosts.
 
 A later merge, split, replacement, or retirement must preserve provenance and
 migrate the schema, verifier, mappings, and affected evidence explicitly.
 
 ---
 
-## Boundaries and evidence
+## Current reshaping boundary
 
-Accord adds no installer, background runtime, Hook, MCP server, App, state store, or automatic user-configuration mutation. It relies on current host capabilities and keeps host-specific lifecycle mechanics in replaceable projections.
+Accord is not limited to the capability surface of Codex, Claude or any other
+concrete Agent. Each Agent and host capability surface is a replaceable adapter
+plus a freshness-bound observation. The portable product covers the
+Agent-neutral dynamic relation from requirement to capability, authority, route,
+observed effect and evidence; native, official, maintained, composed or bounded
+authored mechanisms can enter when current facts and lifecycle value justify
+them.
 
-The v2.0.1-preview.2 line is a Public Preview distribution and usability repair over immutable v2.0.
+A Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier or
+another mechanism is neither mandatory nor permanently forbidden. Visibility or
+installation does not imply activation. A sufficient native path should produce
+no avoidable intervention, while a residual gap can justify scoped machinery
+with interference, update, rollback and retirement controls.
 
-It does not claim universal human-AI correctness, broad field effectiveness, cross-host or cross-surface equivalence, lower burden for every user, or production safety.
+The current verifier proves only structural conformance of this active reshaping
+state and the integrity of retained historical package evidence. It reports zero
+current verified criteria and no release candidate. The immutable v2.0 and
+v2.0.1-preview.1 releases remain historical public facts; preview.2 was not
+published and must not be tagged.
 
-A valid verifier result proves only the finite repository contract for that checkout. Accepted behavior samples remain task-, host-, projection-, and revision-bound.
-
-The retained `GT-07:cleanup` failure continues to narrow the claim instead of being rewritten as success.
-
-Exact criteria and release gates are in [`product/acceptance.json`](product/acceptance.json). Finite release claims are summarized in [`docs/releases/v2.0.1-preview.2.md`](docs/releases/v2.0.1-preview.2.md).
-
----
-
-## After this release
-
-v2.0.1-preview.2 is a finite stage, not the end of the mission. Later work is admitted only from observed residual gaps, real-task evidence, or material host changes.
-
-The continuing lanes include observed Claude-client behavior, field effect, cross-host or longitudinal evidence, and representative tasks `GT-06`, `GT-09`, and `GT-10`.
-
-Host improvements may let Accord simplify or retire a projection instead of adding machinery.
-
-A missing feature is restored only when its user value, risk reduction, or recovery benefit exceeds its code, cognition, lifecycle, and operating cost.
+The completed reshaping increment mapped one real outcome across plan,
+context-tailored process, acceptance and a compact goal projection, then
+replayed the smallest adaptive vertical slice. The next bounded step is to
+turn that accepted active baseline into a separately replayed `v3.0.0` full
+release candidate without inheriting preview.2 authority or package readiness.
+See
+[`product/reshaping-guidance.json`](product/reshaping-guidance.json) and
+[`docs/operations/CONTINUATION.md`](docs/operations/CONTINUATION.md).
 
 ---
 
