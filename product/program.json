@@ -12,7 +12,7 @@
     "authority": "docs/operations/HISTORY.md",
     "rule": "These immutable releases, the retired unreleased checkpoint and the superseded locally exposed development distribution are provenance only. They are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
-  "releaseIntent": "Preserve the completed 2026-08-25 adaptive reshape as a historical non-release main baseline, integrate host-neutral resource stewardship from the earliest affected authority boundary, and supersede the locally exposed but never publicly released 3.0.0 development package before forming a separately replayed v3.0.1 full-release candidate. The major version reflects the changed product category and boundary; the patch advance preserves monotonic package identity for reliable update and rollback. It does not inherit preview.2, 3.0.0-development or pre-resource-stewardship authority, evidence or package readiness, and it may become a candidate only after its host projections, representative tasks, exact local review, required hosted systems, condition-fit Cloud disposition, finite claim ceiling and release gates are remapped and passed.",
+  "releaseIntent": "Preserve the completed 2026-08-25 adaptive reshape as a historical non-release main baseline, integrate host-neutral resource stewardship from the earliest affected authority boundary, and supersede the locally exposed but never publicly released 3.0.0 development package before forming a separately replayed v3.0.1 full-release candidate. The major version reflects the changed product category and boundary; the patch advance preserves monotonic package identity for reliable update and rollback. It does not inherit preview.2, 3.0.0-development or pre-resource-stewardship authority, evidence or package readiness. It may become a repository candidate only after its authority, host projections, representative tasks, deterministic conformance, finite claim ceiling and candidate package are remapped and internally coherent; exact-local review, hosted verification, named-human authorization, tagging, public-update replay and cleanup remain sequential downstream gates.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "maintenancePlan": "CONTRIBUTING.md",
@@ -417,7 +417,7 @@
         "dependsOn": ["repository-candidate"],
         "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "On the unchanged clean v3 candidate, the goal carrier directly runs canonical verification, both host checks, all 19 product tests, Claude strict validation, actionlint, JSON, link, identity, diff and residue checks; verifies the publishable GT-07, GT-11 and GT-12 source bindings, direct-command result text and structured-record digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent specification, implementation and standards review of the complete demand-and-correction-to-final-claim chain, the adaptive Skill, context-isolated, outcome-bound, identity-neutral representative behavior, verified handoff, ownership-aware resource admission and release, interference, update or replacement rollback and claim ceiling. Any P0 or P1 blocks; only after this gate passes may the same SHA be pushed."
+        "condition": "On the unchanged clean v3 candidate, the goal carrier directly runs canonical verification, both host checks, all 19 product tests, Claude strict validation, actionlint, JSON, link, identity, diff and residue checks; verifies the publishable GT-07, GT-11 and GT-12 source bindings, direct-command result text and structured-record digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent specification, implementation and standards review of the complete demand-and-correction-to-final-claim chain, the adaptive Skill, context-isolated, outcome-bound, identity-neutral representative behavior, verified handoff, ownership-aware resource admission and release, interference, update or replacement rollback and claim ceiling. This pre-push gate verifies README commands and package surfaces but does not claim public-tag installation before the immutable tag exists. Any P0 or P1 blocks; only after this gate passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
@@ -445,7 +445,7 @@
         "dependsOn": ["exact-tagged-public-release"],
         "acceptanceIds": ["R4", "Q4"],
         "completionOperand": "releaseVerificationAndCleanup",
-        "condition": "The goal carrier directly verifies the remote and local v3.0.1 tag SHA, non-prerelease maturity, Latest eligibility, tracked body, finite claim ceiling and zero-asset policy; updates the bounded local Accord marketplace from the prior immutable ref to exact v3.0.1, verifies the installed Skill bytes and fresh-carrier activation or rolls back on failure, removes task-created Cloud or evaluator resources, confirms repository and task residue are absent, and replays local verification."
+        "condition": "The goal carrier directly verifies the remote and local v3.0.1 tag SHA, non-prerelease maturity, Latest eligibility, tracked body, finite claim ceiling and zero-asset policy; updates the bounded local Accord marketplace from the prior immutable ref to exact v3.0.1, verifies the installed Skill bytes and fresh-carrier activation or rolls back on failure; obtains one context-isolated clean-state evaluator replay of the README installation, confirmation and removal path against the public immutable tag; removes task-created Cloud or evaluator resources, confirms repository and task residue are absent, and replays local verification."
       }
     ],
     "rule": "Execute the v3.0.1 full-release gates strictly in order. A failure, correction, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, optional unclaimed client surfaces remain explicit unknowns, and no plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
@@ -524,6 +524,8 @@
       "def test_authority_and_static_suite_mutations_fail_closed",
       "def test_complexity_identity_and_paths_fail_closed",
       "def test_current_contract_is_valid_and_explicitly_incomplete",
+      "def test_current_representative_sample_is_complete_at_release_boundary",
+      "def test_evidence_authority_bindings_and_types_fail_closed",
       "def test_evidence_cannot_self_verify_or_self_authorize",
       "def test_external_release_contract_is_exact_and_external",
       "def test_failed_sample_narrows_claim",
@@ -532,10 +534,14 @@
       "def test_projection_package_and_admission_are_fail_closed",
       "def test_representative_sample_binds_projection_source_and_task",
       "def test_retired_residue_and_duplicate_json_fail_closed",
+      "def test_active_tree_reads_are_descriptor_bound",
       "def test_conservative_identity_boundary_allows_declared_safe_surfaces",
+      "def test_git_metadata_capture_is_bounded",
+      "def test_historical_identity_capture_is_bounded",
+      "def test_identity_decoding_and_file_io_fail_closed",
       "def test_retired_identity_static_surfaces_are_rejected"
     ],
-    "minimumTestCount": 13,
+    "minimumTestCount": 19,
     "forbiddenActivePaths": [
       "yiyuan_accord/task_validator_o1_lifecycle_suite.py",
       "yiyuan_accord/task_validator_o2_codex_reference.py",

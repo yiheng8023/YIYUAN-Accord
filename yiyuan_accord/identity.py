@@ -570,6 +570,7 @@ def module_layout_errors(root, module, executing, test_markers, minimum_test_cou
         or set(methods) - set(functions)
         or not isinstance(minimum_test_count, int) or isinstance(minimum_test_count, bool)
         or minimum_test_count <= 0
+        or minimum_test_count != len(methods)
         or sum(name.startswith("test_") for name in functions) < minimum_test_count
         or test_class.decorator_list
         or any(functions[name].decorator_list for name in methods if name in functions)

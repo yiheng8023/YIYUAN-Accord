@@ -96,19 +96,22 @@ Then read, in order:
   retirement trigger. Exposed limits, interruption, cleanup or performance
   tracing alone are not proof that the host automatically closes the loop;
   shared or unknown resources are never reclaimed automatically.
-- The current tree has 65 tracked files against a 70-file ceiling before the
-  current GT-07/GT-11/GT-12 evidence replacement. The intended one combined
-  source record plus three observations replaces the two superseded pre-resource
-  GT-11 evidence files, leaving three expected slots. At least three slots and five
-  percent product-code/test headroom must remain; the guardrail is not a growth
-  target or deletion KPI.
+- The current repository-shaped candidate has 67 tracked files against a
+  70-file ceiling after the current GT-07/GT-11/GT-12 evidence replacement.
+  The one combined source record plus three observations replaced the two
+  superseded pre-resource GT-11 evidence files, leaving three expected slots.
+  At least three slots and five percent product-code/test headroom must remain;
+  the guardrail is not a growth target or deletion KPI.
 - Release order is fixed for the unchanged exact SHA: clean repository
-  candidate; exact local verification and independent review; push; Ubuntu,
-  Windows and macOS GitHub Actions plus a condition-fit ordinary Codex Cloud disposition; separate
-  named-human decision; lightweight `v3.0.1` tag and non-prerelease GitHub
-  Release with no assets; public verification, supported local plugin update,
-  cleanup and final local replay. See the canonical machine-readable gates for
-  the exact conditions.
+  candidate; exact local verification and independent review of README commands
+  and package surfaces without claiming a not-yet-existing public-tag install;
+  push; Ubuntu, Windows and macOS GitHub Actions plus a condition-fit ordinary
+  Codex Cloud disposition; separate named-human decision; lightweight `v3.0.1`
+  tag and non-prerelease GitHub Release with no assets; public verification,
+  supported local plugin update, one context-isolated clean-state README
+  installation/confirmation/removal replay against the immutable tag, cleanup
+  and final local replay. See the canonical machine-readable gates for the exact
+  conditions.
 
 ## Product direction
 

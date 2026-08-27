@@ -258,12 +258,21 @@ class ProductControlTests(unittest.TestCase):
         self.assertNotIn('maxControlBytes', program['complexityBudget']['targets'])
         if report['programStatus'] == 'ready':
             gate = program['releaseProcedure']['orderedGates'][1]['condition']
+            self.assertEqual(program['complexityBudget']['minimumTestCount'], 19)
             for marker in (
                 'without accessing credential or session logs',
                 'context-isolated, outcome-bound, identity-neutral',
+                'does not claim public-tag installation before the immutable tag exists',
             ):
                 self.assertIn(marker, gate)
                 self.assertIn(marker, acceptance['candidateVerification']['rule'])
+            final_gate = program['releaseProcedure']['orderedGates'][-1]['condition']
+            for marker in (
+                'context-isolated clean-state evaluator replay',
+                'against the public immutable tag',
+            ):
+                self.assertIn(marker, final_gate)
+                self.assertIn(marker, acceptance['publicRelease']['rule'])
         else:
             prompt = program['goalModePrompt']
             expected_goal_states = (
@@ -306,6 +315,8 @@ class ProductControlTests(unittest.TestCase):
                 'resourceStewardship'].pop('diagnosticRule')),
             (P, 'minimumProductCodeAndTestHeadroomPercent', lambda v: v[
                 'complexityBudget'].update(minimumProductCodeAndTestHeadroomPercent=4)),
+            (P, 'product control test markers are not executable unittest methods',
+             lambda v: v['complexityBudget'].update(minimumTestCount=18)),
             (P, 'digestBoundBinaryAssets must be an object', lambda v: v[
                 'complexityBudget'].pop('digestBoundBinaryAssets')),
             (G, 'static-suite-as-behavior',

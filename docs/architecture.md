@@ -257,11 +257,17 @@ publishable bundle's task-specific bindings, captured result-text and
 structured-record digests, independent post-state and claim limits without
 accessing credential or session logs. Repository evidence cannot authenticate
 private source history, so that remains an explicit unknown rather than a
-hidden release precondition. One evaluator isolated from candidate-preparation
-context also exercises the README activation, confirmation and removal path
-from a clean state. The accountable user, a colleague or a second observation
-surface may execute this context-isolated, outcome-bound, identity-neutral
-internal usability sample; it is not population-level field evidence.
+hidden release precondition. This pre-push gate reviews the README commands and
+package surfaces from the clean candidate, but it cannot claim an installation
+from the not-yet-created public immutable tag.
+
+After the authorized tag and Release exist, one evaluator isolated from
+candidate-preparation context exercises the README installation, confirmation
+and removal path from a clean state against that public immutable tag. The
+accountable user, a colleague or a second observation surface may execute this
+context-isolated, outcome-bound, identity-neutral usability sample; it is not
+population-level field evidence. A failure fails release verification and
+triggers bounded rollback; it never authorizes moving the tag.
 
 The repository verifier recomputes these digests and rejects stale or partial
 bindings. It does not authenticate a real-world observer or prove that a host
@@ -273,8 +279,9 @@ transcripts are not release evidence.
 
 A distribution-only change does not manufacture new behavior or invalidate an
 unchanged behavior observation. It must still replay deterministic validation
-of the complete manifest, marketplace, metadata, asset and package surface, and
-it must obtain current clean-state activation, confirmation and removal
+of the complete manifest, marketplace, metadata, asset and package surface.
+After its immutable distribution exists, release verification must also obtain
+current clean-state installation, activation, confirmation and removal
 evidence. A contract or Skill locator/content change invalidates the dependent
 behavior observation from that earliest boundary.
 

@@ -124,21 +124,26 @@ repository observation cannot self-attest it. For a release candidate, first
 commit one clean local SHA and directly run the complete local checks plus
 independent specification, implementation-robustness and standards-conformance
 review. That local gate also requires independent review of the publishable
-source bundle and one evaluator isolated from candidate-preparation context to
-complete the README activation, confirmation and removal path from a clean
-state. This
-context-isolated, outcome-bound, identity-neutral internal usability sample may
-be executed by the accountable user, a colleague or a second observation
-surface. Do not inspect private credential or session logs; their unavailable
-source-authenticity value remains outside the finite release claim. Only after these
-checks pass may the same SHA be pushed and verified
+source bundle, README commands and package surfaces. Do not claim a public-tag
+installation before the immutable tag exists. Do not inspect private credential
+or session logs; their unavailable source-authenticity value remains outside
+the finite release claim. Only after these checks pass may the same SHA be
+pushed and verified
 on every declared hosted system;
 only after hosted verification may separate named-human authorization be
 requested for that SHA and claim ceiling. Do not write candidate-specific
 local-review, hosted or human-authority proof back into the candidate, and do
 not start a later release gate before its predecessor passes. Completion also
 requires the exact tagged public release, direct live verification and
-goal-carrier cleanup.
+goal-carrier cleanup. After the authorized tag and Release exist, update the
+bounded local marketplace from its prior immutable public ref to the exact new
+tag, verify installed Skill bytes and fresh-carrier activation, and have one
+evaluator isolated from candidate-preparation context complete the README
+installation, confirmation and removal path from a clean state against that
+public tag. This context-isolated, outcome-bound, identity-neutral usability
+sample may be executed by the accountable user, a colleague or a second
+observation surface. Roll back on failure, remove task-created resources and
+replay final checks. Do not rewrite historical tags or evidence.
 
 One publishable source bundle may serve the release sample. It has exact outer
 shape `{"schema": 1, "records": {"GT-01": record, ...}}`. Every referenced
@@ -159,7 +164,8 @@ In acceptance evidence, `supportsCriterion` and the observation's
 deliberately repeats the observation's exact `claimLimit.statement`; this
 conservative, machine-checkable equality prevents a release-facing paraphrase
 from exceeding the observed evidence ceiling.
-Every retained failure is also projected as a sorted `taskId:failure` token in
+Every retained failure is also projected as a sorted
+`taskId:adapterId:failure` token in
 `claimCeiling.retainedBehaviorExclusions` and the exact release body.
 
 Do not submit credentials, private memory, account state, restricted material
