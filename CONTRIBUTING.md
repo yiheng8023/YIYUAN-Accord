@@ -78,13 +78,14 @@ maturity and availability, trust/persistence/side effects, native equivalence or
 residual gap, verification result and retirement trigger. Do not create a
 duplicate standing registry or turn a dynamic host fact into portable truth.
 
-For v2.0 the canonical verifier is maintainer-owned release infrastructure; its
-scope is repository conformance and it retires or shrinks when a simpler live
-check preserves the same fail-closed boundary. The two maintainer-owned Skill
-projections exist only to expose the portable kernel through current host-native
-packaging; a sufficient native replacement, lost net benefit or unmaintainable
-host drift triggers simplification or retirement. This release-level record
-satisfies mechanism ownership and retirement without adding another registry.
+For the current v3 line, the canonical verifier is maintainer-owned release
+infrastructure; its scope is repository conformance and it retires or shrinks
+when a simpler live check preserves the same fail-closed boundary. The two
+maintainer-owned Skill projections expose the portable kernel and adaptive
+outcome-delivery behavior through current host-native packaging; a sufficient
+native replacement, lost net benefit or unmaintainable host drift triggers
+simplification or retirement. This release-level record satisfies mechanism
+ownership and retirement without adding another registry.
 
 ## Verification
 

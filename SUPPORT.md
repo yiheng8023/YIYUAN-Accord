@@ -4,8 +4,8 @@ Community support is best effort.
 
 This repository accepts questions and reports about:
 
-- the YIYUAN Accord portable collaboration semantics and open minimum quality and
-  evidence-conformance contract;
+- the YIYUAN Accord adaptive human-Agent collaboration system, portable kernel,
+  and open minimum quality and evidence-conformance contract;
 - the product-contract verifier and documentation;
 - source, license, and public reproduction evidence;
 - demand-driven capability routing and user-burden evaluation;
@@ -59,8 +59,9 @@ Sponsorship does not change these boundaries.
 
 # 支持说明
 
-社区支持按尽力而为原则提供。本仓库接受与 YIYUAN Accord 协作契约、验证器、文档、
-公开复现、用户负担、生命周期、清理和薄宿主投影有关的问题与报告。
+社区支持按尽力而为原则提供。本仓库接受与 YIYUAN Accord 动态适配人机协作系统、
+可移植内核、验证器、文档、公开复现、用户负担、生命周期、清理和薄宿主投影有关的
+问题与报告。
 
 ## 先说明你需要什么
 

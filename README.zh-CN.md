@@ -10,10 +10,9 @@ YIYUAN Accord 是一个开放、Agent 中立、机制中立的人机协作系统
 
 [English](README.md)
 
-> **当前版本：**当不可变的
-> [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v3.0.1)
-> tag 存在时，使用该正式版；在此之前，最后一个已发布、可安装版本仍是
-> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1)。
+> **当前版本：**使用不可变、非预发行的
+> [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1)
+> 正式版。
 > 不要从持续移动的 `main` checkout 安装。
 
 ---
@@ -217,12 +216,18 @@ Accord 把资源使用视为动态路线变量：观测需求、容量与当前�
 清理命令只是诊断或控制证据，不等于自动优化或释放证明；跟踪只按需开启，
 不得静默收集或上传。
 
-v3 仓库候选把一个真实结果映射为计划、因地制宜的工序、验收和精简目标
-投影；在有界 GT-07 连续性、GT-11 修复与 GT-12 资源治理切片上回放精确动态适配
-Skill；并要求八项仓库验收
-全部满足。canonical verifier 不评估托管、人类、tag、公开 Release 或清理
-完成态；这些门禁仍对同一 SHA 保持外部、严格有序。不可变的 v2.0 与
-v2.0.1-preview.1 仍是公开历史事实；preview.2 未曾发布，不得打 tag。详见
+不可变的 v3.0.1 正式版把一个真实结果映射为计划、因地制宜的工序、验收和
+精简目标投影；在有界 GT-07 连续性、GT-11 修复与 GT-12 资源治理切片上回放
+精确动态适配 Skill；并要求八项仓库验收全部满足。其精确 tag revision
+[`24cf9f3`](https://github.com/yiheng8023/YIYUAN-Accord/commit/24cf9f3750ecd700944988e81a519db54b67b8e8)
+在发布前通过精确本地、独立审查与
+[多操作系统 GitHub Actions 矩阵](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/33047474095)。
+
+canonical verifier 有意不证明托管系统、人类权限、tag 或公开 Release 创建、
+安装更新与清理完成态。这些门禁已作为不可变正式版前后的任务时证据完成；
+机器可读的 program 与 acceptance 文件保留候选期发布合同，不把外部事实
+倒写成仓库自证。不可变的 v2.0 与 v2.0.1-preview.1 仍是公开历史事实；
+preview.2 未曾发布，不得打 tag。详见
 [`product/reshaping-guidance.json`](product/reshaping-guidance.json) 与
 [`docs/operations/CONTINUATION.md`](docs/operations/CONTINUATION.md)。
 

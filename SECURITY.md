@@ -1,6 +1,7 @@
 # Security policy
 
-YIYUAN Accord is a portable collaboration reliability contract, verifier,
+YIYUAN Accord is an Agent-neutral human-Agent collaboration system: a portable
+reliability kernel plus adaptive outcome-delivery semantics, a verifier,
 representative evaluation suite and two thin reference Skills. It is not a
 sandbox, identity or authorization system, secret store, dependency scanner or
 production runtime.

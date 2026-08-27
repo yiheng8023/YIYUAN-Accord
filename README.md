@@ -14,11 +14,9 @@ The broader mission is advancing human-AI collaboration. The current product sur
 
 [简体中文](README.zh-CN.md)
 
-> **Current release:** use the immutable
-> [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v3.0.1)
-> full release when that tag exists. Until then, the last published installable
-> version remains
-> [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1).
+> **Current release:** use the immutable, non-prerelease
+> [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1)
+> full release.
 > Never install from a moving `main` checkout.
 
 ---
@@ -257,15 +255,23 @@ its redundant logic is retired. A performance trace or cleanup command is
 diagnostic/control evidence, not proof of automatic optimization or release.
 Tracing remains on-demand and must not be silently collected or uploaded.
 
-The v3 repository candidate maps one real outcome across plan, context-tailored
-process, acceptance and a compact goal projection; replays the exact adaptive
-Skill on bounded GT-07 continuity, GT-11 repair and GT-12
-resource-stewardship slices; and
-requires all eight repository criteria.
-The canonical verifier does not evaluate hosted, human, tag, public Release or
-cleanup completion. Those gates remain external and ordered for the unchanged
-SHA. Immutable v2.0 and v2.0.1-preview.1 remain historical public facts;
-preview.2 was never published and must not be tagged. See
+The immutable v3.0.1 release maps one real outcome across plan,
+context-tailored process, acceptance and a compact goal projection; replays the
+exact adaptive Skill on bounded GT-07 continuity, GT-11 repair and GT-12
+resource-stewardship slices; and requires all eight repository criteria. Its
+exact tagged revision
+[`24cf9f3`](https://github.com/yiheng8023/YIYUAN-Accord/commit/24cf9f3750ecd700944988e81a519db54b67b8e8)
+passed exact local and independent review plus the
+[multi-OS GitHub Actions matrix](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/33047474095)
+before publication.
+
+The canonical verifier intentionally does not attest hosted systems, human
+authority, tag or public Release creation, installed update, or cleanup. Those
+gates were completed as task-time evidence around the immutable release; the
+machine-readable program and acceptance files retain the candidate-time release
+contract rather than rewriting external facts as repository self-attestation.
+Immutable v2.0 and v2.0.1-preview.1 remain historical public facts; preview.2
+was never published and must not be tagged. See
 [`product/reshaping-guidance.json`](product/reshaping-guidance.json) and
 [`docs/operations/CONTINUATION.md`](docs/operations/CONTINUATION.md).
 

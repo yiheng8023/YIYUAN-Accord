@@ -33,15 +33,46 @@ Then read, in order:
   facts. The `v2.0.1-preview.2` tree remains an unreleased historical
   checkpoint. This continuation does not move historical tags or reuse their
   release authority.
-- Current authority selects a `v3.0.1 full-release candidate`, not another
-  preview. The major version records the incompatible correction from a
-  runtime-free thin-contract premise to a small portable kernel plus an
-  adaptive, mechanism-neutral outcome-delivery system. Full release is not a
-  universal correctness, cross-host equivalence or production-safety claim.
-- `program.status` is `ready`. Fresh current-Skill GT-07, GT-11 and GT-12 local
-  observations plus independent dirty-tree reviews passed, but only the clean
-  committed SHA can satisfy repository-candidate readiness. Exact-SHA local
-  review, hosted, human, public-update and cleanup gates remain downstream.
+- The `v3.0.1 full-release candidate` became the immutable, non-prerelease,
+  zero-asset public
+  [`v3.0.1` release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1)
+  at exact SHA `24cf9f3750ecd700944988e81a519db54b67b8e8`. Its lightweight tag
+  resolves directly to that commit and remains immutable. Later `main`
+  documentation or maintenance does not change the released package.
+- The major version records the incompatible correction from a runtime-free
+  thin-contract premise to a small portable kernel plus an adaptive,
+  mechanism-neutral outcome-delivery system. Full release is not a universal
+  correctness, cross-host equivalence, broad-field-value or production-safety
+  claim.
+- `program.status` remains `ready` because `program.json` and
+  `acceptance.json` are the immutable release-candidate contract for the tagged
+  source. Their task-time human authorization fields deliberately remain
+  unpopulated: repository content cannot self-attest an external decision,
+  hosted result, public mutation or cleanup. This is not a denial that the live
+  gates completed.
+- On the exact released SHA, canonical verification, both static host checks,
+  all 19 product tests, Claude strict marketplace validation, actionlint, JSON,
+  Markdown-link, identity, diff and residue checks passed. Independent
+  specification and implementation reviews found no P0-P3 issue. GitHub
+  Actions run
+  [`33047474095`](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/33047474095)
+  completed 9/9 jobs across Ubuntu, Windows and macOS with CPython 3.10-3.14.
+- A condition-fit read-only Codex Cloud task verified the exact SHA on Linux
+  with Python 3.12 through canonical, static host, product-test, JSON, link,
+  diff, identity and residue lanes. It did not supply Claude CLI, actionlint,
+  other Python versions, other operating systems or behavior evidence; those
+  limits stay explicit and the finite release claim excludes Cloud behavior.
+- The named human separately authorized the exact SHA, finite claim, lightweight
+  tag and full public Release. Live GitHub verification then confirmed the tag,
+  Latest/non-prerelease/zero-asset metadata and tracked release body. These are
+  task-time facts, not operands that the repository verifier may self-create.
+- The 2026-08-27 GitHub surface audit aligned About with the v3 adaptive-system
+  identity and added the `agent-neutral` topic. The repository remains public on
+  default branch `main`, Apache-2.0, with Issues enabled and no invented external
+  homepage. Discussions, Projects and Wiki remain disabled. GitHub community
+  health reports 85% because no Issue or pull-request template is tracked; none
+  was added merely to raise that score because the released 67/70 file guardrail
+  deliberately preserves three slots for outcome-bearing work.
 - Codex and Claude now expose the shared portable Skill name
   `deliver-demand-driven-outcome` through host-qualified packages at version
   `3.0.1`. The packages currently add no Runtime, Hook, MCP server, App or
@@ -49,15 +80,17 @@ Then read, in order:
 - Installation and enablement expose latent capability. They do not imply
   per-message activation, behavior, value or cross-client equivalence. A
   sufficient healthy native route is a valid no-op.
-- The local Codex marketplace remains intentionally enabled at its last public
-  immutable `v2.0.1-preview.1` ref. During current GT-07, two fresh ephemeral
-  carriers read and applied transient byte-identical 3.0.1 Skill content, then a
-  later marketplace refresh restored the configured public ref and removed the
-  unpublished cache. This proves fresh-carrier activation and bounded continuity,
-  not persistent pre-release update or current-session in-place reload. After the
-  public v3.0.1 tag exists, release verification must update the bounded local
-  marketplace to that exact tag, verify installed bytes and activation, and roll
-  back on failure. External cache state does not rewrite repository identity.
+- The local Codex marketplace and installed plugin were updated through native
+  lifecycle commands to public tag `v3.0.1`. The marketplace checkout is clean
+  at the released SHA, the installed Skill bytes match the tag and one fresh
+  ephemeral Codex carrier explicitly activated the installed Skill. Plugin-list
+  version text alone is not source identity; verify the actual marketplace ref
+  and bytes. Current-session in-place hot reload and automatic per-message
+  activation remain unproved.
+- That fresh Codex carrier also reported non-blocking host warnings that manifest
+  icon paths containing `..` were ignored. The Skill loaded and activated, so
+  this is a visual-metadata compatibility issue for a later exact-SHA patch, not
+  a reason to move or rewrite the v3.0.1 tag.
 - GT-07 (`carrier-fitness-with-unknown-capacity`), GT-11
   (`adaptive-agent-owned-repository-repair`) and GT-12
   (`bounded-resource-stewardship-and-reclaim`) are the required current v3
@@ -74,11 +107,16 @@ Then read, in order:
   exclusion even though the fresh v3 Codex-local GT-07 independently verified
   exact fixture post-state. Historical evidence is preserved against its
   versioned task contract rather than rewritten to match the current task.
-- Current Claude behavior remains unclaimed. Claude Code, Desktop Chat, web Chat
-  and Cowork are separate evidence surfaces; installation, official support or
-  one surface's result cannot attest another.
-- Codex Cloud is a condition-fit hosted evidence lane, not a release blocker,
-  because the finite v3 claim excludes Cloud behavior. It need not install the local plugin:
+- One context-isolated Claude Code CLI session loaded the exact tagged plugin
+  through `--plugin-dir`, exposed and activated the shared Skill with tools
+  disabled, and left no persistent session or temporary clone. The actual route
+  used a third-party DeepSeek model through the user's current configuration.
+  This qualifies only that session-level exposure path; native Claude-model
+  behavior, persistent Claude installation, Desktop Chat, web Chat and Cowork
+  remain separate unclaimed evidence surfaces.
+- Codex Cloud remains a condition-fit hosted evidence lane, not a permanent
+  product prerequisite, because the finite v3 claim excludes Cloud behavior. It
+  need not install the local plugin:
   admission dynamically selects the lowest-cost effective exact-revision
   projection among a repository Skill, `AGENTS.md`, setup or maintenance
   bootstrap, established native plugin support or bounded degradation. A
@@ -96,22 +134,20 @@ Then read, in order:
   retirement trigger. Exposed limits, interruption, cleanup or performance
   tracing alone are not proof that the host automatically closes the loop;
   shared or unknown resources are never reclaimed automatically.
-- The current repository-shaped candidate has 67 tracked files against a
-  70-file ceiling after the current GT-07/GT-11/GT-12 evidence replacement.
+- The released repository has 67 tracked files against a 70-file ceiling after
+  the GT-07/GT-11/GT-12 evidence replacement.
   The one combined source record plus three observations replaced the two
   superseded pre-resource GT-11 evidence files, leaving three expected slots.
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
-- Release order is fixed for the unchanged exact SHA: clean repository
-  candidate; exact local verification and independent review of README commands
-  and package surfaces without claiming a not-yet-existing public-tag install;
-  push; Ubuntu, Windows and macOS GitHub Actions plus a condition-fit ordinary
-  Codex Cloud disposition; separate named-human decision; lightweight `v3.0.1`
-  tag and non-prerelease GitHub Release with no assets; public verification,
-  supported local plugin update, one context-isolated clean-state README
-  installation/confirmation/removal replay against the immutable tag, cleanup
-  and final local replay. See the canonical machine-readable gates for the exact
-  conditions.
+- The release sequence completed in its declared order for the unchanged exact
+  SHA: repository candidate; exact local verification and independent review;
+  push; Ubuntu, Windows and macOS Actions plus a condition-fit Codex Cloud
+  disposition; separate named-human decision; lightweight `v3.0.1` tag and
+  non-prerelease zero-asset Release; public verification; supported local plugin
+  update; context-isolated clean-state tag replay; cleanup; and final local
+  replay. The machine-readable gates preserve the prospective contract; this
+  navigation records their live disposition without changing authority.
 
 ## Product direction
 
@@ -157,10 +193,13 @@ that JSON plus an in-memory projection is insufficient for scale, query
 expressiveness, concurrency, durability or latency and that the added lifecycle
 cost is justified.
 
-## Current ordered work
+## Ordered work disposition
 
-The machine-validated `fourSurfaceMapping.process.orderedSteps` is authoritative
-for order and lifecycle. Its current single chain is:
+The machine-validated `fourSurfaceMapping.process.orderedSteps` remains the
+authoritative release-candidate order and lifecycle for the tagged source. All
+13 repository-shaping steps completed before publication; the task-time release
+gates then completed externally on the exact SHA. The chain is retained below
+as the replay map, not as unfinished current work:
 
 1. `migrate-version-neutral-active-carrier` — completed.
 2. `bind-current-gt11-contract` — completed.
@@ -176,31 +215,32 @@ for order and lifecycle. Its current single chain is:
    evidence of live Codex hot update or causal comparative product value.
 6. `replay-condition-fit-carriers` — completed as a condition-fit scope
    decision, not a cross-carrier PASS. Current Claude behavior remains
-   unclaimed. Codex Cloud is now an external exact-candidate gate rather than
-   repository evidence. Cloud replay selects among an established native plugin,
+   unclaimed beyond the bounded post-tag CLI exposure described above. Codex
+   Cloud exact-SHA static replay passed with recorded limitations rather than
+   becoming repository evidence. Cloud replay selects among an established native plugin,
    repository Skill, `AGENTS.md`, setup or maintenance bootstrap and bounded
    degradation, then verifies the exact revision, actual exposure, behavior and
    residue. A carrier's current insufficiency is neither permanent retirement
    nor universal failure.
 7. `independent-review-and-bound-claim` — completed for selecting the bounded
-   v3 candidate shape and finite claim. The later exact-local gate still requires
-   an independent review of the final clean SHA before push; hosted evidence,
-   named-human authorization, tag, Release and cleanup remain downstream.
+   v3 candidate shape and finite claim. Independent exact-SHA review, hosted
+   evidence, named-human authorization, tag, Release and cleanup subsequently
+   completed as separate task-time gates.
 8. `bind-resource-stewardship-contract` — completed without restoring the old
    pre-Accord architecture or authoring an unproven controller.
 9. `run-codex-local-gt12-resource-stewardship` — completed for the bounded
    receipt-plus-independent-poststate claim.
 10. `replay-current-gt11-after-skill-change` — completed.
 11. `replay-current-gt07-after-plugin-update` — completed for transient exact
-    Skill exposure, verified handoff and bounded post-state; durable installed
-    update remains a post-tag gate.
+    Skill exposure, verified handoff and bounded post-state; the later public-tag
+    installed update and fresh-carrier activation also passed separately.
 12. `replay-current-evidence-after-binding-and-alignment-correction` — completed.
     Cross-task and traversal binding now fail closed; direct results bind both
     captured text and structured records; GT-12 is narrowed to receipt-bound
     pre-state/latency and independent post-state; ready-mode coverage passes.
 13. `rebuild-independent-resource-aware-candidate` — completed for the
-    repository-shaped candidate; its new exact clean revision must still pass
-    the separate exact-local gate before push or hosted verification.
+    repository-shaped candidate; its exact clean revision subsequently passed
+    the separate exact-local and hosted gates before publication.
 
 ## Evidence replay
 

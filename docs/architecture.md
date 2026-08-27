@@ -4,7 +4,8 @@ YIYUAN Accord combines one small portable kernel with an adaptive,
 mechanism-neutral outcome-delivery system. The 2026-08-25 direction is
 revisable guidance. Its active authority has completed the first remapping and
 adaptive vertical-slice replay. The v3 package surfaces are the current
-candidate projections; preview.2 remains an unreleased historical checkpoint.
+released reference projections; preview.2 remains an unreleased historical
+checkpoint.
 
 ~~~text
 latest bound user goal and corrections
