@@ -27,6 +27,7 @@ CANDIDATE_SYSTEMS = set((
     "github-actions-ubuntu-latest github-actions-windows-latest "
     "github-actions-macos-latest codex-cloud"
 ).split())
+FULL_RELEASE_REQUIRED_SYSTEMS = CANDIDATE_SYSTEMS - {"codex-cloud"}
 RELEASE_SURFACES = (
     "AGENTS.md CONTEXT.md README.md README.zh-CN.md .claude-plugin/marketplace.json "
     ".github/workflows/validate.yml "
@@ -56,6 +57,9 @@ def canonical_goal_objective(program, authority, work_stages, release_gates):
     mapping = increment.get("fourSurfaceMapping", {}) if isinstance(increment, dict) else {}
     process = mapping.get("process", {}) if isinstance(mapping, dict) else {}
     goal_mode = mapping.get("goalMode", {}) if isinstance(mapping, dict) else {}
+    process_loss = (
+        program.get("processLossControl", {}) if isinstance(program, dict) else {}
+    )
     current_authority = authority.get("semantic", []) if isinstance(authority, dict) else []
     ordered = process.get("orderedSteps")
     compact_steps = [
@@ -64,8 +68,19 @@ def canonical_goal_objective(program, authority, work_stages, release_gates):
             for field in ("id", "state", "dependsOn", "acceptanceIds")
         }
         for item in ordered
-        if isinstance(item, dict)
+        if isinstance(item, dict) and item.get("state") != "completed"
     ] if isinstance(ordered, list) else ordered
+    work_items = increment.get("workItems") if isinstance(increment, dict) else None
+    closeout = (
+        work_items[0].get("closeoutSequence")
+        if isinstance(work_items, list) and len(work_items) == 1
+        and isinstance(work_items[0], dict)
+        else None
+    )
+    current_work = [
+        item.get("id") for item in closeout
+        if isinstance(item, dict) and item.get("state") != "completed"
+    ] if isinstance(closeout, list) else work_stages
     projection = {
         "schema": "yiyuan-accord-goal/v2",
         "directive": goal_mode.get("directive"),
@@ -87,8 +102,9 @@ def canonical_goal_objective(program, authority, work_stages, release_gates):
         ],
         "route": {
             "semantics": process.get("routeRule"),
+            "alignment": process_loss.get("alignmentRule"),
             "orderedSteps": compact_steps,
-            "work": list(work_stages) if isinstance(work_stages, list) else [],
+            "work": list(current_work) if isinstance(current_work, list) else [],
             "futureReleaseGates": (
                 list(release_gates) if isinstance(release_gates, list) else []
             ),
@@ -809,7 +825,7 @@ def release_procedure_errors(root, program, identity, criterion_ids, prompt, goa
         procedure.get("requiredCandidateVerificationSystemIds")
     )
     expected_required = (
-        CANDIDATE_SYSTEMS
+        FULL_RELEASE_REQUIRED_SYSTEMS
         if procedure.get("releaseChannel") == "full-release"
         else {"codex-cloud"}
     )

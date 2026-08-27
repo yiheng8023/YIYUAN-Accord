@@ -31,7 +31,7 @@ CONTRACT_RELEASE_RE = re.compile(
 CONSTITUTION_FIELDS = set((
     "schema id productId identity domainModel purpose successDefinition kernel "
     "hostAdapterStandard learnedFailureStandards qualityInvariants humanAuthority "
-    "productBoundary evidenceBoundary evolutionPolicy authority"
+    "productBoundary resourceStewardship evidenceBoundary evolutionPolicy authority"
 ).split())
 PROGRAM_FIELDS = set((
     "schema id productId release distributionVersion historicalRelease releaseIntent constitution acceptance maintenancePlan "
@@ -174,6 +174,10 @@ def operating_model_errors(constitution):
             ("humanOnlyStepRule",),
         ),
         "productBoundary": (("includes", "excludes"), ("hostRule",)),
+        "resourceStewardship": (
+            ("resourceKinds", "lifecycle"),
+            ("role", "nativeRule", "automaticActionRule", "unknownOwnershipRule", "diagnosticRule"),
+        ),
         "evidenceBoundary": (("classes",), ("releaseRule", "claimRule")),
         "evolutionPolicy": (
             ("principles", "mechanismAdmissionRequires"),
@@ -640,9 +644,14 @@ def release_identity_errors(
         errors.append("acceptance top-level shape is invalid")
     historical = program.get("historicalRelease")
     historical_fields = {
-        "releaseLine", "releasedTags", "unreleasedCheckpoint", "authority", "rule",
+        "releaseLine", "releasedTags", "unreleasedCheckpoint",
+        "supersededDevelopmentDistributions", "authority", "rule",
     }
     released_tags = historical.get("releasedTags") if isinstance(historical, dict) else None
+    superseded_development = (
+        historical.get("supersededDevelopmentDistributions")
+        if isinstance(historical, dict) else None
+    )
     historical_valid = (
         isinstance(historical, dict)
         and set(historical) == historical_fields
@@ -651,6 +660,7 @@ def release_identity_errors(
             "releaseLine", "unreleasedCheckpoint", "authority", "rule",
         ))
         and bool(_string_list(released_tags))
+        and bool(_string_list(superseded_development))
         and historical.get("authority") == "docs/operations/HISTORY.md"
     )
     historical_release = historical.get("releaseLine") if historical_valid else None
@@ -665,6 +675,11 @@ def release_identity_errors(
         or released_tags[0] != historical_release
         or len(released_tags) != 2
         or RELEASE_RE.fullmatch(released_tags[1]) is None
+        or any(RELEASE_RE.fullmatch(item) is None for item in superseded_development)
+        or len(set(superseded_development)) != len(superseded_development)
+        or not set(superseded_development).isdisjoint(
+            {*released_tags, checkpoint}
+        )
         or checkpoint_match.groups()[:2] != historical_match.groups()
         or RELEASE_RE.fullmatch(released_tags[1]).groups()[:2]
         != historical_match.groups()
@@ -673,19 +688,22 @@ def release_identity_errors(
 
     contract_release = program.get("release")
     distribution = program.get("distributionVersion")
-    if program.get("status") != "ready":
-        if (
-            contract_release is not None or distribution is not None
-            or acceptance.get("release") is not None
-            or acceptance.get("distributionVersion") is not None
-        ):
-            errors.append(
-                "active reshaping must not select a current release or distribution version"
-            )
+    selected_current_release = any(
+        value is not None for value in (
+            contract_release,
+            distribution,
+            acceptance.get("release"),
+            acceptance.get("distributionVersion"),
+        )
+    )
+    if program.get("status") != "ready" and not selected_current_release:
         contract_release = historical_release
         distribution = checkpoint
-    elif acceptance.get("release") != contract_release:
-        errors.append("program and acceptance release must match")
+    else:
+        if acceptance.get("release") != contract_release:
+            errors.append("program and acceptance release must match")
+        if acceptance.get("distributionVersion") != distribution:
+            errors.append("acceptance.distributionVersion does not match program")
     contract_match = (
         CONTRACT_RELEASE_RE.fullmatch(contract_release)
         if isinstance(contract_release, str) else None
@@ -695,12 +713,14 @@ def release_identity_errors(
     match = RELEASE_RE.fullmatch(distribution) if isinstance(distribution, str) else None
     if match is None:
         return errors + ["program.distributionVersion must be a v-prefixed semantic version"]
+    if isinstance(superseded_development, list) and distribution in superseded_development:
+        errors.append(
+            "program.distributionVersion reuses a superseded development distribution"
+        )
     major, minor, _patch, prerelease, _build = match.groups()
     if contract_match is not None and (major, minor) != contract_match.groups():
         errors.append("program.distributionVersion must belong to the contract release line")
     package_version = distribution[1:]
-    if program.get("status") == "ready" and acceptance.get("distributionVersion") != distribution:
-        errors.append("acceptance.distributionVersion does not match program")
     for index, projection in enumerate(program.get("hostProjections", [])):
         if isinstance(projection, dict) and projection.get("packageVersion") != package_version:
             errors.append(

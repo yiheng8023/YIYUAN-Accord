@@ -104,12 +104,29 @@ _Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: ef
 `product/constitution.json#/qualityInvariants (value: material side effects are attributable and are stopped, recovered or rolled back where the effect permits)`
 _Avoid_: proposed action, claimed outcome
 
+**Resource**:
+An observable unit of context, execution, connection, storage or host capacity
+whose identity, ownership, lease and state determine whether it may be admitted,
+rebalanced, released or preserved.
+_Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: resource)`,
+`product/constitution.json#/resourceStewardship`
+_Avoid_: process count alone, task completion, automatically disposable state
+
 **Continuity**:
 Preservation and reconciliation of the current goal and state across phases,
 carriers and actors.
 _Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: continuity)`,
 `product/constitution.json#/learnedFailureStandards (id: L6)`
 _Avoid_: copied history, implicit handoff
+
+**Process-loss control**:
+End-to-end reconciliation of the latest demand and corrections with goal,
+authority, route, implementation, evidence, acceptance and final claim. It
+applies even when the current carrier is healthy; continuity transition is only
+one possible response to an observed divergence.
+_Source_: `product/program.json#/processLossControl/alignmentRule`,
+`product/constitution.json#/humanAuthority/agentOwnsWithinBoundedAuthority (value: proactive-continuity-and-process-loss-control)`
+_Avoid_: forced handoff, fixed workflow, plan compliance without outcome alignment
 
 **Topology**:
 The selected code carriers and conversation carriers through which work and
@@ -178,6 +195,21 @@ A source- and freshness-bound query view that joins durable semantic records
 with current environment observations without turning a snapshot into truth.
 _Source_: `product/reshaping-guidance.json#/dynamicIndex`
 _Avoid_: manually duplicated catalog, committed host snapshot, authority replacement
+
+**Capability provenance**:
+The observed origin of a capability: model-inherent, host-native,
+client-surface, tool or extension, configuration or policy, composition, or a
+bounded authored residual. Origin informs discovery and retirement but does not
+prove effective availability.
+_Source_: `product/reshaping-guidance.json#/capabilityDiscovery/provenanceKinds`
+_Avoid_: capability owner, vendor truth, product boundary
+
+**Effective capability instance**:
+One observation of a stable capability meaning under an exact Agent/host,
+carrier, model route, tool set, configuration, permission, context and time.
+Fitness and health belong to this combination and expire on material drift.
+_Source_: `product/reshaping-guidance.json#/capabilityDiscovery/effectiveCapabilityIdentity`
+_Avoid_: universal model ability, permanent host feature, duplicate semantic capability
 
 **Graph projection**:
 A derived node-and-edge view used to find feasible routes, affected evidence

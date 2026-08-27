@@ -14,9 +14,9 @@
     "currentProductScope": "human-agent-collaboration",
     "productCategory": "portable-kernel-and-host-adaptive-human-agent-collaboration-system",
     "decisionDimensions": ["goal", "requirement", "capability", "authority", "evidence", "cost"],
-    "crossCuttingObjects": ["context", "state", "effect", "continuity", "topology", "lifecycle"],
+    "crossCuttingObjects": ["context", "state", "effect", "resource", "continuity", "topology", "lifecycle"],
     "roleDistinctions": ["actor", "responsibility", "authority", "accountability"],
-    "rule": "Decision dimensions are a revisable diagnostic lens, not an exhaustive ontology or fixed four-quadrant encoding. Context, state, effect, continuity, topology and lifecycle cross-cut them; authority, responsibility and accountability remain distinct. A named method is recovered and defined before it becomes executable product semantics."
+    "rule": "Decision dimensions are a revisable diagnostic lens, not an exhaustive ontology or fixed four-quadrant encoding. Context, state, effect, resource, continuity, topology and lifecycle cross-cut them; authority, responsibility and accountability remain distinct. A named method is recovered and defined before it becomes executable product semantics."
   },
   "purpose": "Provide an open, Agent-neutral and mechanism-neutral human-Agent collaboration system: keep a small portable reliability kernel while adapting discovery, routing, configuration, carriers, topology, continuity, verification and cleanup to the current goal, host and authority so the user does not have to operate avoidable Agent mechanics.",
   "successDefinition": "A finite release is successful when representative users can reach bounded real outcomes with less avoidable orchestration and recovery burden, acceptable interference and recoverable effects across its claimed hosts. Healthy native behavior may produce a no-op; residual gaps may justify a Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier, composed route or another mechanism. Each mechanism and claim remains scoped, observable, replaceable and retireable. A release is neither a universal runtime nor proof that every human-AI collaboration problem is solved, and later facts may revise its premise, representation, route or product shape.",
@@ -141,6 +141,12 @@
       "name": "counterevidence-not-control",
       "mapsTo": ["K4", "K5"],
       "rule": "Preserve failed trials as compact regression standards and representative counterexamples, not as active historical validators or inherited proof."
+    },
+    {
+      "id": "L8",
+      "name": "resource-release-is-observed-state",
+      "mapsTo": ["K2", "K4", "K5"],
+      "rule": "Task, turn, process or conversation completion and the existence of a cleanup primitive do not prove resource release. Distinguish resource identity, owner, lease and state; prefer sufficient native governance; automatically reclaim only task-exclusive, authorized, reversible and verifiable exposure; preserve shared or unknown ownership; and verify release plus residual pressure before closing the claim."
     }
   ],
   "qualityInvariants": [
@@ -156,7 +162,10 @@
     "completion is supported by external criteria and observed effects rather than model self-assessment or artifact shape",
     "serious or repeated failure changes an evaluation, route, instruction or mechanism, while anecdotal failure alone cannot cause permanent accretion",
     "ideas, methodologies, standards, policies, rules, logic, mechanisms, processes, protocols, representations, carriers, capabilities and metrics declare scope, applicability, provenance, override, degradation, expiry and retirement semantics rather than becoming globally active by visibility",
-    "durable semantic records are separated from ephemeral environment snapshots and derived indexes; observed learning may update fitness and regression inputs but cannot grant authority or consequential effects"
+    "a stable capability meaning is distinct from an effective capability instance: provenance may be model-inherent, host-native, client-surface, tool-or-extension, configuration-enabled, composed or bounded-authored, while effective evidence binds the observed Agent, host, carrier, model route, tools, configuration, permissions, context and time and expires when any material member changes",
+    "durable semantic records are separated from ephemeral environment snapshots and derived indexes; observed learning may update fitness and regression inputs but cannot grant authority or consequential effects",
+    "resource admission, allocation, degradation and release are derived from current demand, capacity, ownership, authority and evidence; diagnostic telemetry is neither an optimizer nor release proof, and sufficient native governance makes Accord-specific control a no-op",
+    "one distribution version identifies one immutable behavior-bearing package; an observed same-version content mismatch invalidates activation and behavior evidence and requires a new monotonic version plus health check and byte-accurate rollback rather than cache replacement by assertion"
   ],
   "humanAuthority": {
     "humanOwns": [
@@ -174,7 +183,8 @@
       "supported-authorized-execution",
       "continuous-reconciliation-and-recovery",
       "verification-claim-control-and-cleanup",
-      "proactive-continuity-and-process-loss-control"
+      "proactive-continuity-and-process-loss-control",
+      "bounded-resource-admission-allocation-rebalancing-release-and-verification"
     ],
     "humanOnlyStepRule": "Detect, minimize, explain and post-verify a technically or authoritatively unavoidable human action; never transfer supported Agent-owned orchestration to the user."
   },
@@ -182,8 +192,10 @@
     "includes": [
       "portable-collaboration-kernel",
       "goal-to-outcome-adaptive-orchestration",
+      "agent-execution-and-host-adaptation-subdomain",
       "live-capability-and-environment-discovery",
       "dynamic-index-and-route-derivation",
+      "host-neutral-dynamic-resource-stewardship",
       "agent-owned-configuration-code-and-conversation-topology-continuity-recovery-and-cleanup",
       "replaceable-host-local-cloud-and-client-projections",
       "minimum-quality-evidence-and-lifecycle-contract",
@@ -197,7 +209,34 @@
       "domain-correctness-or-professional-authority",
       "static-host-version-context-threshold-perfect-score-or-universal-effectiveness-claim"
     ],
-    "hostRule": "A concrete Agent, host, client, cloud, model route, provider, operating system, context, Skill, plugin, App, MCP, Hook, memory, tool, configuration, state and runtime is a dynamic variable represented in replaceable adapters, scoped policy, ephemeral snapshots or evidence rather than portable identity. The capability surface of Codex, Claude or any other concrete Agent is a freshness-bound observation and first evidence surface, never the Agent-neutral product boundary or capability ceiling. Any supported future native, official, maintained, composed or bounded authored mechanism may be used when it is authorized, lower-net-cost than alternatives and independently bounded for activation, interference, update, rollback and retirement. Official host guidance is high-weight evidence, never product sovereignty."
+    "hostRule": "A concrete Agent, host, client, cloud, model route, provider, operating system, context, Skill, plugin, App, MCP, Hook, memory, tool, configuration, state and runtime is a dynamic variable represented in replaceable adapters, scoped policy, ephemeral snapshots or evidence rather than portable identity. A capability may originate in the model, host, client surface, tool or extension, configuration, composition or bounded authored residual; its effective availability belongs to the observed combination rather than any one product or model label. The capability surface of Codex, Claude or any other concrete Agent is a freshness-bound observation and first evidence surface, never the Agent-neutral product boundary or capability ceiling. Agent execution concerns—capability use, execution, configuration, topology, continuity, resource stewardship and host adaptation—form one product subdomain rather than the whole human-Agent collaboration system. Any supported future native, official, maintained, composed or bounded authored mechanism may be used when it is authorized, lower-net-cost than alternatives and independently bounded for activation, interference, update, rollback and retirement. Official host guidance is high-weight evidence, never product sovereignty."
+  },
+  "resourceStewardship": {
+    "role": "host-neutral-dynamic-scheduling-and-release-contract",
+    "resourceKinds": [
+      "context",
+      "active-turn",
+      "loaded-or-persisted-conversation",
+      "subagent-or-worker",
+      "terminal-or-background-command",
+      "MCP-connection-or-subscription",
+      "child-process",
+      "cache-or-task-artifact",
+      "compute-memory-storage-or-network-capacity"
+    ],
+    "lifecycle": [
+      "observe-capacity-demand-and-current-exposure",
+      "bind-resource-identity-owner-lease-and-state-or-record-unknown",
+      "admit-the-minimum-sufficient-concurrency-budget-and-route",
+      "monitor-pressure-outcome-and-interference",
+      "rebalance-degrade-interrupt-or-hand-off-within-authority",
+      "release-task-owned-exposure",
+      "verify-pre-post-state-release-latency-and-residue"
+    ],
+    "nativeRule": "Use healthy sufficient host-native admission, limits, interruption, cleanup and reclamation first. When current evidence shows that the host closes the required loop, Accord-specific control is a passing no-op and is degraded or retired; exposed primitives or diagnostic traces alone do not prove that loop.",
+    "automaticActionRule": "Automatic allocation, interruption or reclamation requires attributable task-exclusive ownership, an authorized real actuator, bounded and reversible effect, independent post-state verification, and no new trust, data, cost, destructive, irreversible or shared-resource boundary.",
+    "unknownOwnershipRule": "Never kill, archive, unload, disconnect or delete a shared or unknown resource merely because pressure exists. Reduce new admission, lower concurrency or budget, choose a lighter route, surface the unknown and await stronger evidence or human authority when needed.",
+    "diagnosticRule": "Performance tracing and telemetry are on-demand evidence sources, not always-on product requirements, autonomous optimizers or completion receipts. Collection, retention and upload remain bounded, visible and subject to applicable privacy and authority constraints."
   },
   "evidenceBoundary": {
     "classes": [
@@ -255,7 +294,7 @@
       "docs/releases/v2.0.md",
       "docs/releases/v2.0.1-preview.1.md",
       "docs/releases/v2.0.1-preview.2.md",
-      "docs/releases/v3.0.0.md",
+      "docs/releases/v3.0.1.md",
       "evals/golden-tasks.json",
       "plugins/"
     ],

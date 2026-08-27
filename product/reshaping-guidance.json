@@ -12,7 +12,7 @@
       "near-zero avoidable user orchestration",
       "latent availability after supported installation or enablement without forced per-message intervention",
       "context-tailored activation and no-op when no residual benefit exists",
-      "Agent-owned discovery, routing, execution, correction, continuity, verification and cleanup within granted authority",
+      "Agent-owned discovery, routing, execution, correction, continuity, resource stewardship, verification and cleanup within granted authority",
       "graceful degradation when a preferred capability or host surface is unavailable"
     ],
     "success": "Representative tasks show useful consequence-level outcomes with lower avoidable human burden, bounded interference and recoverable side effects across supported hosts; failures improve routing and retirement decisions without promoting learning artifacts into authority."
@@ -30,7 +30,8 @@
     "total-lifecycle-cost-and-retirement",
     "earliest-affected-boundary-replay",
     "code-and-conversation-topology-as-agent-owned-orchestration",
-    "historical-failure-as-counterevidence-not-current-proof"
+    "historical-failure-as-counterevidence-not-current-proof",
+    "resource-completion-is-not-release-proof"
   ],
   "retiredAsActivePremises": [
     {
@@ -134,7 +135,7 @@
       "extension-markets-and-maintainer-health",
       "network-and-authoritative-source-availability",
       "code-and-conversation-topology",
-      "observed-outcome-burden-interference-and-residue",
+      "observed-outcome-burden-interference-resource-pressure-release-and-residue",
       "evidence-freshness-and-conflict"
     ],
     "tailoringRule": "Ideas, methodologies, standards, policies, rules, logic, mechanisms, processes, protocols, representations, carriers and metrics are scoped and activated by current facts. Only the few stable variables above are candidates for portable always-on treatment."
@@ -142,6 +143,31 @@
   "capabilityDiscovery": {
     "ownedBy": "Agent",
     "coverageRule": "YIYUAN Accord covers the Agent-neutral dynamic relation from requirement to capability, authority, route, observed effect and evidence; it does not take the capability surface of Codex, Claude or any other concrete Agent as the product boundary. A concrete Agent and its current host capability are replaceable adapters plus freshness-bound evidence snapshots, never the product ceiling.",
+    "primaryBenefits": [
+      "model official and observed capability surfaces as source-bound, refreshable relations instead of fixed product assumptions",
+      "query sufficient existing native, model, extension, configured or composed routes before admitting an authored residual"
+    ],
+    "provenanceKinds": [
+      "model-inherent",
+      "host-native",
+      "client-surface",
+      "tool-or-extension",
+      "configuration-or-policy-enabled",
+      "composed",
+      "bounded-authored"
+    ],
+    "effectiveCapabilityIdentity": {
+      "semanticKey": "stable capability meaning independent of provider, host or mechanism",
+      "observationKey": [
+        "agent-and-host",
+        "client-carrier-and-operating-system",
+        "model-provider-route-and-reasoning-mode",
+        "tool-extension-and-mechanism-set",
+        "configuration-permissions-trust-data-and-network",
+        "task-context-and-observed-at"
+      ],
+      "rule": "A semantic capability may have many effective instances. Availability, health, cost and fitness bind the observed combination, not a model, host, marketplace or installation label alone."
+    },
     "capabilityStates": [
       "unknown",
       "declared",
@@ -174,7 +200,7 @@
       "maintenance-health",
       "verification-and-retirement-cost"
     ],
-    "refreshRule": "Refresh the affected snapshot and route when a host, version, official interface, extension ecosystem, model route, configuration, permission, network source or observed capability changes. A newly exposed capability can supersede Accord machinery; a removed capability can trigger degradation, alternative discovery, composition or bounded authorship.",
+    "refreshRule": "Refresh affected instances and routes when their host, interface, extension, model route, configuration, permission, network, context or observation changes. New model-inherent, native or extended capability can supersede Accord machinery; removal can trigger degradation, discovery, composition or bounded authorship.",
     "failureRule": "Do not stop at today's host surface, a small marketplace or weak native feature when another compliant discovery or composition lane can satisfy the goal. Do not promise an unobserved capability, and do not install, connect, spend or cross a trust or data boundary without the authority required for that effect."
   },
   "topology": {
@@ -200,13 +226,30 @@
     "rule": "The Agent selects and verifies topology from host-native signals and current constraints. The user is asked only when a new authority, trust, data, cost, destructive, irreversible or publication boundary makes the choice genuinely human-owned.",
     "codexCloud": "Codex Cloud is a first-class execution, comparison, verification and continuity carrier when its isolated environment, setup, secrets, network policy and source revision fit the task; it is not merely a release checker and does not inherit unverified local state."
   },
+  "resourceStewardship": {
+    "decision": "required-as-a-host-neutral-dynamic-contract",
+    "scope": "Observe and dynamically steward context, turns, conversations, workers, terminals, connections, subscriptions, child processes, task artifacts and host capacity without making any concrete host primitive or controller part of portable identity.",
+    "loop": [
+      "observe-current-capacity-demand-and-exposure",
+      "attribute-resource-identity-owner-lease-and-state-or-record-unknown",
+      "admit-minimum-sufficient-concurrency-budget-and-route",
+      "monitor-outcome-pressure-and-interference",
+      "rebalance-degrade-interrupt-or-hand-off-within-authority",
+      "release-task-owned-exposure",
+      "verify-release-latency-poststate-and-residue"
+    ],
+    "nativeFirstRule": "Reuse sufficient healthy host-native limits, interruption, cleanup and reclamation. Exposed controls or performance traces prove available primitives or diagnostics, not automatic whole-loop governance; when the host demonstrably closes the loop, Accord-specific action is a passing no-op and retirement candidate.",
+    "automationRule": "Act automatically only on attributable task-exclusive resources through authorized, reversible, bounded and verifiable actuators. Shared or unknown ownership forbids destructive reclaim; lower admission or concurrency, choose a lighter route, preserve the resource and surface the unknown instead.",
+    "privacyRule": "Performance tracing is an on-demand diagnostic input. Do not require continuous tracing, silently collect or upload traces, or claim optimization or release from trace existence alone.",
+    "implementationGate": "Do not author a scheduler, daemon, Hook, MCP or runtime merely because native controls are incomplete. First demonstrate a representative residual gap, then choose the smallest replaceable mechanism with isolation, health, rollback, cleanup and retirement evidence."
+  },
   "dynamicIndex": {
     "decision": "required-as-a-lightweight-derived-system",
     "sourceFormat": "schema-validated-versioned-JSON-records-with-stable-identifiers",
     "sourceRule": "Store durable semantic facts, decisions and provenance; do not manually duplicate every derived edge or commit transient host state.",
     "runtimeSnapshot": {
       "persistence": "ephemeral-or-ignored-cache",
-      "requiredMetadata": ["capturedAt", "scope", "source", "freshness", "health", "unknowns"],
+      "requiredMetadata": ["capturedAt", "scope", "source", "provenance", "compositionKey", "freshness", "health", "unknowns"],
       "invalidation": [
         "goal-or-phase-change",
         "user-correction",
@@ -228,12 +271,17 @@
         "host",
         "model-route",
         "capability",
+        "capability-source",
+        "capability-instance",
         "source",
         "policy",
         "standard",
         "mechanism",
         "carrier",
         "topology",
+        "resource",
+        "lease",
+        "capacity-budget",
         "effect",
         "evidence",
         "decision",
@@ -242,9 +290,15 @@
       "edgeKinds": [
         "requires",
         "supplies",
+        "provided-by",
+        "effective-under",
         "applies-to",
         "scoped-to",
         "carried-by",
+        "consumes",
+        "owned-by",
+        "leased-by",
+        "releases",
         "verified-by",
         "derived-from",
         "invalidates",
@@ -256,6 +310,7 @@
         "observed-on",
         "supports-outcome"
       ],
+      "normalizationRule": "Keep one semantic capability node; create instances only for observed or queried combinations. Never enumerate the Cartesian product of hosts, models, tools, configurations and contexts; expire or merge instances by provenance, composition key and freshness.",
       "databaseGate": "Do not add a graph database until representative queries show that schema-validated JSON plus an in-memory projection fails on scale, query expressiveness, concurrency, durability or latency and the added lifecycle cost is justified.",
       "feasibilityValidation": {
         "status": "validated-as-bounded-prototype-direction",
@@ -296,7 +351,8 @@
     "discover-live-environment-and-capabilities",
     "compute-a-minimum-sufficient-tailored-route",
     "execute-within-authority",
-    "observe-effects-burden-interference-and-residue",
+    "observe-effects-burden-interference-resource-pressure-and-residue",
+    "rebalance-or-release-attributable-task-owned-resources",
     "bind-evidence-and-reconcile-divergence",
     "update-fitness-health-regression-and-retirement-inputs",
     "improve-later-routing-and-remove-redundancy"
@@ -310,6 +366,8 @@
     "measure-code-prompt-context-latency-cost-interference-recovery-and-retirement",
     "sandbox-or-isolate-probes-when-consequences-justify-it",
     "explicit-ownership-rollback-cleanup-and-retirement-trigger",
+    "no-autonomous-reclaim-of-shared-or-unknown-resources",
+    "on-demand-diagnostic-tracing-without-silent-upload-or-completion-claims",
     "A-B-observation-without-current-plugin-with-current-plugin-and-with-candidate-when-interference-is-material",
     "prefer-native-hot-reload-or-atomic-versioned-update-with-health-check-and-rollback-over-session-fragility"
   ],
@@ -317,7 +375,7 @@
     {
       "id": "pre-accord-project-history",
       "role": "provenance-counterevidence-and-recoverable-design-input",
-      "rule": "Recover concepts and failures by exact revision; do not roll back the tree or restore retired validator generations wholesale."
+      "rule": "Treat the pre-Accord system as the provenance of the Agent execution and host-adaptation subdomain, not as the whole product or a discarded predecessor. Recover concepts and failures by exact revision; do not roll back the tree or restore retired validator generations wholesale."
     },
     {
       "id": "human-agent-collaboration-shortfall-research",
@@ -340,27 +398,40 @@
       "rule": "Adopt only goal-relevant evidence-backed ideas after neutral comparison; Anthropic is neither portable authority nor product identity."
     }
   ],
+  "selectiveCapabilityRecall": {
+    "rule": "The new plan supplements and corrects the pre-Accord Agent execution system inside Accord. Recover a historical capability when a current representative problem re-establishes its outcome value, then reshape it through official capability discovery, dynamic applicability, native delegation, hot update, verification and retirement. Recover the smallest semantic contract, failure standard or reusable mechanism that closes the evidenced gap; do not restore the historical architecture, controller, workflow, file set or implementation generation wholesale.",
+    "requiredForAdmission": [
+      "current-problem-and-outcome-fit",
+      "provenance-and-historical-failure-recovery",
+      "native-and-maintained-route-comparison",
+      "bounded-current-implementation-or-no-op",
+      "representative-help-and-interference-evidence",
+      "ownership-update-rollback-cleanup-and-retirement"
+    ],
+    "firstSlice": "Resource stewardship is the first corrected Agent-execution-subdomain slice: it recalls the historical attribution and release boundary as L8 and GT-12, adds current official capability discovery and dynamic native-first routing, and leaves the old preflight, generic Skills and unproven controller design in history. Process-loss control is not a new adjacent feature but a recalled original pre-Accord Agent-execution mission: current GT-07 and GT-11 must preserve the latest demand and corrections through goal, authority, route, implementation, evidence, acceptance and final claim without requiring a real carrier transition when the live carrier is healthy. Runtime machinery remains evidence-gated."
+  },
   "fourSurfaceGuidance": {
     "plan": [
       "start from the product outcome and observed collaboration gaps",
       "inventory retained, retired, unknown and candidate premises",
       "define the smallest end-to-end vertical slice that demonstrates user value",
       "name earliest affected authority and evidence replay boundaries",
-      "budget outcome, burden, interference, context, cost, recovery and lifecycle"
+      "budget outcome, burden, interference, context, resource capacity, cost, recovery and lifecycle"
     ],
     "process": [
       "bind goal and authority",
       "observe current host, model route, topology and capability state",
+      "observe resource capacity, demand, ownership, leases and current exposure",
       "query or derive feasible routes",
-      "execute the highest-fitness authorized route",
+      "admit the minimum sufficient concurrency and execute the highest-fitness authorized route",
       "continuously reconcile requirements, process, effects and evidence",
-      "degrade, recover, hand off or retire from explicit triggers",
-      "clean task effects and feed bounded learning into later routing"
+      "rebalance, degrade, interrupt, recover, hand off or retire from explicit triggers",
+      "release and verify task-owned resources, clean task effects and feed bounded learning into later routing"
     ],
     "acceptance": [
       "evaluate real outcome and avoidable human burden together",
       "separate static conformance, effective activation, behavior, field effect and portability",
-      "test helpful intervention, correct no-op, correction, context pressure, topology transition, recovery and cleanup",
+      "test helpful intervention, correct no-op, correction, context and resource pressure, topology transition, safe allocation, degradation, recovery, release and cleanup",
       "test current-plugin interference and update or rollback behavior",
       "use local Codex, Codex Cloud, Claude Code and an available Claude client as the first evidence surfaces rather than the product capability ceiling, and test only the claim each observed surface can support",
       "retain failure and unknowns without converting them into success or universal product failure"
@@ -369,7 +440,7 @@
       "carry the desired outcome, authority, current phase and completion target",
       "reference live discovery and the dynamic index instead of hard-coding a host route",
       "make pause boundaries and irreversible effects explicit",
-      "own capability, configuration, topology, continuity, verification and cleanup mechanics",
+      "own capability, configuration, topology, continuity, resource stewardship, verification and cleanup mechanics",
       "refresh on correction, drift, failure, evidence conflict, side effect or carrier pressure",
       "remain short enough to preserve host reasoning capacity and defer detail by progressive disclosure"
     ]

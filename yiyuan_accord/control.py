@@ -758,6 +758,7 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
             "sampleRationale", "taskDecisionRule", "releaseDecisionRule",
             "postReleaseTasks", "postSessionBindingContracts",
             "historicalEvidenceContractSha256", "historicalEvidence",
+            "historicalTaskContracts",
         }:
             errors.append("acceptance.representativeBehaviorPolicy shape is invalid")
         required_sample = _string_list(
@@ -805,12 +806,24 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
             "historicalEvidenceContractSha256"
         )
         historical = representative_policy.get("historicalEvidence")
+        historical_tasks = representative_policy.get("historicalTaskContracts")
         if (
             not isinstance(historical_contract, str)
             or not SHA256_RE.fullmatch(historical_contract)
             or not isinstance(historical, list)
             or not historical
             or any(not isinstance(item, dict) for item in historical)
+            or not isinstance(historical_tasks, dict)
+            or any(
+                not _nonempty_string(task_id)
+                or not isinstance(contract, dict)
+                or set(contract) != {"goldenTaskSha256", "task"}
+                or not isinstance(contract.get("goldenTaskSha256"), str)
+                or not SHA256_RE.fullmatch(contract["goldenTaskSha256"])
+                or not isinstance(contract.get("task"), dict)
+                or contract["task"].get("id") != task_id
+                for task_id, contract in historical_tasks.items()
+            )
         ):
             errors.append("representative historical evidence policy is invalid")
         else:

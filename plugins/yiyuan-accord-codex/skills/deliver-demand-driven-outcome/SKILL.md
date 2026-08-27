@@ -74,6 +74,26 @@ handoff, code topology or a condition-fit cloud carrier from source-bound host
 signals; do not make the user manage capacity or topology. Verify the destination
 before releasing the source and keep one accountable writer for shared state.
 
+## Resource stewardship
+
+Treat resource use as a dynamic route variable, not an afterthought or fixed
+limit. Observe current demand, capacity and exposure; distinguish context,
+turns, conversations, workers, terminals, connections, subscriptions,
+processes and task artifacts; bind identity, owner, lease and state or record
+them as unknown. Admit the minimum sufficient concurrency and budget, monitor
+outcome and pressure, then rebalance, degrade, interrupt or hand off when the
+evidence changes.
+
+Prefer healthy native admission, limits, interruption, cleanup and reclamation.
+If the host demonstrably closes the whole loop, do nothing and retire redundant
+Accord logic. Automatically release only attributable, task-exclusive resources
+through authorized, reversible and verifiable controls; preserve shared or
+unknown resources, reduce new admission or choose a lighter route instead.
+Verify pre/post state, release latency and residue—task, turn, process or
+conversation completion is not release proof. Performance tracing is optional
+on-demand diagnostic evidence, not an optimizer or completion receipt; do not
+silently collect, retain or upload it.
+
 ## Host admission
 
 For evaluation or release, static-check this projection with
@@ -88,7 +108,8 @@ over version; effective over declared; unknown is first-class; drift is normal;
 verify consequential effects; no user compensation; keep host details outside
 the kernel; retire projection logic when native capability closes the gap.
 
-Apply L1–L7: outcome over process; subtraction before repeated repair; total
+Apply L1–L8: outcome over process; subtraction before repeated repair; total
 complexity must pay rent; assurance scales with consequence and claim; measure
 help and interference; continuity uses source signals or unknown; preserve
-failed trials as compact counterexamples rather than active inherited proof.
+failed trials as compact counterexamples rather than active inherited proof;
+resource release requires attributable post-state evidence.

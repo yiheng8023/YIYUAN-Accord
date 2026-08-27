@@ -104,10 +104,12 @@ capture, not source authenticity; the active goal carrier must observe capture
 directly. Post-session checks or cleanup assertions must bind either their exact
 completed observer-session output and event locator, or a directly observed
 independent Agent result with its carrier session, task locator, full captured
-reports, phase nonces, digest, completion time and claim, through
+reports, phase nonces, result-text and structured-record digests, completion time and claim, through
 `sourceBindings`. Repository copies still cannot prove source authenticity;
-candidate review must compare the publishable record with original host or
-session records. A task with such a claim declares
+candidate review verifies task-specific bindings, captured result-text and
+structured-record digests, independent post-state and claim limits without
+accessing credential or session logs, while source authenticity remains an
+explicit bounded unknown. A task with such a claim declares
 `postSessionBindingContract`, including exact cardinality of distinct event
 locators across the complete contract. The acceptance release-sample policy
 anchors the exact contract independently; the Golden Task and its payload
@@ -121,14 +123,14 @@ human authority. Deterministic conformance is recomputed by the verifier; a
 repository observation cannot self-attest it. For a release candidate, first
 commit one clean local SHA and directly run the complete local checks plus
 independent specification, implementation-robustness and standards-conformance
-review. That local gate also
-requires an independent human or second observation surface to compare the
-publishable source bundle with the original host or session records, plus one
-evaluator isolated from candidate-preparation context to complete the README
-activation, confirmation and removal path from a clean state. This
+review. That local gate also requires independent review of the publishable
+source bundle and one evaluator isolated from candidate-preparation context to
+complete the README activation, confirmation and removal path from a clean
+state. This
 context-isolated, outcome-bound, identity-neutral internal usability sample may
 be executed by the accountable user, a colleague or a second observation
-surface. Keep private raw records outside the repository. Only after these
+surface. Do not inspect private credential or session logs; their unavailable
+source-authenticity value remains outside the finite release claim. Only after these
 checks pass may the same SHA be pushed and verified
 on every declared hosted system;
 only after hosted verification may separate named-human authorization be

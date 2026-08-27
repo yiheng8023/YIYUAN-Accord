@@ -83,7 +83,7 @@ def _official_source(source, captured_at):
     )
 
 
-def _postcapture_binding(binding, payload, captured_at):
+def _postcapture_binding(binding, payload, captured_at, task_id=None):
     if not isinstance(binding, dict):
         return False
     if binding.get("kind") == "observer-session-event":
@@ -101,51 +101,82 @@ def _postcapture_binding(binding, payload, captured_at):
                 r"response_item/call_[A-Za-z0-9]+", binding["eventLocator"]
             ) is not None
         )
-    if binding.get("kind") != "direct-independent-agent-result":
-        return False
-    nonces = binding.get("phaseNonces")
-    results = payload.get("independentAgentResults") if isinstance(payload, dict) else None
-    completed_at = _time(binding.get("completedAt"))
-    agent_task = binding.get("agentTask")
-    return (
-        _exact(
-            binding,
-            ("kind", "carrierSessionId", "agentTask", "resultLocator", "phaseNonces",
-             "resultSha256", "completedAt", "claim"),
-            ("carrierSessionId", "agentTask", "resultLocator",
-             "resultSha256", "completedAt", "claim"),
+    if binding.get("kind") == "direct-independent-command-result":
+        results = (
+            payload.get("independentCommandResults")
+            if isinstance(payload, dict) else None
         )
-        and _text(agent_task)
-        and re.fullmatch(
-            r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}",
-            binding["carrierSessionId"],
-        ) is not None
-        and binding["resultLocator"] == f"codex-collaboration-agent:{agent_task}"
-        and completed_at is not None and captured_at is not None
-        and completed_at <= captured_at
-        and isinstance(nonces, list) and nonces
-        and all(_text(value) for value in nonces)
-        and len(nonces) == len(set(nonces))
-        and _records(results) and results
-        and all(
-            _exact(result, ("kind", "agentTask", "phase", "nonce", "report"),
-                   ("agentTask", "phase", "nonce", "report"))
-            and result["kind"] == "independent-agent-result"
-            and result["agentTask"] == binding["agentTask"]
-            and _text(result["phase"]) and _text(result["nonce"])
-            and _text(result["report"])
-            for result in results
+        task_locator = binding.get("taskLocator")
+        nonces = binding.get("phaseNonces")
+        completed_at = _time(binding.get("completedAt"))
+        valid_results = (
+            _records(results) and results
+            and all(
+                _exact(
+                    result,
+                    ("kind", "carrierSessionId", "taskLocator", "phase", "nonce", "report"),
+                    ("carrierSessionId", "taskLocator", "phase", "nonce", "report"),
+                )
+                and result["kind"] == "independent-command-result"
+                and all(_text(result[field]) for field in (
+                    "carrierSessionId", "taskLocator", "phase", "nonce", "report"
+                ))
+                for result in results
+            )
         )
-        and [result["nonce"] for result in results] == nonces
-        and binding.get("resultSha256") == _digest(results)
-    )
+        bound_results = [
+            result for result in results
+            if isinstance(result, dict)
+            and result.get("carrierSessionId") == binding.get("carrierSessionId")
+            and result.get("taskLocator") == task_locator
+        ] if isinstance(results, list) else []
+        return bool(
+            _exact(
+                binding,
+                ("kind", "carrierSessionId", "taskLocator", "resultLocator",
+                 "phaseNonces", "resultSha256", "resultRecordSha256",
+                 "completedAt", "claim"),
+                ("carrierSessionId", "taskLocator", "resultLocator",
+                 "resultSha256", "resultRecordSha256", "completedAt", "claim"),
+            )
+            and re.fullmatch(
+                r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}",
+                binding["carrierSessionId"],
+            ) is not None
+            and _text(task_locator)
+            and _text(task_id)
+            and task_locator.split("/")[0] == task_id
+            and len(task_locator.split("/")) > 1
+            and all(
+                segment not in {"", ".", ".."}
+                for segment in task_locator.split("/")
+            )
+            and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/-]{0,127}", task_locator)
+            is not None
+            and binding["resultLocator"] == (
+                f"task-artifact:{task_locator}/agent-final.txt"
+            )
+            and completed_at is not None and captured_at is not None
+            and completed_at <= captured_at
+            and isinstance(nonces, list) and nonces
+            and all(_text(value) for value in nonces)
+            and len(nonces) == len(set(nonces))
+            and valid_results and bound_results
+            and [result["nonce"] for result in bound_results] == nonces
+            and binding.get("resultSha256") == sha256(
+                bound_results[0]["report"].encode("utf-8")
+            ).hexdigest()
+            and binding.get("resultRecordSha256") == _digest(bound_results)
+        )
+    return False
 
 
 def _postcapture_binding_key(binding):
     if binding.get("kind") == "observer-session-event":
         return binding["kind"], binding.get("sessionId"), binding.get("eventLocator")
     return (binding.get("kind"), binding.get("carrierSessionId"),
-            binding.get("resultLocator"), binding.get("resultSha256"))
+            binding.get("taskLocator"), binding.get("resultLocator"),
+            binding.get("resultSha256"), binding.get("resultRecordSha256"))
 
 
 def _postcapture_bundle(payload, task, captured_at):
@@ -185,7 +216,9 @@ def _postcapture_bundle(payload, task, captured_at):
         bindings = event.get("sourceBindings")
         if (
             not _records(bindings) or len(bindings) != count
-            or not all(_postcapture_binding(binding, payload, captured_at)
+            or not all(_postcapture_binding(
+                binding, payload, captured_at, task.get("id")
+            )
                        for binding in bindings)
             or len({_postcapture_binding_key(binding) for binding in bindings}) != count
         ):
@@ -193,6 +226,22 @@ def _postcapture_bundle(payload, task, captured_at):
         selected.append({"location": location, "event": event})
     locators = [_postcapture_binding_key(binding)
                 for item in selected for binding in item["event"]["sourceBindings"]]
+    command_results = payload.get("independentCommandResults")
+    command_bindings = [
+        binding for item in selected for binding in item["event"]["sourceBindings"]
+        if binding.get("kind") == "direct-independent-command-result"
+    ]
+    if command_results is not None or command_bindings:
+        actual = [
+            (result.get("carrierSessionId"), result.get("taskLocator"), result.get("nonce"))
+            for result in command_results
+        ] if isinstance(command_results, list) else []
+        expected = [
+            (binding.get("carrierSessionId"), binding.get("taskLocator"), nonce)
+            for binding in command_bindings for nonce in binding.get("phaseNonces", [])
+        ]
+        if not actual or len(actual) != len(set(actual)) or actual != expected:
+            return None
     return ({"contract": contract, "events": selected} if len(special) == len(selected)
             and len(locators) == len(set(locators)) else None)
 
@@ -502,7 +551,8 @@ def representative_sample_errors(
         claim = observation.get("claimLimit")
         if state in {"failed", "failed-repeated-same-purpose"} and isinstance(claim, dict):
             exclusions.extend(
-                f"{task_id}:{value}" for value in claim.get("excludedClaims", [])
+                f"{task_id}:{projection}:{value}"
+                for value in claim.get("excludedClaims", [])
                 if _text(value)
             )
     required = set(required_task_ids)
@@ -529,9 +579,11 @@ def representative_sample_errors(
         task_id = observation.get("taskId") if isinstance(observation, dict) else None
         claim = observation.get("claimLimit") if isinstance(observation, dict) else None
         if _text(task_id) and isinstance(claim, dict) and claim.get("retainedFailure") is True:
+            adapter_id = observation.get("hostIdentity", {}).get("adapterId")
             exclusions.extend(
-                f"{task_id}:{value}" for value in claim.get("excludedClaims", [])
-                if _text(value)
+                f"{task_id}:{adapter_id}:{value}"
+                for value in claim.get("excludedClaims", [])
+                if _text(adapter_id) and _text(value)
             )
     declared = acceptance.get("claimCeiling", {}).get("retainedBehaviorExclusions")
     if require_complete and declared != sorted(set(exclusions)):
@@ -573,6 +625,19 @@ def historical_representative_errors(root, acceptance, golden, read_json):
         item.get("id"): item for item in golden.get("tasks", [])
         if isinstance(item, dict) and _text(item.get("id"))
     }
+    historical_tasks = policy.get("historicalTaskContracts")
+    if not isinstance(historical_tasks, dict):
+        historical_tasks = {}
+    for task_id, contract in historical_tasks.items():
+        task = contract.get("task") if isinstance(contract, dict) else None
+        if (
+            not _text(task_id) or not isinstance(task, dict)
+            or task.get("id") != task_id
+            or contract.get("goldenTaskSha256") != _digest(task)
+        ):
+            errors = [f"historicalTaskContracts[{task_id!r}] is invalid"]
+            return errors
+        tasks[task_id] = task
     burden = golden.get("metrics", {}).get("humanBurden", [])
     binding_contracts = policy.get("postSessionBindingContracts", {})
     if not isinstance(binding_contracts, dict):
@@ -591,7 +656,11 @@ def historical_representative_errors(root, acceptance, golden, read_json):
         if not isinstance(task, dict):
             errors.append(f"{label} has unknown Golden Task")
             continue
-        if task.get("postSessionBindingContract") != binding_contracts.get(task_id):
+        if (
+            task_id not in historical_tasks
+            and task.get("postSessionBindingContract")
+            != binding_contracts.get(task_id)
+        ):
             errors.append(
                 f"{label} post-session binding contract does not match representative policy"
             )

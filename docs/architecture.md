@@ -174,6 +174,30 @@ capability. Current official host guidance is high-weight task-time evidence,
 not permanent core authority. Host drift causes revalidation, and native
 improvement may retire projection logic.
 
+## Resource stewardship
+
+Resource stewardship is a host-neutral dynamic contract, not a bundled daemon
+or universal scheduler. The task-time view distinguishes context, active turns,
+loaded or persisted conversations, workers, terminals, MCP connections or
+subscriptions, child processes, task artifacts and host capacity. Each
+actionable resource needs an identity, owner, lease and state; unknown remains
+unknown.
+
+The loop is observe, attribute, admit the minimum sufficient concurrency and
+budget, monitor, rebalance or degrade, release task-owned exposure, and verify
+pre/post state, release latency and residue. Automatic interruption or reclaim
+is eligible only for attributable task-exclusive resources through authorized,
+bounded, reversible and verifiable controls. Shared or unknown resources are
+never killed merely because pressure exists; the route first reduces new
+admission, lowers concurrency or chooses a lighter carrier.
+
+Native host primitives are preferred and may make the Accord action a no-op.
+Their existence does not prove that the host automatically closes the full
+resource stewardship loop. Performance tracing is on-demand diagnostic
+evidence, not an optimizer or release receipt, and it does not authorize silent
+collection, retention or upload. A custom scheduler, Runtime, Hook or MCP is
+admitted only after a representative residual gap justifies its lifecycle cost.
+
 The capability view is an event-triggered dynamic index, not a manually
 maintained global catalog. Durable schema-validated JSON identifies meanings,
 relations and provenance; task-time observations bind current host, client,
@@ -182,6 +206,16 @@ unknowns. A graph is derived in memory or an ignored cache for route and impact
 queries. Transient host or account state is not committed. A graph database is
 admitted only after representative queries prove that this smaller design is
 insufficient and its added lifecycle cost is justified.
+
+Capability origin is not assumed to be the host. It may be model-inherent,
+host-native, client-specific, extension-provided, configuration-enabled,
+composed or bounded-authored. The graph keeps one stable semantic capability
+node and binds availability, health, cost and evidence to effective instances
+of the observed Agent/host, carrier, model route, tools, configuration,
+permissions, context and time. Only observed or currently queried combinations
+are materialized; the host-model-tool-context Cartesian product is never
+precomputed. This lets the same index model official surfaces and check whether
+an existing route already closes a requirement before Accord authors anything.
 
 Codex local and Cloud plus Claude Code and available Claude clients are the
 first concrete-Agent remapping and evaluation surfaces; no concrete Agent or
@@ -193,7 +227,8 @@ test variables or adapters, not identity claims.
 ## Evaluation
 
 evals/golden-tasks.json contains representative help, no-op, authority,
-correction, proof-proxy, continuity, capability, report-handling and cleanup
+correction, proof-proxy, continuity, capability, report-handling, resource
+stewardship and cleanup
 cases. A task declares required and prohibited behaviors before execution.
 Observations record Agent actions, human actions, effects, residue and claim
 limits independently of the model's own verdict. Each release observation
@@ -217,14 +252,16 @@ hashes the complete selected event set. Omitting the contract, an event, a
 binding or that digest therefore fails closed instead of silently narrowing
 the claimed source.
 
-Before the exact local release gate passes, an independent human or second
-observation surface compares the publishable bundle with the original host or
-session records. The raw records remain outside the public repository. One
-evaluator isolated from candidate-preparation context also exercises the README
-activation, confirmation and removal path from a clean state. The accountable
-user, a colleague or a second observation surface may execute this
-context-isolated, outcome-bound, identity-neutral internal usability sample; it
-is not population-level field evidence.
+Before the exact local release gate passes, an independent review verifies the
+publishable bundle's task-specific bindings, captured result-text and
+structured-record digests, independent post-state and claim limits without
+accessing credential or session logs. Repository evidence cannot authenticate
+private source history, so that remains an explicit unknown rather than a
+hidden release precondition. One evaluator isolated from candidate-preparation
+context also exercises the README activation, confirmation and removal path
+from a clean state. The accountable user, a colleague or a second observation
+surface may execute this context-isolated, outcome-bound, identity-neutral
+internal usability sample; it is not population-level field evidence.
 
 The repository verifier recomputes these digests and rejects stale or partial
 bindings. It does not authenticate a real-world observer or prove that a host
@@ -277,3 +314,12 @@ constrains duplication, unjustified permanence and negative-value exposure; it
 is not a feature-deletion KPI. Finite release closes a bounded product version,
 while later evidence can simplify, narrow, replace, retire or open one new
 causal increment.
+
+The pre-Accord system is neither the whole product nor discarded history. Its
+capability use, execution, configuration, code and conversation topology,
+continuity, demand-to-goal process-loss control, resource stewardship and
+host-adaptation concerns now form one
+subdomain of the larger human-Agent collaboration system. Accord supplements
+and corrects that subdomain with systematic official-capability discovery,
+dynamic applicability, native delegation, hot update, evidence replay and
+retirement instead of restoring the old issue-by-issue architecture wholesale.

@@ -29,11 +29,15 @@ explicit migrations that affect present decisions.
   use JSON plus a derived graph before considering a graph database, and replay
   product evidence from the premise boundary. It guides the next four-way
   mapping but is not permanent truth or release authority.
-- After the first adaptive vertical slice completed, the next distribution
-  direction was selected as a separately replayed `v3.0.0` full release rather
-  than another preview. This records version and maturity intent only: it does
-  not turn the active reshape baseline into a candidate, inherit preview.2
-  evidence, or waive exact local, hosted, human, tag and cleanup gates.
+- After the first adaptive vertical slice completed, `v3.0.0` was selected as a
+  full-release development projection rather than another preview. It was
+  exposed in the local Codex cache before publication. Resource-stewardship
+  changes then made the repository Skill byte-distinct while that cache still
+  identified itself as `3.0.0`; no public tag or Release existed. The
+  development distribution is therefore superseded and the separately replayed
+  formal candidate advances monotonically to `v3.0.1`. This preserves reliable
+  update and byte-accurate rollback identity without moving any historical tag,
+  inheriting earlier evidence or waiving local, hosted, human and cleanup gates.
 
 Use Git to inspect an exact historical file:
 
@@ -73,6 +77,20 @@ single minimal Skill repair repeated the same failure, so the repair was
 removed and the task stayed failed. This established a reusable distinction:
 the YIYUAN Accord evaluation may conform by exposing and limiting a host
 failure even while the host behavior itself remains unqualified.
+
+The v3 candidate then supplied three more compact counterexamples. `FC-V3-01`
+found that a first Windows atomic-update fixture called `fsync` on a read-only
+descriptor and left one transaction file; the corrected fixture replayed health
+failure, byte-exact rollback and cleanup without turning that into live host
+update proof. `FC-V3-02` found that seven-digit fractional evidence timestamps
+passed newer interpreters but failed Python 3.10; parsing now normalizes excess
+precision and the failed pushed SHA remains ineligible. `FC-V3-03` found that
+two fresh Codex carriers could apply transient exact 3.0.1 Skill bytes and pass
+verified handoff, while the host later restored its configured immutable
+`v2.0.1-preview.1` marketplace ref. That is not a continuity failure or durable
+candidate hot-update proof: installed version authority must be rechecked after
+the immutable public tag exists, without teaching users to install moving
+`main`.
 
 Those lessons now live in constitution learned-failure standards and
 representative Golden Tasks. The retired code is not required at runtime to

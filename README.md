@@ -15,7 +15,7 @@ The broader mission is advancing human-AI collaboration. The current product sur
 [简体中文](README.zh-CN.md)
 
 > **Current release:** use the immutable
-> [`v3.0.0`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v3.0.0)
+> [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v3.0.1)
 > full release when that tag exists. Until then, the last published installable
 > version remains
 > [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1).
@@ -25,7 +25,7 @@ The broader mission is advancing human-AI collaboration. The current product sur
 
 ## Release maturity and evidence
 
-v3.0.0 is a full project release rather than another prerelease. “Full release”
+v3.0.1 is a full project release rather than another prerelease. “Full release”
 means the exact repository, packages, finite claims and declared local/hosted
 gates passed; it does not mean universal behavior, production safety or every
 Agent and client surface is proven. The test corpus remains deliberately finite,
@@ -58,7 +58,7 @@ or model version; record the version and route actually used.
 Install the exact immutable tag:
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.0.0
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.0.1
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
@@ -77,7 +77,7 @@ In Claude Desktop Chat, Claude web chat or Cowork, open
 For a persistent Claude Code installation:
 
 ```powershell
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.0.0
+claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.0.1
 claude plugin install yiyuan-accord-claude@yiyuan-accord
 ```
 
@@ -204,7 +204,7 @@ release authority or establish production safety.
 - **Representative Help-and-Interference Tasks**:
   [`evals/golden-tasks.json`](evals/golden-tasks.json)
 
-The portable contract is **K1–K5**. Host rules **H1–H10** and learned-failure rules **L1–L7** keep host drift and trial history outside the core.
+The portable contract is **K1–K5**. Host rules **H1–H10** and learned-failure rules **L1–L8** keep host drift and trial history outside the core.
 
 Those three authority files are the current reviewable bootstrap, not
 unquestionable truth, a permanent file count or a ceiling defined by the
@@ -225,15 +225,43 @@ observed effect and evidence; native, official, maintained, composed or bounded
 authored mechanisms can enter when current facts and lifecycle value justify
 them.
 
+The pre-Accord system is now the Agent execution and host-adaptation subdomain
+inside this broader collaboration system. Its useful capabilities and failure
+lessons are selectively recovered against current representative needs, then
+reshaped through official capability discovery, dynamic routing, hot update and
+retirement—not restored as the old issue-by-issue architecture.
+
+Its original process-loss mission also remains: the Agent keeps the latest
+demand and corrections aligned with the goal, authority, route, implementation,
+evidence, acceptance and final claim. A healthy conversation is not handed off
+just to follow a procedure; material divergence is traced to its earliest
+affected boundary and only dependent work is replayed.
+
 A Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier or
 another mechanism is neither mandatory nor permanently forbidden. Visibility or
 installation does not imply activation. A sufficient native path should produce
 no avoidable intervention, while a residual gap can justify scoped machinery
 with interference, update, rollback and retirement controls.
 
+### Resource stewardship
+
+Accord treats resource use as a dynamic route variable. It observes demand,
+capacity and current exposure; attributes identity, ownership, lease and state;
+admits the minimum sufficient concurrency and budget; rebalances or degrades
+under pressure; releases only attributable task-owned resources; and verifies
+post-state and residue. Shared or unknown resources are preserved.
+
+Healthy native limits, interruption, cleanup and reclamation are reused first.
+When a host demonstrably closes the whole loop, Accord adds no controller and
+its redundant logic is retired. A performance trace or cleanup command is
+diagnostic/control evidence, not proof of automatic optimization or release.
+Tracing remains on-demand and must not be silently collected or uploaded.
+
 The v3 repository candidate maps one real outcome across plan, context-tailored
 process, acceptance and a compact goal projection; replays the exact adaptive
-Skill on the bounded GT-11 slice; and requires all eight repository criteria.
+Skill on bounded GT-07 continuity, GT-11 repair and GT-12
+resource-stewardship slices; and
+requires all eight repository criteria.
 The canonical verifier does not evaluate hosted, human, tag, public Release or
 cleanup completion. Those gates remain external and ordered for the unchanged
 SHA. Immutable v2.0 and v2.0.1-preview.1 remain historical public facts;

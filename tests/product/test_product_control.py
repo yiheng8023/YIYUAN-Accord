@@ -13,6 +13,7 @@ from yiyuan_accord.evidence import (
     _publishable_payload,
     _time,
     representative_contract_sha256,
+    representative_sample_errors,
 )
 from yiyuan_accord.guardrails import (
     canonical_goal_objective,
@@ -28,8 +29,8 @@ from yiyuan_accord.identity import (
 ROOT = Path(__file__).resolve().parents[2]
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
-CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-26-gt11-codex-local-source.json'
-CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-26-gt11-codex-local.json'
+CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-26-v301-codex-local-source.json'
+CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-26-v301-gt11-codex-local.json'
 OBS = {
     1: 'evals/observations/2026-08-24-v20-claude-gt01.json',
     2: 'evals/observations/2026-08-24-v20-claude-gt02.json',
@@ -207,6 +208,10 @@ class ProductControlTests(unittest.TestCase):
             guidance['dynamicIndex']['graphProjection']['implementation'],
             'derived-in-memory-or-ignored-cache-first',
         )
+        self.assertIn('model-inherent',
+                      guidance['capabilityDiscovery']['provenanceKinds'])
+        self.assertIn('Cartesian product',
+                      guidance['dynamicIndex']['graphProjection']['normalizationRule'])
         self.assertIn(
             'preview2-is-a-current-release-candidate',
             {item['id'] for item in guidance['retiredAsActivePremises']},
@@ -224,6 +229,22 @@ class ProductControlTests(unittest.TestCase):
             'dynamic-index-and-route-derivation',
             constitution['productBoundary']['includes'],
         )
+        self.assertEqual(
+            constitution['resourceStewardship']['role'],
+            'host-neutral-dynamic-scheduling-and-release-contract',
+        )
+        self.assertIn(
+            'L8',
+            {item['id'] for item in constitution['learnedFailureStandards']},
+        )
+        self.assertEqual(
+            acceptance['representativeBehaviorPolicy']['requiredTaskIdsForRelease'],
+            ['GT-07', 'GT-11', 'GT-12'],
+        )
+        self.assertEqual(
+            guidance['resourceStewardship']['decision'],
+            'required-as-a-host-neutral-dynamic-contract',
+        )
         target = program['complexityBudget']['targets']
         self.assertGreaterEqual(
             target['maxTrackedFiles'] - report['complexity']['trackedFiles'], 3
@@ -238,18 +259,18 @@ class ProductControlTests(unittest.TestCase):
         if report['programStatus'] == 'ready':
             gate = program['releaseProcedure']['orderedGates'][1]['condition']
             for marker in (
-                'original host or session records',
+                'without accessing credential or session logs',
                 'context-isolated, outcome-bound, identity-neutral',
             ):
                 self.assertIn(marker, gate)
                 self.assertIn(marker, acceptance['candidateVerification']['rule'])
         else:
             prompt = program['goalModePrompt']
-            self.assertEqual(
-                prompt['state'],
-                'retired' if program['increment']['state'] == 'completed'
-                else 'active-in-host',
+            expected_goal_states = (
+                {'retired'} if program['increment']['state'] == 'completed'
+                else {'prepared-host-goal-paused', 'active-in-host'}
             )
+            self.assertIn(prompt['state'], expected_goal_states)
             mapping = program['increment']['fourSurfaceMapping']
             self.assertEqual(
                 mapping['outcomeId'],
@@ -257,6 +278,10 @@ class ProductControlTests(unittest.TestCase):
             )
             projection = json.loads(prompt['objective'])
             self.assertEqual(projection['schema'], 'yiyuan-accord-goal/v2')
+            self.assertEqual(
+                projection['route']['alignment'],
+                program['processLossControl']['alignmentRule'],
+            )
             ordered = projection['route']['orderedSteps']
             self.assertLessEqual(
                 len(prompt['objective']), 3600,
@@ -265,8 +290,9 @@ class ProductControlTests(unittest.TestCase):
             self.assertEqual(
                 ordered,
                 [{field: step[field] for field in (
-                    'id', 'state', 'dependsOn', 'acceptanceIds'
-                )} for step in mapping['process']['orderedSteps']],
+                     'id', 'state', 'dependsOn', 'acceptanceIds'
+                )} for step in mapping['process']['orderedSteps']
+                 if step['state'] != 'completed'],
             )
     def test_authority_and_static_suite_mutations_fail_closed(self):
         cases = (
@@ -276,6 +302,8 @@ class ProductControlTests(unittest.TestCase):
             (C, 'compatibilityAliases must be empty',
              lambda v: v['identity'].update(compatibilityAliases=['x'])),
             (C, 'humanAuthority shape', lambda v: v.pop('humanAuthority')),
+            (C, 'resourceStewardship shape', lambda v: v[
+                'resourceStewardship'].pop('diagnosticRule')),
             (P, 'minimumProductCodeAndTestHeadroomPercent', lambda v: v[
                 'complexityBudget'].update(minimumProductCodeAndTestHeadroomPercent=4)),
             (P, 'digestBoundBinaryAssets must be an object', lambda v: v[
@@ -283,6 +311,9 @@ class ProductControlTests(unittest.TestCase):
             (G, 'static-suite-as-behavior',
              lambda v: v['evaluationProtocol'].update(staticSuiteIsNotBehaviorEvidence=False)),
             (G, 'humanBurden metrics', lambda v: v['metrics'].update(help=['self-claim'])),
+            (G, 'golden tasks do not cover contract ids', lambda v: next(
+                task for task in v['tasks'] if task['id'] == 'GT-12'
+            )['mapsTo'].remove('L8')),
             (A, 'representative post-session binding contracts', lambda v: v[
                 'representativeBehaviorPolicy'].update(postSessionBindingContracts=[])),
             (A, 'finite-release evidence lanes', lambda v: (
@@ -305,13 +336,16 @@ class ProductControlTests(unittest.TestCase):
             (manifest['interface']['defaultPrompt'], manifest['mcpServers']) = (projection['interfaceDefaultPrompt'], {})
             _write(root, manifest_path, manifest)
             skill = root / projection['skill']
-            skill.write_text(skill.read_text(encoding='utf-8').replace('name: deliver-demand-driven-outcome', 'name: publish-now', 1), encoding='utf-8')
+            skill.write_text(skill.read_text(encoding='utf-8').replace(
+                'name: deliver-demand-driven-outcome', 'name: publish-now', 1
+            ).replace('## Resource stewardship', '## Capacity management', 1), encoding='utf-8')
             market = _read(root, projection['marketplace'])
             market['plugins'][0]['policy']['installation'] = 'INSTALLED_BY_DEFAULT'
             _write(root, projection['marketplace'], market)
             self.assert_has(host_check(root, 'codex')['errors'], 'program projection shape',
                             'package digest', 'unsupported fields', 'Skill frontmatter identity',
-                            'AVAILABLE/ON_INSTALL', 'interface contract')
+                            'AVAILABLE/ON_INSTALL', 'interface contract',
+                            'Skill omits marker Resource stewardship')
         with _fixture() as root:
             # Preserve a lexical alias so the mock follows the verifier's
             # canonical root on hosts whose temporary path resolves elsewhere.
@@ -397,8 +431,14 @@ class ProductControlTests(unittest.TestCase):
             )
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
-        observation = _read(ROOT, CURRENT_GT11_OBSERVATION)['projectionIdentity']
         current = host_check(ROOT, 'codex')['details']
+        observation = {
+            'adapterId': 'codex',
+            'contract': current['contract'],
+            'skill': current['skill'],
+            'contractSha256': current['identity']['contractSha256'],
+            'skillSha256': current['identity']['skillSha256'],
+        }
         presentation_drift = dict(
             observation,
             manifestSha256='0' * 64,
@@ -418,13 +458,13 @@ class ProductControlTests(unittest.TestCase):
             ),
             'skill does not match current adapter',
         )
-        with _fixture() as root:
-            locator = CURRENT_GT11_OBSERVATION
-            observation = _read(root, locator)
-            observation['projectionIdentity']['skillSha256'] = '0' * 64
-            _write(root, locator, observation)
-            _rehash(root, locator)
-            self.assert_has(_errors(root), 'skillSha256 does not match')
+        behavior_drift = dict(observation, skillSha256='0' * 64)
+        self.assert_has(
+            projection_observation_errors(
+                behavior_drift, current, 'behavior-drift', 'codex'
+            ),
+            'skillSha256 does not match',
+        )
 
     def test_representative_sample_binds_projection_source_and_task(self):
         acceptance, golden = _read(ROOT, A), _read(ROOT, G)
@@ -553,33 +593,132 @@ class ProductControlTests(unittest.TestCase):
         self.assertIsNotNone(_postcapture_bundle(
             current['payload'], current_task, _time(current['capturedAt'])
         ))
-        for mutation in (
-            'digest', 'nonce', 'agent-task', 'carrier', 'locator', 'completed',
-            'result', 'results-missing',
-        ):
-            payload = json.loads(json.dumps(current['payload']))
+        command_payload = json.loads(json.dumps(current['payload']))
+        command_payload['independentCommandResults'] = [{
+            'kind': 'independent-command-result',
+            'carrierSessionId': '01a03c8f-ba9e-7991-b375-c673345ed4ad',
+            'taskLocator': 'GT-11/independent-observer',
+            'phase': 'bounded-agent-result',
+            'nonce': 'gt11-independent-observer-20260826-a',
+            'report': 'The isolated Agent wrote a structured result and exited cleanly.',
+        }]
+        command_event = next(
+            item for item in command_payload['materialEvents']
+            if item['kind'] == 'independent-poststate'
+        )
+        command_event['sourceBindings'] = [{
+            'kind': 'direct-independent-command-result',
+            'carrierSessionId': '01a03c8f-ba9e-7991-b375-c673345ed4ad',
+            'taskLocator': 'GT-11/independent-observer',
+            'resultLocator': 'task-artifact:GT-11/independent-observer/agent-final.txt',
+            'phaseNonces': ['gt11-independent-observer-20260826-a'],
+            'resultSha256': hashlib.sha256(
+                command_payload['independentCommandResults'][0][
+                    'report'
+                ].encode('utf-8')
+            ).hexdigest(),
+            'resultRecordSha256': _digest(
+                command_payload['independentCommandResults']
+            ),
+            'completedAt': '2026-08-26T03:54:30Z',
+            'claim': 'Bound to the isolated command result without reading session logs.',
+        }]
+        self.assertIsNotNone(_postcapture_bundle(
+            command_payload, current_task, _time(current['capturedAt'])
+        ))
+        mutations = (
+            ('binding', 'resultSha256', '0' * 64),
+            ('binding', 'resultRecordSha256', '0' * 64),
+            ('binding', 'carrierSessionId', 'wrong'),
+            ('binding', 'taskLocator', 'GT-11/other-observer'),
+            ('binding', 'resultLocator', 'task-artifact:other.txt'),
+            ('binding', 'phaseNonces', ['other-nonce']),
+            ('binding', 'completedAt', '2999-01-01T00:00:00Z'),
+            ('result', 'report', 'drift'),
+            ('payload', 'independentCommandResults', None),
+        )
+        for scope, key, value in mutations:
+            payload = json.loads(json.dumps(command_payload))
             event = next(
                 item for item in payload['materialEvents']
                 if item['kind'] == 'independent-poststate'
             )
             binding = event['sourceBindings'][0]
-            if mutation == 'digest':
-                binding['resultSha256'] = '0' * 64
-            elif mutation == 'nonce':
-                binding['phaseNonces'][0] = 'unbound-phase'
-            elif mutation == 'agent-task':
-                binding['agentTask'] = '/root/different-agent'
-            elif mutation == 'carrier':
-                binding['carrierSessionId'] = 'wrong'
-            elif mutation == 'locator':
-                binding['resultLocator'] = 'codex-collaboration-agent:/wrong'
-            elif mutation == 'completed':
-                binding['completedAt'] = '2999-01-01T00:00:00Z'
-            elif mutation == 'result':
-                payload['independentAgentResults'][0]['report'] += ' drift'
+            target = {'binding': binding, 'result': payload[
+                'independentCommandResults'][0], 'payload': payload}[scope]
+            if value is None:
+                target.pop(key)
             else:
-                payload.pop('independentAgentResults')
-            with self.subTest(direct_independent_binding=mutation):
+                target[key] = value
+            with self.subTest(direct_independent_command_binding=(scope, key)):
+                self.assertIsNone(_postcapture_bundle(
+                    payload, current_task, _time(current['capturedAt'])
+                ))
+        swapped = json.loads(json.dumps(command_payload))
+        first = swapped['independentCommandResults'][0]
+        second = dict(
+            first,
+            carrierSessionId='01a03c90-409d-79f9-8232-7522da1eefac',
+            taskLocator='GT-11/second-observer',
+            nonce='gt11-second-observer-20260826-b',
+            report='The second isolated Agent completed its own bounded report.',
+        )
+        swapped['independentCommandResults'].append(second)
+        event = next(
+            item for item in swapped['materialEvents']
+            if item['kind'] == 'independent-poststate'
+        )
+        binding = event['sourceBindings'][0]
+        binding['carrierSessionId'] = second['carrierSessionId']
+        binding['taskLocator'] = second['taskLocator']
+        binding['resultLocator'] = (
+            'task-artifact:GT-11/second-observer/agent-final.txt'
+        )
+        binding['phaseNonces'] = [second['nonce']]
+        binding['resultSha256'] = hashlib.sha256(
+            second['report'].encode('utf-8')
+        ).hexdigest()
+        binding['resultRecordSha256'] = _digest([second])
+        with self.subTest(swapped_direct_command_carrier=True):
+            self.assertIsNone(_postcapture_bundle(
+                swapped, current_task, _time(current['capturedAt'])
+            ))
+        source_bundle = _read(ROOT, CURRENT_GT11_SOURCE)
+        gt12 = source_bundle['records']['GT-12']
+        with self.subTest(cross_task_command_bundle=True):
+            self.assertIsNone(_postcapture_bundle(
+                gt12['payload'], current_task, _time(gt12['capturedAt'])
+            ))
+        traversed = json.loads(json.dumps(command_payload))
+        traversed_result = traversed['independentCommandResults'][0]
+        traversed_result['taskLocator'] = (
+            'GT-11/../GT-12/independent-observer'
+        )
+        traversed_event = next(
+            item for item in traversed['materialEvents']
+            if item['kind'] == 'independent-poststate'
+        )
+        traversed_binding = traversed_event['sourceBindings'][0]
+        traversed_binding['taskLocator'] = traversed_result['taskLocator']
+        traversed_binding['resultLocator'] = (
+            'task-artifact:GT-11/../GT-12/independent-observer/agent-final.txt'
+        )
+        traversed_binding['resultRecordSha256'] = _digest([traversed_result])
+        with self.subTest(cross_task_path_traversal=True):
+            self.assertIsNone(_postcapture_bundle(
+                traversed, current_task, _time(current['capturedAt'])
+            ))
+        for field in ('phase', 'report'):
+            payload = json.loads(json.dumps(command_payload))
+            payload['independentCommandResults'][0][field] = ''
+            event = next(
+                item for item in payload['materialEvents']
+                if item['kind'] == 'independent-poststate'
+            )
+            event['sourceBindings'][0]['resultRecordSha256'] = _digest(
+                payload['independentCommandResults']
+            )
+            with self.subTest(empty_direct_command_field=field):
                 self.assertIsNone(_postcapture_bundle(
                     payload, current_task, _time(current['capturedAt'])
                 ))
@@ -647,11 +786,19 @@ class ProductControlTests(unittest.TestCase):
                 _errors(root), 'historical claim binding is invalid'
             )
         self.assertEqual(
-            _read(ROOT, A)['claimCeiling']['retainedBehaviorExclusions'], ['GT-07:cleanup']
+            _read(ROOT, A)['claimCeiling']['retainedBehaviorExclusions'],
+            ['GT-07:claude-code:cleanup']
         )
         self.rejected(A, 'retained behavior exclusions', lambda v:
                       v['claimCeiling'].update(
                           retainedBehaviorExclusions=['GT-07:stale exclusion']))
+        self.rejected(
+            A, 'historicalTaskContracts', lambda v: v[
+                'representativeBehaviorPolicy'
+            ]['historicalTaskContracts']['GT-07'].update(
+                goldenTaskSha256='0' * 64
+            )
+        )
         with _fixture() as root:
             locator = OBS[7]
             observation = _read(root, locator)
@@ -671,6 +818,20 @@ class ProductControlTests(unittest.TestCase):
             errors, state = _observe(root, locator, observation, 'must-pass fixture')
             self.assertEqual(state, 'failed')
             self.assert_has(errors, 'failure lacks counterevidence')
+
+    def test_current_representative_sample_is_complete_at_release_boundary(self):
+        acceptance, golden = _read(ROOT, A), _read(ROOT, G)
+        errors = representative_sample_errors(
+            ROOT,
+            acceptance,
+            acceptance['representativeBehaviorPolicy'][
+                'requiredTaskIdsForRelease'
+            ],
+            golden,
+            lambda root, locator, _: _read(root, locator),
+            require_complete=True,
+        )
+        self.assertEqual(errors, [])
 
     def test_plan_process_acceptance_and_release_order_stay_aligned(self):
         with _indexed_fixture() as root:
@@ -702,8 +863,8 @@ class ProductControlTests(unittest.TestCase):
             text = path.read_text(encoding='utf-8')
             path.write_text(
                 text.replace(
-                    'v3.0.0 full-release candidate',
-                    'v3.0.0 draft only',
+                    'v3.0.1 full-release candidate',
+                    'v3.0.1 draft only',
                     1,
                 ),
                 encoding='utf-8',
@@ -763,9 +924,17 @@ class ProductControlTests(unittest.TestCase):
         increment = program['increment']
         increment['state'] = 'blocked'
         item = increment['workItems'][0]
-        item['state'] = item['closeoutSequence'][-1]['state'] = 'blocked'
+        item['state'] = 'blocked'
+        next(
+            (stage for stage in item['closeoutSequence']
+             if stage['state'] == 'active'),
+            item['closeoutSequence'][-1],
+        )['state'] = 'blocked'
         steps = increment['fourSurfaceMapping']['process']['orderedSteps']
-        steps[-1]['state'] = 'blocked'
+        next(
+            (step for step in steps if step['state'] == 'active'),
+            steps[-1],
+        )['state'] = 'blocked'
         blocked_errors = []
         criteria = set(program['goalModePrompt']['mapsTo'])
         _validate_four_surface_mapping(increment, criteria, blocked_errors)
@@ -838,13 +1007,23 @@ class ProductControlTests(unittest.TestCase):
         )
         self.rejected(
             P, 'acceptance.distributionVersion does not match program',
-            lambda v: v.update(distributionVersion='v3.0.1'),
+            lambda v: v.update(distributionVersion='v3.0.2'),
         )
         self.rejected(
             P, 'historicalRelease provenance is invalid',
             lambda v: v['historicalRelease'].update(
                 unreleasedCheckpoint='v2.0.01'
             ),
+        )
+        self.rejected(
+            P, 'historicalRelease provenance is invalid',
+            lambda v: v['historicalRelease'].update(
+                supersededDevelopmentDistributions=[]
+            ),
+        )
+        self.rejected(
+            P, 'reuses a superseded development distribution',
+            lambda v: v.update(distributionVersion='v3.0.0'),
         )
         self.rejected(
             A, 'historicalRelease provenance is invalid',

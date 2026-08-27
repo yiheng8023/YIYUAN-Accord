@@ -11,7 +11,7 @@ YIYUAN Accord 是一个开放、Agent 中立、机制中立的人机协作系统
 [English](README.md)
 
 > **当前版本：**当不可变的
-> [`v3.0.0`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v3.0.0)
+> [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v3.0.1)
 > tag 存在时，使用该正式版；在此之前，最后一个已发布、可安装版本仍是
 > [`v2.0.1-preview.1`](https://github.com/yiheng8023/YIYUAN-Accord/tree/v2.0.1-preview.1)。
 > 不要从持续移动的 `main` checkout 安装。
@@ -20,7 +20,7 @@ YIYUAN Accord 是一个开放、Agent 中立、机制中立的人机协作系统
 
 ## 发布成熟度与证据
 
-v3.0.0 是项目正式版，不再使用预发行标签。“正式版”只表示这个精确仓库、
+v3.0.1 是项目正式版，不再使用预发行标签。“正式版”只表示这个精确仓库、
 包、有限声明与已声明的本地/托管门禁通过，不表示普遍行为、生产安全或所有
 Agent 与客户端表面都已证明。测试集仍有意保持有限，因此代表性使用、反例
 与失败属于持续证据。
@@ -44,7 +44,7 @@ Agent 与客户端表面都已证明。测试集仍有意保持有限，因此�
 安装精确、不可变的 tag：
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.0.0
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.0.1
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
@@ -62,7 +62,7 @@ codex plugin add yiyuan-accord-codex@yiyuan-accord
 Claude Code 持久安装：
 
 ```powershell
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.0.0
+claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.0.1
 claude plugin install yiyuan-accord-claude@yiyuan-accord
 ```
 
@@ -175,7 +175,7 @@ python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 - **帮助与干扰代表任务**：
   [`evals/golden-tasks.json`](evals/golden-tasks.json)
 
-可移植契约是 **K1–K5**。**H1–H10** 宿主规则和 **L1–L7** 试错标准把宿主漂移与历史失败留在核心之外。
+可移植契约是 **K1–K5**。**H1–H10** 宿主规则和 **L1–L8** 试错标准把宿主漂移与历史失败留在核心之外。
 
 这三份权威文件只是当前可审查的启动拓扑，并非不容置疑的真理、永久数量，
 更不是由今天宿主可见能力决定的覆盖上限。未来的合并、拆分、替换或退役
@@ -191,13 +191,35 @@ Accord 不受 Codex、Claude 或任何具体 Agent 能力面的限制。每个�
 当现场事实与生命周期价值成立时，原生、官方、受维护、组合或受控新建的
 机制都可以进入路线。
 
+Accord 之前的系统现在是这个更大协作系统中的 Agent 执行与宿主适配子域。其
+有价值的能力和失败教训按当前代表需求选择性召回，再通过官方能力发现、动态
+路由、热更新和退役机制重新塑形，而不是恢复原来“遇到一个问题堆一层实现”
+的整体架构。
+
 Skill、插件、App、MCP、Hook、配置、状态、Runtime、云端载体或其他机制，
 既不是必选项，也不是永久禁区。可见或安装不等于激活；原生路径充分时应当
 没有不必要介入，存在残余缺口时则可以引入具备干扰、更新、回滚和退役控制
 的局部机制。
 
+Accord 前身的 Agent 执行子域原有过程损失控制使命也被保留：Agent 应使最新需求与纠偏、目标、
+权限、路线、实现、证据、验收和最终声明持续对齐。健康对话不因流程而强行交接；
+一旦出现实质偏离，就定位最早受影响边界，只回放其下游工作。
+
+### 资源治理
+
+Accord 把资源使用视为动态路线变量：观测需求、容量与当前暴露，区分资源
+身份、所有者、租约和状态，采用满足结果所需的最小并发与预算；压力变化时
+重新平衡或降级；只释放可归因的任务专属资源，并核验释放后的状态与残留。
+共享资源或所有权未知的资源必须保留。
+
+宿主原生的限额、中断、清理与回收能力健康且充分时优先使用；宿主能够证实
+闭合完整循环时，Accord 不重复创建控制器，并应退役冗余逻辑。性能跟踪或
+清理命令只是诊断或控制证据，不等于自动优化或释放证明；跟踪只按需开启，
+不得静默收集或上传。
+
 v3 仓库候选把一个真实结果映射为计划、因地制宜的工序、验收和精简目标
-投影；在有界 GT-11 切片上回放精确动态适配 Skill；并要求八项仓库验收
+投影；在有界 GT-07 连续性、GT-11 修复与 GT-12 资源治理切片上回放精确动态适配
+Skill；并要求八项仓库验收
 全部满足。canonical verifier 不评估托管、人类、tag、公开 Release 或清理
 完成态；这些门禁仍对同一 SHA 保持外部、严格有序。不可变的 v2.0 与
 v2.0.1-preview.1 仍是公开历史事实；preview.2 未曾发布，不得打 tag。详见

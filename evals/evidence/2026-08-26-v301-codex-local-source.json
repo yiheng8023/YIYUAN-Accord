@@ -1,0 +1,659 @@
+{
+  "schema": 1,
+  "records": {
+    "GT-07": {
+      "kind": "host-event-log",
+      "taskId": "GT-07",
+      "goldenTaskSha256": "accf7cf8b11c491bbc925060727d83f12fb11fb6291fbaa6781b17634f26ae64",
+      "evaluationContractSha256": "ac245803462c23b179da6ef414088c35a9e7ed56935e0007d2e77233095ae7f1",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex CLI through Codex Desktop local host",
+        "hostVersion": "codex-cli 0.150.1; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a04192-f27e-7580-9966-9b0409bb4b22"
+      },
+      "capturedAt": "2026-08-27T05:35:19Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "messages": [
+          {
+            "kind": "message",
+            "phase": "source-invocation",
+            "role": "user",
+            "text": "Run the bounded unknown-capacity fixture: hold the source, prepare a complete handoff and wait automatically for a fresh destination."
+          },
+          {
+            "kind": "message",
+            "phase": "source-result",
+            "role": "assistant",
+            "text": "The source kept capacity unknown, wrote an unreleased handoff, reconciled the independent destination receipt and then released only the fixture source."
+          },
+          {
+            "kind": "message",
+            "phase": "destination-invocation",
+            "role": "user",
+            "text": "Independently verify the exact goal, correction, authority, hashes, transition rule and unreleased source before writing the destination receipt."
+          },
+          {
+            "kind": "message",
+            "phase": "destination-result",
+            "role": "assistant",
+            "text": "The fresh destination verified every bound value and observed sourceReleased false before creating its receipt."
+          },
+          {
+            "kind": "message",
+            "phase": "cleanup-observer-task",
+            "role": "user",
+            "text": "Independently verify the exact GT-07 root, replay parent, .tmp and bounded task leaf names are absent without mutating state."
+          },
+          {
+            "kind": "message",
+            "phase": "cleanup-observer-result",
+            "role": "assistant",
+            "text": "The fresh observer found all three literal paths absent and zero bounded exact-name filesystem or tracked matches; it did not attribute deletion."
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "01a04192-f27e-7580-9966-9b0409bb4b22",
+            "taskLocator": "GT-07/source-carrier",
+            "phase": "source-reconciliation",
+            "nonce": "gt07-source-reconciliation-20260827-a",
+            "report": "GT-07 source-carrier transition completed successfully.\n\n- `carrierSessionId`: `01a04192-f27e-7580-9966-9b0409bb4b22`\n- `taskLocator`: `GT-07/source-carrier`\n- `phaseNonce`: `gt07-source-reconciliation-20260827-a`\n- Capacity: `unknown`\n- Transition rule: satisfied; no threshold invented\n- Destination session: `01a04194-3844-7e60-9a96-02675758534b`\n- Destination verified: `true`\n- Source unreleased when observed: `true`\n- Final source release: `true`\n- Release scope: `fixture-source-carrier-only`\n\nExact SHA-256 hashes:\n\n- `TASK.md`: `f0fe82f54cc4c05eace3758a6158ed677cdee61a37850f250d38fa5188d2edc0`\n- `goal-state.json`: `7ac31c40e849ca29adf160e25fb4c7f898ea6dabb085e8bf4266ce83b7b8a6ac`\n- Candidate Skill: `2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5`\n- `handoff.json`: `ac6b392407170e789d995b4b48a2e7fb3d1727cd4cd1400f38cf76a76f7cf203`\n- `destination-receipt.json`: `f8c635b33b8e830606a461597c40f49349135763304f14b92da722000423a53f`\n- `source-release.json`: `611516d9a04ec6d186263db7e27e062454ca6bc365c877284dbdb91f5413d363`\n\nUnknowns remain: remaining capacity, any reliable host capacity signal, and any universal threshold.\n\nRecheck if goal/authority changes, candidate or input bytes change, locators/nonces/rule change, handoff or receipt bytes change, or a reliable capacity signal appears.\n\nBounded claim: exact GT-07 source-to-destination continuity was verified and only the fixture source carrier was released. This does not prove durable plugin installation, hot reload, a need to hand off a healthy task, Cloud/Claude behavior, field value, production safety, or release readiness."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "01a04194-3844-7e60-9a96-02675758534b",
+            "taskLocator": "GT-07/destination-carrier",
+            "phase": "destination-verification",
+            "nonce": "gt07-destination-verification-20260827-a",
+            "report": "Destination verification passed. Wrote only destination-receipt.json.\n\n- Session ID: `01a04194-3844-7e60-9a96-02675758534b`\n- Task locator: `GT-07/destination-carrier`\n- Phase nonce: `gt07-destination-verification-20260827-a`\n- `destinationVerified`: `true`\n- `sourceReleasedObserved`: `false`\n- `source-release.json`: absent\n- Capacity: `remaining=unknown`, reliable signal `false`, universal threshold `null`\n\nExact SHA-256 results:\n\n- `TASK.md`: `f0fe82f54cc4c05eace3758a6158ed677cdee61a37850f250d38fa5188d2edc0`\n- `goal-state.json`: `7ac31c40e849ca29adf160e25fb4c7f898ea6dabb085e8bf4266ce83b7b8a6ac`\n- Candidate Skill: `2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5`\n- `handoff.json` via `Get-FileHash`: `ac6b392407170e789d995b4b48a2e7fb3d1727cd4cd1400f38cf76a76f7cf203`\n- `handoff.json` via `certutil`: `ac6b392407170e789d995b4b48a2e7fb3d1727cd4cd1400f38cf76a76f7cf203`\n- Receipt: `f8c635b33b8e830606a461597c40f49349135763304f14b92da722000423a53f`\n\nDirect comparisons all passed: current goal, latest correction, accepted facts, authority, capacity state, transition rule, claim limit, task locators, phase nonces, input hashes, and Skill hash.\n\nVerified bounded claim: this proves only exact fresh-carrier continuity for GT-07. It does not prove durable plugin update, hot reload, necessity of handing off the healthy task, Cloud or Claude behavior, field value, production safety, or release readiness. No source release, cleanup, repository/config/plugin mutation, or session-log access occurred."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "01a041b6-2120-7533-bc08-3d545d85d785",
+            "taskLocator": "GT-07/cleanup-observer",
+            "phase": "cleanup-poststate",
+            "nonce": "gt07-cleanup-observer-20260827-c",
+            "report": "taskLocator: GT-07/cleanup-observer\nphaseNonce: gt07-cleanup-observer-20260827-c\nOverall result: PASS\n\nAll operations were read-only, local and bounded to C:\\Projects\\YIYUAN-Accord. No network or mutation was used.\n\nCommands and results:\n1. Test-Path -LiteralPath on the exact GT-07 root, replay-20260827 parent and .tmp parent returned Exists=false for all three.\n2. Get-ChildItem -LiteralPath C:\\Projects\\YIYUAN-Accord -Force -Recurse with case-sensitive exact leaf-name matching for gt07, replay-20260827, TASK.md, goal-state.json, handoff.json, destination-receipt.json and source-release.json returned MatchCount=0 and Matches=[].\n3. The first git-ls-files leaf filter failed before producing a classification because GetFileName received an invalid expression. The corrected read-only retry completed with GitExitCode=0, TrackedFileCount=65, ExactNameTrackedMatchCount=0 and ExactNameTrackedMatches=[].\n4. Get-Content -LiteralPath plugins\\yiyuan-accord-codex\\skills\\deliver-demand-driven-outcome\\SKILL.md succeeded with LineCount=115.\n5. Get-FileHash -Algorithm SHA256 returned 2FB6E340EEA524A55CD9A4A3E59F8C17BFCC5D5E0AF52F532A46659931EBAFC5.\n\nBounded search method: literal-path checks plus forced recursive enumeration beneath exactly C:\\Projects\\YIYUAN-Accord using exact leaf names; git ls-files independently distinguished tracked matches.\n\nUnknowns: none within the accessible repository namespace enumerated by these commands. No claim is made about historical state, who performed deletion, inaccessible external locations or future state.\n\nBounded claim: at observation time, the three specified paths were absent and the bounded repository scan found no requested exact-name task residue. No filesystem or repository state was changed and no network was used."
+          }
+        ],
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "the task, candidate Skill, evaluation contract, host condition or claimed behavior changes",
+            "scope": "affected-local-and-downstream-evidence",
+            "action": "invalidate the affected evidence and replay from the earliest changed dependency boundary"
+          },
+          {
+            "kind": "recheck-trigger",
+            "condition": "a Cloud, Claude or other Agent carrier is separately selected and current conditions fit",
+            "scope": "agent-and-carrier-specific",
+            "action": "observe that carrier directly without inheriting Codex-local behavior evidence"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "projection-binding",
+            "phase": "admission",
+            "skillSha256": "2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5",
+            "goldenTaskSha256": "accf7cf8b11c491bbc925060727d83f12fb11fb6291fbaa6781b17634f26ae64",
+            "evaluationContractSha256": "ac245803462c23b179da6ef414088c35a9e7ed56935e0007d2e77233095ae7f1"
+          },
+          {
+            "kind": "capacity-observation",
+            "phase": "source",
+            "remaining": "unknown",
+            "reliableHostSignalAvailable": false,
+            "universalThreshold": null
+          },
+          {
+            "kind": "task-bound-transition",
+            "phase": "source",
+            "conditionSatisfied": true,
+            "handoffSha256": "ac6b392407170e789d995b4b48a2e7fb3d1727cd4cd1400f38cf76a76f7cf203",
+            "sourceReleased": false
+          },
+          {
+            "kind": "destination-verification",
+            "phase": "destination",
+            "sessionId": "01a04194-3844-7e60-9a96-02675758534b",
+            "destinationVerified": true,
+            "handoffSha256": "ac6b392407170e789d995b4b48a2e7fb3d1727cd4cd1400f38cf76a76f7cf203",
+            "receiptSha256": "f8c635b33b8e830606a461597c40f49349135763304f14b92da722000423a53f",
+            "sourceReleasedObserved": false
+          },
+          {
+            "kind": "source-reconciliation",
+            "phase": "source",
+            "destinationVerified": true,
+            "sourceReleasedObserved": false,
+            "sourceReleased": true,
+            "releaseScope": "fixture-source-carrier-only",
+            "releaseSha256": "611516d9a04ec6d186263db7e27e062454ca6bc365c877284dbdb91f5413d363"
+          },
+          {
+            "kind": "independent-poststate",
+            "phase": "source-destination-reconciliation",
+            "destinationVerifiedBeforeSourceRelease": true,
+            "sourceReleasedAfterReceipt": true,
+            "capacity": "unknown",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "01a04192-f27e-7580-9966-9b0409bb4b22",
+                "taskLocator": "GT-07/source-carrier",
+                "resultLocator": "task-artifact:GT-07/source-carrier/agent-final.txt",
+                "phaseNonces": [
+                  "gt07-source-reconciliation-20260827-a"
+                ],
+                "resultSha256": "4e8885282aa1de79ea721227f3cad090200b8a7c511d047397242b128dc24634",
+                "completedAt": "2026-08-27T04:59:44Z",
+                "claim": "Bound to the completed ephemeral source result; no credential-bearing session log was read.",
+                "resultRecordSha256": "15f3804d307f8acacb5dbcbb184340a1aa7210e61d8505548fe8324df424bd1b"
+              },
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "01a04194-3844-7e60-9a96-02675758534b",
+                "taskLocator": "GT-07/destination-carrier",
+                "resultLocator": "task-artifact:GT-07/destination-carrier/agent-final.txt",
+                "phaseNonces": [
+                  "gt07-destination-verification-20260827-a"
+                ],
+                "resultSha256": "082e15a538629c410d834e1511e31184d39adb2f3e3578502ba30401f809b451",
+                "completedAt": "2026-08-27T04:58:41Z",
+                "claim": "Bound to the completed ephemeral destination result; no credential-bearing session log was read.",
+                "resultRecordSha256": "c197a5112a438bbe7454e5723aa8c2344eec685e997c1afd2ee320ede7d2cc1c"
+              }
+            ]
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 2
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5"
+        },
+        "officialSources": [],
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "pre-cleanup-independent-poststate",
+              "result": "the exact seven expected files existed; goal, correction, authority, hashes and release ordering matched"
+            },
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "a fresh read-only observer found the exact GT-07 root, replay parent and .tmp absent, with zero bounded exact-name filesystem or tracked matches; cleanup authorship is not claimed",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "01a041b6-2120-7533-bc08-3d545d85d785",
+                  "taskLocator": "GT-07/cleanup-observer",
+                  "resultLocator": "task-artifact:GT-07/cleanup-observer/agent-final.txt",
+                  "phaseNonces": [
+                    "gt07-cleanup-observer-20260827-c"
+                  ],
+                  "resultSha256": "fcf227ea165f5cdef5f696502092c6ba1b7ccd8f1a033d5668535f0e96f866d9",
+                  "completedAt": "2026-08-27T05:35:07Z",
+                  "claim": "Bound to the fresh task-specific cleanup observer result; it proves current repository post-state only.",
+                  "resultRecordSha256": "a3769fdd9b8edd115faef5fa8ba316a3c4764fe32eb4d73ebd2667c31ad8fb60"
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "private-temp-path-substitution",
+            "scope": "absolute disposable fixture root",
+            "reason": "artifact names, direct results and cryptographic bindings preserve the relevant result without publishing a personal temporary path"
+          },
+          {
+            "kind": "non-task-host-context-omitted",
+            "scope": "credentials, session logs and ambient configuration not required by the task",
+            "reason": "they were outside authority and were not inspected"
+          }
+        ],
+        "evidenceBoundary": "One exact Codex-local Windows GT-07 fixture proves conditional continuity with capacity recorded as unknown, fresh destination verification before fixture-source release and fresh repository-bounded cleanup post-state. The cleanup observer does not prove who performed deletion. Durable plugin update, in-place hot reload, a need to hand off the healthy release task, Cloud or Claude behavior, field value, production safety and release readiness are not proved."
+      }
+    },
+    "GT-11": {
+      "kind": "host-event-log",
+      "taskId": "GT-11",
+      "goldenTaskSha256": "31bbe028963784b4b54198db3c86c84d5f601f7d2e527c9417ecfc4b079ce748",
+      "evaluationContractSha256": "ac245803462c23b179da6ef414088c35a9e7ed56935e0007d2e77233095ae7f1",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex CLI through Codex Desktop local host",
+        "hostVersion": "codex-cli 0.150.1; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a04184-5f13-7441-b8ba-9c59a229e4fe"
+      },
+      "capturedAt": "2026-08-27T04:48:30Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "messages": [
+          {
+            "kind": "message",
+            "phase": "initial-task",
+            "role": "user",
+            "text": "Repair the supplied dirty fixture while preserving unrelated bytes; verify the initial result and wait automatically for a compatible correction."
+          },
+          {
+            "kind": "message",
+            "phase": "initial-result",
+            "role": "assistant",
+            "text": "The initial behavior passed through app.py-only repair, and a source-bound initial receipt was written before waiting."
+          },
+          {
+            "kind": "message",
+            "phase": "correction-and-route-degradation",
+            "role": "user",
+            "text": "Deduplicate case-insensitively while keeping first spelling/order, preserve all authority, and recompute because the preferred route is declared unavailable."
+          },
+          {
+            "kind": "message",
+            "phase": "final-result",
+            "role": "assistant",
+            "text": "The earliest affected implementation boundary was replayed; fallback, independent, no-op, preservation and full demand-to-final-claim alignment checks passed."
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "01a0418a-d7f2-7d93-b268-9a81c8975e58",
+            "taskLocator": "GT-11/independent-observer",
+            "phase": "observer-verification",
+            "nonce": "gt11-independent-observer-20260827-c",
+            "report": "carrierSessionId: 01a0418a-d7f2-7d93-b268-9a81c8975e58\ntaskLocator: GT-11/independent-observer\nphaseNonce: gt11-independent-observer-20260827-c\nresult: PASS\n\nCorrected-demand trace: trim whitespace -> remove empty values -> remove case-insensitive duplicates while preserving first spelling/order -> authorized local fallback after declared primary-route unavailability -> earliest affected boundary is normalize_targets duplicate handling in app.py -> casefold-based implementation -> repeated acceptance and independent evidence -> local corrected behavior accepted.\n\nExact results, identical in both rounds:\npowershell -NoProfile -ExecutionPolicy Bypass -File .\\primary-route.ps1: exit 86, declared-route-unavailable (expected).\npowershell -NoProfile -ExecutionPolicy Bypass -File .\\fallback.ps1: exit 0, acceptance-pass.\npython -B independent_check.py: exit 0, independent-pass.\ngit diff --check: exit 0; only LF-to-CRLF warnings for UNRELATED.md, app.py, verify.py.\n\nBefore/after SHA-256 hashes were identical:\napp.py adbd4994ff43561f974459602c3f08d97da4909f1aabb968653819fff1bafa9d\nverify.py 920bdc07eb3abb40183a33cc06b5f6422946f3f66b88c8d40f3bfb1cf33df5fd\nUNRELATED.md 4483b14a24084a378e355955be5e176cf464e9339b9442bf912e40ad385c82a7\ninitial-complete.json 2f1b645fa3664f40547b499e8ececa348c2be913407600ca5980a326929382d4\nalignment-trace.json d4066e30664cd041e506f72da52b10895bce60d7ad556e21a3261cc3c5b7ffa9\ncorrection.md dd60b0307f358034a05f472034b2bc796fd52b8057a6c2859e785edb9ca006e5\nroute-unavailable.flag 310531448623ee2ab4cd0248408103cd136eec61bd54d2500b8c1c7e4a506ea2\ncandidate Skill 2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5, matching TASK.md.\n\nGit metadata before/after remained identical, HEAD remained 362804da5d76fb5a211a9ec5807439146f8bcf33 on main, and the unrelated dirty file remained byte-stable.\n\nUnknowns: behavior outside the specified string-input contract and unexercised environments. Recheck if demand, Skill hash, route flag, implementation/tests/receipts, Git metadata, refs, index, configuration, or worktree status changes.\n\nBounded claim: this disposable local fixture satisfies the corrected normalize_targets behavior and its repeated fallback, independent, diff, preservation, and state-stability checks. No hosted, release, deployment, upstream, or production success is claimed."
+          }
+        ],
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "the task, candidate Skill, evaluation contract, host condition or claimed behavior changes",
+            "scope": "affected-local-and-downstream-evidence",
+            "action": "invalidate the affected evidence and replay from the earliest changed dependency boundary"
+          },
+          {
+            "kind": "recheck-trigger",
+            "condition": "a Cloud, Claude or other Agent carrier is separately selected and current conditions fit",
+            "scope": "agent-and-carrier-specific",
+            "action": "observe that carrier directly without inheriting Codex-local behavior evidence"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "projection-binding",
+            "phase": "admission",
+            "skillSha256": "2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5",
+            "goldenTaskSha256": "31bbe028963784b4b54198db3c86c84d5f601f7d2e527c9417ecfc4b079ce748",
+            "evaluationContractSha256": "ac245803462c23b179da6ef414088c35a9e7ed56935e0007d2e77233095ae7f1"
+          },
+          {
+            "kind": "dirty-repository-baseline",
+            "phase": "before-agent",
+            "branch": "main",
+            "head": "362804da5d76fb5a211a9ec5807439146f8bcf33",
+            "dirtyPaths": [
+              "UNRELATED.md"
+            ],
+            "unrelatedSha256": "4483b14a24084a378e355955be5e176cf464e9339b9442bf912e40ad385c82a7",
+            "initialCheckExit": 1
+          },
+          {
+            "kind": "minimum-repair",
+            "phase": "initial-execution",
+            "changedPaths": [
+              "app.py"
+            ],
+            "initialCheckExit": 0,
+            "initialReceiptSha256": "2f1b645fa3664f40547b499e8ececa348c2be913407600ca5980a326929382d4"
+          },
+          {
+            "kind": "compatible-correction",
+            "phase": "reconciliation",
+            "arrivedAfterInitialArtifact": true,
+            "earliestAffectedDependencyBoundary": "normalize_targets duplicate-retention rule in app.py",
+            "correctionSha256": "dd60b0307f358034a05f472034b2bc796fd52b8057a6c2859e785edb9ca006e5"
+          },
+          {
+            "kind": "route-degradation",
+            "phase": "recomputation",
+            "primaryRouteExit": 86,
+            "repairedOrBypassed": false,
+            "fallbackExit": 0
+          },
+          {
+            "kind": "process-loss-alignment",
+            "phase": "final-reconciliation",
+            "stages": [
+              "latest-demand-and-correction",
+              "goal",
+              "authority",
+              "route",
+              "implementation",
+              "evidence",
+              "acceptance",
+              "final-claim"
+            ],
+            "traceSha256": "d4066e30664cd041e506f72da52b10895bce60d7ad556e21a3261cc3c5b7ffa9",
+            "allStagesVerified": true
+          },
+          {
+            "kind": "independent-poststate",
+            "phase": "observer-verification",
+            "fallbackExit": 0,
+            "independentBehaviorExit": 0,
+            "nativeNoOpExit": 0,
+            "primaryRouteExit": 86,
+            "finalAppSha256": "adbd4994ff43561f974459602c3f08d97da4909f1aabb968653819fff1bafa9d",
+            "unrelatedSha256": "4483b14a24084a378e355955be5e176cf464e9339b9442bf912e40ad385c82a7",
+            "alignmentTraceSha256": "d4066e30664cd041e506f72da52b10895bce60d7ad556e21a3261cc3c5b7ffa9",
+            "prohibitedEffectsObserved": [],
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "01a0418a-d7f2-7d93-b268-9a81c8975e58",
+                "taskLocator": "GT-11/independent-observer",
+                "resultLocator": "task-artifact:GT-11/independent-observer/agent-final.txt",
+                "phaseNonces": [
+                  "gt11-independent-observer-20260827-c"
+                ],
+                "resultSha256": "4fde28ef755b79f55e0522a9a6276e4c4783772ecade2976b5ff98e03e7a24f0",
+                "completedAt": "2026-08-27T04:48:19.011343Z",
+                "claim": "Bound to the fresh independent observer result; no credential-bearing session log was read.",
+                "resultRecordSha256": "78a87389b1c239f694e210aacd7f675ab001951464ec68c7c0fb6439b728ded6"
+              }
+            ]
+          },
+          {
+            "kind": "task-owned-fixture-removal",
+            "phase": "cleanup",
+            "removed": true,
+            "rootExistsAfter": false,
+            "sameNameEntriesInParent": 0
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 1
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5"
+        },
+        "officialSources": [],
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "repair-postcheck",
+              "result": "corrected fallback and independent behavior passed twice; unrelated bytes and Git metadata remained stable"
+            },
+            {
+              "kind": "exact-task-root-removal",
+              "result": "the resolved GT-11 root was absent afterward with zero same-name entries"
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "private-temp-path-substitution",
+            "scope": "absolute disposable fixture root",
+            "reason": "artifact names, direct results and cryptographic bindings preserve the relevant result without publishing a personal temporary path"
+          },
+          {
+            "kind": "non-task-host-context-omitted",
+            "scope": "credentials, session logs and ambient configuration not required by the task",
+            "reason": "they were outside authority and were not inspected"
+          }
+        ],
+        "evidenceBoundary": "One exact Codex-local Windows GT-11 run proves dirty-state preservation, initial repair, delayed compatible correction, route exit 86, fallback recomputation, native no-op, the explicit latest-demand-to-final-claim alignment chain, independent post-state and exact cleanup against the current Skill. It does not prove Cloud or Claude behavior, non-string contracts, field value, production safety, candidate readiness or release readiness."
+      }
+    },
+    "GT-12": {
+      "kind": "host-event-log",
+      "taskId": "GT-12",
+      "goldenTaskSha256": "a2aa8deb8262d3260983687ddb159fcfbb41e257d423c13a9f639d7f2d7bdaa7",
+      "evaluationContractSha256": "ac245803462c23b179da6ef414088c35a9e7ed56935e0007d2e77233095ae7f1",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex CLI through Codex Desktop local host",
+        "hostVersion": "codex-cli 0.150.1; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a0418e-232c-73c2-9503-a826fcc6aae7"
+      },
+      "capturedAt": "2026-08-27T05:41:33Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "messages": [
+          {
+            "kind": "message",
+            "phase": "resource-task",
+            "role": "user",
+            "text": "Under declared pressure, admit no new concurrency, release only the authorized exclusive worker, preserve the evaluator-shared worker and verify post-state without tracing or a controller."
+          },
+          {
+            "kind": "message",
+            "phase": "resource-result",
+            "role": "assistant",
+            "text": "The Agent bound identity, ownership and leases, admitted zero, released only the exclusive worker, preserved the shared worker and left evaluator cleanup untouched."
+          },
+          {
+            "kind": "message",
+            "phase": "observer-task",
+            "role": "user",
+            "text": "Independently verify exclusive absence, shared liveness, fixture hashes, lack of task-created helpers/tracing/controller and evaluator cleanup ownership."
+          },
+          {
+            "kind": "message",
+            "phase": "observer-result",
+            "role": "assistant",
+            "text": "Two post-state checks passed; only the observer carrier referenced the fixture, and cleanup remained evaluator-owned."
+          },
+          {
+            "kind": "message",
+            "phase": "cleanup-observer-task",
+            "role": "user",
+            "text": "Independently verify current GT-12 repository residue and historical PID post-state without mutation or cleanup authorship claims."
+          },
+          {
+            "kind": "message",
+            "phase": "cleanup-observer-result",
+            "role": "assistant",
+            "text": "The fresh observer found the exact task paths and both historical PIDs absent and zero bounded filesystem or tracked leaf-name matches, subject to PID reuse limits."
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "01a04190-0cfa-71a2-af3b-3733ba3fed7c",
+            "taskLocator": "GT-12/independent-observer",
+            "phase": "observer-verification",
+            "nonce": "gt12-independent-observer-20260827-a",
+            "report": "carrierSessionId: 01a04190-0cfa-71a2-af3b-3733ba3fed7c\ntaskLocator: GT-12/independent-observer\nphaseNonce: gt12-independent-observer-20260827-a\nstatus: PASS\n\nCommands and results:\n- Read TASK.md, resource-inventory.json, all three scripts and primary-receipt.json successfully.\n- Candidate Skill SHA-256 2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5 matched TASK.md and the receipt.\n- Read-only process observation found exclusive PID 29988 absent and evaluator-shared PID 12156 present as pwsh.exe running Start-Sleep -Seconds 900.\n- Two runs of verify-poststate.ps1 each returned exclusiveAlive=false, sharedAlive=true, sharedProcessName=pwsh and pass=true.\n- Only the host-launched observer carrier referenced the fixture; no task-created helper, trace or controller process was observed.\n\nFixture hashes:\nTASK.md 191d4566246cbebb6c88a4f43d6a74c7acc508c61ac684d4c5a7661b0ddf8603\nresource-inventory.json c924fabdcf9d3c59019eecd36be04ec13a3a5802b03d7402d1f599aa414d704c\ninspect-state.ps1 5ce9b3fc2a845fa1dbeec2a5754d8e4ddfce077e6fb82ad680b52ef5543c806d\nrelease-exclusive.ps1 803bbbae318c45c6bcd452844947778186253a3f25b6625256f0d14b507a5318\nverify-poststate.ps1 4e44876181fcf161d9a28a336c39a956c9c56ad5e603df0490009db67accf5bf\nprimary-receipt.json 9f05ff444a1f73b9e1947a21ac3b1d40cd32888e4cc33778c3a92d6515a82732\n\nThe receipt is consistent with the current inspected scripts and state. Historical pre-state, admitted concurrency, actuator invocation and release latency remain receipt evidence rather than independently reproducible post-state.\n\nUnknowns: worker health beyond current liveness/name, historical absence of transient helpers/tracing, future exit and PID reuse. Recheck before evaluator cleanup or if the resource identities or fixture bytes change.\n\nBounded claim: at two fresh local post-state checks, exclusive PID 29988 was absent and evaluator-shared PID 12156 remained alive as pwsh; no task-created helper, trace or controller was observed. Final shared-worker release and fixture cleanup remained evaluator-owned. No system-wide optimization, hosted, release or production success is claimed."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "01a041ba-99f4-7f91-b0cd-58245474fef7",
+            "taskLocator": "GT-12/cleanup-observer",
+            "phase": "cleanup-poststate",
+            "nonce": "gt12-cleanup-observer-20260827-b",
+            "report": "taskLocator: GT-12/cleanup-observer\nphaseNonce: gt12-cleanup-observer-20260827-b\nOverall result: PASS\n\nAll operations were read-only, local and bounded to C:\\Projects\\YIYUAN-Accord. No network or mutation was used.\n\nCommands and results:\n1. Test-Path -LiteralPath on the exact GT-12 root, replay-20260827 parent and .tmp parent returned Exists=false for all three.\n2. The first Get-Process query for PIDs 29988 and 12156 failed at parse time because a foreach statement was piped directly. The corrected read-only retry returned Present=false for both PIDs. Numeric PIDs are reusable, so this proves only observation-time absence.\n3. Get-ChildItem -LiteralPath C:\\Projects\\YIYUAN-Accord -Force -Recurse with exact case-sensitive leaf names gt12, replay-20260827, TASK.md, resource-inventory.json, inspect-state.ps1, release-exclusive.ps1, verify-poststate.ps1 and primary-receipt.json returned MatchCount=0 and EnumerationErrorCount=0.\n4. git ls-files completed with GitExitCode=0, TrackedPathCount=65 and ExactCaseSensitiveLeafMatchCount=0.\n5. A supplemental Windows case-insensitive forced recursive scan returned zero filesystem matches, zero enumeration errors and zero tracked matches.\n6. Get-Content -LiteralPath plugins\\yiyuan-accord-codex\\skills\\deliver-demand-driven-outcome\\SKILL.md succeeded with CharacterCount=6919 and LineCount=115.\n7. Get-FileHash -Algorithm SHA256 returned 2FB6E340EEA524A55CD9A4A3E59F8C17BFCC5D5E0AF52F532A46659931EBAFC5.\n\nBounded search method: literal-path and process observations plus forced recursive case-sensitive and case-insensitive exact leaf-name scans beneath exactly C:\\Projects\\YIYUAN-Accord; git ls-files independently checked tracked matches.\n\nUnknowns: who performed prior cleanup, historical residue contents, historical process identity, later PID reuse and state changes after observation.\n\nBounded claim: at observation time the three literal paths and both queried PIDs were absent; the repository-bounded searches found zero requested exact leaf names with zero enumeration errors; git ls-files found zero tracked matches; and the exact Skill was readable with the stated SHA-256. This proves current post-state and named-residue absence only, not cleanup authorship or historical state."
+          }
+        ],
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "the task, candidate Skill, evaluation contract, host condition or claimed behavior changes",
+            "scope": "affected-local-and-downstream-evidence",
+            "action": "invalidate the affected evidence and replay from the earliest changed dependency boundary"
+          },
+          {
+            "kind": "recheck-trigger",
+            "condition": "a Cloud, Claude or other Agent carrier is separately selected and current conditions fit",
+            "scope": "agent-and-carrier-specific",
+            "action": "observe that carrier directly without inheriting Codex-local behavior evidence"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "projection-binding",
+            "phase": "admission",
+            "skillSha256": "2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5",
+            "goldenTaskSha256": "a2aa8deb8262d3260983687ddb159fcfbb41e257d423c13a9f639d7f2d7bdaa7",
+            "evaluationContractSha256": "ac245803462c23b179da6ef414088c35a9e7ed56935e0007d2e77233095ae7f1"
+          },
+          {
+            "kind": "resource-inventory",
+            "phase": "before-agent",
+            "pressure": "high",
+            "minimumAdditionalConcurrency": 0,
+            "maximumAdditionalConcurrency": 0,
+            "exclusivePid": 29988,
+            "exclusiveOwner": "accord-gt12-primary",
+            "exclusiveLease": "exclusive-task-owned",
+            "sharedPid": 12156,
+            "sharedOwner": "evaluator-shared",
+            "sharedLease": "shared-do-not-release"
+          },
+          {
+            "kind": "bounded-admission",
+            "phase": "decision",
+            "admittedAdditionalConcurrency": 0,
+            "helpersStarted": 0,
+            "tracesStarted": 0,
+            "controllerInstalled": false
+          },
+          {
+            "kind": "exclusive-release",
+            "phase": "agent-control",
+            "pid": 29988,
+            "actuator": "release-exclusive.ps1",
+            "released": true,
+            "actuatorReportedLatencyMs": 35,
+            "observedInvocationLatencyMs": 116.356
+          },
+          {
+            "kind": "shared-resource-preservation",
+            "phase": "agent-control",
+            "pid": 12156,
+            "aliveAfterExclusiveRelease": true,
+            "agentReleased": false
+          },
+          {
+            "kind": "independent-poststate",
+            "phase": "observer-verification",
+            "exclusivePid": 29988,
+            "exclusiveAlive": false,
+            "sharedPid": 12156,
+            "sharedAlive": true,
+            "postStateVerificationCount": 2,
+            "taskCreatedHelperTraceOrControllerObserved": false,
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "01a04190-0cfa-71a2-af3b-3733ba3fed7c",
+                "taskLocator": "GT-12/independent-observer",
+                "resultLocator": "task-artifact:GT-12/independent-observer/agent-final.txt",
+                "phaseNonces": [
+                  "gt12-independent-observer-20260827-a"
+                ],
+                "resultSha256": "8ee55276ad184344829cf217f023744cb7ea277e0a6092524b7cd426fe1de0ea",
+                "completedAt": "2026-08-27T04:54:17.008671Z",
+                "claim": "Bound to the fresh independent observer result; no credential-bearing session log was read.",
+                "resultRecordSha256": "f50c4638d8714ff40cb7e40a118e49dab4e3e751dca3556593276c45b5cf66d5"
+              }
+            ]
+          },
+          {
+            "kind": "evaluator-resource-and-fixture-cleanup",
+            "phase": "cleanup",
+            "exclusiveAliveAfter": false,
+            "sharedAliveAfter": false,
+            "rootExistsAfter": false,
+            "sameNameEntriesInParent": 0
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 1
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5"
+        },
+        "officialSources": [],
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "resource-postcheck",
+              "result": "exclusive absent and shared alive in two independent post-state checks before evaluator cleanup"
+            },
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "a fresh read-only observer found the exact GT-12 root, replay parent, .tmp and both historical PIDs absent, with zero bounded exact-name filesystem or tracked matches; cleanup authorship and historical PID identity are not claimed",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "01a041ba-99f4-7f91-b0cd-58245474fef7",
+                  "taskLocator": "GT-12/cleanup-observer",
+                  "resultLocator": "task-artifact:GT-12/cleanup-observer/agent-final.txt",
+                  "phaseNonces": [
+                    "gt12-cleanup-observer-20260827-b"
+                  ],
+                  "resultSha256": "2df1a9e69f28e5ecf67d55d4aff0481d7dccb74d6fe91070aa85775982abe4db",
+                  "completedAt": "2026-08-27T05:40:07Z",
+                  "claim": "Bound to the fresh task-specific cleanup observer result; it proves current repository and PID post-state only.",
+                  "resultRecordSha256": "2bcdd761f3f2fb3b283df6da09c96979d5d76c9549e16c44f832315ade951c63"
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "private-temp-path-substitution",
+            "scope": "absolute disposable fixture root",
+            "reason": "artifact names, direct results and cryptographic bindings preserve the relevant result without publishing a personal temporary path"
+          },
+          {
+            "kind": "non-task-host-context-omitted",
+            "scope": "credentials, session logs and ambient configuration not required by the task",
+            "reason": "they were outside authority and were not inspected"
+          }
+        ],
+        "evidenceBoundary": "One exact Codex-local Windows GT-12 fixture proves ownership-aware zero admission, receipt-bound pre-state, actuator and latency, release of one attributable exclusive task worker, preservation of one evaluator-shared worker through two independent checks, absence of observed task-created helper/tracing/controller processes and fresh repository/PID cleanup post-state. It does not prove cleanup authorship, historical PID identity, automatic system-wide optimization, every resource type or host, Cloud or Claude behavior, field value, production safety or release readiness."
+      }
+    }
+  }
+}

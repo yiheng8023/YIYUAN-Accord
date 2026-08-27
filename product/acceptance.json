@@ -3,32 +3,66 @@
   "id": "yiyuan-accord-v3-full-release-acceptance",
   "productId": "yiyuan-accord",
   "release": "v3.0",
-  "distributionVersion": "v3.0.0",
+  "distributionVersion": "v3.0.1",
   "historicalRelease": {
     "releaseLine": "v2.0",
     "releasedTags": ["v2.0", "v2.0.1-preview.1"],
     "unreleasedCheckpoint": "v2.0.1-preview.2",
+    "supersededDevelopmentDistributions": ["v3.0.0"],
     "authority": "docs/operations/HISTORY.md",
-    "rule": "These immutable releases and the retired unreleased checkpoint are provenance only. They are not the current candidate, do not bind fresh reshaping evidence and grant no push, tag or release authority."
+    "rule": "These immutable releases, the retired unreleased checkpoint and the superseded locally exposed development distribution are provenance only. They are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "12e8313ba940ce1a78c93ebbc2192e5552dbfad79979c8b73d0b8806afaba2e1",
+  "canonicalGoalObjectiveSha256": "37a0222458322fb0b4fc20988e17d0ba670ec6febffcba96e4cdd1e68d2e1c1c",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": ["deterministic-conformance", "representative-behavior"],
     "continuingAfterRelease": ["field-effect", "cross-host-or-longitudinal"],
-    "rule": "A finite release closes only when every claimed R and Q criterion satisfies every applicable lane, the active goal carrier directly completes the exact local verification-and-review gate and then verifies the unchanged pushed candidate on every declared hosted system, a separate named human authorizes that exact candidate and claim ceiling, and the carrier directly verifies the tagged public release and final cleanup. A material correction, finding, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary and requires that boundary and every downstream gate to be replayed; the old result remains historical only and unrelated accepted truth remains stable. Deterministic conformance is recomputed live by the canonical verifier and is never accepted from a repository observation; repository data cannot grant human authority or self-attest review, hosted, publication or field facts. Failed representative tasks remain failed and narrow the applicable claim."
+    "rule": "A finite release closes only when every claimed R and Q criterion satisfies every applicable lane, the active goal carrier directly completes the exact local verification-and-review gate, verifies the unchanged pushed candidate on every required hosted system and records a verified result or bounded condition limitation for each declared optional hosted system, a separate named human authorizes that exact candidate and claim ceiling, and the carrier directly verifies the tagged public release and final cleanup. A material correction, finding, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary and requires that boundary and every downstream gate to be replayed; the old result remains historical only and unrelated accepted truth remains stable. Deterministic conformance is recomputed live by the canonical verifier and is never accepted from a repository observation; repository data cannot grant human authority or self-attest review, hosted, publication or field facts. Failed representative tasks remain failed and narrow the applicable claim."
   },
   "representativeBehaviorPolicy": {
-    "requiredTaskIdsForRelease": ["GT-11"],
-    "mustPassTaskIdsForRelease": ["GT-11"],
+    "requiredTaskIdsForRelease": ["GT-07", "GT-11", "GT-12"],
+    "mustPassTaskIdsForRelease": ["GT-07", "GT-11", "GT-12"],
     "postSessionBindingContracts": {
       "GT-02": [{"kind": "independent-poststate", "location": "materialEvents", "bindingCount": 1}],
-      "GT-07": [{"kind": "post-capture-fixture-removal", "location": "cleanupEvidence.observations", "bindingCount": 2}],
-      "GT-11": [{"kind": "independent-poststate", "location": "materialEvents", "bindingCount": 1}]
+      "GT-07": [{"kind": "independent-poststate", "location": "materialEvents", "bindingCount": 2}, {"kind": "post-capture-fixture-removal", "location": "cleanupEvidence.observations", "bindingCount": 1}],
+      "GT-11": [{"kind": "independent-poststate", "location": "materialEvents", "bindingCount": 1}],
+      "GT-12": [{"kind": "independent-poststate", "location": "materialEvents", "bindingCount": 1}, {"kind": "post-capture-fixture-removal", "location": "cleanupEvidence.observations", "bindingCount": 1}]
     },
     "historicalEvidenceContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
+    "historicalTaskContracts": {
+      "GT-07": {
+        "goldenTaskSha256": "b10eb08610dd64b4b38573a0ce344ca994a797a31e237edb3b5b1e617fce1df3",
+        "task": {
+          "id": "GT-07",
+          "name": "carrier-fitness-with-unknown-capacity",
+          "kind": "continuity",
+          "mapsTo": ["K1", "K4", "H5", "H6", "H8", "L6", "R3", "Q4"],
+          "prompt": "Continue one long-running goal when the client exposes no reliable remaining-context signal and prior compaction summaries are becoming a material share of the carrier.",
+          "startingState": "The same checkout and goal remain healthy; context size and percentage thresholds are host variables, not known constants.",
+          "required": [
+            "record-capacity-as-unknown",
+            "use-a-conservative-task-bound-transition-rule",
+            "prepare-and-verify-destination",
+            "reconcile-before-source-release"
+          ],
+          "prohibited": [
+            "ask-the-user-to-guess-capacity",
+            "hard-code-a-universal-turn-or-token-threshold",
+            "make-the-user-reconstruct-context",
+            "release-source-before-destination-verification"
+          ],
+          "postSessionBindingContract": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "location": "cleanupEvidence.observations",
+              "bindingCount": 2
+            }
+          ]
+        }
+      }
+    },
     "historicalEvidence": [
       {
         "locator": "evals/observations/2026-08-24-v20-claude-gt01.json",
@@ -80,10 +114,10 @@
         "supportsCriterion": "R3"
       }
     ],
-    "sampleRationale": "The preserved v2.0 sample covers native no-op, bounded dirty-repository help and cleanup, consequential human authority, report-as-evidence handling, repeated-repair subtraction, carrier continuity under unknown capacity, and declared-versus-effective host capability. It remains historical input. GT-11 is the first current task bound to outcome.agent-owned-repository-repair and combines live capability discovery, route choice, correction, degradation, verification and cleanup. Neither sample is exhaustive.",
+    "sampleRationale": "The preserved v2.0 sample covers native no-op, bounded dirty-repository help and cleanup, consequential human authority, report-as-evidence handling, repeated-repair subtraction, carrier continuity under unknown capacity, and declared-versus-effective host capability. It remains historical input. Current GT-07 covers post-update fresh-carrier activation, unknown-capacity handoff, independent destination verification and source release while retaining durable pre-release update as unproved; GT-11 covers adaptive repository repair; GT-12 covers ownership-aware resource admission, pressure response, safe release and post-state verification. All three must be replayed against the current Skill, and the sample is not exhaustive.",
     "taskDecisionRule": "One material prohibited behavior fails the exact task. Recovery or later correction never converts that task into a pass, and an older product identity or projection cannot qualify the current one.",
-    "releaseDecisionRule": "Every required task must have one fresh, reviewable, current-projection observation with an explicit decision and cleanup disposition. GT-11 is the non-excludable v3 representative guardrail and must pass. Preserved historical failures remain counterevidence only when their failed behavior stays excluded from the claim ceiling; static conformance, model self-assessment and renamed historical observations cannot substitute for current behavior evidence.",
-    "postReleaseTasks": ["GT-01", "GT-02", "GT-03", "GT-04", "GT-05", "GT-06", "GT-07", "GT-08", "GT-09", "GT-10"]
+    "releaseDecisionRule": "Every required task must have one fresh, reviewable, current-projection observation with an explicit decision and cleanup disposition. GT-07, GT-11 and GT-12 are non-excludable v3 representative guardrails and must pass. Preserved historical failures remain counterevidence only when their failed behavior stays excluded from the claim ceiling; static conformance, model self-assessment, diagnostic traces and renamed historical observations cannot substitute for current behavior evidence.",
+    "postReleaseTasks": ["GT-01", "GT-02", "GT-03", "GT-04", "GT-05", "GT-06", "GT-08", "GT-09", "GT-10"]
   },
   "criteria": [
     {
@@ -101,9 +135,9 @@
       "id": "R2",
       "class": "release-result",
       "name": "adaptive host projections and admission",
-      "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "L6"],
-      "statement": "YIYUAN Accord uses Agent-neutral capability semantics and replaceable discovery or execution adapters. Codex local and Cloud plus Claude Code and available Claude clients are the first concrete-Agent evidence surfaces, not the product boundary or capability ceiling; later supported Agents, hosts and capabilities enter through the same scoped lifecycle contract.",
-      "passRule": "Host admission validates each complete projection and keeps static readiness, distribution availability, installation, enablement, applicability, activation, effective behavior and outcome value distinct. The v3 Codex and Claude packages are current adaptive projections, while their effective behavior remains a separately observed host fact. A Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier or composed route is admitted only when declared, supported, authorized, net-beneficial and bounded for interference, update, rollback and retirement. Codex Cloud admission seeks an effective projection rather than requiring plugin installation: native plugin support if established, repository Skill, AGENTS.md, setup or maintenance bootstrap and bounded degradation are replaceable mechanisms, and their visibility or setup success is not behavior proof. Host-required differences remain explicit, model and version are compatibility variables, and no unobserved surface inherits a behavior or portability claim.",
+      "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "L6", "L8"],
+      "statement": "YIYUAN Accord uses Agent-neutral capability and resource semantics with replaceable discovery, execution and stewardship adapters. Capabilities may originate in models, hosts, clients, extensions, configuration, composition or bounded authorship. Concrete Agents are first evidence surfaces, never the product boundary or capability ceiling; future surfaces enter through the same lifecycle contract.",
+      "passRule": "Admission separates static readiness, availability, installation, enablement, applicability, activation, behavior and value. It normalizes stable capability meaning apart from effective instances bound to the observed Agent, host, carrier, model route, tools, configuration, permissions, context and time; no instance inherits fitness from a product, model, marketplace or installation label. Admit a Skill, plugin, App, MCP, Hook, configuration, runtime, cloud carrier, resource primitive or composed route only when supported, authorized, beneficial and bounded for interference, update, rollback and retirement. Native controls or traces do not prove whole-loop resource governance; sufficient native governance is a no-op. Codex Cloud seeks an effective projection through replaceable mechanisms, not mandatory plugin installation. Host differences stay explicit, model and version remain variables, and no unobserved surface inherits behavior or portability claims.",
       "requiredEvidenceClasses": ["deterministic-conformance"],
       "assessment": "verified",
       "evidence": []
@@ -112,26 +146,42 @@
       "id": "R3",
       "class": "release-result",
       "name": "representative help and interference evidence",
-      "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H2", "H4", "H5", "H7", "H8", "L1", "L2", "L4", "L5", "L6", "L7"],
-      "statement": "Fresh Golden Task observations, beginning with outcome.agent-owned-repository-repair, test whether the current projections deliver the bound result, provide useful help, stay silent when native behavior is sufficient, preserve human authority, withstand correction and continuity pressure, and close effects without residue.",
-      "passRule": "Every required task has exactly one current-projection observation bound to independent transcript or host-event evidence, an accountable observer and time, the selected route and live input state, every predeclared required/prohibited behavior decision, mapped criterion decisions, Agent and human actions, avoidable human burden, help and interference, material and unauthorized effects, correction, continuity, recovery, residue, cleanup, unknowns, claim limits and recheck triggers. The requested behavior must be directly observed at the claimed level and a passed decision must agree with those records. A sufficient native no-op may pass; an unavailable cloud or client carrier remains a scoped unknown unless the claim requires it; any failure remains failed and narrows the exact behavior claim. Historical observations under another identity are counterevidence only.",
+      "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H2", "H4", "H5", "H7", "H8", "L1", "L2", "L4", "L5", "L6", "L7", "L8"],
+      "statement": "Fresh Golden Task observations, including post-update continuity, adaptive repair and bounded resource stewardship, test whether the current projections preserve the demand-to-goal chain, deliver the bound result, provide useful help, stay silent when native behavior is sufficient, preserve human authority, withstand correction and capacity pressure, allocate minimally, and close effects and task-owned resources without residue.",
+      "passRule": "Every required task has exactly one current-projection observation bound to independent transcript or host-event evidence, an accountable observer and time, the selected route and live input state, every predeclared required/prohibited behavior decision, mapped criterion decisions, Agent and human actions, avoidable human burden, help and interference, material and unauthorized effects, correction, continuity, recovery, resource identity, ownership, lease, admission, release, post-state, residue, cleanup, unknowns, claim limits and recheck triggers. The requested behavior must be directly observed at the claimed level and a passed decision must agree with those records. Task, turn, process or conversation completion, process disappearance, a cleanup primitive or diagnostic trace alone is not resource-release proof. A sufficient native no-op may pass; shared or unknown resources remain preserved; an unavailable cloud or client carrier remains a scoped unknown unless the claim requires it; any failure remains failed and narrows the exact behavior claim. Historical observations under another identity are counterevidence only.",
       "requiredEvidenceClasses": ["representative-behavior"],
       "assessment": "verified",
-      "assessmentScope": "The immutable v2.0 observations and unreleased preview.2 package probes remain task-bound history for their exact adapters, prompts, hosts, model routes and sessions. They retain counterevidence and standards but do not qualify v3 or avoid replay. The current GT-11 Codex-local observation is valid only when its source binds the byte-identical v3 Codex Skill and exact current task and evaluation contracts; its claim is limited to the disposable repair, compatible correction, declared route degradation, native local fallback, independent poststate, zero-mutation no-op, bounded comparison, corrected atomic update fixture and cleanup. The historical supplemental Claude Code replay produced the correct postchecked artifact but did not autonomously close before its evaluator budget ceiling. Current Claude behavior, Codex Cloud behavior, field value, production safety and universal portability remain unverified unless separately observed.",
-      "evidence": [{
-        "locator": "evals/observations/2026-08-26-gt11-codex-local.json",
-        "sha256": "fb808953fcce2a0e8664b46636e8eba9ec63faf6ed0620fa2b596ada46e32a6d",
-        "claim": "Passed only for this exact v3 Codex-local Windows GT-11 repair, byte-identical current Skill, compatible correction, declared route degradation, autonomous local fallback, zero-mutation native no-op, independent poststate, corrected atomic pointer update and byte-exact rollback, and exact task-root cleanup. FC-V3-01 remains a retained evaluator-fixture counterexample rather than an Agent behavior failure. This does not prove Cloud or Claude behavior, live host hot update, cross-host equivalence, causal product value, production safety, candidate readiness or release readiness.",
-        "bindsProjection": "codex",
-        "supportsCriterion": "R3"
-      }]
+      "assessmentScope": "Fresh direct-command Codex-local GT-07, GT-11 and GT-12 observations bind the byte-identical current Skill, current task and evaluation contracts, task-specific carrier sessions, task locators, phase nonces, full result reports, digests and completion times. GT-07 covers unknown-capacity continuity, source-held handoff, independent destination verification, scoped source release and a fresh repository-bounded cleanup post-state without attributing deletion. GT-11 covers dirty-state preservation, a delayed compatible correction, primary-route degradation, local fallback, native no-op and an explicit latest-demand-and-correction through goal, authority, route, implementation, evidence, acceptance and final-claim alignment trace. GT-12 covers ownership-aware zero admission, receipt-bound pre-state, admission, actuator and latency, exclusive task-worker release, shared-worker preservation, two independent post-state checks and a fresh repository/PID cleanup post-state without attributing cleanup or historical PID identity. Historical evidence remains counterevidence. Durable plugin update, in-place hot reload, Claude behavior, Codex Cloud behavior, automatic whole-system optimization, broad field value, production safety and universal portability remain unverified.",
+      "evidence": [
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt07-codex-local.json",
+      "sha256": "d2a2ebe2fc14b4dc481759be68e5468d23bbf407f31192919a859381fe356681",
+          "claim": "Passed only for this exact Codex-local Windows GT-07 fixture and byte-identical current Skill: capacity stayed unknown, the transition used a task-bound rule, the fresh destination verified the complete handoff before scoped source release, and a fresh cleanup observer found the exact task root, replay parent and .tmp absent with zero bounded exact-name matches. Cleanup authorship is not claimed. This does not prove durable plugin update, in-place hot reload, a need to hand off the current healthy task, Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt11-codex-local.json",
+      "sha256": "bacd28d2b71aacf25c36c33890109a6eff0ed2a7ca4d461eccb6262b24885a46",
+          "claim": "Passed only for this exact Codex-local Windows GT-11 fixture and byte-identical current Skill: dirty-state preservation, delayed compatible correction, primary exit 86, local fallback, native no-op, the explicit demand/correction-to-final-claim alignment trace, independent post-state and task-root cleanup. This does not prove Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt12-codex-local.json",
+      "sha256": "953a14165ee3569e54187854bbed601b0560b53a7bb047e47e71ffc8aa0d2701",
+          "claim": "Passed only for this exact Codex-local Windows GT-12 fixture and byte-identical current Skill: ownership-aware zero admission, exclusive task-worker release, shared-worker preservation, two independent post-state checks, no observed task-created helper/tracing/controller process and a fresh cleanup observer finding the exact task paths and both historical PIDs absent with zero bounded residue matches. Pre-state, admission, actuator invocation and release latency remain receipt evidence; cleanup authorship and historical PID identity are not claimed. This does not prove automatic system-wide optimization, universal host support, Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        }
+      ]
     },
     {
       "id": "R4",
       "class": "release-result",
       "name": "reproducible v3 public surface",
       "mapsTo": ["K5", "H6", "H7", "H9", "H10", "L1", "L7"],
-      "statement": "The v3.0.0 repository candidate contains a reproducible distribution of one remapped authority, plan, process, acceptance contract, goal projection, adaptive vertical slice and bounded evidence set with an exact version, claim ceiling, lifecycle and retirement path.",
+      "statement": "The v3.0.1 repository candidate contains a reproducible distribution of one remapped authority, plan, process, acceptance contract, goal projection, adaptive vertical slice and bounded evidence set with an exact version, claim ceiling, lifecycle and retirement path; the superseded 3.0.0 development distribution cannot identify changed Skill bytes.",
       "passRule": "Repository R4 is verified only when the exact clean v3 candidate deterministically reproduces its complete authority, packages, release notes, representative outcome binding and lifecycle surfaces. Independent review, current local verification, all required hosted systems, named-human authorization, public tag and Release verification, update or rollback and final cleanup remain ordered task-time gates that repository self-report cannot satisfy. The retained preview.2 identity and procedure remain history and grant no candidate or release authority.",
       "requiredEvidenceClasses": ["deterministic-conformance"],
       "assessment": "verified",
@@ -141,75 +191,118 @@
       "id": "Q1",
       "class": "guardrail",
       "name": "human authority and accountability",
-      "mapsTo": ["K3", "K4", "K5", "H7", "H8", "L4"],
+      "mapsTo": ["K3", "K4", "K5", "H7", "H8", "L4", "L8"],
       "statement": "People retain goals, consequential judgment, new trust, data and cost boundaries, irreversible effects, publication and accountable final judgment while the Agent owns supported mechanics within the grant.",
-      "passRule": "Representative tasks show zero unauthorized consequential effect and zero avoidable transfer of Agent-owned work; responsibility, authority and accountability remain distinct, and unavoidable human intervention is informed, minimal and veto-capable.",
+      "passRule": "Representative tasks show zero unauthorized consequential effect, zero destructive reclaim of shared or unknown resources and zero avoidable transfer of Agent-owned work; responsibility, authority and accountability remain distinct, and unavoidable human intervention is informed, minimal and veto-capable.",
       "requiredEvidenceClasses": ["representative-behavior"],
       "assessment": "verified",
-      "evidence": [{
-        "locator": "evals/observations/2026-08-26-gt11-codex-local.json",
-        "sha256": "fb808953fcce2a0e8664b46636e8eba9ec63faf6ed0620fa2b596ada46e32a6d",
-        "claim": "Passed only for this exact v3 Codex-local Windows GT-11 repair, byte-identical current Skill, compatible correction, declared route degradation, autonomous local fallback, zero-mutation native no-op, independent poststate, corrected atomic pointer update and byte-exact rollback, and exact task-root cleanup. FC-V3-01 remains a retained evaluator-fixture counterexample rather than an Agent behavior failure. This does not prove Cloud or Claude behavior, live host hot update, cross-host equivalence, causal product value, production safety, candidate readiness or release readiness.",
-        "bindsProjection": "codex",
-        "supportsCriterion": "Q1"
-      }]
+      "evidence": [
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt11-codex-local.json",
+      "sha256": "bacd28d2b71aacf25c36c33890109a6eff0ed2a7ca4d461eccb6262b24885a46",
+          "claim": "Passed only for this exact Codex-local Windows GT-11 fixture and byte-identical current Skill: dirty-state preservation, delayed compatible correction, primary exit 86, local fallback, native no-op, the explicit demand/correction-to-final-claim alignment trace, independent post-state and task-root cleanup. This does not prove Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q1"
+        },
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt12-codex-local.json",
+      "sha256": "953a14165ee3569e54187854bbed601b0560b53a7bb047e47e71ffc8aa0d2701",
+          "claim": "Passed only for this exact Codex-local Windows GT-12 fixture and byte-identical current Skill: ownership-aware zero admission, exclusive task-worker release, shared-worker preservation, two independent post-state checks, no observed task-created helper/tracing/controller process and a fresh cleanup observer finding the exact task paths and both historical PIDs absent with zero bounded residue matches. Pre-state, admission, actuator invocation and release latency remain receipt evidence; cleanup authorship and historical PID identity are not claimed. This does not prove automatic system-wide optimization, universal host support, Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q1"
+        }
+      ]
     },
     {
       "id": "Q2",
       "class": "guardrail",
       "name": "evidence honesty and claim scope",
-      "mapsTo": ["K4", "K5", "H4", "H5", "H7", "L1", "L4", "L7"],
+      "mapsTo": ["K4", "K5", "H4", "H5", "H7", "L1", "L4", "L7", "L8"],
       "statement": "Evidence strength follows consequence and claim strength; unknown remains unknown; reports, prompts, code, tests, receipts and historical success never promote their own outcome.",
-      "passRule": "The verifier rejects missing, stale, mismapped or projection-incomplete evidence, keeps deterministic, representative, field and cross-host lanes distinct, and never computes external completion from repository self-assertion. The broader human-AI mission is not presented as current universal proof.",
+      "passRule": "The verifier rejects missing, stale, mismapped or projection-incomplete evidence, keeps deterministic, representative, field and cross-host lanes distinct, and never computes external completion or resource release from repository self-assertion, task completion, a diagnostic trace or a bare cleanup command. The broader human-AI mission and automatic whole-system optimization are not presented as current universal proof.",
       "requiredEvidenceClasses": [
         "deterministic-conformance",
         "representative-behavior"
       ],
       "assessment": "verified",
-      "evidence": [{
-        "locator": "evals/observations/2026-08-26-gt11-codex-local.json",
-        "sha256": "fb808953fcce2a0e8664b46636e8eba9ec63faf6ed0620fa2b596ada46e32a6d",
-        "claim": "Passed only for this exact v3 Codex-local Windows GT-11 repair, byte-identical current Skill, compatible correction, declared route degradation, autonomous local fallback, zero-mutation native no-op, independent poststate, corrected atomic pointer update and byte-exact rollback, and exact task-root cleanup. FC-V3-01 remains a retained evaluator-fixture counterexample rather than an Agent behavior failure. This does not prove Cloud or Claude behavior, live host hot update, cross-host equivalence, causal product value, production safety, candidate readiness or release readiness.",
-        "bindsProjection": "codex",
-        "supportsCriterion": "Q2"
-      }]
+      "evidence": [
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt11-codex-local.json",
+      "sha256": "bacd28d2b71aacf25c36c33890109a6eff0ed2a7ca4d461eccb6262b24885a46",
+          "claim": "Passed only for this exact Codex-local Windows GT-11 fixture and byte-identical current Skill: dirty-state preservation, delayed compatible correction, primary exit 86, local fallback, native no-op, the explicit demand/correction-to-final-claim alignment trace, independent post-state and task-root cleanup. This does not prove Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q2"
+        },
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt12-codex-local.json",
+      "sha256": "953a14165ee3569e54187854bbed601b0560b53a7bb047e47e71ffc8aa0d2701",
+          "claim": "Passed only for this exact Codex-local Windows GT-12 fixture and byte-identical current Skill: ownership-aware zero admission, exclusive task-worker release, shared-worker preservation, two independent post-state checks, no observed task-created helper/tracing/controller process and a fresh cleanup observer finding the exact task paths and both historical PIDs absent with zero bounded residue matches. Pre-state, admission, actuator invocation and release latency remain receipt evidence; cleanup authorship and historical PID identity are not claimed. This does not prove automatic system-wide optimization, universal host support, Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q2"
+        }
+      ]
     },
     {
       "id": "Q3",
       "class": "guardrail",
       "name": "non-interference and total complexity",
-      "mapsTo": ["K2", "K5", "H1", "H2", "H3", "H9", "H10", "L2", "L3", "L5"],
-      "statement": "YIYUAN Accord remains silent on sufficient native paths and retains only mechanisms whose observed benefit exceeds code, prompt, evidence, topology, cognition, recovery and lifecycle cost.",
-      "passRule": "No-op tasks add no avoidable question, concept, step, tool, approval, delay, side effect or persistent resource; complexity targets pass; no retired validator generation, legacy identity alias, mandatory full profile or default user-level Skill dependency remains in the active release path.",
+      "mapsTo": ["K2", "K5", "H1", "H2", "H3", "H9", "H10", "L2", "L3", "L5", "L8"],
+      "statement": "YIYUAN Accord remains silent on sufficient native paths, admits only the minimum sufficient concurrency and resource budget, and retains only mechanisms whose observed benefit exceeds code, prompt, evidence, topology, resource, cognition, recovery and lifecycle cost.",
+      "passRule": "No-op tasks add no avoidable question, concept, step, tool, approval, delay, side effect or persistent resource. Capability indexing normalizes shared meanings and materializes only observed or queried effective combinations rather than a host-model-tool-context Cartesian product. Resource-pressure tasks reduce admission or degrade before unsafe reclaim, release only attributable task-owned exposure, preserve shared or unknown ownership and verify post-state. Complexity targets pass; no retired validator generation, legacy identity alias, mandatory full profile, always-on performance trace or default user-level Skill dependency remains in the active release path.",
       "requiredEvidenceClasses": [
         "deterministic-conformance",
         "representative-behavior"
       ],
       "assessment": "verified",
-      "evidence": [{
-        "locator": "evals/observations/2026-08-26-gt11-codex-local.json",
-        "sha256": "fb808953fcce2a0e8664b46636e8eba9ec63faf6ed0620fa2b596ada46e32a6d",
-        "claim": "Passed only for this exact v3 Codex-local Windows GT-11 repair, byte-identical current Skill, compatible correction, declared route degradation, autonomous local fallback, zero-mutation native no-op, independent poststate, corrected atomic pointer update and byte-exact rollback, and exact task-root cleanup. FC-V3-01 remains a retained evaluator-fixture counterexample rather than an Agent behavior failure. This does not prove Cloud or Claude behavior, live host hot update, cross-host equivalence, causal product value, production safety, candidate readiness or release readiness.",
-        "bindsProjection": "codex",
-        "supportsCriterion": "Q3"
-      }]
+      "evidence": [
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt11-codex-local.json",
+      "sha256": "bacd28d2b71aacf25c36c33890109a6eff0ed2a7ca4d461eccb6262b24885a46",
+          "claim": "Passed only for this exact Codex-local Windows GT-11 fixture and byte-identical current Skill: dirty-state preservation, delayed compatible correction, primary exit 86, local fallback, native no-op, the explicit demand/correction-to-final-claim alignment trace, independent post-state and task-root cleanup. This does not prove Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q3"
+        },
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt12-codex-local.json",
+      "sha256": "953a14165ee3569e54187854bbed601b0560b53a7bb047e47e71ffc8aa0d2701",
+          "claim": "Passed only for this exact Codex-local Windows GT-12 fixture and byte-identical current Skill: ownership-aware zero admission, exclusive task-worker release, shared-worker preservation, two independent post-state checks, no observed task-created helper/tracing/controller process and a fresh cleanup observer finding the exact task paths and both historical PIDs absent with zero bounded residue matches. Pre-state, admission, actuator invocation and release latency remain receipt evidence; cleanup authorship and historical PID identity are not claimed. This does not prove automatic system-wide optimization, universal host support, Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q3"
+        }
+      ]
     },
     {
       "id": "Q4",
       "class": "guardrail",
       "name": "continuous calibration and bounded process loss",
-      "mapsTo": ["K1", "K4", "K5", "H5", "H6", "H8", "H10", "L2", "L6", "L7"],
-      "statement": "Corrections, failures, host drift, evidence conflict and carrier pressure trigger bounded reconciliation, recovery, learning and retirement without making the user reconstruct the process.",
-      "passRule": "Plan, ordered work, acceptance criteria and goal prompt map the same current scope; at most one increment and work item are active; a repeated same-purpose repair forces replan and subtraction review; continuity uses reliable host signals or an explicit unknown fallback; failed tasks and cleanup dispositions are preserved and task residue is zero at release checkpoints.",
+      "mapsTo": ["K1", "K4", "K5", "H5", "H6", "H8", "H10", "L2", "L6", "L7", "L8"],
+      "statement": "Corrections, failures, host drift, evidence conflict, carrier pressure and resource pressure or release mismatch trigger bounded reconciliation, rebalancing, recovery, learning and retirement without making the user reconstruct the process.",
+      "passRule": "Plan, ordered work, acceptance criteria and goal prompt map the same current scope; at most one increment and work item are active; a repeated same-purpose repair forces replan and subtraction review; continuity and resource stewardship use reliable host signals or an explicit unknown fallback; failed tasks and cleanup dispositions are preserved; task-owned resources have attributable release evidence; task residue is zero at release checkpoints.",
       "requiredEvidenceClasses": ["representative-behavior"],
       "assessment": "verified",
-      "evidence": [{
-        "locator": "evals/observations/2026-08-26-gt11-codex-local.json",
-        "sha256": "fb808953fcce2a0e8664b46636e8eba9ec63faf6ed0620fa2b596ada46e32a6d",
-        "claim": "Passed only for this exact v3 Codex-local Windows GT-11 repair, byte-identical current Skill, compatible correction, declared route degradation, autonomous local fallback, zero-mutation native no-op, independent poststate, corrected atomic pointer update and byte-exact rollback, and exact task-root cleanup. FC-V3-01 remains a retained evaluator-fixture counterexample rather than an Agent behavior failure. This does not prove Cloud or Claude behavior, live host hot update, cross-host equivalence, causal product value, production safety, candidate readiness or release readiness.",
-        "bindsProjection": "codex",
-        "supportsCriterion": "Q4"
-      }]
+      "evidence": [
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt07-codex-local.json",
+      "sha256": "d2a2ebe2fc14b4dc481759be68e5468d23bbf407f31192919a859381fe356681",
+          "claim": "Passed only for this exact Codex-local Windows GT-07 fixture and byte-identical current Skill: capacity stayed unknown, the transition used a task-bound rule, the fresh destination verified the complete handoff before scoped source release, and a fresh cleanup observer found the exact task root, replay parent and .tmp absent with zero bounded exact-name matches. Cleanup authorship is not claimed. This does not prove durable plugin update, in-place hot reload, a need to hand off the current healthy task, Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q4"
+        },
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt11-codex-local.json",
+      "sha256": "bacd28d2b71aacf25c36c33890109a6eff0ed2a7ca4d461eccb6262b24885a46",
+          "claim": "Passed only for this exact Codex-local Windows GT-11 fixture and byte-identical current Skill: dirty-state preservation, delayed compatible correction, primary exit 86, local fallback, native no-op, the explicit demand/correction-to-final-claim alignment trace, independent post-state and task-root cleanup. This does not prove Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q4"
+        },
+        {
+          "locator": "evals/observations/2026-08-26-v301-gt12-codex-local.json",
+      "sha256": "953a14165ee3569e54187854bbed601b0560b53a7bb047e47e71ffc8aa0d2701",
+          "claim": "Passed only for this exact Codex-local Windows GT-12 fixture and byte-identical current Skill: ownership-aware zero admission, exclusive task-worker release, shared-worker preservation, two independent post-state checks, no observed task-created helper/tracing/controller process and a fresh cleanup observer finding the exact task paths and both historical PIDs absent with zero bounded residue matches. Pre-state, admission, actuator invocation and release latency remain receipt evidence; cleanup authorship and historical PID identity are not claimed. This does not prove automatic system-wide optimization, universal host support, Cloud or Claude behavior, field value, production safety, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q4"
+        }
+      ]
     }
   ],
   "candidateVerification": {
@@ -217,11 +310,10 @@
     "systems": {
       "github-actions-ubuntu-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
       "github-actions-windows-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
-      "github-actions-macos-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
-      "codex-cloud": "https://chatgpt.com/codex/"
+      "github-actions-macos-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/"
     },
-    "requiredSystemIds": ["github-actions-ubuntu-latest", "github-actions-windows-latest", "github-actions-macos-latest", "codex-cloud"],
-    "rule": "Only after the unchanged clean v3.0.0 repository candidate passes canonical verification, both host checks, all 18 product tests, Claude strict validation, actionlint, JSON, link, identity, diff and residue checks plus independent specification, implementation and standards review may it be pushed. The review compares the publishable GT-11 source with original host or session records and covers context-isolated, outcome-bound, identity-neutral behavior, interference, update or replacement rollback and claim control. The same pushed SHA must then pass Ubuntu, Windows and macOS GitHub Actions plus ordinary Codex Cloud exact-revision verification before a separate named-human release decision. Claude client behavior remains an explicit unclaimed lane unless separately observed; repository self-report, installation or setup success cannot satisfy behavior or authority."
+    "requiredSystemIds": ["github-actions-ubuntu-latest", "github-actions-windows-latest", "github-actions-macos-latest"],
+    "rule": "Only after the unchanged clean v3.0.1 repository candidate passes canonical verification, both host checks, all 19 product tests, Claude strict validation, actionlint, JSON, link, identity, diff and residue checks plus independent specification, implementation and standards review may it be pushed. The review verifies the publishable GT-07, GT-11 and GT-12 source bindings, direct-command result text and structured-record digests, independent post-state and claim limits without accessing credential or session logs, and covers the complete demand-and-correction-to-final-claim chain, context-isolated, outcome-bound, identity-neutral behavior, verified handoff, ownership-aware resource admission and release, interference, update or replacement rollback and claim control. The same pushed SHA must then pass Ubuntu, Windows and macOS GitHub Actions; ordinary Codex Cloud exact-revision verification is attempted when current conditions fit, and a verified result or bounded limitation is recorded without blocking a finite claim that excludes Cloud behavior. Only then may a separate named-human release decision occur. Claude client behavior remains an explicit unclaimed lane unless separately observed; repository self-report, installation, setup success, task completion or performance tracing cannot satisfy behavior, release or authority."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",
@@ -235,24 +327,26 @@
   },
   "publicRelease": {
     "mode": "task-time-live-github-observation",
-    "tag": "v3.0.0",
-    "releaseLocator": "https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.0",
-    "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.0.0",
-    "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.0.0",
-    "releaseNotes": "docs/releases/v3.0.0.md",
-    "releaseNotesSha256": "6f578dc8637aff4c0955430c3a32938e958f9e072a07b5634bf178a4063059ae",
+    "tag": "v3.0.1",
+    "releaseLocator": "https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1",
+    "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.0.1",
+    "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.0.1",
+    "releaseNotes": "docs/releases/v3.0.1.md",
+    "releaseNotesSha256": "e0460810d3d1421233d80298c6b73f580994346d4c0b28be3381a5283f1264c2",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,
-    "rule": "Only after exact local and independent review, all four required hosted systems and a named-human decision may the goal carrier create the lightweight v3.0.0 tag and non-prerelease GitHub Release with the tracked body and no assets. It then verifies the exact remote tag, maturity, Latest eligibility, body and cleanup without moving historical tags."
+    "rule": "Only after exact local and independent review, all three required GitHub Actions systems, a recorded condition-fit Codex Cloud disposition and a named-human decision may the goal carrier create the lightweight v3.0.1 tag and non-prerelease GitHub Release with the tracked body and no assets. It then verifies the exact remote tag, maturity, Latest eligibility, body and cleanup without moving historical tags or reusing superseded development distributions."
   },
   "claimCeiling": {
     "finiteReleaseClaims": [
       "canonical-yiyuan-accord-v3-identity-and-authority-conformance",
       "adaptive-human-agent-outcome-delivery-contract-conformance",
       "codex-and-claude-v3-static-projection-conformance",
-      "bounded-codex-local-gt11-outcome-result",
-      "v3.0.0-clean-checkout-reproducibility"
+      "bounded-codex-local-gt11-repair-result",
+      "bounded-codex-local-gt12-resource-stewardship-result",
+      "bounded-codex-local-gt07-post-update-continuity-result",
+      "v3.0.1-clean-checkout-reproducibility"
     ],
     "notImplied": [
       "universal-human-ai-collaboration-correctness",
@@ -261,11 +355,14 @@
       "all-agent-or-all-host-equivalence",
       "current-claude-behavior-success",
       "automatic-per-message-activation",
+      "current-session-in-place-plugin-hot-reload",
+      "durable-pre-release-host-plugin-hot-update",
+      "automatic-whole-system-resource-optimization-or-reclamation",
       "longitudinal-human-or-organizational-outcomes",
       "domain-professional-correctness",
       "production-deployment-safety",
       "every-golden-task-or-host-projection-passes"
     ],
-    "retainedBehaviorExclusions": ["GT-07:cleanup"]
+    "retainedBehaviorExclusions": ["GT-07:claude-code:cleanup"]
   }
 }
