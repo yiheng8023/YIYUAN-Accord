@@ -81,12 +81,14 @@ Then read, in order:
   per-message activation, behavior, value or cross-client equivalence. A
   sufficient healthy native route is a valid no-op.
 - The local Codex marketplace and installed plugin were updated through native
-  lifecycle commands to public tag `v3.0.1`. The marketplace checkout is clean
-  at the released SHA, the installed Skill bytes match the tag and one fresh
-  ephemeral Codex carrier explicitly activated the installed Skill. Plugin-list
-  version text alone is not source identity; verify the actual marketplace ref
-  and bytes. Current-session in-place hot reload and automatic per-message
-  activation remain unproved.
+  lifecycle commands to public tag `v3.0.1`. Its tracked source resolves to the
+  released SHA; host-owned `.codex-marketplace-install.json` separately records
+  that exact public ref and revision without becoming repository content. The
+  installed Skill bytes match the tag and one fresh ephemeral Codex carrier
+  explicitly activated the installed Skill. Plugin-list version text alone is
+  not source identity; verify the actual marketplace ref and bytes.
+  Current-session in-place hot reload and automatic per-message activation
+  remain unproved.
 - That fresh Codex carrier also reported non-blocking host warnings that manifest
   icon paths containing `..` were ignored. The Skill loaded and activated, so
   this is a visual-metadata compatibility issue for a later exact-SHA patch, not
