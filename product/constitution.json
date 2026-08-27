@@ -19,7 +19,7 @@
     "rule": "Decision dimensions are a revisable diagnostic lens, not an exhaustive ontology or fixed four-quadrant encoding. Context, state, effect, resource, continuity, topology and lifecycle cross-cut them; authority, responsibility and accountability remain distinct. A named method is recovered and defined before it becomes executable product semantics."
   },
   "purpose": "Provide an open, Agent-neutral and mechanism-neutral human-Agent collaboration system: keep a small portable reliability kernel while adapting discovery, routing, configuration, carriers, topology, continuity, verification and cleanup to the current goal, host and authority so the user does not have to operate avoidable Agent mechanics.",
-  "successDefinition": "A finite release is successful when representative users can reach bounded real outcomes with less avoidable orchestration and recovery burden, acceptable interference and recoverable effects across its claimed hosts. Healthy native behavior may produce a no-op; residual gaps may justify a Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier, composed route or another mechanism. Each mechanism and claim remains scoped, observable, replaceable and retireable. A release is neither a universal runtime nor proof that every human-AI collaboration problem is solved, and later facts may revise its premise, representation, route or product shape.",
+  "successDefinition": "A finite release is successful when representative users can reach bounded real outcomes with less avoidable orchestration and recovery burden, acceptable interference and recoverable effects across its claimed hosts. Healthy whole-loop native behavior may produce a no-op; an unclosed outcome obligation, broken relation or coordination risk may justify a Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier, composed route or another mechanism. Each mechanism and claim remains scoped, observable, replaceable and retireable. A release is neither a universal runtime nor proof that every human-AI collaboration problem is solved, and later facts may revise its premise, representation, route or product shape.",
   "kernel": [
     {
       "id": "K1",
@@ -29,7 +29,7 @@
     {
       "id": "K2",
       "name": "minimum-sufficient-route",
-      "commitment": "Discover and use sufficient healthy native or already-available capability first, then resolve official, maintained, composed or bounded authored routes for the evidenced residual. Select by current outcome fitness, authority and total lifecycle cost; unknown remains unknown, and sufficient native behavior produces no avoidable intervention."
+      "commitment": "Discover and use sufficient healthy native or already-available capability first, then resolve official, maintained, composed or bounded authored paths for the evidenced collaboration-closure need. Select by current outcome fitness, authority and total lifecycle cost; unknown remains unknown, and a sufficient whole-loop route produces no avoidable intervention."
     },
     {
       "id": "K3",
@@ -96,7 +96,7 @@
     {
       "id": "H10",
       "mapsTo": ["K2", "K5"],
-      "rule": "Degrade, replace or retire YIYUAN Accord host-specific logic when native improvement or a lower-cost route removes the residual gap; installation or visibility alone neither activates nor justifies removal of a healthy latent capability."
+      "rule": "Degrade, replace or retire YIYUAN Accord host-specific logic when native improvement or a lower-cost route closes the same outcome obligations and relations; installation or visibility alone neither activates nor justifies removal of a healthy latent capability."
     }
   ],
   "learnedFailureStandards": [
@@ -209,7 +209,7 @@
       "domain-correctness-or-professional-authority",
       "static-host-version-context-threshold-perfect-score-or-universal-effectiveness-claim"
     ],
-    "hostRule": "A concrete Agent, host, client, cloud, model route, provider, operating system, context, Skill, plugin, App, MCP, Hook, memory, tool, configuration, state and runtime is a dynamic variable represented in replaceable adapters, scoped policy, ephemeral snapshots or evidence rather than portable identity. A capability may originate in the model, host, client surface, tool or extension, configuration, composition or bounded authored residual; its effective availability belongs to the observed combination rather than any one product or model label. The capability surface of Codex, Claude or any other concrete Agent is a freshness-bound observation and first evidence surface, never the Agent-neutral product boundary or capability ceiling. Agent execution concerns—capability use, execution, configuration, topology, continuity, resource stewardship and host adaptation—form one product subdomain rather than the whole human-Agent collaboration system. Any supported future native, official, maintained, composed or bounded authored mechanism may be used when it is authorized, lower-net-cost than alternatives and independently bounded for activation, interference, update, rollback and retirement. Official host guidance is high-weight evidence, never product sovereignty."
+    "hostRule": "A concrete Agent, host, client, cloud, model route, provider, operating system, context, Skill, plugin, App, MCP, Hook, memory, tool, configuration, state and runtime is a dynamic variable represented in replaceable adapters, scoped policy, ephemeral snapshots or evidence rather than portable identity. A capability may originate in the model, host, client surface, tool or extension, configuration, composition or bounded authored mechanism; its effective availability belongs to the observed combination and relations rather than any one product or model label. The capability surface of Codex, Claude or any other concrete Agent is a freshness-bound observation and first evidence surface, never the Agent-neutral product boundary or capability ceiling. Agent execution concerns—capability use, execution, configuration, topology, continuity, resource stewardship and host adaptation—form one product subdomain rather than the whole human-Agent collaboration system. Any supported future native, official, maintained, composed or bounded authored mechanism may be used when it is authorized, lower-net-cost than alternatives and independently bounded for activation, interference, update, rollback and retirement. Official host guidance is high-weight evidence, never product sovereignty."
   },
   "resourceStewardship": {
     "role": "host-neutral-dynamic-scheduling-and-release-contract",
@@ -258,7 +258,7 @@
       "subtraction-of-negative-value",
       "proportionate-restraint",
       "graceful-degradation",
-      "residual-gap-fill",
+      "collaboration-closure-need",
       "positive-flywheel"
     ],
     "mechanismAdmissionRequires": [
@@ -271,7 +271,7 @@
     "repairRule": "A second same-purpose repair generation triggers abstraction review and a deletion or replacement attempt before another mechanism is admitted.",
     "nonInterferenceRule": "When the host can already complete the task safely, reliably and with acceptable burden, YIYUAN Accord adds no avoidable active question, instruction, tool call, approval, delay, state mutation, topology change or persistent effect. A healthy installed or enabled latent capability may remain available without intervening in every message; its continued presence must still satisfy isolation, update, rollback and retirement controls.",
     "feedbackRule": "A material user correction, observed failure, host change, evidence conflict, later rule or phase boundary traces to the earliest affected dependency boundary; prior passes remain historical facts but are superseded as current-candidate evidence, the affected plan, acceptance mapping, projection and every downstream gate are replayed, and unrelated accepted truth remains stable.",
-    "retirementRule": "A YIYUAN Accord mechanism, standard, policy, representation or route is simplified, degraded, disabled, replaced or removed when its applicability expires or residual benefit is no longer demonstrated. Subtraction targets implementation weight, duplication, stale assumptions, unjustified permanence and negative-value machinery; it may not silently remove a user-valued outcome capability unless a sufficient native or replacement route exists or the product scope is explicitly reconsidered. Git preserves provenance while active navigation and authority stop routing through retired material."
+    "retirementRule": "A YIYUAN Accord mechanism, standard, policy, representation or route is simplified, degraded, disabled, replaced or removed when its applicability expires or net collaboration benefit is no longer demonstrated. Subtraction targets implementation weight, duplication, stale assumptions, unjustified permanence and negative-value machinery; it may not silently remove a user-valued outcome capability unless a sufficient native or replacement whole-loop route exists or the product scope is explicitly reconsidered. Git preserves provenance while active navigation and authority stop routing through retired material."
   },
   "authority": {
     "semantic": [
@@ -295,6 +295,7 @@
       "docs/releases/v2.0.1-preview.1.md",
       "docs/releases/v2.0.1-preview.2.md",
       "docs/releases/v3.0.1.md",
+      "docs/releases/v3.1.0.md",
       "evals/golden-tasks.json",
       "plugins/"
     ],

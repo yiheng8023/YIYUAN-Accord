@@ -1,0 +1,676 @@
+{
+  "records": {
+    "GT-07": {
+      "capturedAt": "2026-08-27T14:33:32Z",
+      "evaluationContractSha256": "a3caa9cfe9668555afd3b3d363841af67f88af59c23a66f290f22b19b5674db4",
+      "goldenTaskSha256": "accf7cf8b11c491bbc925060727d83f12fb11fb6291fbaa6781b17634f26ae64",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop source with fresh ephemeral Codex CLI destination",
+        "hostVersion": "codex-cli 0.150.1 destination with gpt-5.6-luna low; Windows NT 10.0.26200.0",
+        "sessionId": "01a04398-a250-78f3-849b-dcc41f89ecdc"
+      },
+      "kind": "host-event-log",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "cleanupEvidence": {
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "exact replay root and task processes absent; foreign state preserved",
+              "sourceBindings": [
+                {
+                  "carrierSessionId": "d31d19ab-0bf4-450d-b7e6-1ccf674ef1c9",
+                  "claim": "Binds exact cleanup poststate.",
+                  "completedAt": "2026-08-27T14:33:31Z",
+                  "kind": "direct-independent-command-result",
+                  "phaseNonces": [
+                    "gt07-v310-r2-cleanup"
+                  ],
+                  "resultLocator": "task-artifact:GT-07/cleanup-observer/agent-final.txt",
+                  "resultRecordSha256": "f0c61036424b58e248a0dd846e35bbc03048108e8e0bd3d8898e59e10e98fe3d",
+                  "resultSha256": "ffd5eeff2f3ba8dbc9c7c5f7b4cb3ec163affd95791ea17c5b01cae68bc26bb1",
+                  "taskLocator": "GT-07/cleanup-observer"
+                }
+              ]
+            }
+          ],
+          "state": "verified-clean"
+        },
+        "evidenceBoundary": "One exact current-Skill Codex-local GT-07 replay proves unknown-capacity handling and destination verification before fixture-source release. It does not prove a universal threshold, need to hand off this healthy carrier, current-session plugin hot reload, Claude, Cloud, field value or release readiness.",
+        "independentCommandResults": [
+          {
+            "carrierSessionId": "01a04398-a250-78f3-849b-dcc41f89ecdc",
+            "kind": "independent-command-result",
+            "nonce": "gt07-v310-r2-destination",
+            "phase": "destination-verification",
+            "report": "PASS after one non-material read-command correction. Fresh ephemeral Codex destination 01a04398-a250-78f3-849b-dcc41f89ecdc recomputed TASK.md, goal-state.json and exact candidate Skill hashes; reconciled the goal, product-definition correction, authority, unknown capacity and sourceReleased=false; wrote only destination-receipt.json; and used no network, credential or session log, or .remember state.",
+            "taskLocator": "GT-07/destination-carrier"
+          },
+          {
+            "carrierSessionId": "c8bbdd1b-a453-466e-9ae1-d8baf44f8524",
+            "kind": "independent-command-result",
+            "nonce": "gt07-v310-r2-source",
+            "phase": "source-poststate",
+            "report": "PASS. The source independently verified destinationVerified=true, sourceReleasedObserved=false, task hash 4b91eae10781f98a998ca56d1563b8e19e79d909e2f50ddfd85d144972d74310, goal-state hash cbc45ad8bc2c64522965109c3b540aefd1a5fffaffcd42c5797d782e28a00e8f, candidate Skill hash ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765 and receipt hash eb887e252f3c808fafd83b6d4ba272eeb3d2440698410c287a643de72a5266fc before the fixture-source-only release.",
+            "taskLocator": "GT-07/source-reconciliation"
+          },
+          {
+            "carrierSessionId": "d31d19ab-0bf4-450d-b7e6-1ccf674ef1c9",
+            "kind": "independent-command-result",
+            "nonce": "gt07-v310-r2-cleanup",
+            "phase": "cleanup-poststate",
+            "report": "PASS. The exact .tmp/replay-v310-r2 root and empty .tmp parent were absent; PIDs 41704 and 41752 were absent; git tracked zero replay paths; foreign .remember state remained preserved and unread.",
+            "taskLocator": "GT-07/cleanup-observer"
+          }
+        ],
+        "materialEvents": [
+          {
+            "capacity": "unknown",
+            "kind": "capacity-observation",
+            "reliableSignal": false,
+            "universalThreshold": null
+          },
+          {
+            "kind": "task-bound-transition",
+            "result": "fresh destination used only for controlled GT-07; no need to move the healthy main task was asserted"
+          },
+          {
+            "kind": "route-correction",
+            "result": "one wrong handoff property caused a read-only command failure; the destination corrected it without writing extra state"
+          },
+          {
+            "destinationVerified": true,
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "carrierSessionId": "01a04398-a250-78f3-849b-dcc41f89ecdc",
+                "claim": "Binds the fresh destination result.",
+                "completedAt": "2026-08-27T14:33:31Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt07-v310-r2-destination"
+                ],
+                "resultLocator": "task-artifact:GT-07/destination-carrier/agent-final.txt",
+                "resultRecordSha256": "8137fdac7d83d7402d46a1c9413ee3f519d5e8c42ed4ca5c2bf1d66393a63e2f",
+                "resultSha256": "93dbafce7739b179d27ee5e98e6d08d382e0b9d3a7585d6e3ec65aaf0b1aa7fe",
+                "taskLocator": "GT-07/destination-carrier"
+              },
+              {
+                "carrierSessionId": "c8bbdd1b-a453-466e-9ae1-d8baf44f8524",
+                "claim": "Binds source-side receipt and release ordering.",
+                "completedAt": "2026-08-27T14:33:31Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt07-v310-r2-source"
+                ],
+                "resultLocator": "task-artifact:GT-07/source-reconciliation/agent-final.txt",
+                "resultRecordSha256": "879ebef06e8847e839e3c0cab1b7360f36584cfbbe9084faea27e60c9b9df669",
+                "resultSha256": "fe1df9b1d0b1ced3c4414bdad8832bc5497c908d4d707daa816dbd696dd933c1",
+                "taskLocator": "GT-07/source-reconciliation"
+              }
+            ],
+            "sourceReleasedAfterDestination": true
+          }
+        ],
+        "messages": [
+          {
+            "kind": "source-request",
+            "phase": "source-handoff",
+            "role": "user",
+            "text": "Capacity is unknown. Preserve the exact goal, product-definition correction and authority in a fresh destination; retain the healthy source until independent destination verification."
+          },
+          {
+            "kind": "destination-result",
+            "phase": "destination-verification",
+            "role": "assistant",
+            "text": "The fresh destination verified the current Skill, handoff hashes and sourceReleased=false, recovered from one non-material read-command error, and wrote only the receipt."
+          },
+          {
+            "kind": "source-result",
+            "phase": "source-reconciliation",
+            "role": "assistant",
+            "text": "The source independently verified the receipt and only then released the fixture source; the evaluator later verified cleanup."
+          }
+        ],
+        "officialSources": [],
+        "postSessionBindingContract": [
+          {
+            "bindingCount": 2,
+            "kind": "independent-poststate",
+            "location": "materialEvents"
+          },
+          {
+            "bindingCount": 1,
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations"
+          }
+        ],
+        "projectionExposure": {
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "kind": "exact-skill-content-read",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "recheckTriggers": [
+          {
+            "action": "recompute without a universal threshold",
+            "condition": "reliable capacity signal or carrier risk changes",
+            "kind": "recheck-trigger",
+            "scope": "continuity route"
+          }
+        ],
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained bounded material events and direct results only; no credential or session logs and no foreign-state contents."
+          }
+        ]
+      },
+      "taskId": "GT-07"
+    },
+    "GT-11": {
+      "capturedAt": "2026-08-27T14:33:32Z",
+      "evaluationContractSha256": "a3caa9cfe9668555afd3b3d363841af67f88af59c23a66f290f22b19b5674db4",
+      "goldenTaskSha256": "31bbe028963784b4b54198db3c86c84d5f601f7d2e527c9417ecfc4b079ce748",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop local host",
+        "hostVersion": "Codex Desktop version unknown; model route unknown; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "31a9a2b7-f7c6-4a31-a70f-a1f0194f0ca1"
+      },
+      "kind": "host-event-log",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "cleanupEvidence": {
+          "observations": [
+            {
+              "kind": "bounded-fixture-removal",
+              "result": "the exact combined replay root was removed after capture"
+            }
+          ],
+          "state": "verified-clean"
+        },
+        "evidenceBoundary": "One exact current-Skill Codex-local GT-11 fixture proves bounded repair, compatible correction, preferred-route degradation, native fallback, unrelated dirty-state preservation and independent poststate. It does not prove other inputs, Claude, Cloud, field value or release readiness.",
+        "independentCommandResults": [
+          {
+            "carrierSessionId": "4ff2d286-5b04-4433-8074-33f145d34e84",
+            "kind": "independent-command-result",
+            "nonce": "gt11-v310-r2-independent",
+            "phase": "independent-poststate",
+            "report": "PASS. Initial normalization first failed and then passed; the compatible case-insensitive first-spelling correction passed; preferred-route.cmd returned exit 86 once before native Python fallback; independent_check.py passed; fixture HEAD stayed 34e708c10145e6962699c4f1ab18de167e3996f2; app.py hash was 4deff9ec4479d2da47c4aeb8c945a52dedff46aaf343e5bdc45884b48af5b0a9; unrelated dirty work hash stayed 626f01569385e4f8959e69c752f3a9d883048c3eac966b64fa1361796c857101; alignment trace hash was ac6dbf5537edd29e97dec5787a5943c16ffe01147b3c99b1c9c3e87b29e7be78.",
+            "taskLocator": "GT-11/independent-observer"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "initial-failure-and-repair",
+            "result": "initial oracle failed before the minimum normalization repair and then passed"
+          },
+          {
+            "earliestAffectedDependencyBoundary": "normalize_targets duplicate-retention rule",
+            "kind": "compatible-correction",
+            "result": "case-insensitive first-spelling deduplication added without reasking settled context"
+          },
+          {
+            "kind": "route-recomputation",
+            "preferredAttemptCount": 1,
+            "preferredExit": 86,
+            "selected": "native-python-fallback"
+          },
+          {
+            "kind": "native-no-op",
+            "result": "existing Python and repository-local checks required no installation or persistent component"
+          },
+          {
+            "correctionExit": 0,
+            "independentExit": 0,
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "carrierSessionId": "4ff2d286-5b04-4433-8074-33f145d34e84",
+                "claim": "Binds consequence, correction, fallback and preservation checks.",
+                "completedAt": "2026-08-27T14:33:31Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt11-v310-r2-independent"
+                ],
+                "resultLocator": "task-artifact:GT-11/independent-observer/agent-final.txt",
+                "resultRecordSha256": "75d20a17d521b800a9cce3346db67da0b3c903f78431feffc38464e1d7a3df8e",
+                "resultSha256": "b211836e02851036d2f8491046b9cfc5afabe1099ed05986731fa1d7b861611d",
+                "taskLocator": "GT-11/independent-observer"
+              }
+            ],
+            "unrelatedPreserved": true
+          }
+        ],
+        "messages": [
+          {
+            "kind": "bound-request",
+            "phase": "initial-demand",
+            "role": "user",
+            "text": "Repair trimming and empty removal in the disposable dirty repository, preserve unrelated work, absorb the compatible case-insensitive first-spelling correction, and adapt if the preferred route fails."
+          },
+          {
+            "kind": "bounded-result",
+            "phase": "final-result",
+            "role": "assistant",
+            "text": "Initial and corrected checks passed; preferred exit 86 caused native fallback; the alignment trace and unrelated bytes were preserved."
+          }
+        ],
+        "officialSources": [],
+        "postSessionBindingContract": [
+          {
+            "bindingCount": 1,
+            "kind": "independent-poststate",
+            "location": "materialEvents"
+          }
+        ],
+        "projectionExposure": {
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "kind": "exact-skill-content-read",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "recheckTriggers": [
+          {
+            "action": "recompute from normalize_targets and replay dependent checks",
+            "condition": "input, correction, route, Skill or unrelated work changes",
+            "kind": "recheck-trigger",
+            "scope": "GT-11 route and implementation"
+          }
+        ],
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained bounded material events and direct results only; no credential or session logs and no foreign-state contents."
+          }
+        ]
+      },
+      "taskId": "GT-11"
+    },
+    "GT-12": {
+      "capturedAt": "2026-08-27T14:33:32Z",
+      "evaluationContractSha256": "a3caa9cfe9668555afd3b3d363841af67f88af59c23a66f290f22b19b5674db4",
+      "goldenTaskSha256": "8b26e1bf6125075552bf0a908823bb9bef95697335fd37a68cc85a1161b18ec1",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop local host",
+        "hostVersion": "Codex Desktop version unknown; model route unknown; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "5320b14c-cf84-4e7e-9126-dc584602bcf3"
+      },
+      "kind": "host-event-log",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "cleanupEvidence": {
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "shared evaluator lease completed naturally; both PIDs and replay root were absent",
+              "sourceBindings": [
+                {
+                  "carrierSessionId": "cc6d1704-2695-414c-8cee-22d60928bc3f",
+                  "claim": "Binds exact resource and fixture cleanup.",
+                  "completedAt": "2026-08-27T14:33:31Z",
+                  "kind": "direct-independent-command-result",
+                  "phaseNonces": [
+                    "gt12-v310-r2-cleanup"
+                  ],
+                  "resultLocator": "task-artifact:GT-12/cleanup-observer/agent-final.txt",
+                  "resultRecordSha256": "82222828aa4b84b2838187494fb82f5ef77be18b279852d4a80c5ad98b7cb704",
+                  "resultSha256": "ffd5eeff2f3ba8dbc9c7c5f7b4cb3ec163affd95791ea17c5b01cae68bc26bb1",
+                  "taskLocator": "GT-12/cleanup-observer"
+                }
+              ]
+            }
+          ],
+          "state": "verified-clean"
+        },
+        "evidenceBoundary": "One exact current-Skill Windows GT-12 replay proves zero new admission, exclusive task process release, shared process preservation in two checks, bounded lease completion and cleanup. It does not prove automatic whole-system optimization, other identities, other hosts or release readiness.",
+        "independentCommandResults": [
+          {
+            "carrierSessionId": "55c2ced5-90bc-419e-9bd8-a819db8e0552",
+            "kind": "independent-command-result",
+            "nonce": "gt12-v310-r2-independent",
+            "phase": "resource-poststate",
+            "report": "PASS. Under declared pressure no worker was admitted; supplied PID 41704 was observed as pwsh and released through the exact task-exclusive actuator; evaluator-shared PID 41752 was observed as pwsh, not released, and remained alive in two checks; no controller, tracing or telemetry was used; the shared process later completed its bounded lease naturally.",
+            "taskLocator": "GT-12/independent-observer"
+          },
+          {
+            "carrierSessionId": "cc6d1704-2695-414c-8cee-22d60928bc3f",
+            "kind": "independent-command-result",
+            "nonce": "gt12-v310-r2-cleanup",
+            "phase": "cleanup-poststate",
+            "report": "PASS. The exact .tmp/replay-v310-r2 root and empty .tmp parent were absent; PIDs 41704 and 41752 were absent; git tracked zero replay paths; foreign .remember state remained preserved and unread.",
+            "taskLocator": "GT-12/cleanup-observer"
+          }
+        ],
+        "materialEvents": [
+          {
+            "exclusiveLease": "exclusive",
+            "exclusiveOwner": "task",
+            "exclusivePid": 41704,
+            "kind": "resource-inventory",
+            "pressure": "declared-high",
+            "sharedLease": "shared",
+            "sharedOwner": "evaluator",
+            "sharedPid": 41752
+          },
+          {
+            "admittedNewWorkers": 0,
+            "diagnosticTraceEnabled": false,
+            "kind": "minimum-admission",
+            "telemetryUploaded": false
+          },
+          {
+            "aliveAfter": false,
+            "kind": "exclusive-release",
+            "pid": 41704,
+            "sharedReleaseAttempted": false
+          },
+          {
+            "exclusiveAlive": false,
+            "kind": "independent-poststate",
+            "sharedAlive": true,
+            "sourceBindings": [
+              {
+                "carrierSessionId": "55c2ced5-90bc-419e-9bd8-a819db8e0552",
+                "claim": "Binds ownership-aware admission and release poststate.",
+                "completedAt": "2026-08-27T14:33:31Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt12-v310-r2-independent"
+                ],
+                "resultLocator": "task-artifact:GT-12/independent-observer/agent-final.txt",
+                "resultRecordSha256": "eac963bf9606c06d63b17dbb81019305c6f65247b49bb1db8afadfeb439e051f",
+                "resultSha256": "62366dd6b822c1cc7d0e101d261a4d8146c399c4d884fc6d3ecdd9f4a7830bad",
+                "taskLocator": "GT-12/independent-observer"
+              }
+            ],
+            "verificationCount": 2
+          }
+        ],
+        "messages": [
+          {
+            "kind": "resource-request",
+            "phase": "resource-demand",
+            "role": "user",
+            "text": "Under declared pressure admit no new worker, release only the exclusive task sleeper, preserve the evaluator-shared sleeper, verify twice, and use no controller, tracing or telemetry."
+          },
+          {
+            "kind": "resource-result",
+            "phase": "resource-result",
+            "role": "assistant",
+            "text": "No worker was admitted; only the exclusive PID was released; the shared PID remained alive in two checks and later completed its evaluator lease naturally."
+          }
+        ],
+        "officialSources": [],
+        "postSessionBindingContract": [
+          {
+            "bindingCount": 1,
+            "kind": "independent-poststate",
+            "location": "materialEvents"
+          },
+          {
+            "bindingCount": 1,
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations"
+          }
+        ],
+        "projectionExposure": {
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "kind": "exact-skill-content-read",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "recheckTriggers": [
+          {
+            "action": "rebind facts before any release action",
+            "condition": "resource identity, owner, lease, pressure or actuator changes",
+            "kind": "recheck-trigger",
+            "scope": "GT-12 resource route"
+          }
+        ],
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained bounded material events and direct results only; no credential or session logs and no foreign-state contents."
+          }
+        ]
+      },
+      "taskId": "GT-12"
+    },
+    "GT-13": {
+      "capturedAt": "2026-08-27T14:33:32Z",
+      "amendments": [
+        {
+          "kind": "contract-correction",
+          "amendedAt": "2026-08-27T15:45:36Z",
+          "changeClass": "observed-context-correction",
+          "priorGoldenTaskSha256": "8fab9a762cc379b347b9dd0862e1b356aff5241e3d5f7051b382c3bb37054150",
+          "correctedGoldenTaskSha256": "c79d6870bef6ca02a4cdbe08c5785a3d7d3a3123976b68263e4f99e095c8ef55",
+          "behaviorReplayPerformed": false,
+          "scope": "Aligned the workspace description and prohibited-claim wording to the already observed saved-checkout dogfood boundary.",
+          "reason": "Independent specification review found that the earlier disposable-workspace wording contradicted the captured saved-checkout event and single-arm claim.",
+          "claimImpact": "metadata-only-no-new-behavior-claim"
+        }
+      ],
+      "evaluationContractSha256": "a3caa9cfe9668555afd3b3d363841af67f88af59c23a66f290f22b19b5674db4",
+      "goldenTaskSha256": "c79d6870bef6ca02a4cdbe08c5785a3d7d3a3123976b68263e4f99e095c8ef55",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout goal carrier",
+        "hostVersion": "Codex Desktop version unknown; model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "76601377-acde-4c62-8615-677f14a4eeaf"
+      },
+      "kind": "host-event-log",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "cleanupEvidence": {
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "exact replay root and task processes absent; foreign .remember preserved unread",
+              "sourceBindings": [
+                {
+                  "carrierSessionId": "a7b020e0-419c-48ae-a7fe-8c185b3485fa",
+                  "claim": "Binds final replay-resource cleanup.",
+                  "completedAt": "2026-08-27T14:33:31Z",
+                  "kind": "direct-independent-command-result",
+                  "phaseNonces": [
+                    "gt13-v310-r2-cleanup"
+                  ],
+                  "resultLocator": "task-artifact:GT-13/cleanup-observer/agent-final.txt",
+                  "resultRecordSha256": "a4f8d9afb22211bca6d239c7cb0684854940dba1effa275ef7b3b95a68f07980",
+                  "resultSha256": "ffd5eeff2f3ba8dbc9c7c5f7b4cb3ec163affd95791ea17c5b01cae68bc26bb1",
+                  "taskLocator": "GT-13/cleanup-observer"
+                }
+              ]
+            }
+          ],
+          "state": "verified-clean"
+        },
+        "evidenceBoundary": "This single-arm Codex-local dogfood result proves only the bounded current-Skill correction-to-conformance collaboration closure and its four-task replay. It does not prove installed Hook firing, automatic implicit invocation, current-session hot reload, comparative population value, Claude or Cloud behavior, broad field effectiveness, production safety, candidate readiness or release readiness.",
+        "independentCommandResults": [
+          {
+            "carrierSessionId": "97102c47-4035-477a-86f6-2248ef22bcad",
+            "kind": "independent-command-result",
+            "nonce": "gt13-v310-r2-semantic",
+            "phase": "independent-poststate",
+            "report": "PASS semantic poststate: collaboration-closure authority, 3535-byte deterministic goal projection, current Codex Skill ba72f8c6ad08, GT-13 admission, and derived relation view 0695d573aabb60448b5d0d3aed80a285509e42592079c4ebda67d18982384d49.",
+            "taskLocator": "GT-13/semantic-poststate"
+          },
+          {
+            "carrierSessionId": "d2f6be68-acde-42ed-8d65-cd324e119d76",
+            "kind": "independent-command-result",
+            "nonce": "gt13-v310-r2-control",
+            "phase": "independent-poststate",
+            "report": "PASS. The complete current product-control suite ran 19 tests in 164.057 seconds with zero failures or errors, including deterministic goal alignment, fail-closed projection evidence drift, authority, identity, complexity, release ordering and residue controls.",
+            "taskLocator": "GT-13/control-poststate"
+          },
+          {
+            "carrierSessionId": "a7b020e0-419c-48ae-a7fe-8c185b3485fa",
+            "kind": "independent-command-result",
+            "nonce": "gt13-v310-r2-cleanup",
+            "phase": "cleanup-poststate",
+            "report": "PASS. The exact .tmp/replay-v310-r2 root and empty .tmp parent were absent; PIDs 41704 and 41752 were absent; git tracked zero replay paths; foreign .remember state remained preserved and unread.",
+            "taskLocator": "GT-13/cleanup-observer"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "relation-and-constraint-graph",
+            "result": "smallest relevant graph bound outcome obligations, user and Agent roles, authority, candidate projections, carriers, evidence, resources, effects and lifecycle",
+            "viewSha256": "0695d573aabb60448b5d0d3aed80a285509e42592079c4ebda67d18982384d49"
+          },
+          {
+            "items": [
+              "stale residual goal projection",
+              "misleading public wording",
+              "test coupled to retired evidence",
+              "current behavior evidence gap",
+              "installed-cache and task-visible inventory drift"
+            ],
+            "kind": "unclosed-obligations"
+          },
+          {
+            "kind": "selected-closure-path",
+            "result": "repair semantic boundary and deterministic projection; use native editing and verification; replay four tasks; leave publication and unsupported hot reload outside the route"
+          },
+          {
+            "activation": "exact candidate Skill content read",
+            "effect": "authority and derived surfaces aligned without tag, install or unrelated cleanup",
+            "evidence": "semantic poststate plus 19-test independent control result",
+            "execution": "single saved-checkout Codex writer with native tools",
+            "kind": "activation-execution-effect-evidence"
+          },
+          {
+            "cognitiveSurface": "ordinary user receives outcome, material state, decision and limits; internal graph and rule IDs remain cold",
+            "kind": "state-carrier-and-cognition",
+            "stateCarrier": "current task plus reviewable repository authority and bounded handoff receipt"
+          },
+          {
+            "degradation": "task-visible Skill catalog named 3.0.1 while cache directory held stale 3.1.0 residual semantics",
+            "earliestAffectedDependencyBoundary": "product/reshaping-guidance.json#/boundedAutonomy",
+            "kind": "correction-and-route-degradation",
+            "response": "did not claim hot reload or overwrite installed state; current repository projection remained the exact evidence target"
+          },
+          {
+            "kind": "human-boundary",
+            "result": "user owned the product-definition correction and future exact-SHA release decision; Agent owned supported reconciliation and verification"
+          },
+          {
+            "kind": "mechanism-and-resource-lifecycle",
+            "result": "no Runtime, MCP, controller, telemetry or per-prompt Hook added; stateless SessionStart Hook remains candidate-only with trust and activation unverified; task resources were bounded and released"
+          },
+          {
+            "kind": "independent-poststate",
+            "productTests": "19/19 pass",
+            "semanticAligned": true,
+            "sourceBindings": [
+              {
+                "carrierSessionId": "97102c47-4035-477a-86f6-2248ef22bcad",
+                "claim": "Binds semantic and deterministic-goal poststate.",
+                "completedAt": "2026-08-27T14:33:31Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt13-v310-r2-semantic"
+                ],
+                "resultLocator": "task-artifact:GT-13/semantic-poststate/agent-final.txt",
+                "resultRecordSha256": "d852ece7a9a15635e142fe497b99388f24d1eef392126c538e999e9570d30ec9",
+                "resultSha256": "f859f7c282c2f8eb486481aa48ffe67710cea2a9c0f03bc33878471d2915ccc9",
+                "taskLocator": "GT-13/semantic-poststate"
+              },
+              {
+                "carrierSessionId": "d2f6be68-acde-42ed-8d65-cd324e119d76",
+                "claim": "Binds fail-closed control-suite poststate.",
+                "completedAt": "2026-08-27T14:33:31Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt13-v310-r2-control"
+                ],
+                "resultLocator": "task-artifact:GT-13/control-poststate/agent-final.txt",
+                "resultRecordSha256": "b8b8a72471227f48f97542421e82e6def289f89090a7948b5f292f870af35641",
+                "resultSha256": "df269a9528057cedfb9fa19a5e8fd3c856ef8b09f3378fe149d9808b978b056c",
+                "taskLocator": "GT-13/control-poststate"
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "kind": "product-correction",
+            "phase": "human-grant",
+            "role": "user",
+            "text": "Do not define Accord as the difference between native capability and human intervention. Keep the broader problem-solving intent, treat capability gaps only as one local view, and continue strengthening the core without publishing yet."
+          },
+          {
+            "kind": "bounded-result",
+            "phase": "collaboration-closure",
+            "role": "assistant",
+            "text": "The correction was traced to the product premise; authority, goal mode, Skills, Hooks, README, architecture, Golden Task and fail-closed tests were aligned; current package and cache drift stayed scoped; four behavior tasks and cleanup were verified; tag and Release remain outside current authority."
+          }
+        ],
+        "officialSources": [],
+        "postSessionBindingContract": [
+          {
+            "bindingCount": 2,
+            "kind": "independent-poststate",
+            "location": "materialEvents"
+          },
+          {
+            "bindingCount": 1,
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations"
+          }
+        ],
+        "projectionExposure": {
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "kind": "exact-skill-content-read",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "recheckTriggers": [
+          {
+            "action": "recompute from the earliest affected dependency boundary",
+            "condition": "goal, authority, Skill, Hook, host, cache, evidence or release phase changes",
+            "kind": "recheck-trigger",
+            "scope": "affected collaboration-closure relations and downstream claims"
+          }
+        ],
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained bounded material events and direct results only; no credential or session logs and no foreign-state contents."
+          }
+        ]
+      },
+      "taskId": "GT-13"
+    }
+  },
+  "schema": 1
+}

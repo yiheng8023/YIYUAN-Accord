@@ -168,12 +168,14 @@ satisfy a bound outcome within authority and total lifecycle cost.
 _Source_: `product/program.json#/increment/fourSurfaceMapping/process/routeRule`
 _Avoid_: fixed workflow, preferred product, installed capability
 
-**Residual gap**:
-A consequential collaboration problem not sufficiently covered by healthy
-native, maintained or accountable domain mechanisms.
+**Collaboration-closure need**:
+An unclosed outcome obligation, unreliable relation, or coordination and
+verification risk that still needs a feasible authorized path. A capability
+gap is one local diagnostic view of this need, not the product definition or a
+set-subtraction formula.
 _Source_: `product/constitution.json#/kernel (id: K2)`,
-`product/constitution.json#/evolutionPolicy/principles (value: residual-gap-fill)`
-_Avoid_: any inconvenience, missing feature
+`product/reshaping-guidance.json#/boundedAutonomy/closureModel`
+_Avoid_: any inconvenience, missing feature, capability-set difference
 
 **Mechanism**:
 A bounded means for creating, observing, controlling, recovering or verifying
@@ -199,7 +201,7 @@ _Avoid_: manually duplicated catalog, committed host snapshot, authority replace
 **Capability provenance**:
 The observed origin of a capability: model-inherent, host-native,
 client-surface, tool or extension, configuration or policy, composition, or a
-bounded authored residual. Origin informs discovery and retirement but does not
+bounded authored mechanism. Origin informs discovery and retirement but does not
 prove effective availability.
 _Source_: `product/reshaping-guidance.json#/capabilityDiscovery/provenanceKinds`
 _Avoid_: capability owner, vendor truth, product boundary

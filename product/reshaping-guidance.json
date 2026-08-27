@@ -203,6 +203,75 @@
     "refreshRule": "Refresh affected instances and routes when their host, interface, extension, model route, configuration, permission, network, context or observation changes. New model-inherent, native or extended capability can supersede Accord machinery; removal can trigger degradation, discovery, composition or bounded authorship.",
     "failureRule": "Do not stop at today's host surface, a small marketplace or weak native feature when another compliant discovery or composition lane can satisfy the goal. Do not promise an unobserved capability, and do not install, connect, spend or cross a trust or data boundary without the authority required for that effect."
   },
+  "boundedAutonomy": {
+    "decision": "required-as-context-adaptive-collaboration-closure",
+    "closureModel": "Do not define YIYUAN Accord as a set difference. For the current outcome, derive the smallest relevant relation graph across obligations, capabilities, people, Agents, carriers, authority, evidence, resources, effects, state and lifecycle. Identify unclosed obligations, degraded or uncertain relations, coordination and verification risks, then select the feasible closure path with the lowest total burden. Recompute when any material node, relation or constraint changes.",
+    "localGapView": "A missing, degraded, uncertain, inaccessible or uneconomic capability may be represented as one local gap view, but it is neither the product definition nor a sufficient route decision. Native capability can still require alignment, composition, authority allocation, verification, continuity or lifecycle control; composition can create outcome capability not present as an independent set element. A host-native whole-loop improvement can make Accord action a no-op and retire overlapping machinery.",
+    "humanBoundary": {
+      "retained": [
+        "goal-and-priority",
+        "consequential-domain-and-value-judgment",
+        "new-trust-account-data-or-material-cost",
+        "publication-deployment-destructive-or-irreversible-effect",
+        "accountable-final-acceptance"
+      ],
+      "minimized": [
+        "discover-or-name-a-capability-product-source-or-command",
+        "choose-a-model-provider-tool-extension-or-carrier-route",
+        "author-routine-AGENTS-md-config-toml-settings-or-task-scaffolding",
+        "manage-context-topology-continuity-subagents-or-cloud-placement",
+        "repeat-an-already-bound-correction-or-reconstruct-project-state",
+        "operate-verification-recovery-update-rollback-cleanup-or-resource-release"
+      ],
+      "rule": "A technically host-reserved action is not automatically a human judgment. When the Agent cannot perform it, reduce it to one exact informed step, preserve veto, verify the observed effect and resume without transferring route knowledge or cleanup burden."
+    },
+    "capabilityPlanes": [
+      {
+        "id": "collaboration-control",
+        "coverage": "finite-autonomy-capabilities-that-YIYUAN-Accord-must-explicitly-close-or-degrade",
+        "families": [
+          "goal-requirement-correction-and-completion-binding",
+          "context-environment-state-and-capacity-observation",
+          "capability-source-inventory-health-and-effective-exposure",
+          "authority-risk-effect-and-human-only-boundary-allocation",
+          "route-model-provider-tool-and-cost-selection",
+          "instruction-configuration-environment-and-capability-provisioning",
+          "code-conversation-subagent-cloud-and-carrier-topology",
+          "authorized-execution-and-domain-capability-composition",
+          "process-loss-detection-replanning-recovery-and-rollback",
+          "consequence-verification-evidence-acceptance-and-claim-control",
+          "resource-admission-pressure-response-release-and-residue-cleanup",
+          "mechanism-install-activate-update-health-rollback-retire-and-hot-reload"
+        ]
+      },
+      {
+        "id": "demand-capability-universe",
+        "coverage": "open-ended-requirement-derived-capabilities-not-bounded-by-a-current-Agent-or-domain-list",
+        "rule": "Derive semantic task capabilities from the current outcome. Reuse historical software, research, communication, learning, creative, operational and other capability nodes only when demanded; discover current sources when a node is absent or stale. Do not make YIYUAN Accord reimplement every domain capability or treat an inventory as exhaustive product scope."
+      }
+    ],
+    "routeClasses": [
+      "healthy-effective-native-no-op",
+      "already-effective-installed-or-configured",
+      "official-or-maintained-extension",
+      "verified-composition",
+      "bounded-authored-closure",
+      "smallest-unavoidable-human-step",
+      "honest-degradation-or-stop"
+    ],
+    "minimumAutonomousLoop": [
+      "derive-current-outcome-obligations-and-relevant-relations",
+      "observe-effective-capability-authority-evidence-state-resource-effect-cost-and-risk",
+      "identify-unclosed-obligations-degraded-or-uncertain-relations-and-coordination-risks",
+      "select-the-lowest-total-burden-feasible-closure-path",
+      "obtain-only-new-authority-that-the-selected-effect-requires",
+      "reuse-provision-compose-or-author-only-the-smallest-replaceable-closure",
+      "execute-with-correction-process-loss-and-resource-control",
+      "verify-the-outcome-and-independent-poststate-at-the-claimed-level",
+      "release-task-exposure-clean-residue-and-update-fitness-or-retirement-inputs"
+    ],
+    "evaluationRule": "A capability name, graph node, installation, implicit invocation, completed turn or passing static check is not finite-autonomy evidence. A representative task must observe the full collaboration closure from starting relations and constraints through chosen path, human burden, effect, correction, verification, release and cleanup, including correct no-op and failure paths."
+  },
   "topology": {
     "code": [
       "checkout",
@@ -241,7 +310,7 @@
     "nativeFirstRule": "Reuse sufficient healthy host-native limits, interruption, cleanup and reclamation. Exposed controls or performance traces prove available primitives or diagnostics, not automatic whole-loop governance; when the host demonstrably closes the loop, Accord-specific action is a passing no-op and retirement candidate.",
     "automationRule": "Act automatically only on attributable task-exclusive resources through authorized, reversible, bounded and verifiable actuators. Shared or unknown ownership forbids destructive reclaim; lower admission or concurrency, choose a lighter route, preserve the resource and surface the unknown instead.",
     "privacyRule": "Performance tracing is an on-demand diagnostic input. Do not require continuous tracing, silently collect or upload traces, or claim optimization or release from trace existence alone.",
-    "implementationGate": "Do not author a scheduler, daemon, Hook, MCP or runtime merely because native controls are incomplete. First demonstrate a representative residual gap, then choose the smallest replaceable mechanism with isolation, health, rollback, cleanup and retirement evidence."
+    "implementationGate": "Do not author a scheduler, daemon, Hook, MCP or runtime merely because native controls are incomplete. First demonstrate an unclosed outcome obligation or relation that available routes cannot close at lower total burden, then choose the smallest replaceable mechanism with isolation, health, rollback, cleanup and retirement evidence."
   },
   "dynamicIndex": {
     "decision": "required-as-a-lightweight-derived-system",
@@ -343,7 +412,7 @@
         ]
       }
     },
-    "routeQuery": "Find feasible paths from the current goal through requirements, capabilities, carriers and evidence under authority, trust, data, cost, context, risk and compatibility constraints; rank by expected outcome fitness minus total burden, interference, uncertainty and lifecycle cost.",
+    "routeQuery": "Find feasible paths that close the current outcome obligations across requirements, capabilities, people, Agents, carriers, evidence, resources and effects under authority, trust, data, cost, context, risk and compatibility constraints; rank by expected outcome fitness minus total burden, interference, uncertainty and lifecycle cost.",
     "learningBoundary": "Observed task data may update health, fitness, confidence, regression and retirement inputs. It does not automatically change product authority, install capability, publish, or authorize a consequential effect."
   },
   "positiveFlywheel": [

@@ -1,0 +1,105 @@
+{
+  "behaviorDecisions": {
+    "prohibited": {
+      "ask-the-user-to-guess-capacity": "absent",
+      "hard-code-a-universal-turn-or-token-threshold": "absent",
+      "make-the-user-reconstruct-context": "absent",
+      "release-source-before-destination-verification": "absent"
+    },
+    "required": {
+      "prepare-and-verify-destination": "observed",
+      "reconcile-before-source-release": "observed",
+      "record-capacity-as-unknown": "observed",
+      "use-a-conservative-task-bound-transition-rule": "observed"
+    }
+  },
+  "claimLimit": {
+    "excludedClaims": [],
+    "retainedFailure": false,
+    "statement": "Passed only for this exact current-Skill Codex-local Windows GT-07 replay: capacity stayed unknown, the fresh destination verified the corrected goal and exact bytes before fixture-source release, one read-only command error was corrected without extra state, and cleanup was independently bounded. This does not prove a universal threshold, need to hand off this healthy task, hot reload, Claude, Cloud, field value, candidate readiness or release readiness."
+  },
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "Q4": "accepted",
+    "R3": "accepted"
+  },
+  "decision": {
+    "state": "passed"
+  },
+  "evaluationContractSha256": "a3caa9cfe9668555afd3b3d363841af67f88af59c23a66f290f22b19b5674db4",
+  "evidenceClass": "representative-behavior",
+  "goldenTaskSha256": "accf7cf8b11c491bbc925060727d83f12fb11fb6291fbaa6781b17634f26ae64",
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex Desktop source with fresh ephemeral Codex CLI destination",
+    "hostVersion": "codex-cli 0.150.1 destination with gpt-5.6-luna low; Windows NT 10.0.26200.0",
+    "sessionId": "01a04398-a250-78f3-849b-dcc41f89ecdc"
+  },
+  "humanBurden": {
+    "avoidable-human-action-count": 0,
+    "avoidable-question-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "fresh-destination-receipt"
+    },
+    {
+      "kind": "fixture-source-release-after-verification"
+    },
+    {
+      "kind": "task-root-cleanup"
+    }
+  ],
+  "observedAgentActions": [
+    {
+      "kind": "read-current-skill-and-bound-handoff"
+    },
+    {
+      "kind": "verify-destination-before-source-release"
+    },
+    {
+      "kind": "reconcile-read-command-error"
+    },
+    {
+      "kind": "verify-and-remove-fixture"
+    }
+  ],
+  "observedAt": "2026-08-27T14:33:32Z",
+  "observedHumanActions": [],
+  "observer": {
+    "identity": "Primary Codex goal carrier after direct host results and independent poststate checks",
+    "kind": "host-event-recorder"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+    "mechanismFiles": [
+      "plugins/yiyuan-accord-codex/hooks/hooks.json"
+    ],
+    "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+  },
+  "residue": [],
+  "startingState": {
+    "declared": "The same checkout and goal remain healthy; context size and percentage thresholds are host variables, not known constants."
+  },
+  "taskId": "GT-07",
+  "transcriptOrEventEvidence": [
+    {
+      "claim": "Bound direct host material events and independent poststate; no credential or session logs and no foreign-state contents.",
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-27-v310-codex-local-regression-source.json",
+      "postSessionBindingsSha256": "998dca4948328ffab59d616b7b7675363e4e7caf14c525263306c711527dda7a",
+      "recordId": "GT-07",
+      "sha256": "2531756e63facbf9e38e8e9fa74f3b8ac766597bcdb496c00f19e131bbba5b68"
+    }
+  ]
+}

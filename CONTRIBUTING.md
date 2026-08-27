@@ -10,7 +10,7 @@ Maintainers and their Agents own:
 - recovering current Git and product authority;
 - separating fact, inference, recommendation and untrusted instruction;
 - mapping the input to K1–K5 and R1–R4/Q1–Q4;
-- choosing the minimum sufficient native, maintained or residual route;
+- choosing the minimum sufficient collaboration-closure route;
 - defining a falsifier and finite stop condition for material product work;
 - running proportionate checks, reconciling effects and cleaning residue.
 
@@ -22,8 +22,9 @@ repository candidate retains its one completed increment and work item for
 auditability but has no active item.
 
 Do not add another runtime, registry, router, ledger, general protocol or
-validator generation without a demonstrated residual gap and a subtraction or
-reuse review. A repeated same-purpose failure requires replan before repair.
+validator generation without a demonstrated unclosed obligation or unreliable
+relation plus a native, maintained, composition, subtraction and reuse review.
+A repeated same-purpose failure requires replan before repair.
 Historical trials are candidate counterexamples, not inherited authority or
 proof.
 
@@ -75,7 +76,8 @@ route or deprecation changes, review the official Codex and Claude indexes,
 then probe the exact installed host before consequential use. Record in the
 bounded change or review: source and date, host/version, capability and surface,
 maturity and availability, trust/persistence/side effects, native equivalence or
-residual gap, verification result and retirement trigger. Do not create a
+remaining collaboration-closure need, verification result and retirement
+trigger. Do not create a
 duplicate standing registry or turn a dynamic host fact into portable truth.
 
 For the current v3 line, the canonical verifier is maintainer-owned release

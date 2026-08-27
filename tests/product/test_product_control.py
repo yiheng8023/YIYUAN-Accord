@@ -18,6 +18,7 @@ from yiyuan_accord.evidence import (
 from yiyuan_accord.guardrails import (
     canonical_goal_objective,
     closeout_sequence_errors,
+    projection_evidence_binding_errors,
     projection_observation_errors,
     validate_projection_package,
 )
@@ -31,6 +32,9 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-26-v301-codex-local-source.json'
 CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-26-v301-gt11-codex-local.json'
+SRC310 = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
+OBS11 = 'evals/observations/2026-08-27-v310-gt11-codex-local.json'
+OBS13 = 'evals/observations/2026-08-27-v310-gt13-codex-local.json'
 OBS = {
     1: 'evals/observations/2026-08-24-v20-claude-gt01.json',
     2: 'evals/observations/2026-08-24-v20-claude-gt02.json',
@@ -62,27 +66,28 @@ def _git(root, *arguments, **options):
 def _fixture():
     with tempfile.TemporaryDirectory(prefix='ya-') as temporary:
         target = Path(temporary) / 'repository'
-        shutil.copytree(ROOT, target, ignore=shutil.ignore_patterns('.git', '.tmp', '__pycache__', '*.pyc'))
+        shutil.copytree(ROOT, target, ignore=shutil.ignore_patterns(
+            '.git', '.tmp', '.remember', '__pycache__', '*.pyc'))
         yield target
+
+def _make_indexed_fixture():
+    temporary = tempfile.TemporaryDirectory(prefix='ya-index-')
+    target = Path(temporary.name) / 'repository'
+    subprocess.run(['git', 'clone', '--quiet', '--no-hardlinks', str(ROOT),
+                    str(target)], check=True)
+    shutil.copytree(ROOT, target, dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns(
+                        '.git', '.tmp', '.remember', '__pycache__', '*.pyc'))
+    _git(target, 'add', '-A')
+    _git(target, '-c', 'user.name=Accord Fixture',
+         '-c', 'user.email=fixture@example.invalid', 'commit', '--quiet',
+         '--allow-empty', '-m', 'current fixture')
+    return temporary, target
 
 @contextmanager
 def _indexed_fixture():
-    with tempfile.TemporaryDirectory(prefix='ya-index-') as temporary:
-        target = Path(temporary) / 'repository'
-        subprocess.run(
-            ['git', 'clone', '--quiet', '--no-hardlinks', str(ROOT), str(target)],
-            check=True,
-        )
-        shutil.copytree(
-            ROOT,
-            target,
-            dirs_exist_ok=True,
-            ignore=shutil.ignore_patterns('.git', '.tmp', '__pycache__', '*.pyc'),
-        )
-        _git(target, 'add', '-A')
-        _git(target, '-c', 'user.name=Accord Fixture',
-             '-c', 'user.email=fixture@example.invalid', 'commit', '--quiet',
-             '--allow-empty', '-m', 'current fixture')
+    temporary, target = _make_indexed_fixture()
+    with temporary:
         yield target
 
 def _rehash(root, locator):
@@ -97,6 +102,13 @@ def _rehash(root, locator):
             item['sha256'] = digest
     _write(root, A, acceptance)
 
+def _bind_source(root, locator, bundle, observation):
+    _write(root, SRC310, bundle)
+    observation['transcriptOrEventEvidence'][0]['sha256'] = _digest(bundle[
+        'records'][observation['taskId']])
+    _write(root, locator, observation)
+    _rehash(root, locator)
+
 def _observe(root, locator, observation=None, label='fixture observation'):
     golden, observed = _read(root, G), observation or _read(root, locator)
     task = next(item for item in golden['tasks'] if item['id'] == observed['taskId'])
@@ -106,9 +118,11 @@ def _observe(root, locator, observation=None, label='fixture observation'):
         lambda current_root, current_locator, _: _read(current_root, current_locator)
     )
 
-def _public_source_errors(root, locator, bundle, observation):
+def _public_source_errors(
+    root, locator, bundle, observation, source_locator=SOURCE,
+):
     record = bundle['records'][observation['taskId']]
-    _write(root, SOURCE, bundle)
+    _write(root, source_locator, bundle)
     source = observation['transcriptOrEventEvidence'][0]
     source['sha256'] = _digest(record)
     task = next(item for item in _read(root, G)['tasks'] if item['id'] == observation['taskId'])
@@ -184,11 +198,13 @@ class ProductControlTests(unittest.TestCase):
             self.assert_has(_errors(root), message)
 
     def test_current_contract_is_valid_and_explicitly_incomplete(self):
-        report = verify_product(ROOT)
+        temporary, root = _make_indexed_fixture()
+        self.addCleanup(temporary.cleanup)
+        report = verify_product(root)
         self.assertTrue(report['valid'], report['errors'])
         self.assertEqual(report['criteria']['ids'], CRITERIA)
         if report['programStatus'] == 'active':
-            program = _read(ROOT, P)
+            program = _read(root, P)
             stages = program['increment']['workItems'][0]['closeoutSequence']
             self.assertEqual(
                 all(stage['state'] == 'completed' for stage in stages),
@@ -200,9 +216,9 @@ class ProductControlTests(unittest.TestCase):
             self.assertEqual(report['criteria']['verified'], 8)
             self.assertEqual(report['repositoryCandidateReady'], report['checkoutClean'])
         self.assertTrue(all(host['staticReady'] for host in report['hostChecks'].values()))
-        program, acceptance = _read(ROOT, P), _read(ROOT, A)
-        constitution = _read(ROOT, C)
-        guidance = _read(ROOT, 'product/reshaping-guidance.json')
+        program, acceptance = _read(root, P), _read(root, A)
+        constitution = _read(root, C)
+        guidance = _read(root, 'product/reshaping-guidance.json')
         self.assertEqual(guidance['status'], 'accepted-revisable-guidance')
         self.assertEqual(
             guidance['dynamicIndex']['graphProjection']['implementation'],
@@ -217,7 +233,7 @@ class ProductControlTests(unittest.TestCase):
             {item['id'] for item in guidance['retiredAsActivePremises']},
         )
         historical_notes = (
-            ROOT / 'docs/releases/v2.0.1-preview.2.md'
+            root / 'docs/releases/v2.0.1-preview.2.md'
         ).read_text(encoding='utf-8')
         self.assertIn('Unreleased historical checkpoint', historical_notes)
         self.assertNotIn('claude plugin marketplace add', historical_notes)
@@ -239,8 +255,24 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             acceptance['representativeBehaviorPolicy']['requiredTaskIdsForRelease'],
-            ['GT-07', 'GT-11', 'GT-12'],
+            ['GT-07', 'GT-11', 'GT-12', 'GT-13'],
         )
+        release_notes = (root / acceptance['publicRelease']['releaseNotes']).read_text(
+            encoding='utf-8')
+        internal_claims = (
+            acceptance['claimCeiling']['finiteReleaseClaims']
+            + acceptance['claimCeiling']['notImplied']
+            + acceptance['claimCeiling']['retainedBehaviorExclusions']
+        )
+        self.assertTrue(all(value not in release_notes for value in internal_claims))
+        self.assertTrue(all(
+            value in release_notes
+            for field in (
+                'publicFiniteReleaseClaims', 'publicNotImplied',
+                'publicRetainedBehaviorExclusions',
+            )
+            for value in acceptance['claimCeiling'][field].values()
+        ))
         self.assertEqual(
             guidance['resourceStewardship']['decision'],
             'required-as-a-host-neutral-dynamic-contract',
@@ -253,7 +285,7 @@ class ProductControlTests(unittest.TestCase):
         percent = program['complexityBudget']['minimumProductCodeAndTestHeadroomPercent']
         self.assertGreaterEqual(limit - report['complexity']['productCodeAndTestBytes'],
                                 (limit * percent + 99) // 100)
-        self.assertNotRegex((ROOT / 'CONTEXT.md').read_text(encoding='utf-8'),
+        self.assertNotRegex((root / 'CONTEXT.md').read_text(encoding='utf-8'),
                             r'#/[^`\n]+/[0-9]+(?:/|`)')
         self.assertNotIn('maxControlBytes', program['complexityBudget']['targets'])
         if report['programStatus'] == 'ready':
@@ -322,11 +354,23 @@ class ProductControlTests(unittest.TestCase):
             (G, 'static-suite-as-behavior',
              lambda v: v['evaluationProtocol'].update(staticSuiteIsNotBehaviorEvidence=False)),
             (G, 'humanBurden metrics', lambda v: v['metrics'].update(help=['self-claim'])),
-            (G, 'golden tasks do not cover contract ids', lambda v: next(
-                task for task in v['tasks'] if task['id'] == 'GT-12'
-            )['mapsTo'].remove('L8')),
+            (G, 'bound reviewable GT-13 workspace', lambda v: next(
+                task for task in v['tasks'] if task['id'] == 'GT-13'
+            ).update(workspaceContract=None)),
+            (G, 'bound reviewable GT-13 workspace', lambda v: next(
+                task for task in v['tasks'] if task['id'] == 'GT-13'
+            ).update(prompt=(
+                'Do not use a reviewable, explicitly bound workspace; '
+                'use an ephemeral clone.'
+            ))),
+            (G, 'golden tasks do not cover contract ids', lambda v: [
+                task['mapsTo'].remove('L8')
+                for task in v['tasks'] if 'L8' in task['mapsTo']
+            ]),
             (A, 'representative post-session binding contracts', lambda v: v[
                 'representativeBehaviorPolicy'].update(postSessionBindingContracts=[])),
+            (A, 'acceptance.claimCeiling is invalid', lambda v: v[
+                'claimCeiling'].pop('publicFiniteReleaseClaims')),
             (A, 'finite-release evidence lanes', lambda v: (
                 v['evidenceLanes']['continuingAfterRelease'].append(
                     v['evidenceLanes']['requiredForFiniteRelease'].pop())))
@@ -379,7 +423,7 @@ class ProductControlTests(unittest.TestCase):
                 digest, errors = validate_projection_package(
                     root, projection['id'], projection['manifest'],
                     projection['contract'], projection['skill'],
-                    projection['metadataFiles'], [],
+                    projection['metadataFiles'], [], projection['mechanismFiles'],
                 )
             self.assertIsNone(digest)
             self.assert_has(errors, 'package declared file is unsafe')
@@ -441,14 +485,66 @@ class ProductControlTests(unittest.TestCase):
                 'marketplace presentation is invalid',
             )
 
+        for adapter_id, projection_index in (('codex', 0), ('claude-code', 1)):
+            with self.subTest(adapter=adapter_id), _fixture() as root:
+                program = _read(root, P)
+                projection = program['hostProjections'][projection_index]
+                hook_path = projection['mechanismFiles'][0]
+                hook = _read(root, hook_path)
+                hook['hooks']['SessionStart'][0]['hooks'][0]['command'] = 'echo drifted'
+                _write(root, hook_path, hook)
+                self.assert_has(
+                    host_check(root, adapter_id)['errors'],
+                    'activation mechanism contract is invalid',
+                    'package digest is not approved by program',
+                )
+
+        for suffix in (' & extra', '; extra', ' $(extra)', ' `extra`', ' %PATH%'):
+            with self.subTest(shell_suffix=suffix), _fixture() as root:
+                program = _read(root, P)
+                program['hostProjections'][0]['activationContext'] += suffix
+                _write(root, P, program)
+                self.assert_has(
+                    host_check(root, 'codex')['errors'],
+                    'activation context is invalid',
+                )
+
+        with _fixture() as root:
+            observation = _read(root, OBS11)
+            bundle = _read(root, SRC310)
+            record = bundle['records']['GT-11']
+            record['payload']['projectionExposure']['mechanismSha256'] = '0' * 64
+            _bind_source(root, OBS11, bundle, observation)
+            self.assert_has(_errors(root), 'sourceEvidence[0] is invalid')
+
+        with _fixture() as root:
+            observation = _read(root, OBS13)
+            bundle = _read(root, SRC310)
+            record = bundle['records']['GT-13']
+            record['amendments'][0] = None
+            _bind_source(root, OBS13, bundle, observation)
+            self.assert_has(_errors(root), 'sourceEvidence[0] is invalid')
+
+        with _fixture() as root:
+            observation = _read(root, OBS13)
+            bundle = _read(root, SRC310)
+            record = bundle['records']['GT-13']
+            duplicate = dict(record['amendments'][0])
+            duplicate['priorGoldenTaskSha256'] = '1' * 64
+            record['amendments'].append(duplicate)
+            _bind_source(root, OBS13, bundle, observation)
+            self.assert_has(_errors(root), 'sourceEvidence[0] is invalid')
+
     def test_projection_evidence_rejects_drift_and_relocation(self):
         current = host_check(ROOT, 'codex')['details']
         observation = {
             'adapterId': 'codex',
             'contract': current['contract'],
             'skill': current['skill'],
+            'mechanismFiles': current['mechanismFiles'],
             'contractSha256': current['identity']['contractSha256'],
             'skillSha256': current['identity']['skillSha256'],
+            'mechanismSha256': current['identity']['mechanismSha256'],
         }
         presentation_drift = dict(
             observation,
@@ -476,6 +572,51 @@ class ProductControlTests(unittest.TestCase):
             ),
             'skillSha256 does not match',
         )
+
+        with _fixture() as root:
+            acceptance = _read(root, A)
+            criterion = next(
+                item for item in acceptance['criteria'] if item['id'] == 'R3'
+            )
+            criterion['assessment'] = 'continuing'
+            criterion['evidence'] = [next(
+                item for item in criterion['evidence']
+                if item.get('bindsProjection') == 'codex'
+            )]
+            _write(root, A, acceptance)
+            locator = criterion['evidence'][0]['locator']
+            observation = _read(root, locator)
+            observation['projectionIdentity'].update({
+                'adapterId': 'codex',
+                'contract': current['contract'],
+                'skill': current['skill'],
+                'mechanismFiles': current['mechanismFiles'],
+                'contractSha256': current['identity']['contractSha256'],
+                'skillSha256': current['identity']['skillSha256'],
+                'mechanismSha256': current['identity']['mechanismSha256'],
+            })
+            _write(root, locator, observation)
+            reports = {'codex': host_check(root, 'codex')['details']}
+            self.assertEqual(
+                projection_evidence_binding_errors(
+                    root, acceptance, reports,
+                    lambda current_root, current_locator, _: _read(
+                        current_root, current_locator
+                    ),
+                ),
+                [],
+            )
+            observation['projectionIdentity']['skillSha256'] = '0' * 64
+            _write(root, locator, observation)
+            self.assert_has(
+                projection_evidence_binding_errors(
+                    root, acceptance, reports,
+                    lambda current_root, current_locator, _: _read(
+                        current_root, current_locator
+                    ),
+                ),
+                'skillSha256 does not match current adapter codex',
+            )
 
     def test_representative_sample_binds_projection_source_and_task(self):
         acceptance, golden = _read(ROOT, A), _read(ROOT, G)
@@ -566,7 +707,18 @@ class ProductControlTests(unittest.TestCase):
             with self.subTest(policy_anchor=task_id), _fixture() as root:
                 golden = _read(root, G)
                 task = next(item for item in golden['tasks'] if item['id'] == task_id)
-                locator, bundle = OBS[int(task_id[-2:])], _read(root, SOURCE)
+                if task_id == 'GT-07':
+                    locator = 'evals/observations/2026-08-26-v301-gt07-codex-local.json'
+                    source_locator = CURRENT_GT11_SOURCE
+                    acceptance = _read(root, A)
+                    for criterion in acceptance['criteria']:
+                        if criterion['id'] in {'R3', 'Q1'}:
+                            criterion['assessment'] = 'continuing'
+                    _write(root, A, acceptance)
+                else:
+                    locator = OBS[int(task_id[-2:])]
+                    source_locator = SOURCE
+                bundle = _read(root, source_locator)
                 record, observation = bundle['records'][task_id], _read(root, locator)
                 payload = record['payload']
                 if task_id == 'GT-02':
@@ -588,7 +740,9 @@ class ProductControlTests(unittest.TestCase):
                 record['goldenTaskSha256'] = observation['goldenTaskSha256'] = digest
                 _write(root, G, golden)
                 self.assert_has(
-                    _public_source_errors(root, locator, bundle, observation),
+                    _public_source_errors(
+                        root, locator, bundle, observation, source_locator,
+                    ),
                     'post-session binding contract does not match representative policy',
                 )
 
@@ -810,6 +964,19 @@ class ProductControlTests(unittest.TestCase):
                 goldenTaskSha256='0' * 64
             )
         )
+
+        with _fixture() as root:
+            acceptance = _read(root, A)
+            ceiling = acceptance['claimCeiling']
+            excluded = next(iter(ceiling['publicNotImplied']))
+            ceiling['publicNotImplied'][excluded] = next(iter(
+                ceiling['publicFiniteReleaseClaims'].values()
+            ))
+            _write(root, A, acceptance)
+            self.assert_has(
+                _errors(root),
+                'public claim summaries overlap',
+            )
         with _fixture() as root:
             locator = OBS[7]
             observation = _read(root, locator)
@@ -845,6 +1012,17 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(errors, [])
 
     def test_plan_process_acceptance_and_release_order_stay_aligned(self):
+        with _fixture() as root:
+            program = _read(root, P)
+            program['releaseProcedure']['orderedGates'][0]['requiredTaskIds'].remove(
+                'GT-13'
+            )
+            _write(root, P, program)
+            self.assert_has(
+                _errors(root),
+                'requiredTaskIds is invalid',
+            )
+
         with _indexed_fixture() as root:
             program = _read(root, P)
             workflow = root / '.github/workflows/validate.yml'
@@ -874,7 +1052,7 @@ class ProductControlTests(unittest.TestCase):
             text = path.read_text(encoding='utf-8')
             path.write_text(
                 text.replace(
-                    'v3.0.1 full-release candidate',
+                    'immutable, non-prerelease',
                     'v3.0.1 draft only',
                     1,
                 ),
@@ -963,7 +1141,8 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(projection['authority']['mode'],
                          'reviewable-versioned-current-set')
         self.assertEqual(
-            projection['outcome']['id'], 'outcome.agent-owned-repository-repair'
+            projection['outcome']['id'],
+            'outcome.context-adaptive-collaboration-closure',
         )
         self.assertEqual(
             _canonical_official_url('https://code.claude.com/docs/en/desktop'),
@@ -1064,6 +1243,18 @@ class ProductControlTests(unittest.TestCase):
             notes.write_text('# expanded\n', encoding='utf-8')
             self.assert_has(_errors(root), 'systems do not match', 'publicRelease policy',
                             'release notes digest', 'claims and exclusions overlap')
+
+        with _fixture() as root:
+            acceptance = _read(root, A)
+            notes = root / acceptance['publicRelease']['releaseNotes']
+            summary = next(iter(
+                acceptance['claimCeiling']['publicNotImplied'].values()))
+            notes.write_text(notes.read_text(encoding='utf-8').replace(
+                'It does not imply:', f'- {summary}\n\nIt does not imply:', 1),
+                encoding='utf-8')
+            acceptance['publicRelease']['releaseNotesSha256'] = hashlib.sha256(notes.read_bytes()).hexdigest()
+            _write(root, A, acceptance)
+            self.assert_has(_errors(root), 'release notes do not expose the complete claim ceiling')
 
     def test_complexity_identity_and_paths_fail_closed(self):
         with _fixture() as root:

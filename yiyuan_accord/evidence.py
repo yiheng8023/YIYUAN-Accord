@@ -13,7 +13,10 @@ _OFFICIAL_HOSTS = {
     "developers.openai.com", "github.com", "code.claude.com",
     "learn.chatgpt.com",
 }
-_PROJECTION_FIELDS = ("adapterId", "skill", "skillSha256")
+_PROJECTION_FIELDS = (
+    "adapterId", "contract", "contractSha256", "skill", "skillSha256",
+    "mechanismFiles", "mechanismSha256",
+)
 _UNRESERVED = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~")
 
 
@@ -255,6 +258,17 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
     )
     triggers = payload.get("recheckTriggers")
     required = task.get("required", [])
+    projection_fields = (
+        _PROJECTION_FIELDS
+        if isinstance(projection, dict)
+        and all(field in projection for field in (
+            "mechanismFiles", "mechanismSha256",
+        ))
+        else ("adapterId", "skill", "skillSha256")
+    )
+    projection_text_fields = tuple(
+        field for field in projection_fields if field != "mechanismFiles"
+    )
     return (
         payload.get("captureProtocol") == "direct-host-material-events-v1"
         and _records(messages) and messages
@@ -273,14 +287,26 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
             )
         )
         and _postcapture_bundle(payload, task, captured_at) is not None
-        and _exact(exposure, ("kind", *_PROJECTION_FIELDS), _PROJECTION_FIELDS)
+        and all(field in projection_fields for field in (
+            "adapterId", "skill", "skillSha256",
+        ))
+        and _exact(
+            exposure, ("kind", *projection_fields), projection_text_fields,
+        )
+        and (
+            "mechanismFiles" not in projection_fields
+            or isinstance(exposure.get("mechanismFiles"), list)
+            and exposure["mechanismFiles"]
+            and len(exposure["mechanismFiles"]) == len(set(exposure["mechanismFiles"]))
+            and all(_text(locator) for locator in exposure["mechanismFiles"])
+        )
         and _text(exposure.get("kind"))
         and exposure["kind"] in {
             "exact-skill-content-read", "host-runtime-attribution"
         }
         and isinstance(projection, dict)
-        and all(exposure[field] == projection.get(field)
-                for field in _PROJECTION_FIELDS)
+        and all(exposure[field] == projection[field]
+                for field in projection_fields)
         and _records(sources)
         and all(_official_source(item, captured_at) for item in sources)
         and len({_canonical_official_url(item["url"]) for item in sources}) == len(sources)
@@ -319,6 +345,54 @@ def representative_contract_sha256(acceptance, golden):
         "evaluationProtocol": golden.get("evaluationProtocol"),
         "metrics": golden.get("metrics"),
     })
+
+
+def _source_amendments(record, task, task_digest, captured_at):
+    amendments = record.get("amendments") if isinstance(record, dict) else None
+    if amendments is None:
+        return True
+    if (not isinstance(amendments, list) or not amendments
+            or any(not isinstance(a, dict) for a in amendments)):
+        return False
+    ws = task.get("workspaceContract")
+    if not isinstance(ws, dict): return False
+    origin = ws.get("supersedesGoldenTaskSha256")
+    if amendments[0].get("priorGoldenTaskSha256") != origin:
+        return False
+    previous_time = captured_at
+    previous_digest = None
+    for amendment in amendments:
+        amended_at = _time(amendment.get("amendedAt"))
+        if (
+            not _exact(amendment, (
+                "kind", "amendedAt", "changeClass", "priorGoldenTaskSha256",
+                "correctedGoldenTaskSha256", "behaviorReplayPerformed",
+                "scope", "reason", "claimImpact",
+            ), (
+                "kind", "amendedAt", "changeClass", "priorGoldenTaskSha256",
+                "correctedGoldenTaskSha256", "scope", "reason", "claimImpact",
+            ))
+            or amendment.get("kind") != "contract-correction"
+            or amendment.get("changeClass") != "observed-context-correction"
+            or amendment.get("behaviorReplayPerformed") is not False
+            or amendment.get("claimImpact") != "metadata-only-no-new-behavior-claim"
+            or re.fullmatch(
+                r"[0-9a-f]{64}", amendment.get("priorGoldenTaskSha256", "")
+            ) is None
+            or re.fullmatch(
+                r"[0-9a-f]{64}", amendment.get("correctedGoldenTaskSha256", "")
+            ) is None
+            or amendment.get("priorGoldenTaskSha256")
+            == amendment.get("correctedGoldenTaskSha256")
+            or previous_digest is not None
+            and amendment.get("priorGoldenTaskSha256") != previous_digest
+            or amended_at is None or amended_at > datetime.now().astimezone()
+            or previous_time is None or amended_at < previous_time
+        ):
+            return False
+        previous_time = amended_at
+        previous_digest = amendment["correctedGoldenTaskSha256"]
+    return previous_digest == task_digest
 
 
 def _observation_errors(
@@ -376,16 +450,18 @@ def _observation_errors(
         postcapture = _postcapture_bundle(
             record.get("payload", {}), task, captured
         ) if isinstance(record, dict) else None
+        record_fields = (
+            "kind", "taskId", "goldenTaskSha256", "evaluationContractSha256",
+            "hostIdentity", "capturedAt", "payload",
+        ) + (("amendments",) if isinstance(record, dict) and "amendments" in record else ())
         valid = (
             _exact(source, source_fields,
                    ("locator", "recordId", "claim"))
             and _text(source.get("kind"))
             and source["kind"] in {"host-transcript", "host-event-log"}
             and _exact(bundle, ("schema", "records")) and bundle.get("schema") == 1
-            and _exact(record, (
-                "kind", "taskId", "goldenTaskSha256", "evaluationContractSha256",
-                "hostIdentity", "capturedAt", "payload",
-            ))
+            and _exact(record, record_fields)
+            and _source_amendments(record, task, task_digest, captured)
             and record.get("kind") == source.get("kind")
             and record.get("taskId") == task.get("id")
             and record.get("goldenTaskSha256") == task_digest

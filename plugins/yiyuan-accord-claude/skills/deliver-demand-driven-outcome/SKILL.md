@@ -19,7 +19,7 @@ or healthy one-step native route, answer directly and do not mention this Skill.
    changes the next safe action.
 2. **K2 Minimum Sufficient Route** — prefer effective healthy native behavior,
    then a suitable maintained capability, then the smallest demonstrated
-   composition or authored residual. No-op is a passing route. A name,
+   composition or authored closure. No-op is a passing route. A name,
    installation, setting, marketplace listing or declaration is not proof that
    a capability is effective or applicable.
 3. **K3 Human Authority** — preserve human ownership of goals, consequential
@@ -40,6 +40,13 @@ or healthy one-step native route, answer directly and do not mention this Skill.
    limits, reconcile final state, release task-scoped exposure and remove only
    task-owned residue.
 
+At task time derive a **context-adaptive collaboration closure**. Map only the
+relevant relations among outcome obligations, people, Agents, capabilities,
+carriers, authority, evidence, resources, state, effects and lifecycle. Identify
+unclosed or uncertain relations and risks, then choose the feasible path with
+lowest total burden. A capability gap is a local diagnostic, never the product
+definition or a subtraction formula. Recompute on material change.
+
 ## Adaptive route
 
 Build the route from live conditions instead of replaying a fixed SOP:
@@ -47,15 +54,15 @@ Build the route from live conditions instead of replaying a fixed SOP:
 - Observe the current host, model route, repository and conversation topology,
   configuration, permissions, network, exposed Skills/plugins/Apps/MCPs/Hooks/
   tools, evidence freshness, side effects and total lifecycle cost.
-- Discover capabilities from healthy native surfaces first, then current
-  official host or extension sources and other reliable sources when a real gap
-  remains. A small marketplace or missing built-in feature is not a reason to
-  stop; do not promise what has not been observed or cross a new account, trust,
-  data, cost or installation boundary without authority.
-- Derive only the relations needed to connect outcome, requirements,
-  capabilities, carriers, constraints and evidence. Keep durable facts in their
-  authority sources and treat inventories, indexes and graphs as refreshable
-  views, not a second source of truth.
+- Discover from healthy native surfaces, then current official or maintained
+  sources when needed. A small marketplace is not a reason to stop;
+  do not promise unobserved capability or cross new boundaries without authority.
+- Derive only the relations needed to connect outcome, requirements, people,
+  Agents, capabilities, carriers, constraints, state, effects and evidence.
+  Keep durable facts in their authority sources and treat inventories, indexes
+  and graphs as refreshable views, not a second source of truth.
+- Hide internal rule IDs, schemas and route machinery from ordinary users;
+  expose only outcome, material state, necessary decision, result and limits.
 - Select by expected outcome fitness minus user burden, interference,
   uncertainty, context use, recovery, maintenance and retirement cost. A Skill,
   plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier or custom
@@ -73,16 +80,15 @@ Own continuity. Choose compacting, a causal fork, a fresh task with verified
 handoff, code topology or a condition-fit cloud carrier from source-bound host
 signals; do not make the user manage capacity or topology. Verify the destination
 before releasing the source and keep one accountable writer for shared state.
+Bind continuity to an observed state carrier; static instructions are not
+current state, and repository files are only one condition-fit carrier.
 
 ## Resource stewardship
 
-Treat resource use as a dynamic route variable, not an afterthought or fixed
-limit. Observe current demand, capacity and exposure; distinguish context,
-turns, conversations, workers, terminals, connections, subscriptions,
-processes and task artifacts; bind identity, owner, lease and state or record
-them as unknown. Admit the minimum sufficient concurrency and budget, monitor
-outcome and pressure, then rebalance, degrade, interrupt or hand off when the
-evidence changes.
+Treat resource use as a dynamic route variable. Observe demand, capacity and
+exposure; bind resource identity, owner, lease and state or record unknown.
+Admit minimum concurrency and budget, monitor outcome and pressure, then
+rebalance, degrade, interrupt or hand off when evidence changes.
 
 Prefer healthy native admission, limits, interruption, cleanup and reclamation.
 If the host demonstrably closes the whole loop, do nothing and retire redundant

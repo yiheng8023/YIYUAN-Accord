@@ -30,6 +30,11 @@ Agent and client surface is proven. The test corpus remains deliberately finite,
 so representative use, counterexamples and failures belong to continuing
 evidence.
 
+The moving `main` branch currently contains an unreleased v3.1.0 candidate. It
+replaces the earlier capability-set-difference summary with context-adaptive
+collaboration closure and adds one stateless `SessionStart` activation reminder.
+It is development evidence, not an installation source or published upgrade.
+
 Report feedback in [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues). Include:
 
 - exact tag and revision;
@@ -87,11 +92,13 @@ Use `/reload-plugins` after checkout changes.
 
 ### What installation changes
 
-Installation makes one progressively disclosed adaptive Skill available. The
-v3 packages themselves add no Runtime, Hook, MCP server, App, state store,
-background process or automatic project mutation. This package fact is not a
-permanent product prohibition: a later task may use or propose another bounded
-mechanism when current evidence and authority justify it.
+The public v3.0.1 packages make one progressively disclosed adaptive Skill
+available and add no Runtime, Hook, MCP server, App, state store, background
+process or automatic project mutation. The unreleased v3.1.0 candidate also
+contains one stateless `SessionStart` context Hook: it reads no transcript,
+writes no state and starts no background process. These are versioned package
+facts, not permanent product prohibitions. Hook trust, host firing and the
+activation-to-effect chain remain separate evidence from installation.
 
 Installation, enablement and visibility do not imply activation. During normal
 work the host may invoke the Skill implicitly for a relevant nontrivial task;
@@ -186,7 +193,7 @@ release authority or establish production safety.
 
 ---
 
-## What the repository contains
+## Maintainer and source-verification reference
 
 - **Current schema-v3 authority set**:
   [`constitution.json`](product/constitution.json),
@@ -202,7 +209,10 @@ release authority or establish production safety.
 - **Representative Help-and-Interference Tasks**:
   [`evals/golden-tasks.json`](evals/golden-tasks.json)
 
-The portable contract is **K1–K5**. Host rules **H1–H10** and learned-failure rules **L1–L8** keep host drift and trial history outside the core.
+The linked source files separate portable collaboration commitments from
+host-specific rules and learned failure guardrails. Their internal identifiers
+exist for maintainers, automated checks and exact evidence binding; ordinary
+use should require only an outcome, material state, decisions and honest limits.
 
 Those three authority files are the current reviewable bootstrap, not
 unquestionable truth, a permanent file count or a ceiling defined by the
@@ -238,8 +248,9 @@ affected boundary and only dependent work is replayed.
 A Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier or
 another mechanism is neither mandatory nor permanently forbidden. Visibility or
 installation does not imply activation. A sufficient native path should produce
-no avoidable intervention, while a residual gap can justify scoped machinery
-with interference, update, rollback and retirement controls.
+no avoidable intervention, while an unclosed outcome obligation or unreliable
+relation can justify scoped machinery with interference, update, rollback and
+retirement controls.
 
 ### Resource stewardship
 

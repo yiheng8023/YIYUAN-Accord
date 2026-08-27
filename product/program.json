@@ -1,18 +1,23 @@
 {
   "schema": 3,
-  "id": "yiyuan-accord-adaptive-reshape-program",
+  "id": "yiyuan-accord-bounded-autonomy-program",
   "productId": "yiyuan-accord",
-  "release": "v3.0",
-  "distributionVersion": "v3.0.1",
+  "release": "v3.1",
+  "distributionVersion": "v3.1.0",
   "historicalRelease": {
     "releaseLine": "v2.0",
-    "releasedTags": ["v2.0", "v2.0.1-preview.1"],
+    "releasedTags": [
+      "v2.0",
+      "v2.0.1-preview.1"
+    ],
     "unreleasedCheckpoint": "v2.0.1-preview.2",
-    "supersededDevelopmentDistributions": ["v3.0.0"],
+    "supersededDevelopmentDistributions": [
+      "v3.0.0"
+    ],
     "authority": "docs/operations/HISTORY.md",
     "rule": "These immutable releases, the retired unreleased checkpoint and the superseded locally exposed development distribution are provenance only. They are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
-  "releaseIntent": "Preserve the completed 2026-08-25 adaptive reshape as a historical non-release main baseline, integrate host-neutral resource stewardship from the earliest affected authority boundary, and supersede the locally exposed but never publicly released 3.0.0 development package before forming a separately replayed v3.0.1 full-release candidate. The major version reflects the changed product category and boundary; the patch advance preserves monotonic package identity for reliable update and rollback. It does not inherit preview.2, 3.0.0-development or pre-resource-stewardship authority, evidence or package readiness. It may become a repository candidate only after its authority, host projections, representative tasks, deterministic conformance, finite claim ceiling and candidate package are remapped and internally coherent; exact-local review, hosted verification, named-human authorization, tagging, public-update replay and cleanup remain sequential downstream gates.",
+  "releaseIntent": "Open one bounded-autonomy increment after the current immutable public release without moving any released tag: model a context-adaptive collaboration closure across outcome obligations, live relations, constraints, authority, evidence, resources and effects; then prove one minimum end-to-end closure slice before selecting broader mechanisms. v3.1.0 is only a prospective full-release candidate identity for changed package bytes. It receives no inherited behavior, hosted, field, human, tag or publication credit from the current immutable public release.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "maintenancePlan": "CONTRIBUTING.md",
@@ -65,238 +70,364 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "cf6c65f393ca47134995584168640accd4aebc249b0b57ef9777d4ca5d00e392",
-      "disposition": "current-guidance-for-next-plan-process-acceptance-and-goal-projection-not-release-authority"
+      "repositorySha256": "faadc84442ee1803b4830c3b2e41fa7f42118751a5aec562090eeba6ddb2026c",
+      "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
+    },
+    {
+      "id": "current-host-capability-sources-2026-08-27",
+      "kind": "fresh-official-host-capability-and-lifecycle-input",
+      "capturedAt": "2026-08-27",
+      "sources": [
+        "https://learn.chatgpt.com/docs/hooks",
+        "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+        "https://learn.chatgpt.com/docs/plugins",
+        "https://learn.chatgpt.com/docs/extend/mcp",
+        "https://code.claude.com/docs/en/hooks",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://code.claude.com/docs/en/plugins",
+        "https://code.claude.com/docs/en/mcp",
+        "https://code.claude.com/docs/en/desktop"
+      ],
+      "disposition": "fresh-high-weight-host-input-not-portable-authority-or-behavior-proof"
     }
   ],
   "increment": {
-    "id": "increment.v3-full-release-candidate",
+    "id": "increment.v31-context-adaptive-collaboration-closure",
     "state": "completed",
-    "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "observedProblem": "The adaptive reshape baseline corrected the product premise and package surface, but it treated the pre-Accord system mainly as retired provenance rather than the Agent execution and host-adaptation subdomain of the larger collaboration system. The old issue-by-issue construction also lacked systematic official capability discovery, dynamic applicability, hot update and retirement. Its original process-loss mission therefore became underrepresented: demand, goal, implementation, evidence and release claim could drift while conversations, workers, terminals, connections, processes, artifacts and capacity pressure accumulated without proactive attribution or verified release.",
-    "hypothesis": "A v3.0.1 full-release candidate can supplement and correct the Agent execution subdomain through the same host-neutral adaptive system: preserve one traceable demand-to-goal-to-effect chain, resolve official and effective capability, observe demand and capacity, bind identity and ownership, admit minimum sufficient concurrency, rebalance or degrade under pressure, reclaim only attributable task-owned exposure, verify release, hot-update or retire replaceable mechanisms, no-op when native governance is sufficient, and avoid claiming a universal scheduler or cross-host equivalence.",
+    "acceptanceIds": [
+      "R1",
+      "R2",
+      "R3",
+      "R4",
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "observedProblem": "The current immutable public release honestly exposes a host-adaptive Skill and bounded continuity, repair and resource fixtures, but it mostly declares rather than closes the larger finite-autonomy promise. The current long Codex task crossed automatic compaction without YIYUAN Accord surfacing a carrier-fitness decision, and the existing model contains a capability meta-model without a complete collaboration-control coverage map. A single handoff Hook or more host adapters would address symptoms while leaving users to operate many other avoidable discovery, configuration, routing, topology, verification, update and cleanup mechanics.",
+    "hypothesis": "A lightweight relation-and-constraint model can preserve an open demand-capability universe while making finite collaboration-control obligations explicit. Identifying unclosed obligations, degraded or uncertain relations, coordination and verification risks, then proving one full collaboration-closure slice with native no-op, maintained or composed help, bounded authorship, correction, resource and lifecycle paths can increase real autonomy without reviving a universal runtime, copying the pre-Accord implementation or making a current host list the product ceiling.",
+    "hostCapabilityRefresh": {
+      "capturedAt": "2026-08-27",
+      "facts": [
+        "Codex and Claude expose Skills for relevant implicit use, but availability and installation are not task-time behavior proof.",
+        "Current Codex plugin Hooks support SessionStart for startup, resume, clear and compact; compact-matched context reaches the immediate post-compaction continuation. Command and MCP handlers are supported, prompt and Agent handlers are skipped, and each new or changed non-managed Hook hash requires user review and trust.",
+        "Current Claude plugin Hooks support SessionStart for startup, resume, clear, compact and fork; plain standard output becomes context. The same Hook lifecycle runs in local CLI, IDE and Desktop sessions, while Cloud uses its own repository or account-carried conditions.",
+        "Claude can reload installed or development plugin Skills, Agents, Hooks, MCP and LSP surfaces in-session. Current Codex documentation supports marketplace refresh and plugin reinstall or restart paths but does not establish equivalent active-session plugin hot reload."
+      ],
+      "inferences": [
+        "A compact SessionStart reminder is a candidate activation and post-compaction context path that need not inspect transcripts, add state, run per prompt or create a second control plane; actual host firing and effect remain separate evidence.",
+        "A UserPromptSubmit Hook would add unavoidable per-turn overhead and Codex cannot narrow it with a matcher; Stop prompt or Agent Hooks add model cost and lack current Codex portability; a Runtime or MCP is not yet justified for static activation.",
+        "Host lifecycle differences require capability-conditioned update and rollback, not a false cross-host hot-reload claim."
+      ],
+      "unknowns": [
+        "Fresh task-time behavior and measurable net help remain unverified.",
+        "Codex active-session plugin hot reload is not established by current official documentation.",
+        "Claude client behavior through the user's current third-party model route and Cloud behavior remain separate condition-fit evidence lanes."
+      ]
+    },
+    "firstMechanismDecision": {
+      "id": "session-start-collaboration-closure-activation",
+      "state": "static-definition-present-behavior-unverified",
+      "selected": "Bundle one stateless, no-extra-interpreter SessionStart context Hook with each current host projection. Its static definition points nontrivial or stateful outcomes to the installed Skill, is configured for the host's declared startup and continuation events, stays silent for a simple or sufficient native route, reads no transcript, writes no state and starts no background process. Actual firing, trust, activation and effect remain unverified.",
+      "humanBoundary": "Codex Hook trust remains an explicit exact-definition user decision. Installation, update, rollback, publication and any new external effect keep their existing authority boundaries.",
+      "claimLimit": "The package proves only that a candidate activation definition is present and statically bound. It does not prove host firing, trust, activation, implicit invocation, collaboration closure, task outcome, low interference, hot reload, cross-host behavior, field value or production safety."
+    },
     "representativeOutcome": {
-      "id": "outcome.agent-owned-repository-repair",
-      "statement": "Given one bounded software change request and an accessible disposable repository, the Agent delivers the requested verified behavior while preserving unrelated work and requiring the user only for consequential judgment or genuinely unavailable authority.",
-      "startingState": "The concrete Agent, local or cloud carrier, model route, repository state, installed extensions, configuration and available capabilities are observed at task time and may be sufficient, degraded, unavailable or unknown.",
-      "completion": "The requested behavior is externally verified at the claimed level; unauthorized effects are zero; avoidable user-operated discovery, routing, configuration, continuity, resource stewardship, verification and cleanup steps are zero; material effects, burden, resource pressure, interference, unknowns and residue are reconciled.",
-      "claimLimit": "Current Codex-local GT-07, GT-11 and GT-12 observations qualify only their exact fresh-carrier continuity, demand-and-correction-to-final-claim adaptive repair, and ownership-aware resource-stewardship fixtures against the byte-identical Skill. They do not prove durable plugin update, in-place hot reload, automatic whole-system optimization, universal correctness, every Agent or carrier, Claude or Cloud behavior, broad field value or production safety.",
+      "id": "outcome.context-adaptive-collaboration-closure",
+      "statement": "For a bounded nontrivial outcome, derive its relevant obligations and live relations, identify what is unclosed or unreliable, then complete the lowest-burden authorized path while asking only for non-delegable judgment or authority.",
+      "startingState": "The outcome, current task and bounded authority are supplied. Host, client, model route, installed or discoverable capability, configuration, topology, capacity and health may be sufficient, incomplete, degraded, unavailable or unknown; no specific extension or authored mechanism is preselected.",
+      "completion": "The claimed consequence and independent post-state are verified; supported avoidable mechanics are Agent-owned; human-only actions are minimal and verified; unauthorized effects and task residue are zero.",
+      "claimLimit": "Current evidence proves only repository-candidate conformance plus the bounded current-Skill Codex-local GT-07, GT-11, GT-12 and single-arm GT-13 results. Installed Hook firing, implicit invocation, hot reload, comparative value, Claude, client, Cloud, cross-host, field, production, hosted and release claims remain unverified.",
       "firstEvidenceSurfaces": [
         "codex-local",
-        "codex-cloud-when-current-conditions-fit",
-        "claude-code",
-        "available-claude-client-when-effective"
+        "claude-code-when-current-conditions-fit",
+        "available-client-when-effective",
+        "codex-cloud-when-current-conditions-fit"
       ]
     },
     "fourSurfaceMapping": {
-      "outcomeId": "outcome.agent-owned-repository-repair",
+      "outcomeId": "outcome.context-adaptive-collaboration-closure",
       "plan": {
-        "hypothesis": "Live capability and resource discovery plus a derived minimum-sufficient route can complete the repair with lower avoidable human and system burden than either an unconditional plugin route or a user-operated workflow. A stable capability meaning is normalized separately from observed instances whose provenance and fitness bind the effective host, model route, carrier, tools, configuration, permissions and context. Resource admission, allocation, degradation and release remain host-neutral decisions; native primitives, repository Skills, configuration, cloud carriers and bounded authored mechanisms are replaceable routes selected from current evidence.",
-        "earliestAffectedBoundary": "product/constitution.json",
-        "slice": "Bind one repair outcome plus one bounded resource-pressure fixture; observe the live host, model route, carrier, repository, capability provenance and effective composition, resource ownership, capacity, authority and evidence state; derive an authorized minimum-burden route; execute and reconcile the effect; compare help, no-op and interference; release attributable task resources; retain bounded counterevidence.",
-        "stopCondition": "The process, acceptance surface and compact goal projection name this same outcome, completion condition, claim limit and refresh boundary without fixing a host, model, mechanism or cloud requirement."
+        "hypothesis": "Model the smallest relevant outcome-relation subgraph before choosing implementation. Treat official native, installed, maintained, composed and bounded-authored mechanisms as dynamic participants; preserve human goal and consequential authority; require one consequence-level vertical slice to pay for every retained mechanism.",
+        "earliestAffectedBoundary": "product/reshaping-guidance.json#/boundedAutonomy",
+        "slice": "Normalize collaboration-control obligations, current capabilities and their live relations; select one representative unclosed outcome path; close it through the minimum replaceable route; and replay no-op, help, correction, authority, process-loss, resource, update, rollback, cleanup and retirement paths.",
+        "stopCondition": "The plan, process, acceptance surface and compact goal projection agree on context-adaptive collaboration closure, no new mechanism is selected merely because it is easy to package, and the first representative task plus its claim and replay boundaries are explicit."
       },
       "process": {
-        "routeRule": "At each material change, derive the lowest-net-burden route and minimum sufficient resource admission that satisfy the current outcome under observed capability, capacity, ownership, authority, trust, data, cost, topology and evidence conditions; a healthy sufficient native route or native resource-governance loop is a passing no-op.",
+        "routeRule": "Derive current outcome obligations and the smallest relevant relation graph; observe capabilities, authority, evidence, resources, effects and constraints; identify unclosed or unreliable relations and coordination risks; choose the lowest-burden feasible closure path. Recompute on material change and retire authored overlap when a native whole loop suffices.",
         "phases": [
-          "bind-outcome-authority-and-prohibited-effects",
-          "observe-current-state-and-discover-capabilities",
-          "bind-capability-provenance-and-effective-composition",
-          "attribute-resource-ownership-and-admit-minimum-capacity",
-          "derive-and-select-minimum-sufficient-authorized-route",
-          "execute-with-continuous-reconciliation",
-          "rebalance-degrade-and-release-attributable-task-resources",
-          "verify-consequence-burden-resource-release-interference-and-residue",
-          "recover-degrade-hand-off-or-close-with-bounded-learning"
+          "bind-outcome-required-capabilities-and-human-boundaries",
+          "observe-effective-capabilities-environment-topology-resources-and-cost",
+          "identify-unclosed-relations-and-rank-native-installed-maintained-composed-authored-and-human-only-paths",
+          "obtain-only-effect-specific-new-authority",
+          "provision-and-execute-the-smallest-replaceable-route",
+          "reconcile-correction-process-loss-resource-pressure-and-lifecycle",
+          "verify-consequence-human-burden-interference-poststate-and-claim",
+          "release-clean-learn-update-or-retire"
         ],
         "orderedSteps": [
           {
-            "id": "migrate-version-neutral-active-carrier",
+            "id": "model-context-adaptive-collaboration-closure",
             "state": "completed",
             "dependsOn": [],
-            "acceptanceIds": ["R1", "R2", "Q2", "Q4"],
-            "completion": "The active program, acceptance, verifier and tests can represent reshaping without selecting an exact release or distribution version; immutable released and unreleased historical identities remain provenance only, and canonical output cannot present them as the current candidate."
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "The revisable guidance, program, acceptance contract and compact goal projection distinguish finite collaboration-control obligations from an open demand-capability universe, derive only the relevant live relations and constraints, preserve genuinely human-only judgment, and minimize avoidable user-operated mechanics without treating any host feature list or set difference as the product boundary."
           },
           {
-            "id": "bind-current-gt11-contract",
+            "id": "refresh-current-host-capability-evidence",
             "state": "completed",
-            "dependsOn": ["migrate-version-neutral-active-carrier"],
-            "acceptanceIds": ["R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "GT-11 and its evaluation contract derive from the current version-neutral authority and outcome; old observations remain historical inputs, and the binding itself is not behavior proof."
+            "dependsOn": [
+              "model-context-adaptive-collaboration-closure"
+            ],
+            "acceptanceIds": [
+              "R2",
+              "Q2",
+              "Q3"
+            ],
+            "completion": "Current official and observed Codex and Claude capability, lifecycle, configuration, topology and client surfaces are source-bound, freshness-limited and mapped only as candidate suppliers; pre-Accord semantics are normalized and selectively recalled without restoring retired architecture or validators."
           },
           {
-            "id": "build-disposable-repair-fixture",
+            "id": "select-first-representative-collaboration-closure",
             "state": "completed",
-            "dependsOn": ["bind-current-gt11-contract"],
-            "acceptanceIds": ["R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "A disposable repository supplies one exact repair, an unrelated dirty change, a compatible correction, a route-degradation event, independent poststate checks and exact task-residue ownership without user or production data."
+            "dependsOn": [
+              "refresh-current-host-capability-evidence"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "One real unclosed outcome path is selected because it crosses the full demand-to-effect relation chain, not because its host adapter is easy. The task predeclares native no-op, maintained or composed help, bounded authorship, human-only, degradation, correction, verification, resource and cleanup paths."
           },
           {
-            "id": "run-codex-local-gt11",
+            "id": "implement-minimum-replaceable-closure-mechanism",
             "state": "completed",
-            "dependsOn": ["build-disposable-repair-fixture"],
-            "acceptanceIds": ["R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "A fresh Codex-local GT-11 observation is bound to the exact current projection, host and contract; independent event and filesystem poststate evidence records the requested effect, route, burden, interference, correction, degradation, cleanup, unknowns and claim ceiling."
+            "dependsOn": [
+              "select-first-representative-collaboration-closure"
+            ],
+            "acceptanceIds": [
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "The smallest authorized replaceable mechanism or composition is present and statically bound to the selected relation without claiming host firing or effect, changes no unrelated user configuration, and declares capability-conditioned update or hot reload, rollback, release, cleanup and retirement when a native whole-loop path becomes sufficient."
           },
           {
-            "id": "compare-noop-help-interference-and-update",
+            "id": "replay-noop-help-correction-authority-resource-and-lifecycle",
             "state": "completed",
-            "dependsOn": ["run-codex-local-gt11"],
-            "acceptanceIds": ["R2", "R3", "Q2", "Q3", "Q4"],
-            "completion": "Native-sufficient no-op and residual-help paths are compared at bounded cost; unnecessary activation is absent, and supported hot update or atomic versioned update, health check and rollback are exercised without turning one mechanism into a product requirement."
+            "dependsOn": [
+              "implement-minimum-replaceable-closure-mechanism"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "Fresh current-projection observations exercise the full collaboration-closure task plus sufficient-native no-op, correction, route degradation, one unavoidable human gate, process-loss control, bounded resources, failure, rollback, release and zero-residue post-state without reading credential or session logs."
           },
           {
-            "id": "replay-condition-fit-carriers",
+            "id": "replay-condition-fit-hosts-and-clients",
             "state": "completed",
-            "dependsOn": ["compare-noop-help-interference-and-update"],
-            "acceptanceIds": ["R2", "R3", "Q2", "Q4"],
-            "completion": "Claude Code, an available effective Claude client and Codex Cloud are replayed only when their current task conditions fit. Cloud admission discovers the lowest-cost effective current projection instead of requiring plugin installation, binds the exact remote revision and distinguishes repository Skill, AGENTS.md, setup or maintenance bootstrap, native plugin support if established, and bounded degradation. Unavailable or insufficient carriers remain scoped unknowns and do not invalidate the verified local result."
+            "dependsOn": [
+              "replay-noop-help-correction-authority-resource-and-lifecycle"
+            ],
+            "acceptanceIds": [
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "Codex local is the first behavior surface; Claude Code, an available client and Codex Cloud are exercised only when their actual conditions fit. Each observed combination keeps its own capability, installation, activation, behavior, privacy, toolchain and claim limits; a blocked or unsupported surface remains scoped evidence."
           },
           {
-            "id": "independent-review-and-bound-claim",
+            "id": "independent-review-and-form-exact-v31-candidate",
             "state": "completed",
-            "dependsOn": ["replay-condition-fit-carriers"],
-            "acceptanceIds": ["R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "An independent review reconciles the v3 plan, adaptive Skill and package surfaces, observations, failures, interference, update path, residue and claim ceiling, then decides whether the exact clean repository is a release candidate; it cannot grant hosted, human, tag or release completion."
-          },
-          {
-            "id": "bind-resource-stewardship-contract",
-            "state": "completed",
-            "dependsOn": ["independent-review-and-bound-claim"],
-            "acceptanceIds": ["R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "Authority, plan, acceptance, adaptive Skills and GT-12 express one host-neutral observe, attribute, admit, monitor, rebalance, release and verify loop; native sufficiency is a no-op, diagnostic tracing is not an optimizer, and shared or unknown ownership cannot be reclaimed automatically."
-          },
-          {
-            "id": "run-codex-local-gt12-resource-stewardship",
-            "state": "completed",
-            "dependsOn": ["bind-resource-stewardship-contract"],
-            "acceptanceIds": ["R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "A fresh Codex-local GT-12 observation proves bounded resource admission, pressure response, exclusive task-owned release, preservation of shared or unknown resources and independent post-state verification without installing an unproven controller or treating diagnostics as optimization."
-          },
-          {
-            "id": "replay-current-gt11-after-skill-change",
-            "state": "completed",
-            "dependsOn": ["run-codex-local-gt12-resource-stewardship"],
-            "acceptanceIds": ["R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "GT-11 is replayed against the byte-identical post-resource-stewardship Skill so the new cross-cutting contract does not regress repair, no-op, correction, degradation, continuity, update, rollback or cleanup behavior."
-          },
-          {
-            "id": "replay-current-gt07-after-plugin-update",
-            "state": "completed",
-            "dependsOn": ["replay-current-gt11-after-skill-change"],
-            "acceptanceIds": ["R3", "Q4"],
-            "completion": "GT-07 is replayed in two fresh ephemeral Codex carriers after exact 3.0.1 Skill exposure: capacity stays unknown, the source remains live until an independent destination verifies the handoff, and fixture-scoped release and cleanup are verified. The later host marketplace refresh restores its configured v2.0.1-preview.1 ref, so durable pre-release update and current-session in-place reload remain outside the passed claim and must be rechecked after the immutable public tag exists."
-          },
-          {
-            "id": "replay-current-evidence-after-binding-and-alignment-correction",
-            "state": "completed",
-            "dependsOn": ["replay-current-gt07-after-plugin-update"],
-            "acceptanceIds": ["R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "After the evidence-source standard and process-loss requirement changed, GT-07, GT-11 and GT-12 are replayed against the exact current Skill with per-carrier task locators, phase nonces, full reports and digests; GT-11 directly verifies the latest-demand-to-final-claim alignment chain, and all task-owned resources and fixture residue are independently absent."
-          },
-          {
-            "id": "rebuild-independent-resource-aware-candidate",
-            "state": "completed",
-            "dependsOn": ["replay-current-evidence-after-binding-and-alignment-correction"],
-            "acceptanceIds": ["R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "completion": "A new exact clean revision passes deterministic checks and independent specification, implementation and standards review for all three representative tasks, demand-to-goal alignment, verified handoff, resource ownership and release boundaries, native delegation, interference, lifecycle and finite claims before any push or hosted gate."
+            "dependsOn": [
+              "replay-condition-fit-hosts-and-clients"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "Only after semantic, implementation, behavior, interference, lifecycle, documentation and standards review agree may one exact clean v3.1.0 repository candidate enter the existing hosted, named-human, tag, public-release and cleanup gate sequence."
           }
         ],
-        "degradationRule": "A failed or unavailable route remains scoped evidence, triggers re-observation or an eligible alternative, and does not become universal product failure or permanent retirement."
+        "degradationRule": "Unavailable or failed capability narrows that exact path, preserves evidence and triggers relation-and-constraint recomputation. It does not transfer supported mechanics to the user, convert current unavailability into permanent retirement, or justify a larger authored control plane without a demonstrated collaboration-closure need."
       },
       "acceptance": {
-        "criterionIds": ["R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-        "requiredObservations": [
-          "requested-behavior-at-the-claimed-level",
-          "selected-route-and-live-input-state",
-          "agent-and-human-actions",
-          "avoidable-human-burden",
-          "help-and-interference",
-          "material-effects-and-unauthorized-effects",
-          "demand-goal-implementation-evidence-and-claim-alignment",
-          "correction-continuity-recovery-and-cleanup",
-          "resource-demand-ownership-admission-release-and-poststate",
-          "unknowns-claim-limit-and-recheck-triggers"
+        "criterionIds": [
+          "R1",
+          "R2",
+          "R3",
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4"
         ],
-        "passRule": "Pass only when the outcome completion condition is directly observed, prohibited effects remain absent, no required observation is missing, and every claim stays within the exact surface and carrier evidence. Resource completion requires attributable pre/post state and release evidence; task or conversation completion, process disappearance, a cleanup primitive or diagnostic trace alone is insufficient. A sufficient native no-op may pass; an unavailable cloud or client surface remains a scoped unknown unless the claim requires it. Cloud evidence binds the exact checked-out revision, actual projection exposure and behavior; plugin installation, setup success, repository visibility or AGENTS.md loading alone cannot self-attest the outcome."
+        "requiredObservations": [
+          "required-capabilities-and-starting-effective-capability-envelope",
+          "unclosed-obligations-relations-risks-and-selected-closure-path",
+          "agent-owned-and-genuinely-human-only-actions",
+          "avoidable-human-burden-help-noop-and-interference",
+          "configuration-topology-resource-and-lifecycle-effects",
+          "correction-process-loss-degradation-recovery-and-rollback",
+          "requested-consequence-independent-poststate-release-and-residue",
+          "unknowns-claim-limit-recheck-and-retirement-triggers"
+        ],
+        "passRule": "Pass only when one representative task directly observes the full collaboration closure from starting obligations, relations and constraints through selected path, authorized effect, correction, verification, release and cleanup; a sufficient native whole-loop path stays a no-op; every supported mechanic is Agent-owned; each human action is genuinely unavoidable, minimal and verified; failed paths stay failed; no installation, graph node, static check or model self-report substitutes for behavior."
       },
       "goalMode": {
-        "directive": "Deliver the bound representative outcome through a live, minimum-sufficient and authorized route; own avoidable mechanics; refresh on material change; verify the consequence and leave reconciled state.",
-        "completion": "representative-outcome-observed-with-bounded-evidence-and-reconciled-effects",
+        "directive": "Deliver one bounded outcome through its lowest-burden authorized collaboration closure; preserve human judgment and authority, own supported orchestration, verify the consequence and release task exposure.",
+        "completion": "context-adaptive-collaboration-closure-with-verified-outcome-minimum-human-burden-and-reconciled-effects",
         "pauseOnlyFor": [
           "consequential-human-judgment",
           "new-trust-account-data-or-material-cost",
-          "publication-deployment-or-irreversible-effect"
+          "publication-deployment-destructive-or-irreversible-effect"
         ]
       }
     },
     "falsifiers": [
-      "the reshape merely restores historical files, validators or a universal control plane without proving current outcome value",
-      "a mechanism, host, model, provider, extension market, version, file count, graph database or workflow becomes permanent product identity without evidence",
-      "installation or global visibility is treated as mandatory per-message activation",
-      "dynamic indexing duplicates authority, commits transient host or account state, or cannot invalidate stale observations",
-      "Agent-owned discovery, configuration, routing, topology, continuity, verification or cleanup is transferred back to the user when the Agent can safely perform it",
-      "subtraction removes a required user outcome without a sufficient native or replacement path or an explicit product-scope correction",
-      "a learned task observation automatically grants authority, installation, publication or another consequential effect",
-      "the mapped plan, process, acceptance and goal projection cannot be traced to one current outcome and earliest affected evidence boundary",
-      "fresh reshaping evidence is bound to the superseded v2.0 release line or the unreleased preview.2 distribution placeholder",
-      "representative A-B evidence shows net burden, interference, cost or recovery risk greater than the delivered outcome benefit"
-      ,"resource pressure causes automatic destructive action against shared or unknown ownership, or task completion is promoted into release proof without attributable post-state evidence"
+      "the next change optimizes host count, packaging or a single handoff symptom without strengthening the demand-to-effect finite-autonomy loop",
+      "a fixed Codex, Claude, model, marketplace, plugin, Hook, runtime, capability catalog or graph becomes the product boundary",
+      "a host label or installed capability is treated as an automatically closed obligation before effective task exposure, relations and health are observed",
+      "genuinely human-owned judgment is automated or technically Agent-owned mechanics are transferred to the user",
+      "pre-Accord code, registries, workflows or validator generations are restored wholesale instead of selectively normalized",
+      "a capability index, plan, test, installation, implicit invocation or completed turn is claimed as outcome evidence",
+      "the first mechanism lacks task-bound activation, bounded effects, verification, update or hot reload disposition, rollback, cleanup and retirement",
+      "more code, prompts, state, context, processes or evidence are retained without observed net help over interference and lifecycle cost"
     ],
-    "finiteStopCondition": "Stop this repository increment when v3.0.1 is a clean full-release candidate with the latest demand and corrections aligned through goal, authority, route, implementation, evidence, acceptance and final claim; adaptive host packages, bilingual onboarding, exact current GT-07, GT-11 and GT-12 representative evidence, deterministic conformance, rollback and independent review must agree with that chain. Hosted systems, human authorization, tag, public Release, installed-update replay and cleanup remain ordered external gates for the unchanged SHA.",
+    "finiteStopCondition": "Stop the increment only when an exact clean v3.1.0 candidate has one mapped context-adaptive collaboration-closure model, one minimal replaceable vertical implementation, fresh current-projection evidence for full closure plus no-op, correction, authority, degradation, resource and lifecycle paths, bounded host and client dispositions, independent review, zero task residue and an honest finite claim. Hosted verification, named-human authorization, tag, public Release, installed-update replay and final cleanup remain ordered external gates.",
     "workItems": [
       {
-        "id": "work.product-premise-reset-and-adaptive-system-reshape",
+        "id": "work.v31-context-adaptive-collaboration-closure",
         "state": "completed",
-        "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+        "acceptanceIds": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4"
+        ],
         "closeoutSequence": [
           {
-            "id": "record-revisable-reshaping-consensus",
+            "id": "model-context-adaptive-collaboration-closure",
             "state": "completed",
-            "acceptanceIds": ["R1", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[record-revisable-reshaping-consensus] One machine-readable record captures the north star, retained commitments, retired premises, adaptive factor taxonomy, dynamic index and graph decision, topology, discovery lanes, positive flywheel, anti-bloat controls and guidance for the next four mapped surfaces without granting release authority."
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[model-context-adaptive-collaboration-closure] The revisable guidance, program, acceptance contract and compact goal projection distinguish finite collaboration-control obligations from an open demand-capability universe, derive only relevant live relations and constraints, preserve genuinely human-only judgment, and minimize avoidable user-operated mechanics without treating any host feature list or set difference as the product boundary."
           },
           {
-            "id": "remap-authority-domain-and-lifecycle",
+            "id": "refresh-current-host-capability-evidence",
             "state": "completed",
-            "acceptanceIds": ["R1", "R2", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[remap-authority-domain-and-lifecycle] The constitution and domain glossary define a small invariant kernel plus mechanism-neutral adaptive system, dynamic applicability and explicit retirement; no active authority treats runtime-free packaging, a fixed host version, marketplace, file count, topology or mechanism as product correctness."
+            "acceptanceIds": [
+              "R2",
+              "Q2",
+              "Q3"
+            ],
+            "stopCondition": "[refresh-current-host-capability-evidence] Current official and observed Codex and Claude capability, lifecycle, configuration, topology and client surfaces are source-bound, freshness-limited and mapped only as candidate suppliers; pre-Accord semantics are normalized and selectively recalled without restoring retired architecture or validators."
           },
           {
-            "id": "map-plan-process-acceptance-and-goal-projection",
+            "id": "select-first-representative-collaboration-closure",
             "state": "completed",
-            "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[map-plan-process-acceptance-and-goal-projection] One current outcome maps to a revisable plan, context-tailored process, consequence-level acceptance and compact goal projection; the route queries live capability and environment state rather than hard-coding implementation means."
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[select-first-representative-collaboration-closure] One real unclosed outcome path is selected because it crosses the full demand-to-effect relation chain, not because its host adapter is easy. The task predeclares native no-op, maintained or composed help, bounded authorship, human-only, degradation, correction, verification, resource and cleanup paths."
           },
           {
-            "id": "prove-minimum-adaptive-vertical-slice",
+            "id": "implement-minimum-replaceable-closure-mechanism",
             "state": "completed",
-            "acceptanceIds": ["R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[prove-minimum-adaptive-vertical-slice] The exact v3 adaptive Skill is replayed on one current Codex-local end-to-end slice with live discovery, route selection, authorized execution, no-op or degradation, continuity, verification, cleanup and bounded update rollback evidence; independent review then freezes only the repository candidate while hosted and release gates remain external."
+            "acceptanceIds": [
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[implement-minimum-replaceable-closure-mechanism] The smallest authorized replaceable mechanism or composition is present and statically bound to the selected relation without claiming host firing or effect, changes no unrelated user configuration, and declares capability-conditioned update or hot reload, rollback, release, cleanup and retirement when a native whole-loop path becomes sufficient."
           },
           {
-            "id": "bind-resource-stewardship-contract",
+            "id": "replay-noop-help-correction-authority-resource-and-lifecycle",
             "state": "completed",
-            "acceptanceIds": ["R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[bind-resource-stewardship-contract] The semantic authority, both adaptive Skills and GT-12 define a host-neutral resource loop with ownership-aware admission, degradation, release and verification; native sufficiency remains a no-op and no automatic reclaim crosses shared or unknown ownership."
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[replay-noop-help-correction-authority-resource-and-lifecycle] Fresh current-projection observations exercise the full collaboration-closure task plus sufficient-native no-op, correction, route degradation, one unavoidable human gate, process-loss control, bounded resources, failure, rollback, release and zero-residue post-state without reading credential or session logs."
           },
           {
-            "id": "run-resource-stewardship-and-regression-replays",
+            "id": "replay-condition-fit-hosts-and-clients",
             "state": "completed",
-            "acceptanceIds": ["R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[run-resource-stewardship-and-regression-replays] Fresh current-Skill GT-07, GT-11 and GT-12 observations pass with verified destination-before-source-release, independent post-state, bounded interference and zero task-owned residue; durable pre-release plugin update remains explicitly unproved and failures stay failed and narrow the claim."
+            "acceptanceIds": [
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[replay-condition-fit-hosts-and-clients] Codex local is the first behavior surface; Claude Code, an available client and Codex Cloud are exercised only when their actual conditions fit. Each observed combination keeps its own capability, installation, activation, behavior, privacy, toolchain and claim limits; a blocked or unsupported surface remains scoped evidence."
           },
           {
-            "id": "repair-current-evidence-binding-and-process-loss-replay",
+            "id": "independent-review-and-form-exact-v31-candidate",
             "state": "completed",
-            "acceptanceIds": ["R2", "R3", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[repair-current-evidence-binding-and-process-loss-replay] Fresh GT-07, GT-11 and GT-12 direct-command reports bind distinct carrier sessions, task locators, phase nonces, digests and completion times; GT-11 explicitly preserves the latest demand and correction through goal, authority, route, implementation, evidence, acceptance and final claim; all fixtures and task-owned resources are verified released."
-          },
-          {
-            "id": "rebuild-resource-aware-candidate",
-            "state": "completed",
-            "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-            "stopCondition": "[rebuild-resource-aware-candidate] A new exact clean candidate passes complete local checks and independent review for the changed authority, Skills, all three required tasks, demand-to-goal alignment, lifecycle, rollback and finite claim before push or hosted verification."
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[independent-review-and-form-exact-v31-candidate] Only after semantic, implementation, behavior, interference, lifecycle, documentation and standards review agree may one exact clean v3.1.0 repository candidate enter the existing hosted, named-human, tag, public-release and cleanup gate sequence."
           }
         ]
       }
@@ -309,7 +440,11 @@
       "github-actions-macos-latest": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/",
       "codex-cloud": "https://chatgpt.com/codex/"
     },
-    "requiredCandidateVerificationSystemIds": ["github-actions-ubuntu-latest", "github-actions-windows-latest", "github-actions-macos-latest"],
+    "requiredCandidateVerificationSystemIds": [
+      "github-actions-ubuntu-latest",
+      "github-actions-windows-latest",
+      "github-actions-macos-latest"
+    ],
     "assetPolicy": "no-attached-assets",
     "releaseChannel": "full-release",
     "surfaceMarkers": {
@@ -324,7 +459,6 @@
       "README.md": [
         "Current release",
         "Never install from a moving `main` checkout",
-        "v3.0.1",
         "Start in 30 seconds",
         "deliver-demand-driven-outcome",
         "product/reshaping-guidance.json",
@@ -341,7 +475,6 @@
       "README.zh-CN.md": [
         "当前版本",
         "不要从持续移动的 `main` checkout 安装",
-        "v3.0.1",
         "30 秒开始",
         "deliver-demand-driven-outcome",
         "product/reshaping-guidance.json",
@@ -377,7 +510,7 @@
       ".claude-plugin/marketplace.json": [
         "Official YIYUAN Accord plugin marketplace.",
         "./plugins/yiyuan-accord-claude",
-        "3.0.1"
+        "3.1.0"
       ],
       "docs/architecture.md": [
         "one small portable kernel with an adaptive",
@@ -399,7 +532,7 @@
       "docs/operations/CONTINUATION.md": [
         "Recover live Git",
         "Codex Cloud reproducibility",
-        "v3.0.1 full-release candidate",
+        "immutable, non-prerelease",
         "does not move historical tags",
         "GT-12"
       ]
@@ -408,87 +541,219 @@
       {
         "id": "repository-candidate",
         "dependsOn": [],
-        "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+        "acceptanceIds": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4"
+        ],
+        "requiredTaskIds": [
+          "GT-07",
+          "GT-11",
+          "GT-12",
+          "GT-13"
+        ],
         "completionOperand": null,
-        "condition": "One locally committed clean v3.0.1 full-release candidate preserves the latest demand and corrections through goal, schema-v3 authority, route, implementation, evidence, acceptance and final claim; its adaptive Codex and Claude packages, bilingual installation and lifecycle guidance, exact current GT-07, GT-11 and GT-12 observations, release notes, verifier and tests agree with that chain; all eight repository criteria are verified, historical tags remain immutable and no known blocker or task residue remains."
+        "condition": "One locally committed clean v3.1.0 full-release candidate preserves the latest demand and corrections through goal, schema-v3 authority, route, implementation, evidence, acceptance and final claim; its adaptive Codex and Claude packages, bilingual installation and lifecycle guidance, exact current GT-07, GT-11, GT-12 and GT-13 observations, release notes, verifier and tests agree with that chain; all eight repository criteria are verified, historical tags remain immutable and no known blocker or task residue remains."
       },
       {
         "id": "exact-local-verification-and-review",
-        "dependsOn": ["repository-candidate"],
-        "acceptanceIds": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
+        "dependsOn": [
+          "repository-candidate"
+        ],
+        "acceptanceIds": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4"
+        ],
+        "requiredTaskIds": [
+          "GT-07",
+          "GT-11",
+          "GT-12",
+          "GT-13"
+        ],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "On the unchanged clean v3 candidate, the goal carrier directly runs canonical verification, both host checks, all 19 product tests, Claude strict validation, actionlint, JSON, link, identity, diff and residue checks; verifies the publishable GT-07, GT-11 and GT-12 source bindings, direct-command result text and structured-record digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent specification, implementation and standards review of the complete demand-and-correction-to-final-claim chain, the adaptive Skill, context-isolated, outcome-bound, identity-neutral representative behavior, verified handoff, ownership-aware resource admission and release, interference, update or replacement rollback and claim ceiling. This pre-push gate verifies README commands and package surfaces but does not claim public-tag installation before the immutable tag exists. Any P0 or P1 blocks; only after this gate passes may the same SHA be pushed."
+        "condition": "On the unchanged clean v3 candidate, the goal carrier directly runs canonical verification, both host checks, all 19 product tests, Claude strict validation, actionlint, JSON, link, identity, diff and residue checks; verifies the publishable GT-07, GT-11, GT-12 and GT-13 source bindings, direct-command result text and structured-record digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent specification, implementation and standards review of the complete demand-and-correction-to-final-claim chain, the adaptive Skill, context-isolated, outcome-bound, identity-neutral representative behavior, verified handoff, ownership-aware resource admission and release, interference, update or replacement rollback and claim ceiling. This pre-push gate verifies README commands and package surfaces but does not claim public-tag installation before the immutable tag exists. Any P0 or P1 blocks; only after this gate passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
-        "dependsOn": ["exact-local-verification-and-review"],
-        "acceptanceIds": ["R4", "Q2", "Q3"],
+        "dependsOn": [
+          "exact-local-verification-and-review"
+        ],
+        "acceptanceIds": [
+          "R4",
+          "Q2",
+          "Q3"
+        ],
+        "requiredTaskIds": [],
         "completionOperand": "exactCandidateHostedVerification",
         "condition": "After push, the unchanged v3 SHA must pass Ubuntu, Windows and macOS GitHub Actions. The goal carrier also attempts an ordinary condition-fit Codex Cloud exact-revision run using an effective repository Skill, AGENTS.md, setup or maintenance bootstrap, native plugin support if established, or bounded degradation; a verified Cloud pass is retained, while missing conditions or insufficient official support are recorded as a scoped non-blocking limitation because Cloud behavior is outside the finite claim. Setup success alone is not behavior proof. Claude client surfaces remain scoped unless separately observed."
       },
       {
         "id": "exact-human-release-authorization",
-        "dependsOn": ["exact-candidate-hosted-verification"],
-        "acceptanceIds": ["R4", "Q1"],
+        "dependsOn": [
+          "exact-candidate-hosted-verification"
+        ],
+        "acceptanceIds": [
+          "R4",
+          "Q1"
+        ],
+        "requiredTaskIds": [],
         "completionOperand": "namedHumanReleaseAuthorization",
         "condition": "After all three required GitHub Actions systems pass on the unchanged SHA and the condition-fit Codex Cloud attempt has either a verified result or a bounded limitation record, present the exact revision, finite claim ceiling, retained failures, Cloud and Claude unknowns and continuing evidence lanes to the named accountable human; the decision preserves a real veto and remains external to the repository."
       },
       {
         "id": "exact-tagged-public-release",
-        "dependsOn": ["exact-human-release-authorization"],
-        "acceptanceIds": ["R4"],
+        "dependsOn": [
+          "exact-human-release-authorization"
+        ],
+        "acceptanceIds": [
+          "R4"
+        ],
+        "requiredTaskIds": [],
         "completionOperand": "exactTaggedPublicRelease",
-        "condition": "After exact hosted verification and named-human authorization, create one lightweight v3.0.1 tag and a non-draft, non-prerelease GitHub Release with the tracked release body and no attached assets; never move or reuse an existing tag or superseded development distribution."
+        "condition": "After exact hosted verification and named-human authorization, create one lightweight v3.1.0 tag and a non-draft, non-prerelease GitHub Release with the tracked release body and no attached assets; never move or reuse an existing tag or superseded development distribution."
       },
       {
         "id": "release-verification-and-cleanup",
-        "dependsOn": ["exact-tagged-public-release"],
-        "acceptanceIds": ["R4", "Q4"],
+        "dependsOn": [
+          "exact-tagged-public-release"
+        ],
+        "acceptanceIds": [
+          "R4",
+          "Q4"
+        ],
+        "requiredTaskIds": [],
         "completionOperand": "releaseVerificationAndCleanup",
-        "condition": "The goal carrier directly verifies the remote and local v3.0.1 tag SHA, non-prerelease maturity, Latest eligibility, tracked body, finite claim ceiling and zero-asset policy; updates the bounded local Accord marketplace from the prior immutable ref to exact v3.0.1, verifies the installed Skill bytes and fresh-carrier activation or rolls back on failure; obtains one context-isolated clean-state evaluator replay of the README installation, confirmation and removal path against the public immutable tag; removes task-created Cloud or evaluator resources, confirms repository and task residue are absent, and replays local verification."
+        "condition": "The goal carrier directly verifies the remote and local v3.1.0 tag SHA, non-prerelease maturity, Latest eligibility, tracked body, finite claim ceiling and zero-asset policy; updates the bounded local Accord marketplace from the prior immutable ref to exact v3.1.0, verifies the installed Skill bytes and fresh-carrier activation or rolls back on failure; obtains one context-isolated clean-state evaluator replay of the README installation, confirmation and removal path against the public immutable tag; removes task-created Cloud or evaluator resources, confirms repository and task residue are absent, and replays local verification."
       }
     ],
-    "rule": "Execute the v3.0.1 full-release gates strictly in order. A failure, correction, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, optional unclaimed client surfaces remain explicit unknowns, and no plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
+    "rule": "Execute the v3.1.0 full-release gates strictly in order. A failure, correction, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, optional unclaimed client surfaces remain explicit unknowns, and no plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
   },
   "goalModePrompt": {
     "state": "retired",
     "authority": "derived-from-current-reviewable-authority-set",
-    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"representative-outcome-observed-with-bounded-evidence-and-reconciled-effects\",\"directive\":\"Deliver the bound representative outcome through a live, minimum-sufficient and authorized route; own avoidable mechanics; refresh on material change; verify the consequence and leave reconciled state.\",\"evidenceSurfaces\":[\"codex-local\",\"codex-cloud-when-current-conditions-fit\",\"claude-code\",\"available-claude-client-when-effective\"],\"outcome\":{\"claimLimit\":\"Current Codex-local GT-07, GT-11 and GT-12 observations qualify only their exact fresh-carrier continuity, demand-and-correction-to-final-claim adaptive repair, and ownership-aware resource-stewardship fixtures against the byte-identical Skill. They do not prove durable plugin update, in-place hot reload, automatic whole-system optimization, universal correctness, every Agent or carrier, Claude or Cloud behavior, broad field value or production safety.\",\"completion\":\"The requested behavior is externally verified at the claimed level; unauthorized effects are zero; avoidable user-operated discovery, routing, configuration, continuity, resource stewardship, verification and cleanup steps are zero; material effects, burden, resource pressure, interference, unknowns and residue are reconciled.\",\"id\":\"outcome.agent-owned-repository-repair\",\"statement\":\"Given one bounded software change request and an accessible disposable repository, the Agent delivers the requested verified behavior while preserving unrelated work and requiring the user only for consequential judgment or genuinely unavailable authority.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"Maintain the chain from latest demand and corrections through goal, authority, route, implementation, evidence, acceptance and release claim. At each material correction, effect or phase boundary compare it end to end; name the earliest divergence, replay only affected downstream work and preserve accepted unaffected truth. Healthy carriers retain this process-loss obligation.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[],\"semantics\":\"At each material change, derive the lowest-net-burden route and minimum sufficient resource admission that satisfy the current outcome under observed capability, capacity, ownership, authority, trust, data, cost, topology and evidence conditions; a healthy sufficient native route or native resource-governance loop is a passing no-op.\",\"work\":[]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-fork\"]}",
-    "workStageIds": ["record-revisable-reshaping-consensus", "remap-authority-domain-and-lifecycle", "map-plan-process-acceptance-and-goal-projection", "prove-minimum-adaptive-vertical-slice", "bind-resource-stewardship-contract", "run-resource-stewardship-and-regression-replays", "repair-current-evidence-binding-and-process-loss-replay", "rebuild-resource-aware-candidate"],
-    "releaseGateIds": ["repository-candidate", "exact-local-verification-and-review", "exact-candidate-hosted-verification", "exact-human-release-authorization", "exact-tagged-public-release", "release-verification-and-cleanup"],
-    "mapsTo": ["R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"],
-    "refreshTriggers": ["user-correction", "observed-failure-or-side-effect", "host-or-capability-drift", "resource-pressure-or-release-mismatch", "dynamic-index-invalidation", "evidence-conflict", "later-rule-or-revision", "phase-or-authority-boundary", "repeated-same-purpose-repair"],
-    "hostLifecycleNote": "v3.0.1 is a full-release repository candidate, not a universal behavior claim. The locally exposed but never publicly released 3.0.0 development package is superseded and cannot identify these changed Skill bytes. Installation and enablement expose latent capability and do not prove per-message activation, value, no-op behavior or cross-surface equivalence. A fresh-carrier GT-07 replay applied exact transient 3.0.1 bytes, but the host later restored the configured v2.0.1-preview.1 marketplace ref; persistent upgrade remains a post-public-tag verification, not candidate-time proof. The adaptive Skill derives its route from live host, capability, authority, topology, cost and evidence conditions; Skills, plugins, Apps, MCPs, Hooks, settings, state, runtimes and cloud carriers remain replaceable mechanisms. Codex Cloud uses the effective exact-revision projection available there rather than requiring local plugin installation. Claude Code, Desktop, Chat and Cowork remain separate evidence surfaces. Hosted, human, tag, Release, installed-update replay and cleanup completion remain external for the unchanged SHA."
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"context-adaptive-collaboration-closure-with-verified-outcome-minimum-human-burden-and-reconciled-effects\",\"directive\":\"Deliver one bounded outcome through its lowest-burden authorized collaboration closure; preserve human judgment and authority, own supported orchestration, verify the consequence and release task exposure.\",\"evidenceSurfaces\":[\"codex-local\",\"claude-code-when-current-conditions-fit\",\"available-client-when-effective\",\"codex-cloud-when-current-conditions-fit\"],\"outcome\":{\"claimLimit\":\"Current evidence proves only repository-candidate conformance plus the bounded current-Skill Codex-local GT-07, GT-11, GT-12 and single-arm GT-13 results. Installed Hook firing, implicit invocation, hot reload, comparative value, Claude, client, Cloud, cross-host, field, production, hosted and release claims remain unverified.\",\"completion\":\"The claimed consequence and independent post-state are verified; supported avoidable mechanics are Agent-owned; human-only actions are minimal and verified; unauthorized effects and task residue are zero.\",\"id\":\"outcome.context-adaptive-collaboration-closure\",\"statement\":\"For a bounded nontrivial outcome, derive its relevant obligations and live relations, identify what is unclosed or unreliable, then complete the lowest-burden authorized path while asking only for non-delegable judgment or authority.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"Keep latest demand and corrections aligned through goal, authority, route, implementation, evidence, acceptance and claim. At material correction, effect or phase boundaries, locate the earliest divergence, replay affected downstream work and preserve unrelated accepted truth.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[],\"semantics\":\"Derive current outcome obligations and the smallest relevant relation graph; observe capabilities, authority, evidence, resources, effects and constraints; identify unclosed or unreliable relations and coordination risks; choose the lowest-burden feasible closure path. Recompute on material change and retire authored overlap when a native whole loop suffices.\",\"work\":[]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-fork\"]}",
+    "workStageIds": [
+      "model-context-adaptive-collaboration-closure",
+      "refresh-current-host-capability-evidence",
+      "select-first-representative-collaboration-closure",
+      "implement-minimum-replaceable-closure-mechanism",
+      "replay-noop-help-correction-authority-resource-and-lifecycle",
+      "replay-condition-fit-hosts-and-clients",
+      "independent-review-and-form-exact-v31-candidate"
+    ],
+    "releaseGateIds": [
+      "repository-candidate",
+      "exact-local-verification-and-review",
+      "exact-candidate-hosted-verification",
+      "exact-human-release-authorization",
+      "exact-tagged-public-release",
+      "release-verification-and-cleanup"
+    ],
+    "mapsTo": [
+      "R1",
+      "R2",
+      "R3",
+      "R4",
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "refreshTriggers": [
+      "user-correction",
+      "observed-failure-or-side-effect",
+      "host-or-capability-drift",
+      "resource-pressure-or-release-mismatch",
+      "dynamic-index-invalidation",
+      "evidence-conflict",
+      "later-rule-or-revision",
+      "phase-or-authority-boundary",
+      "repeated-same-purpose-repair"
+    ],
+    "hostLifecycleNote": "The current immutable public release remains the installed baseline. v3.1.0 is a full-release repository candidate, not a public release or universal behavior claim; its changed package or mechanism bytes inherit no hosted, field, human, tag or publication evidence. Installation and enablement expose capability but do not prove task-time activation or collaboration closure. Current Codex and Claude capability observations are freshness-bound participants, not the Agent-neutral product boundary. ZCode and external methodology studies remain later feasibility-backed work, not current implementation."
   },
   "hostProjections": [
     {
       "id": "codex",
       "packageId": "yiyuan-accord-codex",
-      "packageVersion": "3.0.1",
-      "packageSha256": "6520fc3ace0331717e56abe49febc2d612e66ccf5c7dd298637d343fac7ef666",
+      "packageVersion": "3.1.0",
+      "packageSha256": "b5f0900f7a526c2c53ed1ae1f4fe728f54c3ae85326f05ce636bce62be24a1c9",
       "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "marketplace": ".agents/plugins/marketplace.json",
       "contract": "plugins/yiyuan-accord-codex/adapter.json",
       "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
-      "metadataFiles": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml"],
-      "interfaceDefaultPrompt": ["Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."],
+      "metadataFiles": [
+        "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml"
+      ],
+      "mechanismFiles": [
+        "plugins/yiyuan-accord-codex/hooks/hooks.json"
+      ],
+      "activationContext": "YIYUAN Accord is available. For a nontrivial or stateful outcome, use the installed deliver-demand-driven-outcome Skill to derive the relevant outcome obligations, live relations and constraints, retained human boundary, and lowest-total-burden feasible collaboration-closure path. Own supported orchestration, reconcile material change, verify the claimed consequence, and release task exposure. Stay silent for a simple answer or a sufficient native one-step route. This reminder adds no user authority and is not behavior evidence.",
+      "interfaceDefaultPrompt": [
+        "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
+      ],
       "maxSkillBytes": 7500,
-      "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "earliest affected dependency boundary", "H1–H10", "L1–L8", "Resource stewardship", "Static readiness is not behavior"],
-      "forbiddenPaths": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references"]
+      "requiredSkillMarkers": [
+        "K1",
+        "K2",
+        "K3",
+        "K4",
+        "K5",
+        "collaboration closure",
+        "earliest affected dependency boundary",
+        "H1–H10",
+        "L1–L8",
+        "Resource stewardship",
+        "Static readiness is not behavior"
+      ],
+      "forbiddenPaths": [
+        "plugins/yiyuan-accord-codex/scripts",
+        "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references"
+      ]
     },
     {
       "id": "claude-code",
       "packageId": "yiyuan-accord-claude",
-      "packageVersion": "3.0.1",
-      "packageSha256": "b5e7aec2e5da5eb0e141ffc4dd5fc3c406c17a8aeb533f724b0507276e1d78ac",
+      "packageVersion": "3.1.0",
+      "packageSha256": "d98d44caa90a22323b0e33b94adc88a757bcdcc7ad94483278695e7289945d50",
       "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
       "marketplace": ".claude-plugin/marketplace.json",
       "contract": "plugins/yiyuan-accord-claude/adapter.json",
       "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
       "metadataFiles": [],
+      "mechanismFiles": [
+        "plugins/yiyuan-accord-claude/hooks/hooks.json"
+      ],
+      "activationContext": "YIYUAN Accord is available. For a nontrivial or stateful outcome, use the installed deliver-demand-driven-outcome Skill to derive the relevant outcome obligations, live relations and constraints, retained human boundary, and lowest-total-burden feasible collaboration-closure path. Own supported orchestration, reconcile material change, verify the claimed consequence, and release task exposure. Stay silent for a simple answer or a sufficient native one-step route. This reminder adds no user authority and is not behavior evidence.",
       "maxSkillBytes": 7500,
-      "requiredSkillMarkers": ["K1", "K2", "K3", "K4", "K5", "earliest affected dependency boundary", "H1–H10", "L1–L8", "Resource stewardship", "Static readiness is not behavior"],
-      "forbiddenPaths": ["plugins/yiyuan-accord-claude/hooks", "plugins/yiyuan-accord-claude/scripts", "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/references"]
+      "requiredSkillMarkers": [
+        "K1",
+        "K2",
+        "K3",
+        "K4",
+        "K5",
+        "collaboration closure",
+        "earliest affected dependency boundary",
+        "H1–H10",
+        "L1–L8",
+        "Resource stewardship",
+        "Static readiness is not behavior"
+      ],
+      "forbiddenPaths": [
+        "plugins/yiyuan-accord-claude/scripts",
+        "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/references"
+      ]
     }
   ],
   "complexityBudget": {
@@ -502,8 +767,8 @@
       "primaryInstructionBytes": 18940
     },
     "targets": {
-      "maxTrackedFiles": 70,
-      "maxProductCodeAndTestBytes": 240000,
+      "maxTrackedFiles": 78,
+      "maxProductCodeAndTestBytes": 260000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -555,7 +820,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are release guardrails, not permanent product invariants or permission to remove intended outcome capability. The resource-stewardship and process-loss evidence increment raises the current checkpoint from 225000 through 232000, 235000 and 237000 to 240000 product-code-and-test bytes for its fail-closed contract, path-safe task binding, separate result-text and structured-record digests, independently bound cleanup, historical task semantics, full alignment trace and release-boundary tests, while retaining at least five percent headroom and remaining materially below the 1551209-byte baseline. The checkpoint permits at most 70 tracked files and 26000 primary-instruction bytes with at least three tracked-file slots; 70 accounts for one combined current GT-07/GT-11/GT-12 source record plus three current observations after the two superseded pre-resource GT-11 evidence files leave the active tree, while retaining three expected slots. None is a growth target. Count code, prompts, context, evidence, state, topology, resources, human cognition, latency, money, interference, recovery, maintenance and retirement. Durable semantic records remain single-sourced; transient environment snapshots and derived graphs are not committed. Any breach pauses candidate claims and triggers premise, interface and representation review across simplification, deletion, replacement, native delegation, recomposition and bounded addition. Historical intermediate measurements and rejected validator generations remain in Git and docs/operations/HISTORY.md rather than active routing."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. The active bounded-autonomy increment raises the planning checkpoint to at most 78 tracked files and 260000 product-code-and-test bytes with at least five percent headroom so one release note, bounded host mechanism, tests and evidence can be admitted without pretending that the previous public release's three spare slots are a permanent architecture. None is a growth target. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,
@@ -563,10 +828,11 @@
     "samePurposeRepairBeforeReplan": 1,
     "prohibitedAgentWorkTransfer": 0,
     "taskResidueAtCheckpoint": 0,
-    "alignmentRule": "Maintain the chain from latest demand and corrections through goal, authority, route, implementation, evidence, acceptance and release claim. At each material correction, effect or phase boundary compare it end to end; name the earliest divergence, replay only affected downstream work and preserve accepted unaffected truth. Healthy carriers retain this process-loss obligation.",
+    "alignmentRule": "Keep latest demand and corrections aligned through goal, authority, route, implementation, evidence, acceptance and claim. At material correction, effect or phase boundaries, locate the earliest divergence, replay affected downstream work and preserve unrelated accepted truth.",
     "resourceRule": "Observe current demand and capacity, attribute identity, owner, lease and state, admit minimum sufficient concurrency and budget, rebalance or degrade under pressure, release only attributable task-owned exposure through authorized native controls, and independently verify post-state and residue. Shared or unknown ownership is never reclaimed automatically; sufficient native whole-loop governance is a no-op and an Accord-specific mechanism retirement trigger.",
     "carrierRule": "Use current source-bound host signals when reliable; if capacity is unavailable, record unknown and transition conservatively. No universal turn count, context size, token percentage or summary ratio is product authority.",
     "correctionRule": "A material correction, failure, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary and requires that boundary and every downstream gate to be replayed while unrelated accepted truth remains stable. A repeated correction or failed same-purpose mechanism pauses the current shape until premise, interface and representation are reconsidered; deletion, replacement, recomposition, native-host delegation and bounded addition are all considered. There is no universal add-or-subtract default, while L2 requires a deletion or replacement attempt before another same-purpose repair layer. Authority surfaces form a reviewable versioned current set; their merge, split, replacement or retirement requires explicit provenance-preserving schema and verifier migration plus the same earliest-boundary replay.",
-    "continuingCalibration": "Post-release failures may update Golden Tasks, narrow a claim, simplify or retire a projection, or open one new bounded increment; release status does not freeze learning."
+    "continuingCalibration": "Post-release failures may update Golden Tasks, narrow a claim, simplify or retire a projection, or open one new bounded increment; release status does not freeze learning.",
+    "boundedAutonomyRule": "At each material phase, recompute the latest outcome obligations, relevant live relations and constraints, healthy effective capabilities, genuinely non-delegable human judgment, unclosed obligations and coordination or verification risks. Preserve the latest correction through closure path, implementation, evidence, acceptance and claim."
   }
 }

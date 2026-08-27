@@ -37,7 +37,7 @@ RELEASE_SURFACES = (
 _COMMENT_NORMALIZED_WORKFLOW_SHA256 = (
     "ad0c60218e844c1e43be64fe9955d5ff60980dd694551238b8c3ef7eda77c560"
 )
-GATE_FIELDS = "id dependsOn acceptanceIds completionOperand condition".split()
+GATE_FIELDS = "id dependsOn acceptanceIds requiredTaskIds completionOperand condition".split()
 GATE_SEQUENCE = (
     ("repository-candidate", None),
     ("exact-local-verification-and-review", "exactLocalVerificationAndReview"),
@@ -148,7 +148,7 @@ CODEX_METADATA_FIELDS = {
 }
 _PROJECTION_FIELDS = set((
     "id packageId packageVersion packageSha256 manifest contract skill metadataFiles "
-    "maxSkillBytes requiredSkillMarkers forbiddenPaths"
+    "mechanismFiles activationContext maxSkillBytes requiredSkillMarkers forbiddenPaths"
 ).split())
 
 
@@ -430,9 +430,66 @@ def plugin_file_locators(root, plugin_root):
     return sorted(files)
 
 
+def activation_mechanism_errors(
+    root, adapter_id, mechanism_locators, activation_context,
+):
+    prefix = f"adapter {adapter_id}"
+    if (
+        not isinstance(activation_context, str)
+        or not activation_context.strip()
+        or len(activation_context) > 800
+        # Shared shell payloads use a deliberately small literal alphabet.
+        or re.fullmatch(r"[A-Za-z0-9 .,:-]+", activation_context) is None
+    ):
+        return [f"{prefix} activation context is invalid"]
+    required = (
+        "deliver-demand-driven-outcome", "outcome obligations",
+        "live relations and constraints", "human boundary",
+        "collaboration-closure path", "simple answer", "user authority",
+        "behavior evidence",
+    )
+    errors = [
+        f"{prefix} activation context omits marker {marker}"
+        for marker in required if marker not in activation_context
+    ]
+    if not isinstance(mechanism_locators, list) or len(mechanism_locators) != 1:
+        return errors + [f"{prefix} activation mechanism must declare one file"]
+    locator = mechanism_locators[0]
+    expected = f"plugins/yiyuan-accord-{'codex' if adapter_id == 'codex' else 'claude'}/hooks/hooks.json"
+    if locator != expected:
+        return errors + [f"{prefix} activation mechanism locator is invalid"]
+    path = repository_relative_path(root, locator)
+    if path is None or path.is_symlink() or not path.is_file():
+        return errors + [f"{prefix} activation mechanism file is unsafe"]
+    try:
+        value = json.loads(_owned_text(path))
+    except (json.JSONDecodeError, OSError, UnicodeError):
+        return errors + [f"{prefix} activation mechanism is unreadable"]
+    matcher = (
+        "startup|resume|clear|compact"
+        if adapter_id == "codex"
+        else "startup|resume|clear|compact|fork"
+    )
+    expected_value = {
+        "hooks": {
+            "SessionStart": [{
+                "matcher": matcher,
+                "hooks": [{
+                    "type": "command",
+                    "command": f"echo {activation_context}",
+                    "timeout": 3,
+                }],
+            }],
+        },
+    }
+    if value != expected_value:
+        errors.append(f"{prefix} activation mechanism contract is invalid")
+    return errors
+
+
 def validate_projection_package(
     root, adapter_id, manifest_locator, contract_locator, skill_locator,
-    metadata_locators, asset_locators,
+    metadata_locators, asset_locators, mechanism_locators=None,
 ):
     errors = []
     prefix = f"adapter {adapter_id}"
@@ -440,7 +497,7 @@ def validate_projection_package(
         locator
         for locator in (
             manifest_locator, contract_locator, skill_locator,
-            *metadata_locators, *asset_locators,
+            *metadata_locators, *asset_locators, *(mechanism_locators or []),
         )
         if isinstance(locator, str)
     ]
@@ -515,6 +572,11 @@ def validate_host_projection(
     metadata_locators = metadata if isinstance(metadata, list) and all(
         isinstance(item, str) for item in metadata
     ) else []
+    mechanisms = projection.get("mechanismFiles")
+    mechanism_locators = mechanisms if isinstance(mechanisms, list) and all(
+        isinstance(item, str) for item in mechanisms
+    ) else []
+    activation_context = projection.get("activationContext")
     manifest = read_json(root, manifest_locator, errors) if isinstance(manifest_locator, str) else {}
     contract = read_json(root, contract_locator, errors) if isinstance(contract_locator, str) else {}
     skill_path = repository_relative_path(root, skill_locator)
@@ -556,12 +618,17 @@ def validate_host_projection(
         errors.extend(marketplace_errors(
             adapter_id, marketplace, manifest, expected_path, product_id, identity
         ))
+    errors.extend(activation_mechanism_errors(
+        root, adapter_id, mechanism_locators, activation_context,
+    ))
     expected_contract = {
         "schema": 1, "productId": product_id, "packageId": expected_package,
         "adapterId": adapter_id, "kernelIds": contract_ids["kernel"],
         "hostStandardIds": contract_ids["host"],
         "learnedFailureIds": contract_ids["lessons"],
-        "goldenTasks": golden_tasks_file, "runtimeAdded": False,
+        "goldenTasks": golden_tasks_file,
+        "activationMechanism": "session-start-context-hook",
+        "runtimeAdded": False,
         "requiresFixedHostVersion": False, "behaviorEvidenceState": "unverified",
     }
     if contract != expected_contract:
@@ -598,7 +665,7 @@ def validate_host_projection(
 
     package_digest, package_errors = validate_projection_package(
         root, adapter_id, manifest_locator, contract_locator, skill_locator,
-        metadata_locators, asset_locators,
+        metadata_locators, asset_locators, mechanism_locators,
     )
     errors.extend(package_errors)
     if package_digest != projection.get("packageSha256"):
@@ -626,6 +693,13 @@ def validate_host_projection(
                 errors.append(f"{prefix} {field} source is unavailable")
     if package_digest is not None:
         projection_identity["packageSha256"] = package_digest
+    if mechanism_locators:
+        try:
+            projection_identity["mechanismSha256"] = package_sha256(
+                root, mechanism_locators,
+            )
+        except OSError:
+            errors.append(f"{prefix} mechanism identity is unavailable")
     return {
         "id": adapter_id,
         "staticReady": len(errors) == initial_error_count,
@@ -636,6 +710,7 @@ def validate_host_projection(
         "contract": contract_locator,
         "skill": skill_locator,
         "metadataFiles": metadata_locators,
+        "mechanismFiles": mechanism_locators,
         "identity": projection_identity,
     }
 
@@ -646,19 +721,18 @@ def projection_observation_errors(
     current = host_report.get("identity")
     if not isinstance(current, dict):
         return [f"{label} projection identity unavailable"]
-    # Representative behavior depends on the adapter contract and exposed Skill.
-    # Distribution identity (manifest, marketplace, package and presentation
-    # assets) is checked in full by static conformance and the current activation
-    # walkthrough instead of invalidating unchanged behavior observations.
+    # Behavior binds its contract and Skill; static checks own distribution identity.
     expected = {
         field: host_report[field]
         for field in ("contract", "skill")
         if isinstance(host_report.get(field), str)
     } | {
         field: current[field]
-        for field in ("contractSha256", "skillSha256")
+        for field in ("contractSha256", "skillSha256", "mechanismSha256")
         if isinstance(current.get(field), str)
     }
+    if isinstance(host_report.get("mechanismFiles"), list):
+        expected["mechanismFiles"] = host_report["mechanismFiles"]
     errors = []
     if observed.get("adapterId") != adapter_id:
         errors.append(f"{label} projection identity mismatch")
@@ -679,13 +753,16 @@ def projection_evidence_binding_errors(
         return errors
     groups = []
     for criterion_index, criterion in enumerate(criteria):
+        # Only promoted evidence must bind the current behavior-bearing sources.
+        if (
+            not isinstance(criterion, dict)
+            or criterion.get("assessment") not in {"continuing", "verified"}
+        ):
+            continue
         evidence = criterion.get("evidence") if isinstance(criterion, dict) else None
         if isinstance(evidence, list):
             groups.append((f"criteria[{criterion_index}].evidence", evidence))
-    # Historical observations retain the projection bytes recorded at capture.
-    # Comparing them with a later adapter would erase provenance on every
-    # behavior-bearing Skill change. Their source and projection identity are
-    # still checked by historical_representative_errors.
+    # Historical evidence retains its captured projection identity.
     for prefix, evidence in groups:
         for evidence_index, item in enumerate(evidence):
             label = f"{prefix}[{evidence_index}]"
@@ -807,7 +884,10 @@ def closeout_sequence_errors(
     return errors
 
 
-def release_procedure_errors(root, program, identity, criterion_ids, prompt, goal_digest):
+def release_procedure_errors(
+    root, program, identity, criterion_ids, prompt, goal_digest,
+    required_task_ids,
+):
     procedure = program.get("releaseProcedure") if isinstance(program, dict) else None
     if not _exact(procedure, PROCEDURE_FIELDS):
         return ["program.releaseProcedure is invalid"]
@@ -867,6 +947,10 @@ def release_procedure_errors(root, program, identity, criterion_ids, prompt, goa
             errors.append(f"{label}.dependsOn must name only the previous gate")
         if not isinstance(gate.get("condition"), str) or not gate["condition"].strip():
             errors.append(f"{label}.condition must be non-empty")
+        gate_tasks = _string_list(gate.get("requiredTaskIds"))
+        expected_tasks = required_task_ids if index < 2 else []
+        if gate_tasks is None or gate_tasks != expected_tasks:
+            errors.append(f"{label}.requiredTaskIds is invalid")
     prompt = prompt if isinstance(prompt, dict) else {}
     if prompt.get("releaseGateIds") != [
         gate_id for gate_id, _ in GATE_SEQUENCE
@@ -978,22 +1062,53 @@ def external_release_contract_errors(root, acceptance):
     ):
         errors.append("acceptance.publicRelease policy is invalid")
     ceiling = acceptance.get("claimCeiling")
-    claims, groups, retained = [], [], []
+    groups, retained, public_groups, public_retained = [], [], [], []
     if _exact(ceiling, {
-        "finiteReleaseClaims", "notImplied", "retainedBehaviorExclusions",
+        "finiteReleaseClaims", "publicFiniteReleaseClaims", "notImplied",
+        "publicNotImplied", "retainedBehaviorExclusions",
+        "publicRetainedBehaviorExclusions",
     }):
-        for field in ("finiteReleaseClaims", "notImplied"):
+        for field, public_field in (
+            ("finiteReleaseClaims", "publicFiniteReleaseClaims"),
+            ("notImplied", "publicNotImplied"),
+        ):
             values = _string_list(ceiling.get(field))
             if not values:
                 errors.append(f"acceptance.claimCeiling.{field} is invalid")
             else:
                 groups.append(values)
-                claims.extend(values)
+            summary_map = ceiling.get(public_field)
+            if (
+                not isinstance(summary_map, dict) or not values
+                or set(summary_map) != set(values)
+                or any(not _nonempty_string(summary) for summary in summary_map.values())
+                or len(summary_map) != len(set(summary_map.values()))
+            ):
+                errors.append(f"acceptance.claimCeiling.{public_field} is invalid")
+            else:
+                public_groups.append(list(summary_map.values()))
         retained = ceiling.get("retainedBehaviorExclusions")
         if _string_list(retained) is None or retained != sorted(retained):
             errors.append("acceptance.claimCeiling.retainedBehaviorExclusions is invalid")
+        public_retained_map = ceiling.get("publicRetainedBehaviorExclusions")
+        if (
+            not isinstance(public_retained_map, dict)
+            or set(public_retained_map) != set(retained)
+            or any(
+                not _nonempty_string(summary)
+                for summary in public_retained_map.values()
+            )
+            or len(public_retained_map) != len(set(public_retained_map.values()))
+        ):
+            errors.append(
+                "acceptance.claimCeiling retained behavior exclusions are invalid"
+            )
+        else:
+            public_retained = list(public_retained_map.values())
         if len(groups) == 2 and set(groups[0]) & set(groups[1]):
             errors.append("acceptance.claimCeiling claims and exclusions overlap")
+        if len(public_groups) == 2 and set(public_groups[0]) & set(public_groups[1]):
+            errors.append("acceptance.claimCeiling public claim summaries overlap")
     else:
         errors.append("acceptance.claimCeiling is invalid")
     notes = repository_relative_path(
@@ -1006,10 +1121,21 @@ def external_release_contract_errors(root, acceptance):
         text = raw.decode("utf-8")
         if sha256(raw).hexdigest() != public.get("releaseNotesSha256"):
             errors.append("release notes digest does not match public release contract")
-        if any(f"`{claim}`" not in text for claim in claims):
+        _, heading, ceiling_text = text.partition(
+            "## Prospective finite claim ceiling"
+        )
+        finite_text, separator, excluded_text = ceiling_text.partition(
+            "It does not imply:"
+        )
+        if (
+            not heading or not separator or len(public_groups) != 2
+            or any(f"- {claim}" not in finite_text for claim in public_groups[0])
+            or any(f"- {claim}" not in excluded_text for claim in public_groups[1])
+            or any(f"- {claim}" in excluded_text for claim in public_groups[0])
+            or any(f"- {claim}" in finite_text for claim in public_groups[1])
+        ):
             errors.append("release notes do not expose the complete claim ceiling")
-        marker = f"`retainedBehaviorExclusions={json.dumps(retained, separators=(',', ':'))}`"
-        if marker not in text:
+        if any(summary not in excluded_text for summary in public_retained):
             errors.append("release notes do not expose retained behavior exclusions")
     except (OSError, UnicodeError) as exc:
         errors.append(f"release notes are invalid: {exc}")

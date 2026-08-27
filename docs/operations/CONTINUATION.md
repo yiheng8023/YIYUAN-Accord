@@ -39,17 +39,25 @@ Then read, in order:
   at exact SHA `24cf9f3750ecd700944988e81a519db54b67b8e8`. Its lightweight tag
   resolves directly to that commit and remains immutable. Later `main`
   documentation or maintenance does not change the released package.
+- The saved `main` checkout now carries a locally verified, unreleased v3.1.0
+  repository candidate. Its hosted, human, tag and public-release gates remain
+  unperformed and separately authorized.
+  Its earliest correction boundary is
+  `product/reshaping-guidance.json#/boundedAutonomy`: Accord is not defined as a
+  capability set difference. It derives the smallest task-relevant graph of
+  outcome obligations and live relations, then closes unfulfilled or unreliable
+  relations through the lowest-burden feasible authorized path. Capability gaps
+  remain one local diagnostic view. No v3.1.0 tag or Release exists, and no
+  earlier tag may be moved.
 - The major version records the incompatible correction from a runtime-free
   thin-contract premise to a small portable kernel plus an adaptive,
   mechanism-neutral outcome-delivery system. Full release is not a universal
   correctness, cross-host equivalence, broad-field-value or production-safety
   claim.
-- `program.status` remains `ready` because `program.json` and
-  `acceptance.json` are the immutable release-candidate contract for the tagged
-  source. Their task-time human authorization fields deliberately remain
-  unpopulated: repository content cannot self-attest an external decision,
-  hosted result, public mutation or cleanup. This is not a denial that the live
-  gates completed.
+- At the tagged v3.0.1 SHA and the current local v3.1.0 repository candidate,
+  `program.status` is `ready`. The v3.1.0 task-time human authorization fields
+  remain unpopulated because repository content cannot self-attest an external
+  decision, hosted result, public mutation or cleanup.
 - On the exact released SHA, canonical verification, both static host checks,
   all 19 product tests, Claude strict marketplace validation, actionlint, JSON,
   Markdown-link, identity, diff and residue checks passed. Independent
@@ -73,10 +81,15 @@ Then read, in order:
   health reports 85% because no Issue or pull-request template is tracked; none
   was added merely to raise that score because the released 67/70 file guardrail
   deliberately preserves three slots for outcome-bearing work.
-- Codex and Claude now expose the shared portable Skill name
+- Public v3.0.1 Codex and Claude packages expose the shared portable Skill name
   `deliver-demand-driven-outcome` through host-qualified packages at version
-  `3.0.1`. The packages currently add no Runtime, Hook, MCP server, App or
+  `3.0.1`. Those packages add no Runtime, Hook, MCP server, App or
   state store; this is a versioned package fact, not a permanent prohibition.
+- The unreleased v3.1.0 packages add one stateless `SessionStart` context Hook.
+  It reads no transcript, writes no state, starts no background process and
+  points only relevant nontrivial or stateful outcomes to the Skill. Static
+  validation and package bytes do not prove host firing, trust, implicit
+  invocation, low interference or outcome value.
 - Installation and enablement expose latent capability. They do not imply
   per-message activation, behavior, value or cross-client equivalence. A
   sufficient healthy native route is a valid no-op.
@@ -89,16 +102,30 @@ Then read, in order:
   not source identity; verify the actual marketplace ref and bytes.
   Current-session in-place hot reload and automatic per-message activation
   remain unproved.
+- During the current v3.1 work, `codex plugin list` reports the local Accord
+  plugin installed and enabled at `3.1.0`, and all six cached package files are
+  byte-identical to the current candidate. The task-start Skill catalog still
+  named a missing 3.0.1 cache path, so catalog exposure, manager state, cache
+  bytes, Hook trust and current-task activation remain distinct. The causal
+  refresh event and current-session hot reload were not observed.
+- `claude plugin list` reports the public Accord `3.0.1` package installed and
+  enabled. Claude Code 2.1.247 strictly validates the candidate v3.1.0 manifest,
+  but the candidate was not installed or behavior-tested; the current
+  third-party model route is not presented as native Claude-model evidence.
 - That fresh Codex carrier also reported non-blocking host warnings that manifest
   icon paths containing `..` were ignored. The Skill loaded and activated, so
   this is a visual-metadata compatibility issue for a later exact-SHA patch, not
   a reason to move or rewrite the v3.0.1 tag.
 - GT-07 (`carrier-fitness-with-unknown-capacity`), GT-11
-  (`adaptive-agent-owned-repository-repair`) and GT-12
-  (`bounded-resource-stewardship-and-reclaim`) are the required current v3
-  representative tasks. Each observation must bind the exact current Codex
+  (`adaptive-agent-owned-repository-repair`), GT-12
+  (`bounded-resource-stewardship-and-reclaim`) and GT-13
+  (`context-adaptive-collaboration-closure`) are the required current v3.1
+  representative tasks. The current Codex-local observations bind the exact
+  candidate Codex
   Skill, Golden Task, evaluation contract, independent source/poststate and
-  complete public source record. GT-07 must hold the source until independent
+  one complete public source record. All four bounded tasks or workspaces pass. GT-13 is a
+  single-arm dogfood result, not comparative population evidence. GT-07 held
+  the source until independent
   destination verification; GT-12 must distinguish identity, ownership, lease
   and state, use minimum sufficient admission, preserve shared or unknown
   resources and verify task-owned release. v2 observations and preview.2 probes
@@ -136,12 +163,18 @@ Then read, in order:
   retirement trigger. Exposed limits, interruption, cleanup or performance
   tracing alone are not proof that the host automatically closes the loop;
   shared or unknown resources are never reclaimed automatically.
-- The released repository has 67 tracked files against a 70-file ceiling after
+- The released repository has 67 tracked files against its former 70-file
+  ceiling after
   the GT-07/GT-11/GT-12 evidence replacement.
   The one combined source record plus three observations replaced the two
   superseded pre-resource GT-11 evidence files, leaving three expected slots.
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
+- The v3.1 candidate guardrail permits at most 78 tracked files and
+  260000 product-code-and-test bytes with at least five percent headroom. The
+  repository candidate adds one release note, two Hook files, one combined
+  source and four observations; these are outcome-bearing slots, not a growth
+  target.
 - The release sequence completed in its declared order for the unchanged exact
   SHA: repository candidate; exact local verification and independent review;
   push; Ubuntu, Windows and macOS Actions plus a condition-fit Codex Cloud
@@ -197,11 +230,24 @@ cost is justified.
 
 ## Ordered work disposition
 
-The machine-validated `fourSurfaceMapping.process.orderedSteps` remains the
-authoritative release-candidate order and lifecycle for the tagged source. All
-13 repository-shaping steps completed before publication; the task-time release
-gates then completed externally on the exact SHA. The chain is retained below
-as the replay map, not as unfinished current work:
+The current machine authority is `product/program.json`. Its seven v3.1
+repository-shaping stages are completed locally:
+
+1. `model-context-adaptive-collaboration-closure`.
+2. `refresh-current-host-capability-evidence`.
+3. `select-first-representative-collaboration-closure`.
+4. `implement-minimum-replaceable-closure-mechanism`.
+5. `replay-noop-help-correction-authority-resource-and-lifecycle`.
+6. `replay-condition-fit-hosts-and-clients`.
+7. `independent-review-and-form-exact-v31-candidate`.
+
+The v3.1 hosted, named-human, tag, Release and post-release cleanup gates remain
+unperformed. They may run only in the declared order on one unchanged exact
+revision.
+
+The following 13-step chain is the immutable v3.0.1 historical disposition.
+Its external gates completed for the tagged v3.0.1 SHA; it is retained only as
+a replay map and is not current v3.1 authority or unfinished work:
 
 1. `migrate-version-neutral-active-carrier` — completed.
 2. `bind-current-gt11-contract` — completed.

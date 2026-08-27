@@ -478,7 +478,7 @@ def _validate_four_surface_mapping(increment, criterion_ids, errors):
 
 def _validate_program(
     root, program, criterion_ids, all_contract_ids, identity, authority,
-    goal_digest, errors,
+    goal_digest, required_task_ids, errors,
 ):
     if program.get("schema") != 3:
         errors.append("program.schema must be 3")
@@ -527,6 +527,7 @@ def _validate_program(
     prompt = program.get("goalModePrompt")
     errors.extend(release_procedure_errors(
         root, program, authority, set(criterion_ids), prompt, goal_digest,
+        required_task_ids,
     ))
     if not isinstance(prompt, dict):
         errors.append("program.goalModePrompt must be an object")
@@ -595,9 +596,13 @@ def _validate_program(
             package_ids.append(projection["packageId"])
         if "marketplace" in projection and not _nonempty_string(projection.get("marketplace")):
             errors.append(f"hostProjections[{index}].marketplace must be non-empty")
-        for field in ("metadataFiles", "forbiddenPaths"):
+        for field in ("metadataFiles", "mechanismFiles", "forbiddenPaths"):
             if _string_list(projection.get(field)) is None:
                 errors.append(f"hostProjections[{index}].{field} must be a string list")
+        if not _nonempty_string(projection.get("activationContext")):
+            errors.append(
+                f"hostProjections[{index}].activationContext must be non-empty"
+            )
         if projection.get("id") == "codex" and not _string_list(projection.get("interfaceDefaultPrompt")):
             errors.append("hostProjections codex interfaceDefaultPrompt must be non-empty")
         markers = projection.get("requiredSkillMarkers")
@@ -895,6 +900,36 @@ def _validate_golden_tasks(
             errors.append(f"{label}.required must be non-empty")
         if not _string_list(task.get("prohibited")):
             errors.append(f"{label}.prohibited must be non-empty")
+        if task.get("id") == "GT-13":
+            prompt = task.get("prompt", "")
+            starting_state = task.get("startingState", "")
+            workspace = task.get("workspaceContract")
+            if (
+                not isinstance(workspace, dict)
+                or set(workspace) != {
+                    "mode", "preserveUserState", "releaseScope",
+                    "promptSha256", "startingStateSha256",
+                    "supersedesGoldenTaskSha256",
+                }
+                or workspace.get("mode") != "bound-reviewable"
+                or workspace.get("preserveUserState") is not True
+                or workspace.get("releaseScope") != "task-attributable-only"
+                or re.fullmatch(r"[0-9a-f]{64}", workspace.get(
+                    "supersedesGoldenTaskSha256", "")) is None
+                or workspace.get("promptSha256") != sha256(
+                    prompt.encode("utf-8")
+                ).hexdigest()
+                or workspace.get("startingStateSha256") != sha256(
+                    starting_state.encode("utf-8")
+                ).hexdigest()
+                or "reviewable, explicitly bound workspace" not in prompt
+                or "bound workspace or checkout" not in starting_state
+                or "disposable" in prompt
+                or "disposable" in starting_state
+            ):
+                errors.append(
+                    f"{label} must model the bound reviewable GT-13 workspace"
+                )
     if "help" not in kinds or "non-interference" not in kinds:
         errors.append("golden tasks must include help and non-interference cases")
     missing = sorted(kernel_host_lesson_ids - coverage)
@@ -992,7 +1027,8 @@ def verify_product(root):
     _validate_program(
         root, program, criterion_ids, all_ids, identity,
         constitution.get("authority"),
-        acceptance.get("canonicalGoalObjectiveSha256"), errors,
+        acceptance.get("canonicalGoalObjectiveSha256"),
+        required_release_task_ids, errors,
     )
     maintenance_plan = program.get("maintenancePlan")
     release_notes = acceptance.get("publicRelease", {}).get("releaseNotes")

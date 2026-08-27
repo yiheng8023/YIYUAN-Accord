@@ -139,9 +139,12 @@ release eligibility or completion.
 
 Each current v3 projection consists of one host-native manifest, one small
 YIYUAN Accord adapter contract and one progressively disclosed adaptive Skill,
-plus only the metadata or presentation assets declared by that manifest. The
-current packages add no runtime, Hook, MCP server, App or state store; that is a
-versioned package fact, not a permanent product shape or mechanism prohibition.
+plus only the metadata, presentation assets and mechanisms declared by that
+manifest. Public v3.0.1 adds no runtime, Hook, MCP server, App or state store.
+The unreleased v3.1.0 projection additionally declares one stateless
+`SessionStart` context Hook. Neither package shape is a permanent product
+identity or mechanism prohibition; Hook trust, firing and behavior remain
+separate from static package conformance.
 
 A future host adapter may use a Skill, plugin, App, MCP, Hook, configuration,
 state, runtime, cloud carrier or composed mechanism when the current host
@@ -197,7 +200,8 @@ Their existence does not prove that the host automatically closes the full
 resource stewardship loop. Performance tracing is on-demand diagnostic
 evidence, not an optimizer or release receipt, and it does not authorize silent
 collection, retention or upload. A custom scheduler, Runtime, Hook or MCP is
-admitted only after a representative residual gap justifies its lifecycle cost.
+admitted only after a representative unclosed obligation or unreliable relation
+justifies its lifecycle cost.
 
 The capability view is an event-triggered dynamic index, not a manually
 maintained global catalog. Durable schema-validated JSON identifies meanings,
@@ -315,7 +319,7 @@ representation review. Deletion, replacement, recomposition, native delegation
 and bounded addition are all considered; there is no universal add-or-subtract
 default. L2 retains one evidence-derived ordering constraint: try deletion or
 replacement before admitting another same-purpose repair layer. A new or
-retained mechanism requires an observed residual gap or end-to-end outcome need,
+retained mechanism requires an observed collaboration-closure need,
 insufficient current alternatives, benefit greater than total lifecycle cost,
 proportionate verification, and rollback or retirement semantics. Thinness
 constrains duplication, unjustified permanence and negative-value exposure; it
