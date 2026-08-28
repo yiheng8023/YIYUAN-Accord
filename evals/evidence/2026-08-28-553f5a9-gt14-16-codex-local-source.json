@@ -1,0 +1,450 @@
+{
+  "schema": 1,
+  "records": {
+    "GT-14": {
+      "kind": "host-event-log",
+      "taskId": "GT-14",
+      "goldenTaskSha256": "05020a9a46d96135cc4f70e1d622c4a911de4336f2ef1e736438d3cc563ea6e8",
+      "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout goal carrier",
+        "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+      },
+      "capturedAt": "2026-08-28T00:39:31Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "messages": [
+          {
+            "role": "user",
+            "phase": "human-grant",
+            "kind": "environment-boundary",
+            "text": "Treat the installed and enabled Accord host as extended; isolate when material, preserve external state, and do not confuse installation with behavior."
+          },
+          {
+            "role": "assistant",
+            "phase": "bounded-result",
+            "kind": "environment-admission",
+            "text": "The current composition was admitted only for its exact static and Skill-exposure claim; native and official-clean self-attestation were rejected; the unknown confounder narrowed the claim and disposable fixture residue was removed."
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "environment-admission",
+            "revision": "553f5a97e08390117e877e7b913c7a501018bfa5",
+            "fixtureSha256": "c25d1ce0810c73a3078978a2bfac356ea935f38134dc84e1812a0355b888a175",
+            "composition": "current-enabled extended Codex goal carrier",
+            "AccordExposure": "installed-and-enabled from user-bound starting state; exact Skill content read; Hook firing unknown",
+            "disposition": "admit-current-composition-only"
+          },
+          {
+            "kind": "counterexamples",
+            "results": [
+              "Accord-enabled current host called native: rejected",
+              "isolated-minimal called official-clean: rejected",
+              "unknown material confounder without sufficient isolation: hold-unknown"
+            ]
+          },
+          {
+            "kind": "privacy-and-preservation",
+            "result": "live plugins were not disabled or reconfigured; no credential, configuration, session or unrelated state content was read"
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "b47ecabd-44e0-4a3b-a7f2-9b2d83b829db",
+                "taskLocator": "GT-14/poststate",
+                "resultLocator": "task-artifact:GT-14/poststate/agent-final.txt",
+                "phaseNonces": [
+                  "gt-14-poststate-553f5a9"
+                ],
+                "resultSha256": "d7f46f117f23647994d386d3d63d4e170812a3b35ecf481e9119de2768a31944",
+                "resultRecordSha256": "e17400c82d46ebcef4cf8adaea18bb2abc6b3b684908c0f8b64eb0d5d554c472",
+                "completedAt": "2026-08-28T00:39:30Z",
+                "claim": "Binds the exact disposable GT-14 deterministic-process result; no credential, configuration or session log was read."
+              }
+            ],
+            "result": "all exact poststate bindings passed within the task boundary"
+          }
+        ],
+        "officialSources": [],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "b47ecabd-44e0-4a3b-a7f2-9b2d83b829db",
+            "taskLocator": "GT-14/poststate",
+            "phase": "independent-poststate",
+            "nonce": "gt-14-poststate-553f5a9",
+            "report": "PASS GT-14 exact current-enabled composition admitted only to its scoped static/Skill-exposure claim; native and official-clean self-attestation rejected; material unknown held; private host state remained outside the fixture."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "e2ac2094-14f9-43ad-8b7a-9303ba5c3738",
+            "taskLocator": "GT-14/cleanup",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-14-cleanup-553f5a9",
+            "report": "PASS GT-14 task-owned fixture root removed after capture; no tracked fixture path or task residue remained."
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 1
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "exact task-owned root absent; zero tracked fixture paths",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "e2ac2094-14f9-43ad-8b7a-9303ba5c3738",
+                  "taskLocator": "GT-14/cleanup",
+                  "resultLocator": "task-artifact:GT-14/cleanup/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-14-cleanup-553f5a9"
+                  ],
+                  "resultSha256": "a734ecec8a6081950975068f0254648450809996bdafa1f21cf52928552ca4a5",
+                  "resultRecordSha256": "b0d778cd3fa74cd35d2a48e43b3bfa07daf1066bae8968faace969a1a7865c08",
+                  "completedAt": "2026-08-28T00:39:30Z",
+                  "claim": "Binds the exact disposable GT-14 deterministic-process result; no credential, configuration or session log was read."
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained exact non-secret fixture decisions, hashes and direct process reports only; no credential, configuration, session content or unrelated persistent-state content."
+          }
+        ],
+        "evidenceBoundary": "Passed only for exact-revision current-composition admission and three fail-closed baseline/isolation counterexamples. Static projection and task Skill exposure do not prove Hook firing, native cleanliness, causal Accord effect, interference, value or cross-host behavior.",
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "revision, projection, environment, policy, evaluator or claim changes",
+            "scope": "GT-14 exact composition, route and lifecycle claim",
+            "action": "invalidate the affected observation and replay from its earliest boundary"
+          }
+        ]
+      }
+    },
+    "GT-15": {
+      "kind": "host-event-log",
+      "taskId": "GT-15",
+      "goldenTaskSha256": "8faa4282c5fe026b18a64e4beaa24a8403537a9460ef7709f072e4ff8a585bd1",
+      "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout goal carrier",
+        "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+      },
+      "capturedAt": "2026-08-28T00:39:31Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "messages": [
+          {
+            "role": "user",
+            "phase": "human-grant",
+            "kind": "feasibility-boundary",
+            "text": "Research feasibility before implementing self-bootstrapping, reuse good external methods without personality worship, and preserve limits and side effects."
+          },
+          {
+            "role": "assistant",
+            "phase": "bounded-result",
+            "kind": "feasibility-decision",
+            "text": "The study separated sources from decisions, retained prior failures, compared no-build/reuse/composition/authorship and admitted only a pure-data core; the stale-heading probe failure was corrected and retained."
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "feasibility-study-binding",
+            "revision": "553f5a97e08390117e877e7b913c7a501018bfa5",
+            "fixtureSha256": "812acb08d539a8c80cea25f11aa4c4dfa403b7e44610067a1f8eff62e8eee6c5",
+            "studySha256": "e6020760b13efc888128abe336c36dabaaaaebaa3f3802821807b4ffe3d11f00",
+            "result": "source/fact/inference/decision lanes, prior counterevidence, route comparison, P0-P4 gates and exit conditions present"
+          },
+          {
+            "kind": "retained-probe-correction",
+            "firstAttempt": "failed because the disposable checker expected superseded generic section titles",
+            "correction": "rebound the checker to exact current headings and active-stage marker",
+            "claimImpact": "probe-assumption correction; no failed product premise hidden"
+          },
+          {
+            "kind": "route-decision",
+            "result": "conditional-go minimum pure-data reference core; no-build retained for sufficient native loops; equivalent-fit reuse preferred; bounded composition conditionally admitted; lifecycle-dominated authorship rejected"
+          }
+        ],
+        "officialSources": [],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "9e84f2ee-82d6-445a-849b-fb36de31b6f5",
+            "taskLocator": "GT-15/cleanup",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-15-cleanup-553f5a9",
+            "report": "PASS GT-15 corrected read-only probe artifacts removed after capture; the first stale-heading probe failure remains recorded and no task residue remained."
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "exact task-owned root absent; zero tracked fixture paths",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "9e84f2ee-82d6-445a-849b-fb36de31b6f5",
+                  "taskLocator": "GT-15/cleanup",
+                  "resultLocator": "task-artifact:GT-15/cleanup/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-15-cleanup-553f5a9"
+                  ],
+                  "resultSha256": "29dd8130e2cfaebaf13ea5b9cf06e503f71a94eb376565561edac3de89a891d1",
+                  "resultRecordSha256": "f7d2ca24305c1da042b6c6f97e090aadd1d0523a6299ad35c436f55c652d124c",
+                  "completedAt": "2026-08-28T00:39:30Z",
+                  "claim": "Binds the exact disposable GT-15 deterministic-process result; no credential, configuration or session log was read."
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained exact non-secret fixture decisions, hashes and direct process reports only; no credential, configuration, session content or unrelated persistent-state content."
+          }
+        ],
+        "evidenceBoundary": "Passed only for the named feasibility/reuse study and its corrected read-only probe. It does not prove implementation behavior, a live mechanism, complete self-bootstrapping, universal repository fit, product-form sufficiency, field value or release readiness.",
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "revision, projection, environment, policy, evaluator or claim changes",
+            "scope": "GT-15 exact composition, route and lifecycle claim",
+            "action": "invalidate the affected observation and replay from its earliest boundary"
+          }
+        ]
+      }
+    },
+    "GT-16": {
+      "kind": "host-event-log",
+      "taskId": "GT-16",
+      "goldenTaskSha256": "f1c97ce196c14b6b513f97e359c6025d2426e81c5bc868544c1bc7d694741a1a",
+      "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout goal carrier",
+        "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+      },
+      "capturedAt": "2026-08-28T00:39:31Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "messages": [
+          {
+            "role": "user",
+            "phase": "human-grant",
+            "kind": "bootstrap-boundary",
+            "text": "Strengthen the complete self-bootstrapping core without fixing the product form; use environment evidence, minimum sufficient means and verifiable lifecycle closure."
+          },
+          {
+            "role": "assistant",
+            "phase": "bounded-result",
+            "kind": "bootstrap-result",
+            "text": "The isolated fixture selected a replaceable composition, rejected installed-without-verifier and oversized authorship, observed consequence and cleanup, required matching rollback, rejected forged/cross-boundary evidence and removed all fixture residue."
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "minimum-form-bootstrap",
+            "revision": "553f5a97e08390117e877e7b913c7a501018bfa5",
+            "fixtureSha256": "6d8ea2ac9a87a69ca72134c5e83d1d6f7ae319ed3ffbc7fcdadb698864c1afa5",
+            "selectedRoute": "replaceable-composition",
+            "effect": "bounded consequence independently observed",
+            "cleanup": "task probe released with zero task residue"
+          },
+          {
+            "kind": "declaration-activation-effect-separation",
+            "result": "installed plugin rejected because its independent consequence verifier was unknown; native no-add lacked responsibilities; composition closed the obligation"
+          },
+          {
+            "kind": "evolution-and-counterexamples",
+            "result": "lifecycle-dominated authored runtime discarded and rollback accepted; wrong subject invalid; cross-boundary poststate, residue and missing rollback all blocked completion"
+          },
+          {
+            "kind": "authority-and-form-boundary",
+            "result": "no new trust, account, data, cost, Runtime, service or persistent state; exact fixture claim only"
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "c7774421-7ebb-4a9e-bcde-73c1f15f1e58",
+                "taskLocator": "GT-16/outcome",
+                "resultLocator": "task-artifact:GT-16/outcome/agent-final.txt",
+                "phaseNonces": [
+                  "gt-16-outcome-553f5a9"
+                ],
+                "resultSha256": "1bd9973a2b669d2f3171b7cf255af410ed3a304d6a661b3abc0f8646a8783581",
+                "resultRecordSha256": "116b0221af64202561816358efd37647d48518ee264add2fa71226f144e4ef04",
+                "completedAt": "2026-08-28T00:39:30Z",
+                "claim": "Binds the exact disposable GT-16 deterministic-process result; no credential, configuration or session log was read."
+              },
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "e0dcdbd3-35c0-4ea5-85cb-69b12d716b82",
+                "taskLocator": "GT-16/lifecycle",
+                "resultLocator": "task-artifact:GT-16/lifecycle/agent-final.txt",
+                "phaseNonces": [
+                  "gt-16-lifecycle-553f5a9"
+                ],
+                "resultSha256": "974de42f14c81666f5b4a9abe3f1bf5ed4a9c90e367016de448f086f331b2101",
+                "resultRecordSha256": "f68d739dcab83e693c73eaa92558415018ab2bce4e28c3b5f5af858b7e4ec254",
+                "completedAt": "2026-08-28T00:39:30Z",
+                "claim": "Binds the exact disposable GT-16 deterministic-process result; no credential, configuration or session log was read."
+              }
+            ],
+            "result": "all exact poststate bindings passed within the task boundary"
+          }
+        ],
+        "officialSources": [],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "c7774421-7ebb-4a9e-bcde-73c1f15f1e58",
+            "taskLocator": "GT-16/outcome",
+            "phase": "independent-poststate",
+            "nonce": "gt-16-outcome-553f5a9",
+            "report": "PASS GT-16 outcome poststate: minimum replaceable composition selected, installation without an independent verifier rejected, consequence observed, and the task probe released with zero recorded task residue."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "e0dcdbd3-35c0-4ea5-85cb-69b12d716b82",
+            "taskLocator": "GT-16/lifecycle",
+            "phase": "independent-poststate",
+            "nonce": "gt-16-lifecycle-553f5a9",
+            "report": "PASS GT-16 lifecycle poststate: lifecycle-dominated authored runtime discarded, matching rollback observed, and wrong-subject, cross-boundary, residue and missing-rollback counterexamples all failed closed."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "862b6536-2a5b-4214-8b69-3426f9683f02",
+            "taskLocator": "GT-16/cleanup",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-16-cleanup-553f5a9",
+            "report": "PASS GT-16 task-owned fixture root and generated files removed after capture; no tracked fixture path or task residue remained."
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 2
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "exact task-owned root absent; zero tracked fixture paths",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "862b6536-2a5b-4214-8b69-3426f9683f02",
+                  "taskLocator": "GT-16/cleanup",
+                  "resultLocator": "task-artifact:GT-16/cleanup/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-16-cleanup-553f5a9"
+                  ],
+                  "resultSha256": "ddb87c789c8cec227c7b582814ff1127a91fe2b894cd0a01518943af0245b41e",
+                  "resultRecordSha256": "e6a11802ceebef0b6dd987536f08db46521142abe37daabc4c23559cd93f6075",
+                  "completedAt": "2026-08-28T00:39:30Z",
+                  "claim": "Binds the exact disposable GT-16 deterministic-process result; no credential, configuration or session log was read."
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained exact non-secret fixture decisions, hashes and direct process reports only; no credential, configuration, session content or unrelated persistent-state content."
+          }
+        ],
+        "evidenceBoundary": "Passed only for one exact disposable pure-data bootstrap at revision 553f5a97e08390117e877e7b913c7a501018bfa5: minimum composition, consequence, matching rollback and zero task residue. It does not prove a live host mechanism, plugin or Runtime sufficiency, cross-host portability, population value, durable learning, production safety, candidate readiness or release readiness.",
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "revision, projection, environment, policy, evaluator or claim changes",
+            "scope": "GT-16 exact composition, route and lifecycle claim",
+            "action": "invalidate the affected observation and replay from its earliest boundary"
+          }
+        ]
+      }
+    }
+  }
+}

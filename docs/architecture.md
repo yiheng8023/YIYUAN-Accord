@@ -6,9 +6,13 @@ authority is no longer a release-ready v3.1 plan: bounded P0-P3 feasibility
 research, semantic and isolation design, evaluation design and the P4
 product-form-neutral vertical slice are complete. P4 admits only the minimum
 deterministic, side-effect-free plain-data reference core, whose implementation
-is now complete; fresh isolated activation-to-effect and lifecycle replay is
-active. The implementation does not admit a Runtime, durable state layer or live behavior
-claim. The exact v3.1 package checkpoint
+is now complete. Exact checkpoint `553f5a97e08390117e877e7b913c7a501018bfa5`
+retains failed GT-14 through GT-16 attempts: fixture execution and cleanup are
+observed, but required composition, wheel/provenance and full-vector source
+facts are missing. Source-complete activation/effect/lifecycle replay remains
+active. The implementation does not
+admit a Runtime, durable state layer, durable evolution or live-mechanism claim.
+The exact v3.1 package checkpoint
 remains bounded historical evidence; public v3.0.1 remains the installed
 release reference, and preview.2 remains an unreleased historical checkpoint.
 
@@ -404,8 +408,13 @@ current-composition case cannot claim causal or native value. GT-14 through
 GT-18 each bind a case type, oracle, counterexamples and claim ceiling, while
 the coverage matrix assigns environment admission, feasibility/reuse,
 minimum-form bootstrap, global consensus reconciliation and longitudinal
-evolution obligations. The suite design is machine-checkable but has not been
-executed and is not behavior or value evidence.
+evolution obligations. Exact checkpoint
+`553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14 through
+GT-16 attempts as counterevidence: summary execution and cleanup do not replace
+the task-required source facts. GT-17 and GT-18 remain unexecuted. The attempts
+do not prove Hook firing, a live mechanism, durable evolution, broad value,
+candidate readiness or release readiness; the suite design itself is not
+behavior or value evidence.
 
 Observations record Agent actions, human actions, effects, residue and claim
 limits independently of the model's own verdict. Each release observation
@@ -473,8 +482,36 @@ opposite category error of requiring every evaluated host behavior to pass
 before the evaluation contract itself can ship.
 
 The required finite-release lanes are deterministic conformance and bounded
-representative behavior. Field effect and cross-host or longitudinal evidence
-continue after release unless the release explicitly claims them.
+representative behavior, including the program-declared bounded longitudinal
+sequence. Broader field, population, cross-host and longitudinal evidence
+continues after release unless the release explicitly claims it.
+
+## Whole-system balance before candidate formation
+
+After the required representative and longitudinal core evidence, but before
+independent candidate review, Accord performs a source-bound whole-system
+balance self-audit. Each comparison first binds a versioned claim-scoped
+baseline, target, counterfactual, evidence cutoff, known confounders, claim
+limit and invalidation triggers. Public v3.0.1, historical unreleased exact
+checkpoints, the moving audit snapshot and controlled environment arms are
+separate baselines for separate claims; an Accord-enabled composed host cannot
+self-attest an official-clean or no-Accord baseline. The current review model covers product value and capability
+closure; semantics and consensus; environment adaptation and portability;
+reuse and product-form selection; activation, consequence and evidence; human
+authority, privacy and supply-chain trust; user cognitive burden; reliability,
+recovery and residue; performance and resources; architecture and
+maintainability; evaluation and longitudinal learning; host lifecycle;
+documentation; and governance and distribution. The list is revisable rather
+than an exhaustive ontology.
+
+Baselines and dimensions do not compensate for each other. A violated authority, evidence,
+consequence, cleanup or release gate remains a blocker, and an unknown that can
+change the decision remains unresolved. For otherwise admissible routes the
+review prioritizes the weakest outcome-relevant link and Pareto improvements,
+compares no-op, native, reuse, composition and bounded authorship, applies the
+minimum reversible remediation, then replays every affected criterion and
+interaction. The resulting ledger is input to independent review; it cannot
+declare itself independent or turn a checklist into product value.
 
 ## Complexity and evolution
 

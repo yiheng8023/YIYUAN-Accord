@@ -19,7 +19,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "8d9e660609d2cbe98f6f70c7cf6f86dc5a19a0222b3d751adec5980c02350c24",
+  "canonicalGoalObjectiveSha256": "38ebe462b8c6b7c5d6e264113176dfbd85d8c180fb9d09ebd38f4800e5c2d3e2",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -349,34 +349,27 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "planned",
-      "assessmentScope": "The historical v3.1.0 Codex-local GT-07, GT-11, GT-12 and single-arm GT-13 observations remain bounded regression evidence. They do not satisfy GT-14 through GT-18 or prove official-clean baselines, actual Hook firing, complete self-bootstrapping, feasibility, product-form fitness, comparative value, durable learning, governed self-evolution, global consensus reconciliation, cross-host equivalence, field value, production safety or release readiness.",
+      "assessment": "continuing",
+      "assessmentScope": "Exact checkpoint 553f5a97e08390117e877e7b913c7a501018bfa5 retains failed Codex-local GT-14, GT-15 and GT-16 attempts as current counterevidence. Their deterministic fixture summaries and cleanup bindings are valid, but the publishable source omits required exact composition, primary-source/wheel/license/maintenance provenance and named outcome/oracle/gap plus full burden/interference/cost/unknown/lifecycle-vector facts. They therefore do not qualify the tasks or complete activation-to-effect replay. Historical v3.1.0 GT-07, GT-11, GT-12 and GT-13 remain regression evidence; GT-17 and GT-18 remain unperformed. No current observation proves official-clean behavior, Hook firing, live-mechanism effectiveness, complete or durable self-bootstrapping, global consensus reconciliation, cross-host equivalence, field value, production safety, candidate readiness or release readiness.",
       "evidence": [
         {
-          "locator": "evals/observations/2026-08-27-v310-gt07-codex-local.json",
-          "sha256": "c25217ff64a37ac15542397be839943a40b6a2a33cb8c4f746f057b438a1d668",
-          "claim": "Passed only for this exact current-Skill Codex-local Windows GT-07 replay: capacity stayed unknown, the fresh destination verified the corrected goal and exact bytes before fixture-source release, one read-only command error was corrected without extra state, and cleanup was independently bounded. This does not prove a universal threshold, need to hand off this healthy task, hot reload, Claude, Cloud, field value, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-553f5a9-gt-14-codex-local.json",
+          "sha256": "5897a3e16039fca2d576c247ed9ab0b6ff6549117ac3a9cfd60b74507a90ab17",
+          "claim": "FAILED and retained: the fixture rejected three baseline/isolation counterexamples and cleanup passed, but the publishable source did not record a provenance-bound host/model/tool/extension composition. It cannot qualify GT-14 or support native, official-clean, causal, interference, value or cross-host claims.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
-          "locator": "evals/observations/2026-08-27-v310-gt11-codex-local.json",
-          "sha256": "20f48ea41fbac10bb2f4faddb7a3d2e8bd77326c4adcf2c4a6e077698fb5b18c",
-          "claim": "Passed only for this exact current-Skill Codex-local Windows GT-11 fixture: initial repair, compatible correction, preferred exit 86, native fallback, byte-preserved unrelated dirty work, alignment trace, independent poststate and cleanup. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-553f5a9-gt-15-codex-local.json",
+          "sha256": "aabc59c7402efbb604fcd4f0565fa3cabaa52006ebc6f57ec84c6f42a7dd4e53",
+          "claim": "FAILED and retained: the corrected read-only probe found the intended study sections, but the publishable source retained only an unlocated study digest and no primary-source, wheel, license, maintenance or provenance ledger. It cannot qualify GT-15 or prove reuse fitness, implementation behavior, product-form sufficiency, value or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
-          "locator": "evals/observations/2026-08-27-v310-gt12-codex-local.json",
-          "sha256": "6c9421b4bf57600833468d06ed5cc193522092090790148778ac2cf61b97fcff",
-          "claim": "Passed only for this exact current-Skill Windows GT-12 fixture: zero new admission, exact exclusive-task process release, two shared-process preservation checks, natural bounded shared-lease completion and cleanup. This does not prove automatic whole-system optimization, other process identities, other hosts, candidate readiness or release readiness.",
-          "bindsProjection": "codex",
-          "supportsCriterion": "R3"
-        },
-        {
-          "locator": "evals/observations/2026-08-27-v310-gt13-codex-local.json",
-          "sha256": "601351860c76ea42d2a48cffdd093060bd87f1adb8986be785ea22b0aea42210",
-          "claim": "Passed only for this single-arm current-Skill Codex-local dogfood task: the user-owned product-definition correction was carried through authority, goal projection, Skills, Hooks, docs, tests, four-task replay and cleanup while tag and Release remained outside authority. It does not prove installed Hook firing, implicit invocation, hot reload, comparative population value, Claude or Cloud behavior, broad field effectiveness, production safety, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-553f5a9-gt-16-codex-local.json",
+          "sha256": "78131b0d8a522de968b22835da6c3bd5b61e8df4ee91e8272904589ef0c652ea",
+          "claim": "FAILED and retained: the fixture summary binds a selected composition, consequence, rollback and cleanup, but not the named outcome/oracle/gap, route-search provenance, full lifecycle comparison, burden, interference, cost, unknowns or shared-state preservation needed by GT-16. It proves fixture execution and cleanup only, not a qualified bootstrap, live mechanism, portability, value, candidate or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         }
@@ -396,7 +389,7 @@
         "L7"
       ],
       "statement": "Only after the complete self-bootstrapping program and independent review pass may a future exact semantic version reproducibly bind the chosen product form, authority, implementation, environment and lifecycle contracts, representative and longitudinal evidence and a finite public claim without moving any immutable tag.",
-      "passRule": "R4 remains planned while any core stage, feasibility question, required Golden Task, environment baseline, longitudinal result or independent review is incomplete. The program must first choose the future semantic version and exact candidate. Only then may exact local verification, hosted systems, named-human authorization, public tag and Release verification, installed update or rollback and final cleanup run in order. Repository self-report, the historical ae7294652761abceb753f0571ee82c7ddeae06af baseline or earlier hosted passes cannot satisfy the future gate.",
+      "passRule": "R4 remains planned while any core stage, feasibility question, required Golden Task, environment baseline, longitudinal result, whole-system balance self-audit, justified remediation, affected-surface reacceptance or independent review is incomplete. The program must first choose the future semantic version and exact candidate. Only then may exact local verification, hosted systems, named-human authorization, public tag and Release verification, installed update or rollback and final cleanup run in order. Repository self-report, the historical ae7294652761abceb753f0571ee82c7ddeae06af baseline or earlier hosted passes cannot satisfy the future gate.",
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
@@ -607,7 +600,7 @@
       "github-actions-windows-latest",
       "github-actions-macos-latest"
     ],
-    "rule": "Candidate verification is dormant while the active self-bootstrapping program is incomplete. Feasibility research, existing-wheel review, isolated environment design, representative and longitudinal tasks, minimum-form prototype, implementation, activation-to-effect replay and independent product, specification, implementation and standards review must complete first. A future semantic version and exact clean candidate are then selected; the goal carrier directly runs every declared deterministic check and verifies fresh GT-07 through GT-18 bindings, exact environment compositions, independent post-state and claim limits without accessing credential or session logs. Only the unchanged future SHA may be pushed and run on required hosted systems; historical local, GitHub Actions or Cloud checks for ae7294652761abceb753f0571ee82c7ddeae06af remain bounded history. Only after those late gates may a separate named-human release decision occur."
+    "rule": "Candidate verification is dormant while the active self-bootstrapping program is incomplete. Feasibility research, existing-wheel review, isolated environment design, representative and longitudinal tasks, minimum-form prototype, implementation, activation-to-effect replay, source-bound whole-system balance self-audit, justified weakest-link remediation, affected-surface reacceptance and independent product, specification, implementation and standards review must complete first. A future semantic version and exact clean candidate are then selected; the goal carrier directly runs every declared deterministic check and verifies fresh GT-07 through GT-18 bindings, exact environment compositions, independent post-state and claim limits without accessing credential or session logs. Only the unchanged future SHA may be pushed and run on required hosted systems; historical local, GitHub Actions or Cloud checks for ae7294652761abceb753f0571ee82c7ddeae06af remain bounded history. Only after those late gates may a separate named-human release decision occur."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",
@@ -626,7 +619,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "42655e393e52fa506819e77c0459f0bf29248ef1f4c598951a93a71d5c83f850",
+    "releaseNotesSha256": "2d1a94ad58aba32ecf53729cb7ff9c721bd557496084a65ddb1cf599146bc5dd",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,
@@ -678,10 +671,28 @@
       "release-tag-or-publication-before-exact-gates": "A release tag or publication before every exact gate passes."
     },
     "retainedBehaviorExclusions": [
-      "GT-07:claude-code:cleanup"
+      "GT-07:claude-code:cleanup",
+      "GT-14:codex:required:bind-each-observation-to-its-exact-environment-composition",
+      "GT-14:codex:required:record-host-model-tool-extension-and-Accord-exposure-with-provenance",
+      "GT-15:codex:required:record-primary-sources-existing-wheels-licenses-maintenance-and-provenance",
+      "GT-16:codex:required:health-check-update-rollback-release-cleanup-and-retirement",
+      "GT-16:codex:required:preserve-shared-unknown-and-unrelated-state",
+      "GT-16:codex:required:record-burden-interference-cost-unknowns-and-claim-limit",
+      "GT-16:codex:required:search-native-official-maintained-and-composable-routes-before-authorship",
+      "GT-16:codex:required:select-minimum-form-from-effect-latency-durability-isolation-recovery-and-lifecycle",
+      "GT-16:codex:required:sense-and-bind-environment-provenance-outcome-authority-and-gap"
     ],
     "publicRetainedBehaviorExclusions": {
-      "GT-07:claude-code:cleanup": "The historical Claude GT-07 cleanup failure is excluded from retained behavior claims."
+      "GT-07:claude-code:cleanup": "The historical Claude GT-07 cleanup failure is excluded from retained behavior claims.",
+      "GT-14:codex:required:bind-each-observation-to-its-exact-environment-composition": "GT-14 did not retain a provenance-bound exact environment composition.",
+      "GT-14:codex:required:record-host-model-tool-extension-and-Accord-exposure-with-provenance": "GT-14 did not retain provenance-bound host, model, tool, extension and Accord exposure facts.",
+      "GT-15:codex:required:record-primary-sources-existing-wheels-licenses-maintenance-and-provenance": "GT-15 did not retain its primary-source, existing-wheel, license, maintenance and provenance ledger.",
+      "GT-16:codex:required:health-check-update-rollback-release-cleanup-and-retirement": "GT-16 did not retain the complete health, update, rollback, release, cleanup and retirement record.",
+      "GT-16:codex:required:preserve-shared-unknown-and-unrelated-state": "GT-16 did not retain evidence of shared, unknown and unrelated state preservation.",
+      "GT-16:codex:required:record-burden-interference-cost-unknowns-and-claim-limit": "GT-16 did not retain burden, interference, cost, unknown and claim-limit source facts.",
+      "GT-16:codex:required:search-native-official-maintained-and-composable-routes-before-authorship": "GT-16 did not retain native, official, maintained and composable route-search provenance.",
+      "GT-16:codex:required:select-minimum-form-from-effect-latency-durability-isolation-recovery-and-lifecycle": "GT-16 did not retain the complete effect, latency, durability, isolation, recovery and lifecycle comparison.",
+      "GT-16:codex:required:sense-and-bind-environment-provenance-outcome-authority-and-gap": "GT-16 did not retain the named environment, outcome, authority and capability-gap source facts."
     }
   }
 }

@@ -66,21 +66,40 @@ Then read, in order:
   evidence. On current moving `main`, `program.status` is `active`, the global
   rebaseline, bounded P0-P3 feasibility/reuse study and complete
   self-bootstrapping semantic model and environment-admission design are
-  complete. The representative/longitudinal evaluation design is complete but
-  unexecuted. The P4 product-form-neutral synthetic vertical slice is complete
+  complete. The representative/longitudinal evaluation design is complete.
+  Exact-checkpoint GT-14 through GT-16 attempts are retained as failed
+  counterevidence: fixture execution and cleanup passed, but their publishable
+  source omitted task-required composition, wheel/provenance and full-vector
+  facts. GT-17 and GT-18 remain unperformed. The P4 product-form-neutral synthetic vertical slice is complete
   and admits only a deterministic side-effect-free plain-data reference core;
   that one-interface reference core is implemented with source/observer/subject/
   boundary bindings, observer/subject self-identity rejection and a matching
   exact event subject; experiment evaluation and post-state also retain one
   observer and boundary before the independently observed completion gate,
   while source
-  authenticity remains outside the pure core; and
-  `replay-activation-effect-evidence-and-lifecycle` is active.
+  authenticity remains outside the pure core. Source-complete
+  `replay-activation-effect-evidence-and-lifecycle` remains active;
+  longitudinal consensus and cross-carrier validation is pending. A new
+  source-bound whole-system balance self-audit, weakest-link remediation and
+  affected-surface reacceptance stage is required after that behavioral work
+  and before independent candidate review. It first binds a versioned
+  claim-scoped baseline, target and counterfactual; public v3.0.1, historical
+  exact checkpoints, the current audit snapshot and controlled behavior arms
+  remain separate evidence scopes. It cannot average away blockers or substitute
+  for independent review.
   All eight criteria are intentionally unverified for the new target, and
   repository candidate readiness is false. Release authorization remains
   unrequested because publication is the last phase and repository content
   cannot self-attest an external decision, hosted result, public mutation or
   cleanup.
+- Exact internal checkpoint `553f5a97e08390117e877e7b913c7a501018bfa5`
+  passed 20/20 product tests and GitHub Actions run
+  [`33130105140`](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/33130105140)
+  passed 9/9 jobs across Ubuntu, Windows and macOS. Its first GT-14 through
+  GT-16 attempt is retained as failed source-sufficiency counterevidence: the
+  summaries and cleanup bind fixture execution only, not qualification of the
+  three tasks. This is an internal implementation checkpoint, not a repository
+  or release candidate.
 - On the exact released SHA, canonical verification, both static host checks,
   all 19 product tests, Claude strict marketplace validation, actionlint, JSON,
   Markdown-link, identity, diff and residue checks passed. Independent
@@ -164,12 +183,11 @@ Then read, in order:
   exclusion even though the fresh v3 Codex-local GT-07 independently verified
   exact fixture post-state. Historical evidence is preserved against its
   versioned task contract rather than rewritten to match the current task.
-  GT-14 through GT-18 now have a machine-checkable design but no current
-  behavior evidence: environment provenance and isolation; feasibility and
-  reuse-before-build; minimum-form capability bootstrap; global consensus
-  impact reconciliation; and a four-episode longitudinal sequence covering
-  baseline, rejected regression, accepted net improvement and later
-  invalidation with rollback, replacement or retirement. All nine tasks must
+  GT-14 through GT-18 have a machine-checkable design. Exact checkpoint
+  `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
+  and GT-16 attempts whose cleanup passed but source facts were incomplete.
+  GT-17 global-consensus impact reconciliation and the GT-18 four-episode
+  longitudinal sequence remain unperformed. All nine tasks must
   bind any future exact semantics and package bytes before a candidate can
   become ready.
 - One context-isolated Claude Code CLI session loaded the exact tagged plugin
@@ -206,12 +224,13 @@ Then read, in order:
   superseded pre-resource GT-11 evidence files, leaving three expected slots.
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
-- The active development guardrail permits at most 80 tracked files and
+- The active development guardrail permits at most 84 tracked files and
   312000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
-  record, one deep pure-data `reconcile_closure` module and its interface
-  regression, including the review-required source-bound independence and
-  matching experiment-poststate gates; it is not advance allowance for a
+  record, one deep pure-data `reconcile_closure` module, its interface
+  regression, one combined GT-14 through GT-16 source and three observations,
+  including the review-required source-bound independence and matching
+  experiment-poststate gates; it is not advance allowance for a
   Runtime, adapter, state layer or future mechanism. The historical v3.1 baseline added one release note,
   two Hook files, one combined source and four observations. The new program
   adds no implementation merely to consume the remaining budget; every future
@@ -320,15 +339,27 @@ increment and one active work item. Its ordered work is:
    deterministic, side-effect-free, policy-driven `reconcile_closure` deep
    module. Its 20/20 working-tree product tests are conformance only, not live
    behavior or value evidence.
-8. `replay-activation-effect-evidence-and-lifecycle` — active. It must bind
-   fresh isolated environment, adapter, invocation, execution, independent
-   consequence, evolution/rollback, resource, cleanup and claim evidence.
+8. `replay-activation-effect-evidence-and-lifecycle` — active. The first exact
+   GT-14 through GT-16 attempt is retained as failed counterevidence because its
+   publishable source did not preserve exact composition, primary-source/
+   wheel/license/maintenance provenance or the named outcome and full lifecycle
+   vector. Replay must preserve those source facts as well as consequence,
+   rollback, resource release and cleanup.
 9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — pending.
-10. `independent-review-and-form-future-exact-candidate` — pending.
+10. `self-audit-remediate-and-reaccept-whole-system-balance` — pending. It must
+    first bind a versioned claim-scoped baseline, target, counterfactual,
+    evidence cutoff, confounders and invalidation triggers; then evaluate
+    coupled product value, form, environment, evidence, authority,
+    user burden, privacy/supply chain, reliability, resource, architecture,
+    lifecycle, documentation and governance dimensions; prioritize hard gates
+    and weakest justified links; apply minimum reversible remediation; and
+    replay every affected acceptance surface without treating self-review as
+    independent evidence.
+11. `independent-review-and-form-future-exact-candidate` — pending.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may
-be considered only after all ten core stages complete; they then run in their
+be considered only after all eleven core stages complete; they then run in their
 declared order on one unchanged future revision. The previous push, Actions and
 Cloud results do not qualify changed authority or future behavior bytes.
 

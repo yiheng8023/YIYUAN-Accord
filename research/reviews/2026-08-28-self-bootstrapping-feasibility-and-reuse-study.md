@@ -24,8 +24,10 @@ core is a small semantic and evaluation contract that can:
 The current decision has advanced from the P0-P3 **conditional-go for semantic
 modelling** through completed P4 and one minimum pure-data reference core.
 It remains **no-go for a live mechanism, a new runtime, a general state store or
-release work**. Fresh isolated behavior replay and the longitudinal gates remain
-unperformed.
+release work**. Exact checkpoint `553f5a97e08390117e877e7b913c7a501018bfa5`
+retains failed GT-14 through GT-16 attempts because their publishable source is
+not task-complete; source-complete replay remains active. GT-17 global-consensus
+reconciliation and GT-18 longitudinal evolution remain unperformed.
 
 The unbounded interpretation is infeasible: no system can guarantee complete
 visibility into every host, infer human values or authority from context,
@@ -573,5 +575,90 @@ task-owned disposable artifacts. They are removed after this decision is mapped
 into the versioned product record because the bound checkout forbids the
 throwaway Git branch normally used for prototype custody. The reviewable answer
 and its explicit claim ceiling remain here. The admitted reference core is now
-implemented; the next active stage is
+implemented. The first GT-14 through GT-16 attempt is retained as failed
+counterevidence because fixture summaries and hashes did not preserve all
+task-required source facts; the active stage remains
 `replay-activation-effect-evidence-and-lifecycle`.
+
+## Whole-system balance self-audit: initial current-state cut
+
+This review was added after the 2026-08-28 human correction that candidate
+formation must follow a whole-system assessment, weakest-link remediation and
+affected-surface reacceptance. It is an initial source-bound cut over the
+current staged repository state, not completion of that later stage and not an
+independent review. It must be refreshed after GT-14 through GT-18 and every
+admitted remediation. No aggregate score is used: a hard failure or a material
+unknown that can change the release decision remains a blocker.
+
+### Baseline contract
+
+There is no single universal baseline for this audit. Every comparison must
+name its claim, target, counterfactual, evidence cutoff, known confounders,
+freshness and invalidation trigger before it can support improvement or
+regression language:
+
+- immutable public v3.0.1 is the baseline only for published distribution,
+  installation guidance and its finite retained behavior claims;
+- `ae7294652761abceb753f0571ee82c7ddeae06af` is an unreleased historical
+  implementation/package checkpoint and not current candidate authority;
+- `553f5a97e08390117e877e7b913c7a501018bfa5` is the current internal
+  implementation checkpoint and the origin of retained source-insufficient
+  GT-14 through GT-16 counterevidence, not a qualified behavior baseline;
+- the staged moving-`main` tree at this review cutoff is only the current
+  self-audit snapshot and cannot self-attest a clean candidate; and
+- environment, activation or incremental-effect comparisons require the exact
+  controlled arms declared by the Golden Task. The installed Accord-enabled,
+  extension-composed hosts are current-enabled observations, never inferred
+  official-clean or no-Accord baselines.
+
+These baselines may coexist because they answer different questions. None may
+lend its authority or evidence level to another dimension by name similarity.
+
+| Coupled dimension | Current evidence-backed state | Shortfall or tradeoff | Minimum preferred response |
+| --- | --- | --- | --- |
+| Product goal and capability closure | concern | The complete bounded self-bootstrap is explicit, but only the pure decision core is implemented; live discovery, execution, continuity and retirement remain replaceable responsibilities rather than observed closure. | Keep form neutral; close only responsibilities exposed by source-complete representative evidence. |
+| Semantics and consistency | concern | Constitution, plan, acceptance, goal projection, docs and packages have strong deterministic bindings, but every material consensus has a broad dependency fan-out and can leave stale derived claims. | Retain earliest-boundary replay and add the pre-candidate balance/reacceptance stage; independently challenge the final projection. |
+| Environment sensing and isolation | blocker | Both local hosts are Accord-enabled, extension-composed environments. No current arm may self-attest official-clean, isolated-no-Accord or exact-candidate behavior. | Capture a permitted provenance-bound composition at fixture creation and use only the least costly sufficient isolated arms for the named claim. |
+| Reuse-first discovery and supply chain | blocker | The design study supports dynamic reuse-first routing, but the GT-15 attempt did not retain exact primary sources, repository revisions, licenses, maintenance/provenance, fit limits and exit conditions. | Replay GT-15 with a source ledger; compare no-build, native, maintained reuse, composition and bounded authorship before adding code. |
+| Activation, consequence and evidence | blocker | GT-14 through GT-16 executed fixtures and cleanup, but their source records cannot substantiate environment admission, route fitness or full consequence/lifecycle claims. Installation, enablement and Hook presence remain declaration-level facts. | Build source-complete task-owned fixtures and replay GT-14 through GT-16; preserve failures and exact claim exclusions. |
+| Learning, continuity and evolution | blocker | No approved durable state carrier or completed longitudinal sequence proves later-route improvement, correction propagation, invalidation or retirement. GT-17 and GT-18 remain unperformed. | Execute the bounded consensus replay and four-episode longitudinal sequence before selecting a carrier; admit durable state only if the observed responsibility cannot be closed otherwise. |
+| Product form and cross-form coherence | concern | The pure core plus thin plugin projections avoids premature lock-in, but current packages alone do not prove a systemic persistent loop and a larger runtime could impose control-plane tax. | Let effect, latency, durability, isolation, recovery and lifecycle evidence choose no-op, one form or replaceable composition; do not use host count as product depth. |
+| Human authority, privacy and trust | concern | The design fails closed, forbids self-granted authority and excludes credential/session content, but live acquisition and external-wheel paths have not yet proved the same boundaries. | Keep new trust, account, data, cost and publication decisions human-bound; verify ordinary routes without specialist account/security surfaces or private logs. |
+| User burden and cognitive load | concern | Progressive disclosure and a quiet simple-task path are designed, yet the internal authority/plan/evidence corpus is large and must not become the ordinary user's operating model. | Measure avoidable questions, concepts, steps, delay and recovery in representative tasks; keep K/H/L and JSON internal and project only the minimum context-fit interface. |
+| Reliability, recovery and residue | blocker | Pure-core rollback rules and historical GT-07/11/12 regressions are strong, but current GT-16 lacks the complete health/update/rollback/release/cleanup record. A foreign host residue also prevents a clean exact candidate and is outside current cleanup authority. | Replay lifecycle post-state independently; preserve foreign/shared/unknown state; resolve the external residue only through a later explicit, verifiable authority path. |
+| Performance, resources and total cost | unknown | The pure reducer has low apparent mechanism cost and GT-13 is a useful single-arm dogfood trace, but there is no qualified comparative burden, latency, context, resource or population evidence. | Capture the non-compensating vector in GT-16 and longitudinal tasks; do not infer optimization or field value from one arm. |
+| Architecture and maintainability | concern | `reconcile_closure` is a deep side-effect-free module with an open policy/form boundary, but the authority, documentation and product-control test surfaces are already large and close to explicit complexity headroom. | Prefer deletion, consolidation and generated projections; split or add surfaces only when a repeated change or demonstrated closure need pays the lifecycle cost. |
+| Host portability and lifecycle | concern | Codex and Claude packages validate statically, but behavior evidence is not equivalent across hosts and the historical Claude cleanup failure remains excluded. ZCode is only a later feasibility hypothesis. | Finish core evidence first; then inspect each host's primary surface and implement only a thin projection when it closes a named gap. |
+| Distribution, release and operations | blocker | The public recommended immutable release is v3.0.1; `main` is an active, changed and not-clean v3.1.0 program with no exact-candidate authorization or v3.1.0 tag. | Finish behavioral and longitudinal evidence, whole-system remediation/reacceptance and independent review; only then choose a future exact version and candidate and request new exact-SHA release authority. |
+
+### Weak-link order and current preferred route
+
+1. Preserve the failed GT-14 through GT-16 attempts and their public claim
+   exclusions; fix the evidence contract so continuing states cannot omit a
+   retained failure.
+2. Create source-complete, task-owned GT-14 through GT-16 replays that bind the
+   environment, primary sources and full non-compensating consequence/lifecycle
+   vector at creation time rather than reconstructing them later.
+3. Run GT-17 and GT-18 to test global consensus propagation, a real observed
+   carrier, useful later-route change, regression rejection, invalidation and
+   rollback or retirement.
+4. Re-evaluate the responsibility-to-form graph. Prefer no-op or existing
+   healthy routes; admit a Skill, plugin, Hook, protocol, state carrier,
+   runtime, service, client, cloud component or composition only for an observed
+   unclosed responsibility and keep it replaceable.
+5. Refresh this balance ledger, prioritize hard gates and Pareto improvements,
+   implement only justified minimum remediations, and replay every affected
+   acceptance and lifecycle surface.
+6. Reduce user-facing concept load and internal maintenance burden where it does
+   not weaken evidence or capability closure; preserve explicit residual risks.
+7. Submit one clean exact candidate to independent product, specification,
+   implementation and standards review. Resolve foreign host residue only under
+   separate explicit authority. Hosted verification, named-human release
+   authorization, tag and public Release remain later ordered gates.
+
+The current optimal decision is therefore **not** to add a Runtime or another
+host projection now. It is to strengthen source capture, isolated consequence
+evidence, longitudinal continuity and global reconciliation first. Those facts
+can later justify a durable carrier or a multi-form system; absent them, a
+larger mechanism would improve architectural appearance while worsening the
+very balance this review is meant to protect.

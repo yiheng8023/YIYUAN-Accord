@@ -38,8 +38,13 @@ product-form work is complete. P4 admits only a deterministic, side-effect-free
 plain-data reference core, now implemented behind one policy-driven
 `reconcile_closure` interface. It rejects observer/subject self-identity and
 requires matching independent experiment post-state before closure; these are
-structural bindings, not self-proof of real source authenticity. Fresh isolated activation-to-effect and lifecycle
-replay is active, while live mechanisms, representative value and release remain gated. Exact revision
+structural bindings, not self-proof of real source authenticity. Exact checkpoint
+`553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14 through
+GT-16 attempts: fixture execution and cleanup were observed, but required
+composition, wheel/provenance and full-vector source facts were not retained.
+Source-complete activation/effect/lifecycle replay remains active; GT-17,
+GT-18, live mechanisms, durable evolution, representative value and release
+remain gated. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
 verified, unreleased v3.1.0 baseline; a later product consensus superseded its
 `ready` status without erasing its bounded evidence. `main` is therefore not a
@@ -51,6 +56,19 @@ highest-risk assumptions in disposable isolated environments before admitting
 the minimum reference-core implementation. Product form continues to follow
 demonstrated closure properties and total lifecycle cost. Release is the final
 phase.
+
+Before any future candidate is formed, the program now requires a source-bound
+whole-system balance self-audit, minimum remediation of the weakest justified
+links and reacceptance of every affected dimension and interaction. Product
+value, environment adaptation, evidence, authority, user burden, privacy and
+supply-chain trust, reliability, resources, architecture, lifecycle,
+documentation and governance are coupled non-compensating dimensions: an
+average score cannot hide a blocker or material unknown. This self-review is a
+challenge input, not a substitute for the later independent review. Every
+comparison first binds a versioned claim-scoped baseline, target and
+counterfactual: public v3.0.1, an unreleased exact checkpoint, the current audit
+snapshot and a controlled behavior arm support different claims and cannot
+lend evidence strength to one another.
 
 Plugins and Skills are current projections; they are not presumed sufficient
 or insufficient. When complete responsibilities require several carriers,

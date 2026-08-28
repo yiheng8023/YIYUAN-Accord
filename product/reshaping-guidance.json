@@ -937,6 +937,61 @@
     ],
     "firstSlice": "Resource stewardship is the first corrected Agent-execution-subdomain slice: it recalls the historical attribution and release boundary as L8 and GT-12, adds current official capability discovery and dynamic native-first routing, and leaves the old preflight, generic Skills and unproven controller design in history. Process-loss control is not a new adjacent feature but a recalled original pre-Accord Agent-execution mission: current GT-07 and GT-11 must preserve the latest demand and corrections through goal, authority, route, implementation, evidence, acceptance and final claim without requiring a real carrier transition when the live carrier is healthy. Runtime machinery remains evidence-gated."
   },
+  "wholeSystemBalanceReview": {
+    "status": "accepted-required-before-candidate-but-not-yet-executed",
+    "purpose": "Expose coupled weak links and tradeoffs before candidate formation, then drive minimum justified remediation and affected-surface reacceptance without turning a checklist or average score into product truth.",
+    "reviewSequence": [
+      "bind-current-goal-authority-candidate-scope-versioned-claim-scoped-baseline-target-counterfactual-evidence-cutoff-confounders-and-invalidation-triggers",
+      "inventory-dimension-level-evidence-blockers-unknowns-and-claim-limits",
+      "map-cross-dimension-couplings-failure-propagation-and-recovery-cost",
+      "identify-hard-gates-and-weakest-justified-links-without-compensating-average",
+      "compare-no-op-native-reuse-composition-and-bounded-authorship-alternatives",
+      "implement-the-minimum-reversible-remediation-that-improves-net-outcome",
+      "replay-every-affected-criterion-interaction-and-lifecycle-boundary",
+      "retain-residual-risk-rejected-options-counterevidence-and-recheck-triggers",
+      "submit-the-reaccepted-system-to-independent-review"
+    ],
+    "currentReviewDimensions": [
+      "baseline-target-counterfactual-evidence-cutoff-confounders-and-invalidation",
+      "product-goal-user-value-and-capability-closure",
+      "domain-semantics-consensus-and-claim-coherence",
+      "environment-sensing-adaptation-isolation-and-portability",
+      "reuse-discovery-form-selection-and-cross-form-coherence",
+      "activation-execution-consequence-and-evidence-integrity",
+      "human-authority-privacy-trust-supply-chain-and-compliance",
+      "user-cognitive-orchestration-and-recovery-burden",
+      "reliability-failure-containment-recovery-continuity-and-residue",
+      "performance-latency-context-resource-and-total-lifecycle-cost",
+      "architecture-modularity-complexity-maintainability-and-testability",
+      "observability-evaluation-reproducibility-and-longitudinal-learning",
+      "host-projection-compatibility-update-rollback-and-retirement",
+      "documentation-onboarding-accessibility-and-user-facing-concept-load",
+      "governance-versioning-distribution-release-and-post-release-operations"
+    ],
+    "stateVocabulary": [
+      "pass",
+      "concern",
+      "blocker",
+      "unknown",
+      "justified-not-applicable"
+    ],
+    "baselineRule": "There is no single timeless baseline. Bind each comparison to its claim and dimension: the immutable public v3.0.1 release may baseline published distribution and bounded public behavior; historical unreleased exact checkpoints may baseline only their retained implementation or regression facts; the moving main snapshot may baseline only the current audit cut; and behavior or incremental-effect claims require their declared controlled counterfactual arms. Every baseline records exact revision or environment, provenance, evidence level, known confounders, claim limit, freshness and invalidation triggers. An Accord-enabled composed host cannot self-attest an official-clean or no-Accord baseline.",
+    "decisionRule": "No comparison begins before its baseline, target and counterfactual are compatible with the claim. No aggregate score can compensate for a violated authority, evidence, consequence, cleanup or release hard gate. Among otherwise admissible routes, prioritize the weakest outcome-relevant link and Pareto improvements over cosmetic breadth; account for improvement, regression, coupling, reversibility, blast radius, user burden and lifecycle cost. An unknown that can change the release decision remains unresolved. Self-review supplies a candidate for independent challenge and never counts as independent evidence.",
+    "requiredLedgerFields": [
+      "dimension",
+      "claim-scoped-baseline-target-counterfactual-evidence-cutoff-and-invalidation",
+      "bound-claim-and-evidence",
+      "state-and-confidence",
+      "problem-or-shortfall",
+      "upstream-and-downstream-couplings",
+      "severity-likelihood-reversibility-and-blast-radius",
+      "alternatives-and-existing-wheels",
+      "selected-remediation-or-explicit-no-op",
+      "affected-acceptance-and-replay-boundary",
+      "residual-risk-claim-limit-and-recheck-trigger"
+    ],
+    "claimLimit": "This is a revisable review model, not proof that one baseline fits every claim, that every possible dimension has been enumerated, that current implementation passes, or that self-review can replace representative, longitudinal, independent, hosted, human or public evidence."
+  },
   "fourSurfaceGuidance": {
     "plan": [
       "start from the product-level outcome and complete bounded self-bootstrapping obligations rather than a preferred product form",
@@ -946,6 +1001,7 @@
       "define successive end-to-end vertical slices from sensing and reuse through consequence verification learning evolution rollback and retirement",
       "name earliest affected authority evidence and replay boundaries for every correction",
       "budget outcome, burden, interference, context, resource capacity, trust, data, cost, recovery, maintenance and retirement",
+      "reserve a pre-candidate whole-system balance audit remediation and reacceptance stage after core behavioral and longitudinal evidence and bind its claim-scoped baseline target and counterfactual first",
       "keep release as the final gate after product value and internal consistency, not the planning center"
     ],
     "process": [
@@ -959,6 +1015,7 @@
       "verify declaration activation execution effect evidence burden interference poststate release and residue as distinct links",
       "learn and run bounded keep-discard rollback or replacement experiments without self-granting authority",
       "recompute on correction drift failure new consensus or evidence conflict and reconcile every dependent surface",
+      "before candidate formation bind the versioned claim-scoped baseline target and counterfactual then audit coupled dimensions remediate weakest justified links and replay affected interactions without averaging away blockers",
       "degrade hand off release clean retire or rebaseline from explicit triggers"
     ],
     "acceptance": [
@@ -970,6 +1027,7 @@
       "require a new consensus to update plan process acceptance goal projection implementation evidence documentation and claim surfaces from the earliest affected boundary",
       "use local and condition-fit host client cloud or other carriers as evidence surfaces rather than product identity and test only the claim each observed composition supports",
       "retain failures counterevidence contamination and unknowns without converting them into success or universal product failure",
+      "require a source-bound claim-scoped baseline target and counterfactual plus whole-system weak-link ledger minimum remediation and affected-surface reacceptance before independent review",
       "do not form a release candidate until representative and longitudinal core criteria pass"
     ],
     "goalModePrompt": [
@@ -980,6 +1038,7 @@
       "make human judgment new trust data cost publication destructive and irreversible pause boundaries explicit",
       "own capability acquisition configuration topology continuity resource stewardship verification learning rollback cleanup and retirement mechanics",
       "refresh and globally reconcile on correction new consensus drift failure evidence conflict side effect or carrier pressure",
+      "carry the pending baseline binding whole-system self-audit remediation reacceptance and independent-review order before candidate formation",
       "keep release dormant until all core stages are complete and a future exact candidate is independently justified",
       "remain compact enough to preserve host reasoning capacity and defer detail by progressive disclosure"
     ]
@@ -993,7 +1052,7 @@
       "host-adapters-and-evaluations",
       "documentation-and-release-route"
     ],
-    "minimumNextSlice": "Replay the implemented reconcile_closure interface in fresh task-owned isolated GT-14 through GT-16 fixtures that bind exact environment provenance, route offers, policy, adapter identity, activation or invocation, execution, independent consequence, full-vector evolution decision, rollback, resource release, cleanup post-state and claim limit. Derive only the comparison arms needed by the named claim; the installed current host cannot self-attest native or no-Accord behavior. Add a live adapter or mechanism only if the replay exposes a responsibility the pure core and existing routes cannot close, and keep that addition replaceable, reversible and independently observable.",
+    "minimumNextSlice": "Replay only GT-14 through GT-16 with source-complete task-owned fixtures. GT-14 must retain provenance-bound host, model, tool, extension and Accord exposure facts plus explicit unknowns without reading private configuration or session content. GT-15 should trigger external discovery only for an evidenced capability gap, material uncertainty or likely mature ecosystem—not every trivial task—and must retain exact official primary sources, mature repository revisions, licenses, maintenance/provenance signals, fit assumptions, limitations, supply-chain or trust/data/cost effects and exit conditions before comparing no-build, native, reuse, composition and bounded authorship. GT-16 must predeclare the named outcome, oracle, gap, authority and route set, then retain the full non-compensating burden, interference, cost, unknown, recovery and lifecycle vector alongside independently observed consequence, rollback, resource release and cleanup. Treat the installed host only as current-enabled composition; never infer official-clean, no-Accord, Hook firing or value from installation. Add a live adapter, durable carrier or other mechanism only if a source-complete replay exposes a responsibility the pure core and existing routes cannot close, and keep any admitted addition replaceable, reversible and independently observable.",
     "requiredReplay": [
       "semantic-authority-and-derived-surface-conformance",
       "plan-process-acceptance-goal-projection-alignment",
@@ -1002,6 +1061,7 @@
       "existing-wheel-adoption-product-form-selection-and-complete-self-bootstrapping",
       "representative-help-no-op-correction-continuity-recovery-learning-evolution-rollback-retirement-and-cleanup",
       "longitudinal-consensus-and-cross-carrier-consistency",
+      "claim-scoped-baseline-target-counterfactual-whole-system-balance-weak-link-remediation-affected-surface-reacceptance-and-independent-review",
       "release-claim-and-lifecycle-only-after-a-future-exact-candidate"
     ]
   }

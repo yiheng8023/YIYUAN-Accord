@@ -33,6 +33,8 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-26-v301-codex-local-source.json'
 CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-26-v301-gt11-codex-local.json'
+CURRENT_GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json'
+CURRENT_GT16_OBSERVATION = 'evals/observations/2026-08-28-553f5a9-gt-16-codex-local.json'
 SRC310 = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
 OBS11 = 'evals/observations/2026-08-27-v310-gt11-codex-local.json'
 OBS13 = 'evals/observations/2026-08-27-v310-gt13-codex-local.json'
@@ -207,6 +209,8 @@ class ProductControlTests(unittest.TestCase):
         if report['programStatus'] == 'active':
             program = _read(root, P)
             stages = program['increment']['workItems'][0]['closeoutSequence']
+            self.assertIn('self-audit-remediate-and-reaccept-whole-system-balance',
+                          {stage['id'] for stage in stages})
             self.assertEqual(
                 all(stage['state'] == 'completed' for stage in stages),
                 program['increment']['state'] == 'completed',
@@ -349,6 +353,9 @@ class ProductControlTests(unittest.TestCase):
             suite['id'],
             'representative-and-longitudinal-self-bootstrapping-evaluation/v1',
         )
+        self.assertIn('source-insufficient', suite['status'])
+        self.assertEqual(suite['attemptedTaskIds'], ['GT-14', 'GT-15', 'GT-16'])
+        self.assertEqual(suite['unperformedTaskIds'], ['GT-17', 'GT-18'])
         self.assertEqual(
             {item['id'] for item in suite['caseTypes']},
             {'representative-case', 'longitudinal-sequence'},
@@ -1183,18 +1190,13 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertIsNone(_postcapture_bundle(payload, task, _time(record['capturedAt'])))
 
-        for task_id in ('GT-02', 'GT-07'):
+        for task_id in ('GT-02', 'GT-16'):
             with self.subTest(policy_anchor=task_id), _fixture() as root:
                 golden = _read(root, G)
                 task = next(item for item in golden['tasks'] if item['id'] == task_id)
-                if task_id == 'GT-07':
-                    locator = 'evals/observations/2026-08-26-v301-gt07-codex-local.json'
-                    source_locator = CURRENT_GT11_SOURCE
-                    acceptance = _read(root, A)
-                    for criterion in acceptance['criteria']:
-                        if criterion['id'] in {'R3', 'Q1'}:
-                            criterion['assessment'] = 'continuing'
-                    _write(root, A, acceptance)
+                if task_id == 'GT-16':
+                    locator = CURRENT_GT16_OBSERVATION
+                    source_locator = CURRENT_GT16_SOURCE
                 else:
                     locator = OBS[int(task_id[-2:])]
                     source_locator = SOURCE
@@ -1430,10 +1432,18 @@ class ProductControlTests(unittest.TestCase):
             self.assert_has(
                 _errors(root), 'historical claim binding is invalid'
             )
-        self.assertEqual(
-            _read(ROOT, A)['claimCeiling']['retainedBehaviorExclusions'],
-            ['GT-07:claude-code:cleanup']
-        )
+        excluded = _read(ROOT, A)['claimCeiling']['retainedBehaviorExclusions']
+        self.assertEqual(len(excluded), 10)
+        self.assertEqual(excluded, sorted(excluded))
+        with _fixture() as root:
+            acceptance = _read(root, A)
+            token = next(value for value in excluded if value.startswith('GT-16:'))
+            acceptance['claimCeiling']['retainedBehaviorExclusions'].remove(token)
+            acceptance['claimCeiling']['publicRetainedBehaviorExclusions'].pop(token)
+            _write(root, A, acceptance)
+            self.assert_has(
+                _errors(root), 'retained behavior exclusions mismatch'
+            )
         self.rejected(A, 'retained behavior exclusions', lambda v:
                       v['claimCeiling'].update(
                           retainedBehaviorExclusions=['GT-07:stale exclusion']))

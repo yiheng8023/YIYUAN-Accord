@@ -662,7 +662,7 @@ def representative_sample_errors(
                 if _text(adapter_id) and _text(value)
             )
     declared = acceptance.get("claimCeiling", {}).get("retainedBehaviorExclusions")
-    if require_complete and declared != sorted(set(exclusions)):
+    if declared != sorted(set(exclusions)):
         errors.append("retained behavior exclusions mismatch")
     for criterion in users:
         criterion_id = criterion.get("id")
