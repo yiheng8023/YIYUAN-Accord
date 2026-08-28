@@ -1731,6 +1731,11 @@ class ProductControlTests(unittest.TestCase):
             _time(candidate_record['capturedAt']), (acceptance, _read(ROOT, G), current),
         )
         self.assertTrue(_source_amendments(*candidate_args))
+        unamended = json.loads(json.dumps(candidate_record))
+        unamended.pop('amendments')
+        self.assertFalse(_source_amendments(
+            ROOT, unamended, *candidate_args[2:],
+        ))
         injected = json.loads(json.dumps(candidate_record))
         injected['payload']['evaluatedRevision'] = '--output=unexpected'
         with patch('yiyuan_accord.evidence._bounded_git_bytes') as git_read:
@@ -1743,6 +1748,14 @@ class ProductControlTests(unittest.TestCase):
         ]
         with patch('yiyuan_accord.evidence._bounded_git_bytes',
                    side_effect=malformed_history):
+            self.assertFalse(_source_amendments(*candidate_args))
+        revision = candidate_record['payload']['evaluatedRevision']
+        malformed_acceptance = [
+            _git(ROOT, 'show', f'{revision}:evals/golden-tasks.json'),
+            b'{"claimCeiling":null}',
+        ]
+        with patch('yiyuan_accord.evidence._bounded_git_bytes',
+                   side_effect=malformed_acceptance):
             self.assertFalse(_source_amendments(*candidate_args))
         with patch('yiyuan_accord.evidence._bounded_git_bytes',
                    side_effect=subprocess.CalledProcessError(1, 'git')):

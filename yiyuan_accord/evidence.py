@@ -481,8 +481,11 @@ def _candidate_evaluation_delta(
     prior_acceptance, prior_golden, prior_digest,
     current_acceptance, current_golden, current_digest,
 ):
-    prior = _representative_contract(prior_acceptance, prior_golden)
-    current = _representative_contract(current_acceptance, current_golden)
+    try:
+        prior = _representative_contract(prior_acceptance, prior_golden)
+        current = _representative_contract(current_acceptance, current_golden)
+    except (AttributeError, TypeError, ValueError):
+        return False
     if _digest(prior) != prior_digest or _digest(current) != current_digest:
         return False
     prior_policy, current_policy = (
@@ -541,7 +544,12 @@ def _source_amendments(
 ):
     amendments = record.get("amendments") if isinstance(record, dict) else None
     if amendments is None:
-        return True
+        if current_contract is None:
+            return True
+        return (isinstance(record, dict)
+                and isinstance(current_contract, tuple)
+                and len(current_contract) == 3
+                and record.get("evaluationContractSha256") == current_contract[2])
     if (not isinstance(amendments, list) or not amendments
             or any(not isinstance(a, dict) for a in amendments)):
         return False
@@ -580,7 +588,9 @@ def _source_amendments(
         amendment = amendments[0]
         if (len(amendments) != 1 or len(current_tuple) != 3
                 or prior_task != current
-                or _digest(prior_task) != prior_digest):
+                or _digest(prior_task) != prior_digest
+                or record.get("evaluationContractSha256")
+                != amendment.get("priorEvaluationContractSha256")):
             return False
         current_acceptance, current_golden, current_evaluation = current_tuple
         if not _candidate_evaluation_delta(

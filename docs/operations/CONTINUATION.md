@@ -318,7 +318,7 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The active development guardrail permits at most 86 tracked files and
-  360000 product-code-and-test bytes with at least five percent headroom and
+  364000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
   regression, one append-only GT-14 through GT-19 source and seven current
@@ -445,8 +445,9 @@ increment and one active work item. Its ordered work is:
    acceptance dimensions, counterfactual-derived comparison eligibility, exact
    evidence and carrier bindings, independence/privacy/sampling/stop rules and
    a GT-14 through GT-19 obligation matrix; and gives every new task an oracle,
-   counterexamples and claim ceiling. GT-19 is a four-episode dynamic
-   responsibility-retirement design and is not yet executed.
+   counterexamples and claim ceiling. At this design-only checkpoint GT-19 was
+   a four-episode dynamic responsibility-retirement design and was not yet
+   executed; its later finite replay is recorded below.
 6. `prototype-product-form-neutral-vertical-slices` — completed. The disposable
    P4 fixture selected the minimum composition for an observed continuity gap,
    no-op when the native whole loop was observed, rejected plugin enablement as
@@ -455,8 +456,8 @@ increment and one active work item. Its ordered work is:
 7. `implement-minimum-self-bootstrapping-reference-core` — completed as the
    deterministic, side-effect-free, policy-driven `reconcile_closure` deep
    module. Exact `6a98cb7` corrected whole-route leakage to exact
-   route-plus-responsibility retirement. The working correction additionally
-   requires current source-bound successor discovery and derived
+   route-plus-responsibility retirement. The later source-bound correction
+   additionally required current successor discovery and derived
    same-responsibility overlap before independent consequence, cleanup,
    reversible policy gates, retirement post-state and recheck. Its tests are
    conformance only, not live behavior or value evidence.
@@ -473,8 +474,8 @@ increment and one active work item. Its ordered work is:
    evidence binds exact independent effect and cleanup, every episode's full
    vector and core decision, explicit carrier source/target states, retirement
     and zero task-owned residue. Preserve f0ed9ce/08eb72a as source-insufficient
-    counterevidence. GT-14/15/16 and GT-18 remain unaffected within their old
-    finite claims, but GT-07 is reopened because
+    counterevidence. At that checkpoint GT-14/15/16 and GT-18 were unaffected
+    within their old finite claims, but GT-07 was reopened because
     its former contract did not distinguish causal fork from fresh sequential
     handoff or keep code, conversation and execution topology independent;
     GT-17 was reopened because its former consensus replay lacked the new
@@ -495,7 +496,10 @@ increment and one active work item. Its ordered work is:
     replay every affected acceptance surface and preserve the finite revised
     GT-07, GT-17 and GT-19 results with their failures, costs and claim limits,
     without treating self-review as independent evidence.
-11. `independent-review-and-form-future-exact-candidate` — active.
+11. `independent-review-and-form-future-exact-candidate` — active. Sparse
+    candidate qualification currently retains only GT-07 and GT-17; fresh
+    GT-11/12/13/14/15/16/18/19 replay remains required before this stage can
+    complete.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may
