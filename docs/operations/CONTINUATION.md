@@ -122,13 +122,18 @@ Then read, in order:
   task-worker admission, exact exclusive release, four shared-resource checks,
   evaluator-owned lease completion and cleanup; one blocked read-only command
   remains a bounded route correction. GT-13 through GT-16 plus GT-18 and GT-19
-  still have changed Skill, evaluation contract or reference-core subjects and
-  need fresh bounded replay; GT-07 is not rerun merely to refresh bookkeeping.
+  initially had changed Skill, evaluation contract or reference-core subjects.
+  Fresh single-arm GT-13 at `f182a0a` now passes only its saved-checkout
+  collaboration closure, four-surface alignment, conditional research and
+  publication boundary; one fixture no-match command and 32794 evaluator
+  tokens exclude an efficient-reading claim. GT-14 through GT-16 plus GT-18
+  and GT-19 still need fresh bounded replay; GT-07 is not rerun merely to
+  refresh bookkeeping.
   To preserve the three-file complexity reserve, the superseded derived
-  `7d7a7e5` GT-17 and GT-18 observation files are removed only after their
-  complete source records remain in the active evidence carrier and immutable
-  Git history; the finite former-contract facts and later applicable evidence
-  remain named.
+  `7d7a7e5` GT-17/GT-18 and `fd4b99a` GT-19 derived observation files are
+  removed only after their complete source records remain in the active
+  evidence carrier and immutable Git history; the finite former-contract facts
+  and later applicable evidence remain named.
   The next specification/standards cross-review rejected evaluator-history
   allowlisting as sufficient proof and found unsafe pre-validation Git input
   plus malformed historical-task crash paths. Candidate amendments must now
@@ -509,10 +514,10 @@ increment and one active work item. Its ordered work is:
     without treating self-review as independent evidence.
 11. `independent-review-and-form-future-exact-candidate` — active. Sparse
     candidate qualification retains GT-07 and GT-17 through exact amendments;
-    fresh isolated GT-11 at `f4dce57` and GT-12 at `72709b8` now pass their
-    finite current-subject claims while their evaluator/route corrections
-    remain visible. Fresh GT-13/14/15/16/18/19 replay remains required before
-    this stage can complete.
+    fresh isolated GT-11 at `f4dce57`, GT-12 at `72709b8` and single-arm GT-13
+    at `f182a0a` now pass their finite current-subject claims while their
+    evaluator, route and interference costs remain visible. Fresh
+    GT-14/15/16/18/19 replay remains required before this stage can complete.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may

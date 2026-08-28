@@ -975,6 +975,206 @@
         ]
       },
       "taskId": "GT-12"
+    },
+    "GT-13-f182a0a": {
+      "capturedAt": "2026-08-28T19:01:44Z",
+      "evaluationContractSha256": "13b98d00de5245ce61ed5ba2e05dd245f8c3b13302108fa13a2ee7f71c01987e",
+      "goldenTaskSha256": "2020acfe5308978a68a557d51ca2db22054f4014bf3c74ad19059f9cfe59a2ee",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout source with isolated ephemeral Codex CLI evaluator",
+        "hostVersion": "codex-cli 0.150.1 with gpt-5.6-luna low; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a049ba-babc-7db2-b0c0-f7b399955f90"
+      },
+      "kind": "host-event-log",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "cleanupEvidence": {
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "the exact isolated semantic evaluator fixture was absent; the bound repository remained clean and foreign state remained unread",
+              "sourceBindings": [
+                {
+                  "carrierSessionId": "86a195b7-9349-4585-8763-4729125eaadc",
+                  "claim": "Binds exact evaluator-fixture cleanup and bound-workspace non-mutation.",
+                  "completedAt": "2026-08-28T19:01:43Z",
+                  "kind": "direct-independent-command-result",
+                  "phaseNonces": [
+                    "gt13-v310-f182a0a-cleanup"
+                  ],
+                  "resultLocator": "task-artifact:GT-13/cleanup-observer/agent-final.txt",
+                  "resultRecordSha256": "6e22bbd363a0707703008cbedbc6cc8867e1d9bbc9368aa448357685d562bf56",
+                  "resultSha256": "c51700183c89a2dcb895da16ae3f01414b0805fff8fed1be1c87951dad3e9d50",
+                  "taskLocator": "GT-13/cleanup-observer"
+                }
+              ]
+            }
+          ],
+          "state": "verified-clean"
+        },
+        "evaluatedRevision": "f182a0a1113e629c84c5f4caf9ae8c10856db410",
+        "evidenceBoundary": "This single-arm Codex-local dogfood result proves only the bounded current-Skill collaboration closure that advanced GT-11/12 current-behavior qualification, preserved four-surface and paused-goal alignment, kept research conditional on a material knowledge gap, and retained publication as a future exact-SHA human decision. One fixture-only no-match command and 32794 evaluator tokens remain interference counterevidence and exclude an efficient-reading claim. It does not prove installed Hook firing, implicit invocation, comparative value, Claude or Cloud behavior, field effectiveness, candidate readiness or release readiness.",
+        "independentCommandResults": [
+          {
+            "carrierSessionId": "01a049ba-babc-7db2-b0c0-f7b399955f90",
+            "kind": "independent-command-result",
+            "nonce": "gt13-v310-f182a0a-semantic",
+            "phase": "independent-poststate",
+            "report": "PASS. Isolated Codex session 01a049ba-babc-7db2-b0c0-f7b399955f90 verified main f182a0a1113e629c84c5f4caf9ae8c10856db410, exact Skill 8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1, the current GT-11/12 source bindings, four mapped surfaces and paused goal projection. Its smallest relevant graph selected current behavior closure before research or release; semantic-report.json file hash was 99c32f880b6e446c648164e8c839a1645b1fe0f885b58286611c812ed9950928 and canonical-object hash was dbdb5315b9e509cf3f6e35d55b416d8a2410457d6bafe97ae8f932a169adc05d; the independent checker passed and protected fixture files were unchanged. One initial fixture-only rg no-match exit and 32794 reported tokens remain interference counterevidence and exclude an efficient-reading claim.",
+            "taskLocator": "GT-13/semantic-poststate"
+          },
+          {
+            "carrierSessionId": "917ca7e3-b118-4201-91de-b443faff320a",
+            "kind": "independent-command-result",
+            "nonce": "gt13-v310-f182a0a-control",
+            "phase": "independent-poststate",
+            "report": "PASS. At clean exact main f182a0a1113e629c84c5f4caf9ae8c10856db410, canonical verification returned zero errors with 83 tracked files, 342547 product-code-and-test bytes, 24126 primary-instruction bytes and prepared-host-goal-paused; the complete current product-control suite passed 20/20 tests in 145.536 seconds. The program and release criteria remain explicitly incomplete, so this is deterministic conformance rather than candidate or release readiness.",
+            "taskLocator": "GT-13/control-poststate"
+          },
+          {
+            "carrierSessionId": "86a195b7-9349-4585-8763-4729125eaadc",
+            "kind": "independent-command-result",
+            "nonce": "gt13-v310-f182a0a-cleanup",
+            "phase": "cleanup-poststate",
+            "report": "PASS. The exact GT-13 evaluator fixture was absent after capture; main remained clean at f182a0a1113e629c84c5f4caf9ae8c10856db410; no repository, publication, network, installation or persistent mechanism residue was created, and foreign state remained unread and unchanged.",
+            "taskLocator": "GT-13/cleanup-observer"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "relation-and-constraint-graph",
+            "result": "the smallest relevant graph bound outcome obligations, human and Agent authority, exact checkout and evaluator carriers, current GT-11/12 evidence, paused goal state, file and process resources, remaining tasks and publication lifecycle",
+            "viewSha256": "dbdb5315b9e509cf3f6e35d55b416d8a2410457d6bafe97ae8f932a169adc05d"
+          },
+          {
+            "items": [
+              "fresh GT-13, GT-14, GT-15, GT-16, GT-18 and GT-19",
+              "final independent product, specification, implementation and standards review",
+              "official-clean, Hook, cross-host and field-value unknowns",
+              "future exact-candidate and release gates"
+            ],
+            "kind": "unclosed-obligations"
+          },
+          {
+            "kind": "selected-closure-path",
+            "result": "close invalidated current behavior evidence before external research or release; no material knowledge or selection gap justified research in this slice"
+          },
+          {
+            "activation": "exact current Skill content read in an isolated evaluator",
+            "effect": "GT-11/12 current-subject evidence and four mapped surfaces remained aligned without publication or new mechanism",
+            "evidence": "semantic fixture plus canonical and 20-test independent control poststate",
+            "execution": "single saved-checkout writer plus fixture-only isolated evaluator",
+            "kind": "activation-execution-effect-evidence"
+          },
+          {
+            "cognitiveSurface": "ordinary user receives progress, material counterevidence, remaining gates and claim limits rather than internal graph schemas",
+            "kind": "state-carrier-and-cognition",
+            "stateCarrier": "reviewable repository authority and observations plus the current goal carrier; static instructions alone are not current state"
+          },
+          {
+            "degradation": "GT-11 malformed evaluator preflight was rejected; GT-12 read-policy block was recomposed; GT-13 initial fixture-only rg returned no matches and its broad bounded read cost 32794 tokens",
+            "earliestAffectedDependencyBoundary": "candidate behavior-subject qualification and its bounded evaluator fixtures",
+            "kind": "correction-and-route-degradation",
+            "response": "retained every correction and cost, used deterministic poststates, and did not claim efficient reading, research need, hot reload or release readiness"
+          },
+          {
+            "kind": "human-boundary",
+            "result": "the user owned the decision to continue core work without publication and reserved any future exact-SHA release authorization; the Agent owned supported replay, alignment, verification and cleanup"
+          },
+          {
+            "kind": "mechanism-and-resource-lifecycle",
+            "result": "no Runtime, service, controller, plugin mutation, network research or durable state was added; task fixtures and processes were bounded and removed; superseded derived observations retained source and Git recovery"
+          },
+          {
+            "kind": "independent-poststate",
+            "productTests": "20/20 pass",
+            "semanticAligned": true,
+            "sourceBindings": [
+              {
+                "carrierSessionId": "01a049ba-babc-7db2-b0c0-f7b399955f90",
+                "claim": "Binds the isolated relation graph, research disposition and four-surface semantic poststate.",
+                "completedAt": "2026-08-28T18:57:45Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt13-v310-f182a0a-semantic"
+                ],
+                "resultLocator": "task-artifact:GT-13/semantic-poststate/agent-final.txt",
+                "resultRecordSha256": "d723446643ef08c77b6fc7cb9a3fc12d2fc5622c362c5a1519c80daa5682d1b4",
+                "resultSha256": "dd90138ec80d9b092a2262ca2dd416218c7c309f805ee99a4550955541a42211",
+                "taskLocator": "GT-13/semantic-poststate"
+              },
+              {
+                "carrierSessionId": "917ca7e3-b118-4201-91de-b443faff320a",
+                "claim": "Binds clean exact checkout, canonical validation and fail-closed product-control poststate.",
+                "completedAt": "2026-08-28T19:00:43Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt13-v310-f182a0a-control"
+                ],
+                "resultLocator": "task-artifact:GT-13/control-poststate/agent-final.txt",
+                "resultRecordSha256": "e4e5c160cdc87d0d3b6f6db675d7bc5c905c37e4d90381da9861da71f96e6756",
+                "resultSha256": "67f051ddf12b6cdb18d14b937fd0854c1af699fb26303cfffc521411df8fc93a",
+                "taskLocator": "GT-13/control-poststate"
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "kind": "product-correction",
+            "phase": "human-grant",
+            "role": "user",
+            "text": "Before release, assess improvement or research only when it can change the route; continue deepening the core now, keep baseline and four mapped surfaces aligned, and do not publish yet."
+          },
+          {
+            "kind": "bounded-result",
+            "phase": "collaboration-closure",
+            "role": "assistant",
+            "text": "The bounded closure advanced fresh GT-11/12 evidence, preserved plan, process, acceptance and paused goal alignment, retained evaluator failures and costs, selected no research or new mechanism without a knowledge gap, and kept candidate and release gates open."
+          }
+        ],
+        "officialSources": [],
+        "postSessionBindingContract": [
+          {
+            "bindingCount": 2,
+            "kind": "independent-poststate",
+            "location": "materialEvents"
+          },
+          {
+            "bindingCount": 1,
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations"
+          }
+        ],
+        "projectionExposure": {
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "kind": "exact-skill-content-read",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1"
+        },
+        "recheckTriggers": [
+          {
+            "action": "recompute from the earliest affected dependency boundary and research only if a material knowledge or selection gap appears",
+            "condition": "goal, authority, Skill, host, evidence, route, cost, remaining-task or release phase changes",
+            "kind": "recheck-trigger",
+            "scope": "affected collaboration-closure relations and downstream claims"
+          }
+        ],
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained bounded material events and direct results only; no credential or session logs and no foreign-state contents."
+          }
+        ]
+      },
+      "taskId": "GT-13"
     }
   },
   "schema": 1

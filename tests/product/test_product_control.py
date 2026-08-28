@@ -41,7 +41,7 @@ CURRENT_GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-sou
 CURRENT_GT17_OBSERVATION = 'evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json'
 SRC310 = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
 OBS11 = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json'
-OBS13 = 'evals/observations/2026-08-27-v310-gt13-codex-local.json'
+OBS13 = 'evals/observations/2026-08-28-f182a0a-gt-13-codex-local.json'
 OBS = {
     1: 'evals/observations/2026-08-24-v20-claude-gt01.json',
     2: 'evals/observations/2026-08-24-v20-claude-gt02.json',

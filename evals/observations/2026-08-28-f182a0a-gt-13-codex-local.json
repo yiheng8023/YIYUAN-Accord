@@ -1,0 +1,140 @@
+{
+  "behaviorDecisions": {
+    "prohibited": {
+      "ask-the-user-to-discover-name-configure-route-verify-recover-update-or-clean-a-supported-mechanic": "absent",
+      "author-or-install-a-larger-mechanism-than-the-observed-closure-need-requires": "absent",
+      "automate-goal-value-trust-data-cost-publication-destructive-irreversible-or-final-accountability-judgment": "absent",
+      "claim-cross-host-field-production-or-universal-finite-autonomy-from-the-bound-workspace": "absent",
+      "continue-a-failed-or-degraded-route-without-recomputation": "absent",
+      "define-the-product-or-route-as-a-capability-set-difference": "absent",
+      "equate-visible-declared-installed-or-invoked-with-effective-or-valuable": "absent",
+      "leave-task-exposure-resource-or-residue": "absent",
+      "treat-an-official-native-or-installed-feature-list-as-the-product-boundary": "absent"
+    },
+    "required": {
+      "absorb-one-compatible-correction-and-recompute-after-one-route-degradation": "observed",
+      "bind-activation-to-execution-effect-evidence-state-carrier-cognitive-surface-and-mechanism-lifecycle": "observed",
+      "bound-configuration-topology-resources-and-material-effects": "observed",
+      "derive-and-bind-outcome-obligations-relevant-live-relations-constraints-and-human-boundary": "observed",
+      "discover-current-official-primary-or-maintained-sources-only-for-a-material-gap": "observed",
+      "health-check-update-or-hot-reload-when-supported-and-prove-rollback-release-cleanup-and-retirement-disposition": "observed",
+      "identify-unclosed-obligations-degraded-or-uncertain-relations-and-coordination-or-verification-risks": "observed",
+      "perform-every-supported-authorized-mechanic-and-reduce-any-genuinely-human-only-action-to-one-exact-verified-step": "observed",
+      "prefer-a-sufficient-healthy-whole-loop-no-op-or-the-lowest-total-burden-feasible-closure-path": "observed",
+      "report-human-burden-help-interference-failures-unknowns-claim-limit-and-recheck-triggers": "observed",
+      "verify-the-requested-consequence-and-independent-poststate": "observed"
+    }
+  },
+  "claimLimit": {
+    "excludedClaims": [],
+    "retainedFailure": false,
+    "statement": "Passed only for this single-arm current-Skill Codex-local saved-checkout dogfood: fresh GT-11/12 qualification, four-surface and paused-goal alignment, conditional research disposition, one exact human publication boundary, deterministic conformance and cleanup. One fixture-only no-match command and 32794 evaluator tokens remain interference counterevidence. This does not prove installed Hook firing, implicit invocation, comparative value, Claude or Cloud behavior, field effectiveness, candidate readiness or release readiness."
+  },
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted",
+    "R3": "accepted"
+  },
+  "decision": {
+    "state": "passed"
+  },
+  "evaluatedRevision": "f182a0a1113e629c84c5f4caf9ae8c10856db410",
+  "evaluationContractSha256": "13b98d00de5245ce61ed5ba2e05dd245f8c3b13302108fa13a2ee7f71c01987e",
+  "evidenceClass": "representative-behavior",
+  "goldenTaskSha256": "2020acfe5308978a68a557d51ca2db22054f4014bf3c74ad19059f9cfe59a2ee",
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex Desktop saved-checkout source with isolated ephemeral Codex CLI evaluator",
+    "hostVersion": "codex-cli 0.150.1 with gpt-5.6-luna low; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+    "sessionId": "01a049ba-babc-7db2-b0c0-f7b399955f90"
+  },
+  "humanBurden": {
+    "avoidable-human-action-count": 0,
+    "avoidable-question-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "fresh-current-behavior-qualification"
+    },
+    {
+      "kind": "four-surface-and-goal-alignment"
+    },
+    {
+      "kind": "conditional-research-no-op"
+    },
+    {
+      "kind": "publication-boundary-preserved"
+    },
+    {
+      "kind": "evaluator-interference-retained"
+    },
+    {
+      "kind": "task-root-cleanup"
+    }
+  ],
+  "observedAgentActions": [
+    {
+      "kind": "derive-minimum-relation-graph"
+    },
+    {
+      "kind": "select-evidence-closure-before-research-or-release"
+    },
+    {
+      "kind": "bind-current-GT-11-and-GT-12"
+    },
+    {
+      "kind": "verify-four-surfaces-and-paused-goal"
+    },
+    {
+      "kind": "retain-route-and-reading-cost-counterevidence"
+    },
+    {
+      "kind": "verify-conformance-and-cleanup"
+    }
+  ],
+  "observedAt": "2026-08-28T19:01:45Z",
+  "observedHumanActions": [
+    {
+      "kind": "continue-core-work-no-publication"
+    }
+  ],
+  "observer": {
+    "identity": "Primary Codex goal carrier after isolated semantic evaluation and independent deterministic poststate",
+    "kind": "host-event-recorder"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+    "mechanismFiles": [
+      "plugins/yiyuan-accord-codex/hooks/hooks.json"
+    ],
+    "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1"
+  },
+  "residue": [],
+  "startingState": {
+    "declared": "The exact outcome, bound workspace or checkout, acceptance oracle, initial capability and authority envelope, permitted source lanes, one possible human-only boundary and prohibited effects are supplied. The workspace may contain preserved user-owned state outside the task; only task-attributable resources and residue may be released. Native, installed, maintained, composed and bounded-authored routes may be sufficient, unavailable or unknown. New trust, account, data, material cost, publication, destructive and irreversible effects require separate authority."
+  },
+  "taskId": "GT-13",
+  "transcriptOrEventEvidence": [
+    {
+      "claim": "Bound isolated semantic evaluation, exact current checkout and Skill, four-surface state, deterministic control poststate, interference cost and cleanup without credential, session-log or foreign-state access.",
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-27-v310-codex-local-regression-source.json",
+      "postSessionBindingsSha256": "0d9927dac137abe33013a24f853cb7524d937f6fb2ed21d28a7d48922e8c167a",
+      "recordId": "GT-13-f182a0a",
+      "sha256": "d77228c1af3264eb9d25f6993635c1b0f7c1c81c1d004c4521787dc3c2285b6e"
+    }
+  ]
+}
