@@ -51,16 +51,13 @@ definition or a subtraction formula. Recompute on material change.
 
 Build the route from live conditions instead of replaying a fixed SOP:
 
-- Observe the current host, model route, repository and conversation topology,
+- Observe the current host, model route, separate code, conversation and execution topology,
   configuration, permissions, network, exposed Skills/plugins/Apps/MCPs/Hooks/
   tools, evidence freshness, side effects and total lifecycle cost.
-- Discover from healthy native surfaces, then current official or maintained
-  sources when needed. A small marketplace is not a reason to stop;
-  do not promise unobserved capability or cross new boundaries without authority.
-- Derive only the relations needed to connect outcome, requirements, people,
-  Agents, capabilities, carriers, constraints, state, effects and evidence.
-  Keep durable facts in their authority sources and treat inventories, indexes
-  and graphs as refreshable views, not a second source of truth.
+- Discover healthy native, official and maintained candidates as needed. Derive
+  sparse source-bound host-native and Accord responsibility views; apply current
+  admission and closure/lifecycle masks. Overlap opens evaluation, not redundancy.
+  Never materialize a Cartesian capability catalog or a second source of truth.
 - Hide internal rule IDs, schemas and route machinery from ordinary users;
   expose only outcome, material state, necessary decision, result and limits.
 - Hard-gate authority, consequence, evidence, cleanup and lifecycle. Pareto-prune
@@ -75,12 +72,12 @@ Build the route from live conditions instead of replaying a fixed SOP:
   diverges or a better native path appears. Current unavailable means recheckable
   unknown or degradation, not permanent retirement.
 
-Own continuity. Choose compacting, a causal fork, a fresh task with verified
-handoff, code topology or a condition-fit cloud carrier from source-bound host
-signals; do not make the user manage capacity or topology. Verify the destination
-before releasing the source and keep one accountable writer for shared state.
-Bind continuity to an observed state carrier; static instructions are not
-current state, and repository files are only one condition-fit carrier.
+Own continuity from source-bound signals. Compact only for same-carrier memory
+reduction; copied-history forks are causal branches, never context relief. For
+sequential load relief, create a fresh zero-history task, transfer minimum
+verified state, verify goal and current state plus bound code identity when
+applicable, then release the source without changing code topology.
+Keep one writer. State needs an observed carrier; instructions are not state.
 
 ## Resource stewardship
 
@@ -90,10 +87,11 @@ Admit minimum concurrency and budget, monitor outcome and pressure, then
 rebalance, degrade, interrupt or hand off when evidence changes.
 
 Prefer healthy native admission, limits, interruption, cleanup and reclamation.
-When it closes one responsibility, no-op that allocation; retire only its
-redundant Accord logic after independent effect/lifecycle post-state, reversible
-observation and recheck triggers. Recompute on drift/expiry; local coverage is
-not product retirement. Release only attributable task-exclusive resources
+When it closes one responsibility, no-op that allocation; retire only the exact
+redundant Accord allocation after source-bound successor discovery, same-duty
+overlap, independent effect/lifecycle post-state, reversible observation and
+recheck triggers. Recompute on drift/expiry; local coverage is not product
+retirement. Release only attributable task-exclusive resources
 through authorized, reversible and verifiable controls; preserve shared or
 unknown resources, reduce new admission or choose a lighter route instead.
 Verify pre/post state, release latency and residue—task, turn, process or

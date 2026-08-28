@@ -59,7 +59,14 @@ balance audit is now active. A new GT-19 host-drift lane is designed but
 unperformed: declaration alone must not retire Accord; a verified native route
 may retire only the same responsibility through reversible observed lifecycle
 post-state, and later drift or evidence expiry must recompute the allocation.
-Live mechanisms, durable continuity, cross-host or
+The audit has also reopened GT-07 after finding that compact, copied-history
+causal fork and fresh zero-history sequential handoff had been described too
+loosely. Code topology, conversation topology and local/cloud execution
+placement are now independent; a conversation transition never implies a
+branch, worktree, repository fork or placement change. Sparse host-native and
+Accord responsibility views may expose overlap, but current admission,
+consequence and lifecycle evidence must still prove actual redundancy. Live
+mechanisms, durable continuity, cross-host or
 population value and release remain gated. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
 verified, unreleased v3.1.0 baseline; a later product consensus superseded its
@@ -89,7 +96,12 @@ lend evidence strength to one another.
 Plugins and Skills are current projections; they are not presumed sufficient
 or insufficient. When complete responsibilities require several carriers,
 shared outcome, authority, evidence and lifecycle contracts provide system
-coherence without forcing the product into one Runtime or state layer.
+coherence without forcing the product into one Runtime or state layer. Each
+retained capability may fill a replaceable deep-module role behind a narrow
+interface; native or external capabilities remain adapter dependencies rather
+than becoming Accord-owned code. A material consensus governs direction but is
+not propagated as a new implementation baseline until contradiction, category,
+boundary and dependency checks reconcile every affected surface.
 
 Report feedback in [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues). Include:
 
@@ -192,7 +204,7 @@ Everything else is activated on demand by the task and host environment. If the 
 ## When It Is Useful
 
 - **Goal Drift**: A task drifts from the requested outcome despite generating a large volume of plausible, busy work.
-- **Interrupted Workflows**: A long-running task is paused, corrected, or handed off across different execution carriers.
+- **Interrupted Workflows**: A long-running task is paused, corrected, or handed off across different conversation carriers while code and execution placement stay separately bound.
 - **False Green Lights**: Tests, reports, intermediate commits, or hosted green checks are mistaken for real-world delivery.
 - **Decision Boundaries**: The Agent should autonomously handle routine mechanics, but must strictly halt before genuine human decisions, privilege escalations, tangible costs, or irreversible mutations.
 - **Cascade Corrections**: A mid-flight fix or updated rule invalidates earlier evidence, requiring a bounded downstream replay.

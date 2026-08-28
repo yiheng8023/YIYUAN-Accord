@@ -73,6 +73,21 @@ _Source_: `product/reshaping-guidance.json#/selfBootstrappingCore/productFormRul
 `product/reshaping-guidance.json#/dynamicIndex/graphProjection`
 _Avoid_: permanent architecture, form identity, unverified composition
 
+**Deep module**:
+A cohesive responsibility-bearing unit whose narrow interface hides substantial
+policy, state, evidence and lifecycle detail. A native or external capability
+may fill a module role through an adapter without becoming Accord-owned code.
+_Source_: `product/reshaping-guidance.json#/selfBootstrappingCore/productFormRule`,
+`product/reshaping-guidance.json#/selfBootstrappingCore/referenceCore`
+_Avoid_: one file per module, public internals, ownership by participation
+
+**Interface and adapter seam**:
+The smallest stable contract exposed by a module, plus an evidenced variation
+point where two or more host-specific adapters supply that contract. Internal
+graphs, matrices, caches and evaluators remain behind the interface.
+_Source_: `product/reshaping-guidance.json#/selfBootstrappingCore/productFormRule`
+_Avoid_: abstraction without two adapters, host leakage into the portable core
+
 **Coherence contract**:
 The shared responsibility, interface, authority, state, evidence, version,
 failure, recovery and retirement boundary for cooperating product forms.
@@ -233,7 +248,20 @@ Preservation and reconciliation of the current goal and state across phases,
 carriers and actors.
 _Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: continuity)`,
 `product/constitution.json#/learnedFailureStandards (id: L6)`
-_Avoid_: copied history, implicit handoff
+_Avoid_: copied history mistaken for load relief, implicit handoff
+
+**Causal fork**:
+A copied-history branch used for divergent causal work. It is not sequential
+handoff or a remedy for accumulated inherited context.
+_Source_: `product/constitution.json#/learnedFailureStandards (id: L6)`
+_Avoid_: context relief, source replacement, implicit state reconciliation
+
+**Sequential handoff**:
+A transition to a fresh zero-inherited-history carrier that transfers only the
+minimum verified state, verifies destination goal, checkout and current state,
+then releases the source.
+_Source_: `product/constitution.json#/learnedFailureStandards (id: L6)`
+_Avoid_: fork, copy-only continuation, release before destination verification
 
 **Process-loss control**:
 End-to-end reconciliation of the latest demand, accountable consensus and
@@ -253,12 +281,28 @@ _Source_: `product/constitution.json#/evolutionPolicy/feedbackRule`,
 `product/reshaping-guidance.json#/selfBootstrappingCore/consensusRule`
 _Avoid_: permanent truth, rewritten history, simultaneous stale ready state
 
-**Topology**:
-The selected code carriers and conversation carriers through which work and
-state move, including their synchronization, handoff and cleanup relations.
-_Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: topology)`,
+**Code topology**:
+The repository, checkout, branch, worktree, repository-fork, synchronization,
+merge and cleanup relations that locate code and mutations.
+_Source_: `product/reshaping-guidance.json#/topology/code`,
 `product/constitution.json#/hostAdapterStandard (id: H8)`
-_Avoid_: branch alone, copied conversation alone, user-operated routing
+_Avoid_: conversation fork, implicit handoff, code change inferred from task change
+
+**Conversation topology**:
+The current task, compaction, causal fork, fresh sequential handoff, conclusion
+reconciliation, source release and archive relations that locate conversational
+work and state. It changes independently of code topology.
+_Source_: `product/reshaping-guidance.json#/topology/conversation`,
+`product/constitution.json#/hostAdapterStandard (id: H8)`
+_Avoid_: branch or worktree, repository fork, code move inferred from handoff
+
+**Execution topology**:
+The local or cloud environment, worker, process, terminal, connection and
+placement relations used to execute work. It may bind to code or conversation
+state for one outcome but changes neither topology by itself.
+_Source_: `product/reshaping-guidance.json#/topology/execution`,
+`product/constitution.json#/hostAdapterStandard (id: H8)`
+_Avoid_: code branch, conversation fork, cloud placement as repository mutation
 
 **Lifecycle**:
 The path from observed gap through admission, operation, evaluation,
@@ -331,6 +375,13 @@ A source- and freshness-bound query view that joins durable semantic records
 with current environment observations without turning a snapshot into truth.
 _Source_: `product/reshaping-guidance.json#/dynamicIndex`
 _Avoid_: manually duplicated catalog, committed host snapshot, authority replacement
+
+**Sparse capability-surface views**:
+Derived H (host-native responsibility incidence) and A (Accord responsibility
+allocation) views, filtered by current admission and closure-lifecycle masks.
+Their overlap opens redundancy evaluation but never proves retirement.
+_Source_: `product/reshaping-guidance.json#/dynamicIndex/sparseMatrixViews`
+_Avoid_: Cartesian capability catalog, binary-overlap retirement, second authority
 
 **Capability provenance**:
 The observed origin of a capability: model-inherent, host-native,

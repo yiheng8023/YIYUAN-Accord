@@ -98,7 +98,8 @@ def canonical_goal_objective(program, authority, work_stages, release_gates):
         },
         "workspace": [
             r"C:\Projects\YIYUAN-Accord", "main",
-            "preserve-existing-tags-and-history", "no-branch-worktree-or-fork",
+            "preserve-existing-tags-and-history",
+            "no-branch-worktree-or-repository-fork",
         ],
         "route": {
             "semantics": process.get("routeRule"),

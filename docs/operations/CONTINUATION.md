@@ -121,13 +121,14 @@ Then read, in order:
   At exact clean rebaseline `f898ebd6c14580fb9236cd01440b88314b3c2fab`,
   the reference core could select a healthy native no-op but could not close the
   lifecycle of a non-selected redundant Accord route. A red deterministic
-  regression reproduced that gap. The current working tree adds the minimum
-  host-neutral responsibility-scoped retirement contract: the selected
-  successor must cover the same responsibility and have prior independent
-  consequence and cleanup; the transition also requires authorized reversible
-  observation, independent retirement post-state and recheck triggers. Missing,
-  stale or premature retirement blocks closure, and drift or evidence expiry
-  starts a fresh allocation decision. GT-19 now specifies the four-episode
+  regression reproduced that gap. Exact `6a98cb7` added the minimum host-neutral
+  responsibility-scoped retirement contract. The current working correction
+  further requires source-bound observation of the selected successor and a
+  derived same-responsibility overlap before prior independent consequence and
+  cleanup, authorized reversible observation, independent retirement post-state
+  and recheck triggers can admit retirement. Missing, stale or premature
+  retirement blocks closure, and drift or evidence expiry starts a fresh
+  allocation decision. GT-19 now specifies the four-episode
   declaration-rejection, verified replacement, scoped retirement and
   recomputation behavior, but remains unperformed. This is pure-data
   conformance only; no live host mechanism, Runtime, durable state or global
@@ -308,8 +309,10 @@ Then read, in order:
 Keep a small portable reliability kernel and develop a complete bounded
 self-bootstrapping outcome-delivery system. Host, model route, version, extension ecosystem,
 Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier,
-code topology and conversation topology are dynamic variables or possible
+code topology, conversation topology and execution placement are dynamic variables or possible
 mechanisms, not portable product identity and not permanent prohibitions.
+They remain separate decision planes: a task transition never implies a code
+or local/cloud placement change, and neither of those changes proves continuity.
 Codex, Claude or any other concrete Agent and its visible capabilities are
 replaceable adapters plus freshness-bound evidence snapshots, not the
 Agent-neutral product boundary or coverage ceiling. A new, changed or removed
@@ -346,6 +349,12 @@ Use schema-validated, versioned JSON with stable identifiers for durable
 semantic records. Join it at task time with source- and freshness-bound host
 observations. Build the relationship graph on demand in memory or an ignored
 cache; do not commit transient host, model, account or capability state.
+
+For a queried responsibility, derive only sparse H (host-native capability) and
+A (Accord allocation) incidence views, then apply current E (admission) and V
+(closure/lifecycle) masks. H/A overlap is a candidate relation, never redundancy
+or retirement proof, and no host × model × tool × context Cartesian matrix is
+materialized.
 
 Refresh dependent observations when the goal, phase, user correction, Git
 state, authority, host version, extension exposure, model route, configuration,
@@ -397,11 +406,12 @@ increment and one active work item. Its ordered work is:
    closed on cleanup residue. This is synthetic logic evidence only.
 7. `implement-minimum-self-bootstrapping-reference-core` — completed as the
    deterministic, side-effect-free, policy-driven `reconcile_closure` deep
-   module. It now records required non-selected route retirement only after a
-   same-responsibility selected successor has independent consequence and
-   cleanup, reversible policy gates, independent retirement post-state and
-   recheck triggers. Its working-tree product tests are conformance only, not
-   live behavior or value evidence.
+   module. Exact `6a98cb7` corrected whole-route leakage to exact
+   route-plus-responsibility retirement. The working correction additionally
+   requires current source-bound successor discovery and derived
+   same-responsibility overlap before independent consequence, cleanup,
+   reversible policy gates, retirement post-state and recheck. Its tests are
+   conformance only, not live behavior or value evidence.
 8. `replay-activation-effect-evidence-and-lifecycle` — completed. The first
    exact GT-14 through GT-16 attempt remains failed source-sufficiency
    counterevidence. At `84447a7a1b9557e22ef5585d159459e8701fa40e`, the
@@ -409,20 +419,27 @@ increment and one active work item. Its ordered work is:
    primary-source/wheel/license/maintenance provenance, the named outcome and
    full lifecycle vector, consequence, rollback, resource release and cleanup;
    all three pass only their finite claim.
-9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — completed
-   at `7d7a7e57b7eea02afcda21880d2f018cbc7dda0c`. Fresh GT-17 and GT-18
+9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — its prior
+   bounded evidence remains historical at
+   `7d7a7e57b7eea02afcda21880d2f018cbc7dda0c`. Fresh GT-17 and GT-18
    evidence binds exact independent effect and cleanup, every episode's full
    vector and core decision, explicit carrier source/target states, retirement
-   and zero task-owned residue. Preserve f0ed9ce/08eb72a as source-insufficient
-   counterevidence; do not rerun unaffected GT-07 or GT-14/15/16.
+    and zero task-owned residue. Preserve f0ed9ce/08eb72a as source-insufficient
+    counterevidence. GT-14/15/16 and GT-18 remain unaffected within their old
+    finite claims, but GT-07 is reopened because
+    its former contract did not distinguish causal fork from fresh sequential
+    handoff or keep code, conversation and execution topology independent;
+    GT-17 is reopened because its former consensus replay lacked the new
+    proposition-level contradiction and category gate.
 10. `self-audit-remediate-and-reaccept-whole-system-balance` — active. It must
     first bind a versioned claim-scoped baseline, target, counterfactual,
     evidence cutoff, confounders and invalidation triggers; then evaluate
+    proposition contradictions, category errors and boundary drift before
     coupled product value, form, environment, evidence, authority,
     user burden, privacy/supply chain, reliability, resource, architecture,
     lifecycle, documentation and governance dimensions; prioritize hard gates
     and weakest justified links; apply minimum reversible remediation; and
-    replay every affected acceptance surface, including future-exact GT-19,
+    replay every affected acceptance surface, including future-exact GT-07, GT-17 and GT-19,
     without treating self-review as independent evidence.
 11. `independent-review-and-form-future-exact-candidate` — pending.
 
@@ -516,4 +533,8 @@ them to simulate current evidence.
 Record live branch, HEAD, upstream, ahead/behind, dirty paths, verifier result,
 current program stage, changed authority surfaces, evidence replay status,
 unknowns, side effects, residue and the next safe boundary. Keep local,
-hosted, behavior, field, release and production claims distinct.
+hosted, behavior, field, release and production claims distinct. This is a
+sequential conversation transition, not a copied-history fork and not a code-
+topology change: use a fresh zero-history destination, transfer minimum verified
+state, verify destination plus any separately bound code identity, then release
+only the source conversation carrier.

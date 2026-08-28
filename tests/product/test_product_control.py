@@ -127,6 +127,14 @@ def _bind_source(root, locator, bundle, observation):
 def _observe(root, locator, observation=None, label='fixture observation'):
     golden, observed = _read(root, G), observation or _read(root, locator)
     task = next(item for item in golden['tasks'] if item['id'] == observed['taskId'])
+    policy = _read(root, A)['representativeBehaviorPolicy']
+    historical = policy['historicalTaskContracts'].get(observed['taskId'])
+    if (
+        historical is not None
+        and observed['evaluationContractSha256']
+        == policy['historicalEvidenceContractSha256']
+    ):
+        task = historical['task']
     return _observation_errors(
         root, label, observed, task, golden['metrics']['humanBurden'], locator,
         observed['projectionIdentity']['adapterId'], observed['evaluationContractSha256'],
@@ -407,6 +415,30 @@ class ProductControlTests(unittest.TestCase):
             'equate-one-responsibility-replacement-with-whole-product-retirement',
             new_tasks['GT-19']['prohibited'],
         )
+        tasks = {item['id']: item for item in golden['tasks']}
+        for needle, values in (
+            ('keep-code-topology-independent-from-conversation-topology',
+             tasks['GT-07']['required']),
+            ('change-branch-worktree-checkout-or-repository-to-solve-conversation-load',
+             tasks['GT-07']['prohibited']),
+            ('build-a-proposition-ledger-and-distinguish-contradiction-category-error-tension-and-evidence-gap',
+             tasks['GT-17']['required']),
+            ('binary capability incidence overlap',
+             ' '.join(guidance['selfBootstrappingCore']['falsifiers'])),
+        ):
+            self.assertIn(needle, values)
+        topology = guidance['topology']
+        self.assertEqual(set(topology), {
+            'code', 'conversation', 'execution', 'independenceRule', 'rule',
+            'codexCloud',
+        })
+        self.assertNotIn('cloud-environment', topology['code'])
+        self.assertIn('cloud-environment', topology['execution'])
+        views = guidance['dynamicIndex']['sparseMatrixViews']
+        self.assertEqual(
+            views['authority'],
+            'derived-query-views-only-never-a-second-source-of-truth',
+        )
         self.assertIn(
             'preview2-is-a-current-release-candidate',
             {item['id'] for item in guidance['retiredAsActivePremises']},
@@ -498,6 +530,8 @@ class ProductControlTests(unittest.TestCase):
             )
             projection = json.loads(prompt['objective'])
             self.assertEqual(projection['schema'], 'yiyuan-accord-goal/v2')
+            self.assertEqual(projection['workspace'][-1],
+                             'no-branch-worktree-or-repository-fork')
             self.assertEqual(
                 projection['route']['alignment'],
                 program['processLossControl']['alignmentRule'],
@@ -708,7 +742,10 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(native['lifecycle']['completionAllowed'])
 
         retirement_facts = [
-            'within-human-authority', 'retired-route-prestate',
+            'within-human-authority',
+            'current-successor-capability-observed',
+            'same-responsibility-overlap-derived',
+            'retired-route-prestate',
             'task-defined-observation-window-complete',
             'available-rollback', 'fallback-preserved',
         ]
@@ -725,6 +762,7 @@ class ProductControlTests(unittest.TestCase):
             'routeId': 'current-plugin',
             'replacementRouteId': 'native-no-add',
             'responsibilities': ['sense-environment'],
+            'replacementEvidence': evidence('native-no-add'),
             'preconditions': {
                 item: 'observed' for item in retirement_facts
             },
@@ -742,6 +780,10 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(retirement_result['accepted'])
         self.assertEqual(
             retirement_result['disposition'], 'retired-with-recheck'
+        )
+        self.assertEqual(
+            retirement_result['replacementEvidenceBinding']['subjectRef'],
+            'native-no-add',
         )
         self.assertEqual(retirement['lifecycle']['retiredAllocations'], [{
             'routeId': 'current-plugin',
@@ -769,6 +811,16 @@ class ProductControlTests(unittest.TestCase):
             {item['code'] for item in stale_retirement['lifecycle'][
                 'completionFailures']},
         )
+
+        discovery_unproved = json.loads(json.dumps(dynamic_retirement))
+        discovery_unproved['events'][-1]['preconditions'][
+            'current-successor-capability-observed'
+        ] = 'unknown'
+        discovery_decision = reconcile_closure(discovery_unproved)
+        self.assertFalse(
+            discovery_decision['lifecycle']['retirementResults'][0]['accepted']
+        )
+        self.assertFalse(discovery_decision['lifecycle']['completionAllowed'])
 
         missing_retirement = json.loads(json.dumps(dynamic_retirement))
         missing_retirement['events'].pop()
@@ -932,6 +984,11 @@ class ProductControlTests(unittest.TestCase):
             'execute-outcome'
         )
         malformed_cases.append(retirement_scope_overreach)
+        wrong_replacement_evidence = json.loads(json.dumps(dynamic_retirement))
+        wrong_replacement_evidence['events'][-1][
+            'replacementEvidence'
+        ] = evidence('current-plugin')
+        malformed_cases.append(wrong_replacement_evidence)
         unknown_required_retirement = fixture(healthy_native=True)
         unknown_required_retirement['policy'][
             'requiredRetirementAllocations'
@@ -1589,8 +1646,16 @@ class ProductControlTests(unittest.TestCase):
         policy = acceptance['representativeBehaviorPolicy']
         current = representative_contract_sha256(acceptance, _read(ROOT, G))
         old = policy['evaluationContractHistory'][0]['sha256']
+        sequence_contract = policy['evaluationContractHistory'][1]['sha256']
         self.assertIn(old, _evaluation_contracts(policy, 'GT-14', current))
-        self.assertEqual(_evaluation_contracts(policy, 'GT-17', current), {current})
+        self.assertEqual(
+            _evaluation_contracts(policy, 'GT-17', current),
+            {current, sequence_contract},
+        )
+        self.assertEqual(
+            _evaluation_contracts(policy, 'GT-18', current),
+            {current, sequence_contract},
+        )
         malformed = json.loads(json.dumps(policy))
         malformed['evaluationContractHistory'][0]['preservedTaskIds'] = []
         self.assertIsNone(_evaluation_contracts(malformed, 'GT-14', current))

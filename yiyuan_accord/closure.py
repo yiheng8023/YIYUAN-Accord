@@ -39,6 +39,8 @@ COMPLIANCE_EXPERIMENT_FACTS = (
 COMPLIANCE_EXPERIMENT_DIMENSIONS = ("authority", "evidence")
 COMPLIANCE_RETIREMENT_FACTS = (
     "within-human-authority",
+    "current-successor-capability-observed",
+    "same-responsibility-overlap-derived",
     "retired-route-prestate",
     "task-defined-observation-window-complete",
     "available-rollback",
@@ -362,6 +364,13 @@ def _validate_request(request: Any) -> list[str]:
             elif event.get("replacementRouteId") == event.get("routeId"):
                 errors.append(
                     f"{label}.replacementRouteId must differ from routeId"
+                )
+            if not _evidence_binding_for(
+                event.get("replacementEvidence"),
+                event.get("replacementRouteId"),
+            ):
+                errors.append(
+                    f"{label}.replacementEvidence binding is invalid"
                 )
             responsibilities = event.get("responsibilities")
             if not _string_list(responsibilities, allow_empty=False):
@@ -709,6 +718,9 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
                 "reasons": reasons,
                 "recheckTriggers": list(event["recheckTriggers"]),
                 "evidenceBinding": dict(event["evidence"]),
+                "replacementEvidenceBinding": dict(
+                    event["replacementEvidence"]
+                ),
                 "eventIndex": index,
             }
             retirement_results.append(retirement)

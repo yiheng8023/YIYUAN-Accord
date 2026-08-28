@@ -153,10 +153,20 @@ condition, comparison dimension, contextual preference and experiment vector.
 Product forms are arbitrary data supplied by adapters. Multiple incomparable
 frontier routes remain `hold-unknown` unless current policy provides a bounded
 context preference; the implementation never invents a weighted score. This
-seam can therefore accept a plugin, native capability, local library, cloud
+interface can therefore accept a plugin, native capability, local library, cloud
 carrier, authored mechanism or future form without changing the core, while a
 real adapter or mechanism still requires its own need, activation, effect,
 rollback, cleanup and retirement evidence.
+
+`reconcile_closure` remains the deep interface; sparse H (host-native
+responsibility incidence), A (Accord responsibility allocation), E (admission)
+and V (closure/lifecycle) views plus graph, cache and evaluator details stay
+behind normalized plain-data route inputs. H/A overlap opens evaluation only.
+Retirement additionally binds a current source-observed successor, the exact
+shared responsibility, independent consequence and cleanup, reversible
+observation, post-state and recheck. Codex and Claude are the two concrete
+projection adapters that justify the host-adapter seam. This does not justify a
+matrix service, graph database, Runtime or state store.
 
 Feasibility comes first. Primary sources, prior Accord failures and existing
 wheels produce a feasibility matrix, adoption ledger, risk register and bounded
@@ -373,6 +383,16 @@ permissions, context and time. Only observed or currently queried combinations
 are materialized; the host-model-tool-context Cartesian product is never
 precomputed. This lets the same index model official surfaces and check whether
 an existing route already closes a requirement before Accord authors anything.
+
+Topology has three orthogonal planes. Code topology covers repository,
+checkout, branch, worktree, repository fork, synchronization and merge.
+Conversation topology covers compaction, causal fork, fresh sequential handoff,
+source release and archive. Execution topology covers local or cloud placement,
+workers, processes, terminals and connections. Changing one plane changes
+neither of the others unless the current outcome explicitly binds and verifies
+that relation. A copied-history fork is causal branching, not context relief;
+sequential load relief uses a fresh zero-history destination, minimum verified
+state transfer, destination reconciliation and only then source release.
 
 Codex local and Cloud plus Claude Code and available Claude clients are the
 first concrete-Agent remapping and evaluation surfaces; no concrete Agent or

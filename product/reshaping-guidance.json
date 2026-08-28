@@ -132,7 +132,7 @@
     },
     {
       "kind": "carrier",
-      "meaning": "host, task, cloud environment, repository, branch, worktree, conversation or handoff that carries work or state"
+      "meaning": "host, task, cloud environment, repository, branch, worktree, conversation or durable medium that carries work or state; a handoff is a transition between carriers"
     },
     {
       "kind": "capability",
@@ -266,7 +266,7 @@
       "maintenance-health",
       "verification-and-retirement-cost"
     ],
-    "refreshRule": "Refresh affected instances and routes when their host, interface, extension, model route, configuration, permission, network, context or observation changes. New model-inherent, native or extended capability can supersede Accord machinery; removal can trigger degradation, discovery, composition or bounded authorship.",
+    "refreshRule": "Refresh affected instances, sparse responsibility-incidence views and routes when their host, interface, extension, model route, configuration, permission, network, context or observation changes. New model-inherent, native or extended capability can open a responsibility-overlap candidate with Accord machinery; only admitted consequence and lifecycle closure proves actual redundancy. Removal can trigger degradation, discovery, composition or bounded authorship.",
     "failureRule": "Do not stop at today's host surface, a small marketplace or weak native feature when another compliant discovery or composition lane can satisfy the goal. Do not promise an unobserved capability, and do not install, connect, spend or cross a trust or data boundary without the authority required for that effect."
   },
   "boundedAutonomy": {
@@ -600,7 +600,12 @@
           "deletion",
           "retirement"
         ],
-        "rule": "Static instructions are not current state. A carrier transports accountable state but never becomes its authority; newer bound consensus refreshes or supersedes stale derived state."
+        "transitionSemantics": {
+          "compact": "same-carrier-memory-reduction-only",
+          "causalFork": "copied-history-branch-for-divergent-causal-work-not-context-relief-or-sequential-handoff",
+          "sequentialLoadRelief": "fresh-zero-inherited-history-carrier-plus-minimum-verified-state-transfer-destination-verification-then-source-release"
+        },
+        "rule": "Static instructions are not current state. A carrier transports accountable state but never becomes its authority; newer bound consensus refreshes or supersedes stale derived state. Forking and handoff remain distinct topology operations even when both create another carrier."
       },
       "invariants": [
         {
@@ -1229,7 +1234,7 @@
       "status": "implemented-deterministic-conformance-only-not-host-behavior-value-or-release-evidence",
       "locator": "yiyuan_accord/closure.py",
       "interface": "reconcile_closure(request)-to-json-serializable-decision",
-      "moduleDepth": "One pure interface hides structural validation, stable compliance invariants, dynamic policy admission, responsibility closure, unknown preservation, Pareto frontier derivation, contextual or equivalent-fit selection, experiment keep-discard-rollback decisions, source-observer-exact-subject-boundary identity binding, same-observer-and-boundary experiment reconciliation, independent consequence and cleanup post-state, matching experiment lifecycle post-state, residue and finite claim handling.",
+      "moduleDepth": "One pure interface hides structural validation, stable compliance invariants, dynamic policy admission, responsibility closure, sparse capability-overlap inputs, unknown preservation, Pareto frontier derivation, contextual or equivalent-fit selection, experiment keep-discard-rollback decisions, source-observer-exact-subject-boundary identity binding, successor discovery and retirement evidence binding, independent consequence and cleanup post-state, matching lifecycle post-state, residue and finite claim handling. Graphs and matrix views remain implementation choices behind normalized plain-data routes rather than enlarging this interface.",
       "stableComplianceInvariants": [
         "human-authority-is-supplied-never-derived",
         "route-compliance-is-observed-never-invented",
@@ -1302,8 +1307,8 @@
     "environmentRule": "Treat every real host as a composed environment rather than an official blank slate. Bind one named claim to one provenance-bound composition and freshness window; detect material extensions, Accord exposure, persistent state, self-observation and unknowns; select the least costly sufficient isolation; and use official-clean, isolated-minimal, current-enabled, isolated-no-Accord or candidate-enabled-isolated arms only when the decision requires them. An Accord-enabled arm cannot attest a native or no-Accord baseline, and isolation cannot create authority or universal cleanliness.",
     "evaluationRule": "Select representative cases by outcome-obligation and failure-mode coverage rather than convenience or prior success. Keep one-episode representative evidence distinct from an ordered longitudinal sequence; derive comparison eligibility from the named counterfactual; bind exact environment, projection, treatment, evaluator, carrier, effects and cleanup; and retain all attempts. Judge outcome, authority, evidence, privacy, burden, interference, recovery, resources, continuity and lifecycle as a non-compensating vector. A longitudinal evolution claim requires baseline, rejection and rollback of a regressed mutation, independent acceptance of one net improvement and later invalidation with rollback, replacement or retirement. Design, static checks and a single sequence are not field or population value.",
     "reuseRule": "Search for and understand suitable existing wheels before authorship. Record provenance, license, maintenance health, exact reusable idea or component, fit, limits, failure modes, side effects, integration burden, rollback and retirement. Adopt a pattern without inheriting its personality, prestige, platform assumptions or metric as authority.",
-    "productFormRule": "Allocate each currently relevant responsibility to plugin, Skill, Hook, protocol, library, runtime, service, client integration, cloud carrier, an open-ended composition or no added artifact only after the required effect, environment, authority, latency, isolation, durability, update, recovery and lifecycle properties are known. One form may be sufficient and several replaceable forms may cooperate; shared outcome, authority, evidence and lifecycle contracts provide system coherence without requiring one centralized carrier. Form is a dynamic route variable and may change across contexts, but flexibility itself must remain observable, bounded and verifiable.",
-    "consensusRule": "Record a new accountable consensus as a versioned correction, distinguish judgment from factual proof, locate the earliest affected dependency, preserve the superseded baseline as history, and replay the plan, process, acceptance, goal projection, implementation, evidence, documentation and claim surfaces that depend on it.",
+    "productFormRule": "Allocate each currently relevant responsibility to plugin, Skill, Hook, protocol, library, runtime, service, client integration, cloud carrier, an open-ended composition or no added artifact only after the required effect, environment, authority, latency, isolation, durability, update, recovery and lifecycle properties are known. Treat every retained capability as a replaceable module with one narrow interface and high internal depth: responsibility, authority, state, evidence and lifecycle stay cohesive while host-specific variation sits in adapters at real seams. Add a seam only when at least two justified adapters vary there; keep graph, matrix, cache and evaluator internals behind the module interface. One form may be sufficient and several replaceable modules may cooperate; shared outcome, authority, evidence and lifecycle contracts provide system coherence without requiring one centralized carrier. Form is a dynamic route variable and may change across contexts, but flexibility itself must remain observable, bounded and verifiable.",
+    "consensusRule": "Record a new accountable consensus as a versioned correction and let it govern direction, while distinguishing judgment from factual proof. Before downstream execution, compare it with the current proposition set for contradiction, category error, boundary drift and dependency impact; repair from the earliest affected dependency or stop the affected route. Preserve the superseded baseline as history, then replay the plan, process, acceptance, goal projection, implementation, evidence, documentation and claim surfaces that depend on it. Only the reconciled set becomes the next coherent implementation baseline.",
     "falsifiers": [
       "a plugin Hook or runtime is selected before the closure properties require it",
       "an Accord-enabled environment is treated as an uncontaminated native baseline",
@@ -1311,7 +1316,10 @@
       "a popular external repository or person's method is copied without fit limits counterevidence and exit conditions",
       "learning artifacts silently become authority or persistent user state",
       "form flexibility accumulates mechanisms without named responsibility shared contracts evidence or retirement",
-      "a new consensus changes one surface while dependent plan process acceptance prompt implementation evidence or claims remain stale"
+      "a new consensus changes one surface while dependent plan process acceptance prompt implementation evidence or claims remain stale",
+      "a copied-history fork is used as sequential context relief or called a handoff",
+      "binary capability incidence overlap is treated as redundancy or retirement proof",
+      "module autonomy bypasses the shared responsibility authority state evidence or lifecycle interface"
     ]
   },
   "topology": {
@@ -1320,7 +1328,6 @@
       "branch",
       "worktree",
       "repository-fork",
-      "cloud-environment",
       "synchronization",
       "merge",
       "cleanup"
@@ -1329,12 +1336,21 @@
       "current-task",
       "compact",
       "causal-fork",
-      "fresh-task-with-verified-handoff",
+      "fresh-zero-inherited-history-carrier-with-verified-handoff",
       "conclusion-reconciliation",
       "source-release",
       "archive"
     ],
-    "rule": "The Agent selects and verifies topology from host-native signals and current constraints. The user is asked only when a new authority, trust, data, cost, destructive, irreversible or publication boundary makes the choice genuinely human-owned.",
+    "execution": [
+      "local-environment",
+      "cloud-environment",
+      "worker-or-process",
+      "terminal-or-connection",
+      "placement",
+      "cleanup"
+    ],
+    "independenceRule": "Code topology, conversation topology and execution or resource placement are orthogonal. A compact, causal fork or sequential handoff does not create or select a checkout, branch, worktree or repository fork; a code-topology change does not prove state transfer or conversation continuity; and local or cloud placement changes neither unless separately bound. Bind and verify each only when the outcome requires it.",
+    "rule": "The Agent selects and verifies topology from host-native signals and current constraints. Compact means same-carrier memory reduction; causal fork means copied-history branching; sequential context relief means a fresh zero-inherited-history carrier, minimum verified state transfer, destination verification and only then source release. These are not interchangeable. The user is asked only when a new authority, trust, data, cost, destructive, irreversible or publication boundary makes the choice genuinely human-owned.",
     "codexCloud": "Codex Cloud is a first-class execution, comparison, verification and continuity carrier when its isolated environment, setup, secrets, network policy and source revision fit the task; it is not merely a release checker and does not inherit unverified local state."
   },
   "resourceStewardship": {
@@ -1381,6 +1397,50 @@
         "responsibility-product-form-or-cross-form-contract-change",
         "effect-evidence-acceptance-or-residue-change"
       ]
+    },
+    "sparseMatrixViews": {
+      "authority": "derived-query-views-only-never-a-second-source-of-truth",
+      "hostNativeCapabilitySurface": {
+        "axes": [
+          "current-outcome-responsibility",
+          "source-and-freshness-bound-host-native-capability-instance"
+        ],
+        "cell": "tri-state observed support plus provenance composition health and expiry"
+      },
+      "accordCapabilitySurface": {
+        "axes": [
+          "current-outcome-responsibility",
+          "Accord-capability-mechanism-or-form-allocation"
+        ],
+        "cell": "tri-state current allocation effectiveness exposure burden and lifecycle"
+      },
+      "admissionMask": {
+        "applies": [
+          "authority",
+          "model-effective-exposure",
+          "configuration-and-permission",
+          "health-and-compatibility",
+          "trust-data-cost-and-risk"
+        ],
+        "rule": "A declared or visible capability remains ineligible until the current composition passes every hard gate."
+      },
+      "closureLifecycleMask": {
+        "applies": [
+          "activation",
+          "execution",
+          "consequence",
+          "independent-evidence",
+          "cleanup",
+          "rollback",
+          "retirement-poststate-and-recheck"
+        ],
+        "rule": "Name or incidence overlap cannot substitute for same-responsibility consequence and lifecycle closure."
+      },
+      "candidateOverlap": {
+        "derivation": "sparse join on stable responsibility identifiers after the admission mask",
+        "decisionRule": "H-intersect-A produces a candidate redundancy relation only; retirement requires the closure-lifecycle mask and exact allocation evidence"
+      },
+      "materializationRule": "Materialize only queried responsibilities and observed capability instances. Never persist a full host-by-model-by-tool-by-context Cartesian matrix or treat matrix cells as authority."
     },
     "graphProjection": {
       "implementation": "derived-in-memory-or-ignored-cache-first",

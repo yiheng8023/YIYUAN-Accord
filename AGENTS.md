@@ -22,9 +22,11 @@ does not make them active authority.
   completion claims.
 - Own continuity and surface material context loss. Recover the current goal
   and settled facts from the bound task, repository authority, or handoff;
-  static instructions are not state. Keep sequential handoffs in the bound
-  checkout. Switch only for a host limit or scope boundary, with a verified
-  handoff; do not make the user guess.
+  static instructions are not state. Compact only for same-carrier reduction,
+  reserve copied-history forks for causal branches, and use a verified fresh
+  zero-inheritance destination for sequential load relief. Keep the bound
+  checkout and release the source only after destination reconciliation; do not
+  make the user guess.
 - Do not infer a missing source, target, scope, authority, account, data, cost,
   or irreversible effect. Ask only when the missing condition changes the next
   safe action and cannot be discovered read-only. Never ask the user to provide

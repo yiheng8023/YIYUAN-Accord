@@ -1078,3 +1078,95 @@ The derived graph adds only `audit-cut:f898ebd`,
 finite allocation, and GT-19 `verifies` the future behavior claim. Task-time
 host capability instances remain ephemeral; no host-model-tool-context product
 is precomputed and the graph remains derived rather than authoritative.
+
+## System coherence calibration after the continuity and capability-view corrections
+
+This is a proposition-level calibration, not another feature proposal. The
+exact committed baseline is `6a98cb7b7a73bc650731c33e895853175da95754` on the
+same `main` checkout. The review subject is the subsequent dirty correction set
+that distinguishes fork from handoff, introduces sparse capability-surface
+views and binds native-successor discovery to responsibility retirement. The
+target is one internally consistent bounded proposition set whose authority,
+plan, process, acceptance, goal projection, interfaces, evidence and claims do
+not prescribe mutually incompatible actions. The counterfactual is to promote
+each locally plausible consensus directly into downstream work; that route can
+produce a larger but contradictory system and is rejected.
+
+The evidence cutoff is repository authority and tracked implementation through
+2026-08-28 plus the live Git identity above. The current host remains
+Accord-enabled and extension-composed. This review does not observe Hook firing,
+official-clean behavior, live native replacement, field value, cross-host
+equivalence or a durable continuity carrier. Those are evidence gaps rather than
+logical contradictions. Recheck this ledger when the bound outcome or authority
+changes, a proposition or interface changes, a new product form is admitted,
+host capability evidence changes, GT-07 or GT-19 produces evidence, or an
+independent reviewer finds a counterexample.
+
+### Proposition ledger
+
+| ID | Proposition pair | Finding | Reconciled disposition |
+| --- | --- | --- | --- |
+| P1 | Complete self-bootstrapping / human authority | Consistent only when complete is bounded. | Accord may close every named responsibility or expose an unknown and stop condition; it never creates goals, authority or universal completeness. |
+| P2 | Dynamic product form / stable architecture | Tension, not contradiction. | The stable element is a narrow outcome-authority-state-evidence-lifecycle interface; plugin, Skill, Hook, native route, service or no artifact remains a replaceable allocation. |
+| P3 | Any capability as a module / Accord ownership | The unqualified statement is a category error. | Any admitted capability may fill a module role in the current closure. A native or external capability stays an external dependency behind an adapter and does not become Accord-owned implementation. |
+| P4 | Modular high cohesion / whole-system coherence | Low coupling alone can fragment authority and state. | Each deep module keeps its responsibility cohesive and cooperates only through the shared interface; internal matrix, graph, cache and evaluator choices stay hidden. |
+| P5 | Host-native and Accord matrices / dynamic graph | Consistent only as derived sparse query views. | H and A are source- and freshness-bound responsibility-incidence views; E and V are admission and closure-lifecycle masks. None is a second authority source or a Cartesian capability catalogue. |
+| P6 | H/A overlap / redundancy | The former shortcut was contradictory. | Overlap opens evaluation only. Same responsibility, successor consequence, cleanup, authority, reversible observation, retirement post-state and recheck are additionally required. |
+| P7 | Route retirement / responsibility retirement | The first implementation leaked whole-route semantics. | Exact `6a98cb7` replaced route IDs with route-plus-responsibility allocations. Unrelated allocations and latent fallback remain intact. |
+| P8 | Compact / fork / sequential handoff | The earlier wording made distinct topology operations appear interchangeable. | Compact reduces memory on one carrier; a fork copies history for causal branching; sequential load relief uses a fresh zero-history destination and verified minimum state transfer. |
+| P9 | Carrier / handoff | Calling handoff a carrier is a category error. | A carrier transports work or state. Handoff is a transition between carriers and completes only after destination verification and scoped source release. |
+| P10 | Dynamic retirement / fallback and uninstall | No contradiction when logical allocation and physical removal stay separate. | Bypass or retire only the exact redundant allocation; preserve a healthy latent fallback when its lifecycle value warrants it. Global uninstall is a separate authorized effect. |
+| P11 | Claude `fork` Hook event / fork semantics | Event coverage can be mistaken for product semantics. | The Hook may observe a host `SessionStart` fork event, but this proves neither handoff, context relief, activation, behavior nor value. |
+| P12 | Latest consensus / coherent baseline | Immediate propagation can create a contradiction cascade. | A correction governs direction immediately, but becomes the next implementation baseline only after contradiction, category, boundary and dependency checks reconcile every affected surface. |
+| P13 | Self-audit / independent review | Self-audit cannot independently certify itself. | This calibration can repair premises and reopen evidence; GT-07, GT-17, GT-19, reacceptance and later independent specification, implementation and standards review remain separate gates. |
+| P14 | Conversation / code / execution topology | Treating them as one topology makes a context transition silently authorize code-carrier or environment-placement changes. | They are orthogonal decision spaces. A compact, causal fork or sequential handoff preserves code topology and execution placement unless separately admitted; branch, worktree, repository-fork, local or cloud changes do not prove conversation continuity. |
+
+### Decision predicates
+
+The symbols are explanatory constraints, not a new runtime language:
+
+```text
+CandidateOverlap(r) = ObservedFresh(H[r,*])
+                      AND Active(A[r,*])
+                      AND AdmissionMask(E)
+
+Redundant(r,a) = CandidateOverlap(r)
+                 AND SameResponsibility(r,a)
+                 AND SuccessorConsequence(r)
+                 AND Cleanup(r)
+                 AND ClosureLifecycleMask(V)
+
+Retire(a) = Redundant(r,a)
+            AND HumanAuthority
+            AND ReversibleObservation
+            AND IndependentPoststate
+            AND ExplicitRecheck
+
+SequentialHandoff = FreshZeroHistoryDestination
+                    AND MinimumVerifiedStateTransfer
+                    AND DestinationReconciled
+                    AND ScopedSourceRelease
+
+Compact != CausalFork
+CausalFork != SequentialHandoff
+Compact != SequentialHandoff
+```
+
+The implementation boundary remains one deep pure-data
+`reconcile_closure(request)` interface. Codex and Claude are two concrete host
+adapters at a real projection seam. H, A, E, V and the relation graph remain
+internal derived inputs or query views; this review admits no matrix service,
+graph database, Runtime, state store or new host adapter.
+
+### Earliest-boundary replay
+
+The earliest authority boundary is the constitution's success, continuity,
+feedback and retirement semantics. Dependent surfaces are the reshaping model,
+glossary, Skills, program and paused goal projection, GT-07 and GT-19 contracts,
+acceptance rules, reference-core retirement binding, architecture and
+continuation documentation, tests and claim ceiling. Historical GT-07 evidence
+remains true only for its old task contract; the corrected contract reopens
+current qualification. The coherence calibration is incomplete until all these
+surfaces parse, their deterministic checks pass, their hashes and package
+projections agree, and the two reopened behavior tasks later pass on one exact
+baseline. It is not candidate or release evidence.
