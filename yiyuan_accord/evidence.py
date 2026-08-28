@@ -5,7 +5,10 @@ import re
 import subprocess
 from urllib.parse import unquote, urlsplit
 
-from .identity import _exact, _nonempty_string as _text, _safe_https_locator
+from .identity import (
+    _bounded_git_bytes, _exact, _nonempty_string as _text,
+    _safe_https_locator, _strict_json_object,
+)
 
 
 STATES = {"passed", "failed", "failed-repeated-same-purpose"}
@@ -480,17 +483,38 @@ def _evaluation_contracts(policy, task_id, current):
     return contracts
 
 
-def _source_amendments(record, task, task_digest, captured_at):
+def _source_amendments(root, record, task, task_digest, captured_at):
     amendments = record.get("amendments") if isinstance(record, dict) else None
     if amendments is None:
         return True
     if (not isinstance(amendments, list) or not amendments
             or any(not isinstance(a, dict) for a in amendments)):
         return False
-    ws = task.get("workspaceContract")
-    if not isinstance(ws, dict): return False
-    origin = ws.get("supersedesGoldenTaskSha256")
-    if amendments[0].get("priorGoldenTaskSha256") != origin:
+    change_class = amendments[0].get("changeClass")
+    prior_digest = amendments[0].get("priorGoldenTaskSha256")
+    if change_class == "observed-context-correction":
+        ws = task.get("workspaceContract")
+        if (not isinstance(ws, dict)
+                or prior_digest != ws.get("supersedesGoldenTaskSha256")):
+            return False
+    elif change_class == "candidate-subject-binding":
+        payload = record.get("payload")
+        revision = payload.get("evaluatedRevision") if isinstance(payload, dict) else None
+        try:
+            suite = _strict_json_object(_bounded_git_bytes(
+                root, ["show", f"{revision}:evals/golden-tasks.json"]
+            ))
+            prior_task = next(item for item in suite.get("tasks", [])
+                              if item.get("id") == task.get("id"))
+        except (OSError, StopIteration, subprocess.SubprocessError,
+                UnicodeError, ValueError):
+            return False
+        current = dict(task)
+        current.pop("behaviorSubjectFiles", None)
+        if (len(amendments) != 1 or prior_task != current
+                or _digest(prior_task) != prior_digest):
+            return False
+    else:
         return False
     previous_time = captured_at
     previous_digest = None
@@ -506,7 +530,7 @@ def _source_amendments(record, task, task_digest, captured_at):
                 "correctedGoldenTaskSha256", "scope", "reason", "claimImpact",
             ))
             or amendment.get("kind") != "contract-correction"
-            or amendment.get("changeClass") != "observed-context-correction"
+            or amendment.get("changeClass") != change_class
             or amendment.get("behaviorReplayPerformed") is not False
             or amendment.get("claimImpact") != "metadata-only-no-new-behavior-claim"
             or re.fullmatch(
@@ -633,7 +657,7 @@ def _observation_errors(
             and source["kind"] in {"host-transcript", "host-event-log"}
             and _exact(bundle, ("schema", "records")) and bundle.get("schema") == 1
             and _exact(record, record_fields)
-            and _source_amendments(record, task, task_digest, captured)
+            and _source_amendments(root, record, task, task_digest, captured)
             and record.get("kind") == source.get("kind")
             and record.get("taskId") == task.get("id")
             and record.get("goldenTaskSha256") == task_digest

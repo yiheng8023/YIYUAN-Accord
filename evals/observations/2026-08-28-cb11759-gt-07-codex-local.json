@@ -1,7 +1,8 @@
 {
   "taskId": "GT-07",
-  "goldenTaskSha256": "bef7afffb777817ffe991ad271bcbb7a97fae04aa2af9b057241434f4791c76a",
+  "goldenTaskSha256": "52f2c2fb2820894737c2696c4b6b703cfba95013cd19311faf38453897a19c4d",
   "evaluationContractSha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
+  "evaluatedRevision": "cb11759362217dee4ff08aa43db75046bd63c651",
   "observedAt": "2026-08-28T14:23:04Z",
   "observer": {
     "kind": "host-event-recorder",
@@ -32,7 +33,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
       "recordId": "GT-07-cb11759",
-      "sha256": "4ce305213d0cdae3cc3aa9603c80447dcbd60b8b431759e8301ee699821b05f3",
+      "sha256": "d0792425a4b469e619d8c784caa0ed7624a1eb02bdd2e1f5d0b242e1adbd2057",
       "claim": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness.",
       "postSessionBindingsSha256": "e7f6354b611b016fcc25e02acc415635e8bf86fb601ae5e43b2b6071c9b3d277"
     }

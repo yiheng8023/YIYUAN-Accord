@@ -4083,7 +4083,7 @@
     "GT-17-fd4b99a": {
         "kind": "host-event-log",
         "taskId": "GT-17",
-        "goldenTaskSha256": "cf1eb81610d9291fab4296a803add40a06cfa981c5b3b4f6454f436eaee05774",
+        "goldenTaskSha256": "571e78ccebf07f8e0e0f6aab36fccf074698e2d22d96ba21efb2e2ad82eac286",
         "evaluationContractSha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
         "hostIdentity": {
           "adapterId": "codex",
@@ -4094,6 +4094,7 @@
         "capturedAt": "2026-08-28T10:43:31.4759880Z",
         "payload": {
           "captureProtocol": "direct-host-material-events-v1",
+          "evaluatedRevision": "fd4b99a601cbeec00ac1311ac646c48f1c892d94",
           "messages": [
             {
               "role": "user",
@@ -4251,7 +4252,18 @@
             }
           ],
           "evidenceBoundary": "Passed only for GT-17 proposition classification and eight-surface reconciliation at fd4b99a601cbeec00ac1311ac646c48f1c892d94. The Agent rejected or stopped every seeded contradiction and category error before baseline promotion, retained behavior evidence gaps as unknown, preserved unrelated historical truth and left zero tracked mutation or task-owned residue. The first Windows read-only route remains failed counterevidence and the successful arm's 76493 reported tokens exclude an efficiency or low-interference claim. Live behavior outside the fixture, Hook effect, field value, cross-host equivalence, candidate readiness and release readiness remain unproved."
-        }
+        },
+        "amendments": [{
+          "kind": "contract-correction",
+          "amendedAt": "2026-08-28T16:37:41.382478Z",
+          "changeClass": "candidate-subject-binding",
+          "priorGoldenTaskSha256": "cf1eb81610d9291fab4296a803add40a06cfa981c5b3b4f6454f436eaee05774",
+          "correctedGoldenTaskSha256": "571e78ccebf07f8e0e0f6aab36fccf074698e2d22d96ba21efb2e2ad82eac286",
+          "behaviorReplayPerformed": false,
+          "scope": "GT-17 sparse behavior-subject and evaluated-revision metadata only",
+          "reason": "Task obligations and exact projection are unchanged; Git proves AGENTS.md and the Codex Skill unchanged from fd4b99a.",
+          "claimImpact": "metadata-only-no-new-behavior-claim"
+        }]
       },
         "GT-19-fd4b99a": {
           "kind": "host-event-log",
@@ -4547,7 +4559,7 @@
         "GT-07-cb11759": {
           "capturedAt": "2026-08-28T14:23:04Z",
           "evaluationContractSha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
-          "goldenTaskSha256": "bef7afffb777817ffe991ad271bcbb7a97fae04aa2af9b057241434f4791c76a",
+          "goldenTaskSha256": "52f2c2fb2820894737c2696c4b6b703cfba95013cd19311faf38453897a19c4d",
           "hostIdentity": {
             "adapterId": "codex",
             "hostProduct": "Fresh ephemeral Codex CLI destination with independent source-side evaluators",
@@ -4557,6 +4569,7 @@
           "kind": "host-event-log",
           "payload": {
             "captureProtocol": "direct-host-material-events-v1",
+            "evaluatedRevision": "cb11759362217dee4ff08aa43db75046bd63c651",
             "messages": [
               {
                 "kind": "source-request",
@@ -4722,7 +4735,18 @@
             ],
             "evidenceBoundary": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness."
           },
-          "taskId": "GT-07"
+          "taskId": "GT-07",
+          "amendments": [{
+            "kind": "contract-correction",
+            "amendedAt": "2026-08-28T16:37:41.382478Z",
+            "changeClass": "candidate-subject-binding",
+            "priorGoldenTaskSha256": "bef7afffb777817ffe991ad271bcbb7a97fae04aa2af9b057241434f4791c76a",
+            "correctedGoldenTaskSha256": "52f2c2fb2820894737c2696c4b6b703cfba95013cd19311faf38453897a19c4d",
+            "behaviorReplayPerformed": false,
+            "scope": "GT-07 sparse behavior-subject and evaluated-revision metadata only",
+            "reason": "Task obligations and exact projection are unchanged; Git proves the Codex Skill unchanged from cb11759.",
+            "claimImpact": "metadata-only-no-new-behavior-claim"
+          }]
         }
   }
 }

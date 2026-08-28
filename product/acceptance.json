@@ -205,6 +205,12 @@
           "GT-18"
         ],
         "reason": "Exact 7d7a7e5 observations remain bounded facts under their former evaluator contract. GT-17 is reopened by the later proposition-coherence correction; GT-18 remains a finite state-carrier sequence and makes no code- or conversation-topology transition claim."
+      },
+      {
+        "kind": "scoped-evaluation-contract-supersession",
+        "sha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
+        "preservedTaskIds": ["GT-07", "GT-17"],
+        "reason": "Candidate qualification adds only sparse behavior-subject and evaluated-revision bindings for these tasks. Their obligations and exact projection are unchanged, and Git proves their declared subject files unchanged from the captured revisions; no new behavior claim is made."
       }
     ],
     "historicalEvidenceContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
@@ -399,61 +405,19 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "planned",
+      "assessment": "continuing",
       "assessmentScope": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, fresh source-complete Codex-local GT-14 through GT-16 observations pass only their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision and one disposable pure-data minimum-form bootstrap. Independent review rejected the later f0ed9ce/08eb72a GT-17/18 completion claim and its former-verifier acceptance; both remain counterevidence. At exact 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c, a fresh bounded replay passes GT-17 only for its former global-surface contract and GT-18 only for one synthetic four-episode full-vector sequence with source-bound state-carrier edges, regression rollback, native no-add retention, later invalidation, replacement, retirement and zero task resources. GT-18 claims no code- or conversation-topology transition and remains unaffected. Exact fd4b99a601cbeec00ac1311ac646c48f1c892d94 now passes revised GT-17 only for proposition classification, stop-before-conflict propagation and eight-surface reconciliation. Its first Windows read-only route remains failed evidence-unavailable counterevidence, and the successful arm's 76493 reported tokens exclude low-interference or efficient-reading claims. At the same revision, revised GT-19 passes only one source-bound four-episode Codex-local sense-environment responsibility-allocation sequence after official-source, local-help, isolated Accord/native behavior, deterministic post-state and canonical-validator cross-checks. Official declaration and sparse overlap alone did not retire anything; only current-plugin/sense-environment retired after the native route closed the same responsibility and lifecycle, bind-authority and fallback remained, and evidence expiry restored the plugin allocation. The pure-data-only arm, schema rejection, hash-transcription failure and PowerShell API mismatch remain counterevidence; successful Accord/native arms reported 21183/19642 tokens. At cb11759362217dee4ff08aa43db75046bd63c651, revised GT-07 passes only one Codex-local fresh zero-inherited-history destination receipt, three-way compact/fork/sequential-handoff classification and destination-before-fixture-source release sequence. Code topology and local execution placement remained independently unchanged. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator type mismatch, 22607 tokens and slow cleanup remain counterevidence; actual compact and fork operations were not performed. BAL-04 selected no added form and no net Accord gain for its exact paired condition. Exact 6a98cb7 corrected route-level leakage to responsibility-allocation retirement; fd4b99a adds source-bound successor observation, graph-derived same-responsibility overlap and topology/coherence gates. Revised GT-07, GT-17 and GT-19 now have only their finite source-complete Codex-local results. Global deterministic reacceptance is complete; independent review is active. Official-clean behavior, Hook firing, implicit activation, live-mechanism effectiveness on a genuine gap, durable carrier need, cross-host or field value, production safety, whole-system balance, candidate readiness and release readiness remain unproved.",
       "evidence": [
         {
-          "locator": "evals/observations/2026-08-28-84447a7-gt-14-codex-local.json",
-          "sha256": "3a8f2faf40a4309c38bf0916100667b6bd027f94eb6066a4a10ffc923ffc2300",
-          "claim": "Passed only for provenance-bound admission of this exact current-enabled composition. It does not prove official-clean or no-Accord behavior, model identity, Hook firing, causal Accord effect, interference, value or cross-host behavior.",
-          "bindsProjection": "codex",
-          "supportsCriterion": "R3"
-        },
-        {
-          "locator": "evals/observations/2026-08-28-84447a7-gt-15-codex-local.json",
-          "sha256": "0d1041139b822a293be4dfaf5b7d1b66427255331831309bb15a81466efeb489",
-          "claim": "Passed only for feasibility and the no-build decision for the named pre-authorship route-selection sub-capability. It does not prove dependency activation, live adapter behavior, product-form sufficiency, end-to-end self-bootstrapping, field value or release readiness.",
-          "bindsProjection": "codex",
-          "supportsCriterion": "R3"
-        },
-        {
-          "locator": "evals/observations/2026-08-28-84447a7-gt-16-codex-local.json",
-          "sha256": "50b489d1ab8074c0967fa9958e7f383acce41636627f3a03661241a697f68417",
-          "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap with independent consequence, rollback, resource release and cleanup. It does not prove a live host mechanism, plugin or Runtime sufficiency, durable learning, cross-host portability, population value, candidate or release readiness.",
-          "bindsProjection": "codex",
-          "supportsCriterion": "R3"
-        },
-        {
-          "locator": "evals/observations/2026-08-28-7d7a7e5-gt-17-codex-local.json",
-          "sha256": "889d735e01bda9135376d6b8f2e95043bc3fdffaf9c7bfcf2dcc935f4807ce76",
-          "claim": "Passed only for the independent-review evidence correction at 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c: the earliest GT-17/18 source boundary, eight bounded dependent surfaces, scoped evaluator history, prior 84447a7 GT-14/15/16 truth and f0ed9ce/08eb72a counterevidence agree. It does not prove factual product value, official-clean or no-Accord behavior, live mechanism effect, every external carrier, candidate readiness, publication authority or release readiness.",
-          "bindsProjection": "codex",
-          "supportsCriterion": "R3"
-        },
-        {
-          "locator": "evals/observations/2026-08-28-7d7a7e5-gt-18-codex-local.json",
-          "sha256": "c1f17000bedd78dc2056b418f4fe4f4bc836241607bab6718d20deda05e5ebd8",
-          "claim": "Passed only for one synthetic four-episode sequence at 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c: every episode retains the immutable full vector and source-bound core decision, the proxy regression is rejected and rolled back, native no-add is kept only as a bounded improvement, later invalidation restores minimal composition, three actual carrier edges chain exact states, retired routes are explicit and task resources are zero. It does not prove unbounded self-improvement, durable-carrier need, long-term field value, cross-user generalization, cross-host equivalence, candidate readiness or release readiness.",
-          "bindsProjection": "codex",
-          "supportsCriterion": "R3"
-        },
-        {
           "locator": "evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json",
-          "sha256": "40bdf1f574d1cff2a919923371ea7e0171050a6e643e0f82591d74a1b08046f4",
+          "sha256": "ff4ddd0a93869f46a94917676c4e67119f83865b8d9e52757c2bfdd737cae39b",
           "claim": "Passed only for GT-17 proposition classification and eight-surface reconciliation at fd4b99a601cbeec00ac1311ac646c48f1c892d94. The Agent rejected or stopped every seeded contradiction and category error before baseline promotion, retained behavior evidence gaps as unknown, preserved unrelated historical truth and left zero tracked mutation or task-owned residue. The first Windows read-only route remains failed counterevidence and the successful arm's 76493 reported tokens exclude an efficiency or low-interference claim. Live behavior outside the fixture, Hook effect, field value, cross-host equivalence, candidate readiness and release readiness remain unproved.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
-          "locator": "evals/observations/2026-08-28-fd4b99a-gt-19-codex-local.json",
-          "sha256": "2cb44390c2c024e2f36143b356755ccb1bd28641f4967762a3c7968ad0e5072c",
-          "claim": "Passed only for one source-bound four-episode Codex-local sense-environment allocation sequence at fd4b99a601cbeec00ac1311ac646c48f1c892d94. Official declaration and responsibility incidence did not cause retirement; the no-add native arm was admitted only after exact observed behavior, consequence, cleanup and rollback closure; only current-plugin/sense-environment retired with recheck while bind-authority and fallback remained; evidence expiry restored the plugin allocation. Failed attempts, finite token cost and zero tracked mutation/residue remain visible. Hook causality, field value, cross-host equivalence, durable state, whole-product retirement, candidate readiness and release readiness remain unproved.",
-          "bindsProjection": "codex",
-          "supportsCriterion": "R3"
-        },
-        {
           "locator": "evals/observations/2026-08-28-cb11759-gt-07-codex-local.json",
-          "sha256": "5381cd5f9402064ad6730abbddae2835895bbbcf17f8411f589403a49d7d93f6",
+          "sha256": "9c9d585d31433cbb4e0df34ae76969a72e9d024d988d5b3e65275404ca7b378a",
           "claim": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"

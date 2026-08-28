@@ -37,7 +37,7 @@ SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
 CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-27-v310-gt11-codex-local.json'
 CURRENT_GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json'
-CURRENT_GT16_OBSERVATION = 'evals/observations/2026-08-28-84447a7-gt-16-codex-local.json'
+CURRENT_GT17_OBSERVATION = 'evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json'
 SRC310 = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
 OBS11 = 'evals/observations/2026-08-27-v310-gt11-codex-local.json'
 OBS13 = 'evals/observations/2026-08-27-v310-gt13-codex-local.json'
@@ -1437,20 +1437,20 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertIsNone(_postcapture_bundle(payload, task, _time(record['capturedAt'])))
 
-        for task_id in ('GT-02', 'GT-16'):
+        for task_id in ('GT-02', 'GT-17'):
             with self.subTest(policy_anchor=task_id), _fixture() as root:
-                if task_id == 'GT-16':
-                    _enable_current_sample_validation(root)
                 golden = _read(root, G)
                 task = next(item for item in golden['tasks'] if item['id'] == task_id)
-                if task_id == 'GT-16':
-                    locator = CURRENT_GT16_OBSERVATION
+                if task_id == 'GT-17':
+                    locator = CURRENT_GT17_OBSERVATION
                     source_locator = CURRENT_GT16_SOURCE
                 else:
                     locator = OBS[int(task_id[-2:])]
                     source_locator = SOURCE
                 bundle = _read(root, source_locator)
-                record, observation = bundle['records'][task_id], _read(root, locator)
+                observation = _read(root, locator)
+                record = bundle['records'][observation[
+                    'transcriptOrEventEvidence'][0]['recordId']]
                 payload = record['payload']
                 if task_id == 'GT-02':
                     task.pop('postSessionBindingContract')
@@ -1463,8 +1463,8 @@ class ProductControlTests(unittest.TestCase):
                         'postSessionBindingsSha256'
                     )
                 else:
-                    task['postSessionBindingContract'][0]['bindingCount'] = 1
-                    payload['postSessionBindingContract'][0]['bindingCount'] = 1
+                    task['postSessionBindingContract'][0]['bindingCount'] = 2
+                    payload['postSessionBindingContract'][0]['bindingCount'] = 2
                     bindings = payload['cleanupEvidence']['observations'][-1]['sourceBindings']
                     payload['cleanupEvidence']['observations'][-1]['sourceBindings'] = bindings[:1]
                 digest = _digest(task)
@@ -1707,10 +1707,11 @@ class ProductControlTests(unittest.TestCase):
         current = representative_contract_sha256(acceptance, _read(ROOT, G))
         old = policy['evaluationContractHistory'][0]['sha256']
         sequence_contract = policy['evaluationContractHistory'][1]['sha256']
+        qualification_contract = policy['evaluationContractHistory'][2]['sha256']
         self.assertIn(old, _evaluation_contracts(policy, 'GT-14', current))
         self.assertEqual(
             _evaluation_contracts(policy, 'GT-17', current),
-            {current, sequence_contract},
+            {current, sequence_contract, qualification_contract},
         )
         self.assertEqual(
             _evaluation_contracts(policy, 'GT-18', current),
@@ -1841,9 +1842,7 @@ class ProductControlTests(unittest.TestCase):
             ROOT,a,a['representativeBehaviorPolicy']['requiredTaskIdsForRelease'],
             g,lambda r,p,_:_read(r,p),True)
         self.assert_has(e,'representative tasks missing',
-                        'R3 representative coverage mismatch',
-                        'observation shape invalid',
-                        'evaluatedRevision is invalid')
+                        'R3 representative coverage mismatch')
 
         revision = _git(ROOT, 'rev-parse', 'HEAD', text=True).strip()
         task = {'behaviorSubjectFiles': ['yiyuan_accord/closure.py']}

@@ -111,6 +111,13 @@ Then read, in order:
   source-recorded ancestor `evaluatedRevision` are therefore the current
   earliest dependency boundary; affected evidence must be replayed or
   deterministically shown unchanged before another independent review.
+  Exact behavior checkpoint `4e42ccc702a5a25eb53362192f17ebf5aacf3598`
+  implements that gate. GT-07 at `cb11759` and GT-17 at `fd4b99a` retain
+  unchanged task obligations, exact Codex projection and task-declared subject
+  bytes, so metadata-only source amendments promote them to partial current R3
+  evidence without behavior replay. GT-11 through GT-16 plus GT-18 and GT-19
+  have changed Skill, evaluation contract or reference-core subjects and need
+  fresh bounded replay; GT-07 is not rerun merely to refresh bookkeeping.
   The user cleared the host goal after a new dynamic-retirement
   consensus; the deterministic repository projection remains
   `prepared-host-goal-paused` and must be refreshed before any later activation.
@@ -304,7 +311,7 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The active development guardrail permits at most 86 tracked files and
-  352000 product-code-and-test bytes with at least five percent headroom and
+  354000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
   regression, one append-only GT-14 through GT-19 source and seven current

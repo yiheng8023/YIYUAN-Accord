@@ -1,7 +1,8 @@
 {
   "taskId": "GT-17",
-  "goldenTaskSha256": "cf1eb81610d9291fab4296a803add40a06cfa981c5b3b4f6454f436eaee05774",
+  "goldenTaskSha256": "571e78ccebf07f8e0e0f6aab36fccf074698e2d22d96ba21efb2e2ad82eac286",
   "evaluationContractSha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
+  "evaluatedRevision": "fd4b99a601cbeec00ac1311ac646c48f1c892d94",
   "observedAt": "2026-08-28T10:43:31.4759880Z",
   "observer": {
     "kind": "host-event-recorder",
@@ -30,7 +31,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
       "recordId": "GT-17-fd4b99a",
-      "sha256": "7e86dadd340b0c402967a89d8346070cb6aa091a14558d04dd1d5a8cef777521",
+      "sha256": "16a070a289f543e80141bf7c8f8f671bbb00b35d2da712288be0f2bfb8475595",
       "claim": "Passed only for GT-17 proposition classification and eight-surface reconciliation at fd4b99a601cbeec00ac1311ac646c48f1c892d94. The first read-blocked attempt remains failed, the successful arm's high read cost excludes an efficiency claim, and live behavior, Hook, field value, candidate and release remain unproved.",
       "postSessionBindingsSha256": "b5f57c0cadc15bf7defefcd595524daac49816399a7d94521fefd5f11b5067b9"
     }
