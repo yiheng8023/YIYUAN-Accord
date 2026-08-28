@@ -4543,6 +4543,186 @@
             "recheckTriggers": [{"kind": "recheck-trigger", "condition": "Codex command surface, candidate Skill, native behavior, evidence freshness, responsibility scope or evaluator changes", "scope": "GT-19 dynamic sense-environment allocation", "action": "refresh only affected H/A/E/V cells and run a new exact bounded sequence without inheriting this finite result"}],
             "evidenceBoundary": "Passed only for one source-bound four-episode Codex-local sense-environment allocation sequence at fd4b99a601cbeec00ac1311ac646c48f1c892d94. Official declaration and responsibility incidence did not cause retirement; the no-add native arm was admitted only after exact observed behavior, consequence, cleanup and rollback closure; only current-plugin/sense-environment retired with recheck while bind-authority and fallback remained; evidence expiry restored the plugin allocation. Failed attempts, finite token cost and zero tracked mutation/residue remain visible. Hook causality, field value, cross-host equivalence, durable state, whole-product retirement, candidate readiness and release readiness remain unproved."
           }
+        },
+        "GT-07-cb11759": {
+          "capturedAt": "2026-08-28T14:23:04Z",
+          "evaluationContractSha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
+          "goldenTaskSha256": "bef7afffb777817ffe991ad271bcbb7a97fae04aa2af9b057241434f4791c76a",
+          "hostIdentity": {
+            "adapterId": "codex",
+            "hostProduct": "Fresh ephemeral Codex CLI destination with independent source-side evaluators",
+            "hostVersion": "Codex CLI 0.150.1; gpt-5.6-luna low; Windows PowerShell 5.1 and PowerShell 7.6.5; Windows NT 10.0.26200.0",
+            "sessionId": "01a04840-ec1f-7423-a44b-45880579b10c"
+          },
+          "kind": "host-event-log",
+          "payload": {
+            "captureProtocol": "direct-host-material-events-v1",
+            "messages": [
+              {
+                "kind": "source-request",
+                "phase": "source-handoff",
+                "role": "user",
+                "text": "Capacity is unknown. Distinguish compact, causal fork and fresh sequential handoff; preserve the same code identity and local execution placement; retain the source until a zero-inherited-history destination is independently verified."
+              },
+              {
+                "kind": "destination-result",
+                "phase": "destination-verification",
+                "role": "assistant",
+                "text": "The fresh destination classified all three conversation operations, verified the minimum state, exact Skill and code binding while sourceReleased=false, and reported no code-topology or execution-placement change."
+              },
+              {
+                "kind": "source-result",
+                "phase": "source-reconciliation",
+                "role": "assistant",
+                "text": "Independent destination post-state passed before the task fixture source was released; source-side reconciliation and exact-root cleanup then passed."
+              }
+            ],
+            "materialEvents": [
+              {
+                "kind": "capacity-observation",
+                "capacity": "unknown",
+                "reliableSignal": false,
+                "universalThreshold": null
+              },
+              {
+                "kind": "conversation-topology-classification",
+                "taskSha256": "91c190553e1cf61c4d1137df10931d9f1fed45f4380c6b774589e7f9e4fa5897",
+                "sourceStateBeforeSha256": "3d8eb6ad028a631857da0ae72bf0b806f18d61b89dd61832de8f454a4d032327",
+                "destinationResultSha256": "50c25b5b0ce9f9dd85f7703d36baac6936b309deee16907445847d1e619ed7f6",
+                "schemaSha256": "b1ecc51da2281d18349592e4f9495d2ff6286f01e32804f2c8d4be58a0013f2a",
+                "reportedTokensUsed": 22607,
+                "receivedFields": ["goal", "authority", "code-binding", "current-state", "evidence", "claim-limit"],
+                "classifications": [
+                  {"id": "compact", "semantic": "same-carrier-memory-reduction", "historyInheritance": "same-carrier", "sequentialContextRelief": false},
+                  {"id": "causal-fork", "semantic": "copied-history-causal-branch", "historyInheritance": "copied", "sequentialContextRelief": false},
+                  {"id": "sequential-handoff", "semantic": "fresh-zero-inherited-history-destination", "historyInheritance": "none", "sequentialContextRelief": true}
+                ],
+                "codeTopology": {"repository": "C:\\Projects\\YIYUAN-Accord", "branch": "main", "head": "cb11759362217dee4ff08aa43db75046bd63c651", "changed": false},
+                "executionPlacement": {"kind": "local", "changed": false},
+                "sourceReleasedObserved": false
+              },
+              {
+                "kind": "failed-attempts-retained",
+                "attempts": [
+                  {"route": "Codex CLI preflight", "failure": "--approve-for-me and an explicit --sandbox value were mutually exclusive; no session or behavior started"},
+                  {"sessionId": "01a0483f-9af8-7682-9b0f-0b4ec2782dde", "failure": "response schema const properties lacked explicit type and were rejected before behavior"},
+                  {"sessionId": "01a04840-922d-7872-b265-e54c3f0f9792", "failure": "response schema empty violations array lacked items and was rejected before behavior"},
+                  {"sessionId": "01a04840-ec1f-7423-a44b-45880579b10c", "failure": "a provisional pre-tool draft used zero hashes and wrong transfer fields; it was not the final result and was not promoted"},
+                  {"sessionId": "01a04840-ec1f-7423-a44b-45880579b10c", "failure": "one Git read ran from the non-repository task root and one PowerShell upstream expression partially failed; exact git -C reads corrected both without mutation"},
+                  {"carrier": "source-side PowerShell evaluator", "failure": "the first evaluator compared an auto-decoded DateTime to a string; UTC normalization corrected the read-only comparison"},
+                  {"carrier": "task-root cleanup", "failure": "exact-root deletion completed and verified clean but was anomalously slow; no low-interference or efficient-cleanup claim is made"}
+                ],
+                "disposition": "all failures and corrections remain counterevidence; none was promoted into the passing post-state"
+              },
+              {
+                "kind": "independent-poststate",
+                "sourceBindings": [
+                  {
+                    "kind": "direct-independent-command-result",
+                    "carrierSessionId": "5f04f389-0c3a-4bde-88ea-2c2b7aca9671",
+                    "taskLocator": "GT-07/destination-poststate",
+                    "resultLocator": "task-artifact:GT-07/destination-poststate/agent-final.txt",
+                    "phaseNonces": ["gt07-cb11759-destination-evaluator"],
+                    "resultSha256": "b7bd3ee60aa2564626ac4187792fb0de551ed76dd954e723c0465a81a70ac613",
+                    "resultRecordSha256": "fa23e46a6d2048f0e3f72ed77d21ceeac056b0bef6fee1c4dd6ee12cd9736372",
+                    "completedAt": "2026-08-28T12:04:50Z",
+                    "claim": "Binds exact destination receipt, minimum transfer, three-way conversation-topology classification, sourceReleased=false, unchanged code/execution topology and clean repository post-state."
+                  },
+                  {
+                    "kind": "direct-independent-command-result",
+                    "carrierSessionId": "3b794b86-52c3-4b22-850e-a65a58699d39",
+                    "taskLocator": "GT-07/source-reconciliation",
+                    "resultLocator": "task-artifact:GT-07/source-reconciliation/agent-final.txt",
+                    "phaseNonces": ["gt07-cb11759-source-reconciliation-r2"],
+                    "resultSha256": "46550332d879494bcd70eceeb435b7ab15fe2857fbacdbc888db9c7b1c5b7c9b",
+                    "resultRecordSha256": "99ac378f82e28c909ad34bf0491fe123fe415a7108a19e907b8db7895037db4d",
+                    "completedAt": "2026-08-28T12:06:35Z",
+                    "claim": "Binds verified destination-before-source-release ordering, exact receipt and unchanged code identity and local execution placement."
+                  }
+                ],
+                "result": "fresh destination and source reconciliation independently agree before the task fixture source is released"
+              }
+            ],
+            "officialSources": [],
+            "independentCommandResults": [
+              {
+                "kind": "independent-command-result",
+                "carrierSessionId": "5f04f389-0c3a-4bde-88ea-2c2b7aca9671",
+                "taskLocator": "GT-07/destination-poststate",
+                "phase": "destination-verification",
+                "nonce": "gt07-cb11759-destination-evaluator",
+                "report": "PASS revised GT-07 destination at cb11759362217dee4ff08aa43db75046bd63c651: session 01a04840-ec1f-7423-a44b-45880579b10c observed capacity unknown and sourceReleased=false; received only goal, authority, code-binding, current-state, evidence and claim-limit; classified compact as same-carrier memory reduction, causal fork as copied-history branch not context relief, and sequential handoff as fresh zero-history transfer; exact repository main/HEAD, current Skill and local execution placement matched; repository stayed clean."
+              },
+              {
+                "kind": "independent-command-result",
+                "carrierSessionId": "3b794b86-52c3-4b22-850e-a65a58699d39",
+                "taskLocator": "GT-07/source-reconciliation",
+                "phase": "source-poststate",
+                "nonce": "gt07-cb11759-source-reconciliation-r2",
+                "report": "PASS revised GT-07 source reconciliation at cb11759362217dee4ff08aa43db75046bd63c651: destination result 50c25b5b0ce9f9dd85f7703d36baac6936b309deee16907445847d1e619ed7f6 and its independent evaluator completed before the task fixture source was released; repository main/HEAD and local execution placement remained unchanged."
+              },
+              {
+                "kind": "independent-command-result",
+                "carrierSessionId": "a7b95b9e-dc8b-4272-86b2-6e1882d53442",
+                "taskLocator": "GT-07/cleanup-poststate",
+                "phase": "cleanup-poststate",
+                "nonce": "gt07-cb11759-cleanup",
+                "report": "PASS revised GT-07 cleanup: exact task-owned temp root C:\\Users\\15521\\AppData\\Local\\Temp\\yiyuan-accord-gt07-cb11759 is absent; repository remains clean; neighboring temporary and foreign state were not enumerated."
+              }
+            ],
+            "projectionExposure": {
+              "kind": "exact-skill-content-read",
+              "adapterId": "codex",
+              "contract": "plugins/yiyuan-accord-codex/adapter.json",
+              "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+              "mechanismFiles": ["plugins/yiyuan-accord-codex/hooks/hooks.json"],
+              "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+              "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+              "skillSha256": "8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1"
+            },
+            "cleanupEvidence": {
+              "state": "verified-clean",
+              "observations": [
+                {
+                  "kind": "post-capture-fixture-removal",
+                  "sourceBindings": [
+                    {
+                      "kind": "direct-independent-command-result",
+                      "carrierSessionId": "a7b95b9e-dc8b-4272-86b2-6e1882d53442",
+                      "taskLocator": "GT-07/cleanup-poststate",
+                      "resultLocator": "task-artifact:GT-07/cleanup-poststate/agent-final.txt",
+                      "phaseNonces": ["gt07-cb11759-cleanup"],
+                      "resultSha256": "5d3dff81397cbb7b78ed8a9f03e301b3c3d0e122d05e79f70d391b50c4229703",
+                      "resultRecordSha256": "b7eeb00030943d934bd1b90688ee17bab65500af1b301013dc53a6aa22a7d8de",
+                      "completedAt": "2026-08-28T14:23:03Z",
+                      "claim": "Binds exact task-root absence and clean repository without enumerating neighboring temporary or foreign state."
+                    }
+                  ],
+                  "result": "the exact task-owned GT-07 root is absent; neighboring and foreign state were not enumerated or changed"
+                }
+              ]
+            },
+            "redactions": [
+              {
+                "kind": "source-minimization",
+                "result": "Retained only task-owned source/result hashes, exact Git and projection identity, bounded topology decisions, direct evaluator summaries, failures, token cost and cleanup; no credentials, configuration, chat transcript, session log or foreign-state content."
+              }
+            ],
+            "postSessionBindingContract": [
+              {"kind": "independent-poststate", "location": "materialEvents", "bindingCount": 2},
+              {"kind": "post-capture-fixture-removal", "location": "cleanupEvidence.observations", "bindingCount": 1}
+            ],
+            "recheckTriggers": [
+              {
+                "kind": "recheck-trigger",
+                "condition": "reliable capacity signal, destination semantics, candidate Skill, code binding, execution placement or cleanup route changes",
+                "scope": "GT-07 continuity route",
+                "action": "recompute without a universal threshold and run a new exact bounded destination-before-source-release replay"
+              }
+            ],
+            "evidenceBoundary": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness."
+          },
+          "taskId": "GT-07"
         }
   }
 }

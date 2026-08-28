@@ -101,7 +101,9 @@ Then read, in order:
   state edges, effect, retirement and cleanup. Separate Hook-disabled effect,
   sequence, carrier and cleanup reviewers passed; the f0ed9ce/08eb72a attempt
   remains counterevidence. `self-audit-remediate-and-reaccept-whole-system-balance`
-  is active. The user cleared the host goal after a new dynamic-retirement
+  completed after revised GT-07/17/19 cross-validation and global deterministic
+  reacceptance; `independent-review-and-form-future-exact-candidate` is active.
+  The user cleared the host goal after a new dynamic-retirement
   consensus; the deterministic repository projection remains
   `prepared-host-goal-paused` and must be refreshed before any later activation.
   Host target state remains task state rather than behavior or value evidence.
@@ -247,8 +249,15 @@ Then read, in order:
   evaluation and canonical evidence validation. Its pure-data insufficiency,
   schema, transcription and PowerShell-route failures remain counterevidence;
   the successful arms' 21183/19642 reported tokens exclude efficiency or
-  low-interference claims. Revised GT-07 remains unperformed. These finite
-  results prove neither live mechanism, durable-carrier or field value. All ten
+  low-interference claims. Exact `cb11759` then passes revised GT-07 only for one
+  Codex-local fresh zero-inherited-history destination receipt, three-way
+  compact/fork/sequential-handoff classification and destination-before-fixture-
+  source release sequence. Code topology and local execution placement remained
+  unchanged. Three CLI/schema preflight failures, a provisional draft, command
+  corrections, a source-evaluator type mismatch, 22607 tokens and slow cleanup
+  remain counterevidence; no actual compact or fork operation was performed.
+  These finite results prove neither live mechanism, durable-carrier or field
+  value. All ten
   tasks must bind any future exact semantics and package bytes before a
   candidate can become ready.
 - One context-isolated Claude Code CLI session loaded the exact tagged plugin
@@ -297,8 +306,9 @@ Then read, in order:
   removed. Revised GT-17 and GT-19 now occupy two bounded observation carriers;
   three superseded v3.0.1 derived observation projections were removed from the
   active tree while their combined source bundle, immutable tag and Git history
-  remain. This leaves four slots before the revised GT-07 observation and the
-  required three afterward. Independent review then exposed missing GT-17 cleanup and GT-18
+  remain. This left four slots before the revised GT-07 observation; that
+  observation now uses one and preserves the required three. Independent review
+  then exposed missing GT-17 cleanup and GT-18
   full-vector/carrier-edge source validation. The later f898ebd audit exposed
   missing non-selected-route retirement closure; the latest bounded 12000-byte
   increase pays only for same-responsibility successor, prior consequence and
@@ -449,7 +459,7 @@ increment and one active work item. Its ordered work is:
     propagation and eight-surface reconciliation. The first Windows read-only
     arm remains failed evidence-unavailable counterevidence, and the successful
     arm's 76493 reported tokens exclude an efficient-reading claim.
-10. `self-audit-remediate-and-reaccept-whole-system-balance` — active. It must
+10. `self-audit-remediate-and-reaccept-whole-system-balance` — completed. It
     first bind a versioned claim-scoped baseline, target, counterfactual,
     evidence cutoff, confounders and invalidation triggers; then evaluate
     proposition contradictions, category errors and boundary drift before
@@ -457,10 +467,10 @@ increment and one active work item. Its ordered work is:
     user burden, privacy/supply chain, reliability, resource, architecture,
     lifecycle, documentation and governance dimensions; prioritize hard gates
     and weakest justified links; apply minimum reversible remediation; and
-    replay every affected acceptance surface, preserve the finite revised GT-17
-    and GT-19 results and obtain future-exact revised GT-07 evidence,
+    replay every affected acceptance surface and preserve the finite revised
+    GT-07, GT-17 and GT-19 results with their failures, costs and claim limits,
     without treating self-review as independent evidence.
-11. `independent-review-and-form-future-exact-candidate` — pending.
+11. `independent-review-and-form-future-exact-candidate` — active.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may

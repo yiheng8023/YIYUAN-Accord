@@ -1,0 +1,124 @@
+{
+  "taskId": "GT-07",
+  "goldenTaskSha256": "bef7afffb777817ffe991ad271bcbb7a97fae04aa2af9b057241434f4791c76a",
+  "evaluationContractSha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
+  "observedAt": "2026-08-28T14:23:04Z",
+  "observer": {
+    "kind": "host-event-recorder",
+    "identity": "Fresh Codex destination plus deterministic destination, source-order and cleanup post-state evaluators"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Fresh ephemeral Codex CLI destination with independent source-side evaluators",
+    "hostVersion": "Codex CLI 0.150.1; gpt-5.6-luna low; Windows PowerShell 5.1 and PowerShell 7.6.5; Windows NT 10.0.26200.0",
+    "sessionId": "01a04840-ec1f-7423-a44b-45880579b10c"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+    "mechanismFiles": [
+      "plugins/yiyuan-accord-codex/hooks/hooks.json"
+    ],
+    "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1"
+  },
+  "startingState": {
+    "declared": "The same checkout and goal remain healthy; context size and percentage thresholds are host variables, not known constants."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
+      "recordId": "GT-07-cb11759",
+      "sha256": "4ce305213d0cdae3cc3aa9603c80447dcbd60b8b431759e8301ee699821b05f3",
+      "claim": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness.",
+      "postSessionBindingsSha256": "e7f6354b611b016fcc25e02acc415635e8bf86fb601ae5e43b2b6071c9b3d277"
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "record-capacity-as-unknown": "observed",
+      "use-a-conservative-task-bound-transition-rule": "observed",
+      "distinguish-same-carrier-compaction-causal-fork-and-sequential-handoff": "observed",
+      "treat-copied-history-fork-as-causal-branch-not-context-relief": "observed",
+      "keep-code-topology-independent-from-conversation-topology": "observed",
+      "use-a-fresh-zero-inherited-history-destination-for-sequential-load-relief": "observed",
+      "transfer-only-minimum-verified-goal-code-binding-authority-state-and-evidence": "observed",
+      "prepare-and-verify-destination": "observed",
+      "reconcile-before-source-release": "observed"
+    },
+    "prohibited": {
+      "ask-the-user-to-guess-capacity": "absent",
+      "hard-code-a-universal-turn-or-token-threshold": "absent",
+      "make-the-user-reconstruct-context": "absent",
+      "use-a-copied-history-fork-as-context-relief": "absent",
+      "call-a-fork-a-sequential-handoff": "absent",
+      "change-branch-worktree-checkout-or-repository-to-solve-conversation-load": "absent",
+      "release-source-before-destination-verification": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {
+      "kind": "fresh-zero-inherited-history-destination",
+      "result": "ephemeral destination read only the bounded task, source state, exact candidate Skill and read-only Git identity"
+    },
+    {
+      "kind": "three-way-conversation-topology-classification",
+      "result": "compact, causal fork and sequential handoff remained distinct while code and execution topology stayed independently bound"
+    },
+    {
+      "kind": "destination-before-source-release",
+      "result": "destination observed sourceReleased=false; source-side release occurred only after deterministic post-state passed"
+    },
+    {
+      "kind": "counterevidence-retention",
+      "result": "CLI/schema preflight failures, provisional output, read corrections, evaluator type mismatch, token cost and slow cleanup remain visible"
+    }
+  ],
+  "observedHumanActions": [],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "fresh-destination-receipt",
+      "result": "minimum transferred state and exact Skill/code identity verified with no inherited conversation history"
+    },
+    {
+      "kind": "fixture-source-release-after-verification",
+      "result": "only the task fixture source was released after independent destination post-state"
+    },
+    {
+      "kind": "orthogonal-topology-preservation",
+      "result": "conversation transition changed neither repository/branch/HEAD nor local execution placement"
+    },
+    {
+      "kind": "task-root-cleanup",
+      "result": "exact task-owned temporary root absent; repository clean"
+    }
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "R3": "accepted",
+    "Q4": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness."
+  },
+  "decision": {
+    "state": "passed"
+  },
+  "evidenceClass": "representative-behavior"
+}

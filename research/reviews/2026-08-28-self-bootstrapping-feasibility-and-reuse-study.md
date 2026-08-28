@@ -1118,7 +1118,7 @@ independent reviewer finds a counterexample.
 | P10 | Dynamic retirement / fallback and uninstall | No contradiction when logical allocation and physical removal stay separate. | Bypass or retire only the exact redundant allocation; preserve a healthy latent fallback when its lifecycle value warrants it. Global uninstall is a separate authorized effect. |
 | P11 | Claude `fork` Hook event / fork semantics | Event coverage can be mistaken for product semantics. | The Hook may observe a host `SessionStart` fork event, but this proves neither handoff, context relief, activation, behavior nor value. |
 | P12 | Latest consensus / coherent baseline | Immediate propagation can create a contradiction cascade. | A correction governs direction immediately, but becomes the next implementation baseline only after contradiction, category, boundary and dependency checks reconcile every affected surface. |
-| P13 | Self-audit / independent review | Self-audit cannot independently certify itself. | This calibration can repair premises and reopen evidence; revised GT-17 and GT-19 now each have isolated behavior, deterministic post-state and canonical evidence cross-validation, while revised GT-07, reacceptance and later independent specification, implementation and standards review remain separate gates. |
+| P13 | Self-audit / independent review | Self-audit cannot independently certify itself. | This calibration can repair premises and reopen evidence; revised GT-07, GT-17 and GT-19 now each have isolated behavior plus deterministic and canonical evidence cross-validation, while global reacceptance and later independent specification, implementation and standards review remain separate gates. |
 | P14 | Conversation / code / execution topology | Treating them as one topology makes a context transition silently authorize code-carrier or environment-placement changes. | They are orthogonal decision spaces. A compact, causal fork or sequential handoff preserves code topology and execution placement unless separately admitted; branch, worktree, repository-fork, local or cloud changes do not prove conversation continuity. |
 
 ## Revised GT-17 proposition-coherence replay at `fd4b99a`
@@ -1184,6 +1184,39 @@ sequence. It does not prove Hook causality, efficient or low-interference
 operation, field value, cross-host equivalence, durable state, whole-product
 retirement, candidate readiness or release readiness.
 
+## Revised GT-07 topology-safe continuity replay at `cb11759`
+
+The corrected continuity case used a fresh ephemeral Codex CLI destination with
+user configuration and inherited conversation history excluded. It received
+only goal, authority, code binding, current state, evidence and claim limit.
+Capacity stayed `unknown`; no turn, token or percentage threshold was invented.
+The destination classified compact as same-carrier memory reduction, causal
+fork as copied-history branching that is not context relief, and sequential
+handoff as a fresh zero-history destination. This was one actual fresh
+destination receipt and a classification of the other two operations, not an
+actual compact or fork execution.
+
+The destination observed `sourceReleased=false`, verified the exact repository,
+`main`, `cb11759362217dee4ff08aa43db75046bd63c651` and current candidate Skill,
+and reported unchanged code topology and local execution placement. A separate
+deterministic evaluator checked the exact hashes, minimum field list,
+three-class order, repository cleanliness and task-file set. Only after that
+post-state passed did source reconciliation release the task fixture. A final
+exact-root check removed only task-owned residue without enumerating neighboring
+temporary or foreign state; the main Codex task itself was neither transferred
+nor released.
+
+Counterevidence remains first-class: the initial CLI flags conflicted; two
+structured-output schemas failed preflight; the successful session emitted an
+unverified provisional draft before reading evidence; two read commands needed
+bounded correction; the first source evaluator compared an auto-decoded
+`DateTime` with a string; the successful destination reported 22607 tokens; and
+the exact-root deletion was anomalously slow despite eventually passing. The
+result therefore excludes efficient or low-interference operation, an actual
+compact or fork, a need to move the healthy main task, a universal threshold,
+Hook causality, cross-host equivalence, field value, candidate readiness and
+release readiness.
+
 ### Decision predicates
 
 The symbols are explanatory constraints, not a new runtime language:
@@ -1229,8 +1262,8 @@ glossary, Skills, program and paused goal projection, GT-07 and GT-19 contracts,
 acceptance rules, reference-core retirement binding, architecture and
 continuation documentation, tests and claim ceiling. Historical GT-07 evidence
 remains true only for its old task contract; the corrected contract reopens
-current qualification. Revised GT-19 now passes only the finite source-bound
-sequence described above. The coherence calibration remains incomplete until
-all affected surfaces parse, their deterministic checks pass, their hashes and
-package projections agree, and revised GT-07 passes on a later exact baseline.
-It is not candidate or release evidence.
+current qualification. Revised GT-07 and GT-19 now pass only the finite
+source-bound sequences described above. The coherence calibration remains
+incomplete until all affected surfaces parse, their deterministic checks pass,
+their hashes and package projections agree, and the complete system is
+independently reviewed. These results are not candidate or release evidence.
