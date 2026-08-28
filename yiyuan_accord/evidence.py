@@ -465,10 +465,9 @@ def _continuity_narrative_hashes(root, locator, record_id, payload, task):
         return None
     revision = next(iter(revisions))
     try:
-        ancestor = subprocess.run(
-            ["git", "-C", str(root), "merge-base", "--is-ancestor", revision, "HEAD"],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-        ).returncode
+        _bounded_git_bytes(
+            root, ["merge-base", "--is-ancestor", revision, "HEAD"], 1,
+        )
         historical = _strict_json_object(_bounded_git_bytes(
             root, ["show", "--end-of-options", f"{revision}:{locator}"],
             1_048_576,
@@ -485,7 +484,7 @@ def _continuity_narrative_hashes(root, locator, record_id, payload, task):
         if isinstance(item, dict) and _text(item.get("taskLocator"))
     }
     identity = ("kind", "carrierSessionId", "taskLocator", "phase", "nonce")
-    if ancestor != 0 or any(
+    if any(
         not isinstance(old.get(phase), dict)
         or "facts" in old[phase] or not _text(old[phase].get("report"))
         or any(old[phase].get(field) != current[phase].get(field)
