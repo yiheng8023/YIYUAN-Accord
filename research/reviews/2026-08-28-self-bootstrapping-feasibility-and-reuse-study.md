@@ -1301,8 +1301,17 @@ glossary, Skills, program and paused goal projection, GT-07 and GT-19 contracts,
 acceptance rules, reference-core retirement binding, architecture and
 continuation documentation, tests and claim ceiling. Historical GT-07 evidence
 remains true only for its old task contract; the corrected contract reopens
-current qualification. Revised GT-07 and GT-19 now pass only the finite
-source-bound sequences described above. The coherence calibration remains
+current qualification. Revised GT-07 and the earlier GT-19 cut pass only the
+finite source-bound sequences described above. At exact revision
+`2460adcff02bd56144f8d3f647ecef27cd5fefd0`, fresh current-contract GT-18
+and GT-19 add only one synthetic four-episode immutable-vector evolution
+sequence and one Codex-local sense-environment responsibility-allocation
+sequence. The former rejects and rolls back a proxy hard-gate regression before
+later invalidation and replacement; the latter rejects declaration-only and
+sparse-overlap retirement, retires only one admitted same-responsibility
+allocation, and restores it on evidence expiry. Their blocked routes,
+transcription and query corrections, initial failed independent review and high
+token costs remain counterevidence. The coherence calibration remains
 incomplete until all affected surfaces parse, their deterministic checks pass,
 their hashes and package projections agree, and the complete system is
 independently reviewed. These results are not candidate or release evidence.

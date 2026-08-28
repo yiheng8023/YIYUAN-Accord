@@ -13,8 +13,12 @@ facts are missing. Fresh current-contract GT-14 through GT-16 at exact
 `1bbcc9542c92674dc0b5adcb032d6f9b01248531` now pass only one exact
 environment admission, one primary-source no-dependency feasibility decision
 and one disposable pure-data minimum-form bootstrap; their failures and costs
-remain explicit. Fresh current GT-18/19 replay and independent review remain
-active. The implementation does not
+remain explicit. Fresh current-contract GT-18/19 at exact
+`2460adcff02bd56144f8d3f647ecef27cd5fefd0` now pass only one bounded
+synthetic evolution sequence and one bounded Codex-local responsibility-
+allocation sequence, with blocked arms, corrections, failed review and high
+costs retained. A genuinely new independent full-system review remains active.
+The implementation does not
 admit a Runtime, durable state layer, durable evolution or live-mechanism claim.
 The exact v3.1 package checkpoint
 remains bounded historical evidence; public v3.0.1 remains the installed
@@ -463,6 +467,19 @@ support only one bounded evidence correction and one synthetic four-episode
 sequence; durable carrier need, cross-host or broad value, candidate readiness
 and release readiness remain unproved. The later whole-system balance audit and
 affected-surface deterministic reacceptance completed before independent review.
+
+At exact revision `2460adcff02bd56144f8d3f647ecef27cd5fefd0`, current-
+contract GT-18 retains an immutable full vector, rejects and rolls back a proxy
+hard-gate regression, retains native-no-add only while admitted, then invalidates
+and replaces it through three exact disposable carrier edges with zero task
+residue. Current-contract GT-19 retains official declaration, isolated Accord
+and native arms, explicit closure requests and independent review: declaration
+and sparse incidence do not retire; only the exact same-responsibility Accord
+allocation retires after admitted native consequence and lifecycle closure; and
+expiry restores it. The blocked arm, final-answer transcription errors, initial
+failed review, correction path and evaluator costs are part of the evidence.
+Neither observation proves a durable carrier, Hook causality, whole-product
+retirement, field value, candidate readiness or release readiness.
 
 BAL-04 later ran one paired repository-Skill/no-Accord correction task at audit
 cut `1463034569fe6e724f186c88171e3ee12dffc94b`. Both arms passed the same

@@ -59,12 +59,18 @@ replay passes GT-17 only for the bounded evidence correction and GT-18 only for
 one synthetic four-episode full-vector sequence with actual carrier source and
 target states, regression rollback, native no-add retention, later invalidation,
 replacement, retirement and zero task resources. The source-bound whole-system
-balance audit and affected-surface deterministic reacceptance are complete;
-independent review is active. At exact revision `fd4b99a`, revised GT-19 passes
-only one finite Codex-local four-episode responsibility-allocation sequence:
-declaration alone retired nothing, a verified native successor retired only the
-same responsibility through a reversible observed lifecycle, and evidence
-expiry restored the Accord allocation. At exact `cb11759`, revised GT-07 passes
+balance audit and affected-surface deterministic reacceptance are complete. At
+exact revision `2460adcff02bd56144f8d3f647ecef27cd5fefd0`, fresh current-
+contract GT-18 passes only one synthetic four-episode immutable-vector sequence
+with a rejected and rolled-back proxy regression, bounded native-no-add
+retention, later invalidation and three exact disposable carrier edges. Fresh
+GT-19 passes only one Codex-local sense-environment responsibility-allocation
+sequence: declaration and sparse overlap retired nothing, one observed same-
+responsibility native successor permitted only reversible scoped retirement,
+and evidence expiry restored the Accord allocation. Blocked arms, transcription
+and query corrections, the initial failed GT-19 review and high evaluator costs
+remain counterevidence. A genuinely new independent full-system review remains
+active. At exact `cb11759`, revised GT-07 passes
 only one fresh zero-history destination receipt and source-release ordering;
 actual compact and fork operations were not performed. Code topology,
 conversation topology and local/cloud execution placement remain independent.

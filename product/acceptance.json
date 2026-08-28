@@ -19,7 +19,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "b892036313a362a66ecdd67fed3f299630917e3f383ec436b5451d21b517287b",
+  "canonicalGoalObjectiveSha256": "32f9fb96147ad3c30a4ff671990f675fb54f6e9b8bbbd0da0adc7099d10671bd",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -406,7 +406,7 @@
         "representative-behavior"
       ],
       "assessment": "continuing",
-      "assessmentScope": "Fresh current-contract GT-14, GT-15 and GT-16 at exact behavior-bearing revision 1bbcc9542c92674dc0b5adcb032d6f9b01248531 pass only one claim-scoped current-enabled environment admission, one primary-source bounded-improvement feasibility/no-build decision and one disposable pure-data minimum-form bootstrap. GT-14 retains preflight/schema failures, a policy-blocked read arm and 46141 evaluator tokens; GT-15 retains one self-deferred answer and 34448 tokens; GT-16 retains two failed effect arms, one CLI preflight, 52839 tokens, a guardian warning and 17.3-second cleanup. Exact 84447a7 GT-14 through GT-16 remain finite superseded-contract history, not current candidate proof. Independent review rejected the later f0ed9ce/08eb72a GT-17/18 completion claim and its former-verifier acceptance; both remain counterevidence. At exact 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c, a fresh bounded replay passes GT-17 only for its former global-surface contract and GT-18 only for one synthetic four-episode full-vector sequence with source-bound state-carrier edges, regression rollback, native no-add retention, later invalidation, replacement, retirement and zero task resources. GT-18 claims no code- or conversation-topology transition and remains unaffected. Exact fd4b99a601cbeec00ac1311ac646c48f1c892d94 now passes revised GT-17 only for proposition classification, stop-before-conflict propagation and eight-surface reconciliation. Its first Windows read-only route remains failed evidence-unavailable counterevidence, and the successful arm's 76493 reported tokens exclude low-interference or efficient-reading claims. At the same revision, revised GT-19 passes only one source-bound four-episode Codex-local sense-environment responsibility-allocation sequence after official-source, local-help, isolated Accord/native behavior, deterministic post-state and canonical-validator cross-checks. Official declaration and sparse overlap alone did not retire anything; only current-plugin/sense-environment retired after the native route closed the same responsibility and lifecycle, bind-authority and fallback remained, and evidence expiry restored the plugin allocation. The pure-data-only arm, schema rejection, hash-transcription failure and PowerShell API mismatch remain counterevidence; successful Accord/native arms reported 21183/19642 tokens. At cb11759362217dee4ff08aa43db75046bd63c651, revised GT-07 passes only one Codex-local fresh zero-inherited-history destination receipt, three-way compact/fork/sequential-handoff classification and destination-before-fixture-source release sequence. Code topology and local execution placement remained independently unchanged. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator type mismatch, 22607 tokens and slow cleanup remain counterevidence; actual compact and fork operations were not performed. BAL-04 selected no added form and no net Accord gain for its exact paired condition. Exact 6a98cb7 corrected route-level leakage to responsibility-allocation retirement; fd4b99a adds source-bound successor observation, graph-derived same-responsibility overlap and topology/coherence gates. Revised GT-07, GT-17 and GT-19 now have only their finite source-complete Codex-local results. Fresh isolated GT-11 at f4dce570c5aa97a4956a1faeda1fdd42ff070207 and GT-12 at 72709b8c78ccb18b0978887f5bce8c46b25f7c11 now pass only their bounded current-subject adaptive-repair and resource-stewardship claims while preserving their evaluator and route corrections. Fresh single-arm GT-13 at f182a0a1113e629c84c5f4caf9ae8c10856db410 passes only the saved-checkout collaboration closure that aligns fresh GT-11/12, four mapped surfaces, conditional research and the publication boundary; one fixture no-match command and 32794 evaluator tokens exclude an efficient-reading claim. Global deterministic reacceptance is complete for this enlarged current subset; fresh current GT-18/19 and a new independent full-system review still remain. Official-clean behavior, Hook firing, implicit activation, live-mechanism effectiveness on a genuine gap, durable carrier need, cross-host or field value, production safety, whole-system balance, candidate readiness and release readiness remain unproved.",
+      "assessmentScope": "Fresh current-contract GT-14/15/16 at exact 1bbcc9542c92674dc0b5adcb032d6f9b01248531 and GT-18/19 at exact 2460adcff02bd56144f8d3f647ecef27cd5fefd0 pass only their bounded Codex-local claims. GT-18 proves one synthetic four-episode immutable-vector sequence that rejects and rolls back a proxy hard-gate regression, temporarily retains native-no-add, later invalidates and replaces it through three exact disposable carrier edges, and leaves zero task residue; its 181410-token independent review and two query corrections exclude efficiency or low-interference claims. GT-19 proves one four-episode sense-environment responsibility-allocation sequence: official declaration and sparse incidence do not retire, observed same-responsibility native consequence plus an explicit closure request permits only current-plugin/sense-environment retirement, and evidence expiry restores it while bind-authority remains. Its 110313-token blocked arm, two final-answer transcription errors, 59918-token failed independent review, corrected 58952-token review and retained unknowns remain counterevidence. Earlier failed, source-insufficient, former-contract and superseded observations remain bounded history rather than current proof. Fresh GT-07/11/12/13/17 retain only their recorded finite claims, failures and costs; BAL-04 still selected no added form and no net Accord gain for its exact pair. Global deterministic reacceptance is complete for this current subset; a genuinely new independent full-system product, specification, implementation and standards review remains before exact-candidate formation. Official-clean or no-Accord product behavior, Hook firing or causality, live-mechanism effectiveness on a genuine gap, durable-carrier need, cross-host or field value, production safety, whole-system balance, candidate readiness and release readiness remain unproved.",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json",
@@ -440,6 +440,20 @@
           "locator": "evals/observations/2026-08-28-1bbcc95-gt-16-codex-local.json",
           "sha256": "1797281aec1b84f40b7fe50688ba722d3c444aafce06d6a8229386bb0222379f",
           "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-18-codex-local.json",
+          "sha256": "70d37a5167debd6320177a50987e5242388efa4e38adaab65c6c2d6bc2a0c3e1",
+          "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-19-codex-local.json",
+          "sha256": "500e2d4b1205ed8d5f6fab9d170ea9cffd6730947429bb43fd65a03c037b081c",
+          "claim": "Passed only for one current-contract four-episode Codex-local sense-environment allocation sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: official declaration and sparse incidence do not retire; the native arm is admitted only after observed behavior and a source-bound closure request; only current-plugin/sense-environment retires with rollback, observation-window, fallback and recheck evidence; expiry restores the plugin allocation while bind-authority remains. A 110313-token blocked arm, two Accord final-answer transcription errors, a 59918-token failed review, the corrected 58952-token review and all unknowns remain counterevidence. No Hook causality, official-clean state, product value, global uninstall, whole-product redundancy, candidate or release claim follows.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         }
@@ -527,6 +541,20 @@
           "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q1"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-18-codex-local.json",
+          "sha256": "70d37a5167debd6320177a50987e5242388efa4e38adaab65c6c2d6bc2a0c3e1",
+          "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q1"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-19-codex-local.json",
+          "sha256": "500e2d4b1205ed8d5f6fab9d170ea9cffd6730947429bb43fd65a03c037b081c",
+          "claim": "Passed only for one current-contract four-episode Codex-local sense-environment allocation sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: official declaration and sparse incidence do not retire; the native arm is admitted only after observed behavior and a source-bound closure request; only current-plugin/sense-environment retires with rollback, observation-window, fallback and recheck evidence; expiry restores the plugin allocation while bind-authority remains. A 110313-token blocked arm, two Accord final-answer transcription errors, a 59918-token failed review, the corrected 58952-token review and all unknowns remain counterevidence. No Hook causality, official-clean state, product value, global uninstall, whole-product redundancy, candidate or release claim follows.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q1"
         }
       ]
     },
@@ -592,6 +620,20 @@
           "locator": "evals/observations/2026-08-28-1bbcc95-gt-16-codex-local.json",
           "sha256": "1797281aec1b84f40b7fe50688ba722d3c444aafce06d6a8229386bb0222379f",
           "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q2"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-18-codex-local.json",
+          "sha256": "70d37a5167debd6320177a50987e5242388efa4e38adaab65c6c2d6bc2a0c3e1",
+          "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q2"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-19-codex-local.json",
+          "sha256": "500e2d4b1205ed8d5f6fab9d170ea9cffd6730947429bb43fd65a03c037b081c",
+          "claim": "Passed only for one current-contract four-episode Codex-local sense-environment allocation sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: official declaration and sparse incidence do not retire; the native arm is admitted only after observed behavior and a source-bound closure request; only current-plugin/sense-environment retires with rollback, observation-window, fallback and recheck evidence; expiry restores the plugin allocation while bind-authority remains. A 110313-token blocked arm, two Accord final-answer transcription errors, a 59918-token failed review, the corrected 58952-token review and all unknowns remain counterevidence. No Hook causality, official-clean state, product value, global uninstall, whole-product redundancy, candidate or release claim follows.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
         }
@@ -661,6 +703,20 @@
           "locator": "evals/observations/2026-08-28-1bbcc95-gt-16-codex-local.json",
           "sha256": "1797281aec1b84f40b7fe50688ba722d3c444aafce06d6a8229386bb0222379f",
           "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q3"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-18-codex-local.json",
+          "sha256": "70d37a5167debd6320177a50987e5242388efa4e38adaab65c6c2d6bc2a0c3e1",
+          "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q3"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-19-codex-local.json",
+          "sha256": "500e2d4b1205ed8d5f6fab9d170ea9cffd6730947429bb43fd65a03c037b081c",
+          "claim": "Passed only for one current-contract four-episode Codex-local sense-environment allocation sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: official declaration and sparse incidence do not retire; the native arm is admitted only after observed behavior and a source-bound closure request; only current-plugin/sense-environment retires with rollback, observation-window, fallback and recheck evidence; expiry restores the plugin allocation while bind-authority remains. A 110313-token blocked arm, two Accord final-answer transcription errors, a 59918-token failed review, the corrected 58952-token review and all unknowns remain counterevidence. No Hook causality, official-clean state, product value, global uninstall, whole-product redundancy, candidate or release claim follows.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q3"
         }
@@ -738,6 +794,20 @@
           "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-18-codex-local.json",
+          "sha256": "70d37a5167debd6320177a50987e5242388efa4e38adaab65c6c2d6bc2a0c3e1",
+          "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q4"
+        },
+        {
+          "locator": "evals/observations/2026-08-29-2460adc-gt-19-codex-local.json",
+          "sha256": "500e2d4b1205ed8d5f6fab9d170ea9cffd6730947429bb43fd65a03c037b081c",
+          "claim": "Passed only for one current-contract four-episode Codex-local sense-environment allocation sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: official declaration and sparse incidence do not retire; the native arm is admitted only after observed behavior and a source-bound closure request; only current-plugin/sense-environment retires with rollback, observation-window, fallback and recheck evidence; expiry restores the plugin allocation while bind-authority remains. A 110313-token blocked arm, two Accord final-answer transcription errors, a 59918-token failed review, the corrected 58952-token review and all unknowns remain counterevidence. No Hook causality, official-clean state, product value, global uninstall, whole-product redundancy, candidate or release claim follows.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q4"
         }
       ]
     }
@@ -773,7 +843,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "6bbf8c330d692f9495b758363d7df6f06d4007b0dcee61941d15c5adc4d52965",
+    "releaseNotesSha256": "679ea898b662fbc2d376af686f3b18414f64f6a5885097d7f17760b21cb7a4a4",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,

@@ -132,10 +132,23 @@ Then read, in order:
   disposable pure-data minimum-form bootstrap. Their preflight, policy,
   self-reference, failed-effect, guardian, token-cost and cleanup
   counterevidence remains visible; exact `84447a7` is superseded-contract
-  history only. GT-18 and GT-19 still need fresh bounded replay; GT-07 is not
-  rerun merely to refresh bookkeeping.
+  history only. At exact `2460adcff02bd56144f8d3f647ecef27cd5fefd0`,
+  fresh current-contract GT-18 now passes only one synthetic four-episode
+  immutable-vector sequence with one rejected and rolled-back proxy regression,
+  bounded native-no-add retention, later invalidation, three exact disposable
+  carrier edges and zero task residue. Fresh GT-19 passes only one four-episode
+  Codex-local sense-environment responsibility-allocation sequence: official
+  declaration and sparse incidence do not retire; one observed same-
+  responsibility native successor plus a source-bound closure request permits
+  only reversible `current-plugin/sense-environment` retirement; and evidence
+  expiry restores it while `bind-authority` remains. The 110313-token blocked
+  arm, two final-answer transcription errors, the initial 59918-token failed
+  review, corrected 58952-token review, GT-18's 181410-token review and two
+  query corrections remain counterevidence. GT-07 is not rerun merely to
+  refresh bookkeeping.
   To preserve the three-file complexity reserve, the superseded derived
-  `84447a7` GT-14/GT-15/GT-16, `7d7a7e5` GT-17/GT-18 and `fd4b99a` GT-19
+  `84447a7` GT-14/GT-15/GT-16, `7d7a7e5` GT-17/GT-18, `fd4b99a` GT-19 and
+  the superseded 2026-08-27 v3.1.0 GT-11/GT-12
   derived observation files are removed only after their complete source
   records remain in the active evidence carrier, replacement observations are
   validated where required, and immutable Git history preserves the exact
@@ -302,8 +315,18 @@ Then read, in order:
   unchanged. Three CLI/schema preflight failures, a provisional draft, command
   corrections, a source-evaluator type mismatch, 22607 tokens and slow cleanup
   remain counterevidence; no actual compact or fork operation was performed.
-  These finite results prove neither live mechanism, durable-carrier or field
-  value. All ten
+  Exact `2460adc` then adds fresh current-contract GT-18 only for one synthetic
+  immutable-vector evolution sequence and fresh GT-19 only for one source-bound
+  sense-environment allocation sequence. GT-18 rejects and rolls back a proxy
+  hard-gate regression before bounded retention, invalidation and replacement
+  across three exact disposable carrier edges. GT-19 rejects declaration-only
+  and sparse-overlap retirement; an explicit closure request plus observed
+  same-responsibility native consequence permits only reversible scoped
+  retirement, and expiry restores the allocation. Its blocked arm, two answer
+  transcription errors, initial failed independent review and corrected review,
+  plus GT-18's query corrections and high review cost, remain visible. These
+  finite results prove neither live mechanism, durable-carrier or field value.
+  All ten
   tasks must bind any future exact semantics and package bytes before a
   candidate can become ready.
 - One context-isolated Claude Code CLI session loaded the exact tagged plugin
@@ -344,7 +367,7 @@ Then read, in order:
   364000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
-  regression, one append-only GT-14 through GT-19 source and seven current
+  regression, one append-only GT-14 through GT-19 source and bounded current
   observations,
   including the review-required source-bound independence and matching
   experiment-poststate gates. The two-file increase from 84 pays only for the
@@ -354,7 +377,12 @@ Then read, in order:
   active tree while their combined source bundle, immutable tag and Git history
   remain. This left four slots before the revised GT-07 observation; that
   observation now uses one and preserves the required three. Independent review
-  then exposed missing GT-17 cleanup and GT-18
+  of fresh current-contract GT-18/19 reuses the append-only source, adds two
+  current observation carriers and removes only the superseded 2026-08-27
+  v3.1.0 GT-11/GT-12 derived files after their full source records, fresh
+  replacements and immutable history were verified. The tracked-file count
+  therefore remains 83 and the required three-slot reserve remains intact.
+  An earlier independent review exposed missing GT-17 cleanup and GT-18
   full-vector/carrier-edge source validation. The later f898ebd audit exposed
   missing non-selected-route retirement closure; the latest bounded 12000-byte
   increase pays only for same-responsibility successor, prior consequence and
@@ -508,6 +536,11 @@ increment and one active work item. Its ordered work is:
     propagation and eight-surface reconciliation. The first Windows read-only
     arm remains failed evidence-unavailable counterevidence, and the successful
     arm's 76493 reported tokens exclude an efficient-reading claim.
+    At exact `2460adc`, fresh current-contract GT-18 now also passes only one
+    synthetic four-episode immutable-vector sequence with rejected proxy
+    regression, rollback, bounded retention, later invalidation, three exact
+    disposable carrier edges and zero task residue; its two query corrections
+    and 181410-token review remain counterevidence.
 10. `self-audit-remediate-and-reaccept-whole-system-balance` — completed. It
     first bind a versioned claim-scoped baseline, target, counterfactual,
     evidence cutoff, confounders and invalidation triggers; then evaluate
@@ -517,7 +550,8 @@ increment and one active work item. Its ordered work is:
     lifecycle, documentation and governance dimensions; prioritize hard gates
     and weakest justified links; apply minimum reversible remediation; and
     replay every affected acceptance surface and preserve the finite revised
-    GT-07, GT-17 and GT-19 results with their failures, costs and claim limits,
+    GT-07, GT-17 and GT-19 results plus fresh current-contract GT-18/19 with
+    their failures, corrections, costs and claim limits,
     without treating self-review as independent evidence.
 11. `independent-review-and-form-future-exact-candidate` — active. Sparse
     candidate qualification retains GT-07 and GT-17 through exact amendments;
@@ -525,10 +559,13 @@ increment and one active work item. Its ordered work is:
     at `f182a0a` now pass their finite current-subject claims while their
     evaluator, route and interference costs remain visible. Fresh GT-14/15/16
     at `1bbcc95` now pass only their current environment, feasibility and
-    pure-data bootstrap claims with failures and costs retained. Fresh GT-18
-    and GT-19 plus a new genuinely independent product, specification,
-    implementation and standards review remain required before this stage can
-    complete or an exact candidate can exist.
+    pure-data bootstrap claims with failures and costs retained. Fresh current-
+    contract GT-18/19 at `2460adc` now pass only their finite evolution and
+    responsibility-allocation sequences with blocked routes, transcription and
+    query corrections, the initial failed review and high costs retained. A new
+    genuinely independent product, specification, implementation and standards
+    review remains required before this stage can complete or an exact candidate
+    can exist.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may
