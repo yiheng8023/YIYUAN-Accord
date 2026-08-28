@@ -36,11 +36,11 @@ ROOT = Path(__file__).resolve().parents[2]
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
-CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-27-v310-gt11-codex-local.json'
+CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json'
 CURRENT_GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json'
 CURRENT_GT17_OBSERVATION = 'evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json'
 SRC310 = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
-OBS11 = 'evals/observations/2026-08-27-v310-gt11-codex-local.json'
+OBS11 = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json'
 OBS13 = 'evals/observations/2026-08-27-v310-gt13-codex-local.json'
 OBS = {
     1: 'evals/observations/2026-08-24-v20-claude-gt01.json',

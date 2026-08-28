@@ -115,9 +115,16 @@ Then read, in order:
   implements that gate. GT-07 at `cb11759` and GT-17 at `fd4b99a` retain
   unchanged task obligations, exact Codex projection and task-declared subject
   bytes, so metadata-only source amendments promote them to partial current R3
-  evidence without behavior replay. GT-11 through GT-16 plus GT-18 and GT-19
-  have changed Skill, evaluation contract or reference-core subjects and need
-  fresh bounded replay; GT-07 is not rerun merely to refresh bookkeeping.
+  evidence without behavior replay. Fresh isolated GT-11 at `f4dce57` now
+  passes only its bounded adaptive-repair claim; its malformed first evaluator
+  fixture and one outer observer working-directory correction remain
+  counterevidence. GT-12 through GT-16 plus GT-18 and GT-19 still have changed
+  Skill, evaluation contract or reference-core subjects and need fresh bounded
+  replay; GT-07 is not rerun merely to refresh bookkeeping.
+  To preserve the three-file complexity reserve, the superseded derived
+  `7d7a7e5` GT-17 observation file is removed only after its complete source
+  record remains in the active evidence carrier and immutable Git history;
+  the finite former-contract fact and later `fd4b99a` replacement remain named.
   The next specification/standards cross-review rejected evaluator-history
   allowlisting as sufficient proof and found unsafe pre-validation Git input
   plus malformed historical-task crash paths. Candidate amendments must now
@@ -497,8 +504,10 @@ increment and one active work item. Its ordered work is:
     GT-07, GT-17 and GT-19 results with their failures, costs and claim limits,
     without treating self-review as independent evidence.
 11. `independent-review-and-form-future-exact-candidate` — active. Sparse
-    candidate qualification currently retains only GT-07 and GT-17; fresh
-    GT-11/12/13/14/15/16/18/19 replay remains required before this stage can
+    candidate qualification retains GT-07 and GT-17 through exact amendments;
+    fresh isolated GT-11 at `f4dce57` now passes its finite current-subject
+    claim while its rejected evaluator preflight remains visible. Fresh
+    GT-12/13/14/15/16/18/19 replay remains required before this stage can
     complete.
 
 The release procedure is dormant. A future semantic version, exact candidate,

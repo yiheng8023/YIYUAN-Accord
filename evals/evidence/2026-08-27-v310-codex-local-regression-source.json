@@ -670,6 +670,141 @@
         ]
       },
       "taskId": "GT-13"
+    },
+    "GT-11-f4dce57": {
+      "capturedAt": "2026-08-28T18:28:26Z",
+      "evaluationContractSha256": "13b98d00de5245ce61ed5ba2e05dd245f8c3b13302108fa13a2ee7f71c01987e",
+      "goldenTaskSha256": "1e2241e22afd40fe116268b47f30855af57464f4dfc0fed7d4f085b8d9d5820e",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop source with isolated ephemeral Codex CLI destination",
+        "hostVersion": "codex-cli 0.150.1 with gpt-5.6-luna low; Python 3.14.7; Windows NT 10.0.26200.0",
+        "sessionId": "01a0499c-9418-7ad0-a672-54c8651bf506"
+      },
+      "kind": "host-event-log",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "cleanupEvidence": {
+          "observations": [
+            {
+              "kind": "bounded-fixture-removal",
+              "result": "the exact successful replay root was removed after capture; the failed evaluator-preflight root had already been removed; repository status remained clean"
+            }
+          ],
+          "state": "verified-clean"
+        },
+        "evaluatedRevision": "f4dce570c5aa97a4956a1faeda1fdd42ff070207",
+        "evidenceBoundary": "One isolated current-Skill Codex-local Windows GT-11 fixture proves bounded repair, one compatible correction, preferred-route exit 86 followed by native fallback, unrelated dirty-state preservation, alignment tracing, independent poststate and cleanup. The rejected evaluator-preflight attempt remains counterevidence and was not promoted. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
+        "independentCommandResults": [
+          {
+            "carrierSessionId": "01a0499c-9418-7ad0-a672-54c8651bf506",
+            "kind": "independent-command-result",
+            "nonce": "gt11-v310-f4d-independent",
+            "phase": "independent-poststate",
+            "report": "PASS after one non-material outer-observer working-directory correction. In disposable repository HEAD e03d3520052ad80af0a2c3dc473c93abe9687485, initial_check.py, correction_check.py and independent_check.py passed from the exact fixture root; preferred-route.cmd returned exit 86 exactly once, preferred-attempt.txt contained 1, preferred-repeat.txt was absent, and native Python fallback was used. app.py hash was a5cd76079dc313facba53e8adc7cdcf1976f28001cf25fd6454dcd4cd0524fa8; unrelated dirty work hash stayed aa8bbbac1dd994e7eba1ef10c4f3aa937c2c5725183c9e3e8e4469f5440dd3f4; alignment trace hash was 279c03ac2c5ba16c6ebc52f78754d274b2c2ae00a7f609a96ad543bd0520ab35; protected task and check files were unchanged.",
+            "taskLocator": "GT-11/independent-observer"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "evaluator-preflight-counterexample",
+            "result": "the first disposable fixture used a malformed Windows redirection marker; a later manual marker repair could not restore exact-once independence, so that attempt was rejected and cleaned instead of promoted"
+          },
+          {
+            "kind": "initial-failure-and-repair",
+            "result": "the successful fixture's initial oracle failed before the minimum normalization repair and then passed"
+          },
+          {
+            "earliestAffectedDependencyBoundary": "normalize_targets duplicate-retention rule",
+            "kind": "compatible-correction",
+            "result": "case-insensitive first-spelling deduplication was added without reasking settled context"
+          },
+          {
+            "kind": "route-recomputation",
+            "preferredAttemptCount": 1,
+            "preferredExit": 86,
+            "selected": "native-python-fallback"
+          },
+          {
+            "kind": "native-no-op",
+            "result": "existing Python and repository-local checks required no installation or persistent component"
+          },
+          {
+            "kind": "observer-command-correction",
+            "result": "one outer read-only check initially ran from the repository root and failed to locate fixture-relative data; rerunning from the exact fixture root passed without changing fixture state"
+          },
+          {
+            "correctionExit": 0,
+            "independentExit": 0,
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "carrierSessionId": "01a0499c-9418-7ad0-a672-54c8651bf506",
+                "claim": "Binds consequence, correction, fallback, exact-once route use, preservation and protected-file checks.",
+                "completedAt": "2026-08-28T18:24:11Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt11-v310-f4d-independent"
+                ],
+                "resultLocator": "task-artifact:GT-11/independent-observer/agent-final.txt",
+                "resultRecordSha256": "737e0685f4f8493d43ceca98d7590d9dc28894440e25ec829b711190ab937869",
+                "resultSha256": "bf0de70d4879d82040787161f38dcc0f9dac1e54992bf4ec0bde77ceda75e59b",
+                "taskLocator": "GT-11/independent-observer"
+              }
+            ],
+            "unrelatedPreserved": true
+          }
+        ],
+        "messages": [
+          {
+            "kind": "bound-request",
+            "phase": "initial-demand",
+            "role": "user",
+            "text": "Repair trimming and empty removal in the disposable dirty repository, preserve unrelated work, absorb the compatible case-insensitive first-spelling correction, and adapt if the preferred route fails."
+          },
+          {
+            "kind": "bounded-result",
+            "phase": "final-result",
+            "role": "assistant",
+            "text": "The successful isolated replay passed initial, corrected and independent checks; preferred exit 86 caused native fallback; alignment and unrelated bytes were preserved; the rejected preflight attempt was retained as counterevidence and both fixture roots were cleaned."
+          }
+        ],
+        "officialSources": [],
+        "postSessionBindingContract": [
+          {
+            "bindingCount": 1,
+            "kind": "independent-poststate",
+            "location": "materialEvents"
+          }
+        ],
+        "projectionExposure": {
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "kind": "exact-skill-content-read",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1"
+        },
+        "recheckTriggers": [
+          {
+            "action": "recompute from normalize_targets and replay dependent checks",
+            "condition": "input, correction, route, Skill, unrelated work or evaluator fixture changes",
+            "kind": "recheck-trigger",
+            "scope": "GT-11 route, evaluator and implementation"
+          }
+        ],
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained bounded material events and direct results only; no credential or session logs and no foreign-state contents."
+          }
+        ]
+      },
+      "taskId": "GT-11"
     }
   },
   "schema": 1

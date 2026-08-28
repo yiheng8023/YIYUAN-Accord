@@ -19,7 +19,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "758d695dc5abcd611b7ddc55f60e88485bf283652e071de9c0aaf9da94fe5a4d",
+  "canonicalGoalObjectiveSha256": "30045a30df4393e4c7afff168a6d7767f5253efb81c7696c75fe644146df6613",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -466,9 +466,9 @@
       "assessment": "planned",
       "evidence": [
         {
-          "locator": "evals/observations/2026-08-27-v310-gt11-codex-local.json",
-          "sha256": "20f48ea41fbac10bb2f4faddb7a3d2e8bd77326c4adcf2c4a6e077698fb5b18c",
-          "claim": "Passed only for this exact current-Skill Codex-local Windows GT-11 fixture: initial repair, compatible correction, preferred exit 86, native fallback, byte-preserved unrelated dirty work, alignment trace, independent poststate and cleanup. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json",
+          "sha256": "90e6fff955fd0108de91c421b93e5a7e16f8b6f9fa55b16631b78f46ce350f5c",
+          "claim": "Passed only for this isolated current-Skill Codex-local Windows GT-11 fixture: initial repair, one compatible correction, preferred exit 86, native fallback, byte-preserved unrelated dirty work, alignment trace, independent poststate and cleanup. A malformed first evaluator fixture remains rejected counterevidence. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q1"
         },
@@ -512,9 +512,9 @@
       "assessment": "planned",
       "evidence": [
         {
-          "locator": "evals/observations/2026-08-27-v310-gt11-codex-local.json",
-          "sha256": "20f48ea41fbac10bb2f4faddb7a3d2e8bd77326c4adcf2c4a6e077698fb5b18c",
-          "claim": "Passed only for this exact current-Skill Codex-local Windows GT-11 fixture: initial repair, compatible correction, preferred exit 86, native fallback, byte-preserved unrelated dirty work, alignment trace, independent poststate and cleanup. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json",
+          "sha256": "90e6fff955fd0108de91c421b93e5a7e16f8b6f9fa55b16631b78f46ce350f5c",
+          "claim": "Passed only for this isolated current-Skill Codex-local Windows GT-11 fixture: initial repair, one compatible correction, preferred exit 86, native fallback, byte-preserved unrelated dirty work, alignment trace, independent poststate and cleanup. A malformed first evaluator fixture remains rejected counterevidence. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
         },
@@ -560,9 +560,9 @@
       "assessment": "planned",
       "evidence": [
         {
-          "locator": "evals/observations/2026-08-27-v310-gt11-codex-local.json",
-          "sha256": "20f48ea41fbac10bb2f4faddb7a3d2e8bd77326c4adcf2c4a6e077698fb5b18c",
-          "claim": "Passed only for this exact current-Skill Codex-local Windows GT-11 fixture: initial repair, compatible correction, preferred exit 86, native fallback, byte-preserved unrelated dirty work, alignment trace, independent poststate and cleanup. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json",
+          "sha256": "90e6fff955fd0108de91c421b93e5a7e16f8b6f9fa55b16631b78f46ce350f5c",
+          "claim": "Passed only for this isolated current-Skill Codex-local Windows GT-11 fixture: initial repair, one compatible correction, preferred exit 86, native fallback, byte-preserved unrelated dirty work, alignment trace, independent poststate and cleanup. A malformed first evaluator fixture remains rejected counterevidence. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q3"
         },
@@ -614,9 +614,9 @@
           "supportsCriterion": "Q4"
         },
         {
-          "locator": "evals/observations/2026-08-27-v310-gt11-codex-local.json",
-          "sha256": "20f48ea41fbac10bb2f4faddb7a3d2e8bd77326c4adcf2c4a6e077698fb5b18c",
-          "claim": "Passed only for this exact current-Skill Codex-local Windows GT-11 fixture: initial repair, compatible correction, preferred exit 86, native fallback, byte-preserved unrelated dirty work, alignment trace, independent poststate and cleanup. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json",
+          "sha256": "90e6fff955fd0108de91c421b93e5a7e16f8b6f9fa55b16631b78f46ce350f5c",
+          "claim": "Passed only for this isolated current-Skill Codex-local Windows GT-11 fixture: initial repair, one compatible correction, preferred exit 86, native fallback, byte-preserved unrelated dirty work, alignment trace, independent poststate and cleanup. A malformed first evaluator fixture remains rejected counterevidence. This does not prove other inputs, Claude, Cloud, field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
         },
