@@ -147,9 +147,11 @@ It
 performs no host discovery, I/O, installation, execution, storage or publication.
 
 The module does not encode a universal Accord workflow. Human authority,
-compliance, independent consequence verification and cleanup evidence remain
-non-bypassable; the task supplies and versions every other responsibility,
-condition, comparison dimension, contextual preference and experiment vector.
+provenance-bound composition, current route availability, compliance,
+independent consequence verification, the eight-field multi-form coherence
+contract and cleanup evidence remain non-bypassable. The task supplies and
+versions responsibilities plus additional admission and coherence conditions,
+comparison dimensions, contextual preferences and experiment vectors.
 Product forms are arbitrary data supplied by adapters. Multiple incomparable
 frontier routes remain `hold-unknown` unless current policy provides a bounded
 context preference; the implementation never invents a weighted score. This

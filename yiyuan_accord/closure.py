@@ -1,8 +1,8 @@
 """Pure, no-I/O closure decision core with one plain-data interface.
 
-Human authority, compliance and independent consequence/cleanup evidence are
-stable invariants. Task policy supplies every other condition, dimension,
-preference and open-ended route form.
+Human authority, provenance, availability, cross-form coherence and independent
+consequence/cleanup evidence are stable invariants. Task policy supplies
+additional conditions, dimensions, preferences and open-ended route forms.
 """
 
 from __future__ import annotations
@@ -34,8 +34,12 @@ COMPLIANCE_ROUTE_FACTS = (
 )
 COMPLIANCE_COHERENCE_FACTS = (
     "responsibility-boundaries",
+    "interfaces-and-version",
     "authority-and-side-effects",
+    "state-owner-and-freshness",
     "evidence-and-independent-poststate",
+    "failure-degradation-and-recovery",
+    "update-replacement-and-rollback",
     "cleanup-retirement-and-residue",
 )
 COMPLIANCE_COMPLETION_FACTS = ("consequence", "cleanup-poststate")

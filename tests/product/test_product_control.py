@@ -575,8 +575,12 @@ class ProductControlTests(unittest.TestCase):
         }
         coherence = {
             'responsibility-boundaries': 'observed',
+            'interfaces-and-version': 'observed',
             'authority-and-side-effects': 'observed',
+            'state-owner-and-freshness': 'observed',
             'evidence-and-independent-poststate': 'observed',
+            'failure-degradation-and-recovery': 'observed',
+            'update-replacement-and-rollback': 'observed',
             'cleanup-retirement-and-residue': 'observed',
         }
         dimensions = [
@@ -884,15 +888,15 @@ class ProductControlTests(unittest.TestCase):
             for item in no_availability_decision['assessments']
         ))
 
-        no_coherence_gate = fixture()
-        no_coherence_gate['policy']['requiredCoherenceFacts'] = []
-        no_coherence_gate['routes'][2]['coherence'] = {}
-        no_coherence_decision = reconcile_closure(no_coherence_gate)
-        self.assertFalse(no_coherence_decision['valid'])
-        self.assertIn(
-            'routes[2].coherence lacks a required policy fact',
-            no_coherence_decision['errors'],
-        )
+        for missing_coherence_fact in coherence:
+            with self.subTest(missing_coherence_fact=missing_coherence_fact):
+                missing_coherence = fixture()
+                missing_coherence['policy']['requiredCoherenceFacts'] = []
+                missing_coherence['routes'][2]['coherence'].pop(
+                    missing_coherence_fact
+                )
+                decision = reconcile_closure(missing_coherence)
+                self.assertFalse(decision['valid'])
 
         residual = reconcile_closure(fixture(residue=True))
         self.assertFalse(residual['lifecycle']['completionAllowed'])

@@ -1237,17 +1237,20 @@
       "moduleDepth": "One pure interface hides structural validation, stable compliance invariants, dynamic policy admission, responsibility closure, sparse capability-overlap inputs, unknown preservation, Pareto frontier derivation, contextual or equivalent-fit selection, experiment keep-discard-rollback decisions, source-observer-exact-subject-boundary identity binding, successor discovery and retirement evidence binding, independent consequence and cleanup post-state, matching lifecycle post-state, residue and finite claim handling. Graphs and matrix views remain implementation choices behind normalized plain-data routes rather than enlarging this interface.",
       "stableComplianceInvariants": [
         "human-authority-is-supplied-never-derived",
+        "environment-composition-is-provenance-bound",
+        "route-availability-is-currently-observed",
         "route-compliance-is-observed-never-invented",
         "consequence-verifier-is-independent",
+        "multi-form-routes-bind-all-eight-coherence-contract-fields",
         "consequence-and-cleanup-poststate-are-independently-observed-before-completion",
         "evolution-cannot-mutate-its-evaluator-and-requires-a-source-bound-matching-rollback-or-keep-poststate",
         "authority-or-evidence-regression-cannot-be-compensated-by-another-metric",
         "unknown-not-observed-residue-and-malformed-input-never-become-success"
       ],
       "taskSuppliedPolicy": [
-        "environment-admission-facts",
-        "responsibilities-and-route-conditions",
-        "multi-form-coherence-facts",
+        "additional-environment-admission-facts",
+        "responsibilities-and-additional-route-conditions",
+        "additional-multi-form-coherence-facts",
         "comparison-dimensions-and-context-preference",
         "source-reuse-preference",
         "additional-completion-facts",
