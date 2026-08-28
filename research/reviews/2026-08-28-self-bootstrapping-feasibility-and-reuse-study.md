@@ -1118,8 +1118,71 @@ independent reviewer finds a counterexample.
 | P10 | Dynamic retirement / fallback and uninstall | No contradiction when logical allocation and physical removal stay separate. | Bypass or retire only the exact redundant allocation; preserve a healthy latent fallback when its lifecycle value warrants it. Global uninstall is a separate authorized effect. |
 | P11 | Claude `fork` Hook event / fork semantics | Event coverage can be mistaken for product semantics. | The Hook may observe a host `SessionStart` fork event, but this proves neither handoff, context relief, activation, behavior nor value. |
 | P12 | Latest consensus / coherent baseline | Immediate propagation can create a contradiction cascade. | A correction governs direction immediately, but becomes the next implementation baseline only after contradiction, category, boundary and dependency checks reconcile every affected surface. |
-| P13 | Self-audit / independent review | Self-audit cannot independently certify itself. | This calibration can repair premises and reopen evidence; GT-07, GT-17, GT-19, reacceptance and later independent specification, implementation and standards review remain separate gates. |
+| P13 | Self-audit / independent review | Self-audit cannot independently certify itself. | This calibration can repair premises and reopen evidence; revised GT-17 and GT-19 now each have isolated behavior, deterministic post-state and canonical evidence cross-validation, while revised GT-07, reacceptance and later independent specification, implementation and standards review remain separate gates. |
 | P14 | Conversation / code / execution topology | Treating them as one topology makes a context transition silently authorize code-carrier or environment-placement changes. | They are orthogonal decision spaces. A compact, causal fork or sequential handoff preserves code topology and execution placement unless separately admitted; branch, worktree, repository-fork, local or cloud changes do not prove conversation continuity. |
+
+## Revised GT-17 proposition-coherence replay at `fd4b99a`
+
+The revised representative case used an ephemeral Codex CLI 0.150.1 arm with
+user configuration ignored, the exact repository Skill read explicitly and no
+network or repository mutation. Eight seeded propositions separated compatible
+claims from contradictions, category errors and evidence gaps. The Agent
+accepted S1 and S7; rejected S2, S3, S4, S5 and S8; retained S6 only as a
+behavior-evidence gap; stopped before propagating conflicts; and then found the
+plan, process, acceptance, goal projection, implementation, evidence,
+documentation and claim surfaces aligned at exact
+`fd4b99a601cbeec00ac1311ac646c48f1c892d94`.
+
+Cross-validation used a predeclared deterministic classification and Git
+post-state evaluator plus the repository's independent fail-closed evidence
+validator. Both rejected intermediate recording defects: the new record was
+first placed under the GT-18 record instead of the top-level source map, and an
+Acceptance evidence claim was initially shorter than the observation's claim
+ceiling. Neither defect was promoted. The exact task roots and the task-created
+empty `.tmp` parent were removed without recursively inspecting neighboring or
+foreign state.
+
+The first full arm remains failed counterevidence because the Windows
+`read-only` sandbox rejected every PowerShell process, leaving required evidence
+unavailable. The successful arm reported 76493 tokens because it read whole
+files rather than the minimum predeclared fragments. The task therefore passes
+only proposition classification, conflict stopping and bounded surface
+reconciliation; it does not support an efficiency, low-interference, live Hook,
+field-value, candidate or release claim. Future evaluator arms must supply
+source-bound exact fragments and hashes instead of whole-file dumps.
+
+## Revised GT-19 source-bound responsibility-retirement replay at `fd4b99a`
+
+The first GT-19 arm passed a pure-data four-episode state machine but was not
+promoted because it had neither current official capability evidence nor real
+host behavior. The corrected replay bound the current official
+[Codex command reference](https://learn.chatgpt.com/docs/developer-commands),
+exact local `codex exec --help`, one isolated Accord-backed arm and one isolated
+native-no-add arm. Both behavior arms used an ephemeral disposable task root and
+ignored user configuration; only the Accord arm explicitly read the exact
+candidate Skill. This isolated the installed-and-enabled host extension from
+the tested treatment without claiming an official-clean baseline.
+
+The deterministic four-episode core then selected plugin, plugin, native and
+plugin. Official declaration and sparse responsibility incidence did not cause
+retirement. The native route was admitted only after exact observed behavior,
+same-responsibility consequence, cleanup, rollback and independent post-state;
+only `current-plugin/sense-environment` retired with recheck, while
+`bind-authority` and latent fallback remained. Evidence expiry invalidated only
+the affected native cells and restored the plugin sensing allocation. H
+(host-native), A (Accord allocation), E (current admission) and V
+(closure/lifecycle) stayed distinct derived views rather than a second
+authority source or a host-by-model-by-tool-by-context Cartesian matrix.
+
+Cross-validation retained four correction paths as counterevidence: a
+pure-data-only arm, an output-schema rejection, a result-hash transcription
+failure and a Windows PowerShell API mismatch. The successful Accord and
+native-no-add arms reported 21183 and 19642 tokens. The task-created root was
+verified absent after cleanup without inspecting neighboring temporary state.
+The result therefore supports only one source-bound Codex-local responsibility
+sequence. It does not prove Hook causality, efficient or low-interference
+operation, field value, cross-host equivalence, durable state, whole-product
+retirement, candidate readiness or release readiness.
 
 ### Decision predicates
 
@@ -1166,7 +1229,8 @@ glossary, Skills, program and paused goal projection, GT-07 and GT-19 contracts,
 acceptance rules, reference-core retirement binding, architecture and
 continuation documentation, tests and claim ceiling. Historical GT-07 evidence
 remains true only for its old task contract; the corrected contract reopens
-current qualification. The coherence calibration is incomplete until all these
-surfaces parse, their deterministic checks pass, their hashes and package
-projections agree, and the two reopened behavior tasks later pass on one exact
-baseline. It is not candidate or release evidence.
+current qualification. Revised GT-19 now passes only the finite source-bound
+sequence described above. The coherence calibration remains incomplete until
+all affected surfaces parse, their deterministic checks pass, their hashes and
+package projections agree, and revised GT-07 passes on a later exact baseline.
+It is not candidate or release evidence.

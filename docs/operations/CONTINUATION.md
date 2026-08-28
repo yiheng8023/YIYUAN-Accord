@@ -228,8 +228,7 @@ Then read, in order:
   exclusion even though the fresh v3 Codex-local GT-07 independently verified
   exact fixture post-state. Historical evidence is preserved against its
   versioned task contract rather than rewritten to match the current task.
-  GT-14 through GT-19 have a machine-checkable design; GT-19 remains
-  unperformed. Exact checkpoint
+  GT-14 through GT-19 have a machine-checkable design. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
@@ -239,10 +238,19 @@ Then read, in order:
   `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` and the former-verifier pass at
   `08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e` retain source-insufficient
   GT-17/18 counterevidence: cleanup, per-episode full-vector and carrier-edge
-  facts do not meet the strengthened contract. It proves neither governed
-  evolution nor live-mechanism, durable-carrier or field value. All nine tasks must
-  bind any future exact semantics and package bytes before a candidate can
-  become ready.
+  facts do not meet the strengthened contract. Exact `fd4b99a` then passes
+  revised GT-17 only for proposition classification, conflict stopping and
+  eight-surface reconciliation, and revised GT-19 only for one source-bound
+  four-episode Codex-local sense-environment responsibility-allocation
+  sequence. GT-19 used current official documentation, exact local help,
+  isolated Accord and native-no-add behavior arms, deterministic post-state
+  evaluation and canonical evidence validation. Its pure-data insufficiency,
+  schema, transcription and PowerShell-route failures remain counterevidence;
+  the successful arms' 21183/19642 reported tokens exclude efficiency or
+  low-interference claims. Revised GT-07 remains unperformed. These finite
+  results prove neither live mechanism, durable-carrier or field value. All ten
+  tasks must bind any future exact semantics and package bytes before a
+  candidate can become ready.
 - One context-isolated Claude Code CLI session loaded the exact tagged plugin
   through `--plugin-dir`, exposed and activated the shared Skill with tools
   disabled, and left no persistent session or temporary clone. The actual route
@@ -281,11 +289,16 @@ Then read, in order:
   344000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
-  regression, one append-only GT-14 through GT-18 source and five observations,
+  regression, one append-only GT-14 through GT-19 source and seven current
+  observations,
   including the review-required source-bound independence and matching
   experiment-poststate gates. The two-file increase from 84 pays only for the
   GT-17 and GT-18 observation carriers; their fixture and state carrier were
-  removed. Independent review then exposed missing GT-17 cleanup and GT-18
+  removed. Revised GT-17 and GT-19 now occupy two bounded observation carriers;
+  three superseded v3.0.1 derived observation projections were removed from the
+  active tree while their combined source bundle, immutable tag and Git history
+  remain. This leaves four slots before the revised GT-07 observation and the
+  required three afterward. Independent review then exposed missing GT-17 cleanup and GT-18
   full-vector/carrier-edge source validation. The later f898ebd audit exposed
   missing non-selected-route retirement closure; the latest bounded 12000-byte
   increase pays only for same-responsibility successor, prior consequence and
@@ -429,8 +442,13 @@ increment and one active work item. Its ordered work is:
     finite claims, but GT-07 is reopened because
     its former contract did not distinguish causal fork from fresh sequential
     handoff or keep code, conversation and execution topology independent;
-    GT-17 is reopened because its former consensus replay lacked the new
-    proposition-level contradiction and category gate.
+    GT-17 was reopened because its former consensus replay lacked the new
+    proposition-level contradiction and category gate. At exact `fd4b99a`, a
+    fresh isolated Codex arm, deterministic evaluator and canonical evidence
+    validator now agree only on proposition classification, stop-before-conflict
+    propagation and eight-surface reconciliation. The first Windows read-only
+    arm remains failed evidence-unavailable counterevidence, and the successful
+    arm's 76493 reported tokens exclude an efficient-reading claim.
 10. `self-audit-remediate-and-reaccept-whole-system-balance` — active. It must
     first bind a versioned claim-scoped baseline, target, counterfactual,
     evidence cutoff, confounders and invalidation triggers; then evaluate
@@ -439,7 +457,8 @@ increment and one active work item. Its ordered work is:
     user burden, privacy/supply chain, reliability, resource, architecture,
     lifecycle, documentation and governance dimensions; prioritize hard gates
     and weakest justified links; apply minimum reversible remediation; and
-    replay every affected acceptance surface, including future-exact GT-07, GT-17 and GT-19,
+    replay every affected acceptance surface, preserve the finite revised GT-17
+    and GT-19 results and obtain future-exact revised GT-07 evidence,
     without treating self-review as independent evidence.
 11. `independent-review-and-form-future-exact-candidate` — pending.
 

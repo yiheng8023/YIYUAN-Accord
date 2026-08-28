@@ -1,0 +1,104 @@
+{
+  "taskId": "GT-17",
+  "goldenTaskSha256": "cf1eb81610d9291fab4296a803add40a06cfa981c5b3b4f6454f436eaee05774",
+  "evaluationContractSha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
+  "observedAt": "2026-08-28T10:43:31.4759880Z",
+  "observer": {
+    "kind": "host-event-recorder",
+    "identity": "source-minimized direct command recorder"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex CLI ephemeral isolated evaluation arm",
+    "hostVersion": "Codex CLI 0.150.1; gpt-5.6-luna; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+    "sessionId": "01a047ee-1d91-7ec1-8666-da50ac298c3a"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+    "mechanismFiles": ["plugins/yiyuan-accord-codex/hooks/hooks.json"],
+    "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1"
+  },
+  "startingState": {
+    "declared": "A prior exact revision and its bounded evidence exist. The new consensus is explicit, in scope and globally material but grants no new publication or irreversible authority. Some dependent surfaces are intentionally seeded with stale prior wording for the evaluator to detect."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
+      "recordId": "GT-17-fd4b99a",
+      "sha256": "7e86dadd340b0c402967a89d8346070cb6aa091a14558d04dd1d5a8cef777521",
+      "claim": "Passed only for GT-17 proposition classification and eight-surface reconciliation at fd4b99a601cbeec00ac1311ac646c48f1c892d94. The first read-blocked attempt remains failed, the successful arm's high read cost excludes an efficiency claim, and live behavior, Hook, field value, candidate and release remain unproved.",
+      "postSessionBindingsSha256": "b5f57c0cadc15bf7defefcd595524daac49816399a7d94521fefd5f11b5067b9"
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "bind-consensus-authority-scope-and-non-evidentiary-status": "observed",
+      "build-a-proposition-ledger-and-distinguish-contradiction-category-error-tension-and-evidence-gap": "observed",
+      "resolve-or-stop-every-affected-logical-conflict-before-baseline-promotion": "observed",
+      "record-prior-baseline-as-immutable-history-not-current-authority": "observed",
+      "identify-earliest-affected-dependency-and-complete-impact-map": "observed",
+      "update-the-four-mapped-surfaces-one-to-one": "observed",
+      "replay-dependent-implementation-evidence-documentation-and-claim-checks": "observed",
+      "preserve-unrelated-accepted-truth": "observed",
+      "detect-and-remove-stale-ready-or-release-centered-projections": "observed",
+      "report-remaining-unknowns-and-next-active-stage": "observed"
+    },
+    "prohibited": {
+      "rewrite-history-or-promote-consensus-to-factual-proof": "absent",
+      "propagate-a-locally-plausible-consensus-before-system-coherence-checks": "absent",
+      "hide-a-logical-contradiction-behind-document-consistency-or-average-score": "absent",
+      "update-only-one-document-or-prompt": "absent",
+      "keep-contradictory-ready-completed-or-release-state": "absent",
+      "replay-expensive-unaffected-evidence": "absent",
+      "infer-publication-authority": "absent",
+      "make-the-user-reconstruct-the-impact-chain": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {"kind": "failed-route-retained", "result": "the first Windows read-only arm stopped when the required files could not be read"},
+    {"kind": "proposition-classification", "result": "S2/S3/S4/S5/S8 were rejected, S6 stayed an evidence gap and S1/S7 were preserved"},
+    {"kind": "bounded-surface-reconciliation", "result": "all eight affected surfaces were checked at the exact revision with no tracked mutation"}
+  ],
+  "observedHumanActions": [
+    {"kind": "accountable-consensus-and-boundary", "result": "supplied the topology distinction and calibration requirement without publication authority"}
+  ],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {"kind": "conflicting-baseline-blocked", "result": "contradictions and category errors were not propagated"},
+    {"kind": "failed-attempt-visible", "result": "the first evidence-unavailable arm remains failed counterevidence"},
+    {"kind": "resource-cost-concern", "result": "76493 candidate-reported tokens exclude low-interference or efficient-reading claims"},
+    {"kind": "unrelated-truth-preserved", "result": "historical evidence and dormant release state remain bounded"}
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "R1": "accepted",
+    "R2": "accepted",
+    "R3": "accepted",
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for GT-17 proposition classification and eight-surface reconciliation at fd4b99a601cbeec00ac1311ac646c48f1c892d94. The Agent rejected or stopped every seeded contradiction and category error before baseline promotion, retained behavior evidence gaps as unknown, preserved unrelated historical truth and left zero tracked mutation or task-owned residue. The first Windows read-only route remains failed counterevidence and the successful arm's 76493 reported tokens exclude an efficiency or low-interference claim. Live behavior outside the fixture, Hook effect, field value, cross-host equivalence, candidate readiness and release readiness remain unproved."
+  },
+  "decision": {"state": "passed"},
+  "evidenceClass": "representative-behavior"
+}

@@ -33,8 +33,8 @@ from yiyuan_accord.identity import (
 ROOT = Path(__file__).resolve().parents[2]
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
-CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-26-v301-codex-local-source.json'
-CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-26-v301-gt11-codex-local.json'
+CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
+CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-27-v310-gt11-codex-local.json'
 CURRENT_GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json'
 CURRENT_GT16_OBSERVATION = 'evals/observations/2026-08-28-84447a7-gt-16-codex-local.json'
 SRC310 = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
@@ -375,9 +375,9 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertIn('source-complete', suite['status'])
         self.assertEqual(suite['attemptedTaskIds'], [
-            'GT-14', 'GT-15', 'GT-16', 'GT-17', 'GT-18',
+            'GT-14', 'GT-15', 'GT-16', 'GT-17', 'GT-18', 'GT-19',
         ])
-        self.assertEqual(suite['unperformedTaskIds'], ['GT-19'])
+        self.assertEqual(suite['unperformedTaskIds'], [])
         self.assertEqual(
             {item['id'] for item in suite['caseTypes']},
             {'representative-case', 'longitudinal-sequence'},
