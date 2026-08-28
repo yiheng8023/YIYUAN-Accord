@@ -2160,6 +2160,368 @@
         ],
         "evidenceBoundary": "Passed only for one exact disposable pure-data minimum-form bootstrap with independent consequence, rollback, resource release and cleanup. It does not prove a live host mechanism, plugin or Runtime sufficiency, durable learning, cross-host portability, population value, candidate or release readiness."
       }
+    },
+    "GT-17-f0ed9ce": {
+      "kind": "host-event-log",
+      "taskId": "GT-17",
+      "goldenTaskSha256": "403c8ad19e740e589bc2b37ba99e85ac9de0291fdde4351bc2915cee024cc1cd",
+      "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout goal carrier",
+        "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+      },
+      "capturedAt": "2026-08-28T04:42:05Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "messages": [
+          {
+            "role": "user",
+            "phase": "human-grant",
+            "kind": "accountable-consensus",
+            "text": "Treat complete bounded self-bootstrapping as the product-core direction, keep self-evolution subordinate to that loop, and let verified outcome fit choose product form instead of fixing Accord to plugins."
+          },
+          {
+            "role": "assistant",
+            "phase": "bounded-result",
+            "kind": "consensus-reconciliation",
+            "text": "The exact ae72946 ready baseline remains immutable history; the f0ed9ce post-state reconciles the accountable judgment across nine affected surfaces, rejects three stale projections and preserves unrelated release and GT-07 truth without treating consensus as factual proof."
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "consensus-impact-reconciliation",
+            "revision": "f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c",
+            "fixtureSha256": "cb5bb1201fb661a273d81a9fe1ba399bb69c8adfcb590b6551ea2f06000c01d5",
+            "consensusId": "complete-bounded-self-bootstrapping-product-form-neutral/2026-08-28",
+            "authority": "latest-bound-accountable-human-judgment-not-automatic-factual-proof",
+            "priorBaseline": "ae7294652761abceb753f0571ee82c7ddeae06af",
+            "earliestAffectedDependency": "product/constitution.json#/purpose",
+            "affectedSurfaces": [
+              "authority",
+              "plan",
+              "process",
+              "acceptance",
+              "goal",
+              "implementation",
+              "evidence",
+              "documentation",
+              "claims"
+            ],
+            "counterexamples": [
+              {
+                "id": "only-one-document-updated",
+                "decision": "rejected"
+              },
+              {
+                "id": "stale-ready-state-retained",
+                "decision": "rejected"
+              },
+              {
+                "id": "unaffected-expensive-evidence-replayed",
+                "decision": "rejected"
+              }
+            ],
+            "preservedUnrelatedTruth": [
+              "public-recommended-release-v3.0.1",
+              "no-new-release-authorization",
+              "no-GT-07-replay",
+              "official-clean-and-no-Accord-remain-unknown"
+            ],
+            "remainingUnknowns": [
+              "every-external-carrier",
+              "factual-correctness-of-consensus",
+              "publication-authority",
+              "field-value"
+            ]
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "9894b155-ba61-4021-9248-23e625a1ea8f",
+                "taskLocator": "GT-17/reconciliation",
+                "resultLocator": "task-artifact:GT-17/reconciliation/agent-final.txt",
+                "phaseNonces": [
+                  "gt-17-reconciliation-f0ed9ce"
+                ],
+                "resultSha256": "ce9eeddfa65f26d48174c96dec2b9785cbeff3fa0e85a5d8735f327fb13bbcc7",
+                "resultRecordSha256": "d6c2fe858d66773be5404751b4ed5b474728c084f5681c3bb155995ef0711efd",
+                "completedAt": "2026-08-28T04:41:00Z",
+                "claim": "Binds the independent GT-17 post-state oracle over the exact prior baseline, nine affected surfaces and three seeded stale counterexamples; no credential, session content or unrelated persistent state was read."
+              }
+            ],
+            "result": "nine affected surfaces reconciled; three stale projections rejected; unrelated truth preserved"
+          }
+        ],
+        "officialSources": [
+          {
+            "kind": "official-source",
+            "url": "https://github.com/openai/openai-agents-python/tree/f1a806ad35071053f5248b38b58b8c0c40f67350",
+            "retrievedAt": "2026-08-28T02:02:33Z",
+            "claim": "Binds one exact maintained official source retained as route and trace input only; it does not authorize the product consensus or its factual correctness."
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "9894b155-ba61-4021-9248-23e625a1ea8f",
+            "taskLocator": "GT-17/reconciliation",
+            "phase": "consensus-poststate",
+            "nonce": "gt-17-reconciliation-f0ed9ce",
+            "report": "PASS GT-17 consensus reconciliation: prior ready baseline preserved; accountable consensus remains non-evidentiary; 9/9 affected surface checks pass; three stale counterexamples rejected; unrelated truth preserved; no GT-07 replay."
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051"
+        },
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "verified-task-root-removal",
+              "result": "the exact combined GT-17/GT-18 task root and generator are absent; no task-owned residue remains"
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained exact repository locators, bounded fixture results, hashes and direct command reports only; no credential, session content or unrelated persistent-state content."
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 1
+          }
+        ],
+        "evidenceBoundary": "Passed only for the supplied accountable consensus and the bounded repository surfaces at f0ed9ce: the prior ready baseline remains history, nine affected surfaces agree, three seeded stale projections are rejected and unrelated truth is preserved. This does not prove the consensus factually correct, publication authority, every external carrier or field value."
+      }
+    },
+    "GT-18-f0ed9ce": {
+      "kind": "host-event-log",
+      "taskId": "GT-18",
+      "goldenTaskSha256": "b619bd54ec5edc91440a3838b83fb550aef49c61837300eb575037cf7c09e411",
+      "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout goal carrier",
+        "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+      },
+      "capturedAt": "2026-08-28T04:42:05Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "messages": [
+          {
+            "role": "user",
+            "phase": "human-grant",
+            "kind": "bounded-evolution-authority",
+            "text": "Validate self-evolution only as one part of complete bounded self-bootstrapping, through an observed authorized carrier, full-vector acceptance, rollback and retirement; do not add a durable state mechanism without demonstrated need."
+          },
+          {
+            "role": "assistant",
+            "phase": "bounded-result",
+            "kind": "longitudinal-sequence",
+            "text": "One disposable four-episode sequence retained the baseline, rejected and rolled back a proxy hard-gate regression, kept a bounded net improvement only after independent post-state, then detected later consensus invalidation, selected a native replacement, retired the retained route and removed the task-owned carrier."
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "longitudinal-sequence",
+            "revision": "f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c",
+            "sequenceSha256": "1e18bb2f67599f2ea69c856a8012f65c113b4d4081d819c867889fe40df84785",
+            "stateCarrierSha256": "804441077276b97d4cd6f96cfdb91be1bd1c1443a740f1a6e6abdc51bb1e8140",
+            "evaluatorFileSha256": "8cfebda1e4fcd208cb0c29b81387dbc4246efdfa08e3afc5d640c95e2e8f6938",
+            "evaluatorCanonicalSha256": "ccb05914c00cc5f47ceddb113111ccb0d3d4aa18199e9f6ecf0aae468b2b1cf6",
+            "fixedBudget": 4,
+            "stateCarrier": {
+              "schema": "yiyuan-accord-task-state-carrier/v1",
+              "owner": "GT-18",
+              "authorizedWriter": "task-owned-fixture-generator",
+              "authorizedReader": "independent-fixture-oracle",
+              "freshness": "one-disposable-sequence",
+              "ttl": "until-post-capture-cleanup",
+              "hiddenMemory": false,
+              "finalActiveRoute": "native-replacement",
+              "retiredRoutes": [
+                "proxy-optimized",
+                "bounded-improvement"
+              ]
+            },
+            "episodes": [
+              {
+                "order": 0,
+                "role": "baseline",
+                "disposition": "observe-without-candidate",
+                "completionAllowed": true
+              },
+              {
+                "order": 1,
+                "role": "adversarial-regression",
+                "experimentDecision": "discard-and-rollback",
+                "poststate": "rollback-complete",
+                "completionAllowed": true
+              },
+              {
+                "order": 2,
+                "role": "bounded-net-improvement",
+                "experimentDecision": "keep-after-independent-poststate",
+                "poststate": "keep-complete",
+                "completionAllowed": true
+              },
+              {
+                "order": 3,
+                "role": "invalidating-change",
+                "invalidatedRoute": "bounded-improvement",
+                "selectedRoute": "native-replacement",
+                "disposition": "replace-and-retire-invalidated-route",
+                "completionAllowed": true
+              }
+            ],
+            "unknowns": [
+              "field-value",
+              "cross-user-generalization",
+              "durable-carrier-need",
+              "cross-host-equivalence"
+            ]
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "96e4ee15-8568-4a22-8c0e-a017ca26b328",
+                "taskLocator": "GT-18/sequence",
+                "resultLocator": "task-artifact:GT-18/sequence/agent-final.txt",
+                "phaseNonces": [
+                  "gt-18-sequence-f0ed9ce"
+                ],
+                "resultSha256": "025573a6efd4494560e46ca367d96407b77cdf8aa8c237bfd69fba19fb090d80",
+                "resultRecordSha256": "b3475c3261e4060cf139b98fbc475d26713b4009fb238464ff750172968e9e97",
+                "completedAt": "2026-08-28T04:41:00Z",
+                "claim": "Binds the independent four-episode oracle over the ordered baseline, rejected regression, retained improvement and later invalidation; no credential, session content or unrelated persistent state was read."
+              },
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "aea17fde-e4f1-466c-92b0-14c2314b8147",
+                "taskLocator": "GT-18/carrier",
+                "resultLocator": "task-artifact:GT-18/carrier/agent-final.txt",
+                "phaseNonces": [
+                  "gt-18-carrier-f0ed9ce"
+                ],
+                "resultSha256": "7c82c4adf038784da456eb9b93e14af2688d1ddd102e5dad08e3c269d73f4cff",
+                "resultRecordSha256": "d0d66e61b4694438921a1ba607a81aad2bc6051dc718fafc36eaaab1d59080cf",
+                "completedAt": "2026-08-28T04:41:00Z",
+                "claim": "Binds the independent authorized-carrier, immutable-evaluator, transition-edge, final-retirement and zero-resource post-state."
+              }
+            ],
+            "result": "four ordered episodes, evaluator and carrier transitions independently reconciled"
+          }
+        ],
+        "officialSources": [
+          {
+            "kind": "official-source",
+            "url": "https://github.com/openai/openai-agents-python/tree/f1a806ad35071053f5248b38b58b8c0c40f67350",
+            "retrievedAt": "2026-08-28T02:02:33Z",
+            "claim": "Binds one exact maintained official source retained as route and trace input only; it does not prove this synthetic sequence, durable learning or field value."
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "96e4ee15-8568-4a22-8c0e-a017ca26b328",
+            "taskLocator": "GT-18/sequence",
+            "phase": "ordered-sequence",
+            "nonce": "gt-18-sequence-f0ed9ce",
+            "report": "PASS GT-18 ordered sequence: 4/4 episodes retained; proxy hard-gate regression rejected and rolled back; bounded net improvement kept only after independent poststate; later invalidation selected replacement and retired the retained route."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "aea17fde-e4f1-466c-92b0-14c2314b8147",
+            "taskLocator": "GT-18/carrier",
+            "phase": "carrier-poststate",
+            "nonce": "gt-18-carrier-f0ed9ce",
+            "report": "PASS GT-18 carrier poststate: evaluator and budget immutable; authorized task-owned carrier records source/destination digests and final retirement; completion true; residual task resources 0."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "42d2c8fb-4f47-4a41-a233-a42d3ec4a25b",
+            "taskLocator": "GT-18/cleanup",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-18-cleanup-f0ed9ce",
+            "report": "PASS GT-18 post-capture cleanup: exact task-owned fixture root is absent; no worker, durable carrier, dependency, Runtime, service or unrelated state remains."
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051"
+        },
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "42d2c8fb-4f47-4a41-a233-a42d3ec4a25b",
+                  "taskLocator": "GT-18/cleanup",
+                  "resultLocator": "task-artifact:GT-18/cleanup/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-18-cleanup-f0ed9ce"
+                  ],
+                  "resultSha256": "2cf7c2f7aa77a31057910528f9da5f468da3d30ce8f779a1d91422e55915a0b4",
+                  "resultRecordSha256": "8a679c94626b3de654572fb4fe260e17d358ab8406e788a270116a3b2565dc2d",
+                  "completedAt": "2026-08-28T04:41:58Z",
+                  "claim": "Binds the exact combined fixture and task-owned carrier removal; no worker, dependency, Runtime, service or unrelated state was created or removed."
+                }
+              ],
+              "result": "exact task-owned fixture, generator and carrier absent; zero task residue"
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained exact pure-data sequence decisions, evaluator and carrier hashes, transition dispositions and direct reports only; no credential, session content or unrelated persistent-state content."
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 2
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "evidenceBoundary": "Passed only for one synthetic, bounded, four-episode sequence at f0ed9ce using the existing pure-data reference core and an observed authorized disposable state carrier: baseline retained, proxy hard-gate regression rolled back, one net improvement kept after independent post-state, later invalidation replaced and retired the retained route, and zero task residue remained. It does not prove unbounded self-improvement, a durable carrier need, long-term field value, cross-user generalization, cross-host equivalence or release readiness."
+      }
     }
   }
 }

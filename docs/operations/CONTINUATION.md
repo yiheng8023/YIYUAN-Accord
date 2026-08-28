@@ -74,8 +74,11 @@ Then read, in order:
   behavior-bearing revision `84447a7a1b9557e22ef5585d159459e8701fa40e`,
   three new source-complete observations pass only claim-scoped
   current-enabled admission, pre-authorship no-build feasibility and one
-  disposable pure-data minimum-form bootstrap. The old failures are unchanged.
-  GT-17 and GT-18 remain unperformed. The P4 product-form-neutral synthetic vertical slice is complete
+  disposable pure-data minimum-form bootstrap. At exact behavior-bearing
+  revision `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c`, source-complete GT-17
+  passes only one nine-surface accountable-consensus reconciliation and
+  source-complete GT-18 passes only one synthetic four-episode governed-
+  evolution sequence. The old failures are unchanged. The P4 product-form-neutral synthetic vertical slice is complete
   and admits only a deterministic side-effect-free plain-data reference core;
   that one-interface reference core is implemented with source/observer/subject/
   boundary bindings, observer/subject self-identity rejection and a matching
@@ -90,12 +93,16 @@ Then read, in order:
   attempts. No dependency, live adapter, Runtime, service or durable carrier
   was added. The task-owned fixture and empty temporary root were removed; the
   post-cleanup canonical and both host checks have no errors.
-  `validate-longitudinal-consensus-and-cross-carrier-continuity` is active. The
-  refreshed canonical target-mode prompt is active in this exact Codex task;
-  host activation remains task state rather than behavior or value evidence. A new
-  source-bound whole-system balance self-audit, weakest-link remediation and
-  affected-surface reacceptance stage is required after that behavioral work
-  and before independent candidate review. It first binds a versioned
+  `validate-longitudinal-consensus-and-cross-carrier-continuity` is complete.
+  The authorized GT-18 carrier, generator and fixture were removed; no durable
+  state, dependency, Runtime or service was added. The broader existing Codex
+  goal remains active and already includes the next audit, but the refreshed
+  phase-specific canonical prompt is truthfully prepared rather than claimed
+  active because the host exposes no in-place objective refresh for an
+  unfinished goal. Host target state remains task state rather than behavior
+  or value evidence. The source-bound whole-system balance self-audit,
+  weakest-link remediation and affected-surface reacceptance stage is now
+  active before independent candidate review. It first binds a versioned
   claim-scoped baseline, target and counterfactual; public v3.0.1, historical
   exact checkpoints, the current audit snapshot and controlled behavior arms
   remain separate evidence scopes. It cannot average away blockers or substitute
@@ -201,10 +208,12 @@ Then read, in order:
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
   `84447a7a1b9557e22ef5585d159459e8701fa40e` now has separate passing
-  source-complete GT-14, GT-15 and GT-16 observations with finite claim limits;
-  these do not promote the old attempts or prove live-mechanism value.
-  GT-17 global-consensus impact reconciliation and the GT-18 four-episode
-  longitudinal sequence remain unperformed. All nine tasks must
+  source-complete GT-14, GT-15 and GT-16 observations with finite claim limits.
+  Exact behavior-bearing revision
+  `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` adds passing finite GT-17
+  global-consensus and GT-18 four-episode longitudinal observations through a
+  removed disposable carrier. These do not promote the old attempts or prove
+  live-mechanism, durable-carrier or field value. All nine tasks must
   bind any future exact semantics and package bytes before a candidate can
   become ready.
 - One context-isolated Claude Code CLI session loaded the exact tagged plugin
@@ -241,13 +250,15 @@ Then read, in order:
   superseded pre-resource GT-11 evidence files, leaving three expected slots.
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
-- The active development guardrail permits at most 84 tracked files and
+- The active development guardrail permits at most 86 tracked files and
   312000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
-  regression, one combined GT-14 through GT-16 source and three observations,
+  regression, one append-only GT-14 through GT-18 source and five observations,
   including the review-required source-bound independence and matching
-  experiment-poststate gates; it is not advance allowance for a
+  experiment-poststate gates. The two-file increase from 84 pays only for the
+  GT-17 and GT-18 observation carriers; their fixture and state carrier were
+  removed, and the unchanged byte checkpoint is not advance allowance for a
   Runtime, adapter, state layer or future mechanism. The historical v3.1 baseline added one release note,
   two Hook files, one combined source and four observations. The new program
   adds no implementation merely to consume the remaining budget; every future
@@ -363,13 +374,15 @@ increment and one active work item. Its ordered work is:
    primary-source/wheel/license/maintenance provenance, the named outcome and
    full lifecycle vector, consequence, rollback, resource release and cleanup;
    all three pass only their finite claim.
-9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — active.
-   Next, GT-17 must reconcile the latest globally material consensus across all
-   dependent surfaces while preserving history and unrelated truth; GT-18 must
-   run the ordered four-episode baseline, rejected regression, retained net
-   improvement and later invalidation/retirement sequence through an observed
-   authorized task-owned carrier. Expensive unaffected GT-07 is not replayed.
-10. `self-audit-remediate-and-reaccept-whole-system-balance` — pending. It must
+9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — completed.
+   At `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c`, source-complete GT-17
+   reconciles the accountable consensus across nine affected surfaces while
+   preserving ae72946 history, unrelated release truth and unaffected GT-07.
+   Source-complete GT-18 runs baseline, rejected hard-gate regression, retained
+   net improvement and later invalidation/replacement/retirement in order under
+   one immutable evaluator, fixed budget and disposable authorized carrier.
+   The carrier and fixture were removed with zero task residue.
+10. `self-audit-remediate-and-reaccept-whole-system-balance` — active. It must
     first bind a versioned claim-scoped baseline, target, counterfactual,
     evidence cutoff, confounders and invalidation triggers; then evaluate
     coupled product value, form, environment, evidence, authority,

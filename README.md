@@ -42,9 +42,16 @@ structural bindings, not self-proof of real source authenticity. Exact checkpoin
 `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14 through
 GT-16 attempts: fixture execution and cleanup were observed, but required
 composition, wheel/provenance and full-vector source facts were not retained.
-Source-complete activation/effect/lifecycle replay remains active; GT-17,
-GT-18, live mechanisms, durable evolution, representative value and release
-remain gated. Exact revision
+At exact revisions `84447a7a1b9557e22ef5585d159459e8701fa40e` and
+`f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c`, source-complete GT-14 through
+GT-18 observations now pass only bounded current-composition admission,
+reuse-before-build, one disposable pure-data bootstrap, one nine-surface
+consensus reconciliation and one synthetic four-episode governed-evolution
+sequence. The latter rejects a proxy hard-gate regression, keeps one net
+improvement only after independent post-state, then replaces and retires it
+after later invalidation through a removed disposable carrier. Live mechanisms,
+durable evolution, cross-host or population value and release remain gated; the
+active next stage is a non-compensating whole-system balance self-audit. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
 verified, unreleased v3.1.0 baseline; a later product consensus superseded its
 `ready` status without erasing its bounded evidence. `main` is therefore not a

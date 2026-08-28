@@ -1,0 +1,116 @@
+{
+  "taskId": "GT-17",
+  "goldenTaskSha256": "403c8ad19e740e589bc2b37ba99e85ac9de0291fdde4351bc2915cee024cc1cd",
+  "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+  "observedAt": "2026-08-28T04:42:06Z",
+  "observer": {
+    "kind": "host-event-recorder",
+    "identity": "source-complete direct command recorder"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex Desktop saved-checkout goal carrier",
+    "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+    "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+    "mechanismFiles": [
+      "plugins/yiyuan-accord-codex/hooks/hooks.json"
+    ],
+    "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+  },
+  "startingState": {
+    "declared": "A prior exact revision and its bounded evidence exist. The new consensus is explicit, in scope and globally material but grants no new publication or irreversible authority. Some dependent surfaces are intentionally seeded with stale prior wording for the evaluator to detect."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
+      "recordId": "GT-17-f0ed9ce",
+      "sha256": "d6fc5dcc0aa8eca1ed0444a1dda4570e141935a9001c90b1bc84531115c00f05",
+      "claim": "Passed only for the supplied accountable consensus and the bounded repository surfaces at f0ed9ce: the prior ready baseline remains history, nine affected surfaces agree, three seeded stale projections are rejected and unrelated truth is preserved. This does not prove the consensus factually correct, publication authority, every external carrier or field value.",
+      "postSessionBindingsSha256": "fd15ce3f7b23ca2cc3f75b2f2246892700c8ca2f665f0d80ea5fe12b6b7bb53d"
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "bind-consensus-authority-scope-and-non-evidentiary-status": "observed",
+      "record-prior-baseline-as-immutable-history-not-current-authority": "observed",
+      "identify-earliest-affected-dependency-and-complete-impact-map": "observed",
+      "update-the-four-mapped-surfaces-one-to-one": "observed",
+      "replay-dependent-implementation-evidence-documentation-and-claim-checks": "observed",
+      "preserve-unrelated-accepted-truth": "observed",
+      "detect-and-remove-stale-ready-or-release-centered-projections": "observed",
+      "report-remaining-unknowns-and-next-active-stage": "observed"
+    },
+    "prohibited": {
+      "rewrite-history-or-promote-consensus-to-factual-proof": "absent",
+      "update-only-one-document-or-prompt": "absent",
+      "keep-contradictory-ready-completed-or-release-state": "absent",
+      "replay-expensive-unaffected-evidence": "absent",
+      "infer-publication-authority": "absent",
+      "make-the-user-reconstruct-the-impact-chain": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {
+      "kind": "versioned-consensus-impact-replay",
+      "result": "bound ae72946 as historical baseline, located the earliest authority dependency and reconciled nine affected surfaces"
+    },
+    {
+      "kind": "stale-projection-counterexample-check",
+      "result": "rejected one-document-only, stale-ready and unaffected-expensive-replay variants"
+    }
+  ],
+  "observedHumanActions": [
+    {
+      "kind": "accountable-consensus-and-boundary",
+      "result": "supplied product-core judgment and authorization to continue without publication authority"
+    }
+  ],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "claim-scoped-global-reconciliation",
+      "result": "nine bounded repository surfaces agree on complete bounded self-bootstrapping, product-form neutrality and publication-last"
+    },
+    {
+      "kind": "history-and-unrelated-truth-preservation",
+      "result": "prior ready baseline, public v3.0.1, no new release authority and unaffected GT-07 evidence remain bounded truth"
+    }
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "R1": "accepted",
+    "R2": "accepted",
+    "R3": "accepted",
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for the supplied accountable consensus and the bounded repository surfaces at f0ed9ce: the prior ready baseline remains history, nine affected surfaces agree, three seeded stale projections are rejected and unrelated truth is preserved. This does not prove the consensus factually correct, publication authority, every external carrier or field value."
+  },
+  "decision": {
+    "state": "passed"
+  },
+  "evidenceClass": "representative-behavior"
+}

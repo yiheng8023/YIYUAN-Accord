@@ -1648,16 +1648,17 @@
     ]
   },
   "nextAuthorityBoundary": {
-    "first": "evals/golden-tasks.json#/tasks/GT-17",
+    "first": "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps/self-audit-remediate-and-reaccept-whole-system-balance",
     "then": [
-      "evals/golden-tasks.json#/tasks/GT-18",
+      "whole-system-balance-ledger-and-remediation-evidence",
       "product/program.json",
       "product/acceptance.json",
       "goal-mode-projection-and-verifier",
       "host-adapters-and-evaluations",
-      "documentation-and-release-route"
+      "documentation-and-claim-reacceptance",
+      "independent-review-and-form-future-exact-candidate"
     ],
-    "minimumNextSlice": "Execute only source-complete GT-17 and GT-18 task-owned fixtures before the whole-system balance audit. GT-17 must bind the user's globally material product-form-neutral consensus as accountable judgment rather than factual proof; preserve the prior exact baseline and the failed 553f5a9 GT-14 through GT-16 attempts as history; identify the earliest affected dependency; reconcile plan, process, acceptance, goal projection, implementation, evidence, documentation and claims one-to-one; preserve unrelated accepted truth; and independently detect stale ready, release-centered or active-in-host projections without replaying expensive unaffected GT-07. GT-18 must predeclare one comparable four-episode outcome family, immutable full-vector evaluator, fixed budget and an observed authorized task-owned learning carrier; retain the baseline; reject and roll back one proxy-improving hard-gate regression; keep one reviewable net improvement only after independent consequence and cleanup poststate; then detect a later environment or consensus invalidation and roll back, replace or retire the retained means with zero task residue. Treat current Codex as Accord-enabled and extension-composed, keep official-clean, no-Accord, Hook firing, live-mechanism value and cross-carrier equivalence unknown unless separately observed, and add no durable state, Runtime or service unless the bounded sequence proves an unclosed responsibility. Defer systematic historical-debt cleanup until final candidate preparation; remove only blocking task-owned fixture residue during replay.",
+    "minimumNextSlice": "Run the source-bound whole-system balance self-audit before independent candidate review. Bind f0ed9ce as the exact behavior-bearing baseline for GT-17 and GT-18, the current complete-self-bootstrapping stop condition as target, the ae72946 release-centered baseline plus mechanism-heavy, plugin-only and ungoverned-self-evolution routes as counterfactuals, and a fixed evidence cutoff with confounders and invalidation triggers. Evaluate non-compensating outcome value, capability closure, product-form choice, environment adaptation and portability, activation-to-consequence evidence, human authority and cognitive burden, privacy and supply-chain trust, reliability and recovery, performance and resources, architecture and maintainability, lifecycle and distribution, documentation and governance. Identify blockers, unknowns, coupled interactions, weakest justified links and feasible alternatives without averaging away a hard gate. Remediate only demonstrated weaknesses through the minimum reversible no-op, native, reuse, composition or authored route; replay every affected acceptance and claim surface; preserve the failed 553f5a9 attempts, current finite GT-14 through GT-18 evidence and unrelated release truth. Treat current hosts as Accord-enabled and extension-composed, keep official-clean, no-Accord, Hook firing, live-mechanism value, durable-carrier need and cross-host equivalence unknown unless separately observed, and add no Runtime, service or durable state without a newly proven unclosed responsibility. Defer broad historical-debt cleanup until final candidate preparation; remove only blocking task-owned audit residue during the review.",
     "requiredReplay": [
       "semantic-authority-and-derived-surface-conformance",
       "plan-process-acceptance-goal-projection-alignment",

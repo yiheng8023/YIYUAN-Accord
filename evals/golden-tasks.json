@@ -47,10 +47,10 @@
   },
   "suiteDesign": {
     "id": "representative-and-longitudinal-self-bootstrapping-evaluation/v1",
-    "status": "gt14-through-gt16-attempted-but-source-insufficient-and-retained-as-counterevidence-gt17-and-gt18-unperformed",
-    "attemptedTaskIds": ["GT-14", "GT-15", "GT-16"],
-    "unperformedTaskIds": ["GT-17", "GT-18"],
-    "executionClaimLimit": "The retained GT-14 through GT-16 attempts prove fixture execution and cleanup only. Their publishable source omits required composition, wheel/provenance and full-vector facts, so they do not qualify the tasks or complete the replay stage. GT-17 and GT-18 remain unperformed; no suite status proves value, portability, candidate readiness or release readiness.",
+    "status": "gt14-through-gt18-source-complete-claim-scoped-local-observations-retained",
+    "attemptedTaskIds": ["GT-14", "GT-15", "GT-16", "GT-17", "GT-18"],
+    "unperformedTaskIds": [],
+    "executionClaimLimit": "At exact behavior-bearing revisions 84447a7a1b9557e22ef5585d159459e8701fa40e and f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c, source-complete local GT-14 through GT-18 observations pass only their bounded current-composition, feasibility, pure-data bootstrap, global-consensus reconciliation and one synthetic four-episode governed-evolution claims. The failed 553f5a9 GT-14 through GT-16 source-sufficiency attempts remain history. No suite status proves official-clean or no-Accord behavior, live mechanism or Hook effect, durable carrier need, cross-host equivalence, population or field value, candidate readiness or release readiness.",
     "authorityRule": "The current outcome, human-owned boundaries, semantic model, environment-admission contract and acceptance criteria define the evaluation. A task, metric, baseline, candidate, state carrier, model verdict or evaluator output cannot create authority or weaken a criterion.",
     "caseTypes": [
       {

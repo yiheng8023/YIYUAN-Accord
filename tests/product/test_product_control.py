@@ -355,9 +355,11 @@ class ProductControlTests(unittest.TestCase):
             suite['id'],
             'representative-and-longitudinal-self-bootstrapping-evaluation/v1',
         )
-        self.assertIn('source-insufficient', suite['status'])
-        self.assertEqual(suite['attemptedTaskIds'], ['GT-14', 'GT-15', 'GT-16'])
-        self.assertEqual(suite['unperformedTaskIds'], ['GT-17', 'GT-18'])
+        self.assertIn('source-complete', suite['status'])
+        self.assertEqual(suite['attemptedTaskIds'], [
+            'GT-14', 'GT-15', 'GT-16', 'GT-17', 'GT-18',
+        ])
+        self.assertEqual(suite['unperformedTaskIds'], [])
         self.assertEqual(
             {item['id'] for item in suite['caseTypes']},
             {'representative-case', 'longitudinal-sequence'},

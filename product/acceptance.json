@@ -19,7 +19,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "9f9c853d8177791fbd7da284413276bdaeba597dd9e258ec2ef8b714d75b5a45",
+  "canonicalGoalObjectiveSha256": "79a872b1e9a930425fcaaa1e606e70b21f45d54e6e551b57b877c50b516636f0",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -350,7 +350,7 @@
         "representative-behavior"
       ],
       "assessment": "continuing",
-      "assessmentScope": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, fresh source-complete Codex-local GT-14, GT-15 and GT-16 observations pass their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision and one disposable pure-data minimum-form bootstrap. The prior 553f5a9 attempts remain hash-bound failed counterevidence in the combined source archive and recoverable parent Git blobs; they are not rewritten. Historical v3.1.0 GT-07, GT-11, GT-12 and GT-13 remain regression evidence; GT-17 and GT-18 remain unperformed. No current observation proves official-clean or no-Accord behavior, Hook firing, live-mechanism effectiveness, durable self-evolution, global consensus reconciliation, cross-host equivalence, field value, production safety, candidate readiness or release readiness.",
+      "assessmentScope": "At exact behavior-bearing revisions 84447a7a1b9557e22ef5585d159459e8701fa40e and f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c, fresh source-complete Codex-local GT-14 through GT-18 observations pass only their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision, one disposable pure-data minimum-form bootstrap, one global accountable-consensus reconciliation and one synthetic four-episode governed-evolution sequence. GT-17 preserves ae72946 as historical rather than current ready authority and rejects one-document-only, stale-ready and unaffected-GT-07-replay counterexamples. GT-18 rejects and rolls back a proxy hard-gate regression, retains one net improvement only after independent post-state, then replaces and retires it after later invalidation through an observed authorized disposable carrier with zero residue. The prior 553f5a9 attempts remain hash-bound failed counterevidence in the combined source archive and recoverable parent Git blobs; they are not rewritten. Historical v3.1.0 GT-07, GT-11, GT-12 and GT-13 remain regression evidence. No current observation proves official-clean or no-Accord behavior, Hook firing, live-mechanism effectiveness, a durable carrier need, cross-host equivalence, population or field value, production safety, candidate readiness or release readiness.",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-28-84447a7-gt-14-codex-local.json",
@@ -370,6 +370,20 @@
           "locator": "evals/observations/2026-08-28-84447a7-gt-16-codex-local.json",
           "sha256": "50b489d1ab8074c0967fa9958e7f383acce41636627f3a03661241a697f68417",
           "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap with independent consequence, rollback, resource release and cleanup. It does not prove a live host mechanism, plugin or Runtime sufficiency, durable learning, cross-host portability, population value, candidate or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-f0ed9ce-gt-17-codex-local.json",
+          "sha256": "25f5ecb878910490de6d0e1ead8c45ef684584b246449b61efba4531c2ef9473",
+          "claim": "Passed only for the supplied accountable consensus and the bounded repository surfaces at f0ed9ce: the prior ready baseline remains history, nine affected surfaces agree, three seeded stale projections are rejected and unrelated truth is preserved. This does not prove the consensus factually correct, publication authority, every external carrier or field value.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-f0ed9ce-gt-18-codex-local.json",
+          "sha256": "f29aca340cd2ddc30fe58c0b5826cc8d2770e11138200cb0352a27585ab7b466",
+          "claim": "Passed only for one synthetic, bounded, four-episode sequence at f0ed9ce using the existing pure-data reference core and an observed authorized disposable state carrier: baseline retained, proxy hard-gate regression rolled back, one net improvement kept after independent post-state, later invalidation replaced and retired the retained route, and zero task residue remained. It does not prove unbounded self-improvement, a durable carrier need, long-term field value, cross-user generalization, cross-host equivalence or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         }
