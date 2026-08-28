@@ -105,10 +105,10 @@
     },
     {
       "id": "self-bootstrapping-feasibility-and-reuse-study-2026-08-28",
-      "kind": "primary-source-feasibility-matrix-adoption-ledger-and-p0-p4-results",
+      "kind": "exact-source-wheel-provenance-feasibility-ledger-and-p0-p4-results",
       "repositoryLocator": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
-      "repositorySha256": "1f8c25b213b895eae35d2e22c1e91a83f46283dda7ed9378f8b6acde31acc4b0",
-      "disposition": "admitted-input-for-minimum-pure-data-reference-core-with-live-mechanism-behavior-and-release-still-closed"
+      "repositorySha256": "edef3b0549f061431289b334a3a88ef351585f391c50705a45b19cc91ea5e87e",
+      "disposition": "admitted-source-bound-no-build-input-with-publishable-gt15-observation-still-required-and-live-mechanism-behavior-and-release-closed"
     }
   ],
   "increment": {

@@ -76,10 +76,14 @@ Then read, in order:
   boundary bindings, observer/subject self-identity rejection and a matching
   exact event subject; experiment evaluation and post-state also retain one
   observer and boundary before the independently observed completion gate,
-  while source
-  authenticity remains outside the pure core. Source-complete
-  `replay-activation-effect-evidence-and-lifecycle` remains active;
-  longitudinal consensus and cross-carrier validation is pending. A new
+  while source authenticity remains outside the pure core. Source-complete
+  `replay-activation-effect-evidence-and-lifecycle` remains active. A refreshed
+  exact-revision/source/wheel/license/maintenance ledger and one disposable
+  GT-15 no-build route probe now pass at the feasibility layer, but they are not
+  yet a publishable GT-15 observation and do not rewrite the retained failed
+  attempt. The task-owned fixture and empty temporary root were removed; the
+  post-cleanup canonical and Codex host checks have no errors. Longitudinal
+  consensus and cross-carrier validation is pending. A new
   source-bound whole-system balance self-audit, weakest-link remediation and
   affected-surface reacceptance stage is required after that behavioral work
   and before independent candidate review. It first binds a versioned

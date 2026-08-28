@@ -44,6 +44,103 @@ framework reuse and bounded authorship. Primary sources are favored, but a
 source's official status or author's reputation is evidence about provenance,
 not evidence of fit. No third-party code or dependency has been added.
 
+### GT-15 source-bound decision chain
+
+The named sub-capability for this replay is **discover and select the minimum
+replaceable route before authorship**. Its claim is feasibility and route
+fitness only. It does not claim that an external wheel is installed, activated,
+effective or required, or that the complete self-bootstrapping loop works.
+
+The comparison is bound as follows:
+
+1. **Outcome and baseline:** decide whether the pure-data core at repository
+   revision `e080b303ea078eecfe147140646a73d249d5beb1`, with `closure.py`
+   SHA-256 `f1081db8c89d7ab4a18daf3a3640abc83db51eb46765f9220eba3193aa1c9570`,
+   can stay dependency-free while host discovery, composition and continuity
+   remain replaceable responsibilities. The route baseline is this
+   current-enabled host's already exposed read-only capability with no new
+   task mechanism; it is not a native, official-clean or no-Accord environment
+   baseline.
+2. **Counterfactual:** compare no-build, one suitable maintained reuse route,
+   a bounded composition and bounded authorship under the same responsibility
+   and authority envelope. Environment arms and route alternatives remain
+   different concepts.
+3. **Falsifiable hypothesis:** an existing route is reusable only if current
+   primary-source provenance, license, maintenance and package facts are known,
+   it closes the named responsibility without new ungranted authority, and its
+   effect, isolation, recovery and retirement burden is not dominated by a
+   smaller route.
+4. **Hard gates before preference:** unknown license for the copied component,
+   unavailable independent consequence evidence, hidden trust/data expansion,
+   missing rollback or retirement, or a materially mismatched runtime fails
+   adoption. Popularity, author reputation and a local proxy gain cannot
+   compensate.
+5. **Decision:** retain no-build for the core; admit protocol or framework
+   patterns as replaceable adapter candidates only. Install or copy nothing
+   until a later representative gap proves that the current host-native route
+   cannot close the obligation and a bounded probe passes the same full vector.
+6. **Invalidation:** repository revision, package release, license, maintenance,
+   host surface, authority, evaluator, claim or observed responsibility change
+   invalidates only the affected comparison and replays from its source fact.
+
+This ordering prevents a green implementation probe from retroactively proving
+that its source, baseline, authority or product-form premise was valid.
+
+### Exact source, wheel and provenance ledger
+
+Cutoff: `2026-08-28T02:02:33Z`. Repository facts came from the GitHub repository
+and commit APIs; package facts came from each named PyPI project JSON response;
+mechanism facts were checked against the linked primary documentation. A wheel
+manifest digest is SHA-256 over sorted `filename:sha256` entries joined by LF.
+`pushedAt` is freshness evidence only, never proof of maintenance quality or
+Accord fit. No package was downloaded, installed, imported or executed.
+
+| Candidate | Exact source and maintenance fact | Package and license fact | Transferable mechanism | Accord fit limit and exit condition |
+| --- | --- | --- | --- | --- |
+| Karpathy `autoresearch` | [`228791fb499afffb54b46200aca536f79142f117`](https://github.com/karpathy/autoresearch/tree/228791fb499afffb54b46200aca536f79142f117), `master`, not archived, `pushedAt=2026-03-26T00:07:37Z` | No PyPI wheel assessed. The exact README declares MIT, but the exact root has no standalone `LICENSE` and GitHub reports `license=unknown`; therefore pattern study is allowed but copying remains held pending component-level license confirmation. | One mutable surface, fixed evaluator and budget, keep/discard log, human-readable experiment contract. | Single-GPU training, one proxy and one machine are not Accord's multi-dimensional outcome. Exit on evaluator drift, contamination, cross-machine comparison, authority expansion or repeated failure. |
+| Karpathy `nanochat` | [`92d63d4e8bb4df75c3b71618f31ddde2378b2bcd`](https://github.com/karpathy/nanochat/tree/92d63d4e8bb4df75c3b71618f31ddde2378b2bcd), `master`, not archived, `pushedAt=2026-08-02T21:05:23Z` | Repository metadata reports MIT; no Accord dependency or wheel admitted. | Current compact end-to-end reference against which older `nanoGPT` patterns can be interpreted. | Educational/research legibility is not a collaboration-control runtime. Use only to test deep-module clarity; exit if it expands product scope. |
+| Karpathy `micrograd` | [`7bc720e951fe422b8f8814aa5aa1b64121d26b4c`](https://github.com/karpathy/micrograd/tree/7bc720e951fe422b8f8814aa5aa1b64121d26b4c), `master`, not archived, `pushedAt=2026-08-03T04:04:05Z` | Repository metadata reports MIT; no Accord dependency or wheel admitted. | Minimal readable semantic reference separated from production concerns. | Does not supply discovery, authority, continuity, lifecycle or effect evidence. Retire the analogy when it stops reducing conceptual load. |
+| Karpathy `nanoGPT` | [`3adf61e154c3fe3fca428ad6bc3818b27a3b8291`](https://github.com/karpathy/nanoGPT/tree/3adf61e154c3fe3fca428ad6bc3818b27a3b8291), `master`, not archived, `pushedAt=2025-11-12T19:52:34Z` | Repository metadata reports MIT; no Accord dependency or wheel admitted. | Counterexample showing that a formerly useful small reference can become superseded. | Its own current guidance points to `nanochat`; do not freeze an old reference into product authority. |
+| Karpathy `llm.c` | [`f1e2ace651495b74ae22d45d1723443fd00ecd3a`](https://github.com/karpathy/llm.c/tree/f1e2ace651495b74ae22d45d1723443fd00ecd3a), `master`, not archived, `pushedAt=2025-06-26T17:03:40Z` | Repository metadata reports MIT; no Accord dependency or wheel admitted. | Small reference and optimized implementation may legitimately have different envelopes. | Hardware and optimization specificity do not justify an Accord runtime. Reuse only the separation principle. |
+| OpenAI Agents SDK | [`f1a806ad35071053f5248b38b58b8c0c40f67350`](https://github.com/openai/openai-agents-python/tree/f1a806ad35071053f5248b38b58b8c0c40f67350), `main`, not archived, `pushedAt=2026-08-28T01:40:41Z` | `openai-agents==0.22.0`, Python `>=3.10`, one universal wheel, MIT expression; wheel-manifest SHA-256 `71a58443f22b3003f5100dc01d09f72708caa91eaadd3865a1c3ba2484c8ce5b`. | Agents, tools, handoffs, sessions, guardrails, tracing and isolated sandbox surfaces provide a maintained composition candidate. | Adds an application runtime and provider semantics; tracing is not outcome evidence. Re-evaluate only after a named live responsibility cannot be closed natively. |
+| MCP specification and Python SDK | Spec [`d8fdc88fb970313247d8a180ac1ec3f6a10a8885`](https://github.com/modelcontextprotocol/modelcontextprotocol/tree/d8fdc88fb970313247d8a180ac1ec3f6a10a8885); Python SDK [`6705402e246dc4eb1fcdf4d9902b78d3c9c36e1b`](https://github.com/modelcontextprotocol/python-sdk/tree/6705402e246dc4eb1fcdf4d9902b78d3c9c36e1b); both not archived and pushed on 2026-08-26 | Spec repository license file SHA `4a93985763241755401a10678395303de4e720ba` records a MIT-to-Apache-2.0 transition plus CC-BY-4.0 documentation boundary; exact components need review. Python SDK/PyPI `mcp==2.1.1`, Python `>=3.10`, one universal wheel, MIT metadata; wheel-manifest SHA-256 `464c915a5b854da992fc387db4acb959db43751368bb958bc3641061d09caf9e`. | Negotiated capabilities, focused servers, list/change surfaces and host-controlled boundaries fit a replaceable discovery adapter. | Declaration does not prove authorization, health, model-effective exposure or value. Exit before building a duplicate registry or leaking host context across servers. |
+| LangGraph | [`d5f4b2aa960940effc8430165ab3604038e817af`](https://github.com/langchain-ai/langgraph/tree/d5f4b2aa960940effc8430165ab3604038e817af), `main`, not archived, `pushedAt=2026-08-28T01:15:28Z` | `langgraph==1.2.11`, Python `>=3.10`, one universal wheel, MIT; wheel-manifest SHA-256 `9f8b64063190386cb18c771fc1c9e206ef385eff253bb98a7407e050878f9cf7`. | Thread checkpoints, cross-thread stores, pause/resume, inspection and recovery are candidate carrier responsibilities. | Persistence introduces ownership, retention and deletion duties; in-memory state does not survive restart and checkpoints can grow unbounded. Reject until GT-18 proves a durable carrier is necessary. |
+| Temporal Python SDK | [`35b24bb28edf40fc3e2d3c446ea77a0cba312f6f`](https://github.com/temporalio/sdk-python/tree/35b24bb28edf40fc3e2d3c446ea77a0cba312f6f), `main`, not archived, `pushedAt=2026-08-28T00:35:47Z` | `temporalio==1.32.0`, Python `>=3.10`, seven platform wheels, MIT; wheel-manifest SHA-256 `c6ce300a3456d222f51c06d990a95cb1e6a5a498f74867304cfab16f1b13ba2c`. | Durable event history, deterministic replay, cancellation and explicit workflow lifecycle are candidate long-running carrier mechanisms. | Requires a service, workers, determinism, operations and state lifecycle. Reject as dominated unless a proven long-lived obligation exceeds host-bound or lighter carrier fitness. |
+
+The ledger supports a **conditional-go for replaceable adapter patterns and a
+no-go for dependency adoption now**. It also corrects the earlier shorthand
+that called every reviewed Karpathy repository simply MIT: `autoresearch` has a
+README declaration but lacks a standalone license file at the bound tree, and
+MCP licensing is component-sensitive during its transition. These are source
+facts, not objections to the ideas.
+
+### Bounded high-risk route probe
+
+A task-owned pure-data request with SHA-256
+`af8e872b054d21cba2d025d600dffdd87aeedd77c641b5d3056331522bbe0b81`
+replayed the exact obligation through `reconcile_closure`. It compared the
+observed native read-only research route with an `autoresearch` pattern copy,
+OpenAI Agents SDK, an MCP composition, LangGraph, Temporal and bounded
+authorship. The independent deterministic oracle observed:
+
+- `valid=true`, `disposition=no-op`, selected route
+  `native-read-only-no-add`, and completion allowed;
+- bounded authorship passed hard gates but was Pareto-dominated by no-build;
+- every copied, framework or composition route failed at least one current
+  responsibility, license, fit, independent-evidence, authority or coherence
+  gate; and
+- no package was downloaded, installed, imported or executed, and the exact
+  task-owned fixture directory was removed and independently observed absent.
+
+This probe verifies the route selector and the current no-build decision only.
+Its historical fixture label `native-read-only-no-add` means host-native
+read-only capability in the current-enabled composition, not an official-clean
+or no-Accord arm.
+It is not installation, activation, live-adapter behavior, field value or a
+passing GT-15 observation. GT-15 still requires a publishable source record and
+observation binding that preserve this ledger and post-capture cleanup without
+retroactively rewriting the retained failed attempt.
+
 The concern that plugins and Skills alone may not provide systematic,
 persistent, flexible end-to-end closure is admitted as an architecture pressure,
 not as a proved universal deficiency. Each projection must be tested against
@@ -81,8 +178,9 @@ prototype gates.
 Sources: [micrograd](https://github.com/karpathy/micrograd),
 [microgpt](https://karpathy.github.io/2026/02/12/microgpt/),
 [nanoGPT](https://github.com/karpathy/nanoGPT), and
-[llm.c](https://github.com/karpathy/llm.c). The repositories reviewed here use
-the MIT license.
+[llm.c](https://github.com/karpathy/llm.c). The bound `micrograd`, `nanoGPT`
+and `llm.c` repository metadata reports MIT; `microgpt` is an article, not a
+reusable package.
 
 - **Admit as a design pattern:** expose the irreducible end-to-end algorithm in
   a small readable reference implementation; keep optimized or host-specific
@@ -103,7 +201,9 @@ the MIT license.
 
 ### Karpathy: autoresearch bounded experiment operator
 
-Source: [autoresearch](https://github.com/karpathy/autoresearch), MIT.
+Source: [autoresearch](https://github.com/karpathy/autoresearch). Its bound
+README declares MIT, but the exact tree lacks a standalone `LICENSE`; this
+review therefore admits the pattern and does not copy code.
 
 - **Admit as a prototype pattern only:** one explicitly mutable file, a fixed
   evaluator outside that surface, a fixed five-minute budget, a logged
@@ -625,7 +725,7 @@ lend its authority or evidence level to another dimension by name similarity.
 | Product form and cross-form coherence | concern | The pure core plus thin plugin projections avoids premature lock-in, but current packages alone do not prove a systemic persistent loop and a larger runtime could impose control-plane tax. | Let effect, latency, durability, isolation, recovery and lifecycle evidence choose no-op, one form or replaceable composition; do not use host count as product depth. |
 | Human authority, privacy and trust | concern | The design fails closed, forbids self-granted authority and excludes credential/session content, but live acquisition and external-wheel paths have not yet proved the same boundaries. | Keep new trust, account, data, cost and publication decisions human-bound; verify ordinary routes without specialist account/security surfaces or private logs. |
 | User burden and cognitive load | concern | Progressive disclosure and a quiet simple-task path are designed, yet the internal authority/plan/evidence corpus is large and must not become the ordinary user's operating model. | Measure avoidable questions, concepts, steps, delay and recovery in representative tasks; keep K/H/L and JSON internal and project only the minimum context-fit interface. |
-| Reliability, recovery and residue | blocker | Pure-core rollback rules and historical GT-07/11/12 regressions are strong, but current GT-16 lacks the complete health/update/rollback/release/cleanup record. A foreign host residue also prevents a clean exact candidate and is outside current cleanup authority. | Replay lifecycle post-state independently; preserve foreign/shared/unknown state; resolve the external residue only through a later explicit, verifiable authority path. |
+| Reliability, recovery and residue | blocker | Pure-core rollback rules and historical GT-07/11/12 regressions are strong, but current GT-16 lacks the complete health/update/rollback/release/cleanup record. The prior foreign-host blocker and the empty task-temporary root were cleared under explicit human authority; the post-cleanup canonical and Codex host checks report no errors, but that host fact does not qualify GT-16. | Replay lifecycle post-state independently; preserve foreign/shared/unknown state and keep exact zero-residue verification as a non-compensating gate. |
 | Performance, resources and total cost | unknown | The pure reducer has low apparent mechanism cost and GT-13 is a useful single-arm dogfood trace, but there is no qualified comparative burden, latency, context, resource or population evidence. | Capture the non-compensating vector in GT-16 and longitudinal tasks; do not infer optimization or field value from one arm. |
 | Architecture and maintainability | concern | `reconcile_closure` is a deep side-effect-free module with an open policy/form boundary, but the authority, documentation and product-control test surfaces are already large and close to explicit complexity headroom. | Prefer deletion, consolidation and generated projections; split or add surfaces only when a repeated change or demonstrated closure need pays the lifecycle cost. |
 | Host portability and lifecycle | concern | Codex and Claude packages validate statically, but behavior evidence is not equivalent across hosts and the historical Claude cleanup failure remains excluded. ZCode is only a later feasibility hypothesis. | Finish core evidence first; then inspect each host's primary surface and implement only a thin projection when it closes a named gap. |
@@ -652,9 +752,10 @@ lend its authority or evidence level to another dimension by name similarity.
 6. Reduce user-facing concept load and internal maintenance burden where it does
    not weaken evidence or capability closure; preserve explicit residual risks.
 7. Submit one clean exact candidate to independent product, specification,
-   implementation and standards review. Resolve foreign host residue only under
-   separate explicit authority. Hosted verification, named-human release
-   authorization, tag and public Release remain later ordered gates.
+   implementation and standards review, rechecking zero task residue without
+   weakening preservation of foreign, shared or unknown state. Hosted
+   verification, named-human release authorization, tag and public Release
+   remain later ordered gates.
 
 The current optimal decision is therefore **not** to add a Runtime or another
 host projection now. It is to strengthen source capture, isolated consequence
