@@ -75,8 +75,9 @@ Then read, in order:
   three new source-complete observations pass only claim-scoped
   current-enabled admission, pre-authorship no-build feasibility and one
   disposable pure-data minimum-form bootstrap. The later exact
-  `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` GT-17/18 attempt passed the
-  former verifier, but independent review found GT-17 cleanup unbound and
+  `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` GT-17/18 attempt and its
+  `08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e` former-verifier acceptance
+  were rejected after independent review found GT-17 cleanup unbound and
   GT-18 missing per-episode full-vector and explicit carrier source/target-
   state evidence. It remains source-insufficient counterevidence. The P4 product-form-neutral synthetic vertical slice is complete
   and admits only a deterministic side-effect-free plain-data reference core;
@@ -204,7 +205,8 @@ Then read, in order:
   `84447a7a1b9557e22ef5585d159459e8701fa40e` now has separate passing
   source-complete GT-14, GT-15 and GT-16 observations with finite claim limits.
   Exact behavior-bearing revision
-  `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` retains source-insufficient
+  `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` and the former-verifier pass at
+  `08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e` retain source-insufficient
   GT-17/18 counterevidence: cleanup, per-episode full-vector and carrier-edge
   facts do not meet the strengthened contract. It proves neither governed
   evolution nor live-mechanism, durable-carrier or field value. All nine tasks must

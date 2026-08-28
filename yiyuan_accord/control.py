@@ -762,6 +762,7 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
             "requiredTaskIdsForRelease", "mustPassTaskIdsForRelease",
             "sampleRationale", "taskDecisionRule", "releaseDecisionRule",
             "postReleaseTasks", "postSessionBindingContracts",
+            "evaluationContractHistory",
             "historicalEvidenceContractSha256", "historicalEvidence",
             "historicalTaskContracts",
         }:
@@ -807,6 +808,22 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
             )
         ):
             errors.append("representative post-session binding contracts are invalid")
+        evaluation_history = representative_policy.get("evaluationContractHistory")
+        if (
+            not isinstance(evaluation_history, list) or not evaluation_history
+            or any(
+                not isinstance(item, dict)
+                or set(item) != {"kind", "sha256", "preservedTaskIds", "reason"}
+                or item.get("kind") != "scoped-evaluation-contract-supersession"
+                or not isinstance(item.get("sha256"), str)
+                or not SHA256_RE.fullmatch(item["sha256"])
+                or not _string_list(item.get("preservedTaskIds"))
+                or not set(item["preservedTaskIds"]).issubset(set(task_mappings))
+                or not _nonempty_string(item.get("reason"))
+                for item in evaluation_history
+            )
+        ):
+            errors.append("representative evaluation contract history is invalid")
         historical_contract = representative_policy.get(
             "historicalEvidenceContractSha256"
         )

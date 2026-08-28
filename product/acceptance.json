@@ -142,6 +142,11 @@
           "kind": "independent-poststate",
           "location": "materialEvents",
           "bindingCount": 1
+        },
+        {
+          "kind": "post-capture-fixture-removal",
+          "location": "cleanupEvidence.observations",
+          "bindingCount": 1
         }
       ],
       "GT-18": [
@@ -157,6 +162,28 @@
         }
       ]
     },
+    "evaluationContractHistory": [
+      {
+        "kind": "scoped-evaluation-contract-supersession",
+        "sha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+        "preservedTaskIds": [
+          "GT-01",
+          "GT-02",
+          "GT-03",
+          "GT-04",
+          "GT-05",
+          "GT-07",
+          "GT-08",
+          "GT-11",
+          "GT-12",
+          "GT-13",
+          "GT-14",
+          "GT-15",
+          "GT-16"
+        ],
+        "reason": "The strengthened GT-17 cleanup and GT-18 longitudinal source contract supersedes only those affected tasks; exact prior observations for the listed tasks retain their original evaluator digest and finite claim."
+      }
+    ],
     "historicalEvidenceContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
     "historicalTaskContracts": {
       "GT-07": {
@@ -350,7 +377,7 @@
         "representative-behavior"
       ],
       "assessment": "continuing",
-      "assessmentScope": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, fresh source-complete Codex-local GT-14 through GT-16 observations pass only their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision and one disposable pure-data minimum-form bootstrap. Independent review rejected the later f0ed9ce GT-17/18 completion claim because GT-17 cleanup lacked an exact source binding and GT-18 omitted per-episode immutable full-vector and carrier source/target-state evidence. Those records and the prior 553f5a9 attempts remain failed or source-insufficient counterevidence rather than accepted behavior. Historical v3.1.0 GT-07, GT-11, GT-12 and GT-13 remain regression evidence. GT-17/18, official-clean or no-Accord behavior, Hook firing, live-mechanism effectiveness, a durable carrier need, cross-host equivalence, population or field value, production safety, candidate readiness and release readiness remain unproved.",
+      "assessmentScope": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, fresh source-complete Codex-local GT-14 through GT-16 observations pass only their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision and one disposable pure-data minimum-form bootstrap. Independent review rejected the later f0ed9ce GT-17/18 completion claim and its 08eb72a former-verifier acceptance because GT-17 cleanup lacked an exact source binding and GT-18 omitted per-episode immutable full-vector and carrier source/target-state evidence. Those records and the prior 553f5a9 attempts remain failed or source-insufficient counterevidence rather than accepted behavior. Historical v3.1.0 GT-07, GT-11, GT-12 and GT-13 remain regression evidence. GT-17/18, official-clean or no-Accord behavior, Hook firing, live-mechanism effectiveness, a durable carrier need, cross-host equivalence, population or field value, production safety, candidate readiness and release readiness remain unproved.",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-28-84447a7-gt-14-codex-local.json",
@@ -619,7 +646,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "f39d9c2f95099b5518c51402c7304bfc297fe6d5ba1a9cdeff14dd66dadb14ab",
+    "releaseNotesSha256": "9c3d64d067de1553826c7127735c6236620e5cd5510472f70576bf1039e18c73",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,

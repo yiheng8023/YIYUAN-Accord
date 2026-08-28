@@ -46,9 +46,11 @@ At exact revision `84447a7a1b9557e22ef5585d159459e8701fa40e`,
 source-complete GT-14 through GT-16 observations pass only bounded
 current-composition admission, reuse-before-build and one disposable pure-data
 bootstrap. The later `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c`
-GT-17/18 attempt passed the former verifier, but independent review found its
+GT-17/18 attempt and its `08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e`
+former-verifier acceptance were rejected by independent review, which found the
 cleanup, per-episode full-vector and carrier-edge sources incomplete. It remains
-counterevidence while a strengthened fail-closed replay is active. Live
+source facts incomplete. Both remain counterevidence while a strengthened
+fail-closed replay is active. Live
 mechanisms, governed evolution, durable continuity, cross-host or population
 value and release remain gated; whole-system balance review is pending. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically

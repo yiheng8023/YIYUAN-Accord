@@ -50,7 +50,7 @@
     "status": "gt14-through-gt16-source-complete-gt17-through-gt18-source-insufficient-replay-active",
     "attemptedTaskIds": ["GT-14", "GT-15", "GT-16", "GT-17", "GT-18"],
     "unperformedTaskIds": [],
-    "executionClaimLimit": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, source-complete local GT-14 through GT-16 observations pass only bounded current-composition admission, feasibility/no-build and one disposable pure-data bootstrap. The failed 553f5a9 GT-14 through GT-16 attempts and the source-insufficient f0ed9ce GT-17/18 attempt remain counterevidence. GT-17/18, official-clean or no-Accord behavior, live mechanism or Hook effect, durable carrier need, cross-host equivalence, population or field value, candidate readiness and release readiness remain unproved.",
+    "executionClaimLimit": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, source-complete local GT-14 through GT-16 observations pass only bounded current-composition admission, feasibility/no-build and one disposable pure-data bootstrap. The failed 553f5a9 GT-14 through GT-16 attempts and the source-insufficient f0ed9ce/08eb72a GT-17/18 attempt remain counterevidence. GT-17/18, official-clean or no-Accord behavior, live mechanism or Hook effect, durable carrier need, cross-host equivalence, population or field value, candidate readiness and release readiness remain unproved.",
     "authorityRule": "The current outcome, human-owned boundaries, semantic model, environment-admission contract and acceptance criteria define the evaluation. A task, metric, baseline, candidate, state carrier, model verdict or evaluator output cannot create authority or weaken a criterion.",
     "caseTypes": [
       {

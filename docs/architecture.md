@@ -412,8 +412,9 @@ evolution obligations. Exact checkpoint
 `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14 through
 GT-16 attempts as counterevidence: summary execution and cleanup do not replace
 the task-required source facts. The later exact revision
-`f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` attempted GT-17 and GT-18 and
-passed the former verifier, but independent review found that GT-17 cleanup was
+`f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` attempted GT-17 and GT-18; its
+`08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e` former-verifier acceptance was
+rejected after independent review found that GT-17 cleanup was
 not source-bound and GT-18 retained only episode conclusions rather than each
 episode's immutable full vector and explicit carrier source/target states. The
 attempt remains counterevidence. The strengthened evidence layer now fails

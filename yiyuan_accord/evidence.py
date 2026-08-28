@@ -436,11 +436,15 @@ def representative_contract_sha256(acceptance, golden):
         "requiredEvidenceClasses",
     )
     criteria = acceptance.get("criteria")
+    policy = acceptance.get("representativeBehaviorPolicy")
+    digest_policy = dict(policy) if isinstance(policy, dict) else policy
+    if isinstance(digest_policy, dict):
+        digest_policy.pop("evaluationContractHistory", None)
     return _digest({
         "productId": acceptance.get("productId"),
         "release": acceptance.get("release"),
         "evidenceLanes": acceptance.get("evidenceLanes"),
-        "representativeBehaviorPolicy": acceptance.get("representativeBehaviorPolicy"),
+        "representativeBehaviorPolicy": digest_policy,
         "claimCeiling": {
             field: acceptance.get("claimCeiling", {}).get(field)
             for field in ("finiteReleaseClaims", "notImplied")
@@ -453,6 +457,26 @@ def representative_contract_sha256(acceptance, golden):
         "evaluationProtocol": golden.get("evaluationProtocol"),
         "metrics": golden.get("metrics"),
     })
+
+
+def _evaluation_contracts(policy, task_id, current):
+    contracts = {current}
+    history = policy.get("evaluationContractHistory") if isinstance(policy, dict) else None
+    if not isinstance(history, list):
+        return None
+    for item in history:
+        preserved = item.get("preservedTaskIds") if isinstance(item, dict) else None
+        if (
+            not _exact(item, ("kind", "sha256", "preservedTaskIds", "reason"),
+                       ("sha256", "reason"))
+            or item["kind"] != "scoped-evaluation-contract-supersession"
+            or re.fullmatch(r"[0-9a-f]{64}", item["sha256"]) is None
+            or _string_set(preserved) is None or not preserved
+        ):
+            return None
+        if task_id in preserved:
+            contracts.add(item["sha256"])
+    return contracts
 
 
 def _source_amendments(record, task, task_digest, captured_at):
@@ -533,7 +557,9 @@ def _observation_errors(
     task_digest = _digest(task)
     if observation.get("goldenTaskSha256") != task_digest:
         errors.append(f"{label} Golden Task digest mismatch")
-    if observation.get("evaluationContractSha256") != evaluation_digest:
+    evaluation_digests = ({evaluation_digest} if isinstance(evaluation_digest, str)
+                          else set(evaluation_digest or []))
+    if observation.get("evaluationContractSha256") not in evaluation_digests:
         errors.append(f"{label} evaluation contract digest mismatch")
     for field in ("observedAgentActions", "observedHumanActions", "materialEffects", "residue"):
         value = observation.get(field)
@@ -573,7 +599,8 @@ def _observation_errors(
             and record.get("kind") == source.get("kind")
             and record.get("taskId") == task.get("id")
             and record.get("goldenTaskSha256") == task_digest
-            and record.get("evaluationContractSha256") == evaluation_digest
+            and record.get("evaluationContractSha256") == observation.get(
+                "evaluationContractSha256")
             and record.get("hostIdentity") == host
             and captured is not None and observed_at is not None and captured <= observed_at
             and _publishable_payload(
@@ -705,6 +732,8 @@ def representative_sample_errors(
     if not isinstance(binding_contracts, dict):
         binding_contracts = {}
     errors, observed, states, r3_locators, exclusions = [], {}, {}, {}, []
+    if _evaluation_contracts(policy, "", evaluation) is None:
+        errors.append("representative evaluation contract history is invalid")
     exact_fields = set(fields) | {"evidenceClass"}
     for index, item in enumerate(representative.get("evidence", [])):
         if not isinstance(item, dict) or not _text(item.get("locator")):
@@ -728,7 +757,8 @@ def representative_sample_errors(
             )
         local, state = _observation_errors(
             root, label, observation, task, burden, item["locator"],
-            projection if _text(projection) else "", evaluation, read_json,
+            projection if _text(projection) else "",
+            _evaluation_contracts(policy, task_id, evaluation) or {evaluation}, read_json,
         )
         errors.extend(local)
         states[task_id] = state
