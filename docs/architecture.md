@@ -404,6 +404,22 @@ that relation. A copied-history fork is causal branching, not context relief;
 sequential load relief uses a fresh zero-history destination, minimum verified
 state transfer, destination reconciliation and only then source release.
 
+Host terms are adapter vocabulary, not portable ontology. One host may call a
+code carrier a project or workspace and a conversation carrier a task, thread,
+conversation or session. Accord normalizes those labels into separately
+provenanced code, outcome, conversation-carrier and execution relations before
+comparison. Broad functional similarity places two capabilities in the same
+candidate family; interchangeable responsibility closure still requires
+matching inputs, outputs, inheritance, authority, side effects, evidence and
+lifecycle.
+
+Capacity pressure, summarization and handoff are observed continuity risks,
+not a closed taxonomy. Any source-bound condition that can lose, distort,
+stale or misbind goal, state, authority, evidence, resources, topology, time or
+causality reopens the earliest affected boundary. The dynamic graph therefore
+queries relevant relations and trigger evidence instead of hard-coding a fixed
+list of host events.
+
 Codex local and Cloud plus Claude Code and available Claude clients are the
 first concrete-Agent remapping and evaluation surfaces; no concrete Agent or
 its capability surface defines the portable kernel, product boundary or future

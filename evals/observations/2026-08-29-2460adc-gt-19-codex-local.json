@@ -32,7 +32,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
       "recordId": "GT-19-2460adc",
-      "sha256": "a331399041da326fdcae34d5d1e25f328ce5ea261e1bc71af0d4e2f3f9fbfefe",
+      "sha256": "b9030cf07b9e6394e35d81cd980fcf73019118dc6e4e729ad181653ac6cbc4a4",
       "claim": "Passed only for one current-contract four-episode Codex-local sense-environment allocation sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: official declaration and sparse incidence do not retire; the native arm is admitted only after observed behavior and a source-bound closure request; only current-plugin/sense-environment retires with rollback, observation-window, fallback and recheck evidence; expiry restores the plugin allocation while bind-authority remains. A 110313-token blocked arm, two Accord final-answer transcription errors, a 59918-token failed review, the corrected 58952-token review and all unknowns remain counterevidence. No Hook causality, official-clean state, product value, global uninstall, whole-product redundancy, candidate or release claim follows.",
       "postSessionBindingsSha256": "50a9d0585e0fda91162147836e39f9aaa343623c0e0d48818df71df2a26bf141"
     }

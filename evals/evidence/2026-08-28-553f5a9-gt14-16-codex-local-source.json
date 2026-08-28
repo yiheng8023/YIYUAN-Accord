@@ -6970,7 +6970,7 @@
                                                                     "durable-carrier-need",
                                                                     "cross-host-equivalence"
                                                                 ],
-                                                   "sequenceSha256":  "1d11dc98893985deae2cb7f9a4f35a82d1faa5c9962c120acb480ff3cfd24b1b"
+                                                   "sequenceSha256":  "0afc2077df458c8a5b79e3ec04921abd0f37865074ed11ee3c06009ee686e16a"
                                                },
                                                {
                                                    "kind":  "independent-poststate",
@@ -9353,7 +9353,7 @@
                                                                     "cross-host-equivalence",
                                                                     "whole-product-redundancy"
                                                                 ],
-                                                   "sequenceSha256":  "69facbc7e72ebb61d7685d30935e86326320094477586306d5df9b0b8a78d9a8"
+                                                   "sequenceSha256":  "2ee6fa5ac6944317a2d3a66644dd5ed5bfc95015a155da06a3e507b9e65a570e"
                                                },
                                                {
                                                    "kind":  "independent-poststate",

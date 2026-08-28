@@ -455,6 +455,17 @@ A (Accord allocation) incidence views, then apply current E (admission) and V
 or retirement proof, and no host × model × tool × context Cartesian matrix is
 materialized.
 
+Normalize host-specific project, workspace, task, thread, conversation and
+session labels into separately provenanced code, outcome, conversation-carrier
+and execution relations before comparing capabilities. Similar names or broad
+functions open a composition or replacement query; they do not prove identical
+state inheritance, authority, effect or lifecycle.
+
+Capacity pressure, summarization and handoff are current examples rather than
+an exhaustive continuity-risk list. Refresh from the earliest affected boundary
+whenever a source-bound condition can lose, distort, stale or misbind goal,
+state, authority, evidence, resources, topology, time or causality.
+
 Refresh dependent observations when the goal, phase, user correction, Git
 state, authority, host version, extension exposure, model route, configuration,
 source freshness, capability health, observed effect, evidence, acceptance or
@@ -565,13 +576,20 @@ increment and one active work item. Its ordered work is:
     contract GT-18/19 at `2460adc` now pass only their finite evolution and
     responsibility-allocation sequences with blocked routes, transcription and
     query corrections, the initial failed review and high costs retained. A new
-    independent specification and standards reviews of exact `59a340f` failed
-    on the audit staleness, replay contradiction, evidence-semantic fail-open,
-    malformed-cleanup exception, release-task wording and metadata overclaim
-    above. Those findings are remediation inputs, not candidate evidence. A new
-    genuinely independent product, specification, implementation and standards
-    review of the repaired exact tree remains required before this stage can
-    complete or an exact candidate can exist.
+    independent reviews of exact `7860fee` passed the product/specification
+    mapping but failed implementation and standards on self-attested GT-07
+    topology meaning, fixture-shaped GT-18/19 route and failure oracles,
+    malformed carrier exceptions and format-only sequence digests. The current
+    remediation validates GT-07 carrier relations, accepts open route sets and
+    non-fixed regression dimensions, fails closed on unknown longitudinal kinds
+    and malformed carriers, binds event revision, and recomputes a canonical
+    whole-event digest without replaying GT-07. It also treats capacity,
+    summarization and handoff as examples in an open continuity-risk set and
+    normalizes host vocabulary before capability equivalence. These repairs are
+    still remediation inputs, not candidate evidence. A genuinely independent
+    product, specification, implementation and standards review of the repaired
+    exact tree remains required before this stage can complete or an exact
+    candidate can exist.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may

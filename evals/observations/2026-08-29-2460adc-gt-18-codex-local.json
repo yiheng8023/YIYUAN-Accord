@@ -32,7 +32,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
       "recordId": "GT-18-2460adc",
-      "sha256": "f2b72ee72684297a00d85b53700733f0050787d5a0f0dba5d9215fd4166c0e9d",
+      "sha256": "1c08b77721bc728d81c20297f74d1aece40b2e1eee878431bbfb4653c35d171b",
       "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
       "postSessionBindingsSha256": "2df5fb4eb333b8f4c0d7ae1a01813338ca752338a5cf20a04187b9b38fbe530a"
     }

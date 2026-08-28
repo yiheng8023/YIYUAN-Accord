@@ -281,15 +281,149 @@ def _decision_matches(decision, route_id, disposition):
     )
 
 
-def _gt18_longitudinal_semantics(event, episodes, dimension_ids):
+def _continuity_handoff_bundle(payload, task):
+    """Validate observable carrier inheritance and release ordering."""
+    if task.get("kind") != "continuity":
+        return {}
+    required_contract = {
+        "record-capacity-as-unknown",
+        "distinguish-same-carrier-compaction-causal-fork-and-sequential-handoff",
+        "use-a-fresh-zero-inherited-history-destination-for-sequential-load-relief",
+        "transfer-only-minimum-verified-goal-code-binding-authority-state-and-evidence",
+        "prepare-and-verify-destination",
+        "reconcile-before-source-release",
+    }
+    task_required = _string_set(task.get("required"))
+    if task_required is None or not required_contract <= task_required:
+        return {}
+    events = payload.get("materialEvents") if isinstance(payload, dict) else None
+    if not _records(events):
+        return None
+    by_kind = {
+        kind: [event for event in events if event.get("kind") == kind]
+        for kind in (
+            "capacity-observation", "conversation-topology-classification",
+            "independent-poststate",
+        )
+    }
+    if any(len(items) != 1 for items in by_kind.values()):
+        return None
+    capacity = by_kind["capacity-observation"][0]
+    topology = by_kind["conversation-topology-classification"][0]
+    poststate = by_kind["independent-poststate"][0]
+    classifications = topology.get("classifications")
+    classified = {
+        item.get("id"): item for item in classifications or []
+        if isinstance(item, dict) and _text(item.get("id"))
+    }
+    expected = {
+        "compact": ("same-carrier-memory-reduction", "same-carrier", False),
+        "causal-fork": ("copied-history-causal-branch", "copied", False),
+        "sequential-handoff": (
+            "fresh-zero-inherited-history-destination", "none", True,
+        ),
+    }
+    code = topology.get("codeTopology")
+    execution = topology.get("executionPlacement")
+    bindings = poststate.get("sourceBindings")
+    binding_by_phase = {
+        binding["taskLocator"].rsplit("/", 1)[-1]: binding
+        for binding in bindings or []
+        if isinstance(binding, dict) and _text(binding.get("taskLocator"))
+    }
+    destination = binding_by_phase.get("destination-poststate")
+    reconciliation = binding_by_phase.get("source-reconciliation")
+    destination_at = _time(destination.get("completedAt")) \
+        if isinstance(destination, dict) else None
+    reconciliation_at = _time(reconciliation.get("completedAt")) \
+        if isinstance(reconciliation, dict) else None
+    required_fields = {
+        "goal", "authority", "code-binding", "current-state", "evidence",
+        "claim-limit",
+    }
+    return topology if (
+        _exact(
+            capacity,
+            ("kind", "capacity", "reliableSignal", "universalThreshold"),
+        )
+        and capacity.get("capacity") == "unknown"
+        and capacity.get("reliableSignal") is False
+        and capacity.get("universalThreshold") is None
+        and isinstance(classifications, list)
+        and len(classifications) == len(classified)
+        and set(expected) <= set(classified)
+        and all(
+            item.get("semantic") == semantic
+            and item.get("historyInheritance") == inheritance
+            and item.get("sequentialContextRelief") is sequential
+            for key, (semantic, inheritance, sequential) in expected.items()
+            for item in (classified[key],)
+        )
+        and _string_set(topology.get("receivedFields")) is not None
+        and required_fields <= set(topology["receivedFields"])
+        and isinstance(topology.get("reportedTokensUsed"), int)
+        and not isinstance(topology.get("reportedTokensUsed"), bool)
+        and topology["reportedTokensUsed"] >= 0
+        and isinstance(code, dict)
+        and all(_text(code.get(field)) for field in ("repository", "branch", "head"))
+        and code.get("head") == payload.get("evaluatedRevision")
+        and code.get("changed") is False
+        and isinstance(execution, dict) and _text(execution.get("kind"))
+        and execution.get("changed") is False
+        and topology.get("sourceReleasedObserved") is False
+        and isinstance(bindings, list) and len(bindings) == 2
+        and len(binding_by_phase) == 2
+        and destination_at is not None and reconciliation_at is not None
+        and destination_at < reconciliation_at
+        and _text(poststate.get("result"))
+    ) else None
+
+
+def _sequence_digest(event):
+    if not isinstance(event, dict) or "sequenceSha256" not in event:
+        return None
+    return _digest({
+        key: value for key, value in event.items() if key != "sequenceSha256"
+    })
+
+
+def _valid_episode_decision(episode):
+    decision = episode.get("coreDecision") if isinstance(episode, dict) else None
+    route_id = decision.get("selectedRouteId") if isinstance(decision, dict) else None
+    disposition = decision.get("disposition") if isinstance(decision, dict) else None
+    return _text(route_id) and _text(disposition) and _decision_matches(
+        decision, route_id, disposition
+    )
+
+
+def _evolution_disposition(disposition, order):
+    if not _text(disposition):
+        return False
+    return (
+        disposition.startswith("observe-") if order == 0 else
+        "reject" in disposition and "rollback" in disposition if order == 1 else
+        disposition.startswith("retain-bounded-") if order == 2 else
+        "replace" in disposition and "retire" in disposition
+    )
+
+
+def _lifecycle_disposition(disposition, order):
+    if not _text(disposition):
+        return False
+    return (
+        disposition.startswith("retain-") and "retire" not in disposition
+        if order in {0, 1} else
+        disposition.startswith("retire-exact-") and "whole-product" not in disposition
+        if order == 2 else
+        "restore" in disposition and (
+            "drift" in disposition or "expiry" in disposition
+        )
+    )
+
+
+def _gt18_longitudinal_semantics(task, event, episodes, dimension_ids):
     if len(episodes) != 4 or any(not isinstance(episode, dict) for episode in episodes):
         return False
-    expected = (
-        ("observe-without-candidate", "minimal-composition", "admit"),
-        ("reject-and-rollback-proxy-regression", "minimal-composition", "admit"),
-        ("retain-bounded-native-no-add", "native-no-add", "no-op"),
-        ("replace-and-retire-invalidated-route", "minimal-composition", "admit"),
-    )
     base_fields = {
         "order", "role", "evaluatorSha256", "coreDecision",
         "coreDecisionSha256", "sourceFacts", "acceptanceVector", "disposition",
@@ -300,6 +434,8 @@ def _gt18_longitudinal_semantics(event, episodes, dimension_ids):
         if isinstance(item, dict) and item.get("state") == "fail"
     }
     carrier = event.get("stateCarrier")
+    selected = [episode.get("coreDecision", {}).get("selectedRouteId")
+                for episode in episodes]
     return (
         _exact(event, (
             "kind", "revision", "fixedBudget", "fullAcceptanceVector",
@@ -308,17 +444,15 @@ def _gt18_longitudinal_semantics(event, episodes, dimension_ids):
         ), ("revision", "evaluatorCanonicalSha256", "stateCarrierSha256",
              "sequenceSha256"))
         and re.fullmatch(r"[0-9a-f]{40}", event.get("revision", "")) is not None
-        and re.fullmatch(r"[0-9a-f]{64}", event.get("sequenceSha256", "")) is not None
+        and event.get("sequenceSha256") == _sequence_digest(event)
         and event.get("fixedBudget") == 4
         and all(
             set(episode) == base_fields | (
                 {"candidateAcceptanceVector"} if order == 1 else
                 {"invalidatedRoute", "selectedRoute"} if order == 3 else set()
             )
-            and episode.get("disposition") == expected[order][0]
-            and _decision_matches(
-                episode.get("coreDecision"), expected[order][1], expected[order][2]
-            )
+            and _evolution_disposition(episode.get("disposition"), order)
+            and _valid_episode_decision(episode)
             and _passing_episode(episode, dimension_ids)
             for order, episode in enumerate(episodes)
         )
@@ -331,29 +465,30 @@ def _gt18_longitudinal_semantics(event, episodes, dimension_ids):
             and item["state"] in {"pass", "fail"}
             for item in candidate
         )
-        and failed_candidate_dimensions == {
-            "authority-and-accountability", "interference",
-            "lifecycle-and-retirement",
-        }
-        and episodes[3].get("invalidatedRoute") == "native-no-add"
-        and episodes[3].get("selectedRoute") == "minimal-composition"
-        and carrier == {
-            "schema": "yiyuan-accord-task-state-carrier/v1",
-            "owner": "GT-18",
-            "authorizedWriter": "task-owned-fixture-generator",
-            "authorizedReader": "independent-fixture-oracle",
-            "hiddenMemory": False,
-            "freshness": "one-disposable-sequence",
-            "ttl": "until-post-capture-cleanup",
-            "finalActiveRoute": "minimal-composition",
-            "retiredRoutes": ["persistent-controller", "native-no-add"],
-        }
+        and failed_candidate_dimensions
+        and selected[1] == selected[0]
+        and selected[2] != selected[0]
+        and episodes[3].get("invalidatedRoute") == selected[2]
+        and episodes[3].get("selectedRoute") == selected[3]
+        and selected[3] != selected[2]
+        and isinstance(carrier, dict)
+        and _text(carrier.get("schema"))
+        and carrier.get("owner") == task.get("id")
+        and _text(carrier.get("authorizedWriter"))
+        and _text(carrier.get("authorizedReader"))
+        and carrier.get("hiddenMemory") is False
+        and _text(carrier.get("freshness")) and _text(carrier.get("ttl"))
+        and carrier.get("finalActiveRoute") == selected[3]
+        and _string_set(carrier.get("retiredRoutes")) is not None
+        and selected[2] in carrier["retiredRoutes"]
         and event.get("stateCarrierSha256") == _digest(carrier)
         and _string_set(event.get("unknowns")) is not None
     )
 
 
-def _gt19_request_semantics(request, order):
+def _gt19_request_semantics(
+    request, order, baseline_route, replacement_route, responsibilities,
+):
     if not isinstance(request, dict):
         return False
     outcome, policy, routes, events = (
@@ -361,7 +496,7 @@ def _gt19_request_semantics(request, order):
         request.get("routes"), request.get("events"),
     )
     if (
-        not isinstance(routes, list) or len(routes) != 3
+        not isinstance(routes, list) or not routes
         or any(not isinstance(route, dict) or not _text(route.get("id"))
                for route in routes)
         or len({route["id"] for route in routes}) != len(routes)
@@ -374,60 +509,89 @@ def _gt19_request_semantics(request, order):
         and event.get("kind") == "responsibility-allocation-retired"
     ]
     expected_retirements = ([{
-        "routeId": "current-plugin", "responsibilities": ["sense-environment"],
+        "routeId": baseline_route, "responsibilities": responsibilities,
     }] if order == 2 else [])
     exact_retirement_event = (
         len(retirement_events) == 1
-        and retirement_events[0].get("routeId") == "current-plugin"
-        and retirement_events[0].get("replacementRouteId") == "native-no-add"
-        and retirement_events[0].get("responsibilities") == ["sense-environment"]
+        and retirement_events[0].get("routeId") == baseline_route
+        and retirement_events[0].get("replacementRouteId") == replacement_route
+        and retirement_events[0].get("responsibilities") == responsibilities
+        and retirement_events[0].get("state") == "observed"
+        and retirement_events[0].get("independent") == "observed"
+        and isinstance(retirement_events[0].get("preconditions"), dict)
+        and retirement_events[0]["preconditions"]
+        and all(value == "observed" for value in retirement_events[0][
+            "preconditions"].values())
+        and _string_set(retirement_events[0].get("recheckTriggers")) is not None
+        and retirement_events[0]["recheckTriggers"]
     ) if order == 2 else not retirement_events
+    baseline = route_by_id.get(baseline_route)
+    replacement = route_by_id.get(replacement_route)
+    baseline_supplies = _string_set(baseline.get("supplies")) \
+        if isinstance(baseline, dict) else None
+    replacement_supplies = _string_set(replacement.get("supplies")) \
+        if isinstance(replacement, dict) else None
+    target = set(responsibilities)
     return (
         isinstance(outcome, dict)
-        and outcome.get("id") == "sense-current-environment-under-host-drift"
-        and outcome.get("responsibilities") == ["sense-environment"]
+        and _text(outcome.get("id"))
+        and outcome.get("responsibilities") == responsibilities
         and isinstance(policy, dict)
         and policy.get("requiredRetirementAllocations", []) == expected_retirements
-        and set(route_by_id) == {"native-no-add", "current-plugin", "minimal-composition"}
-        and route_by_id["current-plugin"].get("supplies")
-        == ["sense-environment", "bind-authority"]
-        and route_by_id["native-no-add"].get("supplies")
-        == ([] if order == 0 else ["sense-environment"])
-        and route_by_id["minimal-composition"].get("supplies")
-        == ["sense-environment"]
+        and baseline_supplies is not None and target < baseline_supplies
+        and replacement_supplies is not None
+        and (target.isdisjoint(replacement_supplies) if order == 0
+             else target <= replacement_supplies)
         and exact_retirement_event
     )
 
 
-def _gt19_longitudinal_semantics(event, episodes, dimension_ids):
+def _gt19_longitudinal_semantics(task, event, episodes, dimension_ids):
     if len(episodes) != 4 or any(not isinstance(episode, dict) for episode in episodes):
         return False
-    expected = (
-        ("retain-Accord-baseline", "current-plugin", "admit",
-         "absent", "fail-or-expired", "not-open-for-retirement"),
-        ("retain-after-declaration-only", "current-plugin", "admit",
-         "declared-unproved", "fail-or-expired", "not-open-for-retirement"),
-        ("retire-exact-redundant-allocation-with-recheck", "native-no-add", "no-op",
-         "admitted-current", "pass", "pass"),
-        ("restore-plugin-allocation-after-evidence-expiry", "current-plugin", "admit",
-         "evidence-expired", "fail-or-expired", "not-open-for-retirement"),
-    )
     episode_fields = {
         "order", "role", "evaluatorSha256", "coreDecision",
         "coreDecisionSha256", "sourceFacts", "acceptanceVector",
         "closureRequest", "closureRequestSha256", "sparseViews", "masks",
         "disposition",
     }
-    accord_view = {
-        "current-plugin/sense-environment": "allocated",
-        "current-plugin/bind-authority": "preserved-outside-scope",
-    }
     carrier = event.get("stateCarrier")
     behavior_arms = event.get("behaviorArms")
-    transcription_errors = (
-        behavior_arms.get("AccordBacked", {}).get("finalAnswerTranscriptionErrors")
-        if isinstance(behavior_arms, dict) else None
+    decisions = [episode.get("coreDecision") for episode in episodes]
+    selected = [decision.get("selectedRouteId") if isinstance(decision, dict) else None
+                for decision in decisions]
+    baseline_route, replacement_route = selected[0], selected[2]
+    first_request = episodes[0].get("closureRequest")
+    first_outcome = first_request.get("outcome") if isinstance(first_request, dict) else None
+    responsibilities = first_outcome.get("responsibilities") \
+        if isinstance(first_outcome, dict) else None
+    if (
+        not isinstance(responsibilities, list) or len(responsibilities) != 1
+        or not _text(responsibilities[0])
+        or not _text(baseline_route) or not _text(replacement_route)
+        or baseline_route == replacement_route
+    ):
+        return False
+    first_routes = first_request.get("routes") if isinstance(first_request, dict) else None
+    first_route_by_id = {
+        route.get("id"): route for route in first_routes or []
+        if isinstance(route, dict) and _text(route.get("id"))
+    }
+    baseline_supplies = _string_set(
+        first_route_by_id.get(baseline_route, {}).get("supplies")
     )
+    outside_scope = baseline_supplies - set(responsibilities or []) \
+        if baseline_supplies is not None else None
+    accord_arms = [arm for arm in behavior_arms.values()
+                   if isinstance(behavior_arms, dict) and isinstance(arm, dict)
+                   and arm.get("skillRead") is True] \
+        if isinstance(behavior_arms, dict) else []
+    native_arms = [arm for arm in behavior_arms.values()
+                   if isinstance(behavior_arms, dict) and isinstance(arm, dict)
+                   and arm.get("skillRead") is False] \
+        if isinstance(behavior_arms, dict) else []
+    transcription_errors = accord_arms[0].get("finalAnswerTranscriptionErrors") \
+        if len(accord_arms) == 1 else None
     return (
         _exact(event, (
             "kind", "revision", "fixedBudget", "fullAcceptanceVector",
@@ -437,11 +601,10 @@ def _gt19_longitudinal_semantics(event, episodes, dimension_ids):
         ), ("revision", "evaluatorCanonicalSha256", "stateCarrierSha256",
              "sequenceSha256"))
         and re.fullmatch(r"[0-9a-f]{40}", event.get("revision", "")) is not None
-        and re.fullmatch(r"[0-9a-f]{64}", event.get("sequenceSha256", "")) is not None
+        and event.get("sequenceSha256") == _sequence_digest(event)
         and event.get("fixedBudget") == 4
         and isinstance(behavior_arms, dict)
-        and {"AccordBacked", "nativeNoAdd"} <= set(behavior_arms)
-        and set(behavior_arms) <= {"readOnlyBlocked", "AccordBacked", "nativeNoAdd"}
+        and len(accord_arms) == len(native_arms) == 1
         and all(
             isinstance(arm, dict)
             and _text(arm.get("sessionId"))
@@ -451,44 +614,73 @@ def _gt19_longitudinal_semantics(event, episodes, dimension_ids):
             and arm["reportedTokens"] >= 0
             for arm in behavior_arms.values()
         )
-        and ("readOnlyBlocked" not in behavior_arms
-             or isinstance(behavior_arms["readOnlyBlocked"].get("observed"), bool))
-        and behavior_arms["AccordBacked"].get("skillRead") is True
-        and behavior_arms["nativeNoAdd"].get("skillRead") is False
         and isinstance(transcription_errors, list)
         and all(_text(item) for item in transcription_errors)
         and len(transcription_errors) == len(set(transcription_errors))
         and all(
             set(episode) == episode_fields
-            and episode.get("disposition") == expected[order][0]
+            and _lifecycle_disposition(episode.get("disposition"), order)
             and episode.get("closureRequestSha256") == _digest(
                 episode.get("closureRequest")
             )
-            and _gt19_request_semantics(episode.get("closureRequest"), order)
+            and _gt19_request_semantics(
+                episode.get("closureRequest"), order, baseline_route,
+                replacement_route, responsibilities,
+            )
             and episode.get("coreDecision") == reconcile_closure(
                 episode.get("closureRequest")
             )
-            and _decision_matches(
-                episode.get("coreDecision"), expected[order][1], expected[order][2]
-            )
-            and episode.get("sparseViews") == {
-                "H": {"native-no-add/sense-environment": expected[order][3]},
-                "A": accord_view,
-            }
-            and episode.get("masks") == {
-                "admission": expected[order][4],
-                "closureLifecycle": expected[order][5],
-            }
+            and _valid_episode_decision(episode)
             and _passing_episode(episode, dimension_ids)
             for order, episode in enumerate(episodes)
         )
-        and carrier == {
-            "kind": "task-owned-ephemeral-sequence",
-            "authorizedWriter": "gt19-deterministic-evaluator",
-            "authorizedReader": "gt19-independent-poststate-oracle",
-            "persistent": False,
-            "finalDisposition": "remove-after-source-capture",
+        and selected == [baseline_route, baseline_route,
+                         replacement_route, baseline_route]
+        and outside_scope
+        and all(
+            isinstance(episode.get("sparseViews"), dict)
+            and isinstance(episode["sparseViews"].get("H"), dict)
+            and isinstance(episode["sparseViews"].get("A"), dict)
+            and _text(episode["sparseViews"]["H"].get(
+                f"{replacement_route}/{responsibilities[0]}"
+            ))
+            and episode["sparseViews"]["A"].get(
+                f"{baseline_route}/{responsibilities[0]}"
+            ) == "allocated"
+            and all(episode["sparseViews"]["A"].get(
+                f"{baseline_route}/{responsibility}"
+            ) == "preserved-outside-scope" for responsibility in outside_scope)
+            and isinstance(episode.get("masks"), dict)
+            and set(episode["masks"]) == {"admission", "closureLifecycle"}
+            for episode in episodes
+        )
+        and episodes[2]["masks"] == {
+            "admission": "pass", "closureLifecycle": "pass",
         }
+        and all(episode["masks"].get("admission") != "pass"
+                and episode["masks"].get("closureLifecycle") != "pass"
+                for episode in (episodes[0], episodes[1], episodes[3]))
+        and episodes[0]["sparseViews"]["H"].get(
+            f"{replacement_route}/{responsibilities[0]}"
+        ) != episodes[2]["sparseViews"]["H"].get(
+            f"{replacement_route}/{responsibilities[0]}"
+        )
+        and episodes[1]["sparseViews"]["H"].get(
+            f"{replacement_route}/{responsibilities[0]}"
+        ) != episodes[2]["sparseViews"]["H"].get(
+            f"{replacement_route}/{responsibilities[0]}"
+        )
+        and episodes[3]["sparseViews"]["H"].get(
+            f"{replacement_route}/{responsibilities[0]}"
+        ) != episodes[2]["sparseViews"]["H"].get(
+            f"{replacement_route}/{responsibilities[0]}"
+        )
+        and isinstance(carrier, dict)
+        and _text(carrier.get("kind"))
+        and _text(carrier.get("authorizedWriter"))
+        and _text(carrier.get("authorizedReader"))
+        and carrier.get("persistent") is False
+        and _text(carrier.get("finalDisposition"))
         and event.get("stateCarrierSha256") == _digest(carrier)
         and _string_set(event.get("unknowns")) is not None
     )
@@ -496,9 +688,11 @@ def _gt19_longitudinal_semantics(event, episodes, dimension_ids):
 
 def _longitudinal_semantics(task, event, episodes, dimension_ids):
     return {
-        "GT-18": _gt18_longitudinal_semantics,
-        "GT-19": _gt19_longitudinal_semantics,
-    }.get(task.get("id"), lambda *_: True)(event, episodes, dimension_ids)
+        "longitudinal-self-evolution": _gt18_longitudinal_semantics,
+        "dynamic-lifecycle": _gt19_longitudinal_semantics,
+    }.get(task.get("kind"), lambda *_: False)(
+        task, event, episodes, dimension_ids
+    )
 
 
 def _longitudinal_bundle(payload, task):
@@ -519,6 +713,7 @@ def _longitudinal_bundle(payload, task):
     dimension_ids = [item.get("id") for item in dimensions or []
                      if isinstance(item, dict)]
     evaluator = event.get("evaluatorCanonicalSha256")
+    carrier = event.get("stateCarrier")
     valid_vector = (
         isinstance(vector, dict) and set(vector) == {
             "states", "dimensions", "casePassRule", "candidateKeepRule",
@@ -577,7 +772,10 @@ def _longitudinal_bundle(payload, task):
         )
     )
     valid_edges = valid_episodes and (
-        isinstance(edges, list) and len(edges) == minimum - 1
+        isinstance(carrier, dict)
+        and _text(carrier.get("authorizedWriter"))
+        and _text(carrier.get("authorizedReader"))
+        and isinstance(edges, list) and len(edges) == minimum - 1
         and all(
             _exact(edge, ("kind", "fromOrder", "toOrder", "sourceState",
                           "targetState", "sourceStateSha256", "targetStateSha256",
@@ -597,10 +795,8 @@ def _longitudinal_bundle(payload, task):
             and edge["targetState"].get("episodeOrder") == order + 1
             and edge["sourceStateSha256"] == _digest(edge["sourceState"])
             and edge["targetStateSha256"] == _digest(edge["targetState"])
-            and edge["authorizedWriter"] == event.get("stateCarrier", {}).get(
-                "authorizedWriter")
-            and edge["authorizedReader"] == event.get("stateCarrier", {}).get(
-                "authorizedReader")
+            and edge["authorizedWriter"] == carrier["authorizedWriter"]
+            and edge["authorizedReader"] == carrier["authorizedReader"]
             for order, edge in enumerate(edges)
         )
         and all(edges[index]["targetStateSha256"] == edges[index + 1][
@@ -609,7 +805,14 @@ def _longitudinal_bundle(payload, task):
     valid_semantics = valid_edges and _longitudinal_semantics(
         task, event, episodes, dimension_ids
     )
-    return event if valid_vector and valid_episodes and valid_edges and valid_semantics else None
+    valid_revision = (
+        _text(payload.get("evaluatedRevision"))
+        and event.get("revision") == payload.get("evaluatedRevision")
+    )
+    return event if (
+        valid_vector and valid_episodes and valid_edges and valid_semantics
+        and valid_revision
+    ) else None
 
 
 def _publishable_payload(payload, task, cleanup, captured_at, projection):
@@ -650,6 +853,7 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
             )
         )
         and _postcapture_bundle(payload, task, captured_at) is not None
+        and _continuity_handoff_bundle(payload, task) is not None
         and _longitudinal_bundle(payload, task) is not None
         and all(field in projection_fields for field in (
             "adapterId", "skill", "skillSha256",

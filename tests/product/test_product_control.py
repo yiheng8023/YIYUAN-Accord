@@ -11,10 +11,12 @@ from yiyuan_accord.evidence import (
     _behavior_subject_revision_errors,
     _digest,
     _evaluation_contracts,
+    _continuity_handoff_bundle,
     _longitudinal_bundle,
     _observation_errors,
     _postcapture_bundle,
     _publishable_payload,
+    _sequence_digest,
     _source_amendments,
     _time,
     representative_contract_sha256,
@@ -444,7 +446,7 @@ class ProductControlTests(unittest.TestCase):
         topology = guidance['topology']
         self.assertEqual(set(topology), {
             'code', 'conversation', 'execution', 'independenceRule', 'rule',
-            'codexCloud',
+            'hostVocabularyRule', 'continuityRiskRule', 'codexCloud',
         })
         self.assertNotIn('cloud-environment', topology['code'])
         self.assertIn('cloud-environment', topology['execution'])
@@ -453,6 +455,8 @@ class ProductControlTests(unittest.TestCase):
             views['authority'],
             'derived-query-views-only-never-a-second-source-of-truth',
         )
+        self.assertIn('functional family', views['semanticEquivalenceRule'])
+        self.assertIn('not a closed taxonomy', topology['continuityRiskRule'])
         self.assertIn(
             'preview2-is-a-current-release-candidate',
             {item['id'] for item in guidance['retiredAsActivePremises']},
@@ -1644,12 +1648,45 @@ class ProductControlTests(unittest.TestCase):
 
         gt18 = tasks['GT-18']
         source = _read(ROOT, CURRENT_GT16_SOURCE)
+        gt07 = tasks['GT-07']
+        gt07_record = source['records']['GT-07-cb11759']
+        gt07_payload = gt07_record['payload']
+        self.assertIsNotNone(_continuity_handoff_bundle(gt07_payload, gt07))
+        for path, value in (
+            (('materialEvents', 0, 'capacity'), 'known-80-percent'),
+            (('materialEvents', 0, 'universalThreshold'), 75),
+            (('materialEvents', 1, 'classifications', 1, 'sequentialContextRelief'), True),
+            (('materialEvents', 1, 'classifications', 2, 'historyInheritance'), 'copied'),
+            (('materialEvents', 1, 'codeTopology', 'changed'), True),
+            (('materialEvents', 1, 'executionPlacement', 'changed'), True),
+            (('materialEvents', 1, 'sourceReleasedObserved'), True),
+        ):
+            payload = json.loads(json.dumps(gt07_payload))
+            target = payload
+            for part in path[:-1]:
+                target = target[part]
+            target[path[-1]] = value
+            with self.subTest(gt07_semantic_path=path):
+                self.assertIsNone(_continuity_handoff_bundle(payload, gt07))
+        malformed_handoff = json.loads(json.dumps(gt07_payload))
+        poststate = next(
+            item for item in malformed_handoff['materialEvents']
+            if item['kind'] == 'independent-poststate'
+        )
+        poststate['sourceBindings'][0]['taskLocator'] = []
+        self.assertIsNone(_continuity_handoff_bundle(malformed_handoff, gt07))
+
         event = next(
             item for item in source['records']['GT-18-2460adc'][
                 'payload']['materialEvents']
             if item['kind'] == 'longitudinal-sequence'
         )
-        self.assertIsNotNone(_longitudinal_bundle({'materialEvents': [event]}, gt18))
+        gt18_payload = {
+            'evaluatedRevision': source['records']['GT-18-2460adc'][
+                'payload']['evaluatedRevision'],
+            'materialEvents': [event],
+        }
+        self.assertIsNotNone(_longitudinal_bundle(gt18_payload, gt18))
         for path, value in (
             (('fullAcceptanceVector', 'states'), ['pass']),
             (('episodes', 1, 'acceptanceVector'), lambda items: items[:-1]),
@@ -1659,11 +1696,13 @@ class ProductControlTests(unittest.TestCase):
             (('carrierEdges', 0, 'sourceState', 'activeRoute'), 'drift'),
             (('carrierEdges',), lambda items: items[:-1]),
         ):
-            payload = {'materialEvents': [json.loads(json.dumps(event))]}
-            target = payload['materialEvents'][0]
+            payload = json.loads(json.dumps(gt18_payload))
+            event_target = payload['materialEvents'][0]
+            target = event_target
             for part in path[:-1]:
                 target = target[part]
             target[path[-1]] = value(target[path[-1]]) if callable(value) else value
+            event_target['sequenceSha256'] = _sequence_digest(event_target)
             with self.subTest(longitudinal_path=path):
                 self.assertIsNone(_longitudinal_bundle(payload, gt18))
 
@@ -1675,13 +1714,51 @@ class ProductControlTests(unittest.TestCase):
             (('episodes', 2, 'disposition'), 'retain-unbounded-change'),
             (('episodes', 3, 'invalidatedRoute'), 'minimal-composition'),
         ):
-            payload = {'materialEvents': [json.loads(json.dumps(event))]}
-            target = payload['materialEvents'][0]
+            payload = json.loads(json.dumps(gt18_payload))
+            event_target = payload['materialEvents'][0]
+            target = event_target
             for part in path[:-1]:
                 target = target[part]
             target[path[-1]] = value(target[path[-1]]) if callable(value) else value
+            event_target['sequenceSha256'] = _sequence_digest(event_target)
             with self.subTest(gt18_semantic_path=path, value=str(value)):
                 self.assertIsNone(_longitudinal_bundle(payload, gt18))
+
+        bounded_alternative = json.loads(json.dumps(gt18_payload))
+        candidate = bounded_alternative['materialEvents'][0]['episodes'][1][
+            'candidateAcceptanceVector'
+        ]
+        for item in candidate:
+            item['state'] = (
+                'fail' if item['id'] == 'authority-and-accountability' else 'pass'
+            )
+        bounded_alternative['materialEvents'][0]['sequenceSha256'] = (
+            _sequence_digest(bounded_alternative['materialEvents'][0])
+        )
+        self.assertIsNotNone(_longitudinal_bundle(bounded_alternative, gt18))
+
+        for carrier in ('malformed-carrier', [], None):
+            malformed = json.loads(json.dumps(gt18_payload))
+            malformed['materialEvents'][0]['stateCarrier'] = carrier
+            malformed['materialEvents'][0]['sequenceSha256'] = _sequence_digest(
+                malformed['materialEvents'][0]
+            )
+            with self.subTest(malformed_state_carrier=repr(carrier)):
+                self.assertIsNone(_longitudinal_bundle(malformed, gt18))
+
+        revision_mismatch = json.loads(json.dumps(gt18_payload))
+        revision_mismatch['materialEvents'][0]['revision'] = '0' * 40
+        revision_mismatch['materialEvents'][0]['sequenceSha256'] = _sequence_digest(
+            revision_mismatch['materialEvents'][0]
+        )
+        self.assertIsNone(_longitudinal_bundle(revision_mismatch, gt18))
+        unbound_sequence = json.loads(json.dumps(gt18_payload))
+        unbound_sequence['materialEvents'][0]['sequenceSha256'] = '0' * 64
+        self.assertIsNone(_longitudinal_bundle(unbound_sequence, gt18))
+        unknown_longitudinal = json.loads(json.dumps(gt18))
+        unknown_longitudinal['id'] = 'GT-UNKNOWN'
+        unknown_longitudinal['kind'] = 'future-longitudinal-contract'
+        self.assertIsNone(_longitudinal_bundle(gt18_payload, unknown_longitudinal))
 
         gt19 = tasks['GT-19']
         gt19_event = next(
@@ -1689,10 +1766,14 @@ class ProductControlTests(unittest.TestCase):
                 'payload']['materialEvents']
             if item['kind'] == 'longitudinal-sequence'
         )
-        self.assertIsNotNone(_longitudinal_bundle(
-            {'materialEvents': [gt19_event]}, gt19
-        ))
+        gt19_payload = {
+            'evaluatedRevision': source['records']['GT-19-2460adc'][
+                'payload']['evaluatedRevision'],
+            'materialEvents': [gt19_event],
+        }
+        self.assertIsNotNone(_longitudinal_bundle(gt19_payload, gt19))
         cleaner_behavior_arms = {
+            'evaluatedRevision': gt19_payload['evaluatedRevision'],
             'materialEvents': [json.loads(json.dumps(gt19_event))]
         }
         cleaner_event = cleaner_behavior_arms['materialEvents'][0]
@@ -1700,6 +1781,7 @@ class ProductControlTests(unittest.TestCase):
         cleaner_event['behaviorArms']['AccordBacked'][
             'finalAnswerTranscriptionErrors'
         ] = []
+        cleaner_event['sequenceSha256'] = _sequence_digest(cleaner_event)
         self.assertIsNotNone(_longitudinal_bundle(cleaner_behavior_arms, gt19))
         for path, value in (
             (('episodes', 2, 'disposition'), 'retire-whole-product'),
@@ -1708,14 +1790,16 @@ class ProductControlTests(unittest.TestCase):
             (('episodes', 1, 'masks', 'admission'), 'pass'),
             (('episodes', 1, 'closureRequest', 'routes', 0, 'id'), []),
         ):
-            payload = {'materialEvents': [json.loads(json.dumps(gt19_event))]}
-            target = payload['materialEvents'][0]
+            payload = json.loads(json.dumps(gt19_payload))
+            event_target = payload['materialEvents'][0]
+            target = event_target
             for part in path[:-1]:
                 target = target[part]
             target[path[-1]] = value
+            event_target['sequenceSha256'] = _sequence_digest(event_target)
             with self.subTest(gt19_semantic_path=path):
                 self.assertIsNone(_longitudinal_bundle(payload, gt19))
-        expanded = {'materialEvents': [json.loads(json.dumps(gt19_event))]}
+        expanded = json.loads(json.dumps(gt19_payload))
         episode = expanded['materialEvents'][0]['episodes'][2]
         episode['closureRequest']['policy']['requiredRetirementAllocations'][0][
             'responsibilities'
@@ -1723,7 +1807,42 @@ class ProductControlTests(unittest.TestCase):
         episode['closureRequestSha256'] = _digest(episode['closureRequest'])
         episode['coreDecision'] = reconcile_closure(episode['closureRequest'])
         episode['coreDecisionSha256'] = _digest(episode['coreDecision'])
+        for fact in episode['sourceFacts']:
+            fact['valueSha256'] = episode['coreDecisionSha256']
+        expanded['materialEvents'][0]['sequenceSha256'] = _sequence_digest(
+            expanded['materialEvents'][0]
+        )
         self.assertIsNone(_longitudinal_bundle(expanded, gt19))
+
+        malformed_responsibility = json.loads(json.dumps(gt19_payload))
+        malformed_event = malformed_responsibility['materialEvents'][0]
+        for episode in malformed_event['episodes']:
+            episode['closureRequest']['outcome']['responsibilities'] = [{}]
+            episode['closureRequestSha256'] = _digest(episode['closureRequest'])
+        malformed_event['sequenceSha256'] = _sequence_digest(malformed_event)
+        self.assertIsNone(_longitudinal_bundle(
+            malformed_responsibility, gt19
+        ))
+
+        extra_route = json.loads(json.dumps(gt19_payload))
+        for episode in extra_route['materialEvents'][0]['episodes']:
+            route = json.loads(json.dumps(episode['closureRequest']['routes'][-1]))
+            route['id'] = 'unavailable-extra-route'
+            route['sourceKind'] = 'authored'
+            route['facts']['available'] = 'unknown'
+            route['lifecycle'] = {
+                key: value + 100 for key, value in route['lifecycle'].items()
+            }
+            episode['closureRequest']['routes'].append(route)
+            episode['closureRequestSha256'] = _digest(episode['closureRequest'])
+            episode['coreDecision'] = reconcile_closure(episode['closureRequest'])
+            episode['coreDecisionSha256'] = _digest(episode['coreDecision'])
+            for fact in episode['sourceFacts']:
+                fact['valueSha256'] = episode['coreDecisionSha256']
+        extra_route['materialEvents'][0]['sequenceSha256'] = _sequence_digest(
+            extra_route['materialEvents'][0]
+        )
+        self.assertIsNotNone(_longitudinal_bundle(extra_route, gt19))
 
         acceptance = _read(ROOT, A)
         policy = acceptance['representativeBehaviorPolicy']

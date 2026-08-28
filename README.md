@@ -331,6 +331,15 @@ evidence, acceptance and final claim. A healthy conversation is not handed off
 just to follow a procedure; material divergence is traced to its earliest
 affected boundary and only dependent work is replayed.
 
+Summaries, capacity pressure and handoffs are observed high-frequency risks,
+not a closed list. Any condition that can lose, distort, stale or misbind the
+goal, state, authority, evidence, resources, topology, time or causality
+triggers bounded reconstruction. Host labels such as project, workspace, task,
+thread, conversation and session are first mapped to distinct canonical
+relations. Broad functional similarity opens composition or replacement
+evaluation; names or feature families alone do not prove interchangeability,
+actual invocation or retirement eligibility.
+
 A Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier or
 another mechanism is neither mandatory nor permanently forbidden. Visibility or
 installation does not imply activation. A sufficient native path should produce

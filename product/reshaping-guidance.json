@@ -1353,6 +1353,8 @@
       "cleanup"
     ],
     "independenceRule": "Code topology, conversation topology and execution or resource placement are orthogonal. A compact, causal fork or sequential handoff does not create or select a checkout, branch, worktree or repository fork; a code-topology change does not prove state transfer or conversation continuity; and local or cloud placement changes neither unless separately bound. Bind and verify each only when the outcome requires it.",
+    "hostVocabularyRule": "Treat project, workspace, task, thread, conversation, session and similar host labels as adapter vocabulary. Normalize them into canonical code-carrier, outcome-task, conversation-carrier and execution-instance relations with provenance; similar names or broad functions open equivalence evaluation but do not prove identical inheritance, authority, effects or lifecycle.",
+    "continuityRiskRule": "Capacity pressure, summarization and handoff are observed examples, not a closed taxonomy. Reconcile from the earliest affected boundary whenever any source-bound condition can lose, distort, stale or misbind goal, state, authority, evidence, resources, topology, time or causality.",
     "rule": "The Agent selects and verifies topology from host-native signals and current constraints. Compact means same-carrier memory reduction; causal fork means copied-history branching; sequential context relief means a fresh zero-inherited-history carrier, minimum verified state transfer, destination verification and only then source release. These are not interchangeable. The user is asked only when a new authority, trust, data, cost, destructive, irreversible or publication boundary makes the choice genuinely human-owned.",
     "codexCloud": "Codex Cloud is a first-class execution, comparison, verification and continuity carrier when its isolated environment, setup, secrets, network policy and source revision fit the task; it is not merely a release checker and does not inherit unverified local state."
   },
@@ -1443,6 +1445,7 @@
         "derivation": "sparse join on stable responsibility identifiers after the admission mask",
         "decisionRule": "H-intersect-A produces a candidate redundancy relation only; retirement requires the closure-lifecycle mask and exact allocation evidence"
       },
+      "semanticEquivalenceRule": "Normalize host vocabulary and group capabilities into a functional family only after comparing responsibility, inputs, outputs, state inheritance, authority, side effects, evidence and lifecycle. Functional similarity opens composition or replacement evaluation; observed same-duty consequence and lifecycle closure decide interchangeability.",
       "materializationRule": "Materialize only queried responsibilities and observed capability instances. Never persist a full host-by-model-by-tool-by-context Cartesian matrix or treat matrix cells as authority."
     },
     "graphProjection": {
@@ -1671,6 +1674,7 @@
     ],
     "activeProjection": {
       "auditCut": "59a340fbdec91d1b9287ba3c44a94a49348558c8",
+      "reviewCut": "7860feec789d8f38234906cab64e2f0d186a36b2",
       "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#whole-system-balance-reacceptance-from-exact-cut-59a340f",
       "dominantBlocker": "independent-review-confirmation-and-foreign-residue-before-exact-candidate-formation",
       "remediation": {
@@ -1679,10 +1683,10 @@
         "BAL-03": "one-pair-no-observed-harm-not-firing-effect-or-value-proof",
         "BAL-04": "paired-no-add-calibration-complete-genuine-unclosed-responsibility-still-required",
         "BAL-05": "pure-data-dynamic-retirement-sequence-source-complete-and-reaccepted-live-form-lifecycle-still-unknown",
-        "BAL-06": "role-level-gt18-gt19-semantics-and-fail-closed-cleanup-under-independent-review-remediation",
+        "BAL-06": "gt07-carrier-relations-open-route-and-regression-invariants-malformed-carrier-and-canonical-sequence-remediation-under-independent-re-review",
         "BAL-07": "replay-release-task-and-user-facing-burden-wording-narrowed-without-behavior-replay"
       },
-      "graphRule": "Project exact cut 59a340f, independent-review findings, affected semantic-evidence and wording edges plus selected minimum remediations; preserve current exact task evidence while strengthened validation and sparse subject bindings pass, refresh only the invalidated slice, and never precompute host-model-tool-context products."
+      "graphRule": "Project the exact 59a340f whole-system audit, exact 7860fee independent-review findings, affected semantic-evidence and wording edges plus selected minimum remediations. Preserve current exact task behavior facts while strengthened validation, canonical sequence binding and sparse subject bindings pass; refresh only the invalidated slice, normalize host vocabulary before functional comparison, treat continuity triggers as open source-bound risks, and never precompute host-model-tool-context products."
     },
     "claimLimit": "This is a revisable review model, not proof that one baseline fits every claim, that every possible dimension has been enumerated, that current implementation passes, or that self-review can replace representative, longitudinal, independent, hosted, human or public evidence."
   },
@@ -1730,9 +1734,11 @@
       "carry the desired product outcome latest consensus authority current phase completion target and exact workspace",
       "observe environment provenance and Accord's own presence before trusting a native or enabled baseline",
       "reference live discovery and the dynamic index instead of hard-coding a host route or product form",
+      "normalize host-specific project workspace task thread conversation and session terms into canonical relations before capability comparison",
       "reuse suitable existing capability before composition or authorship and record fit limits and exit conditions",
       "make human judgment new trust data cost publication destructive and irreversible pause boundaries explicit",
       "own capability acquisition configuration topology continuity resource stewardship verification learning rollback cleanup and retirement mechanics",
+      "treat capacity summarization and handoff as examples in an open continuity-risk set and refresh on any source-bound loss distortion staleness or misbinding",
       "refresh and globally reconcile on correction new consensus drift failure evidence conflict side effect or carrier pressure",
       "carry the pending baseline binding whole-system self-audit remediation reacceptance and independent-review order before candidate formation",
       "keep release dormant until all core stages and sparse exact behavior-subject bindings are complete and a future candidate is independently justified",
@@ -1740,9 +1746,9 @@
     ]
   },
   "nextAuthorityBoundary": {
-    "first": "independent-review-findings-at-exact-59a340f-and-their-earliest-affected-boundaries",
+    "first": "independent-review-findings-at-exact-7860fee-and-their-earliest-affected-boundaries",
     "then": [
-      "gt18-gt19-role-level-semantic-evidence-and-fail-closed-cleanup-remediation",
+      "gt07-carrier-gt18-gt19-relationship-semantics-malformed-carrier-and-canonical-sequence-remediation",
       "product/program.json",
       "product/acceptance.json",
       "product/reshaping-guidance.json-derived-index-and-graph-projection",
