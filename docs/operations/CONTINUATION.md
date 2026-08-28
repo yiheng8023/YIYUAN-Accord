@@ -94,14 +94,17 @@ Then read, in order:
   attempts. No dependency, live adapter, Runtime, service or durable carrier
   was added. The task-owned fixture and empty temporary root were removed; the
   post-cleanup canonical and both host checks have no errors.
-  `validate-longitudinal-consensus-and-cross-carrier-continuity` is active
-  again at the earliest affected evidence boundary. Its strengthened contract
-  requires source-bound GT-17 cleanup, every GT-18 episode's immutable full
-  vector and explicit carrier source/target states. The existing Codex goal
-  already names this stage and is active-in-host. Host target state remains
-  task state rather than behavior or value evidence. The source-bound
-  whole-system balance self-audit, weakest-link remediation and affected-
-  surface reacceptance stage is pending until this replay closes.
+  At exact revision `7d7a7e57b7eea02afcda21880d2f018cbc7dda0c`,
+  source-complete GT-17 and GT-18 observations now bind the corrected earliest
+  evidence boundary, scoped evaluator history, every GT-18 episode's immutable
+  full vector and actual core decision, three explicit carrier source/target
+  state edges, effect, retirement and cleanup. Separate Hook-disabled effect,
+  sequence, carrier and cleanup reviewers passed; the f0ed9ce/08eb72a attempt
+  remains counterevidence. `self-audit-remediate-and-reaccept-whole-system-balance`
+  is active. The existing Codex goal already contains this work but its ordered
+  step cannot be refreshed in place, so the deterministic next goal projection
+  is `prepared-host-goal-paused`; host target state remains task state rather
+  than behavior or value evidence.
   All eight criteria are intentionally unverified for the new target, and
   repository candidate readiness is false. Release authorization remains
   unrequested because publication is the last phase and repository content
@@ -372,13 +375,13 @@ increment and one active work item. Its ordered work is:
    primary-source/wheel/license/maintenance provenance, the named outcome and
    full lifecycle vector, consequence, rollback, resource release and cleanup;
    all three pass only their finite claim.
-9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — active.
-   Preserve the `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` attempt as
-   source-insufficient counterevidence. A fresh bounded replay must bind GT-17
-   cleanup to an exact independent result and retain GT-18's full vector in
-   every episode plus explicit carrier source/target states, effect, retirement
-   and zero task-owned residue. Do not rerun unaffected GT-07 or GT-14/15/16.
-10. `self-audit-remediate-and-reaccept-whole-system-balance` — pending. It must
+9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — completed
+   at `7d7a7e57b7eea02afcda21880d2f018cbc7dda0c`. Fresh GT-17 and GT-18
+   evidence binds exact independent effect and cleanup, every episode's full
+   vector and core decision, explicit carrier source/target states, retirement
+   and zero task-owned residue. Preserve f0ed9ce/08eb72a as source-insufficient
+   counterevidence; do not rerun unaffected GT-07 or GT-14/15/16.
+10. `self-audit-remediate-and-reaccept-whole-system-balance` — active. It must
     first bind a versioned claim-scoped baseline, target, counterfactual,
     evidence cutoff, confounders and invalidation triggers; then evaluate
     coupled product value, form, environment, evidence, authority,

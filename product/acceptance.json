@@ -19,7 +19,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "9f9c853d8177791fbd7da284413276bdaeba597dd9e258ec2ef8b714d75b5a45",
+  "canonicalGoalObjectiveSha256": "459826f7ef956cc1d428e01871399478a85fa34e7aee0b0c5b1d9aded96e8e9c",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -377,7 +377,7 @@
         "representative-behavior"
       ],
       "assessment": "continuing",
-      "assessmentScope": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, fresh source-complete Codex-local GT-14 through GT-16 observations pass only their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision and one disposable pure-data minimum-form bootstrap. Independent review rejected the later f0ed9ce GT-17/18 completion claim and its 08eb72a former-verifier acceptance because GT-17 cleanup lacked an exact source binding and GT-18 omitted per-episode immutable full-vector and carrier source/target-state evidence. Those records and the prior 553f5a9 attempts remain failed or source-insufficient counterevidence rather than accepted behavior. Historical v3.1.0 GT-07, GT-11, GT-12 and GT-13 remain regression evidence. GT-17/18, official-clean or no-Accord behavior, Hook firing, live-mechanism effectiveness, a durable carrier need, cross-host equivalence, population or field value, production safety, candidate readiness and release readiness remain unproved.",
+      "assessmentScope": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, fresh source-complete Codex-local GT-14 through GT-16 observations pass only their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision and one disposable pure-data minimum-form bootstrap. Independent review rejected the later f0ed9ce GT-17/18 completion claim and its 08eb72a former-verifier acceptance because GT-17 cleanup lacked an exact source binding and GT-18 omitted per-episode immutable full-vector and carrier source/target-state evidence; both remain counterevidence. At exact revision 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c, a fresh bounded replay passes GT-17 only for source-bound correction across eight dependent surfaces with scoped evaluator history, and GT-18 only for one synthetic four-episode full-vector sequence with actual source/target carrier states, regression rollback, native no-add retention, later invalidation, replacement, retirement and zero task resources. Historical v3.1.0 GT-07, GT-11, GT-12 and GT-13 remain regression evidence. Official-clean or no-Accord behavior, Hook firing, live-mechanism effectiveness, a durable carrier need, cross-host equivalence, population or field value, production safety, whole-system balance, candidate readiness and release readiness remain unproved.",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-28-84447a7-gt-14-codex-local.json",
@@ -397,6 +397,20 @@
           "locator": "evals/observations/2026-08-28-84447a7-gt-16-codex-local.json",
           "sha256": "50b489d1ab8074c0967fa9958e7f383acce41636627f3a03661241a697f68417",
           "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap with independent consequence, rollback, resource release and cleanup. It does not prove a live host mechanism, plugin or Runtime sufficiency, durable learning, cross-host portability, population value, candidate or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-f0ed9ce-gt-17-codex-local.json",
+          "sha256": "889d735e01bda9135376d6b8f2e95043bc3fdffaf9c7bfcf2dcc935f4807ce76",
+          "claim": "Passed only for the independent-review evidence correction at 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c: the earliest GT-17/18 source boundary, eight bounded dependent surfaces, scoped evaluator history, prior 84447a7 GT-14/15/16 truth and f0ed9ce/08eb72a counterevidence agree. It does not prove factual product value, official-clean or no-Accord behavior, live mechanism effect, every external carrier, candidate readiness, publication authority or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-f0ed9ce-gt-18-codex-local.json",
+          "sha256": "c1f17000bedd78dc2056b418f4fe4f4bc836241607bab6718d20deda05e5ebd8",
+          "claim": "Passed only for one synthetic four-episode sequence at 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c: every episode retains the immutable full vector and source-bound core decision, the proxy regression is rejected and rolled back, native no-add is kept only as a bounded improvement, later invalidation restores minimal composition, three actual carrier edges chain exact states, retired routes are explicit and task resources are zero. It does not prove unbounded self-improvement, durable-carrier need, long-term field value, cross-user generalization, cross-host equivalence, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         }
@@ -646,7 +660,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "9c3d64d067de1553826c7127735c6236620e5cd5510472f70576bf1039e18c73",
+    "releaseNotesSha256": "e62c0ee8cf963290ed645b539859e5f71476bd702f24714032de0bcb64ce2773",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,

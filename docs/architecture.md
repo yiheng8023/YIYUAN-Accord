@@ -418,9 +418,13 @@ rejected after independent review found that GT-17 cleanup was
 not source-bound and GT-18 retained only episode conclusions rather than each
 episode's immutable full vector and explicit carrier source/target states. The
 attempt remains counterevidence. The strengthened evidence layer now fails
-closed on those omissions; fresh bounded effect and cleanup observations are
-required before governed evolution, durable carrier need, cross-host or broad
-value, candidate readiness or release readiness can be claimed.
+closed on those omissions. At exact revision
+`7d7a7e57b7eea02afcda21880d2f018cbc7dda0c`, fresh bounded GT-17 and
+GT-18 observations retain source-bound cleanup, the immutable per-episode full
+vector, actual core decisions and explicit carrier source/target states. They
+support only one bounded evidence correction and one synthetic four-episode
+sequence; durable carrier need, cross-host or broad value, whole-system balance,
+candidate readiness and release readiness remain unproved.
 
 Observations record Agent actions, human actions, effects, residue and claim
 limits independently of the model's own verdict. Each release observation

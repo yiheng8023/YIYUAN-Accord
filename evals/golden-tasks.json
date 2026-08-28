@@ -47,10 +47,10 @@
   },
   "suiteDesign": {
     "id": "representative-and-longitudinal-self-bootstrapping-evaluation/v1",
-    "status": "gt14-through-gt16-source-complete-gt17-through-gt18-source-insufficient-replay-active",
+    "status": "gt14-through-gt18-source-complete-whole-system-balance-audit-active",
     "attemptedTaskIds": ["GT-14", "GT-15", "GT-16", "GT-17", "GT-18"],
     "unperformedTaskIds": [],
-    "executionClaimLimit": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, source-complete local GT-14 through GT-16 observations pass only bounded current-composition admission, feasibility/no-build and one disposable pure-data bootstrap. The failed 553f5a9 GT-14 through GT-16 attempts and the source-insufficient f0ed9ce/08eb72a GT-17/18 attempt remain counterevidence. GT-17/18, official-clean or no-Accord behavior, live mechanism or Hook effect, durable carrier need, cross-host equivalence, population or field value, candidate readiness and release readiness remain unproved.",
+    "executionClaimLimit": "At 84447a7, source-complete local GT-14 through GT-16 pass only bounded current-composition admission, feasibility/no-build and one disposable pure-data bootstrap. At 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c, source-complete GT-17/18 pass only one bounded independent-review reconciliation and one synthetic four-episode full-vector sequence with exact carrier states and cleanup. The failed 553f5a9 and source-insufficient f0ed9ce/08eb72a attempts remain counterevidence. Official-clean or no-Accord behavior, live mechanism or Hook effect, durable carrier need, cross-host, population or field value, whole-system balance, candidate readiness and release readiness remain unproved.",
     "authorityRule": "The current outcome, human-owned boundaries, semantic model, environment-admission contract and acceptance criteria define the evaluation. A task, metric, baseline, candidate, state carrier, model verdict or evaluator output cannot create authority or weaken a criterion.",
     "caseTypes": [
       {

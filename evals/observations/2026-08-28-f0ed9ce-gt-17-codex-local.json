@@ -1,8 +1,8 @@
 {
   "taskId": "GT-17",
-  "goldenTaskSha256": "403c8ad19e740e589bc2b37ba99e85ac9de0291fdde4351bc2915cee024cc1cd",
-  "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
-  "observedAt": "2026-08-28T04:42:06Z",
+  "goldenTaskSha256": "869367aece267afeaaef463d5ba1f36a5b825813634f79d39a0eff8207c56f61",
+  "evaluationContractSha256": "f6f2340cc771d33559d9b62781735a8908fa87de9ccce54e544e7e3d288edbbb",
+  "observedAt": "2026-08-28T06:55:03Z",
   "observer": {
     "kind": "host-event-recorder",
     "identity": "source-complete direct command recorder"
@@ -31,10 +31,10 @@
     {
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
-      "recordId": "GT-17-f0ed9ce",
-      "sha256": "d6fc5dcc0aa8eca1ed0444a1dda4570e141935a9001c90b1bc84531115c00f05",
-      "claim": "Passed only for the supplied accountable consensus and the bounded repository surfaces at f0ed9ce: the prior ready baseline remains history, nine affected surfaces agree, three seeded stale projections are rejected and unrelated truth is preserved. This does not prove the consensus factually correct, publication authority, every external carrier or field value.",
-      "postSessionBindingsSha256": "fd15ce3f7b23ca2cc3f75b2f2246892700c8ca2f665f0d80ea5fe12b6b7bb53d"
+      "recordId": "GT-17-7d7a7e5",
+      "sha256": "b72b18c412006d9dddfc4bf4834fb41105a23b4a061e9b62a98f4ef321fb975e",
+      "claim": "Passed only for the independent-review evidence correction at 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c: the earliest GT-17/18 source boundary, eight bounded dependent surfaces, scoped evaluator history, prior 84447a7 GT-14/15/16 truth and f0ed9ce/08eb72a counterevidence agree. It does not prove factual product value, official-clean or no-Accord behavior, live mechanism effect, every external carrier, candidate readiness, publication authority or release readiness.",
+      "postSessionBindingsSha256": "f5ac48da9476d269b9523ba9970bbbbaf45e90cd62eae88d9bd983bfa20240cb"
     }
   ],
   "behaviorDecisions": {
@@ -59,12 +59,12 @@
   },
   "observedAgentActions": [
     {
-      "kind": "versioned-consensus-impact-replay",
-      "result": "bound ae72946 as historical baseline, located the earliest authority dependency and reconciled nine affected surfaces"
+      "kind": "earliest-boundary-evidence-correction",
+      "result": "retained f0ed9ce/08eb72a as source-insufficient counterevidence and strengthened the exact GT-17/18 binding boundary"
     },
     {
-      "kind": "stale-projection-counterexample-check",
-      "result": "rejected one-document-only, stale-ready and unaffected-expensive-replay variants"
+      "kind": "bounded-impact-reconciliation",
+      "result": "reconciled eight dependent surfaces and scoped evaluator history without replaying accepted GT-14/15/16 or GT-07 evidence"
     }
   ],
   "observedHumanActions": [
@@ -81,12 +81,12 @@
   },
   "materialEffects": [
     {
-      "kind": "claim-scoped-global-reconciliation",
-      "result": "nine bounded repository surfaces agree on complete bounded self-bootstrapping, product-form neutrality and publication-last"
+      "kind": "former-verifier-counterexample-retained",
+      "result": "a green former verifier no longer promotes source-incomplete GT-17/18 evidence"
     },
     {
-      "kind": "history-and-unrelated-truth-preservation",
-      "result": "prior ready baseline, public v3.0.1, no new release authority and unaffected GT-07 evidence remain bounded truth"
+      "kind": "unrelated-truth-preserved",
+      "result": "public v3.0.1, historical ae72946, accepted 84447a7 GT-14/15/16 and unaffected GT-07 remain scoped truth"
     }
   ],
   "residue": [],
@@ -107,7 +107,7 @@
   "claimLimit": {
     "retainedFailure": false,
     "excludedClaims": [],
-    "statement": "Passed only for the supplied accountable consensus and the bounded repository surfaces at f0ed9ce: the prior ready baseline remains history, nine affected surfaces agree, three seeded stale projections are rejected and unrelated truth is preserved. This does not prove the consensus factually correct, publication authority, every external carrier or field value."
+    "statement": "Passed only for the independent-review evidence correction at 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c: the earliest GT-17/18 source boundary, eight bounded dependent surfaces, scoped evaluator history, prior 84447a7 GT-14/15/16 truth and f0ed9ce/08eb72a counterevidence agree. It does not prove factual product value, official-clean or no-Accord behavior, live mechanism effect, every external carrier, candidate readiness, publication authority or release readiness."
   },
   "decision": {
     "state": "passed"

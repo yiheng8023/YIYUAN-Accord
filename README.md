@@ -49,10 +49,14 @@ bootstrap. The later `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c`
 GT-17/18 attempt and its `08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e`
 former-verifier acceptance were rejected by independent review, which found the
 cleanup, per-episode full-vector and carrier-edge sources incomplete. It remains
-source facts incomplete. Both remain counterevidence while a strengthened
-fail-closed replay is active. Live
-mechanisms, governed evolution, durable continuity, cross-host or population
-value and release remain gated; whole-system balance review is pending. Exact revision
+source facts incomplete, and both remain counterevidence. At exact revision
+`7d7a7e57b7eea02afcda21880d2f018cbc7dda0c`, a fresh source-complete
+replay passes GT-17 only for the bounded evidence correction and GT-18 only for
+one synthetic four-episode full-vector sequence with actual carrier source and
+target states, regression rollback, native no-add retention, later invalidation,
+replacement, retirement and zero task resources. The source-bound whole-system
+balance audit is now active. Live mechanisms, durable continuity, cross-host or
+population value and release remain gated. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
 verified, unreleased v3.1.0 baseline; a later product consensus superseded its
 `ready` status without erasing its bounded evidence. `main` is therefore not a

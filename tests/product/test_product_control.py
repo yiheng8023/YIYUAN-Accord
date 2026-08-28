@@ -9,6 +9,7 @@ from yiyuan_accord.control import (
 from yiyuan_accord.evidence import (
     _canonical_official_url,
     _digest,
+    _evaluation_contracts,
     _longitudinal_bundle,
     _observation_errors,
     _postcapture_bundle,
@@ -1457,6 +1458,16 @@ class ProductControlTests(unittest.TestCase):
             target[path[-1]] = value(target[path[-1]]) if callable(value) else value
             with self.subTest(longitudinal_path=path):
                 self.assertIsNone(_longitudinal_bundle(payload, gt18))
+
+        acceptance = _read(ROOT, A)
+        policy = acceptance['representativeBehaviorPolicy']
+        current = representative_contract_sha256(acceptance, _read(ROOT, G))
+        old = policy['evaluationContractHistory'][0]['sha256']
+        self.assertIn(old, _evaluation_contracts(policy, 'GT-14', current))
+        self.assertEqual(_evaluation_contracts(policy, 'GT-17', current), {current})
+        malformed = json.loads(json.dumps(policy))
+        malformed['evaluationContractHistory'][0]['preservedTaskIds'] = []
+        self.assertIsNone(_evaluation_contracts(malformed, 'GT-14', current))
 
         source_cases = (
             (8, ('officialSources', 0, 'url'), 'https://github.com/openai/../x'),
