@@ -9,6 +9,7 @@ from yiyuan_accord.control import (
 from yiyuan_accord.evidence import (
     _canonical_official_url,
     _digest,
+    _longitudinal_bundle,
     _observation_errors,
     _postcapture_bundle,
     _publishable_payload,
@@ -1380,6 +1381,82 @@ class ProductControlTests(unittest.TestCase):
             payload, current_task, observation['cleanup'],
             _time(current['capturedAt']), observation['projectionIdentity'],
         ))
+
+        gt18 = tasks['GT-18']
+        vector = _read(ROOT, G)['suiteDesign']['fullAcceptanceVector']
+        dimensions = [item['id'] for item in vector['dimensions']]
+        evaluator = 'a' * 64
+        event = {
+            'kind': 'longitudinal-sequence',
+            'evaluatorCanonicalSha256': evaluator,
+            'stateCarrier': {
+                'authorizedWriter': 'task-owned-fixture-generator',
+                'authorizedReader': 'independent-fixture-oracle',
+            },
+            'fullAcceptanceVector': vector,
+            'episodes': [],
+            'carrierEdges': [],
+        }
+        carrier_states = [{
+            'episodeOrder': order,
+            'activeRoute': 'bounded-route',
+            'retiredRoutes': [],
+        } for order in range(4)]
+        for order, role in enumerate(gt18['evaluationDesign']['episodeRoles']):
+            decision = {'valid': True, 'selectedRouteId': 'bounded-route',
+                        'completionAllowed': True, 'episodeOrder': order}
+            fact_id = f'episode-{order}/core-decision'
+            event['episodes'].append({
+                'order': order,
+                'role': role,
+                'evaluatorSha256': evaluator,
+                'coreDecision': decision,
+                'coreDecisionSha256': _digest(decision),
+                'sourceFacts': [{
+                    'kind': 'sequence-source-fact',
+                    'id': fact_id,
+                    'valueSha256': _digest(decision),
+                    'summary': 'bounded core decision and completion poststate',
+                }],
+                'acceptanceVector': [{
+                    'id': dimension,
+                    'state': 'pass',
+                    'rationale': 'bounded source-bound result',
+                    'sourceFacts': [fact_id],
+                } for dimension in dimensions],
+            })
+        for order in range(3):
+            event['carrierEdges'].append({
+                'kind': 'carrier-edge',
+                'fromOrder': order,
+                'toOrder': order + 1,
+                'sourceState': carrier_states[order],
+                'targetState': carrier_states[order + 1],
+                'sourceStateSha256': _digest(carrier_states[order]),
+                'targetStateSha256': _digest(carrier_states[order + 1]),
+                'sourceStateSummary': f'episode {order} retained state',
+                'targetStateSummary': f'episode {order + 1} admitted state',
+                'transition': 'authorized bounded carryover',
+                'authorizedWriter': 'task-owned-fixture-generator',
+                'authorizedReader': 'independent-fixture-oracle',
+            })
+        self.assertIsNotNone(_longitudinal_bundle({'materialEvents': [event]}, gt18))
+        for path, value in (
+            (('fullAcceptanceVector', 'states'), ['pass']),
+            (('episodes', 1, 'acceptanceVector'), lambda items: items[:-1]),
+            (('episodes', 2, 'evaluatorSha256'), 'b' * 64),
+            (('episodes', 2, 'sourceFacts', 0, 'valueSha256'), 'b' * 64),
+            (('carrierEdges', 0, 'sourceStateSummary'), ''),
+            (('carrierEdges', 0, 'sourceState', 'activeRoute'), 'drift'),
+            (('carrierEdges',), lambda items: items[:-1]),
+        ):
+            payload = {'materialEvents': [json.loads(json.dumps(event))]}
+            target = payload['materialEvents'][0]
+            for part in path[:-1]:
+                target = target[part]
+            target[path[-1]] = value(target[path[-1]]) if callable(value) else value
+            with self.subTest(longitudinal_path=path):
+                self.assertIsNone(_longitudinal_bundle(payload, gt18))
 
         source_cases = (
             (8, ('officialSources', 0, 'url'), 'https://github.com/openai/../x'),

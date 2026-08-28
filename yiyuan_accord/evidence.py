@@ -249,6 +249,113 @@ def _postcapture_bundle(payload, task, captured_at):
             and len(locators) == len(set(locators)) else None)
 
 
+def _longitudinal_bundle(payload, task):
+    design = task.get("evaluationDesign")
+    if not isinstance(design, dict) or design.get("caseType") != "longitudinal-sequence":
+        return {}
+    events = payload.get("materialEvents") if isinstance(payload, dict) else None
+    matches = [event for event in events or [] if isinstance(event, dict)
+               and event.get("kind") == "longitudinal-sequence"]
+    if len(matches) != 1:
+        return None
+    event = matches[0]
+    vector, episodes, edges = (event.get("fullAcceptanceVector"),
+                               event.get("episodes"), event.get("carrierEdges"))
+    states = vector.get("states") if isinstance(vector, dict) else None
+    dimensions = vector.get("dimensions") if isinstance(vector, dict) else None
+    roles, minimum = design.get("episodeRoles"), design.get("minimumEpisodes")
+    dimension_ids = [item.get("id") for item in dimensions or []
+                     if isinstance(item, dict)]
+    evaluator = event.get("evaluatorCanonicalSha256")
+    valid_vector = (
+        isinstance(vector, dict) and set(vector) == {
+            "states", "dimensions", "casePassRule", "candidateKeepRule",
+            "aggregationForbidden",
+        }
+        and all(_text(vector[field]) for field in (
+            "casePassRule", "candidateKeepRule", "aggregationForbidden",
+        ))
+        and _string_set(states) is not None and states and len(states) == len(set(states))
+        and isinstance(dimensions, list) and dimensions
+        and len(dimension_ids) == len(dimensions) == len(set(dimension_ids))
+        and all(
+            _exact(item, ("id", "hardGate", "requires"), ("id",))
+            and isinstance(item["hardGate"], bool)
+            and _string_set(item["requires"]) is not None and item["requires"]
+            for item in dimensions
+        )
+        and _digest(vector) == design.get("fullAcceptanceVectorSha256")
+    )
+    valid_episodes = valid_vector and (
+        isinstance(minimum, int) and not isinstance(minimum, bool) and minimum > 1
+        and isinstance(roles, list) and len(roles) == minimum
+        and len(roles) == len(set(roles)) and all(_text(role) for role in roles)
+        and isinstance(episodes, list) and len(episodes) == minimum
+        and re.fullmatch(r"[0-9a-f]{64}", evaluator or "") is not None
+        and all(
+            episode.get("order") == order and episode.get("role") == roles[order]
+            and episode.get("evaluatorSha256") == evaluator
+            and isinstance(episode.get("coreDecision"), dict)
+            and episode.get("coreDecisionSha256") == _digest(episode["coreDecision"])
+            and _records(episode.get("sourceFacts")) and episode["sourceFacts"]
+            and len({item.get("id") for item in episode["sourceFacts"]}) == len(
+                episode["sourceFacts"])
+            and all(
+                _exact(item, ("kind", "id", "valueSha256", "summary"),
+                       ("id", "valueSha256", "summary"))
+                and item["kind"] == "sequence-source-fact"
+                and item["valueSha256"] == episode["coreDecisionSha256"]
+                for item in episode["sourceFacts"]
+            )
+            and isinstance(episode.get("acceptanceVector"), list)
+            and [item.get("id") for item in episode["acceptanceVector"]] == dimension_ids
+            and all(
+                _exact(item, ("id", "state", "rationale", "sourceFacts"),
+                       ("id", "state", "rationale"))
+                and item["state"] in states
+                and isinstance(item["sourceFacts"], list) and item["sourceFacts"]
+                and all(_text(fact) for fact in item["sourceFacts"])
+                and set(item["sourceFacts"]) <= {
+                    fact["id"] for fact in episode["sourceFacts"]
+                }
+                for item in episode["acceptanceVector"]
+            )
+            for order, episode in enumerate(episodes)
+        )
+    )
+    valid_edges = valid_episodes and (
+        isinstance(edges, list) and len(edges) == minimum - 1
+        and all(
+            _exact(edge, ("kind", "fromOrder", "toOrder", "sourceState",
+                          "targetState", "sourceStateSha256", "targetStateSha256",
+                          "sourceStateSummary",
+                          "targetStateSummary", "transition", "authorizedWriter",
+                          "authorizedReader"),
+                   ("sourceStateSha256", "targetStateSha256", "sourceStateSummary",
+                    "targetStateSummary", "transition", "authorizedWriter",
+                    "authorizedReader"))
+            and edge["kind"] == "carrier-edge"
+            and edge["fromOrder"] == order and edge["toOrder"] == order + 1
+            and all(re.fullmatch(r"[0-9a-f]{64}", edge[field]) is not None
+                    for field in ("sourceStateSha256", "targetStateSha256"))
+            and isinstance(edge["sourceState"], dict)
+            and isinstance(edge["targetState"], dict)
+            and edge["sourceState"].get("episodeOrder") == order
+            and edge["targetState"].get("episodeOrder") == order + 1
+            and edge["sourceStateSha256"] == _digest(edge["sourceState"])
+            and edge["targetStateSha256"] == _digest(edge["targetState"])
+            and edge["authorizedWriter"] == event.get("stateCarrier", {}).get(
+                "authorizedWriter")
+            and edge["authorizedReader"] == event.get("stateCarrier", {}).get(
+                "authorizedReader")
+            for order, edge in enumerate(edges)
+        )
+        and all(edges[index]["targetStateSha256"] == edges[index + 1][
+            "sourceStateSha256"] for index in range(len(edges) - 1))
+    )
+    return event if valid_vector and valid_episodes and valid_edges else None
+
+
 def _publishable_payload(payload, task, cleanup, captured_at, projection):
     if not isinstance(payload, dict):
         return False
@@ -287,6 +394,7 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
             )
         )
         and _postcapture_bundle(payload, task, captured_at) is not None
+        and _longitudinal_bundle(payload, task) is not None
         and all(field in projection_fields for field in (
             "adapterId", "skill", "skillSha256",
         ))

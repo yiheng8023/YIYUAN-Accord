@@ -411,18 +411,15 @@ minimum-form bootstrap, global consensus reconciliation and longitudinal
 evolution obligations. Exact checkpoint
 `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14 through
 GT-16 attempts as counterevidence: summary execution and cleanup do not replace
-the task-required source facts. At exact revision
-`f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c`, source-complete GT-17 preserves
-the prior ready baseline as history and reconciles one accountable consensus
-across nine bounded surfaces while rejecting one-document-only, stale-ready
-and unaffected-replay counterexamples. Source-complete GT-18 retains four
-ordered episodes under one immutable evaluator and disposable authorized
-carrier: baseline; rejected and rolled-back hard-gate regression; independently
-kept net improvement; and later invalidation with replacement and retirement.
-The carrier and fixture were removed. These observations do not prove Hook
-firing, a live mechanism, durable carrier need, cross-host or broad value,
-candidate readiness or release readiness; the suite design itself is not
-behavior or value evidence.
+the task-required source facts. The later exact revision
+`f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` attempted GT-17 and GT-18 and
+passed the former verifier, but independent review found that GT-17 cleanup was
+not source-bound and GT-18 retained only episode conclusions rather than each
+episode's immutable full vector and explicit carrier source/target states. The
+attempt remains counterevidence. The strengthened evidence layer now fails
+closed on those omissions; fresh bounded effect and cleanup observations are
+required before governed evolution, durable carrier need, cross-host or broad
+value, candidate readiness or release readiness can be claimed.
 
 Observations record Agent actions, human actions, effects, residue and claim
 limits independently of the model's own verdict. Each release observation

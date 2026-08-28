@@ -677,8 +677,11 @@ throwaway Git branch normally used for prototype custody. The reviewable answer
 and its explicit claim ceiling remain here. The admitted reference core is now
 implemented. The first GT-14 through GT-16 attempt is retained as failed
 counterevidence because fixture summaries and hashes did not preserve all
-task-required source facts; the active stage remains
-`replay-activation-effect-evidence-and-lifecycle`.
+task-required source facts. Exact revision
+`84447a7a1b9557e22ef5585d159459e8701fa40e` later closed GT-14 through
+GT-16. Independent review then rejected the `f0ed9ce` GT-17/18 completion
+claim, so the active stage is again
+`validate-longitudinal-consensus-and-cross-carrier-continuity`.
 
 ## Whole-system balance self-audit: initial current-state cut
 
@@ -686,8 +689,8 @@ This review was added after the 2026-08-28 human correction that candidate
 formation must follow a whole-system assessment, weakest-link remediation and
 affected-surface reacceptance. It is an initial source-bound cut over the
 current staged repository state, not completion of that later stage and not an
-independent review. It must be refreshed after GT-14 through GT-18 and every
-admitted remediation. No aggregate score is used: a hard failure or a material
+independent review. It must be refreshed after source-complete GT-17/18 and
+every admitted remediation. No aggregate score is used: a hard failure or a material
 unknown that can change the release decision remains a blocker.
 
 ### Baseline contract
@@ -701,10 +704,15 @@ regression language:
   installation guidance and its finite retained behavior claims;
 - `ae7294652761abceb753f0571ee82c7ddeae06af` is an unreleased historical
   implementation/package checkpoint and not current candidate authority;
-- `553f5a97e08390117e877e7b913c7a501018bfa5` is the current internal
-  implementation checkpoint and the origin of retained source-insufficient
-  GT-14 through GT-16 counterevidence, not a qualified behavior baseline;
-- the staged moving-`main` tree at this review cutoff is only the current
+- `553f5a97e08390117e877e7b913c7a501018bfa5` is the origin of retained
+  source-insufficient GT-14 through GT-16 counterevidence, not a qualified
+  behavior baseline;
+- `84447a7a1b9557e22ef5585d159459e8701fa40e` is the exact finite
+  behavior-bearing baseline for accepted GT-14 through GT-16 only;
+- `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c` and the former-verifier pass
+  at `08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e` retain source-insufficient
+  GT-17/18 counterevidence, not governed-evolution proof;
+- the moving-`main` tree at this review cutoff is only the current
   self-audit snapshot and cannot self-attest a clean candidate; and
 - environment, activation or incremental-effect comparisons require the exact
   controlled arms declared by the Golden Task. The installed Accord-enabled,
@@ -719,13 +727,13 @@ lend its authority or evidence level to another dimension by name similarity.
 | Product goal and capability closure | concern | The complete bounded self-bootstrap is explicit, but only the pure decision core is implemented; live discovery, execution, continuity and retirement remain replaceable responsibilities rather than observed closure. | Keep form neutral; close only responsibilities exposed by source-complete representative evidence. |
 | Semantics and consistency | concern | Constitution, plan, acceptance, goal projection, docs and packages have strong deterministic bindings, but every material consensus has a broad dependency fan-out and can leave stale derived claims. | Retain earliest-boundary replay and add the pre-candidate balance/reacceptance stage; independently challenge the final projection. |
 | Environment sensing and isolation | blocker | Both local hosts are Accord-enabled, extension-composed environments. No current arm may self-attest official-clean, isolated-no-Accord or exact-candidate behavior. | Capture a permitted provenance-bound composition at fixture creation and use only the least costly sufficient isolated arms for the named claim. |
-| Reuse-first discovery and supply chain | blocker | The design study supports dynamic reuse-first routing, but the GT-15 attempt did not retain exact primary sources, repository revisions, licenses, maintenance/provenance, fit limits and exit conditions. | Replay GT-15 with a source ledger; compare no-build, native, maintained reuse, composition and bounded authorship before adding code. |
-| Activation, consequence and evidence | blocker | GT-14 through GT-16 executed fixtures and cleanup, but their source records cannot substantiate environment admission, route fitness or full consequence/lifecycle claims. Installation, enablement and Hook presence remain declaration-level facts. | Build source-complete task-owned fixtures and replay GT-14 through GT-16; preserve failures and exact claim exclusions. |
-| Learning, continuity and evolution | blocker | No approved durable state carrier or completed longitudinal sequence proves later-route improvement, correction propagation, invalidation or retirement. GT-17 and GT-18 remain unperformed. | Execute the bounded consensus replay and four-episode longitudinal sequence before selecting a carrier; admit durable state only if the observed responsibility cannot be closed otherwise. |
+| Reuse-first discovery and supply chain | concern | Exact 84447a7 GT-15 evidence binds primary sources, repository revision, licenses, maintenance/provenance, fit limits and exit conditions for one finite no-build decision. It does not establish universal wheel fitness or future freshness. | Preserve the accepted finite result; refresh sources only when a named route or maintenance fact becomes decision-relevant. |
+| Activation, consequence and evidence | blocker | Exact 84447a7 GT-14 through GT-16 source records substantiate their finite environment, route and lifecycle claims, but f0ed9ce GT-17/18 passed a verifier that did not require source-bound cleanup, per-episode vectors or carrier states. Installation, enablement and Hook presence remain declaration-level facts. | Keep GT-14/15/16 stable; strengthen the evidence contract and replay only GT-17/18 with explicit full-vector, carrier-edge and cleanup bindings. |
+| Learning, continuity and evolution | blocker | The f0ed9ce sequence retained conclusions but not enough source facts to prove immutable full-vector evaluation or observed carrier transitions. No approved durable state carrier or completed longitudinal sequence proves later-route improvement, invalidation or retirement. | Execute the bounded GT-17/18 replay under the strengthened contract; admit durable state only if the observed responsibility cannot be closed otherwise. |
 | Product form and cross-form coherence | concern | The pure core plus thin plugin projections avoids premature lock-in, but current packages alone do not prove a systemic persistent loop and a larger runtime could impose control-plane tax. | Let effect, latency, durability, isolation, recovery and lifecycle evidence choose no-op, one form or replaceable composition; do not use host count as product depth. |
 | Human authority, privacy and trust | concern | The design fails closed, forbids self-granted authority and excludes credential/session content, but live acquisition and external-wheel paths have not yet proved the same boundaries. | Keep new trust, account, data, cost and publication decisions human-bound; verify ordinary routes without specialist account/security surfaces or private logs. |
 | User burden and cognitive load | concern | Progressive disclosure and a quiet simple-task path are designed, yet the internal authority/plan/evidence corpus is large and must not become the ordinary user's operating model. | Measure avoidable questions, concepts, steps, delay and recovery in representative tasks; keep K/H/L and JSON internal and project only the minimum context-fit interface. |
-| Reliability, recovery and residue | blocker | Pure-core rollback rules and historical GT-07/11/12 regressions are strong, but current GT-16 lacks the complete health/update/rollback/release/cleanup record. The prior foreign-host blocker and the empty task-temporary root were cleared under explicit human authority; the post-cleanup canonical and Codex host checks report no errors, but that host fact does not qualify GT-16. | Replay lifecycle post-state independently; preserve foreign/shared/unknown state and keep exact zero-residue verification as a non-compensating gate. |
+| Reliability, recovery and residue | blocker | Pure-core rollback rules and historical GT-07/11/12 plus accepted GT-16 evidence are strong, but GT-17's cleanup claim was not independently source-bound and GT-18's carrier poststate was summarized without retained source/target states. | Replay only the affected poststates; preserve foreign/shared/unknown state and keep exact zero-residue verification as a non-compensating gate. |
 | Performance, resources and total cost | unknown | The pure reducer has low apparent mechanism cost and GT-13 is a useful single-arm dogfood trace, but there is no qualified comparative burden, latency, context, resource or population evidence. | Capture the non-compensating vector in GT-16 and longitudinal tasks; do not infer optimization or field value from one arm. |
 | Architecture and maintainability | concern | `reconcile_closure` is a deep side-effect-free module with an open policy/form boundary, but the authority, documentation and product-control test surfaces are already large and close to explicit complexity headroom. | Prefer deletion, consolidation and generated projections; split or add surfaces only when a repeated change or demonstrated closure need pays the lifecycle cost. |
 | Host portability and lifecycle | concern | Codex and Claude packages validate statically, but behavior evidence is not equivalent across hosts and the historical Claude cleanup failure remains excluded. ZCode is only a later feasibility hypothesis. | Finish core evidence first; then inspect each host's primary surface and implement only a thin projection when it closes a named gap. |
@@ -733,15 +741,13 @@ lend its authority or evidence level to another dimension by name similarity.
 
 ### Weak-link order and current preferred route
 
-1. Preserve the failed GT-14 through GT-16 attempts and their public claim
-   exclusions; fix the evidence contract so continuing states cannot omit a
-   retained failure.
-2. Create source-complete, task-owned GT-14 through GT-16 replays that bind the
-   environment, primary sources and full non-compensating consequence/lifecycle
-   vector at creation time rather than reconstructing them later.
-3. Run GT-17 and GT-18 to test global consensus propagation, a real observed
-   carrier, useful later-route change, regression rejection, invalidation and
-   rollback or retirement.
+1. Preserve the failed 553f5a9 and source-insufficient f0ed9ce/08eb attempts;
+   retain accepted 84447a7 GT-14/15/16 without unnecessary replay.
+2. Enforce fail-closed GT-17 cleanup cardinality and GT-18 per-episode immutable
+   full-vector plus explicit carrier source/target-state validation.
+3. Rerun only GT-17 and GT-18 to test global consensus propagation, an observed
+   disposable carrier, useful later-route change, regression rejection,
+   invalidation and rollback or retirement.
 4. Re-evaluate the responsibility-to-form graph. Prefer no-op or existing
    healthy routes; admit a Skill, plugin, Hook, protocol, state carrier,
    runtime, service, client, cloud component or composition only for an observed
