@@ -19,7 +19,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "30045a30df4393e4c7afff168a6d7767f5253efb81c7696c75fe644146df6613",
+  "canonicalGoalObjectiveSha256": "739927a2a0f1447f1f016b058c1a8bde8be8866d8b75831e00298f5c5f8df626",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -473,9 +473,9 @@
           "supportsCriterion": "Q1"
         },
         {
-          "locator": "evals/observations/2026-08-27-v310-gt12-codex-local.json",
-          "sha256": "6c9421b4bf57600833468d06ed5cc193522092090790148778ac2cf61b97fcff",
-          "claim": "Passed only for this exact current-Skill Windows GT-12 fixture: zero new admission, exact exclusive-task process release, two shared-process preservation checks, natural bounded shared-lease completion and cleanup. This does not prove automatic whole-system optimization, other process identities, other hosts, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-72709b8-gt-12-codex-local.json",
+          "sha256": "53ff51aecfa672f47dcfa7ba610a41bfb49735ade2649d6381870f44d3a67441",
+          "claim": "Passed only for this isolated current-Skill Windows GT-12 fixture: zero new task-worker admission, exact-once exclusive-task process release within the five-second oracle, four shared-process preservation checks, evaluator-owned bounded lease completion and cleanup. One blocked read-only command was recomposed. This does not prove automatic whole-system optimization, other identities, other hosts, field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q1"
         },
@@ -519,9 +519,9 @@
           "supportsCriterion": "Q2"
         },
         {
-          "locator": "evals/observations/2026-08-27-v310-gt12-codex-local.json",
-          "sha256": "6c9421b4bf57600833468d06ed5cc193522092090790148778ac2cf61b97fcff",
-          "claim": "Passed only for this exact current-Skill Windows GT-12 fixture: zero new admission, exact exclusive-task process release, two shared-process preservation checks, natural bounded shared-lease completion and cleanup. This does not prove automatic whole-system optimization, other process identities, other hosts, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-72709b8-gt-12-codex-local.json",
+          "sha256": "53ff51aecfa672f47dcfa7ba610a41bfb49735ade2649d6381870f44d3a67441",
+          "claim": "Passed only for this isolated current-Skill Windows GT-12 fixture: zero new task-worker admission, exact-once exclusive-task process release within the five-second oracle, four shared-process preservation checks, evaluator-owned bounded lease completion and cleanup. One blocked read-only command was recomposed. This does not prove automatic whole-system optimization, other identities, other hosts, field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
         },
@@ -567,9 +567,9 @@
           "supportsCriterion": "Q3"
         },
         {
-          "locator": "evals/observations/2026-08-27-v310-gt12-codex-local.json",
-          "sha256": "6c9421b4bf57600833468d06ed5cc193522092090790148778ac2cf61b97fcff",
-          "claim": "Passed only for this exact current-Skill Windows GT-12 fixture: zero new admission, exact exclusive-task process release, two shared-process preservation checks, natural bounded shared-lease completion and cleanup. This does not prove automatic whole-system optimization, other process identities, other hosts, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-72709b8-gt-12-codex-local.json",
+          "sha256": "53ff51aecfa672f47dcfa7ba610a41bfb49735ade2649d6381870f44d3a67441",
+          "claim": "Passed only for this isolated current-Skill Windows GT-12 fixture: zero new task-worker admission, exact-once exclusive-task process release within the five-second oracle, four shared-process preservation checks, evaluator-owned bounded lease completion and cleanup. One blocked read-only command was recomposed. This does not prove automatic whole-system optimization, other identities, other hosts, field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q3"
         },
@@ -621,9 +621,9 @@
           "supportsCriterion": "Q4"
         },
         {
-          "locator": "evals/observations/2026-08-27-v310-gt12-codex-local.json",
-          "sha256": "6c9421b4bf57600833468d06ed5cc193522092090790148778ac2cf61b97fcff",
-          "claim": "Passed only for this exact current-Skill Windows GT-12 fixture: zero new admission, exact exclusive-task process release, two shared-process preservation checks, natural bounded shared-lease completion and cleanup. This does not prove automatic whole-system optimization, other process identities, other hosts, candidate readiness or release readiness.",
+          "locator": "evals/observations/2026-08-28-72709b8-gt-12-codex-local.json",
+          "sha256": "53ff51aecfa672f47dcfa7ba610a41bfb49735ade2649d6381870f44d3a67441",
+          "claim": "Passed only for this isolated current-Skill Windows GT-12 fixture: zero new task-worker admission, exact-once exclusive-task process release within the five-second oracle, four shared-process preservation checks, evaluator-owned bounded lease completion and cleanup. One blocked read-only command was recomposed. This does not prove automatic whole-system optimization, other identities, other hosts, field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
         },

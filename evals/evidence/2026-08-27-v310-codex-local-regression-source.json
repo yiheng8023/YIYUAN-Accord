@@ -805,6 +805,176 @@
         ]
       },
       "taskId": "GT-11"
+    },
+    "GT-12-72709b8": {
+      "capturedAt": "2026-08-28T18:48:35Z",
+      "evaluationContractSha256": "13b98d00de5245ce61ed5ba2e05dd245f8c3b13302108fa13a2ee7f71c01987e",
+      "goldenTaskSha256": "5587e5aa78e984847ca7b32df99603623088a91d72f0f412b068d4a84f45c1fa",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop source with isolated ephemeral Codex CLI destination",
+        "hostVersion": "codex-cli 0.150.1 with gpt-5.6-luna low; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a049b1-b1cc-7b71-897d-bd5c007d460d"
+      },
+      "kind": "host-event-log",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "cleanupEvidence": {
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "after the independent poststate the evaluator completed its shared lease; both exact PIDs and the replay root were absent while the main repository stayed clean",
+              "sourceBindings": [
+                {
+                  "carrierSessionId": "0d684e83-695b-4220-bc9f-c19a2b0ce5a2",
+                  "claim": "Binds exact shared-lease completion, process absence and fixture cleanup.",
+                  "completedAt": "2026-08-28T18:48:34Z",
+                  "kind": "direct-independent-command-result",
+                  "phaseNonces": [
+                    "gt12-v310-72709b8-cleanup"
+                  ],
+                  "resultLocator": "task-artifact:GT-12/cleanup-observer/agent-final.txt",
+                  "resultRecordSha256": "aedd9b95d0cf96afd920c7d5193943eafeda03b1b99dcd920c2104e6daa742d6",
+                  "resultSha256": "514d657ebddff0027d56cfbb504f1269cba00c39de83841c218a8efa00dff441",
+                  "taskLocator": "GT-12/cleanup-observer"
+                }
+              ]
+            }
+          ],
+          "state": "verified-clean"
+        },
+        "evaluatedRevision": "72709b8c78ccb18b0978887f5bce8c46b25f7c11",
+        "evidenceBoundary": "One isolated current-Skill Windows GT-12 replay proves zero new task-worker admission, exact exclusive-task process release, four shared-process preservation checks, evaluator-owned bounded shared-lease completion and cleanup. One blocked read-only command was recomposed without state change. It does not prove automatic whole-system optimization, other identities, other hosts, field value, candidate readiness or release readiness.",
+        "independentCommandResults": [
+          {
+            "carrierSessionId": "d024627c-66e6-41b3-b09e-23a5912f8814",
+            "kind": "independent-command-result",
+            "nonce": "gt12-v310-72709b8-independent",
+            "phase": "resource-poststate",
+            "report": "PASS after one non-material blocked read-only command was recomposed. At disposable fixture HEAD 31c3725d003adc8b0a45d2034287ae0aa86c93be under declared-high pressure, no task worker was admitted; exclusive task-owned PID 29636 was released exactly once through the supplied actuator; evaluator-shared PID 27460 was not signalled or released and remained alive through inner and outer two-check poststates. Protected fixture files were unchanged; receipt hash was e243eb94ba26234f3a5749df377c0e4794fa5ebfca61d8378b2782429a782da2; exact-once marker hash was 07846b783c23904a75834c1932bc2fad41e388e18bc32ffd73ed87bfa3844d87; no controller, tracing or telemetry was added.",
+            "taskLocator": "GT-12/independent-observer"
+          },
+          {
+            "carrierSessionId": "0d684e83-695b-4220-bc9f-c19a2b0ce5a2",
+            "kind": "independent-command-result",
+            "nonce": "gt12-v310-72709b8-cleanup",
+            "phase": "cleanup-poststate",
+            "report": "PASS. Only after the independent resource poststate, the outer evaluator created its exact lease-completion signal; shared PID 27460 then completed naturally. Exclusive PID 29636, shared PID 27460 and the exact fixture root were absent; main repository HEAD remained 72709b8c78ccb18b0978887f5bce8c46b25f7c11 with clean status; no foreign state was read or changed.",
+            "taskLocator": "GT-12/cleanup-observer"
+          }
+        ],
+        "materialEvents": [
+          {
+            "exclusiveLease": "exclusive",
+            "exclusiveOwner": "task",
+            "exclusivePid": 29636,
+            "kind": "resource-inventory",
+            "pressure": "declared-high",
+            "sharedLease": "shared",
+            "sharedOwner": "evaluator",
+            "sharedPid": 27460
+          },
+          {
+            "admittedNewWorkers": 0,
+            "diagnosticTraceEnabled": false,
+            "kind": "minimum-admission",
+            "telemetryUploaded": false
+          },
+          {
+            "actuator": "fixture-native-release-exclusive",
+            "actuatorExit": 0,
+            "aliveAfter": false,
+            "kind": "exclusive-release",
+            "observedCommandWallMilliseconds": 3082,
+            "pid": 29636,
+            "releaseLatencyBoundMilliseconds": 5000,
+            "sharedReleaseAttempted": false
+          },
+          {
+            "kind": "route-correction",
+            "result": "one blocked read-only command was recomposed into an accepted combined read; no fixture state changed before the initial check"
+          },
+          {
+            "kind": "native-no-op",
+            "result": "supplied PowerShell admission, interruption, observation and cleanup controls closed the bounded responsibility without a controller, dependency or persistent monitor"
+          },
+          {
+            "exclusiveAlive": false,
+            "kind": "independent-poststate",
+            "sharedAlive": true,
+            "sourceBindings": [
+              {
+                "carrierSessionId": "d024627c-66e6-41b3-b09e-23a5912f8814",
+                "claim": "Binds ownership-aware admission, exact-once release, latency bound and shared preservation poststate.",
+                "completedAt": "2026-08-28T18:48:20Z",
+                "kind": "direct-independent-command-result",
+                "phaseNonces": [
+                  "gt12-v310-72709b8-independent"
+                ],
+                "resultLocator": "task-artifact:GT-12/independent-observer/agent-final.txt",
+                "resultRecordSha256": "3e3ff2afc19acebfea2018d4c450d2da0e80cfdab0dfe50eef11e2d06de42cba",
+                "resultSha256": "fa6cd8a898847dec103d4d58372bcac4ddc58ebb79ae2e68389468efc5020f63",
+                "taskLocator": "GT-12/independent-observer"
+              }
+            ],
+            "verificationCount": 4
+          }
+        ],
+        "messages": [
+          {
+            "kind": "resource-request",
+            "phase": "resource-demand",
+            "role": "user",
+            "text": "Under declared high pressure admit no new task worker, release only the exclusive task-owned sleeper, preserve the evaluator-shared sleeper through independent checks, and use no controller, tracing or telemetry."
+          },
+          {
+            "kind": "resource-result",
+            "phase": "resource-result",
+            "role": "assistant",
+            "text": "No task worker was admitted; only the exclusive PID was released exactly once; the shared PID remained alive through four checks and later completed its evaluator-owned lease; the fixture was removed."
+          }
+        ],
+        "officialSources": [],
+        "postSessionBindingContract": [
+          {
+            "bindingCount": 1,
+            "kind": "independent-poststate",
+            "location": "materialEvents"
+          },
+          {
+            "bindingCount": 1,
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations"
+          }
+        ],
+        "projectionExposure": {
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "kind": "exact-skill-content-read",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1"
+        },
+        "recheckTriggers": [
+          {
+            "action": "rebind pre-state, admission, actuator, latency and independent post-state before any release action",
+            "condition": "resource identity, owner, lease, pressure, actuator, Skill or evaluator fixture changes",
+            "kind": "recheck-trigger",
+            "scope": "GT-12 resource route"
+          }
+        ],
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained bounded material events and direct results only; no credential or session logs and no foreign-state contents."
+          }
+        ]
+      },
+      "taskId": "GT-12"
     }
   },
   "schema": 1
