@@ -1674,19 +1674,19 @@
     ],
     "activeProjection": {
       "auditCut": "59a340fbdec91d1b9287ba3c44a94a49348558c8",
-      "reviewCut": "fcefee402de21179438f904c20ef8b1c55e3fef6",
+      "reviewCut": "f3c9b09b784c844762557a959d81418e7b443374",
       "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#whole-system-balance-reacceptance-from-exact-cut-59a340f",
-      "dominantBlocker": "fcefee4-standards-review-remediation-and-foreign-residue-before-exact-candidate-formation",
+      "dominantBlocker": "f3c9b09-ancestor-provenance-and-budget-text-remediation-before-independent-re-review",
       "remediation": {
         "BAL-01": "implemented-and-deterministically-reaccepted",
         "BAL-02": "implemented-and-deterministically-reaccepted",
         "BAL-03": "one-pair-no-observed-harm-not-firing-effect-or-value-proof",
         "BAL-04": "paired-no-add-calibration-complete-genuine-unclosed-responsibility-still-required",
         "BAL-05": "pure-data-dynamic-retirement-sequence-source-complete-and-reaccepted-live-form-lifecycle-still-unknown",
-        "BAL-06": "fcefee4-specification-pass-but-standards-fail-on-gt07-typed-minimum-state-gt18-declared-regression-and-gt19-outcome-family-binding",
-        "BAL-07": "typed-evidence-normalization-and-three-counterexample-remediation-without-behavior-replay"
+        "BAL-06": "f3c9b09-closes-six-semantic-mutants-but-standards-review-finds-unbound-source-narrative-hash",
+        "BAL-07": "bind-typed-normalization-to-the-same-record-at-an-exact-untyped-ancestor-and-reconcile-the-400000-byte-budget-text"
       },
-      "graphRule": "Project the exact 59a340f whole-system audit, exact 7860fee and fcefee4 independent-review findings, affected semantic-evidence and wording edges plus selected minimum remediations. Preserve current exact task behavior facts only while GT-07 typed minimum-state facts, task-declared GT-18 regression dimensions, GT-19 same-outcome-family binding, canonical sequence binding and sparse subject bindings pass; refresh only the invalidated slice, normalize host vocabulary before functional comparison, treat continuity triggers as open source-bound risks, and never precompute host-model-tool-context products."
+      "graphRule": "Project the exact 59a340f whole-system audit and exact 7860fee, fcefee4 and f3c9b09 independent-review findings with their affected semantic-evidence and wording edges. Preserve current exact task behavior facts only while GT-07 typed minimum-state facts bind the same independent-result identity and narrative hash at an exact untyped ancestor, task-declared GT-18 regression dimensions, GT-19 same-outcome-family binding, canonical sequence binding and sparse subject bindings pass; refresh only the invalidated slice, normalize host vocabulary before functional comparison, treat continuity triggers as open source-bound risks, and never precompute host-model-tool-context products."
     },
     "claimLimit": "This is a revisable review model, not proof that one baseline fits every claim, that every possible dimension has been enumerated, that current implementation passes, or that self-review can replace representative, longitudinal, independent, hosted, human or public evidence."
   },
@@ -1746,9 +1746,9 @@
     ]
   },
   "nextAuthorityBoundary": {
-    "first": "standards-review-findings-at-exact-fcefee4-and-their-earliest-affected-boundaries",
+    "first": "specification-and-standards-review-findings-at-exact-f3c9b09-and-their-earliest-affected-boundaries",
     "then": [
-      "gt07-typed-exact-minimum-state-gt18-task-declared-regression-and-gt19-same-outcome-family-remediation",
+      "gt07-typed-report-ancestor-provenance-and-400000-byte-budget-text-reconciliation",
       "product/program.json",
       "product/acceptance.json",
       "product/reshaping-guidance.json-derived-index-and-graph-projection",
@@ -1757,7 +1757,7 @@
       "documentation-and-claim-reacceptance",
       "new-independent-review-before-forming-future-exact-candidate"
     ],
-    "minimumNextSlice": "Retain every failed, source-insufficient, former-contract and superseded attempt as exact bounded history in current source carriers or immutable Git history; remove a superseded derived observation only after its source record, current replacement and file-budget rationale are verified. Fresh current-contract GT-14/15/16@1bbcc95 and GT-18/19@2460adc now pass only their finite Codex-local claims with blocked arms, failed review, transcription and query corrections, token costs and cleanup retained; revised GT-07/11/12/13/17 retain only their recorded bounded claims. Exact fcefee4 passed specification review but failed standards review on GT-07 free-text self-attestation and non-minimum transfer, an unrelated GT-18 failure dimension, and GT-19 outcome-family drift. Repair only those earliest semantic and evidence bindings, preserve the original narrative hashes during deterministic typed normalization without behavior replay, reconcile the four mapped surfaces, and rerun genuinely independent specification and standards review before exact-candidate formation. Treat current hosts as Accord-enabled and extension-composed; keep official-clean or no-Accord product behavior, Hook firing or causality, live-mechanism value, durable-carrier need, cross-host equivalence and field value unknown. Add no Runtime, service, dependency or durable state without a source-complete unclosed responsibility and net lifecycle improvement. Keep the goal projection paused until activation is materially needed, and defer broader historical cleanup until exact-candidate preparation.",
+    "minimumNextSlice": "Retain every failed, source-insufficient, former-contract and superseded attempt as exact bounded history in current source carriers or immutable Git history; remove a superseded derived observation only after its source record, current replacement and file-budget rationale are verified. Fresh current-contract GT-14/15/16@1bbcc95 and GT-18/19@2460adc now pass only their finite Codex-local claims with blocked arms, failed review, transcription and query corrections, token costs and cleanup retained; revised GT-07/11/12/13/17 retain only their recorded bounded claims. Exact fcefee4 passed specification review but failed standards review on GT-07 free-text self-attestation and non-minimum transfer, an unrelated GT-18 failure dimension, and GT-19 outcome-family drift. Exact f3c9b09 closed all six requested semantic mutants, but specification review found stale 390000/364000 complexity wording and standards review proved that sourceNarrativeSha256 could still self-attest after synchronized rehashing. Bind each typed GT-07 report to the same independent-result identity and original narrative at exact untyped ancestor fcefee4, reconcile every active complexity statement to 400000 while retaining 5% headroom, preserve no-behavior-replay limits, and rerun genuinely independent specification and standards review before exact-candidate formation. Treat current hosts as Accord-enabled and extension-composed; keep official-clean or no-Accord product behavior, Hook firing or causality, live-mechanism value, durable-carrier need, cross-host equivalence and field value unknown. Add no Runtime, service, dependency or durable state without a source-complete unclosed responsibility and net lifecycle improvement. Keep the goal projection paused until activation is materially needed, and defer broader historical cleanup until exact-candidate preparation.",
     "requiredReplay": [
       "semantic-authority-and-derived-surface-conformance",
       "plan-process-acceptance-goal-projection-alignment",

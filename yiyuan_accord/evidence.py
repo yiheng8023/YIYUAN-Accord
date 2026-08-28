@@ -292,7 +292,7 @@ def _decision_matches(decision, route_id, disposition):
     )
 
 
-def _continuity_handoff_bundle(payload, task):
+def _continuity_handoff_bundle(payload, task, narrative_hashes=None):
     """Validate observable carrier inheritance and release ordering."""
     if task.get("kind") != "continuity":
         return {}
@@ -384,11 +384,15 @@ def _continuity_handoff_bundle(payload, task):
         facts = result.get("facts") if isinstance(result, dict) else None
         return (
             isinstance(facts, dict)
-            and set(facts) == set(expected) | {"kind", "sourceNarrativeSha256"}
+            and set(facts) == set(expected) | {
+                "kind", "sourceNarrativeRevision", "sourceNarrativeSha256",
+            }
             and facts.get("kind") == kind
-            and re.fullmatch(
-                r"[0-9a-f]{64}", facts.get("sourceNarrativeSha256", "")
-            ) is not None
+            and isinstance(narrative_hashes, dict)
+            and facts["sourceNarrativeRevision"] == narrative_hashes.get("revision")
+            and facts["sourceNarrativeSha256"] == narrative_hashes.get(
+                result["taskLocator"].rsplit("/", 1)[-1]
+            )
             and all(facts.get(key) == value for key, value in expected.items())
             and result.get("report") == _canonical_json(facts)
         )
@@ -438,6 +442,61 @@ def _continuity_handoff_bundle(payload, task):
         )
         and _text(poststate.get("result"))
     ) else None
+
+
+def _continuity_narrative_hashes(root, locator, record_id, payload, task):
+    if task.get("kind") != "continuity":
+        return {}
+    results = payload.get("independentCommandResults") \
+        if isinstance(payload, dict) else None
+    phases = ("destination-poststate", "source-reconciliation")
+    current = {
+        item["taskLocator"].rsplit("/", 1)[-1]: item
+        for item in results or []
+        if isinstance(item, dict) and _text(item.get("taskLocator"))
+    }
+    typed = [current.get(phase) for phase in phases]
+    if any(not isinstance(item, dict) or not isinstance(item.get("facts"), dict)
+           for item in typed):
+        return None
+    revisions = {item["facts"].get("sourceNarrativeRevision") for item in typed}
+    if (len(revisions) != 1
+            or re.fullmatch(r"[0-9a-f]{40}", next(iter(revisions), "")) is None):
+        return None
+    revision = next(iter(revisions))
+    try:
+        ancestor = subprocess.run(
+            ["git", "-C", str(root), "merge-base", "--is-ancestor", revision, "HEAD"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        ).returncode
+        historical = _strict_json_object(_bounded_git_bytes(
+            root, ["show", "--end-of-options", f"{revision}:{locator}"],
+            1_048_576,
+        ))
+    except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+        return None
+    records = historical.get("records") if isinstance(historical, dict) else None
+    record = records.get(record_id) if isinstance(records, dict) else None
+    old_results = record.get("payload", {}).get("independentCommandResults") \
+        if isinstance(record, dict) else None
+    old = {
+        item["taskLocator"].rsplit("/", 1)[-1]: item
+        for item in old_results or []
+        if isinstance(item, dict) and _text(item.get("taskLocator"))
+    }
+    identity = ("kind", "carrierSessionId", "taskLocator", "phase", "nonce")
+    if ancestor != 0 or any(
+        not isinstance(old.get(phase), dict)
+        or "facts" in old[phase] or not _text(old[phase].get("report"))
+        or any(old[phase].get(field) != current[phase].get(field)
+               for field in identity)
+        for phase in phases
+    ):
+        return None
+    return {"revision": revision, **{
+        phase: sha256(old[phase]["report"].encode("utf-8")).hexdigest()
+        for phase in phases
+    }}
 
 
 def _sequence_digest(event):
@@ -499,7 +558,7 @@ def _gt18_longitudinal_semantics(task, event, episodes, dimension_ids):
         if isinstance(marker, str)
         and marker.startswith("reject-proxy-improvement-that-weakens-")
     ), "")
-    regression_terms = set(regression_rule.split("-"))
+    regression_terms = set(regression_rule.partition("-weakens-")[2].split("-"))
     declared_regression_dimensions = {
         dimension for dimension in dimension_ids
         if regression_terms & set(dimension.split("-"))
@@ -889,7 +948,9 @@ def _longitudinal_bundle(payload, task):
     ) else None
 
 
-def _publishable_payload(payload, task, cleanup, captured_at, projection):
+def _publishable_payload(
+    payload, task, cleanup, captured_at, projection, continuity_narratives=None,
+):
     if not isinstance(payload, dict):
         return False
     messages, sources, evidence, exposure = (
@@ -927,7 +988,9 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
             )
         )
         and _postcapture_bundle(payload, task, captured_at) is not None
-        and _continuity_handoff_bundle(payload, task) is not None
+        and _continuity_handoff_bundle(
+            payload, task, continuity_narratives
+        ) is not None
         and _longitudinal_bundle(payload, task) is not None
         and all(field in projection_fields for field in (
             "adapterId", "skill", "skillSha256",
@@ -1274,6 +1337,9 @@ def _observation_errors(
         postcapture = _postcapture_bundle(
             record.get("payload", {}), task, captured
         ) if isinstance(record, dict) else None
+        continuity_narratives = _continuity_narrative_hashes(
+            root, locator, record_id, record.get("payload", {}), task,
+        ) if isinstance(record, dict) else None
         record_fields = (
             "kind", "taskId", "goldenTaskSha256", "evaluationContractSha256",
             "hostIdentity", "capturedAt", "payload",
@@ -1300,7 +1366,7 @@ def _observation_errors(
             and captured is not None and observed_at is not None and captured <= observed_at
             and _publishable_payload(
                 record.get("payload"), task, observation.get("cleanup"), captured,
-                observation.get("projectionIdentity"),
+                observation.get("projectionIdentity"), continuity_narratives,
             )
             and source.get("sha256") == _digest(record)
             and (not binding_contract or postcapture is not None and source.get(

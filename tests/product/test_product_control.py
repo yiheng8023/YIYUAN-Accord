@@ -12,6 +12,7 @@ from yiyuan_accord.evidence import (
     _digest,
     _evaluation_contracts,
     _continuity_handoff_bundle,
+    _continuity_narrative_hashes,
     _longitudinal_bundle,
     _observation_errors,
     _postcapture_bundle,
@@ -1651,7 +1652,14 @@ class ProductControlTests(unittest.TestCase):
         gt07 = tasks['GT-07']
         gt07_record = source['records']['GT-07-cb11759']
         gt07_payload = gt07_record['payload']
-        self.assertIsNotNone(_continuity_handoff_bundle(gt07_payload, gt07))
+        narratives = _continuity_narrative_hashes(
+            ROOT, CURRENT_GT16_SOURCE, 'GT-07-cb11759', gt07_payload, gt07,
+        )
+        self.assertIsNotNone(narratives)
+        continuity = lambda payload: _continuity_handoff_bundle(
+            payload, gt07, narratives
+        )
+        self.assertIsNotNone(continuity(gt07_payload))
         for path, value in (
             (('materialEvents', 0, 'capacity'), 'known-80-percent'),
             (('materialEvents', 0, 'universalThreshold'), 75),
@@ -1667,20 +1675,20 @@ class ProductControlTests(unittest.TestCase):
                 target = target[part]
             target[path[-1]] = value
             with self.subTest(gt07_semantic_path=path):
-                self.assertIsNone(_continuity_handoff_bundle(payload, gt07))
+                self.assertIsNone(continuity(payload))
         malformed_handoff = json.loads(json.dumps(gt07_payload))
         poststate = next(
             item for item in malformed_handoff['materialEvents']
             if item['kind'] == 'independent-poststate'
         )
         poststate['sourceBindings'][0]['taskLocator'] = []
-        self.assertIsNone(_continuity_handoff_bundle(malformed_handoff, gt07))
+        self.assertIsNone(continuity(malformed_handoff))
 
         extra_handoff_state = json.loads(json.dumps(gt07_payload))
         extra_handoff_state['materialEvents'][1]['receivedFields'].append(
             'credential-content'
         )
-        self.assertIsNone(_continuity_handoff_bundle(extra_handoff_state, gt07))
+        self.assertIsNone(continuity(extra_handoff_state))
 
         contradictory_report = json.loads(json.dumps(gt07_payload))
         result = next(
@@ -1699,9 +1707,7 @@ class ProductControlTests(unittest.TestCase):
             result['report'].encode('utf-8')
         ).hexdigest()
         binding['resultRecordSha256'] = _digest([result])
-        self.assertIsNone(_continuity_handoff_bundle(
-            contradictory_report, gt07
-        ))
+        self.assertIsNone(continuity(contradictory_report))
         cross_bound_drift = json.loads(json.dumps(gt07_payload))
         result = next(item for item in cross_bound_drift[
             'independentCommandResults'
@@ -1711,7 +1717,17 @@ class ProductControlTests(unittest.TestCase):
             result['facts'], ensure_ascii=False, sort_keys=True,
             separators=(',', ':'),
         )
-        self.assertIsNone(_continuity_handoff_bundle(cross_bound_drift, gt07))
+        self.assertIsNone(continuity(cross_bound_drift))
+        provenance = json.loads(json.dumps(gt07_payload))
+        result = next(item for item in provenance[
+            'independentCommandResults'
+        ] if item['taskLocator'].endswith('/destination-poststate'))
+        result['facts']['sourceNarrativeSha256'] = '0' * 64
+        result['report'] = json.dumps(
+            result['facts'], ensure_ascii=False, sort_keys=True,
+            separators=(',', ':'),
+        )
+        self.assertIsNone(continuity(provenance))
 
         event = next(
             item for item in source['records']['GT-18-2460adc'][

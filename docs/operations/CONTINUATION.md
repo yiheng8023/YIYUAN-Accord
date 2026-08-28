@@ -364,7 +364,7 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The active development guardrail permits at most 86 tracked files and
-  364000 product-code-and-test bytes with at least five percent headroom and
+  400000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
   regression, one append-only GT-14 through GT-19 source and bounded current
@@ -591,11 +591,17 @@ increment and one active work item. Its ordered work is:
     narrower counterexamples: contradictory GT-07 free text plus extra inherited
     state could pass; a GT-18 human-burden-only failure could stand in for the
     task-declared adversarial regression; and GT-19 could change outcome family
-    between episodes. The follow-up uses canonical typed independent facts with
-    original narrative hashes, requires the exact minimum received-field set,
+    between episodes. The follow-up uses canonical typed normalization of the
+    bound reports, requires the exact minimum received-field set,
     derives GT-18 eligible regression dimensions from its task contract and
     locks GT-19 to the first outcome ID. This is deterministic evidence
-    normalization and validator hardening, not a GT-07 behavior replay. The
+    normalization and validator hardening, not a GT-07 behavior replay. Exact
+    `f3c9b09` closed all six requested semantic mutants, but its specification
+    review found stale 390000/364000 budget text and its standards review proved
+    the retained narrative SHA could still be replaced and self-rehashed. The
+    next repair therefore reads the same result identity and original narrative
+    from exact untyped ancestor `fcefee4`, verifies the ancestor relation and
+    hash, and rejects a typed/self-rehashed substitute. The
     code-and-test ceiling moves from 390000 to 400000 bytes to keep the existing
     5% headroom rule without obscuring these checks through byte-golfing; a later
     addition must still preserve that headroom or justify subtraction. Goal mode
