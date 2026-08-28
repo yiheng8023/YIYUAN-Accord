@@ -28,6 +28,30 @@ CONTRACT_RELEASE_RE = re.compile(
     r"^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$"
 )
 
+
+def _unique_json_object(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError(f"duplicate JSON key: {key}")
+        value[key] = item
+    return value
+
+
+def _reject_json_constant(value):
+    raise ValueError(f"non-finite JSON number: {value}")
+
+
+def _strict_json_object(text):
+    value = json.loads(
+        text,
+        object_pairs_hook=_unique_json_object,
+        parse_constant=_reject_json_constant,
+    )
+    if not isinstance(value, dict):
+        raise ValueError("top-level JSON value is not an object")
+    return value
+
 CONSTITUTION_FIELDS = set((
     "schema id productId identity domainModel purpose successDefinition kernel "
     "hostAdapterStandard learnedFailureStandards qualityInvariants humanAuthority "
@@ -452,7 +476,7 @@ def active_tree_errors(
             ).decode("utf-8")
             for locator in ("product/constitution.json", "README.md")
         ]
-        old, readme = json.loads(history[0]), history[1]
+        old, readme = _strict_json_object(history[0]), history[1]
         command = old.get("authority", {}).get("executableVerifier", "")
         product_id = old.get("productId")
         title = next(

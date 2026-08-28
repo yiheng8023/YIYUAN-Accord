@@ -436,7 +436,10 @@ minimum-form bootstrap, global consensus reconciliation and longitudinal
 evolution obligations. GT-19 adds a four-episode host-drift lane: Accord-backed
 baseline, declaration-only native counterexample, verified same-responsibility
 successor plus reversible scoped retirement, then drift or evidence-expiry
-recomputation. It is designed but unperformed. Exact checkpoint
+recomputation. At exact `fd4b99a`, one source-bound Codex-local replay passes
+only that finite sequence after official-source, local-help, isolated-behavior,
+deterministic and canonical cross-checks; its failed routes and finite token
+cost remain counterevidence. Exact checkpoint
 `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14 through
 GT-16 attempts as counterevidence: summary execution and cleanup do not replace
 the task-required source facts. The later exact revision
@@ -451,8 +454,9 @@ closed on those omissions. At exact revision
 GT-18 observations retain source-bound cleanup, the immutable per-episode full
 vector, actual core decisions and explicit carrier source/target states. They
 support only one bounded evidence correction and one synthetic four-episode
-sequence; durable carrier need, cross-host or broad value, whole-system balance,
-candidate readiness and release readiness remain unproved.
+sequence; durable carrier need, cross-host or broad value, candidate readiness
+and release readiness remain unproved. The later whole-system balance audit and
+affected-surface deterministic reacceptance completed before independent review.
 
 BAL-04 later ran one paired repository-Skill/no-Accord correction task at audit
 cut `1463034569fe6e724f186c88171e3ee12dffc94b`. Both arms passed the same

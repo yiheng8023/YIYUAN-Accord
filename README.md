@@ -55,18 +55,18 @@ replay passes GT-17 only for the bounded evidence correction and GT-18 only for
 one synthetic four-episode full-vector sequence with actual carrier source and
 target states, regression rollback, native no-add retention, later invalidation,
 replacement, retirement and zero task resources. The source-bound whole-system
-balance audit is now active. A new GT-19 host-drift lane is designed but
-unperformed: declaration alone must not retire Accord; a verified native route
-may retire only the same responsibility through reversible observed lifecycle
-post-state, and later drift or evidence expiry must recompute the allocation.
-The audit has also reopened GT-07 after finding that compact, copied-history
-causal fork and fresh zero-history sequential handoff had been described too
-loosely. Code topology, conversation topology and local/cloud execution
-placement are now independent; a conversation transition never implies a
-branch, worktree, repository fork or placement change. Sparse host-native and
-Accord responsibility views may expose overlap, but current admission,
-consequence and lifecycle evidence must still prove actual redundancy. Live
-mechanisms, durable continuity, cross-host or
+balance audit and affected-surface deterministic reacceptance are complete;
+independent review is active. At exact revision `fd4b99a`, revised GT-19 passes
+only one finite Codex-local four-episode responsibility-allocation sequence:
+declaration alone retired nothing, a verified native successor retired only the
+same responsibility through a reversible observed lifecycle, and evidence
+expiry restored the Accord allocation. At exact `cb11759`, revised GT-07 passes
+only one fresh zero-history destination receipt and source-release ordering;
+actual compact and fork operations were not performed. Code topology,
+conversation topology and local/cloud execution placement remain independent.
+Sparse host-native and Accord responsibility views may expose overlap, but
+current admission, consequence and lifecycle evidence must still prove actual
+redundancy. Live mechanisms, durable continuity, cross-host or
 population value and release remain gated. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
 verified, unreleased v3.1.0 baseline; a later product consensus superseded its

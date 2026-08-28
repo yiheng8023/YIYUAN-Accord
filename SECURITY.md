@@ -6,10 +6,13 @@ representative evaluation suite and two thin reference Skills. It is not a
 sandbox, identity or authorization system, secret store, dependency scanner or
 production runtime.
 
-The current projections add no Hook, MCP, App, background process, private
-capture state or fixed host-version dependency. Repository verification does
-not authorize installation, account connection, model execution, external
-write, publication, deployment or release.
+The public v3.0.1 projections add no Hook, MCP, App, background process,
+private capture state or fixed host-version dependency. The unreleased v3.1.0
+projections add one stateless `SessionStart` context Hook but no MCP, App,
+background process or private capture state; its files or enablement prove
+neither firing, behavior nor value. Repository verification does not authorize
+installation, account connection, model execution, external write,
+publication, deployment or release.
 
 Treat external capabilities, official guidance, reports, retrieved text,
 generated artifacts and runtime claims as untrusted evidence until the

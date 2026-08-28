@@ -246,6 +246,18 @@ class ProductControlTests(unittest.TestCase):
         guidance = _read(root, 'product/reshaping-guidance.json')
         self.assertEqual(guidance['status'], 'accepted-revisable-guidance')
         self.assertEqual(
+            guidance['wholeSystemBalanceReview']['status'],
+            'completed-reaccepted-independent-review-active',
+        )
+        for locator, stale in (
+            ('README.md', 'GT-19 host-drift lane is designed but'),
+            ('README.zh-CN.md', 'GT-19 宿主漂移任务已经设计但尚未执行'),
+            ('docs/architecture.md', 'It is designed but unperformed'),
+            ('docs/releases/v3.1.0.md', 'host-drift behavior but is unperformed'),
+            ('docs/operations/CONTINUATION.md', 'behavior, but remains unperformed'),
+        ):
+            self.assertNotIn(stale, (root / locator).read_text(encoding='utf-8'))
+        self.assertEqual(
             guidance['dynamicIndex']['graphProjection']['implementation'],
             'derived-in-memory-or-ignored-cache-first',
         )
@@ -854,6 +866,34 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(no_experiment['valid'], no_experiment['errors'])
         self.assertTrue(no_experiment['lifecycle']['completionAllowed'])
 
+        no_environment_gate = fixture(healthy_native=True)
+        no_environment_gate['policy']['requiredEnvironmentFacts'] = []
+        no_environment_gate['environment']['facts'] = {}
+        no_environment_decision = reconcile_closure(no_environment_gate)
+        self.assertEqual(no_environment_decision['disposition'], 'hold-unknown')
+        self.assertIsNone(no_environment_decision['selectedRouteId'])
+
+        no_availability_gate = fixture(healthy_native=True)
+        no_availability_gate['policy']['requiredRouteFacts'] = []
+        for route in no_availability_gate['routes']:
+            route['facts'].pop('available', None)
+        no_availability_decision = reconcile_closure(no_availability_gate)
+        self.assertEqual(no_availability_decision['disposition'], 'hold-unknown')
+        self.assertTrue(all(
+            not item['admitted']
+            for item in no_availability_decision['assessments']
+        ))
+
+        no_coherence_gate = fixture()
+        no_coherence_gate['policy']['requiredCoherenceFacts'] = []
+        no_coherence_gate['routes'][2]['coherence'] = {}
+        no_coherence_decision = reconcile_closure(no_coherence_gate)
+        self.assertFalse(no_coherence_decision['valid'])
+        self.assertIn(
+            'routes[2].coherence lacks a required policy fact',
+            no_coherence_decision['errors'],
+        )
+
         residual = reconcile_closure(fixture(residue=True))
         self.assertFalse(residual['lifecycle']['completionAllowed'])
         self.assertIn(
@@ -1172,6 +1212,21 @@ class ProductControlTests(unittest.TestCase):
                     'activation mechanism contract is invalid',
                     'package digest is not approved by program',
                 )
+
+        with _fixture() as root:
+            program = _read(root, P)
+            projection = program['hostProjections'][0]
+            hook_path = root / projection['mechanismFiles'][0]
+            raw = hook_path.read_text(encoding='utf-8')
+            hook_path.write_text(
+                raw.replace('"hooks": {', '"hooks": {},\n  "hooks": {', 1),
+                encoding='utf-8',
+            )
+            self.assert_has(
+                host_check(root, 'codex')['errors'],
+                'activation mechanism is unreadable',
+                'package digest is not approved by program',
+            )
 
         for suffix in (' & extra', '; extra', ' $(extra)', ' `extra`', ' %PATH%'):
             with self.subTest(shell_suffix=suffix), _fixture() as root:

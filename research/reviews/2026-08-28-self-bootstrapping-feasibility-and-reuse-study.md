@@ -1,9 +1,10 @@
 # Complete self-bootstrapping feasibility and reuse study
 
-Status: feasibility completed; source-bound whole-system balance audit active at
-exact cut `1463034569fe6e724f186c88171e3ee12dffc94b`, 2026-08-28. This is
+Status: feasibility and source-bound whole-system balance self-audit completed;
+affected-surface deterministic reacceptance completed through exact behavior
+cuts `fd4b99a` and `cb11759`, 2026-08-28. Independent review is active. This is
 an admitted design and self-review input, not runtime authority, independent
-review, behavior evidence or release evidence.
+acceptance, field-value evidence or release evidence.
 
 ## Decision
 
@@ -30,8 +31,9 @@ retains failed GT-14 through GT-16 attempts because their publishable source is
 not task-complete. Exact `84447a7` later passes source-complete GT-14 through
 GT-16 only for their finite claims, and exact `7d7a7e5` passes GT-17/18 only for
 one bounded reconciliation and one synthetic four-episode full-vector sequence.
-The whole-system balance audit is active; live mechanisms, a Runtime, general
-state store and release work remain no-go without new evidence.
+The whole-system balance audit and deterministic reacceptance are complete;
+live mechanisms, a Runtime, general state store and release work remain no-go
+without new evidence and independent review.
 
 The unbounded interpretation is infeasible: no system can guarantee complete
 visibility into every host, infer human values or authority from context,
@@ -774,7 +776,7 @@ can later justify a durable carrier or a multi-form system; absent them, a
 larger mechanism would improve architectural appearance while worsening the
 very balance this review is meant to protect.
 
-## Whole-system balance self-audit: active cut at `1463034`
+## Whole-system balance self-audit: completed from cut `1463034`
 
 This is the first current execution of the required audit, not a replacement for
 independent review. The audit cut is exact revision
@@ -863,11 +865,11 @@ dimensions while proving none. The lowest-total-burden route is therefore:
 - `BAL-01 exact-observation-identity` — implemented after the audit cut by
   renaming the new GT-17/18 observation locators from misleading `f0ed9ce` names
   to `7d7a7e5` while retaining the old source records as counterevidence. It is
-  pending deterministic reacceptance and an exact remediation commit.
+  deterministically reaccepted in the later mapped tree.
 - `BAL-02 goal-projection-headroom` — implemented after the cut by shortening
   only redundant route/alignment prose. The deterministic structured objective
   remains fully mapped and is 3299 characters instead of 3543, below the 3600
-  guardrail with more correction headroom. It is pending reacceptance.
+  guardrail with more correction headroom. It is deterministically reaccepted.
 - `BAL-03 enabled-Hook-diagnostic` — one disposable paired Codex 0.150.1 run used
   the same “reply exactly OK” prompt with Hooks explicitly off and on. Both final
   outputs were `OK`, both CLI counters were 13064 tokens, elapsed wall time was
@@ -882,10 +884,11 @@ dimensions while proving none. The lowest-total-burden route is therefore:
   gain. The active remainder is a genuinely unclosed responsibility, not a
   search for a favorable benchmark. Do not add a Runtime, service or durable
   carrier to make the test pass.
-- `BAL-05 form-and-host-lifecycle` — pending a form selected by the active
-  remainder of `BAL-04`. Test isolated install,
-  trigger, consequence, update/rollback, removal and cleanup only for the forms
-  selected by observed responsibility closure.
+- `BAL-05 form-and-host-lifecycle` — the pure-data responsibility-allocation
+  retirement slice is implemented and revised GT-19 passes one finite
+  source-bound Codex-local sequence. Live install, trigger, consequence,
+  update/rollback, removal and cleanup stay pending until an observed
+  responsibility selects a concrete form.
 
 ### BAL-04 paired no-add calibration
 
@@ -1060,11 +1063,12 @@ away after the fact.
 
 The regression is now green for accepted scoped retirement, an unknown
 observation-window fact, an omitted required retirement and a retirement event
-ordered before successor consequence/cleanup. This is deterministic
-conformance only. GT-19 adds the future source-complete four-episode behavior
-obligation: Accord-backed baseline, declaration-only native counterexample,
-verified same-responsibility replacement and reversible retirement, then drift
-or expiry recomputation. It remains unperformed and blocks candidate formation.
+ordered before successor consequence/cleanup. At this rebaseline cut GT-19 was
+still a future source-complete obligation. Exact `fd4b99a` later passes one
+finite Codex-local sequence covering the Accord-backed baseline,
+declaration-only native counterexample, verified same-responsibility replacement
+and reversible retirement, then evidence-expiry recomputation. Its failed routes
+and finite cost remain counterevidence; live behavior remains unproved.
 
 ### Index and graph delta
 
@@ -1118,7 +1122,7 @@ independent reviewer finds a counterexample.
 | P10 | Dynamic retirement / fallback and uninstall | No contradiction when logical allocation and physical removal stay separate. | Bypass or retire only the exact redundant allocation; preserve a healthy latent fallback when its lifecycle value warrants it. Global uninstall is a separate authorized effect. |
 | P11 | Claude `fork` Hook event / fork semantics | Event coverage can be mistaken for product semantics. | The Hook may observe a host `SessionStart` fork event, but this proves neither handoff, context relief, activation, behavior nor value. |
 | P12 | Latest consensus / coherent baseline | Immediate propagation can create a contradiction cascade. | A correction governs direction immediately, but becomes the next implementation baseline only after contradiction, category, boundary and dependency checks reconcile every affected surface. |
-| P13 | Self-audit / independent review | Self-audit cannot independently certify itself. | This calibration can repair premises and reopen evidence; revised GT-07, GT-17 and GT-19 now each have isolated behavior plus deterministic and canonical evidence cross-validation, while global reacceptance and later independent specification, implementation and standards review remain separate gates. |
+| P13 | Self-audit / independent review | Self-audit cannot independently certify itself. | This calibration repaired premises and global deterministic reacceptance completed; revised GT-07, GT-17 and GT-19 each have isolated behavior plus deterministic and canonical evidence cross-validation, while independent specification, implementation and standards review remains a separate active gate. |
 | P14 | Conversation / code / execution topology | Treating them as one topology makes a context transition silently authorize code-carrier or environment-placement changes. | They are orthogonal decision spaces. A compact, causal fork or sequential handoff preserves code topology and execution placement unless separately admitted; branch, worktree, repository-fork, local or cloud changes do not prove conversation continuity. |
 
 ## Revised GT-17 proposition-coherence replay at `fd4b99a`

@@ -130,11 +130,12 @@ Then read, in order:
   cleanup, authorized reversible observation, independent retirement post-state
   and recheck triggers can admit retirement. Missing, stale or premature
   retirement blocks closure, and drift or evidence expiry starts a fresh
-  allocation decision. GT-19 now specifies the four-episode
-  declaration-rejection, verified replacement, scoped retirement and
-  recomputation behavior, but remains unperformed. This is pure-data
-  conformance only; no live host mechanism, Runtime, durable state or global
-  uninstall was added.
+  allocation decision. At exact `fd4b99a`, revised GT-19 passes only one
+  source-bound Codex-local four-episode declaration-rejection, verified
+  replacement, scoped-retirement and expiry-recomputation sequence after
+  official-source, local-help, isolated-behavior, deterministic and canonical
+  cross-checks. Its failed routes and finite token cost remain counterevidence;
+  no live host mechanism, Runtime, durable state or global uninstall was added.
   All eight criteria are intentionally unverified for the new target, and
   repository candidate readiness is false. Release authorization remains
   unrequested because publication is the last phase and repository content

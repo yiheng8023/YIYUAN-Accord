@@ -25,10 +25,18 @@ EVIDENCE_BINDING_FIELDS = frozenset({
 })
 
 # These are compliance/evidence invariants, not a product-form or workflow list.
+COMPLIANCE_ENVIRONMENT_FACTS = ("provenance-bound",)
 COMPLIANCE_ROUTE_FACTS = (
     "within-human-authority",
     "compliant",
     "independent-consequence-verifier",
+    "available",
+)
+COMPLIANCE_COHERENCE_FACTS = (
+    "responsibility-boundaries",
+    "authority-and-side-effects",
+    "evidence-and-independent-poststate",
+    "cleanup-retirement-and-residue",
 )
 COMPLIANCE_COMPLETION_FACTS = ("consequence", "cleanup-poststate")
 COMPLIANCE_EXPERIMENT_FACTS = (
@@ -195,8 +203,10 @@ def _validate_request(request: Any) -> list[str]:
     dimensions = dimensions if _string_list(dimensions, allow_empty=False) else []
     coherence_required = policy.get("requiredCoherenceFacts", []) \
         if isinstance(policy, Mapping) else []
-    coherence_required = coherence_required \
-        if _string_list(coherence_required) else []
+    coherence_required = _ordered_union(
+        COMPLIANCE_COHERENCE_FACTS,
+        coherence_required if _string_list(coherence_required) else [],
+    )
     for index, route in enumerate(routes):
         label = f"routes[{index}]"
         if not isinstance(route, Mapping):
@@ -564,8 +574,14 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
     required_route_facts = _ordered_union(
         COMPLIANCE_ROUTE_FACTS, policy["requiredRouteFacts"]
     )
+    required_environment_facts = _ordered_union(
+        COMPLIANCE_ENVIRONMENT_FACTS, policy["requiredEnvironmentFacts"]
+    )
+    required_coherence_facts = _ordered_union(
+        COMPLIANCE_COHERENCE_FACTS, policy["requiredCoherenceFacts"]
+    )
     environment_failures = _fact_failures(
-        environment["facts"], policy["requiredEnvironmentFacts"],
+        environment["facts"], required_environment_facts,
         "environment",
     )
     assessments: list[dict[str, Any]] = []
@@ -586,7 +602,7 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
         ))
         if len(route["forms"]) > 1:
             failures.extend(_fact_failures(
-                route["coherence"], policy["requiredCoherenceFacts"],
+                route["coherence"], required_coherence_facts,
                 "coherence",
             ))
         assessments.append({

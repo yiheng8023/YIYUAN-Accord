@@ -22,6 +22,7 @@ from .identity import (
     _bounded_git_bytes,
     _bounded_regular_bytes,
     _nonempty_string,
+    _strict_json_object,
     _string_list,
     active_tree_errors,
     authority_contract_errors,
@@ -44,19 +45,6 @@ SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
 ASSESSMENTS = {"planned", "verified", "blocked", "continuing"}
 PROGRAM_STATES = {"active", "ready", "blocked"}
-
-
-def _unique_object(pairs):
-    value = {}
-    for key, item in pairs:
-        if key in value:
-            raise ValueError(f"duplicate JSON key: {key}")
-        value[key] = item
-    return value
-
-
-def _reject_constant(value):
-    raise ValueError(f"non-finite JSON number: {value}")
 
 
 def _safe_file(root, locator, errors):
@@ -85,13 +73,7 @@ def _read_json(root, locator, errors):
             raise ValueError(f"JSON exceeds {MAX_JSON_BYTES} bytes")
         if read_state is not None:
             raise ValueError(f"JSON source is {read_state}")
-        value = json.loads(
-            raw.decode("utf-8"),
-            object_pairs_hook=_unique_object,
-            parse_constant=_reject_constant,
-        )
-        if not isinstance(value, dict):
-            raise ValueError("top-level JSON value is not an object")
+        value = _strict_json_object(raw.decode("utf-8"))
         return value
     except (OSError, UnicodeError, ValueError) as exc:
         errors.append(f"invalid JSON {locator}: {exc}")

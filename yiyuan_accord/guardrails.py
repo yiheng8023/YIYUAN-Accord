@@ -11,6 +11,7 @@ from .identity import (
     _exact,
     _nonempty_string,
     _safe_https_locator,
+    _strict_json_object,
     _string_list,
 )
 
@@ -463,8 +464,8 @@ def activation_mechanism_errors(
     if path is None or path.is_symlink() or not path.is_file():
         return errors + [f"{prefix} activation mechanism file is unsafe"]
     try:
-        value = json.loads(_owned_text(path))
-    except (json.JSONDecodeError, OSError, UnicodeError):
+        value = _strict_json_object(_owned_text(path))
+    except (OSError, UnicodeError, ValueError):
         return errors + [f"{prefix} activation mechanism is unreadable"]
     matcher = (
         "startup|resume|clear|compact"

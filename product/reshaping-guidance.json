@@ -1614,7 +1614,7 @@
     "firstSlice": "Resource stewardship is the first corrected Agent-execution-subdomain slice: it recalls the historical attribution and release boundary as L8 and GT-12, adds current official capability discovery and dynamic native-first routing, and leaves the old preflight, generic Skills and unproven controller design in history. Process-loss control is not a new adjacent feature but a recalled original pre-Accord Agent-execution mission: current GT-07 and GT-11 must preserve the latest demand and corrections through goal, authority, route, implementation, evidence, acceptance and final claim without requiring a real carrier transition when the live carrier is healthy. Runtime machinery remains evidence-gated."
   },
   "wholeSystemBalanceReview": {
-    "status": "active-remediation-pending-reacceptance",
+    "status": "completed-reaccepted-independent-review-active",
     "purpose": "Expose coupled weak links and tradeoffs before candidate formation, then drive minimum justified remediation and affected-surface reacceptance without turning a checklist or average score into product truth.",
     "reviewSequence": [
       "bind-current-goal-authority-candidate-scope-versioned-claim-scoped-baseline-target-counterfactual-evidence-cutoff-confounders-and-invalidation-triggers",
@@ -1667,15 +1667,15 @@
       "residual-risk-claim-limit-and-recheck-trigger"
     ],
     "activeProjection": {
-      "auditCut": "f898ebd6c14580fb9236cd01440b88314b3c2fab",
-      "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#dynamic-responsibility-retirement-rebaseline-at-f898ebd",
-      "dominantBlocker": "future-exact-source-complete-representative-value-for-a-genuine-gap-including-dynamic-responsibility-scoped-retirement",
+      "auditCut": "cb11759362217dee4ff08aa43db75046bd63c651",
+      "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#system-coherence-calibration-after-the-continuity-and-capability-view-corrections",
+      "dominantBlocker": "independent-review-findings-before-future-exact-candidate-formation",
       "remediation": {
-        "BAL-01": "implemented-pending-reacceptance",
-        "BAL-02": "implemented-pending-reacceptance",
+        "BAL-01": "implemented-and-deterministically-reaccepted",
+        "BAL-02": "implemented-and-deterministically-reaccepted",
         "BAL-03": "one-pair-no-observed-harm-not-firing-effect-or-value-proof",
         "BAL-04": "paired-no-add-calibration-complete-genuine-unclosed-responsibility-still-required",
-        "BAL-05": "pure-data-dynamic-retirement-contract-implemented-pending-source-complete-GT-19-and-global-reacceptance"
+        "BAL-05": "pure-data-dynamic-retirement-sequence-source-complete-and-reaccepted-live-form-lifecycle-still-unknown"
       },
       "graphRule": "Project only this cut, blocker relations and selected remediations; refresh on invalidation and never precompute host-model-tool-context products."
     },
