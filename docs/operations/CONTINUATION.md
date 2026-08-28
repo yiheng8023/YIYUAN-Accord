@@ -39,25 +39,48 @@ Then read, in order:
   at exact SHA `24cf9f3750ecd700944988e81a519db54b67b8e8`. Its lightweight tag
   resolves directly to that commit and remains immutable. Later `main`
   documentation or maintenance does not change the released package.
-- The saved `main` checkout now carries a locally verified, unreleased v3.1.0
-  repository candidate. Its hosted, human, tag and public-release gates remain
-  unperformed and separately authorized.
-  Its earliest correction boundary is
-  `product/reshaping-guidance.json#/boundedAutonomy`: Accord is not defined as a
-  capability set difference. It derives the smallest task-relevant graph of
-  outcome obligations and live relations, then closes unfulfilled or unreliable
-  relations through the lowest-burden feasible authorized path. Capability gaps
-  remain one local diagnostic view. No v3.1.0 tag or Release exists, and no
-  earlier tag may be moved.
+- Exact revision `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a
+  historically verified, unreleased v3.1.0 baseline. Its local, independent,
+  GitHub Actions and condition-fit Cloud results remain bounded facts, but the
+  later accountable product consensus superseded its `ready` state from
+  `product/constitution.json#/purpose,/successDefinition,/productBoundary,/evolutionPolicy`.
+  It is not the current candidate and grants no tag or Release authority.
+- The saved `main` checkout now carries an active, intentionally incomplete
+  self-bootstrapping feasibility and core-shaping program. Accord remains a context-adaptive
+  collaboration closure rather than a capability set difference, but the new
+  product target is broader: complete bounded self-bootstrapping across
+  environment sensing, outcome and authority binding, reuse or acquisition,
+  composition or authorship, execution, verification, learning, self-evolution,
+  rollback, continuity, resource release and retirement. Self-evolution is one
+  component; plugin, Hook, runtime or any other product form remains a dynamic
+  route variable. One form may close a bounded result and an open-ended set of
+  replaceable forms may cooperate, but shared outcome, authority, evidence and
+  lifecycle contracts—not a centralized carrier—provide system coherence. No
+  v3.1.0 tag or Release exists, and no earlier tag may be moved.
 - The major version records the incompatible correction from a runtime-free
   thin-contract premise to a small portable kernel plus an adaptive,
   mechanism-neutral outcome-delivery system. Full release is not a universal
   correctness, cross-host equivalence, broad-field-value or production-safety
   claim.
-- At the tagged v3.0.1 SHA and the current local v3.1.0 repository candidate,
-  `program.status` is `ready`. The v3.1.0 task-time human authorization fields
-  remain unpopulated because repository content cannot self-attest an external
-  decision, hosted result, public mutation or cleanup.
+- At the tagged v3.0.1 SHA, the released program remains historical `ready`
+  evidence. On current moving `main`, `program.status` is `active`, the global
+  rebaseline, bounded P0-P3 feasibility/reuse study and complete
+  self-bootstrapping semantic model and environment-admission design are
+  complete. The representative/longitudinal evaluation design is complete but
+  unexecuted. The P4 product-form-neutral synthetic vertical slice is complete
+  and admits only a deterministic side-effect-free plain-data reference core;
+  that one-interface reference core is implemented with source/observer/subject/
+  boundary bindings, observer/subject self-identity rejection and a matching
+  exact event subject; experiment evaluation and post-state also retain one
+  observer and boundary before the independently observed completion gate,
+  while source
+  authenticity remains outside the pure core; and
+  `replay-activation-effect-evidence-and-lifecycle` is active.
+  All eight criteria are intentionally unverified for the new target, and
+  repository candidate readiness is false. Release authorization remains
+  unrequested because publication is the last phase and repository content
+  cannot self-attest an external decision, hosted result, public mutation or
+  cleanup.
 - On the exact released SHA, canonical verification, both static host checks,
   all 19 product tests, Claude strict marketplace validation, actionlint, JSON,
   Markdown-link, identity, diff and residue checks passed. Independent
@@ -102,16 +125,23 @@ Then read, in order:
   not source identity; verify the actual marketplace ref and bytes.
   Current-session in-place hot reload and automatic per-message activation
   remain unproved.
-- During the current v3.1 work, `codex plugin list` reports the local Accord
-  plugin installed and enabled at `3.1.0`, and all six cached package files are
-  byte-identical to the current candidate. The task-start Skill catalog still
-  named a missing 3.0.1 cache path, so catalog exposure, manager state, cache
-  bytes, Hook trust and current-task activation remain distinct. The causal
-  refresh event and current-session hot reload were not observed.
-- `claude plugin list` reports the public Accord `3.0.1` package installed and
-  enabled. Claude Code 2.1.247 strictly validates the candidate v3.1.0 manifest,
-  but the candidate was not installed or behavior-tested; the current
-  third-party model route is not presented as native Claude-model evidence.
+- On 2026-08-28, read-only host inventory reported Codex CLI 0.150.1 with
+  `yiyuan-accord-codex` 3.1.0 installed and enabled alongside bundled,
+  primary-runtime and curated plugins. It reported Claude Code 2.1.247 with
+  public `yiyuan-accord-claude` 3.0.1 installed and enabled alongside multiple
+  official plugins, including persistent-state and Hook-capable extensions.
+  These are composed environments, not official-clean or no-Accord baselines.
+  Do not alter live plugin configuration merely to manufacture a comparison;
+  use disposable isolation when confounding can change the decision. Plugin
+  listing proves declared installation and enablement only, not Hook firing,
+  activation, behavior, value or absence of interference.
+- Both repository Skills and the installed 3.1.0 Codex Skill still contain the
+  superseded scalar phrase `expected outcome fitness minus` total costs. The
+  current semantic model instead requires hard admission, lifecycle Pareto
+  pruning, context-derived constraints and equivalent-fit reuse tie-breaking.
+  Treat this as explicit downstream projection drift for the later
+  implementation-and-replay stage; do not hot-mutate either composed live host
+  or treat the older phrase as current model authority.
 - That fresh Codex carrier also reported non-blocking host warnings that manifest
   icon paths containing `..` were ignored. The Skill loaded and activated, so
   this is a visual-metadata compatibility issue for a later exact-SHA patch, not
@@ -119,12 +149,10 @@ Then read, in order:
 - GT-07 (`carrier-fitness-with-unknown-capacity`), GT-11
   (`adaptive-agent-owned-repository-repair`), GT-12
   (`bounded-resource-stewardship-and-reclaim`) and GT-13
-  (`context-adaptive-collaboration-closure`) are the required current v3.1
-  representative tasks. The current Codex-local observations bind the exact
-  candidate Codex
-  Skill, Golden Task, evaluation contract, independent source/poststate and
-  one complete public source record. All four bounded tasks or workspaces pass. GT-13 is a
-  single-arm dogfood result, not comparative population evidence. GT-07 held
+  (`context-adaptive-collaboration-closure`) remain required regression tasks.
+  Their historical Codex-local observations bind the exact v3.1 baseline and
+  pass only those bounded tasks or workspaces. GT-13 is a single-arm dogfood
+  result, not comparative population evidence. GT-07 held
   the source until independent
   destination verification; GT-12 must distinguish identity, ownership, lease
   and state, use minimum sufficient admission, preserve shared or unknown
@@ -136,6 +164,14 @@ Then read, in order:
   exclusion even though the fresh v3 Codex-local GT-07 independently verified
   exact fixture post-state. Historical evidence is preserved against its
   versioned task contract rather than rewritten to match the current task.
+  GT-14 through GT-18 now have a machine-checkable design but no current
+  behavior evidence: environment provenance and isolation; feasibility and
+  reuse-before-build; minimum-form capability bootstrap; global consensus
+  impact reconciliation; and a four-episode longitudinal sequence covering
+  baseline, rejected regression, accepted net improvement and later
+  invalidation with rollback, replacement or retirement. All nine tasks must
+  bind any future exact semantics and package bytes before a candidate can
+  become ready.
 - One context-isolated Claude Code CLI session loaded the exact tagged plugin
   through `--plugin-dir`, exposed and activated the shared Skill with tools
   disabled, and left no persistent session or temporary clone. The actual route
@@ -170,11 +206,16 @@ Then read, in order:
   superseded pre-resource GT-11 evidence files, leaving three expected slots.
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
-- The v3.1 candidate guardrail permits at most 78 tracked files and
-  260000 product-code-and-test bytes with at least five percent headroom. The
-  repository candidate adds one release note, two Hook files, one combined
-  source and four observations; these are outcome-bearing slots, not a growth
-  target.
+- The active development guardrail permits at most 80 tracked files and
+  312000 product-code-and-test bytes with at least five percent headroom and
+  three tracked-file slots. This bounded adjustment admits the feasibility
+  record, one deep pure-data `reconcile_closure` module and its interface
+  regression, including the review-required source-bound independence and
+  matching experiment-poststate gates; it is not advance allowance for a
+  Runtime, adapter, state layer or future mechanism. The historical v3.1 baseline added one release note,
+  two Hook files, one combined source and four observations. The new program
+  adds no implementation merely to consume the remaining budget; every future
+  mechanism must pay rent.
 - The release sequence completed in its declared order for the unchanged exact
   SHA: repository candidate; exact local verification and independent review;
   push; Ubuntu, Windows and macOS Actions plus a condition-fit Codex Cloud
@@ -186,8 +227,8 @@ Then read, in order:
 
 ## Product direction
 
-Keep a small portable reliability kernel and restore a complete adaptive
-outcome-delivery system. Host, model route, version, extension ecosystem,
+Keep a small portable reliability kernel and develop a complete bounded
+self-bootstrapping outcome-delivery system. Host, model route, version, extension ecosystem,
 Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier,
 code topology and conversation topology are dynamic variables or possible
 mechanisms, not portable product identity and not permanent prohibitions.
@@ -207,9 +248,19 @@ The target experience is near-zero avoidable user orchestration:
 - healthy native capability is used when sufficient;
 - compliant official, maintained, composed or bounded authored routes remain
   available when native capability is insufficient;
+- feasibility research, prior failure recovery and existing-wheel review occur
+  before architecture commitment or implementation;
+- the current environment and Accord's own installation or activation state are
+  observed, provenance-bound and isolated when they could confound a claim;
+- product form follows required effect, authority, latency, durability,
+  isolation, recovery and total lifecycle cost; neither plugin sufficiency nor
+  persistent-Runtime necessity is presumed, and multi-form flexibility must
+  remain observable, bounded and verifiable;
 - activation is context-tailored, with no-op as a passing result;
 - failure degrades or recomputes the route and preserves bounded evidence;
-- learning informs fitness and retirement but never grants authority.
+- learning informs fitness and retirement but never grants authority;
+- self-evolution uses bounded full-vector keep/discard or rollback experiments
+  and remains one component of complete self-bootstrapping.
 
 ## Dynamic index boundary
 
@@ -230,20 +281,56 @@ cost is justified.
 
 ## Ordered work disposition
 
-The current machine authority is `product/program.json`. Its seven v3.1
-repository-shaping stages are completed locally:
+The current machine authority is `product/program.json`. It has one active
+increment and one active work item. Its ordered work is:
 
-1. `model-context-adaptive-collaboration-closure`.
-2. `refresh-current-host-capability-evidence`.
-3. `select-first-representative-collaboration-closure`.
-4. `implement-minimum-replaceable-closure-mechanism`.
-5. `replay-noop-help-correction-authority-resource-and-lifecycle`.
-6. `replay-condition-fit-hosts-and-clients`.
-7. `independent-review-and-form-exact-v31-candidate`.
+1. `rebaseline-product-and-consensus-impact-map` — completed after full local
+   structural reconciliation.
+2. `conduct-self-bootstrapping-feasibility-and-reuse-study` — completed. The
+   primary-source matrix, adoption ledger and P0-P4 logic results are
+   `research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md`;
+   they admit only the minimum pure-data reference core, not a live mechanism,
+   durable runtime, behavior claim or release.
+3. `model-complete-self-bootstrapping-core` — completed from the admitted
+   feasibility evidence. Its machine-checkable model defines 12 entities, 16
+   graph-aligned relations, independent observation facets, hard admission,
+   Pareto-context selection, multi-form coherence, bounded evolution,
+   continuity, 12 invariants, five limits, ten degradation paths and eight
+   stress scenarios without claiming implemented behavior.
+4. `design-environment-isolation-and-adaptive-admission` — completed as a
+   machine-checkable design contract. One bounded claim binds one
+   provenance/freshness-scoped composition; five arm kinds, a five-level
+   minimum-sufficient isolation ladder, independent evaluator and treatment
+   rules, privacy boundaries, cleanup/invalidation contracts, five limits and
+   eleven stress scenarios prevent self-attested native baselines. This is not
+   implemented sensing, isolation, comparison behavior or value evidence.
+5. `define-representative-and-longitudinal-evaluation-suite` — completed as
+   design, not behavior. It distinguishes one-episode representative cases from
+   minimum-four-episode longitudinal sequences; defines ten non-compensating
+   acceptance dimensions, counterfactual-derived comparison eligibility, exact
+   evidence and carrier bindings, independence/privacy/sampling/stop rules and
+   a GT-14 through GT-18 obligation matrix; and gives every new task an oracle,
+   counterexamples and claim ceiling.
+6. `prototype-product-form-neutral-vertical-slices` — completed. The disposable
+   P4 fixture selected the minimum composition for an observed continuity gap,
+   no-op when the native whole loop was observed, rejected plugin enablement as
+   effect, rolled back a lifecycle-dominated persistent controller and failed
+   closed on cleanup residue. This is synthetic logic evidence only.
+7. `implement-minimum-self-bootstrapping-reference-core` — completed as the
+   deterministic, side-effect-free, policy-driven `reconcile_closure` deep
+   module. Its 20/20 working-tree product tests are conformance only, not live
+   behavior or value evidence.
+8. `replay-activation-effect-evidence-and-lifecycle` — active. It must bind
+   fresh isolated environment, adapter, invocation, execution, independent
+   consequence, evolution/rollback, resource, cleanup and claim evidence.
+9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — pending.
+10. `independent-review-and-form-future-exact-candidate` — pending.
 
-The v3.1 hosted, named-human, tag, Release and post-release cleanup gates remain
-unperformed. They may run only in the declared order on one unchanged exact
-revision.
+The release procedure is dormant. A future semantic version, exact candidate,
+hosted checks, named-human decision, tag, Release and post-release cleanup may
+be considered only after all ten core stages complete; they then run in their
+declared order on one unchanged future revision. The previous push, Actions and
+Cloud results do not qualify changed authority or future behavior bytes.
 
 The following 13-step chain is the immutable v3.0.1 historical disposition.
 Its external gates completed for the tagged v3.0.1 SHA; it is retained only as

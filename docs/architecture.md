@@ -1,36 +1,47 @@
 # Architecture
 
 YIYUAN Accord combines one small portable kernel with an adaptive,
-mechanism-neutral outcome-delivery system. The 2026-08-25 direction is
-revisable guidance. Its active authority has completed the first remapping and
-adaptive vertical-slice replay. The v3 package surfaces are the current
-released reference projections; preview.2 remains an unreleased historical
-checkpoint.
+mechanism-neutral and product-form-neutral outcome-delivery system. The active
+authority is no longer a release-ready v3.1 plan: bounded P0-P3 feasibility
+research, semantic and isolation design, evaluation design and the P4
+product-form-neutral vertical slice are complete. P4 admits only the minimum
+deterministic, side-effect-free plain-data reference core, whose implementation
+is now complete; fresh isolated activation-to-effect and lifecycle replay is
+active. The implementation does not admit a Runtime, durable state layer or live behavior
+claim. The exact v3.1 package checkpoint
+remains bounded historical evidence; public v3.0.1 remains the installed
+release reference, and preview.2 remains an unreleased historical checkpoint.
 
 ~~~text
-latest bound user goal and corrections
+latest bound goal, consensus and corrections
                 |
                 v
  portable kernel + scoped authority and acceptance
                 |
                 v
- durable semantic JSON + live environment snapshot
+ feasibility research + existing-wheel adoption ledger
                 |
                 v
-       derived capability/route graph
+ composed-environment provenance + isolation decision
+                |
+                v
+ durable semantic JSON + live observation + derived route graph
         /          |          \
        v           v           v
  native route  maintained    bounded composed or
                extension      authored mechanism
                 |
                 v
- authorized execution across local/client/cloud carrier
+ minimum sufficient product form and authorized execution
                 |
                 v
- effect observation -> reconciliation -> recovery/cleanup
+ declaration -> activation -> execution -> consequence -> evidence
                 |
                 v
- fitness, regression and retirement inputs
+ governed learning/evolution -> keep, rollback, release or retire
+                |
+                v
+ global reconciliation across dependent surfaces
 ~~~
 
 The arrows mean dependency, not automatic authority promotion. Reports,
@@ -57,7 +68,7 @@ K1–K5 are the product interface:
 
 H1–H10 constrain how a host projection admits current official guidance,
 native capability, effective observation, unknown state, drift, verification,
-user burden, host-specific detail and retirement. L1–L7 are regression
+user burden, host-specific detail and retirement. L1–L8 are regression
 standards distilled from the project's two-month trial history.
 
 In schema v3 these identifiers and their full current statements live in
@@ -65,6 +76,138 @@ product/constitution.json. `product/reshaping-guidance.json` records the current
 accepted but revisable reshape and dynamic-index direction. Derived prose may
 explain them but cannot silently redefine them. These are current source
 locations, not an eternal ontology or permanent authority-file count.
+
+## Complete bounded self-bootstrapping
+
+Self-bootstrapping is the bounded product ability to establish and improve the
+minimum sufficient means for the current collaboration outcome. It includes:
+
+- sensing environment composition, state, capacity and Accord's own exposure;
+- binding the latest outcome, consensus, authority and completion condition;
+- discovering and evaluating native, official, maintained and composable
+  capability before authorship;
+- allocating named responsibilities to plugin, Skill, Hook, protocol, library,
+  runtime, service, client, cloud, composition, an evidence-selected multi-form
+  route or no additional artifact from required closure properties rather than
+  identity;
+- executing and independently verifying activation, consequence, burden,
+  interference, post-state and residue;
+- learning through an observed authorized carrier and evolving only through a
+  bounded keep/discard or rollback experiment; and
+- degrading, releasing or retiring mechanisms that fail or no longer pay their
+  lifecycle cost.
+
+Self-evolution is one operator inside that loop. It is not the whole core and
+cannot optimize a single metric beyond outcome, authority, evidence, recovery,
+interference and lifecycle constraints.
+
+Product-form neutrality is not product-form indifference. A Skill or plugin is
+a useful projection but is not assumed to close persistence, cross-host
+continuity, independent observation or full lifecycle responsibilities. Those
+gaps must be demonstrated rather than presumed. Conversely, “systematic” does
+not imply an Accord-owned runtime or state store: one form may close a bounded
+outcome, several replaceable forms may cooperate, and coherence comes from the
+shared outcome, authority, evidence and lifecycle contracts.
+
+The current semantic model is
+`product/reshaping-guidance.json#/selfBootstrappingCore/semanticModel`. Its unit
+of reasoning is a context-bound outcome obligation and only the current
+relations needed to close it. Responsibilities map many-to-many to no added
+artifact, one sufficient form or several replaceable forms; a multi-form route
+is admitted only under an explicit coherence contract. Declaration,
+installation, enablement, activation, execution, consequence, evidence and
+cleanup post-state remain independent tri-state observations rather than a
+linear progress enum.
+
+Route selection first applies closure, availability, authority, independent
+verification and hard task constraints. It then removes lifecycle-dominated
+routes, derives unresolved choices from the current context and uses no-op,
+native or maintained reuse only as a tie-breaker among equivalent-fit paths.
+The model records twelve invariants, five fundamental limits, ten degradation
+paths and eight counterexample scenarios. These are machine-checkable semantic
+conformance, not implemented behavior or value evidence.
+
+The P4-admitted reference core is the deep pure-data module
+`yiyuan_accord/closure.py`. Its only public interface is
+`reconcile_closure(request)`: one versioned request carries the current outcome,
+provenance-bound environment facts, task policy, open-ended route offers and
+ordered, source-bound observations; one JSON-serializable result returns admission failures,
+the Pareto frontier, an explicit selection or honest stop, experiment decisions,
+effect and cleanup facts, experiment lifecycle post-state, residue and a finite
+claim limit. Independent observations structurally bind source, observer,
+subject and isolation boundary and reject observer/subject self-identity; source
+authenticity and real separation remain adapter/evidence-layer obligations.
+Every subject must equal the event's route or experiment candidate, and an
+experiment's evaluation and post-state must keep the same observer and boundary.
+It
+performs no host discovery, I/O, installation, execution, storage or publication.
+
+The module does not encode a universal Accord workflow. Human authority,
+compliance, independent consequence verification and cleanup evidence remain
+non-bypassable; the task supplies and versions every other responsibility,
+condition, comparison dimension, contextual preference and experiment vector.
+Product forms are arbitrary data supplied by adapters. Multiple incomparable
+frontier routes remain `hold-unknown` unless current policy provides a bounded
+context preference; the implementation never invents a weighted score. This
+seam can therefore accept a plugin, native capability, local library, cloud
+carrier, authored mechanism or future form without changing the core, while a
+real adapter or mechanism still requires its own need, activation, effect,
+rollback, cleanup and retirement evidence.
+
+Feasibility comes first. Primary sources, prior Accord failures and existing
+wheels produce a feasibility matrix, adoption ledger, risk register and bounded
+probe plan. Architecture commitment and implementation are admitted only after
+the relevant sub-capability is feasible or conditionally feasible under stated
+conditions. Unknown or failed premises narrow or stop the route.
+
+Every real host is a composed environment. The current Codex and Claude Code
+hosts already have Accord and other extensions enabled, so they are not
+official-clean or no-Accord baselines. Evidence records that composition and
+uses official-clean, disposable isolated-minimal, current-enabled,
+isolated-no-Accord or candidate-enabled-isolated arms only when the named
+decision needs them. Installation and enablement remain distinct from
+activation, execution, consequence and evidence.
+
+Environment admission is claim-scoped rather than host-scoped. One admission
+binds a named claim to one provenance-bound composition and freshness window.
+Its snapshot records only permitted metadata for the host and client, model
+route, tools, extensions, instructions, configuration, authority boundaries,
+network, workspace and revision, persistent state, resources and Accord
+exposure. Credential content, session or conversation content, unrelated
+persistent state, secret-derived fingerprints and silent continuous telemetry
+are outside the observation boundary; unavailable facts stay `unknown`.
+
+A confounder is material only when it can change the current route,
+consequence, evaluator independence, burden, lifecycle or claim. The absence of
+an observed confounder means only "none observed within this scope." Accord
+does not permanently label a machine clean or contaminated. It selects the
+least costly boundary that removes the material difference, holds it constant,
+measures it independently or narrows the claim: current-composition scoping,
+synthetic or task fixtures, isolated configuration/state/workspace/process,
+disposable system boundaries, then independent external evaluation. Isolation
+cannot create missing authority, observability, professional judgment or
+rollback.
+
+Comparison arms answer a named counterfactual rather than satisfying a fixed
+A/B ceremony. A current-composition behavior claim can use a single arm when
+it makes no native or causal inference. A native or no-Accord claim needs an
+independently observed appropriate control. An incremental Accord-effect claim
+needs matched isolated-no-Accord and exact-candidate arms, with other material
+dimensions held or disclosed and effect and cleanup observed outside the
+treatment boundary. An Accord-enabled arm cannot attest its own native
+baseline; an isolated-minimal container is not automatically official-clean;
+and the candidate cannot change the baseline, evaluator, tolerance or
+post-state. Non-equivalent arms remain separate scoped observations.
+
+Every admitted arm declares cleanup before execution. Only attributable,
+task-exclusive isolation resources may be released automatically; foreign,
+shared and unknown state is preserved. Composition, treatment identity,
+evaluator, claim, freshness, effect conflict or cleanup failure invalidates the
+dependent admission. The structured contract contains five arm kinds, a
+five-level isolation ladder, hard admission gates, eight invalidation classes,
+five fundamental limits and eleven stress scenarios. These are deterministic
+design conformance, not implemented environment sensing, comparative behavior
+or product value evidence.
 
 ## One deep verification seam
 
@@ -232,9 +375,38 @@ test variables or adapters, not identity claims.
 ## Evaluation
 
 evals/golden-tasks.json contains representative help, no-op, authority,
-correction, proof-proxy, continuity, capability, report-handling, resource
-stewardship and cleanup
-cases. A task declares required and prohibited behaviors before execution.
+correction, proof-proxy, continuity, capability, report-handling, environment,
+resource and cleanup cases. A task declares required and prohibited behaviors
+before execution.
+
+The self-bootstrapping suite has two distinct units. A representative case is
+one bounded episode selected by outcome-obligation and failure-mode coverage.
+A longitudinal sequence has at least four ordered episodes: baseline, mandatory
+rejection and rollback of a proxy-improving regression, retention of one net
+improvement after independent post-state, and a later material invalidation
+that forces recomputation, rollback, replacement or retirement. Repeating one
+convenient fixture is neither longitudinal evidence nor population coverage.
+
+Every case uses a non-compensating ten-dimension acceptance vector: outcome,
+authority, evidence, privacy/trust/data/cost, human burden, interference,
+recovery, resources/residue, continuity/consensus and lifecycle/retirement.
+Each dimension is `pass`, `fail`, `unknown` or justified `not-applicable`.
+Unknown narrows the claim; a hard-gate failure cannot be averaged away; and a
+candidate is kept only when at least one decision-relevant dimension improves,
+none regresses outside tolerance and all hard gates plus effect and cleanup
+post-state pass independently. No universal weighted score is product
+authority.
+
+Comparison eligibility comes from the named counterfactual. Environment arms
+use the composed-environment admission contract; no-build, reuse, composition
+and authorship are route candidates rather than environment arms. A single
+current-composition case cannot claim causal or native value. GT-14 through
+GT-18 each bind a case type, oracle, counterexamples and claim ceiling, while
+the coverage matrix assigns environment admission, feasibility/reuse,
+minimum-form bootstrap, global consensus reconciliation and longitudinal
+evolution obligations. The suite design is machine-checkable but has not been
+executed and is not behavior or value evidence.
+
 Observations record Agent actions, human actions, effects, residue and claim
 limits independently of the model's own verdict. Each release observation
 binds the exact Golden Task digest, the evaluation protocol and burden metric

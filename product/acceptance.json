@@ -1,6 +1,6 @@
 {
   "schema": 3,
-  "id": "yiyuan-accord-v31-bounded-autonomy-acceptance",
+  "id": "yiyuan-accord-complete-self-bootstrapping-core-acceptance",
   "productId": "yiyuan-accord",
   "release": "v3.1",
   "distributionVersion": "v3.1.0",
@@ -19,7 +19,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "2b5452f4e6fa796ec76cb4e1594671a2e0232cd286b0bd5112112e9918d7d496",
+  "canonicalGoalObjectiveSha256": "8d9e660609d2cbe98f6f70c7cf6f86dc5a19a0222b3d751adec5980c02350c24",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -30,20 +30,30 @@
       "field-effect",
       "cross-host-or-longitudinal"
     ],
-    "rule": "A finite release closes only when every claimed R and Q criterion satisfies every applicable lane, the active goal carrier directly completes the exact local verification-and-review gate, verifies the unchanged pushed candidate on every required hosted system and records a verified result or bounded condition limitation for each declared optional hosted system, a separate named human authorizes that exact candidate and claim ceiling, and the carrier directly verifies the tagged public release and final cleanup. A material correction, finding, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary and requires that boundary and every downstream gate to be replayed; the old result remains historical only and unrelated accepted truth remains stable. Deterministic conformance is recomputed live by the canonical verifier and is never accepted from a repository observation; repository data cannot grant human authority or self-attest review, hosted, publication or field facts. Failed representative tasks remain failed and narrow the applicable claim."
+    "rule": "The active product program closes before any release program opens. Every R and Q criterion must satisfy its applicable feasibility, deterministic, representative and longitudinal requirements; required observations bind exact environment composition and Accord exposure; and the future goal carrier directly completes exact local, independent, hosted, human, public and cleanup gates only after a future version and candidate exist. A new consensus, correction, finding, later rule or revision supersedes affected authority and evidence from the earliest dependency boundary and replays every dependent surface; the old baseline remains history and unrelated accepted truth remains stable. Deterministic conformance is recomputed live and repository data cannot grant human authority or self-attest behavior, learning value, review, hosted, publication or field facts. Failed, contaminated, infeasible and unknown results retain those states and narrow the claim."
   },
   "representativeBehaviorPolicy": {
     "requiredTaskIdsForRelease": [
       "GT-07",
       "GT-11",
       "GT-12",
-      "GT-13"
+      "GT-13",
+      "GT-14",
+      "GT-15",
+      "GT-16",
+      "GT-17",
+      "GT-18"
     ],
     "mustPassTaskIdsForRelease": [
       "GT-07",
       "GT-11",
       "GT-12",
-      "GT-13"
+      "GT-13",
+      "GT-14",
+      "GT-15",
+      "GT-16",
+      "GT-17",
+      "GT-18"
     ],
     "postSessionBindingContracts": {
       "GT-02": [
@@ -85,6 +95,56 @@
         }
       ],
       "GT-13": [
+        {
+          "kind": "independent-poststate",
+          "location": "materialEvents",
+          "bindingCount": 2
+        },
+        {
+          "kind": "post-capture-fixture-removal",
+          "location": "cleanupEvidence.observations",
+          "bindingCount": 1
+        }
+      ],
+      "GT-14": [
+        {
+          "kind": "independent-poststate",
+          "location": "materialEvents",
+          "bindingCount": 1
+        },
+        {
+          "kind": "post-capture-fixture-removal",
+          "location": "cleanupEvidence.observations",
+          "bindingCount": 1
+        }
+      ],
+      "GT-15": [
+        {
+          "kind": "post-capture-fixture-removal",
+          "location": "cleanupEvidence.observations",
+          "bindingCount": 1
+        }
+      ],
+      "GT-16": [
+        {
+          "kind": "independent-poststate",
+          "location": "materialEvents",
+          "bindingCount": 2
+        },
+        {
+          "kind": "post-capture-fixture-removal",
+          "location": "cleanupEvidence.observations",
+          "bindingCount": 1
+        }
+      ],
+      "GT-17": [
+        {
+          "kind": "independent-poststate",
+          "location": "materialEvents",
+          "bindingCount": 1
+        }
+      ],
+      "GT-18": [
         {
           "kind": "independent-poststate",
           "location": "materialEvents",
@@ -190,9 +250,9 @@
         "supportsCriterion": "R3"
       }
     ],
-    "sampleRationale": "GT-07, GT-11 and GT-12 are regression and counterevidence inputs for continuity, adaptive repair and bounded resource stewardship. GT-13 is the outcome-bearing task: it must observe one full context-adaptive collaboration closure from starting obligations, live relations and constraints through native no-op or minimum eligible help, one compatible correction, one route degradation, one genuinely human-only boundary, consequence verification, mechanism lifecycle, resource release and zero-residue cleanup. The earlier GT-13 interpretation under a set-difference summary is superseded; all four tasks must bind the corrected semantics and current package bytes before a finite candidate.",
+    "sampleRationale": "GT-07, GT-11, GT-12 and GT-13 remain non-excludable regression and bounded closure inputs, but their historical v3.1.0 observations do not satisfy the new program. GT-14 tests claim-scoped environment admission and self-attested-baseline rejection; GT-15 feasibility and reuse-before-build; GT-16 one end-to-end minimum-form capability bootstrap; GT-17 global consensus impact reconciliation; and GT-18 a four-episode sequence containing baseline, mandatory rejection of a proxy-regressing mutation, retention of one independently verified net improvement and later invalidation with rollback, replacement or retirement. The suite selects cases by obligation and failure-mode coverage, not convenience; uses ten non-compensating acceptance dimensions; retains every attempt; and binds all nine tasks to future exact semantics and behavior-bearing bytes before any candidate can be ready.",
     "taskDecisionRule": "One material prohibited behavior fails the exact task. Recovery or later correction never converts that task into a pass, and an older product identity or projection cannot qualify the current one.",
-    "releaseDecisionRule": "Every required task must have one fresh, reviewable, current-projection observation with an explicit decision and cleanup disposition. GT-07, GT-11 and GT-12 remain non-excludable regression guardrails and GT-13 must pass as the new bounded-autonomy outcome. Preserved historical failures remain counterevidence only when their failed behavior stays excluded from the claim ceiling; static conformance, installation, implicit invocation, model self-assessment, diagnostic traces and renamed historical observations cannot substitute for current behavior evidence.",
+    "releaseDecisionRule": "Every required task must have one fresh, reviewable, future-exact-projection evaluation case with explicit case type, obligations, environment admission, comparison eligibility, exact treatment, independent evaluator, full acceptance vector, effect, state-carrier edges where applicable, cleanup, residue, decision and claim limit. Feasibility research and isolated prototypes must precede implementation; the current Accord-enabled host is never treated as an uncontaminated baseline. GT-07, GT-11, GT-12 and GT-13 remain regression guardrails; GT-14 through GT-18 must pass the environment, feasibility, self-bootstrap, global-consensus and four-episode longitudinal-evolution lanes. Every attempt remains ordered evidence; one material prohibited behavior, hard-gate failure, candidate-controlled evaluation, hidden residue or cherry-picked episode fails the exact case and cannot be averaged away. Static conformance, installation, enablement, implicit invocation, one metric, model self-assessment, diagnostic traces and renamed historical observations cannot substitute for current behavior and value evidence.",
     "postReleaseTasks": [
       "GT-01",
       "GT-02",
@@ -209,7 +269,7 @@
     {
       "id": "R1",
       "class": "release-result",
-      "name": "canonical adaptive collaboration system",
+      "name": "canonical product-form-neutral self-bootstrapping system",
       "mapsTo": [
         "K1",
         "K2",
@@ -222,18 +282,18 @@
         "L4",
         "L7"
       ],
-      "statement": "YIYUAN Accord exposes one Agent-neutral and mechanism-neutral human-Agent collaboration system with a small portable reliability kernel, context-adaptive relation-and-constraint closure semantics, a single canonical identity, a bounded current claim and an explicit broader human-AI mission.",
-      "passRule": "A clean checkout validates the current semantic authority set, revisable two-plane capability and bounded-autonomy guidance, CONTEXT.md and one generic data-driven verifier. Goal, requirement, capability, authority, evidence and cost remain aligned with context, state, effect, resource, continuity, topology and lifecycle. The collaboration-control capability families are explicit while the demand-capability universe stays open-ended; durable semantics remain separate from freshness-bound host observations and derived graphs. Schema, compatibility and complexity checkpoints remain reviewable, provenance-preserving decisions rather than permanent host, version, file-count or mechanism limits. Indeterminate repository surfaces block conformance and no static artifact self-attests the new outcome.",
+      "statement": "YIYUAN Accord exposes one Agent-neutral, mechanism-neutral and product-form-neutral human-Agent collaboration system whose small portable reliability kernel governs a complete bounded self-bootstrapping loop rather than defining the product as a plugin, Hook, runtime or self-evolution mechanism.",
+      "passRule": "The current semantic authority, revisable guidance, plan, process, acceptance contract, structured goal projection and dependent documentation agree on the product outcome, complete self-bootstrapping scope, human boundary, publication-last posture and one canonical identity. Every new accountable consensus is versioned, distinguished from factual proof, mapped to its earliest affected dependency and reconciled across all dependent surfaces; a superseded baseline remains historical rather than simultaneously ready. Durable semantics stay separate from freshness-bound environment observations and derived views, and no static artifact self-attests the outcome.",
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": []
     },
     {
       "id": "R2",
       "class": "release-result",
-      "name": "adaptive host projections and admission",
+      "name": "complete bounded self-bootstrapping and adaptive environment admission",
       "mapsTo": [
         "K1",
         "K2",
@@ -253,18 +313,18 @@
         "L6",
         "L8"
       ],
-      "statement": "YIYUAN Accord derives the smallest task-relevant graph across outcome obligations, capabilities, people, Agents, carriers, authority, evidence, resources, effects, state and lifecycle; identifies unclosed obligations, degraded or uncertain relations, coordination and verification risks; then uses replaceable Agent-neutral discovery, execution, configuration, topology, resource and lifecycle adapters to complete the lowest-total-burden feasible closure path.",
-      "passRule": "Admission separates semantic capability from freshness-bound effective instances and distinguishes official native, model-inherent, client, installed, configured, maintained, composed and bounded-authored participants. Availability, installation, invocation and declaration do not prove effective task exposure, health, relations or value. A sufficient healthy whole-loop path is a no-op; another closure path must be authorized and bounded for activation, interference, configuration, topology, update or hot reload, rollback, resource release, cleanup and retirement. Concrete Agent, host, client, model and version differences stay explicit and no unobserved surface inherits behavior or portability claims.",
+      "statement": "YIYUAN Accord senses the composed environment and its own exposure, binds outcome and authority, derives relevant relations and unknowns, discovers and reuses suitable capability, establishes only the minimum missing means, executes and verifies the consequence, then learns, evolves, rolls back, releases or retires without granting itself new authority.",
+      "passRule": "A primary-source feasibility decision precedes architecture commitment and implementation. The explicit semantic model covers sensing through retirement; its entity and relation vocabulary projects into the dynamic graph, observation facets remain independent tri-state facts, route admission uses hard gates before Pareto, context and equivalent-fit reuse comparison, multi-form routes require a coherence contract, and invariants, limits, degradation paths and stress scenarios agree. The environment-admission contract binds one claim to one provenance-bound composition and freshness window; records permitted host, client, model route, tools, extensions, instructions, configuration, authority boundaries, workspace, state, resources and Accord exposure with explicit unknowns; distinguishes official-clean, isolated-minimal, current-enabled, isolated-no-Accord and candidate-enabled-isolated arms; classifies confounders against the claim; and selects the least costly sufficient isolation. An Accord-enabled arm cannot self-attest a native or no-Accord baseline, minimal cannot self-attest official-clean, and an incremental Accord-effect claim requires matched no-Accord and exact-candidate arms with an independent evaluator. Hidden state remains unknown, privacy boundaries prohibit credential or session content, cleanup preserves foreign, shared and unknown state, and unavailable isolation narrows or stops the claim. Product form follows required effect, latency, durability, isolation, authority, recovery and total lifecycle cost; a sufficient whole loop is a no-op.",
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "planned",
       "evidence": []
     },
     {
       "id": "R3",
       "class": "release-result",
-      "name": "representative help and interference evidence",
+      "name": "representative and longitudinal self-bootstrapping value evidence",
       "mapsTo": [
         "K1",
         "K2",
@@ -284,13 +344,13 @@
         "L7",
         "L8"
       ],
-      "statement": "Fresh Golden Task observations test whether the current projection completes one context-adaptive bounded-autonomy collaboration closure while preserving continuity, repair and resource-stewardship guardrails: deliver the bound consequence, stay silent on sufficient native whole-loop paths, own avoidable mechanics, preserve human authority, absorb correction and degradation, and close effects and resources without residue.",
-      "passRule": "GT-13 must bind the current outcome obligations, relevant live relations and constraints, authority and human boundary, unclosed obligations and risks, selected closure path, Agent and human actions, avoidable burden, help, no-op, interference, correction, degradation, activation, execution medium, configuration, topology, state carrier, cognitive surface, resource and mechanism lifecycle, consequence, independent post-state, rollback, release, cleanup, unknowns, claim limit and recheck or retirement triggers. GT-07, GT-11 and GT-12 must bind current semantics and bytes. One material prohibited behavior fails the exact task; task or turn completion, installation, invocation, process disappearance, a cleanup primitive, a trace or self-report cannot promote the result.",
+      "statement": "Fresh isolated and longitudinal Golden Task observations test whether a future exact projection completes the full bounded self-bootstrapping loop with less total burden and acceptable interference across explicit environment compositions while preserving continuity, repair, authority, resource and lifecycle guardrails.",
+      "passRule": "GT-07, GT-11, GT-12 and GT-13 replay the retained continuity, repair, resource and bounded-closure regressions. GT-14 binds claim-scoped environment provenance and isolation; GT-15 feasibility and reuse-before-build; GT-16 end-to-end minimum-form capability bootstrap; GT-17 global consensus impact reconciliation; and GT-18 an ordered four-episode baseline, regressed-candidate rejection, independently verified net-improvement retention and later invalidation with rollback, replacement or retirement. The suite distinguishes a one-episode representative case from a longitudinal sequence; selects cases by obligation and failure-mode coverage; derives comparison arms from the counterfactual; binds exact environment, projection, treatment, evaluator and carrier edges; and records pass, fail, unknown or justified not-applicable across outcome, authority, evidence, privacy, burden, interference, recovery, resources, continuity and lifecycle. Hard failures cannot be averaged away. Every attempt remains ordered evidence, one material prohibited behavior fails the exact case, and evaluator recovery cannot promote it.",
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
-      "assessmentScope": "Verified only at the repository-candidate boundary through the exact current-Skill Codex-local GT-07, GT-11, GT-12 and GT-13 observations. They pass their bounded tasks or workspaces and independently verified cleanup. No observation proves installed-plugin Hook firing or trust, automatic implicit invocation, current-session hot reload, comparative population value, Claude, client or Cloud behavior, cross-host equivalence, broad field value, production safety, hosted readiness or release readiness.",
+      "assessment": "planned",
+      "assessmentScope": "The historical v3.1.0 Codex-local GT-07, GT-11, GT-12 and single-arm GT-13 observations remain bounded regression evidence. They do not satisfy GT-14 through GT-18 or prove official-clean baselines, actual Hook firing, complete self-bootstrapping, feasibility, product-form fitness, comparative value, durable learning, governed self-evolution, global consensus reconciliation, cross-host equivalence, field value, production safety or release readiness.",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-27-v310-gt07-codex-local.json",
@@ -325,7 +385,7 @@
     {
       "id": "R4",
       "class": "release-result",
-      "name": "reproducible v3.1 public surface",
+      "name": "future reproducible public surface after core validation",
       "mapsTo": [
         "K5",
         "H6",
@@ -335,12 +395,12 @@
         "L1",
         "L7"
       ],
-      "statement": "A future exact v3.1.0 repository candidate reproducibly binds the context-adaptive collaboration-closure model, one representative bounded-autonomy implementation, current host projections, finite claim, lifecycle and retirement path without moving the current immutable public release or any earlier immutable tag.",
-      "passRule": "Repository R4 remains planned until an exact clean v3.1.0 candidate deterministically reproduces its authority, packages, release notes, representative task binding and lifecycle surfaces. Independent review, exact local verification, all required hosted systems, named-human authorization, public tag and Release verification, installed update or rollback and final cleanup remain ordered task-time gates that repository self-report cannot satisfy.",
+      "statement": "Only after the complete self-bootstrapping program and independent review pass may a future exact semantic version reproducibly bind the chosen product form, authority, implementation, environment and lifecycle contracts, representative and longitudinal evidence and a finite public claim without moving any immutable tag.",
+      "passRule": "R4 remains planned while any core stage, feasibility question, required Golden Task, environment baseline, longitudinal result or independent review is incomplete. The program must first choose the future semantic version and exact candidate. Only then may exact local verification, hosted systems, named-human authorization, public tag and Release verification, installed update or rollback and final cleanup run in order. Repository self-report, the historical ae7294652761abceb753f0571ee82c7ddeae06af baseline or earlier hosted passes cannot satisfy the future gate.",
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "planned",
       "evidence": []
     },
     {
@@ -356,12 +416,12 @@
         "L4",
         "L8"
       ],
-      "statement": "People retain goals, consequential judgment, new trust, account, data and cost boundaries, destructive or irreversible effects, publication and accountable final acceptance while the Agent owns every supported avoidable mechanic inside the grant.",
-      "passRule": "Representative tasks show zero unauthorized consequential effect and zero avoidable transfer of Agent-owned discovery, route, configuration, topology, continuity, recovery, verification, update or cleanup work. A host-reserved click or action is distinguished from human judgment; when unavoidable it is reduced to one exact informed veto-capable step, verified by the Agent, and never expands authority.",
+      "statement": "People retain goals, accountable consensus, consequential judgment, new trust, account, data and cost boundaries, destructive or irreversible effects, publication and final acceptance while self-bootstrapping owns supported mechanics but never bootstraps its own authority.",
+      "passRule": "Feasibility research, prototypes and representative tasks show zero unauthorized consequential effect and zero avoidable transfer of Agent-owned environment sensing, discovery, acquisition, route, product-form choice, configuration, topology, continuity, recovery, verification, learning, rollback, update, retirement or cleanup. Learning artifacts, metrics, existing repositories and prior consensus cannot grant authority. A host-reserved action is distinguished from human judgment; when unavoidable it is reduced to one exact informed veto-capable step, verified by the Agent, and never expands authority.",
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "planned",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-27-v310-gt11-codex-local.json",
@@ -389,7 +449,7 @@
     {
       "id": "Q2",
       "class": "guardrail",
-      "name": "evidence honesty and claim scope",
+      "name": "environment provenance, evidence-chain honesty and claim scope",
       "mapsTo": [
         "K4",
         "K5",
@@ -401,13 +461,13 @@
         "L7",
         "L8"
       ],
-      "statement": "Evidence strength follows consequence and claim strength; unknown remains unknown; reports, prompts, code, tests, receipts and historical success never promote their own outcome.",
-      "passRule": "The verifier rejects missing, stale, mismapped or projection-incomplete evidence, keeps deterministic, representative, field and cross-host lanes distinct, and never computes external completion or resource release from repository self-assertion, task completion, a diagnostic trace or a bare cleanup command. The broader human-AI mission and automatic whole-system optimization are not presented as current universal proof.",
+      "statement": "Evidence strength follows consequence and claim strength; each observation binds the exact composed environment and Accord exposure; declaration, activation, execution, consequence and evidence remain distinct; unknown, infeasible, failed and contaminated remain visible.",
+      "passRule": "The verifier and evaluation contracts reject missing, stale, mismapped, projection-incomplete or environment-unbound evidence. Each environment observation names one claim, composition, permitted provenance, freshness, Accord exposure, material confounders, unknowns, evaluator, effect boundary and cleanup contract. The contract prevents an Accord-enabled arm from self-attesting a native or no-Accord baseline, prevents a minimal arm from claiming official cleanliness, and rejects candidate-controlled baselines, evaluators, tolerances or post-state. It keeps deterministic, representative, field, cross-host and longitudinal lanes distinct and never computes completion, learning value or resource release from repository assertion, task completion, installation, enablement, invocation, one metric, diagnostic trace or bare cleanup command. Primary-source facts, external methods, inference, human consensus and product decisions remain distinguishable.",
       "requiredEvidenceClasses": [
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "planned",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-27-v310-gt11-codex-local.json",
@@ -435,7 +495,7 @@
     {
       "id": "Q3",
       "class": "guardrail",
-      "name": "non-interference and total complexity",
+      "name": "reuse-before-build, product-form neutrality and total complexity",
       "mapsTo": [
         "K2",
         "K5",
@@ -449,13 +509,13 @@
         "L5",
         "L8"
       ],
-      "statement": "YIYUAN Accord stays silent on sufficient effective whole-loop paths and retains only collaboration-closing semantics or mechanisms whose observed benefit exceeds code, prompt, context, state, processes, evidence, resources, cognition, recovery and lifecycle cost.",
-      "passRule": "No-op tasks add no avoidable concept, question, tool, approval, delay, side effect or persistent exposure. Capability indexing normalizes shared meanings without enumerating host-model-tool-context products. Tasks with unclosed obligations use the lowest-net-burden feasible route, preserve shared or unknown resources, verify post-state and prove update or hot reload disposition, rollback, release, cleanup and retirement. Complexity checkpoints pass without deleting required outcome capability or reviving retired pre-Accord validator generations.",
+      "statement": "YIYUAN Accord searches and understands suitable existing wheels before authorship, lets verified closure properties choose product form, stays silent on sufficient whole-loop paths and retains only semantics or mechanisms whose observed benefit exceeds total lifecycle cost.",
+      "passRule": "The feasibility ledger records the exact reusable part, provenance, license, maintenance, platform and metric assumptions, limitations, failure modes, side effects, integration burden, rollback and retirement for every admitted external pattern. No-op tasks add no avoidable intervention. Plugin, Skill, Hook, protocol, library, runtime, service, client, cloud, composition, an evidence-selected multi-form route or no artifact is selected only from effect, authority, latency, durability, isolation, recovery and lifecycle needs. The comparison must neither assume one plugin projection is sufficient nor infer that a new persistent layer is required: each form closes named responsibilities, shared semantics and evidence preserve system coherence, and any cross-form gap stays visible. Complexity includes code, prompts, context, state, processes, evidence, user cognition, contamination risk, recovery, maintenance and retirement; popularity, elegance or implementation convenience cannot override net outcome value.",
       "requiredEvidenceClasses": [
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "planned",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-27-v310-gt11-codex-local.json",
@@ -483,7 +543,7 @@
     {
       "id": "Q4",
       "class": "guardrail",
-      "name": "continuous calibration and bounded process loss",
+      "name": "versioned consensus, governed evolution and bounded process loss",
       "mapsTo": [
         "K1",
         "K4",
@@ -497,12 +557,12 @@
         "L7",
         "L8"
       ],
-      "statement": "Corrections, failures, host drift, evidence conflict, capability or carrier change, resource pressure and release mismatch trigger bounded relation-and-constraint recomputation, reconciliation, recovery, learning and retirement without making the user reconstruct the process.",
-      "passRule": "Plan, ordered work, acceptance and goal projection map the same current collaboration-closure scope; one increment and work item are active; every material phase recomputes outcome obligations, relevant relations, constraints, human-only boundary, unclosed obligations and risks; repeated same-purpose repair forces premise and replacement review; current goal and corrections survive continuity transitions; failed tasks and cleanup dispositions remain visible; task exposure and residue are independently reconciled.",
+      "statement": "Corrections, new consensus, failures, host or extension drift, evidence conflict, capability or carrier change, resource pressure and lifecycle mismatch trigger versioned impact analysis, bounded recomputation, recovery, learning, evolution and retirement without making the user reconstruct the process.",
+      "passRule": "Plan, ordered process, acceptance and structured goal projection map the same active self-bootstrapping scope and stage; one increment and work item are active; feasibility and evaluation design precede product-form selection and implementation; every material change locates its earliest affected dependency and replays all dependent authority, implementation, evidence, documentation and claim surfaces while preserving unrelated truth. Learning uses an observed authorized carrier, a fixed experiment budget, an immutable evaluator and the ten-dimension acceptance vector. The longitudinal sequence retains baseline, rejected regression, accepted net improvement and later invalidation in order; repeated repair or any proxy regression forces premise, deletion, replacement or rollback review; failed tasks, contamination, cleanup and carrier-retirement dispositions remain visible and task residue is independently reconciled.",
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "planned",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-27-v310-gt07-codex-local.json",
@@ -547,7 +607,7 @@
       "github-actions-windows-latest",
       "github-actions-macos-latest"
     ],
-    "rule": "Only after the unchanged clean v3.1.0 repository candidate passes canonical verification, both host checks, all declared product tests, Claude strict validation, actionlint, JSON, link, identity, diff and residue checks plus independent specification, implementation and standards review may it be pushed. Review must cover the context-adaptive collaboration-closure model; context-isolated, outcome-bound, identity-neutral representative behavior; GT-13 full relation-and-constraint closure; replayed GT-07/GT-11/GT-12 regression bindings; current source records; independent post-state and claim limits without accessing credential or session logs; activation-to-effect assurance, user cognitive burden, continuity state carriers, interference, configuration, topology, update or hot reload, rollback, resource release, cleanup and retirement; and the complete latest-demand-and-correction-to-final-claim chain. This pre-push gate does not claim public-tag installation before the immutable tag exists. The same pushed SHA must then pass Ubuntu, Windows and macOS GitHub Actions; condition-fit Codex Cloud is attempted and bounded without inheriting local state. Only then may a separate named-human release decision occur."
+    "rule": "Candidate verification is dormant while the active self-bootstrapping program is incomplete. Feasibility research, existing-wheel review, isolated environment design, representative and longitudinal tasks, minimum-form prototype, implementation, activation-to-effect replay and independent product, specification, implementation and standards review must complete first. A future semantic version and exact clean candidate are then selected; the goal carrier directly runs every declared deterministic check and verifies fresh GT-07 through GT-18 bindings, exact environment compositions, independent post-state and claim limits without accessing credential or session logs. Only the unchanged future SHA may be pushed and run on required hosted systems; historical local, GitHub Actions or Cloud checks for ae7294652761abceb753f0571ee82c7ddeae06af remain bounded history. Only after those late gates may a separate named-human release decision occur."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",
@@ -566,11 +626,11 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "039b613ab5149d06bc665199102a8ad0aad457e74639974889dfd717dbd50b24",
+    "releaseNotesSha256": "42655e393e52fa506819e77c0459f0bf29248ef1f4c598951a93a71d5c83f850",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,
-    "rule": "Only after exact local and independent review, all three required GitHub Actions systems, a condition-fit Codex Cloud disposition and a named-human decision may the goal carrier create a new lightweight v3.1.0 tag and non-prerelease GitHub Release with the tracked body and no assets. It must verify the exact remote tag, maturity, Latest eligibility and body; obtain one context-isolated clean-state evaluator replay of supported public installation, activation, update or rollback and removal paths against the public immutable tag; and verify cleanup without moving the current immutable public release or any earlier tag."
+    "rule": "This v3.1.0 object is a dormant compatibility placeholder while the active program decides whether future behavior-bearing bytes require a new semantic version. It grants no tag or publication authority. After every core stage passes, the chosen product form and version, release notes, claim ceiling and package identities must be migrated together and reverified. Only a future exact local and independent review, required hosted systems, condition-fit environment disposition and fresh named-human decision may create one new lightweight tag and matching non-prerelease GitHub Release. The goal carrier then verifies the exact public state, isolated installation, activation, update or rollback, removal and cleanup without moving any existing tag."
   },
   "claimCeiling": {
     "finiteReleaseClaims": [

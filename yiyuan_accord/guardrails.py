@@ -68,7 +68,7 @@ def canonical_goal_objective(program, authority, work_stages, release_gates):
             for field in ("id", "state", "dependsOn", "acceptanceIds")
         }
         for item in ordered
-        if isinstance(item, dict) and item.get("state") != "completed"
+        if isinstance(item, dict) and item.get("state") in {"active", "blocked"}
     ] if isinstance(ordered, list) else ordered
     work_items = increment.get("workItems") if isinstance(increment, dict) else None
     closeout = (
@@ -104,7 +104,7 @@ def canonical_goal_objective(program, authority, work_stages, release_gates):
             "semantics": process.get("routeRule"),
             "alignment": process_loss.get("alignmentRule"),
             "orderedSteps": compact_steps,
-            "work": list(current_work) if isinstance(current_work, list) else [],
+            "work": list(current_work[:2]) if isinstance(current_work, list) else [],
             "futureReleaseGates": (
                 list(release_gates) if isinstance(release_gates, list) else []
             ),

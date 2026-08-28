@@ -2,6 +2,7 @@ from contextlib import contextmanager
 import hashlib, json, shutil, subprocess, tempfile, unittest
 from pathlib import Path
 from unittest.mock import patch
+from yiyuan_accord.closure import reconcile_closure
 from yiyuan_accord.control import (
     _validate_four_surface_mapping, host_check, verify_product,
 )
@@ -228,6 +229,156 @@ class ProductControlTests(unittest.TestCase):
                       guidance['capabilityDiscovery']['provenanceKinds'])
         self.assertIn('Cartesian product',
                       guidance['dynamicIndex']['graphProjection']['normalizationRule'])
+        model = guidance['selfBootstrappingCore']['semanticModel']
+        graph = guidance['dynamicIndex']['graphProjection']
+        self.assertEqual(model['id'], 'complete-bounded-self-bootstrapping/v1')
+        self.assertEqual(model['factModel']['values'],
+                         ['observed', 'not-observed', 'unknown'])
+        self.assertEqual(
+            model['routeDecision']['comparison']['mode'],
+            'pareto-then-context-then-equivalent-fit-reuse-tiebreak',
+        )
+        self.assertEqual(model['formAllocation']['cardinality'],
+                         'many-to-many-context-and-freshness-bound')
+        self.assertTrue(
+            {item['id'] for item in model['entities']}
+            <= set(graph['nodeKinds'])
+        )
+        self.assertTrue(
+            {item['id'] for item in model['relationKinds']}
+            <= set(graph['edgeKinds'])
+        )
+        invariants = {item['id'] for item in model['invariants']}
+        self.assertIn('authority-is-not-derived', invariants)
+        self.assertTrue(all(set(item['guards']) <= invariants
+                            for item in model['stressScenarios']))
+        self.assertTrue(all(
+            item['expectedDisposition'] in model['closureModel']['routeDispositions']
+            for item in model['stressScenarios']
+        ))
+        self.assertGreaterEqual(len(model['stressScenarios']), 8)
+        self.assertGreaterEqual(len(model['degradationPaths']), 10)
+        environment = guidance['selfBootstrappingCore'][
+            'environmentAdmissionContract'
+        ]
+        self.assertEqual(environment['id'], 'composed-environment-admission/v1')
+        self.assertEqual(
+            environment['admissionUnit'],
+            'one-bounded-claim-under-one-provenance-bound-composition-and-freshness-window',
+        )
+        self.assertEqual(
+            environment['snapshot']['factModelRef'],
+            '#/selfBootstrappingCore/semanticModel/factModel',
+        )
+        self.assertEqual(
+            {item['id'] for item in environment['armKinds']},
+            {
+                'official-clean', 'isolated-minimal', 'current-enabled',
+                'isolated-no-Accord', 'candidate-enabled-isolated',
+            },
+        )
+        self.assertEqual(
+            [item['order'] for item in environment['isolationLadder']],
+            list(range(5)),
+        )
+        dispositions = set(environment['admission']['dispositions'])
+        self.assertTrue(all(
+            item['expectedDisposition'] in dispositions
+            for item in environment['stressScenarios']
+        ))
+        self.assertIn(
+            'an-Accord-enabled-arm-cannot-attest-the-no-Accord-or-native-baseline',
+            environment['comparisonContract']['independenceRules'],
+        )
+        self.assertIn(
+            'credential-content',
+            environment['snapshot']['privacyBoundary']['forbid'],
+        )
+        self.assertGreaterEqual(len(environment['stressScenarios']), 10)
+        self.assertGreaterEqual(len(environment['cleanupAndInvalidation'][
+            'invalidateOn']), 8)
+        prototype = guidance['selfBootstrappingCore'][
+            'productFormPrototypeDecision'
+        ]
+        self.assertEqual(
+            prototype['id'], 'product-form-neutral-vertical-slice/v1'
+        )
+        self.assertEqual(
+            set(prototype['routeCandidates']),
+            {
+                'no-added-mechanism', 'current-plugin-projection',
+                'replaceable-composition',
+                'bounded-authored-persistent-controller',
+            },
+        )
+        scenario_results = {
+            item['id']: item for item in prototype['scenarioResults']
+        }
+        self.assertEqual(
+            scenario_results['native-whole-loop-observed']['selected'],
+            'no-added-mechanism',
+        )
+        self.assertEqual(
+            scenario_results[
+                'effect-succeeds-but-cleanup-leaves-residue'
+            ]['disposition'],
+            'completion-rejected',
+        )
+        self.assertIn(
+            'runtime-service-database-or-background-process',
+            prototype['referenceCoreAdmission']['prohibited'],
+        )
+        self.assertFalse(prototype['isolation']['liveHostRead'])
+        reference = guidance['selfBootstrappingCore'][
+            'referenceCoreImplementation'
+        ]
+        self.assertEqual(
+            reference['interface'],
+            'reconcile_closure(request)-to-json-serializable-decision',
+        )
+        self.assertIn(
+            'route-source-kinds-and-product-forms',
+            reference['openEndedInputs'],
+        )
+        self.assertIn(
+            'host-and-capability-discovery', reference['replaceableAdapters']
+        )
+        golden = _read(root, G)
+        suite = golden['suiteDesign']
+        self.assertEqual(
+            suite['id'],
+            'representative-and-longitudinal-self-bootstrapping-evaluation/v1',
+        )
+        self.assertEqual(
+            {item['id'] for item in suite['caseTypes']},
+            {'representative-case', 'longitudinal-sequence'},
+        )
+        dimensions = suite['fullAcceptanceVector']['dimensions']
+        self.assertEqual(len(dimensions), 10)
+        self.assertTrue(all(
+            isinstance(item['hardGate'], bool) and item['requires']
+            for item in dimensions
+        ))
+        self.assertEqual(
+            set(suite['comparisonEligibility']['armKinds']),
+            {item['id'] for item in environment['armKinds']},
+        )
+        self.assertEqual(
+            {item['taskId'] for item in suite['coverageMatrix']},
+            {f'GT-{number}' for number in range(14, 19)},
+        )
+        new_tasks = {
+            item['id']: item for item in golden['tasks']
+            if item['id'] in {f'GT-{number}' for number in range(14, 19)}
+        }
+        self.assertTrue(all(item['evaluationDesign'] for item in new_tasks.values()))
+        self.assertEqual(
+            new_tasks['GT-18']['evaluationDesign']['minimumEpisodes'], 4
+        )
+        self.assertEqual(
+            new_tasks['GT-18']['evaluationDesign']['episodeRoles'],
+            [item['id'] for item in suite['longitudinalSequence']['episodeRoles']],
+        )
         self.assertIn(
             'preview2-is-a-current-release-candidate',
             {item['id'] for item in guidance['retiredAsActivePremises']},
@@ -255,7 +406,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             acceptance['representativeBehaviorPolicy']['requiredTaskIdsForRelease'],
-            ['GT-07', 'GT-11', 'GT-12', 'GT-13'],
+            ['GT-07','GT-11','GT-12','GT-13',*[f'GT-{n}' for n in range(14,19)]],
         )
         release_notes = (root / acceptance['publicRelease']['releaseNotes']).read_text(
             encoding='utf-8')
@@ -333,8 +484,337 @@ class ProductControlTests(unittest.TestCase):
                 [{field: step[field] for field in (
                      'id', 'state', 'dependsOn', 'acceptanceIds'
                 )} for step in mapping['process']['orderedSteps']
-                 if step['state'] != 'completed'],
+                 if step['state'] in {'active', 'blocked'}],
             )
+
+    def test_reference_core_is_policy_driven_and_fail_closed(self):
+        responsibilities = [
+            'sense-environment', 'bind-authority', 'preserve-correction',
+            'execute-outcome', 'observe-consequence',
+            'release-task-residue',
+        ]
+        compliance = {
+            'within-human-authority': 'observed',
+            'compliant': 'observed',
+            'independent-consequence-verifier': 'observed',
+            'available': 'observed',
+        }
+        coherence = {
+            'responsibility-boundaries': 'observed',
+            'authority-and-side-effects': 'observed',
+            'evidence-and-independent-poststate': 'observed',
+            'cleanup-retirement-and-residue': 'observed',
+        }
+        dimensions = [
+            'human-burden', 'interference', 'persistence', 'recovery',
+            'maintenance', 'retirement',
+        ]
+        experiment_dimensions = [
+            'outcome', 'authority', 'evidence', 'privacy', 'burden',
+            'interference', 'recovery', 'resources', 'continuity',
+            'lifecycle',
+        ]
+        experiment_facts = [
+            'exact-baseline', 'fixed-budget', 'one-bounded-mutable-surface',
+            'immutable-evaluator', 'full-acceptance-vector',
+            'preauthorized-tolerances', 'available-rollback',
+            'independent-effect-and-cleanup-poststate',
+        ]
+
+        def evidence(subject, observer='fixture-oracle'):
+            return {
+                'sourceRef': f'fixture-source:{subject}',
+                'observerRef': observer,
+                'subjectRef': subject,
+                'boundaryRef': 'task-owned-process:synthetic-p4',
+            }
+
+        def fixture(*, healthy_native=False, residue=False):
+            native_supplies = [
+                item for item in responsibilities
+                if healthy_native or item != 'preserve-correction'
+            ]
+            routes = [
+                {
+                    'id': 'native-no-add', 'sourceKind': 'no-added',
+                    'forms': [], 'supplies': native_supplies,
+                    'facts': dict(compliance), 'coherence': {},
+                    'lifecycle': {item: 0 for item in dimensions},
+                },
+                {
+                    'id': 'current-plugin', 'sourceKind': 'maintained',
+                    'forms': ['plugin'],
+                    'supplies': ['sense-environment', 'bind-authority'],
+                    'facts': {
+                        **compliance,
+                        'independent-consequence-verifier': 'unknown',
+                    },
+                    'coherence': {},
+                    'lifecycle': {item: 1 for item in dimensions},
+                },
+                {
+                    'id': 'minimal-composition', 'sourceKind': 'composition',
+                    'forms': [
+                        'native-executor', 'task-scoped-handoff',
+                        'independent-effect-probe',
+                    ],
+                    'supplies': list(responsibilities),
+                    'facts': dict(compliance), 'coherence': dict(coherence),
+                    'lifecycle': {item: 1 for item in dimensions},
+                },
+                {
+                    'id': 'persistent-controller', 'sourceKind': 'authored',
+                    'forms': ['persistent-controller'],
+                    'supplies': list(responsibilities),
+                    'facts': dict(compliance), 'coherence': {},
+                    'lifecycle': {
+                        'human-burden': 2, 'interference': 3,
+                        'persistence': 4, 'recovery': 3,
+                        'maintenance': 4, 'retirement': 4,
+                    },
+                },
+            ]
+            selected = 'native-no-add' if healthy_native else 'minimal-composition'
+            events = [
+                {
+                    'kind': 'fact-observed', 'routeId': selected,
+                    'factId': 'execution', 'state': 'observed',
+                    'independent': 'observed',
+                    'evidence': evidence(selected),
+                },
+                {
+                    'kind': 'fact-observed', 'routeId': selected,
+                    'factId': 'consequence', 'state': 'observed',
+                    'independent': 'observed',
+                    'evidence': evidence(selected),
+                },
+            ]
+            if not healthy_native:
+                events.append({
+                    'kind': 'experiment-evaluated',
+                    'baselineRouteId': selected,
+                    'candidateRouteId': 'persistent-controller',
+                    'preconditions': {
+                        item: 'observed' for item in experiment_facts
+                    },
+                    'comparison': {
+                        item: (
+                            'better' if item == 'outcome'
+                            else 'worse' if item == 'lifecycle'
+                            else 'equal'
+                        ) for item in experiment_dimensions
+                    },
+                    'evidence': evidence('persistent-controller'),
+                })
+                events.append({
+                    'kind': 'experiment-poststate',
+                    'baselineRouteId': selected,
+                    'candidateRouteId': 'persistent-controller',
+                    'disposition': 'rollback-complete',
+                    'state': 'observed',
+                    'independent': 'observed',
+                    'evidence': evidence('persistent-controller'),
+                })
+            events.append({
+                'kind': 'resource-poststate', 'routeId': selected,
+                'releasedResources': (
+                    [] if healthy_native or residue else ['task-scoped-handoff']
+                ),
+                'residualTaskResources': (
+                    ['task-scoped-handoff'] if residue else []
+                ),
+                'independent': 'observed',
+                'evidence': evidence(selected),
+            })
+            return {
+                'schema': 'yiyuan-accord-closure/v1',
+                'outcome': {
+                    'id': 'preserve-corrected-brief-across-one-interruption',
+                    'responsibilities': list(responsibilities),
+                },
+                'environment': {
+                    'compositionKey': 'synthetic:p4:v1',
+                    'facts': {'provenance-bound': 'observed'},
+                    'unknowns': ['field-value', 'cross-host-equivalence'],
+                },
+                'policy': {
+                    'id': 'p4-task-policy/v1',
+                    'requiredEnvironmentFacts': ['provenance-bound'],
+                    'requiredRouteFacts': ['available'],
+                    'requiredCoherenceFacts': list(coherence),
+                    'comparisonDimensions': list(dimensions),
+                    'sourcePreference': [
+                        'no-added', 'native', 'maintained', 'composition',
+                        'authored',
+                    ],
+                    'contextPreference': [],
+                    'requiredCompletionFacts': ['execution'],
+                    'requiredExperimentFacts': list(experiment_facts),
+                    'experimentDimensions': list(experiment_dimensions),
+                },
+                'routes': routes,
+                'events': events,
+            }
+
+        decision = reconcile_closure(fixture())
+        self.assertTrue(decision['valid'], decision['errors'])
+        self.assertEqual(decision['selectedRouteId'], 'minimal-composition')
+        self.assertEqual(decision['disposition'], 'admit')
+        self.assertTrue(decision['lifecycle']['completionAllowed'])
+        self.assertEqual(
+            decision['lifecycle']['experimentResults'][0]['decision'],
+            'discard-and-rollback',
+        )
+        self.assertTrue(
+            decision['lifecycle']['experimentResults'][0]['poststate'][
+                'accepted']
+        )
+        self.assertFalse(next(
+            item for item in decision['assessments']
+            if item['routeId'] == 'current-plugin'
+        )['admitted'])
+
+        native = reconcile_closure(fixture(healthy_native=True))
+        self.assertEqual(native['selectedRouteId'], 'native-no-add')
+        self.assertEqual(native['disposition'], 'no-op')
+        self.assertTrue(native['lifecycle']['completionAllowed'])
+
+        no_experiment_policy = fixture(healthy_native=True)
+        no_experiment_policy['policy']['requiredExperimentFacts'] = []
+        no_experiment_policy['policy']['experimentDimensions'] = []
+        no_experiment_policy['policy']['requiredCompletionFacts'] = []
+        no_experiment = reconcile_closure(no_experiment_policy)
+        self.assertTrue(no_experiment['valid'], no_experiment['errors'])
+        self.assertTrue(no_experiment['lifecycle']['completionAllowed'])
+
+        residual = reconcile_closure(fixture(residue=True))
+        self.assertFalse(residual['lifecycle']['completionAllowed'])
+        self.assertIn(
+            'completion:task-residue',
+            {item['code'] for item in residual['lifecycle'][
+                'completionFailures']},
+        )
+
+        for corrected_fact in (
+            'within-human-authority', 'compliant', 'available',
+        ):
+            corrected = fixture()
+            corrected['events'].append({
+                'kind': 'fact-observed',
+                'routeId': 'minimal-composition',
+                'factId': corrected_fact,
+                'state': 'not-observed',
+                'independent': 'observed',
+                'evidence': evidence('minimal-composition'),
+            })
+            corrected_decision = reconcile_closure(corrected)
+            with self.subTest(corrected_fact=corrected_fact):
+                self.assertFalse(
+                    corrected_decision['lifecycle']['completionAllowed']
+                )
+                self.assertIn(
+                    f'route-poststate:{corrected_fact}',
+                    {item['code'] for item in corrected_decision['lifecycle'][
+                        'completionFailures']},
+                )
+
+        rollback_unverified = fixture()
+        rollback_unverified['events'] = [
+            event for event in rollback_unverified['events']
+            if event['kind'] != 'experiment-poststate'
+        ]
+        rollback_decision = reconcile_closure(rollback_unverified)
+        self.assertFalse(rollback_decision['lifecycle']['completionAllowed'])
+        self.assertIn(
+            'completion:experiment-poststate:persistent-controller',
+            {item['code'] for item in rollback_decision['lifecycle'][
+                'completionFailures']},
+        )
+
+        self_attested = fixture()
+        self_attested['events'][1]['evidence']['observerRef'] = (
+            'minimal-composition'
+        )
+        self.assertFalse(reconcile_closure(self_attested)['valid'])
+
+        wrong_subject = fixture()
+        wrong_subject['events'][1]['evidence']['subjectRef'] = 'native-no-add'
+        self.assertFalse(reconcile_closure(wrong_subject)['valid'])
+
+        cross_boundary = fixture()
+        cross_boundary['events'][3]['evidence']['boundaryRef'] = (
+            'task-owned-process:different-boundary'
+        )
+        cross_boundary_decision = reconcile_closure(cross_boundary)
+        self.assertFalse(
+            cross_boundary_decision['lifecycle']['completionAllowed']
+        )
+        self.assertFalse(
+            cross_boundary_decision['lifecycle']['experimentResults'][0][
+                'poststate']['accepted']
+        )
+
+        unknown = fixture()
+        unknown['environment']['facts']['provenance-bound'] = 'unknown'
+        unknown_decision = reconcile_closure(unknown)
+        self.assertEqual(unknown_decision['disposition'], 'hold-unknown')
+        self.assertIsNone(unknown_decision['selectedRouteId'])
+
+        dynamic_policy = fixture()
+        dynamic_policy['policy']['requiredRouteFacts'].append(
+            'fit-for-current-context'
+        )
+        policy_decision = reconcile_closure(dynamic_policy)
+        self.assertEqual(policy_decision['disposition'], 'hold-unknown')
+        self.assertTrue(all(
+            not item['admitted'] for item in policy_decision['assessments']
+        ))
+
+        malformed = fixture()
+        malformed['schema'] = 'invented'
+        invalid = reconcile_closure(malformed)
+        self.assertFalse(invalid['valid'])
+        self.assertEqual(invalid['disposition'], 'reject')
+
+        malformed_cases = []
+        bad_forms = fixture()
+        bad_forms['routes'][0]['forms'] = None
+        malformed_cases.append(bad_forms)
+        bad_dimensions = fixture()
+        bad_dimensions['policy']['comparisonDimensions'] = None
+        malformed_cases.append(bad_dimensions)
+        bad_route_binding = fixture()
+        bad_route_binding['events'][0]['routeId'] = []
+        malformed_cases.append(bad_route_binding)
+        same_experiment_route = fixture()
+        same_experiment_route['events'][2]['candidateRouteId'] = (
+            'minimal-composition'
+        )
+        malformed_cases.append(same_experiment_route)
+        contradictory_poststate = fixture()
+        contradictory_poststate['events'][-1][
+            'residualTaskResources'
+        ] = ['task-scoped-handoff']
+        contradictory_poststate['events'][-1][
+            'releasedResources'
+        ] = ['task-scoped-handoff']
+        malformed_cases.append(contradictory_poststate)
+        cleanup_self_claim = fixture()
+        cleanup_self_claim['events'][-1] = {
+            'kind': 'fact-observed',
+            'routeId': 'minimal-composition',
+            'factId': 'cleanup-poststate',
+            'state': 'observed',
+            'independent': 'observed',
+            'evidence': evidence('minimal-composition'),
+        }
+        malformed_cases.append(cleanup_self_claim)
+        for case in malformed_cases:
+            with self.subTest(case=case):
+                invalid = reconcile_closure(case)
+                self.assertFalse(invalid['valid'])
+                self.assertEqual(invalid['disposition'], 'reject')
+
     def test_authority_and_static_suite_mutations_fail_closed(self):
         cases = (
             (C, 'constitution top-level shape', lambda v: v.update(extra=True)),
@@ -515,7 +995,7 @@ class ProductControlTests(unittest.TestCase):
             record = bundle['records']['GT-11']
             record['payload']['projectionExposure']['mechanismSha256'] = '0' * 64
             _bind_source(root, OBS11, bundle, observation)
-            self.assert_has(_errors(root), 'sourceEvidence[0] is invalid')
+            self.assert_has(_observe(root, OBS11)[0], 'sourceEvidence[0] is invalid')
 
         with _fixture() as root:
             observation = _read(root, OBS13)
@@ -523,7 +1003,7 @@ class ProductControlTests(unittest.TestCase):
             record = bundle['records']['GT-13']
             record['amendments'][0] = None
             _bind_source(root, OBS13, bundle, observation)
-            self.assert_has(_errors(root), 'sourceEvidence[0] is invalid')
+            self.assert_has(_observe(root, OBS13)[0], 'sourceEvidence[0] is invalid')
 
         with _fixture() as root:
             observation = _read(root, OBS13)
@@ -533,7 +1013,7 @@ class ProductControlTests(unittest.TestCase):
             duplicate['priorGoldenTaskSha256'] = '1' * 64
             record['amendments'].append(duplicate)
             _bind_source(root, OBS13, bundle, observation)
-            self.assert_has(_errors(root), 'sourceEvidence[0] is invalid')
+            self.assert_has(_observe(root, OBS13)[0], 'sourceEvidence[0] is invalid')
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         current = host_check(ROOT, 'codex')['details']
@@ -997,19 +1477,14 @@ class ProductControlTests(unittest.TestCase):
             self.assertEqual(state, 'failed')
             self.assert_has(errors, 'failure lacks counterevidence')
 
-    def test_current_representative_sample_is_complete_at_release_boundary(self):
-        acceptance, golden = _read(ROOT, A), _read(ROOT, G)
-        errors = representative_sample_errors(
-            ROOT,
-            acceptance,
-            acceptance['representativeBehaviorPolicy'][
-                'requiredTaskIdsForRelease'
-            ],
-            golden,
-            lambda root, locator, _: _read(root, locator),
-            require_complete=True,
-        )
-        self.assertEqual(errors, [])
+    def test_current_sample_blocks_release(self):
+        a,g=_read(ROOT,A),_read(ROOT,G)
+        next(c for c in a['criteria'] if c['id']=='R3')['assessment']='verified'
+        e=representative_sample_errors(
+            ROOT,a,a['representativeBehaviorPolicy']['requiredTaskIdsForRelease'],
+            g,lambda r,p,_:_read(r,p),True)
+        self.assert_has(e,'representative tasks missing',
+                        'R3 representative coverage mismatch')
 
     def test_plan_process_acceptance_and_release_order_stay_aligned(self):
         with _fixture() as root:
@@ -1142,7 +1617,7 @@ class ProductControlTests(unittest.TestCase):
                          'reviewable-versioned-current-set')
         self.assertEqual(
             projection['outcome']['id'],
-            'outcome.context-adaptive-collaboration-closure',
+            'outcome.complete-bounded-self-bootstrapping-core',
         )
         self.assertEqual(
             _canonical_official_url('https://code.claude.com/docs/en/desktop'),

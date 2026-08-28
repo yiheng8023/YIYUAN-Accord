@@ -2,9 +2,11 @@
 
 Turn a desired outcome into a verified, recoverable finish—without forcing the user to manage the Agent's tools, topology, or internal mechanics.
 
-YIYUAN Accord is an open, Agent-neutral and mechanism-neutral human-Agent
-collaboration system: a small portable reliability kernel plus adaptive,
-replaceable outcome-delivery behavior.
+YIYUAN Accord is an open, Agent-neutral, mechanism-neutral and
+product-form-neutral human-Agent collaboration system: a small portable
+reliability kernel plus adaptive, replaceable outcome-delivery behavior. Its
+active product direction is complete bounded self-bootstrapping, not a plugin,
+Hook, runtime or self-evolution loop taken alone.
 
 It anchors the Agent to the user's current goal, selects the minimum sufficient route, and preserves human authority at real decision boundaries.
 
@@ -30,10 +32,30 @@ Agent and client surface is proven. The test corpus remains deliberately finite,
 so representative use, counterexamples and failures belong to continuing
 evidence.
 
-The moving `main` branch currently contains an unreleased v3.1.0 candidate. It
-replaces the earlier capability-set-difference summary with context-adaptive
-collaboration closure and adds one stateless `SessionStart` activation reminder.
-It is development evidence, not an installation source or published upgrade.
+The moving `main` branch is an active self-bootstrapping core-shaping program.
+Bounded P0-P4 logic feasibility, semantic, isolation, evaluation-design and
+product-form work is complete. P4 admits only a deterministic, side-effect-free
+plain-data reference core, now implemented behind one policy-driven
+`reconcile_closure` interface. It rejects observer/subject self-identity and
+requires matching independent experiment post-state before closure; these are
+structural bindings, not self-proof of real source authenticity. Fresh isolated activation-to-effect and lifecycle
+replay is active, while live mechanisms, representative value and release remain gated. Exact revision
+`ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
+verified, unreleased v3.1.0 baseline; a later product consensus superseded its
+`ready` status without erasing its bounded evidence. `main` is therefore not a
+release candidate, installation source or published upgrade.
+
+The program studied primary sources, prior failures and suitable existing
+wheels; classified self-bootstrapping sub-capabilities; and tested the
+highest-risk assumptions in disposable isolated environments before admitting
+the minimum reference-core implementation. Product form continues to follow
+demonstrated closure properties and total lifecycle cost. Release is the final
+phase.
+
+Plugins and Skills are current projections; they are not presumed sufficient
+or insufficient. When complete responsibilities require several carriers,
+shared outcome, authority, evidence and lifecycle contracts provide system
+coherence without forcing the product into one Runtime or state layer.
 
 Report feedback in [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues). Include:
 
@@ -94,11 +116,12 @@ Use `/reload-plugins` after checkout changes.
 
 The public v3.0.1 packages make one progressively disclosed adaptive Skill
 available and add no Runtime, Hook, MCP server, App, state store, background
-process or automatic project mutation. The unreleased v3.1.0 candidate also
-contains one stateless `SessionStart` context Hook: it reads no transcript,
-writes no state and starts no background process. These are versioned package
-facts, not permanent product prohibitions. Hook trust, host firing and the
-activation-to-effect chain remain separate evidence from installation.
+process or automatic project mutation. The historical unreleased v3.1.0
+package baseline also contains one stateless `SessionStart` context Hook: it
+reads no transcript, writes no state and starts no background process. These
+are versioned package facts, not the product identity or permanent mechanism
+prohibitions. Hook trust, host firing and the activation-to-effect chain remain
+separate evidence from installation.
 
 Installation, enablement and visibility do not imply activation. During normal
 work the host may invoke the Skill implicitly for a relevant nontrivial task;

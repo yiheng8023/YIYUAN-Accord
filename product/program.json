@@ -1,6 +1,6 @@
 {
   "schema": 3,
-  "id": "yiyuan-accord-bounded-autonomy-program",
+  "id": "yiyuan-accord-self-bootstrapping-core-program",
   "productId": "yiyuan-accord",
   "release": "v3.1",
   "distributionVersion": "v3.1.0",
@@ -17,11 +17,11 @@
     "authority": "docs/operations/HISTORY.md",
     "rule": "These immutable releases, the retired unreleased checkpoint and the superseded locally exposed development distribution are provenance only. They are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
-  "releaseIntent": "Open one bounded-autonomy increment after the current immutable public release without moving any released tag: model a context-adaptive collaboration closure across outcome obligations, live relations, constraints, authority, evidence, resources and effects; then prove one minimum end-to-end closure slice before selecting broader mechanisms. v3.1.0 is only a prospective full-release candidate identity for changed package bytes. It receives no inherited behavior, hosted, field, human, tag or publication credit from the current immutable public release.",
+  "releaseIntent": "Publication is deliberately deferred. Preserve ae7294652761abceb753f0571ee82c7ddeae06af as the historical verified v3.1.0 package-and-repository baseline, not current ready authority, and reopen one active product-core increment. The increment must define and demonstrate complete bounded self-bootstrapping across environment sensing, outcome and authority binding, existing-capability reuse or acquisition, composition or authorship, execution, consequence verification, learning, self-evolution, recovery, continuity, resource release and retirement. Product form remains a downstream route decision. No future exact candidate, tag or Release is considered until this program, its representative and longitudinal evidence, every dependent projection and independent review are complete.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "maintenancePlan": "CONTRIBUTING.md",
-  "status": "ready",
+  "status": "active",
   "inputEvidence": [
     {
       "id": "project-refactor-audit-2026-08-20",
@@ -70,7 +70,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "faadc84442ee1803b4830c3b2e41fa7f42118751a5aec562090eeba6ddb2026c",
+      "repositorySha256": "ae1fe8915b06f009ce588ef56c8fb9ce07569c01f7760db0df65bbd047ae2184",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -89,11 +89,31 @@
         "https://code.claude.com/docs/en/desktop"
       ],
       "disposition": "fresh-high-weight-host-input-not-portable-authority-or-behavior-proof"
+    },
+    {
+      "id": "karpathy-primary-method-and-repository-inputs-2026-08-28",
+      "kind": "primary-external-simplification-experiment-and-self-evolution-feasibility-input",
+      "capturedAt": "2026-08-28",
+      "sources": [
+        "https://github.com/karpathy/autoresearch",
+        "https://github.com/karpathy/micrograd",
+        "https://github.com/karpathy/nanoGPT",
+        "https://github.com/karpathy/llm.c",
+        "https://github.com/karpathy/karpathy.github.io/blob/master/_posts/2026-02-12-microgpt.markdown"
+      ],
+      "disposition": "feasibility-and-reuse-input-only-requires-pattern-fit-limit-side-effect-license-and-exit-review-not-personality-authority"
+    },
+    {
+      "id": "self-bootstrapping-feasibility-and-reuse-study-2026-08-28",
+      "kind": "primary-source-feasibility-matrix-adoption-ledger-and-p0-p4-results",
+      "repositoryLocator": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
+      "repositorySha256": "e6020760b13efc888128abe336c36dabaaaaebaa3f3802821807b4ffe3d11f00",
+      "disposition": "admitted-input-for-minimum-pure-data-reference-core-with-live-mechanism-behavior-and-release-still-closed"
     }
   ],
   "increment": {
-    "id": "increment.v31-context-adaptive-collaboration-closure",
-    "state": "completed",
+    "id": "increment.complete-bounded-self-bootstrapping-core",
+    "state": "active",
     "acceptanceIds": [
       "R1",
       "R2",
@@ -104,70 +124,75 @@
       "Q3",
       "Q4"
     ],
-    "observedProblem": "The current immutable public release honestly exposes a host-adaptive Skill and bounded continuity, repair and resource fixtures, but it mostly declares rather than closes the larger finite-autonomy promise. The current long Codex task crossed automatic compaction without YIYUAN Accord surfacing a carrier-fitness decision, and the existing model contains a capability meta-model without a complete collaboration-control coverage map. A single handoff Hook or more host adapters would address symptoms while leaving users to operate many other avoidable discovery, configuration, routing, topology, verification, update and cleanup mechanics.",
-    "hypothesis": "A lightweight relation-and-constraint model can preserve an open demand-capability universe while making finite collaboration-control obligations explicit. Identifying unclosed obligations, degraded or uncertain relations, coordination and verification risks, then proving one full collaboration-closure slice with native no-op, maintained or composed help, bounded authorship, correction, resource and lifecycle paths can increase real autonomy without reviving a universal runtime, copying the pre-Accord implementation or making a current host list the product ceiling.",
+    "observedProblem": "The historical ae7294652761abceb753f0571ee82c7ddeae06af baseline closed one bounded collaboration slice and produced statically conformant Codex and Claude plugin packages, but the product program then converged on candidate publication before demonstrating the complete intended core. The current evidence does not establish environment-aware baselining, reliable reuse-before-build, capability acquisition and composition, product-form selection, activation-to-effect assurance, governed learning and self-evolution, longitudinal continuity, or global reconciliation after a new consensus. Both current hosts are already extended and Accord-enabled, so current-host observations are not official-clean or no-Accord baselines and can be confounded by Accord itself or unrelated extensions.",
+    "hypothesis": "A product-form-neutral, complete bounded self-bootstrapping core can turn the existing collaboration contract into a stronger outcome system without defaulting to a plugin, Runtime or control plane. If Accord senses environment provenance; binds the latest outcome, consensus and human authority; reuses suitable native, official and maintained wheels before authorship; chooses the minimum sufficient form; separates declaration, activation, execution, effect and evidence; and learns, evolves, rolls back and retires through bounded experiments, then it can improve real collaboration closure while limiting interference, self-confirmation, proxy optimization and lifecycle burden.",
     "hostCapabilityRefresh": {
-      "capturedAt": "2026-08-27",
+      "capturedAt": "2026-08-28",
       "facts": [
-        "Codex and Claude expose Skills for relevant implicit use, but availability and installation are not task-time behavior proof.",
-        "Current Codex plugin Hooks support SessionStart for startup, resume, clear and compact; compact-matched context reaches the immediate post-compaction continuation. Command and MCP handlers are supported, prompt and Agent handlers are skipped, and each new or changed non-managed Hook hash requires user review and trust.",
-        "Current Claude plugin Hooks support SessionStart for startup, resume, clear, compact and fork; plain standard output becomes context. The same Hook lifecycle runs in local CLI, IDE and Desktop sessions, while Cloud uses its own repository or account-carried conditions.",
-        "Claude can reload installed or development plugin Skills, Agents, Hooks, MCP and LSP surfaces in-session. Current Codex documentation supports marketplace refresh and plugin reinstall or restart paths but does not establish equivalent active-session plugin hot reload."
+        "The current Codex CLI is 0.150.1 and yiyuan-accord-codex 3.1.0 is installed and enabled alongside other bundled, primary-runtime and curated plugins.",
+        "The current Claude Code CLI is 2.1.247 and yiyuan-accord-claude 3.0.1 is installed and enabled alongside multiple official plugins, including persistent-state and Hook-capable extensions.",
+        "Plugin listing proves only declared installation and enablement. It does not prove Hook firing, implicit activation, effective model exposure, behavior, isolation, value or absence of interference.",
+        "The current repository remains the saved main checkout; the historical v3.1.0 candidate SHA has already passed its bounded local, independent, GitHub Actions and condition-fit Cloud checks, but a later global product consensus supersedes its ready state without erasing those historical facts."
       ],
       "inferences": [
-        "A compact SessionStart reminder is a candidate activation and post-compaction context path that need not inspect transcripts, add state, run per prompt or create a second control plane; actual host firing and effect remain separate evidence.",
-        "A UserPromptSubmit Hook would add unavoidable per-turn overhead and Codex cannot narrow it with a matcher; Stop prompt or Agent Hooks add model cost and lack current Codex portability; a Runtime or MCP is not yet justified for static activation.",
-        "Host lifecycle differences require capability-conditioned update and rollback, not a false cross-host hot-reload claim."
+        "Current-host dogfood must be labelled Accord-enabled and extension-composed; an official-clean or no-Accord claim needs a separately controlled environment rather than subtraction by narrative.",
+        "A stateless SessionStart Hook remains one candidate activation mechanism, not the product core and not sufficient evidence of self-bootstrapping.",
+        "Environment sensing, isolation selection and adaptive admission belong inside the self-bootstrapping loop because the route cannot be trusted before its own observation context is understood."
       ],
       "unknowns": [
-        "Fresh task-time behavior and measurable net help remain unverified.",
-        "Codex active-session plugin hot reload is not established by current official documentation.",
-        "Claude client behavior through the user's current third-party model route and Cloud behavior remain separate condition-fit evidence lanes."
+        "No official-clean, isolated-no-Accord and candidate-enabled comparative result exists for the new core.",
+        "Actual task-time Hook firing, implicit activation, low interference and product value remain unverified.",
+        "The repository and installed v3.1.0 Skills still contain the superseded scalar phrase expected outcome fitness minus total costs. The current semantic authority instead requires hard admission, lifecycle Pareto pruning, context-derived constraints and equivalent-fit reuse tie-breaking. This downstream projection drift is recorded for the later implementation-and-replay stage and must not be treated as current model authority or silently hot-mutated in the composed live hosts.",
+        "The minimum sufficient product form for durable self-bootstrapping remains undecided.",
+        "Cross-session learning and self-evolution have no approved durable state carrier or longitudinal evidence."
       ]
     },
     "firstMechanismDecision": {
-      "id": "session-start-collaboration-closure-activation",
-      "state": "static-definition-present-behavior-unverified",
-      "selected": "Bundle one stateless, no-extra-interpreter SessionStart context Hook with each current host projection. Its static definition points nontrivial or stateful outcomes to the installed Skill, is configured for the host's declared startup and continuation events, stays silent for a simple or sufficient native route, reads no transcript, writes no state and starts no background process. Actual firing, trust, activation and effect remain unverified.",
-      "humanBoundary": "Codex Hook trust remains an explicit exact-definition user decision. Installation, update, rollback, publication and any new external effect keep their existing authority boundaries.",
-      "claimLimit": "The package proves only that a candidate activation definition is present and statically bound. It does not prove host firing, trust, activation, implicit invocation, collaboration closure, task outcome, low interference, hot reload, cross-host behavior, field value or production safety."
+      "id": "product-form-after-closure-properties",
+      "state": "deferred-pending-product-form-prototype-and-behavior-comparison",
+      "selected": "No new plugin, Hook, runtime, service, state store, protocol or host adapter is selected by this plan. Preserve the existing projections as bounded baselines while the program derives required closure properties, audits reusable wheels, isolates confounded environments and compares admitted forms through lifecycle Pareto, context and equivalent-fit reuse rules.",
+      "humanBoundary": "New installation, enablement, trust, account, data, material cost, publication, destructive or irreversible effects still require their exact authority. Read-only environment observation, bounded local modeling and disposable isolated fixtures remain Agent-owned within the current grant.",
+      "claimLimit": "The plan proves neither that a new mechanism is needed nor that the existing plugin shape is sufficient. Product-form choice remains pending representative and longitudinal evidence."
     },
     "representativeOutcome": {
-      "id": "outcome.context-adaptive-collaboration-closure",
-      "statement": "For a bounded nontrivial outcome, derive its relevant obligations and live relations, identify what is unclosed or unreliable, then complete the lowest-burden authorized path while asking only for non-delegable judgment or authority.",
-      "startingState": "The outcome, current task and bounded authority are supplied. Host, client, model route, installed or discoverable capability, configuration, topology, capacity and health may be sufficient, incomplete, degraded, unavailable or unknown; no specific extension or authored mechanism is preselected.",
-      "completion": "The claimed consequence and independent post-state are verified; supported avoidable mechanics are Agent-owned; human-only actions are minimal and verified; unauthorized effects and task residue are zero.",
-      "claimLimit": "Current evidence proves only repository-candidate conformance plus the bounded current-Skill Codex-local GT-07, GT-11, GT-12 and single-arm GT-13 results. Installed Hook firing, implicit invocation, hot reload, comparative value, Claude, client, Cloud, cross-host, field, production, hosted and release claims remain unverified.",
+      "id": "outcome.complete-bounded-self-bootstrapping-core",
+      "statement": "Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.",
+      "startingState": "The product goal and human boundaries are supplied, but environment provenance, Accord activation, other extensions, capability health, suitable existing wheels, product form, state carrier and longitudinal fitness may be unknown. The current local hosts are explicitly Accord-enabled and extension-composed; no clean baseline or comparative advantage is presumed.",
+      "completion": "One isolated representative and one longitudinal sequence verify feasible reuse, context-fit responsibility-to-form allocation or no-op, cross-form coherence where needed, consequence, governed evolution or rollback, global reconciliation and zero unauthorized residue with lower total burden.",
+      "claimLimit": "Historical v3.1 checks and GT-07/11/12/13 are regression evidence only; they do not prove clean baselines, complete self-bootstrapping, durable evolution, form fitness, broad value or release readiness.",
       "firstEvidenceSurfaces": [
-        "codex-local",
-        "claude-code-when-current-conditions-fit",
-        "available-client-when-effective",
-        "codex-cloud-when-current-conditions-fit"
+        "official-clean",
+        "isolated-minimal",
+        "current-enabled",
+        "isolated-no-Accord",
+        "candidate-enabled-isolated",
+        "condition-fit-host-or-longitudinal-sequence"
       ]
     },
     "fourSurfaceMapping": {
-      "outcomeId": "outcome.context-adaptive-collaboration-closure",
+      "outcomeId": "outcome.complete-bounded-self-bootstrapping-core",
       "plan": {
-        "hypothesis": "Model the smallest relevant outcome-relation subgraph before choosing implementation. Treat official native, installed, maintained, composed and bounded-authored mechanisms as dynamic participants; preserve human goal and consequential authority; require one consequence-level vertical slice to pay for every retained mechanism.",
-        "earliestAffectedBoundary": "product/reshaping-guidance.json#/boundedAutonomy",
-        "slice": "Normalize collaboration-control obligations, current capabilities and their live relations; select one representative unclosed outcome path; close it through the minimum replaceable route; and replay no-op, help, correction, authority, process-loss, resource, update, rollback, cleanup and retirement paths.",
-        "stopCondition": "The plan, process, acceptance surface and compact goal projection agree on context-adaptive collaboration closure, no new mechanism is selected merely because it is easy to package, and the first representative task plus its claim and replay boundaries are explicit."
+        "hypothesis": "Complete bounded self-bootstrapping, not a particular plugin, fixed catalogue of forms or self-evolution loop, is the product-core hypothesis. Establish its semantic loop, environment and authority model, reuse ledger, responsibility-to-form decision rule, cross-form coherence contract, representative and longitudinal evaluations, then implement only the smallest demonstrated closure. Preserve each superseded baseline as history and replay every globally affected surface from the earliest dependency boundary.",
+        "earliestAffectedBoundary": "product/constitution.json#/purpose,/successDefinition,/productBoundary,/evolutionPolicy",
+        "slice": "First rebaseline authority and the four mapped surfaces. Then conduct primary-source, existing-wheel and bounded technical feasibility research; model the complete loop only from admitted evidence; define environment provenance and isolation; design representative and longitudinal tasks; prototype competing product forms; implement only after the feasibility gate passes; replay declaration-to-effect and lifecycle paths; validate cross-carrier continuity and governed evolution; and only then form a future exact candidate.",
+        "stopCondition": "The active plan is no longer release-centered; every stage maps to explicit criteria and evidence; current Accord-enabled hosts are treated as composed environments; product form remains undecided until evidence; external methods are selective inputs with limits and exit conditions; and release gates remain dormant until all core work and review complete."
       },
       "process": {
-        "routeRule": "Derive current outcome obligations and the smallest relevant relation graph; observe capabilities, authority, evidence, resources, effects and constraints; identify unclosed or unreliable relations and coordination risks; choose the lowest-burden feasible closure path. Recompute on material change and retire authored overlap when a native whole loop suffices.",
+        "routeRule": "Version consensus; sense environment provenance and Accord exposure; bind outcome and authority; research feasibility and reusable capability before implementation; dynamically allocate each relevant responsibility to no added artifact, one sufficient form or several replaceable cooperating forms under shared outcome, authority, evidence and lifecycle contracts; verify activation through consequence and post-state; govern learning by keep-discard or rollback; reconcile dependent surfaces; release or retire means that no longer pay their lifecycle cost.",
         "phases": [
-          "bind-outcome-required-capabilities-and-human-boundaries",
-          "observe-effective-capabilities-environment-topology-resources-and-cost",
-          "identify-unclosed-relations-and-rank-native-installed-maintained-composed-authored-and-human-only-paths",
-          "obtain-only-effect-specific-new-authority",
-          "provision-and-execute-the-smallest-replaceable-route",
-          "reconcile-correction-process-loss-resource-pressure-and-lifecycle",
-          "verify-consequence-human-burden-interference-poststate-and-claim",
-          "release-clean-learn-update-or-retire"
+          "rebaseline-consensus-and-global-dependency-map",
+          "research-self-bootstrapping-feasibility-existing-wheels-and-failure-modes",
+          "model-complete-self-bootstrapping-semantics-from-evidence",
+          "audit-environment-composition-and-isolation",
+          "design-isolated-representative-and-longitudinal-evaluation",
+          "prototype-and-select-minimum-product-form",
+          "implement-and-execute-bounded-reference-core",
+          "verify-activation-effect-learning-evolution-rollback-and-retirement",
+          "reconcile-all-surfaces-and-only-then-assess-a-future-candidate"
         ],
         "orderedSteps": [
           {
-            "id": "model-context-adaptive-collaboration-closure",
+            "id": "rebaseline-product-and-consensus-impact-map",
             "state": "completed",
             "dependsOn": [],
             "acceptanceIds": [
@@ -178,26 +203,13 @@
               "Q3",
               "Q4"
             ],
-            "completion": "The revisable guidance, program, acceptance contract and compact goal projection distinguish finite collaboration-control obligations from an open demand-capability universe, derive only the relevant live relations and constraints, preserve genuinely human-only judgment, and minimize avoidable user-operated mechanics without treating any host feature list or set difference as the product boundary."
+            "completion": "The latest consensus is recorded as a versioned correction; ae7294652761abceb753f0571ee82c7ddeae06af is preserved as historical bounded evidence but no longer current ready authority; constitution, plan, process, acceptance, goal projection and dependent documentation agree on complete bounded self-bootstrapping, product-form neutrality, environment provenance, global impact replay and publication-last."
           },
           {
-            "id": "refresh-current-host-capability-evidence",
+            "id": "conduct-self-bootstrapping-feasibility-and-reuse-study",
             "state": "completed",
             "dependsOn": [
-              "model-context-adaptive-collaboration-closure"
-            ],
-            "acceptanceIds": [
-              "R2",
-              "Q2",
-              "Q3"
-            ],
-            "completion": "Current official and observed Codex and Claude capability, lifecycle, configuration, topology and client surfaces are source-bound, freshness-limited and mapped only as candidate suppliers; pre-Accord semantics are normalized and selectively recalled without restoring retired architecture or validators."
-          },
-          {
-            "id": "select-first-representative-collaboration-closure",
-            "state": "completed",
-            "dependsOn": [
-              "refresh-current-host-capability-evidence"
+              "rebaseline-product-and-consensus-impact-map"
             ],
             "acceptanceIds": [
               "R1",
@@ -208,29 +220,13 @@
               "Q3",
               "Q4"
             ],
-            "completion": "One real unclosed outcome path is selected because it crosses the full demand-to-effect relation chain, not because its host adapter is easy. The task predeclares native no-op, maintained or composed help, bounded authorship, human-only, degradation, correction, verification, resource and cleanup paths."
+            "completion": "A primary-source feasibility record and adoption ledger compare current native and maintained capabilities, prior Accord counterevidence, relevant research and external repositories including Karpathy's small-legible implementations and bounded experiment loops. It states feasible, conditionally feasible and currently infeasible sub-capabilities; exact reusable parts; licenses; environment and metric assumptions; failure, safety, authority, contamination and lifecycle risks; prototype questions; stop conditions; and the evidence required before implementation."
           },
           {
-            "id": "implement-minimum-replaceable-closure-mechanism",
+            "id": "model-complete-self-bootstrapping-core",
             "state": "completed",
             "dependsOn": [
-              "select-first-representative-collaboration-closure"
-            ],
-            "acceptanceIds": [
-              "R2",
-              "R3",
-              "Q1",
-              "Q2",
-              "Q3",
-              "Q4"
-            ],
-            "completion": "The smallest authorized replaceable mechanism or composition is present and statically bound to the selected relation without claiming host firing or effect, changes no unrelated user configuration, and declares capability-conditioned update or hot reload, rollback, release, cleanup and retirement when a native whole-loop path becomes sufficient."
-          },
-          {
-            "id": "replay-noop-help-correction-authority-resource-and-lifecycle",
-            "state": "completed",
-            "dependsOn": [
-              "implement-minimum-replaceable-closure-mechanism"
+              "conduct-self-bootstrapping-feasibility-and-reuse-study"
             ],
             "acceptanceIds": [
               "R1",
@@ -241,13 +237,13 @@
               "Q3",
               "Q4"
             ],
-            "completion": "Fresh current-projection observations exercise the full collaboration-closure task plus sufficient-native no-op, correction, route degradation, one unavoidable human gate, process-loss control, bounded resources, failure, rollback, release and zero-residue post-state without reading credential or session logs."
+            "completion": "Using only admitted feasibility findings, product/reshaping-guidance.json#/selfBootstrappingCore/semanticModel defines one explicit semantic model covering sensing, outcome and authority binding, relation closure, capability reuse or acquisition, responsibility-to-form allocation, cross-form composition or authorship, execution, verification, learning, self-evolution, rollback, continuity, resource release and retirement. Its entities and relations project into the lightweight graph; independent fact facets, hard admission, Pareto-context selection, coherence contracts, bounded evolution, continuity, invariants, fundamental limits, degradation paths and stress scenarios remain machine-checkable. It distinguishes system coherence from a centralized runtime, treats self-evolution as a subordinate operator and allows no step to self-authorize consequential effects."
           },
           {
-            "id": "replay-condition-fit-hosts-and-clients",
+            "id": "design-environment-isolation-and-adaptive-admission",
             "state": "completed",
             "dependsOn": [
-              "replay-noop-help-correction-authority-resource-and-lifecycle"
+              "model-complete-self-bootstrapping-core"
             ],
             "acceptanceIds": [
               "R2",
@@ -257,13 +253,13 @@
               "Q3",
               "Q4"
             ],
-            "completion": "Codex local is the first behavior surface; Claude Code, an available client and Codex Cloud are exercised only when their actual conditions fit. Each observed combination keeps its own capability, installation, activation, behavior, privacy, toolchain and claim limits; a blocked or unsupported surface remains scoped evidence."
+            "completion": "product/reshaping-guidance.json#/selfBootstrappingCore/environmentAdmissionContract binds one claim to one provenance-bound composition and freshness window; records permitted composition, Accord exposure, confounders, unknowns, evaluator, effect and cleanup boundaries; distinguishes official-clean, isolated-minimal, current-enabled, isolated-no-Accord and candidate-enabled-isolated arms; selects the least costly sufficient isolation; forbids self-attested baselines and candidate-controlled evaluation; preserves privacy and foreign state; and degrades honestly when sufficient isolation is unavailable. Its contract, arm taxonomy, isolation ladder, admission rules, invalidation triggers, limits and stress scenarios are machine-checkable design, not implemented sensing, isolation, behavior or value evidence."
           },
           {
-            "id": "independent-review-and-form-exact-v31-candidate",
+            "id": "define-representative-and-longitudinal-evaluation-suite",
             "state": "completed",
             "dependsOn": [
-              "replay-condition-fit-hosts-and-clients"
+              "design-environment-isolation-and-adaptive-admission"
             ],
             "acceptanceIds": [
               "R1",
@@ -274,10 +270,94 @@
               "Q3",
               "Q4"
             ],
-            "completion": "Only after semantic, implementation, behavior, interference, lifecycle, documentation and standards review agree may one exact clean v3.1.0 repository candidate enter the existing hosted, named-human, tag, public-release and cleanup gate sequence."
+            "completion": "evals/golden-tasks.json#/suiteDesign defines one representative-case unit and one minimum-four-episode longitudinal-sequence unit; ten non-compensating acceptance dimensions; claim-derived environment and route comparison eligibility; exact case, treatment, evaluator, carrier, effect and cleanup bindings; independence, privacy, sampling, stop and claim rules; and a GT-14 through GT-18 obligation matrix. Each task binds a specific oracle, counterexamples and claim ceiling. GT-18 must preserve baseline, reject a proxy-regressing mutation, retain one independently verified net improvement, then detect later invalidation and roll back, replace or retire. This is machine-checkable evaluation design, not executed behavior, comparative value or release evidence."
+          },
+          {
+            "id": "prototype-product-form-neutral-vertical-slices",
+            "state": "completed",
+            "dependsOn": [
+              "define-representative-and-longitudinal-evaluation-suite"
+            ],
+            "acceptanceIds": [
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "The task-owned P4 single-file synthetic prototype recorded in research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md compared no-added mechanism, current plugin projection, replaceable composition and bounded authored persistence under one responsibility and closure contract. Claim-scoped admission, Pareto and equivalent-fit reuse selection chose the minimum composition for the observed continuity gap, chose no added mechanism when the native whole loop was observed, rejected installation/enablement as effect, discarded and rolled back a lifecycle-dominated persistent-controller experiment, and rejected completion when cleanup left residue. This admits only a deterministic side-effect-free plain-data reference core with stable compliance invariants and task-supplied policy; it is not live host, product behavior, comparative value or release evidence."
+          },
+          {
+            "id": "implement-minimum-self-bootstrapping-reference-core",
+            "state": "completed",
+            "dependsOn": [
+              "prototype-product-form-neutral-vertical-slices"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "yiyuan_accord/closure.py now exposes one deterministic side-effect-free reconcile_closure(request) interface over plain data. It keeps only stable human-authority, compliance, independent-verifier, consequence, cleanup and safe-evolution invariants; accepts versioned task-time environment facts, responsibilities, conditions, dimensions, preferences, open-ended forms and source-bound observations; rejects observer/subject self-identity and a subject that differs from the event route or experiment candidate; derives fail-closed admission, Pareto frontier, no-op or context selection, experiment keep-discard-rollback plus matching same-observer-and-boundary independent lifecycle post-state, consequence, cleanup, residue and finite claim results; and leaves source authenticity, discovery, execution, storage, evaluators, continuity carriers, adapters and publication replaceable. The 2026-08-28 working-tree product suite passed 20/20 including interface-level no-op, composition, dynamic-policy, no-experiment, authority correction, rollback post-state, self-attestation and cross-boundary rejection, unknown, residue and malformed-input cases. This is deterministic implementation conformance, not live adapter, source authenticity, host behavior, representative value or release evidence."
+          },
+          {
+            "id": "replay-activation-effect-evidence-and-lifecycle",
+            "state": "active",
+            "dependsOn": [
+              "implement-minimum-self-bootstrapping-reference-core"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "Fresh isolated observations separately bind declaration, installation, enablement, activation, execution, requested consequence, independent post-state, burden, interference, learning input, self-evolution decision, rollback, release, cleanup and retirement. Failed or contaminated arms remain failed or bounded and cannot be promoted by a later recovery."
+          },
+          {
+            "id": "validate-longitudinal-consensus-and-cross-carrier-continuity",
+            "state": "pending",
+            "dependsOn": [
+              "replay-activation-effect-evidence-and-lifecycle"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "A bounded repeated-outcome sequence demonstrates that useful learning survives only through an observed authorized carrier, improves later routing without proxy drift, absorbs one globally material consensus change across every mapped surface, and preserves unrelated truth through one condition-fit carrier transition or records a scoped limitation."
+          },
+          {
+            "id": "independent-review-and-form-future-exact-candidate",
+            "state": "pending",
+            "dependsOn": [
+              "validate-longitudinal-consensus-and-cross-carrier-continuity"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "Only after product, semantic, implementation, behavioral, environmental, longitudinal, interference, lifecycle, documentation and standards review agree may the program choose a future semantic version and form one exact clean candidate. Publication remains a separate final sequence requiring new exact authority."
           }
         ],
-        "degradationRule": "Unavailable or failed capability narrows that exact path, preserves evidence and triggers relation-and-constraint recomputation. It does not transfer supported mechanics to the user, convert current unavailability into permanent retirement, or justify a larger authored control plane without a demonstrated collaboration-closure need."
+        "degradationRule": "Unknown or confounded environment state first narrows the claim or triggers isolation. An unavailable, failed or uneconomic capability narrows that exact path, preserves counterevidence and triggers relation-and-constraint recomputation. It does not transfer supported mechanics to the user, convert current unavailability into permanent retirement, or justify a larger authored control plane without a demonstrated closure need. Learning or self-evolution that weakens outcome, authority, evidence, rollback, interference or lifecycle is discarded or rolled back."
       },
       "acceptance": {
         "criterionIds": [
@@ -290,20 +370,26 @@
           "Q4"
         ],
         "requiredObservations": [
+          "versioned-consensus-baseline-and-global-impact-map",
+          "environment-provenance-Accord-exposure-and-isolation-decision",
           "required-capabilities-and-starting-effective-capability-envelope",
-          "unclosed-obligations-relations-risks-and-selected-closure-path",
+          "existing-wheel-search-adoption-or-rejection-ledger",
+          "unclosed-obligations-relations-risks-product-form-and-selected-closure-path",
           "agent-owned-and-genuinely-human-only-actions",
-          "avoidable-human-burden-help-noop-and-interference",
+          "declaration-installation-enablement-activation-execution-effect-and-evidence-chain",
+          "avoidable-human-burden-help-noop-interference-and-total-lifecycle-cost",
           "configuration-topology-resource-and-lifecycle-effects",
-          "correction-process-loss-degradation-recovery-and-rollback",
+          "correction-process-loss-capability-acquisition-composition-degradation-recovery-and-rollback",
+          "learning-self-evolution-keep-discard-authority-and-retirement",
+          "longitudinal-state-carrier-and-later-route-improvement",
           "requested-consequence-independent-poststate-release-and-residue",
           "unknowns-claim-limit-recheck-and-retirement-triggers"
         ],
-        "passRule": "Pass only when one representative task directly observes the full collaboration closure from starting obligations, relations and constraints through selected path, authorized effect, correction, verification, release and cleanup; a sufficient native whole-loop path stays a no-op; every supported mechanic is Agent-owned; each human action is genuinely unavoidable, minimal and verified; failed paths stay failed; no installation, graph node, static check or model self-report substitutes for behavior."
+        "passRule": "Pass only when the declared representative and longitudinal suite externally observes the complete bounded self-bootstrapping loop across controlled environment compositions: from consensus, environment sensing and existing-wheel search through minimum-form route, authorized execution, consequence verification, learning or self-evolution, rollback or retirement, global reconciliation, release and cleanup. A sufficient native whole-loop path stays a no-op; every supported mechanic is Agent-owned; each human action is genuinely unavoidable, minimal and verified; failed or contaminated paths stay bounded; and no installation, graph node, static check, single metric or model self-report substitutes for behavior and value."
       },
       "goalMode": {
-        "directive": "Deliver one bounded outcome through its lowest-burden authorized collaboration closure; preserve human judgment and authority, own supported orchestration, verify the consequence and release task exposure.",
-        "completion": "context-adaptive-collaboration-closure-with-verified-outcome-minimum-human-burden-and-reconciled-effects",
+        "directive": "Research, build and prove Accord's complete bounded self-bootstrapping core: sense the composed environment, reuse before building, allocate responsibilities to context-fit replaceable forms without a fixed catalogue, verify effects and lifecycle, and reconcile every material correction.",
+        "completion": "bounded-self-bootstrap-with-provenance-reuse-verified-evolution-and-consistency",
         "pauseOnlyFor": [
           "consequential-human-judgment",
           "new-trust-account-data-or-material-cost",
@@ -312,20 +398,21 @@
       }
     },
     "falsifiers": [
-      "the next change optimizes host count, packaging or a single handoff symptom without strengthening the demand-to-effect finite-autonomy loop",
-      "a fixed Codex, Claude, model, marketplace, plugin, Hook, runtime, capability catalog or graph becomes the product boundary",
-      "a host label or installed capability is treated as an automatically closed obligation before effective task exposure, relations and health are observed",
+      "the next change optimizes host count packaging Hook activation or release optics without strengthening complete self-bootstrapping",
+      "a fixed Codex Claude model marketplace plugin Hook runtime service capability catalog graph or database becomes the product boundary",
+      "the current Accord-enabled host is treated as an official-clean native or no-Accord baseline",
+      "self-evolution is equated with the whole core or optimizes a proxy while outcome authority evidence rollback interference or lifecycle weaken",
+      "a popular external method repository or personality is copied without provenance fit limitations counterevidence license rollback and exit conditions",
+      "a host label installed capability plan test invocation completed turn or historical exact candidate is claimed as current outcome evidence",
+      "a new consensus changes one authority or projection while dependent plan process acceptance prompt implementation evidence documentation or claims remain stale",
       "genuinely human-owned judgment is automated or technically Agent-owned mechanics are transferred to the user",
-      "pre-Accord code, registries, workflows or validator generations are restored wholesale instead of selectively normalized",
-      "a capability index, plan, test, installation, implicit invocation or completed turn is claimed as outcome evidence",
-      "the first mechanism lacks task-bound activation, bounded effects, verification, update or hot reload disposition, rollback, cleanup and retirement",
-      "more code, prompts, state, context, processes or evidence are retained without observed net help over interference and lifecycle cost"
+      "more code prompts state context processes evidence or durable services are retained without observed net help over interference and lifecycle cost"
     ],
-    "finiteStopCondition": "Stop the increment only when an exact clean v3.1.0 candidate has one mapped context-adaptive collaboration-closure model, one minimal replaceable vertical implementation, fresh current-projection evidence for full closure plus no-op, correction, authority, degradation, resource and lifecycle paths, bounded host and client dispositions, independent review, zero task residue and an honest finite claim. Hosted verification, named-human authorization, tag, public Release, installed-update replay and final cleanup remain ordered external gates.",
+    "finiteStopCondition": "Stop the increment only when the complete bounded self-bootstrapping model, reuse ledger, environment-isolation contract, representative and longitudinal evaluation suite, minimum selected product form, reference implementation, declaration-to-effect evidence, governed learning and self-evolution, rollback, retirement, cross-carrier continuity, consensus-wide reconciliation, independent review and zero-residue state agree. Only then may a new exact candidate and semantic version be chosen; hosted verification, named-human authorization, tag, public Release, installed-update replay and final cleanup remain later ordered gates.",
     "workItems": [
       {
-        "id": "work.v31-context-adaptive-collaboration-closure",
-        "state": "completed",
+        "id": "work.complete-bounded-self-bootstrapping-core",
+        "state": "active",
         "acceptanceIds": [
           "R1",
           "R2",
@@ -338,7 +425,7 @@
         ],
         "closeoutSequence": [
           {
-            "id": "model-context-adaptive-collaboration-closure",
+            "id": "rebaseline-product-and-consensus-impact-map",
             "state": "completed",
             "acceptanceIds": [
               "R1",
@@ -348,20 +435,20 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[model-context-adaptive-collaboration-closure] The revisable guidance, program, acceptance contract and compact goal projection distinguish finite collaboration-control obligations from an open demand-capability universe, derive only relevant live relations and constraints, preserve genuinely human-only judgment, and minimize avoidable user-operated mechanics without treating any host feature list or set difference as the product boundary."
+            "stopCondition": "[rebaseline-product-and-consensus-impact-map] The latest consensus is versioned; the prior exact baseline is historical rather than current ready authority; and constitution, plan, process, acceptance, goal projection and dependent documentation agree on complete self-bootstrapping, environment provenance, product-form neutrality, global replay and publication-last."
           },
           {
-            "id": "refresh-current-host-capability-evidence",
+            "id": "conduct-self-bootstrapping-feasibility-and-reuse-study",
             "state": "completed",
             "acceptanceIds": [
               "R2",
               "Q2",
               "Q3"
             ],
-            "stopCondition": "[refresh-current-host-capability-evidence] Current official and observed Codex and Claude capability, lifecycle, configuration, topology and client surfaces are source-bound, freshness-limited and mapped only as candidate suppliers; pre-Accord semantics are normalized and selectively recalled without restoring retired architecture or validators."
+            "stopCondition": "[conduct-self-bootstrapping-feasibility-and-reuse-study] Primary sources, existing wheels, prior failures and bounded probes establish feasible, conditionally feasible and infeasible sub-capabilities plus fit, limits, risks, licenses, stop conditions and implementation evidence gates."
           },
           {
-            "id": "select-first-representative-collaboration-closure",
+            "id": "model-complete-self-bootstrapping-core",
             "state": "completed",
             "acceptanceIds": [
               "R1",
@@ -372,10 +459,10 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[select-first-representative-collaboration-closure] One real unclosed outcome path is selected because it crosses the full demand-to-effect relation chain, not because its host adapter is easy. The task predeclares native no-op, maintained or composed help, bounded authorship, human-only, degradation, correction, verification, resource and cleanup paths."
+            "stopCondition": "[model-complete-self-bootstrapping-core] The admitted feasibility evidence supports one explicit machine-checkable semantic model covering sensing through retirement, responsibility-to-form allocation and cross-form coherence; graph vocabulary, independent fact facets, invariants, unresolved limits, degradation paths and stress scenarios agree, and self-evolution remains subordinate to the complete loop."
           },
           {
-            "id": "implement-minimum-replaceable-closure-mechanism",
+            "id": "design-environment-isolation-and-adaptive-admission",
             "state": "completed",
             "acceptanceIds": [
               "R2",
@@ -385,10 +472,10 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[implement-minimum-replaceable-closure-mechanism] The smallest authorized replaceable mechanism or composition is present and statically bound to the selected relation without claiming host firing or effect, changes no unrelated user configuration, and declares capability-conditioned update or hot reload, rollback, release, cleanup and retirement when a native whole-loop path becomes sufficient."
+            "stopCondition": "[design-environment-isolation-and-adaptive-admission] One claim binds one provenance-bound composition and freshness window; permitted observations, Accord exposure, material confounders, unknowns, comparison arms, evaluator independence, isolation, cleanup and invalidation are explicit; current Accord cannot self-attest native or no-Accord behavior; minimal cannot self-attest official cleanliness; candidate-controlled comparison fails closed; privacy and foreign state are preserved; and unavailable isolation narrows or stops the claim."
           },
           {
-            "id": "replay-noop-help-correction-authority-resource-and-lifecycle",
+            "id": "define-representative-and-longitudinal-evaluation-suite",
             "state": "completed",
             "acceptanceIds": [
               "R1",
@@ -399,10 +486,10 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[replay-noop-help-correction-authority-resource-and-lifecycle] Fresh current-projection observations exercise the full collaboration-closure task plus sufficient-native no-op, correction, route degradation, one unavoidable human gate, process-loss control, bounded resources, failure, rollback, release and zero-residue post-state without reading credential or session logs."
+            "stopCondition": "[define-representative-and-longitudinal-evaluation-suite] Representative and longitudinal case types, ten non-compensating acceptance dimensions, comparison eligibility, exact evidence bindings, independence, privacy, sampling and stop rules and the GT-14 through GT-18 obligation matrix agree; every task has an oracle, counterexamples and claim ceiling; and GT-18 requires the ordered baseline, rejected regression, accepted net improvement and later invalidation sequence without claiming the design was executed."
           },
           {
-            "id": "replay-condition-fit-hosts-and-clients",
+            "id": "prototype-product-form-neutral-vertical-slices",
             "state": "completed",
             "acceptanceIds": [
               "R2",
@@ -412,11 +499,53 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[replay-condition-fit-hosts-and-clients] Codex local is the first behavior surface; Claude Code, an available client and Codex Cloud are exercised only when their actual conditions fit. Each observed combination keeps its own capability, installation, activation, behavior, privacy, toolchain and claim limits; a blocked or unsupported surface remains scoped evidence."
+            "stopCondition": "[prototype-product-form-neutral-vertical-slices] A disposable P4 fixture compares no-added-mechanism, current plugin projection, replaceable composition and bounded authorship under the same responsibility, claim-scoped admission conditions and lifecycle vector; independently observed effect plus zero task residue closes the synthetic loop, native whole-loop sufficiency selects no-op, plugin declaration/enablement earns no effect claim, a lifecycle-dominated proxy improvement rolls back and cleanup residue rejects completion. The result admits only a minimum pure-data reference core with stable compliance invariants and task-supplied policy, and no live mechanism or behavior claim."
           },
           {
-            "id": "independent-review-and-form-exact-v31-candidate",
+            "id": "implement-minimum-self-bootstrapping-reference-core",
             "state": "completed",
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[implement-minimum-self-bootstrapping-reference-core] One pure reconcile_closure interface validates plain-data requests, enforces only stable compliance and human-authority invariants, accepts task-time policy, open-ended forms and source-observer-exact-subject-boundary bindings, derives fail-closed admission and non-weighted route selection, rejects observer/subject self-identity, and reconciles consequence, experiment and matching same-observer-and-boundary independent rollback or keep post-state, cleanup, residue and claim state without I/O, host discovery, fixed workflow, durable state or a new mechanism; interface-level deterministic regressions pass while source authenticity, behavior and value remain unclaimed."
+          },
+          {
+            "id": "replay-activation-effect-evidence-and-lifecycle",
+            "state": "active",
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[replay-activation-effect-evidence-and-lifecycle] Fresh isolated observations separately bind declaration through consequence and lifecycle; failed and contaminated arms remain bounded and cleanup is independently verified."
+          },
+          {
+            "id": "validate-longitudinal-consensus-and-cross-carrier-continuity",
+            "state": "pending",
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[validate-longitudinal-consensus-and-cross-carrier-continuity] A bounded repeated sequence proves authorized learning, later-route improvement, global consensus reconciliation and condition-fit continuity without proxy drift or stale surfaces."
+          },
+          {
+            "id": "independent-review-and-form-future-exact-candidate",
+            "state": "pending",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -427,7 +556,7 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[independent-review-and-form-exact-v31-candidate] Only after semantic, implementation, behavior, interference, lifecycle, documentation and standards review agree may one exact clean v3.1.0 repository candidate enter the existing hosted, named-human, tag, public-release and cleanup gate sequence."
+            "stopCondition": "[independent-review-and-form-future-exact-candidate] Independent review agrees on product value, semantics, implementation, environment controls, longitudinal behavior, lifecycle, documentation and claim before any future exact candidate or release decision."
           }
         ]
       }
@@ -555,10 +684,15 @@
           "GT-07",
           "GT-11",
           "GT-12",
-          "GT-13"
+          "GT-13",
+          "GT-14",
+          "GT-15",
+          "GT-16",
+          "GT-17",
+          "GT-18"
         ],
         "completionOperand": null,
-        "condition": "One locally committed clean v3.1.0 full-release candidate preserves the latest demand and corrections through goal, schema-v3 authority, route, implementation, evidence, acceptance and final claim; its adaptive Codex and Claude packages, bilingual installation and lifecycle guidance, exact current GT-07, GT-11, GT-12 and GT-13 observations, release notes, verifier and tests agree with that chain; all eight repository criteria are verified, historical tags remain immutable and no known blocker or task residue remains."
+        "condition": "This dormant gate opens only after the active self-bootstrapping increment is completed, feasibility has passed, a future semantic version is explicitly selected, and one locally committed clean candidate binds the latest consensus through constitution, plan, process, acceptance, structured goal projection, implementation, documentation, all nine required Golden Tasks and an honest finite claim. All eight repository criteria must be verified, historical tags remain immutable and no known blocker or task residue remains."
       },
       {
         "id": "exact-local-verification-and-review",
@@ -579,10 +713,15 @@
           "GT-07",
           "GT-11",
           "GT-12",
-          "GT-13"
+          "GT-13",
+          "GT-14",
+          "GT-15",
+          "GT-16",
+          "GT-17",
+          "GT-18"
         ],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "On the unchanged clean v3 candidate, the goal carrier directly runs canonical verification, both host checks, all 19 product tests, Claude strict validation, actionlint, JSON, link, identity, diff and residue checks; verifies the publishable GT-07, GT-11, GT-12 and GT-13 source bindings, direct-command result text and structured-record digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent specification, implementation and standards review of the complete demand-and-correction-to-final-claim chain, the adaptive Skill, context-isolated, outcome-bound, identity-neutral representative behavior, verified handoff, ownership-aware resource admission and release, interference, update or replacement rollback and claim ceiling. This pre-push gate verifies README commands and package surfaces but does not claim public-tag installation before the immutable tag exists. Any P0 or P1 blocks; only after this gate passes may the same SHA be pushed."
+        "condition": "On the unchanged future clean candidate, the goal carrier directly runs every declared deterministic check; verifies fresh GT-07 through GT-18 source bindings, exact environment compositions, direct-command results, structured digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent product, specification, implementation and standards review of feasibility, complete self-bootstrapping, product-form choice, isolation, activation-to-effect assurance, governed evolution, longitudinal continuity, interference, rollback, release, cleanup and claim ceiling. Any P0 or P1 blocks; only after this late gate passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
@@ -596,7 +735,7 @@
         ],
         "requiredTaskIds": [],
         "completionOperand": "exactCandidateHostedVerification",
-        "condition": "After push, the unchanged v3 SHA must pass Ubuntu, Windows and macOS GitHub Actions. The goal carrier also attempts an ordinary condition-fit Codex Cloud exact-revision run using an effective repository Skill, AGENTS.md, setup or maintenance bootstrap, native plugin support if established, or bounded degradation; a verified Cloud pass is retained, while missing conditions or insufficient official support are recorded as a scoped non-blocking limitation because Cloud behavior is outside the finite claim. Setup success alone is not behavior proof. Claude client surfaces remain scoped unless separately observed."
+        "condition": "After a future exact push, the unchanged SHA must pass every required hosted system. Condition-fit cloud or client runs bind their exact environment and Accord exposure; missing conditions remain scoped limitations unless the finite claim requires them. Setup, installation or enablement alone is not behavior proof, and historical runs on ae7294652761abceb753f0571ee82c7ddeae06af cannot qualify changed authority, behavior or package bytes."
       },
       {
         "id": "exact-human-release-authorization",
@@ -621,7 +760,7 @@
         ],
         "requiredTaskIds": [],
         "completionOperand": "exactTaggedPublicRelease",
-        "condition": "After exact hosted verification and named-human authorization, create one lightweight v3.1.0 tag and a non-draft, non-prerelease GitHub Release with the tracked release body and no attached assets; never move or reuse an existing tag or superseded development distribution."
+        "condition": "Only after every core and exact-candidate gate plus fresh named-human authorization, create one new lightweight tag for the future selected semantic version and a matching non-draft, non-prerelease GitHub Release with the tracked body and no attached assets; never move or reuse an existing tag or superseded development distribution."
       },
       {
         "id": "release-verification-and-cleanup",
@@ -634,23 +773,26 @@
         ],
         "requiredTaskIds": [],
         "completionOperand": "releaseVerificationAndCleanup",
-        "condition": "The goal carrier directly verifies the remote and local v3.1.0 tag SHA, non-prerelease maturity, Latest eligibility, tracked body, finite claim ceiling and zero-asset policy; updates the bounded local Accord marketplace from the prior immutable ref to exact v3.1.0, verifies the installed Skill bytes and fresh-carrier activation or rolls back on failure; obtains one context-isolated clean-state evaluator replay of the README installation, confirmation and removal path against the public immutable tag; removes task-created Cloud or evaluator resources, confirms repository and task residue are absent, and replays local verification."
+        "condition": "The goal carrier directly verifies the future selected remote and local tag SHA, maturity, Latest eligibility, tracked body, finite claim ceiling and asset policy; updates a bounded isolated Accord marketplace from the prior immutable ref to that exact version, verifies installed bytes and fresh-carrier activation or rolls back on failure; obtains one context-isolated clean-state evaluator replay of supported installation, confirmation and removal paths; removes task-created cloud, evaluator and isolation resources, confirms repository and task residue are absent, and replays local verification."
       }
     ],
-    "rule": "Execute the v3.1.0 full-release gates strictly in order. A failure, correction, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, optional unclaimed client surfaces remain explicit unknowns, and no plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
+    "rule": "This release procedure is dormant while the self-bootstrapping program is active and publication is not the planning center. After all core stages pass and a future exact version is selected, execute the gates strictly in order. A correction, new consensus, failure, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, and no plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
   },
   "goalModePrompt": {
-    "state": "retired",
+    "state": "active-in-host",
     "authority": "derived-from-current-reviewable-authority-set",
-    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"context-adaptive-collaboration-closure-with-verified-outcome-minimum-human-burden-and-reconciled-effects\",\"directive\":\"Deliver one bounded outcome through its lowest-burden authorized collaboration closure; preserve human judgment and authority, own supported orchestration, verify the consequence and release task exposure.\",\"evidenceSurfaces\":[\"codex-local\",\"claude-code-when-current-conditions-fit\",\"available-client-when-effective\",\"codex-cloud-when-current-conditions-fit\"],\"outcome\":{\"claimLimit\":\"Current evidence proves only repository-candidate conformance plus the bounded current-Skill Codex-local GT-07, GT-11, GT-12 and single-arm GT-13 results. Installed Hook firing, implicit invocation, hot reload, comparative value, Claude, client, Cloud, cross-host, field, production, hosted and release claims remain unverified.\",\"completion\":\"The claimed consequence and independent post-state are verified; supported avoidable mechanics are Agent-owned; human-only actions are minimal and verified; unauthorized effects and task residue are zero.\",\"id\":\"outcome.context-adaptive-collaboration-closure\",\"statement\":\"For a bounded nontrivial outcome, derive its relevant obligations and live relations, identify what is unclosed or unreliable, then complete the lowest-burden authorized path while asking only for non-delegable judgment or authority.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"Keep latest demand and corrections aligned through goal, authority, route, implementation, evidence, acceptance and claim. At material correction, effect or phase boundaries, locate the earliest divergence, replay affected downstream work and preserve unrelated accepted truth.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[],\"semantics\":\"Derive current outcome obligations and the smallest relevant relation graph; observe capabilities, authority, evidence, resources, effects and constraints; identify unclosed or unreliable relations and coordination risks; choose the lowest-burden feasible closure path. Recompute on material change and retire authored overlap when a native whole loop suffices.\",\"work\":[]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-fork\"]}",
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"bounded-self-bootstrap-with-provenance-reuse-verified-evolution-and-consistency\",\"directive\":\"Research, build and prove Accord's complete bounded self-bootstrapping core: sense the composed environment, reuse before building, allocate responsibilities to context-fit replaceable forms without a fixed catalogue, verify effects and lifecycle, and reconcile every material correction.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"Historical v3.1 checks and GT-07/11/12/13 are regression evidence only; they do not prove clean baselines, complete self-bootstrapping, durable evolution, form fitness, broad value or release readiness.\",\"completion\":\"One isolated representative and one longitudinal sequence verify feasible reuse, context-fit responsibility-to-form allocation or no-op, cross-form coherence where needed, consequence, governed evolution or rollback, global reconciliation and zero unauthorized residue with lower total burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"Align latest demand, consensus and corrections across authority, the four mapped surfaces, implementation, evidence, documentation and claim. Version material change, locate its earliest dependency, replay affected surfaces and preserve unrelated truth and superseded baselines as history.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"implement-minimum-self-bootstrapping-reference-core\"],\"id\":\"replay-activation-effect-evidence-and-lifecycle\",\"state\":\"active\"}],\"semantics\":\"Version consensus; sense environment provenance and Accord exposure; bind outcome and authority; research feasibility and reusable capability before implementation; dynamically allocate each relevant responsibility to no added artifact, one sufficient form or several replaceable cooperating forms under shared outcome, authority, evidence and lifecycle contracts; verify activation through consequence and post-state; govern learning by keep-discard or rollback; reconcile dependent surfaces; release or retire means that no longer pay their lifecycle cost.\",\"work\":[\"replay-activation-effect-evidence-and-lifecycle\",\"validate-longitudinal-consensus-and-cross-carrier-continuity\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-fork\"]}",
     "workStageIds": [
-      "model-context-adaptive-collaboration-closure",
-      "refresh-current-host-capability-evidence",
-      "select-first-representative-collaboration-closure",
-      "implement-minimum-replaceable-closure-mechanism",
-      "replay-noop-help-correction-authority-resource-and-lifecycle",
-      "replay-condition-fit-hosts-and-clients",
-      "independent-review-and-form-exact-v31-candidate"
+      "rebaseline-product-and-consensus-impact-map",
+      "conduct-self-bootstrapping-feasibility-and-reuse-study",
+      "model-complete-self-bootstrapping-core",
+      "design-environment-isolation-and-adaptive-admission",
+      "define-representative-and-longitudinal-evaluation-suite",
+      "prototype-product-form-neutral-vertical-slices",
+      "implement-minimum-self-bootstrapping-reference-core",
+      "replay-activation-effect-evidence-and-lifecycle",
+      "validate-longitudinal-consensus-and-cross-carrier-continuity",
+      "independent-review-and-form-future-exact-candidate"
     ],
     "releaseGateIds": [
       "repository-candidate",
@@ -672,8 +814,11 @@
     ],
     "refreshTriggers": [
       "user-correction",
+      "new-accountable-consensus",
       "observed-failure-or-side-effect",
       "host-or-capability-drift",
+      "environment-composition-or-Accord-exposure-change",
+      "feasibility-finding-or-existing-wheel-change",
       "resource-pressure-or-release-mismatch",
       "dynamic-index-invalidation",
       "evidence-conflict",
@@ -681,7 +826,7 @@
       "phase-or-authority-boundary",
       "repeated-same-purpose-repair"
     ],
-    "hostLifecycleNote": "The current immutable public release remains the installed baseline. v3.1.0 is a full-release repository candidate, not a public release or universal behavior claim; its changed package or mechanism bytes inherit no hosted, field, human, tag or publication evidence. Installation and enablement expose capability but do not prove task-time activation or collaboration closure. Current Codex and Claude capability observations are freshness-bound participants, not the Agent-neutral product boundary. ZCode and external methodology studies remain later feasibility-backed work, not current implementation."
+    "hostLifecycleNote": "The public recommended release remains v3.0.1. The local Codex host has Accord 3.1.0 installed and enabled; the local Claude Code host has Accord 3.0.1 installed and enabled; both include other extensions and are composed environments rather than official-clean baselines. ae7294652761abceb753f0571ee82c7ddeae06af is a historical verified v3.1.0 baseline, not a current ready candidate after the new product consensus. Installation and enablement do not prove activation, behavior or value. Feasibility research, existing-wheel review and isolated comparison precede implementation; product form and any future semantic version remain undecided, and release is dormant until all core stages complete."
   },
   "hostProjections": [
     {
@@ -767,8 +912,8 @@
       "primaryInstructionBytes": 18940
     },
     "targets": {
-      "maxTrackedFiles": 78,
-      "maxProductCodeAndTestBytes": 260000,
+      "maxTrackedFiles": 80,
+      "maxProductCodeAndTestBytes": 312000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -789,7 +934,7 @@
       "def test_authority_and_static_suite_mutations_fail_closed",
       "def test_complexity_identity_and_paths_fail_closed",
       "def test_current_contract_is_valid_and_explicitly_incomplete",
-      "def test_current_representative_sample_is_complete_at_release_boundary",
+      "def test_current_sample_blocks_release",
       "def test_evidence_authority_bindings_and_types_fail_closed",
       "def test_evidence_cannot_self_verify_or_self_authorize",
       "def test_external_release_contract_is_exact_and_external",
@@ -797,6 +942,7 @@
       "def test_plan_process_acceptance_and_release_order_stay_aligned",
       "def test_projection_evidence_rejects_drift_and_relocation",
       "def test_projection_package_and_admission_are_fail_closed",
+      "def test_reference_core_is_policy_driven_and_fail_closed",
       "def test_representative_sample_binds_projection_source_and_task",
       "def test_retired_residue_and_duplicate_json_fail_closed",
       "def test_active_tree_reads_are_descriptor_bound",
@@ -806,7 +952,7 @@
       "def test_identity_decoding_and_file_io_fail_closed",
       "def test_retired_identity_static_surfaces_are_rejected"
     ],
-    "minimumTestCount": 19,
+    "minimumTestCount": 20,
     "forbiddenActivePaths": [
       "yiyuan_accord/task_validator_o1_lifecycle_suite.py",
       "yiyuan_accord/task_validator_o2_codex_reference.py",
@@ -820,7 +966,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. The active bounded-autonomy increment raises the planning checkpoint to at most 78 tracked files and 260000 product-code-and-test bytes with at least five percent headroom so one release note, bounded host mechanism, tests and evidence can be admitted without pretending that the previous public release's three spare slots are a permanent architecture. None is a growth target. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module and two-axis review exposed missing anti-self-attestation, exact-subject, same-boundary and actual experiment-poststate gates, the active bounded-autonomy increment sets the planning checkpoint at no more than 80 tracked files and 312000 product-code-and-test bytes with at least five percent byte headroom and three tracked-file slots after the admitted feasibility record and one deep pure-data reference-core module are included. The increase from the pre-implementation 266000-byte checkpoint pays only for the single reconcile_closure interface, its policy-driven compliance, Pareto and lifecycle logic, source-observer-subject-boundary binding, matching rollback or keep post-state, and interface-level regression; it is not a growth target or advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. The result remains far below the 1551209-byte historical baseline and preserves bounded current headroom without pretending that spare capacity is permanent architecture. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,
@@ -828,11 +974,11 @@
     "samePurposeRepairBeforeReplan": 1,
     "prohibitedAgentWorkTransfer": 0,
     "taskResidueAtCheckpoint": 0,
-    "alignmentRule": "Keep latest demand and corrections aligned through goal, authority, route, implementation, evidence, acceptance and claim. At material correction, effect or phase boundaries, locate the earliest divergence, replay affected downstream work and preserve unrelated accepted truth.",
+    "alignmentRule": "Align latest demand, consensus and corrections across authority, the four mapped surfaces, implementation, evidence, documentation and claim. Version material change, locate its earliest dependency, replay affected surfaces and preserve unrelated truth and superseded baselines as history.",
     "resourceRule": "Observe current demand and capacity, attribute identity, owner, lease and state, admit minimum sufficient concurrency and budget, rebalance or degrade under pressure, release only attributable task-owned exposure through authorized native controls, and independently verify post-state and residue. Shared or unknown ownership is never reclaimed automatically; sufficient native whole-loop governance is a no-op and an Accord-specific mechanism retirement trigger.",
     "carrierRule": "Use current source-bound host signals when reliable; if capacity is unavailable, record unknown and transition conservatively. No universal turn count, context size, token percentage or summary ratio is product authority.",
     "correctionRule": "A material correction, failure, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary and requires that boundary and every downstream gate to be replayed while unrelated accepted truth remains stable. A repeated correction or failed same-purpose mechanism pauses the current shape until premise, interface and representation are reconsidered; deletion, replacement, recomposition, native-host delegation and bounded addition are all considered. There is no universal add-or-subtract default, while L2 requires a deletion or replacement attempt before another same-purpose repair layer. Authority surfaces form a reviewable versioned current set; their merge, split, replacement or retirement requires explicit provenance-preserving schema and verifier migration plus the same earliest-boundary replay.",
-    "continuingCalibration": "Post-release failures may update Golden Tasks, narrow a claim, simplify or retire a projection, or open one new bounded increment; release status does not freeze learning.",
-    "boundedAutonomyRule": "At each material phase, recompute the latest outcome obligations, relevant live relations and constraints, healthy effective capabilities, genuinely non-delegable human judgment, unclosed obligations and coordination or verification risks. Preserve the latest correction through closure path, implementation, evidence, acceptance and claim."
+    "continuingCalibration": "Feasibility findings, prototype counterevidence, representative or longitudinal failures and later field evidence may update Golden Tasks, narrow a claim, simplify or retire a projection, or open one new bounded increment; neither a ready baseline nor a release freezes learning or future consensus.",
+    "boundedAutonomyRule": "At each material phase, sense environment composition and Accord exposure; recompute the latest outcome obligations, consensus, relevant relations and constraints, healthy effective and reusable capabilities, genuinely non-delegable human judgment, unclosed obligations and risks. Feasibility precedes implementation. Preserve each material correction through the four mapped surfaces, chosen product form, implementation, evidence, documentation, acceptance and claim; self-evolution remains subordinate to full-loop outcome, authority, rollback and retirement."
   }
 }
