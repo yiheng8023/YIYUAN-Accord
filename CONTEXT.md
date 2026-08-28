@@ -267,6 +267,15 @@ _Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: li
 `product/constitution.json#/evolutionPolicy`
 _Avoid_: permanent installation
 
+**Responsibility-scoped retirement**:
+The composition-bound end of one Accord responsibility allocation after an
+admitted successor closes the same obligation and the transition remains
+reversible, observed and recheckable. It does not imply whole-product retirement.
+_Source_: `product/constitution.json#/evolutionPolicy/retirementRule`,
+`product/reshaping-guidance.json#/selfBootstrappingCore/semanticModel`
+_Avoid_: host-version cutoff, declaration-driven removal, global uninstall,
+permanent retirement across environment drift
+
 ## Human and Agent roles
 
 **Responsibility**:

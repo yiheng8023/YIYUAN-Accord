@@ -101,10 +101,10 @@ Then read, in order:
   state edges, effect, retirement and cleanup. Separate Hook-disabled effect,
   sequence, carrier and cleanup reviewers passed; the f0ed9ce/08eb72a attempt
   remains counterevidence. `self-audit-remediate-and-reaccept-whole-system-balance`
-  is active. The existing Codex goal already contains this work but its ordered
-  step cannot be refreshed in place, so the deterministic next goal projection
-  is `prepared-host-goal-paused`; host target state remains task state rather
-  than behavior or value evidence.
+  is active. The user cleared the host goal after a new dynamic-retirement
+  consensus; the deterministic repository projection remains
+  `prepared-host-goal-paused` and must be refreshed before any later activation.
+  Host target state remains task state rather than behavior or value evidence.
   At audit cut `1463034569fe6e724f186c88171e3ee12dffc94b`, BAL-04 ran one
   disposable matched repository-Skill/no-Accord correction task with Codex CLI
   0.150.1 and `gpt-5.6-luna`. Both arms passed the same independent outcome,
@@ -118,6 +118,20 @@ Then read, in order:
   gates plus lifecycle Pareto and equivalent-fit native/reuse preference.
   Every earlier behavior observation remains bound to the old Skill hashes;
   R3 is planned again for the corrected projections.
+  At exact clean rebaseline `f898ebd6c14580fb9236cd01440b88314b3c2fab`,
+  the reference core could select a healthy native no-op but could not close the
+  lifecycle of a non-selected redundant Accord route. A red deterministic
+  regression reproduced that gap. The current working tree adds the minimum
+  host-neutral responsibility-scoped retirement contract: the selected
+  successor must cover the same responsibility and have prior independent
+  consequence and cleanup; the transition also requires authorized reversible
+  observation, independent retirement post-state and recheck triggers. Missing,
+  stale or premature retirement blocks closure, and drift or evidence expiry
+  starts a fresh allocation decision. GT-19 now specifies the four-episode
+  declaration-rejection, verified replacement, scoped retirement and
+  recomputation behavior, but remains unperformed. This is pure-data
+  conformance only; no live host mechanism, Runtime, durable state or global
+  uninstall was added.
   All eight criteria are intentionally unverified for the new target, and
   repository candidate readiness is false. Release authorization remains
   unrequested because publication is the last phase and repository content
@@ -213,7 +227,8 @@ Then read, in order:
   exclusion even though the fresh v3 Codex-local GT-07 independently verified
   exact fixture post-state. Historical evidence is preserved against its
   versioned task contract rather than rewritten to match the current task.
-  GT-14 through GT-18 have a machine-checkable design. Exact checkpoint
+  GT-14 through GT-19 have a machine-checkable design; GT-19 remains
+  unperformed. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
@@ -262,7 +277,7 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The active development guardrail permits at most 86 tracked files and
-  326000 product-code-and-test bytes with at least five percent headroom and
+  338000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
   regression, one append-only GT-14 through GT-18 source and five observations,
@@ -270,9 +285,12 @@ Then read, in order:
   experiment-poststate gates. The two-file increase from 84 pays only for the
   GT-17 and GT-18 observation carriers; their fixture and state carrier were
   removed. Independent review then exposed missing GT-17 cleanup and GT-18
-  full-vector/carrier-edge source validation; the bounded 14000-byte increase
-  pays only for those fail-closed checks and mutation regressions, not advance
-  allowance for a Runtime, adapter, state layer or future mechanism. The historical v3.1 baseline added one release note,
+  full-vector/carrier-edge source validation. The later f898ebd audit exposed
+  missing non-selected-route retirement closure; the latest bounded 12000-byte
+  increase pays only for same-responsibility successor, prior consequence and
+  cleanup, reversible retirement, recheck, completion-failure logic and negative
+  regressions, not advance allowance for a Runtime, adapter, state layer or
+  future mechanism. The historical v3.1 baseline added one release note,
   two Hook files, one combined source and four observations. The new program
   adds no implementation merely to consume the remaining budget; every future
   mechanism must pay rent.
@@ -369,8 +387,9 @@ increment and one active work item. Its ordered work is:
    minimum-four-episode longitudinal sequences; defines ten non-compensating
    acceptance dimensions, counterfactual-derived comparison eligibility, exact
    evidence and carrier bindings, independence/privacy/sampling/stop rules and
-   a GT-14 through GT-18 obligation matrix; and gives every new task an oracle,
-   counterexamples and claim ceiling.
+   a GT-14 through GT-19 obligation matrix; and gives every new task an oracle,
+   counterexamples and claim ceiling. GT-19 is a four-episode dynamic
+   responsibility-retirement design and is not yet executed.
 6. `prototype-product-form-neutral-vertical-slices` — completed. The disposable
    P4 fixture selected the minimum composition for an observed continuity gap,
    no-op when the native whole loop was observed, rejected plugin enablement as
@@ -378,8 +397,11 @@ increment and one active work item. Its ordered work is:
    closed on cleanup residue. This is synthetic logic evidence only.
 7. `implement-minimum-self-bootstrapping-reference-core` — completed as the
    deterministic, side-effect-free, policy-driven `reconcile_closure` deep
-   module. Its 20/20 working-tree product tests are conformance only, not live
-   behavior or value evidence.
+   module. It now records required non-selected route retirement only after a
+   same-responsibility selected successor has independent consequence and
+   cleanup, reversible policy gates, independent retirement post-state and
+   recheck triggers. Its working-tree product tests are conformance only, not
+   live behavior or value evidence.
 8. `replay-activation-effect-evidence-and-lifecycle` — completed. The first
    exact GT-14 through GT-16 attempt remains failed source-sufficiency
    counterevidence. At `84447a7a1b9557e22ef5585d159459e8701fa40e`, the
@@ -400,8 +422,8 @@ increment and one active work item. Its ordered work is:
     user burden, privacy/supply chain, reliability, resource, architecture,
     lifecycle, documentation and governance dimensions; prioritize hard gates
     and weakest justified links; apply minimum reversible remediation; and
-    replay every affected acceptance surface without treating self-review as
-    independent evidence.
+    replay every affected acceptance surface, including future-exact GT-19,
+    without treating self-review as independent evidence.
 11. `independent-review-and-form-future-exact-candidate` — pending.
 
 The release procedure is dormant. A future semantic version, exact candidate,

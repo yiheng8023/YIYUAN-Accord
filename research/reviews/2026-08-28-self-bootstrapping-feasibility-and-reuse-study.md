@@ -984,3 +984,88 @@ trace/context remediations. It does not prove field value, complete environment
 sensing, Hook benefit, product-form sufficiency, cross-host portability,
 candidate readiness, release readiness or that the listed dimensions exhaust
 all future failure modes. Those remain active blockers or recheck obligations.
+
+## Dynamic responsibility retirement rebaseline at `f898ebd`
+
+The 2026-08-28 human consensus sharpened an existing principle rather than
+selecting a host or product form: host capability surfaces differ and drift, so
+native coverage and Accord retirement must be derived dynamically as one
+closed lifecycle loop. The canonical term is **responsibility-scoped
+retirement**. It is not a host-version cutoff, feature-table lookup, global
+uninstall rule or proof that the whole product has become redundant.
+
+### Claim-scoped baseline, target and counterfactual
+
+- Baseline: exact clean revision
+  `f898ebd6c14580fb9236cd01440b88314b3c2fab`. Its pure-data core could admit a
+  healthy `native-no-add` route and select `no-op`, but a `route-retired` event
+  for a non-selected redundant Accord route produced no retirement result.
+  The first bounded regression failed with `KeyError: 'retirementResults'`.
+- Target: for one exact composed environment and current responsibility, an
+  admitted selected successor has prior independently observed consequence and
+  cleanup; the retired allocation prestate and task-defined observation window
+  are observed; the redundant route transition is authorized, reversible, independently observed
+  and tied to explicit recheck triggers; missing, stale or premature required
+  retirement blocks closure. A later composition change or evidence expiry is a
+  new decision, not proof that the earlier finite retirement was universally
+  wrong or permanent.
+- Counterfactuals: leaving the redundant route active preserves fallback but
+  can retain avoidable context, interference and maintenance burden; retiring by
+  host name, version, visibility or declaration is under-evidenced; global
+  uninstall overreaches responsibility and authority boundaries; a standing
+  monitor, Runtime or durable state store is unjustified until a live route
+  demonstrates that need.
+- Evidence cutoff: repository authority, prior feasibility sources, the exact
+  baseline behavior and current deterministic regression. No live host
+  activation, native capability effect, uninstallation or field-value evidence
+  is claimed.
+- Confounders and limits: the fixture supplies task-time facts and does not
+  authenticate official sources, execute host controls or prove that a latent
+  fallback remains usable outside the exact composition. Those remain adapter
+  and representative-evidence responsibilities.
+- Invalidation triggers: goal or responsibility change, environment composition
+  or Accord exposure change, host capability drift, evidence expiry or conflict,
+  replacement consequence or cleanup regression, rollback loss, retirement
+  post-state failure, new authority boundary or non-zero residue.
+
+### Feasibility and minimum implementation decision
+
+The existing deep module already represented open-ended routes,
+responsibility supplies, hard admission, Pareto/context selection, independent
+effect and cleanup observations, experiments, rollback and a finite
+composition-bound claim. The smallest falsifiable change therefore extends that
+same interface rather than adding another component:
+
+1. task policy optionally names retirement facts and routes that must close;
+2. a retirement event binds the redundant route, selected replacement, exact
+   responsibility subset, policy preconditions, independent evidence and recheck
+   triggers;
+3. the decision accepts retirement only after the replacement is the admitted
+   selected route and its consequence plus cleanup have already been
+   independently observed;
+4. required retirement missing, premature, stale or non-independent becomes a
+   completion failure;
+5. the output records `retired-with-recheck`, exact retired route IDs, evidence
+   binding and finite claim scope. It performs no effect and never infers
+   whole-product retirement.
+
+The regression is now green for accepted scoped retirement, an unknown
+observation-window fact, an omitted required retirement and a retirement event
+ordered before successor consequence/cleanup. This is deterministic
+conformance only. GT-19 adds the future source-complete four-episode behavior
+obligation: Accord-backed baseline, declaration-only native counterexample,
+verified same-responsibility replacement and reversible retirement, then drift
+or expiry recomputation. It remains unperformed and blocks candidate formation.
+
+### Index and graph delta
+
+The derived graph adds only `audit-cut:f898ebd`,
+`responsibility:dynamic-retirement`, `route:current-Accord-allocation`,
+`route:selected-successor`, `evidence:successor-consequence-cleanup`,
+`transition:retired-with-recheck`, `task:GT-19` and
+`remediation:BAL-05`. `selected-successor provides responsibility`,
+`transition replaces current-Accord-allocation`, independent evidence
+`verifies` the successor and transition, recheck triggers `invalidate` the
+finite allocation, and GT-19 `verifies` the future behavior claim. Task-time
+host capability instances remain ephemeral; no host-model-tool-context product
+is precomputed and the graph remains derived rather than authoritative.

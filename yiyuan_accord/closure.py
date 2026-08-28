@@ -37,6 +37,12 @@ COMPLIANCE_EXPERIMENT_FACTS = (
     "independent-effect-and-cleanup-poststate",
 )
 COMPLIANCE_EXPERIMENT_DIMENSIONS = ("authority", "evidence")
+COMPLIANCE_RETIREMENT_FACTS = (
+    "within-human-authority",
+    "retired-route-prestate",
+    "task-defined-observation-window-complete",
+    "available-rollback",
+)
 
 
 def _identifier(value: Any) -> bool:
@@ -141,6 +147,9 @@ def _validate_request(request: Any) -> list[str]:
             allow_empty = field != "comparisonDimensions"
             if not _string_list(policy.get(field), allow_empty=allow_empty):
                 errors.append(f"policy.{field} must be a unique string list")
+        for field in ("requiredRetirementFacts", "requiredRetirementRouteIds"):
+            if not _string_list(policy.get(field, [])):
+                errors.append(f"policy.{field} must be a unique string list")
 
     routes = request.get("routes")
     if not isinstance(routes, list) or not routes:
@@ -183,6 +192,14 @@ def _validate_request(request: Any) -> list[str]:
             errors.append(f"{label}.lifecycle lacks a non-negative comparison dimension")
     if len(route_ids) != len(set(route_ids)):
         errors.append("route ids must be unique")
+    required_retirement_ids = policy.get("requiredRetirementRouteIds", []) \
+        if isinstance(policy, Mapping) else []
+    if _string_list(required_retirement_ids):
+        for route_id in required_retirement_ids:
+            if route_id not in route_ids:
+                errors.append(
+                    "policy.requiredRetirementRouteIds contains an unknown route"
+                )
 
     events = request.get("events")
     if not isinstance(events, list) or any(
@@ -287,6 +304,46 @@ def _validate_request(request: Any) -> list[str]:
             if not _identifier(event.get("routeId")) \
                     or event.get("routeId") not in valid_route_ids:
                 errors.append(f"{label}.routeId is unknown")
+            if not _identifier(event.get("replacementRouteId")) \
+                    or event.get("replacementRouteId") not in valid_route_ids:
+                errors.append(f"{label}.replacementRouteId is unknown")
+            elif event.get("replacementRouteId") == event.get("routeId"):
+                errors.append(
+                    f"{label}.replacementRouteId must differ from routeId"
+                )
+            responsibilities = event.get("responsibilities")
+            if not _string_list(responsibilities, allow_empty=False):
+                errors.append(f"{label}.responsibilities is invalid")
+            else:
+                outcome_responsibilities = outcome.get("responsibilities", []) \
+                    if isinstance(outcome, Mapping) else []
+                route_by_id = {
+                    route.get("id"): route for route in routes
+                    if isinstance(route, Mapping)
+                }
+                retired_route = route_by_id.get(event.get("routeId"), {})
+                replacement_route = route_by_id.get(
+                    event.get("replacementRouteId"), {}
+                )
+                if any(item not in outcome_responsibilities
+                       for item in responsibilities):
+                    errors.append(
+                        f"{label}.responsibilities exceed the current outcome"
+                    )
+                if any(item not in retired_route.get("supplies", [])
+                       for item in responsibilities):
+                    errors.append(
+                        f"{label}.responsibilities are not supplied by routeId"
+                    )
+                if any(item not in replacement_route.get("supplies", [])
+                       for item in responsibilities):
+                    errors.append(
+                        f"{label}.responsibilities are not supplied by replacementRouteId"
+                    )
+            if not _fact_map(event.get("preconditions")):
+                errors.append(f"{label}.preconditions is invalid")
+            if not _string_list(event.get("recheckTriggers"), allow_empty=False):
+                errors.append(f"{label}.recheckTriggers is invalid")
             if event.get("state") not in FACT_VALUES:
                 errors.append(f"{label}.state is invalid")
             if event.get("independent") not in FACT_VALUES:
@@ -492,8 +549,10 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
     facts: dict[str, dict[str, Any]] = {}
     event_results: list[dict[str, Any]] = []
     experiment_results: list[dict[str, Any]] = []
+    retirement_results: list[dict[str, Any]] = []
     residual_resources: list[str] | None = None
-    retired = False
+    retired_route_ids: list[str] = []
+    selected_route_retired = False
 
     for index, event in enumerate(request["events"]):
         kind = event["kind"]
@@ -547,6 +606,60 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
                     "poststate does not close a preceding experiment decision"
                 ),
             })
+        elif kind == "route-retired":
+            route_id = event["routeId"]
+            replacement_id = event["replacementRouteId"]
+            reasons: list[str] = []
+            if route_id == selected_id:
+                reasons.append("the selected route cannot retire itself")
+            if replacement_id != selected_id:
+                reasons.append("replacement is not the selected route")
+            if replacement_id not in admitted_ids:
+                reasons.append("replacement route is not admitted")
+            for fact_id in ("consequence", "cleanup-poststate"):
+                observation = facts.get(fact_id, {
+                    "state": "unknown", "independent": "unknown"
+                })
+                if observation["state"] != "observed" \
+                        or observation["independent"] != "observed":
+                    reasons.append(
+                        f"replacement {fact_id} is not independently observed"
+                    )
+            retirement_facts = _ordered_union(
+                COMPLIANCE_RETIREMENT_FACTS,
+                policy.get("requiredRetirementFacts", []),
+            )
+            reasons.extend(item["detail"] for item in _fact_failures(
+                event["preconditions"], retirement_facts, "retirement"
+            ))
+            if event["state"] != "observed":
+                reasons.append("retirement state is not observed")
+            if event["independent"] != "observed":
+                reasons.append("retirement post-state is not independent")
+            accepted = not reasons
+            if accepted and route_id not in retired_route_ids:
+                retired_route_ids.append(route_id)
+            if route_id == selected_id and event["state"] == "observed":
+                selected_route_retired = True
+            retirement = {
+                "routeId": route_id,
+                "replacementRouteId": replacement_id,
+                "responsibilities": list(event["responsibilities"]),
+                "accepted": accepted,
+                "disposition": (
+                    "retired-with-recheck" if accepted else "hold-unknown"
+                ),
+                "reasons": reasons,
+                "recheckTriggers": list(event["recheckTriggers"]),
+                "evidenceBinding": dict(event["evidence"]),
+                "eventIndex": index,
+            }
+            retirement_results.append(retirement)
+            result.update({
+                "accepted": accepted,
+                "disposition": retirement["disposition"],
+                "reason": None if accepted else "; ".join(reasons),
+            })
         elif event.get("routeId") != selected_id or selected is None:
             result.update({
                 "accepted": False,
@@ -574,9 +687,6 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
                 "releasedResources": list(event["releasedResources"]),
                 "residualTaskResources": residual_resources,
             })
-        elif kind == "route-retired":
-            retired = event["state"] == "observed"
-            result.update({"accepted": True, "retired": retired})
         event_results.append(result)
 
     required_completion = _ordered_union(
@@ -629,7 +739,20 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
             "state": "not-observed",
             "detail": "task-owned residual resources remain",
         })
-    if retired:
+    accepted_retirements = {
+        item["routeId"] for item in retirement_results if item["accepted"]
+    }
+    for route_id in policy.get("requiredRetirementRouteIds", []):
+        if route_id not in accepted_retirements:
+            completion_failures.append({
+                "code": f"completion:retirement:{route_id}",
+                "state": "unknown",
+                "detail": (
+                    f"required route {route_id} lacks an independently observed "
+                    "reversible retirement bound to the selected replacement"
+                ),
+            })
+    if selected_route_retired:
         completion_failures.append({
             "code": "completion:selected-route-retired",
             "state": "not-observed",
@@ -652,8 +775,10 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
             "effectiveRouteFacts": effective_route_facts,
             "eventResults": event_results,
             "experimentResults": experiment_results,
+            "retirementResults": retirement_results,
+            "retiredRouteIds": retired_route_ids,
             "residualTaskResources": residual_resources,
-            "selectedRouteRetired": retired,
+            "selectedRouteRetired": selected_route_retired,
             "completionFailures": completion_failures,
             "completionAllowed": completion_allowed,
         },

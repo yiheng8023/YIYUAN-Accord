@@ -55,7 +55,11 @@ replay passes GT-17 only for the bounded evidence correction and GT-18 only for
 one synthetic four-episode full-vector sequence with actual carrier source and
 target states, regression rollback, native no-add retention, later invalidation,
 replacement, retirement and zero task resources. The source-bound whole-system
-balance audit is now active. Live mechanisms, durable continuity, cross-host or
+balance audit is now active. A new GT-19 host-drift lane is designed but
+unperformed: declaration alone must not retire Accord; a verified native route
+may retire only the same responsibility through reversible observed lifecycle
+post-state, and later drift or evidence expiry must recompute the allocation.
+Live mechanisms, durable continuity, cross-host or
 population value and release remain gated. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
 verified, unreleased v3.1.0 baseline; a later product consensus superseded its
@@ -314,8 +318,11 @@ under pressure; releases only attributable task-owned resources; and verifies
 post-state and residue. Shared or unknown resources are preserved.
 
 Healthy native limits, interruption, cleanup and reclamation are reused first.
-When a host demonstrably closes the whole loop, Accord adds no controller and
-its redundant logic is retired. A performance trace or cleanup command is
+When a host demonstrably closes one responsibility, Accord makes that allocation
+a no-op and retires only the redundant logic after independent consequence and
+cleanup, reversible observation, retirement post-state and recheck triggers.
+Drift or evidence expiry recomputes the route; one covered responsibility never
+implies whole-product retirement. A performance trace or cleanup command is
 diagnostic/control evidence, not proof of automatic optimization or release.
 Tracing remains on-demand and must not be silently collected or uploaded.
 

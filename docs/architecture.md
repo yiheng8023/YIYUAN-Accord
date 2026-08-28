@@ -323,7 +323,12 @@ The host-check command is deliberately two-level:
 Declared, installed or visible capability is not automatically effective
 capability. Current official host guidance is high-weight task-time evidence,
 not permanent core authority. Host drift causes revalidation, and native
-improvement may retire projection logic.
+improvement may retire projection logic. Retirement is dynamic and
+responsibility-scoped: the current selected successor must close the same
+obligation with independent consequence and cleanup, authorized reversible
+observation, an independent retirement post-state and explicit recheck
+triggers. Evidence expiry or composition drift recomputes the allocation;
+covering one responsibility never proves that the whole product is redundant.
 
 ## Resource stewardship
 
@@ -405,10 +410,13 @@ Comparison eligibility comes from the named counterfactual. Environment arms
 use the composed-environment admission contract; no-build, reuse, composition
 and authorship are route candidates rather than environment arms. A single
 current-composition case cannot claim causal or native value. GT-14 through
-GT-18 each bind a case type, oracle, counterexamples and claim ceiling, while
+GT-19 each bind a case type, oracle, counterexamples and claim ceiling, while
 the coverage matrix assigns environment admission, feasibility/reuse,
 minimum-form bootstrap, global consensus reconciliation and longitudinal
-evolution obligations. Exact checkpoint
+evolution obligations. GT-19 adds a four-episode host-drift lane: Accord-backed
+baseline, declaration-only native counterexample, verified same-responsibility
+successor plus reversible scoped retirement, then drift or evidence-expiry
+recomputation. It is designed but unperformed. Exact checkpoint
 `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14 through
 GT-16 attempts as counterevidence: summary execution and cleanup do not replace
 the task-required source facts. The later exact revision

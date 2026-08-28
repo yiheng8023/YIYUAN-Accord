@@ -90,8 +90,10 @@ Admit minimum concurrency and budget, monitor outcome and pressure, then
 rebalance, degrade, interrupt or hand off when evidence changes.
 
 Prefer healthy native admission, limits, interruption, cleanup and reclamation.
-If the host demonstrably closes the whole loop, do nothing and retire redundant
-Accord logic. Automatically release only attributable, task-exclusive resources
+When it closes one responsibility, no-op that allocation; retire only its
+redundant Accord logic after independent effect/lifecycle post-state, reversible
+observation and recheck triggers. Recompute on drift/expiry; local coverage is
+not product retirement. Release only attributable task-exclusive resources
 through authorized, reversible and verifiable controls; preserve shared or
 unknown resources, reduce new admission or choose a lighter route instead.
 Verify pre/post state, release latency and residue—task, turn, process or
@@ -108,10 +110,10 @@ readiness, installation and enablement are not behavior or value evidence.
 **Static readiness is not behavior**. For
 ordinary work, do not impose that ceremony.
 
-Apply H1–H10: official guidance first but conditional; native first; capability
-over version; effective over declared; unknown is first-class; drift is normal;
-verify consequential effects; no user compensation; keep host details outside
-the kernel; retire projection logic when native capability closes the gap.
+Apply H1–H10: official evidence first but conditional; prefer effective native
+capability over names or versions; treat unknown and drift as first-class;
+verify effects, avoid user compensation, keep host details outside the kernel,
+and retire only responsibilities an admitted native route fully closes.
 
 Apply L1–L8: outcome over process; subtraction before repeated repair; total
 complexity must pay rent; assurance scales with consequence and claim; measure

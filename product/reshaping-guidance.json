@@ -456,9 +456,9 @@
           "id": "replaceable-by",
           "meaning": "A form, carrier or mechanism has an admitted substitution path."
         },
-        {
-          "id": "retires-when",
-          "meaning": "A mechanism or allocation has an explicit expiry or negative-value condition."
+      {
+        "id": "retires-when",
+        "meaning": "A responsibility allocation or mechanism has an explicit composition-bound expiry, admitted successor, reversible transition, independent retirement post-state and recheck condition."
         }
       ],
       "factModel": {
@@ -504,8 +504,9 @@
           "rollback",
           "hold-unknown",
           "replay",
-          "honest-stop",
-          "retire"
+        "honest-stop",
+        "retire",
+        "retired-with-recheck"
         ]
       },
       "routeDecision": {
@@ -520,7 +521,8 @@
           "prefer-no-op-native-or-maintained-reuse-only-among-equivalent-fit-paths",
           "execute-with-bounded-effects-and-resources",
           "verify-consequence-poststate-residue-and-claim",
-          "learn-reconcile-degrade-rollback-release-or-retire"
+        "for-each-redundant-allocation-bind-the-selected-successor-responsibility-coverage-observation-window-rollback-independent-retirement-poststate-and-recheck-triggers",
+        "learn-reconcile-degrade-rollback-release-or-retire-and-recompute-on-drift-or-expiry"
         ],
         "hardAdmission": [
           "closes-named-responsibilities",
@@ -645,9 +647,9 @@
           "id": "global-correction-replays-dependents",
           "rule": "A material consensus or fact change replays every dependent surface from the earliest affected boundary while preserving unrelated truth."
         },
-        {
-          "id": "forms-pay-lifecycle-rent",
-          "rule": "Flexibility cannot justify unused, duplicated, stale or non-retirable forms and mechanisms."
+      {
+        "id": "forms-pay-lifecycle-rent",
+        "rule": "Flexibility cannot justify unused, duplicated, stale or non-retirable forms and mechanisms. Retirement is responsibility-scoped and composition-bound: an admitted successor must independently close the same consequence and cleanup before a reversible observed transition, and local coverage cannot self-attest whole-product retirement."
         }
       ],
       "fundamentalLimits": [
@@ -690,9 +692,9 @@
           "when": "continuity-carrier-lifecycle-is-incomplete",
           "disposition": "reject-durable-carrier"
         },
-        {
-          "when": "a-form-no-longer-pays-lifecycle-rent",
-          "disposition": "degrade-replace-or-retire"
+      {
+        "when": "a-form-no-longer-pays-lifecycle-rent",
+        "disposition": "bind-a-same-responsibility-successor-then-bypass-degrade-replace-or-retire-with-recheck"
         },
         {
           "when": "an-effect-is-irreversible",
@@ -713,6 +715,16 @@
           "expectedDisposition": "no-op",
           "guards": [
             "allocation-is-explicit",
+            "forms-pay-lifecycle-rent"
+          ]
+        },
+        {
+          "id": "native-route-covers-one-Accord-responsibility-after-host-drift",
+          "expectedDisposition": "retired-with-recheck",
+          "reason": "same-responsibility-successor-consequence-cleanup-observation-rollback-and-retirement-poststate-are-observed",
+          "guards": [
+            "environment-binds-fitness",
+            "effect-before-claim",
             "forms-pay-lifecycle-rent"
           ]
         },
@@ -1595,15 +1607,15 @@
       "residual-risk-claim-limit-and-recheck-trigger"
     ],
     "activeProjection": {
-      "auditCut": "1463034569fe6e724f186c88171e3ee12dffc94b",
-      "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#whole-system-balance-self-audit-active-cut-at-1463034",
-      "dominantBlocker": "one-condition-fit-representative-outcome-binding-candidate-exposure-effect-burden-interference-resource-cost-and-lifecycle",
+      "auditCut": "f898ebd6c14580fb9236cd01440b88314b3c2fab",
+      "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#dynamic-responsibility-retirement-rebaseline-at-f898ebd",
+      "dominantBlocker": "future-exact-source-complete-representative-value-for-a-genuine-gap-including-dynamic-responsibility-scoped-retirement",
       "remediation": {
         "BAL-01": "implemented-pending-reacceptance",
         "BAL-02": "implemented-pending-reacceptance",
         "BAL-03": "one-pair-no-observed-harm-not-firing-effect-or-value-proof",
         "BAL-04": "paired-no-add-calibration-complete-genuine-unclosed-responsibility-still-required",
-        "BAL-05": "pending-form-selected-by-BAL-04"
+        "BAL-05": "pure-data-dynamic-retirement-contract-implemented-pending-source-complete-GT-19-and-global-reacceptance"
       },
       "graphRule": "Project only this cut, blocker relations and selected remediations; refresh on invalidation and never precompute host-model-tool-context products."
     },

@@ -369,7 +369,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(suite['attemptedTaskIds'], [
             'GT-14', 'GT-15', 'GT-16', 'GT-17', 'GT-18',
         ])
-        self.assertEqual(suite['unperformedTaskIds'], [])
+        self.assertEqual(suite['unperformedTaskIds'], ['GT-19'])
         self.assertEqual(
             {item['id'] for item in suite['caseTypes']},
             {'representative-case', 'longitudinal-sequence'},
@@ -386,11 +386,11 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             {item['taskId'] for item in suite['coverageMatrix']},
-            {f'GT-{number}' for number in range(14, 19)},
+            {f'GT-{number}' for number in range(14, 20)},
         )
         new_tasks = {
             item['id']: item for item in golden['tasks']
-            if item['id'] in {f'GT-{number}' for number in range(14, 19)}
+            if item['id'] in {f'GT-{number}' for number in range(14, 20)}
         }
         self.assertTrue(all(item['evaluationDesign'] for item in new_tasks.values()))
         self.assertEqual(
@@ -399,6 +399,13 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             new_tasks['GT-18']['evaluationDesign']['episodeRoles'],
             [item['id'] for item in suite['longitudinalSequence']['episodeRoles']],
+        )
+        self.assertEqual(
+            new_tasks['GT-19']['evaluationDesign']['minimumEpisodes'], 4
+        )
+        self.assertIn(
+            'equate-one-responsibility-replacement-with-whole-product-retirement',
+            new_tasks['GT-19']['prohibited'],
         )
         self.assertIn(
             'preview2-is-a-current-release-candidate',
@@ -427,7 +434,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             acceptance['representativeBehaviorPolicy']['requiredTaskIdsForRelease'],
-            ['GT-07','GT-11','GT-12','GT-13',*[f'GT-{n}' for n in range(14,19)]],
+            ['GT-07','GT-11','GT-12','GT-13',*[f'GT-{n}' for n in range(14,20)]],
         )
         release_notes = (root / acceptance['publicRelease']['releaseNotes']).read_text(
             encoding='utf-8')
@@ -700,6 +707,83 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(native['disposition'], 'no-op')
         self.assertTrue(native['lifecycle']['completionAllowed'])
 
+        retirement_facts = [
+            'within-human-authority', 'retired-route-prestate',
+            'task-defined-observation-window-complete',
+            'available-rollback', 'fallback-preserved',
+        ]
+        dynamic_retirement = fixture(healthy_native=True)
+        dynamic_retirement['policy'].update({
+            'requiredRetirementFacts': ['fallback-preserved'],
+            'requiredRetirementRouteIds': ['current-plugin'],
+        })
+        dynamic_retirement['events'].append({
+            'kind': 'route-retired',
+            'routeId': 'current-plugin',
+            'replacementRouteId': 'native-no-add',
+            'responsibilities': ['sense-environment', 'bind-authority'],
+            'preconditions': {
+                item: 'observed' for item in retirement_facts
+            },
+            'recheckTriggers': [
+                'environment-composition-change',
+                'replacement-effect-drift',
+                'evidence-expiry',
+            ],
+            'state': 'observed',
+            'independent': 'observed',
+            'evidence': evidence('current-plugin'),
+        })
+        retirement = reconcile_closure(dynamic_retirement)
+        retirement_result = retirement['lifecycle']['retirementResults'][0]
+        self.assertTrue(retirement_result['accepted'])
+        self.assertEqual(
+            retirement_result['disposition'], 'retired-with-recheck'
+        )
+        self.assertEqual(
+            retirement['lifecycle']['retiredRouteIds'], ['current-plugin']
+        )
+        self.assertTrue(retirement['lifecycle']['completionAllowed'])
+
+        stale_replacement = json.loads(json.dumps(dynamic_retirement))
+        stale_replacement['events'][-1]['preconditions'][
+            'task-defined-observation-window-complete'
+        ] = 'unknown'
+        stale_retirement = reconcile_closure(stale_replacement)
+        self.assertFalse(
+            stale_retirement['lifecycle']['retirementResults'][0]['accepted']
+        )
+        self.assertFalse(stale_retirement['lifecycle']['completionAllowed'])
+        self.assertIn(
+            'completion:retirement:current-plugin',
+            {item['code'] for item in stale_retirement['lifecycle'][
+                'completionFailures']},
+        )
+
+        missing_retirement = json.loads(json.dumps(dynamic_retirement))
+        missing_retirement['events'].pop()
+        missing_retirement_decision = reconcile_closure(missing_retirement)
+        self.assertFalse(
+            missing_retirement_decision['lifecycle']['completionAllowed']
+        )
+        self.assertIn(
+            'completion:retirement:current-plugin',
+            {item['code'] for item in missing_retirement_decision['lifecycle'][
+                'completionFailures']},
+        )
+
+        premature_retirement = json.loads(json.dumps(dynamic_retirement))
+        retirement_event = premature_retirement['events'].pop()
+        premature_retirement['events'].insert(0, retirement_event)
+        premature_retirement_decision = reconcile_closure(premature_retirement)
+        self.assertFalse(
+            premature_retirement_decision['lifecycle'][
+                'retirementResults'][0]['accepted']
+        )
+        self.assertFalse(
+            premature_retirement_decision['lifecycle']['completionAllowed']
+        )
+
         no_experiment_policy = fixture(healthy_native=True)
         no_experiment_policy['policy']['requiredExperimentFacts'] = []
         no_experiment_policy['policy']['experimentDimensions'] = []
@@ -830,6 +914,19 @@ class ProductControlTests(unittest.TestCase):
             'evidence': evidence('minimal-composition'),
         }
         malformed_cases.append(cleanup_self_claim)
+        missing_retirement_recheck = json.loads(json.dumps(dynamic_retirement))
+        missing_retirement_recheck['events'][-1]['recheckTriggers'] = []
+        malformed_cases.append(missing_retirement_recheck)
+        retirement_scope_overreach = json.loads(json.dumps(dynamic_retirement))
+        retirement_scope_overreach['events'][-1]['responsibilities'].append(
+            'execute-outcome'
+        )
+        malformed_cases.append(retirement_scope_overreach)
+        unknown_required_retirement = fixture(healthy_native=True)
+        unknown_required_retirement['policy'][
+            'requiredRetirementRouteIds'
+        ] = ['invented-route']
+        malformed_cases.append(unknown_required_retirement)
         for case in malformed_cases:
             with self.subTest(case=case):
                 invalid = reconcile_closure(case)
