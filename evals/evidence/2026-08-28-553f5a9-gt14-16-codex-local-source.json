@@ -445,6 +445,1721 @@
           }
         ]
       }
+    },
+    "archive-observation-GT-14-553f5a9": {
+      "kind": "retained-failed-observation",
+      "taskId": "GT-14",
+      "decision": "failed",
+      "retainedFailure": true,
+      "originalLocator": "evals/observations/2026-08-28-553f5a9-gt-14-codex-local.json",
+      "originalFileSha256": "5897a3e16039fca2d576c247ed9ab0b6ff6549117ac3a9cfd60b74507a90ab17",
+      "originalGitBlobSha1": "fc7699cbc2160ca7c5cae506e1b62e3e98e68c6f",
+      "recoverAt": "84447a7a1b9557e22ef5585d159459e8701fa40e:evals/observations/2026-08-28-553f5a9-gt-14-codex-local.json",
+      "sourceRecordId": "GT-14",
+      "sourceRecordSha256": "45d3774794eec39e8fea91e4d1a6768a50a813dc21be8b4a9e71da339bc8e28f",
+      "excludedClaims": [
+        "required:record-host-model-tool-extension-and-Accord-exposure-with-provenance",
+        "required:bind-each-observation-to-its-exact-environment-composition"
+      ],
+      "claim": "FAILED and retained: the fixture rejected three baseline/isolation counterexamples and cleanup passed, but the publishable source did not record a provenance-bound host/model/tool/extension composition."
+    },
+    "archive-observation-GT-15-553f5a9": {
+      "kind": "retained-failed-observation",
+      "taskId": "GT-15",
+      "decision": "failed",
+      "retainedFailure": true,
+      "originalLocator": "evals/observations/2026-08-28-553f5a9-gt-15-codex-local.json",
+      "originalFileSha256": "aabc59c7402efbb604fcd4f0565fa3cabaa52006ebc6f57ec84c6f42a7dd4e53",
+      "originalGitBlobSha1": "be63d6cb2e3ceb408b5bcfb5116e50797e75396d",
+      "recoverAt": "84447a7a1b9557e22ef5585d159459e8701fa40e:evals/observations/2026-08-28-553f5a9-gt-15-codex-local.json",
+      "sourceRecordId": "GT-15",
+      "sourceRecordSha256": "483ad382d64fb67e41ede095e3bc67d52fa466b4105122f62cbd8e60447cec55",
+      "excludedClaims": [
+        "required:record-primary-sources-existing-wheels-licenses-maintenance-and-provenance"
+      ],
+      "claim": "FAILED and retained: the corrected read-only probe found the intended study sections, but the publishable source retained no primary-source, wheel, license, maintenance or provenance ledger."
+    },
+    "archive-observation-GT-16-553f5a9": {
+      "kind": "retained-failed-observation",
+      "taskId": "GT-16",
+      "decision": "failed",
+      "retainedFailure": true,
+      "originalLocator": "evals/observations/2026-08-28-553f5a9-gt-16-codex-local.json",
+      "originalFileSha256": "78131b0d8a522de968b22835da6c3bd5b61e8df4ee91e8272904589ef0c652ea",
+      "originalGitBlobSha1": "0af7b3733c57972865bb74e80eb647d3c7222b6b",
+      "recoverAt": "84447a7a1b9557e22ef5585d159459e8701fa40e:evals/observations/2026-08-28-553f5a9-gt-16-codex-local.json",
+      "sourceRecordId": "GT-16",
+      "sourceRecordSha256": "ea142af5666a7790c38b1909851309d9be7145d9e417a112061e2ee938a6e6ab",
+      "excludedClaims": [
+        "required:sense-and-bind-environment-provenance-outcome-authority-and-gap",
+        "required:search-native-official-maintained-and-composable-routes-before-authorship",
+        "required:select-minimum-form-from-effect-latency-durability-isolation-recovery-and-lifecycle",
+        "required:record-burden-interference-cost-unknowns-and-claim-limit",
+        "required:health-check-update-rollback-release-cleanup-and-retirement",
+        "required:preserve-shared-unknown-and-unrelated-state"
+      ],
+      "claim": "FAILED and retained: the fixture bound a selected composition, consequence, rollback and cleanup, but not the outcome, route provenance, full-vector comparison or shared-state preservation required by GT-16."
+    },
+    "GT-14-84447a7": {
+      "kind": "host-event-log",
+      "taskId": "GT-14",
+      "goldenTaskSha256": "05020a9a46d96135cc4f70e1d622c4a911de4336f2ef1e736438d3cc563ea6e8",
+      "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout goal carrier",
+        "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+      },
+      "capturedAt": "2026-08-28T03:34:21Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "exact task-owned root absent after capture; zero tracked fixture paths",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "2e16dfb3-4a14-4122-a34f-0142e97f11a2",
+                  "taskLocator": "GT-14/cleanup",
+                  "resultLocator": "task-artifact:GT-14/cleanup/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-14-cleanup-84447a7"
+                  ],
+                  "resultSha256": "a7736fdfc2db2d9799195da28bc116d62b287e7b440485c70fc2b459ae903f16",
+                  "resultRecordSha256": "63442bb326031b9ddc4e609f5c88a2fa637bfc86b63494a0333e88e58deb157d",
+                  "completedAt": "2026-08-28T03:34:21Z",
+                  "claim": "Binds the exact disposable GT-14 independent command result; no credential, configuration, session content or unrelated persistent state was read."
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained exact non-secret environment, source, request, decision and independent poststate facts only; no credential, configuration, session content or unrelated persistent-state content."
+          }
+        ],
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "revision, projection, environment, source, policy, evaluator or claim changes",
+            "scope": "GT-14 exact composition, route, effect and lifecycle claim",
+            "action": "invalidate only the affected observation and replay from its earliest boundary"
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "phase": "human-grant",
+            "kind": "environment-boundary",
+            "text": "Treat the installed and enabled Accord host as extension-composed; isolate only when the claim requires it, preserve external state and separate installation from effect."
+          },
+          {
+            "role": "assistant",
+            "phase": "bounded-result",
+            "kind": "environment-admission",
+            "text": "The exact current-enabled composition is admitted only for static and Skill-exposure facts; model and Hook state stay unknown, private state stays outside scope and no clean or causal baseline is inferred."
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "environment-provenance",
+            "revision": "84447a7a1b9557e22ef5585d159459e8701fa40e",
+            "fixtureSha256": "0121ece50fc9dc02393ce9962450ee1a407640688e078cf930e3822341956bb5",
+            "composition": {
+              "claim": "admit only the exact current-enabled static and Skill-exposure composition",
+              "repositoryRevision": "84447a7a1b9557e22ef5585d159459e8701fa40e",
+              "host": {
+                "product": "Codex Desktop saved-checkout goal carrier",
+                "desktopVersion": {
+                  "state": "unknown",
+                  "provenance": "not exposed to task"
+                },
+                "cliVersion": "codex-cli 0.150.1",
+                "pythonVersion": "3.14.7",
+                "powerShellVersion": "7.6.5",
+                "osVersion": "Windows-11-10.0.26200-SP0",
+                "modelRoute": {
+                  "state": "unknown",
+                  "provenance": "not exposed to task"
+                }
+              },
+              "composition": {
+                "state": "current-enabled-extension-composed",
+                "Accord": {
+                  "humanBoundState": "installed-and-enabled",
+                  "exposedSkillRead": true,
+                  "repositorySkillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765",
+                  "installedSkillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765",
+                  "HookPackagePresent": true,
+                  "HookFiring": "unknown"
+                },
+                "otherExtensions": {
+                  "state": "present-but-not-enumerated",
+                  "reason": "full enablement and private configuration are outside the claim"
+                }
+              },
+              "arms": {
+                "current-enabled": "admitted-for-exact-static-and-Skill-exposure-only",
+                "official-clean": "not-observed-and-not-inferred",
+                "isolated-minimal": "not-required-by-this-noncausal-claim",
+                "isolated-no-Accord": "not-required-by-this-noncausal-claim",
+                "candidate-enabled-isolated": "not-required-by-this-noncausal-claim"
+              },
+              "privacy": {
+                "credentials": "not-read",
+                "configuration": "not-read",
+                "sessionContent": "not-read",
+                "unrelatedPersistentState": "not-read"
+              },
+              "unknowns": [
+                "desktop-version",
+                "model-route",
+                "Hook-firing",
+                "causal-Accord-effect",
+                "interference",
+                "field-value"
+              ]
+            }
+          },
+          {
+            "kind": "claim-scoped-arm-decision",
+            "arms": {
+              "current-enabled": "admitted-for-exact-static-and-Skill-exposure-only",
+              "official-clean": "not-observed-and-not-inferred",
+              "isolated-minimal": "not-required-by-this-noncausal-claim",
+              "isolated-no-Accord": "not-required-by-this-noncausal-claim",
+              "candidate-enabled-isolated": "not-required-by-this-noncausal-claim"
+            },
+            "result": "current-enabled admitted only; all unobserved arms remain unclaimed"
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "bfc6d30c-c5e8-4c41-b146-2e3a16a12f50",
+                "taskLocator": "GT-14/poststate",
+                "resultLocator": "task-artifact:GT-14/poststate/agent-final.txt",
+                "phaseNonces": [
+                  "gt-14-poststate-84447a7"
+                ],
+                "resultSha256": "9c84cc0dab427e452bb63cf16c7634410ace74259cb764d5a735405e4ffe36fb",
+                "resultRecordSha256": "95e62bb2d7c030b4bf5d615b9046c2bae7c90a931d85fff0aa4c003e92982958",
+                "completedAt": "2026-08-28T03:34:21Z",
+                "claim": "Binds the exact disposable GT-14 independent command result; no credential, configuration, session content or unrelated persistent state was read."
+              }
+            ],
+            "result": "exact non-secret composition independently reconciled"
+          }
+        ],
+        "officialSources": [],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "bfc6d30c-c5e8-4c41-b146-2e3a16a12f50",
+            "taskLocator": "GT-14/poststate",
+            "phase": "independent-poststate",
+            "nonce": "gt-14-poststate-84447a7",
+            "report": "PASS GT-14 independent poststate: repository, CLI, runtime, installed Skill and projection hashes match the exact current-enabled composition; model route and Hook firing remain unknown; official-clean, native and no-Accord states were not inferred."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "2e16dfb3-4a14-4122-a34f-0142e97f11a2",
+            "taskLocator": "GT-14/cleanup",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-14-cleanup-84447a7",
+            "report": "PASS GT-14 post-capture cleanup: the exact task-owned fixture root is absent; no tracked fixture path was created and no unrelated host state was inspected or changed."
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 1
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "evidenceBoundary": "Passed only for provenance-bound admission of this exact current-enabled composition. It does not prove official-clean or no-Accord behavior, model identity, Hook firing, causal Accord effect, interference, value or cross-host behavior."
+      }
+    },
+    "GT-15-84447a7": {
+      "kind": "host-event-log",
+      "taskId": "GT-15",
+      "goldenTaskSha256": "8faa4282c5fe026b18a64e4beaa24a8403537a9460ef7709f072e4ff8a585bd1",
+      "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout goal carrier",
+        "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+      },
+      "capturedAt": "2026-08-28T03:34:21Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "exact task-owned root absent after capture; zero tracked fixture paths",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "335ee83a-2d0a-4f6f-9e69-5b635604af6e",
+                  "taskLocator": "GT-15/cleanup",
+                  "resultLocator": "task-artifact:GT-15/cleanup/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-15-cleanup-84447a7"
+                  ],
+                  "resultSha256": "6422123be756dbf25537805102c034a948ddad5fa5fa41deafda2b3535c94059",
+                  "resultRecordSha256": "b84bfe58c7ae6a8f69b0ede57174b27c7057326ef02f9608b744aae46410878c",
+                  "completedAt": "2026-08-28T03:34:21Z",
+                  "claim": "Binds the exact disposable GT-15 independent command result; no credential, configuration, session content or unrelated persistent state was read."
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained exact non-secret environment, source, request, decision and independent poststate facts only; no credential, configuration, session content or unrelated persistent-state content."
+          }
+        ],
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "revision, projection, environment, source, policy, evaluator or claim changes",
+            "scope": "GT-15 exact composition, route, effect and lifecycle claim",
+            "action": "invalidate only the affected observation and replay from its earliest boundary"
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "phase": "human-grant",
+            "kind": "feasibility-boundary",
+            "text": "Research feasibility before implementation, find mature wheels before authorship, reuse mechanisms rather than reputations and retain limits, side effects and exit conditions."
+          },
+          {
+            "role": "assistant",
+            "phase": "bounded-result",
+            "kind": "feasibility-decision",
+            "text": "The exact source ledger and no-build route probe retain prior failure, compare the same obligation under hard gates and select the current read-only route without adding a dependency or product form."
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "named-sub-capability",
+            "name": "discover-and-select-minimum-replaceable-route-before-authorship",
+            "baselineRevision": "84447a7a1b9557e22ef5585d159459e8701fa40e",
+            "closureSha256": "f1081db8c89d7ab4a18daf3a3640abc83db51eb46765f9220eba3193aa1c9570",
+            "studyLocator": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
+            "studySha256": "edef3b0549f061431289b334a3a88ef351585f391c50705a45b19cc91ea5e87e",
+            "counterfactual": [
+              "no-build",
+              "maintained-reuse",
+              "bounded-composition",
+              "bounded-authorship"
+            ]
+          },
+          {
+            "kind": "source-wheel-license-maintenance-ledger",
+            "cutoff": "2026-08-28T02:02:33Z",
+            "facts": [
+              {
+                "candidate": "autoresearch-pattern",
+                "revision": "228791fb499afffb54b46200aca536f79142f117",
+                "license": "README-declares-MIT-but-root-LICENSE-absent-copy-held",
+                "package": "none-assessed",
+                "maintenance": "not-archived;pushedAt=2026-03-26T00:07:37Z",
+                "fit": "pattern-study-only"
+              },
+              {
+                "candidate": "openai-agents",
+                "revision": "f1a806ad35071053f5248b38b58b8c0c40f67350",
+                "license": "MIT",
+                "package": "openai-agents==0.22.0;python>=3.10;wheelManifestSha256=71a58443f22b3003f5100dc01d09f72708caa91eaadd3865a1c3ba2484c8ce5b",
+                "maintenance": "not-archived;pushedAt=2026-08-28T01:40:41Z",
+                "fit": "runtime-duty-dominates-current-read-only-obligation"
+              },
+              {
+                "candidate": "mcp-composition",
+                "revision": "d8fdc88fb970313247d8a180ac1ec3f6a10a8885",
+                "license": "component-sensitive-MIT-Apache-2.0-CC-BY-4.0-transition",
+                "package": "mcp==2.1.1;python>=3.10;wheelManifestSha256=464c915a5b854da992fc387db4acb959db43751368bb958bc3641061d09caf9e",
+                "maintenance": "source-and-sdk-not-archived;pushedAt=2026-08-26",
+                "fit": "adapter-candidate-only"
+              },
+              {
+                "candidate": "durable-state-frameworks",
+                "revision": "langgraph=d5f4b2aa960940effc8430165ab3604038e817af;temporal=35b24bb28edf40fc3e2d3c446ea77a0cba312f6f",
+                "license": "MIT",
+                "package": "langgraph==1.2.11;temporalio==1.32.0",
+                "maintenance": "not-archived;current-at-cutoff",
+                "fit": "state-and-service-lifecycle-not-justified"
+              }
+            ],
+            "decisionRule": "hard source authority fit consequence rollback and lifecycle gates precede preference"
+          },
+          {
+            "kind": "bounded-route-probe",
+            "request": {
+              "schema": "yiyuan-accord-closure/v1",
+              "outcome": {
+                "id": "select-minimum-replaceable-route-before-authorship",
+                "responsibilities": [
+                  "discover-candidate-routes",
+                  "bind-source-provenance",
+                  "compare-authority-and-lifecycle",
+                  "retain-counterevidence",
+                  "select-before-authorship"
+                ]
+              },
+              "environment": {
+                "compositionKey": "codex-current-enabled:84447a7a1b9557e22ef5585d159459e8701fa40e",
+                "facts": {
+                  "provenance-bound": "observed",
+                  "Accord-enabled-composition": "observed"
+                },
+                "unknowns": [
+                  "official-clean-equivalence",
+                  "Hook-firing",
+                  "field-value"
+                ]
+              },
+              "policy": {
+                "id": "gt15-source-complete-policy/v1",
+                "requiredEnvironmentFacts": [
+                  "provenance-bound",
+                  "Accord-enabled-composition"
+                ],
+                "requiredRouteFacts": [
+                  "within-human-authority",
+                  "compliant",
+                  "available",
+                  "independent-consequence-verifier",
+                  "source-provenance-bound",
+                  "license-known-or-copy-held",
+                  "maintenance-fact-bound",
+                  "independent-route-decision"
+                ],
+                "requiredCoherenceFacts": [
+                  "same-obligation",
+                  "source-version-license",
+                  "authority-lifecycle-exit"
+                ],
+                "comparisonDimensions": [
+                  "human-burden",
+                  "interference",
+                  "persistence",
+                  "recovery",
+                  "maintenance",
+                  "retirement"
+                ],
+                "sourcePreference": [
+                  "no-added",
+                  "native",
+                  "maintained",
+                  "composition",
+                  "authored"
+                ],
+                "contextPreference": [],
+                "requiredCompletionFacts": [
+                  "route-decision",
+                  "source-ledger-bound"
+                ],
+                "requiredExperimentFacts": [],
+                "experimentDimensions": []
+              },
+              "routes": [
+                {
+                  "id": "current-enabled-read-only-no-add",
+                  "sourceKind": "no-added",
+                  "forms": [],
+                  "supplies": [
+                    "discover-candidate-routes",
+                    "bind-source-provenance",
+                    "compare-authority-and-lifecycle",
+                    "retain-counterevidence",
+                    "select-before-authorship"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "available": "observed",
+                    "independent-consequence-verifier": "observed",
+                    "source-provenance-bound": "observed",
+                    "license-known-or-copy-held": "observed",
+                    "maintenance-fact-bound": "observed",
+                    "independent-route-decision": "observed"
+                  },
+                  "coherence": {
+                    "same-obligation": "observed",
+                    "source-version-license": "observed",
+                    "authority-lifecycle-exit": "observed"
+                  },
+                  "lifecycle": {
+                    "human-burden": 0,
+                    "interference": 0,
+                    "persistence": 0,
+                    "recovery": 0,
+                    "maintenance": 0,
+                    "retirement": 0
+                  }
+                },
+                {
+                  "id": "autoresearch-pattern-copy",
+                  "sourceKind": "maintained",
+                  "forms": [
+                    "copied-pattern"
+                  ],
+                  "supplies": [
+                    "retain-counterevidence",
+                    "select-before-authorship"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "available": "observed",
+                    "independent-consequence-verifier": "observed",
+                    "source-provenance-bound": "observed",
+                    "license-known-or-copy-held": "unknown",
+                    "maintenance-fact-bound": "observed",
+                    "independent-route-decision": "observed"
+                  },
+                  "coherence": {},
+                  "lifecycle": {
+                    "human-burden": 2,
+                    "interference": 2,
+                    "persistence": 2,
+                    "recovery": 2,
+                    "maintenance": 2,
+                    "retirement": 2
+                  }
+                },
+                {
+                  "id": "openai-agents-sdk",
+                  "sourceKind": "maintained",
+                  "forms": [
+                    "application-runtime"
+                  ],
+                  "supplies": [
+                    "discover-candidate-routes",
+                    "select-before-authorship"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "available": "observed",
+                    "independent-consequence-verifier": "observed",
+                    "source-provenance-bound": "observed",
+                    "license-known-or-copy-held": "observed",
+                    "maintenance-fact-bound": "observed",
+                    "independent-route-decision": "observed"
+                  },
+                  "coherence": {
+                    "source-version-license": "observed"
+                  },
+                  "lifecycle": {
+                    "human-burden": 2,
+                    "interference": 2,
+                    "persistence": 2,
+                    "recovery": 2,
+                    "maintenance": 2,
+                    "retirement": 2
+                  }
+                },
+                {
+                  "id": "mcp-discovery-composition",
+                  "sourceKind": "composition",
+                  "forms": [
+                    "protocol-adapter"
+                  ],
+                  "supplies": [
+                    "discover-candidate-routes",
+                    "bind-source-provenance"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "available": "observed",
+                    "independent-consequence-verifier": "observed",
+                    "source-provenance-bound": "observed",
+                    "license-known-or-copy-held": "observed",
+                    "maintenance-fact-bound": "observed",
+                    "independent-route-decision": "unknown"
+                  },
+                  "coherence": {
+                    "source-version-license": "observed"
+                  },
+                  "lifecycle": {
+                    "human-burden": 1,
+                    "interference": 1,
+                    "persistence": 1,
+                    "recovery": 1,
+                    "maintenance": 1,
+                    "retirement": 1
+                  }
+                },
+                {
+                  "id": "durable-state-framework",
+                  "sourceKind": "maintained",
+                  "forms": [
+                    "durable-state-runtime"
+                  ],
+                  "supplies": [
+                    "retain-counterevidence"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "available": "observed",
+                    "independent-consequence-verifier": "observed",
+                    "source-provenance-bound": "observed",
+                    "license-known-or-copy-held": "observed",
+                    "maintenance-fact-bound": "observed",
+                    "independent-route-decision": "observed"
+                  },
+                  "coherence": {},
+                  "lifecycle": {
+                    "human-burden": 3,
+                    "interference": 3,
+                    "persistence": 3,
+                    "recovery": 3,
+                    "maintenance": 3,
+                    "retirement": 3
+                  }
+                },
+                {
+                  "id": "bounded-authorship",
+                  "sourceKind": "authored",
+                  "forms": [
+                    "task-scoped-selector"
+                  ],
+                  "supplies": [
+                    "discover-candidate-routes",
+                    "bind-source-provenance",
+                    "compare-authority-and-lifecycle",
+                    "retain-counterevidence",
+                    "select-before-authorship"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "available": "observed",
+                    "independent-consequence-verifier": "observed",
+                    "source-provenance-bound": "observed",
+                    "license-known-or-copy-held": "observed",
+                    "maintenance-fact-bound": "observed",
+                    "independent-route-decision": "observed"
+                  },
+                  "coherence": {
+                    "same-obligation": "observed",
+                    "source-version-license": "observed",
+                    "authority-lifecycle-exit": "observed"
+                  },
+                  "lifecycle": {
+                    "human-burden": 1,
+                    "interference": 1,
+                    "persistence": 1,
+                    "recovery": 1,
+                    "maintenance": 1,
+                    "retirement": 1
+                  }
+                }
+              ],
+              "events": [
+                {
+                  "kind": "fact-observed",
+                  "routeId": "current-enabled-read-only-no-add",
+                  "factId": "route-decision",
+                  "state": "observed",
+                  "independent": "observed",
+                  "evidence": {
+                    "sourceRef": "fixture-source:current-enabled-read-only-no-add",
+                    "observerRef": "independent-fixture-oracle",
+                    "subjectRef": "current-enabled-read-only-no-add",
+                    "boundaryRef": "task-owned-process:gt15-source-complete"
+                  }
+                },
+                {
+                  "kind": "fact-observed",
+                  "routeId": "current-enabled-read-only-no-add",
+                  "factId": "source-ledger-bound",
+                  "state": "observed",
+                  "independent": "observed",
+                  "evidence": {
+                    "sourceRef": "fixture-source:current-enabled-read-only-no-add",
+                    "observerRef": "independent-fixture-oracle",
+                    "subjectRef": "current-enabled-read-only-no-add",
+                    "boundaryRef": "task-owned-process:gt15-source-complete"
+                  }
+                },
+                {
+                  "kind": "fact-observed",
+                  "routeId": "current-enabled-read-only-no-add",
+                  "factId": "consequence",
+                  "state": "observed",
+                  "independent": "observed",
+                  "evidence": {
+                    "sourceRef": "fixture-source:current-enabled-read-only-no-add",
+                    "observerRef": "independent-fixture-oracle",
+                    "subjectRef": "current-enabled-read-only-no-add",
+                    "boundaryRef": "task-owned-process:gt15-source-complete"
+                  }
+                },
+                {
+                  "kind": "resource-poststate",
+                  "routeId": "current-enabled-read-only-no-add",
+                  "releasedResources": [],
+                  "residualTaskResources": [],
+                  "independent": "observed",
+                  "evidence": {
+                    "sourceRef": "fixture-source:current-enabled-read-only-no-add",
+                    "observerRef": "independent-fixture-oracle",
+                    "subjectRef": "current-enabled-read-only-no-add",
+                    "boundaryRef": "task-owned-process:gt15-source-complete"
+                  }
+                }
+              ]
+            },
+            "requestSha256": "66bc5382e709c7b31b18e5551549367ddb6678c647364b59fd75741424c3c6d4",
+            "result": {
+              "schema": "yiyuan-accord-closure-decision/v1",
+              "valid": true,
+              "outcomeId": "select-minimum-replaceable-route-before-authorship",
+              "compositionKey": "codex-current-enabled:84447a7a1b9557e22ef5585d159459e8701fa40e",
+              "policyId": "gt15-source-complete-policy/v1",
+              "disposition": "no-op",
+              "selectedRouteId": "current-enabled-read-only-no-add",
+              "frontierRouteIds": [
+                "current-enabled-read-only-no-add"
+              ],
+              "assessments": [
+                {
+                  "routeId": "current-enabled-read-only-no-add",
+                  "sourceKind": "no-added",
+                  "forms": [],
+                  "admitted": true,
+                  "failures": [],
+                  "lifecycle": {
+                    "human-burden": 0,
+                    "interference": 0,
+                    "persistence": 0,
+                    "recovery": 0,
+                    "maintenance": 0,
+                    "retirement": 0
+                  }
+                },
+                {
+                  "routeId": "autoresearch-pattern-copy",
+                  "sourceKind": "maintained",
+                  "forms": [
+                    "copied-pattern"
+                  ],
+                  "admitted": false,
+                  "failures": [
+                    {
+                      "code": "responsibility:discover-candidate-routes",
+                      "state": "not-observed",
+                      "detail": "responsibility discover-candidate-routes is not supplied"
+                    },
+                    {
+                      "code": "responsibility:bind-source-provenance",
+                      "state": "not-observed",
+                      "detail": "responsibility bind-source-provenance is not supplied"
+                    },
+                    {
+                      "code": "responsibility:compare-authority-and-lifecycle",
+                      "state": "not-observed",
+                      "detail": "responsibility compare-authority-and-lifecycle is not supplied"
+                    },
+                    {
+                      "code": "route:license-known-or-copy-held",
+                      "state": "unknown",
+                      "detail": "required route fact license-known-or-copy-held is unknown"
+                    }
+                  ],
+                  "lifecycle": {
+                    "human-burden": 2,
+                    "interference": 2,
+                    "persistence": 2,
+                    "recovery": 2,
+                    "maintenance": 2,
+                    "retirement": 2
+                  }
+                },
+                {
+                  "routeId": "openai-agents-sdk",
+                  "sourceKind": "maintained",
+                  "forms": [
+                    "application-runtime"
+                  ],
+                  "admitted": false,
+                  "failures": [
+                    {
+                      "code": "responsibility:bind-source-provenance",
+                      "state": "not-observed",
+                      "detail": "responsibility bind-source-provenance is not supplied"
+                    },
+                    {
+                      "code": "responsibility:compare-authority-and-lifecycle",
+                      "state": "not-observed",
+                      "detail": "responsibility compare-authority-and-lifecycle is not supplied"
+                    },
+                    {
+                      "code": "responsibility:retain-counterevidence",
+                      "state": "not-observed",
+                      "detail": "responsibility retain-counterevidence is not supplied"
+                    }
+                  ],
+                  "lifecycle": {
+                    "human-burden": 2,
+                    "interference": 2,
+                    "persistence": 2,
+                    "recovery": 2,
+                    "maintenance": 2,
+                    "retirement": 2
+                  }
+                },
+                {
+                  "routeId": "mcp-discovery-composition",
+                  "sourceKind": "composition",
+                  "forms": [
+                    "protocol-adapter"
+                  ],
+                  "admitted": false,
+                  "failures": [
+                    {
+                      "code": "responsibility:compare-authority-and-lifecycle",
+                      "state": "not-observed",
+                      "detail": "responsibility compare-authority-and-lifecycle is not supplied"
+                    },
+                    {
+                      "code": "responsibility:retain-counterevidence",
+                      "state": "not-observed",
+                      "detail": "responsibility retain-counterevidence is not supplied"
+                    },
+                    {
+                      "code": "responsibility:select-before-authorship",
+                      "state": "not-observed",
+                      "detail": "responsibility select-before-authorship is not supplied"
+                    },
+                    {
+                      "code": "route:independent-route-decision",
+                      "state": "unknown",
+                      "detail": "required route fact independent-route-decision is unknown"
+                    }
+                  ],
+                  "lifecycle": {
+                    "human-burden": 1,
+                    "interference": 1,
+                    "persistence": 1,
+                    "recovery": 1,
+                    "maintenance": 1,
+                    "retirement": 1
+                  }
+                },
+                {
+                  "routeId": "durable-state-framework",
+                  "sourceKind": "maintained",
+                  "forms": [
+                    "durable-state-runtime"
+                  ],
+                  "admitted": false,
+                  "failures": [
+                    {
+                      "code": "responsibility:discover-candidate-routes",
+                      "state": "not-observed",
+                      "detail": "responsibility discover-candidate-routes is not supplied"
+                    },
+                    {
+                      "code": "responsibility:bind-source-provenance",
+                      "state": "not-observed",
+                      "detail": "responsibility bind-source-provenance is not supplied"
+                    },
+                    {
+                      "code": "responsibility:compare-authority-and-lifecycle",
+                      "state": "not-observed",
+                      "detail": "responsibility compare-authority-and-lifecycle is not supplied"
+                    },
+                    {
+                      "code": "responsibility:select-before-authorship",
+                      "state": "not-observed",
+                      "detail": "responsibility select-before-authorship is not supplied"
+                    }
+                  ],
+                  "lifecycle": {
+                    "human-burden": 3,
+                    "interference": 3,
+                    "persistence": 3,
+                    "recovery": 3,
+                    "maintenance": 3,
+                    "retirement": 3
+                  }
+                },
+                {
+                  "routeId": "bounded-authorship",
+                  "sourceKind": "authored",
+                  "forms": [
+                    "task-scoped-selector"
+                  ],
+                  "admitted": true,
+                  "failures": [],
+                  "lifecycle": {
+                    "human-burden": 1,
+                    "interference": 1,
+                    "persistence": 1,
+                    "recovery": 1,
+                    "maintenance": 1,
+                    "retirement": 1
+                  }
+                }
+              ],
+              "lifecycle": {
+                "facts": {
+                  "route-decision": {
+                    "state": "observed",
+                    "independent": "observed",
+                    "eventIndex": 0
+                  },
+                  "source-ledger-bound": {
+                    "state": "observed",
+                    "independent": "observed",
+                    "eventIndex": 1
+                  },
+                  "consequence": {
+                    "state": "observed",
+                    "independent": "observed",
+                    "eventIndex": 2
+                  },
+                  "cleanup-poststate": {
+                    "state": "observed",
+                    "independent": "observed",
+                    "eventIndex": 3
+                  }
+                },
+                "effectiveRouteFacts": {
+                  "within-human-authority": "observed",
+                  "compliant": "observed",
+                  "available": "observed",
+                  "independent-consequence-verifier": "observed",
+                  "source-provenance-bound": "observed",
+                  "license-known-or-copy-held": "observed",
+                  "maintenance-fact-bound": "observed",
+                  "independent-route-decision": "observed"
+                },
+                "eventResults": [
+                  {
+                    "index": 0,
+                    "kind": "fact-observed",
+                    "accepted": true,
+                    "factId": "route-decision"
+                  },
+                  {
+                    "index": 1,
+                    "kind": "fact-observed",
+                    "accepted": true,
+                    "factId": "source-ledger-bound"
+                  },
+                  {
+                    "index": 2,
+                    "kind": "fact-observed",
+                    "accepted": true,
+                    "factId": "consequence"
+                  },
+                  {
+                    "index": 3,
+                    "kind": "resource-poststate",
+                    "accepted": true,
+                    "releasedResources": [],
+                    "residualTaskResources": []
+                  }
+                ],
+                "experimentResults": [],
+                "residualTaskResources": [],
+                "selectedRouteRetired": false,
+                "completionFailures": [],
+                "completionAllowed": true
+              },
+              "unknowns": [
+                "official-clean-equivalence",
+                "Hook-firing",
+                "field-value"
+              ],
+              "errors": [],
+              "claimLimit": "this-exact-outcome-composition-policy-route-set-and-ordered-observation-sequence-only"
+            },
+            "resultSha256": "3d68a10d9f099cb78ddfd308fb6a8148778a731c484ee47ffff06d785f8ee97e",
+            "decision": "no-build-current-enabled-read-only-route",
+            "priorAttempt": "source-bundle-record:archive-observation-GT-15-553f5a9"
+          }
+        ],
+        "officialSources": [
+          {
+            "kind": "official-source",
+            "url": "https://github.com/openai/openai-agents-python/tree/f1a806ad35071053f5248b38b58b8c0c40f67350",
+            "retrievedAt": "2026-08-28T02:02:33Z",
+            "claim": "Binds the exact maintained OpenAI Agents SDK source revision assessed by the ledger."
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "335ee83a-2d0a-4f6f-9e69-5b635604af6e",
+            "taskLocator": "GT-15/cleanup",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-15-cleanup-84447a7",
+            "report": "PASS GT-15 post-capture cleanup: the exact source-complete route-probe fixture root is absent; no package was downloaded, installed, imported or executed."
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "evidenceBoundary": "Passed only for feasibility and the no-build decision for the named pre-authorship route-selection sub-capability. It does not prove dependency activation, live adapter behavior, product-form sufficiency, end-to-end self-bootstrapping, field value or release readiness."
+      }
+    },
+    "GT-16-84447a7": {
+      "kind": "host-event-log",
+      "taskId": "GT-16",
+      "goldenTaskSha256": "f1c97ce196c14b6b513f97e359c6025d2426e81c5bc868544c1bc7d694741a1a",
+      "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex Desktop saved-checkout goal carrier",
+        "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+        "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+      },
+      "capturedAt": "2026-08-28T03:34:21Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json"
+          ],
+          "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+        },
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "result": "exact task-owned root absent after capture; zero tracked fixture paths",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "22754993-4df9-44f1-a311-7bd4c94143de",
+                  "taskLocator": "GT-16/cleanup",
+                  "resultLocator": "task-artifact:GT-16/cleanup/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-16-cleanup-84447a7"
+                  ],
+                  "resultSha256": "b3ff11229d7741a526b4909a82eb850418e4ee9d100128be701dfbe11ced15d1",
+                  "resultRecordSha256": "48b5148c5ea279d4208a977f4b91168facf8a8b28e9174cf87b87bce9b38c775",
+                  "completedAt": "2026-08-28T03:34:21Z",
+                  "claim": "Binds the exact disposable GT-16 independent command result; no credential, configuration, session content or unrelated persistent state was read."
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "source-minimization",
+            "result": "Retained exact non-secret environment, source, request, decision and independent poststate facts only; no credential, configuration, session content or unrelated persistent-state content."
+          }
+        ],
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "revision, projection, environment, source, policy, evaluator or claim changes",
+            "scope": "GT-16 exact composition, route, effect and lifecycle claim",
+            "action": "invalidate only the affected observation and replay from its earliest boundary"
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "phase": "human-grant",
+            "kind": "bootstrap-boundary",
+            "text": "Close one predeclared disposable collaboration-control gap with the minimum replaceable form; preserve authority, independently verify consequence and complete rollback, resource and cleanup lifecycle."
+          },
+          {
+            "role": "assistant",
+            "phase": "bounded-result",
+            "kind": "bootstrap-result",
+            "text": "The source-bound fixture rejects no-add and installed-without-effect routes, admits one minimum composition, observes consequence, rolls back dominated authorship, releases its task resource and leaves unrelated state untouched."
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "predeclared-bootstrap-contract",
+            "outcome": "preserve-corrected-brief-across-one-disposable-interruption",
+            "oracle": "corrected brief survives; exact consequence and matching independent poststate observed; task resource released; zero residue",
+            "gap": "current-enabled no-add route lacks preserve-correction responsibility and installed projection lacks an independent consequence verifier",
+            "authority": "pure-data task fixture only; no new trust account data material cost persistence publication or irreversible effect",
+            "routes": [
+              "current-enabled-no-add",
+              "installed-projection",
+              "minimal-replaceable-composition",
+              "persistent-controller"
+            ]
+          },
+          {
+            "kind": "full-route-and-lifecycle-vector",
+            "request": {
+              "schema": "yiyuan-accord-closure/v1",
+              "outcome": {
+                "id": "preserve-corrected-brief-across-one-disposable-interruption",
+                "responsibilities": [
+                  "sense-environment",
+                  "bind-authority",
+                  "preserve-correction",
+                  "execute-outcome",
+                  "observe-consequence",
+                  "release-task-residue"
+                ]
+              },
+              "environment": {
+                "compositionKey": "isolated-pure-data:84447a7a1b9557e22ef5585d159459e8701fa40e",
+                "facts": {
+                  "provenance-bound": "observed",
+                  "disposable": "observed"
+                },
+                "unknowns": [
+                  "live-host-effect",
+                  "cross-host-equivalence",
+                  "field-value"
+                ]
+              },
+              "policy": {
+                "id": "gt16-bounded-bootstrap-policy/v1",
+                "requiredEnvironmentFacts": [
+                  "provenance-bound",
+                  "disposable"
+                ],
+                "requiredRouteFacts": [
+                  "within-human-authority",
+                  "compliant",
+                  "independent-consequence-verifier",
+                  "available"
+                ],
+                "requiredCoherenceFacts": [
+                  "responsibility-boundaries",
+                  "authority-and-side-effects",
+                  "evidence-and-independent-poststate",
+                  "cleanup-retirement-and-residue"
+                ],
+                "comparisonDimensions": [
+                  "human-burden",
+                  "interference",
+                  "persistence",
+                  "recovery",
+                  "maintenance",
+                  "retirement"
+                ],
+                "sourcePreference": [
+                  "no-added",
+                  "native",
+                  "maintained",
+                  "composition",
+                  "authored"
+                ],
+                "contextPreference": [],
+                "requiredCompletionFacts": [
+                  "execution"
+                ],
+                "requiredExperimentFacts": [
+                  "exact-baseline",
+                  "fixed-budget",
+                  "one-bounded-mutable-surface",
+                  "immutable-evaluator",
+                  "full-acceptance-vector",
+                  "preauthorized-tolerances",
+                  "available-rollback",
+                  "independent-effect-and-cleanup-poststate"
+                ],
+                "experimentDimensions": [
+                  "outcome",
+                  "authority",
+                  "evidence",
+                  "privacy",
+                  "burden",
+                  "interference",
+                  "recovery",
+                  "resources",
+                  "continuity",
+                  "lifecycle"
+                ]
+              },
+              "routes": [
+                {
+                  "id": "current-enabled-no-add",
+                  "sourceKind": "no-added",
+                  "forms": [],
+                  "supplies": [
+                    "sense-environment",
+                    "bind-authority",
+                    "execute-outcome",
+                    "observe-consequence",
+                    "release-task-residue"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "independent-consequence-verifier": "observed",
+                    "available": "observed"
+                  },
+                  "coherence": {},
+                  "lifecycle": {
+                    "human-burden": 0,
+                    "interference": 0,
+                    "persistence": 0,
+                    "recovery": 0,
+                    "maintenance": 0,
+                    "retirement": 0
+                  }
+                },
+                {
+                  "id": "installed-projection",
+                  "sourceKind": "maintained",
+                  "forms": [
+                    "plugin"
+                  ],
+                  "supplies": [
+                    "sense-environment",
+                    "bind-authority"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "independent-consequence-verifier": "unknown",
+                    "available": "observed"
+                  },
+                  "coherence": {},
+                  "lifecycle": {
+                    "human-burden": 1,
+                    "interference": 1,
+                    "persistence": 1,
+                    "recovery": 1,
+                    "maintenance": 1,
+                    "retirement": 1
+                  }
+                },
+                {
+                  "id": "minimal-replaceable-composition",
+                  "sourceKind": "composition",
+                  "forms": [
+                    "native-executor",
+                    "task-scoped-handoff",
+                    "independent-effect-probe"
+                  ],
+                  "supplies": [
+                    "sense-environment",
+                    "bind-authority",
+                    "preserve-correction",
+                    "execute-outcome",
+                    "observe-consequence",
+                    "release-task-residue"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "independent-consequence-verifier": "observed",
+                    "available": "observed"
+                  },
+                  "coherence": {
+                    "responsibility-boundaries": "observed",
+                    "authority-and-side-effects": "observed",
+                    "evidence-and-independent-poststate": "observed",
+                    "cleanup-retirement-and-residue": "observed"
+                  },
+                  "lifecycle": {
+                    "human-burden": 1,
+                    "interference": 1,
+                    "persistence": 1,
+                    "recovery": 1,
+                    "maintenance": 1,
+                    "retirement": 1
+                  }
+                },
+                {
+                  "id": "persistent-controller",
+                  "sourceKind": "authored",
+                  "forms": [
+                    "persistent-controller"
+                  ],
+                  "supplies": [
+                    "sense-environment",
+                    "bind-authority",
+                    "preserve-correction",
+                    "execute-outcome",
+                    "observe-consequence",
+                    "release-task-residue"
+                  ],
+                  "facts": {
+                    "within-human-authority": "observed",
+                    "compliant": "observed",
+                    "independent-consequence-verifier": "observed",
+                    "available": "observed"
+                  },
+                  "coherence": {},
+                  "lifecycle": {
+                    "human-burden": 2,
+                    "interference": 3,
+                    "persistence": 4,
+                    "recovery": 3,
+                    "maintenance": 4,
+                    "retirement": 4
+                  }
+                }
+              ],
+              "events": [
+                {
+                  "kind": "fact-observed",
+                  "routeId": "minimal-replaceable-composition",
+                  "factId": "execution",
+                  "state": "observed",
+                  "independent": "observed",
+                  "evidence": {
+                    "sourceRef": "fixture-source:minimal-replaceable-composition",
+                    "observerRef": "independent-fixture-oracle",
+                    "subjectRef": "minimal-replaceable-composition",
+                    "boundaryRef": "task-owned-process:gt16-source-complete"
+                  }
+                },
+                {
+                  "kind": "fact-observed",
+                  "routeId": "minimal-replaceable-composition",
+                  "factId": "consequence",
+                  "state": "observed",
+                  "independent": "observed",
+                  "evidence": {
+                    "sourceRef": "fixture-source:minimal-replaceable-composition",
+                    "observerRef": "independent-fixture-oracle",
+                    "subjectRef": "minimal-replaceable-composition",
+                    "boundaryRef": "task-owned-process:gt16-source-complete"
+                  }
+                },
+                {
+                  "kind": "experiment-evaluated",
+                  "baselineRouteId": "minimal-replaceable-composition",
+                  "candidateRouteId": "persistent-controller",
+                  "preconditions": {
+                    "exact-baseline": "observed",
+                    "fixed-budget": "observed",
+                    "one-bounded-mutable-surface": "observed",
+                    "immutable-evaluator": "observed",
+                    "full-acceptance-vector": "observed",
+                    "preauthorized-tolerances": "observed",
+                    "available-rollback": "observed",
+                    "independent-effect-and-cleanup-poststate": "observed"
+                  },
+                  "comparison": {
+                    "outcome": "better",
+                    "authority": "equal",
+                    "evidence": "equal",
+                    "privacy": "equal",
+                    "burden": "equal",
+                    "interference": "equal",
+                    "recovery": "equal",
+                    "resources": "equal",
+                    "continuity": "equal",
+                    "lifecycle": "worse"
+                  },
+                  "evidence": {
+                    "sourceRef": "fixture-source:persistent-controller",
+                    "observerRef": "independent-fixture-oracle",
+                    "subjectRef": "persistent-controller",
+                    "boundaryRef": "task-owned-process:gt16-source-complete"
+                  }
+                },
+                {
+                  "kind": "experiment-poststate",
+                  "baselineRouteId": "minimal-replaceable-composition",
+                  "candidateRouteId": "persistent-controller",
+                  "disposition": "rollback-complete",
+                  "state": "observed",
+                  "independent": "observed",
+                  "evidence": {
+                    "sourceRef": "fixture-source:persistent-controller",
+                    "observerRef": "independent-fixture-oracle",
+                    "subjectRef": "persistent-controller",
+                    "boundaryRef": "task-owned-process:gt16-source-complete"
+                  }
+                },
+                {
+                  "kind": "resource-poststate",
+                  "routeId": "minimal-replaceable-composition",
+                  "releasedResources": [
+                    "task-scoped-handoff"
+                  ],
+                  "residualTaskResources": [],
+                  "independent": "observed",
+                  "evidence": {
+                    "sourceRef": "fixture-source:minimal-replaceable-composition",
+                    "observerRef": "independent-fixture-oracle",
+                    "subjectRef": "minimal-replaceable-composition",
+                    "boundaryRef": "task-owned-process:gt16-source-complete"
+                  }
+                }
+              ]
+            },
+            "requestSha256": "20cac0f59d6fcb6483d1117ae1975048d7c7336727fba34c2e40cfd862046e2b",
+            "result": {
+              "schema": "yiyuan-accord-closure-decision/v1",
+              "valid": true,
+              "outcomeId": "preserve-corrected-brief-across-one-disposable-interruption",
+              "compositionKey": "isolated-pure-data:84447a7a1b9557e22ef5585d159459e8701fa40e",
+              "policyId": "gt16-bounded-bootstrap-policy/v1",
+              "disposition": "admit",
+              "selectedRouteId": "minimal-replaceable-composition",
+              "frontierRouteIds": [
+                "minimal-replaceable-composition"
+              ],
+              "assessments": [
+                {
+                  "routeId": "current-enabled-no-add",
+                  "sourceKind": "no-added",
+                  "forms": [],
+                  "admitted": false,
+                  "failures": [
+                    {
+                      "code": "responsibility:preserve-correction",
+                      "state": "not-observed",
+                      "detail": "responsibility preserve-correction is not supplied"
+                    }
+                  ],
+                  "lifecycle": {
+                    "human-burden": 0,
+                    "interference": 0,
+                    "persistence": 0,
+                    "recovery": 0,
+                    "maintenance": 0,
+                    "retirement": 0
+                  }
+                },
+                {
+                  "routeId": "installed-projection",
+                  "sourceKind": "maintained",
+                  "forms": [
+                    "plugin"
+                  ],
+                  "admitted": false,
+                  "failures": [
+                    {
+                      "code": "responsibility:preserve-correction",
+                      "state": "not-observed",
+                      "detail": "responsibility preserve-correction is not supplied"
+                    },
+                    {
+                      "code": "responsibility:execute-outcome",
+                      "state": "not-observed",
+                      "detail": "responsibility execute-outcome is not supplied"
+                    },
+                    {
+                      "code": "responsibility:observe-consequence",
+                      "state": "not-observed",
+                      "detail": "responsibility observe-consequence is not supplied"
+                    },
+                    {
+                      "code": "responsibility:release-task-residue",
+                      "state": "not-observed",
+                      "detail": "responsibility release-task-residue is not supplied"
+                    },
+                    {
+                      "code": "route:independent-consequence-verifier",
+                      "state": "unknown",
+                      "detail": "required route fact independent-consequence-verifier is unknown"
+                    }
+                  ],
+                  "lifecycle": {
+                    "human-burden": 1,
+                    "interference": 1,
+                    "persistence": 1,
+                    "recovery": 1,
+                    "maintenance": 1,
+                    "retirement": 1
+                  }
+                },
+                {
+                  "routeId": "minimal-replaceable-composition",
+                  "sourceKind": "composition",
+                  "forms": [
+                    "native-executor",
+                    "task-scoped-handoff",
+                    "independent-effect-probe"
+                  ],
+                  "admitted": true,
+                  "failures": [],
+                  "lifecycle": {
+                    "human-burden": 1,
+                    "interference": 1,
+                    "persistence": 1,
+                    "recovery": 1,
+                    "maintenance": 1,
+                    "retirement": 1
+                  }
+                },
+                {
+                  "routeId": "persistent-controller",
+                  "sourceKind": "authored",
+                  "forms": [
+                    "persistent-controller"
+                  ],
+                  "admitted": true,
+                  "failures": [],
+                  "lifecycle": {
+                    "human-burden": 2,
+                    "interference": 3,
+                    "persistence": 4,
+                    "recovery": 3,
+                    "maintenance": 4,
+                    "retirement": 4
+                  }
+                }
+              ],
+              "lifecycle": {
+                "facts": {
+                  "execution": {
+                    "state": "observed",
+                    "independent": "observed",
+                    "eventIndex": 0
+                  },
+                  "consequence": {
+                    "state": "observed",
+                    "independent": "observed",
+                    "eventIndex": 1
+                  },
+                  "cleanup-poststate": {
+                    "state": "observed",
+                    "independent": "observed",
+                    "eventIndex": 4
+                  }
+                },
+                "effectiveRouteFacts": {
+                  "within-human-authority": "observed",
+                  "compliant": "observed",
+                  "independent-consequence-verifier": "observed",
+                  "available": "observed"
+                },
+                "eventResults": [
+                  {
+                    "index": 0,
+                    "kind": "fact-observed",
+                    "accepted": true,
+                    "factId": "execution"
+                  },
+                  {
+                    "index": 1,
+                    "kind": "fact-observed",
+                    "accepted": true,
+                    "factId": "consequence"
+                  },
+                  {
+                    "index": 2,
+                    "kind": "experiment-evaluated",
+                    "accepted": true,
+                    "decision": "discard-and-rollback"
+                  },
+                  {
+                    "index": 3,
+                    "kind": "experiment-poststate",
+                    "accepted": true,
+                    "reason": null
+                  },
+                  {
+                    "index": 4,
+                    "kind": "resource-poststate",
+                    "accepted": true,
+                    "releasedResources": [
+                      "task-scoped-handoff"
+                    ],
+                    "residualTaskResources": []
+                  }
+                ],
+                "experimentResults": [
+                  {
+                    "baselineRouteId": "minimal-replaceable-composition",
+                    "candidateRouteId": "persistent-controller",
+                    "decision": "discard-and-rollback",
+                    "reasons": [
+                      "full acceptance vector regressed"
+                    ],
+                    "evidenceBinding": {
+                      "sourceRef": "fixture-source:persistent-controller",
+                      "observerRef": "independent-fixture-oracle",
+                      "subjectRef": "persistent-controller",
+                      "boundaryRef": "task-owned-process:gt16-source-complete"
+                    },
+                    "poststate": {
+                      "disposition": "rollback-complete",
+                      "state": "observed",
+                      "independent": "observed",
+                      "eventIndex": 3,
+                      "accepted": true
+                    }
+                  }
+                ],
+                "residualTaskResources": [],
+                "selectedRouteRetired": false,
+                "completionFailures": [],
+                "completionAllowed": true
+              },
+              "unknowns": [
+                "live-host-effect",
+                "cross-host-equivalence",
+                "field-value"
+              ],
+              "errors": [],
+              "claimLimit": "this-exact-outcome-composition-policy-route-set-and-ordered-observation-sequence-only"
+            },
+            "resultSha256": "278a03571c0874c82e2cbcefa4b89df67b54545dfd1d6f90014332de9b855edc",
+            "dimensions": [
+              "outcome",
+              "authority",
+              "evidence",
+              "privacy",
+              "burden",
+              "interference",
+              "recovery",
+              "resources",
+              "continuity",
+              "lifecycle"
+            ],
+            "unknowns": [
+              "live-host-effect",
+              "cross-host-equivalence",
+              "field-value"
+            ],
+            "priorAttempt": "source-bundle-record:archive-observation-GT-16-553f5a9"
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "bd75fd7e-1bbb-49ad-a2c0-1db655ea1bb5",
+                "taskLocator": "GT-16/outcome",
+                "resultLocator": "task-artifact:GT-16/outcome/agent-final.txt",
+                "phaseNonces": [
+                  "gt-16-outcome-84447a7"
+                ],
+                "resultSha256": "61eedf6343e26cc74436459b629fd757a9cb01a1a2fb0108fbf396b2181de053",
+                "resultRecordSha256": "d603caf9d410825f979d41202623ecc2d3d86eadf0441afbeb010e4780f239a9",
+                "completedAt": "2026-08-28T03:34:21Z",
+                "claim": "Binds the exact disposable GT-16 independent command result; no credential, configuration, session content or unrelated persistent state was read."
+              },
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "82db1e36-bce7-4e65-baca-b742a804a8dc",
+                "taskLocator": "GT-16/lifecycle",
+                "resultLocator": "task-artifact:GT-16/lifecycle/agent-final.txt",
+                "phaseNonces": [
+                  "gt-16-lifecycle-84447a7"
+                ],
+                "resultSha256": "69b13806d5c120d6237db25374bd69a881ac661abd02f3456b2d712eb84e7665",
+                "resultRecordSha256": "0462bd59f036989b97f0f8eca23d1a1eb979c3180aafc971168433f27089b241",
+                "completedAt": "2026-08-28T03:34:21Z",
+                "claim": "Binds the exact disposable GT-16 independent command result; no credential, configuration, session content or unrelated persistent state was read."
+              }
+            ],
+            "result": "outcome consequence rollback resource release and lifecycle independently reconciled"
+          }
+        ],
+        "officialSources": [
+          {
+            "kind": "official-source",
+            "url": "https://github.com/openai/openai-agents-python/tree/f1a806ad35071053f5248b38b58b8c0c40f67350",
+            "retrievedAt": "2026-08-28T02:02:33Z",
+            "claim": "Binds the exact maintained route source compared before bounded authorship."
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "bd75fd7e-1bbb-49ad-a2c0-1db655ea1bb5",
+            "taskLocator": "GT-16/outcome",
+            "phase": "independent-poststate",
+            "nonce": "gt-16-outcome-84447a7",
+            "report": "PASS GT-16 independent outcome poststate: the predeclared corrected-brief obligation, oracle, authority and gap bind the admitted minimum replaceable composition; execution and consequence are independently observed and installed-without-effect is rejected."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "82db1e36-bce7-4e65-baca-b742a804a8dc",
+            "taskLocator": "GT-16/lifecycle",
+            "phase": "independent-poststate",
+            "nonce": "gt-16-lifecycle-84447a7",
+            "report": "PASS GT-16 independent lifecycle poststate: the full non-compensating vector is retained; the lifecycle-dominated persistent controller is discarded with matching rollback, the task resource is released, and shared, unknown and unrelated state remains preserved."
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "22754993-4df9-44f1-a311-7bd4c94143de",
+            "taskLocator": "GT-16/cleanup",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-16-cleanup-84447a7",
+            "report": "PASS GT-16 post-capture cleanup: the exact disposable bootstrap fixture root and task resource are absent; no task-owned residue remains."
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 2
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "evidenceBoundary": "Passed only for one exact disposable pure-data minimum-form bootstrap with independent consequence, rollback, resource release and cleanup. It does not prove a live host mechanism, plugin or Runtime sufficiency, durable learning, cross-host portability, population value, candidate or release readiness."
+      }
     }
   }
 }

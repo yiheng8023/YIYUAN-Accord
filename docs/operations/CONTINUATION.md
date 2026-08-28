@@ -67,23 +67,32 @@ Then read, in order:
   rebaseline, bounded P0-P3 feasibility/reuse study and complete
   self-bootstrapping semantic model and environment-admission design are
   complete. The representative/longitudinal evaluation design is complete.
-  Exact-checkpoint GT-14 through GT-16 attempts are retained as failed
-  counterevidence: fixture execution and cleanup passed, but their publishable
-  source omitted task-required composition, wheel/provenance and full-vector
-  facts. GT-17 and GT-18 remain unperformed. The P4 product-form-neutral synthetic vertical slice is complete
+  Exact checkpoint `553f5a97e08390117e877e7b913c7a501018bfa5` retains
+  failed GT-14 through GT-16 source-sufficiency counterevidence: fixture
+  execution and cleanup passed, but the publishable source omitted
+  task-required composition, wheel/provenance and full-vector facts. At exact
+  behavior-bearing revision `84447a7a1b9557e22ef5585d159459e8701fa40e`,
+  three new source-complete observations pass only claim-scoped
+  current-enabled admission, pre-authorship no-build feasibility and one
+  disposable pure-data minimum-form bootstrap. The old failures are unchanged.
+  GT-17 and GT-18 remain unperformed. The P4 product-form-neutral synthetic vertical slice is complete
   and admits only a deterministic side-effect-free plain-data reference core;
   that one-interface reference core is implemented with source/observer/subject/
   boundary bindings, observer/subject self-identity rejection and a matching
   exact event subject; experiment evaluation and post-state also retain one
   observer and boundary before the independently observed completion gate,
   while source authenticity remains outside the pure core. Source-complete
-  `replay-activation-effect-evidence-and-lifecycle` remains active. A refreshed
-  exact-revision/source/wheel/license/maintenance ledger and one disposable
-  GT-15 no-build route probe now pass at the feasibility layer, but they are not
-  yet a publishable GT-15 observation and do not rewrite the retained failed
-  attempt. The task-owned fixture and empty temporary root were removed; the
-  post-cleanup canonical and Codex host checks have no errors. Longitudinal
-  consensus and cross-carrier validation is pending. A new
+  `replay-activation-effect-evidence-and-lifecycle` is complete. The refreshed
+  exact-revision/source/wheel/license/maintenance ledger, no-build route probe,
+  named outcome/oracle/gap, full non-compensating vector, consequence,
+  rollback, resource-release and cleanup bindings are now publishable for
+  these three finite observations without rewriting the retained failed
+  attempts. No dependency, live adapter, Runtime, service or durable carrier
+  was added. The task-owned fixture and empty temporary root were removed; the
+  post-cleanup canonical and both host checks have no errors.
+  `validate-longitudinal-consensus-and-cross-carrier-continuity` is active. The
+  refreshed canonical target-mode prompt is active in this exact Codex task;
+  host activation remains task state rather than behavior or value evidence. A new
   source-bound whole-system balance self-audit, weakest-link remediation and
   affected-surface reacceptance stage is required after that behavioral work
   and before independent candidate review. It first binds a versioned
@@ -190,6 +199,10 @@ Then read, in order:
   GT-14 through GT-18 have a machine-checkable design. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
+  Exact behavior-bearing revision
+  `84447a7a1b9557e22ef5585d159459e8701fa40e` now has separate passing
+  source-complete GT-14, GT-15 and GT-16 observations with finite claim limits;
+  these do not promote the old attempts or prove live-mechanism value.
   GT-17 global-consensus impact reconciliation and the GT-18 four-episode
   longitudinal sequence remain unperformed. All nine tasks must
   bind any future exact semantics and package bytes before a candidate can
@@ -343,13 +356,19 @@ increment and one active work item. Its ordered work is:
    deterministic, side-effect-free, policy-driven `reconcile_closure` deep
    module. Its 20/20 working-tree product tests are conformance only, not live
    behavior or value evidence.
-8. `replay-activation-effect-evidence-and-lifecycle` — active. The first exact
-   GT-14 through GT-16 attempt is retained as failed counterevidence because its
-   publishable source did not preserve exact composition, primary-source/
-   wheel/license/maintenance provenance or the named outcome and full lifecycle
-   vector. Replay must preserve those source facts as well as consequence,
-   rollback, resource release and cleanup.
-9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — pending.
+8. `replay-activation-effect-evidence-and-lifecycle` — completed. The first
+   exact GT-14 through GT-16 attempt remains failed source-sufficiency
+   counterevidence. At `84447a7a1b9557e22ef5585d159459e8701fa40e`, the
+   separate current observations preserve exact composition and unknowns,
+   primary-source/wheel/license/maintenance provenance, the named outcome and
+   full lifecycle vector, consequence, rollback, resource release and cleanup;
+   all three pass only their finite claim.
+9. `validate-longitudinal-consensus-and-cross-carrier-continuity` — active.
+   Next, GT-17 must reconcile the latest globally material consensus across all
+   dependent surfaces while preserving history and unrelated truth; GT-18 must
+   run the ordered four-episode baseline, rejected regression, retained net
+   improvement and later invalidation/retirement sequence through an observed
+   authorized task-owned carrier. Expensive unaffected GT-07 is not replayed.
 10. `self-audit-remediate-and-reaccept-whole-system-balance` — pending. It must
     first bind a versioned claim-scoped baseline, target, counterfactual,
     evidence cutoff, confounders and invalidation triggers; then evaluate

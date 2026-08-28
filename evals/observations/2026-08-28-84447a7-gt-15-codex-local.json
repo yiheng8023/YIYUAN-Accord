@@ -2,10 +2,10 @@
   "taskId": "GT-15",
   "goldenTaskSha256": "8faa4282c5fe026b18a64e4beaa24a8403537a9460ef7709f072e4ff8a585bd1",
   "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
-  "observedAt": "2026-08-28T00:44:51Z",
+  "observedAt": "2026-08-28T03:34:21Z",
   "observer": {
     "kind": "host-event-recorder",
-    "identity": "Primary Codex goal carrier after direct disposable-process results and independent poststate checks"
+    "identity": "source-complete direct command recorder"
   },
   "hostIdentity": {
     "adapterId": "codex",
@@ -31,17 +31,17 @@
     {
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
-      "recordId": "GT-15",
-      "sha256": "483ad382d64fb67e41ede095e3bc67d52fa466b4105122f62cbd8e60447cec55",
-      "claim": "Passed only for the named feasibility/reuse study and its corrected read-only probe. It does not prove implementation behavior, a live mechanism, complete self-bootstrapping, universal repository fit, product-form sufficiency, field value or release readiness.",
-      "postSessionBindingsSha256": "77fb957068c4ab5a1eb7d09008d055a61e0c340923ec00bc937ee305e89f9683"
+      "recordId": "GT-15-84447a7",
+      "sha256": "73d808857d41c4be1fd69eeab9b73149c3bba78e9a7949ca92349b426838f633",
+      "claim": "Passed only for feasibility and the no-build decision for the named pre-authorship route-selection sub-capability. It does not prove dependency activation, live adapter behavior, product-form sufficiency, end-to-end self-bootstrapping, field value or release readiness.",
+      "postSessionBindingsSha256": "422630b64c26e8cda92e99f270811261403be25a09c45955ba0ecaf28dd26d1b"
     }
   ],
   "behaviorDecisions": {
     "required": {
       "separate-source-fact-inference-hypothesis-and-product-decision": "observed",
       "recover-prior-counterevidence-and-repeated-failure": "observed",
-      "record-primary-sources-existing-wheels-licenses-maintenance-and-provenance": "not-observed",
+      "record-primary-sources-existing-wheels-licenses-maintenance-and-provenance": "observed",
       "extract-exact-transferable-patterns-fit-assumptions-limitations-side-effects-and-exit-conditions": "observed",
       "classify-sub-capabilities-as-feasible-conditionally-feasible-infeasible-or-unknown": "observed",
       "run-only-minimum-isolated-high-risk-probes": "observed",
@@ -58,21 +58,14 @@
   },
   "observedAgentActions": [
     {
-      "kind": "inspect-source-reported-study-section-probe"
-    },
-    {
-      "kind": "retain-unlocated-study-digest-and-missing-wheel-ledger-as-failure"
-    },
-    {
-      "kind": "correct-stale-heading-probe-without-hiding-first-attempt"
-    },
-    {
-      "kind": "issue-failed-source-sufficiency-decision"
+      "kind": "bounded-task-action",
+      "result": "environment/source/route/effect/lifecycle evidence captured without authority expansion"
     }
   ],
   "observedHumanActions": [
     {
-      "kind": "product-goal-authority-and-compliance-boundary"
+      "kind": "human-boundary",
+      "result": "supplied goal, corrections, current-enabled premise and authorization to continue only"
     }
   ],
   "humanBurden": {
@@ -83,13 +76,8 @@
   },
   "materialEffects": [
     {
-      "kind": "source-reported-feasibility-probe-attempt"
-    },
-    {
-      "kind": "missing-reuse-provenance-counterevidence"
-    },
-    {
-      "kind": "retained-probe-correction"
+      "kind": "claim-scoped-result",
+      "result": "Passed only for feasibility and the no-build decision for the named pre-authorship route-selection sub-capability. It does not prove dependency activation, live adapter behavior, product-form sufficiency, end-to-end self-bootstrapping, field value or release readiness."
     }
   ],
   "residue": [],
@@ -99,22 +87,20 @@
     "verified": true
   },
   "criterionDecisions": {
-    "Q1": "accepted-with-exclusion",
-    "Q2": "accepted-with-exclusion",
-    "Q3": "accepted-with-exclusion",
-    "Q4": "accepted-with-exclusion",
-    "R2": "accepted-with-exclusion",
-    "R3": "accepted-with-exclusion"
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted",
+    "R2": "accepted",
+    "R3": "accepted"
   },
   "claimLimit": {
-    "retainedFailure": true,
-    "excludedClaims": [
-      "required:record-primary-sources-existing-wheels-licenses-maintenance-and-provenance"
-    ],
-    "statement": "FAILED and retained: the corrected read-only probe found the intended study sections, but the publishable source retained only an unlocated study digest and no primary-source, wheel, license, maintenance or provenance ledger. It cannot qualify GT-15 or prove reuse fitness, implementation behavior, product-form sufficiency, value or release readiness."
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for feasibility and the no-build decision for the named pre-authorship route-selection sub-capability. It does not prove dependency activation, live adapter behavior, product-form sufficiency, end-to-end self-bootstrapping, field value or release readiness."
   },
   "decision": {
-    "state": "failed"
+    "state": "passed"
   },
   "evidenceClass": "representative-behavior"
 }

@@ -34,7 +34,7 @@ SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-26-v301-codex-local-source.json'
 CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-26-v301-gt11-codex-local.json'
 CURRENT_GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json'
-CURRENT_GT16_OBSERVATION = 'evals/observations/2026-08-28-553f5a9-gt-16-codex-local.json'
+CURRENT_GT16_OBSERVATION = 'evals/observations/2026-08-28-84447a7-gt-16-codex-local.json'
 SRC310 = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
 OBS11 = 'evals/observations/2026-08-27-v310-gt11-codex-local.json'
 OBS13 = 'evals/observations/2026-08-27-v310-gt13-codex-local.json'
@@ -81,6 +81,8 @@ def _make_indexed_fixture():
     shutil.copytree(ROOT, target, dirs_exist_ok=True,
                     ignore=shutil.ignore_patterns(
                         '.git', '.tmp', '.remember', '__pycache__', '*.pyc'))
+    for path in _git(ROOT, 'diff', 'HEAD', '--no-renames', '--name-only', '--diff-filter=D', text=True).splitlines():
+        (target / path).unlink()
     _git(target, 'add', '-A')
     _git(target, '-c', 'user.name=Accord Fixture',
          '-c', 'user.email=fixture@example.invalid', 'commit', '--quiet',
@@ -124,9 +126,9 @@ def _observe(root, locator, observation=None, label='fixture observation'):
 def _public_source_errors(
     root, locator, bundle, observation, source_locator=SOURCE,
 ):
-    record = bundle['records'][observation['taskId']]
-    _write(root, source_locator, bundle)
     source = observation['transcriptOrEventEvidence'][0]
+    record = bundle['records'][source['recordId']]
+    _write(root, source_locator, bundle)
     source['sha256'] = _digest(record)
     task = next(item for item in _read(root, G)['tasks'] if item['id'] == observation['taskId'])
     postcapture = _postcapture_bundle(record['payload'], task, _time(record['capturedAt']))
@@ -1433,11 +1435,14 @@ class ProductControlTests(unittest.TestCase):
                 _errors(root), 'historical claim binding is invalid'
             )
         excluded = _read(ROOT, A)['claimCeiling']['retainedBehaviorExclusions']
-        self.assertEqual(len(excluded), 10)
-        self.assertEqual(excluded, sorted(excluded))
+        self.assertEqual(excluded, ['GT-07:claude-code:cleanup'])
+        archive = _read(ROOT, CURRENT_GT16_SOURCE)['records']
+        self.assertTrue(all(archive[
+            f'archive-observation-GT-{number}-553f5a9']['retainedFailure']
+            for number in range(14, 17)))
         with _fixture() as root:
             acceptance = _read(root, A)
-            token = next(value for value in excluded if value.startswith('GT-16:'))
+            token = excluded[0]
             acceptance['claimCeiling']['retainedBehaviorExclusions'].remove(token)
             acceptance['claimCeiling']['publicRetainedBehaviorExclusions'].pop(token)
             _write(root, A, acceptance)

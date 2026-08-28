@@ -19,7 +19,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "38ebe462b8c6b7c5d6e264113176dfbd85d8c180fb9d09ebd38f4800e5c2d3e2",
+  "canonicalGoalObjectiveSha256": "9f9c853d8177791fbd7da284413276bdaeba597dd9e258ec2ef8b714d75b5a45",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -350,26 +350,26 @@
         "representative-behavior"
       ],
       "assessment": "continuing",
-      "assessmentScope": "Exact checkpoint 553f5a97e08390117e877e7b913c7a501018bfa5 retains failed Codex-local GT-14, GT-15 and GT-16 attempts as current counterevidence. Their deterministic fixture summaries and cleanup bindings are valid, but the publishable source omits required exact composition, primary-source/wheel/license/maintenance provenance and named outcome/oracle/gap plus full burden/interference/cost/unknown/lifecycle-vector facts. They therefore do not qualify the tasks or complete activation-to-effect replay. Historical v3.1.0 GT-07, GT-11, GT-12 and GT-13 remain regression evidence; GT-17 and GT-18 remain unperformed. No current observation proves official-clean behavior, Hook firing, live-mechanism effectiveness, complete or durable self-bootstrapping, global consensus reconciliation, cross-host equivalence, field value, production safety, candidate readiness or release readiness.",
+      "assessmentScope": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, fresh source-complete Codex-local GT-14, GT-15 and GT-16 observations pass their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision and one disposable pure-data minimum-form bootstrap. The prior 553f5a9 attempts remain hash-bound failed counterevidence in the combined source archive and recoverable parent Git blobs; they are not rewritten. Historical v3.1.0 GT-07, GT-11, GT-12 and GT-13 remain regression evidence; GT-17 and GT-18 remain unperformed. No current observation proves official-clean or no-Accord behavior, Hook firing, live-mechanism effectiveness, durable self-evolution, global consensus reconciliation, cross-host equivalence, field value, production safety, candidate readiness or release readiness.",
       "evidence": [
         {
-          "locator": "evals/observations/2026-08-28-553f5a9-gt-14-codex-local.json",
-          "sha256": "5897a3e16039fca2d576c247ed9ab0b6ff6549117ac3a9cfd60b74507a90ab17",
-          "claim": "FAILED and retained: the fixture rejected three baseline/isolation counterexamples and cleanup passed, but the publishable source did not record a provenance-bound host/model/tool/extension composition. It cannot qualify GT-14 or support native, official-clean, causal, interference, value or cross-host claims.",
+          "locator": "evals/observations/2026-08-28-84447a7-gt-14-codex-local.json",
+          "sha256": "3a8f2faf40a4309c38bf0916100667b6bd027f94eb6066a4a10ffc923ffc2300",
+          "claim": "Passed only for provenance-bound admission of this exact current-enabled composition. It does not prove official-clean or no-Accord behavior, model identity, Hook firing, causal Accord effect, interference, value or cross-host behavior.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
-          "locator": "evals/observations/2026-08-28-553f5a9-gt-15-codex-local.json",
-          "sha256": "aabc59c7402efbb604fcd4f0565fa3cabaa52006ebc6f57ec84c6f42a7dd4e53",
-          "claim": "FAILED and retained: the corrected read-only probe found the intended study sections, but the publishable source retained only an unlocated study digest and no primary-source, wheel, license, maintenance or provenance ledger. It cannot qualify GT-15 or prove reuse fitness, implementation behavior, product-form sufficiency, value or release readiness.",
+          "locator": "evals/observations/2026-08-28-84447a7-gt-15-codex-local.json",
+          "sha256": "0d1041139b822a293be4dfaf5b7d1b66427255331831309bb15a81466efeb489",
+          "claim": "Passed only for feasibility and the no-build decision for the named pre-authorship route-selection sub-capability. It does not prove dependency activation, live adapter behavior, product-form sufficiency, end-to-end self-bootstrapping, field value or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         },
         {
-          "locator": "evals/observations/2026-08-28-553f5a9-gt-16-codex-local.json",
-          "sha256": "78131b0d8a522de968b22835da6c3bd5b61e8df4ee91e8272904589ef0c652ea",
-          "claim": "FAILED and retained: the fixture summary binds a selected composition, consequence, rollback and cleanup, but not the named outcome/oracle/gap, route-search provenance, full lifecycle comparison, burden, interference, cost, unknowns or shared-state preservation needed by GT-16. It proves fixture execution and cleanup only, not a qualified bootstrap, live mechanism, portability, value, candidate or release readiness.",
+          "locator": "evals/observations/2026-08-28-84447a7-gt-16-codex-local.json",
+          "sha256": "50b489d1ab8074c0967fa9958e7f383acce41636627f3a03661241a697f68417",
+          "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap with independent consequence, rollback, resource release and cleanup. It does not prove a live host mechanism, plugin or Runtime sufficiency, durable learning, cross-host portability, population value, candidate or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         }
@@ -671,28 +671,10 @@
       "release-tag-or-publication-before-exact-gates": "A release tag or publication before every exact gate passes."
     },
     "retainedBehaviorExclusions": [
-      "GT-07:claude-code:cleanup",
-      "GT-14:codex:required:bind-each-observation-to-its-exact-environment-composition",
-      "GT-14:codex:required:record-host-model-tool-extension-and-Accord-exposure-with-provenance",
-      "GT-15:codex:required:record-primary-sources-existing-wheels-licenses-maintenance-and-provenance",
-      "GT-16:codex:required:health-check-update-rollback-release-cleanup-and-retirement",
-      "GT-16:codex:required:preserve-shared-unknown-and-unrelated-state",
-      "GT-16:codex:required:record-burden-interference-cost-unknowns-and-claim-limit",
-      "GT-16:codex:required:search-native-official-maintained-and-composable-routes-before-authorship",
-      "GT-16:codex:required:select-minimum-form-from-effect-latency-durability-isolation-recovery-and-lifecycle",
-      "GT-16:codex:required:sense-and-bind-environment-provenance-outcome-authority-and-gap"
+      "GT-07:claude-code:cleanup"
     ],
     "publicRetainedBehaviorExclusions": {
-      "GT-07:claude-code:cleanup": "The historical Claude GT-07 cleanup failure is excluded from retained behavior claims.",
-      "GT-14:codex:required:bind-each-observation-to-its-exact-environment-composition": "GT-14 did not retain a provenance-bound exact environment composition.",
-      "GT-14:codex:required:record-host-model-tool-extension-and-Accord-exposure-with-provenance": "GT-14 did not retain provenance-bound host, model, tool, extension and Accord exposure facts.",
-      "GT-15:codex:required:record-primary-sources-existing-wheels-licenses-maintenance-and-provenance": "GT-15 did not retain its primary-source, existing-wheel, license, maintenance and provenance ledger.",
-      "GT-16:codex:required:health-check-update-rollback-release-cleanup-and-retirement": "GT-16 did not retain the complete health, update, rollback, release, cleanup and retirement record.",
-      "GT-16:codex:required:preserve-shared-unknown-and-unrelated-state": "GT-16 did not retain evidence of shared, unknown and unrelated state preservation.",
-      "GT-16:codex:required:record-burden-interference-cost-unknowns-and-claim-limit": "GT-16 did not retain burden, interference, cost, unknown and claim-limit source facts.",
-      "GT-16:codex:required:search-native-official-maintained-and-composable-routes-before-authorship": "GT-16 did not retain native, official, maintained and composable route-search provenance.",
-      "GT-16:codex:required:select-minimum-form-from-effect-latency-durability-isolation-recovery-and-lifecycle": "GT-16 did not retain the complete effect, latency, durability, isolation, recovery and lifecycle comparison.",
-      "GT-16:codex:required:sense-and-bind-environment-provenance-outcome-authority-and-gap": "GT-16 did not retain the named environment, outcome, authority and capability-gap source facts."
+      "GT-07:claude-code:cleanup": "The historical Claude GT-07 cleanup failure is excluded from retained behavior claims."
     }
   }
 }

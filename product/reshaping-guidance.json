@@ -82,23 +82,74 @@
     }
   ],
   "factorTaxonomy": [
-    {"kind": "purpose", "meaning": "desired human or product outcome and accountable value"},
-    {"kind": "invariant", "meaning": "small portable condition that remains unless explicitly changed at the product-governance boundary"},
-    {"kind": "premise", "meaning": "falsifiable belief used to choose a design or route"},
-    {"kind": "principle", "meaning": "directional idea for judgment, not an executable command"},
-    {"kind": "methodology", "meaning": "reusable way to analyze or solve a class of problems"},
-    {"kind": "standard", "meaning": "minimum quality or interoperability threshold with a declared scope"},
-    {"kind": "policy", "meaning": "context-bound decision rule including authority, risk, data, trust or cost"},
-    {"kind": "logic", "meaning": "deterministic or probabilistic relation used to infer, rank or transition"},
-    {"kind": "mechanism", "meaning": "means that creates, observes, controls, recovers or verifies an effect"},
-    {"kind": "process", "meaning": "revisable sequence selected for the current task or phase"},
-    {"kind": "protocol", "meaning": "contract or interface between roles, carriers, tools or systems"},
-    {"kind": "representation", "meaning": "schema, prompt, index, graph, document or other projection of meaning"},
-    {"kind": "carrier", "meaning": "host, task, cloud environment, repository, branch, worktree, conversation or handoff that carries work or state"},
-    {"kind": "capability", "meaning": "observable ability exposed natively, by extension, by composition or by bounded authorship"},
-    {"kind": "evidence", "meaning": "source-bound observation supporting a limited fact, effect or claim"},
-    {"kind": "metric", "meaning": "measurement of outcome, burden, interference, cost, recovery or confidence"},
-    {"kind": "lifecycle", "meaning": "discovered, eligible, activated, healthy, degraded, superseded or retired state and transition"}
+    {
+      "kind": "purpose",
+      "meaning": "desired human or product outcome and accountable value"
+    },
+    {
+      "kind": "invariant",
+      "meaning": "small portable condition that remains unless explicitly changed at the product-governance boundary"
+    },
+    {
+      "kind": "premise",
+      "meaning": "falsifiable belief used to choose a design or route"
+    },
+    {
+      "kind": "principle",
+      "meaning": "directional idea for judgment, not an executable command"
+    },
+    {
+      "kind": "methodology",
+      "meaning": "reusable way to analyze or solve a class of problems"
+    },
+    {
+      "kind": "standard",
+      "meaning": "minimum quality or interoperability threshold with a declared scope"
+    },
+    {
+      "kind": "policy",
+      "meaning": "context-bound decision rule including authority, risk, data, trust or cost"
+    },
+    {
+      "kind": "logic",
+      "meaning": "deterministic or probabilistic relation used to infer, rank or transition"
+    },
+    {
+      "kind": "mechanism",
+      "meaning": "means that creates, observes, controls, recovers or verifies an effect"
+    },
+    {
+      "kind": "process",
+      "meaning": "revisable sequence selected for the current task or phase"
+    },
+    {
+      "kind": "protocol",
+      "meaning": "contract or interface between roles, carriers, tools or systems"
+    },
+    {
+      "kind": "representation",
+      "meaning": "schema, prompt, index, graph, document or other projection of meaning"
+    },
+    {
+      "kind": "carrier",
+      "meaning": "host, task, cloud environment, repository, branch, worktree, conversation or handoff that carries work or state"
+    },
+    {
+      "kind": "capability",
+      "meaning": "observable ability exposed natively, by extension, by composition or by bounded authorship"
+    },
+    {
+      "kind": "evidence",
+      "meaning": "source-bound observation supporting a limited fact, effect or claim"
+    },
+    {
+      "kind": "metric",
+      "meaning": "measurement of outcome, burden, interference, cost, recovery or confidence"
+    },
+    {
+      "kind": "lifecycle",
+      "meaning": "discovered, eligible, activated, healthy, degraded, superseded or retired state and transition"
+    }
   ],
   "factorApplicabilityContract": {
     "requiredFields": [
@@ -295,44 +346,147 @@
       "unitOfReasoning": "context-bound-outcome-obligations-and-the-current-relations-needed-to-close-them",
       "authorityRule": "The latest bound goal, accountable consensus and human-owned boundaries authorize the model. Environment observations, indexes, routes, scores, experiments and carriers may challenge or derive from authority but never create it.",
       "entities": [
-        {"id": "outcome-obligation", "meaning": "A result condition with an owner, completion criterion, consequence and residual-risk boundary."},
-        {"id": "responsibility", "meaning": "A duty to perform, coordinate or verify a bounded part of one outcome obligation."},
-        {"id": "actor", "meaning": "A person, Agent or accountable external participant that can own responsibility, authority or action."},
-        {"id": "capability", "meaning": "A stable semantic ability that may support one or more responsibilities."},
-        {"id": "capability-instance", "meaning": "A freshness-bound observation of capability fitness under an exact composed environment."},
-        {"id": "product-form", "meaning": "A replaceable delivery shape that carries capabilities, state or effects without becoming product identity."},
-        {"id": "coherence-contract", "meaning": "The shared responsibility, interface, authority, state, evidence, version, failure, recovery and retirement contract for cooperating forms."},
-        {"id": "carrier", "meaning": "An observed host, task, repository, client, cloud or durable medium that transports work or state."},
-        {"id": "resource", "meaning": "An attributable unit of context, execution, connection, storage or capacity with ownership and lifecycle."},
-        {"id": "effect", "meaning": "An observed material change that may satisfy or violate an outcome obligation."},
-        {"id": "evidence", "meaning": "Source-bound support for one limited observation, effect, criterion or claim."},
-        {"id": "experiment", "meaning": "A fixed-budget, reversible proposal to change one bounded route, policy, representation or replaceable mechanism."}
+        {
+          "id": "outcome-obligation",
+          "meaning": "A result condition with an owner, completion criterion, consequence and residual-risk boundary."
+        },
+        {
+          "id": "responsibility",
+          "meaning": "A duty to perform, coordinate or verify a bounded part of one outcome obligation."
+        },
+        {
+          "id": "actor",
+          "meaning": "A person, Agent or accountable external participant that can own responsibility, authority or action."
+        },
+        {
+          "id": "capability",
+          "meaning": "A stable semantic ability that may support one or more responsibilities."
+        },
+        {
+          "id": "capability-instance",
+          "meaning": "A freshness-bound observation of capability fitness under an exact composed environment."
+        },
+        {
+          "id": "product-form",
+          "meaning": "A replaceable delivery shape that carries capabilities, state or effects without becoming product identity."
+        },
+        {
+          "id": "coherence-contract",
+          "meaning": "The shared responsibility, interface, authority, state, evidence, version, failure, recovery and retirement contract for cooperating forms."
+        },
+        {
+          "id": "carrier",
+          "meaning": "An observed host, task, repository, client, cloud or durable medium that transports work or state."
+        },
+        {
+          "id": "resource",
+          "meaning": "An attributable unit of context, execution, connection, storage or capacity with ownership and lifecycle."
+        },
+        {
+          "id": "effect",
+          "meaning": "An observed material change that may satisfy or violate an outcome obligation."
+        },
+        {
+          "id": "evidence",
+          "meaning": "Source-bound support for one limited observation, effect, criterion or claim."
+        },
+        {
+          "id": "experiment",
+          "meaning": "A fixed-budget, reversible proposal to change one bounded route, policy, representation or replaceable mechanism."
+        }
       ],
       "relationKinds": [
-        {"id": "requires", "meaning": "An obligation, responsibility or route needs another relation to be viable."},
-        {"id": "owned-by", "meaning": "A responsibility, authority, resource or effect has an accountable owner."},
-        {"id": "provided-by", "meaning": "A capability instance is exposed by an actor, form or composition."},
-        {"id": "effective-under", "meaning": "A capability instance or route is fit only under a bound composed context."},
-        {"id": "allocated-to", "meaning": "A current responsibility is assigned to no added artifact, one form or several forms."},
-        {"id": "cooperates-with", "meaning": "Two replaceable forms jointly discharge named responsibilities."},
-        {"id": "governed-by", "meaning": "A route or cooperating form set follows one coherence, authority or evaluation contract."},
-        {"id": "carried-by", "meaning": "Current work or state is bound to an observed carrier."},
-        {"id": "consumes", "meaning": "A route uses an attributable resource or budget."},
-        {"id": "supports-outcome", "meaning": "An observed effect supports a named outcome obligation within a finite claim."},
-        {"id": "verified-by", "meaning": "An effect, post-state or cleanup claim is supported by independent evidence."},
-        {"id": "derived-from", "meaning": "A view, route or decision is recomputable from named sources and observations."},
-        {"id": "invalidates", "meaning": "A correction, conflict, expiry or failed invariant defeats a dependent relation or claim."},
-        {"id": "degrades-to", "meaning": "A route narrows to a less capable but still honest disposition."},
-        {"id": "replaceable-by", "meaning": "A form, carrier or mechanism has an admitted substitution path."},
-        {"id": "retires-when", "meaning": "A mechanism or allocation has an explicit expiry or negative-value condition."}
+        {
+          "id": "requires",
+          "meaning": "An obligation, responsibility or route needs another relation to be viable."
+        },
+        {
+          "id": "owned-by",
+          "meaning": "A responsibility, authority, resource or effect has an accountable owner."
+        },
+        {
+          "id": "provided-by",
+          "meaning": "A capability instance is exposed by an actor, form or composition."
+        },
+        {
+          "id": "effective-under",
+          "meaning": "A capability instance or route is fit only under a bound composed context."
+        },
+        {
+          "id": "allocated-to",
+          "meaning": "A current responsibility is assigned to no added artifact, one form or several forms."
+        },
+        {
+          "id": "cooperates-with",
+          "meaning": "Two replaceable forms jointly discharge named responsibilities."
+        },
+        {
+          "id": "governed-by",
+          "meaning": "A route or cooperating form set follows one coherence, authority or evaluation contract."
+        },
+        {
+          "id": "carried-by",
+          "meaning": "Current work or state is bound to an observed carrier."
+        },
+        {
+          "id": "consumes",
+          "meaning": "A route uses an attributable resource or budget."
+        },
+        {
+          "id": "supports-outcome",
+          "meaning": "An observed effect supports a named outcome obligation within a finite claim."
+        },
+        {
+          "id": "verified-by",
+          "meaning": "An effect, post-state or cleanup claim is supported by independent evidence."
+        },
+        {
+          "id": "derived-from",
+          "meaning": "A view, route or decision is recomputable from named sources and observations."
+        },
+        {
+          "id": "invalidates",
+          "meaning": "A correction, conflict, expiry or failed invariant defeats a dependent relation or claim."
+        },
+        {
+          "id": "degrades-to",
+          "meaning": "A route narrows to a less capable but still honest disposition."
+        },
+        {
+          "id": "replaceable-by",
+          "meaning": "A form, carrier or mechanism has an admitted substitution path."
+        },
+        {
+          "id": "retires-when",
+          "meaning": "A mechanism or allocation has an explicit expiry or negative-value condition."
+        }
       ],
       "factModel": {
-        "values": ["observed", "not-observed", "unknown"],
-        "independentFacets": ["declaration", "installation", "enablement", "activation", "execution", "consequence", "evidence", "cleanup-poststate"],
+        "values": [
+          "observed",
+          "not-observed",
+          "unknown"
+        ],
+        "independentFacets": [
+          "declaration",
+          "installation",
+          "enablement",
+          "activation",
+          "execution",
+          "consequence",
+          "evidence",
+          "cleanup-poststate"
+        ],
         "rule": "Facets are independent facts connected by explicit causal relations, not a linear enum. A later observation never backfills an earlier facet; missing causality remains visible."
       },
       "closureModel": {
-        "obligationStates": ["open", "unreliable", "closed", "infeasible", "retired"],
+        "obligationStates": [
+          "open",
+          "unreliable",
+          "closed",
+          "infeasible",
+          "retired"
+        ],
         "closedWhen": [
           "the-current-obligation-and-criterion-are-bound",
           "responsibility-authority-and-accountability-are-explicit",
@@ -340,7 +494,19 @@
           "the-claimed-consequence-and-required-poststate-are-observed",
           "residual-risk-unknowns-resources-and-lifecycle-are-reconciled"
         ],
-        "routeDispositions": ["no-op", "admit", "probe-or-narrow", "request-minimum-authority", "reject", "degrade", "rollback", "hold-unknown", "replay", "honest-stop", "retire"]
+        "routeDispositions": [
+          "no-op",
+          "admit",
+          "probe-or-narrow",
+          "request-minimum-authority",
+          "reject",
+          "degrade",
+          "rollback",
+          "hold-unknown",
+          "replay",
+          "honest-stop",
+          "retire"
+        ]
       },
       "routeDecision": {
         "orderedSteps": [
@@ -356,42 +522,133 @@
           "verify-consequence-poststate-residue-and-claim",
           "learn-reconcile-degrade-rollback-release-or-retire"
         ],
-        "hardAdmission": ["closes-named-responsibilities", "currently-observed-available", "within-current-authority", "independent-consequence-verifier", "satisfies-hard-task-trust-data-cost-risk-and-compatibility-constraints"],
+        "hardAdmission": [
+          "closes-named-responsibilities",
+          "currently-observed-available",
+          "within-current-authority",
+          "independent-consequence-verifier",
+          "satisfies-hard-task-trust-data-cost-risk-and-compatibility-constraints"
+        ],
         "comparison": {
           "mode": "pareto-then-context-then-equivalent-fit-reuse-tiebreak",
-          "lifecycleDimensions": ["human-burden", "interference", "persistence", "recovery", "maintenance", "retirement"],
+          "lifecycleDimensions": [
+            "human-burden",
+            "interference",
+            "persistence",
+            "recovery",
+            "maintenance",
+            "retirement"
+          ],
           "forbidden": "universal-weighted-score-or-popularity-ranking-as-product-authority"
         }
       },
       "formAllocation": {
         "cardinality": "many-to-many-context-and-freshness-bound",
-        "allowedShapes": ["no-added-artifact", "one-sufficient-form", "several-replaceable-cooperating-forms"],
-        "coherenceContractRequires": ["responsibility-boundaries", "interfaces-and-version", "authority-and-side-effects", "state-owner-and-freshness", "evidence-and-independent-poststate", "failure-degradation-and-recovery", "update-replacement-and-rollback", "cleanup-retirement-and-residue"],
+        "allowedShapes": [
+          "no-added-artifact",
+          "one-sufficient-form",
+          "several-replaceable-cooperating-forms"
+        ],
+        "coherenceContractRequires": [
+          "responsibility-boundaries",
+          "interfaces-and-version",
+          "authority-and-side-effects",
+          "state-owner-and-freshness",
+          "evidence-and-independent-poststate",
+          "failure-degradation-and-recovery",
+          "update-replacement-and-rollback",
+          "cleanup-retirement-and-residue"
+        ],
         "rule": "System coherence comes from the shared contract and observed relations. It is not inferred from co-installation, a common vendor, one process, one repository or one centralized runtime."
       },
       "evolutionTransaction": {
-        "requires": ["exact-baseline", "fixed-budget", "one-bounded-mutable-surface", "immutable-evaluator", "full-acceptance-vector", "preauthorized-tolerances", "available-rollback", "independent-effect-and-cleanup-poststate"],
-        "dispositions": ["keep-after-independent-poststate", "discard-and-rollback", "invalidate-and-rollback", "hold-unknown", "revisit-premise-or-retire"],
+        "requires": [
+          "exact-baseline",
+          "fixed-budget",
+          "one-bounded-mutable-surface",
+          "immutable-evaluator",
+          "full-acceptance-vector",
+          "preauthorized-tolerances",
+          "available-rollback",
+          "independent-effect-and-cleanup-poststate"
+        ],
+        "dispositions": [
+          "keep-after-independent-poststate",
+          "discard-and-rollback",
+          "invalidate-and-rollback",
+          "hold-unknown",
+          "revisit-premise-or-retire"
+        ],
         "rule": "A proxy gain cannot compensate for weakened authority, evidence, burden, interference, recovery or lifecycle fitness."
       },
       "continuityDecision": {
-        "orderedPreference": ["no-durable-state-when-no-cross-session-obligation", "observed-current-healthy-recoverable-host-bound-carrier", "replaceable-durable-carrier-only-for-required-cross-host-or-long-lived-continuity"],
-        "durableCarrierRequires": ["owner", "schema", "version", "freshness", "ttl", "privacy", "migration", "deletion", "retirement"],
+        "orderedPreference": [
+          "no-durable-state-when-no-cross-session-obligation",
+          "observed-current-healthy-recoverable-host-bound-carrier",
+          "replaceable-durable-carrier-only-for-required-cross-host-or-long-lived-continuity"
+        ],
+        "durableCarrierRequires": [
+          "owner",
+          "schema",
+          "version",
+          "freshness",
+          "ttl",
+          "privacy",
+          "migration",
+          "deletion",
+          "retirement"
+        ],
         "rule": "Static instructions are not current state. A carrier transports accountable state but never becomes its authority; newer bound consensus refreshes or supersedes stale derived state."
       },
       "invariants": [
-        {"id": "authority-is-not-derived", "rule": "No observation, capability, route, score, experiment, carrier or product form grants new human-owned authority."},
-        {"id": "unknown-is-not-success", "rule": "Unknown, unobserved, infeasible, contaminated and failed remain distinct from closed."},
-        {"id": "effect-before-claim", "rule": "Declaration, installation, enablement, activation or execution never substitutes for the claimed consequence and post-state."},
-        {"id": "allocation-is-explicit", "rule": "Every admitted responsibility has an owner, an authorized allocation or no-op reason, a verifier and a lifecycle disposition."},
-        {"id": "multi-form-coherence-is-explicit", "rule": "Cooperating forms cannot rely on implicit shared state, authority, ordering, recovery or cleanup."},
-        {"id": "derived-views-remain-derived", "rule": "Indexes, graphs, snapshots and routes retain source, provenance, freshness and invalidation and are never a second authority source."},
-        {"id": "environment-binds-fitness", "rule": "Capability and route fitness bind the exact composed environment and Accord exposure; self-observation cannot attest a clean baseline."},
-        {"id": "evolution-is-a-bounded-transaction", "rule": "The candidate cannot alter its authority, evaluator, baseline, tolerance or independent post-state requirement."},
-        {"id": "continuity-has-an-observed-carrier", "rule": "Cross-session state has currentness, ownership, recovery, migration, deletion and retirement or the continuity claim narrows."},
-        {"id": "resources-close-by-attributable-poststate", "rule": "Only task-exclusive attributable exposure is released automatically; shared or unknown ownership is preserved."},
-        {"id": "global-correction-replays-dependents", "rule": "A material consensus or fact change replays every dependent surface from the earliest affected boundary while preserving unrelated truth."},
-        {"id": "forms-pay-lifecycle-rent", "rule": "Flexibility cannot justify unused, duplicated, stale or non-retirable forms and mechanisms."}
+        {
+          "id": "authority-is-not-derived",
+          "rule": "No observation, capability, route, score, experiment, carrier or product form grants new human-owned authority."
+        },
+        {
+          "id": "unknown-is-not-success",
+          "rule": "Unknown, unobserved, infeasible, contaminated and failed remain distinct from closed."
+        },
+        {
+          "id": "effect-before-claim",
+          "rule": "Declaration, installation, enablement, activation or execution never substitutes for the claimed consequence and post-state."
+        },
+        {
+          "id": "allocation-is-explicit",
+          "rule": "Every admitted responsibility has an owner, an authorized allocation or no-op reason, a verifier and a lifecycle disposition."
+        },
+        {
+          "id": "multi-form-coherence-is-explicit",
+          "rule": "Cooperating forms cannot rely on implicit shared state, authority, ordering, recovery or cleanup."
+        },
+        {
+          "id": "derived-views-remain-derived",
+          "rule": "Indexes, graphs, snapshots and routes retain source, provenance, freshness and invalidation and are never a second authority source."
+        },
+        {
+          "id": "environment-binds-fitness",
+          "rule": "Capability and route fitness bind the exact composed environment and Accord exposure; self-observation cannot attest a clean baseline."
+        },
+        {
+          "id": "evolution-is-a-bounded-transaction",
+          "rule": "The candidate cannot alter its authority, evaluator, baseline, tolerance or independent post-state requirement."
+        },
+        {
+          "id": "continuity-has-an-observed-carrier",
+          "rule": "Cross-session state has currentness, ownership, recovery, migration, deletion and retirement or the continuity claim narrows."
+        },
+        {
+          "id": "resources-close-by-attributable-poststate",
+          "rule": "Only task-exclusive attributable exposure is released automatically; shared or unknown ownership is preserved."
+        },
+        {
+          "id": "global-correction-replays-dependents",
+          "rule": "A material consensus or fact change replays every dependent surface from the earliest affected boundary while preserving unrelated truth."
+        },
+        {
+          "id": "forms-pay-lifecycle-rent",
+          "rule": "Flexibility cannot justify unused, duplicated, stale or non-retirable forms and mechanisms."
+        }
       ],
       "fundamentalLimits": [
         "hidden-or-unexposed-environment-state-cannot-be-guaranteed-observed",
@@ -401,26 +658,113 @@
         "arbitrary-irreversible-external-effects-cannot-be-rolled-back"
       ],
       "degradationPaths": [
-        {"when": "environment-provenance-or-material-confounding-is-unknown", "disposition": "isolate-or-narrow-claim"},
-        {"when": "required-authority-is-missing", "disposition": "request-one-minimum-informed-step-or-stop"},
-        {"when": "capability-health-or-verifier-is-unknown", "disposition": "probe-or-narrow-without-silent-authorship"},
-        {"when": "no-admitted-route-closes-the-obligation", "disposition": "record-infeasible-and-honest-stop"},
-        {"when": "consequence-or-cleanup-poststate-is-unknown", "disposition": "hold-open-and-narrow-claim"},
-        {"when": "non-dominated-routes-remain-without-a-context-constraint", "disposition": "derive-the-missing-constraint-or-preserve-the-choice"},
-        {"when": "a-candidate-mutates-evaluator-authority-or-exceeds-tolerance", "disposition": "invalidate-or-discard-and-rollback"},
-        {"when": "continuity-carrier-lifecycle-is-incomplete", "disposition": "reject-durable-carrier"},
-        {"when": "a-form-no-longer-pays-lifecycle-rent", "disposition": "degrade-replace-or-retire"},
-        {"when": "an-effect-is-irreversible", "disposition": "require-prior-human-authority-and-otherwise-stop"}
+        {
+          "when": "environment-provenance-or-material-confounding-is-unknown",
+          "disposition": "isolate-or-narrow-claim"
+        },
+        {
+          "when": "required-authority-is-missing",
+          "disposition": "request-one-minimum-informed-step-or-stop"
+        },
+        {
+          "when": "capability-health-or-verifier-is-unknown",
+          "disposition": "probe-or-narrow-without-silent-authorship"
+        },
+        {
+          "when": "no-admitted-route-closes-the-obligation",
+          "disposition": "record-infeasible-and-honest-stop"
+        },
+        {
+          "when": "consequence-or-cleanup-poststate-is-unknown",
+          "disposition": "hold-open-and-narrow-claim"
+        },
+        {
+          "when": "non-dominated-routes-remain-without-a-context-constraint",
+          "disposition": "derive-the-missing-constraint-or-preserve-the-choice"
+        },
+        {
+          "when": "a-candidate-mutates-evaluator-authority-or-exceeds-tolerance",
+          "disposition": "invalidate-or-discard-and-rollback"
+        },
+        {
+          "when": "continuity-carrier-lifecycle-is-incomplete",
+          "disposition": "reject-durable-carrier"
+        },
+        {
+          "when": "a-form-no-longer-pays-lifecycle-rent",
+          "disposition": "degrade-replace-or-retire"
+        },
+        {
+          "when": "an-effect-is-irreversible",
+          "disposition": "require-prior-human-authority-and-otherwise-stop"
+        }
       ],
       "stressScenarios": [
-        {"id": "installed-plugin-with-unknown-activation", "expectedDisposition": "probe-or-narrow", "guards": ["unknown-is-not-success", "effect-before-claim"]},
-        {"id": "healthy-native-route-closes-every-obligation", "expectedDisposition": "no-op", "guards": ["allocation-is-explicit", "forms-pay-lifecycle-rent"]},
-        {"id": "two-forms-share-implicit-state-without-contract", "expectedDisposition": "reject", "reason": "missing-coherence-contract", "guards": ["multi-form-coherence-is-explicit", "derived-views-remain-derived"]},
-        {"id": "cross-host-state-without-migration-deletion-or-retirement", "expectedDisposition": "reject", "reason": "incomplete-durable-carrier-lifecycle", "guards": ["continuity-has-an-observed-carrier", "forms-pay-lifecycle-rent"]},
-        {"id": "candidate-improves-proxy-but-regresses-burden", "expectedDisposition": "rollback", "reason": "full-vector-regression", "guards": ["evolution-is-a-bounded-transaction"]},
-        {"id": "candidate-mutates-its-evaluator", "expectedDisposition": "rollback", "reason": "invalid-comparison", "guards": ["evolution-is-a-bounded-transaction"]},
-        {"id": "new-accountable-consensus-invalidates-current-route", "expectedDisposition": "replay", "reason": "earliest-affected-boundary", "guards": ["global-correction-replays-dependents"]},
-        {"id": "irreversible-effect-without-prior-human-authority", "expectedDisposition": "honest-stop", "guards": ["authority-is-not-derived"]}
+        {
+          "id": "installed-plugin-with-unknown-activation",
+          "expectedDisposition": "probe-or-narrow",
+          "guards": [
+            "unknown-is-not-success",
+            "effect-before-claim"
+          ]
+        },
+        {
+          "id": "healthy-native-route-closes-every-obligation",
+          "expectedDisposition": "no-op",
+          "guards": [
+            "allocation-is-explicit",
+            "forms-pay-lifecycle-rent"
+          ]
+        },
+        {
+          "id": "two-forms-share-implicit-state-without-contract",
+          "expectedDisposition": "reject",
+          "reason": "missing-coherence-contract",
+          "guards": [
+            "multi-form-coherence-is-explicit",
+            "derived-views-remain-derived"
+          ]
+        },
+        {
+          "id": "cross-host-state-without-migration-deletion-or-retirement",
+          "expectedDisposition": "reject",
+          "reason": "incomplete-durable-carrier-lifecycle",
+          "guards": [
+            "continuity-has-an-observed-carrier",
+            "forms-pay-lifecycle-rent"
+          ]
+        },
+        {
+          "id": "candidate-improves-proxy-but-regresses-burden",
+          "expectedDisposition": "rollback",
+          "reason": "full-vector-regression",
+          "guards": [
+            "evolution-is-a-bounded-transaction"
+          ]
+        },
+        {
+          "id": "candidate-mutates-its-evaluator",
+          "expectedDisposition": "rollback",
+          "reason": "invalid-comparison",
+          "guards": [
+            "evolution-is-a-bounded-transaction"
+          ]
+        },
+        {
+          "id": "new-accountable-consensus-invalidates-current-route",
+          "expectedDisposition": "replay",
+          "reason": "earliest-affected-boundary",
+          "guards": [
+            "global-correction-replays-dependents"
+          ]
+        },
+        {
+          "id": "irreversible-effect-without-prior-human-authority",
+          "expectedDisposition": "honest-stop",
+          "guards": [
+            "authority-is-not-derived"
+          ]
+        }
       ],
       "projectionRule": "The dynamic index derives only queried entity instances, responsibility allocations and relations from current authority plus observations. It must invalidate affected projections on material change and never precompute a host-model-tool-context-form Cartesian product."
     },
@@ -430,14 +774,53 @@
       "admissionUnit": "one-bounded-claim-under-one-provenance-bound-composition-and-freshness-window",
       "purpose": "Decide whether an environment observation may support one named claim, whether a comparison arm is required, and which minimum isolation or honest degradation is proportionate to material confounding. It does not certify a host as globally clean.",
       "snapshot": {
-        "requiredFields": ["capturedAt", "scope", "claim", "sources", "provenance", "compositionKey", "freshness", "composition", "AccordExposure", "confounders", "unknowns", "evaluator", "effectBoundary", "cleanupContract"],
-        "compositionDimensions": ["host-and-client", "model-and-route", "tools-and-native-capabilities", "Skills-plugins-Apps-MCPs-Hooks-and-other-extensions", "instructions-and-policy", "configuration-and-feature-flags", "permissions-trust-account-and-data-boundaries", "network-and-external-services", "workspace-source-revision-and-dirty-state", "persistent-state-cache-and-prior-effects", "resources-time-and-load", "Accord-package-version-content-and-exposure"],
+        "requiredFields": [
+          "capturedAt",
+          "scope",
+          "claim",
+          "sources",
+          "provenance",
+          "compositionKey",
+          "freshness",
+          "composition",
+          "AccordExposure",
+          "confounders",
+          "unknowns",
+          "evaluator",
+          "effectBoundary",
+          "cleanupContract"
+        ],
+        "compositionDimensions": [
+          "host-and-client",
+          "model-and-route",
+          "tools-and-native-capabilities",
+          "Skills-plugins-Apps-MCPs-Hooks-and-other-extensions",
+          "instructions-and-policy",
+          "configuration-and-feature-flags",
+          "permissions-trust-account-and-data-boundaries",
+          "network-and-external-services",
+          "workspace-source-revision-and-dirty-state",
+          "persistent-state-cache-and-prior-effects",
+          "resources-time-and-load",
+          "Accord-package-version-content-and-exposure"
+        ],
         "factModelRef": "#/selfBootstrappingCore/semanticModel/factModel",
         "compositionKeyRule": "Derive a stable key only from normalized non-secret identifiers and explicit unknown markers. The key locates one observed composition; it is not proof that hidden state is absent or that two environments are equivalent.",
         "freshnessRule": "Freshness is scoped to the claim and every material composition member. Expiry or a changed member invalidates only dependent capability, route, comparison and claim projections.",
         "privacyBoundary": {
-          "allow": ["non-secret-version-and-identity-metadata", "declared-exposure-and-health", "task-owned-prestate-and-poststate", "bounded-redacted-effect-and-resource-observations"],
-          "forbid": ["credential-content", "session-or-conversation-content", "unrelated-persistent-state", "silent-continuous-telemetry", "secret-derived-fingerprint"],
+          "allow": [
+            "non-secret-version-and-identity-metadata",
+            "declared-exposure-and-health",
+            "task-owned-prestate-and-poststate",
+            "bounded-redacted-effect-and-resource-observations"
+          ],
+          "forbid": [
+            "credential-content",
+            "session-or-conversation-content",
+            "unrelated-persistent-state",
+            "silent-continuous-telemetry",
+            "secret-derived-fingerprint"
+          ],
           "whenUnavailable": "record-unknown-and-isolate-or-narrow-the-claim"
         }
       },
@@ -469,59 +852,247 @@
         }
       ],
       "confounding": {
-        "statuses": ["observed-material", "observed-nonmaterial", "none-observed-within-scope", "unknown"],
-        "classes": ["Accord-self-observation", "other-extension-or-Hook-interference", "instruction-or-policy-overlap", "persistent-state-cache-or-prior-effect", "host-client-model-or-route-difference", "tool-configuration-permission-network-or-account-difference", "workspace-source-data-or-dirty-state-difference", "evaluator-operator-time-load-or-resource-difference", "residual-process-resource-or-artifact"],
-        "materialWhenAny": ["can-change-route-selection-or-capability-exposure", "can-change-the-observed-consequence-or-poststate", "can-change-human-burden-interference-recovery-or-lifecycle", "can-change-the-evaluator-or-evidence-independence", "can-broaden-the-claim-beyond-the-observed-composition", "is-unknown-and-the-claim-is-causal-comparative-consequential-or-release-bearing"],
+        "statuses": [
+          "observed-material",
+          "observed-nonmaterial",
+          "none-observed-within-scope",
+          "unknown"
+        ],
+        "classes": [
+          "Accord-self-observation",
+          "other-extension-or-Hook-interference",
+          "instruction-or-policy-overlap",
+          "persistent-state-cache-or-prior-effect",
+          "host-client-model-or-route-difference",
+          "tool-configuration-permission-network-or-account-difference",
+          "workspace-source-data-or-dirty-state-difference",
+          "evaluator-operator-time-load-or-resource-difference",
+          "residual-process-resource-or-artifact"
+        ],
+        "materialWhenAny": [
+          "can-change-route-selection-or-capability-exposure",
+          "can-change-the-observed-consequence-or-poststate",
+          "can-change-human-burden-interference-recovery-or-lifecycle",
+          "can-change-the-evaluator-or-evidence-independence",
+          "can-broaden-the-claim-beyond-the-observed-composition",
+          "is-unknown-and-the-claim-is-causal-comparative-consequential-or-release-bearing"
+        ],
         "rule": "Classify materiality against the named claim, not by the mere presence of an extension or difference. Absence of an observed confounder means none observed within scope, never globally uncontaminated."
       },
       "isolationLadder": [
-        {"order": 0, "id": "scoped-current-composition", "boundary": "No added isolation; bind the claim to the observed current composition.", "useWhen": "The claim is non-causal and composition-specific, no material confounder affects it, and direct independent effect evidence is available."},
-        {"order": 1, "id": "synthetic-in-memory-or-task-fixture", "boundary": "Use task-owned synthetic inputs or an in-memory fixture with no live-host mutation.", "useWhen": "The question is semantic, algorithmic or fail-closed logic and field equivalence is not claimed."},
-        {"order": 2, "id": "isolated-config-state-workspace-and-process", "boundary": "Use fresh task-owned configuration, state, workspace and process roots with explicit inherited surfaces.", "useWhen": "Local extension, configuration, state, workspace or process contamination could change the decision."},
-        {"order": 3, "id": "disposable-system-boundary", "boundary": "Use a disposable container, VM, user profile, device or condition-fit remote host with declared kernel, account, network and service inheritance.", "useWhen": "Process-level isolation is insufficient and the consequence, comparison or compatibility claim justifies the cost."},
-        {"order": 4, "id": "independent-external-evaluation", "boundary": "Use a separately controlled evaluator or real condition-fit environment outside the candidate's authority.", "useWhen": "A causal, consequential, cross-host, field-value or release-bearing claim requires independence that lower levels cannot provide."}
+        {
+          "order": 0,
+          "id": "scoped-current-composition",
+          "boundary": "No added isolation; bind the claim to the observed current composition.",
+          "useWhen": "The claim is non-causal and composition-specific, no material confounder affects it, and direct independent effect evidence is available."
+        },
+        {
+          "order": 1,
+          "id": "synthetic-in-memory-or-task-fixture",
+          "boundary": "Use task-owned synthetic inputs or an in-memory fixture with no live-host mutation.",
+          "useWhen": "The question is semantic, algorithmic or fail-closed logic and field equivalence is not claimed."
+        },
+        {
+          "order": 2,
+          "id": "isolated-config-state-workspace-and-process",
+          "boundary": "Use fresh task-owned configuration, state, workspace and process roots with explicit inherited surfaces.",
+          "useWhen": "Local extension, configuration, state, workspace or process contamination could change the decision."
+        },
+        {
+          "order": 3,
+          "id": "disposable-system-boundary",
+          "boundary": "Use a disposable container, VM, user profile, device or condition-fit remote host with declared kernel, account, network and service inheritance.",
+          "useWhen": "Process-level isolation is insufficient and the consequence, comparison or compatibility claim justifies the cost."
+        },
+        {
+          "order": 4,
+          "id": "independent-external-evaluation",
+          "boundary": "Use a separately controlled evaluator or real condition-fit environment outside the candidate's authority.",
+          "useWhen": "A causal, consequential, cross-host, field-value or release-bearing claim requires independence that lower levels cannot provide."
+        }
       ],
       "isolationSelectionRule": "Choose the least costly available boundary that either removes each material confounder, holds it constant, measures it independently or narrows the claim so it is no longer material. Isolation may reduce confounding but never creates missing authority, professional judgment, effect observability or rollback.",
       "admission": {
-        "hardGates": ["named-claim-and-consequence", "provenance-bound-snapshot-with-explicit-unknowns", "observed-Accord-exposure-facets-without-backfill", "material-confounder-disposition", "independent-evaluator-for-the-claimed-effect", "authority-trust-data-cost-risk-and-effect-boundary", "predeclared-cleanup-and-residue-verifier"],
-        "decisionOrder": ["bind-claim-risk-consequence-and-counterfactual", "capture-permitted-composition-facts-and-unknowns", "classify-Accord-exposure-and-material-confounders", "decide-whether-current-composition-alone-can-support-the-claim", "derive-the-minimum-required-arm-set", "select-the-lowest-sufficient-isolation-boundary", "verify-arm-comparability-evaluator-independence-authority-and-cleanup", "admit-one-scoped-disposition-or-degrade-honestly"],
-        "dispositions": ["admit-current-composition", "admit-scoped-baseline", "admit-comparison", "require-isolation", "narrow-claim", "hold-unknown", "reject", "honest-stop"],
+        "hardGates": [
+          "named-claim-and-consequence",
+          "provenance-bound-snapshot-with-explicit-unknowns",
+          "observed-Accord-exposure-facets-without-backfill",
+          "material-confounder-disposition",
+          "independent-evaluator-for-the-claimed-effect",
+          "authority-trust-data-cost-risk-and-effect-boundary",
+          "predeclared-cleanup-and-residue-verifier"
+        ],
+        "decisionOrder": [
+          "bind-claim-risk-consequence-and-counterfactual",
+          "capture-permitted-composition-facts-and-unknowns",
+          "classify-Accord-exposure-and-material-confounders",
+          "decide-whether-current-composition-alone-can-support-the-claim",
+          "derive-the-minimum-required-arm-set",
+          "select-the-lowest-sufficient-isolation-boundary",
+          "verify-arm-comparability-evaluator-independence-authority-and-cleanup",
+          "admit-one-scoped-disposition-or-degrade-honestly"
+        ],
+        "dispositions": [
+          "admit-current-composition",
+          "admit-scoped-baseline",
+          "admit-comparison",
+          "require-isolation",
+          "narrow-claim",
+          "hold-unknown",
+          "reject",
+          "honest-stop"
+        ],
         "rules": [
-          {"id": "current-composition-behavior", "when": "The claim concerns only the observed current composition and does not infer a native or causal baseline.", "then": "admit-current-composition"},
-          {"id": "native-or-clean-baseline", "when": "The claim uses native, clean, unmodified or no-Accord language.", "then": "require an independently observed official-clean, isolated-minimal or isolated-no-Accord arm whose narrower meaning is stated"},
-          {"id": "incremental-Accord-effect", "when": "The claim attributes a consequence, burden or interference difference to Accord or a candidate.", "then": "require matched isolated-no-Accord and candidate-enabled-isolated arms plus an independent evaluator"},
-          {"id": "unknown-material-provenance", "when": "A material composition member or confounder is unknown.", "then": "require-isolation-or-narrow-claim"},
-          {"id": "unavailable-sufficient-isolation", "when": "No authorized affordable boundary can remove, hold, measure or bound a material confounder.", "then": "hold-unknown-or-honest-stop"},
-          {"id": "irreversible-or-human-owned-boundary", "when": "The effect is irreversible or requires new human-owned authority.", "then": "honest-stop-until-prior-human-authority-regardless-of-isolation"}
+          {
+            "id": "current-composition-behavior",
+            "when": "The claim concerns only the observed current composition and does not infer a native or causal baseline.",
+            "then": "admit-current-composition"
+          },
+          {
+            "id": "native-or-clean-baseline",
+            "when": "The claim uses native, clean, unmodified or no-Accord language.",
+            "then": "require an independently observed official-clean, isolated-minimal or isolated-no-Accord arm whose narrower meaning is stated"
+          },
+          {
+            "id": "incremental-Accord-effect",
+            "when": "The claim attributes a consequence, burden or interference difference to Accord or a candidate.",
+            "then": "require matched isolated-no-Accord and candidate-enabled-isolated arms plus an independent evaluator"
+          },
+          {
+            "id": "unknown-material-provenance",
+            "when": "A material composition member or confounder is unknown.",
+            "then": "require-isolation-or-narrow-claim"
+          },
+          {
+            "id": "unavailable-sufficient-isolation",
+            "when": "No authorized affordable boundary can remove, hold, measure or bound a material confounder.",
+            "then": "hold-unknown-or-honest-stop"
+          },
+          {
+            "id": "irreversible-or-human-owned-boundary",
+            "when": "The effect is irreversible or requires new human-owned authority.",
+            "then": "honest-stop-until-prior-human-authority-regardless-of-isolation"
+          }
         ]
       },
       "comparisonContract": {
         "counterfactualRule": "Create only arms needed to answer the named decision. A current-composition observation needs no automatic clean arm; an incremental-effect claim needs a comparison that differs only by the declared treatment or makes every other material difference explicit.",
-        "matchedDimensions": ["outcome-and-task-input", "host-client-model-and-route", "tools-extensions-instructions-and-policy-except-treatment", "configuration-permissions-network-account-and-data", "workspace-source-state-and-resources", "evaluator-metric-timing-budget-and-stop-condition"],
-        "treatmentIdentity": ["product-id", "version", "package-content-digest", "adapter-and-manifest", "enabled-surfaces", "candidate-owned-state-and-processes"],
-        "independenceRules": ["an-Accord-enabled-arm-cannot-attest-the-no-Accord-or-native-baseline", "the-candidate-cannot-edit-or-select-its-baseline-evaluator-tolerance-or-poststate", "effect-and-cleanup-evidence-must-cross-the-treatment-boundary", "non-equivalent-arms-support-separate-scoped-observations-not-causal-attribution", "arm-order-randomization-or-counterbalancing-is-required-when-learning-cache-or-order-can-change-the-result"],
+        "matchedDimensions": [
+          "outcome-and-task-input",
+          "host-client-model-and-route",
+          "tools-extensions-instructions-and-policy-except-treatment",
+          "configuration-permissions-network-account-and-data",
+          "workspace-source-state-and-resources",
+          "evaluator-metric-timing-budget-and-stop-condition"
+        ],
+        "treatmentIdentity": [
+          "product-id",
+          "version",
+          "package-content-digest",
+          "adapter-and-manifest",
+          "enabled-surfaces",
+          "candidate-owned-state-and-processes"
+        ],
+        "independenceRules": [
+          "an-Accord-enabled-arm-cannot-attest-the-no-Accord-or-native-baseline",
+          "the-candidate-cannot-edit-or-select-its-baseline-evaluator-tolerance-or-poststate",
+          "effect-and-cleanup-evidence-must-cross-the-treatment-boundary",
+          "non-equivalent-arms-support-separate-scoped-observations-not-causal-attribution",
+          "arm-order-randomization-or-counterbalancing-is-required-when-learning-cache-or-order-can-change-the-result"
+        ],
         "claimRule": "Report per-arm composition, unknowns and effects before any difference. Causal language is allowed only for an admitted matched comparison; otherwise report association or scoped behavior."
       },
       "cleanupAndInvalidation": {
-        "cleanupRequires": ["task-owned-isolation-resource-inventory", "owner-and-lease", "prestate", "authorized-release-control", "independent-poststate", "residual-pressure-and-foreign-state-disposition"],
-        "preserve": ["shared-resource", "unknown-ownership", "foreign-host-state", "unrelated-user-work"],
-        "invalidateOn": ["goal-claim-or-risk-change", "host-client-model-or-route-change", "tool-extension-Hook-instruction-policy-or-configuration-change", "permission-network-account-data-or-state-change", "workspace-source-revision-or-dirty-state-change", "Accord-version-package-content-exposure-or-candidate-change", "evaluator-metric-tolerance-or-arm-topology-change", "freshness-expiry-effect-conflict-cleanup-failure-or-residue"],
+        "cleanupRequires": [
+          "task-owned-isolation-resource-inventory",
+          "owner-and-lease",
+          "prestate",
+          "authorized-release-control",
+          "independent-poststate",
+          "residual-pressure-and-foreign-state-disposition"
+        ],
+        "preserve": [
+          "shared-resource",
+          "unknown-ownership",
+          "foreign-host-state",
+          "unrelated-user-work"
+        ],
+        "invalidateOn": [
+          "goal-claim-or-risk-change",
+          "host-client-model-or-route-change",
+          "tool-extension-Hook-instruction-policy-or-configuration-change",
+          "permission-network-account-data-or-state-change",
+          "workspace-source-revision-or-dirty-state-change",
+          "Accord-version-package-content-exposure-or-candidate-change",
+          "evaluator-metric-tolerance-or-arm-topology-change",
+          "freshness-expiry-effect-conflict-cleanup-failure-or-residue"
+        ],
         "rule": "Release only task-exclusive attributable isolation resources. A cleanup command, task completion or disappearance from one listing is not post-state evidence."
       },
       "stressScenarios": [
-        {"id": "current-Accord-enabled-host-claimed-as-native", "expectedDisposition": "reject", "reason": "self-attesting-baseline"},
-        {"id": "current-composition-with-direct-effect-and-no-causal-claim", "expectedDisposition": "admit-current-composition", "reason": "scoped-evidence-sufficient"},
-        {"id": "declared-enabled-with-activation-and-effect-unknown", "expectedDisposition": "narrow-claim", "reason": "independent-facets-remain-unknown"},
-        {"id": "unknown-material-extension-with-disposable-isolation-available", "expectedDisposition": "require-isolation", "reason": "material-confounder-can-be-bounded"},
-        {"id": "unknown-provenance-with-no-sufficient-isolation", "expectedDisposition": "hold-unknown", "reason": "cannot-establish-counterfactual"},
-        {"id": "minimal-container-called-official-clean", "expectedDisposition": "reject", "reason": "minimal-is-not-official-provenance"},
-        {"id": "matched-no-Accord-and-candidate-arms-with-independent-effect-probe", "expectedDisposition": "admit-comparison", "reason": "counterfactual-and-independence-satisfied"},
-        {"id": "candidate-changes-evaluator-or-tolerance", "expectedDisposition": "reject", "reason": "comparison-authority-violated"},
-        {"id": "arm-order-can-leak-learning-or-cache-without-counterbalance", "expectedDisposition": "require-isolation", "reason": "order-is-material"},
-        {"id": "isolation-needs-new-authority-for-irreversible-effect", "expectedDisposition": "honest-stop", "reason": "isolation-cannot-grant-authority"},
-        {"id": "cleanup-finds-foreign-or-unknown-state", "expectedDisposition": "narrow-claim", "reason": "preserve-foreign-state-and-disclose-residue"}
+        {
+          "id": "current-Accord-enabled-host-claimed-as-native",
+          "expectedDisposition": "reject",
+          "reason": "self-attesting-baseline"
+        },
+        {
+          "id": "current-composition-with-direct-effect-and-no-causal-claim",
+          "expectedDisposition": "admit-current-composition",
+          "reason": "scoped-evidence-sufficient"
+        },
+        {
+          "id": "declared-enabled-with-activation-and-effect-unknown",
+          "expectedDisposition": "narrow-claim",
+          "reason": "independent-facets-remain-unknown"
+        },
+        {
+          "id": "unknown-material-extension-with-disposable-isolation-available",
+          "expectedDisposition": "require-isolation",
+          "reason": "material-confounder-can-be-bounded"
+        },
+        {
+          "id": "unknown-provenance-with-no-sufficient-isolation",
+          "expectedDisposition": "hold-unknown",
+          "reason": "cannot-establish-counterfactual"
+        },
+        {
+          "id": "minimal-container-called-official-clean",
+          "expectedDisposition": "reject",
+          "reason": "minimal-is-not-official-provenance"
+        },
+        {
+          "id": "matched-no-Accord-and-candidate-arms-with-independent-effect-probe",
+          "expectedDisposition": "admit-comparison",
+          "reason": "counterfactual-and-independence-satisfied"
+        },
+        {
+          "id": "candidate-changes-evaluator-or-tolerance",
+          "expectedDisposition": "reject",
+          "reason": "comparison-authority-violated"
+        },
+        {
+          "id": "arm-order-can-leak-learning-or-cache-without-counterbalance",
+          "expectedDisposition": "require-isolation",
+          "reason": "order-is-material"
+        },
+        {
+          "id": "isolation-needs-new-authority-for-irreversible-effect",
+          "expectedDisposition": "honest-stop",
+          "reason": "isolation-cannot-grant-authority"
+        },
+        {
+          "id": "cleanup-finds-foreign-or-unknown-state",
+          "expectedDisposition": "narrow-claim",
+          "reason": "preserve-foreign-state-and-disclose-residue"
+        }
       ],
-      "fundamentalLimits": ["hidden-host-account-network-and-service-state-may-remain-unknown", "no-isolation-boundary-proves-universal-cleanliness-or-production-equivalence", "a-controlled-environment-can-improve-causal-evidence-but-cannot-prove-human-or-field-value", "an-isolated-no-Accord-arm-is-not-identical-to-a-never-installed-history-when-prior-effects-cannot-be-excluded", "isolation-does-not-create-authority-observability-reversibility-or-professional-correctness"],
+      "fundamentalLimits": [
+        "hidden-host-account-network-and-service-state-may-remain-unknown",
+        "no-isolation-boundary-proves-universal-cleanliness-or-production-equivalence",
+        "a-controlled-environment-can-improve-causal-evidence-but-cannot-prove-human-or-field-value",
+        "an-isolated-no-Accord-arm-is-not-identical-to-a-never-installed-history-when-prior-effects-cannot-be-excluded",
+        "isolation-does-not-create-authority-observability-reversibility-or-professional-correctness"
+      ],
       "projectionRule": "Persist durable vocabulary and decision rules only. Keep real environment snapshots, composition keys, permitted observations and arm allocations ephemeral or in evidence artifacts with scope, provenance, freshness, privacy, invalidation and cleanup; never commit a live host or account inventory as authority."
     },
     "feasibilityGate": {
@@ -574,10 +1145,34 @@
         "return-honest-stop-when-no-route-is-admitted"
       ],
       "scenarioResults": [
-        {"id": "missing-native-continuity-and-plugin-effect-unknown", "selected": "replaceable-composition", "effect": "observed", "poststate": "zero-task-residue", "disposition": "bounded-loop-closed"},
-        {"id": "native-whole-loop-observed", "selected": "no-added-mechanism", "effect": "observed", "poststate": "zero-task-residue", "disposition": "bounded-loop-closed"},
-        {"id": "effect-succeeds-but-cleanup-leaves-residue", "selected": "replaceable-composition", "effect": "observed", "poststate": "residue-observed", "disposition": "completion-rejected"},
-        {"id": "plugin-declared-enabled-effect-unknown", "selected": "replaceable-composition", "effect": "not-observed", "poststate": "unknown", "disposition": "installation-and-enablement-not-promoted"}
+        {
+          "id": "missing-native-continuity-and-plugin-effect-unknown",
+          "selected": "replaceable-composition",
+          "effect": "observed",
+          "poststate": "zero-task-residue",
+          "disposition": "bounded-loop-closed"
+        },
+        {
+          "id": "native-whole-loop-observed",
+          "selected": "no-added-mechanism",
+          "effect": "observed",
+          "poststate": "zero-task-residue",
+          "disposition": "bounded-loop-closed"
+        },
+        {
+          "id": "effect-succeeds-but-cleanup-leaves-residue",
+          "selected": "replaceable-composition",
+          "effect": "observed",
+          "poststate": "residue-observed",
+          "disposition": "completion-rejected"
+        },
+        {
+          "id": "plugin-declared-enabled-effect-unknown",
+          "selected": "replaceable-composition",
+          "effect": "not-observed",
+          "poststate": "unknown",
+          "disposition": "installation-and-enablement-not-promoted"
+        }
       ],
       "boundedEvolutionResult": "A persistent authored controller that could improve one proxy was lifecycle-dominated by the minimum composition and was discarded and rolled back.",
       "referenceCoreAdmission": {
@@ -753,7 +1348,16 @@
     "sourceRule": "Store durable semantic facts, decisions and provenance; do not manually duplicate every derived edge or commit transient host state.",
     "runtimeSnapshot": {
       "persistence": "ephemeral-or-ignored-cache",
-      "requiredMetadata": ["capturedAt", "scope", "source", "provenance", "compositionKey", "freshness", "health", "unknowns"],
+      "requiredMetadata": [
+        "capturedAt",
+        "scope",
+        "source",
+        "provenance",
+        "compositionKey",
+        "freshness",
+        "health",
+        "unknowns"
+      ],
       "invalidation": [
         "goal-or-phase-change",
         "user-correction",
@@ -1044,15 +1648,16 @@
     ]
   },
   "nextAuthorityBoundary": {
-    "first": "product/constitution.json",
+    "first": "evals/golden-tasks.json#/tasks/GT-17",
     "then": [
+      "evals/golden-tasks.json#/tasks/GT-18",
       "product/program.json",
       "product/acceptance.json",
       "goal-mode-projection-and-verifier",
       "host-adapters-and-evaluations",
       "documentation-and-release-route"
     ],
-    "minimumNextSlice": "Replay only GT-14 through GT-16 with source-complete task-owned fixtures. GT-14 must retain provenance-bound host, model, tool, extension and Accord exposure facts plus explicit unknowns without reading private configuration or session content. GT-15 should trigger external discovery only for an evidenced capability gap, material uncertainty or likely mature ecosystem—not every trivial task—and must retain exact official primary sources, mature repository revisions, licenses, maintenance/provenance signals, fit assumptions, limitations, supply-chain or trust/data/cost effects and exit conditions before comparing no-build, native, reuse, composition and bounded authorship. GT-16 must predeclare the named outcome, oracle, gap, authority and route set, then retain the full non-compensating burden, interference, cost, unknown, recovery and lifecycle vector alongside independently observed consequence, rollback, resource release and cleanup. Treat the installed host only as current-enabled composition; never infer official-clean, no-Accord, Hook firing or value from installation. Add a live adapter, durable carrier or other mechanism only if a source-complete replay exposes a responsibility the pure core and existing routes cannot close, and keep any admitted addition replaceable, reversible and independently observable.",
+    "minimumNextSlice": "Execute only source-complete GT-17 and GT-18 task-owned fixtures before the whole-system balance audit. GT-17 must bind the user's globally material product-form-neutral consensus as accountable judgment rather than factual proof; preserve the prior exact baseline and the failed 553f5a9 GT-14 through GT-16 attempts as history; identify the earliest affected dependency; reconcile plan, process, acceptance, goal projection, implementation, evidence, documentation and claims one-to-one; preserve unrelated accepted truth; and independently detect stale ready, release-centered or active-in-host projections without replaying expensive unaffected GT-07. GT-18 must predeclare one comparable four-episode outcome family, immutable full-vector evaluator, fixed budget and an observed authorized task-owned learning carrier; retain the baseline; reject and roll back one proxy-improving hard-gate regression; keep one reviewable net improvement only after independent consequence and cleanup poststate; then detect a later environment or consensus invalidation and roll back, replace or retire the retained means with zero task residue. Treat current Codex as Accord-enabled and extension-composed, keep official-clean, no-Accord, Hook firing, live-mechanism value and cross-carrier equivalence unknown unless separately observed, and add no durable state, Runtime or service unless the bounded sequence proves an unclosed responsibility. Defer systematic historical-debt cleanup until final candidate preparation; remove only blocking task-owned fixture residue during replay.",
     "requiredReplay": [
       "semantic-authority-and-derived-surface-conformance",
       "plan-process-acceptance-goal-projection-alignment",

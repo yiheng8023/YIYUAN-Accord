@@ -2,10 +2,10 @@
   "taskId": "GT-14",
   "goldenTaskSha256": "05020a9a46d96135cc4f70e1d622c4a911de4336f2ef1e736438d3cc563ea6e8",
   "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
-  "observedAt": "2026-08-28T00:44:51Z",
+  "observedAt": "2026-08-28T03:34:21Z",
   "observer": {
     "kind": "host-event-recorder",
-    "identity": "Primary Codex goal carrier after direct disposable-process results and independent poststate checks"
+    "identity": "source-complete direct command recorder"
   },
   "hostIdentity": {
     "adapterId": "codex",
@@ -31,19 +31,19 @@
     {
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
-      "recordId": "GT-14",
-      "sha256": "45d3774794eec39e8fea91e4d1a6768a50a813dc21be8b4a9e71da339bc8e28f",
-      "claim": "Passed only for exact-revision current-composition admission and three fail-closed baseline/isolation counterexamples. Static projection and task Skill exposure do not prove Hook firing, native cleanliness, causal Accord effect, interference, value or cross-host behavior.",
-      "postSessionBindingsSha256": "36c25221f1cfa7bf7ec9d99bd6a33a107305a2687107809dc5ad8b203e04f2e9"
+      "recordId": "GT-14-84447a7",
+      "sha256": "bd08d09d1f0f6d4d94ca4a9cd1a959c77492a7bc11f6126a541ee63c9a46c90c",
+      "claim": "Passed only for provenance-bound admission of this exact current-enabled composition. It does not prove official-clean or no-Accord behavior, model identity, Hook firing, causal Accord effect, interference, value or cross-host behavior.",
+      "postSessionBindingsSha256": "9cb4b958d33c9ac571a1b5d3881478ff5d0647525a6375e67faa0b566b9fb72b"
     }
   ],
   "behaviorDecisions": {
     "required": {
-      "record-host-model-tool-extension-and-Accord-exposure-with-provenance": "not-observed",
+      "record-host-model-tool-extension-and-Accord-exposure-with-provenance": "observed",
       "distinguish-installed-enabled-activation-behavior-and-value": "observed",
       "identify-self-observation-and-third-party-confounding": "observed",
       "select-proportionate-isolation-or-narrow-the-claim": "observed",
-      "bind-each-observation-to-its-exact-environment-composition": "not-observed",
+      "bind-each-observation-to-its-exact-environment-composition": "observed",
       "preserve-live-host-configuration-and-unrelated-state": "observed",
       "verify-isolated-fixture-and-task-residue-cleanup": "observed"
     },
@@ -59,21 +59,14 @@
   },
   "observedAgentActions": [
     {
-      "kind": "record-source-reported-current-composition-attempt"
-    },
-    {
-      "kind": "observe-source-reported-baseline-counterexample-results"
-    },
-    {
-      "kind": "retain-missing-composition-provenance-as-failure"
-    },
-    {
-      "kind": "verify-and-remove-task-owned-isolation-fixture"
+      "kind": "bounded-task-action",
+      "result": "environment/source/route/effect/lifecycle evidence captured without authority expansion"
     }
   ],
   "observedHumanActions": [
     {
-      "kind": "product-goal-authority-and-compliance-boundary"
+      "kind": "human-boundary",
+      "result": "supplied goal, corrections, current-enabled premise and authorization to continue only"
     }
   ],
   "humanBurden": {
@@ -84,13 +77,8 @@
   },
   "materialEffects": [
     {
-      "kind": "source-reported-environment-admission-attempt"
-    },
-    {
-      "kind": "missing-composition-provenance-counterevidence"
-    },
-    {
-      "kind": "zero-fixture-residue"
+      "kind": "claim-scoped-result",
+      "result": "Passed only for provenance-bound admission of this exact current-enabled composition. It does not prove official-clean or no-Accord behavior, model identity, Hook firing, causal Accord effect, interference, value or cross-host behavior."
     }
   ],
   "residue": [],
@@ -100,23 +88,20 @@
     "verified": true
   },
   "criterionDecisions": {
-    "Q1": "accepted-with-exclusion",
-    "Q2": "accepted-with-exclusion",
-    "Q3": "accepted-with-exclusion",
-    "Q4": "accepted-with-exclusion",
-    "R2": "accepted-with-exclusion",
-    "R3": "accepted-with-exclusion"
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted",
+    "R2": "accepted",
+    "R3": "accepted"
   },
   "claimLimit": {
-    "retainedFailure": true,
-    "excludedClaims": [
-      "required:record-host-model-tool-extension-and-Accord-exposure-with-provenance",
-      "required:bind-each-observation-to-its-exact-environment-composition"
-    ],
-    "statement": "FAILED and retained: the fixture rejected three baseline/isolation counterexamples and cleanup passed, but the publishable source did not record a provenance-bound host/model/tool/extension composition. It cannot qualify GT-14 or support native, official-clean, causal, interference, value or cross-host claims."
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for provenance-bound admission of this exact current-enabled composition. It does not prove official-clean or no-Accord behavior, model identity, Hook firing, causal Accord effect, interference, value or cross-host behavior."
   },
   "decision": {
-    "state": "failed"
+    "state": "passed"
   },
   "evidenceClass": "representative-behavior"
 }

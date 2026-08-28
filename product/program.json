@@ -70,7 +70,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "a3f1591016ed885d1c4d296c566b306ea451247bee333cce4261abdf9247b507",
+      "repositorySha256": "eb02e86e9bc31b01966588f0a3654ec7b6936896b8b8226cf6cfebb553ff7b86",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -108,7 +108,7 @@
       "kind": "exact-source-wheel-provenance-feasibility-ledger-and-p0-p4-results",
       "repositoryLocator": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
       "repositorySha256": "edef3b0549f061431289b334a3a88ef351585f391c50705a45b19cc91ea5e87e",
-      "disposition": "admitted-source-bound-no-build-input-with-publishable-gt15-observation-still-required-and-live-mechanism-behavior-and-release-closed"
+      "disposition": "admitted-source-bound-no-build-input-with-passing-claim-scoped-gt15-observation-and-live-mechanism-behavior-field-value-and-release-closed"
     }
   ],
   "increment": {
@@ -124,7 +124,7 @@
       "Q3",
       "Q4"
     ],
-    "observedProblem": "The historical ae7294652761abceb753f0571ee82c7ddeae06af baseline closed one bounded collaboration slice and produced statically conformant Codex and Claude plugin packages, but the product program then converged on candidate publication before demonstrating the complete intended core. Exact checkpoint 553f5a97e08390117e877e7b913c7a501018bfa5 retains three failed GT-14 through GT-16 attempts: fixture execution and cleanup were observed, but the publishable source omitted task-required environment, wheel/provenance and full-vector facts. It therefore still does not establish official-clean or no-Accord baselines, reuse fitness, a qualified minimum-form bootstrap, actual activation, live-mechanism effectiveness, durable governed learning and self-evolution, longitudinal continuity, global reconciliation after a new consensus, broad field value or release readiness. Both current hosts are already extended and Accord-enabled, so current-host observations are not official-clean or no-Accord baselines and can be confounded by Accord itself or unrelated extensions.",
+    "observedProblem": "The historical ae7294652761abceb753f0571ee82c7ddeae06af baseline closed one bounded collaboration slice and produced statically conformant Codex and Claude plugin packages, but the product program then converged on candidate publication before demonstrating the complete intended core. The exact 553f5a97e08390117e877e7b913c7a501018bfa5 GT-14 through GT-16 attempts remain failed source-sufficiency counterevidence. At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, fresh source-complete GT-14, GT-15 and GT-16 observations now pass only their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision and one disposable pure-data minimum-form bootstrap. They still do not establish official-clean or no-Accord behavior, Hook firing, live-mechanism effectiveness, durable governed learning and self-evolution, longitudinal continuity, global reconciliation after a new consensus, cross-carrier equivalence, broad field value or release readiness. Both current hosts are already extended and Accord-enabled, so current-host observations are not official-clean or no-Accord baselines and can be confounded by Accord itself or unrelated extensions.",
     "hypothesis": "A product-form-neutral, complete bounded self-bootstrapping core can turn the existing collaboration contract into a stronger outcome system without defaulting to a plugin, Runtime or control plane. If Accord senses environment provenance; binds the latest outcome, consensus and human authority; reuses suitable native, official and maintained wheels before authorship; chooses the minimum sufficient form; separates declaration, activation, execution, effect and evidence; and learns, evolves, rolls back and retires through bounded experiments, then it can improve real collaboration closure while limiting interference, self-confirmation, proxy optimization and lifecycle burden.",
     "hostCapabilityRefresh": {
       "capturedAt": "2026-08-28",
@@ -159,7 +159,7 @@
       "statement": "Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.",
       "startingState": "The product goal and human boundaries are supplied, but environment provenance, Accord activation, other extensions, capability health, suitable existing wheels, product form, state carrier and longitudinal fitness may be unknown. The current local hosts are explicitly Accord-enabled and extension-composed; no clean baseline or comparative advantage is presumed.",
       "completion": "One isolated representative and one longitudinal sequence verify feasible reuse, context-fit responsibility-to-form allocation or no-op, cross-form coherence where needed, consequence, governed evolution or rollback, global reconciliation and zero unauthorized residue with lower total burden.",
-      "claimLimit": "Historical v3.1 and GT-07/11/12/13 remain regression-only. At 553f5a97e08390117e877e7b913c7a501018bfa5, failed GT-14/15/16 attempts prove fixture execution and cleanup only; missing source facts exclude environment admission, reuse fitness and a qualified bootstrap, plus live-mechanism value, durable evolution, consensus/cross-carrier continuity and release readiness.",
+      "claimLimit": "At 84447a7a1b9557e22ef5585d159459e8701fa40e, GT-14/15/16 pass only current-enabled admission, no-build feasibility and one disposable pure-data bootstrap; prior 553f5a9 failures remain history. GT-17/18, clean/no-Accord, Hook/live effect, durable or cross-carrier value and release remain unproved.",
       "firstEvidenceSurfaces": [
         "official-clean",
         "isolated-minimal",
@@ -308,7 +308,7 @@
           },
           {
             "id": "replay-activation-effect-evidence-and-lifecycle",
-            "state": "active",
+            "state": "completed",
             "dependsOn": [
               "implement-minimum-self-bootstrapping-reference-core"
             ],
@@ -321,11 +321,11 @@
               "Q3",
               "Q4"
             ],
-            "completion": "Complete only after fresh source-complete GT-14, GT-15 and GT-16 observations bind the task-required exact composition and unknowns; primary sources, existing wheels, licenses, maintenance and provenance; and named outcome, oracle, gap, route search, full lifecycle vector, burden, interference, cost, consequence, rollback, release and cleanup. The retained 553f5a97e08390117e877e7b913c7a501018bfa5 attempts prove fixture execution and cleanup but fail those evidence gates and remain current counterevidence."
+            "completion": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, source-complete task-owned GT-14, GT-15 and GT-16 replays bind the current-enabled host composition and explicit unknowns; exact primary source, repository revision, wheel, license, maintenance and provenance facts; and the named outcome, oracle, gap, route search, full lifecycle vector, burden, interference, cost, consequence, rollback, resource release and cleanup. All three current observations pass their finite claim; the failed 553f5a97e08390117e877e7b913c7a501018bfa5 observations remain unchanged counterevidence. No live adapter, dependency, durable carrier, Runtime or service was added."
           },
           {
             "id": "validate-longitudinal-consensus-and-cross-carrier-continuity",
-            "state": "pending",
+            "state": "active",
             "dependsOn": [
               "replay-activation-effect-evidence-and-lifecycle"
             ],
@@ -407,8 +407,8 @@
         "passRule": "Pass only when the declared representative and longitudinal suite externally observes the complete bounded self-bootstrapping loop across controlled environment compositions: from consensus, environment sensing and existing-wheel search through minimum-form route, authorized execution, consequence verification, learning or self-evolution, rollback or retirement, global reconciliation, release and cleanup. Before candidate formation, a source-bound whole-system review must bind a versioned claim-scoped baseline, target, counterfactual, evidence cutoff, confounders and invalidation triggers; expose blockers, unknowns, interactions and tradeoffs across every coupled dimension; remediate the weakest justified links; and re-accept affected surfaces without using an average score to compensate for a hard failure. A sufficient native whole-loop path stays a no-op; every supported mechanic is Agent-owned; each human action is genuinely unavoidable, minimal and verified; failed or contaminated paths stay bounded; and no installation, graph node, static check, single metric, self-review or model self-assessment substitutes for behavior, independent review and value."
       },
       "goalMode": {
-      "directive": "Prove Accord's complete bounded self-bootstrap: sense environment; bind claim-scoped baseline, target and counterfactual; reuse before build; choose minimum forms; verify consequence and lifecycle; reconcile change; audit balance, remediate weakest justified links and reaccept before candidate formation.",
-      "completion": "bounded-self-bootstrap-with-provenance-reuse-verified-evolution-balance-and-consistency",
+        "directive": "Prove Accord's complete bounded self-bootstrap: sense environment; bind claim-scoped baseline, target and counterfactual; reuse before build; choose minimum forms; verify consequence and lifecycle; reconcile change; audit balance, remediate weakest justified links and reaccept before candidate formation.",
+        "completion": "bounded-self-bootstrap-with-provenance-reuse-verified-evolution-balance-and-consistency",
         "pauseOnlyFor": [
           "consequential-human-judgment",
           "new-trust-account-data-or-material-cost",
@@ -536,7 +536,7 @@
           },
           {
             "id": "replay-activation-effect-evidence-and-lifecycle",
-            "state": "active",
+            "state": "completed",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -546,11 +546,12 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[replay-activation-effect-evidence-and-lifecycle] Fresh isolated observations separately bind declaration through consequence and lifecycle; failed and contaminated arms remain bounded and cleanup is independently verified."
+            "stopCondition": "[replay-activation-effect-evidence-and-lifecycle] Fresh isolated observations separately bind declaration through consequence and lifecycle; failed and contaminated arms remain bounded and cleanup is independently verified.",
+            "completion": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, source-complete task-owned GT-14, GT-15 and GT-16 replays bind the current-enabled host composition and explicit unknowns; exact primary source, repository revision, wheel, license, maintenance and provenance facts; and the named outcome, oracle, gap, route search, full lifecycle vector, burden, interference, cost, consequence, rollback, resource release and cleanup. All three current observations pass their finite claim; the failed 553f5a97e08390117e877e7b913c7a501018bfa5 observations remain unchanged counterevidence. No live adapter, dependency, durable carrier, Runtime or service was added."
           },
           {
             "id": "validate-longitudinal-consensus-and-cross-carrier-continuity",
-            "state": "pending",
+            "state": "active",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -814,7 +815,7 @@
   "goalModePrompt": {
     "state": "active-in-host",
     "authority": "derived-from-current-reviewable-authority-set",
-    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"bounded-self-bootstrap-with-provenance-reuse-verified-evolution-balance-and-consistency\",\"directive\":\"Prove Accord's complete bounded self-bootstrap: sense environment; bind claim-scoped baseline, target and counterfactual; reuse before build; choose minimum forms; verify consequence and lifecycle; reconcile change; audit balance, remediate weakest justified links and reaccept before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"Historical v3.1 and GT-07/11/12/13 remain regression-only. At 553f5a97e08390117e877e7b913c7a501018bfa5, failed GT-14/15/16 attempts prove fixture execution and cleanup only; missing source facts exclude environment admission, reuse fitness and a qualified bootstrap, plus live-mechanism value, durable evolution, consensus/cross-carrier continuity and release readiness.\",\"completion\":\"One isolated representative and one longitudinal sequence verify feasible reuse, context-fit responsibility-to-form allocation or no-op, cross-form coherence where needed, consequence, governed evolution or rollback, global reconciliation and zero unauthorized residue with lower total burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"Align latest demand, consensus and corrections across authority, the four mapped surfaces, implementation, evidence, documentation and claim. Version material change, locate its earliest dependency, replay affected surfaces and preserve unrelated truth and superseded baselines as history.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"implement-minimum-self-bootstrapping-reference-core\"],\"id\":\"replay-activation-effect-evidence-and-lifecycle\",\"state\":\"active\"}],\"semantics\":\"Version consensus; bind outcome, authority, environment and Accord provenance, plus claim-scoped baseline, target and counterfactual. Reuse before build. Allocate each obligation to no artifact or minimum replaceable context-fit forms under shared outcome, authority, evidence and lifecycle contracts. Verify consequence and post-state; keep, roll back or retire learning; reconcile change. Before candidate formation audit non-compensating dimensions, remediate weakest justified links and reaccept affected interactions. Retire means whose lifecycle cost exceeds value.\",\"work\":[\"replay-activation-effect-evidence-and-lifecycle\",\"validate-longitudinal-consensus-and-cross-carrier-continuity\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-fork\"]}",
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"bounded-self-bootstrap-with-provenance-reuse-verified-evolution-balance-and-consistency\",\"directive\":\"Prove Accord's complete bounded self-bootstrap: sense environment; bind claim-scoped baseline, target and counterfactual; reuse before build; choose minimum forms; verify consequence and lifecycle; reconcile change; audit balance, remediate weakest justified links and reaccept before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"At 84447a7a1b9557e22ef5585d159459e8701fa40e, GT-14/15/16 pass only current-enabled admission, no-build feasibility and one disposable pure-data bootstrap; prior 553f5a9 failures remain history. GT-17/18, clean/no-Accord, Hook/live effect, durable or cross-carrier value and release remain unproved.\",\"completion\":\"One isolated representative and one longitudinal sequence verify feasible reuse, context-fit responsibility-to-form allocation or no-op, cross-form coherence where needed, consequence, governed evolution or rollback, global reconciliation and zero unauthorized residue with lower total burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"Align latest demand, consensus and corrections across authority, the four mapped surfaces, implementation, evidence, documentation and claim. Version material change, locate its earliest dependency, replay affected surfaces and preserve unrelated truth and superseded baselines as history.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"replay-activation-effect-evidence-and-lifecycle\"],\"id\":\"validate-longitudinal-consensus-and-cross-carrier-continuity\",\"state\":\"active\"}],\"semantics\":\"Version consensus; bind outcome, authority, environment and Accord provenance, plus claim-scoped baseline, target and counterfactual. Reuse before build. Allocate each obligation to no artifact or minimum replaceable context-fit forms under shared outcome, authority, evidence and lifecycle contracts. Verify consequence and post-state; keep, roll back or retire learning; reconcile change. Before candidate formation audit non-compensating dimensions, remediate weakest justified links and reaccept affected interactions. Retire means whose lifecycle cost exceeds value.\",\"work\":[\"validate-longitudinal-consensus-and-cross-carrier-continuity\",\"self-audit-remediate-and-reaccept-whole-system-balance\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-fork\"]}",
     "workStageIds": [
       "rebaseline-product-and-consensus-impact-map",
       "conduct-self-bootstrapping-feasibility-and-reuse-study",
@@ -860,7 +861,7 @@
       "phase-or-authority-boundary",
       "repeated-same-purpose-repair"
     ],
-    "hostLifecycleNote": "The public recommended release remains v3.0.1. The local Codex host has Accord 3.1.0 installed and enabled; the local Claude Code host has Accord 3.0.1 installed and enabled; both include other extensions and are composed environments rather than official-clean baselines. ae7294652761abceb753f0571ee82c7ddeae06af is a historical verified v3.1.0 baseline, not a current ready candidate after the new product consensus. Installation and enablement do not prove activation, behavior or value. Feasibility research, existing-wheel review and isolated comparison precede implementation; product form and any future semantic version remain undecided, and release is dormant until all core stages complete."
+    "hostLifecycleNote": "The public recommended release remains v3.0.1. Current Codex and Claude hosts have Accord installed and enabled alongside other extensions, so both are composed rather than official-clean baselines; installation does not prove activation, behavior or value. Exact revision 84447a7a1b9557e22ef5585d159459e8701fa40e now carries claim-scoped passing GT-14 through GT-16 evidence while the earlier 553f5a9 failures remain history. GT-17 and GT-18 longitudinal consensus/evolution work is active; product form, durable carrier and any future semantic version remain undecided. The refreshed canonical goal is now active in this exact Codex task; host activation is task state, not behavior or value evidence, and release remains dormant."
   },
   "hostProjections": [
     {
