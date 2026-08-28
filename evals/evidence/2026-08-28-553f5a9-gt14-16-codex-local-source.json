@@ -4638,8 +4638,8 @@
                     "taskLocator": "GT-07/destination-poststate",
                     "resultLocator": "task-artifact:GT-07/destination-poststate/agent-final.txt",
                     "phaseNonces": ["gt07-cb11759-destination-evaluator"],
-                    "resultSha256": "b7bd3ee60aa2564626ac4187792fb0de551ed76dd954e723c0465a81a70ac613",
-                    "resultRecordSha256": "fa23e46a6d2048f0e3f72ed77d21ceeac056b0bef6fee1c4dd6ee12cd9736372",
+                    "resultSha256": "10f26735dd7716c967cc311f5d9efa77f9fd83f638f17b8d303c62c1a592deb3",
+                    "resultRecordSha256": "db8711f22973486a2690afc7bc86cf7614397f1566f52009aa81d651f5627ec4",
                     "completedAt": "2026-08-28T12:04:50Z",
                     "claim": "Binds exact destination receipt, minimum transfer, three-way conversation-topology classification, sourceReleased=false, unchanged code/execution topology and clean repository post-state."
                   },
@@ -4649,8 +4649,8 @@
                     "taskLocator": "GT-07/source-reconciliation",
                     "resultLocator": "task-artifact:GT-07/source-reconciliation/agent-final.txt",
                     "phaseNonces": ["gt07-cb11759-source-reconciliation-r2"],
-                    "resultSha256": "46550332d879494bcd70eceeb435b7ab15fe2857fbacdbc888db9c7b1c5b7c9b",
-                    "resultRecordSha256": "99ac378f82e28c909ad34bf0491fe123fe415a7108a19e907b8db7895037db4d",
+                    "resultSha256": "b5905a935e5dc018ce9cd3127a472ca3ad3d34331be6f881dbf5e3c444d8e005",
+                    "resultRecordSha256": "c62168b99916245aa8f2e651a9ac6bfcab9dbafca9dbbf315075295da9525c97",
                     "completedAt": "2026-08-28T12:06:35Z",
                     "claim": "Binds verified destination-before-source-release ordering, exact receipt and unchanged code identity and local execution placement."
                   }
@@ -4666,7 +4666,21 @@
                 "taskLocator": "GT-07/destination-poststate",
                 "phase": "destination-verification",
                 "nonce": "gt07-cb11759-destination-evaluator",
-                "report": "PASS revised GT-07 destination at cb11759362217dee4ff08aa43db75046bd63c651: session 01a04840-ec1f-7423-a44b-45880579b10c observed capacity unknown and sourceReleased=false; received only goal, authority, code-binding, current-state, evidence and claim-limit; classified compact as same-carrier memory reduction, causal fork as copied-history branch not context relief, and sequential handoff as fresh zero-history transfer; exact repository main/HEAD, current Skill and local execution placement matched; repository stayed clean."
+                "report": "{\"capacity\":{\"capacity\":\"unknown\",\"reliableSignal\":false,\"universalThreshold\":null},\"classifications\":[{\"historyInheritance\":\"same-carrier\",\"id\":\"compact\",\"semantic\":\"same-carrier-memory-reduction\",\"sequentialContextRelief\":false},{\"historyInheritance\":\"copied\",\"id\":\"causal-fork\",\"semantic\":\"copied-history-causal-branch\",\"sequentialContextRelief\":false},{\"historyInheritance\":\"none\",\"id\":\"sequential-handoff\",\"semantic\":\"fresh-zero-inherited-history-destination\",\"sequentialContextRelief\":true}],\"codeTopology\":{\"branch\":\"main\",\"changed\":false,\"head\":\"cb11759362217dee4ff08aa43db75046bd63c651\",\"repository\":\"C:\\\\Projects\\\\YIYUAN-Accord\"},\"executionPlacement\":{\"changed\":false,\"kind\":\"local\"},\"kind\":\"continuity-destination-poststate/v1\",\"receivedFields\":[\"goal\",\"authority\",\"code-binding\",\"current-state\",\"evidence\",\"claim-limit\"],\"sourceNarrativeSha256\":\"b7bd3ee60aa2564626ac4187792fb0de551ed76dd954e723c0465a81a70ac613\",\"sourceReleasedObserved\":false}",
+                "facts": {
+                  "kind": "continuity-destination-poststate/v1",
+                  "sourceNarrativeSha256": "b7bd3ee60aa2564626ac4187792fb0de551ed76dd954e723c0465a81a70ac613",
+                  "capacity": {"capacity": "unknown", "reliableSignal": false, "universalThreshold": null},
+                  "receivedFields": ["goal", "authority", "code-binding", "current-state", "evidence", "claim-limit"],
+                  "classifications": [
+                    {"id": "compact", "semantic": "same-carrier-memory-reduction", "historyInheritance": "same-carrier", "sequentialContextRelief": false},
+                    {"id": "causal-fork", "semantic": "copied-history-causal-branch", "historyInheritance": "copied", "sequentialContextRelief": false},
+                    {"id": "sequential-handoff", "semantic": "fresh-zero-inherited-history-destination", "historyInheritance": "none", "sequentialContextRelief": true}
+                  ],
+                  "codeTopology": {"repository": "C:\\Projects\\YIYUAN-Accord", "branch": "main", "head": "cb11759362217dee4ff08aa43db75046bd63c651", "changed": false},
+                  "executionPlacement": {"kind": "local", "changed": false},
+                  "sourceReleasedObserved": false
+                }
               },
               {
                 "kind": "independent-command-result",
@@ -4674,7 +4688,16 @@
                 "taskLocator": "GT-07/source-reconciliation",
                 "phase": "source-poststate",
                 "nonce": "gt07-cb11759-source-reconciliation-r2",
-                "report": "PASS revised GT-07 source reconciliation at cb11759362217dee4ff08aa43db75046bd63c651: destination result 50c25b5b0ce9f9dd85f7703d36baac6936b309deee16907445847d1e619ed7f6 and its independent evaluator completed before the task fixture source was released; repository main/HEAD and local execution placement remained unchanged."
+                "report": "{\"codeTopology\":{\"branch\":\"main\",\"changed\":false,\"head\":\"cb11759362217dee4ff08aa43db75046bd63c651\",\"repository\":\"C:\\\\Projects\\\\YIYUAN-Accord\"},\"destinationResultSha256\":\"50c25b5b0ce9f9dd85f7703d36baac6936b309deee16907445847d1e619ed7f6\",\"destinationVerifiedBeforeSourceRelease\":true,\"executionPlacement\":{\"changed\":false,\"kind\":\"local\"},\"kind\":\"continuity-source-reconciliation/v1\",\"sourceNarrativeSha256\":\"46550332d879494bcd70eceeb435b7ab15fe2857fbacdbc888db9c7b1c5b7c9b\",\"sourceReleasedObserved\":false}",
+                "facts": {
+                  "kind": "continuity-source-reconciliation/v1",
+                  "sourceNarrativeSha256": "46550332d879494bcd70eceeb435b7ab15fe2857fbacdbc888db9c7b1c5b7c9b",
+                  "destinationResultSha256": "50c25b5b0ce9f9dd85f7703d36baac6936b309deee16907445847d1e619ed7f6",
+                  "destinationVerifiedBeforeSourceRelease": true,
+                  "codeTopology": {"repository": "C:\\Projects\\YIYUAN-Accord", "branch": "main", "head": "cb11759362217dee4ff08aa43db75046bd63c651", "changed": false},
+                  "executionPlacement": {"kind": "local", "changed": false},
+                  "sourceReleasedObserved": false
+                }
               },
               {
                 "kind": "independent-command-result",
@@ -4720,7 +4743,7 @@
             "redactions": [
               {
                 "kind": "source-minimization",
-                "result": "Retained only task-owned source/result hashes, exact Git and projection identity, bounded topology decisions, direct evaluator summaries, failures, token cost and cleanup; no credentials, configuration, chat transcript, session log or foreign-state content."
+                "result": "Retained only task-owned source/result hashes, exact Git and projection identity, bounded topology decisions, typed evaluator facts with source-narrative hashes, failures, token cost and cleanup; no credentials, configuration, chat transcript, session log or foreign-state content."
               }
             ],
             "postSessionBindingContract": [
@@ -4735,7 +4758,7 @@
                 "action": "recompute without a universal threshold and run a new exact bounded destination-before-source-release replay"
               }
             ],
-            "evidenceBoundary": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness."
+            "evidenceBoundary": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Existing independent narratives were deterministically normalized into typed facts with their original hashes retained; no behavior was replayed or added. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness."
           },
           "taskId": "GT-07",
           "amendments": [{

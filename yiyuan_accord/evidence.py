@@ -52,9 +52,13 @@ def _time(value):
     return parsed if parsed.tzinfo is not None else None
 
 
+def _canonical_json(value):
+    return json.dumps(value, ensure_ascii=False, sort_keys=True,
+                      separators=(",", ":"))
+
+
 def _digest(value):
-    return sha256(json.dumps(value, ensure_ascii=False, sort_keys=True,
-        separators=(",", ":")).encode()).hexdigest()
+    return sha256(_canonical_json(value).encode()).hexdigest()
 
 
 def _canonical_official_url(value):
@@ -120,15 +124,22 @@ def _postcapture_binding(binding, payload, captured_at, task_id=None):
         valid_results = (
             _records(results) and results
             and all(
-                _exact(
-                    result,
-                    ("kind", "carrierSessionId", "taskLocator", "phase", "nonce", "report"),
-                    ("carrierSessionId", "taskLocator", "phase", "nonce", "report"),
-                )
+                set(result) in ({
+                    "kind", "carrierSessionId", "taskLocator", "phase", "nonce",
+                    "report",
+                }, {
+                    "kind", "carrierSessionId", "taskLocator", "phase", "nonce",
+                    "report", "facts",
+                })
                 and result["kind"] == "independent-command-result"
                 and all(_text(result[field]) for field in (
                     "carrierSessionId", "taskLocator", "phase", "nonce", "report"
                 ))
+                and (
+                    "facts" not in result
+                    or isinstance(result["facts"], dict) and result["facts"]
+                    and result["report"] == _canonical_json(result["facts"])
+                )
                 for result in results
             )
         )
@@ -337,10 +348,51 @@ def _continuity_handoff_bundle(payload, task):
         if isinstance(destination, dict) else None
     reconciliation_at = _time(reconciliation.get("completedAt")) \
         if isinstance(reconciliation, dict) else None
+    command_results = payload.get("independentCommandResults")
+    result_by_phase = {
+        result["taskLocator"].rsplit("/", 1)[-1]: result
+        for result in command_results or []
+        if isinstance(result, dict) and _text(result.get("taskLocator"))
+    }
+    destination_result = result_by_phase.get("destination-poststate")
+    reconciliation_result = result_by_phase.get("source-reconciliation")
     required_fields = {
         "goal", "authority", "code-binding", "current-state", "evidence",
         "claim-limit",
     }
+    destination_expected = {
+        "capacity": {
+            key: capacity.get(key) for key in (
+                "capacity", "reliableSignal", "universalThreshold"
+            )
+        },
+        "receivedFields": topology.get("receivedFields"),
+        "classifications": classifications,
+        "codeTopology": code,
+        "executionPlacement": execution,
+        "sourceReleasedObserved": topology.get("sourceReleasedObserved"),
+    }
+    reconciliation_expected = {
+        "destinationResultSha256": topology.get("destinationResultSha256"),
+        "destinationVerifiedBeforeSourceRelease": True,
+        "codeTopology": code,
+        "executionPlacement": execution,
+        "sourceReleasedObserved": topology.get("sourceReleasedObserved"),
+    }
+
+    def structured(result, kind, expected):
+        facts = result.get("facts") if isinstance(result, dict) else None
+        return (
+            isinstance(facts, dict)
+            and set(facts) == set(expected) | {"kind", "sourceNarrativeSha256"}
+            and facts.get("kind") == kind
+            and re.fullmatch(
+                r"[0-9a-f]{64}", facts.get("sourceNarrativeSha256", "")
+            ) is not None
+            and all(facts.get(key) == value for key, value in expected.items())
+            and result.get("report") == _canonical_json(facts)
+        )
+
     return topology if (
         _exact(
             capacity,
@@ -359,8 +411,8 @@ def _continuity_handoff_bundle(payload, task):
             for key, (semantic, inheritance, sequential) in expected.items()
             for item in (classified[key],)
         )
-        and _string_set(topology.get("receivedFields")) is not None
-        and required_fields <= set(topology["receivedFields"])
+        and _string_set(topology.get("receivedFields")) == required_fields
+        and len(topology["receivedFields"]) == len(required_fields)
         and isinstance(topology.get("reportedTokensUsed"), int)
         and not isinstance(topology.get("reportedTokensUsed"), bool)
         and topology["reportedTokensUsed"] >= 0
@@ -375,6 +427,15 @@ def _continuity_handoff_bundle(payload, task):
         and len(binding_by_phase) == 2
         and destination_at is not None and reconciliation_at is not None
         and destination_at < reconciliation_at
+        and len(result_by_phase) == 3
+        and structured(
+            destination_result, "continuity-destination-poststate/v1",
+            destination_expected,
+        )
+        and structured(
+            reconciliation_result, "continuity-source-reconciliation/v1",
+            reconciliation_expected,
+        )
         and _text(poststate.get("result"))
     ) else None
 
@@ -433,6 +494,16 @@ def _gt18_longitudinal_semantics(task, event, episodes, dimension_ids):
         item.get("id") for item in candidate or []
         if isinstance(item, dict) and item.get("state") == "fail"
     }
+    regression_rule = next((
+        marker for marker in task.get("required", [])
+        if isinstance(marker, str)
+        and marker.startswith("reject-proxy-improvement-that-weakens-")
+    ), "")
+    regression_terms = set(regression_rule.split("-"))
+    declared_regression_dimensions = {
+        dimension for dimension in dimension_ids
+        if regression_terms & set(dimension.split("-"))
+    }
     carrier = event.get("stateCarrier")
     selected = [episode.get("coreDecision", {}).get("selectedRouteId")
                 for episode in episodes]
@@ -465,7 +536,7 @@ def _gt18_longitudinal_semantics(task, event, episodes, dimension_ids):
             and item["state"] in {"pass", "fail"}
             for item in candidate
         )
-        and failed_candidate_dimensions
+        and failed_candidate_dimensions & declared_regression_dimensions
         and selected[1] == selected[0]
         and selected[2] != selected[0]
         and episodes[3].get("invalidatedRoute") == selected[2]
@@ -487,7 +558,8 @@ def _gt18_longitudinal_semantics(task, event, episodes, dimension_ids):
 
 
 def _gt19_request_semantics(
-    request, order, baseline_route, replacement_route, responsibilities,
+    request, order, baseline_route, replacement_route, outcome_id,
+    responsibilities,
 ):
     if not isinstance(request, dict):
         return False
@@ -534,7 +606,7 @@ def _gt19_request_semantics(
     target = set(responsibilities)
     return (
         isinstance(outcome, dict)
-        and _text(outcome.get("id"))
+        and outcome.get("id") == outcome_id
         and outcome.get("responsibilities") == responsibilities
         and isinstance(policy, dict)
         and policy.get("requiredRetirementAllocations", []) == expected_retirements
@@ -563,10 +635,12 @@ def _gt19_longitudinal_semantics(task, event, episodes, dimension_ids):
     baseline_route, replacement_route = selected[0], selected[2]
     first_request = episodes[0].get("closureRequest")
     first_outcome = first_request.get("outcome") if isinstance(first_request, dict) else None
+    outcome_id = first_outcome.get("id") if isinstance(first_outcome, dict) else None
     responsibilities = first_outcome.get("responsibilities") \
         if isinstance(first_outcome, dict) else None
     if (
-        not isinstance(responsibilities, list) or len(responsibilities) != 1
+        not _text(outcome_id)
+        or not isinstance(responsibilities, list) or len(responsibilities) != 1
         or not _text(responsibilities[0])
         or not _text(baseline_route) or not _text(replacement_route)
         or baseline_route == replacement_route
@@ -625,7 +699,7 @@ def _gt19_longitudinal_semantics(task, event, episodes, dimension_ids):
             )
             and _gt19_request_semantics(
                 episode.get("closureRequest"), order, baseline_route,
-                replacement_route, responsibilities,
+                replacement_route, outcome_id, responsibilities,
             )
             and episode.get("coreDecision") == reconcile_closure(
                 episode.get("closureRequest")

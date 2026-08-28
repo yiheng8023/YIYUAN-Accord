@@ -1676,6 +1676,43 @@ class ProductControlTests(unittest.TestCase):
         poststate['sourceBindings'][0]['taskLocator'] = []
         self.assertIsNone(_continuity_handoff_bundle(malformed_handoff, gt07))
 
+        extra_handoff_state = json.loads(json.dumps(gt07_payload))
+        extra_handoff_state['materialEvents'][1]['receivedFields'].append(
+            'credential-content'
+        )
+        self.assertIsNone(_continuity_handoff_bundle(extra_handoff_state, gt07))
+
+        contradictory_report = json.loads(json.dumps(gt07_payload))
+        result = next(
+            item for item in contradictory_report['independentCommandResults']
+            if item['taskLocator'].endswith('/destination-poststate')
+        )
+        result['report'] += '; inherited copied history and source released early'
+        binding = next(
+            item for item in next(
+                event for event in contradictory_report['materialEvents']
+                if event['kind'] == 'independent-poststate'
+            )['sourceBindings']
+            if item['taskLocator'].endswith('/destination-poststate')
+        )
+        binding['resultSha256'] = hashlib.sha256(
+            result['report'].encode('utf-8')
+        ).hexdigest()
+        binding['resultRecordSha256'] = _digest([result])
+        self.assertIsNone(_continuity_handoff_bundle(
+            contradictory_report, gt07
+        ))
+        cross_bound_drift = json.loads(json.dumps(gt07_payload))
+        result = next(item for item in cross_bound_drift[
+            'independentCommandResults'
+        ] if item['taskLocator'].endswith('/destination-poststate'))
+        result['facts']['sourceReleasedObserved'] = True
+        result['report'] = json.dumps(
+            result['facts'], ensure_ascii=False, sort_keys=True,
+            separators=(',', ':'),
+        )
+        self.assertIsNone(_continuity_handoff_bundle(cross_bound_drift, gt07))
+
         event = next(
             item for item in source['records']['GT-18-2460adc'][
                 'payload']['materialEvents']
@@ -1736,6 +1773,17 @@ class ProductControlTests(unittest.TestCase):
             _sequence_digest(bounded_alternative['materialEvents'][0])
         )
         self.assertIsNotNone(_longitudinal_bundle(bounded_alternative, gt18))
+
+        irrelevant_regression = json.loads(json.dumps(gt18_payload))
+        candidate = irrelevant_regression['materialEvents'][0]['episodes'][1][
+            'candidateAcceptanceVector'
+        ]
+        for item in candidate:
+            item['state'] = 'fail' if item['id'] == 'human-burden' else 'pass'
+        irrelevant_regression['materialEvents'][0]['sequenceSha256'] = (
+            _sequence_digest(irrelevant_regression['materialEvents'][0])
+        )
+        self.assertIsNone(_longitudinal_bundle(irrelevant_regression, gt18))
 
         for carrier in ('malformed-carrier', [], None):
             malformed = json.loads(json.dumps(gt18_payload))
@@ -1823,6 +1871,18 @@ class ProductControlTests(unittest.TestCase):
         self.assertIsNone(_longitudinal_bundle(
             malformed_responsibility, gt19
         ))
+
+        outcome_drift = json.loads(json.dumps(gt19_payload))
+        event_target = outcome_drift['materialEvents'][0]
+        episode = event_target['episodes'][1]
+        episode['closureRequest']['outcome']['id'] = 'different-outcome-family'
+        episode['closureRequestSha256'] = _digest(episode['closureRequest'])
+        episode['coreDecision'] = reconcile_closure(episode['closureRequest'])
+        episode['coreDecisionSha256'] = _digest(episode['coreDecision'])
+        for fact in episode['sourceFacts']:
+            fact['valueSha256'] = episode['coreDecisionSha256']
+        event_target['sequenceSha256'] = _sequence_digest(event_target)
+        self.assertIsNone(_longitudinal_bundle(outcome_drift, gt19))
 
         extra_route = json.loads(json.dumps(gt19_payload))
         for episode in extra_route['materialEvents'][0]['episodes']:

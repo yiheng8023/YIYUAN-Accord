@@ -586,9 +586,22 @@ increment and one active work item. Its ordered work is:
     whole-event digest without replaying GT-07. It also treats capacity,
     summarization and handoff as examples in an open continuity-risk set and
     normalizes host vocabulary before capability equivalence. These repairs are
-    still remediation inputs, not candidate evidence. A genuinely independent
-    product, specification, implementation and standards review of the repaired
-    exact tree remains required before this stage can complete or an exact
+    still remediation inputs, not candidate evidence. Exact `fcefee4` then
+    passed the new specification review but failed standards review on three
+    narrower counterexamples: contradictory GT-07 free text plus extra inherited
+    state could pass; a GT-18 human-burden-only failure could stand in for the
+    task-declared adversarial regression; and GT-19 could change outcome family
+    between episodes. The follow-up uses canonical typed independent facts with
+    original narrative hashes, requires the exact minimum received-field set,
+    derives GT-18 eligible regression dimensions from its task contract and
+    locks GT-19 to the first outcome ID. This is deterministic evidence
+    normalization and validator hardening, not a GT-07 behavior replay. The
+    code-and-test ceiling moves from 390000 to 400000 bytes to keep the existing
+    5% headroom rule without obscuring these checks through byte-golfing; a later
+    addition must still preserve that headroom or justify subtraction. Goal mode
+    remains paused and unchanged because none of these fixes changes the active
+    route. A genuinely independent specification and standards re-review of the
+    next exact tree remains required before this stage can complete or an exact
     candidate can exist.
 
 The release procedure is dormant. A future semantic version, exact candidate,
