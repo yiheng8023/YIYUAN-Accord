@@ -4259,9 +4259,11 @@
           "changeClass": "candidate-subject-binding",
           "priorGoldenTaskSha256": "cf1eb81610d9291fab4296a803add40a06cfa981c5b3b4f6454f436eaee05774",
           "correctedGoldenTaskSha256": "571e78ccebf07f8e0e0f6aab36fccf074698e2d22d96ba21efb2e2ad82eac286",
+          "priorEvaluationContractSha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
+          "correctedEvaluationContractSha256": "13b98d00de5245ce61ed5ba2e05dd245f8c3b13302108fa13a2ee7f71c01987e",
           "behaviorReplayPerformed": false,
-          "scope": "GT-17 sparse behavior-subject and evaluated-revision metadata only",
-          "reason": "Task obligations and exact projection are unchanged; Git proves AGENTS.md and the Codex Skill unchanged from fd4b99a.",
+          "scope": "GT-17 sparse behavior-subject, evaluated-revision and evaluator-qualification metadata only",
+          "reason": "Task obligations, behavior evaluator and exact projection are unchanged; Git proves AGENTS.md and the Codex Skill unchanged from fd4b99a, while the evaluator delta adds only the exact candidate revision/subject qualification gate that this record now satisfies.",
           "claimImpact": "metadata-only-no-new-behavior-claim"
         }]
       },
@@ -4742,9 +4744,11 @@
             "changeClass": "candidate-subject-binding",
             "priorGoldenTaskSha256": "bef7afffb777817ffe991ad271bcbb7a97fae04aa2af9b057241434f4791c76a",
             "correctedGoldenTaskSha256": "52f2c2fb2820894737c2696c4b6b703cfba95013cd19311faf38453897a19c4d",
+            "priorEvaluationContractSha256": "068c063593c752e60af9e74a5f05475598f2a752bb47b0a92b1693777c3ea743",
+            "correctedEvaluationContractSha256": "13b98d00de5245ce61ed5ba2e05dd245f8c3b13302108fa13a2ee7f71c01987e",
             "behaviorReplayPerformed": false,
-            "scope": "GT-07 sparse behavior-subject and evaluated-revision metadata only",
-            "reason": "Task obligations and exact projection are unchanged; Git proves the Codex Skill unchanged from cb11759.",
+            "scope": "GT-07 sparse behavior-subject, evaluated-revision and evaluator-qualification metadata only",
+            "reason": "Task obligations, behavior evaluator and exact projection are unchanged; Git proves the Codex Skill unchanged from cb11759, while the evaluator delta adds only the exact candidate revision/subject qualification gate that this record now satisfies.",
             "claimImpact": "metadata-only-no-new-behavior-claim"
           }]
         }

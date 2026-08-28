@@ -955,7 +955,7 @@
     },
     "targets": {
       "maxTrackedFiles": 86,
-      "maxProductCodeAndTestBytes": 354000,
+      "maxProductCodeAndTestBytes": 360000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -1008,7 +1008,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module, independent review required source-complete GT-17/18 validation, the f898ebd audit exposed missing responsibility-scoped retirement, later review exposed empty-policy admission and duplicate-key Hook parsing, and candidate audit exposed missing exact behavior-subject binding. The active increment therefore permits at most 86 tracked files and 354000 product-code-and-test bytes while retaining at least five percent byte headroom and three tracked-file slots. The bounded increase pays only for stable closure admission, scoped retirement, shared strict parsing and fail-closed sparse task-subject validation plus Git-proven metadata-only reuse and their negative regressions; it is not advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. Historical and revised observations remain compacted into existing carriers, immutable Git history preserves superseded facts, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module, independent review required source-complete GT-17/18 validation, the f898ebd audit exposed missing responsibility-scoped retirement, later review exposed empty-policy admission and duplicate-key Hook parsing, and candidate audit exposed missing exact behavior-subject binding. The active increment therefore permits at most 86 tracked files and 360000 product-code-and-test bytes while retaining at least five percent byte headroom and three tracked-file slots. The bounded increase pays only for stable closure admission, scoped retirement, shared strict parsing, fail-closed sparse task-subject validation, exact old-to-new evaluator-delta proof, safe bounded Git reads and their negative regressions; it is not advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. Historical and revised observations remain compacted into existing carriers, immutable Git history preserves superseded facts, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

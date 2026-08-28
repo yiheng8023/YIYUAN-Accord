@@ -31,7 +31,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
       "recordId": "GT-17-fd4b99a",
-      "sha256": "16a070a289f543e80141bf7c8f8f671bbb00b35d2da712288be0f2bfb8475595",
+      "sha256": "4cd1c2468d8e484e3bebb9ad7eadebd2bd3765643d4ed6cd63134b6d4dea14b6",
       "claim": "Passed only for GT-17 proposition classification and eight-surface reconciliation at fd4b99a601cbeec00ac1311ac646c48f1c892d94. The first read-blocked attempt remains failed, the successful arm's high read cost excludes an efficiency claim, and live behavior, Hook, field value, candidate and release remain unproved.",
       "postSessionBindingsSha256": "b5f57c0cadc15bf7defefcd595524daac49816399a7d94521fefd5f11b5067b9"
     }

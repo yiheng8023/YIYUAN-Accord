@@ -33,7 +33,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
       "recordId": "GT-07-cb11759",
-      "sha256": "d0792425a4b469e619d8c784caa0ed7624a1eb02bdd2e1f5d0b242e1adbd2057",
+      "sha256": "2843dd97276076e05ba4d9f2cdede6ffc7bf4b8b6f68c1b07b3564fa53e756e4",
       "claim": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness.",
       "postSessionBindingsSha256": "e7f6354b611b016fcc25e02acc415635e8bf86fb601ae5e43b2b6071c9b3d277"
     }

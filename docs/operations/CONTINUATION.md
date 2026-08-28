@@ -118,6 +118,13 @@ Then read, in order:
   evidence without behavior replay. GT-11 through GT-16 plus GT-18 and GT-19
   have changed Skill, evaluation contract or reference-core subjects and need
   fresh bounded replay; GT-07 is not rerun merely to refresh bookkeeping.
+  The next specification/standards cross-review rejected evaluator-history
+  allowlisting as sufficient proof and found unsafe pre-validation Git input
+  plus malformed historical-task crash paths. Candidate amendments must now
+  bind and recompute both old and current evaluator digests, admit only the
+  exact revision/subject qualification delta, validate a 40-hex revision
+  before an end-of-options Git read, and fail closed on malformed JSON or Git
+  failure. These are verifier corrections, not new behavior claims.
   The user cleared the host goal after a new dynamic-retirement
   consensus; the deterministic repository projection remains
   `prepared-host-goal-paused` and must be refreshed before any later activation.
@@ -311,7 +318,7 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The active development guardrail permits at most 86 tracked files and
-  354000 product-code-and-test bytes with at least five percent headroom and
+  360000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
   regression, one append-only GT-14 through GT-19 source and seven current
@@ -329,8 +336,10 @@ Then read, in order:
   missing non-selected-route retirement closure; the latest bounded 12000-byte
   increase pays only for same-responsibility successor, prior consequence and
   cleanup, reversible retirement, recheck, completion-failure logic and negative
-  regressions, not advance allowance for a Runtime, adapter, state layer or
-  future mechanism. The historical v3.1 baseline added one release note,
+  regressions. The final bounded increase adds only evaluator-delta proof,
+  option-safe Git reads and malformed-history/Git-failure falsifiers; it is not
+  advance allowance for a Runtime, adapter, state layer or future mechanism.
+  The historical v3.1 baseline added one release note,
   two Hook files, one combined source and four observations. The new program
   adds no implementation merely to consume the remaining budget; every future
   mechanism must pay rent.

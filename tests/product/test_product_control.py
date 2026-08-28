@@ -15,6 +15,7 @@ from yiyuan_accord.evidence import (
     _observation_errors,
     _postcapture_bundle,
     _publishable_payload,
+    _source_amendments,
     _time,
     representative_contract_sha256,
     representative_sample_errors,
@@ -1720,6 +1721,48 @@ class ProductControlTests(unittest.TestCase):
         malformed = json.loads(json.dumps(policy))
         malformed['evaluationContractHistory'][0]['preservedTaskIds'] = []
         self.assertIsNone(_evaluation_contracts(malformed, 'GT-14', current))
+
+        candidate_bundle = _read(ROOT, CURRENT_GT16_SOURCE)
+        candidate_record = candidate_bundle['records']['GT-17-fd4b99a']
+        candidate_task = next(item for item in _read(ROOT, G)['tasks']
+                              if item['id'] == 'GT-17')
+        candidate_args = (
+            ROOT, candidate_record, candidate_task, _digest(candidate_task),
+            _time(candidate_record['capturedAt']), (acceptance, _read(ROOT, G), current),
+        )
+        self.assertTrue(_source_amendments(*candidate_args))
+        injected = json.loads(json.dumps(candidate_record))
+        injected['payload']['evaluatedRevision'] = '--output=unexpected'
+        with patch('yiyuan_accord.evidence._bounded_git_bytes') as git_read:
+            self.assertFalse(_source_amendments(
+                ROOT, injected, *candidate_args[2:],
+            ))
+            git_read.assert_not_called()
+        malformed_history = [
+            b'{"tasks":[null]}', json.dumps(acceptance).encode(),
+        ]
+        with patch('yiyuan_accord.evidence._bounded_git_bytes',
+                   side_effect=malformed_history):
+            self.assertFalse(_source_amendments(*candidate_args))
+        with patch('yiyuan_accord.evidence._bounded_git_bytes',
+                   side_effect=subprocess.CalledProcessError(1, 'git')):
+            self.assertFalse(_source_amendments(*candidate_args))
+        changed_acceptance = json.loads(json.dumps(acceptance))
+        changed_acceptance['representativeBehaviorPolicy'][
+            'releaseDecisionRule'
+        ] += ' Unreviewed semantic expansion.'
+        changed_contract = (
+            changed_acceptance, candidate_args[-1][1],
+            representative_contract_sha256(changed_acceptance, candidate_args[-1][1]),
+        )
+        changed_record = json.loads(json.dumps(candidate_record))
+        changed_record['amendments'][0][
+            'correctedEvaluationContractSha256'
+        ] = changed_contract[-1]
+        changed_args = (
+            ROOT, changed_record, *candidate_args[2:-1], changed_contract,
+        )
+        self.assertFalse(_source_amendments(*changed_args))
 
         source_cases = (
             (8, ('officialSources', 0, 'url'), 'https://github.com/openai/../x'),

@@ -434,7 +434,17 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
     )
 
 
-def representative_contract_sha256(acceptance, golden):
+_CANDIDATE_RULE_INSERTION = (
+    "Each task declares only its relevant behavior-subject files; a promoted "
+    "observation and its source record bind one ancestor evaluatedRevision, and "
+    "current tracked subject bytes must remain identical while task and evaluation "
+    "digests bind current semantics. This sparse invalidation rule neither accepts "
+    "stale core behavior nor forces replay for unrelated evidence or presentation "
+    "changes."
+)
+
+
+def _representative_contract(acceptance, golden):
     semantic_fields = (
         "id", "class", "name", "mapsTo", "statement", "passRule",
         "requiredEvidenceClasses",
@@ -444,7 +454,7 @@ def representative_contract_sha256(acceptance, golden):
     digest_policy = dict(policy) if isinstance(policy, dict) else policy
     if isinstance(digest_policy, dict):
         digest_policy.pop("evaluationContractHistory", None)
-    return _digest({
+    return {
         "productId": acceptance.get("productId"),
         "release": acceptance.get("release"),
         "evidenceLanes": acceptance.get("evidenceLanes"),
@@ -460,7 +470,50 @@ def representative_contract_sha256(acceptance, golden):
         ] if isinstance(criteria, list) else [],
         "evaluationProtocol": golden.get("evaluationProtocol"),
         "metrics": golden.get("metrics"),
-    })
+    }
+
+
+def representative_contract_sha256(acceptance, golden):
+    return _digest(_representative_contract(acceptance, golden))
+
+
+def _candidate_evaluation_delta(
+    prior_acceptance, prior_golden, prior_digest,
+    current_acceptance, current_golden, current_digest,
+):
+    prior = _representative_contract(prior_acceptance, prior_golden)
+    current = _representative_contract(current_acceptance, current_golden)
+    if _digest(prior) != prior_digest or _digest(current) != current_digest:
+        return False
+    prior_policy, current_policy = (
+        prior.get("representativeBehaviorPolicy"),
+        current.get("representativeBehaviorPolicy"),
+    )
+    prior_protocol, current_protocol = (
+        prior.get("evaluationProtocol"), current.get("evaluationProtocol"),
+    )
+    if not all(isinstance(item, dict) for item in (
+        prior_policy, current_policy, prior_protocol, current_protocol,
+    )):
+        return False
+    prior_rule, current_rule = (
+        prior_policy.get("releaseDecisionRule"),
+        current_policy.get("releaseDecisionRule"),
+    )
+    head, separator, tail = prior_rule.partition(". ") \
+        if isinstance(prior_rule, str) else ("", "", "")
+    expected_rule = f"{head}. {_CANDIDATE_RULE_INSERTION} {tail}"
+    if (
+        not separator or current_rule != expected_rule
+        or "requiredCandidateObservationFields" in prior_protocol
+        or current_protocol.get("requiredCandidateObservationFields")
+        != ["evaluatedRevision"]
+    ):
+        return False
+    normalized = json.loads(json.dumps(current))
+    normalized["representativeBehaviorPolicy"]["releaseDecisionRule"] = prior_rule
+    normalized["evaluationProtocol"].pop("requiredCandidateObservationFields")
+    return normalized == prior
 
 
 def _evaluation_contracts(policy, task_id, current):
@@ -483,7 +536,9 @@ def _evaluation_contracts(policy, task_id, current):
     return contracts
 
 
-def _source_amendments(root, record, task, task_digest, captured_at):
+def _source_amendments(
+    root, record, task, task_digest, captured_at, current_contract=None,
+):
     amendments = record.get("amendments") if isinstance(record, dict) else None
     if amendments is None:
         return True
@@ -500,24 +555,48 @@ def _source_amendments(root, record, task, task_digest, captured_at):
     elif change_class == "candidate-subject-binding":
         payload = record.get("payload")
         revision = payload.get("evaluatedRevision") if isinstance(payload, dict) else None
-        try:
-            suite = _strict_json_object(_bounded_git_bytes(
-                root, ["show", f"{revision}:evals/golden-tasks.json"]
-            ))
-            prior_task = next(item for item in suite.get("tasks", [])
-                              if item.get("id") == task.get("id"))
-        except (OSError, StopIteration, subprocess.SubprocessError,
-                UnicodeError, ValueError):
+        if re.fullmatch(r"[0-9a-f]{40}", revision or "") is None:
             return False
+        try:
+            prior_golden = _strict_json_object(_bounded_git_bytes(
+                root, ["show", "--end-of-options", f"{revision}:evals/golden-tasks.json"]
+            ))
+            prior_acceptance = _strict_json_object(_bounded_git_bytes(
+                root, ["show", "--end-of-options", f"{revision}:product/acceptance.json"]
+            ))
+        except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+            return False
+        tasks = prior_golden.get("tasks")
+        if (not isinstance(tasks, list)
+                or any(not isinstance(item, dict) for item in tasks)):
+            return False
+        matches = [item for item in tasks if item.get("id") == task.get("id")]
+        if len(matches) != 1:
+            return False
+        prior_task = matches[0]
         current = dict(task)
         current.pop("behaviorSubjectFiles", None)
-        if (len(amendments) != 1 or prior_task != current
+        current_tuple = current_contract if isinstance(current_contract, tuple) else ()
+        amendment = amendments[0]
+        if (len(amendments) != 1 or len(current_tuple) != 3
+                or prior_task != current
                 or _digest(prior_task) != prior_digest):
+            return False
+        current_acceptance, current_golden, current_evaluation = current_tuple
+        if not _candidate_evaluation_delta(
+            prior_acceptance, prior_golden,
+            amendment.get("priorEvaluationContractSha256"),
+            current_acceptance, current_golden,
+            amendment.get("correctedEvaluationContractSha256"),
+        ) or amendment.get("correctedEvaluationContractSha256") != current_evaluation:
             return False
     else:
         return False
     previous_time = captured_at
     previous_digest = None
+    evaluation_fields = (
+        "priorEvaluationContractSha256", "correctedEvaluationContractSha256",
+    ) if change_class == "candidate-subject-binding" else ()
     for amendment in amendments:
         amended_at = _time(amendment.get("amendedAt"))
         if (
@@ -525,9 +604,11 @@ def _source_amendments(root, record, task, task_digest, captured_at):
                 "kind", "amendedAt", "changeClass", "priorGoldenTaskSha256",
                 "correctedGoldenTaskSha256", "behaviorReplayPerformed",
                 "scope", "reason", "claimImpact",
+                *evaluation_fields,
             ), (
                 "kind", "amendedAt", "changeClass", "priorGoldenTaskSha256",
                 "correctedGoldenTaskSha256", "scope", "reason", "claimImpact",
+                *evaluation_fields,
             ))
             or amendment.get("kind") != "contract-correction"
             or amendment.get("changeClass") != change_class
@@ -539,6 +620,11 @@ def _source_amendments(root, record, task, task_digest, captured_at):
             or re.fullmatch(
                 r"[0-9a-f]{64}", amendment.get("correctedGoldenTaskSha256", "")
             ) is None
+            or any(re.fullmatch(
+                r"[0-9a-f]{64}", amendment.get(field, "")
+            ) is None for field in evaluation_fields)
+            or evaluation_fields and amendment["priorEvaluationContractSha256"]
+            == amendment["correctedEvaluationContractSha256"]
             or amendment.get("priorGoldenTaskSha256")
             == amendment.get("correctedGoldenTaskSha256")
             or previous_digest is not None
@@ -588,6 +674,7 @@ def _behavior_subject_revision_errors(root, label, observation, task):
 def _observation_errors(
     root, label, observation, task, burden_metrics, observation_locator,
     projection_id, evaluation_digest, read_json, require_current_subject=False,
+    current_contract=None,
 ):
     errors = []
     if require_current_subject:
@@ -657,7 +744,9 @@ def _observation_errors(
             and source["kind"] in {"host-transcript", "host-event-log"}
             and _exact(bundle, ("schema", "records")) and bundle.get("schema") == 1
             and _exact(record, record_fields)
-            and _source_amendments(root, record, task, task_digest, captured)
+            and _source_amendments(
+                root, record, task, task_digest, captured, current_contract,
+            )
             and record.get("kind") == source.get("kind")
             and record.get("taskId") == task.get("id")
             and record.get("goldenTaskSha256") == task_digest
@@ -829,7 +918,7 @@ def representative_sample_errors(
             root, label, observation, task, burden, item["locator"],
             projection if _text(projection) else "",
             _evaluation_contracts(policy, task_id, evaluation) or {evaluation}, read_json,
-            require_current_subject,
+            require_current_subject, (acceptance, golden, evaluation),
         )
         errors.extend(local)
         states[task_id] = state
