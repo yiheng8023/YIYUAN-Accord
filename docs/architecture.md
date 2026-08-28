@@ -478,6 +478,15 @@ and sparse incidence do not retire; only the exact same-responsibility Accord
 allocation retires after admitted native consequence and lifecycle closure; and
 expiry restores it. The blocked arm, final-answer transcription errors, initial
 failed review, correction path and evaluator costs are part of the evidence.
+The evidence boundary validates more than the generic episode shape: GT-18
+binds exact role dispositions, full and candidate vectors, selected and
+invalidated routes plus its task-owned carrier; GT-19 binds each closure request
+digest, recomputes the pure closure decision, and checks responsibility-scoped
+H/A views and admission/lifecycle masks. Meaning-changing request, vector,
+scope, view or mask mutations therefore fail closed. Malformed cleanup data is
+also a normal validation failure rather than an exception path. These checks
+authenticate repository semantics only; they do not turn stored evidence into
+proof that a live host event occurred.
 Neither observation proves a durable carrier, Hook causality, whole-product
 retirement, field value, candidate readiness or release readiness.
 

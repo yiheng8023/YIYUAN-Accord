@@ -5,6 +5,7 @@ import re
 import subprocess
 from urllib.parse import unquote, urlsplit
 
+from .closure import reconcile_closure
 from .identity import (
     _bounded_git_bytes, _exact, _nonempty_string as _text,
     _safe_https_locator, _strict_json_object,
@@ -253,6 +254,253 @@ def _postcapture_bundle(payload, task, captured_at):
             and len(locators) == len(set(locators)) else None)
 
 
+def _passing_episode(episode, dimension_ids):
+    vector = episode.get("acceptanceVector") if isinstance(episode, dict) else None
+    return (
+        isinstance(vector, list)
+        and [item.get("id") for item in vector if isinstance(item, dict)]
+        == dimension_ids
+        and len(vector) == len(dimension_ids)
+        and all(item.get("state") == "pass" for item in vector)
+    )
+
+
+def _decision_matches(decision, route_id, disposition):
+    lifecycle = decision.get("lifecycle") if isinstance(decision, dict) else None
+    return (
+        isinstance(decision, dict)
+        and decision.get("valid") is True
+        and decision.get("errors") == []
+        and decision.get("selectedRouteId") == route_id
+        and decision.get("frontierRouteIds") == [route_id]
+        and decision.get("disposition") == disposition
+        and isinstance(lifecycle, dict)
+        and lifecycle.get("completionAllowed") is True
+        and lifecycle.get("completionFailures") == []
+        and lifecycle.get("residualTaskResources") == []
+    )
+
+
+def _gt18_longitudinal_semantics(event, episodes, dimension_ids):
+    if len(episodes) != 4 or any(not isinstance(episode, dict) for episode in episodes):
+        return False
+    expected = (
+        ("observe-without-candidate", "minimal-composition", "admit"),
+        ("reject-and-rollback-proxy-regression", "minimal-composition", "admit"),
+        ("retain-bounded-native-no-add", "native-no-add", "no-op"),
+        ("replace-and-retire-invalidated-route", "minimal-composition", "admit"),
+    )
+    base_fields = {
+        "order", "role", "evaluatorSha256", "coreDecision",
+        "coreDecisionSha256", "sourceFacts", "acceptanceVector", "disposition",
+    }
+    candidate = episodes[1].get("candidateAcceptanceVector")
+    failed_candidate_dimensions = {
+        item.get("id") for item in candidate or []
+        if isinstance(item, dict) and item.get("state") == "fail"
+    }
+    carrier = event.get("stateCarrier")
+    return (
+        _exact(event, (
+            "kind", "revision", "fixedBudget", "fullAcceptanceVector",
+            "evaluatorCanonicalSha256", "episodes", "carrierEdges",
+            "stateCarrier", "stateCarrierSha256", "unknowns", "sequenceSha256",
+        ), ("revision", "evaluatorCanonicalSha256", "stateCarrierSha256",
+             "sequenceSha256"))
+        and re.fullmatch(r"[0-9a-f]{40}", event.get("revision", "")) is not None
+        and re.fullmatch(r"[0-9a-f]{64}", event.get("sequenceSha256", "")) is not None
+        and event.get("fixedBudget") == 4
+        and all(
+            set(episode) == base_fields | (
+                {"candidateAcceptanceVector"} if order == 1 else
+                {"invalidatedRoute", "selectedRoute"} if order == 3 else set()
+            )
+            and episode.get("disposition") == expected[order][0]
+            and _decision_matches(
+                episode.get("coreDecision"), expected[order][1], expected[order][2]
+            )
+            and _passing_episode(episode, dimension_ids)
+            for order, episode in enumerate(episodes)
+        )
+        and isinstance(candidate, list)
+        and [item.get("id") for item in candidate if isinstance(item, dict)]
+        == dimension_ids
+        and len(candidate) == len(dimension_ids)
+        and all(
+            _exact(item, ("id", "state"), ("id", "state"))
+            and item["state"] in {"pass", "fail"}
+            for item in candidate
+        )
+        and failed_candidate_dimensions == {
+            "authority-and-accountability", "interference",
+            "lifecycle-and-retirement",
+        }
+        and episodes[3].get("invalidatedRoute") == "native-no-add"
+        and episodes[3].get("selectedRoute") == "minimal-composition"
+        and carrier == {
+            "schema": "yiyuan-accord-task-state-carrier/v1",
+            "owner": "GT-18",
+            "authorizedWriter": "task-owned-fixture-generator",
+            "authorizedReader": "independent-fixture-oracle",
+            "hiddenMemory": False,
+            "freshness": "one-disposable-sequence",
+            "ttl": "until-post-capture-cleanup",
+            "finalActiveRoute": "minimal-composition",
+            "retiredRoutes": ["persistent-controller", "native-no-add"],
+        }
+        and event.get("stateCarrierSha256") == _digest(carrier)
+        and _string_set(event.get("unknowns")) is not None
+    )
+
+
+def _gt19_request_semantics(request, order):
+    if not isinstance(request, dict):
+        return False
+    outcome, policy, routes, events = (
+        request.get("outcome"), request.get("policy"),
+        request.get("routes"), request.get("events"),
+    )
+    if (
+        not isinstance(routes, list) or len(routes) != 3
+        or any(not isinstance(route, dict) or not _text(route.get("id"))
+               for route in routes)
+        or len({route["id"] for route in routes}) != len(routes)
+        or not isinstance(events, list)
+    ):
+        return False
+    route_by_id = {route["id"]: route for route in routes}
+    retirement_events = [
+        event for event in events or [] if isinstance(event, dict)
+        and event.get("kind") == "responsibility-allocation-retired"
+    ]
+    expected_retirements = ([{
+        "routeId": "current-plugin", "responsibilities": ["sense-environment"],
+    }] if order == 2 else [])
+    exact_retirement_event = (
+        len(retirement_events) == 1
+        and retirement_events[0].get("routeId") == "current-plugin"
+        and retirement_events[0].get("replacementRouteId") == "native-no-add"
+        and retirement_events[0].get("responsibilities") == ["sense-environment"]
+    ) if order == 2 else not retirement_events
+    return (
+        isinstance(outcome, dict)
+        and outcome.get("id") == "sense-current-environment-under-host-drift"
+        and outcome.get("responsibilities") == ["sense-environment"]
+        and isinstance(policy, dict)
+        and policy.get("requiredRetirementAllocations", []) == expected_retirements
+        and set(route_by_id) == {"native-no-add", "current-plugin", "minimal-composition"}
+        and route_by_id["current-plugin"].get("supplies")
+        == ["sense-environment", "bind-authority"]
+        and route_by_id["native-no-add"].get("supplies")
+        == ([] if order == 0 else ["sense-environment"])
+        and route_by_id["minimal-composition"].get("supplies")
+        == ["sense-environment"]
+        and exact_retirement_event
+    )
+
+
+def _gt19_longitudinal_semantics(event, episodes, dimension_ids):
+    if len(episodes) != 4 or any(not isinstance(episode, dict) for episode in episodes):
+        return False
+    expected = (
+        ("retain-Accord-baseline", "current-plugin", "admit",
+         "absent", "fail-or-expired", "not-open-for-retirement"),
+        ("retain-after-declaration-only", "current-plugin", "admit",
+         "declared-unproved", "fail-or-expired", "not-open-for-retirement"),
+        ("retire-exact-redundant-allocation-with-recheck", "native-no-add", "no-op",
+         "admitted-current", "pass", "pass"),
+        ("restore-plugin-allocation-after-evidence-expiry", "current-plugin", "admit",
+         "evidence-expired", "fail-or-expired", "not-open-for-retirement"),
+    )
+    episode_fields = {
+        "order", "role", "evaluatorSha256", "coreDecision",
+        "coreDecisionSha256", "sourceFacts", "acceptanceVector",
+        "closureRequest", "closureRequestSha256", "sparseViews", "masks",
+        "disposition",
+    }
+    accord_view = {
+        "current-plugin/sense-environment": "allocated",
+        "current-plugin/bind-authority": "preserved-outside-scope",
+    }
+    carrier = event.get("stateCarrier")
+    behavior_arms = event.get("behaviorArms")
+    transcription_errors = (
+        behavior_arms.get("AccordBacked", {}).get("finalAnswerTranscriptionErrors")
+        if isinstance(behavior_arms, dict) else None
+    )
+    return (
+        _exact(event, (
+            "kind", "revision", "fixedBudget", "fullAcceptanceVector",
+            "evaluatorCanonicalSha256", "episodes", "carrierEdges",
+            "stateCarrier", "stateCarrierSha256", "behaviorArms", "unknowns",
+            "sequenceSha256",
+        ), ("revision", "evaluatorCanonicalSha256", "stateCarrierSha256",
+             "sequenceSha256"))
+        and re.fullmatch(r"[0-9a-f]{40}", event.get("revision", "")) is not None
+        and re.fullmatch(r"[0-9a-f]{64}", event.get("sequenceSha256", "")) is not None
+        and event.get("fixedBudget") == 4
+        and isinstance(behavior_arms, dict)
+        and {"AccordBacked", "nativeNoAdd"} <= set(behavior_arms)
+        and set(behavior_arms) <= {"readOnlyBlocked", "AccordBacked", "nativeNoAdd"}
+        and all(
+            isinstance(arm, dict)
+            and _text(arm.get("sessionId"))
+            and isinstance(arm.get("mutations"), list)
+            and isinstance(arm.get("reportedTokens"), int)
+            and not isinstance(arm.get("reportedTokens"), bool)
+            and arm["reportedTokens"] >= 0
+            for arm in behavior_arms.values()
+        )
+        and ("readOnlyBlocked" not in behavior_arms
+             or isinstance(behavior_arms["readOnlyBlocked"].get("observed"), bool))
+        and behavior_arms["AccordBacked"].get("skillRead") is True
+        and behavior_arms["nativeNoAdd"].get("skillRead") is False
+        and isinstance(transcription_errors, list)
+        and all(_text(item) for item in transcription_errors)
+        and len(transcription_errors) == len(set(transcription_errors))
+        and all(
+            set(episode) == episode_fields
+            and episode.get("disposition") == expected[order][0]
+            and episode.get("closureRequestSha256") == _digest(
+                episode.get("closureRequest")
+            )
+            and _gt19_request_semantics(episode.get("closureRequest"), order)
+            and episode.get("coreDecision") == reconcile_closure(
+                episode.get("closureRequest")
+            )
+            and _decision_matches(
+                episode.get("coreDecision"), expected[order][1], expected[order][2]
+            )
+            and episode.get("sparseViews") == {
+                "H": {"native-no-add/sense-environment": expected[order][3]},
+                "A": accord_view,
+            }
+            and episode.get("masks") == {
+                "admission": expected[order][4],
+                "closureLifecycle": expected[order][5],
+            }
+            and _passing_episode(episode, dimension_ids)
+            for order, episode in enumerate(episodes)
+        )
+        and carrier == {
+            "kind": "task-owned-ephemeral-sequence",
+            "authorizedWriter": "gt19-deterministic-evaluator",
+            "authorizedReader": "gt19-independent-poststate-oracle",
+            "persistent": False,
+            "finalDisposition": "remove-after-source-capture",
+        }
+        and event.get("stateCarrierSha256") == _digest(carrier)
+        and _string_set(event.get("unknowns")) is not None
+    )
+
+
+def _longitudinal_semantics(task, event, episodes, dimension_ids):
+    return {
+        "GT-18": _gt18_longitudinal_semantics,
+        "GT-19": _gt19_longitudinal_semantics,
+    }.get(task.get("id"), lambda *_: True)(event, episodes, dimension_ids)
+
+
 def _longitudinal_bundle(payload, task):
     design = task.get("evaluationDesign")
     if not isinstance(design, dict) or design.get("caseType") != "longitudinal-sequence":
@@ -293,11 +541,12 @@ def _longitudinal_bundle(payload, task):
     valid_episodes = valid_vector and (
         isinstance(minimum, int) and not isinstance(minimum, bool) and minimum > 1
         and isinstance(roles, list) and len(roles) == minimum
-        and len(roles) == len(set(roles)) and all(_text(role) for role in roles)
+        and all(_text(role) for role in roles) and len(roles) == len(set(roles))
         and isinstance(episodes, list) and len(episodes) == minimum
         and re.fullmatch(r"[0-9a-f]{64}", evaluator or "") is not None
         and all(
-            episode.get("order") == order and episode.get("role") == roles[order]
+            isinstance(episode, dict)
+            and episode.get("order") == order and episode.get("role") == roles[order]
             and episode.get("evaluatorSha256") == evaluator
             and isinstance(episode.get("coreDecision"), dict)
             and episode.get("coreDecisionSha256") == _digest(episode["coreDecision"])
@@ -357,7 +606,10 @@ def _longitudinal_bundle(payload, task):
         and all(edges[index]["targetStateSha256"] == edges[index + 1][
             "sourceStateSha256"] for index in range(len(edges) - 1))
     )
-    return event if valid_vector and valid_episodes and valid_edges else None
+    valid_semantics = valid_edges and _longitudinal_semantics(
+        task, event, episodes, dimension_ids
+    )
+    return event if valid_vector and valid_episodes and valid_edges and valid_semantics else None
 
 
 def _publishable_payload(payload, task, cleanup, captured_at, projection):
@@ -424,7 +676,8 @@ def _publishable_payload(payload, task, cleanup, captured_at, projection):
         and len({_canonical_official_url(item["url"]) for item in sources}) == len(sources)
         and ("resolve-current-official-guidance" not in required or len(sources) >= 2)
         and isinstance(evidence, dict) and set(evidence) == {"state", "observations"}
-        and evidence["state"] == (cleanup or {}).get("state")
+        and isinstance(cleanup, dict)
+        and evidence["state"] == cleanup.get("state")
         and _records(evidence["observations"]) and evidence["observations"]
         and _records(payload.get("redactions")) and _text(payload.get("evidenceBoundary"))
         and ("surface-only-the-exact-human-decision" not in required or any(

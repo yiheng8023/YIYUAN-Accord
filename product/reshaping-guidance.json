@@ -1617,7 +1617,7 @@
     "firstSlice": "Resource stewardship is the first corrected Agent-execution-subdomain slice: it recalls the historical attribution and release boundary as L8 and GT-12, adds current official capability discovery and dynamic native-first routing, and leaves the old preflight, generic Skills and unproven controller design in history. Process-loss control is not a new adjacent feature but a recalled original pre-Accord Agent-execution mission: current GT-07 and GT-11 must preserve the latest demand and corrections through goal, authority, route, implementation, evidence, acceptance and final claim without requiring a real carrier transition when the live carrier is healthy. Runtime machinery remains evidence-gated."
   },
   "wholeSystemBalanceReview": {
-    "status": "completed-reaccepted-candidate-subject-binding-active",
+    "status": "completed-refreshed-independent-review-active",
     "purpose": "Expose coupled weak links and tradeoffs before candidate formation, then drive minimum justified remediation and affected-surface reacceptance without turning a checklist or average score into product truth.",
     "reviewSequence": [
       "bind-current-goal-authority-candidate-scope-versioned-claim-scoped-baseline-target-counterfactual-evidence-cutoff-confounders-and-invalidation-triggers",
@@ -1670,17 +1670,19 @@
       "residual-risk-claim-limit-and-recheck-trigger"
     ],
     "activeProjection": {
-      "auditCut": "cb11759362217dee4ff08aa43db75046bd63c651",
-      "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#system-coherence-calibration-after-the-continuity-and-capability-view-corrections",
-      "dominantBlocker": "sparse-exact-behavior-subject-binding-and-dependent-replay-before-candidate-formation",
+      "auditCut": "59a340fbdec91d1b9287ba3c44a94a49348558c8",
+      "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#whole-system-balance-reacceptance-from-exact-cut-59a340f",
+      "dominantBlocker": "independent-review-confirmation-and-foreign-residue-before-exact-candidate-formation",
       "remediation": {
         "BAL-01": "implemented-and-deterministically-reaccepted",
         "BAL-02": "implemented-and-deterministically-reaccepted",
         "BAL-03": "one-pair-no-observed-harm-not-firing-effect-or-value-proof",
         "BAL-04": "paired-no-add-calibration-complete-genuine-unclosed-responsibility-still-required",
-        "BAL-05": "pure-data-dynamic-retirement-sequence-source-complete-and-reaccepted-live-form-lifecycle-still-unknown"
+        "BAL-05": "pure-data-dynamic-retirement-sequence-source-complete-and-reaccepted-live-form-lifecycle-still-unknown",
+        "BAL-06": "role-level-gt18-gt19-semantics-and-fail-closed-cleanup-under-independent-review-remediation",
+        "BAL-07": "replay-release-task-and-user-facing-burden-wording-narrowed-without-behavior-replay"
       },
-      "graphRule": "Project only this cut, blocker relations and selected remediations; refresh on invalidation and never precompute host-model-tool-context products."
+      "graphRule": "Project exact cut 59a340f, independent-review findings, affected semantic-evidence and wording edges plus selected minimum remediations; preserve current exact task evidence while strengthened validation and sparse subject bindings pass, refresh only the invalidated slice, and never precompute host-model-tool-context products."
     },
     "claimLimit": "This is a revisable review model, not proof that one baseline fits every claim, that every possible dimension has been enumerated, that current implementation passes, or that self-review can replace representative, longitudinal, independent, hosted, human or public evidence."
   },
@@ -1738,15 +1740,16 @@
     ]
   },
   "nextAuthorityBoundary": {
-    "first": "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps/independent-review-and-form-future-exact-candidate",
+    "first": "independent-review-findings-at-exact-59a340f-and-their-earliest-affected-boundaries",
     "then": [
-      "whole-system-balance-ledger-and-remediation-evidence",
+      "gt18-gt19-role-level-semantic-evidence-and-fail-closed-cleanup-remediation",
       "product/program.json",
       "product/acceptance.json",
+      "product/reshaping-guidance.json-derived-index-and-graph-projection",
       "goal-mode-projection-and-verifier",
       "host-adapters-and-evaluations",
       "documentation-and-claim-reacceptance",
-      "independent-review-and-form-future-exact-candidate"
+      "new-independent-review-before-forming-future-exact-candidate"
     ],
     "minimumNextSlice": "Retain every failed, source-insufficient, former-contract and superseded attempt as exact bounded history in current source carriers or immutable Git history; remove a superseded derived observation only after its source record, current replacement and file-budget rationale are verified. Fresh current-contract GT-14/15/16@1bbcc95 and GT-18/19@2460adc now pass only their finite Codex-local claims with blocked arms, failed review, transcription and query corrections, token costs and cleanup retained; revised GT-07/11/12/13/17 retain only their recorded bounded claims. Reconcile these observations across baseline, plan, ordered process, acceptance, goal projection, implementation, documentation and release claims; then conduct a genuinely new independent product, specification, implementation and standards review and remediate any finding before forming an exact candidate. Treat current hosts as Accord-enabled and extension-composed; keep official-clean or no-Accord product behavior, Hook firing or causality, live-mechanism value, durable-carrier need, cross-host equivalence and field value unknown. Add no Runtime, service, dependency or durable state without a source-complete unclosed responsibility and net lifecycle improvement. Keep the goal projection paused until activation is materially needed, and defer broader historical cleanup until exact-candidate preparation.",
     "requiredReplay": [
@@ -1756,7 +1759,7 @@
       "environment-provenance-official-clean-current-enabled-isolated-and-self-observation-controls",
       "existing-wheel-adoption-product-form-selection-and-complete-self-bootstrapping",
       "representative-help-no-op-correction-continuity-recovery-learning-evolution-rollback-retirement-and-cleanup",
-      "current-exact-gt11-gt12-gt13-gt14-gt15-gt16-gt18-and-gt19-behavior-subject-replay",
+      "preserve-current-exact-gt11-gt12-gt13-gt14-gt15-gt16-gt18-and-gt19-evidence-and-replay-only-on-task-evaluator-projection-or-behavior-subject-drift",
       "longitudinal-consensus-and-cross-carrier-consistency",
       "claim-scoped-baseline-target-counterfactual-whole-system-balance-weak-link-remediation-affected-surface-reacceptance-and-independent-review",
       "release-claim-and-lifecycle-only-after-a-future-exact-candidate"

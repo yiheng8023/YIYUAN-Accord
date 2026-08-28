@@ -1315,3 +1315,88 @@ token costs remain counterevidence. The coherence calibration remains
 incomplete until all affected surfaces parse, their deterministic checks pass,
 their hashes and package projections agree, and the complete system is
 independently reviewed. These results are not candidate or release evidence.
+
+## Whole-system balance reacceptance from exact cut `59a340f`
+
+Independent review reopened the earlier self-audit at exact clean revision
+`59a340fbdec91d1b9287ba3c44a94a49348558c8`. That cut was 20 commits ahead of
+`origin/main` at `08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e`, was not pushed,
+tagged or released, and retained public v3.0.1 as the only recommended immutable
+release. Its deterministic checks were green, but that did not compensate for
+the later source-bound counterexamples below. The evidence cutoff includes
+fresh GT-18/19 source records at evaluated revision
+`2460adcff02bd56144f8d3f647ecef27cd5fefd0` and the two independent reviews of
+the `59a340f` tree.
+
+The target remains one coherent, bounded, minimum-total-burden self-bootstrap
+that can form a clean exact candidate only after current independent review.
+The counterfactuals remain native no-add, released plugin-only v3.0.1, the
+working pure-data core plus thin projections, and a minimum replaceable
+composition only for a source-complete unclosed responsibility. Confounders
+remain the Accord-enabled extension-composed live hosts, absent official-clean
+or candidate-enabled isolated product arms, unobserved Hook causality, finite
+synthetic tasks and unknown model-route identity. Reopen the earliest affected
+dimension when the goal, authority, task, evaluator, behavior-subject bytes,
+projection behavior, environment composition, evidence freshness, selected
+form or public release changes; presentation-only changes do not force an
+unrelated behavior replay.
+
+### Current non-compensating ledger
+
+| Dimension | State at `59a340f` | Current evidence, failure or cost | Minimum response / no-action reason |
+| --- | --- | --- | --- |
+| Baseline, target, counterfactual and cutoff | pass | Public v3.0.1, historical behavior revisions, current repository cut and behavior arms remain claim-scoped instead of lending authority to one another. | Preserve the binding and refresh only on an invalidation trigger. |
+| Product outcome and capability closure | unknown / release blocker | BAL-04 selected no added form and no net Accord gain for its exact pair; no live source-complete gap proves incremental product value. | Do not manufacture a favorable case or add machinery; retain the unknown until a genuine responsibility is unclosed. |
+| Proposition, category and boundary coherence | concern | The core semantics remain coherent, but `requiredReplay` contradicted the completed replay state and broad “GT-07 through GT-19” wording accidentally included post-release GT-08/09/10. | Correct the two projections; bind future verification to the exact `requiredTaskIdsForRelease` set. |
+| Environment sensing, adaptation and isolation | unknown | Both live hosts remain Accord-enabled and extension-composed; official-clean, isolated-no-Accord product behavior and candidate-enabled isolated effect remain unobserved. | Preserve the unknown and choose only the least-cost arm required by a later named claim. |
+| Reuse discovery and product-form choice | concern | GT-15 proves one finite reuse/no-build decision, while plugin metadata still overclaimed removal of all tool/topology burden. | Narrow presentation to reducing avoidable burden; do not select a Runtime, service, durable store or new host projection. |
+| Activation, consequence and evidence integrity | blocker at cut | The longitudinal validator checked generic shape but accepted semantic corruption of GT-18 dispositions/vectors and GT-19 closure requests/views/masks. A repository-held source digest could therefore preserve the wrong meaning. | Add role-level schemas, bind the immutable vectors and derived views, recompute each GT-19 closure decision, and reject scope expansion. Existing behavior evidence may remain only if it passes the strengthened semantics unchanged. |
+| Human authority, privacy, trust and supply chain | concern | No credential/session content or new dependency was admitted; live acquisition and external composition remain unproved. | Keep account, trust, data, cost, cleanup of foreign state and publication human-bound. No added mechanism is justified. |
+| User cognitive and orchestration burden | concern | Internal H/A/E/V and JSON remain hidden, but GT-18 used 181410 review tokens and two query corrections; GT-19 retained a 110313-token blocked arm, two transcription errors, a 59918-token failed review and a corrected 58952-token review. | Keep these as counterevidence, narrow user-facing claims and prefer consolidation; do not infer low burden or efficiency. |
+| Reliability, failure containment and recovery | blocker at cut | Malformed cleanup input could raise before the public validator reached its normal fail-closed error path. GT-07 also retains preflight, provisional-output, read, evaluator, token and slow-cleanup costs. | Type-check cleanup before access and add a public regression; preserve all recorded recovery costs. |
+| Performance, context, resources and lifecycle cost | concern / unknown | GT-07 reported 22607 tokens, GT-17 76493, GT-18 181410; GT-19 retained the costs above. BAL-03 and BAL-04 establish neither population benefit nor a qualified total-cost advantage. | Do not optimize or market proxy wins; require a condition-fit comparison before any value claim. |
+| Architecture, modularity and maintainability | concern | The pure reducer and thin adapters remain appropriately deep, but the evidence boundary lacked task-role semantics and four mapped surfaces carry broad fan-out risk. | Strengthen the existing evidence module and tests only; add no subsystem, dependency or second authority source. |
+| Observability, evaluation and reproducibility | blocker at cut | Exact hashes and generic structure did not make GT-18/19 meaning tamper-evident; the first independent review route also failed because the zero-config Windows sandbox denied every repository read. | Repair semantic validation locally, retain the blocked review as environment counterevidence and rerun independent review on an evidence-capable isolated route. |
+| Host projection compatibility and lifecycle | unknown | Static Codex/Claude packages and bounded Hook diagnostics do not prove trigger, effect, hot update, rollback, removal, cross-host equivalence or ZCode fitness. | Preserve the current thin seam and defer host-specific work until a selected responsibility requires it. |
+| Documentation and claim surface | concern | The active stage and release deferral are clear, but stale audit prose, replay wording and “without burden” metadata could overstate current proof. | Refresh the audit and mapped projections; keep ordinary-user language bounded and release explicitly dormant. |
+| Governance, candidate and release | blocker by design | No clean exact candidate, passing new independent review, hosted verification or new named-human exact-SHA release authority exists. Foreign `.remember` remains outside task cleanup authority. | Keep independent review active; do not push, tag, publish, weaken residue policy or touch foreign state. |
+
+### Weakest-link decision and remediation
+
+The cut's weakest links are semantic evidence integrity and fail-closed cleanup,
+not missing product forms. A stronger Runtime, graph store or durable carrier
+would neither detect a changed GT-19 closure request nor prevent the cleanup
+type error, and would worsen lifecycle cost in this exact slice. This is a
+current route decision, not a categorical ban: when an observed responsibility
+requires persistence, concurrency, cross-carrier coordination or recovery that
+lighter routes cannot close, Runtime, service, state carrier or another form
+re-enters the same non-compensating comparison. The minimum remediation here
+therefore:
+
+1. validates GT-18 and GT-19 role-level episode semantics, full vectors, state
+   carriers and responsibility scope inside the existing evidence module;
+2. recomputes every GT-19 decision from its bound closure request and rejects
+   any mismatch, sparse-view drift, mask drift or whole-product expansion;
+3. makes malformed cleanup data return a normal validation failure and adds
+   negative mutation coverage for every independent-review counterexample;
+4. changes future replay wording from an unconditional task rerun to preserving
+   current exact evidence and replaying only on task, evaluator, projection or
+   behavior-subject drift;
+5. binds the release task set by its exact field and narrows Codex metadata from
+   eliminating burden to reducing avoidable burden; and
+6. refreshes the four mapped surfaces and lightweight derived index without
+   adding a second authority source or invalidating unchanged behavior evidence.
+   The evidenced role-schema and negative-test increase revises the current
+   product-code/test ceiling from 364000 to 380000 bytes; 355244 measured bytes
+   still leave more than the required five-percent headroom and remain far
+   below the 1551209-byte pre-reshape baseline. The increase grants no future
+   mechanism allowance.
+
+This reacceptance does not average away the cut's blockers. It permits current
+GT-18/19 evidence to remain only if the strengthened validator accepts the
+unchanged records and their declared behavior-subject bytes have not drifted.
+The verifier, tests, package identity, documentation hashes and four mapped
+surfaces must all pass on the repaired tree; then a new genuinely independent
+product, specification, implementation and standards review must confirm the
+result. Until that happens the tree is not a clean exact candidate, and release
+remains closed.

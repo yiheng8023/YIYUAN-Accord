@@ -70,7 +70,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "b8bcb87b09085e3a70a580e83250683f08c40331d9c703e25f28f01f8bae2af0",
+      "repositorySha256": "eda7955f671dfa94ccf8e36d111b31851ffb761cd038f681ef0109a36703aae8",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -107,7 +107,7 @@
       "id": "self-bootstrapping-feasibility-and-reuse-study-2026-08-28",
       "kind": "exact-source-wheel-provenance-feasibility-ledger-and-p0-p4-results",
       "repositoryLocator": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
-      "repositorySha256": "5664249b1a36675bae8bc62e6777cddb8f5bbb65b1b860fcf4e7bd63bce7b04a",
+      "repositorySha256": "ba5472446532551b0e3906d99a47a9f213699325051e7fffd3f4d34a068b1252",
       "disposition": "admitted-source-bound-no-build-input-with-passing-claim-scoped-gt15-observation-and-live-mechanism-behavior-field-value-and-release-closed"
     }
   ],
@@ -356,7 +356,7 @@
               "Q3",
               "Q4"
             ],
-            "completion": "A source-bound whole-system ledger first binds the versioned claim-scoped baseline, target, counterfactual, evidence cutoff, confounders and invalidation triggers, then checks the proposition set for contradiction, category error, boundary drift and dependency impact before evaluating coupled product value, capability closure, form choice, environment adaptation, evidence, authority, burden, privacy, reliability, resources, architecture, lifecycle, documentation and governance. Exact 6a98cb7 corrected responsibility-allocation retirement; exact fd4b99a separates compact, causal fork and fresh sequential handoff, keeps code, conversation and execution topology orthogonal, derives sparse host-native and Accord views with admission and lifecycle masks, and keeps every module behind the shared responsibility-authority-state-evidence-lifecycle interface. Revised GT-17 passes only proposition coherence and eight-surface reconciliation after three-method cross-validation; its failed read-only route and high read cost remain counterevidence. Revised GT-19 passes only one source-bound four-episode Codex-local responsibility sequence after official-source, local-help, isolated-behavior, deterministic and canonical cross-checks; its failed routes and finite token cost remain counterevidence. Revised GT-07 passes only one fresh zero-inherited-history destination, three-way topology classification and destination-before-fixture-source release sequence; its preflight, provisional-output, read, evaluator, token and cleanup costs remain counterevidence, and no actual compact or fork operation is claimed. GT-18 remains bounded historical state-carrier evidence because it made no changed-topology claim. The ledger records blockers, unknowns, interactions and alternatives without a compensating average; remediates each justified weakest link through the minimum reversible route; and replays every affected acceptance surface until no logical conflict or weak link is hidden by a stronger dimension. Self-review remains distinct from independent review."
+            "completion": "The source-bound non-compensating whole-system ledger was refreshed from exact clean cut 59a340fbdec91d1b9287ba3c44a94a49348558c8 with current GT-18/19@2460adc evidence and both independent reviews. It rebinds baseline, target, counterfactual, cutoff, confounders and invalidation triggers; classifies every coupled dimension as pass, concern, blocker or unknown; and retains GT-07, GT-17, GT-18 and GT-19 blocked routes, correction paths, transcription failures, review failures, high token costs and cleanup costs as counterevidence. Review found two non-compensating cut blockers: GT-18/19 role semantics were not fail-closed against meaning-changing mutations, and malformed cleanup data could raise instead of returning a validation failure. The minimum remediation strengthens the existing evidence module with role-level schemas, immutable vectors and carriers, recomputed GT-19 closure requests, responsibility-scoped views and masks, public cleanup-type regression and negative mutations; it adds no Runtime, state store, dependency or second authority source. Stale unconditional replay wording, ambiguous GT-07-through-GT-19 release wording and burden-elimination metadata are narrowed at the same earliest affected boundary. Current behavior evidence is preserved only if the strengthened verifier accepts its unchanged source, task, evaluator, projection and behavior-subject bindings; otherwise the affected task reopens. Self-review remains distinct from the active independent review and creates no candidate or release authority."
           },
           {
             "id": "independent-review-and-form-future-exact-candidate",
@@ -578,7 +578,7 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[self-audit-remediate-and-reaccept-whole-system-balance] A source-bound non-compensating whole-system review binds the exact baseline, target, counterfactual, cutoff, confounders and invalidation triggers; closes every proposition contradiction, category error and boundary conflict from the earliest dependency; keeps code, conversation and execution topology independent; derives sparse capability views without making them authority; keeps deep modules behind a shared coherence interface; preserves cross-validated revised GT-07, GT-17 and GT-19 finite evidence with every failure and claim limit; remediates other weakest justified links through minimum reversible routes; and re-accepts every affected dimension and interaction without substituting self-review for independent review."
+            "stopCondition": "[self-audit-remediate-and-reaccept-whole-system-balance] The source-bound non-compensating ledger is refreshed from exact cut 59a340f with current GT-18/19@2460adc evidence and independent-review counterexamples; every baseline, target, counterfactual, cutoff, confounder, invalidation trigger, failure, correction and cost remains visible. The existing evidence module fails closed on GT-18/19 role semantics, vectors, carriers, GT-19 recomputed closure requests, responsibility scope, sparse views and masks plus malformed cleanup input; mapped replay, release-task and metadata wording are corrected without adding a mechanism. Current exact evidence is preserved only while strengthened validation and sparse behavior-subject bindings pass, and self-review never substitutes for the active independent review."
           },
           {
             "id": "independent-review-and-form-future-exact-candidate",
@@ -760,7 +760,7 @@
           "GT-19"
         ],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "On the unchanged future clean candidate, the goal carrier directly runs every declared deterministic check; verifies fresh GT-07 through GT-19 source bindings, exact environment compositions, direct-command results, structured digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent product, specification, implementation and standards review of feasibility, complete self-bootstrapping, product-form choice, isolation, activation-to-effect assurance, governed evolution, dynamic responsibility retirement, longitudinal continuity, interference, rollback, release, cleanup and claim ceiling. Any P0 or P1 blocks; only after this late gate passes may the same SHA be pushed."
+        "condition": "On the unchanged future clean candidate, the goal carrier directly runs every declared deterministic check; verifies the exact requiredTaskIdsForRelease set with fresh source bindings, exact environment compositions, direct-command results, structured digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent product, specification, implementation and standards review of feasibility, complete self-bootstrapping, product-form choice, isolation, activation-to-effect assurance, governed evolution, dynamic responsibility retirement, longitudinal continuity, interference, rollback, release, cleanup and claim ceiling. Any P0 or P1 blocks; only after this late gate passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
@@ -875,7 +875,7 @@
       "id": "codex",
       "packageId": "yiyuan-accord-codex",
       "packageVersion": "3.1.0",
-      "packageSha256": "70f8aef4c502bce376f103c0311b7492861e3c8c8d0d7c087b91581150f3450b",
+      "packageSha256": "19c6cad80cfe7ad3f65d99c2384053558d3a54acaa7aa990307d0a5b96afe424",
       "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "marketplace": ".agents/plugins/marketplace.json",
       "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -955,7 +955,7 @@
     },
     "targets": {
       "maxTrackedFiles": 86,
-      "maxProductCodeAndTestBytes": 364000,
+      "maxProductCodeAndTestBytes": 380000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -1008,7 +1008,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module, independent review required source-complete GT-17/18 validation, the f898ebd audit exposed missing responsibility-scoped retirement, later review exposed empty-policy admission and duplicate-key Hook parsing, and candidate audit exposed missing exact behavior-subject binding. The active increment therefore permits at most 86 tracked files and 364000 product-code-and-test bytes while retaining at least five percent byte headroom and three tracked-file slots. The bounded increase pays only for stable closure admission, scoped retirement, shared strict parsing, fail-closed sparse task-subject validation, exact old-to-new evaluator-delta proof, safe bounded Git reads and their negative regressions; it is not advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. Historical and revised observations remain compacted into existing carriers, immutable Git history preserves superseded facts, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module, independent review required source-complete GT-17/18 validation, the f898ebd audit exposed missing responsibility-scoped retirement, later review exposed empty-policy admission and duplicate-key Hook parsing, candidate audit exposed missing exact behavior-subject binding, and exact-cut 59a340f review proved that generic longitudinal shape still admitted meaning-changing GT-18/19 mutations and malformed cleanup could escape fail-closed validation. The active increment therefore permits at most 86 tracked files and 380000 product-code-and-test bytes while retaining at least five percent byte headroom and three tracked-file slots. The bounded increase pays only for stable closure admission, scoped retirement, shared strict parsing, fail-closed sparse task-subject and role-level longitudinal semantics, recomputed closure-request proof, safe bounded Git reads and their negative regressions; it is not advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. Historical and revised observations remain compacted into existing carriers, immutable Git history preserves superseded facts, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

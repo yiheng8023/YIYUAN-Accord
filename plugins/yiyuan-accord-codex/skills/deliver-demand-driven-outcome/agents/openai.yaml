@@ -1,6 +1,6 @@
 interface:
   display_name: "Demand-Driven Outcome Delivery"
-  short_description: "Complete goals without tool or topology burden"
+  short_description: "Reduce avoidable tool and topology burden"
   default_prompt: "Use $deliver-demand-driven-outcome to complete this goal while owning capability, continuity, correction, verification, and cleanup."
 
 policy:

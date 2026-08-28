@@ -541,18 +541,20 @@ increment and one active work item. Its ordered work is:
     regression, rollback, bounded retention, later invalidation, three exact
     disposable carrier edges and zero task residue; its two query corrections
     and 181410-token review remain counterevidence.
-10. `self-audit-remediate-and-reaccept-whole-system-balance` — completed. It
-    first bind a versioned claim-scoped baseline, target, counterfactual,
-    evidence cutoff, confounders and invalidation triggers; then evaluate
-    proposition contradictions, category errors and boundary drift before
-    coupled product value, form, environment, evidence, authority,
-    user burden, privacy/supply chain, reliability, resource, architecture,
-    lifecycle, documentation and governance dimensions; prioritize hard gates
-    and weakest justified links; apply minimum reversible remediation; and
-    replay every affected acceptance surface and preserve the finite revised
-    GT-07, GT-17 and GT-19 results plus fresh current-contract GT-18/19 with
-    their failures, corrections, costs and claim limits,
-    without treating self-review as independent evidence.
+10. `self-audit-remediate-and-reaccept-whole-system-balance` — completed and
+    refreshed from exact cut `59a340f`. It binds the current baseline, target,
+    counterfactual, evidence cutoff, confounders and invalidation triggers;
+    classifies every coupled dimension without averaging blockers away; and
+    retains the finite revised GT-07/17/18/19 failures, corrections, high token
+    costs and claim limits. Independent review reopened semantic evidence and
+    cleanup as the weakest links: GT-18/19 role-level meaning could be mutated
+    behind valid generic shape, and malformed cleanup could raise. The minimum
+    repair strengthens the existing evidence module and negative tests,
+    recomputes GT-19 closure decisions, narrows replay/task-set/metadata wording
+    and adds no Runtime, durable state, dependency or second authority source.
+    Current evidence remains accepted only while the strengthened validation
+    and sparse behavior-subject bindings pass; self-review is not independent
+    evidence.
 11. `independent-review-and-form-future-exact-candidate` — active. Sparse
     candidate qualification retains GT-07 and GT-17 through exact amendments;
     fresh isolated GT-11 at `f4dce57`, GT-12 at `72709b8` and single-arm GT-13
@@ -563,9 +565,13 @@ increment and one active work item. Its ordered work is:
     contract GT-18/19 at `2460adc` now pass only their finite evolution and
     responsibility-allocation sequences with blocked routes, transcription and
     query corrections, the initial failed review and high costs retained. A new
+    independent specification and standards reviews of exact `59a340f` failed
+    on the audit staleness, replay contradiction, evidence-semantic fail-open,
+    malformed-cleanup exception, release-task wording and metadata overclaim
+    above. Those findings are remediation inputs, not candidate evidence. A new
     genuinely independent product, specification, implementation and standards
-    review remains required before this stage can complete or an exact candidate
-    can exist.
+    review of the repaired exact tree remains required before this stage can
+    complete or an exact candidate can exist.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may
