@@ -19,7 +19,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "b07887d078f8309e176093a349114019804814c2b5ea37817a6ff44da0b4594c",
+  "canonicalGoalObjectiveSha256": "b892036313a362a66ecdd67fed3f299630917e3f383ec436b5451d21b517287b",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -406,7 +406,7 @@
         "representative-behavior"
       ],
       "assessment": "continuing",
-      "assessmentScope": "At exact behavior-bearing revision 84447a7a1b9557e22ef5585d159459e8701fa40e, fresh source-complete Codex-local GT-14 through GT-16 observations pass only their claim-scoped current-enabled environment admission, pre-authorship feasibility/no-build route decision and one disposable pure-data minimum-form bootstrap. Independent review rejected the later f0ed9ce/08eb72a GT-17/18 completion claim and its former-verifier acceptance; both remain counterevidence. At exact 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c, a fresh bounded replay passes GT-17 only for its former global-surface contract and GT-18 only for one synthetic four-episode full-vector sequence with source-bound state-carrier edges, regression rollback, native no-add retention, later invalidation, replacement, retirement and zero task resources. GT-18 claims no code- or conversation-topology transition and remains unaffected. Exact fd4b99a601cbeec00ac1311ac646c48f1c892d94 now passes revised GT-17 only for proposition classification, stop-before-conflict propagation and eight-surface reconciliation. Its first Windows read-only route remains failed evidence-unavailable counterevidence, and the successful arm's 76493 reported tokens exclude low-interference or efficient-reading claims. At the same revision, revised GT-19 passes only one source-bound four-episode Codex-local sense-environment responsibility-allocation sequence after official-source, local-help, isolated Accord/native behavior, deterministic post-state and canonical-validator cross-checks. Official declaration and sparse overlap alone did not retire anything; only current-plugin/sense-environment retired after the native route closed the same responsibility and lifecycle, bind-authority and fallback remained, and evidence expiry restored the plugin allocation. The pure-data-only arm, schema rejection, hash-transcription failure and PowerShell API mismatch remain counterevidence; successful Accord/native arms reported 21183/19642 tokens. At cb11759362217dee4ff08aa43db75046bd63c651, revised GT-07 passes only one Codex-local fresh zero-inherited-history destination receipt, three-way compact/fork/sequential-handoff classification and destination-before-fixture-source release sequence. Code topology and local execution placement remained independently unchanged. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator type mismatch, 22607 tokens and slow cleanup remain counterevidence; actual compact and fork operations were not performed. BAL-04 selected no added form and no net Accord gain for its exact paired condition. Exact 6a98cb7 corrected route-level leakage to responsibility-allocation retirement; fd4b99a adds source-bound successor observation, graph-derived same-responsibility overlap and topology/coherence gates. Revised GT-07, GT-17 and GT-19 now have only their finite source-complete Codex-local results. Fresh isolated GT-11 at f4dce570c5aa97a4956a1faeda1fdd42ff070207 and GT-12 at 72709b8c78ccb18b0978887f5bce8c46b25f7c11 now pass only their bounded current-subject adaptive-repair and resource-stewardship claims while preserving their evaluator and route corrections. Fresh single-arm GT-13 at f182a0a1113e629c84c5f4caf9ae8c10856db410 passes only the saved-checkout collaboration closure that aligns fresh GT-11/12, four mapped surfaces, conditional research and the publication boundary; one fixture no-match command and 32794 evaluator tokens exclude an efficient-reading claim. Global deterministic reacceptance is complete; independent review is active. Official-clean behavior, Hook firing, implicit activation, live-mechanism effectiveness on a genuine gap, durable carrier need, cross-host or field value, production safety, whole-system balance, candidate readiness and release readiness remain unproved.",
+      "assessmentScope": "Fresh current-contract GT-14, GT-15 and GT-16 at exact behavior-bearing revision 1bbcc9542c92674dc0b5adcb032d6f9b01248531 pass only one claim-scoped current-enabled environment admission, one primary-source bounded-improvement feasibility/no-build decision and one disposable pure-data minimum-form bootstrap. GT-14 retains preflight/schema failures, a policy-blocked read arm and 46141 evaluator tokens; GT-15 retains one self-deferred answer and 34448 tokens; GT-16 retains two failed effect arms, one CLI preflight, 52839 tokens, a guardian warning and 17.3-second cleanup. Exact 84447a7 GT-14 through GT-16 remain finite superseded-contract history, not current candidate proof. Independent review rejected the later f0ed9ce/08eb72a GT-17/18 completion claim and its former-verifier acceptance; both remain counterevidence. At exact 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c, a fresh bounded replay passes GT-17 only for its former global-surface contract and GT-18 only for one synthetic four-episode full-vector sequence with source-bound state-carrier edges, regression rollback, native no-add retention, later invalidation, replacement, retirement and zero task resources. GT-18 claims no code- or conversation-topology transition and remains unaffected. Exact fd4b99a601cbeec00ac1311ac646c48f1c892d94 now passes revised GT-17 only for proposition classification, stop-before-conflict propagation and eight-surface reconciliation. Its first Windows read-only route remains failed evidence-unavailable counterevidence, and the successful arm's 76493 reported tokens exclude low-interference or efficient-reading claims. At the same revision, revised GT-19 passes only one source-bound four-episode Codex-local sense-environment responsibility-allocation sequence after official-source, local-help, isolated Accord/native behavior, deterministic post-state and canonical-validator cross-checks. Official declaration and sparse overlap alone did not retire anything; only current-plugin/sense-environment retired after the native route closed the same responsibility and lifecycle, bind-authority and fallback remained, and evidence expiry restored the plugin allocation. The pure-data-only arm, schema rejection, hash-transcription failure and PowerShell API mismatch remain counterevidence; successful Accord/native arms reported 21183/19642 tokens. At cb11759362217dee4ff08aa43db75046bd63c651, revised GT-07 passes only one Codex-local fresh zero-inherited-history destination receipt, three-way compact/fork/sequential-handoff classification and destination-before-fixture-source release sequence. Code topology and local execution placement remained independently unchanged. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator type mismatch, 22607 tokens and slow cleanup remain counterevidence; actual compact and fork operations were not performed. BAL-04 selected no added form and no net Accord gain for its exact paired condition. Exact 6a98cb7 corrected route-level leakage to responsibility-allocation retirement; fd4b99a adds source-bound successor observation, graph-derived same-responsibility overlap and topology/coherence gates. Revised GT-07, GT-17 and GT-19 now have only their finite source-complete Codex-local results. Fresh isolated GT-11 at f4dce570c5aa97a4956a1faeda1fdd42ff070207 and GT-12 at 72709b8c78ccb18b0978887f5bce8c46b25f7c11 now pass only their bounded current-subject adaptive-repair and resource-stewardship claims while preserving their evaluator and route corrections. Fresh single-arm GT-13 at f182a0a1113e629c84c5f4caf9ae8c10856db410 passes only the saved-checkout collaboration closure that aligns fresh GT-11/12, four mapped surfaces, conditional research and the publication boundary; one fixture no-match command and 32794 evaluator tokens exclude an efficient-reading claim. Global deterministic reacceptance is complete for this enlarged current subset; fresh current GT-18/19 and a new independent full-system review still remain. Official-clean behavior, Hook firing, implicit activation, live-mechanism effectiveness on a genuine gap, durable carrier need, cross-host or field value, production safety, whole-system balance, candidate readiness and release readiness remain unproved.",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json",
@@ -419,6 +419,27 @@
           "locator": "evals/observations/2026-08-28-cb11759-gt-07-codex-local.json",
           "sha256": "d64fa48c7a2963d7f594057fb429f5a5f42612b106b6193357f69d503cbfbfd1",
           "claim": "Passed only for one revised GT-07 Codex-local fixture at cb11759362217dee4ff08aa43db75046bd63c651: capacity remained unknown; one fresh zero-inherited-history destination classified compact, causal fork and sequential handoff without conflation; it verified exact minimum state, Skill and code identity while sourceReleased=false; independent source reconciliation released only the task fixture afterward; code topology and local execution placement remained unchanged; cleanup removed only task-owned residue. Three CLI/schema preflight failures, one provisional draft, two command corrections, one source-evaluator time-type mismatch, 22607 tokens and slow cleanup remain visible. This does not prove an actual compact or fork operation, need to move the healthy main task, a universal threshold, Hook causality, cross-host equivalence, field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-14-codex-local.json",
+          "sha256": "a67a2109b52d905dda1c0e7b1b94c8027ce80c20cbfa3db4f6d36d05789da913",
+          "claim": "Passed only for one exact current-enabled static and Skill-exposure composition at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Installation, enablement, activation, behavior and value were separated; all required counterexamples were rejected; live configuration and private state were preserved; task residue was removed. Preflight/schema failures, one policy-blocked read arm and 46141 reported evaluator tokens remain counterevidence. This does not prove Hook firing, outer-carrier behavior, official-clean or no-Accord behavior, causal Accord value, interference, cross-host behavior, field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-15-codex-local.json",
+          "sha256": "b335f273806111f4227e03eda6bcc89ebd76b8e7486137e4db13a703dc1d08bc",
+          "claim": "Passed only for current primary-source feasibility and adoption judgment for bounded evaluator-governed improvement of one exact behavior subject at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Transferable patterns may be internalized, but no dependency or new mechanism is selected. The first self-deferred answer and 34448 reported evaluator tokens remain counterevidence. This does not prove implementation, product-form sufficiency, complete self-bootstrapping, end-to-end or field value, universal wheel coverage, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "R3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-16-codex-local.json",
+          "sha256": "1797281aec1b84f40b7fe50688ba722d3c444aafce06d6a8229386bb0222379f",
+          "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "R3"
         }
@@ -485,6 +506,27 @@
           "claim": "Passed only for this single-arm current-Skill Codex-local saved-checkout dogfood: fresh GT-11/12 qualification, four-surface and paused-goal alignment, conditional research disposition, one exact human publication boundary, deterministic conformance and cleanup. One fixture-only no-match command and 32794 evaluator tokens remain interference counterevidence. This does not prove installed Hook firing, implicit invocation, comparative value, Claude or Cloud behavior, field effectiveness, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q1"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-14-codex-local.json",
+          "sha256": "a67a2109b52d905dda1c0e7b1b94c8027ce80c20cbfa3db4f6d36d05789da913",
+          "claim": "Passed only for one exact current-enabled static and Skill-exposure composition at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Installation, enablement, activation, behavior and value were separated; all required counterexamples were rejected; live configuration and private state were preserved; task residue was removed. Preflight/schema failures, one policy-blocked read arm and 46141 reported evaluator tokens remain counterevidence. This does not prove Hook firing, outer-carrier behavior, official-clean or no-Accord behavior, causal Accord value, interference, cross-host behavior, field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q1"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-15-codex-local.json",
+          "sha256": "b335f273806111f4227e03eda6bcc89ebd76b8e7486137e4db13a703dc1d08bc",
+          "claim": "Passed only for current primary-source feasibility and adoption judgment for bounded evaluator-governed improvement of one exact behavior subject at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Transferable patterns may be internalized, but no dependency or new mechanism is selected. The first self-deferred answer and 34448 reported evaluator tokens remain counterevidence. This does not prove implementation, product-form sufficiency, complete self-bootstrapping, end-to-end or field value, universal wheel coverage, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q1"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-16-codex-local.json",
+          "sha256": "1797281aec1b84f40b7fe50688ba722d3c444aafce06d6a8229386bb0222379f",
+          "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q1"
         }
       ]
     },
@@ -529,6 +571,27 @@
           "locator": "evals/observations/2026-08-28-f182a0a-gt-13-codex-local.json",
           "sha256": "4ed187bdda6adaba40af6290973d4815697449925aecb565840110711a5b6a35",
           "claim": "Passed only for this single-arm current-Skill Codex-local saved-checkout dogfood: fresh GT-11/12 qualification, four-surface and paused-goal alignment, conditional research disposition, one exact human publication boundary, deterministic conformance and cleanup. One fixture-only no-match command and 32794 evaluator tokens remain interference counterevidence. This does not prove installed Hook firing, implicit invocation, comparative value, Claude or Cloud behavior, field effectiveness, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q2"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-14-codex-local.json",
+          "sha256": "a67a2109b52d905dda1c0e7b1b94c8027ce80c20cbfa3db4f6d36d05789da913",
+          "claim": "Passed only for one exact current-enabled static and Skill-exposure composition at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Installation, enablement, activation, behavior and value were separated; all required counterexamples were rejected; live configuration and private state were preserved; task residue was removed. Preflight/schema failures, one policy-blocked read arm and 46141 reported evaluator tokens remain counterevidence. This does not prove Hook firing, outer-carrier behavior, official-clean or no-Accord behavior, causal Accord value, interference, cross-host behavior, field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q2"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-15-codex-local.json",
+          "sha256": "b335f273806111f4227e03eda6bcc89ebd76b8e7486137e4db13a703dc1d08bc",
+          "claim": "Passed only for current primary-source feasibility and adoption judgment for bounded evaluator-governed improvement of one exact behavior subject at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Transferable patterns may be internalized, but no dependency or new mechanism is selected. The first self-deferred answer and 34448 reported evaluator tokens remain counterevidence. This does not prove implementation, product-form sufficiency, complete self-bootstrapping, end-to-end or field value, universal wheel coverage, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q2"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-16-codex-local.json",
+          "sha256": "1797281aec1b84f40b7fe50688ba722d3c444aafce06d6a8229386bb0222379f",
+          "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
         }
@@ -577,6 +640,27 @@
           "locator": "evals/observations/2026-08-28-f182a0a-gt-13-codex-local.json",
           "sha256": "4ed187bdda6adaba40af6290973d4815697449925aecb565840110711a5b6a35",
           "claim": "Passed only for this single-arm current-Skill Codex-local saved-checkout dogfood: fresh GT-11/12 qualification, four-surface and paused-goal alignment, conditional research disposition, one exact human publication boundary, deterministic conformance and cleanup. One fixture-only no-match command and 32794 evaluator tokens remain interference counterevidence. This does not prove installed Hook firing, implicit invocation, comparative value, Claude or Cloud behavior, field effectiveness, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-14-codex-local.json",
+          "sha256": "a67a2109b52d905dda1c0e7b1b94c8027ce80c20cbfa3db4f6d36d05789da913",
+          "claim": "Passed only for one exact current-enabled static and Skill-exposure composition at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Installation, enablement, activation, behavior and value were separated; all required counterexamples were rejected; live configuration and private state were preserved; task residue was removed. Preflight/schema failures, one policy-blocked read arm and 46141 reported evaluator tokens remain counterevidence. This does not prove Hook firing, outer-carrier behavior, official-clean or no-Accord behavior, causal Accord value, interference, cross-host behavior, field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-15-codex-local.json",
+          "sha256": "b335f273806111f4227e03eda6bcc89ebd76b8e7486137e4db13a703dc1d08bc",
+          "claim": "Passed only for current primary-source feasibility and adoption judgment for bounded evaluator-governed improvement of one exact behavior subject at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Transferable patterns may be internalized, but no dependency or new mechanism is selected. The first self-deferred answer and 34448 reported evaluator tokens remain counterevidence. This does not prove implementation, product-form sufficiency, complete self-bootstrapping, end-to-end or field value, universal wheel coverage, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q3"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-16-codex-local.json",
+          "sha256": "1797281aec1b84f40b7fe50688ba722d3c444aafce06d6a8229386bb0222379f",
+          "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q3"
         }
@@ -633,6 +717,27 @@
           "claim": "Passed only for this single-arm current-Skill Codex-local saved-checkout dogfood: fresh GT-11/12 qualification, four-surface and paused-goal alignment, conditional research disposition, one exact human publication boundary, deterministic conformance and cleanup. One fixture-only no-match command and 32794 evaluator tokens remain interference counterevidence. This does not prove installed Hook firing, implicit invocation, comparative value, Claude or Cloud behavior, field effectiveness, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-14-codex-local.json",
+          "sha256": "a67a2109b52d905dda1c0e7b1b94c8027ce80c20cbfa3db4f6d36d05789da913",
+          "claim": "Passed only for one exact current-enabled static and Skill-exposure composition at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Installation, enablement, activation, behavior and value were separated; all required counterexamples were rejected; live configuration and private state were preserved; task residue was removed. Preflight/schema failures, one policy-blocked read arm and 46141 reported evaluator tokens remain counterevidence. This does not prove Hook firing, outer-carrier behavior, official-clean or no-Accord behavior, causal Accord value, interference, cross-host behavior, field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q4"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-15-codex-local.json",
+          "sha256": "b335f273806111f4227e03eda6bcc89ebd76b8e7486137e4db13a703dc1d08bc",
+          "claim": "Passed only for current primary-source feasibility and adoption judgment for bounded evaluator-governed improvement of one exact behavior subject at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Transferable patterns may be internalized, but no dependency or new mechanism is selected. The first self-deferred answer and 34448 reported evaluator tokens remain counterevidence. This does not prove implementation, product-form sufficiency, complete self-bootstrapping, end-to-end or field value, universal wheel coverage, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q4"
+        },
+        {
+          "locator": "evals/observations/2026-08-28-1bbcc95-gt-16-codex-local.json",
+          "sha256": "1797281aec1b84f40b7fe50688ba722d3c444aafce06d6a8229386bb0222379f",
+          "claim": "Passed only for one exact disposable pure-data minimum-form bootstrap at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. The current core held completion before effect, one isolated executor updated only the task-owned state carrier, independent checks verified activation, execution, consequence, rollback, resource release, zero residue and cleanup, and all three required counterexamples failed closed. Two failed effect arms, one CLI preflight, 52839 successful-or-failed evaluator tokens, a guardian warning and 17.3-second cleanup remain counterevidence. This does not prove live-host behavior, plugin or Runtime sufficiency, durable learning, cross-host portability, population or field value, candidate readiness or release readiness.",
+          "bindsProjection": "codex",
+          "supportsCriterion": "Q4"
         }
       ]
     }
@@ -668,7 +773,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "0a9540a6a60a6e92aa30a7fe1156bb88a15e0d379394776d0a34c543635d9e3c",
+    "releaseNotesSha256": "6bbf8c330d692f9495b758363d7df6f06d4007b0dcee61941d15c5adc4d52965",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,

@@ -1,0 +1,109 @@
+{
+  "taskId": "GT-15",
+  "goldenTaskSha256": "27c2049db8a2357f8d872e824e9486d8e0653e25346844802a5cb8e8a7bcd456",
+  "evaluationContractSha256": "13b98d00de5245ce61ed5ba2e05dd245f8c3b13302108fa13a2ee7f71c01987e",
+  "evaluatedRevision": "1bbcc9542c92674dc0b5adcb032d6f9b01248531",
+  "observedAt": "2026-08-28T19:26:57Z",
+  "observer": {
+    "kind": "host-event-recorder",
+    "identity": "Primary Codex goal carrier after current primary-source research, isolated counterexample evaluation and deterministic decision check"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex Desktop saved-checkout source with isolated ephemeral Codex CLI evaluator",
+    "hostVersion": "codex-cli 0.150.1 with gpt-5.6-luna low; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+    "sessionId": "01a049d5-92ac-7671-97a9-9ed44a536f1d"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "81357dabe89bf4ba9441de7e2b9c42ec5d10919173f6a491a69eb00fdca9156a",
+    "mechanismFiles": [
+      "plugins/yiyuan-accord-codex/hooks/hooks.json"
+    ],
+    "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1"
+  },
+  "startingState": {
+    "declared": "The sub-capability and intended outcome are supplied. Existing native, official, open-source and maintained third-party approaches may exist; their popularity, license, platform, metric, safety, authority and lifecycle fit are not presumed. Product implementation is not yet authorized by conceptual attractiveness alone."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
+      "recordId": "GT-15-1bbcc95",
+      "sha256": "91e018bd39cad50d06da33ff103d71c87f0e13e8f0a640db1b9f77e36d1b1ff2",
+      "postSessionBindingsSha256": "0738906829fb7a77ea707fd8a28df9b265fe83faeddd785b39184020a2a4d7c0",
+      "claim": "Passed only for current primary-source feasibility and adoption judgment for bounded evaluator-governed improvement of one exact behavior subject at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Transferable patterns may be internalized, but no dependency or new mechanism is selected. The first self-deferred answer and 34448 reported evaluator tokens remain counterevidence. This does not prove implementation, product-form sufficiency, complete self-bootstrapping, end-to-end or field value, universal wheel coverage, candidate readiness or release readiness."
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "separate-source-fact-inference-hypothesis-and-product-decision": "observed",
+      "recover-prior-counterevidence-and-repeated-failure": "observed",
+      "record-primary-sources-existing-wheels-licenses-maintenance-and-provenance": "observed",
+      "extract-exact-transferable-patterns-fit-assumptions-limitations-side-effects-and-exit-conditions": "observed",
+      "classify-sub-capabilities-as-feasible-conditionally-feasible-infeasible-or-unknown": "observed",
+      "run-only-minimum-isolated-high-risk-probes": "observed",
+      "issue-go-conditional-go-no-go-or-research-more-with-recheck-triggers": "observed"
+    },
+    "prohibited": {
+      "implement-before-the-feasibility-gate": "absent",
+      "copy-a-person-repository-platform-or-metric-as-authority": "absent",
+      "treat-stars-praise-or-simplicity-as-fit-evidence": "absent",
+      "hide-a-failed-or-unknown-premise-with-more-machinery": "absent",
+      "invent-a-runtime-database-or-state-carrier-without-need": "absent",
+      "claim-complete-self-bootstrapping-from-one-self-evolution-loop": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {"kind": "refresh-primary-repository-license-maintenance-and-wheel-facts"},
+    {"kind": "separate-source-inference-hypothesis-and-product-decision"},
+    {"kind": "extract-transferable-mechanisms-with-fit-and-exit-boundaries"},
+    {"kind": "compare-no-build-reuse-composition-and-authorship"},
+    {"kind": "reject-three-required-counterexamples"},
+    {"kind": "correct-self-deferred-probe-and-retain-cost"},
+    {"kind": "select-no-build-no-dependency-and-cleanup"}
+  ],
+  "observedHumanActions": [
+    {"kind": "authorize-bounded-research-and-rational-pattern-absorption"}
+  ],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {"kind": "current-source-ledger-refreshed"},
+    {"kind": "bounded-improvement-conditionally-feasible"},
+    {"kind": "pattern-internalization-admitted"},
+    {"kind": "dependency-and-authorship-not-selected"},
+    {"kind": "no-package-or-persistent-mechanism-added"},
+    {"kind": "task-root-cleanup"}
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted",
+    "R2": "accepted",
+    "R3": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Passed only for current primary-source feasibility and adoption judgment for bounded evaluator-governed improvement of one exact behavior subject at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Transferable patterns may be internalized, but no dependency or new mechanism is selected. The first self-deferred answer and 34448 reported evaluator tokens remain counterevidence. This does not prove implementation, product-form sufficiency, complete self-bootstrapping, end-to-end or field value, universal wheel coverage, candidate readiness or release readiness."
+  },
+  "decision": {
+    "state": "passed"
+  },
+  "evidenceClass": "representative-behavior"
+}

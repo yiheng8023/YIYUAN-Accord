@@ -9,7 +9,11 @@ deterministic, side-effect-free plain-data reference core, whose implementation
 is now complete. Exact checkpoint `553f5a97e08390117e877e7b913c7a501018bfa5`
 retains failed GT-14 through GT-16 attempts: fixture execution and cleanup are
 observed, but required composition, wheel/provenance and full-vector source
-facts are missing. Source-complete activation/effect/lifecycle replay remains
+facts are missing. Fresh current-contract GT-14 through GT-16 at exact
+`1bbcc9542c92674dc0b5adcb032d6f9b01248531` now pass only one exact
+environment admission, one primary-source no-dependency feasibility decision
+and one disposable pure-data minimum-form bootstrap; their failures and costs
+remain explicit. Fresh current GT-18/19 replay and independent review remain
 active. The implementation does not
 admit a Runtime, durable state layer, durable evolution or live-mechanism claim.
 The exact v3.1 package checkpoint

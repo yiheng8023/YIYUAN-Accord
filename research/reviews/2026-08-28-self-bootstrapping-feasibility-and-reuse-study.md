@@ -94,6 +94,41 @@ that its source, baseline, authority or product-form premise was valid.
 
 ### Exact source, wheel and provenance ledger
 
+#### Current bounded-improvement refresh at `1bbcc95`
+
+Cutoff: `2026-08-28T19:23:11Z`. This refresh names one narrower
+sub-capability: **bounded evaluator-governed improvement of one behavior
+subject as one component of complete self-bootstrapping**. It does not replace
+the broader ledger below. Repository and commit facts were refreshed from the
+GitHub repository/commit APIs, package facts from PyPI project JSON, and the
+mechanism interpretation from the linked repository documentation. No package
+was downloaded, installed, imported or executed.
+
+| Candidate | Exact current fact | Transferable pattern | Limit and current decision |
+| --- | --- | --- | --- |
+| Karpathy `autoresearch` | [`228791fb499afffb54b46200aca536f79142f117`](https://github.com/karpathy/autoresearch/tree/228791fb499afffb54b46200aca536f79142f117), `master`, not archived, `pushedAt=2026-03-26T00:07:37Z`; the README declares MIT, but the root still has no standalone `LICENSE` and repository metadata reports no detected license | One mutable behavior surface, human-owned experiment contract, fixed budget and metric, keep/discard loop | Single NVIDIA GPU, one metric and cross-machine non-comparability cannot stand in for Accord's authority, full vector or cleanup. Study the pattern; hold direct copying pending component-level license confirmation. |
+| DSPy | [`3afc03f2d041a28ba5f50a963a328c3926b40acd`](https://github.com/stanfordnlp/dspy/tree/3afc03f2d041a28ba5f50a963a328c3926b40acd), `main`, not archived; MIT; `dspy==3.3.1`, Python `>=3.10,<3.15`, wheel SHA-256 `250049f565f52c014609ce2d3ca0de17a6c9449ac961492d61a009aa30dceabf` | Separate metric/evaluator from proposal, bound evaluation budget, use feedback and Pareto-aware candidate selection | Requires representative data and trustworthy metrics; optimizing a proxy can overfit it. Retain as a maintained future reuse candidate, not a current dependency. |
+| OpenAI Evals | [`8eac7a7de5215c907fbddc30efdaf316913eccdd`](https://github.com/openai/evals/tree/8eac7a7de5215c907fbddc30efdaf316913eccdd), `main`, not archived; MIT; `evals==3.0.1.post1`, Python `>=3.9`, wheel SHA-256 `0abcb2051303500784b1641a6e4f6b813ed43ad64f879a37d344a6774eb8eb78` | Separate evaluation logic from solving strategy; keep task and grader reviewable | May add API-key, data-rights, dependency and material-cost duties; it is an evaluation framework, not Accord's authority, state or lifecycle closure. Retain as a future specialized evaluator candidate only. |
+
+Source facts support one **conditional-go for pattern internalization** and a
+current **no-build/no-dependency decision**. The existing Accord core already
+binds behavior-subject bytes, evaluator contracts, non-compensating dimensions,
+counterevidence, rollback, recheck and cleanup. The current gap is fresh
+qualification, not a missing experiment runtime. A fresh isolated evaluator
+resisted all three seeded counterexamples: popularity with missing fit or
+license, proxy improvement without authority/full-vector/cleanup control, and
+an unknown high-risk premise without a safe probe. Its first otherwise-correct
+answer incorrectly deferred the probe that it had just performed; the corrected
+replay made the current no-build decision explicit. This is useful process-loss
+counterevidence, not a reason to add orchestration machinery.
+
+Recheck only if the behavior subject or evaluator changes, a concrete
+integration gap survives the existing loop, a source's license or maintenance
+facts change, or a proposed route introduces new platform, credential, data,
+cost, rollback or cleanup duties. Self-evolution remains one module within the
+bounded self-bootstrap; this result proves neither the whole loop nor candidate
+or release readiness.
+
 Cutoff: `2026-08-28T02:02:33Z`. Repository facts came from the GitHub repository
 and commit APIs; package facts came from each named PyPI project JSON response;
 mechanism facts were checked against the linked primary documentation. A wheel

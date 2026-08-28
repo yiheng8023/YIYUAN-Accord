@@ -1,17 +1,18 @@
 {
   "taskId": "GT-14",
-  "goldenTaskSha256": "05020a9a46d96135cc4f70e1d622c4a911de4336f2ef1e736438d3cc563ea6e8",
-  "evaluationContractSha256": "bf0b9ee138be7740a6f76e5a216e80290d0065d6ea56a98ef98c12f1799cf91c",
-  "observedAt": "2026-08-28T03:34:21Z",
+  "goldenTaskSha256": "4cdc033727c116e004cbc48af796dbf8e47f8129941fe66f56aff070c895087b",
+  "evaluationContractSha256": "13b98d00de5245ce61ed5ba2e05dd245f8c3b13302108fa13a2ee7f71c01987e",
+  "evaluatedRevision": "1bbcc9542c92674dc0b5adcb032d6f9b01248531",
+  "observedAt": "2026-08-28T19:18:17Z",
   "observer": {
     "kind": "host-event-recorder",
-    "identity": "source-complete direct command recorder"
+    "identity": "Primary Codex goal carrier after isolated semantic evaluation and independent deterministic poststate"
   },
   "hostIdentity": {
     "adapterId": "codex",
-    "hostProduct": "Codex Desktop saved-checkout goal carrier",
-    "hostVersion": "Codex CLI 0.150.1; Codex Desktop version and model route not exposed; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
-    "sessionId": "01a043c6-c911-72c2-bea1-903d7f231a5a"
+    "hostProduct": "Codex Desktop saved-checkout source with isolated ephemeral Codex CLI evaluator",
+    "hostVersion": "codex-cli 0.150.1 with gpt-5.6-luna low; Python 3.14.7; PowerShell 7.6.5; Windows NT 10.0.26200.0",
+    "sessionId": "01a049cc-aad2-7322-9201-98cd0fd5ab0f"
   },
   "projectionIdentity": {
     "adapterId": "codex",
@@ -22,7 +23,7 @@
     ],
     "mechanismSha256": "8f8e066c5bda4871a659d67f4d78d90a55c75d6d8a14f4df49965fa32a200051",
     "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
-    "skillSha256": "ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765"
+    "skillSha256": "8f064edf8baa4fd293bf31e19126eaef49a2bde7b562f861448c72eaabb06dc1"
   },
   "startingState": {
     "declared": "The current host exposes plugin names, versions and enabled states but is not an official-clean baseline. Credential-bearing configuration, session contents and unrelated persistent state are outside scope. Disposable isolation is available only when its cost and claim value justify it."
@@ -31,10 +32,10 @@
     {
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json",
-      "recordId": "GT-14-84447a7",
-      "sha256": "bd08d09d1f0f6d4d94ca4a9cd1a959c77492a7bc11f6126a541ee63c9a46c90c",
-      "claim": "Passed only for provenance-bound admission of this exact current-enabled composition. It does not prove official-clean or no-Accord behavior, model identity, Hook firing, causal Accord effect, interference, value or cross-host behavior.",
-      "postSessionBindingsSha256": "9cb4b958d33c9ac571a1b5d3881478ff5d0647525a6375e67faa0b566b9fb72b"
+      "recordId": "GT-14-1bbcc95",
+      "sha256": "bfa5a2077ca6a6aab4ccc2b4728227a363363a73c1ae4f5d9c88b6e0f83accb2",
+      "postSessionBindingsSha256": "998208fa9bb9a5e05871726eb04cf0f2a84ad999057526977230777926a5566a",
+      "claim": "Passed only for one exact current-enabled static and Skill-exposure composition at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Installation, enablement, activation, behavior and value were separated; all required counterexamples were rejected; live configuration and private state were preserved; task residue was removed. Preflight/schema failures, one policy-blocked read arm and 46141 reported evaluator tokens remain counterevidence. This does not prove Hook firing, outer-carrier behavior, official-clean or no-Accord behavior, causal Accord value, interference, cross-host behavior, field value, candidate readiness or release readiness."
     }
   ],
   "behaviorDecisions": {
@@ -58,16 +59,15 @@
     }
   },
   "observedAgentActions": [
-    {
-      "kind": "bounded-task-action",
-      "result": "environment/source/route/effect/lifecycle evidence captured without authority expansion"
-    }
+    {"kind": "bind-exact-non-secret-environment-provenance"},
+    {"kind": "separate-installation-enablement-activation-behavior-and-value"},
+    {"kind": "reject-three-required-counterexamples"},
+    {"kind": "narrow-claim-instead-of-fabricating-baseline"},
+    {"kind": "retain-preflight-policy-and-token-cost-counterevidence"},
+    {"kind": "verify-independent-poststate-and-cleanup"}
   ],
   "observedHumanActions": [
-    {
-      "kind": "human-boundary",
-      "result": "supplied goal, corrections, current-enabled premise and authorization to continue only"
-    }
+    {"kind": "bind-current-enabled-host-and-preservation-boundary"}
   ],
   "humanBurden": {
     "avoidable-question-count": 0,
@@ -76,10 +76,10 @@
     "user-operated-capability-or-topology-count": 0
   },
   "materialEffects": [
-    {
-      "kind": "claim-scoped-result",
-      "result": "Passed only for provenance-bound admission of this exact current-enabled composition. It does not prove official-clean or no-Accord behavior, model identity, Hook firing, causal Accord effect, interference, value or cross-host behavior."
-    }
+    {"kind": "exact-current-composition-admitted"},
+    {"kind": "unproved-lifecycle-facets-kept-unknown"},
+    {"kind": "live-host-and-private-state-preserved"},
+    {"kind": "task-root-cleanup"}
   ],
   "residue": [],
   "cleanup": {
@@ -98,7 +98,7 @@
   "claimLimit": {
     "retainedFailure": false,
     "excludedClaims": [],
-    "statement": "Passed only for provenance-bound admission of this exact current-enabled composition. It does not prove official-clean or no-Accord behavior, model identity, Hook firing, causal Accord effect, interference, value or cross-host behavior."
+    "statement": "Passed only for one exact current-enabled static and Skill-exposure composition at 1bbcc9542c92674dc0b5adcb032d6f9b01248531. Installation, enablement, activation, behavior and value were separated; all required counterexamples were rejected; live configuration and private state were preserved; task residue was removed. Preflight/schema failures, one policy-blocked read arm and 46141 reported evaluator tokens remain counterevidence. This does not prove Hook firing, outer-carrier behavior, official-clean or no-Accord behavior, causal Accord value, interference, cross-host behavior, field value, candidate readiness or release readiness."
   },
   "decision": {
     "state": "passed"

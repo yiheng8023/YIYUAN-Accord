@@ -42,10 +42,14 @@ structural bindings, not self-proof of real source authenticity. Exact checkpoin
 `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14 through
 GT-16 attempts: fixture execution and cleanup were observed, but required
 composition, wheel/provenance and full-vector source facts were not retained.
-At exact revision `84447a7a1b9557e22ef5585d159459e8701fa40e`,
-source-complete GT-14 through GT-16 observations pass only bounded
-current-composition admission, reuse-before-build and one disposable pure-data
-bootstrap. The later `f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c`
+At exact behavior-bearing revision
+`1bbcc9542c92674dc0b5adcb032d6f9b01248531`, fresh current-contract GT-14
+through GT-16 observations now pass only bounded current-composition admission,
+primary-source evaluator-loop feasibility with no dependency, and one
+disposable pure-data minimum-form bootstrap; all failed routes and costs remain
+counterevidence. Exact `84447a7a1b9557e22ef5585d159459e8701fa40e`
+retains only superseded-contract history. The later
+`f0ed9ce715afdbc5d9eb75e08225e9a1e46c554c`
 GT-17/18 attempt and its `08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e`
 former-verifier acceptance were rejected by independent review, which found the
 cleanup, per-episode full-vector and carrier-edge sources incomplete. It remains

@@ -126,14 +126,21 @@ Then read, in order:
   Fresh single-arm GT-13 at `f182a0a` now passes only its saved-checkout
   collaboration closure, four-surface alignment, conditional research and
   publication boundary; one fixture no-match command and 32794 evaluator
-  tokens exclude an efficient-reading claim. GT-14 through GT-16 plus GT-18
-  and GT-19 still need fresh bounded replay; GT-07 is not rerun merely to
-  refresh bookkeeping.
+  tokens exclude an efficient-reading claim. Fresh current-contract GT-14,
+  GT-15 and GT-16 at `1bbcc95` now pass only exact current-composition
+  admission, bounded evaluator-loop feasibility with no dependency, and one
+  disposable pure-data minimum-form bootstrap. Their preflight, policy,
+  self-reference, failed-effect, guardian, token-cost and cleanup
+  counterevidence remains visible; exact `84447a7` is superseded-contract
+  history only. GT-18 and GT-19 still need fresh bounded replay; GT-07 is not
+  rerun merely to refresh bookkeeping.
   To preserve the three-file complexity reserve, the superseded derived
-  `7d7a7e5` GT-17/GT-18 and `fd4b99a` GT-19 derived observation files are
-  removed only after their complete source records remain in the active
-  evidence carrier and immutable Git history; the finite former-contract facts
-  and later applicable evidence remain named.
+  `84447a7` GT-14/GT-15/GT-16, `7d7a7e5` GT-17/GT-18 and `fd4b99a` GT-19
+  derived observation files are removed only after their complete source
+  records remain in the active evidence carrier, replacement observations are
+  validated where required, and immutable Git history preserves the exact
+  former bytes; the finite former-contract facts and later applicable evidence
+  remain named.
   The next specification/standards cross-review rejected evaluator-history
   allowlisting as sufficient proof and found unsafe pre-validation Git input
   plus malformed historical-task crash paths. Candidate amendments must now
@@ -516,8 +523,12 @@ increment and one active work item. Its ordered work is:
     candidate qualification retains GT-07 and GT-17 through exact amendments;
     fresh isolated GT-11 at `f4dce57`, GT-12 at `72709b8` and single-arm GT-13
     at `f182a0a` now pass their finite current-subject claims while their
-    evaluator, route and interference costs remain visible. Fresh
-    GT-14/15/16/18/19 replay remains required before this stage can complete.
+    evaluator, route and interference costs remain visible. Fresh GT-14/15/16
+    at `1bbcc95` now pass only their current environment, feasibility and
+    pure-data bootstrap claims with failures and costs retained. Fresh GT-18
+    and GT-19 plus a new genuinely independent product, specification,
+    implementation and standards review remain required before this stage can
+    complete or an exact candidate can exist.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may
