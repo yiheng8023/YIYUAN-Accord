@@ -105,6 +105,19 @@ Then read, in order:
   step cannot be refreshed in place, so the deterministic next goal projection
   is `prepared-host-goal-paused`; host target state remains task state rather
   than behavior or value evidence.
+  At audit cut `1463034569fe6e724f186c88171e3ee12dffc94b`, BAL-04 ran one
+  disposable matched repository-Skill/no-Accord correction task with Codex CLI
+  0.150.1 and `gpt-5.6-luna`. Both arms passed the same independent outcome,
+  foreign-state and zero-residue poststate with no human action; the control
+  needed one failed intermediate test run, while the Skill arm loaded more
+  input context. The fixed order, explicit generic Skill invitation and shared
+  user Skills prevent a net-effect claim. This condition therefore selects no
+  added form and leaves a genuinely unclosed responsibility as the active
+  BAL-04 requirement. Review of the exact treatment exposed the superseded
+  scalar route rule in both working 3.1.0 Skills; both are corrected to hard
+  gates plus lifecycle Pareto and equivalent-fit native/reuse preference.
+  Every earlier behavior observation remains bound to the old Skill hashes;
+  R3 is planned again for the corrected projections.
   All eight criteria are intentionally unverified for the new target, and
   repository candidate readiness is false. Release authorization remains
   unrequested because publication is the last phase and repository content
@@ -162,23 +175,22 @@ Then read, in order:
   not source identity; verify the actual marketplace ref and bytes.
   Current-session in-place hot reload and automatic per-message activation
   remain unproved.
-- On 2026-08-28, read-only host inventory reported Codex CLI 0.150.1 with
-  `yiyuan-accord-codex` 3.1.0 installed and enabled alongside bundled,
-  primary-runtime and curated plugins. It reported Claude Code 2.1.247 with
-  public `yiyuan-accord-claude` 3.0.1 installed and enabled alongside multiple
-  official plugins, including persistent-state and Hook-capable extensions.
+- On 2026-08-28, read-only host inventory reported Codex CLI 0.150.1 and
+  Claude Code 2.1.247 with their public Accord 3.0.1 plugins installed and
+  enabled alongside multiple other extensions. The working repository
+  projections are 3.1.0 and are not the installed public package.
   These are composed environments, not official-clean or no-Accord baselines.
   Do not alter live plugin configuration merely to manufacture a comparison;
   use disposable isolation when confounding can change the decision. Plugin
   listing proves declared installation and enablement only, not Hook firing,
   activation, behavior, value or absence of interference.
-- Both repository Skills and the installed 3.1.0 Codex Skill still contain the
-  superseded scalar phrase `expected outcome fitness minus` total costs. The
-  current semantic model instead requires hard admission, lifecycle Pareto
-  pruning, context-derived constraints and equivalent-fit reuse tie-breaking.
-  Treat this as explicit downstream projection drift for the later
-  implementation-and-replay stage; do not hot-mutate either composed live host
-  or treat the older phrase as current model authority.
+- The old working 3.1.0 Skill bytes used by BAL-04 still contained the
+  superseded scalar phrase `expected outcome fitness minus` total costs. Both
+  repository projections are now corrected to hard admission, lifecycle
+  Pareto pruning, context-derived constraints and equivalent-fit native/reuse
+  preference. Prior evidence remains bound to the old hashes and the corrected
+  projections require replay. Do not hot-mutate either composed live 3.0.1
+  host or treat its installation as current working-candidate behavior.
 - That fresh Codex carrier also reported non-blocking host warnings that manifest
   icon paths containing `..` were ignored. The Skill loaded and activated, so
   this is a visual-metadata compatibility issue for a later exact-SHA patch, not

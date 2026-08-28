@@ -426,6 +426,15 @@ support only one bounded evidence correction and one synthetic four-episode
 sequence; durable carrier need, cross-host or broad value, whole-system balance,
 candidate readiness and release readiness remain unproved.
 
+BAL-04 later ran one paired repository-Skill/no-Accord correction task at audit
+cut `1463034569fe6e724f186c88171e3ee12dffc94b`. Both arms passed the same
+independent poststate and cleanup with no human action, so the exact condition
+selects no added form and supplies no net Accord-value claim. It also exposed a
+working-Skill drift from hard admission and lifecycle Pareto back to a scalar
+fitness-minus-cost sentence. Both host Skills are corrected at that earliest
+boundary; all earlier behavior remains bound to its old Skill hash and cannot
+qualify the corrected projections without fresh replay.
+
 Observations record Agent actions, human actions, effects, residue and claim
 limits independently of the model's own verdict. Each release observation
 binds the exact Golden Task digest, the evaluation protocol and burden metric

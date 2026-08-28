@@ -109,6 +109,14 @@ def _rehash(root, locator):
             item['sha256'] = digest
     _write(root, A, acceptance)
 
+def _enable_current_sample_validation(root):
+    acceptance = _read(root, A)
+    criterion = next(
+        item for item in acceptance['criteria'] if item['id'] == 'R3'
+    )
+    criterion['assessment'] = 'continuing'
+    _write(root, A, acceptance)
+
 def _bind_source(root, locator, bundle, observation):
     _write(root, SRC310, bundle)
     observation['transcriptOrEventEvidence'][0]['sha256'] = _digest(bundle[
@@ -1198,6 +1206,8 @@ class ProductControlTests(unittest.TestCase):
 
         for task_id in ('GT-02', 'GT-16'):
             with self.subTest(policy_anchor=task_id), _fixture() as root:
+                if task_id == 'GT-16':
+                    _enable_current_sample_validation(root)
                 golden = _read(root, G)
                 task = next(item for item in golden['tasks'] if item['id'] == task_id)
                 if task_id == 'GT-16':
@@ -1531,6 +1541,7 @@ class ProductControlTests(unittest.TestCase):
             f'archive-observation-GT-{number}-553f5a9']['retainedFailure']
             for number in range(14, 17)))
         with _fixture() as root:
+            _enable_current_sample_validation(root)
             acceptance = _read(root, A)
             token = excluded[0]
             acceptance['claimCeiling']['retainedBehaviorExclusions'].remove(token)

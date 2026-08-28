@@ -63,10 +63,9 @@ Build the route from live conditions instead of replaying a fixed SOP:
   and graphs as refreshable views, not a second source of truth.
 - Hide internal rule IDs, schemas and route machinery from ordinary users;
   expose only outcome, material state, necessary decision, result and limits.
-- Select by expected outcome fitness minus user burden, interference,
-  uncertainty, context use, recovery, maintenance and retirement cost. A Skill,
-  plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier or custom
-  mechanism is neither mandatory nor permanently forbidden.
+- Hard-gate authority, consequence, evidence, cleanup and lifecycle. Pareto-prune
+  dominated routes; choose by context, preferring native/reuse only at equal fit.
+  No carrier or mechanism is mandatory or permanently forbidden.
 - Configure supported project or host surfaces, including task instructions or
   settings, only when in scope, observable and reversible. Prefer native hot
   reload or atomic versioned update with health check and byte-accurate rollback;

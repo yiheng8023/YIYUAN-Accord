@@ -1,8 +1,9 @@
 # Complete self-bootstrapping feasibility and reuse study
 
-Status: feasibility stage completed, 2026-08-28. This is an admitted design input, not
-runtime authority, implementation approval, behavior evidence or release
-evidence.
+Status: feasibility completed; source-bound whole-system balance audit active at
+exact cut `1463034569fe6e724f186c88171e3ee12dffc94b`, 2026-08-28. This is
+an admitted design and self-review input, not runtime authority, independent
+review, behavior evidence or release evidence.
 
 ## Decision
 
@@ -26,8 +27,11 @@ modelling** through completed P4 and one minimum pure-data reference core.
 It remains **no-go for a live mechanism, a new runtime, a general state store or
 release work**. Exact checkpoint `553f5a97e08390117e877e7b913c7a501018bfa5`
 retains failed GT-14 through GT-16 attempts because their publishable source is
-not task-complete; source-complete replay remains active. GT-17 global-consensus
-reconciliation and GT-18 longitudinal evolution remain unperformed.
+not task-complete. Exact `84447a7` later passes source-complete GT-14 through
+GT-16 only for their finite claims, and exact `7d7a7e5` passes GT-17/18 only for
+one bounded reconciliation and one synthetic four-episode full-vector sequence.
+The whole-system balance audit is active; live mechanisms, a Runtime, general
+state store and release work remain no-go without new evidence.
 
 The unbounded interpretation is infeasible: no system can guarantee complete
 visibility into every host, infer human values or authority from context,
@@ -680,17 +684,17 @@ counterevidence because fixture summaries and hashes did not preserve all
 task-required source facts. Exact revision
 `84447a7a1b9557e22ef5585d159459e8701fa40e` later closed GT-14 through
 GT-16. Independent review then rejected the `f0ed9ce` GT-17/18 completion
-claim, so the active stage is again
-`validate-longitudinal-consensus-and-cross-carrier-continuity`.
+claim. Exact `7d7a7e57b7eea02afcda21880d2f018cbc7dda0c` later closed the
+strengthened finite GT-17/18 replay without rewriting that counterevidence; the
+active stage is now `self-audit-remediate-and-reaccept-whole-system-balance`.
 
-## Whole-system balance self-audit: initial current-state cut
+## Whole-system balance self-audit: historical pre-replay cut
 
-This review was added after the 2026-08-28 human correction that candidate
+This retained historical cut was added after the 2026-08-28 human correction that candidate
 formation must follow a whole-system assessment, weakest-link remediation and
-affected-surface reacceptance. It is an initial source-bound cut over the
-current staged repository state, not completion of that later stage and not an
-independent review. It must be refreshed after source-complete GT-17/18 and
-every admitted remediation. No aggregate score is used: a hard failure or a material
+affected-surface reacceptance. It predates the source-complete GT-17/18 replay
+and is superseded by the active cut below; it remains history rather than current
+product truth. No aggregate score is used: a hard failure or a material
 unknown that can change the release decision remains a blocker.
 
 ### Baseline contract
@@ -769,3 +773,214 @@ evidence, longitudinal continuity and global reconciliation first. Those facts
 can later justify a durable carrier or a multi-form system; absent them, a
 larger mechanism would improve architectural appearance while worsening the
 very balance this review is meant to protect.
+
+## Whole-system balance self-audit: active cut at `1463034`
+
+This is the first current execution of the required audit, not a replacement for
+independent review. The audit cut is exact revision
+`1463034569fe6e724f186c88171e3ee12dffc94b` on `main`; its tree was clean when
+formed, it was three commits ahead of `origin/main` at
+`08eb72a57cdb4b0d27de1df16ebeccccd1e04f9e`, and it was not pushed as a
+candidate. The evidence cutoff is `2026-08-28T07:24:36Z`.
+
+At the cut, 20/20 product tests, the canonical verifier, both static host checks,
+`git diff --check`, Actionlint and strict Claude plugin validation passed. Those
+are deterministic conformance only. GitHub still exposed immutable non-draft,
+non-prerelease v3.0.1 as the recommended public release and no v3.1.0 Release.
+Codex and Claude both reported Accord 3.0.1 installed and enabled alongside
+other extensions; the working repository projects 3.1.0. Neither installed
+state nor a clean repository proves candidate activation, causal effect or
+value.
+
+### Bound comparison contract
+
+- **Target:** before candidate formation, one condition-fit representative
+  outcome and the retained longitudinal sequence must close the complete bounded
+  self-bootstrap with minimum total burden, no hard-gate regression, verified
+  lifecycle and zero unauthorized residue; every affected R1-R3 and Q1-Q4
+  interaction must then be reaccepted.
+- **Baselines:** public v3.0.1 governs only published distribution facts;
+  `84447a7` governs only finite GT-14/15/16 behavior; `7d7a7e5` governs only the
+  finite GT-17/18 reconciliation and synthetic sequence; `1463034` governs the
+  current repository contract. Failed `553f5a9` and source-insufficient
+  `f0ed9ce`/`08eb72a` remain counterevidence.
+- **Counterfactuals:** (1) no added Accord means when a healthy native route
+  closes the whole outcome; (2) the released plugin-only 3.0.1 projection;
+  (3) the current pure-data core plus thin candidate projections; and (4) only
+  if a named responsibility remains unclosed, a minimum replaceable composition.
+  These are route alternatives, not automatically comparable environment arms.
+- **Confounders:** both live hosts are Accord-enabled and extension-composed;
+  model route identity is not exposed in the recorded observations; GT-14/18
+  are bounded or synthetic; the Hook and installed projection are 3.0.1 while
+  the working package is 3.1.0; no official-clean, isolated-no-Accord,
+  candidate-enabled-isolated, population or field arm has been admitted.
+- **Invalidation:** change to goal, authority, task oracle, evaluator, full
+  vector, code, package, Hook, host composition, model route, public release,
+  observation source, cleanup state or selected product form reopens the earliest
+  affected dimension and every downstream claim.
+
+### Non-compensating dimension ledger
+
+| Dimension | State / confidence | Current evidence and coupled shortfall | Selected response and recheck |
+| --- | --- | --- | --- |
+| Baseline, target, counterfactual, cutoff and invalidation | pass / high | The claim-scoped multi-baseline contract above prevents v3.0.1, historical checkpoints, current `main` and behavior arms from lending evidence to one another. | Rebind on every invalidation; never call the composed host a native baseline. |
+| Product goal, user value and capability closure | blocker / high | The complete bounded core is explicit and the pure reducer plus finite tasks close logic, but no condition-fit representative user outcome proves that current forms close the full live loop with lower total burden. This blocks form and release decisions. | Run one source-complete representative vertical slice before adding mechanisms or forming a candidate. |
+| Domain semantics, consensus and claim coherence | concern / high | Authority, four mappings, model, evidence and claims are deterministic and latest-bound corrections replay from the earliest boundary. Broad fan-out still makes stale projections a recurring risk. | Keep exact impact replay; independently challenge the final reaccepted projection. |
+| Environment sensing, adaptation, isolation and portability | blocker / high | Current composition can be enumerated, but both real hosts are contaminated for native/no-Accord claims and no candidate-enabled isolated arm exists. This directly couples to causal value and Hook claims. | Derive only the least costly permitted arms from the representative claim; preserve unavailable arms as unknown. |
+| Reuse discovery, form selection and cross-form coherence | concern / medium | GT-15 supports one finite no-build decision and P4 supports a synthetic minimum composition; neither proves plugin-only sufficiency or a live multi-form contract. | Let the representative effect, durability, isolation, recovery and lifecycle result choose no artifact, thin projection or replaceable composition. |
+| Activation, execution, consequence and evidence integrity | blocker / high | GT-14 through GT-18 are now source-complete for their finite claims, and the former green-but-incomplete verifier is retained as counterevidence. Hook/package installation remains declaration; working 3.1.0 behavior is unobserved. | Bind declaration, enablement, actual trigger, execution, consequence, independent poststate and cleanup separately in the representative slice. |
+| Human authority, privacy, trust, supply chain and compliance | concern / high | The core fails closed, no new dependency or trust surface was added, and evidence excludes credentials and session content. Live capability acquisition and external composition have not exercised the same boundary end to end. | Keep new account, trust, data, material cost and publication human-bound; admit exact maintained sources only when a named gap requires them. |
+| User cognitive, orchestration and recovery burden | blocker / medium | Ordinary users should not operate K/H/L, JSON or topology, but there is no qualified comparison of questions, concepts, actions, delay or recovery for an actual candidate-enabled outcome. | Capture the declared human-burden vector and user-visible concept surface in the representative comparison. |
+| Reliability, failure containment, recovery, continuity and residue | concern / high | Deterministic rollback plus retained GT-07/11/12/16/18 facts are strong, and the corrected replay has exact cleanup. Long-lived and cross-host continuity remain unknown and foreign/shared ownership must stay preserved. | Reuse native continuity first; add durable state only when an observed obligation cannot otherwise close. |
+| Performance, latency, context, resources and lifecycle cost | blocker / medium | Code and process budgets are explicit, but no qualified candidate comparison measures latency, context load, resource use or lifecycle cost. One diagnostic Hook pair cannot establish causality or population impact. | Measure the non-compensating cost vector in the same representative arms; do not optimize a proxy independently. |
+| Architecture, modularity, complexity, maintainability and testability | concern / high | The pure core is deep and side-effect-free, the repository remains at 83 tracked files and 308896 product-code/test bytes, but the goal projection and evidence corpus were near their explicit headroom. | Keep one core interface; shorten the goal projection, correct trace names and prefer consolidation before addition. |
+| Observability, evaluation, reproducibility and longitudinal learning | concern / high | The strengthened source contract retains vectors, actual core decisions, carrier states, evaluator identity and cleanup. Independent outputs still use finite synthetic cases and repository-held evidence cannot self-prove real source authenticity. | Preserve failed attempts, bind every new external observation and require later independent review. |
+| Host projection compatibility, update, rollback and retirement | blocker / high | Codex and Claude currently run released 3.0.1 while the repository projects 3.1.0; static package validation does not prove isolated install, trigger, upgrade, rollback, removal or equivalent behavior. | After the representative form decision, test only the selected thin projections in condition-fit isolated carriers. ZCode stays a later feasibility hypothesis. |
+| Documentation, onboarding, accessibility and concept load | concern / medium | Public README wording separates product core from plugin form and keeps internal identifiers out of the main proposition, but the governance/evidence corpus remains dense and the dormant v3.1.0 release document can be mistaken for an imminent release. | Keep publication-deferred language prominent; derive a smaller user surface only after the selected form is known. |
+| Governance, versioning, distribution and post-release operations | blocker / high | Release order and human veto are sound, but no future semantic version or exact candidate exists; local commits and a green verifier cannot create publication authority. | Complete remediation, affected-surface reacceptance and independent review before choosing a version or requesting exact-SHA release authority. |
+
+### Coupling and weakest-link decision
+
+The dominant coupled blocker is not “missing Runtime.” It is the absence of one
+condition-fit representative outcome that simultaneously binds composition,
+candidate exposure, effect, burden, interference, resource cost and lifecycle.
+Without it, environment, form, Hook, user burden, performance and host-lifecycle
+questions cannot be decided independently: adding machinery would worsen six
+dimensions while proving none. The lowest-total-burden route is therefore:
+
+1. repair trace and prompt-headroom debt without changing behavior;
+2. calibrate the currently enabled Hook only as a diagnostic, not value proof;
+3. design one bounded candidate-enabled representative comparison whose
+   counterfactual determines the necessary environment arms;
+4. select no artifact, one thin form or a replaceable composition only from the
+   observed unclosed responsibility;
+5. replay every affected criterion and interaction; and
+6. submit the reaccepted result to independent specification, implementation and
+   standards review before candidate formation.
+
+### Remediation ledger
+
+- `BAL-01 exact-observation-identity` — implemented after the audit cut by
+  renaming the new GT-17/18 observation locators from misleading `f0ed9ce` names
+  to `7d7a7e5` while retaining the old source records as counterevidence. It is
+  pending deterministic reacceptance and an exact remediation commit.
+- `BAL-02 goal-projection-headroom` — implemented after the cut by shortening
+  only redundant route/alignment prose. The deterministic structured objective
+  remains fully mapped and is 3299 characters instead of 3543, below the 3600
+  guardrail with more correction headroom. It is pending reacceptance.
+- `BAL-03 enabled-Hook-diagnostic` — one disposable paired Codex 0.150.1 run used
+  the same “reply exactly OK” prompt with Hooks explicitly off and on. Both final
+  outputs were `OK`, both CLI counters were 13064 tokens, elapsed wall time was
+  11.33 s off and 9.12 s on, and no visible extra action or residue remained.
+  Order, model variance and absent trigger attribution make this **no observed
+  harm in one pair**, not proof of Hook firing, causal benefit, low population
+  interference or 3.1.0 behavior. Keep the user-enabled Hook on for ordinary
+  use; keep Hooks off in independent evaluators and any clean/no-Accord arm.
+- `BAL-04 representative-live-closure` — one paired no-add calibration is
+  complete. Repository-Skill and no-Accord arms both closed the correction
+  outcome, so that condition selects no added form and proves no net Accord
+  gain. The active remainder is a genuinely unclosed responsibility, not a
+  search for a favorable benchmark. Do not add a Runtime, service or durable
+  carrier to make the test pass.
+- `BAL-05 form-and-host-lifecycle` — pending a form selected by the active
+  remainder of `BAL-04`. Test isolated install,
+  trigger, consequence, update/rollback, removal and cleanup only for the forms
+  selected by observed responsibility closure.
+
+### BAL-04 paired no-add calibration
+
+The first condition-fit comparison was frozen before execution at audit cut
+`1463034569fe6e724f186c88171e3ee12dffc94b`. Both disposable arms began from
+the same six source hashes and exactly one failing correction test. Both used
+Codex CLI 0.150.1, `gpt-5.6-luna` at medium reasoning, ignored user config and
+rules, disabled Hooks, used the native automatic-review workspace route, did
+not install a plugin and received the same prompt. The candidate arm alone
+exposed repository Skill
+`ba72f8c6ad0821dde0f42759123494c4bffa3fcafe13431d74fd97d80c687765`;
+the control arm had no Accord Skill but, like the candidate arm, still exposed
+shared user Skills. The control selected the user TDD Skill, which is a known
+composition confounder rather than a hidden clean-native claim.
+
+The first candidate harness invocation was excluded before comparison because
+the Windows workspace policy denied every source read and write; all fixture
+hashes remained exact. A second redundant `--sandbox workspace-write` plus
+`--approve-for-me` invocation was rejected at argument parsing. The common
+admitted route then ran both arms from unchanged inputs. The excluded source
+digests are
+`bde818260a6ab1ca608b082ee40ef8a27d3bb05e045d31782be4b1443560314f`
+and
+`a4579eae6ed0babd16921d1d981b791d153330ecd6040053025a71a3cbab52ab`;
+they are evaluator-admission counterevidence, not product failures.
+
+| Observation | Repository Skill | No Accord |
+| --- | --- | --- |
+| Codex thread | `01a04756-c4ad-7450-811e-a670b827570e` | `01a04759-8248-7163-b5be-e3d353a33104` |
+| Declared tests | 4/4 pass | 4/4 pass after one intermediate run failed 3 tests |
+| Independent hidden poststate | 8/8 pass | 8/8 pass |
+| Foreign-state SHA-256 | exact | exact |
+| Human questions/actions | 0/0 | 0/0 |
+| Network/dependency/cache/unexpected residue | none observed | none observed |
+| Completed commands / file-change events | 5 / 3 | 6 / 2 |
+| Input / cached-input tokens | 177911 / 158464 | 175716 / 157440 |
+| Output / reasoning-output tokens | 3657 / 990 | 3910 / 1669 |
+| Observable log span | about 106.7 s | about 106.8 s |
+
+The candidate event stream and control event stream were hashed as
+`f1c6018a43ec0b7ae67351e9029207cf75a10016da75d9b179e9fc019c02b259`
+and
+`9d41f9f5e7283aa31d466828f721974011e521342ebdf6cfe969fce628a1ee13`.
+The frozen contract and independent evaluator digests were
+`0999a6f1510d124ffbbb79253dee8b1a9484ee60b5a923e1a29d5c277f71e203`
+and
+`62033f8dd16ea5775a0a1f7ee220ac2c6aef5a02e35af2454279c59a8db6db0c`.
+Final implementation/test digests were candidate
+`8810053007f5c878485c91e7cd18ab629258031e47ff14c74f39fa9c832bfeb7` /
+`452cbcbf13e54ab5f55576eea008d294fb4643b100af8b811c995d09f855b13d`
+and control
+`524d7df2a166a46f6a1940f9499ca5792df8190dd10871c10814a57dd314e834` /
+`c867c867b307b596314d89d292dfea52134c3154d7923e039eb48c73a1c37b8c`.
+The exact task root was independently absent after cleanup.
+
+This pair shows no observed consequence, human-burden, residue or elapsed-time
+advantage for Accord. The candidate used fewer output and reasoning tokens and
+avoided an intermediate red run, but loaded more input context and made more
+file-change events. With one fixed order, one model, an explicit generic Skill
+invitation and a baseline that already closed through native execution plus an
+existing TDD Skill, no net treatment effect is established. The correct product
+decision is no added form for this condition. It also means BAL-04 remains open
+for one source-complete outcome whose baseline actually leaves a named
+responsibility unclosed; selecting a case only because Accord might win would
+be benchmark fishing.
+
+Reviewing the exact treatment after this result exposed one semantic drift:
+both working 3.1.0 Skills still used a scalar expected-fitness-minus-cost rule
+after authority had changed to hard admission, lifecycle Pareto pruning,
+context constraints and equivalent-fit reuse preference. Both projections are
+corrected at the earliest affected boundary. The pair remains bound to the old
+Skill hash and lends no behavior evidence to the corrected projections.
+
+### Lightweight index and graph refresh
+
+The durable index gains only the audit cut, four blocker classes and their
+selected remediations; it does not enumerate host × model × tool × context
+combinations or create a second authority source.
+
+- Nodes: `audit-cut:1463034`, `target:pre-candidate-reaccepted-core`,
+  `counterfactual:native-no-add`, `counterfactual:released-plugin-3.0.1`,
+  `counterfactual:working-3.1-projection`, `blocker:representative-live-value`,
+  `blocker:environment-and-causal-attribution`,
+  `blocker:user-burden-and-interference`, `blocker:host-lifecycle`, and
+  `remediation:BAL-01..BAL-05`.
+- Edges: the cut `derived-from` exact authority and evidence; each blocker
+  `conflicts-with` the target; `BAL-01` and `BAL-02` `supports-outcome` by
+  reducing trace/context debt; `BAL-03` `observed-on` the current composed Codex
+  host; `BAL-04` `verified-by` the future condition-fit comparison; and
+  `BAL-05` `depends-on` the selected form from `BAL-04`.
+- Refresh on any invalidation trigger above; expire task-time host instances and
+  retain only the source-bound semantic decision and finite evidence claim.
+
+Claim ceiling: this audit identifies current coupled weaknesses and two safe
+trace/context remediations. It does not prove field value, complete environment
+sensing, Hook benefit, product-form sufficiency, cross-host portability,
+candidate readiness, release readiness or that the listed dimensions exhaust
+all future failure modes. Those remain active blockers or recheck obligations.
