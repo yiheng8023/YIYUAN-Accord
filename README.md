@@ -73,6 +73,13 @@ verified, unreleased v3.1.0 baseline; a later product consensus superseded its
 `ready` status without erasing its bounded evidence. `main` is therefore not a
 release candidate, installation source or published upgrade.
 
+Candidate evidence is now invalidated sparsely rather than by label or by every
+repository change. Each required Golden Task declares its relevant executable
+or instruction files; promotion requires a source-recorded ancestor revision,
+the current task and evaluation digests, the exact host projection, and no byte
+change in that task-specific behavior subject. Evidence or presentation-only
+commits do not force unrelated replay, while a changed core or Skill does.
+
 The program studied primary sources, prior failures and suitable existing
 wheels; classified self-bootstrapping sub-capabilities; and tested the
 highest-risk assumptions in disposable isolated environments before admitting

@@ -878,6 +878,11 @@ def _validate_golden_tasks(
     required_fields = _string_list(protocol.get("requiredObservationFields")) or []
     if not required_fields:
         errors.append("golden tasks must define required observation fields")
+    candidate_fields = _string_list(
+        protocol.get("requiredCandidateObservationFields")
+    ) or []
+    if candidate_fields != ["evaluatedRevision"]:
+        errors.append("golden tasks candidate observation fields are invalid")
     metrics = suite.get("metrics")
     burden = metrics.get("humanBurden") if isinstance(metrics, dict) else None
     if (
@@ -898,6 +903,17 @@ def _validate_golden_tasks(
             errors.append(f"{label}.required must be non-empty")
         if not _string_list(task.get("prohibited")):
             errors.append(f"{label}.prohibited must be non-empty")
+        if task.get("id") in required_release_task_ids:
+            subject_files = _string_list(task.get("behaviorSubjectFiles"))
+            if (
+                not subject_files or len(subject_files) != len(set(subject_files))
+                or any(
+                    Path(locator).is_absolute() or "\\" in locator
+                    or any(part in {"", ".", ".."} for part in locator.split("/"))
+                    for locator in subject_files
+                )
+            ):
+                errors.append(f"{label}.behaviorSubjectFiles is invalid")
         if task.get("id") == "GT-13":
             prompt = task.get("prompt", "")
             starting_state = task.get("startingState", "")
@@ -949,6 +965,7 @@ def _validate_golden_tasks(
         "tasks": len(task_ids),
         "kinds": sorted(kind for kind in kinds if kind),
         "requiredObservationFields": required_fields,
+        "requiredCandidateObservationFields": candidate_fields,
         "behaviorEvidence": "not-established-by-static-suite",
     }
 

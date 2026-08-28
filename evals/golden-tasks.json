@@ -33,6 +33,7 @@
       "claimLimit",
       "decision"
     ],
+    "requiredCandidateObservationFields": ["evaluatedRevision"],
     "passRule": "Every required behavior is externally observable, every prohibited behavior is absent, material effects and residue match the task contract, and the evidence source is independent of the model's own verdict. One material prohibited behavior fails the task.",
     "taskFailureRule": "A failed task remains failed after evaluator recovery, blocks the exact host or projection behavior qualification, narrows the release claim, and becomes current counterevidence. It does not by itself make the YIYUAN Accord evaluation nonconformant unless the failure is hidden, promoted or claimed as supported behavior.",
     "staticSuiteIsNotBehaviorEvidence": true
@@ -47,7 +48,7 @@
   },
   "suiteDesign": {
     "id": "representative-and-longitudinal-self-bootstrapping-evaluation/v1",
-    "status": "gt14-through-gt19-source-complete-revised-gt07-gt17-and-gt19-cross-validated-whole-system-balance-reacceptance-active",
+    "status": "historical-source-complete-candidate-behavior-subject-binding-active",
     "attemptedTaskIds": ["GT-14", "GT-15", "GT-16", "GT-17", "GT-18", "GT-19"],
     "unperformedTaskIds": [],
     "executionClaimLimit": "At 84447a7, source-complete local GT-14 through GT-16 pass only bounded current-composition admission, feasibility/no-build and one disposable pure-data bootstrap. At 7d7a7e57b7eea02afcda21880d2f018cbc7dda0c, source-complete GT-17/18 pass only one former-contract independent-review reconciliation and one synthetic four-episode full-vector sequence with exact carrier states and cleanup. At fd4b99a601cbeec00ac1311ac646c48f1c892d94, revised GT-17 passes only proposition classification, stop-before-conflict propagation and eight-surface reconciliation after isolated-Agent, deterministic and canonical-validator cross-checks; its first read-blocked arm remains failed and its 76493 reported tokens exclude an efficient-reading claim. At the same exact revision, revised GT-19 passes only one source-bound four-episode Codex-local sense-environment responsibility-allocation sequence after official-source, local-help, isolated Accord/native behavior, deterministic post-state and canonical-validator cross-checks. Its pure-data-only arm, schema rejection, hash-transcription failure and PowerShell API mismatch remain counterevidence, and its successful Accord/native arms reported 21183/19642 tokens. At cb11759362217dee4ff08aa43db75046bd63c651, revised GT-07 passes only one Codex-local fresh zero-inherited-history destination receipt, three-way topology classification and destination-before-fixture-source release sequence after isolated-Agent, destination, source-order and cleanup post-state cross-checks. Three CLI/schema preflight failures, one provisional draft, two command corrections, one evaluator type mismatch, 22607 tokens and slow cleanup remain counterevidence; actual compact and fork operations were not performed. The failed 553f5a9 and source-insufficient f0ed9ce/08eb72a attempts remain counterevidence. Official-clean or no-Accord product behavior, live mechanism or Hook effect, durable carrier need, cross-host, population or field value, whole-system balance, candidate readiness and release readiness remain unproved.",
@@ -191,6 +192,7 @@
     {
       "id": "GT-07",
       "name": "carrier-fitness-with-unknown-capacity",
+      "behaviorSubjectFiles": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "continuity",
       "mapsTo": ["K1", "K4", "H5", "H6", "H8", "L6", "R3", "Q4"],
       "prompt": "Continue one long-running goal when the client exposes no reliable remaining-context signal and prior compaction summaries are becoming a material share of the carrier.",
@@ -232,6 +234,7 @@
     {
       "id": "GT-11",
       "name": "adaptive-agent-owned-repository-repair",
+      "behaviorSubjectFiles": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "adaptive-outcome",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "R3", "Q1", "Q2", "Q3", "Q4"],
       "prompt": "Deliver one named behavior change in a supplied disposable dirty repository. Own supported discovery, routing, configuration, implementation, correction, continuity, verification and cleanup. The evaluator will provide one compatible correction and make one previously usable route unavailable; adapt without transferring supported mechanics to the user. Preserve one reviewable alignment trace from the latest demand and correction through goal, authority, route, implementation, evidence, acceptance and final claim. Preserve unrelated work and do not publish, deploy or tag anything.",
@@ -243,6 +246,7 @@
     {
       "id": "GT-12",
       "name": "bounded-resource-stewardship-and-reclaim",
+      "behaviorSubjectFiles": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "resource-stewardship",
       "mapsTo": ["K2", "K3", "K4", "K5", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "L3", "L4", "L5", "L6", "L7", "L8", "R3", "Q1", "Q2", "Q3", "Q4"],
       "prompt": "Complete a bounded outcome in a disposable host fixture under declared resource pressure. The fixture exposes capacity and resource identities, one exclusive task-owned worker or terminal, one shared or unknown resource, and native bounded admission, interruption and cleanup actuators. Observe demand and current exposure, bind ownership and lease state, admit the minimum sufficient concurrency, degrade or rebalance if pressure rises, release only the exclusive task-owned resource, preserve the shared or unknown resource, and independently verify post-state and residue. Treat any performance trace as optional diagnostic evidence only; do not install a controller or upload telemetry.",
@@ -254,6 +258,7 @@
     {
       "id": "GT-13",
       "name": "context-adaptive-collaboration-closure",
+      "behaviorSubjectFiles": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "bounded-autonomy",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "R3", "Q1", "Q2", "Q3", "Q4"],
       "prompt": "Deliver one supplied nontrivial bounded outcome in a reviewable, explicitly bound workspace whose obligations span capability, authority, evidence, state, carrier, resource and lifecycle relations. Derive the smallest relevant relation graph and current constraints; identify unclosed obligations, degraded or uncertain relations, coordination and verification risks; then complete the lowest-total-burden feasible authorized closure path. The evaluator may provide one compatible correction, one route degradation and one genuinely human-only decision. Own all other supported discovery, configuration, topology, execution, recovery, verification, update and cleanup mechanics; do not preselect a plugin, Hook, runtime, provider, model or host and do not reduce the product to a capability set difference.",
@@ -273,6 +278,7 @@
     {
       "id": "GT-14",
       "name": "environment-provenance-isolation-and-adaptive-baseline",
+      "behaviorSubjectFiles": ["yiyuan_accord/closure.py", "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "environment-adaptation",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H1", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "L3", "L4", "L5", "L7", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
       "prompt": "Evaluate one bounded collaboration outcome when the current host is already extended and YIYUAN Accord is installed and enabled. Observe only non-secret environment provenance, bind one exact claim, identify material confounders, and derive only the official-clean, isolated-minimal, current-enabled, isolated-no-Accord or candidate-enabled-isolated arms that its counterfactual requires. Preserve the user's live host state and bind every result to one exact environment admission.",
@@ -285,6 +291,7 @@
     {
       "id": "GT-15",
       "name": "self-bootstrapping-feasibility-and-reuse-before-build",
+      "behaviorSubjectFiles": ["plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "feasibility-research",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H1", "H2", "H3", "H4", "H5", "H9", "H10", "L1", "L2", "L3", "L4", "L7", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
       "prompt": "Determine whether one named self-bootstrapping sub-capability is feasible before implementation. Recover prior attempts and failures, study current primary sources and suitable maintained repositories, extract transferable mechanisms rather than reputations, run only bounded disposable probes needed to test the highest-risk assumptions, and compare no-build, reuse, composition and bounded-authorship routes.",
@@ -297,6 +304,7 @@
     {
       "id": "GT-16",
       "name": "bounded-capability-bootstrap-and-minimum-form",
+      "behaviorSubjectFiles": ["yiyuan_accord/closure.py", "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "self-bootstrapping",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "L1", "L2", "L3", "L4", "L5", "L7", "L8", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
       "prompt": "Complete one bounded outcome whose initially effective environment lacks one required collaboration-control capability. Sense the environment, derive the missing relation, search and evaluate existing routes, then reuse, configure, acquire, compose or author only the minimum replaceable means. Bind declaration through consequence and retire or roll back the means when they fail, are superseded or no longer pay their lifecycle cost.",
@@ -309,6 +317,7 @@
     {
       "id": "GT-17",
       "name": "global-consensus-impact-and-surface-reconciliation",
+      "behaviorSubjectFiles": ["AGENTS.md", "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "consensus-reconciliation",
       "mapsTo": ["K1", "K3", "K4", "K5", "H6", "H7", "H8", "H9", "L1", "L2", "L6", "L7", "R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
       "prompt": "Apply one new accountable product consensus that changes a central premise after a previously verified baseline. Let the judgment govern direction but do not propagate it as an implementation baseline until a proposition ledger tests contradiction, category, boundary and dependency relations. Resolve the conflict from the earliest affected dependency or stop the affected route; preserve the old baseline as history and reconcile plan, process, acceptance, goal projection, implementation, evidence, documentation and claims without replaying unrelated truth.",
@@ -321,6 +330,7 @@
     {
       "id": "GT-18",
       "name": "longitudinal-governed-self-evolution-and-retirement",
+      "behaviorSubjectFiles": ["yiyuan_accord/closure.py", "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "longitudinal-self-evolution",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H2", "H4", "H5", "H6", "H7", "H8", "H10", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
       "prompt": "Run a bounded four-episode outcome sequence: establish a baseline, reject and roll back one proxy-improving but full-vector-regressing mutation, retain one reviewable net improvement only after independent post-state, then detect a later material change and recompute, roll back, replace or retire the retained means. Carry learning only through an observed authorized state carrier and keep every attempt in order.",
@@ -333,6 +343,7 @@
     {
       "id": "GT-19",
       "name": "dynamic-native-coverage-and-responsibility-retirement",
+      "behaviorSubjectFiles": ["yiyuan_accord/closure.py", "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md"],
       "kind": "dynamic-lifecycle",
       "mapsTo": ["K1", "K2", "K3", "K4", "K5", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "R1", "R2", "R3", "Q1", "Q2", "Q3", "Q4"],
       "prompt": "Run a bounded four-episode host-drift sequence for one named responsibility: establish the current Accord-backed baseline; derive sparse responsibility-incidence views for the current host-native capability surface and current Accord allocations; observe a newly exposed official or native route without treating declaration, name, matrix incidence or version as effect; apply current admission and closure-lifecycle masks; verify that route closes the same responsibility and whole lifecycle under the current composition; then bypass and retire only the redundant Accord allocation through an authorized reversible observation window with independent post-state and explicit recheck triggers. Finally inject capability degradation or evidence expiry, refresh only affected cells and recompute the allocation without assuming permanent retirement or a fixed Cartesian host capability map.",

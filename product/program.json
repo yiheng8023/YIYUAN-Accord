@@ -70,7 +70,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "1e764763bdc91f610face20281da39e5f006c45a0451787e709f035499d6da03",
+      "repositorySha256": "e6c920ee3f1c36cb34a735ed034823fa9e1e9a96f237c9dd293b9db75ebe1372",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -373,7 +373,7 @@
               "Q3",
               "Q4"
             ],
-            "completion": "Only after product, semantic, implementation, behavioral, environmental, longitudinal, interference, lifecycle, documentation and standards review agree may the program choose a future semantic version and form one exact clean candidate. Publication remains a separate final sequence requiring new exact authority."
+            "completion": "Independent product, specification, implementation and standards review must agree, then every promoted Golden Task must bind its current task and evaluation digests, exact projection, source-recorded ancestor evaluated revision and unchanged sparse behavior-subject bytes before the program may choose a semantic version and form one clean candidate. Publication remains a separate final sequence requiring new exact authority."
           }
         ],
         "degradationRule": "Unknown or confounded environment state first narrows the claim or triggers isolation. An unavailable, failed or uneconomic capability narrows that exact path, preserves counterevidence and triggers relation-and-constraint recomputation. Newly declared, visible or version-labelled native capability does not retire anything; only a same-responsibility selected successor with independent consequence, cleanup, reversible observation and retirement post-state may close that allocation, and drift or evidence expiry recomputes it. The route never transfers supported mechanics to the user, converts current unavailability into permanent retirement, or justifies a larger authored control plane without a demonstrated closure need. Learning or self-evolution that weakens outcome, authority, evidence, rollback, interference or lifecycle is discarded or rolled back."
@@ -593,7 +593,7 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[independent-review-and-form-future-exact-candidate] Independent review agrees on product value, semantics, implementation, environment controls, longitudinal behavior, lifecycle, documentation and claim before any future exact candidate or release decision."
+            "stopCondition": "[independent-review-and-form-future-exact-candidate] Independent review agrees on product value, semantics, implementation, environment controls, longitudinal behavior, lifecycle, documentation and claim; every promoted task then binds current semantics, projection and unchanged sparse behavior-subject bytes from a source-recorded ancestor revision before any future exact candidate or release decision."
           }
         ]
       }
@@ -955,7 +955,7 @@
     },
     "targets": {
       "maxTrackedFiles": 86,
-      "maxProductCodeAndTestBytes": 348000,
+      "maxProductCodeAndTestBytes": 352000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -1008,7 +1008,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module, independent review required source-complete GT-17/18 validation, the f898ebd audit exposed missing non-selected-route retirement closure, and the later independent review exposed empty-policy admission plus duplicate-key Hook parsing, the active increment sets the planning checkpoint at no more than 86 tracked files and 348000 product-code-and-test bytes with at least five percent byte headroom and three tracked-file slots. The bounded increase pays only for responsibility-scoped successor closure, stable provenance/availability/coherence admission, shared strict JSON parsing, lifecycle post-state and their negative regressions; it is not advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. Revised GT-17 and GT-19 add two bounded observation carriers; three superseded v3.0.1 derived observation projections leave the active tree while their combined source bundle, immutable tag and Git history remain, preserving four current slots and three after revised GT-07. The result remains far below the 1551209-byte historical baseline and preserves reviewable headroom without pretending that spare capacity is permanent architecture. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module, independent review required source-complete GT-17/18 validation, the f898ebd audit exposed missing responsibility-scoped retirement, later review exposed empty-policy admission and duplicate-key Hook parsing, and candidate audit exposed missing exact behavior-subject binding. The active increment therefore permits at most 86 tracked files and 352000 product-code-and-test bytes while retaining at least five percent byte headroom and three tracked-file slots. The bounded increase pays only for stable closure admission, scoped retirement, shared strict parsing and fail-closed sparse task-subject validation plus their negative regressions; it is not advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. Historical and revised observations remain compacted into existing carriers, immutable Git history preserves superseded facts, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

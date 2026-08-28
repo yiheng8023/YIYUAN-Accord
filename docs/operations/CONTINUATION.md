@@ -103,6 +103,14 @@ Then read, in order:
   remains counterevidence. `self-audit-remediate-and-reaccept-whole-system-balance`
   completed after revised GT-07/17/19 cross-validation and global deterministic
   reacceptance; `independent-review-and-form-future-exact-candidate` is active.
+  Independent product/specification/implementation/standards review found no
+  remaining issue at `dd865f4a1770e60b0cc5cfba0c2d92e68a1962e0`.
+  The subsequent candidate-eligibility audit found that the verifier bound
+  current task/evaluation and plugin projection bytes but not the shared
+  reference behavior subject. Sparse per-task `behaviorSubjectFiles` plus a
+  source-recorded ancestor `evaluatedRevision` are therefore the current
+  earliest dependency boundary; affected evidence must be replayed or
+  deterministically shown unchanged before another independent review.
   The user cleared the host goal after a new dynamic-retirement
   consensus; the deterministic repository projection remains
   `prepared-host-goal-paused` and must be refreshed before any later activation.
@@ -296,7 +304,7 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The active development guardrail permits at most 86 tracked files and
-  344000 product-code-and-test bytes with at least five percent headroom and
+  352000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
   regression, one append-only GT-14 through GT-19 source and seven current

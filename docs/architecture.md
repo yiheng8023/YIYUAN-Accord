@@ -477,6 +477,15 @@ host/session identity and a
 complete controlled transcript or host-event record held in a separate source
 bundle. Independence is established by the source record and direct task-time
 observation, not by a boolean written into the observation.
+
+Candidate promotion adds a sparse behavior-subject gate. Every required task
+names only the tracked implementation or instruction files relevant to its
+claim. The observation and source payload agree on an exact ancestor
+`evaluatedRevision`; Git then proves those current task-subject bytes unchanged.
+The task and evaluation digests bind semantics, while the projection identity
+binds adapter, Skill and Hook bytes. This prevents stale core evidence from
+qualifying a candidate without turning an evidence-only commit into a global
+behavior invalidation or a repository-wide precomputed matrix.
 An assertion collected after the primary host session must carry structured
 `sourceBindings` to the exact completed observer-session output, locator,
 completion time and bounded

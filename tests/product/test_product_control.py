@@ -8,6 +8,7 @@ from yiyuan_accord.control import (
 )
 from yiyuan_accord.evidence import (
     _canonical_official_url,
+    _behavior_subject_revision_errors,
     _digest,
     _evaluation_contracts,
     _longitudinal_bundle,
@@ -247,7 +248,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(guidance['status'], 'accepted-revisable-guidance')
         self.assertEqual(
             guidance['wholeSystemBalanceReview']['status'],
-            'completed-reaccepted-independent-review-active',
+            'completed-reaccepted-candidate-subject-binding-active',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -1840,7 +1841,17 @@ class ProductControlTests(unittest.TestCase):
             ROOT,a,a['representativeBehaviorPolicy']['requiredTaskIdsForRelease'],
             g,lambda r,p,_:_read(r,p),True)
         self.assert_has(e,'representative tasks missing',
-                        'R3 representative coverage mismatch')
+                        'R3 representative coverage mismatch',
+                        'observation shape invalid',
+                        'evaluatedRevision is invalid')
+
+        revision = _git(ROOT, 'rev-parse', 'HEAD', text=True).strip()
+        task = {'behaviorSubjectFiles': ['yiyuan_accord/closure.py']}
+        self.assertEqual(_behavior_subject_revision_errors(
+            ROOT, 'current subject', {'evaluatedRevision': revision}, task), [])
+        self.assert_has(_behavior_subject_revision_errors(
+            ROOT, 'stale subject', {'evaluatedRevision': '84447a7a1b9557e22ef5585d159459e8701fa40e'}, task),
+            'behavior subject differs from evaluatedRevision')
 
     def test_plan_process_acceptance_and_release_order_stay_aligned(self):
         with _fixture() as root:

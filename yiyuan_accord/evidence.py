@@ -2,6 +2,7 @@ from datetime import datetime
 from hashlib import sha256
 import json
 import re
+import subprocess
 from urllib.parse import unquote, urlsplit
 
 from .identity import _exact, _nonempty_string as _text, _safe_https_locator
@@ -527,11 +528,48 @@ def _source_amendments(record, task, task_digest, captured_at):
     return previous_digest == task_digest
 
 
+def _behavior_subject_revision_errors(root, label, observation, task):
+    revision, files = observation.get("evaluatedRevision"), task.get(
+        "behaviorSubjectFiles"
+    )
+    if re.fullmatch(r"[0-9a-f]{40}", revision or "") is None:
+        return [f"{label} evaluatedRevision is invalid"]
+    if (not isinstance(files, list) or not files
+            or any(not _text(locator) for locator in files)):
+        return [f"{label} behavior subject is invalid"]
+    try:
+        tracked = subprocess.check_output(
+            ["git", "-C", str(root), "ls-files", "--", *files],
+            stderr=subprocess.DEVNULL, text=True,
+        ).splitlines()
+        ancestor = subprocess.run(
+            ["git", "-C", str(root), "merge-base", "--is-ancestor", revision, "HEAD"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        ).returncode
+        changed = subprocess.run(
+            ["git", "-C", str(root), "diff", "--quiet", revision, "--", *files],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        ).returncode
+    except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+        return [f"{label} behavior subject is unavailable"]
+    if set(tracked) != set(files) or len(tracked) != len(files):
+        return [f"{label} behavior subject is not the exact tracked set"]
+    if ancestor != 0:
+        return [f"{label} evaluatedRevision is not an ancestor"]
+    if changed != 0:
+        return [f"{label} behavior subject differs from evaluatedRevision"]
+    return []
+
+
 def _observation_errors(
     root, label, observation, task, burden_metrics, observation_locator,
-    projection_id, evaluation_digest, read_json,
+    projection_id, evaluation_digest, read_json, require_current_subject=False,
 ):
     errors = []
+    if require_current_subject:
+        errors.extend(_behavior_subject_revision_errors(
+            root, label, observation, task
+        ))
     observed_at = _time(observation.get("observedAt"))
     observer, host = observation.get("observer"), observation.get("hostIdentity")
     if observed_at is None or observed_at > datetime.now().astimezone():
@@ -601,6 +639,9 @@ def _observation_errors(
             and record.get("goldenTaskSha256") == task_digest
             and record.get("evaluationContractSha256") == observation.get(
                 "evaluationContractSha256")
+            and (not require_current_subject or isinstance(record.get("payload"), dict)
+                 and record["payload"].get("evaluatedRevision")
+                 == observation.get("evaluatedRevision"))
             and record.get("hostIdentity") == host
             and captured is not None and observed_at is not None and captured <= observed_at
             and _publishable_payload(
@@ -735,6 +776,11 @@ def representative_sample_errors(
     if _evaluation_contracts(policy, "", evaluation) is None:
         errors.append("representative evaluation contract history is invalid")
     exact_fields = set(fields) | {"evidenceClass"}
+    require_current_subject = representative.get("assessment") in {
+        "verified", "continuing"
+    }
+    if require_current_subject:
+        exact_fields.update(protocol.get("requiredCandidateObservationFields", []))
     for index, item in enumerate(representative.get("evidence", [])):
         if not isinstance(item, dict) or not _text(item.get("locator")):
             continue
@@ -759,6 +805,7 @@ def representative_sample_errors(
             root, label, observation, task, burden, item["locator"],
             projection if _text(projection) else "",
             _evaluation_contracts(policy, task_id, evaluation) or {evaluation}, read_json,
+            require_current_subject,
         )
         errors.extend(local)
         states[task_id] = state
