@@ -277,7 +277,7 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The active development guardrail permits at most 86 tracked files and
-  338000 product-code-and-test bytes with at least five percent headroom and
+  344000 product-code-and-test bytes with at least five percent headroom and
   three tracked-file slots. This bounded adjustment admits the feasibility
   record, one deep pure-data `reconcile_closure` module, its interface
   regression, one append-only GT-14 through GT-18 source and five observations,

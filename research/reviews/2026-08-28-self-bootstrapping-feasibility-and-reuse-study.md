@@ -998,7 +998,7 @@ uninstall rule or proof that the whole product has become redundant.
 
 - Baseline: exact clean revision
   `f898ebd6c14580fb9236cd01440b88314b3c2fab`. Its pure-data core could admit a
-  healthy `native-no-add` route and select `no-op`, but a `route-retired` event
+  healthy `native-no-add` route and select `no-op`, but a retirement event
   for a non-selected redundant Accord route produced no retirement result.
   The first bounded regression failed with `KeyError: 'retirementResults'`.
 - Target: for one exact composed environment and current responsibility, an
@@ -1045,9 +1045,18 @@ same interface rather than adding another component:
    independently observed;
 4. required retirement missing, premature, stale or non-independent becomes a
    completion failure;
-5. the output records `retired-with-recheck`, exact retired route IDs, evidence
-   binding and finite claim scope. It performs no effect and never infers
-   whole-product retirement.
+5. the output records `retired-with-recheck` and exact retired allocations as
+   route-plus-responsibility scopes, with evidence binding and finite claim
+   scope. It performs no effect and never infers whole-route or whole-product
+   retirement.
+
+The first green implementation still exposed a naming leak during GT-19
+design: `retiredRouteIds` could imply that a partial allocation retired its
+entire source route. The corrected interface therefore accepts
+`requiredRetirementAllocations`, emits `retiredAllocations`, rejects the former
+route-only shortcut, and matches completion against the exact responsibility
+set. This correction precedes behavior evidence rather than being normalized
+away after the fact.
 
 The regression is now green for accepted scoped retirement, an unknown
 observation-window fact, an omitted required retirement and a retirement event

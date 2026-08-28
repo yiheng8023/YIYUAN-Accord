@@ -715,13 +715,16 @@ class ProductControlTests(unittest.TestCase):
         dynamic_retirement = fixture(healthy_native=True)
         dynamic_retirement['policy'].update({
             'requiredRetirementFacts': ['fallback-preserved'],
-            'requiredRetirementRouteIds': ['current-plugin'],
+            'requiredRetirementAllocations': [{
+                'routeId': 'current-plugin',
+                'responsibilities': ['sense-environment'],
+            }],
         })
         dynamic_retirement['events'].append({
-            'kind': 'route-retired',
+            'kind': 'responsibility-allocation-retired',
             'routeId': 'current-plugin',
             'replacementRouteId': 'native-no-add',
-            'responsibilities': ['sense-environment', 'bind-authority'],
+            'responsibilities': ['sense-environment'],
             'preconditions': {
                 item: 'observed' for item in retirement_facts
             },
@@ -740,9 +743,16 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             retirement_result['disposition'], 'retired-with-recheck'
         )
-        self.assertEqual(
-            retirement['lifecycle']['retiredRouteIds'], ['current-plugin']
-        )
+        self.assertEqual(retirement['lifecycle']['retiredAllocations'], [{
+            'routeId': 'current-plugin',
+            'replacementRouteId': 'native-no-add',
+            'responsibilities': ['sense-environment'],
+            'recheckTriggers': [
+                'environment-composition-change',
+                'replacement-effect-drift',
+                'evidence-expiry',
+            ],
+        }])
         self.assertTrue(retirement['lifecycle']['completionAllowed'])
 
         stale_replacement = json.loads(json.dumps(dynamic_retirement))
@@ -755,7 +765,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertFalse(stale_retirement['lifecycle']['completionAllowed'])
         self.assertIn(
-            'completion:retirement:current-plugin',
+            'completion:retirement:current-plugin:sense-environment',
             {item['code'] for item in stale_retirement['lifecycle'][
                 'completionFailures']},
         )
@@ -767,7 +777,7 @@ class ProductControlTests(unittest.TestCase):
             missing_retirement_decision['lifecycle']['completionAllowed']
         )
         self.assertIn(
-            'completion:retirement:current-plugin',
+            'completion:retirement:current-plugin:sense-environment',
             {item['code'] for item in missing_retirement_decision['lifecycle'][
                 'completionFailures']},
         )
@@ -924,9 +934,18 @@ class ProductControlTests(unittest.TestCase):
         malformed_cases.append(retirement_scope_overreach)
         unknown_required_retirement = fixture(healthy_native=True)
         unknown_required_retirement['policy'][
-            'requiredRetirementRouteIds'
-        ] = ['invented-route']
+            'requiredRetirementAllocations'
+        ] = [{
+            'routeId': 'invented-route',
+            'responsibilities': ['sense-environment'],
+        }]
         malformed_cases.append(unknown_required_retirement)
+        whole_route_shortcut = json.loads(json.dumps(dynamic_retirement))
+        whole_route_shortcut['policy'].pop('requiredRetirementAllocations')
+        whole_route_shortcut['policy'][
+            'requiredRetirementRouteIds'
+        ] = ['current-plugin']
+        malformed_cases.append(whole_route_shortcut)
         for case in malformed_cases:
             with self.subTest(case=case):
                 invalid = reconcile_closure(case)

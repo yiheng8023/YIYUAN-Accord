@@ -107,7 +107,7 @@
       "id": "self-bootstrapping-feasibility-and-reuse-study-2026-08-28",
       "kind": "exact-source-wheel-provenance-feasibility-ledger-and-p0-p4-results",
       "repositoryLocator": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
-      "repositorySha256": "79d94ad3490fc4dd6e6b36905a5da170ca0ade4603fd96248721ded7e094b096",
+      "repositorySha256": "2a6dcaf0a9bcfe8a0bd689df97cbf9a34063a30e56f4ca37d710a96e2b68ced1",
       "disposition": "admitted-source-bound-no-build-input-with-passing-claim-scoped-gt15-observation-and-live-mechanism-behavior-field-value-and-release-closed"
     }
   ],
@@ -533,7 +533,7 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[implement-minimum-self-bootstrapping-reference-core] One pure reconcile_closure interface validates plain-data requests, enforces only stable compliance and human-authority invariants, accepts task-time policy, open-ended forms and source-observer-exact-subject-boundary bindings, derives fail-closed admission and non-weighted route selection, rejects observer/subject self-identity, and reconciles consequence, experiment and matching independent rollback, keep or responsibility-scoped retirement post-state. A redundant route retires only behind the selected same-responsibility successor's independent consequence and cleanup, observed old-allocation prestate and task-defined observation window, authority, rollback and explicit recheck triggers; missing, stale, premature or scope-overreaching required retirement blocks closure. The core performs no I/O, host discovery, fixed workflow, durable state or effect; deterministic regressions pass while source authenticity, behavior and value remain unclaimed."
+            "stopCondition": "[implement-minimum-self-bootstrapping-reference-core] One pure reconcile_closure interface validates plain-data requests, enforces only stable compliance and human-authority invariants, accepts task-time policy, open-ended forms and source-observer-exact-subject-boundary bindings, derives fail-closed admission and non-weighted route selection, rejects observer/subject self-identity, and reconciles consequence, experiment and matching independent rollback, keep or responsibility-scoped retirement post-state. A redundant responsibility allocation retires only behind the selected same-responsibility successor's independent consequence and cleanup, observed old-allocation prestate and task-defined observation window, authority, rollback and explicit recheck triggers; required retirement matches exact route-plus-responsibility scope, while missing, stale, premature, whole-route-shortcut or scope-overreaching retirement blocks closure. The core performs no I/O, host discovery, fixed workflow, durable state or effect; deterministic regressions pass while source authenticity, behavior and value remain unclaimed."
           },
           {
             "id": "replay-activation-effect-evidence-and-lifecycle",
@@ -952,7 +952,7 @@
     },
     "targets": {
       "maxTrackedFiles": 86,
-      "maxProductCodeAndTestBytes": 338000,
+      "maxProductCodeAndTestBytes": 344000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -1005,7 +1005,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module, independent review required source-complete GT-17/18 validation, and the f898ebd audit exposed missing non-selected-route retirement closure, the active increment sets the planning checkpoint at no more than 86 tracked files and 338000 product-code-and-test bytes with at least five percent byte headroom and three tracked-file slots. The latest bounded 12000-byte increase pays only for responsibility-scoped successor coverage, prior independent consequence and cleanup, reversible retirement policy, post-state, recheck and completion-failure logic plus their negative regressions; it is not advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. The result remains far below the 1551209-byte historical baseline and preserves reviewable headroom without pretending that spare capacity is permanent architecture. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module, independent review required source-complete GT-17/18 validation, and the f898ebd audit exposed missing non-selected-route retirement closure, the active increment sets the planning checkpoint at no more than 86 tracked files and 344000 product-code-and-test bytes with at least five percent byte headroom and three tracked-file slots. The latest bounded 18000-byte increase pays only for responsibility-scoped successor coverage, prior independent consequence and cleanup, exact allocation rather than whole-route retirement, reversible policy, post-state, recheck and completion-failure logic plus their negative regressions; it is not advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. The result remains far below the 1551209-byte historical baseline and preserves reviewable headroom without pretending that spare capacity is permanent architecture. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,
