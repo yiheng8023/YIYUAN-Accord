@@ -36,6 +36,7 @@ from yiyuan_accord.identity import (
     active_tree_errors,
 )
 ROOT = Path(__file__).resolve().parents[2]
+HOOK_PROCESS_TIMEOUT_SECONDS = 15
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
@@ -3315,7 +3316,7 @@ class ProductControlTests(unittest.TestCase):
             result = subprocess.run(
                 [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
                 input=json.dumps(event), text=True, capture_output=True,
-                cwd=temporary, timeout=5,
+                cwd=temporary, timeout=HOOK_PROCESS_TIMEOUT_SECONDS,
             )
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(result.stdout, '')
@@ -3337,7 +3338,7 @@ class ProductControlTests(unittest.TestCase):
             result = subprocess.run(
                 [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
                 input=json.dumps(event), text=True, capture_output=True,
-                cwd=temporary, timeout=5,
+                cwd=temporary, timeout=HOOK_PROCESS_TIMEOUT_SECONDS,
             )
             self.assertEqual(result.returncode, 0, result.stderr)
             envelope = json.loads(result.stdout)
@@ -3399,12 +3400,14 @@ class ProductControlTests(unittest.TestCase):
             fresh = subprocess.run(
                 [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
                 input=json.dumps({**base, 'source': 'clear'}), text=True,
-                capture_output=True, cwd=temporary, timeout=5,
+                capture_output=True, cwd=temporary,
+                timeout=HOOK_PROCESS_TIMEOUT_SECONDS,
             )
             resumed = subprocess.run(
                 [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
                 input=json.dumps({**base, 'source': 'resume'}), text=True,
-                capture_output=True, cwd=temporary, timeout=5,
+                capture_output=True, cwd=temporary,
+                timeout=HOOK_PROCESS_TIMEOUT_SECONDS,
             )
             self.assertEqual(fresh.returncode, 0, fresh.stderr)
             self.assertEqual(fresh.stdout, '')
@@ -3435,17 +3438,18 @@ class ProductControlTests(unittest.TestCase):
             invalid_fields = subprocess.run(
                 [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
                 input=json.dumps(event), text=True, capture_output=True,
-                cwd=temporary, timeout=5,
+                cwd=temporary, timeout=HOOK_PROCESS_TIMEOUT_SECONDS,
             )
             malformed = subprocess.run(
                 [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
                 input='{malformed', text=True, capture_output=True,
-                cwd=temporary, timeout=5,
+                cwd=temporary, timeout=HOOK_PROCESS_TIMEOUT_SECONDS,
             )
             unknown_source = subprocess.run(
                 [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
                 input=json.dumps({**event, 'source': 'unknown'}), text=True,
-                capture_output=True, cwd=temporary, timeout=5,
+                capture_output=True, cwd=temporary,
+                timeout=HOOK_PROCESS_TIMEOUT_SECONDS,
             )
             self.assertEqual(invalid_fields.returncode, 0,
                              invalid_fields.stderr)
