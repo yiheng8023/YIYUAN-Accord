@@ -702,7 +702,7 @@ next turn. The first installed-package turn remains an enabled-but-untrusted
 request override.
 
 After two pre-model path and generated `HooksListResponse` shape corrections,
-one separately authorized `gpt-5.6-luna`/low turn supplied
+one separately authorized low-effort turn supplied
 `bypass_hook_trust` through both `thread/start` and `thread/resume` request
 `config`. Exactly one installed synchronous `SessionStart:resume` Hook emitted
 `hook/started` and `hook/completed`, injected
@@ -716,6 +716,17 @@ and one schema/source branch only. Semantic directive use, Hook-caused official
 state re-sensing and pure-core invocation, named consequence, independent
 post-state, comparative value and topology actuation remain open; GT-21 remains
 incomplete.
+
+Two later exact simple-route arms, at `f5f281c` and `6d91360`, each ran one
+installed startup Hook silently with zero context and zero tools, then failed
+before Agent output. The latter request named no concrete model, retained the
+host-resolved value only as observation provenance and captured official
+structured class `other`, ten same-turn error notifications and server retry.
+Model identity and version are runtime variables, never Accord identity, route
+authority or an oracle condition. The repeated host-turn boundary exposes no
+residual Accord duty, so it admits neither a new client nor model-label
+substitution; recheck waits for a supported host lane or a more specific
+structured cause under fresh bounded authority.
 
 Before that candidate gate can open, GT-21 first exercises frozen exact package
 bytes in disposable official-clean and candidate-enabled lanes. It consumes

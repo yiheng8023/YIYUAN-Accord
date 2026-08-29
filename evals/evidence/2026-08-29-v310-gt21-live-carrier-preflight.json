@@ -383,9 +383,10 @@
           "deterministicCandidateStartupAndClearSilence": true,
           "priorLiveClaudeStartupHookSilenceRetained": true,
           "completeSimpleAgentEpisodeUnderTheSameOracle": false,
-          "latestAttemptRecord": "GT-21-simple-native-route-f5f281c",
+          "latestAttemptRecord": "GT-21-simple-native-route-model-variable-6d91360",
           "failureRecheckActivated": true,
-          "claimLimit": "Transport-level no-op is retained. One exact f5f281c same-oracle attempt proved installed startup Hook silence and zero tool or Accord-context interference, but the model turn failed before any Agent response, so the sufficient simple Agent consequence remains open and the failure cause stays unknown."
+          "modelIdentitySemantics": "Model route, provider label, model family and version are runtime environment variables. A concrete resolved value may be retained only as provenance for one observation; it is never a product binding, route selector or oracle condition.",
+          "claimLimit": "Transport-level no-op is retained. Exact f5f281c and 6d91360 same-oracle attempts both proved installed startup Hook silence and zero tool or Accord-context interference, but each host turn failed before any Agent response. The latest request omitted a concrete model, retained the host-resolved value only as provenance and captured structured error class other plus server retry. The sufficient simple Agent consequence therefore remains open without admitting model substitution or a new Accord mechanism."
         },
         "decision": {
           "state": "continue-gt21",
@@ -393,14 +394,14 @@
           "unknown": [
             "a narrow production trust lifecycle for the installed Hook",
             "ordinary-host activation of the no-added host-integration allocation",
-            "a complete sufficient simple Agent episode under the same delay context and interference oracle; the first exact f5f281c attempt failed after silent Hook completion and before Agent output",
+            "a complete sufficient simple Agent episode under the same delay context and interference oracle; exact f5f281c and model-variable 6d91360 attempts both failed after silent Hook completion and before Agent output",
             "fresh zero-history sequential handoff actuation when policy actually requires load relief",
             "Claude compact or resume equivalence",
             "cross-host value and portability",
             "whole-system component selection and non-compensating balance"
           ],
-          "nextMinimumWork": "Keep the product component set unchanged while the recheck is open. Before any newly authorized model attempt, revise the disposable evaluator to retain only the structured turn failure class, then bind one complete same-oracle simple Agent consequence. Do not proceed to fresh-handoff actuation or admit a client, MCP, SDK or persistence until the earliest failure boundary exposes a residual Accord duty.",
-          "claimLimit": "One source-bound isolated Codex event-to-core-to-Agent semantic-use-to-named-consequence case on exact revision 2f6e3de, one read-only product-boundary comparison and one failed-inconclusive simple-route attempt on exact revision f5f281c. It is not full GT-21, ordinary-host activation, cross-host equivalence, production trust, product value, candidate readiness or release evidence."
+          "nextMinimumWork": "Keep the product component set unchanged and stop same-purpose model-identity substitution. Recheck the simple Agent consequence only when a supported host lane can complete a model-variable turn or exposes a more specific structured cause, under a separately authorized count. Do not proceed to fresh-handoff actuation or admit a client, MCP, SDK or persistence until the earliest failure boundary exposes a residual Accord duty.",
+          "claimLimit": "One source-bound isolated Codex event-to-core-to-Agent semantic-use-to-named-consequence case on exact revision 2f6e3de, one read-only product-boundary comparison, one failed-inconclusive simple-route attempt on exact f5f281c and one structured-failure model-variable attempt on exact 6d91360. It is not full GT-21, ordinary-host activation, cross-host equivalence, production trust, product value, candidate readiness or release evidence."
         },
         "productFormBoundaryDecision": {
           "capturedAt": "2026-08-29T12:37:53.7113577Z",
@@ -455,13 +456,15 @@
             "plugin-private cross-event state without an evidenced duty"
           ],
           "earliestUnclosedBoundary": "Current Codex plugin registration exposes Skill and Hook package surfaces but no narrow production-trusted callback that makes a plugin-owned direct client the active host client. Adding a separately distributed client would add activation, update, rollback, trust, interference and cross-host lifecycle duties before the same-oracle simple route has failed.",
-          "decision": "Do not add or distribute a direct App Server client now. The first exact simple-route attempt activated recheck but failed only after the installed startup Hook completed silently and before Agent output, with no residual Accord duty identified. Treat direct-client behavior as a host-integration responsibility and reference evaluator for condition-fit hosts. Preserve the existing component set while the turn failure class, complete simple route and conditional fresh handoff remain open.",
+          "decision": "Do not add or distribute a direct App Server client now. Two exact simple-route attempts failed only after the installed startup Hook completed silently and before Agent output. The corrected model-variable attempt retained official structured class other and server retry but still identified no residual Accord duty. Treat direct-client behavior as a host-integration responsibility and reference evaluator for condition-fit hosts. Preserve the existing component set while the complete simple route and conditional fresh handoff remain open; do not use a concrete model identity as a retry strategy or product condition.",
           "recheckStatus": {
             "activatedBy": "GT-21-simple-native-route-f5f281c",
-            "earliestObservedFailureBoundary": "model turn after successful silent startup Hook completion and before Agent response",
-            "failureClass": "unknown because the disposable evaluator retained status and timing but not the structured turn error class",
+            "latestDiagnosticRecord": "GT-21-simple-native-route-model-variable-6d91360",
+            "earliestObservedFailureBoundary": "host turn after successful silent startup Hook completion and before Agent response",
+            "failureClass": "official structured class other with ten same-turn error notifications and server retry observed; message content was not retained",
             "residualAccordDutyIdentified": false,
-            "mechanismEscalationAdmitted": false
+            "mechanismEscalationAdmitted": false,
+            "modelIdentityBindingAdmitted": false
           },
           "recheckTriggers": [
             "the same-oracle simple route fails",
@@ -613,6 +616,181 @@
           "mechanismEscalationAdmitted": false,
           "nextMinimumWork": "Before a future separately authorized model call, retain only the structured turn failure class in the disposable evaluator and repeat no more than the newly authorized count. Do not advance to fresh handoff or add a client, MCP, SDK or persistence while this earlier boundary is unresolved.",
           "claimLimit": "One exact Codex-local failed-inconclusive simple-route attempt on f5f281c. It proves live installed startup Hook silence and cleanup only; it does not prove the simple Agent consequence, causality of the turn failure, value, production trust, GT-21 completion, candidate readiness or release readiness."
+        }
+      }
+    },
+    "GT-21-simple-native-route-model-variable-6d91360": {
+      "taskId": "GT-21",
+      "kind": "isolated-model-variable-simple-route-source",
+      "capturedAt": "2026-08-29T16:17:29.9220533Z",
+      "hostIdentity": {
+        "hostProduct": "Codex CLI and App Server",
+        "hostVersion": "0.150.1",
+        "operatingSystem": "Windows",
+        "sessionPersistence": "one task-owned paginated synthetic thread in a disposable CODEX_HOME with verified deletion",
+        "rawConversationRetained": false,
+        "credentialsReadOrCopied": false,
+        "currentHostConfigurationMutated": false
+      },
+      "payload": {
+        "evaluatedRevision": "6d9136019956564e1870b832667d18b3d952090a",
+        "candidateBindingState": "Exact source-bound Codex-local structured-failure simple-route attempt. Installed startup Hook silence passed again and the runtime-resolved model value is provenance only, but the Agent consequence did not complete; this is not GT-21 completion, a selected product form, candidate or release evidence.",
+        "behaviorSubject": {
+          "yiyuan_accord/closure.py": "f771192cd6e81fedf7343c538415da6c40f35e3807509e94430c836b21fe7e47",
+          "runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+          "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+        },
+        "revisionRelation": {
+          "priorSimpleAttemptRevision": "f5f281c54c6953e4f20f9934da510c47153bdb48",
+          "priorSimpleAttemptIsAncestor": true,
+          "priorExactArmRevision": "2f6e3de8e31b85eb909735aac1799d4d00603ece",
+          "priorExactArmIsAncestor": true,
+          "behaviorSubjectChangedSincePriorExactArm": false
+        },
+        "modelVariableContract": {
+          "portableRule": "Model route, provider label, model family and version are runtime environment variables, not Accord identity, route authority or an oracle condition.",
+          "concreteModelRequested": false,
+          "hostResolvedModelObservation": "gpt-5.6-sol",
+          "hostResolvedProviderObservation": "openai",
+          "observationUse": "single-run provenance only",
+          "productBindingAdmitted": false,
+          "oracleDependsOnModelIdentity": false,
+          "reasoningResourceControl": "low"
+        },
+        "authority": {
+          "authorizedClientTurnStarts": 1,
+          "actualClientTurnStarts": 1,
+          "clientRetryCount": 0,
+          "requestScopedHookTrustAuthorized": true,
+          "persistentTrustAuthorized": false
+        },
+        "preflight": {
+          "modelTurnRequests": 0,
+          "selectedInstalledPackageFiles": 6,
+          "selectedInstalledPackageFilesExact": true,
+          "concreteModelLiteralCountInEvaluator": 0,
+          "structuredStringErrorClassesCovered": 12,
+          "structuredObjectErrorClassesCovered": 5,
+          "enabledAccordSessionStartHookCount": 1,
+          "hookSource": "plugin",
+          "hookTrustStatus": "untrusted",
+          "hookDiscoveryErrors": 0,
+          "hookDiscoveryWarnings": 0,
+          "threadModelResolvedByHost": true,
+          "threadApprovalPolicy": "never",
+          "threadSandbox": "readOnly",
+          "threadNetworkAccess": false,
+          "hookRunsBeforeTurn": 0,
+          "taskThreadDeleted": true,
+          "appServerExited": true,
+          "recoveredEvaluatorCorrections": [
+            "Removed a schema-generation-only CLI option from the live App Server process before any model turn.",
+            "Normalized the current generated hook event enum sessionStart rather than the narrative SessionStart label before any model turn."
+          ]
+        },
+        "treatment": {
+          "surface": "thread/start with sessionStartSource startup and no concrete model followed by one turn/start",
+          "eventDefinition": "installed synchronous plugin sessionStart:startup",
+          "requestScopedTestControl": "bypass_hook_trust",
+          "productionTrustClaim": false,
+          "syntheticPrompt": "Reply with exactly SIMPLE_NATIVE_OK and nothing else. Do not use tools.",
+          "dynamicTools": 0,
+          "environments": 0,
+          "sandbox": "readOnly",
+          "approvalPolicy": "never"
+        },
+        "liveObservation": {
+          "outcome": "failed-diagnostic-after-silent-hook",
+          "hook": {
+            "startedCount": 1,
+            "completedCount": 1,
+            "sameRunId": true,
+            "status": "completed",
+            "durationMs": 123,
+            "eventName": "sessionStart",
+            "source": "plugin",
+            "entryCount": 0,
+            "injectedContextCount": 0
+          },
+          "turn": {
+            "status": "failed",
+            "durationMs": 25626,
+            "wallDurationMs": 25633,
+            "completedItemTypes": [],
+            "agentMessageCount": 0,
+            "toolItemCount": 0,
+            "tokenUsageAvailable": false,
+            "structuredFailureClassAvailable": true,
+            "structuredFailureClass": "other",
+            "structuredFailureHttpStatusCode": null,
+            "structuredErrorNotificationCount": 10,
+            "serverRetryObserved": true,
+            "errorMessagePresent": true,
+            "errorMessageContentRetained": false,
+            "additionalDetailsPresent": false
+          },
+          "consequence": {
+            "namedConsequence": "SIMPLE_NATIVE_OK",
+            "exactNamedConsequenceObserved": false,
+            "accordMarkerInAgentResponse": false,
+            "cognitiveInterferenceAssessable": false
+          },
+          "independentPoststate": {
+            "observer": "task-owned App Server protocol client and parent cleanup verifier, not the evaluated Agent",
+            "hookInventoryStable": true,
+            "taskThreadDeleted": true,
+            "taskThreadAbsentAfterDelete": true,
+            "appServerExitCode": 0,
+            "serverRequestCount": 0,
+            "temporaryLiveRootRemoved": true,
+            "temporarySchemaRootRemoved": true,
+            "backgroundProcessesRetained": 0,
+            "taskOwnedResidueRetained": 0
+          },
+          "topology": {
+            "ephemeral": false,
+            "historyMode": "paginated",
+            "forkedFromIdPresent": false,
+            "parentThreadIdPresent": false,
+            "copiedHistoryForkCreated": false,
+            "gitWorktreeCreated": false,
+            "gitBranchCreated": false,
+            "repositoryForkCreated": false,
+            "freshHandoffActuated": false
+          }
+        },
+        "sameOracleComparison": {
+          "priorSimpleAttemptRecord": "GT-21-simple-native-route-f5f281c",
+          "behaviorSubjectUnchanged": true,
+          "startupHookSilentAgain": true,
+          "avoidableAccordContextInjected": false,
+          "toolInterferenceObserved": false,
+          "namedSimpleConsequenceClosed": false,
+          "priorSimpleHookDurationMs": 119,
+          "currentSimpleHookDurationMs": 123,
+          "singleSampleLatencyComparisonAdmitted": false,
+          "modelIdentityComparisonAdmitted": false,
+          "result": "The model-variable arm again passed Hook silence, context and tool-interference checks but failed before Agent output. The official generic class other and server retry make the failure diagnostic rather than unclassified, but neither identify an Accord duty nor make a resolved model value causal."
+        },
+        "decision": {
+          "state": "continue-gt21-model-variable-host-turn-recheck",
+          "admitted": "A second exact installed sessionStart:startup execution remained silent with zero context entries and zero tools, stable inventory, clean topology and zero task residue. The evaluator retained the official structured failure class and retry presence without retaining message content.",
+          "rejected": "The complete sufficient simple Agent episode still did not pass because the single authorized host-resolved turn failed before any Agent message or named consequence.",
+          "earliestObservedFailureBoundary": "host turn after successful silent startup Hook completion and before Agent response",
+          "failureCause": "Official structured class other after same-turn server retry; the available class is too generic to assign a more specific cause.",
+          "modelIdentityBindingAdmitted": false,
+          "residualAccordDutyIdentified": false,
+          "mechanismEscalationAdmitted": false,
+          "repeatedRepairDisposition": "Stop substituting concrete model identities. Preserve both failed trials as bounded counterexamples and recheck only on a supported host-lane or structured-cause change under fresh bounded authority.",
+          "nextMinimumWork": "Reconcile the model-variable rule across current program, acceptance, guidance and continuation claims. Keep the product component set unchanged. Do not repeat the simple turn merely with another model label, advance to fresh handoff or add a client, MCP, SDK or persistence while this earlier host-turn boundary exposes no residual Accord duty.",
+          "claimLimit": "One exact Codex-local structured-failure simple-route attempt on 6d91360. It proves live installed startup Hook silence, model-identity independence of the request and cleanup only; it does not prove the simple Agent consequence, a specific failure cause, value, production trust, GT-21 completion, candidate readiness or release readiness."
         }
       }
     }

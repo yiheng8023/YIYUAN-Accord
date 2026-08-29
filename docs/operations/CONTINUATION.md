@@ -169,7 +169,8 @@ Then read, in order:
   Host target state remains task state rather than behavior or value evidence.
   At audit cut `1463034569fe6e724f186c88171e3ee12dffc94b`, BAL-04 ran one
   disposable matched repository-Skill/no-Accord correction task with Codex CLI
-  0.150.1 and `gpt-5.6-luna`. Both arms passed the same independent outcome,
+  0.150.1; its resolved model value remains source-evidence provenance only.
+  Both arms passed the same independent outcome,
   foreign-state and zero-residue poststate with no human action; the control
   needed one failed intermediate test run, while the Skill arm loaded more
   input context. The fixed order, explicit generic Skill invitation and shared
@@ -716,7 +717,7 @@ increment and one active work item. Its ordered work is:
     supply runtime-only trust through the thread request. Two later path and
     generated `HooksListResponse` shape corrections stopped before `turn/start`,
     deleted their task threads and consumed no model call. One separately
-    authorized `gpt-5.6-luna`/low turn then supplied `bypass_hook_trust` through
+    authorized low-effort turn then supplied `bypass_hook_trust` through
     both `thread/start` and `thread/resume` request `config`. Exactly one installed
     synchronous `SessionStart:resume` Hook started and completed, injected
     `yiyuan-accord-hook-context/v1` with `signal.source=resume`, and the Agent
@@ -728,6 +729,15 @@ increment and one active work item. Its ordered work is:
     official-state re-sensing, pure-core invocation, consequence or independent
     post-state. Compare it with the direct client under the same end-to-end oracle;
     do not add another mechanism merely because the partial chains differ.
+    Exact `f5f281c` and `6d91360` simple-route arms then each ran one installed
+    startup Hook silently with zero context and zero tools but failed before
+    Agent output. The latest request supplied no concrete model, retained the
+    host-resolved value only as provenance and captured structured class `other`,
+    ten same-turn error notifications and server retry. Model identity and version
+    are runtime variables, never product or oracle bindings. The repeated host-
+    turn boundary exposes no residual Accord duty, so model-label substitution
+    stops and fresh handoff remains gated until a supported host lane or more
+    specific structured cause permits a bounded recheck.
 14. `prove-transactional-install-state-preservation-and-removal` — pending after
     stage 13. Current package contents are plugin-scoped and do not themselves
     replace user instruction or configuration files, but that static fact is
