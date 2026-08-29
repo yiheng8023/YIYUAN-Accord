@@ -522,7 +522,7 @@
         },
         {
           "locator": "evals/observations/2026-08-29-2460adc-gt-18-codex-local.json",
-          "sha256": "c8eb8645a725b5984e5bbae22e31e9630d14c079cc3be3ca72538f95ad3bbf7f",
+          "sha256": "513c9a256412df3524a5eb8f043b45f31a7c1332fa4ab70b76da6f452965ee40",
           "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q1"
@@ -596,7 +596,7 @@
         },
         {
           "locator": "evals/observations/2026-08-29-2460adc-gt-18-codex-local.json",
-          "sha256": "c8eb8645a725b5984e5bbae22e31e9630d14c079cc3be3ca72538f95ad3bbf7f",
+          "sha256": "513c9a256412df3524a5eb8f043b45f31a7c1332fa4ab70b76da6f452965ee40",
           "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q2"
@@ -672,7 +672,7 @@
         },
         {
           "locator": "evals/observations/2026-08-29-2460adc-gt-18-codex-local.json",
-          "sha256": "c8eb8645a725b5984e5bbae22e31e9630d14c079cc3be3ca72538f95ad3bbf7f",
+          "sha256": "513c9a256412df3524a5eb8f043b45f31a7c1332fa4ab70b76da6f452965ee40",
           "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q3"
@@ -754,7 +754,7 @@
         },
         {
           "locator": "evals/observations/2026-08-29-2460adc-gt-18-codex-local.json",
-          "sha256": "c8eb8645a725b5984e5bbae22e31e9630d14c079cc3be3ca72538f95ad3bbf7f",
+          "sha256": "513c9a256412df3524a5eb8f043b45f31a7c1332fa4ab70b76da6f452965ee40",
           "claim": "Passed only for one synthetic current-contract four-episode sequence at 2460adcff02bd56144f8d3f647ecef27cd5fefd0: the immutable full vector and actual closure decisions reject and roll back a proxy hard-gate regression, retain native-no-add only as a bounded improvement, then invalidate and replace it through three exact disposable carrier edges with zero task residue. The independent review used 181410 tokens and needed two PowerShell-query corrections, excluding efficiency or low-interference claims. It does not prove unbounded improvement, durable-carrier need, field or cross-host value, candidate readiness or release readiness.",
           "bindsProjection": "codex",
           "supportsCriterion": "Q4"
