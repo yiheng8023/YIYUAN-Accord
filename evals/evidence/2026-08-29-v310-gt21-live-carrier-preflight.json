@@ -227,6 +227,180 @@
           "persistentHookTrustWritten": false
         }
       }
+    },
+    "GT-21-isolated-live-carrier-2f6e3de": {
+      "taskId": "GT-21",
+      "kind": "source-bound-isolated-live-carrier-observation",
+      "capturedAt": "2026-08-29T11:54:56.6884038Z",
+      "hostIdentity": {
+        "hostProduct": "Codex CLI and App Server",
+        "hostVersion": "Codex 0.150.1",
+        "operatingSystem": "Windows",
+        "model": "gpt-5.6-luna",
+        "reasoningEffort": "low",
+        "authorizedModelTurns": 1,
+        "observedModelTurns": 1,
+        "rawConversationRetained": false,
+        "credentialsReadOrCopied": false,
+        "currentHostConfigurationMutated": false,
+        "persistentTrustWritten": false
+      },
+      "payload": {
+        "evaluatedRevision": "2f6e3de8e31b85eb909735aac1799d4d00603ece",
+        "candidateBindingState": "Exact source-bound Codex-local bounded observation. It advances but does not complete GT-21, select a distributable product form, establish production trust, or authorize a candidate or Release.",
+        "behaviorSubject": {
+          "yiyuan_accord/closure.py": "f771192cd6e81fedf7343c538415da6c40f35e3807509e94430c836b21fe7e47",
+          "runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+          "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+        },
+        "preflight": {
+          "modelTurns": 0,
+          "attempts": 2,
+          "firstCorrection": "The official Skill name included its plugin namespace; the filter was corrected to the generated response shape before live work.",
+          "officialFieldCount": 5,
+          "officialStateStable": true,
+          "hookLifecycleNotifications": 0,
+          "pureCore": {
+            "schema": "yiyuan-accord-closure-decision/v2",
+            "valid": true,
+            "errors": [],
+            "currentReceipt": true,
+            "disposition": "hold-unknown",
+            "selectedRouteId": null,
+            "completionAllowed": false
+          },
+          "taskThreadDeleted": true,
+          "appServersExited": true
+        },
+        "liveObservation": {
+          "trigger": {
+            "surface": "thread/resume followed by the first resumed turn",
+            "eventDefinition": "installed synchronous plugin SessionStart:resume",
+            "requestScopedTestControl": "bypass_hook_trust",
+            "productionTrustClaim": false
+          },
+          "officialResensing": {
+            "fieldCount": 5,
+            "surfaces": [
+              "config/read",
+              "hooks/list",
+              "skills/list",
+              "permissionProfile/list",
+              "thread/goal/get"
+            ],
+            "configReadable": true,
+            "enabledSessionStartPluginHooks": 1,
+            "enabledOutcomeSkills": 1,
+            "permissionProfileCount": 3,
+            "threadApprovalPolicy": "never",
+            "threadSandbox": "readOnly",
+            "goalStatus": "active",
+            "beforeAfterStable": true
+          },
+          "pureCore": {
+            "schema": "yiyuan-accord-closure-decision/v2",
+            "valid": true,
+            "errors": [],
+            "currentReceipt": true,
+            "disposition": "hold-unknown",
+            "selectedRouteId": null,
+            "completionAllowed": false,
+            "reason": "Independent consequence verification and post-state were intentionally unknown at the decision boundary."
+          },
+          "hook": {
+            "startedCount": 1,
+            "completedCount": 1,
+            "completionStatus": "completed",
+            "durationMs": 124,
+            "typedContextSchemaObserved": "yiyuan-accord-hook-context/v1",
+            "sourceObserved": "resume"
+          },
+          "agentUseAndConsequence": {
+            "typedApplicationContextSchema": "yiyuan-accord-decision-context/v1",
+            "requiredSemanticJoin": [
+              "hook signal.source equals resume",
+              "core disposition equals hold-unknown",
+              "core selectedRouteId is null",
+              "core completionAllowed is false"
+            ],
+            "agentMessageCount": 1,
+            "namedConsequence": "ACCORD_HOLD_UNKNOWN",
+            "exactNamedConsequenceObserved": true,
+            "toolItemCount": 0
+          },
+          "independentPoststate": {
+            "observer": "task-owned App Server protocol client and parent cleanup verifier, not the evaluated Agent",
+            "officialStateStable": true,
+            "taskThreadDeleted": true,
+            "appServersExited": true,
+            "temporaryRootRemoved": true,
+            "backgroundProcessesRetained": 0,
+            "taskOwnedResidueRetained": 0
+          },
+          "topology": {
+            "ephemeral": false,
+            "historyMode": "paginated",
+            "forkedFromId": null,
+            "parentThreadId": null,
+            "copiedHistoryForkCreated": false,
+            "gitWorktreeCreated": false,
+            "gitBranchCreated": false,
+            "repositoryForkCreated": false,
+            "sequentialReliefRequiredByPolicy": false,
+            "freshHandoffActuated": false
+          }
+        },
+        "routeComparison": [
+          {
+            "route": "SessionStart Hook alone",
+            "result": "insufficient-for-current-receipt-core-chain",
+            "evidence": "The supported Hook input supplies an invalidation signal and bounded event hints, but not the five structured current-state surfaces or a pure-core result. Treating the event as state would violate the receipt contract."
+          },
+          {
+            "route": "direct App Server resume client alone",
+            "result": "sufficient-for-zero-model-resensing-and-core",
+            "evidence": "The resume response can cause five current structured queries and pure-core hold-unknown without a model turn, but by itself it does not inject or prove Agent semantic use."
+          },
+          {
+            "route": "direct App Server client plus installed Hook and typed turn context",
+            "result": "passed-one-bounded-end-to-end-Codex-arm",
+            "evidence": "The combined arm closed event, current re-sensing, pure core, two typed context inputs, Agent semantic join, exact named consequence and independent cleanup/post-state with zero tools."
+          },
+          {
+            "route": "bundled MCP SDK or persistent controller",
+            "result": "not-admitted",
+            "evidence": "No residual duty in this bounded arm falsified the lower event-driven and direct-client composition strongly enough to justify a daemon, database, scheduler or persistent service."
+          }
+        ],
+        "simpleRoute": {
+          "deterministicCandidateStartupAndClearSilence": true,
+          "priorLiveClaudeStartupHookSilenceRetained": true,
+          "completeSimpleAgentEpisodeUnderTheSameOracle": false,
+          "claimLimit": "Transport-level no-op is retained, but a same-oracle sufficient simple Agent episode with measured delay, context and cognitive interference remains open."
+        },
+        "decision": {
+          "state": "continue-gt21",
+          "admitted": "One exact frozen Codex-local arm now proves a supported resume lifecycle signal can be followed by current structured re-sensing and the pure core, while the first resumed turn contributes typed Hook context; the Agent semantically joined both typed inputs, emitted the exact named hold consequence, used no tools, and left independently observed stable state with zero task residue.",
+          "unknown": [
+            "a narrow production trust lifecycle for the installed Hook",
+            "whether the direct App Server client is a distributable Accord component or a host-integration responsibility",
+            "a complete sufficient simple Agent episode under the same delay context and interference oracle",
+            "fresh zero-history sequential handoff actuation when policy actually requires load relief",
+            "Claude compact or resume equivalence",
+            "cross-host value and portability",
+            "whole-system component selection and non-compensating balance"
+          ],
+          "nextMinimumWork": "Compare the combined direct-client route with a host-native no-added-component route at the product and lifecycle boundary. Select the smallest distributable responsibility allocation only after the same-oracle simple route and conditional fresh-handoff obligations are bound; do not admit MCP, SDK or persistence without a residual duty.",
+          "claimLimit": "One source-bound isolated Codex event-to-core-to-Agent semantic-use-to-named-consequence case on exact revision 2f6e3de only. It is not full GT-21, cross-host equivalence, production trust, a selected product form, product value, candidate readiness or release evidence."
+        }
+      }
     }
   }
 }
