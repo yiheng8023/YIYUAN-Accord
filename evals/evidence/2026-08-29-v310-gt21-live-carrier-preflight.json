@@ -1,0 +1,232 @@
+{
+  "schema": 1,
+  "records": {
+    "GT-21-live-carrier-preflight-working-tree": {
+      "taskId": "GT-21",
+      "kind": "bounded-live-carrier-preflight-source",
+      "capturedAt": "2026-08-29T10:25:14.800Z",
+      "hostIdentity": {
+        "hostProduct": "Codex CLI and App Server plus Claude Code isolated local probes",
+        "hostVersion": "Codex 0.150.1; Claude Code 2.1.251",
+        "operatingSystem": "Windows",
+        "nodeVersion": "24.19.0",
+        "sessionPersistence": "ephemeral, disposable CODEX_HOME, or one task-owned synthetic thread in the current authenticated Codex home with verified deletion",
+        "rawConversationRetained": false,
+        "credentialsReadOrCopied": false,
+        "currentHostConfigurationMutated": false
+      },
+      "payload": {
+        "evaluatedRevision": null,
+        "candidateBindingState": "working-tree preflight only; requires future exact revision and complete GT-21 replay",
+        "behaviorSubject": {
+          "runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+          "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+          "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a"
+        },
+        "attempts": [
+          {
+            "id": "official-structured-surface-query",
+            "outcome": "passed-bounded-preflight",
+            "observed": "A fresh disposable CODEX_HOME App Server returned structured config, experimental feature, Skill, Hook, MCP and thread-list results, exited normally and removed its probe root.",
+            "claimLimit": "Availability and response shape only; no field value, Agent use or product effect."
+          },
+          {
+            "id": "transport-and-encoding-corrections",
+            "outcome": "recovered-counterevidence",
+            "observed": "A fire-and-EOF route dropped post-initialize messages; a later Python pipe used the Windows default encoding and failed on UTF-8. The exact task processes and roots were independently removed before retry.",
+            "claimLimit": "Probe-wrapper failures, not App Server unavailability."
+          },
+          {
+            "id": "public-hook-seam-red-green",
+            "outcome": "passed-deterministic-working-tree",
+            "observed": "Five public-seam tests now cover startup and clear silence, compact and resume non-authoritative event hints inside typed minimum output, invalid-field rejection, visible fixed failure without input echo for malformed or unknown input, zero file side effects and byte-identical Codex and Claude package copies.",
+            "claimLimit": "Synthetic official-shaped event input; no live Hook causality."
+          },
+          {
+            "id": "claude-stream-json-verbose-preflight",
+            "outcome": "recovered-counterevidence",
+            "observed": "The first session-only Claude print arm stopped before Hook or model execution because stream-json requires the explicit verbose flag. The exact disposable root was removed before retry.",
+            "claimLimit": "CLI invocation correction only; no Hook or Agent behavior."
+          },
+          {
+            "id": "claude-session-only-startup-hook",
+            "outcome": "passed-bounded-live-trigger",
+            "observed": "An exact working-package copy loaded through one session-only plugin-dir in a disposable Git root with restricted settings, no tools and no session persistence. The official event stream reported SessionStart:startup hook_started followed by a successful hook_response with empty output, stdout and stderr and exit code zero. The later model request failed authentication with a revoked OAuth token before any Agent response, tokens or cost, and the probe root was removed.",
+            "claimLimit": "Actual Claude session-only startup Hook trigger and correct silence only; not installed-plugin, compact or resume trigger, context injection, Agent use, execution, consequence, evidence or value."
+          },
+          {
+            "id": "codex-runtime-only-hook-isolation",
+            "outcome": "passed-bounded-live-isolation",
+            "observed": "For a disposable cwd, structured hooks/list exposed one enabled but modified installed Accord SessionStart Hook. The ephemeral App Server thread overrode that exact hook key to disabled, supplied only the reviewed working-tree compact matcher through session config and used the documented runtime-only bypass_hook_trust field. The official event stream reported zero installed-plugin Hook runs and no persistent trust or current-install mutation.",
+            "claimLimit": "One invocation-scoped isolation result only; runtime trust bypass is broader than per-Hook trust and is admitted here only because the effective prestate had one enumerated Hook and its exact key was disabled before model work."
+          },
+          {
+            "id": "codex-ephemeral-compact-context-agent-use",
+            "outcome": "passed-bounded-live-chain",
+            "observed": "One authenticated ephemeral Codex App Server thread used a read-only sandbox, no dynamic tools and gpt-5.6-luna at low effort. After a minimal seed turn, the official thread/compact/start method completed. The candidate sessionFlags SessionStart Hook completed once, its context independently contained signal.source compact, the next Agent response returned exactly the injected schema value yiyuan-accord-hook-context/v1, zero tool-like items were observed and the disposable root was removed.",
+            "claimLimit": "Actual isolated compact trigger, context injection and one schema-field Agent read only; not installed-plugin behavior, resume, official-state re-sensing, state receipt, pure-core invocation, semantic use of directives, product consequence, value, no-Accord advantage or topology actuation."
+          },
+          {
+            "id": "codex-compact-probe-schema-expectation-correction",
+            "outcome": "recovered-counterevidence",
+            "observed": "The summary probe initially compared the injected context against a guessed stale schema string and reported candidateContextHasSchema false. Direct source inspection and deterministic adapter replay established the actual schema as yiyuan-accord-hook-context/v1, exactly matching the Agent response; the event source check remained independently true.",
+            "claimLimit": "Probe-assertion correction only; the false comparison is not a product failure and the matching token does not promote the broader GT-21 chain."
+          },
+          {
+            "id": "app-server-ephemeral-goal-read",
+            "outcome": "recovered-counterevidence",
+            "observed": "A read-only App Server prototype created an ephemeral thread without starting a model turn. thread/goal/get was rejected because ephemeral threads do not support goals; the retry retained that field as unavailable rather than inventing an absent goal.",
+            "claimLimit": "Current local App Server behavior for one ephemeral thread only; stored-thread goal behavior and portable host equivalence are not inferred."
+          },
+          {
+            "id": "prototype-self-attested-poststate-correction",
+            "outcome": "recovered-counterevidence",
+            "observed": "The first complete prototype mechanically admitted its route after treating its own pre/post queries as an independent consequence verifier. Review rejected that circular claim and changed the same field plus consequence and resource independence to unknown before the accepted retry.",
+            "claimLimit": "Evaluator correction only; an orchestration wrapper cannot independently prove its own product consequence or cleanup."
+          },
+          {
+            "id": "official-snapshot-receipt-core-fail-closed",
+            "outcome": "passed-bounded-feasibility",
+            "observed": "A disposable App Server process used only initialize, config/read, hooks/list, skills/list, permissionProfile/list, ephemeral thread/start and the rejected goal read. It returned current structured configuration, Hook, Skill and permission surfaces, discovered the installed Accord Hook and Skill, and made no write request or model turn. A throwaway adapter normalized only five decision-bound fields into one current yiyuan-accord-closure/v2 receipt and invoked the repository pure core. The core returned valid true, currentReceipt true, disposition hold-unknown, no selected route and completionAllowed false because independent consequence verification remained unknown. A second structured snapshot matched the first, zero Hook lifecycle notifications were observed and no transcript or credential was read or copied.",
+            "claimLimit": "Official structured state-to-typed-receipt-to-pure-core connectivity and fail-closed behavior only. The adapter was throwaway, the App Server client is not an admitted product form, the Hook event did not cause this chain, and no Agent semantic use, product consequence, independent post-state, value or cross-host portability follows."
+          },
+          {
+            "id": "probe-isolation-variable-collision-recovered",
+            "outcome": "recovered-counterevidence",
+            "observed": "The first disposable installation command used a PowerShell variable name that collided case-insensitively with the protected HOME variable, so CODEX_HOME briefly pointed at the user-profile root instead of the task root. The newly added marketplace and plugin were removed through Codex lifecycle commands; the only remaining zero-byte config file and empty plugin cache directories had the task timestamp and no user content, were removed by exact absolute path, and their absence was verified before retry.",
+            "claimLimit": "Probe-orchestration correction only. It does not affect repository or product behavior, and it is retained because isolation declarations require verified prestate and poststate rather than intent."
+          },
+          {
+            "id": "zero-turn-thread-persistence-requires-state",
+            "outcome": "recovered-counterevidence",
+            "observed": "A disposable App Server thread/start returned a non-ephemeral thread id, but after the server exited a second server rejected thread/resume because no rollout existed. A corrected retry wrote one task-owned goal through thread/goal/set without a turn; the next server resumed the thread, read the same goal state and later deleted the thread successfully.",
+            "claimLimit": "On Codex 0.150.1, a zero-turn non-ephemeral thread declaration alone is not persistence evidence. One official goal state can make the task thread resumable in this isolated lane; broader durability, loss control and cross-host equivalence remain unproved."
+          },
+          {
+            "id": "installed-plugin-resume-hook-is-turn-lazy",
+            "outcome": "rejected-as-zero-turn-trigger-proof",
+            "observed": "The disposable native marketplace and plugin lifecycle installed and enabled exact v3.1.0 candidate bytes; source and installed Hook plus runtime SHA-256 values matched. hooks/list discovered the candidate with zero discovery errors. After task-owned goal state made the thread resumable, thread/resume acknowledged successfully but emitted zero hook/started and zero hook/completed notifications. Current official Codex source queues pending SessionStart sources and dispatches them only with a TurnContext, so resume alone restores state but does not execute the Hook before the next turn.",
+            "claimLimit": "Exact installed-package zero-turn resume discovery and non-execution only. This does not disprove first-turn resume execution; testing that would start a model turn and crosses a separate cost and data boundary."
+          },
+          {
+            "id": "first-turn-readonly-access-schema-drift",
+            "outcome": "recovered-counterevidence",
+            "observed": "The first authorized first-turn request was rejected before a turn result because current Codex 0.150.1 no longer accepts readOnly.access and directs clients to permissionProfile for restricted reads. The task thread and exact disposable root were removed before correction.",
+            "claimLimit": "Live protocol-shape correction only; no Hook execution, Agent response or product behavior follows."
+          },
+          {
+            "id": "first-turn-active-turn-output-schema-conflict",
+            "outcome": "recovered-counterevidence",
+            "observed": "After resume, a retry with a request-only output schema was rejected as ActiveTurnOutputSchemaMismatch. Current official source shows that this error occurs when an active task already exists with a different final-output schema, before the new user input is accepted. No turn result or Agent item was observed, and the task thread plus disposable root were removed.",
+            "claimLimit": "This establishes a client-composition conflict and pre-existing active-turn topology for the exact sequence, not Hook execution, model cost absence or product effect."
+          },
+          {
+            "id": "installed-plugin-first-turn-resume-untrusted-control",
+            "outcome": "failed-bounded-live-arm",
+            "observed": "One authorized gpt-5.6-luna low-effort synthetic turn ran in an empty disposable cwd over exact installed Hook and runtime bytes. Structured hooks/list showed the Accord SessionStart matcher enabled, plugin-sourced and free of discovery warnings or errors, but trustStatus remained modified. Resume acknowledged, zero hook/started and zero hook/completed notifications appeared, the Agent returned NO_CONTEXT, and completed items were only userMessage, reasoning and agentMessage with no tool execution. The task thread was deleted, absent from the next list result, both App Server processes exited zero and the exact disposable root was removed.",
+            "claimLimit": "This is an enabled-but-untrusted control, not a trusted first-turn Hook test. It falsifies the probe's process-level trust-bypass assumption but does not show that a correctly request-scoped trusted Hook cannot inject on the first resume turn."
+          },
+          {
+            "id": "app-server-request-scoped-hook-trust-correction",
+            "outcome": "source-grounded-correction",
+            "observed": "Current official Codex source defines bypass_hook_trust as a runtime-only ConfigOverrides field. App Server extracts it from the generic thread request config map and supplies it through the typed runtime override while building the session. Passing the same text only as an app-server CLI -c override did not create the required request-scoped trust grant. Generated current-host ThreadStartParams and ThreadResumeParams both expose a config object for that override.",
+            "sources": [
+              "https://github.com/openai/codex/blob/main/codex-rs/core/src/config/mod.rs",
+              "https://github.com/openai/codex/blob/main/codex-rs/app-server/src/config_manager.rs",
+              "https://github.com/openai/codex/blob/main/codex-rs/app-server-protocol/schema/typescript/v2/ThreadStartParams.ts",
+              "https://github.com/openai/codex/blob/main/codex-rs/app-server-protocol/schema/typescript/v2/ThreadResumeParams.ts"
+            ],
+            "claimLimit": "This corrected probe orchestration and opened, but did not itself satisfy, the separately authorized model-call boundary."
+          },
+          {
+            "id": "trusted-first-turn-hook-inventory-shape-corrections",
+            "outcome": "recovered-pre-model-counterevidence",
+            "observed": "Two corrected preflights each created goal-backed task state, resumed it with request-scoped bypass_hook_trust, stopped before turn/start and deleted the task thread. The first normalized mixed Windows path separators; the second followed the generated current-host HooksListResponse data[].hooks[] grouping instead of assuming a flat list. Both verified thread absence after deletion and consumed no model call.",
+            "claimLimit": "Probe-client corrections and cleanup evidence only; neither attempt proves Hook execution or zero billing."
+          },
+          {
+            "id": "installed-plugin-first-turn-resume-request-scoped-trust-bypass",
+            "outcome": "passed-bounded-live-chain",
+            "observed": "One explicitly authorized gpt-5.6-luna low-effort synthetic turn ran in an empty disposable cwd over installed Hook and runtime bytes whose SHA-256 values exactly matched the working package. Before the turn, structured hooks/list exposed exactly one enabled plugin Hook: the Accord SessionStart matcher, with zero discovery warnings or errors and general inventory trustStatus modified. thread/start and thread/resume both supplied runtime-only bypass_hook_trust through request config. On the first resumed turn the official stream emitted exactly one synchronous thread-scoped hook/started and one completed hook/completed for the installed package; completion took 123 ms and carried typed yiyuan-accord-hook-context/v1 context with signal.source resume. The Agent returned exactly HOOK_CONTEXT_RESUME. Completed items were only userMessage, reasoning and agentMessage, with no tool execution. The task thread was deleted and absent from the next list, both App Server processes exited zero, and the exact disposable root plus temporary probe script were removed.",
+            "claimLimit": "This proves request-scoped trust-bypass execution, installed-package first-turn resume trigger, typed context injection and one schema/source-branch Agent read in one current-auth isolated lane. It does not convert general trustStatus modified into durable trust, select the Hook as product form, prove official-state re-sensing, pure-core invocation, semantic directive use, named product consequence, independent post-state, value, topology actuation, portability or release readiness."
+          },
+          {
+            "id": "request-scoped-hook-trust-bypass-scope-warning",
+            "outcome": "retained-risk-counterevidence",
+            "observed": "The Hook event exposed permission_mode bypassPermissions as a non-authoritative event hint even though the turn request also imposed a read-only sandbox, approvalPolicy never, no environments and no tool use. No write or tool effect occurred.",
+            "claimLimit": "Runtime bypass_hook_trust is acceptable only as this bounded test control; the observation does not establish a narrow production trust mechanism or permission equivalence and prevents promoting the bypass itself into the product route."
+          },
+          {
+            "id": "direct-app-server-resume-receipt-core-chain",
+            "outcome": "passed-bounded-live-connectivity",
+            "observed": "In the same disposable lane, the acknowledged official thread/resume response directly triggered config/read, hooks/list, skills/list, permissionProfile/list and thread/goal/get before any core call. All five surfaces returned, candidate Hook and Skill discovery succeeded, goal state was readable and present, and the response-to-query-to-core timestamps were monotonic. A throwaway direct App Server client normalized five required bindings with official-host-state or bounded-direct-observation provenance and invoked reconcile_closure. The decision was valid with currentReceipt true, stateFieldCount five, disposition hold-unknown, no selected route and completionAllowed false. No model turn, transcript read, credential read or current installation/configuration mutation occurred. The task thread was deleted, absent from the next list result, both App Server processes exited zero, and the exact task root plus the recovered wrong-root residues were verified absent.",
+            "claimLimit": "One event-caused official App Server resume-response-to-state-receipt-to-pure-core chain only. It shows the direct client route can bypass a zero-turn Hook gap, but does not select that product form or prove Hook execution, Agent semantic use, product consequence, independent consequence verification, value, topology actuation or portability."
+          },
+          {
+            "id": "isolated-plugin-discovery",
+            "outcome": "passed-bounded-preflight",
+            "observed": "One native marketplace-add and plugin-add intent in a disposable CODEX_HOME exposed one Hook entry for the probe cwd with zero discovery errors and warnings. The process was run with one-shot vetted-source hook-trust bypass and no persisted trust.",
+            "claimLimit": "Installation and discovery only; activation, execution and value remain separate."
+          },
+          {
+            "id": "app-server-sandbox-schema-drift",
+            "outcome": "recovered-counterevidence",
+            "observed": "The current local App Server rejected documentation-shaped sandbox value readOnly and required read-only; the corrected thread/start passed.",
+            "claimLimit": "Live protocol response overrides the stale or non-matching example for this host version."
+          },
+          {
+            "id": "thread-start-is-not-session-hook",
+            "outcome": "rejected-as-trigger-proof",
+            "observed": "thread/start produced a thread/started notification but no Hook run. A resume without a persisted rollout failed, demonstrating that conversation topology creation is not itself SessionStart execution evidence.",
+            "claimLimit": "No Hook trigger claim."
+          },
+          {
+            "id": "candidate-enabled-unauthenticated-turn",
+            "outcome": "inconclusive-with-counterevidence",
+            "observed": "The disposable installed plugin remained discoverable, but an unauthenticated turn emitted host errors and no hook/started or hook/completed notification. All task processes and roots were then removed.",
+            "claimLimit": "Authentication failed before a usable Agent turn; this neither passes nor disproves the Hook."
+          },
+          {
+            "id": "ephemeral-current-auth-official-clean-attempt",
+            "outcome": "partial-preflight-only",
+            "observed": "A current-auth Codex exec turn completed with ephemeral sessions, user config and rules ignored, a read-only sandbox and zero task residue. The exec JSONL did not surface Hook lifecycle events, and the temporary project layer did not load without a separate project-trust decision.",
+            "claimLimit": "Agent route and isolation availability only; no Hook execution, context injection or consequence claim."
+          },
+          {
+            "id": "cli-help-parser-drift",
+            "outcome": "recovered-counterevidence",
+            "observed": "The current exec help listed both -a and --ask-for-approval, while the active subcommand parser rejected both. Removing the nonessential option preserved the read-only no-tool probe and allowed the ephemeral turn to complete.",
+            "claimLimit": "Declaration and actual callability are distinct even on the same installed client."
+          }
+        ],
+        "preflightDecision": {
+          "state": "continue-gt21",
+          "admitted": "A shared short-lived event adapter is feasible and packageable without a persistent process or durable state. One Claude session-only startup event triggered the exact copied adapter and completed silently. One isolated ephemeral Codex thread triggered the reviewed sessionFlags adapter through official compact, injected typed context and produced one matching schema-field Agent response with zero tool use while the installed Hook was disabled. A disposable App Server lane proved that task-owned goal state can make a zero-turn thread resumable and that the official resume response can directly trigger current structured re-sensing, a five-field receipt and pure-core invocation; the core correctly held unknown without independent consequence evidence. The first installed-package turn was retained as an enabled-but-untrusted NO_CONTEXT control. After two pre-model client corrections, the separately authorized request-scoped trust-bypass arm then emitted exactly one installed SessionStart:resume start/completion pair, injected schema/source context and produced exact HOOK_CONTEXT_RESUME with zero tools. Cleanup passed for every task thread, process, root and temporary script.",
+          "unknown": [
+            "installed-package compact and sessionFlags resume execution without the test-only broad trust bypass",
+            "whether direct App Server resume-response handling or a first-turn Hook is the lower-burden selected event-to-core route",
+            "Agent use beyond one injected schema/source branch",
+            "named consequence and independent post-state",
+            "fresh zero-history sequential handoff actuation",
+            "whether an App Server client, bundled MCP, another official carrier or no added product form wins whole-system selection",
+            "Node availability across every supported installation surface",
+            "Claude compact or resume behavior and cross-host equivalence"
+          ],
+          "blockedBy": "The direct App Server client closes resume-response-to-current-state-to-core connectivity without a model turn. The corrected installed-package Hook arm now closes first-turn resume trigger-to-typed-context-to-one Agent branch only under a broad request-scoped test bypass. Neither arm yet closes the same end-to-end obligation: the direct client lacks selected product form and independent consequence, while the Hook arm lacks official-state re-sensing, pure-core invocation, named consequence and a narrow production trust lifecycle. GT-21 must next compare their total burden under one consequence/interference/continuity/lifecycle oracle, retain a silent sufficient route and prove genuinely independent post-state before MCP, persistence or deeper form is admitted.",
+          "claimLimit": "This source is preflight and counterevidence, not a GT-21 observation, exact candidate, comparative value result or release evidence."
+        },
+        "cleanup": {
+          "taskOwnedProcesses": [],
+          "taskOwnedTemporaryRoots": [],
+          "currentDesktopAppServerTerminated": false,
+          "currentInstalledAccordMutated": false,
+          "persistentHookTrustWritten": false
+        }
+      }
+    }
+  }
+}

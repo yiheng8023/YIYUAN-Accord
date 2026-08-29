@@ -102,7 +102,9 @@ Then read, in order:
   sequence, carrier and cleanup reviewers passed; the f0ed9ce/08eb72a attempt
   remains counterevidence. `self-audit-remediate-and-reaccept-whole-system-balance`
   completed after revised GT-07/17/19 cross-validation and global deterministic
-  reacceptance; `independent-review-and-form-future-exact-candidate` is active.
+  reacceptance; at that historical boundary,
+  `independent-review-and-form-future-exact-candidate` became active before the
+  later live-state correction superseded it.
   Independent product/specification/implementation/standards review found no
   remaining issue at `dd865f4a1770e60b0cc5cfba0c2d92e68a1962e0`.
   The subsequent candidate-eligibility audit found that the verifier bound
@@ -234,16 +236,31 @@ Then read, in order:
   `deliver-demand-driven-outcome` through host-qualified packages at version
   `3.0.1`. Those packages add no Runtime, Hook, MCP server, App or
   state store; this is a versioned package fact, not a permanent prohibition.
-- The unreleased v3.1.0 packages add one stateless `SessionStart` context Hook.
-  It reads no transcript, writes no state, starts no background process and
-  points only relevant nontrivial or stateful outcomes to the Skill. Static
-  validation and package bytes do not prove host firing, trust, implicit
+- The unreleased v3.1.0 packages add one shared short-lived `SessionStart`
+  command adapter behind the Skill. It reads no transcript, writes no state,
+  starts no background process and depends only on a host-path Node executable. Both host
+  projections now use only the documented `startup`, `resume`, `clear` and
+  `compact` sources; the unsupported Claude `fork` matcher was removed. The
+  adapter keeps `startup` and `clear` silent; on `compact` or `resume` it emits
+  only non-authoritative event hints and requests task-time re-sensing before
+  receipts or allocation. Invalid input fails visibly without echoing it. The
+  injection is not a live receipt, Agent use, execution, consequence, evidence or value.
+  One disposable Claude session-only probe has now observed the exact copied
+  adapter fire on `SessionStart:startup` and complete silently. It does not prove
+  installed-package firing, `compact` or `resume` injection or any downstream effect.
+  A separate ephemeral Codex App Server probe disabled the enumerated installed
+  Hook, invoked official `thread/compact/start`, observed one candidate
+  `sessionFlags` context with `signal.source=compact`, and saw the next Agent
+  return exactly `yiyuan-accord-hook-context/v1` with zero tool-like items. This
+  proves only one field-read path, not re-sensing, core use or product consequence.
+  Static validation and package bytes do not prove host firing, trust, implicit
   invocation, low interference or outcome value.
 - Installation and enablement expose latent capability. They do not imply
   per-message activation, behavior, value or cross-client equivalence. A
   sufficient healthy native route is a valid no-op.
-- The local Codex marketplace and installed plugin were updated through native
-  lifecycle commands to public tag `v3.0.1`. Its tracked source resolves to the
+- At its recorded verification cut, the local Codex marketplace and installed
+  plugin were updated through native lifecycle commands to public tag `v3.0.1`.
+  Its tracked source resolves to the
   released SHA; host-owned `.codex-marketplace-install.json` separately records
   that exact public ref and revision without becoming repository content. The
   installed Skill bytes match the tag and one fresh ephemeral Codex carrier
@@ -251,10 +268,14 @@ Then read, in order:
   not source identity; verify the actual marketplace ref and bytes.
   Current-session in-place hot reload and automatic per-message activation
   remain unproved.
-- On 2026-08-28, read-only host inventory reported Codex CLI 0.150.1 and
-  Claude Code 2.1.247 with their public Accord 3.0.1 plugins installed and
-  enabled alongside multiple other extensions. The working repository
-  projections are 3.1.0 and are not the installed public package.
+- On 2026-08-29, read-only host inventory reported Codex CLI 0.150.1 with
+  Accord 3.1.0 declared installed and enabled, and Claude Code 2.1.251 with
+  Accord 3.0.1 installed and enabled, alongside multiple other extensions.
+  The Codex working-tree projection, local marketplace snapshot and installed
+  cache are byte-distinct: the marketplace snapshot lacks the candidate Hook,
+  while the installed cache and working tree contain different Skill and Hook
+  bytes. A repository edit is therefore not a live plugin update and the
+  declared version is not sufficient source identity.
   These are composed environments, not official-clean or no-Accord baselines.
   Do not alter live plugin configuration merely to manufacture a comparison;
   use disposable isolation when confounding can change the decision. Plugin
@@ -265,8 +286,8 @@ Then read, in order:
   repository projections are now corrected to hard admission, lifecycle
   Pareto pruning, context-derived constraints and equivalent-fit native/reuse
   preference. Prior evidence remains bound to the old hashes and the corrected
-  projections require replay. Do not hot-mutate either composed live 3.0.1
-  host or treat its installation as current working-candidate behavior.
+  projections require replay. Do not hot-mutate either composed live host or
+  treat an installed version label as current working-candidate behavior.
 - That fresh Codex carrier also reported non-blocking host warnings that manifest
   icon paths containing `..` were ignored. The Skill loaded and activated, so
   this is a visual-metadata compatibility issue for a later exact-SHA patch, not
@@ -289,7 +310,8 @@ Then read, in order:
   exclusion even though the fresh v3 Codex-local GT-07 independently verified
   exact fixture post-state. Historical evidence is preserved against its
   versioned task contract rather than rewritten to match the current task.
-  GT-14 through GT-19 have a machine-checkable design. Exact checkpoint
+  GT-14 through GT-21 have a machine-checkable design; GT-20 and the later
+  API-first live-carrier GT-21 remain unperformed. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
@@ -363,12 +385,16 @@ Then read, in order:
   superseded pre-resource GT-11 evidence files, leaving three expected slots.
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
-- The active development guardrail permits at most 86 tracked files and
-  400000 product-code-and-test bytes with at least five percent headroom and
-  three tracked-file slots. This bounded adjustment admits the feasibility
-  record, one deep pure-data `reconcile_closure` module, its interface
-  regression, one append-only GT-14 through GT-19 source and bounded current
-  observations,
+- The active development guardrail permits at most 91 tracked files and
+  462000 product-code-and-test bytes with at least five percent headroom and
+  three tracked-file slots after the five current untracked candidate files are
+  tracked. Those files carry the earlier current-receipt source, one canonical
+  adapter, two exact package copies and one bounded preflight/counterevidence
+  record; they do not pre-authorize a Runtime, service or durable store. The wider bounded adjustment admits the feasibility
+  record, one deep pure-data `reconcile_closure` module, its live observation
+  receipt, three per-responsibility implementation modes and interface
+  regression, one append-only existing GT-14 through GT-19 source and bounded
+  current observations; GT-20 and GT-21 remain unperformed,
   including the review-required source-bound independence and matching
   experiment-poststate gates. The two-file increase from 84 pays only for the
   GT-17 and GT-18 observation carriers; their fixture and state carrier were
@@ -425,6 +451,9 @@ The target experience is near-zero avoidable user orchestration:
 - the Agent owns supported discovery, route selection, configuration,
   execution, correction, continuity, resource stewardship, verification, update
   and cleanup;
+- every supplied responsibility is explicitly allocated as Accord-contained,
+  Agent-native or Accord-Agent-composed; one route may mix modes, and a source
+  kind, product form or whole-task label cannot substitute for the allocation;
 - healthy native capability is used when sufficient;
 - compliant official, maintained, composed or bounded authored routes remain
   available when native capability is insufficient;
@@ -445,15 +474,28 @@ The target experience is near-zero avoidable user orchestration:
 ## Dynamic index boundary
 
 Use schema-validated, versioned JSON with stable identifiers for durable
-semantic records. Join it at task time with source- and freshness-bound host
-observations. Build the relationship graph on demand in memory or an ignored
+semantic records. Join it at task time with source- and freshness-bound typed
+state fields. Build the relationship graph on demand in memory or an ignored
 cache; do not commit transient host, model, account or capability state.
 
-For a queried responsibility, derive only sparse H (host-native capability) and
-A (Accord allocation) incidence views, then apply current E (admission) and V
-(closure/lifecycle) masks. H/A overlap is a candidate relation, never redundancy
+For a queried responsibility, derive sparse H (host-native capability), A
+(Accord allocation) and S (state authority/freshness) views, then apply E
+(admission) and V (closure/lifecycle) masks. H/A overlap is a candidate relation, never redundancy
 or retirement proof, and no host × model × tool × context Cartesian matrix is
 materialized.
+
+At material boundaries, a typed receipt resolves current official host-owned
+fields first, Accord-owned fields second and only unexposed facts through bounded
+observation. Each field binds the normalized decision target and value, one
+writer, bounded readers, source, fallback precedence and current generation.
+Hooks and lifecycle events only invalidate. Missing, conflicting, unbound,
+signal-only, stale, expired or mismatched fields stay unknown; signal-only
+invalidation may return only an independently bound last-safe allocation.
+Sharing and injection remain
+distinct from Agent use, execution, consequence, evidence and field value.
+An official carrier that proves an exact same-duty state responsibility at lower
+total burden opens reversible subtraction of the displaced Runtime, adapter or
+wheel; it does not justify keeping two permanent paths.
 
 Normalize host-specific project, workspace, task, thread, conversation and
 session labels into separately provenanced code, outcome, conversation-carrier
@@ -506,10 +548,18 @@ increment and one active work item. Its ordered work is:
    minimum-four-episode longitudinal sequences; defines ten non-compensating
    acceptance dimensions, counterfactual-derived comparison eligibility, exact
    evidence and carrier bindings, independence/privacy/sampling/stop rules and
-   a GT-14 through GT-19 obligation matrix; and gives every new task an oracle,
-   counterexamples and claim ceiling. At this design-only checkpoint GT-19 was
-   a four-episode dynamic responsibility-retirement design and was not yet
-   executed; its later finite replay is recorded below.
+   a GT-14 through GT-21 obligation matrix; and gives every new task an oracle,
+   counterexamples and claim ceiling. GT-19 was originally a four-episode
+   dynamic responsibility-retirement design and its later finite replay is
+   recorded below. GT-20 was added by the later plug-and-play/remove-and-leave
+   correction and remains unperformed. GT-21 was added after the live-chain
+   audit exposed that Skill plus SessionStart echo did not prove operational
+   invocation, consequence or topology-safe continuity. The working tree now
+   replaces that echo with a provisional shared short-lived event adapter; this
+   advances the public seam, isolated discovery and one bounded Claude
+   session-only silent `startup` trigger. A later bounded Codex arm additionally
+   closes one ephemeral `compact` trigger, typed injection and schema-field Agent
+   read with no tool use, still not GT-21 completion.
 6. `prototype-product-form-neutral-vertical-slices` — completed. The disposable
    P4 fixture selected the minimum composition for an observed continuity gap,
    no-op when the native whole loop was observed, rejected plugin enablement as
@@ -566,7 +616,8 @@ increment and one active work item. Its ordered work is:
     Current evidence remains accepted only while the strengthened validation
     and sparse behavior-subject bindings pass; self-review is not independent
     evidence.
-11. `independent-review-and-form-future-exact-candidate` — active. Sparse
+11. `independent-review-and-form-future-exact-candidate` — superseded before
+    candidate formation by the later live-state and responsibility correction. Sparse
     candidate qualification retains GT-07 and GT-17 through exact amendments;
     fresh isolated GT-11 at `f4dce57`, GT-12 at `72709b8` and single-arm GT-13
     at `f182a0a` now pass their finite current-subject claims while their
@@ -604,15 +655,110 @@ increment and one active work item. Its ordered work is:
     hash, and rejects a typed/self-rehashed substitute. The
     code-and-test ceiling moves from 390000 to 400000 bytes to keep the existing
     5% headroom rule without obscuring these checks through byte-golfing; a later
-    addition must still preserve that headroom or justify subtraction. Goal mode
-    remains paused and unchanged because none of these fixes changes the active
-    route. A genuinely independent specification and standards re-review of the
-    next exact tree remains required before this stage can complete or an exact
-    candidate can exist.
+    addition must still preserve that headroom or justify subtraction. This is
+    bounded remediation history, not a current candidate claim.
+12. `implement-and-replay-live-state-receipt-closure` — completed. Official docs
+    establish non-uniform carrier surfaces; Codex App Server now directly
+    exposes structured model/provider, feature, Skill, Hook, MCP, installed/App,
+    effective-config and thread state surfaces. A disposable pure-data PoC passes
+    two adapter shapes, monotonic same-writer merge, dual-writer conflict,
+    expiry, privacy and responsibility/state-axis separation without mutating a
+    host or adding a Runtime/store. The core now accepts typed per-field
+    supported-official-API, other-official-host-state, Accord-state or bounded-observation bindings that bind
+    the normalized decision target and value, current generation and source
+    precedence; signal-only invalidation can return only an independently bound
+    last-safe allocation. Package digests and static host projections reconcile.
+    The new GT-19 source retains schema preflight and two zero-rule exec-policy
+    failures, then one ephemeral read-only Codex arm over exact sparse working-
+    tree bytes matched an independent four-episode probe, preserved last-safe,
+    re-sensed generations and left no task fixture. This is synthetic bounded-
+    observation evidence, not live official state, Hook causality or exact-
+    revision candidate evidence.
+13. `prove-isolated-live-operational-carrier-and-continuity` — active after
+    stage 12. The current packages add one shared short-lived host-path Node
+    adapter behind their Skills. It keeps `startup` and `clear` silent and turns
+    only supported `compact` or `resume` event fields into non-authoritative
+    hints in typed minimum continuity context, without persistent process or state. Public-seam tests,
+    identical packaged bytes, isolated native Hook discovery and structured App
+    Server query feasibility pass, and one isolated Claude session-only `startup`
+    trigger completes silently. One isolated Codex sessionFlags `compact` arm also
+    closes trigger, injection and a schema-field Agent read with zero tool use.
+    A later exact-package zero-turn arm proves one task-owned official goal makes
+    the thread resumable and that an acknowledged `thread/resume` response can
+    directly trigger current structured re-sensing, a five-field receipt and
+    pure-core invocation. It also proves installed `SessionStart:resume` stays
+    pending until the next turn. A later request-scoped test-bypass arm closes
+    one installed first-turn resume trigger, typed injection and schema/source
+    Agent branch with zero tools, but not production trust or product effect.
+    Installed-package `compact`, sessionFlags `resume`, Node portability,
+    semantic directive use, Hook-caused official re-sensing/core invocation,
+    product consequence and topology actuation remain unproved. GT-21 first maps every relevant official query, action, event,
+    capability, state, topology, permission and lifecycle surface and consumes
+    supported structured host facts directly. Frozen exact bytes then run in
+    disposable official-clean and candidate-enabled lanes. A real event must
+    invalidate and re-sense, invoke the pure core, emit only typed minimum
+    context, be observably used by the Agent, close an independently observed
+    consequence and remain silent on a sufficient simple route. Any cross-event
+    state stays bounded and plugin-private. A required sequential relief starts
+    a fresh zero-history conversation, verifies the destination before source
+    release and is not a copied-history fork, Git worktree or Git branch. Lower-
+    burden native and event-driven routes must fail the same oracle before MCP,
+    SDK, App Server client or persistent-service escalation. The current
+    development task does not hot-load treatment bytes and is never a baseline.
+    The zero-turn App Server sequence retains unsupported ephemeral goal state,
+    missing rollout before state, the recovered isolation-variable collision and
+    the turn-lazy Hook as counterevidence. Its direct resume-event path returns a
+    current receipt and `hold-unknown` core decision because independent product
+    consequence is unavailable. This proves bounded connectivity only; it
+    neither selects an App Server product form nor passes the frozen
+    Agent-use-to-consequence arm. The first installed-package turn remains an
+    enabled-but-untrusted `NO_CONTEXT` control because process CLI `-c` did not
+    supply runtime-only trust through the thread request. Two later path and
+    generated `HooksListResponse` shape corrections stopped before `turn/start`,
+    deleted their task threads and consumed no model call. One separately
+    authorized `gpt-5.6-luna`/low turn then supplied `bypass_hook_trust` through
+    both `thread/start` and `thread/resume` request `config`. Exactly one installed
+    synchronous `SessionStart:resume` Hook started and completed, injected
+    `yiyuan-accord-hook-context/v1` with `signal.source=resume`, and the Agent
+    returned exact `HOOK_CONTEXT_RESUME`; no tool ran and thread, processes, root
+    and probe script were removed. General inventory `trustStatus` stayed
+    `modified`, and the event exposed `permission_mode=bypassPermissions`, so the
+    broad bypass is retained only as a test control. The Hook route now closes
+    trigger, typed injection and one schema/source branch, not production trust,
+    official-state re-sensing, pure-core invocation, consequence or independent
+    post-state. Compare it with the direct client under the same end-to-end oracle;
+    do not add another mechanism merely because the partial chains differ.
+14. `prove-transactional-install-state-preservation-and-removal` — pending after
+    stage 13. Current package contents are plugin-scoped and do not themselves
+    replace user instruction or configuration files, but that static fact is
+    not lifecycle proof. GT-20 must use disposable non-empty Codex and Claude
+    scopes, current native lifecycle surfaces and exact package bytes to prove
+    one user intent per authorized install, update, rollback or removal after
+    source trust; atomic rollback after an injected failure; preservation of
+    existing and concurrent user changes, unrelated plugins and shared or
+    unknown state; zero active Accord registration, exposure, process and data
+    state; and non-callability plus bounded automatic host cleanup for any
+    retained host-owned inert cache. Credentials, real sessions and global user
+    state remain out of scope.
+    A bounded 2026-08-29 feasibility probe used empty `CODEX_HOME` and
+    `CLAUDE_CONFIG_DIR` roots with non-empty user sentinels. One native install
+    intent per host copied exact working-tree 3.1.0 manifest, Hook and Skill
+    bytes; native uninstall and marketplace removal preserved pre-existing and
+    concurrent user fields and removed all active registrations. Codex removed
+    its package contents but retained empty cache directories; Claude retained
+    an unlisted host-owned version cache under its documented orphan-cleanup
+    lifecycle. The probe root was removed. Update-failure rollback, unrelated
+    installed-plugin preservation, shared dependency behavior and actual
+    activation remain untested, so GT-20 remains unperformed.
+15. `reaccept-whole-system-after-live-state-closure` — pending after GT-21 and GT-20.
+16. `independent-review-and-form-future-exact-candidate` — pending after whole-
+    system reacceptance. Goal mode remains paused; only a genuinely independent
+    exact-tree specification, implementation and standards review can form a
+    future candidate.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may
-be considered only after all eleven core stages complete; they then run in their
+be considered only after all sixteen core stages complete; they then run in their
 declared order on one unchanged future revision. The previous push, Actions and
 Cloud results do not qualify changed authority or future behavior bytes.
 
@@ -672,6 +818,9 @@ Recompute or replay:
 - representative outcome, no-op, correction, continuity, resource admission,
   pressure response, ownership-aware release, recovery and cleanup;
 - update, rollback and residue;
+- non-empty-host one-intent installation and removal, user-state and concurrent-
+  edit preservation, partial-failure rollback, zero active Accord state and
+  bounded host-owned inert-cache cleanup;
 - exact-revision local and Codex Cloud reproducibility;
 - the current v3 release claim and lifecycle.
 

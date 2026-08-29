@@ -444,48 +444,57 @@ def activation_mechanism_errors(
         or re.fullmatch(r"[A-Za-z0-9 .,:-]+", activation_context) is None
     ):
         return [f"{prefix} activation context is invalid"]
-    required = (
-        "deliver-demand-driven-outcome", "outcome obligations",
-        "live relations and constraints", "human boundary",
-        "collaboration-closure path", "simple answer", "user authority",
-        "behavior evidence",
-    )
-    errors = [
-        f"{prefix} activation context omits marker {marker}"
-        for marker in required if marker not in activation_context
+    # Product semantics live in the reviewable authority set. This verifier
+    # checks only the bounded transport shape and package identity.
+    errors = []
+    package = "codex" if adapter_id == "codex" else "claude"
+    expected_locators = [
+        f"plugins/yiyuan-accord-{package}/hooks/hooks.json",
+        f"plugins/yiyuan-accord-{package}/runtime/accord-hook.cjs",
     ]
-    if not isinstance(mechanism_locators, list) or len(mechanism_locators) != 1:
-        return errors + [f"{prefix} activation mechanism must declare one file"]
-    locator = mechanism_locators[0]
-    expected = f"plugins/yiyuan-accord-{'codex' if adapter_id == 'codex' else 'claude'}/hooks/hooks.json"
-    if locator != expected:
+    if mechanism_locators != expected_locators:
         return errors + [f"{prefix} activation mechanism locator is invalid"]
-    path = repository_relative_path(root, locator)
-    if path is None or path.is_symlink() or not path.is_file():
+    path = repository_relative_path(root, mechanism_locators[0])
+    runtime_path = repository_relative_path(root, mechanism_locators[1])
+    canonical_runtime = repository_relative_path(root, "runtime/accord-hook.cjs")
+    if (
+        path is None or path.is_symlink() or not path.is_file()
+        or runtime_path is None or runtime_path.is_symlink()
+        or not runtime_path.is_file()
+        or canonical_runtime is None or canonical_runtime.is_symlink()
+        or not canonical_runtime.is_file()
+    ):
         return errors + [f"{prefix} activation mechanism file is unsafe"]
     try:
         value = _strict_json_object(_owned_text(path))
     except (OSError, UnicodeError, ValueError):
         return errors + [f"{prefix} activation mechanism is unreadable"]
-    matcher = (
-        "startup|resume|clear|compact"
-        if adapter_id == "codex"
-        else "startup|resume|clear|compact|fork"
+    matcher = "startup|resume|clear|compact"
+    root_variable = (
+        "PLUGIN_ROOT" if adapter_id == "codex" else "CLAUDE_PLUGIN_ROOT"
     )
+    handler = {
+        "type": "command",
+        "command": f'node "${{{root_variable}}}/runtime/accord-hook.cjs"',
+        "timeout": 3,
+    }
+    if adapter_id == "codex":
+        handler["additionalContextLimit"] = 700
     expected_value = {
         "hooks": {
             "SessionStart": [{
                 "matcher": matcher,
-                "hooks": [{
-                    "type": "command",
-                    "command": f"echo {activation_context}",
-                    "timeout": 3,
-                }],
+                "hooks": [handler],
             }],
         },
     }
     if value != expected_value:
         errors.append(f"{prefix} activation mechanism contract is invalid")
+    try:
+        if _owned_bytes(runtime_path) != _owned_bytes(canonical_runtime):
+            errors.append(f"{prefix} live-hook module differs from canonical bytes")
+    except OSError:
+        errors.append(f"{prefix} live-hook module is unreadable")
     return errors
 
 
@@ -629,8 +638,11 @@ def validate_host_projection(
         "hostStandardIds": contract_ids["host"],
         "learnedFailureIds": contract_ids["lessons"],
         "goldenTasks": golden_tasks_file,
-        "activationMechanism": "session-start-context-hook",
+        "activationMechanism": "session-start-live-continuity-hook",
         "runtimeAdded": False,
+        "runtimeDependency": "host-path-node",
+        "persistentProcessAdded": False,
+        "persistentStateAdded": False,
         "requiresFixedHostVersion": False, "behaviorEvidenceState": "unverified",
     }
     if contract != expected_contract:

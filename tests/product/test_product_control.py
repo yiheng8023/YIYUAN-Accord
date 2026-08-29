@@ -174,6 +174,229 @@ def _balanced_add(terms):
                  ] + terms[len(terms) // 2 * 2:]
     return terms[0]
 
+def _refresh_gt19_episode(episode):
+    episode['closureRequestSha256'] = _digest(episode['closureRequest'])
+    episode['coreDecision'] = reconcile_closure(episode['closureRequest'])
+    episode['coreDecisionSha256'] = _digest(episode['coreDecision'])
+    for fact in episode['sourceFacts']:
+        fact['valueSha256'] = episode['coreDecisionSha256']
+
+def _gt19_state_bindings(request, composition, generation, order):
+    source_kind = (
+        'official-host-state' if order == 2
+        else 'bounded-direct-observation'
+    )
+    unavailable = (
+        [] if source_kind == 'official-host-state'
+        else ['official-host-state', 'accord-state']
+    )
+    source_order = 0 if order == 1 else order
+
+    def binding(field, target_kind, subject, fact_id, value):
+        return {
+            'field': field,
+            'targetKind': target_kind,
+            'subjectRef': subject,
+            'factId': fact_id,
+            'value': value,
+            'writer': 'fixture:host-state-normalizer',
+            'readers': ['accord'],
+            'sourceKind': source_kind,
+            'sourceRef': f'fixture:host-state:{source_order}:{field}',
+            'unavailableSources': unavailable,
+            'generation': generation,
+        }
+
+    bindings = [
+        binding(
+            f'environment.{fact_id}', 'environment-fact', composition,
+            fact_id, value,
+        )
+        for fact_id, value in request['environment']['facts'].items()
+    ]
+    for route in request['routes']:
+        bindings.extend(
+            binding(
+                f'route.{route["id"]}.{fact_id}', 'route-fact',
+                route['id'], fact_id, value,
+            )
+            for fact_id, value in route['facts'].items()
+        )
+        if len(route['forms']) > 1:
+            bindings.extend(
+                binding(
+                    f'coherence.{route["id"]}.{fact_id}',
+                    'coherence-fact', route['id'], fact_id, value,
+                )
+                for fact_id, value in route['coherence'].items()
+            )
+    return bindings
+
+def _gt19_v2_payload(historical_event, revision):
+    event = json.loads(json.dumps(historical_event))
+    baseline, replacement = 'current-plugin', 'native-no-add'
+    event['behaviorArms'].pop('readOnlyBlocked', None)
+    event['behaviorArms']['AccordBacked']['finalAnswerTranscriptionErrors'] = []
+    observations = (
+        ('gt19-observation-1', 'gt19-composition-1', 7,
+         '2026-08-29T00:00:00Z', '2026-08-29T00:01:00Z', []),
+        ('gt19-observation-1', 'gt19-composition-1', 7,
+         '2026-08-29T00:00:00Z', '2026-08-29T00:02:00Z',
+         ['user-intervention']),
+        ('gt19-observation-2', 'gt19-composition-2', 8,
+         '2026-08-29T00:03:00Z', '2026-08-29T00:04:00Z', []),
+        ('gt19-observation-3', 'gt19-composition-3', 9,
+         '2026-08-29T00:05:00Z', '2026-08-29T00:06:00Z', []),
+    )
+    h_states = (
+        'absent', 'injection-observed-effect-unknown',
+        'admitted-current', 'evidence-expired',
+    )
+    a_states = (
+        ('allocated', None),
+        ('preserved-last-valid', None),
+        ('retired-with-recheck', 'allocated'),
+        ('restored', 'unavailable'),
+    )
+    dispositions = (
+        'retain-Accord-baseline',
+        'retain-last-valid-on-invalidated-receipt',
+        'retire-exact-redundant-allocation',
+        'restore-after-native-expiry',
+    )
+    freshness = (
+        'current', 'invalidated-event-only',
+        'current-resensed', 'current-recomputed',
+    )
+    for order, episode in enumerate(event['episodes']):
+        request = episode['closureRequest']
+        request['schema'] = 'yiyuan-accord-closure/v2'
+        identity, composition, generation, captured, decision, invalidations = (
+            observations[order]
+        )
+        request['environment']['compositionKey'] = composition
+        request['environment']['observation'] = {
+            'id': identity,
+            'compositionKey': composition,
+            'generation': generation,
+            'capturedAt': captured,
+            'decisionAt': decision,
+            'validUntil': '2026-08-29T00:20:00Z',
+            'stateBindings': [],
+            'invalidatedBy': invalidations,
+        }
+        for route in request['routes']:
+            if route['id'] == baseline:
+                route['responsibilityModes'] = {
+                    responsibility: (
+                        'accord-agent-composed'
+                        if responsibility == 'sense-environment'
+                        else 'accord-contained'
+                    )
+                    for responsibility in route['supplies']
+                }
+            elif route['id'] == replacement:
+                route['responsibilityModes'] = {
+                    responsibility: 'agent-native'
+                    for responsibility in route['supplies']
+                }
+            else:
+                route['responsibilityModes'] = {
+                    responsibility: 'accord-agent-composed'
+                    for responsibility in route['supplies']
+                }
+        request['environment']['observation']['stateBindings'] = (
+            json.loads(json.dumps(event['episodes'][0]['closureRequest'][
+                'environment']['observation']['stateBindings']))
+            if order == 1 else _gt19_state_bindings(
+                request, composition, generation, order
+            )
+        )
+        request['environment']['lastSafeAllocation'] = (
+            {
+                'routeId': baseline,
+                'responsibilityModes': {
+                    responsibility: next(
+                        route for route in request['routes']
+                        if route['id'] == baseline
+                    )['responsibilityModes'][responsibility]
+                    for responsibility in request['outcome'][
+                        'responsibilities'
+                    ]
+                },
+                'observationId': identity,
+                'observationGeneration': generation,
+                'evidence': {
+                    'sourceRef': 'fixture:prior-safe-decision',
+                    'observerRef': 'fixture:independent-oracle',
+                    'subjectRef': baseline,
+                    'boundaryRef': 'fixture:gt19-sequence',
+                },
+            } if order == 1 else None
+        )
+        if order == 1:
+            injection = json.loads(json.dumps(request['events'][0]))
+            injection['factId'] = 'context-injection'
+            injection['state'] = 'observed'
+            injection['independent'] = 'unknown'
+            request['events'] = [injection]
+        episode['disposition'] = dispositions[order]
+        episode['sparseViews']['H'] = {
+            f'{replacement}/sense-environment': h_states[order],
+        }
+        episode['sparseViews']['A'] = {
+            f'{baseline}/sense-environment': a_states[order][0],
+            f'{baseline}/bind-authority': 'preserved-outside-scope',
+        }
+        if a_states[order][1] is not None:
+            episode['sparseViews']['A'][
+                f'{replacement}/sense-environment'
+            ] = a_states[order][1]
+        episode['sparseViews']['S'] = {
+            binding['field']: {
+                key: binding[key] for key in (
+                    'targetKind', 'subjectRef', 'factId', 'value', 'writer',
+                    'readers', 'sourceKind', 'sourceRef',
+                    'unavailableSources', 'generation',
+                )
+            } | {'freshness': freshness[order]}
+            for binding in request['environment']['observation'][
+                'stateBindings'
+            ]
+        }
+        _refresh_gt19_episode(episode)
+
+    allocations = (
+        {'sense-environment': baseline, 'bind-authority': baseline},
+        {'sense-environment': baseline, 'bind-authority': baseline},
+        {'sense-environment': replacement, 'bind-authority': baseline},
+        {'sense-environment': baseline, 'bind-authority': baseline},
+    )
+    states = []
+    for order, episode in enumerate(event['episodes']):
+        receipt = episode['closureRequest']['environment']['observation']
+        states.append({
+            'episodeOrder': order,
+            'effectiveAllocations': allocations[order],
+            'retiredAllocations': (
+                [f'{baseline}/sense-environment'] if order == 2 else []
+            ),
+            'observationId': receipt['id'],
+            'observationGeneration': receipt['generation'],
+            'evidenceFreshness': freshness[order],
+        })
+    for order, edge in enumerate(event['carrierEdges']):
+        edge['sourceState'] = states[order]
+        edge['targetState'] = states[order + 1]
+        edge['sourceStateSha256'] = _digest(edge['sourceState'])
+        edge['targetStateSha256'] = _digest(edge['targetState'])
+    event['stateCarrier']['finalEffectiveAllocations'] = allocations[3]
+    event['stateCarrier']['lastObservationId'] = observations[3][0]
+    event['stateCarrierSha256'] = _digest(event['stateCarrier'])
+    event['revision'] = revision
+    event['sequenceSha256'] = _sequence_digest(event)
+    return {'evaluatedRevision': revision, 'materialEvents': [event]}
+
 def _retired_raw_errors(body, locator='sample.txt', encoding='utf-8'):
     return _retired_byte_errors(body.encode(encoding), locator)
 
@@ -394,7 +617,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(suite['attemptedTaskIds'], [
             'GT-14', 'GT-15', 'GT-16', 'GT-17', 'GT-18', 'GT-19',
         ])
-        self.assertEqual(suite['unperformedTaskIds'], [])
+        self.assertEqual(suite['unperformedTaskIds'], ['GT-20', 'GT-21'])
         self.assertEqual(
             {item['id'] for item in suite['caseTypes']},
             {'representative-case', 'longitudinal-sequence'},
@@ -411,11 +634,11 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             {item['taskId'] for item in suite['coverageMatrix']},
-            {f'GT-{number}' for number in range(14, 20)},
+            {f'GT-{number}' for number in range(14, 22)},
         )
         new_tasks = {
             item['id']: item for item in golden['tasks']
-            if item['id'] in {f'GT-{number}' for number in range(14, 20)}
+            if item['id'] in {f'GT-{number}' for number in range(14, 22)}
         }
         self.assertTrue(all(item['evaluationDesign'] for item in new_tasks.values()))
         self.assertEqual(
@@ -431,6 +654,30 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn(
             'equate-one-responsibility-replacement-with-whole-product-retirement',
             new_tasks['GT-19']['prohibited'],
+        )
+        self.assertIn(
+            'replace-truncate-or-silently-append-AGENTS-CLAUDE-config-toml-or-settings-files',
+            new_tasks['GT-20']['prohibited'],
+        )
+        self.assertIn(
+            'preserve-concurrent-user-edits-and-stop-on-ownership-or-merge-conflict',
+            new_tasks['GT-20']['required'],
+        )
+        self.assertIn(
+            'use-fresh-thread-start-not-fork-for-sequential-load-relief',
+            new_tasks['GT-21']['required'],
+        )
+        self.assertIn(
+            'consume-supported-structured-official-facts-directly-and-normalize-only-needed-fields',
+            new_tasks['GT-21']['required'],
+        )
+        self.assertIn(
+            'persist-a-second-authoritative-host-capability-database-or-load-unrelated-official-surfaces',
+            new_tasks['GT-21']['prohibited'],
+        )
+        self.assertIn(
+            'equate-conversation-fork-Git-worktree-Git-branch-or-repository-fork',
+            new_tasks['GT-21']['prohibited'],
         )
         tasks = {item['id']: item for item in golden['tasks']}
         for needle, values in (
@@ -451,6 +698,9 @@ class ProductControlTests(unittest.TestCase):
         })
         self.assertNotIn('cloud-environment', topology['code'])
         self.assertIn('cloud-environment', topology['execution'])
+        self.assertIn('localized labels', topology['hostVocabularyRule'].lower())
+        self.assertIn('object, operation and inheritance semantics',
+                      topology['hostVocabularyRule'])
         views = guidance['dynamicIndex']['sparseMatrixViews']
         self.assertEqual(
             views['authority'],
@@ -485,7 +735,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertEqual(
             acceptance['representativeBehaviorPolicy']['requiredTaskIdsForRelease'],
-            ['GT-07','GT-11','GT-12','GT-13',*[f'GT-{n}' for n in range(14,20)]],
+            ['GT-07','GT-11','GT-12','GT-13',*[f'GT-{n}' for n in range(14,22)]],
         )
         release_notes = (root / acceptance['publicRelease']['releaseNotes']).read_text(
             encoding='utf-8')
@@ -614,6 +864,23 @@ class ProductControlTests(unittest.TestCase):
                 'boundaryRef': 'task-owned-process:synthetic-p4',
             }
 
+        def state_binding(field, target_kind, subject, fact_id, value):
+            return {
+                'field': field,
+                'targetKind': target_kind,
+                'subjectRef': subject,
+                'factId': fact_id,
+                'value': value,
+                'writer': 'fixture:bounded-observer',
+                'readers': ['accord'],
+                'sourceKind': 'bounded-direct-observation',
+                'sourceRef': f'fixture:state:{field}',
+                'unavailableSources': [
+                    'official-host-state', 'accord-state',
+                ],
+                'generation': 1,
+            }
+
         def fixture(*, healthy_native=False, residue=False):
             native_supplies = [
                 item for item in responsibilities
@@ -623,6 +890,9 @@ class ProductControlTests(unittest.TestCase):
                 {
                     'id': 'native-no-add', 'sourceKind': 'no-added',
                     'forms': [], 'supplies': native_supplies,
+                    'responsibilityModes': {
+                        item: 'agent-native' for item in native_supplies
+                    },
                     'facts': dict(compliance), 'coherence': {},
                     'lifecycle': {item: 0 for item in dimensions},
                 },
@@ -630,6 +900,10 @@ class ProductControlTests(unittest.TestCase):
                     'id': 'current-plugin', 'sourceKind': 'maintained',
                     'forms': ['plugin'],
                     'supplies': ['sense-environment', 'bind-authority'],
+                    'responsibilityModes': {
+                        'sense-environment': 'accord-contained',
+                        'bind-authority': 'accord-agent-composed',
+                    },
                     'facts': {
                         **compliance,
                         'independent-consequence-verifier': 'unknown',
@@ -644,6 +918,14 @@ class ProductControlTests(unittest.TestCase):
                         'independent-effect-probe',
                     ],
                     'supplies': list(responsibilities),
+                    'responsibilityModes': {
+                        'sense-environment': 'accord-contained',
+                        'bind-authority': 'accord-agent-composed',
+                        'preserve-correction': 'accord-agent-composed',
+                        'execute-outcome': 'agent-native',
+                        'observe-consequence': 'accord-agent-composed',
+                        'release-task-residue': 'accord-agent-composed',
+                    },
                     'facts': dict(compliance), 'coherence': dict(coherence),
                     'lifecycle': {item: 1 for item in dimensions},
                 },
@@ -651,6 +933,9 @@ class ProductControlTests(unittest.TestCase):
                     'id': 'persistent-controller', 'sourceKind': 'authored',
                     'forms': ['persistent-controller'],
                     'supplies': list(responsibilities),
+                    'responsibilityModes': {
+                        item: 'accord-contained' for item in responsibilities
+                    },
                     'facts': dict(compliance), 'coherence': {},
                     'lifecycle': {
                         'human-burden': 2, 'interference': 3,
@@ -659,6 +944,26 @@ class ProductControlTests(unittest.TestCase):
                     },
                 },
             ]
+            state_bindings = [state_binding(
+                'environment.provenance-bound', 'environment-fact',
+                'synthetic:p4:v1', 'provenance-bound', 'observed',
+            )]
+            for route in routes:
+                state_bindings.extend(
+                    state_binding(
+                        f'route.{route["id"]}.{fact_id}', 'route-fact',
+                        route['id'], fact_id, value,
+                    )
+                    for fact_id, value in route['facts'].items()
+                )
+                if len(route['forms']) > 1:
+                    state_bindings.extend(
+                        state_binding(
+                            f'coherence.{route["id"]}.{fact_id}',
+                            'coherence-fact', route['id'], fact_id, value,
+                        )
+                        for fact_id, value in route['coherence'].items()
+                    )
             selected = 'native-no-add' if healthy_native else 'minimal-composition'
             events = [
                 {
@@ -712,7 +1017,7 @@ class ProductControlTests(unittest.TestCase):
                 'evidence': evidence(selected),
             })
             return {
-                'schema': 'yiyuan-accord-closure/v1',
+                'schema': 'yiyuan-accord-closure/v2',
                 'outcome': {
                     'id': 'preserve-corrected-brief-across-one-interruption',
                     'responsibilities': list(responsibilities),
@@ -721,6 +1026,17 @@ class ProductControlTests(unittest.TestCase):
                     'compositionKey': 'synthetic:p4:v1',
                     'facts': {'provenance-bound': 'observed'},
                     'unknowns': ['field-value', 'cross-host-equivalence'],
+                    'lastSafeAllocation': None,
+                    'observation': {
+                        'id': 'synthetic:p4:observation:1',
+                        'compositionKey': 'synthetic:p4:v1',
+                        'generation': 1,
+                        'capturedAt': '2026-08-29T00:00:00Z',
+                        'decisionAt': '2026-08-29T00:00:01Z',
+                        'validUntil': '2026-08-29T00:05:00Z',
+                        'stateBindings': state_bindings,
+                        'invalidatedBy': [],
+                    },
                 },
                 'policy': {
                     'id': 'p4-task-policy/v1',
@@ -745,6 +1061,20 @@ class ProductControlTests(unittest.TestCase):
         self.assertTrue(decision['valid'], decision['errors'])
         self.assertEqual(decision['selectedRouteId'], 'minimal-composition')
         self.assertEqual(decision['disposition'], 'admit')
+        self.assertTrue(decision['environmentObservation']['current'])
+        self.assertEqual(
+            next(item for item in decision['assessments']
+                 if item['routeId'] == 'minimal-composition')[
+                     'responsibilityModes'],
+            {
+                'sense-environment': 'accord-contained',
+                'bind-authority': 'accord-agent-composed',
+                'preserve-correction': 'accord-agent-composed',
+                'execute-outcome': 'agent-native',
+                'observe-consequence': 'accord-agent-composed',
+                'release-task-residue': 'accord-agent-composed',
+            },
+        )
         self.assertTrue(decision['lifecycle']['completionAllowed'])
         self.assertEqual(
             decision['lifecycle']['experimentResults'][0]['decision'],
@@ -913,6 +1243,27 @@ class ProductControlTests(unittest.TestCase):
                 'completionFailures']},
         )
 
+        injection_only = fixture()
+        injection_only['events'] = [
+            event for event in injection_only['events']
+            if event.get('factId') not in {'execution', 'consequence'}
+        ]
+        injection_only['events'].insert(0, {
+            'kind': 'fact-observed', 'routeId': 'minimal-composition',
+            'factId': 'context-injection', 'state': 'observed',
+            'independent': 'observed',
+            'evidence': evidence('minimal-composition'),
+        })
+        injection_decision = reconcile_closure(injection_only)
+        self.assertTrue(injection_decision['valid'])
+        self.assertFalse(injection_decision['lifecycle']['completionAllowed'])
+        self.assertTrue({
+            'completion:execution', 'completion:consequence',
+        }.issubset({
+            item['code'] for item in injection_decision['lifecycle'][
+                'completionFailures']
+        }))
+
         for corrected_fact in (
             'within-human-authority', 'compliant', 'available',
         ):
@@ -978,6 +1329,54 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(unknown_decision['disposition'], 'hold-unknown')
         self.assertIsNone(unknown_decision['selectedRouteId'])
 
+        observation_failures = {
+            'signal-only': lambda value: value.update(stateBindings=[]),
+            'composition-mismatch': lambda value: value.update(
+                compositionKey='synthetic:different'
+            ),
+            'future': lambda value: value.update(
+                capturedAt='2026-08-29T00:00:02Z'
+            ),
+            'expired': lambda value: value.update(
+                validUntil='2026-08-29T00:00:00Z'
+            ),
+            'invalidated': lambda value: value.update(
+                invalidatedBy=['user-intervention']
+            ),
+        }
+        for name, mutate in observation_failures.items():
+            request = fixture(healthy_native=True)
+            mutate(request['environment']['observation'])
+            held = reconcile_closure(request)
+            with self.subTest(environment_observation=name):
+                self.assertTrue(held['valid'], held['errors'])
+                self.assertEqual(held['disposition'], 'hold-unknown')
+                self.assertIsNone(held['selectedRouteId'])
+                self.assertFalse(held['environmentObservation']['current'])
+
+        refreshed = fixture(healthy_native=True)
+        refreshed['environment']['compositionKey'] = 'synthetic:p4:v2'
+        refreshed['environment']['observation'].update({
+            'id': 'synthetic:p4:observation:2',
+            'compositionKey': 'synthetic:p4:v2',
+            'generation': 2,
+            'capturedAt': '2026-08-29T00:00:02Z',
+            'decisionAt': '2026-08-29T00:00:03Z',
+            'validUntil': '2026-08-29T00:05:02Z',
+            'invalidatedBy': [],
+        })
+        for binding in refreshed['environment']['observation'][
+            'stateBindings'
+        ]:
+            binding['generation'] = 2
+            if binding['targetKind'] == 'environment-fact':
+                binding['subjectRef'] = 'synthetic:p4:v2'
+        refreshed_decision = reconcile_closure(refreshed)
+        self.assertEqual(refreshed_decision['selectedRouteId'], 'native-no-add')
+        self.assertEqual(
+            refreshed_decision['environmentObservation']['generation'], 2
+        )
+
         dynamic_policy = fixture()
         dynamic_policy['policy']['requiredRouteFacts'].append(
             'fit-for-current-context'
@@ -994,7 +1393,79 @@ class ProductControlTests(unittest.TestCase):
         self.assertFalse(invalid['valid'])
         self.assertEqual(invalid['disposition'], 'reject')
 
+        conflicting_writer = fixture()
+        duplicate = dict(conflicting_writer['environment']['observation'][
+            'stateBindings'][0], writer='another-writer')
+        conflicting_writer['environment']['observation'][
+            'stateBindings'].append(duplicate)
+        conflict = reconcile_closure(conflicting_writer)
+        self.assertTrue(conflict['valid'], conflict['errors'])
+        self.assertEqual(conflict['disposition'], 'hold-unknown')
+        self.assertFalse(conflict['environmentObservation']['current'])
+
+        unbound_value = fixture()
+        unbound_value['environment']['observation']['stateBindings'][0][
+            'value'
+        ] = 'not-observed'
+        unbound = reconcile_closure(unbound_value)
+        self.assertTrue(unbound['valid'], unbound['errors'])
+        self.assertEqual(unbound['disposition'], 'hold-unknown')
+        self.assertIsNone(unbound['selectedRouteId'])
+
+        unbound_target = fixture()
+        unbound_target['environment']['observation']['stateBindings'][0][
+            'factId'
+        ] = 'unrelated-fact'
+        unbound = reconcile_closure(unbound_target)
+        self.assertTrue(unbound['valid'], unbound['errors'])
+        self.assertEqual(unbound['disposition'], 'hold-unknown')
+        self.assertIsNone(unbound['selectedRouteId'])
+
+        signal_only = fixture(healthy_native=True)
+        signal_only['environment']['observation']['invalidatedBy'] = [
+            'user-intervention'
+        ]
+        signal_only['environment']['lastSafeAllocation'] = {
+            'routeId': 'native-no-add',
+            'responsibilityModes': {
+                item: 'agent-native' for item in responsibilities
+            },
+            'observationId': 'synthetic:p4:observation:1',
+            'observationGeneration': 1,
+            'evidence': evidence('native-no-add'),
+        }
+        preserved = reconcile_closure(signal_only)
+        self.assertIsNone(preserved['selectedRouteId'])
+        self.assertEqual(
+            preserved['preservedAllocation']['routeId'], 'native-no-add'
+        )
+        self.assertTrue(
+            preserved['environmentObservation']['preservedLastSafe']
+        )
+
         malformed_cases = []
+        sensitive_state = fixture()
+        sensitive_state['environment']['observation']['stateBindings'][0][
+            'field'] = 'Credential.token'
+        malformed_cases.append(sensitive_state)
+        stale_binding = fixture()
+        stale_binding['environment']['observation']['generation'] = 2
+        malformed_cases.append(stale_binding)
+        precedence_bypass = fixture()
+        precedence_bypass['environment']['observation']['stateBindings'][0][
+            'unavailableSources'
+        ] = []
+        malformed_cases.append(precedence_bypass)
+        missing_mode = fixture()
+        missing_mode['routes'][2]['responsibilityModes'].pop(
+            'preserve-correction'
+        )
+        malformed_cases.append(missing_mode)
+        invented_mode = fixture()
+        invented_mode['routes'][2]['responsibilityModes'][
+            'preserve-correction'
+        ] = 'plugin-does-everything'
+        malformed_cases.append(invented_mode)
         bad_forms = fixture()
         bad_forms['routes'][0]['forms'] = None
         malformed_cases.append(bad_forms)
@@ -1067,6 +1538,12 @@ class ProductControlTests(unittest.TestCase):
             (A, 'acceptance top-level shape', lambda v: v.update(authorize=True)),
             (C, 'compatibilityAliases must be empty',
              lambda v: v['identity'].update(compatibilityAliases=['x'])),
+            (C, 'responsibilityAllocationModes is invalid', lambda v: v[
+                'domainModel'].update(responsibilityAllocationModes=[
+                    'plugin-does-everything'
+                ])),
+            (C, 'stateCoordinationModes is invalid', lambda v: v[
+                'domainModel'].update(stateCoordinationModes=['implicit-shared'])),
             (C, 'humanAuthority shape', lambda v: v.pop('humanAuthority')),
             (C, 'resourceStewardship shape', lambda v: v[
                 'resourceStewardship'].pop('diagnosticRule')),
@@ -1316,13 +1793,18 @@ class ProductControlTests(unittest.TestCase):
         with _fixture() as root:
             acceptance = _read(root, A)
             criterion = next(
-                item for item in acceptance['criteria'] if item['id'] == 'R3'
+                item for item in acceptance['criteria']
+                if any(evidence.get('bindsProjection') == 'codex'
+                       for evidence in item.get('evidence', []))
             )
-            criterion['assessment'] = 'continuing'
-            criterion['evidence'] = [next(
+            evidence = next(
                 item for item in criterion['evidence']
                 if item.get('bindsProjection') == 'codex'
-            )]
+            )
+            for item in acceptance['criteria']:
+                item['evidence'] = []
+            criterion['assessment'] = 'continuing'
+            criterion['evidence'] = [evidence]
             _write(root, A, acceptance)
             locator = criterion['evidence'][0]['locator']
             observation = _read(root, locator)
@@ -1443,36 +1925,26 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assertIsNone(_postcapture_bundle(payload, task, _time(record['capturedAt'])))
 
-        for task_id in ('GT-02', 'GT-17'):
+        for task_id in ('GT-02',):
             with self.subTest(policy_anchor=task_id), _fixture() as root:
                 golden = _read(root, G)
                 task = next(item for item in golden['tasks'] if item['id'] == task_id)
-                if task_id == 'GT-17':
-                    locator = CURRENT_GT17_OBSERVATION
-                    source_locator = CURRENT_GT16_SOURCE
-                else:
-                    locator = OBS[int(task_id[-2:])]
-                    source_locator = SOURCE
+                locator = OBS[int(task_id[-2:])]
+                source_locator = SOURCE
                 bundle = _read(root, source_locator)
                 observation = _read(root, locator)
                 record = bundle['records'][observation[
                     'transcriptOrEventEvidence'][0]['recordId']]
                 payload = record['payload']
-                if task_id == 'GT-02':
-                    task.pop('postSessionBindingContract')
-                    payload.pop('postSessionBindingContract')
-                    payload['materialEvents'] = [
-                        event for event in payload['materialEvents']
-                        if event['kind'] != 'independent-poststate'
-                    ]
-                    observation['transcriptOrEventEvidence'][0].pop(
-                        'postSessionBindingsSha256'
-                    )
-                else:
-                    task['postSessionBindingContract'][0]['bindingCount'] = 2
-                    payload['postSessionBindingContract'][0]['bindingCount'] = 2
-                    bindings = payload['cleanupEvidence']['observations'][-1]['sourceBindings']
-                    payload['cleanupEvidence']['observations'][-1]['sourceBindings'] = bindings[:1]
+                task.pop('postSessionBindingContract')
+                payload.pop('postSessionBindingContract')
+                payload['materialEvents'] = [
+                    event for event in payload['materialEvents']
+                    if event['kind'] != 'independent-poststate'
+                ]
+                observation['transcriptOrEventEvidence'][0].pop(
+                    'postSessionBindingsSha256'
+                )
                 digest = _digest(task)
                 record['goldenTaskSha256'] = observation['goldenTaskSha256'] = digest
                 _write(root, G, golden)
@@ -1835,90 +2307,117 @@ class ProductControlTests(unittest.TestCase):
                 'payload']['evaluatedRevision'],
             'materialEvents': [gt19_event],
         }
-        self.assertIsNotNone(_longitudinal_bundle(gt19_payload, gt19))
-        cleaner_behavior_arms = {
-            'evaluatedRevision': gt19_payload['evaluatedRevision'],
-            'materialEvents': [json.loads(json.dumps(gt19_event))]
-        }
-        cleaner_event = cleaner_behavior_arms['materialEvents'][0]
-        cleaner_event['behaviorArms'].pop('readOnlyBlocked')
-        cleaner_event['behaviorArms']['AccordBacked'][
-            'finalAnswerTranscriptionErrors'
-        ] = []
-        cleaner_event['sequenceSha256'] = _sequence_digest(cleaner_event)
-        self.assertIsNotNone(_longitudinal_bundle(cleaner_behavior_arms, gt19))
-        for path, value in (
-            (('episodes', 2, 'disposition'), 'retire-whole-product'),
-            (('episodes', 2, 'closureRequestSha256'), '0' * 64),
-            (('episodes', 2, 'sparseViews'), {}),
-            (('episodes', 1, 'masks', 'admission'), 'pass'),
-            (('episodes', 1, 'closureRequest', 'routes', 0, 'id'), []),
-        ):
-            payload = json.loads(json.dumps(gt19_payload))
-            event_target = payload['materialEvents'][0]
-            target = event_target
-            for part in path[:-1]:
-                target = target[part]
-            target[path[-1]] = value
-            event_target['sequenceSha256'] = _sequence_digest(event_target)
-            with self.subTest(gt19_semantic_path=path):
-                self.assertIsNone(_longitudinal_bundle(payload, gt19))
-        expanded = json.loads(json.dumps(gt19_payload))
-        episode = expanded['materialEvents'][0]['episodes'][2]
-        episode['closureRequest']['policy']['requiredRetirementAllocations'][0][
-            'responsibilities'
-        ] = ['sense-environment', 'bind-authority']
-        episode['closureRequestSha256'] = _digest(episode['closureRequest'])
-        episode['coreDecision'] = reconcile_closure(episode['closureRequest'])
-        episode['coreDecisionSha256'] = _digest(episode['coreDecision'])
-        for fact in episode['sourceFacts']:
-            fact['valueSha256'] = episode['coreDecisionSha256']
-        expanded['materialEvents'][0]['sequenceSha256'] = _sequence_digest(
-            expanded['materialEvents'][0]
+        self.assertIsNone(_longitudinal_bundle(gt19_payload, gt19))
+        gt19_v2 = _gt19_v2_payload(
+            gt19_event, gt19_payload['evaluatedRevision']
         )
-        self.assertIsNone(_longitudinal_bundle(expanded, gt19))
+        self.assertIsNotNone(_longitudinal_bundle(gt19_v2, gt19))
 
-        malformed_responsibility = json.loads(json.dumps(gt19_payload))
-        malformed_event = malformed_responsibility['materialEvents'][0]
-        for episode in malformed_event['episodes']:
-            episode['closureRequest']['outcome']['responsibilities'] = [{}]
-            episode['closureRequestSha256'] = _digest(episode['closureRequest'])
-        malformed_event['sequenceSha256'] = _sequence_digest(malformed_event)
+        no_invalidation = json.loads(json.dumps(gt19_v2))
+        episode = no_invalidation['materialEvents'][0]['episodes'][1]
+        episode['closureRequest']['environment']['observation'][
+            'invalidatedBy'
+        ] = []
+        _refresh_gt19_episode(episode)
+        no_invalidation['materialEvents'][0]['sequenceSha256'] = (
+            _sequence_digest(no_invalidation['materialEvents'][0])
+        )
+        self.assertIsNone(_longitudinal_bundle(no_invalidation, gt19))
+
+        state_view_drift = json.loads(json.dumps(gt19_v2))
+        event_target = state_view_drift['materialEvents'][0]
+        event_target['episodes'][2]['sparseViews']['S'][
+            'environment.provenance-bound'
+        ]['writer'] = 'self-attested-writer'
+        event_target['sequenceSha256'] = _sequence_digest(event_target)
+        self.assertIsNone(_longitudinal_bundle(state_view_drift, gt19))
+
+        unbound_route_fact = json.loads(json.dumps(gt19_v2))
+        event_target = unbound_route_fact['materialEvents'][0]
+        episode = event_target['episodes'][2]
+        route = next(
+            item for item in episode['closureRequest']['routes']
+            if item['id'] == 'native-no-add'
+        )
+        route['facts']['available'] = 'not-observed'
+        _refresh_gt19_episode(episode)
+        event_target['sequenceSha256'] = _sequence_digest(event_target)
+        self.assertIsNone(_longitudinal_bundle(unbound_route_fact, gt19))
+
+        stale_field_generation = json.loads(json.dumps(gt19_v2))
+        event_target = stale_field_generation['materialEvents'][0]
+        episode = event_target['episodes'][2]
+        episode['closureRequest']['environment']['observation'][
+            'stateBindings'
+        ][0]['generation'] -= 1
+        _refresh_gt19_episode(episode)
+        event_target['sequenceSha256'] = _sequence_digest(event_target)
         self.assertIsNone(_longitudinal_bundle(
-            malformed_responsibility, gt19
+            stale_field_generation, gt19
         ))
 
-        outcome_drift = json.loads(json.dumps(gt19_payload))
-        event_target = outcome_drift['materialEvents'][0]
-        episode = event_target['episodes'][1]
-        episode['closureRequest']['outcome']['id'] = 'different-outcome-family'
-        episode['closureRequestSha256'] = _digest(episode['closureRequest'])
-        episode['coreDecision'] = reconcile_closure(episode['closureRequest'])
-        episode['coreDecisionSha256'] = _digest(episode['coreDecision'])
-        for fact in episode['sourceFacts']:
-            fact['valueSha256'] = episode['coreDecisionSha256']
+        priority_bypass = json.loads(json.dumps(gt19_v2))
+        event_target = priority_bypass['materialEvents'][0]
+        episode = event_target['episodes'][3]
+        episode['closureRequest']['environment']['observation'][
+            'stateBindings'
+        ][0]['unavailableSources'] = []
+        _refresh_gt19_episode(episode)
         event_target['sequenceSha256'] = _sequence_digest(event_target)
-        self.assertIsNone(_longitudinal_bundle(outcome_drift, gt19))
+        self.assertIsNone(_longitudinal_bundle(priority_bypass, gt19))
 
-        extra_route = json.loads(json.dumps(gt19_payload))
-        for episode in extra_route['materialEvents'][0]['episodes']:
-            route = json.loads(json.dumps(episode['closureRequest']['routes'][-1]))
-            route['id'] = 'unavailable-extra-route'
-            route['sourceKind'] = 'authored'
-            route['facts']['available'] = 'unknown'
-            route['lifecycle'] = {
-                key: value + 100 for key, value in route['lifecycle'].items()
-            }
-            episode['closureRequest']['routes'].append(route)
-            episode['closureRequestSha256'] = _digest(episode['closureRequest'])
-            episode['coreDecision'] = reconcile_closure(episode['closureRequest'])
-            episode['coreDecisionSha256'] = _digest(episode['coreDecision'])
-            for fact in episode['sourceFacts']:
-                fact['valueSha256'] = episode['coreDecisionSha256']
-        extra_route['materialEvents'][0]['sequenceSha256'] = _sequence_digest(
-            extra_route['materialEvents'][0]
+        missing_last_safe = json.loads(json.dumps(gt19_v2))
+        event_target = missing_last_safe['materialEvents'][0]
+        episode = event_target['episodes'][1]
+        episode['closureRequest']['environment']['lastSafeAllocation'] = None
+        _refresh_gt19_episode(episode)
+        event_target['sequenceSha256'] = _sequence_digest(event_target)
+        self.assertIsNone(_longitudinal_bundle(missing_last_safe, gt19))
+
+        injection_as_effect = json.loads(json.dumps(gt19_v2))
+        episode = injection_as_effect['materialEvents'][0]['episodes'][1]
+        consequence = json.loads(json.dumps(episode['closureRequest']['events'][0]))
+        consequence['factId'] = 'consequence'
+        consequence['independent'] = 'observed'
+        episode['closureRequest']['events'].append(consequence)
+        _refresh_gt19_episode(episode)
+        injection_as_effect['materialEvents'][0]['sequenceSha256'] = (
+            _sequence_digest(injection_as_effect['materialEvents'][0])
         )
-        self.assertIsNotNone(_longitudinal_bundle(extra_route, gt19))
+        self.assertIsNone(_longitudinal_bundle(injection_as_effect, gt19))
+
+        whole_route_mode = json.loads(json.dumps(gt19_v2))
+        for episode in whole_route_mode['materialEvents'][0]['episodes']:
+            baseline = next(
+                route for route in episode['closureRequest']['routes']
+                if route['id'] == 'current-plugin'
+            )
+            baseline['responsibilityModes']['sense-environment'] = 'agent-native'
+            _refresh_gt19_episode(episode)
+        whole_route_mode['materialEvents'][0]['sequenceSha256'] = (
+            _sequence_digest(whole_route_mode['materialEvents'][0])
+        )
+        self.assertIsNone(_longitudinal_bundle(whole_route_mode, gt19))
+
+        changed_on_invalidated_receipt = json.loads(json.dumps(gt19_v2))
+        event_target = changed_on_invalidated_receipt['materialEvents'][0]
+        invalid_allocation = {
+            'sense-environment': 'native-no-add',
+            'bind-authority': 'current-plugin',
+        }
+        event_target['carrierEdges'][0]['targetState'][
+            'effectiveAllocations'
+        ] = invalid_allocation
+        event_target['carrierEdges'][1]['sourceState'][
+            'effectiveAllocations'
+        ] = invalid_allocation
+        for edge in event_target['carrierEdges'][:2]:
+            edge['sourceStateSha256'] = _digest(edge['sourceState'])
+            edge['targetStateSha256'] = _digest(edge['targetState'])
+        event_target['sequenceSha256'] = _sequence_digest(event_target)
+        self.assertIsNone(_longitudinal_bundle(
+            changed_on_invalidated_receipt, gt19
+        ))
 
         acceptance = _read(ROOT, A)
         policy = acceptance['representativeBehaviorPolicy']
@@ -1947,7 +2446,7 @@ class ProductControlTests(unittest.TestCase):
             ROOT, candidate_record, candidate_task, _digest(candidate_task),
             _time(candidate_record['capturedAt']), (acceptance, _read(ROOT, G), current),
         )
-        self.assertTrue(_source_amendments(*candidate_args))
+        self.assertFalse(_source_amendments(*candidate_args))
         unamended = json.loads(json.dumps(candidate_record))
         unamended.pop('amendments')
         self.assertFalse(_source_amendments(
@@ -2119,8 +2618,17 @@ class ProductControlTests(unittest.TestCase):
 
         revision = _git(ROOT, 'rev-parse', 'HEAD', text=True).strip()
         task = {'behaviorSubjectFiles': ['yiyuan_accord/closure.py']}
-        self.assertEqual(_behavior_subject_revision_errors(
-            ROOT, 'current subject', {'evaluatedRevision': revision}, task), [])
+        current_errors = _behavior_subject_revision_errors(
+            ROOT, 'current subject', {'evaluatedRevision': revision}, task)
+        subject_dirty = subprocess.run(
+            ['git', '-C', str(ROOT), 'diff', '--quiet', 'HEAD', '--',
+             'yiyuan_accord/closure.py'],
+            stderr=subprocess.DEVNULL,
+        ).returncode == 1
+        if subject_dirty:
+            self.assert_has(current_errors, 'behavior subject differs')
+        else:
+            self.assertEqual(current_errors, [])
         self.assert_has(_behavior_subject_revision_errors(
             ROOT, 'stale subject', {'evaluatedRevision': '84447a7a1b9557e22ef5585d159459e8701fa40e'}, task),
             'behavior subject differs from evaluatedRevision')
@@ -2790,3 +3298,202 @@ class ProductControlTests(unittest.TestCase):
             with _deny_path('read_bytes', target):
                 errors = _errors(root)
             self.assert_has(errors, 'digest source is oversized')
+
+    def test_live_hook_stays_silent_for_fresh_startup(self):
+        node = shutil.which('node')
+        self.assertIsNotNone(node, 'the selected live-hook adapter requires node')
+        event = {
+            'session_id': 'must-not-be-emitted-or-persisted',
+            'transcript_path': 'must-not-be-opened-or-emitted',
+            'cwd': 'C:/disposable/workspace',
+            'hook_event_name': 'SessionStart',
+            'model': 'fixture-model',
+            'permission_mode': 'default',
+            'source': 'startup',
+        }
+        with tempfile.TemporaryDirectory(prefix='accord-hook-') as temporary:
+            result = subprocess.run(
+                [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
+                input=json.dumps(event), text=True, capture_output=True,
+                cwd=temporary, timeout=5,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stdout, '')
+            self.assertEqual(list(Path(temporary).iterdir()), [])
+
+    def test_live_hook_emits_only_typed_minimum_continuity_context(self):
+        node = shutil.which('node')
+        self.assertIsNotNone(node, 'the selected live-hook adapter requires node')
+        event = {
+            'session_id': 'private-session-sentinel',
+            'transcript_path': 'private-transcript-sentinel',
+            'cwd': 'C:/private-workspace-sentinel',
+            'hook_event_name': 'SessionStart',
+            'model': 'fixture-model',
+            'permission_mode': 'default',
+            'source': 'compact',
+        }
+        with tempfile.TemporaryDirectory(prefix='accord-hook-') as temporary:
+            result = subprocess.run(
+                [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
+                input=json.dumps(event), text=True, capture_output=True,
+                cwd=temporary, timeout=5,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            envelope = json.loads(result.stdout)
+            context = json.loads(
+                envelope['hookSpecificOutput']['additionalContext'])
+            self.assertEqual(envelope['hookSpecificOutput']['hookEventName'],
+                             'SessionStart')
+            self.assertEqual(context, {
+                'schema': 'yiyuan-accord-hook-context/v1',
+                'signal': {
+                    'event': 'SessionStart',
+                    'source': 'compact',
+                    'sourceKind': 'supported-official-hook-event',
+                },
+                'eventHints': [
+                    {
+                        'field': 'host.model',
+                        'value': 'fixture-model',
+                        'sourceRef': 'SessionStart.model',
+                    },
+                    {
+                        'field': 'host.permission-mode',
+                        'value': 'default',
+                        'sourceRef': 'SessionStart.permission_mode',
+                    },
+                ],
+                'directives': [
+                    'invalidate-dependent-assumptions',
+                    're-sense-decision-relevant-state-from-supported-official-structured-sources',
+                    'hold-missing-or-conflicting-fields-unknown',
+                    'preserve-independently-bound-last-safe-allocation',
+                    'use-fresh-zero-history-only-if-sequential-relief-is-required',
+                    'verify-destination-before-source-release',
+                ],
+                'claimLimit': [
+                    'signal-is-not-current-task-state',
+                    'signal-is-not-user-authority',
+                    'event-hints-are-not-state-receipts',
+                    'injection-is-not-agent-use-execution-consequence-evidence-or-value',
+                ],
+            })
+            self.assertNotIn('private-session-sentinel', result.stdout)
+            self.assertNotIn('private-transcript-sentinel', result.stdout)
+            self.assertNotIn('private-workspace-sentinel', result.stdout)
+            self.assertEqual(list(Path(temporary).iterdir()), [])
+
+    def test_live_hook_distinguishes_recovery_from_fresh_sources(self):
+        node = shutil.which('node')
+        self.assertIsNotNone(node, 'the selected live-hook adapter requires node')
+        base = {
+            'session_id': 'private-session-sentinel',
+            'transcript_path': 'private-transcript-sentinel',
+            'cwd': 'C:/private-workspace-sentinel',
+            'hook_event_name': 'SessionStart',
+            'model': 'fixture-model',
+            'permission_mode': 'default',
+        }
+        with tempfile.TemporaryDirectory(prefix='accord-hook-') as temporary:
+            fresh = subprocess.run(
+                [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
+                input=json.dumps({**base, 'source': 'clear'}), text=True,
+                capture_output=True, cwd=temporary, timeout=5,
+            )
+            resumed = subprocess.run(
+                [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
+                input=json.dumps({**base, 'source': 'resume'}), text=True,
+                capture_output=True, cwd=temporary, timeout=5,
+            )
+            self.assertEqual(fresh.returncode, 0, fresh.stderr)
+            self.assertEqual(fresh.stdout, '')
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            envelope = json.loads(resumed.stdout)
+            context = json.loads(
+                envelope['hookSpecificOutput']['additionalContext'])
+            self.assertEqual(context['signal'], {
+                'event': 'SessionStart',
+                'source': 'resume',
+                'sourceKind': 'supported-official-hook-event',
+            })
+            self.assertEqual(list(Path(temporary).iterdir()), [])
+
+    def test_live_hook_does_not_propagate_invalid_or_unbound_fields(self):
+        node = shutil.which('node')
+        self.assertIsNotNone(node, 'the selected live-hook adapter requires node')
+        event = {
+            'session_id': 'private-session-sentinel',
+            'transcript_path': 'private-transcript-sentinel',
+            'cwd': 'C:/private-workspace-sentinel',
+            'hook_event_name': 'SessionStart',
+            'model': {'raw': 'private-model-sentinel'},
+            'permission_mode': ['private-permission-sentinel'],
+            'source': 'compact',
+        }
+        with tempfile.TemporaryDirectory(prefix='accord-hook-') as temporary:
+            invalid_fields = subprocess.run(
+                [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
+                input=json.dumps(event), text=True, capture_output=True,
+                cwd=temporary, timeout=5,
+            )
+            malformed = subprocess.run(
+                [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
+                input='{malformed', text=True, capture_output=True,
+                cwd=temporary, timeout=5,
+            )
+            unknown_source = subprocess.run(
+                [node, str(ROOT / 'runtime' / 'accord-hook.cjs')],
+                input=json.dumps({**event, 'source': 'unknown'}), text=True,
+                capture_output=True, cwd=temporary, timeout=5,
+            )
+            self.assertEqual(invalid_fields.returncode, 0,
+                             invalid_fields.stderr)
+            envelope = json.loads(invalid_fields.stdout)
+            context = json.loads(
+                envelope['hookSpecificOutput']['additionalContext'])
+            self.assertEqual(context['eventHints'], [])
+            self.assertNotIn('private-model-sentinel', invalid_fields.stdout)
+            self.assertNotIn('private-permission-sentinel',
+                             invalid_fields.stdout)
+            self.assertEqual(malformed.returncode, 1)
+            self.assertEqual(malformed.stdout, '')
+            self.assertEqual(
+                malformed.stderr,
+                'YIYUAN Accord: invalid SessionStart hook input; state remains unknown.\n',
+            )
+            self.assertEqual(unknown_source.returncode, 1)
+            self.assertEqual(unknown_source.stdout, '')
+            self.assertEqual(unknown_source.stderr, malformed.stderr)
+            self.assertEqual(list(Path(temporary).iterdir()), [])
+
+    def test_live_hook_is_packaged_behind_both_host_adapters(self):
+        canonical = (ROOT / 'runtime' / 'accord-hook.cjs').read_bytes()
+        projections = {
+            'codex': (
+                'plugins/yiyuan-accord-codex',
+                {
+                    'type': 'command',
+                    'command': 'node "${PLUGIN_ROOT}/runtime/accord-hook.cjs"',
+                    'timeout': 3,
+                    'additionalContextLimit': 700,
+                },
+            ),
+            'claude-code': (
+                'plugins/yiyuan-accord-claude',
+                {
+                    'type': 'command',
+                    'command': 'node "${CLAUDE_PLUGIN_ROOT}/runtime/accord-hook.cjs"',
+                    'timeout': 3,
+                },
+            ),
+        }
+        for adapter, (root, expected_handler) in projections.items():
+            with self.subTest(adapter=adapter):
+                self.assertEqual(
+                    (ROOT / root / 'runtime' / 'accord-hook.cjs').read_bytes(),
+                    canonical,
+                )
+                hook = _read(ROOT, f'{root}/hooks/hooks.json')
+                handler = hook['hooks']['SessionStart'][0]['hooks'][0]
+                self.assertEqual(handler, expected_handler)

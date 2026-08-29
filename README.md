@@ -69,19 +69,81 @@ sequence: declaration and sparse overlap retired nothing, one observed same-
 responsibility native successor permitted only reversible scoped retirement,
 and evidence expiry restored the Accord allocation. Blocked arms, transcription
 and query corrections, the initial failed GT-19 review and high evaluator costs
-remain counterevidence. A genuinely new independent full-system review remains
-active. At exact `cb11759`, revised GT-07 passes
+remain counterevidence. That GT-19 result is now historical: it did not bind a
+current typed state receipt, user-intervention invalidation, source precedence
+or explicit per-responsibility implementation modes. A new working-tree source
+retains schema and zero-rule exec-policy failures, then one ephemeral read-only
+Codex arm over exact sparse bytes matched an independent synthetic four-episode
+typed-receipt probe and removed its task copy. The working packages now add one
+shared short-lived `SessionStart` event adapter behind their Skills: `startup`
+and `clear` are silent, while `compact` and `resume` convert only supported event
+fields into non-authoritative hints inside typed minimum continuity context. It adds no persistent process or
+state. Public-seam tests, identical package bytes, isolated native discovery and
+structured App Server query feasibility pass. One disposable Claude
+session-only `SessionStart:startup` event also triggered the exact copied
+adapter and completed silently. A separate ephemeral Codex App Server thread
+disabled the enumerated installed Hook, used official `thread/compact/start`,
+observed the candidate session Hook inject `signal.source=compact`, and saw the
+Agent return exactly the injected schema value with zero tool use. A later
+exact-package zero-turn arm showed that one task-owned official goal makes a
+thread resumable, while installed `SessionStart:resume` remains pending until
+the next turn. The acknowledged `thread/resume` response itself then triggered
+official state re-sensing, a current five-field receipt and pure-core invocation.
+Installed-package `compact`, session-only `resume`, semantic directive use,
+Hook-caused official re-sensing and core invocation, product consequence,
+topology actuation, narrow production trust and Node portability remain
+unproved. The first installed-package turn remains an enabled-but-untrusted
+`NO_CONTEXT` control. After path and generated-response-shape corrections stopped
+before model work, one separately authorized `gpt-5.6-luna`/low turn supplied
+runtime-only `bypass_hook_trust` through both thread request `config` objects.
+Exactly one installed synchronous `SessionStart:resume` Hook started and
+completed, injected `yiyuan-accord-hook-context/v1` with `signal.source=resume`,
+and the Agent returned exact `HOOK_CONTEXT_RESUME` without tools. Cleanup passed.
+General inventory trust remained modified and the event reported
+`permission_mode=bypassPermissions`, so the broad bypass is a test control, not
+a production trust route or product-value result. GT-21 therefore first
+closes that minimum live chain in frozen isolated lanes; GT-20 then tests the
+selected component set's non-empty-host transactional lifecycle. Whole-system
+reacceptance, an exact-
+revision observation and a genuinely new independent review remain gated. At exact
+`cb11759`, revised GT-07 passes
 only one fresh zero-history destination receipt and source-release ordering;
 actual compact and fork operations were not performed. Code topology,
 conversation topology and local/cloud execution placement remain independent.
-Sparse host-native and Accord responsibility views may expose overlap, but
-current admission, consequence and lifecycle evidence must still prove actual
-redundancy. Live mechanisms, durable continuity, cross-host or
+
+A zero-turn disposable App Server sequence first observed that ephemeral threads
+do not expose goal state, then established a task-owned goal-backed resumable
+thread. `thread/resume` restored the official state but did not execute the
+installed Hook before a turn. Treating that official resume response as the
+event, a throwaway direct client queried current structured configuration,
+Hook, Skill, permission and goal surfaces, normalized five decision-bound fields
+into a current receipt and invoked the pure core. The core correctly returned
+`hold-unknown`: the wrapper could not independently prove its own product
+consequence. This proves one direct event-to-state-to-core route, not an admitted
+App Server product form, semantic Agent use or product effect.
+Sparse host-native and Accord responsibility views plus the state-authority
+view may expose overlap and its current source, but current admission,
+consequence and lifecycle evidence must still prove actual redundancy. Live
+mechanisms, durable continuity, cross-host or
 population value and release remain gated. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
 verified, unreleased v3.1.0 baseline; a later product consensus superseded its
 `ready` status without erasing its bounded evidence. `main` is therefore not a
 release candidate, installation source or published upgrade.
+
+Responsibility implementation and state coordination are orthogonal. The
+derived index uses sparse H (host capability), A (Accord allocation) and S
+(field authority/freshness) views. At material boundaries, a supported official
+structured query or state interface is preferred, then other current typed
+official host-owned state, Accord-owned state and bounded observation for
+unexposed facts. Accord consumes those official facts directly and normalizes
+only fields needed by the current obligation; it does not recreate a second
+authoritative host capability database. Each field binds its normalized decision target
+and value, one writer, bounded readers, fallback precedence and current
+generation; conflicts, unbound values or missing fields remain unknown. Shared
+state is not Agent use, execution, consequence or value evidence. When an
+official carrier proves the same state duty at lower total burden, the displaced
+Runtime, adapter or wheel becomes a reversible subtraction candidate.
 
 Candidate evidence is now invalidated sparsely rather than by label or by every
 repository change. Each required Golden Task declares its relevant executable
@@ -179,17 +241,45 @@ Use `/reload-plugins` after checkout changes.
 
 The public v3.0.1 packages make one progressively disclosed adaptive Skill
 available and add no Runtime, Hook, MCP server, App, state store, background
-process or automatic project mutation. The historical unreleased v3.1.0
-package baseline also contains one stateless `SessionStart` context Hook: it
-reads no transcript, writes no state and starts no background process. These
-are versioned package facts, not the product identity or permanent mechanism
-prohibitions. Hook trust, host firing and the activation-to-effect chain remain
-separate evidence from installation.
+process or automatic project mutation. Exact historical baseline `ae729465`
+contained an earlier stateless `SessionStart` context Hook; the current
+development candidate replaces its echo command with a shared short-lived Node
+event adapter and narrows its matcher. Both versions read no transcript, write
+no state and start no background process, but current executable, matcher or
+context bytes are not attributed back to the historical revision.
+These are versioned package facts, not the product identity or permanent
+mechanism prohibitions. On `compact` or `resume`, the current adapter emits only
+non-authoritative event hints plus a requirement to re-sense permitted current
+state before forming receipts; `startup` and `clear` stay silent, and invalid
+input fails visibly without echoing it. The injection is neither a live receipt
+nor Agent use, execution, consequence, evidence or value. Hook trust, host
+firing and the activation-to-effect chain remain separate evidence from
+installation.
 
 Installation, enablement and visibility do not imply activation. During normal
 work the host may invoke the Skill implicitly for a relevant nontrivial task;
 it should stay silent when a healthy native route is sufficient. Select the
 Skill explicitly only for a deterministic exposure check.
+
+The current packages keep their Skill and Hook inside plugin-owned paths; they
+do not replace project or user `AGENTS.md`, `CLAUDE.md`, `config.toml` or
+settings files. That is a static package fact, not proof of plug-and-play or
+remove-and-leave behavior. Before a future candidate exists, GT-21 must first
+consume supported official query, action, event, capability, state, topology,
+permission and lifecycle surfaces; then prove, with frozen bytes in disposable
+official-clean and candidate-enabled lanes, event invalidation and re-sensing,
+pure-core invocation, typed minimum context, observable Agent use, consequence,
+independent post-state, a silent sufficient route and topology-safe fresh
+conversation handoff. Installation, enablement or Hook output cannot substitute
+for that chain. Once the final component set is selected, GT-20 must use
+disposable non-empty Codex and Claude scopes to show that, after source trust,
+one user lifecycle intent orchestrates all selected Accord components, a failed
+update rolls back atomically, existing and concurrent user changes plus shared
+or foreign state remain intact, and removal leaves zero active Accord
+registration, exposure, process or data state. A host-owned inert cache is
+acceptable only when it is non-callable, automatically bounded by the host's
+documented cleanup contract and requires no user action; it is not physical
+zero residue and Accord must not delete it outside supported host lifecycle.
 
 ---
 
@@ -261,6 +351,12 @@ Prefer native hot reload when supported. Otherwise use an atomic versioned
 replacement, verify health and restore the prior exact version on failure.
 Never move an existing tag or edit global host configuration as a substitute
 for supported lifecycle commands.
+
+“Plug-and-play” does not mean hiding trust, privilege, data, cost or destructive
+authority. It means that after those unavoidable boundaries are explicitly
+settled, the user does not install or remove Accord's internal components one by
+one. If a host cannot provide that transaction without overwriting user state,
+the route remains an adapter gap rather than a successful installation story.
 
 For source verification, clone the exact tag and use a Python interpreter with
 the required standard-library capabilities. The current release CI exercises
@@ -346,6 +442,12 @@ installation does not imply activation. A sufficient native path should produce
 no avoidable intervention, while an unclosed outcome obligation or unreliable
 relation can justify scoped machinery with interference, update, rollback and
 retirement controls.
+
+Implementation is allocated responsibility by responsibility in three modes:
+Accord-contained, Agent-native or Accord-Agent-composed. One route may mix all
+three; a source label, plugin name or whole-task category cannot replace that
+allocation. Observation and context injection can enable a route, but neither
+proves Agent use, execution, consequence, independent evidence or product value.
 
 ### Resource stewardship
 

@@ -2,11 +2,11 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "startup|resume|clear|compact|fork",
+        "matcher": "startup|resume|clear|compact",
         "hooks": [
           {
             "type": "command",
-            "command": "echo YIYUAN Accord is available. For a nontrivial or stateful outcome, use the installed deliver-demand-driven-outcome Skill to derive the relevant outcome obligations, live relations and constraints, retained human boundary, and lowest-total-burden feasible collaboration-closure path. Own supported orchestration, reconcile material change, verify the claimed consequence, and release task exposure. Stay silent for a simple answer or a sufficient native one-step route. This reminder adds no user authority and is not behavior evidence.",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/runtime/accord-hook.cjs\"",
             "timeout": 3
           }
         ]

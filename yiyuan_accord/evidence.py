@@ -5,7 +5,11 @@ import re
 import subprocess
 from urllib.parse import unquote, urlsplit
 
-from .closure import reconcile_closure
+from .closure import (
+    RESPONSIBILITY_MODES,
+    SCHEMA as CLOSURE_SCHEMA,
+    reconcile_closure,
+)
 from .identity import (
     _bounded_git_bytes, _exact, _nonempty_string as _text,
     _safe_https_locator, _strict_json_object,
@@ -515,6 +519,28 @@ def _valid_episode_decision(episode):
     )
 
 
+def _hold_unknown_episode_decision(episode):
+    decision = episode.get("coreDecision") if isinstance(episode, dict) else None
+    lifecycle = decision.get("lifecycle") if isinstance(decision, dict) else None
+    observation = decision.get("environmentObservation") \
+        if isinstance(decision, dict) else None
+    return (
+        isinstance(decision, dict)
+        and decision.get("valid") is True
+        and decision.get("errors") == []
+        and decision.get("selectedRouteId") is None
+        and decision.get("frontierRouteIds") == []
+        and decision.get("disposition") == "hold-unknown"
+        and isinstance(observation, dict)
+        and observation.get("current") is False
+        and isinstance(lifecycle, dict)
+        and lifecycle.get("completionAllowed") is False
+        and isinstance(lifecycle.get("completionFailures"), list)
+        and lifecycle["completionFailures"]
+        and lifecycle.get("residualTaskResources") is None
+    )
+
+
 def _evolution_disposition(disposition, order):
     if not _text(disposition):
         return False
@@ -626,7 +652,8 @@ def _gt19_request_semantics(
         request.get("routes"), request.get("events"),
     )
     if (
-        not isinstance(routes, list) or not routes
+        request.get("schema") != CLOSURE_SCHEMA
+        or not isinstance(routes, list) or not routes
         or any(not isinstance(route, dict) or not _text(route.get("id"))
                for route in routes)
         or len({route["id"] for route in routes}) != len(routes)
@@ -662,6 +689,38 @@ def _gt19_request_semantics(
     replacement_supplies = _string_set(replacement.get("supplies")) \
         if isinstance(replacement, dict) else None
     target = set(responsibilities)
+    expected_selected = baseline_route if order in {0, 3} else replacement_route
+    successful_events = [
+        event for event in events if isinstance(event, dict)
+        and event.get("routeId") == expected_selected
+    ]
+    observed_facts = {
+        event.get("factId") for event in successful_events
+        if event.get("kind") == "fact-observed"
+        and event.get("state") == "observed"
+        and event.get("independent") == "observed"
+    }
+    clean_poststates = [
+        event for event in successful_events
+        if event.get("kind") == "resource-poststate"
+        and event.get("residualTaskResources") == []
+        and event.get("independent") == "observed"
+    ]
+    event_only = [
+        event for event in events if isinstance(event, dict)
+        and event.get("kind") == "fact-observed"
+        and event.get("factId") in {"hook-fired", "context-injection"}
+        and event.get("state") == "observed"
+    ]
+    forbidden_event_only_consequences = [
+        event for event in events if isinstance(event, dict)
+        and (
+            event.get("kind") == "resource-poststate"
+            or event.get("kind") == "responsibility-allocation-retired"
+            or event.get("kind") == "fact-observed"
+            and event.get("factId") in {"execution", "consequence"}
+        )
+    ]
     return (
         isinstance(outcome, dict)
         and outcome.get("id") == outcome_id
@@ -673,6 +732,201 @@ def _gt19_request_semantics(
         and (target.isdisjoint(replacement_supplies) if order == 0
              else target <= replacement_supplies)
         and exact_retirement_event
+        and (
+            bool(event_only) and not forbidden_event_only_consequences
+            if order == 1 else
+            {"execution", "consequence"} <= observed_facts
+            and len(clean_poststates) == 1
+        )
+    )
+
+
+def _gt19_route_modes(routes):
+    if not isinstance(routes, list):
+        return None
+    observed_modes = set()
+    mixed = False
+    for route in routes:
+        supplies = _string_set(route.get("supplies")) \
+            if isinstance(route, dict) else None
+        modes = route.get("responsibilityModes") \
+            if isinstance(route, dict) else None
+        if (
+            supplies is None or not isinstance(modes, dict)
+            or set(modes) != supplies
+            or any(mode not in RESPONSIBILITY_MODES for mode in modes.values())
+        ):
+            return None
+        values = set(modes.values())
+        observed_modes.update(values)
+        mixed = mixed or len(values) > 1
+    return observed_modes, mixed
+
+
+def _gt19_observation_semantics(episodes, decisions):
+    receipts = [
+        episode.get("closureRequest", {}).get("environment", {}).get("observation")
+        for episode in episodes
+    ]
+    environments = [
+        episode.get("closureRequest", {}).get("environment")
+        for episode in episodes
+    ]
+    if any(not isinstance(item, dict) for item in receipts + environments):
+        return False
+    ids = [item.get("id") for item in receipts]
+    compositions = [item.get("compositionKey") for item in receipts]
+    generations = [item.get("generation") for item in receipts]
+    decision_observations = [
+        decision.get("environmentObservation")
+        if isinstance(decision, dict) else None
+        for decision in decisions
+    ]
+    freshness = (
+        "current", "invalidated-event-only",
+        "current-resensed", "current-recomputed",
+    )
+    expected_state_views = []
+    for receipt, current_freshness in zip(receipts, freshness):
+        bindings = receipt.get("stateBindings") if isinstance(receipt, dict) else None
+        expected_state_views.append({
+            binding["field"]: {
+                key: binding[key] for key in (
+                    "targetKind", "subjectRef", "factId", "value", "writer",
+                    "readers", "sourceKind", "sourceRef",
+                    "unavailableSources", "generation",
+                )
+            } | {"freshness": current_freshness}
+            for binding in bindings or [] if isinstance(binding, dict)
+        })
+    return (
+        all(isinstance(item.get("stateBindings"), list)
+            and item["stateBindings"] for item in receipts)
+        and receipts[1].get("stateBindings") == receipts[0].get("stateBindings")
+        and ids[0] == ids[1] and ids[2] not in ids[:2]
+        and ids[3] not in ids[:3]
+        and compositions[0] == compositions[1]
+        and compositions[2] not in compositions[:2]
+        and compositions[3] not in compositions[:3]
+        and all(
+            environment.get("compositionKey") == receipt.get("compositionKey")
+            for environment, receipt in zip(environments, receipts)
+        )
+        and isinstance(generations[0], int)
+        and not isinstance(generations[0], bool)
+        and generations == [generations[0], generations[0],
+                            generations[0] + 1, generations[0] + 2]
+        and receipts[0].get("invalidatedBy") == []
+        and "user-intervention" in receipts[1].get("invalidatedBy", [])
+        and receipts[2].get("invalidatedBy") == []
+        and receipts[3].get("invalidatedBy") == []
+        and all(
+            isinstance(observation, dict)
+            and observation.get("id") == receipt.get("id")
+            and observation.get("generation") == receipt.get("generation")
+            and observation.get("current") is current
+            for observation, receipt, current in zip(
+                decision_observations, receipts, (True, False, True, True)
+            )
+        )
+        and all(
+            episode.get("sparseViews", {}).get("S") == expected
+            for episode, expected in zip(episodes, expected_state_views)
+        )
+    )
+
+
+def _gt19_stage_semantics(episodes):
+    decisions = [episode.get("coreDecision") for episode in episodes]
+    invalidated = decisions[1]
+    invalidated_lifecycle = invalidated.get("lifecycle") \
+        if isinstance(invalidated, dict) else None
+    invalidated_results = invalidated_lifecycle.get("eventResults") \
+        if isinstance(invalidated_lifecycle, dict) else None
+    invalidated_environment = invalidated.get("environmentObservation") \
+        if isinstance(invalidated, dict) else None
+    preserved = invalidated.get("preservedAllocation") \
+        if isinstance(invalidated, dict) else None
+    baseline = decisions[0].get("selectedRouteId") \
+        if isinstance(decisions[0], dict) else None
+    successful = []
+    for order in (0, 2, 3):
+        decision = decisions[order]
+        lifecycle = decision.get("lifecycle") if isinstance(decision, dict) else None
+        facts = lifecycle.get("facts") if isinstance(lifecycle, dict) else None
+        event_results = lifecycle.get("eventResults") \
+            if isinstance(lifecycle, dict) else None
+        successful.append(
+            _valid_episode_decision(episodes[order])
+            and isinstance(facts, dict)
+            and all(
+                isinstance(facts.get(fact), dict)
+                and facts[fact].get("state") == "observed"
+                and facts[fact].get("independent") == "observed"
+                for fact in ("execution", "consequence", "cleanup-poststate")
+            )
+            and isinstance(event_results, list)
+            and all(result.get("accepted") is True for result in event_results)
+        )
+    return (
+        all(successful)
+        and _hold_unknown_episode_decision(episodes[1])
+        and isinstance(invalidated_environment, dict)
+        and invalidated_environment.get("preservedLastSafe") is True
+        and isinstance(preserved, dict)
+        and preserved.get("routeId") == baseline
+        and isinstance(preserved.get("responsibilityModes"), dict)
+        and isinstance(invalidated_results, list) and invalidated_results
+        and all(result.get("accepted") is False for result in invalidated_results)
+        and all(
+            isinstance(result.get("reason"), str)
+            and "selected route" in result["reason"]
+            for result in invalidated_results
+        )
+    )
+
+
+def _gt19_carrier_semantics(
+    event, episodes, baseline_route, replacement_route,
+    responsibilities, outside_scope,
+):
+    edges = event.get("carrierEdges")
+    carrier = event.get("stateCarrier")
+    if not isinstance(edges, list) or len(edges) != 3 or not isinstance(carrier, dict):
+        return False
+    states = [edges[0].get("sourceState")] + [edge.get("targetState") for edge in edges]
+    receipts = [
+        episode["closureRequest"]["environment"]["observation"]
+        for episode in episodes
+    ]
+    expected_allocations = []
+    for order in range(4):
+        allocation = {item: baseline_route for item in outside_scope}
+        allocation.update({
+            item: replacement_route if order == 2 else baseline_route
+            for item in responsibilities
+        })
+        expected_allocations.append(allocation)
+    expected_retired = [
+        [], [], [f"{baseline_route}/{item}" for item in responsibilities], [],
+    ]
+    expected_freshness = [
+        "current", "invalidated-event-only", "current-resensed",
+        "current-recomputed",
+    ]
+    return (
+        all(isinstance(state, dict) for state in states)
+        and all(
+            state.get("episodeOrder") == order
+            and state.get("effectiveAllocations") == expected_allocations[order]
+            and state.get("retiredAllocations") == expected_retired[order]
+            and state.get("observationId") == receipts[order].get("id")
+            and state.get("observationGeneration") == receipts[order].get("generation")
+            and state.get("evidenceFreshness") == expected_freshness[order]
+            for order, state in enumerate(states)
+        )
+        and carrier.get("finalEffectiveAllocations") == expected_allocations[3]
+        and carrier.get("lastObservationId") == receipts[3].get("id")
     )
 
 
@@ -698,8 +952,7 @@ def _gt19_longitudinal_semantics(task, event, episodes, dimension_ids):
         if isinstance(first_outcome, dict) else None
     if (
         not _text(outcome_id)
-        or not isinstance(responsibilities, list) or len(responsibilities) != 1
-        or not _text(responsibilities[0])
+        or _string_set(responsibilities) is None or not responsibilities
         or not _text(baseline_route) or not _text(replacement_route)
         or baseline_route == replacement_route
     ):
@@ -714,6 +967,27 @@ def _gt19_longitudinal_semantics(task, event, episodes, dimension_ids):
     )
     outside_scope = baseline_supplies - set(responsibilities or []) \
         if baseline_supplies is not None else None
+    route_sets = [
+        {route.get("id") for route in episode.get("closureRequest", {}).get("routes", [])
+         if isinstance(route, dict) and _text(route.get("id"))}
+        for episode in episodes
+    ]
+    mode_summaries = [
+        _gt19_route_modes(episode.get("closureRequest", {}).get("routes"))
+        for episode in episodes
+    ]
+    baseline_modes = [
+        next((route.get("responsibilityModes") for route in episode.get(
+            "closureRequest", {}).get("routes", [])
+              if isinstance(route, dict) and route.get("id") == baseline_route), None)
+        for episode in episodes
+    ]
+    replacement_modes = [
+        next((route.get("responsibilityModes") for route in episode.get(
+            "closureRequest", {}).get("routes", [])
+              if isinstance(route, dict) and route.get("id") == replacement_route), None)
+        for episode in episodes
+    ]
     accord_arms = [arm for arm in behavior_arms.values()
                    if isinstance(behavior_arms, dict) and isinstance(arm, dict)
                    and arm.get("skillRead") is True] \
@@ -762,13 +1036,30 @@ def _gt19_longitudinal_semantics(task, event, episodes, dimension_ids):
             and episode.get("coreDecision") == reconcile_closure(
                 episode.get("closureRequest")
             )
-            and _valid_episode_decision(episode)
             and _passing_episode(episode, dimension_ids)
             for order, episode in enumerate(episodes)
         )
-        and selected == [baseline_route, baseline_route,
+        and _gt19_observation_semantics(episodes, decisions)
+        and _gt19_stage_semantics(episodes)
+        and selected == [baseline_route, None,
                          replacement_route, baseline_route]
         and outside_scope
+        and all(route_set == route_sets[0] for route_set in route_sets)
+        and all(summary is not None for summary in mode_summaries)
+        and set().union(*(summary[0] for summary in mode_summaries))
+        == set(RESPONSIBILITY_MODES)
+        and any(summary[1] for summary in mode_summaries)
+        and all(isinstance(modes, dict) for modes in baseline_modes + replacement_modes)
+        and all(
+            baseline_modes[order].get(responsibility)
+            in {"accord-contained", "accord-agent-composed"}
+            and replacement_modes[order].get(responsibility) == "agent-native"
+            for order in (1, 2, 3) for responsibility in responsibilities
+        )
+        and all(
+            len(set(baseline_modes[order].values())) > 1
+            for order in range(4)
+        )
         and all(
             isinstance(episode.get("sparseViews"), dict)
             and isinstance(episode["sparseViews"].get("H"), dict)
@@ -776,9 +1067,6 @@ def _gt19_longitudinal_semantics(task, event, episodes, dimension_ids):
             and _text(episode["sparseViews"]["H"].get(
                 f"{replacement_route}/{responsibilities[0]}"
             ))
-            and episode["sparseViews"]["A"].get(
-                f"{baseline_route}/{responsibilities[0]}"
-            ) == "allocated"
             and all(episode["sparseViews"]["A"].get(
                 f"{baseline_route}/{responsibility}"
             ) == "preserved-outside-scope" for responsibility in outside_scope)
@@ -806,6 +1094,28 @@ def _gt19_longitudinal_semantics(task, event, episodes, dimension_ids):
             f"{replacement_route}/{responsibilities[0]}"
         ) != episodes[2]["sparseViews"]["H"].get(
             f"{replacement_route}/{responsibilities[0]}"
+        )
+        and episodes[0]["sparseViews"]["A"].get(
+            f"{baseline_route}/{responsibilities[0]}"
+        ) == "allocated"
+        and episodes[1]["sparseViews"]["A"].get(
+            f"{baseline_route}/{responsibilities[0]}"
+        ) == "preserved-last-valid"
+        and episodes[2]["sparseViews"]["A"].get(
+            f"{baseline_route}/{responsibilities[0]}"
+        ) == "retired-with-recheck"
+        and episodes[2]["sparseViews"]["A"].get(
+            f"{replacement_route}/{responsibilities[0]}"
+        ) == "allocated"
+        and episodes[3]["sparseViews"]["A"].get(
+            f"{baseline_route}/{responsibilities[0]}"
+        ) == "restored"
+        and episodes[3]["sparseViews"]["A"].get(
+            f"{replacement_route}/{responsibilities[0]}"
+        ) == "unavailable"
+        and _gt19_carrier_semantics(
+            event, episodes, baseline_route, replacement_route,
+            responsibilities, outside_scope,
         )
         and isinstance(carrier, dict)
         and _text(carrier.get("kind"))

@@ -70,30 +70,40 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "eb943eba4f5912fc50f4b66aba061c7ad1dc7a705ba4c3564f371b6ad18fda00",
+      "repositorySha256": "49bb8b64da0efdb9eb47d7240c136dffcb6089bb7c405f9d0bafcab63d699e45",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
-      "id": "current-host-capability-sources-2026-08-27",
-      "kind": "fresh-official-host-capability-and-lifecycle-input",
-      "capturedAt": "2026-08-27",
+      "id": "current-host-capability-and-state-sources-2026-08-29",
+      "kind": "fresh-official-host-capability-lifecycle-and-state-carrier-input",
+      "capturedAt": "2026-08-29",
       "sources": [
         "https://learn.chatgpt.com/docs/hooks",
         "https://learn.chatgpt.com/docs/agent-configuration/subagents",
         "https://learn.chatgpt.com/docs/plugins",
         "https://learn.chatgpt.com/docs/extend/mcp",
+        "https://learn.chatgpt.com/docs/app-server",
         "https://code.claude.com/docs/en/hooks",
         "https://code.claude.com/docs/en/sub-agents",
         "https://code.claude.com/docs/en/plugins",
         "https://code.claude.com/docs/en/mcp",
+        "https://code.claude.com/docs/en/agent-sdk/sessions",
+        "https://code.claude.com/docs/en/agent-sdk/session-storage",
         "https://code.claude.com/docs/en/desktop"
       ],
-      "disposition": "fresh-high-weight-host-input-not-portable-authority-or-behavior-proof"
+      "disposition": "fresh-high-weight-host-and-state-carrier-input-not-live-field-availability-portable-authority-or-behavior-proof"
+    },
+    {
+      "id": "gt21-live-carrier-preflight-2026-08-29",
+      "kind": "bounded-working-tree-live-carrier-preflight-and-counterevidence",
+      "repositoryLocator": "evals/evidence/2026-08-29-v310-gt21-live-carrier-preflight.json",
+      "repositorySha256": "2cc2fb0486c056b0819ed21da90553eb7f503f7b373298f762122eebecf4d79e",
+      "disposition": "admitted-preflight-only-not-gt21-observation-exact-candidate-or-release-evidence"
     },
     {
       "id": "karpathy-primary-method-and-repository-inputs-2026-08-28",
       "kind": "primary-external-simplification-experiment-and-self-evolution-feasibility-input",
-      "capturedAt": "2026-08-28",
+      "capturedAt": "2026-08-29",
       "sources": [
         "https://github.com/karpathy/autoresearch",
         "https://github.com/karpathy/micrograd",
@@ -124,42 +134,53 @@
       "Q3",
       "Q4"
     ],
-    "observedProblem": "The historical ae7294652761abceb753f0571ee82c7ddeae06af baseline closed one bounded collaboration slice and produced statically conformant Codex and Claude plugin packages, but the program had converged on publication before demonstrating the intended complete bounded self-bootstrapping core. Current hosts remain extension-composed and Accord-enabled, so they cannot self-attest official-clean, no-Accord or causal Accord effect. The reference core now binds proposition coherence, independent code/conversation/execution topology, sparse host-native and Accord responsibility views, admission masks, source-bound same-responsibility replacement, reversible scoped retirement and recomputation without adding a Runtime or durable store. Fresh current-contract GT-14/15/16@1bbcc95 and GT-18/19@2460adc pass only finite Codex-local claims with their failures, corrections, high token costs and cleanup retained; revised GT-07/11/12/13/17 retain only their recorded bounded claims. BAL-04 selected no added form and no net Accord gain. Exact-cut 7860fee failed implementation and standards review on GT-07 self-attestation, fixture-shaped GT-18/19 validation, malformed carriers and unbound sequence semantics. Exact fcefee4 closed those classes but standards review found contradictory GT-07 free text plus non-minimum received state, an unrelated GT-18 human-burden-only failure and GT-19 outcome-family drift. Exact f3c9b09 closed all six requested semantic mutants; specification review then found stale 390000/364000 complexity wording, while standards review proved sourceNarrativeSha256 could still self-attest after synchronized facts, report and binding rehashing. The current remediation binds canonical typed GT-07 report normalization to the same independent-result identity and original narrative at exact untyped ancestor fcefee4 through a bounded Git read; derives accepted GT-18 regression dimensions from the task contract; locks every GT-19 episode to the first outcome ID; and reconciles the active complexity ceiling to 400000 with at least 5% headroom. This is deterministic evidence normalization and validation, not behavior replay. Capacity, summarization and handoff remain examples in an open continuity-risk set; host vocabulary is normalized before capability equivalence; goal mode remains paused. A fresh exact independent re-review, candidate formation, hosted verification, publication authority and public cleanup remain unresolved.",
-    "hypothesis": "A product-form-neutral, complete bounded self-bootstrapping core can turn the existing collaboration contract into a stronger outcome system without defaulting to a plugin, Runtime or control plane. If Accord first reconciles each material consensus against the current proposition set; keeps code and conversation topology independent; senses environment provenance; binds the latest outcome and human authority; reuses suitable native, official and maintained wheels before authorship; allocates minimum deep modules behind narrow shared interfaces; derives sparse host-native and Accord responsibility views plus current admission and closure-lifecycle masks; and replaces or retires only exact allocations whose successor independently closes the same consequence and lifecycle with reversible recheck, then it can improve real collaboration closure while limiting contradiction, interference, self-confirmation, proxy optimization and lifecycle burden.",
+    "observedProblem": "The historical ae7294652761abceb753f0571ee82c7ddeae06af baseline closed one bounded collaboration slice and produced statically conformant Codex and Claude plugin packages, but the program had converged on publication before demonstrating the intended complete bounded self-bootstrapping core. Current hosts remain extension-composed and Accord-enabled, so they cannot self-attest official-clean, no-Accord or causal Accord effect. The reference core now binds proposition coherence, independent code/conversation/execution topology, sparse host-native and Accord responsibility views, the state-authority view, admission masks, source-bound same-responsibility replacement, reversible scoped retirement and recomputation without adding a Runtime or durable store. Fresh current-contract GT-14/15/16@1bbcc95 and GT-18/19@2460adc pass only finite Codex-local claims with their failures, corrections, high token costs and cleanup retained; revised GT-07/11/12/13/17 retain only their recorded bounded claims. BAL-04 selected no added form and no net Accord gain. Exact-cut 7860fee failed implementation and standards review on GT-07 self-attestation, fixture-shaped GT-18/19 validation, malformed carriers and unbound sequence semantics. Exact fcefee4 closed those classes but standards review found contradictory GT-07 free text plus non-minimum received state, an unrelated GT-18 human-burden-only failure and GT-19 outcome-family drift. Exact f3c9b09 closed all six requested semantic mutants; specification review then found stale 390000/364000 complexity wording, while standards review proved sourceNarrativeSha256 could still self-attest after synchronized facts, report and binding rehashing. The following remediation bound canonical typed GT-07 report normalization to the same independent-result identity and original narrative at exact untyped ancestor fcefee4, derived accepted GT-18 regression dimensions from the task contract, locked every GT-19 episode to the first outcome ID and reconciled the then-active ceiling to 400000. The live-state and per-responsibility correction reopens GT-19 and preserves old evidence only as history. A pure-data PoC now establishes field-contract and adapter-shape feasibility across Codex-App-Server-shaped and Claude-MCP-resource-shaped inputs while rejecting dual writers, expiry and raw conversation fields; it proves no live host availability or value. Independent self-review then exposed that source metadata was not bound to decision target/value and last-safe preservation lived only in a fixture helper; the core and regressions now close those P1 classes. The active ceiling is therefore 462000 with at least 5% headroom after subtracting redundant v1 tests, so typed target/value binding, core-bound last-safe preservation and the live-adapter boundary remain maintainable rather than byte-golfed. A live-chain audit first showed that both candidate packages exposed only the Skill and one SessionStart echo. The working tree now replaces that echo with one shared short-lived Node event adapter: startup and clear stay silent, while compact and resume parse only supported Hook event fields and return typed minimum continuity context without persistent process or state. Its public seam, package-byte equality, isolated native discovery and structured App Server query feasibility pass. One Claude session-only startup trigger completes silently, and one ephemeral Codex sessionFlags compact arm closes trigger, typed injection and an exact schema-field Agent read with zero tool use while the enumerated installed Hook stays disabled. It does not yet re-sense host state, form a current receipt, invoke the pure core, drive topology, prove semantic Agent use beyond that field read or independently verify a product consequence. Current official Codex and Claude surfaces support richer query, action, event, state and lifecycle primitives, so the earlier no-added-form decision remains reopened without admitting a persistent Runtime. Capacity, summarization and handoff remain examples in an open continuity-risk set; conversation fork, Git worktree and Git branch are distinct; host vocabulary is normalized before capability equivalence; goal mode remains paused. A fresh exact independent re-review, candidate formation, hosted verification, publication authority and public cleanup remain unresolved.",
+    "hypothesis": "A product-form-neutral, complete bounded self-bootstrapping core can turn the existing collaboration contract into a stronger outcome system without defaulting to a plugin, Runtime or control plane. If Accord first reconciles each material consensus against the current proposition set; keeps code and conversation topology independent; senses environment provenance; binds the latest outcome and human authority; reuses suitable native, official and maintained wheels before authorship; allocates minimum deep modules behind narrow shared interfaces; derives sparse host-native and Accord responsibility views plus the current state-authority, admission and closure-lifecycle views; and replaces or retires only exact allocations whose successor independently closes the same consequence and lifecycle with reversible recheck, then it can improve real collaboration closure while limiting contradiction, interference, self-confirmation, proxy optimization and lifecycle burden.",
     "hostCapabilityRefresh": {
-      "capturedAt": "2026-08-28",
+      "capturedAt": "2026-08-29",
       "facts": [
-        "The current Codex CLI is 0.150.1 and yiyuan-accord-codex 3.1.0 is installed and enabled alongside other bundled, primary-runtime and curated plugins.",
-        "The current Claude Code CLI is 2.1.247 and yiyuan-accord-claude 3.0.1 is installed and enabled alongside multiple official plugins, including persistent-state and Hook-capable extensions.",
+        "The current Codex CLI is 0.150.1 and reports yiyuan-accord-codex 3.1.0 installed and enabled alongside other bundled, primary-runtime and curated plugins.",
+        "The current Codex working-tree projection, local marketplace snapshot and installed cache are three byte-distinct surfaces; the marketplace snapshot lacks the candidate Hook while the installed cache and working tree each contain different Skill and Hook bytes. Editing the repository therefore does not hot-update the installed plugin or establish which bytes caused a reminder.",
+        "The current Claude Code CLI is 2.1.251 and yiyuan-accord-claude 3.0.1 is installed and enabled alongside multiple official plugins, including persistent-state and Hook-capable extensions.",
         "Plugin listing proves only declared installation and enablement. It does not prove Hook firing, implicit activation, effective model exposure, behavior, isolation, value or absence of interference.",
-        "The current repository remains the saved main checkout; the historical v3.1.0 candidate SHA has already passed its bounded local, independent, GitHub Actions and condition-fit Cloud checks, but a later global product consensus supersedes its ready state without erasing those historical facts."
+        "The current repository remains the saved main checkout; the historical v3.1.0 candidate SHA has already passed its bounded local, independent, GitHub Actions and condition-fit Cloud checks, but a later global product consensus supersedes its ready state without erasing those historical facts.",
+        "Official Codex App Server and Claude MCP or session surfaces expose non-uniform state carriers. A 2026-08-29 pure-data PoC normalized two carrier-shaped envelopes, accepted monotonic same-writer updates and rejected dual writers, expiry and raw conversation fields without live host mutation.",
+        "A 2026-08-29 ephemeral Codex GT-19 arm over a tracked-file candidate copy returned the exact independently reproduced four-episode typed-receipt result. Schema preflight and two zero-rule exec-policy blocks remain counterevidence; the successful read-only arm required existing execpolicy, left the copy unchanged and was removed.",
+        "The working-tree Codex and Claude packages now declare one shared short-lived SessionStart command adapter, runtimeAdded false, runtimeDependency host-path-node, no persistent process or state and behaviorEvidenceState unverified. It converts only compact or resume event fields into non-authoritative hints inside typed minimum continuity context; no packaged component re-senses official state, forms a state receipt, invokes yiyuan_accord/closure.py, drives topology or verifies consequence.",
+        "Current official Codex Hooks can run commands or already-connected MCP tools at prompt, tool, compact, stop and session boundaries and provide plugin-private writable data. Codex App Server directly exposes model/list, modelProvider/capabilities/read, experimentalFeature/list, skills/list, hooks/list, mcpServerStatus/list, app/installed, config/read and thread/list plus fresh thread start, resume and copied-history fork. Current Claude plugins can likewise package Hooks and MCP servers across prompt, compact, file, configuration, task and worktree events. These structured surfaces are primary host facts for their declared scope, but remain available primitives rather than Accord behavior evidence.",
+        "A disposable zero-turn App Server prototype returned current structured configuration, Hook, Skill and permission surfaces, exposed installed Accord, rejected goal reads for an ephemeral thread, normalized five decision-bound fields into a current receipt and invoked the pure core. After a self-attested post-state attempt was rejected, the corrected core decision held unknown because independent consequence evidence was unavailable. A later isolated exact-package arm proved that task-owned official goal state makes a zero-turn thread resumable, but the installed SessionStart Hook remains pending until a turn. The acknowledged thread/resume response itself then directly triggered official state re-sensing, a current five-field receipt and pure-core invocation; the core again held unknown without independent product consequence. The first installed turn retained an enabled-untrusted NO_CONTEXT control. After two pre-model client-shape corrections, a separately authorized request-scoped trust-bypass turn emitted one installed synchronous SessionStart:resume start/completion pair, injected schema/source context and yielded exact HOOK_CONTEXT_RESUME with zero tools and full task cleanup. General trustStatus remained modified and the event reported permission_mode bypassPermissions. This closes bounded direct event-to-state-to-core connectivity plus a separate Hook trigger-to-context-to-one-Agent-branch chain, not a selected product form, production trust, Hook-caused re-sensing/core invocation, consequence or value."
       ],
       "inferences": [
         "Current-host dogfood must be labelled Accord-enabled and extension-composed; an official-clean or no-Accord claim needs a separately controlled environment rather than subtraction by narrative.",
-        "A stateless SessionStart Hook remains one candidate activation mechanism, not the product core and not sufficient evidence of self-bootstrapping.",
-        "Environment sensing, isolation selection and adaptive admission belong inside the self-bootstrapping loop because the route cannot be trusted before its own observation context is understood."
+        "The provisional stateless SessionStart adapter is only an event-to-context boundary, not the product core or sufficient evidence of a live event-to-effect self-bootstrapping chain. On current Codex, resume queues that Hook until the next turn, so zero-turn state restoration must not be claimed as Hook execution.",
+        "The lowest-burden live candidate reads supported official structured APIs for every exposed field, uses events only to invalidate and trigger bounded re-sensing, then invokes the pure core and emits typed minimum context. A throwaway direct App Server client passes resume-response-to-current-receipt-to-core connectivity without a model turn, while zero-turn SessionStart is turn-lazy. The first installed turn remains an enabled-untrusted NO_CONTEXT control. A corrected request-scoped trust-bypass arm then proves one installed first-turn resume trigger, typed injection and schema/source Agent branch with zero tools; general trust stays modified and permission_mode is bypassPermissions, so the broad bypass is test-only. Neither route is selected: the client adds ownership, cross-host adaptation and lifecycle burden, while the Hook route still lacks official re-sensing, core invocation, consequence and narrow trust lifecycle. Add plugin-private state only for a demonstrated cross-event field, escalate to bundled MCP only for a remaining typed query or action gap, and admit an SDK, App Server client or persistent service only after lower layers fail the same oracle.",
+        "Development dogfood must freeze exact candidate bytes and stay distinct from official-clean and isolated-no-Accord baselines; repository edits must not hot-update the active development task or become causal evidence.",
+        "Environment sensing, isolation selection and adaptive admission belong inside the self-bootstrapping loop because the route cannot be trusted before its own context is understood.",
+        "For each required field, prefer a supported official structured API, then other current typed official host-owned state, Accord-owned state and bounded direct observation; bind every normalized decision target and value with explicit fallback precedence and current generation. Accord normalizes only fields relevant to the current obligation and does not recreate a second authoritative host capability database. Events only invalidate, while missing, conflicting, unbound or mismatched fields stay unknown. Responsibility implementation and state coordination remain orthogonal; an admitted official same-duty carrier may subtract a displaced Runtime, adapter or wheel only through ordinary reversible retirement."
       ],
       "unknowns": [
         "No official-clean result exists. BAL-04 ran one matched repository-Skill/no-Accord pair and both arms closed the same correction outcome; one model, fixed order, an explicit generic Skill invitation, shared user Skills and no demonstrated baseline gap keep incremental Accord effect unknown.",
-        "Actual task-time Hook firing, implicit activation, low interference and product value remain unverified.",
+        "One disposable Claude session-only task verifies exact-copied SessionStart:startup firing and correct silence. A separate ephemeral Codex App Server task disables the installed Hook, invokes official compact, observes candidate sessionFlags context and one exact schema-field Agent read with zero tool use. One installed first-turn resume Hook also triggers, injects typed context and drives one schema/source branch under broad request-scoped test bypass. Installed-package compact, sessionFlags resume, semantic directive use, narrow production trust, implicit activation, low interference and product value remain unverified.",
         "BAL-04 exposed that both working 3.1.0 Skills still used the superseded scalar expected-fitness-minus-cost rule. Both projections are now corrected to hard admission, lifecycle Pareto pruning, context constraints and equivalent-fit native or reuse preference. Earlier behavior stays bound to its prior Skill hashes; the corrected projections have no inherited behavior claim and are not silently hot-mutated into live hosts.",
-        "The minimum sufficient product form for durable self-bootstrapping remains undecided.",
-        "The f0ed9ce synthetic four-episode attempt remains source-insufficient counterevidence. The corrected 7d7a7e5 replay establishes only one finite governed sequence and does not establish a need or authority for durable state, cross-session field value or cross-host equivalence."
+        "The minimum sufficient live operational carrier and any durable self-bootstrapping form remain undecided. The provisional host-path Node Hook has passed public-seam, package-equality and isolated discovery preflight, one exact-copied Claude session-only startup trigger with correct silence, one ephemeral Codex sessionFlags compact trigger plus schema-field Agent read, and one installed first-turn resume trigger plus schema/source Agent branch under request-scoped test bypass; all Agent arms used zero tools. A zero-turn App Server sequence proves direct thread/resume-response-to-current-receipt-to-core connectivity and correct hold-unknown behavior after task-owned goal state makes the thread resumable. The installed Hook waits for a turn, and the broad bypass does not supply production trust. Installed-package compact, sessionFlags resume, Node portability, semantic directive use, Hook-caused official re-sensing/core invocation, product consequence and topology-safe handoff remain unproved; plugin-private state, bundled MCP, SDK or App Server client and a persistent service have not passed a common obligation and lifecycle comparison.",
+        "No current evidence proves that a plugin Hook can perform the complete fresh sequential handoff. Event detection, fresh conversation creation, minimum state transfer, destination reconciliation and source release remain separate obligations; copied-history fork, Git worktree and Git branch are not substitutes.",
+        "The f0ed9ce synthetic four-episode attempt remains source-insufficient counterevidence. The corrected 7d7a7e5 replay establishes only one finite governed sequence and does not establish a need or authority for durable state, cross-session field value or cross-host equivalence.",
+        "Official documentation establishes several Codex structured fields, but no current evidence proves their live permission behavior, freshness, update latency, cross-host equivalence, mapping to the current obligation, Agent consumption, consequence or value; fields outside supported APIs remain unknown."
       ]
     },
     "firstMechanismDecision": {
       "id": "product-form-after-closure-properties",
-      "state": "no-new-durable-form-admitted-after-finite-longitudinal-and-no-add-paired-evidence",
-      "selected": "No new plugin, Hook, runtime, service, state store, protocol or host adapter is admitted. The f898ebd retirement gap is semantic and fail-closed, so the pure-data core remains the smallest implemented means and gains only a responsibility-scoped replacement and retirement decision contract. BAL-04 still shows one correction outcome closed equally by repository-Skill and no-Accord arms, so that condition selects no additional form and proves no net Accord gain. Revised GT-19 now shows one finite source-bound dynamic responsibility retirement and expiry restoration sequence, but not live field control or a need for another form. Existing projections remain bounded carriers, not product identity.",
+      "state": "reopened-for-live-operational-carrier-feasibility",
+      "selected": "Provisionally admit only one shared short-lived SessionStart event adapter for GT-21 treatment, not as the selected Codex operational form: it keeps startup and clear silent, maps compact or resume to non-authoritative event hints inside typed minimum continuity context, depends on host-path Node, and adds no persistent process or state. Invalid input fails visibly without echoing it. Public-seam tests, exact package-byte equality, isolated native discovery and structured App Server query feasibility pass; one disposable Claude session-only startup event triggers the exact copied adapter and completes silently; one ephemeral Codex sessionFlags compact arm disables the installed Hook, closes trigger and typed injection, and yields one exact schema-field Agent read with zero tool use. A zero-turn exact-package App Server arm proves task-owned goal-backed resume state plus a direct official resume-response-to-current-receipt-to-pure-core chain; the core holds unknown without independent consequence evidence. The same arm proves installed SessionStart resume is turn-lazy. An enabled-but-untrusted first-turn control returned NO_CONTEXT; after request-shape corrections, one separately authorized gpt-5.6-luna/low arm supplied bypass_hook_trust through thread request config, emitted exactly one installed synchronous SessionStart:resume start/completion pair, injected schema/source context and yielded exact HOOK_CONTEXT_RESUME with zero tools. General inventory trustStatus remained modified, and the event exposed permission_mode bypassPermissions, so this broad test control is not a production trust mechanism. Direct App Server client and first-turn Hook remain comparative candidates, not selected forms. Installed-package compact, sessionFlags resume, semantic directive use, official re-sensing through the Hook route, execution, product consequence, independent evidence, value, topology actuation, narrow trust lifecycle and Node portability do not yet pass. Compare native, Hook, bundled MCP, App Server client and deeper routes under one obligation and lifecycle oracle before adding form. Freeze exact bytes before candidate-enabled isolation or current-host dogfood. BAL-04 still proves no incremental benefit for its neutral paired task, not general sufficiency of a runtime-free package. Existing projections remain bounded carriers, not product identity.",
       "humanBoundary": "New installation, enablement, trust, account, data, material cost, publication, destructive or irreversible effects still require their exact authority. Read-only environment observation, bounded local modeling and disposable isolated fixtures remain Agent-owned within the current grant.",
-      "claimLimit": "The finite sequence, one neutral paired task and pure-data retirement conformance do not justify durable machinery, prove current plugin sufficiency, live host retirement or that no future mechanism is needed. Product form remains context-fit and revisable; any future addition requires a source-complete unclosed responsibility and net whole-vector improvement."
+      "claimLimit": "Official source availability makes event-driven and deeper carriers feasible in principle but proves no Accord activation, effect, continuity or value. The finite sequence, one neutral paired task and pure-data retirement conformance do not justify durable machinery, prove current plugin sufficiency, live host retirement or that a Hook alone is enough. Product form remains context-fit and revisable; any addition requires a source-complete unclosed responsibility, isolated effect evidence and net whole-vector improvement."
     },
     "representativeOutcome": {
       "id": "outcome.complete-bounded-self-bootstrapping-core",
       "statement": "Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.",
       "startingState": "The product goal and human boundaries are supplied, but environment provenance, Accord activation, other extensions, capability health, suitable existing wheels, product form, state carrier and longitudinal fitness may be unknown. The current local hosts are explicitly Accord-enabled and extension-composed; no clean baseline or comparative advantage is presumed.",
-      "completion": "Representative and longitudinal sequences verify one coherent bounded proposition set; minimum deep-module or no-op allocation; source-bound sparse capability admission; consequence, governed evolution, topology-safe continuity, scoped retirement and recomputation, reconciliation, cleanup and lower burden.",
-      "claimLimit": "Fresh GT-14/15/16@1bbcc95, GT-18/19@2460adc and GT-07/11/12/13/17 pass only bounded Codex-local claims with failures, corrections and costs retained. Actual compact/fork, official-clean or no-Accord product behavior, Hook effect, durable need, cross-host or field value, whole-system balance, candidate and release remain unproved; BAL-04 found no net gain.",
+      "completion": "Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.",
+      "claimLimit": "GT-19 is synthetic. Codex compact and request-scoped first-turn resume prove typed injection plus one schema/source read; zero-turn App Server proves goal-backed resume and direct receipt-to-core hold-unknown. Selected route, semantic directive use, consequence, handoff, cross-host value, narrow trust lifecycle, balance, candidate and release remain unproved.",
       "firstEvidenceSurfaces": [
         "official-clean",
         "isolated-minimal",
@@ -174,11 +195,11 @@
       "plan": {
         "hypothesis": "Complete bounded self-bootstrapping, not a particular plugin, fixed catalogue of forms or self-evolution loop, is the product-core hypothesis. Complete means every responsibility inside the named bound is closed, explicitly retired or honestly left unknown; it is not universal completeness. Establish its semantic loop, environment and authority model, reuse ledger, responsibility-to-form decision rule, cross-form coherence contract, representative and longitudinal evaluations, then implement only the smallest demonstrated closure. A new consensus governs direction but reaches implementation baseline status only after proposition-level contradiction, category, boundary and dependency checks. Preserve each superseded baseline as history and replay every globally affected surface from the earliest dependency boundary.",
         "earliestAffectedBoundary": "product/constitution.json#/purpose,/successDefinition,/productBoundary,/evolutionPolicy",
-        "slice": "First rebaseline authority and the four mapped surfaces. Before any affected downstream execution, reconcile the current proposition set for contradiction, category error, boundary drift and dependency impact. Then conduct primary-source, existing-wheel and bounded technical feasibility research; model the complete loop only from admitted evidence; define environment provenance and isolation; design representative and longitudinal tasks; prototype competing product forms; implement only after the feasibility gate passes; replay declaration-to-effect and lifecycle paths; validate cross-carrier continuity and governed evolution; perform a coupled whole-system balance self-audit, remediate the weakest justified links and re-accept every affected dimension; and only then form a future exact candidate.",
-        "stopCondition": "The active plan is no longer release-centered; every stage maps to explicit criteria and evidence; no unresolved logical contradiction or category error is propagated as a baseline; current Accord-enabled hosts are treated as composed environments; product form remains undecided until evidence; external methods are selective inputs with limits and exit conditions; a whole-system self-audit cannot average away a blocker or substitute for independent review; and release gates remain dormant until coherence repair, core work, remediation, reacceptance and review complete."
+        "slice": "Retain the pure-data receipt, lifecycle probe, direct App Server resume-response-to-current-receipt-to-core chain, enabled-untrusted NO_CONTEXT control and corrected request-scoped trust-bypass first-turn Hook chain, while keeping the mechanism boundary open. Current evidence shows task-owned goal state is resumable without a model; SessionStart resume waits for a turn; request config can run the installed Hook and inject typed schema/source context that one Agent branch reads, but the broad bypass is test-only and the Hook route still lacks official-state re-sensing, pure-core invocation and consequence. Compare it with the direct client and lower-burden native alternatives under one consequence, interference, continuity, trust and lifecycle oracle. Prove the smallest route in candidate-enabled isolation, including a silent no-op and topology-safe fresh handoff when required; only then finalize components, replay transactional lifecycle, dogfood frozen bytes, re-accept every dimension and form a future exact candidate.",
+        "stopCondition": "The active plan is no longer release-centered; every stage maps to explicit criteria and evidence; no unresolved logical contradiction or category error is propagated as a baseline; current Accord-enabled hosts are treated as composed environments; environment design or one startup snapshot cannot self-attest current task-time state; product form remains undecided until evidence; external methods are selective inputs with limits and exit conditions; a whole-system self-audit cannot average away a blocker or substitute for independent review; and release gates remain dormant until live sensing, coherence repair, remediation, reacceptance and review complete."
       },
       "process": {
-        "routeRule": "Bind outcome, authority, environment and comparison; stop on conflict. Reuse before build; compose effective capabilities and choose no artifact or minimum modules. Normalize host labels to canonical relations; similarity opens evaluation, not identity. H/A plus E/V only opens redundancy evaluation. Retire an exact allocation after same-duty effect, lifecycle and cleanup, reversible post-state/recheck; recompute on drift. Keep topologies independent; compact, causal fork and fresh handoff are distinct. Capacity, summaries and handoff are non-exhaustive; reconcile any source-bound loss, distortion, staleness or misbinding. Verify burden, lifecycle and residue; reaccept.",
+        "routeRule": "Bind current source-ranked target/value receipts at material boundaries; missing or conflict stays unknown. Events invalidate, not prove effect. Codex direct resume can re-sense without a model; request-scoped test bypass proves first-turn Hook trigger and typed injection, not production trust or consequence. Prefer native query/action plus pure core; add state, actuation or persistence only for residual duties. Isolate, preserve user and foreign state, and retire only after consequence, cleanup and recheck.",
         "phases": [
           "rebaseline-consensus-and-global-dependency-map",
           "research-self-bootstrapping-feasibility-existing-wheels-and-failure-modes",
@@ -190,6 +211,10 @@
           "verify-activation-effect-learning-evolution-rollback-and-retirement",
           "calibrate-proposition-coherence-and-replay-dependent-surfaces",
           "audit-whole-system-balance-remediate-weak-links-and-reaccept",
+          "validate-state-interoperability-implement-live-receipts-invalidate-resense-and-replay",
+          "prove-isolated-live-operational-carrier-loss-control-and-topology-safe-handoff",
+          "prove-transactional-distribution-after-component-selection",
+          "dogfood-frozen-bytes-in-a-fresh-composed-carrier",
           "reconcile-all-surfaces-and-only-then-assess-a-future-candidate"
         ],
         "orderedSteps": [
@@ -272,7 +297,7 @@
               "Q3",
               "Q4"
             ],
-            "completion": "evals/golden-tasks.json#/suiteDesign defines representative-case and minimum-four-episode longitudinal-sequence units; ten non-compensating acceptance dimensions; claim-derived environment and route comparison eligibility; exact case, treatment, evaluator, carrier, effect and cleanup bindings; independence, privacy, sampling, stop and claim rules; and a GT-14 through GT-19 obligation matrix. Each task binds a specific oracle, counterexamples and claim ceiling. GT-18 preserves the governed evolution sequence; GT-19 preserves an Accord-backed baseline, rejects declaration-only native coverage, admits one same-responsibility successor and reversible retirement, then recomputes after drift or evidence expiry. This is machine-checkable evaluation design, not executed behavior, comparative value or release evidence."
+            "completion": "evals/golden-tasks.json#/suiteDesign defines representative-case and minimum-four-episode longitudinal-sequence units; ten non-compensating acceptance dimensions; claim-derived environment and route comparison eligibility; exact case, treatment, evaluator, carrier, effect and cleanup bindings; independence, privacy, sampling, stop and claim rules; and a GT-14 through GT-21 obligation matrix. Each task binds a specific oracle, counterexamples and claim ceiling. GT-18 preserves governed evolution; GT-19 preserves current-receipt dynamic retirement; GT-20 requires one-intent host-native orchestration over non-empty user state, atomic rollback, concurrent-edit preservation, zero active Accord state and a bounded automatic host-cleanup contract for any inert host-owned cache; GT-21 requires an isolated real event-to-core-to-consequence path, low-interference no-op, bounded private state and topology-safe fresh sequential handoff. GT-20 and GT-21 remain unperformed and no task design proves behavior, comparative value or release readiness."
           },
           {
             "id": "prototype-product-form-neutral-vertical-slices",
@@ -359,10 +384,78 @@
             "completion": "The source-bound non-compensating whole-system ledger was refreshed from exact clean cut 59a340fbdec91d1b9287ba3c44a94a49348558c8 with current GT-18/19@2460adc evidence and both independent reviews. It rebinds baseline, target, counterfactual, cutoff, confounders and invalidation triggers; classifies every coupled dimension as pass, concern, blocker or unknown; and retains GT-07, GT-17, GT-18 and GT-19 blocked routes, correction paths, transcription failures, review failures, high token costs and cleanup costs as counterevidence. Review found two non-compensating cut blockers: GT-18/19 role semantics were not fail-closed against meaning-changing mutations, and malformed cleanup data could raise instead of returning a validation failure. The minimum remediation strengthens the existing evidence module with role-level schemas, immutable vectors and carriers, recomputed GT-19 closure requests, responsibility-scoped views and masks, public cleanup-type regression and negative mutations; it adds no Runtime, state store, dependency or second authority source. Stale unconditional replay wording, ambiguous GT-07-through-GT-19 release wording and burden-elimination metadata are narrowed at the same earliest affected boundary. Current behavior evidence is preserved only if the strengthened verifier accepts its unchanged source, task, evaluator, projection and behavior-subject bindings; otherwise the affected task reopens. Self-review remains distinct from the active independent review and creates no candidate or release authority."
           },
           {
-            "id": "independent-review-and-form-future-exact-candidate",
-            "state": "active",
+            "id": "implement-and-replay-live-state-receipt-closure",
+            "state": "completed",
             "dependsOn": [
               "self-audit-remediate-and-reaccept-whole-system-balance"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "Official Codex and Claude sources plus a disposable pure-data PoC established non-uniform carrier and adapter-shape feasibility without host mutation or a Runtime/store. The core now admits only target/value-bound current-generation typed receipts with official-state-first precedence, single-writer conflict and privacy closure; signal-only invalidation holds unknown and returns only an independently bound last-safe allocation, while responsibility modes remain orthogonal. Source record evals/evidence/2026-08-29-v310-gt19-current-receipt-codex-local-source.json retains schema preflight and two zero-rule exec-policy blocks, then binds one successful ephemeral read-only Codex arm to exact sparse working-tree bytes. Its four episodes independently reproduce current-plugin, hold/preserve, native-no-add and restored-plugin decisions with re-sensing and zero residue for executed episodes. The fixture was removed. This proves one synthetic bounded-observation Agent replay only, not live official fields, Hook causality, an exact revision, candidate or release readiness."
+          },
+          {
+            "id": "prove-isolated-live-operational-carrier-and-continuity",
+            "state": "active",
+            "dependsOn": [
+              "implement-and-replay-live-state-receipt-closure"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+          "completion": "Use current official Codex and Claude sources to map all relevant native query, action, event, capability, state, topology, permission and lifecycle surfaces to the same obligations. Consume supported structured host facts directly and compare a synchronous event-driven Hook, direct App Server event client, plugin-private state, bundled MCP and deeper SDK or persistent routes only for residual gaps. The bounded zero-turn arm already proves task-owned goal-backed resume state and direct resume-response-to-current-receipt-to-core connectivity, while proving that SessionStart resume waits for the next turn. Run the remaining GT-21 work only in frozen candidate-enabled isolated scopes, with a no-Accord arm when claiming incremental effect. The selected real supported event route must invalidate and re-sense, invoke the pure core, emit only typed decision-relevant context, be consumed by the Agent, close an independently observed consequence and remain silent on a sufficient simple route. Cross-event state, if needed, stays plugin-private and bounded. A required sequential relief must use a fresh zero-history conversation, not copied-history fork, Git worktree or Git branch; transfer minimum verified state, reconcile the destination and only then release the source. Leave zero background process and task-owned residue. Escalate mechanism depth only after the lower route fails under the same oracle."
+          },
+          {
+            "id": "prove-transactional-install-state-preservation-and-removal",
+            "state": "pending",
+            "dependsOn": [
+              "prove-isolated-live-operational-carrier-and-continuity"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "After GT-21 selects the exact component set, use current official host lifecycle surfaces before authoring an installer, then run GT-20 in disposable non-empty Codex and Claude scopes. After exact source trust, one user lifecycle intent per install, update, rollback or removal operation must orchestrate all selected Accord components; preserve user-owned instructions and configuration, a concurrent user edit, unrelated plugins and shared or unknown dependencies; atomically restore the last verified version after injected failure; remove all active Accord registration, exposure, process and data state; and independently verify activation separately from installation. Any retained host-owned inert cache must be non-callable, observed under a bounded automatic cleanup contract and require no user action; Accord must not relabel it physical zero residue or delete it outside supported lifecycle. Keep credentials, real sessions and global user state out of scope."
+          },
+          {
+            "id": "reaccept-whole-system-after-live-state-closure",
+            "state": "pending",
+            "dependsOn": [
+              "prove-transactional-install-state-preservation-and-removal"
+            ],
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "completion": "Re-run the contradiction map, environment admission, dynamic index and graph, capability allocation, field-level state ownership and interoperability, live operational carrier, topology-safe continuity, retirement, privacy, interference, complexity, documentation, host packaging, transactional lifecycle and whole-system non-compensating balance checks from the typed live-state and user-state-preservation boundaries. Preserve historical GT-19 as bounded earlier evidence wherever it lacks the stronger receipt contract and keep GT-20 and GT-21 unknown until independently replayed."
+          },
+          {
+            "id": "independent-review-and-form-future-exact-candidate",
+            "state": "pending",
+            "dependsOn": [
+              "reaccept-whole-system-after-live-state-closure"
             ],
             "acceptanceIds": [
               "R1",
@@ -398,6 +491,7 @@
           "declaration-installation-enablement-activation-execution-effect-and-evidence-chain",
           "avoidable-human-burden-help-noop-interference-and-total-lifecycle-cost",
           "configuration-topology-resource-and-lifecycle-effects",
+          "one-intent-transactional-install-update-rollback-removal-user-state-preservation-and-zero-Accord-residue",
           "correction-process-loss-capability-acquisition-composition-degradation-recovery-and-rollback",
         "learning-self-evolution-keep-discard-authority-and-retirement",
         "same-responsibility-native-replacement-reversible-observation-independent-retirement-poststate-and-drift-recomputation",
@@ -406,11 +500,11 @@
           "requested-consequence-independent-poststate-release-and-residue",
           "unknowns-claim-limit-recheck-and-retirement-triggers"
         ],
-      "passRule": "Pass only when the current proposition set has no unresolved contradiction, category error or boundary conflict and the declared representative and longitudinal suite externally observes the complete bounded self-bootstrapping loop across controlled environment compositions. The loop runs from consensus calibration and environment sensing through existing-wheel search, minimum deep-module allocation, authorized execution, consequence verification, learning or self-evolution, responsibility-scoped rollback or retirement, drift/expiry recomputation, global reconciliation, release and cleanup. Normalize host-specific project, workspace, task, thread, conversation and session vocabulary into canonical code, outcome, carrier and execution relations before capability comparison; functional similarity opens equivalence evaluation but never proves interchangeability. Code topology and conversation topology remain independently bound; capacity, summarization and handoff are examples in an open continuity-risk set, while any source-bound loss, distortion, staleness or misbinding reopens the affected boundary. Sparse host-native and Accord responsibility views plus current admission and closure-lifecycle masks may open redundancy evaluation but never decide it alone. Before candidate formation, a source-bound whole-system review must bind a versioned claim-scoped baseline, target, counterfactual, evidence cutoff, confounders and invalidation triggers; expose blockers, unknowns, interactions and tradeoffs; remediate the weakest justified links; and re-accept affected surfaces without compensating for a hard failure. The current review slice additionally requires canonical typed GT-07 report normalization cross-bound to the exact received-field set and the same independent-result identity plus original narrative at an exact untyped ancestor, a GT-18 candidate failure intersecting regression dimensions derived from its task contract, and one GT-19 outcome ID across every episode; deterministic evidence normalization cannot add behavior. Every supported mechanic is Agent-owned; failed or contaminated paths stay bounded; and no installation, graph node, static check, single metric, self-review or model self-assessment substitutes for behavior, independent review and value."
+      "passRule": "Pass only when the current proposition set has no unresolved contradiction, category error or boundary conflict and the declared representative and longitudinal suite externally observes the complete bounded self-bootstrapping loop across controlled environment compositions. The loop runs from consensus calibration and environment sensing through existing-wheel search, minimum deep-module allocation, authorized execution, consequence verification, learning or self-evolution, responsibility-scoped rollback or retirement, drift/expiry recomputation, global reconciliation, release and cleanup. Normalize host-specific project, workspace, task, thread, conversation and session vocabulary into canonical code, outcome, carrier and execution relations before capability comparison; functional similarity opens equivalence evaluation but never proves interchangeability. Code topology and conversation topology remain independently bound; capacity, summarization and handoff are examples in an open continuity-risk set, while any source-bound loss, distortion, staleness or misbinding reopens the affected boundary. Sparse host-native and Accord responsibility views plus the state-authority view and current admission and closure-lifecycle masks may open redundancy evaluation but never decide it alone. Before candidate formation, a source-bound whole-system review must bind a versioned claim-scoped baseline, target, counterfactual, evidence cutoff, confounders and invalidation triggers; expose blockers, unknowns, interactions and tradeoffs; remediate the weakest justified links; and re-accept affected surfaces without compensating for a hard failure. The current review slice additionally requires canonical typed GT-07 report normalization cross-bound to the exact received-field set and the same independent-result identity plus original narrative at an exact untyped ancestor, a GT-18 candidate failure intersecting regression dimensions derived from its task contract, and one GT-19 outcome ID across every episode; deterministic evidence normalization cannot add behavior. Every supported mechanic is Agent-owned; failed or contaminated paths stay bounded; and no installation, graph node, static check, single metric, self-review or model self-assessment substitutes for behavior, independent review and value."
       },
       "goalMode": {
-      "directive": "First reconcile Accord's proposition set and every affected projection; then prove complete bounded self-bootstrap through context sensing, minimum-form reuse, verified evolution, scoped retirement, continuity and cleanup before candidate formation.",
-      "completion": "coherent-bounded-self-bootstrap-with-provenance-reuse-verified-evolution-balance-and-consistency",
+      "directive": "Reconcile affected projections; prove typed state, live event-to-effect, fresh continuity, transactional lifecycle, evolution, scoped retirement and cleanup before candidate formation.",
+      "completion": "coherent-bounded-self-bootstrap-with-live-effect-provenance-reuse-topology-safe-continuity-balance-and-consistency",
         "pauseOnlyFor": [
           "consequential-human-judgment",
           "new-trust-account-data-or-material-cost",
@@ -427,9 +521,10 @@
       "a host label installed capability plan test invocation completed turn or historical exact candidate is claimed as current outcome evidence",
       "a new consensus changes one authority or projection while dependent plan process acceptance prompt implementation evidence documentation or claims remain stale",
       "genuinely human-owned judgment is automated or technically Agent-owned mechanics are transferred to the user",
+      "one-click language hides source trust privilege data cost or destructive authority or an installer overwrites user state removes shared state restores a stale preimage leaves active Accord residue or leaves host cache callable unbounded or user-cleaned",
       "more code prompts state context processes evidence or durable services are retained without observed net help over interference and lifecycle cost"
     ],
-    "finiteStopCondition": "Stop the increment only when the bounded proposition set, separate code and conversation topology contracts, sparse capability-view semantics, deep-module interfaces, reuse ledger, environment-isolation contract, representative and longitudinal evaluation suite, reference implementation, declaration-to-effect evidence, governed evolution, rollback, retirement, continuity, consensus-wide reconciliation, source-bound whole-system review, weakest-link remediation, affected-surface reacceptance, independent review and zero-residue state agree with no unresolved contradiction. Only then may a new exact candidate and semantic version be chosen; hosted verification, named-human authorization, tag, public Release, installed-update replay and final cleanup remain later ordered gates.",
+    "finiteStopCondition": "Stop the increment only when the bounded proposition set, separate conversation-fork, Git-worktree and Git-branch semantics, sparse capability-view semantics, deep-module interfaces, reuse ledger, environment-isolation contract, representative and longitudinal evaluation suite including GT-20 and GT-21, reference implementation, a real event-to-core-to-Agent-use-to-consequence chain, topology-safe fresh continuity, governed evolution, transactional installation and removal with user-state preservation, rollback, retirement, consensus-wide reconciliation, source-bound whole-system review, weakest-link remediation, affected-surface reacceptance, independent review, zero active Accord state and bounded host-owned inert-cache cleanup agree with no unresolved contradiction. Only then may a new exact candidate and semantic version be chosen; hosted verification, named-human authorization, tag, public Release, installed-update replay and final cleanup remain later ordered gates.",
     "workItems": [
       {
         "id": "work.complete-bounded-self-bootstrapping-core",
@@ -507,7 +602,7 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[define-representative-and-longitudinal-evaluation-suite] Representative and longitudinal case types, ten non-compensating acceptance dimensions, comparison eligibility, exact evidence bindings, independence, privacy, sampling and stop rules and the GT-14 through GT-19 obligation matrix agree; every task has an oracle, counterexamples and claim ceiling; GT-18 requires the ordered governed-evolution sequence; and GT-19 requires declaration rejection, same-responsibility replacement, reversible scoped retirement and drift/expiry recomputation without claiming either design was executed."
+            "stopCondition": "[define-representative-and-longitudinal-evaluation-suite] Representative and longitudinal case types, ten non-compensating acceptance dimensions, comparison eligibility, exact evidence bindings, independence, privacy, sampling and stop rules and the GT-14 through GT-21 obligation matrix agree; every task has an oracle, counterexamples and claim ceiling; GT-18 requires governed evolution; GT-19 requires current-receipt dynamic retirement; GT-20 requires one-intent transactional host lifecycle with non-empty user-state preservation, failure rollback, zero active Accord state and bounded host-owned inert-cache cleanup; and GT-21 requires API-first isolated live operational closure, silent no-op and topology-safe fresh continuity without claiming any design was executed."
           },
           {
             "id": "prototype-product-form-neutral-vertical-slices",
@@ -581,8 +676,64 @@
             "stopCondition": "[self-audit-remediate-and-reaccept-whole-system-balance] The source-bound non-compensating ledger is refreshed from exact cut 59a340f with current GT-18/19@2460adc evidence and independent-review counterexamples; every baseline, target, counterfactual, cutoff, confounder, invalidation trigger, failure, correction and cost remains visible. The existing evidence module fails closed on GT-18/19 role semantics, vectors, carriers, GT-19 recomputed closure requests, responsibility scope, sparse views and masks plus malformed cleanup input; mapped replay, release-task and metadata wording are corrected without adding a mechanism. Current exact evidence is preserved only while strengthened validation and sparse behavior-subject bindings pass, and self-review never substitutes for the active independent review."
           },
           {
-            "id": "independent-review-and-form-future-exact-candidate",
+            "id": "implement-and-replay-live-state-receipt-closure",
+            "state": "completed",
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[implement-and-replay-live-state-receipt-closure] The pure-data interoperability PoC passes adapter normalization, monotonic same-writer merge, dual-writer conflict, expiry, privacy and axis-separation checks without host mutation. Current decisions then accept only typed field receipts that bind every normalized decision target and value to a supported official structured API, other official host state, Accord state or bounded observation with explicit fallback precedence, one writer, bounded readers, provenance, current generation and freshness; missing, conflicting, unbound, signal-only, stale, expired, invalidated or mismatched state holds unknown, while signal-only invalidation returns the independently bound last-safe allocation. Every responsibility binds one implementation mode and routes may mix them; an official same-duty carrier opens reversible subtraction of its displaced Runtime, adapter or wheel. One replay separately proves state acquisition, injection, Agent use, execution, consequence, evidence, invalidation, re-sensing and cleanup without claiming Hook causality, universal visibility or live official-state availability."
+          },
+          {
+            "id": "prove-isolated-live-operational-carrier-and-continuity",
             "state": "active",
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[prove-isolated-live-operational-carrier-and-continuity] GT-21 passes on frozen candidate-enabled isolated bytes: relevant official query, action, event, capability, state, topology, permission and lifecycle surfaces are mapped; supported structured host facts are consumed directly; a real supported event invalidates and re-senses, invokes the pure core, and only typed decision-relevant context reaches and is used by the Agent; the named consequence and independent post-state close; and a sufficient simple route remains silent. Necessary cross-event fields stay in bounded plugin-private state. Any required sequential load relief uses a fresh zero-inherited-history conversation rather than copied-history fork, Git worktree or Git branch; destination reconciliation precedes source release. Lower-burden native and event-driven paths are falsified before MCP, SDK, App Server client or persistent escalation, and final post-state has zero background process and task-owned residue."
+          },
+          {
+            "id": "prove-transactional-install-state-preservation-and-removal",
+            "state": "pending",
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[prove-transactional-install-state-preservation-and-removal] After GT-21 selects the exact component set, current official host lifecycle surfaces are used before any new installer. GT-20 then passes in disposable non-empty Codex and Claude scopes: one authorized lifecycle intent after source trust orchestrates every selected Accord component, user instructions and configuration plus concurrent edits and foreign or shared state are preserved, injected partial failure rolls back to the exact last verified version, all active Accord registration, exposure, process and data state is removed, and independent activation checks pass without reading credentials or real sessions. Any retained host-owned inert cache is non-callable, bound to a documented bounded automatic cleanup contract and requires no user action; it is neither hidden, called physical zero residue nor deleted outside supported lifecycle."
+          },
+          {
+            "id": "reaccept-whole-system-after-live-state-closure",
+            "state": "pending",
+            "acceptanceIds": [
+              "R1",
+              "R2",
+              "R3",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "stopCondition": "[reaccept-whole-system-after-live-state-closure] Constitution, plan, process, acceptance, goal projection, environment admission, dynamic index and graph, responsibility and state-coordination axes, live carrier, continuity topology, implementation, evidence, documentation, host packages, transactional lifecycle, complexity and non-compensating whole-system balance agree on the typed live-state and user-state-preservation contracts; earlier GT-19 remains historical wherever it lacks current receipt semantics and GT-20 or GT-21 is not promoted without exact behavior evidence."
+          },
+          {
+            "id": "independent-review-and-form-future-exact-candidate",
+            "state": "pending",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -727,10 +878,12 @@
           "GT-16",
           "GT-17",
           "GT-18",
-          "GT-19"
+          "GT-19",
+          "GT-20",
+          "GT-21"
         ],
         "completionOperand": null,
-        "condition": "This dormant gate opens only after the active self-bootstrapping increment is completed, feasibility has passed, a future semantic version is explicitly selected, and one locally committed clean candidate binds the latest consensus through constitution, plan, process, acceptance, structured goal projection, implementation, documentation, all ten required Golden Tasks and an honest finite claim. All eight repository criteria must be verified, historical tags remain immutable and no known blocker or task residue remains."
+        "condition": "This dormant gate opens only after the active self-bootstrapping increment is completed, feasibility has passed, a future semantic version is explicitly selected, and one locally committed clean candidate binds the latest consensus through constitution, plan, process, acceptance, structured goal projection, implementation, documentation, all twelve required Golden Tasks and an honest finite claim. All eight repository criteria must be verified, historical tags remain immutable and no known blocker or task residue remains."
       },
       {
         "id": "exact-local-verification-and-review",
@@ -757,7 +910,9 @@
           "GT-16",
           "GT-17",
           "GT-18",
-          "GT-19"
+          "GT-19",
+          "GT-20",
+          "GT-21"
         ],
         "completionOperand": "exactLocalVerificationAndReview",
         "condition": "On the unchanged future clean candidate, the goal carrier directly runs every declared deterministic check; verifies the exact requiredTaskIdsForRelease set with fresh source bindings, exact environment compositions, direct-command results, structured digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent product, specification, implementation and standards review of feasibility, complete self-bootstrapping, product-form choice, isolation, activation-to-effect assurance, governed evolution, dynamic responsibility retirement, longitudinal continuity, interference, rollback, release, cleanup and claim ceiling. Any P0 or P1 blocks; only after this late gate passes may the same SHA be pushed."
@@ -820,7 +975,7 @@
   "goalModePrompt": {
     "state": "prepared-host-goal-paused",
     "authority": "derived-from-current-reviewable-authority-set",
-    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"coherent-bounded-self-bootstrap-with-provenance-reuse-verified-evolution-balance-and-consistency\",\"directive\":\"First reconcile Accord's proposition set and every affected projection; then prove complete bounded self-bootstrap through context sensing, minimum-form reuse, verified evolution, scoped retirement, continuity and cleanup before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"Fresh GT-14/15/16@1bbcc95, GT-18/19@2460adc and GT-07/11/12/13/17 pass only bounded Codex-local claims with failures, corrections and costs retained. Actual compact/fork, official-clean or no-Accord product behavior, Hook effect, durable need, cross-host or field value, whole-system balance, candidate and release remain unproved; BAL-04 found no net gain.\",\"completion\":\"Representative and longitudinal sequences verify one coherent bounded proposition set; minimum deep-module or no-op allocation; source-bound sparse capability admission; consequence, governed evolution, topology-safe continuity, scoped retirement and recomputation, reconciliation, cleanup and lower burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"From the earliest affected boundary, reconcile each correction against the proposition set across authority, four mappings, implementation, evidence, documentation and claims; preserve unrelated truth and history, and stop affected work while a conflict remains.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"self-audit-remediate-and-reaccept-whole-system-balance\"],\"id\":\"independent-review-and-form-future-exact-candidate\",\"state\":\"active\"}],\"semantics\":\"Bind outcome, authority, environment and comparison; stop on conflict. Reuse before build; compose effective capabilities and choose no artifact or minimum modules. Normalize host labels to canonical relations; similarity opens evaluation, not identity. H/A plus E/V only opens redundancy evaluation. Retire an exact allocation after same-duty effect, lifecycle and cleanup, reversible post-state/recheck; recompute on drift. Keep topologies independent; compact, causal fork and fresh handoff are distinct. Capacity, summaries and handoff are non-exhaustive; reconcile any source-bound loss, distortion, staleness or misbinding. Verify burden, lifecycle and residue; reaccept.\",\"work\":[\"independent-review-and-form-future-exact-candidate\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-repository-fork\"]}",
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"coherent-bounded-self-bootstrap-with-live-effect-provenance-reuse-topology-safe-continuity-balance-and-consistency\",\"directive\":\"Reconcile affected projections; prove typed state, live event-to-effect, fresh continuity, transactional lifecycle, evolution, scoped retirement and cleanup before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"GT-19 is synthetic. Codex compact and request-scoped first-turn resume prove typed injection plus one schema/source read; zero-turn App Server proves goal-backed resume and direct receipt-to-core hold-unknown. Selected route, semantic directive use, consequence, handoff, cross-host value, narrow trust lifecycle, balance, candidate and release remain unproved.\",\"completion\":\"Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"From the earliest affected boundary, reconcile each correction against the proposition set across authority, four mappings, implementation, evidence, documentation and claims; preserve unrelated truth and history, and stop affected work while a conflict remains.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"implement-and-replay-live-state-receipt-closure\"],\"id\":\"prove-isolated-live-operational-carrier-and-continuity\",\"state\":\"active\"}],\"semantics\":\"Bind current source-ranked target/value receipts at material boundaries; missing or conflict stays unknown. Events invalidate, not prove effect. Codex direct resume can re-sense without a model; request-scoped test bypass proves first-turn Hook trigger and typed injection, not production trust or consequence. Prefer native query/action plus pure core; add state, actuation or persistence only for residual duties. Isolate, preserve user and foreign state, and retire only after consequence, cleanup and recheck.\",\"work\":[\"prove-isolated-live-operational-carrier-and-continuity\",\"prove-transactional-install-state-preservation-and-removal\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-repository-fork\"]}",
     "workStageIds": [
       "rebaseline-product-and-consensus-impact-map",
       "conduct-self-bootstrapping-feasibility-and-reuse-study",
@@ -832,6 +987,10 @@
       "replay-activation-effect-evidence-and-lifecycle",
       "validate-longitudinal-consensus-and-cross-carrier-continuity",
       "self-audit-remediate-and-reaccept-whole-system-balance",
+      "implement-and-replay-live-state-receipt-closure",
+      "prove-isolated-live-operational-carrier-and-continuity",
+      "prove-transactional-install-state-preservation-and-removal",
+      "reaccept-whole-system-after-live-state-closure",
       "independent-review-and-form-future-exact-candidate"
     ],
     "releaseGateIds": [
@@ -858,6 +1017,7 @@
       "observed-failure-or-side-effect",
       "host-or-capability-drift",
       "environment-composition-or-Accord-exposure-change",
+      "environment-observation-missing-stale-expired-invalidated-or-mismatched",
       "feasibility-finding-or-existing-wheel-change",
       "resource-pressure-or-release-mismatch",
       "dynamic-index-invalidation",
@@ -868,14 +1028,14 @@
       "phase-or-authority-boundary",
       "repeated-same-purpose-repair"
     ],
-    "hostLifecycleNote": "The public recommended release remains v3.0.1. Current Codex and Claude hosts are Accord-enabled and extension-composed, so installation or Hook enablement proves neither activation, behavior nor value and cannot form an official-clean baseline. Fresh current-contract GT-14/15/16@1bbcc95 and GT-18/19@2460adc pass only their exact bounded Codex-local claims; the blocked arms, failed reviews, transcription and query corrections, high token costs and cleanup costs remain counterevidence. Revised GT-07/11/12/13/17 retain only their recorded finite claims. BAL-04 selected no added form and no net Accord gain for its exact condition. Goal activation remains paused; no live Hook effect, durable carrier, candidate semantic version or release authorization is claimed, and release remains dormant pending genuinely independent full-system review and exact-candidate gates."
+    "hostLifecycleNote": "The public recommended release remains v3.0.1. Current Codex 0.150.1 and Claude Code 2.1.251 hosts are Accord-enabled and extension-composed, so installation or Hook enablement proves neither activation, behavior nor value and cannot form an official-clean baseline. Codex reports Accord 3.1.0 installed and enabled, but its installed cache differs from both the local marketplace snapshot and the working-tree projection; Claude reports Accord 3.0.1. Repository edits are therefore candidate edits, not live installed updates. Exact new bytes require a host-supported versioned lifecycle or explicit development reload/new carrier, and an observed reminder is not Hook-file causality. Earlier tasks retain only exact bounded Codex-local historical claims. One synthetic current-receipt working-tree Agent source now passes with failures retained, but it has no evaluatedRevision and proves no live official field. A bounded 2026-08-29 isolated feasibility probe installed exact working-tree 3.1.0 package bytes through one native intent per host, preserved seeded and concurrent user fields, removed active registrations and cleaned its own probe root. Codex removed package contents but left empty cache directories; Claude retained an unlisted host-owned version cache under its documented orphan cleanup. This corrects physical-zero semantics but proves no update rollback, unrelated installed-plugin or shared-dependency preservation, actual activation or full GT-20. The working packages now carry a provisional shared short-lived SessionStart adapter in addition to their Skills. Startup and clear are silent; compact and resume can return typed minimum continuity context from supported event fields, with no persistent process or state. Public-seam tests, package-byte equality, isolated native discovery and structured App Server query feasibility pass. One disposable Claude session-only startup event triggered the exact copied adapter and completed silently. One separate ephemeral Codex App Server arm disabled the installed Hook, invoked official compact, observed sessionFlags context and one exact schema-field Agent read with zero tool use. A zero-turn exact-package arm proved official goal-backed resume state and a direct thread/resume-response-to-current-receipt-to-core chain, while showing that installed SessionStart resume waits for a turn. A later request-scoped trust-bypass arm then triggered exactly one installed synchronous SessionStart:resume Hook on the first turn, injected schema/source context and yielded exact HOOK_CONTEXT_RESUME with zero tools and complete cleanup. General trustStatus remained modified and the event reported permission_mode bypassPermissions, so this broad bypass stays a test control rather than a production trust route. Installed-package compact, sessionFlags resume, Node portability, semantic directive use, Hook-caused official re-sensing and core invocation, product consequence and topology-safe handoff do not pass. GT-21 therefore precedes GT-20 and must compare direct client and Hook routes under the same end-to-end oracle, then close the frozen isolated event-to-effect chain and low-interference route before the final component set is lifecycle-tested. Current development work is not a baseline and is not hot-updated. Host events remain invalidation hints until re-sensing; current official host-owned fields may become fact sources only when their typed scope, writer, provenance and freshness are observed. Goal activation stays paused; persistent-carrier need, candidate, release and causal value remain unproved."
   },
   "hostProjections": [
     {
       "id": "codex",
       "packageId": "yiyuan-accord-codex",
       "packageVersion": "3.1.0",
-      "packageSha256": "19c6cad80cfe7ad3f65d99c2384053558d3a54acaa7aa990307d0a5b96afe424",
+      "packageSha256": "93237e07dec32157cd291d137cb0e70d3274ee11226996c87579a9526aa3996e",
       "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "marketplace": ".agents/plugins/marketplace.json",
       "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -884,9 +1044,10 @@
         "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml"
       ],
       "mechanismFiles": [
-        "plugins/yiyuan-accord-codex/hooks/hooks.json"
+        "plugins/yiyuan-accord-codex/hooks/hooks.json",
+        "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
       ],
-      "activationContext": "YIYUAN Accord is available. For a nontrivial or stateful outcome, use the installed deliver-demand-driven-outcome Skill to derive the relevant outcome obligations, live relations and constraints, retained human boundary, and lowest-total-burden feasible collaboration-closure path. Own supported orchestration, reconcile material change, verify the claimed consequence, and release task exposure. Stay silent for a simple answer or a sufficient native one-step route. This reminder adds no user authority and is not behavior evidence.",
+      "activationContext": "SessionStart compact or resume provides only non authoritative supported official hook event hints for model and permission mode, invalidates dependent assumptions, and requires re sensing decision relevant state from supported official structured sources before forming receipts. Missing or conflicting fields remain unknown and independently bound last safe allocation is preserved. Sequential relief uses a fresh zero history destination only when required, and destination verification precedes source release. Startup and clear stay silent. Invalid input fails visibly without echoing input. This signal is not current task state, user authority, Agent use, execution, consequence, evidence or value.",
       "interfaceDefaultPrompt": [
         "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
       ],
@@ -913,16 +1074,17 @@
       "id": "claude-code",
       "packageId": "yiyuan-accord-claude",
       "packageVersion": "3.1.0",
-      "packageSha256": "447309b7773656b35bc6d61c4ca5d9a00bc379f39d93ac1e11938d1b2949bbab",
+      "packageSha256": "d91eed86fa1e0683b79b78bdfd3e9ca357031927e2ccef1755a34113ce5d079d",
       "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
       "marketplace": ".claude-plugin/marketplace.json",
       "contract": "plugins/yiyuan-accord-claude/adapter.json",
       "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
       "metadataFiles": [],
       "mechanismFiles": [
-        "plugins/yiyuan-accord-claude/hooks/hooks.json"
+        "plugins/yiyuan-accord-claude/hooks/hooks.json",
+        "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs"
       ],
-      "activationContext": "YIYUAN Accord is available. For a nontrivial or stateful outcome, use the installed deliver-demand-driven-outcome Skill to derive the relevant outcome obligations, live relations and constraints, retained human boundary, and lowest-total-burden feasible collaboration-closure path. Own supported orchestration, reconcile material change, verify the claimed consequence, and release task exposure. Stay silent for a simple answer or a sufficient native one-step route. This reminder adds no user authority and is not behavior evidence.",
+      "activationContext": "SessionStart compact or resume provides only non authoritative supported official hook event hints for model and permission mode, invalidates dependent assumptions, and requires re sensing decision relevant state from supported official structured sources before forming receipts. Missing or conflicting fields remain unknown and independently bound last safe allocation is preserved. Sequential relief uses a fresh zero history destination only when required, and destination verification precedes source release. Startup and clear stay silent. Invalid input fails visibly without echoing input. This signal is not current task state, user authority, Agent use, execution, consequence, evidence or value.",
       "maxSkillBytes": 7500,
       "requiredSkillMarkers": [
         "K1",
@@ -954,8 +1116,8 @@
       "primaryInstructionBytes": 18940
     },
     "targets": {
-      "maxTrackedFiles": 86,
-      "maxProductCodeAndTestBytes": 400000,
+      "maxTrackedFiles": 91,
+      "maxProductCodeAndTestBytes": 462000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -992,9 +1154,14 @@
       "def test_git_metadata_capture_is_bounded",
       "def test_historical_identity_capture_is_bounded",
       "def test_identity_decoding_and_file_io_fail_closed",
-      "def test_retired_identity_static_surfaces_are_rejected"
+      "def test_retired_identity_static_surfaces_are_rejected",
+      "def test_live_hook_stays_silent_for_fresh_startup",
+      "def test_live_hook_emits_only_typed_minimum_continuity_context",
+      "def test_live_hook_distinguishes_recovery_from_fresh_sources",
+      "def test_live_hook_does_not_propagate_invalid_or_unbound_fields",
+      "def test_live_hook_is_packaged_behind_both_host_adapters"
     ],
-    "minimumTestCount": 20,
+    "minimumTestCount": 25,
     "forbiddenActivePaths": [
       "yiyuan_accord/task_validator_o1_lifecycle_suite.py",
       "yiyuan_accord/task_validator_o2_codex_reference.py",
@@ -1008,7 +1175,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, capability deletion targets or reasons to reject a demonstrated collaboration-closure need. After P4 admitted the first production module, independent review required source-complete GT-17/18 validation, the f898ebd audit exposed missing responsibility-scoped retirement, later review exposed empty-policy admission and duplicate-key Hook parsing, candidate audit exposed missing exact behavior-subject binding, exact-cut 59a340f review proved that generic longitudinal shape still admitted meaning-changing GT-18/19 mutations and malformed cleanup could escape fail-closed validation, exact-cut 7860fee review exposed self-attested GT-07 topology semantics, fixture-shaped GT-18/19 route or failure oracles, malformed carrier crashes and format-only sequence digests, and fcefee4/f3c9b09 review required typed minimum-state and ancestor narrative provenance. The active increment therefore permits at most 86 tracked files and 400000 product-code-and-test bytes while retaining at least five percent byte headroom and three tracked-file slots. The bounded increase pays only for stable closure admission, scoped retirement, shared strict parsing, fail-closed sparse task-subject, contract-driven continuity and relationship-invariant longitudinal semantics, recomputed closure-request and canonical sequence proof, safe bounded Git reads and their negative regressions; it is not advance allowance for a Runtime, host adapter, storage layer, framework or future mechanism. Historical and revised observations remain compacted into existing carriers, immutable Git history preserves superseded facts, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, user cognition, latency, interference, recovery, maintenance and retirement. At each breach or same-purpose repair, compare deletion, native delegation, composition, replacement and bounded addition; retain only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants or capability deletion targets. Independent reviews successively required source-complete evolution evidence, scoped retirement, strict parsing, exact behavior-subject binding, semantic longitudinal validation, malformed-carrier failure closure, typed ancestor provenance, source-to-decision target/value binding, core-bound last-safe preservation and a fail-closed live-event adapter seam. The active increment permits at most 91 tracked files and 462000 product-code-and-test bytes with at least five percent byte headroom and three tracked-file slots after the five currently untracked candidate files are tracked. Those files are the earlier bounded current-receipt Agent source, one canonical short-lived adapter, two exact host-package copies and one bounded preflight/counterevidence record; they do not pre-authorize a Runtime, service, storage layer or framework. Redundant v1 mutations were removed before this bounded increase; the remaining allowance pays for typed official/Accord/observed state bindings, source precedence, single-writer conflict and privacy validation, current receipts, last-safe allocation, per-responsibility modes, the minimum adapter boundary and existing stable closure logic. The result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, cognition, latency, interference, recovery, maintenance and retirement; at each breach compare deletion, native delegation, composition, replacement and bounded addition, retaining only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

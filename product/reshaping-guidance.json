@@ -345,6 +345,28 @@
       "status": "model-only-not-implementation-behavior-value-or-release-evidence",
       "unitOfReasoning": "context-bound-outcome-obligations-and-the-current-relations-needed-to-close-them",
       "authorityRule": "The latest bound goal, accountable consensus and human-owned boundaries authorize the model. Environment observations, indexes, routes, scores, experiments and carriers may challenge or derive from authority but never create it.",
+      "responsibilityAllocation": {
+        "unit": "one-current-responsibility-under-one-admitted-composition",
+        "modes": [
+          "accord-contained",
+          "agent-native",
+          "accord-agent-composed"
+        ],
+        "rule": "Allocate each responsibility independently; one route may mix all three modes. Forms, source kinds and whole-task labels cannot substitute for this allocation. Accord-contained means Accord closes the duty through an admitted internalized mechanism; Agent-native means current observed Agent or host behavior closes it and Accord remains no-op except for bounded observation and verification; Accord-Agent-composed means named duties are divided across Accord and Agent under one authority, interface, state, failure, evidence, cleanup and retirement contract.",
+        "stageRule": "Observation, injection, execution, consequence, independent evidence and field value are distinct stages. An observed Hook or context injection may enable a route but cannot self-attest Agent use, effect, completion or Accord value."
+      },
+      "stateCoordination": {
+        "axisRule": "State coordination is orthogonal to responsibility implementation. A responsibility may be Accord-contained, Agent-native or composed while its required fields remain host-owned observed facts, Accord-owned exposed facts or field-scoped interoperable facts.",
+        "minimumContract": [
+          "field-and-outcome-scope",
+          "single-authoritative-writer-and-bounded-readers",
+          "schema-version-source-and-authority-reference",
+          "generation-freshness-ttl-and-invalidation",
+          "conflict-precedence-privacy-migration-deletion-and-retirement"
+        ],
+        "carrierRule": "Prefer a healthy official native carrier when it fits the contract. Do not default to raw conversations, credentials, unrelated host state, a new service, Runtime or durable store; sharing a field is not evidence that an Agent used it or produced the claimed consequence.",
+        "subtractionRule": "When a current official carrier independently closes the same state acquisition, storage, synchronization, invalidation or other responsibility with lower total burden, retire the displaced Accord Runtime, adapter or third-party wheel under the ordinary reversible same-duty retirement gate; do not keep two permanent paths merely because both exist."
+      },
       "entities": [
         {
           "id": "outcome-obligation",
@@ -414,7 +436,7 @@
         },
         {
           "id": "allocated-to",
-          "meaning": "A current responsibility is assigned to no added artifact, one form or several forms."
+          "meaning": "A current responsibility is assigned in one explicit Accord-contained, Agent-native or Accord-Agent-composed mode and may use no added artifact, one form or several forms."
         },
         {
           "id": "cooperates-with",
@@ -555,7 +577,7 @@
           "responsibility-boundaries",
           "interfaces-and-version",
           "authority-and-side-effects",
-          "state-owner-and-freshness",
+          "field-owner-readers-provenance-freshness-and-invalidation",
           "evidence-and-independent-poststate",
           "failure-degradation-and-recovery",
           "update-replacement-and-rollback",
@@ -622,11 +644,11 @@
         },
         {
           "id": "allocation-is-explicit",
-          "rule": "Every admitted responsibility has an owner, an authorized allocation or no-op reason, a verifier and a lifecycle disposition."
+          "rule": "Every admitted responsibility has an owner, one explicit Accord-contained, Agent-native or Accord-Agent-composed allocation or no-op reason, a verifier and a lifecycle disposition; one route may mix modes."
         },
         {
           "id": "multi-form-coherence-is-explicit",
-          "rule": "Cooperating forms cannot rely on implicit shared state, authority, ordering, recovery or cleanup."
+          "rule": "Cooperating forms cannot rely on implicit shared state, authority, ordering, recovery or cleanup; every interoperable field has one authoritative writer, bounded readers and conflict or invalidation semantics."
         },
         {
           "id": "derived-views-remain-derived",
@@ -787,7 +809,7 @@
     },
     "environmentAdmissionContract": {
       "id": "composed-environment-admission/v1",
-      "status": "design-only-not-implementation-behavior-value-or-release-evidence",
+      "status": "current-receipt-working-tree-agent-replay-passed-transactional-lifecycle-replay-active",
       "admissionUnit": "one-bounded-claim-under-one-provenance-bound-composition-and-freshness-window",
       "purpose": "Decide whether an environment observation may support one named claim, whether a comparison arm is required, and which minimum isolation or honest degradation is proportionate to material confounding. It does not certify a host as globally clean.",
       "snapshot": {
@@ -840,6 +862,29 @@
           ],
           "whenUnavailable": "record-unknown-and-isolate-or-narrow-the-claim"
         }
+      },
+      "liveObservationReceipt": {
+        "status": "bounded-state-prototype-passed-production-interface-active",
+        "primarySources": [
+          "https://learn.chatgpt.com/docs/hooks",
+          "https://code.claude.com/docs/en/hooks"
+        ],
+        "interface": [
+          "observation-id",
+          "composition-key",
+          "generation",
+          "captured-at",
+          "decision-at",
+          "valid-until",
+          "typed-field-target-value-and-source-bindings",
+          "change-signals",
+          "facts",
+          "unknowns"
+        ],
+        "admissionRule": "At Accord entry and each material decision, effect, verification, cleanup or handoff boundary, a decision-relevant environment carries a current typed receipt. Resolve each field from a supported official structured API first, then other current official host-owned state, Accord-owned state or bounded direct observation when needed; bind its normalized decision target and value, one writer, bounded readers, provenance, current generation, freshness and validity, and require a fallback to enumerate unavailable higher-priority sources. Lifecycle events and material change only invalidate. Missing, conflicting, unbound, signal-only, future, expired, invalidated or mismatched fields hold unknown until re-sensing issues a new receipt.",
+        "adapterRule": "Use each host's current native context and authorized read-only discovery at task time. Event-capable adapters may issue low-cost invalidation hints; hosts without such events re-probe just in time at the same material boundaries. Do not add a watcher, Runtime or durable state solely to emulate events.",
+        "projectionRule": "The receipt keys only dependent ephemeral graph instances, sparse H, A and S views, admission masks, routes, retirement allocations and claims. A new generation invalidates and recomputes those dependents without rebuilding an exhaustive environment matrix or rewriting unaffected authority.",
+        "privacyAndLifecycle": "Read only permitted non-secret metadata and task-owned state. Never read credential or conversation content, derive secret fingerprints, persist a live host inventory, start silent continuous telemetry or background work, or treat receipt validation as source authenticity, behavior, value or Hook-causality proof."
       },
       "armKinds": [
         {
@@ -1234,7 +1279,7 @@
       "status": "implemented-deterministic-conformance-only-not-host-behavior-value-or-release-evidence",
       "locator": "yiyuan_accord/closure.py",
       "interface": "reconcile_closure(request)-to-json-serializable-decision",
-      "moduleDepth": "One pure interface hides structural validation, stable compliance invariants, dynamic policy admission, responsibility closure, sparse capability-overlap inputs, unknown preservation, Pareto frontier derivation, contextual or equivalent-fit selection, experiment keep-discard-rollback decisions, source-observer-exact-subject-boundary identity binding, successor discovery and retirement evidence binding, independent consequence and cleanup post-state, matching lifecycle post-state, residue and finite claim handling. Graphs and matrix views remain implementation choices behind normalized plain-data routes rather than enlarging this interface.",
+      "moduleDepth": "One pure interface hides structural validation, stable compliance invariants, dynamic policy admission, per-responsibility Accord-contained, Agent-native or Accord-Agent-composed allocation, responsibility closure, sparse capability-overlap inputs, unknown preservation, Pareto frontier derivation, contextual or equivalent-fit selection, experiment keep-discard-rollback decisions, source-observer-exact-subject-boundary identity binding, successor discovery and retirement evidence binding, independent consequence and cleanup post-state, matching lifecycle post-state, residue and finite claim handling. Graphs and matrix views remain implementation choices behind normalized plain-data routes rather than enlarging this interface.",
       "stableComplianceInvariants": [
         "human-authority-is-supplied-never-derived",
         "environment-composition-is-provenance-bound",
@@ -1245,7 +1290,8 @@
         "consequence-and-cleanup-poststate-are-independently-observed-before-completion",
         "evolution-cannot-mutate-its-evaluator-and-requires-a-source-bound-matching-rollback-or-keep-poststate",
         "authority-or-evidence-regression-cannot-be-compensated-by-another-metric",
-        "unknown-not-observed-residue-and-malformed-input-never-become-success"
+        "unknown-not-observed-residue-and-malformed-input-never-become-success",
+        "distribution-never-overwrites-user-owned-instructions-or-configuration-and-removes-only-Accord-owned-state"
       ],
       "taskSuppliedPolicy": [
         "additional-environment-admission-facts",
@@ -1259,7 +1305,7 @@
       "openEndedInputs": [
         "environment-facts-and-unknowns",
         "route-source-kinds-and-product-forms",
-        "capability-and-responsibility-offers",
+        "capability-responsibility-offers-and-per-responsibility-implementation-modes",
         "lifecycle-dimensions",
         "source-bound-fact-experiment-poststate-resource-and-retirement-observations"
       ],
@@ -1300,6 +1346,7 @@
       "model-relevant-relations-risks-unknowns-and-unclosed-obligations",
       "discover-and-evaluate-native-existing-official-maintained-and-composable-capabilities",
       "reuse-configure-acquire-compose-or-author-the-minimum-sufficient-replaceable-means",
+      "orchestrate-selected-Accord-components-behind-one-supported-lifecycle-intent-after-source-trust-with-user-state-preservation-and-failure-rollback",
       "execute-with-effect-resource-continuity-and-process-loss-control",
       "verify-activation-execution-consequence-poststate-burden-interference-and-residue",
       "learn-from-success-failure-correction-and-counterevidence-without-self-granting-authority",
@@ -1307,10 +1354,10 @@
       "rollback-degrade-release-retire-or-rebaseline-and-reconcile-all-dependent-surfaces"
     ],
     "selfEvolutionRole": "Self-evolution proposes and evaluates bounded changes to hypotheses, routing fitness, prompts, policies, representations or replaceable mechanisms. It never substitutes for environment sensing, goal and authority binding, capability acquisition, execution, verification, rollback or retirement, and it cannot optimize a proxy beyond the bound outcome and claim.",
-    "environmentRule": "Treat every real host as a composed environment rather than an official blank slate. Bind one named claim to one provenance-bound composition and freshness window; detect material extensions, Accord exposure, persistent state, self-observation and unknowns; select the least costly sufficient isolation; and use official-clean, isolated-minimal, current-enabled, isolated-no-Accord or candidate-enabled-isolated arms only when the decision requires them. An Accord-enabled arm cannot attest a native or no-Accord baseline, and isolation cannot create authority or universal cleanliness.",
+    "environmentRule": "Treat every real host as a composed environment rather than an official blank slate. At Accord entry and material boundaries, prefer current typed official host-owned fields, then Accord-owned fields and bounded direct observation; the normalized decision target and value, one writer, bounded readers, source precedence, provenance, current generation and freshness bind every admitted field. Events only invalidate. Missing, conflicting, unbound, signal-only, stale, expired, invalidated or mismatched state remains unknown until re-sensed. Detect extensions, Accord exposure, persistent state, self-observation and unknowns; select only decision-needed isolation. An Accord-enabled arm cannot attest a native or no-Accord baseline, and isolation cannot create authority or universal cleanliness.",
     "evaluationRule": "Select representative cases by outcome-obligation and failure-mode coverage rather than convenience or prior success. Keep one-episode representative evidence distinct from an ordered longitudinal sequence; derive comparison eligibility from the named counterfactual; bind exact environment, projection, treatment, evaluator, carrier, effects and cleanup; and retain all attempts. Judge outcome, authority, evidence, privacy, burden, interference, recovery, resources, continuity and lifecycle as a non-compensating vector. A longitudinal evolution claim requires baseline, rejection and rollback of a regressed mutation, independent acceptance of one net improvement and later invalidation with rollback, replacement or retirement. Design, static checks and a single sequence are not field or population value.",
     "reuseRule": "Search for and understand suitable existing wheels before authorship. Record provenance, license, maintenance health, exact reusable idea or component, fit, limits, failure modes, side effects, integration burden, rollback and retirement. Adopt a pattern without inheriting its personality, prestige, platform assumptions or metric as authority.",
-    "productFormRule": "Allocate each currently relevant responsibility to plugin, Skill, Hook, protocol, library, runtime, service, client integration, cloud carrier, an open-ended composition or no added artifact only after the required effect, environment, authority, latency, isolation, durability, update, recovery and lifecycle properties are known. Treat every retained capability as a replaceable module with one narrow interface and high internal depth: responsibility, authority, state, evidence and lifecycle stay cohesive while host-specific variation sits in adapters at real seams. Add a seam only when at least two justified adapters vary there; keep graph, matrix, cache and evaluator internals behind the module interface. One form may be sufficient and several replaceable modules may cooperate; shared outcome, authority, evidence and lifecycle contracts provide system coherence without requiring one centralized carrier. Form is a dynamic route variable and may change across contexts, but flexibility itself must remain observable, bounded and verifiable.",
+    "productFormRule": "Allocate each currently relevant responsibility to plugin, Skill, Hook, protocol, library, runtime, service, client integration, cloud carrier, an open-ended composition or no added artifact only after the required effect, environment, authority, latency, isolation, durability, update, recovery and lifecycle properties are known. Treat every retained capability as a replaceable module with one narrow interface and high internal depth: responsibility, authority, state, evidence and lifecycle stay cohesive while host-specific variation sits in adapters at real seams. Add a seam only when at least two justified adapters vary there; keep graph, matrix, cache and evaluator internals behind the module interface. One form may be sufficient and several replaceable modules may cooperate; shared outcome, authority, evidence and lifecycle contracts provide system coherence without requiring one centralized carrier. User experience follows plug-and-play and remove-and-leave: after unavoidable source trust, prefer one host-supported lifecycle intent that bundles or dependency-composes all selected Accord components, uses plugin-scoped or namespaced surfaces instead of replacing AGENTS.md, CLAUDE.md, config.toml or settings.json, atomically rolls partial failure back, preserves concurrent edits plus shared and foreign state, and removes only Accord-owned state. A host that cannot close this contract remains an adapter gap; manual user component assembly cannot be counted as success. Form is a dynamic route variable and may change across contexts, but flexibility itself must remain observable, bounded and verifiable.",
     "consensusRule": "Record a new accountable consensus as a versioned correction and let it govern direction, while distinguishing judgment from factual proof. Before downstream execution, compare it with the current proposition set for contradiction, category error, boundary drift and dependency impact; repair from the earliest affected dependency or stop the affected route. Preserve the superseded baseline as history, then replay the plan, process, acceptance, goal projection, implementation, evidence, documentation and claim surfaces that depend on it. Only the reconciled set becomes the next coherent implementation baseline.",
     "falsifiers": [
       "a plugin Hook or runtime is selected before the closure properties require it",
@@ -1322,7 +1369,8 @@
       "a new consensus changes one surface while dependent plan process acceptance prompt implementation evidence or claims remain stale",
       "a copied-history fork is used as sequential context relief or called a handoff",
       "binary capability incidence overlap is treated as redundancy or retirement proof",
-      "module autonomy bypasses the shared responsibility authority state evidence or lifecycle interface"
+      "module autonomy bypasses the shared responsibility authority state evidence or lifecycle interface",
+      "single-package convenience overwrites user configuration hides authority requires manual internal-component assembly or leaves partial or foreign-state damage"
     ]
   },
   "topology": {
@@ -1353,9 +1401,9 @@
       "cleanup"
     ],
     "independenceRule": "Code topology, conversation topology and execution or resource placement are orthogonal. A compact, causal fork or sequential handoff does not create or select a checkout, branch, worktree or repository fork; a code-topology change does not prove state transfer or conversation continuity; and local or cloud placement changes neither unless separately bound. Bind and verify each only when the outcome requires it.",
-    "hostVocabularyRule": "Treat project, workspace, task, thread, conversation, session and similar host labels as adapter vocabulary. Normalize them into canonical code-carrier, outcome-task, conversation-carrier and execution-instance relations with provenance; similar names or broad functions open equivalence evaluation but do not prove identical inheritance, authority, effects or lifecycle.",
+    "hostVocabularyRule": "Treat project, workspace, task, thread, conversation, session and similar host labels as adapter vocabulary. Localized labels and reused icons may collide across topology planes, so require object, operation and inheritance semantics before selecting a capability. Normalize them into canonical code-carrier, outcome-task, conversation-carrier and execution-instance relations with provenance; similar names or broad functions open equivalence evaluation but do not prove identical inheritance, authority, effects or lifecycle.",
     "continuityRiskRule": "Capacity pressure, summarization and handoff are observed examples, not a closed taxonomy. Reconcile from the earliest affected boundary whenever any source-bound condition can lose, distort, stale or misbind goal, state, authority, evidence, resources, topology, time or causality.",
-    "rule": "The Agent selects and verifies topology from host-native signals and current constraints. Compact means same-carrier memory reduction; causal fork means copied-history branching; sequential context relief means a fresh zero-inherited-history carrier, minimum verified state transfer, destination verification and only then source release. These are not interchangeable. The user is asked only when a new authority, trust, data, cost, destructive, irreversible or publication boundary makes the choice genuinely human-owned.",
+    "rule": "The Agent selects and verifies topology from host-native signals and current constraints. Compact means same-carrier memory reduction; causal conversation fork means copied-history conversation branching; sequential context relief means a fresh zero-inherited-history conversation carrier, minimum verified state transfer, destination verification and only then source release. A Git branch is a ref and a Git worktree is a checkout. These are not interchangeable. The user is asked only when a new authority, trust, data, cost, destructive, irreversible or publication boundary makes the choice genuinely human-owned.",
     "codexCloud": "Codex Cloud is a first-class execution, comparison, verification and continuity carrier when its isolated environment, setup, secrets, network policy and source revision fit the task; it is not merely a release checker and does not inherit unverified local state."
   },
   "resourceStewardship": {
@@ -1373,12 +1421,12 @@
     "nativeFirstRule": "Reuse sufficient healthy host-native limits, interruption, cleanup and reclamation. Exposed controls or performance traces prove available primitives or diagnostics, not automatic whole-loop governance; when the host demonstrably closes the loop, Accord-specific action is a passing no-op and retirement candidate.",
     "automationRule": "Act automatically only on attributable task-exclusive resources through authorized, reversible, bounded and verifiable actuators. Shared or unknown ownership forbids destructive reclaim; lower admission or concurrency, choose a lighter route, preserve the resource and surface the unknown instead.",
     "privacyRule": "Performance tracing is an on-demand diagnostic input. Do not require continuous tracing, silently collect or upload traces, or claim optimization or release from trace existence alone.",
-    "implementationGate": "Do not author a scheduler, daemon, Hook, MCP or runtime merely because native controls are incomplete. First demonstrate an unclosed outcome obligation or relation that available routes cannot close at lower total burden, then choose the smallest replaceable mechanism with isolation, health, rollback, cleanup and retirement evidence."
+    "implementationGate": "Do not author a scheduler, daemon, Hook, MCP or runtime merely because native controls are incomplete. First inventory and consume all relevant supported official query, action, event, capability, state, topology, permission and lifecycle surfaces; demonstrate the residual unclosed outcome obligation or relation that those routes cannot close at lower total burden; then choose the smallest replaceable mechanism with isolation, health, rollback, cleanup and retirement evidence."
   },
   "dynamicIndex": {
     "decision": "required-as-a-lightweight-derived-system",
     "sourceFormat": "schema-validated-versioned-JSON-records-with-stable-identifiers",
-    "sourceRule": "Store durable semantic facts, decisions and provenance; do not manually duplicate every derived edge or commit transient host state.",
+    "sourceRule": "Store durable semantic facts, decisions and provenance; read current host facts directly from supported official structured surfaces when available; do not manually duplicate every derived edge, recreate a second authoritative host capability database or commit transient host state.",
     "runtimeSnapshot": {
       "persistence": "ephemeral-or-ignored-cache",
       "requiredMetadata": [
@@ -1396,6 +1444,7 @@
         "user-correction",
         "Git-HEAD-status-config-or-authority-change",
         "host-version-feature-or-policy-change",
+        "official-API-or-host-notification-invalidates-a-read-field",
         "Skill-plugin-App-MCP-Hook-tool-model-or-route-change",
         "source-expiry-or-conflict",
         "capability-install-update-disable-or-health-change",
@@ -1410,7 +1459,7 @@
           "current-outcome-responsibility",
           "source-and-freshness-bound-host-native-capability-instance"
         ],
-        "cell": "tri-state observed support plus provenance composition health and expiry"
+        "cell": "tri-state observed support plus official interface or fallback source provenance composition permission health generation freshness and expiry"
       },
       "accordCapabilitySurface": {
         "axes": [
@@ -1418,6 +1467,14 @@
           "Accord-capability-mechanism-or-form-allocation"
         ],
         "cell": "tri-state current allocation effectiveness exposure burden and lifecycle"
+      },
+      "stateAuthoritySurface": {
+        "axes": [
+          "current-outcome-state-field",
+          "owner-carrier-and-source-binding"
+        ],
+        "cell": "host-owned Accord-owned or interoperable field with normalized decision target and value one writer bounded readers source kind reference precedence schema version current generation freshness validity invalidation conflict and privacy disposition",
+        "sourcePrecedence": "supported official structured API then other current typed official host-owned state then Accord-owned state then bounded direct observation; unavailable or conflicting fields remain unknown"
       },
       "admissionMask": {
         "applies": [
@@ -1461,6 +1518,7 @@
         "authority",
         "context",
         "state",
+        "state-field",
         "route",
         "host",
         "model-route",
@@ -1499,6 +1557,8 @@
         "carried-by",
         "consumes",
         "owned-by",
+        "written-by",
+        "read-by",
         "leased-by",
         "releases",
         "verified-by",
@@ -1512,7 +1572,7 @@
         "observed-on",
         "supports-outcome"
       ],
-      "normalizationRule": "Keep semantic capability, responsibility, product-form and coherence-contract nodes stable; create capability instances and responsibility-to-form allocations only for observed or queried contexts. One responsibility may have alternative forms and one form may close several responsibilities. Never enumerate the Cartesian product of hosts, models, tools, configurations, contexts and forms; expire or merge instances and allocations by authority, provenance, composition key, freshness and lifecycle.",
+      "normalizationRule": "Keep semantic capability, responsibility, state-field, product-form and coherence-contract nodes stable; create capability instances, responsibility allocations and field bindings only for observed or queried contexts. One responsibility may have alternative forms and one form may close several duties. Never enumerate the Cartesian product of hosts, models, tools, configurations, contexts and forms; expire or merge instances, allocations and bindings by authority, writer, provenance, generation, composition, freshness and lifecycle.",
       "databaseGate": "Do not add a graph database until representative queries show that schema-validated JSON plus an in-memory projection fails on scale, query expressiveness, concurrency, durability or latency and the added lifecycle cost is justified.",
       "feasibilityValidation": {
         "status": "validated-as-bounded-prototype-direction",
@@ -1547,7 +1607,7 @@
         ]
       }
     },
-    "routeQuery": "Find current responsibility-to-form paths that close the outcome obligations across requirements, capabilities, people, Agents, product forms, carriers, coherence contracts, evidence, resources and effects. First admit only paths satisfying closure, observed availability, authority, an independent verifier and hard trust, data, cost, context, risk and compatibility constraints; then remove lifecycle-dominated paths across human burden, interference, persistence, recovery and maintenance; derive any remaining choice from current context; and prefer no-op, native or maintained reuse only as a tie-breaker among equivalent-fit paths. Keep each cross-form gap and unknown visible rather than collapsing the result into one universal score.",
+    "routeQuery": "Find current responsibility-to-form paths and required state-field bindings that close the outcome across requirements, capabilities, actors, forms, carriers, contracts, evidence, resources and effects. Query all relevant supported official fact, event, action, state, topology, permission and lifecycle surfaces before fallback discovery, normalize only the fields needed by the current obligation, and keep their host provenance. Admit only paths whose fields have one writer, bounded readers, current provenance and no unresolved conflict and whose route satisfies availability, authority, independent verification and hard trust, data, cost, context, risk and compatibility gates. Remove lifecycle-dominated paths; choose by current context and prefer no-op, native or maintained reuse only among equivalent-fit paths. Keep every cross-form or state gap and unknown visible rather than collapsing them into one score.",
     "learningBoundary": "Observed task data may update health, fitness, confidence, regression and retirement inputs. It does not automatically change product authority, install capability, publish, or authorize a consequential effect."
   },
   "positiveFlywheel": [
@@ -1699,6 +1759,7 @@
       "define successive end-to-end vertical slices from sensing and reuse through consequence verification learning evolution rollback and retirement",
       "name earliest affected authority evidence and replay boundaries for every correction",
       "budget outcome, burden, interference, context, resource capacity, trust, data, cost, recovery, maintenance and retirement",
+      "treat one-intent installation update rollback and removal with user-state preservation as a behavior obligation independent of package shape",
       "reserve a pre-candidate whole-system balance audit remediation and reacceptance stage after core behavioral and longitudinal evidence and bind its claim-scoped baseline target and counterfactual first",
       "keep release as the final gate after product value and internal consistency, not the planning center"
     ],
@@ -1709,6 +1770,7 @@
       "derive the smallest relevant relation graph and identify unclosed unreliable or uneconomic obligations",
       "search evaluate and reuse suitable existing wheels before composition or authorship",
       "allocate responsibilities across one sufficient form several replaceable cooperating forms or no added artifact from required effect authority latency durability isolation recovery and total lifecycle cost",
+      "reuse supported host lifecycle surfaces to orchestrate selected components behind one user intent while preserving existing and concurrent user state",
       "admit the minimum sufficient resources and execute the authorized route",
       "verify declaration activation execution effect evidence burden interference poststate release and residue as distinct links",
       "learn and run bounded keep-discard rollback or replacement experiments without self-granting authority",
@@ -1722,6 +1784,7 @@
       "separate declaration installation enablement activation execution consequence evidence field value portability and release",
       "require only the provenance-bound official-clean isolated-minimal current-enabled isolated-no-Accord and candidate-enabled-isolated arms needed by the named claim when confounding could change the decision",
       "test environment sensing reuse-before-build responsibility-to-form allocation cross-form coherence helpful intervention correct no-op correction capability acquisition composition context and resource pressure topology transition safe allocation degradation recovery learning rollback retirement release and cleanup",
+      "test non-empty-host one-intent install update failure rollback and removal while preserving user instructions configuration concurrent edits unrelated plugins shared dependencies and foreign state",
       "require self-evolution to improve the bound outcome without weakening authority evidence rollback interference or lifecycle",
       "require a new consensus to update plan process acceptance goal projection implementation evidence documentation and claim surfaces from the earliest affected boundary",
       "use local and condition-fit host client cloud or other carriers as evidence surfaces rather than product identity and test only the claim each observed composition supports",
@@ -1733,39 +1796,48 @@
     "goalModePrompt": [
       "carry the desired product outcome latest consensus authority current phase completion target and exact workspace",
       "observe environment provenance and Accord's own presence before trusting a native or enabled baseline",
+      "at material boundaries prefer supported official structured APIs then other current typed official host state Accord state or bounded observation and bind every normalized decision target and value to a fresh field-scoped receipt before environment-dependent routing",
+      "keep responsibility implementation and state coordination orthogonal and share only typed field-scoped state with one authoritative writer bounded readers freshness invalidation and conflict handling",
       "reference live discovery and the dynamic index instead of hard-coding a host route or product form",
       "normalize host-specific project workspace task thread conversation and session terms into canonical relations before capability comparison",
       "reuse suitable existing capability before composition or authorship and record fit limits and exit conditions",
       "make human judgment new trust data cost publication destructive and irreversible pause boundaries explicit",
       "own capability acquisition configuration topology continuity resource stewardship verification learning rollback cleanup and retirement mechanics",
+      "prefer plugin-scoped or namespaced lifecycle operations and never overwrite user-owned instructions or configuration to simulate activation",
       "treat capacity summarization and handoff as examples in an open continuity-risk set and refresh on any source-bound loss distortion staleness or misbinding",
       "refresh and globally reconcile on correction new consensus drift failure evidence conflict side effect or carrier pressure",
-      "carry the pending baseline binding whole-system self-audit remediation reacceptance and independent-review order before candidate formation",
+      "carry the bounded current-receipt source and failures plus Claude silent startup Codex compact injection direct resume-to-core enabled-untrusted NO_CONTEXT control and request-scoped trust-bypass first-turn resume trigger injection and schema-source read without promoting the broad bypass to production trust or any partial chain to GT-21 completion; compare routes under one consequence interference continuity trust and lifecycle oracle before GT-20 replay whole-system reacceptance and independent review",
       "keep release dormant until all core stages and sparse exact behavior-subject bindings are complete and a future candidate is independently justified",
       "remain compact enough to preserve host reasoning capacity and defer detail by progressive disclosure"
     ]
   },
   "nextAuthorityBoundary": {
-    "first": "specification-and-standards-review-findings-at-exact-f3c9b09-and-their-earliest-affected-boundaries",
+    "first": "API-first-isolated-live-operational-carrier-and-topology-safe-continuity-boundary",
     "then": [
-      "gt07-typed-report-ancestor-provenance-and-400000-byte-budget-text-reconciliation",
       "product/program.json",
       "product/acceptance.json",
       "product/reshaping-guidance.json-derived-index-and-graph-projection",
       "goal-mode-projection-and-verifier",
       "host-adapters-and-evaluations",
+      "GT-21-isolated-live-operational-carrier-and-topology-safe-continuity-replay",
+      "GT-20-non-empty-Codex-and-Claude-lifecycle-replay",
+      "whole-system-balance-reacceptance",
       "documentation-and-claim-reacceptance",
       "new-independent-review-before-forming-future-exact-candidate"
     ],
-    "minimumNextSlice": "Retain every failed, source-insufficient, former-contract and superseded attempt as exact bounded history in current source carriers or immutable Git history; remove a superseded derived observation only after its source record, current replacement and file-budget rationale are verified. Fresh current-contract GT-14/15/16@1bbcc95 and GT-18/19@2460adc now pass only their finite Codex-local claims with blocked arms, failed review, transcription and query corrections, token costs and cleanup retained; revised GT-07/11/12/13/17 retain only their recorded bounded claims. Exact fcefee4 passed specification review but failed standards review on GT-07 free-text self-attestation and non-minimum transfer, an unrelated GT-18 failure dimension, and GT-19 outcome-family drift. Exact f3c9b09 closed all six requested semantic mutants, but specification review found stale 390000/364000 complexity wording and standards review proved that sourceNarrativeSha256 could still self-attest after synchronized rehashing. Bind each typed GT-07 report to the same independent-result identity and original narrative at exact untyped ancestor fcefee4, reconcile every active complexity statement to 400000 while retaining 5% headroom, preserve no-behavior-replay limits, and rerun genuinely independent specification and standards review before exact-candidate formation. Treat current hosts as Accord-enabled and extension-composed; keep official-clean or no-Accord product behavior, Hook firing or causality, live-mechanism value, durable-carrier need, cross-host equivalence and field value unknown. Add no Runtime, service, dependency or durable state without a source-complete unclosed responsibility and net lifecycle improvement. Keep the goal projection paused until activation is materially needed, and defer broader historical cleanup until exact-candidate preparation.",
+    "minimumNextSlice": "Retain every attempt as bounded history. The working tree provisionally admits one shared short-lived host-path Node SessionStart adapter: startup and clear are silent; compact and resume convert supported event fields into non-authoritative typed continuity context; malformed input fails visibly without echo; no persistent process or state is added. Public-seam tests, identical package bytes, native discovery and structured App Server queries pass. Claude startup triggers the copied adapter silently. An isolated Codex sessionFlags compact arm disables the installed Hook, injects context and yields one schema-field read with zero tools. Task-owned goal state makes a zero-turn thread resumable; the installed resume Hook waits for the first turn, while the resume response can directly drive structured re-sensing, a five-field current receipt and pure-core hold-unknown. The enabled-untrusted first-turn control returned NO_CONTEXT. After path and generated HooksListResponse shape corrections stopped before model work and cleaned their task threads, one separately authorized gpt-5.6-luna low-effort turn supplied bypass_hook_trust through both thread request config objects. Exactly one installed synchronous SessionStart:resume Hook started and completed in 123 ms, injected yiyuan-accord-hook-context/v1 with signal.source resume and yielded exact HOOK_CONTEXT_RESUME; no tools ran and thread, processes, root and probe script were removed. General trustStatus stayed modified and the Hook event reported permission_mode bypassPermissions, so this broad bypass is a test control rather than production trust. The Hook route now closes trigger, injection and one schema/source branch; it still lacks official-state re-sensing, pure-core invocation, semantic directive use, named consequence and independent post-state. The direct client closes event-to-state-to-core without a model but remains an unselected product form and lacks the same consequence proof. Continue mapping supported official query, action, event, capability, state, topology, permission and lifecycle surfaces while keeping unexposed fields unknown. Compare direct client, Hook and lower-burden native routes under one consequence, interference, continuity, trust and lifecycle oracle. The selected route must expose only typed decision-relevant context, bind a named consequence and genuinely independent post-state on frozen exact bytes, and stay silent on a sufficient simple route. Then close bounded state only if needed and prove a fresh zero-history handoff distinct from copied-history fork, Git worktree and Git branch. Only after selecting the operational component set may GT-20 test one-intent transactional lifecycle over non-empty host state. Do not author an installer, MCP, SDK/App Server client or persistent service unless lower-burden routes fail the same oracle. Reaccept every affected authority, graph, implementation, documentation, package and non-compensating balance surface before independent exact-tree review or candidate formation.",
     "requiredReplay": [
       "semantic-authority-and-derived-surface-conformance",
       "plan-process-acceptance-goal-projection-alignment",
       "host-admission-and-interference",
       "environment-provenance-official-clean-current-enabled-isolated-and-self-observation-controls",
+      "supported-official-query-action-event-capability-state-topology-permission-and-lifecycle-surface-map-with-no-second-authoritative-capability-database",
+      "live-typed-state-receipt-source-precedence-event-invalidation-expiry-resensing-and-dependent-recomputation",
       "existing-wheel-adoption-product-form-selection-and-complete-self-bootstrapping",
+      "isolated-live-event-to-core-to-Agent-use-to-consequence-and-independent-poststate-with-silent-no-op-bounded-private-state-and-topology-safe-fresh-handoff",
+      "transactional-plug-and-play-and-remove-and-leave-over-non-empty-user-state-with-failure-rollback-zero-active-Accord-state-and-bounded-host-owned-inert-cache-cleanup",
       "representative-help-no-op-correction-continuity-recovery-learning-evolution-rollback-retirement-and-cleanup",
-      "preserve-current-exact-gt11-gt12-gt13-gt14-gt15-gt16-gt18-and-gt19-evidence-and-replay-only-on-task-evaluator-projection-or-behavior-subject-drift",
+      "preserve-current-exact-gt11-gt12-gt13-gt14-gt15-gt16-and-gt18-evidence-while-replaying-gt19-for-the-new-typed-live-state-contract",
       "longitudinal-consensus-and-cross-carrier-consistency",
       "claim-scoped-baseline-target-counterfactual-whole-system-balance-weak-link-remediation-affected-surface-reacceptance-and-independent-review",
       "release-claim-and-lifecycle-only-after-a-future-exact-candidate"

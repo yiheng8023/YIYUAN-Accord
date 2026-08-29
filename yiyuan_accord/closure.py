@@ -8,20 +8,45 @@ additional conditions, dimensions, preferences and open-ended route forms.
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+from datetime import datetime, timezone
 from math import isfinite
 from numbers import Real
 from typing import Any
 
 
-SCHEMA = "yiyuan-accord-closure/v1"
-DECISION_SCHEMA = "yiyuan-accord-closure-decision/v1"
+SCHEMA = "yiyuan-accord-closure/v2"
+DECISION_SCHEMA = "yiyuan-accord-closure-decision/v2"
 FACT_VALUES = frozenset({"observed", "not-observed", "unknown"})
+RESPONSIBILITY_MODES = frozenset({
+    "accord-contained", "agent-native", "accord-agent-composed",
+})
+STATE_SOURCE_KINDS = frozenset({
+    "official-host-state", "accord-state", "bounded-direct-observation",
+})
+STATE_SOURCE_ORDER = (
+    "official-host-state", "accord-state", "bounded-direct-observation",
+)
+STATE_TARGET_KINDS = frozenset({
+    "environment-fact", "route-fact", "coherence-fact",
+})
 COMPARISON_VALUES = frozenset({"better", "equal", "worse", "unknown"})
 EXPERIMENT_POSTSTATE_VALUES = frozenset({
     "keep-complete", "rollback-complete",
 })
 EVIDENCE_BINDING_FIELDS = frozenset({
     "sourceRef", "observerRef", "subjectRef", "boundaryRef",
+})
+OBSERVATION_FIELDS = frozenset({
+    "id", "compositionKey", "generation", "capturedAt", "decisionAt",
+    "validUntil", "stateBindings", "invalidatedBy",
+})
+STATE_BINDING_FIELDS = frozenset({
+    "field", "targetKind", "subjectRef", "factId", "value", "writer",
+    "readers", "sourceKind", "sourceRef", "unavailableSources", "generation",
+})
+LAST_SAFE_ALLOCATION_FIELDS = frozenset({
+    "routeId", "responsibilityModes", "observationId",
+    "observationGeneration", "evidence",
 })
 
 # These are compliance/evidence invariants, not a product-form or workflow list.
@@ -80,6 +105,176 @@ def _fact_map(value: Any) -> bool:
     )
 
 
+def _responsibility_modes(value: Any, supplies: Any) -> bool:
+    return (
+        isinstance(value, Mapping)
+        and _string_list(supplies)
+        and set(value) == set(supplies)
+        and all(mode in RESPONSIBILITY_MODES for mode in value.values())
+    )
+
+
+def _utc(value: Any) -> datetime | None:
+    if not isinstance(value, str) or not value.endswith("Z"):
+        return None
+    try:
+        parsed = datetime.fromisoformat(value[:-1] + "+00:00")
+    except ValueError:
+        return None
+    return parsed if parsed.tzinfo == timezone.utc else None
+
+
+def _observation(value: Any) -> bool:
+    bindings = value.get("stateBindings") if isinstance(value, Mapping) else None
+    return (
+        isinstance(value, Mapping)
+        and set(value) == OBSERVATION_FIELDS
+        and _identifier(value.get("id"))
+        and _identifier(value.get("compositionKey"))
+        and isinstance(value.get("generation"), int)
+        and not isinstance(value.get("generation"), bool)
+        and value["generation"] > 0
+        and all(_utc(value.get(field)) is not None for field in (
+            "capturedAt", "decisionAt", "validUntil",
+        ))
+        and isinstance(bindings, list)
+        and all(
+            isinstance(item, Mapping)
+            and set(item) == STATE_BINDING_FIELDS
+            and _identifier(item.get("field"))
+            and not item["field"].casefold().startswith((
+                "conversation.raw", "credential.", "secret.",
+            ))
+            and item["field"].casefold() not in {"credential", "secret"}
+            and item.get("targetKind") in STATE_TARGET_KINDS
+            and _identifier(item.get("subjectRef"))
+            and _identifier(item.get("factId"))
+            and item.get("value") in FACT_VALUES
+            and _identifier(item.get("writer"))
+            and _string_list(item.get("readers"), allow_empty=False)
+            and item.get("sourceKind") in STATE_SOURCE_KINDS
+            and _identifier(item.get("sourceRef"))
+            and item.get("unavailableSources") == list(
+                STATE_SOURCE_ORDER[:STATE_SOURCE_ORDER.index(
+                    item.get("sourceKind")
+                )]
+            )
+            and isinstance(item.get("generation"), int)
+            and not isinstance(item.get("generation"), bool)
+            and item["generation"] == value["generation"]
+            for item in bindings
+        )
+        and _string_list(value.get("invalidatedBy"))
+    )
+
+
+def _observation_failures(
+    observation: Mapping[str, Any], composition_key: str,
+) -> list[dict[str, str]]:
+    captured = _utc(observation["capturedAt"])
+    decision = _utc(observation["decisionAt"])
+    valid_until = _utc(observation["validUntil"])
+    checks = (
+        (not observation["stateBindings"], "state-source", "unknown",
+         "environment observation has no current state source"),
+        (observation["compositionKey"] != composition_key, "composition",
+         "not-observed", "environment observation composition is mismatched"),
+        (captured > decision, "future", "not-observed",
+         "environment observation was captured after the decision"),
+        (decision > valid_until, "expired", "not-observed",
+         "environment observation expired before the decision"),
+        (bool(observation["invalidatedBy"]), "invalidated", "not-observed",
+         "environment observation has pending invalidation signals"),
+    )
+    return [{"code": f"environment:observation-{code}", "state": state,
+             "detail": detail} for failed, code, state, detail in checks if failed]
+
+
+def _state_binding_failures(
+    observation: Mapping[str, Any], environment: Mapping[str, Any],
+    routes: Sequence[Mapping[str, Any]], policy: Mapping[str, Any],
+) -> list[dict[str, str]]:
+    bindings = observation["stateBindings"]
+    failures: list[dict[str, str]] = []
+    by_field: dict[str, list[Mapping[str, Any]]] = {}
+    by_target: dict[tuple[str, str, str], list[Mapping[str, Any]]] = {}
+    for binding in bindings:
+        by_field.setdefault(binding["field"], []).append(binding)
+        target = (
+            binding["targetKind"], binding["subjectRef"], binding["factId"],
+        )
+        by_target.setdefault(target, []).append(binding)
+    for field, items in by_field.items():
+        if len(items) > 1:
+            failures.append({
+                "code": f"environment:state-binding-conflict:{field}",
+                "state": "unknown",
+                "detail": f"state field {field} has multiple bindings",
+            })
+    for target, items in by_target.items():
+        if len(items) > 1:
+            failures.append({
+                "code": "environment:state-target-conflict:" + ":".join(target),
+                "state": "unknown",
+                "detail": "decision target has multiple state bindings",
+            })
+
+    route_by_id = {route["id"]: route for route in routes}
+    for binding in bindings:
+        kind, subject, fact_id = (
+            binding["targetKind"], binding["subjectRef"], binding["factId"],
+        )
+        if kind == "environment-fact":
+            expected_subject = environment["compositionKey"]
+            facts = environment["facts"]
+        else:
+            route = route_by_id.get(subject)
+            expected_subject = subject if route is not None else None
+            facts = route.get(
+                "facts" if kind == "route-fact" else "coherence", {}
+            ) if route is not None else {}
+        if expected_subject is None or subject != expected_subject \
+                or facts.get(fact_id) != binding["value"]:
+            failures.append({
+                "code": (
+                    f"environment:state-binding-mismatch:{kind}:"
+                    f"{subject}:{fact_id}"
+                ),
+                "state": "not-observed",
+                "detail": "state binding does not equal its decision target",
+            })
+
+    required_targets = {
+        ("environment-fact", environment["compositionKey"], fact_id)
+        for fact_id in _ordered_union(
+            COMPLIANCE_ENVIRONMENT_FACTS, policy["requiredEnvironmentFacts"]
+        )
+    }
+    required_route_facts = _ordered_union(
+        COMPLIANCE_ROUTE_FACTS, policy["requiredRouteFacts"]
+    )
+    required_coherence = _ordered_union(
+        COMPLIANCE_COHERENCE_FACTS, policy["requiredCoherenceFacts"]
+    )
+    for route in routes:
+        required_targets.update(
+            ("route-fact", route["id"], fact_id)
+            for fact_id in required_route_facts
+        )
+        if len(route["forms"]) > 1:
+            required_targets.update(
+                ("coherence-fact", route["id"], fact_id)
+                for fact_id in required_coherence
+            )
+    for target in sorted(required_targets - set(by_target)):
+        failures.append({
+            "code": "environment:state-binding-missing:" + ":".join(target),
+            "state": "unknown",
+            "detail": "decision target has no typed state binding",
+        })
+    return failures
+
+
 def _retirement_specs(value: Any) -> bool:
     return (
         isinstance(value, list)
@@ -128,6 +323,43 @@ def _evidence_binding_for(value: Any, subject: Any) -> bool:
     return _evidence_binding(value) and value["subjectRef"] == subject
 
 
+def _last_safe_allocation(
+    value: Any, observation: Any, outcome: Any,
+    route_by_id: Mapping[str, Mapping[str, Any]],
+) -> bool:
+    if value is None:
+        return True
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != LAST_SAFE_ALLOCATION_FIELDS
+        or not isinstance(observation, Mapping)
+        or not isinstance(outcome, Mapping)
+        or not _identifier(value.get("routeId"))
+        or value["routeId"] not in route_by_id
+        or value.get("observationId") != observation.get("id")
+        or value.get("observationGeneration") != observation.get("generation")
+        or not _evidence_binding_for(value.get("evidence"), value["routeId"])
+    ):
+        return False
+    responsibilities = outcome.get("responsibilities")
+    modes = value.get("responsibilityModes")
+    route = route_by_id[value["routeId"]]
+    return (
+        _string_list(responsibilities, allow_empty=False)
+        and isinstance(modes, Mapping)
+        and set(modes) == set(responsibilities)
+        and all(mode in RESPONSIBILITY_MODES for mode in modes.values())
+        and all(
+            isinstance(route.get("supplies"), list)
+            and responsibility in route["supplies"]
+            and isinstance(route.get("responsibilityModes"), Mapping)
+            and route["responsibilityModes"].get(responsibility)
+            == modes[responsibility]
+            for responsibility in responsibilities
+        )
+    )
+
+
 def _ordered_union(*groups: Sequence[str]) -> list[str]:
     result: list[str] = []
     for group in groups:
@@ -163,6 +395,10 @@ def _validate_request(request: Any) -> list[str]:
             errors.append("environment.facts must map identifiers to tri-state facts")
         if not _string_list(environment.get("unknowns")):
             errors.append("environment.unknowns must be a unique string list")
+        if not _observation(environment.get("observation")):
+            errors.append("environment.observation must be a bounded live receipt")
+        if "lastSafeAllocation" not in environment:
+            errors.append("environment.lastSafeAllocation must be explicit")
 
     policy = request.get("policy")
     policy_lists = (
@@ -227,6 +463,13 @@ def _validate_request(request: Any) -> list[str]:
         for field in ("forms", "supplies"):
             if not _string_list(route.get(field)):
                 errors.append(f"{label}.{field} must be a unique string list")
+        if not _responsibility_modes(
+            route.get("responsibilityModes"), route.get("supplies")
+        ):
+            errors.append(
+                f"{label}.responsibilityModes must allocate every supplied "
+                "responsibility to one supported implementation mode"
+            )
         if not _fact_map(route.get("facts")):
             errors.append(f"{label}.facts must map identifiers to tri-state facts")
         coherence = route.get("coherence")
@@ -268,6 +511,11 @@ def _validate_request(request: Any) -> list[str]:
                     "policy.requiredRetirementAllocations exceeds the "
                     "current route responsibility scope"
                 )
+    if isinstance(environment, Mapping) and not _last_safe_allocation(
+        environment.get("lastSafeAllocation"), environment.get("observation"),
+        outcome, route_by_id,
+    ):
+        errors.append("environment.lastSafeAllocation is invalid")
 
     events = request.get("events")
     if not isinstance(events, list) or any(
@@ -565,6 +813,7 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
             "valid": False,
             "disposition": "reject",
             "selectedRouteId": None,
+            "preservedAllocation": None,
             "frontierRouteIds": [],
             "assessments": [],
             "lifecycle": None,
@@ -588,6 +837,12 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
         environment["facts"], required_environment_facts,
         "environment",
     )
+    environment_failures.extend(_observation_failures(
+        environment["observation"], environment["compositionKey"]
+    ))
+    environment_failures.extend(_state_binding_failures(
+        environment["observation"], environment, request["routes"], policy
+    ))
     assessments: list[dict[str, Any]] = []
     route_by_id = {route["id"]: route for route in request["routes"]}
     for route in request["routes"]:
@@ -613,6 +868,7 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
             "routeId": route["id"],
             "sourceKind": route["sourceKind"],
             "forms": list(route["forms"]),
+            "responsibilityModes": dict(route["responsibilityModes"]),
             "admitted": not failures,
             "failures": failures,
             "lifecycle": {
@@ -623,6 +879,27 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
 
     selected_id, frontier_ids, disposition = _select(assessments, policy)
     selected = route_by_id.get(selected_id)
+    last_safe = environment["lastSafeAllocation"]
+    invalidated = any(
+        item["code"] == "environment:observation-invalidated"
+        for item in environment_failures
+    )
+    unsafe_failures = [
+        item for item in environment_failures
+        if item["code"] != "environment:observation-invalidated"
+        and not item["code"].startswith("environment:state-binding-")
+    ]
+    preserved_allocation = (
+        {
+            "routeId": last_safe["routeId"],
+            "responsibilityModes": dict(last_safe["responsibilityModes"]),
+            "observationId": last_safe["observationId"],
+            "observationGeneration": last_safe["observationGeneration"],
+            "evidenceBinding": dict(last_safe["evidence"]),
+        }
+        if selected_id is None and invalidated and not unsafe_failures
+        and last_safe is not None else None
+    )
     effective_route_facts = dict(selected["facts"]) if selected else {}
     admitted_ids = {
         item["routeId"] for item in assessments if item["admitted"]
@@ -862,9 +1139,25 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
         "valid": True,
         "outcomeId": outcome["id"],
         "compositionKey": environment["compositionKey"],
+        "environmentObservation": {
+            "id": environment["observation"]["id"],
+            "generation": environment["observation"]["generation"],
+            "decisionAt": environment["observation"]["decisionAt"],
+            "validUntil": environment["observation"]["validUntil"],
+            "sourceKinds": sorted({
+                item["sourceKind"]
+                for item in environment["observation"]["stateBindings"]
+            }),
+            "stateFieldCount": len(
+                environment["observation"]["stateBindings"]
+            ),
+            "current": not environment_failures,
+            "preservedLastSafe": preserved_allocation is not None,
+        },
         "policyId": policy["id"],
         "disposition": disposition,
         "selectedRouteId": selected_id,
+        "preservedAllocation": preserved_allocation,
         "frontierRouteIds": frontier_ids,
         "assessments": assessments,
         "lifecycle": {
@@ -888,4 +1181,7 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-__all__ = ["DECISION_SCHEMA", "FACT_VALUES", "SCHEMA", "reconcile_closure"]
+__all__ = [
+    "DECISION_SCHEMA", "FACT_VALUES", "RESPONSIBILITY_MODES", "SCHEMA",
+    "STATE_SOURCE_KINDS", "reconcile_closure",
+]

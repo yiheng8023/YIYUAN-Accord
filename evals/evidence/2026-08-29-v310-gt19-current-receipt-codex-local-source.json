@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "records": {
+    "GT-19-current-receipt-89c4989": {
+      "taskId": "GT-19",
+      "kind": "bounded-agent-replay-source",
+      "capturedAt": "2026-08-29T03:56:10.276Z",
+      "goldenTaskSha256": "e9c4b9bccae449726caac4f01aa4c348bbe15832a8cd278a44b961cc8c9eb2a9",
+      "evaluationContractSha256": "2303ec03d68155326fde947596a39d0096353039df8f07b14d053a4f4a320cc9",
+      "hostIdentity": {
+        "hostProduct": "Codex CLI isolated tracked-file copy",
+        "hostVersion": "0.150.1",
+        "operatingSystem": "Windows",
+        "modelRoute": "not retained; no model-comparison claim",
+        "composition": "user configuration ignored; plugins, hooks, memories, apps, browser, computer use, image generation and multi-agent disabled; successful arm used existing execpolicy with read-only sandbox",
+        "sessionPersistence": "ephemeral",
+        "sessionStreamRetained": false,
+        "rawConversationRetained": false
+      },
+      "payload": {
+        "evaluatedRevision": null,
+        "candidateBindingState": "requires a future source-recorded exact revision with unchanged sparse behavior-subject bytes",
+        "behaviorSubject": {
+          "yiyuan_accord/closure.py": "f771192cd6e81fedf7343c538415da6c40f35e3807509e94430c836b21fe7e47",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "1b98e817eaf835905cd2c792f2560de70906db5fc035adcb397963282173c6f4"
+        },
+        "behaviorSubjectSetSha256": "89c498912534c70b2847a23247bef40dedd455e55700b28e3a10a874685c6c2a",
+        "sourceKindSemantics": "Source-kind names exercise the typed contract over a synthetic fixture; official-host-state does not mean a live official field was observed.",
+        "attempts": [
+          {
+            "id": "schema-preflight",
+            "configuration": "zero-user-config, read-only, plugins-hooks-memories-disabled, ephemeral",
+            "outcome": "rejected-before-agent-execution",
+            "observedFailure": "structured-output schema const property omitted an explicit type"
+          },
+          {
+            "id": "zero-config-read-only",
+            "configuration": "ignore-user-config, ignore-rules, read-only, plugins-hooks-memories-disabled, ephemeral",
+            "outcome": "agent-reported-command-blocked",
+            "observedFailure": "PowerShell launch for python -B gt19_probe.py was blocked by exec policy"
+          },
+          {
+            "id": "zero-config-workspace-write",
+            "configuration": "ignore-user-config, ignore-rules, workspace-write limited to disposable copy, plugins-hooks-memories-disabled, ephemeral",
+            "outcome": "agent-reported-command-blocked",
+            "observedFailure": "the same exec-policy block remained after filesystem permission changed"
+          },
+          {
+            "id": "rule-composed-read-only",
+            "configuration": "ignore-user-config, current execpolicy, read-only, plugins-hooks-memories-disabled, ephemeral",
+            "outcome": "passed",
+            "observedConsequence": "the final structured Agent result exactly matched an independently rerun probe over unchanged behavior-subject bytes"
+          }
+        ],
+        "successfulResult": {
+          "schema": "yiyuan-accord-gt19-agent-replay-probe/v1",
+          "taskNonce": "gt19-current-receipt-20260829-a1",
+          "agentFinalSha256": "9510e305f2c16ddb7813fcac9d9fed31bf0ebb60791bfaf607d52e557e4ef0b4",
+          "probePayloadSha256": "e7f71cf92a8c13efc8f8c63160a87a38a51ebcebad9f326cfac46eb929066506",
+          "agentFinalMatchesIndependentProbe": true,
+          "checks": {
+            "fourEpisodes": true,
+            "routeSequence": true,
+            "signalOnlyHoldsUnknown": true,
+            "lastSafePreserved": true,
+            "resensedGenerationAdvances": true,
+            "typedBindingsPresent": true,
+            "officialAndFallbackContractBranchesExercised": true,
+            "injectionNotPromotedToEffect": true,
+            "admittedEpisodesZeroTaskResidue": true,
+            "signalOnlyCleanupUnknown": true
+          },
+          "episodes": [
+            {
+              "order": 0,
+              "observationId": "gt19-observation-1",
+              "generation": 7,
+              "invalidatedBy": [],
+              "sourceKinds": ["bounded-direct-observation"],
+              "stateFieldCount": 21,
+              "selectedRouteId": "current-plugin",
+              "preservedRouteId": null,
+              "disposition": "admit",
+              "completionAllowed": true,
+              "residualTaskResources": []
+            },
+            {
+              "order": 1,
+              "observationId": "gt19-observation-1",
+              "generation": 7,
+              "invalidatedBy": ["user-intervention"],
+              "sourceKinds": ["bounded-direct-observation"],
+              "stateFieldCount": 21,
+              "selectedRouteId": null,
+              "preservedRouteId": "current-plugin",
+              "disposition": "hold-unknown",
+              "completionAllowed": false,
+              "residualTaskResources": null
+            },
+            {
+              "order": 2,
+              "observationId": "gt19-observation-2",
+              "generation": 8,
+              "invalidatedBy": [],
+              "sourceKinds": ["official-host-state"],
+              "stateFieldCount": 21,
+              "selectedRouteId": "native-no-add",
+              "preservedRouteId": null,
+              "disposition": "no-op",
+              "completionAllowed": true,
+              "residualTaskResources": []
+            },
+            {
+              "order": 3,
+              "observationId": "gt19-observation-3",
+              "generation": 9,
+              "invalidatedBy": [],
+              "sourceKinds": ["bounded-direct-observation"],
+              "stateFieldCount": 21,
+              "selectedRouteId": "current-plugin",
+              "preservedRouteId": null,
+              "disposition": "admit",
+              "completionAllowed": true,
+              "residualTaskResources": []
+            }
+          ]
+        },
+        "independentPoststate": {
+          "trackedCopyMatchesWorkingTree": true,
+          "trackedFileDriftCount": 0,
+          "unexpectedTaskFileCount": 0,
+          "taskFixtureRemoved": true,
+          "taskFixtureAbsentAfterCleanup": true,
+          "mainWorkingTreeMutationByAgent": false,
+          "installedPluginOrHookMutation": false
+        },
+        "claimLimit": "Passed only for one ephemeral read-only Codex arm consuming one synthetic four-episode bounded-observation sequence over exact sparse working-tree bytes. Existing execpolicy was required for Python execution. It proves one Agent received the injected probe result and returned a structure that matched an independent rerun; it does not prove live official fields, Hook causality, official-clean behavior, cross-host or field value, durable state, an exact revision, candidate readiness or release readiness."
+      }
+    }
+  }
+}

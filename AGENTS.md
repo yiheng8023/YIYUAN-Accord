@@ -23,7 +23,7 @@ does not make them active authority.
 - Own continuity and surface material context loss. Recover the current goal
   and settled facts from the bound task, repository authority, or handoff;
   static instructions are not state. Compact only for same-carrier reduction,
-  reserve copied-history forks for causal branches, and use a verified fresh
+  reserve copied-history forks for causal conversation branches, and use a verified fresh
   zero-inheritance destination for sequential load relief. Keep the bound
   checkout and release the source only after destination reconciliation; do not
   make the user guess.

@@ -176,6 +176,8 @@ def domain_model_errors(domain):
         "decisionDimensions",
         "crossCuttingObjects",
         "roleDistinctions",
+        "responsibilityAllocationModes",
+        "stateCoordinationModes",
         "rule",
     }
     if not _exact(domain, fields):
@@ -184,10 +186,23 @@ def domain_model_errors(domain):
     for field in ("missionScope", "currentProductScope", "productCategory", "rule"):
         if not _nonempty_string(domain.get(field)):
             errors.append(f"constitution.domainModel.{field} must be non-empty")
-    for field in ("decisionDimensions", "crossCuttingObjects", "roleDistinctions"):
+    for field in (
+        "decisionDimensions", "crossCuttingObjects", "roleDistinctions",
+    ):
         values = _string_list(domain.get(field))
         if not values:
             errors.append(f"constitution.domainModel.{field} is invalid")
+    if domain.get("responsibilityAllocationModes") != [
+        "accord-contained", "agent-native", "accord-agent-composed",
+    ]:
+        errors.append(
+            "constitution.domainModel.responsibilityAllocationModes is invalid"
+        )
+    if domain.get("stateCoordinationModes") != [
+        "host-owned-observed", "accord-owned-exposed",
+        "field-scoped-interoperable",
+    ]:
+        errors.append("constitution.domainModel.stateCoordinationModes is invalid")
     return errors
 
 
