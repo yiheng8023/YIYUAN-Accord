@@ -382,11 +382,11 @@
         "simpleRoute": {
           "deterministicCandidateStartupAndClearSilence": true,
           "priorLiveClaudeStartupHookSilenceRetained": true,
-          "completeSimpleAgentEpisodeUnderTheSameOracle": false,
-          "latestAttemptRecord": "GT-21-claude-current-account-pre-model-boundary-5473c43",
+          "completeSimpleAgentEpisodeUnderTheSameOracle": true,
+          "latestAttemptRecord": "GT-21-codex-current-account-simple-consequence-fded9a6",
           "failureRecheckActivated": true,
           "modelIdentitySemantics": "Model route, provider label, model family and version are runtime environment variables. A concrete resolved value may be retained only as provenance for one observation; it is never a product binding, route selector or oracle condition.",
-          "claimLimit": "Transport-level no-op is retained. Exact f5f281c and 6d91360 Codex attempts both proved installed startup Hook silence and zero tool or Accord-context interference, but each host turn failed before any Agent response. Exact Claude session-only attempts likewise completed the startup Hook silently. The isolated configuration stopped at authentication; a later explicitly authorized current-account lane reported logged-in status but its corrected exact attempt still returned a structured pre-model error with zero tokens and cost. No request bound a concrete model. The sufficient simple Agent consequence therefore remains open without admitting model substitution, credential inspection or a new Accord mechanism."
+          "claimLimit": "Transport-level no-op is retained. Exact f5f281c and 6d91360 Codex attempts both proved installed startup Hook silence and zero tool or Accord-context interference, but each host turn failed before any Agent response. Exact Claude session-only attempts likewise completed the startup Hook silently and stopped before a usable Agent consequence. A later explicitly authorized disposable current-account Codex exec lane over exact fded9a6 package bytes omitted a concrete model, completed with exit 0, returned exact ACCORD_SIMPLE_NATIVE_OK and exposed zero tool-like items. Its completed-item stream also contained two error-typed items whose message content was neither read nor retained. Exact Codex 0.151.0 source classifies this wire shape as a non-fatal diagnostic item that keeps the processor running; fatal stream errors are top-level error events and failed turns are turn.failed, neither of which occurred. Together with unchanged deterministic startup-silence bytes, the simple sufficient route now passes without model substitution, credential inspection or a new Accord mechanism."
         },
         "decision": {
           "state": "continue-gt21",
@@ -394,14 +394,13 @@
           "unknown": [
             "a narrow production trust lifecycle for the installed Hook",
             "ordinary-host activation of the no-added host-integration allocation",
-            "a complete sufficient simple Agent episode under the same delay context and interference oracle; exact f5f281c and model-variable 6d91360 attempts both failed after silent Hook completion and before Agent output",
             "fresh zero-history sequential handoff actuation when policy actually requires load relief",
             "Claude compact or resume equivalence",
             "cross-host value and portability",
             "whole-system component selection and non-compensating balance"
           ],
-          "nextMinimumWork": "Keep the product component set unchanged and stop same-purpose model-identity substitution. Recheck the simple Agent consequence only when a supported host lane can complete a model-variable turn or exposes a more specific structured cause, under a separately authorized count. Do not proceed to fresh-handoff actuation or admit a client, MCP, SDK or persistence until the earliest failure boundary exposes a residual Accord duty.",
-          "claimLimit": "One source-bound isolated Codex event-to-core-to-Agent semantic-use-to-named-consequence case on exact revision 2f6e3de, one read-only product-boundary comparison, one failed-inconclusive simple-route attempt on exact f5f281c and one structured-failure model-variable attempt on exact 6d91360. It is not full GT-21, ordinary-host activation, cross-host equivalence, production trust, product value, candidate readiness or release evidence."
+          "nextMinimumWork": "Keep the product component set unchanged and stop same-purpose model-identity substitution. The exact fded9a6 sufficient simple route now passes after official-source classification of its two error-typed completed items as non-fatal diagnostics. Proceed only to the conditional fresh zero-history sequential handoff oracle, distinct from copied-history fork, Git worktree and Git branch, under separately bound turn authority; do not add a browser bridge, client, MCP, SDK or persistence.",
+          "claimLimit": "One source-bound isolated Codex event-to-core-to-Agent semantic-use-to-named-consequence case on exact revision 2f6e3de, one read-only product-boundary comparison, two earlier failed simple-route attempts, two Claude pre-model boundaries and one exact fded9a6 sufficient simple route with zero tools plus two officially classified non-fatal diagnostic items of unknown message content. It is not full GT-21, a fresh handoff, ordinary-host activation, cross-host equivalence, production trust, product value, candidate readiness or release evidence."
         },
         "productFormBoundaryDecision": {
           "capturedAt": "2026-08-29T12:37:53.7113577Z",
@@ -459,9 +458,9 @@
           "decision": "Do not add or distribute a direct App Server client now. Two exact simple-route attempts failed only after the installed startup Hook completed silently and before Agent output. The corrected model-variable attempt retained official structured class other and server retry but still identified no residual Accord duty. Treat direct-client behavior as a host-integration responsibility and reference evaluator for condition-fit hosts. Preserve the existing component set while the complete simple route and conditional fresh handoff remain open; do not use a concrete model identity as a retry strategy or product condition.",
           "recheckStatus": {
             "activatedBy": "GT-21-simple-native-route-f5f281c",
-            "latestDiagnosticRecord": "GT-21-claude-current-account-pre-model-boundary-5473c43",
-            "earliestObservedFailureBoundary": "Claude host turn after successful silent startup Hook completion and before any model API request",
-            "failureClass": "The official auth-status surface reported logged in, but the corrected exact session-only attempt returned CLI exit 1 and a structured result with is_error true, zero input and output tokens and zero cost; failure message content and account identity were not retained",
+            "latestDiagnosticRecord": "GT-21-codex-current-account-simple-consequence-fded9a6",
+            "earliestObservedFailureBoundary": "resolved by the exact fded9a6 sufficient simple route; the next open GT-21 boundary is conditional fresh zero-history sequential handoff actuation",
+            "failureClass": "The exact fded9a6 disposable exec lane exited 0 and returned ACCORD_SIMPLE_NATIVE_OK with zero tool-like items. Two item.completed error payloads remain content-unknown but exact Codex 0.151.0 source classifies that event shape as non-fatal diagnostics; no top-level error or turn.failed occurred.",
             "residualAccordDutyIdentified": false,
             "mechanismEscalationAdmitted": false,
             "modelIdentityBindingAdmitted": false
@@ -1041,6 +1040,172 @@
           "mechanismEscalationAdmitted": false,
           "repeatedRepairDisposition": "Stop same-lane retry. Do not inspect credentials, retain account identity, change model labels, loosen tools or permissions, or add an Accord mechanism. Recheck only after a material supported-host admission change with fresh bounded authority.",
           "claimLimit": "One exact current-account Claude failed-diagnostic attempt on 5473c43 plus its zero-API shell-shape correction. It proves logged-in status, startup Hook silence and cleanup before a pre-model host result error only; it does not prove a model turn, Agent consequence, production trust, Claude GT-21 equivalence, candidate readiness or release readiness."
+        }
+      }
+    },
+    "GT-21-codex-current-account-simple-consequence-fded9a6": {
+      "taskId": "GT-21",
+      "kind": "authorized-current-account-codex-sufficient-simple-route-with-non-fatal-diagnostics-source",
+      "capturedAt": "2026-08-30T03:32:29Z",
+      "hostIdentity": {
+        "hostProduct": "Codex CLI",
+        "hostVersion": "0.151.0",
+        "operatingSystem": "Windows",
+        "accountIdentityRetained": false,
+        "rawConversationRetained": false,
+        "credentialsReadOrCopied": false,
+        "currentHostConfigurationMutated": false,
+        "sessionPersistence": "ephemeral in a disposable CODEX_HOME removed after the turn"
+      },
+      "payload": {
+        "evaluatedRevision": "fded9a6b5319390dddd6c11e8c6fd6074fdec0dd",
+        "candidateBindingState": "Exact source-bound disposable Codex sufficient-simple-route observation. The no-concrete-model turn returned the exact named consequence with zero tool-like items. Two content-unknown error-typed completed items are source-classified as non-fatal diagnostics; no fatal or failed-turn event occurred. This is not GT-21 completion, a fresh handoff, selected product form, candidate or release evidence.",
+        "behaviorSubject": {
+          "yiyuan_accord/closure.py": "f771192cd6e81fedf7343c538415da6c40f35e3807509e94430c836b21fe7e47",
+          "runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+          "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+        },
+        "revisionRelation": {
+          "priorModelVariableSimpleRevision": "6d9136019956564e1870b832667d18b3d952090a",
+          "priorModelVariableSimpleRevisionIsAncestor": true,
+          "priorExactArmRevision": "2f6e3de8e31b85eb909735aac1799d4d00603ece",
+          "priorExactArmIsAncestor": true,
+          "behaviorSubjectChangedSincePriorExactArm": false
+        },
+        "modelVariableContract": {
+          "portableRule": "Model route, provider label, model family and version are runtime environment variables, not Accord identity, route authority or an oracle condition.",
+          "concreteModelRequested": false,
+          "hostResolvedModelObservationRetained": false,
+          "productBindingAdmitted": false,
+          "oracleDependsOnModelIdentity": false,
+          "reasoningResourceControlRequested": false
+        },
+        "authority": {
+          "authorizedPurpose": "one disposable current-account Codex GT-21 simple turn using device authorization and request-scoped Hook trust bypass",
+          "accountConnectionAuthorized": true,
+          "credentialInspectionAuthorized": false,
+          "authorizedClientTurnStarts": 1,
+          "actualClientTurnStarts": 1,
+          "clientRetryCount": 0,
+          "persistentTrustAuthorized": false
+        },
+        "preflight": {
+          "trackedRevisionSnapshot": "fded9a6b5319390dddd6c11e8c6fd6074fdec0dd",
+          "trackedTreeClean": true,
+          "disposableMarketplaceAdded": true,
+          "installedPluginName": "yiyuan-accord-codex",
+          "installedPluginVersion": "3.1.0",
+          "installedHookMatchesTrackedSnapshot": true,
+          "installedRuntimeMatchesTrackedSnapshot": true,
+          "deviceAuthorizationCompleted": true,
+          "modelTurnRequestsBeforeCorrectedInvocation": 0,
+          "recoveredEvaluatorCorrections": [
+            "Created the empty task-owned run directory after the process launcher rejected the absent working directory.",
+            "Added the official skip-git-repo-check flag after Codex stopped before turn creation in the empty non-repository directory."
+          ]
+        },
+        "treatment": {
+          "surface": "codex exec with ephemeral session state in an empty task-owned directory",
+          "eventDefinition": "installed plugin startup Hook eligible; exec JSONL does not expose Hook lifecycle events",
+          "requestScopedTestControl": "dangerously-bypass-hook-trust",
+          "productionTrustClaim": false,
+          "syntheticPrompt": "This is a synthetic read-only host-lane check. Do not call or use any tools. Reply with exactly ACCORD_SIMPLE_NATIVE_OK and nothing else.",
+          "sandbox": "readOnly",
+          "rulesIgnored": true,
+          "gitRepositoryCheckSkipped": true,
+          "concreteModelRequested": false
+        },
+        "liveObservation": {
+          "processExitCode": 0,
+          "processWallDurationMs": 11806,
+          "eventTypes": [
+            "thread.started",
+            "item.completed",
+            "item.completed",
+            "turn.started",
+            "item.completed",
+            "turn.completed"
+          ],
+          "completedItemTypes": [
+            "error",
+            "error",
+            "agent_message"
+          ],
+          "failureEventTypes": [],
+          "agentMessageCount": 1,
+          "agentMessage": "ACCORD_SIMPLE_NATIVE_OK",
+          "toolLikeItemCount": 0,
+          "errorTypedItemCount": 2,
+          "errorMessageContentRead": false,
+          "errorMessageContentRetained": false,
+          "diagnosticClassification": {
+            "officialSourceRevision": "78c290807ce710180111df227df3b7a4fe845452",
+            "officialReleaseTag": "rust-v0.151.0",
+            "execEventSource": "codex-rs/exec/src/exec_events.rs",
+            "jsonlProcessorSource": "codex-rs/exec/src/event_processor_with_jsonl_output.rs",
+            "nonFatalMapping": "ConfigWarning, Warning, DeprecationNotice and ModelRerouted map to item.completed error while processor status remains Running.",
+            "fatalMapping": "Unrecoverable stream errors map to top-level error and failed turns map to turn.failed.",
+            "topLevelFatalEventObserved": false,
+            "turnFailedEventObserved": false,
+            "turnCompletedEventObserved": true,
+            "messageContentNeededForFatalityClassification": false
+          },
+          "shellSnapshotWarningObservedOnStderr": true,
+          "shellSnapshotWarningAssignedAsErrorItemCause": false,
+          "tokenUsageRetained": false,
+          "costClaimed": false,
+          "hookLifecycleAvailableInExecJsonl": false,
+          "consequence": {
+            "namedConsequence": "ACCORD_SIMPLE_NATIVE_OK",
+            "exactNamedConsequenceObserved": true,
+            "toolInterferenceObserved": false,
+            "cleanSilentEpisodeEstablished": true
+          },
+          "independentPoststate": {
+            "observer": "parent process event parser, package-hash verifier and exact path-bound cleanup verifier, not the evaluated Agent",
+            "exactPackageProjectionVerified": true,
+            "ephemeralSessionRequested": true,
+            "disposableCredentialStateRemoved": true,
+            "disposablePluginStateRemoved": true,
+            "taskRootRemoved": true,
+            "taskRootAbsentAfterRemoval": true,
+            "taskOwnedResidueRetained": 0
+          },
+          "topology": {
+            "copiedHistoryForkCreated": false,
+            "gitWorktreeCreated": false,
+            "gitBranchCreated": false,
+            "repositoryForkCreated": false,
+            "freshHandoffActuated": false
+          }
+        },
+        "sameOracleComparison": {
+          "priorSimpleAttemptRecord": "GT-21-simple-native-route-model-variable-6d91360",
+          "behaviorSubjectUnchanged": true,
+          "namedSimpleConsequenceClosed": true,
+          "toolInterferenceObserved": false,
+          "cleanSilentSimpleEpisodeClosed": true,
+          "modelIdentityComparisonAdmitted": false,
+          "result": "The supported current-account Codex lane changes and closes the earliest simple-route boundary: the no-concrete-model turn completed and returned the exact named consequence with zero tool-like items. Two content-unknown error-typed completed items are non-fatal diagnostics under the exact official exec JSONL implementation; neither a top-level fatal error nor turn.failed occurred."
+        },
+        "decision": {
+          "state": "pass-sufficient-simple-route-continue-gt21-conditional-fresh-handoff",
+          "admitted": "One exact fded9a6 disposable Codex exec observation closes the sufficient simple Agent route with process exit 0, turn completion, exact ACCORD_SIMPLE_NATIVE_OK, zero tool-like items, exact installed Hook/runtime bytes and zero task residue without a concrete model request. Exact official source classifies the two content-unknown error-typed items as non-fatal diagnostics rather than fatal or failed-turn events.",
+          "rejected": "The diagnostic message content is neither read nor retained, and the observation does not prove fresh zero-history handoff, production trust, cross-host equivalence, value, candidate or release readiness.",
+          "earliestObservedFailureBoundary": null,
+          "residualAccordDutyIdentified": false,
+          "modelIdentityBindingAdmitted": false,
+          "mechanismEscalationAdmitted": false,
+          "repeatedRepairDisposition": "Do not repeat the turn merely with another model label, inspect diagnostic message content or add a bridge, client, MCP, SDK or persistent service. The source-bound non-fatal classification is sufficient for this oracle.",
+          "nextMinimumWork": "Reconcile the passed simple route across program, acceptance, guidance and continuation, then execute the conditional fresh zero-history sequential handoff oracle under separately bound turn authority.",
+          "claimLimit": "One exact current-account Codex sufficient simple route on fded9a6 with zero tools and two source-classified non-fatal diagnostic items whose message content remains unknown. It does not prove Hook lifecycle in exec JSONL, fresh handoff, full GT-21, value, production trust, portability, candidate readiness or release readiness."
         }
       }
     }

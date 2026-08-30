@@ -732,13 +732,8 @@ increment and one active work item. Its ordered work is:
     do not add another mechanism merely because the partial chains differ.
     Exact `f5f281c` and `6d91360` simple-route arms then each ran one installed
     startup Hook silently with zero context and zero tools but failed before
-    Agent output. The latest request supplied no concrete model, retained the
-    host-resolved value only as provenance and captured structured class `other`,
-    ten same-turn error notifications and server retry. Model identity and version
-    are runtime variables, never product or oracle bindings. The repeated host-
-    turn boundary exposes no residual Accord duty, so model-label substitution
-    stops and fresh handoff remains gated until a supported host lane or more
-    specific structured cause permits a bounded recheck.
+    Agent output. Those requests did not make a concrete model part of the
+    product or oracle. Model identity and version remain runtime variables.
     An exact Claude session-only plugin recheck at `7a4c932` completed one
     startup Hook silently, then stopped at isolated-host authentication before
     any model API request, Agent consequence, token use or cost. Its task root
@@ -757,6 +752,26 @@ increment and one active work item. Its ordered work is:
     zero API requests and left no task root. Repeated same-lane repair now stops;
     recheck only after a material supported-host admission change under fresh
     bounded authority.
+    A later explicitly authorized disposable current-account Codex 0.151.0 lane
+    installed exact `fded9a6` package bytes from a tracked archive. One
+    `codex exec --ephemeral` turn used a read-only sandbox, ignored project rules,
+    skipped only the empty-directory Git check, supplied request-scoped Hook
+    trust bypass and requested no concrete model. It exited 0 and returned exact
+    `ACCORD_SIMPLE_NATIVE_OK` with zero tool-like items. The completed-item stream
+    also contained two `error`-typed items; their message content was neither
+    read nor retained. Exact Codex 0.151.0 source maps this wire shape to
+    non-fatal diagnostic notifications while the processor remains running;
+    fatal stream errors are top-level `error` events and failed turns are
+    `turn.failed`, neither of which occurred. The observed PowerShell shell-
+    snapshot warning is not assigned as either item's specific cause. Tracked
+    and installed Hook/runtime bytes matched;
+    the disposable credential, marketplace, plugin and task root were removed.
+    This closes the named simple Agent consequence, the prior pre-model host-
+    admission boundary and the sufficient simple-route oracle without another
+    model call or diagnostic-message read. GT-21 now advances to a conditional
+    fresh zero-history sequential handoff under separately bound turn authority.
+    Do not inspect diagnostic message content, substitute model labels or add a
+    browser bridge, MCP, SDK, App Server client or persistent service.
 14. `prove-transactional-install-state-preservation-and-removal` — pending after
     stage 13. Current package contents are plugin-scoped and do not themselves
     replace user instruction or configuration files, but that static fact is
