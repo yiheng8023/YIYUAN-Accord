@@ -15,12 +15,6 @@ git rev-parse origin/main
 git rev-list --left-right --count HEAD...origin/main
 ```
 
-The protected foreign `.tmp` residue is a known clean-candidate blocker. Do not
-enumerate, open, print, hash, modify or delete it, and do not run the live-root
-canonical verifier or either host check while it remains. Use only targeted
-tracked-file checks or an indexed disposable fixture until its owner supplies a
-verified cleanup route.
-
 Then read, in order:
 
 1. `product/constitution.json`
@@ -50,9 +44,11 @@ Then read, in order:
   later accountable product consensus superseded its `ready` state from
   `product/constitution.json#/purpose,/successDefinition,/productBoundary,/evolutionPolicy`.
   It is not the current candidate and grants no tag or Release authority.
-- The saved `main` checkout now carries an unreleased, intentionally incomplete
-  working projection for the self-bootstrapping feasibility and core-shaping
-  program. Accord remains a context-adaptive
+- The saved `main` checkout now carries the selected, unreleased v3.1.0
+  repository candidate formed from the `a1cccb0` behavior/evidence baseline and
+  the current state-forming projection. It is not yet a clean exact-local
+  candidate, hosted result, named-human decision, tag or public Release. Accord
+  remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
   product target is broader: complete bounded self-bootstrapping across
   environment sensing, outcome and authority binding, reuse or acquisition,
@@ -61,15 +57,34 @@ Then read, in order:
   component; plugin, Hook, runtime or any other product form remains a dynamic
   route variable. One form may close a bounded result and an open-ended set of
   replaceable forms may cooperate, but shared outcome, authority, evidence and
-  lifecycle contracts—not a centralized carrier—provide system coherence. No
-  v3.1.0 tag or Release exists, and no earlier tag may be moved.
+  lifecycle contracts—not a centralized carrier—provide system coherence. The
+  selected components are the existing Skill, short-lived Hook adapter, pure
+  core and host manifests; the direct App Server client remains evaluator-only.
+  No second API, browser bridge, MCP, SDK/App Server client or persistent
+  service is admitted. No v3.1.0 tag or Release exists, and no earlier tag may
+  be moved.
+- Baseline, plan, process, acceptance and goal projection are current
+  versioned stage surfaces, not permanent truth. Candidate-forming closeout is
+  recorded at `product/program.json#/increment/closeoutSnapshot` with a stable
+  locator and `containing-git-commit` relation but no embedded self SHA. After
+  commit, its exact reference is `<containing-sha>:<self-locator>`; a successor
+  cites that predecessor and Git preserves older nodes. Only the terminal
+  ordered release gate has a null next gate; a later version starts a new
+  ordered cycle from that terminal predecessor. The separate future
+  evolution horizon is recomputed from the whole-project panorama, the latest
+  accepted snapshot and fresh environment facts; maintenance, iteration,
+  updates, bounded refactoring, host adaptation, retirement or replacement and
+  later development remain non-authoritative candidates until one next bounded
+  increment is admitted.
 - The major version records the incompatible correction from a runtime-free
   thin-contract premise to a small portable kernel plus an adaptive,
   mechanism-neutral outcome-delivery system. Full release is not a universal
   correctness, cross-host equivalence, broad-field-value or production-safety
   claim.
 - At the tagged v3.0.1 SHA, the released program remains historical `ready`
-  evidence. On current moving `main`, `program.status` is `active`, the global
+  evidence. On current moving `main`, `program.status` is `ready`, its one
+  increment and work item are completed, its goal projection is retired and
+  v3.1.0 is the selected repository candidate. The global
   rebaseline, bounded P0-P3 feasibility/reuse study and complete
   self-bootstrapping semantic model and environment-admission design are
   complete. The representative/longitudinal evaluation design is complete.
@@ -170,23 +185,23 @@ Then read, in order:
   before an end-of-options Git read, and fail closed on malformed JSON or Git
   failure. These are verifier corrections, not new behavior claims.
   The user cleared the host goal after a new dynamic-retirement
-  consensus; the deterministic repository projection remains
-  `prepared-host-goal-paused` and must be refreshed before any later activation.
-  Host target state remains task state rather than behavior or value evidence.
+  consensus; at that transition the deterministic repository projection was
+  `prepared-host-goal-paused` and required refresh before any later activation.
+  Host target state remained task state rather than behavior or value evidence.
   At audit cut `1463034569fe6e724f186c88171e3ee12dffc94b`, BAL-04 ran one
   disposable matched repository-Skill/no-Accord correction task with Codex CLI
-  0.150.1; its resolved model value remains source-evidence provenance only.
+  0.150.1; its resolved model value was source-evidence provenance only.
   Both arms passed the same independent outcome,
   foreign-state and zero-residue poststate with no human action; the control
   needed one failed intermediate test run, while the Skill arm loaded more
   input context. The fixed order, explicit generic Skill invitation and shared
-  user Skills prevent a net-effect claim. This condition therefore selects no
-  added form and leaves a genuinely unclosed responsibility as the active
+  user Skills prevented a net-effect claim. That condition therefore selected no
+  added form and left a genuinely unclosed responsibility as the active
   BAL-04 requirement. Review of the exact treatment exposed the superseded
-  scalar route rule in both working 3.1.0 Skills; both are corrected to hard
+  scalar route rule in both working 3.1.0 Skills; both were corrected to hard
   gates plus lifecycle Pareto and equivalent-fit native/reuse preference.
   Every earlier behavior observation remains bound to the old Skill hashes;
-  R3 is planned again for the corrected projections.
+  R3 was planned again for the corrected projections.
   At exact clean rebaseline `f898ebd6c14580fb9236cd01440b88314b3c2fab`,
   the reference core could select a healthy native no-op but could not close the
   lifecycle of a non-selected redundant Accord route. A red deterministic
@@ -203,11 +218,10 @@ Then read, in order:
   official-source, local-help, isolated-behavior, deterministic and canonical
   cross-checks. Its failed routes and finite token cost remain counterevidence;
   no live host mechanism, Runtime, durable state or global uninstall was added.
-  All eight criteria are intentionally unverified for the new target, and
-  repository candidate readiness is false. Release authorization remains
-  unrequested because publication is the last phase and repository content
-  cannot self-attest an external decision, hosted result, public mutation or
-  cleanup.
+  At that boundary all eight criteria were intentionally unverified and
+  repository candidate readiness was false. That remains historical evidence,
+  not the current candidate state; repository content still cannot self-attest
+  an external decision, hosted result, public mutation or cleanup.
 - Exact internal checkpoint `553f5a97e08390117e877e7b913c7a501018bfa5`
   passed 20/20 product tests and GitHub Actions run
   [`33130105140`](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/33130105140)
@@ -395,12 +409,12 @@ Then read, in order:
   superseded pre-resource GT-11 evidence files, leaving three expected slots.
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
-- The unreleased working-projection guardrail permits at most 91 tracked files
-  and 528000 product-code-and-test bytes with at least five percent headroom.
-  The dynamic-evidence and final-review calibration has 88 tracked files and
-  499608 code/test bytes, leaving the required three tracked-file slots and
-  28392 bytes of headroom against a required 26400. These values are
-  navigation, not candidate evidence;
+- The selected-candidate guardrail permits at most 105 tracked files and
+  590000 Python-and-test bytes with at least five percent headroom and three
+  tracked-file slots. At the selected repository-candidate state projection,
+  102 tracked files preserve all three slots and 560482 Python/test bytes leave
+  29518 bytes (5.0031%) of headroom. These values are navigation targets, not
+  candidate evidence;
   refresh them after any code, test or file-set change and keep the machine
   guardrail authoritative. GT-21 and GT-20
   retain bounded exact evidence with their failures, evaluator-fixture
@@ -522,8 +536,9 @@ cost is justified.
 
 ## Ordered work disposition
 
-The current machine authority is `product/program.json`. It has one active
-increment and one active work item. Its ordered work is:
+The current machine authority is `product/program.json`. It is `ready` and
+retains one completed increment and one completed work item for auditability,
+with no active item. Its completed ordered work is:
 
 1. `rebaseline-product-and-consensus-impact-map` — completed after full local
    structural reconciliation.
@@ -815,8 +830,8 @@ Historical superseded review disposition —
     source-bound reacceptance from exact cut `85a917a`. It preserves GT-21 and
     GT-20 as bounded results, keeps production, cross-host and updated-client
     entry behavior unknown, and does not form a candidate or release claim.
-15. `independent-review-and-form-future-exact-candidate` — active in the machine
-    projection. The review cycle at pre-remediation cut
+15. `independent-review-and-form-future-exact-candidate` — completed for the
+    selected v3.1.0 repository candidate. The review cycle at pre-remediation cut
     `523f2ef47df96b76c132525ff432d044e7b1b4b3` completed separate product,
     specification, implementation and standards reviews and produced
     remediation findings. It did not form a candidate, and completion does not
@@ -827,7 +842,7 @@ Historical superseded review disposition —
     nested observer text could raise; a format-valid fictional public Release
     tail could be accepted; `HISTORY.md` was mislabeled as authority; and the
     provisional current-byte gate had no promotion or retirement state. The
-    current working repair freezes all nine source records and selected semantic
+    subsequent repair freezes all nine source records and selected semantic
     digests, compares GT-21 record and contract subjects, type-narrows nested
     text, rejects every offline release tail, makes HISTORY a derived projection
     and adds an active/promoted/retired lifecycle whose promotion requires a
@@ -842,25 +857,24 @@ Historical superseded review disposition —
     step. The existing closure Interface covers sufficient-route no-research,
     material-gap Adapter allocation, public-lead-only hold and bounded
     authorship; no second research API, account connection, persistent service,
-    unconditional network search or model/version binding is admitted. It
-    remains unreviewed changed bytes.
-    Goal mode remains paused; a future unchanged revision still requires the
-    complete independent review set before candidate formation. Findings and
-    remediation do not themselves form or authorize it.
+    unconditional network search or model/version binding is admitted. The
+    corrected source-bound evidence and independent candidate-forming review
+    now select the Skill, short-lived Hook adapter, pure core and manifests.
+    The direct App Server client remains evaluator-only. Goal mode is retired.
+    The next gate is a clean unchanged exact revision through canonical
+    and host-local verification plus four independent exact-tree reviews;
+    candidate selection alone does not authorize publication.
 
-The release procedure is dormant. A future semantic version, exact candidate,
-hosted checks, named-human decision, tag, Release and post-release cleanup may
-be considered only after all fifteen core stages complete; they then run in
-their declared order on one unchanged future revision. After the client update,
-all Codex, Claude and ChatGPT GUI entry points are unknown; read-only re-sensing
-must precede any current-entry claim or installation guidance. Protected foreign `.tmp` residue remains the
-clean exact-candidate blocker. During remediation one mistaken direct verifier
-call enumerated only the already known protected top-level locator and pruned it
-before descent; it did not read contents, hash bytes, modify the directory or
-run either host check. The printed locator is retained as process
-counterevidence, and that verifier route remains stopped. The previous push,
-Actions and Cloud results do not qualify changed authority or future behavior
-bytes.
+The release procedure is now gated on the selected v3.1.0 repository candidate.
+Clean exact-local and host checks, four independent exact-tree reviews, hosted
+checks, a named-human decision, tag, Release, public verification and
+post-release cleanup must run in their declared order on one unchanged exact
+revision. After the client update, all Codex, Claude and ChatGPT GUI entry
+points remain unknown; read-only re-sensing must precede any current-entry claim
+or installation guidance. A prior foreign-residue incident and one mistaken
+pruned verifier invocation remain historical process counterevidence; neither
+is the current candidate blocker. The previous push, Actions and Cloud results
+do not qualify changed authority or current candidate bytes.
 
 The following 13-step chain is the immutable v3.0.1 historical disposition.
 Its external gates completed for the tagged v3.0.1 SHA; it is retained only as

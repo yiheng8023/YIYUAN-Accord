@@ -32,9 +32,11 @@ Agent and client surface is proven. The test corpus remains deliberately finite,
 so representative use, counterexamples and failures belong to continuing
 evidence.
 
-The moving `main` branch is an active self-bootstrapping core-shaping program.
-Bounded P0-P4 logic feasibility, semantic, isolation, evaluation-design and
-product-form work is complete. P4 admits only a deterministic, side-effect-free
+The moving `main` branch now carries the internally completed, `ready` v3.1.0
+repository candidate; its goal projection is retired and it is not an install
+source or public release. Exact clean-SHA local review and every later external
+gate remain pending. Bounded P0-P4 logic feasibility, semantic, isolation,
+evaluation-design and product-form work is complete. P4 admits only a deterministic, side-effect-free
 plain-data reference core, now implemented behind one policy-driven
 `reconcile_closure` interface. It rejects observer/subject self-identity and
 requires matching independent experiment post-state before closure; these are
@@ -112,13 +114,15 @@ reacceptance from exact cut `85a917a` is complete. The independent exact-tree
 review cycle at pre-remediation cut
 `523f2ef47df96b76c132525ff432d044e7b1b4b3` covered product, specification,
 implementation and standards and produced remediation findings; it did not
-form a candidate or transfer review completion to changed bytes. Candidate
-formation and release remain closed. The current main bytes are an unreleased
-working projection. After the client update, all Codex, Claude
-and ChatGPT GUI entry points are unknown and require read-only re-sensing before
-any current-entry claim. Protected foreign
-`.tmp` residue remains the clean exact-candidate blocker; this reacceptance
-neither inspects nor removes it. At exact `cb11759`,
+form a candidate or transfer review completion to changed bytes. The later
+candidate-forming review has now completed against the corrected source-bound
+evidence and selected v3.1.0 as the repository candidate. It is not yet an
+exact local candidate, hosted result, named-human release decision, tag or
+public Release. The next gate is one clean unchanged exact revision through
+local verification and four independent exact-tree reviews. After the client
+update, current Codex, Claude and ChatGPT entry compatibility still requires
+read-only re-sensing before any claim. Production trust, live Claude behavior,
+cross-host behavior and comparative field value remain unknown. At exact `cb11759`,
 revised GT-07 passes
 only one fresh zero-history destination receipt and source-release ordering;
 actual compact and fork operations were not performed. Code topology,
@@ -136,13 +140,13 @@ consequence. This proves one direct event-to-state-to-core route, not an admitte
 App Server product form, semantic Agent use or product effect.
 Sparse host-native and Accord responsibility views plus the state-authority
 view may expose overlap and its current source, but current admission,
-consequence and lifecycle evidence must still prove actual redundancy. Live
-mechanisms, durable continuity, cross-host or
-population value and release remain gated. Exact revision
+consequence and lifecycle evidence must still prove actual redundancy. Durable
+continuity, cross-host or population value and release remain gated. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
 verified, unreleased v3.1.0 baseline; a later product consensus superseded its
-`ready` status without erasing its bounded evidence. `main` is therefore not a
-release candidate, installation source or published upgrade.
+`ready` status without erasing its bounded evidence. The current v3.1.0
+repository candidate is still neither an installation source nor a published
+upgrade.
 
 Responsibility implementation and state coordination are orthogonal. The
 derived index uses sparse H (host capability), A (Accord allocation) and S
@@ -181,7 +185,7 @@ A public lead can open an inquiry or counterexample but cannot alone support a
 consequential claim. No separate research API, account connection, persistent
 service or provider/model binding is part of the portable core.
 
-Before any future candidate is formed, the program now requires a source-bound
+Before this candidate was selected, the program required a source-bound
 whole-system balance self-audit, minimum remediation of the weakest justified
 links and reacceptance of every affected dimension and interaction. Product
 value, environment adaptation, evidence, authority, user burden, privacy and
@@ -203,6 +207,20 @@ interface; native or external capabilities remain adapter dependencies rather
 than becoming Accord-owned code. A material consensus governs direction but is
 not propagated as a new implementation baseline until contradiction, category,
 boundary and dependency checks reconcile every affected surface.
+
+For a complex project, baseline, plan, process, acceptance and goal projection
+are versioned stage projections rather than fixed truth. A closed stage becomes
+a referenceable node snapshot with exact surface and evidence references,
+finite claim and invalidation triggers. It declares a stable locator and
+containing-commit relation without embedding its own SHA, so after commit the
+exact node is referenced as `<containing-sha>:<self-locator>` and cannot
+self-attest a later gate.
+Future planning is a separate, non-authoritative evolution horizon derived on
+demand from the whole-project panorama, the latest accepted snapshot and fresh
+environment facts. It considers maintenance, iteration, updates, bounded
+refactoring, host adaptation, retirement or replacement and later development,
+but admits only one currently justified bounded increment rather than freezing
+an automatic roadmap.
 
 Report feedback in [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues). Include:
 
@@ -274,8 +292,8 @@ Use `/reload-plugins` after checkout changes.
 The public v3.0.1 packages make one progressively disclosed adaptive Skill
 available and add no Runtime, Hook, MCP server, App, state store, background
 process or automatic project mutation. Exact historical baseline `ae729465`
-contained an earlier stateless `SessionStart` context Hook; the current
-unreleased working projection replaces its echo command with a shared short-lived Node
+contained an earlier stateless `SessionStart` context Hook; the selected
+v3.1.0 repository candidate replaces its echo command with a shared short-lived Node
 event adapter and narrows its matcher. Both versions read no transcript, write
 no state and start no background process, but current executable, matcher or
 context bytes are not attributed back to the historical revision.
@@ -284,9 +302,12 @@ mechanism prohibitions. On `compact` or `resume`, the current adapter emits only
 non-authoritative event hints plus a requirement to re-sense permitted current
 state before forming receipts; `startup` and `clear` stay silent, and invalid
 input fails visibly without echoing it. The injection is neither a live receipt
-nor Agent use, execution, consequence, evidence or value. Hook trust, host
-firing and the activation-to-effect chain remain separate evidence from
-installation.
+nor Agent use, execution, consequence, evidence or value. The selected
+candidate component set is the existing Skill, short-lived Hook adapter, pure
+core and host manifests. The direct App Server client remains evaluator-only;
+the candidate adds no second API, browser bridge, MCP, SDK client or persistent
+service. Hook trust, host firing and the activation-to-effect chain remain
+separate evidence from installation.
 
 Installation, enablement and visibility do not imply activation. During normal
 work the host may invoke the Skill implicitly for a relevant nontrivial task;
@@ -308,7 +329,7 @@ data state. The retained Claude cache is host-owned, non-callable and covered by
 the observed bounded cleanup contract; it is not physical zero residue. These
 bounded results do not establish production, unmanaged or cross-OS behavior,
 actual Claude Hook activation, current updated-client entry compatibility,
-cross-host value, candidate readiness or release readiness.
+cross-host value or release readiness.
 
 ---
 

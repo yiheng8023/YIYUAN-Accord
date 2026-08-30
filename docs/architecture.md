@@ -20,13 +20,15 @@ allocation sequence, with blocked arms, corrections, failed review and high
 costs retained. Exact GT-21 and GT-20 evidence now closes only their bounded
 current-host live-carrier/fresh-handoff and disposable Windows transactional-
 lifecycle cases. Source-bound whole-system reacceptance from exact cut
-`85a917a` is complete, and a genuinely new independent exact-tree full-system
-review is now active. The tree is not a candidate or release; production,
-cross-host and updated-client entry compatibility remain unknown, while
-protected foreign `.tmp` residue remains the clean exact-candidate blocker and
-is not inspected or removed by this reacceptance.
-The implementation does not
-admit a Runtime, durable state layer, durable evolution or live-mechanism claim.
+`85a917a` is complete, and the later independent candidate-forming review has
+selected v3.1.0 as the repository candidate. It is not yet a clean exact-local
+candidate, hosted result, named-human release decision, tag or public Release.
+The next gate is one clean unchanged revision through local verification and
+four independent exact-tree reviews. Production trust, live Claude behavior,
+cross-host value and updated-client entry compatibility remain unknown.
+The implementation does not admit an Accord-managed Runtime, durable state
+layer or durable evolution. Selecting the short-lived Hook does not prove
+production trust or broad live-host behavior.
 The exact v3.1 package checkpoint
 remains bounded historical evidence; public v3.0.1 remains the recommended
 release reference, and preview.2 remains an unreleased historical checkpoint.
@@ -372,7 +374,7 @@ Each current v3 projection consists of one host-native manifest, one small
 YIYUAN Accord adapter contract and one progressively disclosed adaptive Skill,
 plus only the metadata, presentation assets and mechanisms declared by that
 manifest. Public v3.0.1 adds no runtime, Hook, MCP server, App or state store.
-The unreleased v3.1.0 working projection additionally declares one shared,
+The selected v3.1.0 repository candidate additionally declares one shared,
 short-lived `SessionStart` command adapter. Neither package shape is a permanent
 product identity or mechanism prohibition; Hook trust, firing and behavior
 remain separate from static package conformance. Both current host projections
@@ -417,11 +419,12 @@ re-sense and invoke the pure core; add plugin-private state only for an evidence
 cross-event duty; add bundled MCP or an equivalent typed actuator only for a
 remaining query or action gap; and consider an SDK, App Server client or
 persistent service only after lower-burden routes fail the same oracle.
-The direct App Server event route is now feasible rather than hypothetical, but
-still pays for an owning client, cross-host adaptation and lifecycle. The Hook
-route is lighter in form but requires a first turn for resume execution. Neither
-wins until the same obligation and lifecycle oracle compares Agent use,
-consequence, interference, recovery and cleanup.
+The direct App Server event route is feasible rather than hypothetical, but it
+still pays for an owning client, cross-host adaptation and lifecycle. The
+candidate comparison therefore selects the existing Skill, short-lived Hook
+adapter, pure core and host manifests. App Server remains an evaluator and
+reference surface only; v3.1.0 adds no second API, browser bridge, MCP, SDK/App
+Server client or persistent service.
 
 A future host adapter may use a Skill, plugin, App, MCP, Hook, configuration,
 state, runtime, cloud carrier or composed mechanism when the current host
@@ -638,7 +641,7 @@ sequence; durable carrier need, cross-host or broad value, candidate readiness
 and release readiness remain unproved. That earlier whole-system balance audit
 and affected-surface deterministic reacceptance completed before its historical
 independent review; it is not the later `85a917a` live-state/lifecycle
-reacceptance or the current independent exact-tree review.
+reacceptance or the completed candidate-forming review.
 
 At exact revision `2460adcff02bd56144f8d3f647ecef27cd5fefd0`, current-
 contract GT-18 retains an immutable full vector, rejects and rolls back a proxy
@@ -770,7 +773,7 @@ task root was removed. This repeated pre-model boundary stops same-lane retry;
 it does not authorize model substitution, credential inspection, permission
 loosening or an Accord mechanism.
 
-Before that candidate gate can open, exact GT-21 evidence now closes only one
+For the selected candidate, exact GT-21 evidence closes only one
 bounded current-host event-to-consequence path, one silent sufficient route and
 one fresh zero-history handoff whose destination was verified before source
 release. Exact GT-20 evidence separately closes only one disposable non-empty
@@ -780,8 +783,9 @@ native removal and bounded inert-cache classification. Installation, enablement
 or Hook output alone still cannot substitute for behavior, and a clean-state
 install cannot expose overwrite, stale-restore, ownership or host-cache errors.
 The `85a917a` source-bound whole-system reacceptance preserves these finite
-claims without promoting them to production, cross-host, updated-client entry,
-candidate or release evidence; the independent exact-tree review is active.
+claims without promoting them to production, cross-host, updated-client entry
+or release evidence. The later candidate-forming review is complete; clean
+exact-local verification and four independent exact-tree reviews remain next.
 
 After the authorized tag and Release exist, one evaluator isolated from
 candidate-preparation context exercises the README installation, confirmation
@@ -822,7 +826,7 @@ representative behavior, including the program-declared bounded longitudinal
 sequence. Broader field, population, cross-host and longitudinal evidence
 continues after release unless the release explicitly claims it.
 
-## Whole-system balance before candidate formation
+## Whole-system balance and candidate formation
 
 After the required representative and longitudinal core evidence, but before
 independent candidate review, Accord performs a source-bound whole-system
@@ -849,6 +853,10 @@ minimum reversible remediation, then replays every affected criterion and
 interaction. The resulting ledger is input to independent review; it cannot
 declare itself independent or turn a checklist into product value.
 
+That sequence is complete for the selected v3.1.0 repository candidate. It
+forms a bounded candidate, not release evidence; exact-local, hosted,
+named-human, tag, publication and public-verification gates remain distinct.
+
 ## Complexity and evolution
 
 The program retains the pre-reshape baseline at revision
@@ -871,6 +879,34 @@ constrains duplication, unjustified permanence and negative-value exposure; it
 is not a feature-deletion KPI. Finite release closes a bounded product version,
 while later evidence can simplify, narrow, replace, retire or open one new
 causal increment.
+
+Baseline, plan, process, acceptance and goal projection are therefore dynamic
+in a constrained sense: each is a versioned, evidence-bound projection of one
+current stage, not permanent truth and not a freely moving preference. A
+material change preserves the prior version, cause, evidence cutoff and
+affected criteria, cannot silently weaken acceptance, and replays from the
+earliest affected dependency boundary. Stage closeout forms a referenceable
+node snapshot that binds its authority and surface locators, evidence,
+acceptance transition, finite claim ceiling, unknowns, invalidation triggers,
+closed gate and next gate. The tracked snapshot declares a stable self locator
+and `containing-git-commit` relation but never embeds its own SHA. After commit,
+its exact external reference is `<containing-sha>:<self-locator>`; a successor
+cites that exact predecessor while Git preserves older nodes. This avoids
+self-reference without postponing the snapshot or letting it self-attest a
+later release gate. Only the terminal ordered release gate has a null next gate;
+a later version begins a new ordered cycle while citing that terminal snapshot.
+
+Project evolution is split into the current executable stage and a future
+evolution horizon. The latter is a sparse, on-demand derived view recomputed
+from the whole-project panorama, the latest accepted stage snapshot and fresh
+user, host and environment facts. It considers maintenance and health,
+iteration, dependency or distribution updates, bounded refactoring, host and
+interface adaptation, retirement or replacement, and later outcome-driven
+development. Those are candidate classes, not an automatic backlog or second
+authority source: only the next item that passes current goal, authority,
+feasibility, value, lifecycle and acceptance gates becomes a bounded
+increment. This is the concrete form of few stable constraints driving many
+context variables without precomputing a Cartesian roadmap.
 
 The pre-Accord system is neither the whole product nor discarded history. Its
 capability use, execution, configuration, code and conversation topology,

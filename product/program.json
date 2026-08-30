@@ -50,11 +50,11 @@
     "externalFactSource": "task-time-live-github-observation",
     "rule": "This exact admitted public-release snapshot is frozen repository provenance, not live publication proof. Offline validation rejects every unadmitted tail. Only after a matching tag and public Release complete the hosted, named-human, publication and live-verification gates may a separate post-release reconciliation update the code-side admitted snapshot, program, acceptance, recommendation pointer and derived human-readable projection together; no repository field can self-attest that transition. Earlier records are never rewritten. The retired unreleased checkpoint and superseded locally exposed development distribution are provenance only. Historical records are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
-  "releaseIntent": "Publication is deliberately deferred. Preserve ae7294652761abceb753f0571ee82c7ddeae06af as the historical verified v3.1.0 package-and-repository baseline, not current ready authority, and reopen one active product-core increment. The increment must define and demonstrate complete bounded self-bootstrapping across environment sensing, outcome and authority binding, existing-capability reuse or acquisition, composition or authorship, execution, consequence verification, learning, self-evolution, recovery, continuity, resource release and retirement. Product form remains a downstream route decision. No future exact candidate, tag or Release is considered until this program, its representative and longitudinal evidence, every dependent projection and independent review are complete.",
+  "releaseIntent": "v3.1.0 is the selected repository candidate after the complete bounded self-bootstrapping increment, current representative evidence and independent exact-tree review passed. The public recommendation remains immutable v3.0.1 until the remaining external gates complete in order. This repository state does not claim exact local verification on a clean committed SHA, hosted verification, named-human release authorization, a v3.1.0 tag, public Release, post-release installation or release cleanup.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "maintenancePlan": "CONTRIBUTING.md",
-  "status": "active",
+  "status": "ready",
   "inputEvidence": [
     {
       "id": "project-refactor-audit-2026-08-20",
@@ -110,7 +110,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "1a76d15b20fe9237c775228f43363bff7de130f2a84a056b54d74ab6ee23fced",
+      "repositorySha256": "43528ebbca0e134e079473a95119bba239f73300bbc0722d108a2bf4eb70b16d",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -138,7 +138,7 @@
       "kind": "bounded-exact-codex-local-live-carrier-simple-route-and-fresh-handoff-observation-with-model-variable-and-zero-residue",
       "repositoryLocator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
       "repositorySha256": "22b120089c3551e4d60d15e20e636b5dfab23b37f9bc29e275554608b369654e",
-      "latestFailureBoundary": "GT-21 closes for one bounded current-host case at exact 3878968: a separate official fresh thread/start destination received six verified fields, used one model-variable read-only turn and one task-owned verifier, returned ACCORD_FRESH_HANDOFF_VERIFIED, stayed distinct from copied-history and Git topology, was verified before source release, and left zero task residue. Source-bound whole-system reacceptance at 85a917a is complete; independent exact-tree review is the earliest open boundary.",
+      "latestFailureBoundary": "GT-21 closes only three bounded current-host arms: one event-to-current-state-to-pure-core-to-Agent hold consequence, one sufficient simple no-added-research route, and one separate official fresh thread/start destination with six verified fields, destination-before-source release and zero task residue. Independent exact-tree review has accepted those finite claims for the selected v3.1.0 repository candidate; exact local verification on the eventual clean committed candidate is the earliest open boundary.",
       "disposition": "admitted-bounded-exact-codex-local-gt21-pass-current-host-claim-selected-no-added-client-not-whole-system-candidate-or-release-evidence"
     },
     {
@@ -146,7 +146,7 @@
       "kind": "bounded-exact-windows-codex-and-claude-non-empty-host-transactional-lifecycle-observation",
       "repositoryLocator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
       "repositorySha256": "22b120089c3551e4d60d15e20e636b5dfab23b37f9bc29e275554608b369654e",
-      "latestFailureBoundary": "GT-20 closes for exact tracked v3.0.1 to 4c8bcc3 bytes in two disposable non-empty Windows host scopes: native failed updates retain the exact old package, native updates install exact current bytes, user and foreign state survive, removal leaves zero active Accord state, Codex cache is absent, Claude cache is unlisted and marked for a 14-day live-session-aware host sweep, and all task roots and matching processes are removed. Source-bound whole-system reacceptance at 85a917a is complete; independent exact-tree review is the earliest open boundary.",
+      "latestFailureBoundary": "GT-20 closes for exact tracked v3.0.1 to 4c8bcc3 bytes in two disposable non-empty Windows host scopes: native failed updates retain the exact old package, native updates install exact current bytes, user and foreign state survive, removal leaves zero active Accord state, Codex cache is absent, Claude cache is unlisted and marked for a 14-day live-session-aware host sweep, and all task roots and matching processes are removed. Source-bound whole-system reacceptance at 85a917a is complete, and a separate candidate-forming independent review accepted those finite claims for the selected v3.1.0 repository candidate; exact local verification on the clean committed candidate is the earliest open boundary.",
       "disposition": "admitted-bounded-exact-gt20-pass-not-production-cross-os-value-candidate-or-release-evidence"
     },
     {
@@ -167,12 +167,12 @@
       "kind": "exact-source-wheel-provenance-feasibility-ledger-and-p0-p4-results",
       "repositoryLocator": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
       "repositorySha256": "74a4cc1accb2dac0a3fde7e8e3435d2990b06dd6a2a65d0805e73930e700b00f",
-      "disposition": "admitted-source-bound-reuse-and-whole-system-reacceptance-record-independent-review-active-candidate-and-release-closed"
+      "disposition": "admitted-source-bound-reuse-and-whole-system-reacceptance-record-independent-review-complete-candidate-selected-external-release-gates-closed"
     }
   ],
   "increment": {
     "id": "increment.complete-bounded-self-bootstrapping-core",
-    "state": "active",
+    "state": "completed",
     "acceptanceIds": [
       "R1",
       "R2",
@@ -183,9 +183,68 @@
       "Q3",
       "Q4"
     ],
+    "closeoutSnapshot": {
+      "schema": "yiyuan-accord-stage-closeout-snapshot/v1",
+      "id": "stage.v3.1.0.repository-candidate.closed",
+      "stage": "repository-candidate",
+      "state": "closed",
+      "revisionBinding": {
+        "kind": "containing-git-commit",
+        "selfLocator": "product/program.json#/increment/closeoutSnapshot",
+        "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
+      },
+      "predecessorSnapshotRef": null,
+      "authorityRefs": [
+        "product/constitution.json",
+        "product/program.json",
+        "product/acceptance.json"
+      ],
+      "surfaceRefs": {
+        "baseline": "product/reshaping-guidance.json#/wholeSystemBalanceReview",
+        "plan": "product/program.json#/increment/fourSurfaceMapping/plan",
+        "process": "product/program.json#/increment/fourSurfaceMapping/process",
+        "acceptance": "product/acceptance.json",
+        "goalProjection": "product/program.json#/goalModePrompt"
+      },
+      "evidenceRefs": [
+        "product/program.json#/inputEvidence",
+        "product/acceptance.json#/criteria",
+        "evals/golden-tasks.json",
+        "product/program.json#/releaseProcedure/orderedGates/0"
+      ],
+      "evidenceCutoff": {
+        "kind": "containing-git-commit",
+        "rule": "Only evidenceRefs resolved inside the immutable containing commit belong to this snapshot; later repository or task-time facts require a successor node."
+      },
+      "invalidationTriggerRefs": [
+        "product/constitution.json#/evolutionPolicy/feedbackRule",
+        "product/program.json#/goalModePrompt/refreshTriggers",
+        "product/program.json#/processLossControl/correctionRule"
+      ],
+      "acceptanceTransition": {
+        "kind": "snapshot-bootstrap",
+        "rationaleRef": "product/program.json#/increment/fourSurfaceMapping/plan",
+        "affectedCriterionIds": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4"
+        ],
+        "replayRef": "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
+      },
+      "evaluationContractSha256": "d459d9c43349173b8db5fdf61f2a1cf04b3831bb1e3a496c5842fdda9dd0144e",
+      "closedGateId": "repository-candidate",
+      "nextGateId": "exact-local-verification-and-review",
+      "claimCeilingRef": "product/acceptance.json#/claimCeiling",
+      "unknownsRef": "product/program.json#/increment/hostCapabilityRefresh/unknowns"
+    },
     "provisionalEvidenceLifecycle": {
       "schema": "yiyuan-accord-provisional-evidence-lifecycle/v2",
-      "state": "active-current-byte-gate",
+      "state": "promoted-by-complete-current-r3",
       "criterionId": "R3",
       "taskIds": [
         "GT-20",
@@ -202,7 +261,7 @@
       "retirementGate": "recorded-post-release-reconciliation",
       "retiredByPublicRelease": null
     },
-    "observedProblem": "The historical ae729465 baseline closed one bounded collaboration slice and statically conformant host packages but did not establish the complete bounded self-bootstrapping core. The current reference core now binds proposition coherence, typed target/value receipts, source precedence, single-writer state, event-only invalidation, last-safe preservation, responsibility-scoped native replacement and retirement, topology-safe fresh continuity, a portable Skill plus short-lived Hook adapter, pure core and host manifests without a distributed client or persistent service. Exact GT-21 revisions retain only one bounded current-host event-to-core-to-Agent hold consequence, one sufficient simple route and one fresh official thread/start handoff; exact GT-20@4c8bcc3 retains only one disposable non-empty Windows Codex and Claude transactional lifecycle. Their declared behavior subjects do not drift through source cut 85a917a, and the source-bound non-compensating whole-system ledger at that cut reaccepts the affected projections without a new behavior or model run. A user-observed client update invalidates all prior current-entry and compatibility assumptions, so post-release ChatGPT/Codex and Claude entry points remain unknown until direct re-sensing. Independent exact-tree review is now active. Production trust, ordinary activation, actual Claude host triggering, comparative or cross-host value, R4, a clean exact candidate, hosted candidate verification, named-human release authorization, tag, public Release and post-release installation remain later gates; the immutable public recommendation remains v3.0.1.",
+    "observedProblem": "The historical ae729465 baseline closed one bounded collaboration slice and statically conformant host packages but did not establish the complete bounded self-bootstrapping core. The completed reference increment now binds proposition coherence, typed target/value receipts, source precedence, single-writer state, event-only invalidation, last-safe preservation, responsibility-scoped native replacement and retirement, topology-safe fresh continuity, a portable Skill plus short-lived Hook adapter, pure core and host manifests without a distributed client or persistent service. The twelve current observations retain only their finite claims, including three bounded GT-21 arms and one disposable Windows GT-20 lifecycle; independent exact-tree product, specification, implementation and standards review accepted those bindings and the selected v3.1.0 repository candidate. A user-observed client update still invalidates prior current-entry and compatibility assumptions. Production trust, ordinary activation, actual Claude live triggering, comparative or cross-host value, updated-client compatibility, exact clean-SHA local review, hosted verification, named-human authorization, tag, public Release and post-release installation remain later gates; the immutable public recommendation remains v3.0.1.",
     "hypothesis": "A product-form-neutral, complete bounded self-bootstrapping core can turn the existing collaboration contract into a stronger outcome system without defaulting to a plugin, Runtime or control plane. If Accord first reconciles each material consensus against the current proposition set; keeps code and conversation topology independent; senses environment provenance; binds the latest outcome and human authority; reuses suitable native, official and maintained wheels before authorship; allocates minimum deep modules behind narrow shared interfaces; derives sparse host-native and Accord responsibility views plus the current state-authority, admission and closure-lifecycle views; and replaces or retires only exact allocations whose successor independently closes the same consequence and lifecycle with reversible recheck, then it can improve real collaboration closure while limiting contradiction, interference, self-confirmation, proxy optimization and lifecycle burden.",
     "hostCapabilityRefresh": {
       "capturedAt": "2026-08-30",
@@ -239,7 +298,7 @@
     "firstMechanismDecision": {
       "id": "product-form-after-closure-properties",
       "state": "selected-current-component-set-no-added-client",
-      "selected": "Keep the portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and host projection manifests; do not add or distribute an Accord App Server client, bundled MCP, browser bridge, SDK service, daemon, database, persistent controller or second research-specific interface. The existing closure Interface allocates an evidence-acquisition responsibility only when task policy identifies a route-changing material gap; a sufficient route remains a no-op, public-lead-only evidence holds unknown and bounded authorship still requires the current task authority. Exact 2f6e3de closes the nontrivial event-to-core-to-Agent consequence, exact fded9a6 closes the sufficient simple route, and exact 3878968 closes the conditional fresh thread/start handoff with six verified fields, destination-before-source release and zero residue. The task-owned App Server driver and dynamic verifier remain evaluation-only. No residual Accord duty justifies extra machinery; model identity and version remain runtime provenance. Exact 4c8bcc3 closes only the bounded disposable Windows transactional lifecycle, and source-bound whole-system reacceptance at 85a917a is complete; the dynamic evidence-acquisition correction and review-remediation gates must pass before independent exact-tree review can form a candidate.",
+      "selected": "Keep the portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and host projection manifests; do not add or distribute an Accord App Server client, bundled MCP, browser bridge, SDK service, daemon, database, persistent controller or second research-specific interface. The existing closure Interface allocates an evidence-acquisition responsibility only when task policy identifies a route-changing material gap; a sufficient route remains a no-op, public-lead-only evidence holds unknown and bounded authorship still requires the current task authority. Exact 2f6e3de closes the nontrivial event-to-core-to-Agent consequence, exact fded9a6 closes the sufficient simple route, and exact 3878968 closes the conditional fresh thread/start handoff with six verified fields, destination-before-source release and zero residue. The task-owned App Server driver and dynamic verifier remain evaluation-only. No residual Accord duty justifies extra machinery; model identity and version remain runtime provenance. Exact 4c8bcc3 closes only the bounded disposable Windows transactional lifecycle, source-bound whole-system reacceptance at 85a917a is complete, and the dynamic evidence-acquisition correction plus candidate-forming review remediation have passed and selected v3.1.0. This component decision does not itself grant exact local review, hosted, human, publication or release authority.",
       "humanBoundary": "New installation, enablement, trust, account, data, material cost, publication, destructive or irreversible effects still require their exact authority. Read-only environment observation, bounded local modeling and disposable isolated fixtures remain Agent-owned within the current grant.",
       "claimLimit": "The no-added-client allocation is selected for this bounded increment. Exact 3878968 proves one current-host fresh handoff without concrete model binding, exact 4c8bcc3 proves one disposable Windows transactional lifecycle and the 85a917a source-bound ledger reaccepts their unchanged behavior subjects. None proves ordinary activation, production Hook trust, current updated-client compatibility, Claude equivalence, cross-host value, independent review, candidate or release gates."
     },
@@ -521,7 +580,7 @@
           },
           {
             "id": "independent-review-and-form-future-exact-candidate",
-            "state": "active",
+            "state": "completed",
             "dependsOn": [
               "reaccept-whole-system-after-live-state-closure"
             ],
@@ -534,7 +593,7 @@
               "Q3",
               "Q4"
             ],
-            "completion": "The dynamic evidence-acquisition semantics and Interface cases, provisional lifecycle transition binding and exact HISTORY projection must pass deterministic reacceptance first. Independent product, specification, implementation and standards review must then agree, and every promoted Golden Task must bind its current task and evaluation digests, exact projection, source-recorded ancestor evaluated revision and unchanged sparse behavior-subject bytes before the program may choose a semantic version and form one clean candidate. Publication remains a separate final sequence requiring new exact authority."
+            "completion": "Dynamic evidence-acquisition semantics and Interface cases, provisional lifecycle transition binding and exact HISTORY projection passed deterministic reacceptance. Independent product, specification, implementation and standards review agreed on the finite claim and selected component set, and every required Golden Task binds current task and evaluation digests, exact projection, source-recorded ancestor evaluated revision and unchanged sparse behavior-subject bytes. v3.1.0 is the selected repository candidate; exact clean-SHA local review and every external release gate remain separate."
           }
         ],
         "degradationRule": "Unknown or confounded environment state first narrows the claim or triggers isolation. An unavailable, failed or uneconomic capability narrows that exact path, preserves counterevidence and triggers relation-and-constraint recomputation. Newly declared, visible or version-labelled native capability does not retire anything; only a same-responsibility selected successor with independent consequence, cleanup, reversible observation and retirement post-state may close that allocation, and drift or evidence expiry recomputes it. The route never transfers supported mechanics to the user, converts current unavailability into permanent retirement, or justifies a larger authored control plane without a demonstrated closure need. Learning or self-evolution that weakens outcome, authority, evidence, rollback, interference or lifecycle is discarded or rolled back."
@@ -597,7 +656,7 @@
     "workItems": [
       {
         "id": "work.complete-bounded-self-bootstrapping-core",
-        "state": "active",
+        "state": "completed",
         "acceptanceIds": [
           "R1",
           "R2",
@@ -802,7 +861,7 @@
           },
           {
             "id": "independent-review-and-form-future-exact-candidate",
-            "state": "active",
+            "state": "completed",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -813,7 +872,7 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[independent-review-and-form-future-exact-candidate] Dynamic evidence acquisition is omitted for a sufficient route, allocated only for a material route-changing gap, holds on public-lead-only evidence and reuses the existing closure Interface without a second route authority; provisional lifecycle retirement binds the current exact public release and HISTORY is an exact projection. Independent review then agrees on product value, semantics, implementation, environment controls, longitudinal behavior, lifecycle, documentation and claim; every promoted task binds current semantics, projection and unchanged sparse behavior-subject bytes from a source-recorded ancestor revision before any future exact candidate or release decision."
+            "stopCondition": "[independent-review-and-form-future-exact-candidate] Dynamic evidence acquisition is omitted for a sufficient route, allocated only for a material route-changing gap, holds on public-lead-only evidence and reuses the existing closure Interface without a second route authority; provisional lifecycle promotion binds the complete current R3 set and HISTORY remains an exact immutable projection. Independent review agrees on product value, semantics, implementation, environment controls, longitudinal behavior, lifecycle, documentation and finite claim; every promoted task binds current semantics, projection and unchanged sparse behavior-subject bytes from a source-recorded ancestor revision, selecting v3.1.0 as the repository candidate without claiming any later release gate."
           }
         ]
       }
@@ -952,7 +1011,7 @@
           "GT-21"
         ],
         "completionOperand": null,
-        "condition": "This dormant gate opens only after the active self-bootstrapping increment is completed, feasibility has passed, a future semantic version is explicitly selected, and one locally committed clean candidate binds the latest consensus through constitution, plan, process, acceptance, structured goal projection, implementation, documentation, all twelve required Golden Tasks and an honest finite claim. All eight repository criteria must be verified, historical tags remain immutable and no known blocker or task residue remains."
+        "condition": "This gate is satisfied when the completed self-bootstrapping increment, selected v3.1.0 semantics and repository state bind the latest consensus through constitution, plan, process, acceptance, structured goal projection, implementation, documentation, all twelve required Golden Tasks and an honest finite claim. All eight repository criteria are verified and historical tags remain immutable; the next gate must still form and review one clean committed exact SHA with no task residue."
       },
       {
         "id": "exact-local-verification-and-review",
@@ -984,7 +1043,7 @@
           "GT-21"
         ],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "On the unchanged future clean candidate, the goal carrier directly runs every declared deterministic check; verifies the exact requiredTaskIdsForRelease set with fresh source bindings, exact environment compositions, direct-command results, structured digests, independent post-state and claim limits without accessing credential or session logs; and obtains independent product, specification, implementation and standards review of feasibility, complete self-bootstrapping, product-form choice, isolation, activation-to-effect assurance, governed evolution, dynamic responsibility retirement, longitudinal continuity, interference, rollback, release, cleanup and claim ceiling. Any P0 or P1 blocks; only after this late gate passes may the same SHA be pushed."
+        "condition": "On the unchanged clean committed v3.1.0 candidate, the goal carrier directly runs every declared deterministic check; verifies the exact requiredTaskIdsForRelease set with fresh source bindings, exact environment compositions, direct-command results, structured digests, independent post-state and claim limits without accessing credential or session logs; and obtains context-isolated, outcome-bound, identity-neutral review of the exact publishable and installable surfaces. This gate does not claim public-tag installation before the immutable tag exists. Any P0 or P1 blocks; only after this gate passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
@@ -1023,7 +1082,7 @@
         ],
         "requiredTaskIds": [],
         "completionOperand": "exactTaggedPublicRelease",
-        "condition": "Only after every core and exact-candidate gate plus fresh named-human authorization, create one new lightweight tag for the future selected semantic version and a matching non-draft, non-prerelease GitHub Release with the tracked body and no attached assets; never move or reuse an existing tag or superseded development distribution."
+        "condition": "Only after every core and exact-candidate gate plus fresh named-human authorization, create one new lightweight tag for the selected semantic version named by distributionVersion and a matching non-draft, non-prerelease GitHub Release with the tracked body and no attached assets; never move or reuse an existing tag or superseded development distribution."
       },
       {
         "id": "release-verification-and-cleanup",
@@ -1036,15 +1095,15 @@
         ],
         "requiredTaskIds": [],
         "completionOperand": "releaseVerificationAndCleanup",
-        "condition": "The goal carrier directly verifies the future selected remote and local tag SHA, maturity, Latest eligibility, tracked body, finite claim ceiling and asset policy; updates a bounded isolated Accord marketplace from the prior immutable ref to that exact version, verifies installed bytes and fresh-carrier activation or rolls back on failure; obtains one context-isolated clean-state evaluator replay of supported installation, confirmation and removal paths; removes task-created cloud, evaluator and isolation resources, confirms repository and task residue are absent, and replays local verification."
+        "condition": "The goal carrier directly verifies the selected remote and local tag SHA, maturity, Latest eligibility, tracked body, finite claim ceiling and asset policy; updates a bounded isolated Accord marketplace from the prior immutable ref to that exact version, verifies installed bytes and fresh-carrier activation or rolls back on failure; obtains one context-isolated clean-state evaluator replay of supported installation, confirmation and removal paths against the public immutable tag; removes task-created cloud, evaluator and isolation resources, confirms repository and task residue are absent, and replays local verification."
       }
     ],
-    "rule": "This release procedure is dormant while the self-bootstrapping program is active and publication is not the planning center. After all core stages pass and a future exact version is selected, execute the gates strictly in order. A correction, new consensus, failure, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, and no plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
+    "rule": "The completed core program selects v3.1.0 as the repository candidate and opens this external release sequence. Execute the remaining gates strictly in order: exact local verification and review, exact-candidate hosted verification, named-human authorization, tagged public Release, then public verification and cleanup. A correction, new consensus, failure, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, and no plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
   },
   "goalModePrompt": {
-    "state": "prepared-host-goal-paused",
+    "state": "retired",
     "authority": "derived-from-current-reviewable-authority-set",
-    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"coherent-bounded-self-bootstrap-with-live-effect-provenance-reuse-topology-safe-continuity-balance-and-consistency\",\"directive\":\"Reconcile affected projections and dynamic evidence applicability; prove typed effect, continuity, lifecycle, evolution, retirement and cleanup before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"GT-19 is synthetic. GT-21 proves only the listed bounded local event/core/Agent hold, sufficient no-model-bound route and fresh handoff; model identity is runtime provenance. GT-20 proves only the listed disposable Windows lifecycle, and 85a917a reacceptance preserves those finite claims. No client/browser bridge, ordinary activation, production trust, updated-client compatibility, portability, value, independent review, candidate or release is proved.\",\"completion\":\"Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"From the earliest affected boundary, reconcile each correction against the proposition set across authority, four mappings, implementation, evidence, documentation and claims; preserve unrelated truth and history, and stop affected work while a conflict remains.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"reaccept-whole-system-after-live-state-closure\"],\"id\":\"independent-review-and-form-future-exact-candidate\",\"state\":\"active\"}],\"semantics\":\"Bind current target/value receipts; unknown stays unknown and events only invalidate. Acquire evidence only when missing, stale or conflicting facts or unresolved reuse can change the route; sufficient routes do no research, public leads need corroboration and adapters stay authority-, cost- and lifecycle-bound. Host queries and injects, Accord decides and the Agent executes; model identity and version are runtime provenance. Preserve selected components and complete deterministic correction plus independent exact-tree review before candidate selection; add no client or bridge.\",\"work\":[\"independent-review-and-form-future-exact-candidate\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-repository-fork\"]}",
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"coherent-bounded-self-bootstrap-with-live-effect-provenance-reuse-topology-safe-continuity-balance-and-consistency\",\"directive\":\"Reconcile affected projections and dynamic evidence applicability; prove typed effect, continuity, lifecycle, evolution, retirement and cleanup before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"GT-19 is synthetic. GT-21 proves only the listed bounded local event/core/Agent hold, sufficient no-model-bound route and fresh handoff; model identity is runtime provenance. GT-20 proves only the listed disposable Windows lifecycle, and 85a917a reacceptance preserves those finite claims. No client/browser bridge, ordinary activation, production trust, updated-client compatibility, portability, value, independent review, candidate or release is proved.\",\"completion\":\"Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"From the earliest affected boundary, reconcile each correction against the proposition set across authority, four mappings, implementation, evidence, documentation and claims; preserve unrelated truth and history, and stop affected work while a conflict remains.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[],\"semantics\":\"Bind current target/value receipts; unknown stays unknown and events only invalidate. Acquire evidence only when missing, stale or conflicting facts or unresolved reuse can change the route; sufficient routes do no research, public leads need corroboration and adapters stay authority-, cost- and lifecycle-bound. Host queries and injects, Accord decides and the Agent executes; model identity and version are runtime provenance. Preserve selected components and complete deterministic correction plus independent exact-tree review before candidate selection; add no client or bridge.\",\"work\":[]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-repository-fork\"]}",
     "workStageIds": [
       "rebaseline-product-and-consensus-impact-map",
       "conduct-self-bootstrapping-feasibility-and-reuse-study",
@@ -1097,7 +1156,7 @@
       "phase-or-authority-boundary",
       "repeated-same-purpose-repair"
     ],
-    "hostLifecycleNote": "The public recommended release remains v3.0.1. Current hosts are Accord-enabled and extension-composed, so installation or Hook enablement proves neither activation, behavior nor value. Exact 2f6e3de closes one event-to-current-state-to-core-to-Agent named hold consequence; exact fded9a6 closes the sufficient no-model-bound simple route; exact 3878968 closes one fresh official thread/start handoff with six verified fields, destination-before-source release, unchanged code/execution topology and zero task residue. Model identity and version remain runtime provenance, broad Hook trust bypass remains test-only, and the App Server driver remains reference-only. The selected product set is the portable Skill, short-lived Hook adapter, pure core and manifests. Exact 4c8bcc3 passes only one disposable Windows transactional lifecycle, and 85a917a source-bound whole-system reacceptance is complete. The user-observed client update invalidates the prior installed-entry snapshot; post-release entry points must be re-sensed before installation. Independent review is active, while production trust, ordinary activation, actual Claude host triggering, cross-host value, candidate and release remain unproved."
+    "hostLifecycleNote": "The public recommended release remains v3.0.1. v3.1.0 is the selected repository candidate after independent exact-tree review, not a hosted, authorized, tagged or public release. The selected product set is the portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the App Server driver remains an evaluator only. Model identity and version remain runtime provenance variables, broad Hook trust bypass remains test-only, and the user-observed client update leaves current installed-entry compatibility unknown until post-release re-sensing. Production trust, ordinary activation, actual Claude live triggering, cross-host and product value remain unknown."
   },
   "hostProjections": [
     {
@@ -1185,8 +1244,8 @@
       "primaryInstructionBytes": 18940
     },
     "targets": {
-      "maxTrackedFiles": 91,
-      "maxProductCodeAndTestBytes": 528000,
+      "maxTrackedFiles": 105,
+      "maxProductCodeAndTestBytes": 590000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -1212,6 +1271,10 @@
       "def test_evidence_cannot_self_verify_or_self_authorize",
       "def test_external_release_contract_is_exact_and_external",
       "def test_failed_sample_narrows_claim",
+      "def test_frozen_gt20_21_promotion_is_exact_and_fail_closed",
+      "def test_frozen_promotion_maps_only_exact_observations_to_representative",
+      "def test_gt15_embedded_source_packet_is_self_contained_and_fail_closed",
+      "def test_gt16_retained_failure_and_corrected_poststate_are_fail_closed",
       "def test_plan_process_acceptance_and_release_order_stay_aligned",
       "def test_projection_evidence_rejects_drift_and_relocation",
       "def test_projection_package_and_admission_are_fail_closed",
@@ -1234,9 +1297,10 @@
       "def test_provisional_source_contract_is_required_while_r3_is_planned",
       "def test_provisional_gt20_21_mutations_fail_after_repository_rehash",
       "def test_reacceptance_projects_current_stage_without_model_binding",
+      "def test_ready_frozen_projection_set_selects_only_exact_bound_adapter",
       "def test_public_release_history_freezes_admitted_snapshot_and_rejects_tail"
     ],
-    "minimumTestCount": 31,
+    "minimumTestCount": 36,
     "forbiddenActivePaths": [
       "yiyuan_accord/task_validator_o1_lifecycle_suite.py",
       "yiyuan_accord/task_validator_o2_codex_reference.py",
@@ -1250,7 +1314,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants or capability deletion targets. Independent reviews successively required source-complete evolution evidence, scoped retirement, strict parsing, exact behavior-subject binding, semantic longitudinal validation, malformed-carrier failure closure, typed ancestor provenance, source-to-decision target/value binding, core-bound last-safe preservation, a fail-closed live-event adapter seam and, at exact failed review cuts 523f2ef and ef10100, unconditional provisional-source, complete declared-package, retained-attempt, lifecycle-transition and non-self-attested public-history validation. The active increment permits at most 91 tracked files and 528000 product-code-and-test bytes with at least five percent byte headroom and three tracked-file slots. At calibration, 88 tracked files and 499608 product-code-and-test bytes leave all three slots and 28392 bytes of headroom, above the required 26400. The increase from the prior 462000, 505000, 520000 and 525000 ceilings pays only for source-record, ancestor, task/evaluation digest, package, retained-attempt, independent post-state, cleanup, claim-ceiling, malformed-input, synchronized-mutation, exact evidence-lifecycle, frozen-contract, type-safety, visible-history including its Markdown envelope, dynamic evidence-applicability and exact scoped-evaluator successor checks; it is not allowance for a Runtime, service, client bridge, storage layer, framework, unconditional network search or model-specific route. Existing typed state, current receipts, minimum adapter boundary and stable closure logic remain bounded, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, cognition, latency, interference, recovery, maintenance and retirement; at each breach compare deletion, native delegation, composition, replacement and bounded addition, retaining only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants or capability deletion targets. Independent reviews successively required source-complete evolution evidence, scoped retirement, strict parsing, exact behavior-subject binding, semantic longitudinal validation, malformed-carrier failure closure, typed ancestor provenance, source-to-decision target/value binding, core-bound last-safe preservation, a fail-closed live-event adapter seam and unconditional provisional-source, complete declared-package, retained-attempt, lifecycle-transition and non-self-attested public-history validation. The selected v3.1.0 repository candidate permits at most 105 tracked files and 590000 product-code-and-test bytes with at least five percent byte headroom. At candidate calibration, 102 tracked files preserve all three reserved slots; 560482 measured product-code-and-test bytes leave 29518 bytes, or 5.0031 percent, of headroom. The increase pays only for exact source, observation, lifecycle, dynamic-evidence, stage-closeout and candidate-verification controls; it is not allowance for a Runtime, service, client bridge, storage layer, framework, unconditional network search or model-specific route. Existing typed state, current receipts, minimum adapter boundary and stable closure logic remain bounded, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, cognition, latency, interference, recovery, maintenance and retirement; at each breach compare deletion, native delegation, composition, replacement and bounded addition, retaining only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,
@@ -1262,6 +1326,10 @@
     "resourceRule": "Observe current demand and capacity, attribute identity, owner, lease and state, admit minimum sufficient concurrency and budget, rebalance or degrade under pressure, release only attributable task-owned exposure through authorized native controls, and independently verify post-state and residue. Shared or unknown ownership is never reclaimed automatically; sufficient native whole-loop governance is a no-op and an Accord-specific mechanism retirement trigger.",
     "carrierRule": "Use current source-bound host signals when reliable; if a decision-relevant signal is unavailable, record unknown and transition conservatively. Capacity pressure, summarization and handoff are observed examples rather than an exhaustive trigger list: reconcile whenever goal, state, authority, evidence, resources, topology, time or causality may be lost, distorted, stale or misbound. Normalize each host's project, workspace, task, thread, conversation and session labels into distinct canonical code, outcome, carrier and execution relations before comparing or composing capabilities. Compact only reduces memory on the current carrier, a copied-history fork is a causal branch, and sequential load relief uses a fresh zero-history destination with minimum verified state transfer, destination reconciliation and only then source release. These conversation operations do not change code topology or local/cloud execution placement; bind either separately when required. No universal turn count, context size, token percentage, summary ratio or fixed trigger taxonomy is product authority.",
     "correctionRule": "A material correction, failure, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary. It governs direction immediately but is admitted as the next implementation baseline only after proposition-level contradiction, category, boundary and dependency checks; unresolved conflict pauses affected work. The boundary and every downstream gate are replayed while unrelated accepted truth remains stable. A repeated correction or failed same-purpose mechanism pauses the current shape until premise, interface and representation are reconsidered; deletion, replacement, recomposition, native-host delegation and bounded addition are all considered. There is no universal add-or-subtract default, while L2 requires a deletion or replacement attempt before another same-purpose repair layer. Authority surfaces form a reviewable versioned current set; their merge, split, replacement or retirement requires explicit provenance-preserving schema and verifier migration plus the same earliest-boundary replay.",
+    "currentStageRule": "The current stage is the selected v3.1.0 repository candidate and its ordered exact-local, hosted, named-human, publication and public-verification gates. That stage owns current execution; future candidates may challenge it through a material correction but cannot silently enter its release scope or borrow its evidence.",
+    "stageSnapshotState": "latest-closed-stage-snapshot-prepared-for-containing-commit-binding",
+    "stageSnapshotRule": "Baseline, plan, process, acceptance and goal projection are versioned stage projections. increment.closeoutSnapshot records the closed repository-candidate node without embedding its own commit SHA: it declares a containing-git-commit relation, and after commit the exact external locator is the immutable containing SHA plus its stable repository locator. A successor cites that prior exact locator, while Git preserves the superseded node; only the terminal release gate has a null next gate, and a later version begins a new ordered cycle from that predecessor. The tracked object never self-attests publication, authorization or a later gate.",
+    "evolutionHorizonRule": "The future horizon is recomputed on demand from the whole-project panorama, latest accepted stage snapshot and fresh user, host and environment facts. It must consider maintenance and health, iteration, updates, bounded refactoring, host adaptation, retirement or replacement and later outcome-driven development, but remains a derived non-authoritative non-commitment candidate set until one item passes current authority, feasibility, value, lifecycle and acceptance gates into the next bounded increment.",
     "continuingCalibration": "Feasibility findings, prototype counterevidence, representative or longitudinal failures and later field evidence may update Golden Tasks, narrow a claim, simplify or retire a projection, or open one new bounded increment. Each material update first rechecks the proposition set and affected dependency graph; neither consensus, a ready baseline nor a release freezes learning, and none licenses a contradictory baseline.",
     "boundedAutonomyRule": "At each material phase, sense environment composition and Accord exposure; recompute the latest outcome obligations, consensus, relevant relations and constraints, healthy effective and reusable capabilities, genuinely non-delegable human judgment, unclosed obligations and risks. Feasibility precedes implementation. Preserve each material correction through the four mapped surfaces, chosen product form, implementation, evidence, documentation, acceptance and claim; self-evolution remains subordinate to full-loop outcome, authority, rollback and retirement."
   }

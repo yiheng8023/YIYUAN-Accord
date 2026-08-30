@@ -758,24 +758,51 @@ def projection_observation_errors(
     return errors
 
 
+def _current_projection_set(observed, host_reports):
+    projections = observed.get("projections")
+    if not isinstance(projections, list):
+        return None
+    normalized = {}
+    for projection in projections:
+        projection_id = projection.get("adapterId") \
+            if isinstance(projection, dict) else None
+        mechanisms = projection.get("mechanismFiles") \
+            if isinstance(projection, dict) else None
+        if (
+            not isinstance(projection_id, str)
+            or projection_id in normalized or projection_id not in host_reports
+            or not isinstance(mechanisms, list)
+            or any(
+                not isinstance(item, dict)
+                or set(item) != {"locator", "sha256"}
+                or not isinstance(item.get("locator"), str)
+                or re.fullmatch(r"[0-9a-f]{64}", item.get("sha256", "")) is None
+                for item in mechanisms
+            )
+        ):
+            return None
+        normalized[projection_id] = {
+            **projection,
+            "mechanismFiles": [item["locator"] for item in mechanisms],
+        }
+    return normalized
+
+
 def projection_evidence_binding_errors(
-    root, acceptance, host_reports, read_json,
+    root, acceptance, host_reports, read_json, promotion_lanes=None,
 ):
     errors = []
     criteria = acceptance.get("criteria")
     if not isinstance(criteria, list):
         return errors
-    groups = []
-    for criterion_index, criterion in enumerate(criteria):
-        # Only promoted evidence must bind the current behavior-bearing sources.
-        if (
-            not isinstance(criterion, dict)
-            or criterion.get("assessment") not in {"continuing", "verified"}
-        ):
-            continue
-        evidence = criterion.get("evidence") if isinstance(criterion, dict) else None
-        if isinstance(evidence, list):
-            groups.append((f"criteria[{criterion_index}].evidence", evidence))
+    # Only promoted evidence must bind the current behavior-bearing sources.
+    groups = [
+        (f"criteria[{index}].evidence", criterion["evidence"])
+        for index, criterion in enumerate(criteria)
+        if isinstance(criterion, dict)
+        and criterion.get("assessment") in {"continuing", "verified"}
+        and isinstance(criterion.get("evidence"), list)
+    ]
     # Historical evidence retains its captured projection identity.
     for prefix, evidence in groups:
         for evidence_index, item in enumerate(evidence):
@@ -795,6 +822,27 @@ def projection_evidence_binding_errors(
                 observed = observation.get("projectionIdentity")
             if not isinstance(observed, dict):
                 errors.append(f"{label} lacks projection identity")
+                continue
+            lane = promotion_lanes.get(locator) \
+                if isinstance(promotion_lanes, dict) else None
+            if (
+                isinstance(lane, dict)
+                and observation.get("taskId") == lane.get("taskId")
+                and observation.get("evidenceClass") == lane.get("sourceClass")
+                and observed.get("kind") == "current-projection-set"
+            ):
+                normalized = _current_projection_set(observed, host_reports)
+                if normalized is None:
+                    errors.append(f"{label} current projection set is invalid")
+                    continue
+                if set(normalized) != set(host_reports):
+                    errors.append(f"{label} current projection set is incomplete")
+                    continue
+                for projection_id, projection in normalized.items():
+                    errors.extend(projection_observation_errors(
+                        projection, host_reports[projection_id], label,
+                        projection_id,
+                    ))
                 continue
             errors.extend(
                 projection_observation_errors(

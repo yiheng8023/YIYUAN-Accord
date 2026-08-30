@@ -47,6 +47,23 @@ For one concrete problem, counterexample, host drift or repeated correction:
 7. after publication, remove task exposure and residue and complete the final
    release closeout; the repository increment was already completed at freeze.
 
+Treat baseline, plan, process, acceptance and goal projection as one versioned
+stage set. A material revision keeps the superseded version, cause, evidence
+cutoff and affected criteria, never weakens acceptance silently, and replays
+from the earliest affected dependency. At stage closeout, create one current
+node snapshot with a stable repository locator and a
+`containing-git-commit` relation, but do not write its own SHA into the object.
+After commit, cite it as `<containing-sha>:<self-locator>`; a successor points
+to that exact predecessor and Git retains older nodes.
+
+Keep future planning as a derived evolution horizon separate from the current
+executable stage. Recompute it on demand from the whole-project panorama, the
+latest accepted snapshot and fresh environment facts. It must consider
+maintenance, iteration, updates, bounded refactoring, host adaptation,
+retirement or replacement and later development, but none becomes a commitment
+until current authority, feasibility, value, lifecycle and acceptance gates
+admit one next bounded increment.
+
 A material correction, finding or later rule returns to the earliest affected
 dependency boundary. Prior results remain historical facts but not current
 proof; replay that boundary and every downstream check before reusing their

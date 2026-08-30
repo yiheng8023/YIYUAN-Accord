@@ -194,13 +194,21 @@ def _safe_https_locator(value):
     )
 
 
-def _bounded_git_bytes(root, arguments, limit=_GIT_CAPTURE_LIMIT):
+def _bounded_git_bytes(root, arguments, limit=_GIT_CAPTURE_LIMIT, input_bytes=None):
+    if input_bytes is not None and (
+        not isinstance(input_bytes, bytes) or len(input_bytes) > limit
+    ):
+        raise subprocess.SubprocessError("bounded Git input failed")
     with tempfile.TemporaryFile() as output:
         process = subprocess.Popen(
             ["git", "-C", str(root), *arguments], stdout=output,
             stderr=subprocess.DEVNULL,
+            stdin=subprocess.PIPE if input_bytes is not None else subprocess.DEVNULL,
         )
         try:
+            if input_bytes is not None:
+                process.stdin.write(input_bytes)
+                process.stdin.close()
             deadline = time.monotonic() + 10
             while process.poll() is None:
                 if (os.fstat(output.fileno()).st_size > limit

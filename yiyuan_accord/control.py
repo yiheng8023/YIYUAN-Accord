@@ -9,6 +9,7 @@ from .evidence import (
     frozen_gt20_21_promotion_errors,
     historical_representative_errors,
     provisional_gt20_21_source_errors,
+    representative_contract_sha256,
     representative_sample_errors,
 )
 from .guardrails import (
@@ -25,6 +26,7 @@ from .guardrails import (
     validate_host_projection,
 )
 from .identity import (
+    RELEASE_RE,
     _bounded_git_bytes,
     _bounded_regular_bytes,
     _nonempty_string,
@@ -46,6 +48,7 @@ AUTHORITY_BOOTSTRAP = (
     "product/acceptance.json",
 )
 GOLDEN_TASKS_FILE = "evals/golden-tasks.json"
+GUIDANCE_FILE = "product/reshaping-guidance.json"
 MAX_JSON_BYTES = 1_000_000
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
@@ -149,6 +152,10 @@ def _require_texts(owner, fields, label, errors):
     )
 
 
+def _contains_markers(value, markers):
+    return _nonempty_string(value) and all(marker in value for marker in markers)
+
+
 def _validate_constitution(constitution, errors):
     if constitution.get("schema") != 3:
         errors.append("constitution.schema must be 3")
@@ -195,6 +202,57 @@ def _validate_constitution(constitution, errors):
         "lessons": lesson_ids,
         "identity": identity,
     }
+
+
+def _validate_stage_guidance(guidance, errors):
+    adaptive = guidance.get("adaptiveSystem") if isinstance(guidance, dict) else None
+    stage = adaptive.get("stageStateContract") if isinstance(adaptive, dict) else None
+    horizon = adaptive.get("evolutionHorizon") if isinstance(adaptive, dict) else None
+    if not isinstance(stage, dict) or set(stage) != {
+        "role", "dynamicSurfaces", "changeRule", "closeoutSnapshotRule", "historyRule",
+    } or stage.get("role") != "derived-referenceable-node-not-authority-or-release-evidence" \
+            or stage.get("dynamicSurfaces") != [
+                "baseline", "plan", "process-and-ordered-work",
+                "acceptance-contract", "goal-mode-projection",
+            ] or not _contains_markers(stage.get("changeRule"), (
+                "versioned, evidence-bound and rebuildable", "prior version",
+                "evidence cutoff", "affected criteria", "earliest replay boundary",
+                "silently weaken acceptance", "erase failed evidence", "future stage",
+            )) or not _contains_markers(stage.get("closeoutSnapshotRule"), (
+                "stage identity", "parent node", "authority and surface locators",
+                "acceptance transition", "evaluation contract", "invalidation triggers",
+                "containing-git-commit", "never stores its own SHA",
+                "<containing-sha>:<self-locator>", "successor cites", "cannot self-attest",
+                "next gate is null only", "later version starts a new ordered cycle",
+                "terminal predecessor",
+            )) or not _contains_markers(stage.get("historyRule"), (
+                "latest accepted stage projection", "Git history",
+                "predecessor locator", "do not add a snapshot registry",
+            )):
+        errors.append("reshaping guidance stage snapshot contract is invalid")
+    if not isinstance(horizon, dict) or set(horizon) != {
+        "inputs", "candidateClasses", "rule", "storageRule",
+    } or horizon.get("inputs") != [
+        "whole-project-panorama-and-live-obligations",
+        "latest-accepted-stage-snapshot",
+        "fresh-environment-host-evidence-and-user-corrections",
+    ] or horizon.get("candidateClasses") != [
+        "maintenance-and-health", "iteration-and-quality-improvement",
+        "dependency-standard-and-distribution-update",
+        "bounded-refactoring-and-complexity-reduction",
+        "host-client-model-route-and-interface-adaptation",
+        "retirement-replacement-and-degradation",
+        "later-outcome-driven-development",
+    ] or not _contains_markers(horizon.get("rule"), (
+        "sparse, on-demand derived view",
+        "not a second authority source, frozen roadmap, Cartesian precomputation or automatic commitment",
+        "Refresh only affected candidates", "at most the next bounded increment",
+        "hypothetical, deferred, retired or unknown",
+    )) or not _contains_markers(horizon.get("storageRule"), (
+        "Do not persist unpromoted horizon items", "horizon registry",
+        "only the one candidate admitted as a versioned bounded increment",
+    )):
+        errors.append("reshaping guidance evolution horizon contract is invalid")
 
 
 def _validate_input_evidence(root, program, errors):
@@ -478,9 +536,259 @@ def _validate_four_surface_mapping(increment, criterion_ids, errors):
             errors.append("increment.fourSurfaceMapping.goalMode pauseOnlyFor is invalid")
 
 
+def _semantic_version_precedence(value):
+    match = RELEASE_RE.fullmatch(value) if isinstance(value, str) else None
+    if match is None:
+        return None
+    major, minor, patch, prerelease, _build = match.groups()
+    identifiers = tuple(
+        (0, int(item)) if item.isdigit() else (1, item)
+        for item in prerelease.split(".")
+    ) if prerelease is not None else ()
+    return (
+        int(major), int(minor), int(patch),
+        1 if prerelease is None else 0, identifiers,
+    )
+
+
+def _historical_snapshot_nodes(root, current):
+    revisions = _bounded_git_bytes(
+        root, ["log", "--first-parent", "--format=%H", "--", "product/program.json"]
+    ).decode("ascii").splitlines()
+    requests = b"".join(
+        f"{revision}:product/program.json\n".encode("ascii") for revision in revisions
+    )
+    batch = _bounded_git_bytes(
+        root, ["cat-file", "--batch"], 67_108_864, requests,
+    )
+    nodes, offset = [], 0
+    for revision in revisions:
+        end = batch.find(b"\n", offset)
+        header = batch[offset:end].split()
+        if end < 0 or len(header) != 3 or header[1] != b"blob":
+            raise ValueError("invalid Git batch header")
+        size = int(header[2])
+        offset = end + 1
+        content = batch[offset:offset + size]
+        offset += size + 1
+        if len(content) != size or batch[offset - 1:offset] != b"\n":
+            raise ValueError("invalid Git batch body")
+        if b'"closeoutSnapshot"' not in content:
+            continue
+        historical = _strict_json_object(content)
+        increment = historical.get("increment")
+        node = increment.get("closeoutSnapshot") \
+            if isinstance(increment, dict) else None
+        if node is not None and node != current:
+            nodes.append((revision, node))
+    if offset != len(batch):
+        raise ValueError("unexpected Git batch suffix")
+    return nodes
+
+
+def _validate_closeout_snapshot(
+    root, program, acceptance, criterion_ids, evaluation_digest, errors,
+):
+    increment = program.get("increment", {})
+    value = increment.get("closeoutSnapshot")
+    fields = set((
+        "schema id stage state revisionBinding predecessorSnapshotRef authorityRefs "
+        "surfaceRefs evidenceRefs evidenceCutoff invalidationTriggerRefs "
+        "acceptanceTransition evaluationContractSha256 closedGateId nextGateId "
+        "claimCeilingRef unknownsRef"
+    ).split())
+    if not isinstance(value, dict) or set(value) != fields:
+        errors.append("increment.closeoutSnapshot shape is invalid")
+        return
+    if value.get("schema") != "yiyuan-accord-stage-closeout-snapshot/v1" or value.get(
+        "id"
+    ) != f"stage.{program.get('distributionVersion')}.{value.get('stage')}.closed":
+        errors.append("increment.closeoutSnapshot schema is invalid")
+    _require_texts(
+        value, ("id", "stage", "state", "closedGateId",
+                "claimCeilingRef", "unknownsRef"),
+        "increment.closeoutSnapshot", errors,
+    )
+    binding = value.get("revisionBinding")
+    if binding != {
+        "kind": "containing-git-commit",
+        "selfLocator": "product/program.json#/increment/closeoutSnapshot",
+        "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object.",
+    }:
+        errors.append("increment.closeoutSnapshot revision binding is invalid")
+    if value.get("authorityRefs") != list(AUTHORITY_BOOTSTRAP):
+        errors.append("increment.closeoutSnapshot authority references are invalid")
+    if value.get("surfaceRefs") != {
+        "baseline": "product/reshaping-guidance.json#/wholeSystemBalanceReview",
+        "plan": "product/program.json#/increment/fourSurfaceMapping/plan",
+        "process": "product/program.json#/increment/fourSurfaceMapping/process",
+        "acceptance": "product/acceptance.json",
+        "goalProjection": "product/program.json#/goalModePrompt",
+    }:
+        errors.append("increment.closeoutSnapshot surface references are invalid")
+    gates = program.get("releaseProcedure", {}).get("orderedGates", [])
+    gate_ids = [item.get("id") for item in gates if isinstance(item, dict)]
+    closed = value.get("closedGateId")
+    try:
+        closed_index = gate_ids.index(closed)
+    except ValueError:
+        closed_index = -1
+    if value.get("evidenceRefs") != [
+        "product/program.json#/inputEvidence",
+        "product/acceptance.json#/criteria",
+        GOLDEN_TASKS_FILE,
+        f"product/program.json#/releaseProcedure/orderedGates/{closed_index}",
+    ]:
+        errors.append("increment.closeoutSnapshot evidence references are invalid")
+    cutoff = value.get("evidenceCutoff")
+    if cutoff != {
+        "kind": "containing-git-commit",
+        "rule": "Only evidenceRefs resolved inside the immutable containing commit belong to this snapshot; later repository or task-time facts require a successor node.",
+    }:
+        errors.append("increment.closeoutSnapshot evidence cutoff is invalid")
+    if value.get("invalidationTriggerRefs") != [
+        "product/constitution.json#/evolutionPolicy/feedbackRule",
+        "product/program.json#/goalModePrompt/refreshTriggers",
+        "product/program.json#/processLossControl/correctionRule",
+    ]:
+        errors.append("increment.closeoutSnapshot invalidation triggers are invalid")
+    transition = value.get("acceptanceTransition")
+    if not isinstance(transition, dict) or set(transition) != {
+        "kind", "rationaleRef", "affectedCriterionIds", "replayRef",
+    } or transition.get("kind") not in {
+        "snapshot-bootstrap", "unchanged", "changed",
+    } or transition.get("rationaleRef") != (
+        "product/program.json#/increment/fourSurfaceMapping/plan"
+    ) or transition.get("replayRef") != (
+        "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
+    ):
+        errors.append("increment.closeoutSnapshot acceptance transition is invalid")
+    predecessor = value.get("predecessorSnapshotRef")
+    kind = transition.get("kind") if isinstance(transition, dict) else None
+    actual_affected = None
+    predecessor_match = re.fullmatch(
+        r"([0-9a-f]{40}):product/program\.json#/increment/closeoutSnapshot",
+        predecessor or "",
+    )
+    if (predecessor is None) != (kind == "snapshot-bootstrap") or (
+        predecessor is not None and predecessor_match is None
+    ):
+        errors.append("increment.closeoutSnapshot predecessor is invalid")
+    try:
+        historical_nodes = _historical_snapshot_nodes(root, value)
+    except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+        historical_nodes = None
+        errors.append("increment.closeoutSnapshot predecessor lineage is unavailable")
+    if kind == "snapshot-bootstrap":
+        if historical_nodes:
+            errors.append("increment.closeoutSnapshot bootstrap breaks predecessor lineage")
+    elif predecessor_match is not None:
+        revision = predecessor_match.group(1)
+        latest_revision = historical_nodes[0][0] if historical_nodes else None
+        if revision != latest_revision:
+            errors.append("increment.closeoutSnapshot predecessor is not latest accepted snapshot")
+            prior_program, prior_acceptance, prior_golden = {}, {}, {}
+        else:
+            try:
+                prior_program = _strict_json_object(_bounded_git_bytes(
+                    root, ["show", "--end-of-options", f"{revision}:product/program.json"]
+                ))
+                prior_acceptance = _strict_json_object(_bounded_git_bytes(
+                    root, ["show", "--end-of-options", f"{revision}:product/acceptance.json"]
+                ))
+                prior_golden = _strict_json_object(_bounded_git_bytes(
+                    root, ["show", "--end-of-options", f"{revision}:{GOLDEN_TASKS_FILE}"]
+                ))
+            except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+                prior_program, prior_acceptance, prior_golden = {}, {}, {}
+        prior_increment = prior_program.get("increment") \
+            if isinstance(prior_program, dict) else None
+        prior = prior_increment.get("closeoutSnapshot") \
+            if isinstance(prior_increment, dict) else None
+        prior_binding = prior.get("revisionBinding") if isinstance(prior, dict) else None
+        prior_gates = prior_program.get("releaseProcedure", {}).get("orderedGates", []) \
+            if isinstance(prior_program.get("releaseProcedure"), dict) else []
+        prior_gate_ids = [item.get("id") for item in prior_gates if isinstance(item, dict)]
+        prior_closed = prior.get("closedGateId") if isinstance(prior, dict) else None
+        try:
+            prior_index = prior_gate_ids.index(prior_closed)
+        except ValueError:
+            prior_index = -1
+        prior_next = prior_gate_ids[prior_index + 1] \
+            if 0 <= prior_index < len(prior_gate_ids) - 1 else None
+        try:
+            prior_evaluation = representative_contract_sha256(prior_acceptance, prior_golden)
+        except (AttributeError, TypeError, ValueError):
+            prior_evaluation = None
+        prior_distribution = prior_program.get("distributionVersion")
+        current_distribution = program.get("distributionVersion")
+        same_distribution = prior_distribution == current_distribution
+        prior_precedence = _semantic_version_precedence(prior_distribution)
+        current_precedence = _semantic_version_precedence(current_distribution)
+        gate_transition = (
+            prior.get("closedGateId") == value.get("closedGateId")
+            or prior.get("nextGateId") == value.get("closedGateId")
+        ) if same_distribution and isinstance(prior, dict) else (
+            isinstance(prior, dict) and prior.get("nextGateId") is None
+            and closed_index == 0 and prior_precedence is not None
+            and current_precedence is not None and current_precedence > prior_precedence
+        )
+        if not isinstance(prior, dict) or prior.get("state") != "closed" \
+                or not gate_transition or not isinstance(prior_binding, dict) \
+                or prior_binding.get("selfLocator") != (
+            "product/program.json#/increment/closeoutSnapshot"
+        ) or prior_index < 0 or prior.get("nextGateId") != prior_next \
+                or prior.get("evaluationContractSha256") != prior_evaluation:
+            errors.append("increment.closeoutSnapshot predecessor cannot be resolved")
+        elif kind == "unchanged" and prior.get(
+            "evaluationContractSha256"
+        ) != evaluation_digest:
+            errors.append("increment.closeoutSnapshot unchanged contract drifted")
+        prior_items = prior_acceptance.get("criteria") \
+            if isinstance(prior_acceptance, dict) else None
+        current_items = acceptance.get("criteria") if isinstance(acceptance, dict) else None
+        if isinstance(prior_items, list) and isinstance(current_items, list) and all(
+            isinstance(item, dict) and _nonempty_string(item.get("id"))
+            for item in prior_items + current_items
+        ):
+            old = {item["id"]: item for item in prior_items}
+            new = {item["id"]: item for item in current_items}
+            actual_affected = {
+                item_id for item_id in set(old) | set(new) if old.get(item_id) != new.get(item_id)
+            }
+            old_global, new_global = dict(prior_acceptance), dict(acceptance)
+            old_global.pop("criteria", None)
+            new_global.pop("criteria", None)
+            if old_global != new_global:
+                actual_affected.update(set(old) | set(new))
+        else:
+            errors.append("increment.closeoutSnapshot predecessor acceptance is invalid")
+    affected_list = _string_list(transition.get("affectedCriterionIds")) \
+        if isinstance(transition, dict) else None
+    affected = set(affected_list or ())
+    if affected_list is None or (
+        kind == "snapshot-bootstrap" and affected != criterion_ids
+    ) or (kind == "unchanged" and affected) or (kind == "changed" and not affected) or (
+        kind in {"unchanged", "changed"} and actual_affected is not None
+        and affected != actual_affected
+    ):
+        errors.append("increment.closeoutSnapshot affected criteria are invalid")
+    if value.get("evaluationContractSha256") != evaluation_digest:
+        errors.append("increment.closeoutSnapshot evaluation contract drifted")
+    if value.get("claimCeilingRef") != "product/acceptance.json#/claimCeiling" or value.get(
+        "unknownsRef"
+    ) != "product/program.json#/increment/hostCapabilityRefresh/unknowns":
+        errors.append("increment.closeoutSnapshot claim and unknown references are invalid")
+    expected_next = gate_ids[closed_index + 1] \
+        if 0 <= closed_index < len(gate_ids) - 1 else None
+    if value.get("state") != "closed" or value.get("stage") != closed \
+            or closed_index < 0 or value.get("nextGateId") != expected_next:
+        errors.append("increment.closeoutSnapshot gate transition is invalid")
+
+
 def _validate_program(
-    root, program, criterion_ids, all_contract_ids, identity, authority,
-    goal_digest, required_task_ids, errors,
+    root, program, acceptance, criterion_ids, all_contract_ids, identity, authority,
+    goal_digest, required_task_ids, evaluation_digest, errors,
 ):
     if program.get("schema") != 3:
         errors.append("program.schema must be 3")
@@ -525,6 +833,9 @@ def _validate_program(
             ):
                 errors.append(f"increment.workItems[{index}].acceptanceIds is invalid")
             errors.extend(closeout_sequence_errors(item, set(criterion_ids)))
+        _validate_closeout_snapshot(
+            root, program, acceptance, set(criterion_ids), evaluation_digest, errors,
+        )
 
     prompt = program.get("goalModePrompt")
     errors.extend(release_procedure_errors(
@@ -570,6 +881,30 @@ def _validate_program(
     if not isinstance(process, dict):
         errors.append("program.processLossControl must be an object")
     else:
+        _require_texts(
+            process,
+            ("currentStageRule", "stageSnapshotState", "stageSnapshotRule",
+             "evolutionHorizonRule", "continuingCalibration"),
+            "program.processLossControl", errors,
+        )
+        if process.get("stageSnapshotState") != (
+            "latest-closed-stage-snapshot-prepared-for-containing-commit-binding"
+        ) or not _contains_markers(process.get("currentStageRule"), (
+            "current stage", "owns current execution",
+            "cannot silently enter its release scope", "borrow its evidence",
+        )) or not _contains_markers(process.get("stageSnapshotRule"), (
+            "versioned stage projections", "containing-git-commit",
+            "exact external locator", "successor cites", "Git preserves",
+            "terminal release gate", "new ordered cycle", "never self-attests",
+        )) or not _contains_markers(process.get("evolutionHorizonRule"), (
+            "recomputed on demand", "whole-project panorama",
+            "latest accepted stage snapshot", "fresh user, host and environment facts",
+            "maintenance and health", "iteration", "updates", "bounded refactoring",
+            "host adaptation", "retirement or replacement",
+            "later outcome-driven development", "non-authoritative non-commitment",
+            "next bounded increment",
+        )):
+            errors.append("program stage snapshot and evolution horizon rules are invalid")
         for field in (
             "maxActiveIncrements",
             "maxActiveWorkItems",
@@ -832,13 +1167,20 @@ def _validate_acceptance(
             not isinstance(evaluation_history, list) or not evaluation_history
             or any(
                 not isinstance(item, dict)
-                or set(item) != {"kind", "sha256", "preservedTaskIds", "reason"}
+                or set(item) not in (
+                    {"kind", "sha256", "preservedTaskIds", "reason"},
+                    {"kind", "sha256", "sourceRevision", "preservedTaskIds", "reason"},
+                )
                 or item.get("kind") != "scoped-evaluation-contract-supersession"
                 or not isinstance(item.get("sha256"), str)
                 or not SHA256_RE.fullmatch(item["sha256"])
                 or not _string_list(item.get("preservedTaskIds"))
                 or not set(item["preservedTaskIds"]).issubset(set(task_mappings))
                 or not _nonempty_string(item.get("reason"))
+                or "sourceRevision" in item and (
+                    not isinstance(item["sourceRevision"], str)
+                    or not REVISION_RE.fullmatch(item["sourceRevision"])
+                )
                 for item in evaluation_history
             )
             or not evaluation_contract_history_valid(representative_policy)
@@ -1035,6 +1377,7 @@ def verify_product(root):
     constitution = _read_json(root, AUTHORITY_BOOTSTRAP[0], errors)
     program = _read_json(root, AUTHORITY_BOOTSTRAP[1], errors)
     acceptance = _read_json(root, AUTHORITY_BOOTSTRAP[2], errors)
+    _validate_stage_guidance(_read_json(root, GUIDANCE_FILE, errors), errors)
 
     authority_product_id = constitution.get("productId")
     product_ids = {
@@ -1088,10 +1431,11 @@ def verify_product(root):
     )
     all_ids = kernel_host_lesson_ids | set(criterion_ids)
     _validate_program(
-        root, program, criterion_ids, all_ids, identity,
+        root, program, acceptance, criterion_ids, all_ids, identity,
         constitution.get("authority"),
         acceptance.get("canonicalGoalObjectiveSha256"),
-        required_release_task_ids, errors,
+        required_release_task_ids,
+        representative_contract_sha256(acceptance, golden_suite), errors,
     )
     maintenance_plan = program.get("maintenancePlan")
     release_notes = acceptance.get("publicRelease", {}).get("releaseNotes")
@@ -1148,7 +1492,7 @@ def verify_product(root):
     errors.extend(repository_file_errors)
     errors.extend(
         projection_evidence_binding_errors(
-            root, acceptance, host_reports, _read_json
+            root, acceptance, host_reports, _read_json, promotion_lanes
         )
     )
     errors.extend(

@@ -1124,6 +1124,7 @@
           "kind": "model-result-slice",
           "taskId": "GT-16",
           "sha256": "d4db5cade684fc0ebed120992bd3cfab2335b3009c8262884571cdd904f38d66",
+          "valueSha256": "6d8b2e5d95def87f726d081783793b03850ba0c85ebe4ac9bea46607eb6f0bca",
           "value": {
             "taskId": "GT-16",
             "replayKind": "corrected-replay-after-retained-behavior-failure",

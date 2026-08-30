@@ -1514,6 +1514,8 @@ def _gt16_retained_failure_bundle(payload, task, cleanup):
         if isinstance(model_value, dict) else None
     corrected_sha = model_result.get("sha256") \
         if isinstance(model_result, dict) else None
+    value_sha = model_result.get("valueSha256") \
+        if isinstance(model_result, dict) else None
     assistant_messages = [
         message for message in payload.get("messages", [])
         if isinstance(message, dict) and message.get("role") == "assistant"
@@ -1597,16 +1599,18 @@ def _gt16_retained_failure_bundle(payload, task, cleanup):
             "cleanupObserved": True,
         }
         and corrected_sha != original_record["sha256"]
-        and _exact(model_result, ("kind", "taskId", "sha256", "value"),
-                   ("kind", "taskId", "sha256"))
+        and _exact(model_result, (
+            "kind", "taskId", "sha256", "valueSha256", "value",
+        ), ("kind", "taskId", "sha256", "valueSha256"))
         and model_result["kind"] == "model-result-slice"
         and model_result["taskId"] == "GT-16"
         and re.fullmatch(r"[0-9a-f]{64}", corrected_sha or "") is not None
-        and model_result["sha256"] == _digest(model_value)
+        and isinstance(model_value, dict)
+        and re.fullmatch(r"[0-9a-f]{64}", value_sha or "") is not None
+        and value_sha == _digest(model_value)
         and assistant_value == model_value
         and assistant_raw is not None
-        and sha256(assistant_raw).hexdigest() == corrected_sha
-        and isinstance(model_value, dict)
+        and sha256(assistant_raw).hexdigest() == value_sha
         and model_value.get("taskId") == "GT-16"
         and model_value.get("replayKind")
         == "corrected-replay-after-retained-behavior-failure"
@@ -1762,10 +1766,10 @@ _CANDIDATE_RULE_INSERTION = (
     "changes."
 )
 _EXPECTED_EVALUATION_CONTRACT_HISTORY_SHA256 = (
-    "4db2e196edefcd281c501991770fc2e4d9a8ae50f3eda6a182c8156b7fbb6804"
+    "0c680620a4789bc72d93df6b10d61ee017475699fc911a690d5a84b7b58e70dd"
 )
 _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256 = (
-    "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415"
+    "d459d9c43349173b8db5fdf61f2a1cf04b3831bb1e3a496c5842fdda9dd0144e"
 )
 
 
@@ -1851,12 +1855,19 @@ def _evaluation_contracts(policy, task_id, current):
         return None
     for item in history:
         preserved = item.get("preservedTaskIds") if isinstance(item, dict) else None
+        source_revision = item.get("sourceRevision") if isinstance(item, dict) else None
+        fields = ("kind", "sha256", "preservedTaskIds", "reason") + (
+            ("sourceRevision",) if source_revision is not None else ()
+        )
         if (
-            not _exact(item, ("kind", "sha256", "preservedTaskIds", "reason"),
-                       ("sha256", "reason"))
+            not _exact(item, fields, ("sha256", "reason") + (
+                ("sourceRevision",) if source_revision is not None else ()
+            ))
             or item["kind"] != "scoped-evaluation-contract-supersession"
             or re.fullmatch(r"[0-9a-f]{64}", item["sha256"]) is None
             or _string_set(preserved) is None or not preserved
+            or source_revision is not None
+            and re.fullmatch(r"[0-9a-f]{40}", source_revision) is None
         ):
             return None
         if (
@@ -1875,6 +1886,31 @@ def evaluation_contract_history_valid(policy):
     ) is not None
 
 
+def _historical_evaluation_contract(root, policy, task_id, current, target):
+    admitted = _evaluation_contracts(policy, task_id, current)
+    history = policy.get("evaluationContractHistory") if isinstance(policy, dict) else []
+    matches = [
+        item for item in history if isinstance(item, dict)
+        and item.get("sha256") == target and task_id in item.get("preservedTaskIds", [])
+        and isinstance(item.get("sourceRevision"), str)
+    ]
+    if admitted is None or target not in admitted or len(matches) != 1:
+        return None
+    revision = matches[0]["sourceRevision"]
+    try:
+        _bounded_git_bytes(root, ["merge-base", "--is-ancestor", revision, "HEAD"], 1)
+        acceptance = _strict_json_object(_bounded_git_bytes(
+            root, ["show", "--end-of-options", f"{revision}:product/acceptance.json"]
+        ))
+        golden = _strict_json_object(_bounded_git_bytes(
+            root, ["show", "--end-of-options", f"{revision}:evals/golden-tasks.json"]
+        ))
+    except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+        return None
+    return (acceptance, golden) \
+        if representative_contract_sha256(acceptance, golden) == target else None
+
+
 def _source_amendments(
     root, record, task, task_digest, captured_at, current_contract=None,
 ):
@@ -1882,10 +1918,14 @@ def _source_amendments(
     if amendments is None:
         if current_contract is None:
             return True
-        return (isinstance(record, dict)
-                and isinstance(current_contract, tuple)
-                and len(current_contract) == 3
-                and record.get("evaluationContractSha256") == current_contract[2])
+        if not isinstance(record, dict) or not isinstance(current_contract, tuple) \
+                or len(current_contract) != 3:
+            return False
+        acceptance, _, current = current_contract
+        admitted = _evaluation_contracts(
+            acceptance.get("representativeBehaviorPolicy", {}), task.get("id"), current,
+        ) if isinstance(acceptance, dict) else None
+        return admitted is not None and record.get("evaluationContractSha256") in admitted
     if (not isinstance(amendments, list) or not amendments
             or any(not isinstance(a, dict) for a in amendments)):
         return False
@@ -1929,12 +1969,20 @@ def _source_amendments(
                 != amendment.get("priorEvaluationContractSha256")):
             return False
         current_acceptance, current_golden, current_evaluation = current_tuple
+        corrected_evaluation = amendment.get("correctedEvaluationContractSha256")
+        delta_contract = (current_acceptance, current_golden)
+        if corrected_evaluation != current_evaluation:
+            delta_contract = _historical_evaluation_contract(
+                root, current_acceptance.get("representativeBehaviorPolicy"),
+                task.get("id"), current_evaluation, corrected_evaluation,
+            )
+            if delta_contract is None:
+                return False
         if not _candidate_evaluation_delta(
             prior_acceptance, prior_golden,
             amendment.get("priorEvaluationContractSha256"),
-            current_acceptance, current_golden,
-            amendment.get("correctedEvaluationContractSha256"),
-        ) or amendment.get("correctedEvaluationContractSha256") != current_evaluation:
+            *delta_contract, corrected_evaluation,
+        ):
             return False
     else:
         return False
@@ -2027,7 +2075,7 @@ def _observation_errors(
             root, label, observation, task, projection_id, read_json,
             require_current_subject,
         )
-    errors = []
+    errors, retained_prior_failure = [], False
     if require_current_subject:
         errors.extend(_behavior_subject_revision_errors(
             root, label, observation, task
@@ -2129,6 +2177,10 @@ def _observation_errors(
         )
         if not valid:
             errors.append(f"{label} sourceEvidence[{index}] is invalid")
+        elif _gt16_retained_failure_bundle(
+            record.get("payload"), task, observation.get("cleanup")
+        ):
+            retained_prior_failure = True
 
     behaviors = observation.get("behaviorDecisions")
     required = behaviors.get("required") if isinstance(behaviors, dict) else None
@@ -2194,12 +2246,16 @@ def _observation_errors(
         or any(not _text(value) for value in claim.get("excludedClaims", []))
     ):
         errors.append(f"{label} claimLimit is invalid")
-    elif behavior_valid and (
-        claim["retainedFailure"] is not bool(failures)
-        or set(claim["excludedClaims"]) != set(failures)
-        or len(claim["excludedClaims"]) != len(failures)
-    ):
-        errors.append(f"{label} claimLimit contradicts behavior")
+    elif behavior_valid:
+        expected_exclusions = set(failures)
+        if retained_prior_failure:
+            expected_exclusions.add("the retained prior behavior failure passed")
+        if (
+            claim["retainedFailure"] is not bool(expected_exclusions)
+            or set(claim["excludedClaims"]) != expected_exclusions
+            or len(claim["excludedClaims"]) != len(expected_exclusions)
+        ):
+            errors.append(f"{label} claimLimit contradicts behavior")
     decision = observation.get("decision")
     raw_state = decision.get("state") if isinstance(decision, dict) else None
     state = raw_state if _text(raw_state) and raw_state in STATES else None
@@ -3012,6 +3068,9 @@ def frozen_gt20_21_promotion_errors(
                 for item in promotion.get("promotedRecords", [])
                 if isinstance(item, dict)}
     current_evaluation = representative_contract_sha256(acceptance, golden)
+    policy = acceptance.get("representativeBehaviorPolicy", {})
+    promotion_evaluation = promotion.get("currentEvaluationContractSha256") \
+        if isinstance(promotion, dict) else None
     successors = [
         item for item in acceptance.get("representativeBehaviorPolicy", {}).get(
             "evaluationContractHistory", []
@@ -3027,7 +3086,9 @@ def frozen_gt20_21_promotion_errors(
         set(promoted) != set(FROZEN_GT20_21_OBSERVATIONS)
         or not set(promoted) <= set(tasks) or set(entries) != set(promoted)
         or len(successors) != 1
-        or promotion.get("currentEvaluationContractSha256") != current_evaluation
+        or any(promotion_evaluation not in (
+            _evaluation_contracts(policy, task_id, current_evaluation) or set()
+        ) for task_id in promoted)
         or promotion.get("contractSupersessionSha256") != _digest(successors[0])
         or None in projections.values()
         or promotion.get("projectionIdentities") != projections
@@ -3063,7 +3124,7 @@ def frozen_gt20_21_promotion_errors(
             }
             and item.get("currentDigests") == {
                 "goldenTaskSha256": _digest(task),
-                "evaluationContractSha256": current_evaluation,
+                "evaluationContractSha256": promotion_evaluation,
             }
             and item.get("observationLocator") == locator
         )
