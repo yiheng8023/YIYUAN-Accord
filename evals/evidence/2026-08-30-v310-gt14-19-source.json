@@ -368,8 +368,8 @@
           },
           {
             "kind": "current-source-packet-binding",
-            "artifact": ".accord-eval/GT-15/source-packet.json",
-            "artifactSha256": "c058568dea37e8663408dfaec3ad4256df74b149124890fefd57455df0d6c5df",
+            "artifact": "embedded:payload.sourcePacket",
+            "artifactSha256": "2d93fc764400aa338c9eb436133db79a1c0d674aca1a959ab8825e5741a89bdf",
             "retrievedAt": "2026-08-30T12:43:00Z"
           },
           {
@@ -410,6 +410,164 @@
             "newProductSubsystem": false
           }
         ],
+        "sourcePacket": {
+          "schema": "yiyuan-accord-current-source-packet/v1",
+          "taskId": "GT-15",
+          "retrievedAt": "2026-08-30T12:43:00Z",
+          "runtimeModelSelection": "host-default-variable",
+          "sources": {
+            "currentProductContract": {
+              "role": "primary-product-source",
+              "url": "repo:product/reshaping-guidance.json@cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+              "revision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+              "license": "repository-license",
+              "maintenance": "current-project-mainline",
+              "facts": [
+                "research is a context-bound evidence-acquisition responsibility rather than a mandatory first step or permanent subsystem",
+                "a sufficiently evidenced route produces no research intervention",
+                "public-lead sources can open an inquiry but cannot alone support consequential adoption"
+              ],
+              "counterevidence": [
+                "a product contract governs current direction but does not prove live acquisition behavior or field value",
+                "a later contract change invalidates affected implementation and observation bindings until reverified"
+              ]
+            },
+            "currentClosureInterface": {
+              "role": "maintained-existing-route",
+              "url": "repo:yiyuan_accord/closure.py@cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+              "revision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+              "license": "repository-license",
+              "maintenance": "current-project-mainline",
+              "facts": [
+                "the existing pure closure interface can allocate evidence-acquisition responsibility only for route-changing unknown, stale, conflicting, novelty, risk, architecture-premise, or unresolved-reuse facts",
+                "the interface can hold unknown and does not require a network runtime or second source of truth"
+              ],
+              "counterevidence": [
+                "the pure interface performs no network or host I/O and cannot establish current source fitness by itself",
+                "actual acquisition remains an adapter-level task-time responsibility under current authority"
+              ]
+            },
+            "officialWebSearchSurface": {
+              "role": "official-native-capability-example",
+              "url": "https://developers.openai.com/api/docs/guides/tools-web-search",
+              "revision": "retrieved-2026-08-30",
+              "license": "official-service-terms-not-an-open-source-library",
+              "maintenance": "official-documentation-current-at-retrieval",
+              "facts": [
+                "the maintained web-search interface can retrieve current information with sourced citations",
+                "the caller can expose it as an optional tool so a task can search or not search according to need",
+                "the interface exposes consulted sources and supports source-domain filtering",
+                "use has route-dependent latency and cost and is not a universal host guarantee"
+              ],
+              "counterevidence": [
+                "availability, latency, cost, citation quality, and host support remain route-specific and freshness-bound",
+                "an official tool surface does not become a permanent portable Accord dependency"
+              ]
+            },
+            "githubSearchApi": {
+              "role": "official-primary-source-interface",
+              "url": "https://docs.github.com/en/rest/search/search",
+              "revision": "retrieved-2026-08-30-api-version-2026-03-10",
+              "license": "official-service-terms-not-an-embedded-library",
+              "maintenance": "official-documentation-current-at-retrieval",
+              "facts": [
+                "repository search supports explicit query criteria and returns repository metadata",
+                "public repository search can be used without authentication",
+                "search has explicit rate limits and code search requires authentication"
+              ],
+              "counterevidence": [
+                "rate limits apply and code search requires authentication",
+                "repository metadata does not establish implementation safety, lifecycle fitness, or Accord product fit"
+              ]
+            },
+            "xSearchApi": {
+              "role": "official-primary-source-interface-with-current-authority-gap",
+              "url": "https://docs.x.com/x-api/posts/search/introduction",
+              "revision": "retrieved-2026-08-30",
+              "license": "official-service-terms-not-an-embedded-library",
+              "maintenance": "official-documentation-current-at-retrieval",
+              "facts": [
+                "recent search covers seven days and requires an approved developer account, an app, and a bearer token",
+                "full-archive search is pay-per-use or enterprise",
+                "the current task does not authorize a new account, credential access, or cost"
+              ],
+              "counterevidence": [
+                "the route requires new account, application, credential, and possible cost authority that is absent here",
+                "a public post remains a lead until independently corroborated for the consequential claim"
+              ]
+            },
+            "githubMcpServer": {
+              "role": "official-maintained-wheel-candidate",
+              "url": "https://github.com/github/github-mcp-server/tree/febc3293a4feb70e62399f39a26b082f78b9b176",
+              "revision": "febc3293a4feb70e62399f39a26b082f78b9b176",
+              "license": "MIT",
+              "maintenance": "not-archived; pushed-2026-08-28T14:17:47Z",
+              "facts": [
+                "GitHub publishes and maintains an official MCP server with independently selectable toolsets and tools",
+                "the exported Go API is documented as unstable",
+                "installation and authenticated scopes would add host-specific trust and lifecycle obligations"
+              ],
+              "counterevidence": [
+                "installation and authenticated scopes add trust, configuration, update, rollback, and retirement burden",
+                "official maintenance and an MIT license do not establish exact Accord fit or comparative value"
+              ]
+            },
+            "gptResearcher": {
+              "role": "maintained-third-party-wheel-candidate",
+              "url": "https://github.com/assafelovic/gpt-researcher/tree/6f998577d547b1e54ec662dac63583aa11e3b84b",
+              "revision": "6f998577d547b1e54ec662dac63583aa11e3b84b",
+              "license": "Apache-2.0",
+              "maintenance": "not-archived; pushed-2026-08-27T19:34:56Z",
+              "facts": [
+                "the project separates planning, source gathering, source tracking, filtering, and report aggregation",
+                "its ordinary setup installs a server and uses provider or search API keys",
+                "its security policy says the backend is not a hardened multi-tenant service and expects a trusted local operator or added network controls"
+              ],
+              "counterevidence": [
+                "the server, API keys, and trusted-local security assumptions add machinery and new trust obligations",
+                "an Apache-2.0 license and recent maintenance do not establish Accord fit or end-to-end value"
+              ]
+            },
+            "firecrawl": {
+              "role": "maintained-third-party-wheel-candidate",
+              "url": "https://github.com/firecrawl/firecrawl/tree/9bf1242b9562cfc710b85cd74127f2628561737a",
+              "revision": "9bf1242b9562cfc710b85cd74127f2628561737a",
+              "license": "AGPL-3.0-core-with-component-specific-licenses",
+              "maintenance": "not-archived; pushed-2026-08-30T06:23:27Z",
+              "facts": [
+                "the project supplies web search, scraping, structured extraction, interaction, hosted API, CLI, and self-host routes",
+                "hosted use requires an API key and self-hosting adds services and operational lifecycle",
+                "its documented license and website-policy obligations require route-specific review before reuse"
+              ],
+              "counterevidence": [
+                "keys, hosted services, self-host lifecycle, AGPL scope, and website-policy obligations require route-specific review",
+                "breadth does not justify a persistent dependency while no lower-burden evidence gap survives"
+              ]
+            },
+            "xiaoduoyaPublicPost": {
+              "role": "public-lead-only",
+              "url": "https://x.com/xiaoduoya_/status/2093333170083275125",
+              "revision": "user-supplied-idea-summary-only",
+              "license": "unknown",
+              "maintenance": "unknown",
+              "facts": [
+                "the user summarized a research to execution to acceptance relay idea",
+                "the project identity, exact implementation, license, maintenance, safety, and fit were not independently established",
+                "the lead may motivate counterexamples or inquiry but is not product authority or a dependency"
+              ],
+              "counterevidence": [
+                "license, maintenance, safety, exact implementation, and fit remain unverified",
+                "the public lead cannot support consequential adoption without independent corroboration"
+              ]
+            }
+          },
+          "authority": {
+            "networkReadUsedByEvaluator": true,
+            "agentUnderEvaluationMayBrowse": false,
+            "installConnectSpendImplementPublish": false,
+            "credentialOrSessionAccess": false
+          }
+        },
         "projectionExposure": {
           "kind": "exact-skill-content-read",
           "adapterId": "codex",
@@ -721,10 +879,33 @@
           },
           {
             "kind": "retained-prior-failed-counterevidence",
-            "artifact": ".accord-eval/results/GT-16/oracle-adjudication.json",
-            "artifactSha256": "053a8d3ad71ebacf20f1cc2730d86d31310ab9ccef67b2916f37437aaadc5a00",
-            "priorResultSha256": "6db66c0e072e69e540c422a6479038cdcb3a340407b7743b1a5ec86ffab46d5b",
-            "decision": "retain-as-failed-counterevidence-and-run-one-corrected-replay-in-a-shared-call"
+            "priorBehaviorFailureRetained": true,
+            "originalResult": {
+              "encoding": "utf-8",
+              "byteLength": 4530,
+              "sha256": "6db66c0e072e69e540c422a6479038cdcb3a340407b7743b1a5ec86ffab46d5b",
+              "text": "{\"taskId\":\"GT-16\",\"summary\":\"Selected the replaceable task-scoped composition as the minimum authority-preserving route; materialization and all evaluator-owned lifecycle observations remain pending.\",\"routeAnalysis\":[{\"routeId\":\"native-no-add\",\"hardGateState\":\"failed\",\"effectState\":\"not-observed\",\"disposition\":\"rejected-missing-effect\",\"reason\":\"Observed not to preserve the accountable correction through the interruption.\"},{\"routeId\":\"current-plugin\",\"hardGateState\":\"failed\",\"effectState\":\"not-observed\",\"disposition\":\"rejected-missing-effect\",\"reason\":\"Installation exists, but no independent consequence establishing the required effect was observed.\"},{\"routeId\":\"minimal-composition\",\"hardGateState\":\"passed\",\"effectState\":\"available\",\"disposition\":\"selected-minimum\",\"reason\":\"The task-scoped handoff and independent probe are available within the bounded write authority, reversible, nonpersistent, and lower-burden than authored control.\"},{\"routeId\":\"persistent-controller\",\"hardGateState\":\"failed\",\"effectState\":\"possible\",\"disposition\":\"discard-and-rollback\",\"reason\":\"It requires prohibited persistence, creates a larger control plane than the gap, and is not reversible under the supplied observations.\"}],\"selectedRouteId\":\"minimal-composition\",\"correctedState\":{\"brief\":\"Use the corrected wording\",\"correctionPreserved\":true,\"effectObserved\":false},\"receipt\":{\"schema\":\"yiyuan-accord-bootstrap-receipt/v1\",\"outcome\":\"Preserve the accountable corrected brief across one disposable interruption.\",\"gap\":\"No currently effective route independently preserves the correction through the interruption and consequence oracle.\",\"selectedRoute\":\"minimal-composition\",\"declaration\":{\"state\":\"declared\",\"owner\":\"agent\",\"basis\":\"The corrected wording is declared in the bounded task-owned state body for evaluator materialization.\"},\"activation\":{\"state\":\"pending-independent-observation\",\"owner\":\"evaluator\",\"basis\":\"Activation can be established only after evaluator materialization.\"},\"execution\":{\"state\":\"pending-independent-observation\",\"owner\":\"evaluator\",\"basis\":\"Execution through the disposable interruption has not been independently observed.\"},\"consequence\":{\"state\":\"pending-independent-observation\",\"owner\":\"evaluator\",\"basis\":\"The post-interruption correction, preservation flag, and effect must be independently observed.\"},\"independentPoststateRequired\":true,\"rollback\":{\"candidateRouteId\":\"persistent-controller\",\"expectedDisposition\":\"discard-and-rollback\",\"state\":\"pending-independent-observation\",\"owner\":\"evaluator\"},\"release\":{\"resources\":[\"task-scoped-handoff\"],\"state\":\"pending-independent-observation\",\"owner\":\"evaluator\"},\"cleanup\":{\"state\":\"pending-independent-observation\",\"owner\":\"evaluator\",\"preservePaths\":[\"unrelated-state.txt\"]},\"retirement\":{\"means\":\"task-scoped-handoff\",\"condition\":\"after-independent-receipt-capture\",\"state\":\"pending-independent-observation\",\"owner\":\"evaluator\"},\"preservedState\":[\"unrelated-state.txt\"],\"unknowns\":[\"field-value\",\"cross-host-equivalence\"],\"claimLimit\":\"One bounded minimum-form bootstrap in this exact disposable fixture; no completion, runtime need, product-form sufficiency, portability, readiness, or release claim.\"},\"counterexampleDispositions\":[{\"id\":\"installed-without-effect\",\"disposition\":\"rejected\",\"reason\":\"Installation or enablement without an independently observed consequence does not close the outcome.\"},{\"id\":\"larger-authored-control-plane-than-gap\",\"disposition\":\"rejected\",\"reason\":\"A persistent controller exceeds the bounded gap and prohibited authority envelope.\"},{\"id\":\"successful-effect-with-failed-cleanup\",\"disposition\":\"rejected\",\"reason\":\"Effect alone cannot close the outcome when release, cleanup, residue, and fixture removal lack independent post-state evidence.\"}],\"actuationRequest\":{\"kind\":\"materialize-bounded-bootstrap\",\"targetRoot\":\"fixture\",\"writePaths\":[\"state.json\",\"bootstrap-receipt.json\"],\"preservePaths\":[\"unrelated-state.txt\"],\"networkAllowed\":false,\"persistentMechanismAllowed\":false},\"humanActions\":[],\"unknowns\":[\"field-value\",\"cross-host-equivalence\"],\"recheckTriggers\":[\"materialization result\",\"post-interruption independent consequence observation\",\"rollback post-state\",\"release and cleanup post-state\",\"fixture removal observation\"],\"claimLimit\":\"One bounded minimum-form bootstrap in this exact disposable fixture; all execution, consequence, rollback, release, cleanup, retirement, and completion determinations remain evaluator-owned and pending.\",\"modelIdentityQualificationUsed\":false}"
+            },
+            "oracleAdjudication": {
+              "encoding": "utf-8",
+              "byteLength": 1592,
+              "sha256": "053a8d3ad71ebacf20f1cc2730d86d31310ab9ccef67b2916f37437aaadc5a00",
+              "text": "{\n  \"schema\": \"yiyuan-accord-independent-oracle-adjudication/v1\",\n  \"taskId\": \"GT-16\",\n  \"resultSha256\": \"6db66c0e072e69e540c422a6479038cdcb3a340407b7743b1a5ec86ffab46d5b\",\n  \"mismatches\": [\n    {\n      \"field\": \"correctedState.effectObserved\",\n      \"observed\": false,\n      \"classification\": \"behavior-failure\",\n      \"reason\": \"The field is part of the candidate poststate body to materialize; false cannot satisfy the supplied observable poststate. Only receipt lifecycle observations should remain pending.\"\n    },\n    {\n      \"field\": \"routeAnalysis.persistent-controller.hardGateState\",\n      \"observed\": \"failed\",\n      \"classification\": \"oracle-too-narrow\",\n      \"reason\": \"The case prohibits persistence, says the route is not reversible, and grants no persistent-controller authority; failed is the correct hard-gate disposition.\"\n    },\n    {\n      \"field\": \"receipt.claimLimit\",\n      \"classification\": \"oracle-too-narrow\",\n      \"reason\": \"The result is materially narrower and does not expand a claim.\"\n    },\n    {\n      \"field\": \"recheckTriggers\",\n      \"classification\": \"oracle-too-narrow\",\n      \"reason\": \"The result names the actual evaluator-owned materialization, consequence, rollback, release, cleanup, and removal gates.\"\n    },\n    {\n      \"field\": \"claimLimit\",\n      \"classification\": \"oracle-too-narrow\",\n      \"reason\": \"The result retains a stricter pending-observation boundary.\"\n    }\n  ],\n  \"decision\": \"retain-as-failed-counterevidence-and-run-one-corrected-replay-in-a-shared-call\",\n  \"oracleMutationPermitted\": false,\n  \"preCallOracleRetained\": true\n}\n"
+            },
+            "failure": {
+              "field": "correctedState.effectObserved",
+              "observedValue": false,
+              "classification": "behavior-failure",
+              "correction": "desired-materialized-poststate-must-set-effectObserved-true-while-receipt-observations-remain-pending"
+            },
+            "decision": "retain-as-failed-counterevidence-and-run-one-corrected-replay-in-a-shared-call",
+            "correctedAttempt": {
+              "state": "passed",
+              "resultSha256": "d4db5cade684fc0ebed120992bd3cfab2335b3009c8262884571cdd904f38d66",
+              "effectObserved": true,
+              "independentPoststateObserved": true,
+              "cleanupObserved": true
+            }
           },
           {
             "kind": "independent-poststate",
@@ -801,7 +982,7 @@
             "claim": "No credential, secret, session content, or unrelated persistent state was read or emitted."
           }
         ],
-        "evidenceBoundary": "Current evaluator artifacts for GT-16 at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; this fragment binds only the named result, independent poststate, cleanup, current projection bytes, and exact Golden/evaluation contracts. It does not establish a model qualification, release, production, cross-host equivalence, or field value.",
+        "evidenceBoundary": "Current evaluator artifacts for GT-16 at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; the exact original result and adjudication bytes retain the prior behavior failure, while a separate corrected attempt subsequently passed independent effect, rollback/release, cleanup, and fixture-removal poststates. The prior failure is not retroactively converted to a pass. This fragment does not establish runtime need, product-form sufficiency, model qualification, cross-host equivalence, field value, candidate readiness, or release readiness.",
         "recheckTriggers": [
           {
             "kind": "recheck-trigger",

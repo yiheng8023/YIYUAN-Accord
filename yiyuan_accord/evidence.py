@@ -60,6 +60,31 @@ _PROVISIONAL_GT20_21_RETAINED_RECORDS = (
 _PROVISIONAL_GT20_21_LIFECYCLE_SCHEMA = (
     "yiyuan-accord-provisional-evidence-lifecycle/v2"
 )
+_FROZEN_GT20_21_PROMOTION_SCHEMA = "frozen-r3-promotion/v1"
+_FROZEN_GT20_21_SOURCE_BOUND_REVISION = (
+    "ef10100649c95ee0bb359a45ab3097a14884cf97"
+)
+_FROZEN_GT20_21_CURRENT_CONTRACT_REVISION = (
+    "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9"
+)
+_FROZEN_GT20_21_BASE_SOURCE_SHA256 = (
+    "044cf9ba000da7819c7a64c15d8c08da2f3e973596e761a7ae0182f58af45256"
+)
+_FROZEN_GT20_21_PROMOTION_SHA256 = (
+    "4047269e5c84e14da5221a837cae572608c877603df8d91a68e206cf0fdabf3a"
+)
+FROZEN_GT20_21_OBSERVATIONS = {
+    "GT-20": (
+        "evals/observations/cf1d8c9-gt20-frozen-r3-promotion.json",
+        "fca5f8a311dd3aa90596094722fd712de9fc8dee427684151b928518ffcb9ee6",
+        "GT-20-transactional-lifecycle-4c8bcc3",
+    ),
+    "GT-21": (
+        "evals/observations/cf1d8c9-gt21-frozen-r3-promotion.json",
+        "9388cc11c0d71f3a561021baaaf7259f7846bc8d3bba9265db346ee066ff26f7",
+        "GT-21-fresh-zero-history-handoff-3878968",
+    ),
+}
 
 
 def _records(value):
@@ -1290,6 +1315,110 @@ def _longitudinal_bundle(payload, task):
     ) else None
 
 
+def _embedded_research_source_packet(payload, task, captured_at):
+    if not isinstance(payload, dict):
+        return False
+    events = payload.get("materialEvents")
+    bindings = [
+        item for item in events or []
+        if isinstance(item, dict)
+        and item.get("kind") == "current-source-packet-binding"
+    ]
+    if "sourcePacket" not in payload and not bindings:
+        return True
+    packet = payload.get("sourcePacket")
+    sources = packet.get("sources") if isinstance(packet, dict) else None
+    authority = packet.get("authority") if isinstance(packet, dict) else None
+    retrieved_at = _time(packet.get("retrievedAt")) \
+        if isinstance(packet, dict) else None
+    if (
+        not _exact(packet, (
+            "schema", "taskId", "retrievedAt", "runtimeModelSelection",
+            "sources", "authority",
+        ), ("schema", "taskId", "retrievedAt", "runtimeModelSelection"))
+        or packet.get("schema") != "yiyuan-accord-current-source-packet/v1"
+        or packet.get("taskId") != task.get("id")
+        or packet.get("runtimeModelSelection") != "host-default-variable"
+        or retrieved_at is None or captured_at is None
+        or retrieved_at > captured_at
+        or not isinstance(sources, dict) or not sources
+        or not _exact(authority, (
+            "networkReadUsedByEvaluator", "agentUnderEvaluationMayBrowse",
+            "installConnectSpendImplementPublish", "credentialOrSessionAccess",
+        ))
+        or authority != {
+            "networkReadUsedByEvaluator": True,
+            "agentUnderEvaluationMayBrowse": False,
+            "installConnectSpendImplementPublish": False,
+            "credentialOrSessionAccess": False,
+        }
+        or len(bindings) != 1
+    ):
+        return False
+    allowed_roles = {
+        "primary-product-source", "maintained-existing-route",
+        "official-native-capability-example", "official-primary-source-interface",
+        "official-primary-source-interface-with-current-authority-gap",
+        "official-maintained-wheel-candidate",
+        "maintained-third-party-wheel-candidate", "public-lead-only",
+    }
+    source_urls = []
+    roles = []
+    evaluated_revision = payload.get("evaluatedRevision")
+    for source in sources.values():
+        if not _exact(source, (
+            "role", "url", "revision", "license", "maintenance", "facts",
+            "counterevidence",
+        ), ("role", "url", "revision", "license", "maintenance")):
+            return False
+        role, url = source["role"], source["url"]
+        facts, counterevidence = source["facts"], source["counterevidence"]
+        repository_match = re.fullmatch(
+            r"repo:(product/reshaping-guidance\.json|yiyuan_accord/closure\.py)@"
+            r"([0-9a-f]{40})",
+            url,
+        )
+        if (
+            role not in allowed_roles
+            or not isinstance(facts, list) or not facts
+            or not isinstance(counterevidence, list) or not counterevidence
+            or any(not _text(value) for value in (*facts, *counterevidence))
+            or len(facts) != len(set(facts))
+            or len(counterevidence) != len(set(counterevidence))
+            or not (
+                _safe_https_locator(url)
+                or repository_match is not None
+                and repository_match.group(2) == source["revision"]
+                == evaluated_revision
+            )
+            or role == "public-lead-only"
+            and (source["license"] != "unknown" or source["maintenance"] != "unknown")
+        ):
+            return False
+        roles.append(role)
+        source_urls.append(url)
+    if (
+        set(roles) != allowed_roles
+        or len(source_urls) != len(set(source_urls))
+        or sum(role == "public-lead-only" for role in roles) != 1
+    ):
+        return False
+    official_urls = {
+        item.get("url") for item in payload.get("officialSources", [])
+        if isinstance(item, dict)
+    }
+    binding = bindings[0]
+    return bool(
+        official_urls <= set(source_urls)
+        and _exact(binding, (
+            "kind", "artifact", "artifactSha256", "retrievedAt",
+        ), ("artifact", "artifactSha256", "retrievedAt"))
+        and binding["artifact"] == "embedded:payload.sourcePacket"
+        and binding["artifactSha256"] == _digest(packet)
+        and binding["retrievedAt"] == packet["retrievedAt"]
+    )
+
+
 def _publishable_payload(
     payload, task, cleanup, captured_at, projection, continuity_narratives=None,
 ):
@@ -1319,6 +1448,7 @@ def _publishable_payload(
                 for field in ("role", "phase", "text"))
         and {item.get("role") for item in messages} == {"user", "assistant"}
         and _records(payload.get("materialEvents")) and payload["materialEvents"]
+        and _embedded_research_source_packet(payload, task, captured_at)
         and (
             "report-scoped-unknowns-recheck-triggers-and-claim-limit" not in required
             or _records(triggers) and triggers and all(
@@ -1639,6 +1769,11 @@ def _observation_errors(
     projection_id, evaluation_digest, read_json, require_current_subject=False,
     current_contract=None,
 ):
+    if observation.get("evidenceClass") == "frozen-source-metadata-promotion":
+        return _frozen_gt20_21_observation_errors(
+            root, label, observation, task, projection_id, read_json,
+            require_current_subject,
+        )
     errors = []
     if require_current_subject:
         errors.extend(_behavior_subject_revision_errors(
@@ -1726,6 +1861,14 @@ def _observation_errors(
             and _publishable_payload(
                 record.get("payload"), task, observation.get("cleanup"), captured,
                 observation.get("projectionIdentity"), continuity_narratives,
+            )
+            and (
+                record_id != "GT-15-current-artifacts-cf1d8c9e"
+                or isinstance(record.get("payload"), dict)
+                and "sourcePacket" in record["payload"]
+                and _embedded_research_source_packet(
+                    record["payload"], task, captured,
+                )
             )
             and source.get("sha256") == _digest(record)
             and (not binding_contract or postcapture is not None and source.get(
@@ -1999,6 +2142,62 @@ def _provisional_package_digest(root, revision, locators):
     return digest.hexdigest()
 
 
+def _frozen_path(value, dotted_path):
+    current = value
+    for part in dotted_path.split("."):
+        if not isinstance(current, dict) or part not in current:
+            return None
+        current = current[part]
+    return current
+
+
+def _frozen_projection_identity(root, program, projection_id):
+    items = program.get("hostProjections") if isinstance(program, dict) else None
+    matches = [
+        item for item in items or []
+        if isinstance(item, dict) and item.get("id") == projection_id
+    ]
+    if len(matches) != 1:
+        return None
+    item = matches[0]
+    contract, skill, mechanisms = (
+        item.get("contract"), item.get("skill"), item.get("mechanismFiles")
+    )
+    if (
+        not _text(contract) or not _text(skill)
+        or not isinstance(mechanisms, list) or not mechanisms
+        or any(not _text(locator) for locator in mechanisms)
+    ):
+        return None
+    try:
+        mechanism_files = [
+            {
+                "locator": locator,
+                "sha256": _provisional_revision_digest(root, "HEAD", locator),
+            }
+            for locator in mechanisms
+        ]
+        mechanism_sha256 = _provisional_package_digest(
+            root, "HEAD", mechanisms
+        )
+        contract_sha256 = _provisional_revision_digest(root, "HEAD", contract)
+        skill_sha256 = _provisional_revision_digest(root, "HEAD", skill)
+    except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+        return None
+    return {
+        "adapterId": projection_id,
+        "packageId": item.get("packageId"),
+        "packageVersion": item.get("packageVersion"),
+        "packageSha256": item.get("packageSha256"),
+        "contract": contract,
+        "contractSha256": contract_sha256,
+        "skill": skill,
+        "skillSha256": skill_sha256,
+        "mechanismFiles": mechanism_files,
+        "mechanismSha256": mechanism_sha256,
+    }
+
+
 def provisional_gt20_21_source_errors(
     root, program, acceptance, golden, read_json,
 ):
@@ -2151,7 +2350,9 @@ def provisional_gt20_21_source_errors(
     bundle = read_json(root, PROVISIONAL_GT20_21_SOURCE, errors)
     contract = bundle.get("provisionalContract") if isinstance(bundle, dict) else None
     if (
-        not _exact(bundle, ("schema", "provisionalContract", "records"))
+        not _exact(bundle, (
+            "schema", "provisionalContract", "frozenPromotion", "records",
+        ))
         or bundle.get("schema") != 1
         or not _exact(contract, (
             "schema", "sourceLocator", "retainedRecords", "records",
@@ -2462,6 +2663,197 @@ def provisional_gt20_21_source_errors(
             or any(value not in exclusions for value in definition["excludedClaims"])
         ):
             errors.append(f"{label} claim ceiling is invalid")
+    return errors
+
+
+def _frozen_gt20_21_observation_errors(
+    root, label, observation, task, projection_id, read_json,
+    require_current_subject,
+):
+    admitted = FROZEN_GT20_21_OBSERVATIONS.get(task.get("id"))
+    errors = []
+    if (
+        projection_id not in {"", "codex"}
+        or admitted is None
+        or _digest(observation) != admitted[1]
+    ):
+        errors.append(f"{label} frozen promotion observation is invalid")
+    if require_current_subject:
+        errors.extend(_behavior_subject_revision_errors(
+            root, label, observation, task,
+        ))
+    return errors, "passed" if not errors else None
+
+
+def frozen_gt20_21_promotion_errors(
+    root, program, acceptance, golden, read_json,
+):
+    errors = []
+
+    def git_source(revision):
+        try:
+            data = _bounded_git_bytes(root, [
+                "show", "--end-of-options", f"{revision}:{PROVISIONAL_GT20_21_SOURCE}",
+            ], 1_048_576)
+            return data, _strict_json_object(data)
+        except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+            return b"", None
+
+    base_bytes, base = git_source(_FROZEN_GT20_21_CURRENT_CONTRACT_REVISION)
+    if (
+        not isinstance(base, dict)
+        or sha256(base_bytes).hexdigest() != _FROZEN_GT20_21_BASE_SOURCE_SHA256
+    ):
+        return ["frozen GT-20/21 base source binding is invalid"]
+    bundle = read_json(root, PROVISIONAL_GT20_21_SOURCE, errors)
+    if (
+        not isinstance(bundle, dict)
+        or set(bundle) != {"schema", "provisionalContract", "frozenPromotion", "records"}
+        or any(bundle.get(field) != base.get(field)
+               for field in ("schema", "provisionalContract", "records"))
+    ):
+        return errors + ["frozen GT-20/21 source preimage or retained attempts drifted"]
+    promotion = bundle.get("frozenPromotion")
+    if (
+        not isinstance(promotion, dict)
+        or promotion.get("schema") != _FROZEN_GT20_21_PROMOTION_SCHEMA
+        or _digest(promotion) != _FROZEN_GT20_21_PROMOTION_SHA256
+    ):
+        return errors + ["frozen GT-20/21 promotion contract is invalid"]
+    serialized = _canonical_json(promotion)
+    if (
+        "direct-host-material-events-v1" in serialized
+        or any(f'\"{field}\"' in serialized for field in (
+            "messages", "materialEvents", "observedAt", "capturedAt",
+        ))
+        or re.search(
+            r"\b(?:gpt|claude|gemini|deepseek|llama|qwen)[\s_-]*"
+            r"(?:\d|opus|sonnet|haiku|pro|flash|max|turbo)",
+            serialized, re.IGNORECASE,
+        )
+    ):
+        errors.append("frozen GT-20/21 promotion claims live, timed or model-bound behavior")
+    for revision in (
+        _FROZEN_GT20_21_SOURCE_BOUND_REVISION,
+        _FROZEN_GT20_21_CURRENT_CONTRACT_REVISION,
+    ):
+        try:
+            code = subprocess.run(
+                ["git", "-C", str(root), "merge-base", "--is-ancestor", revision, "HEAD"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            ).returncode
+        except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+            code = 1
+        if code:
+            errors.append("frozen GT-20/21 source-bound revision is not an ancestor")
+
+    program = program if isinstance(program, dict) else {}
+    acceptance = acceptance if isinstance(acceptance, dict) else {}
+    golden = golden if isinstance(golden, dict) else {}
+    tasks = {item.get("id"): item for item in golden.get("tasks", [])
+             if isinstance(item, dict) and _text(item.get("id"))}
+    entries = {item.get("taskId"): item
+               for item in base["provisionalContract"].get("records", [])
+               if isinstance(item, dict)}
+    promoted = {item.get("taskId"): item
+                for item in promotion.get("promotedRecords", [])
+                if isinstance(item, dict)}
+    current_evaluation = representative_contract_sha256(acceptance, golden)
+    successors = [
+        item for item in acceptance.get("representativeBehaviorPolicy", {}).get(
+            "evaluationContractHistory", []
+        ) if isinstance(item, dict)
+        and item.get("sha256") == _PROVISIONAL_GT20_21_EVALUATION_SHA256
+        and item.get("preservedTaskIds") == ["GT-20", "GT-21"]
+    ]
+    projections = {
+        key: _frozen_projection_identity(root, program, key)
+        for key in ("codex", "claude-code")
+    }
+    if (
+        set(promoted) != set(FROZEN_GT20_21_OBSERVATIONS)
+        or not set(promoted) <= set(tasks) or set(entries) != set(promoted)
+        or len(successors) != 1
+        or promotion.get("currentEvaluationContractSha256") != current_evaluation
+        or promotion.get("contractSupersessionSha256") != _digest(successors[0])
+        or None in projections.values()
+        or promotion.get("projectionIdentities") != projections
+    ):
+        errors.append("frozen GT-20/21 current contract binding is invalid")
+
+    _, ancestor = git_source(_FROZEN_GT20_21_SOURCE_BOUND_REVISION)
+    ancestor_records = ancestor.get("records") if isinstance(ancestor, dict) else {}
+    records = base["records"]
+    for task_id, (locator, _, record_id) in FROZEN_GT20_21_OBSERVATIONS.items():
+        task, entry, item, record = (
+            tasks.get(task_id), entries.get(task_id), promoted.get(task_id),
+            records.get(record_id),
+        )
+        if not all(isinstance(value, dict) for value in (task, entry, item, record)):
+            errors.append(f"frozen {task_id} source binding is invalid")
+            continue
+        if (
+            ancestor_records.get(record_id) != record
+            or item.get("selectedRecordId") != record_id
+            or item.get("selectedRecordSha256") != _digest(record)
+            or item.get("sourceContractEntrySha256") != _digest(entry)
+            or item.get("sourceDigests") != {
+                "goldenTaskSha256": entry.get("goldenTaskSha256"),
+                "evaluationContractSha256": entry.get("evaluationContractSha256"),
+            }
+            or item.get("currentDigests") != {
+                "goldenTaskSha256": _digest(task),
+                "evaluationContractSha256": current_evaluation,
+            }
+            or item.get("evaluatedRevision") != entry.get("evaluatedRevision")
+            or item.get("behaviorSubject") != entry.get("behaviorSubject")
+            or item.get("observationLocator") != locator
+        ):
+            errors.append(f"frozen {task_id} source or digest binding is invalid")
+        post, cleanup, claim = (
+            item["poststateBinding"], item["cleanupBinding"],
+            item["claimCeilingBinding"],
+        )
+        markers = cleanup.get("requiredMarkers")
+        if (
+            not isinstance(markers, dict)
+            or post.get("sha256") != _digest(_frozen_path(
+                record, post.get("sourcePath", "")
+            ))
+            or cleanup.get("contractSha256") != _digest(entry.get("cleanup"))
+            or cleanup.get("requiredMarkersSha256") != _digest(markers)
+            or any(_frozen_path(record, path) != value for path, value in markers.items())
+            or claim.get("sourceClaimSha256") != _digest(_frozen_path(
+                record, claim.get("sourcePath", "")
+            ))
+            or claim.get("contractSha256") != _digest(entry.get("claimCeiling"))
+        ):
+            errors.append(f"frozen {task_id} poststate, cleanup or claim binding is invalid")
+        errors.extend(_behavior_subject_revision_errors(
+            root, f"frozen {task_id}",
+            {"evaluatedRevision": item.get("evaluatedRevision")}, task,
+        ))
+        try:
+            subject = {path: _provisional_revision_digest(root, "HEAD", path)
+                       for path in task.get("behaviorSubjectFiles", [])}
+        except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+            subject = None
+        if item.get("behaviorSubject") != subject:
+            errors.append(f"frozen {task_id} behavior subject bytes drifted")
+
+    for task_id, (locator, digest, _) in FROZEN_GT20_21_OBSERVATIONS.items():
+        observation, task = read_json(root, locator, errors), tasks.get(task_id)
+        if (
+            not isinstance(observation, dict) or _digest(observation) != digest
+            or not isinstance(task, dict)
+        ):
+            errors.append(f"frozen {task_id} current observation is invalid")
+        else:
+            local, _ = _frozen_gt20_21_observation_errors(
+                root, f"frozen {task_id}", observation, task, "codex",
+                read_json, True,
+            )
+            errors.extend(local)
     return errors
 
 

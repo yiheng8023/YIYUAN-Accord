@@ -33,7 +33,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-30-v310-gt07-13-source.json",
       "recordId": "GT-12-current-artifacts-cf1d8c9e",
-      "sha256": "13a7e8d5d53d2202f2cc180bd9591836500d538959990612715f767660862d58",
+      "sha256": "33e7c0ae9bb0c6632299cf62d506e663eab915afaacb7ee3e3119c64dc532e87",
       "claim": "Current GT-12 result, exact independent poststate, cleanup, Golden Task, evaluation contract, and projection bytes only.",
       "postSessionBindingsSha256": "4de27cb134219780d02dd48cc9ed30e5c501d27aa06d583e013bf35311061a73"
     }
@@ -66,7 +66,7 @@
     {
       "kind": "structured-agent-result",
       "resultSha256": "6fc66cc704b814842d00bc72a7d051f6dd6ba4ea640413e35881243a499cc180",
-      "summary": "Zero new workers admitted. Exact exclusive task-owned instance termination is requested; shared preservation, release latency, independent post-state, and cleanup remain pending evaluator evidence."
+      "summary": "The model requested zero new admission and one exact exclusive-resource release with evaluator-owned actuation still pending at model-proposal time. The independent evaluator subsequently observed release, shared-resource preservation, bounded latency, poststate, and cleanup; the bounded attempt passed."
     }
   ],
   "observedHumanActions": [],
@@ -100,7 +100,7 @@
   "claimLimit": {
     "retainedFailure": false,
     "excludedClaims": [],
-    "statement": "One evaluator-generated disposable two-resource episode pending exact actuation and independent post-state; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness or release claim."
+    "statement": "The model proposal was pending at model-proposal stage; the independent evaluator subsequently completed the exact exclusive-resource actuation and observed shared preservation, release latency, poststate, and cleanup. This pass is limited to one evaluator-generated disposable two-resource episode; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness, or release claim."
   },
   "decision": {
     "state": "passed"

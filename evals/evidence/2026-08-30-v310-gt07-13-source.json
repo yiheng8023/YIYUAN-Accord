@@ -473,7 +473,7 @@
             "claim": "No credential, secret, raw conversation history, session log, or unrelated persistent state was read or emitted."
           }
         ],
-        "evidenceBoundary": "One exact GT-11 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim. This record does not establish a concrete model/version qualification, cross-host equivalence, candidate readiness, release, production, or field value.",
+        "evidenceBoundary": "One exact GT-11 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; the model proposal was pending at model-proposal stage; the independent evaluator subsequently completed atomic actuation, native tests, protected-byte checks, poststate, and cleanup. This pass is limited to one exact disposable repository; no cloud, client, release, deployment, publication, universal behavior, concrete model/version qualification, cross-host equivalence, candidate readiness, production, or field-value claim. The embedded assistant result retains the earlier model-proposal-stage boundary and is not itself the pass authority.",
         "recheckTriggers": [
           {
             "kind": "recheck-trigger",
@@ -726,7 +726,7 @@
             "claim": "No credential, secret, raw conversation history, session log, or unrelated persistent state was read or emitted."
           }
         ],
-        "evidenceBoundary": "One exact GT-12 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; One evaluator-generated disposable two-resource episode pending exact actuation and independent post-state; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness or release claim. This record does not establish a concrete model/version qualification, cross-host equivalence, candidate readiness, release, production, or field value.",
+        "evidenceBoundary": "One exact GT-12 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; the model proposal was pending at model-proposal stage; the independent evaluator subsequently completed the exact exclusive-resource actuation and observed shared preservation, release latency, poststate, and cleanup. This pass is limited to one evaluator-generated disposable two-resource episode; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness, release, concrete model/version qualification, production, or field-value claim. The embedded assistant result retains the earlier model-proposal-stage boundary and is not itself the pass authority.",
         "recheckTriggers": [
           {
             "kind": "recheck-trigger",
@@ -1055,7 +1055,7 @@
             "claim": "No credential, secret, raw conversation history, session log, or unrelated persistent state was read or emitted."
           }
         ],
-        "evidenceBoundary": "One exact GT-13 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; One bounded single-arm JSON closure proposal pending independent evaluator execution; no comparative value, live Hook, cross-host, production, candidate-readiness or release claim. This record does not establish a concrete model/version qualification, cross-host equivalence, candidate readiness, release, production, or field value.",
+        "evidenceBoundary": "One exact GT-13 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; the model proposal was pending at model-proposal stage; the independent evaluator subsequently completed materialization and observed the JSON consequence, protected bytes, lifecycle poststate, and cleanup. This pass is limited to one bounded single-arm JSON closure; no comparative value, live Hook, cross-host, production, candidate-readiness, release, concrete model/version qualification, or field-value claim. The embedded assistant result retains the earlier model-proposal-stage boundary and is not itself the pass authority.",
         "recheckTriggers": [
           {
             "kind": "recheck-trigger",

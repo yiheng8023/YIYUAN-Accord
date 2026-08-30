@@ -33,7 +33,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-30-v310-gt07-13-source.json",
       "recordId": "GT-13-current-artifacts-cf1d8c9e",
-      "sha256": "b2f25b0098b17712f5ff231af2f3c66dfde2d1439c389d9e1dcf21e7e1b9134a",
+      "sha256": "489f44b20d28686a87c200cadfa9abc3d82770b325f8071005861bc0a320569a",
       "claim": "Current GT-13 result, exact independent poststate, cleanup, Golden Task, evaluation contract, and projection bytes only.",
       "postSessionBindingsSha256": "1cfbd851878aecb1115e0de03273d22d3ac4979ed8d0a00fcc6754a2b5010473"
     }
@@ -68,7 +68,7 @@
     {
       "kind": "structured-agent-result",
       "resultSha256": "4e0d03a4cba970f1803e9a1b8649c43a8d914d0edc8f52b97bba88dbd4d8237c",
-      "summary": "Proposes the corrected unpublished JSON closure through the available native route; materialization, independent verification, cleanup, and fixture removal remain evaluator-owned and pending."
+      "summary": "The model proposed an unpublished corrected JSON closure with materialization still pending at model-proposal time. The independent evaluator subsequently materialized it and observed the consequence, protected bytes, lifecycle poststate, and cleanup; the bounded corrected attempt passed."
     }
   ],
   "observedHumanActions": [],
@@ -104,7 +104,7 @@
   "claimLimit": {
     "retainedFailure": false,
     "excludedClaims": [],
-    "statement": "One bounded single-arm JSON closure proposal pending independent evaluator execution; no comparative value, live Hook, cross-host, production, candidate-readiness or release claim."
+    "statement": "The model proposal was pending at model-proposal stage; the independent evaluator subsequently completed materialization and observed the JSON consequence, protected bytes, lifecycle poststate, and cleanup. This pass is limited to one bounded single-arm JSON closure; no comparative value, live Hook, cross-host, production, candidate-readiness, or release claim."
   },
   "decision": {
     "state": "passed"

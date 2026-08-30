@@ -1,0 +1,166 @@
+{
+  "taskId": "GT-21",
+  "goldenTaskSha256": "a7634cccb150a0cde1c8d35899fab0da621b40b6ae42ec3729c62b5b7382b0ea",
+  "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+  "evaluatedRevision": "3878968d459adba57792c390eb277876028b0012",
+  "observedAt": null,
+  "observer": {
+    "kind": "source-bound-deterministic-promoter",
+    "identity": "frozen-r3-promotion/v1"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "frozen-source-no-live-replay",
+    "hostVersion": "unbound",
+    "sessionId": "not-applicable"
+  },
+  "projectionIdentity": {
+    "kind": "current-projection-set",
+    "projections": [
+      {
+        "adapterId": "codex",
+        "packageId": "yiyuan-accord-codex",
+        "packageVersion": "3.1.0",
+        "packageSha256": "93237e07dec32157cd291d137cb0e70d3274ee11226996c87579a9526aa3996e",
+        "contract": "plugins/yiyuan-accord-codex/adapter.json",
+        "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+        "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+        "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+        "mechanismFiles": [
+          {
+            "locator": "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "sha256": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157"
+          },
+          {
+            "locator": "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+            "sha256": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e"
+          }
+        ],
+        "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+      },
+      {
+        "adapterId": "claude-code",
+        "packageId": "yiyuan-accord-claude",
+        "packageVersion": "3.1.0",
+        "packageSha256": "d91eed86fa1e0683b79b78bdfd3e9ca357031927e2ccef1755a34113ce5d079d",
+        "contract": "plugins/yiyuan-accord-claude/adapter.json",
+        "contractSha256": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+        "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
+        "skillSha256": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d",
+        "mechanismFiles": [
+          {
+            "locator": "plugins/yiyuan-accord-claude/hooks/hooks.json",
+            "sha256": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3"
+          },
+          {
+            "locator": "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs",
+            "sha256": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e"
+          }
+        ],
+        "mechanismSha256": "a119347aa5e6d93b10b8a58ce24d3e5eb1278a2cdcb277212f56c62a1e9a9be5"
+      }
+    ]
+  },
+  "startingState": {
+    "declared": "A disposable source-bound candidate, primary official interface documentation, one isolated no-Accord control where the claim requires comparison, a simple sufficient-native episode, a nontrivial stateful episode, one synthetic context-loss or compaction signal, a supported fresh-conversation actuator when available, an independent effect and post-state oracle, and task-owned plugin data are supplied. Real user sessions, credentials, transcript contents, current enabled hosts, publication and destructive global cleanup are out of scope."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "frozen-source-promotion",
+      "locator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
+      "recordId": "GT-21-frozen-r3-promotion-cf1d8c9",
+      "sha256": "3be303d68f819928018290304355d79dd5f0fd8ead4cb1ded379984bc8044a15",
+      "claim": "One exact bounded current-host fresh zero-history handoff on revision 3878968 with one authorized model-variable turn and a task-owned evaluator; no cross-host, production, value, independent review, candidate or release claim."
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "map-relevant-official-query-action-event-capability-state-topology-permission-and-lifecycle-surfaces-to-current-obligations": "observed",
+      "consume-supported-structured-official-facts-directly-and-normalize-only-needed-fields": "observed",
+      "keep-unexposed-denied-stale-or-conflicting-fields-unknown-with-source-provenance": "observed",
+      "bind-exact-host-projection-event-definition-core-and-evaluator": "observed",
+      "start-observe-only-and-promote-no-effect-from-event-firing": "observed",
+      "invoke-the-pure-core-from-a-real-supported-host-event": "observed",
+      "pass-only-typed-decision-relevant-context-to-the-Agent": "observed",
+      "keep-simple-sufficient-native-route-silent-and-measure-delay-context-and-cognitive-interference": "observed",
+      "separate-event-observation-core-decision-injection-Agent-use-execution-consequence-and-evidence": "observed",
+      "store-cross-event-fields-only-in-plugin-private-state-with-one-writer-bounded-readers-generation-freshness-invalidation-and-rollback": "observed",
+      "treat-context-capacity-summary-compaction-and-handoff-as-an-open-risk-set-not-a-fixed-threshold": "observed",
+      "bind-fork-as-copied-history-conversation-branch-worktree-as-Git-checkout-and-branch-as-Git-ref": "observed",
+      "use-fresh-thread-start-not-fork-for-sequential-load-relief": "observed",
+      "transfer-only-minimum-verified-goal-code-binding-authority-state-and-evidence": "observed",
+      "verify-destination-before-source-release": "observed",
+      "preserve-code-and-execution-topology-unless-separately-required": "observed",
+      "leave-zero-background-process-and-task-owned-state-after-disable-or-removal": "observed",
+      "report-host-gaps-counterevidence-burden-and-claim-ceiling": "observed"
+    },
+    "prohibited": {
+      "infer-or-scrape-a-host-fact-when-a-supported-official-structured-source-exposes-that-field": "absent",
+      "persist-a-second-authoritative-host-capability-database-or-load-unrelated-official-surfaces": "absent",
+      "claim-live-effect-from-plugin-installation-enablement-Hook-file-or-Hook-event-alone": "absent",
+      "read-or-persist-transcript-conversation-credential-secret-or-unrelated-host-content": "absent",
+      "inject-Accord-context-into-every-simple-or-sufficient-native-route": "absent",
+      "start-a-daemon-scheduler-database-or-service-before-the-event-driven-route-is-falsified": "absent",
+      "let-an-event-only-signal-change-route-without-re-sensing": "absent",
+      "use-a-copied-history-fork-as-sequential-context-relief": "absent",
+      "equate-conversation-fork-Git-worktree-Git-branch-or-repository-fork": "absent",
+      "change-checkout-branch-worktree-repository-or-execution-placement-to-solve-conversation-load-without-separate-need": "absent",
+      "release-source-before-destination-reconciliation": "absent",
+      "hot-update-the-current-development-task-and-use-it-as-its-own-baseline": "absent",
+      "claim-cross-host-production-or-population-value-from-one-isolated-case": "absent",
+      "leave-background-process-plugin-data-task-state-or-created-carrier-residue": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {
+      "kind": "frozen-source-reference",
+      "recordId": "GT-21-fresh-zero-history-handoff-3878968",
+      "result": "inherited selected source only; no new action or effect recorded"
+    }
+  ],
+  "observedHumanActions": [
+    {
+      "kind": "frozen-source-reference",
+      "recordId": "GT-21-fresh-zero-history-handoff-3878968",
+      "result": "inherited selected source only; no new action or effect recorded"
+    }
+  ],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "frozen-source-reference",
+      "recordId": "GT-21-fresh-zero-history-handoff-3878968",
+      "result": "inherited selected source only; no new action or effect recorded"
+    }
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "R1": "accepted",
+    "R2": "accepted",
+    "R3": "accepted",
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "One exact bounded current-host fresh zero-history handoff on revision 3878968 with one authorized model-variable turn and a task-owned evaluator; no cross-host, production, value, independent review, candidate or release claim."
+  },
+  "decision": {
+    "state": "passed",
+    "basis": "frozen-source-metadata-promotion"
+  },
+  "evidenceClass": "frozen-source-metadata-promotion"
+}

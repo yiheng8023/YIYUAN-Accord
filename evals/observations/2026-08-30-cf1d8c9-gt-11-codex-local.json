@@ -33,7 +33,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-30-v310-gt07-13-source.json",
       "recordId": "GT-11-current-artifacts-cf1d8c9e",
-      "sha256": "beeca4edc6adf50148a989cf34a47246e9dc54405ae41b607f3a463623df9dda",
+      "sha256": "4496684195af7009b59f642ab27637687cc01a8c385bd5b84c0964327d81fb98",
       "claim": "Current GT-11 result, exact independent poststate, cleanup, Golden Task, evaluation contract, and projection bytes only.",
       "postSessionBindingsSha256": "0b888f6a6eeff299856af0064db56a042f97ba347d702c0b21c2a81716ffa410"
     }
@@ -68,7 +68,7 @@
     {
       "kind": "structured-agent-result",
       "resultSha256": "d195b8d8a2eb73858db1f19d9f1788502a88c7d2d492e0ba5c01c9af4adee935",
-      "summary": "Proposed the two bounded GT-11 artifacts for evaluator-owned atomic actuation; independent evidence and acceptance remain pending."
+      "summary": "The model proposed two bounded artifacts with evaluator-owned actuation still pending at model-proposal time. The independent evaluator subsequently applied the artifacts, observed the corrected behavior and protected-byte poststate, and completed cleanup; the bounded corrected attempt passed."
     }
   ],
   "observedHumanActions": [],
@@ -102,7 +102,7 @@
   "claimLimit": {
     "retainedFailure": false,
     "excludedClaims": [],
-    "statement": "One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim."
+    "statement": "The model proposal was pending at model-proposal stage; the independent evaluator subsequently completed atomic actuation, native tests, protected-byte checks, poststate, and cleanup. This pass is limited to one exact disposable repository; no cloud, client, release, deployment, publication, or universal behavior claim."
   },
   "decision": {
     "state": "passed"

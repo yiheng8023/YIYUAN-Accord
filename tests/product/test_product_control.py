@@ -20,6 +20,7 @@ from yiyuan_accord.evidence import (
     _sequence_digest,
     _source_amendments,
     _time,
+    frozen_gt20_21_promotion_errors,
     provisional_gt20_21_source_errors,
     representative_contract_sha256,
     representative_sample_errors,
@@ -47,6 +48,10 @@ CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-lo
 CURRENT_GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json'
 CURRENT_GT17_OBSERVATION = 'evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json'
 PROVISIONAL_GT20_21_SOURCE = 'evals/evidence/2026-08-30-v310-gt20-21-source.json'
+FROZEN_GT20_21_OBSERVATIONS = (
+    'evals/observations/cf1d8c9-gt20-frozen-r3-promotion.json',
+    'evals/observations/cf1d8c9-gt21-frozen-r3-promotion.json',
+)
 SRC310 = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
 OBS11 = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json'
 OBS13 = 'evals/observations/2026-08-28-f182a0a-gt-13-codex-local.json'
@@ -122,6 +127,7 @@ def _provisional_fixture():
             A,
             G,
             PROVISIONAL_GT20_21_SOURCE,
+            *FROZEN_GT20_21_OBSERVATIONS,
         ):
             shutil.copy2(ROOT / locator, target / locator)
         yield target
@@ -1154,6 +1160,56 @@ class ProductControlTests(unittest.TestCase):
                 'provisional GT-21 source Golden Task digest is not admitted',
                 'provisional GT-21 source evaluation contract digest is not admitted',
             )
+
+    def test_frozen_gt20_21_promotion_is_exact_and_fail_closed(self):
+        def errors(root):
+            return frozen_gt20_21_promotion_errors(
+                root, _read(root, P), _read(root, A), _read(root, G),
+                lambda base, locator, _: _read(base, locator),
+            )
+
+        def replace(value, path, replacement):
+            for part in path[:-1]:
+                value = value[part]
+            value[path[-1]] = replacement
+
+        cases = (
+            ('subject drift', ('frozenPromotion', 'promotedRecords', 0,
+                               'behaviorSubject'), {}),
+            ('record drift', ('records',
+                              'GT-20-transactional-lifecycle-4c8bcc3',
+                              'claimLimit'), 'drift'),
+            ('marker omission', ('frozenPromotion', 'promotedRecords', 0,
+                                 'cleanupBinding', 'requiredMarkers'), {}),
+            ('claim expansion', ('frozenPromotion', 'claimCeiling',
+                                 'liveBehaviorClaimed'), True),
+            ('current digest', ('frozenPromotion',
+                                'currentEvaluationContractSha256'), '0' * 64),
+            ('non-ancestor', ('frozenPromotion',
+                              'sourceBoundAncestorRevision'), '0' * 40),
+            ('live masquerade', ('frozenPromotion', 'schema'),
+             'direct-host-material-events-v1'),
+            ('unselected attempt', ('frozenPromotion', 'nonPromotedAttempts',
+                                    0, 'disposition'), 'promoted'),
+        )
+        with _provisional_fixture() as root:
+            original = _read(root, PROVISIONAL_GT20_21_SOURCE)
+            self.assertEqual(errors(root), [])
+            for name, path, replacement in cases:
+                with self.subTest(name=name):
+                    source = json.loads(json.dumps(original))
+                    replace(source, path, replacement)
+                    _write(root, PROVISIONAL_GT20_21_SOURCE, source)
+                    self.assertTrue(errors(root))
+            _write(root, PROVISIONAL_GT20_21_SOURCE, original)
+            for field, value in (
+                ('observedAt', '2026-08-30T00:00:00Z'),
+                ('hostIdentity', {'hostProduct': 'gpt-9'}),
+            ):
+                observation = _read(ROOT, FROZEN_GT20_21_OBSERVATIONS[0])
+                observation[field] = value
+                _write(root, FROZEN_GT20_21_OBSERVATIONS[0], observation)
+                self.assertTrue(errors(root))
 
     def test_reacceptance_projects_current_stage_without_model_binding(self):
         program = _read(ROOT, P)
@@ -2963,6 +3019,88 @@ class ProductControlTests(unittest.TestCase):
                 _write(root, locator, observation)
                 _rehash(root, locator)
                 self.assert_has(_errors(root), error)
+
+    def test_gt15_embedded_source_packet_is_self_contained_and_fail_closed(self):
+        source_locator = (
+            'evals/evidence/2026-08-30-v310-gt14-19-source.json'
+        )
+        observation_locator = (
+            'evals/observations/'
+            '2026-08-30-cf1d8c9-gt-15-codex-local.json'
+        )
+        record_id = 'GT-15-current-artifacts-cf1d8c9e'
+        bundle = _read(ROOT, source_locator)
+        record = bundle['records'][record_id]
+        payload = record['payload']
+        task = next(
+            item for item in _read(ROOT, G)['tasks'] if item['id'] == 'GT-15'
+        )
+        observation = _read(ROOT, observation_locator)
+        publishable_args = (
+            task, observation['cleanup'], _time(record['capturedAt']),
+            observation['projectionIdentity'],
+        )
+        self.assertTrue(_publishable_payload(payload, *publishable_args))
+
+        packet = payload['sourcePacket']
+        binding = next(
+            item for item in payload['materialEvents']
+            if item['kind'] == 'current-source-packet-binding'
+        )
+        self.assertEqual(binding['artifact'], 'embedded:payload.sourcePacket')
+        self.assertEqual(binding['artifactSha256'], _digest(packet))
+        self.assertEqual(packet['runtimeModelSelection'], 'host-default-variable')
+        self.assertTrue(all(
+            source['facts'] and source['counterevidence']
+            and source['role'] and source['license'] and source['maintenance']
+            for source in packet['sources'].values()
+        ))
+
+        mutations = (
+            lambda value: value.pop('sourcePacket'),
+            lambda value: value['sourcePacket'].__setitem__(
+                'runtimeModelSelection', 'concrete-model-version',
+            ),
+            lambda value: next(iter(value['sourcePacket']['sources'].values()))[
+                'counterevidence'
+            ].clear(),
+            lambda value: next(
+                source for source in value['sourcePacket']['sources'].values()
+                if source['role'] == 'public-lead-only'
+            ).__setitem__('license', 'MIT'),
+            lambda value: next(
+                item for item in value['materialEvents']
+                if item['kind'] == 'current-source-packet-binding'
+            ).__setitem__('artifactSha256', '0' * 64),
+            lambda value: value.__setitem__(
+                'materialEvents', [
+                    item for item in value['materialEvents']
+                    if item['kind'] != 'current-source-packet-binding'
+                ],
+            ),
+        )
+        for index, mutate in enumerate(mutations):
+            candidate = json.loads(json.dumps(payload))
+            mutate(candidate)
+            with self.subTest(source_packet_mutation=index):
+                self.assertFalse(
+                    _publishable_payload(candidate, *publishable_args)
+                )
+
+        with _fixture() as root:
+            bundle = _read(root, source_locator)
+            observation = _read(root, observation_locator)
+            record = bundle['records'][record_id]
+            record['payload'].pop('sourcePacket')
+            record['payload']['materialEvents'] = [
+                item for item in record['payload']['materialEvents']
+                if item['kind'] != 'current-source-packet-binding'
+            ]
+            observation['transcriptOrEventEvidence'][0]['sha256'] = _digest(record)
+            _write(root, source_locator, bundle)
+            _write(root, observation_locator, observation)
+            errors, _ = _observe(root, observation_locator, observation)
+            self.assert_has(errors, 'sourceEvidence[0] is invalid')
 
     def test_failed_sample_narrows_claim(self):
         with _fixture() as root:

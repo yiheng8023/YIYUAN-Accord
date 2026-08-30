@@ -137,7 +137,7 @@
       "id": "gt21-live-carrier-preflight-2026-08-29",
       "kind": "bounded-exact-codex-local-live-carrier-simple-route-and-fresh-handoff-observation-with-model-variable-and-zero-residue",
       "repositoryLocator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
-      "repositorySha256": "044cf9ba000da7819c7a64c15d8c08da2f3e973596e761a7ae0182f58af45256",
+      "repositorySha256": "1d5dbc4376d2f836ee86621f9264eb882f0d5c192235e19410fa53826bf0582b",
       "latestFailureBoundary": "GT-21 closes for one bounded current-host case at exact 3878968: a separate official fresh thread/start destination received six verified fields, used one model-variable read-only turn and one task-owned verifier, returned ACCORD_FRESH_HANDOFF_VERIFIED, stayed distinct from copied-history and Git topology, was verified before source release, and left zero task residue. Source-bound whole-system reacceptance at 85a917a is complete; independent exact-tree review is the earliest open boundary.",
       "disposition": "admitted-bounded-exact-codex-local-gt21-pass-current-host-claim-selected-no-added-client-not-whole-system-candidate-or-release-evidence"
     },
@@ -145,7 +145,7 @@
       "id": "gt20-transactional-lifecycle-2026-08-30",
       "kind": "bounded-exact-windows-codex-and-claude-non-empty-host-transactional-lifecycle-observation",
       "repositoryLocator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
-      "repositorySha256": "044cf9ba000da7819c7a64c15d8c08da2f3e973596e761a7ae0182f58af45256",
+      "repositorySha256": "1d5dbc4376d2f836ee86621f9264eb882f0d5c192235e19410fa53826bf0582b",
       "latestFailureBoundary": "GT-20 closes for exact tracked v3.0.1 to 4c8bcc3 bytes in two disposable non-empty Windows host scopes: native failed updates retain the exact old package, native updates install exact current bytes, user and foreign state survive, removal leaves zero active Accord state, Codex cache is absent, Claude cache is unlisted and marked for a 14-day live-session-aware host sweep, and all task roots and matching processes are removed. Source-bound whole-system reacceptance at 85a917a is complete; independent exact-tree review is the earliest open boundary.",
       "disposition": "admitted-bounded-exact-gt20-pass-not-production-cross-os-value-candidate-or-release-evidence"
     },
@@ -192,7 +192,7 @@
         "GT-21"
       ],
       "sourceLocator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
-      "sourceSha256": "044cf9ba000da7819c7a64c15d8c08da2f3e973596e761a7ae0182f58af45256",
+      "sourceSha256": "1d5dbc4376d2f836ee86621f9264eb882f0d5c192235e19410fa53826bf0582b",
       "inputEvidenceIds": [
         "gt20-transactional-lifecycle-2026-08-30",
         "gt21-live-carrier-preflight-2026-08-29"

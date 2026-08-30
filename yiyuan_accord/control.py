@@ -5,6 +5,7 @@ import subprocess
 
 from .evidence import (
     evaluation_contract_history_valid,
+    frozen_gt20_21_promotion_errors,
     historical_representative_errors,
     provisional_gt20_21_source_errors,
     representative_sample_errors,
@@ -1133,6 +1134,11 @@ def verify_product(root):
     )
     errors.extend(
         provisional_gt20_21_source_errors(
+            root, program, acceptance, golden_suite, _read_json,
+        )
+    )
+    errors.extend(
+        frozen_gt20_21_promotion_errors(
             root, program, acceptance, golden_suite, _read_json,
         )
     )

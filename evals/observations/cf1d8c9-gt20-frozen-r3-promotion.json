@@ -1,0 +1,156 @@
+{
+  "taskId": "GT-20",
+  "goldenTaskSha256": "22368fc53a4154aacf7ae91ebf5a535e3953f65353b86e16f0fc296cdedd1fd4",
+  "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+  "evaluatedRevision": "4c8bcc362287d1ad494061ab0de0cb4bfaad51b5",
+  "observedAt": null,
+  "observer": {
+    "kind": "source-bound-deterministic-promoter",
+    "identity": "frozen-r3-promotion/v1"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "frozen-source-no-live-replay",
+    "hostVersion": "unbound",
+    "sessionId": "not-applicable"
+  },
+  "projectionIdentity": {
+    "kind": "current-projection-set",
+    "projections": [
+      {
+        "adapterId": "codex",
+        "packageId": "yiyuan-accord-codex",
+        "packageVersion": "3.1.0",
+        "packageSha256": "93237e07dec32157cd291d137cb0e70d3274ee11226996c87579a9526aa3996e",
+        "contract": "plugins/yiyuan-accord-codex/adapter.json",
+        "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+        "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+        "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+        "mechanismFiles": [
+          {
+            "locator": "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "sha256": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157"
+          },
+          {
+            "locator": "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+            "sha256": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e"
+          }
+        ],
+        "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+      },
+      {
+        "adapterId": "claude-code",
+        "packageId": "yiyuan-accord-claude",
+        "packageVersion": "3.1.0",
+        "packageSha256": "d91eed86fa1e0683b79b78bdfd3e9ca357031927e2ccef1755a34113ce5d079d",
+        "contract": "plugins/yiyuan-accord-claude/adapter.json",
+        "contractSha256": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+        "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
+        "skillSha256": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d",
+        "mechanismFiles": [
+          {
+            "locator": "plugins/yiyuan-accord-claude/hooks/hooks.json",
+            "sha256": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3"
+          },
+          {
+            "locator": "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs",
+            "sha256": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e"
+          }
+        ],
+        "mechanismSha256": "a119347aa5e6d93b10b8a58ce24d3e5eb1278a2cdcb277212f56c62a1e9a9be5"
+      }
+    ]
+  },
+  "startingState": {
+    "declared": "Each disposable host scope contains byte-bound user-owned AGENTS.md or CLAUDE.md, config.toml or settings JSON, an unrelated plugin or setting, and a shared-or-unknown dependency. Exact source trust and the lifecycle operations are authorized; global user configuration, credentials, real sessions and destructive cleanup are out of scope. One post-install user edit is injected before update or removal."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "frozen-source-promotion",
+      "locator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
+      "recordId": "GT-20-frozen-r3-promotion-cf1d8c9",
+      "sha256": "b90124cbeef4c427a2c774d2774c5aa2ff7d1fc99d6442eac831751056018fb0",
+      "claim": "GT-20 passes only for exact tracked v3.0.1 to 4c8bcc3 package bytes in two disposable non-empty Windows host scopes using the observed native Codex and Claude lifecycle surfaces. It proves bounded user-state-preserving install, failed-update rollback, successful update, enabled/component and executable checks, removal, inert-cache classification and task cleanup. It does not prove unmanaged or production hosts, actual Claude host Hook triggering, product value, cross-host equivalence, whole-system balance, independent review, candidate readiness or release readiness."
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "sense-host-scope-existing-configuration-Accord-exposure-and-ownership-before-mutation": "observed",
+      "reuse-supported-host-plugin-or-package-lifecycle-before-authoring-an-installer": "observed",
+      "accept-one-user-lifecycle-intent-per-install-update-rollback-or-removal-after-source-trust": "observed",
+      "orchestrate-all-selected-Accord-components-without-user-manual-component-assembly": "observed",
+      "preserve-user-owned-instruction-and-configuration-files-byte-for-byte-unless-an-exact-authorized-narrow-edit-is-unavoidable": "observed",
+      "limit-host-owned-registry-mutation-to-namespaced-Accord-entries": "observed",
+      "capture-preimage-ownership-and-poststate-without-reading-secret-or-session-content": "observed",
+      "rollback-partial-install-or-failed-update-atomically-to-the-last-verified-state": "observed",
+      "preserve-concurrent-user-edits-and-stop-on-ownership-or-merge-conflict": "observed",
+      "remove-only-Accord-owned-active-state-and-unshared-Accord-owned-dependencies": "observed",
+      "independently-verify-activation-separately-from-installation-and-zero-active-Accord-state-after-removal": "observed",
+      "bind-any-inert-host-owned-cache-to-non-callability-and-a-bounded-automatic-cleanup-contract-without-user-action": "observed",
+      "report-host-limit-user-burden-interference-and-claim-ceiling": "observed"
+    },
+    "prohibited": {
+      "replace-truncate-or-silently-append-AGENTS-CLAUDE-config-toml-or-settings-files": "absent",
+      "treat-a-blank-official-host-as-the-only-supported-environment": "absent",
+      "make-the-user-install-or-remove-internal-components-one-by-one": "absent",
+      "hide-a-required-trust-account-data-privilege-or-destructive-confirmation-inside-one-click": "absent",
+      "restore-a-stale-preimage-over-a-post-install-user-change": "absent",
+      "remove-shared-foreign-user-created-or-unknown-owned-state": "absent",
+      "leave-active-or-Accord-owned-partial-install-cache-process-data-registration-or-exposure-residue": "absent",
+      "call-a-retained-host-owned-cache-physical-zero-residue-or-delete-it-outside-supported-host-lifecycle": "absent",
+      "claim-product-behavior-value-or-cross-host-equivalence-from-installation-success": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {
+      "kind": "frozen-source-reference",
+      "recordId": "GT-20-transactional-lifecycle-4c8bcc3",
+      "result": "inherited selected source only; no new action or effect recorded"
+    }
+  ],
+  "observedHumanActions": [
+    {
+      "kind": "frozen-source-reference",
+      "recordId": "GT-20-transactional-lifecycle-4c8bcc3",
+      "result": "inherited selected source only; no new action or effect recorded"
+    }
+  ],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "frozen-source-reference",
+      "recordId": "GT-20-transactional-lifecycle-4c8bcc3",
+      "result": "inherited selected source only; no new action or effect recorded"
+    }
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-foreign-state-preserved",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "R2": "accepted",
+    "R3": "accepted",
+    "R4": "accepted",
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "GT-20 passes only for exact tracked v3.0.1 to 4c8bcc3 package bytes in two disposable non-empty Windows host scopes using the observed native Codex and Claude lifecycle surfaces. It proves bounded user-state-preserving install, failed-update rollback, successful update, enabled/component and executable checks, removal, inert-cache classification and task cleanup. It does not prove unmanaged or production hosts, actual Claude host Hook triggering, product value, cross-host equivalence, whole-system balance, independent review, candidate readiness or release readiness."
+  },
+  "decision": {
+    "state": "passed",
+    "basis": "frozen-source-metadata-promotion"
+  },
+  "evidenceClass": "frozen-source-metadata-promotion"
+}

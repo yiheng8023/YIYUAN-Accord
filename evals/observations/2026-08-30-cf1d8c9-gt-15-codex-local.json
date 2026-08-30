@@ -33,7 +33,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-30-v310-gt14-19-source.json",
       "recordId": "GT-15-current-artifacts-cf1d8c9e",
-      "sha256": "c5f164b79cb32e7e2347dc1d4cad520635959a023188c0d5aef284a34cfe3464",
+      "sha256": "5f639b994538e116b62ae6cd31147d29ccd77201b6f4c6fcdfb42b61e7b990a7",
       "claim": "Current GT-15 structured result, independent poststate, and cleanup artifacts.",
       "postSessionBindingsSha256": "4791ec08507e607a2e431ae177fa8dd0a98fdc059ddc917e2b1dad1f6c86825b"
     }

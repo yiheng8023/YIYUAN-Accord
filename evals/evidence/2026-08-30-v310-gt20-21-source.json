@@ -147,6 +147,224 @@
       }
     ]
   },
+  "frozenPromotion": {
+    "schema": "frozen-r3-promotion/v1",
+    "baseSourceRawSha256": "044cf9ba000da7819c7a64c15d8c08da2f3e973596e761a7ae0182f58af45256",
+    "sourceBoundAncestorRevision": "ef10100649c95ee0bb359a45ab3097a14884cf97",
+    "currentContractRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+    "sourceEvaluationContractSha256": "312693dc71c52c44fe6a11b564671c95818466f1d8ddfd263763dab2af055ab5",
+    "currentEvaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+    "contractSupersessionSha256": "c79f3b226e95edaf1db50018d2e15633a26706a003044333381aecd3af5baf2b",
+    "allowedChangeClasses": [
+      "metadata-binding",
+      "candidate-subject-binding",
+      "current-contract-binding"
+    ],
+    "claimCeiling": {
+      "scope": "metadata-candidate-subject-current-contract-only",
+      "behaviorReplayPerformed": false,
+      "newBehaviorFactsAdded": false,
+      "liveBehaviorClaimed": false,
+      "independentReviewClaimed": false,
+      "candidateReadinessClaimed": false,
+      "releaseReadinessClaimed": false
+    },
+    "modelIdentityQualificationUsed": false,
+    "projectionIdentities": {
+      "codex": {
+        "adapterId": "codex",
+        "packageId": "yiyuan-accord-codex",
+        "packageVersion": "3.1.0",
+        "packageSha256": "93237e07dec32157cd291d137cb0e70d3274ee11226996c87579a9526aa3996e",
+        "contract": "plugins/yiyuan-accord-codex/adapter.json",
+        "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+        "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+        "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+        "mechanismFiles": [
+          {
+            "locator": "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "sha256": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157"
+          },
+          {
+            "locator": "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+            "sha256": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e"
+          }
+        ],
+        "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+      },
+      "claude-code": {
+        "adapterId": "claude-code",
+        "packageId": "yiyuan-accord-claude",
+        "packageVersion": "3.1.0",
+        "packageSha256": "d91eed86fa1e0683b79b78bdfd3e9ca357031927e2ccef1755a34113ce5d079d",
+        "contract": "plugins/yiyuan-accord-claude/adapter.json",
+        "contractSha256": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+        "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
+        "skillSha256": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d",
+        "mechanismFiles": [
+          {
+            "locator": "plugins/yiyuan-accord-claude/hooks/hooks.json",
+            "sha256": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3"
+          },
+          {
+            "locator": "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs",
+            "sha256": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e"
+          }
+        ],
+        "mechanismSha256": "a119347aa5e6d93b10b8a58ce24d3e5eb1278a2cdcb277212f56c62a1e9a9be5"
+      }
+    },
+    "promotedRecords": [
+      {
+        "taskId": "GT-20",
+        "promotionRecordId": "GT-20-frozen-r3-promotion-cf1d8c9",
+        "selectedRecordId": "GT-20-transactional-lifecycle-4c8bcc3",
+        "selectedRecordSha256": "a66b9aa05610baf362c38213d266d31a005c737ab1699173a590a25542cd32ec",
+        "sourceContractEntrySha256": "ad7c1438037bd4253d68c3ebad07499ed2abeba29ad67c1fd49e68a8cdd6db9d",
+        "sourceDigests": {
+          "goldenTaskSha256": "22368fc53a4154aacf7ae91ebf5a535e3953f65353b86e16f0fc296cdedd1fd4",
+          "evaluationContractSha256": "312693dc71c52c44fe6a11b564671c95818466f1d8ddfd263763dab2af055ab5"
+        },
+        "currentDigests": {
+          "goldenTaskSha256": "22368fc53a4154aacf7ae91ebf5a535e3953f65353b86e16f0fc296cdedd1fd4",
+          "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415"
+        },
+        "evaluatedRevision": "4c8bcc362287d1ad494061ab0de0cb4bfaad51b5",
+        "behaviorSubject": {
+          ".agents/plugins/marketplace.json": "a680e15cf06c551d93f7869b20fed25ef0c0ef3c0c7a41a10ec85a583be973ae",
+          ".claude-plugin/marketplace.json": "a0b6edac1fcd10f2b330045fab177ba1f0a520f63fbd3b8e9fd48d6abfe969c3",
+          "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json": "b39034d978fc9ed5ba814b2297dfa44afc8d4e96603899af9e421da913e56f51",
+          "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "plugins/yiyuan-accord-codex/assets/yiyuan-nexus-mark.png": "6e407c1942ff86e8f751930bf5df1000579b9a37824e17dde336d26ea450a235",
+          "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml": "e0e5d0fb6f8f62cd67bd8e28abe79484a860bceb386751dc68ed8b51f7a15068",
+          "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json": "42344973b7ee1fb6b00846173be01f77563f18432708e1e542c7d31f51628c70",
+          "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+          "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+        },
+        "projectionIds": ["codex", "claude-code"],
+        "poststateBinding": {
+          "sourcePath": "cleanupEvidence",
+          "sha256": "4de77508b8d35ddab0950d34e44e1f5a3cfb6cb2ebd31332cca38b6771154d66"
+        },
+        "cleanupBinding": {
+          "contractSha256": "118a9d7b1f39befdfdd003dea1a4595d768f9d62b7bfdaf7bedcd7755df10678",
+          "requiredMarkersSha256": "284a417867cb17ceeb070d761cf293e43a2b86d287fc91996742104db69eb829",
+          "requiredMarkers": {
+            "authorityAndPrivacy.modelCallCount": 0,
+            "cleanupEvidence.activeAccordRegistrations": 0,
+            "cleanupEvidence.activeAccordMarketplaces": 0,
+            "cleanupEvidence.activeAccordDataRoots": 0,
+            "cleanupEvidence.matchingTaskProcesses": 0,
+            "cleanupEvidence.formalFixtureRootExists": false,
+            "cleanupEvidence.learningFixtureRootExists": false,
+            "cleanupEvidence.repositoryTmpInspectedOrModified": false,
+            "hostCacheDisposition.codex.callable": false,
+            "hostCacheDisposition.claude.listedOrEnabled": false,
+            "hostCacheDisposition.claude.callable": false,
+            "hostCacheDisposition.claude.dataStatePresent": false,
+            "hostCacheDisposition.claude.cleanupContract": "The exact local Claude binary writes .orphaned_at only under the plugin cache root, sweeps unlisted versions, skips versions used by a live session and deletes an orphan when marker age exceeds 1209600000 ms (14 days)."
+          }
+        },
+        "claimCeilingBinding": {
+          "sourcePath": "claimLimit",
+          "sourceClaimSha256": "b00d2ff5650ae82efce5da9aa9096767dfd44107e6cb3e92688e75933d97b5fb",
+          "contractSha256": "978448f5a5b2147ea8eacac231effb8fa0df41c48f2d76908d6b5fa4a64a25ae"
+        },
+        "amendmentCore": {
+          "kind": "frozen-r3-source-amendment/v1",
+          "changeClasses": ["metadata-binding", "candidate-subject-binding", "current-contract-binding"],
+          "priorGoldenTaskSha256": "22368fc53a4154aacf7ae91ebf5a535e3953f65353b86e16f0fc296cdedd1fd4",
+          "currentGoldenTaskSha256": "22368fc53a4154aacf7ae91ebf5a535e3953f65353b86e16f0fc296cdedd1fd4",
+          "priorEvaluationContractSha256": "312693dc71c52c44fe6a11b564671c95818466f1d8ddfd263763dab2af055ab5",
+          "currentEvaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+          "behaviorReplayPerformed": false,
+          "newBehaviorFactsAdded": false,
+          "claimImpact": "metadata-only-no-new-behavior-claim"
+        },
+        "observationLocator": "evals/observations/cf1d8c9-gt20-frozen-r3-promotion.json"
+      },
+      {
+        "taskId": "GT-21",
+        "promotionRecordId": "GT-21-frozen-r3-promotion-cf1d8c9",
+        "selectedRecordId": "GT-21-fresh-zero-history-handoff-3878968",
+        "selectedRecordSha256": "cb14e25128123afcfb6354fefcb480d18b171d7539af0a78dc905f61df33b5cc",
+        "sourceContractEntrySha256": "0cb08c560e250ddc6b06827704ac4d7dc90815f6be37e6487e13cb8b223824d3",
+        "sourceDigests": {
+          "goldenTaskSha256": "a7634cccb150a0cde1c8d35899fab0da621b40b6ae42ec3729c62b5b7382b0ea",
+          "evaluationContractSha256": "312693dc71c52c44fe6a11b564671c95818466f1d8ddfd263763dab2af055ab5"
+        },
+        "currentDigests": {
+          "goldenTaskSha256": "a7634cccb150a0cde1c8d35899fab0da621b40b6ae42ec3729c62b5b7382b0ea",
+          "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415"
+        },
+        "evaluatedRevision": "3878968d459adba57792c390eb277876028b0012",
+        "behaviorSubject": {
+          "yiyuan_accord/closure.py": "f771192cd6e81fedf7343c538415da6c40f35e3807509e94430c836b21fe7e47",
+          "runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+          "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+        },
+        "projectionIds": ["codex", "claude-code"],
+        "poststateBinding": {
+          "sourcePath": "payload.liveObservation.independentPoststate",
+          "sha256": "e907ffcb52211aaa158f69b875f316958d9012a36db8a06dc2fe82a9c515615e"
+        },
+        "cleanupBinding": {
+          "contractSha256": "1552001dbd077eade9db5af7d1b66cf688b9880f43af9f8b8dede83ab862ad3c",
+          "requiredMarkersSha256": "b815bb1106fe7ff53ead82c4bd50a443a9a39abfd6994253b86716b54c61724e",
+          "requiredMarkers": {
+            "payload.liveObservation.independentPoststate.observer": "parent App Server protocol evaluator, task-thread list audit, exact process filter and exact-root absence check; not the evaluated Agent",
+            "payload.liveObservation.independentPoststate.sourceDeleted": true,
+            "payload.liveObservation.independentPoststate.destinationDeleted": true,
+            "payload.liveObservation.independentPoststate.remainingTaskThreads": 0,
+            "payload.liveObservation.independentPoststate.matchingTaskProcesses": 0,
+            "payload.liveObservation.independentPoststate.disposableCredentialStateRemoved": true,
+            "payload.liveObservation.independentPoststate.disposablePluginStateRemoved": true,
+            "payload.liveObservation.independentPoststate.taskRootRemoved": true,
+            "payload.liveObservation.independentPoststate.taskRootAbsentAfterRemoval": true,
+            "payload.liveObservation.independentPoststate.taskOwnedResidueRetained": 0
+          }
+        },
+        "claimCeilingBinding": {
+          "sourcePath": "payload.decision.claimLimit",
+          "sourceClaimSha256": "0a57fd9adfa7c52be3d81dd6e11c6b15f2e826602a4316a233deeef2798da954",
+          "contractSha256": "b729ba9be44455d0b1d368c96627a30fe794bafc7115ab4969f675d2dc0774ce"
+        },
+        "amendmentCore": {
+          "kind": "frozen-r3-source-amendment/v1",
+          "changeClasses": ["metadata-binding", "candidate-subject-binding", "current-contract-binding"],
+          "priorGoldenTaskSha256": "a7634cccb150a0cde1c8d35899fab0da621b40b6ae42ec3729c62b5b7382b0ea",
+          "currentGoldenTaskSha256": "a7634cccb150a0cde1c8d35899fab0da621b40b6ae42ec3729c62b5b7382b0ea",
+          "priorEvaluationContractSha256": "312693dc71c52c44fe6a11b564671c95818466f1d8ddfd263763dab2af055ab5",
+          "currentEvaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+          "behaviorReplayPerformed": false,
+          "newBehaviorFactsAdded": false,
+          "claimImpact": "metadata-only-no-new-behavior-claim"
+        },
+        "observationLocator": "evals/observations/cf1d8c9-gt21-frozen-r3-promotion.json"
+      }
+    ],
+    "nonPromotedAttempts": [
+      {"recordId": "GT-21-live-carrier-preflight-working-tree", "disposition": "retained-in-raw-source-not-promoted"},
+      {"recordId": "GT-21-isolated-live-carrier-2f6e3de", "disposition": "retained-in-raw-source-not-promoted"},
+      {"recordId": "GT-21-simple-native-route-f5f281c", "disposition": "retained-in-raw-source-not-promoted"},
+      {"recordId": "GT-21-simple-native-route-model-variable-6d91360", "disposition": "retained-in-raw-source-not-promoted"},
+      {"recordId": "GT-21-claude-simple-auth-boundary-7a4c932", "disposition": "retained-in-raw-source-not-promoted"},
+      {"recordId": "GT-21-claude-current-account-pre-model-boundary-5473c43", "disposition": "retained-in-raw-source-not-promoted"},
+      {"recordId": "GT-21-codex-current-account-simple-consequence-fded9a6", "disposition": "retained-in-raw-source-not-promoted"}
+    ]
+  },
   "records": {
     "GT-21-live-carrier-preflight-working-tree": {
       "taskId": "GT-21",

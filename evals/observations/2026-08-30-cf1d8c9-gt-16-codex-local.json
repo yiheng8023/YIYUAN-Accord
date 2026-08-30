@@ -33,7 +33,7 @@
       "kind": "host-event-log",
       "locator": "evals/evidence/2026-08-30-v310-gt14-19-source.json",
       "recordId": "GT-16-current-artifacts-cf1d8c9e",
-      "sha256": "3261fe553b4bff7682c8725086a9df5574ef03f9b67a1d6a53d5ccd0c931eab1",
+      "sha256": "e4b3e541e0f2895d4eeec8dee33911facb5409997421a3231fd274851e1c2653",
       "claim": "Current GT-16 structured result, independent poststate, and cleanup artifacts.",
       "postSessionBindingsSha256": "a6cc622157fac5227b47fcce35e75ca11704984660afbd2eaeb456f704237999"
     }
@@ -63,7 +63,7 @@
     {
       "kind": "structured-agent-result",
       "resultSha256": "d4db5cade684fc0ebed120992bd3cfab2335b3009c8262884571cdd904f38d66",
-      "summary": "Corrects only the desired materialized poststate by setting effectObserved true; the reversible minimal composition remains selected, while all independent effect and lifecycle observations remain evaluator-owned and pending."
+      "summary": "The original GT-16 attempt remains a retained behavior failure at correctedState.effectObserved=false. A separate corrected attempt subsequently passed independent effect, rollback/release, cleanup, and fixture-removal poststates."
     }
   ],
   "observedHumanActions": [],
@@ -96,13 +96,15 @@
     "R3": "accepted"
   },
   "claimLimit": {
-    "retainedFailure": false,
-    "excludedClaims": [],
-    "statement": "One bounded minimum-form bootstrap in this exact disposable fixture; no runtime need, plugin or Hook sufficiency, cross-host portability, durable learning, population value, candidate readiness or release readiness."
+    "retainedFailure": true,
+    "excludedClaims": [
+      "the retained prior behavior failure passed"
+    ],
+    "statement": "The original GT-16 attempt remains retained failed counterevidence and is not retroactively passed; only the separate corrected attempt passed for one bounded disposable minimum-form bootstrap. No runtime need, plugin or Hook sufficiency, cross-host portability, durable learning, population value, candidate readiness, or release readiness is established."
   },
   "decision": {
     "state": "passed",
-    "basis": "Current independent evaluator artifacts satisfy the bounded task contract."
+    "basis": "The separate corrected attempt satisfies the bounded task contract; the prior behavior failure remains retained counterevidence."
   },
   "evidenceClass": "representative-behavior",
   "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9"
