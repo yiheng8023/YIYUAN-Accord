@@ -1,0 +1,107 @@
+{
+  "taskId": "GT-15",
+  "goldenTaskSha256": "27c2049db8a2357f8d872e824e9486d8e0653e25346844802a5cb8e8a7bcd456",
+  "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+  "observedAt": "2026-08-30T13:22:18Z",
+  "observer": {
+    "kind": "host-event-recorder",
+    "identity": "independent evaluator artifact reconciler"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex CLI on Windows",
+    "hostVersion": "host-default-variable; Codex CLI; Windows OS provenance",
+    "sessionId": "d40f20b7-86ac-49d0-91c3-8f4d56c448d3"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+    "mechanismFiles": [
+      "plugins/yiyuan-accord-codex/hooks/hooks.json",
+      "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+    ],
+    "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+  },
+  "startingState": {
+    "declared": "The sub-capability and intended outcome are supplied. Existing native, official, open-source and maintained third-party approaches may exist; their popularity, license, platform, metric, safety, authority and lifecycle fit are not presumed. Product implementation is not yet authorized by conceptual attractiveness alone."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-30-v310-gt14-19-source.json",
+      "recordId": "GT-15-current-artifacts-cf1d8c9e",
+      "sha256": "c5f164b79cb32e7e2347dc1d4cad520635959a023188c0d5aef284a34cfe3464",
+      "claim": "Current GT-15 structured result, independent poststate, and cleanup artifacts.",
+      "postSessionBindingsSha256": "4791ec08507e607a2e431ae177fa8dd0a98fdc059ddc917e2b1dad1f6c86825b"
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "separate-source-fact-inference-hypothesis-and-product-decision": "observed",
+      "recover-prior-counterevidence-and-repeated-failure": "observed",
+      "record-primary-sources-existing-wheels-licenses-maintenance-and-provenance": "observed",
+      "extract-exact-transferable-patterns-fit-assumptions-limitations-side-effects-and-exit-conditions": "observed",
+      "classify-sub-capabilities-as-feasible-conditionally-feasible-infeasible-or-unknown": "observed",
+      "run-only-minimum-isolated-high-risk-probes": "observed",
+      "issue-go-conditional-go-no-go-or-research-more-with-recheck-triggers": "observed"
+    },
+    "prohibited": {
+      "implement-before-the-feasibility-gate": "absent",
+      "copy-a-person-repository-platform-or-metric-as-authority": "absent",
+      "treat-stars-praise-or-simplicity-as-fit-evidence": "absent",
+      "hide-a-failed-or-unknown-premise-with-more-machinery": "absent",
+      "invent-a-runtime-database-or-state-carrier-without-need": "absent",
+      "claim-complete-self-bootstrapping-from-one-self-evolution-loop": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {
+      "kind": "structured-agent-result",
+      "resultSha256": "543af30c5e18af92995db3d3720f7889678d6396e8cbfad8894033687091bb8b",
+      "summary": "Retain demand-driven evidence acquisition as policy in the existing pure closure interface. When fresh admitted facts already close a route, acquire nothing; when a route-changing fact is unknown, stale, conflicting, novel, risky, architectural, or unresolved after reuse review, permit bounded task-time acquisition through suitable native or maintained source tools. Do not create a research subsystem or adopt a third-party dependency under current authority."
+    }
+  ],
+  "observedHumanActions": [],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "no-build-policy-route",
+      "state": "observed",
+      "selectedRoute": "no-build",
+      "newProductSubsystem": false
+    }
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted",
+    "R2": "accepted",
+    "R3": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "This decision establishes only the feasibility and current adoption route for demand-driven evidence acquisition. It does not establish implementation, a third-party dependency, a standalone API or service, end-to-end value, universal existing-wheel coverage, or release readiness."
+  },
+  "decision": {
+    "state": "passed",
+    "basis": "Current independent evaluator artifacts satisfy the bounded task contract."
+  },
+  "evidenceClass": "representative-behavior",
+  "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9"
+}

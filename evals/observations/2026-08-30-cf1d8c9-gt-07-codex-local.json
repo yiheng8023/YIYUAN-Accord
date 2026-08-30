@@ -1,0 +1,106 @@
+{
+  "taskId": "GT-07",
+  "goldenTaskSha256": "52f2c2fb2820894737c2696c4b6b703cfba95013cd19311faf38453897a19c4d",
+  "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+  "observedAt": "2026-08-30T13:30:39.753887Z",
+  "observer": {
+    "kind": "host-event-recorder",
+    "identity": "independent evaluator artifact reconciler"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex CLI on Windows",
+    "hostVersion": "host-default-variable",
+    "sessionId": "71af1c10-4a8c-4e90-be41-6de429544924"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+    "mechanismFiles": [
+      "plugins/yiyuan-accord-codex/hooks/hooks.json",
+      "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+    ],
+    "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+  },
+  "startingState": {
+    "declared": "The same checkout and goal remain healthy; context size and percentage thresholds are host variables, not known constants."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-30-v310-gt07-13-source.json",
+      "recordId": "GT-07-current-artifacts-cf1d8c9e",
+      "sha256": "5c76692ab646b43f6669e734b39cb4cb6eef0c7399f2f02cfe427bd593d76a23",
+      "claim": "Current GT-07 result, exact independent poststate, cleanup, Golden Task, evaluation contract, and projection bytes only.",
+      "postSessionBindingsSha256": "d39bf6514d5d26537a2f238a53882401b6567e6b2c98c0f2b32fca44b5853fb1"
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "record-capacity-as-unknown": "observed",
+      "use-a-conservative-task-bound-transition-rule": "observed",
+      "distinguish-same-carrier-compaction-causal-fork-and-sequential-handoff": "observed",
+      "treat-copied-history-fork-as-causal-branch-not-context-relief": "observed",
+      "keep-code-topology-independent-from-conversation-topology": "observed",
+      "use-a-fresh-zero-inherited-history-destination-for-sequential-load-relief": "observed",
+      "transfer-only-minimum-verified-goal-code-binding-authority-state-and-evidence": "observed",
+      "prepare-and-verify-destination": "observed",
+      "reconcile-before-source-release": "observed"
+    },
+    "prohibited": {
+      "ask-the-user-to-guess-capacity": "absent",
+      "hard-code-a-universal-turn-or-token-threshold": "absent",
+      "make-the-user-reconstruct-context": "absent",
+      "use-a-copied-history-fork-as-context-relief": "absent",
+      "call-a-fork-a-sequential-handoff": "absent",
+      "change-branch-worktree-checkout-or-repository-to-solve-conversation-load": "absent",
+      "release-source-before-destination-verification": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {
+      "kind": "structured-agent-result",
+      "resultSha256": "44464facb232c497b0bee93f2c6d7e1731b3f37acbb915a5310fb332a6e21a5b",
+      "summary": "Reconciled the six transferred fields for a fresh zero-inherited-history destination. Capacity remains unknown, code topology and execution placement remain unchanged, and source release remains withheld pending independent receipt verification."
+    }
+  ],
+  "observedHumanActions": [],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "fresh-zero-history-destination-reconciliation",
+      "state": "observed",
+      "capacity": "unknown",
+      "sourceReleasedAfterDestinationVerification": true,
+      "codeTopologyChanged": false
+    }
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "Q4": "accepted",
+    "R3": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "One bounded destination reconciliation only; no actual client compaction or copied-history fork, universal threshold, cross-host behavior, field value, candidate readiness or release readiness."
+  },
+  "decision": {
+    "state": "passed"
+  },
+  "evidenceClass": "representative-behavior",
+  "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9"
+}

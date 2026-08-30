@@ -1,0 +1,124 @@
+{
+  "taskId": "GT-19",
+  "goldenTaskSha256": "e9c4b9bccae449726caac4f01aa4c348bbe15832a8cd278a44b961cc8c9eb2a9",
+  "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+  "observedAt": "2026-08-30T13:23:30.425611Z",
+  "observer": {
+    "kind": "host-event-recorder",
+    "identity": "independent dual-sequence evaluator"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex isolated evaluator",
+    "hostVersion": "host-default-variable",
+    "sessionId": "6c548d9a-d4d4-480d-9b5a-bac475e9e5fb"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+    "mechanismFiles": [
+      "plugins/yiyuan-accord-codex/hooks/hooks.json",
+      "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+    ],
+    "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+  },
+  "startingState": {
+    "declared": "A disposable environment exposes one currently effective Accord-backed responsibility, one initially absent native alternative, exact outcome and authority bounds, bounded direct environment sources, an independent execution/consequence/cleanup oracle, reversible controls and a four-episode evaluator-owned drift schedule. The host identity, Hook state and product form do not determine capability; publication, destructive global uninstall, credentials, conversation or session content and unrelated host state are out of scope."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-30-v310-gt14-19-source.json",
+      "recordId": "GT-19-dual-sequence-cf1d8c9e",
+      "sha256": "0173984fbac840e4a372469ca61e418af4c5031ca2d58a6e2a7b4a9c732dce85",
+      "claim": "Current GT-19 four-episode sequence, independent poststates, and cleanup under the exact abstract host admission.",
+      "postSessionBindingsSha256": "ec6adbde689affcbef4c2e9c6ac0817038c4a219b26b645c68dc8e0d9f9b70be"
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "bind-exact-composition-responsibility-current-allocation-authority-and-baseline": "observed",
+      "bind-current-typed-field-receipt-with-official-state-first-Accord-state-second-and-bounded-observation-fallback": "observed",
+      "bind-normalized-decision-target-and-value-one-writer-bounded-readers-source-kind-reference-unavailable-higher-priority-sources-current-generation-freshness-conflict-and-privacy": "observed",
+      "allocate-every-supplied-responsibility-as-Accord-contained-Agent-native-or-Accord-Agent-composed-and-include-one-mixed-mode-route": "observed",
+      "derive-sparse-host-native-and-Accord-responsibility-incidence-views": "observed",
+      "discover-capability-from-current-official-sources-and-observed-host-behavior": "observed",
+      "apply-current-admission-and-closure-lifecycle-masks-before-overlap-can-be-redundancy": "observed",
+      "keep-state-sharing-declaration-Hook-firing-and-injection-separate-from-Agent-use-execution-consequence-evidence-and-value": "observed",
+      "invalidate-before-route-change-and-re-sense-before-environment-dependent-recomputation": "observed",
+      "admit-the-native-route-only-after-it-closes-the-same-responsibility-and-hard-gate-lifecycle": "observed",
+      "bypass-and-retire-only-the-redundant-responsibility-allocation-or-same-duty-runtime-adapter-or-wheel": "observed",
+      "bind-successor-discovery-observation-window-rollback-independent-retirement-poststate-and-recheck-triggers": "observed",
+      "preserve-other-Accord-responsibilities-latent-fallback-and-foreign-state": "observed",
+      "refresh-only-affected-view-cells-and-recompute-on-capability-drift-or-evidence-expiry": "observed",
+      "verify-every-episode-consequence-cleanup-residue-burden-interference-and-claim-limit": "observed"
+    },
+    "prohibited": {
+      "hard-code-one-host-version-or-capability-table-as-portable-authority": "absent",
+      "persist-or-precompute-a-host-model-tool-context-Cartesian-capability-matrix": "absent",
+      "treat-binary-name-or-incidence-overlap-as-redundancy": "absent",
+      "retire-from-installation-enablement-visibility-or-provider-label": "absent",
+      "treat-a-Hook-event-or-context-injection-as-Agent-use-execution-consequence-evidence-or-value": "absent",
+      "change-an-environment-dependent-allocation-from-an-event-only-missing-stale-expired-invalidated-or-mismatched-receipt": "absent",
+      "infer-one-whole-task-mode-from-a-route-source-kind-product-form-or-plugin-name": "absent",
+      "equate-one-responsibility-replacement-with-whole-product-retirement": "absent",
+      "remove-a-route-before-independent-replacement-consequence-and-cleanup": "absent",
+      "perform-destructive-global-uninstall-without-explicit-authority": "absent",
+      "make-retirement-permanent-across-environment-drift-or-evidence-expiry": "absent",
+      "hide-fallback-loss-retirement-failure-or-residue": "absent",
+      "transfer-supported-discovery-recomputation-rollback-or-cleanup-to-the-user": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {
+      "kind": "structured-longitudinal-result",
+      "resultSha256": "8f73c10ba76ec290096b9aeee2e53f912d9377cb22276a27cb10f1ffd4b36ede",
+      "episodeDecisionCount": 4,
+      "summary": "Maintained typed official-first state authority and separate responsibility scopes: held the signal-only episode unknown, re-sensed before scoped native retirement, and restored the Accord allocation after native evidence drift or expiry."
+    }
+  ],
+  "observedHumanActions": [],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "longitudinal-sequence-poststate",
+      "sequenceSha256": "fe76d4da6b6b7b1f5c05d95d36e1da12c6be51fc46fde8eb173d72cb852c1e35",
+      "episodeCount": 4,
+      "stateCarrierSha256": "00fffe5b9a0156e0183e45e35c27cc123106a69b91d0af7bf29943bf0d8763e3"
+    }
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted",
+    "R1": "accepted",
+    "R2": "accepted",
+    "R3": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Typed live-state admission, mixed per-responsibility modes, scoped replacement and reversible retirement for one four-episode disposable sequence using sparse H/A/S views; no live official-field availability, Hook causality, universal host map, automatic uninstall, whole-product redundancy, cross-host equivalence or field-value conclusion."
+  },
+  "decision": {
+    "state": "passed",
+    "basis": "The current canonical sequence and independent validators admit all required behavior while retaining the finite claim ceiling."
+  },
+  "evidenceClass": "representative-behavior",
+  "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9"
+}

@@ -92,8 +92,8 @@
                 "phaseNonces": [
                   "gt-07-destination-poststate-083e082905634f978a36ffeab1897de9"
                 ],
-                "resultSha256": "b16943bbefcd887f8118d9dfc482b6ce73aa73de37c061cc83a6e82de2f44ecb",
-                "resultRecordSha256": "15085f89c77ba28b42de7685d88f666968a000b63939feb84513a4e6f716d843",
+                "resultSha256": "7252501053f3d4b4c6c9146e49e32ba33f85ddc6a53f61612bc5640b1175ada5",
+                "resultRecordSha256": "43b7d4b8493c0ed083d61620391102e644c099238ebdd27f8873ecced64c0fe3",
                 "completedAt": "2026-08-30T13:27:29.582959Z",
                 "claim": "Fresh independent evaluator destination-poststate capture for GT-07 only."
               },
@@ -105,8 +105,8 @@
                 "phaseNonces": [
                   "gt-07-source-reconciliation-790bf6ea3bfa460ca6be75ed54d6141a"
                 ],
-                "resultSha256": "251b58706353f1c774e550b50f4b6960ab1bfac327b983935733d9ed3ecf83f7",
-                "resultRecordSha256": "ec2d0d5563a8e804ce6b433d44efa133e97cd99116778eac70cab15921fd1bcf",
+                "resultSha256": "a7198ead15dbd715a6301e611b7854333b2095f12167f847d6719cc8b395491c",
+                "resultRecordSha256": "bae6948d9c5a0b892864010c645344671e0b11a65d79c3fe5e7871004320bfcd",
                 "completedAt": "2026-08-30T13:27:29.761168Z",
                 "claim": "Fresh independent evaluator source-reconciliation capture for GT-07 only."
               }
@@ -185,7 +185,56 @@
             "taskLocator": "GT-07/destination-poststate",
             "phase": "destination-poststate",
             "nonce": "gt-07-destination-poststate-083e082905634f978a36ffeab1897de9",
-            "report": "{\"capacity\":{\"capacity\":\"unknown\",\"reliableSignal\":false,\"universalThreshold\":null},\"classifications\":[{\"historyInheritance\":\"same-carrier\",\"id\":\"compact\",\"semantic\":\"same-carrier-memory-reduction\",\"sequentialContextRelief\":false},{\"historyInheritance\":\"copied\",\"id\":\"causal-fork\",\"semantic\":\"copied-history-causal-branch\",\"sequentialContextRelief\":false},{\"historyInheritance\":\"none\",\"id\":\"sequential-handoff\",\"semantic\":\"fresh-zero-inherited-history-destination\",\"sequentialContextRelief\":true}],\"codeTopology\":{\"branch\":\"main\",\"changed\":false,\"head\":\"cf1d8c9e57741ed5c353bb630ca8dded7bd225b9\",\"repository\":\"C:\\\\Projects\\\\YIYUAN-Accord\"},\"executionPlacement\":{\"changed\":false,\"kind\":\"same-local-host\"},\"kind\":\"continuity-destination-poststate/v1\",\"receivedFields\":[\"goal\",\"authority\",\"code-binding\",\"current-state\",\"evidence\",\"claim-limit\"],\"sourceReleasedObserved\":false}"
+            "report": "{\"capacity\":{\"capacity\":\"unknown\",\"reliableSignal\":false,\"universalThreshold\":null},\"classifications\":[{\"historyInheritance\":\"same-carrier\",\"id\":\"compact\",\"semantic\":\"same-carrier-memory-reduction\",\"sequentialContextRelief\":false},{\"historyInheritance\":\"copied\",\"id\":\"causal-fork\",\"semantic\":\"copied-history-causal-branch\",\"sequentialContextRelief\":false},{\"historyInheritance\":\"none\",\"id\":\"sequential-handoff\",\"semantic\":\"fresh-zero-inherited-history-destination\",\"sequentialContextRelief\":true}],\"codeTopology\":{\"branch\":\"main\",\"changed\":false,\"head\":\"cf1d8c9e57741ed5c353bb630ca8dded7bd225b9\",\"repository\":\"C:\\\\Projects\\\\YIYUAN-Accord\"},\"executionPlacement\":{\"changed\":false,\"kind\":\"same-local-host\"},\"kind\":\"continuity-destination-poststate/v1\",\"receivedFields\":[\"goal\",\"authority\",\"code-binding\",\"current-state\",\"evidence\",\"claim-limit\"],\"sourceNarrativeRevision\":\"a019669591324942adc8276bd5c4bf57d901f375\",\"sourceNarrativeSha256\":\"b16943bbefcd887f8118d9dfc482b6ce73aa73de37c061cc83a6e82de2f44ecb\",\"sourceReleasedObserved\":false}",
+            "facts": {
+              "kind": "continuity-destination-poststate/v1",
+              "capacity": {
+                "capacity": "unknown",
+                "reliableSignal": false,
+                "universalThreshold": null
+              },
+              "receivedFields": [
+                "goal",
+                "authority",
+                "code-binding",
+                "current-state",
+                "evidence",
+                "claim-limit"
+              ],
+              "classifications": [
+                {
+                  "id": "compact",
+                  "semantic": "same-carrier-memory-reduction",
+                  "historyInheritance": "same-carrier",
+                  "sequentialContextRelief": false
+                },
+                {
+                  "id": "causal-fork",
+                  "semantic": "copied-history-causal-branch",
+                  "historyInheritance": "copied",
+                  "sequentialContextRelief": false
+                },
+                {
+                  "id": "sequential-handoff",
+                  "semantic": "fresh-zero-inherited-history-destination",
+                  "historyInheritance": "none",
+                  "sequentialContextRelief": true
+                }
+              ],
+              "codeTopology": {
+                "repository": "C:\\Projects\\YIYUAN-Accord",
+                "branch": "main",
+                "head": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+                "changed": false
+              },
+              "executionPlacement": {
+                "kind": "same-local-host",
+                "changed": false
+              },
+              "sourceReleasedObserved": false,
+              "sourceNarrativeRevision": "a019669591324942adc8276bd5c4bf57d901f375",
+              "sourceNarrativeSha256": "b16943bbefcd887f8118d9dfc482b6ce73aa73de37c061cc83a6e82de2f44ecb"
+            }
           },
           {
             "kind": "independent-command-result",
@@ -193,7 +242,25 @@
             "taskLocator": "GT-07/source-reconciliation",
             "phase": "source-reconciliation",
             "nonce": "gt-07-source-reconciliation-790bf6ea3bfa460ca6be75ed54d6141a",
-            "report": "{\"codeTopology\":{\"branch\":\"main\",\"changed\":false,\"head\":\"cf1d8c9e57741ed5c353bb630ca8dded7bd225b9\",\"repository\":\"C:\\\\Projects\\\\YIYUAN-Accord\"},\"destinationResultSha256\":\"b16943bbefcd887f8118d9dfc482b6ce73aa73de37c061cc83a6e82de2f44ecb\",\"destinationVerifiedBeforeSourceRelease\":true,\"executionPlacement\":{\"changed\":false,\"kind\":\"same-local-host\"},\"kind\":\"continuity-source-reconciliation/v1\",\"sourceReleasedObserved\":false}"
+            "report": "{\"codeTopology\":{\"branch\":\"main\",\"changed\":false,\"head\":\"cf1d8c9e57741ed5c353bb630ca8dded7bd225b9\",\"repository\":\"C:\\\\Projects\\\\YIYUAN-Accord\"},\"destinationResultSha256\":\"b16943bbefcd887f8118d9dfc482b6ce73aa73de37c061cc83a6e82de2f44ecb\",\"destinationVerifiedBeforeSourceRelease\":true,\"executionPlacement\":{\"changed\":false,\"kind\":\"same-local-host\"},\"kind\":\"continuity-source-reconciliation/v1\",\"sourceNarrativeRevision\":\"a019669591324942adc8276bd5c4bf57d901f375\",\"sourceNarrativeSha256\":\"251b58706353f1c774e550b50f4b6960ab1bfac327b983935733d9ed3ecf83f7\",\"sourceReleasedObserved\":false}",
+            "facts": {
+              "kind": "continuity-source-reconciliation/v1",
+              "destinationResultSha256": "b16943bbefcd887f8118d9dfc482b6ce73aa73de37c061cc83a6e82de2f44ecb",
+              "destinationVerifiedBeforeSourceRelease": true,
+              "codeTopology": {
+                "repository": "C:\\Projects\\YIYUAN-Accord",
+                "branch": "main",
+                "head": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+                "changed": false
+              },
+              "executionPlacement": {
+                "kind": "same-local-host",
+                "changed": false
+              },
+              "sourceReleasedObserved": false,
+              "sourceNarrativeRevision": "a019669591324942adc8276bd5c4bf57d901f375",
+              "sourceNarrativeSha256": "251b58706353f1c774e550b50f4b6960ab1bfac327b983935733d9ed3ecf83f7"
+            }
           },
           {
             "kind": "independent-command-result",

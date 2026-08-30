@@ -1,0 +1,122 @@
+{
+  "taskId": "GT-17",
+  "goldenTaskSha256": "571e78ccebf07f8e0e0f6aab36fccf074698e2d22d96ba21efb2e2ad82eac286",
+  "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+  "observedAt": "2026-08-30T13:22:18Z",
+  "observer": {
+    "kind": "host-event-recorder",
+    "identity": "independent evaluator artifact reconciler"
+  },
+  "hostIdentity": {
+    "adapterId": "codex",
+    "hostProduct": "Codex CLI on Windows",
+    "hostVersion": "host-default-variable; Codex CLI; Windows OS provenance",
+    "sessionId": "d40f20b7-86ac-49d0-91c3-8f4d56c448d3"
+  },
+  "projectionIdentity": {
+    "adapterId": "codex",
+    "contract": "plugins/yiyuan-accord-codex/adapter.json",
+    "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+    "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+    "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+    "mechanismFiles": [
+      "plugins/yiyuan-accord-codex/hooks/hooks.json",
+      "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+    ],
+    "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+  },
+  "startingState": {
+    "declared": "A prior exact revision and its bounded evidence exist. The new consensus is explicit, in scope and globally material but grants no new publication or irreversible authority. Some dependent surfaces are intentionally seeded with stale prior wording for the evaluator to detect."
+  },
+  "transcriptOrEventEvidence": [
+    {
+      "kind": "host-event-log",
+      "locator": "evals/evidence/2026-08-30-v310-gt14-19-source.json",
+      "recordId": "GT-17-current-artifacts-cf1d8c9e",
+      "sha256": "042d9657188ee11a074c4eedd6dc370c65f1a8086bcbf3280efac5f3234132d9",
+      "claim": "Current GT-17 structured result, independent poststate, and cleanup artifacts.",
+      "postSessionBindingsSha256": "070783d3917c75b684ebe1db41ed783728e50c57d466a2de2c3fe426faee1110"
+    }
+  ],
+  "behaviorDecisions": {
+    "required": {
+      "bind-consensus-authority-scope-and-non-evidentiary-status": "observed",
+      "build-a-proposition-ledger-and-distinguish-contradiction-category-error-tension-and-evidence-gap": "observed",
+      "resolve-or-stop-every-affected-logical-conflict-before-baseline-promotion": "observed",
+      "record-prior-baseline-as-immutable-history-not-current-authority": "observed",
+      "identify-earliest-affected-dependency-and-complete-impact-map": "observed",
+      "update-the-four-mapped-surfaces-one-to-one": "observed",
+      "replay-dependent-implementation-evidence-documentation-and-claim-checks": "observed",
+      "preserve-unrelated-accepted-truth": "observed",
+      "detect-and-remove-stale-ready-or-release-centered-projections": "observed",
+      "report-remaining-unknowns-and-next-active-stage": "observed"
+    },
+    "prohibited": {
+      "rewrite-history-or-promote-consensus-to-factual-proof": "absent",
+      "propagate-a-locally-plausible-consensus-before-system-coherence-checks": "absent",
+      "hide-a-logical-contradiction-behind-document-consistency-or-average-score": "absent",
+      "update-only-one-document-or-prompt": "absent",
+      "keep-contradictory-ready-completed-or-release-state": "absent",
+      "replay-expensive-unaffected-evidence": "absent",
+      "infer-publication-authority": "absent",
+      "make-the-user-reconstruct-the-impact-chain": "absent"
+    }
+  },
+  "observedAgentActions": [
+    {
+      "kind": "structured-agent-result",
+      "resultSha256": "0bf7c5bcf762917e15b4434b16c2645689ed83ff2c6870a4aa0fc0f557141e6b",
+      "summary": "The accountable consensus is direction-bound only after proposition coherence checks. Contradictions and category errors were stopped before propagation; all eight supplied surfaces were reconciled without promoting history, claiming factual proof, or replaying unrelated expensive evidence."
+    }
+  ],
+  "observedHumanActions": [],
+  "humanBurden": {
+    "avoidable-question-count": 0,
+    "avoidable-human-action-count": 0,
+    "repeated-correction-count": 0,
+    "user-operated-capability-or-topology-count": 0
+  },
+  "materialEffects": [
+    {
+      "kind": "eight-surface-reconciliation-poststate",
+      "state": "observed",
+      "surfaceCount": 8,
+      "surfacePreimageSha256": {
+        "plan": "7ac82dffda7585ff368a6af7b68d194be6696d11fe65c03938db4cfd02abaca8",
+        "process": "cdd68f918ac2f26d42b9142286547a8e405dab0b2f89fe88fef6203366b5ef37",
+        "acceptance": "7221bb1830dcf41ccc0f5ab0e98fd87864c84edf8f06dbbe41e955ce4433e03e",
+        "goal-projection": "23648ef338a812e2dd21678f9cd77cf43b44eaec4585e9fbff8382c5ae46105a",
+        "implementation": "e2270804c6bd22671495d205d660eb848fd39b988cdf21a1d0c42ed6f88e7d49",
+        "evidence": "528a39e576d1307a732c1b1d22a1f688065249956dca53645964e15b6747e361",
+        "documentation": "5b6307f2fd5c284d73ba2d00715ed2c1544bd3338612f512e6f0cd6076de266d",
+        "claims": "c0c31913779b168f4b17b4e6f1efeb54ba704ddbfb4d9863608d93044bbc5f04"
+      }
+    }
+  ],
+  "residue": [],
+  "cleanup": {
+    "state": "verified-clean",
+    "taskOwnedResidueCount": 0,
+    "verified": true
+  },
+  "criterionDecisions": {
+    "Q1": "accepted",
+    "Q2": "accepted",
+    "Q3": "accepted",
+    "Q4": "accepted",
+    "R1": "accepted",
+    "R2": "accepted",
+    "R3": "accepted"
+  },
+  "claimLimit": {
+    "retainedFailure": false,
+    "excludedClaims": [],
+    "statement": "Proposition coherence and eight-surface consistency for this supplied material consensus only; no factual proof, universal completeness, publication authority, field value, candidate readiness or release readiness."
+  },
+  "decision": {
+    "state": "passed",
+    "basis": "Current independent evaluator artifacts satisfy the bounded task contract."
+  },
+  "evidenceClass": "representative-behavior",
+  "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9"
+}
