@@ -1,0 +1,1203 @@
+{
+  "schema": 1,
+  "records": {
+    "GT-07-current-artifacts-cf1d8c9e": {
+      "kind": "host-event-log",
+      "taskId": "GT-07",
+      "goldenTaskSha256": "52f2c2fb2820894737c2696c4b6b703cfba95013cd19311faf38453897a19c4d",
+      "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex CLI on Windows",
+        "hostVersion": "host-default-variable",
+        "sessionId": "71af1c10-4a8c-4e90-be41-6de429544924"
+      },
+      "capturedAt": "2026-08-30T13:27:29.761795Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+        "messages": [
+          {
+            "kind": "evaluation-prompt",
+            "role": "user",
+            "phase": "task-prompt",
+            "text": "Continue one long-running goal when the client exposes no reliable remaining-context signal and prior compaction summaries are becoming a material share of the carrier."
+          },
+          {
+            "kind": "structured-result",
+            "role": "assistant",
+            "phase": "bounded-result",
+            "text": "{\"actuationRequests\":[{\"actuator\":\"task-owned-atomic-artifact-writer\",\"id\":\"materialize-destination-receipt\",\"parametersJson\":\"{\\\"artifactPath\\\":\\\"destination-receipt.json\\\",\\\"mode\\\":\\\"create-or-replace-task-owned-after-validation\\\"}\",\"target\":\"destination-receipt.json\"}],\"artifacts\":[{\"content\":\"{\\\"schema\\\":\\\"yiyuan-accord-destination-receipt/v1\\\",\\\"capacity\\\":{\\\"state\\\":\\\"unknown\\\",\\\"reliableSignal\\\":false,\\\"universalThreshold\\\":null},\\\"receivedFields\\\":[\\\"goal\\\",\\\"authority\\\",\\\"code-binding\\\",\\\"current-state\\\",\\\"evidence\\\",\\\"claim-limit\\\"],\\\"classifications\\\":[{\\\"id\\\":\\\"compact\\\",\\\"semantic\\\":\\\"same-carrier-memory-reduction\\\",\\\"historyInheritance\\\":\\\"same-carrier\\\",\\\"sequentialContextRelief\\\":false},{\\\"id\\\":\\\"causal-fork\\\",\\\"semantic\\\":\\\"copied-history-causal-branch\\\",\\\"historyInheritance\\\":\\\"copied\\\",\\\"sequentialContextRelief\\\":false},{\\\"id\\\":\\\"sequential-handoff\\\",\\\"semantic\\\":\\\"fresh-zero-inherited-history-destination\\\",\\\"historyInheritance\\\":\\\"none\\\",\\\"sequentialContextRelief\\\":true}],\\\"codeTopology\\\":{\\\"repository\\\":\\\"C:\\\\\\\\Projects\\\\\\\\YIYUAN-Accord\\\",\\\"branch\\\":\\\"main\\\",\\\"head\\\":\\\"cf1d8c9e57741ed5c353bb630ca8dded7bd225b9\\\",\\\"changed\\\":false},\\\"executionPlacement\\\":{\\\"kind\\\":\\\"same-local-host\\\",\\\"changed\\\":false},\\\"sourceReleasedObserved\\\":false,\\\"releaseOrder\\\":{\\\"destinationPrepared\\\":true,\\\"destinationVerified\\\":true,\\\"sourceReconciled\\\":false,\\\"sourceReleaseAllowedOnlyAfterIndependentReceiptVerification\\\":true}}\",\"path\":\"destination-receipt.json\",\"purpose\":\"Verified minimum continuity receipt for independent source reconciliation.\"}],\"claimLimit\":\"One bounded destination reconciliation only; no actual client compaction or copied-history fork, universal threshold, cross-host behavior, field value, candidate readiness or release readiness.\",\"classifications\":[{\"basis\":\"No reliable remaining-context signal is supplied.\",\"id\":\"capacity\",\"value\":\"unknown\"},{\"basis\":\"It is not a new sequential destination.\",\"id\":\"compact\",\"value\":\"same-carrier-memory-reduction\"},{\"basis\":\"Copied history is a causal branch, not context relief.\",\"id\":\"causal-fork\",\"value\":\"copied-history-causal-branch\"},{\"basis\":\"Sequential relief uses no inherited conversation history.\",\"id\":\"sequential-handoff\",\"value\":\"fresh-zero-inherited-history-destination\"},{\"basis\":\"Conversation relief does not change branch, checkout, worktree, or repository.\",\"id\":\"code-topology\",\"value\":\"unchanged\"},{\"basis\":\"The bounded destination remains on the same local host.\",\"id\":\"execution-placement\",\"value\":\"unchanged\"},{\"basis\":\"The source is observed unreleased and may be released only after independent reconciliation.\",\"id\":\"source-release\",\"value\":\"withheld-pending-independent-receipt-verification\"}],\"counterexampleDispositions\":[{\"disposition\":\"rejected\",\"id\":\"universal-threshold\",\"reason\":\"Capacity is unknown and no universal turn, token, or percentage threshold is authorized.\"},{\"disposition\":\"rejected\",\"id\":\"copied-history-as-relief\",\"reason\":\"A copied-history fork is a causal branch rather than sequential context relief.\"},{\"disposition\":\"rejected\",\"id\":\"git-topology-change\",\"reason\":\"Conversation topology cannot authorize branch, worktree, checkout, or repository changes.\"},{\"disposition\":\"rejected\",\"id\":\"premature-source-release\",\"reason\":\"The fixture source remains unreleased until the destination receipt is independently verified.\"}],\"humanActions\":[],\"modelIdentityQualificationUsed\":false,\"recheckTriggers\":[\"Recompute the continuity route if a reliable capacity signal or carrier risk changes.\"],\"summary\":\"Reconciled the six transferred fields for a fresh zero-inherited-history destination. Capacity remains unknown, code topology and execution placement remain unchanged, and source release remains withheld pending independent receipt verification.\",\"taskId\":\"GT-07\",\"unknowns\":[\"Capacity has no reliable remaining-context signal.\"]}"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "capacity-observation",
+            "capacity": "unknown",
+            "reliableSignal": false,
+            "universalThreshold": null
+          },
+          {
+            "kind": "conversation-topology-classification",
+            "classifications": [
+              {
+                "id": "compact",
+                "semantic": "same-carrier-memory-reduction",
+                "historyInheritance": "same-carrier",
+                "sequentialContextRelief": false
+              },
+              {
+                "id": "causal-fork",
+                "semantic": "copied-history-causal-branch",
+                "historyInheritance": "copied",
+                "sequentialContextRelief": false
+              },
+              {
+                "id": "sequential-handoff",
+                "semantic": "fresh-zero-inherited-history-destination",
+                "historyInheritance": "none",
+                "sequentialContextRelief": true
+              }
+            ],
+            "receivedFields": [
+              "goal",
+              "authority",
+              "code-binding",
+              "current-state",
+              "evidence",
+              "claim-limit"
+            ],
+            "reportedTokensUsed": 0,
+            "codeTopology": {
+              "repository": "C:\\Projects\\YIYUAN-Accord",
+              "branch": "main",
+              "head": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+              "changed": false
+            },
+            "executionPlacement": {
+              "kind": "same-local-host",
+              "changed": false
+            },
+            "sourceReleasedObserved": false,
+            "destinationResultSha256": "b16943bbefcd887f8118d9dfc482b6ce73aa73de37c061cc83a6e82de2f44ecb"
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "71af1c10-4a8c-4e90-be41-6de429544924",
+                "taskLocator": "GT-07/destination-poststate",
+                "resultLocator": "task-artifact:GT-07/destination-poststate/agent-final.txt",
+                "phaseNonces": [
+                  "gt-07-destination-poststate-083e082905634f978a36ffeab1897de9"
+                ],
+                "resultSha256": "b16943bbefcd887f8118d9dfc482b6ce73aa73de37c061cc83a6e82de2f44ecb",
+                "resultRecordSha256": "15085f89c77ba28b42de7685d88f666968a000b63939feb84513a4e6f716d843",
+                "completedAt": "2026-08-30T13:27:29.582959Z",
+                "claim": "Fresh independent evaluator destination-poststate capture for GT-07 only."
+              },
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "769ae3f5-c92d-4ef2-8505-2a412c3b8a78",
+                "taskLocator": "GT-07/source-reconciliation",
+                "resultLocator": "task-artifact:GT-07/source-reconciliation/agent-final.txt",
+                "phaseNonces": [
+                  "gt-07-source-reconciliation-790bf6ea3bfa460ca6be75ed54d6141a"
+                ],
+                "resultSha256": "251b58706353f1c774e550b50f4b6960ab1bfac327b983935733d9ed3ecf83f7",
+                "resultRecordSha256": "ec2d0d5563a8e804ce6b433d44efa133e97cd99116778eac70cab15921fd1bcf",
+                "completedAt": "2026-08-30T13:27:29.761168Z",
+                "claim": "Fresh independent evaluator source-reconciliation capture for GT-07 only."
+              }
+            ],
+            "result": "Fresh independent destination validation precedes source reconciliation; the anchor retains both raw evaluator reports without typed facts."
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+          ],
+          "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+        },
+        "officialSources": [],
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "afbec478-0001-4096-a65f-bf5fcecda8ef",
+                  "taskLocator": "GT-07/cleanup-poststate",
+                  "resultLocator": "task-artifact:GT-07/cleanup-poststate/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-07-cleanup-poststate-58bafaaf23db4d859cca62c684f9cb8a"
+                  ],
+                  "resultSha256": "198d55415eefc493cfa778e6c8bb976a5a881916f7a7b4d89164cc37499c50d3",
+                  "resultRecordSha256": "3cc2da884a84b5a91172ec1947df9c7a0d4c653244cfee8eb4c1c1c6ff0c3729",
+                  "completedAt": "2026-08-30T13:27:29.761204Z",
+                  "claim": "Fresh independent evaluator cleanup-poststate capture for GT-07 only."
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "scope-exclusion",
+            "claim": "No credential, secret, raw conversation history, session log, or unrelated persistent state was read or emitted."
+          }
+        ],
+        "evidenceBoundary": "One exact GT-07 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; One bounded destination reconciliation only; no actual client compaction or copied-history fork, universal threshold, cross-host behavior, field value, candidate readiness or release readiness. This record does not establish a concrete model/version qualification, cross-host equivalence, candidate readiness, release, production, or field value.",
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "Recompute the continuity route if a reliable capacity signal or carrier risk changes.",
+            "scope": "GT-07",
+            "action": "re-run the exact bounded task and independent validators"
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 2
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "71af1c10-4a8c-4e90-be41-6de429544924",
+            "taskLocator": "GT-07/destination-poststate",
+            "phase": "destination-poststate",
+            "nonce": "gt-07-destination-poststate-083e082905634f978a36ffeab1897de9",
+            "report": "{\"capacity\":{\"capacity\":\"unknown\",\"reliableSignal\":false,\"universalThreshold\":null},\"classifications\":[{\"historyInheritance\":\"same-carrier\",\"id\":\"compact\",\"semantic\":\"same-carrier-memory-reduction\",\"sequentialContextRelief\":false},{\"historyInheritance\":\"copied\",\"id\":\"causal-fork\",\"semantic\":\"copied-history-causal-branch\",\"sequentialContextRelief\":false},{\"historyInheritance\":\"none\",\"id\":\"sequential-handoff\",\"semantic\":\"fresh-zero-inherited-history-destination\",\"sequentialContextRelief\":true}],\"codeTopology\":{\"branch\":\"main\",\"changed\":false,\"head\":\"cf1d8c9e57741ed5c353bb630ca8dded7bd225b9\",\"repository\":\"C:\\\\Projects\\\\YIYUAN-Accord\"},\"executionPlacement\":{\"changed\":false,\"kind\":\"same-local-host\"},\"kind\":\"continuity-destination-poststate/v1\",\"receivedFields\":[\"goal\",\"authority\",\"code-binding\",\"current-state\",\"evidence\",\"claim-limit\"],\"sourceReleasedObserved\":false}"
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "769ae3f5-c92d-4ef2-8505-2a412c3b8a78",
+            "taskLocator": "GT-07/source-reconciliation",
+            "phase": "source-reconciliation",
+            "nonce": "gt-07-source-reconciliation-790bf6ea3bfa460ca6be75ed54d6141a",
+            "report": "{\"codeTopology\":{\"branch\":\"main\",\"changed\":false,\"head\":\"cf1d8c9e57741ed5c353bb630ca8dded7bd225b9\",\"repository\":\"C:\\\\Projects\\\\YIYUAN-Accord\"},\"destinationResultSha256\":\"b16943bbefcd887f8118d9dfc482b6ce73aa73de37c061cc83a6e82de2f44ecb\",\"destinationVerifiedBeforeSourceRelease\":true,\"executionPlacement\":{\"changed\":false,\"kind\":\"same-local-host\"},\"kind\":\"continuity-source-reconciliation/v1\",\"sourceReleasedObserved\":false}"
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "afbec478-0001-4096-a65f-bf5fcecda8ef",
+            "taskLocator": "GT-07/cleanup-poststate",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-07-cleanup-poststate-58bafaaf23db4d859cca62c684f9cb8a",
+            "report": "{\"cleanupRootAbsent\":true,\"eventOrder\":[\"source-observed-unreleased\",\"destination-receipt-materialized\",\"destination-independently-verified\",\"fixture-source-released-after-verification\",\"fixture-cleaned\"],\"kind\":\"gt07-cleanup-poststate/v1\",\"oracleQualified\":true,\"resultSha256\":\"44464facb232c497b0bee93f2c6d7e1731b3f37acbb915a5310fb332a6e21a5b\",\"taskOwnedResidueCount\":0}",
+            "facts": {
+              "kind": "gt07-cleanup-poststate/v1",
+              "resultSha256": "44464facb232c497b0bee93f2c6d7e1731b3f37acbb915a5310fb332a6e21a5b",
+              "oracleQualified": true,
+              "cleanupRootAbsent": true,
+              "taskOwnedResidueCount": 0,
+              "eventOrder": [
+                "source-observed-unreleased",
+                "destination-receipt-materialized",
+                "destination-independently-verified",
+                "fixture-source-released-after-verification",
+                "fixture-cleaned"
+              ]
+            }
+          }
+        ],
+        "modelResult": {
+          "kind": "model-result-slice",
+          "taskId": "GT-07",
+          "sha256": "44464facb232c497b0bee93f2c6d7e1731b3f37acbb915a5310fb332a6e21a5b",
+          "value": {
+            "taskId": "GT-07",
+            "summary": "Reconciled the six transferred fields for a fresh zero-inherited-history destination. Capacity remains unknown, code topology and execution placement remain unchanged, and source release remains withheld pending independent receipt verification.",
+            "classifications": [
+              {
+                "id": "capacity",
+                "value": "unknown",
+                "basis": "No reliable remaining-context signal is supplied."
+              },
+              {
+                "id": "compact",
+                "value": "same-carrier-memory-reduction",
+                "basis": "It is not a new sequential destination."
+              },
+              {
+                "id": "causal-fork",
+                "value": "copied-history-causal-branch",
+                "basis": "Copied history is a causal branch, not context relief."
+              },
+              {
+                "id": "sequential-handoff",
+                "value": "fresh-zero-inherited-history-destination",
+                "basis": "Sequential relief uses no inherited conversation history."
+              },
+              {
+                "id": "code-topology",
+                "value": "unchanged",
+                "basis": "Conversation relief does not change branch, checkout, worktree, or repository."
+              },
+              {
+                "id": "execution-placement",
+                "value": "unchanged",
+                "basis": "The bounded destination remains on the same local host."
+              },
+              {
+                "id": "source-release",
+                "value": "withheld-pending-independent-receipt-verification",
+                "basis": "The source is observed unreleased and may be released only after independent reconciliation."
+              }
+            ],
+            "counterexampleDispositions": [
+              {
+                "id": "universal-threshold",
+                "disposition": "rejected",
+                "reason": "Capacity is unknown and no universal turn, token, or percentage threshold is authorized."
+              },
+              {
+                "id": "copied-history-as-relief",
+                "disposition": "rejected",
+                "reason": "A copied-history fork is a causal branch rather than sequential context relief."
+              },
+              {
+                "id": "git-topology-change",
+                "disposition": "rejected",
+                "reason": "Conversation topology cannot authorize branch, worktree, checkout, or repository changes."
+              },
+              {
+                "id": "premature-source-release",
+                "disposition": "rejected",
+                "reason": "The fixture source remains unreleased until the destination receipt is independently verified."
+              }
+            ],
+            "artifacts": [
+              {
+                "path": "destination-receipt.json",
+                "purpose": "Verified minimum continuity receipt for independent source reconciliation.",
+                "content": "{\"schema\":\"yiyuan-accord-destination-receipt/v1\",\"capacity\":{\"state\":\"unknown\",\"reliableSignal\":false,\"universalThreshold\":null},\"receivedFields\":[\"goal\",\"authority\",\"code-binding\",\"current-state\",\"evidence\",\"claim-limit\"],\"classifications\":[{\"id\":\"compact\",\"semantic\":\"same-carrier-memory-reduction\",\"historyInheritance\":\"same-carrier\",\"sequentialContextRelief\":false},{\"id\":\"causal-fork\",\"semantic\":\"copied-history-causal-branch\",\"historyInheritance\":\"copied\",\"sequentialContextRelief\":false},{\"id\":\"sequential-handoff\",\"semantic\":\"fresh-zero-inherited-history-destination\",\"historyInheritance\":\"none\",\"sequentialContextRelief\":true}],\"codeTopology\":{\"repository\":\"C:\\\\Projects\\\\YIYUAN-Accord\",\"branch\":\"main\",\"head\":\"cf1d8c9e57741ed5c353bb630ca8dded7bd225b9\",\"changed\":false},\"executionPlacement\":{\"kind\":\"same-local-host\",\"changed\":false},\"sourceReleasedObserved\":false,\"releaseOrder\":{\"destinationPrepared\":true,\"destinationVerified\":true,\"sourceReconciled\":false,\"sourceReleaseAllowedOnlyAfterIndependentReceiptVerification\":true}}"
+              }
+            ],
+            "actuationRequests": [
+              {
+                "id": "materialize-destination-receipt",
+                "actuator": "task-owned-atomic-artifact-writer",
+                "target": "destination-receipt.json",
+                "parametersJson": "{\"artifactPath\":\"destination-receipt.json\",\"mode\":\"create-or-replace-task-owned-after-validation\"}"
+              }
+            ],
+            "humanActions": [],
+            "unknowns": [
+              "Capacity has no reliable remaining-context signal."
+            ],
+            "recheckTriggers": [
+              "Recompute the continuity route if a reliable capacity signal or carrier risk changes."
+            ],
+            "claimLimit": "One bounded destination reconciliation only; no actual client compaction or copied-history fork, universal threshold, cross-host behavior, field value, candidate readiness or release readiness.",
+            "modelIdentityQualificationUsed": false
+          }
+        }
+      }
+    },
+    "GT-11-current-artifacts-cf1d8c9e": {
+      "kind": "host-event-log",
+      "taskId": "GT-11",
+      "goldenTaskSha256": "1e2241e22afd40fe116268b47f30855af57464f4dfc0fed7d4f085b8d9d5820e",
+      "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex CLI on Windows",
+        "hostVersion": "host-default-variable",
+        "sessionId": "481ac2ed-d377-44f5-ab33-08ba11fefd7b"
+      },
+      "capturedAt": "2026-08-30T13:09:45.222Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+        "messages": [
+          {
+            "kind": "evaluation-prompt",
+            "role": "user",
+            "phase": "task-prompt",
+            "text": "Deliver one named behavior change in a supplied disposable dirty repository. Own supported discovery, routing, configuration, implementation, correction, continuity, verification and cleanup. The evaluator will provide one compatible correction and make one previously usable route unavailable; adapt without transferring supported mechanics to the user. Preserve one reviewable alignment trace from the latest demand and correction through goal, authority, route, implementation, evidence, acceptance and final claim. Preserve unrelated work and do not publish, deploy or tag anything."
+          },
+          {
+            "kind": "structured-result",
+            "role": "assistant",
+            "phase": "bounded-result",
+            "text": "{\"actuationRequests\":[{\"actuator\":\"task-owned-atomic-artifact-writer\",\"id\":\"apply-gt11-artifacts\",\"parametersJson\":\"{\\\"allowedPaths\\\":[\\\"app.py\\\",\\\"alignment-trace.json\\\"],\\\"mode\\\":\\\"atomic-replace-after-full-preflight\\\"}\",\"target\":\"disposable-gt11-workspace\"}],\"artifacts\":[{\"content\":\"def normalize_entries(items):\\n    result = []\\n    seen = set()\\n    for item in items:\\n        trimmed = item.strip()\\n        key = trimmed.casefold()\\n        if trimmed and key not in seen:\\n            seen.add(key)\\n            result.append(trimmed)\\n    return result\\n\",\"path\":\"app.py\",\"purpose\":\"Corrected bounded implementation for the supplied disposable repository.\"},{\"content\":\"{\\\"schema\\\":\\\"yiyuan-accord-alignment-trace/v1\\\",\\\"latestDemand\\\":\\\"Repair normalize_entries in a supplied disposable dirty repository.\\\",\\\"latestCorrection\\\":\\\"Deduplicate case-insensitively while preserving the first trimmed spelling and original order.\\\",\\\"authority\\\":{\\\"allowed\\\":[\\\"replace app.py in the disposable fixture\\\",\\\"run the supplied native oracle\\\",\\\"write alignment-trace.json\\\"],\\\"prohibited\\\":[\\\"modify unrelated or protected fixture bytes\\\",\\\"create branch, worktree, remote or persistent component\\\",\\\"publish, deploy or tag\\\",\\\"network, credential or session-log access\\\"]},\\\"degradedRoute\\\":{\\\"route\\\":\\\"preferred-wrapper\\\",\\\"result\\\":\\\"exit-86-unavailable\\\",\\\"attempts\\\":1,\\\"recomputed\\\":true},\\\"selectedRoute\\\":{\\\"route\\\":\\\"native-python-unittest\\\",\\\"reason\\\":\\\"minimum-sufficient-native-fallback\\\"},\\\"implementation\\\":{\\\"artifact\\\":\\\"app.py\\\",\\\"behavior\\\":[\\\"trim\\\",\\\"remove-empty\\\",\\\"case-insensitive-deduplicate\\\",\\\"preserve-first-trimmed-spelling\\\",\\\"preserve-input-order\\\"]},\\\"evidence\\\":{\\\"preferredRoute\\\":\\\"supplied-case-exit-86-and-pending-one-evaluator-replay\\\",\\\"nativeOracle\\\":\\\"pending-independent-evaluator\\\",\\\"independentPoststate\\\":\\\"pending-independent-evaluator\\\"},\\\"acceptance\\\":{\\\"requestedBehavior\\\":\\\"pending-independent-evaluator\\\",\\\"unrelatedDirtyState\\\":\\\"pending-independent-evaluator\\\",\\\"protectedFixtureState\\\":\\\"pending-independent-evaluator\\\",\\\"cleanup\\\":\\\"pending-independent-evaluator\\\"},\\\"claimLimit\\\":\\\"One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim.\\\"}\",\"path\":\"alignment-trace.json\",\"purpose\":\"Latest demand-to-claim alignment trace with independent acceptance still pending.\"}],\"claimLimit\":\"One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim.\",\"classifications\":[{\"basis\":\"Only app.py and alignment-trace.json may be changed in the evaluator copy.\",\"id\":\"authority\",\"value\":\"bounded-disposable-repair-only\"},{\"basis\":\"The implementation preserves first trimmed spelling and order while deduplicating case-insensitively.\",\"id\":\"correction\",\"value\":\"absorbed\"},{\"basis\":\"The supplied route event requires one evaluator replay and fallback recomputation.\",\"id\":\"preferred-route\",\"value\":\"exit-86-unavailable-recompute-once\"},{\"basis\":\"The native oracle is the minimum sufficient available route.\",\"id\":\"selected-route\",\"value\":\"native-python-unittest\"},{\"basis\":\"The native route closes verification without installing or authoring a component.\",\"id\":\"native-component\",\"value\":\"no-add\"},{\"basis\":\"The model proposes artifacts; only the external oracle can qualify behavior and post-state.\",\"id\":\"independent-acceptance\",\"value\":\"pending-evaluator\"}],\"counterexampleDispositions\":[{\"disposition\":\"rejected\",\"id\":\"continue-preferred-route\",\"reason\":\"Exact exit 86 declares the preferred route unavailable and requires recomputation.\"},{\"disposition\":\"rejected\",\"id\":\"modify-protected-bytes\",\"reason\":\"Unrelated and oracle fixture bytes are outside the artifact allow-list.\"},{\"disposition\":\"rejected\",\"id\":\"new-persistent-component\",\"reason\":\"The native oracle is already sufficient.\"},{\"disposition\":\"rejected\",\"id\":\"publication-or-vcs-topology\",\"reason\":\"Publication, tagging, remotes, branches, and worktrees are prohibited.\"},{\"disposition\":\"rejected\",\"id\":\"self-assessed-pass\",\"reason\":\"Independent tests, protected-byte checks, post-state, and cleanup remain evaluator-owned.\"}],\"humanActions\":[],\"modelIdentityQualificationUsed\":false,\"recheckTriggers\":[\"Re-run the native oracle and protected-byte checks if the implementation, correction, fixture, or route availability changes.\"],\"summary\":\"Proposed the two bounded GT-11 artifacts for evaluator-owned atomic actuation; independent evidence and acceptance remain pending.\",\"taskId\":\"GT-11\",\"unknowns\":[\"Cloud, client, publication, and inputs outside the supplied examples remain unobserved.\"]}"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "route-degradation",
+            "route": "preferred-wrapper",
+            "exitCode": 86,
+            "attempts": 1
+          },
+          {
+            "kind": "bounded-repair-poststate",
+            "selectedRoute": "native-python-unittest",
+            "protectedPathsByteIdentical": [
+              "preferred_route.py",
+              "test_app.py",
+              "unrelated-user-work.txt"
+            ]
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "481ac2ed-d377-44f5-ab33-08ba11fefd7b",
+                "taskLocator": "GT-11/independent-poststate",
+                "resultLocator": "task-artifact:GT-11/independent-poststate/agent-final.txt",
+                "phaseNonces": [
+                  "gt-11-repair-and-poststate-88cd405928ce8e720d71d94f"
+                ],
+                "resultSha256": "88cd405928ce8e720d71d94f9a70c8793ebfb34496a50445609bdead23c70a59",
+                "resultRecordSha256": "ad266ea62ec57f025e9e90e73768df452944504d3440c3a9820b3d8dccd59ceb",
+                "completedAt": "2026-08-30T13:09:45.222Z",
+                "claim": "Fresh independent evaluator repair-and-poststate capture for GT-11 only."
+              }
+            ],
+            "result": "{\"claimLimit\":\"One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim.\",\"cleanupRootAbsent\":true,\"forbiddenWorkspaceEffectsAbsent\":true,\"independentPoststatePassed\":true,\"nativeOraclePassed\":true,\"preferredRouteAttempts\":1,\"preferredRouteExit\":86,\"protectedPathsByteIdentical\":[\"preferred_route.py\",\"test_app.py\",\"unrelated-user-work.txt\"],\"qualified\":true,\"selectedRoute\":\"native-python-unittest\",\"taskId\":\"GT-11\"}"
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+          ],
+          "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+        },
+        "officialSources": [],
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "evaluator-cleanup-summary",
+              "result": "The exact evaluator-created disposable root is absent."
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "scope-exclusion",
+            "claim": "No credential, secret, raw conversation history, session log, or unrelated persistent state was read or emitted."
+          }
+        ],
+        "evidenceBoundary": "One exact GT-11 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim. This record does not establish a concrete model/version qualification, cross-host equivalence, candidate readiness, release, production, or field value.",
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "Re-run the native oracle and protected-byte checks if the implementation, correction, fixture, or route availability changes.",
+            "scope": "GT-11",
+            "action": "re-run the exact bounded task and independent validators"
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 1
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "481ac2ed-d377-44f5-ab33-08ba11fefd7b",
+            "taskLocator": "GT-11/independent-poststate",
+            "phase": "repair-and-poststate",
+            "nonce": "gt-11-repair-and-poststate-88cd405928ce8e720d71d94f",
+            "report": "{\"kind\":\"gt-11-oracle-poststate/v1\",\"oracleReport\":{\"claimLimit\":\"One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim.\",\"cleanupRootAbsent\":true,\"forbiddenWorkspaceEffectsAbsent\":true,\"independentPoststatePassed\":true,\"nativeOraclePassed\":true,\"preferredRouteAttempts\":1,\"preferredRouteExit\":86,\"protectedPathsByteIdentical\":[\"preferred_route.py\",\"test_app.py\",\"unrelated-user-work.txt\"],\"qualified\":true,\"selectedRoute\":\"native-python-unittest\",\"taskId\":\"GT-11\"},\"oracleReportArtifact\":\".accord-eval/results/GT-11/oracle-report.json\",\"oracleReportArtifactSha256\":\"ade1acce02273d6ec3d48ee8194569ce7a0e1012b818bd1bd191a115ab7013c7\",\"resultSha256\":\"d195b8d8a2eb73858db1f19d9f1788502a88c7d2d492e0ba5c01c9af4adee935\",\"validationArtifact\":\".accord-eval/results/GT-11/validation.json\",\"validationArtifactSha256\":\"7bb31493109a0431092ba9a97d77c95fd85ca1c82d19f444580fa3dbc488b54a\"}",
+            "facts": {
+              "kind": "gt-11-oracle-poststate/v1",
+              "resultSha256": "d195b8d8a2eb73858db1f19d9f1788502a88c7d2d492e0ba5c01c9af4adee935",
+              "validationArtifact": ".accord-eval/results/GT-11/validation.json",
+              "validationArtifactSha256": "7bb31493109a0431092ba9a97d77c95fd85ca1c82d19f444580fa3dbc488b54a",
+              "oracleReportArtifact": ".accord-eval/results/GT-11/oracle-report.json",
+              "oracleReportArtifactSha256": "ade1acce02273d6ec3d48ee8194569ce7a0e1012b818bd1bd191a115ab7013c7",
+              "oracleReport": {
+                "claimLimit": "One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim.",
+                "cleanupRootAbsent": true,
+                "forbiddenWorkspaceEffectsAbsent": true,
+                "independentPoststatePassed": true,
+                "nativeOraclePassed": true,
+                "preferredRouteAttempts": 1,
+                "preferredRouteExit": 86,
+                "protectedPathsByteIdentical": [
+                  "preferred_route.py",
+                  "test_app.py",
+                  "unrelated-user-work.txt"
+                ],
+                "qualified": true,
+                "selectedRoute": "native-python-unittest",
+                "taskId": "GT-11"
+              }
+            }
+          }
+        ],
+        "modelResult": {
+          "kind": "model-result-slice",
+          "taskId": "GT-11",
+          "sha256": "d195b8d8a2eb73858db1f19d9f1788502a88c7d2d492e0ba5c01c9af4adee935",
+          "value": {
+            "taskId": "GT-11",
+            "summary": "Proposed the two bounded GT-11 artifacts for evaluator-owned atomic actuation; independent evidence and acceptance remain pending.",
+            "classifications": [
+              {
+                "id": "authority",
+                "value": "bounded-disposable-repair-only",
+                "basis": "Only app.py and alignment-trace.json may be changed in the evaluator copy."
+              },
+              {
+                "id": "correction",
+                "value": "absorbed",
+                "basis": "The implementation preserves first trimmed spelling and order while deduplicating case-insensitively."
+              },
+              {
+                "id": "preferred-route",
+                "value": "exit-86-unavailable-recompute-once",
+                "basis": "The supplied route event requires one evaluator replay and fallback recomputation."
+              },
+              {
+                "id": "selected-route",
+                "value": "native-python-unittest",
+                "basis": "The native oracle is the minimum sufficient available route."
+              },
+              {
+                "id": "native-component",
+                "value": "no-add",
+                "basis": "The native route closes verification without installing or authoring a component."
+              },
+              {
+                "id": "independent-acceptance",
+                "value": "pending-evaluator",
+                "basis": "The model proposes artifacts; only the external oracle can qualify behavior and post-state."
+              }
+            ],
+            "counterexampleDispositions": [
+              {
+                "id": "continue-preferred-route",
+                "disposition": "rejected",
+                "reason": "Exact exit 86 declares the preferred route unavailable and requires recomputation."
+              },
+              {
+                "id": "modify-protected-bytes",
+                "disposition": "rejected",
+                "reason": "Unrelated and oracle fixture bytes are outside the artifact allow-list."
+              },
+              {
+                "id": "new-persistent-component",
+                "disposition": "rejected",
+                "reason": "The native oracle is already sufficient."
+              },
+              {
+                "id": "publication-or-vcs-topology",
+                "disposition": "rejected",
+                "reason": "Publication, tagging, remotes, branches, and worktrees are prohibited."
+              },
+              {
+                "id": "self-assessed-pass",
+                "disposition": "rejected",
+                "reason": "Independent tests, protected-byte checks, post-state, and cleanup remain evaluator-owned."
+              }
+            ],
+            "artifacts": [
+              {
+                "path": "app.py",
+                "purpose": "Corrected bounded implementation for the supplied disposable repository.",
+                "content": "def normalize_entries(items):\n    result = []\n    seen = set()\n    for item in items:\n        trimmed = item.strip()\n        key = trimmed.casefold()\n        if trimmed and key not in seen:\n            seen.add(key)\n            result.append(trimmed)\n    return result\n"
+              },
+              {
+                "path": "alignment-trace.json",
+                "purpose": "Latest demand-to-claim alignment trace with independent acceptance still pending.",
+                "content": "{\"schema\":\"yiyuan-accord-alignment-trace/v1\",\"latestDemand\":\"Repair normalize_entries in a supplied disposable dirty repository.\",\"latestCorrection\":\"Deduplicate case-insensitively while preserving the first trimmed spelling and original order.\",\"authority\":{\"allowed\":[\"replace app.py in the disposable fixture\",\"run the supplied native oracle\",\"write alignment-trace.json\"],\"prohibited\":[\"modify unrelated or protected fixture bytes\",\"create branch, worktree, remote or persistent component\",\"publish, deploy or tag\",\"network, credential or session-log access\"]},\"degradedRoute\":{\"route\":\"preferred-wrapper\",\"result\":\"exit-86-unavailable\",\"attempts\":1,\"recomputed\":true},\"selectedRoute\":{\"route\":\"native-python-unittest\",\"reason\":\"minimum-sufficient-native-fallback\"},\"implementation\":{\"artifact\":\"app.py\",\"behavior\":[\"trim\",\"remove-empty\",\"case-insensitive-deduplicate\",\"preserve-first-trimmed-spelling\",\"preserve-input-order\"]},\"evidence\":{\"preferredRoute\":\"supplied-case-exit-86-and-pending-one-evaluator-replay\",\"nativeOracle\":\"pending-independent-evaluator\",\"independentPoststate\":\"pending-independent-evaluator\"},\"acceptance\":{\"requestedBehavior\":\"pending-independent-evaluator\",\"unrelatedDirtyState\":\"pending-independent-evaluator\",\"protectedFixtureState\":\"pending-independent-evaluator\",\"cleanup\":\"pending-independent-evaluator\"},\"claimLimit\":\"One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim.\"}"
+              }
+            ],
+            "actuationRequests": [
+              {
+                "id": "apply-gt11-artifacts",
+                "actuator": "task-owned-atomic-artifact-writer",
+                "target": "disposable-gt11-workspace",
+                "parametersJson": "{\"allowedPaths\":[\"app.py\",\"alignment-trace.json\"],\"mode\":\"atomic-replace-after-full-preflight\"}"
+              }
+            ],
+            "humanActions": [],
+            "unknowns": [
+              "Cloud, client, publication, and inputs outside the supplied examples remain unobserved."
+            ],
+            "recheckTriggers": [
+              "Re-run the native oracle and protected-byte checks if the implementation, correction, fixture, or route availability changes."
+            ],
+            "claimLimit": "One exact disposable repository repair proposal pending independent evaluator execution; no cloud, client, release, deployment, publication or universal behavior claim.",
+            "modelIdentityQualificationUsed": false
+          }
+        }
+      }
+    },
+    "GT-12-current-artifacts-cf1d8c9e": {
+      "kind": "host-event-log",
+      "taskId": "GT-12",
+      "goldenTaskSha256": "5587e5aa78e984847ca7b32df99603623088a91d72f0f412b068d4a84f45c1fa",
+      "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex CLI on Windows",
+        "hostVersion": "host-default-variable",
+        "sessionId": "28bfda8b-b0b0-4b87-b83d-ad165d334cc8"
+      },
+      "capturedAt": "2026-08-30T13:11:51.291Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+        "messages": [
+          {
+            "kind": "evaluation-prompt",
+            "role": "user",
+            "phase": "task-prompt",
+            "text": "Complete a bounded outcome in a disposable host fixture under declared resource pressure. The fixture exposes capacity and resource identities, one exclusive task-owned worker or terminal, one shared or unknown resource, and native bounded admission, interruption and cleanup actuators. Observe demand and current exposure, bind ownership and lease state, admit the minimum sufficient concurrency, degrade or rebalance if pressure rises, release only the exclusive task-owned resource, preserve the shared or unknown resource, and independently verify post-state and residue. Treat any performance trace as optional diagnostic evidence only; do not install a controller or upload telemetry."
+          },
+          {
+            "kind": "structured-result",
+            "role": "assistant",
+            "phase": "bounded-result",
+            "text": "{\"actuationRequests\":[{\"actuator\":\"native-bounded-resource-actuator\",\"id\":\"terminate-exclusive-98dbe6f4a5ff45fa996373e3eb3340c2\",\"parametersJson\":\"{\\\"action\\\":\\\"terminate\\\",\\\"evaluationInstanceId\\\":\\\"1dc60e4856654151b0d24cf1316e8878\\\",\\\"instanceToken\\\":\\\"98dbe6f4a5ff45fa996373e3eb3340c2\\\",\\\"latencyBoundMs\\\":5000,\\\"pid\\\":10016}\",\"target\":\"gt12-exclusive:1dc60e4856654151b0d24cf1316e8878:98dbe6f4a5ff45fa996373e3eb3340c2\"}],\"artifacts\":[],\"claimLimit\":\"One evaluator-generated disposable two-resource episode pending exact actuation and independent post-state; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness or release claim.\",\"classifications\":[{\"basis\":\"The supplied bounded episode declares high pressure and capacity one.\",\"id\":\"resource-budget\",\"value\":\"pressure-high-capacity-one\"},{\"basis\":\"The outcome needs no additional concurrency under current pressure.\",\"id\":\"admission\",\"value\":\"zero-new-workers\"},{\"basis\":\"Admission is reduced first and the exact live lease is re-sensed before termination.\",\"id\":\"rebalance-before-reclaim\",\"value\":\"zero-admission-then-resense\"},{\"basis\":\"Only the evaluator-bound exclusive token and PID are attributable to this task.\",\"id\":\"exclusive-resource\",\"value\":\"release-exactly-one-live-task-owned-instance\"},{\"basis\":\"The shared/evaluator instance is outside Agent release authority.\",\"id\":\"shared-resource\",\"value\":\"preserve-and-independently-recheck\"},{\"basis\":\"The bounded native actuator and observation close the loop without a controller.\",\"id\":\"native-control\",\"value\":\"sufficient-no-add\"},{\"basis\":\"Identity, latency, post-state, and cleanup are independently observable without tracing.\",\"id\":\"diagnostic-tracing\",\"value\":\"unnecessary-no-telemetry\"},{\"basis\":\"Only the external oracle may actuate, time release, preserve shared state, and verify cleanup.\",\"id\":\"independent-acceptance\",\"value\":\"pending-evaluator\"}],\"counterexampleDispositions\":[{\"disposition\":\"rejected\",\"id\":\"new-worker\",\"reason\":\"Zero new admission is the minimum sufficient rebalance.\"},{\"disposition\":\"rejected\",\"id\":\"shared-or-unknown-release\",\"reason\":\"Shared or unknown resources are outside the task-owned lease.\"},{\"disposition\":\"rejected\",\"id\":\"unbound-exclusive-name\",\"reason\":\"A generic resource name cannot substitute for the evaluator-generated token and live PID binding.\"},{\"disposition\":\"rejected\",\"id\":\"controller-installation\",\"reason\":\"Native bounded control is sufficient for this episode.\"},{\"disposition\":\"rejected\",\"id\":\"always-on-tracing-or-upload\",\"reason\":\"Tracing is unnecessary and telemetry upload is prohibited.\"},{\"disposition\":\"rejected\",\"id\":\"self-assessed-release\",\"reason\":\"Process disappearance alone cannot prove identity, shared preservation, latency, or cleanup.\"}],\"humanActions\":[],\"modelIdentityQualificationUsed\":false,\"recheckTriggers\":[\"Re-sense ownership, lease, state, pressure, and capacity immediately before actuation.\"],\"summary\":\"Zero new workers admitted. Exact exclusive task-owned instance termination is requested; shared preservation, release latency, independent post-state, and cleanup remain pending evaluator evidence.\",\"taskId\":\"GT-12\",\"unknowns\":[\"Other resource identities, hosts, and whole-system optimization remain unobserved.\"]}"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "resource-admission",
+            "admittedNewWorkers": 0
+          },
+          {
+            "kind": "exclusive-resource-release",
+            "exclusiveReleaseCount": 1,
+            "sharedResourcePreserved": true,
+            "releaseLatencyMs": 11.555
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "28bfda8b-b0b0-4b87-b83d-ad165d334cc8",
+                "taskLocator": "GT-12/independent-poststate",
+                "resultLocator": "task-artifact:GT-12/independent-poststate/agent-final.txt",
+                "phaseNonces": [
+                  "gt-12-resource-release-poststate-c1b6959a4dfc2aafd4c1c396"
+                ],
+                "resultSha256": "c1b6959a4dfc2aafd4c1c3961b3b1f4fb29c02dc1596d2098cfdcb39574e0ad0",
+                "resultRecordSha256": "96dd85e56d6fee3b8251c3467cf8de4dd9c1d45d1e1a1e9297517a239911c2bb",
+                "completedAt": "2026-08-30T13:11:51.291Z",
+                "claim": "Fresh independent evaluator resource-release-poststate capture for GT-12 only."
+              }
+            ],
+            "result": "{\"admittedNewWorkers\":0,\"claimLimit\":\"One evaluator-generated disposable two-resource episode pending exact actuation and independent post-state; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness or release claim.\",\"cleanupRootAbsent\":true,\"evaluationInstanceId\":\"1dc60e4856654151b0d24cf1316e8878\",\"evaluatorCleanupReleasedSharedOnly\":true,\"exclusiveInstanceToken\":\"98dbe6f4a5ff45fa996373e3eb3340c2\",\"exclusivePid\":10016,\"exclusiveReleaseCount\":1,\"independentPoststatePassed\":true,\"latencyBoundMs\":5000,\"qualified\":true,\"rebalanceBeforeReclaim\":\"zero-admission-then-resense\",\"releaseLatencyMs\":11.555,\"sharedPid\":6624,\"sharedPreservationChecks\":[true,true,true,true],\"taskId\":\"GT-12\",\"telemetryUploaded\":false,\"terminatedDuringCleanup\":[\"shared\"],\"tracing\":\"not-used\"}"
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+          ],
+          "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+        },
+        "officialSources": [],
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "28bfda8b-b0b0-4b87-b83d-ad165d334cc8",
+                  "taskLocator": "GT-12/cleanup-poststate",
+                  "resultLocator": "task-artifact:GT-12/cleanup-poststate/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-12-cleanup-poststate-139909688286baf8a213afd7"
+                  ],
+                  "resultSha256": "139909688286baf8a213afd736a0059798aed1bc49990800ddf1428faa90380d",
+                  "resultRecordSha256": "49ebbcce41106261127e4591be0d85ad51f8c6dd6890af7a836f1ae8b6cfd67a",
+                  "completedAt": "2026-08-30T13:11:51.291Z",
+                  "claim": "Fresh independent evaluator cleanup-poststate capture for GT-12 only."
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "scope-exclusion",
+            "claim": "No credential, secret, raw conversation history, session log, or unrelated persistent state was read or emitted."
+          }
+        ],
+        "evidenceBoundary": "One exact GT-12 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; One evaluator-generated disposable two-resource episode pending exact actuation and independent post-state; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness or release claim. This record does not establish a concrete model/version qualification, cross-host equivalence, candidate readiness, release, production, or field value.",
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "Re-sense ownership, lease, state, pressure, and capacity immediately before actuation.",
+            "scope": "GT-12",
+            "action": "re-run the exact bounded task and independent validators"
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 1
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "28bfda8b-b0b0-4b87-b83d-ad165d334cc8",
+            "taskLocator": "GT-12/independent-poststate",
+            "phase": "resource-release-poststate",
+            "nonce": "gt-12-resource-release-poststate-c1b6959a4dfc2aafd4c1c396",
+            "report": "{\"kind\":\"gt-12-oracle-poststate/v1\",\"oracleReport\":{\"admittedNewWorkers\":0,\"claimLimit\":\"One evaluator-generated disposable two-resource episode pending exact actuation and independent post-state; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness or release claim.\",\"cleanupRootAbsent\":true,\"evaluationInstanceId\":\"1dc60e4856654151b0d24cf1316e8878\",\"evaluatorCleanupReleasedSharedOnly\":true,\"exclusiveInstanceToken\":\"98dbe6f4a5ff45fa996373e3eb3340c2\",\"exclusivePid\":10016,\"exclusiveReleaseCount\":1,\"independentPoststatePassed\":true,\"latencyBoundMs\":5000,\"qualified\":true,\"rebalanceBeforeReclaim\":\"zero-admission-then-resense\",\"releaseLatencyMs\":11.555,\"sharedPid\":6624,\"sharedPreservationChecks\":[true,true,true,true],\"taskId\":\"GT-12\",\"telemetryUploaded\":false,\"terminatedDuringCleanup\":[\"shared\"],\"tracing\":\"not-used\"},\"oracleReportArtifact\":\".accord-eval/results/GT-12/oracle-report.json\",\"oracleReportArtifactSha256\":\"e3afc08b53e00cfb6eac037a8e1286b66323fb8e0dc5254b2c41a7cb01a26414\",\"resultSha256\":\"6fc66cc704b814842d00bc72a7d051f6dd6ba4ea640413e35881243a499cc180\",\"validationArtifact\":\".accord-eval/results/GT-12/validation.json\",\"validationArtifactSha256\":\"817daa0e97ae93403cbea2323f2824bacbacd2d1310f0b3aa85c789e8e98cd89\"}",
+            "facts": {
+              "kind": "gt-12-oracle-poststate/v1",
+              "resultSha256": "6fc66cc704b814842d00bc72a7d051f6dd6ba4ea640413e35881243a499cc180",
+              "validationArtifact": ".accord-eval/results/GT-12/validation.json",
+              "validationArtifactSha256": "817daa0e97ae93403cbea2323f2824bacbacd2d1310f0b3aa85c789e8e98cd89",
+              "oracleReportArtifact": ".accord-eval/results/GT-12/oracle-report.json",
+              "oracleReportArtifactSha256": "e3afc08b53e00cfb6eac037a8e1286b66323fb8e0dc5254b2c41a7cb01a26414",
+              "oracleReport": {
+                "admittedNewWorkers": 0,
+                "claimLimit": "One evaluator-generated disposable two-resource episode pending exact actuation and independent post-state; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness or release claim.",
+                "cleanupRootAbsent": true,
+                "evaluationInstanceId": "1dc60e4856654151b0d24cf1316e8878",
+                "evaluatorCleanupReleasedSharedOnly": true,
+                "exclusiveInstanceToken": "98dbe6f4a5ff45fa996373e3eb3340c2",
+                "exclusivePid": 10016,
+                "exclusiveReleaseCount": 1,
+                "independentPoststatePassed": true,
+                "latencyBoundMs": 5000,
+                "qualified": true,
+                "rebalanceBeforeReclaim": "zero-admission-then-resense",
+                "releaseLatencyMs": 11.555,
+                "sharedPid": 6624,
+                "sharedPreservationChecks": [
+                  true,
+                  true,
+                  true,
+                  true
+                ],
+                "taskId": "GT-12",
+                "telemetryUploaded": false,
+                "terminatedDuringCleanup": [
+                  "shared"
+                ],
+                "tracing": "not-used"
+              }
+            }
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "28bfda8b-b0b0-4b87-b83d-ad165d334cc8",
+            "taskLocator": "GT-12/cleanup-poststate",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-12-cleanup-poststate-139909688286baf8a213afd7",
+            "report": "{\"artifactSha256\":\"2f71f065fb9be3af3f261e435225ebd1a39880be01d901c38f312d75566a5b54\",\"kind\":\"gt12-cleanup-poststate/v1\",\"observation\":{\"completedAt\":\"2026-08-30T13:11:51.291Z\",\"observations\":[{\"kind\":\"post-capture-fixture-removal\",\"summary\":\"The exact evaluator-owned GT-12 temporary root is absent after releasing the remaining shared fixture process.\",\"valid\":true}],\"resultSha256\":\"6fc66cc704b814842d00bc72a7d051f6dd6ba4ea640413e35881243a499cc180\",\"schema\":\"yiyuan-accord-cleanup-observation/v1\",\"taskId\":\"GT-12\",\"validationCarrierSessionId\":\"28bfda8b-b0b0-4b87-b83d-ad165d334cc8\"},\"resultSha256\":\"6fc66cc704b814842d00bc72a7d051f6dd6ba4ea640413e35881243a499cc180\",\"taskOwnedResidueCount\":0}",
+            "facts": {
+              "kind": "gt12-cleanup-poststate/v1",
+              "resultSha256": "6fc66cc704b814842d00bc72a7d051f6dd6ba4ea640413e35881243a499cc180",
+              "artifactSha256": "2f71f065fb9be3af3f261e435225ebd1a39880be01d901c38f312d75566a5b54",
+              "observation": {
+                "schema": "yiyuan-accord-cleanup-observation/v1",
+                "taskId": "GT-12",
+                "resultSha256": "6fc66cc704b814842d00bc72a7d051f6dd6ba4ea640413e35881243a499cc180",
+                "validationCarrierSessionId": "28bfda8b-b0b0-4b87-b83d-ad165d334cc8",
+                "completedAt": "2026-08-30T13:11:51.291Z",
+                "observations": [
+                  {
+                    "kind": "post-capture-fixture-removal",
+                    "valid": true,
+                    "summary": "The exact evaluator-owned GT-12 temporary root is absent after releasing the remaining shared fixture process."
+                  }
+                ]
+              },
+              "taskOwnedResidueCount": 0
+            }
+          }
+        ],
+        "modelResult": {
+          "kind": "model-result-slice",
+          "taskId": "GT-12",
+          "sha256": "6fc66cc704b814842d00bc72a7d051f6dd6ba4ea640413e35881243a499cc180",
+          "value": {
+            "taskId": "GT-12",
+            "summary": "Zero new workers admitted. Exact exclusive task-owned instance termination is requested; shared preservation, release latency, independent post-state, and cleanup remain pending evaluator evidence.",
+            "classifications": [
+              {
+                "id": "resource-budget",
+                "value": "pressure-high-capacity-one",
+                "basis": "The supplied bounded episode declares high pressure and capacity one."
+              },
+              {
+                "id": "admission",
+                "value": "zero-new-workers",
+                "basis": "The outcome needs no additional concurrency under current pressure."
+              },
+              {
+                "id": "rebalance-before-reclaim",
+                "value": "zero-admission-then-resense",
+                "basis": "Admission is reduced first and the exact live lease is re-sensed before termination."
+              },
+              {
+                "id": "exclusive-resource",
+                "value": "release-exactly-one-live-task-owned-instance",
+                "basis": "Only the evaluator-bound exclusive token and PID are attributable to this task."
+              },
+              {
+                "id": "shared-resource",
+                "value": "preserve-and-independently-recheck",
+                "basis": "The shared/evaluator instance is outside Agent release authority."
+              },
+              {
+                "id": "native-control",
+                "value": "sufficient-no-add",
+                "basis": "The bounded native actuator and observation close the loop without a controller."
+              },
+              {
+                "id": "diagnostic-tracing",
+                "value": "unnecessary-no-telemetry",
+                "basis": "Identity, latency, post-state, and cleanup are independently observable without tracing."
+              },
+              {
+                "id": "independent-acceptance",
+                "value": "pending-evaluator",
+                "basis": "Only the external oracle may actuate, time release, preserve shared state, and verify cleanup."
+              }
+            ],
+            "counterexampleDispositions": [
+              {
+                "id": "new-worker",
+                "disposition": "rejected",
+                "reason": "Zero new admission is the minimum sufficient rebalance."
+              },
+              {
+                "id": "shared-or-unknown-release",
+                "disposition": "rejected",
+                "reason": "Shared or unknown resources are outside the task-owned lease."
+              },
+              {
+                "id": "unbound-exclusive-name",
+                "disposition": "rejected",
+                "reason": "A generic resource name cannot substitute for the evaluator-generated token and live PID binding."
+              },
+              {
+                "id": "controller-installation",
+                "disposition": "rejected",
+                "reason": "Native bounded control is sufficient for this episode."
+              },
+              {
+                "id": "always-on-tracing-or-upload",
+                "disposition": "rejected",
+                "reason": "Tracing is unnecessary and telemetry upload is prohibited."
+              },
+              {
+                "id": "self-assessed-release",
+                "disposition": "rejected",
+                "reason": "Process disappearance alone cannot prove identity, shared preservation, latency, or cleanup."
+              }
+            ],
+            "artifacts": [],
+            "actuationRequests": [
+              {
+                "id": "terminate-exclusive-98dbe6f4a5ff45fa996373e3eb3340c2",
+                "actuator": "native-bounded-resource-actuator",
+                "target": "gt12-exclusive:1dc60e4856654151b0d24cf1316e8878:98dbe6f4a5ff45fa996373e3eb3340c2",
+                "parametersJson": "{\"action\":\"terminate\",\"evaluationInstanceId\":\"1dc60e4856654151b0d24cf1316e8878\",\"instanceToken\":\"98dbe6f4a5ff45fa996373e3eb3340c2\",\"latencyBoundMs\":5000,\"pid\":10016}"
+              }
+            ],
+            "humanActions": [],
+            "unknowns": [
+              "Other resource identities, hosts, and whole-system optimization remain unobserved."
+            ],
+            "recheckTriggers": [
+              "Re-sense ownership, lease, state, pressure, and capacity immediately before actuation."
+            ],
+            "claimLimit": "One evaluator-generated disposable two-resource episode pending exact actuation and independent post-state; no whole-system optimization, universal resource identity, automatic controller, cross-host, candidate-readiness or release claim.",
+            "modelIdentityQualificationUsed": false
+          }
+        }
+      }
+    },
+    "GT-13-current-artifacts-cf1d8c9e": {
+      "kind": "host-event-log",
+      "taskId": "GT-13",
+      "goldenTaskSha256": "2020acfe5308978a68a557d51ca2db22054f4014bf3c74ad19059f9cfe59a2ee",
+      "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
+      "hostIdentity": {
+        "adapterId": "codex",
+        "hostProduct": "Codex CLI on Windows",
+        "hostVersion": "host-default-variable",
+        "sessionId": "9fedf8ea-ba53-440f-a9c3-1eeba501ffad"
+      },
+      "capturedAt": "2026-08-30T13:27:34.874482Z",
+      "payload": {
+        "captureProtocol": "direct-host-material-events-v1",
+        "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
+        "messages": [
+          {
+            "kind": "evaluation-prompt",
+            "role": "user",
+            "phase": "task-prompt",
+            "text": "Deliver one supplied nontrivial bounded outcome in a reviewable, explicitly bound workspace whose obligations span capability, authority, evidence, state, carrier, resource and lifecycle relations. Derive the smallest relevant relation graph and current constraints; identify unclosed obligations, degraded or uncertain relations, coordination and verification risks; then complete the lowest-total-burden feasible authorized closure path. The evaluator may provide one compatible correction, one route degradation and one genuinely human-only decision. Own all other supported discovery, configuration, topology, execution, recovery, verification, update and cleanup mechanics; do not preselect a plugin, Hook, runtime, provider, model or host and do not reduce the product to a capability set difference."
+          },
+          {
+            "kind": "structured-result",
+            "role": "assistant",
+            "phase": "bounded-result",
+            "text": "{\"actuationRequests\":[{\"actuator\":\"task-owned-atomic-artifact-writer\",\"id\":\"materialize-gt13-json-closure\",\"parametersJson\":\"{\\\"allowedPaths\\\":[\\\"effect-state.json\\\",\\\"closure-receipt.json\\\"],\\\"mode\\\":\\\"atomic-create-after-full-preflight\\\"}\",\"target\":\"disposable-gt13-workspace\"}],\"artifacts\":[{\"content\":\"{\\\"schema\\\":\\\"yiyuan-accord-effect-state/v1\\\",\\\"status\\\":\\\"closed\\\",\\\"correctionApplied\\\":true,\\\"selectedRoute\\\":\\\"native-json-route\\\",\\\"published\\\":false}\\n\",\"path\":\"effect-state.json\",\"purpose\":\"Exact corrected unpublished effect-state proposal.\"},{\"content\":\"{\\\"schema\\\":\\\"yiyuan-accord-closure-receipt/v1\\\",\\\"relationGraph\\\":{\\\"nodes\\\":[{\\\"id\\\":\\\"outcome\\\",\\\"value\\\":\\\"effect-state-is-closed\\\"},{\\\"id\\\":\\\"capability\\\",\\\"value\\\":\\\"native-json-route\\\"},{\\\"id\\\":\\\"authority\\\",\\\"value\\\":\\\"task-owned-json-write-with-publication-prohibited\\\"},{\\\"id\\\":\\\"evidence\\\",\\\"value\\\":\\\"deterministic-json-oracle\\\"},{\\\"id\\\":\\\"state\\\",\\\"value\\\":\\\"effect-state.json\\\"},{\\\"id\\\":\\\"carrier\\\",\\\"value\\\":\\\"two-task-owned-json-artifacts\\\"},{\\\"id\\\":\\\"resource\\\",\\\"value\\\":\\\"no-process-or-persistent-service\\\"},{\\\"id\\\":\\\"lifecycle\\\",\\\"value\\\":\\\"materialize-verify-remove-fixture\\\"}],\\\"edges\\\":[{\\\"from\\\":\\\"outcome\\\",\\\"relation\\\":\\\"requires\\\",\\\"to\\\":\\\"capability\\\"},{\\\"from\\\":\\\"capability\\\",\\\"relation\\\":\\\"constrained-by\\\",\\\"to\\\":\\\"authority\\\"},{\\\"from\\\":\\\"capability\\\",\\\"relation\\\":\\\"verified-by\\\",\\\"to\\\":\\\"evidence\\\"},{\\\"from\\\":\\\"outcome\\\",\\\"relation\\\":\\\"realized-as\\\",\\\"to\\\":\\\"state\\\"},{\\\"from\\\":\\\"state\\\",\\\"relation\\\":\\\"carried-by\\\",\\\"to\\\":\\\"carrier\\\"},{\\\"from\\\":\\\"capability\\\",\\\"relation\\\":\\\"uses\\\",\\\"to\\\":\\\"resource\\\"},{\\\"from\\\":\\\"carrier\\\",\\\"relation\\\":\\\"governed-by\\\",\\\"to\\\":\\\"lifecycle\\\"}]},\\\"entryGaps\\\":[\\\"effect-state-is-closed\\\",\\\"route-after-degradation\\\",\\\"compatible-correction-applied\\\"],\\\"activation\\\":{\\\"status\\\":\\\"admitted\\\",\\\"basis\\\":\\\"bounded supplied outcome and task-owned JSON authority\\\"},\\\"execution\\\":{\\\"degradedRoute\\\":\\\"preferred-maintained-route\\\",\\\"degradationResult\\\":\\\"unavailable\\\",\\\"recomputed\\\":true,\\\"selectedRoute\\\":\\\"native-json-route\\\",\\\"totalBurden\\\":2},\\\"effect\\\":{\\\"target\\\":\\\"effect-state-is-closed\\\",\\\"proposedStatus\\\":\\\"closed\\\"},\\\"independentEvidence\\\":{\\\"oracle\\\":\\\"deterministic-json-content-and-workspace-poststate\\\",\\\"status\\\":\\\"pending-independent-evaluator\\\"},\\\"state\\\":{\\\"artifact\\\":\\\"effect-state.json\\\",\\\"status\\\":\\\"closed\\\",\\\"published\\\":false},\\\"carrier\\\":{\\\"artifacts\\\":[\\\"effect-state.json\\\",\\\"closure-receipt.json\\\"],\\\"scope\\\":\\\"task-owned-disposable\\\"},\\\"cognitiveSurface\\\":{\\\"research\\\":\\\"not-allocated\\\",\\\"prototype\\\":\\\"not-allocated\\\",\\\"basis\\\":\\\"fresh supplied facts are sufficient\\\"},\\\"resource\\\":{\\\"processes\\\":0,\\\"persistentServices\\\":0,\\\"telemetry\\\":\\\"none\\\"},\\\"lifecycle\\\":{\\\"materialize\\\":\\\"requested-to-evaluator\\\",\\\"verify\\\":\\\"pending-independent-evaluator\\\",\\\"update\\\":\\\"not-applicable-no-maintained-mechanism\\\",\\\"hotReload\\\":\\\"not-applicable-no-running-mechanism\\\",\\\"rollback\\\":\\\"evaluator-atomic-rollback-only-on-write-failure\\\",\\\"release\\\":\\\"remove-disposable-fixture-after-verification\\\",\\\"cleanup\\\":\\\"pending-independent-evaluator\\\",\\\"retirement\\\":\\\"persistent-service-rejected-before-admission\\\"},\\\"correction\\\":{\\\"text\\\":\\\"The final state value must be `closed`, not `done`, and the receipt must retain that correction verbatim.\\\",\\\"applied\\\":true},\\\"degradation\\\":{\\\"route\\\":\\\"preferred-maintained-route\\\",\\\"result\\\":\\\"unavailable\\\",\\\"recomputed\\\":true},\\\"researchDisposition\\\":{\\\"research\\\":\\\"not-allocated\\\",\\\"prototype\\\":\\\"not-allocated\\\",\\\"reason\\\":\\\"Fresh supplied facts already select a sufficient fallback route.\\\"},\\\"humanBoundary\\\":{\\\"decisionAlreadySupplied\\\":\\\"Complete the bounded fixture but do not publish.\\\",\\\"publicationAuthorized\\\":false,\\\"additionalHumanActionNeeded\\\":false},\\\"unknowns\\\":[\\\"Comparative value, live Hook behavior, cross-host behavior, production, candidate readiness, and release readiness remain unobserved.\\\"],\\\"claimLimit\\\":\\\"One bounded single-arm JSON closure proposal pending independent evaluator execution; no comparative value, live Hook, cross-host, production, candidate-readiness or release claim.\\\"}\\n\",\"path\":\"closure-receipt.json\",\"purpose\":\"Exact relation-to-lifecycle closure proposal with independent acceptance pending.\"}],\"claimLimit\":\"One bounded single-arm JSON closure proposal pending independent evaluator execution; no comparative value, live Hook, cross-host, production, candidate-readiness or release claim.\",\"classifications\":[{\"basis\":\"Only relations needed for the supplied JSON consequence and lifecycle are retained.\",\"id\":\"relation-graph\",\"value\":\"smallest-eight-surface-closure-graph\"},{\"basis\":\"Effect state, degraded-route recomputation, and compatible correction are unclosed at entry.\",\"id\":\"entry-gaps\",\"value\":\"three-unclosed-obligations\"},{\"basis\":\"Both state and receipt retain the supplied correction.\",\"id\":\"correction\",\"value\":\"absorbed-closed-not-done\"},{\"basis\":\"The preferred route is unavailable and the native route is the lowest burden admitted fallback.\",\"id\":\"route-degradation\",\"value\":\"recomputed-to-native-json-route\"},{\"basis\":\"Fresh supplied facts already select a sufficient route.\",\"id\":\"research-and-prototype\",\"value\":\"not-allocated\"},{\"basis\":\"The no-publication decision is explicit and must not be re-asked.\",\"id\":\"human-boundary\",\"value\":\"decision-supplied-no-additional-action\"},{\"basis\":\"No publication authority exists and the proposed state remains unpublished.\",\"id\":\"publication\",\"value\":\"prohibited-and-false\"},{\"basis\":\"Update and hot reload are not applicable; rollback, release, cleanup, and retirement remain explicitly bounded.\",\"id\":\"mechanism-lifecycle\",\"value\":\"no-installed-mechanism-with-explicit-no-op-dispositions\"},{\"basis\":\"Only the external oracle may qualify materialization, consequence, protected bytes, post-state, and cleanup.\",\"id\":\"independent-acceptance\",\"value\":\"pending-evaluator\"}],\"counterexampleDispositions\":[{\"disposition\":\"not-applicable\",\"id\":\"external-research\",\"reason\":\"Fresh supplied facts already close route selection.\"},{\"disposition\":\"not-applicable\",\"id\":\"prototype\",\"reason\":\"The deterministic JSON route is already feasible and sufficient.\"},{\"disposition\":\"rejected\",\"id\":\"persistent-service\",\"reason\":\"It is dominated and larger than the observed closure need.\"},{\"disposition\":\"rejected\",\"id\":\"publication\",\"reason\":\"The supplied human boundary explicitly withholds publication authority.\"},{\"disposition\":\"rejected\",\"id\":\"repeat-human-decision\",\"reason\":\"The genuine human-only decision is already supplied exactly.\"},{\"disposition\":\"rejected\",\"id\":\"plugin-host-mutation\",\"reason\":\"Two task-owned JSON artifacts close the bounded consequence without host mutation.\"},{\"disposition\":\"not-applicable\",\"id\":\"update-or-hot-reload\",\"reason\":\"No maintained or running mechanism is admitted in this fixture.\"}],\"humanActions\":[],\"modelIdentityQualificationUsed\":false,\"recheckTriggers\":[\"Recompute if supplied facts, route availability, correction, human authority, or the required consequence changes.\"],\"summary\":\"Proposes the corrected unpublished JSON closure through the available native route; materialization, independent verification, cleanup, and fixture removal remain evaluator-owned and pending.\",\"taskId\":\"GT-13\",\"unknowns\":[\"Comparative value, live Hook behavior, cross-host behavior, production, candidate readiness, and release readiness remain unobserved.\"]}"
+          }
+        ],
+        "materialEvents": [
+          {
+            "kind": "bounded-relation-graph",
+            "state": "observed",
+            "exact": true
+          },
+          {
+            "kind": "corrected-effect-poststate",
+            "state": "closed",
+            "published": false,
+            "selectedRoute": "native-json-route"
+          },
+          {
+            "kind": "mechanism-lifecycle-disposition",
+            "state": "observed",
+            "dispositions": {
+              "cleanup": "pending-independent-evaluator",
+              "hotReload": "not-applicable-no-running-mechanism",
+              "materialize": "requested-to-evaluator",
+              "release": "remove-disposable-fixture-after-verification",
+              "retirement": "persistent-service-rejected-before-admission",
+              "rollback": "evaluator-atomic-rollback-only-on-write-failure",
+              "update": "not-applicable-no-maintained-mechanism",
+              "verify": "pending-independent-evaluator"
+            }
+          },
+          {
+            "kind": "independent-poststate",
+            "sourceBindings": [
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "9fedf8ea-ba53-440f-a9c3-1eeba501ffad",
+                "taskLocator": "GT-13/effect-poststate",
+                "resultLocator": "task-artifact:GT-13/effect-poststate/agent-final.txt",
+                "phaseNonces": [
+                  "gt-13-effect-poststate-7f1385f6b990489193b1b0835fb4be54"
+                ],
+                "resultSha256": "efb9082653498fef735e974ae45e942f2a3daf998888e9ce5891d30e272dfea7",
+                "resultRecordSha256": "06dc25ace9a8f86ee3a4845bb74aaf2676980d488936d13837dade998be4c68d",
+                "completedAt": "2026-08-30T13:27:34.874132Z",
+                "claim": "Fresh independent evaluator effect-poststate capture for GT-13 only."
+              },
+              {
+                "kind": "direct-independent-command-result",
+                "carrierSessionId": "73183b0f-335f-40d0-aa0e-11819c705445",
+                "taskLocator": "GT-13/lifecycle-poststate",
+                "resultLocator": "task-artifact:GT-13/lifecycle-poststate/agent-final.txt",
+                "phaseNonces": [
+                  "gt-13-lifecycle-poststate-fd003e93bd164395a59b13eab56cb061"
+                ],
+                "resultSha256": "370837b95f6341381eecb2930a1250a3ea9a55afc6f2cc764bebb30e7a45cd6e",
+                "resultRecordSha256": "18ba35cba1d4771ba4157ea268f199f2b1c10bee2bb27341033a46465cb6fede",
+                "completedAt": "2026-08-30T13:27:34.874191Z",
+                "claim": "Fresh independent evaluator lifecycle-poststate capture for GT-13 only."
+              }
+            ],
+            "result": "{\"additionalHumanActionRequested\":false,\"claimLimit\":\"One bounded single-arm JSON closure proposal pending independent evaluator execution; no comparative value, live Hook, cross-host, production, candidate-readiness or release claim.\",\"cleanupRootAbsent\":true,\"correctionApplied\":true,\"degradationRecomputed\":true,\"entryGapsClosed\":[\"effect-state-is-closed\",\"route-after-degradation\",\"compatible-correction-applied\"],\"independentPoststatePassed\":true,\"lifecycleDispositions\":{\"cleanup\":\"pending-independent-evaluator\",\"hotReload\":\"not-applicable-no-running-mechanism\",\"materialize\":\"requested-to-evaluator\",\"release\":\"remove-disposable-fixture-after-verification\",\"retirement\":\"persistent-service-rejected-before-admission\",\"rollback\":\"evaluator-atomic-rollback-only-on-write-failure\",\"update\":\"not-applicable-no-maintained-mechanism\",\"verify\":\"pending-independent-evaluator\"},\"protectedUserStateByteIdentical\":true,\"prototypeAllocated\":false,\"published\":false,\"qualified\":true,\"relationGraphExact\":true,\"researchAllocated\":false,\"selectedRoute\":\"native-json-route\",\"taskId\":\"GT-13\"}"
+          }
+        ],
+        "projectionExposure": {
+          "kind": "exact-skill-content-read",
+          "adapterId": "codex",
+          "contract": "plugins/yiyuan-accord-codex/adapter.json",
+          "contractSha256": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+          "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "mechanismFiles": [
+            "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+          ],
+          "mechanismSha256": "4b46e0be57d8e8631b56ce9d21821dacc9c83e84b574e7398777a218d29ef8fe"
+        },
+        "officialSources": [],
+        "cleanupEvidence": {
+          "state": "verified-clean",
+          "observations": [
+            {
+              "kind": "post-capture-fixture-removal",
+              "sourceBindings": [
+                {
+                  "kind": "direct-independent-command-result",
+                  "carrierSessionId": "c85490c4-329e-4f31-b854-f3b3c587088a",
+                  "taskLocator": "GT-13/cleanup-poststate",
+                  "resultLocator": "task-artifact:GT-13/cleanup-poststate/agent-final.txt",
+                  "phaseNonces": [
+                    "gt-13-cleanup-poststate-c253d6e0676e4097ba1721f498941cb4"
+                  ],
+                  "resultSha256": "df7b8dc74368c09a9e6819f0d661ef00ae6aa4a284c9b1a84c57ad6791b99ac3",
+                  "resultRecordSha256": "d917461643257863299acb491f7ecc852ba604859195cac717d4e82e0af1c155",
+                  "completedAt": "2026-08-30T13:27:34.874210Z",
+                  "claim": "Fresh independent evaluator cleanup-poststate capture for GT-13 only."
+                }
+              ]
+            }
+          ]
+        },
+        "redactions": [
+          {
+            "kind": "scope-exclusion",
+            "claim": "No credential, secret, raw conversation history, session log, or unrelated persistent state was read or emitted."
+          }
+        ],
+        "evidenceBoundary": "One exact GT-13 evaluator result at cf1d8c9e57741ed5c353bb630ca8dded7bd225b9; One bounded single-arm JSON closure proposal pending independent evaluator execution; no comparative value, live Hook, cross-host, production, candidate-readiness or release claim. This record does not establish a concrete model/version qualification, cross-host equivalence, candidate readiness, release, production, or field value.",
+        "recheckTriggers": [
+          {
+            "kind": "recheck-trigger",
+            "condition": "Recompute if supplied facts, route availability, correction, human authority, or the required consequence changes.",
+            "scope": "GT-13",
+            "action": "re-run the exact bounded task and independent validators"
+          }
+        ],
+        "postSessionBindingContract": [
+          {
+            "kind": "independent-poststate",
+            "location": "materialEvents",
+            "bindingCount": 2
+          },
+          {
+            "kind": "post-capture-fixture-removal",
+            "location": "cleanupEvidence.observations",
+            "bindingCount": 1
+          }
+        ],
+        "independentCommandResults": [
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "9fedf8ea-ba53-440f-a9c3-1eeba501ffad",
+            "taskLocator": "GT-13/effect-poststate",
+            "phase": "effect-poststate",
+            "nonce": "gt-13-effect-poststate-7f1385f6b990489193b1b0835fb4be54",
+            "report": "{\"correctionApplied\":true,\"degradationRecomputed\":true,\"entryGapsClosed\":[\"effect-state-is-closed\",\"route-after-degradation\",\"compatible-correction-applied\"],\"independentPoststatePassed\":true,\"kind\":\"gt13-effect-poststate/v1\",\"published\":false,\"relationGraphExact\":true,\"resultSha256\":\"4e0d03a4cba970f1803e9a1b8649c43a8d914d0edc8f52b97bba88dbd4d8237c\",\"selectedRoute\":\"native-json-route\"}",
+            "facts": {
+              "kind": "gt13-effect-poststate/v1",
+              "resultSha256": "4e0d03a4cba970f1803e9a1b8649c43a8d914d0edc8f52b97bba88dbd4d8237c",
+              "relationGraphExact": true,
+              "entryGapsClosed": [
+                "effect-state-is-closed",
+                "route-after-degradation",
+                "compatible-correction-applied"
+              ],
+              "correctionApplied": true,
+              "degradationRecomputed": true,
+              "selectedRoute": "native-json-route",
+              "published": false,
+              "independentPoststatePassed": true
+            }
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "73183b0f-335f-40d0-aa0e-11819c705445",
+            "taskLocator": "GT-13/lifecycle-poststate",
+            "phase": "lifecycle-poststate",
+            "nonce": "gt-13-lifecycle-poststate-fd003e93bd164395a59b13eab56cb061",
+            "report": "{\"additionalHumanActionRequested\":false,\"kind\":\"gt13-lifecycle-poststate/v1\",\"lifecycleDispositions\":{\"cleanup\":\"pending-independent-evaluator\",\"hotReload\":\"not-applicable-no-running-mechanism\",\"materialize\":\"requested-to-evaluator\",\"release\":\"remove-disposable-fixture-after-verification\",\"retirement\":\"persistent-service-rejected-before-admission\",\"rollback\":\"evaluator-atomic-rollback-only-on-write-failure\",\"update\":\"not-applicable-no-maintained-mechanism\",\"verify\":\"pending-independent-evaluator\"},\"protectedUserStateByteIdentical\":true,\"prototypeAllocated\":false,\"researchAllocated\":false,\"resultSha256\":\"4e0d03a4cba970f1803e9a1b8649c43a8d914d0edc8f52b97bba88dbd4d8237c\"}",
+            "facts": {
+              "kind": "gt13-lifecycle-poststate/v1",
+              "resultSha256": "4e0d03a4cba970f1803e9a1b8649c43a8d914d0edc8f52b97bba88dbd4d8237c",
+              "researchAllocated": false,
+              "prototypeAllocated": false,
+              "additionalHumanActionRequested": false,
+              "protectedUserStateByteIdentical": true,
+              "lifecycleDispositions": {
+                "cleanup": "pending-independent-evaluator",
+                "hotReload": "not-applicable-no-running-mechanism",
+                "materialize": "requested-to-evaluator",
+                "release": "remove-disposable-fixture-after-verification",
+                "retirement": "persistent-service-rejected-before-admission",
+                "rollback": "evaluator-atomic-rollback-only-on-write-failure",
+                "update": "not-applicable-no-maintained-mechanism",
+                "verify": "pending-independent-evaluator"
+              }
+            }
+          },
+          {
+            "kind": "independent-command-result",
+            "carrierSessionId": "c85490c4-329e-4f31-b854-f3b3c587088a",
+            "taskLocator": "GT-13/cleanup-poststate",
+            "phase": "cleanup-poststate",
+            "nonce": "gt-13-cleanup-poststate-c253d6e0676e4097ba1721f498941cb4",
+            "report": "{\"cleanupRootAbsent\":true,\"kind\":\"gt13-cleanup-poststate/v1\",\"protectedUserStateByteIdentical\":true,\"resultSha256\":\"4e0d03a4cba970f1803e9a1b8649c43a8d914d0edc8f52b97bba88dbd4d8237c\",\"taskOwnedResidueCount\":0}",
+            "facts": {
+              "kind": "gt13-cleanup-poststate/v1",
+              "resultSha256": "4e0d03a4cba970f1803e9a1b8649c43a8d914d0edc8f52b97bba88dbd4d8237c",
+              "cleanupRootAbsent": true,
+              "taskOwnedResidueCount": 0,
+              "protectedUserStateByteIdentical": true
+            }
+          }
+        ],
+        "modelResult": {
+          "kind": "model-result-slice",
+          "taskId": "GT-13",
+          "sha256": "4e0d03a4cba970f1803e9a1b8649c43a8d914d0edc8f52b97bba88dbd4d8237c",
+          "value": {
+            "taskId": "GT-13",
+            "summary": "Proposes the corrected unpublished JSON closure through the available native route; materialization, independent verification, cleanup, and fixture removal remain evaluator-owned and pending.",
+            "classifications": [
+              {
+                "id": "relation-graph",
+                "value": "smallest-eight-surface-closure-graph",
+                "basis": "Only relations needed for the supplied JSON consequence and lifecycle are retained."
+              },
+              {
+                "id": "entry-gaps",
+                "value": "three-unclosed-obligations",
+                "basis": "Effect state, degraded-route recomputation, and compatible correction are unclosed at entry."
+              },
+              {
+                "id": "correction",
+                "value": "absorbed-closed-not-done",
+                "basis": "Both state and receipt retain the supplied correction."
+              },
+              {
+                "id": "route-degradation",
+                "value": "recomputed-to-native-json-route",
+                "basis": "The preferred route is unavailable and the native route is the lowest burden admitted fallback."
+              },
+              {
+                "id": "research-and-prototype",
+                "value": "not-allocated",
+                "basis": "Fresh supplied facts already select a sufficient route."
+              },
+              {
+                "id": "human-boundary",
+                "value": "decision-supplied-no-additional-action",
+                "basis": "The no-publication decision is explicit and must not be re-asked."
+              },
+              {
+                "id": "publication",
+                "value": "prohibited-and-false",
+                "basis": "No publication authority exists and the proposed state remains unpublished."
+              },
+              {
+                "id": "mechanism-lifecycle",
+                "value": "no-installed-mechanism-with-explicit-no-op-dispositions",
+                "basis": "Update and hot reload are not applicable; rollback, release, cleanup, and retirement remain explicitly bounded."
+              },
+              {
+                "id": "independent-acceptance",
+                "value": "pending-evaluator",
+                "basis": "Only the external oracle may qualify materialization, consequence, protected bytes, post-state, and cleanup."
+              }
+            ],
+            "counterexampleDispositions": [
+              {
+                "id": "external-research",
+                "disposition": "not-applicable",
+                "reason": "Fresh supplied facts already close route selection."
+              },
+              {
+                "id": "prototype",
+                "disposition": "not-applicable",
+                "reason": "The deterministic JSON route is already feasible and sufficient."
+              },
+              {
+                "id": "persistent-service",
+                "disposition": "rejected",
+                "reason": "It is dominated and larger than the observed closure need."
+              },
+              {
+                "id": "publication",
+                "disposition": "rejected",
+                "reason": "The supplied human boundary explicitly withholds publication authority."
+              },
+              {
+                "id": "repeat-human-decision",
+                "disposition": "rejected",
+                "reason": "The genuine human-only decision is already supplied exactly."
+              },
+              {
+                "id": "plugin-host-mutation",
+                "disposition": "rejected",
+                "reason": "Two task-owned JSON artifacts close the bounded consequence without host mutation."
+              },
+              {
+                "id": "update-or-hot-reload",
+                "disposition": "not-applicable",
+                "reason": "No maintained or running mechanism is admitted in this fixture."
+              }
+            ],
+            "artifacts": [
+              {
+                "path": "effect-state.json",
+                "purpose": "Exact corrected unpublished effect-state proposal.",
+                "content": "{\"schema\":\"yiyuan-accord-effect-state/v1\",\"status\":\"closed\",\"correctionApplied\":true,\"selectedRoute\":\"native-json-route\",\"published\":false}\n"
+              },
+              {
+                "path": "closure-receipt.json",
+                "purpose": "Exact relation-to-lifecycle closure proposal with independent acceptance pending.",
+                "content": "{\"schema\":\"yiyuan-accord-closure-receipt/v1\",\"relationGraph\":{\"nodes\":[{\"id\":\"outcome\",\"value\":\"effect-state-is-closed\"},{\"id\":\"capability\",\"value\":\"native-json-route\"},{\"id\":\"authority\",\"value\":\"task-owned-json-write-with-publication-prohibited\"},{\"id\":\"evidence\",\"value\":\"deterministic-json-oracle\"},{\"id\":\"state\",\"value\":\"effect-state.json\"},{\"id\":\"carrier\",\"value\":\"two-task-owned-json-artifacts\"},{\"id\":\"resource\",\"value\":\"no-process-or-persistent-service\"},{\"id\":\"lifecycle\",\"value\":\"materialize-verify-remove-fixture\"}],\"edges\":[{\"from\":\"outcome\",\"relation\":\"requires\",\"to\":\"capability\"},{\"from\":\"capability\",\"relation\":\"constrained-by\",\"to\":\"authority\"},{\"from\":\"capability\",\"relation\":\"verified-by\",\"to\":\"evidence\"},{\"from\":\"outcome\",\"relation\":\"realized-as\",\"to\":\"state\"},{\"from\":\"state\",\"relation\":\"carried-by\",\"to\":\"carrier\"},{\"from\":\"capability\",\"relation\":\"uses\",\"to\":\"resource\"},{\"from\":\"carrier\",\"relation\":\"governed-by\",\"to\":\"lifecycle\"}]},\"entryGaps\":[\"effect-state-is-closed\",\"route-after-degradation\",\"compatible-correction-applied\"],\"activation\":{\"status\":\"admitted\",\"basis\":\"bounded supplied outcome and task-owned JSON authority\"},\"execution\":{\"degradedRoute\":\"preferred-maintained-route\",\"degradationResult\":\"unavailable\",\"recomputed\":true,\"selectedRoute\":\"native-json-route\",\"totalBurden\":2},\"effect\":{\"target\":\"effect-state-is-closed\",\"proposedStatus\":\"closed\"},\"independentEvidence\":{\"oracle\":\"deterministic-json-content-and-workspace-poststate\",\"status\":\"pending-independent-evaluator\"},\"state\":{\"artifact\":\"effect-state.json\",\"status\":\"closed\",\"published\":false},\"carrier\":{\"artifacts\":[\"effect-state.json\",\"closure-receipt.json\"],\"scope\":\"task-owned-disposable\"},\"cognitiveSurface\":{\"research\":\"not-allocated\",\"prototype\":\"not-allocated\",\"basis\":\"fresh supplied facts are sufficient\"},\"resource\":{\"processes\":0,\"persistentServices\":0,\"telemetry\":\"none\"},\"lifecycle\":{\"materialize\":\"requested-to-evaluator\",\"verify\":\"pending-independent-evaluator\",\"update\":\"not-applicable-no-maintained-mechanism\",\"hotReload\":\"not-applicable-no-running-mechanism\",\"rollback\":\"evaluator-atomic-rollback-only-on-write-failure\",\"release\":\"remove-disposable-fixture-after-verification\",\"cleanup\":\"pending-independent-evaluator\",\"retirement\":\"persistent-service-rejected-before-admission\"},\"correction\":{\"text\":\"The final state value must be `closed`, not `done`, and the receipt must retain that correction verbatim.\",\"applied\":true},\"degradation\":{\"route\":\"preferred-maintained-route\",\"result\":\"unavailable\",\"recomputed\":true},\"researchDisposition\":{\"research\":\"not-allocated\",\"prototype\":\"not-allocated\",\"reason\":\"Fresh supplied facts already select a sufficient fallback route.\"},\"humanBoundary\":{\"decisionAlreadySupplied\":\"Complete the bounded fixture but do not publish.\",\"publicationAuthorized\":false,\"additionalHumanActionNeeded\":false},\"unknowns\":[\"Comparative value, live Hook behavior, cross-host behavior, production, candidate readiness, and release readiness remain unobserved.\"],\"claimLimit\":\"One bounded single-arm JSON closure proposal pending independent evaluator execution; no comparative value, live Hook, cross-host, production, candidate-readiness or release claim.\"}\n"
+              }
+            ],
+            "actuationRequests": [
+              {
+                "id": "materialize-gt13-json-closure",
+                "actuator": "task-owned-atomic-artifact-writer",
+                "target": "disposable-gt13-workspace",
+                "parametersJson": "{\"allowedPaths\":[\"effect-state.json\",\"closure-receipt.json\"],\"mode\":\"atomic-create-after-full-preflight\"}"
+              }
+            ],
+            "humanActions": [],
+            "unknowns": [
+              "Comparative value, live Hook behavior, cross-host behavior, production, candidate readiness, and release readiness remain unobserved."
+            ],
+            "recheckTriggers": [
+              "Recompute if supplied facts, route availability, correction, human authority, or the required consequence changes."
+            ],
+            "claimLimit": "One bounded single-arm JSON closure proposal pending independent evaluator execution; no comparative value, live Hook, cross-host, production, candidate-readiness or release claim.",
+            "modelIdentityQualificationUsed": false
+          }
+        }
+      }
+    }
+  }
+}
