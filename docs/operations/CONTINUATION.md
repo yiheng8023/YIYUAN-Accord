@@ -620,7 +620,8 @@ increment and one active work item. Its ordered work is:
     Current evidence remains accepted only while the strengthened validation
     and sparse behavior-subject bindings pass; self-review is not independent
     evidence.
-11. `independent-review-and-form-future-exact-candidate` — superseded before
+Historical superseded review disposition —
+    `independent-review-and-form-future-exact-candidate` was superseded before
     candidate formation by the later live-state and responsibility correction. Sparse
     candidate qualification retains GT-07 and GT-17 through exact amendments;
     fresh isolated GT-11 at `f4dce57`, GT-12 at `72709b8` and single-arm GT-13
@@ -661,7 +662,7 @@ increment and one active work item. Its ordered work is:
     5% headroom rule without obscuring these checks through byte-golfing; a later
     addition must still preserve that headroom or justify subtraction. This is
     bounded remediation history, not a current candidate claim.
-12. `implement-and-replay-live-state-receipt-closure` — completed. Official docs
+11. `implement-and-replay-live-state-receipt-closure` — completed. Official docs
     establish non-uniform carrier surfaces; Codex App Server now directly
     exposes structured model/provider, feature, Skill, Hook, MCP, installed/App,
     effective-config and thread state surfaces. A disposable pure-data PoC passes
@@ -678,8 +679,8 @@ increment and one active work item. Its ordered work is:
     re-sensed generations and left no task fixture. This is synthetic bounded-
     observation evidence, not live official state, Hook causality or exact-
     revision candidate evidence.
-13. `prove-isolated-live-operational-carrier-and-continuity` — completed after
-    stage 12. The current packages add one shared short-lived host-path Node
+12. `prove-isolated-live-operational-carrier-and-continuity` — completed after
+    stage 11. The current packages add one shared short-lived host-path Node
     adapter behind their Skills. It keeps `startup` and `clear` silent and turns
     only supported `compact` or `resume` event fields into non-authoritative
     hints in typed minimum continuity context, without persistent process or state. Public-seam tests,
@@ -696,7 +697,8 @@ increment and one active work item. Its ordered work is:
     Agent branch with zero tools, but not production trust or product effect.
     Installed-package `compact`, sessionFlags `resume`, Node portability,
     semantic directive use, Hook-caused official re-sensing/core invocation,
-    product consequence and topology actuation remain unproved. GT-21 first maps every relevant official query, action, event,
+    product consequence and topology actuation remain unproved. The GT-21
+    contract required mapping every relevant official query, action, event,
     capability, state, topology, permission and lifecycle surface and consumes
     supported structured host facts directly. Frozen exact bytes then run in
     disposable official-clean and candidate-enabled lanes. A real event must
@@ -720,7 +722,7 @@ increment and one active work item. Its ordered work is:
     supply runtime-only trust through the thread request. Two later path and
     generated `HooksListResponse` shape corrections stopped before `turn/start`,
     deleted their task threads and consumed no model call. One separately
-    authorized low-effort turn then supplied `bypass_hook_trust` through
+    authorized model-variable read-only turn then supplied `bypass_hook_trust` through
     both `thread/start` and `thread/resume` request `config`. Exactly one installed
     synchronous `SessionStart:resume` Hook started and completed, injected
     `yiyuan-accord-hook-context/v1` with `signal.source=resume`, and the Agent
@@ -770,8 +772,9 @@ increment and one active work item. Its ordered work is:
     the disposable credential, marketplace, plugin and task root were removed.
     This closes the named simple Agent consequence, the prior pre-model host-
     admission boundary and the sufficient simple-route oracle without another
-    model call or diagnostic-message read. GT-21 now advances to a conditional
-    fresh zero-history sequential handoff under separately bound turn authority.
+    model call or diagnostic-message read. The later exact `3878968` arm then
+    closes only the conditional fresh zero-history sequential handoff under
+    separately bound turn authority.
     Exact `3878968` then created task-owned source and destination carriers with
     separate official `thread/start` actions, transferred exactly six typed
     fields, used one read-only destination turn without a concrete model request
@@ -788,7 +791,7 @@ increment and one active work item. Its ordered work is:
     and manifests are selected; the direct App Server shape stays reference-only.
     Do not inspect diagnostic content, bind model labels or add a browser bridge,
     MCP, SDK/App Server client or persistent service.
-14. `prove-transactional-install-state-preservation-and-removal` — completed
+13. `prove-transactional-install-state-preservation-and-removal` — completed
     only for the bounded case in
     `evals/evidence/2026-08-30-v310-gt20-21-source.json`.
     Exact tracked `v3.0.1` bytes were installed into disposable non-empty Codex
@@ -810,18 +813,22 @@ increment and one active work item. Its ordered work is:
     credentials, session logs or model turn were used. Production, unmanaged or
     cross-OS hosts, actual Claude host Hook triggering, product value and release
     readiness remain unknown.
-15. `reaccept-whole-system-after-live-state-closure` — active after bounded
-    GT-21 and GT-20 closure.
-16. `independent-review-and-form-future-exact-candidate` — pending after whole-
-    system reacceptance. Goal mode remains paused; only a genuinely independent
-    exact-tree specification, implementation and standards review can form a
-    future candidate.
+14. `reaccept-whole-system-after-live-state-closure` — completed only for the
+    source-bound reacceptance from exact cut `85a917a`. It preserves GT-21 and
+    GT-20 as bounded results, keeps production, cross-host and updated-client
+    entry behavior unknown, and does not form a candidate or release claim.
+15. `independent-review-and-form-future-exact-candidate` — active. Goal mode
+    remains paused; only a genuinely independent exact-tree specification,
+    implementation and standards review can form a future candidate.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may
-be considered only after all sixteen core stages complete; they then run in their
-declared order on one unchanged future revision. The previous push, Actions and
-Cloud results do not qualify changed authority or future behavior bytes.
+be considered only after all fifteen core stages complete; they then run in
+their declared order on one unchanged future revision. The updated client entry
+surface has not yet been re-sensed. Protected foreign `.tmp` residue remains the
+clean exact-candidate blocker and is neither inspected nor removed. The previous
+push, Actions and Cloud results do not qualify changed authority or future
+behavior bytes.
 
 The following 13-step chain is the immutable v3.0.1 historical disposition.
 Its external gates completed for the tagged v3.0.1 SHA; it is retained only as

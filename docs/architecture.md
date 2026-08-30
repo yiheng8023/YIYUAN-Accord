@@ -17,9 +17,14 @@ remain explicit. Fresh current-contract GT-18/19 at exact
 `2460adcff02bd56144f8d3f647ecef27cd5fefd0` now pass only one bounded
 synthetic evolution sequence and one bounded Codex-local responsibility-
 allocation sequence, with blocked arms, corrections, failed review and high
-costs retained. A genuinely new independent full-system review remains pending
-after the bounded GT-21 and GT-20 cases and the still-active affected-surface
-reacceptance.
+costs retained. Exact GT-21 and GT-20 evidence now closes only their bounded
+current-host live-carrier/fresh-handoff and disposable Windows transactional-
+lifecycle cases. Source-bound whole-system reacceptance from exact cut
+`85a917a` is complete, and a genuinely new independent exact-tree full-system
+review is now active. The tree is not a candidate or release; production,
+cross-host and updated-client entry compatibility remain unknown, while
+protected foreign `.tmp` residue remains the clean exact-candidate blocker and
+is not inspected or removed by this reacceptance.
 The implementation does not
 admit a Runtime, durable state layer, durable evolution or live-mechanism claim.
 The exact v3.1 package checkpoint
@@ -614,8 +619,10 @@ GT-18 observations retain source-bound cleanup, the immutable per-episode full
 vector, actual core decisions and explicit carrier source/target states. They
 support only one bounded evidence correction and one synthetic four-episode
 sequence; durable carrier need, cross-host or broad value, candidate readiness
-and release readiness remain unproved. The later whole-system balance audit and
-affected-surface deterministic reacceptance completed before independent review.
+and release readiness remain unproved. That earlier whole-system balance audit
+and affected-surface deterministic reacceptance completed before its historical
+independent review; it is not the later `85a917a` live-state/lifecycle
+reacceptance or the current independent exact-tree review.
 
 At exact revision `2460adcff02bd56144f8d3f647ecef27cd5fefd0`, current-
 contract GT-18 retains an immutable full vector, rejects and rolls back a proxy
@@ -703,7 +710,7 @@ next turn. The first installed-package turn remains an enabled-but-untrusted
 request override.
 
 After two pre-model path and generated `HooksListResponse` shape corrections,
-one separately authorized low-effort turn supplied
+one separately authorized model-variable read-only turn supplied
 `bypass_hook_trust` through both `thread/start` and `thread/resume` request
 `config`. Exactly one installed synchronous `SessionStart:resume` Hook emitted
 `hook/started` and `hook/completed`, injected
@@ -715,8 +722,10 @@ returned exact `HOOK_CONTEXT_RESUME`; item types were only `userMessage`,
 test control, not a production trust mechanism. This closes trigger, injection
 and one schema/source branch only. Semantic directive use, Hook-caused official
 state re-sensing and pure-core invocation, named consequence, independent
-post-state, comparative value and topology actuation remain open; GT-21 remains
-incomplete.
+post-state, comparative value and topology actuation remain open for that arm.
+Later exact GT-21 arms close only one bounded event-to-consequence case, one
+sufficient simple route and one fresh zero-history handoff; model identity and
+version remain runtime provenance rather than product or oracle inputs.
 
 Two later exact simple-route arms, at `f5f281c` and `6d91360`, each ran one
 installed startup Hook silently with zero context and zero tools, then failed
@@ -745,24 +754,18 @@ task root was removed. This repeated pre-model boundary stops same-lane retry;
 it does not authorize model substitution, credential inspection, permission
 loosening or an Accord mechanism.
 
-Before that candidate gate can open, GT-21 first exercises frozen exact package
-bytes in disposable official-clean and candidate-enabled lanes. It consumes
-supported official host facts directly and proves one real event through
-invalidation, re-sensing, pure-core invocation, typed minimum context, observable
-Agent use, consequence and independent post-state while a sufficient simple
-route stays silent. Any cross-event state remains bounded and plugin-private. A
-required sequential relief starts a fresh zero-history conversation and verifies
-the destination before source release; copied-history fork, Git worktree and Git
-branch cannot substitute. Installation, enablement or Hook output cannot pass.
-
-GT-20 then separately exercises the selected current Codex and Claude lifecycle
-adapters in disposable non-empty scopes. It binds seeded
-user instructions and configuration, unrelated and shared state, a concurrent
-post-install user edit and an injected update failure; then it verifies
-one-intent orchestration, exact rollback, zero active Accord state and the
-ownership, non-callability and bounded automatic cleanup of any inert host cache.
-A clean-state install is not a substitute because it cannot expose overwrite,
-stale-restore, ownership or host-cache lifecycle errors.
+Before that candidate gate can open, exact GT-21 evidence now closes only one
+bounded current-host event-to-consequence path, one silent sufficient route and
+one fresh zero-history handoff whose destination was verified before source
+release. Exact GT-20 evidence separately closes only one disposable non-empty
+Windows Codex and Claude lifecycle with seeded user/foreign state, concurrent
+edits, injected update failure, verified old-version retention, exact update,
+native removal and bounded inert-cache classification. Installation, enablement
+or Hook output alone still cannot substitute for behavior, and a clean-state
+install cannot expose overwrite, stale-restore, ownership or host-cache errors.
+The `85a917a` source-bound whole-system reacceptance preserves these finite
+claims without promoting them to production, cross-host, updated-client entry,
+candidate or release evidence; the independent exact-tree review is active.
 
 After the authorized tag and Release exist, one evaluator isolated from
 candidate-preparation context exercises the README installation, confirmation

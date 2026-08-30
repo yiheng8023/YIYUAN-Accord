@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-import hashlib, json, shutil, subprocess, tempfile, unittest
+import hashlib, json, re, shutil, subprocess, tempfile, unittest
 from pathlib import Path
 from unittest.mock import patch
 from yiyuan_accord.closure import reconcile_closure
@@ -819,6 +819,23 @@ class ProductControlTests(unittest.TestCase):
                 )} for step in mapping['process']['orderedSteps']
                  if step['state'] in {'active', 'blocked'}],
             )
+
+    def test_reacceptance_projects_current_stage_without_model_binding(self):
+        program = _read(ROOT, P)
+        for stages in (program['increment']['fourSurfaceMapping']['process']['orderedSteps'],
+                       program['increment']['workItems'][0]['closeoutSequence']):
+            self.assertEqual([step['state'] for step in stages[-2:]],
+                             ['completed', 'active'])
+        active = '\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
+            'README.md', 'README.zh-CN.md', P, 'product/reshaping-guidance.json',
+            'docs/architecture.md', 'docs/operations/CONTINUATION.md',
+            'docs/releases/v3.1.0.md'))
+        self.assertIsNone(re.search(
+            r'\b(?:gpt|gemini)-\d|claude-(?:\d|opus|sonnet|haiku)|deepseek-[vr]\d|'
+            r'run gt-20 next|whole-system reacceptance (?:is active|remains pending|'
+            r'is now the earliest open boundary)|(keep the selected current component set) '
+            r'and \1',
+            active, re.IGNORECASE))
 
     def test_reference_core_is_policy_driven_and_fail_closed(self):
         responsibilities = [

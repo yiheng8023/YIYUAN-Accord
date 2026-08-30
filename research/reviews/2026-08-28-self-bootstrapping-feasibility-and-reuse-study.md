@@ -1,10 +1,10 @@
 # Complete self-bootstrapping feasibility and reuse study
 
 Status: feasibility and source-bound whole-system balance self-audit completed;
-affected-surface deterministic reacceptance completed through exact behavior
-cuts `fd4b99a` and `cb11759`, 2026-08-28. Independent review is active. This is
-an admitted design and self-review input, not runtime authority, independent
-acceptance, field-value evidence or release evidence.
+affected-surface reacceptance now also covers exact audit cut `85a917a` after
+the bounded GT-21 and GT-20 results. Independent exact-tree review is active.
+This is an admitted design and self-review input, not runtime authority,
+independent acceptance, field-value evidence or release evidence.
 
 ## Decision
 
@@ -25,15 +25,17 @@ core is a small semantic and evaluation contract that can:
 
 The current decision has advanced from the P0-P3 **conditional-go for semantic
 modelling** through completed P4 and one minimum pure-data reference core.
-It remains **no-go for a live mechanism, a new runtime, a general state store or
-release work**. Exact checkpoint `553f5a97e08390117e877e7b913c7a501018bfa5`
+It remains **no-go for an additional live mechanism, a new runtime, a general
+state store or release work**. The selected bounded component set already
+contains one shared short-lived Hook; no residual duty justifies adding a
+client, service or persistence. Exact checkpoint `553f5a97e08390117e877e7b913c7a501018bfa5`
 retains failed GT-14 through GT-16 attempts because their publishable source is
 not task-complete. Exact `84447a7` later passes source-complete GT-14 through
 GT-16 only for their finite claims, and exact `7d7a7e5` passes GT-17/18 only for
 one bounded reconciliation and one synthetic four-episode full-vector sequence.
 The whole-system balance audit and deterministic reacceptance are complete;
-live mechanisms, a Runtime, general state store and release work remain no-go
-without new evidence and independent review.
+additional live mechanisms, a Runtime, general state store and release work
+remain no-go without new evidence and independent review.
 
 The unbounded interpretation is infeasible: no system can guarantee complete
 visibility into every host, infer human values or authority from context,
@@ -1400,3 +1402,78 @@ surfaces must all pass on the repaired tree; then a new genuinely independent
 product, specification, implementation and standards review must confirm the
 result. Until that happens the tree is not a clean exact candidate, and release
 remains closed.
+
+## Whole-system reacceptance after live state and lifecycle: cut 85a917a
+
+This source-bound reacceptance evaluates exact main revision
+85a917a9a6faf9670cf0accce6532b90342fc80f after the bounded GT-21 live
+carrier/fresh-handoff result and GT-20 transactional lifecycle result were
+committed and pushed. HEAD, origin/main and the public remote main ref
+matched that SHA with ahead/behind 0/0. Hosted run
+33295504266 checked out the immutable revision and passed all nine Ubuntu,
+macOS and Windows matrix jobs by 2026-08-30T05:50:16Z. Local support evidence
+was 25/25 product tests, 30 parsed current JSON files, Actionlint, strict Claude
+marketplace validation, three Hook syntax checks and git diff --check.
+Canonical and host checks were deliberately not rerun in the bound checkout:
+protected foreign .tmp residue remains their sole known top-level blocker and
+was not inspected, read, hashed, relaxed or removed.
+
+### Bound comparison
+
+- **Target:** one coherent finite product projection whose selected portable
+  Skill, shared short-lived SessionStart Hook adapter, pure closure core and
+  host manifests agree with typed live-state, topology-safe continuity and
+  one-intent user-state-preserving lifecycle evidence before independent review.
+- **Baselines:** public immutable v3.0.1 governs only current publication;
+  exact GT-18/19 revisions govern only their retained synthetic facts; exact
+  GT-21 revisions govern only the bounded Codex live-chain and fresh handoff;
+  exact 4c8bcc3 governs only the disposable Windows GT-20 lifecycle; and
+  85a917a is the current repository audit cut, not a release candidate.
+- **Counterfactuals:** retain no added product form when the selected thin set
+  closes the bounded duty; add a typed actuator, client, service or persistence
+  only if an independently observed residual responsibility cannot be closed by
+  official query/action surfaces plus the synchronous Hook and pure core.
+- **Confounders:** the live checkout is Accord-enabled; ordinary activation,
+  production trust, actual Claude host triggering, unmanaged and cross-OS
+  lifecycle, population value and qualified comparative burden remain
+  unobserved. A desktop client update occurred after GT-20 capture; observed CLI
+  surfaces stayed unchanged, but all post-release entry projections must be
+  refreshed rather than inherited.
+- **Invalidation:** goal or authority correction, task/evaluator or
+  behavior-subject drift, host or client lifecycle change, package-byte drift,
+  new trust/data/cost, cleanup-state change, evidence expiry, selected-form
+  change or public release change reopens only the earliest affected dimension.
+  Model identity and version remain runtime provenance, never route authority.
+
+### Non-compensating ledger at 85a917a
+
+| Dimension | State | Evidence-backed decision and residual boundary |
+| --- | --- | --- |
+| Baseline, target, counterfactual and cutoff | pass | Exact claim-scoped revisions, hosted run and invalidation triggers are bound; no historical or installed state lends authority to another claim. |
+| Product outcome and capability closure | concern | The bounded component set closes the observed GT-19/20/21 responsibilities without extra machinery. Ordinary production and cross-host value remain excluded rather than inferred. |
+| Proposition, category and boundary coherence | concern, remediated | Audit found one duplicated GT-20 route phrase and stale Q4 sequencing. Correct the two derived projections and regenerate the structured goal; no semantic or product-code change is justified. |
+| Environment sensing, adaptation and isolation | concern | Typed receipt rules and one Codex event path are closed only for their recorded compositions. Official-clean, no-Accord and post-update desktop compositions remain unknown unless a later claim requires them. |
+| Reuse discovery and product-form choice | pass for current bound | Existing official lifecycle surfaces and the selected Skill/Hook/core/manifests close the observed duties. Direct App Server and dynamic verifier remain evaluation-only; no bridge, MCP, client, daemon, database or persistent controller is admitted. |
+| Activation, execution, consequence and evidence integrity | pass with finite scope | GT-21 separates event, receipt, pure-core decision, Agent use, named consequence and independent post-state. Request-scoped trust bypass remains test-only and actual Claude triggering remains unknown. |
+| Human authority, privacy, trust and supply chain | pass with retained gates | No credential or session-log read, real-user mutation, silent telemetry, new dependency or production trust grant occurred. Publication and exact new trust/data/cost remain human-bound. |
+| User cognitive and orchestration burden | concern | GT-21 used one destination turn and zero tools; GT-20 used one native lifecycle intent per host operation in disposable scopes. No population or comparative burden claim is admitted. |
+| Reliability, failure containment, recovery, continuity and residue | concern with candidate blocker | GT-20 proves exact failed-update retention, successful update, user/foreign-state preservation and zero active Accord state; GT-21 proves destination-before-source release and zero task residue. Host-owned inert cache is bounded, while protected foreign .tmp still blocks a clean local candidate. |
+| Performance, context, resources and lifecycle cost | concern | The audit cut has 88 tracked files, 437679 product-code/test bytes under the 462000 ceiling, 24485 primary-instruction bytes under 26000 and three tracked-file slots. No population latency or value claim is admitted. |
+| Architecture, modularity and maintainability | pass with headroom concern | One pure core and shared Hook implementation remain the deep seams; all three Hook bytes agree. Evidence is consolidated in the existing multi-task carrier and no subsystem or dependency is added. |
+| Observability, evaluation and reproducibility | pass for exact cut | The complete local product suite and nine-job immutable hosted matrix pass; failures, fixture corrections, trust limitation, unknowns and cleanup post-state remain in source evidence. Static checks do not become behavior proof. |
+| Host projection compatibility, update, rollback and retirement | pass with finite scope | Exact disposable Windows Codex and Claude lifecycle passes; Codex retains no package cache and Claude retains only non-callable unlisted cache under the observed bounded host sweep. Post-update desktop and production equivalence remain unknown. |
+| Documentation and claim surface | concern, remediated | Architecture, continuation, release notes, Golden Tasks, acceptance and goal projections are refreshed to the same finite boundary; stale sequence text is removed and the detailed ledger stays behind this review pointer. |
+| Governance, candidate and release | blocker by design | Public v3.0.1 remains the only recommended immutable release. A genuinely independent exact-tree review, future exact candidate/version, clean local gate, exact hosted candidate verification and exact human release authorization remain ordered prerequisites. |
+
+### Decision and next gate
+
+The weakest justified remediation is projection repair, not more product
+mechanism. The typed-state, live consequence, fresh continuity and
+transactional lifecycle results are mutually compatible with the selected
+component set, and the full affected surface can be reaccepted without
+promoting any bounded observation into production, portability, value,
+candidate or release proof. Mark the reacceptance stage complete only after the
+two stale projections, this review pointer, all hashes and the deterministic
+suite agree. Then activate one genuinely independent exact-tree product,
+specification, implementation and standards review. Candidate formation remains
+separate and cannot bypass the protected residue rule or exact later gates.

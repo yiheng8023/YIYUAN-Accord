@@ -94,19 +94,26 @@ Hook-caused official re-sensing and core invocation, product consequence,
 topology actuation, narrow production trust and Node portability remain
 unproved. The first installed-package turn remains an enabled-but-untrusted
 `NO_CONTEXT` control. After path and generated-response-shape corrections stopped
-before model work, one separately authorized `gpt-5.6-luna`/low turn supplied
-runtime-only `bypass_hook_trust` through both thread request `config` objects.
+before model work, one separately authorized model-variable read-only turn
+supplied runtime-only `bypass_hook_trust` through both thread request `config`
+objects.
 Exactly one installed synchronous `SessionStart:resume` Hook started and
 completed, injected `yiyuan-accord-hook-context/v1` with `signal.source=resume`,
 and the Agent returned exact `HOOK_CONTEXT_RESUME` without tools. Cleanup passed.
 General inventory trust remained modified and the event reported
 `permission_mode=bypassPermissions`, so the broad bypass is a test control, not
-a production trust route or product-value result. GT-21 therefore first
-closes that minimum live chain in frozen isolated lanes; GT-20 then tests the
-selected component set's non-empty-host transactional lifecycle. Whole-system
-reacceptance, an exact-
-revision observation and a genuinely new independent review remain gated. At exact
-`cb11759`, revised GT-07 passes
+a production trust route or product-value result. Exact GT-21 arms now close
+only the bounded current-host event-to-consequence path, sufficient simple
+route and fresh thread/start handoff. Exact GT-20 evidence separately closes
+only one disposable non-empty Windows Codex and Claude transactional lifecycle
+with failed-update retention, exact update, user/foreign-state preservation,
+native removal and bounded inert host cache. Source-bound whole-system
+reacceptance from exact cut `85a917a` is complete; independent exact-tree
+review is now active, while candidate formation and release remain gated. The
+updated client entry surface has not yet been re-sensed, and protected foreign
+`.tmp` residue remains the clean exact-candidate blocker; this reacceptance
+neither inspects nor removes it. At exact `cb11759`,
+revised GT-07 passes
 only one fresh zero-history destination receipt and source-release ordering;
 actual compact and fork operations were not performed. Code topology,
 conversation topology and local/cloud execution placement remain independent.
@@ -264,22 +271,19 @@ Skill explicitly only for a deterministic exposure check.
 The current packages keep their Skill and Hook inside plugin-owned paths; they
 do not replace project or user `AGENTS.md`, `CLAUDE.md`, `config.toml` or
 settings files. That is a static package fact, not proof of plug-and-play or
-remove-and-leave behavior. Before a future candidate exists, GT-21 must first
-consume supported official query, action, event, capability, state, topology,
-permission and lifecycle surfaces; then prove, with frozen bytes in disposable
-official-clean and candidate-enabled lanes, event invalidation and re-sensing,
-pure-core invocation, typed minimum context, observable Agent use, consequence,
-independent post-state, a silent sufficient route and topology-safe fresh
-conversation handoff. Installation, enablement or Hook output cannot substitute
-for that chain. Once the final component set is selected, GT-20 must use
-disposable non-empty Codex and Claude scopes to show that, after source trust,
-one user lifecycle intent orchestrates all selected Accord components, a failed
-update rolls back atomically, existing and concurrent user changes plus shared
-or foreign state remain intact, and removal leaves zero active Accord
-registration, exposure, process or data state. A host-owned inert cache is
-acceptable only when it is non-callable, automatically bounded by the host's
-documented cleanup contract and requires no user action; it is not physical
-zero residue and Accord must not delete it outside supported host lifecycle.
+remove-and-leave behavior by itself. Exact GT-21 evidence now closes only one
+bounded current-host event-to-consequence path, one silent sufficient route and
+one topology-safe fresh conversation handoff with destination verification
+before source release. Exact GT-20 evidence now closes only one disposable
+non-empty Windows Codex and Claude lifecycle: after source trust, one lifecycle
+intent orchestrates the selected components, failed update retains the verified
+old version, update installs exact current bytes, user and foreign state remain
+intact, and removal leaves zero active Accord registration, exposure, process or
+data state. The retained Claude cache is host-owned, non-callable and covered by
+the observed bounded cleanup contract; it is not physical zero residue. These
+bounded results do not establish production, unmanaged or cross-OS behavior,
+actual Claude Hook activation, current updated-client entry compatibility,
+cross-host value, candidate readiness or release readiness.
 
 ---
 

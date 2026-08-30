@@ -1733,10 +1733,11 @@
       "residual-risk-claim-limit-and-recheck-trigger"
     ],
     "activeProjection": {
-      "auditCut": "59a340fbdec91d1b9287ba3c44a94a49348558c8",
+      "auditCut": "85a917a9a6faf9670cf0accce6532b90342fc80f",
       "reviewCut": "f3c9b09b784c844762557a959d81418e7b443374",
-      "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#whole-system-balance-reacceptance-from-exact-cut-59a340f",
-      "dominantBlocker": "f3c9b09-ancestor-provenance-and-budget-text-remediation-before-independent-re-review",
+      "reviewCutDisposition": "historical-independent-review-counterevidence-only-not-a-current-independent-review-of-85a917a-or-any-later-tree",
+      "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#whole-system-reacceptance-after-live-state-and-lifecycle-cut-85a917a",
+      "dominantBlocker": "independent-exact-tree-review-before-any-future-candidate-decision",
       "remediation": {
         "BAL-01": "implemented-and-deterministically-reaccepted",
         "BAL-02": "implemented-and-deterministically-reaccepted",
@@ -1744,9 +1745,12 @@
         "BAL-04": "paired-no-add-calibration-complete-genuine-unclosed-responsibility-still-required",
         "BAL-05": "pure-data-dynamic-retirement-sequence-source-complete-and-reaccepted-live-form-lifecycle-still-unknown",
         "BAL-06": "f3c9b09-closes-six-semantic-mutants-but-standards-review-finds-unbound-source-narrative-hash",
-        "BAL-07": "bind-typed-normalization-to-the-same-record-at-an-exact-untyped-ancestor-and-reconcile-the-400000-byte-budget-text"
+        "BAL-07": "bind-typed-normalization-to-the-same-record-at-an-exact-untyped-ancestor-and-reconcile-the-400000-byte-budget-text",
+        "BAL-08": "GT-21-bounded-current-host-live-carrier-sufficient-simple-route-and-fresh-zero-history-handoff-reaccepted-with-production-trust-ordinary-activation-and-cross-host-value-still-unknown",
+        "BAL-09": "GT-20-bounded-disposable-Windows-transactional-lifecycle-and-user-state-preservation-reaccepted-with-actual-Claude-trigger-unmanaged-cross-OS-production-and-value-still-unknown",
+        "BAL-10": "live-state-and-lifecycle-whole-system-projection-repaired-from-85a917a-independent-exact-tree-review-active-R4-candidate-and-release-closed-current-client-entry-instance-unknown-until-resensed"
       },
-      "graphRule": "Project the exact 59a340f whole-system audit and exact 7860fee, fcefee4 and f3c9b09 independent-review findings with their affected semantic-evidence and wording edges. Preserve current exact task behavior facts only while GT-07 typed minimum-state facts bind the same independent-result identity and narrative hash at an exact untyped ancestor, task-declared GT-18 regression dimensions, GT-19 same-outcome-family binding, canonical sequence binding and sparse subject bindings pass; refresh only the invalidated slice, normalize host vocabulary before functional comparison, treat continuity triggers as open source-bound risks, and never precompute host-model-tool-context products."
+      "graphRule": "Project the exact 85a917a whole-system reacceptance cut, the historical 59a340f audit, historical 7860fee, fcefee4 and f3c9b09 independent-review findings, and bounded GT-18, GT-19, GT-20 and GT-21 evidence with their affected semantic, evidence, lifecycle and wording edges. The f3c9b09 review remains historical counterevidence and is not an independent review of 85a917a or any later tree. Preserve exact task behavior facts only while their task contract, evaluator, source-recorded ancestor, canonical sequence, sparse behavior-subject bindings and claim ceilings remain valid. A client update invalidates the current entry-instance projection to unknown until read-only re-sensing; model identity and version remain runtime variables rather than product, route or oracle bindings. Refresh only the invalidated slice, normalize host vocabulary before functional comparison and never precompute host-model-tool-context products."
     },
     "claimLimit": "This is a revisable review model, not proof that one baseline fits every claim, that every possible dimension has been enumerated, that current implementation passes, or that self-review can replace representative, longitudinal, independent, hosted, human or public evidence."
   },
@@ -1806,40 +1810,29 @@
       "prefer plugin-scoped or namespaced lifecycle operations and never overwrite user-owned instructions or configuration to simulate activation",
       "treat capacity summarization and handoff as examples in an open continuity-risk set and refresh on any source-bound loss distortion staleness or misbinding",
       "refresh and globally reconcile on correction new consensus drift failure evidence conflict side effect or carrier pressure",
-      "carry the bounded current-receipt, event-to-core-to-Agent consequence, sufficient simple route and exact 3878968 fresh thread/start handoff with six-field destination reconciliation, destination-before-source release and zero residue without promoting request-scoped trust bypass to production trust; keep model identity variable, select the existing component set, run GT-20 over disposable non-empty Codex and Claude state, then reaccept whole-system balance and obtain independent exact-tree review",
+      "carry the reaccepted bounded current-receipt, event-to-core-to-Agent consequence, sufficient simple route, exact 3878968 fresh thread/start handoff and exact 4c8bcc3 transactional lifecycle without promoting them to production trust, portability, value, R4, candidate or release evidence; whole-system reacceptance from cut 85a917a is complete and independent exact-tree review is active; treat the updated client's current entry-instance projection as unknown until read-only re-sensing, and keep model identity and version as runtime variables",
       "keep release dormant until all core stages and sparse exact behavior-subject bindings are complete and a future candidate is independently justified",
       "remain compact enough to preserve host reasoning capacity and defer detail by progressive disclosure"
     ]
   },
   "nextAuthorityBoundary": {
-    "first": "transactional-non-empty-host-lifecycle-and-user-state-preservation-boundary",
+    "first": "independent-exact-tree-review-before-future-candidate",
     "then": [
-      "product/program.json",
-      "product/acceptance.json",
-      "product/reshaping-guidance.json-derived-index-and-graph-projection",
-      "goal-mode-projection-and-verifier",
-      "host-adapters-and-evaluations",
-      "GT-20-non-empty-Codex-and-Claude-lifecycle-replay",
-      "whole-system-balance-reacceptance",
-      "documentation-and-claim-reacceptance",
-      "new-independent-review-before-forming-future-exact-candidate"
+      "independent-product-specification-implementation-and-standards-review-of-one-exact-reaccepted-tree",
+      "current-client-entry-instance-read-only-resensing-before-any-current-entry-claim",
+      "promoted-task-current-semantics-projection-ancestor-and-unchanged-sparse-behavior-subject-binding",
+      "future-semantic-version-and-repository-candidate-decision-only-after-independent-review",
+      "R4-candidate-hosted-human-tagged-release-and-cleanup-gates-remain-closed-until-their-dependencies-pass"
     ],
-    "minimumNextSlice": "Retain every attempt as bounded history. Exact 2f6e3de closes one event-to-current-state-to-core-to-Agent hold consequence; exact fded9a6 closes the sufficient simple route without model binding; exact 3878968 closes one conditional fresh zero-history sequential handoff with destination-before-source release and zero task residue. Exact 4c8bcc3 closes only one tracked v3.0.1-to-current transactional lifecycle in disposable non-empty Windows Codex and Claude scopes: injected source failures retain the exact old version, recovery installs exact current bytes, user and foreign state survive, native removal leaves zero active Accord state, Claude inert cache is bound to a 14-day live-session-aware host sweep, and all task roots are removed. Keep the selected portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests. The direct App Server client remains a reference evaluator; do not add a browser bridge, MCP, SDK/client, daemon, database or persistence. Reaccept the whole system from the typed live-state and user-state-preservation boundaries before any independent exact-tree review or candidate formation.",
-    "latestFailureBoundary": "GT-21 and GT-20 have no remaining boundary for their bounded observed cases. Exact 3878968 preserves the current-host event, sufficient-simple and fresh-handoff claims without concrete model binding. Exact 4c8bcc3 preserves only disposable Windows transactional lifecycle, failed-update rollback, user and foreign state, exact update, removal, inert-cache and zero-task-residue claims. Production trust, ordinary activation, actual Claude host triggering, unmanaged or cross-OS hosts, cross-host value, whole-system balance, candidate and release readiness remain scoped unknowns. Whole-system reacceptance is now the earliest open boundary.",
+    "minimumNextSlice": "Retain every attempt and the exact GT-18, GT-19, GT-20 and GT-21 claim ceilings as bounded history. Whole-system reacceptance from exact cut 85a917a is complete after reconciling typed live-state, topology-safe continuity, transactional lifecycle, user-state preservation, host-owned inert-cache limits and non-compensating balance without adding a client, bridge, MCP, SDK, daemon, database or persistence. Keep the selected portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the direct App Server client remains a reference evaluator. Obtain one genuinely independent product, specification, implementation and standards review of the resulting exact tree before any future semantic-version or candidate decision. Because the client changed after the bounded observations, treat every current entry-instance projection as unknown until read-only re-sensing. Model identity and version remain runtime variables. R4, candidate, publication and release remain closed.",
+    "latestFailureBoundary": "The source-bound whole-system reacceptance after bounded GT-21 and GT-20 is complete for cut 85a917a. The earliest open boundary is a genuinely independent exact-tree product, specification, implementation and standards review; historical review cut f3c9b09 cannot qualify the current tree. The updated client's current entry-instance projection is unknown until read-only re-sensing and cannot qualify an activation, compatibility or installation claim. Production trust, ordinary activation, actual Claude host triggering, unmanaged or cross-OS hosts, cross-host value and product value remain scoped unknowns. R4, repository candidate, hosted candidate verification, human release authorization, tag, public Release and cleanup gates remain closed. Model identity and version remain variables rather than product bindings.",
     "requiredReplay": [
-      "semantic-authority-and-derived-surface-conformance",
-      "plan-process-acceptance-goal-projection-alignment",
-      "host-admission-and-interference",
-      "environment-provenance-official-clean-current-enabled-isolated-and-self-observation-controls",
-      "supported-official-query-action-event-capability-state-topology-permission-and-lifecycle-surface-map-with-no-second-authoritative-capability-database",
-      "live-typed-state-receipt-source-precedence-event-invalidation-expiry-resensing-and-dependent-recomputation",
-      "existing-wheel-adoption-product-form-selection-and-complete-self-bootstrapping",
-      "isolated-live-event-to-core-to-Agent-use-to-consequence-and-independent-poststate-with-silent-no-op-bounded-private-state-and-topology-safe-fresh-handoff",
-      "transactional-plug-and-play-and-remove-and-leave-over-non-empty-user-state-with-failure-rollback-zero-active-Accord-state-and-bounded-host-owned-inert-cache-cleanup",
-      "representative-help-no-op-correction-continuity-recovery-learning-evolution-rollback-retirement-and-cleanup",
-      "preserve-current-exact-gt11-gt12-gt13-gt14-gt15-gt16-and-gt18-evidence-while-replaying-gt19-for-the-new-typed-live-state-contract",
-      "longitudinal-consensus-and-cross-carrier-consistency",
-      "claim-scoped-baseline-target-counterfactual-whole-system-balance-weak-link-remediation-affected-surface-reacceptance-and-independent-review",
+      "preserve-the-85a917a-source-bound-whole-system-reacceptance-and-every-bounded-counterexample-without-self-attesting-independent-acceptance",
+      "independently-review-product-value-semantics-implementation-environment-controls-longitudinal-behavior-lifecycle-documentation-and-claim-on-one-exact-tree",
+      "verify-current-task-and-evaluation-semantics-exact-projection-source-recorded-ancestor-and-unchanged-sparse-behavior-subject-bytes-before-promoting-any-observation",
+      "read-only-resense-the-updated-client-entry-instance-before-any-current-host-activation-compatibility-installation-or-entry-surface-claim",
+      "keep-model-identity-and-version-as-runtime-provenance-variables-not-product-route-or-oracle-bindings",
+      "keep-R4-repository-candidate-hosted-human-publication-and-cleanup-gates-closed-until-the-independent-review-and-future-exact-candidate-dependencies-pass",
       "release-claim-and-lifecycle-only-after-a-future-exact-candidate"
     ]
   }
