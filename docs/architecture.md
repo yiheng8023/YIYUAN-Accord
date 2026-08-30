@@ -728,6 +728,13 @@ residual Accord duty, so it admits neither a new client nor model-label
 substitution; recheck waits for a supported host lane or a more specific
 structured cause under fresh bounded authority.
 
+An exact Claude session-only plugin recheck at `7a4c932` likewise completed one
+startup Hook silently, then stopped at isolated-host authentication before any
+model API request, Agent consequence, token use or cost. Its task root was
+removed. This is a host admission boundary and retained counterevidence, not a
+model-dependent result or residual Accord duty; no login, credential access,
+real-session reuse or mechanism escalation follows.
+
 Before that candidate gate can open, GT-21 first exercises frozen exact package
 bytes in disposable official-clean and candidate-enabled lanes. It consumes
 supported official host facts directly and proves one real event through

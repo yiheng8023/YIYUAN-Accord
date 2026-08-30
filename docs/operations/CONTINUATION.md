@@ -739,6 +739,14 @@ increment and one active work item. Its ordered work is:
     turn boundary exposes no residual Accord duty, so model-label substitution
     stops and fresh handoff remains gated until a supported host lane or more
     specific structured cause permits a bounded recheck.
+    An exact Claude session-only plugin recheck at `7a4c932` completed one
+    startup Hook silently, then stopped at isolated-host authentication before
+    any model API request, Agent consequence, token use or cost. Its task root
+    was removed. Retain this as host-admission counterevidence only: do not log
+    in, inspect credentials, reuse a real session, bind a model label or add an
+    Accord mechanism. Recheck only when an authenticated disposable supported
+    lane is independently available under explicit account and cost authority,
+    or another supported lane changes materially.
 14. `prove-transactional-install-state-preservation-and-removal` — pending after
     stage 13. Current package contents are plugin-scoped and do not themselves
     replace user instruction or configuration files, but that static fact is

@@ -383,10 +383,10 @@
           "deterministicCandidateStartupAndClearSilence": true,
           "priorLiveClaudeStartupHookSilenceRetained": true,
           "completeSimpleAgentEpisodeUnderTheSameOracle": false,
-          "latestAttemptRecord": "GT-21-simple-native-route-model-variable-6d91360",
+          "latestAttemptRecord": "GT-21-claude-simple-auth-boundary-7a4c932",
           "failureRecheckActivated": true,
           "modelIdentitySemantics": "Model route, provider label, model family and version are runtime environment variables. A concrete resolved value may be retained only as provenance for one observation; it is never a product binding, route selector or oracle condition.",
-          "claimLimit": "Transport-level no-op is retained. Exact f5f281c and 6d91360 same-oracle attempts both proved installed startup Hook silence and zero tool or Accord-context interference, but each host turn failed before any Agent response. The latest request omitted a concrete model, retained the host-resolved value only as provenance and captured structured error class other plus server retry. The sufficient simple Agent consequence therefore remains open without admitting model substitution or a new Accord mechanism."
+          "claimLimit": "Transport-level no-op is retained. Exact f5f281c and 6d91360 Codex attempts both proved installed startup Hook silence and zero tool or Accord-context interference, but each host turn failed before any Agent response. A later exact Claude session-only plugin attempt again completed the startup Hook silently, then stopped at isolated-host authentication before any model API request, token use or cost. No request bound a concrete model. The sufficient simple Agent consequence therefore remains open without admitting model substitution, credential access or a new Accord mechanism."
         },
         "decision": {
           "state": "continue-gt21",
@@ -459,9 +459,9 @@
           "decision": "Do not add or distribute a direct App Server client now. Two exact simple-route attempts failed only after the installed startup Hook completed silently and before Agent output. The corrected model-variable attempt retained official structured class other and server retry but still identified no residual Accord duty. Treat direct-client behavior as a host-integration responsibility and reference evaluator for condition-fit hosts. Preserve the existing component set while the complete simple route and conditional fresh handoff remain open; do not use a concrete model identity as a retry strategy or product condition.",
           "recheckStatus": {
             "activatedBy": "GT-21-simple-native-route-f5f281c",
-            "latestDiagnosticRecord": "GT-21-simple-native-route-model-variable-6d91360",
-            "earliestObservedFailureBoundary": "host turn after successful silent startup Hook completion and before Agent response",
-            "failureClass": "official structured class other with ten same-turn error notifications and server retry observed; message content was not retained",
+            "latestDiagnosticRecord": "GT-21-claude-simple-auth-boundary-7a4c932",
+            "earliestObservedFailureBoundary": "isolated host authentication after successful silent startup Hook completion and before any model API request",
+            "failureClass": "Claude structured authentication_failed with zero API duration, tokens and cost; no credential content was read or retained",
             "residualAccordDutyIdentified": false,
             "mechanismEscalationAdmitted": false,
             "modelIdentityBindingAdmitted": false
@@ -791,6 +791,134 @@
           "repeatedRepairDisposition": "Stop substituting concrete model identities. Preserve both failed trials as bounded counterexamples and recheck only on a supported host-lane or structured-cause change under fresh bounded authority.",
           "nextMinimumWork": "Reconcile the model-variable rule across current program, acceptance, guidance and continuation claims. Keep the product component set unchanged. Do not repeat the simple turn merely with another model label, advance to fresh handoff or add a client, MCP, SDK or persistence while this earlier host-turn boundary exposes no residual Accord duty.",
           "claimLimit": "One exact Codex-local structured-failure simple-route attempt on 6d91360. It proves live installed startup Hook silence, model-identity independence of the request and cleanup only; it does not prove the simple Agent consequence, a specific failure cause, value, production trust, GT-21 completion, candidate readiness or release readiness."
+        }
+      }
+    },
+    "GT-21-claude-simple-auth-boundary-7a4c932": {
+      "taskId": "GT-21",
+      "kind": "isolated-claude-simple-route-auth-boundary-source",
+      "capturedAt": "2026-08-30T02:06:39.089Z",
+      "hostIdentity": {
+        "hostProduct": "Claude Code",
+        "hostVersion": "2.1.251",
+        "operatingSystem": "Windows",
+        "sessionPersistence": "disabled for one task-owned synthetic session-only plugin attempt",
+        "rawConversationRetained": false,
+        "credentialsReadOrCopied": false,
+        "currentHostConfigurationMutated": false
+      },
+      "payload": {
+        "evaluatedRevision": "7a4c932dc022b982edbf1f0a80253ef8e8a39375",
+        "candidateBindingState": "Exact source-bound Claude session-only plugin failed-diagnostic simple-route attempt. The startup Hook completed silently, but isolated-host authentication stopped the turn before any model API request or Agent consequence; this is not GT-21 completion, candidate or release evidence.",
+        "behaviorSubject": {
+          "yiyuan_accord/closure.py": "f771192cd6e81fedf7343c538415da6c40f35e3807509e94430c836b21fe7e47",
+          "runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+          "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+        },
+        "revisionRelation": {
+          "priorCodexSimpleRevision": "6d9136019956564e1870b832667d18b3d952090a",
+          "priorCodexSimpleRevisionIsAncestor": true,
+          "priorExactArmRevision": "2f6e3de8e31b85eb909735aac1799d4d00603ece",
+          "priorExactArmIsAncestor": true,
+          "behaviorSubjectChangedSincePriorExactArm": false
+        },
+        "modelVariableContract": {
+          "portableRule": "Model route, provider label, model family and version are runtime environment variables, not Accord identity, route authority or an oracle condition.",
+          "concreteModelRequested": false,
+          "completedModelApiRequests": 0,
+          "hostResolvedModelObservationRetained": false,
+          "productBindingAdmitted": false,
+          "oracleDependsOnModelIdentity": false,
+          "reasoningResourceControl": "low"
+        },
+        "authority": {
+          "authorizedPurpose": "advance the real release conditions without weakening them",
+          "clientTurnAttempts": 1,
+          "completedModelApiRequests": 0,
+          "totalCostUsd": 0,
+          "accountConnectionAuthorized": false,
+          "credentialInspectionAuthorized": false
+        },
+        "preflight": {
+          "pluginLoadMode": "session-only plugin directory",
+          "pluginVersion": "3.1.0",
+          "sessionPersistenceDisabled": true,
+          "toolsExposed": 0,
+          "mcpServersExposed": 0,
+          "concreteModelRequested": false,
+          "initialCliShapeErrorBeforeModel": "stream-json required verbose",
+          "initialCliShapeCorrectedBeforeTurnAttempt": true
+        },
+        "treatment": {
+          "surface": "claude print mode with one exact session-only plugin directory and no concrete model",
+          "eventDefinition": "plugin SessionStart:startup",
+          "syntheticPrompt": "Reply with exactly SIMPLE_NATIVE_OK and nothing else. Do not use tools.",
+          "permissionMode": "dontAsk",
+          "tools": 0,
+          "sessionPersistence": false,
+          "maxBudgetUsd": 0.25
+        },
+        "liveObservation": {
+          "outcome": "failed-diagnostic-at-isolated-host-authentication-after-silent-hook",
+          "hook": {
+            "startedCount": 1,
+            "completedCount": 1,
+            "sameRunId": true,
+            "status": "success",
+            "eventName": "SessionStart",
+            "source": "session-only plugin",
+            "exitCode": 0,
+            "outputEmpty": true,
+            "stdoutEmpty": true,
+            "stderrEmpty": true,
+            "injectedContextCount": 0
+          },
+          "turn": {
+            "status": "api_error",
+            "structuredFailureClass": "authentication_failed",
+            "apiDurationMs": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "totalCostUsd": 0,
+            "toolItemCount": 0,
+            "completedModelApiRequests": 0,
+            "agentConsequenceObserved": false,
+            "authenticationMessageContentRetained": false
+          },
+          "independentPoststate": {
+            "observer": "parent process exit and task-root absence check, not the evaluated Agent",
+            "claudeProcessExited": true,
+            "sessionPersistenceDisabled": true,
+            "taskRootRemoved": true,
+            "taskRootAbsentAfterRemoval": true,
+            "backgroundProcessesRetained": 0,
+            "taskOwnedResidueRetained": 0
+          },
+          "topology": {
+            "copiedHistoryForkCreated": false,
+            "gitWorktreeCreated": false,
+            "gitBranchCreated": false,
+            "repositoryForkCreated": false,
+            "freshHandoffActuated": false
+          }
+        },
+        "decision": {
+          "state": "continue-gt21-authenticated-isolated-host-lane-required",
+          "admitted": "One exact Claude session-only plugin startup Hook completed silently with no injected context, tools, model API request, token use, cost, persistent session or task residue.",
+          "rejected": "The simple Agent consequence did not run because the isolated host had no authenticated route. Authentication failure is a host admission boundary, not evidence for model causality or an Accord mechanism gap.",
+          "earliestObservedFailureBoundary": "isolated host authentication after successful silent startup Hook completion and before any model API request",
+          "residualAccordDutyIdentified": false,
+          "accountOrCredentialEscalationAdmitted": false,
+          "mechanismEscalationAdmitted": false,
+          "repeatedRepairDisposition": "Do not log in, inspect credentials, reuse real sessions or retry with a model label. Recheck only when an authenticated disposable host lane is independently available under explicit account and cost authority, or another supported lane changes materially.",
+          "claimLimit": "One exact Claude session-only failed-diagnostic attempt on 7a4c932. It proves startup Hook silence and cleanup before an authentication boundary only; it does not prove a model turn, Agent consequence, production trust, Claude GT-21 equivalence, candidate readiness or release readiness."
         }
       }
     }

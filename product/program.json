@@ -70,7 +70,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "24e8ba8404505702c5f76aa518493df8c7b817b257c9a66de94f7c4d84ae17a6",
+      "repositorySha256": "f364b0ac85c805d563140f4b39e2c8f7ce5dab34046faa30ab2a1e4e2037cb5c",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -95,10 +95,11 @@
     },
     {
       "id": "gt21-live-carrier-preflight-2026-08-29",
-      "kind": "bounded-preflight-counterevidence-exact-codex-local-live-carrier-observation-product-boundary-decision-and-model-variable-failed-simple-routes",
+      "kind": "bounded-preflight-counterevidence-exact-codex-local-live-carrier-observation-product-boundary-decision-model-variable-failed-simple-routes-and-claude-auth-boundary",
       "repositoryLocator": "evals/evidence/2026-08-29-v310-gt21-live-carrier-preflight.json",
-      "repositorySha256": "b6c74484f5a280077dd0ae20309b76be4bf6cd16d3620f89cf854f1137751757",
-      "disposition": "admitted-bounded-exact-codex-local-arm-provisional-no-added-client-recheck-model-variable-structured-host-turn-failure-and-silent-hook-evidence-not-complete-gt21-candidate-or-release-evidence"
+      "repositorySha256": "f8f2addc453967a733a7533e13087c426e460438b1f8e0c8fbc4353d42f3cbdc",
+      "latestFailureBoundary": "Exact Claude session-only startup Hook completed silently, then isolated-host authentication failed before any model API request, token use or cost; no credential access, account escalation or model binding is admitted.",
+      "disposition": "admitted-bounded-exact-codex-local-arm-provisional-no-added-client-recheck-model-variable-structured-host-turn-failure-claude-auth-boundary-and-silent-hook-evidence-not-complete-gt21-candidate-or-release-evidence"
     },
     {
       "id": "karpathy-primary-method-and-repository-inputs-2026-08-28",
