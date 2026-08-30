@@ -2,7 +2,7 @@
   "taskId": "GT-21",
   "goldenTaskSha256": "a7634cccb150a0cde1c8d35899fab0da621b40b6ae42ec3729c62b5b7382b0ea",
   "evaluationContractSha256": "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415",
-  "evaluatedRevision": "3878968d459adba57792c390eb277876028b0012",
+  "evaluatedRevision": "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9",
   "observedAt": null,
   "observer": {
     "kind": "source-bound-deterministic-promoter",

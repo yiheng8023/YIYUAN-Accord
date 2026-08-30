@@ -1187,6 +1187,18 @@ class ProductControlTests(unittest.TestCase):
                                  'liveBehaviorClaimed'), True),
             ('current digest', ('frozenPromotion',
                                 'currentEvaluationContractSha256'), '0' * 64),
+            ('promoted revision drift', ('frozenPromotion',
+                                         'promotedRecords', 1,
+                                         'evaluatedRevision'), '0' * 40),
+            ('component revision collapsed', ('frozenPromotion',
+                                               'promotedRecords', 1,
+                                               'selectedRecordSet', 'components',
+                                               0, 'evaluatedRevision'),
+             'cf1d8c9e57741ed5c353bb630ca8dded7bd225b9'),
+            ('component revision drift', ('frozenPromotion',
+                                           'promotedRecords', 1,
+                                           'selectedRecordSet', 'components',
+                                           1, 'evaluatedRevision'), '0' * 40),
             ('composite omission', ('frozenPromotion', 'promotedRecords', 1,
                                     'selectedRecordSet', 'components'), []),
             ('composite order', ('frozenPromotion', 'promotedRecords', 1,
@@ -1217,6 +1229,8 @@ class ProductControlTests(unittest.TestCase):
             for field, value in (
                 ('observedAt', '2026-08-30T00:00:00Z'),
                 ('hostIdentity', {'hostProduct': 'gpt-9'}),
+                ('evaluatedRevision',
+                 '3878968d459adba57792c390eb277876028b0012'),
             ):
                 observation = _read(ROOT, FROZEN_GT20_21_OBSERVATIONS[0])
                 observation[field] = value

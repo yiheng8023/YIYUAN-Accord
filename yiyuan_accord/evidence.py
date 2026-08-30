@@ -74,7 +74,7 @@ _FROZEN_GT20_21_BASE_SOURCE_SHA256 = (
     "044cf9ba000da7819c7a64c15d8c08da2f3e973596e761a7ae0182f58af45256"
 )
 _FROZEN_GT20_21_PROMOTION_SHA256 = (
-    "0444f79d7ec437481fa58606bffe4debf4e0f0d2fd64db927c14883148056f0a"
+    "7da9ddc93d4a8df0e66c85e2d427193f8acd9ae058bdcc4d6f5cfee1f84d0163"
 )
 FROZEN_GT20_21_OBSERVATIONS = {
     "GT-20": (
@@ -84,7 +84,7 @@ FROZEN_GT20_21_OBSERVATIONS = {
     ),
     "GT-21": (
         "evals/observations/cf1d8c9-gt21-frozen-r3-promotion.json",
-        "e4e2fda21abc303d76a3e75aa0784c3d9a70ca06085d5f2a6c43bcfdbf9ead2b",
+        "f4d23755b359f65fc20f5b7bb03eea37fa0c5279637ce0b066eddd60951e0ba6",
         (
             "GT-21-isolated-live-carrier-2f6e3de",
             "GT-21-codex-current-account-simple-consequence-fded9a6",
@@ -3093,6 +3093,8 @@ def frozen_gt20_21_promotion_errors(
             if (
                 not shared_valid
                 or item.get("sourceTaskContractEntrySha256") != _digest(entry)
+                or item.get("evaluatedRevision")
+                != _FROZEN_GT20_21_CURRENT_CONTRACT_REVISION
                 or item.get("candidateBehaviorSubject") != current_subject
                 or not isinstance(selection, dict)
                 or selection.get("schema") != "ordered-frozen-source-composite/v1"
@@ -3144,6 +3146,10 @@ def frozen_gt20_21_promotion_errors(
                 ))
             ):
                 errors.append("frozen GT-21 composite claim ceiling is invalid")
+            errors.extend(_behavior_subject_revision_errors(
+                root, "frozen GT-21 promoted candidate",
+                {"evaluatedRevision": item.get("evaluatedRevision")}, task,
+            ))
 
         for component, record, post, cleanup, claim in components:
             markers = cleanup.get("requiredMarkers")
@@ -3188,6 +3194,8 @@ def frozen_gt20_21_promotion_errors(
         if (
             not isinstance(observation, dict) or _digest(observation) != digest
             or not isinstance(task, dict)
+            or observation.get("evaluatedRevision")
+            != promoted.get(task_id, {}).get("evaluatedRevision")
         ):
             errors.append(f"frozen {task_id} current observation is invalid")
         else:
