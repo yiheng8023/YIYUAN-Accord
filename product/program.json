@@ -70,7 +70,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "f364b0ac85c805d563140f4b39e2c8f7ce5dab34046faa30ab2a1e4e2037cb5c",
+      "repositorySha256": "50cd2bc00b030d26c0f7b257efdab203d9a7e207832fd0690275b7fa276cea32",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -95,11 +95,11 @@
     },
     {
       "id": "gt21-live-carrier-preflight-2026-08-29",
-      "kind": "bounded-preflight-counterevidence-exact-codex-local-live-carrier-observation-product-boundary-decision-model-variable-failed-simple-routes-and-claude-auth-boundary",
+      "kind": "bounded-preflight-counterevidence-exact-codex-local-live-carrier-observation-product-boundary-decision-model-variable-failed-simple-routes-and-claude-pre-model-boundaries",
       "repositoryLocator": "evals/evidence/2026-08-29-v310-gt21-live-carrier-preflight.json",
-      "repositorySha256": "f8f2addc453967a733a7533e13087c426e460438b1f8e0c8fbc4353d42f3cbdc",
-      "latestFailureBoundary": "Exact Claude session-only startup Hook completed silently, then isolated-host authentication failed before any model API request, token use or cost; no credential access, account escalation or model binding is admitted.",
-      "disposition": "admitted-bounded-exact-codex-local-arm-provisional-no-added-client-recheck-model-variable-structured-host-turn-failure-claude-auth-boundary-and-silent-hook-evidence-not-complete-gt21-candidate-or-release-evidence"
+      "repositorySha256": "dd6af510e3585a733ffeebf63170c420c5c65cd2757e1abcbb46e368cc6a73d9",
+      "latestFailureBoundary": "After explicit current-account and cost authority, the official Claude auth-status surface reported logged in, but the corrected exact session-only attempt still returned CLI exit 1 and a structured result error after one silent startup Hook and before any model API request, token use or cost. The task root was removed; no credential inspection or model binding is admitted.",
+      "disposition": "admitted-bounded-exact-codex-local-arm-provisional-no-added-client-recheck-model-variable-structured-host-turn-failure-claude-pre-model-boundaries-and-silent-hook-evidence-not-complete-gt21-candidate-or-release-evidence"
     },
     {
       "id": "karpathy-primary-method-and-repository-inputs-2026-08-28",

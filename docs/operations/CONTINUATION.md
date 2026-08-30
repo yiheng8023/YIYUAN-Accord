@@ -747,6 +747,16 @@ increment and one active work item. Its ordered work is:
     Accord mechanism. Recheck only when an authenticated disposable supported
     lane is independently available under explicit account and cost authority,
     or another supported lane changes materially.
+    The user then explicitly authorized one current-account Claude lane with a
+    `$0.25` ceiling. Official auth status reported logged in, but after one
+    corrected exact session-only invocation the startup Hook again completed
+    silently and the host returned CLI exit 1 plus a structured result error
+    before any model API request, Agent consequence, token use or cost. Zero
+    tools ran, no credential, account identity or failure message was retained,
+    and the task root was removed. A preceding shell-shape correction also used
+    zero API requests and left no task root. Repeated same-lane repair now stops;
+    recheck only after a material supported-host admission change under fresh
+    bounded authority.
 14. `prove-transactional-install-state-preservation-and-removal` — pending after
     stage 13. Current package contents are plugin-scoped and do not themselves
     replace user instruction or configuration files, but that static fact is

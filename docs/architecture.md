@@ -735,6 +735,15 @@ removed. This is a host admission boundary and retained counterevidence, not a
 model-dependent result or residual Accord duty; no login, credential access,
 real-session reuse or mechanism escalation follows.
 
+After explicit current-account and `$0.25` cost authority, the official Claude
+auth-status surface reported logged in. The corrected exact session-only attempt
+at `5473c43` still returned CLI exit 1 and a structured result error after one
+silent startup Hook and before any model API request, token use or cost. Zero
+tools ran, no account identity or failure message was retained, and the exact
+task root was removed. This repeated pre-model boundary stops same-lane retry;
+it does not authorize model substitution, credential inspection, permission
+loosening or an Accord mechanism.
+
 Before that candidate gate can open, GT-21 first exercises frozen exact package
 bytes in disposable official-clean and candidate-enabled lanes. It consumes
 supported official host facts directly and proves one real event through
