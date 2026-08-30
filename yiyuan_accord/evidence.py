@@ -67,23 +67,38 @@ _FROZEN_GT20_21_SOURCE_BOUND_REVISION = (
 _FROZEN_GT20_21_CURRENT_CONTRACT_REVISION = (
     "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9"
 )
+_GT16_RETAINED_FAILURE_REVISION = (
+    "cf1d8c9e57741ed5c353bb630ca8dded7bd225b9"
+)
 _FROZEN_GT20_21_BASE_SOURCE_SHA256 = (
     "044cf9ba000da7819c7a64c15d8c08da2f3e973596e761a7ae0182f58af45256"
 )
 _FROZEN_GT20_21_PROMOTION_SHA256 = (
-    "4047269e5c84e14da5221a837cae572608c877603df8d91a68e206cf0fdabf3a"
+    "0444f79d7ec437481fa58606bffe4debf4e0f0d2fd64db927c14883148056f0a"
 )
 FROZEN_GT20_21_OBSERVATIONS = {
     "GT-20": (
         "evals/observations/cf1d8c9-gt20-frozen-r3-promotion.json",
         "fca5f8a311dd3aa90596094722fd712de9fc8dee427684151b928518ffcb9ee6",
-        "GT-20-transactional-lifecycle-4c8bcc3",
+        ("GT-20-transactional-lifecycle-4c8bcc3",),
     ),
     "GT-21": (
         "evals/observations/cf1d8c9-gt21-frozen-r3-promotion.json",
-        "9388cc11c0d71f3a561021baaaf7259f7846bc8d3bba9265db346ee066ff26f7",
-        "GT-21-fresh-zero-history-handoff-3878968",
+        "e4e2fda21abc303d76a3e75aa0784c3d9a70ca06085d5f2a6c43bcfdbf9ead2b",
+        (
+            "GT-21-isolated-live-carrier-2f6e3de",
+            "GT-21-codex-current-account-simple-consequence-fded9a6",
+            "GT-21-fresh-zero-history-handoff-3878968",
+        ),
     ),
+}
+FROZEN_GT20_21_REPRESENTATIVE_LANES = {
+    locator: {
+        "taskId": task_id,
+        "sourceClass": "frozen-source-metadata-promotion",
+        "targetClass": "representative-behavior",
+    }
+    for task_id, (locator, _, _) in FROZEN_GT20_21_OBSERVATIONS.items()
 }
 
 
@@ -1419,6 +1434,243 @@ def _embedded_research_source_packet(payload, task, captured_at):
     )
 
 
+def _embedded_utf8_json(record):
+    if not _exact(
+        record, ("encoding", "byteLength", "sha256", "text"),
+        ("encoding", "sha256", "text"),
+    ) or record.get("encoding") != "utf-8":
+        return None
+    try:
+        raw = record["text"].encode("utf-8")
+    except UnicodeEncodeError:
+        return None
+    if (
+        not isinstance(record.get("byteLength"), int)
+        or isinstance(record.get("byteLength"), bool)
+        or record["byteLength"] != len(raw)
+        or record["sha256"] != sha256(raw).hexdigest()
+    ):
+        return None
+    try:
+        return _strict_json_object(record["text"])
+    except (TypeError, ValueError):
+        return None
+
+
+def _gt16_retained_failure_bundle(payload, task, cleanup):
+    if (
+        task.get("id") != "GT-16"
+        or payload.get("evaluatedRevision") != _GT16_RETAINED_FAILURE_REVISION
+    ):
+        return {}
+    events = payload.get("materialEvents")
+    by_kind = {
+        kind: [event for event in events or []
+               if isinstance(event, dict) and event.get("kind") == kind]
+        for kind in (
+            "model-result-binding", "bounded-bootstrap-result",
+            "retained-prior-failed-counterevidence", "independent-poststate",
+        )
+    }
+    if any(len(items) != 1 for items in by_kind.values()):
+        return None
+    retained = by_kind["retained-prior-failed-counterevidence"][0]
+    result_binding = by_kind["model-result-binding"][0]
+    bootstrap = by_kind["bounded-bootstrap-result"][0]
+    original_record = retained.get("originalResult")
+    adjudication_record = retained.get("oracleAdjudication")
+    original = _embedded_utf8_json(original_record)
+    adjudication = _embedded_utf8_json(adjudication_record)
+    if original is None or adjudication is None:
+        return None
+
+    expected_failure = {
+        "field": "correctedState.effectObserved",
+        "observedValue": False,
+        "classification": "behavior-failure",
+        "correction": (
+            "desired-materialized-poststate-must-set-effectObserved-true-"
+            "while-receipt-observations-remain-pending"
+        ),
+    }
+    decision = (
+        "retain-as-failed-counterevidence-and-run-one-corrected-replay-"
+        "in-a-shared-call"
+    )
+    original_state = original.get("correctedState")
+    mismatches = adjudication.get("mismatches")
+    behavior_failures = [
+        mismatch for mismatch in mismatches or []
+        if isinstance(mismatch, dict)
+        and mismatch.get("classification") == "behavior-failure"
+    ]
+    corrected = retained.get("correctedAttempt")
+    model_result = payload.get("modelResult")
+    model_value = model_result.get("value") \
+        if isinstance(model_result, dict) else None
+    prior = model_value.get("priorFailureBinding") \
+        if isinstance(model_value, dict) else None
+    corrected_state = model_value.get("correctedState") \
+        if isinstance(model_value, dict) else None
+    corrected_sha = model_result.get("sha256") \
+        if isinstance(model_result, dict) else None
+    assistant_messages = [
+        message for message in payload.get("messages", [])
+        if isinstance(message, dict) and message.get("role") == "assistant"
+    ]
+    try:
+        assistant_text = assistant_messages[0]["text"] \
+            if len(assistant_messages) == 1 else None
+        assistant_value = _strict_json_object(assistant_text)
+        assistant_raw = assistant_text.encode("utf-8")
+    except (KeyError, TypeError, UnicodeEncodeError, ValueError):
+        assistant_value, assistant_raw = None, None
+
+    results = payload.get("independentCommandResults")
+    result_by_locator = {
+        result.get("taskLocator"): result
+        for result in results or [] if isinstance(result, dict)
+    }
+    expected_locators = {
+        "GT-16/effect-poststate", "GT-16/rollback-release-poststate",
+        "GT-16/cleanup-poststate",
+    }
+    if (
+        not isinstance(results, list) or len(results) != 3
+        or set(result_by_locator) != expected_locators
+    ):
+        return None
+    effect = result_by_locator["GT-16/effect-poststate"].get("facts")
+    rollback = result_by_locator[
+        "GT-16/rollback-release-poststate"
+    ].get("facts")
+    cleanup_result = result_by_locator["GT-16/cleanup-poststate"].get("facts")
+    effect_observation = effect.get("observation") \
+        if isinstance(effect, dict) else None
+    rollback_observation = rollback.get("observation") \
+        if isinstance(rollback, dict) else None
+    cleanup_observation = cleanup_result.get("observation") \
+        if isinstance(cleanup_result, dict) else None
+    effect_facts = effect_observation.get("facts") \
+        if isinstance(effect_observation, dict) else None
+    rollback_facts = rollback_observation.get("facts") \
+        if isinstance(rollback_observation, dict) else None
+    cleanup_facts = cleanup_observation.get("facts") \
+        if isinstance(cleanup_observation, dict) else None
+
+    valid = (
+        _exact(retained, (
+            "kind", "priorBehaviorFailureRetained", "originalResult",
+            "oracleAdjudication", "failure", "decision", "correctedAttempt",
+        ))
+        and retained["priorBehaviorFailureRetained"] is True
+        and retained.get("failure") == expected_failure
+        and retained.get("decision") == decision
+        and isinstance(original_state, dict)
+        and original.get("taskId") == "GT-16"
+        and original_state.get("effectObserved") is False
+        and _exact(adjudication, (
+            "schema", "taskId", "resultSha256", "mismatches", "decision",
+            "oracleMutationPermitted", "preCallOracleRetained",
+        ), ("schema", "taskId", "resultSha256", "decision"))
+        and adjudication["schema"]
+        == "yiyuan-accord-independent-oracle-adjudication/v1"
+        and adjudication["taskId"] == "GT-16"
+        and adjudication["resultSha256"] == original_record["sha256"]
+        and adjudication["decision"] == decision
+        and adjudication["oracleMutationPermitted"] is False
+        and adjudication["preCallOracleRetained"] is True
+        and isinstance(mismatches, list) and mismatches
+        and len(behavior_failures) == 1
+        and _exact(behavior_failures[0], (
+            "field", "observed", "classification", "reason",
+        ), ("field", "classification", "reason"))
+        and behavior_failures[0]["field"] == expected_failure["field"]
+        and behavior_failures[0]["observed"] is False
+        and _exact(corrected, (
+            "state", "resultSha256", "effectObserved",
+            "independentPoststateObserved", "cleanupObserved",
+        ), ("state", "resultSha256"))
+        and corrected == {
+            "state": "passed", "resultSha256": corrected_sha,
+            "effectObserved": True, "independentPoststateObserved": True,
+            "cleanupObserved": True,
+        }
+        and corrected_sha != original_record["sha256"]
+        and _exact(model_result, ("kind", "taskId", "sha256", "value"),
+                   ("kind", "taskId", "sha256"))
+        and model_result["kind"] == "model-result-slice"
+        and model_result["taskId"] == "GT-16"
+        and re.fullmatch(r"[0-9a-f]{64}", corrected_sha or "") is not None
+        and model_result["sha256"] == _digest(model_value)
+        and assistant_value == model_value
+        and assistant_raw is not None
+        and sha256(assistant_raw).hexdigest() == corrected_sha
+        and isinstance(model_value, dict)
+        and model_value.get("taskId") == "GT-16"
+        and model_value.get("replayKind")
+        == "corrected-replay-after-retained-behavior-failure"
+        and _exact(prior, (
+            "originalResultPath", "originalResultSha256",
+            "oracleAdjudicationPath", "oracleAdjudicationSha256", "failure",
+        ), (
+            "originalResultPath", "originalResultSha256",
+            "oracleAdjudicationPath", "oracleAdjudicationSha256",
+        ))
+        and prior["originalResultSha256"] == original_record["sha256"]
+        and prior["oracleAdjudicationSha256"] == adjudication_record["sha256"]
+        and prior["failure"] == expected_failure
+        and isinstance(corrected_state, dict)
+        and corrected_state.get("effectObserved") is True
+        and _exact(result_binding, (
+            "kind", "taskId", "resultSha256", "runtimeModelSelection",
+            "qualificationBranchesOnModelIdentityOrVersion",
+        ), ("kind", "taskId", "resultSha256", "runtimeModelSelection"))
+        and result_binding["taskId"] == "GT-16"
+        and result_binding["resultSha256"] == corrected_sha
+        and result_binding["runtimeModelSelection"] == "host-default-variable"
+        and result_binding["qualificationBranchesOnModelIdentityOrVersion"] is False
+        and _exact(bootstrap, (
+            "kind", "selectedRoute", "correctedState",
+            "poststateArtifactSha256",
+        ), ("kind", "selectedRoute", "poststateArtifactSha256"))
+        and bootstrap["selectedRoute"] == model_value.get("selectedRouteId")
+        and bootstrap["correctedState"] == corrected_state
+        and isinstance(effect, dict) and effect.get("resultSha256") == corrected_sha
+        and effect.get("artifactSha256") == bootstrap["poststateArtifactSha256"]
+        and isinstance(effect_facts, dict)
+        and effect_facts.get("valid") is True
+        and effect_facts.get("correctedState") == corrected_state
+        and effect_facts.get("effectObserved") is True
+        and effect_facts.get("correctionPreserved") is True
+        and effect_facts.get("unrelatedStatePreserved") is True
+        and isinstance(rollback, dict)
+        and rollback.get("resultSha256") == corrected_sha
+        and isinstance(rollback_facts, dict)
+        and rollback_facts.get("valid") is True
+        and rollback_facts.get("rollbackDisposition") == "discard-and-rollback"
+        and rollback_facts.get("releasedResources") == ["task-scoped-handoff"]
+        and rollback_facts.get("residualTaskResources") == []
+        and rollback_facts.get("persistentControllerMaterialized") is False
+        and rollback_facts.get("fixtureRestoredToBaseline") is True
+        and isinstance(cleanup_result, dict)
+        and isinstance(cleanup_observation, dict)
+        and cleanup_observation.get("resultSha256") == corrected_sha
+        and cleanup_observation.get("taskId") == "GT-16"
+        and cleanup_observation.get("phase") == "cleanup-poststate"
+        and cleanup_facts == {
+            "exactRunRootAbsent": True, "taskOwnedResidueCount": 0,
+            "fixtureRemoved": True, "unrelatedStatePreserved": True,
+        }
+        and payload.get("cleanupEvidence", {}).get("state") == "verified-clean"
+        and cleanup == {
+            "state": "verified-clean", "taskOwnedResidueCount": 0,
+            "verified": True,
+        }
+    )
+    return retained if valid else None
+
+
 def _publishable_payload(
     payload, task, cleanup, captured_at, projection, continuity_narratives=None,
 ):
@@ -1460,6 +1712,7 @@ def _publishable_payload(
             )
         )
         and _postcapture_bundle(payload, task, captured_at) is not None
+        and _gt16_retained_failure_bundle(payload, task, cleanup) is not None
         and _continuity_handoff_bundle(
             payload, task, continuity_narratives
         ) is not None
@@ -2784,62 +3037,151 @@ def frozen_gt20_21_promotion_errors(
     _, ancestor = git_source(_FROZEN_GT20_21_SOURCE_BOUND_REVISION)
     ancestor_records = ancestor.get("records") if isinstance(ancestor, dict) else {}
     records = base["records"]
-    for task_id, (locator, _, record_id) in FROZEN_GT20_21_OBSERVATIONS.items():
-        task, entry, item, record = (
-            tasks.get(task_id), entries.get(task_id), promoted.get(task_id),
-            records.get(record_id),
-        )
-        if not all(isinstance(value, dict) for value in (task, entry, item, record)):
+    selected_ids = set()
+    gt21_roles = (
+        "event-to-core-to-agent-consequence",
+        "sufficient-simple-silent-route",
+        "fresh-zero-history-handoff",
+    )
+    for task_id, (locator, _, record_ids) in FROZEN_GT20_21_OBSERVATIONS.items():
+        task, entry, item = tasks.get(task_id), entries.get(task_id), promoted.get(task_id)
+        selected_ids.update(record_ids)
+        if not all(isinstance(value, dict) for value in (task, entry, item)):
             errors.append(f"frozen {task_id} source binding is invalid")
             continue
-        if (
-            ancestor_records.get(record_id) != record
-            or item.get("selectedRecordId") != record_id
-            or item.get("selectedRecordSha256") != _digest(record)
-            or item.get("sourceContractEntrySha256") != _digest(entry)
-            or item.get("sourceDigests") != {
+        try:
+            current_subject = {
+                path: _provisional_revision_digest(root, "HEAD", path)
+                for path in task.get("behaviorSubjectFiles", [])
+            }
+        except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+            current_subject = None
+        shared_valid = (
+            item.get("sourceDigests") == {
                 "goldenTaskSha256": entry.get("goldenTaskSha256"),
                 "evaluationContractSha256": entry.get("evaluationContractSha256"),
             }
-            or item.get("currentDigests") != {
+            and item.get("currentDigests") == {
                 "goldenTaskSha256": _digest(task),
                 "evaluationContractSha256": current_evaluation,
             }
-            or item.get("evaluatedRevision") != entry.get("evaluatedRevision")
-            or item.get("behaviorSubject") != entry.get("behaviorSubject")
-            or item.get("observationLocator") != locator
-        ):
-            errors.append(f"frozen {task_id} source or digest binding is invalid")
-        post, cleanup, claim = (
-            item["poststateBinding"], item["cleanupBinding"],
-            item["claimCeilingBinding"],
+            and item.get("observationLocator") == locator
         )
-        markers = cleanup.get("requiredMarkers")
-        if (
-            not isinstance(markers, dict)
-            or post.get("sha256") != _digest(_frozen_path(
-                record, post.get("sourcePath", "")
+        if task_id == "GT-20":
+            record_id = record_ids[0]
+            record = records.get(record_id)
+            if (
+                not isinstance(record, dict) or not shared_valid
+                or ancestor_records.get(record_id) != record
+                or item.get("selectedRecordId") != record_id
+                or item.get("selectedRecordSha256") != _digest(record)
+                or item.get("sourceContractEntrySha256") != _digest(entry)
+                or item.get("evaluatedRevision") != entry.get("evaluatedRevision")
+                or item.get("behaviorSubject") != entry.get("behaviorSubject")
+                or item.get("behaviorSubject") != current_subject
+            ):
+                errors.append(f"frozen {task_id} source or digest binding is invalid")
+                continue
+            components = [(
+                item, record, item["poststateBinding"], item["cleanupBinding"],
+                item["claimCeilingBinding"],
+            )]
+        else:
+            selection = item.get("selectedRecordSet")
+            components = selection.get("components") \
+                if isinstance(selection, dict) else None
+            if (
+                not shared_valid
+                or item.get("sourceTaskContractEntrySha256") != _digest(entry)
+                or item.get("candidateBehaviorSubject") != current_subject
+                or not isinstance(selection, dict)
+                or selection.get("schema") != "ordered-frozen-source-composite/v1"
+                or selection.get("orderRequired") is not True
+                or selection.get("allComponentsRequired") is not True
+                or not isinstance(components, list)
+                or len(components) != len(record_ids)
+                or [component.get("recordId") for component in components
+                    if isinstance(component, dict)] != list(record_ids)
+                or [component.get("role") for component in components
+                    if isinstance(component, dict)] != list(gt21_roles)
+                or [component.get("order") for component in components
+                    if isinstance(component, dict)] != [1, 2, 3]
+            ):
+                errors.append("frozen GT-21 ordered composite selection is invalid")
+                continue
+            bound_components = []
+            for component, record_id in zip(components, record_ids):
+                record = records.get(record_id)
+                payload = record.get("payload") if isinstance(record, dict) else None
+                if (
+                    not isinstance(record, dict) or not isinstance(payload, dict)
+                    or ancestor_records.get(record_id) != record
+                    or component.get("sourceRecordSha256") != _digest(record)
+                    or component.get("evaluatedRevision") != payload.get("evaluatedRevision")
+                    or component.get("behaviorSubject") != payload.get("behaviorSubject")
+                    or component.get("behaviorSubject") != current_subject
+                ):
+                    errors.append(f"frozen GT-21 composite component {record_id} is invalid")
+                    continue
+                bound_components.append((
+                    component, record, component.get("poststateBinding", {}),
+                    component.get("cleanupBinding", {}),
+                    component.get("claimCeilingBinding", {}),
+                ))
+                errors.extend(_behavior_subject_revision_errors(
+                    root, f"frozen GT-21 {record_id}",
+                    {"evaluatedRevision": component.get("evaluatedRevision")}, task,
+                ))
+            components = bound_components
+            aggregate = item.get("compositeClaimCeilingBinding", {})
+            aggregate_record = records.get(record_ids[0], {})
+            if (
+                aggregate.get("sourceRecordId") != record_ids[0]
+                or aggregate.get("scope")
+                != "three-selected-finite-source-claims-no-expansion"
+                or aggregate.get("sourceClaimSha256") != _digest(_frozen_path(
+                    aggregate_record, aggregate.get("sourcePath", "")
+                ))
+            ):
+                errors.append("frozen GT-21 composite claim ceiling is invalid")
+
+        for component, record, post, cleanup, claim in components:
+            markers = cleanup.get("requiredMarkers")
+            if (
+                not isinstance(markers, dict)
+                or post.get("sha256") != _digest(_frozen_path(
+                    record, post.get("sourcePath", "")
+                ))
+                or cleanup.get("requiredMarkersSha256") != _digest(markers)
+                or any(_frozen_path(record, path) != value
+                       for path, value in markers.items())
+                or claim.get("sourceClaimSha256") != _digest(_frozen_path(
+                    record, claim.get("sourcePath", "")
+                ))
+                or task_id == "GT-20"
+                and (
+                    cleanup.get("contractSha256") != _digest(entry.get("cleanup"))
+                    or claim.get("contractSha256") != _digest(
+                        entry.get("claimCeiling")
+                    )
+                )
+            ):
+                errors.append(
+                    f"frozen {task_id} poststate, cleanup or claim binding is invalid"
+                )
+        if task_id == "GT-20":
+            errors.extend(_behavior_subject_revision_errors(
+                root, f"frozen {task_id}",
+                {"evaluatedRevision": item.get("evaluatedRevision")}, task,
             ))
-            or cleanup.get("contractSha256") != _digest(entry.get("cleanup"))
-            or cleanup.get("requiredMarkersSha256") != _digest(markers)
-            or any(_frozen_path(record, path) != value for path, value in markers.items())
-            or claim.get("sourceClaimSha256") != _digest(_frozen_path(
-                record, claim.get("sourcePath", "")
-            ))
-            or claim.get("contractSha256") != _digest(entry.get("claimCeiling"))
-        ):
-            errors.append(f"frozen {task_id} poststate, cleanup or claim binding is invalid")
-        errors.extend(_behavior_subject_revision_errors(
-            root, f"frozen {task_id}",
-            {"evaluatedRevision": item.get("evaluatedRevision")}, task,
-        ))
-        try:
-            subject = {path: _provisional_revision_digest(root, "HEAD", path)
-                       for path in task.get("behaviorSubjectFiles", [])}
-        except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
-            subject = None
-        if item.get("behaviorSubject") != subject:
-            errors.append(f"frozen {task_id} behavior subject bytes drifted")
+
+    retained = [
+        {"recordId": record_id,
+         "disposition": "retained-in-raw-source-not-promoted"}
+        for record_id in records if record_id not in selected_ids
+    ]
+    if promotion.get("nonPromotedAttempts") != retained:
+        errors.append("frozen GT-20/21 failed or nonselected attempt ledger is invalid")
 
     for task_id, (locator, digest, _) in FROZEN_GT20_21_OBSERVATIONS.items():
         observation, task = read_json(root, locator, errors), tasks.get(task_id)

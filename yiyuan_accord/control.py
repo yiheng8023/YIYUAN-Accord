@@ -4,6 +4,7 @@ import re
 import subprocess
 
 from .evidence import (
+    FROZEN_GT20_21_REPRESENTATIVE_LANES,
     evaluation_contract_history_valid,
     frozen_gt20_21_promotion_errors,
     historical_representative_errors,
@@ -623,6 +624,7 @@ def _validate_program(
 
 def _validate_evidence_item(
     root, item, label, errors, expected_evidence_classes=None,
+    promotion_lanes=None,
 ):
     locator = item.get("locator")
     expected = item.get("sha256")
@@ -643,6 +645,18 @@ def _validate_evidence_item(
             errors.append(f"{label} direct evidence must be a JSON observation")
         else:
             observation = _read_json(root, locator, errors)
+            lane = promotion_lanes.get(locator) \
+                if isinstance(promotion_lanes, dict) else None
+            if (
+                isinstance(lane, dict)
+                and observation.get("taskId") == lane.get("taskId")
+                and observation.get("evidenceClass") == lane.get("sourceClass")
+                and lane.get("targetClass") == "representative-behavior"
+            ):
+                observation = {
+                    **observation,
+                    "evidenceClass": lane["targetClass"],
+                }
             if observation.get("evidenceClass") == "deterministic-conformance":
                 errors.append(
                     f"{label} deterministic conformance is computed live, not accepted from repository observations"
@@ -657,7 +671,10 @@ def _validate_evidence_item(
     return observation
 
 
-def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golden, errors):
+def _validate_acceptance(
+    root, acceptance, contract_ids, evidence_classes, golden, errors,
+    promotion_lanes=None,
+):
     if acceptance.get("schema") != 3:
         errors.append("acceptance.schema must be 3")
     _require_texts(acceptance, ("id", "productId"), "acceptance", errors)
@@ -705,6 +722,7 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
                 f"{label}.evidence[{evidence_index}]",
                 errors,
                 stored_classes,
+                promotion_lanes,
             )
             accepted, decision_errors = criterion_observation_decision(
                 criterion.get("id"),
@@ -1046,6 +1064,14 @@ def verify_product(root):
         else []
     )
     golden_suite = _read_json(root, GOLDEN_TASKS_FILE, errors)
+    promotion_errors = frozen_gt20_21_promotion_errors(
+        root, program, acceptance, golden_suite, _read_json,
+    )
+    errors.extend(promotion_errors)
+    promotion_lanes = (
+        FROZEN_GT20_21_REPRESENTATIVE_LANES
+        if not promotion_errors else {}
+    )
     (
         criterion_ids,
         criteria_verified,
@@ -1058,6 +1084,7 @@ def verify_product(root):
         evidence_classes,
         golden_suite,
         errors,
+        promotion_lanes,
     )
     all_ids = kernel_host_lesson_ids | set(criterion_ids)
     _validate_program(
@@ -1134,11 +1161,6 @@ def verify_product(root):
     )
     errors.extend(
         provisional_gt20_21_source_errors(
-            root, program, acceptance, golden_suite, _read_json,
-        )
-    )
-    errors.extend(
-        frozen_gt20_21_promotion_errors(
             root, program, acceptance, golden_suite, _read_json,
         )
     )

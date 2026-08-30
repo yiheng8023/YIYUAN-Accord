@@ -4,9 +4,11 @@ from pathlib import Path
 from unittest.mock import patch
 from yiyuan_accord.closure import reconcile_closure
 from yiyuan_accord.control import (
-    _validate_four_surface_mapping, host_check, verify_product,
+    _validate_evidence_item, _validate_four_surface_mapping,
+    host_check, verify_product,
 )
 from yiyuan_accord.evidence import (
+    FROZEN_GT20_21_REPRESENTATIVE_LANES,
     _canonical_official_url,
     _behavior_subject_revision_errors,
     _digest,
@@ -1185,6 +1187,16 @@ class ProductControlTests(unittest.TestCase):
                                  'liveBehaviorClaimed'), True),
             ('current digest', ('frozenPromotion',
                                 'currentEvaluationContractSha256'), '0' * 64),
+            ('composite omission', ('frozenPromotion', 'promotedRecords', 1,
+                                    'selectedRecordSet', 'components'), []),
+            ('composite order', ('frozenPromotion', 'promotedRecords', 1,
+                                 'selectedRecordSet', 'components', 0,
+                                 'order'), 3),
+            ('composite failed substitute', ('frozenPromotion',
+                                              'promotedRecords', 1,
+                                              'selectedRecordSet', 'components',
+                                              0, 'recordId'),
+             'GT-21-simple-native-route-f5f281c'),
             ('non-ancestor', ('frozenPromotion',
                               'sourceBoundAncestorRevision'), '0' * 40),
             ('live masquerade', ('frozenPromotion', 'schema'),
@@ -1210,6 +1222,51 @@ class ProductControlTests(unittest.TestCase):
                 observation[field] = value
                 _write(root, FROZEN_GT20_21_OBSERVATIONS[0], observation)
                 self.assertTrue(errors(root))
+
+    def test_frozen_promotion_maps_only_exact_observations_to_representative(self):
+        with _provisional_fixture() as root:
+            locator = FROZEN_GT20_21_OBSERVATIONS[0]
+            item = {
+                'locator': locator,
+                'sha256': hashlib.sha256((root / locator).read_bytes()).hexdigest(),
+                'claim': 'Exact frozen promotion lane fixture.',
+            }
+            promotion_errors = frozen_gt20_21_promotion_errors(
+                root, _read(root, P), _read(root, A), _read(root, G),
+                lambda base, path, _: _read(base, path),
+            )
+            errors = []
+            observation = _validate_evidence_item(
+                root, item, 'promotion lane', errors,
+                {'representative-behavior'},
+                FROZEN_GT20_21_REPRESENTATIVE_LANES
+                if not promotion_errors else {},
+            )
+            self.assertEqual(promotion_errors, [])
+            self.assertEqual(errors, [])
+            self.assertEqual(
+                observation['evidenceClass'], 'representative-behavior'
+            )
+
+            raw = _read(root, locator)
+            raw['observedAt'] = '2026-08-30T00:00:00Z'
+            _write(root, locator, raw)
+            item['sha256'] = hashlib.sha256((root / locator).read_bytes()).hexdigest()
+            promotion_errors = frozen_gt20_21_promotion_errors(
+                root, _read(root, P), _read(root, A), _read(root, G),
+                lambda base, path, _: _read(base, path),
+            )
+            errors = []
+            observation = _validate_evidence_item(
+                root, item, 'promotion lane', errors,
+                {'representative-behavior'}, {},
+            )
+            self.assertTrue(promotion_errors)
+            self.assertEqual(
+                observation['evidenceClass'],
+                'frozen-source-metadata-promotion',
+            )
+            self.assert_has(errors, 'evidenceClass is not required')
 
     def test_reacceptance_projects_current_stage_without_model_binding(self):
         program = _read(ROOT, P)
@@ -3101,6 +3158,169 @@ class ProductControlTests(unittest.TestCase):
             _write(root, observation_locator, observation)
             errors, _ = _observe(root, observation_locator, observation)
             self.assert_has(errors, 'sourceEvidence[0] is invalid')
+
+    def test_gt16_retained_failure_and_corrected_poststate_are_fail_closed(self):
+        source_locator = (
+            'evals/evidence/2026-08-30-v310-gt14-19-source.json'
+        )
+        observation_locator = (
+            'evals/observations/'
+            '2026-08-30-cf1d8c9-gt-16-codex-local.json'
+        )
+        record_id = 'GT-16-current-artifacts-cf1d8c9e'
+
+        def retained(payload):
+            return next(
+                item for item in payload['materialEvents']
+                if item['kind'] == 'retained-prior-failed-counterevidence'
+            )
+
+        def rewrite_blob(blob, mutate):
+            value = json.loads(blob['text'])
+            mutate(value)
+            blob['text'] = json.dumps(
+                value, ensure_ascii=False, sort_keys=True, separators=(',', ':'),
+            )
+            raw = blob['text'].encode('utf-8')
+            blob['byteLength'] = len(raw)
+            blob['sha256'] = hashlib.sha256(raw).hexdigest()
+
+        def rebind_command(payload, task_locator, mutate):
+            result = next(
+                item for item in payload['independentCommandResults']
+                if item['taskLocator'] == task_locator
+            )
+            mutate(result['facts'])
+            result['report'] = json.dumps(
+                result['facts'], ensure_ascii=False, sort_keys=True,
+                separators=(',', ':'),
+            )
+            observations = [
+                *payload['materialEvents'],
+                *payload['cleanupEvidence']['observations'],
+            ]
+            binding = next(
+                item for observation in observations
+                for item in observation.get('sourceBindings', [])
+                if item.get('taskLocator') == task_locator
+            )
+            binding['resultSha256'] = hashlib.sha256(
+                result['report'].encode('utf-8')
+            ).hexdigest()
+            binding['resultRecordSha256'] = _digest([result])
+
+        def mutate_adjudication(payload, mutate):
+            rewrite_blob(retained(payload)['oracleAdjudication'], mutate)
+
+        mutations = (
+            ('missing-retained-event', lambda payload: payload.__setitem__(
+                'materialEvents', [
+                    item for item in payload['materialEvents']
+                    if item['kind'] != 'retained-prior-failed-counterevidence'
+                ],
+            )),
+            ('original-length', lambda payload: retained(payload)[
+                'originalResult'].__setitem__('byteLength', 1)),
+            ('original-sha', lambda payload: retained(payload)[
+                'originalResult'].__setitem__('sha256', '0' * 64)),
+            ('original-bytes', lambda payload: retained(payload)[
+                'originalResult'].__setitem__(
+                    'text', retained(payload)['originalResult']['text'] + ' '
+                )),
+            ('original-effect-not-failed', lambda payload: rewrite_blob(
+                retained(payload)['originalResult'],
+                lambda value: value['correctedState'].__setitem__(
+                    'effectObserved', True,
+                ),
+            )),
+            ('adjudication-length', lambda payload: retained(payload)[
+                'oracleAdjudication'].__setitem__('byteLength', 1)),
+            ('adjudication-sha', lambda payload: retained(payload)[
+                'oracleAdjudication'].__setitem__('sha256', '0' * 64)),
+            ('adjudication-result-binding', lambda payload: mutate_adjudication(
+                payload, lambda value: value.__setitem__('resultSha256', '0' * 64),
+            )),
+            ('adjudication-failure-value', lambda payload: mutate_adjudication(
+                payload, lambda value: next(
+                    item for item in value['mismatches']
+                    if item.get('classification') == 'behavior-failure'
+                ).__setitem__('observed', True),
+            )),
+            ('failure-field', lambda payload: retained(payload)['failure'].__setitem__(
+                'field', 'receipt.consequence.state',
+            )),
+            ('failure-value', lambda payload: retained(payload)['failure'].__setitem__(
+                'observedValue', True,
+            )),
+            ('oracle-mutation-permitted', lambda payload: mutate_adjudication(
+                payload, lambda value: value.__setitem__(
+                    'oracleMutationPermitted', True,
+                ),
+            )),
+            ('pre-call-oracle-not-retained', lambda payload: mutate_adjudication(
+                payload, lambda value: value.__setitem__('preCallOracleRetained', False),
+            )),
+            ('corrected-attempt-not-distinct', lambda payload: retained(payload)[
+                'correctedAttempt'].__setitem__(
+                    'resultSha256', retained(payload)['originalResult']['sha256'],
+                )),
+            ('corrected-attempt-failed', lambda payload: retained(payload)[
+                'correctedAttempt'].__setitem__('state', 'failed')),
+            ('corrected-effect-not-observed', lambda payload: retained(payload)[
+                'correctedAttempt'].__setitem__('effectObserved', False)),
+            ('corrected-poststate-not-observed', lambda payload: retained(payload)[
+                'correctedAttempt'].__setitem__('independentPoststateObserved', False)),
+            ('corrected-cleanup-not-observed', lambda payload: retained(payload)[
+                'correctedAttempt'].__setitem__('cleanupObserved', False)),
+            ('model-prior-failure-unbound', lambda payload: payload['modelResult'][
+                'value']['priorFailureBinding'].__setitem__(
+                    'originalResultSha256', '0' * 64,
+                )),
+            ('effect-poststate-false', lambda payload: rebind_command(
+                payload, 'GT-16/effect-poststate',
+                lambda facts: facts['observation']['facts'].__setitem__(
+                    'effectObserved', False,
+                ),
+            )),
+            ('rollback-not-restored', lambda payload: rebind_command(
+                payload, 'GT-16/rollback-release-poststate',
+                lambda facts: facts['observation']['facts'].__setitem__(
+                    'fixtureRestoredToBaseline', False,
+                ),
+            )),
+            ('cleanup-residue', lambda payload: rebind_command(
+                payload, 'GT-16/cleanup-poststate',
+                lambda facts: facts['observation']['facts'].__setitem__(
+                    'taskOwnedResidueCount', 1,
+                ),
+            )),
+        )
+
+        with _fixture() as root:
+            baseline_bundle = _read(root, source_locator)
+            baseline_observation = _read(root, observation_locator)
+            errors, _ = _observe(root, observation_locator, baseline_observation)
+            self.assertNotIn('sourceEvidence[0] is invalid', errors)
+            task = next(
+                item for item in _read(root, G)['tasks'] if item['id'] == 'GT-16'
+            )
+            for name, mutate in mutations:
+                bundle = json.loads(json.dumps(baseline_bundle))
+                observation = json.loads(json.dumps(baseline_observation))
+                record = bundle['records'][record_id]
+                mutate(record['payload'])
+                postcapture = _postcapture_bundle(
+                    record['payload'], task, _time(record['capturedAt'])
+                )
+                self.assertIsNotNone(postcapture, name)
+                source = observation['transcriptOrEventEvidence'][0]
+                source['sha256'] = _digest(record)
+                source['postSessionBindingsSha256'] = _digest(postcapture)
+                _write(root, source_locator, bundle)
+                _write(root, observation_locator, observation)
+                errors, _ = _observe(root, observation_locator, observation)
+                with self.subTest(gt16_mutation=name):
+                    self.assert_has(errors, 'sourceEvidence[0] is invalid')
 
     def test_failed_sample_narrows_claim(self):
         with _fixture() as root:

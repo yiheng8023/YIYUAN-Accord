@@ -66,11 +66,34 @@
   },
   "transcriptOrEventEvidence": [
     {
-      "kind": "frozen-source-promotion",
+      "kind": "frozen-source-composite-promotion",
       "locator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
       "recordId": "GT-21-frozen-r3-promotion-cf1d8c9",
-      "sha256": "3be303d68f819928018290304355d79dd5f0fd8ead4cb1ded379984bc8044a15",
-      "claim": "One exact bounded current-host fresh zero-history handoff on revision 3878968 with one authorized model-variable turn and a task-owned evaluator; no cross-host, production, value, independent review, candidate or release claim."
+      "sha256": "933a9b746da2f934f3a140400fe856cb8b5db8b95ce143923a963a5645300a06",
+      "orderedSelectedRecords": [
+        {
+          "order": 1,
+          "role": "event-to-core-to-agent-consequence",
+          "recordId": "GT-21-isolated-live-carrier-2f6e3de",
+          "sourceRecordSha256": "e49eb8442e45f4b2fc520e617a787e6254cc3def87bdeb591ac2279d2c28bd7f",
+          "evaluatedRevision": "2f6e3de8e31b85eb909735aac1799d4d00603ece"
+        },
+        {
+          "order": 2,
+          "role": "sufficient-simple-silent-route",
+          "recordId": "GT-21-codex-current-account-simple-consequence-fded9a6",
+          "sourceRecordSha256": "0ddb105e819e3c4d1dcb4d6ae91766d783196d3e210e6585e41ca68408e8707e",
+          "evaluatedRevision": "fded9a6b5319390dddd6c11e8c6fd6074fdec0dd"
+        },
+        {
+          "order": 3,
+          "role": "fresh-zero-history-handoff",
+          "recordId": "GT-21-fresh-zero-history-handoff-3878968",
+          "sourceRecordSha256": "cb14e25128123afcfb6354fefcb480d18b171d7539af0a78dc905f61df33b5cc",
+          "evaluatedRevision": "3878968d459adba57792c390eb277876028b0012"
+        }
+      ],
+      "claim": "One source-bound isolated Codex event-to-core-to-Agent consequence arm, one sufficient no-model-bound simple route and one exact 3878968 fresh zero-history sequential handoff with destination-before-source release and zero task residue. Production trust, ordinary activation, Claude equivalence, cross-host value, GT-20, whole-system reacceptance, candidate and release remain open."
     }
   ],
   "behaviorDecisions": {
@@ -113,16 +136,24 @@
   },
   "observedAgentActions": [
     {
-      "kind": "frozen-source-reference",
-      "recordId": "GT-21-fresh-zero-history-handoff-3878968",
-      "result": "inherited selected source only; no new action or effect recorded"
+      "kind": "frozen-source-composite-reference",
+      "recordIds": [
+        "GT-21-isolated-live-carrier-2f6e3de",
+        "GT-21-codex-current-account-simple-consequence-fded9a6",
+        "GT-21-fresh-zero-history-handoff-3878968"
+      ],
+      "result": "inherited ordered selected sources only; no new action or effect recorded"
     }
   ],
   "observedHumanActions": [
     {
-      "kind": "frozen-source-reference",
-      "recordId": "GT-21-fresh-zero-history-handoff-3878968",
-      "result": "inherited selected source only; no new action or effect recorded"
+      "kind": "frozen-source-composite-reference",
+      "recordIds": [
+        "GT-21-isolated-live-carrier-2f6e3de",
+        "GT-21-codex-current-account-simple-consequence-fded9a6",
+        "GT-21-fresh-zero-history-handoff-3878968"
+      ],
+      "result": "inherited ordered selected sources only; no new action or effect recorded"
     }
   ],
   "humanBurden": {
@@ -133,9 +164,13 @@
   },
   "materialEffects": [
     {
-      "kind": "frozen-source-reference",
-      "recordId": "GT-21-fresh-zero-history-handoff-3878968",
-      "result": "inherited selected source only; no new action or effect recorded"
+      "kind": "frozen-source-composite-reference",
+      "recordIds": [
+        "GT-21-isolated-live-carrier-2f6e3de",
+        "GT-21-codex-current-account-simple-consequence-fded9a6",
+        "GT-21-fresh-zero-history-handoff-3878968"
+      ],
+      "result": "inherited ordered selected sources only; no new action or effect recorded"
     }
   ],
   "residue": [],
@@ -155,12 +190,21 @@
   },
   "claimLimit": {
     "retainedFailure": false,
-    "excludedClaims": [],
-    "statement": "One exact bounded current-host fresh zero-history handoff on revision 3878968 with one authorized model-variable turn and a task-owned evaluator; no cross-host, production, value, independent review, candidate or release claim."
+    "excludedClaims": [
+      "production trust",
+      "ordinary activation",
+      "Claude equivalence",
+      "cross-host value",
+      "GT-20",
+      "whole-system reacceptance",
+      "candidate",
+      "release"
+    ],
+    "statement": "One source-bound isolated Codex event-to-core-to-Agent consequence arm, one sufficient no-model-bound simple route and one exact 3878968 fresh zero-history sequential handoff with destination-before-source release and zero task residue. Production trust, ordinary activation, Claude equivalence, cross-host value, GT-20, whole-system reacceptance, candidate and release remain open."
   },
   "decision": {
     "state": "passed",
-    "basis": "frozen-source-metadata-promotion"
+    "basis": "frozen-source-composite-metadata-promotion"
   },
   "evidenceClass": "frozen-source-metadata-promotion"
 }
