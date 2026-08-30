@@ -676,7 +676,7 @@ increment and one active work item. Its ordered work is:
     re-sensed generations and left no task fixture. This is synthetic bounded-
     observation evidence, not live official state, Hook causality or exact-
     revision candidate evidence.
-13. `prove-isolated-live-operational-carrier-and-continuity` — active after
+13. `prove-isolated-live-operational-carrier-and-continuity` — completed after
     stage 12. The current packages add one shared short-lived host-path Node
     adapter behind their Skills. It keeps `startup` and `clear` silent and turns
     only supported `compact` or `resume` event fields into non-authoritative
@@ -770,9 +770,23 @@ increment and one active work item. Its ordered work is:
     admission boundary and the sufficient simple-route oracle without another
     model call or diagnostic-message read. GT-21 now advances to a conditional
     fresh zero-history sequential handoff under separately bound turn authority.
-    Do not inspect diagnostic message content, substitute model labels or add a
-    browser bridge, MCP, SDK, App Server client or persistent service.
-14. `prove-transactional-install-state-preservation-and-removal` — pending after
+    Exact `3878968` then created task-owned source and destination carriers with
+    separate official `thread/start` actions, transferred exactly six typed
+    fields, used one read-only destination turn without a concrete model request
+    and returned `ACCORD_FRESH_HANDOFF_VERIFIED` after one bounded verifier call.
+    Independent observation confirmed distinct thread IDs, no inherited history,
+    unchanged code/execution topology, destination verification while the source
+    remained live, source release only afterward, both thread deletions, zero
+    matching processes and exact-root removal. One pre-turn output-schema mismatch
+    was officially classified as `NotSubmitted`; no model turn was consumed. The
+    completed evaluator shell later required interruption only because an
+    uncancelled timeout remained after App Server exit 0; a corrected zero-turn
+    audit reconfirmed zero residue. GT-21 therefore passes only for this bounded
+    current-host claim. The existing Skill, short-lived Hook adapter, pure core
+    and manifests are selected; the direct App Server shape stays reference-only.
+    Do not inspect diagnostic content, bind model labels or add a browser bridge,
+    MCP, SDK/App Server client or persistent service.
+14. `prove-transactional-install-state-preservation-and-removal` — active after
     stage 13. Current package contents are plugin-scoped and do not themselves
     replace user instruction or configuration files, but that static fact is
     not lifecycle proof. GT-20 must use disposable non-empty Codex and Claude
@@ -794,7 +808,7 @@ increment and one active work item. Its ordered work is:
     lifecycle. The probe root was removed. Update-failure rollback, unrelated
     installed-plugin preservation, shared dependency behavior and actual
     activation remain untested, so GT-20 remains unperformed.
-15. `reaccept-whole-system-after-live-state-closure` — pending after GT-21 and GT-20.
+15. `reaccept-whole-system-after-live-state-closure` — pending after GT-20.
 16. `independent-review-and-form-future-exact-candidate` — pending after whole-
     system reacceptance. Goal mode remains paused; only a genuinely independent
     exact-tree specification, implementation and standards review can form a

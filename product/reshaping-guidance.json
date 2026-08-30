@@ -478,9 +478,9 @@
           "id": "replaceable-by",
           "meaning": "A form, carrier or mechanism has an admitted substitution path."
         },
-      {
-        "id": "retires-when",
-        "meaning": "A responsibility allocation or mechanism has an explicit composition-bound expiry, admitted successor, reversible transition, independent retirement post-state and recheck condition."
+        {
+          "id": "retires-when",
+          "meaning": "A responsibility allocation or mechanism has an explicit composition-bound expiry, admitted successor, reversible transition, independent retirement post-state and recheck condition."
         }
       ],
       "factModel": {
@@ -526,9 +526,9 @@
           "rollback",
           "hold-unknown",
           "replay",
-        "honest-stop",
-        "retire",
-        "retired-with-recheck"
+          "honest-stop",
+          "retire",
+          "retired-with-recheck"
         ]
       },
       "routeDecision": {
@@ -543,8 +543,8 @@
           "prefer-no-op-native-or-maintained-reuse-only-among-equivalent-fit-paths",
           "execute-with-bounded-effects-and-resources",
           "verify-consequence-poststate-residue-and-claim",
-        "for-each-redundant-allocation-bind-the-selected-successor-responsibility-coverage-observation-window-rollback-independent-retirement-poststate-and-recheck-triggers",
-        "learn-reconcile-degrade-rollback-release-or-retire-and-recompute-on-drift-or-expiry"
+          "for-each-redundant-allocation-bind-the-selected-successor-responsibility-coverage-observation-window-rollback-independent-retirement-poststate-and-recheck-triggers",
+          "learn-reconcile-degrade-rollback-release-or-retire-and-recompute-on-drift-or-expiry"
         ],
         "hardAdmission": [
           "closes-named-responsibilities",
@@ -674,9 +674,9 @@
           "id": "global-correction-replays-dependents",
           "rule": "A material consensus or fact change replays every dependent surface from the earliest affected boundary while preserving unrelated truth."
         },
-      {
-        "id": "forms-pay-lifecycle-rent",
-        "rule": "Flexibility cannot justify unused, duplicated, stale or non-retirable forms and mechanisms. Retirement is responsibility-scoped and composition-bound: an admitted successor must independently close the same consequence and cleanup before a reversible observed transition, and local coverage cannot self-attest whole-product retirement."
+        {
+          "id": "forms-pay-lifecycle-rent",
+          "rule": "Flexibility cannot justify unused, duplicated, stale or non-retirable forms and mechanisms. Retirement is responsibility-scoped and composition-bound: an admitted successor must independently close the same consequence and cleanup before a reversible observed transition, and local coverage cannot self-attest whole-product retirement."
         }
       ],
       "fundamentalLimits": [
@@ -719,9 +719,9 @@
           "when": "continuity-carrier-lifecycle-is-incomplete",
           "disposition": "reject-durable-carrier"
         },
-      {
-        "when": "a-form-no-longer-pays-lifecycle-rent",
-        "disposition": "bind-a-same-responsibility-successor-then-bypass-degrade-replace-or-retire-with-recheck"
+        {
+          "when": "a-form-no-longer-pays-lifecycle-rent",
+          "disposition": "bind-a-same-responsibility-successor-then-bypass-degrade-replace-or-retire-with-recheck"
         },
         {
           "when": "an-effect-is-irreversible",
@@ -1806,27 +1806,26 @@
       "prefer plugin-scoped or namespaced lifecycle operations and never overwrite user-owned instructions or configuration to simulate activation",
       "treat capacity summarization and handoff as examples in an open continuity-risk set and refresh on any source-bound loss distortion staleness or misbinding",
       "refresh and globally reconcile on correction new consensus drift failure evidence conflict side effect or carrier pressure",
-      "carry the bounded current-receipt source and failures plus Claude silent startup Codex compact injection direct resume-to-core enabled-untrusted NO_CONTEXT control and request-scoped trust-bypass first-turn resume trigger injection and schema-source read without promoting the broad bypass to production trust or any partial chain to GT-21 completion; compare routes under one consequence interference continuity trust and lifecycle oracle before GT-20 replay whole-system reacceptance and independent review",
+      "carry the bounded current-receipt, event-to-core-to-Agent consequence, sufficient simple route and exact 3878968 fresh thread/start handoff with six-field destination reconciliation, destination-before-source release and zero residue without promoting request-scoped trust bypass to production trust; keep model identity variable, select the existing component set, run GT-20 over disposable non-empty Codex and Claude state, then reaccept whole-system balance and obtain independent exact-tree review",
       "keep release dormant until all core stages and sparse exact behavior-subject bindings are complete and a future candidate is independently justified",
       "remain compact enough to preserve host reasoning capacity and defer detail by progressive disclosure"
     ]
   },
   "nextAuthorityBoundary": {
-    "first": "API-first-isolated-live-operational-carrier-and-topology-safe-continuity-boundary",
+    "first": "transactional-non-empty-host-lifecycle-and-user-state-preservation-boundary",
     "then": [
       "product/program.json",
       "product/acceptance.json",
       "product/reshaping-guidance.json-derived-index-and-graph-projection",
       "goal-mode-projection-and-verifier",
       "host-adapters-and-evaluations",
-      "GT-21-isolated-live-operational-carrier-and-topology-safe-continuity-replay",
       "GT-20-non-empty-Codex-and-Claude-lifecycle-replay",
       "whole-system-balance-reacceptance",
       "documentation-and-claim-reacceptance",
       "new-independent-review-before-forming-future-exact-candidate"
     ],
-    "minimumNextSlice": "Retain every attempt as bounded history. The working tree provisionally admits one shared short-lived host-path SessionStart adapter with silent startup and clear plus typed compact and resume hints and no persistent process or state. Public-seam tests, identical package bytes, native discovery and structured App Server queries pass. Codex compact context injection, official goal-backed resume, resume-response-to-five-field-receipt-to-pure-core hold-unknown and one request-scoped trust-bypass resume Hook arm establish bounded links, while the broad bypass remains test-only. Exact 2f6e3de closes one event-to-current-state-to-core-to-Agent named hold consequence with zero tools and independent post-state; the direct client stays a reference evaluator, not an admitted component. Exact f5f281c and 6d91360 simple arms stop before Agent output; exact Claude arms stop before a usable Agent consequence. Exact fded9a6 then uses a disposable current-account Codex exec lane over byte-matched package files, requests no concrete model, exits 0 and returns exact ACCORD_SIMPLE_NATIVE_OK with zero tool-like items. Its two content-unknown item.completed error payloads are non-fatal diagnostics under the exact official exec JSONL implementation; no top-level error or turn.failed occurs, and exact cleanup removes the disposable account, plugin and task state. Model identity and version remain runtime variables, never product or oracle bindings. The sufficient simple route now passes. Advance only to a topology-safe fresh zero-history sequential handoff when policy requires load relief and turn authority is separately bound; verify destination goal, current state and bound code identity before source release and distinguish it from copied-history fork, Git worktree and Git branch. Do not inspect diagnostic content, substitute model labels, add a browser bridge, installer, MCP, SDK/App Server client or persistent service. Only after the handoff oracle closes may the program select the operational component set, run GT-20 over non-empty host state and reaccept every affected authority, graph, implementation, documentation, package and non-compensating balance surface before independent exact-tree review or candidate formation.",
-    "latestFailureBoundary": "The prior pre-model admission boundary is resolved. Under explicit current-account authority, exact fded9a6 package bytes were installed into a disposable Codex 0.151.0 home. One no-concrete-model ephemeral read-only turn exited 0, returned exact ACCORD_SIMPLE_NATIVE_OK and exposed zero tool-like items. Its two content-unknown item.completed error payloads are non-fatal diagnostics under exact official source; no top-level error or turn.failed occurred. Exact package matching and removal of the disposable account, plugin and task state passed. The next open GT-21 boundary is conditional fresh zero-history sequential handoff under separately bound turn authority; no model binding, credential inspection, bridge adoption or mechanism escalation is admitted.",
+    "minimumNextSlice": "Retain every attempt as bounded history. Exact 2f6e3de closes one event-to-current-state-to-core-to-Agent hold consequence; exact fded9a6 closes the sufficient simple route without model binding; exact 3878968 closes one conditional fresh zero-history sequential handoff through separate official thread/start actions, six typed fields, one model-variable read-only destination turn, one task-owned verifier, destination-before-source release, unchanged code/execution topology and zero task residue. One output-schema mismatch was NotSubmitted before a turn; the evaluator timeout shell was interrupted only after App Server exit 0 and a later zero-turn audit reconfirmed zero threads and processes. Keep the selected portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests. The direct App Server client remains a reference evaluator; do not add a browser bridge, MCP, SDK/client, daemon, database or persistence. Run GT-20 next in disposable non-empty Codex and Claude scopes, preserving user and foreign state, injecting update failure, verifying rollback and activation separately, and removing all active Accord state before whole-system reacceptance and independent exact-tree review.",
+    "latestFailureBoundary": "GT-21 has no remaining boundary for the bounded current-host claim. Exact 3878968 used a fresh official thread/start destination, transferred six verified fields, returned ACCORD_FRESH_HANDOFF_VERIFIED without requesting a concrete model, kept the source until destination verification, preserved code and execution topology, and removed both threads, matching processes, disposable account/plugin state and the exact task root. Production trust, ordinary activation, Claude equivalence and cross-host value remain scoped unknowns. GT-20 transactional lifecycle over non-empty Codex and Claude state is now the earliest open boundary.",
     "requiredReplay": [
       "semantic-authority-and-derived-surface-conformance",
       "plan-process-acceptance-goal-projection-alignment",
