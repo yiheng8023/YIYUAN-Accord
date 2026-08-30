@@ -18,7 +18,8 @@ remain explicit. Fresh current-contract GT-18/19 at exact
 synthetic evolution sequence and one bounded Codex-local responsibility-
 allocation sequence, with blocked arms, corrections, failed review and high
 costs retained. A genuinely new independent full-system review remains pending
-after GT-21, GT-20 and affected-surface reacceptance.
+after the bounded GT-21 and GT-20 cases and the still-active affected-surface
+reacceptance.
 The implementation does not
 admit a Runtime, durable state layer, durable evolution or live-mechanism claim.
 The exact v3.1 package checkpoint

@@ -311,9 +311,10 @@ Then read, in order:
   exclusion even though the fresh v3 Codex-local GT-07 independently verified
   exact fixture post-state. Historical evidence is preserved against its
   versioned task contract rather than rewritten to match the current task.
-  GT-14 through GT-21 have a machine-checkable design; GT-20 remains
-  unperformed, while the later API-first live-carrier GT-21 is active and
-  incomplete. Exact checkpoint
+  GT-14 through GT-21 have a machine-checkable design. GT-21 now passes only
+  its bounded current-host live-carrier and fresh-handoff case, and GT-20 now
+  passes only its bounded disposable Windows transactional-lifecycle case.
+  Whole-system affected-surface reacceptance remains active. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
@@ -396,9 +397,10 @@ Then read, in order:
   record, one deep pure-data `reconcile_closure` module, its live observation
   receipt, three per-responsibility implementation modes and interface
   regression, one append-only existing GT-14 through GT-19 source and bounded
-  current observations; GT-20 remains unperformed and GT-21 is active but
-  incomplete, including the review-required source-bound independence and matching
-  experiment-poststate gates. The two-file increase from 84 pays only for the
+  current observations. GT-21 and GT-20 now retain bounded exact evidence with
+  their failures, evaluator-fixture corrections, unknowns and matching cleanup post-state;
+  neither establishes production, cross-host value, candidate or release readiness.
+  The two-file increase from 84 pays only for the
   GT-17 and GT-18 observation carriers; their fixture and state carrier were
   removed. Revised GT-17 and GT-19 now occupy two bounded observation carriers;
   three superseded v3.0.1 derived observation projections were removed from the
@@ -554,7 +556,7 @@ increment and one active work item. Its ordered work is:
    counterexamples and claim ceiling. GT-19 was originally a four-episode
    dynamic responsibility-retirement design and its later finite replay is
    recorded below. GT-20 was added by the later plug-and-play/remove-and-leave
-   correction and remains unperformed. GT-21 was added after the live-chain
+   correction; its bounded transactional replay is recorded below. GT-21 was added after the live-chain
    audit exposed that Skill plus SessionStart echo did not prove operational
    invocation, consequence or topology-safe continuity. The working tree now
    replaces that echo with a provisional shared short-lived event adapter; this
@@ -786,29 +788,30 @@ increment and one active work item. Its ordered work is:
     and manifests are selected; the direct App Server shape stays reference-only.
     Do not inspect diagnostic content, bind model labels or add a browser bridge,
     MCP, SDK/App Server client or persistent service.
-14. `prove-transactional-install-state-preservation-and-removal` — active after
-    stage 13. Current package contents are plugin-scoped and do not themselves
-    replace user instruction or configuration files, but that static fact is
-    not lifecycle proof. GT-20 must use disposable non-empty Codex and Claude
-    scopes, current native lifecycle surfaces and exact package bytes to prove
-    one user intent per authorized install, update, rollback or removal after
-    source trust; atomic rollback after an injected failure; preservation of
-    existing and concurrent user changes, unrelated plugins and shared or
-    unknown state; zero active Accord registration, exposure, process and data
-    state; and non-callability plus bounded automatic host cleanup for any
-    retained host-owned inert cache. Credentials, real sessions and global user
-    state remain out of scope.
-    A bounded 2026-08-29 feasibility probe used empty `CODEX_HOME` and
-    `CLAUDE_CONFIG_DIR` roots with non-empty user sentinels. One native install
-    intent per host copied exact working-tree 3.1.0 manifest, Hook and Skill
-    bytes; native uninstall and marketplace removal preserved pre-existing and
-    concurrent user fields and removed all active registrations. Codex removed
-    its package contents but retained empty cache directories; Claude retained
-    an unlisted host-owned version cache under its documented orphan-cleanup
-    lifecycle. The probe root was removed. Update-failure rollback, unrelated
-    installed-plugin preservation, shared dependency behavior and actual
-    activation remain untested, so GT-20 remains unperformed.
-15. `reaccept-whole-system-after-live-state-closure` — pending after GT-20.
+14. `prove-transactional-install-state-preservation-and-removal` — completed
+    only for the bounded case in
+    `evals/evidence/2026-08-30-v310-gt20-21-source.json`.
+    Exact tracked `v3.0.1` bytes were installed into disposable non-empty Codex
+    and Claude scopes alongside user instructions, configuration, an unrelated
+    installed plugin and a shared host dependency. After a concurrent user edit,
+    each native update failed against a task-owned source with the plugin path
+    absent; exact `3.0.1` bytes remained and no `3.1.0` cache appeared. Restoring
+    the same marketplace path to the complete tracked `4c8bcc3` archive updated
+    both hosts to exact manifest, Hook and Skill bytes. Enabled/component
+    inventory and installed executable checks were separate from installation.
+    Native removal preserved user, concurrent, foreign and shared state and left
+    zero active Accord registration, marketplace, process or data state. Codex
+    retained no Accord package cache. Claude retained only unlisted
+    `.orphaned_at` version caches; the exact local binary sweeps unlisted versions
+    after 14 days and skips live-session users, so these are host-owned inert
+    cache, not physical zero residue. Both fixture roots and matching processes
+    were removed. One invalid-TOML fixture attempt and one reserved-variable
+    post-state printer failure remain counterevidence. No real configuration,
+    credentials, session logs or model turn were used. Production, unmanaged or
+    cross-OS hosts, actual Claude host Hook triggering, product value and release
+    readiness remain unknown.
+15. `reaccept-whole-system-after-live-state-closure` — active after bounded
+    GT-21 and GT-20 closure.
 16. `independent-review-and-form-future-exact-candidate` — pending after whole-
     system reacceptance. Goal mode remains paused; only a genuinely independent
     exact-tree specification, implementation and standards review can form a

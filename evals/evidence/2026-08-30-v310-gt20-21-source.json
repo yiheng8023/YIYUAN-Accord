@@ -1401,6 +1401,209 @@
           "claimLimit": "One exact bounded current-host fresh zero-history handoff on revision 3878968 with one authorized model-variable turn and a task-owned evaluator; no cross-host, production, value, candidate or release claim."
         }
       }
+    },
+    "GT-20-transactional-lifecycle-4c8bcc3": {
+      "id": "GT-20-transactional-lifecycle-4c8bcc3",
+      "taskId": "GT-20",
+      "capturedAt": "2026-08-30",
+      "evaluatedRevision": "4c8bcc362287d1ad494061ab0de0cb4bfaad51b5",
+      "baselineRelease": {
+        "tag": "v3.0.1",
+        "revision": "24cf9f3750ecd700944988e81a519db54b67b8e8"
+      },
+      "authorityAndPrivacy": {
+        "sourceTrust": "task-owned local tracked archives only",
+        "authorizedEffects": [
+          "disposable native marketplace registration",
+          "disposable plugin install",
+          "one injected failed update",
+          "successful native update",
+          "native uninstall and marketplace removal",
+          "task-owned fixture cleanup"
+        ],
+        "excluded": [
+          "real user configuration",
+          "credentials",
+          "session logs",
+          "global plugin state",
+          "model invocation",
+          "repository .tmp"
+        ],
+        "modelCallCount": 0,
+        "modelIdentity": "not requested or bound"
+      },
+      "environment": {
+        "os": "windows",
+        "codex": {
+          "version": "codex-cli 0.151.0",
+          "binarySha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+          "scope": "disposable non-empty CODEX_HOME",
+          "nativeSurfaces": [
+            "plugin marketplace add",
+            "plugin add",
+            "plugin list --json",
+            "plugin remove",
+            "plugin marketplace remove"
+          ]
+        },
+        "claude": {
+          "version": "Claude Code 2.1.251",
+          "binarySha256": "8d1229a281281b98fd2dee72b3253a704be4fce4d45207200cd32a9bb5a6c909",
+          "scope": "disposable non-empty CLAUDE_CONFIG_DIR",
+          "nativeSurfaces": [
+            "plugin marketplace add",
+            "plugin install",
+            "plugin list --json",
+            "plugin details",
+            "plugin update",
+            "plugin uninstall",
+            "plugin marketplace remove"
+          ]
+        }
+      },
+      "prestate": {
+        "codex": {
+          "instructionSha256": "28663705a8d690c268a9a26589671341bd2be1ea4fe6f0dcd0609d12068857c2",
+          "sharedDependencySha256": "22a9b5abdc874d807a6040c66a0c3c839213fb6fc0f45cb0f469a192e72ad6e0",
+          "userFields": [
+            "approval_policy=on-request",
+            "sandbox_mode=read-only",
+            "gt20-user-preexisting"
+          ],
+          "unrelatedPlugin": "gt20-unrelated-codex@gt20-unrelated-codex-market"
+        },
+        "claude": {
+          "instructionSha256": "f6f746333d62a217f7636c77bdbc49267e15b2fa38ede002d0e6cb16f18df247",
+          "sharedDependencySha256": "22a9b5abdc874d807a6040c66a0c3c839213fb6fc0f45cb0f469a192e72ad6e0",
+          "userFields": [
+            "GT20_USER_SENTINEL=preserve"
+          ],
+          "unrelatedPlugin": "gt20-unrelated-claude@gt20-unrelated-claude-market"
+        }
+      },
+      "orderedObservations": [
+        {
+          "phase": "baseline-install",
+          "result": "pass",
+          "observed": "Both native hosts installed and enabled Accord 3.0.1 while retaining an enabled unrelated plugin. Claude details reported one Skill, zero Hooks and zero MCP servers."
+        },
+        {
+          "phase": "post-install-concurrent-user-edit",
+          "result": "pass",
+          "observed": "The Codex config gained gt20-user-concurrent-edit=preserve and Claude settings gained GT20_USER_CONCURRENT_EDIT=preserve before either update arm."
+        },
+        {
+          "phase": "injected-update-failure",
+          "result": "pass",
+          "observed": "The task atomically replaced only the local marketplace source path with a tracked 3.1.0 archive whose two plugin directories were intentionally absent. Codex and Claude each exited 1 on their native update surface. Both retained exact 3.0.1 manifest and Skill hashes, no 3.1.0 cache was created, and user, unrelated-plugin and shared-dependency state remained present."
+        },
+        {
+          "phase": "successful-update",
+          "result": "pass",
+          "observed": "The same marketplace path was switched to the complete tracked 4c8bcc3 archive. Codex installed 3.1.0 enabled; Claude reported 3.0.1 to 3.1.0 and details changed from zero to one SessionStart Hook. Both retained the unrelated plugin and concurrent user edit."
+        },
+        {
+          "phase": "independent-current-byte-and-executable-check",
+          "result": "pass",
+          "observed": "Installed manifest, Hook and Skill hashes matched the exact tracked 4c8bcc3 source on both hosts. Each installed Hook accepted one synthetic startup payload, emitted no context, started no model or tool and exited 0. Registry enabled state and component inventory were checked separately from these executable checks."
+        },
+        {
+          "phase": "native-removal",
+          "result": "pass",
+          "observed": "Native plugin uninstall or remove plus marketplace removal left only the unrelated plugin and marketplace, preserved user instructions, both user fields including the concurrent edit and the shared dependency, and removed all Accord registration and data state."
+        },
+        {
+          "phase": "task-resource-release",
+          "result": "pass",
+          "observed": "All task-owned unrelated plugins and marketplaces were then removed through native lifecycle commands. Both formal and learning fixture roots were resolved inside the task visualization root, removed, and independently returned Test-Path false; matching node, codex and claude process count was zero."
+        }
+      ],
+      "currentPackageHashes": {
+        "codex": {
+          "manifestSha256": "b39034d978fc9ed5ba814b2297dfa44afc8d4e96603899af9e421da913e56f51",
+          "hookSha256": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "skillSha256": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a"
+        },
+        "claude": {
+          "manifestSha256": "42344973b7ee1fb6b00846173be01f77563f18432708e1e542c7d31f51628c70",
+          "hookSha256": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "skillSha256": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+        }
+      },
+      "failedUpdateRollbackHashes": {
+        "codex": {
+          "manifestSha256": "67200d20effad35c47508dbe77e3c32a9960ffbf2b37baf193add388b140d2c5",
+          "skillSha256": "2fb6e340eea524a55cd9a4a3e59f8c17bfcc5d5e0af52f532a46659931ebafc5"
+        },
+        "claude": {
+          "manifestSha256": "ff54515ec6421d69cad399760c65b443c215fca56fd3e76b81efc4b9589772fb",
+          "skillSha256": "8b0b4342e5c6463ff35e50b121948335df61080d8c054912fc17a67b3ea60bb6"
+        }
+      },
+      "hostCacheDisposition": {
+        "codex": {
+          "postRemovalAccordVersionCachePresent": false,
+          "callable": false,
+          "classification": "no retained Accord package cache"
+        },
+        "claude": {
+          "postRemovalAccordVersionCachePresent": true,
+          "listedOrEnabled": false,
+          "callable": false,
+          "dataStatePresent": false,
+          "orphanMarkers": {
+            "3.0.1": "1788066756934",
+            "3.1.0": "1788066810667"
+          },
+          "cleanupContract": "The exact local Claude binary writes .orphaned_at only under the plugin cache root, sweeps unlisted versions, skips versions used by a live session and deletes an orphan when marker age exceeds 1209600000 ms (14 days).",
+          "classification": "host-owned inert cache under bounded automatic cleanup; not physical zero residue and not manually deleted before task-root release"
+        }
+      },
+      "counterevidence": [
+        {
+          "id": "learning-probe-not-formal-evidence",
+          "disposition": "A first exact-current install and remove probe established command and JSON shapes but did not exercise version transition; it was cleaned and is not used as the GT-20 pass arm."
+        },
+        {
+          "id": "codex-concurrent-edit-fixture-syntax-error",
+          "disposition": "The first Codex failure attempt stopped on a task-fixture TOML line accidentally prefixed with a plus sign, before reading the broken source. It is retained as an evaluator-fixture error, was not counted, and the corrected source-failure arm was rerun from the unchanged exact 3.0.1 cache."
+        },
+        {
+          "id": "reserved-PowerShell-variable-poststate-error",
+          "disposition": "One read-only poststate printer attempted to assign a case-insensitive HOME variable and failed before checks or writes. A task-specific variable rerun produced the admitted poststate."
+        }
+      ],
+      "acceptanceVector": {
+        "outcome-consequence": "pass",
+        "authority-and-accountability": "pass",
+        "evidence-integrity": "pass",
+        "privacy-trust-data-and-cost": "pass",
+        "human-burden": "pass",
+        "interference": "pass",
+        "recovery-and-reversibility": "pass",
+        "resource-and-residue": "pass",
+        "continuity-and-consensus": "pass",
+        "lifecycle-and-retirement": "pass"
+      },
+      "cleanupEvidence": {
+        "activeAccordRegistrations": 0,
+        "activeAccordMarketplaces": 0,
+        "activeAccordDataRoots": 0,
+        "matchingTaskProcesses": 0,
+        "formalFixtureRootExists": false,
+        "learningFixtureRootExists": false,
+        "repositoryTmpInspectedOrModified": false
+      },
+      "unknowns": [
+        "unmanaged hosts",
+        "production user scopes",
+        "cross-operating-system cache behavior",
+        "actual Claude host Hook trigger",
+        "cross-host value or burden reduction",
+        "whole-system reacceptance",
+        "candidate and release readiness"
+      ],
+      "claimLimit": "GT-20 passes only for exact tracked v3.0.1 to 4c8bcc3 package bytes in two disposable non-empty Windows host scopes using the observed native Codex and Claude lifecycle surfaces. It proves bounded user-state-preserving install, failed-update rollback, successful update, enabled/component and executable checks, removal, inert-cache classification and task cleanup. It does not prove unmanaged or production hosts, actual Claude host Hook triggering, product value, cross-host equivalence, whole-system balance, candidate readiness or release readiness."
     }
   }
 }
