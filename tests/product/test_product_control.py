@@ -20,6 +20,7 @@ from yiyuan_accord.evidence import (
     _sequence_digest,
     _source_amendments,
     _time,
+    provisional_gt20_21_source_errors,
     representative_contract_sha256,
     representative_sample_errors,
 )
@@ -33,6 +34,7 @@ from yiyuan_accord.guardrails import (
 from yiyuan_accord.identity import (
     CONTRACT_RELEASE_RE,
     RELEASE_RE,
+    _public_release_record_valid,
     active_tree_errors,
     release_identity_errors,
 )
@@ -116,6 +118,8 @@ def _provisional_fixture():
         for locator in (
             'yiyuan_accord/control.py',
             'yiyuan_accord/evidence.py',
+            P,
+            A,
             G,
             PROVISIONAL_GT20_21_SOURCE,
         ):
@@ -140,6 +144,11 @@ def _rehash_program_input(root, locator):
     for item in program['inputEvidence']:
         if item.get('repositoryLocator') == locator:
             item['repositorySha256'] = digest
+    lifecycle = program.get('increment', {}).get(
+        'provisionalEvidenceLifecycle', {}
+    )
+    if lifecycle.get('sourceLocator') == locator:
+        lifecycle['sourceSha256'] = digest
     _write(root, P, program)
 
 def _enable_current_sample_validation(root):
@@ -861,6 +870,89 @@ class ProductControlTests(unittest.TestCase):
                 'provisional GT-20 evaluatedRevision is not an ancestor',
             )
 
+        with _provisional_fixture() as root:
+            program, acceptance, golden = (
+                _read(root, P), _read(root, A), _read(root, G)
+            )
+            lifecycle = program['increment']['provisionalEvidenceLifecycle']
+
+            def lifecycle_errors():
+                return provisional_gt20_21_source_errors(
+                    root, program, acceptance, golden,
+                    lambda base, locator, _: _read(base, locator),
+                )
+
+            def retire_to(release, observed_at):
+                lifecycle.update({
+                    'state': 'retired-after-recorded-public-release',
+                    'targetReleaseTag': release['tag'],
+                    'retiredByPublicRelease': {
+                        'tag': release['tag'], 'revision': release['revision'],
+                        'observedAt': observed_at,
+                        'source': 'task-time-live-github-observation',
+                        'releaseApi': acceptance['publicRelease']['releaseApi'],
+                        'tagApi': acceptance['publicRelease']['tagApi'],
+                    },
+                })
+
+            lifecycle['state'] = 'promoted-by-complete-current-r3'
+            _write(root, P, program)
+            self.assert_has(
+                _errors(root),
+                'provisional GT-20/21 lifecycle transition is invalid',
+            )
+
+            program['status'] = 'ready'
+            next(item for item in acceptance['criteria']
+                 if item['id'] == 'R3')['assessment'] = 'verified'
+            local = lifecycle_errors()
+            self.assertTrue(
+                _lacks(local, 'provisional GT-20', 'provisional GT-21'),
+                local,
+            )
+            _write(root, P, program)
+            _write(root, A, acceptance)
+            self.assert_has(
+                _errors(root),
+                'verified without direct evidence',
+            )
+
+            old_release = program['historicalRelease']['publicReleases'][-1]
+            retire_to(old_release, '2026-08-30T00:00:00Z')
+            self.assert_has(
+                lifecycle_errors(),
+                'provisional GT-20/21 lifecycle transition is invalid',
+            )
+
+            release = {**old_release, 'tag': 'v3.1.0', 'revision': 'c' * 40,
+                       'publishedAt': '2026-09-01T00:00:00Z'}
+            program['historicalRelease']['publicReleases'].append(release)
+            program['historicalRelease']['recommendedPublicRelease'] = 'v3.1.0'
+            acceptance['historicalRelease'] = json.loads(json.dumps(
+                program['historicalRelease']
+            ))
+            retire_to(release, '2026-09-01T00:05:00Z')
+            local = lifecycle_errors()
+            self.assertTrue(
+                _lacks(local, 'provisional GT-20', 'provisional GT-21'),
+                local,
+            )
+            lifecycle['retiredByPublicRelease']['revision'] = None
+            self.assert_has(
+                lifecycle_errors(),
+                'provisional GT-20/21 lifecycle transition is invalid',
+            )
+            lifecycle['retiredByPublicRelease']['revision'] = release['revision']
+            source = _read(root, PROVISIONAL_GT20_21_SOURCE)
+            source['provisionalContract']['records'][0][
+                'behaviorSubject'
+            ].pop('plugins/yiyuan-accord-codex/adapter.json')
+            _write(root, PROVISIONAL_GT20_21_SOURCE, source)
+            self.assert_has(
+                lifecycle_errors(),
+                'provisional GT-20 source contract record is not admitted',
+            )
+
     def test_gt20_subjects_are_derived_from_projection_declarations(self):
         with _provisional_fixture() as root:
             golden = _read(root, G)
@@ -942,12 +1034,44 @@ class ProductControlTests(unittest.TestCase):
             record['payload']['decision'] = []
             refresh_record(source, 'GT-21')
 
+        def mutate_payload_subject(source):
+            contract = entry(source, 'GT-21')
+            record = source['records'][contract['recordId']]
+            record['payload']['behaviorSubject'].pop('yiyuan_accord/closure.py')
+            refresh_record(source, 'GT-21')
+
+        def mutate_null_gt21_observer(source):
+            contract = entry(source, 'GT-21')
+            record = source['records'][contract['recordId']]
+            poststate = record['payload']['liveObservation']['independentPoststate']
+            poststate['observer'] = None
+            contract['independentPoststate']['sha256'] = _digest(poststate)
+            refresh_record(source, 'GT-21')
+
+        def mutate_null_gt20_release_observation(source):
+            contract = entry(source, 'GT-20')
+            record = source['records'][contract['recordId']]
+            next(item for item in record['orderedObservations']
+                 if item['phase'] == 'task-resource-release')['observed'] = None
+            refresh_record(source, 'GT-20')
+
         cases = (
             ('schema', 'provisional GT-20/21 source contract is invalid',
              lambda source: source.update(schema=2)),
             ('duplicate task entry', 'provisional GT-20/21 source record set is invalid',
              lambda source: source['provisionalContract']['records'].append(
                  json.loads(json.dumps(entry(source, 'GT-20'))))),
+            ('retained order', 'provisional GT-20/21 retained attempt ledger is invalid',
+             lambda source: source['provisionalContract'][
+                 'retainedRecords'].__setitem__(
+                     slice(0, 2),
+                     list(reversed(source['provisionalContract'][
+                         'retainedRecords'][:2])),
+                 )),
+            ('deleted failed attempt',
+             'provisional GT-20/21 retained attempt ledger is invalid',
+             lambda source: source['records'].pop(
+                 'GT-21-simple-native-route-f5f281c')),
             ('task digest', 'provisional GT-20 Golden Task digest mismatch',
              lambda source: entry(source, 'GT-20').update(
                  goldenTaskSha256='0' * 64)),
@@ -957,6 +1081,9 @@ class ProductControlTests(unittest.TestCase):
             ('behavior subject', 'provisional GT-20 behavior subject binding is invalid',
              lambda source: entry(source, 'GT-20')['behaviorSubject'].pop(
                  'plugins/yiyuan-accord-codex/adapter.json')),
+            ('record payload behavior subject',
+             'provisional GT-21 behavior subject binding is invalid',
+             mutate_payload_subject),
             ('package digest', 'provisional GT-20 projection package digest mismatch',
              lambda source: entry(source, 'GT-20')[
                  'projectionPackageSha256'].update(codex='0' * 64)),
@@ -979,6 +1106,12 @@ class ProductControlTests(unittest.TestCase):
              'provisional GT-21 claim ceiling is invalid', mutate_contradictory_claim),
             ('malformed decision object',
              'provisional GT-21 claim ceiling is invalid', mutate_malformed_decision),
+            ('null GT-21 observer',
+             'provisional GT-21 independent post-state is invalid',
+             mutate_null_gt21_observer),
+            ('null GT-20 release observation',
+             'provisional GT-20 independent post-state is invalid',
+             mutate_null_gt20_release_observation),
         )
         with _provisional_fixture() as root:
             original = _read(root, PROVISIONAL_GT20_21_SOURCE)
@@ -995,6 +1128,32 @@ class ProductControlTests(unittest.TestCase):
                     _write(root, PROVISIONAL_GT20_21_SOURCE, source)
                     _rehash_program_input(root, PROVISIONAL_GT20_21_SOURCE)
                     self.assert_has(_errors(root), fragment)
+
+        with _provisional_fixture() as root:
+            source, golden, acceptance = (
+                _read(root, PROVISIONAL_GT20_21_SOURCE),
+                _read(root, G),
+                _read(root, A),
+            )
+            task = next(item for item in golden['tasks'] if item['id'] == 'GT-21')
+            task['prompt'] += ' synchronized semantic expansion'
+            _write(root, G, golden)
+            contract = entry(source, 'GT-21')
+            contract['goldenTaskSha256'] = _digest(task)
+            criterion = next(item for item in acceptance['criteria']
+                             if item['id'] == 'R3')
+            criterion['statement'] += ' synchronized semantic expansion'
+            _write(root, A, acceptance)
+            contract['evaluationContractSha256'] = representative_contract_sha256(
+                acceptance, golden
+            )
+            _write(root, PROVISIONAL_GT20_21_SOURCE, source)
+            _rehash_program_input(root, PROVISIONAL_GT20_21_SOURCE)
+            self.assert_has(
+                _errors(root),
+                'provisional GT-21 source Golden Task digest is not admitted',
+                'provisional GT-21 source evaluation contract digest is not admitted',
+            )
 
     def test_reacceptance_projects_current_stage_without_model_binding(self):
         program = _read(ROOT, P)
@@ -1252,6 +1411,36 @@ class ProductControlTests(unittest.TestCase):
                 'events': events,
             }
 
+        def require_route_fact(request, fact_id, observed_route_ids):
+            request['policy']['requiredRouteFacts'].append(fact_id)
+            for route in request['routes']:
+                value = (
+                    'observed' if route['id'] in observed_route_ids else 'unknown'
+                )
+                route['facts'][fact_id] = value
+                request['environment']['observation']['stateBindings'].append(
+                    state_binding(
+                        f'route.{route["id"]}.{fact_id}', 'route-fact',
+                        route['id'], fact_id, value,
+                    )
+                )
+
+        def allocate_evidence_acquisition(request, route_id):
+            responsibility = 'acquire-current-decision-evidence'
+            request['outcome']['responsibilities'].append(responsibility)
+            route = next(item for item in request['routes']
+                         if item['id'] == route_id)
+            route['supplies'].append(responsibility)
+            route['responsibilityModes'][responsibility] = (
+                'accord-agent-composed'
+            )
+
+        def evidence_case(route_id, fact_id, observed):
+            request = fixture()
+            allocate_evidence_acquisition(request, route_id)
+            require_route_fact(request, fact_id, observed)
+            return reconcile_closure(request)
+
         decision = reconcile_closure(fixture())
         self.assertTrue(decision['valid'], decision['errors'])
         self.assertEqual(decision['selectedRouteId'], 'minimal-composition')
@@ -1288,6 +1477,25 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(native['selectedRouteId'], 'native-no-add')
         self.assertEqual(native['disposition'], 'no-op')
         self.assertTrue(native['lifecycle']['completionAllowed'])
+        self.assertNotIn(
+            'acquire-current-decision-evidence',
+            fixture(healthy_native=True)['outcome']['responsibilities'],
+        )
+
+        for route_id, fact, observed, selected, disposition in (
+            ('minimal-composition',
+             'consequential-evidence-not-public-lead-only',
+             {'minimal-composition'}, 'minimal-composition', 'admit'),
+            ('minimal-composition',
+             'consequential-evidence-not-public-lead-only',
+             set(), None, 'hold-unknown'),
+            ('persistent-controller',
+             'bounded-search-and-authorship-authority',
+             {'persistent-controller'}, 'persistent-controller', 'admit'),
+        ):
+            decision = evidence_case(route_id, fact, observed)
+            self.assertEqual(decision['selectedRouteId'], selected)
+            self.assertEqual(decision['disposition'], disposition)
 
         retirement_facts = [
             'within-human-authority',
@@ -1766,6 +1974,9 @@ class ProductControlTests(unittest.TestCase):
             ]),
             (A, 'representative post-session binding contracts', lambda v: v[
                 'representativeBehaviorPolicy'].update(postSessionBindingContracts=[])),
+            (A, 'representative evaluation contract history is invalid', lambda v: v[
+                'representativeBehaviorPolicy']['evaluationContractHistory'][-1][
+                    'preservedTaskIds'].append('GT-19')),
             (A, 'acceptance.claimCeiling is invalid', lambda v: v[
                 'claimCeiling'].pop('publicFiniteReleaseClaims')),
             (A, 'finite-release evidence lanes', lambda v: (
@@ -2620,6 +2831,7 @@ class ProductControlTests(unittest.TestCase):
         old = policy['evaluationContractHistory'][0]['sha256']
         sequence_contract = policy['evaluationContractHistory'][1]['sha256']
         qualification_contract = policy['evaluationContractHistory'][2]['sha256']
+        dynamic_contract = policy['evaluationContractHistory'][3]['sha256']
         self.assertIn(old, _evaluation_contracts(policy, 'GT-14', current))
         self.assertEqual(
             _evaluation_contracts(policy, 'GT-17', current),
@@ -2628,6 +2840,25 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(
             _evaluation_contracts(policy, 'GT-18', current),
             {current, sequence_contract},
+        )
+        self.assertEqual(
+            _evaluation_contracts(policy, 'GT-20', current),
+            {current, dynamic_contract},
+        )
+        self.assertEqual(_evaluation_contracts(policy, 'GT-19', current), {current})
+        widened = json.loads(json.dumps(policy))
+        widened['evaluationContractHistory'][-1]['preservedTaskIds'].append('GT-19')
+        self.assertIsNone(_evaluation_contracts(widened, 'GT-19', current))
+        changed_acceptance = json.loads(json.dumps(acceptance))
+        changed_policy = changed_acceptance['representativeBehaviorPolicy']
+        changed_policy['releaseDecisionRule'] += ' Unrelated future semantic change.'
+        changed_current = representative_contract_sha256(
+            changed_acceptance, _read(ROOT, G),
+        )
+        self.assertNotEqual(changed_current, current)
+        self.assertEqual(
+            _evaluation_contracts(changed_policy, 'GT-20', changed_current),
+            {changed_current},
         )
         malformed = json.loads(json.dumps(policy))
         malformed['evaluationContractHistory'][0]['preservedTaskIds'] = []
@@ -3073,29 +3304,36 @@ class ProductControlTests(unittest.TestCase):
             _write(root, A, acceptance)
             self.assert_has(_errors(root), 'release notes do not expose the complete claim ceiling')
 
-    def test_public_release_history_freezes_known_prefix_and_accepts_valid_tail(self):
+    def test_public_release_history_freezes_admitted_snapshot_and_rejects_tail(self):
         program = _read(ROOT, P)
         acceptance = _read(ROOT, A)
         identity = _read(ROOT, C)['identity']
+        history_text = (ROOT / 'docs/operations/HISTORY.md').read_text(
+            encoding='utf-8'
+        )
 
-        def history_errors(history):
+        def history_errors(history, projection=history_text):
             changed_program = json.loads(json.dumps(program))
             changed_acceptance = json.loads(json.dumps(acceptance))
             changed_program['historicalRelease'] = json.loads(json.dumps(history))
             changed_acceptance['historicalRelease'] = json.loads(json.dumps(history))
             return release_identity_errors(
-                identity, changed_program, changed_acceptance,
+                identity, changed_program, changed_acceptance, projection,
             )
 
         baseline = json.loads(json.dumps(program['historicalRelease']))
+        legacy_future = {**baseline['publicReleases'][-1], 'tag': 'v4.0'}
+        self.assertFalse(_public_release_record_valid(legacy_future))
         self.assertFalse(any(
             'historicalRelease provenance is invalid' in error
             for error in history_errors(baseline)
         ))
 
         for name, mutation in (
-            ('known-revision', lambda value: value['publicReleases'][3].update(
-                revision='0' * 40)),
+            ('known-revision-type', lambda value: value['publicReleases'][3].update(
+                revision=7)),
+            ('non-object-record', lambda value: value['publicReleases'].__setitem__(
+                0, None)),
             ('known-order', lambda value: value['publicReleases'].__setitem__(
                 slice(0, 2), list(reversed(value['publicReleases'][:2])))),
             ('duplicate-tag', lambda value: value['publicReleases'].append({
@@ -3137,6 +3375,23 @@ class ProductControlTests(unittest.TestCase):
                 'assetPolicy': 'no-attached-assets',
                 'publishedAt': '2026-9-1T0:0:0Z',
             })),
+            ('fictional-full-tail', lambda value: (
+                value['publicReleases'].append({
+                    'tag': 'v3.1.0',
+                    'revision': 'b' * 40,
+                    'releaseKind': 'full-release',
+                    'prerelease': False,
+                    'assetPolicy': 'no-attached-assets',
+                    'publishedAt': '2026-09-02T00:00:00Z',
+                }),
+                value.update(recommendedPublicRelease='v3.1.0'),
+            )),
+            ('semantic-authority-field', lambda value: (
+                value.__setitem__('authority', value.pop('provenanceProjection')),
+            )),
+            ('repository-fact-source', lambda value: value.update(
+                externalFactSource='repository-declared'
+            )),
         ):
             with self.subTest(invalid_history=name):
                 changed = json.loads(json.dumps(baseline))
@@ -3146,38 +3401,66 @@ class ProductControlTests(unittest.TestCase):
                     for error in history_errors(changed)
                 ))
 
-        preview_tail = json.loads(json.dumps(baseline))
-        preview_tail['publicReleases'].append({
-            'tag': 'v3.1.0-preview.1',
-            'revision': 'a' * 40,
-            'releaseKind': 'public-preview',
-            'prerelease': True,
-            'assetPolicy': 'no-attached-assets',
-            'publishedAt': '2026-09-01T00:00:00Z',
-        })
-        self.assertFalse(any(
-            'historicalRelease provenance is invalid' in error
-            for error in history_errors(preview_tail)
-        ))
-
-        full_tail = json.loads(json.dumps(preview_tail))
-        full_tail['publicReleases'].append({
-            'tag': 'v3.1.0',
-            'revision': 'b' * 40,
-            'releaseKind': 'full-release',
-            'prerelease': False,
-            'assetPolicy': 'no-attached-assets',
-            'publishedAt': '2026-09-02T00:00:00Z',
-        })
-        self.assertTrue(any(
-            'historicalRelease provenance is invalid' in error
-            for error in history_errors(full_tail)
-        ))
-        full_tail['recommendedPublicRelease'] = 'v3.1.0'
-        self.assertFalse(any(
-            'historicalRelease provenance is invalid' in error
-            for error in history_errors(full_tail)
-        ))
+        fictional_projection_tail = history_text.replace(
+            '\nThe recorded recommendation pointer',
+            '\n| `v9.9.9` | `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa` | '
+            '`2026-09-09T09:09:09Z` | full Release | no attached assets |\n'
+            '\nThe recorded recommendation pointer',
+        )
+        table_lines = [
+            line for line in history_text.splitlines()
+            if line.startswith('|')
+        ]
+        reversed_projection = history_text.replace(
+            '\n'.join(table_lines[2:4]),
+            '\n'.join(reversed(table_lines[2:4])),
+        )
+        hidden_table = history_text.replace(
+            '\n'.join(table_lines), '<!--\n' + '\n'.join(table_lines) + '\n-->',
+        )
+        for projection in (
+            history_text.replace(
+                '`24cf9f3750ecd700944988e81a519db54b67b8e8`',
+                '`0000000000000000000000000000000000000000`',
+            ),
+            fictional_projection_tail,
+            fictional_projection_tail.replace(
+                '\n| `v9.9.9`', '\n | `v9.9.9`',
+            ),
+            reversed_projection,
+          hidden_table,
+          history_text.replace(
+              '## Public Release ledger',
+              '```markdown\n## Public Release ledger', 1,
+          ).replace('## Major boundaries', '## Major boundaries\n```', 1),
+          history_text.replace(
+              '## Public Release ledger', '<!--\n## Public Release ledger', 1,
+          ).replace('## Major boundaries', '## Major boundaries\n-->', 1),
+          history_text.replace(
+              '## Public Release ledger', '<div hidden>\n## Public Release ledger', 1,
+          ).replace('## Major boundaries', '## Major boundaries\n</div>', 1),
+          history_text.replace(
+                'It is not semantic authority or live publication',
+                'It is not live authority or publication', 1,
+            ) + '\n<!-- It is not semantic authority or live publication -->',
+            history_text.replace(
+                'It is not semantic authority or live publication',
+                'It is semantic authority and live publication', 1,
+            ).replace(
+                '\n## Major boundaries',
+                '\n<!-- It is not semantic authority or live publication -->'
+                '\n\n## Major boundaries',
+            ),
+            history_text.replace(
+                '\n## Major boundaries',
+                '\nThis ledger is semantic authority and live publication; '
+                'the actual recommendation is `v9.9.9`.\n\n## Major boundaries',
+            ),
+        ):
+            self.assert_has(
+                history_errors(baseline, projection),
+                'historicalRelease provenance is invalid',
+            )
 
     def test_complexity_identity_and_paths_fail_closed(self):
         with _fixture() as root:

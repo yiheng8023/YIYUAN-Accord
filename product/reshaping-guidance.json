@@ -267,7 +267,7 @@
       "verification-and-retirement-cost"
     ],
     "refreshRule": "Refresh affected instances, sparse responsibility-incidence views and routes when their host, interface, extension, model route, configuration, permission, network, context or observation changes. New model-inherent, native or extended capability can open a responsibility-overlap candidate with Accord machinery; only admitted consequence and lifecycle closure proves actual redundancy. Removal can trigger degradation, discovery, composition or bounded authorship.",
-    "failureRule": "Do not stop at today's host surface, a small marketplace or weak native feature when another compliant discovery or composition lane can satisfy the goal. Do not promise an unobserved capability, and do not install, connect, spend or cross a trust or data boundary without the authority required for that effect."
+    "failureRule": "Do not stop at today's host surface, a small marketplace or weak native feature when another compliant discovery or composition lane can satisfy the goal, but do not run discovery merely because a task exists. A public lead can open an inquiry or counterexample and cannot alone support a consequential adoption or product claim. Do not promise an unobserved capability, and do not browse, install, connect, spend or cross a trust or data boundary without the authority required for that effect."
   },
   "boundedAutonomy": {
     "decision": "required-as-context-adaptive-collaboration-closure",
@@ -1161,6 +1161,7 @@
       "currentDisposition": "p0-p4-logic-and-minimum-pure-data-reference-core-implemented-live-adapter-mechanism-behavior-and-release-closed",
       "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
       "decisionOrder": [
+        "derive-whether-a-current-material-unknown-or-unresolved-route-candidate-requires-evidence-acquisition",
         "recover-prior-Accord-attempts-failures-and-unresolved-assumptions",
         "study-current-primary-research-official-capabilities-and-maintained-existing-wheels",
         "separate-feasible-conditionally-feasible-currently-infeasible-and-unknown-sub-capabilities",
@@ -1177,7 +1178,7 @@
         "bounded-probe-results-and-counterevidence",
         "go-conditional-go-no-go-or-research-more-decision-with-recheck-triggers"
       ],
-      "rule": "Do not implement a self-bootstrapping mechanism merely because the conceptual loop is attractive. A feasibility decision must precede architecture commitment and implementation; an unknown or failed premise narrows the model, opens a bounded research question or stops the route rather than being hidden by more machinery. P4 admits only the deterministic pure-data reference core described by productFormPrototypeDecision; every live mechanism and behavior claim remains independently gated."
+      "rule": "Research is a context-bound evidence-acquisition responsibility, not a mandatory first step or permanent subsystem. Derive it only when a missing, stale or conflicting fact, unresolved reuse candidate, material novelty, consequence risk or architecture premise could change the current route; a sufficiently evidenced route produces no research intervention. When active, recover relevant counterevidence, prefer current primary sources and suitable maintained wheels, treat public-lead sources only as inquiry or counterexample inputs, and stop or hold unknown before architecture commitment or implementation when the material premise remains unresolved. P4 admits only the deterministic pure-data reference core described by productFormPrototypeDecision; every live Adapter, network effect, mechanism and behavior claim remains independently gated."
     },
     "productFormPrototypeDecision": {
       "id": "product-form-neutral-vertical-slice/v1",
@@ -1279,7 +1280,7 @@
       "status": "implemented-deterministic-conformance-only-not-host-behavior-value-or-release-evidence",
       "locator": "yiyuan_accord/closure.py",
       "interface": "reconcile_closure(request)-to-json-serializable-decision",
-      "moduleDepth": "One pure interface hides structural validation, stable compliance invariants, dynamic policy admission, per-responsibility Accord-contained, Agent-native or Accord-Agent-composed allocation, responsibility closure, sparse capability-overlap inputs, unknown preservation, Pareto frontier derivation, contextual or equivalent-fit selection, experiment keep-discard-rollback decisions, source-observer-exact-subject-boundary identity binding, successor discovery and retirement evidence binding, independent consequence and cleanup post-state, matching lifecycle post-state, residue and finite claim handling. Graphs and matrix views remain implementation choices behind normalized plain-data routes rather than enlarging this interface.",
+      "moduleDepth": "One pure interface hides structural validation, stable compliance invariants, dynamic policy admission, per-responsibility Accord-contained, Agent-native or Accord-Agent-composed allocation, task-policy inclusion or omission of a context-bound evidence-acquisition responsibility, responsibility closure, sparse capability-overlap inputs, unknown preservation, Pareto frontier derivation, contextual or equivalent-fit selection, experiment keep-discard-rollback decisions, source-observer-exact-subject-boundary identity binding, successor discovery and retirement evidence binding, independent consequence and cleanup post-state, matching lifecycle post-state, residue and finite claim handling. Graphs, source catalogues and matrix views remain implementation choices behind normalized plain-data routes rather than enlarging this interface.",
       "stableComplianceInvariants": [
         "human-authority-is-supplied-never-derived",
         "environment-composition-is-provenance-bound",
@@ -1296,6 +1297,7 @@
       "taskSuppliedPolicy": [
         "additional-environment-admission-facts",
         "responsibilities-and-additional-route-conditions",
+        "dynamic-evidence-acquisition-applicability-source-roles-and-corroboration",
         "additional-multi-form-coherence-facts",
         "comparison-dimensions-and-context-preference",
         "source-reuse-preference",
@@ -1311,6 +1313,7 @@
       ],
       "replaceableAdapters": [
         "host-and-capability-discovery",
+        "on-demand-primary-source-repository-scholarly-or-public-lead-observation",
         "form-catalogue-or-live-index",
         "execution-and-configuration",
         "evidence-and-independent-evaluator",
@@ -1320,10 +1323,13 @@
       ],
       "verification": {
         "interfaceTest": "tests/product/test_product_control.py::ProductControlTests.test_reference_core_is_policy_driven_and_fail_closed",
-        "latestWorkingTreeResult": "2026-08-30-remediation-working-tree-31-of-31-product-tests-pass-independent-review-pending-not-candidate",
+        "latestWorkingTreeResult": "2026-08-30-second-review-remediation-working-tree-30-of-30-safe-product-tests-pass-one-live-root-test-unrun-protected-residue-independent-rereview-pending-not-candidate",
         "covers": [
           "minimum-composition-for-one-observed-gap",
           "native-whole-loop-no-op",
+          "sufficient-route-with-no-evidence-acquisition-responsibility",
+          "material-gap-with-on-demand-evidence-acquisition-allocation",
+          "public-lead-only-hold-unknown-and-bounded-authorship-gate",
           "plugin-effect-unknown",
           "dynamic-task-policy-condition",
           "no-experiment-policy",
@@ -1356,7 +1362,7 @@
     "selfEvolutionRole": "Self-evolution proposes and evaluates bounded changes to hypotheses, routing fitness, prompts, policies, representations or replaceable mechanisms. It never substitutes for environment sensing, goal and authority binding, capability acquisition, execution, verification, rollback or retirement, and it cannot optimize a proxy beyond the bound outcome and claim.",
     "environmentRule": "Treat every real host as a composed environment rather than an official blank slate. At Accord entry and material boundaries, prefer current typed official host-owned fields, then Accord-owned fields and bounded direct observation; the normalized decision target and value, one writer, bounded readers, source precedence, provenance, current generation and freshness bind every admitted field. Events only invalidate. Missing, conflicting, unbound, signal-only, stale, expired, invalidated or mismatched state remains unknown until re-sensed. Detect extensions, Accord exposure, persistent state, self-observation and unknowns; select only decision-needed isolation. An Accord-enabled arm cannot attest a native or no-Accord baseline, and isolation cannot create authority or universal cleanliness.",
     "evaluationRule": "Select representative cases by outcome-obligation and failure-mode coverage rather than convenience or prior success. Keep one-episode representative evidence distinct from an ordered longitudinal sequence; derive comparison eligibility from the named counterfactual; bind exact environment, projection, treatment, evaluator, carrier, effects and cleanup; and retain all attempts. Judge outcome, authority, evidence, privacy, burden, interference, recovery, resources, continuity and lifecycle as a non-compensating vector. A longitudinal evolution claim requires baseline, rejection and rollback of a regressed mutation, independent acceptance of one net improvement and later invalidation with rollback, replacement or retirement. Design, static checks and a single sequence are not field or population value.",
-    "reuseRule": "Search for and understand suitable existing wheels before authorship. Record provenance, license, maintenance health, exact reusable idea or component, fit, limits, failure modes, side effects, integration burden, rollback and retirement. Adopt a pattern without inheriting its personality, prestige, platform assumptions or metric as authority.",
+    "reuseRule": "When authorship or architecture commitment remains a current candidate and existing admitted evidence cannot establish sufficient fit, dynamically search for and understand suitable existing wheels before authorship. When fresh evidence already closes the route, create no research responsibility. Record provenance, freshness, license, maintenance health, exact reusable idea or component, fit, limits, counterevidence, side effects, integration burden, rollback and retirement. Public-lead channels may discover a candidate or counterexample but cannot alone establish consequential fit; re-observe the underlying primary, official, repository or scholarly source. Adopt a pattern without inheriting its personality, prestige, platform assumptions or metric as authority.",
     "productFormRule": "Allocate each currently relevant responsibility to plugin, Skill, Hook, protocol, library, runtime, service, client integration, cloud carrier, an open-ended composition or no added artifact only after the required effect, environment, authority, latency, isolation, durability, update, recovery and lifecycle properties are known. Treat every retained capability as a replaceable module with one narrow interface and high internal depth: responsibility, authority, state, evidence and lifecycle stay cohesive while host-specific variation sits in adapters at real seams. Add a seam only when at least two justified adapters vary there; keep graph, matrix, cache and evaluator internals behind the module interface. One form may be sufficient and several replaceable modules may cooperate; shared outcome, authority, evidence and lifecycle contracts provide system coherence without requiring one centralized carrier. User experience follows plug-and-play and remove-and-leave: after unavoidable source trust, prefer one host-supported lifecycle intent that bundles or dependency-composes all selected Accord components, uses plugin-scoped or namespaced surfaces instead of replacing AGENTS.md, CLAUDE.md, config.toml or settings.json, atomically rolls partial failure back, preserves concurrent edits plus shared and foreign state, and removes only Accord-owned state. A host that cannot close this contract remains an adapter gap; manual user component assembly cannot be counted as success. Form is a dynamic route variable and may change across contexts, but flexibility itself must remain observable, bounded and verifiable.",
     "consensusRule": "Record a new accountable consensus as a versioned correction and let it govern direction, while distinguishing judgment from factual proof. Before downstream execution, compare it with the current proposition set for contradiction, category error, boundary drift and dependency impact; repair from the earliest affected dependency or stop the affected route. Preserve the superseded baseline as history, then replay the plan, process, acceptance, goal projection, implementation, evidence, documentation and claim surfaces that depend on it. Only the reconciled set becomes the next coherent implementation baseline.",
     "falsifiers": [
@@ -1772,7 +1778,7 @@
       "sense host model route topology capabilities state capacity resources extensions and Accord's own exposure with provenance",
       "isolate or create comparison arms when current extensions persistent state or self-observation could confound the claim",
       "derive the smallest relevant relation graph and identify unclosed unreliable or uneconomic obligations",
-      "search evaluate and reuse suitable existing wheels before composition or authorship",
+      "when route-changing evidence is missing stale or conflicting search evaluate and reuse suitable existing wheels before composition or authorship otherwise consume the sufficient current route without research",
       "allocate responsibilities across one sufficient form several replaceable cooperating forms or no added artifact from required effect authority latency durability isolation recovery and total lifecycle cost",
       "reuse supported host lifecycle surfaces to orchestrate selected components behind one user intent while preserving existing and concurrent user state",
       "admit the minimum sufficient resources and execute the authorized route",
@@ -1804,7 +1810,7 @@
       "keep responsibility implementation and state coordination orthogonal and share only typed field-scoped state with one authoritative writer bounded readers freshness invalidation and conflict handling",
       "reference live discovery and the dynamic index instead of hard-coding a host route or product form",
       "normalize host-specific project workspace task thread conversation and session terms into canonical relations before capability comparison",
-      "reuse suitable existing capability before composition or authorship and record fit limits and exit conditions",
+      "when a material gap requires acquisition reuse suitable existing capability before composition or authorship and record fit limits and exit conditions otherwise admit no research as the sufficient result",
       "make human judgment new trust data cost publication destructive and irreversible pause boundaries explicit",
       "own capability acquisition configuration topology continuity resource stewardship verification learning rollback cleanup and retirement mechanics",
       "prefer plugin-scoped or namespaced lifecycle operations and never overwrite user-owned instructions or configuration to simulate activation",

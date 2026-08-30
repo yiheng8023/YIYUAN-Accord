@@ -1528,3 +1528,39 @@ call was stopped from further use, the incident remains process counterevidence,
 and no green result compensates for it. Clean exact-candidate formation remains
 blocked until the human-controlled residue boundary changes and the ordered
 checks can be run without weakening the rule.
+
+## Failed remediation review and second bounded repair: cut `ef10100`
+
+The first remediation was committed locally as
+`ef10100649c95ee0bb359a45ab3097a14884cf97` and remained unpushed. Separate
+fixed-point product, specification, implementation and standards lanes reviewed
+only `523f2ef...ef10100`; they did not run canonical or host checks and did not
+inspect the protected residue. The exact cut failed again:
+
+| Lane | Material finding at `ef10100` | Second bounded repair |
+| --- | --- | --- |
+| Specification and evidence | The selected wrapper compared Golden Task and evaluation digests only with simultaneously mutable current files. Seven failed or partial GT-21 attempts were not in the admitted set, and the GT-21 record subject was not compared with the wrapper subject. | Freeze the source-time task and evaluation digests, retain an ordered nine-record ledger with per-record digests, and require wrapper, record and ancestor subject agreement. |
+| Implementation | Null nested observer text could reach string containment and raise `TypeError` instead of returning a validation error. | Type-narrow nested text before semantic containment and retain synchronized malformed-input regressions. |
+| Product lifecycle | The provisional current-byte gate was unconditional with no promotion or retirement state, so later legitimate package evolution would remain bound to old observation bytes. | Add a machine lifecycle in the active program. The current gate remains active for every active or blocked program. Promotion is accepted only for a ready program with verified complete current R3 evidence; post-release retirement additionally requires the exact full Release to enter the externally reconciled admitted history snapshot. Frozen historical provenance remains checked without equating it to new bytes. |
+| Standards and public release | A format-valid fictional tail and moved recommendation pointer passed offline. `HISTORY.md` was also mislabeled as a fourth authority. | Admit only the exact four externally observed public records and v3.0.1 recommendation; reject every offline tail; make HISTORY a derived human-readable projection; require future records to enter only through a separate live post-release reconciliation. |
+
+The second repair does not change any historical behavior payload, call a model,
+add a network route, create a candidate or grant publication authority. Its
+code-and-test calibration is 499608 bytes under a finite 528000-byte ceiling,
+leaving 28392 bytes against the required 26400 headroom and all three tracked-
+file slots. The added allowance is restricted to the retained-attempt,
+immutable-semantics, malformed-input, lifecycle and external-publication-
+boundary checks. A new exact independent review is required for every changed
+byte before push or candidate formation.
+
+The final bounded pass keeps research as a dynamically allocated evidence-
+acquisition responsibility on the existing closure Interface: a sufficient
+route performs none, a consequential public lead holds without corroboration,
+and authorship requires its named authority fact. It also binds the entire
+frozen provisional contract record after lifecycle promotion or retirement,
+type-narrows release revisions and requires the exact HISTORY table and its
+non-authoritative explanation to remain visible rather than comment-hidden.
+The current representative decision rule makes that applicability explicit.
+Its former evaluator digest is retained only as a scoped supersession for the
+unchanged GT-20 lifecycle and GT-21 continuity obligations; it carries no live
+research or prototype claim into the new contract.

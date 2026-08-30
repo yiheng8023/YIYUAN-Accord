@@ -7,10 +7,13 @@ explicit migrations that affect present decisions.
 
 ## Public Release ledger
 
-This chronological table is the human-readable authority for the frozen known
-prefix in `product/program.json` and `product/acceptance.json`. Every row records
-facts fixed at publication; later recommendation or supersession does not
-rewrite it.
+This chronological table is the derived human-readable projection of the exact
+admitted release-provenance snapshot in `product/program.json` and
+`product/acceptance.json`. It is not semantic authority or live publication
+proof. Every admitted row records a fact observed after publication; later
+recommendation or supersession does not rewrite it. Offline validation rejects
+any new tail until a separate post-release reconciliation binds the matching
+live tag and public Release observation.
 
 | Tag | Exact revision | Published at (UTC) | Release kind | Asset policy |
 | --- | --- | --- | --- | --- |
@@ -19,9 +22,10 @@ rewrite it.
 | `v2.0.1-preview.1` | `e3a6eeb3fbb87ce2966c1015f90b0dea09ebbe07` | `2026-08-25T08:46:58Z` | public prerelease | no attached assets |
 | `v3.0.1` | `24cf9f3750ecd700944988e81a519db54b67b8e8` | `2026-08-27T07:13:18Z` | full Release | no attached assets |
 
-The mutable recommendation pointer currently selects `v3.0.1`, the latest
-published full Release. A later public record appends to the ledger; a completed
-later full Release may advance the pointer without altering any earlier row.
+The recorded recommendation pointer currently selects `v3.0.1`, the latest
+admitted full Release. A later public record may enter the snapshot only after
+its external gates and live verification complete; a later full Release may
+then advance the pointer without altering any earlier row.
 
 ## Major boundaries
 

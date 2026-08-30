@@ -1,8 +1,46 @@
 {
   "schema": 1,
   "provisionalContract": {
-    "schema": "yiyuan-accord-provisional-gt20-21-source/v1",
+    "schema": "yiyuan-accord-provisional-gt20-21-source/v2",
     "sourceLocator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
+    "retainedRecords": [
+      {
+        "recordId": "GT-21-live-carrier-preflight-working-tree",
+        "sha256": "19bfd829179fc57f3e45afc8fd17d9360c786006053f50ea9d772a783d16d597"
+      },
+      {
+        "recordId": "GT-21-isolated-live-carrier-2f6e3de",
+        "sha256": "e49eb8442e45f4b2fc520e617a787e6254cc3def87bdeb591ac2279d2c28bd7f"
+      },
+      {
+        "recordId": "GT-21-simple-native-route-f5f281c",
+        "sha256": "2d92c0dbee3d5816679b4cc479c382d3b199570ce1f468163911c4acb8f3cd37"
+      },
+      {
+        "recordId": "GT-21-simple-native-route-model-variable-6d91360",
+        "sha256": "a27837ca5d08b9d88e11ccf3bc023cb86380a236f0318714104662b906ca0e83"
+      },
+      {
+        "recordId": "GT-21-claude-simple-auth-boundary-7a4c932",
+        "sha256": "0e61fe32697c383a301e6701560b2cb8a47f4d5317d48e12de51e14a83168e13"
+      },
+      {
+        "recordId": "GT-21-claude-current-account-pre-model-boundary-5473c43",
+        "sha256": "7799873a3516ca386feaf6f9380f6deca2b875557e40f4e28a272ba41ba26fd2"
+      },
+      {
+        "recordId": "GT-21-codex-current-account-simple-consequence-fded9a6",
+        "sha256": "0ddb105e819e3c4d1dcb4d6ae91766d783196d3e210e6585e41ca68408e8707e"
+      },
+      {
+        "recordId": "GT-21-fresh-zero-history-handoff-3878968",
+        "sha256": "cb14e25128123afcfb6354fefcb480d18b171d7539af0a78dc905f61df33b5cc"
+      },
+      {
+        "recordId": "GT-20-transactional-lifecycle-4c8bcc3",
+        "sha256": "a66b9aa05610baf362c38213d266d31a005c737ab1699173a590a25542cd32ec"
+      }
+    ],
     "records": [
       {
         "taskId": "GT-20",

@@ -30,6 +30,36 @@ _UNRESERVED = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012
 PROVISIONAL_GT20_21_SOURCE = (
     "evals/evidence/2026-08-30-v310-gt20-21-source.json"
 )
+_PROVISIONAL_GT20_21_EVALUATION_SHA256 = (
+    "312693dc71c52c44fe6a11b564671c95818466f1d8ddfd263763dab2af055ab5"
+)
+_PROVISIONAL_GT20_21_CONTRACT_SHA256 = {
+    "GT-20": "ad7c1438037bd4253d68c3ebad07499ed2abeba29ad67c1fd49e68a8cdd6db9d",
+    "GT-21": "0cb08c560e250ddc6b06827704ac4d7dc90815f6be37e6487e13cb8b223824d3",
+}
+_PROVISIONAL_GT20_21_RETAINED_RECORDS = (
+    ("GT-21-live-carrier-preflight-working-tree",
+     "19bfd829179fc57f3e45afc8fd17d9360c786006053f50ea9d772a783d16d597"),
+    ("GT-21-isolated-live-carrier-2f6e3de",
+     "e49eb8442e45f4b2fc520e617a787e6254cc3def87bdeb591ac2279d2c28bd7f"),
+    ("GT-21-simple-native-route-f5f281c",
+     "2d92c0dbee3d5816679b4cc479c382d3b199570ce1f468163911c4acb8f3cd37"),
+    ("GT-21-simple-native-route-model-variable-6d91360",
+     "a27837ca5d08b9d88e11ccf3bc023cb86380a236f0318714104662b906ca0e83"),
+    ("GT-21-claude-simple-auth-boundary-7a4c932",
+     "0e61fe32697c383a301e6701560b2cb8a47f4d5317d48e12de51e14a83168e13"),
+    ("GT-21-claude-current-account-pre-model-boundary-5473c43",
+     "7799873a3516ca386feaf6f9380f6deca2b875557e40f4e28a272ba41ba26fd2"),
+    ("GT-21-codex-current-account-simple-consequence-fded9a6",
+     "0ddb105e819e3c4d1dcb4d6ae91766d783196d3e210e6585e41ca68408e8707e"),
+    ("GT-21-fresh-zero-history-handoff-3878968",
+     "cb14e25128123afcfb6354fefcb480d18b171d7539af0a78dc905f61df33b5cc"),
+    ("GT-20-transactional-lifecycle-4c8bcc3",
+     "a66b9aa05610baf362c38213d266d31a005c737ab1699173a590a25542cd32ec"),
+)
+_PROVISIONAL_GT20_21_LIFECYCLE_SCHEMA = (
+    "yiyuan-accord-provisional-evidence-lifecycle/v2"
+)
 
 
 def _records(value):
@@ -1348,6 +1378,12 @@ _CANDIDATE_RULE_INSERTION = (
     "stale core behavior nor forces replay for unrelated evidence or presentation "
     "changes."
 )
+_EXPECTED_EVALUATION_CONTRACT_HISTORY_SHA256 = (
+    "4db2e196edefcd281c501991770fc2e4d9a8ae50f3eda6a182c8156b7fbb6804"
+)
+_EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256 = (
+    "9dda5f33adc376918ab214f0ff1c233dace4a3e43f7fb936f959469ca2f21415"
+)
 
 
 def _representative_contract(acceptance, golden):
@@ -1440,9 +1476,20 @@ def _evaluation_contracts(policy, task_id, current):
             or _string_set(preserved) is None or not preserved
         ):
             return None
-        if task_id in preserved:
+        if (
+            current == _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256
+            and task_id in preserved
+        ):
             contracts.add(item["sha256"])
+    if _digest(history) != _EXPECTED_EVALUATION_CONTRACT_HISTORY_SHA256:
+        return None
     return contracts
+
+
+def evaluation_contract_history_valid(policy):
+    return _evaluation_contracts(
+        policy, "", _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256,
+    ) is not None
 
 
 def _source_amendments(
@@ -1955,30 +2002,28 @@ def _provisional_package_digest(root, revision, locators):
 def provisional_gt20_21_source_errors(
     root, program, acceptance, golden, read_json,
 ):
-    """Validate the admitted GT-20/21 source even before R3 is promoted."""
     errors = []
+    program = program if isinstance(program, dict) else {}
+    acceptance = acceptance if isinstance(acceptance, dict) else {}
+    golden = golden if isinstance(golden, dict) else {}
+    task_items = golden.get("tasks")
+    task_items = task_items if isinstance(task_items, list) else []
     tasks = {
-        item.get("id"): item for item in golden.get("tasks", [])
+        item.get("id"): item for item in task_items
         if isinstance(item, dict) and _text(item.get("id"))
-    } if isinstance(golden, dict) else {}
-    declared, package_files = _provisional_projection_files(
-        root, program, read_json, errors,
-    )
-    gt20_files = tasks.get("GT-20", {}).get("behaviorSubjectFiles")
-    if _string_set(gt20_files) != declared:
-        errors.append(
-            "provisional GT-20 behavior subject does not match declared projection files"
-        )
+    }
 
     expected_inputs = {
         "gt20-transactional-lifecycle-2026-08-30",
         "gt21-live-carrier-preflight-2026-08-29",
     }
+    input_items = program.get("inputEvidence")
+    input_items = input_items if isinstance(input_items, list) else []
     inputs = {
-        item.get("id"): item for item in program.get("inputEvidence", [])
+        item.get("id"): item for item in input_items
         if isinstance(item, dict) and _text(item.get("id"))
         and item.get("id") in expected_inputs
-    } if isinstance(program, dict) else {}
+    }
     if (
         set(inputs) != expected_inputs
         or any(item.get("repositoryLocator") != PROVISIONAL_GT20_21_SOURCE
@@ -1986,21 +2031,158 @@ def provisional_gt20_21_source_errors(
     ):
         errors.append("provisional GT-20/21 source input binding is invalid")
 
+    criteria = acceptance.get("criteria")
+    criteria = criteria if isinstance(criteria, list) else []
+    r3 = next((
+        item for item in criteria
+        if isinstance(item, dict) and item.get("id") == "R3"
+    ), {})
+    increment = program.get("increment")
+    lifecycle = increment.get("provisionalEvidenceLifecycle") \
+        if isinstance(increment, dict) else None
+    lifecycle_fields = (
+        "schema", "state", "criterionId", "taskIds", "sourceLocator",
+        "sourceSha256", "inputEvidenceIds", "targetReleaseTag",
+        "promotionGate", "retirementGate", "retiredByPublicRelease",
+    )
+    lifecycle_base_valid = (
+        _exact(lifecycle, lifecycle_fields,
+               ("schema", "state", "criterionId", "sourceLocator",
+                "sourceSha256", "targetReleaseTag", "promotionGate",
+                "retirementGate"))
+        and lifecycle.get("schema") == _PROVISIONAL_GT20_21_LIFECYCLE_SCHEMA
+        and lifecycle.get("criterionId") == "R3"
+        and lifecycle.get("taskIds") == ["GT-20", "GT-21"]
+        and lifecycle.get("sourceLocator") == PROVISIONAL_GT20_21_SOURCE
+        and lifecycle.get("inputEvidenceIds") == sorted(expected_inputs)
+        and isinstance(lifecycle.get("sourceSha256"), str)
+        and re.fullmatch(r"[0-9a-f]{64}", lifecycle["sourceSha256"])
+        and all(item.get("repositorySha256") == lifecycle.get("sourceSha256")
+                for item in inputs.values())
+        and lifecycle.get("promotionGate")
+        == "program-ready-with-complete-current-r3"
+        and lifecycle.get("retirementGate")
+        == "recorded-post-release-reconciliation"
+    )
+    state = lifecycle.get("state") if lifecycle_base_valid else None
+    target_release = lifecycle.get("targetReleaseTag") \
+        if lifecycle_base_valid else None
+    active_current_gate = True
+    if not lifecycle_base_valid:
+        errors.append("provisional GT-20/21 lifecycle contract is invalid")
+    elif state == "active-current-byte-gate":
+        if (
+            lifecycle.get("retiredByPublicRelease") is not None
+            or target_release != program.get("distributionVersion")
+        ):
+            errors.append("provisional GT-20/21 lifecycle transition is invalid")
+    elif state == "promoted-by-complete-current-r3":
+        if (
+            lifecycle.get("retiredByPublicRelease") is not None
+            or target_release != program.get("distributionVersion")
+            or program.get("status") != "ready"
+            or r3.get("assessment") != "verified"
+        ):
+            errors.append("provisional GT-20/21 lifecycle transition is invalid")
+        else:
+            active_current_gate = False
+    elif state == "retired-after-recorded-public-release":
+        program_history = program.get("historicalRelease", {})
+        acceptance_history = acceptance.get("historicalRelease", {})
+        public_releases = program_history.get("publicReleases", []) \
+            if isinstance(program_history, dict) else []
+        matching_release = [
+            item for item in public_releases if isinstance(item, dict)
+            and item.get("tag") == target_release
+            and item.get("releaseKind") == "full-release"
+            and item.get("prerelease") is False
+        ] if isinstance(public_releases, list) else []
+        retirement = lifecycle.get("retiredByPublicRelease")
+        retirement_fields = {
+            "tag", "revision", "observedAt", "source", "releaseApi", "tagApi",
+        }
+        public_policy = acceptance.get("publicRelease", {})
+        observed_at = _time(retirement.get("observedAt")) \
+            if isinstance(retirement, dict) else None
+        published_at = _time(matching_release[0].get("publishedAt")) \
+            if len(matching_release) == 1 else None
+        if (
+            target_release != program.get("distributionVersion")
+            or target_release != acceptance.get("distributionVersion")
+            or program.get("status") != "ready"
+            or r3.get("assessment") != "verified"
+            or not isinstance(retirement, dict)
+            or set(retirement) != retirement_fields
+            or retirement.get("tag") != target_release
+            or not isinstance(retirement.get("revision"), str)
+            or re.fullmatch(r"[0-9a-f]{40}", retirement["revision"]) is None
+            or retirement.get("source") != "task-time-live-github-observation"
+            or not isinstance(public_policy, dict)
+            or public_policy.get("tag") != target_release
+            or retirement.get("releaseApi") != public_policy.get("releaseApi")
+            or retirement.get("tagApi") != public_policy.get("tagApi")
+            or not isinstance(program_history, dict)
+            or not isinstance(acceptance_history, dict)
+            or program_history != acceptance_history
+            or program_history.get("recommendedPublicRelease") != target_release
+            or len(matching_release) != 1
+            or retirement.get("revision") != matching_release[0].get("revision")
+            or observed_at is None
+            or published_at is None
+            or observed_at < published_at
+        ):
+            errors.append("provisional GT-20/21 lifecycle transition is invalid")
+        else:
+            active_current_gate = False
+    else:
+        errors.append("provisional GT-20/21 lifecycle state is invalid")
+
+    package_files = {}
+    if active_current_gate:
+        declared, package_files = _provisional_projection_files(
+            root, program, read_json, errors,
+        )
+        gt20_files = tasks.get("GT-20", {}).get("behaviorSubjectFiles")
+        if _string_set(gt20_files) != declared:
+            errors.append(
+                "provisional GT-20 behavior subject does not match declared projection files"
+            )
+
     bundle = read_json(root, PROVISIONAL_GT20_21_SOURCE, errors)
     contract = bundle.get("provisionalContract") if isinstance(bundle, dict) else None
     if (
         not _exact(bundle, ("schema", "provisionalContract", "records"))
         or bundle.get("schema") != 1
-        or not _exact(contract, ("schema", "sourceLocator", "records"),
+        or not _exact(contract, (
+            "schema", "sourceLocator", "retainedRecords", "records",
+        ),
                       ("schema", "sourceLocator"))
-        or contract.get("schema") != "yiyuan-accord-provisional-gt20-21-source/v1"
+        or contract.get("schema") != "yiyuan-accord-provisional-gt20-21-source/v2"
         or contract.get("sourceLocator") != PROVISIONAL_GT20_21_SOURCE
+        or not isinstance(contract.get("retainedRecords"), list)
         or not isinstance(contract.get("records"), list)
     ):
         errors.append("provisional GT-20/21 source contract is invalid")
         contract = {}
     records = bundle.get("records") if isinstance(bundle, dict) else None
     records = records if isinstance(records, dict) else {}
+    retained_records = contract.get("retainedRecords") \
+        if isinstance(contract, dict) else None
+    expected_retained_records = [
+        {"recordId": record_id, "sha256": digest}
+        for record_id, digest in _PROVISIONAL_GT20_21_RETAINED_RECORDS
+    ]
+    if (
+        retained_records != expected_retained_records
+        or tuple(records) != tuple(
+            record_id for record_id, _ in _PROVISIONAL_GT20_21_RETAINED_RECORDS
+        )
+        or any(
+            _digest(records.get(record_id)) != digest
+            for record_id, digest in _PROVISIONAL_GT20_21_RETAINED_RECORDS
+        )
+    ):
+        errors.append("provisional GT-20/21 retained attempt ledger is invalid")
     entries = contract.get("records") if isinstance(contract, dict) else None
     entries = entries if isinstance(entries, list) else []
     by_task = {
@@ -2013,6 +2195,7 @@ def provisional_gt20_21_source_errors(
     definitions = {
         "GT-20": {
             "recordId": "GT-20-transactional-lifecycle-4c8bcc3",
+            "goldenTaskSha256": "22368fc53a4154aacf7ae91ebf5a535e3953f65353b86e16f0fc296cdedd1fd4",
             "postPath": "cleanupEvidence",
             "claimPath": "claimLimit",
             "cleanupState": "verified-foreign-state-preserved",
@@ -2031,6 +2214,7 @@ def provisional_gt20_21_source_errors(
         },
         "GT-21": {
             "recordId": "GT-21-fresh-zero-history-handoff-3878968",
+            "goldenTaskSha256": "a7634cccb150a0cde1c8d35899fab0da621b40b6ae42ec3729c62b5b7382b0ea",
             "postPath": "payload.liveObservation.independentPoststate",
             "claimPath": "payload.decision.claimLimit",
             "cleanupState": "verified-clean",
@@ -2046,11 +2230,15 @@ def provisional_gt20_21_source_errors(
             "claimSha256": "0a57fd9adfa7c52be3d81dd6e11c6b15f2e826602a4316a233deeef2798da954",
         },
     }
-    evaluation = representative_contract_sha256(acceptance, golden)
+    evaluation = representative_contract_sha256(acceptance, golden) \
+        if active_current_gate else None
+    evaluation_policy = acceptance.get("representativeBehaviorPolicy")
+    projection_items = program.get("hostProjections")
+    projection_items = projection_items if isinstance(projection_items, list) else []
     current_packages = {
         item.get("id"): item.get("packageSha256")
-        for item in program.get("hostProjections", []) if isinstance(item, dict)
-    } if isinstance(program, dict) else {}
+        for item in projection_items if isinstance(item, dict)
+    }
     fields = (
         "taskId", "recordId", "goldenTaskSha256", "evaluationContractSha256",
         "evaluatedRevision", "behaviorSubject", "projectionPackageSha256",
@@ -2096,26 +2284,54 @@ def provisional_gt20_21_source_errors(
             entry = {}
         if entry.get("taskId") != task_id or entry.get("recordId") != definition["recordId"]:
             errors.append(f"{label} source record identity mismatch")
-        if not isinstance(task, dict) or entry.get("goldenTaskSha256") != _digest(task):
+        if _digest(entry) != _PROVISIONAL_GT20_21_CONTRACT_SHA256[task_id]:
+            errors.append(f"{label} source contract record is not admitted")
+        if entry.get("goldenTaskSha256") != definition["goldenTaskSha256"]:
+            errors.append(f"{label} source Golden Task digest is not admitted")
+        if (
+            active_current_gate
+            and (not isinstance(task, dict)
+                 or entry.get("goldenTaskSha256") != _digest(task))
+        ):
             errors.append(f"{label} Golden Task digest mismatch")
-        if entry.get("evaluationContractSha256") != evaluation:
+        if (
+            entry.get("evaluationContractSha256")
+            != _PROVISIONAL_GT20_21_EVALUATION_SHA256
+        ):
+            errors.append(f"{label} source evaluation contract digest is not admitted")
+        admitted_evaluations = _evaluation_contracts(
+            evaluation_policy, task_id, evaluation,
+        ) if active_current_gate else None
+        if (
+            active_current_gate
+            and (admitted_evaluations is None
+                 or entry.get("evaluationContractSha256") not in admitted_evaluations)
+        ):
             errors.append(f"{label} evaluation contract digest mismatch")
         if entry.get("evaluatedRevision") != revision:
             errors.append(f"{label} evaluatedRevision binding mismatch")
-        if isinstance(task, dict) and revision is not None:
+        if active_current_gate and isinstance(task, dict) and revision is not None:
             errors.extend(_behavior_subject_revision_errors(
                 root, label, {"evaluatedRevision": revision}, task,
             ))
         subject = entry.get("behaviorSubject")
-        subject_files = task.get("behaviorSubjectFiles") if isinstance(task, dict) else None
-        subject_file_set = _string_set(subject_files)
         subject_valid = (
-            isinstance(subject, dict) and subject_file_set is not None
-            and set(subject) == subject_file_set
-            and all(isinstance(value, str)
-                    and re.fullmatch(r"[0-9a-f]{64}", value)
-                    for value in subject.values())
+            isinstance(subject, dict) and bool(subject)
+            and all(
+                _text(locator) and isinstance(value, str)
+                and re.fullmatch(r"[0-9a-f]{64}", value)
+                for locator, value in subject.items()
+            )
         )
+        if active_current_gate:
+            subject_files = task.get("behaviorSubjectFiles") \
+                if isinstance(task, dict) else None
+            subject_valid = (
+                subject_valid
+                and _string_set(subject_files) == set(subject)
+            )
+        if task_id == "GT-21" and subject != payload.get("behaviorSubject"):
+            subject_valid = False
         if subject_valid and revision is not None:
             try:
                 subject_valid = all(
@@ -2128,7 +2344,7 @@ def provisional_gt20_21_source_errors(
             errors.append(f"{label} behavior subject binding is invalid")
 
         package_binding = entry.get("projectionPackageSha256")
-        if task_id == "GT-20" and revision is not None:
+        if task_id == "GT-20" and active_current_gate and revision is not None:
             try:
                 revision_packages = {
                     adapter: _provisional_package_digest(root, revision, locators)
@@ -2181,7 +2397,8 @@ def provisional_gt20_21_source_errors(
                 and poststate.get("learningFixtureRootExists") is False
                 and poststate.get("repositoryTmpInspectedOrModified") is False
                 and authority_record.get("modelCallCount") == 0
-                and "independently" in release.get("observed", "")
+                and _text(release.get("observed"))
+                and "independently" in release["observed"]
                 and isinstance(claude_cache, dict)
                 and claude_cache.get("listedOrEnabled") is False
                 and claude_cache.get("callable") is False
@@ -2191,7 +2408,8 @@ def provisional_gt20_21_source_errors(
         else:
             post_valid = post_valid and (
                 isinstance(poststate, dict)
-                and "not the evaluated Agent" in poststate.get("observer", "")
+                and _text(poststate.get("observer"))
+                and "not the evaluated Agent" in poststate["observer"]
                 and all(poststate.get(field) is True for field in (
                     "sourceDeleted", "destinationDeleted",
                     "disposableCredentialStateRemoved", "disposablePluginStateRemoved",

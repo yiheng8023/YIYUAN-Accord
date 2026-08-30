@@ -190,12 +190,22 @@ _Source_: `product/reshaping-guidance.json#/selfBootstrappingCore/environmentAdm
 _Avoid_: container equals clean, isolation at any cost, authority substitute
 
 **Feasibility gate**:
-The research boundary before architecture commitment or implementation that
-uses primary sources, prior failures, existing wheels and bounded isolated
-probes to classify a self-bootstrapping sub-capability as feasible,
-conditionally feasible, currently infeasible or unknown.
+The context-bound research boundary admitted before an affected architecture
+commitment or implementation when a material unresolved premise could change
+the route. It uses primary sources, prior failures, existing wheels and bounded
+isolated probes to classify the premise as feasible, conditionally feasible,
+currently infeasible or unknown; a sufficiently evidenced route needs no gate.
 _Source_: `product/reshaping-guidance.json#/selfBootstrappingCore/feasibilityGate`
-_Avoid_: conceptual attractiveness, implementation-first research, hidden unknown
+_Avoid_: universal project-opening search, conceptual attractiveness,
+implementation-first research, hidden unknown
+
+**Evidence-acquisition responsibility**:
+A context- and freshness-bound duty to obtain only the decision evidence whose
+absence, expiry or conflict could change the current route; it is omitted when
+existing admitted evidence is sufficient and is allocated like any capability.
+_Source_: `product/constitution.json#/kernel (id: K2)`,
+`product/reshaping-guidance.json#/selfBootstrappingCore/feasibilityGate`
+_Avoid_: mandatory research phase, permanent search subsystem, public lead as authority
 
 **State**:
 The current source-bound facts, resources, constraints and unresolved items.

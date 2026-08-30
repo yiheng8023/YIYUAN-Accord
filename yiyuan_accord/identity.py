@@ -32,7 +32,7 @@ _PUBLIC_RELEASE_FIELDS = (
     "tag", "revision", "releaseKind", "prerelease", "assetPolicy",
     "publishedAt",
 )
-_EXPECTED_PUBLIC_RELEASE_PREFIX = (
+_EXPECTED_PUBLIC_RELEASE_HISTORY = (
     ("v1.2", "6d857517455b6f3f86a4c9cbd79fc618febbbe00",
      "full-release", False, "no-attached-assets", "2026-08-20T18:27:42Z"),
     ("v2.0", "71ff4a2687b54f26c8dbf3a94384257f1fc0f532",
@@ -42,12 +42,58 @@ _EXPECTED_PUBLIC_RELEASE_PREFIX = (
     ("v3.0.1", "24cf9f3750ecd700944988e81a519db54b67b8e8",
      "full-release", False, "no-attached-assets", "2026-08-27T07:13:18Z"),
 )
+_EXPECTED_PUBLIC_RELEASE_PROJECTION_SHA256 = (
+    "ffa5fdabb016044a4edda0977cdffb670658323cc3212f997faee0f1a54f2e17"
+)
+
+
+def _public_release_projection_valid(history_text, records, recommendation):
+    if not isinstance(history_text, str):
+        return False
+    kinds = {
+        "full-release": "full Release",
+        "public-preview": "public prerelease",
+    }
+    rows = [
+        "| `{tag}` | `{revision}` | `{publishedAt}` | {kind} | no attached assets |".format(
+            **record, kind=kinds.get(record.get("releaseKind")),
+        )
+        for record in records
+    ] if isinstance(records, list) and all(isinstance(record, dict) for record in records) \
+        else []
+    heading = "## Public Release ledger"
+    next_heading = "## Major boundaries"
+    if history_text.count(heading) != 1 or history_text.count(next_heading) != 1:
+        return False
+    ledger = history_text.split(heading, 1)[1].split(next_heading, 1)[0]
+    anchored_projection = history_text.split(next_heading, 1)[0] + next_heading + "\n"
+    if (
+        sha256(anchored_projection.encode("utf-8")).hexdigest()
+        != _EXPECTED_PUBLIC_RELEASE_PROJECTION_SHA256
+        or "<!--" in ledger or "-->" in ledger
+        or any(marker not in ledger for marker in (
+        "derived human-readable projection of the exact",
+        "It is not semantic authority or live publication",
+        f"currently selects `{recommendation}`",
+        ))
+    ):
+        return False
+    projected_table = [
+        line for line in ledger.splitlines() if line.lstrip().startswith("|")
+    ]
+    expected_table = [
+        "| Tag | Exact revision | Published at (UTC) | Release kind | Asset policy |",
+        "| --- | --- | --- | --- | --- |",
+        *rows,
+    ]
+    return bool(rows) and projected_table == expected_table
 
 
 def _public_release_record_valid(record, allow_legacy_tag=False):
     if not isinstance(record, dict) or set(record) != set(_PUBLIC_RELEASE_FIELDS):
         return False
     tag = record.get("tag")
+    revision = record.get("revision")
     prerelease = record.get("prerelease")
     published_at = record.get("publishedAt")
     full_match = RELEASE_RE.fullmatch(tag) if isinstance(tag, str) else None
@@ -66,7 +112,8 @@ def _public_release_record_valid(record, allow_legacy_tag=False):
             published_at or "",
         ) is not None
         and parsed_time.strftime("%Y-%m-%dT%H:%M:%SZ") == published_at
-        and re.fullmatch(r"[0-9a-f]{40}", record.get("revision") or "") is not None
+        and isinstance(revision, str)
+        and re.fullmatch(r"[0-9a-f]{40}", revision) is not None
         and isinstance(prerelease, bool)
         and prerelease is (full_match is not None and full_match.group(4) is not None)
         and record.get("releaseKind")
@@ -721,7 +768,7 @@ def authority_contract_errors(
 
 
 def release_identity_errors(
-    identity, program, acceptance,
+    identity, program, acceptance, history_text,
 ):
     errors = []
     if set(program) != PROGRAM_FIELDS:
@@ -732,7 +779,8 @@ def release_identity_errors(
     historical_fields = {
         "schema", "legacyCheckpointLine", "publicReleases",
         "recommendedPublicRelease", "unreleasedCheckpoint",
-        "supersededDevelopmentDistributions", "authority", "rule",
+        "supersededDevelopmentDistributions", "provenanceProjection",
+        "externalFactSource", "rule",
     }
     public_releases = (
         historical.get("publicReleases") if isinstance(historical, dict) else None
@@ -741,10 +789,10 @@ def release_identity_errors(
         tuple(
             tuple(item.get(field) for field in _PUBLIC_RELEASE_FIELDS)
             if _public_release_record_valid(
-                item, index < len(_EXPECTED_PUBLIC_RELEASE_PREFIX),
+                item, isinstance(item, dict) and item.get("tag") in {"v1.2", "v2.0"},
             )
             else ()
-            for index, item in enumerate(public_releases)
+            for item in public_releases
         )
         if isinstance(public_releases, list) else None
     )
@@ -753,9 +801,9 @@ def release_identity_errors(
         if isinstance(public_releases, list)
         and all(
             _public_release_record_valid(
-                item, index < len(_EXPECTED_PUBLIC_RELEASE_PREFIX),
+                item, isinstance(item, dict) and item.get("tag") in {"v1.2", "v2.0"},
             )
-            for index, item in enumerate(public_releases)
+            for item in public_releases
         )
         else None
     )
@@ -779,11 +827,9 @@ def release_identity_errors(
         isinstance(historical, dict)
         and set(historical) == historical_fields
         and acceptance.get("historicalRelease") == historical
-        and historical.get("schema") == 2
+        and historical.get("schema") == 3
         and isinstance(public_records, tuple)
-        and len(public_records) >= len(_EXPECTED_PUBLIC_RELEASE_PREFIX)
-        and public_records[:len(_EXPECTED_PUBLIC_RELEASE_PREFIX)]
-        == _EXPECTED_PUBLIC_RELEASE_PREFIX
+        and public_records == _EXPECTED_PUBLIC_RELEASE_HISTORY
         and isinstance(public_tags, list)
         and len(public_tags) == len(set(public_tags))
         and len(public_revisions) == len(set(public_revisions))
@@ -792,10 +838,18 @@ def release_identity_errors(
         and historical.get("recommendedPublicRelease") == full_release_tags[-1]
         and all(_nonempty_string(historical.get(field)) for field in (
             "legacyCheckpointLine", "recommendedPublicRelease",
-            "unreleasedCheckpoint", "authority", "rule",
+            "unreleasedCheckpoint", "provenanceProjection",
+            "externalFactSource", "rule",
         ))
         and bool(_string_list(superseded_development))
-        and historical.get("authority") == "docs/operations/HISTORY.md"
+        and historical.get("provenanceProjection") == "docs/operations/HISTORY.md"
+        and historical.get("externalFactSource")
+        == "task-time-live-github-observation"
+        and _public_release_projection_valid(
+            history_text,
+            public_releases,
+            historical.get("recommendedPublicRelease"),
+        )
     )
     historical_release = (
         historical.get("legacyCheckpointLine") if historical_valid else None

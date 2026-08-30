@@ -172,6 +172,15 @@ the minimum reference-core implementation. Product form continues to follow
 demonstrated closure properties and total lifecycle cost. Release is the final
 phase.
 
+Research is not a mandatory opening ceremony for every project. The existing
+plain-data `reconcile_closure` interface treats evidence acquisition like any
+other context-bound responsibility: a fresh sufficient route adds none; a
+route-changing material unknown may allocate an official, repository,
+scholarly, host-native or public-lead Adapter under current authority and cost.
+A public lead can open an inquiry or counterexample but cannot alone support a
+consequential claim. No separate research API, account connection, persistent
+service or provider/model binding is part of the portable core.
+
 Before any future candidate is formed, the program now requires a source-bound
 whole-system balance self-audit, minimum remediation of the weakest justified
 links and reacceptance of every affected dimension and interaction. Product

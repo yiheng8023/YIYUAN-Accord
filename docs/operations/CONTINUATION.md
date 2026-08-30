@@ -9,12 +9,17 @@ route by being readable.
 
 ```powershell
 git branch --show-current
-git status --short
+git status --short --untracked-files=no
 git rev-parse HEAD
 git rev-parse origin/main
 git rev-list --left-right --count HEAD...origin/main
-python -B -m yiyuan_accord verify --root . --json
 ```
+
+The protected foreign `.tmp` residue is a known clean-candidate blocker. Do not
+enumerate, open, print, hash, modify or delete it, and do not run the live-root
+canonical verifier or either host check while it remains. Use only targeted
+tracked-file checks or an indexed disposable fixture until its owner supplies a
+verified cleanup route.
 
 Then read, in order:
 
@@ -391,10 +396,11 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The unreleased working-projection guardrail permits at most 91 tracked files
-  and 505000 product-code-and-test bytes with at least five percent headroom.
-  The remediation calibration has 88 tracked files and 473000 code/test bytes,
-  leaving the required three tracked-file slots and 32000 bytes of headroom
-  against a required 25250. These values are navigation, not candidate evidence;
+  and 528000 product-code-and-test bytes with at least five percent headroom.
+  The dynamic-evidence and final-review calibration has 88 tracked files and
+  499608 code/test bytes, leaving the required three tracked-file slots and
+  28392 bytes of headroom against a required 26400. These values are
+  navigation, not candidate evidence;
   refresh them after any code, test or file-set change and keep the machine
   guardrail authoritative. GT-21 and GT-20
   retain bounded exact evidence with their failures, evaluator-fixture
@@ -451,8 +457,10 @@ The target experience is near-zero avoidable user orchestration:
 - healthy native capability is used when sufficient;
 - compliant official, maintained, composed or bounded authored routes remain
   available when native capability is insufficient;
-- feasibility research, prior failure recovery and existing-wheel review occur
-  before architecture commitment or implementation;
+- when missing, stale or conflicting evidence can change the route, bounded
+  research, relevant failure recovery and existing-wheel review occur before
+  the affected architecture commitment or implementation; a sufficient fresh
+  route adds none;
 - the current environment and Accord's own installation or activation state are
   observed, provenance-bound and isolated when they could confound a claim;
 - product form follows required effect, authority, latency, durability,
@@ -812,9 +820,33 @@ Historical superseded review disposition —
     `523f2ef47df96b76c132525ff432d044e7b1b4b3` completed separate product,
     specification, implementation and standards reviews and produced
     remediation findings. It did not form a candidate, and completion does not
-    transfer to changed bytes. Goal mode remains paused; a future unchanged
-    revision still requires the complete independent review set before candidate
-    formation. Findings and remediation do not themselves form or authorize it.
+    transfer to changed bytes. The next local remediation cut `ef10100` also
+    failed fixed-point product, specification, implementation and standards
+    review: synchronized task/evaluation/source edits could still rebind old
+    GT-20/21 records; unselected failed attempts were not frozen; malformed
+    nested observer text could raise; a format-valid fictional public Release
+    tail could be accepted; `HISTORY.md` was mislabeled as authority; and the
+    provisional current-byte gate had no promotion or retirement state. The
+    current working repair freezes all nine source records and selected semantic
+    digests, compares GT-21 record and contract subjects, type-narrows nested
+    text, rejects every offline release tail, makes HISTORY a derived projection
+    and adds an active/promoted/retired lifecycle whose promotion requires a
+    ready program with complete current R3 and whose retirement requires a
+    recorded post-release reconciliation. A further preflight found that the
+    retired state could still reuse the old v3.0.1 Release and that the HISTORY
+    projection accepted an extra formatted row. The repair now binds retirement
+    to the current distribution, ready/R3 state, exact public revision and live
+    API observation record, and compares the complete ordered ledger.
+    The latest product correction also makes research a dynamically applicable
+    evidence-acquisition responsibility rather than a mandatory project-opening
+    step. The existing closure Interface covers sufficient-route no-research,
+    material-gap Adapter allocation, public-lead-only hold and bounded
+    authorship; no second research API, account connection, persistent service,
+    unconditional network search or model/version binding is admitted. It
+    remains unreviewed changed bytes.
+    Goal mode remains paused; a future unchanged revision still requires the
+    complete independent review set before candidate formation. Findings and
+    remediation do not themselves form or authorize it.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may
@@ -882,6 +914,9 @@ Recompute or replay:
 
 - semantic authority, derived surfaces and verifier conformance;
 - plan, process, acceptance and goal-projection alignment;
+- dynamic evidence-acquisition applicability, source roles, corroboration,
+  no-research and bounded-authorship dispositions through the existing closure
+  Interface;
 - host admission, effective activation and interference;
 - representative outcome, no-op, correction, continuity, resource admission,
   pressure response, ownership-aware release, recovery and cleanup;
@@ -908,7 +943,8 @@ them to simulate current evidence.
   effect.
 - Prefer direct primary or official host sources and current source behavior;
   OpenAI and Anthropic are high-weight inputs for their hosts, not product
-  authority or truth by identity.
+  authority or truth by identity. Public-lead channels may open an inquiry or
+  counterexample but cannot alone support a consequential claim.
 - Preserve unrelated work and release task-created exposure and residue before
   closeout.
 

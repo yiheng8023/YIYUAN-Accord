@@ -4,6 +4,7 @@ import re
 import subprocess
 
 from .evidence import (
+    evaluation_contract_history_valid,
     historical_representative_errors,
     provisional_gt20_21_source_errors,
     representative_sample_errors,
@@ -81,6 +82,20 @@ def _read_json(root, locator, errors):
     except (OSError, UnicodeError, ValueError) as exc:
         errors.append(f"invalid JSON {locator}: {exc}")
         return {}
+
+
+def _read_text(root, locator, errors):
+    path = _safe_file(root, locator, errors)
+    if path is None:
+        return ""
+    try:
+        raw, read_state = _bounded_regular_bytes(path)
+        if read_state is not None:
+            raise ValueError(f"text source is {read_state}")
+        return raw.decode("utf-8")
+    except (OSError, UnicodeError, ValueError) as exc:
+        errors.append(f"invalid text {locator}: {exc}")
+        return ""
 
 
 def _hash(path, errors, label):
@@ -807,6 +822,7 @@ def _validate_acceptance(root, acceptance, contract_ids, evidence_classes, golde
                 or not _nonempty_string(item.get("reason"))
                 for item in evaluation_history
             )
+            or not evaluation_contract_history_valid(representative_policy)
         ):
             errors.append("representative evaluation contract history is invalid")
         historical_contract = representative_policy.get(
@@ -1060,7 +1076,12 @@ def verify_product(root):
             (GOLDEN_TASKS_FILE, maintenance_plan, release_notes),
         )
     )
-    errors.extend(release_identity_errors(identity, program, acceptance))
+    errors.extend(release_identity_errors(
+        identity,
+        program,
+        acceptance,
+        _read_text(root, "docs/operations/HISTORY.md", errors),
+    ))
     golden = _validate_golden_tasks(
         golden_suite,
         all_ids,

@@ -38,7 +38,13 @@ latest bound goal, consensus and corrections
  portable kernel + scoped authority and acceptance
                 |
                 v
- feasibility research + existing-wheel adoption ledger
+ current evidence and route sufficiency
+        /                    \
+       v                      v
+ sufficient: no research   material gap: on-demand evidence acquisition
+                              |
+                              v
+               primary sources + existing-wheel disposition
                 |
                 v
  composed-environment provenance + isolation decision
@@ -103,8 +109,9 @@ minimum sufficient means for the current collaboration outcome. It includes:
 
 - sensing environment composition, state, capacity and Accord's own exposure;
 - binding the latest outcome, consensus, authority and completion condition;
-- discovering and evaluating native, official, maintained and composable
-  capability before authorship;
+- consuming sufficient current route evidence directly, or when a material gap
+  can change the route, discovering and evaluating native, official,
+  maintained and composable capability before authorship;
 - allocating named responsibilities to plugin, Skill, Hook, protocol, library,
   runtime, service, client, cloud, composition, an evidence-selected multi-form
   route or no additional artifact from required closure properties rather than
@@ -172,6 +179,12 @@ independent consequence verification, the eight-field multi-form coherence
 contract and cleanup evidence remain non-bypassable. The task supplies and
 versions responsibilities plus additional admission and coherence conditions,
 comparison dimensions, contextual preferences and experiment vectors.
+That policy may include an evidence-acquisition responsibility only when a
+missing, stale or conflicting fact or unresolved reuse/feasibility question can
+change the route; a sufficiently evidenced route omits it. Official, source-
+repository, scholarly, host-native and public-lead sources remain replaceable
+Adapters. A public lead can open an inquiry or counterexample, but policy keeps
+the route unknown until a stronger source corroborates a consequential claim.
 Product forms are arbitrary data supplied by adapters. Multiple incomparable
 frontier routes remain `hold-unknown` unless current policy provides a bounded
 context preference; the implementation never invents a weighted score. This
@@ -216,11 +229,14 @@ independently closes an exact acquisition, storage, synchronization or
 invalidation duty at lower total burden, the same gate subtracts the displaced
 Runtime, adapter or third-party wheel instead of retaining both indefinitely.
 
-Feasibility comes first. Primary sources, prior Accord failures and existing
-wheels produce a feasibility matrix, adoption ledger, risk register and bounded
-probe plan. Architecture commitment and implementation are admitted only after
-the relevant sub-capability is feasible or conditionally feasible under stated
-conditions. Unknown or failed premises narrow or stop the route.
+Feasibility is dynamically applicable. When an affected architecture commitment
+or implementation depends on a material unresolved premise, primary sources,
+prior Accord failures and suitable existing wheels produce only the needed
+feasibility matrix, adoption ledger, risk register and bounded probe plan. The
+route proceeds only after that premise is feasible or conditionally feasible
+under stated conditions; unknown or failed premises narrow or stop it. When
+fresh admitted evidence already closes the route, no research responsibility,
+network action or extra product form is created.
 
 Every real host is a composed environment. The current Codex and Claude Code
 hosts already have Accord and other extensions enabled, so they are not
