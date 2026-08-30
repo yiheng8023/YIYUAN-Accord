@@ -311,8 +311,9 @@ Then read, in order:
   exclusion even though the fresh v3 Codex-local GT-07 independently verified
   exact fixture post-state. Historical evidence is preserved against its
   versioned task contract rather than rewritten to match the current task.
-  GT-14 through GT-21 have a machine-checkable design; GT-20 and the later
-  API-first live-carrier GT-21 remain unperformed. Exact checkpoint
+  GT-14 through GT-21 have a machine-checkable design; GT-20 remains
+  unperformed, while the later API-first live-carrier GT-21 is active and
+  incomplete. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
@@ -395,8 +396,8 @@ Then read, in order:
   record, one deep pure-data `reconcile_closure` module, its live observation
   receipt, three per-responsibility implementation modes and interface
   regression, one append-only existing GT-14 through GT-19 source and bounded
-  current observations; GT-20 and GT-21 remain unperformed,
-  including the review-required source-bound independence and matching
+  current observations; GT-20 remains unperformed and GT-21 is active but
+  incomplete, including the review-required source-bound independence and matching
   experiment-poststate gates. The two-file increase from 84 pays only for the
   GT-17 and GT-18 observation carriers; their fixture and state carrier were
   removed. Revised GT-17 and GT-19 now occupy two bounded observation carriers;

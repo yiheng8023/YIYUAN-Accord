@@ -617,8 +617,9 @@ class ProductControlTests(unittest.TestCase):
         self.assertIn('source-complete', suite['status'])
         self.assertEqual(suite['attemptedTaskIds'], [
             'GT-14', 'GT-15', 'GT-16', 'GT-17', 'GT-18', 'GT-19',
+            'GT-21',
         ])
-        self.assertEqual(suite['unperformedTaskIds'], ['GT-20', 'GT-21'])
+        self.assertEqual(suite['unperformedTaskIds'], ['GT-20'])
         self.assertEqual(
             {item['id'] for item in suite['caseTypes']},
             {'representative-case', 'longitudinal-sequence'},
