@@ -27,6 +27,9 @@ _PROJECTION_FIELDS = (
     "mechanismFiles", "mechanismSha256",
 )
 _UNRESERVED = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~")
+PROVISIONAL_GT20_21_SOURCE = (
+    "evals/evidence/2026-08-30-v310-gt20-21-source.json"
+)
 
 
 def _records(value):
@@ -1897,6 +1900,350 @@ def representative_sample_errors(
             errors.append(
                 f"{criterion_id} representative coverage mismatch"
             )
+    return errors
+
+
+def _provisional_projection_files(root, program, read_json, errors):
+    subjects, packages = set(), {}
+    projections = program.get("hostProjections") if isinstance(program, dict) else None
+    for projection in projections if isinstance(projections, list) else []:
+        if not isinstance(projection, dict) or not _text(projection.get("id")):
+            continue
+        locators = [projection.get(field) for field in ("manifest", "contract", "skill")]
+        for field in ("metadataFiles", "mechanismFiles"):
+            value = projection.get(field)
+            locators.extend(value if isinstance(value, list) else [])
+        manifest_locator = projection.get("manifest")
+        manifest = read_json(root, manifest_locator, errors) \
+            if _text(manifest_locator) else {}
+        interface = manifest.get("interface") if isinstance(manifest, dict) else None
+        plugin_root = manifest_locator.rsplit("/", 2)[0] \
+            if _text(manifest_locator) and manifest_locator.count("/") >= 2 else None
+        for field in ("composerIcon", "logo"):
+            value = interface.get(field) if isinstance(interface, dict) else None
+            parts = value[2:].split("/") \
+                if isinstance(value, str) and value.startswith("./") else []
+            if plugin_root and parts and all(part not in {"", ".", ".."} for part in parts):
+                locators.append("/".join((plugin_root, *parts)))
+        package = {locator for locator in locators if _text(locator)}
+        packages[projection["id"]] = package
+        subjects.update(package)
+        marketplace = projection.get("marketplace")
+        if _text(marketplace):
+            subjects.add(marketplace)
+    return subjects, packages
+
+
+def _provisional_revision_digest(root, revision, locator):
+    content = _bounded_git_bytes(
+        root, ["show", "--end-of-options", f"{revision}:{locator}"]
+    )
+    return sha256(content).hexdigest()
+
+
+def _provisional_package_digest(root, revision, locators):
+    digest = sha256()
+    for locator in sorted(locators):
+        digest.update(locator.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(bytes.fromhex(
+            _provisional_revision_digest(root, revision, locator)
+        ))
+    return digest.hexdigest()
+
+
+def provisional_gt20_21_source_errors(
+    root, program, acceptance, golden, read_json,
+):
+    """Validate the admitted GT-20/21 source even before R3 is promoted."""
+    errors = []
+    tasks = {
+        item.get("id"): item for item in golden.get("tasks", [])
+        if isinstance(item, dict) and _text(item.get("id"))
+    } if isinstance(golden, dict) else {}
+    declared, package_files = _provisional_projection_files(
+        root, program, read_json, errors,
+    )
+    gt20_files = tasks.get("GT-20", {}).get("behaviorSubjectFiles")
+    if _string_set(gt20_files) != declared:
+        errors.append(
+            "provisional GT-20 behavior subject does not match declared projection files"
+        )
+
+    expected_inputs = {
+        "gt20-transactional-lifecycle-2026-08-30",
+        "gt21-live-carrier-preflight-2026-08-29",
+    }
+    inputs = {
+        item.get("id"): item for item in program.get("inputEvidence", [])
+        if isinstance(item, dict) and _text(item.get("id"))
+        and item.get("id") in expected_inputs
+    } if isinstance(program, dict) else {}
+    if (
+        set(inputs) != expected_inputs
+        or any(item.get("repositoryLocator") != PROVISIONAL_GT20_21_SOURCE
+               for item in inputs.values())
+    ):
+        errors.append("provisional GT-20/21 source input binding is invalid")
+
+    bundle = read_json(root, PROVISIONAL_GT20_21_SOURCE, errors)
+    contract = bundle.get("provisionalContract") if isinstance(bundle, dict) else None
+    if (
+        not _exact(bundle, ("schema", "provisionalContract", "records"))
+        or bundle.get("schema") != 1
+        or not _exact(contract, ("schema", "sourceLocator", "records"),
+                      ("schema", "sourceLocator"))
+        or contract.get("schema") != "yiyuan-accord-provisional-gt20-21-source/v1"
+        or contract.get("sourceLocator") != PROVISIONAL_GT20_21_SOURCE
+        or not isinstance(contract.get("records"), list)
+    ):
+        errors.append("provisional GT-20/21 source contract is invalid")
+        contract = {}
+    records = bundle.get("records") if isinstance(bundle, dict) else None
+    records = records if isinstance(records, dict) else {}
+    entries = contract.get("records") if isinstance(contract, dict) else None
+    entries = entries if isinstance(entries, list) else []
+    by_task = {
+        item.get("taskId"): item for item in entries
+        if isinstance(item, dict) and _text(item.get("taskId"))
+    }
+    if len(entries) != 2 or len(by_task) != 2 or set(by_task) != {"GT-20", "GT-21"}:
+        errors.append("provisional GT-20/21 source record set is invalid")
+
+    definitions = {
+        "GT-20": {
+            "recordId": "GT-20-transactional-lifecycle-4c8bcc3",
+            "postPath": "cleanupEvidence",
+            "claimPath": "claimLimit",
+            "cleanupState": "verified-foreign-state-preserved",
+            "observer": "no-evaluated-agent-or-model-participated",
+            "allowedScope": (
+                "exact tracked v3.0.1 to 4c8bcc3 package bytes in two disposable "
+                "non-empty windows host scopes"
+            ),
+            "excludedClaims": [
+                "unmanaged", "production", "actual claude host hook triggering",
+                "product value", "cross-host equivalence", "whole-system balance",
+                "independent review", "candidate readiness", "release readiness",
+            ],
+            "recordSha256": "a66b9aa05610baf362c38213d266d31a005c737ab1699173a590a25542cd32ec",
+            "claimSha256": "b00d2ff5650ae82efce5da9aa9096767dfd44107e6cb3e92688e75933d97b5fb",
+        },
+        "GT-21": {
+            "recordId": "GT-21-fresh-zero-history-handoff-3878968",
+            "postPath": "payload.liveObservation.independentPoststate",
+            "claimPath": "payload.decision.claimLimit",
+            "cleanupState": "verified-clean",
+            "observer": "parent-evaluator-not-evaluated-agent",
+            "allowedScope": (
+                "one exact bounded current-host fresh zero-history handoff on revision 3878968"
+            ),
+            "excludedClaims": [
+                "cross-host", "production", "value", "independent review",
+                "candidate", "release",
+            ],
+            "recordSha256": "cb14e25128123afcfb6354fefcb480d18b171d7539af0a78dc905f61df33b5cc",
+            "claimSha256": "0a57fd9adfa7c52be3d81dd6e11c6b15f2e826602a4316a233deeef2798da954",
+        },
+    }
+    evaluation = representative_contract_sha256(acceptance, golden)
+    current_packages = {
+        item.get("id"): item.get("packageSha256")
+        for item in program.get("hostProjections", []) if isinstance(item, dict)
+    } if isinstance(program, dict) else {}
+    fields = (
+        "taskId", "recordId", "goldenTaskSha256", "evaluationContractSha256",
+        "evaluatedRevision", "behaviorSubject", "projectionPackageSha256",
+        "sourceBindings", "independentPoststate", "cleanup", "claimCeiling",
+    )
+    for task_id, definition in definitions.items():
+        label, task = f"provisional {task_id}", tasks.get(task_id)
+        record = records.get(definition["recordId"])
+        record = record if isinstance(record, dict) else {}
+        payload = record.get("payload") if isinstance(record.get("payload"), dict) else {}
+        live_observation = payload.get("liveObservation")
+        live_observation = live_observation \
+            if isinstance(live_observation, dict) else {}
+        decision_record = payload.get("decision")
+        decision_record = decision_record if isinstance(decision_record, dict) else {}
+        authority_record = record.get("authorityAndPrivacy")
+        authority_record = authority_record \
+            if isinstance(authority_record, dict) else {}
+        revision = record.get("evaluatedRevision") if task_id == "GT-20" \
+            else payload.get("evaluatedRevision")
+        if not isinstance(revision, str) or re.fullmatch(
+            r"[0-9a-f]{40}", revision
+        ) is None:
+            errors.append(f"{label} evaluatedRevision is invalid")
+            revision = None
+        else:
+            try:
+                relation = subprocess.run(
+                    ["git", "-C", str(root), "merge-base", "--is-ancestor",
+                     revision, "HEAD"],
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                ).returncode
+            except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+                errors.append(f"{label} evaluatedRevision is unavailable")
+                revision = None
+            else:
+                if relation != 0:
+                    errors.append(f"{label} evaluatedRevision is not an ancestor")
+
+        entry = by_task.get(task_id)
+        if not _exact(entry, fields):
+            errors.append(f"{label} contract is invalid")
+            entry = {}
+        if entry.get("taskId") != task_id or entry.get("recordId") != definition["recordId"]:
+            errors.append(f"{label} source record identity mismatch")
+        if not isinstance(task, dict) or entry.get("goldenTaskSha256") != _digest(task):
+            errors.append(f"{label} Golden Task digest mismatch")
+        if entry.get("evaluationContractSha256") != evaluation:
+            errors.append(f"{label} evaluation contract digest mismatch")
+        if entry.get("evaluatedRevision") != revision:
+            errors.append(f"{label} evaluatedRevision binding mismatch")
+        if isinstance(task, dict) and revision is not None:
+            errors.extend(_behavior_subject_revision_errors(
+                root, label, {"evaluatedRevision": revision}, task,
+            ))
+        subject = entry.get("behaviorSubject")
+        subject_files = task.get("behaviorSubjectFiles") if isinstance(task, dict) else None
+        subject_file_set = _string_set(subject_files)
+        subject_valid = (
+            isinstance(subject, dict) and subject_file_set is not None
+            and set(subject) == subject_file_set
+            and all(isinstance(value, str)
+                    and re.fullmatch(r"[0-9a-f]{64}", value)
+                    for value in subject.values())
+        )
+        if subject_valid and revision is not None:
+            try:
+                subject_valid = all(
+                    digest == _provisional_revision_digest(root, revision, locator)
+                    for locator, digest in subject.items()
+                )
+            except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+                subject_valid = False
+        if not subject_valid:
+            errors.append(f"{label} behavior subject binding is invalid")
+
+        package_binding = entry.get("projectionPackageSha256")
+        if task_id == "GT-20" and revision is not None:
+            try:
+                revision_packages = {
+                    adapter: _provisional_package_digest(root, revision, locators)
+                    for adapter, locators in package_files.items()
+                }
+            except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+                revision_packages = None
+            if package_binding != revision_packages or package_binding != current_packages:
+                errors.append(f"{label} projection package digest mismatch")
+        elif task_id == "GT-21" and package_binding != {}:
+            errors.append(f"{label} projection package digest is out of scope")
+
+        bindings = entry.get("sourceBindings")
+        record_digest = _digest(record)
+        expected_binding = [{
+            "kind": "bundle-record-sha256",
+            "locator": PROVISIONAL_GT20_21_SOURCE,
+            "recordId": definition["recordId"],
+            "sha256": definition["recordSha256"],
+        }]
+        if record_digest != definition["recordSha256"]:
+            errors.append(f"{label} source record digest is not admitted")
+        if bindings != expected_binding:
+            errors.append(f"{label} source binding is invalid")
+
+        poststate = record.get("cleanupEvidence") if task_id == "GT-20" \
+            else live_observation.get("independentPoststate")
+        post_contract = entry.get("independentPoststate")
+        post_valid = (
+            _exact(post_contract, ("sourcePath", "sha256", "observerSeparation"),
+                   ("sourcePath", "sha256", "observerSeparation"))
+            and post_contract.get("sourcePath") == definition["postPath"]
+            and post_contract.get("sha256") == _digest(poststate)
+            and post_contract.get("observerSeparation") == definition["observer"]
+        )
+        if task_id == "GT-20":
+            phases = record.get("orderedObservations")
+            release = next((item for item in phases if isinstance(item, dict)
+                            and item.get("phase") == "task-resource-release"), {}) \
+                if isinstance(phases, list) else {}
+            cache = record.get("hostCacheDisposition")
+            claude_cache = cache.get("claude") if isinstance(cache, dict) else None
+            post_valid = post_valid and (
+                isinstance(poststate, dict)
+                and all(poststate.get(field) == 0 for field in (
+                    "activeAccordRegistrations", "activeAccordMarketplaces",
+                    "activeAccordDataRoots", "matchingTaskProcesses",
+                ))
+                and poststate.get("formalFixtureRootExists") is False
+                and poststate.get("learningFixtureRootExists") is False
+                and poststate.get("repositoryTmpInspectedOrModified") is False
+                and authority_record.get("modelCallCount") == 0
+                and "independently" in release.get("observed", "")
+                and isinstance(claude_cache, dict)
+                and claude_cache.get("listedOrEnabled") is False
+                and claude_cache.get("callable") is False
+                and claude_cache.get("dataStatePresent") is False
+                and _text(claude_cache.get("cleanupContract"))
+            )
+        else:
+            post_valid = post_valid and (
+                isinstance(poststate, dict)
+                and "not the evaluated Agent" in poststate.get("observer", "")
+                and all(poststate.get(field) is True for field in (
+                    "sourceDeleted", "destinationDeleted",
+                    "disposableCredentialStateRemoved", "disposablePluginStateRemoved",
+                    "taskRootRemoved", "taskRootAbsentAfterRemoval",
+                ))
+                and all(poststate.get(field) == 0 for field in (
+                    "remainingTaskThreads", "matchingTaskProcesses",
+                    "taskOwnedResidueRetained",
+                ))
+            )
+        if not post_valid:
+            errors.append(f"{label} independent post-state is invalid")
+
+        cleanup = entry.get("cleanup")
+        if (
+            not _exact(cleanup, ("state", "taskOwnedResidueCount", "verified"),
+                       ("state",))
+            or cleanup.get("state") != definition["cleanupState"]
+            or type(cleanup.get("taskOwnedResidueCount")) is not int
+            or cleanup.get("taskOwnedResidueCount") != 0
+            or cleanup.get("verified") is not True
+            or not post_valid
+        ):
+            errors.append(f"{label} cleanup contract is invalid")
+
+        claim = record.get("claimLimit") if task_id == "GT-20" \
+            else decision_record.get("claimLimit")
+        ceiling = entry.get("claimCeiling")
+        claim_text = claim.lower() if isinstance(claim, str) else ""
+        marker = "does not prove" if "does not prove" in claim_text else "; no "
+        prefix, separator, exclusions = claim_text.partition(marker)
+        if (
+            not _exact(ceiling, (
+                "sourcePath", "sha256", "scope", "allowedScope", "excludedClaims",
+                "independentReviewClaimed", "candidateClaimed", "releaseClaimed",
+            ), ("sourcePath", "sha256", "scope", "allowedScope"))
+            or ceiling.get("sourcePath") != definition["claimPath"]
+            or ceiling.get("sha256") != definition["claimSha256"]
+            or _digest(claim) != definition["claimSha256"]
+            or ceiling.get("scope") != "bounded-provisional-source-only"
+            or ceiling.get("allowedScope") != definition["allowedScope"]
+            or ceiling.get("excludedClaims") != definition["excludedClaims"]
+            or any(ceiling.get(field) is not False for field in (
+                "independentReviewClaimed", "candidateClaimed", "releaseClaimed",
+            ))
+            or not separator or definition["allowedScope"] not in prefix
+            or any(value in prefix for value in (
+                "independent review", "candidate", "release",
+            ))
+            or any(value not in exclusions for value in definition["excludedClaims"])
+        ):
+            errors.append(f"{label} claim ceiling is invalid")
     return errors
 
 

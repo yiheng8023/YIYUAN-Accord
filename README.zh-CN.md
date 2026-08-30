@@ -59,7 +59,7 @@ GT-17 的有界证据纠偏，以及 GT-18 的一次合成四阶段全向量序�
 不新增持久进程或状态。公开接缝测试、两端包字节一致性、隔离原生发现和 App Server 结构化
 查询可行性通过；一个一次性 Claude 会话也实际触发了精确复制适配器的
 `SessionStart:startup` 并正确保持静默。另一个 ephemeral Codex App Server 线程禁用了已枚举的安装态
-Hook，通过官方 `thread/compact/start` 触发候选会话 Hook，独立观察到注入的
+Hook，通过官方 `thread/compact/start` 触发工作投影会话 Hook，独立观察到注入的
 `signal.source=compact`，随后 Agent 以零工具调用精确返回注入的 schema 值。安装包实例的
 零 turn `resume` 现在证明只恢复 goal 支撑的官方状态，`SessionStart` 要到首个 turn 才执行；
 同一官方 resume 响应已直接触发状态重感知、当前回执和纯内核调用。首个安装包 turn 仍作为
@@ -75,9 +75,14 @@ Hook，通过官方 `thread/compact/start` 触发候选会话 Hook，独立观�
 现仅对一个当前宿主的事件到结果路线、一个充分简单路线和一次先验收目标再释放源的零历史交接
 有界通过；GT-20 的精确证据另仅对一次性非空 Windows Codex 与 Claude 配置域中的失败更新保留、
 精确更新、用户与外来状态保护、原生移除及受限惰性宿主缓存有界通过。以 `85a917a` 为精确切点的
-source-bound 全系统重验收已经有界完成，当前阶段是独立 exact-tree review；它们都不是 candidate
-或 release 证据。生产信任、非受管或跨 OS/跨宿主行为、Claude 实际 Hook 激活、价值以及更新后
-客户端的当前入口兼容性仍为未知。受保护的外来 `.tmp` 仍是 clean exact candidate blocker，本次
+source-bound 全系统重验收已经有界完成。预修复切点
+`523f2ef47df96b76c132525ff432d044e7b1b4b3` 的 independent exact-tree review 已覆盖相互独立的
+product、specification、implementation 与 standards 四条审查车道并产生整改问题；它没有
+形成 candidate，审查完成状态也不转移到变更后的字节。未来候选形成和发布仍关闭。当前 main 字节
+只是未发布工作投影，不是 candidate 或 release 证据。客户端更新后，Codex、Claude 与 ChatGPT 的
+全部 GUI 入口均为未知；任何当前入口 claim 之前都必须先只读重感知。生产信任、非受管或跨
+OS/跨宿主行为、Claude 实际 Hook 激活与价值仍为未知。受保护的外来 `.tmp` 仍是 clean exact
+candidate blocker，本次
 重验收既不检查也不删除它。修订后的
 GT-07 在精确 `cb11759` 上仅对一次新鲜零历史目标接收与源释放顺序通过；没有执行真实的压缩或
 对话分叉操作。中文宿主界面的裸词“分支”可能同时指 Git branch 与 task/chat fork；Accord 始终
@@ -139,29 +144,35 @@ Agent 已使用、已经执行、产生结果或带来价值。若官方载体�
 
 ### 安装前确认
 
-使用当前支持插件的 Codex 或 Claude 表面，具备访问公开仓库的网络、修改
-用户级插件配置的权限，并在安装后新建任务或会话。Accord 不绑定某个固定
-宿主或模型版本；请记录实际使用的版本与路线。
+下列命令与 GUI 标签只是 **v3.0.1 最后验证的历史路径**，不是当前客户端入口
+claim。后续客户端更新后，Codex、Claude 与 ChatGPT 的全部 GUI 入口均为未知。
+尝试 GUI 安装或生命周期操作前，必须先只读重感知当前客户端入口，并记录实际
+宿主、版本与路线。v3.0.1 没有单独验证 ChatGPT GUI 安装路径。
 
-### Codex
+在 v3.0.1 验证切点，Codex 与 Claude 路径要求宿主支持插件、可联网访问公开
+仓库、允许修改用户级插件配置，并在安装后新建任务或会话。Accord 不绑定某个
+固定宿主或模型版本。
 
-安装精确、不可变的 tag：
+### Codex — v3.0.1 最后验证路径
+
+记录中的 CLI 路径安装精确、不可变的 tag：
 
 ```powershell
 codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.0.1
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
-重启桌面端或新建 CLI 会话，打开 **Plugins** 或运行 `/plugins`，确认
-`YIYUAN Accord for Codex` 与 `deliver-demand-driven-outcome` 已出现。
+在该验证切点，记录中的后续操作是重启桌面端或新建 CLI 会话，打开
+**Plugins** 或运行 `/plugins`，确认 `YIYUAN Accord for Codex` 与
+`deliver-demand-driven-outcome` 已出现。不得假设更新后这些 GUI 标签或位置仍有效。
 
-### Claude 客户端与 Claude Code
+### Claude 客户端与 Claude Code — v3.0.1 最后验证路径
 
-在 Claude Desktop Chat、Claude 网页聊天或 Cowork 中打开
+在该验证切点，Claude Desktop Chat、Claude 网页聊天与 Cowork 的记录路径是在
 **Customize > Plugins**，把
 `https://github.com/yiheng8023/YIYUAN-Accord` 添加为个人 marketplace，
 安装 **YIYUAN Accord for Claude**，新建聊天并确认
-`deliver-demand-driven-outcome` 可见。
+`deliver-demand-driven-outcome` 可见。不得把它当作当前 GUI 入口 claim。
 
 Claude Code 持久安装：
 
@@ -179,7 +190,7 @@ checkout 变化后使用 `/reload-plugins`。
 
 公开 v3.0.1 包只会让一个渐进式披露的动态适配 Skill 可用，不新增 Runtime、
 Hook、MCP server、App、状态存储、后台进程或自动项目修改。精确历史基线
-`ae729465` 包含较早的无状态 `SessionStart` 上下文 Hook；当前开发候选修改了
+`ae729465` 包含较早的无状态 `SessionStart` 上下文 Hook；当前未发布工作投影修改了
 该 Hook 的 matcher 与提醒文本。两个版本都不读取会话原文、不写状态、不启动
 后台进程，但不能把当前 matcher 或文本字节追溯成历史 revision 的事实。这些只是
 版本化包事实，不是产品身份或永久机制禁区；当前提醒要求 Agent 重感知被允许的
@@ -235,7 +246,9 @@ Accord 不是要求用户额外学习的提示词模板，普通请求就足够�
 
 ## 更新、回滚、移除与源码验证
 
-请在执行安装的同一表面确认生命周期状态：使用
+本节 GUI 标签同样只是 v3.0.1 最后验证的历史路径。客户端更新后，依赖任何
+Codex、Claude 或 ChatGPT 入口标签或动作前，都必须先只读重感知相应表面。在
+该验证切点，生命周期状态在执行安装的同一表面确认，使用
 `codex plugin list --json`、`claude plugin list --json` 或
 **Customize > Plugins**。不同表面的列表差异是应记录的宿主状态，不是另一
 安装必然失败的证明。

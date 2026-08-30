@@ -809,7 +809,7 @@
     },
     "environmentAdmissionContract": {
       "id": "composed-environment-admission/v1",
-      "status": "current-receipt-working-tree-agent-replay-passed-transactional-lifecycle-replay-active",
+      "status": "current-receipt-working-tree-agent-replay-passed-transactional-lifecycle-completed-whole-system-reaccepted-independent-review-active",
       "admissionUnit": "one-bounded-claim-under-one-provenance-bound-composition-and-freshness-window",
       "purpose": "Decide whether an environment observation may support one named claim, whether a comparison arm is required, and which minimum isolation or honest degradation is proportionate to material confounding. It does not certify a host as globally clean.",
       "snapshot": {
@@ -1320,7 +1320,7 @@
       ],
       "verification": {
         "interfaceTest": "tests/product/test_product_control.py::ProductControlTests.test_reference_core_is_policy_driven_and_fail_closed",
-        "latestWorkingTreeResult": "2026-08-28-20-of-20-product-tests-pass",
+        "latestWorkingTreeResult": "2026-08-30-remediation-working-tree-31-of-31-product-tests-pass-independent-review-pending-not-candidate",
         "covers": [
           "minimum-composition-for-one-observed-gap",
           "native-whole-loop-no-op",

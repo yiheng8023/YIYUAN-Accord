@@ -1,4 +1,5 @@
 import ast
+from datetime import datetime
 from hashlib import sha256
 import io
 import json
@@ -27,6 +28,51 @@ RELEASE_RE = re.compile(
 CONTRACT_RELEASE_RE = re.compile(
     r"^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$"
 )
+_PUBLIC_RELEASE_FIELDS = (
+    "tag", "revision", "releaseKind", "prerelease", "assetPolicy",
+    "publishedAt",
+)
+_EXPECTED_PUBLIC_RELEASE_PREFIX = (
+    ("v1.2", "6d857517455b6f3f86a4c9cbd79fc618febbbe00",
+     "full-release", False, "no-attached-assets", "2026-08-20T18:27:42Z"),
+    ("v2.0", "71ff4a2687b54f26c8dbf3a94384257f1fc0f532",
+     "full-release", False, "no-attached-assets", "2026-08-25T02:04:49Z"),
+    ("v2.0.1-preview.1", "e3a6eeb3fbb87ce2966c1015f90b0dea09ebbe07",
+     "public-preview", True, "no-attached-assets", "2026-08-25T08:46:58Z"),
+    ("v3.0.1", "24cf9f3750ecd700944988e81a519db54b67b8e8",
+     "full-release", False, "no-attached-assets", "2026-08-27T07:13:18Z"),
+)
+
+
+def _public_release_record_valid(record, allow_legacy_tag=False):
+    if not isinstance(record, dict) or set(record) != set(_PUBLIC_RELEASE_FIELDS):
+        return False
+    tag = record.get("tag")
+    prerelease = record.get("prerelease")
+    published_at = record.get("publishedAt")
+    full_match = RELEASE_RE.fullmatch(tag) if isinstance(tag, str) else None
+    legacy_match = (
+        CONTRACT_RELEASE_RE.fullmatch(tag)
+        if allow_legacy_tag and isinstance(tag, str) else None
+    )
+    try:
+        parsed_time = datetime.strptime(published_at, "%Y-%m-%dT%H:%M:%SZ")
+    except (TypeError, ValueError):
+        return False
+    return (
+        (full_match is not None or legacy_match is not None)
+        and re.fullmatch(
+            r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z",
+            published_at or "",
+        ) is not None
+        and parsed_time.strftime("%Y-%m-%dT%H:%M:%SZ") == published_at
+        and re.fullmatch(r"[0-9a-f]{40}", record.get("revision") or "") is not None
+        and isinstance(prerelease, bool)
+        and prerelease is (full_match is not None and full_match.group(4) is not None)
+        and record.get("releaseKind")
+        == ("public-preview" if prerelease else "full-release")
+        and record.get("assetPolicy") == "no-attached-assets"
+    )
 
 
 def _unique_json_object(pairs):
@@ -684,10 +730,47 @@ def release_identity_errors(
         errors.append("acceptance top-level shape is invalid")
     historical = program.get("historicalRelease")
     historical_fields = {
-        "releaseLine", "releasedTags", "unreleasedCheckpoint",
+        "schema", "legacyCheckpointLine", "publicReleases",
+        "recommendedPublicRelease", "unreleasedCheckpoint",
         "supersededDevelopmentDistributions", "authority", "rule",
     }
-    released_tags = historical.get("releasedTags") if isinstance(historical, dict) else None
+    public_releases = (
+        historical.get("publicReleases") if isinstance(historical, dict) else None
+    )
+    public_records = (
+        tuple(
+            tuple(item.get(field) for field in _PUBLIC_RELEASE_FIELDS)
+            if _public_release_record_valid(
+                item, index < len(_EXPECTED_PUBLIC_RELEASE_PREFIX),
+            )
+            else ()
+            for index, item in enumerate(public_releases)
+        )
+        if isinstance(public_releases, list) else None
+    )
+    public_tags = (
+        [item.get("tag") for item in public_releases]
+        if isinstance(public_releases, list)
+        and all(
+            _public_release_record_valid(
+                item, index < len(_EXPECTED_PUBLIC_RELEASE_PREFIX),
+            )
+            for index, item in enumerate(public_releases)
+        )
+        else None
+    )
+    public_revisions = (
+        [item.get("revision") for item in public_releases]
+        if public_tags is not None else None
+    )
+    published_times = (
+        [item.get("publishedAt") for item in public_releases]
+        if public_tags is not None else None
+    )
+    full_release_tags = (
+        [item.get("tag") for item in public_releases if not item.get("prerelease")]
+        if public_tags is not None else None
+    )
     superseded_development = (
         historical.get("supersededDevelopmentDistributions")
         if isinstance(historical, dict) else None
@@ -696,14 +779,27 @@ def release_identity_errors(
         isinstance(historical, dict)
         and set(historical) == historical_fields
         and acceptance.get("historicalRelease") == historical
+        and historical.get("schema") == 2
+        and isinstance(public_records, tuple)
+        and len(public_records) >= len(_EXPECTED_PUBLIC_RELEASE_PREFIX)
+        and public_records[:len(_EXPECTED_PUBLIC_RELEASE_PREFIX)]
+        == _EXPECTED_PUBLIC_RELEASE_PREFIX
+        and isinstance(public_tags, list)
+        and len(public_tags) == len(set(public_tags))
+        and len(public_revisions) == len(set(public_revisions))
+        and published_times == sorted(set(published_times))
+        and bool(full_release_tags)
+        and historical.get("recommendedPublicRelease") == full_release_tags[-1]
         and all(_nonempty_string(historical.get(field)) for field in (
-            "releaseLine", "unreleasedCheckpoint", "authority", "rule",
+            "legacyCheckpointLine", "recommendedPublicRelease",
+            "unreleasedCheckpoint", "authority", "rule",
         ))
-        and bool(_string_list(released_tags))
         and bool(_string_list(superseded_development))
         and historical.get("authority") == "docs/operations/HISTORY.md"
     )
-    historical_release = historical.get("releaseLine") if historical_valid else None
+    historical_release = (
+        historical.get("legacyCheckpointLine") if historical_valid else None
+    )
     historical_match = (
         CONTRACT_RELEASE_RE.fullmatch(historical_release)
         if isinstance(historical_release, str) else None
@@ -712,17 +808,13 @@ def release_identity_errors(
     checkpoint_match = RELEASE_RE.fullmatch(checkpoint) if isinstance(checkpoint, str) else None
     if (
         not historical_valid or historical_match is None or checkpoint_match is None
-        or released_tags[0] != historical_release
-        or len(released_tags) != 2
-        or RELEASE_RE.fullmatch(released_tags[1]) is None
+        or historical_release != "v2.0"
         or any(RELEASE_RE.fullmatch(item) is None for item in superseded_development)
         or len(set(superseded_development)) != len(superseded_development)
         or not set(superseded_development).isdisjoint(
-            {*released_tags, checkpoint}
+            {*public_tags, checkpoint}
         )
         or checkpoint_match.groups()[:2] != historical_match.groups()
-        or RELEASE_RE.fullmatch(released_tags[1]).groups()[:2]
-        != historical_match.groups()
     ):
         errors.append("program and acceptance historicalRelease provenance is invalid")
 

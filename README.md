@@ -83,7 +83,7 @@ structured App Server query feasibility pass. One disposable Claude
 session-only `SessionStart:startup` event also triggered the exact copied
 adapter and completed silently. A separate ephemeral Codex App Server thread
 disabled the enumerated installed Hook, used official `thread/compact/start`,
-observed the candidate session Hook inject `signal.source=compact`, and saw the
+observed the working-projection session Hook inject `signal.source=compact`, and saw the
 Agent return exactly the injected schema value with zero tool use. A later
 exact-package zero-turn arm showed that one task-owned official goal makes a
 thread resumable, while installed `SessionStart:resume` remains pending until
@@ -108,9 +108,15 @@ route and fresh thread/start handoff. Exact GT-20 evidence separately closes
 only one disposable non-empty Windows Codex and Claude transactional lifecycle
 with failed-update retention, exact update, user/foreign-state preservation,
 native removal and bounded inert host cache. Source-bound whole-system
-reacceptance from exact cut `85a917a` is complete; independent exact-tree
-review is now active, while candidate formation and release remain gated. The
-updated client entry surface has not yet been re-sensed, and protected foreign
+reacceptance from exact cut `85a917a` is complete. The independent exact-tree
+review cycle at pre-remediation cut
+`523f2ef47df96b76c132525ff432d044e7b1b4b3` covered product, specification,
+implementation and standards and produced remediation findings; it did not
+form a candidate or transfer review completion to changed bytes. Candidate
+formation and release remain closed. The current main bytes are an unreleased
+working projection. After the client update, all Codex, Claude
+and ChatGPT GUI entry points are unknown and require read-only re-sensing before
+any current-entry claim. Protected foreign
 `.tmp` residue remains the clean exact-candidate blocker; this reacceptance
 neither inspects nor removes it. At exact `cb11759`,
 revised GT-07 passes
@@ -205,31 +211,41 @@ Never include credentials or private session content.
 
 ### Before installation
 
-Use a current Codex or Claude surface with plugin support, network access to the
-public repository, permission to change user-level plugin configuration, and a
-new task or session after installation. Accord does not require one fixed host
-or model version; record the version and route actually used.
+The commands and GUI labels below are last-verified **v3.0.1 historical
+routes**, not current client-entry claims. After the subsequent client update,
+all Codex, Claude and ChatGPT GUI entry points are unknown. Before attempting a
+GUI installation or lifecycle action, first re-sense the current client entry
+surface read-only and record the observed host, version and route. No separate
+ChatGPT GUI installation route was verified for v3.0.1.
 
-### Codex
+At the v3.0.1 verification cut, the Codex and Claude routes required plugin
+support, network access to the public repository, permission to change
+user-level plugin configuration, and a new task or session after installation.
+Accord does not require one fixed host or model version.
 
-Install the exact immutable tag:
+### Codex — last-verified v3.0.1 route
+
+The recorded CLI route installed the exact immutable tag:
 
 ```powershell
 codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.0.1
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
-Restart the desktop app or start a new CLI session. Open **Plugins** or run
-`/plugins`, then confirm `YIYUAN Accord for Codex` and
-`deliver-demand-driven-outcome` are present.
+At that verification cut, the recorded follow-up was to restart the desktop app
+or start a new CLI session, open **Plugins** or run `/plugins`, then confirm
+`YIYUAN Accord for Codex` and `deliver-demand-driven-outcome` were present.
+Do not assume those GUI labels or locations remain current after the update.
 
-### Claude clients and Claude Code
+### Claude clients and Claude Code — last-verified v3.0.1 routes
 
-In Claude Desktop Chat, Claude web chat or Cowork, open
+At that verification cut, the recorded Claude Desktop Chat, Claude web chat and
+Cowork GUI route was to open
 **Customize > Plugins**, add
 `https://github.com/yiheng8023/YIYUAN-Accord` as a personal marketplace, install
 **YIYUAN Accord for Claude**, start a new chat and confirm
-`deliver-demand-driven-outcome` is visible.
+`deliver-demand-driven-outcome` was visible. Do not treat this as a current GUI
+entry claim.
 
 For a persistent Claude Code installation:
 
@@ -250,7 +266,7 @@ The public v3.0.1 packages make one progressively disclosed adaptive Skill
 available and add no Runtime, Hook, MCP server, App, state store, background
 process or automatic project mutation. Exact historical baseline `ae729465`
 contained an earlier stateless `SessionStart` context Hook; the current
-development candidate replaces its echo command with a shared short-lived Node
+unreleased working projection replaces its echo command with a shared short-lived Node
 event adapter and narrows its matcher. Both versions read no transcript, write
 no state and start no background process, but current executable, matcher or
 context bytes are not attributed back to the historical revision.
@@ -327,9 +343,12 @@ always sufficient.
 
 ## Update, rollback, removal and source verification
 
-Confirm lifecycle state on the same surface that installed the package. Use
-`codex plugin list --json`, `claude plugin list --json`, or
-**Customize > Plugins**; a difference between surfaces is observed host state,
+The GUI labels in this section are also last-verified v3.0.1 historical routes.
+After the client update, re-sense the relevant Codex, Claude or ChatGPT entry
+surface read-only before relying on any label or action. At the verification
+cut, lifecycle state was confirmed on the same surface that installed the
+package using `codex plugin list --json`, `claude plugin list --json`, or
+**Customize > Plugins**. A difference between surfaces is observed host state,
 not automatic proof of failure.
 
 An immutable ref never advances. To update or roll back Codex, remove the

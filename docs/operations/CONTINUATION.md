@@ -45,8 +45,9 @@ Then read, in order:
   later accountable product consensus superseded its `ready` state from
   `product/constitution.json#/purpose,/successDefinition,/productBoundary,/evolutionPolicy`.
   It is not the current candidate and grants no tag or Release authority.
-- The saved `main` checkout now carries an active, intentionally incomplete
-  self-bootstrapping feasibility and core-shaping program. Accord remains a context-adaptive
+- The saved `main` checkout now carries an unreleased, intentionally incomplete
+  working projection for the self-bootstrapping feasibility and core-shaping
+  program. Accord remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
   product target is broader: complete bounded self-bootstrapping across
   environment sensing, outcome and authority binding, reuse or acquisition,
@@ -288,7 +289,7 @@ Then read, in order:
   Pareto pruning, context-derived constraints and equivalent-fit native/reuse
   preference. Prior evidence remains bound to the old hashes and the corrected
   projections require replay. Do not hot-mutate either composed live host or
-  treat an installed version label as current working-candidate behavior.
+  treat an installed version label as current working-projection behavior.
 - That fresh Codex carrier also reported non-blocking host warnings that manifest
   icon paths containing `..` were ignored. The Skill loaded and activated, so
   this is a visual-metadata compatibility issue for a later exact-SHA patch, not
@@ -314,7 +315,8 @@ Then read, in order:
   GT-14 through GT-21 have a machine-checkable design. GT-21 now passes only
   its bounded current-host live-carrier and fresh-handoff case, and GT-20 now
   passes only its bounded disposable Windows transactional-lifecycle case.
-  Whole-system affected-surface reacceptance remains active. Exact checkpoint
+  Whole-system affected-surface reacceptance is complete only for the bounded
+  source-bound claim recorded below; it is not candidate or release proof. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
@@ -351,7 +353,7 @@ Then read, in order:
   transcription errors, initial failed independent review and corrected review,
   plus GT-18's query corrections and high review cost, remain visible. These
   finite results prove neither live mechanism, durable-carrier or field value.
-  All ten
+  All twelve
   tasks must bind any future exact semantics and package bytes before a
   candidate can become ready.
 - One context-isolated Claude Code CLI session loaded the exact tagged plugin
@@ -388,38 +390,26 @@ Then read, in order:
   superseded pre-resource GT-11 evidence files, leaving three expected slots.
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
-- The active development guardrail permits at most 91 tracked files and
-  462000 product-code-and-test bytes with at least five percent headroom and
-  three tracked-file slots after the five current untracked candidate files are
-  tracked. Those files carry the earlier current-receipt source, one canonical
-  adapter, two exact package copies and one bounded preflight/counterevidence
-  record; they do not pre-authorize a Runtime, service or durable store. The wider bounded adjustment admits the feasibility
-  record, one deep pure-data `reconcile_closure` module, its live observation
-  receipt, three per-responsibility implementation modes and interface
-  regression, one append-only existing GT-14 through GT-19 source and bounded
-  current observations. GT-21 and GT-20 now retain bounded exact evidence with
-  their failures, evaluator-fixture corrections, unknowns and matching cleanup post-state;
-  neither establishes production, cross-host value, candidate or release readiness.
-  The two-file increase from 84 pays only for the
-  GT-17 and GT-18 observation carriers; their fixture and state carrier were
-  removed. Revised GT-17 and GT-19 now occupy two bounded observation carriers;
-  three superseded v3.0.1 derived observation projections were removed from the
-  active tree while their combined source bundle, immutable tag and Git history
-  remain. This left four slots before the revised GT-07 observation; that
-  observation now uses one and preserves the required three. Independent review
-  of fresh current-contract GT-18/19 reuses the append-only source, adds two
-  current observation carriers and removes only the superseded 2026-08-27
-  v3.1.0 GT-11/GT-12 derived files after their full source records, fresh
-  replacements and immutable history were verified. The tracked-file count
-  therefore remains 83 and the required three-slot reserve remains intact.
+- The unreleased working-projection guardrail permits at most 91 tracked files
+  and 505000 product-code-and-test bytes with at least five percent headroom.
+  The remediation calibration has 88 tracked files and 473000 code/test bytes,
+  leaving the required three tracked-file slots and 32000 bytes of headroom
+  against a required 25250. These values are navigation, not candidate evidence;
+  refresh them after any code, test or file-set change and keep the machine
+  guardrail authoritative. GT-21 and GT-20
+  retain bounded exact evidence with their failures, evaluator-fixture
+  corrections, unknowns and matching cleanup post-state; neither establishes
+  production, cross-host value, candidate or release readiness.
   An earlier independent review exposed missing GT-17 cleanup and GT-18
   full-vector/carrier-edge source validation. The later f898ebd audit exposed
   missing non-selected-route retirement closure; the latest bounded 12000-byte
   increase pays only for same-responsibility successor, prior consequence and
   cleanup, reversible retirement, recheck, completion-failure logic and negative
-  regressions. The final bounded increase adds only evaluator-delta proof,
-  option-safe Git reads and malformed-history/Git-failure falsifiers; it is not
-  advance allowance for a Runtime, adapter, state layer or future mechanism.
+  regressions. The latest bounded increase adds only unconditional provisional-
+  source, complete declared-package, record/claim allowlist, malformed-input and
+  synchronized-mutation validation required by the failed `523f2ef` review; it
+  is not advance allowance for a Runtime, adapter, state layer, client bridge,
+  fixed model route or future mechanism.
   The historical v3.1 baseline added one release note,
   two Hook files, one combined source and four observations. The new program
   adds no implementation merely to consume the remaining budget; every future
@@ -817,18 +807,28 @@ Historical superseded review disposition —
     source-bound reacceptance from exact cut `85a917a`. It preserves GT-21 and
     GT-20 as bounded results, keeps production, cross-host and updated-client
     entry behavior unknown, and does not form a candidate or release claim.
-15. `independent-review-and-form-future-exact-candidate` — active. Goal mode
-    remains paused; only a genuinely independent exact-tree specification,
-    implementation and standards review can form a future candidate.
+15. `independent-review-and-form-future-exact-candidate` — active in the machine
+    projection. The review cycle at pre-remediation cut
+    `523f2ef47df96b76c132525ff432d044e7b1b4b3` completed separate product,
+    specification, implementation and standards reviews and produced
+    remediation findings. It did not form a candidate, and completion does not
+    transfer to changed bytes. Goal mode remains paused; a future unchanged
+    revision still requires the complete independent review set before candidate
+    formation. Findings and remediation do not themselves form or authorize it.
 
 The release procedure is dormant. A future semantic version, exact candidate,
 hosted checks, named-human decision, tag, Release and post-release cleanup may
 be considered only after all fifteen core stages complete; they then run in
-their declared order on one unchanged future revision. The updated client entry
-surface has not yet been re-sensed. Protected foreign `.tmp` residue remains the
-clean exact-candidate blocker and is neither inspected nor removed. The previous
-push, Actions and Cloud results do not qualify changed authority or future
-behavior bytes.
+their declared order on one unchanged future revision. After the client update,
+all Codex, Claude and ChatGPT GUI entry points are unknown; read-only re-sensing
+must precede any current-entry claim or installation guidance. Protected foreign `.tmp` residue remains the
+clean exact-candidate blocker. During remediation one mistaken direct verifier
+call enumerated only the already known protected top-level locator and pruned it
+before descent; it did not read contents, hash bytes, modify the directory or
+run either host check. The printed locator is retained as process
+counterevidence, and that verifier route remains stopped. The previous push,
+Actions and Cloud results do not qualify changed authority or future behavior
+bytes.
 
 The following 13-step chain is the immutable v3.0.1 historical disposition.
 Its external gates completed for the tagged v3.0.1 SHA; it is retained only as

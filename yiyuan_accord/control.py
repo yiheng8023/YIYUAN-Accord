@@ -3,7 +3,11 @@ from pathlib import Path
 import re
 import subprocess
 
-from .evidence import historical_representative_errors, representative_sample_errors
+from .evidence import (
+    historical_representative_errors,
+    provisional_gt20_21_source_errors,
+    representative_sample_errors,
+)
 from .guardrails import (
     EXTERNAL_COMPLETION_OPERANDS,
     clean_git_checkout,
@@ -1104,6 +1108,11 @@ def verify_product(root):
             acceptance,
             golden_suite,
             _read_json,
+        )
+    )
+    errors.extend(
+        provisional_gt20_21_source_errors(
+            root, program, acceptance, golden_suite, _read_json,
         )
     )
     errors.extend(

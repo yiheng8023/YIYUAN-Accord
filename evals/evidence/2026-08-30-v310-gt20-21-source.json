@@ -1,5 +1,114 @@
 {
   "schema": 1,
+  "provisionalContract": {
+    "schema": "yiyuan-accord-provisional-gt20-21-source/v1",
+    "sourceLocator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
+    "records": [
+      {
+        "taskId": "GT-20",
+        "recordId": "GT-20-transactional-lifecycle-4c8bcc3",
+        "goldenTaskSha256": "22368fc53a4154aacf7ae91ebf5a535e3953f65353b86e16f0fc296cdedd1fd4",
+        "evaluationContractSha256": "312693dc71c52c44fe6a11b564671c95818466f1d8ddfd263763dab2af055ab5",
+        "evaluatedRevision": "4c8bcc362287d1ad494061ab0de0cb4bfaad51b5",
+        "behaviorSubject": {
+          ".agents/plugins/marketplace.json": "a680e15cf06c551d93f7869b20fed25ef0c0ef3c0c7a41a10ec85a583be973ae",
+          ".claude-plugin/marketplace.json": "a0b6edac1fcd10f2b330045fab177ba1f0a520f63fbd3b8e9fd48d6abfe969c3",
+          "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json": "b39034d978fc9ed5ba814b2297dfa44afc8d4e96603899af9e421da913e56f51",
+          "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "plugins/yiyuan-accord-codex/assets/yiyuan-nexus-mark.png": "6e407c1942ff86e8f751930bf5df1000579b9a37824e17dde336d26ea450a235",
+          "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml": "e0e5d0fb6f8f62cd67bd8e28abe79484a860bceb386751dc68ed8b51f7a15068",
+          "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json": "42344973b7ee1fb6b00846173be01f77563f18432708e1e542c7d31f51628c70",
+          "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+          "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+        },
+        "projectionPackageSha256": {
+          "codex": "93237e07dec32157cd291d137cb0e70d3274ee11226996c87579a9526aa3996e",
+          "claude-code": "d91eed86fa1e0683b79b78bdfd3e9ca357031927e2ccef1755a34113ce5d079d"
+        },
+        "sourceBindings": [
+          {
+            "kind": "bundle-record-sha256",
+            "locator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
+            "recordId": "GT-20-transactional-lifecycle-4c8bcc3",
+            "sha256": "a66b9aa05610baf362c38213d266d31a005c737ab1699173a590a25542cd32ec"
+          }
+        ],
+        "independentPoststate": {
+          "sourcePath": "cleanupEvidence",
+          "sha256": "4de77508b8d35ddab0950d34e44e1f5a3cfb6cb2ebd31332cca38b6771154d66",
+          "observerSeparation": "no-evaluated-agent-or-model-participated"
+        },
+        "cleanup": {
+          "state": "verified-foreign-state-preserved",
+          "taskOwnedResidueCount": 0,
+          "verified": true
+        },
+        "claimCeiling": {
+          "sourcePath": "claimLimit",
+          "sha256": "b00d2ff5650ae82efce5da9aa9096767dfd44107e6cb3e92688e75933d97b5fb",
+          "scope": "bounded-provisional-source-only",
+          "allowedScope": "exact tracked v3.0.1 to 4c8bcc3 package bytes in two disposable non-empty windows host scopes",
+          "excludedClaims": ["unmanaged", "production", "actual claude host hook triggering", "product value", "cross-host equivalence", "whole-system balance", "independent review", "candidate readiness", "release readiness"],
+          "independentReviewClaimed": false,
+          "candidateClaimed": false,
+          "releaseClaimed": false
+        }
+      },
+      {
+        "taskId": "GT-21",
+        "recordId": "GT-21-fresh-zero-history-handoff-3878968",
+        "goldenTaskSha256": "a7634cccb150a0cde1c8d35899fab0da621b40b6ae42ec3729c62b5b7382b0ea",
+        "evaluationContractSha256": "312693dc71c52c44fe6a11b564671c95818466f1d8ddfd263763dab2af055ab5",
+        "evaluatedRevision": "3878968d459adba57792c390eb277876028b0012",
+        "behaviorSubject": {
+          "yiyuan_accord/closure.py": "f771192cd6e81fedf7343c538415da6c40f35e3807509e94430c836b21fe7e47",
+          "runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+          "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+          "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+          "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+          "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+        },
+        "projectionPackageSha256": {},
+        "sourceBindings": [
+          {
+            "kind": "bundle-record-sha256",
+            "locator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
+            "recordId": "GT-21-fresh-zero-history-handoff-3878968",
+            "sha256": "cb14e25128123afcfb6354fefcb480d18b171d7539af0a78dc905f61df33b5cc"
+          }
+        ],
+        "independentPoststate": {
+          "sourcePath": "payload.liveObservation.independentPoststate",
+          "sha256": "e907ffcb52211aaa158f69b875f316958d9012a36db8a06dc2fe82a9c515615e",
+          "observerSeparation": "parent-evaluator-not-evaluated-agent"
+        },
+        "cleanup": {
+          "state": "verified-clean",
+          "taskOwnedResidueCount": 0,
+          "verified": true
+        },
+        "claimCeiling": {
+          "sourcePath": "payload.decision.claimLimit",
+          "sha256": "0a57fd9adfa7c52be3d81dd6e11c6b15f2e826602a4316a233deeef2798da954",
+          "scope": "bounded-provisional-source-only",
+          "allowedScope": "one exact bounded current-host fresh zero-history handoff on revision 3878968",
+          "excludedClaims": ["cross-host", "production", "value", "independent review", "candidate", "release"],
+          "independentReviewClaimed": false,
+          "candidateClaimed": false,
+          "releaseClaimed": false
+        }
+      }
+    ]
+  },
   "records": {
     "GT-21-live-carrier-preflight-working-tree": {
       "taskId": "GT-21",
@@ -1398,7 +1507,7 @@
           "modelIdentityBindingAdmitted": false,
           "mechanismEscalationAdmitted": false,
           "nextMinimumWork": "Run GT-20 over disposable non-empty Codex and Claude state using the selected existing component set, current native lifecycle surfaces, injected update failure, user and foreign-state preservation, independent activation checks and exact cleanup.",
-          "claimLimit": "One exact bounded current-host fresh zero-history handoff on revision 3878968 with one authorized model-variable turn and a task-owned evaluator; no cross-host, production, value, candidate or release claim."
+          "claimLimit": "One exact bounded current-host fresh zero-history handoff on revision 3878968 with one authorized model-variable turn and a task-owned evaluator; no cross-host, production, value, independent review, candidate or release claim."
         }
       }
     },
@@ -1603,7 +1712,7 @@
         "whole-system reacceptance",
         "candidate and release readiness"
       ],
-      "claimLimit": "GT-20 passes only for exact tracked v3.0.1 to 4c8bcc3 package bytes in two disposable non-empty Windows host scopes using the observed native Codex and Claude lifecycle surfaces. It proves bounded user-state-preserving install, failed-update rollback, successful update, enabled/component and executable checks, removal, inert-cache classification and task cleanup. It does not prove unmanaged or production hosts, actual Claude host Hook triggering, product value, cross-host equivalence, whole-system balance, candidate readiness or release readiness."
+      "claimLimit": "GT-20 passes only for exact tracked v3.0.1 to 4c8bcc3 package bytes in two disposable non-empty Windows host scopes using the observed native Codex and Claude lifecycle surfaces. It proves bounded user-state-preserving install, failed-update rollback, successful update, enabled/component and executable checks, removal, inert-cache classification and task cleanup. It does not prove unmanaged or production hosts, actual Claude host Hook triggering, product value, cross-host equivalence, whole-system balance, independent review, candidate readiness or release readiness."
     }
   }
 }

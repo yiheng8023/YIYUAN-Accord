@@ -5,17 +5,49 @@
   "release": "v3.1",
   "distributionVersion": "v3.1.0",
   "historicalRelease": {
-    "releaseLine": "v2.0",
-    "releasedTags": [
-      "v2.0",
-      "v2.0.1-preview.1"
+    "schema": 2,
+    "legacyCheckpointLine": "v2.0",
+    "publicReleases": [
+      {
+        "tag": "v1.2",
+        "revision": "6d857517455b6f3f86a4c9cbd79fc618febbbe00",
+        "releaseKind": "full-release",
+        "prerelease": false,
+        "assetPolicy": "no-attached-assets",
+        "publishedAt": "2026-08-20T18:27:42Z"
+      },
+      {
+        "tag": "v2.0",
+        "revision": "71ff4a2687b54f26c8dbf3a94384257f1fc0f532",
+        "releaseKind": "full-release",
+        "prerelease": false,
+        "assetPolicy": "no-attached-assets",
+        "publishedAt": "2026-08-25T02:04:49Z"
+      },
+      {
+        "tag": "v2.0.1-preview.1",
+        "revision": "e3a6eeb3fbb87ce2966c1015f90b0dea09ebbe07",
+        "releaseKind": "public-preview",
+        "prerelease": true,
+        "assetPolicy": "no-attached-assets",
+        "publishedAt": "2026-08-25T08:46:58Z"
+      },
+      {
+        "tag": "v3.0.1",
+        "revision": "24cf9f3750ecd700944988e81a519db54b67b8e8",
+        "releaseKind": "full-release",
+        "prerelease": false,
+        "assetPolicy": "no-attached-assets",
+        "publishedAt": "2026-08-27T07:13:18Z"
+      }
     ],
+    "recommendedPublicRelease": "v3.0.1",
     "unreleasedCheckpoint": "v2.0.1-preview.2",
     "supersededDevelopmentDistributions": [
       "v3.0.0"
     ],
     "authority": "docs/operations/HISTORY.md",
-    "rule": "These immutable releases, the retired unreleased checkpoint and the superseded locally exposed development distribution are provenance only. They are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
+    "rule": "The frozen known prefix and any valid chronological tail of public release facts are append-only provenance. The separate recommendedPublicRelease pointer may advance only to the latest non-prerelease record after that exact release completes every gate; it never rewrites an older record. The retired unreleased checkpoint and superseded locally exposed development distribution are provenance only. Historical records are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
@@ -797,7 +829,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "cc739dc05b1f06b5374020b69bee4b5d0f1231a3e4c72b1ed43d7aebdaf7a5ca",
+    "releaseNotesSha256": "c2de10bdac198c998b56ff75b41807a8de7799984e8cb27bb5605f4a84084894",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,

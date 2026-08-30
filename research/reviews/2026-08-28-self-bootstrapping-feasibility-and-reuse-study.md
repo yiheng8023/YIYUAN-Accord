@@ -1477,3 +1477,54 @@ two stale projections, this review pointer, all hashes and the deterministic
 suite agree. Then activate one genuinely independent exact-tree product,
 specification, implementation and standards review. Candidate formation remains
 separate and cannot bypass the protected residue rule or exact later gates.
+
+## Failed exact-tree review and bounded remediation: cut `523f2ef`
+
+The next independent review fixed its subject at exact pushed revision
+`523f2ef47df96b76c132525ff432d044e7b1b4b3`. Hosted run `33296858841`
+passed all nine Ubuntu, macOS and Windows jobs for that immutable cut, while the
+local supporting checks passed 26 product tests, tracked-JSON parsing,
+cross-projection hashes, deterministic goal generation, Actionlint, strict
+Claude marketplace validation, three Node syntax checks and `git diff --check`.
+Those checks did not make the cut a candidate. Canonical and host checks were
+again deliberately not run because protected foreign `.tmp` residue remained
+their known top-level blocker and was not inspected, read, hashed, relaxed or
+removed.
+
+Three zero-inheritance, read-only review lanes then failed the exact cut:
+
+| Lane | Material finding at `523f2ef` | Bounded remediation |
+| --- | --- | --- |
+| Product and specification | GT-20 named only a sparse subset of the installed package; lifecycle and test-count projections were stale; the continuation carrier omitted the product review lane. | Derive GT-20 subjects from the complete declared Codex and Claude package projections, and reconcile guidance, continuation and test-result projections without changing the bounded observation. |
+| Implementation and evidence | The shared source record was hash-bound but its GT-20/21 semantics were not unconditionally validated while R3 remained planned. A synchronized source and registered-hash mutation could therefore self-attest. | Add one narrow unconditional provisional-source validator that binds current Golden Task and evaluation-contract digests, ancestor revisions, exact behavior subjects, complete package digests, admitted record identities, source bindings, independent post-state, cleanup and finite claim ceilings, with synchronized-mutation and malformed-input regressions. |
+| Standards and release | Machine history omitted public immutable v3.0.1, user-facing prose mislabeled current main as a candidate, and pre-update GUI paths were presented as current after the client changed. | Migrate to append-only public Release records, keep v3.0.1 recommended until a later release completes, call current main an unreleased working projection, and mark every post-update Codex, Claude and ChatGPT GUI entry unknown until read-only re-sensing. |
+
+The failure does not rewrite the exact GT-20 or GT-21 historical observations:
+their evaluated behavior bytes remained unchanged, so their finite source facts
+may be retained only if the strengthened validator accepts them. It does revoke
+independent-review completion for `523f2ef` and every changed remediation byte.
+No Runtime, service, client bridge, MCP server, durable store, model-specific
+route or new external turn is admitted by this repair. No model was called, no
+new trust or account access was granted, and no candidate, tag or Release was
+formed.
+
+The implementation and negative tests necessarily increase measured product
+code-and-test bytes beyond the prior `462000` ceiling. The stabilized
+calibration measures 473000 bytes under a new finite 505000-byte ceiling,
+leaving 32000 bytes against the required 25250-byte headroom. The increase pays
+solely for the review-required fail-closed source, full-package, malformed-input
+and synchronized-mutation binding and is not future mechanism allowance. The
+repaired exact revision must pass the complete deterministic and
+hosted suites and a new independent product, specification, implementation and
+standards review. Candidate formation remains a later unchanged-revision gate,
+and the protected residue policy remains unchanged.
+
+One remediation command then mistakenly invoked the direct product verifier as
+if it excluded the residue lane. Its residue walker enumerated the already known
+protected top-level locator and pruned that directory before descent; it did not
+open or read contents, hash bytes, change the directory or run either host
+check. Printing the locator still violated the explicit no-print boundary. The
+call was stopped from further use, the incident remains process counterevidence,
+and no green result compensates for it. Clean exact-candidate formation remains
+blocked until the human-controlled residue boundary changes and the ordered
+checks can be run without weakening the rule.

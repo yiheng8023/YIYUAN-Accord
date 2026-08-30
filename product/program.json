@@ -5,17 +5,49 @@
   "release": "v3.1",
   "distributionVersion": "v3.1.0",
   "historicalRelease": {
-    "releaseLine": "v2.0",
-    "releasedTags": [
-      "v2.0",
-      "v2.0.1-preview.1"
+    "schema": 2,
+    "legacyCheckpointLine": "v2.0",
+    "publicReleases": [
+      {
+        "tag": "v1.2",
+        "revision": "6d857517455b6f3f86a4c9cbd79fc618febbbe00",
+        "releaseKind": "full-release",
+        "prerelease": false,
+        "assetPolicy": "no-attached-assets",
+        "publishedAt": "2026-08-20T18:27:42Z"
+      },
+      {
+        "tag": "v2.0",
+        "revision": "71ff4a2687b54f26c8dbf3a94384257f1fc0f532",
+        "releaseKind": "full-release",
+        "prerelease": false,
+        "assetPolicy": "no-attached-assets",
+        "publishedAt": "2026-08-25T02:04:49Z"
+      },
+      {
+        "tag": "v2.0.1-preview.1",
+        "revision": "e3a6eeb3fbb87ce2966c1015f90b0dea09ebbe07",
+        "releaseKind": "public-preview",
+        "prerelease": true,
+        "assetPolicy": "no-attached-assets",
+        "publishedAt": "2026-08-25T08:46:58Z"
+      },
+      {
+        "tag": "v3.0.1",
+        "revision": "24cf9f3750ecd700944988e81a519db54b67b8e8",
+        "releaseKind": "full-release",
+        "prerelease": false,
+        "assetPolicy": "no-attached-assets",
+        "publishedAt": "2026-08-27T07:13:18Z"
+      }
     ],
+    "recommendedPublicRelease": "v3.0.1",
     "unreleasedCheckpoint": "v2.0.1-preview.2",
     "supersededDevelopmentDistributions": [
       "v3.0.0"
     ],
     "authority": "docs/operations/HISTORY.md",
-    "rule": "These immutable releases, the retired unreleased checkpoint and the superseded locally exposed development distribution are provenance only. They are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
+    "rule": "The frozen known prefix and any valid chronological tail of public release facts are append-only provenance. The separate recommendedPublicRelease pointer may advance only to the latest non-prerelease record after that exact release completes every gate; it never rewrites an older record. The retired unreleased checkpoint and superseded locally exposed development distribution are provenance only. Historical records are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
   "releaseIntent": "Publication is deliberately deferred. Preserve ae7294652761abceb753f0571ee82c7ddeae06af as the historical verified v3.1.0 package-and-repository baseline, not current ready authority, and reopen one active product-core increment. The increment must define and demonstrate complete bounded self-bootstrapping across environment sensing, outcome and authority binding, existing-capability reuse or acquisition, composition or authorship, execution, consequence verification, learning, self-evolution, recovery, continuity, resource release and retirement. Product form remains a downstream route decision. No future exact candidate, tag or Release is considered until this program, its representative and longitudinal evidence, every dependent projection and independent review are complete.",
   "constitution": "product/constitution.json",
@@ -67,10 +99,17 @@
       "disposition": "immutable-history-not-current-projection-evidence"
     },
     {
+      "id": "public-release-ledger-2026-08-30",
+      "kind": "append-only-public-release-fact-ledger-and-current-recommendation-pointer",
+      "repositoryLocator": "docs/operations/HISTORY.md",
+      "repositorySha256": "d07deac4403c4842da697b401abe34657b4e9aedd5dc937454d38ea3cc3e2725",
+      "disposition": "known-prefix-authority-and-extensible-history-not-current-candidate-or-release-authorization"
+    },
+    {
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "e9671b5abfd398c72314f5bd51d829524fd7441462bc22928bbb40f179e0fa5a",
+      "repositorySha256": "2add2542ca8685bab586fb97f139d3d41482404d121daa1ff84ca89e7a894a7b",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -97,7 +136,7 @@
       "id": "gt21-live-carrier-preflight-2026-08-29",
       "kind": "bounded-exact-codex-local-live-carrier-simple-route-and-fresh-handoff-observation-with-model-variable-and-zero-residue",
       "repositoryLocator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
-      "repositorySha256": "8a0967e5c2de83f8dcf00fad9591e32251697c8a0787b5e6df227b8ceeb2d474",
+      "repositorySha256": "48bf261b74a22c344808358060c37ecc2478a8fc530382a25d51289c24a41f28",
       "latestFailureBoundary": "GT-21 closes for one bounded current-host case at exact 3878968: a separate official fresh thread/start destination received six verified fields, used one model-variable read-only turn and one task-owned verifier, returned ACCORD_FRESH_HANDOFF_VERIFIED, stayed distinct from copied-history and Git topology, was verified before source release, and left zero task residue. Source-bound whole-system reacceptance at 85a917a is complete; independent exact-tree review is the earliest open boundary.",
       "disposition": "admitted-bounded-exact-codex-local-gt21-pass-current-host-claim-selected-no-added-client-not-whole-system-candidate-or-release-evidence"
     },
@@ -105,7 +144,7 @@
       "id": "gt20-transactional-lifecycle-2026-08-30",
       "kind": "bounded-exact-windows-codex-and-claude-non-empty-host-transactional-lifecycle-observation",
       "repositoryLocator": "evals/evidence/2026-08-30-v310-gt20-21-source.json",
-      "repositorySha256": "8a0967e5c2de83f8dcf00fad9591e32251697c8a0787b5e6df227b8ceeb2d474",
+      "repositorySha256": "48bf261b74a22c344808358060c37ecc2478a8fc530382a25d51289c24a41f28",
       "latestFailureBoundary": "GT-20 closes for exact tracked v3.0.1 to 4c8bcc3 bytes in two disposable non-empty Windows host scopes: native failed updates retain the exact old package, native updates install exact current bytes, user and foreign state survive, removal leaves zero active Accord state, Codex cache is absent, Claude cache is unlisted and marked for a 14-day live-session-aware host sweep, and all task roots and matching processes are removed. Source-bound whole-system reacceptance at 85a917a is complete; independent exact-tree review is the earliest open boundary.",
       "disposition": "admitted-bounded-exact-gt20-pass-not-production-cross-os-value-candidate-or-release-evidence"
     },
@@ -126,7 +165,7 @@
       "id": "self-bootstrapping-feasibility-and-reuse-study-2026-08-28",
       "kind": "exact-source-wheel-provenance-feasibility-ledger-and-p0-p4-results",
       "repositoryLocator": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
-      "repositorySha256": "744054fe812140a1bd57cee078618218568080f5c1d27fc35e08129020cb7f46",
+      "repositorySha256": "743f0b353b521f4e1fc1beca74848d993c87f1f1eac44d7cf636986e9dfce047",
       "disposition": "admitted-source-bound-reuse-and-whole-system-reacceptance-record-independent-review-active-candidate-and-release-closed"
     }
   ],
@@ -169,7 +208,7 @@
       ],
       "unknowns": [
         "No official-clean result exists. BAL-04 ran one matched repository-Skill/no-Accord pair and both arms closed the same correction outcome; one model, fixed order, an explicit generic Skill invitation, shared user Skills and no demonstrated baseline gap keep incremental Accord effect unknown.",
-        "One disposable Claude session-only task verifies exact-copied SessionStart:startup firing and correct silence. A separate ephemeral Codex App Server task disables the installed Hook, invokes official compact, observes candidate sessionFlags context and one exact schema-field Agent read with zero tool use. One installed first-turn resume Hook also triggers, injects typed context and drives one schema/source branch under broad request-scoped test bypass. Installed-package compact, sessionFlags resume, semantic directive use, narrow production trust, implicit activation, low interference and product value remain unverified.",
+        "One disposable Claude session-only task verifies exact-copied SessionStart:startup firing and correct silence. A separate ephemeral Codex App Server task disables the installed Hook, invokes official compact, observes working-projection sessionFlags context and one exact schema-field Agent read with zero tool use. One installed first-turn resume Hook also triggers, injects typed context and drives one schema/source branch under broad request-scoped test bypass. Installed-package compact, sessionFlags resume, semantic directive use, narrow production trust, implicit activation, low interference and product value remain unverified.",
         "BAL-04 exposed that both working 3.1.0 Skills still used the superseded scalar expected-fitness-minus-cost rule. Both projections are now corrected to hard admission, lifecycle Pareto pruning, context constraints and equivalent-fit native or reuse preference. Earlier behavior stays bound to its prior Skill hashes; the corrected projections have no inherited behavior claim and are not silently hot-mutated into live hosts.",
         "The minimum current product set is selected as the portable Skill, short-lived Hook adapter, pure core and manifests, with no added distributed client or persistent service. Its bounded event, context, current-receipt, pure-core hold, sufficient-simple, fresh-handoff and transactional-lifecycle evidence does not prove ordinary activation, narrow production trust, actual Claude host triggering, semantic directive use, comparative value, cross-host portability or updated-client compatibility.",
         "The official fresh sequential handoff is proved only for one disposable direct App Server evaluator route, including fresh thread creation, six-field destination reconciliation, destination-before-source release and zero task residue. The packaged Hook is not claimed to create that handoff automatically; copied-history fork, Git worktree and Git branch remain non-substitutes.",
@@ -1126,7 +1165,7 @@
     },
     "targets": {
       "maxTrackedFiles": 91,
-      "maxProductCodeAndTestBytes": 462000,
+      "maxProductCodeAndTestBytes": 505000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,
@@ -1168,9 +1207,15 @@
       "def test_live_hook_emits_only_typed_minimum_continuity_context",
       "def test_live_hook_distinguishes_recovery_from_fresh_sources",
       "def test_live_hook_does_not_propagate_invalid_or_unbound_fields",
-      "def test_live_hook_is_packaged_behind_both_host_adapters"
+      "def test_live_hook_is_packaged_behind_both_host_adapters",
+      "def test_provisional_gt20_revision_is_validated_while_r3_is_planned",
+      "def test_gt20_subjects_are_derived_from_projection_declarations",
+      "def test_provisional_source_contract_is_required_while_r3_is_planned",
+      "def test_provisional_gt20_21_mutations_fail_after_repository_rehash",
+      "def test_reacceptance_projects_current_stage_without_model_binding",
+      "def test_public_release_history_freezes_known_prefix_and_accepts_valid_tail"
     ],
-    "minimumTestCount": 25,
+    "minimumTestCount": 31,
     "forbiddenActivePaths": [
       "yiyuan_accord/task_validator_o1_lifecycle_suite.py",
       "yiyuan_accord/task_validator_o2_codex_reference.py",
@@ -1184,7 +1229,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants or capability deletion targets. Independent reviews successively required source-complete evolution evidence, scoped retirement, strict parsing, exact behavior-subject binding, semantic longitudinal validation, malformed-carrier failure closure, typed ancestor provenance, source-to-decision target/value binding, core-bound last-safe preservation and a fail-closed live-event adapter seam. The active increment permits at most 91 tracked files and 462000 product-code-and-test bytes with at least five percent byte headroom and three tracked-file slots after the five currently untracked candidate files are tracked. Those files are the earlier bounded current-receipt Agent source, one canonical short-lived adapter, two exact host-package copies and one bounded preflight/counterevidence record; they do not pre-authorize a Runtime, service, storage layer or framework. Redundant v1 mutations were removed before this bounded increase; the remaining allowance pays for typed official/Accord/observed state bindings, source precedence, single-writer conflict and privacy validation, current receipts, last-safe allocation, per-responsibility modes, the minimum adapter boundary and existing stable closure logic. The result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, cognition, latency, interference, recovery, maintenance and retirement; at each breach compare deletion, native delegation, composition, replacement and bounded addition, retaining only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants or capability deletion targets. Independent reviews successively required source-complete evolution evidence, scoped retirement, strict parsing, exact behavior-subject binding, semantic longitudinal validation, malformed-carrier failure closure, typed ancestor provenance, source-to-decision target/value binding, core-bound last-safe preservation, a fail-closed live-event adapter seam and, at exact failed review cut 523f2ef, unconditional provisional-source plus complete declared-package validation. The active increment permits at most 91 tracked files and 505000 product-code-and-test bytes with at least five percent byte headroom and three tracked-file slots. At calibration, 88 tracked files and 473000 product-code-and-test bytes leave all three slots and 32000 bytes of headroom, above the required 25250. The increase from the prior 462000 ceiling pays only for the review-required source-record, ancestor, task/evaluation digest, package, independent post-state, cleanup, claim-ceiling, malformed-input and synchronized-mutation checks; it is not allowance for a Runtime, service, client bridge, storage layer, framework or model-specific route. Existing typed state, current receipts, minimum adapter boundary and stable closure logic remain bounded, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, cognition, latency, interference, recovery, maintenance and retirement; at each breach compare deletion, native delegation, composition, replacement and bounded addition, retaining only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

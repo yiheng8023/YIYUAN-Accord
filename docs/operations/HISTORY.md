@@ -5,6 +5,24 @@ Git is the durable provenance layer for superseded experiments and release
 routes; current navigation retains only the standards, counterexamples and
 explicit migrations that affect present decisions.
 
+## Public Release ledger
+
+This chronological table is the human-readable authority for the frozen known
+prefix in `product/program.json` and `product/acceptance.json`. Every row records
+facts fixed at publication; later recommendation or supersession does not
+rewrite it.
+
+| Tag | Exact revision | Published at (UTC) | Release kind | Asset policy |
+| --- | --- | --- | --- | --- |
+| `v1.2` | `6d857517455b6f3f86a4c9cbd79fc618febbbe00` | `2026-08-20T18:27:42Z` | full Release | no attached assets |
+| `v2.0` | `71ff4a2687b54f26c8dbf3a94384257f1fc0f532` | `2026-08-25T02:04:49Z` | full Release | no attached assets |
+| `v2.0.1-preview.1` | `e3a6eeb3fbb87ce2966c1015f90b0dea09ebbe07` | `2026-08-25T08:46:58Z` | public prerelease | no attached assets |
+| `v3.0.1` | `24cf9f3750ecd700944988e81a519db54b67b8e8` | `2026-08-27T07:13:18Z` | full Release | no attached assets |
+
+The mutable recommendation pointer currently selects `v3.0.1`, the latest
+published full Release. A later public record appends to the ledger; a completed
+later full Release may advance the pointer without altering any earlier row.
+
 ## Major boundaries
 
 - Revision c53866726834d79a68c61a5b87b4f7ce90698a2c is the pre-reset product
@@ -38,6 +56,12 @@ explicit migrations that affect present decisions.
   formal candidate advances monotonically to `v3.0.1`. This preserves reliable
   update and byte-accurate rollback identity without moving any historical tag,
   inheriting earlier evidence or waiving local, hosted, human and cleanup gates.
+- Public `v3.0.1` was subsequently released on 2026-08-27 from exact commit
+  `24cf9f3750ecd700944988e81a519db54b67b8e8` as a non-prerelease full Release
+  with no attached assets. It remains the recommended immutable public release
+  while the later unreleased working projection reopens product evidence. This
+  fact is append-only history, not candidate identity or authority to move the
+  tag, publish current main, or inherit release evidence for changed bytes.
 
 Use Git to inspect an exact historical file:
 

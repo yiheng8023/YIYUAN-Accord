@@ -34,6 +34,7 @@ from yiyuan_accord.identity import (
     CONTRACT_RELEASE_RE,
     RELEASE_RE,
     active_tree_errors,
+    release_identity_errors,
 )
 ROOT = Path(__file__).resolve().parents[2]
 HOOK_PROCESS_TIMEOUT_SECONDS = 15
@@ -43,6 +44,7 @@ CURRENT_GT11_SOURCE = 'evals/evidence/2026-08-27-v310-codex-local-regression-sou
 CURRENT_GT11_OBSERVATION = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json'
 CURRENT_GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json'
 CURRENT_GT17_OBSERVATION = 'evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json'
+PROVISIONAL_GT20_21_SOURCE = 'evals/evidence/2026-08-30-v310-gt20-21-source.json'
 SRC310 = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
 OBS11 = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json'
 OBS13 = 'evals/observations/2026-08-28-f182a0a-gt-13-codex-local.json'
@@ -103,6 +105,23 @@ def _indexed_fixture():
     with temporary:
         yield target
 
+@contextmanager
+def _provisional_fixture():
+    with tempfile.TemporaryDirectory(prefix='ya-provisional-') as temporary:
+        target = Path(temporary) / 'repository'
+        subprocess.run(
+            ['git', 'clone', '--quiet', '--no-hardlinks', str(ROOT), str(target)],
+            check=True,
+        )
+        for locator in (
+            'yiyuan_accord/control.py',
+            'yiyuan_accord/evidence.py',
+            G,
+            PROVISIONAL_GT20_21_SOURCE,
+        ):
+            shutil.copy2(ROOT / locator, target / locator)
+        yield target
+
 def _rehash(root, locator):
     acceptance = _read(root, A)
     digest = hashlib.sha256((root / locator).read_bytes()).hexdigest()
@@ -114,6 +133,14 @@ def _rehash(root, locator):
         if item['locator'] == locator:
             item['sha256'] = digest
     _write(root, A, acceptance)
+
+def _rehash_program_input(root, locator):
+    program = _read(root, P)
+    digest = hashlib.sha256((root / locator).read_bytes()).hexdigest()
+    for item in program['inputEvidence']:
+        if item.get('repositoryLocator') == locator:
+            item['repositorySha256'] = digest
+    _write(root, P, program)
 
 def _enable_current_sample_validation(root):
     acceptance = _read(root, A)
@@ -499,6 +526,7 @@ class ProductControlTests(unittest.TestCase):
         self.assertEqual(model['id'], 'complete-bounded-self-bootstrapping/v1')
         self.assertEqual(model['factModel']['values'],
                          ['observed', 'not-observed', 'unknown'])
+
         self.assertEqual(
             model['routeDecision']['comparison']['mode'],
             'pareto-then-context-then-equivalent-fit-reuse-tiebreak',
@@ -819,6 +847,154 @@ class ProductControlTests(unittest.TestCase):
                 )} for step in mapping['process']['orderedSteps']
                  if step['state'] in {'active', 'blocked'}],
             )
+
+    def test_provisional_gt20_revision_is_validated_while_r3_is_planned(self):
+        with _provisional_fixture() as root:
+            source = _read(root, PROVISIONAL_GT20_21_SOURCE)
+            source['records']['GT-20-transactional-lifecycle-4c8bcc3'][
+                'evaluatedRevision'
+            ] = '0' * 40
+            _write(root, PROVISIONAL_GT20_21_SOURCE, source)
+            _rehash_program_input(root, PROVISIONAL_GT20_21_SOURCE)
+            self.assert_has(
+                _errors(root),
+                'provisional GT-20 evaluatedRevision is not an ancestor',
+            )
+
+    def test_gt20_subjects_are_derived_from_projection_declarations(self):
+        with _provisional_fixture() as root:
+            golden = _read(root, G)
+            task = next(item for item in golden['tasks'] if item['id'] == 'GT-20')
+            task['behaviorSubjectFiles'].pop()
+            _write(root, G, golden)
+            self.assert_has(
+                _errors(root),
+                'provisional GT-20 behavior subject does not match declared projection files',
+            )
+
+    def test_provisional_source_contract_is_required_while_r3_is_planned(self):
+        with _provisional_fixture() as root:
+            source = _read(root, PROVISIONAL_GT20_21_SOURCE)
+            source['provisionalContract'] = {}
+            _write(root, PROVISIONAL_GT20_21_SOURCE, source)
+            _rehash_program_input(root, PROVISIONAL_GT20_21_SOURCE)
+            self.assert_has(
+                _errors(root),
+                'provisional GT-20/21 source contract is invalid',
+            )
+
+    def test_provisional_gt20_21_mutations_fail_after_repository_rehash(self):
+        def entry(source, task_id):
+            return next(
+                item for item in source['provisionalContract']['records']
+                if item['taskId'] == task_id
+            )
+
+        def refresh_record(source, task_id):
+            contract = entry(source, task_id)
+            record = source['records'][contract['recordId']]
+            contract['sourceBindings'][0]['sha256'] = _digest(record)
+            return contract, record
+
+        def mutate_poststate(source):
+            contract = entry(source, 'GT-21')
+            record = source['records'][contract['recordId']]
+            poststate = record['payload']['liveObservation']['independentPoststate']
+            poststate['sourceDeleted'] = False
+            contract['independentPoststate']['sha256'] = _digest(poststate)
+            refresh_record(source, 'GT-21')
+
+        def mutate_claim(source):
+            contract = entry(source, 'GT-21')
+            record = source['records'][contract['recordId']]
+            claim = 'This provisional source proves candidate and release readiness.'
+            record['payload']['decision']['claimLimit'] = claim
+            contract['claimCeiling']['sha256'] = _digest(claim)
+            refresh_record(source, 'GT-21')
+
+        def mutate_contradictory_claim(source):
+            contract = entry(source, 'GT-21')
+            record = source['records'][contract['recordId']]
+            claim = (
+                'This bounded source proves candidate and release readiness. '
+                'It does not prove cross-host production value; candidate and release '
+                'remain named exclusions.'
+            )
+            record['payload']['decision']['claimLimit'] = claim
+            contract['claimCeiling']['sha256'] = _digest(claim)
+            refresh_record(source, 'GT-21')
+
+        def mutate_malformed_poststate(source):
+            contract = entry(source, 'GT-21')
+            record = source['records'][contract['recordId']]
+            record['payload']['liveObservation'] = []
+            refresh_record(source, 'GT-21')
+
+        def mutate_malformed_authority(source):
+            contract = entry(source, 'GT-20')
+            record = source['records'][contract['recordId']]
+            record['authorityAndPrivacy'] = []
+            refresh_record(source, 'GT-20')
+
+        def mutate_malformed_decision(source):
+            contract = entry(source, 'GT-21')
+            record = source['records'][contract['recordId']]
+            record['payload']['decision'] = []
+            refresh_record(source, 'GT-21')
+
+        cases = (
+            ('schema', 'provisional GT-20/21 source contract is invalid',
+             lambda source: source.update(schema=2)),
+            ('duplicate task entry', 'provisional GT-20/21 source record set is invalid',
+             lambda source: source['provisionalContract']['records'].append(
+                 json.loads(json.dumps(entry(source, 'GT-20'))))),
+            ('task digest', 'provisional GT-20 Golden Task digest mismatch',
+             lambda source: entry(source, 'GT-20').update(
+                 goldenTaskSha256='0' * 64)),
+            ('evaluation digest', 'provisional GT-21 evaluation contract digest mismatch',
+             lambda source: entry(source, 'GT-21').update(
+                 evaluationContractSha256='0' * 64)),
+            ('behavior subject', 'provisional GT-20 behavior subject binding is invalid',
+             lambda source: entry(source, 'GT-20')['behaviorSubject'].pop(
+                 'plugins/yiyuan-accord-codex/adapter.json')),
+            ('package digest', 'provisional GT-20 projection package digest mismatch',
+             lambda source: entry(source, 'GT-20')[
+                 'projectionPackageSha256'].update(codex='0' * 64)),
+            ('source binding', 'provisional GT-21 source binding is invalid',
+             lambda source: entry(source, 'GT-21')['sourceBindings'][0].update(
+                 sha256='0' * 64)),
+            ('independent poststate', 'provisional GT-21 independent post-state is invalid',
+             mutate_poststate),
+            ('malformed poststate object',
+             'provisional GT-21 independent post-state is invalid',
+             mutate_malformed_poststate),
+            ('malformed authority object',
+             'provisional GT-20 independent post-state is invalid',
+             mutate_malformed_authority),
+            ('cleanup', 'provisional GT-20 cleanup contract is invalid',
+             lambda source: entry(source, 'GT-20')['cleanup'].update(
+                 taskOwnedResidueCount=1)),
+            ('claim ceiling', 'provisional GT-21 claim ceiling is invalid', mutate_claim),
+            ('contradictory synchronized claim',
+             'provisional GT-21 claim ceiling is invalid', mutate_contradictory_claim),
+            ('malformed decision object',
+             'provisional GT-21 claim ceiling is invalid', mutate_malformed_decision),
+        )
+        with _provisional_fixture() as root:
+            original = _read(root, PROVISIONAL_GT20_21_SOURCE)
+            _write(root, PROVISIONAL_GT20_21_SOURCE, original)
+            _rehash_program_input(root, PROVISIONAL_GT20_21_SOURCE)
+            self.assertTrue(
+                _lacks(_errors(root), 'provisional GT-20', 'provisional GT-21'),
+                'the unmodified provisional contract must validate while R3 is planned',
+            )
+            for name, fragment, mutate in cases:
+                with self.subTest(name=name):
+                    source = json.loads(json.dumps(original))
+                    mutate(source)
+                    _write(root, PROVISIONAL_GT20_21_SOURCE, source)
+                    _rehash_program_input(root, PROVISIONAL_GT20_21_SOURCE)
+                    self.assert_has(_errors(root), fragment)
 
     def test_reacceptance_projects_current_stage_without_model_binding(self):
         program = _read(ROOT, P)
@@ -2858,7 +3034,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.rejected(
             A, 'historicalRelease provenance is invalid',
-            lambda v: v['historicalRelease'].update(releasedTags=[]),
+            lambda v: v['historicalRelease'].update(publicReleases=[]),
         )
         self.rejected(
             P, 'required candidate systems are invalid',
@@ -2896,6 +3072,112 @@ class ProductControlTests(unittest.TestCase):
             acceptance['publicRelease']['releaseNotesSha256'] = hashlib.sha256(notes.read_bytes()).hexdigest()
             _write(root, A, acceptance)
             self.assert_has(_errors(root), 'release notes do not expose the complete claim ceiling')
+
+    def test_public_release_history_freezes_known_prefix_and_accepts_valid_tail(self):
+        program = _read(ROOT, P)
+        acceptance = _read(ROOT, A)
+        identity = _read(ROOT, C)['identity']
+
+        def history_errors(history):
+            changed_program = json.loads(json.dumps(program))
+            changed_acceptance = json.loads(json.dumps(acceptance))
+            changed_program['historicalRelease'] = json.loads(json.dumps(history))
+            changed_acceptance['historicalRelease'] = json.loads(json.dumps(history))
+            return release_identity_errors(
+                identity, changed_program, changed_acceptance,
+            )
+
+        baseline = json.loads(json.dumps(program['historicalRelease']))
+        self.assertFalse(any(
+            'historicalRelease provenance is invalid' in error
+            for error in history_errors(baseline)
+        ))
+
+        for name, mutation in (
+            ('known-revision', lambda value: value['publicReleases'][3].update(
+                revision='0' * 40)),
+            ('known-order', lambda value: value['publicReleases'].__setitem__(
+                slice(0, 2), list(reversed(value['publicReleases'][:2])))),
+            ('duplicate-tag', lambda value: value['publicReleases'].append({
+                **value['publicReleases'][-1],
+                'revision': 'a' * 40,
+                'publishedAt': '2026-08-28T00:00:00Z',
+            })),
+            ('duplicate-revision', lambda value: value['publicReleases'].append({
+                **value['publicReleases'][-1],
+                'tag': 'v3.1.0',
+                'publishedAt': '2026-08-28T00:00:00Z',
+            })),
+            ('kind-mismatch', lambda value: value['publicReleases'][2].update(
+                releaseKind='full-release')),
+            ('preview-as-full', lambda value: (
+                value['publicReleases'].append({
+                    'tag': 'v3.1.0-preview.2',
+                    'revision': 'a' * 40,
+                    'releaseKind': 'full-release',
+                    'prerelease': False,
+                    'assetPolicy': 'no-attached-assets',
+                    'publishedAt': '2026-09-01T00:00:00Z',
+                }),
+                value.update(recommendedPublicRelease='v3.1.0-preview.2'),
+            )),
+            ('legacy-tail', lambda value: value['publicReleases'].append({
+                'tag': 'v4.0',
+                'revision': 'a' * 40,
+                'releaseKind': 'full-release',
+                'prerelease': False,
+                'assetPolicy': 'no-attached-assets',
+                'publishedAt': '2026-09-01T00:00:00Z',
+            })),
+            ('noncanonical-time', lambda value: value['publicReleases'].append({
+                'tag': 'v3.1.0-preview.2',
+                'revision': 'a' * 40,
+                'releaseKind': 'public-preview',
+                'prerelease': True,
+                'assetPolicy': 'no-attached-assets',
+                'publishedAt': '2026-9-1T0:0:0Z',
+            })),
+        ):
+            with self.subTest(invalid_history=name):
+                changed = json.loads(json.dumps(baseline))
+                mutation(changed)
+                self.assertTrue(any(
+                    'historicalRelease provenance is invalid' in error
+                    for error in history_errors(changed)
+                ))
+
+        preview_tail = json.loads(json.dumps(baseline))
+        preview_tail['publicReleases'].append({
+            'tag': 'v3.1.0-preview.1',
+            'revision': 'a' * 40,
+            'releaseKind': 'public-preview',
+            'prerelease': True,
+            'assetPolicy': 'no-attached-assets',
+            'publishedAt': '2026-09-01T00:00:00Z',
+        })
+        self.assertFalse(any(
+            'historicalRelease provenance is invalid' in error
+            for error in history_errors(preview_tail)
+        ))
+
+        full_tail = json.loads(json.dumps(preview_tail))
+        full_tail['publicReleases'].append({
+            'tag': 'v3.1.0',
+            'revision': 'b' * 40,
+            'releaseKind': 'full-release',
+            'prerelease': False,
+            'assetPolicy': 'no-attached-assets',
+            'publishedAt': '2026-09-02T00:00:00Z',
+        })
+        self.assertTrue(any(
+            'historicalRelease provenance is invalid' in error
+            for error in history_errors(full_tail)
+        ))
+        full_tail['recommendedPublicRelease'] = 'v3.1.0'
+        self.assertFalse(any(
+            'historicalRelease provenance is invalid' in error
+            for error in history_errors(full_tail)
+        ))
 
     def test_complexity_identity_and_paths_fail_closed(self):
         with _fixture() as root:
