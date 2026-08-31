@@ -52,11 +52,24 @@ Then read, in order:
   carry of `39f4f69`, not a predecessor locator. Exact `7e14f3a` completed all
   36 clean local tests in 8650.981 seconds, but its 144.183-minute seam exceeded
   the declared 120-minute hosted job ceiling before setup, canonical
-  verification or the two standalone host checks; no hosted run occurred. It
-  is the latest failed canonical predecessor origin and grants no later-gate
-  authority. The current bytes preserve every check and finite claim while
-  raising only that job ceiling to 240 minutes, but are not yet a clean accepted
-  exact SHA,
+  verification or the two standalone host checks; no hosted run occurred.
+  Exact `9bd82876e2b350787edcab09e3835426e069272c` then passed all 36 clean exact
+  local tests in 9821.638 seconds, or 163.694 minutes, plus canonical,
+  standalone host, static and four-axis review, but required GitHub Actions run
+  `33405883747` failed its Ubuntu/Python 3.14 leg at 35/36 because excessive
+  JSON nesting could be accepted by that parser without an independent
+  structure rejection. Its Windows/Python 3.10 leg separately failed at 35/36
+  when the first Node Hook subprocess reached the test helper's 15-second
+  deadlock guard; five later Hook invocations in that job and the
+  Windows/Python 3.14 leg passed. The terminal nine-leg run contains seven
+  PASS results and those two required FAIL results; both macOS legs passed.
+  `9bd82876` is the latest failed canonical predecessor
+  origin and grants no hosted or later-gate authority. The current working-tree
+  successor preserves every matrix leg, test and finite claim, adds an explicit
+  parser-independent 512-depth bound for parsed schema-v1 historical programs,
+  and changes only the CI test-process deadlock guard to 60 seconds while both
+  host manifests retain their separately asserted three-second product timeout,
+  and remains an uncommitted correction rather than a clean accepted exact SHA,
   hosted result, named-human decision, tag or public Release. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
@@ -92,7 +105,9 @@ Then read, in order:
   evidence bytes and digests, and declared host projection package, manifest,
   contract, Skill and marketplace identity. Each referenced revision blob uses
   the admitted one-megabyte JSON limit; the history index admits at most 4096
-  revisions and 67108864 aggregate Git batch bytes. Complete normalized
+  revisions and 67108864 aggregate Git batch bytes; every parsed schema-v1
+  historical program independently fails closed above visited-value depth 512,
+  even if the runtime parser accepts it. Complete normalized
   transition state plus raw marketplace identity determines affected criteria.
   Passing it does not replay the complete historical
   verifier or attest historical tests, behavior, live host facts, human
@@ -917,23 +932,56 @@ Historical superseded review disposition —
     that observed local seam already exceeded the workflow's 120-minute job
     ceiling before setup, canonical verification or the two standalone host
     checks. No hosted run occurred, so hosted status remains unknown.
-    `7e14f3a` is the latest failed canonical predecessor origin and grants no
-    complete exact-local, hosted or publication authority. The current
-    correction cites that origin, retains `dc75f89` only as the failed carry
+    `7e14f3a` is a failed canonical predecessor origin and grants no complete
+    exact-local, hosted or publication authority. The next correction cited
+    that origin, retained `dc75f89` only as the failed carry
     inside the `39f4f69` identical-node run, aligns the
     one-megabyte blob limit, compares complete normalized transition state plus
     raw marketplace identity, reuses one bounded first-parent history index,
     normalizes declared parser failures, and makes immutable installation plus
     Release wording v3.1.0-bound but conditional on external publication. It
-    also binds fixture expectations to the computed origin and recalibrates the
-    640087-byte Python/test payload with 39913 bytes, or 5.8696 percent, of
+    also bound fixture expectations to the computed origin and recalibrated the
+    then-current 640087-byte Python/test payload with 39913 bytes, or 5.8696 percent, of
     headroom. It raises only the per-job ceiling from 120 to 240 minutes; the
     nine-platform/interpreter matrix, every command, every check and every
     finite claim remain unchanged. The larger ceiling permits the known path
     to finish but does not establish hosted PASS or actual hosted cost.
-    The next gate is a clean unchanged exact revision through canonical
-    and host-local verification plus four independent exact-tree reviews;
-    candidate selection alone does not authorize publication.
+    Exact `9bd82876e2b350787edcab09e3835426e069272c` then passed all 36
+    clean exact local tests in 9821.638 seconds, or 163.694 minutes, plus
+    canonical verification, both standalone host checks, all static checks and
+    four independent exact-tree reviews. It was pushed to `origin/main` and
+    triggered required GitHub Actions run `33405883747`. The Ubuntu/Python 3.14
+    leg passed its canonical and both projection checks but failed
+    `test_plan_process_acceptance_and_release_order_stay_aligned` at 35/36 in
+    993.524 seconds: Linux CPython 3.14.7 accepted the generated 100000-level,
+    600001-byte JSON object, so the parser-dependent structure rejection did
+    not raise the expected `ValueError`. The Windows/Python 3.10 leg also ended
+    at 35/36 in 3599.059 seconds when its first Node Hook subprocess reached the
+    helper's 15-second deadlock guard. The same job's five later Hook processes,
+    including the same silent branch through `startup`, passed; the identical
+    runtime blob had passed nine intervening complete workflows and the
+    Windows/Python 3.14 leg passed. The log cannot distinguish Node startup,
+    stdin/end or runner scheduling, so it supports a repeated hosted
+    first-process/communication outlier rather than a deterministic Hook logic
+    defect. The terminal matrix contains seven PASS legs—macOS 3.10/3.14,
+    Ubuntu 3.10/3.11/3.12/3.13 and Windows 3.14—and those two FAIL legs.
+    Either required failure invalidates the candidate irrespective of
+    other matrix results. `9bd82876` is the
+    latest failed canonical predecessor origin and grants no hosted, tag,
+    Release or later-gate authority. The current uncommitted successor bounds
+    every parsed schema-v1 historical program by an explicit visited-value
+    depth upper limit of 512, preserves the one-megabyte blob, 4096-revision,
+    64-MiB aggregate and 512-predecessor bounds, and tests both real deep input
+    and parser-success rejection. The test helper's deadlock guard rises from
+    15 to 60 seconds without retry or runtime change; both host manifests retain
+    the separately asserted three-second product timeout, and a future 60-second
+    hang opens a bounded cold-start probe rather than another timeout increase.
+    The 102 tracked files now contain 641565
+    Python/test bytes with 38435 bytes, or 5.6522 percent, of headroom. The next
+    gate is a clean unchanged successor revision through canonical and
+    host-local verification plus four independent exact-tree reviews, followed
+    by a fresh full nine-leg hosted matrix; candidate selection alone does not
+    authorize publication.
 
 The release procedure is now gated on the selected v3.1.0 repository candidate.
 Clean exact-local and host checks, four independent exact-tree reviews, hosted

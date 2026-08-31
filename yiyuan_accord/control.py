@@ -81,6 +81,7 @@ _SNAPSHOT_V1_RELEASE_RE = re.compile(
     rf"(?:\+({_SNAPSHOT_V1_SEMVER_BUILD}))?$"
 )
 _SNAPSHOT_V1_MAX_LINEAGE_DEPTH = 512
+_SNAPSHOT_V1_MAX_JSON_DEPTH = 512
 _SNAPSHOT_V1_MAX_HISTORY_REVISIONS = 4096
 _SNAPSHOT_V1_HISTORY_BYTES = 67_108_864
 _SNAPSHOT_V1_BLOB_BYTES = 1_000_000
@@ -648,6 +649,19 @@ def _snapshot_v1_node_key(node):
     ).encode("utf-8")).hexdigest()
 
 
+def _snapshot_v1_json_structure_is_bounded(value):
+    pending = [(value, 1)]
+    while pending:
+        item, depth = pending.pop()
+        if depth > _SNAPSHOT_V1_MAX_JSON_DEPTH:
+            return False
+        if isinstance(item, dict):
+            pending.extend((child, depth + 1) for child in item.values())
+        elif isinstance(item, list):
+            pending.extend((child, depth + 1) for child in item)
+    return True
+
+
 def _snapshot_v1_history_index(root, anchor, cache):
     if not isinstance(cache, dict):
         raise TypeError("snapshot lineage cache is invalid")
@@ -714,6 +728,8 @@ def _snapshot_v1_history_index(root, anchor, cache):
             raise ValueError(
                 "snapshot lineage program structure is invalid"
             ) from exc
+        if not _snapshot_v1_json_structure_is_bounded(historical):
+            raise ValueError("snapshot lineage program structure is invalid")
         increment = historical.get("increment")
         node = increment.get("closeoutSnapshot") \
             if isinstance(increment, dict) else None

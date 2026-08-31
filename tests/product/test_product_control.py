@@ -8,7 +8,8 @@ from yiyuan_accord.control import (
     _validate_closeout_snapshot, _snapshot_lineage_contract_errors,
     _snapshot_documents, _snapshot_revision_contract_errors,
     _snapshot_bytes, _snapshot_v1_evidence_errors, _snapshot_v1_lineage,
-    _snapshot_v1_transition_errors,
+    _snapshot_v1_transition_errors, _snapshot_v1_json_structure_is_bounded,
+    _SNAPSHOT_V1_MAX_JSON_DEPTH,
     _semantic_version_precedence,
     host_check, verify_product,
 )
@@ -49,7 +50,8 @@ from yiyuan_accord.identity import (
 )
 ROOT = Path(__file__).resolve().parents[2]
 TC = unittest.TestCase
-HOOK_PROCESS_TIMEOUT_SECONDS = 15
+# CI deadlock guard; not the three-second product Hook timeout.
+HOOK_PROCESS_TIMEOUT_SECONDS = 60
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 GT11_SOURCE = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
@@ -3486,6 +3488,22 @@ class ProductControlTests(unittest.TestCase):
         with patch(
             'yiyuan_accord.control._bounded_git_bytes',
             side_effect=deeply_nested_history,
+        ), self.assertRaisesRegex(ValueError, 'structure'):
+            _snapshot_v1_lineage(
+                ROOT, {}, deeply_nested_revision, {},
+            )
+        parser_success = 0
+        for _ in range(_SNAPSHOT_V1_MAX_JSON_DEPTH - 1):
+            parser_success = {'a': parser_success}
+        self.at(_snapshot_v1_json_structure_is_bounded(parser_success))
+        parser_success = {'a': parser_success}
+        self.af(_snapshot_v1_json_structure_is_bounded(parser_success))
+        with patch(
+            'yiyuan_accord.control._bounded_git_bytes',
+            side_effect=deeply_nested_history,
+        ), patch(
+            'yiyuan_accord.control._strict_json_object',
+            return_value=parser_success,
         ), self.assertRaisesRegex(ValueError, 'structure'):
             _snapshot_v1_lineage(
                 ROOT, {}, deeply_nested_revision, {},
