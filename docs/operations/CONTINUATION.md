@@ -46,9 +46,12 @@ Then read, in order:
   It is not the current candidate and grants no tag or Release authority.
 - The saved `main` checkout carries the selected, unreleased v3.1.0
   repository-candidate projection formed from the `a1cccb0` behavior/evidence
-  baseline. Exact correction SHAs `0988b223`, `0da23a21` and `b202c40` failed later
-  exact-tree review and remain lineage predecessors only; the current bytes are
-  their candidate-forming correction, not yet a clean accepted exact SHA,
+  baseline. Exact correction SHAs `0988b223`, `0da23a21`, `b202c40` and
+  `39f4f69` failed later exact-tree or exact-local review and remain canonical
+  lineage predecessor origins only. Exact `dc75f89` is a failed identical-node
+  carry of `39f4f69`, not a predecessor locator. The current bytes correct its
+  fixture-origin and complexity-calibration boundaries, but are not yet a clean
+  accepted exact SHA,
   hosted result, named-human decision, tag or public Release. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
@@ -897,12 +900,22 @@ Historical superseded review disposition —
     scans. Exact `b202c40` then failed because deeply nested sub-limit history
     could escape as a structural parser exception and the prospective public
     README/Release body still directed v3.1.0 readers to v3.0.1 or described
-    publication as pending. The current correction preserves all three as
-    predecessors, aligns the
+    publication as pending. Exact `39f4f69` then failed the full clean exact
+    suite at 35 passes and one fixture failure because five test paths treated a
+    later empty carry as canonical origin; the product lineage correctly kept
+    the oldest identical node. Exact carry `dc75f89` corrected those fixture
+    baselines without weakening rejection paths, but fresh standards review
+    found that its tracked complexity statement still described the prior test
+    bytes. Its full suite was stopped after two passes and produced no complete
+    result. The current correction preserves `39f4f69` as the latest canonical
+    predecessor origin and `dc75f89` only as its failed carry, aligns the
     one-megabyte blob limit, compares complete normalized transition state plus
     raw marketplace identity, reuses one bounded first-parent history index,
     normalizes declared parser failures, and makes immutable installation plus
-    Release wording v3.1.0-bound but conditional on external publication.
+    Release wording v3.1.0-bound but conditional on external publication. It
+    also binds fixture expectations to the computed origin and recalibrates the
+    640087-byte Python/test payload with 39913 bytes, or 5.8696 percent, of
+    headroom.
     The next gate is a clean unchanged exact revision through canonical
     and host-local verification plus four independent exact-tree reviews;
     candidate selection alone does not authorize publication.
