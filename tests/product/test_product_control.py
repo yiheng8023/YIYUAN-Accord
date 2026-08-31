@@ -3255,8 +3255,11 @@ class ProductControlTests(unittest.TestCase):
         with _indexed() as root:
             program = _read(root, P)
             snapshot = program['increment']['closeoutSnapshot']
+            origin = _snapshot_v1_lineage(
+                root, snapshot, 'HEAD', {},
+            )[0]
             snapshot['predecessorSnapshotRef'] = (
-                f"{_git(root, 'rev-parse', 'HEAD', text=True).strip()}:"
+                f'{origin}:'
                 'product/program.json#/increment/closeoutSnapshot'
             )
             snapshot['acceptanceTransition']['affectedCriterionIds'].remove('R1')
@@ -3608,7 +3611,9 @@ class ProductControlTests(unittest.TestCase):
         with _indexed() as root:
             program = _read(root, P)
             gates = [x['id'] for x in program['releaseProcedure']['orderedGates']]
-            origin = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            origin = _snapshot_v1_lineage(
+                root, program['increment']['closeoutSnapshot'], 'HEAD', {},
+            )[0]
             readme = root / 'README.md'
             readme.write_text(readme.read_text(encoding='utf-8') + '\ncarry\n',
                               encoding='utf-8')
@@ -3629,7 +3634,9 @@ class ProductControlTests(unittest.TestCase):
             original = _read(root, P)
             successor = _clone(original)
             gates = [x['id'] for x in successor['releaseProcedure']['orderedGates']]
-            origin = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            origin = _snapshot_v1_lineage(
+                root, original['increment']['closeoutSnapshot'], 'HEAD', {},
+            )[0]
             advance(successor, gates, 1, origin)
             _write(root, P, successor)
             _git(root, 'add', P)
@@ -3657,7 +3664,9 @@ class ProductControlTests(unittest.TestCase):
 
         with _indexed() as root:
             program = _read(root, P)
-            base = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            base = _snapshot_v1_lineage(
+                root, program['increment']['closeoutSnapshot'], 'HEAD', {},
+            )[0]
             snapshot = program['increment']['closeoutSnapshot']
             snapshot['predecessorSnapshotRef'] = f'{base}:{snapshot_ref}'
             snapshot['acceptanceTransition'].update(
@@ -3670,7 +3679,9 @@ class ProductControlTests(unittest.TestCase):
         with _indexed() as root:
             program = _read(root, P)
             gates = [item['id'] for item in program['releaseProcedure']['orderedGates']]
-            base = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            base = _snapshot_v1_lineage(
+                root, program['increment']['closeoutSnapshot'], 'HEAD', {},
+            )[0]
             snapshot = advance(program, gates, 1, base)
             _write(root, P, program)
             _git(root, 'add', P)
