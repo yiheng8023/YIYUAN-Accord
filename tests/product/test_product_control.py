@@ -7,7 +7,8 @@ from yiyuan_accord.control import (
     _validate_evidence_item, _validate_four_surface_mapping,
     _validate_closeout_snapshot, _snapshot_lineage_contract_errors,
     _snapshot_documents, _snapshot_revision_contract_errors,
-    _snapshot_v1_evidence_errors,
+    _snapshot_bytes, _snapshot_v1_evidence_errors, _snapshot_v1_lineage,
+    _snapshot_v1_transition_errors,
     _semantic_version_precedence,
     host_check, verify_product,
 )
@@ -3388,6 +3389,97 @@ class ProductControlTests(unittest.TestCase):
                 ),
                 'historicalEvidence[0] binding is invalid',
             )
+
+        constitution, prior_program, prior_acceptance, prior_guidance, \
+            prior_golden = exact_documents
+        successor = _clone(prior_program)
+        gates = [
+            item['id'] for item in successor['releaseProcedure']['orderedGates']
+        ]
+        closed_index = gates.index(
+            successor['increment']['closeoutSnapshot']['closedGateId']
+        )
+        advance(successor, gates, closed_index + 1, predecessor)
+        successor['hostProjections'][0]['activationContext'] += ' Drift.'
+        self.has(
+            _snapshot_v1_transition_errors(
+                ROOT, None, predecessor,
+                successor, prior_acceptance, prior_guidance,
+                constitution, prior_golden,
+                prior_program, prior_acceptance, prior_guidance,
+                constitution, prior_golden,
+            ),
+            'revision-bound v1 affected criteria are invalid',
+        )
+        successor['hostProjections'][0]['activationContext'] = (
+            prior_program['hostProjections'][0]['activationContext']
+        )
+        with patch(
+            'yiyuan_accord.control._snapshot_or_worktree_bytes',
+            side_effect=lambda root, locator, revision=None: (
+                b'prior-marketplace' if revision else b'current-marketplace'
+            ),
+        ):
+            self.has(
+                _snapshot_v1_transition_errors(
+                    ROOT, None, predecessor,
+                    successor, prior_acceptance, prior_guidance,
+                    constitution, prior_golden,
+                    prior_program, prior_acceptance, prior_guidance,
+                    constitution, prior_golden,
+                ),
+                'revision-bound v1 affected criteria are invalid',
+            )
+
+        lineage_cache = {}
+        with patch(
+            'yiyuan_accord.control._bounded_git_bytes',
+            wraps=_bounded_git_bytes,
+        ) as bounded_git:
+            _, latest, _, _ = _snapshot_v1_lineage(
+                ROOT, current['increment']['closeoutSnapshot'],
+                'HEAD', lineage_cache,
+            )
+            scans = sum(
+                call.args[1][0] in {'log', 'cat-file'}
+                for call in bounded_git.call_args_list
+            )
+            self.ann(latest)
+            _snapshot_v1_lineage(
+                ROOT, latest[1], latest[0], lineage_cache,
+            )
+            self.ae(sum(
+                call.args[1][0] in {'log', 'cat-file'}
+                for call in bounded_git.call_args_list
+            ), scans)
+
+        oversized_revision = 'a' * 40
+        def oversized_history(root, args, limit=262_144, input_bytes=None):
+            if args[0] == 'log':
+                return f'{oversized_revision}\n'.encode('ascii')
+            if args[:2] == ['cat-file', '--batch']:
+                return (
+                    f'{oversized_revision} blob 1000001\n'.encode('ascii')
+                )
+            raise AssertionError(args)
+        with patch(
+            'yiyuan_accord.control._bounded_git_bytes',
+            side_effect=oversized_history,
+        ), self.assertRaisesRegex(ValueError, 'blob bound'):
+            _snapshot_v1_lineage(
+                ROOT, {}, oversized_revision, {},
+            )
+
+        with _indexed() as root:
+            locator = 'evals/evidence/large-snapshot-regression.json'
+            raw = b'{"value":"' + (b'x' * 300_000) + b'"}\n'
+            (root / locator).write_bytes(raw)
+            _git(root, 'add', locator)
+            _git(root, '-c', 'user.name=Accord Fixture',
+                 '-c', 'user.email=fixture@example.invalid',
+                 'commit', '--quiet', '-m', 'large snapshot blob')
+            revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            self.ae(_snapshot_bytes(root, locator, revision), raw)
 
         with _indexed() as root:
             program = _read(root, P)

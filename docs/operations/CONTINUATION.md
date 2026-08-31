@@ -44,10 +44,12 @@ Then read, in order:
   later accountable product consensus superseded its `ready` state from
   `product/constitution.json#/purpose,/successDefinition,/productBoundary,/evolutionPolicy`.
   It is not the current candidate and grants no tag or Release authority.
-- The saved `main` checkout now carries the selected, unreleased v3.1.0
-  repository candidate formed from the `a1cccb0` behavior/evidence baseline and
-  the current state-forming projection. It is not yet a clean exact-local
-  candidate, hosted result, named-human decision, tag or public Release. Accord
+- The saved `main` checkout carries the selected, unreleased v3.1.0
+  repository-candidate projection formed from the `a1cccb0` behavior/evidence
+  baseline. Exact correction SHAs `0988b223` and `0da23a21` failed later
+  exact-tree review and remain lineage predecessors only; the current bytes are
+  their candidate-forming correction, not yet a clean accepted exact SHA,
+  hosted result, named-human decision, tag or public Release. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
   product target is broader: complete bounded self-bootstrapping across
@@ -75,11 +77,16 @@ Then read, in order:
   carry is checked and cannot rebind snapshot authority, surfaces, evidence or
   cutoff. A successor cites the most recent different node's origin. The current
   verifier recomputes only a bounded, schema-versioned repository
-  snapshot-lineage predicate for every carry and recursively for that origin:
+  snapshot-lineage predicate for every carry and recursively for that origin,
+  using one bounded first-parent history index reused across the walk:
   strict node shape, origin-bound constitution, program and acceptance,
   referenced guidance and Golden Tasks, repository-located current and historical
   evidence bytes and digests, and declared host projection package, manifest,
-  contract, Skill and marketplace identity. Passing it does not replay the complete historical
+  contract, Skill and marketplace identity. Each referenced revision blob uses
+  the admitted one-megabyte JSON limit; the history index admits at most 4096
+  revisions and 67108864 aggregate Git batch bytes. Complete normalized
+  transition state plus raw marketplace identity determines affected criteria.
+  Passing it does not replay the complete historical
   verifier or attest historical tests, behavior, live host facts, human
   authority, publication or other external gates. Malformed intermediates,
   carry locators, stale ancestors, gaps, excessive predecessor depth and non-contiguous replay fail closed.
@@ -423,15 +430,17 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The selected-candidate guardrail permits at most 105 tracked files and
-  670000 Python-and-test bytes with at least five percent headroom and three
+  680000 Python-and-test bytes with at least five percent headroom and three
   tracked-file slots. At the selected repository-candidate state projection,
-  102 tracked files preserve all three slots and 631525 Python/test bytes leave
-  38475 bytes (5.7425%) of headroom. The final 80000-byte increase over the
+  102 tracked files preserve all three slots; the canonical verifier recomputes
+  current Python/test bytes and headroom after every code or test change. The
+  final 90000-byte increase over the
   former 590000-byte ceiling is bounded to canonical snapshot-origin discovery,
   the self-contained schema-v1 historical predicate, revision-bound authority,
   current and historical evidence, declared projection package and marketplace
-  identity, deterministic malformed-history failure closure, and their
-  anti-rebinding/anti-washing regressions; it is not general growth allowance
+  identity, deterministic malformed-history failure closure, complete
+  transition comparison, aligned blob admission, one reusable bounded history
+  index and their anti-rebinding/anti-washing regressions; it is not general growth allowance
   and does not imply a complete historical verifier. These values are navigation targets, not
   candidate evidence;
   refresh them after any code, test or file-set change and keep the machine
@@ -878,8 +887,16 @@ Historical superseded review disposition —
     authorship; no second research API, account connection, persistent service,
     unconditional network search or model/version binding is admitted. The
     corrected source-bound evidence and independent candidate-forming review
-    now select the Skill, short-lived Hook adapter, pure core and manifests.
+    select the Skill, short-lived Hook adapter, pure core and manifests.
     The direct App Server client remains evaluator-only. Goal mode is retired.
+    Exact `0988b223` subsequently failed because identical carries could rebind
+    frozen stage state and malformed predecessors could be washed into a
+    successor. Exact `0da23a21` then failed because admitted revision blobs
+    could be false-rejected, transition comparison omitted projection and
+    marketplace state, and recursive lineage discovery repeated first-parent
+    scans. The current correction preserves both as predecessors, aligns the
+    one-megabyte blob limit, compares complete normalized transition state plus
+    raw marketplace identity, and reuses one bounded first-parent history index.
     The next gate is a clean unchanged exact revision through canonical
     and host-local verification plus four independent exact-tree reviews;
     candidate selection alone does not authorize publication.

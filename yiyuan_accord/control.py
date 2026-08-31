@@ -81,6 +81,9 @@ _SNAPSHOT_V1_RELEASE_RE = re.compile(
     rf"(?:\+({_SNAPSHOT_V1_SEMVER_BUILD}))?$"
 )
 _SNAPSHOT_V1_MAX_LINEAGE_DEPTH = 512
+_SNAPSHOT_V1_MAX_HISTORY_REVISIONS = 4096
+_SNAPSHOT_V1_HISTORY_BYTES = 67_108_864
+_SNAPSHOT_V1_BLOB_BYTES = 1_000_000
 _SNAPSHOT_V1_PROJECTION_FIELDS = frozenset((
     "id packageId packageVersion packageSha256 manifest marketplace contract "
     "skill metadataFiles mechanismFiles activationContext interfaceDefaultPrompt "
@@ -624,7 +627,8 @@ def _snapshot_bytes(root, locator, revision):
             or fields[0] not in {b"100644", b"100755"} or fields[1] != b"blob":
         raise ValueError("snapshot file is not an owned regular blob")
     return _bounded_git_bytes(
-        root, ["show", "--end-of-options", f"{revision}:{locator}"]
+        root, ["show", "--end-of-options", f"{revision}:{locator}"],
+        _SNAPSHOT_V1_BLOB_BYTES,
     )
 
 
@@ -638,28 +642,59 @@ def _snapshot_json(root, locator, revision=None):
     return _strict_json_object(_snapshot_bytes(root, locator, revision))
 
 
-def _snapshot_v1_lineage(root, current, anchor="HEAD"):
+def _snapshot_v1_node_key(node):
+    return sha256(json.dumps(
+        node, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+    ).encode("utf-8")).hexdigest()
+
+
+def _snapshot_v1_history_index(root, anchor, cache):
+    if not isinstance(cache, dict):
+        raise TypeError("snapshot lineage cache is invalid")
     if anchor != "HEAD" and (
         not isinstance(anchor, str)
         or _SNAPSHOT_V1_REVISION_RE.fullmatch(anchor) is None
     ):
         raise ValueError("snapshot lineage anchor is invalid")
+    resolved = anchor
+    if anchor == "HEAD":
+        resolved = _bounded_git_bytes(
+            root, ["rev-parse", "--verify", "HEAD^{commit}"], 64,
+        ).decode("ascii").strip()
+        if _SNAPSHOT_V1_REVISION_RE.fullmatch(resolved) is None:
+            raise ValueError("snapshot lineage HEAD is invalid")
+    root_key = str(Path(root).resolve())
+    cache_key = ("snapshot-v1-history-index", root_key, resolved)
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached, resolved
     revisions = _bounded_git_bytes(
-        root, ["log", "--first-parent", "--format=%H", anchor]
+        root, [
+            "log", "--first-parent",
+            f"--max-count={_SNAPSHOT_V1_MAX_HISTORY_REVISIONS + 1}",
+            "--format=%H", resolved,
+        ]
     ).decode("ascii").splitlines()
+    if (
+        not revisions
+        or len(revisions) > _SNAPSHOT_V1_MAX_HISTORY_REVISIONS
+        or any(_SNAPSHOT_V1_REVISION_RE.fullmatch(item) is None
+               for item in revisions)
+    ):
+        raise ValueError("snapshot lineage revision bound is invalid")
     requests = b"".join(
         f"{revision}:{_SNAPSHOT_V1_AUTHORITY_REFS[1]}\n".encode("ascii")
         for revision in revisions
     )
     batch = _bounded_git_bytes(
-        root, ["cat-file", "--batch"], 67_108_864, requests,
+        root, ["cat-file", "--batch"], _SNAPSHOT_V1_HISTORY_BYTES, requests,
     )
     records, offset = [], 0
     for revision in revisions:
         end = batch.find(b"\n", offset)
-        header = batch[offset:end].split()
         if end < 0:
             raise ValueError("invalid Git batch header")
+        header = batch[offset:end].split()
         offset = end + 1
         if len(header) == 2 and header[1] == b"missing":
             records.append((revision, None))
@@ -667,6 +702,8 @@ def _snapshot_v1_lineage(root, current, anchor="HEAD"):
         if len(header) != 3 or header[1] != b"blob":
             raise ValueError("invalid Git batch header")
         size = int(header[2])
+        if size < 0 or size > _SNAPSHOT_V1_BLOB_BYTES:
+            raise ValueError("snapshot lineage blob bound is invalid")
         content = batch[offset:offset + size]
         offset += size + 1
         if len(content) != size or batch[offset - 1:offset] != b"\n":
@@ -684,16 +721,52 @@ def _snapshot_v1_lineage(root, current, anchor="HEAD"):
             groups[-1][0].append(revision)
         else:
             groups.append(([revision], node))
-    index, origin, current_run = 0, None, ()
-    if groups and groups[0][1] == current:
-        current_run = tuple(groups[0][0])
-        origin, index = current_run[-1], 1
-    replay = any(node == current for _, node in groups[index:])
+    frozen_groups, positions, occurrences = [], {}, {}
+    for group_index, (group_revisions, node) in enumerate(groups):
+        node_key = _snapshot_v1_node_key(node)
+        frozen_revisions = tuple(group_revisions)
+        frozen_groups.append((frozen_revisions, node, node_key))
+        occurrences.setdefault(node_key, []).append(group_index)
+        for position, revision in enumerate(frozen_revisions):
+            positions[revision] = (group_index, position)
+    history = {
+        "groups": tuple(frozen_groups),
+        "positions": positions,
+        "occurrences": {
+            key: tuple(value) for key, value in occurrences.items()
+        },
+    }
+    for revision in positions:
+        cache[("snapshot-v1-history-index", root_key, revision)] = history
+    cache[cache_key] = history
+    return history, resolved
+
+
+def _snapshot_v1_lineage(root, current, anchor="HEAD", cache=None):
+    cache = {} if cache is None else cache
+    history, resolved = _snapshot_v1_history_index(root, anchor, cache)
+    groups = history["groups"]
+    group_index, position = history["positions"][resolved]
+    group_revisions, group_node, _ = groups[group_index]
+    first_revisions = group_revisions[position:]
+    current_key = _snapshot_v1_node_key(current)
+    origin, current_run = None, ()
+    if group_node == current:
+        current_run = first_revisions
+        origin, predecessor_index = current_run[-1], group_index + 1
+    else:
+        predecessor_index = group_index
+    replay = any(
+        index >= predecessor_index and groups[index][1] == current
+        for index in history["occurrences"].get(current_key, ())
+    )
     predecessor = None
-    if index < len(groups) and groups[index][1] is not None:
-        revisions, node = groups[index]
-        predecessor = (revisions[-1], node, tuple(revisions))
-    elif any(node is not None for _, node in groups[index:]):
+    if predecessor_index < len(groups) and groups[predecessor_index][1] is not None:
+        revisions, node, _ = groups[predecessor_index]
+        if predecessor_index == group_index:
+            revisions = first_revisions
+        predecessor = (revisions[-1], node, revisions)
+    elif any(node is not None for _, node, _ in groups[predecessor_index:]):
         replay = True
     return origin, predecessor, replay, current_run
 
@@ -1245,6 +1318,7 @@ def _snapshot_v1_node_errors(program, acceptance):
 
 
 def _snapshot_v1_transition_errors(
+    root, current_revision, prior_revision,
     program, acceptance, guidance, constitution, golden,
     prior_program, prior_acceptance, prior_guidance, prior_constitution,
     prior_golden,
@@ -1320,14 +1394,12 @@ def _snapshot_v1_transition_errors(
         item_id for item_id in set(old) | set(new)
         if old.get(item_id) != new.get(item_id)
     }
-    old_global, new_global = dict(prior_acceptance), dict(acceptance)
-    old_global.pop("criteria", None)
-    new_global.pop("criteria", None)
-    if old_global != new_global or _snapshot_v1_stage_projection(
-        prior_program, prior_acceptance, prior_guidance,
-        prior_constitution, prior_golden,
-    ) != _snapshot_v1_stage_projection(
-        program, acceptance, guidance, constitution, golden,
+    if _snapshot_v1_transition_projection(
+        root, prior_revision, prior_program, prior_acceptance,
+        prior_guidance, prior_constitution, prior_golden,
+    ) != _snapshot_v1_transition_projection(
+        root, current_revision, program, acceptance, guidance,
+        constitution, golden,
     ):
         actual_affected.update(set(old) | set(new))
     if set(transition.get("affectedCriterionIds", [])) != actual_affected:
@@ -1358,9 +1430,7 @@ def _snapshot_v1_lineage_errors(
     if origin in lineage:
         return ["revision-bound v1 lineage contains a cycle"]
     try:
-        node_key = sha256(json.dumps(
-            node, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
-        ).encode("utf-8")).hexdigest()
+        node_key = _snapshot_v1_node_key(node)
     except _SNAPSHOT_V1_FAILURES:
         return ["revision-bound v1 lineage node is malformed"]
     key = (
@@ -1384,7 +1454,9 @@ def _snapshot_v1_lineage_errors(
         )
         if not frozen or not valid:
             errors.append("revision-bound v1 carry run is invalid")
-        canonical, latest, replay, _ = _snapshot_v1_lineage(root, node, origin)
+        canonical, latest, replay, _ = _snapshot_v1_lineage(
+            root, node, origin, cache,
+        )
         if canonical != origin or replay:
             errors.append("revision-bound v1 canonical origin is invalid")
     except _SNAPSHOT_V1_FAILURES:
@@ -1407,6 +1479,7 @@ def _snapshot_v1_lineage_errors(
             try:
                 prior_documents = _snapshot_v1_documents(root, prior_origin)
                 errors.extend(_snapshot_v1_transition_errors(
+                    root, origin, prior_origin,
                     program, acceptance, guidance, constitution, golden,
                     prior_documents[1], prior_documents[2], prior_documents[3],
                     prior_documents[0], prior_documents[4],
@@ -1437,27 +1510,41 @@ def _snapshot_lineage_contract_errors(
         return ["revision-bound snapshot lineage is malformed"]
 
 
-def _snapshot_v1_stage_projection(
-    program, acceptance, guidance, constitution, golden,
+def _snapshot_v1_transition_projection(
+    root, revision, program, acceptance, guidance, constitution, golden,
 ):
     if any(not isinstance(item, dict) for item in (
         program, acceptance, guidance, constitution, golden,
     )):
         raise TypeError("revision-bound v1 document is not an object")
     increment = program.get("increment")
-    increment = increment if isinstance(increment, dict) else {}
-    mapping = increment.get("fourSurfaceMapping")
-    mapping = mapping if isinstance(mapping, dict) else {}
-    refresh = increment.get("hostCapabilityRefresh")
-    refresh = refresh if isinstance(refresh, dict) else {}
+    if not isinstance(increment, dict):
+        raise TypeError("revision-bound v1 increment is not an object")
+    normalized_increment = dict(increment)
+    normalized_increment.pop("closeoutSnapshot", None)
+    normalized_program = dict(program)
+    normalized_program["increment"] = normalized_increment
+    normalized_acceptance = dict(acceptance)
+    normalized_acceptance.pop("criteria", None)
+    projections = program.get("hostProjections")
+    if not isinstance(projections, list):
+        raise TypeError("revision-bound v1 host projections are not a list")
+    marketplaces = {}
+    for projection in projections:
+        locator = projection.get("marketplace") \
+            if isinstance(projection, dict) else None
+        if not _nonempty_string(locator):
+            raise TypeError("revision-bound v1 marketplace locator is invalid")
+        marketplaces[locator] = sha256(_snapshot_or_worktree_bytes(
+            root, locator, revision,
+        )).hexdigest()
     return {
         "constitution": constitution,
-        "baseline": guidance.get("wholeSystemBalanceReview"),
-        "plan": mapping.get("plan"), "process": mapping.get("process"),
-        "goal": program.get("goalModePrompt"),
-        "inputEvidence": program.get("inputEvidence"), "golden": golden,
-        "unknowns": refresh.get("unknowns"),
-        "claimCeiling": acceptance.get("claimCeiling"),
+        "program": normalized_program,
+        "acceptance": normalized_acceptance,
+        "guidance": guidance,
+        "golden": golden,
+        "marketplaceDigests": marketplaces,
     }
 
 
@@ -1566,7 +1653,7 @@ def _validate_closeout_snapshot(
         errors.append("increment.closeoutSnapshot bound state is unavailable")
     try:
         origin, latest, replay, current_run = _snapshot_v1_lineage(
-            root, value, _revision or "HEAD",
+            root, value, _revision or "HEAD", _cache,
         )
     except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
         origin, latest, replay, current_run = None, None, False, ()
@@ -1708,16 +1795,20 @@ def _validate_closeout_snapshot(
             actual_affected = {
                 item_id for item_id in set(old) | set(new) if old.get(item_id) != new.get(item_id)
             }
-            old_global, new_global = dict(prior_acceptance), dict(acceptance)
-            old_global.pop("criteria", None)
-            new_global.pop("criteria", None)
-            if old_global != new_global or _snapshot_v1_stage_projection(
-                prior_program, prior_acceptance, prior_guidance,
-                prior_constitution, prior_golden,
-            ) != _snapshot_v1_stage_projection(
-                program, acceptance, current_guidance,
-                current_constitution, current_golden,
-            ):
+            try:
+                transition_changed = _snapshot_v1_transition_projection(
+                    root, revision, prior_program, prior_acceptance,
+                    prior_guidance, prior_constitution, prior_golden,
+                ) != _snapshot_v1_transition_projection(
+                    root, _revision, program, acceptance, current_guidance,
+                    current_constitution, current_golden,
+                )
+            except _SNAPSHOT_V1_FAILURES:
+                transition_changed = True
+                errors.append(
+                    "increment.closeoutSnapshot transition state is unavailable"
+                )
+            if transition_changed:
                 actual_affected.update(set(old) | set(new))
         else:
             errors.append("increment.closeoutSnapshot predecessor acceptance is invalid")

@@ -900,11 +900,16 @@ commit in that run is the one canonical origin; every later carry is checked and
 cannot rebind the frozen authority, surfaces, evidence or cutoff. A successor
 must cite the origin of the most recent different node. The current verifier
 recomputes only a bounded, schema-versioned repository snapshot-lineage
-predicate for every carry and recursively for that predecessor origin: strict
+predicate for every carry and recursively for that predecessor origin, using
+one bounded first-parent history index reused across the lineage walk: strict
 node shape, origin-bound constitution, program and acceptance, referenced
 guidance and Golden Tasks, repository-located current and historical evidence
 bytes and digests, and declared host projection package, manifest, contract,
-Skill and marketplace identity. Passing this predicate does not replay the complete historical verifier
+Skill and marketplace identity. Each referenced revision blob uses the admitted
+one-megabyte JSON limit; the index admits at most 4096 revisions and 67108864
+aggregate Git batch bytes. Complete normalized transition state plus raw
+marketplace identity determines the affected-criterion set. Passing this
+predicate does not replay the complete historical verifier
 or attest historical tests, behavior, live host facts, human authority,
 publication or other external gates. Malformed intermediates, carry SHAs, stale
 ancestors, history gaps, excessive predecessor depth and non-contiguous node replay fail closed rather than
