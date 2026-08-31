@@ -5,7 +5,11 @@ from unittest.mock import patch
 from yiyuan_accord.closure import reconcile_closure
 from yiyuan_accord.control import (
     _validate_evidence_item, _validate_four_surface_mapping,
-    _validate_closeout_snapshot, host_check, verify_product,
+    _validate_closeout_snapshot, _snapshot_lineage_contract_errors,
+    _snapshot_documents, _snapshot_revision_contract_errors,
+    _snapshot_v1_evidence_errors,
+    _semantic_version_precedence,
+    host_check, verify_product,
 )
 from yiyuan_accord.evidence import (
     FROZEN_GT20_21_REPRESENTATIVE_LANES,
@@ -37,6 +41,7 @@ from yiyuan_accord.guardrails import (
 from yiyuan_accord.identity import (
     CONTRACT_RELEASE_RE,
     RELEASE_RE,
+    _bounded_git_bytes,
     _public_release_record_valid,
     active_tree_errors,
     release_identity_errors,
@@ -148,6 +153,8 @@ def _write(root, locator, value):
     path.write_text(json.dumps(value, separators=(',', ':')) + '\n', encoding='utf-8')
 
 def _git(root, *arguments, **options):
+    if options.get('text') and 'encoding' not in options:
+        options['encoding'] = 'utf-8'
     return subprocess.check_output(
         ['git', '-C', str(root), *arguments], stderr=subprocess.DEVNULL, **options
     )
@@ -3245,6 +3252,17 @@ class ProductControlTests(unittest.TestCase):
                             )
 
         with _indexed() as root:
+            program = _read(root, P)
+            snapshot = program['increment']['closeoutSnapshot']
+            snapshot['predecessorSnapshotRef'] = (
+                f"{_git(root, 'rev-parse', 'HEAD', text=True).strip()}:"
+                'product/program.json#/increment/closeoutSnapshot'
+            )
+            snapshot['acceptanceTransition']['affectedCriterionIds'].remove('R1')
+            _write(root, P, program)
+            self.has(_errors(root), 'closeoutSnapshot affected criteria')
+
+        with _indexed() as root:
             current = _read(root, P)
             prior = _clone(current)
             prior['increment']['closeoutSnapshot']['id'] += '.different'
@@ -3253,15 +3271,282 @@ class ProductControlTests(unittest.TestCase):
             _git(root, '-c', 'user.name=Accord Fixture',
                  '-c', 'user.email=fixture@example.invalid',
                  'commit', '--quiet', '-m', 'different prior snapshot')
+            current_snapshot = current['increment']['closeoutSnapshot']
+            current_snapshot['predecessorSnapshotRef'] = None
+            current_snapshot['acceptanceTransition'].update(
+                kind='snapshot-bootstrap', affectedCriterionIds=CRITERIA)
             _write(root, P, current)
             self.has(_errors(root),
                             'bootstrap breaks predecessor lineage')
 
         snapshot_ref = 'product/program.json#/increment/closeoutSnapshot'
-        with _indexed() as root:
-            program, acceptance, golden = (
-                _read(root, locator) for locator in (P, A, G)
+
+        def snapshot_errors(root, program=None, cache=None):
+            a, g, errors = _read(root, A), _read(root, G), []
+            _validate_closeout_snapshot(
+                root, program or _read(root, P), a, set(CRITERIA),
+                _contract_sha(a, g), errors, _cache=cache)
+            return errors
+
+        def advance(program, gates, index, predecessor):
+            snapshot = program['increment']['closeoutSnapshot']
+            snapshot['acceptanceTransition'].update(
+                kind='unchanged', affectedCriterionIds=[])
+            snapshot.update(id=f'stage.v3.1.0.{gates[index]}.closed',
+                            stage=gates[index], closedGateId=gates[index],
+                            nextGateId=gates[index + 1],
+                            predecessorSnapshotRef=f'{predecessor}:{snapshot_ref}')
+            snapshot['evidenceRefs'][-1] = (
+                f'product/program.json#/releaseProcedure/orderedGates/{index}')
+            return snapshot
+
+        current = _read(ROOT, P)
+        predecessor = current['increment']['closeoutSnapshot'][
+            'predecessorSnapshotRef'
+        ].split(':', 1)[0]
+        prior = json.loads(_git(
+            ROOT, 'show', f'{predecessor}:{P}', text=True,
+        ))
+        with patch(
+            'yiyuan_accord.control._validate_constitution',
+            side_effect=AssertionError('current rule leaked into snapshot v1'),
+        ), patch(
+            'yiyuan_accord.control._validate_acceptance',
+            side_effect=AssertionError('current rule leaked into snapshot v1'),
+        ), patch(
+            'yiyuan_accord.control._validate_program',
+            side_effect=AssertionError('current rule leaked into snapshot v1'),
+        ), patch(
+            'yiyuan_accord.control.representative_contract_sha256',
+            side_effect=AssertionError('current digest leaked into snapshot v1'),
+        ), patch(
+            'yiyuan_accord.control.release_identity_errors',
+            side_effect=AssertionError('current release rule leaked into snapshot v1'),
+        ):
+            self.ae(_snapshot_lineage_contract_errors(
+                ROOT, predecessor,
+                prior['increment']['closeoutSnapshot'], (predecessor,), (), {},
+            ), [])
+        unsupported = (
+            _read(ROOT, C), _clone(current), _read(ROOT, A),
+            _read(ROOT, 'product/reshaping-guidance.json'), _read(ROOT, G),
+        )
+        unsupported[1]['increment']['closeoutSnapshot']['schema'] = (
+            'yiyuan-accord-stage-closeout-snapshot/v2'
+        )
+        self.has(
+            _snapshot_revision_contract_errors(ROOT, predecessor, unsupported),
+            'unsupported revision-bound snapshot schema',
+        )
+
+        exact_documents = _snapshot_documents(ROOT, predecessor)
+        malformed_cases = (
+            (0, ('identity',), []),
+            (1, ('releaseProcedure',), []),
+            (1, ('increment', 'closeoutSnapshot',
+                 'evaluationContractSha256'), 7),
+            (2, ('criteria',), 'not-a-list'),
+            (2, ('representativeBehaviorPolicy', 'claimCeiling'), []),
+        )
+        with patch(
+            'yiyuan_accord.control._snapshot_v1_projection_package_errors',
+            return_value=[],
+        ), patch(
+            'yiyuan_accord.control._snapshot_v1_evidence_errors',
+            return_value=[],
+        ):
+            for document_index, path, replacement in malformed_cases:
+                documents = list(_clone(exact_documents))
+                _replace(documents[document_index], path, replacement)
+                self.at(
+                    _snapshot_revision_contract_errors(
+                        ROOT, predecessor, tuple(documents),
+                    ),
+                    f'malformed v1 history must fail closed: {path}',
+                )
+            renamed = list(_clone(exact_documents))
+            renamed[1]['hostProjections'][0]['packageId'] = (
+                'yiyuan-accord-renamed'
             )
+            self.has(
+                _snapshot_revision_contract_errors(
+                    ROOT, predecessor, tuple(renamed),
+                ),
+                'projection package ids are invalid',
+            )
+        malformed_evidence = list(_clone(exact_documents))
+        malformed_evidence[2]['representativeBehaviorPolicy'][
+            'historicalEvidence'
+        ][0]['sha256'] = 7
+        with patch(
+            'yiyuan_accord.control._snapshot_bytes', return_value=b'{}',
+        ):
+            self.has(
+                _snapshot_v1_evidence_errors(
+                    ROOT, malformed_evidence[1], malformed_evidence[2],
+                    predecessor,
+                ),
+                'historicalEvidence[0] binding is invalid',
+            )
+
+        with _indexed() as root:
+            program = _read(root, P)
+            drifted = _clone(program)
+            drifted['increment']['fourSurfaceMapping']['plan']['hypothesis'] += ' Drift.'
+            self.has(snapshot_errors(root, drifted),
+                     'snapshot-bound state drifted without successor')
+            readme = root / 'README.md'
+            readme.write_text(readme.read_text(encoding='utf-8') + '\ncarry\n',
+                              encoding='utf-8')
+            self.ae(snapshot_errors(root, program), [])
+
+        with _indexed() as root:
+            original = _read(root, P)
+            drifted = _clone(original)
+            drifted['increment']['fourSurfaceMapping']['plan']['hypothesis'] += ' Drift.'
+            _write(root, P, drifted)
+            _git(root, 'add', P)
+            _git(root, '-c', 'user.name=Accord Fixture',
+                 '-c', 'user.email=fixture@example.invalid',
+                 'commit', '--quiet', '-m', 'invalid bound-state carry')
+            _write(root, P, original)
+            _git(root, 'add', P)
+            _git(root, '-c', 'user.name=Accord Fixture',
+                 '-c', 'user.email=fixture@example.invalid',
+                 'commit', '--quiet', '-m', 'restore bound state')
+            self.has(snapshot_errors(root),
+                     'snapshot-bound state drifted without successor')
+
+        with _indexed() as root:
+            cache = {}
+
+            def invalid_carry(
+                locator, content, label, expected,
+                lineage_expected='revision-bound repository contract is invalid',
+            ):
+                path, original = root / locator, (root / locator).read_bytes()
+                path.write_bytes(content)
+                _git(root, 'add', locator)
+                _git(root, '-c', 'user.name=Accord Fixture',
+                     '-c', 'user.email=fixture@example.invalid',
+                     'commit', '--quiet', '-m', label)
+                revision = _git(
+                    root, 'rev-parse', 'HEAD', text=True,
+                ).strip()
+                revision_errors = _snapshot_revision_contract_errors(
+                    root, revision,
+                )
+                if expected is None:
+                    self.ae(revision_errors, [])
+                else:
+                    self.has(revision_errors, expected)
+                cache[('revision-bound-snapshot-contract', revision)] = (
+                    not revision_errors
+                )
+                path.write_bytes(original)
+                _git(root, 'add', locator)
+                _git(root, '-c', 'user.name=Accord Fixture',
+                     '-c', 'user.email=fixture@example.invalid',
+                     'commit', '--quiet', '-m', f'restore {label}')
+                self.has(
+                    snapshot_errors(root, cache=cache),
+                    lineage_expected,
+                )
+
+            marketplace = '.agents/plugins/marketplace.json'
+            changed_marketplace = _read(root, marketplace)
+            changed_marketplace['plugins'][0]['category'] = 'Productivity'
+            invalid_carry(
+                marketplace,
+                (json.dumps(changed_marketplace, separators=(',', ':')) + '\n').encode(),
+                'drift valid Codex marketplace surface', None,
+                'snapshot-bound state drifted without successor',
+            )
+            constitution = _read(root, C)
+            constitution['identity']['displayName'] = ''
+            invalid_carry(
+                C, (json.dumps(constitution, separators=(',', ':')) + '\n').encode(),
+                'constitution-invalid-then-restored',
+                'revision-bound v1 identity is invalid',
+            )
+            acceptance = _read(root, A)
+            acceptance['schema'] = 2
+            invalid_carry(
+                A, (json.dumps(acceptance, separators=(',', ':')) + '\n').encode(),
+                'acceptance-invalid-then-restored',
+                'revision-bound v1 authority schema is invalid',
+            )
+            invalid_carry(
+                'evals/observations/'
+                '2026-08-30-cf1d8c9-gt-07-codex-local.json',
+                b'{"corrupted":true}\n', 'corrupt referenced snapshot evidence',
+                'digest mismatch',
+            )
+            invalid_carry(
+                'evals/observations/2026-08-24-v20-claude-gt01.json',
+                b'{"corrupted":true}\n',
+                'corrupt historical-only snapshot evidence',
+                'digest mismatch',
+            )
+            package = 'plugins/yiyuan-accord-codex/adapter.json'
+            invalid_carry(
+                package, (root / package).read_bytes() + b'\n',
+                'drift declared projection package',
+                'revision package digest mismatch',
+            )
+
+        with _indexed() as root:
+            program = _read(root, P)
+            gates = [x['id'] for x in program['releaseProcedure']['orderedGates']]
+            origin = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            readme = root / 'README.md'
+            readme.write_text(readme.read_text(encoding='utf-8') + '\ncarry\n',
+                              encoding='utf-8')
+            _git(root, 'add', 'README.md')
+            _git(root, '-c', 'user.name=Accord Fixture',
+                 '-c', 'user.email=fixture@example.invalid',
+                 'commit', '--quiet', '-m', 'carry unchanged snapshot')
+            carry = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            advance(program, gates, 1, carry)
+            self.has(snapshot_errors(root, program),
+                     'predecessor is not latest accepted snapshot')
+            program['increment']['closeoutSnapshot']['predecessorSnapshotRef'] = (
+                f'{origin}:{snapshot_ref}'
+            )
+            self.ae(snapshot_errors(root, program), [])
+
+        with _indexed() as root:
+            original = _read(root, P)
+            successor = _clone(original)
+            gates = [x['id'] for x in successor['releaseProcedure']['orderedGates']]
+            origin = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            advance(successor, gates, 1, origin)
+            _write(root, P, successor)
+            _git(root, 'add', P)
+            _git(root, '-c', 'user.name=Accord Fixture',
+                 '-c', 'user.email=fixture@example.invalid',
+                 'commit', '--quiet', '-m', 'new snapshot before replay')
+            self.has(snapshot_errors(root, original),
+                     'lineage replays a non-current node')
+
+        with _indexed() as root:
+            program = _read(root, P)
+            invalid = _clone(program)
+            invalid['increment']['closeoutSnapshot']['authorityRefs'] = ['invalid']
+            _write(root, P, invalid)
+            _git(root, 'add', P)
+            _git(root, '-c', 'user.name=Accord Fixture',
+                 '-c', 'user.email=fixture@example.invalid',
+                 'commit', '--quiet', '-m', 'invalid snapshot node')
+            revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            gates = [x['id'] for x in program['releaseProcedure']['orderedGates']]
+            advance(program, gates, 1, revision)
+            _write(root, P, program)
+            self.has(snapshot_errors(root, program),
+                     'predecessor is not a valid revision-bound snapshot node')
+
+        with _indexed() as root:
+            program = _read(root, P)
             base = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             snapshot = program['increment']['closeoutSnapshot']
             snapshot['predecessorSnapshotRef'] = f'{base}:{snapshot_ref}'
@@ -3269,52 +3554,25 @@ class ProductControlTests(unittest.TestCase):
                 kind='unchanged', affectedCriterionIds=[])
             program['distributionVersion'] = 'v3.2.0'
             snapshot['id'] = 'stage.v3.2.0.repository-candidate.closed'
-            errors = []
-            _validate_closeout_snapshot(
-                root, program, acceptance, set(CRITERIA),
-                _contract_sha(acceptance, golden), errors,
-            )
+            errors = snapshot_errors(root, program)
             self.has(errors, 'predecessor cannot be resolved')
 
         with _indexed() as root:
-            program, acceptance, golden = (
-                _read(root, locator) for locator in (P, A, G)
-            )
+            program = _read(root, P)
             gates = [item['id'] for item in program['releaseProcedure']['orderedGates']]
             base = _git(root, 'rev-parse', 'HEAD', text=True).strip()
-            snapshot = program['increment']['closeoutSnapshot']
-            snapshot['acceptanceTransition'].update(
-                kind='unchanged', affectedCriterionIds=[])
-            snapshot.update({
-                'id': f'stage.v3.1.0.{gates[1]}.closed',
-                'stage': gates[1], 'closedGateId': gates[1],
-                'nextGateId': gates[2],
-                'predecessorSnapshotRef': f'{base}:{snapshot_ref}',
-            })
-            snapshot['evidenceRefs'][-1] = 'product/program.json#/releaseProcedure/orderedGates/1'
+            snapshot = advance(program, gates, 1, base)
             _write(root, P, program)
             _git(root, 'add', P)
             _git(root, '-c', 'user.name=Accord Fixture',
                  '-c', 'user.email=fixture@example.invalid',
                  'commit', '--quiet', '-m', 'newer accepted snapshot')
             latest = _git(root, 'rev-parse', 'HEAD', text=True).strip()
-            snapshot.update({
-                'id': f'stage.v3.1.0.{gates[2]}.closed',
-                'stage': gates[2], 'closedGateId': gates[2],
-                'nextGateId': gates[3],
-            })
-            snapshot['evidenceRefs'][-1] = 'product/program.json#/releaseProcedure/orderedGates/2'
-            digest = _contract_sha(acceptance, golden)
-            errors = []
-            _validate_closeout_snapshot(
-                root, program, acceptance, set(CRITERIA), digest, errors,
-            )
+            advance(program, gates, 2, snapshot['predecessorSnapshotRef'].split(':')[0])
+            errors = snapshot_errors(root, program)
             self.has(errors, 'predecessor is not latest accepted snapshot')
             snapshot['predecessorSnapshotRef'] = f'{latest}:{snapshot_ref}'
-            errors = []
-            _validate_closeout_snapshot(
-                root, program, acceptance, set(CRITERIA), digest, errors,
-            )
+            errors = snapshot_errors(root, program)
             self.ae(errors, [])
 
         with _fixture() as root:
@@ -3416,6 +3674,16 @@ class ProductControlTests(unittest.TestCase):
         for invalid in ('v2.0', 'v2.0.01', 'v2.0.1-01', '2.0.1', 'v2.0.1-'):
             with self.subTest(invalid_distribution=invalid):
                 self.an(RELEASE_RE.fullmatch(invalid))
+        huge_numeric = '9' * 5_000
+        for value, lower, upper in (
+            (f'v{huge_numeric}.0.0', 'v9.0.0', None),
+            (f'v1.0.0-{huge_numeric}', 'v1.0.0-9', 'v1.0.0'),
+        ):
+            with self.subTest(semver=value[:12]):
+                precedence, low = map(_semantic_version_precedence, (value, lower))
+                high = _semantic_version_precedence(upper) if upper else None
+                self.ann(precedence)
+                self.at(precedence > low and (high is None or precedence < high))
 
         self.rejected(
             P, 'distributionVersion must be a v-prefixed semantic version',
@@ -3835,6 +4103,20 @@ class ProductControlTests(unittest.TestCase):
                 )
 
     def test_git_metadata_capture_is_bounded(self):
+        original_popen = subprocess.Popen
+        observed_stdin = []
+
+        def launch(*arguments, **options):
+            observed_stdin.append(options.get('stdin'))
+            return original_popen(*arguments, **options)
+
+        with patch('yiyuan_accord.identity.subprocess.Popen', side_effect=launch):
+            captured = _bounded_git_bytes(
+                ROOT, ['cat-file', '--batch'], 65_536, b'HEAD:AGENTS.md\n',
+            )
+        self.af(observed_stdin[0] == subprocess.PIPE)
+        self.ai(b'YIYUAN Accord thin collaboration kernel', captured)
+
         with _indexed() as root:
             blob = _git(root, 'hash-object', '-w', '--stdin', input=b'').strip()
             records = b''.join(

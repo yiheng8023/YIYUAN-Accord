@@ -948,7 +948,7 @@ def closeout_sequence_errors(
 
 def release_procedure_errors(
     root, program, identity, criterion_ids, prompt, goal_digest,
-    required_task_ids,
+    required_task_ids, read_text=None,
 ):
     procedure = program.get("releaseProcedure") if isinstance(program, dict) else None
     if not _exact(procedure, PROCEDURE_FIELDS):
@@ -982,8 +982,11 @@ def release_procedure_errors(
         return ["program.releaseProcedure.surfaceMarkers is invalid"]
     for locator, markers in surfaces.items():
         try:
-            raw = _owned_text(repository_relative_path(root, locator))
-        except (AttributeError, OSError, UnicodeError):
+            raw = read_text(locator) if read_text is not None else _owned_text(
+                repository_relative_path(root, locator)
+            )
+        except (AttributeError, OSError, subprocess.SubprocessError,
+                UnicodeError, ValueError):
             raw = ""
         text = " ".join(raw.split())
         if (not _string_list(markers) or any(
@@ -1071,7 +1074,7 @@ def repository_release_authorization_errors(authorization):
     return []
 
 
-def external_release_contract_errors(root, acceptance):
+def external_release_contract_errors(root, acceptance, read_bytes=None):
     errors = []
     candidate = acceptance.get("candidateVerification")
     systems = candidate.get("systems") if isinstance(candidate, dict) else None
@@ -1173,13 +1176,15 @@ def external_release_contract_errors(root, acceptance):
             errors.append("acceptance.claimCeiling public claim summaries overlap")
     else:
         errors.append("acceptance.claimCeiling is invalid")
-    notes = repository_relative_path(
-        root, public.get("releaseNotes") if isinstance(public, dict) else None
-    )
     try:
-        if notes is None or notes.is_symlink() or not notes.is_file():
-            raise OSError("release notes are not an owned regular file")
-        raw = _owned_bytes(notes)
+        locator = public.get("releaseNotes") if isinstance(public, dict) else None
+        if read_bytes is None:
+            notes = repository_relative_path(root, locator)
+            if notes is None or notes.is_symlink() or not notes.is_file():
+                raise OSError("release notes are not an owned regular file")
+            raw = _owned_bytes(notes)
+        else:
+            raw = read_bytes(locator)
         text = raw.decode("utf-8")
         if sha256(raw).hexdigest() != public.get("releaseNotesSha256"):
             errors.append("release notes digest does not match public release contract")
@@ -1199,6 +1204,6 @@ def external_release_contract_errors(root, acceptance):
             errors.append("release notes do not expose the complete claim ceiling")
         if any(summary not in excluded_text for summary in public_retained):
             errors.append("release notes do not expose retained behavior exclusions")
-    except (OSError, UnicodeError) as exc:
+    except (OSError, subprocess.SubprocessError, UnicodeError, ValueError) as exc:
         errors.append(f"release notes are invalid: {exc}")
     return errors

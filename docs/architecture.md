@@ -895,6 +895,20 @@ cites that exact predecessor while Git preserves older nodes. This avoids
 self-reference without postponing the snapshot or letting it self-attest a
 later release gate. Only the terminal ordered release gate has a null next gate;
 a later version begins a new ordered cycle while citing that terminal snapshot.
+For a contiguous first-parent run that carries the same parsed node object, the oldest
+commit in that run is the one canonical origin; every later carry is checked and
+cannot rebind the frozen authority, surfaces, evidence or cutoff. A successor
+must cite the origin of the most recent different node. The current verifier
+recomputes only a bounded, schema-versioned repository snapshot-lineage
+predicate for every carry and recursively for that predecessor origin: strict
+node shape, origin-bound constitution, program and acceptance, referenced
+guidance and Golden Tasks, repository-located current and historical evidence
+bytes and digests, and declared host projection package, manifest, contract,
+Skill and marketplace identity. Passing this predicate does not replay the complete historical verifier
+or attest historical tests, behavior, live host facts, human authority,
+publication or other external gates. Malformed intermediates, carry SHAs, stale
+ancestors, history gaps, excessive predecessor depth and non-contiguous node replay fail closed rather than
+being skipped.
 
 Project evolution is split into the current executable stage and a future
 evolution horizon. The latter is a sparse, on-demand derived view recomputed

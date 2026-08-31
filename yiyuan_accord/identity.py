@@ -199,16 +199,16 @@ def _bounded_git_bytes(root, arguments, limit=_GIT_CAPTURE_LIMIT, input_bytes=No
         not isinstance(input_bytes, bytes) or len(input_bytes) > limit
     ):
         raise subprocess.SubprocessError("bounded Git input failed")
-    with tempfile.TemporaryFile() as output:
+    with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as input_file:
+        if input_bytes is not None:
+            input_file.write(input_bytes)
+            input_file.seek(0)
         process = subprocess.Popen(
             ["git", "-C", str(root), *arguments], stdout=output,
             stderr=subprocess.DEVNULL,
-            stdin=subprocess.PIPE if input_bytes is not None else subprocess.DEVNULL,
+            stdin=input_file if input_bytes is not None else subprocess.DEVNULL,
         )
         try:
-            if input_bytes is not None:
-                process.stdin.write(input_bytes)
-                process.stdin.close()
             deadline = time.monotonic() + 10
             while process.poll() is None:
                 if (os.fstat(output.fileno()).st_size > limit
@@ -730,6 +730,7 @@ def module_layout_errors(root, module, executing, test_markers, minimum_test_cou
 
 def authority_contract_errors(
     root, authority, python_module, semantic_files, required_surfaces,
+    surface_exists=None,
 ):
     fields = {
         "semantic",
@@ -752,14 +753,23 @@ def authority_contract_errors(
     required = {item for item in required_surfaces if _nonempty_string(item)}
     if not required.issubset(set(surfaces)):
         errors.append("constitution.authority omits a required derived surface")
-    try:
-        resolved_root = root.resolve(strict=True)
-    except OSError:
-        return errors + ["constitution.authority repository root is unavailable"]
+    if surface_exists is None:
+        try:
+            resolved_root = root.resolve(strict=True)
+        except OSError:
+            return errors + ["constitution.authority repository root is unavailable"]
     for locator in surfaces:
         relative = Path(locator)
         if "\\" in locator or relative.is_absolute() or ".." in relative.parts:
             errors.append(f"constitution.authority derived surface is invalid: {locator}")
+            continue
+        if surface_exists is not None:
+            try:
+                exists = surface_exists(locator)
+            except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+                exists = False
+            if not exists:
+                errors.append(f"constitution.authority derived surface is missing: {locator}")
             continue
         candidate = resolved_root / relative
         try:

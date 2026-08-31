@@ -70,7 +70,20 @@ Then read, in order:
   commit, its exact reference is `<containing-sha>:<self-locator>`; a successor
   cites that predecessor and Git preserves older nodes. Only the terminal
   ordered release gate has a null next gate; a later version starts a new
-  ordered cycle from that terminal predecessor. The separate future
+  ordered cycle from that terminal predecessor. Identical first-parent carries
+  retain the oldest commit in their contiguous run as the canonical origin; every
+  carry is checked and cannot rebind snapshot authority, surfaces, evidence or
+  cutoff. A successor cites the most recent different node's origin. The current
+  verifier recomputes only a bounded, schema-versioned repository
+  snapshot-lineage predicate for every carry and recursively for that origin:
+  strict node shape, origin-bound constitution, program and acceptance,
+  referenced guidance and Golden Tasks, repository-located current and historical
+  evidence bytes and digests, and declared host projection package, manifest,
+  contract, Skill and marketplace identity. Passing it does not replay the complete historical
+  verifier or attest historical tests, behavior, live host facts, human
+  authority, publication or other external gates. Malformed intermediates,
+  carry locators, stale ancestors, gaps, excessive predecessor depth and non-contiguous replay fail closed.
+  The separate future
   evolution horizon is recomputed from the whole-project panorama, the latest
   accepted snapshot and fresh environment facts; maintenance, iteration,
   updates, bounded refactoring, host adaptation, retirement or replacement and
@@ -410,10 +423,16 @@ Then read, in order:
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
 - The selected-candidate guardrail permits at most 105 tracked files and
-  590000 Python-and-test bytes with at least five percent headroom and three
+  670000 Python-and-test bytes with at least five percent headroom and three
   tracked-file slots. At the selected repository-candidate state projection,
-  102 tracked files preserve all three slots and 560482 Python/test bytes leave
-  29518 bytes (5.0031%) of headroom. These values are navigation targets, not
+  102 tracked files preserve all three slots and 631525 Python/test bytes leave
+  38475 bytes (5.7425%) of headroom. The final 80000-byte increase over the
+  former 590000-byte ceiling is bounded to canonical snapshot-origin discovery,
+  the self-contained schema-v1 historical predicate, revision-bound authority,
+  current and historical evidence, declared projection package and marketplace
+  identity, deterministic malformed-history failure closure, and their
+  anti-rebinding/anti-washing regressions; it is not general growth allowance
+  and does not imply a complete historical verifier. These values are navigation targets, not
   candidate evidence;
   refresh them after any code, test or file-set change and keep the machine
   guardrail authoritative. GT-21 and GT-20

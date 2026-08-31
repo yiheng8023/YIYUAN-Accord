@@ -1769,7 +1769,7 @@ _EXPECTED_EVALUATION_CONTRACT_HISTORY_SHA256 = (
     "0c680620a4789bc72d93df6b10d61ee017475699fc911a690d5a84b7b58e70dd"
 )
 _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256 = (
-    "d459d9c43349173b8db5fdf61f2a1cf04b3831bb1e3a496c5842fdda9dd0144e"
+    "7d81b215aba054800ff751bf3cfe776fee9a3215cbdeaeb665c0149309a15baf"
 )
 
 
@@ -1880,9 +1880,9 @@ def _evaluation_contracts(policy, task_id, current):
     return contracts
 
 
-def evaluation_contract_history_valid(policy):
+def evaluation_contract_history_valid(policy, current=None):
     return _evaluation_contracts(
-        policy, "", _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256,
+        policy, "", current or _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256,
     ) is not None
 
 
