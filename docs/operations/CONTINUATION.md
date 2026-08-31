@@ -64,13 +64,13 @@ Then read, in order:
   Windows/Python 3.14 leg passed. The terminal nine-leg run contains seven
   PASS results and those two required FAIL results; both macOS legs passed.
   `9bd82876` is the latest failed canonical predecessor
-  origin and grants no hosted or later-gate authority. The current working-tree
-  successor preserves every matrix leg, test and finite claim, adds an explicit
+  origin and grants no hosted or later-gate authority. The current committed
+  exact successor preserves every matrix leg, test and finite claim, adds an explicit
   parser-independent 512-depth bound for parsed schema-v1 historical programs,
   and changes only the CI test-process deadlock guard to 60 seconds while both
   host manifests retain their separately asserted three-second product timeout,
-  and remains an uncommitted correction rather than a clean accepted exact SHA,
-  hosted result, named-human decision, tag or public Release. Accord
+  but remains unaccepted pending clean exact-local verification, a hosted
+  result, a named-human decision, a tag and a public Release. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
   product target is broader: complete bounded self-bootstrapping across
@@ -968,7 +968,7 @@ Historical superseded review disposition —
     Either required failure invalidates the candidate irrespective of
     other matrix results. `9bd82876` is the
     latest failed canonical predecessor origin and grants no hosted, tag,
-    Release or later-gate authority. The current uncommitted successor bounds
+    Release or later-gate authority. The current committed exact successor bounds
     every parsed schema-v1 historical program by an explicit visited-value
     depth upper limit of 512, preserves the one-megabyte blob, 4096-revision,
     64-MiB aggregate and 512-predecessor bounds, and tests both real deep input
