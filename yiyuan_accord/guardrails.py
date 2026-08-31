@@ -36,7 +36,7 @@ RELEASE_SURFACES = (
     "SPONSORING.md SPONSORING.zh-CN.md"
 ).split()
 _COMMENT_NORMALIZED_WORKFLOW_SHA256 = (
-    "f28ae673bc5a354c99d62055c926e3b5b9a060f06fcdd642af1a79781f5f130a"
+    "e022fee43be04f7ce1a8902e7b0929b336a986e3afa1d17b432d05c8f44ca1fc"
 )
 GATE_FIELDS = "id dependsOn acceptanceIds requiredTaskIds completionOperand condition".split()
 GATE_SEQUENCE = (

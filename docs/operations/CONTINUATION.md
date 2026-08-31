@@ -49,9 +49,14 @@ Then read, in order:
   baseline. Exact correction SHAs `0988b223`, `0da23a21`, `b202c40` and
   `39f4f69` failed later exact-tree or exact-local review and remain canonical
   lineage predecessor origins only. Exact `dc75f89` is a failed identical-node
-  carry of `39f4f69`, not a predecessor locator. The current bytes correct its
-  fixture-origin and complexity-calibration boundaries, but are not yet a clean
-  accepted exact SHA,
+  carry of `39f4f69`, not a predecessor locator. Exact `7e14f3a` completed all
+  36 clean local tests in 8650.981 seconds, but its 144.183-minute seam exceeded
+  the declared 120-minute hosted job ceiling before setup, canonical
+  verification or the two standalone host checks; no hosted run occurred. It
+  is the latest failed canonical predecessor origin and grants no later-gate
+  authority. The current bytes preserve every check and finite claim while
+  raising only that job ceiling to 240 minutes, but are not yet a clean accepted
+  exact SHA,
   hosted result, named-human decision, tag or public Release. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
@@ -907,15 +912,25 @@ Historical superseded review disposition —
     baselines without weakening rejection paths, but fresh standards review
     found that its tracked complexity statement still described the prior test
     bytes. Its full suite was stopped after two passes and produced no complete
-    result. The current correction preserves `39f4f69` as the latest canonical
-    predecessor origin and `dc75f89` only as its failed carry, aligns the
+    result. Exact `7e14f3a` then passed all 36 clean exact product tests in
+    8650.981 seconds, or 144.183 minutes, but failed hosted-readiness review:
+    that observed local seam already exceeded the workflow's 120-minute job
+    ceiling before setup, canonical verification or the two standalone host
+    checks. No hosted run occurred, so hosted status remains unknown.
+    `7e14f3a` is the latest failed canonical predecessor origin and grants no
+    complete exact-local, hosted or publication authority. The current
+    correction cites that origin, retains `dc75f89` only as the failed carry
+    inside the `39f4f69` identical-node run, aligns the
     one-megabyte blob limit, compares complete normalized transition state plus
     raw marketplace identity, reuses one bounded first-parent history index,
     normalizes declared parser failures, and makes immutable installation plus
     Release wording v3.1.0-bound but conditional on external publication. It
     also binds fixture expectations to the computed origin and recalibrates the
     640087-byte Python/test payload with 39913 bytes, or 5.8696 percent, of
-    headroom.
+    headroom. It raises only the per-job ceiling from 120 to 240 minutes; the
+    nine-platform/interpreter matrix, every command, every check and every
+    finite claim remain unchanged. The larger ceiling permits the known path
+    to finish but does not establish hosted PASS or actual hosted cost.
     The next gate is a clean unchanged exact revision through canonical
     and host-local verification plus four independent exact-tree reviews;
     candidate selection alone does not authorize publication.
