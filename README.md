@@ -16,26 +16,27 @@ The broader mission is advancing human-AI collaboration. The current product sur
 
 [简体中文](README.zh-CN.md)
 
-> **Current release:** use the immutable, non-prerelease
-> [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1)
-> full release.
+> **Release line:** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0).
+> Install it only from the matching immutable, non-prerelease GitHub Release
+> after that link resolves; repository text cannot self-attest publication.
 > Never install from a moving `main` checkout.
 
 ---
 
 ## Release maturity and evidence
 
-v3.0.1 is a full project release rather than another prerelease. “Full release”
-means the exact repository, packages, finite claims and declared local/hosted
-gates passed; it does not mean universal behavior, production safety or every
-Agent and client surface is proven. The test corpus remains deliberately finite,
-so representative use, counterexamples and failures belong to continuing
-evidence.
+v3.1.0 is prepared as a full project release rather than a prerelease. The
+matching immutable GitHub Release, not this tracked text, establishes whether
+publication occurred. “Full release” means the exact repository, packages,
+finite claims and declared local/hosted gates passed; it does not mean universal
+behavior, production safety or every Agent and client surface is proven. The
+test corpus remains deliberately finite, so representative use,
+counterexamples and failures belong to continuing evidence.
 
-The moving `main` branch now carries the internally completed, `ready` v3.1.0
-repository candidate; its goal projection is retired and it is not an install
-source or public release. Exact clean-SHA local review and every later external
-gate remain pending. Bounded P0-P4 logic feasibility, semantic, isolation,
+The tracked v3.1.0 tree retains its candidate-time program: the goal projection
+is retired, while hosted verification, named-human authority, tag, Release and
+cleanup remain external facts that repository bytes cannot self-attest. Bounded
+P0-P4 logic feasibility, semantic, isolation,
 evaluation-design and product-form work is complete. P4 admits only a deterministic, side-effect-free
 plain-data reference core, now implemented behind one policy-driven
 `reconcile_closure` interface. It rejects observer/subject self-identity and
@@ -116,10 +117,12 @@ review cycle at pre-remediation cut
 implementation and standards and produced remediation findings; it did not
 form a candidate or transfer review completion to changed bytes. The later
 candidate-forming review has now completed against the corrected source-bound
-evidence and selected v3.1.0 as the repository candidate. It is not yet an
-exact local candidate, hosted result, named-human release decision, tag or
-public Release. The next gate is one clean unchanged exact revision through
-local verification and four independent exact-tree reviews. After the client
+evidence and selected v3.1.0 as the repository candidate. At that candidate-time
+cut it was not yet an exact local candidate, hosted result, named-human release
+decision, tag or public Release; repository bytes retain that boundary without
+deciding the later external facts. Its candidate-time next gate was one clean
+unchanged exact revision through local verification and four independent
+exact-tree reviews. After the client
 update, current Codex, Claude and ChatGPT entry compatibility still requires
 read-only re-sensing before any claim. Production trust, live Claude behavior,
 cross-host behavior and comparative field value remain unknown. At exact `cb11759`,
@@ -141,12 +144,13 @@ App Server product form, semantic Agent use or product effect.
 Sparse host-native and Accord responsibility views plus the state-authority
 view may expose overlap and its current source, but current admission,
 consequence and lifecycle evidence must still prove actual redundancy. Durable
-continuity, cross-host or population value and release remain gated. Exact revision
+continuity, cross-host and population value remain gated; publication is a
+separate external fact. Exact revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a historically
 verified, unreleased v3.1.0 baseline; a later product consensus superseded its
-`ready` status without erasing its bounded evidence. The current v3.1.0
-repository candidate is still neither an installation source nor a published
-upgrade.
+`ready` status without erasing its bounded evidence. The v3.1.0 tree was neither
+an installation source nor a published upgrade at that candidate-time cut;
+current installability is determined by the matching immutable GitHub Release.
 
 Responsibility implementation and state coordination are orthogonal. The
 derived index uses sparse H (host capability), A (Accord allocation) and S
@@ -238,24 +242,26 @@ Never include credentials or private session content.
 
 ### Before installation
 
-The commands and GUI labels below are last-verified **v3.0.1 historical
-routes**, not current client-entry claims. After the subsequent client update,
-all Codex, Claude and ChatGPT GUI entry points are unknown. Before attempting a
-GUI installation or lifecycle action, first re-sense the current client entry
-surface read-only and record the observed host, version and route. No separate
-ChatGPT GUI installation route was verified for v3.0.1.
+The GUI labels below remain last-verified **v3.0.1 historical routes**, not
+current client-entry claims. The immutable source commands intentionally target
+the v3.1.0 tag and are usable only after its matching public Release exists.
+After the subsequent client update, all Codex, Claude and ChatGPT GUI entry
+points are unknown. Before attempting a GUI installation or lifecycle action,
+first re-sense the current client entry surface read-only and record the
+observed host, version and route. No separate ChatGPT GUI installation route
+was verified for v3.0.1.
 
 At the v3.0.1 verification cut, the Codex and Claude routes required plugin
 support, network access to the public repository, permission to change
 user-level plugin configuration, and a new task or session after installation.
 Accord does not require one fixed host or model version.
 
-### Codex — last-verified v3.0.1 route
+### Codex — v3.1.0 immutable source; GUI last verified at v3.0.1
 
-The recorded CLI route installed the exact immutable tag:
+For this release, install the exact immutable tag:
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.0.1
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.1.0
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
@@ -264,7 +270,7 @@ or start a new CLI session, open **Plugins** or run `/plugins`, then confirm
 `YIYUAN Accord for Codex` and `deliver-demand-driven-outcome` were present.
 Do not assume those GUI labels or locations remain current after the update.
 
-### Claude clients and Claude Code — last-verified v3.0.1 routes
+### Claude clients and Claude Code — v3.1.0 source; GUI last verified at v3.0.1
 
 At that verification cut, the recorded Claude Desktop Chat, Claude web chat and
 Cowork GUI route was to open
@@ -277,7 +283,7 @@ entry claim.
 For a persistent Claude Code installation:
 
 ```powershell
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.0.1
+claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.1.0
 claude plugin install yiyuan-accord-claude@yiyuan-accord
 ```
 
@@ -289,14 +295,14 @@ Use `/reload-plugins` after checkout changes.
 
 ### What installation changes
 
-The public v3.0.1 packages make one progressively disclosed adaptive Skill
-available and add no Runtime, Hook, MCP server, App, state store, background
-process or automatic project mutation. Exact historical baseline `ae729465`
-contained an earlier stateless `SessionStart` context Hook; the selected
-v3.1.0 repository candidate replaces its echo command with a shared short-lived Node
-event adapter and narrows its matcher. Both versions read no transcript, write
-no state and start no background process, but current executable, matcher or
-context bytes are not attributed back to the historical revision.
+The v3.1.0 packages make one progressively disclosed adaptive Skill and a
+short-lived stateless `SessionStart` Hook/pure-core adapter available. They add
+no persistent Runtime, MCP server, App, state store, background process or
+automatic project mutation. Exact historical baseline `ae729465` contained an
+earlier context Hook; v3.1.0 replaces its echo command with the shared adapter
+and narrows its matcher. Neither version reads a transcript, writes state or
+starts a background process, and current executable, matcher or context bytes
+are not attributed back to the historical revision.
 These are versioned package facts, not the product identity or permanent
 mechanism prohibitions. On `compact` or `resume`, the current adapter emits only
 non-authoritative event hints plus a requirement to re-sense permitted current

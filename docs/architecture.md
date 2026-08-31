@@ -914,6 +914,8 @@ or attest historical tests, behavior, live host facts, human authority,
 publication or other external gates. Malformed intermediates, carry SHAs, stale
 ancestors, history gaps, excessive predecessor depth and non-contiguous node replay fail closed rather than
 being skipped.
+Sub-limit parser structure failures, including excessive nesting, are normalized
+at the history-reader boundary and fail closed instead of escaping the verifier.
 
 Project evolution is split into the current executable stage and a future
 evolution horizon. The latter is a sparse, on-demand derived view recomputed

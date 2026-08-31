@@ -3200,8 +3200,8 @@ class ProductControlTests(unittest.TestCase):
             readme = (root / 'README.md').read_text(encoding='utf-8')
             (root / 'README.md').write_text(
                 readme.replace(
-                    'Current release',
-                    'Current experimental recommendation',
+                    'Release line',
+                    'Experimental line',
                     1,
                 ),
                 encoding='utf-8')
@@ -3468,6 +3468,24 @@ class ProductControlTests(unittest.TestCase):
         ), self.assertRaisesRegex(ValueError, 'blob bound'):
             _snapshot_v1_lineage(
                 ROOT, {}, oversized_revision, {},
+            )
+
+        deeply_nested_revision = 'b' * 40
+        deeply_nested = b'{"a":' * 100_000 + b'0' + b'}' * 100_000
+        def deeply_nested_history(root, args, limit=262_144, input_bytes=None):
+            if args[0] == 'log':
+                return f'{deeply_nested_revision}\n'.encode('ascii')
+            if args[:2] == ['cat-file', '--batch']:
+                return (
+                    f'{deeply_nested_revision} blob {len(deeply_nested)}\n'
+                ).encode('ascii') + deeply_nested + b'\n'
+            raise AssertionError(args)
+        with patch(
+            'yiyuan_accord.control._bounded_git_bytes',
+            side_effect=deeply_nested_history,
+        ), self.assertRaisesRegex(ValueError, 'structure'):
+            _snapshot_v1_lineage(
+                ROOT, {}, deeply_nested_revision, {},
             )
 
         with _indexed() as root:

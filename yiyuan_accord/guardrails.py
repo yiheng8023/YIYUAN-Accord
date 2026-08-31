@@ -36,7 +36,7 @@ RELEASE_SURFACES = (
     "SPONSORING.md SPONSORING.zh-CN.md"
 ).split()
 _COMMENT_NORMALIZED_WORKFLOW_SHA256 = (
-    "ad0c60218e844c1e43be64fe9955d5ff60980dd694551238b8c3ef7eda77c560"
+    "f28ae673bc5a354c99d62055c926e3b5b9a060f06fcdd642af1a79781f5f130a"
 )
 GATE_FIELDS = "id dependsOn acceptanceIds requiredTaskIds completionOperand condition".split()
 GATE_SEQUENCE = (
@@ -1188,9 +1188,7 @@ def external_release_contract_errors(root, acceptance, read_bytes=None):
         text = raw.decode("utf-8")
         if sha256(raw).hexdigest() != public.get("releaseNotesSha256"):
             errors.append("release notes digest does not match public release contract")
-        _, heading, ceiling_text = text.partition(
-            "## Prospective finite claim ceiling"
-        )
+        _, heading, ceiling_text = text.partition("## Finite claim ceiling")
         finite_text, separator, excluded_text = ceiling_text.partition(
             "It does not imply:"
         )

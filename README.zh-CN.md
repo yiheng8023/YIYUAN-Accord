@@ -10,27 +10,27 @@ YIYUAN Accord 是一个开放、Agent 中立、机制中立、产品形态中立
 
 [English](README.md)
 
-> **当前版本：**使用不可变、非预发行的
-> [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1)
-> 正式版。
+> **发布版本线：**[`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0)。
+> 仅在该链接对应的不可变、非预发行 GitHub Release 已存在后安装；仓库文本不能自证发布。
 > 不要从持续移动的 `main` checkout 安装。
 
 ---
 
 ## 发布成熟度与证据
 
-v3.0.1 是项目正式版，不再使用预发行标签。“正式版”只表示这个精确仓库、
-包、有限声明与已声明的本地/托管门禁通过，不表示普遍行为、生产安全或所有
-Agent 与客户端表面都已证明。测试集仍有意保持有限，因此代表性使用、反例
-与失败属于持续证据。
+v3.1.0 按项目正式版而非预发行版准备。是否已经发布由匹配的不可变 GitHub Release
+这一外部事实确定，不能由这段仓库文本自证。“正式版”只表示这个精确仓库、包、
+有限声明与已声明的本地/托管门禁通过，不表示普遍行为、生产安全或所有 Agent
+与客户端表面都已证明。测试集仍有意保持有限，因此代表性使用、反例与失败属于持续证据。
 
-持续移动的 `main` 当前承载内部工序已完成、状态为 `ready` 的 v3.1.0 repository candidate；
-其目标投影已退役，但它不是安装源或公开发布。干净 exact-SHA 本地复核及全部后续外部门槛仍待执行。
+v3.1.0 tracked tree 保留候选时程序：目标投影已退役，而托管验证、具名真人权限、
+tag、Release 与清理仍是仓库字节不能自证的外部事实。
 精确 revision
 `ae7294652761abceb753f0571ee82c7ddeae06af` 作为已验证但未发布的 v3.1.0
 历史基线保留；后续产品共识推翻了它的 `ready` 状态，但不抹去其有限证据。
 该历史基线不是当前候选；后续完成的 candidate-forming review 已选定 v3.1.0
-repository candidate，但它仍不是安装源或已发布升级。P0-P3 有界逻辑调研现已完成，
+repository candidate；在该候选时切点它仍不是安装源或已发布升级，而当前安装资格由
+匹配的不可变 GitHub Release 这一外部事实决定。P0-P3 有界逻辑调研现已完成，
 语义、隔离、评估设计和 P4 产品形态纵切也已完成。P4 只准入确定性、无副作用、
 纯数据的最小参考内核；它现已通过一个策略驱动的 `reconcile_closure` 接口实现。
 该接口拒绝观察者与对象同一身份，并要求实验决策具有匹配的独立后状态才能闭环；
@@ -82,9 +82,10 @@ source-bound 全系统重验收已经有界完成。预修复切点
 `523f2ef47df96b76c132525ff432d044e7b1b4b3` 的 independent exact-tree review 已覆盖相互独立的
 product、specification、implementation 与 standards 四条审查车道并产生整改问题；它没有
 形成 candidate，审查完成状态也不转移到变更后的字节。后续 candidate-forming review 已针对纠正后的
-来源绑定证据完成，并选定 v3.1.0 repository candidate。它尚未成为通过 clean exact local、托管检查、
-具名人类发布决定、tag 与公开 Release 的版本；下一门槛是在同一份干净不变 revision 上完成本地验证
-和四项独立 exact-tree 审查。客户端更新后，Codex、Claude 与 ChatGPT 的当前入口兼容性仍须先只读
+来源绑定证据完成，并选定 v3.1.0 repository candidate。在该候选时切点，它尚未成为通过 clean exact local、
+托管检查、具名人类发布决定、tag 与公开 Release 的版本；仓库字节保留该边界而不裁定后续外部事实。
+候选时下一门槛是在同一份干净不变 revision 上完成本地验证和四项独立 exact-tree 审查。客户端更新后，
+Codex、Claude 与 ChatGPT 的当前入口兼容性仍须先只读
 重感知。生产信任、Claude 现场行为、跨 OS/跨宿主行为及比较性现场价值仍为未知。修订后的
 GT-07 在精确 `cb11759` 上仅对一次新鲜零历史目标接收与源释放顺序通过；没有执行真实的压缩或
 对话分叉操作。中文宿主界面的裸词“分支”可能同时指 Git branch 与 task/chat fork；Accord 始终
@@ -92,7 +93,7 @@ GT-07 在精确 `cb11759` 上仅对一次新鲜零历史目标接收与源释放
 拓扑、对话拓扑与本地/云端执行放置彼此独立；换对话不意味着换 branch、
 worktree、repository fork 或执行环境。稀疏的宿主原生能力面与 Accord 责任分配面只能暴露候选
 交集，是否真正冗余仍须通过当前准入、结果和生命周期证据。真实机制、持久连续性、跨宿主或
-群体价值与发布仍受门控。
+群体价值仍受门控；发布事实由匹配的外部 tag 与 Release 决定。
 
 随后一个不启动模型回合的一次性 App Server 序列先观察到 ephemeral thread 不支持目标状态读取，
 再用一个任务专属官方 goal 状态形成可恢复线程。`thread/resume` 恢复了官方状态，但安装态
@@ -161,21 +162,22 @@ locator 和 `containing-git-commit` 关系，不把自己的 SHA 写进对象；
 
 ### 安装前确认
 
-下列命令与 GUI 标签只是 **v3.0.1 最后验证的历史路径**，不是当前客户端入口
-claim。后续客户端更新后，Codex、Claude 与 ChatGPT 的全部 GUI 入口均为未知。
-尝试 GUI 安装或生命周期操作前，必须先只读重感知当前客户端入口，并记录实际
-宿主、版本与路线。v3.0.1 没有单独验证 ChatGPT GUI 安装路径。
+下列 GUI 标签仍只是 **v3.0.1 最后验证的历史路径**，不是当前客户端入口 claim。
+不可变源码命令有意指向 v3.1.0 tag，并且仅在匹配的公开 Release 存在后可用。
+后续客户端更新后，Codex、Claude 与 ChatGPT 的全部 GUI 入口均为未知。尝试 GUI
+安装或生命周期操作前，必须先只读重感知当前客户端入口，并记录实际宿主、版本与
+路线。v3.0.1 没有单独验证 ChatGPT GUI 安装路径。
 
 在 v3.0.1 验证切点，Codex 与 Claude 路径要求宿主支持插件、可联网访问公开
 仓库、允许修改用户级插件配置，并在安装后新建任务或会话。Accord 不绑定某个
 固定宿主或模型版本。
 
-### Codex — v3.0.1 最后验证路径
+### Codex — v3.1.0 不可变源码；GUI 最后验证于 v3.0.1
 
-记录中的 CLI 路径安装精确、不可变的 tag：
+本版本使用精确、不可变的 tag：
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.0.1
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.1.0
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
@@ -183,7 +185,7 @@ codex plugin add yiyuan-accord-codex@yiyuan-accord
 **Plugins** 或运行 `/plugins`，确认 `YIYUAN Accord for Codex` 与
 `deliver-demand-driven-outcome` 已出现。不得假设更新后这些 GUI 标签或位置仍有效。
 
-### Claude 客户端与 Claude Code — v3.0.1 最后验证路径
+### Claude 客户端与 Claude Code — v3.1.0 源码；GUI 最后验证于 v3.0.1
 
 在该验证切点，Claude Desktop Chat、Claude 网页聊天与 Cowork 的记录路径是在
 **Customize > Plugins**，把
@@ -194,7 +196,7 @@ codex plugin add yiyuan-accord-codex@yiyuan-accord
 Claude Code 持久安装：
 
 ```powershell
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.0.1
+claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.1.0
 claude plugin install yiyuan-accord-claude@yiyuan-accord
 ```
 
@@ -205,11 +207,11 @@ checkout 变化后使用 `/reload-plugins`。
 
 ### 安装改变什么
 
-公开 v3.0.1 包只会让一个渐进式披露的动态适配 Skill 可用，不新增 Runtime、
-Hook、MCP server、App、状态存储、后台进程或自动项目修改。精确历史基线
-`ae729465` 包含较早的无状态 `SessionStart` 上下文 Hook；已选定的 v3.1.0 repository candidate 修改了
-该 Hook 的 matcher 与提醒文本。两个版本都不读取会话原文、不写状态、不启动
-后台进程，但不能把当前 matcher 或文本字节追溯成历史 revision 的事实。这些只是
+v3.1.0 包会让一个渐进式披露的动态适配 Skill 与短时、无状态的 `SessionStart`
+Hook/纯内核适配器可用，不新增常驻 Runtime、MCP server、App、状态存储、后台进程
+或自动项目修改。精确历史基线 `ae729465` 包含较早的上下文 Hook；v3.1.0 以共享
+适配器替换其 echo 命令并收窄 matcher。两个版本都不读取会话原文、不写状态、不
+启动后台进程，但不能把当前 matcher 或文本字节追溯成历史 revision 的事实。这些只是
 版本化包事实，不是产品身份或永久机制禁区；当前提醒要求 Agent 重感知被允许的
 状态并逐责任分配实现模式，但提醒本身既不是实时回执，也不是 Agent 使用、执行、
 结果、证据或价值。候选组件集已选定为现有 Skill、短时 Hook 适配器、纯内核与宿主 manifest；

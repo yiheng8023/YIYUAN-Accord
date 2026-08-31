@@ -708,7 +708,12 @@ def _snapshot_v1_history_index(root, anchor, cache):
         offset += size + 1
         if len(content) != size or batch[offset - 1:offset] != b"\n":
             raise ValueError("invalid Git batch body")
-        historical = _strict_json_object(content)
+        try:
+            historical = _strict_json_object(content)
+        except _SNAPSHOT_V1_STRUCTURE_EXCEPTIONS as exc:
+            raise ValueError(
+                "snapshot lineage program structure is invalid"
+            ) from exc
         increment = historical.get("increment")
         node = increment.get("closeoutSnapshot") \
             if isinstance(increment, dict) else None
@@ -1648,14 +1653,14 @@ def _validate_closeout_snapshot(
         _validate_stage_guidance(current_guidance, context_errors)
         if context_errors:
             errors.append("increment.closeoutSnapshot stage guidance is invalid")
-    except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+    except _SNAPSHOT_V1_FAILURES:
         current_constitution, current_guidance, current_golden = {}, {}, {}
         errors.append("increment.closeoutSnapshot bound state is unavailable")
     try:
         origin, latest, replay, current_run = _snapshot_v1_lineage(
             root, value, _revision or "HEAD", _cache,
         )
-    except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+    except _SNAPSHOT_V1_FAILURES:
         origin, latest, replay, current_run = None, None, False, ()
         errors.append("increment.closeoutSnapshot predecessor lineage is unavailable")
     if replay:
@@ -1682,7 +1687,7 @@ def _validate_closeout_snapshot(
                 errors.append(
                     "increment.closeoutSnapshot revision-bound repository contract is invalid"
                 )
-        except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+        except _SNAPSHOT_V1_FAILURES:
             errors.append("increment.closeoutSnapshot origin state is unavailable")
     if kind == "snapshot-bootstrap":
         if latest is not None:
@@ -1703,7 +1708,7 @@ def _validate_closeout_snapshot(
                 prior_node = prior_program.get("increment", {}).get("closeoutSnapshot")
                 if latest is None or prior_node != latest[1]:
                     raise ValueError("predecessor origin does not contain the lineage node")
-            except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+            except _SNAPSHOT_V1_FAILURES:
                 prior_constitution, prior_program, prior_acceptance, prior_guidance, \
                     prior_golden = {}, {}, {}, {}, {}
         prior_increment = prior_program.get("increment") \
@@ -1727,7 +1732,7 @@ def _validate_closeout_snapshot(
             ) if isinstance(prior, dict) and prior.get("schema") == (
                 "yiyuan-accord-stage-closeout-snapshot/v1"
             ) else representative_contract_sha256(prior_acceptance, prior_golden)
-        except (AttributeError, TypeError, ValueError):
+        except _SNAPSHOT_V1_FAILURES:
             prior_evaluation = None
         prior_items = prior_acceptance.get("criteria") \
             if isinstance(prior_acceptance, dict) else None
@@ -1744,7 +1749,7 @@ def _validate_closeout_snapshot(
             prior_run_frozen, prior_run_contract_valid = _snapshot_v1_run_status(
                 root, prior_state, latest[2], _cache,
             ) if latest is not None else (False, False)
-        except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+        except _SNAPSHOT_V1_FAILURES:
             prior_run_frozen, prior_run_contract_valid = False, False
         if revision == latest_revision and prior_evaluation is not None \
                 and isinstance(prior_items, list) and len(prior_ids) == len(prior_items) \
