@@ -29,3 +29,12 @@ decisions must assess that residual retrievability explicitly.
 Contributions are accepted under the license applicable to their file class
 unless agreed otherwise before acceptance. Commercial use depends on the
 applicable license for each item.
+
+Apache-2.0 permits commercial use, modification, and redistribution subject to
+its license and notice obligations. That grant does not include trademark
+permission or permission to imply that a modified or redistributed version is
+official, sponsored, or endorsed. The canonical public source is
+`https://github.com/yiheng8023/YIYUAN-Accord`; official releases are identified
+by repository tags and Release records. Each independently distributed Accord
+plugin package carries its own `LICENSE` and `NOTICE` so those boundaries remain
+available after installation.

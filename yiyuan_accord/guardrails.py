@@ -150,7 +150,8 @@ CODEX_METADATA_FIELDS = {
 }
 _PROJECTION_FIELDS = set((
     "id packageId packageVersion packageSha256 manifest contract skill metadataFiles "
-    "mechanismFiles activationContext maxSkillBytes requiredSkillMarkers forbiddenPaths"
+    "legalFiles mechanismFiles activationContext maxSkillBytes requiredSkillMarkers "
+    "forbiddenPaths"
 ).split())
 
 
@@ -500,15 +501,22 @@ def activation_mechanism_errors(
 
 def validate_projection_package(
     root, adapter_id, manifest_locator, contract_locator, skill_locator,
-    metadata_locators, asset_locators, mechanism_locators=None,
+    metadata_locators, legal_locators, asset_locators, mechanism_locators=None,
 ):
     errors = []
     prefix = f"adapter {adapter_id}"
+    expected_legal_locators = [
+        (Path(manifest_locator).parent.parent / name).as_posix()
+        for name in ("LICENSE", "NOTICE")
+    ] if isinstance(manifest_locator, str) else []
+    if legal_locators != expected_legal_locators:
+        errors.append(f"{prefix} legal file declaration is invalid")
     declared = [
         locator
         for locator in (
             manifest_locator, contract_locator, skill_locator,
-            *metadata_locators, *asset_locators, *(mechanism_locators or []),
+            *metadata_locators, *legal_locators, *asset_locators,
+            *(mechanism_locators or []),
         )
         if isinstance(locator, str)
     ]
@@ -546,6 +554,22 @@ def validate_projection_package(
     if plugin_root is None or not plugin_root.is_dir():
         errors.append(f"{prefix} plugin root is invalid")
         return None, errors
+    for package_locator, authority_locator in zip(
+        expected_legal_locators, ("LICENSE", "NOTICE"), strict=True,
+    ):
+        package_path = repository_relative_path(root, package_locator)
+        authority_path = repository_relative_path(root, authority_locator)
+        try:
+            if (
+                package_path is None or not package_path.is_file()
+                or authority_path is None or not authority_path.is_file()
+                or _owned_bytes(package_path) != _owned_bytes(authority_path)
+            ):
+                errors.append(
+                    f"{prefix} {authority_locator} differs from repository authority"
+                )
+        except OSError:
+            errors.append(f"{prefix} {authority_locator} is unreadable")
     actual = plugin_file_locators(root, plugin_root)
     unexpected = sorted(set(actual) - set(declared))
     missing = sorted(set(declared) - set(actual))
@@ -582,6 +606,10 @@ def validate_host_projection(
     metadata = projection.get("metadataFiles")
     metadata_locators = metadata if isinstance(metadata, list) and all(
         isinstance(item, str) for item in metadata
+    ) else []
+    legal = projection.get("legalFiles")
+    legal_locators = legal if isinstance(legal, list) and all(
+        isinstance(item, str) for item in legal
     ) else []
     mechanisms = projection.get("mechanismFiles")
     mechanism_locators = mechanisms if isinstance(mechanisms, list) and all(
@@ -679,7 +707,7 @@ def validate_host_projection(
 
     package_digest, package_errors = validate_projection_package(
         root, adapter_id, manifest_locator, contract_locator, skill_locator,
-        metadata_locators, asset_locators, mechanism_locators,
+        metadata_locators, legal_locators, asset_locators, mechanism_locators,
     )
     errors.extend(package_errors)
     if package_digest != projection.get("packageSha256"):

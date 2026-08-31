@@ -405,8 +405,11 @@ release eligibility or completion.
 
 Each current v3 projection consists of one host-native manifest, one small
 YIYUAN Accord adapter contract and one progressively disclosed adaptive Skill,
-plus only the metadata, presentation assets and mechanisms declared by that
-manifest. Public v3.0.1 adds no runtime, Hook, MCP server, App or state store.
+plus only the legal files, metadata, presentation assets and mechanisms declared
+by that projection. Each standalone package explicitly carries a top-level
+`LICENSE` and `NOTICE`; both are bound into the complete package digest and must
+match the repository legal text byte for byte. Public v3.0.1 adds no runtime,
+Hook, MCP server, App or state store.
 The selected v3.1.0 repository candidate additionally declares one shared,
 short-lived `SessionStart` command adapter. Neither package shape is a permanent
 product identity or mechanism prohibition; Hook trust, firing and behavior
@@ -837,8 +840,11 @@ record is safe to publish. Private memory, account state and unsanitized host
 transcripts are not release evidence.
 
 A distribution-only change does not manufacture new behavior or invalidate an
-unchanged behavior observation. It must still replay deterministic validation
-of the complete manifest, marketplace, metadata, asset and package surface.
+observation whose declared sparse behavior subject is unchanged. It must still
+replay deterministic validation of the complete manifest, marketplace, legal,
+metadata, asset and package surface. A lifecycle observation that explicitly
+binds the complete installed package, such as GT-20, must be replayed when that
+package file set or digest changes even if executable bytes do not.
 After its immutable distribution exists, release verification must also obtain
 current clean-state installation, activation, confirmation and removal
 evidence. A contract or Skill locator/content change invalidates the dependent

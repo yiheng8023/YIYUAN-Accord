@@ -191,3 +191,9 @@ Every retained failure is also projected as a sorted
 Do not submit credentials, private memory, account state, restricted material
 or unsanitized host configuration. See [SECURITY.md](SECURITY.md) and
 [docs/license-policy.md](docs/license-policy.md).
+
+Unless agreed in writing before acceptance, an intentional contribution is
+submitted under the license already applicable to the affected file and the
+contributor represents that they have the right to submit it. Contributions do
+not transfer third-party trademarks, private data, or material whose terms do
+not permit inclusion.

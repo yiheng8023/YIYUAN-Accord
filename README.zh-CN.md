@@ -430,7 +430,11 @@ Codex 与 Claude 包共享 `deliver-demand-driven-outcome` Skill 名，同时保
 
 YIYUAN Accord 采用 Apache-2.0 许可证。
 
-YIYUAN NEXUS 名称与图形商标保持独立，详见 [`NOTICE`](NOTICE) 与 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
+该许可证允许商用、修改与再分发，但不允许把修改版或再分发版冒充为官方版本，或暗示其受到官方赞助与背书。
+
+本仓库是规范公开来源；官方版本由相互匹配的 Git tag 与 GitHub Release 记录识别。独立安装后，Codex 与 Claude 插件包内也会保留各自的 `LICENSE` 与 `NOTICE`。
+
+YIYUAN Accord、YIYUAN NEXUS 名称与图形商标保持独立，详见 [`NOTICE`](NOTICE)、[`docs/license-policy.md`](docs/license-policy.md) 与 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
 
 社区支持按 [`SUPPORT.md`](SUPPORT.md) 所述尽力提供。
 

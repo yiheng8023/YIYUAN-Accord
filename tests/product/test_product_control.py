@@ -8,6 +8,9 @@ from yiyuan_accord.control import (
     _validate_closeout_snapshot, _snapshot_lineage_contract_errors,
     _snapshot_documents, _snapshot_revision_contract_errors,
     _snapshot_bytes, _snapshot_v1_evidence_errors, _snapshot_v1_lineage,
+    _snapshot_v1_projection_package_errors,
+    _snapshot_v1_projection_shape_errors,
+    _snapshot_v2_node_errors, _snapshot_v2_transition_errors,
     _snapshot_v1_transition_errors, _snapshot_v1_json_structure_is_bounded,
     _SNAPSHOT_V1_MAX_JSON_DEPTH,
     _semantic_version_precedence,
@@ -2102,7 +2105,8 @@ class ProductControlTests(unittest.TestCase):
                 digest, errors = validate_projection_package(
                     root, projection['id'], projection['manifest'],
                     projection['contract'], projection['skill'],
-                    projection['metadataFiles'], [], projection['mechanismFiles'],
+                    projection['metadataFiles'], projection['legalFiles'], [],
+                    projection['mechanismFiles'],
                 )
             self.an(digest)
             self.has(errors, 'package declared file is unsafe')
@@ -2144,6 +2148,30 @@ class ProductControlTests(unittest.TestCase):
                ('activation mechanism contract is invalid',
                 'package digest is not approved by program'))
               for adapter, index in (('codex', 0), ('claude-code', 1))),
+            ('codex', 0, 'missing-legal-declaration', lambda root, _: json_change(
+                root, P, lambda p: p['hostProjections'][0].pop('legalFiles')),
+             ('program projection shape is invalid',
+              'legal file declaration is invalid',
+              'package contains undeclared files',
+              'package digest is not approved by program')),
+            ('codex', 0, 'legal-declaration-order', lambda root, p: json_change(
+                root, P, lambda program: program['hostProjections'][0].update(
+                    legalFiles=list(reversed(p['legalFiles'])))),
+             ('legal file declaration is invalid',)),
+            ('codex', 0, 'package-license', lambda root, p: append_bytes(
+                root, p['legalFiles'][0], b'changed'),
+             ('LICENSE differs from repository authority',
+              'package digest is not approved by program')),
+            ('codex', 0, 'package-notice-extra-restriction',
+             lambda root, p: append_bytes(
+                 root, p['legalFiles'][1],
+                 b'Additional commercial restriction.\n'),
+             ('NOTICE differs from repository authority',
+              'package digest is not approved by program')),
+            ('claude-code', 1, 'missing-package-notice',
+             lambda root, p: (root / p['legalFiles'][1]).unlink(),
+             ('package declared file is unsafe',
+              'package digest is not approved by program')),
         )
         for adapter, index, name, mutate, fragments in drift_cases:
             with self.subTest(adapter=adapter, mutation=name), _fixture() as root:
@@ -2190,6 +2218,108 @@ class ProductControlTests(unittest.TestCase):
                 _bind_source(root, locator, bundle, observation)
                 self.has(_observe(root, locator)[0],
                                 'sourceEvidence[0] is invalid')
+
+    def test_snapshot_v1_legal_files_are_backward_compatible_and_bound(self):
+        current = _read(ROOT, P)
+        predecessor = current['increment']['closeoutSnapshot'][
+            'predecessorSnapshotRef'
+        ].split(':', 1)[0]
+        constitution, legacy_program, *_ = _snapshot_documents(ROOT, predecessor)
+        self.ae(
+            _snapshot_v1_projection_shape_errors(legacy_program, constitution),
+            [],
+        )
+        extended_program = _clone(legacy_program)
+        for projection in extended_program['hostProjections']:
+            package_root = f"plugins/{projection['packageId']}"
+            projection['legalFiles'] = [
+                f'{package_root}/LICENSE', f'{package_root}/NOTICE',
+            ]
+        self.ae(
+            _snapshot_v1_projection_shape_errors(extended_program, constitution),
+            [],
+        )
+        invalid_program = _clone(extended_program)
+        invalid_program['hostProjections'][0]['legalFiles'].reverse()
+        self.has(
+            _snapshot_v1_projection_shape_errors(invalid_program, constitution),
+            'hostProjections[0].legalFiles is invalid',
+        )
+
+        with _indexed() as root:
+            revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
+            constitution, program, *_ = _snapshot_documents(root, revision)
+            self.at(
+                all('legalFiles' in item for item in program['hostProjections']),
+                'current revision must use the extended projection shape',
+            )
+            self.ae(
+                _snapshot_v1_projection_package_errors(
+                    root, program, constitution, revision,
+                ),
+                [],
+            )
+            locator = program['hostProjections'][0]['legalFiles'][0]
+            path = root / locator
+            path.write_bytes(path.read_bytes() + b'changed')
+            _git(root, 'add', locator)
+            _git(
+                root, '-c', 'user.name=Accord Fixture',
+                '-c', 'user.email=fixture@example.invalid',
+                'commit', '--quiet', '-m', 'tampered legal projection',
+            )
+            tampered_revision = _git(
+                root, 'rev-parse', 'HEAD', text=True,
+            ).strip()
+            constitution, program, *_ = _snapshot_documents(
+                root, tampered_revision,
+            )
+            self.has(
+                _snapshot_v1_projection_package_errors(
+                    root, program, constitution, tampered_revision,
+                ),
+                'revision LICENSE differs from repository authority',
+                'revision package digest mismatch',
+            )
+
+    def test_snapshot_v2_reopens_only_the_invalidated_package_boundary(self):
+        program, acceptance = _read(ROOT, P), _read(ROOT, A)
+        node = program['increment']['closeoutSnapshot']
+        self.ae(_snapshot_v2_node_errors(program, acceptance), [])
+        predecessor = node['predecessorSnapshotRef'].split(':', 1)[0]
+        _, prior_program, *_ = _snapshot_documents(ROOT, predecessor)
+        prior = prior_program['increment']['closeoutSnapshot']
+        self.ae(_snapshot_v2_transition_errors(node, prior), [])
+
+        changed = _clone(program)
+        changed_node = changed['increment']['closeoutSnapshot']
+        changed_node['replay']['preservedTaskIds'] = []
+        self.has(
+            _snapshot_v2_node_errors(changed, acceptance),
+            'revision-bound v2 replay boundary is invalid',
+        )
+
+        closed = _clone(program)
+        closed_acceptance = _clone(acceptance)
+        closed['status'] = 'ready'
+        closed['increment']['state'] = 'completed'
+        closed_node = closed['increment']['closeoutSnapshot']
+        closed_node['id'] = 'stage.v3.1.0.repository-candidate.closed'
+        closed_node['state'] = 'closed'
+        closed_node['nextGateId'] = 'exact-local-verification-and-review'
+        closed_node['replay']['evidenceState'] = 'verified'
+        closed_node['replay']['evidenceRef'] = (
+            'evals/evidence/2026-09-01-v310-gt20-exact-package-source.json'
+        )
+        _find(closed_acceptance['criteria'], 'id', 'R3')[
+            'assessment'
+        ] = 'verified'
+        self.ae(_snapshot_v2_node_errors(closed, closed_acceptance), [])
+        self.ae(_snapshot_v2_transition_errors(closed_node, node), [])
+        self.has(
+            _snapshot_v2_transition_errors(closed_node, prior),
+            'revision-bound v2 close transition is invalid',
+        )
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         current = host_check(ROOT, 'codex')['details']

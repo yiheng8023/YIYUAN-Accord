@@ -52,7 +52,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "47a1b829f5ddf44aeaf1b64f3999f65f350600e3d8f925e8f893fbe312dac77e",
+  "canonicalGoalObjectiveSha256": "0e2d66708990ac8ec932b099ad3f39d1ce1e80c157338427f3695f585410dbdd",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -467,7 +467,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": []
     },
     {
@@ -498,7 +498,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "latestAssessmentBoundary": "Exact 3878968 closes GT-21 only for its bounded current-host event-to-consequence, sufficient-simple and fresh-handoff cases; exact 4c8bcc3 closes GT-20 only for its disposable non-empty Windows transactional lifecycle. Source-bound whole-system reacceptance from exact cut 85a917a preserves those unchanged bounded behavior subjects and reconciles the active projections without a new behavior or model run. A separate candidate-forming independent review accepted the corrected finite bindings, so R3 is verified only within that bounded scope and v3.1.0 is the selected repository candidate. The earliest open boundary is exact local verification and four independent exact-tree reviews on one clean unchanged committed SHA. The updated-client entry-instance projection is unknown until read-only re-sensing.",
       "assessmentScope": "Earlier GT-14 through GT-19 observations retain finite claims. The GT-21 source keeps all failed and partial arms plus the bounded event-to-consequence, sufficient-simple and fresh-handoff passes. The GT-20 source keeps the learning probe, evaluator-fixture errors, corrected failed-update rollback, exact successful update, independent enabled/component and executable checks, native removal, host-cache classification and zero task residue. Neither case binds a concrete model. Exact-cut 85a917a reaccepts only source-bound unchanged facts and projection consistency; it does not self-attest independent review, current updated-client compatibility or product value. A separate candidate-forming review has completed and selected the repository candidate without adding behavior evidence. The broad Hook trust bypass stays test-only, direct App Server stays reference-only and no browser bridge, MCP, SDK/client or persistence is admitted. Ordinary activation, production trust, actual Claude host Hook triggering, unmanaged or cross-OS hosts, cross-host value, exact local review, hosted verification, named-human authorization, tag, public Release and post-release installation remain unverified.",
       "evidence": [
@@ -606,7 +606,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": []
     },
     {
@@ -627,7 +627,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -729,7 +729,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -833,7 +833,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -938,7 +938,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-07-codex-local.json",

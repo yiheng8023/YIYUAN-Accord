@@ -2548,6 +2548,17 @@ def provisional_gt20_21_source_errors(
     increment = program.get("increment")
     lifecycle = increment.get("provisionalEvidenceLifecycle") \
         if isinstance(increment, dict) else None
+    exact_lifecycle = increment.get("exactPackageEvidenceLifecycle") \
+        if isinstance(increment, dict) else None
+    invalidated_gt20 = (
+        isinstance(exact_lifecycle, dict)
+        and exact_lifecycle.get("schema")
+        == "yiyuan-accord-exact-package-evidence-lifecycle/v1"
+        and exact_lifecycle.get("taskId") == "GT-20"
+        and exact_lifecycle.get("earliestAffectedBoundary")
+        == "complete-host-projection-package-identity"
+        and exact_lifecycle.get("state") in {"pending", "verified"}
+    )
     lifecycle_fields = (
         "schema", "state", "criterionId", "taskIds", "sourceLocator",
         "sourceSha256", "inputEvidenceIds", "targetReleaseTag",
@@ -2585,7 +2596,14 @@ def provisional_gt20_21_source_errors(
         ):
             errors.append("provisional GT-20/21 lifecycle transition is invalid")
     elif state == "promoted-by-complete-current-r3":
-        if (
+        if invalidated_gt20 and (
+            lifecycle.get("retiredByPublicRelease") is None
+            and target_release == program.get("distributionVersion")
+            and program.get("status") in {"active", "ready"}
+            and r3.get("assessment") in {"continuing", "verified"}
+        ):
+            active_current_gate = False
+        elif (
             lifecycle.get("retiredByPublicRelease") is not None
             or target_release != program.get("distributionVersion")
             or program.get("status") != "ready"
@@ -3059,6 +3077,18 @@ def frozen_gt20_21_promotion_errors(
     program = program if isinstance(program, dict) else {}
     acceptance = acceptance if isinstance(acceptance, dict) else {}
     golden = golden if isinstance(golden, dict) else {}
+    increment = program.get("increment")
+    exact_lifecycle = increment.get("exactPackageEvidenceLifecycle") \
+        if isinstance(increment, dict) else None
+    invalidated_gt20 = (
+        isinstance(exact_lifecycle, dict)
+        and exact_lifecycle.get("schema")
+        == "yiyuan-accord-exact-package-evidence-lifecycle/v1"
+        and exact_lifecycle.get("taskId") == "GT-20"
+        and exact_lifecycle.get("earliestAffectedBoundary")
+        == "complete-host-projection-package-identity"
+        and exact_lifecycle.get("state") in {"pending", "verified"}
+    )
     tasks = {item.get("id"): item for item in golden.get("tasks", [])
              if isinstance(item, dict) and _text(item.get("id"))}
     entries = {item.get("taskId"): item
@@ -3091,7 +3121,8 @@ def frozen_gt20_21_promotion_errors(
         ) for task_id in promoted)
         or promotion.get("contractSupersessionSha256") != _digest(successors[0])
         or None in projections.values()
-        or promotion.get("projectionIdentities") != projections
+        or not invalidated_gt20
+        and promotion.get("projectionIdentities") != projections
     ):
         errors.append("frozen GT-20/21 current contract binding is invalid")
 
@@ -3109,6 +3140,8 @@ def frozen_gt20_21_promotion_errors(
         selected_ids.update(record_ids)
         if not all(isinstance(value, dict) for value in (task, entry, item)):
             errors.append(f"frozen {task_id} source binding is invalid")
+            continue
+        if task_id == "GT-20" and invalidated_gt20:
             continue
         try:
             current_subject = {
@@ -3251,6 +3284,8 @@ def frozen_gt20_21_promotion_errors(
         errors.append("frozen GT-20/21 failed or nonselected attempt ledger is invalid")
 
     for task_id, (locator, digest, _) in FROZEN_GT20_21_OBSERVATIONS.items():
+        if task_id == "GT-20" and invalidated_gt20:
+            continue
         observation, task = read_json(root, locator, errors), tasks.get(task_id)
         if (
             not isinstance(observation, dict) or _digest(observation) != digest

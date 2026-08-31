@@ -430,7 +430,18 @@ The publisher is [yiheng8023](https://github.com/yiheng8023).
 
 YIYUAN Accord is licensed under Apache-2.0.
 
-The YIYUAN NEXUS name and symbol remain separate trademarks. See [`NOTICE`](NOTICE) and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+Commercial use, modification, and redistribution are permitted under that
+license; they do not grant permission to present a modified or redistributed
+version as official, sponsored, or endorsed.
+
+The canonical public source is this repository. Official versions are
+identified by matching Git tags and GitHub Release records, and each standalone
+Codex or Claude plugin package carries its own `LICENSE` and `NOTICE` after
+installation.
+
+The YIYUAN Accord and YIYUAN NEXUS names and symbols remain separate
+trademarks. See [`NOTICE`](NOTICE), [`docs/license-policy.md`](docs/license-policy.md),
+and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 Community help is provided on a best-effort basis under [`SUPPORT.md`](SUPPORT.md).
 
