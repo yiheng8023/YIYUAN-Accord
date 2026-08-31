@@ -128,6 +128,39 @@ minimum sufficient means for the current collaboration outcome. It includes:
 - degrading, releasing or retiring mechanisms that fail or no longer pay their
   lifecycle cost.
 
+The same loop can be inspected through eight host-leveraged responsibility
+dimensions. They are not eight built-in modules or eight independently proven
+abilities:
+
+| Dimension | Bounded responsibility | Hard limit |
+| --- | --- | --- |
+| Self-knowledge | Observe current state, capability, boundary, dependency, risk, unknowns and Accord exposure. | Hidden or unexposed host state remains unknown. |
+| Self-coherence | Reconcile purpose, outcome, authority, rules, structure, action, evidence, acceptance, claims and results. | Internal consistency cannot prove an external premise or effect. |
+| Bounded autonomy | Allocate and orchestrate supported work inside the current outcome and granted authority. | It cannot create goals, human judgment, trust, data, cost, publication or irreversible authority. |
+| On-demand learning | Use admitted facts, feedback, experience, failure and environment change to update fitness, regressions or a candidate capability. | Learning is not mandatory research, authority or proof that a durable new capability exists. |
+| Correction | Detect drift or error, locate the earliest affected boundary, repair it and replay dependents. | It cannot guarantee discovery of every error; lower recurrence requires regression evidence. |
+| Recovery | Roll back, degrade, replace, hand off or restore the last safe state and continuity after reversible failure. | Unavailable upstream capability or irreversible effects may require an honest stop. |
+| External verifiability | Prepare source-bound judgment, action, process, consequence and post-state evidence for independent checking. | The repository, Agent or candidate cannot certify its own correctness, value, clean baseline or publication. |
+| Governed evolution | Test bounded changes across the full acceptance vector, keep only net improvements and later adapt or retire them. | It does not promise permanent improvement, broader applicability or compounding long-term value. |
+
+For each material duty inside those dimensions, the upstream AI Agent, host
+native capabilities and ecosystem are the first candidate means. Accord drives
+selection, coordination, constraints, verification, correction and retirement;
+it authors only the smallest replaceable gap after sufficient native or reusable
+routes fail on evidence.
+
+Each duty is allocated as Accord-contained, Agent-native or
+Accord-Agent-composed. A complete bounded claim requires the material duties to
+be closed, explicitly retired or held unknown with an honest stop. It does not
+require Accord to operate independently of its host, duplicate the host's AI
+capabilities, build eight modules or precompute an eight-dimensional matrix.
+
+This eight-dimension view is a semantic and evaluation lens. It does not expand
+the v3.1.0 public claim ceiling or promote the current bounded experiments into
+proof of eight complete autonomous abilities. It is a contextual compass, not
+a workflow, second authority source or replacement for domain expertise and
+the latest bound user goal.
+
 Self-evolution is one operator inside that loop. It is not the whole core and
 cannot optimize a single metric beyond outcome, authority, evidence, recovery,
 interference and lifecycle constraints.

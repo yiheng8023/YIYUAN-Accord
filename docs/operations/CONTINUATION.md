@@ -63,20 +63,36 @@ Then read, in order:
   deadlock guard; five later Hook invocations in that job and the
   Windows/Python 3.14 leg passed. The terminal nine-leg run contains seven
   PASS results and those two required FAIL results; both macOS legs passed.
-  `9bd82876` is the latest failed canonical predecessor
-  origin and grants no hosted or later-gate authority. The current committed
-  exact successor preserves every matrix leg, test and finite claim, adds an explicit
+  `9bd82876` is the latest failed hosted predecessor origin and grants no hosted
+  or later-gate authority. Exact `39926711d797c90f69ca11bc750adba359df674f`
+  is the canonical origin of the following repository-candidate snapshot: it
+  preserves every matrix leg, test and finite claim, adds an explicit
   parser-independent 512-depth bound for parsed schema-v1 historical programs,
   and changes only the CI test-process deadlock guard to 60 seconds while both
-  host manifests retain their separately asserted three-second product timeout,
-  but remains unaccepted pending clean exact-local verification, a hosted
-  result, a named-human decision, a tag and a public Release. Accord
+  host manifests retain their separately asserted three-second product timeout.
+  Exact `b4f0823ff039caf36628819263d2871c764255dd` is an identical-node
+  documentation carry of `39926711`, not a predecessor locator. The successor
+  described by this document replaces the bilingual README with a
+  progressive-disclosure path and adds a machine-checked host-leveraged eight-
+  dimension responsibility lens. It records both changes in the tracked Release
+  body, rebinds its acceptance and guidance digests and cites `39926711` as the
+  prior snapshot origin. It changes no runtime behavior, manifest, product
+  timeout, claim ceiling or release gate. Earlier validation does not transfer to these bytes;
+  the successor remains unaccepted pending clean exact-local verification, a
+  hosted result, a named-human decision, a tag and a public Release. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
   product target is broader: complete bounded self-bootstrapping across
   environment sensing, outcome and authority binding, reuse or acquisition,
   composition or authorship, execution, verification, learning, self-evolution,
-  rollback, continuity, resource release and retirement. Self-evolution is one
+  rollback, continuity, resource release and retirement. Its host-leveraged
+  eight-dimension view treats self-knowledge, self-coherence, bounded autonomy,
+  on-demand learning, correction, recovery, external verifiability and governed
+  evolution as responsibility families, not eight built-in or independently
+  proven capabilities. The upstream AI Agent, host-native capabilities and
+  ecosystem are the primary means; Accord selects, coordinates, constrains,
+  verifies, corrects and retires them, adding only the smallest evidenced gap.
+  Self-evolution is one
   component; plugin, Hook, runtime or any other product form remains a dynamic
   route variable. One form may close a bounded result and an open-ended set of
   replaceable forms may cooperate, but shared outcome, authority, evidence and
@@ -496,8 +512,8 @@ Then read, in order:
 
 ## Product direction
 
-Keep a small portable reliability kernel and develop a complete bounded
-self-bootstrapping outcome-delivery system. Host, model route, version, extension ecosystem,
+Keep a small portable reliability kernel and develop a complete bounded,
+host-leveraged self-bootstrapping outcome-delivery system. Host, model route, version, extension ecosystem,
 Skill, plugin, App, MCP, Hook, configuration, state, runtime, cloud carrier,
 code topology, conversation topology and execution placement are dynamic variables or possible
 mechanisms, not portable product identity and not permanent prohibitions.
@@ -508,6 +524,15 @@ replaceable adapters plus freshness-bound evidence snapshots, not the
 Agent-neutral product boundary or coverage ceiling. A new, changed or removed
 Agent or host capability invalidates dependent snapshots and causes route
 recomputation rather than a permanent support-list edit.
+
+Use the eight dimensions only as a derived responsibility and evaluation lens:
+self-knowledge, self-coherence, bounded autonomy, on-demand learning,
+correction, recovery, external verifiability and governed evolution. Allocate
+each material duty as Accord-contained, Agent-native or Accord-Agent-composed;
+do not build eight permanent modules or an exhaustive capability matrix.
+"Self-proof" means source-bound evidence prepared for independent review, never
+repository, candidate or Agent self-attestation. This view does not expand the
+v3.1.0 five-item public claim ceiling.
 
 The target experience is near-zero avoidable user orchestration:
 
@@ -599,7 +624,8 @@ with no active item. Its completed ordered work is:
    they admit only the minimum pure-data reference core, not a live mechanism,
    durable runtime, behavior claim or release.
 3. `model-complete-self-bootstrapping-core` — completed from the admitted
-   feasibility evidence. Its machine-checkable model defines 12 entities, 16
+   feasibility evidence and refined by the host-leveraged eight-dimension
+   responsibility lens. Its machine-checkable model defines 12 entities, 16
    graph-aligned relations, independent observation facets, hard admission,
    Pareto-context selection, multi-form coherence, bounded evolution,
    continuity, 12 invariants, five limits, ten degradation paths and eight
@@ -967,21 +993,29 @@ Historical superseded review disposition —
     Ubuntu 3.10/3.11/3.12/3.13 and Windows 3.14—and those two FAIL legs.
     Either required failure invalidates the candidate irrespective of
     other matrix results. `9bd82876` is the
-    latest failed canonical predecessor origin and grants no hosted, tag,
-    Release or later-gate authority. The current committed exact successor bounds
-    every parsed schema-v1 historical program by an explicit visited-value
-    depth upper limit of 512, preserves the one-megabyte blob, 4096-revision,
-    64-MiB aggregate and 512-predecessor bounds, and tests both real deep input
-    and parser-success rejection. The test helper's deadlock guard rises from
-    15 to 60 seconds without retry or runtime change; both host manifests retain
-    the separately asserted three-second product timeout, and a future 60-second
-    hang opens a bounded cold-start probe rather than another timeout increase.
-    The 102 tracked files now contain 641565
-    Python/test bytes with 38435 bytes, or 5.6522 percent, of headroom. The next
-    gate is a clean unchanged successor revision through canonical and
-    host-local verification plus four independent exact-tree reviews, followed
-    by a fresh full nine-leg hosted matrix; candidate selection alone does not
-    authorize publication.
+    latest failed hosted predecessor origin and grants no hosted, tag, Release
+    or later-gate authority. Exact `39926711d797c90f69ca11bc750adba359df674f`
+    is the canonical origin of the next repository-candidate snapshot; exact
+    `b4f0823ff039caf36628819263d2871c764255dd` is its identical-node
+    documentation carry. That snapshot bounds every parsed schema-v1 historical
+    program by an explicit visited-value depth upper limit of 512, preserves the
+    one-megabyte blob, 4096-revision, 64-MiB aggregate and 512-predecessor bounds,
+    and tests both real deep input and parser-success rejection. The test
+    helper's deadlock guard rises from 15 to 60 seconds without retry or runtime
+    change; both host manifests retain the separately asserted three-second
+    product timeout, and a future 60-second hang opens a bounded cold-start
+    probe rather than another timeout increase. The successor described by this
+    document additionally replaces both README entry points with bilingual
+    progressive disclosure; adds a machine-checked host-leveraged eight-
+    dimension responsibility lens without adding eight modules or changing the
+    public claim ceiling; records both changes in this Release body; rebinds the
+    Release-body and guidance digests; and cites `39926711` as its prior snapshot
+    origin. It changes no runtime behavior, manifest, finite claim or gate. The
+    102 tracked files contain 642358 Python/test bytes with 37642 bytes, or
+    5.5356 percent, of headroom. The next gate is a clean unchanged
+    successor revision through canonical and host-local verification plus four
+    independent exact-tree reviews, followed by a fresh full nine-leg hosted
+    matrix; candidate selection alone does not authorize publication.
 
 The release procedure is now gated on the selected v3.1.0 repository candidate.
 Clean exact-local and host checks, four independent exact-tree reviews, hosted

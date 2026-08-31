@@ -625,6 +625,25 @@ class ProductControlTests(unittest.TestCase):
         self.ae(model['id'], 'complete-bounded-self-bootstrapping/v1')
         self.ae(model['factModel']['values'],
                          ['observed', 'not-observed', 'unknown'])
+        leveraged = model['hostLeveragedBootstrap']
+        self.ae(
+            [item['id'] for item in leveraged['dimensions']],
+            [
+                'self-knowledge', 'self-coherence', 'bounded-autonomy',
+                'on-demand-learning', 'correction', 'recovery',
+                'external-verifiability', 'governed-evolution',
+            ],
+        )
+        self.ae(
+            leveraged['allocationModesRef'],
+            '#/selfBootstrappingCore/semanticModel/responsibilityAllocation/modes',
+        )
+        self.ai('upstream AI Agent', leveraged['upstreamRule'])
+        self.ai('not eight built-in abilities', leveraged['evidenceRule'])
+        self.ai(
+            'does not claim host-independent operation',
+            leveraged['independenceLimit'],
+        )
 
         self.ae(
             model['routeDecision']['comparison']['mode'],

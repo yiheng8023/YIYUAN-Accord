@@ -386,6 +386,48 @@
         "rule": "Allocate each responsibility independently; one route may mix all three modes. Forms, source kinds and whole-task labels cannot substitute for this allocation. Accord-contained means Accord closes the duty through an admitted internalized mechanism; Agent-native means current observed Agent or host behavior closes it and Accord remains no-op except for bounded observation and verification; Accord-Agent-composed means named duties are divided across Accord and Agent under one authority, interface, state, failure, evidence, cleanup and retirement contract.",
         "stageRule": "Observation, injection, execution, consequence, independent evidence and field value are distinct stages. An observed Hook or context injection may enable a route but cannot self-attest Agent use, effect, completion or Accord value."
       },
+      "hostLeveragedBootstrap": {
+        "role": "derived-eight-dimension-responsibility-lens-not-eight-built-in-or-independently-proven-capabilities",
+        "dimensions": [
+          {
+            "id": "self-knowledge",
+            "definition": "Observe the composed system's current state, capabilities, boundaries, dependencies, risks and unknowns, including Accord's own exposure."
+          },
+          {
+            "id": "self-coherence",
+            "definition": "Keep purpose, outcome, authority, rules, structure, route, action, evidence, acceptance, claims and results logically reconciled."
+          },
+          {
+            "id": "bounded-autonomy",
+            "definition": "Within a bound outcome and granted authority, allocate responsibilities, select routes, orchestrate supported work and maintain order."
+          },
+          {
+            "id": "on-demand-learning",
+            "definition": "Use admitted facts, feedback, experience, failure and environment change to update evidence, fitness and regression obligations or form or acquire a candidate capability for governed validation."
+          },
+          {
+            "id": "correction",
+            "definition": "Detect contradiction, drift or error, locate the earliest affected boundary, correct it, replay dependents and preserve regression evidence."
+          },
+          {
+            "id": "recovery",
+            "definition": "After reversible failure, conflict or local damage, roll back, degrade, replace, hand off or restore the last safe state and continuity, or stop honestly when recovery is unavailable."
+          },
+          {
+            "id": "external-verifiability",
+            "definition": "Produce source-bound records of judgment, action, process, consequence and post-state that an independent evaluator can verify without letting the system attest its own correctness."
+          },
+          {
+            "id": "governed-evolution",
+            "definition": "Over time propose bounded changes, upgrade replaceable capability, test the full acceptance vector, retain only net improvements, roll back failures and expand verified applicability or compound value only when longitudinal evidence supports it."
+          }
+        ],
+        "allocationModesRef": "#/selfBootstrappingCore/semanticModel/responsibilityAllocation/modes",
+        "allocationRule": "For a complete bounded self-bootstrapping claim, all eight dimensions are responsibility families. Decompose only their material current duties and allocate each to accord-contained, Agent-native or Accord-Agent-composed execution; each duty must be closed, explicitly retired or held unknown with an honest stop. Do not build eight modules or a Cartesian capability matrix.",
+        "upstreamRule": "The upstream AI Agent, host-native capabilities and ecosystem are the primary candidate means. Accord drives their selection, coordination, constraint, verification, correction and retirement, and authors only the smallest replaceable Accord-contained gap after an evidenced failure of sufficient native or reusable routes.",
+        "evidenceRule": "This lens is not eight built-in abilities and is not behavior or value evidence. External verifiability means self-prepared, source-bound evidence that remains independently checkable rather than self-attested proof. Mapping these responsibilities does not expand the v3.1 public claim ceiling.",
+        "independenceLimit": "Accord does not claim host-independent operation. Hidden state, human values, new human authority, unavailable upstream capability, real-world value and arbitrary irreversible effects remain external constraints, unknowns or honest-stop conditions."
+      },
       "stateCoordination": {
         "axisRule": "State coordination is orthogonal to responsibility implementation. A responsibility may be Accord-contained, Agent-native or composed while its required fields remain host-owned observed facts, Accord-owned exposed facts or field-scoped interoperable facts.",
         "minimumContract": [
