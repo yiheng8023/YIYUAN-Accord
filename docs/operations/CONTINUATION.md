@@ -51,9 +51,15 @@ Then read, in order:
   neighboring plugins through Accord removal and probes exact younger/older-
   than-14-day host cache behavior. Transparent China-red and light/dark theme
   logos change the declared Codex package, so prior package evidence is not
-  inherited. Its frozen replay,
-  affected-surface reacceptance and replacement exact-tree reviews are pending;
-  no repository candidate, hosted status, authorization or publication exists.
+   inherited. Its frozen replay,
+   affected-surface reacceptance and replacement exact-tree reviews are pending;
+   no repository candidate, hosted status, authorization or publication exists.
+- Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
+  frozen replay attempt. It failed before evidence publication because two
+  inventory helpers used `return if`, which PowerShell treated as an external
+  command at runtime. The failure finalizer left neither task root nor evidence;
+  the exact commit is retained as failed evaluator counterevidence, not a
+  repository candidate. The corrected helper form must be frozen and replayed.
 - Dynamic applicability uses a small invariant floor plus current context.
   Methods, rules, standards, adapters and mechanisms activate only for a named
   condition and retain evidence, cost, fallback, verification and retirement
@@ -1034,8 +1040,8 @@ Historical superseded review disposition —
     public claim ceiling; records both changes in this Release body; rebinds the
     Release-body and guidance digests; and cites `39926711` as its prior snapshot
     origin. It changes no runtime behavior, manifest, finite claim or gate. The
-    102 tracked files contain 642358 Python/test bytes with 37642 bytes, or
-    5.5356 percent, of headroom. The next boundary is one frozen schema-v4 GT-20
+    107 tracked files contain 727271 Python/test bytes with 52729 bytes, or
+    6.76 percent, of headroom. The next boundary is one frozen schema-v4 GT-20
     complete-package replay, affected-surface reacceptance and four fresh
     independent reviews. Exact-local and the fresh full nine-leg hosted matrix
     remain later; candidate selection alone cannot authorize publication.

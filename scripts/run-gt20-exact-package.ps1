@@ -666,7 +666,8 @@ function Get-InstalledInventory {
     [string]$Label
   )
   $value = Read-JsonOutput $Result $Label
-  return if ($HostId -eq 'codex') { @($value.installed) } else { @($value) }
+  if ($HostId -eq 'codex') { return @($value.installed) }
+  return @($value)
 }
 
 function Assert-PluginInventory {
@@ -700,7 +701,8 @@ function Get-MarketplaceInventory {
     [string]$Label
   )
   $value = Read-JsonOutput $Result $Label
-  return if ($HostId -eq 'codex') { @($value.marketplaces) } else { @($value) }
+  if ($HostId -eq 'codex') { return @($value.marketplaces) }
+  return @($value)
 }
 
 function Assert-MarketplaceInventory {
