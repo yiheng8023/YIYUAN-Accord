@@ -2509,6 +2509,20 @@ def _frozen_projection_identity(root, program, projection_id):
     }
 
 
+def gt20_exact_lifecycle_invalidated(value):
+    return (
+        isinstance(value, dict)
+        and (value.get("schema"), value.get("earliestAffectedBoundary")) in {
+            ("yiyuan-accord-exact-package-evidence-lifecycle/v1",
+             "complete-host-projection-package-identity"),
+            ("yiyuan-accord-exact-package-evidence-lifecycle/v2",
+             "exact-package-evaluator-failure-closure"),
+        }
+        and value.get("taskId") == "GT-20"
+        and value.get("state") in {"pending", "verified"}
+    )
+
+
 def provisional_gt20_21_source_errors(
     root, program, acceptance, golden, read_json,
 ):
@@ -2552,15 +2566,7 @@ def provisional_gt20_21_source_errors(
         if isinstance(increment, dict) else None
     exact_lifecycle = increment.get("exactPackageEvidenceLifecycle") \
         if isinstance(increment, dict) else None
-    invalidated_gt20 = (
-        isinstance(exact_lifecycle, dict)
-        and exact_lifecycle.get("schema")
-        == "yiyuan-accord-exact-package-evidence-lifecycle/v1"
-        and exact_lifecycle.get("taskId") == "GT-20"
-        and exact_lifecycle.get("earliestAffectedBoundary")
-        == "complete-host-projection-package-identity"
-        and exact_lifecycle.get("state") in {"pending", "verified"}
-    )
+    invalidated_gt20 = gt20_exact_lifecycle_invalidated(exact_lifecycle)
     lifecycle_fields = (
         "schema", "state", "criterionId", "taskIds", "sourceLocator",
         "sourceSha256", "inputEvidenceIds", "targetReleaseTag",
@@ -3082,15 +3088,7 @@ def frozen_gt20_21_promotion_errors(
     increment = program.get("increment")
     exact_lifecycle = increment.get("exactPackageEvidenceLifecycle") \
         if isinstance(increment, dict) else None
-    invalidated_gt20 = (
-        isinstance(exact_lifecycle, dict)
-        and exact_lifecycle.get("schema")
-        == "yiyuan-accord-exact-package-evidence-lifecycle/v1"
-        and exact_lifecycle.get("taskId") == "GT-20"
-        and exact_lifecycle.get("earliestAffectedBoundary")
-        == "complete-host-projection-package-identity"
-        and exact_lifecycle.get("state") in {"pending", "verified"}
-    )
+    invalidated_gt20 = gt20_exact_lifecycle_invalidated(exact_lifecycle)
     tasks = {item.get("id"): item for item in golden.get("tasks", [])
              if isinstance(item, dict) and _text(item.get("id"))}
     entries = {item.get("taskId"): item

@@ -1,3 +1,5 @@
+#requires -Version 7.0
+
 param(
   [Parameter(Mandatory = $true)][string]$RepositoryRoot,
   [Parameter(Mandatory = $true)][string]$CandidateRevision,
@@ -6,6 +8,28 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$CommandTimeoutSeconds = 60
+
+if (-not $IsWindows) {
+  throw 'GT-20 exact package lifecycle evaluator requires Windows.'
+}
+
+function ConvertTo-PortablePath {
+  param([Parameter(Mandatory = $true)][string]$Path)
+  $value = [System.IO.Path]::GetFullPath($Path)
+  foreach ($item in @(
+    @($env:LOCALAPPDATA, '%LOCALAPPDATA%'),
+    @($env:APPDATA, '%APPDATA%'),
+    @($env:USERPROFILE, '%USERPROFILE%')
+  )) {
+    if ($item[0] -and $value.StartsWith(
+        [System.IO.Path]::GetFullPath($item[0]),
+        [System.StringComparison]::OrdinalIgnoreCase)) {
+      return $item[1] + $value.Substring([System.IO.Path]::GetFullPath($item[0]).Length)
+    }
+  }
+  return $value
+}
 
 function Invoke-Captured {
   param(
@@ -49,10 +73,21 @@ function Invoke-Captured {
   $process.StandardInput.Close()
   $stdout = $process.StandardOutput.ReadToEndAsync()
   $stderr = $process.StandardError.ReadToEndAsync()
-  $process.WaitForExit()
+  $timedOut = -not $process.WaitForExit($CommandTimeoutSeconds * 1000)
+  if ($timedOut) {
+    try { $process.Kill($true) } catch { }
+    $process.WaitForExit()
+  }
+  $exitCode = if ($timedOut) { 124 } else { $process.ExitCode }
   return [ordered]@{
     argv = @($File) + $Arguments
-    exitCode = $process.ExitCode
+    resolvedCommand = ConvertTo-PortablePath $command.Source
+    resolvedCommandSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $command.Source).Hash.ToLowerInvariant()
+    launcher = ConvertTo-PortablePath $info.FileName
+    launcherSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $info.FileName).Hash.ToLowerInvariant()
+    timeoutSeconds = $CommandTimeoutSeconds
+    timedOut = $timedOut
+    exitCode = $exitCode
     stdout = $stdout.Result
     stderr = $stderr.Result
   }
@@ -116,6 +151,48 @@ function Assert-InstalledInventory {
   }
 }
 
+function Get-RunnerProcessIds {
+  $ids = [System.Collections.Generic.HashSet[int]]::new()
+  $current = $PID
+  for ($depth = 0; $depth -lt 16 -and $current -gt 0; $depth++) {
+    if (-not $ids.Add($current)) { break }
+    $entry = Get-CimInstance -Query (
+      "SELECT ProcessId, ParentProcessId FROM Win32_Process WHERE ProcessId=$current"
+    )
+    if ($null -eq $entry) { break }
+    $current = [int]$entry.ParentProcessId
+  }
+  return @($ids)
+}
+
+function Get-TaskProcessIds {
+  param([Parameter(Mandatory = $true)][string]$TaskPath)
+  $escapedTask = $TaskPath.Replace('\', '\\').Replace("'", "''")
+  $runnerProcesses = @(Get-RunnerProcessIds)
+  return @(Get-CimInstance -Query (
+    "SELECT ProcessId FROM Win32_Process WHERE CommandLine LIKE '%$escapedTask%'"
+  ) | ForEach-Object { [int]$_.ProcessId } | Where-Object {
+    $_ -notin $runnerProcesses
+  })
+}
+
+function Stop-TaskProcesses {
+  param([Parameter(Mandatory = $true)][string]$TaskPath)
+  for ($attempt = 0; $attempt -lt 5; $attempt++) {
+    $processIds = @(Get-TaskProcessIds $TaskPath)
+    if ($processIds.Count -eq 0) { return @() }
+    foreach ($processId in $processIds) {
+      try {
+        $owned = [System.Diagnostics.Process]::GetProcessById($processId)
+        $owned.Kill($true)
+        [void]$owned.WaitForExit(5000)
+      } catch { }
+    }
+    Start-Sleep -Milliseconds 200
+  }
+  return @(Get-TaskProcessIds $TaskPath)
+}
+
 $repository = [System.IO.Path]::GetFullPath($RepositoryRoot)
 $task = [System.IO.Path]::GetFullPath($TaskRoot)
 $evidencePath = [System.IO.Path]::GetFullPath($EvidenceOutput)
@@ -140,7 +217,11 @@ if (Test-Path -LiteralPath $task) {
 if (Test-Path -LiteralPath $evidencePath) {
   throw 'EvidenceOutput must not already exist.'
 }
-if ((git -C $repository rev-parse $CandidateRevision).Trim() -ne $CandidateRevision) {
+if ($CandidateRevision -notmatch '^[0-9a-f]{40}$') {
+  throw 'CandidateRevision must be a lowercase 40-character Git object id.'
+}
+$resolvedCommit = git -C $repository rev-parse --verify "$CandidateRevision`^{commit}" 2>$null
+if ($LASTEXITCODE -ne 0 -or $resolvedCommit.Trim() -ne $CandidateRevision) {
   throw 'CandidateRevision is not an exact commit.'
 }
 
@@ -156,6 +237,13 @@ $claudeRoot = Join-Path $task 'claude-host'
 foreach ($path in ($oldSource, $candidateSource, $codexRoot, $claudeRoot)) {
   New-Item -ItemType Directory -Path $path | Out-Null
 }
+
+$gitVersion = Invoke-Captured git @('--version') $task
+$commands.Add($gitVersion)
+Assert-Exit $gitVersion 0 'Git version'
+$tarVersion = Invoke-Captured tar @('--version') $task
+$commands.Add($tarVersion)
+Assert-Exit $tarVersion 0 'tar version'
 
 $oldArchive = Join-Path $task 'old.tar'
 $candidateArchive = Join-Path $task 'candidate.tar'
@@ -333,11 +421,7 @@ if ($finalClaudeSettings.userSentinel -ne 'USER_CLAUDE_SETTINGS' -or
     @($finalClaudeSettings.extraKnownMarketplaces.PSObject.Properties).Count -ne 0) {
   throw 'Claude user configuration was not preserved or Accord configuration remains.'
 }
-$escapedTask = $task.Replace('\', '\\').Replace("'", "''")
-$processQuery = "SELECT ProcessId FROM Win32_Process WHERE " +
-  "(Name='node.exe' OR Name='codex.exe' OR Name='claude.exe') AND " +
-  "CommandLine LIKE '%$escapedTask%'"
-$matchingProcesses = @(Get-CimInstance -Query $processQuery)
+$matchingProcesses = @(Get-TaskProcessIds $task)
 if ($matchingProcesses.Count -ne 0) { throw 'Task-owned process remains.' }
 $codexCache = @(Get-ChildItem -LiteralPath (Join-Path $codexRoot 'plugins/cache/yiyuan-accord') -Recurse -File -ErrorAction SilentlyContinue | ForEach-Object {
   [System.IO.Path]::GetRelativePath($codexRoot, $_.FullName).Replace('\', '/')
@@ -358,7 +442,7 @@ foreach ($projection in $candidateProgram.hostProjections) {
   $packages[$projection.id] = $projection.packageSha256
 }
 $record = [ordered]@{
-  schema = 'yiyuan-accord-gt20-exact-package-evidence/v1'
+  schema = 'yiyuan-accord-gt20-exact-package-evidence/v2'
   taskId = 'GT-20'
   evaluatedRevision = $CandidateRevision
   runnerSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $PSCommandPath).Hash.ToLowerInvariant()
@@ -391,6 +475,12 @@ $record = [ordered]@{
     installedBytesMatchDeclaredPackages = $true
     startupHookSilent = $true
     resumeHookTypedContext = $true
+    powerShellVersion = $PSVersionTable.PSVersion.ToString()
+    powerShellEdition = $PSVersionTable.PSEdition
+    powerShellExecutable = ConvertTo-PortablePath ([System.Environment]::ProcessPath)
+    powerShellExecutableSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath ([System.Environment]::ProcessPath)).Hash.ToLowerInvariant()
+    gitVersion = $gitVersion.stdout.Trim()
+    tarVersion = $tarVersion.stdout.Trim()
     codexCliVersion = $codexVersion.stdout.Trim()
     claudeCliVersion = $claudeVersion.stdout.Trim()
     nodeVersion = $nodeVersion.stdout.Trim()
@@ -423,13 +513,26 @@ $evidenceJson = $record | ConvertTo-Json -Depth 20
 $succeeded = $true
 Write-Output $evidencePath
 } finally {
-  if (Test-Path -LiteralPath $task) {
-    Remove-Item -LiteralPath $task -Recurse -Force
-  }
-  if (Test-Path -LiteralPath $task) {
-    throw 'TaskRoot cleanup failed in finalizer.'
-  }
-  if (-not $succeeded -and (Test-Path -LiteralPath $evidencePath)) {
-    Remove-Item -LiteralPath $evidencePath -Force
+  $cleanupErrors = [System.Collections.Generic.List[string]]::new()
+  try {
+    if (@(Stop-TaskProcesses $task).Count -ne 0) {
+      $cleanupErrors.Add('task process cleanup failed')
+    }
+  } catch { $cleanupErrors.Add('task process cleanup failed') }
+  try {
+    if (Test-Path -LiteralPath $task) {
+      Remove-Item -LiteralPath $task -Recurse -Force
+    }
+    if (Test-Path -LiteralPath $task) {
+      $cleanupErrors.Add('task root cleanup failed')
+    }
+  } catch { $cleanupErrors.Add('task root cleanup failed') }
+  try {
+    if (-not $succeeded -and (Test-Path -LiteralPath $evidencePath)) {
+      Remove-Item -LiteralPath $evidencePath -Force
+    }
+  } catch { $cleanupErrors.Add('partial evidence cleanup failed') }
+  if ($cleanupErrors.Count -ne 0) {
+    throw ('GT-20 finalizer: ' + ($cleanupErrors -join '; '))
   }
 }

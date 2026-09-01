@@ -141,8 +141,12 @@ candidate projects 108 files against the structured 111-file ceiling. Eight
 Python files contain the product and tests. The three largest maintained code
 surfaces are the product-control test module, `control.py` and `evidence.py`;
 together they dominate code review, coupling and regression cost. The current
-working tree has 683037 Python-and-product-test bytes against the structured
-720000-byte ceiling, leaving 36963 bytes or 5.13 percent. These measurements
+evaluator-correction tree has 684755 Python-and-product-test bytes against the
+recalibrated structured 722000-byte ceiling, leaving 37245 bytes or 5.16
+percent. The 2000-byte ceiling change pays only for commit-type enforcement,
+bounded child termination, all-task-process cleanup and bound PowerShell, Git,
+tar and executable provenance; it preserves more absolute headroom than the
+prior baseline and is not general growth allowance. These measurements
 become history after any change; `product/program.json` and the canonical
 verifier remain the numerical authority.
 
@@ -154,6 +158,14 @@ Those observations justify profiling and equivalent partitioning work, but do
 not justify removing a compatibility leg or skipping the one full exact
 candidate run.
 
+The reported test-position hotspot was measured rather than inferred. Test 24,
+`test_live_hook_stays_silent_for_fresh_startup`, passes alone in about 0.141
+seconds. The observed long seam is test 3,
+`test_complexity_identity_and_paths_fail_closed`, which repeats several full
+repository verification variants and exceeded eight minutes in the interrupted
+candidate run. Position numbers remain diagnostic hints, not stable test
+identity; optimization is accepted only against named tests and obligations.
+
 Evidence volume and projection drift are the other major costs. The largest
 retained source record is about 835 KB, while version, package identity,
 release state and explanatory prose appear across structured product files,
@@ -164,8 +176,10 @@ status.
 
 The ordered bottlenecks are:
 
-1. Preserve schema-v2 lineage, exact package identity, full command evidence,
-   rollback, user-state preservation and cleanup fail-closed.
+1. Close the versioned GT-20 evaluator boundary: exact commit type, bounded
+   command and descendant termination, any task-root process, resolved-tool and
+   environment identity, full command evidence, rollback, user-state
+   preservation and cleanup all fail closed.
 2. Profile validation by test and stable dependency boundary. Admit a fast
    affected-boundary loop only after it selects every mutated obligation; keep
    one full exact suite and all nine matrix legs until equivalent partitioning
