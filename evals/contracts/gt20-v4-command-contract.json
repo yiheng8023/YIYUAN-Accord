@@ -1,0 +1,238 @@
+{
+  "schema": "yiyuan-accord-gt20-command-contract-overlay/v1",
+  "baseContract": {
+    "locator": "evals/contracts/gt20-v3-command-contract.json",
+    "sha256": "53b8281282f876b7298da20577de3859ef107cc689c7aa2de99866a70d52355c"
+  },
+  "priorRelease": {
+    "tag": "v3.0.1",
+    "revision": "24cf9f3750ecd700944988e81a519db54b67b8e8"
+  },
+  "activationProof": {
+    "codex": {
+      "transport": "app-server-stdio-jsonl",
+      "requiredRpcMethods": [
+        "hooks/list",
+        "thread/start",
+        "turn/start",
+        "thread/resume"
+      ],
+      "requiredHookNotifications": [
+        "hook/started",
+        "hook/completed"
+      ],
+      "qualifyingCommandRole": "codexHostActivation",
+      "unitOnlyCommandRoles": [
+        "codexHookRuntimeUnitStartup",
+        "codexHookRuntimeUnitResume"
+      ],
+      "lifecycleTrigger": {
+        "rpcMethod": "turn/start",
+        "modelProvider": "task-owned-loopback-responses-failure",
+        "requiresOpenAIAuth": false,
+        "expectedTerminalStatus": "failed",
+        "purpose": "run-pending-session-start-hooks-before-model-request"
+      },
+      "lifecycleTriggerTurns": 2,
+      "externalModelTurns": 0,
+      "credentialEnvironmentInherited": false
+    },
+    "claude": {
+      "transport": "headless-stream-json-with-loopback-trigger-and-task-owned-node-observer",
+      "requiredSessionStartSources": [
+        "startup",
+        "resume"
+      ],
+      "requiredNativeHookEvents": [
+        "hook_started",
+        "hook_response"
+      ],
+      "qualifyingCommandRole": "claudeHostActivation",
+      "unitOnlyCommandRoles": [
+        "claudeHookRuntimeUnitStartup",
+        "claudeHookRuntimeUnitResume"
+      ],
+      "lifecycleTrigger": {
+        "cliMode": "print",
+        "modelProvider": "task-owned-loopback-messages-failure",
+        "requiresUserAnthropicAuth": false,
+        "expectedTerminalStatus": "api_error",
+        "purpose": "establish-resumable-session-and-run-session-start-before-model-response"
+      },
+      "lifecycleTriggerTurns": 2,
+      "externalModelTurns": 0,
+      "minimumLoopbackHttpRequests": 2,
+      "requiredLoadedPlugin": {
+        "name": "yiyuan-accord-claude",
+        "version": "3.1.0"
+      },
+      "credentialEnvironmentInherited": false
+    }
+  },
+  "failedUpdateProof": {
+    "minimumAcceptedPhase": "host-accepted-update-with-task-owned-staging-observed",
+    "forbiddenFailureCategory": "source-path-absent",
+    "priorInventoryCommandRoles": {
+      "codex": "rollbackCodexInventory",
+      "claude": "rollbackClaudeInventory"
+    },
+    "requiredPoststate": [
+      "exact-prior-installed-bytes-preserved",
+      "official-inventory-reports-prior-version",
+      "fresh-host-inventory-selects-prior-version",
+      "no-candidate-or-temporary-active-residue",
+      "neighbor-and-concurrent-sentinels-preserved"
+    ],
+    "dispositionRule": "Report automatic rollback only after a post-switch failure restores the prior version. A precommit staging failure may prove prior-remained-active and staging cleanup, but not automatic rollback."
+  },
+  "commandEdits": {
+    "replaceRoles": [
+      "accordCodexFailedUpdate",
+      "accordClaudeFailedUpdate",
+      "codexHookStartup",
+      "codexHookResume",
+      "claudeHookStartup",
+      "claudeHookResume"
+    ],
+    "prependArgumentsByRole": {
+      "neighborCodexMarketplaceAdd": [
+        "--dangerously-bypass-hook-trust"
+      ],
+      "neighborCodexInstall": [
+        "--dangerously-bypass-hook-trust"
+      ],
+      "accordCodexMarketplaceAdd": [
+        "--dangerously-bypass-hook-trust"
+      ],
+      "accordCodexInstallPrior": [
+        "--dangerously-bypass-hook-trust"
+      ],
+      "accordCodexUpdateCandidate": [
+        "--dangerously-bypass-hook-trust"
+      ]
+    }
+  },
+  "commands": [
+    {
+      "role": "accordCodexFailedUpdateAfterStaging",
+      "replacesRole": "accordCodexFailedUpdate",
+      "argv": [
+        "codex",
+        "--dangerously-bypass-hook-trust",
+        "plugin",
+        "add",
+        "yiyuan-accord-codex@yiyuan-accord",
+        "--json"
+      ],
+      "environmentProfile": "isolated-codex",
+      "expectedFailureCategory": "task-owned-candidate-lock-after-staging",
+      "expectedExit": "nonzero"
+    },
+    {
+      "role": "accordClaudeFailedUpdateAfterStaging",
+      "replacesRole": "accordClaudeFailedUpdate",
+      "argv": [
+        "claude",
+        "plugin",
+        "update",
+        "yiyuan-accord-claude@yiyuan-accord",
+        "--scope",
+        "user",
+        "-y"
+      ],
+      "environmentProfile": "isolated-claude",
+      "expectedFailureCategory": "task-owned-candidate-lock-after-staging",
+      "expectedExit": "nonzero"
+    },
+    {
+      "role": "codexHostActivation",
+      "insertBeforeRole": "codexHookStartup",
+      "argv": [
+        "codex",
+        "--dangerously-bypass-hook-trust",
+        "app-server",
+        "--stdio"
+      ],
+      "environmentProfile": "isolated-codex",
+      "inputPolicy": "app-server-hook-lifecycle-with-loopback-trigger",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "codexHookRuntimeUnitStartup",
+      "replacesRole": "codexHookStartup",
+      "argv": [
+        "node",
+        "%TASK_ROOT%/codex-host/plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.1.0/runtime/accord-hook.cjs"
+      ],
+      "environmentProfile": "isolated-base",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "codexHookRuntimeUnitResume",
+      "replacesRole": "codexHookResume",
+      "argv": [
+        "node",
+        "%TASK_ROOT%/codex-host/plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.1.0/runtime/accord-hook.cjs"
+      ],
+      "environmentProfile": "isolated-base",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "claudeHostActivation",
+      "insertBeforeRole": "codexHookStartup",
+      "argv": [
+        "claude",
+        "-p",
+        "%TASK_OWNED_LIFECYCLE_TRIGGER%",
+        "--output-format",
+        "stream-json",
+        "--include-hook-events",
+        "--verbose",
+        "--strict-mcp-config",
+        "--mcp-config",
+        "{\"mcpServers\":{}}",
+        "--setting-sources",
+        "user",
+        "--no-chrome",
+        "--max-budget-usd",
+        "0.01"
+      ],
+      "environmentProfile": "isolated-claude",
+      "additionalEnvironmentKeys": [
+        "ANTHROPIC_API_KEY",
+        "ANTHROPIC_BASE_URL",
+        "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
+        "CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL"
+      ],
+      "requiredEnvironmentKeys": [
+        "ANTHROPIC_API_KEY",
+        "ANTHROPIC_BASE_URL",
+        "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC",
+        "CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL"
+      ],
+      "inputPolicy": "headless-hook-lifecycle-with-loopback-trigger",
+      "expectedLoadedPluginVersion": "3.1.0",
+      "expectedExit": "nonzero"
+    },
+    {
+      "role": "claudeHookRuntimeUnitStartup",
+      "replacesRole": "claudeHookStartup",
+      "argv": [
+        "node",
+        "%TASK_ROOT%/claude-host/plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/runtime/accord-hook.cjs"
+      ],
+      "environmentProfile": "isolated-base",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "claudeHookRuntimeUnitResume",
+      "replacesRole": "claudeHookResume",
+      "argv": [
+        "node",
+        "%TASK_ROOT%/claude-host/plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/runtime/accord-hook.cjs"
+      ],
+      "environmentProfile": "isolated-base",
+      "expectedExit": "zero"
+    }
+  ]
+}

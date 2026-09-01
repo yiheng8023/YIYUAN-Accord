@@ -31,8 +31,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
 
@@ -309,6 +312,23 @@ public sealed class AccordSuspendedProcess : IDisposable {
     input = null;
   }
 
+  public void ResumeInteractive() {
+    if (threadHandle == IntPtr.Zero) throw new InvalidOperationException("Process is not suspended.");
+    if (ResumeThread(threadHandle) == UInt32.MaxValue)
+      throw new Win32Exception(Marshal.GetLastWin32Error());
+    CloseHandle(threadHandle);
+    threadHandle = IntPtr.Zero;
+  }
+
+  public void WriteInputLine(string value) {
+    if (input == null) throw new InvalidOperationException("Process input is closed.");
+    input.WriteLine(value ?? "");
+  }
+
+  public void CloseInput() {
+    if (input != null) { input.Dispose(); input = null; }
+  }
+
   public void Dispose() {
     if (threadHandle != IntPtr.Zero) { CloseHandle(threadHandle); threadHandle = IntPtr.Zero; }
     if (input != null) { input.Dispose(); input = null; }
@@ -318,6 +338,63 @@ public sealed class AccordSuspendedProcess : IDisposable {
       try { if (!Process.HasExited) Process.Kill(true); } catch { }
       Process.Dispose(); Process = null;
     }
+  }
+}
+
+public sealed class AccordLoopbackFailingResponsesServer : IDisposable {
+  private readonly TcpListener listener;
+  private readonly CancellationTokenSource cancellation = new CancellationTokenSource();
+  private readonly Task serverTask;
+  private int requestCount;
+
+  public AccordLoopbackFailingResponsesServer() {
+    listener = new TcpListener(IPAddress.Loopback, 0);
+    listener.Start();
+    Port = ((IPEndPoint)listener.LocalEndpoint).Port;
+    serverTask = Task.Run(() => Serve());
+  }
+
+  public int Port { get; private set; }
+  public int RequestCount { get { return Volatile.Read(ref requestCount); } }
+
+  private void Serve() {
+    while (!cancellation.IsCancellationRequested) {
+      TcpClient client;
+      try { client = listener.AcceptTcpClient(); }
+      catch (SocketException) when (cancellation.IsCancellationRequested) { break; }
+      catch (ObjectDisposedException) when (cancellation.IsCancellationRequested) { break; }
+      using (client) {
+        try {
+          client.ReceiveTimeout = 5000;
+          client.SendTimeout = 5000;
+          using (NetworkStream stream = client.GetStream()) {
+            byte[] request = new byte[8192];
+            int read = stream.Read(request, 0, request.Length);
+            if (read <= 0) continue;
+            Interlocked.Increment(ref requestCount);
+            byte[] body = Encoding.UTF8.GetBytes(
+              "{\"error\":{\"message\":\"intentional GT-20 lifecycle stop\"}}"
+            );
+            byte[] header = Encoding.ASCII.GetBytes(
+              "HTTP/1.1 400 Bad Request\r\n" +
+              "Content-Type: application/json\r\n" +
+              "Connection: close\r\n" +
+              "Content-Length: " + body.Length + "\r\n\r\n"
+            );
+            stream.Write(header, 0, header.Length);
+            stream.Write(body, 0, body.Length);
+            stream.Flush();
+          }
+        } catch (IOException) when (cancellation.IsCancellationRequested) { }
+      }
+    }
+  }
+
+  public void Dispose() {
+    cancellation.Cancel();
+    listener.Stop();
+    try { serverTask.Wait(5000); } catch (AggregateException) { }
+    cancellation.Dispose();
   }
 }
 '@
@@ -376,23 +453,29 @@ function Test-PrivateEvidenceText {
 }
 
 function Assert-NoPrivateEvidenceValue {
-  param([Parameter(Mandatory = $true)]$Value)
-  $pending = [System.Collections.Generic.Stack[object]]::new()
-  $pending.Push($Value)
-  while ($pending.Count -ne 0) {
-    $current = $pending.Pop()
-    if ($current -is [string]) {
-      if (Test-PrivateEvidenceText $current) {
-        throw 'Evidence retained a private or task-local root.'
-      }
-    } elseif ($current -is [System.Collections.IDictionary]) {
-      foreach ($item in $current.Values) { $pending.Push($item) }
-    } elseif ($current -is [pscustomobject]) {
-      foreach ($property in $current.PSObject.Properties) {
-        $pending.Push($property.Value)
-      }
-    } elseif ($current -is [System.Collections.IEnumerable]) {
-      foreach ($item in $current) { $pending.Push($item) }
+  param(
+    [Parameter(Mandatory = $true)][AllowNull()]$Value,
+    [string]$Location = '$'
+  )
+  if ($Value -is [string]) {
+    if (Test-PrivateEvidenceText $Value) {
+      throw "Evidence retained a private or task-local root at $Location."
+    }
+  } elseif ($Value -is [System.Collections.IDictionary]) {
+    foreach ($key in $Value.Keys) {
+      Assert-NoPrivateEvidenceValue $Value[$key] "$Location.$key"
+    }
+  } elseif ($Value -is [pscustomobject]) {
+    foreach ($property in $Value.PSObject.Properties) {
+      Assert-NoPrivateEvidenceValue $property.Value (
+        "$Location.$($property.Name)"
+      )
+    }
+  } elseif ($Value -is [System.Collections.IEnumerable]) {
+    $index = 0
+    foreach ($item in $Value) {
+      Assert-NoPrivateEvidenceValue $item "${Location}[$index]"
+      $index++
     }
   }
 }
@@ -574,6 +657,896 @@ function Invoke-Captured {
   }
 }
 
+function Invoke-CodexAppServerConnection {
+  param(
+    [Parameter(Mandatory = $true)]
+    [ValidateSet('thread/start', 'thread/resume')][string]$Method,
+    [AllowNull()][string]$ThreadId,
+    [Parameter(Mandatory = $true)][string]$WorkingDirectory,
+    [Parameter(Mandatory = $true)][hashtable]$Environment,
+    [Parameter(Mandatory = $true)][string]$ExpectedHookSourcePath,
+    [Parameter(Mandatory = $true)][string]$MockBaseUrl
+  )
+  if (($Method -eq 'thread/start') -eq (-not [string]::IsNullOrEmpty($ThreadId))) {
+    throw 'Codex App Server thread id does not match the requested lifecycle method.'
+  }
+  $mockUri = [Uri]$MockBaseUrl
+  if ($mockUri.Scheme -ne 'http' -or $mockUri.Host -ne '127.0.0.1' -or
+      -not $mockUri.AbsolutePath.EndsWith('/v1')) {
+    throw 'Codex lifecycle model probe must remain on task-owned loopback.'
+  }
+  $clock = [System.Diagnostics.Stopwatch]::StartNew()
+  $arguments = @('--dangerously-bypass-hook-trust', 'app-server', '--stdio')
+  $command = Get-Command 'codex.exe' -CommandType Application -ErrorAction SilentlyContinue |
+    Select-Object -First 1
+  if ($null -eq $command) {
+    $command = Get-Command 'codex.cmd' -CommandType Application -ErrorAction Stop |
+      Select-Object -First 1
+  }
+  $identity = Get-TerminalCommandIdentity $command
+  $environmentOverrides = [System.Collections.Generic.Dictionary[string,string]]::new(
+    [System.StringComparer]::OrdinalIgnoreCase
+  )
+  foreach ($name in $ChildEnvironmentNames) {
+    $value = [System.Environment]::GetEnvironmentVariable($name)
+    if ($null -ne $value) { $environmentOverrides[$name] = $value }
+  }
+  foreach ($entry in $Environment.GetEnumerator()) {
+    $environmentOverrides[$entry.Key] = [string]$entry.Value
+  }
+  $commandTemp = Join-Path $script:TaskPathForEvidence 'command-temp'
+  [void][System.IO.Directory]::CreateDirectory($commandTemp)
+  $environmentOverrides['TEMP'] = $commandTemp
+  $environmentOverrides['TMP'] = $commandTemp
+
+  $job = [AccordProcessJob]::new()
+  $owned = $null
+  try {
+    $owned = [AccordSuspendedProcess]::Start(
+      $identity.terminalExecutableRaw, $arguments, $WorkingDirectory,
+      $environmentOverrides, $job
+    )
+    $owned.ResumeInteractive()
+    $stderrTask = [AccordSuspendedProcess]::ReadBoundedAsync(
+      $owned.StandardError, $CommandOutputLimitBytes
+    )
+    $requestId = if ($Method -eq 'thread/start') { 10 } else { 11 }
+    $initialize = [ordered]@{
+      method = 'initialize'
+      id = 0
+      params = [ordered]@{
+        clientInfo = [ordered]@{
+          name = 'yiyuan_accord_gt20'
+          title = 'YIYUAN Accord GT-20 Evaluator'
+          version = '3.1.0'
+        }
+      }
+    }
+    $modelProviderName = 'yiyuan_accord_gt20_mock'
+    $modelProviders = [ordered]@{}
+    $modelProviders[$modelProviderName] = [ordered]@{
+      name = 'YIYUAN Accord GT-20 loopback failure'
+      base_url = $MockBaseUrl
+      wire_api = 'responses'
+      requires_openai_auth = $false
+    }
+    $threadConfig = [ordered]@{
+      model_provider = $modelProviderName
+      model_providers = $modelProviders
+      bypass_hook_trust = $true
+    }
+    $requestParams = [ordered]@{
+      cwd = $WorkingDirectory
+      model = 'yiyuan-accord-gt20-lifecycle-probe'
+      approvalPolicy = 'never'
+      sandbox = 'read-only'
+      config = $threadConfig
+    }
+    if ($Method -eq 'thread/start') {
+      $requestParams['serviceName'] = 'yiyuan_accord_gt20'
+    } else {
+      $requestParams['threadId'] = $ThreadId
+    }
+    $hooksList = [ordered]@{
+      method = 'hooks/list'
+      id = 1
+      params = [ordered]@{cwds = @($WorkingDirectory)}
+    }
+    $request = [ordered]@{method = $Method; id = $requestId; params = $requestParams}
+    $initializeLine = $initialize | ConvertTo-Json -Compress -Depth 20
+    $initializedLine = (([ordered]@{method = 'initialized'; params = [ordered]@{}}) |
+      ConvertTo-Json -Compress -Depth 20)
+    $hooksListLine = $hooksList | ConvertTo-Json -Compress -Depth 20
+    $requestLine = $request | ConvertTo-Json -Compress -Depth 20
+    $inputLines = @($initializeLine, $initializedLine, $hooksListLine, $requestLine)
+
+    $outputLines = [System.Collections.Generic.List[string]]::new()
+    $outputBytes = 0
+    $owned.WriteInputLine($initializeLine)
+    $initializeResponse = $null
+    $lineTask = $owned.StandardOutput.ReadLineAsync()
+    $initializeDeadline = [DateTimeOffset]::UtcNow.AddSeconds(10)
+    while ([DateTimeOffset]::UtcNow -lt $initializeDeadline) {
+      if (-not $lineTask.Wait(100)) { continue }
+      $line = $lineTask.Result
+      if ($null -eq $line) { break }
+      $lineBytes = [System.Text.Encoding]::UTF8.GetByteCount($line + "`n")
+      if ($outputBytes + $lineBytes -gt $CommandOutputLimitBytes) {
+        throw 'Codex App Server output exceeded the evidence byte limit.'
+      }
+      $outputBytes += $lineBytes
+      [void]$outputLines.Add($line)
+      try { $message = $line | ConvertFrom-Json -Depth 40 } catch {
+        throw 'Codex App Server emitted non-JSON stdout.'
+      }
+      if ($message.id -eq 0) {
+        $initializeResponse = $message
+        break
+      }
+      $lineTask = $owned.StandardOutput.ReadLineAsync()
+    }
+    if ($null -eq $initializeResponse -or
+        $null -ne $initializeResponse.error -or
+        $null -eq $initializeResponse.result) {
+      throw 'Codex App Server initialize handshake failed.'
+    }
+    $owned.WriteInputLine($initializedLine)
+    $owned.WriteInputLine($hooksListLine)
+    $hooksListResponse = $null
+    $lineTask = $owned.StandardOutput.ReadLineAsync()
+    $hooksListDeadline = [DateTimeOffset]::UtcNow.AddSeconds(10)
+    while ([DateTimeOffset]::UtcNow -lt $hooksListDeadline) {
+      if (-not $lineTask.Wait(100)) { continue }
+      $line = $lineTask.Result
+      if ($null -eq $line) { break }
+      $lineBytes = [System.Text.Encoding]::UTF8.GetByteCount($line + "`n")
+      if ($outputBytes + $lineBytes -gt $CommandOutputLimitBytes) {
+        throw 'Codex App Server output exceeded the evidence byte limit.'
+      }
+      $outputBytes += $lineBytes
+      [void]$outputLines.Add($line)
+      try { $message = $line | ConvertFrom-Json -Depth 40 } catch {
+        throw 'Codex App Server emitted non-JSON stdout.'
+      }
+      if ($message.id -eq 1) {
+        $hooksListResponse = $message
+        break
+      }
+      $lineTask = $owned.StandardOutput.ReadLineAsync()
+    }
+    if ($null -eq $hooksListResponse -or
+        $null -ne $hooksListResponse.error -or
+        $null -eq $hooksListResponse.result.data) {
+      throw 'Codex App Server hooks/list failed.'
+    }
+    $matchingCwdEntries = @($hooksListResponse.result.data | Where-Object {
+      [System.IO.Path]::GetFullPath([string]$_.cwd).Equals(
+        [System.IO.Path]::GetFullPath($WorkingDirectory),
+        [System.StringComparison]::OrdinalIgnoreCase
+      )
+    })
+    $discoveredHooks = @($matchingCwdEntries | ForEach-Object { $_.hooks })
+    $qualifyingHooks = @($discoveredHooks | Where-Object {
+      $_.eventName -eq 'SessionStart' -and
+      $_.source -eq 'plugin' -and
+      $_.handlerType -eq 'command' -and
+      $_.enabled -eq $true -and
+      [System.IO.Path]::GetFullPath([string]$_.sourcePath).Equals(
+        [System.IO.Path]::GetFullPath($ExpectedHookSourcePath),
+        [System.StringComparison]::OrdinalIgnoreCase
+      )
+    })
+    $discoveryErrors = @($matchingCwdEntries | ForEach-Object { $_.errors })
+    if ($matchingCwdEntries.Count -ne 1 -or $qualifyingHooks.Count -ne 1 -or
+        $discoveryErrors.Count -ne 0) {
+      $discoverySummary = @($discoveredHooks | ForEach-Object {
+        [ordered]@{
+          eventName = $_.eventName
+          source = $_.source
+          sourcePathMatches = [System.IO.Path]::GetFullPath(
+            [string]$_.sourcePath
+          ).Equals(
+            [System.IO.Path]::GetFullPath($ExpectedHookSourcePath),
+            [System.StringComparison]::OrdinalIgnoreCase
+          )
+          handlerType = $_.handlerType
+          enabled = $_.enabled
+          trustStatus = $_.trustStatus
+        }
+      }) | ConvertTo-Json -Compress -Depth 5
+      throw (
+        'Codex App Server hooks/list did not discover the installed Hook. ' +
+        "cwdEntries=$($matchingCwdEntries.Count),errors=$($discoveryErrors.Count)," +
+        "hooks=$discoverySummary"
+      )
+    }
+    $discoveredHook = $qualifyingHooks[0]
+    $owned.WriteInputLine($requestLine)
+
+    $response = $null
+    $lineTask = $owned.StandardOutput.ReadLineAsync()
+    $threadDeadline = [DateTimeOffset]::UtcNow.AddSeconds(15)
+    while ([DateTimeOffset]::UtcNow -lt $threadDeadline) {
+      if (-not $lineTask.Wait(100)) { continue }
+      $line = $lineTask.Result
+      if ($null -eq $line) { break }
+      $lineBytes = [System.Text.Encoding]::UTF8.GetByteCount($line + "`n")
+      if ($outputBytes + $lineBytes -gt $CommandOutputLimitBytes) {
+        throw 'Codex App Server output exceeded the evidence byte limit.'
+      }
+      $outputBytes += $lineBytes
+      [void]$outputLines.Add($line)
+      try { $message = $line | ConvertFrom-Json -Depth 40 } catch {
+        throw 'Codex App Server emitted non-JSON stdout.'
+      }
+      if ($message.id -eq $requestId) { $response = $message }
+      if ($null -ne $response) { break }
+      $lineTask = $owned.StandardOutput.ReadLineAsync()
+    }
+    if ($null -eq $response) {
+      throw "Codex App Server $Method did not return a response."
+    }
+    if ($null -ne $response.error) {
+      throw "Codex App Server $Method rejected the request: $($response.error.message)"
+    }
+    if ($null -eq $response.result.thread.id) {
+      throw "Codex App Server $Method returned a malformed thread receipt."
+    }
+    $observedThreadId = [string]$response.result.thread.id
+    if ($Method -eq 'thread/resume' -and $observedThreadId -ne $ThreadId) {
+      throw 'Codex App Server resumed a different thread.'
+    }
+
+    $turnRequestId = if ($Method -eq 'thread/start') { 20 } else { 21 }
+    $turnRequest = [ordered]@{
+      method = 'turn/start'
+      id = $turnRequestId
+      params = [ordered]@{
+        threadId = $observedThreadId
+        input = @([ordered]@{
+          type = 'text'
+          text = 'GT-20 lifecycle activation probe; do not invoke tools.'
+        })
+      }
+    }
+    $turnLine = $turnRequest | ConvertTo-Json -Compress -Depth 20
+    $inputLines += $turnLine
+    $owned.WriteInputLine($turnLine)
+
+    $turnResponse = $null
+    $turnCompleted = $null
+    $hookStarted = $null
+    $hookCompleted = $null
+    $hookObservations = [System.Collections.Generic.List[object]]::new()
+    $lineTask = $owned.StandardOutput.ReadLineAsync()
+    $deadline = [DateTimeOffset]::UtcNow.AddSeconds(30)
+    while ([DateTimeOffset]::UtcNow -lt $deadline) {
+      if (-not $lineTask.Wait(100)) { continue }
+      $line = $lineTask.Result
+      if ($null -eq $line) { break }
+      $lineBytes = [System.Text.Encoding]::UTF8.GetByteCount($line + "`n")
+      if ($outputBytes + $lineBytes -gt $CommandOutputLimitBytes) {
+        throw 'Codex App Server output exceeded the evidence byte limit.'
+      }
+      $outputBytes += $lineBytes
+      [void]$outputLines.Add($line)
+      try { $message = $line | ConvertFrom-Json -Depth 40 } catch {
+        throw 'Codex App Server emitted non-JSON stdout.'
+      }
+      if ($message.id -eq $turnRequestId) { $turnResponse = $message }
+      if ($message.method -eq 'turn/completed') { $turnCompleted = $message }
+      if ($message.method -in @('hook/started', 'hook/completed')) {
+        $run = $message.params.run
+        $sourcePath = [System.IO.Path]::GetFullPath([string]$run.sourcePath)
+        $sourcePathMatches = $sourcePath.Equals(
+          [System.IO.Path]::GetFullPath($ExpectedHookSourcePath),
+          [System.StringComparison]::OrdinalIgnoreCase
+        )
+        [void]$hookObservations.Add([ordered]@{
+          method = $message.method
+          eventName = $run.eventName
+          source = $run.source
+          sourcePathMatches = $sourcePathMatches
+          scope = $run.scope
+          handlerType = $run.handlerType
+          status = $run.status
+        })
+        if ($run.eventName -eq 'SessionStart' -and
+            $run.source -eq 'plugin' -and
+            $sourcePathMatches) {
+          if ($message.method -eq 'hook/started') { $hookStarted = $message }
+          if ($message.method -eq 'hook/completed') { $hookCompleted = $message }
+        }
+      }
+      if ($null -ne $turnResponse -and $null -ne $hookStarted -and
+          $null -ne $hookCompleted -and $null -ne $turnCompleted) { break }
+      if ($null -ne $turnResponse -and $null -ne $turnResponse.error) { break }
+      $lineTask = $owned.StandardOutput.ReadLineAsync()
+    }
+    if ($null -eq $turnResponse) {
+      throw "Codex App Server $Method lifecycle turn did not return a response."
+    }
+    if ($null -ne $turnResponse.error) {
+      throw (
+        "Codex App Server $Method lifecycle turn was rejected: " +
+        $turnResponse.error.message
+      )
+    }
+    if ($null -eq $turnResponse.result.turn.id) {
+      throw "Codex App Server $Method returned a malformed lifecycle turn receipt."
+    }
+    $observedTurnId = [string]$turnResponse.result.turn.id
+    if ($null -eq $hookStarted -or $null -eq $hookCompleted) {
+      $missingKinds = @()
+      if ($null -eq $hookStarted) { $missingKinds += 'hook/started' }
+      if ($null -eq $hookCompleted) { $missingKinds += 'hook/completed' }
+      $observationSummary = $hookObservations | ConvertTo-Json -Compress -Depth 5
+      throw (
+        "Codex App Server $Method did not emit qualifying " +
+        ($missingKinds -join ',') + "; observed=$observationSummary"
+      )
+    }
+    if ($null -eq $turnCompleted -or
+        $turnCompleted.params.turn.id -ne $observedTurnId -or
+        $turnCompleted.params.turn.status -ne 'failed') {
+      throw "Codex App Server $Method loopback lifecycle turn did not fail closed."
+    }
+    foreach ($notification in @($hookStarted, $hookCompleted)) {
+      if ($null -eq $notification -or
+          $notification.params.threadId -ne $observedThreadId -or
+          $notification.params.turnId -ne $observedTurnId -or
+          $notification.params.run.scope -ne 'thread' -or
+          $notification.params.run.handlerType -ne 'command') {
+        $receiptState = if ($null -eq $notification) {
+          'missing'
+        } else {
+          'threadMatch={0},turnMatch={1},scope={2},handlerType={3}' -f
+            ($notification.params.threadId -eq $observedThreadId),
+            ($notification.params.turnId -eq $observedTurnId),
+            $notification.params.run.scope,
+            $notification.params.run.handlerType
+        }
+        throw "Codex App Server $Method Hook receipt is incomplete: $receiptState"
+      }
+    }
+    if ($hookStarted.params.run.status -ne 'running' -or
+        $hookCompleted.params.run.status -ne 'completed' -or
+        $hookStarted.params.run.id -ne $hookCompleted.params.run.id) {
+      throw "Codex App Server $Method Hook did not complete successfully."
+    }
+    $owned.CloseInput()
+    $exitDeadline = [DateTimeOffset]::UtcNow.AddSeconds(10)
+    while ([DateTimeOffset]::UtcNow -lt $exitDeadline -and
+        (-not $owned.Process.HasExited -or $job.ActiveProcessCount -ne 0)) {
+      Start-Sleep -Milliseconds 50
+    }
+    if (-not $owned.Process.HasExited -or $job.ActiveProcessCount -ne 0) {
+      $job.Terminate(124)
+      throw "Codex App Server $Method did not terminate after stdin closed."
+    }
+    $remainingOutput = $owned.StandardOutput.ReadToEnd()
+    if ($remainingOutput.Length -ne 0) { [void]$outputLines.Add($remainingOutput) }
+    if (-not $stderrTask.Wait(5000)) {
+      throw "Codex App Server $Method stderr did not drain."
+    }
+    if ($stderrTask.IsFaulted) {
+      throw "Codex App Server $Method stderr exceeded the evidence byte limit."
+    }
+    $publicStdout = ConvertTo-PublicEvidenceText ($outputLines -join "`n")
+    $publicStderr = ConvertTo-PublicEvidenceText $stderrTask.Result
+    $publicInput = ConvertTo-PublicEvidenceText ($inputLines -join "`n")
+    $hookRunId = [string]$hookStarted.params.run.id
+    if ($hookRunId -ne [string]$hookCompleted.params.run.id) {
+      throw "Codex App Server $Method Hook lifecycle identity drifted."
+    }
+    # Current Codex Hook run identifiers may embed task-local source paths.
+    # Preserve correlation without publishing the host-private identifier.
+    $hookRunIdSha256 = [Convert]::ToHexString(
+      [System.Security.Cryptography.SHA256]::HashData(
+        [System.Text.Encoding]::UTF8.GetBytes($hookRunId)
+      )
+    ).ToLowerInvariant()
+    return [ordered]@{
+      command = [ordered]@{
+        argv = @('codex', '--dangerously-bypass-hook-trust', 'app-server', '--stdio')
+        resolvedCommand = ConvertTo-PortablePath $command.Source
+        resolvedCommandSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $command.Source).Hash.ToLowerInvariant()
+        launcher = $identity.terminalExecutable
+        launcherSha256 = $identity.terminalExecutableSha256
+        terminalExecutable = $identity.terminalExecutable
+        terminalExecutableSha256 = $identity.terminalExecutableSha256
+        packageManifest = $identity.packageManifest
+        packageManifestSha256 = $identity.packageManifestSha256
+        environmentProfile = 'isolated-codex'
+        environmentKeys = @($environmentOverrides.Keys | Sort-Object)
+        environmentBindings = [ordered]@{
+          CODEX_HOME = '%TASK_ROOT%/codex-host'
+          TEMP = '%TASK_ROOT%/command-temp'
+          TMP = '%TASK_ROOT%/command-temp'
+        }
+        inputSha256 = [Convert]::ToHexString(
+          [System.Security.Cryptography.SHA256]::HashData(
+            [System.Text.Encoding]::UTF8.GetBytes($publicInput)
+          )
+        ).ToLowerInvariant()
+        executionTimeoutSeconds = $CommandTimeoutSeconds
+        endToEndTimeoutSeconds = $CommandEndToEndTimeoutSeconds
+        outputLimitBytes = $CommandOutputLimitBytes
+        elapsedMilliseconds = [Math]::Round($clock.Elapsed.TotalMilliseconds)
+        stdoutBytes = [System.Text.Encoding]::UTF8.GetByteCount($publicStdout)
+        stderrBytes = [System.Text.Encoding]::UTF8.GetByteCount($publicStderr)
+        timedOut = $false
+        terminationRequested = $false
+        terminationConfirmed = $true
+        streamsDrained = $true
+        jobActiveProcesses = [int]$job.ActiveProcessCount
+        exitCode = $owned.Process.ExitCode
+        stdout = $publicStdout
+        stderr = $publicStderr
+      }
+      threadId = $observedThreadId
+      receipt = [ordered]@{
+        rpcMethod = $Method
+        responseId = $requestId
+        threadId = $observedThreadId
+        lifecycleTrigger = [ordered]@{
+          rpcMethod = 'turn/start'
+          responseId = $turnRequestId
+          turnId = $observedTurnId
+          terminalStatus = $turnCompleted.params.turn.status
+          modelProvider = 'task-owned-loopback-responses-failure'
+          requiresOpenAIAuth = $false
+        }
+        discovery = [ordered]@{
+          rpcMethod = 'hooks/list'
+          eventName = $discoveredHook.eventName
+          source = $discoveredHook.source
+          sourcePath = ConvertTo-PublicEvidenceText $discoveredHook.sourcePath
+          handlerType = $discoveredHook.handlerType
+          enabled = $discoveredHook.enabled
+          trustStatus = $discoveredHook.trustStatus
+        }
+        hookStarted = [ordered]@{
+          idSha256 = $hookRunIdSha256
+          eventName = $hookStarted.params.run.eventName
+          source = $hookStarted.params.run.source
+          sourcePath = ConvertTo-PublicEvidenceText $hookStarted.params.run.sourcePath
+          status = $hookStarted.params.run.status
+        }
+        hookCompleted = [ordered]@{
+          idSha256 = $hookRunIdSha256
+          eventName = $hookCompleted.params.run.eventName
+          source = $hookCompleted.params.run.source
+          sourcePath = ConvertTo-PublicEvidenceText $hookCompleted.params.run.sourcePath
+          status = $hookCompleted.params.run.status
+        }
+      }
+    }
+  } finally {
+    if ($null -ne $owned) { $owned.Dispose() }
+    $job.Dispose()
+  }
+}
+
+function Invoke-CodexAppServerActivation {
+  param(
+    [Parameter(Mandatory = $true)][string]$WorkingDirectory,
+    [Parameter(Mandatory = $true)][hashtable]$Environment,
+    [Parameter(Mandatory = $true)][string]$ExpectedHookSourcePath
+  )
+  $mockServer = [AccordLoopbackFailingResponsesServer]::new()
+  try {
+    $mockBaseUrl = "http://127.0.0.1:$($mockServer.Port)/v1"
+    $startup = Invoke-CodexAppServerConnection 'thread/start' $null (
+      $WorkingDirectory
+    ) $Environment $ExpectedHookSourcePath $mockBaseUrl
+    $resume = Invoke-CodexAppServerConnection 'thread/resume' $startup.threadId (
+      $WorkingDirectory
+    ) $Environment $ExpectedHookSourcePath $mockBaseUrl
+    $mockRequestCount = $mockServer.RequestCount
+  } finally {
+    $mockServer.Dispose()
+  }
+  if ($mockRequestCount -ne 2) {
+    throw "Codex lifecycle loopback model request count was $mockRequestCount, expected 2."
+  }
+  $record = $startup.command
+  $record.elapsedMilliseconds = (
+    $startup.command.elapsedMilliseconds + $resume.command.elapsedMilliseconds
+  )
+  $record.stdout = $startup.command.stdout + "`n" + $resume.command.stdout
+  $record.stderr = $startup.command.stderr + $resume.command.stderr
+  $record.stdoutBytes = [System.Text.Encoding]::UTF8.GetByteCount($record.stdout)
+  $record.stderrBytes = [System.Text.Encoding]::UTF8.GetByteCount($record.stderr)
+  $record.inputSha256 = [Convert]::ToHexString(
+    [System.Security.Cryptography.SHA256]::HashData(
+      [System.Text.Encoding]::UTF8.GetBytes(
+        $startup.command.inputSha256 + ':' + $resume.command.inputSha256
+      )
+    )
+  ).ToLowerInvariant()
+  $record['activationReceipt'] = [ordered]@{
+    transport = 'app-server-stdio-jsonl'
+    rpcMethods = @('hooks/list', 'thread/start', 'turn/start', 'thread/resume')
+    lifecycleTriggerTurns = 2
+    externalModelTurns = 0
+    loopbackModelRequests = $mockRequestCount
+    startup = $startup.receipt
+    resume = $resume.receipt
+  }
+  return $record
+}
+
+function Get-ClaudeNativeLifecycleReceipt {
+  param(
+    [Parameter(Mandatory = $true)][System.Collections.IDictionary]$Command,
+    [Parameter(Mandatory = $true)][string]$Source,
+    [Parameter(Mandatory = $true)][string]$SessionId,
+    [Parameter(Mandatory = $true)][string]$ExpectedPluginRoot,
+    [Parameter(Mandatory = $true)][string]$ExpectedPluginVersion
+  )
+  $events = [System.Collections.Generic.List[object]]::new()
+  foreach ($line in @($Command.stdout -split "`r?`n")) {
+    if ([string]::IsNullOrWhiteSpace($line)) { continue }
+    try {
+      $events.Add(($line | ConvertFrom-Json -Depth 30))
+    } catch {
+      throw 'Claude host lifecycle stream contains a non-JSON event.'
+    }
+  }
+  $expectedHookName = "SessionStart:$Source"
+  $started = @($events | Where-Object {
+    $_.type -eq 'system' -and $_.subtype -eq 'hook_started' -and
+    $_.hook_event -eq 'SessionStart' -and
+    $_.hook_name -eq $expectedHookName -and $_.session_id -eq $SessionId
+  })
+  $responses = @($events | Where-Object {
+    $_.type -eq 'system' -and $_.subtype -eq 'hook_response' -and
+    $_.hook_event -eq 'SessionStart' -and
+    $_.hook_name -eq $expectedHookName -and $_.session_id -eq $SessionId
+  })
+  $initializations = @($events | Where-Object {
+    $_.type -eq 'system' -and $_.subtype -eq 'init' -and
+    $_.session_id -eq $SessionId
+  })
+  $terminals = @($events | Where-Object {
+    $_.type -eq 'result' -and $_.session_id -eq $SessionId
+  })
+  if ($started.Count -ne 1 -or $responses.Count -ne 1 -or
+      $initializations.Count -ne 1 -or $terminals.Count -ne 1 -or
+      $started[0].hook_id -ne $responses[0].hook_id -or
+      $responses[0].exit_code -ne 0 -or
+      $responses[0].outcome -ne 'success' -or
+      $terminals[0].terminal_reason -ne 'api_error' -or
+      $terminals[0].api_error_status -ne 400 -or
+      $terminals[0].is_error -ne $true -or
+      $terminals[0].total_cost_usd -ne 0 -or
+      $terminals[0].num_turns -ne 1) {
+    throw "Claude $Source native lifecycle events are invalid."
+  }
+  $plugins = @($initializations[0].plugins | Where-Object {
+    $_.name -eq 'yiyuan-accord-claude'
+  })
+  $expectedPublicRoot = (ConvertTo-PublicEvidenceText $ExpectedPluginRoot).
+    Replace('\', '/')
+  if ($plugins.Count -ne 1 -or $plugins[0].version -ne $ExpectedPluginVersion -or
+      -not ([string]$plugins[0].path).Replace('\', '/').Equals(
+        $expectedPublicRoot, [System.StringComparison]::OrdinalIgnoreCase
+      )) {
+    $observedIdentity = @($plugins | ForEach-Object {
+      [ordered]@{
+        name = $_.name
+        version = $_.version
+        source = $_.source
+        path = ([string]$_.path).Replace('\', '/')
+      }
+    }) | ConvertTo-Json -Compress -Depth 6
+    throw (
+      "Claude $Source loaded plugin identity is invalid: " +
+      "expectedPath=$expectedPublicRoot observed=$observedIdentity"
+    )
+  }
+  return [ordered]@{
+    sessionSource = $Source
+    nativeHookStarted = [ordered]@{
+      subtype = $started[0].subtype
+      hookEvent = $started[0].hook_event
+      hookName = $started[0].hook_name
+      hookId = $started[0].hook_id
+    }
+    nativeHookResponse = [ordered]@{
+      subtype = $responses[0].subtype
+      hookEvent = $responses[0].hook_event
+      hookName = $responses[0].hook_name
+      hookId = $responses[0].hook_id
+      exitCode = $responses[0].exit_code
+      outcome = $responses[0].outcome
+    }
+    loadedPlugin = [ordered]@{
+      name = $plugins[0].name
+      version = $plugins[0].version
+      source = $plugins[0].source
+      path = ([string]$plugins[0].path).Replace('\', '/')
+    }
+    terminal = [ordered]@{
+      status = $terminals[0].terminal_reason
+      apiErrorStatus = $terminals[0].api_error_status
+      isError = $terminals[0].is_error
+      totalCostUsd = $terminals[0].total_cost_usd
+      turns = $terminals[0].num_turns
+    }
+  }
+}
+
+function Invoke-ClaudeHostActivation {
+  param(
+    [Parameter(Mandatory = $true)][string]$WorkingDirectory,
+    [Parameter(Mandatory = $true)][hashtable]$Environment,
+    [Parameter(Mandatory = $true)][string]$ExpectedRuntimePath,
+    [Parameter(Mandatory = $true)][string]$ExpectedPluginVersion
+  )
+  $observerRoot = Join-Path $script:TaskPathForEvidence 'claude-node-observer'
+  [void][System.IO.Directory]::CreateDirectory($observerRoot)
+  $observerScript = Join-Path $observerRoot 'observe.cjs'
+  $observerShellShim = Join-Path $observerRoot 'node'
+  $observerShim = Join-Path $observerRoot 'node.cmd'
+  $receiptPath = Join-Path $observerRoot 'receipts.jsonl'
+  $realNode = (Get-Command 'node.exe' -CommandType Application -ErrorAction Stop |
+    Select-Object -First 1).Source
+  $observerSource = @"
+'use strict';
+const fs = require('node:fs');
+const crypto = require('node:crypto');
+const {spawnSync} = require('node:child_process');
+const realNode = $($realNode | ConvertTo-Json -Compress);
+const receiptPath = $($receiptPath | ConvertTo-Json -Compress);
+const input = fs.readFileSync(0);
+const result = spawnSync(realNode, process.argv.slice(2), {
+  input,
+  env: process.env,
+  maxBuffer: 4 * 1024 * 1024,
+});
+const digest = (value) => crypto.createHash('sha256').update(value || Buffer.alloc(0)).digest('hex');
+let event = null;
+try { event = JSON.parse(input.toString('utf8')); } catch (_) {}
+fs.appendFileSync(receiptPath, JSON.stringify({
+  argv: process.argv.slice(2),
+  hookEventName: event && event.hook_event_name,
+  source: event && event.source,
+  inputSha256: digest(input),
+  stdoutSha256: digest(result.stdout),
+  stderrSha256: digest(result.stderr),
+  exitCode: result.status,
+}) + '\n', 'utf8');
+if (result.stdout) process.stdout.write(result.stdout);
+if (result.stderr) process.stderr.write(result.stderr);
+process.exitCode = Number.isInteger(result.status) ? result.status : 125;
+"@
+  [System.IO.File]::WriteAllText(
+    $observerScript, $observerSource, [System.Text.UTF8Encoding]::new($false)
+  )
+  # Claude command Hooks use a POSIX-like shell on Windows. That shell resolves
+  # the extensionless `node` command before cmd.exe PATHEXT rules can consider
+  # node.cmd, so provide both host-native entry shapes for the same observer.
+  $observerShellSource = '#!/bin/sh' + [System.Environment]::NewLine +
+    'exec "' + $realNode.Replace('\', '/') + '" "' +
+    $observerScript.Replace('\', '/') + '" "$@"' +
+    [System.Environment]::NewLine
+  [System.IO.File]::WriteAllText(
+    $observerShellShim, $observerShellSource,
+    [System.Text.UTF8Encoding]::new($false)
+  )
+  $shimSource = '@"' + $realNode + '" "' + $observerScript + '" %*' +
+    [System.Environment]::NewLine
+  [System.IO.File]::WriteAllText(
+    $observerShim, $shimSource, [System.Text.Encoding]::ASCII
+  )
+  $observerEnvironment = $Environment.Clone()
+  $observerEnvironment['PATH'] = $observerRoot + [System.IO.Path]::PathSeparator + $env:PATH
+  $observerEnvironment['CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC'] = '1'
+  $observerEnvironment['CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL'] = '1'
+  $sessionId = [Guid]::NewGuid().ToString()
+  $trigger = 'GT-20 task-owned lifecycle trigger; no tool use.'
+  $commonArguments = @(
+    '-p', $trigger,
+    '--output-format', 'stream-json',
+    '--include-hook-events', '--verbose',
+    '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}',
+    '--setting-sources', 'user', '--no-chrome',
+    '--max-budget-usd', '0.01'
+  )
+  $expectedPluginRoot = Split-Path -Parent (Split-Path -Parent $ExpectedRuntimePath)
+  $mockServer = [AccordLoopbackFailingResponsesServer]::new()
+  try {
+    $observerEnvironment['ANTHROPIC_BASE_URL'] = (
+      "http://127.0.0.1:$($mockServer.Port)"
+    )
+    $observerEnvironment['ANTHROPIC_API_KEY'] = (
+      'gt20-task-owned-loopback-not-a-secret'
+    )
+    $startup = Invoke-Captured claude @(
+      $commonArguments + @('--session-id', $sessionId)
+    ) $WorkingDirectory $observerEnvironment
+    $startupRequestCount = $mockServer.RequestCount
+    $resume = Invoke-Captured claude @(
+      $commonArguments + @('--resume', $sessionId)
+    ) $WorkingDirectory $observerEnvironment
+    $mockRequestCount = $mockServer.RequestCount
+  } finally {
+    $mockServer.Dispose()
+  }
+  if ($startup.exitCode -eq 0 -or $resume.exitCode -eq 0 -or
+      $startup.timedOut -or $resume.timedOut -or
+      $startupRequestCount -lt 1 -or
+      ($mockRequestCount - $startupRequestCount) -lt 1) {
+    throw 'Claude lifecycle loopback did not fail closed after both host runs.'
+  }
+  $startupNative = Get-ClaudeNativeLifecycleReceipt (
+    $startup
+  ) 'startup' $sessionId $expectedPluginRoot $ExpectedPluginVersion
+  $resumeNative = Get-ClaudeNativeLifecycleReceipt (
+    $resume
+  ) 'resume' $sessionId $expectedPluginRoot $ExpectedPluginVersion
+  if (-not (Test-Path -LiteralPath $receiptPath -PathType Leaf)) {
+    throw 'Claude host activation did not invoke the installed Hook runtime.'
+  }
+  $receipts = @(Get-Content -LiteralPath $receiptPath | ForEach-Object {
+    $_ | ConvertFrom-Json -Depth 20
+  })
+  $matching = @($receipts | Where-Object {
+    $_.argv.Count -eq 1 -and
+    [System.IO.Path]::GetFullPath([string]$_.argv[0]).Equals(
+      [System.IO.Path]::GetFullPath($ExpectedRuntimePath),
+      [System.StringComparison]::OrdinalIgnoreCase
+    ) -and
+    $_.hookEventName -eq 'SessionStart' -and
+    $_.source -in @('startup', 'resume') -and
+    $_.exitCode -eq 0
+  })
+  $sources = @($matching.source | Sort-Object -Unique)
+  if ($matching.Count -ne 2 -or
+      ($sources | ConvertTo-Json -Compress) -ne
+      (@('resume', 'startup') | ConvertTo-Json -Compress)) {
+    throw 'Claude host activation receipts do not close startup and resume.'
+  }
+  $record = $startup
+  $record.argv = @(
+    'claude', '-p', '%TASK_OWNED_LIFECYCLE_TRIGGER%',
+    '--output-format', 'stream-json',
+    '--include-hook-events', '--verbose',
+    '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}',
+    '--setting-sources', 'user', '--no-chrome',
+    '--max-budget-usd', '0.01'
+  )
+  $record.elapsedMilliseconds = (
+    $startup.elapsedMilliseconds + $resume.elapsedMilliseconds
+  )
+  $record.stdout = $startup.stdout + "`n" + $resume.stdout
+  $record.stderr = $startup.stderr + $resume.stderr
+  $record.stdoutBytes = [System.Text.Encoding]::UTF8.GetByteCount($record.stdout)
+  $record.stderrBytes = [System.Text.Encoding]::UTF8.GetByteCount($record.stderr)
+  $record['activationReceipt'] = [ordered]@{
+    transport = 'headless-stream-json-with-loopback-trigger-and-task-owned-node-observer'
+    lifecycleTriggerTurns = 2
+    externalModelTurns = 0
+    loopbackHttpRequests = $mockRequestCount
+    credentialEnvironmentInherited = $false
+    networkEndpoint = 'ipv4-loopback'
+    terminalStatus = 'api_error'
+    hostRuns = @(
+      [ordered]@{
+        source = 'startup'
+        sessionBinding = 'task-owned-session-id'
+        exitCode = $startup.exitCode
+        loopbackHttpRequests = $startupRequestCount
+      },
+      [ordered]@{
+        source = 'resume'
+        sessionBinding = 'same-task-owned-session-id'
+        exitCode = $resume.exitCode
+        loopbackHttpRequests = $mockRequestCount - $startupRequestCount
+      }
+    )
+    native = [ordered]@{
+      startup = $startupNative
+      resume = $resumeNative
+    }
+    hooks = @($matching | ForEach-Object {
+      [ordered]@{
+        hookEventName = $_.hookEventName
+        source = $_.source
+        runtimePath = ConvertTo-PublicEvidenceText $_.argv[0]
+        inputSha256 = $_.inputSha256
+        stdoutSha256 = $_.stdoutSha256
+        stderrSha256 = $_.stderrSha256
+        exitCode = $_.exitCode
+      }
+    })
+  }
+  return $record
+}
+
+function Invoke-UpdateWithCandidateLock {
+  param(
+    [Parameter(Mandatory = $true)][string]$HostCommand,
+    [Parameter(Mandatory = $true)][string[]]$Arguments,
+    [Parameter(Mandatory = $true)][string]$WorkingDirectory,
+    [Parameter(Mandatory = $true)][hashtable]$Environment,
+    [Parameter(Mandatory = $true)][string]$CandidateLockPath,
+    [Parameter(Mandatory = $true)][string]$CandidateStagingPath
+  )
+  $staging = [System.IO.Path]::GetFullPath($CandidateStagingPath)
+  $versionRoot = Split-Path -Parent $staging
+  $stagingParent = Split-Path -Parent $versionRoot
+  $priorVersion = [System.IO.Path]::GetFullPath((
+    Join-Path $versionRoot '3.0.1'
+  ))
+  if (-not (Test-Path -LiteralPath $stagingParent -PathType Container)) {
+    throw 'Candidate staging parent is unavailable for observation.'
+  }
+  $watcher = [System.IO.FileSystemWatcher]::new($stagingParent)
+  $watcher.IncludeSubdirectories = $true
+  $watcher.NotifyFilter = (
+    [System.IO.NotifyFilters]::FileName -bor
+    [System.IO.NotifyFilters]::DirectoryName -bor
+    [System.IO.NotifyFilters]::LastWrite -bor
+    [System.IO.NotifyFilters]::Size
+  )
+  $eventIds = @('Created', 'Changed', 'Renamed') | ForEach-Object {
+    $identifier = "yiyuan-accord-gt20-$($_)-$([Guid]::NewGuid().ToString('N'))"
+    Register-ObjectEvent -InputObject $watcher -EventName $_ -SourceIdentifier (
+      $identifier
+    ) | Out-Null
+    $identifier
+  }
+  $events = @()
+  $lock = [System.IO.FileStream]::new(
+    $CandidateLockPath, [System.IO.FileMode]::Open,
+    [System.IO.FileAccess]::Read, [System.IO.FileShare]::None
+  )
+  try {
+    $watcher.EnableRaisingEvents = $true
+    $result = Invoke-Captured $HostCommand $Arguments $WorkingDirectory $Environment
+  } finally {
+    $lock.Dispose()
+    $watcher.EnableRaisingEvents = $false
+    Start-Sleep -Milliseconds 100
+    foreach ($identifier in $eventIds) {
+      $events += @(Get-Event -SourceIdentifier $identifier -ErrorAction SilentlyContinue)
+      Remove-Event -SourceIdentifier $identifier -ErrorAction SilentlyContinue
+      Unregister-Event -SourceIdentifier $identifier -ErrorAction SilentlyContinue
+    }
+    $watcher.Dispose()
+  }
+  $stagingPrefix = $staging + [System.IO.Path]::DirectorySeparatorChar
+  $priorPrefix = $priorVersion + [System.IO.Path]::DirectorySeparatorChar
+  $stagingEvents = @($events | Where-Object {
+    $path = [string]$_.SourceEventArgs.FullPath
+    ($path.Equals($staging, [System.StringComparison]::OrdinalIgnoreCase) -or
+      $path.StartsWith($stagingPrefix, [System.StringComparison]::OrdinalIgnoreCase) -or
+      $path.StartsWith(
+        $stagingParent + [System.IO.Path]::DirectorySeparatorChar,
+        [System.StringComparison]::OrdinalIgnoreCase
+      )) -and
+      -not $path.Equals(
+        $priorVersion, [System.StringComparison]::OrdinalIgnoreCase
+      ) -and
+      -not $path.StartsWith(
+        $priorPrefix, [System.StringComparison]::OrdinalIgnoreCase
+      )
+  })
+  $stagingObserved = $stagingEvents.Count -ne 0
+  $result['mutationReceipt'] = [ordered]@{
+    stagingObserved = $stagingObserved
+    eventCount = $stagingEvents.Count
+    observationScope = 'isolated-marketplace-cache-excluding-prior-version'
+    eventKinds = @($stagingEvents | ForEach-Object {
+      $_.SourceEventArgs.ChangeType.ToString()
+    } | Sort-Object -Unique)
+  }
+  return $result
+}
+
 function Assert-Exit {
   param([System.Collections.IDictionary]$Result, [int]$Expected, [string]$Label)
   if ($Result.exitCode -ne $Expected) {
@@ -601,9 +1574,83 @@ function Assert-FileMapsEqual {
   $expected = Get-FileMap $ExpectedRoot
   $actual = Get-FileMap $ActualRoot
   if (($expected | ConvertTo-Json -Compress) -ne ($actual | ConvertTo-Json -Compress)) {
-    throw "$Label installed bytes differ"
+    $difference = [ordered]@{
+      missing = @($expected.Keys | Where-Object { -not $actual.Contains($_) } |
+        Sort-Object)
+      extra = @($actual.Keys | Where-Object { -not $expected.Contains($_) } |
+        Sort-Object)
+      changed = @($expected.Keys | Where-Object {
+        $actual.Contains($_) -and $actual[$_] -ne $expected[$_]
+      } | Sort-Object)
+    }
+    throw "$Label installed bytes differ: $($difference | ConvertTo-Json -Compress)"
   }
   return $actual.Count
+}
+
+function Repair-FailedUpdateStaging {
+  param(
+    [Parameter(Mandatory = $true)][string]$ExpectedRoot,
+    [Parameter(Mandatory = $true)][string]$StagingRoot,
+    [Parameter(Mandatory = $true)][string]$HostRoot,
+    [Parameter(Mandatory = $true)][string]$PriorRoot,
+    [Parameter(Mandatory = $true)][bool]$StagingObserved,
+    [Parameter(Mandatory = $true)][string]$Label
+  )
+  $staging = [System.IO.Path]::GetFullPath($StagingRoot)
+  $hostPrefix = [System.IO.Path]::GetFullPath($HostRoot) +
+    [System.IO.Path]::DirectorySeparatorChar
+  if (-not $staging.StartsWith(
+      $hostPrefix, [System.StringComparison]::OrdinalIgnoreCase) -or
+      $staging.Equals(
+        [System.IO.Path]::GetFullPath($PriorRoot),
+        [System.StringComparison]::OrdinalIgnoreCase
+      )) {
+    throw "$Label candidate staging path is outside its isolated host root."
+  }
+  if (-not $StagingObserved) {
+    throw "$Label did not produce an observable candidate-staging event."
+  }
+  if (-not (Test-Path -LiteralPath $staging -PathType Container)) {
+    return [ordered]@{
+      disposition = 'prior-remained-active-host-cleaned-observed-staging'
+      stagedFileCount = $null
+      difference = $null
+      stagingCleanupVerified = $true
+    }
+  }
+  if (@(Get-ChildItem -LiteralPath $staging -Recurse -Force |
+      Where-Object {
+        $_.Attributes -band [System.IO.FileAttributes]::ReparsePoint
+      }).Count -ne 0) {
+    throw "$Label staging contains a reparse point."
+  }
+  $expected = Get-FileMap $ExpectedRoot
+  $actual = Get-FileMap $staging
+  if ($actual.Count -eq 0 -or
+      ($expected | ConvertTo-Json -Compress) -eq
+      ($actual | ConvertTo-Json -Compress)) {
+    throw "$Label staging is empty or already a complete candidate."
+  }
+  $difference = [ordered]@{
+    missing = @($expected.Keys | Where-Object { -not $actual.Contains($_) } |
+      Sort-Object)
+    extra = @($actual.Keys | Where-Object { -not $expected.Contains($_) } |
+      Sort-Object)
+    changed = @($expected.Keys | Where-Object {
+      $actual.Contains($_) -and $actual[$_] -ne $expected[$_]
+    } | Sort-Object)
+  }
+  Remove-Item -LiteralPath $staging -Recurse -Force
+  if (Test-Path -LiteralPath $staging) {
+    throw "$Label task-owned staging cleanup failed."
+  }
+  return [ordered]@{
+    disposition = 'prior-remained-active-with-explicit-task-owned-staging-cleanup'
+    stagedFileCount = $actual.Count
+    difference = $difference
+    stagingCleanupVerified = $true
+  }
 }
 
 function Assert-ExactOrphanCacheVersion {
@@ -745,6 +1792,25 @@ function Add-CommandRecord {
   [void]$commands.Add($Command)
 }
 
+function Set-MutableAccordSource {
+  param(
+    [Parameter(Mandatory = $true)][string]$SourceRoot,
+    [Parameter(Mandatory = $true)][string]$MutableRoot
+  )
+  foreach ($plugin in @('yiyuan-accord-codex', 'yiyuan-accord-claude')) {
+    $destination = Join-Path $MutableRoot "plugins/$plugin"
+    if (Test-Path -LiteralPath $destination) {
+      Remove-Item -LiteralPath $destination -Recurse -Force
+    }
+    Copy-Item -LiteralPath (Join-Path $SourceRoot "plugins/$plugin") `
+      -Destination $destination -Recurse
+  }
+  Copy-Item -LiteralPath (Join-Path $SourceRoot '.agents/plugins/marketplace.json') `
+    -Destination (Join-Path $MutableRoot '.agents/plugins/marketplace.json') -Force
+  Copy-Item -LiteralPath (Join-Path $SourceRoot '.claude-plugin/marketplace.json') `
+    -Destination (Join-Path $MutableRoot '.claude-plugin/marketplace.json') -Force
+}
+
 function Get-ContractArgument {
   param(
     [Parameter(Mandatory = $true)][string]$Value,
@@ -753,6 +1819,189 @@ function Get-ContractArgument {
   )
   return $Value.Replace('%CANDIDATE_REVISION%', $Candidate).
     Replace('%PRIOR_RELEASE_REVISION%', $PriorRelease)
+}
+
+function Resolve-CommandContractOverlay {
+  param(
+    [Parameter(Mandatory = $true)]$Overlay,
+    [Parameter(Mandatory = $true)][string]$CandidateSource
+  )
+  if ($Overlay.schema -ne 'yiyuan-accord-gt20-command-contract-overlay/v1') {
+    throw 'GT-20 successor command contract schema is invalid.'
+  }
+  $basePath = [System.IO.Path]::GetFullPath((
+    Join-Path $CandidateSource ([string]$Overlay.baseContract.locator)
+  ))
+  if (-not $basePath.StartsWith(
+      [System.IO.Path]::GetFullPath($CandidateSource) + [System.IO.Path]::DirectorySeparatorChar,
+      [System.StringComparison]::OrdinalIgnoreCase)) {
+    throw 'GT-20 base command contract escapes the candidate source.'
+  }
+  $baseBytes = [System.IO.File]::ReadAllBytes($basePath)
+  $baseSha256 = [Convert]::ToHexString(
+    [System.Security.Cryptography.SHA256]::HashData($baseBytes)
+  ).ToLowerInvariant()
+  if ($baseSha256 -ne $Overlay.baseContract.sha256) {
+    throw 'GT-20 base command contract digest drifted.'
+  }
+  $base = [System.Text.Encoding]::UTF8.GetString($baseBytes) |
+    ConvertFrom-Json -Depth 20
+  if ($base.schema -ne 'yiyuan-accord-gt20-command-contract/v1') {
+    throw 'GT-20 base command contract schema is invalid.'
+  }
+  $overlayCommands = @($Overlay.commands)
+  $replaceRoles = @($Overlay.commandEdits.replaceRoles)
+  $replacementMap = @{}
+  foreach ($item in @($overlayCommands | Where-Object replacesRole)) {
+    if ($replacementMap.ContainsKey([string]$item.replacesRole)) {
+      throw 'GT-20 successor command contract replaces a role more than once.'
+    }
+    $replacementMap[[string]$item.replacesRole] = $item
+  }
+  if ((@($replacementMap.Keys | Sort-Object) | ConvertTo-Json -Compress) -ne
+      (@($replaceRoles | Sort-Object) | ConvertTo-Json -Compress)) {
+    throw 'GT-20 successor command replacement set is invalid.'
+  }
+  $effectiveCommands = [System.Collections.Generic.List[object]]::new()
+  foreach ($baseSpec in @($base.commands)) {
+    foreach ($insert in @($overlayCommands | Where-Object {
+      $_.insertBeforeRole -eq $baseSpec.role
+    })) {
+      $insertValue = $insert | ConvertTo-Json -Depth 20 | ConvertFrom-Json -AsHashtable
+      [void]$insertValue.Remove('insertBeforeRole')
+      [void]$effectiveCommands.Add($insertValue)
+    }
+    if ($replacementMap.ContainsKey([string]$baseSpec.role)) {
+      $merged = $baseSpec | ConvertTo-Json -Depth 20 | ConvertFrom-Json -AsHashtable
+      $replacement = $replacementMap[[string]$baseSpec.role]
+      foreach ($property in $replacement.PSObject.Properties) {
+        if ($property.Name -ne 'replacesRole') {
+          $merged[$property.Name] = $property.Value
+        }
+      }
+      [void]$effectiveCommands.Add($merged)
+    } else {
+      [void]$effectiveCommands.Add($baseSpec)
+    }
+  }
+  $unplaced = @($overlayCommands | Where-Object {
+    -not $_.replacesRole -and -not $_.insertBeforeRole
+  })
+  if ($unplaced.Count -ne 0) {
+    throw 'GT-20 successor command contract contains an unplaced command.'
+  }
+  $prependEdits = $Overlay.commandEdits.prependArgumentsByRole
+  foreach ($property in $prependEdits.PSObject.Properties) {
+    $matches = @($effectiveCommands | Where-Object role -eq $property.Name)
+    if ($matches.Count -ne 1) {
+      throw "GT-20 successor command prefix target is invalid: $($property.Name)"
+    }
+    $spec = $matches[0]
+    $prefix = @($property.Value)
+    $argv = @($spec.argv)
+    $alreadyPresent = (
+      $argv.Count -ge (1 + $prefix.Count) -and
+      (@($argv[1..$prefix.Count]) | ConvertTo-Json -Compress) -eq
+      ($prefix | ConvertTo-Json -Compress)
+    )
+    if (-not $alreadyPresent) {
+      $spec.argv = @($argv[0]) + $prefix + @($argv | Select-Object -Skip 1)
+    }
+  }
+  $effective = $base | ConvertTo-Json -Depth 20 | ConvertFrom-Json -AsHashtable
+  $effective['commands'] = @($effectiveCommands)
+  return [ordered]@{
+    effective = $effective
+    baseLocator = [string]$Overlay.baseContract.locator
+    baseSha256 = $baseSha256
+  }
+}
+
+function Assert-ActivationCommandReceipt {
+  param(
+    [Parameter(Mandatory = $true)]$Spec,
+    [Parameter(Mandatory = $true)][System.Collections.IDictionary]$Command
+  )
+  if ($Spec.inputPolicy -eq 'app-server-hook-lifecycle-with-loopback-trigger') {
+    $receipt = $Command.activationReceipt
+    if ($receipt.transport -ne 'app-server-stdio-jsonl' -or
+        ($receipt.rpcMethods | ConvertTo-Json -Compress) -ne
+        (@('hooks/list', 'thread/start', 'turn/start', 'thread/resume') |
+          ConvertTo-Json -Compress) -or
+        $receipt.lifecycleTriggerTurns -ne 2 -or
+        $receipt.externalModelTurns -ne 0 -or
+        $receipt.loopbackModelRequests -ne 2) {
+      throw 'Codex host activation protocol receipt is invalid.'
+    }
+    foreach ($item in @($receipt.startup, $receipt.resume)) {
+      if ($item.discovery.rpcMethod -ne 'hooks/list' -or
+          $item.discovery.eventName -ne 'SessionStart' -or
+          $item.discovery.source -ne 'plugin' -or
+          $item.discovery.handlerType -ne 'command' -or
+          $item.discovery.enabled -ne $true -or
+          $item.lifecycleTrigger.rpcMethod -ne 'turn/start' -or
+          $item.lifecycleTrigger.terminalStatus -ne 'failed' -or
+          $item.lifecycleTrigger.modelProvider -ne
+            'task-owned-loopback-responses-failure' -or
+          $item.lifecycleTrigger.requiresOpenAIAuth -ne $false -or
+          $item.hookStarted.eventName -ne 'SessionStart' -or
+          $item.hookStarted.source -ne 'plugin' -or
+          $item.hookStarted.status -ne 'running' -or
+          $item.hookCompleted.eventName -ne 'SessionStart' -or
+          $item.hookCompleted.source -ne 'plugin' -or
+          $item.hookCompleted.status -ne 'completed' -or
+          $item.hookStarted.idSha256 -notmatch '^[0-9a-f]{64}$' -or
+          $item.hookStarted.idSha256 -ne $item.hookCompleted.idSha256) {
+        throw 'Codex installed-package Hook receipt is invalid.'
+      }
+    }
+    return
+  }
+  if ($Spec.inputPolicy -eq 'headless-hook-lifecycle-with-loopback-trigger') {
+    $receipt = $Command.activationReceipt
+    $expectedLoadedPluginVersion = [string]$Spec.expectedLoadedPluginVersion
+    $sources = @($receipt.hooks.source | Sort-Object -Unique)
+    if ([string]::IsNullOrWhiteSpace($expectedLoadedPluginVersion) -or
+        $receipt.transport -ne
+          'headless-stream-json-with-loopback-trigger-and-task-owned-node-observer' -or
+        $receipt.lifecycleTriggerTurns -ne 2 -or
+        $receipt.externalModelTurns -ne 0 -or
+        $receipt.loopbackHttpRequests -lt 2 -or
+        $receipt.credentialEnvironmentInherited -ne $false -or
+        $receipt.networkEndpoint -ne 'ipv4-loopback' -or
+        $receipt.terminalStatus -ne 'api_error' -or
+        @($receipt.hooks).Count -ne 2 -or
+        ($sources | ConvertTo-Json -Compress) -ne
+        (@('resume', 'startup') | ConvertTo-Json -Compress) -or
+        @($receipt.hooks | Where-Object {
+          $_.hookEventName -ne 'SessionStart' -or $_.exitCode -ne 0
+        }).Count -ne 0) {
+      throw 'Claude installed-package Hook receipt is invalid.'
+    }
+    foreach ($source in @('startup', 'resume')) {
+      $native = $receipt.native.$source
+      if ($native.sessionSource -ne $source -or
+          $native.nativeHookStarted.subtype -ne 'hook_started' -or
+          $native.nativeHookStarted.hookEvent -ne 'SessionStart' -or
+          $native.nativeHookResponse.subtype -ne 'hook_response' -or
+          $native.nativeHookResponse.hookEvent -ne 'SessionStart' -or
+          $native.nativeHookResponse.exitCode -ne 0 -or
+          $native.nativeHookResponse.outcome -ne 'success' -or
+          $native.nativeHookStarted.hookId -ne
+            $native.nativeHookResponse.hookId -or
+          $native.loadedPlugin.name -ne 'yiyuan-accord-claude' -or
+          $native.loadedPlugin.version -ne $expectedLoadedPluginVersion -or
+          $native.terminal.status -ne 'api_error' -or
+          $native.terminal.apiErrorStatus -ne 400 -or
+          $native.terminal.isError -ne $true -or
+          $native.terminal.totalCostUsd -ne 0 -or
+          $native.terminal.turns -ne 1) {
+        throw 'Claude native lifecycle event receipt is invalid.'
+      }
+    }
+    return
+  }
+  throw "Unknown GT-20 command input policy: $($Spec.inputPolicy)"
 }
 
 function Assert-CommandContract {
@@ -794,7 +2043,15 @@ function Assert-CommandContract {
     }
     if ($command.environmentProfile -ne $spec.environmentProfile) { $mismatches.Add('environmentProfile') }
     if ($command.failureCategory -ne $spec.expectedFailureCategory) { $mismatches.Add('failureCategory') }
-    if ($command.inputSha256 -ne $spec.inputSha256) { $mismatches.Add('inputSha256') }
+    if ($spec.inputPolicy) {
+      if ($command.inputSha256 -notmatch '^[0-9a-f]{64}$') {
+        $mismatches.Add('inputSha256')
+      } else {
+        Assert-ActivationCommandReceipt $spec $command
+      }
+    } elseif ($command.inputSha256 -ne $spec.inputSha256) {
+      $mismatches.Add('inputSha256')
+    }
     if ($command.executionTimeoutSeconds -ne $expectedBudgets.executionTimeoutSeconds) { $mismatches.Add('executionTimeoutSeconds') }
     if ($command.endToEndTimeoutSeconds -ne $expectedBudgets.endToEndTimeoutSeconds) { $mismatches.Add('endToEndTimeoutSeconds') }
     if ($command.outputLimitBytes -ne $expectedBudgets.outputLimitBytes) { $mismatches.Add('outputLimitBytes') }
@@ -818,8 +2075,14 @@ function Assert-CommandContract {
       throw "GT-20 command contract mismatch at index $index ($($spec.role)): $($mismatches -join ', ')."
     }
     $profile = $profiles.($spec.environmentProfile)
-    $allowed = @($baseAllowed + @($profile.additionalKeys) | Sort-Object -Unique)
-    $required = @($baseRequired + @($profile.requiredAdditionalKeys) | Sort-Object -Unique)
+    $allowed = @(
+      $baseAllowed + @($profile.additionalKeys) +
+      @($spec.additionalEnvironmentKeys) | Sort-Object -Unique
+    )
+    $required = @(
+      $baseRequired + @($profile.requiredAdditionalKeys) +
+      @($spec.requiredEnvironmentKeys) | Sort-Object -Unique
+    )
     if (@($command.environmentKeys | Where-Object { $_ -notin $allowed }).Count -ne 0 -or
         @($required | Where-Object { $_ -notin $command.environmentKeys }).Count -ne 0) {
       throw "GT-20 command environment contract mismatch at index $index ($($spec.role))."
@@ -1071,6 +2334,7 @@ if ($terminationProbe.exitCode -ne 124 -or
 }
 
 $neighborCodexMarketplaceAdd = Invoke-Captured codex @(
+  '--dangerously-bypass-hook-trust',
   'plugin', 'marketplace', 'add', $neighborSource, '--json'
 ) $neighborSource $codexEnvironment
 Add-CommandRecord 'neighborCodexMarketplaceAdd' $neighborCodexMarketplaceAdd
@@ -1081,6 +2345,7 @@ $neighborClaudeMarketplaceAdd = Invoke-Captured claude @(
 Add-CommandRecord 'neighborClaudeMarketplaceAdd' $neighborClaudeMarketplaceAdd
 Assert-Exit $neighborClaudeMarketplaceAdd 0 'Claude neighbor marketplace add'
 $neighborCodexInstall = Invoke-Captured codex @(
+  '--dangerously-bypass-hook-trust',
   'plugin', 'add', 'lifecycle-neighbor-codex@lifecycle-neighbor', '--json'
 ) $neighborSource $codexEnvironment
 Add-CommandRecord 'neighborCodexInstall' $neighborCodexInstall
@@ -1104,13 +2369,19 @@ $neighborClaudeInstalled = Join-Path $claudeRoot 'plugins/cache/lifecycle-neighb
 $neighborCodexFileCount = Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor initial'
 $neighborClaudeFileCount = Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude neighbor initial'
 
-$codexMarketplace = Invoke-Captured codex @('plugin', 'marketplace', 'add', $mutableSource, '--json') $mutableSource $codexEnvironment
+$codexMarketplace = Invoke-Captured codex @(
+  '--dangerously-bypass-hook-trust',
+  'plugin', 'marketplace', 'add', $mutableSource, '--json'
+) $mutableSource $codexEnvironment
 Add-CommandRecord 'accordCodexMarketplaceAdd' $codexMarketplace
 Assert-Exit $codexMarketplace 0 'Codex marketplace add'
 $claudeMarketplace = Invoke-Captured claude @('plugin', 'marketplace', 'add', $mutableSource, '--scope', 'user') $mutableSource $claudeEnvironment
 Add-CommandRecord 'accordClaudeMarketplaceAdd' $claudeMarketplace
 Assert-Exit $claudeMarketplace 0 'Claude marketplace add'
-$codexInstall = Invoke-Captured codex @('plugin', 'add', $CodexAccordPluginId, '--json') $mutableSource $codexEnvironment
+$codexInstall = Invoke-Captured codex @(
+  '--dangerously-bypass-hook-trust',
+  'plugin', 'add', $CodexAccordPluginId, '--json'
+) $mutableSource $codexEnvironment
 Add-CommandRecord 'accordCodexInstallPrior' $codexInstall
 Assert-Exit $codexInstall 0 'Codex install'
 $claudeInstall = Invoke-Captured claude @('plugin', 'install', $ClaudeAccordPluginId, '--scope', 'user', '-y') $mutableSource $claudeEnvironment
@@ -1119,6 +2390,8 @@ Assert-Exit $claudeInstall 0 'Claude install'
 
 $codexOldInstalled = Join-Path $codexRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.0.1'
 $claudeOldInstalled = Join-Path $claudeRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.0.1'
+$codexCandidateInstalled = Join-Path $codexRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.1.0'
+$claudeCandidateInstalled = Join-Path $claudeRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0'
 [void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-codex') $codexOldInstalled 'Codex old')
 [void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldInstalled 'Claude old')
 Add-Content -LiteralPath $codexAgents -Encoding utf8 -NoNewline -Value "CONCURRENT_CODEX_EDIT`n"
@@ -1139,17 +2412,21 @@ foreach ($path in $sentinels) {
   $sentinelHashes[$path] = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant()
 }
 
-Move-Item -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-codex') -Destination (Join-Path $mutableSource 'plugins/yiyuan-accord-codex.failed-update-source')
-Move-Item -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-claude') -Destination (Join-Path $mutableSource 'plugins/yiyuan-accord-claude.failed-update-source')
-if ((Test-Path -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-codex')) -or
-    (Test-Path -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-claude'))) {
-  throw 'Failed-update source paths were not removed.'
-}
-$codexFailedUpdate = Invoke-Captured codex @('plugin', 'add', $CodexAccordPluginId, '--json') $mutableSource $codexEnvironment
-Add-CommandRecord 'accordCodexFailedUpdate' $codexFailedUpdate 'source-path-absent'
+Set-MutableAccordSource $candidateSource $mutableSource
+$codexFailedUpdate = Invoke-UpdateWithCandidateLock codex @(
+  '--dangerously-bypass-hook-trust',
+  'plugin', 'add', $CodexAccordPluginId, '--json'
+) $mutableSource $codexEnvironment (
+  Join-Path $mutableSource 'plugins/yiyuan-accord-codex/NOTICE'
+) $codexCandidateInstalled
+Add-CommandRecord 'accordCodexFailedUpdateAfterStaging' $codexFailedUpdate 'task-owned-candidate-lock-after-staging'
 if ($codexFailedUpdate.exitCode -eq 0) { throw 'Codex failed update unexpectedly succeeded' }
-$claudeFailedUpdate = Invoke-Captured claude @('plugin', 'update', $ClaudeAccordPluginId, '--scope', 'user', '-y') $mutableSource $claudeEnvironment
-Add-CommandRecord 'accordClaudeFailedUpdate' $claudeFailedUpdate 'source-path-absent'
+$claudeFailedUpdate = Invoke-UpdateWithCandidateLock claude @(
+  'plugin', 'update', $ClaudeAccordPluginId, '--scope', 'user', '-y'
+) $mutableSource $claudeEnvironment (
+  Join-Path $mutableSource 'plugins/yiyuan-accord-claude/NOTICE'
+) $claudeCandidateInstalled
+Add-CommandRecord 'accordClaudeFailedUpdateAfterStaging' $claudeFailedUpdate 'task-owned-candidate-lock-after-staging'
 if ($claudeFailedUpdate.exitCode -eq 0) { throw 'Claude failed update unexpectedly succeeded' }
 [void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-codex') $codexOldInstalled 'Codex rollback')
 [void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldInstalled 'Claude rollback')
@@ -1165,20 +2442,29 @@ Assert-PluginInventory $codexRollbackList codex 'lifecycle-neighbor-codex@lifecy
 Assert-PluginInventory $claudeRollbackList claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude neighbor after rollback'
 [void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor after rollback')
 [void](Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude neighbor after rollback')
+$codexFailedUpdateRecovery = Repair-FailedUpdateStaging (
+  Join-Path $candidateSource 'plugins/yiyuan-accord-codex'
+) $codexCandidateInstalled $codexRoot $codexOldInstalled (
+  $codexFailedUpdate.mutationReceipt.stagingObserved
+) 'Codex failed update'
+$claudeFailedUpdateRecovery = Repair-FailedUpdateStaging (
+  Join-Path $candidateSource 'plugins/yiyuan-accord-claude'
+) $claudeCandidateInstalled $claudeRoot $claudeOldInstalled (
+  $claudeFailedUpdate.mutationReceipt.stagingObserved
+) 'Claude failed update'
 
-Copy-Item -LiteralPath (Join-Path $candidateSource 'plugins/yiyuan-accord-codex') -Destination (Join-Path $mutableSource 'plugins/yiyuan-accord-codex') -Recurse
-Copy-Item -LiteralPath (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') -Destination (Join-Path $mutableSource 'plugins/yiyuan-accord-claude') -Recurse
-Copy-Item -LiteralPath (Join-Path $candidateSource '.agents/plugins/marketplace.json') -Destination (Join-Path $mutableSource '.agents/plugins/marketplace.json') -Force
-Copy-Item -LiteralPath (Join-Path $candidateSource '.claude-plugin/marketplace.json') -Destination (Join-Path $mutableSource '.claude-plugin/marketplace.json') -Force
-$codexUpdate = Invoke-Captured codex @('plugin', 'add', $CodexAccordPluginId, '--json') $mutableSource $codexEnvironment
+$codexUpdate = Invoke-Captured codex @(
+  '--dangerously-bypass-hook-trust',
+  'plugin', 'add', $CodexAccordPluginId, '--json'
+) $mutableSource $codexEnvironment
 Add-CommandRecord 'accordCodexUpdateCandidate' $codexUpdate
 Assert-Exit $codexUpdate 0 'Codex successful update'
 $claudeUpdate = Invoke-Captured claude @('plugin', 'update', $ClaudeAccordPluginId, '--scope', 'user', '-y') $mutableSource $claudeEnvironment
 Add-CommandRecord 'accordClaudeUpdateCandidate' $claudeUpdate
 Assert-Exit $claudeUpdate 0 'Claude successful update'
 
-$codexInstalled = Join-Path $codexRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.1.0'
-$claudeInstalled = Join-Path $claudeRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0'
+$codexInstalled = $codexCandidateInstalled
+$claudeInstalled = $claudeCandidateInstalled
 $codexFileCount = Assert-FileMapsEqual (Join-Path $candidateSource 'plugins/yiyuan-accord-codex') $codexInstalled 'Codex candidate'
 $claudeFileCount = Assert-FileMapsEqual (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeInstalled 'Claude candidate'
 $codexList = Invoke-Captured codex @('plugin', 'list', '--json') $mutableSource $codexEnvironment
@@ -1194,6 +2480,19 @@ Assert-PluginInventory $claudeList claude 'lifecycle-neighbor-claude@lifecycle-n
 [void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor after update')
 [void](Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude neighbor after update')
 
+$codexHostActivation = Invoke-CodexAppServerActivation $task $codexEnvironment (
+  Join-Path $codexInstalled 'hooks/hooks.json'
+)
+Add-CommandRecord 'codexHostActivation' $codexHostActivation
+Assert-Exit $codexHostActivation 0 'Codex installed-package host activation'
+$claudeHostActivation = Invoke-ClaudeHostActivation $task $claudeEnvironment (
+  Join-Path $mutableSource 'plugins/yiyuan-accord-claude/runtime/accord-hook.cjs'
+) '3.1.0'
+Add-CommandRecord 'claudeHostActivation' $claudeHostActivation
+if ($claudeHostActivation.exitCode -eq 0) {
+  throw 'Claude installed registration activation did not stop at the loopback boundary.'
+}
+
 $startup = '{"hook_event_name":"SessionStart","source":"startup"}'
 $resume = '{"hook_event_name":"SessionStart","source":"resume","model":"model-variable","permission_mode":"default"}'
 foreach ($runtimeCase in @(
@@ -1201,11 +2500,19 @@ foreach ($runtimeCase in @(
   [pscustomobject]@{Host = 'claude'; Path = (Join-Path $claudeInstalled 'runtime/accord-hook.cjs')}
 )) {
   $startupResult = Invoke-Captured node @($runtimeCase.Path) $task @{} $startup
-  Add-CommandRecord "$($runtimeCase.Host)HookStartup" $startupResult
+  if ($runtimeCase.Host -eq 'codex') {
+    Add-CommandRecord 'codexHookRuntimeUnitStartup' $startupResult
+  } else {
+    Add-CommandRecord 'claudeHookRuntimeUnitStartup' $startupResult
+  }
   Assert-Exit $startupResult 0 'Hook startup'
   if ($startupResult.stdout.Length -ne 0 -or $startupResult.stderr.Length -ne 0) { throw 'Hook startup was not silent.' }
   $resumeResult = Invoke-Captured node @($runtimeCase.Path) $task @{} $resume
-  Add-CommandRecord "$($runtimeCase.Host)HookResume" $resumeResult
+  if ($runtimeCase.Host -eq 'codex') {
+    Add-CommandRecord 'codexHookRuntimeUnitResume' $resumeResult
+  } else {
+    Add-CommandRecord 'claudeHookRuntimeUnitResume' $resumeResult
+  }
   Assert-Exit $resumeResult 0 'Hook resume'
   if (-not $resumeResult.stdout.Contains('yiyuan-accord-hook-context/v1')) { throw 'Hook resume did not emit typed context.' }
 }
@@ -1451,34 +2758,37 @@ $packages = [ordered]@{}
 foreach ($projection in $candidateProgram.hostProjections) {
   $packages[$projection.id] = $projection.packageSha256
 }
-$commandContractLocator = 'evals/contracts/gt20-v3-command-contract.json'
+$commandContractLocator = 'evals/contracts/gt20-v4-command-contract.json'
 $commandContractPath = Join-Path $candidateSource $commandContractLocator
 $commandContractBytes = [System.IO.File]::ReadAllBytes($commandContractPath)
 $commandContract = [System.Text.Encoding]::UTF8.GetString($commandContractBytes) |
   ConvertFrom-Json -Depth 20
-Assert-CommandContract $commandContract $commands $CandidateRevision $priorReleaseRevision
+$resolvedCommandContract = Resolve-CommandContractOverlay $commandContract $candidateSource
+Assert-CommandContract $resolvedCommandContract.effective $commands $CandidateRevision $priorReleaseRevision
 $commandContractSha256 = [Convert]::ToHexString(
   [System.Security.Cryptography.SHA256]::HashData($commandContractBytes)
 ).ToLowerInvariant()
 $record = [ordered]@{
-  schema = 'yiyuan-accord-gt20-exact-package-evidence/v3'
+  schema = 'yiyuan-accord-gt20-exact-package-evidence/v4'
   taskId = 'GT-20'
   evaluatedRevision = $CandidateRevision
   runnerSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $PSCommandPath).Hash.ToLowerInvariant()
   commandContractLocator = $commandContractLocator
   commandContractSha256 = $commandContractSha256
+  baseCommandContractLocator = $resolvedCommandContract.baseLocator
+  baseCommandContractSha256 = $resolvedCommandContract.baseSha256
   packageSha256 = $packages
   behaviorSubject = $behaviorSubject
   lifecycle = [ordered]@{
     install = 'verified'
-    failedUpdateRollback = 'verified'
+    failedUpdateRecovery = 'verified'
     successfulUpdate = 'verified'
     activation = 'verified'
     remove = 'verified'
     postState = 'verified'
     cleanup = 'pending'
   }
-  claimLimit = 'Bounded zero-model Windows lifecycle, exact command-contract execution, command privacy and end-to-end process termination for exact subject Codex and Claude package bytes in disposable non-empty scopes containing a real evaluator-owned unrelated plugin and unmanaged sentinels; Claude host-owned approximately-14-day orphan cleanup was probed for prior and candidate Accord versions while the unrelated plugin remained installed, leaving zero Accord cache. Production, real unmanaged or cross-OS hosts, live-session cache behavior, ordinary model behavior, product value and release readiness remain unclaimed.'
+  claimLimit = 'Bounded Windows exact-package lifecycle evidence for exact subject Codex and Claude package bytes in disposable isolated host roots: mutation-phase failed updates preserved prior installed bytes and fresh-process inventories selected 3.0.1, task-owned staging was closed, successful updates selected 3.1.0 startup/resume, and command privacy, neighbor/unmanaged state preservation, removal, cache disposition, process termination, and zero task residue were verified. The 3.0.1 prior release is Skill-only and no Hook activation is claimed. All lifecycle triggers used task-owned loopback failure endpoints with no external model turns. Real account sessions, current desktop or unmanaged hosts, cross-OS behavior, comparative product value, release readiness, publication, and production remain unclaimed.'
   fixture = [ordered]@{
     platform = 'windows'
     priorVersion = '3.0.1'
@@ -1491,12 +2801,21 @@ $record = [ordered]@{
     unmanagedSentinelsPreserved = $true
     credentialEnvironmentInherited = $false
     hostConfigRootsIsolated = $true
-    sessionInputsProvided = $false
-    modelTurns = 0
-    sourceFailureMode = 'registered-source-package-path-absent'
+    sessionInputsProvided = $true
+    lifecycleTriggerTurns = 4
+    externalModelTurns = 0
+    taskOwnedLoopbackCredential = $true
+    sourceFailureMode = 'task-owned-candidate-lock-after-staging'
+    failedUpdateDisposition = 'prior-remained-active-with-host-cleaned-or-explicit-task-owned-staging-cleanup'
+    automaticRollbackClaimed = $false
+    failedUpdateRecovery = [ordered]@{
+      codex = $codexFailedUpdateRecovery
+      claude = $claudeFailedUpdateRecovery
+    }
     codexUpdateMechanism = 'plugin-add-replaces-installed-version'
     claudeUpdateMechanism = 'plugin-update'
-    rollbackBytesMatchPriorRelease = $true
+    priorInstalledBytesPreservedAfterFailedUpdate = $true
+    freshPriorInventoryVerified = $true
     installedBytesMatchDeclaredPackages = $true
     startupHookSilent = $true
     resumeHookTypedContext = $true

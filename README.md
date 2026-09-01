@@ -291,7 +291,7 @@ The exact public claim ceiling contains five finite statements:
 
 Separate repository evidence includes a side-effect-free reference core and the bounded host scenarios below. It does not expand those five public claims.
 
-Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and one disposable non-empty Windows Codex-and-Claude lifecycle.
+Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and historical lifecycle subfacts from one disposable non-empty Windows Codex-and-Claude replay. Exact review cut `c5a0668` rejected the broad GT-20 claim: direct Node runtime calls do not prove host activation, and a source-absent preflight rejection does not prove mutation-phase failed-update recovery. GT-20 is therefore active on the schema-v6 overlay; affected-surface reacceptance and four fresh independent reviews are pending.
 
 The observed `bypass_hook_trust` / `bypassPermissions` path was a test control, not a production trust route.
 

@@ -882,7 +882,7 @@
     },
     "environmentAdmissionContract": {
       "id": "composed-environment-admission/v1",
-      "status": "current-receipt-and-gt21-preserved-gt20-schema-v5-replay-verified-reacceptance-complete-independent-review-active-candidate-not-selected",
+      "status": "current-receipt-and-gt21-preserved-gt20-schema-v6-host-activation-and-failed-update-recovery-replay-pending-reacceptance-and-independent-review-pending-candidate-not-selected",
       "admissionUnit": "one-bounded-claim-under-one-provenance-bound-composition-and-freshness-window",
       "purpose": "Decide whether an environment observation may support one named claim, whether a comparison arm is required, and which minimum isolation or honest degradation is proportionate to material confounding. It does not certify a host as globally clean.",
       "snapshot": {
@@ -1759,7 +1759,7 @@
     "firstSlice": "Resource stewardship is the first corrected Agent-execution-subdomain slice: it recalls the historical attribution and release boundary as L8 and GT-12, adds current official capability discovery and dynamic native-first routing, and leaves the old preflight, generic Skills and unproven controller design in history. Process-loss control is not a new adjacent feature but a recalled original pre-Accord Agent-execution mission: current GT-07 and GT-11 must preserve the latest demand and corrections through goal, authority, route, implementation, evidence, acceptance and final claim without requiring a real carrier transition when the live carrier is healthy. Runtime machinery remains evidence-gated."
   },
   "wholeSystemBalanceReview": {
-    "status": "reopened-gt20-schema-v5-replay-verified-reacceptance-complete-independent-review-active",
+    "status": "reopened-gt20-schema-v6-host-activation-and-failed-update-recovery-replay-pending-reacceptance-and-independent-review-pending",
     "purpose": "Expose coupled weak links and tradeoffs before candidate formation, then drive minimum justified remediation and affected-surface reacceptance without turning a checklist or average score into product truth.",
     "reviewSequence": [
       "bind-current-goal-authority-candidate-scope-versioned-claim-scoped-baseline-target-counterfactual-evidence-cutoff-confounders-and-invalidation-triggers",
@@ -1812,11 +1812,11 @@
       "residual-risk-claim-limit-and-recheck-trigger"
     ],
     "activeProjection": {
-      "auditCut": "0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c",
+      "auditCut": "c5a06688feee7e93edc58a309679594bcc32bed6",
       "reviewCut": "f3c9b09b784c844762557a959d81418e7b443374",
       "reviewCutDisposition": "historical-independent-review-counterevidence-only-not-a-current-independent-review-of-85a917a-or-any-later-tree",
       "record": "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json",
-      "dominantBlocker": "four-fresh-independent-exact-tree-reviews",
+      "dominantBlocker": "gt20-host-activation-and-mutation-phase-failed-update-recovery",
       "remediation": {
         "BAL-01": "implemented-and-deterministically-reaccepted",
         "BAL-02": "implemented-and-deterministically-reaccepted",
@@ -1826,10 +1826,10 @@
         "BAL-06": "f3c9b09-closes-six-semantic-mutants-but-standards-review-finds-unbound-source-narrative-hash",
         "BAL-07": "bind-typed-normalization-to-the-same-record-at-an-exact-untyped-ancestor-and-reconcile-the-400000-byte-budget-text",
         "BAL-08": "GT-21-bounded-current-host-live-carrier-sufficient-simple-route-and-fresh-zero-history-handoff-reaccepted-with-production-trust-ordinary-activation-and-cross-host-value-still-unknown",
-        "BAL-09": "exact-fc9c1a7-schema-v4-raw-replay-invalidated-and-frozen-0febb415-schema-v5-privacy-ownership-native-host-replay-verified",
-        "BAL-10": "whole-system-projection-reopened-with-schema-v5-replay-verified-affected-surface-reacceptance-complete-and-four-fresh-independent-reviews-active-candidate-not-selected"
+        "BAL-09": "exact-fc9c1a7-schema-v4-raw-replay-invalidated-frozen-0febb415-schema-v5-narrow-subfacts-preserved-and-exact-c5a0668-external-review-failed-host-activation-and-failed-update-recovery",
+        "BAL-10": "whole-system-projection-reopened-at-gt20-schema-v6-host-activation-and-mutation-phase-failed-update-recovery-with-reacceptance-and-independent-reviews-pending-candidate-not-selected"
       },
-      "graphRule": "Project frozen 0febb415 schema-v5 GT-20 evidence and its current affected-surface reacceptance while retaining exact 85a917a, the historical 59a340f audit, historical 7860fee, fcefee4 and f3c9b09 independent-review findings, and bounded GT-18, GT-19 and GT-21 evidence with their claim ceilings. The f3c9b09 review remains historical counterevidence and is not an independent review of 0febb415 or any later tree. Preserve exact task behavior facts only while their task contract, evaluator, source-recorded ancestor, canonical sequence, sparse behavior-subject bindings and claim ceilings remain valid. A client update invalidates the current entry-instance projection to unknown until read-only re-sensing; model identity and version remain runtime variables rather than product, route or oracle bindings. Refresh only the invalidated slice, normalize host vocabulary before functional comparison and never precompute host-model-tool-context products."
+      "graphRule": "Preserve frozen 0febb415 schema-v5 evidence only as immutable counterevidence with bounded install, direct-runtime conformance, preflight preservation, successful-update, removal and cleanup subfacts after exact c5a0668 external review; do not project it as current GT-20 or affected-surface reacceptance. Retain exact 85a917a, the historical 59a340f audit, historical 7860fee, fcefee4 and f3c9b09 independent-review findings, and bounded GT-18, GT-19 and GT-21 evidence with their claim ceilings. The f3c9b09 and c5a0668 reviews remain historical counterevidence and are not current passing reviews of any successor tree. Preserve exact task behavior facts only while their task contract, evaluator, source-recorded ancestor, canonical sequence, sparse behavior-subject bindings and claim ceilings remain valid. Replay GT-20 host activation and mutation-phase failed-update recovery against the digest-bound schema-v6 overlay, then reaccept affected surfaces before independent review. A client update invalidates the current entry-instance projection to unknown until read-only re-sensing; model identity and version remain runtime variables rather than product, route or oracle bindings. Refresh only the invalidated slice, normalize host vocabulary before functional comparison and never precompute host-model-tool-context products."
     },
     "claimLimit": "This is a revisable review model, not proof that one baseline fits every claim, that every possible dimension has been enumerated, that current implementation passes, or that self-review can replace representative, longitudinal, independent, hosted, human or public evidence."
   },
@@ -1895,18 +1895,22 @@
     ]
   },
   "nextAuthorityBoundary": {
-    "first": "four-fresh-independent-reviews-and-repository-candidate-formation",
+    "first": "gt20-host-activation-and-mutation-phase-failed-update-recovery-replay",
     "then": [
+      "affected-surface-reacceptance-after-frozen-schema-v6-gt20-pass",
+      "four-fresh-independent-reviews-and-repository-candidate-formation",
       "exact-local-verification-and-review-of-the-clean-committed-v3.1.0-candidate",
       "current-client-entry-instance-read-only-resensing-before-any-current-entry-claim",
       "promoted-task-current-semantics-projection-ancestor-and-unchanged-sparse-behavior-subject-binding",
       "exact-candidate-hosted-verification-only-after-the-local-gate-passes",
       "named-human-tagged-release-and-cleanup-gates-remain-closed-until-their-dependencies-pass"
     ],
-    "minimumNextSlice": "Retain every attempt and the GT-18, GT-19, historical GT-20, invalidated exact fc9c1a7 raw replay, frozen 0febb415 bounded schema-v5 GT-20 evidence and unchanged GT-21 claim ceilings. Keep the selected portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the direct App Server route remains an evaluator only. The affected surfaces are reaccepted; obtain four fresh independent exact-tree reviews before selecting any replacement v3.1.0 repository candidate. Exact-local and external gates remain closed. Current entry-instance projections remain an Accord-enabled composed development observation rather than a clean baseline, and model identity and version remain runtime variables.",
-    "latestFailureBoundary": "Candidate 9050114 and its GT-20 record remain failed history. Exact fc9c1a7 remains invalidated because its evaluator inspected unrelated system process command lines and did not prove exclusive task-root and evidence-output ownership. Frozen 0febb415 closes the bounded schema-v5 evaluator and native Claude distribution identity replay, and affected surfaces are reaccepted. Four fresh independent exact-tree reviews are the earliest open boundary before candidate selection. Exact-local, hosted, named-human authorization, tag, public Release and cleanup remain closed. Current entry-instance, production, cross-host and value claims remain unknown.",
+    "minimumNextSlice": "Retain every attempt and the GT-18, GT-19, historical GT-20, invalidated exact fc9c1a7 raw replay, frozen 0febb415 schema-v5 record with only its narrower bounded subfacts, failed exact c5a0668 external review and unchanged GT-21 claim ceilings. Keep the selected portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the direct App Server route remains an evaluator only. Replay GT-20 host-native activation and mutation-phase failed-update recovery against the digest-bound v4 overlay on one frozen exact package, then reaccept affected surfaces and obtain four fresh independent exact-tree reviews before selecting any replacement v3.1.0 repository candidate. Exact-local and external gates remain closed. Current entry-instance projections remain an Accord-enabled composed development observation rather than a clean baseline, and model identity and version remain runtime variables.",
+    "latestFailureBoundary": "Candidate 9050114 and its GT-20 record remain failed history. Exact fc9c1a7 remains invalidated because its evaluator inspected unrelated system process command lines and did not prove exclusive task-root and evidence-output ownership. Frozen 0febb415 completed the schema-v5 replay, but exact c5a0668 external review found that direct Node runtime calls did not prove host activation and source-absent preflight rejection did not prove mutation-phase failed-update recovery. Preserve its narrower bounded subfacts without promoting current GT-20. The earliest open boundary is the digest-bound schema-v6 replay; affected-surface reacceptance and four fresh independent exact-tree reviews follow. Exact-local, hosted, named-human authorization, tag, public Release and cleanup remain closed. Current entry-instance, production, cross-host and value claims remain unknown.",
     "requiredReplay": [
-      "preserve-the-85a917a-source-bound-whole-system-reacceptance-every-bounded-counterexample-and-completed-independent-review",
+      "preserve-the-85a917a-source-bound-whole-system-reacceptance-as-history-every-bounded-counterexample-and-failed-c5a0668-independent-review",
+      "replay-gt20-host-native-activation-and-mutation-phase-failed-update-recovery-against-the-digest-bound-schema-v6-overlay",
+      "reaccept-every-affected-surface-after-the-frozen-gt20-replay-passes",
       "obtain-four-fresh-independent-reviews-before-repository-candidate-formation",
       "run-exact-local-verification-and-review-on-the-clean-committed-v3.1.0-candidate",
       "verify-current-task-and-evaluation-semantics-exact-projection-source-recorded-ancestor-and-unchanged-sparse-behavior-subject-bytes-before-promoting-any-observation",

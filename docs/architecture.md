@@ -36,12 +36,16 @@ schema-v4 54-command replay, but later red-team inspection invalidated it as
 current evidence: the evaluator inspected unrelated system process command
 lines and failure cleanup did not prove exclusive ownership of its task root
 and evidence target. Frozen revision
-`0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c` completes the corrected
-schema-v5 replay without global process inspection, cleans only exclusively
-created resources and accepts both the bound npm-shim and official native
-Claude executable layouts. Its affected surfaces are reaccepted; four fresh
-independent exact-tree reviews remain before one unchanged clean SHA may become
-the replacement candidate. Production trust,
+`0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c` completed the corrected
+schema-v5 replay without global process inspection, cleaned only exclusively
+created resources and accepted both the bound npm-shim and official native
+Claude executable layouts. Exact external review cut `c5a0668` then rejected
+the broad GT-20 claim because direct Node runtime calls did not prove host
+activation and source-absent preflight rejection did not prove mutation-phase
+failed-update recovery. Those narrower historical subfacts remain; GT-20
+schema-v6 replay is active, affected-surface reacceptance and four fresh
+independent exact-tree reviews are pending before one unchanged clean SHA may
+become the replacement candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
 The implementation does not admit an Accord-managed Runtime, durable state
@@ -153,10 +157,19 @@ The reopened correction tree has 112 tracked files against the structured
 115-file ceiling. Nine
 Python files contain the product and tests. The three largest maintained code
 surfaces are the product-control test module, `control.py` and `evidence.py`;
-together they dominate code review, coupling and regression cost. The current
-evaluator-correction tree has 750243 Python-and-product-test bytes against the
-recalibrated structured 800000-byte ceiling, leaving 49757 bytes or 6.22
-percent. The increase from the prior 750000-byte ceiling pays only for the
+together they dominate code review, coupling and regression cost. The failed
+exact review cut `c5a0668` had 752634 Python-and-product-test bytes against the
+recalibrated structured 800000-byte ceiling, leaving 47366 bytes or about 5.92
+percent. That revision-bound measurement is history, not a live size claim.
+The first schema-v6 slice recalibrated the structured ceiling to 816000 bytes
+for host activation, mutation-phase failed-update recovery and the bounded
+lineage-read cache. The independent v4 overlay, native activation and failed
+update receipt validators then measured 806997 bytes, so the active ceiling is
+minimally recalibrated to 850000 bytes, leaving 43003 bytes or about 5.06
+percent. The verifier still recomputes the active tree and requires at least
+five percent headroom; this increase is not general growth allowance. The
+earlier increase from the
+prior 750000-byte ceiling paid only for the
 ordered command contract, evidence sanitization, process ownership before
 resume, one hard end-to-end deadline, bounded output draining, real neighboring
 plugin preservation, Claude manifest-to-terminal identity, strict cache
@@ -225,10 +238,11 @@ The ordered bottlenecks are:
   subtraction review before another timeout increase.
 - Keep Windows Python 3.10/3.14, macOS Python 3.10/3.14 and Linux Python
   3.10-3.14. Historical exact-package lifecycle evidence remains bound to its
-  former package. Frozen 0febb415 verifies the changed package and schema-v5
-  evaluator in one disposable Windows replay with exact Codex CLI, Claude Code
-  and Node identities. The raw fc9c1a7 environment remains invalidated as
-  current evidence.
+  former package. Frozen 0febb415 preserves narrower changed-package schema-v5
+  subfacts from one disposable Windows replay with exact Codex CLI, Claude Code
+  and Node identities, but exact c5a0668 review invalidates host activation and
+  mutation-phase failed-update recovery. The raw fc9c1a7 environment remains
+  invalidated as current evidence; schema-v6 GT-20 replay is pending.
   Desktop/ChatGPT, unmanaged-host and cross-OS lifecycle behavior remain
   pending or unknown.
 - Local WSL2 Ubuntu 26.04 on Linux 6.18 with Python 3.14.4 is an available
@@ -1007,10 +1021,12 @@ or Hook output alone still cannot substitute for behavior, and a clean-state
 install cannot expose overwrite, stale-restore, ownership or host-cache errors.
 The `85a917a` source-bound whole-system reacceptance preserves these finite
 claims as history without promoting them to the changed package, production,
-cross-host, updated-client entry or release evidence. Frozen 0febb415 and its
-affected-surface reacceptance now close only the bounded schema-v5 GT-20 slice.
-The current route is four fresh independent exact-tree reviews before any
-replacement candidate or exact-local gate.
+cross-host, updated-client entry or release evidence. Frozen 0febb415 preserves
+only narrower bounded schema-v5 lifecycle subfacts after exact c5a0668 review
+rejected host activation and mutation-phase failed-update recovery. The current
+route is schema-v6 GT-20 replay, affected-surface reacceptance, then four fresh
+independent exact-tree reviews before any replacement candidate or exact-local
+gate.
 
 After the authorized tag and Release exist, one evaluator isolated from
 candidate-preparation context exercises the README installation, confirmation
@@ -1084,11 +1100,13 @@ declare itself independent or turn a checklist into product value.
 That sequence was complete for candidate `9050114`, but four fresh reviews
 reopened the GT-20 evaluator boundary. Exact `fc9c1a7` completed a raw replay,
 then later evaluator privacy and ownership findings invalidated it as current
-GT-20 evidence. Exact `0febb415` now closes the corrected bounded schema-v5
-replay and its affected surfaces are reaccepted. A replacement candidate does
-not exist until four fresh independent exact-tree reviews close; exact-local,
-hosted, named-human, tag, publication and public-verification gates remain
-distinct.
+GT-20 evidence. Exact `0febb415` completed the corrected bounded schema-v5
+replay, but exact `c5a0668` review rejected its host-activation and mutation-
+phase failed-update-recovery claims. Preserve its narrower historical subfacts;
+schema-v6 GT-20 replay and affected-surface reacceptance precede four fresh
+independent exact-tree reviews. A replacement candidate does not yet exist;
+exact-local, hosted, named-human, tag, publication and public-verification gates
+remain distinct.
 
 ## Complexity and evolution
 

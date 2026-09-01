@@ -1,4 +1,6 @@
 from hashlib import sha256
+from contextvars import ContextVar
+from functools import wraps
 import json
 from pathlib import Path
 import re
@@ -61,6 +63,23 @@ PROGRAM_STATES = {"active", "ready", "blocked"}
 
 _SNAPSHOT_V1_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v1"
 _SNAPSHOT_V2_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v2"
+_GT20_LIFECYCLE_PREFIX = "yiyuan-accord-exact-package-evidence-lifecycle/"
+_GT20_REPLAY_BOUNDARIES = {
+    f"{_GT20_LIFECYCLE_PREFIX}v1": "complete-host-projection-package-identity",
+    f"{_GT20_LIFECYCLE_PREFIX}v2": "exact-package-evaluator-failure-closure",
+    f"{_GT20_LIFECYCLE_PREFIX}v3":
+        "exact-package-evaluator-privacy-termination-cleanup-closure",
+    f"{_GT20_LIFECYCLE_PREFIX}v4":
+        "exact-package-command-contract-host-neighbor-and-brand-surface-closure",
+    f"{_GT20_LIFECYCLE_PREFIX}v5":
+        "exact-package-evaluator-privacy-ownership-and-native-host-adaptation-closure",
+    f"{_GT20_LIFECYCLE_PREFIX}v6":
+        "exact-package-host-activation-and-mutation-phase-failed-update-recovery-closure",
+}
+_GT20_V6_PREDECESSOR = "c5a06688feee7e93edc58a309679594bcc32bed6"
+_GT20_EVIDENCE_LOCATOR = (
+    "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json"
+)
 _SNAPSHOT_V1_AUTHORITY_REFS = (
     "product/constitution.json",
     "product/program.json",
@@ -88,6 +107,11 @@ _SNAPSHOT_V1_MAX_JSON_DEPTH = 512
 _SNAPSHOT_V1_MAX_HISTORY_REVISIONS = 4096
 _SNAPSHOT_V1_HISTORY_BYTES = 67_108_864
 _SNAPSHOT_V1_BLOB_BYTES = 1_000_000
+_SNAPSHOT_V1_TREE_BYTES = 1_048_576
+_SNAPSHOT_V1_MAX_TREE_ENTRIES = 8_192
+_SNAPSHOT_V1_TREE_CACHE_BYTES = _SNAPSHOT_V1_HISTORY_BYTES
+_SNAPSHOT_V1_MAX_CACHED_TREE_ENTRIES = 262_144
+_SNAPSHOT_V1_BLOB_CACHE_BYTES = _SNAPSHOT_V1_HISTORY_BYTES
 _SNAPSHOT_V1_PROJECTION_FIELDS = frozenset((
     "id packageId packageVersion packageSha256 manifest marketplace contract "
     "skill metadataFiles mechanismFiles activationContext interfaceDefaultPrompt "
@@ -103,6 +127,17 @@ _SNAPSHOT_V1_STRUCTURE_EXCEPTIONS = (
 _SNAPSHOT_V1_FAILURES = (
     *_SNAPSHOT_V1_IO_EXCEPTIONS, *_SNAPSHOT_V1_STRUCTURE_EXCEPTIONS,
 )
+_SNAPSHOT_READ_CACHE = ContextVar("snapshot-read-cache", default=None)
+
+
+def _gt20_replay(boundary, state, evidence=None):
+    return {
+        "earliestAffectedBoundary": boundary,
+        "invalidatedTaskIds": ["GT-20"],
+        "preservedTaskIds": ["GT-21"],
+        "evidenceState": state,
+        "evidenceRef": evidence,
+    }
 
 
 def _safe_file(root, locator, errors):
@@ -613,6 +648,98 @@ def _semantic_version_precedence(value):
     return _snapshot_v1_semantic_version_precedence(value)
 
 
+class _SnapshotBlobCache:
+    """Bounded revision tree and immutable blob cache for one validation scope."""
+
+    def __init__(self):
+        self._trees = {}
+        self._blobs = {}
+        self._tree_bytes = 0
+        self._tree_entries = 0
+        self._blob_bytes = 0
+
+    @staticmethod
+    def _root_key(root):
+        return str(Path(root).resolve())
+
+    def _tree(self, root, revision):
+        root_key = self._root_key(root)
+        key = (root_key, revision)
+        cached = self._trees.get(key)
+        if cached is not None:
+            return cached, root_key
+        listing = _bounded_git_bytes(
+            root,
+            ["ls-tree", "-r", "-z", "--full-tree", revision],
+            _SNAPSHOT_V1_TREE_BYTES,
+        )
+        if self._tree_bytes + len(listing) > _SNAPSHOT_V1_TREE_CACHE_BYTES:
+            raise ValueError("snapshot tree cache aggregate bound is invalid")
+        tree = {}
+        for raw_record in listing.split(b"\0"):
+            if not raw_record:
+                continue
+            if len(tree) >= _SNAPSHOT_V1_MAX_TREE_ENTRIES:
+                raise ValueError("snapshot revision tree entry bound is invalid")
+            metadata, separator, raw_locator = raw_record.partition(b"\t")
+            fields = metadata.split()
+            locator = raw_locator.decode("utf-8")
+            if (
+                not separator or len(fields) != 3 or not locator
+                or locator in tree
+                or _SNAPSHOT_V1_REVISION_RE.fullmatch(
+                    fields[2].decode("ascii")
+                ) is None
+            ):
+                raise ValueError("snapshot revision tree is invalid")
+            tree[locator] = (
+                fields[0], fields[1], fields[2].decode("ascii"),
+            )
+        if (
+            self._tree_entries + len(tree)
+            > _SNAPSHOT_V1_MAX_CACHED_TREE_ENTRIES
+        ):
+            raise ValueError("snapshot tree cache aggregate bound is invalid")
+        self._trees[key] = tree
+        self._tree_bytes += len(listing)
+        self._tree_entries += len(tree)
+        return tree, root_key
+
+    def read(self, root, locator, revision):
+        tree, root_key = self._tree(root, revision)
+        entry = tree.get(locator)
+        if entry is None or entry[0] not in {b"100644", b"100755"} \
+                or entry[1] != b"blob":
+            raise ValueError("snapshot file is not an owned regular blob")
+        object_id = entry[2]
+        key = (root_key, object_id)
+        cached = self._blobs.get(key)
+        if cached is not None:
+            return cached
+        content = _bounded_git_bytes(
+            root, ["cat-file", "blob", object_id], _SNAPSHOT_V1_BLOB_BYTES,
+        )
+        if self._blob_bytes + len(content) > _SNAPSHOT_V1_BLOB_CACHE_BYTES:
+            raise ValueError("snapshot blob cache aggregate bound is invalid")
+        self._blobs[key] = content
+        self._blob_bytes += len(content)
+        return content
+
+
+def _snapshot_read_scope(function):
+    """Share bounded immutable Git reads across one verifier call graph."""
+    @wraps(function)
+    def scoped(*args, **kwargs):
+        if _SNAPSHOT_READ_CACHE.get() is not None:
+            return function(*args, **kwargs)
+        token = _SNAPSHOT_READ_CACHE.set(_SnapshotBlobCache())
+        try:
+            return function(*args, **kwargs)
+        finally:
+            _SNAPSHOT_READ_CACHE.reset(token)
+    return scoped
+
+
 def _snapshot_bytes(root, locator, revision):
     if (
         not isinstance(revision, str)
@@ -623,6 +750,9 @@ def _snapshot_bytes(root, locator, revision):
     if relative is None or not locator or "\\" in locator or relative.is_absolute() \
             or any(part in {"", ".", ".."} for part in relative.parts):
         raise ValueError("snapshot locator is invalid")
+    cache = _SNAPSHOT_READ_CACHE.get()
+    if cache is not None:
+        return cache.read(root, locator, revision)
     listing = _bounded_git_bytes(
         root, ["ls-tree", "-z", revision, "--", locator], 4096,
     )
@@ -1238,6 +1368,7 @@ def _snapshot_v1_projection_package_errors(
     return errors
 
 
+@_snapshot_read_scope
 def _snapshot_v1_run_status(root, expected, revisions, cache):
     frozen, contract_valid = True, True
     for revision in revisions:
@@ -1464,18 +1595,9 @@ def _snapshot_v2_node_errors(program, acceptance):
         errors.append("revision-bound v2 acceptance transition is invalid")
     replay = node.get("replay")
     lifecycle = increment.get("exactPackageEvidenceLifecycle", {})
-    replay_boundary = {
-        "yiyuan-accord-exact-package-evidence-lifecycle/v1":
-            "complete-host-projection-package-identity",
-        "yiyuan-accord-exact-package-evidence-lifecycle/v2":
-            "exact-package-evaluator-failure-closure",
-        "yiyuan-accord-exact-package-evidence-lifecycle/v3":
-            "exact-package-evaluator-privacy-termination-cleanup-closure",
-        "yiyuan-accord-exact-package-evidence-lifecycle/v4":
-            "exact-package-command-contract-host-neighbor-and-brand-surface-closure",
-        "yiyuan-accord-exact-package-evidence-lifecycle/v5":
-            "exact-package-evaluator-privacy-ownership-and-native-host-adaptation-closure",
-    }.get(lifecycle.get("schema")) if isinstance(lifecycle, dict) else None
+    replay_boundary = _GT20_REPLAY_BOUNDARIES.get(
+        lifecycle.get("schema")
+    ) if isinstance(lifecycle, dict) else None
     if (
         not isinstance(replay, dict)
         or set(replay) != {
@@ -1621,6 +1743,7 @@ def _snapshot_v1_transition_errors(
     return errors
 
 
+@_snapshot_read_scope
 def _snapshot_v1_lineage_errors(
     root, origin, node, revisions, lineage, cache,
 ):
@@ -1747,50 +1870,41 @@ def _snapshot_v2_transition_errors(current, predecessor):
             and prior_state == "reopened"
             and isinstance(current_replay, dict)
             and isinstance(prior_replay, dict)
-            and prior_replay == {
-                "earliestAffectedBoundary": (
-                    "exact-package-evaluator-privacy-termination-cleanup-closure"
-                ),
-                "invalidatedTaskIds": ["GT-20"],
-                "preservedTaskIds": ["GT-21"],
-                "evidenceState": "pending",
-                "evidenceRef": None,
-            }
-            and current_replay == {
-                "earliestAffectedBoundary": (
-                    "exact-package-command-contract-host-neighbor-and-brand-"
-                    "surface-closure"
-                ),
-                "invalidatedTaskIds": ["GT-20"],
-                "preservedTaskIds": ["GT-21"],
-                "evidenceState": "pending",
-                "evidenceRef": None,
-            }
+            and prior_replay == _gt20_replay(
+                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v3"],
+                "pending",
+            )
+            and current_replay == _gt20_replay(
+                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v4"],
+                "pending",
+            )
         ) or (
             prior_schema == _SNAPSHOT_V2_SCHEMA
             and prior_state == "reopened"
             and isinstance(current_replay, dict)
             and isinstance(prior_replay, dict)
-            and prior_replay == {
-                "earliestAffectedBoundary": (
-                    "exact-package-command-contract-host-neighbor-and-brand-"
-                    "surface-closure"
-                ),
-                "invalidatedTaskIds": ["GT-20"],
-                "preservedTaskIds": ["GT-21"],
-                "evidenceState": "pending",
-                "evidenceRef": None,
-            }
-            and current_replay == {
-                "earliestAffectedBoundary": (
-                    "exact-package-evaluator-privacy-ownership-and-native-"
-                    "host-adaptation-closure"
-                ),
-                "invalidatedTaskIds": ["GT-20"],
-                "preservedTaskIds": ["GT-21"],
-                "evidenceState": "pending",
-                "evidenceRef": None,
-            }
+            and prior_replay == _gt20_replay(
+                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v4"],
+                "pending",
+            )
+            and current_replay == _gt20_replay(
+                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v5"],
+                "pending",
+            )
+        )
+        reopened_invalidation = (
+            prior_schema == _SNAPSHOT_V2_SCHEMA
+            and prior_state == "reopened"
+            and isinstance(current_replay, dict)
+            and isinstance(prior_replay, dict)
+            and prior_replay == _gt20_replay(
+                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v5"],
+                "verified", _GT20_EVIDENCE_LOCATOR,
+            )
+            and current_replay == _gt20_replay(
+                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v6"],
+                "pending",
+            )
         )
         reopening_closed = (
             prior_state == "closed" and prior_schema in {
@@ -1798,7 +1912,7 @@ def _snapshot_v2_transition_errors(current, predecessor):
             }
         )
         if not reopening_closed and not reopened_successor \
-                and not reopened_rebaseline:
+                and not reopened_rebaseline and not reopened_invalidation:
             errors.append("revision-bound v2 reopen transition is invalid")
     elif current.get("state") == "closed":
         if prior_schema != _SNAPSHOT_V2_SCHEMA or prior_state != "reopened":
@@ -1824,6 +1938,7 @@ def _snapshot_v2_transition_errors(current, predecessor):
     return errors
 
 
+@_snapshot_read_scope
 def _snapshot_v2_lineage_errors(
     root, origin, node, revisions, lineage, cache,
 ):
@@ -1987,6 +2102,7 @@ def _validate_closeout_snapshot_v2(
         ))
 
 
+@_snapshot_read_scope
 def _validate_closeout_snapshot(
     root, program, acceptance, criterion_ids, evaluation_digest, errors,
     _revision=None, _lineage=(), _cache=None,
@@ -2338,6 +2454,432 @@ def _claude_command_distribution_identity(command):
     )
 
 
+def _gt20_v4_overlay_shape_valid(contract):
+    try:
+        commands = contract["commands"]
+        roles = {item["role"]: item for item in commands}
+        replacements = {
+            item["replacesRole"]: item["role"]
+            for item in commands if "replacesRole" in item
+        }
+        inserts = {
+            (item["insertBeforeRole"], item["role"])
+            for item in commands if "insertBeforeRole" in item
+        }
+        edits = contract["commandEdits"]
+        prefixes = edits["prependArgumentsByRole"]
+        activation = contract["activationProof"]
+        failure = contract["failedUpdateProof"]
+        return (
+            set(contract) == {
+                "schema", "baseContract", "priorRelease", "activationProof",
+                "failedUpdateProof", "commandEdits", "commands",
+            }
+            and contract["schema"]
+                == "yiyuan-accord-gt20-command-contract-overlay/v1"
+            and contract["baseContract"] == {
+                "locator": "evals/contracts/gt20-v3-command-contract.json",
+                "sha256": (
+                    "53b8281282f876b7298da20577de3859ef107cc689c7aa2de99866a70d52355c"
+                ),
+            }
+            and contract["priorRelease"] == {
+                "tag": "v3.0.1",
+                "revision": "24cf9f3750ecd700944988e81a519db54b67b8e8",
+            }
+            and len(commands) == len(roles) == 8
+            and set(edits) == {"replaceRoles", "prependArgumentsByRole"}
+            and set(edits["replaceRoles"]) == set(replacements)
+            and len(edits["replaceRoles"]) == 6
+            and inserts == {
+                ("codexHookStartup", "codexHostActivation"),
+                ("codexHookStartup", "claudeHostActivation"),
+            }
+            and set(prefixes) == {
+                "neighborCodexMarketplaceAdd", "neighborCodexInstall",
+                "accordCodexMarketplaceAdd", "accordCodexInstallPrior",
+                "accordCodexUpdateCandidate",
+            }
+            and all(value == ["--dangerously-bypass-hook-trust"]
+                    for value in prefixes.values())
+            and activation["codex"]["qualifyingCommandRole"]
+                == "codexHostActivation"
+            and activation["claude"]["qualifyingCommandRole"]
+                == "claudeHostActivation"
+            and activation["codex"]["lifecycleTriggerTurns"] == 2
+            and activation["codex"]["externalModelTurns"] == 0
+            and activation["codex"]["credentialEnvironmentInherited"] is False
+            and activation["claude"]["lifecycleTriggerTurns"] == 2
+            and activation["claude"]["externalModelTurns"] == 0
+            and activation["claude"]["minimumLoopbackHttpRequests"] == 2
+            and activation["claude"]["requiredLoadedPlugin"] == {
+                "name": "yiyuan-accord-claude", "version": "3.1.0",
+            }
+            and activation["claude"]["credentialEnvironmentInherited"] is False
+            and failure["minimumAcceptedPhase"]
+                == "host-accepted-update-with-task-owned-staging-observed"
+            and failure["forbiddenFailureCategory"] == "source-path-absent"
+            and failure["priorInventoryCommandRoles"] == {
+                "codex": "rollbackCodexInventory",
+                "claude": "rollbackClaudeInventory",
+            }
+            and "fresh-host-inventory-selects-prior-version"
+                in failure["requiredPoststate"]
+        )
+    except (AttributeError, KeyError, TypeError):
+        return False
+
+
+def _resolve_gt20_v4_command_contract(overlay, base):
+    """Resolve the bounded v4 overlay without trusting the runner's result."""
+
+    if (
+        not _gt20_v4_overlay_shape_valid(overlay)
+        or not isinstance(base, dict)
+        or base.get("schema") != "yiyuan-accord-gt20-command-contract/v1"
+        or not isinstance(base.get("commands"), list)
+    ):
+        return None
+    value = json.loads(json.dumps(base))
+    overlay_commands = overlay["commands"]
+    replacements = {
+        item["replacesRole"]: item
+        for item in overlay_commands if "replacesRole" in item
+    }
+    inserts = {}
+    for item in overlay_commands:
+        if "insertBeforeRole" in item:
+            inserts.setdefault(item["insertBeforeRole"], []).append(item)
+    effective = []
+    base_roles = {item.get("role") for item in value["commands"]}
+    if not set(replacements) <= base_roles or not set(inserts) <= base_roles:
+        return None
+    for base_spec in value["commands"]:
+        for item in inserts.get(base_spec.get("role"), []):
+            inserted = json.loads(json.dumps(item))
+            inserted.pop("insertBeforeRole", None)
+            effective.append(inserted)
+        replacement = replacements.get(base_spec.get("role"))
+        if replacement is None:
+            effective.append(base_spec)
+            continue
+        merged = json.loads(json.dumps(base_spec))
+        merged.update({
+            key: json.loads(json.dumps(item))
+            for key, item in replacement.items() if key != "replacesRole"
+        })
+        effective.append(merged)
+    prefixes = overlay["commandEdits"]["prependArgumentsByRole"]
+    by_role = {item.get("role"): item for item in effective}
+    if len(by_role) != len(effective) or not set(prefixes) <= set(by_role):
+        return None
+    for role, prefix in prefixes.items():
+        argv = by_role[role].get("argv")
+        if not isinstance(argv, list) or not argv:
+            return None
+        if argv[1:1 + len(prefix)] != prefix:
+            by_role[role]["argv"] = [argv[0], *prefix, *argv[1:]]
+    value["commands"] = effective
+    return value
+
+
+def _gt20_v4_activation_receipt_valid(command, host, version):
+    """Validate host-native startup/resume receipts, independent of the runner."""
+
+    if not isinstance(command, dict) or host not in {"codex", "claude"}:
+        return False
+    receipt = command.get("activationReceipt")
+    if not isinstance(receipt, dict) or version not in {"3.0.1", "3.1.0"}:
+        return False
+    if host == "codex":
+        expected_path = (
+            "%TASK_ROOT%/codex-host/plugins/cache/yiyuan-accord/"
+            f"yiyuan-accord-codex/{version}/hooks/hooks.json"
+        )
+        if (
+            command.get("exitCode") != 0
+            or command.get("failureCategory") is not None
+            or set(receipt) != {
+                "transport", "rpcMethods", "lifecycleTriggerTurns",
+                "externalModelTurns", "loopbackModelRequests", "startup",
+                "resume",
+            }
+            or receipt.get("transport") != "app-server-stdio-jsonl"
+            or receipt.get("rpcMethods") != [
+                "hooks/list", "thread/start", "turn/start", "thread/resume",
+            ]
+            or receipt.get("lifecycleTriggerTurns") != 2
+            or receipt.get("externalModelTurns") != 0
+            or receipt.get("loopbackModelRequests") != 2
+        ):
+            return False
+        thread_ids = []
+        for source, rpc_method in (("startup", "thread/start"),
+                                   ("resume", "thread/resume")):
+            item = receipt.get(source)
+            if not isinstance(item, dict) or set(item) != {
+                "rpcMethod", "responseId", "threadId", "lifecycleTrigger",
+                "discovery", "hookStarted", "hookCompleted",
+            }:
+                return False
+            discovery = item.get("discovery")
+            trigger = item.get("lifecycleTrigger")
+            started = item.get("hookStarted")
+            completed = item.get("hookCompleted")
+            normalized_paths = [
+                part.get("sourcePath", "").replace("\\", "/")
+                for part in (discovery, started, completed)
+                if isinstance(part, dict)
+            ]
+            if (
+                item.get("rpcMethod") != rpc_method
+                or type(item.get("responseId")) is not int
+                or not _nonempty_string(item.get("threadId"))
+                or not isinstance(trigger, dict)
+                or trigger.get("rpcMethod") != "turn/start"
+                or type(trigger.get("responseId")) is not int
+                or not _nonempty_string(trigger.get("turnId"))
+                or trigger.get("terminalStatus") != "failed"
+                or trigger.get("modelProvider")
+                    != "task-owned-loopback-responses-failure"
+                or trigger.get("requiresOpenAIAuth") is not False
+                or not isinstance(discovery, dict)
+                or discovery.get("rpcMethod") != "hooks/list"
+                or str(discovery.get("eventName", "")).casefold()
+                    != "sessionstart"
+                or discovery.get("source") != "plugin"
+                or discovery.get("handlerType") != "command"
+                or discovery.get("enabled") is not True
+                or discovery.get("trustStatus") != "untrusted"
+                or not isinstance(started, dict)
+                or not isinstance(completed, dict)
+                or str(started.get("eventName", "")).casefold()
+                    != "sessionstart"
+                or str(completed.get("eventName", "")).casefold()
+                    != "sessionstart"
+                or started.get("source") != "plugin"
+                or completed.get("source") != "plugin"
+                or started.get("status") != "running"
+                or completed.get("status") != "completed"
+                or SHA256_RE.fullmatch(started.get("idSha256") or "") is None
+                or started.get("idSha256") != completed.get("idSha256")
+                or normalized_paths != [expected_path] * 3
+            ):
+                return False
+            thread_ids.append(item["threadId"])
+        return len(set(thread_ids)) == 1
+
+    expected_runtime = (
+        "%TASK_ROOT%/mutable-source/plugins/yiyuan-accord-claude/"
+        "runtime/accord-hook.cjs"
+    )
+    if (
+        command.get("exitCode") == 0
+        or command.get("failureCategory") is not None
+        or set(receipt) != {
+            "transport", "lifecycleTriggerTurns", "externalModelTurns",
+            "loopbackHttpRequests", "credentialEnvironmentInherited",
+            "networkEndpoint", "terminalStatus", "hostRuns", "native",
+            "hooks",
+        }
+        or receipt.get("transport") != (
+            "headless-stream-json-with-loopback-trigger-and-task-owned-"
+            "node-observer"
+        )
+        or receipt.get("lifecycleTriggerTurns") != 2
+        or receipt.get("externalModelTurns") != 0
+        or type(receipt.get("loopbackHttpRequests")) is not int
+        or receipt["loopbackHttpRequests"] < 2
+        or receipt.get("credentialEnvironmentInherited") is not False
+        or receipt.get("networkEndpoint") != "ipv4-loopback"
+        or receipt.get("terminalStatus") != "api_error"
+    ):
+        return False
+    host_runs = receipt.get("hostRuns")
+    if not isinstance(host_runs, list) or len(host_runs) != 2:
+        return False
+    expected_runs = (
+        ("startup", "task-owned-session-id"),
+        ("resume", "same-task-owned-session-id"),
+    )
+    request_total = 0
+    for run, (source, binding) in zip(host_runs, expected_runs, strict=True):
+        if (
+            not isinstance(run, dict)
+            or set(run) != {
+                "source", "sessionBinding", "exitCode", "loopbackHttpRequests",
+            }
+            or run.get("source") != source
+            or run.get("sessionBinding") != binding
+            or type(run.get("exitCode")) is not int
+            or run["exitCode"] == 0
+            or type(run.get("loopbackHttpRequests")) is not int
+            or run["loopbackHttpRequests"] < 1
+        ):
+            return False
+        request_total += run["loopbackHttpRequests"]
+    if request_total != receipt["loopbackHttpRequests"]:
+        return False
+    native = receipt.get("native")
+    hooks = receipt.get("hooks")
+    if (
+        not isinstance(native, dict) or set(native) != {"startup", "resume"}
+        or not isinstance(hooks, list) or len(hooks) != 2
+    ):
+        return False
+    for source in ("startup", "resume"):
+        item = native.get(source)
+        started = item.get("nativeHookStarted") \
+            if isinstance(item, dict) else None
+        response = item.get("nativeHookResponse") \
+            if isinstance(item, dict) else None
+        plugin = item.get("loadedPlugin") if isinstance(item, dict) else None
+        terminal = item.get("terminal") if isinstance(item, dict) else None
+        if (
+            not isinstance(item, dict)
+            or set(item) != {
+                "sessionSource", "nativeHookStarted", "nativeHookResponse",
+                "loadedPlugin", "terminal",
+            }
+            or item.get("sessionSource") != source
+            or not isinstance(started, dict) or not isinstance(response, dict)
+            or started.get("subtype") != "hook_started"
+            or response.get("subtype") != "hook_response"
+            or started.get("hookEvent") != "SessionStart"
+            or response.get("hookEvent") != "SessionStart"
+            or started.get("hookName") != f"SessionStart:{source}"
+            or response.get("hookName") != f"SessionStart:{source}"
+            or not _nonempty_string(started.get("hookId"))
+            or started.get("hookId") != response.get("hookId")
+            or response.get("exitCode") != 0
+            or response.get("outcome") != "success"
+            or plugin != {
+                "name": "yiyuan-accord-claude",
+                "version": version,
+                "source": "yiyuan-accord-claude@yiyuan-accord",
+                "path": "%TASK_ROOT%/mutable-source/plugins/"
+                        "yiyuan-accord-claude",
+            }
+            or terminal != {
+                "status": "api_error", "apiErrorStatus": 400,
+                "isError": True, "totalCostUsd": 0, "turns": 1,
+            }
+        ):
+            return False
+    by_source = {item.get("source"): item for item in hooks
+                 if isinstance(item, dict)}
+    if set(by_source) != {"startup", "resume"}:
+        return False
+    return all(
+        set(item) == {
+            "hookEventName", "source", "runtimePath", "inputSha256",
+            "stdoutSha256", "stderrSha256", "exitCode",
+        }
+        and item.get("hookEventName") == "SessionStart"
+        and item.get("runtimePath", "").replace("\\", "/")
+            == expected_runtime
+        and item.get("exitCode") == 0
+        and all(SHA256_RE.fullmatch(item.get(key) or "") is not None for key in (
+            "inputSha256", "stdoutSha256", "stderrSha256",
+        ))
+        for item in by_source.values()
+    )
+
+
+def _gt20_v4_failed_update_receipts_valid(commands, fixture):
+    """Validate mutation reached staging and recovery claims remain factual."""
+
+    if not isinstance(commands, dict) or not isinstance(fixture, dict):
+        return False
+    for role in (
+        "accordCodexFailedUpdateAfterStaging",
+        "accordClaudeFailedUpdateAfterStaging",
+    ):
+        command = commands.get(role)
+        receipt = command.get("mutationReceipt") \
+            if isinstance(command, dict) else None
+        if (
+            not isinstance(command, dict) or command.get("exitCode") == 0
+            or command.get("failureCategory")
+                != "task-owned-candidate-lock-after-staging"
+            or not isinstance(receipt, dict)
+            or set(receipt) != {
+                "stagingObserved", "eventCount", "observationScope",
+                "eventKinds",
+            }
+            or receipt.get("stagingObserved") is not True
+            or type(receipt.get("eventCount")) is not int
+            or receipt["eventCount"] < 1
+            or receipt.get("observationScope")
+                != "isolated-marketplace-cache-excluding-prior-version"
+            or receipt.get("eventKinds") != ["Changed", "Created"]
+        ):
+            return False
+    recovery = fixture.get("failedUpdateRecovery")
+    codex = recovery.get("codex") if isinstance(recovery, dict) else None
+    claude = recovery.get("claude") if isinstance(recovery, dict) else None
+    difference = claude.get("difference") if isinstance(claude, dict) else None
+    try:
+        codex_inventory = json.loads(commands["rollbackCodexInventory"]["stdout"])
+        claude_inventory = json.loads(commands["rollbackClaudeInventory"]["stdout"])
+        codex_prior = [
+            item for item in codex_inventory.get("installed", [])
+            if isinstance(item, dict)
+            and item.get("pluginId") == "yiyuan-accord-codex@yiyuan-accord"
+        ]
+        claude_prior = [
+            item for item in claude_inventory
+            if isinstance(item, dict)
+            and item.get("id") == "yiyuan-accord-claude@yiyuan-accord"
+        ]
+        fresh_inventory_valid = (
+            len(codex_prior) == len(claude_prior) == 1
+            and codex_prior[0].get("version") == "3.0.1"
+            and codex_prior[0].get("installed") is True
+            and codex_prior[0].get("enabled") is True
+            and claude_prior[0].get("version") == "3.0.1"
+            and claude_prior[0].get("enabled") is True
+        )
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+        fresh_inventory_valid = False
+    return (
+        fixture.get("sourceFailureMode")
+            == "task-owned-candidate-lock-after-staging"
+        and fixture.get("failedUpdateDisposition") == (
+            "prior-remained-active-with-host-cleaned-or-explicit-task-owned-"
+            "staging-cleanup"
+        )
+        and fixture.get("automaticRollbackClaimed") is False
+        and fixture.get("priorInstalledBytesPreservedAfterFailedUpdate") is True
+        and fixture.get("freshPriorInventoryVerified") is True
+        and fresh_inventory_valid
+        and isinstance(recovery, dict) and set(recovery) == {"codex", "claude"}
+        and codex == {
+            "disposition": "prior-remained-active-host-cleaned-observed-staging",
+            "stagedFileCount": None, "difference": None,
+            "stagingCleanupVerified": True,
+        }
+        and isinstance(claude, dict)
+        and set(claude) == {
+            "disposition", "stagedFileCount", "difference",
+            "stagingCleanupVerified",
+        }
+        and claude.get("disposition") == (
+            "prior-remained-active-with-explicit-task-owned-staging-cleanup"
+        )
+        and type(claude.get("stagedFileCount")) is int
+        and claude["stagedFileCount"] > 0
+        and claude.get("stagingCleanupVerified") is True
+        and isinstance(difference, dict)
+        and set(difference) == {"missing", "extra", "changed"}
+        and isinstance(difference.get("missing"), list)
+        and bool(difference["missing"])
+        and difference.get("extra") == [] and difference.get("changed") == []
+        and all(_nonempty_string(item) and not Path(item).is_absolute()
+                for item in difference["missing"])
+    )
+
+
 def _validate_exact_package_evidence_lifecycle(
     root, program, errors, revision=None,
 ):
@@ -2374,6 +2916,11 @@ def _validate_exact_package_evidence_lifecycle(
             "exact-package-evaluator-privacy-ownership-and-native-host-adaptation-closure",
             None, None,
         ),
+        "yiyuan-accord-exact-package-evidence-lifecycle/v6": (
+            "exact-package-host-activation-and-mutation-phase-failed-update-"
+            "recovery-closure",
+            None, None,
+        ),
     }
     contract = contracts.get(lifecycle.get("schema")) \
         if isinstance(lifecycle, dict) else None
@@ -2383,7 +2930,10 @@ def _validate_exact_package_evidence_lifecycle(
     is_v5 = isinstance(lifecycle, dict) and lifecycle.get("schema") == (
         "yiyuan-accord-exact-package-evidence-lifecycle/v5"
     )
-    is_modern = is_v4 or is_v5
+    is_v6 = isinstance(lifecycle, dict) and lifecycle.get("schema") == (
+        "yiyuan-accord-exact-package-evidence-lifecycle/v6"
+    )
+    is_modern = is_v4 or is_v5 or is_v6
     expected_fields = fields | (
         {
             "predecessorLifecycleRef", "commandContractLocator",
@@ -2428,6 +2978,9 @@ def _validate_exact_package_evidence_lifecycle(
             predecessor_lifecycle = None
         predecessor_revision = match.group(1) if match else None
         base_predecessor_ref = (
+            f"{_GT20_V6_PREDECESSOR}:"
+            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+            if is_v6 else
             "fc9c1a7a64257ddf315f862a091a081c4104d81b:"
             "product/program.json#/increment/exactPackageEvidenceLifecycle"
             if is_v5 else
@@ -2452,9 +3005,23 @@ def _validate_exact_package_evidence_lifecycle(
             ),
             "evidence": None,
         }
+        predecessor_shape_valid = True
         if lifecycle.get("state") == "verified":
             expected_predecessor = modern_pending
             expected_predecessor_revision = lifecycle.get("subjectRevision")
+        elif is_v6:
+            expected_predecessor = predecessor_lifecycle
+            expected_predecessor_revision = _GT20_V6_PREDECESSOR
+            predecessor_shape_valid = (
+                isinstance(predecessor_lifecycle, dict)
+                and predecessor_lifecycle.get("schema")
+                    == f"{_GT20_LIFECYCLE_PREFIX}v5"
+                and predecessor_lifecycle.get("state") == "verified"
+                and predecessor_lifecycle.get("taskId") == "GT-20"
+                and predecessor_lifecycle.get("evidence", {}).get(
+                    "evaluatedRevision"
+                ) == predecessor_lifecycle.get("subjectRevision")
+            )
         elif is_v5:
             expected_predecessor = {
                 "schema": "yiyuan-accord-exact-package-evidence-lifecycle/v4",
@@ -2522,13 +3089,17 @@ def _validate_exact_package_evidence_lifecycle(
             predecessor_lifecycle != expected_predecessor
             or predecessor_revision != expected_predecessor_revision
             or not predecessor_is_ancestor
+            or not predecessor_shape_valid
         ):
             errors.append("exact package lifecycle predecessor is invalid")
         command_contract_locator = lifecycle.get("commandContractLocator")
         command_contract_sha256 = lifecycle.get("commandContractSha256")
         if (
             command_contract_locator
-            != "evals/contracts/gt20-v3-command-contract.json"
+            != (
+                "evals/contracts/gt20-v4-command-contract.json" if is_v6
+                else "evals/contracts/gt20-v3-command-contract.json"
+            )
             or SHA256_RE.fullmatch(command_contract_sha256 or "") is None
         ):
             errors.append("exact package lifecycle command contract is invalid")
@@ -2540,44 +3111,53 @@ def _validate_exact_package_evidence_lifecycle(
                 command_contract_object = _strict_json_object(
                     command_contract_raw
                 )
-                command_contract_commands = command_contract_object.get(
-                    "commands"
-                )
-                command_contract_roles = {
-                    item.get("role") for item in command_contract_commands or []
-                    if isinstance(item, dict)
-                }
-                required_command_roles = {
-                    "processTreeTerminationProbe",
-                    "neighborCodexInstall", "neighborClaudeInstall",
-                    "accordCodexFailedUpdate", "accordClaudeFailedUpdate",
-                    "codexHookStartup", "codexHookResume",
-                    "claudeHookStartup", "claudeHookResume",
-                    "accordCodexRemove", "accordClaudeRemove",
-                    "afterRemoveCodexMarketplaces",
-                    "afterRemoveClaudeMarketplaces",
-                    "cleanupCodexNeighborRemove",
-                    "cleanupClaudeNeighborRemove",
-                    "cleanupCodexMarketplaces", "cleanupClaudeMarketplaces",
-                }
                 if sha256(command_contract_raw).hexdigest() \
                         != command_contract_sha256:
                     errors.append(
                         "exact package lifecycle command contract digest mismatch"
                     )
-                if (
-                    command_contract_object.get("schema")
-                        != "yiyuan-accord-gt20-command-contract/v1"
-                    or command_contract_object.get("budgets") != {
+                if is_v6:
+                    shape_valid = _gt20_v4_overlay_shape_valid(
+                        command_contract_object
+                    )
+                    base = command_contract_object.get("baseContract", {})
+                    base_raw = _snapshot_or_worktree_bytes(
+                        root, base.get("locator"), revision,
+                    )
+                    shape_valid = shape_valid and sha256(base_raw).hexdigest() \
+                        == base.get("sha256")
+                else:
+                    commands = command_contract_object.get("commands")
+                    roles = {
+                        item.get("role") for item in commands or []
+                        if isinstance(item, dict)
+                    }
+                    shape_valid = (
+                        command_contract_object.get("schema")
+                            == "yiyuan-accord-gt20-command-contract/v1"
+                        and command_contract_object.get("budgets") == {
                         "executionTimeoutSeconds": 60,
                         "endToEndTimeoutSeconds": 70,
                         "outputLimitBytes": 4194304,
-                    }
-                    or not isinstance(command_contract_commands, list)
-                    or len(command_contract_commands) != 54
-                    or len(command_contract_roles) != 54
-                    or not required_command_roles <= command_contract_roles
-                ):
+                        }
+                        and isinstance(commands, list)
+                        and len(commands) == len(roles) == 54
+                        and {
+                            "processTreeTerminationProbe",
+                            "neighborCodexInstall", "neighborClaudeInstall",
+                            "accordCodexFailedUpdate", "accordClaudeFailedUpdate",
+                            "codexHookStartup", "codexHookResume",
+                            "claudeHookStartup", "claudeHookResume",
+                            "accordCodexRemove", "accordClaudeRemove",
+                            "afterRemoveCodexMarketplaces",
+                            "afterRemoveClaudeMarketplaces",
+                            "cleanupCodexNeighborRemove",
+                            "cleanupClaudeNeighborRemove",
+                            "cleanupCodexMarketplaces",
+                            "cleanupClaudeMarketplaces",
+                        } <= roles
+                    )
+                if not shape_valid:
                     errors.append(
                         "exact package lifecycle command contract shape is invalid"
                     )
@@ -2654,9 +3234,12 @@ def _validate_exact_package_evidence_lifecycle(
         for item in program.get("hostProjections", []) if isinstance(item, dict)
     }
     record_schema = record.get("schema")
-    if is_modern and record_schema != (
-        "yiyuan-accord-gt20-exact-package-evidence/v3"
-    ):
+    expected_record_schema = (
+        "yiyuan-accord-gt20-exact-package-evidence/v4" if is_v6
+        else "yiyuan-accord-gt20-exact-package-evidence/v3"
+        if is_modern else None
+    )
+    if is_modern and record_schema != expected_record_schema:
         errors.append("exact package lifecycle record schema is invalid")
     commands = record.get("commands")
     record_contract = {
@@ -2673,6 +3256,17 @@ def _validate_exact_package_evidence_lifecycle(
              "powerShellExecutableSha256"},
         ),
         "yiyuan-accord-gt20-exact-package-evidence/v3": (
+            None, None,
+            {"gitVersion": "gitVersion", "tarVersion": "tarVersion",
+             "codexCliVersion": "codexVersion",
+             "claudeCliVersion": "claudeVersion",
+             "nodeVersion": "nodeVersion"},
+            {"powerShellVersion", "powerShellEdition", "powerShellExecutable",
+             "powerShellExecutableSha256", "claudePackageManifest",
+             "claudePackageManifestSha256", "claudeTerminalExecutable",
+             "claudeTerminalExecutableSha256"},
+        ),
+        "yiyuan-accord-gt20-exact-package-evidence/v4": (
             None, None,
             {"gitVersion": "gitVersion", "tarVersion": "tarVersion",
              "codexCliVersion": "codexVersion",
@@ -2702,10 +3296,19 @@ def _validate_exact_package_evidence_lifecycle(
     }
     contract_locator = record.get("commandContractLocator")
     contract_raw = current_contract_raw = None
+    base_contract_raw = current_base_contract_raw = None
     command_spec = {}
-    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3":
+    if record_schema in {
+        "yiyuan-accord-gt20-exact-package-evidence/v3",
+        "yiyuan-accord-gt20-exact-package-evidence/v4",
+    }:
         try:
-            if contract_locator != "evals/contracts/gt20-v3-command-contract.json":
+            expected_locator = (
+                "evals/contracts/gt20-v4-command-contract.json"
+                if record_schema.endswith("/v4")
+                else "evals/contracts/gt20-v3-command-contract.json"
+            )
+            if contract_locator != expected_locator:
                 raise ValueError("command contract locator")
             contract_raw = _snapshot_bytes(
                 root, contract_locator, evidence["evaluatedRevision"],
@@ -2713,7 +3316,29 @@ def _validate_exact_package_evidence_lifecycle(
             current_contract_raw = _snapshot_or_worktree_bytes(
                 root, contract_locator, revision,
             )
-            command_spec = _strict_json_object(contract_raw)
+            raw_spec = _strict_json_object(contract_raw)
+            if record_schema.endswith("/v4"):
+                base_locator = raw_spec.get("baseContract", {}).get("locator")
+                if record.get("baseCommandContractLocator") != base_locator:
+                    raise ValueError("base command contract locator")
+                base_contract_raw = _snapshot_bytes(
+                    root, base_locator, evidence["evaluatedRevision"],
+                )
+                current_base_contract_raw = _snapshot_or_worktree_bytes(
+                    root, base_locator, revision,
+                )
+                if (
+                    sha256(base_contract_raw).hexdigest()
+                        != raw_spec.get("baseContract", {}).get("sha256")
+                    or record.get("baseCommandContractSha256")
+                        != sha256(base_contract_raw).hexdigest()
+                ):
+                    raise ValueError("base command contract digest")
+                command_spec = _resolve_gt20_v4_command_contract(
+                    raw_spec, _strict_json_object(base_contract_raw),
+                ) or {}
+            else:
+                command_spec = raw_spec
         except _SNAPSHOT_V1_FAILURES:
             command_spec = {}
 
@@ -2759,6 +3384,9 @@ def _validate_exact_package_evidence_lifecycle(
         ]
 
     def _v3_command_matches(command, spec):
+        is_v4_record = record_schema == (
+            "yiyuan-accord-gt20-exact-package-evidence/v4"
+        )
         profile_name = spec.get("environmentProfile") \
             if isinstance(spec, dict) else None
         profile = contract_profiles.get(profile_name) \
@@ -2768,6 +3396,11 @@ def _validate_exact_package_evidence_lifecycle(
         required_additional = _string_set(
             profile.get("requiredAdditionalKeys")
         ) if isinstance(profile, dict) else set()
+        if is_v4_record and isinstance(spec, dict):
+            additional |= _string_set(spec.get("additionalEnvironmentKeys"))
+            required_additional |= _string_set(
+                spec.get("requiredEnvironmentKeys")
+            )
         environment_keys = command.get("environmentKeys") \
             if isinstance(command, dict) else None
         environment_bindings = command.get("environmentBindings") \
@@ -2800,8 +3433,26 @@ def _validate_exact_package_evidence_lifecycle(
             spec_fields.add("expectedFailureCategory")
         if isinstance(spec, dict) and "budgets" in spec:
             spec_fields.add("budgets")
+        if is_v4_record and isinstance(spec, dict):
+            spec_fields |= {
+                field for field in (
+                    "inputPolicy", "additionalEnvironmentKeys",
+                    "requiredEnvironmentKeys", "expectedLoadedPluginVersion",
+                ) if field in spec
+            }
+            if "inputSha256" not in spec:
+                spec_fields.remove("inputSha256")
+        expected_command_fields = set(v3_command_fields)
+        if is_v4_record and isinstance(spec, dict):
+            if "inputPolicy" in spec:
+                expected_command_fields.add("activationReceipt")
+            if spec.get("role") in {
+                "accordCodexFailedUpdateAfterStaging",
+                "accordClaudeFailedUpdateAfterStaging",
+            }:
+                expected_command_fields.add("mutationReceipt")
         return (
-            set(command) == v3_command_fields
+            set(command) == expected_command_fields
             and set(spec) == spec_fields
             and command.get("role") == spec.get("role")
             and command.get("failureCategory")
@@ -2817,7 +3468,12 @@ def _validate_exact_package_evidence_lifecycle(
             and required <= set(environment_keys)
             and isinstance(environment_bindings, dict)
             and environment_bindings == profile.get("bindings")
-            and command.get("inputSha256") == spec.get("inputSha256")
+            and (
+                SHA256_RE.fullmatch(command.get("inputSha256") or "")
+                    is not None
+                if is_v4_record and "inputPolicy" in spec
+                else command.get("inputSha256") == spec.get("inputSha256")
+            )
             and isinstance(expected_budgets, dict)
             and set(expected_budgets) == {
                 "executionTimeoutSeconds", "endToEndTimeoutSeconds",
@@ -2837,13 +3493,8 @@ def _validate_exact_package_evidence_lifecycle(
                 else expected_budgets == contract_budgets
             )
             and expected_exit in {"zero", "nonzero", "timeout"}
-            and (
-                command.get("failureCategory") == "source-path-absent"
-                if expected_exit == "nonzero"
-                else command.get("failureCategory") == "owned-tree-timeout"
-                if expected_exit == "timeout"
-                else command.get("failureCategory") is None
-            )
+            and command.get("failureCategory")
+                == spec.get("expectedFailureCategory")
             and command.get("executionTimeoutSeconds")
                 == expected_budgets.get("executionTimeoutSeconds")
             and command.get("endToEndTimeoutSeconds")
@@ -3021,8 +3672,11 @@ def _validate_exact_package_evidence_lifecycle(
         }) == 1
         for executable in ("git", "tar", "codex", "claude", "node")
     )
-    v3_commands = (
-        record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3"
+    modern_commands = (
+        record_schema in {
+            "yiyuan-accord-gt20-exact-package-evidence/v3",
+            "yiyuan-accord-gt20-exact-package-evidence/v4",
+        }
         and contract_shape
         and isinstance(commands, list)
         and len(commands) == len(contract_commands)
@@ -3035,6 +3689,16 @@ def _validate_exact_package_evidence_lifecycle(
         and contract_raw == current_contract_raw
         and record.get("commandContractSha256")
             == sha256(contract_raw or b"").hexdigest()
+        and (
+            record_schema != "yiyuan-accord-gt20-exact-package-evidence/v4"
+            or (
+                base_contract_raw == current_base_contract_raw
+                and record.get("baseCommandContractLocator")
+                    == "evals/contracts/gt20-v3-command-contract.json"
+                and record.get("baseCommandContractSha256")
+                    == sha256(base_contract_raw or b"").hexdigest()
+            )
+        )
         and (not is_modern or (
             record.get("commandContractLocator")
                 == lifecycle.get("commandContractLocator")
@@ -3069,8 +3733,10 @@ def _validate_exact_package_evidence_lifecycle(
         return actual == expected
 
     command_contract = (
-        v3_commands if record_schema
-        == "yiyuan-accord-gt20-exact-package-evidence/v3"
+        modern_commands if record_schema in {
+            "yiyuan-accord-gt20-exact-package-evidence/v3",
+            "yiyuan-accord-gt20-exact-package-evidence/v4",
+        }
         else (isinstance(commands, list) and len(commands) == command_count
               and _snapshot_v1_node_key(commands) == command_digest)
     )
@@ -3092,13 +3758,40 @@ def _validate_exact_package_evidence_lifecycle(
         "installedBytesMatchDeclaredPackages": True, "startupHookSilent": True,
         "resumeHookTypedContext": True,
     }
-    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3":
+    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4":
+        fixed_fixture.pop("modelTurns")
+        fixed_fixture.pop("rollbackBytesMatchPriorRelease")
+        fixed_fixture.update({
+            "sessionInputsProvided": True,
+            "lifecycleTriggerTurns": 4,
+            "externalModelTurns": 0,
+            "taskOwnedLoopbackCredential": True,
+            "sourceFailureMode": "task-owned-candidate-lock-after-staging",
+            "failedUpdateDisposition": (
+                "prior-remained-active-with-host-cleaned-or-explicit-task-"
+                "owned-staging-cleanup"
+            ),
+            "automaticRollbackClaimed": False,
+            "priorInstalledBytesPreservedAfterFailedUpdate": True,
+            "freshPriorInventoryVerified": True,
+        })
+    if record_schema in {
+        "yiyuan-accord-gt20-exact-package-evidence/v3",
+        "yiyuan-accord-gt20-exact-package-evidence/v4",
+    }:
         fixed_fixture["priorRevision"] = (
             "24cf9f3750ecd700944988e81a519db54b67b8e8"
         )
+    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4":
+        fixed_fixture["failedUpdateRecovery"] = fixture_value.get(
+            "failedUpdateRecovery"
+        )
     counts = ("codexInstalledFileCount", "claudeInstalledFileCount") + (
         ("neighborCodexInstalledFileCount", "neighborClaudeInstalledFileCount")
-        if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3" else ()
+        if record_schema in {
+            "yiyuan-accord-gt20-exact-package-evidence/v3",
+            "yiyuan-accord-gt20-exact-package-evidence/v4",
+        } else ()
     )
     version_commands = {
         key: (_command_at(reference) if isinstance(reference, int)
@@ -3134,7 +3827,10 @@ def _validate_exact_package_evidence_lifecycle(
                 version_commands.get("claudeCliVersion") or {}
             )
         ))
-        and (record_schema != "yiyuan-accord-gt20-exact-package-evidence/v3"
+        and (record_schema not in {
+                 "yiyuan-accord-gt20-exact-package-evidence/v3",
+                 "yiyuan-accord-gt20-exact-package-evidence/v4",
+             }
              or (
                  fixture.get("claudePackageManifest")
                     == (version_commands.get("claudeCliVersion") or {}).get(
@@ -3156,8 +3852,26 @@ def _validate_exact_package_evidence_lifecycle(
         and all(isinstance(fixture.get(key), int) and not isinstance(fixture[key], bool)
                 and fixture[key] > 0 for key in counts)
     )
+    activation_receipts_contract = True
+    failed_update_receipts_contract = True
+    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4":
+        activation_receipts_contract = all(
+            _gt20_v4_activation_receipt_valid(
+                role_commands.get(role), host, version,
+            )
+            for role, host, version in (
+                ("codexHostActivation", "codex", "3.1.0"),
+                ("claudeHostActivation", "claude", "3.1.0"),
+            )
+        )
+        failed_update_receipts_contract = (
+            _gt20_v4_failed_update_receipts_valid(role_commands, fixture_value)
+        )
     post_state = record.get("postState")
-    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3":
+    if record_schema in {
+        "yiyuan-accord-gt20-exact-package-evidence/v3",
+        "yiyuan-accord-gt20-exact-package-evidence/v4",
+    }:
         after_accord = post_state.get("afterAccordRemoval") \
             if isinstance(post_state, dict) else None
         after_cleanup = post_state.get("afterEvaluatorCleanup") \
@@ -3211,7 +3925,10 @@ def _validate_exact_package_evidence_lifecycle(
             )
         )
     host_cache_contract = True
-    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3":
+    if record_schema in {
+        "yiyuan-accord-gt20-exact-package-evidence/v3",
+        "yiyuan-accord-gt20-exact-package-evidence/v4",
+    }:
         disposition = record.get("hostCacheDisposition")
         codex_disposition = disposition.get("codex", {}) \
             if isinstance(disposition, dict) else {}
@@ -3373,6 +4090,41 @@ def _validate_exact_package_evidence_lifecycle(
             "or cross-OS hosts, live-session cache behavior, ordinary model "
             "behavior, product value and release readiness remain unclaimed."
         )
+    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4":
+        expected_record_fields |= {
+            "commandContractLocator", "commandContractSha256",
+            "baseCommandContractLocator", "baseCommandContractSha256",
+            "hostCacheDisposition",
+        }
+        expected_claim = (
+            "Bounded Windows exact-package lifecycle evidence for exact "
+            "subject Codex and Claude package bytes in disposable isolated "
+            "host roots: mutation-phase failed updates preserved prior "
+            "installed bytes and fresh-process inventories selected 3.0.1, "
+            "task-owned staging was closed, successful updates "
+            "selected 3.1.0 startup/resume, and command privacy, "
+            "neighbor/unmanaged state preservation, removal, cache "
+            "disposition, process termination, and zero task residue were "
+            "verified. The 3.0.1 prior release is Skill-only and no Hook "
+            "activation is claimed. All lifecycle triggers used task-owned loopback "
+            "failure endpoints with no external model turns. Real account "
+            "sessions, current desktop or unmanaged hosts, cross-OS behavior, "
+            "comparative product value, release readiness, publication, and "
+            "production remain unclaimed."
+        )
+    expected_lifecycle = {
+        "install": "verified",
+        (
+            "failedUpdateRecovery" if record_schema
+            == "yiyuan-accord-gt20-exact-package-evidence/v4"
+            else "failedUpdateRollback"
+        ): "verified",
+        "successfulUpdate": "verified",
+        "activation": "verified",
+        "remove": "verified",
+        "postState": "verified",
+        "cleanup": "verified",
+    }
     private_path = False
     pending_values = [record]
     while pending_values:
@@ -3396,17 +4148,11 @@ def _validate_exact_package_evidence_lifecycle(
         or not command_contract
         or record.get("packageSha256") != packages
         or not subject_contract
-        or record.get("lifecycle") != {
-            "install": "verified",
-            "failedUpdateRollback": "verified",
-            "successfulUpdate": "verified",
-            "activation": "verified",
-            "remove": "verified",
-            "postState": "verified",
-            "cleanup": "verified",
-        }
+        or record.get("lifecycle") != expected_lifecycle
         or record.get("claimLimit") != expected_claim
         or not fixture_contract
+        or not activation_receipts_contract
+        or not failed_update_receipts_contract
         or not post_contract
         or not host_cache_contract
         or private_path
@@ -4417,6 +5163,7 @@ def _snapshot_v2_contract_errors(root, revision, documents):
     return errors
 
 
+@_snapshot_read_scope
 def _snapshot_revision_contract_errors(root, revision, documents=None):
     if (
         not isinstance(revision, str)

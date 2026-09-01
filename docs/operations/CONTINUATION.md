@@ -56,12 +56,16 @@ Then read, in order:
   as current evidence because the evaluator inspected unrelated system process
   command lines and did not prove exclusive task-root and evidence-output
   ownership. Frozen revision
-  `0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c` completes the corrected
-  schema-v5 replay without global process inspection, cleans only exclusively
-  created resources and accepts the official native Claude executable layout.
-  Its affected surfaces are reaccepted; four replacement exact-tree reviews
-  are active. No repository candidate, hosted status, authorization or
-  publication exists.
+  `0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c` completed the corrected
+  schema-v5 replay without global process inspection, cleaned only exclusively
+  created resources and accepted the official native Claude executable layout.
+  Exact external review cut `c5a0668` rejected the broad GT-20 claim because
+  direct Node runtime calls did not prove host activation and source-absent
+  preflight rejection did not prove mutation-phase failed-update recovery.
+  Preserve its narrower historical subfacts. GT-20 schema-v6 replay is active;
+  affected-surface reacceptance and four replacement exact-tree reviews are
+  pending. No repository candidate, hosted status, authorization or publication
+  exists.
 - Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
   frozen replay attempt. It failed before evidence publication because two
   inventory helpers used `return if`, which PowerShell treated as an external
@@ -111,10 +115,13 @@ Then read, in order:
   `677c85b2a53a682affe624c440f08bb44a532b6457f0f5c444fa3c76feb027a5`;
   its task root is absent, all command trees are terminated and drained, private
   absolute paths are absent, neighboring plugins and unmanaged sentinels are
-  preserved, and active Accord state is zero after cleanup. This proves only
-  the declared disposable Windows lifecycle; its affected surfaces are
-  reaccepted, while four independent reviews and every later release gate stay
-  open.
+  preserved, and active Accord state is zero after cleanup. Exact `c5a0668`
+  review later found that direct Node runtime calls do not prove host activation
+  and source-absent preflight rejection does not prove mutation-phase failed-
+  update recovery. The record retains only its narrower install, direct-runtime
+  conformance, preflight preservation, successful-update, removal and cleanup
+  facts; current GT-20, reacceptance, independent review and every later release
+  gate stay open.
 - A 2026-09-01 current-host check found three distinct states: the Codex CLI
   self-reported an enabled marketplace package at 3.1.0, the desktop plugin
   detail directly showed enabled 3.0.1 with the former blue-on-white icon, and
@@ -168,10 +175,11 @@ Then read, in order:
   body, rebinds its acceptance and guidance digests and cites `39926711` as the
   prior snapshot origin. Later Commit A froze former package/legal bytes, and
   candidate `9050114` then failed privacy, process-ownership, Claude identity and
-  cache-cleanup review. Frozen 0febb415 and affected-surface reacceptance close
-  the bounded schema-v5 package slice, while four independent exact-tree reviews
-  remain earlier than any clean exact-local, hosted, named-human, tag or public
-  Release gate. Accord
+  cache-cleanup review. Frozen 0febb415 retains only narrower bounded schema-v5
+  subfacts after exact c5a0668 review rejected host activation and mutation-
+  phase failed-update recovery. GT-20 schema-v6 replay and affected-surface
+  reacceptance precede four independent exact-tree reviews and any clean exact-
+  local, hosted, named-human, tag or public Release gate. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
   product target is broader: complete bounded self-bootstrapping across
@@ -486,9 +494,11 @@ Then read, in order:
   its bounded current-host live-carrier and fresh-handoff case; prior GT-20
   Windows lifecycle evidence is historical and does not bind the changed
   package. Prior whole-system affected-surface reacceptance remains only a
-  bounded source-bound historical claim; frozen 0febb415 now closes the
-  corrected schema-v5 replay and the current affected surfaces are reaccepted.
-  Four fresh independent reviews remain pending. Exact checkpoint
+  bounded source-bound historical claim; frozen 0febb415 retains only narrower
+  schema-v5 lifecycle subfacts after exact c5a0668 review rejected host
+  activation and mutation-phase failed-update recovery. GT-20 schema-v6 replay
+  is active; current affected-surface reacceptance and four fresh independent
+  reviews remain pending. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
@@ -999,10 +1009,13 @@ Historical superseded review disposition —
     readiness remain unknown.
 14. `reaccept-whole-system-after-live-state-closure` — prior source-bound
     reacceptance from exact cut `85a917a` remains historical. GT-21 is preserved,
-    but the changed GT-20 package requires a successor replay and reacceptance;
-    production, cross-host and updated-client entry behavior remain unknown.
+    but exact `c5a0668` review reopens GT-20 at host activation and mutation-
+    phase failed-update recovery. Schema-v6 replay is active and reacceptance is
+    pending; production, cross-host and updated-client entry behavior remain
+    unknown.
 15. `independent-review-and-form-future-exact-candidate` — prior review history
-    selected a v3.1.0 repository candidate that later failed. The review cycle at pre-remediation cut
+    selected a v3.1.0 repository candidate that later failed. This step is
+    pending behind current GT-20 and reacceptance. The review cycle at pre-remediation cut
     `523f2ef47df96b76c132525ff432d044e7b1b4b3` completed separate product,
     specification, implementation and standards reviews and produced
     remediation findings. It did not form a candidate, and completion does not
@@ -1108,17 +1121,21 @@ Historical superseded review disposition —
     107 tracked files contain 727271 Python/test bytes with 52729 bytes, or
     6.76 percent, of headroom. Exact `fc9c1a7` then completed the frozen schema-v4
     GT-20 raw replay, but later evaluator privacy and exclusive-ownership
-    findings invalidated it as current evidence. Frozen `0febb415` completes
-    the corrected schema-v5 replay and its affected surfaces are reaccepted.
-    The next boundary is four fresh independent exact-tree reviews. Exact-local and the fresh
+    findings invalidated it as current evidence. Frozen `0febb415` completed
+    the corrected schema-v5 replay, but exact `c5a0668` review rejected its host-
+    activation and mutation-phase failed-update-recovery claims. Preserve its
+    narrower historical subfacts. The next boundary is the digest-bound schema-v6
+    GT-20 replay, followed by affected-surface reacceptance and four fresh
+    independent exact-tree reviews. Exact-local and the fresh
     full nine-leg hosted matrix
     remain later; candidate selection alone cannot authorize publication.
 
 The release procedure currently has no selected v3.1.0 repository candidate.
 Exact `fc9c1a7` remains invalidated raw replay counterevidence. Frozen
-`0febb415` verifies the bounded schema-v5 GT-20 replay and the affected surfaces
-are reaccepted; four fresh independent exact-tree reviews must still close.
-Only then may clean exact-local and host
+`0febb415` retains only narrower bounded schema-v5 subfacts after failed exact
+review cut `c5a0668`. GT-20 schema-v6 replay is active; affected-surface
+reacceptance and four fresh independent exact-tree reviews are pending. Only
+after they close may clean exact-local and host
 checks, hosted checks, a named-human decision, tag, Release, public verification
 and post-release cleanup run in their declared order on one unchanged exact
 revision. After the client update, all Codex, Claude and ChatGPT GUI entry

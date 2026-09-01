@@ -2362,21 +2362,19 @@ class ProductControlTests(unittest.TestCase):
         _, prior_program, *_ = _snapshot_documents(ROOT, predecessor)
         prior = prior_program['increment']['closeoutSnapshot']
         self.ae(_snapshot_v2_transition_errors(node, prior), [])
-        self.ae(prior['replay']['evidenceState'], 'pending')
-        self.an(prior['replay']['evidenceRef'])
-        self.ae(node['replay']['evidenceState'], 'verified')
+        self.ae(prior['replay']['evidenceState'], 'verified')
+        self.ae(node['replay']['evidenceState'], 'pending')
+        self.an(node['replay']['evidenceRef'])
         self.ae(
-            node['replay']['evidenceRef'],
-            'evals/evidence/2026-09-01-v310-gt20-exact-package-source.json',
+            node['replay']['earliestAffectedBoundary'],
+            'exact-package-host-activation-and-mutation-phase-failed-update-'
+            'recovery-closure',
         )
-        for field in (
-            'earliestAffectedBoundary', 'invalidatedTaskIds',
-            'preservedTaskIds',
-        ):
-            self.ae(node['replay'][field], prior['replay'][field])
+        self.ae(node['replay']['invalidatedTaskIds'], ['GT-20'])
+        self.ae(node['replay']['preservedTaskIds'], ['GT-21'])
         self.ae(
             node['predecessorSnapshotRef'],
-            '0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c:'
+            'c5a06688feee7e93edc58a309679594bcc32bed6:'
             'product/program.json#/increment/closeoutSnapshot',
         )
 
@@ -2407,34 +2405,28 @@ class ProductControlTests(unittest.TestCase):
             lifecycle = program['increment']['exactPackageEvidenceLifecycle']
             self.ae(
                 lifecycle['schema'],
-                'yiyuan-accord-exact-package-evidence-lifecycle/v5',
+                'yiyuan-accord-exact-package-evidence-lifecycle/v6',
             )
-            self.ae(lifecycle['state'], 'verified')
-            self.ae(
-                lifecycle['subjectRevision'],
-                '0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c',
-            )
-            self.ae(lifecycle['evidence'], {
-                'locator': (
-                    'evals/evidence/2026-09-01-v310-gt20-'
-                    'exact-package-source.json'
-                ),
-                'sha256': (
-                    '677c85b2a53a682affe624c440f08bb44a532b6457f0f5c444fa3c76feb027a5'
-                ),
-                'evaluatedRevision': (
-                    '0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c'
-                ),
-            })
+            self.ae(lifecycle['state'], 'pending')
+            self.an(lifecycle.get('subjectRevision'))
+            self.an(lifecycle['evidence'])
             self.ae(
                 lifecycle['earliestAffectedBoundary'],
-                'exact-package-evaluator-privacy-ownership-and-native-host-'
-                'adaptation-closure',
+                'exact-package-host-activation-and-mutation-phase-failed-'
+                'update-recovery-closure',
             )
             self.ae(
                 lifecycle['predecessorLifecycleRef'],
-                '0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c:'
+                'c5a06688feee7e93edc58a309679594bcc32bed6:'
                 'product/program.json#/increment/exactPackageEvidenceLifecycle',
+            )
+            self.ae(
+                lifecycle['commandContractLocator'],
+                'evals/contracts/gt20-v4-command-contract.json',
+            )
+            self.ae(
+                lifecycle['commandContractSha256'],
+                _file_sha(root, lifecycle['commandContractLocator']),
             )
 
             def validate(value):
@@ -2462,18 +2454,9 @@ class ProductControlTests(unittest.TestCase):
             )
             for mutate in (
                 lambda value: value.__setitem__('evidence', {}),
-                lambda value: value.__setitem__('state', 'pending'),
+                lambda value: value.__setitem__('state', 'verified'),
                 lambda value: value.__setitem__('priorEvidenceRef', 'missing'),
                 lambda value: value.__setitem__('subjectRevision', '0' * 40),
-                lambda value: value['evidence'].__setitem__(
-                    'locator', 'evals/evidence/wrong.json',
-                ),
-                lambda value: value['evidence'].__setitem__(
-                    'sha256', '0' * 64,
-                ),
-                lambda value: value['evidence'].__setitem__(
-                    'evaluatedRevision', '0' * 40,
-                ),
             ):
                 changed = _clone(lifecycle)
                 mutate(changed)
@@ -2502,6 +2485,435 @@ class ProductControlTests(unittest.TestCase):
             < runner.index("Add-CommandRecord 'priorReleaseRevision'")
             < runner.index('$script:TaskEnvironmentReadyForEvidence = $true')
         )
+
+    def test_gt20_v4_codex_activation_requires_app_server_receipts(self):
+        contract_path = ROOT / 'evals/contracts/gt20-v4-command-contract.json'
+        self.at(contract_path.is_file(), 'successor GT-20 contract is absent')
+        contract = json.loads(contract_path.read_text(encoding='utf-8'))
+        codex = contract['activationProof']['codex']
+        self.ae(codex, {
+            'transport': 'app-server-stdio-jsonl',
+            'requiredRpcMethods': [
+                'hooks/list', 'thread/start', 'turn/start', 'thread/resume',
+            ],
+            'requiredHookNotifications': ['hook/started', 'hook/completed'],
+            'qualifyingCommandRole': 'codexHostActivation',
+            'unitOnlyCommandRoles': [
+                'codexHookRuntimeUnitStartup',
+                'codexHookRuntimeUnitResume',
+            ],
+            'lifecycleTrigger': {
+                'rpcMethod': 'turn/start',
+                'modelProvider': 'task-owned-loopback-responses-failure',
+                'requiresOpenAIAuth': False,
+                'expectedTerminalStatus': 'failed',
+                'purpose': (
+                    'run-pending-session-start-hooks-before-model-request'
+                ),
+            },
+            'lifecycleTriggerTurns': 2,
+            'externalModelTurns': 0,
+            'credentialEnvironmentInherited': False,
+        })
+        roles = {item['role']: item for item in contract['commands']}
+        self.at(codex['qualifyingCommandRole'] in roles)
+        self.at(all(role in roles for role in codex['unitOnlyCommandRoles']))
+        self.ane(
+            codex['qualifyingCommandRole'],
+            codex['unitOnlyCommandRoles'][0],
+            'a direct Node runtime unit call cannot satisfy activation',
+        )
+        self.ae(
+            roles['codexHostActivation']['argv'],
+            [
+                'codex', '--dangerously-bypass-hook-trust',
+                'app-server', '--stdio',
+            ],
+        )
+        self.ani(
+            'accordCodexFailedUpdateAfterStaging',
+            contract['commandEdits']['prependArgumentsByRole'],
+            'the replacement already carries the trust flag and must not '
+            'receive it twice during overlay resolution',
+        )
+
+        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
+            encoding='utf-8'
+        )
+        self.ai('function Invoke-CodexAppServerActivation', runner)
+        self.ai("sandbox = 'read-only'", runner)
+        self.ani("sandbox = 'readOnly'", runner)
+        self.ai("Add-CommandRecord 'codexHostActivation'", runner)
+        self.ai("Add-CommandRecord 'codexHookRuntimeUnitStartup'", runner)
+        self.ai("Add-CommandRecord 'codexHookRuntimeUnitResume'", runner)
+        self.ani("Add-CommandRecord 'codexHookStartup'", runner)
+        self.ani("Add-CommandRecord 'codexHookResume'", runner)
+        self.ai('idSha256 = $hookRunIdSha256', runner)
+        self.ani('id = $hookStarted.params.run.id', runner)
+        initialize_write = runner.index('$owned.WriteInputLine($initializeLine)')
+        initialize_receipt = runner.index(
+            'if ($null -eq $initializeResponse -or'
+        )
+        initialized_write = runner.index('$owned.WriteInputLine($initializedLine)')
+        hooks_list_write = runner.index('$owned.WriteInputLine($hooksListLine)')
+        hooks_list_receipt = runner.index(
+            "Codex App Server hooks/list did not discover the installed Hook."
+        )
+        request_write = runner.index('$owned.WriteInputLine($requestLine)')
+        self.assertLess(initialize_write, initialize_receipt)
+        self.assertLess(initialize_receipt, initialized_write)
+        self.assertLess(initialized_write, hooks_list_write)
+        self.assertLess(hooks_list_write, hooks_list_receipt)
+        self.assertLess(hooks_list_receipt, request_write)
+
+    def test_gt20_v4_claude_activation_requires_native_host_receipts(self):
+        contract = json.loads((
+            ROOT / 'evals/contracts/gt20-v4-command-contract.json'
+        ).read_text(encoding='utf-8'))
+        claude = contract['activationProof']['claude']
+        self.ae(claude, {
+            'transport': (
+                'headless-stream-json-with-loopback-trigger-and-task-owned-'
+                'node-observer'
+            ),
+            'requiredSessionStartSources': ['startup', 'resume'],
+            'requiredNativeHookEvents': ['hook_started', 'hook_response'],
+            'qualifyingCommandRole': 'claudeHostActivation',
+            'unitOnlyCommandRoles': [
+                'claudeHookRuntimeUnitStartup',
+                'claudeHookRuntimeUnitResume',
+            ],
+            'lifecycleTrigger': {
+                'cliMode': 'print',
+                'modelProvider': 'task-owned-loopback-messages-failure',
+                'requiresUserAnthropicAuth': False,
+                'expectedTerminalStatus': 'api_error',
+                'purpose': (
+                    'establish-resumable-session-and-run-session-start-'
+                    'before-model-response'
+                ),
+            },
+            'lifecycleTriggerTurns': 2,
+            'externalModelTurns': 0,
+            'minimumLoopbackHttpRequests': 2,
+            'requiredLoadedPlugin': {
+                'name': 'yiyuan-accord-claude',
+                'version': '3.1.0',
+            },
+            'credentialEnvironmentInherited': False,
+        })
+
+        role = next(
+            item for item in contract['commands']
+            if item['role'] == 'claudeHostActivation'
+        )
+        self.ae(role['inputPolicy'], (
+            'headless-hook-lifecycle-with-loopback-trigger'
+        ))
+        self.ae(role['expectedLoadedPluginVersion'], '3.1.0')
+        self.ae(role['expectedExit'], 'nonzero')
+        self.ae(role['additionalEnvironmentKeys'], [
+            'ANTHROPIC_API_KEY', 'ANTHROPIC_BASE_URL',
+            'CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC',
+            'CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL',
+        ])
+        self.ae(role['requiredEnvironmentKeys'], [
+            'ANTHROPIC_API_KEY', 'ANTHROPIC_BASE_URL',
+            'CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC',
+            'CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL',
+        ])
+
+        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
+            encoding='utf-8'
+        )
+        self.ai('function Invoke-ClaudeHostActivation', runner)
+        self.ai("$observerShellShim = Join-Path $observerRoot 'node'", runner)
+        self.ai("[System.IO.File]::WriteAllText(\n    $observerShellShim", runner)
+        self.ai("'--output-format', 'stream-json'", runner)
+        self.ai("'--include-hook-events', '--verbose'", runner)
+        self.ai("[AccordLoopbackFailingResponsesServer]::new()", runner)
+        self.ai("Add-CommandRecord 'claudeHostActivation'", runner)
+        self.ai("Add-CommandRecord 'claudeHookRuntimeUnitStartup'", runner)
+        self.ai("Add-CommandRecord 'claudeHookRuntimeUnitResume'", runner)
+        self.ani("Add-CommandRecord 'claudeHookStartup'", runner)
+        self.ani("Add-CommandRecord 'claudeHookResume'", runner)
+
+    def test_gt20_v4_failed_update_starts_before_failure_and_fails_closed(self):
+        contract = json.loads((
+            ROOT / 'evals/contracts/gt20-v4-command-contract.json'
+        ).read_text(encoding='utf-8'))
+        proof = contract['failedUpdateProof']
+        self.ae(
+            proof['minimumAcceptedPhase'],
+            'host-accepted-update-with-task-owned-staging-observed',
+        )
+        self.ae(proof['forbiddenFailureCategory'], 'source-path-absent')
+        self.ae(proof['priorInventoryCommandRoles'], {
+            'codex': 'rollbackCodexInventory',
+            'claude': 'rollbackClaudeInventory',
+        })
+        self.at('fresh-host-inventory-selects-prior-version' in (
+            proof['requiredPoststate']
+        ))
+
+        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
+            encoding='utf-8'
+        )
+        self.ai('function Invoke-UpdateWithCandidateLock', runner)
+        self.ai('function Repair-FailedUpdateStaging', runner)
+        self.ai('[System.IO.FileSystemWatcher]::new($stagingParent)', runner)
+        self.ai("$result['mutationReceipt'] = [ordered]@{", runner)
+        self.ai("stagingObserved = $stagingObserved", runner)
+        self.ai('$codexFailedUpdate.mutationReceipt.stagingObserved', runner)
+        self.ai('$claudeFailedUpdate.mutationReceipt.stagingObserved', runner)
+        self.ai('$codexFailedUpdateRecovery = Repair-FailedUpdateStaging', runner)
+        self.ai('$claudeFailedUpdateRecovery = Repair-FailedUpdateStaging', runner)
+        self.ai("Add-CommandRecord 'rollbackCodexInventory'", runner)
+        self.ai("Add-CommandRecord 'rollbackClaudeInventory'", runner)
+        self.ani('codexPriorHostActivationAfterFailedUpdate', runner)
+        self.ani('claudePriorHostActivationAfterFailedUpdate', runner)
+        self.ai("'prior-remained-active-with-explicit-task-owned-staging-cleanup'", runner)
+        self.ani(
+            '[Parameter(Mandatory = $true)][string]$Host,', runner,
+            'PowerShell reserves $Host and cannot bind it as a parameter',
+        )
+        self.ai(
+            "Add-CommandRecord 'accordCodexFailedUpdateAfterStaging'",
+            runner,
+        )
+        self.ai(
+            "Add-CommandRecord 'accordClaudeFailedUpdateAfterStaging'",
+            runner,
+        )
+        self.ani("'source-path-absent'", runner)
+        self.ani('.failed-update-source', runner)
+        self.ai("missing = @($expected.Keys | Where-Object", runner)
+        self.ai("extra = @($actual.Keys | Where-Object", runner)
+        self.ai("changed = @($expected.Keys | Where-Object", runner)
+        self.ai("installed bytes differ: $($difference | ConvertTo-Json", runner)
+
+    def test_gt20_v4_runner_emits_native_activation_and_recovery_facts(self):
+        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
+            encoding='utf-8'
+        )
+        self.ai(
+            "schema = 'yiyuan-accord-gt20-exact-package-evidence/v4'",
+            runner,
+        )
+        self.ai('baseCommandContractLocator =', runner)
+        self.ai('baseCommandContractSha256 =', runner)
+        self.ai("failedUpdateRecovery = 'verified'", runner)
+        self.ani("failedUpdateRollback = 'verified'", runner)
+        self.ai('sessionInputsProvided = $true', runner)
+        self.ai('lifecycleTriggerTurns = 4', runner)
+        self.ai('externalModelTurns = 0', runner)
+        self.ai('taskOwnedLoopbackCredential = $true', runner)
+        self.ai('priorInstalledBytesPreservedAfterFailedUpdate = $true', runner)
+        self.ai('freshPriorInventoryVerified = $true', runner)
+        self.ani('rollbackBytesMatchPriorRelease = $true', runner)
+        self.ani('modelTurns = 0', runner)
+        self.ani('Bounded zero-model Windows lifecycle', runner)
+
+    def test_gt20_v4_receipt_validators_fail_closed(self):
+        hook_path = (
+            '%TASK_ROOT%/codex-host/plugins/cache/yiyuan-accord/'
+            'yiyuan-accord-codex/3.1.0/hooks/hooks.json'
+        )
+
+        def codex_turn(source, rpc_method, response_id):
+            digest = 'a' * 64
+            return {
+                'rpcMethod': rpc_method,
+                'responseId': response_id,
+                'threadId': 'thread-1',
+                'lifecycleTrigger': {
+                    'rpcMethod': 'turn/start', 'responseId': response_id + 10,
+                    'turnId': f'turn-{source}', 'terminalStatus': 'failed',
+                    'modelProvider': 'task-owned-loopback-responses-failure',
+                    'requiresOpenAIAuth': False,
+                },
+                'discovery': {
+                    'rpcMethod': 'hooks/list', 'eventName': 'sessionStart',
+                    'source': 'plugin', 'sourcePath': hook_path,
+                    'handlerType': 'command', 'enabled': True,
+                    'trustStatus': 'untrusted',
+                },
+                'hookStarted': {
+                    'idSha256': digest, 'eventName': 'sessionStart',
+                    'source': 'plugin', 'sourcePath': hook_path,
+                    'status': 'running',
+                },
+                'hookCompleted': {
+                    'idSha256': digest, 'eventName': 'sessionStart',
+                    'source': 'plugin', 'sourcePath': hook_path,
+                    'status': 'completed',
+                },
+            }
+
+        codex = {
+            'exitCode': 0, 'failureCategory': None,
+            'activationReceipt': {
+                'transport': 'app-server-stdio-jsonl',
+                'rpcMethods': [
+                    'hooks/list', 'thread/start', 'turn/start', 'thread/resume',
+                ],
+                'lifecycleTriggerTurns': 2, 'externalModelTurns': 0,
+                'loopbackModelRequests': 2,
+                'startup': codex_turn('startup', 'thread/start', 10),
+                'resume': codex_turn('resume', 'thread/resume', 11),
+            },
+        }
+        self.at(product_control._gt20_v4_activation_receipt_valid(
+            codex, 'codex', '3.1.0'
+        ))
+        drifted = _clone(codex)
+        drifted['activationReceipt']['resume']['hookCompleted']['idSha256'] = (
+            'b' * 64
+        )
+        self.ae(product_control._gt20_v4_activation_receipt_valid(
+            drifted, 'codex', '3.1.0'
+        ), False)
+
+        def claude_native(source):
+            hook_id = f'hook-{source}'
+            return {
+                'sessionSource': source,
+                'nativeHookStarted': {
+                    'subtype': 'hook_started', 'hookEvent': 'SessionStart',
+                    'hookName': f'SessionStart:{source}', 'hookId': hook_id,
+                },
+                'nativeHookResponse': {
+                    'subtype': 'hook_response', 'hookEvent': 'SessionStart',
+                    'hookName': f'SessionStart:{source}', 'hookId': hook_id,
+                    'exitCode': 0, 'outcome': 'success',
+                },
+                'loadedPlugin': {
+                    'name': 'yiyuan-accord-claude', 'version': '3.1.0',
+                    'source': 'yiyuan-accord-claude@yiyuan-accord',
+                    'path': (
+                        '%TASK_ROOT%/mutable-source/plugins/'
+                        'yiyuan-accord-claude'
+                    ),
+                },
+                'terminal': {
+                    'status': 'api_error', 'apiErrorStatus': 400,
+                    'isError': True, 'totalCostUsd': 0, 'turns': 1,
+                },
+            }
+
+        def claude_hook(source):
+            return {
+                'hookEventName': 'SessionStart', 'source': source,
+                'runtimePath': (
+                    '%TASK_ROOT%/mutable-source/plugins/'
+                    'yiyuan-accord-claude/runtime/accord-hook.cjs'
+                ),
+                'inputSha256': '1' * 64, 'stdoutSha256': '2' * 64,
+                'stderrSha256': '3' * 64, 'exitCode': 0,
+            }
+
+        claude = {
+            'exitCode': 1, 'failureCategory': None,
+            'activationReceipt': {
+                'transport': (
+                    'headless-stream-json-with-loopback-trigger-and-task-'
+                    'owned-node-observer'
+                ),
+                'lifecycleTriggerTurns': 2, 'externalModelTurns': 0,
+                'loopbackHttpRequests': 6,
+                'credentialEnvironmentInherited': False,
+                'networkEndpoint': 'ipv4-loopback',
+                'terminalStatus': 'api_error',
+                'hostRuns': [
+                    {'source': 'startup', 'sessionBinding': 'task-owned-session-id',
+                     'exitCode': 1, 'loopbackHttpRequests': 3},
+                    {'source': 'resume',
+                     'sessionBinding': 'same-task-owned-session-id',
+                     'exitCode': 1, 'loopbackHttpRequests': 3},
+                ],
+                'native': {
+                    'startup': claude_native('startup'),
+                    'resume': claude_native('resume'),
+                },
+                'hooks': [claude_hook('startup'), claude_hook('resume')],
+            },
+        }
+        self.at(product_control._gt20_v4_activation_receipt_valid(
+            claude, 'claude', '3.1.0'
+        ))
+        drifted = _clone(claude)
+        drifted['activationReceipt']['native']['resume']['loadedPlugin'][
+            'version'
+        ] = '3.0.1'
+        self.ae(product_control._gt20_v4_activation_receipt_valid(
+            drifted, 'claude', '3.1.0'
+        ), False)
+
+        mutation = {
+            'exitCode': 1,
+            'failureCategory': 'task-owned-candidate-lock-after-staging',
+            'mutationReceipt': {
+                'stagingObserved': True, 'eventCount': 2,
+                'observationScope': (
+                    'isolated-marketplace-cache-excluding-prior-version'
+                ),
+                'eventKinds': ['Changed', 'Created'],
+            },
+        }
+        commands = {
+            'accordCodexFailedUpdateAfterStaging': _clone(mutation),
+            'accordClaudeFailedUpdateAfterStaging': _clone(mutation),
+            'rollbackCodexInventory': {'stdout': json.dumps({
+                'installed': [{
+                    'pluginId': 'yiyuan-accord-codex@yiyuan-accord',
+                    'version': '3.0.1', 'installed': True, 'enabled': True,
+                }],
+            })},
+            'rollbackClaudeInventory': {'stdout': json.dumps([{
+                'id': 'yiyuan-accord-claude@yiyuan-accord',
+                'version': '3.0.1', 'enabled': True,
+            }])},
+        }
+        fixture = {
+            'sourceFailureMode': 'task-owned-candidate-lock-after-staging',
+            'failedUpdateDisposition': (
+                'prior-remained-active-with-host-cleaned-or-explicit-task-'
+                'owned-staging-cleanup'
+            ),
+            'automaticRollbackClaimed': False,
+            'priorInstalledBytesPreservedAfterFailedUpdate': True,
+            'freshPriorInventoryVerified': True,
+            'failedUpdateRecovery': {
+                'codex': {
+                    'disposition': (
+                        'prior-remained-active-host-cleaned-observed-staging'
+                    ),
+                    'stagedFileCount': None, 'difference': None,
+                    'stagingCleanupVerified': True,
+                },
+                'claude': {
+                    'disposition': (
+                        'prior-remained-active-with-explicit-task-owned-'
+                        'staging-cleanup'
+                    ),
+                    'stagedFileCount': 1,
+                    'difference': {
+                        'missing': ['NOTICE'], 'extra': [], 'changed': [],
+                    },
+                    'stagingCleanupVerified': True,
+                },
+            },
+        }
+        self.at(product_control._gt20_v4_failed_update_receipts_valid(
+            commands, fixture
+        ))
+        drifted = _clone(commands)
+        drifted['accordClaudeFailedUpdateAfterStaging']['mutationReceipt'][
+            'stagingObserved'
+        ] = False
+        self.ae(product_control._gt20_v4_failed_update_receipts_valid(
+            drifted, fixture
+        ), False)
 
     def test_gt20_claude_identity_accepts_npm_and_native_layouts(self):
         npm = {
@@ -3659,7 +4071,7 @@ class ProductControlTests(unittest.TestCase):
             snapshot = increment['closeoutSnapshot']
             snapshot['revisionBinding']['exactCommitSha'] = '0' * 40
             snapshot['evaluationContractSha256'] = '0' * 64
-            snapshot['acceptanceTransition']['affectedCriterionIds'].remove('R1')
+            snapshot['acceptanceTransition']['affectedCriterionIds'].remove('R2')
             program['processLossControl']['evolutionHorizonRule'] = ''
             program['releaseProcedure']['orderedGates'][0]['id'] = ''
             program['goalModePrompt']['objective'] = '先推送再审查'
