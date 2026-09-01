@@ -21,7 +21,7 @@ costs retained. Exact GT-21 evidence closes only its bounded current-host
 live-carrier and fresh-handoff cases. Fresh GT-20 evidence at exact Commit A
 `7ea91dad811d337f00f75eb521cffacabd73b05f` closes only the disposable Windows
 CLI lifecycle for the unchanged v3.1 package bytes on Codex CLI 0.151.0 and
-Claude Code 2.1.251. Source-bound whole-system reacceptance from exact cut
+Claude Code 2.1.252. Source-bound whole-system reacceptance from exact cut
 `85a917a` is complete, and the later independent candidate-forming review has
 selected v3.1.0 as the repository candidate. The package boundary is reclosed
 under the schema-v2 status model, but this working tree is not yet a committed
@@ -176,7 +176,7 @@ status.
 
 The ordered bottlenecks are:
 
-1. Close the versioned GT-20 evaluator boundary: exact commit type, bounded
+1. Preserve the closed versioned GT-20 evaluator boundary: exact commit type, bounded
    command and descendant termination, any task-root process, resolved-tool and
    environment identity, full command evidence, rollback, user-state
    preservation and cleanup all fail closed.
@@ -209,7 +209,7 @@ The ordered bottlenecks are:
   subtraction review before another timeout increase.
 - Keep Windows Python 3.10/3.14, macOS Python 3.10/3.14 and Linux Python
   3.10-3.14. The exact-package lifecycle is verified only on Windows with
-  Codex CLI 0.151.0, Claude Code 2.1.251 and Node 24.19.0. Desktop/ChatGPT,
+  Codex CLI 0.151.0, Claude Code 2.1.252 and Node 24.19.0. Desktop/ChatGPT,
   unmanaged-host and cross-OS lifecycle behavior remain unknown.
 - Local WSL2 Ubuntu 26.04 on Linux 6.18 with Python 3.14.4 is an available
   cross-kernel verification environment; task-scoped native Linux Node 24.19.0

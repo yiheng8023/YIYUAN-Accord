@@ -1,8 +1,8 @@
 {
-  "schema": "yiyuan-accord-gt20-exact-package-evidence/v1",
+  "schema": "yiyuan-accord-gt20-exact-package-evidence/v2",
   "taskId": "GT-20",
   "evaluatedRevision": "7ea91dad811d337f00f75eb521cffacabd73b05f",
-  "runnerSha256": "f49f2e74afaa4dbcd0fae9ae015e9c288e36b653813936c788142d96e7441f4a",
+  "runnerSha256": "e2ebb7c540451d39a5560533bc0203f03624f70b6759223a46b6cc31817e9d4d",
   "packageSha256": {
     "codex": "2722087725087d2ed7222f837b63d297937e0f4397526dae5bf76a650ad36fe2",
     "claude-code": "b1dddb67fe9c4cc14ba3089a13702db2497183ebb202a426874de08bbd99b083"
@@ -54,13 +54,49 @@
     "installedBytesMatchDeclaredPackages": true,
     "startupHookSilent": true,
     "resumeHookTypedContext": true,
+    "powerShellVersion": "7.6.5",
+    "powerShellEdition": "Core",
+    "powerShellExecutable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+    "powerShellExecutableSha256": "362a356ce7f0940ec74f73a8fc2c990a2cc24a38a11c90bbd8eca947110ad139",
+    "gitVersion": "git version 2.55.0.windows.3",
+    "tarVersion": "bsdtar 3.8.8 - libarchive 3.8.8 zlib/1.2.13.1-motley liblzma/5.8.1 bz2lib/1.0.8 libzstd/1.5.7 cng/2.0 libb2/bundled",
     "codexCliVersion": "codex-cli 0.151.0",
-    "claudeCliVersion": "2.1.251 (Claude Code)",
+    "claudeCliVersion": "2.1.252 (Claude Code)",
     "nodeVersion": "v24.19.0",
     "codexInstalledFileCount": 9,
     "claudeInstalledFileCount": 7
   },
   "commands": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "resolvedCommand": "C:\\Program Files\\Git\\cmd\\git.exe",
+      "resolvedCommandSha256": "7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364",
+      "launcher": "C:\\Program Files\\Git\\cmd\\git.exe",
+      "launcherSha256": "7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364",
+      "timeoutSeconds": 60,
+      "timedOut": false,
+      "exitCode": 0,
+      "stdout": "git version 2.55.0.windows.3\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "tar",
+        "--version"
+      ],
+      "resolvedCommand": "C:\\WINDOWS\\system32\\tar.exe",
+      "resolvedCommandSha256": "4e598a8cec84af779e3377442fce2b94b976f614ed4c6e5a665e19308fd1e379",
+      "launcher": "C:\\WINDOWS\\system32\\tar.exe",
+      "launcherSha256": "4e598a8cec84af779e3377442fce2b94b976f614ed4c6e5a665e19308fd1e379",
+      "timeoutSeconds": 60,
+      "timedOut": false,
+      "exitCode": 0,
+      "stdout": "bsdtar 3.8.8 - libarchive 3.8.8 zlib/1.2.13.1-motley liblzma/5.8.1 bz2lib/1.0.8 libzstd/1.5.7 cng/2.0 libb2/bundled \r\n",
+      "stderr": ""
+    },
     {
       "argv": [
         "git",
@@ -71,6 +107,12 @@
         "--output=%GT20_TASK_ROOT%\\old.tar",
         "v3.0.1"
       ],
+      "resolvedCommand": "C:\\Program Files\\Git\\cmd\\git.exe",
+      "resolvedCommandSha256": "7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364",
+      "launcher": "C:\\Program Files\\Git\\cmd\\git.exe",
+      "launcherSha256": "7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "",
       "stderr": ""
@@ -85,6 +127,12 @@
         "--output=%GT20_TASK_ROOT%\\candidate.tar",
         "7ea91dad811d337f00f75eb521cffacabd73b05f"
       ],
+      "resolvedCommand": "C:\\Program Files\\Git\\cmd\\git.exe",
+      "resolvedCommandSha256": "7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364",
+      "launcher": "C:\\Program Files\\Git\\cmd\\git.exe",
+      "launcherSha256": "7b7971dd13f0c3a284e538601f2f9770b3a87dfaccb5fb52d68141c67ed22364",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "",
       "stderr": ""
@@ -97,6 +145,12 @@
         "-C",
         "%GT20_TASK_ROOT%\\old-source"
       ],
+      "resolvedCommand": "C:\\WINDOWS\\system32\\tar.exe",
+      "resolvedCommandSha256": "4e598a8cec84af779e3377442fce2b94b976f614ed4c6e5a665e19308fd1e379",
+      "launcher": "C:\\WINDOWS\\system32\\tar.exe",
+      "launcherSha256": "4e598a8cec84af779e3377442fce2b94b976f614ed4c6e5a665e19308fd1e379",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "",
       "stderr": ""
@@ -109,6 +163,12 @@
         "-C",
         "%GT20_TASK_ROOT%\\candidate-source"
       ],
+      "resolvedCommand": "C:\\WINDOWS\\system32\\tar.exe",
+      "resolvedCommandSha256": "4e598a8cec84af779e3377442fce2b94b976f614ed4c6e5a665e19308fd1e379",
+      "launcher": "C:\\WINDOWS\\system32\\tar.exe",
+      "launcherSha256": "4e598a8cec84af779e3377442fce2b94b976f614ed4c6e5a665e19308fd1e379",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "",
       "stderr": ""
@@ -118,6 +178,12 @@
         "codex",
         "--version"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "codex-cli 0.151.0\n",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
@@ -127,8 +193,14 @@
         "claude",
         "--version"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
-      "stdout": "2.1.251 (Claude Code)\n",
+      "stdout": "2.1.252 (Claude Code)\n",
       "stderr": ""
     },
     {
@@ -136,6 +208,12 @@
         "node",
         "--version"
       ],
+      "resolvedCommand": "C:\\Program Files\\nodejs\\node.exe",
+      "resolvedCommandSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "launcher": "C:\\Program Files\\nodejs\\node.exe",
+      "launcherSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "v24.19.0\r\n",
       "stderr": ""
@@ -149,6 +227,12 @@
         "%GT20_TASK_ROOT%\\mutable-source",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\n  \"marketplaceName\": \"yiyuan-accord\",\n  \"installedRoot\": \"%GT20_TASK_ROOT%\\\\mutable-source\",\n  \"alreadyAdded\": false\n}\n",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
@@ -163,6 +247,12 @@
         "--scope",
         "user"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "Adding marketplace…√ Successfully added marketplace: yiyuan-accord (declared in user settings)\n",
       "stderr": ""
@@ -175,6 +265,12 @@
         "yiyuan-accord-codex@yiyuan-accord",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\n  \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n  \"name\": \"yiyuan-accord-codex\",\n  \"marketplaceName\": \"yiyuan-accord\",\n  \"version\": \"3.0.1\",\n  \"installedPath\": \"%GT20_TASK_ROOT%\\\\codex-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-codex\\\\3.0.1\",\n  \"authPolicy\": \"ON_INSTALL\"\n}\n",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
@@ -189,6 +285,12 @@
         "user",
         "-y"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "Installing plugin \"yiyuan-accord-claude@yiyuan-accord\"...√ Successfully installed plugin: yiyuan-accord-claude@yiyuan-accord (scope: user)\n",
       "stderr": ""
@@ -201,6 +303,12 @@
         "yiyuan-accord-codex@yiyuan-accord",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 1,
       "stdout": "",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\nError: plugin source path is not a directory: %GT20_TASK_ROOT%\\mutable-source\\plugins\\yiyuan-accord-codex\n\nCaused by:\n    plugin source path is not a directory: %GT20_TASK_ROOT%\\mutable-source\\plugins\\yiyuan-accord-codex\n"
@@ -215,6 +323,12 @@
         "user",
         "-y"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 1,
       "stdout": "Checking for updates for plugin \"yiyuan-accord-claude@yiyuan-accord\" at user scope…\n",
       "stderr": "× Failed to update plugin \"yiyuan-accord-claude@yiyuan-accord\": Plugin source not found at %GT20_TASK_ROOT%\\mutable-source\\plugins\\yiyuan-accord-claude\n"
@@ -226,6 +340,12 @@
         "list",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\n  \"installed\": [\n    {\n      \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n      \"name\": \"yiyuan-accord-codex\",\n      \"marketplaceName\": \"yiyuan-accord\",\n      \"version\": \"3.0.1\",\n      \"installed\": true,\n      \"enabled\": true,\n      \"source\": {\n        \"source\": \"local\",\n        \"path\": \"%GT20_TASK_ROOT%\\\\mutable-source\\\\plugins\\\\yiyuan-accord-codex\"\n      },\n      \"marketplaceSource\": {\n        \"sourceType\": \"local\",\n        \"source\": \"\\\\\\\\?\\\\%GT20_TASK_ROOT%\\\\mutable-source\"\n      },\n      \"installPolicy\": \"AVAILABLE\",\n      \"authPolicy\": \"ON_INSTALL\"\n    }\n  ],\n  \"available\": []\n}\n",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
@@ -237,8 +357,14 @@
         "list",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
-      "stdout": "[\n  {\n    \"id\": \"yiyuan-accord-claude@yiyuan-accord\",\n    \"version\": \"3.0.1\",\n    \"scope\": \"user\",\n    \"enabled\": true,\n    \"installPath\": \"%GT20_TASK_ROOT%\\\\claude-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-claude\\\\3.0.1\",\n    \"installedAt\": \"2026-09-01T00:04:39.221Z\",\n    \"lastUpdated\": \"2026-09-01T00:04:39.221Z\",\n    \"errors\": [\n      \"Plugin directory not found at path: %GT20_TASK_ROOT%\\\\mutable-source\\\\plugins\\\\yiyuan-accord-claude. Check that the marketplace entry has the correct path.\"\n    ]\n  }\n]\n",
+      "stdout": "[\n  {\n    \"id\": \"yiyuan-accord-claude@yiyuan-accord\",\n    \"version\": \"3.0.1\",\n    \"scope\": \"user\",\n    \"enabled\": true,\n    \"installPath\": \"%GT20_TASK_ROOT%\\\\claude-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-claude\\\\3.0.1\",\n    \"installedAt\": \"2026-09-01T04:52:24.717Z\",\n    \"lastUpdated\": \"2026-09-01T04:52:24.717Z\",\n    \"errors\": [\n      \"Plugin directory not found at path: %GT20_TASK_ROOT%\\\\mutable-source\\\\plugins\\\\yiyuan-accord-claude. Check that the marketplace entry has the correct path.\"\n    ]\n  }\n]\n",
       "stderr": ""
     },
     {
@@ -249,6 +375,12 @@
         "yiyuan-accord-codex@yiyuan-accord",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\n  \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n  \"name\": \"yiyuan-accord-codex\",\n  \"marketplaceName\": \"yiyuan-accord\",\n  \"version\": \"3.1.0\",\n  \"installedPath\": \"%GT20_TASK_ROOT%\\\\codex-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-codex\\\\3.1.0\",\n  \"authPolicy\": \"ON_INSTALL\"\n}\n",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
@@ -263,6 +395,12 @@
         "user",
         "-y"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "Checking for updates for plugin \"yiyuan-accord-claude@yiyuan-accord\" at user scope…\n√ Plugin \"yiyuan-accord-claude\" updated from 3.0.1 to 3.1.0 for scope user. Restart to apply changes.\n",
       "stderr": ""
@@ -274,6 +412,12 @@
         "list",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\n  \"installed\": [\n    {\n      \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n      \"name\": \"yiyuan-accord-codex\",\n      \"marketplaceName\": \"yiyuan-accord\",\n      \"version\": \"3.1.0\",\n      \"installed\": true,\n      \"enabled\": true,\n      \"source\": {\n        \"source\": \"local\",\n        \"path\": \"%GT20_TASK_ROOT%\\\\mutable-source\\\\plugins\\\\yiyuan-accord-codex\"\n      },\n      \"marketplaceSource\": {\n        \"sourceType\": \"local\",\n        \"source\": \"\\\\\\\\?\\\\%GT20_TASK_ROOT%\\\\mutable-source\"\n      },\n      \"installPolicy\": \"AVAILABLE\",\n      \"authPolicy\": \"ON_INSTALL\"\n    }\n  ],\n  \"available\": []\n}\n",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
@@ -285,8 +429,14 @@
         "list",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
-      "stdout": "[\n  {\n    \"id\": \"yiyuan-accord-claude@yiyuan-accord\",\n    \"version\": \"3.1.0\",\n    \"scope\": \"user\",\n    \"enabled\": true,\n    \"installPath\": \"%GT20_TASK_ROOT%\\\\claude-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-claude\\\\3.1.0\",\n    \"installedAt\": \"2026-09-01T00:04:39.221Z\",\n    \"lastUpdated\": \"2026-09-01T00:04:43.845Z\"\n  }\n]\n",
+      "stdout": "[\n  {\n    \"id\": \"yiyuan-accord-claude@yiyuan-accord\",\n    \"version\": \"3.1.0\",\n    \"scope\": \"user\",\n    \"enabled\": true,\n    \"installPath\": \"%GT20_TASK_ROOT%\\\\claude-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-claude\\\\3.1.0\",\n    \"installedAt\": \"2026-09-01T04:52:24.717Z\",\n    \"lastUpdated\": \"2026-09-01T04:52:33.782Z\"\n  }\n]\n",
       "stderr": ""
     },
     {
@@ -294,6 +444,12 @@
         "node",
         "%GT20_TASK_ROOT%\\codex-host\\plugins\\cache\\yiyuan-accord\\yiyuan-accord-codex\\3.1.0\\runtime\\accord-hook.cjs"
       ],
+      "resolvedCommand": "C:\\Program Files\\nodejs\\node.exe",
+      "resolvedCommandSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "launcher": "C:\\Program Files\\nodejs\\node.exe",
+      "launcherSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "",
       "stderr": ""
@@ -303,6 +459,12 @@
         "node",
         "%GT20_TASK_ROOT%\\codex-host\\plugins\\cache\\yiyuan-accord\\yiyuan-accord-codex\\3.1.0\\runtime\\accord-hook.cjs"
       ],
+      "resolvedCommand": "C:\\Program Files\\nodejs\\node.exe",
+      "resolvedCommandSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "launcher": "C:\\Program Files\\nodejs\\node.exe",
+      "launcherSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"{\\\"schema\\\":\\\"yiyuan-accord-hook-context/v1\\\",\\\"signal\\\":{\\\"event\\\":\\\"SessionStart\\\",\\\"source\\\":\\\"resume\\\",\\\"sourceKind\\\":\\\"supported-official-hook-event\\\"},\\\"eventHints\\\":[{\\\"field\\\":\\\"host.model\\\",\\\"value\\\":\\\"model-variable\\\",\\\"sourceRef\\\":\\\"SessionStart.model\\\"},{\\\"field\\\":\\\"host.permission-mode\\\",\\\"value\\\":\\\"default\\\",\\\"sourceRef\\\":\\\"SessionStart.permission_mode\\\"}],\\\"directives\\\":[\\\"invalidate-dependent-assumptions\\\",\\\"re-sense-decision-relevant-state-from-supported-official-structured-sources\\\",\\\"hold-missing-or-conflicting-fields-unknown\\\",\\\"preserve-independently-bound-last-safe-allocation\\\",\\\"use-fresh-zero-history-only-if-sequential-relief-is-required\\\",\\\"verify-destination-before-source-release\\\"],\\\"claimLimit\\\":[\\\"signal-is-not-current-task-state\\\",\\\"signal-is-not-user-authority\\\",\\\"event-hints-are-not-state-receipts\\\",\\\"injection-is-not-agent-use-execution-consequence-evidence-or-value\\\"]}\"}}",
       "stderr": ""
@@ -312,6 +474,12 @@
         "node",
         "%GT20_TASK_ROOT%\\claude-host\\plugins\\cache\\yiyuan-accord\\yiyuan-accord-claude\\3.1.0\\runtime\\accord-hook.cjs"
       ],
+      "resolvedCommand": "C:\\Program Files\\nodejs\\node.exe",
+      "resolvedCommandSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "launcher": "C:\\Program Files\\nodejs\\node.exe",
+      "launcherSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "",
       "stderr": ""
@@ -321,6 +489,12 @@
         "node",
         "%GT20_TASK_ROOT%\\claude-host\\plugins\\cache\\yiyuan-accord\\yiyuan-accord-claude\\3.1.0\\runtime\\accord-hook.cjs"
       ],
+      "resolvedCommand": "C:\\Program Files\\nodejs\\node.exe",
+      "resolvedCommandSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "launcher": "C:\\Program Files\\nodejs\\node.exe",
+      "launcherSha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"{\\\"schema\\\":\\\"yiyuan-accord-hook-context/v1\\\",\\\"signal\\\":{\\\"event\\\":\\\"SessionStart\\\",\\\"source\\\":\\\"resume\\\",\\\"sourceKind\\\":\\\"supported-official-hook-event\\\"},\\\"eventHints\\\":[{\\\"field\\\":\\\"host.model\\\",\\\"value\\\":\\\"model-variable\\\",\\\"sourceRef\\\":\\\"SessionStart.model\\\"},{\\\"field\\\":\\\"host.permission-mode\\\",\\\"value\\\":\\\"default\\\",\\\"sourceRef\\\":\\\"SessionStart.permission_mode\\\"}],\\\"directives\\\":[\\\"invalidate-dependent-assumptions\\\",\\\"re-sense-decision-relevant-state-from-supported-official-structured-sources\\\",\\\"hold-missing-or-conflicting-fields-unknown\\\",\\\"preserve-independently-bound-last-safe-allocation\\\",\\\"use-fresh-zero-history-only-if-sequential-relief-is-required\\\",\\\"verify-destination-before-source-release\\\"],\\\"claimLimit\\\":[\\\"signal-is-not-current-task-state\\\",\\\"signal-is-not-user-authority\\\",\\\"event-hints-are-not-state-receipts\\\",\\\"injection-is-not-agent-use-execution-consequence-evidence-or-value\\\"]}\"}}",
       "stderr": ""
@@ -333,6 +507,12 @@
         "yiyuan-accord-codex@yiyuan-accord",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\n  \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n  \"name\": \"yiyuan-accord-codex\",\n  \"marketplaceName\": \"yiyuan-accord\"\n}\n",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
@@ -347,6 +527,12 @@
         "user",
         "-y"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "√ Successfully uninstalled plugin: yiyuan-accord-claude (scope: user)\n",
       "stderr": ""
@@ -360,6 +546,12 @@
         "yiyuan-accord",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\n  \"marketplaceName\": \"yiyuan-accord\",\n  \"installedRoot\": null\n}\n",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
@@ -374,6 +566,12 @@
         "--scope",
         "user"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "√ Successfully removed marketplace: yiyuan-accord (from user settings)\n",
       "stderr": ""
@@ -385,6 +583,12 @@
         "list",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "resolvedCommandSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "launcher": "%APPDATA%\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "launcherSha256": "cf68265897197ac5f3bff6a10c168eec159842b353129726da5e3ed6b91ef0f4",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "{\n  \"installed\": [],\n  \"available\": []\n}\n",
       "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
@@ -396,6 +600,12 @@
         "list",
         "--json"
       ],
+      "resolvedCommand": "%APPDATA%\\npm\\claude.cmd",
+      "resolvedCommandSha256": "7999fba95dbffe167d9e0a043f29057979a0518ebe89b60c4fcfc6401ea8c424",
+      "launcher": "C:\\Windows\\system32\\cmd.exe",
+      "launcherSha256": "97ac98b1a92c286054cce55239cfccdfc23a5517bd07fe693072c9ca96c7dabb",
+      "timeoutSeconds": 60,
+      "timedOut": false,
       "exitCode": 0,
       "stdout": "[]\n",
       "stderr": ""

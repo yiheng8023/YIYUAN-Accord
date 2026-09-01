@@ -1311,9 +1311,9 @@ class ProductControlTests(unittest.TestCase):
                 ('evaluatedRevision',
                  '3878968d459adba57792c390eb277876028b0012'),
             ):
-                observation = _read(ROOT, FROZEN_OBS[0])
+                observation = _read(ROOT, FROZEN_OBS[1])
                 observation[field] = value
-                _write(root, FROZEN_OBS[0], observation)
+                _write(root, FROZEN_OBS[1], observation)
                 self.at(errors(root))
 
     def test_frozen_promotion_maps_only_exact_observations_to_representative(self):

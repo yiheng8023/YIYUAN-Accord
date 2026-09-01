@@ -52,7 +52,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "770464e25b512f6919cdf49c3b894fb2d01f8b85f16803747edc3e2e6995c554",
+  "canonicalGoalObjectiveSha256": "9e01f06607ba59ffa50c015a97443836e8577df9e183fcb5e963bac57daa3588",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -467,7 +467,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": []
     },
     {
@@ -498,9 +498,9 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "continuing",
-      "latestAssessmentBoundary": "Exact 3878968 preserves GT-21 only for its bounded event-to-consequence, sufficient-simple and fresh-handoff cases. Historical exact 4c8bcc3 GT-20 evidence remains scoped to its original package. Review of the first 7ea91dad811d337f00f75eb521cffacabd73b05f exact-package record found four P1 evaluator defects: non-commit Git objects could pass the revision guard, command waits could hang without bounded cleanup, arbitrary task-owned helper processes could escape residue detection, and the Windows environment was not bound to PowerShell, Git, tar and resolved executable bytes. That record and its repository-candidate close are invalidated; only the exact-package evaluator failure-closure boundary is reopened, Commit A package subjects and GT-21 remain preserved, and a versioned v2 replay is pending.",
-      "assessmentScope": "Earlier GT-14 through GT-19 observations retain their finite claims, and GT-21 remains unchanged. The replacement evaluator must reject non-commit objects, bind PowerShell, Git, tar and every resolved executable, time-bound every child command, terminate descendants on failure, detect any task-root process rather than a CLI allowlist, remove its task root and partial evidence on every path, and produce a strict v2 record for the unchanged Commit A subject bytes. This pending correction establishes no lifecycle pass, repository candidate, exact local, hosted, named-human, tag, public Release or post-release installed-behavior claim.",
+      "assessment": "verified",
+      "latestAssessmentBoundary": "Exact 3878968 preserves GT-21 only for its bounded event-to-consequence, sufficient-simple and fresh-handoff cases. The strict schema-v2 record reclosed only the GT-20 evaluator failure-closure boundary for all 18 unchanged Commit A package subjects: a 40-hex commit is required, every command is time-bounded with descendant termination, every task-root process is included in residue detection, and PowerShell, Git, tar plus resolved executable bytes are bound. The 31-command Windows replay passed on PowerShell 7.6.5, Git 2.55.0.windows.3, bsdtar 3.8.8, Codex CLI 0.151.0, Claude Code 2.1.252 and Node 24.19.0; only the two deliberately failed update commands exited nonzero, no command timed out, installed entries and task processes reached zero, and the task root was removed.",
+      "assessmentScope": "Earlier GT-14 through GT-19 observations retain their finite claims, and GT-21 remains unchanged. The replacement record verifies only the bounded exact Commit A Windows CLI install, two failed-update rollbacks, successful update, installed bytes, enabled inventory, installed Hook behavior, supported native removal, semantic user/concurrent/foreign-state preservation and task cleanup. R3 is verified for these finite evidence claims; it does not establish production trust, ordinary desktop activation, unmanaged or cross-OS behavior, comparative value, exact-local or hosted candidate verification, named-human authorization, tag, public Release or post-release installed behavior.",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-07-codex-local.json",
@@ -606,7 +606,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": []
     },
     {
@@ -627,7 +627,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -729,7 +729,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -833,7 +833,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -933,12 +933,12 @@
       ],
       "statement": "Corrections, new consensus, failures, host or extension drift, evidence conflict, capability or carrier change, resource pressure and lifecycle mismatch trigger versioned impact analysis, bounded recomputation, recovery, learning, evolution and retirement without making the user reconstruct the process.",
       "passRule": "Plan, process, acceptance and structured goal projection map one versioned current stage set. Material consensus passes contradiction, category, boundary and dependency checks, then reopens the earliest affected implementation, evidence, documentation and claims while preserving history. A closed snapshot has one canonical origin: the oldest commit in its contiguous first-parent identical parsed-node run; every carry preserves the origin-bound authority, surfaces, evidence and cutoff, and a successor cites the canonical origin of the latest different node. The current verifier recursively recomputes only the bounded schema-versioned repository snapshot-lineage predicate over strict node shape, origin-bound constitution, program and acceptance, referenced guidance and Golden Tasks, repository-located current and historical evidence bytes and digests, and declared host projection package, manifest, contract, Skill and marketplace identity. It builds one bounded first-parent history index per validation graph and reuses it across predecessor checks; each revision blob uses the admitted JSON byte limit while the index has independent revision-count and aggregate-byte bounds. Every parsed schema-v1 historical program value is traversed independently of runtime parser behavior and rejected when its visited-value depth exceeds 512. Complete normalized transition state plus raw marketplace identity determines affected criteria, and declared parser structure failures are normalized before they can escape the verifier. Predicate PASS proves only that bounded repository lineage and frozen-reference contract; it does not replay the complete historical verifier or attest historical tests, behavior, live host facts, human authority, publication or other external gates. Carry locators, stale or malformed predecessors, parser structure failures, history gaps, excessive JSON value or predecessor depth, resource-bound breaches and non-contiguous replay fail closed. The bounded current-receipt replay, GT-21 live-carrier and fresh-handoff cases, GT-20 transactional lifecycle and source-bound whole-system reacceptance from exact cut 85a917a retain only their stated finite claims. Candidate-forming product, specification, implementation and standards review established the selected v3.1.0 projection, but exact correction SHAs 0988b223, 0da23a21, b202c40 and 39f4f69 failed later exact-tree or exact-local review and remain canonical lineage predecessor origins only; exact carry dc75f89 corrected the fixture but then failed standards review because its complexity calibration remained stale, and it stays inside the 39f4f69 identical-node run rather than becoming a predecessor locator. Exact 7e14f3a completed all 36 clean local tests but failed hosted-readiness review because the 144.183-minute seam exceeded the declared 120-minute job ceiling before the job's other required checks; no hosted run occurred, and it remains a canonical predecessor origin without later-gate authority. Exact 9bd82876e2b350787edcab09e3835426e069272c passed all 36 clean exact local tests in 9821.638 seconds and passed canonical, host-local, static and four-axis exact-tree review, but required hosted run 33405883747 failed the ubuntu-latest / Python 3.14 leg at 35/36 because excessive-nesting rejection still depended on platform-specific parser behavior. Its Windows/Python 3.10 leg independently failed at 35/36 when the first Node Hook subprocess reached the semantic-test helper's 15-second deadlock guard; later same-job Hook calls, Windows/Python 3.14 and nine intervening workflows passed the identical runtime blob. Either required failure invalidates the candidate and cannot be compensated by other matrix legs; 9bd82876 remains a canonical predecessor origin without hosted or later-gate authority. The successor adds the parser-independent 512-depth boundary and raises only the CI deadlock guard to 60 seconds without retry or runtime change, while both manifests retain the separately asserted three-second product Hook timeout. Immutable source-install and tracked Release materials target v3.1.0 without self-attesting publication. The current gate is a replacement clean-SHA local verification and four-axis review before hosted verification or any later release effect. Development evidence keeps official-clean, isolated candidate-enabled and frozen-byte current-enabled dogfood lanes distinct; the active verification task is never its own baseline and never hot-loads mutable treatment bytes. Learning uses authorized carriers, immutable evaluators and non-compensating vectors. Code, conversation and execution topology remain independent; compaction, copied-history conversation fork, fresh conversation handoff, Git branch and Git worktree remain distinct. Repeated repair, proxy regression, partial install, stale restore or foreign-state deletion triggers premise, deletion, replacement or rollback review; failures, contamination, cleanup and carrier retirement remain visible.",
-      "latestAssessmentBoundary": "The v3.1.0 projection remains the intended release line, but fresh exact-tree review invalidated the first GT-20 evaluator and the 016f0a9 repository-candidate close. Q4 therefore continues at a versioned v2 evaluator failure-closure replay, not exact local verification. The correction preserves exact Commit A subjects, GT-21 and unrelated history; binds commit type, bounded command termination, all task-root processes, PowerShell/Git/tar and executable identity; and recalibrates the Python/test ceiling from 720000 to 722000 only because this named failure-closure responsibility otherwise breaches the five-percent reserve. The current node is reopened and no later gate inherits the invalid record.",
-      "assessmentScope": "This assessment establishes only that the correction has been admitted at the earliest affected evaluator boundary with the required plan, process, acceptance, goal-state, budget and lifecycle projections aligned. It does not yet establish a valid v2 GT-20 record, repository candidate, exact local or hosted verification, named-human authorization, tag, public Release, installed behavior, field value or final cleanup. Historical snapshot lineage and finite unrelated evidence remain preserved; the reopened snapshot cannot self-attest its later close.",
+      "latestAssessmentBoundary": "The strict schema-v2 GT-20 record reclosed only the evaluator failure-closure boundary for unchanged Commit A subjects after the exact 0e8ae1b correction node. The current closed stage preserves GT-21 and unrelated history, binds commit type, bounded command termination, every task-root process, PowerShell/Git/tar and executable identity, and keeps the recalibrated 722000-byte ceiling with 37245 bytes or 5.16 percent headroom. Baseline, plan, process, acceptance, structured goal projection, evidence and release documentation now select the replacement v3.1.0 repository candidate and the next exact-local verification-and-review gate.",
+      "assessmentScope": "This assessment verifies the versioned correction, v2 lifecycle record, bounded evidence projection and repository-candidate close only. It preserves exact Commit A subjects, prior failures, historical snapshot lineage, GT-21 and unrelated finite evidence while preventing the invalid record from reaching later gates. It does not establish clean exact-local or hosted verification, named-human authorization, tag, public Release, installed production behavior, field value or final cleanup; the closed snapshot cannot self-attest its containing commit or any external effect.",
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-07-codex-local.json",
@@ -1058,7 +1058,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "eb8f8f5bef1cb9b82dfb1ff904f510b7b4f782824d8a4ed6dde96f478d077db5",
+    "releaseNotesSha256": "ab47b17fac1e74e1423686e12ef6f2a22e8845c8552366e3fa6dfff92905f1db",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,

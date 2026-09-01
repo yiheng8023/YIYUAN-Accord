@@ -2327,7 +2327,7 @@ def _validate_exact_package_evidence_lifecycle(
             set(),
         ),
         "yiyuan-accord-gt20-exact-package-evidence/v2": (
-            31, "45bae061fefdab62b56ad27a88377ea719bba577f324e5ac4df760921d80bd38",
+            31, "488fb399df972b40a8ebab0fe3901c19f65e82a408f7c728248dcfc8b1e4c417",
             {"gitVersion": 0, "tarVersion": 1, "codexCliVersion": 6,
              "claudeCliVersion": 7, "nodeVersion": 8},
             {"powerShellVersion", "powerShellEdition", "powerShellExecutable",

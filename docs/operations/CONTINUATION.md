@@ -43,10 +43,12 @@ Then read, in order:
   schema-v2 stage node first reopens only the complete-package identity
   boundary, preserves GT-21, and invalidates GT-20 for the old package.
   `evals/evidence/2026-09-01-v310-gt20-exact-package-source.json` then verifies
-  the exact Commit A lifecycle on Windows with Codex CLI 0.151.0, Claude Code
-  2.1.251 and Node 24.19.0. The containing Commit B closes that same v2 node and
+  the exact Commit A lifecycle on Windows with PowerShell 7.6.5, Git
+  2.55.0.windows.3, bsdtar 3.8.8, Codex CLI 0.151.0, Claude Code 2.1.252 and
+  Node 24.19.0. The containing close commit closes that same v2 node and
   opens exact-local verification; its exact SHA must be read from Git and is
   not self-attested here. The record proves only isolated CLI install,
+  bounded command and descendant termination, all task-root process cleanup,
   failed-update rollback, successful update, exact installed bytes, enabled
   inventory, installed Hook behavior, native removal, semantic user/concurrent/
   foreign-state preservation and task cleanup. Desktop activation, production,
