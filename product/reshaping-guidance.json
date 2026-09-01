@@ -882,7 +882,7 @@
     },
     "environmentAdmissionContract": {
       "id": "composed-environment-admission/v1",
-      "status": "current-receipt-working-tree-agent-replay-passed-transactional-lifecycle-completed-whole-system-reaccepted-independent-review-accepted-candidate-selected",
+      "status": "current-receipt-and-gt21-preserved-gt20-schema-v4-complete-package-replay-pending-candidate-not-selected",
       "admissionUnit": "one-bounded-claim-under-one-provenance-bound-composition-and-freshness-window",
       "purpose": "Decide whether an environment observation may support one named claim, whether a comparison arm is required, and which minimum isolation or honest degradation is proportionate to material confounding. It does not certify a host as globally clean.",
       "snapshot": {
@@ -1759,7 +1759,7 @@
     "firstSlice": "Resource stewardship is the first corrected Agent-execution-subdomain slice: it recalls the historical attribution and release boundary as L8 and GT-12, adds current official capability discovery and dynamic native-first routing, and leaves the old preflight, generic Skills and unproven controller design in history. Process-loss control is not a new adjacent feature but a recalled original pre-Accord Agent-execution mission: current GT-07 and GT-11 must preserve the latest demand and corrections through goal, authority, route, implementation, evidence, acceptance and final claim without requiring a real carrier transition when the live carrier is healthy. Runtime machinery remains evidence-gated."
   },
   "wholeSystemBalanceReview": {
-    "status": "completed-refreshed-independent-review-accepted-candidate-selected",
+    "status": "reopened-gt20-schema-v4-replay-reacceptance-and-independent-review-pending",
     "purpose": "Expose coupled weak links and tradeoffs before candidate formation, then drive minimum justified remediation and affected-surface reacceptance without turning a checklist or average score into product truth.",
     "reviewSequence": [
       "bind-current-goal-authority-candidate-scope-versioned-claim-scoped-baseline-target-counterfactual-evidence-cutoff-confounders-and-invalidation-triggers",
@@ -1816,7 +1816,7 @@
       "reviewCut": "f3c9b09b784c844762557a959d81418e7b443374",
       "reviewCutDisposition": "historical-independent-review-counterevidence-only-not-a-current-independent-review-of-85a917a-or-any-later-tree",
       "record": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md#whole-system-reacceptance-after-live-state-and-lifecycle-cut-85a917a",
-      "dominantBlocker": "exact-local-verification-and-review-on-clean-committed-v3.1.0-candidate",
+      "dominantBlocker": "frozen-schema-v4-gt20-complete-package-replay",
       "remediation": {
         "BAL-01": "implemented-and-deterministically-reaccepted",
         "BAL-02": "implemented-and-deterministically-reaccepted",
@@ -1826,8 +1826,8 @@
         "BAL-06": "f3c9b09-closes-six-semantic-mutants-but-standards-review-finds-unbound-source-narrative-hash",
         "BAL-07": "bind-typed-normalization-to-the-same-record-at-an-exact-untyped-ancestor-and-reconcile-the-400000-byte-budget-text",
         "BAL-08": "GT-21-bounded-current-host-live-carrier-sufficient-simple-route-and-fresh-zero-history-handoff-reaccepted-with-production-trust-ordinary-activation-and-cross-host-value-still-unknown",
-        "BAL-09": "GT-20-bounded-disposable-Windows-transactional-lifecycle-and-user-state-preservation-reaccepted-with-actual-Claude-trigger-unmanaged-cross-OS-production-and-value-still-unknown",
-        "BAL-10": "live-state-and-lifecycle-whole-system-projection-repaired-from-85a917a-independent-exact-tree-review-accepted-v3.1.0-repository-candidate-selected-external-release-gates-closed-current-client-entry-instance-unknown-until-resensed"
+        "BAL-09": "historical-GT-20-bounded-Windows-lifecycle-retained-only-as-prior-fact-current-schema-v4-package-replay-pending",
+        "BAL-10": "whole-system-projection-reopened-for-schema-v4-replay-affected-surface-reacceptance-and-four-fresh-independent-reviews-candidate-not-selected"
       },
       "graphRule": "Project the exact 85a917a whole-system reacceptance cut, the historical 59a340f audit, historical 7860fee, fcefee4 and f3c9b09 independent-review findings, and bounded GT-18, GT-19, GT-20 and GT-21 evidence with their affected semantic, evidence, lifecycle and wording edges. The f3c9b09 review remains historical counterevidence and is not an independent review of 85a917a or any later tree. Preserve exact task behavior facts only while their task contract, evaluator, source-recorded ancestor, canonical sequence, sparse behavior-subject bindings and claim ceilings remain valid. A client update invalidates the current entry-instance projection to unknown until read-only re-sensing; model identity and version remain runtime variables rather than product, route or oracle bindings. Refresh only the invalidated slice, normalize host vocabulary before functional comparison and never precompute host-model-tool-context products."
     },
@@ -1889,8 +1889,8 @@
       "prefer plugin-scoped or namespaced lifecycle operations and never overwrite user-owned instructions or configuration to simulate activation",
       "treat capacity summarization and handoff as examples in an open continuity-risk set and refresh on any source-bound loss distortion staleness or misbinding",
       "refresh and globally reconcile on correction new consensus drift failure evidence conflict side effect or carrier pressure",
-      "carry the reaccepted bounded current-receipt, event-to-core-to-Agent consequence, sufficient simple route, exact 3878968 fresh thread/start handoff and exact 4c8bcc3 transactional lifecycle without promoting them to production trust, portability or value; whole-system reacceptance and independent exact-tree review are complete, v3.1.0 is the selected repository candidate, the updated client's current entry-instance projection remains unknown until read-only re-sensing, and model identity and version remain runtime variables",
-      "execute the remaining external v3.1.0 gates in order from exact local verification and review through hosted verification, named-human authorization, public release and cleanup",
+      "carry the bounded current-receipt, event-to-core-to-Agent consequence, sufficient simple route and exact 3878968 fresh thread/start handoff without promoting them to production trust, portability or value; retain exact 4c8bcc3 only as historical lifecycle evidence, complete one frozen schema-v4 GT-20 package replay, then affected-surface reacceptance and four fresh independent reviews before selecting any replacement candidate",
+      "keep exact-local and every external v3.1.0 gate closed until the schema-v4 replay, reacceptance and four reviews form one clean replacement candidate",
       "remain compact enough to preserve host reasoning capacity and defer detail by progressive disclosure"
     ]
   },
@@ -1903,8 +1903,8 @@
       "exact-candidate-hosted-verification-only-after-the-local-gate-passes",
       "named-human-tagged-release-and-cleanup-gates-remain-closed-until-their-dependencies-pass"
     ],
-    "minimumNextSlice": "Retain every attempt and the exact GT-18, GT-19, GT-20 and GT-21 claim ceilings as bounded history. Whole-system reacceptance and independent exact-tree review are complete without adding a client, bridge, MCP, SDK, daemon, database or persistence. Keep the selected portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the direct App Server route remains an evaluator only. v3.1.0 is the selected repository candidate. Form its clean committed exact SHA, run exact local verification and review, then advance only through the ordered external gates. Because the client changed after the bounded observations, every current entry-instance projection remains unknown until read-only post-release re-sensing. Model identity and version remain runtime variables.",
-    "latestFailureBoundary": "The completed source-bound reacceptance, twelve current observations and independent exact-tree review select v3.1.0 as the repository candidate. The earliest open boundary is exact local verification and review on its clean committed SHA. The updated client's current entry-instance projection remains unknown and cannot qualify activation, compatibility or installation. Production trust, ordinary activation, actual Claude live triggering, unmanaged or cross-OS hosts, cross-host value and product value remain scoped unknowns. Hosted candidate verification, named-human release authorization, tag, public Release and cleanup remain closed. Model identity and version remain variables rather than product bindings.",
+    "minimumNextSlice": "Retain every attempt and the GT-18, GT-19, historical GT-20 and unchanged GT-21 claim ceilings. Keep the selected portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the direct App Server route remains an evaluator only. Freeze the complete current China-red package and schema-v4 evaluator, run one GT-20 replay, reconcile all affected surfaces and obtain four fresh independent reviews before selecting any replacement v3.1.0 repository candidate. Exact-local and external gates remain closed. Current entry-instance projections remain unknown until read-only post-release re-sensing, and model identity and version remain runtime variables.",
+    "latestFailureBoundary": "Candidate 9050114 and its GT-20 record remain failed history. The earliest open boundary is one frozen schema-v4 complete-package replay covering the ordered command contract, private-path exclusion, owned process-tree termination, real neighboring-plugin preservation, bounded host-cache cleanup and changed China-red brand surface; affected-surface reacceptance and four fresh independent reviews follow before candidate selection. Exact-local, hosted, named-human authorization, tag, public Release and cleanup remain closed. Current entry-instance, production, cross-host and value claims remain unknown.",
     "requiredReplay": [
       "preserve-the-85a917a-source-bound-whole-system-reacceptance-every-bounded-counterexample-and-completed-independent-review",
       "run-exact-local-verification-and-review-on-the-clean-committed-v3.1.0-candidate",

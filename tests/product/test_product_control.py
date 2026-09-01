@@ -2133,7 +2133,7 @@ class ProductControlTests(unittest.TestCase):
               'manifest interface contract is invalid',
               'package declared file is unsafe')),
             ('codex', 0, 'icon', lambda root, _: append_bytes(
-                root, 'plugins/yiyuan-accord-codex/assets/yiyuan-nexus-mark.png',
+                root, 'plugins/yiyuan-accord-codex/assets/yiyuan-nexus-icon-red.svg',
                 b'tampered'), ('package digest is not approved by program',)),
             ('claude-code', 1, 'manifest-marketplace', lambda root, p: (
                 json_change(root, p['manifest'], lambda m: m.update(
@@ -2304,8 +2304,14 @@ class ProductControlTests(unittest.TestCase):
             'revision-bound v2 replay boundary is invalid',
         )
 
-        self.ae(prior['state'], 'closed')
+        self.ae(prior['state'], 'reopened')
         self.ae(node['state'], 'reopened')
+        arbitrary = _clone(node)
+        arbitrary['replay']['earliestAffectedBoundary'] = 'arbitrary-boundary'
+        self.has(
+            _snapshot_v2_transition_errors(arbitrary, prior),
+            'revision-bound v2 reopen transition is invalid',
+        )
         self.has(
             _snapshot_v2_transition_errors(node, node),
             'revision-bound v2 reopen transition is invalid',
@@ -2326,6 +2332,21 @@ class ProductControlTests(unittest.TestCase):
                 return errors
 
             self.ae(validate(lifecycle), [])
+            wrong_predecessor = _clone(lifecycle)
+            wrong_predecessor['predecessorLifecycleRef'] = (
+                '0' * 40
+                + ':product/program.json#/increment/exactPackageEvidenceLifecycle'
+            )
+            self.has(
+                validate(wrong_predecessor),
+                'exact package lifecycle predecessor is invalid',
+            )
+            wrong_contract = _clone(lifecycle)
+            wrong_contract['commandContractSha256'] = '0' * 64
+            self.has(
+                validate(wrong_contract),
+                'exact package lifecycle command contract digest mismatch',
+            )
             for mutate in (
                 lambda value: value.__setitem__('evidence', {}),
                 lambda value: value.__setitem__('state', 'verified'),
@@ -2892,15 +2913,20 @@ class ProductControlTests(unittest.TestCase):
         dynamic_contract = policy['evaluationContractHistory'][3]['sha256']
         stage_contract = policy['evaluationContractHistory'][4]['sha256']
         successor_contract = policy['evaluationContractHistory'][5]['sha256']
+        rebaseline_contract = policy['evaluationContractHistory'][6]['sha256']
         self.ai(old, _evaluation_contracts(policy, 'GT-14', current))
         for task_id, expected in (
             ('GT-17', {current, sequence_contract, qualification_contract,
-                       stage_contract, successor_contract}),
+                       stage_contract, successor_contract,
+                       rebaseline_contract}),
             ('GT-18', {current, sequence_contract, stage_contract,
-                       successor_contract}),
+                       successor_contract, rebaseline_contract}),
             ('GT-20', {current, dynamic_contract, stage_contract,
                        successor_contract}),
-            ('GT-19', {current, stage_contract, successor_contract}),
+            ('GT-19', {current, stage_contract, successor_contract,
+                       rebaseline_contract}),
+            ('GT-21', {current, dynamic_contract, stage_contract,
+                       successor_contract, rebaseline_contract}),
         ):
             self.ae(_evaluation_contracts(policy, task_id, current),
                              expected)

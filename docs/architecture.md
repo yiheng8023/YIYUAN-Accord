@@ -18,19 +18,20 @@ remain explicit. Fresh current-contract GT-18/19 at exact
 synthetic evolution sequence and one bounded Codex-local responsibility-
 allocation sequence, with blocked arms, corrections, failed review and high
 costs retained. Exact GT-21 evidence retains only its bounded current-host
-live-carrier and fresh-handoff cases. The schema-v2 GT-20 record for exact
+live-carrier and fresh-handoff cases. The schema-v2 GT-20 record for historical
 Commit A `7ea91dad811d337f00f75eb521cffacabd73b05f` and candidate `9050114`
 failed four fresh reviews: user-local evidence paths, end-to-end owned-tree
 termination, Claude manifest-to-terminal identity and the host's bounded
-orphan-cache cleanup were not strictly closed. The package subjects remain
-unchanged, but the repository-candidate stage is reopened under schema v3. The
-current correction uses a suspended Windows Job before process resume, one
-absolute hard deadline, generate-time sanitization, a stable normalized
-command-plan digest, exact cache-byte allowlists and observed younger/older-
-than-14-day host cleanup probes. Before the expensive exact-local gate, the
-accountable human must confirm the three digest-bound public assets' ownership
-or license and public-display permission; a denial returns to package identity.
-Only after the v3 replay, affected-surface reacceptance and four fresh
+orphan-cache cleanup were not strictly closed. The repaired evaluator uses a
+suspended Windows Job before process resume, one absolute hard deadline,
+generate-time sanitization, an authoritative complete ordered command contract,
+exact cache-byte probes and real evaluator-owned neighboring plugins registered
+through each host's native lifecycle. The China-red transparent icon plus
+light/dark theme logos also change the complete declared Codex package, so no
+prior GT-20 package evidence is current. The accountable human has confirmed
+the digest-bound public assets' ownership and public-display permission; that
+confirmation is an external asset fact, not final release authorization. Only
+after one frozen schema-v4 replay, affected-surface reacceptance and four fresh
 independent reviews may one unchanged clean SHA become the replacement
 candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
@@ -38,9 +39,8 @@ value remain unknown.
 The implementation does not admit an Accord-managed Runtime, durable state
 layer or durable evolution. Selecting the short-lived Hook does not prove
 production trust or broad live-host behavior.
-Earlier v3.1 package checkpoints remain bounded historical evidence. The
-Commit A package bytes are frozen for containing-commit identity verification;
-public
+Earlier v3.1 package checkpoints remain bounded historical evidence. The next
+GT-20 subject must be frozen in its own containing commit before replay; public
 v3.0.1 remains the recommended release reference, and preview.2 remains an
 unreleased historical checkpoint.
 
@@ -141,17 +141,19 @@ semantic authority, release or production evidence. Measured: 2026-09-01.
 
 ### Panorama and bottleneck order
 
-The reopened correction tree has 108 tracked files against the structured
+The reopened correction tree has 107 tracked files against the structured
 111-file ceiling. Eight
 Python files contain the product and tests. The three largest maintained code
 surfaces are the product-control test module, `control.py` and `evidence.py`;
 together they dominate code review, coupling and regression cost. The current
-evaluator-correction tree has 696114 Python-and-product-test bytes against the
-recalibrated structured 750000-byte ceiling, leaving 53886 bytes or 7.18
-percent. The increase from 722000 pays only for evidence sanitization, process
-ownership before resume, one hard end-to-end deadline, bounded output draining,
-Claude manifest-to-terminal identity, strict cache allowlists and the observed
-host cleanup boundary; it is not general growth allowance. These measurements
+evaluator-correction tree has 727271 Python-and-product-test bytes against the
+recalibrated structured 780000-byte ceiling, leaving 52729 bytes or 6.76
+percent. The increase from the prior 750000-byte ceiling pays only for the
+ordered command contract, evidence sanitization, process ownership before
+resume, one hard end-to-end deadline, bounded output draining, real neighboring
+plugin preservation, Claude manifest-to-terminal identity, strict cache
+allowlists, the observed host cleanup boundary and changed brand surface; it is
+not general growth allowance. These measurements
 become history after any change; `product/program.json` and the canonical
 verifier remain the numerical authority.
 
@@ -213,9 +215,10 @@ The ordered bottlenecks are:
   cost and the 240-minute hosted job ceiling. A breach opens profiling and
   subtraction review before another timeout increase.
 - Keep Windows Python 3.10/3.14, macOS Python 3.10/3.14 and Linux Python
-  3.10-3.14. The exact-package lifecycle is verified only on Windows with
-  Codex CLI 0.151.0, Claude Code 2.1.252 and Node 24.19.0. Desktop/ChatGPT,
-  unmanaged-host and cross-OS lifecycle behavior remain unknown.
+  3.10-3.14. A historical exact-package lifecycle was verified on Windows with
+  Codex CLI 0.151.0, Claude Code 2.1.252 and Node 24.19.0; it does not bind the
+  changed schema-v4 package. Current package compatibility, Desktop/ChatGPT,
+  unmanaged-host and cross-OS lifecycle behavior remain pending or unknown.
 - Local WSL2 Ubuntu 26.04 on Linux 6.18 with Python 3.14.4 is an available
   cross-kernel verification environment; task-scoped native Linux Node 24.19.0
   can keep it independent of the Windows Node path. No WSL result becomes
@@ -960,7 +963,7 @@ task root was removed. This repeated pre-model boundary stops same-lane retry;
 it does not authorize model substitution, credential inspection, permission
 loosening or an Accord mechanism.
 
-For the selected candidate, exact GT-21 evidence closes only one
+For the previously selected but now invalid candidate lineage, exact GT-21 evidence closes only one
 bounded current-host event-to-consequence path, one silent sufficient route and
 one fresh zero-history handoff whose destination was verified before source
 release. Exact GT-20 evidence separately closes only one disposable non-empty
@@ -970,9 +973,10 @@ native removal and bounded inert-cache classification. Installation, enablement
 or Hook output alone still cannot substitute for behavior, and a clean-state
 install cannot expose overwrite, stale-restore, ownership or host-cache errors.
 The `85a917a` source-bound whole-system reacceptance preserves these finite
-claims without promoting them to production, cross-host, updated-client entry
-or release evidence. The later candidate-forming review is complete; clean
-exact-local verification and four independent exact-tree reviews remain next.
+claims as history without promoting them to the changed package, production,
+cross-host, updated-client entry or release evidence. The current route is one
+frozen schema-v4 GT-20 replay, affected-surface reacceptance and four fresh
+independent reviews before any replacement candidate or exact-local gate.
 
 After the authorized tag and Release exist, one evaluator isolated from
 candidate-preparation context exercises the README installation, confirmation
@@ -1045,7 +1049,8 @@ declare itself independent or turn a checklist into product value.
 
 That sequence was complete for candidate `9050114`, but four fresh reviews
 reopened the GT-20 evaluator boundary. A replacement candidate does not exist
-until the v3 replay and affected interactions are reaccepted; exact-local,
+until one frozen schema-v4 complete-package replay, affected interactions and
+four fresh independent reviews close; exact-local,
 hosted, named-human, tag, publication and public-verification gates remain
 distinct.
 

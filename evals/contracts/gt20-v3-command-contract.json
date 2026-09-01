@@ -1,0 +1,447 @@
+{
+  "schema": "yiyuan-accord-gt20-command-contract/v1",
+  "priorRelease": {
+    "tag": "v3.0.1",
+    "revision": "24cf9f3750ecd700944988e81a519db54b67b8e8"
+  },
+  "budgets": {
+    "executionTimeoutSeconds": 60,
+    "endToEndTimeoutSeconds": 70,
+    "outputLimitBytes": 4194304
+  },
+  "environmentProfiles": {
+    "base": {
+      "allowedKeys": [
+        "COMSPEC",
+        "PATH",
+        "PATHEXT",
+        "ProgramData",
+        "ProgramFiles",
+        "ProgramFiles(x86)",
+        "ProgramW6432",
+        "SystemDrive",
+        "SystemRoot",
+        "TEMP",
+        "TMP",
+        "WINDIR"
+      ],
+      "requiredKeys": [
+        "COMSPEC",
+        "PATH",
+        "PATHEXT",
+        "SystemRoot",
+        "TEMP",
+        "TMP",
+        "WINDIR"
+      ]
+    },
+    "preflight-base": {
+      "additionalKeys": [],
+      "requiredAdditionalKeys": [],
+      "bindings": {"TEMP": "%TEMP%", "TMP": "%TEMP%"}
+    },
+    "isolated-base": {
+      "additionalKeys": [],
+      "requiredAdditionalKeys": [],
+      "bindings": {"TEMP": "%TASK_ROOT%/command-temp", "TMP": "%TASK_ROOT%/command-temp"}
+    },
+    "isolated-codex": {
+      "additionalKeys": ["CODEX_HOME"],
+      "requiredAdditionalKeys": ["CODEX_HOME"],
+      "bindings": {"CODEX_HOME": "%TASK_ROOT%/codex-host", "TEMP": "%TASK_ROOT%/command-temp", "TMP": "%TASK_ROOT%/command-temp"}
+    },
+    "isolated-claude": {
+      "additionalKeys": ["CLAUDE_CONFIG_DIR"],
+      "requiredAdditionalKeys": ["CLAUDE_CONFIG_DIR"],
+      "bindings": {"CLAUDE_CONFIG_DIR": "%TASK_ROOT%/claude-host", "TEMP": "%TASK_ROOT%/command-temp", "TMP": "%TASK_ROOT%/command-temp"}
+    }
+  },
+  "commands": [
+    {
+      "role": "candidateCommitCheck",
+      "argv": ["git", "-C", "%REPOSITORY_ROOT%", "rev-parse", "--verify", "%CANDIDATE_REVISION%^{commit}"],
+      "environmentProfile": "preflight-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "priorReleaseRevision",
+      "argv": ["git", "-C", "%REPOSITORY_ROOT%", "rev-parse", "--verify", "v3.0.1^{commit}"],
+      "environmentProfile": "preflight-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "gitVersion",
+      "argv": ["git", "--version"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "tarVersion",
+      "argv": ["tar", "--version"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "archivePriorRelease",
+      "argv": ["git", "-C", "%REPOSITORY_ROOT%", "archive", "--format=tar", "--output=%TASK_ROOT%/old.tar", "%PRIOR_RELEASE_REVISION%"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "archiveCandidate",
+      "argv": ["git", "-C", "%REPOSITORY_ROOT%", "archive", "--format=tar", "--output=%TASK_ROOT%/candidate.tar", "%CANDIDATE_REVISION%"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "extractPriorRelease",
+      "argv": ["tar", "-xf", "%TASK_ROOT%/old.tar", "-C", "%TASK_ROOT%/old-source"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "extractCandidate",
+      "argv": ["tar", "-xf", "%TASK_ROOT%/candidate.tar", "-C", "%TASK_ROOT%/candidate-source"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "codexVersion",
+      "argv": ["codex", "--version"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "claudeVersion",
+      "argv": ["claude", "--version"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "nodeVersion",
+      "argv": ["node", "--version"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "processTreeTerminationProbe",
+      "argv": ["node", "-e", "const {spawn}=require('node:child_process');spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:['ignore','inherit','inherit']});setInterval(()=>{},1000);"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedFailureCategory": "owned-tree-timeout",
+      "expectedExit": "timeout",
+      "budgets": {
+        "executionTimeoutSeconds": 2,
+        "endToEndTimeoutSeconds": 8,
+        "outputLimitBytes": 65536
+      }
+    },
+    {
+      "role": "neighborCodexMarketplaceAdd",
+      "argv": ["codex", "plugin", "marketplace", "add", "%TASK_ROOT%/neighbor-marketplace", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "neighborClaudeMarketplaceAdd",
+      "argv": ["claude", "plugin", "marketplace", "add", "%TASK_ROOT%/neighbor-marketplace", "--scope", "user"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "neighborCodexInstall",
+      "argv": ["codex", "plugin", "add", "lifecycle-neighbor-codex@lifecycle-neighbor", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "neighborClaudeInstall",
+      "argv": ["claude", "plugin", "install", "lifecycle-neighbor-claude@lifecycle-neighbor", "--scope", "user", "-y"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "neighborCodexInventory",
+      "argv": ["codex", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "neighborClaudeInventory",
+      "argv": ["claude", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordCodexMarketplaceAdd",
+      "argv": ["codex", "plugin", "marketplace", "add", "%TASK_ROOT%/mutable-source", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordClaudeMarketplaceAdd",
+      "argv": ["claude", "plugin", "marketplace", "add", "%TASK_ROOT%/mutable-source", "--scope", "user"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordCodexInstallPrior",
+      "argv": ["codex", "plugin", "add", "yiyuan-accord-codex@yiyuan-accord", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordClaudeInstallPrior",
+      "argv": ["claude", "plugin", "install", "yiyuan-accord-claude@yiyuan-accord", "--scope", "user", "-y"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordCodexFailedUpdate",
+      "argv": ["codex", "plugin", "add", "yiyuan-accord-codex@yiyuan-accord", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedFailureCategory": "source-path-absent",
+      "expectedExit": "nonzero"
+    },
+    {
+      "role": "accordClaudeFailedUpdate",
+      "argv": ["claude", "plugin", "update", "yiyuan-accord-claude@yiyuan-accord", "--scope", "user", "-y"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedFailureCategory": "source-path-absent",
+      "expectedExit": "nonzero"
+    },
+    {
+      "role": "rollbackCodexInventory",
+      "argv": ["codex", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "rollbackClaudeInventory",
+      "argv": ["claude", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordCodexUpdateCandidate",
+      "argv": ["codex", "plugin", "add", "yiyuan-accord-codex@yiyuan-accord", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordClaudeUpdateCandidate",
+      "argv": ["claude", "plugin", "update", "yiyuan-accord-claude@yiyuan-accord", "--scope", "user", "-y"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "candidateCodexInventory",
+      "argv": ["codex", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "candidateClaudeInventory",
+      "argv": ["claude", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "codexHookStartup",
+      "argv": ["node", "%TASK_ROOT%/codex-host/plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.1.0/runtime/accord-hook.cjs"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "9f93751a7a648627789067d2c9ffa0aa4f936750631ae13109196da75cbe7f46",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "codexHookResume",
+      "argv": ["node", "%TASK_ROOT%/codex-host/plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.1.0/runtime/accord-hook.cjs"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "366ca4b95754d368867c793f139a8436720f8ea9896a6535461800fdf0b8ef3f",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "claudeHookStartup",
+      "argv": ["node", "%TASK_ROOT%/claude-host/plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/runtime/accord-hook.cjs"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "9f93751a7a648627789067d2c9ffa0aa4f936750631ae13109196da75cbe7f46",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "claudeHookResume",
+      "argv": ["node", "%TASK_ROOT%/claude-host/plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/runtime/accord-hook.cjs"],
+      "environmentProfile": "isolated-base",
+      "inputSha256": "366ca4b95754d368867c793f139a8436720f8ea9896a6535461800fdf0b8ef3f",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "claudeOldYoungSweep",
+      "argv": ["claude", "--init-only"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "claudeOldExpiredSweep",
+      "argv": ["claude", "--init-only"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordCodexRemove",
+      "argv": ["codex", "plugin", "remove", "yiyuan-accord-codex@yiyuan-accord", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordClaudeRemove",
+      "argv": ["claude", "plugin", "uninstall", "yiyuan-accord-claude@yiyuan-accord", "--scope", "user", "-y"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordCodexMarketplaceRemove",
+      "argv": ["codex", "plugin", "marketplace", "remove", "yiyuan-accord", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "accordClaudeMarketplaceRemove",
+      "argv": ["claude", "plugin", "marketplace", "remove", "yiyuan-accord", "--scope", "user"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "claudeCandidateYoungSweep",
+      "argv": ["claude", "--init-only"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "claudeCandidateExpiredSweep",
+      "argv": ["claude", "--init-only"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "afterRemoveCodexInventory",
+      "argv": ["codex", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "afterRemoveClaudeInventory",
+      "argv": ["claude", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "afterRemoveCodexMarketplaces",
+      "argv": ["codex", "plugin", "marketplace", "list", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "afterRemoveClaudeMarketplaces",
+      "argv": ["claude", "plugin", "marketplace", "list", "--json"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "cleanupCodexNeighborRemove",
+      "argv": ["codex", "plugin", "remove", "lifecycle-neighbor-codex@lifecycle-neighbor", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "cleanupClaudeNeighborRemove",
+      "argv": ["claude", "plugin", "uninstall", "lifecycle-neighbor-claude@lifecycle-neighbor", "--scope", "user", "-y"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "cleanupCodexNeighborMarketplaceRemove",
+      "argv": ["codex", "plugin", "marketplace", "remove", "lifecycle-neighbor", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "cleanupClaudeNeighborMarketplaceRemove",
+      "argv": ["claude", "plugin", "marketplace", "remove", "lifecycle-neighbor", "--scope", "user"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "cleanupCodexInventory",
+      "argv": ["codex", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "cleanupClaudeInventory",
+      "argv": ["claude", "plugin", "list", "--json"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "cleanupCodexMarketplaces",
+      "argv": ["codex", "plugin", "marketplace", "list", "--json"],
+      "environmentProfile": "isolated-codex",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    },
+    {
+      "role": "cleanupClaudeMarketplaces",
+      "argv": ["claude", "plugin", "marketplace", "list", "--json"],
+      "environmentProfile": "isolated-claude",
+      "inputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedExit": "zero"
+    }
+  ]
+}

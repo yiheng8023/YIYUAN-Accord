@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -130 260 260" width="32" height="32">
+  <!-- YIYUAN NEXUS small-size colorway v3.1 · transparent China red #DE2910. -->
+  <defs>
+    <mask id="ring-touch-s">
+      <rect x="-130" y="-130" width="260" height="260" fill="white"/>
+      <circle cx="0" cy="-100" r="18.5" fill="black"/>
+      <circle cx="86.60254" cy="-50" r="18.5" fill="black"/>
+      <circle cx="86.60254" cy="50" r="18.5" fill="black"/>
+      <circle cx="0" cy="100" r="18.5" fill="black"/>
+      <circle cx="-86.60254" cy="50" r="18.5" fill="black"/>
+      <circle cx="-86.60254" cy="-50" r="18.5" fill="black"/>
+    </mask>
+    <path id="y-arm-s" d="M-12,0 L-12,68
+                          A6 6 0 0 0 -5,74
+                          A26 26 0 0 1 5,74
+                          A6 6 0 0 0 12,68
+                          L12,0 Z"/>
+  </defs>
+  <g stroke="#DE2910" fill="none" mask="url(#ring-touch-s)">
+    <path stroke-width="9" d="M0,-100 L86.60254,-50 L86.60254,50 L0,100 L-86.60254,50 L-86.60254,-50 Z"/>
+    <path stroke-width="9" d="M0,-100 L0,-36 M-86.60254,50 L-31.18,18 M86.60254,50 L31.18,18"/>
+  </g>
+  <g fill="#DE2910" stroke="none">
+    <use href="#y-arm-s"/>
+    <use href="#y-arm-s" transform="rotate(120)"/>
+    <use href="#y-arm-s" transform="rotate(240)"/>
+    <circle cx="0" cy="0" r="12"/>
+    <path d="M-26,-27 Q0,-12 26,-27 L0,0 Z"/>
+    <path d="M36,-9.5 Q12,6 12,36 L0,0 Z"/>
+    <path d="M-36,-9.5 Q-12,6 -12,36 L0,0 Z"/>
+  </g>
+  <g stroke="#DE2910" stroke-width="9" fill="none">
+    <circle cx="0" cy="-100" r="14"/>
+    <circle cx="86.60254" cy="-50" r="14"/>
+    <circle cx="86.60254" cy="50" r="14"/>
+    <circle cx="0" cy="100" r="14"/>
+    <circle cx="-86.60254" cy="50" r="14"/>
+    <circle cx="-86.60254" cy="-50" r="14"/>
+  </g>
+</svg>

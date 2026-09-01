@@ -38,17 +38,20 @@ Then read, in order:
   at exact SHA `24cf9f3750ecd700944988e81a519db54b67b8e8`. Its lightweight tag
   resolves directly to that commit and remains immutable. Later `main`
   documentation or maintenance does not change the released package.
-- Commit A `7ea91dad811d337f00f75eb521cffacabd73b05f` freezes the complete
-  v3.1.0 Codex and Claude package bytes, including LICENSE and NOTICE. Candidate
+- Historical Commit A `7ea91dad811d337f00f75eb521cffacabd73b05f` froze one
+  former v3.1.0 Codex and Claude package set, including LICENSE and NOTICE. Candidate
   `90501145346f81e02ebdc88fcf3001b39bfdf3d4` and its schema-v2 GT-20
   record failed four fresh reviews and must not be pushed: public evidence
   retained user-local paths, process ownership and output draining were not
   bounded by one hard end-to-end deadline, Claude identity stopped at its shim,
-  and arbitrary orphan-cache files could satisfy cleanup. The current schema-v3
-  correction preserves exact Commit A subjects plus GT-21, owns every command
-  tree before resume, sanitizes private roots, binds Claude's package manifest
-  and actual terminal executable, digests only the stable command plan and
-  probes exact younger/older-than-14-day host cache behavior. Its fresh replay,
+  and arbitrary orphan-cache files could satisfy cleanup. The current schema-v4
+  correction preserves GT-21, owns every command tree before resume, sanitizes
+  private roots, binds Claude's package manifest and actual terminal executable,
+  enforces one complete ordered command contract, preserves real evaluator-owned
+  neighboring plugins through Accord removal and probes exact younger/older-
+  than-14-day host cache behavior. Transparent China-red and light/dark theme
+  logos change the declared Codex package, so prior package evidence is not
+  inherited. Its frozen replay,
   affected-surface reacceptance and replacement exact-tree reviews are pending;
   no repository candidate, hosted status, authorization or publication exists.
 - Dynamic applicability uses a small invariant floor plus current context.
@@ -95,9 +98,9 @@ Then read, in order:
   progressive-disclosure path and adds a machine-checked host-leveraged eight-
   dimension responsibility lens. It records both changes in the tracked Release
   body, rebinds its acceptance and guidance digests and cites `39926711` as the
-  prior snapshot origin. Later Commit A froze complete package/legal bytes, and
+  prior snapshot origin. Later Commit A froze former package/legal bytes, and
   candidate `9050114` then failed privacy, process-ownership, Claude identity and
-  cache-cleanup review. The current v3 evaluator replay is earlier than any
+  cache-cleanup review. The current schema-v4 complete-package replay is earlier than any
   clean exact-local, hosted, named-human, tag or public Release gate. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
@@ -409,11 +412,12 @@ Then read, in order:
   exclusion even though the fresh v3 Codex-local GT-07 independently verified
   exact fixture post-state. Historical evidence is preserved against its
   versioned task contract rather than rewritten to match the current task.
-  GT-14 through GT-21 have a machine-checkable design. GT-21 now passes only
-  its bounded current-host live-carrier and fresh-handoff case, and GT-20 now
-  passes only its bounded disposable Windows transactional-lifecycle case.
-  Whole-system affected-surface reacceptance is complete only for the bounded
-  source-bound claim recorded below; it is not candidate or release proof. Exact checkpoint
+  GT-14 through GT-21 have a machine-checkable design. GT-21 retains only
+  its bounded current-host live-carrier and fresh-handoff case; prior GT-20
+  Windows lifecycle evidence is historical and does not bind the changed
+  package. Prior whole-system affected-surface reacceptance remains only a
+  bounded source-bound historical claim; the schema-v4 replay and successor
+  reacceptance are pending. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
@@ -922,12 +926,12 @@ Historical superseded review disposition —
     credentials, session logs or model turn were used. Production, unmanaged or
     cross-OS hosts, actual Claude host Hook triggering, product value and release
     readiness remain unknown.
-14. `reaccept-whole-system-after-live-state-closure` — completed only for the
-    source-bound reacceptance from exact cut `85a917a`. It preserves GT-21 and
-    GT-20 as bounded results, keeps production, cross-host and updated-client
-    entry behavior unknown, and does not form a candidate or release claim.
-15. `independent-review-and-form-future-exact-candidate` — completed for the
-    selected v3.1.0 repository candidate. The review cycle at pre-remediation cut
+14. `reaccept-whole-system-after-live-state-closure` — prior source-bound
+    reacceptance from exact cut `85a917a` remains historical. GT-21 is preserved,
+    but the changed GT-20 package requires a successor replay and reacceptance;
+    production, cross-host and updated-client entry behavior remain unknown.
+15. `independent-review-and-form-future-exact-candidate` — prior review history
+    selected a v3.1.0 repository candidate that later failed. The review cycle at pre-remediation cut
     `523f2ef47df96b76c132525ff432d044e7b1b4b3` completed separate product,
     specification, implementation and standards reviews and produced
     remediation findings. It did not form a candidate, and completion does not
@@ -1031,15 +1035,16 @@ Historical superseded review disposition —
     Release-body and guidance digests; and cites `39926711` as its prior snapshot
     origin. It changes no runtime behavior, manifest, finite claim or gate. The
     102 tracked files contain 642358 Python/test bytes with 37642 bytes, or
-    5.5356 percent, of headroom. The next gate is a clean unchanged
-    successor revision through canonical and host-local verification plus four
-    independent exact-tree reviews, followed by a fresh full nine-leg hosted
-    matrix; candidate selection alone does not authorize publication.
+    5.5356 percent, of headroom. The next boundary is one frozen schema-v4 GT-20
+    complete-package replay, affected-surface reacceptance and four fresh
+    independent reviews. Exact-local and the fresh full nine-leg hosted matrix
+    remain later; candidate selection alone cannot authorize publication.
 
-The release procedure is now gated on the selected v3.1.0 repository candidate.
-Clean exact-local and host checks, four independent exact-tree reviews, hosted
-checks, a named-human decision, tag, Release, public verification and
-post-release cleanup must run in their declared order on one unchanged exact
+The release procedure currently has no selected v3.1.0 repository candidate.
+One frozen schema-v4 GT-20 replay, affected-surface reacceptance and four fresh
+independent reviews must close first. Only then may clean exact-local and host
+checks, hosted checks, a named-human decision, tag, Release, public verification
+and post-release cleanup run in their declared order on one unchanged exact
 revision. After the client update, all Codex, Claude and ChatGPT GUI entry
 points remain unknown; read-only re-sensing must precede any current-entry claim
 or installation guidance. A prior foreign-residue incident and one mistaken

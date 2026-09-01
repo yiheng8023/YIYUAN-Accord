@@ -1766,10 +1766,10 @@ _CANDIDATE_RULE_INSERTION = (
     "changes."
 )
 _EXPECTED_EVALUATION_CONTRACT_HISTORY_SHA256 = (
-    "1b9272fc51054f998a60cde7f51c00ce3df82ae5261daca93489953d1a74d7a0"
+    "fe40f9667bc497b60e1270a84ca074c5213ba2574f8b71cde615db88237ef953"
 )
 _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256 = (
-    "d3118ce2497099848417d35a38fee37a1ebe9c586c24576bad8955bbc5d0cb3b"
+    "e6f7b45d7f57139583326672688f7f477723f05fc708a0dbb3984d3799154c31"
 )
 
 
@@ -2420,7 +2420,7 @@ def _provisional_projection_files(root, program, read_json, errors):
         interface = manifest.get("interface") if isinstance(manifest, dict) else None
         plugin_root = manifest_locator.rsplit("/", 2)[0] \
             if _text(manifest_locator) and manifest_locator.count("/") >= 2 else None
-        for field in ("composerIcon", "logo"):
+        for field in ("composerIcon", "logo", "logoDark"):
             value = interface.get(field) if isinstance(interface, dict) else None
             parts = value[2:].split("/") \
                 if isinstance(value, str) and value.startswith("./") else []
@@ -2519,6 +2519,8 @@ def gt20_exact_lifecycle_invalidated(value):
              "exact-package-evaluator-failure-closure"),
             ("yiyuan-accord-exact-package-evidence-lifecycle/v3",
              "exact-package-evaluator-privacy-termination-cleanup-closure"),
+            ("yiyuan-accord-exact-package-evidence-lifecycle/v4",
+             "exact-package-command-contract-host-neighbor-and-brand-surface-closure"),
         }
         and value.get("taskId") == "GT-20"
         and value.get("state") in {"pending", "verified"}

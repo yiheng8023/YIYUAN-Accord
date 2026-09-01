@@ -11,6 +11,11 @@ $ErrorActionPreference = 'Stop'
 $CommandTimeoutSeconds = 60
 $CommandEndToEndTimeoutSeconds = 70
 $CommandOutputLimitBytes = 4194304
+$ChildEnvironmentNames = @(
+  'COMSPEC', 'PATH', 'PATHEXT', 'ProgramData', 'ProgramFiles',
+  'ProgramFiles(x86)', 'ProgramW6432', 'SystemDrive', 'SystemRoot',
+  'TEMP', 'TMP', 'WINDIR'
+)
 
 if (-not $IsWindows) {
   throw 'GT-20 exact package lifecycle evaluator requires Windows.'
@@ -25,6 +30,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
 
 public sealed class AccordProcessJob : IDisposable {
@@ -85,8 +91,8 @@ public sealed class AccordProcessJob : IDisposable {
     } finally { Marshal.FreeHGlobal(data); }
   }
 
-  public void Add(Process process) {
-    if (!AssignProcessToJobObject(handle, process.Handle))
+  public void Add(IntPtr processHandle) {
+    if (!AssignProcessToJobObject(handle, processHandle))
       throw new Win32Exception(Marshal.GetLastWin32Error());
   }
 
@@ -153,6 +159,10 @@ public sealed class AccordSuspendedProcess : IDisposable {
   private static extern uint ResumeThread(IntPtr thread);
   [DllImport("kernel32.dll", SetLastError = true)]
   private static extern bool CloseHandle(IntPtr handle);
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern bool TerminateProcess(IntPtr process, uint exitCode);
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern uint WaitForSingleObject(IntPtr handle, uint milliseconds);
 
   private IntPtr threadHandle;
   private StreamWriter input;
@@ -183,8 +193,6 @@ public sealed class AccordSuspendedProcess : IDisposable {
 
   private static IntPtr EnvironmentBlock(IDictionary<string,string> overrides) {
     var values = new SortedDictionary<string,string>(StringComparer.OrdinalIgnoreCase);
-    foreach (DictionaryEntry entry in Environment.GetEnvironmentVariables())
-      values[(string)entry.Key] = (string)entry.Value;
     if (overrides != null)
       foreach (var entry in overrides) values[entry.Key] = entry.Value ?? "";
     var block = new StringBuilder();
@@ -196,7 +204,7 @@ public sealed class AccordSuspendedProcess : IDisposable {
 
   public static AccordSuspendedProcess Start(
     string executable, string[] arguments, string currentDirectory,
-    IDictionary<string,string> environment) {
+    IDictionary<string,string> environment, AccordProcessJob job) {
     const uint HANDLE_FLAG_INHERIT = 1;
     const uint CREATE_SUSPENDED = 0x00000004;
     const uint CREATE_NO_WINDOW = 0x08000000;
@@ -210,6 +218,7 @@ public sealed class AccordSuspendedProcess : IDisposable {
     };
     PROCESS_INFORMATION pi = new PROCESS_INFORMATION();
     bool created = false;
+    bool assigned = false;
     try {
       if (!CreatePipe(out stdoutRead, out stdoutWrite, ref security, 0) ||
           !SetHandleInformation(stdoutRead, HANDLE_FLAG_INHERIT, 0) ||
@@ -231,6 +240,8 @@ public sealed class AccordSuspendedProcess : IDisposable {
         CREATE_SUSPENDED | CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT,
         environmentBlock, currentDirectory, ref startup, out pi);
       if (!created) throw new Win32Exception(Marshal.GetLastWin32Error());
+      job.Add(pi.hProcess);
+      assigned = true;
       var owned = new AccordSuspendedProcess();
       owned.Process = Process.GetProcessById((int)pi.dwProcessId);
       var ignored = owned.Process.Handle;
@@ -249,6 +260,12 @@ public sealed class AccordSuspendedProcess : IDisposable {
         new UTF8Encoding(false)) { AutoFlush = true };
       stdinWrite = IntPtr.Zero;
       return owned;
+    } catch {
+      if (created && !assigned && pi.hProcess != IntPtr.Zero) {
+        TerminateProcess(pi.hProcess, 125);
+        WaitForSingleObject(pi.hProcess, 5000);
+      }
+      throw;
     } finally {
       if (environmentBlock != IntPtr.Zero) Marshal.FreeHGlobal(environmentBlock);
       if (stdoutWrite != IntPtr.Zero) CloseHandle(stdoutWrite);
@@ -260,6 +277,22 @@ public sealed class AccordSuspendedProcess : IDisposable {
       if (pi.hProcess != IntPtr.Zero) CloseHandle(pi.hProcess);
       if (pi.hThread != IntPtr.Zero) CloseHandle(pi.hThread);
     }
+  }
+
+  public static async Task<string> ReadBoundedAsync(
+    StreamReader reader, int maximumBytes) {
+    var result = new StringBuilder();
+    var buffer = new char[4096];
+    int bytes = 0;
+    while (true) {
+      int count = await reader.ReadAsync(buffer, 0, buffer.Length);
+      if (count == 0) break;
+      bytes = checked(bytes + Encoding.UTF8.GetByteCount(buffer, 0, count));
+      if (bytes > maximumBytes)
+        throw new InvalidDataException("Command output exceeded the evidence byte limit.");
+      result.Append(buffer, 0, count);
+    }
+    return result.ToString();
   }
 
   public void Resume(string inputText) {
@@ -303,26 +336,62 @@ function ConvertTo-PortablePath {
   return $value
 }
 
+function Get-PrivateRootPattern {
+  param([Parameter(Mandatory = $true)][string]$Path)
+  $resolved = [System.IO.Path]::GetFullPath($Path).TrimEnd('\', '/')
+  $segments = @($resolved -split '[\\/]+')
+  return (($segments | ForEach-Object {
+    [System.Text.RegularExpressions.Regex]::Escape($_)
+  }) -join '[\\/]+')
+}
+
 function ConvertTo-PublicEvidenceText {
   param([AllowEmptyString()][string]$Value)
   $result = $Value
-  foreach ($item in @(
-    @($script:TaskPathForEvidence, '%TASK_ROOT%'),
-    @($script:TemporaryBaseForEvidence, '%TEMP%'),
-    @($script:RepositoryForEvidence, '%REPOSITORY_ROOT%')
-  )) {
-    if ($item[0]) {
-      $privateRoot = [string]$item[0]
-      $replacement = [string]$item[1]
-      foreach ($spelling in @($privateRoot, $privateRoot.Replace('\', '/'))) {
-        $result = $result.Replace(
-          $spelling, $replacement,
-          [System.StringComparison]::OrdinalIgnoreCase
-        )
-      }
+  foreach ($item in $script:PrivateRootsForEvidence) {
+    if ($item.path) {
+      $result = [System.Text.RegularExpressions.Regex]::Replace(
+        $result, (Get-PrivateRootPattern $item.path),
+        [string]$item.replacement,
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+      )
     }
   }
   return $result
+}
+
+function Test-PrivateEvidenceText {
+  param([AllowEmptyString()][string]$Value)
+  foreach ($item in $script:PrivateRootsForEvidence) {
+    if ($item.path -and [System.Text.RegularExpressions.Regex]::IsMatch(
+        $Value, (Get-PrivateRootPattern $item.path),
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
+      return $true
+    }
+  }
+  return $Value -match '(?i)[a-z]:(?:[\\/]+)(?:users|documents and settings)(?:[\\/]+)'
+}
+
+function Assert-NoPrivateEvidenceValue {
+  param([Parameter(Mandatory = $true)]$Value)
+  $pending = [System.Collections.Generic.Stack[object]]::new()
+  $pending.Push($Value)
+  while ($pending.Count -ne 0) {
+    $current = $pending.Pop()
+    if ($current -is [string]) {
+      if (Test-PrivateEvidenceText $current) {
+        throw 'Evidence retained a private or task-local root.'
+      }
+    } elseif ($current -is [System.Collections.IDictionary]) {
+      foreach ($item in $current.Values) { $pending.Push($item) }
+    } elseif ($current -is [pscustomobject]) {
+      foreach ($property in $current.PSObject.Properties) {
+        $pending.Push($property.Value)
+      }
+    } elseif ($current -is [System.Collections.IEnumerable]) {
+      foreach ($item in $current) { $pending.Push($item) }
+    }
+  }
 }
 
 function Get-TerminalCommandIdentity {
@@ -360,8 +429,12 @@ function Invoke-Captured {
     [Parameter(Mandatory = $true)][string[]]$Arguments,
     [Parameter(Mandatory = $true)][string]$WorkingDirectory,
     [hashtable]$Environment = @{},
-    [string]$InputText = ''
+    [string]$InputText = '',
+    [int]$ExecutionTimeoutSeconds = $CommandTimeoutSeconds,
+    [int]$EndToEndTimeoutSeconds = $CommandEndToEndTimeoutSeconds,
+    [int]$OutputLimitBytes = $CommandOutputLimitBytes
   )
+  $clock = [System.Diagnostics.Stopwatch]::StartNew()
   $command = Get-Command "$File.exe" -CommandType Application -ErrorAction SilentlyContinue |
     Select-Object -First 1
   if ($null -eq $command) {
@@ -372,30 +445,48 @@ function Invoke-Captured {
   $environmentOverrides = [System.Collections.Generic.Dictionary[string,string]]::new(
     [System.StringComparer]::OrdinalIgnoreCase
   )
+  foreach ($name in $ChildEnvironmentNames) {
+    $value = [System.Environment]::GetEnvironmentVariable($name)
+    if ($null -ne $value) { $environmentOverrides[$name] = $value }
+  }
   foreach ($entry in $Environment.GetEnumerator()) {
     $environmentOverrides[$entry.Key] = [string]$entry.Value
+  }
+  $taskEnvironmentReady = (
+    $script:TaskPathForEvidence -and
+    (Test-Path -LiteralPath $script:TaskPathForEvidence -PathType Container)
+  )
+  if ($taskEnvironmentReady) {
+    $commandTemp = Join-Path $script:TaskPathForEvidence 'command-temp'
+    [void][System.IO.Directory]::CreateDirectory($commandTemp)
+    $environmentOverrides['TEMP'] = $commandTemp
+    $environmentOverrides['TMP'] = $commandTemp
   }
   $job = [AccordProcessJob]::new()
   $owned = $null
   try {
     $owned = [AccordSuspendedProcess]::Start(
       $identity.terminalExecutableRaw, $Arguments, $WorkingDirectory,
-      $environmentOverrides
+      $environmentOverrides, $job
     )
-    $job.Add($owned.Process)
     $owned.Resume($InputText)
-    $stdoutTask = $owned.StandardOutput.ReadToEndAsync()
-    $stderrTask = $owned.StandardError.ReadToEndAsync()
-    $clock = [System.Diagnostics.Stopwatch]::StartNew()
-    $executionLimit = [TimeSpan]::FromSeconds($CommandTimeoutSeconds)
+    $stdoutTask = [AccordSuspendedProcess]::ReadBoundedAsync(
+      $owned.StandardOutput, $OutputLimitBytes
+    )
+    $stderrTask = [AccordSuspendedProcess]::ReadBoundedAsync(
+      $owned.StandardError, $OutputLimitBytes
+    )
+    $executionLimit = [TimeSpan]::FromSeconds($ExecutionTimeoutSeconds)
     while ($clock.Elapsed -lt $executionLimit -and
-        (-not $owned.Process.HasExited -or $job.ActiveProcessCount -ne 0)) {
+        (-not $owned.Process.HasExited -or $job.ActiveProcessCount -ne 0) -and
+        -not $stdoutTask.IsFaulted -and -not $stderrTask.IsFaulted) {
       Start-Sleep -Milliseconds 50
     }
     $timedOut = -not $owned.Process.HasExited -or $job.ActiveProcessCount -ne 0
-    $terminationRequested = $timedOut
+    $outputFaulted = $stdoutTask.IsFaulted -or $stderrTask.IsFaulted
+    $terminationRequested = $timedOut -or $outputFaulted
     if ($terminationRequested) { $job.Terminate(124) }
-    $hardLimit = [TimeSpan]::FromSeconds($CommandEndToEndTimeoutSeconds)
+    $hardLimit = [TimeSpan]::FromSeconds($EndToEndTimeoutSeconds)
     while ($clock.Elapsed -lt $hardLimit -and
         (-not $owned.Process.HasExited -or $job.ActiveProcessCount -ne 0)) {
       Start-Sleep -Milliseconds 25
@@ -410,15 +501,35 @@ function Invoke-Captured {
     if (-not $streamsDrained) {
       throw "Command output pipes did not close within the hard deadline: $File"
     }
-    $stdoutValue = $stdoutTask.Result
-    $stderrValue = $stderrTask.Result
-    if ([System.Text.Encoding]::UTF8.GetByteCount($stdoutValue) -gt $CommandOutputLimitBytes -or
-        [System.Text.Encoding]::UTF8.GetByteCount($stderrValue) -gt $CommandOutputLimitBytes) {
+    if ($stdoutTask.IsFaulted -or $stderrTask.IsFaulted) {
       throw "Command output exceeded the evidence byte limit: $File"
     }
+    $stdoutValue = $stdoutTask.Result
+    $stderrValue = $stderrTask.Result
+    $stdoutBytes = [System.Text.Encoding]::UTF8.GetByteCount($stdoutValue)
+    $stderrBytes = [System.Text.Encoding]::UTF8.GetByteCount($stderrValue)
     $exitCode = if ($timedOut) { 124 } else { $owned.Process.ExitCode }
+    $environmentProfile = if ($Environment.ContainsKey('CODEX_HOME')) {
+      'isolated-codex'
+    } elseif ($Environment.ContainsKey('CLAUDE_CONFIG_DIR')) {
+      'isolated-claude'
+    } elseif ($taskEnvironmentReady) {
+      'isolated-base'
+    } else {
+      'preflight-base'
+    }
+    $environmentBindings = [ordered]@{}
+    foreach ($name in @('CODEX_HOME', 'CLAUDE_CONFIG_DIR', 'TEMP', 'TMP')) {
+      if ($environmentOverrides.ContainsKey($name)) {
+        $environmentBindings[$name] = (
+          ConvertTo-PublicEvidenceText ([string]$environmentOverrides[$name])
+        ).Replace('\', '/')
+      }
+    }
     return [ordered]@{
-      argv = @(@($File) + $Arguments | ForEach-Object { ConvertTo-PublicEvidenceText ([string]$_) })
+      argv = @(@($File) + $Arguments | ForEach-Object {
+        (ConvertTo-PublicEvidenceText ([string]$_)).Replace('\', '/')
+      })
       resolvedCommand = ConvertTo-PortablePath $command.Source
       resolvedCommandSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $command.Source).Hash.ToLowerInvariant()
       launcher = $identity.terminalExecutable
@@ -427,15 +538,20 @@ function Invoke-Captured {
       terminalExecutableSha256 = $identity.terminalExecutableSha256
       packageManifest = $identity.packageManifest
       packageManifestSha256 = $identity.packageManifestSha256
-      environmentKeys = @($Environment.Keys | Sort-Object)
+      environmentProfile = $environmentProfile
+      environmentKeys = @($environmentOverrides.Keys | Sort-Object)
+      environmentBindings = $environmentBindings
       inputSha256 = [Convert]::ToHexString(
         [System.Security.Cryptography.SHA256]::HashData(
           [System.Text.Encoding]::UTF8.GetBytes($InputText)
         )
       ).ToLowerInvariant()
-      executionTimeoutSeconds = $CommandTimeoutSeconds
-      endToEndTimeoutSeconds = $CommandEndToEndTimeoutSeconds
-      outputLimitBytes = $CommandOutputLimitBytes
+      executionTimeoutSeconds = $ExecutionTimeoutSeconds
+      endToEndTimeoutSeconds = $EndToEndTimeoutSeconds
+      outputLimitBytes = $OutputLimitBytes
+      elapsedMilliseconds = [Math]::Round($clock.Elapsed.TotalMilliseconds)
+      stdoutBytes = $stdoutBytes
+      stderrBytes = $stderrBytes
       timedOut = $timedOut
       terminationRequested = $terminationRequested
       terminationConfirmed = $terminationConfirmed
@@ -462,7 +578,11 @@ function Get-FileMap {
   param([string]$Root)
   $resolved = [System.IO.Path]::GetFullPath($Root)
   $map = [ordered]@{}
-  foreach ($file in Get-ChildItem -LiteralPath $resolved -Recurse -File | Sort-Object FullName) {
+  $reparse = @(Get-ChildItem -LiteralPath $resolved -Recurse -Force |
+    Where-Object { $_.Attributes -band [System.IO.FileAttributes]::ReparsePoint })
+  if ($reparse.Count -ne 0) { throw "File map root contains a reparse point: $Root" }
+  foreach ($file in Get-ChildItem -LiteralPath $resolved -Recurse -File -Force |
+      Sort-Object FullName) {
     $relative = [System.IO.Path]::GetRelativePath($resolved, $file.FullName).Replace('\', '/')
     $map[$relative] = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
   }
@@ -508,6 +628,28 @@ function Assert-ExactOrphanCacheVersion {
   return $parsed
 }
 
+function Set-OrphanMarkerAge {
+  param(
+    [Parameter(Mandatory = $true)][string]$CacheVersionRoot,
+    [Parameter(Mandatory = $true)][long]$ClockMilliseconds,
+    [Parameter(Mandatory = $true)][long]$AgeMilliseconds
+  )
+  $marker = Join-Path $CacheVersionRoot '.orphaned_at'
+  if (-not (Test-Path -LiteralPath $marker -PathType Leaf)) {
+    throw 'Claude orphan marker is absent.'
+  }
+  $targetMilliseconds = $ClockMilliseconds - $AgeMilliseconds
+  $target = [DateTimeOffset]::FromUnixTimeMilliseconds($targetMilliseconds)
+  Set-Content -LiteralPath $marker -Encoding ascii -NoNewline -Value $targetMilliseconds
+  [System.IO.File]::SetLastWriteTimeUtc($marker, $target.UtcDateTime)
+  $observedMilliseconds = [DateTimeOffset]::new(
+    (Get-Item -LiteralPath $marker).LastWriteTimeUtc
+  ).ToUnixTimeMilliseconds()
+  if ([Math]::Abs($observedMilliseconds - $targetMilliseconds) -gt 2000) {
+    throw 'Claude orphan marker mtime could not be set at the requested boundary.'
+  }
+}
+
 function Read-JsonOutput {
   param([System.Collections.IDictionary]$Result, [string]$Label)
   try {
@@ -517,24 +659,157 @@ function Read-JsonOutput {
   }
 }
 
-function Assert-InstalledInventory {
+function Get-InstalledInventory {
   param(
     [System.Collections.IDictionary]$Result,
     [ValidateSet('codex', 'claude')][string]$HostId,
-    [string]$ExpectedVersion,
     [string]$Label
   )
   $value = Read-JsonOutput $Result $Label
-  $items = if ($HostId -eq 'codex') { @($value.installed) } else { @($value) }
-  $expectedId = if ($HostId -eq 'codex') {
-    'yiyuan-accord-codex@yiyuan-accord'
-  } else {
-    'yiyuan-accord-claude@yiyuan-accord'
+  return if ($HostId -eq 'codex') { @($value.installed) } else { @($value) }
+}
+
+function Assert-PluginInventory {
+  param(
+    [System.Collections.IDictionary]$Result,
+    [ValidateSet('codex', 'claude')][string]$HostId,
+    [string]$PluginId,
+    [AllowNull()][string]$ExpectedVersion,
+    [bool]$Present,
+    [string]$Label
+  )
+  $items = @(Get-InstalledInventory $Result $HostId $Label)
+  $matches = @($items | Where-Object {
+    $actualId = if ($HostId -eq 'codex') { $_.pluginId } else { $_.id }
+    $actualId -eq $PluginId
+  })
+  if (-not $Present) {
+    if ($matches.Count -ne 0) { throw "$Label retained $PluginId." }
+    return
   }
-  $actualId = if ($HostId -eq 'codex') { $items[0].pluginId } else { $items[0].id }
-  if ($items.Count -ne 1 -or $actualId -ne $expectedId -or
-      $items[0].version -ne $ExpectedVersion -or -not $items[0].enabled) {
-    throw "$Label inventory is invalid."
+  if ($matches.Count -ne 1 -or $matches[0].version -ne $ExpectedVersion -or
+      -not $matches[0].enabled) {
+    throw "$Label inventory is invalid for $PluginId."
+  }
+}
+
+function Get-MarketplaceInventory {
+  param(
+    [System.Collections.IDictionary]$Result,
+    [ValidateSet('codex', 'claude')][string]$HostId,
+    [string]$Label
+  )
+  $value = Read-JsonOutput $Result $Label
+  return if ($HostId -eq 'codex') { @($value.marketplaces) } else { @($value) }
+}
+
+function Assert-MarketplaceInventory {
+  param(
+    [System.Collections.IDictionary]$Result,
+    [ValidateSet('codex', 'claude')][string]$HostId,
+    [string]$MarketplaceName,
+    [bool]$Present,
+    [string]$Label
+  )
+  $matches = @(Get-MarketplaceInventory $Result $HostId $Label |
+    Where-Object { $_.name -eq $MarketplaceName })
+  if (($Present -and $matches.Count -ne 1) -or
+      (-not $Present -and $matches.Count -ne 0)) {
+    throw "$Label marketplace state is invalid for $MarketplaceName."
+  }
+}
+
+function Add-CommandRecord {
+  param(
+    [Parameter(Mandatory = $true)][string]$Role,
+    [Parameter(Mandatory = $true)][System.Collections.IDictionary]$Command,
+    [AllowNull()][string]$FailureCategory = $null
+  )
+  if ($Command.Contains('role')) { throw "Command role already assigned: $Role" }
+  $Command.Insert(0, 'role', $Role)
+  $Command.Insert(1, 'failureCategory', $FailureCategory)
+  [void]$commands.Add($Command)
+}
+
+function Get-ContractArgument {
+  param(
+    [Parameter(Mandatory = $true)][string]$Value,
+    [Parameter(Mandatory = $true)][string]$Candidate,
+    [Parameter(Mandatory = $true)][string]$PriorRelease
+  )
+  return $Value.Replace('%CANDIDATE_REVISION%', $Candidate).
+    Replace('%PRIOR_RELEASE_REVISION%', $PriorRelease)
+}
+
+function Assert-CommandContract {
+  param(
+    [Parameter(Mandatory = $true)]$Contract,
+    [Parameter(Mandatory = $true)]$ObservedCommands,
+    [Parameter(Mandatory = $true)][string]$Candidate,
+    [Parameter(Mandatory = $true)][string]$PriorRelease
+  )
+  if ($Contract.schema -ne 'yiyuan-accord-gt20-command-contract/v1' -or
+      $Contract.priorRelease.tag -ne 'v3.0.1' -or
+      $Contract.priorRelease.revision -ne $PriorRelease) {
+    throw 'GT-20 command contract identity is invalid.'
+  }
+  $expected = @($Contract.commands)
+  if ($expected.Count -ne $ObservedCommands.Count) {
+    throw "GT-20 command count $($ObservedCommands.Count) differs from contract $($expected.Count)."
+  }
+  $profiles = $Contract.environmentProfiles
+  $baseAllowed = @($profiles.base.allowedKeys)
+  $baseRequired = @($profiles.base.requiredKeys)
+  for ($index = 0; $index -lt $expected.Count; $index++) {
+    $spec = $expected[$index]
+    $command = $ObservedCommands[$index]
+    $argv = @($spec.argv | ForEach-Object {
+      Get-ContractArgument ([string]$_) $Candidate $PriorRelease
+    })
+    $expectedBudgets = if ($null -ne $spec.budgets) {
+      $spec.budgets
+    } else {
+      $Contract.budgets
+    }
+    $expectedExit = if ($spec.expectedExit -eq 'zero') { 0 } else { $null }
+    $expectedTimedOut = $spec.expectedExit -eq 'timeout'
+    if ($command.role -ne $spec.role -or
+        (($command.argv | ConvertTo-Json -Compress) -ne ($argv | ConvertTo-Json -Compress)) -or
+        $command.environmentProfile -ne $spec.environmentProfile -or
+        $command.failureCategory -ne $spec.expectedFailureCategory -or
+        $command.inputSha256 -ne $spec.inputSha256 -or
+        $command.executionTimeoutSeconds -ne $expectedBudgets.executionTimeoutSeconds -or
+        $command.endToEndTimeoutSeconds -ne $expectedBudgets.endToEndTimeoutSeconds -or
+        $command.outputLimitBytes -ne $expectedBudgets.outputLimitBytes -or
+        $command.timedOut -ne $expectedTimedOut -or
+        $command.terminationRequested -ne $expectedTimedOut -or
+        $command.terminationConfirmed -ne $true -or
+        $command.streamsDrained -ne $true -or
+        $command.jobActiveProcesses -ne 0 -or
+        ($spec.expectedExit -eq 'zero' -and $command.exitCode -ne $expectedExit) -or
+        ($spec.expectedExit -eq 'nonzero' -and $command.exitCode -eq 0) -or
+        ($spec.expectedExit -eq 'timeout' -and $command.exitCode -ne 124)) {
+      throw "GT-20 command contract mismatch at index $index ($($spec.role))."
+    }
+    $profile = $profiles.($spec.environmentProfile)
+    $allowed = @($baseAllowed + @($profile.additionalKeys) | Sort-Object -Unique)
+    $required = @($baseRequired + @($profile.requiredAdditionalKeys) | Sort-Object -Unique)
+    if (@($command.environmentKeys | Where-Object { $_ -notin $allowed }).Count -ne 0 -or
+        @($required | Where-Object { $_ -notin $command.environmentKeys }).Count -ne 0) {
+      throw "GT-20 command environment contract mismatch at index $index ($($spec.role))."
+    }
+    $expectedBindings = $profile.bindings
+    if (($command.environmentBindings | ConvertTo-Json -Compress) -ne
+        ($expectedBindings | ConvertTo-Json -Compress)) {
+      throw "GT-20 command environment binding mismatch at index $index ($($spec.role))."
+    }
+  }
+  $claudeCommands = @($ObservedCommands | Where-Object { $_.argv[0] -eq 'claude' })
+  $claudeIdentity = @($claudeCommands | ForEach-Object {
+    "$($_.resolvedCommandSha256):$($_.terminalExecutableSha256):$($_.packageManifestSha256)"
+  } | Sort-Object -Unique)
+  if ($claudeCommands.Count -eq 0 -or $claudeIdentity.Count -ne 1) {
+    throw 'Claude command identity drifted during GT-20.'
   }
 }
 
@@ -602,14 +877,33 @@ if ($CandidateRevision -notmatch '^[0-9a-f]{40}$') {
 $script:TaskPathForEvidence = $task
 $script:TemporaryBaseForEvidence = $temporaryBase
 $script:RepositoryForEvidence = $repository
+$script:PrivateRootsForEvidence = @(
+  [pscustomobject]@{path = $task; replacement = '%TASK_ROOT%'},
+  [pscustomobject]@{path = $repository; replacement = '%REPOSITORY_ROOT%'},
+  [pscustomobject]@{path = $env:LOCALAPPDATA; replacement = '%LOCALAPPDATA%'},
+  [pscustomobject]@{path = $env:APPDATA; replacement = '%APPDATA%'},
+  [pscustomobject]@{path = $env:USERPROFILE; replacement = '%USERPROFILE%'},
+  [pscustomobject]@{path = $temporaryBase; replacement = '%TEMP%'}
+) | Where-Object path | Sort-Object { ([string]$_.path).Length } -Descending
 $commands = [System.Collections.Generic.List[object]]::new()
 $succeeded = $false
 try {
 $commitCheck = Invoke-Captured git @('-C', $repository, 'rev-parse', '--verify', "$CandidateRevision`^{commit}") $repository
-$commands.Add($commitCheck)
+Add-CommandRecord 'candidateCommitCheck' $commitCheck
 Assert-Exit $commitCheck 0 'candidate commit validation'
 if ($commitCheck.stdout.Trim() -ne $CandidateRevision) {
   throw 'CandidateRevision is not an exact commit.'
+}
+$priorReleaseTag = 'v3.0.1'
+$expectedPriorReleaseRevision = '24cf9f3750ecd700944988e81a519db54b67b8e8'
+$priorReleaseCheck = Invoke-Captured git @(
+  '-C', $repository, 'rev-parse', '--verify', "$priorReleaseTag`^{commit}"
+) $repository
+Add-CommandRecord 'priorReleaseRevision' $priorReleaseCheck
+Assert-Exit $priorReleaseCheck 0 'prior release commit validation'
+$priorReleaseRevision = $priorReleaseCheck.stdout.Trim()
+if ($priorReleaseRevision -ne $expectedPriorReleaseRevision) {
+  throw 'The v3.0.1 tag no longer resolves to the admitted prior release revision.'
 }
 New-Item -ItemType Directory -Path $task | Out-Null
 $oldSource = Join-Path $task 'old-source'
@@ -622,27 +916,110 @@ foreach ($path in ($oldSource, $candidateSource, $codexRoot, $claudeRoot)) {
 }
 
 $gitVersion = Invoke-Captured git @('--version') $task
-$commands.Add($gitVersion)
+Add-CommandRecord 'gitVersion' $gitVersion
 Assert-Exit $gitVersion 0 'Git version'
 $tarVersion = Invoke-Captured tar @('--version') $task
-$commands.Add($tarVersion)
+Add-CommandRecord 'tarVersion' $tarVersion
 Assert-Exit $tarVersion 0 'tar version'
 
 $oldArchive = Join-Path $task 'old.tar'
 $candidateArchive = Join-Path $task 'candidate.tar'
-$archiveOld = Invoke-Captured git @('-C', $repository, 'archive', '--format=tar', "--output=$oldArchive", 'v3.0.1') $repository
-$commands.Add($archiveOld)
+$archiveOld = Invoke-Captured git @('-C', $repository, 'archive', '--format=tar', "--output=$oldArchive", $priorReleaseRevision) $repository
+Add-CommandRecord 'archivePriorRelease' $archiveOld
 Assert-Exit $archiveOld 0 'archive old release'
 $archiveCandidate = Invoke-Captured git @('-C', $repository, 'archive', '--format=tar', "--output=$candidateArchive", $CandidateRevision) $repository
-$commands.Add($archiveCandidate)
+Add-CommandRecord 'archiveCandidate' $archiveCandidate
 Assert-Exit $archiveCandidate 0 'archive candidate'
 $extractOld = Invoke-Captured tar @('-xf', $oldArchive, '-C', $oldSource) $task
-$commands.Add($extractOld)
+Add-CommandRecord 'extractPriorRelease' $extractOld
 Assert-Exit $extractOld 0 'extract old release'
 $extractCandidate = Invoke-Captured tar @('-xf', $candidateArchive, '-C', $candidateSource) $task
-$commands.Add($extractCandidate)
+Add-CommandRecord 'extractCandidate' $extractCandidate
 Assert-Exit $extractCandidate 0 'extract candidate'
 Copy-Item -LiteralPath $oldSource -Destination $mutableSource -Recurse
+
+$neighborSource = Join-Path $task 'neighbor-marketplace'
+$neighborCodexPackage = Join-Path $neighborSource 'plugins/lifecycle-neighbor-codex'
+$neighborClaudePackage = Join-Path $neighborSource 'plugins/lifecycle-neighbor-claude'
+foreach ($path in @(
+  (Join-Path $neighborSource '.agents/plugins'),
+  (Join-Path $neighborSource '.claude-plugin'),
+  (Join-Path $neighborCodexPackage '.codex-plugin'),
+  (Join-Path $neighborCodexPackage 'skills/lifecycle-neighbor-marker'),
+  (Join-Path $neighborClaudePackage '.claude-plugin'),
+  (Join-Path $neighborClaudePackage 'skills/lifecycle-neighbor-marker')
+)) {
+  New-Item -ItemType Directory -Path $path -Force | Out-Null
+}
+$neighborCodexMarketplace = [ordered]@{
+  name = 'lifecycle-neighbor'
+  interface = [ordered]@{displayName = 'Lifecycle Neighbor Fixture'}
+  plugins = @([ordered]@{
+    name = 'lifecycle-neighbor-codex'
+    source = [ordered]@{
+      source = 'local'
+      path = './plugins/lifecycle-neighbor-codex'
+    }
+    policy = [ordered]@{
+      installation = 'AVAILABLE'
+      authentication = 'ON_INSTALL'
+    }
+    category = 'Developer Tools'
+  })
+}
+$neighborClaudeMarketplace = [ordered]@{
+  name = 'lifecycle-neighbor'
+  description = 'Isolated lifecycle preservation fixture.'
+  owner = [ordered]@{name = 'GT20 Evaluator'}
+  plugins = @([ordered]@{
+    name = 'lifecycle-neighbor-claude'
+    source = './plugins/lifecycle-neighbor-claude'
+    description = 'Passive independent plugin used only for lifecycle preservation verification.'
+    version = '1.0.0'
+  })
+}
+$neighborCodexManifest = [ordered]@{
+  name = 'lifecycle-neighbor-codex'
+  version = '1.0.0'
+  description = 'Passive independent plugin used only for isolated lifecycle preservation verification.'
+  skills = './skills/'
+}
+$neighborClaudeManifest = [ordered]@{
+  name = 'lifecycle-neighbor-claude'
+  version = '1.0.0'
+  description = 'Passive independent plugin used only for isolated lifecycle preservation verification.'
+  skills = './skills/'
+}
+$utf8 = [System.Text.UTF8Encoding]::new($false)
+foreach ($entry in @(
+  @((Join-Path $neighborSource '.agents/plugins/marketplace.json'), $neighborCodexMarketplace),
+  @((Join-Path $neighborSource '.claude-plugin/marketplace.json'), $neighborClaudeMarketplace),
+  @((Join-Path $neighborCodexPackage '.codex-plugin/plugin.json'), $neighborCodexManifest),
+  @((Join-Path $neighborClaudePackage '.claude-plugin/plugin.json'), $neighborClaudeManifest)
+)) {
+  [System.IO.File]::WriteAllText(
+    $entry[0], ($entry[1] | ConvertTo-Json -Depth 10) + [System.Environment]::NewLine,
+    $utf8
+  )
+}
+$neighborSkill = @'
+---
+name: lifecycle-neighbor-marker
+description: Passive marker for isolated host lifecycle preservation verification.
+---
+
+# Lifecycle Neighbor Marker
+
+This evaluator-owned fixture has no hooks, executables, dependencies or active behavior.
+'@
+[System.IO.File]::WriteAllText(
+  (Join-Path $neighborCodexPackage 'skills/lifecycle-neighbor-marker/SKILL.md'),
+  $neighborSkill + [System.Environment]::NewLine, $utf8
+)
+[System.IO.File]::WriteAllText(
+  (Join-Path $neighborClaudePackage 'skills/lifecycle-neighbor-marker/SKILL.md'),
+  $neighborSkill + [System.Environment]::NewLine, $utf8
+)
 
 $codexAgents = Join-Path $codexRoot 'AGENTS.md'
 $codexConfig = Join-Path $codexRoot 'config.toml'
@@ -652,19 +1029,16 @@ Set-Content -LiteralPath $codexAgents -Encoding utf8 -NoNewline -Value "USER_COD
 Set-Content -LiteralPath $codexConfig -Encoding utf8 -NoNewline -Value "# USER_CODEX_CONFIG`n"
 Set-Content -LiteralPath $claudeInstructions -Encoding utf8 -NoNewline -Value "USER_CLAUDE_INSTRUCTIONS`n"
 Set-Content -LiteralPath $claudeSettings -Encoding utf8 -NoNewline -Value "{`"permissions`":{`"allow`":[]},`"userSentinel`":`"USER_CLAUDE_SETTINGS`"}`n"
-New-Item -ItemType Directory -Path (Join-Path $codexRoot 'foreign-plugin'), (Join-Path $claudeRoot 'foreign-plugin') | Out-Null
-Set-Content -LiteralPath (Join-Path $codexRoot 'foreign-plugin/sentinel.txt') -Encoding utf8 -NoNewline -Value 'FOREIGN_CODEX'
-Set-Content -LiteralPath (Join-Path $claudeRoot 'foreign-plugin/sentinel.txt') -Encoding utf8 -NoNewline -Value 'FOREIGN_CLAUDE'
-Set-Content -LiteralPath (Join-Path $codexRoot 'shared-dependency.txt') -Encoding utf8 -NoNewline -Value 'SHARED_CODEX'
-Set-Content -LiteralPath (Join-Path $claudeRoot 'shared-dependency.txt') -Encoding utf8 -NoNewline -Value 'SHARED_CLAUDE'
+Set-Content -LiteralPath (Join-Path $codexRoot 'unmanaged-user-state.txt') -Encoding utf8 -NoNewline -Value 'UNMANAGED_CODEX'
+Set-Content -LiteralPath (Join-Path $claudeRoot 'unmanaged-user-state.txt') -Encoding utf8 -NoNewline -Value 'UNMANAGED_CLAUDE'
 
 $codexEnvironment = @{CODEX_HOME = $codexRoot}
 $claudeEnvironment = @{CLAUDE_CONFIG_DIR = $claudeRoot}
 $codexVersion = Invoke-Captured codex @('--version') $task $codexEnvironment
-$commands.Add($codexVersion)
+Add-CommandRecord 'codexVersion' $codexVersion
 Assert-Exit $codexVersion 0 'Codex version'
 $claudeVersion = Invoke-Captured claude @('--version') $task $claudeEnvironment
-$commands.Add($claudeVersion)
+Add-CommandRecord 'claudeVersion' $claudeVersion
 Assert-Exit $claudeVersion 0 'Claude version'
 $claudeManifest = Get-Content -Raw -LiteralPath $claudeVersion.packageManifest.Replace(
   '%APPDATA%', $env:APPDATA, [System.StringComparison]::OrdinalIgnoreCase
@@ -676,19 +1050,67 @@ if ($claudeManifest.name -ne '@anthropic-ai/claude-code' -or
   throw 'Claude shim, package manifest and reported version do not agree.'
 }
 $nodeVersion = Invoke-Captured node @('--version') $task
-$commands.Add($nodeVersion)
+Add-CommandRecord 'nodeVersion' $nodeVersion
 Assert-Exit $nodeVersion 0 'Node version'
+$terminationProbeSource = "const {spawn}=require('node:child_process');spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:['ignore','inherit','inherit']});setInterval(()=>{},1000);"
+$terminationProbe = Invoke-Captured node @(
+  '-e', $terminationProbeSource
+) $task @{} '' 2 8 65536
+Add-CommandRecord 'processTreeTerminationProbe' $terminationProbe 'owned-tree-timeout'
+if ($terminationProbe.exitCode -ne 124 -or
+    $terminationProbe.timedOut -ne $true -or
+    $terminationProbe.terminationRequested -ne $true -or
+    $terminationProbe.terminationConfirmed -ne $true -or
+    $terminationProbe.streamsDrained -ne $true -or
+    $terminationProbe.jobActiveProcesses -ne 0) {
+  throw 'Owned process-tree termination probe did not close exactly.'
+}
+
+$neighborCodexMarketplaceAdd = Invoke-Captured codex @(
+  'plugin', 'marketplace', 'add', $neighborSource, '--json'
+) $neighborSource $codexEnvironment
+Add-CommandRecord 'neighborCodexMarketplaceAdd' $neighborCodexMarketplaceAdd
+Assert-Exit $neighborCodexMarketplaceAdd 0 'Codex neighbor marketplace add'
+$neighborClaudeMarketplaceAdd = Invoke-Captured claude @(
+  'plugin', 'marketplace', 'add', $neighborSource, '--scope', 'user'
+) $neighborSource $claudeEnvironment
+Add-CommandRecord 'neighborClaudeMarketplaceAdd' $neighborClaudeMarketplaceAdd
+Assert-Exit $neighborClaudeMarketplaceAdd 0 'Claude neighbor marketplace add'
+$neighborCodexInstall = Invoke-Captured codex @(
+  'plugin', 'add', 'lifecycle-neighbor-codex@lifecycle-neighbor', '--json'
+) $neighborSource $codexEnvironment
+Add-CommandRecord 'neighborCodexInstall' $neighborCodexInstall
+Assert-Exit $neighborCodexInstall 0 'Codex neighbor install'
+$neighborClaudeInstall = Invoke-Captured claude @(
+  'plugin', 'install', 'lifecycle-neighbor-claude@lifecycle-neighbor',
+  '--scope', 'user', '-y'
+) $neighborSource $claudeEnvironment
+Add-CommandRecord 'neighborClaudeInstall' $neighborClaudeInstall
+Assert-Exit $neighborClaudeInstall 0 'Claude neighbor install'
+$neighborCodexInventory = Invoke-Captured codex @('plugin', 'list', '--json') $neighborSource $codexEnvironment
+Add-CommandRecord 'neighborCodexInventory' $neighborCodexInventory
+Assert-Exit $neighborCodexInventory 0 'Codex neighbor inventory'
+$neighborClaudeInventory = Invoke-Captured claude @('plugin', 'list', '--json') $neighborSource $claudeEnvironment
+Add-CommandRecord 'neighborClaudeInventory' $neighborClaudeInventory
+Assert-Exit $neighborClaudeInventory 0 'Claude neighbor inventory'
+Assert-PluginInventory $neighborCodexInventory codex 'lifecycle-neighbor-codex@lifecycle-neighbor' '1.0.0' $true 'Codex neighbor'
+Assert-PluginInventory $neighborClaudeInventory claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude neighbor'
+$neighborCodexInstalled = Join-Path $codexRoot 'plugins/cache/lifecycle-neighbor/lifecycle-neighbor-codex/1.0.0'
+$neighborClaudeInstalled = Join-Path $claudeRoot 'plugins/cache/lifecycle-neighbor/lifecycle-neighbor-claude/1.0.0'
+$neighborCodexFileCount = Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor initial'
+$neighborClaudeFileCount = Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude neighbor initial'
+
 $codexMarketplace = Invoke-Captured codex @('plugin', 'marketplace', 'add', $mutableSource, '--json') $mutableSource $codexEnvironment
-$commands.Add($codexMarketplace)
+Add-CommandRecord 'accordCodexMarketplaceAdd' $codexMarketplace
 Assert-Exit $codexMarketplace 0 'Codex marketplace add'
 $claudeMarketplace = Invoke-Captured claude @('plugin', 'marketplace', 'add', $mutableSource, '--scope', 'user') $mutableSource $claudeEnvironment
-$commands.Add($claudeMarketplace)
+Add-CommandRecord 'accordClaudeMarketplaceAdd' $claudeMarketplace
 Assert-Exit $claudeMarketplace 0 'Claude marketplace add'
 $codexInstall = Invoke-Captured codex @('plugin', 'add', 'yiyuan-accord-codex@yiyuan-accord', '--json') $mutableSource $codexEnvironment
-$commands.Add($codexInstall)
+Add-CommandRecord 'accordCodexInstallPrior' $codexInstall
 Assert-Exit $codexInstall 0 'Codex install'
 $claudeInstall = Invoke-Captured claude @('plugin', 'install', 'yiyuan-accord-claude@yiyuan-accord', '--scope', 'user', '-y') $mutableSource $claudeEnvironment
-$commands.Add($claudeInstall)
+Add-CommandRecord 'accordClaudeInstallPrior' $claudeInstall
 Assert-Exit $claudeInstall 0 'Claude install'
 
 $codexOldInstalled = Join-Path $codexRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.0.1'
@@ -706,10 +1128,8 @@ $claudeSettingsValue | Add-Member -NotePropertyName concurrentSentinel -NoteProp
   [System.Text.UTF8Encoding]::new($false)
 )
 $sentinels = @($codexAgents, $claudeInstructions,
-  (Join-Path $codexRoot 'foreign-plugin/sentinel.txt'),
-  (Join-Path $claudeRoot 'foreign-plugin/sentinel.txt'),
-  (Join-Path $codexRoot 'shared-dependency.txt'),
-  (Join-Path $claudeRoot 'shared-dependency.txt'))
+  (Join-Path $codexRoot 'unmanaged-user-state.txt'),
+  (Join-Path $claudeRoot 'unmanaged-user-state.txt'))
 $sentinelHashes = [ordered]@{}
 foreach ($path in $sentinels) {
   $sentinelHashes[$path] = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant()
@@ -717,32 +1137,40 @@ foreach ($path in $sentinels) {
 
 Move-Item -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-codex') -Destination (Join-Path $mutableSource 'plugins/yiyuan-accord-codex.failed-update-source')
 Move-Item -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-claude') -Destination (Join-Path $mutableSource 'plugins/yiyuan-accord-claude.failed-update-source')
+if ((Test-Path -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-codex')) -or
+    (Test-Path -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-claude'))) {
+  throw 'Failed-update source paths were not removed.'
+}
 $codexFailedUpdate = Invoke-Captured codex @('plugin', 'add', 'yiyuan-accord-codex@yiyuan-accord', '--json') $mutableSource $codexEnvironment
-$commands.Add($codexFailedUpdate)
+Add-CommandRecord 'accordCodexFailedUpdate' $codexFailedUpdate 'source-path-absent'
 if ($codexFailedUpdate.exitCode -eq 0) { throw 'Codex failed update unexpectedly succeeded' }
 $claudeFailedUpdate = Invoke-Captured claude @('plugin', 'update', 'yiyuan-accord-claude@yiyuan-accord', '--scope', 'user', '-y') $mutableSource $claudeEnvironment
-$commands.Add($claudeFailedUpdate)
+Add-CommandRecord 'accordClaudeFailedUpdate' $claudeFailedUpdate 'source-path-absent'
 if ($claudeFailedUpdate.exitCode -eq 0) { throw 'Claude failed update unexpectedly succeeded' }
 [void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-codex') $codexOldInstalled 'Codex rollback')
 [void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldInstalled 'Claude rollback')
 $codexRollbackList = Invoke-Captured codex @('plugin', 'list', '--json') $mutableSource $codexEnvironment
-$commands.Add($codexRollbackList)
+Add-CommandRecord 'rollbackCodexInventory' $codexRollbackList
 Assert-Exit $codexRollbackList 0 'Codex rollback list'
 $claudeRollbackList = Invoke-Captured claude @('plugin', 'list', '--json') $mutableSource $claudeEnvironment
-$commands.Add($claudeRollbackList)
+Add-CommandRecord 'rollbackClaudeInventory' $claudeRollbackList
 Assert-Exit $claudeRollbackList 0 'Claude rollback list'
-Assert-InstalledInventory $codexRollbackList codex '3.0.1' 'Codex rollback'
-Assert-InstalledInventory $claudeRollbackList claude '3.0.1' 'Claude rollback'
+Assert-PluginInventory $codexRollbackList codex 'yiyuan-accord-codex@yiyuan-accord' '3.0.1' $true 'Codex rollback'
+Assert-PluginInventory $claudeRollbackList claude 'yiyuan-accord-claude@yiyuan-accord' '3.0.1' $true 'Claude rollback'
+Assert-PluginInventory $codexRollbackList codex 'lifecycle-neighbor-codex@lifecycle-neighbor' '1.0.0' $true 'Codex neighbor after rollback'
+Assert-PluginInventory $claudeRollbackList claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude neighbor after rollback'
+[void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor after rollback')
+[void](Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude neighbor after rollback')
 
 Copy-Item -LiteralPath (Join-Path $candidateSource 'plugins/yiyuan-accord-codex') -Destination (Join-Path $mutableSource 'plugins/yiyuan-accord-codex') -Recurse
 Copy-Item -LiteralPath (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') -Destination (Join-Path $mutableSource 'plugins/yiyuan-accord-claude') -Recurse
 Copy-Item -LiteralPath (Join-Path $candidateSource '.agents/plugins/marketplace.json') -Destination (Join-Path $mutableSource '.agents/plugins/marketplace.json') -Force
 Copy-Item -LiteralPath (Join-Path $candidateSource '.claude-plugin/marketplace.json') -Destination (Join-Path $mutableSource '.claude-plugin/marketplace.json') -Force
 $codexUpdate = Invoke-Captured codex @('plugin', 'add', 'yiyuan-accord-codex@yiyuan-accord', '--json') $mutableSource $codexEnvironment
-$commands.Add($codexUpdate)
+Add-CommandRecord 'accordCodexUpdateCandidate' $codexUpdate
 Assert-Exit $codexUpdate 0 'Codex successful update'
 $claudeUpdate = Invoke-Captured claude @('plugin', 'update', 'yiyuan-accord-claude@yiyuan-accord', '--scope', 'user', '-y') $mutableSource $claudeEnvironment
-$commands.Add($claudeUpdate)
+Add-CommandRecord 'accordClaudeUpdateCandidate' $claudeUpdate
 Assert-Exit $claudeUpdate 0 'Claude successful update'
 
 $codexInstalled = Join-Path $codexRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.1.0'
@@ -750,67 +1178,146 @@ $claudeInstalled = Join-Path $claudeRoot 'plugins/cache/yiyuan-accord/yiyuan-acc
 $codexFileCount = Assert-FileMapsEqual (Join-Path $candidateSource 'plugins/yiyuan-accord-codex') $codexInstalled 'Codex candidate'
 $claudeFileCount = Assert-FileMapsEqual (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeInstalled 'Claude candidate'
 $codexList = Invoke-Captured codex @('plugin', 'list', '--json') $mutableSource $codexEnvironment
-$commands.Add($codexList)
+Add-CommandRecord 'candidateCodexInventory' $codexList
 Assert-Exit $codexList 0 'Codex list'
 $claudeList = Invoke-Captured claude @('plugin', 'list', '--json') $mutableSource $claudeEnvironment
-$commands.Add($claudeList)
+Add-CommandRecord 'candidateClaudeInventory' $claudeList
 Assert-Exit $claudeList 0 'Claude list'
-Assert-InstalledInventory $codexList codex '3.1.0' 'Codex list'
-Assert-InstalledInventory $claudeList claude '3.1.0' 'Claude list'
+Assert-PluginInventory $codexList codex 'yiyuan-accord-codex@yiyuan-accord' '3.1.0' $true 'Codex list'
+Assert-PluginInventory $claudeList claude 'yiyuan-accord-claude@yiyuan-accord' '3.1.0' $true 'Claude list'
+Assert-PluginInventory $codexList codex 'lifecycle-neighbor-codex@lifecycle-neighbor' '1.0.0' $true 'Codex neighbor after update'
+Assert-PluginInventory $claudeList claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude neighbor after update'
+[void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor after update')
+[void](Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude neighbor after update')
 
 $startup = '{"hook_event_name":"SessionStart","source":"startup"}'
 $resume = '{"hook_event_name":"SessionStart","source":"resume","model":"model-variable","permission_mode":"default"}'
-foreach ($runtime in ((Join-Path $codexInstalled 'runtime/accord-hook.cjs'), (Join-Path $claudeInstalled 'runtime/accord-hook.cjs'))) {
-  $startupResult = Invoke-Captured node @($runtime) $task @{} $startup
-  $commands.Add($startupResult)
+foreach ($runtimeCase in @(
+  [pscustomobject]@{Host = 'codex'; Path = (Join-Path $codexInstalled 'runtime/accord-hook.cjs')},
+  [pscustomobject]@{Host = 'claude'; Path = (Join-Path $claudeInstalled 'runtime/accord-hook.cjs')}
+)) {
+  $startupResult = Invoke-Captured node @($runtimeCase.Path) $task @{} $startup
+  Add-CommandRecord "$($runtimeCase.Host)HookStartup" $startupResult
   Assert-Exit $startupResult 0 'Hook startup'
   if ($startupResult.stdout.Length -ne 0 -or $startupResult.stderr.Length -ne 0) { throw 'Hook startup was not silent.' }
-  $resumeResult = Invoke-Captured node @($runtime) $task @{} $resume
-  $commands.Add($resumeResult)
+  $resumeResult = Invoke-Captured node @($runtimeCase.Path) $task @{} $resume
+  Add-CommandRecord "$($runtimeCase.Host)HookResume" $resumeResult
   Assert-Exit $resumeResult 0 'Hook resume'
   if (-not $resumeResult.stdout.Contains('yiyuan-accord-hook-context/v1')) { throw 'Hook resume did not emit typed context.' }
 }
 
+# Claude's public cache contract runs its approximately 14-day orphan sweep
+# during plugin initialization, and only while at least one plugin remains
+# installed. The real, evaluator-owned neighbor stays installed while both the
+# prior and candidate Accord orphan boundaries are probed.
+$claudeCacheRoot = Join-Path $claudeRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-claude'
+$claudeOldCache = Join-Path $claudeCacheRoot '3.0.1'
+$claudeCandidateCache = Join-Path $claudeCacheRoot '3.1.0'
+$retentionMilliseconds = 1209600000L
+$clockMilliseconds = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+$youngAgeMilliseconds = $retentionMilliseconds - 3600000L
+$expiredAgeMilliseconds = $retentionMilliseconds + 3600000L
+[void](Assert-ExactOrphanCacheVersion (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldCache 'Claude old')
+Set-OrphanMarkerAge $claudeOldCache $clockMilliseconds $youngAgeMilliseconds
+$claudeOldYoungSweep = Invoke-Captured claude @('--init-only') $task $claudeEnvironment
+Add-CommandRecord 'claudeOldYoungSweep' $claudeOldYoungSweep
+Assert-Exit $claudeOldYoungSweep 0 'Claude old young orphan sweep'
+if (-not (Test-Path -LiteralPath $claudeOldCache -PathType Container)) {
+  throw 'Claude removed a younger-than-contract orphan cache.'
+}
+[void](Assert-ExactOrphanCacheVersion (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldCache 'Claude young')
+Set-OrphanMarkerAge $claudeOldCache $clockMilliseconds $expiredAgeMilliseconds
+$claudeOldExpiredSweep = Invoke-Captured claude @('--init-only') $task $claudeEnvironment
+Add-CommandRecord 'claudeOldExpiredSweep' $claudeOldExpiredSweep
+Assert-Exit $claudeOldExpiredSweep 0 'Claude old expired orphan sweep'
+$expiredSweepDeadline = [DateTimeOffset]::UtcNow.AddSeconds(5)
+while ((Test-Path -LiteralPath $claudeOldCache) -and
+       [DateTimeOffset]::UtcNow -lt $expiredSweepDeadline) {
+  Start-Sleep -Milliseconds 100
+}
+if (Test-Path -LiteralPath $claudeOldCache) {
+  throw 'Claude retained an older-than-contract orphan cache.'
+}
+[void](Assert-FileMapsEqual (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeCandidateCache 'Claude retained installed candidate')
+
 $codexRemove = Invoke-Captured codex @('plugin', 'remove', 'yiyuan-accord-codex@yiyuan-accord', '--json') $mutableSource $codexEnvironment
-$commands.Add($codexRemove)
+Add-CommandRecord 'accordCodexRemove' $codexRemove
 Assert-Exit $codexRemove 0 'Codex remove'
 $claudeRemove = Invoke-Captured claude @('plugin', 'uninstall', 'yiyuan-accord-claude@yiyuan-accord', '--scope', 'user', '-y') $mutableSource $claudeEnvironment
-$commands.Add($claudeRemove)
+Add-CommandRecord 'accordClaudeRemove' $claudeRemove
 Assert-Exit $claudeRemove 0 'Claude remove'
 $codexMarketplaceRemove = Invoke-Captured codex @('plugin', 'marketplace', 'remove', 'yiyuan-accord', '--json') $mutableSource $codexEnvironment
-$commands.Add($codexMarketplaceRemove)
+Add-CommandRecord 'accordCodexMarketplaceRemove' $codexMarketplaceRemove
 Assert-Exit $codexMarketplaceRemove 0 'Codex marketplace remove'
 $claudeMarketplaceRemove = Invoke-Captured claude @('plugin', 'marketplace', 'remove', 'yiyuan-accord', '--scope', 'user') $mutableSource $claudeEnvironment
-$commands.Add($claudeMarketplaceRemove)
+Add-CommandRecord 'accordClaudeMarketplaceRemove' $claudeMarketplaceRemove
 Assert-Exit $claudeMarketplaceRemove 0 'Claude marketplace remove'
-$codexFinal = Invoke-Captured codex @('plugin', 'list', '--json') $task $codexEnvironment
-$commands.Add($codexFinal)
-Assert-Exit $codexFinal 0 'Codex final list'
-$claudeFinal = Invoke-Captured claude @('plugin', 'list', '--json') $task $claudeEnvironment
-$commands.Add($claudeFinal)
-Assert-Exit $claudeFinal 0 'Claude final list'
-if ((Read-JsonOutput $codexFinal 'Codex final list').installed.Count -ne 0 -or
-    (Read-JsonOutput $claudeFinal 'Claude final list').Count -ne 0) {
-  throw 'Native removal left installed Accord entries.'
+[void](Assert-ExactOrphanCacheVersion (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeCandidateCache 'Claude candidate')
+$candidateClockMilliseconds = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+Set-OrphanMarkerAge $claudeCandidateCache $candidateClockMilliseconds $youngAgeMilliseconds
+$claudeCandidateYoungSweep = Invoke-Captured claude @('--init-only') $task $claudeEnvironment
+Add-CommandRecord 'claudeCandidateYoungSweep' $claudeCandidateYoungSweep
+Assert-Exit $claudeCandidateYoungSweep 0 'Claude candidate young orphan sweep'
+if (-not (Test-Path -LiteralPath $claudeCandidateCache -PathType Container)) {
+  throw 'Claude removed the younger-than-contract candidate orphan cache.'
 }
+[void](Assert-ExactOrphanCacheVersion (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeCandidateCache 'Claude candidate young')
+Set-OrphanMarkerAge $claudeCandidateCache $candidateClockMilliseconds $expiredAgeMilliseconds
+$claudeCandidateExpiredSweep = Invoke-Captured claude @('--init-only') $task $claudeEnvironment
+Add-CommandRecord 'claudeCandidateExpiredSweep' $claudeCandidateExpiredSweep
+Assert-Exit $claudeCandidateExpiredSweep 0 'Claude candidate expired orphan sweep'
+$candidateSweepDeadline = [DateTimeOffset]::UtcNow.AddSeconds(5)
+while ((Test-Path -LiteralPath $claudeCandidateCache) -and
+       [DateTimeOffset]::UtcNow -lt $candidateSweepDeadline) {
+  Start-Sleep -Milliseconds 100
+}
+if (Test-Path -LiteralPath $claudeCandidateCache) {
+  throw 'Claude retained the older-than-contract candidate orphan cache.'
+}
+$afterRemoveCodexInventory = Invoke-Captured codex @('plugin', 'list', '--json') $task $codexEnvironment
+Add-CommandRecord 'afterRemoveCodexInventory' $afterRemoveCodexInventory
+Assert-Exit $afterRemoveCodexInventory 0 'Codex after-Accord-removal inventory'
+$afterRemoveClaudeInventory = Invoke-Captured claude @('plugin', 'list', '--json') $task $claudeEnvironment
+Add-CommandRecord 'afterRemoveClaudeInventory' $afterRemoveClaudeInventory
+Assert-Exit $afterRemoveClaudeInventory 0 'Claude after-Accord-removal inventory'
+$afterRemoveCodexMarketplaces = Invoke-Captured codex @(
+  'plugin', 'marketplace', 'list', '--json'
+) $task $codexEnvironment
+Add-CommandRecord 'afterRemoveCodexMarketplaces' $afterRemoveCodexMarketplaces
+Assert-Exit $afterRemoveCodexMarketplaces 0 'Codex after-Accord-removal marketplaces'
+$afterRemoveClaudeMarketplaces = Invoke-Captured claude @(
+  'plugin', 'marketplace', 'list', '--json'
+) $task $claudeEnvironment
+Add-CommandRecord 'afterRemoveClaudeMarketplaces' $afterRemoveClaudeMarketplaces
+Assert-Exit $afterRemoveClaudeMarketplaces 0 'Claude after-Accord-removal marketplaces'
+Assert-PluginInventory $afterRemoveCodexInventory codex 'yiyuan-accord-codex@yiyuan-accord' $null $false 'Codex Accord removal'
+Assert-PluginInventory $afterRemoveClaudeInventory claude 'yiyuan-accord-claude@yiyuan-accord' $null $false 'Claude Accord removal'
+Assert-PluginInventory $afterRemoveCodexInventory codex 'lifecycle-neighbor-codex@lifecycle-neighbor' '1.0.0' $true 'Codex neighbor after Accord removal'
+Assert-PluginInventory $afterRemoveClaudeInventory claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude neighbor after Accord removal'
+Assert-MarketplaceInventory $afterRemoveCodexMarketplaces codex 'yiyuan-accord' $false 'Codex Accord removal'
+Assert-MarketplaceInventory $afterRemoveClaudeMarketplaces claude 'yiyuan-accord' $false 'Claude Accord removal'
+Assert-MarketplaceInventory $afterRemoveCodexMarketplaces codex 'lifecycle-neighbor' $true 'Codex neighbor after Accord removal'
+Assert-MarketplaceInventory $afterRemoveClaudeMarketplaces claude 'lifecycle-neighbor' $true 'Claude neighbor after Accord removal'
+[void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor after Accord removal')
+[void](Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude neighbor after Accord removal')
+
 foreach ($entry in $sentinelHashes.GetEnumerator()) {
   if (-not (Test-Path -LiteralPath $entry.Key) -or
       (Get-FileHash -Algorithm SHA256 -LiteralPath $entry.Key).Hash.ToLowerInvariant() -ne $entry.Value) {
-    throw "User or foreign sentinel changed: $($entry.Key)"
+    throw "User or unmanaged sentinel changed: $($entry.Key)"
   }
 }
-$finalCodexConfig = Get-Content -Raw -LiteralPath $codexConfig
-if (-not $finalCodexConfig.Contains('# USER_CODEX_CONFIG') -or
-    -not $finalCodexConfig.Contains('# CONCURRENT_CODEX_CONFIG_EDIT') -or
-    $finalCodexConfig.Contains('yiyuan-accord')) {
+$afterRemoveCodexConfig = Get-Content -Raw -LiteralPath $codexConfig
+if (-not $afterRemoveCodexConfig.Contains('# USER_CODEX_CONFIG') -or
+    -not $afterRemoveCodexConfig.Contains('# CONCURRENT_CODEX_CONFIG_EDIT') -or
+    $afterRemoveCodexConfig.Contains('yiyuan-accord')) {
   throw 'Codex user configuration was not preserved or Accord configuration remains.'
 }
-$finalClaudeSettings = Get-Content -Raw -LiteralPath $claudeSettings | ConvertFrom-Json
-if ($finalClaudeSettings.userSentinel -ne 'USER_CLAUDE_SETTINGS' -or
-    $finalClaudeSettings.concurrentSentinel -ne 'CONCURRENT_CLAUDE_SETTINGS' -or
-    @($finalClaudeSettings.permissions.allow).Count -ne 0 -or
-    @($finalClaudeSettings.enabledPlugins.PSObject.Properties).Count -ne 0 -or
-    @($finalClaudeSettings.extraKnownMarketplaces.PSObject.Properties).Count -ne 0) {
+$afterRemoveClaudeSettings = Get-Content -Raw -LiteralPath $claudeSettings | ConvertFrom-Json
+if ($afterRemoveClaudeSettings.userSentinel -ne 'USER_CLAUDE_SETTINGS' -or
+    $afterRemoveClaudeSettings.concurrentSentinel -ne 'CONCURRENT_CLAUDE_SETTINGS' -or
+    @($afterRemoveClaudeSettings.permissions.allow).Count -ne 0 -or
+    ((Get-Content -Raw -LiteralPath $claudeSettings).Contains('yiyuan-accord'))) {
   throw 'Claude user configuration was not preserved or Accord configuration remains.'
 }
 $matchingProcesses = @(Get-TaskProcessIds $task)
@@ -828,42 +1335,108 @@ $claudeCache = @(Get-ChildItem -LiteralPath (Join-Path $claudeRoot 'plugins/cach
 if ($codexCache.Count -ne 0) {
   throw 'Codex retained package cache outside the declared zero-cache contract.'
 }
+if ($claudeCache.Count -ne 0) {
+  throw 'Claude retained Accord package cache after the bounded host sweep.'
+}
 
-$claudeCacheRoot = Join-Path $claudeRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-claude'
-$claudeOldCache = Join-Path $claudeCacheRoot '3.0.1'
-$claudeCandidateCache = Join-Path $claudeCacheRoot '3.1.0'
-$retentionMilliseconds = 1209600000L
-$clockMilliseconds = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
-$youngAgeMilliseconds = $retentionMilliseconds - 3600000L
-$expiredAgeMilliseconds = $retentionMilliseconds + 3600000L
-[void](Assert-ExactOrphanCacheVersion (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldCache 'Claude old')
-$candidateOrphanedAt = Assert-ExactOrphanCacheVersion (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeCandidateCache 'Claude candidate'
-$candidateAgeMilliseconds = $clockMilliseconds - $candidateOrphanedAt
-if ($candidateAgeMilliseconds -lt 0 -or $candidateAgeMilliseconds -ge $retentionMilliseconds) {
-  throw 'Claude candidate orphan cache is not inside the fresh retention boundary.'
+$afterAccordRemoval = [ordered]@{
+  codexAccordInstalledEntries = 0
+  claudeAccordInstalledEntries = 0
+  codexNeighborInstalledEntries = 1
+  claudeNeighborInstalledEntries = 1
+  codexAccordMarketplaceEntries = 0
+  claudeAccordMarketplaceEntries = 0
+  codexNeighborMarketplaceEntries = 1
+  claudeNeighborMarketplaceEntries = 1
+  taskProcesses = 0
+  codexAccordCacheFiles = $codexCache
+  claudeAccordCacheFiles = $claudeCache
+  neighborInstalledBytesPreserved = $true
+  unmanagedSentinelsPreserved = $true
+  concurrentUserEditsPreserved = $true
 }
-Set-Content -LiteralPath (Join-Path $claudeOldCache '.orphaned_at') -Encoding ascii -NoNewline -Value ($clockMilliseconds - $youngAgeMilliseconds)
-$youngSweepCommandIndex = $commands.Count
-$claudeYoungSweep = Invoke-Captured claude @('plugin', 'list', '--json') $task $claudeEnvironment
-$commands.Add($claudeYoungSweep)
-Assert-Exit $claudeYoungSweep 0 'Claude young orphan sweep'
-if (-not (Test-Path -LiteralPath $claudeOldCache -PathType Container)) {
-  throw 'Claude removed a younger-than-contract orphan cache.'
+
+# The neighbor is evaluator-owned. Remove it only after the Accord poststate is
+# captured, through the same supported host lifecycle, before deleting TaskRoot.
+$cleanupCodexNeighborRemove = Invoke-Captured codex @(
+  'plugin', 'remove', 'lifecycle-neighbor-codex@lifecycle-neighbor', '--json'
+) $neighborSource $codexEnvironment
+Add-CommandRecord 'cleanupCodexNeighborRemove' $cleanupCodexNeighborRemove
+Assert-Exit $cleanupCodexNeighborRemove 0 'Codex neighbor cleanup'
+$cleanupClaudeNeighborRemove = Invoke-Captured claude @(
+  'plugin', 'uninstall', 'lifecycle-neighbor-claude@lifecycle-neighbor',
+  '--scope', 'user', '-y'
+) $neighborSource $claudeEnvironment
+Add-CommandRecord 'cleanupClaudeNeighborRemove' $cleanupClaudeNeighborRemove
+Assert-Exit $cleanupClaudeNeighborRemove 0 'Claude neighbor cleanup'
+$cleanupCodexNeighborMarketplace = Invoke-Captured codex @(
+  'plugin', 'marketplace', 'remove', 'lifecycle-neighbor', '--json'
+) $neighborSource $codexEnvironment
+Add-CommandRecord 'cleanupCodexNeighborMarketplaceRemove' $cleanupCodexNeighborMarketplace
+Assert-Exit $cleanupCodexNeighborMarketplace 0 'Codex neighbor marketplace cleanup'
+$cleanupClaudeNeighborMarketplace = Invoke-Captured claude @(
+  'plugin', 'marketplace', 'remove', 'lifecycle-neighbor', '--scope', 'user'
+) $neighborSource $claudeEnvironment
+Add-CommandRecord 'cleanupClaudeNeighborMarketplaceRemove' $cleanupClaudeNeighborMarketplace
+Assert-Exit $cleanupClaudeNeighborMarketplace 0 'Claude neighbor marketplace cleanup'
+$cleanupCodexInventory = Invoke-Captured codex @('plugin', 'list', '--json') $task $codexEnvironment
+Add-CommandRecord 'cleanupCodexInventory' $cleanupCodexInventory
+Assert-Exit $cleanupCodexInventory 0 'Codex cleanup inventory'
+$cleanupClaudeInventory = Invoke-Captured claude @('plugin', 'list', '--json') $task $claudeEnvironment
+Add-CommandRecord 'cleanupClaudeInventory' $cleanupClaudeInventory
+Assert-Exit $cleanupClaudeInventory 0 'Claude cleanup inventory'
+$cleanupCodexMarketplaces = Invoke-Captured codex @(
+  'plugin', 'marketplace', 'list', '--json'
+) $task $codexEnvironment
+Add-CommandRecord 'cleanupCodexMarketplaces' $cleanupCodexMarketplaces
+Assert-Exit $cleanupCodexMarketplaces 0 'Codex cleanup marketplaces'
+$cleanupClaudeMarketplaces = Invoke-Captured claude @(
+  'plugin', 'marketplace', 'list', '--json'
+) $task $claudeEnvironment
+Add-CommandRecord 'cleanupClaudeMarketplaces' $cleanupClaudeMarketplaces
+Assert-Exit $cleanupClaudeMarketplaces 0 'Claude cleanup marketplaces'
+Assert-PluginInventory $cleanupCodexInventory codex 'lifecycle-neighbor-codex@lifecycle-neighbor' $null $false 'Codex neighbor cleanup'
+Assert-PluginInventory $cleanupClaudeInventory claude 'lifecycle-neighbor-claude@lifecycle-neighbor' $null $false 'Claude neighbor cleanup'
+Assert-PluginInventory $cleanupCodexInventory codex 'yiyuan-accord-codex@yiyuan-accord' $null $false 'Codex Accord cleanup'
+Assert-PluginInventory $cleanupClaudeInventory claude 'yiyuan-accord-claude@yiyuan-accord' $null $false 'Claude Accord cleanup'
+Assert-MarketplaceInventory $cleanupCodexMarketplaces codex 'lifecycle-neighbor' $false 'Codex neighbor cleanup'
+Assert-MarketplaceInventory $cleanupClaudeMarketplaces claude 'lifecycle-neighbor' $false 'Claude neighbor cleanup'
+Assert-MarketplaceInventory $cleanupCodexMarketplaces codex 'yiyuan-accord' $false 'Codex Accord cleanup'
+Assert-MarketplaceInventory $cleanupClaudeMarketplaces claude 'yiyuan-accord' $false 'Claude Accord cleanup'
+
+$afterEvaluatorCleanup = [ordered]@{
+  codexInstalledEntries = @(Get-InstalledInventory $cleanupCodexInventory codex 'Codex cleanup inventory').Count
+  claudeInstalledEntries = @(Get-InstalledInventory $cleanupClaudeInventory claude 'Claude cleanup inventory').Count
+  codexMarketplaceEntries = @(Get-MarketplaceInventory $cleanupCodexMarketplaces codex 'Codex cleanup marketplaces').Count
+  claudeMarketplaceEntries = @(Get-MarketplaceInventory $cleanupClaudeMarketplaces claude 'Claude cleanup marketplaces').Count
+  taskProcesses = @(Get-TaskProcessIds $task).Count
+  taskRootRemoved = $false
 }
-[void](Assert-ExactOrphanCacheVersion (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldCache 'Claude young')
-Set-Content -LiteralPath (Join-Path $claudeOldCache '.orphaned_at') -Encoding ascii -NoNewline -Value ($clockMilliseconds - $expiredAgeMilliseconds)
-$expiredSweepCommandIndex = $commands.Count
-$claudeExpiredSweep = Invoke-Captured claude @('plugin', 'list', '--json') $task $claudeEnvironment
-$commands.Add($claudeExpiredSweep)
-Assert-Exit $claudeExpiredSweep 0 'Claude expired orphan sweep'
-if (Test-Path -LiteralPath $claudeOldCache) {
-  throw 'Claude retained an older-than-contract orphan cache.'
+if ($afterEvaluatorCleanup.codexInstalledEntries -ne 0 -or
+    $afterEvaluatorCleanup.claudeInstalledEntries -ne 0 -or
+    $afterEvaluatorCleanup.codexMarketplaceEntries -ne 0 -or
+    $afterEvaluatorCleanup.claudeMarketplaceEntries -ne 0 -or
+    $afterEvaluatorCleanup.taskProcesses -ne 0) {
+  throw 'Evaluator-owned fixture cleanup is incomplete.'
 }
-[void](Assert-ExactOrphanCacheVersion (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeCandidateCache 'Claude retained candidate')
-$claudeCache = @(Get-ChildItem -LiteralPath (Join-Path $claudeRoot 'plugins/cache/yiyuan-accord') -Recurse -File -ErrorAction SilentlyContinue |
-  Sort-Object FullName | ForEach-Object {
-  [System.IO.Path]::GetRelativePath($claudeRoot, $_.FullName).Replace('\', '/')
-})
+$finalCodexConfig = Get-Content -Raw -LiteralPath $codexConfig
+if (-not $finalCodexConfig.Contains('# USER_CODEX_CONFIG') -or
+    -not $finalCodexConfig.Contains('# CONCURRENT_CODEX_CONFIG_EDIT') -or
+    $finalCodexConfig.Contains('yiyuan-accord') -or
+    $finalCodexConfig.Contains('lifecycle-neighbor')) {
+  throw 'Codex evaluator cleanup changed user configuration or retained a test registration.'
+}
+$finalClaudeSettingsRaw = Get-Content -Raw -LiteralPath $claudeSettings
+$finalClaudeSettings = $finalClaudeSettingsRaw | ConvertFrom-Json
+if ($finalClaudeSettings.userSentinel -ne 'USER_CLAUDE_SETTINGS' -or
+    $finalClaudeSettings.concurrentSentinel -ne 'CONCURRENT_CLAUDE_SETTINGS' -or
+    @($finalClaudeSettings.permissions.allow).Count -ne 0 -or
+    @($finalClaudeSettings.enabledPlugins.PSObject.Properties).Count -ne 0 -or
+    @($finalClaudeSettings.extraKnownMarketplaces.PSObject.Properties).Count -ne 0 -or
+    $finalClaudeSettingsRaw.Contains('yiyuan-accord') -or
+    $finalClaudeSettingsRaw.Contains('lifecycle-neighbor')) {
+  throw 'Claude evaluator cleanup changed user configuration or retained a test registration.'
+}
 
 $candidateProgram = Get-Content -Raw -LiteralPath (Join-Path $candidateSource 'product/program.json') | ConvertFrom-Json
 $candidateGolden = Get-Content -Raw -LiteralPath (Join-Path $candidateSource 'evals/golden-tasks.json') | ConvertFrom-Json
@@ -876,28 +1449,22 @@ $packages = [ordered]@{}
 foreach ($projection in $candidateProgram.hostProjections) {
   $packages[$projection.id] = $projection.packageSha256
 }
-$commandPlan = @($commands | ForEach-Object {
-  [ordered]@{
-    argv = $_.argv
-    endToEndTimeoutSeconds = $_.endToEndTimeoutSeconds
-    environmentKeys = $_.environmentKeys
-    executionTimeoutSeconds = $_.executionTimeoutSeconds
-    inputSha256 = $_.inputSha256
-    outputLimitBytes = $_.outputLimitBytes
-  }
-})
-$commandPlanJson = $commandPlan | ConvertTo-Json -Depth 8 -Compress
-$commandPlanSha256 = [Convert]::ToHexString(
-  [System.Security.Cryptography.SHA256]::HashData(
-    [System.Text.Encoding]::UTF8.GetBytes($commandPlanJson)
-  )
+$commandContractLocator = 'evals/contracts/gt20-v3-command-contract.json'
+$commandContractPath = Join-Path $candidateSource $commandContractLocator
+$commandContractBytes = [System.IO.File]::ReadAllBytes($commandContractPath)
+$commandContract = [System.Text.Encoding]::UTF8.GetString($commandContractBytes) |
+  ConvertFrom-Json -Depth 20
+Assert-CommandContract $commandContract $commands $CandidateRevision $priorReleaseRevision
+$commandContractSha256 = [Convert]::ToHexString(
+  [System.Security.Cryptography.SHA256]::HashData($commandContractBytes)
 ).ToLowerInvariant()
 $record = [ordered]@{
   schema = 'yiyuan-accord-gt20-exact-package-evidence/v3'
   taskId = 'GT-20'
   evaluatedRevision = $CandidateRevision
   runnerSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $PSCommandPath).Hash.ToLowerInvariant()
-  commandPlanSha256 = $commandPlanSha256
+  commandContractLocator = $commandContractLocator
+  commandContractSha256 = $commandContractSha256
   packageSha256 = $packages
   behaviorSubject = $behaviorSubject
   lifecycle = [ordered]@{
@@ -907,18 +1474,22 @@ $record = [ordered]@{
     activation = 'verified'
     remove = 'verified'
     postState = 'verified'
-    cleanup = 'verified'
+    cleanup = 'pending'
   }
-  claimLimit = 'Bounded zero-model Windows lifecycle, command privacy and end-to-end process termination, plus Claude host-owned 14-day inert-cache cleanup evidence for exact Commit A Codex and Claude package bytes in disposable non-empty scopes; production, unmanaged or cross-OS hosts, live-session cache behavior, ordinary model behavior, product value and release readiness remain unclaimed.'
+  claimLimit = 'Bounded zero-model Windows lifecycle, exact command-contract execution, command privacy and end-to-end process termination for exact subject Codex and Claude package bytes in disposable non-empty scopes containing a real evaluator-owned unrelated plugin and unmanaged sentinels; Claude host-owned approximately-14-day orphan cleanup was probed for prior and candidate Accord versions while the unrelated plugin remained installed, leaving zero Accord cache. Production, real unmanaged or cross-OS hosts, live-session cache behavior, ordinary model behavior, product value and release readiness remain unclaimed.'
   fixture = [ordered]@{
     platform = 'windows'
     priorVersion = '3.0.1'
+    priorRevision = $priorReleaseRevision
     targetVersion = '3.1.0'
     userStatePreserved = $true
     concurrentEditsPreserved = $true
-    foreignStatePreserved = $true
-    credentialsRead = $false
-    sessionsRead = $false
+    unrelatedPluginStatePreserved = $true
+    unrelatedPluginOwnership = 'evaluator-owned-fixture'
+    unmanagedSentinelsPreserved = $true
+    credentialEnvironmentInherited = $false
+    hostConfigRootsIsolated = $true
+    sessionInputsProvided = $false
     modelTurns = 0
     sourceFailureMode = 'registered-source-package-path-absent'
     codexUpdateMechanism = 'plugin-add-replaces-installed-version'
@@ -942,15 +1513,13 @@ $record = [ordered]@{
     nodeVersion = $nodeVersion.stdout.Trim()
     codexInstalledFileCount = $codexFileCount
     claudeInstalledFileCount = $claudeFileCount
+    neighborCodexInstalledFileCount = $neighborCodexFileCount
+    neighborClaudeInstalledFileCount = $neighborClaudeFileCount
   }
   commands = $commands
   postState = [ordered]@{
-    codexInstalledEntries = 0
-    claudeInstalledEntries = 0
-    taskProcesses = 0
-    codexCacheFiles = $codexCache
-    claudeCacheFiles = $claudeCache
-    taskRootRemoved = $true
+    afterAccordRemoval = $afterAccordRemoval
+    afterEvaluatorCleanup = $afterEvaluatorCleanup
   }
   hostCacheDisposition = [ordered]@{
     codex = [ordered]@{
@@ -958,54 +1527,65 @@ $record = [ordered]@{
       hostCallable = $false
     }
     claude = [ordered]@{
-      classification = 'host-dispatch-inert-bounded-orphan-cache'
+      classification = 'host-owned-orphan-cache-swept-to-zero-with-installed-neighbor'
       observedVersions = @('3.0.1', '3.1.0')
-      retainedVersions = @('3.1.0')
+      retainedVersions = @()
       exactAllowlistVerified = $true
       listedOrEnabled = $false
       hostCallable = $false
       dataStatePresent = $false
-      cleanupTrigger = 'plugin-list'
-      retentionMilliseconds = $retentionMilliseconds
-      retainedCandidateAgeMilliseconds = $candidateAgeMilliseconds
-      youngBoundaryAgeMilliseconds = $youngAgeMilliseconds
-      youngBoundaryRetained = $true
-      expiredBoundaryAgeMilliseconds = $expiredAgeMilliseconds
-      expiredBoundaryRemoved = $true
-      youngSweepCommandIndex = $youngSweepCommandIndex
-      expiredSweepCommandIndex = $expiredSweepCommandIndex
-      liveSessionBehavior = 'unverified'
-      claudePackageManifestSha256 = $claudeVersion.packageManifestSha256
-      claudeTerminalExecutableSha256 = $claudeVersion.terminalExecutableSha256
+      hostIdentity = [ordered]@{
+        cliVersion = $claudeVersion.stdout.Trim()
+        packageManifestSha256 = $claudeVersion.packageManifestSha256
+        terminalExecutableSha256 = $claudeVersion.terminalExecutableSha256
+      }
+      officialContract = [ordered]@{
+        source = 'https://code.claude.com/docs/en/plugins-reference#plugin-caching-and-file-resolution'
+        gracePeriod = 'roughly-14-days'
+        requiresInstalledPlugin = $true
+      }
+      exactHostProbe = [ordered]@{
+        ageSignal = 'orphan-marker-filesystem-mtime'
+        observedGracePeriodMilliseconds = $retentionMilliseconds
+        trigger = 'plugin-initialization'
+        priorVersion = [ordered]@{
+          young = [ordered]@{
+            ageMilliseconds = $youngAgeMilliseconds
+            disposition = 'retained'
+            commandRole = 'claudeOldYoungSweep'
+          }
+          expired = [ordered]@{
+            ageMilliseconds = $expiredAgeMilliseconds
+            disposition = 'removed'
+            commandRole = 'claudeOldExpiredSweep'
+          }
+        }
+        candidateVersion = [ordered]@{
+          young = [ordered]@{
+            ageMilliseconds = $youngAgeMilliseconds
+            disposition = 'retained'
+            commandRole = 'claudeCandidateYoungSweep'
+          }
+          expired = [ordered]@{
+            ageMilliseconds = $expiredAgeMilliseconds
+            disposition = 'removed'
+            commandRole = 'claudeCandidateExpiredSweep'
+          }
+        }
+        liveSessionBehavior = 'unverified'
+      }
     }
   }
 }
 
 Remove-Item -LiteralPath $task -Recurse -Force
 if (Test-Path -LiteralPath $task) { throw 'TaskRoot cleanup failed.' }
-$evidenceDirectory = Split-Path -Parent $evidencePath
-if (-not (Test-Path -LiteralPath $evidenceDirectory)) {
-  New-Item -ItemType Directory -Path $evidenceDirectory | Out-Null
-}
+$record.lifecycle.cleanup = 'verified'
+$record.postState.afterEvaluatorCleanup.taskRootRemoved = $true
+Assert-NoPrivateEvidenceValue $record
 $evidenceJson = $record | ConvertTo-Json -Depth 20
-foreach ($privateRoot in @($task, $temporaryBase, $repository, $env:LOCALAPPDATA, $env:APPDATA, $env:USERPROFILE)) {
-  if ($privateRoot) {
-    $resolvedPrivateRoot = [System.IO.Path]::GetFullPath($privateRoot)
-    foreach ($spelling in @($resolvedPrivateRoot, $resolvedPrivateRoot.Replace('\', '/'))) {
-      if ($evidenceJson.Contains(
-          $spelling, [System.StringComparison]::OrdinalIgnoreCase)) {
-        throw 'Evidence serialization retained a private or task-local root.'
-      }
-    }
-  }
-}
-[System.IO.File]::WriteAllText(
-  $evidencePath,
-  $evidenceJson + [System.Environment]::NewLine,
-  [System.Text.UTF8Encoding]::new($false)
-)
+Assert-NoPrivateEvidenceValue ($evidenceJson | ConvertFrom-Json -Depth 30)
 $succeeded = $true
-Write-Output $evidencePath
 } finally {
   $cleanupErrors = [System.Collections.Generic.List[string]]::new()
   try {
@@ -1027,6 +1607,46 @@ Write-Output $evidencePath
     }
   } catch { $cleanupErrors.Add('partial evidence cleanup failed') }
   if ($cleanupErrors.Count -ne 0) {
+    $succeeded = $false
     throw ('GT-20 finalizer: ' + ($cleanupErrors -join '; '))
   }
 }
+if (-not $succeeded -or $null -eq $evidenceJson) {
+  throw 'GT-20 did not reach an evidence publication state.'
+}
+$evidenceDirectory = Split-Path -Parent $evidencePath
+$createdEvidenceDirectory = $false
+if (-not (Test-Path -LiteralPath $evidenceDirectory)) {
+  New-Item -ItemType Directory -Path $evidenceDirectory | Out-Null
+  $createdEvidenceDirectory = $true
+}
+$pendingEvidencePath = Join-Path $evidenceDirectory (
+  ([System.IO.Path]::GetFileName($evidencePath)) + ".pending-$PID-" +
+  [Guid]::NewGuid().ToString('N')
+)
+try {
+  [System.IO.File]::WriteAllText(
+    $pendingEvidencePath,
+    $evidenceJson + [System.Environment]::NewLine,
+    [System.Text.UTF8Encoding]::new($false)
+  )
+  $stream = [System.IO.FileStream]::new(
+    $pendingEvidencePath, [System.IO.FileMode]::Open,
+    [System.IO.FileAccess]::ReadWrite, [System.IO.FileShare]::Read
+  )
+  try { $stream.Flush($true) } finally { $stream.Dispose() }
+  [System.IO.File]::Move($pendingEvidencePath, $evidencePath, $false)
+} finally {
+  if (Test-Path -LiteralPath $pendingEvidencePath) {
+    Remove-Item -LiteralPath $pendingEvidencePath -Force
+  }
+  if (
+    $createdEvidenceDirectory -and
+    -not (Test-Path -LiteralPath $evidencePath) -and
+    (Test-Path -LiteralPath $evidenceDirectory) -and
+    @(Get-ChildItem -LiteralPath $evidenceDirectory -Force).Count -eq 0
+  ) {
+    Remove-Item -LiteralPath $evidenceDirectory -Force
+  }
+}
+Write-Output $evidencePath

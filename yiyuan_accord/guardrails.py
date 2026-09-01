@@ -142,7 +142,7 @@ MANIFEST_FIELDS = {
 }
 CODEX_INTERFACE_FIELDS = set((
     "displayName shortDescription longDescription developerName category capabilities "
-    "websiteURL defaultPrompt brandColor composerIcon logo"
+    "websiteURL defaultPrompt brandColor composerIcon logo logoDark"
 ).split())
 CODEX_METADATA_FIELDS = {
     "interface": set("display_name short_description default_prompt".split()),
@@ -350,9 +350,10 @@ def manifest_shape_errors(
             or interface.get("defaultPrompt") != declared_prompt
             or not _string_list(declared_prompt)
             or any(len(value) > 128 for value in declared_prompt)
-            or interface.get("brandColor") != "#2F6BFF"
-            or interface.get("composerIcon") != "./assets/yiyuan-nexus-mark.png"
-            or interface.get("logo") != interface.get("composerIcon")
+            or interface.get("brandColor") != "#DE2910"
+            or interface.get("composerIcon") != "./assets/yiyuan-nexus-icon-red.svg"
+            or interface.get("logo") != "./assets/yiyuan-nexus-logo-light.svg"
+            or interface.get("logoDark") != "./assets/yiyuan-nexus-logo-dark.svg"
         ):
             errors.append("adapter codex manifest interface contract is invalid")
     elif adapter_id == "claude-code":
@@ -635,14 +636,14 @@ def validate_host_projection(
     asset_locators = []
     if adapter_id == "codex" and isinstance(manifest_locator, str):
         interface = manifest.get("interface") if isinstance(manifest, dict) else None
-        for field in ("composerIcon", "logo"):
+        for field in ("composerIcon", "logo", "logoDark"):
             value = interface.get(field) if isinstance(interface, dict) else None
             if isinstance(value, str) and value.startswith("./") and "\\" not in value:
                 relative = Path(value[2:])
                 if (
                     not relative.is_absolute() and ".." not in relative.parts
                     and relative.parts[:1] == ("assets",)
-                    and relative.suffix.lower() == ".png"
+                    and relative.suffix.lower() in {".png", ".svg"}
                 ):
                     asset_locators.append(
                         (Path(manifest_locator).parent.parent / relative).as_posix()

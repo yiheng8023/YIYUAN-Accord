@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -130 260 260" width="1024" height="1024">
+  <!-- YIYUAN NEXUS colorway: duo dark (color system v1.1, China red #DE2910, 2026-09-01) -->
+  <defs>
+    <mask id="rt">
+      <rect x="-130" y="-130" width="260" height="260" fill="white"/>
+      <circle cx="0" cy="-100" r="13" fill="black"/>
+      <circle cx="86.60254" cy="-50" r="13" fill="black"/>
+      <circle cx="86.60254" cy="50" r="13" fill="black"/>
+      <circle cx="0" cy="100" r="13" fill="black"/>
+      <circle cx="-86.60254" cy="50" r="13" fill="black"/>
+      <circle cx="-86.60254" cy="-50" r="13" fill="black"/>
+    </mask>
+    <path id="ya" d="M-9.5,0 L-9.5,71.35 A5 5 0 0 0 -3.72,76.29 A24 24 0 0 1 3.72,76.29 A5 5 0 0 0 9.5,71.35 L9.5,0 Z"/>
+  </defs>
+  <g stroke="#F5F5F7" fill="none" mask="url(#rt)">
+    <path stroke-width="5" d="M0,-100 L86.60254,-50 L86.60254,50 L0,100 L-86.60254,50 L-86.60254,-50 Z"/>
+    <path stroke-width="5" d="M0,-100 L0,-32 M-86.60254,50 L-27.713,16 M86.60254,50 L27.713,16"/>
+  </g>
+  <g fill="#DE2910" stroke="none">
+    <use href="#ya"/>
+    <use href="#ya" transform="rotate(120)"/>
+    <use href="#ya" transform="rotate(240)"/>
+    <circle cx="0" cy="0" r="9.5"/>
+    <path d="M-24.69,-25.23 Q0,-10.97 24.69,-25.23 L0,0 Z"/>
+    <path d="M34.19,-8.77 Q9.5,5.49 9.5,34 L0,0 Z"/>
+    <path d="M-34.19,-8.77 Q-9.5,5.49 -9.5,34 L0,0 Z"/>
+  </g>
+  <g stroke="#F5F5F7" stroke-width="5" fill="none">
+    <circle cx="0" cy="-100" r="13"/><circle cx="86.60254" cy="-50" r="13"/>
+    <circle cx="86.60254" cy="50" r="13"/><circle cx="0" cy="100" r="13"/>
+    <circle cx="-86.60254" cy="50" r="13"/><circle cx="-86.60254" cy="-50" r="13"/>
+  </g>
+</svg>
