@@ -69,6 +69,14 @@ Then read, in order:
   no task root or evidence and is failed evaluator counterevidence. The next
   freeze uses exact plugin identities plus official plugin and marketplace
   inventories instead of the broad free-text substring.
+- Exact `62f1a433c527e59af5c545d779f1e67c1d7be772` was the third frozen
+  replay attempt. It completed the isolated lifecycle and cleanup, then the
+  final ordered-command reconciliation rejected index zero because PowerShell
+  normalized the omitted typed string failure category to an empty string while
+  the JSON contract requires null. The attempt published no evidence and left
+  no task root. The record entry now normalizes an empty omitted category to
+  null, preserves the two named failure categories, and reports exact mismatched
+  field names for any later command-contract failure.
 - Dynamic applicability uses a small invariant floor plus current context.
   Methods, rules, standards, adapters and mechanisms activate only for a named
   condition and retain evidence, cost, fallback, verification and retirement

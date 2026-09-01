@@ -731,8 +731,13 @@ function Add-CommandRecord {
     [AllowNull()][string]$FailureCategory = $null
   )
   if ($Command.Contains('role')) { throw "Command role already assigned: $Role" }
+  $normalizedFailureCategory = if ([string]::IsNullOrEmpty($FailureCategory)) {
+    $null
+  } else {
+    $FailureCategory
+  }
   $Command.Insert(0, 'role', $Role)
-  $Command.Insert(1, 'failureCategory', $FailureCategory)
+  $Command.Insert(1, 'failureCategory', $normalizedFailureCategory)
   [void]$commands.Add($Command)
 }
 
@@ -778,23 +783,29 @@ function Assert-CommandContract {
     }
     $expectedExit = if ($spec.expectedExit -eq 'zero') { 0 } else { $null }
     $expectedTimedOut = $spec.expectedExit -eq 'timeout'
-    if ($command.role -ne $spec.role -or
-        (($command.argv | ConvertTo-Json -Compress) -ne ($argv | ConvertTo-Json -Compress)) -or
-        $command.environmentProfile -ne $spec.environmentProfile -or
-        $command.failureCategory -ne $spec.expectedFailureCategory -or
-        $command.inputSha256 -ne $spec.inputSha256 -or
-        $command.executionTimeoutSeconds -ne $expectedBudgets.executionTimeoutSeconds -or
-        $command.endToEndTimeoutSeconds -ne $expectedBudgets.endToEndTimeoutSeconds -or
-        $command.outputLimitBytes -ne $expectedBudgets.outputLimitBytes -or
-        $command.timedOut -ne $expectedTimedOut -or
-        $command.terminationRequested -ne $expectedTimedOut -or
-        $command.terminationConfirmed -ne $true -or
-        $command.streamsDrained -ne $true -or
-        $command.jobActiveProcesses -ne 0 -or
-        ($spec.expectedExit -eq 'zero' -and $command.exitCode -ne $expectedExit) -or
+    $mismatches = [System.Collections.Generic.List[string]]::new()
+    if ($command.role -ne $spec.role) { $mismatches.Add('role') }
+    if (($command.argv | ConvertTo-Json -Compress) -ne ($argv | ConvertTo-Json -Compress)) {
+      $mismatches.Add('argv')
+    }
+    if ($command.environmentProfile -ne $spec.environmentProfile) { $mismatches.Add('environmentProfile') }
+    if ($command.failureCategory -ne $spec.expectedFailureCategory) { $mismatches.Add('failureCategory') }
+    if ($command.inputSha256 -ne $spec.inputSha256) { $mismatches.Add('inputSha256') }
+    if ($command.executionTimeoutSeconds -ne $expectedBudgets.executionTimeoutSeconds) { $mismatches.Add('executionTimeoutSeconds') }
+    if ($command.endToEndTimeoutSeconds -ne $expectedBudgets.endToEndTimeoutSeconds) { $mismatches.Add('endToEndTimeoutSeconds') }
+    if ($command.outputLimitBytes -ne $expectedBudgets.outputLimitBytes) { $mismatches.Add('outputLimitBytes') }
+    if ($command.timedOut -ne $expectedTimedOut) { $mismatches.Add('timedOut') }
+    if ($command.terminationRequested -ne $expectedTimedOut) { $mismatches.Add('terminationRequested') }
+    if ($command.terminationConfirmed -ne $true) { $mismatches.Add('terminationConfirmed') }
+    if ($command.streamsDrained -ne $true) { $mismatches.Add('streamsDrained') }
+    if ($command.jobActiveProcesses -ne 0) { $mismatches.Add('jobActiveProcesses') }
+    if (($spec.expectedExit -eq 'zero' -and $command.exitCode -ne $expectedExit) -or
         ($spec.expectedExit -eq 'nonzero' -and $command.exitCode -eq 0) -or
         ($spec.expectedExit -eq 'timeout' -and $command.exitCode -ne 124)) {
-      throw "GT-20 command contract mismatch at index $index ($($spec.role))."
+      $mismatches.Add('exitCode')
+    }
+    if ($mismatches.Count -ne 0) {
+      throw "GT-20 command contract mismatch at index $index ($($spec.role)): $($mismatches -join ', ')."
     }
     $profile = $profiles.($spec.environmentProfile)
     $allowed = @($baseAllowed + @($profile.additionalKeys) | Sort-Object -Unique)
