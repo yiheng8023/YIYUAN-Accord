@@ -11,6 +11,7 @@ from yiyuan_accord.control import (
     _snapshot_v1_projection_package_errors,
     _snapshot_v1_projection_shape_errors,
     _snapshot_v2_node_errors, _snapshot_v2_transition_errors,
+    _validate_exact_package_evidence_lifecycle,
     _snapshot_v1_transition_errors, _snapshot_v1_json_structure_is_bounded,
     _SNAPSHOT_V1_MAX_JSON_DEPTH,
     _semantic_version_precedence,
@@ -2299,27 +2300,42 @@ class ProductControlTests(unittest.TestCase):
             'revision-bound v2 replay boundary is invalid',
         )
 
-        closed = _clone(program)
-        closed_acceptance = _clone(acceptance)
-        closed['status'] = 'ready'
-        closed['increment']['state'] = 'completed'
-        closed_node = closed['increment']['closeoutSnapshot']
-        closed_node['id'] = 'stage.v3.1.0.repository-candidate.closed'
-        closed_node['state'] = 'closed'
-        closed_node['nextGateId'] = 'exact-local-verification-and-review'
-        closed_node['replay']['evidenceState'] = 'verified'
-        closed_node['replay']['evidenceRef'] = (
-            'evals/evidence/2026-09-01-v310-gt20-exact-package-source.json'
-        )
-        _find(closed_acceptance['criteria'], 'id', 'R3')[
-            'assessment'
-        ] = 'verified'
-        self.ae(_snapshot_v2_node_errors(closed, closed_acceptance), [])
-        self.ae(_snapshot_v2_transition_errors(closed_node, node), [])
+        self.ae(prior['state'], 'reopened')
+        self.ae(node['state'], 'closed')
         self.has(
-            _snapshot_v2_transition_errors(closed_node, prior),
+            _snapshot_v2_transition_errors(node, node),
             'revision-bound v2 close transition is invalid',
         )
+
+    def test_exact_package_evidence_fails_closed_on_drift(self):
+        with _indexed() as root:
+            program = _read(root, P)
+            lifecycle = program['increment']['exactPackageEvidenceLifecycle']
+            locator = lifecycle['evidence']['locator']
+            record = _read(root, locator)
+            def validate(value):
+                _write(root, locator, value)
+                lifecycle['evidence']['sha256'] = _file_sha(root, locator)
+                errors = []
+                _validate_exact_package_evidence_lifecycle(root, program, errors)
+                return errors
+            self.ae(validate(record), [])
+            for mutate in (
+                lambda value: value['commands'][0].__setitem__('exitCode', 1),
+                lambda value: value.__setitem__('behaviorSubject', [{'x': 1}]),
+                lambda value: value['postState'].__setitem__('codexCacheFiles', [{}]),
+                lambda value: value.__setitem__('claimLimit', 'production verified'),
+            ):
+                changed = _clone(record)
+                mutate(changed)
+                self.has(validate(changed), 'exact package evidence record contract is invalid')
+            self.ae(validate(record), [])
+            lifecycle['evidence']['evaluatedRevision'] = '0' * 40
+            self.has(validate(record), 'exact package evidence verified state is invalid')
+            lifecycle['evidence']['evaluatedRevision'] = record['evaluatedRevision']
+            subject = next(iter(record['behaviorSubject']))
+            (root / subject).write_bytes((root / subject).read_bytes() + b'drift')
+            self.has(validate(record), 'exact package evidence subject binding is invalid')
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         current = host_check(ROOT, 'codex')['details']

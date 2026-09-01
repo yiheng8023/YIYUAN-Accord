@@ -1,0 +1,425 @@
+{
+  "schema": "yiyuan-accord-gt20-exact-package-evidence/v1",
+  "taskId": "GT-20",
+  "evaluatedRevision": "7ea91dad811d337f00f75eb521cffacabd73b05f",
+  "runnerSha256": "f49f2e74afaa4dbcd0fae9ae015e9c288e36b653813936c788142d96e7441f4a",
+  "packageSha256": {
+    "codex": "2722087725087d2ed7222f837b63d297937e0f4397526dae5bf76a650ad36fe2",
+    "claude-code": "b1dddb67fe9c4cc14ba3089a13702db2497183ebb202a426874de08bbd99b083"
+  },
+  "behaviorSubject": {
+    ".agents/plugins/marketplace.json": "a680e15cf06c551d93f7869b20fed25ef0c0ef3c0c7a41a10ec85a583be973ae",
+    ".claude-plugin/marketplace.json": "a0b6edac1fcd10f2b330045fab177ba1f0a520f63fbd3b8e9fd48d6abfe969c3",
+    "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json": "b39034d978fc9ed5ba814b2297dfa44afc8d4e96603899af9e421da913e56f51",
+    "plugins/yiyuan-accord-codex/adapter.json": "70da4511ac4ba2eac22c78cc95c1d042dd21a8f94b3cb3d80b1817e23e74a929",
+    "plugins/yiyuan-accord-codex/assets/yiyuan-nexus-mark.png": "6e407c1942ff86e8f751930bf5df1000579b9a37824e17dde336d26ea450a235",
+    "plugins/yiyuan-accord-codex/hooks/hooks.json": "6331d07932b2f271fbb8ec76b802fa79e5e5895379711b9af69ef5f2b2aa1157",
+    "plugins/yiyuan-accord-codex/LICENSE": "e96259009082f81ae1ec256200c6bb8606095ba8447ab13b644a8466cab8d653",
+    "plugins/yiyuan-accord-codex/NOTICE": "f7d901b78bef172506fcc63aa63c460c72e5c7192b95c17ef9c16300f34c9a4e",
+    "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+    "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": "c9e897f34cf5c7c12f8b2f86afafd72da1eeccb9e9d82da761ffa5dd3031329a",
+    "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml": "e0e5d0fb6f8f62cd67bd8e28abe79484a860bceb386751dc68ed8b51f7a15068",
+    "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json": "42344973b7ee1fb6b00846173be01f77563f18432708e1e542c7d31f51628c70",
+    "plugins/yiyuan-accord-claude/adapter.json": "a8e89840c08fb6b45eaf68b2cb9a99b8137924265f4e0627840b55e721ea249a",
+    "plugins/yiyuan-accord-claude/hooks/hooks.json": "0b1f0b5745f267f415e2e5468be26624c5510462de944791b5fa6deabc754cd3",
+    "plugins/yiyuan-accord-claude/LICENSE": "e96259009082f81ae1ec256200c6bb8606095ba8447ab13b644a8466cab8d653",
+    "plugins/yiyuan-accord-claude/NOTICE": "f7d901b78bef172506fcc63aa63c460c72e5c7192b95c17ef9c16300f34c9a4e",
+    "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs": "b454a41cb2687da4f9730e1ecc7e6da4eaabc6a6228f422246b796d8cf072c0e",
+    "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": "fc44c6a987af0e871b6decb55700ae74b62778fb1e01e7c5c81bb91482f9699d"
+  },
+  "lifecycle": {
+    "install": "verified",
+    "failedUpdateRollback": "verified",
+    "successfulUpdate": "verified",
+    "activation": "verified",
+    "remove": "verified",
+    "postState": "verified",
+    "cleanup": "verified"
+  },
+  "claimLimit": "Bounded zero-model Windows lifecycle evidence for exact Commit A Codex and Claude package bytes in disposable non-empty scopes; production, unmanaged or cross-OS hosts, ordinary model behavior, product value and release readiness remain unclaimed.",
+  "fixture": {
+    "platform": "windows",
+    "priorVersion": "3.0.1",
+    "targetVersion": "3.1.0",
+    "userStatePreserved": true,
+    "concurrentEditsPreserved": true,
+    "foreignStatePreserved": true,
+    "credentialsRead": false,
+    "sessionsRead": false,
+    "modelTurns": 0,
+    "sourceFailureMode": "registered-source-package-path-absent",
+    "codexUpdateMechanism": "plugin-add-replaces-installed-version",
+    "claudeUpdateMechanism": "plugin-update",
+    "rollbackBytesMatchPriorRelease": true,
+    "installedBytesMatchDeclaredPackages": true,
+    "startupHookSilent": true,
+    "resumeHookTypedContext": true,
+    "codexCliVersion": "codex-cli 0.151.0",
+    "claudeCliVersion": "2.1.251 (Claude Code)",
+    "nodeVersion": "v24.19.0",
+    "codexInstalledFileCount": 9,
+    "claudeInstalledFileCount": 7
+  },
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "-C",
+        "C:\\Projects\\YIYUAN-Accord",
+        "archive",
+        "--format=tar",
+        "--output=%GT20_TASK_ROOT%\\old.tar",
+        "v3.0.1"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-C",
+        "C:\\Projects\\YIYUAN-Accord",
+        "archive",
+        "--format=tar",
+        "--output=%GT20_TASK_ROOT%\\candidate.tar",
+        "7ea91dad811d337f00f75eb521cffacabd73b05f"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "tar",
+        "-xf",
+        "%GT20_TASK_ROOT%\\old.tar",
+        "-C",
+        "%GT20_TASK_ROOT%\\old-source"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "tar",
+        "-xf",
+        "%GT20_TASK_ROOT%\\candidate.tar",
+        "-C",
+        "%GT20_TASK_ROOT%\\candidate-source"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "codex",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "codex-cli 0.151.0\n",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "2.1.251 (Claude Code)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "v24.19.0\r\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "codex",
+        "plugin",
+        "marketplace",
+        "add",
+        "%GT20_TASK_ROOT%\\mutable-source",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"marketplaceName\": \"yiyuan-accord\",\n  \"installedRoot\": \"%GT20_TASK_ROOT%\\\\mutable-source\",\n  \"alreadyAdded\": false\n}\n",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "plugin",
+        "marketplace",
+        "add",
+        "%GT20_TASK_ROOT%\\mutable-source",
+        "--scope",
+        "user"
+      ],
+      "exitCode": 0,
+      "stdout": "Adding marketplace…√ Successfully added marketplace: yiyuan-accord (declared in user settings)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "codex",
+        "plugin",
+        "add",
+        "yiyuan-accord-codex@yiyuan-accord",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n  \"name\": \"yiyuan-accord-codex\",\n  \"marketplaceName\": \"yiyuan-accord\",\n  \"version\": \"3.0.1\",\n  \"installedPath\": \"%GT20_TASK_ROOT%\\\\codex-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-codex\\\\3.0.1\",\n  \"authPolicy\": \"ON_INSTALL\"\n}\n",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "plugin",
+        "install",
+        "yiyuan-accord-claude@yiyuan-accord",
+        "--scope",
+        "user",
+        "-y"
+      ],
+      "exitCode": 0,
+      "stdout": "Installing plugin \"yiyuan-accord-claude@yiyuan-accord\"...√ Successfully installed plugin: yiyuan-accord-claude@yiyuan-accord (scope: user)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "codex",
+        "plugin",
+        "add",
+        "yiyuan-accord-codex@yiyuan-accord",
+        "--json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\nError: plugin source path is not a directory: %GT20_TASK_ROOT%\\mutable-source\\plugins\\yiyuan-accord-codex\n\nCaused by:\n    plugin source path is not a directory: %GT20_TASK_ROOT%\\mutable-source\\plugins\\yiyuan-accord-codex\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "plugin",
+        "update",
+        "yiyuan-accord-claude@yiyuan-accord",
+        "--scope",
+        "user",
+        "-y"
+      ],
+      "exitCode": 1,
+      "stdout": "Checking for updates for plugin \"yiyuan-accord-claude@yiyuan-accord\" at user scope…\n",
+      "stderr": "× Failed to update plugin \"yiyuan-accord-claude@yiyuan-accord\": Plugin source not found at %GT20_TASK_ROOT%\\mutable-source\\plugins\\yiyuan-accord-claude\n"
+    },
+    {
+      "argv": [
+        "codex",
+        "plugin",
+        "list",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"installed\": [\n    {\n      \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n      \"name\": \"yiyuan-accord-codex\",\n      \"marketplaceName\": \"yiyuan-accord\",\n      \"version\": \"3.0.1\",\n      \"installed\": true,\n      \"enabled\": true,\n      \"source\": {\n        \"source\": \"local\",\n        \"path\": \"%GT20_TASK_ROOT%\\\\mutable-source\\\\plugins\\\\yiyuan-accord-codex\"\n      },\n      \"marketplaceSource\": {\n        \"sourceType\": \"local\",\n        \"source\": \"\\\\\\\\?\\\\%GT20_TASK_ROOT%\\\\mutable-source\"\n      },\n      \"installPolicy\": \"AVAILABLE\",\n      \"authPolicy\": \"ON_INSTALL\"\n    }\n  ],\n  \"available\": []\n}\n",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "plugin",
+        "list",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n  {\n    \"id\": \"yiyuan-accord-claude@yiyuan-accord\",\n    \"version\": \"3.0.1\",\n    \"scope\": \"user\",\n    \"enabled\": true,\n    \"installPath\": \"%GT20_TASK_ROOT%\\\\claude-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-claude\\\\3.0.1\",\n    \"installedAt\": \"2026-09-01T00:04:39.221Z\",\n    \"lastUpdated\": \"2026-09-01T00:04:39.221Z\",\n    \"errors\": [\n      \"Plugin directory not found at path: %GT20_TASK_ROOT%\\\\mutable-source\\\\plugins\\\\yiyuan-accord-claude. Check that the marketplace entry has the correct path.\"\n    ]\n  }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "codex",
+        "plugin",
+        "add",
+        "yiyuan-accord-codex@yiyuan-accord",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n  \"name\": \"yiyuan-accord-codex\",\n  \"marketplaceName\": \"yiyuan-accord\",\n  \"version\": \"3.1.0\",\n  \"installedPath\": \"%GT20_TASK_ROOT%\\\\codex-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-codex\\\\3.1.0\",\n  \"authPolicy\": \"ON_INSTALL\"\n}\n",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "plugin",
+        "update",
+        "yiyuan-accord-claude@yiyuan-accord",
+        "--scope",
+        "user",
+        "-y"
+      ],
+      "exitCode": 0,
+      "stdout": "Checking for updates for plugin \"yiyuan-accord-claude@yiyuan-accord\" at user scope…\n√ Plugin \"yiyuan-accord-claude\" updated from 3.0.1 to 3.1.0 for scope user. Restart to apply changes.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "codex",
+        "plugin",
+        "list",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"installed\": [\n    {\n      \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n      \"name\": \"yiyuan-accord-codex\",\n      \"marketplaceName\": \"yiyuan-accord\",\n      \"version\": \"3.1.0\",\n      \"installed\": true,\n      \"enabled\": true,\n      \"source\": {\n        \"source\": \"local\",\n        \"path\": \"%GT20_TASK_ROOT%\\\\mutable-source\\\\plugins\\\\yiyuan-accord-codex\"\n      },\n      \"marketplaceSource\": {\n        \"sourceType\": \"local\",\n        \"source\": \"\\\\\\\\?\\\\%GT20_TASK_ROOT%\\\\mutable-source\"\n      },\n      \"installPolicy\": \"AVAILABLE\",\n      \"authPolicy\": \"ON_INSTALL\"\n    }\n  ],\n  \"available\": []\n}\n",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "plugin",
+        "list",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "[\n  {\n    \"id\": \"yiyuan-accord-claude@yiyuan-accord\",\n    \"version\": \"3.1.0\",\n    \"scope\": \"user\",\n    \"enabled\": true,\n    \"installPath\": \"%GT20_TASK_ROOT%\\\\claude-host\\\\plugins\\\\cache\\\\yiyuan-accord\\\\yiyuan-accord-claude\\\\3.1.0\",\n    \"installedAt\": \"2026-09-01T00:04:39.221Z\",\n    \"lastUpdated\": \"2026-09-01T00:04:43.845Z\"\n  }\n]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "%GT20_TASK_ROOT%\\codex-host\\plugins\\cache\\yiyuan-accord\\yiyuan-accord-codex\\3.1.0\\runtime\\accord-hook.cjs"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "%GT20_TASK_ROOT%\\codex-host\\plugins\\cache\\yiyuan-accord\\yiyuan-accord-codex\\3.1.0\\runtime\\accord-hook.cjs"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"{\\\"schema\\\":\\\"yiyuan-accord-hook-context/v1\\\",\\\"signal\\\":{\\\"event\\\":\\\"SessionStart\\\",\\\"source\\\":\\\"resume\\\",\\\"sourceKind\\\":\\\"supported-official-hook-event\\\"},\\\"eventHints\\\":[{\\\"field\\\":\\\"host.model\\\",\\\"value\\\":\\\"model-variable\\\",\\\"sourceRef\\\":\\\"SessionStart.model\\\"},{\\\"field\\\":\\\"host.permission-mode\\\",\\\"value\\\":\\\"default\\\",\\\"sourceRef\\\":\\\"SessionStart.permission_mode\\\"}],\\\"directives\\\":[\\\"invalidate-dependent-assumptions\\\",\\\"re-sense-decision-relevant-state-from-supported-official-structured-sources\\\",\\\"hold-missing-or-conflicting-fields-unknown\\\",\\\"preserve-independently-bound-last-safe-allocation\\\",\\\"use-fresh-zero-history-only-if-sequential-relief-is-required\\\",\\\"verify-destination-before-source-release\\\"],\\\"claimLimit\\\":[\\\"signal-is-not-current-task-state\\\",\\\"signal-is-not-user-authority\\\",\\\"event-hints-are-not-state-receipts\\\",\\\"injection-is-not-agent-use-execution-consequence-evidence-or-value\\\"]}\"}}",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "%GT20_TASK_ROOT%\\claude-host\\plugins\\cache\\yiyuan-accord\\yiyuan-accord-claude\\3.1.0\\runtime\\accord-hook.cjs"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "%GT20_TASK_ROOT%\\claude-host\\plugins\\cache\\yiyuan-accord\\yiyuan-accord-claude\\3.1.0\\runtime\\accord-hook.cjs"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"{\\\"schema\\\":\\\"yiyuan-accord-hook-context/v1\\\",\\\"signal\\\":{\\\"event\\\":\\\"SessionStart\\\",\\\"source\\\":\\\"resume\\\",\\\"sourceKind\\\":\\\"supported-official-hook-event\\\"},\\\"eventHints\\\":[{\\\"field\\\":\\\"host.model\\\",\\\"value\\\":\\\"model-variable\\\",\\\"sourceRef\\\":\\\"SessionStart.model\\\"},{\\\"field\\\":\\\"host.permission-mode\\\",\\\"value\\\":\\\"default\\\",\\\"sourceRef\\\":\\\"SessionStart.permission_mode\\\"}],\\\"directives\\\":[\\\"invalidate-dependent-assumptions\\\",\\\"re-sense-decision-relevant-state-from-supported-official-structured-sources\\\",\\\"hold-missing-or-conflicting-fields-unknown\\\",\\\"preserve-independently-bound-last-safe-allocation\\\",\\\"use-fresh-zero-history-only-if-sequential-relief-is-required\\\",\\\"verify-destination-before-source-release\\\"],\\\"claimLimit\\\":[\\\"signal-is-not-current-task-state\\\",\\\"signal-is-not-user-authority\\\",\\\"event-hints-are-not-state-receipts\\\",\\\"injection-is-not-agent-use-execution-consequence-evidence-or-value\\\"]}\"}}",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "codex",
+        "plugin",
+        "remove",
+        "yiyuan-accord-codex@yiyuan-accord",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"pluginId\": \"yiyuan-accord-codex@yiyuan-accord\",\n  \"name\": \"yiyuan-accord-codex\",\n  \"marketplaceName\": \"yiyuan-accord\"\n}\n",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "plugin",
+        "uninstall",
+        "yiyuan-accord-claude@yiyuan-accord",
+        "--scope",
+        "user",
+        "-y"
+      ],
+      "exitCode": 0,
+      "stdout": "√ Successfully uninstalled plugin: yiyuan-accord-claude (scope: user)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "codex",
+        "plugin",
+        "marketplace",
+        "remove",
+        "yiyuan-accord",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"marketplaceName\": \"yiyuan-accord\",\n  \"installedRoot\": null\n}\n",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "plugin",
+        "marketplace",
+        "remove",
+        "yiyuan-accord",
+        "--scope",
+        "user"
+      ],
+      "exitCode": 0,
+      "stdout": "√ Successfully removed marketplace: yiyuan-accord (from user settings)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "codex",
+        "plugin",
+        "list",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"installed\": [],\n  \"available\": []\n}\n",
+      "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"%TEMP%\\\\\" (codex_home: AbsolutePathBuf(\"%GT20_TASK_ROOT%\\\\codex-host\"))\n"
+    },
+    {
+      "argv": [
+        "claude",
+        "plugin",
+        "list",
+        "--json"
+      ],
+      "exitCode": 0,
+      "stdout": "[]\n",
+      "stderr": ""
+    }
+  ],
+  "postState": {
+    "codexInstalledEntries": 0,
+    "claudeInstalledEntries": 0,
+    "taskProcesses": 0,
+    "codexCacheFiles": [],
+    "claudeCacheFiles": [
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.0.1/.orphaned_at",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.0.1/adapter.json",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.0.1/.claude-plugin/plugin.json",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.0.1/skills/deliver-demand-driven-outcome/SKILL.md",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/.orphaned_at",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/adapter.json",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/LICENSE",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/NOTICE",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/.claude-plugin/plugin.json",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/hooks/hooks.json",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/runtime/accord-hook.cjs",
+      "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/skills/deliver-demand-driven-outcome/SKILL.md"
+    ],
+    "taskRootRemoved": true
+  }
+}

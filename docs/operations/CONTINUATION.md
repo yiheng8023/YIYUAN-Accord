@@ -38,6 +38,25 @@ Then read, in order:
   at exact SHA `24cf9f3750ecd700944988e81a519db54b67b8e8`. Its lightweight tag
   resolves directly to that commit and remains immutable. Later `main`
   documentation or maintenance does not change the released package.
+- Commit A `7ea91dad811d337f00f75eb521cffacabd73b05f` freezes the complete
+  v3.1.0 Codex and Claude package bytes, including LICENSE and NOTICE. The
+  schema-v2 stage node first reopens only the complete-package identity
+  boundary, preserves GT-21, and invalidates GT-20 for the old package.
+  `evals/evidence/2026-09-01-v310-gt20-exact-package-source.json` then verifies
+  the exact Commit A lifecycle on Windows with Codex CLI 0.151.0, Claude Code
+  2.1.251 and Node 24.19.0. The containing Commit B closes that same v2 node and
+  opens exact-local verification; its exact SHA must be read from Git and is
+  not self-attested here. The record proves only isolated CLI install,
+  failed-update rollback, successful update, exact installed bytes, enabled
+  inventory, installed Hook behavior, native removal, semantic user/concurrent/
+  foreign-state preservation and task cleanup. Desktop activation, production,
+  cross-OS behavior, value, hosted status and publication remain separate.
+- Dynamic applicability uses a small invariant floor plus current context.
+  Methods, rules, standards, adapters and mechanisms activate only for a named
+  condition and retain evidence, cost, fallback, verification and retirement
+  boundaries; this cannot waive a necessary release gate. The measured
+  bottlenecks, budgets, compatibility matrix, feedback route and post-release
+  work are in `docs/architecture.md#maintenance-baseline`.
 - Exact revision `ae7294652761abceb753f0571ee82c7ddeae06af` is retained as a
   historically verified, unreleased v3.1.0 baseline. Its local, independent,
   GitHub Actions and condition-fit Cloud results remain bounded facts, but the
@@ -468,11 +487,11 @@ Then read, in order:
   superseded pre-resource GT-11 evidence files, leaving three expected slots.
   At least three slots and five percent product-code/test headroom must remain;
   the guardrail is not a growth target or deletion KPI.
-- The selected-candidate guardrail permits at most 105 tracked files and
-  680000 Python-and-test bytes with at least five percent headroom and three
-  tracked-file slots. At the selected repository-candidate state projection,
-  102 tracked files preserve all three slots; the canonical verifier recomputes
-  current Python/test bytes and headroom after every code or test change. The
+- The current numerical guardrail lives only in
+  `product/program.json#/complexityBudget`. The canonical verifier recomputes
+  tracked files, Python/test bytes, primary-instruction bytes and headroom after
+  every candidate change; historical counts in this document remain scoped to
+  their named revisions rather than becoming a second current budget. The
   final 90000-byte increase over the
   former 590000-byte ceiling is bounded to canonical snapshot-origin discovery,
   the self-contained schema-v1 historical predicate, revision-bound authority,

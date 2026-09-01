@@ -17,21 +17,26 @@ remain explicit. Fresh current-contract GT-18/19 at exact
 `2460adcff02bd56144f8d3f647ecef27cd5fefd0` now pass only one bounded
 synthetic evolution sequence and one bounded Codex-local responsibility-
 allocation sequence, with blocked arms, corrections, failed review and high
-costs retained. Exact GT-21 and GT-20 evidence now closes only their bounded
-current-host live-carrier/fresh-handoff and disposable Windows transactional-
-lifecycle cases. Source-bound whole-system reacceptance from exact cut
+costs retained. Exact GT-21 evidence closes only its bounded current-host
+live-carrier and fresh-handoff cases. Fresh GT-20 evidence at exact Commit A
+`7ea91dad811d337f00f75eb521cffacabd73b05f` closes only the disposable Windows
+CLI lifecycle for the unchanged v3.1 package bytes on Codex CLI 0.151.0 and
+Claude Code 2.1.251. Source-bound whole-system reacceptance from exact cut
 `85a917a` is complete, and the later independent candidate-forming review has
-selected v3.1.0 as the repository candidate. It is not yet a clean exact-local
-candidate, hosted result, named-human release decision, tag or public Release.
-The next gate is one clean unchanged revision through local verification and
-four independent exact-tree reviews. Production trust, live Claude behavior,
-cross-host value and updated-client entry compatibility remain unknown.
+selected v3.1.0 as the repository candidate. The package boundary is reclosed
+under the schema-v2 status model, but this working tree is not yet a committed
+clean exact-local candidate, hosted result, named-human release decision, tag
+or public Release. The next gate is one clean unchanged Commit B through local
+verification and four fresh independent exact-tree reviews. Production trust,
+desktop-host behavior, live Claude triggering, cross-OS equivalence and product
+value remain unknown.
 The implementation does not admit an Accord-managed Runtime, durable state
 layer or durable evolution. Selecting the short-lived Hook does not prove
 production trust or broad live-host behavior.
-The exact v3.1 package checkpoint
-remains bounded historical evidence; public v3.0.1 remains the recommended
-release reference, and preview.2 remains an unreleased historical checkpoint.
+Earlier v3.1 package checkpoints remain bounded historical evidence. The
+Commit A package bytes are frozen for Commit B identity verification; public
+v3.0.1 remains the recommended release reference, and preview.2 remains an
+unreleased historical checkpoint.
 
 ~~~text
 latest bound goal, consensus and corrections
@@ -103,6 +108,133 @@ product/constitution.json. `product/reshaping-guidance.json` records the current
 accepted but revisable reshape and dynamic-index direction. Derived prose may
 explain them but cannot silently redefine them. These are current source
 locations, not an eternal ontology or permanent authority-file count.
+
+## Dynamic applicability
+
+Accord does not globally activate a method, rule, standard or mechanism merely
+because it is available. A small invariant floor remains always on inside its
+declared scope: applicable legal and safety constraints, truthful evidence,
+explicit authority, failure closure and honest claims. Current goal,
+environment, host capability, risk, evidence, resources and lifecycle state are
+dynamic variables. Concrete routes and controls are derived from that floor and
+those variables, and each needs an applicability condition, evidence, cost,
+fallback, verification and retirement boundary.
+
+This is context adaptation, not permission to skip required gates. Small and
+low-risk work may use a light no-op or native route; release, publication,
+destructive effects and high-consequence work retain deeper independent gates.
+The upstream Agent and host are the primary means for the eight
+self-bootstrapping responsibility families. Accord coordinates and verifies
+them and fills only an evidenced residual gap. The measured maintenance,
+compatibility, feedback and regression route is recorded below.
+
+## Maintenance baseline
+
+Status: measured planning baseline referenced by `product/program.json`, not
+semantic authority, release or production evidence. Measured: 2026-09-01.
+
+### Panorama and bottleneck order
+
+The release-close working tree measured 106 already tracked files before the
+reusable GT-20 runner and its final evidence record are added; the resulting
+candidate projects 108 files against the structured 111-file ceiling. Eight
+Python files contain the product and tests. The three largest maintained code
+surfaces are the product-control test module, `control.py` and `evidence.py`;
+together they dominate code review, coupling and regression cost. The current
+working tree has 683037 Python-and-product-test bytes against the structured
+720000-byte ceiling, leaving 36963 bytes or 5.13 percent. These measurements
+become history after any change; `product/program.json` and the canonical
+verifier remain the numerical authority.
+
+Historical exact-local verification took 9821.638 seconds on Windows. Hosted
+run 33405883747 showed the same complete suite at about 20 minutes on Linux,
+60-67 minutes on Windows and 108 minutes on macOS; the nine required legs ran
+in parallel and the slowest leg determined about 113 minutes of wall time.
+Those observations justify profiling and equivalent partitioning work, but do
+not justify removing a compatibility leg or skipping the one full exact
+candidate run.
+
+Evidence volume and projection drift are the other major costs. The largest
+retained source record is about 835 KB, while version, package identity,
+release state and explanatory prose appear across structured product files,
+manifests, READMEs, continuation and Release notes. Historical facts may repeat
+with their original scope; current mutable facts should have one structured
+owner and derived prose should point to it instead of copying live counts or
+status.
+
+The ordered bottlenecks are:
+
+1. Preserve schema-v2 lineage, exact package identity, full command evidence,
+   rollback, user-state preservation and cleanup fail-closed.
+2. Profile validation by test and stable dependency boundary. Admit a fast
+   affected-boundary loop only after it selects every mutated obligation; keep
+   one full exact suite and all nine matrix legs until equivalent partitioning
+   is mutation-tested across parser, Git and Node seams.
+3. Give mutable version, package, lifecycle, acceptance and budget facts one
+   structured owner; generate or check README, Release and continuation
+   projections rather than adding a second registry.
+4. Extract from `control.py`, `evidence.py` and the product-control test module
+   only around stable duties with narrow data interfaces and unchanged failure
+   behavior; avoid release-time rewrites or catalogues of tiny modules.
+5. Maintain semantic-state lifecycle adapters per host. Verify install, failed
+   update rollback, successful update, activation, removal and preservation of
+   user and foreign state without requiring host-owned formatting or inert
+   cache bytes to be identical.
+6. Advance production claims only through external reuse, real failures,
+   cross-version operation and user outcomes. Repository consistency and
+   self-generated reports support diagnosis but cannot prove field value.
+
+### Budgets and compatibility
+
+- Preserve at least the structured five-percent Python/test headroom and
+  three-file headroom. Each new mechanism must close a named responsibility;
+  process-only artifacts are removed.
+- An affected-boundary loop should stay below ten minutes on the maintainer
+  host. The full exact suite remains separately budgeted by observed platform
+  cost and the 240-minute hosted job ceiling. A breach opens profiling and
+  subtraction review before another timeout increase.
+- Keep Windows Python 3.10/3.14, macOS Python 3.10/3.14 and Linux Python
+  3.10-3.14. The exact-package lifecycle is verified only on Windows with
+  Codex CLI 0.151.0, Claude Code 2.1.251 and Node 24.19.0. Desktop/ChatGPT,
+  unmanaged-host and cross-OS lifecycle behavior remain unknown.
+- Local WSL2 Ubuntu 26.04 on Linux 6.18 with Python 3.14.4 is an available
+  cross-kernel verification environment; task-scoped native Linux Node 24.19.0
+  can keep it independent of the Windows Node path. No WSL result becomes
+  release evidence until it is bound to one exact candidate and retained by an
+  admitted evidence owner; native Ubuntu hosted legs remain required.
+- A prose projection that repeats a mutable value must be checked against its
+  structured owner or clearly label the value as historical.
+
+### Feedback, regression and ordered work
+
+Post-release feedback should capture host and plugin versions, operation,
+starting state, intended outcome, observed effect, interference, recovery,
+residue and whether the route should have been a no-op. It excludes
+credentials, raw conversations and unrelated host inventory. A report remains
+a lead until reproduced or independently corroborated.
+
+Every material real failure becomes a compact counterexample with provenance,
+affected boundary, fix, regression and retirement condition. Cross-version
+coverage begins with v3.0.1 to v3.1.0 and adds only supported upgrade edges
+observed in real use. Production maturity requires repeated external reuse,
+real-failure recovery, maintained compatibility and measurable user value;
+mechanism count, internal consistency and self-evaluation are insufficient.
+
+Ordered post-release work is:
+
+1. Add per-test timing and a deterministic obligation-to-test impact report;
+   measure before changing CI topology.
+2. Prove an equivalent fast loop and platform shard with mutation fixtures;
+   retain the full suite as oracle until non-compensation is demonstrated.
+3. Generate or check repeated release, version and budget projections from
+   their structured owners.
+4. Extract one stable validation duty at a time from large modules, comparing
+   bytes, latency, diagnostics and failure closure before and after.
+5. Open a privacy-bounded real-use feedback route and publish a compatibility
+   table containing only independently observed cells.
+6. Reassess the eight responsibility allocations on host change; retire Accord
+   machinery only after a lower-burden same-duty successor closes consequence,
+   rollback, cleanup and recheck.
 
 ## Complete bounded self-bootstrapping
 

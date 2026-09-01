@@ -50,11 +50,11 @@
     "externalFactSource": "task-time-live-github-observation",
     "rule": "This exact admitted public-release snapshot is frozen repository provenance, not live publication proof. Offline validation rejects every unadmitted tail. Only after a matching tag and public Release complete the hosted, named-human, publication and live-verification gates may a separate post-release reconciliation update the code-side admitted snapshot, program, acceptance, recommendation pointer and derived human-readable projection together; no repository field can self-attest that transition. Earlier records are never rewritten. The retired unreleased checkpoint and superseded locally exposed development distribution are provenance only. Historical records are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
-  "releaseIntent": "v3.1.0 is reopened at the complete host-projection package identity boundary because newly required LICENSE and NOTICE bytes change the installable Codex and Claude packages. Historical GT-20 remains bounded evidence for its original package only; GT-21 is unchanged and preserved. The public recommendation remains immutable v3.0.1 while exact-package GT-20 replay and downstream candidate gates are pending.",
+  "releaseIntent": "v3.1.0 is the selected repository candidate after the complete host-projection package identity boundary was replayed for exact Commit A bytes. Fresh GT-20 lifecycle evidence passes on Windows with Codex CLI 0.151.0 and Claude Code 2.1.251; unchanged GT-21 evidence is preserved. The public recommendation remains immutable v3.0.1 until exact local, hosted, named-human, tag, public Release, post-release installation and cleanup gates complete in order.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
-  "maintenancePlan": "CONTRIBUTING.md",
-  "status": "active",
+  "maintenancePlan": "docs/architecture.md",
+  "status": "ready",
   "inputEvidence": [
     {
       "id": "project-refactor-audit-2026-08-20",
@@ -172,7 +172,7 @@
   ],
   "increment": {
     "id": "increment.complete-bounded-self-bootstrapping-core",
-    "state": "active",
+    "state": "completed",
     "acceptanceIds": [
       "R1",
       "R2",
@@ -185,15 +185,15 @@
     ],
     "closeoutSnapshot": {
       "schema": "yiyuan-accord-stage-closeout-snapshot/v2",
-      "id": "stage.v3.1.0.repository-candidate.reopened",
+      "id": "stage.v3.1.0.repository-candidate.closed",
       "stage": "repository-candidate",
-      "state": "reopened",
+      "state": "closed",
       "revisionBinding": {
         "kind": "containing-git-commit",
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
       },
-      "predecessorSnapshotRef": "2d214345b805322b2e789a67370ee47430c0ac88:product/program.json#/increment/closeoutSnapshot",
+      "predecessorSnapshotRef": "7ea91dad811d337f00f75eb521cffacabd73b05f:product/program.json#/increment/closeoutSnapshot",
       "authorityRefs": [
         "product/constitution.json",
         "product/program.json",
@@ -237,7 +237,7 @@
       },
       "evaluationContractSha256": "412475b21dbf3fa2b51eeca4ae23f3ee2e764c0b6faaa137bce8aff27aff0e88",
       "gateId": "repository-candidate",
-      "nextGateId": "repository-candidate",
+      "nextGateId": "exact-local-verification-and-review",
       "claimCeilingRef": "product/acceptance.json#/claimCeiling",
       "unknownsRef": "product/program.json#/increment/hostCapabilityRefresh/unknowns",
       "replay": {
@@ -248,8 +248,8 @@
         "preservedTaskIds": [
           "GT-21"
         ],
-        "evidenceState": "pending",
-        "evidenceRef": null
+        "evidenceState": "verified",
+        "evidenceRef": "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json"
       }
     },
     "provisionalEvidenceLifecycle": {
@@ -273,7 +273,7 @@
     },
     "exactPackageEvidenceLifecycle": {
       "schema": "yiyuan-accord-exact-package-evidence-lifecycle/v1",
-      "state": "pending",
+      "state": "verified",
       "taskId": "GT-20",
       "earliestAffectedBoundary": "complete-host-projection-package-identity",
       "subjectBinding": "containing-git-commit-complete-declared-packages",
@@ -281,16 +281,20 @@
         "GT-21"
       ],
       "priorEvidenceRef": "evals/evidence/2026-08-30-v310-gt20-21-source.json#/records/GT-20-transactional-lifecycle-4c8bcc3",
-      "evidence": null
+      "evidence": {
+        "locator": "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json",
+        "sha256": "9434fb2f1984301117e9856f6dd8a6c98762eb14b45aac1cf0f98775bf0d6f64",
+        "evaluatedRevision": "7ea91dad811d337f00f75eb521cffacabd73b05f"
+      }
     },
-    "observedProblem": "The historical ae729465 baseline closed one bounded collaboration slice and statically conformant host packages but did not establish the complete bounded self-bootstrapping core. The completed reference increment now binds proposition coherence, typed target/value receipts, source precedence, single-writer state, event-only invalidation, last-safe preservation, responsibility-scoped native replacement and retirement, topology-safe fresh continuity, a portable Skill plus short-lived Hook adapter, pure core and host manifests without a distributed client or persistent service. The twelve current observations retain only their finite claims, including three bounded GT-21 arms and one disposable Windows GT-20 lifecycle; independent exact-tree product, specification, implementation and standards review accepted those bindings and the selected v3.1.0 repository candidate. A user-observed client update still invalidates prior current-entry and compatibility assumptions. Production trust, ordinary activation, actual Claude live triggering, comparative or cross-host value, updated-client compatibility, exact clean-SHA local review, hosted verification, named-human authorization, tag, public Release and post-release installation remain later gates; the immutable public recommendation remains v3.0.1.",
+    "observedProblem": "The historical ae729465 baseline closed one bounded collaboration slice and statically conformant host packages but did not establish the complete bounded self-bootstrapping core. The completed reference increment now binds proposition coherence, typed target/value receipts, source precedence, single-writer state, event-only invalidation, last-safe preservation, responsibility-scoped native replacement and retirement, topology-safe fresh continuity, a portable Skill plus short-lived Hook adapter, pure core and host manifests without a distributed client or persistent service. The retained observations have only finite claims: three bounded GT-21 arms plus the fresh exact Commit A Windows CLI GT-20 lifecycle on Codex CLI 0.151.0 and Claude Code 2.1.251. Independent exact-tree product, specification, implementation and standards review accepted the selected v3.1.0 repository candidate before the package boundary was reopened and reclosed. The disposable CLI evidence does not restore ordinary desktop entry, activation, production or cross-OS assumptions invalidated by the user-observed client update. Production trust, ordinary activation, actual Claude live triggering, desktop and cross-OS compatibility, comparative or cross-host value, exact clean-SHA local review, hosted verification, named-human authorization, tag, public Release and post-release installation remain later gates; the immutable public recommendation remains v3.0.1.",
     "hypothesis": "A product-form-neutral, complete bounded self-bootstrapping core can turn the existing collaboration contract into a stronger outcome system without defaulting to a plugin, Runtime or control plane. If Accord first reconciles each material consensus against the current proposition set; keeps code and conversation topology independent; senses environment provenance; binds the latest outcome and human authority; reuses suitable native, official and maintained wheels before authorship; allocates minimum deep modules behind narrow shared interfaces; derives sparse host-native and Accord responsibility views plus the current state-authority, admission and closure-lifecycle views; and replaces or retires only exact allocations whose successor independently closes the same consequence and lifecycle with reversible recheck, then it can improve real collaboration closure while limiting contradiction, interference, self-confirmation, proxy optimization and lifecycle burden.",
     "hostCapabilityRefresh": {
-      "capturedAt": "2026-08-30",
+      "capturedAt": "2026-09-01",
       "facts": [
-        "A user-observed client update on 2026-08-30 invalidates the prior instance-specific ChatGPT/Codex desktop entry-point, plugin-projection, activation and compatibility snapshot. Those current facts remain unknown until direct post-release re-sensing across every installed entry point.",
+        "A user-observed client update on 2026-08-30 invalidates the prior instance-specific ChatGPT/Codex desktop entry-point, plugin-projection, activation and compatibility snapshot. Fresh disposable lifecycle evidence now binds only Codex CLI 0.151.0 and Claude Code 2.1.251; desktop entry, ordinary activation and every other installed entry point remain unknown until direct post-release re-sensing.",
         "The repository, local marketplace snapshot, installed cache and live client are distinct surfaces. Editing the repository does not hot-update any client projection or establish which bytes caused an observed behavior.",
-        "Prior Codex CLI, Codex desktop and Claude Code installation observations remain bounded history only; no current installed-entry claim is inherited across the client-update signal.",
+        "Prior Codex CLI, Codex desktop and Claude Code installation observations remain bounded history only; no installed-entry claim is inherited across the client-update signal. The fresh Commit A GT-20 record independently establishes only its declared disposable CLI lifecycle.",
         "Plugin listing proves only declared installation and enablement. It does not prove Hook firing, implicit activation, effective model exposure, behavior, isolation, value or absence of interference.",
         "The repository remains the saved main checkout. Earlier candidate-era local, independent, hosted and condition-fit checks remain bounded history only; later product consensus, GT-21, GT-20 and the 85a917a whole-system reacceptance supersede that ready state without erasing historical facts.",
         "Official Codex App Server and Claude MCP or session surfaces expose non-uniform state carriers. A 2026-08-29 pure-data PoC normalized two carrier-shaped envelopes, accepted monotonic same-writer updates and rejected dual writers, expiry and raw conversation fields without live host mutation.",
@@ -311,7 +315,7 @@
         "No official-clean result exists. BAL-04 ran one matched repository-Skill/no-Accord pair and both arms closed the same correction outcome; one model, fixed order, an explicit generic Skill invitation, shared user Skills and no demonstrated baseline gap keep incremental Accord effect unknown.",
         "One disposable Claude session-only task verifies exact-copied SessionStart:startup firing and correct silence. A separate ephemeral Codex App Server task disables the installed Hook, invokes official compact, observes working-projection sessionFlags context and one exact schema-field Agent read with zero tool use. One installed first-turn resume Hook also triggers, injects typed context and drives one schema/source branch under broad request-scoped test bypass. Installed-package compact, sessionFlags resume, semantic directive use, narrow production trust, implicit activation, low interference and product value remain unverified.",
         "BAL-04 exposed that both working 3.1.0 Skills still used the superseded scalar expected-fitness-minus-cost rule. Both projections are now corrected to hard admission, lifecycle Pareto pruning, context constraints and equivalent-fit native or reuse preference. Earlier behavior stays bound to its prior Skill hashes; the corrected projections have no inherited behavior claim and are not silently hot-mutated into live hosts.",
-        "The minimum current product set is selected as the portable Skill, short-lived Hook adapter, pure core and manifests, with no added distributed client or persistent service. Its bounded event, context, current-receipt, pure-core hold, sufficient-simple, fresh-handoff and transactional-lifecycle evidence does not prove ordinary activation, narrow production trust, actual Claude host triggering, semantic directive use, comparative value, cross-host portability or updated-client compatibility.",
+        "The minimum current product set is selected as the portable Skill, short-lived Hook adapter, pure core and manifests, with no added distributed client or persistent service. Its bounded event, context, current-receipt, pure-core hold, sufficient-simple, fresh-handoff and fresh exact disposable CLI lifecycle evidence does not prove ordinary activation, narrow production trust, actual Claude host triggering, semantic directive use, comparative value, desktop behavior, unmanaged-host behavior or cross-OS portability.",
         "The official fresh sequential handoff is proved only for one disposable direct App Server evaluator route, including fresh thread creation, six-field destination reconciliation, destination-before-source release and zero task residue. The packaged Hook is not claimed to create that handoff automatically; copied-history fork, Git worktree and Git branch remain non-substitutes.",
         "The f0ed9ce synthetic four-episode attempt remains source-insufficient counterevidence. The corrected 7d7a7e5 replay establishes only one finite governed sequence and does not establish a need or authority for durable state, cross-session field value or cross-host equivalence.",
         "Official documentation establishes several Codex structured fields, but no current evidence proves their live permission behavior, freshness, update latency, cross-host equivalence, mapping to the current obligation, Agent consumption, consequence or value; fields outside supported APIs remain unknown."
@@ -329,7 +333,7 @@
       "statement": "Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.",
       "startingState": "The product goal and human boundaries are supplied, but environment provenance, Accord activation, other extensions, capability health, suitable existing wheels, product form, state carrier and longitudinal fitness may be unknown. The current local hosts are explicitly Accord-enabled and extension-composed; no clean baseline or comparative advantage is presumed.",
       "completion": "Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.",
-      "claimLimit": "GT-19 is synthetic. GT-21 proves only the listed bounded local event/core/Agent hold, sufficient no-model-bound route and fresh handoff; model identity is runtime provenance. GT-20 proves only the listed disposable Windows lifecycle, and 85a917a reacceptance preserves those finite claims. No client/browser bridge, ordinary activation, production trust, updated-client compatibility, portability, value, independent review, candidate or release is proved.",
+      "claimLimit": "GT-19 is synthetic. GT-21 proves only the listed bounded local event/core/Agent hold, sufficient no-model-bound route and fresh handoff; model identity is runtime provenance. GT-20 proves only the exact Commit A package lifecycle on Windows with Codex CLI 0.151.0 and Claude Code 2.1.251. No production trust, ordinary desktop activation, unmanaged or cross-OS behavior, comparative value, hosted verification or release is proved.",
       "firstEvidenceSurfaces": [
         "official-clean",
         "isolated-minimal",
@@ -568,7 +572,7 @@
           },
           {
             "id": "prove-transactional-install-state-preservation-and-removal",
-            "state": "active",
+            "state": "completed",
             "dependsOn": [
               "prove-isolated-live-operational-carrier-and-continuity"
             ],
@@ -581,11 +585,11 @@
               "Q3",
               "Q4"
             ],
-            "completion": "Exact evidence evals/evidence/2026-08-30-v310-gt20-21-source.json closes GT-20 only for tracked v3.0.1 to 4c8bcc3 bytes in disposable non-empty Windows Codex and Claude scopes. Native source trust and plugin lifecycle preserve user instructions, configuration, concurrent edits, unrelated installed plugins and a shared host dependency. Injected source failures exit nonzero while exact 3.0.1 bytes remain and no 3.1.0 cache appears; recovery installs exact 4c8bcc3 manifest, Hook and Skill bytes, enabled/component inventory and installed executable checks pass, then native removal leaves zero active Accord registration, marketplace, process or data state. Codex retains no Accord version cache; Claude retains only unlisted .orphaned_at caches under the exact local binary's 14-day live-session-aware automatic sweep. All fixture roots are removed. The bounded pass excludes production, unmanaged or cross-OS hosts, actual Claude Hook trigger, value, whole-system, candidate and release claims."
+            "completion": "Exact evidence evals/evidence/2026-09-01-v310-gt20-exact-package-source.json binds all 18 declared Codex and Claude package subjects to Commit A 7ea91dad811d337f00f75eb521cffacabd73b05f. In disposable non-empty Windows scopes, v3.0.1 installs, registered-source package-path failures exit nonzero while exact old bytes remain registered and enabled, recovery installs exact v3.1.0 bytes, enabled inventories and both installed Hooks pass, and native removal leaves zero installed entries or task process. User instructions, semantic configuration, concurrent edits and foreign or shared state are preserved; Codex retains no Accord cache and Claude retains only host-owned unlisted orphaned cache before the entire task root is removed. The record captures full argv, stdout and stderr for 29 commands, reads no credentials or sessions and runs zero model turns. It excludes production, unmanaged or cross-OS hosts, ordinary desktop activation, product value, hosted and release claims."
           },
           {
             "id": "reaccept-whole-system-after-live-state-closure",
-            "state": "pending",
+            "state": "completed",
             "dependsOn": [
               "prove-transactional-install-state-preservation-and-removal"
             ],
@@ -598,11 +602,11 @@
               "Q3",
               "Q4"
             ],
-            "completion": "The source-bound non-compensating ledger at exact cut 85a917a replays the contradiction map, environment admission, dynamic index and graph, capability allocation, field-level state ownership, live carrier, topology-safe continuity, retirement, privacy, interference, complexity, documentation, host packaging and transactional lifecycle from the earliest live-state and user-state-preservation boundaries. GT-20 and GT-21 behavior subjects are unchanged from their source-recorded revisions, so their bounded facts are preserved without a new behavior or model run. Projection drift is corrected, the updated-client instance projection is invalidated to unknown, and no production, current-client compatibility, cross-host value, independent review, candidate or release claim is promoted."
+            "completion": "The reopened dependency graph replays only the complete host-projection package identity boundary: fresh exact-package GT-20 evidence replaces the invalidated prior-package claim, while unchanged GT-21 and all unrelated accepted evidence remain stable. Program, acceptance, goal projection, documentation, package digests, legal carriage, maintenance budget and finite claims are reconciled without adding a runtime mechanism or broadening the public claim ceiling."
           },
           {
             "id": "independent-review-and-form-future-exact-candidate",
-            "state": "pending",
+            "state": "completed",
             "dependsOn": [
               "reaccept-whole-system-after-live-state-closure"
             ],
@@ -615,7 +619,7 @@
               "Q3",
               "Q4"
             ],
-            "completion": "Dynamic evidence-acquisition semantics and Interface cases, provisional lifecycle transition binding and exact HISTORY projection passed deterministic reacceptance. Independent product, specification, implementation and standards review agreed on the finite claim and selected component set, and every required Golden Task binds current task and evaluation digests, exact projection, source-recorded ancestor evaluated revision and unchanged sparse behavior-subject bytes. v3.1.0 is the selected repository candidate; exact clean-SHA local review and every external release gate remain separate."
+            "completion": "The schema-v2 closed transition binds its immediate reopened predecessor, exact Commit A package evidence, preserved GT-21 and the next exact-local gate. The evidence runner and strict record contract make the lifecycle reproducible and diagnostic, while current complexity targets remain machine authoritative. v3.1.0 is the selected repository candidate; exact clean-SHA local review and every external release gate remain separate."
           }
         ],
         "degradationRule": "Unknown or confounded environment state first narrows the claim or triggers isolation. An unavailable, failed or uneconomic capability narrows that exact path, preserves counterevidence and triggers relation-and-constraint recomputation. Newly declared, visible or version-labelled native capability does not retire anything; only a same-responsibility selected successor with independent consequence, cleanup, reversible observation and retirement post-state may close that allocation, and drift or evidence expiry recomputes it. The route never transfers supported mechanics to the user, converts current unavailability into permanent retirement, or justifies a larger authored control plane without a demonstrated closure need. Learning or self-evolution that weakens outcome, authority, evidence, rollback, interference or lifecycle is discarded or rolled back."
@@ -678,7 +682,7 @@
     "workItems": [
       {
         "id": "work.complete-bounded-self-bootstrapping-core",
-        "state": "active",
+        "state": "completed",
         "acceptanceIds": [
           "R1",
           "R2",
@@ -855,7 +859,7 @@
           },
           {
             "id": "prove-transactional-install-state-preservation-and-removal",
-            "state": "active",
+            "state": "completed",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -869,7 +873,7 @@
           },
           {
             "id": "reaccept-whole-system-after-live-state-closure",
-            "state": "pending",
+            "state": "completed",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -883,7 +887,7 @@
           },
           {
             "id": "independent-review-and-form-future-exact-candidate",
-            "state": "pending",
+            "state": "completed",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -1065,7 +1069,7 @@
           "GT-21"
         ],
         "completionOperand": "exactLocalVerificationAndReview",
-        "condition": "On the unchanged clean committed v3.1.0 candidate, the goal carrier directly runs every declared deterministic check; verifies the exact requiredTaskIdsForRelease set with fresh source bindings, exact environment compositions, direct-command results, structured digests, independent post-state and claim limits without accessing credential or session logs; and obtains context-isolated, outcome-bound, identity-neutral review of the exact publishable and installable surfaces. This gate does not claim public-tag installation before the immutable tag exists. Any P0 or P1 blocks; only after this gate passes may the same SHA be pushed."
+        "condition": "On the unchanged clean committed v3.1.0 candidate, the goal carrier directly runs every declared deterministic check; verifies the exact requiredTaskIdsForRelease set with fresh source bindings, exact environment compositions, direct-command results, structured digests, independent post-state and claim limits without accessing credential or session logs; and obtains four fresh, mutually independent, context-isolated, outcome-bound, identity-neutral reviews of the exact publishable and installable surfaces. This gate does not claim public-tag installation before the immutable tag exists. Any P0 or P1 blocks; only after this gate passes may the same SHA be pushed."
       },
       {
         "id": "exact-candidate-hosted-verification",
@@ -1123,9 +1127,9 @@
     "rule": "The completed core program selects v3.1.0 as the repository candidate and opens this external release sequence. Execute the remaining gates strictly in order: exact local verification and review, exact-candidate hosted verification, named-human authorization, tagged public Release, then public verification and cleanup. A correction, new consensus, failure, later rule or revision returns to the earliest affected dependency boundary; only dependent evidence is superseded, unrelated accepted truth remains stable, and no plan, test, commit, push, hosted pass or authorization is promoted into a later effect."
   },
   "goalModePrompt": {
-    "state": "active-in-host",
+    "state": "retired",
     "authority": "derived-from-current-reviewable-authority-set",
-    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"coherent-bounded-self-bootstrap-with-live-effect-provenance-reuse-topology-safe-continuity-balance-and-consistency\",\"directive\":\"Reconcile affected projections and dynamic evidence applicability; prove typed effect, continuity, lifecycle, evolution, retirement and cleanup before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"GT-19 is synthetic. GT-21 proves only the listed bounded local event/core/Agent hold, sufficient no-model-bound route and fresh handoff; model identity is runtime provenance. GT-20 proves only the listed disposable Windows lifecycle, and 85a917a reacceptance preserves those finite claims. No client/browser bridge, ordinary activation, production trust, updated-client compatibility, portability, value, independent review, candidate or release is proved.\",\"completion\":\"Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"From the earliest affected boundary, reconcile each correction against the proposition set across authority, four mappings, implementation, evidence, documentation and claims; preserve unrelated truth and history, and stop affected work while a conflict remains.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"prove-isolated-live-operational-carrier-and-continuity\"],\"id\":\"prove-transactional-install-state-preservation-and-removal\",\"state\":\"active\"}],\"semantics\":\"Bind current target/value receipts; unknown stays unknown and events only invalidate. Acquire evidence only when missing, stale or conflicting facts or unresolved reuse can change the route; sufficient routes do no research, public leads need corroboration and adapters stay authority-, cost- and lifecycle-bound. Host queries and injects, Accord decides and the Agent executes; model identity and version are runtime provenance. Preserve selected components and complete deterministic correction plus independent exact-tree review before candidate selection; add no client or bridge.\",\"work\":[\"prove-transactional-install-state-preservation-and-removal\",\"reaccept-whole-system-after-live-state-closure\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-repository-fork\"]}",
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"coherent-bounded-self-bootstrap-with-live-effect-provenance-reuse-topology-safe-continuity-balance-and-consistency\",\"directive\":\"Reconcile affected projections and dynamic evidence applicability; prove typed effect, continuity, lifecycle, evolution, retirement and cleanup before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"GT-19 is synthetic. GT-21 proves only the listed bounded local event/core/Agent hold, sufficient no-model-bound route and fresh handoff; model identity is runtime provenance. GT-20 proves only the exact Commit A package lifecycle on Windows with Codex CLI 0.151.0 and Claude Code 2.1.251. No production trust, ordinary desktop activation, unmanaged or cross-OS behavior, comparative value, hosted verification or release is proved.\",\"completion\":\"Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"From the earliest affected boundary, reconcile each correction against the proposition set across authority, four mappings, implementation, evidence, documentation and claims; preserve unrelated truth and history, and stop affected work while a conflict remains.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[],\"semantics\":\"Bind current target/value receipts; unknown stays unknown and events only invalidate. Acquire evidence only when missing, stale or conflicting facts or unresolved reuse can change the route; sufficient routes do no research, public leads need corroboration and adapters stay authority-, cost- and lifecycle-bound. Host queries and injects, Accord decides and the Agent executes; model identity and version are runtime provenance. Preserve selected components and complete deterministic correction plus independent exact-tree review before candidate selection; add no client or bridge.\",\"work\":[]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-repository-fork\"]}",
     "workStageIds": [
       "rebaseline-product-and-consensus-impact-map",
       "conduct-self-bootstrapping-feasibility-and-reuse-study",
@@ -1178,7 +1182,7 @@
       "phase-or-authority-boundary",
       "repeated-same-purpose-repair"
     ],
-    "hostLifecycleNote": "The public recommended release remains v3.0.1. v3.1.0 is the selected repository candidate after independent exact-tree review, not a hosted, authorized, tagged or public release. The selected product set is the portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the App Server driver remains an evaluator only. Model identity and version remain runtime provenance variables, broad Hook trust bypass remains test-only, and the user-observed client update leaves current installed-entry compatibility unknown until post-release re-sensing. Production trust, ordinary activation, actual Claude live triggering, cross-host and product value remain unknown."
+    "hostLifecycleNote": "The public recommended release remains v3.0.1. v3.1.0 is the selected repository candidate after exact Commit A package lifecycle evidence passed on Windows with Codex CLI 0.151.0, Claude Code 2.1.251 and Node 24.19.0; it is not yet exact-locally verified on Commit B, hosted, authorized, tagged or public. The selected product set remains the portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the App Server driver remains evaluation-only. Model identity and version remain runtime provenance variables, broad Hook trust bypass remains test-only, and ChatGPT/Codex desktop plus real installed-entry compatibility remain unknown until post-release re-sensing. Production trust, ordinary activation, actual Claude live triggering, cross-host behavior and product value remain unknown."
   },
   "hostProjections": [
     {
@@ -1344,7 +1348,7 @@
       "docs/DEMAND-TO-CAPABILITY-PROFILE-V1.2.md",
       "docs/CONTROLLED-CONFORMANCE-PROTOCOL-V1.2.json"
     ],
-    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants or capability deletion targets. Independent reviews successively required source-complete evolution evidence, scoped retirement, strict parsing, exact behavior-subject binding, semantic longitudinal validation, malformed-carrier failure closure, typed ancestor provenance, source-to-decision target/value binding, core-bound last-safe preservation, a fail-closed live-event adapter seam and unconditional provisional-source, complete declared-package, retained-attempt, lifecycle-transition, non-self-attested public-history and frozen stage-lineage validation. The selected v3.1.0 repository candidate permits at most 105 tracked files and 680000 product-code-and-test bytes with at least five percent byte headroom. At candidate calibration, 102 tracked files preserve all three reserved slots; 642358 measured product-code-and-test bytes leave 37642 bytes, or 5.5356 percent, of headroom. The 793-byte increase over the prior successor pays only for direct regression assertions over the host-leveraged eight-dimension responsibility lens; it adds no validator layer, Runtime, service, capability matrix or public claim. The final 90000-byte guardrail increase over the former 590000-byte ceiling pays only for canonical snapshot-origin discovery, the self-contained schema-v1 historical predicate, revision-bound authority, referenced current and historical evidence, declared projection package and marketplace identity, deterministic malformed-history failure closure including a parser-independent historical-program value-depth bound, complete transition-state comparison, aligned admitted revision-blob limits, one bounded reusable history index, and regressions that prevent carry rebinding or change-then-restore washing; it is not general growth allowance and does not imply a complete historical verifier. The full budget pays only for exact source, observation, lifecycle, dynamic-evidence, stage-closeout and candidate-verification controls; it is not allowance for a Runtime, service, client bridge, storage layer, framework, unconditional network search or model-specific route. Existing typed state, current receipts, minimum adapter boundary and stable closure logic remain bounded, and the result remains far below the 1551209-byte baseline. Count code, prompts, context, state, processes, evidence, cognition, latency, interference, recovery, maintenance and retirement; at each breach compare deletion, native delegation, composition, replacement and bounded addition, retaining only outcome-bearing semantics or mechanisms with verified lifecycle and cleanup."
+    "rule": "Complexity checkpoints are revisable release guardrails, not product invariants, deletion targets or growth allowance. The structured targets, minimum headroom, required markers and forbidden paths in this object are the only current numeric authority; the verifier recomputes tracked files, Python/test bytes and primary-instruction bytes from the candidate instead of copying live counts into prose. New code must pay for a named outcome, evidence or lifecycle obligation and preserve the declared headroom. Validation latency, evidence volume, prompt drift, module coupling, compatibility coverage, interference, recovery and maintenance cost are budgeted alongside bytes. A breach triggers comparison of deletion, native delegation, external reuse, composition, replacement, equivalent test partitioning and bounded addition without weakening required gates or claims."
   },
   "processLossControl": {
     "maxActiveIncrements": 1,

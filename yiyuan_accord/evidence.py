@@ -2270,6 +2270,7 @@ def _observation_errors(
 
 def representative_sample_errors(
     root, acceptance, required_task_ids, golden, read_json, require_complete=False,
+    current_subject_replays=(),
 ):
     criteria = acceptance.get("criteria")
     if not isinstance(criteria, list):
@@ -2336,7 +2337,8 @@ def representative_sample_errors(
             root, label, observation, task, burden, item["locator"],
             projection if _text(projection) else "",
             _evaluation_contracts(policy, task_id, evaluation) or {evaluation}, read_json,
-            require_current_subject, (acceptance, golden, evaluation),
+            require_current_subject and task_id not in current_subject_replays,
+            (acceptance, golden, evaluation),
         )
         errors.extend(local)
         states[task_id] = state

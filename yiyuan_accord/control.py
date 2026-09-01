@@ -2272,12 +2272,16 @@ def _validate_exact_package_evidence_lifecycle(
             errors.append("exact package evidence pending state is invalid")
         return
     evidence = lifecycle.get("evidence")
+    predecessor_revision = snapshot.get("predecessorSnapshotRef", "").split(
+        ":", 1,
+    )[0] if isinstance(snapshot, dict) else None
     if (
         not isinstance(evidence, dict)
         or set(evidence) != {"locator", "sha256", "evaluatedRevision"}
         or not _nonempty_string(evidence.get("locator"))
         or SHA256_RE.fullmatch(evidence.get("sha256") or "") is None
         or REVISION_RE.fullmatch(evidence.get("evaluatedRevision") or "") is None
+        or evidence.get("evaluatedRevision") != predecessor_revision
         or not isinstance(snapshot, dict) or snapshot.get("state") != "closed"
         or program.get("status") != "ready"
     ):
@@ -2295,16 +2299,76 @@ def _validate_exact_package_evidence_lifecycle(
         item.get("id"): item.get("packageSha256")
         for item in program.get("hostProjections", []) if isinstance(item, dict)
     }
+    commands = record.get("commands")
+    expected_command_digest = (
+        "0e3614bb42d1a4eda9c6b0bb4e8d291f95878084e8a5eff4f17e5e562441d266"
+    )
+    command_contract = (
+        isinstance(commands, list) and len(commands) == 29
+        and sha256(json.dumps(
+            commands, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+        ).encode()).hexdigest() == expected_command_digest
+    )
+    fixture = record.get("fixture")
+    fixed_fixture = {
+        "platform": "windows", "priorVersion": "3.0.1", "targetVersion": "3.1.0",
+        "userStatePreserved": True, "concurrentEditsPreserved": True,
+        "foreignStatePreserved": True, "credentialsRead": False,
+        "sessionsRead": False, "modelTurns": 0,
+        "sourceFailureMode": "registered-source-package-path-absent",
+        "codexUpdateMechanism": "plugin-add-replaces-installed-version",
+        "claudeUpdateMechanism": "plugin-update", "rollbackBytesMatchPriorRelease": True,
+        "installedBytesMatchDeclaredPackages": True, "startupHookSilent": True,
+        "resumeHookTypedContext": True,
+    }
+    versions = ("codexCliVersion", "claudeCliVersion", "nodeVersion")
+    counts = ("codexInstalledFileCount", "claudeInstalledFileCount")
+    fixture_contract = (
+        isinstance(fixture, dict) and set(fixture) == set(fixed_fixture) | set(versions) | set(counts)
+        and all(fixture.get(key) == value for key, value in fixed_fixture.items())
+        and command_contract
+        and all(fixture.get(key) == commands[index]["stdout"].strip()
+                for key, index in zip(versions, (4, 5, 6)))
+        and all(isinstance(fixture.get(key), int) and not isinstance(fixture[key], bool)
+                and fixture[key] > 0 for key in counts)
+    )
+    post_state = record.get("postState")
+    cache_fields = ("codexCacheFiles", "claudeCacheFiles")
+    fixed_post = {"codexInstalledEntries": 0, "claudeInstalledEntries": 0,
+                  "taskProcesses": 0, "taskRootRemoved": True}
+    post_contract = (
+        isinstance(post_state, dict) and set(post_state) == set(fixed_post) | set(cache_fields)
+        and all(post_state.get(key) == value for key, value in fixed_post.items())
+        and all(isinstance(post_state.get(key), list)
+                and all(_nonempty_string(item) for item in post_state[key])
+                and len(post_state[key]) == len(set(post_state[key]))
+                for key in cache_fields)
+    )
+    subject_map = record.get("behaviorSubject")
+    subject_contract = (
+        isinstance(subject_map, dict) and set(subject_map) == set(subjects or [])
+        and all(_nonempty_string(locator)
+                and isinstance(digest, str) and SHA256_RE.fullmatch(digest) is not None
+                for locator, digest in subject_map.items())
+    )
+    try:
+        runner_digest = sha256(_snapshot_or_worktree_bytes(
+            root, "scripts/run-gt20-exact-package.ps1", revision,
+        )).hexdigest()
+    except _SNAPSHOT_V1_FAILURES:
+        runner_digest = None
     if (
         set(record) != {
             "schema", "taskId", "evaluatedRevision", "packageSha256",
-            "behaviorSubject", "lifecycle", "claimLimit",
+            "behaviorSubject", "lifecycle", "claimLimit", "runnerSha256",
+            "fixture", "commands", "postState",
         }
         or record.get("schema") != "yiyuan-accord-gt20-exact-package-evidence/v1"
         or record.get("taskId") != "GT-20"
         or record.get("evaluatedRevision") != evidence.get("evaluatedRevision")
+        or record.get("runnerSha256") != runner_digest
         or record.get("packageSha256") != packages
-        or set(record.get("behaviorSubject", {})) != set(subjects or [])
+        or not subject_contract
         or record.get("lifecycle") != {
             "install": "verified",
             "failedUpdateRollback": "verified",
@@ -2314,15 +2378,27 @@ def _validate_exact_package_evidence_lifecycle(
             "postState": "verified",
             "cleanup": "verified",
         }
-        or not _nonempty_string(record.get("claimLimit"))
+        or record.get("claimLimit") != (
+            "Bounded zero-model Windows lifecycle evidence for exact Commit A "
+            "Codex and Claude package bytes in disposable non-empty scopes; "
+            "production, unmanaged or cross-OS hosts, ordinary model behavior, "
+            "product value and release readiness remain unclaimed."
+        )
+        or not fixture_contract
+        or not command_contract
+        or not post_contract
     ):
         errors.append("exact package evidence record contract is invalid")
         return
     try:
         for locator, digest in record["behaviorSubject"].items():
-            if sha256(_snapshot_bytes(
+            evaluated = sha256(_snapshot_bytes(
                 root, locator, evidence["evaluatedRevision"],
-            )).hexdigest() != digest:
+            )).hexdigest()
+            candidate = sha256(_snapshot_or_worktree_bytes(
+                root, locator, revision,
+            )).hexdigest()
+            if evaluated != digest or candidate != digest:
                 raise ValueError("subject digest mismatch")
     except _SNAPSHOT_V1_FAILURES:
         errors.append("exact package evidence subject binding is invalid")
@@ -3460,6 +3536,15 @@ def verify_product(root):
             golden_suite,
             _read_json,
             require_complete=program.get("status") == "ready",
+            current_subject_replays={"GT-20"} if (
+                isinstance(program.get("increment"), dict)
+                and isinstance(program["increment"].get(
+                    "exactPackageEvidenceLifecycle"
+                ), dict)
+                and program["increment"]["exactPackageEvidenceLifecycle"].get(
+                    "state"
+                ) == "verified"
+            ) else set(),
         )
     )
 
