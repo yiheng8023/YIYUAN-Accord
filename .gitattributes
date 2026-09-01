@@ -1,4 +1,4 @@
-* text=auto
+* text=auto eol=lf
 .gitattributes text eol=lf
 LICENSE text eol=lf
 NOTICE text eol=lf
