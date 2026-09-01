@@ -35,11 +35,13 @@ Frozen revision `fc9c1a7a64257ddf315f862a091a081c4104d81b` completed the
 schema-v4 54-command replay, but later red-team inspection invalidated it as
 current evidence: the evaluator inspected unrelated system process command
 lines and failure cleanup did not prove exclusive ownership of its task root
-and evidence target. The schema-v5 correction removes global process
-inspection, cleans only exclusively created resources and accepts both the
-bound npm-shim and official native Claude executable layouts. One new frozen
-replay, affected-surface reacceptance and four fresh independent reviews remain
-before one unchanged clean SHA may become the replacement candidate. Production trust,
+and evidence target. Frozen revision
+`0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c` completes the corrected
+schema-v5 replay without global process inspection, cleans only exclusively
+created resources and accepts both the bound npm-shim and official native
+Claude executable layouts. Its affected surfaces are reaccepted; four fresh
+independent exact-tree reviews remain before one unchanged clean SHA may become
+the replacement candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
 The implementation does not admit an Accord-managed Runtime, durable state
@@ -223,10 +225,10 @@ The ordered bottlenecks are:
   subtraction review before another timeout increase.
 - Keep Windows Python 3.10/3.14, macOS Python 3.10/3.14 and Linux Python
   3.10-3.14. Historical exact-package lifecycle evidence remains bound to its
-  former package. The changed package and schema-v5 evaluator remain pending a
-  frozen disposable Windows replay with exact Codex CLI, Claude Code and Node
-  identities. The raw fc9c1a7 environment used Codex CLI 0.152.0, Claude Code
-  2.1.252 and Node 24.19.0 but is invalidated as current evidence.
+  former package. Frozen 0febb415 verifies the changed package and schema-v5
+  evaluator in one disposable Windows replay with exact Codex CLI, Claude Code
+  and Node identities. The raw fc9c1a7 environment remains invalidated as
+  current evidence.
   Desktop/ChatGPT, unmanaged-host and cross-OS lifecycle behavior remain
   pending or unknown.
 - Local WSL2 Ubuntu 26.04 on Linux 6.18 with Python 3.14.4 is an available
@@ -1005,9 +1007,10 @@ or Hook output alone still cannot substitute for behavior, and a clean-state
 install cannot expose overwrite, stale-restore, ownership or host-cache errors.
 The `85a917a` source-bound whole-system reacceptance preserves these finite
 claims as history without promoting them to the changed package, production,
-cross-host, updated-client entry or release evidence. The current route is one
-frozen schema-v5 GT-20 replay, affected-surface reacceptance and four fresh
-independent reviews before any replacement candidate or exact-local gate.
+cross-host, updated-client entry or release evidence. Frozen 0febb415 and its
+affected-surface reacceptance now close only the bounded schema-v5 GT-20 slice.
+The current route is four fresh independent exact-tree reviews before any
+replacement candidate or exact-local gate.
 
 After the authorized tag and Release exist, one evaluator isolated from
 candidate-preparation context exercises the README installation, confirmation
@@ -1081,9 +1084,9 @@ declare itself independent or turn a checklist into product value.
 That sequence was complete for candidate `9050114`, but four fresh reviews
 reopened the GT-20 evaluator boundary. Exact `fc9c1a7` completed a raw replay,
 then later evaluator privacy and ownership findings invalidated it as current
-GT-20 evidence. A replacement candidate does not exist until one frozen
-schema-v5 replay, affected-surface reacceptance and four fresh independent
-reviews close; exact-local,
+GT-20 evidence. Exact `0febb415` now closes the corrected bounded schema-v5
+replay and its affected surfaces are reaccepted. A replacement candidate does
+not exist until four fresh independent exact-tree reviews close; exact-local,
 hosted, named-human, tag, publication and public-verification gates remain
 distinct.
 

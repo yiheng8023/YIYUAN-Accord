@@ -55,11 +55,13 @@ Then read, in order:
   completed the schema-v4 replay, but later red-team inspection invalidated it
   as current evidence because the evaluator inspected unrelated system process
   command lines and did not prove exclusive task-root and evidence-output
-  ownership. The schema-v5 correction removes global process inspection,
-  cleans only exclusively created resources and accepts the official native
-  Claude executable layout. One frozen replay, affected-surface reacceptance
-  and replacement exact-tree reviews remain pending; no repository candidate,
-  hosted status, authorization or publication exists.
+  ownership. Frozen revision
+  `0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c` completes the corrected
+  schema-v5 replay without global process inspection, cleans only exclusively
+  created resources and accepts the official native Claude executable layout.
+  Its affected surfaces are reaccepted; four replacement exact-tree reviews
+  are active. No repository candidate, hosted status, authorization or
+  publication exists.
 - Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
   frozen replay attempt. It failed before evidence publication because two
   inventory helpers used `return if`, which PowerShell treated as an external
@@ -104,6 +106,15 @@ Then read, in order:
   boundary, and failure cleanup could target a path not exclusively created by
   this run. The original record and normalized carriage remain counterevidence
   but grant no current GT-20 or candidate claim.
+- Exact `0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c` completed the corrected
+  schema-v5 54-command replay. The LF-normalized repository record has SHA-256
+  `677c85b2a53a682affe624c440f08bb44a532b6457f0f5c444fa3c76feb027a5`;
+  its task root is absent, all command trees are terminated and drained, private
+  absolute paths are absent, neighboring plugins and unmanaged sentinels are
+  preserved, and active Accord state is zero after cleanup. This proves only
+  the declared disposable Windows lifecycle; its affected surfaces are
+  reaccepted, while four independent reviews and every later release gate stay
+  open.
 - A 2026-09-01 current-host check found three distinct states: the Codex CLI
   self-reported an enabled marketplace package at 3.1.0, the desktop plugin
   detail directly showed enabled 3.0.1 with the former blue-on-white icon, and
@@ -157,8 +168,10 @@ Then read, in order:
   body, rebinds its acceptance and guidance digests and cites `39926711` as the
   prior snapshot origin. Later Commit A froze former package/legal bytes, and
   candidate `9050114` then failed privacy, process-ownership, Claude identity and
-  cache-cleanup review. The current schema-v5 complete-package replay is earlier than any
-  clean exact-local, hosted, named-human, tag or public Release gate. Accord
+  cache-cleanup review. Frozen 0febb415 and affected-surface reacceptance close
+  the bounded schema-v5 package slice, while four independent exact-tree reviews
+  remain earlier than any clean exact-local, hosted, named-human, tag or public
+  Release gate. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
   product target is broader: complete bounded self-bootstrapping across
@@ -473,8 +486,9 @@ Then read, in order:
   its bounded current-host live-carrier and fresh-handoff case; prior GT-20
   Windows lifecycle evidence is historical and does not bind the changed
   package. Prior whole-system affected-surface reacceptance remains only a
-  bounded source-bound historical claim; the schema-v4 replay and successor
-  reacceptance are pending. Exact checkpoint
+  bounded source-bound historical claim; frozen 0febb415 now closes the
+  corrected schema-v5 replay and the current affected surfaces are reaccepted.
+  Four fresh independent reviews remain pending. Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
   Exact behavior-bearing revision
@@ -1094,16 +1108,17 @@ Historical superseded review disposition —
     107 tracked files contain 727271 Python/test bytes with 52729 bytes, or
     6.76 percent, of headroom. Exact `fc9c1a7` then completed the frozen schema-v4
     GT-20 raw replay, but later evaluator privacy and exclusive-ownership
-    findings invalidated it as current evidence. The next boundary is one
-    frozen schema-v5 replay, affected-surface reacceptance and four fresh
-    independent reviews. Exact-local and the fresh
+    findings invalidated it as current evidence. Frozen `0febb415` completes
+    the corrected schema-v5 replay and its affected surfaces are reaccepted.
+    The next boundary is four fresh independent exact-tree reviews. Exact-local and the fresh
     full nine-leg hosted matrix
     remain later; candidate selection alone cannot authorize publication.
 
 The release procedure currently has no selected v3.1.0 repository candidate.
-Exact `fc9c1a7` remains invalidated raw replay counterevidence. One frozen
-schema-v5 GT-20 replay, affected-surface reacceptance and four fresh independent
-reviews must close. Only then may clean exact-local and host
+Exact `fc9c1a7` remains invalidated raw replay counterevidence. Frozen
+`0febb415` verifies the bounded schema-v5 GT-20 replay and the affected surfaces
+are reaccepted; four fresh independent exact-tree reviews must still close.
+Only then may clean exact-local and host
 checks, hosted checks, a named-human decision, tag, Release, public verification
 and post-release cleanup run in their declared order on one unchanged exact
 revision. After the client update, all Codex, Claude and ChatGPT GUI entry

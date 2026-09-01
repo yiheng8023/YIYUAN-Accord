@@ -661,7 +661,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'reopened-gt20-schema-v5-replay-pending-reacceptance-blocked-independent-review-pending',
+            'reopened-gt20-schema-v5-replay-verified-reacceptance-complete-independent-review-active',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -819,7 +819,19 @@ class ProductControlTests(unittest.TestCase):
             suite['id'],
             'representative-and-longitudinal-self-bootstrapping-evaluation/v1',
         )
-        self.ai('source-complete', suite['status'])
+        self.ae(
+            suite['status'],
+            'historical-source-complete-live-carrier-current-schema-v5-'
+            'transactional-lifecycle-replay-verified-reacceptance-complete-'
+            'independent-exact-tree-review-active',
+        )
+        for marker in (
+            'Frozen 0febb415 completed',
+            'affected surfaces are reaccepted',
+            'Four fresh independent exact-tree',
+            'candidate or release readiness',
+        ):
+            self.ai(marker, suite['executionClaimLimit'])
         self.ae(suite['attemptedTaskIds'], [
             'GT-14', 'GT-15', 'GT-16', 'GT-17', 'GT-18', 'GT-19',
             'GT-20', 'GT-21',
@@ -1425,7 +1437,7 @@ class ProductControlTests(unittest.TestCase):
         for stages in (program['increment']['fourSurfaceMapping']['process']['orderedSteps'],
                        program['increment']['workItems'][0]['closeoutSequence']):
             self.ae([step['state'] for step in stages[-3:]],
-                             ['active', 'pending', 'pending'])
+                             ['completed', 'completed', 'active'])
         active = '\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
             'README.md', 'README.zh-CN.md', P, 'product/reshaping-guidance.json',
             'docs/architecture.md', 'docs/operations/CONTINUATION.md',
@@ -2350,6 +2362,23 @@ class ProductControlTests(unittest.TestCase):
         _, prior_program, *_ = _snapshot_documents(ROOT, predecessor)
         prior = prior_program['increment']['closeoutSnapshot']
         self.ae(_snapshot_v2_transition_errors(node, prior), [])
+        self.ae(prior['replay']['evidenceState'], 'pending')
+        self.an(prior['replay']['evidenceRef'])
+        self.ae(node['replay']['evidenceState'], 'verified')
+        self.ae(
+            node['replay']['evidenceRef'],
+            'evals/evidence/2026-09-01-v310-gt20-exact-package-source.json',
+        )
+        for field in (
+            'earliestAffectedBoundary', 'invalidatedTaskIds',
+            'preservedTaskIds',
+        ):
+            self.ae(node['replay'][field], prior['replay'][field])
+        self.ae(
+            node['predecessorSnapshotRef'],
+            '0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c:'
+            'product/program.json#/increment/closeoutSnapshot',
+        )
 
         changed = _clone(program)
         changed_node = changed['increment']['closeoutSnapshot']
@@ -2380,8 +2409,23 @@ class ProductControlTests(unittest.TestCase):
                 lifecycle['schema'],
                 'yiyuan-accord-exact-package-evidence-lifecycle/v5',
             )
-            self.ae(lifecycle['state'], 'pending')
-            self.an(lifecycle['evidence'])
+            self.ae(lifecycle['state'], 'verified')
+            self.ae(
+                lifecycle['subjectRevision'],
+                '0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c',
+            )
+            self.ae(lifecycle['evidence'], {
+                'locator': (
+                    'evals/evidence/2026-09-01-v310-gt20-'
+                    'exact-package-source.json'
+                ),
+                'sha256': (
+                    '677c85b2a53a682affe624c440f08bb44a532b6457f0f5c444fa3c76feb027a5'
+                ),
+                'evaluatedRevision': (
+                    '0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c'
+                ),
+            })
             self.ae(
                 lifecycle['earliestAffectedBoundary'],
                 'exact-package-evaluator-privacy-ownership-and-native-host-'
@@ -2389,7 +2433,7 @@ class ProductControlTests(unittest.TestCase):
             )
             self.ae(
                 lifecycle['predecessorLifecycleRef'],
-                'fc9c1a7a64257ddf315f862a091a081c4104d81b:'
+                '0febb4150a8d7ffe6bb83b6e6625f5eb1a1faa2c:'
                 'product/program.json#/increment/exactPackageEvidenceLifecycle',
             )
 
@@ -2418,9 +2462,18 @@ class ProductControlTests(unittest.TestCase):
             )
             for mutate in (
                 lambda value: value.__setitem__('evidence', {}),
-                lambda value: value.__setitem__('state', 'verified'),
+                lambda value: value.__setitem__('state', 'pending'),
                 lambda value: value.__setitem__('priorEvidenceRef', 'missing'),
                 lambda value: value.__setitem__('subjectRevision', '0' * 40),
+                lambda value: value['evidence'].__setitem__(
+                    'locator', 'evals/evidence/wrong.json',
+                ),
+                lambda value: value['evidence'].__setitem__(
+                    'sha256', '0' * 64,
+                ),
+                lambda value: value['evidence'].__setitem__(
+                    'evaluatedRevision', '0' * 40,
+                ),
             ):
                 changed = _clone(lifecycle)
                 mutate(changed)
@@ -3084,21 +3137,25 @@ class ProductControlTests(unittest.TestCase):
         successor_contract = policy['evaluationContractHistory'][5]['sha256']
         rebaseline_contract = policy['evaluationContractHistory'][6]['sha256']
         verified_contract = policy['evaluationContractHistory'][7]['sha256']
+        promoted_contract = policy['evaluationContractHistory'][8]['sha256']
         self.ai(old, _evaluation_contracts(policy, 'GT-14', current))
         for task_id, expected in (
             ('GT-17', {current, sequence_contract, qualification_contract,
                        stage_contract, successor_contract,
-                       rebaseline_contract, verified_contract}),
+                       rebaseline_contract, verified_contract,
+                       promoted_contract}),
             ('GT-18', {current, sequence_contract, stage_contract,
                        successor_contract, rebaseline_contract,
-                       verified_contract}),
+                       verified_contract, promoted_contract}),
             ('GT-20', {current, dynamic_contract, stage_contract,
-                       successor_contract, verified_contract}),
+                       successor_contract, verified_contract,
+                       promoted_contract}),
             ('GT-19', {current, stage_contract, successor_contract,
-                       rebaseline_contract, verified_contract}),
+                       rebaseline_contract, verified_contract,
+                       promoted_contract}),
             ('GT-21', {current, dynamic_contract, stage_contract,
                        successor_contract, rebaseline_contract,
-                       verified_contract}),
+                       verified_contract, promoted_contract}),
         ):
             self.ae(_evaluation_contracts(policy, task_id, current),
                              expected)
