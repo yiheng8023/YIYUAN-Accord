@@ -11,6 +11,9 @@ $ErrorActionPreference = 'Stop'
 $CommandTimeoutSeconds = 60
 $CommandEndToEndTimeoutSeconds = 70
 $CommandOutputLimitBytes = 4194304
+$AccordMarketplaceId = 'yiyuan-accord'
+$CodexAccordPluginId = 'yiyuan-accord-codex@yiyuan-accord'
+$ClaudeAccordPluginId = 'yiyuan-accord-claude@yiyuan-accord'
 $ChildEnvironmentNames = @(
   'COMSPEC', 'PATH', 'PATHEXT', 'ProgramData', 'ProgramFiles',
   'ProgramFiles(x86)', 'ProgramW6432', 'SystemDrive', 'SystemRoot',
@@ -1108,10 +1111,10 @@ Assert-Exit $codexMarketplace 0 'Codex marketplace add'
 $claudeMarketplace = Invoke-Captured claude @('plugin', 'marketplace', 'add', $mutableSource, '--scope', 'user') $mutableSource $claudeEnvironment
 Add-CommandRecord 'accordClaudeMarketplaceAdd' $claudeMarketplace
 Assert-Exit $claudeMarketplace 0 'Claude marketplace add'
-$codexInstall = Invoke-Captured codex @('plugin', 'add', 'yiyuan-accord-codex@yiyuan-accord', '--json') $mutableSource $codexEnvironment
+$codexInstall = Invoke-Captured codex @('plugin', 'add', $CodexAccordPluginId, '--json') $mutableSource $codexEnvironment
 Add-CommandRecord 'accordCodexInstallPrior' $codexInstall
 Assert-Exit $codexInstall 0 'Codex install'
-$claudeInstall = Invoke-Captured claude @('plugin', 'install', 'yiyuan-accord-claude@yiyuan-accord', '--scope', 'user', '-y') $mutableSource $claudeEnvironment
+$claudeInstall = Invoke-Captured claude @('plugin', 'install', $ClaudeAccordPluginId, '--scope', 'user', '-y') $mutableSource $claudeEnvironment
 Add-CommandRecord 'accordClaudeInstallPrior' $claudeInstall
 Assert-Exit $claudeInstall 0 'Claude install'
 
@@ -1143,10 +1146,10 @@ if ((Test-Path -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-cod
     (Test-Path -LiteralPath (Join-Path $mutableSource 'plugins/yiyuan-accord-claude'))) {
   throw 'Failed-update source paths were not removed.'
 }
-$codexFailedUpdate = Invoke-Captured codex @('plugin', 'add', 'yiyuan-accord-codex@yiyuan-accord', '--json') $mutableSource $codexEnvironment
+$codexFailedUpdate = Invoke-Captured codex @('plugin', 'add', $CodexAccordPluginId, '--json') $mutableSource $codexEnvironment
 Add-CommandRecord 'accordCodexFailedUpdate' $codexFailedUpdate 'source-path-absent'
 if ($codexFailedUpdate.exitCode -eq 0) { throw 'Codex failed update unexpectedly succeeded' }
-$claudeFailedUpdate = Invoke-Captured claude @('plugin', 'update', 'yiyuan-accord-claude@yiyuan-accord', '--scope', 'user', '-y') $mutableSource $claudeEnvironment
+$claudeFailedUpdate = Invoke-Captured claude @('plugin', 'update', $ClaudeAccordPluginId, '--scope', 'user', '-y') $mutableSource $claudeEnvironment
 Add-CommandRecord 'accordClaudeFailedUpdate' $claudeFailedUpdate 'source-path-absent'
 if ($claudeFailedUpdate.exitCode -eq 0) { throw 'Claude failed update unexpectedly succeeded' }
 [void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-codex') $codexOldInstalled 'Codex rollback')
@@ -1157,8 +1160,8 @@ Assert-Exit $codexRollbackList 0 'Codex rollback list'
 $claudeRollbackList = Invoke-Captured claude @('plugin', 'list', '--json') $mutableSource $claudeEnvironment
 Add-CommandRecord 'rollbackClaudeInventory' $claudeRollbackList
 Assert-Exit $claudeRollbackList 0 'Claude rollback list'
-Assert-PluginInventory $codexRollbackList codex 'yiyuan-accord-codex@yiyuan-accord' '3.0.1' $true 'Codex rollback'
-Assert-PluginInventory $claudeRollbackList claude 'yiyuan-accord-claude@yiyuan-accord' '3.0.1' $true 'Claude rollback'
+Assert-PluginInventory $codexRollbackList codex $CodexAccordPluginId '3.0.1' $true 'Codex rollback'
+Assert-PluginInventory $claudeRollbackList claude $ClaudeAccordPluginId '3.0.1' $true 'Claude rollback'
 Assert-PluginInventory $codexRollbackList codex 'lifecycle-neighbor-codex@lifecycle-neighbor' '1.0.0' $true 'Codex neighbor after rollback'
 Assert-PluginInventory $claudeRollbackList claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude neighbor after rollback'
 [void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor after rollback')
@@ -1168,10 +1171,10 @@ Copy-Item -LiteralPath (Join-Path $candidateSource 'plugins/yiyuan-accord-codex'
 Copy-Item -LiteralPath (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') -Destination (Join-Path $mutableSource 'plugins/yiyuan-accord-claude') -Recurse
 Copy-Item -LiteralPath (Join-Path $candidateSource '.agents/plugins/marketplace.json') -Destination (Join-Path $mutableSource '.agents/plugins/marketplace.json') -Force
 Copy-Item -LiteralPath (Join-Path $candidateSource '.claude-plugin/marketplace.json') -Destination (Join-Path $mutableSource '.claude-plugin/marketplace.json') -Force
-$codexUpdate = Invoke-Captured codex @('plugin', 'add', 'yiyuan-accord-codex@yiyuan-accord', '--json') $mutableSource $codexEnvironment
+$codexUpdate = Invoke-Captured codex @('plugin', 'add', $CodexAccordPluginId, '--json') $mutableSource $codexEnvironment
 Add-CommandRecord 'accordCodexUpdateCandidate' $codexUpdate
 Assert-Exit $codexUpdate 0 'Codex successful update'
-$claudeUpdate = Invoke-Captured claude @('plugin', 'update', 'yiyuan-accord-claude@yiyuan-accord', '--scope', 'user', '-y') $mutableSource $claudeEnvironment
+$claudeUpdate = Invoke-Captured claude @('plugin', 'update', $ClaudeAccordPluginId, '--scope', 'user', '-y') $mutableSource $claudeEnvironment
 Add-CommandRecord 'accordClaudeUpdateCandidate' $claudeUpdate
 Assert-Exit $claudeUpdate 0 'Claude successful update'
 
@@ -1185,8 +1188,8 @@ Assert-Exit $codexList 0 'Codex list'
 $claudeList = Invoke-Captured claude @('plugin', 'list', '--json') $mutableSource $claudeEnvironment
 Add-CommandRecord 'candidateClaudeInventory' $claudeList
 Assert-Exit $claudeList 0 'Claude list'
-Assert-PluginInventory $codexList codex 'yiyuan-accord-codex@yiyuan-accord' '3.1.0' $true 'Codex list'
-Assert-PluginInventory $claudeList claude 'yiyuan-accord-claude@yiyuan-accord' '3.1.0' $true 'Claude list'
+Assert-PluginInventory $codexList codex $CodexAccordPluginId '3.1.0' $true 'Codex list'
+Assert-PluginInventory $claudeList claude $ClaudeAccordPluginId '3.1.0' $true 'Claude list'
 Assert-PluginInventory $codexList codex 'lifecycle-neighbor-codex@lifecycle-neighbor' '1.0.0' $true 'Codex neighbor after update'
 Assert-PluginInventory $claudeList claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude neighbor after update'
 [void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor after update')
@@ -1242,16 +1245,16 @@ if (Test-Path -LiteralPath $claudeOldCache) {
 }
 [void](Assert-FileMapsEqual (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeCandidateCache 'Claude retained installed candidate')
 
-$codexRemove = Invoke-Captured codex @('plugin', 'remove', 'yiyuan-accord-codex@yiyuan-accord', '--json') $mutableSource $codexEnvironment
+$codexRemove = Invoke-Captured codex @('plugin', 'remove', $CodexAccordPluginId, '--json') $mutableSource $codexEnvironment
 Add-CommandRecord 'accordCodexRemove' $codexRemove
 Assert-Exit $codexRemove 0 'Codex remove'
-$claudeRemove = Invoke-Captured claude @('plugin', 'uninstall', 'yiyuan-accord-claude@yiyuan-accord', '--scope', 'user', '-y') $mutableSource $claudeEnvironment
+$claudeRemove = Invoke-Captured claude @('plugin', 'uninstall', $ClaudeAccordPluginId, '--scope', 'user', '-y') $mutableSource $claudeEnvironment
 Add-CommandRecord 'accordClaudeRemove' $claudeRemove
 Assert-Exit $claudeRemove 0 'Claude remove'
-$codexMarketplaceRemove = Invoke-Captured codex @('plugin', 'marketplace', 'remove', 'yiyuan-accord', '--json') $mutableSource $codexEnvironment
+$codexMarketplaceRemove = Invoke-Captured codex @('plugin', 'marketplace', 'remove', $AccordMarketplaceId, '--json') $mutableSource $codexEnvironment
 Add-CommandRecord 'accordCodexMarketplaceRemove' $codexMarketplaceRemove
 Assert-Exit $codexMarketplaceRemove 0 'Codex marketplace remove'
-$claudeMarketplaceRemove = Invoke-Captured claude @('plugin', 'marketplace', 'remove', 'yiyuan-accord', '--scope', 'user') $mutableSource $claudeEnvironment
+$claudeMarketplaceRemove = Invoke-Captured claude @('plugin', 'marketplace', 'remove', $AccordMarketplaceId, '--scope', 'user') $mutableSource $claudeEnvironment
 Add-CommandRecord 'accordClaudeMarketplaceRemove' $claudeMarketplaceRemove
 Assert-Exit $claudeMarketplaceRemove 0 'Claude marketplace remove'
 [void](Assert-ExactOrphanCacheVersion (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeCandidateCache 'Claude candidate')
@@ -1292,12 +1295,12 @@ $afterRemoveClaudeMarketplaces = Invoke-Captured claude @(
 ) $task $claudeEnvironment
 Add-CommandRecord 'afterRemoveClaudeMarketplaces' $afterRemoveClaudeMarketplaces
 Assert-Exit $afterRemoveClaudeMarketplaces 0 'Claude after-Accord-removal marketplaces'
-Assert-PluginInventory $afterRemoveCodexInventory codex 'yiyuan-accord-codex@yiyuan-accord' $null $false 'Codex Accord removal'
-Assert-PluginInventory $afterRemoveClaudeInventory claude 'yiyuan-accord-claude@yiyuan-accord' $null $false 'Claude Accord removal'
+Assert-PluginInventory $afterRemoveCodexInventory codex $CodexAccordPluginId $null $false 'Codex Accord removal'
+Assert-PluginInventory $afterRemoveClaudeInventory claude $ClaudeAccordPluginId $null $false 'Claude Accord removal'
 Assert-PluginInventory $afterRemoveCodexInventory codex 'lifecycle-neighbor-codex@lifecycle-neighbor' '1.0.0' $true 'Codex neighbor after Accord removal'
 Assert-PluginInventory $afterRemoveClaudeInventory claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude neighbor after Accord removal'
-Assert-MarketplaceInventory $afterRemoveCodexMarketplaces codex 'yiyuan-accord' $false 'Codex Accord removal'
-Assert-MarketplaceInventory $afterRemoveClaudeMarketplaces claude 'yiyuan-accord' $false 'Claude Accord removal'
+Assert-MarketplaceInventory $afterRemoveCodexMarketplaces codex $AccordMarketplaceId $false 'Codex Accord removal'
+Assert-MarketplaceInventory $afterRemoveClaudeMarketplaces claude $AccordMarketplaceId $false 'Claude Accord removal'
 Assert-MarketplaceInventory $afterRemoveCodexMarketplaces codex 'lifecycle-neighbor' $true 'Codex neighbor after Accord removal'
 Assert-MarketplaceInventory $afterRemoveClaudeMarketplaces claude 'lifecycle-neighbor' $true 'Claude neighbor after Accord removal'
 [void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor after Accord removal')
@@ -1312,14 +1315,14 @@ foreach ($entry in $sentinelHashes.GetEnumerator()) {
 $afterRemoveCodexConfig = Get-Content -Raw -LiteralPath $codexConfig
 if (-not $afterRemoveCodexConfig.Contains('# USER_CODEX_CONFIG') -or
     -not $afterRemoveCodexConfig.Contains('# CONCURRENT_CODEX_CONFIG_EDIT') -or
-    $afterRemoveCodexConfig.Contains('yiyuan-accord')) {
+    $afterRemoveCodexConfig.Contains($CodexAccordPluginId)) {
   throw 'Codex user configuration was not preserved or Accord configuration remains.'
 }
 $afterRemoveClaudeSettings = Get-Content -Raw -LiteralPath $claudeSettings | ConvertFrom-Json
 if ($afterRemoveClaudeSettings.userSentinel -ne 'USER_CLAUDE_SETTINGS' -or
     $afterRemoveClaudeSettings.concurrentSentinel -ne 'CONCURRENT_CLAUDE_SETTINGS' -or
     @($afterRemoveClaudeSettings.permissions.allow).Count -ne 0 -or
-    ((Get-Content -Raw -LiteralPath $claudeSettings).Contains('yiyuan-accord'))) {
+    ((Get-Content -Raw -LiteralPath $claudeSettings).Contains($ClaudeAccordPluginId))) {
   throw 'Claude user configuration was not preserved or Accord configuration remains.'
 }
 $matchingProcesses = @(Get-TaskProcessIds $task)
@@ -1399,12 +1402,12 @@ Add-CommandRecord 'cleanupClaudeMarketplaces' $cleanupClaudeMarketplaces
 Assert-Exit $cleanupClaudeMarketplaces 0 'Claude cleanup marketplaces'
 Assert-PluginInventory $cleanupCodexInventory codex 'lifecycle-neighbor-codex@lifecycle-neighbor' $null $false 'Codex neighbor cleanup'
 Assert-PluginInventory $cleanupClaudeInventory claude 'lifecycle-neighbor-claude@lifecycle-neighbor' $null $false 'Claude neighbor cleanup'
-Assert-PluginInventory $cleanupCodexInventory codex 'yiyuan-accord-codex@yiyuan-accord' $null $false 'Codex Accord cleanup'
-Assert-PluginInventory $cleanupClaudeInventory claude 'yiyuan-accord-claude@yiyuan-accord' $null $false 'Claude Accord cleanup'
+Assert-PluginInventory $cleanupCodexInventory codex $CodexAccordPluginId $null $false 'Codex Accord cleanup'
+Assert-PluginInventory $cleanupClaudeInventory claude $ClaudeAccordPluginId $null $false 'Claude Accord cleanup'
 Assert-MarketplaceInventory $cleanupCodexMarketplaces codex 'lifecycle-neighbor' $false 'Codex neighbor cleanup'
 Assert-MarketplaceInventory $cleanupClaudeMarketplaces claude 'lifecycle-neighbor' $false 'Claude neighbor cleanup'
-Assert-MarketplaceInventory $cleanupCodexMarketplaces codex 'yiyuan-accord' $false 'Codex Accord cleanup'
-Assert-MarketplaceInventory $cleanupClaudeMarketplaces claude 'yiyuan-accord' $false 'Claude Accord cleanup'
+Assert-MarketplaceInventory $cleanupCodexMarketplaces codex $AccordMarketplaceId $false 'Codex Accord cleanup'
+Assert-MarketplaceInventory $cleanupClaudeMarketplaces claude $AccordMarketplaceId $false 'Claude Accord cleanup'
 
 $afterEvaluatorCleanup = [ordered]@{
   codexInstalledEntries = @(Get-InstalledInventory $cleanupCodexInventory codex 'Codex cleanup inventory').Count
@@ -1424,8 +1427,8 @@ if ($afterEvaluatorCleanup.codexInstalledEntries -ne 0 -or
 $finalCodexConfig = Get-Content -Raw -LiteralPath $codexConfig
 if (-not $finalCodexConfig.Contains('# USER_CODEX_CONFIG') -or
     -not $finalCodexConfig.Contains('# CONCURRENT_CODEX_CONFIG_EDIT') -or
-    $finalCodexConfig.Contains('yiyuan-accord') -or
-    $finalCodexConfig.Contains('lifecycle-neighbor')) {
+    $finalCodexConfig.Contains($CodexAccordPluginId) -or
+    $finalCodexConfig.Contains('lifecycle-neighbor-codex@lifecycle-neighbor')) {
   throw 'Codex evaluator cleanup changed user configuration or retained a test registration.'
 }
 $finalClaudeSettingsRaw = Get-Content -Raw -LiteralPath $claudeSettings
@@ -1435,8 +1438,8 @@ if ($finalClaudeSettings.userSentinel -ne 'USER_CLAUDE_SETTINGS' -or
     @($finalClaudeSettings.permissions.allow).Count -ne 0 -or
     @($finalClaudeSettings.enabledPlugins.PSObject.Properties).Count -ne 0 -or
     @($finalClaudeSettings.extraKnownMarketplaces.PSObject.Properties).Count -ne 0 -or
-    $finalClaudeSettingsRaw.Contains('yiyuan-accord') -or
-    $finalClaudeSettingsRaw.Contains('lifecycle-neighbor')) {
+    $finalClaudeSettingsRaw.Contains($ClaudeAccordPluginId) -or
+    $finalClaudeSettingsRaw.Contains('lifecycle-neighbor-claude@lifecycle-neighbor')) {
   throw 'Claude evaluator cleanup changed user configuration or retained a test registration.'
 }
 

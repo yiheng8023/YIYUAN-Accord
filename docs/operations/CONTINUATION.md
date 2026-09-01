@@ -60,6 +60,15 @@ Then read, in order:
   command at runtime. The failure finalizer left neither task root nor evidence;
   the exact commit is retained as failed evaluator counterevidence, not a
   repository candidate. The corrected helper form must be frozen and replayed.
+- Exact `761d289e6cfacf9967c5cca313dd6f8465a3a715` was the second frozen
+  replay attempt. It reached the post-removal state check, then falsely treated
+  the retained neighboring marketplace path as Accord residue because the
+  dedicated task-root name contains `yiyuan-accord-gt20`. Independent isolated
+  Codex lifecycle diagnosis preserved both configuration sentinels, removed the
+  actual Accord identity and left zero diagnostic residue. The attempt retained
+  no task root or evidence and is failed evaluator counterevidence. The next
+  freeze uses exact plugin identities plus official plugin and marketplace
+  inventories instead of the broad free-text substring.
 - Dynamic applicability uses a small invariant floor plus current context.
   Methods, rules, standards, adapters and mechanisms activate only for a named
   condition and retain evidence, cost, fallback, verification and retirement
