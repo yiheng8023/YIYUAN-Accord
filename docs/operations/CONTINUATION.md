@@ -39,20 +39,18 @@ Then read, in order:
   resolves directly to that commit and remains immutable. Later `main`
   documentation or maintenance does not change the released package.
 - Commit A `7ea91dad811d337f00f75eb521cffacabd73b05f` freezes the complete
-  v3.1.0 Codex and Claude package bytes, including LICENSE and NOTICE. The
-  schema-v2 stage node first reopens only the complete-package identity
-  boundary, preserves GT-21, and invalidates GT-20 for the old package.
-  `evals/evidence/2026-09-01-v310-gt20-exact-package-source.json` then verifies
-  the exact Commit A lifecycle on Windows with PowerShell 7.6.5, Git
-  2.55.0.windows.3, bsdtar 3.8.8, Codex CLI 0.151.0, Claude Code 2.1.252 and
-  Node 24.19.0. The containing close commit closes that same v2 node and
-  opens exact-local verification; its exact SHA must be read from Git and is
-  not self-attested here. The record proves only isolated CLI install,
-  bounded command and descendant termination, all task-root process cleanup,
-  failed-update rollback, successful update, exact installed bytes, enabled
-  inventory, installed Hook behavior, native removal, semantic user/concurrent/
-  foreign-state preservation and task cleanup. Desktop activation, production,
-  cross-OS behavior, value, hosted status and publication remain separate.
+  v3.1.0 Codex and Claude package bytes, including LICENSE and NOTICE. Candidate
+  `90501145346f81e02ebdc88fcf3001b39bfdf3d4` and its schema-v2 GT-20
+  record failed four fresh reviews and must not be pushed: public evidence
+  retained user-local paths, process ownership and output draining were not
+  bounded by one hard end-to-end deadline, Claude identity stopped at its shim,
+  and arbitrary orphan-cache files could satisfy cleanup. The current schema-v3
+  correction preserves exact Commit A subjects plus GT-21, owns every command
+  tree before resume, sanitizes private roots, binds Claude's package manifest
+  and actual terminal executable, digests only the stable command plan and
+  probes exact younger/older-than-14-day host cache behavior. Its fresh replay,
+  affected-surface reacceptance and replacement exact-tree reviews are pending;
+  no repository candidate, hosted status, authorization or publication exists.
 - Dynamic applicability uses a small invariant floor plus current context.
   Methods, rules, standards, adapters and mechanisms activate only for a named
   condition and retain evidence, cost, fallback, verification and retirement
@@ -65,8 +63,8 @@ Then read, in order:
   later accountable product consensus superseded its `ready` state from
   `product/constitution.json#/purpose,/successDefinition,/productBoundary,/evolutionPolicy`.
   It is not the current candidate and grants no tag or Release authority.
-- The saved `main` checkout carries the selected, unreleased v3.1.0
-  repository-candidate projection formed from the `a1cccb0` behavior/evidence
+- The saved `main` checkout carries a reopened, unreleased v3.1.0
+  repository-candidate-stage projection formed from the `a1cccb0` behavior/evidence
   baseline. Exact correction SHAs `0988b223`, `0da23a21`, `b202c40` and
   `39f4f69` failed later exact-tree or exact-local review and remain canonical
   lineage predecessor origins only. Exact `dc75f89` is a failed identical-node
@@ -93,14 +91,14 @@ Then read, in order:
   host manifests retain their separately asserted three-second product timeout.
   Exact `b4f0823ff039caf36628819263d2871c764255dd` is an identical-node
   documentation carry of `39926711`, not a predecessor locator. The successor
-  described by this document replaces the bilingual README with a
+  described by this document first replaced the bilingual README with a
   progressive-disclosure path and adds a machine-checked host-leveraged eight-
   dimension responsibility lens. It records both changes in the tracked Release
   body, rebinds its acceptance and guidance digests and cites `39926711` as the
-  prior snapshot origin. It changes no runtime behavior, manifest, product
-  timeout, claim ceiling or release gate. Earlier validation does not transfer to these bytes;
-  the successor remains unaccepted pending clean exact-local verification, a
-  hosted result, a named-human decision, a tag and a public Release. Accord
+  prior snapshot origin. Later Commit A froze complete package/legal bytes, and
+  candidate `9050114` then failed privacy, process-ownership, Claude identity and
+  cache-cleanup review. The current v3 evaluator replay is earlier than any
+  clean exact-local, hosted, named-human, tag or public Release gate. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
   product target is broader: complete bounded self-bootstrapping across
@@ -124,7 +122,7 @@ Then read, in order:
   service is admitted. No v3.1.0 tag or Release exists, and no earlier tag may
   be moved.
 - Baseline, plan, process, acceptance and goal projection are current
-  versioned stage surfaces, not permanent truth. Candidate-forming closeout is
+  versioned stage surfaces, not permanent truth. The reopened successor is
   recorded at `product/program.json#/increment/closeoutSnapshot` with a stable
   locator and `containing-git-commit` relation but no embedded self SHA. After
   commit, its exact reference is `<containing-sha>:<self-locator>`; a successor
@@ -162,9 +160,9 @@ Then read, in order:
   correctness, cross-host equivalence, broad-field-value or production-safety
   claim.
 - At the tagged v3.0.1 SHA, the released program remains historical `ready`
-  evidence. On current moving `main`, `program.status` is `ready`, its one
-  increment and work item are completed, its goal projection is retired and
-  v3.1.0 is the selected repository candidate. The global
+  evidence. On current moving `main`, `program.status` is `active`, its one
+  increment and work item are reopened at GT-20, its goal projection is active
+  in the host and no v3.1.0 repository candidate is selected. The global
   rebaseline, bounded P0-P3 feasibility/reuse study and complete
   self-bootstrapping semantic model and environment-admission design are
   complete. The representative/longitudinal evaluation design is complete.

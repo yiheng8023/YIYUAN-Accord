@@ -52,7 +52,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "9e01f06607ba59ffa50c015a97443836e8577df9e183fcb5e963bac57daa3588",
+  "canonicalGoalObjectiveSha256": "ed9cfa113c92587e6cc0c30a7b05bcc9f1e1e93d92486363d7b20b05cc4fb59e",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -304,6 +304,26 @@
           "GT-21"
         ],
         "reason": "The stage-state successor corrects the current candidate projection across representative rationale, criterion pass rules, assessments, assessment boundaries and scopes, evidence and release-stage status. Golden Task obligations and digests, evidence lanes, package projection identities, evaluators, behavior-subject bytes and bounded observed behavior facts are unchanged; exact prior observations retain only their former finite claims and do not prove the corrected current stage."
+      },
+      {
+        "kind": "scoped-evaluation-contract-supersession",
+        "sha256": "412475b21dbf3fa2b51eeca4ae23f3ee2e764c0b6faaa137bce8aff27aff0e88",
+        "sourceRevision": "90501145346f81e02ebdc88fcf3001b39bfdf3d4",
+        "preservedTaskIds": [
+          "GT-07",
+          "GT-11",
+          "GT-12",
+          "GT-13",
+          "GT-14",
+          "GT-15",
+          "GT-16",
+          "GT-17",
+          "GT-18",
+          "GT-19",
+          "GT-20",
+          "GT-21"
+        ],
+        "reason": "The strict evaluator correction reopens GT-20 and the repository-candidate stage without changing Golden Task obligations, task digests, package subjects or the bounded facts already observed. Prior observations retain only their former finite claims; GT-20 remains invalid for the current release until the schema-v3 lifecycle replay passes."
       }
     ],
     "historicalEvidenceContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",
@@ -399,7 +419,7 @@
         "supportsCriterion": "R3"
       }
     ],
-    "sampleRationale": "GT-07 and GT-11 through GT-18 retain their bounded roles; current GT-19 remains synthetic typed-receipt evidence. GT-21 passes only for the exact bounded event-to-consequence, sufficient-simple and fresh thread/start handoff cases, and GT-20 passes only for the exact disposable non-empty Windows transactional lifecycle with failed-update rollback, user and foreign state preservation, native removal, inert-cache classification and zero task residue. The selected product set remains the portable Skill, short-lived Hook adapter, pure core and manifests; the request-scoped Hook trust bypass remains test-only and the App Server driver remains an evaluator. Source-bound whole-system reacceptance from exact cut 85a917a is complete only as deterministic reconciliation of those unchanged bounded behavior subjects and active projections; it adds no behavior, current-client compatibility or value proof. The updated-client entry-instance projection remains unknown pending read-only re-sensing. Separate candidate-forming exact-tree product, specification, implementation and standards review is complete and selects v3.1.0 as the repository candidate. All eight criteria are verified only for their finite internal claims; exact clean-SHA local review, hosted verification, named-human authorization, tag, public Release, installation and cleanup remain later gates, while production trust, ordinary activation, actual Claude host triggering, unmanaged or cross-OS behavior, cross-host and product value remain unverified.",
+      "sampleRationale": "GT-07 and GT-11 through GT-19 retain only their bounded historical roles, and GT-21 retains only its exact event-to-consequence, sufficient-simple and fresh thread/start handoff cases. Four fresh reviews invalidated the schema-v2 GT-20 record and candidate 9050114, so GT-20 is continuing pending a strict v3 replay of exact Commit A package bytes for path privacy, owned-tree termination, Claude terminal identity and bounded host-cache cleanup. The selected product set remains the portable Skill, short-lived Hook adapter, pure-core reference and manifests; no repository candidate, current-client compatibility, value, hosted, authorization, publication, production or cross-OS claim is promoted.",
     "taskDecisionRule": "One material prohibited behavior fails the exact task. Recovery or later correction never converts that task into a pass, and an older product identity or projection cannot qualify the current one.",
     "releaseDecisionRule": "Every required task must have one fresh, reviewable, future-exact-projection evaluation case with explicit case type, obligations, environment admission, comparison eligibility, exact treatment, independent evaluator, full acceptance vector, effect, state-carrier edges where applicable, cleanup, residue, decision and claim limit. Each task declares only its relevant behavior-subject files; a promoted observation and its source record bind one ancestor evaluatedRevision, and current tracked subject bytes must remain identical while task and evaluation digests bind current semantics. This sparse invalidation rule neither accepts stale core behavior nor forces replay for unrelated evidence or presentation changes. When dynamic applicability admits them, feasibility research and isolated prototypes must precede the affected implementation; a sufficient fresh route adds neither, and the current Accord-enabled host is never treated as an uncontaminated baseline. GT-07, GT-11, GT-12 and GT-13 remain regression guardrails; GT-14 through GT-21 must pass the environment, feasibility, self-bootstrap, global-consensus, longitudinal-evolution, dynamic responsibility-retirement, isolated live-operational-continuity and transactional distribution-lifecycle lanes. Every attempt remains ordered evidence; one material prohibited behavior, hard-gate failure, candidate-controlled evaluation, hidden residue, user-state overwrite or cherry-picked episode fails the exact case and cannot be averaged away. Static conformance, installation, enablement, implicit invocation, one metric, model self-assessment, diagnostic traces and renamed historical observations cannot substitute for current behavior and value evidence.",
     "postReleaseTasks": [
@@ -467,7 +487,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": []
     },
     {
@@ -498,9 +518,9 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
-      "latestAssessmentBoundary": "Exact 3878968 preserves GT-21 only for its bounded event-to-consequence, sufficient-simple and fresh-handoff cases. The strict schema-v2 record reclosed only the GT-20 evaluator failure-closure boundary for all 18 unchanged Commit A package subjects: a 40-hex commit is required, every command is time-bounded with descendant termination, every task-root process is included in residue detection, and PowerShell, Git, tar plus resolved executable bytes are bound. The 31-command Windows replay passed on PowerShell 7.6.5, Git 2.55.0.windows.3, bsdtar 3.8.8, Codex CLI 0.151.0, Claude Code 2.1.252 and Node 24.19.0; only the two deliberately failed update commands exited nonzero, no command timed out, installed entries and task processes reached zero, and the task root was removed.",
-      "assessmentScope": "Earlier GT-14 through GT-19 observations retain their finite claims, and GT-21 remains unchanged. The replacement record verifies only the bounded exact Commit A Windows CLI install, two failed-update rollbacks, successful update, installed bytes, enabled inventory, installed Hook behavior, supported native removal, semantic user/concurrent/foreign-state preservation and task cleanup. R3 is verified for these finite evidence claims; it does not establish production trust, ordinary desktop activation, unmanaged or cross-OS behavior, comparative value, exact-local or hosted candidate verification, named-human authorization, tag, public Release or post-release installed behavior.",
+      "assessment": "continuing",
+      "latestAssessmentBoundary": "Four fresh reviews invalidated exact candidate 9050114 and its schema-v2 GT-20 record at the evaluator privacy, end-to-end process-termination, Claude terminal-identity and host-cache cleanup boundary. Exact Commit A package subjects and GT-21 remain unchanged; the strict schema-v3 replay is pending.",
+      "assessmentScope": "Earlier GT-14 through GT-19 observations and unchanged GT-21 retain only their finite claims. The v2 GT-20 record and candidate 9050114 are invalidated; a strict v3 replay of exact Commit A package bytes is pending for evidence privacy, end-to-end process termination and bounded host-cache cleanup. No current GT-20, candidate, hosted, authorization, publication, production or field-value claim is promoted.",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-07-codex-local.json",
@@ -601,12 +621,12 @@
         "L1",
         "L7"
       ],
-      "statement": "With the complete self-bootstrapping program and candidate-forming independent review complete, the selected v3.1.0 repository-candidate projection reproducibly binds the chosen product form, authority, implementation, environment and lifecycle contracts, representative and longitudinal evidence and a finite prospective public claim without moving any immutable tag.",
-      "passRule": "R4 is verified at the repository-candidate stage only when every core stage, feasibility question, required Golden Task including GT-20 and GT-21, environment baseline, longitudinal result, whole-system balance review, justified remediation, affected-surface reacceptance and candidate-forming independent review is complete, and the semantic version and repository candidate are selected. This verifies only the internal release-surface contract. One clean committed SHA must next pass exact local verification and review, hosted systems, named-human authorization, public tag and Release, installed update or rollback and final cleanup in order. Repository self-report, static package contents, the historical ae7294652761abceb753f0571ee82c7ddeae06af baseline or earlier hosted passes cannot satisfy those external gates.",
+      "statement": "The v3.1.0 repository-candidate projection is reopened until the strict GT-20 v3 replay, affected-surface reacceptance and replacement independent review reproducibly bind the chosen product form, authority, implementation, environment and lifecycle contracts, evidence and finite prospective public claim without moving an immutable tag.",
+      "passRule": "R4 is verified at the repository-candidate stage only when every core stage, feasibility question, required Golden Task including the current strict GT-20 record and unchanged GT-21, environment baseline, longitudinal result, whole-system balance review, justified remediation, affected-surface reacceptance and candidate-forming independent review is complete, and the semantic version and repository candidate are selected. This verifies only the internal release-surface contract. One later clean committed SHA must pass exact local verification and review, hosted systems, named-human authorization, public tag and Release, installed update or rollback and final cleanup in order. Repository self-report, invalidated candidate 9050114, static package contents or earlier hosted passes cannot satisfy those gates.",
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": []
     },
     {
@@ -627,7 +647,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -729,7 +749,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -833,7 +853,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -933,12 +953,12 @@
       ],
       "statement": "Corrections, new consensus, failures, host or extension drift, evidence conflict, capability or carrier change, resource pressure and lifecycle mismatch trigger versioned impact analysis, bounded recomputation, recovery, learning, evolution and retirement without making the user reconstruct the process.",
       "passRule": "Plan, process, acceptance and structured goal projection map one versioned current stage set. Material consensus passes contradiction, category, boundary and dependency checks, then reopens the earliest affected implementation, evidence, documentation and claims while preserving history. A closed snapshot has one canonical origin: the oldest commit in its contiguous first-parent identical parsed-node run; every carry preserves the origin-bound authority, surfaces, evidence and cutoff, and a successor cites the canonical origin of the latest different node. The current verifier recursively recomputes only the bounded schema-versioned repository snapshot-lineage predicate over strict node shape, origin-bound constitution, program and acceptance, referenced guidance and Golden Tasks, repository-located current and historical evidence bytes and digests, and declared host projection package, manifest, contract, Skill and marketplace identity. It builds one bounded first-parent history index per validation graph and reuses it across predecessor checks; each revision blob uses the admitted JSON byte limit while the index has independent revision-count and aggregate-byte bounds. Every parsed schema-v1 historical program value is traversed independently of runtime parser behavior and rejected when its visited-value depth exceeds 512. Complete normalized transition state plus raw marketplace identity determines affected criteria, and declared parser structure failures are normalized before they can escape the verifier. Predicate PASS proves only that bounded repository lineage and frozen-reference contract; it does not replay the complete historical verifier or attest historical tests, behavior, live host facts, human authority, publication or other external gates. Carry locators, stale or malformed predecessors, parser structure failures, history gaps, excessive JSON value or predecessor depth, resource-bound breaches and non-contiguous replay fail closed. The bounded current-receipt replay, GT-21 live-carrier and fresh-handoff cases, GT-20 transactional lifecycle and source-bound whole-system reacceptance from exact cut 85a917a retain only their stated finite claims. Candidate-forming product, specification, implementation and standards review established the selected v3.1.0 projection, but exact correction SHAs 0988b223, 0da23a21, b202c40 and 39f4f69 failed later exact-tree or exact-local review and remain canonical lineage predecessor origins only; exact carry dc75f89 corrected the fixture but then failed standards review because its complexity calibration remained stale, and it stays inside the 39f4f69 identical-node run rather than becoming a predecessor locator. Exact 7e14f3a completed all 36 clean local tests but failed hosted-readiness review because the 144.183-minute seam exceeded the declared 120-minute job ceiling before the job's other required checks; no hosted run occurred, and it remains a canonical predecessor origin without later-gate authority. Exact 9bd82876e2b350787edcab09e3835426e069272c passed all 36 clean exact local tests in 9821.638 seconds and passed canonical, host-local, static and four-axis exact-tree review, but required hosted run 33405883747 failed the ubuntu-latest / Python 3.14 leg at 35/36 because excessive-nesting rejection still depended on platform-specific parser behavior. Its Windows/Python 3.10 leg independently failed at 35/36 when the first Node Hook subprocess reached the semantic-test helper's 15-second deadlock guard; later same-job Hook calls, Windows/Python 3.14 and nine intervening workflows passed the identical runtime blob. Either required failure invalidates the candidate and cannot be compensated by other matrix legs; 9bd82876 remains a canonical predecessor origin without hosted or later-gate authority. The successor adds the parser-independent 512-depth boundary and raises only the CI deadlock guard to 60 seconds without retry or runtime change, while both manifests retain the separately asserted three-second product Hook timeout. Immutable source-install and tracked Release materials target v3.1.0 without self-attesting publication. The current gate is a replacement clean-SHA local verification and four-axis review before hosted verification or any later release effect. Development evidence keeps official-clean, isolated candidate-enabled and frozen-byte current-enabled dogfood lanes distinct; the active verification task is never its own baseline and never hot-loads mutable treatment bytes. Learning uses authorized carriers, immutable evaluators and non-compensating vectors. Code, conversation and execution topology remain independent; compaction, copied-history conversation fork, fresh conversation handoff, Git branch and Git worktree remain distinct. Repeated repair, proxy regression, partial install, stale restore or foreign-state deletion triggers premise, deletion, replacement or rollback review; failures, contamination, cleanup and carrier retirement remain visible.",
-      "latestAssessmentBoundary": "The strict schema-v2 GT-20 record reclosed only the evaluator failure-closure boundary for unchanged Commit A subjects after the exact 0e8ae1b correction node. The current closed stage preserves GT-21 and unrelated history, binds commit type, bounded command termination, every task-root process, PowerShell/Git/tar and executable identity, and keeps the recalibrated 722000-byte ceiling with 37245 bytes or 5.16 percent headroom. Baseline, plan, process, acceptance, structured goal projection, evidence and release documentation now select the replacement v3.1.0 repository candidate and the next exact-local verification-and-review gate.",
-      "assessmentScope": "This assessment verifies the versioned correction, v2 lifecycle record, bounded evidence projection and repository-candidate close only. It preserves exact Commit A subjects, prior failures, historical snapshot lineage, GT-21 and unrelated finite evidence while preventing the invalid record from reaching later gates. It does not establish clean exact-local or hosted verification, named-human authorization, tag, public Release, installed production behavior, field value or final cleanup; the closed snapshot cannot self-attest its containing commit or any external effect.",
+      "latestAssessmentBoundary": "The repository-candidate stage is reopened after four fresh reviews invalidated candidate 9050114. The v3 correction raises the code-and-test ceiling to 750000 bytes only to retain five-percent maintenance headroom for the privacy, process-ownership, identity and bounded-cache obligations; the verifier still computes actual bytes and fails a breach closed.",
+      "assessmentScope": "The repository-candidate stage is reopened. Exact Commit A subjects, historical failures, snapshot lineage, GT-21 and unrelated finite evidence are preserved, but the v3 lifecycle record, whole-system reacceptance and replacement exact-tree review remain pending. No clean exact-local, hosted, authorization, tag, public Release, installed production, field value or final cleanup claim is established.",
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-07-codex-local.json",
@@ -1039,7 +1059,7 @@
       "github-actions-windows-latest",
       "github-actions-macos-latest"
     ],
-    "rule": "v3.1.0 is the selected repository candidate after the complete bounded self-bootstrapping program and independent exact-tree review. The next gate forms one clean committed SHA; the goal carrier directly runs every deterministic check and verifies the exact requiredTaskIdsForRelease set with fresh task and evaluation digests, exact projection identity, sparse behavior-subject evaluatedRevision ancestry and unchanged bytes, exact environment compositions, independent post-state and claim limits without credential or session logs. The review remains context-isolated, outcome-bound, identity-neutral and does not claim public-tag installation before the immutable tag exists. Only the unchanged candidate SHA may be pushed and run on required hosted systems; historical checks remain bounded history, and named-human release authorization remains external and unrequested."
+    "rule": "v3.1.0 is reopened at the strict GT-20 evaluator boundary; candidate 9050114 is invalid and cannot be pushed. Before expensive exact-local verification, the named accountable human separately confirms that both digest-bound payment QR codes are user-owned and permitted for public display and that the digest-bound NEXUS mark is original or licensed for this public Apache-2.0 distribution; this external provenance confirmation is not release authorization, and a denial returns to package identity. After the v3 record, affected-surface reacceptance and four fresh independent reviews form one clean committed exact candidate, the goal carrier directly runs every deterministic check and verifies the exact requiredTaskIdsForRelease set with fresh bindings, exact environment compositions, independent post-state and claim limits without credential or session logs. Only that unchanged candidate SHA may be pushed; named-human release authorization remains a later external gate."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",
@@ -1058,11 +1078,11 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "ab47b17fac1e74e1423686e12ef6f2a22e8845c8552366e3fa6dfff92905f1db",
+    "releaseNotesSha256": "dbe28ad850a9bc1603abd99fdea8cef391afe8d5b51894989b6eeffd85cf3917",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,
-    "rule": "This object describes the selected v3.1.0 repository candidate and grants no tag or publication authority. Only exact local review on one clean committed SHA, required hosted systems, condition-fit environment disposition and a fresh named-human decision may create one new lightweight tag and matching non-prerelease GitHub Release. After that immutable public object exists, the goal carrier verifies exact public state and obtains one context-isolated clean-state evaluator replay of installation, confirmation and removal paths against the public immutable tag, plus bounded update or rollback and cleanup, without moving any existing tag."
+    "rule": "This object describes a reopened prospective v3.1.0 release and grants no candidate, tag or publication authority. Only a closed strict GT-20 v3 boundary, affected-surface reacceptance, four fresh independent reviews, external asset confirmation, exact local review on one clean committed SHA, required hosted systems, condition-fit environment disposition and a fresh named-human release decision may create one new lightweight tag and matching non-prerelease GitHub Release. After that immutable public object exists, the goal carrier verifies exact public state and obtains one context-isolated clean-state evaluator replay of installation, confirmation and removal paths against the public immutable tag, plus bounded update or rollback and cleanup, without moving any existing tag."
   },
   "claimCeiling": {
     "finiteReleaseClaims": [

@@ -1468,6 +1468,8 @@ def _snapshot_v2_node_errors(program, acceptance):
             "complete-host-projection-package-identity",
         "yiyuan-accord-exact-package-evidence-lifecycle/v2":
             "exact-package-evaluator-failure-closure",
+        "yiyuan-accord-exact-package-evidence-lifecycle/v3":
+            "exact-package-evaluator-privacy-termination-cleanup-closure",
     }.get(lifecycle.get("schema")) if isinstance(lifecycle, dict) else None
     if (
         not isinstance(replay, dict)
@@ -2246,6 +2248,12 @@ def _validate_exact_package_evidence_lifecycle(
             "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json",
             "7ea91dad811d337f00f75eb521cffacabd73b05f",
         ),
+        "yiyuan-accord-exact-package-evidence-lifecycle/v3": (
+            "exact-package-evaluator-privacy-termination-cleanup-closure",
+            "90501145346f81e02ebdc88fcf3001b39bfdf3d4:"
+            "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json",
+            "7ea91dad811d337f00f75eb521cffacabd73b05f",
+        ),
     }
     contract = contracts.get(lifecycle.get("schema")) \
         if isinstance(lifecycle, dict) else None
@@ -2319,6 +2327,7 @@ def _validate_exact_package_evidence_lifecycle(
         item.get("id"): item.get("packageSha256")
         for item in program.get("hostProjections", []) if isinstance(item, dict)
     }
+    record_schema = record.get("schema")
     commands = record.get("commands")
     record_contract = {
         "yiyuan-accord-gt20-exact-package-evidence/v1": (
@@ -2333,12 +2342,109 @@ def _validate_exact_package_evidence_lifecycle(
             {"powerShellVersion", "powerShellEdition", "powerShellExecutable",
              "powerShellExecutableSha256"},
         ),
-    }.get(record.get("schema"))
+        "yiyuan-accord-gt20-exact-package-evidence/v3": (
+            34, "pending-command-plan-digest",
+            {"gitVersion": 1, "tarVersion": 2, "codexCliVersion": 7,
+             "claudeCliVersion": 8, "nodeVersion": 9},
+            {"powerShellVersion", "powerShellEdition", "powerShellExecutable",
+             "powerShellExecutableSha256", "claudePackageManifest",
+             "claudePackageManifestSha256", "claudeTerminalExecutable",
+             "claudeTerminalExecutableSha256"},
+        ),
+    }.get(record_schema)
     command_count, command_digest, versions, environment = record_contract or (
         None, None, {}, set(),
     )
-    command_contract = (isinstance(commands, list) and len(commands) == command_count
-                        and _snapshot_v1_node_key(commands) == command_digest)
+    v3_command_fields = {
+        "argv", "resolvedCommand", "resolvedCommandSha256", "launcher",
+        "launcherSha256", "terminalExecutable", "terminalExecutableSha256",
+        "packageManifest", "packageManifestSha256", "environmentKeys",
+        "inputSha256", "executionTimeoutSeconds", "endToEndTimeoutSeconds",
+        "outputLimitBytes", "timedOut", "terminationRequested",
+        "terminationConfirmed", "streamsDrained", "jobActiveProcesses",
+        "exitCode", "stdout", "stderr",
+    }
+    v3_plan_fields = (
+        "argv", "endToEndTimeoutSeconds", "environmentKeys",
+        "executionTimeoutSeconds", "inputSha256", "outputLimitBytes",
+    )
+    v3_plan = [
+        {key: command.get(key) for key in v3_plan_fields}
+        for command in commands or [] if isinstance(command, dict)
+    ]
+    v3_plan_digest = _snapshot_v1_node_key(v3_plan)
+    v3_commands = (
+        record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3"
+        and isinstance(commands, list) and len(commands) == command_count
+        and len(v3_plan) == command_count
+        and v3_plan_digest == command_digest
+        and record.get("commandPlanSha256") == v3_plan_digest
+        and all(
+            set(command) == v3_command_fields
+            and isinstance(command.get("argv"), list)
+            and command["argv"]
+            and all(_nonempty_string(item) for item in command["argv"])
+            and _nonempty_string(command.get("resolvedCommand"))
+            and SHA256_RE.fullmatch(
+                command.get("resolvedCommandSha256") or ""
+            ) is not None
+            and command.get("launcher") == command.get("terminalExecutable")
+            and command.get("launcherSha256")
+                == command.get("terminalExecutableSha256")
+            and _nonempty_string(command.get("terminalExecutable"))
+            and SHA256_RE.fullmatch(
+                command.get("terminalExecutableSha256") or ""
+            ) is not None
+            and isinstance(command.get("environmentKeys"), list)
+            and len(command["environmentKeys"])
+                == len(set(command["environmentKeys"]))
+            and all(_nonempty_string(item)
+                    for item in command["environmentKeys"])
+            and SHA256_RE.fullmatch(command.get("inputSha256") or "")
+                is not None
+            and command.get("executionTimeoutSeconds") == 60
+            and command.get("endToEndTimeoutSeconds") == 70
+            and command.get("outputLimitBytes") == 4194304
+            and command.get("timedOut") is False
+            and command.get("terminationRequested") is False
+            and command.get("terminationConfirmed") is True
+            and command.get("streamsDrained") is True
+            and command.get("jobActiveProcesses") == 0
+            and isinstance(command.get("exitCode"), int)
+            and not isinstance(command.get("exitCode"), bool)
+            and isinstance(command.get("stdout"), str)
+            and isinstance(command.get("stderr"), str)
+            and (
+                (_nonempty_string(command.get("packageManifest"))
+                 and SHA256_RE.fullmatch(
+                     command.get("packageManifestSha256") or ""
+                 ) is not None)
+                if command["argv"][0] == "claude"
+                else (command.get("packageManifest") is None
+                      and command.get("packageManifestSha256") is None)
+            )
+            for command in commands
+        )
+        and all(
+            command["environmentKeys"] == (
+                ["CODEX_HOME"] if command["argv"][0] == "codex"
+                else ["CLAUDE_CONFIG_DIR"]
+                if command["argv"][0] == "claude" else []
+            )
+            for command in commands
+        )
+        and all(
+            (command["exitCode"] != 0) if index in {14, 15}
+            else (command["exitCode"] == 0)
+            for index, command in enumerate(commands)
+        )
+    )
+    command_contract = (
+        v3_commands if record_schema
+        == "yiyuan-accord-gt20-exact-package-evidence/v3"
+        else (isinstance(commands, list) and len(commands) == command_count
+              and _snapshot_v1_node_key(commands) == command_digest)
+    )
     fixture = record.get("fixture")
     fixed_fixture = {
         "platform": "windows", "priorVersion": "3.0.1", "targetVersion": "3.1.0",
@@ -2362,12 +2468,23 @@ def _validate_exact_package_evidence_lifecycle(
         and (not environment or (
             fixture.get("powerShellEdition") == "Core"
             and all(_nonempty_string(fixture.get(key)) for key in environment - {
-                "powerShellExecutableSha256",
+                "powerShellExecutableSha256", "claudePackageManifestSha256",
+                "claudeTerminalExecutableSha256",
             })
-            and SHA256_RE.fullmatch(
-                fixture.get("powerShellExecutableSha256") or ""
-            ) is not None
+            and all(SHA256_RE.fullmatch(fixture.get(key) or "") is not None
+                    for key in environment if key.endswith("Sha256"))
         ))
+        and (record_schema != "yiyuan-accord-gt20-exact-package-evidence/v3"
+             or (
+                 fixture.get("claudePackageManifest")
+                    == commands[8].get("packageManifest")
+                 and fixture.get("claudePackageManifestSha256")
+                    == commands[8].get("packageManifestSha256")
+                 and fixture.get("claudeTerminalExecutable")
+                    == commands[8].get("terminalExecutable")
+                 and fixture.get("claudeTerminalExecutableSha256")
+                    == commands[8].get("terminalExecutableSha256")
+             ))
         and all(isinstance(fixture.get(key), int) and not isinstance(fixture[key], bool)
                 and fixture[key] > 0 for key in counts)
     )
@@ -2383,6 +2500,82 @@ def _validate_exact_package_evidence_lifecycle(
                 and len(post_state[key]) == len(set(post_state[key]))
                 for key in cache_fields)
     )
+    host_cache_contract = True
+    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3":
+        claude_subject_prefix = "plugins/yiyuan-accord-claude/"
+        claude_cache_prefix = (
+            "plugins/cache/yiyuan-accord/yiyuan-accord-claude/3.1.0/"
+        )
+        expected_claude_cache = {
+            claude_cache_prefix + locator[len(claude_subject_prefix):]
+            for locator in subjects or []
+            if locator.startswith(claude_subject_prefix)
+        } | {claude_cache_prefix + ".orphaned_at"}
+        disposition = record.get("hostCacheDisposition")
+        codex_disposition = disposition.get("codex", {}) \
+            if isinstance(disposition, dict) else {}
+        claude_disposition = disposition.get("claude", {}) \
+            if isinstance(disposition, dict) else {}
+        retained_age = claude_disposition.get(
+            "retainedCandidateAgeMilliseconds"
+        )
+        host_cache_contract = (
+            isinstance(post_state, dict)
+            and isinstance(commands, list) and len(commands) == 34
+            and post_state.get("codexCacheFiles") == []
+            and set(post_state.get("claudeCacheFiles", []))
+                == expected_claude_cache
+            and len(post_state.get("claudeCacheFiles", []))
+                == len(expected_claude_cache)
+            and isinstance(disposition, dict)
+            and set(disposition) == {"codex", "claude"}
+            and codex_disposition == {
+                "classification": "no-retained-accord-package-cache",
+                "hostCallable": False,
+            }
+            and set(claude_disposition) == {
+                "classification", "observedVersions", "retainedVersions",
+                "exactAllowlistVerified", "listedOrEnabled", "hostCallable",
+                "dataStatePresent", "cleanupTrigger", "retentionMilliseconds",
+                "retainedCandidateAgeMilliseconds",
+                "youngBoundaryAgeMilliseconds", "youngBoundaryRetained",
+                "expiredBoundaryAgeMilliseconds", "expiredBoundaryRemoved",
+                "youngSweepCommandIndex", "expiredSweepCommandIndex",
+                "liveSessionBehavior", "claudePackageManifestSha256",
+                "claudeTerminalExecutableSha256",
+            }
+            and claude_disposition.get("classification")
+                == "host-dispatch-inert-bounded-orphan-cache"
+            and claude_disposition.get("observedVersions")
+                == ["3.0.1", "3.1.0"]
+            and claude_disposition.get("retainedVersions") == ["3.1.0"]
+            and claude_disposition.get("exactAllowlistVerified") is True
+            and claude_disposition.get("listedOrEnabled") is False
+            and claude_disposition.get("hostCallable") is False
+            and claude_disposition.get("dataStatePresent") is False
+            and claude_disposition.get("cleanupTrigger") == "plugin-list"
+            and claude_disposition.get("retentionMilliseconds") == 1209600000
+            and isinstance(retained_age, int)
+            and not isinstance(retained_age, bool)
+            and 0 <= retained_age < 1209600000
+            and claude_disposition.get("youngBoundaryAgeMilliseconds")
+                == 1206000000
+            and claude_disposition.get("youngBoundaryRetained") is True
+            and claude_disposition.get("expiredBoundaryAgeMilliseconds")
+                == 1213200000
+            and claude_disposition.get("expiredBoundaryRemoved") is True
+            and claude_disposition.get("youngSweepCommandIndex") == 32
+            and claude_disposition.get("expiredSweepCommandIndex") == 33
+            and claude_disposition.get("liveSessionBehavior") == "unverified"
+            and claude_disposition.get("claudePackageManifestSha256")
+                == fixture.get("claudePackageManifestSha256")
+            and claude_disposition.get("claudeTerminalExecutableSha256")
+                == fixture.get("claudeTerminalExecutableSha256")
+            and commands[32].get("argv")
+                == ["claude", "plugin", "list", "--json"]
+            and commands[33].get("argv")
+                == ["claude", "plugin", "list", "--json"]
+        )
     subject_map = record.get("behaviorSubject")
     subject_contract = (
         isinstance(subject_map, dict) and set(subject_map) == set(subjects or [])
@@ -2396,12 +2589,43 @@ def _validate_exact_package_evidence_lifecycle(
         )).hexdigest()
     except _SNAPSHOT_V1_FAILURES:
         runner_digest = None
+    expected_record_fields = {
+        "schema", "taskId", "evaluatedRevision", "packageSha256",
+        "behaviorSubject", "lifecycle", "claimLimit", "runnerSha256",
+        "fixture", "commands", "postState",
+    }
+    expected_claim = (
+        "Bounded zero-model Windows lifecycle evidence for exact Commit A "
+        "Codex and Claude package bytes in disposable non-empty scopes; "
+        "production, unmanaged or cross-OS hosts, ordinary model behavior, "
+        "product value and release readiness remain unclaimed."
+    )
+    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3":
+        expected_record_fields |= {"commandPlanSha256", "hostCacheDisposition"}
+        expected_claim = (
+            "Bounded zero-model Windows lifecycle, command privacy and "
+            "end-to-end process termination, plus Claude host-owned 14-day "
+            "inert-cache cleanup evidence for exact Commit A Codex and Claude "
+            "package bytes in disposable non-empty scopes; production, "
+            "unmanaged or cross-OS hosts, live-session cache behavior, ordinary "
+            "model behavior, product value and release readiness remain "
+            "unclaimed."
+        )
+    private_path = False
+    pending_values = [record]
+    while pending_values:
+        value = pending_values.pop()
+        if isinstance(value, dict):
+            pending_values.extend(value.values())
+        elif isinstance(value, list):
+            pending_values.extend(value)
+        elif isinstance(value, str) and re.search(
+            r"(?i)[a-z]:[\\/](?:users|documents and settings)[\\/]", value,
+        ):
+            private_path = True
+            break
     if (
-        set(record) != {
-            "schema", "taskId", "evaluatedRevision", "packageSha256",
-            "behaviorSubject", "lifecycle", "claimLimit", "runnerSha256",
-            "fixture", "commands", "postState",
-        }
+        set(record) != expected_record_fields
         or record.get("taskId") != "GT-20"
         or record.get("evaluatedRevision") != evidence.get("evaluatedRevision")
         or record.get("runnerSha256") != runner_digest
@@ -2416,14 +2640,11 @@ def _validate_exact_package_evidence_lifecycle(
             "postState": "verified",
             "cleanup": "verified",
         }
-        or record.get("claimLimit") != (
-            "Bounded zero-model Windows lifecycle evidence for exact Commit A "
-            "Codex and Claude package bytes in disposable non-empty scopes; "
-            "production, unmanaged or cross-OS hosts, ordinary model behavior, "
-            "product value and release readiness remain unclaimed."
-        )
+        or record.get("claimLimit") != expected_claim
         or not fixture_contract
         or not post_contract
+        or not host_cache_contract
+        or private_path
     ):
         errors.append("exact package evidence record contract is invalid")
         return
@@ -2550,9 +2771,19 @@ def _validate_program(
              "evolutionHorizonRule", "continuingCalibration"),
             "program.processLossControl", errors,
         )
-        if process.get("stageSnapshotState") != (
+        closed_stage_state = (
             "latest-closed-stage-snapshot-prepared-for-containing-commit-binding"
-        ) or not _contains_markers(process.get("currentStageRule"), (
+        )
+        replay_stage_state = (
+            "latest-recorded-stage-snapshot-with-successor-replay-active"
+        )
+        expected_stage_snapshot_states = {
+            "active": {closed_stage_state, replay_stage_state},
+            "blocked": {closed_stage_state, replay_stage_state},
+            "completed": {closed_stage_state},
+        }.get(increment_state, set())
+        if process.get("stageSnapshotState") not in expected_stage_snapshot_states \
+                or not _contains_markers(process.get("currentStageRule"), (
             "current stage", "owns current execution",
             "cannot silently enter its release scope", "borrow its evidence",
         )) or not _contains_markers(process.get("stageSnapshotRule"), (
@@ -3468,10 +3699,7 @@ def verify_product(root):
         root, program, acceptance, golden_suite, _read_json,
     )
     errors.extend(promotion_errors)
-    promotion_lanes = (
-        FROZEN_GT20_21_REPRESENTATIVE_LANES
-        if not promotion_errors else {}
-    )
+    promotion_lanes = FROZEN_GT20_21_REPRESENTATIVE_LANES
     (
         criterion_ids,
         criteria_verified,

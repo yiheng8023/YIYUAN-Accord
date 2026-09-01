@@ -12,9 +12,9 @@ The broader mission is better human-AI collaboration. The current product surfac
 
 [简体中文](README.zh-CN.md)
 
-> **Release line:** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0).
+> **Published stable fallback:** [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1). **Release line (pending):** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0).
 >
-> Install only from the matching immutable, non-prerelease GitHub Release after that link resolves. Repository text cannot self-attest publication.
+> Use v3.1.0 only after its link resolves to the matching immutable, non-prerelease GitHub Release; until then use v3.0.1. Repository text cannot self-attest publication.
 >
 > Never install from a moving `main` checkout.
 
@@ -85,7 +85,7 @@ It does not replace domain expertise, grant authority to an Agent, guarantee aut
 
 ### Before installation
 
-The immutable commands below target `v3.1.0`. Use them only after the matching public Release exists at the Release line above.
+The immutable commands below target `v3.1.0`. Use them only after its matching public Release exists. While it is pending, use the same commands with the exact immutable ref changed to `v3.0.1`; do not use moving `main`.
 
 The GUI labels in this README are **v3.0.1 historical routes**, not current-entry claims.
 
@@ -135,7 +135,7 @@ Confirm `/yiyuan-accord-claude:deliver-demand-driven-outcome` in `/help`. Use `/
 
 ### What installation changes
 
-The packages expose one progressively disclosed adaptive Skill, one short-lived stateless `SessionStart` Hook adapter, one side-effect-free pure core, and the required host manifests.
+The packages expose one progressively disclosed adaptive Skill, one short-lived stateless `SessionStart` Hook adapter, and the required host manifests. The repository separately contains a side-effect-free pure-core reference implementation; it is not installed or invoked by either plugin package.
 
 They add no persistent Runtime, MCP server, App, state store, browser bridge, SDK client, background process, or automatic project mutation.
 

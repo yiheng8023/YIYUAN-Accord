@@ -1766,10 +1766,10 @@ _CANDIDATE_RULE_INSERTION = (
     "changes."
 )
 _EXPECTED_EVALUATION_CONTRACT_HISTORY_SHA256 = (
-    "0c680620a4789bc72d93df6b10d61ee017475699fc911a690d5a84b7b58e70dd"
+    "1b9272fc51054f998a60cde7f51c00ce3df82ae5261daca93489953d1a74d7a0"
 )
 _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256 = (
-    "412475b21dbf3fa2b51eeca4ae23f3ee2e764c0b6faaa137bce8aff27aff0e88"
+    "d3118ce2497099848417d35a38fee37a1ebe9c586c24576bad8955bbc5d0cb3b"
 )
 
 
@@ -2517,6 +2517,8 @@ def gt20_exact_lifecycle_invalidated(value):
              "complete-host-projection-package-identity"),
             ("yiyuan-accord-exact-package-evidence-lifecycle/v2",
              "exact-package-evaluator-failure-closure"),
+            ("yiyuan-accord-exact-package-evidence-lifecycle/v3",
+             "exact-package-evaluator-privacy-termination-cleanup-closure"),
         }
         and value.get("taskId") == "GT-20"
         and value.get("state") in {"pending", "verified"}

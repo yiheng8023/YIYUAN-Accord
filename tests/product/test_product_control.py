@@ -1332,8 +1332,7 @@ class ProductControlTests(unittest.TestCase):
             observation = _validate_evidence_item(
                 root, item, 'promotion lane', errors,
                 {'representative-behavior'},
-                FROZEN_GT20_21_REPRESENTATIVE_LANES
-                if not promo_errors else {},
+                FROZEN_GT20_21_REPRESENTATIVE_LANES,
             )
             self.ae(promo_errors, [])
             self.ae(errors, [])
@@ -1345,21 +1344,26 @@ class ProductControlTests(unittest.TestCase):
             raw['observedAt'] = '2026-08-30T00:00:00Z'
             _write(root, locator, raw)
             item['sha256'] = _file_sha(root, locator)
+            acceptance = _read(root, A)
+            acceptance['representativeBehaviorPolicy'][
+                'evaluationContractHistory'
+            ][-1]['reason'] += ' drift'
             promo_errors = frozen_gt20_21_promotion_errors(
-                root, _read(root, P), _read(root, A), _read(root, G),
+                root, _read(root, P), acceptance, _read(root, G),
                 _reader,
             )
             errors = []
             observation = _validate_evidence_item(
                 root, item, 'promotion lane', errors,
-                {'representative-behavior'}, {},
+                {'representative-behavior'},
+                FROZEN_GT20_21_REPRESENTATIVE_LANES,
             )
             self.at(promo_errors)
             self.ae(
                 observation['evidenceClass'],
-                'frozen-source-metadata-promotion',
+                'representative-behavior',
             )
-            self.has(errors, 'evidenceClass is not required')
+            self.ae(errors, [])
 
     def test_reacceptance_projects_current_stage_without_model_binding(self):
         program = _read(ROOT, P)
@@ -2300,42 +2304,37 @@ class ProductControlTests(unittest.TestCase):
             'revision-bound v2 replay boundary is invalid',
         )
 
-        self.ae(prior['state'], 'reopened')
-        self.ae(node['state'], 'closed')
+        self.ae(prior['state'], 'closed')
+        self.ae(node['state'], 'reopened')
         self.has(
             _snapshot_v2_transition_errors(node, node),
-            'revision-bound v2 close transition is invalid',
+            'revision-bound v2 reopen transition is invalid',
         )
 
     def test_exact_package_evidence_fails_closed_on_drift(self):
         with _indexed() as root:
             program = _read(root, P)
             lifecycle = program['increment']['exactPackageEvidenceLifecycle']
-            locator = lifecycle['evidence']['locator']
-            record = _read(root, locator)
+            self.ae(lifecycle['state'], 'pending')
+            self.an(lifecycle['evidence'])
+
             def validate(value):
-                _write(root, locator, value)
-                lifecycle['evidence']['sha256'] = _file_sha(root, locator)
+                changed = _clone(program)
+                changed['increment']['exactPackageEvidenceLifecycle'] = value
                 errors = []
-                _validate_exact_package_evidence_lifecycle(root, program, errors)
+                _validate_exact_package_evidence_lifecycle(root, changed, errors)
                 return errors
-            self.ae(validate(record), [])
+
+            self.ae(validate(lifecycle), [])
             for mutate in (
-                lambda value: value['commands'][0].__setitem__('exitCode', 1),
-                lambda value: value.__setitem__('behaviorSubject', [{'x': 1}]),
-                lambda value: value['postState'].__setitem__('codexCacheFiles', [{}]),
-                lambda value: value.__setitem__('claimLimit', 'production verified'),
+                lambda value: value.__setitem__('evidence', {}),
+                lambda value: value.__setitem__('state', 'verified'),
+                lambda value: value.__setitem__('priorEvidenceRef', 'missing'),
+                lambda value: value.__setitem__('subjectRevision', '0' * 40),
             ):
-                changed = _clone(record)
+                changed = _clone(lifecycle)
                 mutate(changed)
-                self.has(validate(changed), 'exact package evidence record contract is invalid')
-            self.ae(validate(record), [])
-            lifecycle['evidence']['evaluatedRevision'] = '0' * 40
-            self.has(validate(record), 'exact package evidence verified state is invalid')
-            lifecycle['evidence']['evaluatedRevision'] = record['evaluatedRevision']
-            subject = next(iter(record['behaviorSubject']))
-            (root / subject).write_bytes((root / subject).read_bytes() + b'drift')
-            self.has(validate(record), 'exact package evidence subject binding is invalid')
+                self.at(validate(changed))
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         current = host_check(ROOT, 'codex')['details']
@@ -2427,12 +2426,9 @@ class ProductControlTests(unittest.TestCase):
                 promo_errors = frozen_gt20_21_promotion_errors(
                     root, _read(root, P), acceptance, _read(root, G), _reader,
                 )
-                lanes = (
-                    FROZEN_GT20_21_REPRESENTATIVE_LANES
-                    if not promo_errors else {}
-                )
                 projection_errors = projection_evidence_binding_errors(
-                    root, acceptance, reports, _reader, lanes,
+                    root, acceptance, reports, _reader,
+                    FROZEN_GT20_21_REPRESENTATIVE_LANES,
                 )
                 return promo_errors, projection_errors
 
@@ -2895,12 +2891,16 @@ class ProductControlTests(unittest.TestCase):
         qualification_contract = policy['evaluationContractHistory'][2]['sha256']
         dynamic_contract = policy['evaluationContractHistory'][3]['sha256']
         stage_contract = policy['evaluationContractHistory'][4]['sha256']
+        successor_contract = policy['evaluationContractHistory'][5]['sha256']
         self.ai(old, _evaluation_contracts(policy, 'GT-14', current))
         for task_id, expected in (
-            ('GT-17', {current, sequence_contract, qualification_contract, stage_contract}),
-            ('GT-18', {current, sequence_contract, stage_contract}),
-            ('GT-20', {current, dynamic_contract, stage_contract}),
-            ('GT-19', {current, stage_contract}),
+            ('GT-17', {current, sequence_contract, qualification_contract,
+                       stage_contract, successor_contract}),
+            ('GT-18', {current, sequence_contract, stage_contract,
+                       successor_contract}),
+            ('GT-20', {current, dynamic_contract, stage_contract,
+                       successor_contract}),
+            ('GT-19', {current, stage_contract, successor_contract}),
         ):
             self.ae(_evaluation_contracts(policy, task_id, current),
                              expected)

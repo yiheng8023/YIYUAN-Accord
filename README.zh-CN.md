@@ -12,9 +12,9 @@ YIYUAN Accord 是一个开放、Agent 中立的人机协作系统。
 
 [English](README.md)
 
-> **发布版本线：** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0)
+> **已发布稳定后备版本：** [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1)；**待发布版本线：** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0)
 >
-> 只有该链接对应的不可变、非预发行 GitHub Release 已存在时，才可安装这一版本。仓库文本不能自证发布。
+> 只有 v3.1.0 链接对应的不可变、非预发行 GitHub Release 已存在时，才可使用该版本；此前请使用 v3.0.1。仓库文本不能自证发布。
 >
 > 不要从持续移动的 `main` checkout 安装。
 
@@ -85,7 +85,7 @@ Accord 不是每个任务都必须执行的固定流程。简单请求遇到健�
 
 ### 安装前确认
 
-下列不可变命令指向 `v3.1.0`。只有顶部发布版本线对应的公开 Release 已存在时，才可使用。
+下列不可变命令指向 `v3.1.0`，只有对应公开 Release 已存在时才可使用。待发布期间，请把相同命令中的精确不可变 ref 改为 `v3.0.1`；不要使用持续移动的 `main`。
 
 本文中的 GUI 标签是 **v3.0.1 最后验证的历史路径**，不是当前客户端入口声明。
 
@@ -135,7 +135,7 @@ claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 
 ### 安装会改变什么
 
-当前包提供一个渐进披露的动态适配 Skill、一个短时无状态的 `SessionStart` Hook 适配器、一个无副作用纯内核，以及所需宿主 manifest。
+当前包提供一个渐进披露的动态适配 Skill、一个短时无状态的 `SessionStart` Hook 适配器和所需宿主 manifest。仓库另含一个无副作用纯内核参考实现；两个插件包都不会安装或调用它。
 
 它们不新增常驻 Runtime、MCP server、App、状态存储、浏览器桥、SDK 客户端、后台进程或自动项目修改。
 

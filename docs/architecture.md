@@ -17,24 +17,30 @@ remain explicit. Fresh current-contract GT-18/19 at exact
 `2460adcff02bd56144f8d3f647ecef27cd5fefd0` now pass only one bounded
 synthetic evolution sequence and one bounded Codex-local responsibility-
 allocation sequence, with blocked arms, corrections, failed review and high
-costs retained. Exact GT-21 evidence closes only its bounded current-host
-live-carrier and fresh-handoff cases. Fresh GT-20 evidence at exact Commit A
-`7ea91dad811d337f00f75eb521cffacabd73b05f` closes only the disposable Windows
-CLI lifecycle for the unchanged v3.1 package bytes on Codex CLI 0.151.0 and
-Claude Code 2.1.252. Source-bound whole-system reacceptance from exact cut
-`85a917a` is complete, and the later independent candidate-forming review has
-selected v3.1.0 as the repository candidate. The package boundary is reclosed
-under the schema-v2 status model, but this working tree is not yet a committed
-clean exact-local candidate, hosted result, named-human release decision, tag
-or public Release. The next gate is one clean unchanged Commit B through local
-verification and four fresh independent exact-tree reviews. Production trust,
+costs retained. Exact GT-21 evidence retains only its bounded current-host
+live-carrier and fresh-handoff cases. The schema-v2 GT-20 record for exact
+Commit A `7ea91dad811d337f00f75eb521cffacabd73b05f` and candidate `9050114`
+failed four fresh reviews: user-local evidence paths, end-to-end owned-tree
+termination, Claude manifest-to-terminal identity and the host's bounded
+orphan-cache cleanup were not strictly closed. The package subjects remain
+unchanged, but the repository-candidate stage is reopened under schema v3. The
+current correction uses a suspended Windows Job before process resume, one
+absolute hard deadline, generate-time sanitization, a stable normalized
+command-plan digest, exact cache-byte allowlists and observed younger/older-
+than-14-day host cleanup probes. Before the expensive exact-local gate, the
+accountable human must confirm the three digest-bound public assets' ownership
+or license and public-display permission; a denial returns to package identity.
+Only after the v3 replay, affected-surface reacceptance and four fresh
+independent reviews may one unchanged clean SHA become the replacement
+candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
 The implementation does not admit an Accord-managed Runtime, durable state
 layer or durable evolution. Selecting the short-lived Hook does not prove
 production trust or broad live-host behavior.
 Earlier v3.1 package checkpoints remain bounded historical evidence. The
-Commit A package bytes are frozen for Commit B identity verification; public
+Commit A package bytes are frozen for containing-commit identity verification;
+public
 v3.0.1 remains the recommended release reference, and preview.2 remains an
 unreleased historical checkpoint.
 
@@ -135,18 +141,17 @@ semantic authority, release or production evidence. Measured: 2026-09-01.
 
 ### Panorama and bottleneck order
 
-The release-close working tree measured 106 already tracked files before the
-reusable GT-20 runner and its final evidence record are added; the resulting
-candidate projects 108 files against the structured 111-file ceiling. Eight
+The reopened correction tree has 108 tracked files against the structured
+111-file ceiling. Eight
 Python files contain the product and tests. The three largest maintained code
 surfaces are the product-control test module, `control.py` and `evidence.py`;
 together they dominate code review, coupling and regression cost. The current
-evaluator-correction tree has 684755 Python-and-product-test bytes against the
-recalibrated structured 722000-byte ceiling, leaving 37245 bytes or 5.16
-percent. The 2000-byte ceiling change pays only for commit-type enforcement,
-bounded child termination, all-task-process cleanup and bound PowerShell, Git,
-tar and executable provenance; it preserves more absolute headroom than the
-prior baseline and is not general growth allowance. These measurements
+evaluator-correction tree has 696114 Python-and-product-test bytes against the
+recalibrated structured 750000-byte ceiling, leaving 53886 bytes or 7.18
+percent. The increase from 722000 pays only for evidence sanitization, process
+ownership before resume, one hard end-to-end deadline, bounded output draining,
+Claude manifest-to-terminal identity, strict cache allowlists and the observed
+host cleanup boundary; it is not general growth allowance. These measurements
 become history after any change; `product/program.json` and the canonical
 verifier remain the numerical authority.
 
@@ -556,7 +561,7 @@ by that projection. Each standalone package explicitly carries a top-level
 `LICENSE` and `NOTICE`; both are bound into the complete package digest and must
 match the repository legal text byte for byte. Public v3.0.1 adds no runtime,
 Hook, MCP server, App or state store.
-The selected v3.1.0 repository candidate additionally declares one shared,
+The prospective v3.1.0 package set additionally declares one shared,
 short-lived `SessionStart` command adapter. Neither package shape is a permanent
 product identity or mechanism prohibition; Hook trust, firing and behavior
 remain separate from static package conformance. Both current host projections
@@ -1038,9 +1043,11 @@ minimum reversible remediation, then replays every affected criterion and
 interaction. The resulting ledger is input to independent review; it cannot
 declare itself independent or turn a checklist into product value.
 
-That sequence is complete for the selected v3.1.0 repository candidate. It
-forms a bounded candidate, not release evidence; exact-local, hosted,
-named-human, tag, publication and public-verification gates remain distinct.
+That sequence was complete for candidate `9050114`, but four fresh reviews
+reopened the GT-20 evaluator boundary. A replacement candidate does not exist
+until the v3 replay and affected interactions are reaccepted; exact-local,
+hosted, named-human, tag, publication and public-verification gates remain
+distinct.
 
 ## Complexity and evolution
 

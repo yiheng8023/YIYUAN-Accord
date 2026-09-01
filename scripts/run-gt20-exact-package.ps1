@@ -9,10 +9,282 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $CommandTimeoutSeconds = 60
+$CommandEndToEndTimeoutSeconds = 70
+$CommandOutputLimitBytes = 4194304
 
 if (-not $IsWindows) {
   throw 'GT-20 exact package lifecycle evaluator requires Windows.'
 }
+
+Add-Type -TypeDefinition @'
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+using Microsoft.Win32.SafeHandles;
+
+public sealed class AccordProcessJob : IDisposable {
+  private const uint JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE = 0x00002000;
+  private SafeFileHandle handle;
+
+  [StructLayout(LayoutKind.Sequential)]
+  private struct IO_COUNTERS {
+    public ulong ReadOperationCount, WriteOperationCount, OtherOperationCount;
+    public ulong ReadTransferCount, WriteTransferCount, OtherTransferCount;
+  }
+
+  [StructLayout(LayoutKind.Sequential)]
+  private struct JOBOBJECT_BASIC_LIMIT_INFORMATION {
+    public long PerProcessUserTimeLimit, PerJobUserTimeLimit;
+    public uint LimitFlags;
+    public UIntPtr MinimumWorkingSetSize, MaximumWorkingSetSize;
+    public uint ActiveProcessLimit;
+    public UIntPtr Affinity;
+    public uint PriorityClass, SchedulingClass;
+  }
+
+  [StructLayout(LayoutKind.Sequential)]
+  private struct JOBOBJECT_EXTENDED_LIMIT_INFORMATION {
+    public JOBOBJECT_BASIC_LIMIT_INFORMATION BasicLimitInformation;
+    public IO_COUNTERS IoInfo;
+    public UIntPtr ProcessMemoryLimit, JobMemoryLimit, PeakProcessMemoryUsed, PeakJobMemoryUsed;
+  }
+
+  [StructLayout(LayoutKind.Sequential)]
+  private struct JOBOBJECT_BASIC_ACCOUNTING_INFORMATION {
+    public long TotalUserTime, TotalKernelTime, ThisPeriodTotalUserTime, ThisPeriodTotalKernelTime;
+    public uint TotalPageFaultCount, TotalProcesses, ActiveProcesses, TotalTerminatedProcesses;
+  }
+
+  [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+  private static extern SafeFileHandle CreateJobObject(IntPtr attributes, string name);
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern bool SetInformationJobObject(SafeFileHandle job, int infoClass, IntPtr info, uint length);
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern bool QueryInformationJobObject(SafeFileHandle job, int infoClass, IntPtr info, uint length, out uint returnedLength);
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern bool AssignProcessToJobObject(SafeFileHandle job, IntPtr process);
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern bool TerminateJobObject(SafeFileHandle job, uint exitCode);
+
+  public AccordProcessJob() {
+    handle = CreateJobObject(IntPtr.Zero, null);
+    if (handle.IsInvalid) throw new Win32Exception(Marshal.GetLastWin32Error());
+    var limits = new JOBOBJECT_EXTENDED_LIMIT_INFORMATION();
+    limits.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+    int size = Marshal.SizeOf(limits);
+    IntPtr data = Marshal.AllocHGlobal(size);
+    try {
+      Marshal.StructureToPtr(limits, data, false);
+      if (!SetInformationJobObject(handle, 9, data, (uint)size))
+        throw new Win32Exception(Marshal.GetLastWin32Error());
+    } finally { Marshal.FreeHGlobal(data); }
+  }
+
+  public void Add(Process process) {
+    if (!AssignProcessToJobObject(handle, process.Handle))
+      throw new Win32Exception(Marshal.GetLastWin32Error());
+  }
+
+  public uint ActiveProcessCount {
+    get {
+      var value = new JOBOBJECT_BASIC_ACCOUNTING_INFORMATION();
+      int size = Marshal.SizeOf(value);
+      IntPtr data = Marshal.AllocHGlobal(size);
+      try {
+        uint returned;
+        if (!QueryInformationJobObject(handle, 1, data, (uint)size, out returned))
+          throw new Win32Exception(Marshal.GetLastWin32Error());
+        value = Marshal.PtrToStructure<JOBOBJECT_BASIC_ACCOUNTING_INFORMATION>(data);
+        return value.ActiveProcesses;
+      } finally { Marshal.FreeHGlobal(data); }
+    }
+  }
+
+  public void Terminate(uint exitCode) {
+    if (!TerminateJobObject(handle, exitCode))
+      throw new Win32Exception(Marshal.GetLastWin32Error());
+  }
+
+  public void Dispose() {
+    if (handle != null) { handle.Dispose(); handle = null; }
+  }
+}
+
+public sealed class AccordSuspendedProcess : IDisposable {
+  [StructLayout(LayoutKind.Sequential)]
+  private struct SECURITY_ATTRIBUTES {
+    public int nLength;
+    public IntPtr lpSecurityDescriptor;
+    [MarshalAs(UnmanagedType.Bool)] public bool bInheritHandle;
+  }
+
+  [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+  private struct STARTUPINFO {
+    public int cb;
+    public string lpReserved, lpDesktop, lpTitle;
+    public int dwX, dwY, dwXSize, dwYSize, dwXCountChars, dwYCountChars;
+    public int dwFillAttribute, dwFlags;
+    public short wShowWindow, cbReserved2;
+    public IntPtr lpReserved2, hStdInput, hStdOutput, hStdError;
+  }
+
+  [StructLayout(LayoutKind.Sequential)]
+  private struct PROCESS_INFORMATION {
+    public IntPtr hProcess, hThread;
+    public uint dwProcessId, dwThreadId;
+  }
+
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern bool CreatePipe(out IntPtr read, out IntPtr write, ref SECURITY_ATTRIBUTES attributes, int size);
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern bool SetHandleInformation(IntPtr handle, uint mask, uint flags);
+  [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+  private static extern bool CreateProcessW(
+    string applicationName, StringBuilder commandLine, IntPtr processAttributes,
+    IntPtr threadAttributes, bool inheritHandles, uint creationFlags,
+    IntPtr environment, string currentDirectory, ref STARTUPINFO startup,
+    out PROCESS_INFORMATION processInformation);
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern uint ResumeThread(IntPtr thread);
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern bool CloseHandle(IntPtr handle);
+
+  private IntPtr threadHandle;
+  private StreamWriter input;
+  public Process Process { get; private set; }
+  public StreamReader StandardOutput { get; private set; }
+  public StreamReader StandardError { get; private set; }
+
+  private AccordSuspendedProcess() { }
+
+  private static string Quote(string value) {
+    if (value.Length > 0 && value.IndexOfAny(new[] {' ', '\t', '\n', '\v', '"'}) < 0)
+      return value;
+    var result = new StringBuilder("\"");
+    int slashes = 0;
+    foreach (char ch in value) {
+      if (ch == '\\') { slashes++; continue; }
+      if (ch == '"') {
+        result.Append('\\', slashes * 2 + 1).Append(ch);
+        slashes = 0;
+        continue;
+      }
+      result.Append('\\', slashes).Append(ch);
+      slashes = 0;
+    }
+    result.Append('\\', slashes * 2).Append('"');
+    return result.ToString();
+  }
+
+  private static IntPtr EnvironmentBlock(IDictionary<string,string> overrides) {
+    var values = new SortedDictionary<string,string>(StringComparer.OrdinalIgnoreCase);
+    foreach (DictionaryEntry entry in Environment.GetEnvironmentVariables())
+      values[(string)entry.Key] = (string)entry.Value;
+    if (overrides != null)
+      foreach (var entry in overrides) values[entry.Key] = entry.Value ?? "";
+    var block = new StringBuilder();
+    foreach (var entry in values)
+      block.Append(entry.Key).Append('=').Append(entry.Value).Append('\0');
+    block.Append('\0');
+    return Marshal.StringToHGlobalUni(block.ToString());
+  }
+
+  public static AccordSuspendedProcess Start(
+    string executable, string[] arguments, string currentDirectory,
+    IDictionary<string,string> environment) {
+    const uint HANDLE_FLAG_INHERIT = 1;
+    const uint CREATE_SUSPENDED = 0x00000004;
+    const uint CREATE_NO_WINDOW = 0x08000000;
+    const uint CREATE_UNICODE_ENVIRONMENT = 0x00000400;
+    IntPtr stdoutRead = IntPtr.Zero, stdoutWrite = IntPtr.Zero;
+    IntPtr stderrRead = IntPtr.Zero, stderrWrite = IntPtr.Zero;
+    IntPtr stdinRead = IntPtr.Zero, stdinWrite = IntPtr.Zero;
+    IntPtr environmentBlock = IntPtr.Zero;
+    var security = new SECURITY_ATTRIBUTES {
+      nLength = Marshal.SizeOf<SECURITY_ATTRIBUTES>(), bInheritHandle = true
+    };
+    PROCESS_INFORMATION pi = new PROCESS_INFORMATION();
+    bool created = false;
+    try {
+      if (!CreatePipe(out stdoutRead, out stdoutWrite, ref security, 0) ||
+          !SetHandleInformation(stdoutRead, HANDLE_FLAG_INHERIT, 0) ||
+          !CreatePipe(out stderrRead, out stderrWrite, ref security, 0) ||
+          !SetHandleInformation(stderrRead, HANDLE_FLAG_INHERIT, 0) ||
+          !CreatePipe(out stdinRead, out stdinWrite, ref security, 0) ||
+          !SetHandleInformation(stdinWrite, HANDLE_FLAG_INHERIT, 0))
+        throw new Win32Exception(Marshal.GetLastWin32Error());
+      var startup = new STARTUPINFO {
+        cb = Marshal.SizeOf<STARTUPINFO>(), dwFlags = 0x00000100,
+        hStdInput = stdinRead, hStdOutput = stdoutWrite, hStdError = stderrWrite
+      };
+      var commandLine = new StringBuilder(Quote(executable));
+      foreach (string argument in arguments ?? Array.Empty<string>())
+        commandLine.Append(' ').Append(Quote(argument ?? ""));
+      environmentBlock = EnvironmentBlock(environment);
+      created = CreateProcessW(
+        executable, commandLine, IntPtr.Zero, IntPtr.Zero, true,
+        CREATE_SUSPENDED | CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT,
+        environmentBlock, currentDirectory, ref startup, out pi);
+      if (!created) throw new Win32Exception(Marshal.GetLastWin32Error());
+      var owned = new AccordSuspendedProcess();
+      owned.Process = Process.GetProcessById((int)pi.dwProcessId);
+      var ignored = owned.Process.Handle;
+      owned.threadHandle = pi.hThread;
+      pi.hThread = IntPtr.Zero;
+      owned.StandardOutput = new StreamReader(new FileStream(
+        new SafeFileHandle(stdoutRead, true), FileAccess.Read, 4096, false),
+        new UTF8Encoding(false), true);
+      stdoutRead = IntPtr.Zero;
+      owned.StandardError = new StreamReader(new FileStream(
+        new SafeFileHandle(stderrRead, true), FileAccess.Read, 4096, false),
+        new UTF8Encoding(false), true);
+      stderrRead = IntPtr.Zero;
+      owned.input = new StreamWriter(new FileStream(
+        new SafeFileHandle(stdinWrite, true), FileAccess.Write, 4096, false),
+        new UTF8Encoding(false)) { AutoFlush = true };
+      stdinWrite = IntPtr.Zero;
+      return owned;
+    } finally {
+      if (environmentBlock != IntPtr.Zero) Marshal.FreeHGlobal(environmentBlock);
+      if (stdoutWrite != IntPtr.Zero) CloseHandle(stdoutWrite);
+      if (stderrWrite != IntPtr.Zero) CloseHandle(stderrWrite);
+      if (stdinRead != IntPtr.Zero) CloseHandle(stdinRead);
+      if (stdoutRead != IntPtr.Zero) CloseHandle(stdoutRead);
+      if (stderrRead != IntPtr.Zero) CloseHandle(stderrRead);
+      if (stdinWrite != IntPtr.Zero) CloseHandle(stdinWrite);
+      if (pi.hProcess != IntPtr.Zero) CloseHandle(pi.hProcess);
+      if (pi.hThread != IntPtr.Zero) CloseHandle(pi.hThread);
+    }
+  }
+
+  public void Resume(string inputText) {
+    if (threadHandle == IntPtr.Zero) throw new InvalidOperationException("Process is not suspended.");
+    if (ResumeThread(threadHandle) == UInt32.MaxValue)
+      throw new Win32Exception(Marshal.GetLastWin32Error());
+    CloseHandle(threadHandle);
+    threadHandle = IntPtr.Zero;
+    if (!String.IsNullOrEmpty(inputText)) input.Write(inputText);
+    input.Dispose();
+    input = null;
+  }
+
+  public void Dispose() {
+    if (threadHandle != IntPtr.Zero) { CloseHandle(threadHandle); threadHandle = IntPtr.Zero; }
+    if (input != null) { input.Dispose(); input = null; }
+    if (StandardOutput != null) { StandardOutput.Dispose(); StandardOutput = null; }
+    if (StandardError != null) { StandardError.Dispose(); StandardError = null; }
+    if (Process != null) {
+      try { if (!Process.HasExited) Process.Kill(true); } catch { }
+      Process.Dispose(); Process = null;
+    }
+  }
+}
+'@
 
 function ConvertTo-PortablePath {
   param([Parameter(Mandatory = $true)][string]$Path)
@@ -31,6 +303,57 @@ function ConvertTo-PortablePath {
   return $value
 }
 
+function ConvertTo-PublicEvidenceText {
+  param([AllowEmptyString()][string]$Value)
+  $result = $Value
+  foreach ($item in @(
+    @($script:TaskPathForEvidence, '%TASK_ROOT%'),
+    @($script:TemporaryBaseForEvidence, '%TEMP%'),
+    @($script:RepositoryForEvidence, '%REPOSITORY_ROOT%')
+  )) {
+    if ($item[0]) {
+      $privateRoot = [string]$item[0]
+      $replacement = [string]$item[1]
+      foreach ($spelling in @($privateRoot, $privateRoot.Replace('\', '/'))) {
+        $result = $result.Replace(
+          $spelling, $replacement,
+          [System.StringComparison]::OrdinalIgnoreCase
+        )
+      }
+    }
+  }
+  return $result
+}
+
+function Get-TerminalCommandIdentity {
+  param([Parameter(Mandatory = $true)]$Command)
+  $terminal = $Command.Source
+  $manifest = $null
+  if ([System.IO.Path]::GetExtension($Command.Source) -eq '.cmd') {
+    if ([System.IO.Path]::GetFileName($Command.Source) -ne 'claude.cmd') {
+      throw "Unsupported command shim identity: $($Command.Source)"
+    }
+    $manifest = Join-Path (Split-Path -Parent $Command.Source) 'node_modules/@anthropic-ai/claude-code/package.json'
+    $package = Get-Content -Raw -LiteralPath $manifest | ConvertFrom-Json
+    $bin = $package.bin.claude
+    if (-not $bin -or [System.IO.Path]::IsPathRooted([string]$bin)) {
+      throw 'Claude command package manifest has an invalid bin entry.'
+    }
+    $terminal = [System.IO.Path]::GetFullPath((Join-Path (Split-Path -Parent $manifest) ([string]$bin)))
+    if (-not (Test-Path -LiteralPath $terminal -PathType Leaf)) {
+      throw 'Claude terminal executable is unavailable.'
+    }
+  }
+  return [ordered]@{
+    terminalExecutableRaw = $terminal
+    terminalExecutable = ConvertTo-PortablePath $terminal
+    terminalExecutableSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $terminal).Hash.ToLowerInvariant()
+    packageManifestRaw = $manifest
+    packageManifest = if ($manifest) { ConvertTo-PortablePath $manifest } else { $null }
+    packageManifestSha256 = if ($manifest) { (Get-FileHash -Algorithm SHA256 -LiteralPath $manifest).Hash.ToLowerInvariant() } else { $null }
+  }
+}
+
 function Invoke-Captured {
   param(
     [Parameter(Mandatory = $true)][string]$File,
@@ -45,51 +368,86 @@ function Invoke-Captured {
     $command = Get-Command "$File.cmd" -CommandType Application -ErrorAction Stop |
       Select-Object -First 1
   }
-  $info = [System.Diagnostics.ProcessStartInfo]::new()
-  $isCommandShim = [System.IO.Path]::GetExtension($command.Source) -eq '.cmd'
-  $info.FileName = if ($isCommandShim) { $env:ComSpec } else { $command.Source }
-  $info.WorkingDirectory = $WorkingDirectory
-  $info.UseShellExecute = $false
-  $info.RedirectStandardOutput = $true
-  $info.RedirectStandardError = $true
-  $info.RedirectStandardInput = $true
-  if ($isCommandShim) {
-    foreach ($argument in @('/d', '/s', '/c', $command.Source)) {
-      [void]$info.ArgumentList.Add($argument)
-    }
-  }
-  foreach ($argument in $Arguments) {
-    [void]$info.ArgumentList.Add($argument)
-  }
+  $identity = Get-TerminalCommandIdentity $command
+  $environmentOverrides = [System.Collections.Generic.Dictionary[string,string]]::new(
+    [System.StringComparer]::OrdinalIgnoreCase
+  )
   foreach ($entry in $Environment.GetEnumerator()) {
-    $info.Environment[$entry.Key] = [string]$entry.Value
+    $environmentOverrides[$entry.Key] = [string]$entry.Value
   }
-  $process = [System.Diagnostics.Process]::new()
-  $process.StartInfo = $info
-  [void]$process.Start()
-  if ($InputText.Length -gt 0) {
-    $process.StandardInput.Write($InputText)
-  }
-  $process.StandardInput.Close()
-  $stdout = $process.StandardOutput.ReadToEndAsync()
-  $stderr = $process.StandardError.ReadToEndAsync()
-  $timedOut = -not $process.WaitForExit($CommandTimeoutSeconds * 1000)
-  if ($timedOut) {
-    try { $process.Kill($true) } catch { }
-    $process.WaitForExit()
-  }
-  $exitCode = if ($timedOut) { 124 } else { $process.ExitCode }
-  return [ordered]@{
-    argv = @($File) + $Arguments
-    resolvedCommand = ConvertTo-PortablePath $command.Source
-    resolvedCommandSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $command.Source).Hash.ToLowerInvariant()
-    launcher = ConvertTo-PortablePath $info.FileName
-    launcherSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $info.FileName).Hash.ToLowerInvariant()
-    timeoutSeconds = $CommandTimeoutSeconds
-    timedOut = $timedOut
-    exitCode = $exitCode
-    stdout = $stdout.Result
-    stderr = $stderr.Result
+  $job = [AccordProcessJob]::new()
+  $owned = $null
+  try {
+    $owned = [AccordSuspendedProcess]::Start(
+      $identity.terminalExecutableRaw, $Arguments, $WorkingDirectory,
+      $environmentOverrides
+    )
+    $job.Add($owned.Process)
+    $owned.Resume($InputText)
+    $stdoutTask = $owned.StandardOutput.ReadToEndAsync()
+    $stderrTask = $owned.StandardError.ReadToEndAsync()
+    $clock = [System.Diagnostics.Stopwatch]::StartNew()
+    $executionLimit = [TimeSpan]::FromSeconds($CommandTimeoutSeconds)
+    while ($clock.Elapsed -lt $executionLimit -and
+        (-not $owned.Process.HasExited -or $job.ActiveProcessCount -ne 0)) {
+      Start-Sleep -Milliseconds 50
+    }
+    $timedOut = -not $owned.Process.HasExited -or $job.ActiveProcessCount -ne 0
+    $terminationRequested = $timedOut
+    if ($terminationRequested) { $job.Terminate(124) }
+    $hardLimit = [TimeSpan]::FromSeconds($CommandEndToEndTimeoutSeconds)
+    while ($clock.Elapsed -lt $hardLimit -and
+        (-not $owned.Process.HasExited -or $job.ActiveProcessCount -ne 0)) {
+      Start-Sleep -Milliseconds 25
+    }
+    $terminationConfirmed = $owned.Process.HasExited -and $job.ActiveProcessCount -eq 0
+    if (-not $terminationConfirmed) {
+      throw "Command process tree did not terminate within the hard deadline: $File"
+    }
+    $remaining = [Math]::Max(1, [int]($hardLimit.TotalMilliseconds - $clock.Elapsed.TotalMilliseconds))
+    $outputs = [System.Threading.Tasks.Task[]]@($stdoutTask, $stderrTask)
+    $streamsDrained = [System.Threading.Tasks.Task]::WaitAll($outputs, $remaining)
+    if (-not $streamsDrained) {
+      throw "Command output pipes did not close within the hard deadline: $File"
+    }
+    $stdoutValue = $stdoutTask.Result
+    $stderrValue = $stderrTask.Result
+    if ([System.Text.Encoding]::UTF8.GetByteCount($stdoutValue) -gt $CommandOutputLimitBytes -or
+        [System.Text.Encoding]::UTF8.GetByteCount($stderrValue) -gt $CommandOutputLimitBytes) {
+      throw "Command output exceeded the evidence byte limit: $File"
+    }
+    $exitCode = if ($timedOut) { 124 } else { $owned.Process.ExitCode }
+    return [ordered]@{
+      argv = @(@($File) + $Arguments | ForEach-Object { ConvertTo-PublicEvidenceText ([string]$_) })
+      resolvedCommand = ConvertTo-PortablePath $command.Source
+      resolvedCommandSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $command.Source).Hash.ToLowerInvariant()
+      launcher = $identity.terminalExecutable
+      launcherSha256 = $identity.terminalExecutableSha256
+      terminalExecutable = $identity.terminalExecutable
+      terminalExecutableSha256 = $identity.terminalExecutableSha256
+      packageManifest = $identity.packageManifest
+      packageManifestSha256 = $identity.packageManifestSha256
+      environmentKeys = @($Environment.Keys | Sort-Object)
+      inputSha256 = [Convert]::ToHexString(
+        [System.Security.Cryptography.SHA256]::HashData(
+          [System.Text.Encoding]::UTF8.GetBytes($InputText)
+        )
+      ).ToLowerInvariant()
+      executionTimeoutSeconds = $CommandTimeoutSeconds
+      endToEndTimeoutSeconds = $CommandEndToEndTimeoutSeconds
+      outputLimitBytes = $CommandOutputLimitBytes
+      timedOut = $timedOut
+      terminationRequested = $terminationRequested
+      terminationConfirmed = $terminationConfirmed
+      streamsDrained = $streamsDrained
+      jobActiveProcesses = [int]$job.ActiveProcessCount
+      exitCode = $exitCode
+      stdout = ConvertTo-PublicEvidenceText $stdoutValue
+      stderr = ConvertTo-PublicEvidenceText $stderrValue
+    }
+  } finally {
+    if ($null -ne $owned) { $owned.Dispose() }
+    $job.Dispose()
   }
 }
 
@@ -119,6 +477,35 @@ function Assert-FileMapsEqual {
     throw "$Label installed bytes differ"
   }
   return $actual.Count
+}
+
+function Assert-ExactOrphanCacheVersion {
+  param(
+    [Parameter(Mandatory = $true)][string]$ExpectedPackageRoot,
+    [Parameter(Mandatory = $true)][string]$CacheVersionRoot,
+    [Parameter(Mandatory = $true)][string]$Label
+  )
+  if (-not (Test-Path -LiteralPath $CacheVersionRoot -PathType Container)) {
+    throw "$Label cache version root is absent."
+  }
+  $reparse = @(Get-ChildItem -LiteralPath $CacheVersionRoot -Recurse -Force |
+    Where-Object { $_.Attributes -band [System.IO.FileAttributes]::ReparsePoint })
+  if ($reparse.Count -ne 0) { throw "$Label cache contains a reparse point." }
+  $expected = Get-FileMap $ExpectedPackageRoot
+  $actual = Get-FileMap $CacheVersionRoot
+  if (-not $actual.Contains('.orphaned_at')) {
+    throw "$Label cache has no orphan marker."
+  }
+  [void]$actual.Remove('.orphaned_at')
+  if (($expected | ConvertTo-Json -Compress) -ne ($actual | ConvertTo-Json -Compress)) {
+    throw "$Label cache bytes are outside the exact package allowlist."
+  }
+  $marker = Get-Content -Raw -LiteralPath (Join-Path $CacheVersionRoot '.orphaned_at')
+  $parsed = 0L
+  if (-not [long]::TryParse($marker.Trim(), [ref]$parsed) -or $parsed -lt 0) {
+    throw "$Label cache orphan marker is invalid."
+  }
+  return $parsed
 }
 
 function Read-JsonOutput {
@@ -167,29 +554,21 @@ function Get-RunnerProcessIds {
 
 function Get-TaskProcessIds {
   param([Parameter(Mandatory = $true)][string]$TaskPath)
-  $escapedTask = $TaskPath.Replace('\', '\\').Replace("'", "''")
+  $resolvedTask = [System.IO.Path]::GetFullPath($TaskPath)
   $runnerProcesses = @(Get-RunnerProcessIds)
-  return @(Get-CimInstance -Query (
-    "SELECT ProcessId FROM Win32_Process WHERE CommandLine LIKE '%$escapedTask%'"
-  ) | ForEach-Object { [int]$_.ProcessId } | Where-Object {
-    $_ -notin $runnerProcesses
-  })
+  return @(Get-CimInstance -ClassName Win32_Process |
+    Where-Object {
+      $_.CommandLine -and ([string]$_.CommandLine).IndexOf(
+        $resolvedTask, [System.StringComparison]::OrdinalIgnoreCase
+      ) -ge 0 -and [int]$_.ProcessId -notin $runnerProcesses
+    } | ForEach-Object { [int]$_.ProcessId })
 }
 
 function Stop-TaskProcesses {
   param([Parameter(Mandatory = $true)][string]$TaskPath)
-  for ($attempt = 0; $attempt -lt 5; $attempt++) {
-    $processIds = @(Get-TaskProcessIds $TaskPath)
-    if ($processIds.Count -eq 0) { return @() }
-    foreach ($processId in $processIds) {
-      try {
-        $owned = [System.Diagnostics.Process]::GetProcessById($processId)
-        $owned.Kill($true)
-        [void]$owned.WaitForExit(5000)
-      } catch { }
-    }
-    Start-Sleep -Milliseconds 200
-  }
+  # Every launched command is assigned while suspended to a no-breakaway Job.
+  # A remaining literal task-root reference has no proven ownership after that
+  # Job closes, so report it but never terminate an external process by guess.
   return @(Get-TaskProcessIds $TaskPath)
 }
 
@@ -198,14 +577,14 @@ $task = [System.IO.Path]::GetFullPath($TaskRoot)
 $evidencePath = [System.IO.Path]::GetFullPath($EvidenceOutput)
 $temporaryBase = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath())
 if (-not $task.StartsWith($temporaryBase, [System.StringComparison]::OrdinalIgnoreCase) -or
-    -not ([System.IO.Path]::GetFileName($task)).StartsWith('yiyuan-accord-gt20-formal-')) {
+    ([System.IO.Path]::GetFileName($task)) -notmatch '^yiyuan-accord-gt20-formal-[a-z0-9-]+$') {
   throw 'TaskRoot must be a specifically named temporary directory.'
 }
 if ($task.StartsWith($repository, [System.StringComparison]::OrdinalIgnoreCase)) {
   throw 'TaskRoot must be outside the repository.'
 }
 if (-not $evidencePath.StartsWith($temporaryBase, [System.StringComparison]::OrdinalIgnoreCase) -or
-    -not ([System.IO.Path]::GetFileName($evidencePath)).StartsWith('yiyuan-accord-gt20-formal-evidence-') -or
+    ([System.IO.Path]::GetFileName($evidencePath)) -notmatch '^yiyuan-accord-gt20-formal-evidence-[a-z0-9-]+\.json$' -or
     [System.IO.Path]::GetExtension($evidencePath) -ne '.json' -or
     $evidencePath.StartsWith($task, [System.StringComparison]::OrdinalIgnoreCase) -or
     $evidencePath.StartsWith($repository, [System.StringComparison]::OrdinalIgnoreCase)) {
@@ -220,14 +599,18 @@ if (Test-Path -LiteralPath $evidencePath) {
 if ($CandidateRevision -notmatch '^[0-9a-f]{40}$') {
   throw 'CandidateRevision must be a lowercase 40-character Git object id.'
 }
-$resolvedCommit = git -C $repository rev-parse --verify "$CandidateRevision`^{commit}" 2>$null
-if ($LASTEXITCODE -ne 0 -or $resolvedCommit.Trim() -ne $CandidateRevision) {
-  throw 'CandidateRevision is not an exact commit.'
-}
-
+$script:TaskPathForEvidence = $task
+$script:TemporaryBaseForEvidence = $temporaryBase
+$script:RepositoryForEvidence = $repository
 $commands = [System.Collections.Generic.List[object]]::new()
 $succeeded = $false
 try {
+$commitCheck = Invoke-Captured git @('-C', $repository, 'rev-parse', '--verify', "$CandidateRevision`^{commit}") $repository
+$commands.Add($commitCheck)
+Assert-Exit $commitCheck 0 'candidate commit validation'
+if ($commitCheck.stdout.Trim() -ne $CandidateRevision) {
+  throw 'CandidateRevision is not an exact commit.'
+}
 New-Item -ItemType Directory -Path $task | Out-Null
 $oldSource = Join-Path $task 'old-source'
 $candidateSource = Join-Path $task 'candidate-source'
@@ -283,6 +666,15 @@ Assert-Exit $codexVersion 0 'Codex version'
 $claudeVersion = Invoke-Captured claude @('--version') $task $claudeEnvironment
 $commands.Add($claudeVersion)
 Assert-Exit $claudeVersion 0 'Claude version'
+$claudeManifest = Get-Content -Raw -LiteralPath $claudeVersion.packageManifest.Replace(
+  '%APPDATA%', $env:APPDATA, [System.StringComparison]::OrdinalIgnoreCase
+) | ConvertFrom-Json
+if ($claudeManifest.name -ne '@anthropic-ai/claude-code' -or
+    -not $claudeVersion.stdout.Trim().StartsWith(
+      "$($claudeManifest.version) ", [System.StringComparison]::Ordinal
+    )) {
+  throw 'Claude shim, package manifest and reported version do not agree.'
+}
 $nodeVersion = Invoke-Captured node @('--version') $task
 $commands.Add($nodeVersion)
 Assert-Exit $nodeVersion 0 'Node version'
@@ -422,11 +814,54 @@ if ($finalClaudeSettings.userSentinel -ne 'USER_CLAUDE_SETTINGS' -or
   throw 'Claude user configuration was not preserved or Accord configuration remains.'
 }
 $matchingProcesses = @(Get-TaskProcessIds $task)
-if ($matchingProcesses.Count -ne 0) { throw 'Task-owned process remains.' }
-$codexCache = @(Get-ChildItem -LiteralPath (Join-Path $codexRoot 'plugins/cache/yiyuan-accord') -Recurse -File -ErrorAction SilentlyContinue | ForEach-Object {
+if ($matchingProcesses.Count -ne 0) {
+  throw 'Task-owned process remains.'
+}
+$codexCache = @(Get-ChildItem -LiteralPath (Join-Path $codexRoot 'plugins/cache/yiyuan-accord') -Recurse -File -ErrorAction SilentlyContinue |
+  Sort-Object FullName | ForEach-Object {
   [System.IO.Path]::GetRelativePath($codexRoot, $_.FullName).Replace('\', '/')
 })
-$claudeCache = @(Get-ChildItem -LiteralPath (Join-Path $claudeRoot 'plugins/cache/yiyuan-accord') -Recurse -File -ErrorAction SilentlyContinue | ForEach-Object {
+$claudeCache = @(Get-ChildItem -LiteralPath (Join-Path $claudeRoot 'plugins/cache/yiyuan-accord') -Recurse -File -ErrorAction SilentlyContinue |
+  Sort-Object FullName | ForEach-Object {
+  [System.IO.Path]::GetRelativePath($claudeRoot, $_.FullName).Replace('\', '/')
+})
+if ($codexCache.Count -ne 0) {
+  throw 'Codex retained package cache outside the declared zero-cache contract.'
+}
+
+$claudeCacheRoot = Join-Path $claudeRoot 'plugins/cache/yiyuan-accord/yiyuan-accord-claude'
+$claudeOldCache = Join-Path $claudeCacheRoot '3.0.1'
+$claudeCandidateCache = Join-Path $claudeCacheRoot '3.1.0'
+$retentionMilliseconds = 1209600000L
+$clockMilliseconds = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+$youngAgeMilliseconds = $retentionMilliseconds - 3600000L
+$expiredAgeMilliseconds = $retentionMilliseconds + 3600000L
+[void](Assert-ExactOrphanCacheVersion (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldCache 'Claude old')
+$candidateOrphanedAt = Assert-ExactOrphanCacheVersion (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeCandidateCache 'Claude candidate'
+$candidateAgeMilliseconds = $clockMilliseconds - $candidateOrphanedAt
+if ($candidateAgeMilliseconds -lt 0 -or $candidateAgeMilliseconds -ge $retentionMilliseconds) {
+  throw 'Claude candidate orphan cache is not inside the fresh retention boundary.'
+}
+Set-Content -LiteralPath (Join-Path $claudeOldCache '.orphaned_at') -Encoding ascii -NoNewline -Value ($clockMilliseconds - $youngAgeMilliseconds)
+$youngSweepCommandIndex = $commands.Count
+$claudeYoungSweep = Invoke-Captured claude @('plugin', 'list', '--json') $task $claudeEnvironment
+$commands.Add($claudeYoungSweep)
+Assert-Exit $claudeYoungSweep 0 'Claude young orphan sweep'
+if (-not (Test-Path -LiteralPath $claudeOldCache -PathType Container)) {
+  throw 'Claude removed a younger-than-contract orphan cache.'
+}
+[void](Assert-ExactOrphanCacheVersion (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldCache 'Claude young')
+Set-Content -LiteralPath (Join-Path $claudeOldCache '.orphaned_at') -Encoding ascii -NoNewline -Value ($clockMilliseconds - $expiredAgeMilliseconds)
+$expiredSweepCommandIndex = $commands.Count
+$claudeExpiredSweep = Invoke-Captured claude @('plugin', 'list', '--json') $task $claudeEnvironment
+$commands.Add($claudeExpiredSweep)
+Assert-Exit $claudeExpiredSweep 0 'Claude expired orphan sweep'
+if (Test-Path -LiteralPath $claudeOldCache) {
+  throw 'Claude retained an older-than-contract orphan cache.'
+}
+[void](Assert-ExactOrphanCacheVersion (Join-Path $candidateSource 'plugins/yiyuan-accord-claude') $claudeCandidateCache 'Claude retained candidate')
+$claudeCache = @(Get-ChildItem -LiteralPath (Join-Path $claudeRoot 'plugins/cache/yiyuan-accord') -Recurse -File -ErrorAction SilentlyContinue |
+  Sort-Object FullName | ForEach-Object {
   [System.IO.Path]::GetRelativePath($claudeRoot, $_.FullName).Replace('\', '/')
 })
 
@@ -441,11 +876,28 @@ $packages = [ordered]@{}
 foreach ($projection in $candidateProgram.hostProjections) {
   $packages[$projection.id] = $projection.packageSha256
 }
+$commandPlan = @($commands | ForEach-Object {
+  [ordered]@{
+    argv = $_.argv
+    endToEndTimeoutSeconds = $_.endToEndTimeoutSeconds
+    environmentKeys = $_.environmentKeys
+    executionTimeoutSeconds = $_.executionTimeoutSeconds
+    inputSha256 = $_.inputSha256
+    outputLimitBytes = $_.outputLimitBytes
+  }
+})
+$commandPlanJson = $commandPlan | ConvertTo-Json -Depth 8 -Compress
+$commandPlanSha256 = [Convert]::ToHexString(
+  [System.Security.Cryptography.SHA256]::HashData(
+    [System.Text.Encoding]::UTF8.GetBytes($commandPlanJson)
+  )
+).ToLowerInvariant()
 $record = [ordered]@{
-  schema = 'yiyuan-accord-gt20-exact-package-evidence/v2'
+  schema = 'yiyuan-accord-gt20-exact-package-evidence/v3'
   taskId = 'GT-20'
   evaluatedRevision = $CandidateRevision
   runnerSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $PSCommandPath).Hash.ToLowerInvariant()
+  commandPlanSha256 = $commandPlanSha256
   packageSha256 = $packages
   behaviorSubject = $behaviorSubject
   lifecycle = [ordered]@{
@@ -457,7 +909,7 @@ $record = [ordered]@{
     postState = 'verified'
     cleanup = 'verified'
   }
-  claimLimit = 'Bounded zero-model Windows lifecycle evidence for exact Commit A Codex and Claude package bytes in disposable non-empty scopes; production, unmanaged or cross-OS hosts, ordinary model behavior, product value and release readiness remain unclaimed.'
+  claimLimit = 'Bounded zero-model Windows lifecycle, command privacy and end-to-end process termination, plus Claude host-owned 14-day inert-cache cleanup evidence for exact Commit A Codex and Claude package bytes in disposable non-empty scopes; production, unmanaged or cross-OS hosts, live-session cache behavior, ordinary model behavior, product value and release readiness remain unclaimed.'
   fixture = [ordered]@{
     platform = 'windows'
     priorVersion = '3.0.1'
@@ -483,6 +935,10 @@ $record = [ordered]@{
     tarVersion = $tarVersion.stdout.Trim()
     codexCliVersion = $codexVersion.stdout.Trim()
     claudeCliVersion = $claudeVersion.stdout.Trim()
+    claudePackageManifest = $claudeVersion.packageManifest
+    claudePackageManifestSha256 = $claudeVersion.packageManifestSha256
+    claudeTerminalExecutable = $claudeVersion.terminalExecutable
+    claudeTerminalExecutableSha256 = $claudeVersion.terminalExecutableSha256
     nodeVersion = $nodeVersion.stdout.Trim()
     codexInstalledFileCount = $codexFileCount
     claudeInstalledFileCount = $claudeFileCount
@@ -496,6 +952,33 @@ $record = [ordered]@{
     claudeCacheFiles = $claudeCache
     taskRootRemoved = $true
   }
+  hostCacheDisposition = [ordered]@{
+    codex = [ordered]@{
+      classification = 'no-retained-accord-package-cache'
+      hostCallable = $false
+    }
+    claude = [ordered]@{
+      classification = 'host-dispatch-inert-bounded-orphan-cache'
+      observedVersions = @('3.0.1', '3.1.0')
+      retainedVersions = @('3.1.0')
+      exactAllowlistVerified = $true
+      listedOrEnabled = $false
+      hostCallable = $false
+      dataStatePresent = $false
+      cleanupTrigger = 'plugin-list'
+      retentionMilliseconds = $retentionMilliseconds
+      retainedCandidateAgeMilliseconds = $candidateAgeMilliseconds
+      youngBoundaryAgeMilliseconds = $youngAgeMilliseconds
+      youngBoundaryRetained = $true
+      expiredBoundaryAgeMilliseconds = $expiredAgeMilliseconds
+      expiredBoundaryRemoved = $true
+      youngSweepCommandIndex = $youngSweepCommandIndex
+      expiredSweepCommandIndex = $expiredSweepCommandIndex
+      liveSessionBehavior = 'unverified'
+      claudePackageManifestSha256 = $claudeVersion.packageManifestSha256
+      claudeTerminalExecutableSha256 = $claudeVersion.terminalExecutableSha256
+    }
+  }
 }
 
 Remove-Item -LiteralPath $task -Recurse -Force
@@ -505,6 +988,17 @@ if (-not (Test-Path -LiteralPath $evidenceDirectory)) {
   New-Item -ItemType Directory -Path $evidenceDirectory | Out-Null
 }
 $evidenceJson = $record | ConvertTo-Json -Depth 20
+foreach ($privateRoot in @($task, $temporaryBase, $repository, $env:LOCALAPPDATA, $env:APPDATA, $env:USERPROFILE)) {
+  if ($privateRoot) {
+    $resolvedPrivateRoot = [System.IO.Path]::GetFullPath($privateRoot)
+    foreach ($spelling in @($resolvedPrivateRoot, $resolvedPrivateRoot.Replace('\', '/'))) {
+      if ($evidenceJson.Contains(
+          $spelling, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw 'Evidence serialization retained a private or task-local root.'
+      }
+    }
+  }
+}
 [System.IO.File]::WriteAllText(
   $evidencePath,
   $evidenceJson + [System.Environment]::NewLine,
