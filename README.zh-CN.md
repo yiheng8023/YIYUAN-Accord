@@ -93,7 +93,9 @@ Accord 不是每个任务都必须执行的固定流程。简单请求遇到健�
 
 执行 GUI 安装或生命周期操作前，应记录客户端、版本、可见入口和实际结果。v3.0.1 没有单独验证 ChatGPT GUI 安装路径。
 
-已记录的 Codex 与 Claude 路线要求宿主支持插件、能够访问公开仓库、允许修改用户级插件状态，并在安装后新建任务或会话。
+已记录的 Codex 与 Claude 路线要求宿主支持插件、能够访问公开仓库、允许修改用户级插件状态、`node --version` 能在 `PATH` 中成功运行，并在安装后新建任务或会话。
+
+期望 Hook 激活前，必须通过宿主支持的信任流程审查并信任这个非托管 Accord Hook。不得把 `bypass_hook_trust`、`bypassPermissions` 或直接改 settings 当作生产捷径。若当前宿主没有受支持的信任入口，Skill 仍可能可见，但 Hook 辅助连续性保持不可用且未经验证。
 
 Accord 不绑定固定模型名称、型号、版本或提供商路线。模型身份与版本只是单次运行的来源记录，不是产品身份或路线权威。
 
@@ -155,16 +157,17 @@ Hook 适配器不读取私密会话原文，不写持久状态，也不启动后
 
 ## 确认生效
 
-请把确认拆成四个不同问题：
+请把确认拆成五个不同问题：
 
-1. **已安装**：宿主是否报告预期包和精确来源？
-2. **可见**：当前宿主中是否出现预期 Skill 或插件？
-3. **已激活**：相关宿主事件或任务是否实际调用它？
-4. **有效果**：它是否帮助完成目标，并且没有不可接受的干扰或残留？
+1. **已安装**：宿主是否报告预期包和启用状态？
+2. **来源已绑定**：是否登记了不可变 ref，已安装包字节是否匹配该精确 Release？
+3. **可见**：当前宿主中是否出现预期 Skill 或插件？
+4. **已激活**：相关宿主事件或任务是否实际调用它？
+5. **有效果**：它是否帮助完成目标，并且没有不可接受的干扰或残留？
 
-Codex 可先查看 `codex plugin list --json`，再在新任务中确认当前插件和 Skill 列表。
+Codex 可先查看 `codex plugin list --json`，再在新任务中确认当前插件和 Skill 列表。该清单能确认安装/启用状态及其报告的版本和仓库，却不暴露不可变 marketplace ref 或 Git SHA，不能单独证明精确来源。
 
-Claude Code 可先查看 `claude plugin list --json`，再在新会话中通过 `/help` 确认当前命令列表。
+Claude Code 应同时查看 `claude plugin marketplace list --json` 与 `claude plugin list --json`，再在新会话中通过 `/help` 确认当前命令列表。清单报告了 ref 也不能取代已安装字节验证。
 
 GUI 客户端应查看实际界面，不依赖其它版本的截图或标签。
 
@@ -335,6 +338,8 @@ codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref VERSION_TAG
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
+只移除这条路线安装的 Codex 投影时，执行前两条命令后停止，并确认插件与 marketplace 登记都已不存在。
+
 更改 Claude Code 前，先通过列表命令确认这个用户级登记确实属于上述路线。若无法安全区分不同 scope 的同名状态，应停止并报告这个适配缺口。
 
 Claude Code 更新或回滚时，先移除当前用户级包和 marketplace，再登记并安装目标精确 tag：
@@ -353,6 +358,8 @@ claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 优先使用宿主支持的原生重载和生命周期操作。
 
 这些精确 ref 命令执行的是显式替换，不是原子就地更新。应先记录旧精确 tag；若目标安装失败，重新安装该 tag，验证健康状态，并报告未激活时段。
+
+生命周期命令可以刷新安装文件，但不会替换当前任务或会话已经加载的能力。判断新版本前必须新建任务或会话；自报版本、`/reload-plugins` 或缓存变化本身都不是已加载行为完成热更新的证据。
 
 不得移动已有 tag，也不得直接编辑全局宿主配置来代替受支持的生命周期命令。
 

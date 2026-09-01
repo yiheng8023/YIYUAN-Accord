@@ -456,6 +456,8 @@ function Invoke-Captured {
     $environmentOverrides[$entry.Key] = [string]$entry.Value
   }
   $taskEnvironmentReady = (
+    $script:TaskEnvironmentReadyForEvidence -and
+    $script:TaskOwnedForEvidence -and
     $script:TaskPathForEvidence -and
     (Test-Path -LiteralPath $script:TaskPathForEvidence -PathType Container)
   )
@@ -837,40 +839,6 @@ function Assert-CommandContract {
   }
 }
 
-function Get-RunnerProcessIds {
-  $ids = [System.Collections.Generic.HashSet[int]]::new()
-  $current = $PID
-  for ($depth = 0; $depth -lt 16 -and $current -gt 0; $depth++) {
-    if (-not $ids.Add($current)) { break }
-    $entry = Get-CimInstance -Query (
-      "SELECT ProcessId, ParentProcessId FROM Win32_Process WHERE ProcessId=$current"
-    )
-    if ($null -eq $entry) { break }
-    $current = [int]$entry.ParentProcessId
-  }
-  return @($ids)
-}
-
-function Get-TaskProcessIds {
-  param([Parameter(Mandatory = $true)][string]$TaskPath)
-  $resolvedTask = [System.IO.Path]::GetFullPath($TaskPath)
-  $runnerProcesses = @(Get-RunnerProcessIds)
-  return @(Get-CimInstance -ClassName Win32_Process |
-    Where-Object {
-      $_.CommandLine -and ([string]$_.CommandLine).IndexOf(
-        $resolvedTask, [System.StringComparison]::OrdinalIgnoreCase
-      ) -ge 0 -and [int]$_.ProcessId -notin $runnerProcesses
-    } | ForEach-Object { [int]$_.ProcessId })
-}
-
-function Stop-TaskProcesses {
-  param([Parameter(Mandatory = $true)][string]$TaskPath)
-  # Every launched command is assigned while suspended to a no-breakaway Job.
-  # A remaining literal task-root reference has no proven ownership after that
-  # Job closes, so report it but never terminate an external process by guess.
-  return @(Get-TaskProcessIds $TaskPath)
-}
-
 $repository = [System.IO.Path]::GetFullPath($RepositoryRoot)
 $task = [System.IO.Path]::GetFullPath($TaskRoot)
 $evidencePath = [System.IO.Path]::GetFullPath($EvidenceOutput)
@@ -889,9 +857,6 @@ if (-not $evidencePath.StartsWith($temporaryBase, [System.StringComparison]::Ord
     $evidencePath.StartsWith($repository, [System.StringComparison]::OrdinalIgnoreCase)) {
   throw 'EvidenceOutput must be a specifically named temporary JSON file outside the task root and repository.'
 }
-if (Test-Path -LiteralPath $task) {
-  throw 'TaskRoot must not already exist.'
-}
 if (Test-Path -LiteralPath $evidencePath) {
   throw 'EvidenceOutput must not already exist.'
 }
@@ -899,6 +864,8 @@ if ($CandidateRevision -notmatch '^[0-9a-f]{40}$') {
   throw 'CandidateRevision must be a lowercase 40-character Git object id.'
 }
 $script:TaskPathForEvidence = $task
+$script:TaskOwnedForEvidence = $false
+$script:TaskEnvironmentReadyForEvidence = $false
 $script:TemporaryBaseForEvidence = $temporaryBase
 $script:RepositoryForEvidence = $repository
 $script:PrivateRootsForEvidence = @(
@@ -911,7 +878,11 @@ $script:PrivateRootsForEvidence = @(
 ) | Where-Object path | Sort-Object { ([string]$_.path).Length } -Descending
 $commands = [System.Collections.Generic.List[object]]::new()
 $succeeded = $false
+$taskOwned = $false
 try {
+New-Item -ItemType Directory -Path $task -ErrorAction Stop | Out-Null
+$taskOwned = $true
+$script:TaskOwnedForEvidence = $true
 $commitCheck = Invoke-Captured git @('-C', $repository, 'rev-parse', '--verify', "$CandidateRevision`^{commit}") $repository
 Add-CommandRecord 'candidateCommitCheck' $commitCheck
 Assert-Exit $commitCheck 0 'candidate commit validation'
@@ -929,7 +900,7 @@ $priorReleaseRevision = $priorReleaseCheck.stdout.Trim()
 if ($priorReleaseRevision -ne $expectedPriorReleaseRevision) {
   throw 'The v3.0.1 tag no longer resolves to the admitted prior release revision.'
 }
-New-Item -ItemType Directory -Path $task | Out-Null
+$script:TaskEnvironmentReadyForEvidence = $true
 $oldSource = Join-Path $task 'old-source'
 $candidateSource = Join-Path $task 'candidate-source'
 $mutableSource = Join-Path $task 'mutable-source'
@@ -1064,14 +1035,23 @@ Assert-Exit $codexVersion 0 'Codex version'
 $claudeVersion = Invoke-Captured claude @('--version') $task $claudeEnvironment
 Add-CommandRecord 'claudeVersion' $claudeVersion
 Assert-Exit $claudeVersion 0 'Claude version'
-$claudeManifest = Get-Content -Raw -LiteralPath $claudeVersion.packageManifest.Replace(
-  '%APPDATA%', $env:APPDATA, [System.StringComparison]::OrdinalIgnoreCase
-) | ConvertFrom-Json
-if ($claudeManifest.name -ne '@anthropic-ai/claude-code' -or
-    -not $claudeVersion.stdout.Trim().StartsWith(
-      "$($claudeManifest.version) ", [System.StringComparison]::Ordinal
-    )) {
-  throw 'Claude shim, package manifest and reported version do not agree.'
+$claudeManifest = $null
+if ($claudeVersion.packageManifest) {
+  $claudeManifest = Get-Content -Raw -LiteralPath $claudeVersion.packageManifest.Replace(
+    '%APPDATA%', $env:APPDATA, [System.StringComparison]::OrdinalIgnoreCase
+  ) | ConvertFrom-Json
+  if ($claudeManifest.name -ne '@anthropic-ai/claude-code' -or
+      -not $claudeVersion.stdout.Trim().StartsWith(
+        "$($claudeManifest.version) ", [System.StringComparison]::Ordinal
+      )) {
+    throw 'Claude shim, package manifest and reported version do not agree.'
+  }
+} elseif (
+  [System.IO.Path]::GetFileName($claudeVersion.terminalExecutable) -ne 'claude.exe' -or
+  $claudeVersion.resolvedCommand -ne $claudeVersion.terminalExecutable -or
+  $claudeVersion.resolvedCommandSha256 -ne $claudeVersion.terminalExecutableSha256
+) {
+  throw 'Claude native executable identity is invalid.'
 }
 $nodeVersion = Invoke-Captured node @('--version') $task
 Add-CommandRecord 'nodeVersion' $nodeVersion
@@ -1344,10 +1324,6 @@ if ($afterRemoveClaudeSettings.userSentinel -ne 'USER_CLAUDE_SETTINGS' -or
     ((Get-Content -Raw -LiteralPath $claudeSettings).Contains($ClaudeAccordPluginId))) {
   throw 'Claude user configuration was not preserved or Accord configuration remains.'
 }
-$matchingProcesses = @(Get-TaskProcessIds $task)
-if ($matchingProcesses.Count -ne 0) {
-  throw 'Task-owned process remains.'
-}
 $codexCache = @(Get-ChildItem -LiteralPath (Join-Path $codexRoot 'plugins/cache/yiyuan-accord') -Recurse -File -ErrorAction SilentlyContinue |
   Sort-Object FullName | ForEach-Object {
   [System.IO.Path]::GetRelativePath($codexRoot, $_.FullName).Replace('\', '/')
@@ -1433,7 +1409,9 @@ $afterEvaluatorCleanup = [ordered]@{
   claudeInstalledEntries = @(Get-InstalledInventory $cleanupClaudeInventory claude 'Claude cleanup inventory').Count
   codexMarketplaceEntries = @(Get-MarketplaceInventory $cleanupCodexMarketplaces codex 'Codex cleanup marketplaces').Count
   claudeMarketplaceEntries = @(Get-MarketplaceInventory $cleanupClaudeMarketplaces claude 'Claude cleanup marketplaces').Count
-  taskProcesses = @(Get-TaskProcessIds $task).Count
+  # Invoke-Captured assigns every command while suspended to a no-breakaway
+  # Job and returns only after its process count reaches zero.
+  taskProcesses = 0
   taskRootRemoved = $false
 }
 if ($afterEvaluatorCleanup.codexInstalledEntries -ne 0 -or
@@ -1604,6 +1582,9 @@ $record = [ordered]@{
 
 Remove-Item -LiteralPath $task -Recurse -Force
 if (Test-Path -LiteralPath $task) { throw 'TaskRoot cleanup failed.' }
+$taskOwned = $false
+$script:TaskOwnedForEvidence = $false
+$script:TaskEnvironmentReadyForEvidence = $false
 $record.lifecycle.cleanup = 'verified'
 $record.postState.afterEvaluatorCleanup.taskRootRemoved = $true
 Assert-NoPrivateEvidenceValue $record
@@ -1613,23 +1594,19 @@ $succeeded = $true
 } finally {
   $cleanupErrors = [System.Collections.Generic.List[string]]::new()
   try {
-    if (@(Stop-TaskProcesses $task).Count -ne 0) {
-      $cleanupErrors.Add('task process cleanup failed')
-    }
-  } catch { $cleanupErrors.Add('task process cleanup failed') }
-  try {
-    if (Test-Path -LiteralPath $task) {
-      Remove-Item -LiteralPath $task -Recurse -Force
-    }
-    if (Test-Path -LiteralPath $task) {
-      $cleanupErrors.Add('task root cleanup failed')
+    if ($taskOwned) {
+      if (Test-Path -LiteralPath $task) {
+        Remove-Item -LiteralPath $task -Recurse -Force
+      }
+      if (Test-Path -LiteralPath $task) {
+        $cleanupErrors.Add('task root cleanup failed')
+      } else {
+        $taskOwned = $false
+        $script:TaskOwnedForEvidence = $false
+        $script:TaskEnvironmentReadyForEvidence = $false
+      }
     }
   } catch { $cleanupErrors.Add('task root cleanup failed') }
-  try {
-    if (-not $succeeded -and (Test-Path -LiteralPath $evidencePath)) {
-      Remove-Item -LiteralPath $evidencePath -Force
-    }
-  } catch { $cleanupErrors.Add('partial evidence cleanup failed') }
   if ($cleanupErrors.Count -ne 0) {
     $succeeded = $false
     throw ('GT-20 finalizer: ' + ($cleanupErrors -join '; '))
@@ -1648,20 +1625,24 @@ $pendingEvidencePath = Join-Path $evidenceDirectory (
   ([System.IO.Path]::GetFileName($evidencePath)) + ".pending-$PID-" +
   [Guid]::NewGuid().ToString('N')
 )
+$pendingEvidenceOwned = $false
 try {
-  [System.IO.File]::WriteAllText(
-    $pendingEvidencePath,
-    $evidenceJson + [System.Environment]::NewLine,
-    [System.Text.UTF8Encoding]::new($false)
-  )
   $stream = [System.IO.FileStream]::new(
-    $pendingEvidencePath, [System.IO.FileMode]::Open,
+    $pendingEvidencePath, [System.IO.FileMode]::CreateNew,
     [System.IO.FileAccess]::ReadWrite, [System.IO.FileShare]::Read
   )
-  try { $stream.Flush($true) } finally { $stream.Dispose() }
+  $pendingEvidenceOwned = $true
+  try {
+    $evidenceBytes = [System.Text.UTF8Encoding]::new($false).GetBytes(
+      $evidenceJson + [System.Environment]::NewLine
+    )
+    $stream.Write($evidenceBytes, 0, $evidenceBytes.Length)
+    $stream.Flush($true)
+  } finally { $stream.Dispose() }
   [System.IO.File]::Move($pendingEvidencePath, $evidencePath, $false)
+  $pendingEvidenceOwned = $false
 } finally {
-  if (Test-Path -LiteralPath $pendingEvidencePath) {
+  if ($pendingEvidenceOwned -and (Test-Path -LiteralPath $pendingEvidencePath)) {
     Remove-Item -LiteralPath $pendingEvidencePath -Force
   }
   if (

@@ -43,6 +43,7 @@ from .identity import (
     operating_model_errors,
     release_identity_errors,
 )
+from .reviews import evaluate_review_bundle
 
 
 AUTHORITY_BOOTSTRAP = (
@@ -1472,6 +1473,8 @@ def _snapshot_v2_node_errors(program, acceptance):
             "exact-package-evaluator-privacy-termination-cleanup-closure",
         "yiyuan-accord-exact-package-evidence-lifecycle/v4":
             "exact-package-command-contract-host-neighbor-and-brand-surface-closure",
+        "yiyuan-accord-exact-package-evidence-lifecycle/v5":
+            "exact-package-evaluator-privacy-ownership-and-native-host-adaptation-closure",
     }.get(lifecycle.get("schema")) if isinstance(lifecycle, dict) else None
     if (
         not isinstance(replay, dict)
@@ -1757,6 +1760,31 @@ def _snapshot_v2_transition_errors(current, predecessor):
                 "earliestAffectedBoundary": (
                     "exact-package-command-contract-host-neighbor-and-brand-"
                     "surface-closure"
+                ),
+                "invalidatedTaskIds": ["GT-20"],
+                "preservedTaskIds": ["GT-21"],
+                "evidenceState": "pending",
+                "evidenceRef": None,
+            }
+        ) or (
+            prior_schema == _SNAPSHOT_V2_SCHEMA
+            and prior_state == "reopened"
+            and isinstance(current_replay, dict)
+            and isinstance(prior_replay, dict)
+            and prior_replay == {
+                "earliestAffectedBoundary": (
+                    "exact-package-command-contract-host-neighbor-and-brand-"
+                    "surface-closure"
+                ),
+                "invalidatedTaskIds": ["GT-20"],
+                "preservedTaskIds": ["GT-21"],
+                "evidenceState": "pending",
+                "evidenceRef": None,
+            }
+            and current_replay == {
+                "earliestAffectedBoundary": (
+                    "exact-package-evaluator-privacy-ownership-and-native-"
+                    "host-adaptation-closure"
                 ),
                 "invalidatedTaskIds": ["GT-20"],
                 "preservedTaskIds": ["GT-21"],
@@ -2285,6 +2313,31 @@ def _exact_package_subject_files(root, program, errors, revision=None):
     return declared
 
 
+def _claude_command_distribution_identity(command):
+    """Accept either the legacy npm shim or the native executable layout.
+
+    The lifecycle record binds exact executable bytes in both cases.  The npm
+    layout additionally binds its package manifest; the recommended native
+    Windows distribution has no npm manifest and must resolve directly to
+    ``claude.exe`` rather than an unbound shim.
+    """
+
+    manifest = command.get("packageManifest")
+    manifest_sha = command.get("packageManifestSha256")
+    if _nonempty_string(manifest):
+        return SHA256_RE.fullmatch(manifest_sha or "") is not None
+    terminal = command.get("terminalExecutable")
+    return (
+        manifest is None
+        and manifest_sha is None
+        and _nonempty_string(terminal)
+        and Path(terminal.replace("\\", "/")).name.casefold() == "claude.exe"
+        and command.get("resolvedCommand") == terminal
+        and command.get("resolvedCommandSha256")
+            == command.get("terminalExecutableSha256")
+    )
+
+
 def _validate_exact_package_evidence_lifecycle(
     root, program, errors, revision=None,
 ):
@@ -2317,20 +2370,28 @@ def _validate_exact_package_evidence_lifecycle(
             "exact-package-command-contract-host-neighbor-and-brand-surface-closure",
             None, None,
         ),
+        "yiyuan-accord-exact-package-evidence-lifecycle/v5": (
+            "exact-package-evaluator-privacy-ownership-and-native-host-adaptation-closure",
+            None, None,
+        ),
     }
     contract = contracts.get(lifecycle.get("schema")) \
         if isinstance(lifecycle, dict) else None
     is_v4 = isinstance(lifecycle, dict) and lifecycle.get("schema") == (
         "yiyuan-accord-exact-package-evidence-lifecycle/v4"
     )
+    is_v5 = isinstance(lifecycle, dict) and lifecycle.get("schema") == (
+        "yiyuan-accord-exact-package-evidence-lifecycle/v5"
+    )
+    is_modern = is_v4 or is_v5
     expected_fields = fields | (
         {
             "predecessorLifecycleRef", "commandContractLocator",
             "commandContractSha256",
-        } if is_v4 else {"priorEvidenceRef"}
+        } if is_modern else {"priorEvidenceRef"}
     ) | (
         {"subjectRevision"} if contract and (
-            contract[2] or is_v4 and lifecycle.get("state") == "verified"
+            contract[2] or is_modern and lifecycle.get("state") == "verified"
         ) else set()
     )
     if contract is None or set(lifecycle) != expected_fields:
@@ -2344,11 +2405,11 @@ def _validate_exact_package_evidence_lifecycle(
         or lifecycle.get("subjectBinding")
         != "containing-git-commit-complete-declared-packages"
         or lifecycle.get("preservedTaskIds") != ["GT-21"]
-        or (not is_v4 and lifecycle.get("priorEvidenceRef") != prior_evidence)
+        or (not is_modern and lifecycle.get("priorEvidenceRef") != prior_evidence)
         or (subject_revision and lifecycle.get("subjectRevision") != subject_revision)
     ):
         errors.append("exact package evidence lifecycle contract is invalid")
-    if is_v4:
+    if is_modern:
         predecessor = lifecycle.get("predecessorLifecycleRef")
         match = re.fullmatch(
             r"([0-9a-f]{40}):product/program\.json#/increment/"
@@ -2366,12 +2427,43 @@ def _validate_exact_package_evidence_lifecycle(
         except _SNAPSHOT_V1_FAILURES:
             predecessor_lifecycle = None
         predecessor_revision = match.group(1) if match else None
-        expected_predecessor = (
-            {
+        base_predecessor_ref = (
+            "fc9c1a7a64257ddf315f862a091a081c4104d81b:"
+            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+            if is_v5 else
+            "fecbdbc3c557e5145e4f037eb9876a09875f9eba:"
+            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+        )
+        modern_pending = {
+            "schema": lifecycle.get("schema"),
+            "state": "pending",
+            "taskId": "GT-20",
+            "earliestAffectedBoundary": boundary,
+            "subjectBinding": (
+                "containing-git-commit-complete-declared-packages"
+            ),
+            "preservedTaskIds": ["GT-21"],
+            "predecessorLifecycleRef": base_predecessor_ref,
+            "commandContractLocator": lifecycle.get(
+                "commandContractLocator"
+            ),
+            "commandContractSha256": lifecycle.get(
+                "commandContractSha256"
+            ),
+            "evidence": None,
+        }
+        if lifecycle.get("state") == "verified":
+            expected_predecessor = modern_pending
+            expected_predecessor_revision = lifecycle.get("subjectRevision")
+        elif is_v5:
+            expected_predecessor = {
                 "schema": "yiyuan-accord-exact-package-evidence-lifecycle/v4",
                 "state": "pending",
                 "taskId": "GT-20",
-                "earliestAffectedBoundary": boundary,
+                "earliestAffectedBoundary": (
+                    "exact-package-command-contract-host-neighbor-and-brand-"
+                    "surface-closure"
+                ),
                 "subjectBinding": (
                     "containing-git-commit-complete-declared-packages"
                 ),
@@ -2388,8 +2480,11 @@ def _validate_exact_package_evidence_lifecycle(
                 ),
                 "evidence": None,
             }
-            if lifecycle.get("state") == "verified"
-            else {
+            expected_predecessor_revision = (
+                "fc9c1a7a64257ddf315f862a091a081c4104d81b"
+            )
+        else:
+            expected_predecessor = {
                 "schema": "yiyuan-accord-exact-package-evidence-lifecycle/v3",
                 "state": "pending",
                 "taskId": "GT-20",
@@ -2409,12 +2504,9 @@ def _validate_exact_package_evidence_lifecycle(
                 ),
                 "evidence": None,
             }
-        )
-        expected_predecessor_revision = (
-            lifecycle.get("subjectRevision")
-            if lifecycle.get("state") == "verified"
-            else "fecbdbc3c557e5145e4f037eb9876a09875f9eba"
-        )
+            expected_predecessor_revision = (
+                "fecbdbc3c557e5145e4f037eb9876a09875f9eba"
+            )
         try:
             _bounded_git_bytes(
                 root,
@@ -2523,11 +2615,11 @@ def _validate_exact_package_evidence_lifecycle(
         ":", 1,
     )[0] if isinstance(snapshot, dict) else None
     subject_revision = (
-        lifecycle.get("subjectRevision") if is_v4
+        lifecycle.get("subjectRevision") if is_modern
         else subject_revision or predecessor_revision
     )
     verified_reopened = (
-        is_v4 and isinstance(snapshot, dict)
+        is_modern and isinstance(snapshot, dict)
         and snapshot.get("state") == "reopened"
         and program.get("status") == "active"
     )
@@ -2542,7 +2634,7 @@ def _validate_exact_package_evidence_lifecycle(
         or SHA256_RE.fullmatch(evidence.get("sha256") or "") is None
         or REVISION_RE.fullmatch(evidence.get("evaluatedRevision") or "") is None
         or evidence.get("evaluatedRevision") != subject_revision
-        or (is_v4 and evidence.get("locator") != (
+        or (is_modern and evidence.get("locator") != (
             "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json"
         ))
         or not (verified_reopened or verified_closed)
@@ -2562,7 +2654,7 @@ def _validate_exact_package_evidence_lifecycle(
         for item in program.get("hostProjections", []) if isinstance(item, dict)
     }
     record_schema = record.get("schema")
-    if is_v4 and record_schema != (
+    if is_modern and record_schema != (
         "yiyuan-accord-gt20-exact-package-evidence/v3"
     ):
         errors.append("exact package lifecycle record schema is invalid")
@@ -2780,10 +2872,7 @@ def _validate_exact_package_evidence_lifecycle(
                 command.get("terminalExecutableSha256") or ""
             ) is not None
             and (
-                _nonempty_string(command.get("packageManifest"))
-                and SHA256_RE.fullmatch(
-                    command.get("packageManifestSha256") or ""
-                ) is not None
+                _claude_command_distribution_identity(command)
                 if executable == "claude"
                 else command.get("packageManifest") is None
                 and command.get("packageManifestSha256") is None
@@ -2946,7 +3035,7 @@ def _validate_exact_package_evidence_lifecycle(
         and contract_raw == current_contract_raw
         and record.get("commandContractSha256")
             == sha256(contract_raw or b"").hexdigest()
-        and (not is_v4 or (
+        and (not is_modern or (
             record.get("commandContractLocator")
                 == lifecycle.get("commandContractLocator")
             and record.get("commandContractSha256")
@@ -3035,8 +3124,15 @@ def _validate_exact_package_evidence_lifecycle(
                 "powerShellExecutableSha256", "claudePackageManifestSha256",
                 "claudeTerminalExecutableSha256",
             })
-            and all(SHA256_RE.fullmatch(fixture.get(key) or "") is not None
-                    for key in environment if key.endswith("Sha256"))
+            and all(
+                SHA256_RE.fullmatch(fixture.get(key) or "") is not None
+                for key in environment
+                if key.endswith("Sha256")
+                and key != "claudePackageManifestSha256"
+            )
+            and _claude_command_distribution_identity(
+                version_commands.get("claudeCliVersion") or {}
+            )
         ))
         and (record_schema != "yiyuan-accord-gt20-exact-package-evidence/v3"
              or (
@@ -3592,6 +3688,7 @@ def _validate_evidence_item(
 def _validate_acceptance(
     root, acceptance, contract_ids, evidence_classes, golden, errors,
     promotion_lanes=None, revision=None, evaluation_digest=None,
+    independent_review_decision=None,
 ):
     if acceptance.get("schema") != 3:
         errors.append("acceptance.schema must be 3")
@@ -3653,6 +3750,16 @@ def _validate_acceptance(
             if accepted and isinstance(observation.get("evidenceClass"), str):
                 accepted_classes.add(observation["evidenceClass"])
             errors.extend(decision_errors)
+        if (
+            criterion.get("id") == "R4"
+            and assessment == "verified"
+            and not evidence
+            and independent_review_decision != "pass"
+        ):
+            errors.append(
+                f"{label} R4 cannot self-attest independent review completion"
+            )
+            verified = False
         if assessment == "verified" and stored_classes and not evidence:
             errors.append(f"{label} is verified without direct evidence")
         elif assessment == "verified" and accepted_classes != required_class_set:
@@ -3831,6 +3938,39 @@ def _validate_acceptance(
         required_sample_ids,
         post_release_task_ids,
     )
+
+
+def _external_review_decision(root, acceptance, review_bundle, errors):
+    r4 = next((
+        criterion for criterion in acceptance.get("criteria", [])
+        if isinstance(criterion, dict) and criterion.get("id") == "R4"
+    ), None)
+    if (
+        not isinstance(r4, dict)
+        or r4.get("assessment") != "verified"
+        or r4.get("evidence") != []
+        or review_bundle is None
+    ):
+        return None
+    try:
+        revision = _bounded_git_bytes(
+            root, ["rev-parse", "--verify", "HEAD^{commit}"], 64,
+        ).decode("ascii").strip()
+        tree = _bounded_git_bytes(
+            root, ["rev-parse", "--verify", "HEAD^{tree}"], 64,
+        ).decode("ascii").strip()
+        if REVISION_RE.fullmatch(revision) is None or REVISION_RE.fullmatch(tree) is None:
+            raise ValueError("invalid Git object id")
+    except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
+        errors.append("external review bundle: exact HEAD subject is unavailable")
+        return "fail"
+
+    result = evaluate_review_bundle(review_bundle, revision, tree)
+    errors.extend(
+        f"external review bundle: {error}"
+        for error in result["errors"]
+    )
+    return result["decision"]
 
 
 def _validate_golden_tasks(
@@ -4328,7 +4468,7 @@ def host_check(root, adapter_id):
     }
 
 
-def verify_product(root):
+def verify_product(root, review_bundle=None):
     root = Path(root)
     errors = []
     constitution = _read_json(root, AUTHORITY_BOOTSTRAP[0], errors)
@@ -4369,6 +4509,9 @@ def verify_product(root):
     )
     errors.extend(promotion_errors)
     promotion_lanes = FROZEN_GT20_21_REPRESENTATIVE_LANES
+    independent_review_decision = _external_review_decision(
+        root, acceptance, review_bundle, errors,
+    )
     (
         criterion_ids,
         criteria_verified,
@@ -4382,6 +4525,7 @@ def verify_product(root):
         golden_suite,
         errors,
         promotion_lanes,
+        independent_review_decision=independent_review_decision,
     )
     all_ids = kernel_host_lesson_ids | set(criterion_ids)
     _validate_program(

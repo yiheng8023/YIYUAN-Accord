@@ -30,17 +30,23 @@ through each host's native lifecycle. The China-red transparent icon plus
 light/dark theme logos also change the complete declared Codex package, so no
 prior GT-20 package evidence is current. The accountable human has confirmed
 the digest-bound public assets' ownership and public-display permission; that
-confirmation is an external asset fact, not final release authorization. Only
-after one frozen schema-v4 replay, affected-surface reacceptance and four fresh
-independent reviews may one unchanged clean SHA become the replacement
-candidate. Production trust,
+confirmation is an external asset fact, not final release authorization.
+Frozen revision `fc9c1a7a64257ddf315f862a091a081c4104d81b` completed the
+schema-v4 54-command replay, but later red-team inspection invalidated it as
+current evidence: the evaluator inspected unrelated system process command
+lines and failure cleanup did not prove exclusive ownership of its task root
+and evidence target. The schema-v5 correction removes global process
+inspection, cleans only exclusively created resources and accepts both the
+bound npm-shim and official native Claude executable layouts. One new frozen
+replay, affected-surface reacceptance and four fresh independent reviews remain
+before one unchanged clean SHA may become the replacement candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
 The implementation does not admit an Accord-managed Runtime, durable state
 layer or durable evolution. Selecting the short-lived Hook does not prove
 production trust or broad live-host behavior.
-Earlier v3.1 package checkpoints remain bounded historical evidence. The next
-GT-20 subject must be frozen in its own containing commit before replay; public
+Earlier v3.1 package checkpoints remain bounded historical evidence. The raw
+fc9c1a7 replay is exact invalidated counterevidence, not current GT-20. Public
 v3.0.1 remains the recommended release reference, and preview.2 remains an
 unreleased historical checkpoint.
 
@@ -141,18 +147,19 @@ semantic authority, release or production evidence. Measured: 2026-09-01.
 
 ### Panorama and bottleneck order
 
-The reopened correction tree has 107 tracked files against the structured
-111-file ceiling. Eight
+The reopened correction tree has 112 tracked files against the structured
+115-file ceiling. Nine
 Python files contain the product and tests. The three largest maintained code
 surfaces are the product-control test module, `control.py` and `evidence.py`;
 together they dominate code review, coupling and regression cost. The current
-evaluator-correction tree has 727271 Python-and-product-test bytes against the
-recalibrated structured 780000-byte ceiling, leaving 52729 bytes or 6.76
+evaluator-correction tree has 750243 Python-and-product-test bytes against the
+recalibrated structured 800000-byte ceiling, leaving 49757 bytes or 6.22
 percent. The increase from the prior 750000-byte ceiling pays only for the
 ordered command contract, evidence sanitization, process ownership before
 resume, one hard end-to-end deadline, bounded output draining, real neighboring
 plugin preservation, Claude manifest-to-terminal identity, strict cache
-allowlists, the observed host cleanup boundary and changed brand surface; it is
+allowlists, the observed host cleanup boundary, changed brand surface and the
+external exact-tree review gate; it is
 not general growth allowance. These measurements
 become history after any change; `product/program.json` and the canonical
 verifier remain the numerical authority.
@@ -215,10 +222,13 @@ The ordered bottlenecks are:
   cost and the 240-minute hosted job ceiling. A breach opens profiling and
   subtraction review before another timeout increase.
 - Keep Windows Python 3.10/3.14, macOS Python 3.10/3.14 and Linux Python
-  3.10-3.14. A historical exact-package lifecycle was verified on Windows with
-  Codex CLI 0.151.0, Claude Code 2.1.252 and Node 24.19.0; it does not bind the
-  changed schema-v4 package. Current package compatibility, Desktop/ChatGPT,
-  unmanaged-host and cross-OS lifecycle behavior remain pending or unknown.
+  3.10-3.14. Historical exact-package lifecycle evidence remains bound to its
+  former package. The changed package and schema-v5 evaluator remain pending a
+  frozen disposable Windows replay with exact Codex CLI, Claude Code and Node
+  identities. The raw fc9c1a7 environment used Codex CLI 0.152.0, Claude Code
+  2.1.252 and Node 24.19.0 but is invalidated as current evidence.
+  Desktop/ChatGPT, unmanaged-host and cross-OS lifecycle behavior remain
+  pending or unknown.
 - Local WSL2 Ubuntu 26.04 on Linux 6.18 with Python 3.14.4 is an available
   cross-kernel verification environment; task-scoped native Linux Node 24.19.0
   can keep it independent of the Windows Node path. No WSL result becomes
@@ -226,6 +236,22 @@ The ordered bottlenecks are:
   admitted evidence owner; native Ubuntu hosted legs remain required.
 - A prose projection that repeats a mutable value must be checked against its
   structured owner or clearly label the value as historical.
+- The default client profile has kept Accord enabled continuously since the
+  public v3.0.1 release. Later default-profile Agent judgments and host
+  observations are therefore Accord-enabled, extension-composed dogfood, not
+  official-clean or no-Accord baselines. This does not retroactively infer
+  causality or invalidate Git bytes and deterministic tests. Clean comparison
+  and release-review lanes require an exact isolated host root, absent Accord
+  exposure and a fresh zero-history context.
+- The pure closure core currently collects routes without an explicit input
+  cap and its Pareto comparison is quadratic in route count. Read-only
+  measurements at 50, 100, 200, 400 and 800 routes were approximately 0.005,
+  0.016, 0.055, 0.201 and 0.794 seconds on the maintainer host. The installed
+  Hook does not call that core, so this is not an exposed v3.1 runtime blocker.
+  Before any host adapter feeds untrusted or unbounded collections into the
+  core, bind task-specific input and latency budgets, fail over-budget input
+  closed and replay GT-21; do not silently convert this planning measurement
+  into a production guarantee.
 
 ### Feedback, regression and ordered work
 
@@ -254,7 +280,12 @@ Ordered post-release work is:
    bytes, latency, diagnostics and failure closure before and after.
 5. Open a privacy-bounded real-use feedback route and publish a compatibility
    table containing only independently observed cells.
-6. Reassess the eight responsibility allocations on host change; retire Accord
+6. Prototype one deep `ExactTagLifecycle` module behind a single transition
+   interface with separate Codex and Claude host adapters, exact source/staged/
+   live byte binding, crash recovery and sanitized receipts. It must first prove
+   value and failure closure with local immutable tags; it is not part of v3.1,
+   and public GitHub tag behavior remains a later independent gate.
+7. Reassess the eight responsibility allocations on host change; retire Accord
    machinery only after a lower-burden same-duty successor closes consequence,
    rollback, cleanup and recheck.
 
@@ -975,7 +1006,7 @@ install cannot expose overwrite, stale-restore, ownership or host-cache errors.
 The `85a917a` source-bound whole-system reacceptance preserves these finite
 claims as history without promoting them to the changed package, production,
 cross-host, updated-client entry or release evidence. The current route is one
-frozen schema-v4 GT-20 replay, affected-surface reacceptance and four fresh
+frozen schema-v5 GT-20 replay, affected-surface reacceptance and four fresh
 independent reviews before any replacement candidate or exact-local gate.
 
 After the authorized tag and Release exist, one evaluator isolated from
@@ -1048,9 +1079,11 @@ interaction. The resulting ledger is input to independent review; it cannot
 declare itself independent or turn a checklist into product value.
 
 That sequence was complete for candidate `9050114`, but four fresh reviews
-reopened the GT-20 evaluator boundary. A replacement candidate does not exist
-until one frozen schema-v4 complete-package replay, affected interactions and
-four fresh independent reviews close; exact-local,
+reopened the GT-20 evaluator boundary. Exact `fc9c1a7` completed a raw replay,
+then later evaluator privacy and ownership findings invalidated it as current
+GT-20 evidence. A replacement candidate does not exist until one frozen
+schema-v5 replay, affected-surface reacceptance and four fresh independent
+reviews close; exact-local,
 hosted, named-human, tag, publication and public-verification gates remain
 distinct.
 

@@ -1,9 +1,11 @@
 from contextlib import contextmanager
-import hashlib, json, re, shutil, subprocess, tempfile, unittest
+import copy, hashlib, inspect, json, os, re, shutil, subprocess, tempfile, unittest
 from pathlib import Path
 from unittest.mock import patch
 from yiyuan_accord.closure import reconcile_closure
+import yiyuan_accord.control as product_control
 from yiyuan_accord.control import (
+    _claude_command_distribution_identity,
     _validate_evidence_item, _validate_four_surface_mapping,
     _validate_closeout_snapshot, _snapshot_lineage_contract_errors,
     _snapshot_documents, _snapshot_revision_contract_errors,
@@ -549,6 +551,59 @@ def _lacks(errors, *fragments):
 def _errors(root):
     return verify_product(root)['errors']
 
+def _external_review_bundle(revision='1' * 40, tree='2' * 40):
+    subject = {'revision': revision, 'tree': tree}
+    return {
+        'schema': 'yiyuan-accord-external-review-bundle/v1',
+        'subject': dict(subject),
+        'reviews': [
+            {
+                'axis': axis,
+                'reviewerId': f'external-reviewer-{index}',
+                'context': {
+                    'isolation': 'context-isolated',
+                    'history': 'zero-inherited-history',
+                    'environment': 'isolated-no-accord',
+                    'accordExposure': 'absent',
+                },
+                'subject': dict(subject),
+                'reviewedAt': f'2026-09-01T0{index}:00:00Z',
+                'findings': [],
+                'disposition': 'pass',
+                'decision': 'pass',
+            }
+            for index, axis in enumerate(
+                ('product', 'specification', 'implementation', 'standards'), 1
+            )
+        ],
+        'decision': 'pass',
+    }
+
+def _external_r4_static_errors(review_decision=None):
+    constitution = _read(ROOT, C)
+    acceptance = _read(ROOT, A)
+    golden = _read(ROOT, G)
+    for criterion in acceptance['criteria']:
+        if criterion['id'] == 'R4':
+            criterion['assessment'] = 'verified'
+            criterion['evidence'] = []
+    errors = []
+    contract_ids = product_control._validate_constitution(constitution, errors)
+    arguments = (
+        ROOT,
+        acceptance,
+        set(contract_ids['kernel'] + contract_ids['host'] + contract_ids['lessons']),
+        set(constitution['evidenceBoundary']['classes']),
+        golden,
+        errors,
+        FROZEN_GT20_21_REPRESENTATIVE_LANES,
+    )
+    product_control._validate_acceptance(
+        *arguments,
+        independent_review_decision=review_decision,
+    )
+    return errors
+
 class ProductControlTests(unittest.TestCase):
 
     def assert_has(self, errors, *fragments):
@@ -606,7 +661,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'completed-refreshed-independent-review-accepted-candidate-selected',
+            'reopened-gt20-schema-v5-replay-pending-reacceptance-blocked-independent-review-pending',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -1369,18 +1424,18 @@ class ProductControlTests(unittest.TestCase):
         program = _read(ROOT, P)
         for stages in (program['increment']['fourSurfaceMapping']['process']['orderedSteps'],
                        program['increment']['workItems'][0]['closeoutSequence']):
-            self.ae([step['state'] for step in stages[-2:]],
-                             ['completed', 'completed'])
+            self.ae([step['state'] for step in stages[-3:]],
+                             ['active', 'pending', 'pending'])
         active = '\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
             'README.md', 'README.zh-CN.md', P, 'product/reshaping-guidance.json',
             'docs/architecture.md', 'docs/operations/CONTINUATION.md',
             'docs/releases/v3.1.0.md'))
         self.an(re.search(
             r'\b(?:gpt|gemini)-\d|claude-(?:\d|opus|sonnet|haiku)|deepseek-[vr]\d|'
-            r'run gt-20 next|whole-system reacceptance (?:is active|remains pending|'
-            r'is now the earliest open boundary)|(keep the selected current component set) '
+            r'run gt-20 next|(keep the selected current component set) '
             r'and \1',
             active, re.IGNORECASE))
+        self.ai('affected-surface reacceptance', active)
 
     def test_reference_core_is_policy_driven_and_fail_closed(self):
         minimal, native = 'minimal-composition', 'native-no-add'
@@ -2321,8 +2376,22 @@ class ProductControlTests(unittest.TestCase):
         with _indexed() as root:
             program = _read(root, P)
             lifecycle = program['increment']['exactPackageEvidenceLifecycle']
+            self.ae(
+                lifecycle['schema'],
+                'yiyuan-accord-exact-package-evidence-lifecycle/v5',
+            )
             self.ae(lifecycle['state'], 'pending')
             self.an(lifecycle['evidence'])
+            self.ae(
+                lifecycle['earliestAffectedBoundary'],
+                'exact-package-evaluator-privacy-ownership-and-native-host-'
+                'adaptation-closure',
+            )
+            self.ae(
+                lifecycle['predecessorLifecycleRef'],
+                'fc9c1a7a64257ddf315f862a091a081c4104d81b:'
+                'product/program.json#/increment/exactPackageEvidenceLifecycle',
+            )
 
             def validate(value):
                 changed = _clone(program)
@@ -2356,6 +2425,106 @@ class ProductControlTests(unittest.TestCase):
                 changed = _clone(lifecycle)
                 mutate(changed)
                 self.at(validate(changed))
+
+    def test_gt20_runner_cleanup_is_bounded_to_owned_paths(self):
+        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
+            encoding='utf-8'
+        )
+        self.ani('Get-CimInstance -ClassName Win32_Process', runner)
+        self.ani('$_.CommandLine', runner)
+        self.ai('$taskOwned = $false', runner)
+        self.ai('$taskOwned = $true', runner)
+        self.ai('if ($taskOwned)', runner)
+        self.ani('Remove-Item -LiteralPath $evidencePath -Force', runner)
+        self.ai('[System.IO.FileMode]::CreateNew', runner)
+        self.ai('$pendingEvidenceOwned = $true', runner)
+        self.ai(
+            '[System.IO.File]::Move($pendingEvidencePath, $evidencePath, $false)',
+            runner,
+        )
+        self.ai('Remove-Item -LiteralPath $pendingEvidencePath -Force', runner)
+        self.at(
+            runner.index('$script:TaskEnvironmentReadyForEvidence = $false')
+            < runner.index("Add-CommandRecord 'candidateCommitCheck'")
+            < runner.index("Add-CommandRecord 'priorReleaseRevision'")
+            < runner.index('$script:TaskEnvironmentReadyForEvidence = $true')
+        )
+
+    def test_gt20_claude_identity_accepts_npm_and_native_layouts(self):
+        npm = {
+            'resolvedCommand': 'C:/npm/claude.cmd',
+            'resolvedCommandSha256': '1' * 64,
+            'terminalExecutable': 'C:/npm/node_modules/claude/cli.js',
+            'terminalExecutableSha256': '2' * 64,
+            'packageManifest': 'C:/npm/node_modules/claude/package.json',
+            'packageManifestSha256': '3' * 64,
+        }
+        self.at(_claude_command_distribution_identity(npm))
+
+        native = {
+            'resolvedCommand': 'C:/Users/example/.local/bin/claude.exe',
+            'resolvedCommandSha256': '4' * 64,
+            'terminalExecutable': 'C:/Users/example/.local/bin/claude.exe',
+            'terminalExecutableSha256': '4' * 64,
+            'packageManifest': None,
+            'packageManifestSha256': None,
+        }
+        self.at(_claude_command_distribution_identity(native))
+        changed = dict(native, terminalExecutable='C:/tools/not-claude.exe')
+        self.ae(_claude_command_distribution_identity(changed), False)
+        changed = dict(native, terminalExecutableSha256='5' * 64)
+        self.ae(_claude_command_distribution_identity(changed), False)
+
+    @unittest.skipUnless(os.name == 'nt', 'GT-20 runner is Windows-only')
+    def test_gt20_runner_preserves_unowned_collision_markers(self):
+        powershell = shutil.which('pwsh')
+        self.ann(powershell, 'GT-20 runner requires PowerShell 7')
+        runner = ROOT / 'scripts/run-gt20-exact-package.ps1'
+        with tempfile.TemporaryDirectory(prefix='accord-gt20-ownership-') as base:
+            temporary = Path(base)
+            task = temporary / 'yiyuan-accord-gt20-formal-owned-collision'
+            evidence = temporary / (
+                'yiyuan-accord-gt20-formal-evidence-owned-collision.json'
+            )
+
+            task.mkdir()
+            task_marker = task / 'external-marker.txt'
+            task_marker.write_text('preserve task marker', encoding='utf-8')
+            result = subprocess.run(
+                [
+                    powershell, '-NoProfile', '-File', str(runner),
+                    '-RepositoryRoot', str(ROOT),
+                    '-CandidateRevision', '0' * 40,
+                    '-TaskRoot', str(task),
+                    '-EvidenceOutput', str(evidence),
+                ],
+                text=True, encoding='utf-8', errors='replace',
+                capture_output=True, timeout=30,
+            )
+            self.ane(result.returncode, 0)
+            self.ae(
+                task_marker.read_text(encoding='utf-8'),
+                'preserve task marker',
+            )
+
+            shutil.rmtree(task)
+            evidence.write_text('preserve evidence marker', encoding='utf-8')
+            result = subprocess.run(
+                [
+                    powershell, '-NoProfile', '-File', str(runner),
+                    '-RepositoryRoot', str(ROOT),
+                    '-CandidateRevision', '0' * 40,
+                    '-TaskRoot', str(task),
+                    '-EvidenceOutput', str(evidence),
+                ],
+                text=True, encoding='utf-8', errors='replace',
+                capture_output=True, timeout=30,
+            )
+            self.ane(result.returncode, 0)
+            self.ae(
+                evidence.read_text(encoding='utf-8'),
+                'preserve evidence marker',
+            )
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         current = host_check(ROOT, 'codex')['details']
@@ -2914,19 +3083,22 @@ class ProductControlTests(unittest.TestCase):
         stage_contract = policy['evaluationContractHistory'][4]['sha256']
         successor_contract = policy['evaluationContractHistory'][5]['sha256']
         rebaseline_contract = policy['evaluationContractHistory'][6]['sha256']
+        verified_contract = policy['evaluationContractHistory'][7]['sha256']
         self.ai(old, _evaluation_contracts(policy, 'GT-14', current))
         for task_id, expected in (
             ('GT-17', {current, sequence_contract, qualification_contract,
                        stage_contract, successor_contract,
-                       rebaseline_contract}),
+                       rebaseline_contract, verified_contract}),
             ('GT-18', {current, sequence_contract, stage_contract,
-                       successor_contract, rebaseline_contract}),
+                       successor_contract, rebaseline_contract,
+                       verified_contract}),
             ('GT-20', {current, dynamic_contract, stage_contract,
-                       successor_contract}),
+                       successor_contract, verified_contract}),
             ('GT-19', {current, stage_contract, successor_contract,
-                       rebaseline_contract}),
+                       rebaseline_contract, verified_contract}),
             ('GT-21', {current, dynamic_contract, stage_contract,
-                       successor_contract, rebaseline_contract}),
+                       successor_contract, rebaseline_contract,
+                       verified_contract}),
         ):
             self.ae(_evaluation_contracts(policy, task_id, current),
                              expected)
@@ -3334,7 +3506,11 @@ class ProductControlTests(unittest.TestCase):
         e=representative_sample_errors(
             ROOT,a,required,
             g,lambda r,p,_:_read(r,p),True)
-        self.ae(e, [])
+        self.has(
+            e,
+            "must-pass tasks failed: ['GT-20']",
+            'behavior subject differs from evaluatedRevision',
+        )
 
         missing_task = required[-1]
         r3['evidence'] = [
@@ -4786,3 +4962,67 @@ class ProductControlTests(unittest.TestCase):
                 hook = _read(ROOT, f'{root}/hooks/hooks.json')
                 handler = hook['hooks']['SessionStart'][0]['hooks'][0]
                 self.ae(handler, expected_handler)
+
+    def test_external_review_bundle_is_exact_isolated_and_fail_closed(self):
+        from yiyuan_accord.reviews import evaluate_review_bundle
+
+        revision, tree = '1' * 40, '2' * 40
+        bundle = _external_review_bundle(revision, tree)
+        self.ae(
+            evaluate_review_bundle(bundle, revision, tree),
+            {'errors': [], 'decision': 'pass'},
+        )
+        mutations = (
+            ('bundle fields must be exactly',
+             lambda value: value.update(extra='not-admitted')),
+            ('review axes must be exactly',
+             lambda value: value['reviews'][1].update(axis='product')),
+            ('reviewerId values must be four unique identifiers',
+             lambda value: value['reviews'][1].update(
+                 reviewerId=value['reviews'][0]['reviewerId'])),
+            ('context must declare',
+             lambda value: value['reviews'][0]['context'].update(
+                 accordExposure='enabled')),
+            ('contains blocking P1 finding',
+             lambda value: value['reviews'][0].update(
+                 findings=[{'severity': 'P1', 'disposition': 'pass'}])),
+            ('subject does not match exact subject',
+             lambda value: value['reviews'][0]['subject'].update(tree='f' * 40)),
+        )
+        for fragment, mutate in mutations:
+            with self.subTest(fragment=fragment):
+                changed = copy.deepcopy(bundle)
+                mutate(changed)
+                first = evaluate_review_bundle(changed, revision, tree)
+                second = evaluate_review_bundle(
+                    copy.deepcopy(changed), revision, tree)
+                self.ae(first, second)
+                self.ae(first['decision'], 'fail')
+                self.has(first['errors'], fragment)
+
+    def test_external_review_runtime_binds_r4_to_exact_current_head(self):
+        revision = subprocess.run(
+            ['git', 'rev-parse', '--verify', 'HEAD^{commit}'], cwd=ROOT,
+            check=True, text=True, encoding='ascii', capture_output=True,
+        ).stdout.strip()
+        tree = subprocess.run(
+            ['git', 'rev-parse', '--verify', 'HEAD^{tree}'], cwd=ROOT,
+            check=True, text=True, encoding='ascii', capture_output=True,
+        ).stdout.strip()
+        acceptance = {'criteria': [{
+            'id': 'R4', 'assessment': 'verified', 'evidence': [],
+        }]}
+        errors = []
+        decision = product_control._external_review_decision(
+            ROOT, acceptance, _external_review_bundle(revision, tree), errors)
+        self.ae(decision, 'pass')
+        self.ae(errors, [])
+        self.af(any(
+            'R4 cannot self-attest independent review completion' in error
+            for error in _external_r4_static_errors(decision)
+        ))
+        self.ai('review_bundle', inspect.signature(verify_product).parameters)
+        self.has(
+            _external_r4_static_errors(),
+            'R4 cannot self-attest independent review completion',
+        )

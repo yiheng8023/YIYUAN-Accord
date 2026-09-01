@@ -44,16 +44,22 @@ Then read, in order:
   record failed four fresh reviews and must not be pushed: public evidence
   retained user-local paths, process ownership and output draining were not
   bounded by one hard end-to-end deadline, Claude identity stopped at its shim,
-  and arbitrary orphan-cache files could satisfy cleanup. The current schema-v4
+  and arbitrary orphan-cache files could satisfy cleanup. The historical schema-v4
   correction preserves GT-21, owns every command tree before resume, sanitizes
   private roots, binds Claude's package manifest and actual terminal executable,
   enforces one complete ordered command contract, preserves real evaluator-owned
   neighboring plugins through Accord removal and probes exact younger/older-
   than-14-day host cache behavior. Transparent China-red and light/dark theme
   logos change the declared Codex package, so prior package evidence is not
-   inherited. Its frozen replay,
-   affected-surface reacceptance and replacement exact-tree reviews are pending;
-   no repository candidate, hosted status, authorization or publication exists.
+  inherited. Frozen revision `fc9c1a7a64257ddf315f862a091a081c4104d81b`
+  completed the schema-v4 replay, but later red-team inspection invalidated it
+  as current evidence because the evaluator inspected unrelated system process
+  command lines and did not prove exclusive task-root and evidence-output
+  ownership. The schema-v5 correction removes global process inspection,
+  cleans only exclusively created resources and accepts the official native
+  Claude executable layout. One frozen replay, affected-surface reacceptance
+  and replacement exact-tree reviews remain pending; no repository candidate,
+  hosted status, authorization or publication exists.
 - Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
   frozen replay attempt. It failed before evidence publication because two
   inventory helpers used `return if`, which PowerShell treated as an external
@@ -86,6 +92,25 @@ Then read, in order:
   invalid record grants no GT-20 or candidate claim. The corrected runner
   computes public byte counts after sanitization and repeats the same check in
   its own command-contract reconciliation.
+- Exact `fc9c1a7a64257ddf315f862a091a081c4104d81b` completed the schema-v4
+  replay and published the 54-command public record with SHA-256
+  `f9170d433cde999c4aaeb4e013eb79663cbe6cb97935f9cc94ac41e382e32dce`;
+  the tracked LF-normalized repository carriage has SHA-256
+  `88c275c7c4e9b14a624f9575b3dc3a4b295e89a059b6d969d44d2c0d606fb647`.
+  Their parsed JSON is identical, but their byte identities are not interchangeable.
+  The then-current node, lifecycle and transition validators returned no
+  errors. Later review found two evaluator defects outside those predicates:
+  global system-process command-line enumeration breached the intended privacy
+  boundary, and failure cleanup could target a path not exclusively created by
+  this run. The original record and normalized carriage remain counterevidence
+  but grant no current GT-20 or candidate claim.
+- A 2026-09-01 current-host check found three distinct states: the Codex CLI
+  self-reported an enabled marketplace package at 3.1.0, the desktop plugin
+  detail directly showed enabled 3.0.1 with the former blue-on-white icon, and
+  the already-open task exposed the 3.0.1 Accord Skill. Claude Code also retained
+  enabled 3.0.1 at immutable ref v3.0.1. This is an Accord-enabled composed
+  development lane, not a clean baseline, and directly disproves treating file
+  refresh or list output as hot replacement of already-loaded behavior.
 - Dynamic applicability uses a small invariant floor plus current context.
   Methods, rules, standards, adapters and mechanisms activate only for a named
   condition and retain evidence, cost, fallback, verification and retirement
@@ -132,7 +157,7 @@ Then read, in order:
   body, rebinds its acceptance and guidance digests and cites `39926711` as the
   prior snapshot origin. Later Commit A froze former package/legal bytes, and
   candidate `9050114` then failed privacy, process-ownership, Claude identity and
-  cache-cleanup review. The current schema-v4 complete-package replay is earlier than any
+  cache-cleanup review. The current schema-v5 complete-package replay is earlier than any
   clean exact-local, hosted, named-human, tag or public Release gate. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
@@ -1067,14 +1092,18 @@ Historical superseded review disposition —
     Release-body and guidance digests; and cites `39926711` as its prior snapshot
     origin. It changes no runtime behavior, manifest, finite claim or gate. The
     107 tracked files contain 727271 Python/test bytes with 52729 bytes, or
-    6.76 percent, of headroom. The next boundary is one frozen schema-v4 GT-20
-    complete-package replay, affected-surface reacceptance and four fresh
-    independent reviews. Exact-local and the fresh full nine-leg hosted matrix
+    6.76 percent, of headroom. Exact `fc9c1a7` then completed the frozen schema-v4
+    GT-20 raw replay, but later evaluator privacy and exclusive-ownership
+    findings invalidated it as current evidence. The next boundary is one
+    frozen schema-v5 replay, affected-surface reacceptance and four fresh
+    independent reviews. Exact-local and the fresh
+    full nine-leg hosted matrix
     remain later; candidate selection alone cannot authorize publication.
 
 The release procedure currently has no selected v3.1.0 repository candidate.
-One frozen schema-v4 GT-20 replay, affected-surface reacceptance and four fresh
-independent reviews must close first. Only then may clean exact-local and host
+Exact `fc9c1a7` remains invalidated raw replay counterevidence. One frozen
+schema-v5 GT-20 replay, affected-surface reacceptance and four fresh independent
+reviews must close. Only then may clean exact-local and host
 checks, hosted checks, a named-human decision, tag, Release, public verification
 and post-release cleanup run in their declared order on one unchanged exact
 revision. After the client update, all Codex, Claude and ChatGPT GUI entry

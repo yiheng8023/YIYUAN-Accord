@@ -93,7 +93,9 @@ After later client updates, Codex, Claude, and ChatGPT GUI entry points are unkn
 
 Before a GUI installation or lifecycle action, record the client, version, visible route, and observed result. No separate ChatGPT GUI installation route was verified for v3.0.1.
 
-The recorded Codex and Claude routes require plugin support, access to the public repository, permission to change user-level plugin state, and a fresh task or session.
+The recorded Codex and Claude routes require plugin support, access to the public repository, permission to change user-level plugin state, `node --version` to succeed on `PATH`, and a fresh task or session.
+
+Review and trust the non-managed Accord Hook through the host's supported trust flow before expecting Hook activation. Do not use `bypass_hook_trust`, `bypassPermissions`, or direct settings edits as a production shortcut. If the current host exposes no supported trust route, the Skill may still be visible, but Hook-assisted continuity remains unavailable and unverified.
 
 Accord does not bind operation to a fixed model name, model version, or provider route. Model identity and version are run-time provenance, not product identity or route authority.
 
@@ -155,16 +157,17 @@ The direct App Server client remains an evaluator route, not an additional insta
 
 ## Confirm it works
 
-Treat confirmation as four separate questions:
+Treat confirmation as five separate questions:
 
-1. **Installed** — Does the host report the expected package and exact source?
-2. **Visible** — Does the expected Skill or plugin appear in the current host?
-3. **Activated** — Did the relevant host event or task actually invoke it?
-4. **Effective** — Did it contribute to the requested result without unacceptable interference or residue?
+1. **Installed** — Does the host report the expected package and enabled state?
+2. **Source-bound** — Was an immutable ref registered, and do the installed package bytes match that exact release?
+3. **Visible** — Does the expected Skill or plugin appear in the current host?
+4. **Activated** — Did the relevant host event or task actually invoke it?
+5. **Effective** — Did it contribute to the requested result without unacceptable interference or residue?
 
-For Codex, inspect `codex plugin list --json`, then confirm the current plugin and Skill list in a fresh task.
+For Codex, inspect `codex plugin list --json`, then confirm the current plugin and Skill list in a fresh task. The list confirms installed/enabled state and reported version and repository, but does not expose the immutable marketplace ref or Git SHA; it cannot prove exact source by itself.
 
-For Claude Code, inspect `claude plugin list --json`, then confirm the current command list through `/help` in a fresh session.
+For Claude Code, inspect both `claude plugin marketplace list --json` and `claude plugin list --json`, then confirm the current command list through `/help` in a fresh session. A reported ref still does not replace installed-byte verification.
 
 For GUI clients, inspect the current interface instead of relying on screenshots or labels from another version.
 
@@ -335,6 +338,8 @@ codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref VERSION_TAG
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
+To remove only the Codex projection installed by this route, stop after the first two commands and verify that the plugin and marketplace registrations are absent.
+
 Before changing Claude Code, confirm through the list commands that this user-scope registration belongs to the route above. If same-named state across scopes cannot be distinguished safely, stop and report that adapter gap.
 
 To update or roll back Claude Code, remove its current user-scope package and marketplace, then register and install the intended exact tag:
@@ -353,6 +358,8 @@ Use the corresponding current **Customize > Plugins** operation only after confi
 Prefer supported native reload and lifecycle operations.
 
 These exact-ref commands perform an explicit replacement, not an atomic in-place update. Record the previous exact tag first; if target installation fails, reinstall that tag, verify health, and report the inactive interval.
+
+A lifecycle command can refresh installed files without replacing capability already loaded into the current task or session. Open a fresh task or session before judging the new version; a reported version, `/reload-plugins`, or changed cache alone is not hot-update evidence for already loaded behavior.
 
 Never move an existing tag. Do not edit global host configuration as a substitute for supported lifecycle commands.
 
