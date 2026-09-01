@@ -509,8 +509,10 @@ function Invoke-Captured {
     }
     $stdoutValue = $stdoutTask.Result
     $stderrValue = $stderrTask.Result
-    $stdoutBytes = [System.Text.Encoding]::UTF8.GetByteCount($stdoutValue)
-    $stderrBytes = [System.Text.Encoding]::UTF8.GetByteCount($stderrValue)
+    $publicStdout = ConvertTo-PublicEvidenceText $stdoutValue
+    $publicStderr = ConvertTo-PublicEvidenceText $stderrValue
+    $stdoutBytes = [System.Text.Encoding]::UTF8.GetByteCount($publicStdout)
+    $stderrBytes = [System.Text.Encoding]::UTF8.GetByteCount($publicStderr)
     $exitCode = if ($timedOut) { 124 } else { $owned.Process.ExitCode }
     $environmentProfile = if ($Environment.ContainsKey('CODEX_HOME')) {
       'isolated-codex'
@@ -561,8 +563,8 @@ function Invoke-Captured {
       streamsDrained = $streamsDrained
       jobActiveProcesses = [int]$job.ActiveProcessCount
       exitCode = $exitCode
-      stdout = ConvertTo-PublicEvidenceText $stdoutValue
-      stderr = ConvertTo-PublicEvidenceText $stderrValue
+      stdout = $publicStdout
+      stderr = $publicStderr
     }
   } finally {
     if ($null -ne $owned) { $owned.Dispose() }
@@ -794,6 +796,12 @@ function Assert-CommandContract {
     if ($command.executionTimeoutSeconds -ne $expectedBudgets.executionTimeoutSeconds) { $mismatches.Add('executionTimeoutSeconds') }
     if ($command.endToEndTimeoutSeconds -ne $expectedBudgets.endToEndTimeoutSeconds) { $mismatches.Add('endToEndTimeoutSeconds') }
     if ($command.outputLimitBytes -ne $expectedBudgets.outputLimitBytes) { $mismatches.Add('outputLimitBytes') }
+    if ($command.stdoutBytes -ne [System.Text.Encoding]::UTF8.GetByteCount($command.stdout)) {
+      $mismatches.Add('stdoutBytes')
+    }
+    if ($command.stderrBytes -ne [System.Text.Encoding]::UTF8.GetByteCount($command.stderr)) {
+      $mismatches.Add('stderrBytes')
+    }
     if ($command.timedOut -ne $expectedTimedOut) { $mismatches.Add('timedOut') }
     if ($command.terminationRequested -ne $expectedTimedOut) { $mismatches.Add('terminationRequested') }
     if ($command.terminationConfirmed -ne $true) { $mismatches.Add('terminationConfirmed') }

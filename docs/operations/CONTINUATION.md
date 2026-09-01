@@ -77,6 +77,15 @@ Then read, in order:
   no task root. The record entry now normalizes an empty omitted category to
   null, preserves the two named failure categories, and reports exact mismatched
   field names for any later command-contract failure.
+- Exact `b26fc483e280bf5af9f4ef2cf9d2f5a211bff6b9` was the fourth frozen
+  replay attempt. The PowerShell runner completed and published a sanitized
+  54-command record with SHA-256 `85c1f8aa26b2f22e626d9b7605d81a775b229d04ce9c5873b52091823cfdc23c`,
+  but the independent Python verifier rejected it: 17 host commands measured
+  stdout or stderr before private paths were replaced, so the recorded byte
+  counts did not equal the final public strings. No task root remained, and the
+  invalid record grants no GT-20 or candidate claim. The corrected runner
+  computes public byte counts after sanitization and repeats the same check in
+  its own command-contract reconciliation.
 - Dynamic applicability uses a small invariant floor plus current context.
   Methods, rules, standards, adapters and mechanisms activate only for a named
   condition and retain evidence, cost, fallback, verification and retirement
