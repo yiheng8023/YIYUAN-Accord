@@ -410,8 +410,7 @@ function ConvertTo-PortablePath {
     if ($item[0] -and $value.StartsWith(
         [System.IO.Path]::GetFullPath($item[0]),
         [System.StringComparison]::OrdinalIgnoreCase)) {
-      $leaf = [System.IO.Path]::GetFileName($value)
-      return if ($leaf) { $item[1] + '/' + $leaf } else { $item[1] }
+      return $item[1] + $value.Substring([System.IO.Path]::GetFullPath($item[0]).Length)
     }
   }
   if ([System.IO.Path]::IsPathFullyQualified($value)) {
@@ -465,7 +464,11 @@ function Get-FileMapIdentityDigest {
 
 function ConvertTo-PublicEvidenceText {
   param([AllowEmptyString()][string]$Value)
-  $result = $Value
+  $result = [System.Text.RegularExpressions.Regex]::Replace(
+    $Value,
+    '(?:\\{4}\?\\{2}|\\{2}\?\\|//\?/)(?=[A-Za-z]:[\\/])',
+    '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+  )
   foreach ($item in $script:PrivateRootsForEvidence) {
     if ($item.path) {
       $result = [System.Text.RegularExpressions.Regex]::Replace(
