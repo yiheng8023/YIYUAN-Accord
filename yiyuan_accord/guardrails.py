@@ -69,7 +69,7 @@ def canonical_goal_objective(program, authority, work_stages, release_gates):
             for field in ("id", "state", "dependsOn", "acceptanceIds")
         }
         for item in ordered
-        if isinstance(item, dict) and item.get("state") in {"active", "blocked"}
+        if isinstance(item, dict) and item.get("state") in ("active", "blocked")
     ] if isinstance(ordered, list) else ordered
     work_items = increment.get("workItems") if isinstance(increment, dict) else None
     closeout = (
@@ -829,7 +829,7 @@ def projection_evidence_binding_errors(
         (f"criteria[{index}].evidence", criterion["evidence"])
         for index, criterion in enumerate(criteria)
         if isinstance(criterion, dict)
-        and criterion.get("assessment") in {"continuing", "verified"}
+        and criterion.get("assessment") in ("continuing", "verified")
         and isinstance(criterion.get("evidence"), list)
     ]
     # Historical evidence retains its captured projection identity.
@@ -951,7 +951,7 @@ def closeout_sequence_errors(
     for index, stage in enumerate(sequence):
         stage_id = stage.get("id")
         state = stage.get("state")
-        if state not in {"completed", "active", "pending", "blocked"}:
+        if state not in ("completed", "active", "pending", "blocked"):
             errors.append(f"closeoutSequence[{index}].state is invalid")
         else:
             states.append(state)
@@ -962,7 +962,7 @@ def closeout_sequence_errors(
     positions = [index for index, state in enumerate(states) if state == current]
     if current == "completed":
         expected = ["completed"] * len(states)
-    elif current in {"active", "blocked"} and len(positions) == 1:
+    elif current in ("active", "blocked") and len(positions) == 1:
         index = positions[0]
         expected = ["completed"] * index + [current] + ["pending"] * (
             len(states) - index - 1
@@ -1078,11 +1078,11 @@ def repository_release_authorization_errors(authorization):
         return ["acceptance.releaseAuthorization must be an object"]
     if authorization.get("state") == "authorized":
         return ["repository releaseAuthorization cannot grant human authority"]
-    if authorization.get("state") not in {
+    if authorization.get("state") not in (
         "unrequested",
         "request-prepared",
         "declined",
-    }:
+    ):
         return ["acceptance.releaseAuthorization.state is invalid"]
     if not _exact(authorization, AUTHORIZATION_FIELDS) or authorization.get(
         "mode"
@@ -1147,7 +1147,7 @@ def external_release_contract_errors(root, acceptance, read_bytes=None):
         )
         or not isinstance(public.get("releaseNotes"), str)
         or public.get("assetPolicy") != "no-attached-assets"
-        or public.get("maturity") not in {"full-release", "public-preview"}
+        or public.get("maturity") not in ("full-release", "public-preview")
         or not isinstance(public.get("prerelease"), bool)
         or not isinstance(public.get("releaseNotesSha256"), str)
         or re.fullmatch(r"[0-9a-f]{64}", public["releaseNotesSha256"]) is None

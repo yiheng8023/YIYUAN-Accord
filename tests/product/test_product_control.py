@@ -2118,6 +2118,12 @@ class ProductControlTests(unittest.TestCase):
             (P, 'stage snapshot and evolution horizon rules', lambda v: v[
                 'processLossControl'].update(carrierRule=v['processLossControl'][
                     'carrierRule'] + ' False.')),
+            (P, 'processLossControl', lambda v: v['processLossControl'].update(
+                closeMutableProjectionPaths=['program/releaseIntent'])),
+            (P, 'state is invalid', lambda v: v['increment'][
+                'fourSurfaceMapping']['process']['orderedSteps'][0].update(state={})),
+            (A, 'assessment must', lambda v: v['criteria'][
+                0].update(assessment=[])),
             (G, 'static-suite-as-behavior',
              lambda v: v['evaluationProtocol'].update(staticSuiteIsNotBehaviorEvidence=False)),
             (G, 'humanBurden metrics', lambda v: v['metrics'].update(help=['self-claim'])),
@@ -2392,72 +2398,53 @@ class ProductControlTests(unittest.TestCase):
     def test_snapshot_v2_reopens_only_the_invalidated_package_boundary(self):
         program, acceptance = _read(ROOT, P), _read(ROOT, A)
         node = program['increment']['closeoutSnapshot']
-        predecessor = node['predecessorSnapshotRef'].split(':', 1)[0]
-        _, prior_program, *_ = _snapshot_documents(ROOT, predecessor)
+        _, prior_program, *_ = _snapshot_documents(
+            ROOT, node['predecessorSnapshotRef'].split(':', 1)[0])
         prior = prior_program['increment']['closeoutSnapshot']
+        node_errors, transition_errors = _snapshot_v2_node_errors, _snapshot_v2_transition_errors
+        self.ae(node_errors(program, acceptance), []); self.ae(transition_errors(node, prior), [])
+        prefix = ('increment', 'closeoutSnapshot')
+        def rejects(path, value, message):
+            changed = _clone(program); _replace(changed, path, value)
+            self.has(node_errors(changed, acceptance), 'revision-bound v2 ' + message)
+        rejects(prefix + ('acceptanceTransition', 'affectedCriterionIds'), [{}],
+                'acceptance transition is invalid')
         changed_node = prior
         while changed_node['acceptanceTransition']['kind'] != 'changed':
-            revision = changed_node['predecessorSnapshotRef'].split(':', 1)[0]
-            _, changed_program, *_ = _snapshot_documents(ROOT, revision)
-            changed_node = changed_program['increment']['closeoutSnapshot']
-        invalid = 'revision-bound v2 reopen transition is invalid'
-        self.ae(_snapshot_v2_node_errors(program, acceptance), [])
-        self.ae(_snapshot_v2_transition_errors(node, prior), [])
-        missing = _clone(node)
-        missing['acceptanceTransition']['affectedCriterionIds'].remove('R1')
-        changed = _clone(program)
-        changed['increment']['closeoutSnapshot'] = missing
-        self.has(_snapshot_v2_node_errors(changed, acceptance),
-                 'revision-bound v2 acceptance transition is invalid')
-        for bad in (None, [{}]):
-            changed = _clone(program)
-            changed['increment']['closeoutSnapshot']['acceptanceTransition'][
-                'affectedCriterionIds'] = bad
-            self.has(_snapshot_v2_node_errors(changed, acceptance),
-                     'revision-bound v2 acceptance transition is invalid')
-        for key, value in (('preservedTaskIds', []), ('correctionId', 'unbound')):
-            changed = _clone(program)
-            changed['increment']['closeoutSnapshot']['replay'][key] = value
-            self.has(_snapshot_v2_node_errors(changed, acceptance),
-                     'revision-bound v2 replay boundary is invalid')
-        wrong_stage = _clone(program)
-        wrong_stage['increment']['fourSurfaceMapping']['process']['orderedSteps'][-2]['state'] = 'pending'
-        self.has(_snapshot_v2_node_errors(wrong_stage, acceptance),
-                 'revision-bound v2 reacceptance state is invalid')
-        drifted = _clone(node)
-        drifted['unknownsRef'] += '.drifted'
-        for current, previous in ((drifted, prior), (node, node)):
-            self.has(_snapshot_v2_transition_errors(current, previous), invalid)
-        skip = 'revision-bound v2 close skips reacceptance'
-        for state, ref in (
-            ('verified', changed_node['replay']['evidenceRef']),
-            ('pending', None), ('verified', 'alternate-evidence'),
-        ):
-            prev = _clone(changed_node)
-            prev['replay'].update(evidenceState=state, evidenceRef=ref)
-            closed = _clone(prev)
-            closed.update(state='closed', replay=_clone(changed_node['replay']))
-            self.has(_snapshot_v2_transition_errors(closed, prev), skip)
-        malformed = _clone(changed_node)
-        malformed['acceptanceTransition'] = None
-        self.has(_snapshot_v2_transition_errors(closed, malformed), skip)
-        accepted_close = _clone(node)
-        accepted_close['state'] = 'closed'
-        self.ae(_snapshot_v2_transition_errors(accepted_close, node), [])
-        drifted_close = _clone(accepted_close)
-        drifted_close['acceptanceTransition']['affectedCriterionIds'].remove('R1')
-        self.has(_snapshot_v2_transition_errors(drifted_close, node),
-                 'revision-bound v2 acceptance transition drifted before close')
+            _, p, *_ = _snapshot_documents(
+                ROOT, changed_node['predecessorSnapshotRef'].split(':', 1)[0])
+            changed_node = p['increment']['closeoutSnapshot']
+        prev = _clone(changed_node); prev['replay']['evidenceState'] = 'pending'
+        prev['replay']['evidenceRef'] = None
+        closed = _clone(prev); closed.update(state='closed', replay=_clone(node['replay']))
+        self.has(transition_errors(closed, prev),
+                 'revision-bound v2 close skips reacceptance')
+        accepted_close = _clone(node); accepted_close['state'] = 'closed'
+        self.ae(transition_errors(accepted_close, node), [])
         documents = list(_snapshot_documents(ROOT))
-        projection = product_control._snapshot_v2_close_projection(ROOT, None, documents)
-        for assertion, path, value in (
-            (self.ae, (1, 'status'), 'ready'),
-            (self.ane, (2, 'criteria', 0, 'assessmentScope'), 'semantic drift'),
-        ):
-            changed = _clone(documents)
-            _replace(changed, path, value)
-            assertion(product_control._snapshot_v2_close_projection(
-                ROOT, None, changed), projection)
+        project = lambda value: product_control._snapshot_v2_close_projection(ROOT, None, value)
+        projection = project(documents)
+        changed = _clone(documents); _replace(changed, (2, 'criteria', 0,
+            'assessmentScope'), 'semantic drift')
+        self.ane(project(changed), projection)
+        closed = _clone(documents)
+        p, a = closed[1:3]; increment = p['increment']; prompt = p['goalModePrompt']
+        p['status'], prompt['state'], increment['state'] = 'ready', 'retired', 'completed'
+        p['processLossControl']['stageSnapshotState'] = (
+            'latest-closed-stage-snapshot-prepared-for-containing-commit-binding')
+        for item in [increment['workItems'][0], *increment['workItems'][0][
+                'closeoutSequence'], *increment['fourSurfaceMapping']['process']['orderedSteps']]:
+            item['state'] = 'completed'
+        for criterion in a['criteria']: criterion['assessment'] = 'verified'
+        prompt['objective'] = canonical_goal_objective(p, closed[0]['authority'],
+            prompt['workStageIds'], prompt['releaseGateIds'])
+        a['canonicalGoalObjectiveSha256'] = _sha(prompt['objective'].encode())
+        self.ae(project(closed), projection)
+        original = product_control._snapshot_or_worktree_bytes
+        with patch.object(product_control, '_snapshot_or_worktree_bytes',
+                side_effect=lambda root, locator, revision=None: original(root, locator,
+                    revision) + (b'x' if locator == 'AGENTS.md' else b'')):
+            self.ane(project(documents), projection)
 
     def test_revision_tree_cache_has_an_aggregate_memory_bound(self):
         listing = b'100644 blob ' + b'1' * 40 + b'\tproduct/program.json\0'

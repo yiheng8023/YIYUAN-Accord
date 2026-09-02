@@ -19,6 +19,7 @@ from .evidence import (
 from .guardrails import (
     EXTERNAL_COMPLETION_OPERANDS,
     GATE_SEQUENCE,
+    canonical_goal_objective,
     clean_git_checkout,
     closeout_sequence_errors,
     criterion_observation_decision,
@@ -84,8 +85,8 @@ _PRIVATE_EVIDENCE_PATH_RES = (
         r"(?:/|$)|(?:[^/\s\"'<>]+/)+[^/\s\"'<>]+)"
     ),
 )
-ASSESSMENTS = {"planned", "verified", "blocked", "continuing"}
-PROGRAM_STATES = {"active", "ready", "blocked"}
+ASSESSMENTS = ("planned", "verified", "blocked", "continuing")
+PROGRAM_STATES = ("active", "ready", "blocked")
 
 _SNAPSHOT_V1_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v1"
 _SNAPSHOT_V2_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v2"
@@ -770,7 +771,7 @@ def _validate_four_surface_mapping(increment, criterion_ids, errors):
                     continue
                 _require_texts(step, ("id", "completion"), label, errors)
                 state = step.get("state")
-                if state not in {"completed", "active", "pending", "blocked"}:
+                if state not in ("completed", "active", "pending", "blocked"):
                     errors.append(f"{label}.state is invalid")
                 states.append(state)
                 if step.get("id") in seen:
@@ -790,7 +791,7 @@ def _validate_four_surface_mapping(increment, criterion_ids, errors):
             ]
             if current_state == "completed":
                 expected_states = ["completed"] * len(states)
-            elif current_state in {"active", "blocked"} and len(current) == 1:
+            elif current_state in ("active", "blocked") and len(current) == 1:
                 current_index = current[0]
                 expected_states = (
                     ["completed"] * current_index + [current_state]
@@ -1755,7 +1756,7 @@ def _snapshot_v2_node_errors(program, acceptance):
     gate = node.get("gateId")
     if (
         node.get("schema") != _SNAPSHOT_V2_SCHEMA
-        or state not in {"reopened", "closed"}
+        or state not in ("reopened", "closed")
         or node.get("id") != (
             f"stage.{program.get('distributionVersion')}.{node.get('stage')}.{state}"
         )
@@ -1817,7 +1818,7 @@ def _snapshot_v2_node_errors(program, acceptance):
         not isinstance(transition, dict)
         or set(transition) != transition_fields
         or affected_list is None
-        or transition_kind not in {"changed"} | _SNAPSHOT_V2_REACCEPTANCE_KINDS
+        or transition_kind not in ("changed", *_SNAPSHOT_V2_REACCEPTANCE_KINDS)
         or transition.get("rationaleRef") != (
             "product/program.json#/increment/fourSurfaceMapping/plan"
         )
@@ -1881,7 +1882,7 @@ def _snapshot_v2_node_errors(program, acceptance):
         evidence_ref = replay.get("evidenceRef")
         if (
             node.get("nextGateId") != gate
-            or evidence_state not in {"pending", "verified"}
+            or evidence_state not in ("pending", "verified")
             or (evidence_state == "pending" and evidence_ref is not None)
             or (evidence_state == "verified"
                 and not _nonempty_string(evidence_ref))
@@ -2347,24 +2348,24 @@ def _snapshot_v1_transition_projection(
     normalized_acceptance = dict(acceptance)
     normalized_acceptance.pop("criteria", None)
     projections = program.get("hostProjections")
-    if not isinstance(projections, list):
-        raise TypeError("revision-bound v1 host projections are not a list")
-    marketplaces = {}
+    surfaces = program.get("releaseProcedure", {}).get("surfaceMarkers")
+    if not isinstance(projections, list) or not isinstance(surfaces, dict):
+        raise TypeError("invalid raw surfaces")
+    locators = set(surfaces)
     for projection in projections:
         locator = projection.get("marketplace") \
             if isinstance(projection, dict) else None
         if not _nonempty_string(locator):
             raise TypeError("revision-bound v1 marketplace locator is invalid")
-        marketplaces[locator] = sha256(_snapshot_or_worktree_bytes(
-            root, locator, revision,
-        )).hexdigest()
+        locators.add(locator)
     return {
         "constitution": constitution,
         "program": normalized_program,
         "acceptance": normalized_acceptance,
         "guidance": guidance,
         "golden": golden,
-        "marketplaceDigests": marketplaces,
+        "rawSurfaceDigests": {locator: sha256(_snapshot_or_worktree_bytes(
+            root, locator, revision)).hexdigest() for locator in sorted(locators)},
     }
 
 
@@ -2390,7 +2391,14 @@ def _snapshot_v2_close_projection(root, revision, documents):
     )))
     projection["acceptance"] = json.loads(json.dumps(documents[2]))
     program = projection["program"]
-    increment = program["increment"]
+    acceptance, increment = projection["acceptance"], program["increment"]
+    prompt = program["goalModePrompt"]
+    objective = canonical_goal_objective(program, projection["constitution"]["authority"],
+                                         prompt["workStageIds"], prompt["releaseGateIds"])
+    if (prompt.get("objective"), acceptance.get("canonicalGoalObjectiveSha256")) != \
+            (objective, sha256(objective.encode()).hexdigest()):
+        raise TypeError("invalid canonical goal")
+    del prompt["objective"], acceptance["canonicalGoalObjectiveSha256"]
     for owner, key in (
         (program, "status"), (program["goalModePrompt"], "state"),
         (increment, "state"),
@@ -3656,7 +3664,7 @@ def _validate_exact_package_evidence_lifecycle(
         return
     boundary, prior_evidence, subject_revision = contract
     if (
-        lifecycle.get("state") not in {"pending", "verified"}
+        lifecycle.get("state") not in ("pending", "verified")
         or lifecycle.get("taskId") != "GT-20"
         or lifecycle.get("earliestAffectedBoundary") != boundary
         or lifecycle.get("subjectBinding")
@@ -5014,10 +5022,10 @@ def _validate_program(
     increment = program.get("increment")
     program_state = program.get("status")
     allowed_increment_states = {
-        "active": {"active", "completed"},
-        "ready": {"completed"},
-        "blocked": {"blocked"},
-    }.get(program_state, set())
+        "active": ("active", "completed"),
+        "ready": ("completed",),
+        "blocked": ("blocked",),
+    }.get(program_state, ())
     increment_state = increment.get("state") if isinstance(increment, dict) else None
     if increment_state not in allowed_increment_states:
         errors.append("program.increment does not match program status")
@@ -5065,17 +5073,17 @@ def _validate_program(
             "mapsTo", "refreshTriggers", "hostLifecycleNote",
         }:
             errors.append("program.goalModePrompt shape is invalid")
-        if prompt.get("state") not in {
+        if prompt.get("state") not in (
             "prepared-host-goal-paused",
             "active-in-host",
             "retired",
-        }:
+        ):
             errors.append("program.goalModePrompt.state is invalid")
         goal_states = {
-            "active": {"prepared-host-goal-paused", "active-in-host"},
-            "blocked": {"prepared-host-goal-paused"},
-            "completed": {"retired"},
-        }.get(increment_state, set())
+            "active": ("prepared-host-goal-paused", "active-in-host"),
+            "blocked": ("prepared-host-goal-paused",),
+            "completed": ("retired",),
+        }.get(increment_state, ())
         if prompt.get("state") not in goal_states:
             errors.append("program.goalModePrompt does not match increment lifecycle")
         _require_texts(prompt, ("authority", "objective", "hostLifecycleNote"),
@@ -5093,8 +5101,8 @@ def _validate_program(
             errors.append("program.goalModePrompt.workStageIds must match closeoutSequence")
 
     process = program.get("processLossControl")
-    if not isinstance(process, dict):
-        errors.append("program.processLossControl must be an object")
+    if not isinstance(process, dict) or "closeMutableProjectionPaths" in process:
+        errors.append("program.processLossControl shape is invalid")
     else:
         _require_texts(
             process,
@@ -5109,10 +5117,10 @@ def _validate_program(
             "latest-recorded-stage-snapshot-with-successor-replay-active"
         )
         expected_stage_snapshot_states = {
-            "active": {closed_stage_state, replay_stage_state},
-            "blocked": {closed_stage_state, replay_stage_state},
-            "completed": {closed_stage_state},
-        }.get(increment_state, set())
+            "active": (closed_stage_state, replay_stage_state),
+            "blocked": (closed_stage_state, replay_stage_state),
+            "completed": (closed_stage_state,),
+        }.get(increment_state, ())
         if _canonical_json_sha256(process.get("carrierRule")) != ( \
                 _V2_CARRIER_RULE_SHA256) or process.get(
             "stageSnapshotState"

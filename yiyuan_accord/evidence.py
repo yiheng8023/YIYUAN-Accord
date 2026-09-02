@@ -2282,12 +2282,12 @@ def representative_sample_errors(
         return ["acceptance must contain representative criterion R3"]
     users = [
         item for item in criteria if isinstance(item, dict)
-        and item.get("assessment") in {"verified", "continuing"}
+        and item.get("assessment") in ("verified", "continuing")
         and "representative-behavior" in item.get("requiredEvidenceClasses", [])
     ]
     if not users:
         return []
-    if representative.get("assessment") not in {"verified", "continuing"}:
+    if representative.get("assessment") not in ("verified", "continuing"):
         return [
             "verified or continuing representative evidence requires a retained R3 sample"
         ]
@@ -2308,9 +2308,9 @@ def representative_sample_errors(
     if _evaluation_contracts(policy, "", evaluation) is None:
         errors.append("representative evaluation contract history is invalid")
     exact_fields = set(fields) | {"evidenceClass"}
-    require_current_subject = representative.get("assessment") in {
+    require_current_subject = representative.get("assessment") in (
         "verified", "continuing"
-    }
+    )
     if require_current_subject:
         exact_fields.update(protocol.get("requiredCandidateObservationFields", []))
     for index, item in enumerate(representative.get("evidence", [])):
@@ -2620,7 +2620,7 @@ def provisional_gt20_21_source_errors(
             lifecycle.get("retiredByPublicRelease") is None
             and target_release == program.get("distributionVersion")
             and program.get("status") in {"active", "ready"}
-            and r3.get("assessment") in {"continuing", "verified"}
+            and r3.get("assessment") in ("continuing", "verified")
         ):
             active_current_gate = False
         elif (
