@@ -1022,9 +1022,10 @@ Historical superseded review disposition —
     after 14 days and skips live-session users, so these are host-owned inert
     cache, not physical zero residue. Both fixture roots and matching processes
     were removed. One invalid-TOML fixture attempt and one reserved-variable
-    post-state printer failure remain counterevidence. No real configuration,
-    credentials, session logs or model turn were used. Production, unmanaged or
-    cross-OS hosts, actual Claude host Hook triggering, product value and release
+    post-state printer failure remain counterevidence. The nested mechanism lane
+    used no real configuration, credentials, session logs or model turn.
+    Production, unmanaged or cross-OS hosts, actual Claude host Hook triggering,
+    product value and release
     readiness remain unknown. Exact subject `f4c0251` then nests the corrected
     schema-v6 mechanism lane and adds one isolated Codex Agent decision with
     one thread, one turn, one message and zero tools; only the evaluator applies

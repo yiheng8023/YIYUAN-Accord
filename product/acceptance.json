@@ -460,7 +460,7 @@
           "GT-20",
           "GT-21"
         ],
-        "reason": "Failed exact-tree review of 126ac9c found stale current-stage wording in the representative rationale and R3 and Q4 pass rules. This successor changes only those current-stage semantics while Golden Task obligations and digests, evaluators, evidence bytes, behavior-subject bytes and finite observations remain unchanged; prior observations retain only their former claims and do not prove reacceptance or review completion."
+        "reason": "Failed exact-tree review of 126ac9c found stale current-stage wording in the representative rationale and R3 and Q4 pass rules, plus missing structured semantic authority for machine identifiers, translations and distinct topology or permission terms. This successor corrects those evaluation semantics and carries that semantic authority into product/program.json; Golden Task obligations and digests, evaluators, evidence bytes, behavior-subject bytes and finite observations remain unchanged. All eight criteria are reopened, and prior observations retain only their former claims without proving reacceptance or review completion."
       }
     ],
     "historicalEvidenceContractSha256": "6dee357a88a05aad86838f58e69163f7a63767830d33d6ed3b1bf1e52deec706",

@@ -2395,10 +2395,12 @@ class ProductControlTests(unittest.TestCase):
         prior_predecessor = prior['predecessorSnapshotRef'].split(':', 1)[0]
         _, old_program, *_ = _snapshot_documents(ROOT, prior_predecessor)
         old = old_program['increment']['closeoutSnapshot']
+        changed_revision = old['predecessorSnapshotRef'].split(':', 1)[0]
+        _, changed_program, *_ = _snapshot_documents(ROOT, changed_revision)
+        changed_node = changed_program['increment']['closeoutSnapshot']
         invalid = 'revision-bound v2 reopen transition is invalid'
         self.ae(_snapshot_v2_node_errors(program, acceptance), [])
         self.ae(_snapshot_v2_transition_errors(node, prior), [])
-        self.has(_snapshot_v2_transition_errors(node, old), invalid)
         missing = _clone(node)
         missing['acceptanceTransition']['affectedCriterionIds'].remove('R1')
         changed = _clone(program)
@@ -2423,13 +2425,26 @@ class ProductControlTests(unittest.TestCase):
         for current, previous in ((arbitrary, prior), (drifted, prior),
                                   (node, closed_prior), (node, node)):
             self.has(_snapshot_v2_transition_errors(current, previous), invalid)
-        direct_close = _clone(old)
-        direct_close['state'] = 'closed'
-        self.has(_snapshot_v2_transition_errors(direct_close, old),
-                 'revision-bound v2 close skips reacceptance')
+        skip = 'revision-bound v2 close skips reacceptance'
+        for state, ref in (
+            ('verified', changed_node['replay']['evidenceRef']),
+            ('pending', None), ('verified', 'alternate-evidence'),
+        ):
+            prev = _clone(changed_node)
+            prev['replay'].update(evidenceState=state, evidenceRef=ref)
+            closed = _clone(prev)
+            closed.update(state='closed', replay=_clone(changed_node['replay']))
+            self.has(_snapshot_v2_transition_errors(closed, prev), skip)
+        malformed = _clone(changed_node)
+        malformed['acceptanceTransition'] = None
+        self.has(_snapshot_v2_transition_errors(closed, malformed), skip)
         accepted_close = _clone(node)
         accepted_close['state'] = 'closed'
         self.ae(_snapshot_v2_transition_errors(accepted_close, node), [])
+        drifted_close = _clone(accepted_close)
+        drifted_close['acceptanceTransition']['affectedCriterionIds'].remove('R1')
+        self.has(_snapshot_v2_transition_errors(drifted_close, node),
+                 'revision-bound v2 acceptance transition drifted before close')
 
     def test_revision_tree_cache_has_an_aggregate_memory_bound(self):
         listing = b'100644 blob ' + b'1' * 40 + b'\tproduct/program.json\0'

@@ -100,6 +100,13 @@ _SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID = (
 )
 _SNAPSHOT_V2_REACCEPTANCE_KIND = "reaccepting"
 _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND = "reaccepting-correction"
+_SNAPSHOT_V2_REACCEPTANCE_KINDS = frozenset({
+    _SNAPSHOT_V2_REACCEPTANCE_KIND,
+    _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND,
+})
+_SNAPSHOT_V2_CRITERION_IDS = frozenset({
+    "R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4",
+})
 _SNAPSHOT_V2_GT20_CORRECTION_IDS = frozenset({
     _SNAPSHOT_V2_GT20_CORRECTION_ID,
     _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
@@ -324,14 +331,19 @@ def _gt20_replay(boundary, state, evidence=None):
     }
 
 
+def _gt20_boundary(version):
+    return _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}{version}"]
+
+
+def _gt20_corrected_replay(boundary, state, correction, evidence=None):
+    return {**_gt20_replay(boundary, state, evidence), "correctionId": correction}
+
+
 def _gt20_v7_verified_replay():
-    return {
-        **_gt20_replay(
-            _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v7"],
-            "verified", _GT20_V7_EVIDENCE_LOCATOR,
-        ),
-        "correctionId": _SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID,
-    }
+    return _gt20_corrected_replay(
+        _gt20_boundary("v7"), "verified",
+        _SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID, _GT20_V7_EVIDENCE_LOCATOR,
+    )
 
 
 def _safe_file(root, locator, errors):
@@ -837,9 +849,7 @@ def _snapshot_v1_semantic_version_precedence(value):
     )
 
 
-def _semantic_version_precedence(value):
-    """Current-rule compatibility entrypoint; v1 calls its frozen helper directly."""
-    return _snapshot_v1_semantic_version_precedence(value)
+_semantic_version_precedence = _snapshot_v1_semantic_version_precedence
 
 
 def _snapshot_batch_blobs(root, requests, limit, bind_ids=False):
@@ -1234,9 +1244,7 @@ def _snapshot_v1_documents(root, revision=None):
     return constitution, program, acceptance, guidance, golden
 
 
-def _snapshot_documents(root, revision=None):
-    """Compatibility reader; revision predicates call the frozen v1 reader."""
-    return _snapshot_v1_documents(root, revision)
+_snapshot_documents = _snapshot_v1_documents
 
 
 def _snapshot_v1_marketplace_errors(
@@ -1807,10 +1815,7 @@ def _snapshot_v2_node_errors(program, acceptance):
     if (
         not isinstance(transition, dict)
         or set(transition) != transition_fields
-        or transition_kind not in {
-            "changed", _SNAPSHOT_V2_REACCEPTANCE_KIND,
-            _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND,
-        }
+        or transition_kind not in {"changed"} | _SNAPSHOT_V2_REACCEPTANCE_KINDS
         or transition.get("rationaleRef") != (
             "product/program.json#/increment/fourSurfaceMapping/plan"
         )
@@ -1820,7 +1825,7 @@ def _snapshot_v2_node_errors(program, acceptance):
         or set(transition.get("affectedCriterionIds", [])) != (
             criterion_ids if transition_kind ==
             _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND else
-            {"R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"})
+            _SNAPSHOT_V2_CRITERION_IDS - {"R1"})
         or len(transition.get("affectedCriterionIds", [])) != (
             8 if transition_kind == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND else 7)
     ):
@@ -1850,10 +1855,7 @@ def _snapshot_v2_node_errors(program, acceptance):
     ):
         errors.append("revision-bound v2 replay boundary is invalid")
         replay = {}
-    if transition_kind in {
-        _SNAPSHOT_V2_REACCEPTANCE_KIND,
-        _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND,
-    }:
+    if state == "reopened" and transition_kind in _SNAPSHOT_V2_REACCEPTANCE_KINDS:
         mapping = increment.get("fourSurfaceMapping")
         process = mapping.get("process", {}) if isinstance(mapping, dict) else {}
         work_items = increment.get("workItems")
@@ -1978,24 +1980,15 @@ def _snapshot_v1_transition_errors(
         "evaluationContractSha256"
     ) != node.get("evaluationContractSha256"):
         errors.append("revision-bound v1 unchanged evaluation contract drifted")
-    prior_items = prior_acceptance.get("criteria")
-    current_items = acceptance.get("criteria")
-    if not isinstance(prior_items, list) or not isinstance(current_items, list):
+    try:
+        actual_affected = _snapshot_transition_affected_criteria(
+            root, prior_revision, current_revision,
+            (prior_constitution, prior_program, prior_acceptance,
+             prior_guidance, prior_golden),
+            (constitution, program, acceptance, guidance, golden),
+        )
+    except _SNAPSHOT_V1_FAILURES:
         return errors + ["revision-bound v1 predecessor criteria are invalid"]
-    old = {item.get("id"): item for item in prior_items if isinstance(item, dict)}
-    new = {item.get("id"): item for item in current_items if isinstance(item, dict)}
-    actual_affected = {
-        item_id for item_id in set(old) | set(new)
-        if old.get(item_id) != new.get(item_id)
-    }
-    if _snapshot_v1_transition_projection(
-        root, prior_revision, prior_program, prior_acceptance,
-        prior_guidance, prior_constitution, prior_golden,
-    ) != _snapshot_v1_transition_projection(
-        root, current_revision, program, acceptance, guidance,
-        constitution, golden,
-    ):
-        actual_affected.update(set(old) | set(new))
     if set(transition.get("affectedCriterionIds", [])) != actual_affected:
         errors.append("revision-bound v1 affected criteria are invalid")
     return errors
@@ -2155,132 +2148,45 @@ def _snapshot_v2_transition_errors(current, predecessor):
             and current_replay == prior_replay == _gt20_v7_verified_replay()
             and isinstance(current_transition, dict)
             and isinstance(prior_transition, dict)
-            and prior_transition.get("kind") == _SNAPSHOT_V2_REACCEPTANCE_KIND
+            and prior_transition.get("kind") in _SNAPSHOT_V2_REACCEPTANCE_KINDS
             and current_transition.get("kind")
             == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND
-            and set(current_transition.get("affectedCriterionIds", [])) == {
-                "R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"}
+            and set(current_transition.get("affectedCriterionIds", []))
+            == _SNAPSHOT_V2_CRITERION_IDS
             and all(current_transition.get(key) == prior_transition.get(key)
                     for key in ("rationaleRef", "replayRef"))
+            and current.get("predecessorSnapshotRef")
+            != predecessor.get("predecessorSnapshotRef")
             and set(current) == set(predecessor)
             and all(current.get(field) == predecessor.get(field)
                     for field in reacceptance_stable_fields)
         )
-        reopened_correction = (
-            prior_schema == _SNAPSHOT_V2_SCHEMA
-            and prior_state == "reopened"
-            and isinstance(current_replay, dict)
-            and isinstance(prior_replay, dict)
-            and prior_replay == _gt20_replay(
-                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v6"],
-                "pending",
-            )
-            and current_replay == {
-                **_gt20_replay(
-                    _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v6"],
-                    "pending",
-                ),
-                "correctionId": _SNAPSHOT_V2_GT20_CORRECTION_ID,
-            }
+        plain, corrected, boundary = (
+            _gt20_replay, _gt20_corrected_replay, _gt20_boundary)
+        replay_transitions = (
+            (plain(boundary("v3"), "pending"), plain(boundary("v4"), "pending")),
+            (plain(boundary("v4"), "pending"), plain(boundary("v5"), "pending")),
+            (plain(boundary("v5"), "verified", _GT20_V5_EVIDENCE_LOCATOR),
+             plain(boundary("v6"), "pending")),
+            (plain(boundary("v5"), "verified", _GT20_V5_EVIDENCE_LOCATOR),
+             corrected(boundary("v6"), "pending", _SNAPSHOT_V2_GT20_CORRECTION_ID)),
+            (plain(boundary("v6"), "pending"),
+             corrected(boundary("v6"), "pending", _SNAPSHOT_V2_GT20_CORRECTION_ID)),
+            (corrected(boundary("v6"), "pending", _SNAPSHOT_V2_GT20_CORRECTION_ID),
+             corrected(boundary("v6"), "pending",
+                       _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID)),
+            (corrected(boundary("v6"), "verified",
+                       _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
+                       _GT20_V6_EVIDENCE_LOCATOR),
+             corrected(boundary("v7"), "pending",
+                       _SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID)),
         )
-        reopened_review_correction = (
+        reopened_replay_transition = (
             prior_schema == _SNAPSHOT_V2_SCHEMA
             and prior_state == "reopened"
             and isinstance(current_replay, dict)
             and isinstance(prior_replay, dict)
-            and prior_replay == {
-                **_gt20_replay(
-                    _GT20_REPLAY_BOUNDARIES[
-                        f"{_GT20_LIFECYCLE_PREFIX}v6"
-                    ],
-                    "pending",
-                ),
-                "correctionId": _SNAPSHOT_V2_GT20_CORRECTION_ID,
-            }
-            and current_replay == {
-                **_gt20_replay(
-                    _GT20_REPLAY_BOUNDARIES[
-                        f"{_GT20_LIFECYCLE_PREFIX}v6"
-                    ],
-                    "pending",
-                ),
-                "correctionId": _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
-            }
-        )
-        reopened_agent_recovery_correction = (
-            prior_schema == _SNAPSHOT_V2_SCHEMA
-            and prior_state == "reopened"
-            and isinstance(current_replay, dict)
-            and isinstance(prior_replay, dict)
-            and prior_replay == {
-                **_gt20_replay(
-                    _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v6"],
-                    "verified", _GT20_V6_EVIDENCE_LOCATOR,
-                ),
-                "correctionId": _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
-            }
-            and current_replay == {
-                **_gt20_replay(
-                    _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v7"],
-                    "pending",
-                ),
-                "correctionId":
-                    _SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID,
-            }
-        )
-        reopened_rebaseline = (
-            prior_schema == _SNAPSHOT_V2_SCHEMA
-            and prior_state == "reopened"
-            and isinstance(current_replay, dict)
-            and isinstance(prior_replay, dict)
-            and prior_replay == _gt20_replay(
-                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v3"],
-                "pending",
-            )
-            and current_replay == _gt20_replay(
-                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v4"],
-                "pending",
-            )
-        ) or (
-            prior_schema == _SNAPSHOT_V2_SCHEMA
-            and prior_state == "reopened"
-            and isinstance(current_replay, dict)
-            and isinstance(prior_replay, dict)
-            and prior_replay == _gt20_replay(
-                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v4"],
-                "pending",
-            )
-            and current_replay == _gt20_replay(
-                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v5"],
-                "pending",
-            )
-        )
-        reopened_invalidation = (
-            prior_schema == _SNAPSHOT_V2_SCHEMA
-            and prior_state == "reopened"
-            and isinstance(current_replay, dict)
-            and isinstance(prior_replay, dict)
-            and prior_replay == _gt20_replay(
-                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v5"],
-                "verified", _GT20_V5_EVIDENCE_LOCATOR,
-            )
-            and current_replay in (
-                _gt20_replay(
-                    _GT20_REPLAY_BOUNDARIES[
-                        f"{_GT20_LIFECYCLE_PREFIX}v6"
-                    ],
-                    "pending",
-                ),
-                {
-                    **_gt20_replay(
-                        _GT20_REPLAY_BOUNDARIES[
-                            f"{_GT20_LIFECYCLE_PREFIX}v6"
-                        ],
-                        "pending",
-                    ),
-                    "correctionId": _SNAPSHOT_V2_GT20_CORRECTION_ID,
-                },
-            )
+            and (prior_replay, current_replay) in replay_transitions
         )
         reopening_closed = (
             prior_state == "closed" and prior_schema in {
@@ -2292,21 +2198,28 @@ def _snapshot_v2_transition_errors(current, predecessor):
         if not reopening_closed and not reopened_successor \
                 and not reopened_reacceptance \
                 and not reopened_reacceptance_correction \
-                and not reopened_correction and not reopened_review_correction \
-                and not reopened_agent_recovery_correction \
-                and not reopened_rebaseline \
-                and not reopened_invalidation:
+                and not reopened_replay_transition:
             errors.append("revision-bound v2 reopen transition is invalid")
     elif current.get("state") == "closed":
         if prior_schema != _SNAPSHOT_V2_SCHEMA or prior_state != "reopened":
             errors.append("revision-bound v2 close transition is invalid")
         current_replay = current.get("replay")
         prior_replay = predecessor.get("replay")
-        if prior_replay == _gt20_v7_verified_replay() and predecessor.get(
-            "acceptanceTransition", {}).get("kind") not in {
-                _SNAPSHOT_V2_REACCEPTANCE_KIND, _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND}:
+        prior_transition = predecessor.get("acceptanceTransition")
+        v7_boundary = _gt20_boundary("v7")
+        v7_close = any(isinstance(item, dict) and item.get(
+            "earliestAffectedBoundary") == v7_boundary
+            for item in (current_replay, prior_replay))
+        if v7_close and (
+            not isinstance(prior_transition, dict)
+            or prior_transition.get("kind") not in _SNAPSHOT_V2_REACCEPTANCE_KINDS
+        ):
             errors.append("revision-bound v2 close skips reacceptance")
-        if (
+        elif v7_close and current.get("acceptanceTransition") != prior_transition:
+            errors.append("revision-bound v2 acceptance transition drifted before close")
+        if v7_close and current_replay != prior_replay:
+            errors.append("revision-bound v2 replay drifted before close")
+        elif not v7_close and (
             not isinstance(current_replay, dict)
             or not isinstance(prior_replay, dict)
             or {
@@ -2451,6 +2364,21 @@ def _snapshot_v1_transition_projection(
     }
 
 
+def _snapshot_transition_affected_criteria(
+    root, prior_revision, current_revision, prior, current,
+):
+    old = {item["id"]: item for item in prior[2]["criteria"]}
+    new = {item["id"]: item for item in current[2]["criteria"]}
+    affected = {key for key in set(old) | set(new) if old.get(key) != new.get(key)}
+    if _snapshot_v1_transition_projection(
+        root, prior_revision, prior[1], prior[2], prior[3], prior[0], prior[4],
+    ) != _snapshot_v1_transition_projection(
+        root, current_revision, current[1], current[2], current[3], current[0], current[4],
+    ):
+        affected.update(set(old) | set(new))
+    return affected
+
+
 def _validate_closeout_snapshot_v2(
     root, program, acceptance, evaluation_digest, errors,
     revision=None, lineage=(), cache=None,
@@ -2480,6 +2408,27 @@ def _validate_closeout_snapshot_v2(
         errors.append("increment.closeoutSnapshot predecessor is not latest accepted snapshot")
         return
     errors.extend(_snapshot_v2_transition_errors(node, latest[1]))
+    prior_transition = latest[1].get("acceptanceTransition")
+    transition = node.get("acceptanceTransition")
+    affected_transition = isinstance(transition, dict) and (
+        node.get("state") == "closed" or transition.get("kind")
+        == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND)
+    if affected_transition and isinstance(prior_transition, dict) \
+            and prior_transition.get("kind") in _SNAPSHOT_V2_REACCEPTANCE_KINDS:
+        try:
+            prior_documents = _snapshot_v1_documents(root, latest[0])
+            current_documents = _snapshot_v1_documents(root, revision)
+            current_documents = (
+                current_documents[0], program, acceptance,
+                current_documents[3], current_documents[4],
+            )
+            actual = _snapshot_transition_affected_criteria(
+                root, latest[0], revision, prior_documents, current_documents,
+            )
+            if set(transition.get("affectedCriterionIds", [])) != actual:
+                errors.append("revision-bound v2 affected criteria are invalid")
+        except _SNAPSHOT_V1_FAILURES:
+            errors.append("revision-bound v2 transition state is unavailable")
     errors.extend(_snapshot_lineage_contract_errors(
         root, latest[0], latest[1], latest[2], lineage, cache,
     ))
