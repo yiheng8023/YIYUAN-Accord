@@ -209,7 +209,7 @@
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
       },
-      "predecessorSnapshotRef": "732325e0b00911d295203468faed717bf29db3e2:product/program.json#/increment/closeoutSnapshot",
+      "predecessorSnapshotRef": "8224bf80b813e59085a12a6a65083d607e0e75de:product/program.json#/increment/closeoutSnapshot",
       "authorityRefs": [
         "product/constitution.json",
         "product/program.json",
@@ -265,8 +265,8 @@
           "GT-21"
         ],
         "correctionId": "one-intent-agent-decision-and-bounded-compensation-v3",
-        "evidenceState": "pending",
-        "evidenceRef": null
+        "evidenceState": "verified",
+        "evidenceRef": "evals/evidence/2026-09-02-v310-gt20-exact-package-v5-source.json"
       }
     },
     "provisionalEvidenceLifecycle": {
@@ -290,17 +290,22 @@
     },
     "exactPackageEvidenceLifecycle": {
       "schema": "yiyuan-accord-exact-package-evidence-lifecycle/v7",
-      "state": "pending",
+      "state": "verified",
       "taskId": "GT-20",
       "earliestAffectedBoundary": "single-intent-agent-decision-and-bounded-failed-update-recovery-closure",
       "subjectBinding": "containing-git-commit-complete-declared-packages",
       "preservedTaskIds": [
         "GT-21"
       ],
-      "predecessorLifecycleRef": "732325e0b00911d295203468faed717bf29db3e2:product/program.json#/increment/exactPackageEvidenceLifecycle",
+      "predecessorLifecycleRef": "f4c0251bc82bd5af983d365f8a12751217b88e2d:product/program.json#/increment/exactPackageEvidenceLifecycle",
       "commandContractLocator": "evals/contracts/gt20-v4-command-contract.json",
       "commandContractSha256": "6ff2341846d897c6cb5af1caf879f663a51f7214d9b55742030c48c41fdddd58",
-      "evidence": null
+      "subjectRevision": "f4c0251bc82bd5af983d365f8a12751217b88e2d",
+      "evidence": {
+        "locator": "evals/evidence/2026-09-02-v310-gt20-exact-package-v5-source.json",
+        "sha256": "8f56a190a93a4a7a56c58e4c8f03d289e1b4ffc897cc040c6314ac09767eb220",
+        "evaluatedRevision": "f4c0251bc82bd5af983d365f8a12751217b88e2d"
+      }
     },
     "observedProblem": "The bounded self-bootstrapping core and unchanged GT-14 through GT-19 and GT-21 evidence remain accepted, while candidate 9050114, fc9c1a7, c5a0668 and the unpublished misbound schema-v6 replay remain failed history. Exact subject 7a3950e retains corrected authority-bound, recomputable and path-private zero-model native-lifecycle mechanics, but independent review found that evaluator-owned cleanup cannot prove atomic rollback or one-intent Agent recovery. Schema-v7 therefore reopens GT-20 at the Agent-decision and bounded-compensation boundary; affected-surface reacceptance and all four reviews return to pending. Real-account or current-desktop behavior, production, cross-OS behavior, comparative value, candidate, exact-local, hosted, authorization, tag, public Release and post-release installation remain later gates; v3.0.1 remains the public fallback.",
     "hypothesis": "A product-form-neutral, complete bounded self-bootstrapping core can turn the existing collaboration contract into a stronger outcome system without defaulting to a plugin, Runtime or control plane. If Accord first reconciles each material consensus against the current proposition set; keeps code and conversation topology independent; senses environment provenance; binds the latest outcome and human authority; reuses suitable native, official and maintained wheels before authorship; allocates minimum deep modules behind narrow shared interfaces; derives sparse host-native and Accord responsibility views plus the current state-authority, admission and closure-lifecycle views; and replaces or retires only exact allocations whose successor independently closes the same consequence and lifecycle with reversible recheck, then it can improve real collaboration closure while limiting contradiction, interference, self-confirmation, proxy optimization and lifecycle burden.",

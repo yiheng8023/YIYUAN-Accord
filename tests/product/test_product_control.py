@@ -163,110 +163,6 @@ def _replace(value, path, replacement):
                            if callable(replacement) else replacement)
 
 
-def _gt20_v5_envelope(mechanism):
-    roles = {item['role']: item for item in mechanism['commands']}
-    recoveries = mechanism['fixture']['failedUpdateRecovery']
-    subject, adapters = mechanism['behaviorSubject'], ('codex', 'claude')
-    facts = []
-    for adapter in reversed(adapters):
-        result = recoveries[adapter]
-        absent = result['difference'] is None
-        fact = {
-            'adapter': adapter,
-            'allowedAction': ('accept-host-cleaned' if absent else
-                              'remove-attributable-incomplete-staging'),
-            'postCommandAbsent': absent,
-            'candidateIdentityDigest':
-                product_control._candidate_package_identity_sha256(
-                    subject, adapter),
-            'priorIdentityDigest': 'a' * 64,
-            'siblingStateSha256': 'b' * 64,
-            'stagedFileCount': result['stagedFileCount'],
-            'difference': result['difference'],
-        }
-        fact['bindingSha256'] = product_control._canonical_json_sha256(fact)
-        facts.append(fact)
-    receipt_sha = product_control._canonical_json_sha256(facts)
-    revision, nonce = mechanism['evaluatedRevision'], 'c' * 64
-    actions = {fact['adapter']: fact['allowedAction'] for fact in facts}
-    bindings = {fact['adapter']: fact['bindingSha256'] for fact in facts}
-    skill = ('plugins/yiyuan-accord-codex/skills/'
-             'deliver-demand-driven-outcome/SKILL.md')
-    request = {
-        'operation': 'decide-bounded-failed-update-recovery',
-        'userIntentCount': 1, 'userInterventionCount': 0,
-        'evaluatedRevision': revision, 'candidateSkillLocator': skill,
-        'candidateSkillSha256': subject[skill],
-        'failureReceiptSha256': receipt_sha,
-        'nonceSha256': nonce, 'failureFacts': facts,
-    }
-    version = roles['codexVersion']
-    agent = {
-        'request': request,
-        'invocation': {
-            'cliVersion': mechanism['fixture']['codexCliVersion'],
-            'resolvedCommandSha256': version['resolvedCommandSha256'],
-            'terminalExecutableSha256': version['terminalExecutableSha256'],
-            'requestedModel': None, 'reasoningEffort': 'medium',
-            'isolation': (
-                'ephemeral ignore-user-config ignore-rules disable-plugins '
-                'disable-hooks read-only-sandbox approval-never '
-                'empty-task-owned-working-directory structured-output'
-            ).split(),
-            'credentialUse': 'current-user-codex-home-auth-only',
-            'inputSha256': 'd' * 64, 'outputSchemaSha256': 'e' * 64,
-            'eventStreamSha256': 'f' * 64, 'stderrSha256': '0' * 64,
-            'rawStreamPolicy': ('digest-and-safe-structure-only-no-thread-'
-                                'or-turn-id-retained'),
-            'eventTypes': (
-                'thread.started turn.started item.started item.completed '
-                'turn.completed'
-            ).split(),
-            'threadCount': 1, 'turnCount': 1, 'agentMessageCount': 1,
-            'toolCallCount': 0, 'exitCode': 0, 'timedOut': False,
-            'terminationConfirmed': True, 'streamsDrained': True,
-            'jobActiveProcesses': 0,
-        },
-        'decision': {
-            'schema': 'yiyuan-accord-gt20-agent-decision/v1',
-            'decision': 'authorize-bounded-compensation',
-            'boundFailureReceiptSha256': receipt_sha,
-            'boundNonceSha256': nonce, 'boundSubjectRevision': revision,
-            'adapterActions': actions,
-        },
-        'actuation': {
-            'executor': 'evaluator-runner',
-            'targetDerivation': 'bound-private-mutation-receipt-only',
-            **{adapter: {
-                'planBindingSha256': bindings[adapter],
-                'action': actions[adapter], 'safetyRevalidated': True,
-                'result': recoveries[adapter],
-            } for adapter in adapters},
-        },
-        'independentPostState': {
-            **dict.fromkeys((
-                'priorInstalledBytesPreserved unrelatedPluginStatePreserved '
-                'unmanagedAndConcurrentSentinelsPreserved '
-                'completedBeforeIntentReturn'
-            ).split(), True),
-            'inventories': {adapter: {
-                key: value for key, value in
-                roles[f'rollback{adapter.title()}Inventory'].items()
-                if key not in {'role', 'failureCategory'}
-            } for adapter in adapters},
-        },
-    }
-    return {
-        'schema': 'yiyuan-accord-gt20-exact-package-evidence/v5',
-        'taskId': 'GT-20', 'evaluatedRevision': revision,
-        'lifecycle': dict.fromkeys(
-            'mechanism agentDecision actuation independentPostState cleanup'.split(),
-            'verified'),
-        'claimLimit': product_control._GT20_V5_CLAIM,
-        'mechanism': mechanism, 'agentDecision': agent,
-    }
-
-
 def _write(root, locator, value):
     path = root / locator
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -2596,7 +2492,7 @@ class ProductControlTests(unittest.TestCase):
             lifecycle = program['increment']['exactPackageEvidenceLifecycle']
             self.ae(lifecycle, {
                 'schema': 'yiyuan-accord-exact-package-evidence-lifecycle/v7',
-                'state': 'pending',
+                'state': 'verified',
                 'taskId': 'GT-20',
                 'earliestAffectedBoundary': (
                     'single-intent-agent-decision-and-bounded-failed-update-'
@@ -2607,7 +2503,7 @@ class ProductControlTests(unittest.TestCase):
                 ),
                 'preservedTaskIds': ['GT-21'],
                 'predecessorLifecycleRef': (
-                    '732325e0b00911d295203468faed717bf29db3e2:'
+                    'f4c0251bc82bd5af983d365f8a12751217b88e2d:'
                     'product/program.json#/increment/exactPackageEvidenceLifecycle'
                 ),
                 'commandContractLocator': (
@@ -2616,7 +2512,21 @@ class ProductControlTests(unittest.TestCase):
                 'commandContractSha256': _file_sha(
                     root, 'evals/contracts/gt20-v4-command-contract.json',
                 ),
-                'evidence': None,
+                'subjectRevision': 'f4c0251bc82bd5af983d365f8a12751217b88e2d',
+                'evidence': {
+                    'locator': (
+                        'evals/evidence/2026-09-02-v310-gt20-exact-package-'
+                        'v5-source.json'
+                    ),
+                    'sha256': _file_sha(
+                        root,
+                        'evals/evidence/2026-09-02-v310-gt20-exact-package-'
+                        'v5-source.json',
+                    ),
+                    'evaluatedRevision': (
+                        'f4c0251bc82bd5af983d365f8a12751217b88e2d'
+                    ),
+                },
             })
 
             def validate(value):
@@ -2646,10 +2556,10 @@ class ProductControlTests(unittest.TestCase):
             wrong_evidence['evidence'] = {}
             self.has(
                 validate(wrong_evidence),
-                'exact package evidence pending state is invalid',
+                'exact package evidence verified state is invalid',
             )
             wrong_state = _clone(lifecycle)
-            wrong_state['state'] = 'verified'
+            wrong_state['state'] = 'pending'
             self.has(
                 validate(wrong_state),
                 'exact package evidence lifecycle is invalid',
@@ -2818,10 +2728,10 @@ class ProductControlTests(unittest.TestCase):
         ))
 
     def test_gt20_v5_agent_recovery_envelope_fails_closed(self):
-        mechanism = _read(ROOT, (
-            'evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json'
+        envelope = _read(ROOT, (
+            'evals/evidence/2026-09-02-v310-gt20-exact-package-v5-source.json'
         ))
-        envelope = _gt20_v5_envelope(mechanism)
+        mechanism = envelope['mechanism']
         valid = product_control._gt20_v5_agent_recovery_valid
         self.at(valid(envelope, mechanism))
         for path, value in (
