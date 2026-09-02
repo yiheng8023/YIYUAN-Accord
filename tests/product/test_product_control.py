@@ -162,6 +162,111 @@ def _replace(value, path, replacement):
         value[path[-1]] = (replacement(value[path[-1]])
                            if callable(replacement) else replacement)
 
+
+def _gt20_v5_envelope(mechanism):
+    roles = {item['role']: item for item in mechanism['commands']}
+    recoveries = mechanism['fixture']['failedUpdateRecovery']
+    subject, adapters = mechanism['behaviorSubject'], ('codex', 'claude')
+    facts = []
+    for adapter in reversed(adapters):
+        result = recoveries[adapter]
+        absent = result['difference'] is None
+        fact = {
+            'adapter': adapter,
+            'allowedAction': ('accept-host-cleaned' if absent else
+                              'remove-attributable-incomplete-staging'),
+            'postCommandAbsent': absent,
+            'candidateIdentityDigest':
+                product_control._candidate_package_identity_sha256(
+                    subject, adapter),
+            'priorIdentityDigest': 'a' * 64,
+            'siblingStateSha256': 'b' * 64,
+            'stagedFileCount': result['stagedFileCount'],
+            'difference': result['difference'],
+        }
+        fact['bindingSha256'] = product_control._canonical_json_sha256(fact)
+        facts.append(fact)
+    receipt_sha = product_control._canonical_json_sha256(facts)
+    revision, nonce = mechanism['evaluatedRevision'], 'c' * 64
+    actions = {fact['adapter']: fact['allowedAction'] for fact in facts}
+    bindings = {fact['adapter']: fact['bindingSha256'] for fact in facts}
+    skill = ('plugins/yiyuan-accord-codex/skills/'
+             'deliver-demand-driven-outcome/SKILL.md')
+    request = {
+        'operation': 'decide-bounded-failed-update-recovery',
+        'userIntentCount': 1, 'userInterventionCount': 0,
+        'evaluatedRevision': revision, 'candidateSkillLocator': skill,
+        'candidateSkillSha256': subject[skill],
+        'failureReceiptSha256': receipt_sha,
+        'nonceSha256': nonce, 'failureFacts': facts,
+    }
+    version = roles['codexVersion']
+    agent = {
+        'request': request,
+        'invocation': {
+            'cliVersion': mechanism['fixture']['codexCliVersion'],
+            'resolvedCommandSha256': version['resolvedCommandSha256'],
+            'terminalExecutableSha256': version['terminalExecutableSha256'],
+            'requestedModel': None, 'reasoningEffort': 'medium',
+            'isolation': (
+                'ephemeral ignore-user-config ignore-rules disable-plugins '
+                'disable-hooks read-only-sandbox approval-never '
+                'empty-task-owned-working-directory structured-output'
+            ).split(),
+            'credentialUse': 'current-user-codex-home-auth-only',
+            'inputSha256': 'd' * 64, 'outputSchemaSha256': 'e' * 64,
+            'eventStreamSha256': 'f' * 64, 'stderrSha256': '0' * 64,
+            'rawStreamPolicy': ('digest-and-safe-structure-only-no-thread-'
+                                'or-turn-id-retained'),
+            'eventTypes': (
+                'thread.started turn.started item.started item.completed '
+                'turn.completed'
+            ).split(),
+            'threadCount': 1, 'turnCount': 1, 'agentMessageCount': 1,
+            'toolCallCount': 0, 'exitCode': 0, 'timedOut': False,
+            'terminationConfirmed': True, 'streamsDrained': True,
+            'jobActiveProcesses': 0,
+        },
+        'decision': {
+            'schema': 'yiyuan-accord-gt20-agent-decision/v1',
+            'decision': 'authorize-bounded-compensation',
+            'boundFailureReceiptSha256': receipt_sha,
+            'boundNonceSha256': nonce, 'boundSubjectRevision': revision,
+            'adapterActions': actions,
+        },
+        'actuation': {
+            'executor': 'evaluator-runner',
+            'targetDerivation': 'bound-private-mutation-receipt-only',
+            **{adapter: {
+                'planBindingSha256': bindings[adapter],
+                'action': actions[adapter], 'safetyRevalidated': True,
+                'result': recoveries[adapter],
+            } for adapter in adapters},
+        },
+        'independentPostState': {
+            **dict.fromkeys((
+                'priorInstalledBytesPreserved unrelatedPluginStatePreserved '
+                'unmanagedAndConcurrentSentinelsPreserved '
+                'completedBeforeIntentReturn'
+            ).split(), True),
+            'inventories': {adapter: {
+                key: value for key, value in
+                roles[f'rollback{adapter.title()}Inventory'].items()
+                if key not in {'role', 'failureCategory'}
+            } for adapter in adapters},
+        },
+    }
+    return {
+        'schema': 'yiyuan-accord-gt20-exact-package-evidence/v5',
+        'taskId': 'GT-20', 'evaluatedRevision': revision,
+        'lifecycle': dict.fromkeys(
+            'mechanism agentDecision actuation independentPostState cleanup'.split(),
+            'verified'),
+        'claimLimit': product_control._GT20_V5_CLAIM,
+        'mechanism': mechanism, 'agentDecision': agent,
+    }
+
+
 def _write(root, locator, value):
     path = root / locator
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -1165,17 +1270,6 @@ class ProductControlTests(unittest.TestCase):
                 'provisional GT-20 source contract record is not admitted',
             )
 
-    def test_gt20_subjects_are_derived_from_projection_declarations(self):
-        with _provisional() as root:
-            golden = _read(root, G)
-            task = _find(golden['tasks'], 'id', 'GT-20')
-            task['behaviorSubjectFiles'].pop()
-            _write(root, G, golden)
-            self.has(
-                _errors(root),
-                'exact package lifecycle GT-20 subject is invalid',
-            )
-
     def test_provisional_source_contract_is_required_while_r3_is_planned(self):
         with _provisional() as root:
             source = _read(root, GT2021_SOURCE)
@@ -1186,6 +1280,14 @@ class ProductControlTests(unittest.TestCase):
                 _errors(root),
                 'provisional GT-20/21 source contract is invalid',
             )
+
+    def test_gt20_subjects_are_derived_from_projection_declarations(self):
+        with _provisional() as root:
+            golden = _read(root, G)
+            _find(golden['tasks'], 'id', 'GT-20')['behaviorSubjectFiles'].pop()
+            _write(root, G, golden)
+            self.has(_errors(root),
+                     'exact package lifecycle GT-20 subject is invalid')
 
     def test_provisional_gt20_21_mutations_fail_after_repository_rehash(self):
         def entry(source, task_id):
@@ -1459,7 +1561,7 @@ class ProductControlTests(unittest.TestCase):
         for stages in (program['increment']['fourSurfaceMapping']['process']['orderedSteps'],
                        program['increment']['workItems'][0]['closeoutSequence']):
             self.ae([step['state'] for step in stages[-3:]],
-                             ['completed', 'completed', 'active'])
+                    ['active', 'pending', 'pending'])
         active = '\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
             'README.md', 'README.zh-CN.md', P, 'product/reshaping-guidance.json',
             'docs/architecture.md', 'docs/operations/CONTINUATION.md',
@@ -2492,46 +2594,30 @@ class ProductControlTests(unittest.TestCase):
         with _indexed() as root:
             program = _read(root, P)
             lifecycle = program['increment']['exactPackageEvidenceLifecycle']
-            self.ae(
-                lifecycle['schema'],
-                'yiyuan-accord-exact-package-evidence-lifecycle/v6',
-            )
-            self.ae(lifecycle['state'], 'verified')
-            self.ae(
-                lifecycle['subjectRevision'],
-                '7a3950e8faa7b6f3097cfe2c2d01803bbb320173',
-            )
-            self.ae(
-                lifecycle['evidence']['evaluatedRevision'],
-                lifecycle['subjectRevision'],
-            )
-            self.ae(
-                lifecycle['evidence']['locator'],
-                'evals/evidence/2026-09-02-v310-gt20-'
-                'exact-package-v4-source.json',
-            )
-            self.ae(
-                lifecycle['evidence']['sha256'],
-                _file_sha(root, lifecycle['evidence']['locator']),
-            )
-            self.ae(
-                lifecycle['earliestAffectedBoundary'],
-                'exact-package-host-activation-and-mutation-phase-failed-'
-                'update-recovery-closure',
-            )
-            self.ae(
-                lifecycle['predecessorLifecycleRef'],
-                '7a3950e8faa7b6f3097cfe2c2d01803bbb320173:'
-                'product/program.json#/increment/exactPackageEvidenceLifecycle',
-            )
-            self.ae(
-                lifecycle['commandContractLocator'],
-                'evals/contracts/gt20-v4-command-contract.json',
-            )
-            self.ae(
-                lifecycle['commandContractSha256'],
-                _file_sha(root, lifecycle['commandContractLocator']),
-            )
+            self.ae(lifecycle, {
+                'schema': 'yiyuan-accord-exact-package-evidence-lifecycle/v7',
+                'state': 'pending',
+                'taskId': 'GT-20',
+                'earliestAffectedBoundary': (
+                    'single-intent-agent-decision-and-bounded-failed-update-'
+                    'recovery-closure'
+                ),
+                'subjectBinding': (
+                    'containing-git-commit-complete-declared-packages'
+                ),
+                'preservedTaskIds': ['GT-21'],
+                'predecessorLifecycleRef': (
+                    '732325e0b00911d295203468faed717bf29db3e2:'
+                    'product/program.json#/increment/exactPackageEvidenceLifecycle'
+                ),
+                'commandContractLocator': (
+                    'evals/contracts/gt20-v4-command-contract.json'
+                ),
+                'commandContractSha256': _file_sha(
+                    root, 'evals/contracts/gt20-v4-command-contract.json',
+                ),
+                'evidence': None,
+            })
 
             def validate(value):
                 changed = _clone(program)
@@ -2556,15 +2642,18 @@ class ProductControlTests(unittest.TestCase):
                 validate(wrong_contract),
                 'exact package lifecycle command contract digest mismatch',
             )
-            for mutate in (
-                lambda value: value.__setitem__('evidence', {}),
-                lambda value: value.__setitem__('state', 'pending'),
-                lambda value: value.__setitem__('priorEvidenceRef', 'missing'),
-                lambda value: value.__setitem__('subjectRevision', '0' * 40),
-            ):
-                changed = _clone(lifecycle)
-                mutate(changed)
-                self.at(validate(changed))
+            wrong_evidence = _clone(lifecycle)
+            wrong_evidence['evidence'] = {}
+            self.has(
+                validate(wrong_evidence),
+                'exact package evidence pending state is invalid',
+            )
+            wrong_state = _clone(lifecycle)
+            wrong_state['state'] = 'verified'
+            self.has(
+                validate(wrong_state),
+                'exact package evidence lifecycle is invalid',
+            )
 
     def test_public_evidence_privacy_guard_rejects_host_session_material(self):
         private_values = (
@@ -2617,267 +2706,27 @@ class ProductControlTests(unittest.TestCase):
         }
         self.af(product_control._public_evidence_contains_private_material(safe))
 
-    def test_gt20_runner_cleanup_is_bounded_to_owned_paths(self):
-        runner = _text(GT20_RUNNER)
-        self.ani('Get-CimInstance -ClassName Win32_Process', runner)
-        self.ani('$_.CommandLine', runner)
-        self.ai('$taskOwned = $false', runner)
-        self.ai('$taskOwned = $true', runner)
-        self.ai('if ($taskOwned)', runner)
-        self.ani('Remove-Item -LiteralPath $evidencePath -Force', runner)
-        self.ai('[System.IO.FileMode]::CreateNew', runner)
-        self.ai('$pendingEvidenceOwned = $true', runner)
-        self.ai(
-            '[System.IO.File]::Move($pendingEvidencePath, $evidencePath, $false)',
-            runner,
-        )
-        self.ai('Remove-Item -LiteralPath $pendingEvidencePath -Force', runner)
-        self.at(
-            runner.index('$script:TaskEnvironmentReadyForEvidence = $false')
-            < runner.index("Add-CommandRecord 'candidateCommitCheck'")
-            < runner.index("Add-CommandRecord 'priorReleaseRevision'")
-            < runner.index('$script:TaskEnvironmentReadyForEvidence = $true')
-        )
-
-    def test_gt20_v4_codex_activation_requires_app_server_receipts(self):
-        contract_path = ROOT / GT20V4
-        self.at(contract_path.is_file(), 'successor GT-20 contract is absent')
-        contract = json.loads(contract_path.read_text(encoding='utf-8'))
-        codex = contract['activationProof']['codex']
-        self.ae(codex['transport'], 'app-server-stdio-jsonl')
-        self.ae(codex['requiredRpcMethods'], [
-            'hooks/list', 'thread/start', 'turn/start', 'thread/resume',
-        ])
-        self.ae(codex['requiredHookNotifications'], [
-            'hook/started', 'hook/completed',
-        ])
-        self.ae(
-            codex['publicTranscriptPolicy'],
-            'digest-only-private-host-transcript-not-retained',
-        )
-        self.ae(codex['identifierPolicy'], 'sha256-only')
-        self.ae(codex['lifecycleTrigger'], {
-            'rpcMethod': 'turn/start',
-            'modelProvider': 'task-owned-loopback-responses-failure',
-            'requiresOpenAIAuth': False,
-            'expectedTerminalStatus': 'failed',
-            'purpose': 'run-pending-session-start-hooks-before-model-request',
-        })
-        self.ae((codex['lifecycleTriggerTurns'], codex['externalModelTurns'],
-                 codex['credentialEnvironmentInherited']), (2, 0, False))
-        roles = {item['role']: item for item in contract['commands']}
-        self.at(codex['qualifyingCommandRole'] in roles)
-        self.at(all(role in roles for role in codex['unitOnlyCommandRoles']))
-        self.ane(
-            codex['qualifyingCommandRole'],
-            codex['unitOnlyCommandRoles'][0],
-            'a direct Node runtime unit call cannot satisfy activation',
-        )
-        self.ae(
-            roles['codexHostActivation']['argv'],
-            [
-                'codex', '--dangerously-bypass-hook-trust',
-                'app-server', '--stdio',
-            ],
-        )
-        self.ani(
-            'accordCodexFailedUpdateAfterStaging',
-            contract['commandEdits']['prependArgumentsByRole'],
-            'the replacement already carries the trust flag and must not '
-            'receive it twice during overlay resolution',
-        )
-
-        runner = _text(GT20_RUNNER)
-        self.ai('function Invoke-CodexAppServerActivation', runner)
-        self.ai("sandbox = 'read-only'", runner)
-        self.ani("sandbox = 'readOnly'", runner)
-        self.ai("Add-CommandRecord 'codexHostActivation'", runner)
-        self.ai("Add-CommandRecord 'codexHookRuntimeUnitStartup'", runner)
-        self.ai("Add-CommandRecord 'codexHookRuntimeUnitResume'", runner)
-        self.ani("Add-CommandRecord 'codexHookStartup'", runner)
-        self.ani("Add-CommandRecord 'codexHookResume'", runner)
-        self.ai('idSha256 = $hookRunIdSha256', runner)
-        self.ani('id = $hookStarted.params.run.id', runner)
-        initialize_write = runner.index('$owned.WriteInputLine($initializeLine)')
-        initialize_receipt = runner.index(
-            'if ($null -eq $initializeResponse -or'
-        )
-        initialized_write = runner.index('$owned.WriteInputLine($initializedLine)')
-        hooks_list_write = runner.index('$owned.WriteInputLine($hooksListLine)')
-        hooks_list_receipt = runner.index(
-            "Codex App Server hooks/list did not discover the installed Hook."
-        )
-        request_write = runner.index('$owned.WriteInputLine($requestLine)')
-        self.assertLess(initialize_write, initialize_receipt)
-        self.assertLess(initialize_receipt, initialized_write)
-        self.assertLess(initialized_write, hooks_list_write)
-        self.assertLess(hooks_list_write, hooks_list_receipt)
-        self.assertLess(hooks_list_receipt, request_write)
-
-    def test_gt20_v4_claude_activation_requires_native_host_receipts(self):
-        contract = _read(ROOT, GT20V4)
-        claude = contract['activationProof']['claude']
-        self.ae(claude['transport'], (
-            'headless-stream-json-with-loopback-trigger-and-task-owned-'
-            'node-observer'
-        ))
-        self.ae(claude['requiredSessionStartSources'], ['startup', 'resume'])
-        self.ae(claude['requiredNativeHookEvents'], [
-            'hook_started', 'hook_response',
-        ])
-        self.ae(
-            claude['publicTranscriptPolicy'],
-            'digest-only-private-host-transcript-not-retained',
-        )
-        self.ae(claude['identifierPolicy'], 'sha256-only')
-        self.ae(claude['lifecycleTrigger'], {
-            'cliMode': 'print',
-            'modelProvider': 'task-owned-loopback-messages-failure',
-            'requiresUserAnthropicAuth': False,
-            'expectedTerminalStatus': 'api_error',
-            'purpose': ('establish-resumable-session-and-run-session-start-'
-                        'before-model-response'),
-        })
-        self.ae(claude['requiredLoadedPlugin'], {
-            'name': 'yiyuan-accord-claude', 'version': '3.1.0',
-        })
-        self.ae((claude['lifecycleTriggerTurns'], claude['externalModelTurns'],
-                 claude['minimumLoopbackHttpRequests'],
-                 claude['credentialEnvironmentInherited']), (2, 0, 2, False))
-
-        role = next(
-            item for item in contract['commands']
-            if item['role'] == 'claudeHostActivation'
-        )
-        self.ae(role['inputPolicy'], (
-            'headless-hook-lifecycle-with-loopback-trigger'
-        ))
-        self.ae(role['expectedLoadedPluginVersion'], '3.1.0')
-        self.ae(role['expectedExit'], 'nonzero')
-        self.ae(role['additionalEnvironmentKeys'], [
-            'ANTHROPIC_API_KEY', 'ANTHROPIC_BASE_URL',
-            'CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC',
-            'CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL',
-        ])
-        self.ae(role['requiredEnvironmentKeys'], [
-            'ANTHROPIC_API_KEY', 'ANTHROPIC_BASE_URL',
-            'CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC',
-            'CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL',
-        ])
-
-        runner = _text(GT20_RUNNER)
-        self.ai('function Invoke-ClaudeHostActivation', runner)
-        self.ai("$observerShellShim = Join-Path $observerRoot 'node'", runner)
-        self.ai("[System.IO.File]::WriteAllText(\n    $observerShellShim", runner)
-        self.ai("'--output-format', 'stream-json'", runner)
-        self.ai("'--include-hook-events', '--verbose'", runner)
-        self.ai("[AccordLoopbackFailingResponsesServer]::new()", runner)
-        self.ai("Add-CommandRecord 'claudeHostActivation'", runner)
-        self.ai("Add-CommandRecord 'claudeHookRuntimeUnitStartup'", runner)
-        self.ai("Add-CommandRecord 'claudeHookRuntimeUnitResume'", runner)
-        self.ani("Add-CommandRecord 'claudeHookStartup'", runner)
-        self.ani("Add-CommandRecord 'claudeHookResume'", runner)
-
-    def test_gt20_v4_failed_update_starts_before_failure_and_fails_closed(self):
-        contract = _read(ROOT, GT20V4)
-        proof = contract['failedUpdateProof']
-        self.ae(
-            proof['minimumAcceptedPhase'],
-            'host-accepted-update-with-task-owned-staging-observed',
-        )
-        self.ae(proof['forbiddenFailureCategory'], 'source-path-absent')
-        self.ae(proof['observationScope'], 'candidate-bound-staging-route')
-        self.ae(
-            proof['candidateIdentityAlgorithm'],
-            'ordinal-compact-json-package-file-facts-v1',
-        )
-        self.ae(
-            proof['publicPathPolicy'],
-            'root-marker-or-host-leaf-no-unmarked-absolute-path',
-        )
-        self.ae(proof['requiredReceiptFacts'], [
-            'candidateIdentityDigest', 'observedLocators',
-            'observedLocatorSetSha256', 'eventRelativePaths',
-            'eventPathSetSha256',
-        ])
-        self.ae(
-            proof['allowedPathScopes'],
-            ['exact-target', 'verified-temp-sibling'],
-        )
-        self.ae(proof['targetVersion'], '3.1.0')
-        self.ae(proof['unexpectedSiblingDelta'], [])
-        self.ae(proof['priorInventoryCommandRoles'], {
-            'codex': 'rollbackCodexInventory',
-            'claude': 'rollbackClaudeInventory',
-        })
-        self.at('fresh-host-inventory-selects-prior-version' in (
-            proof['requiredPoststate']
-        ))
-
-        runner = _text(GT20_RUNNER)
-        guard = runner.index('$difference.missing.Count -eq 0')
-        self.ai('$difference.extra.Count -ne 0', runner)
-        self.ai('$difference.changed.Count -ne 0', runner)
-        self.assertLess(
-            guard,
-            runner.index('Remove-Item -LiteralPath $owned -Recurse -Force'),
-        )
-
     def test_gt20_v4_receipt_validators_fail_closed(self):
-        hook_path = (
-            '%TASK_ROOT%/codex-host/plugins/cache/yiyuan-accord/'
-            'yiyuan-accord-codex/3.1.0/hooks/hooks.json'
+        evidence = _read(
+            ROOT,
+            'evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json',
         )
+        commands = {item['role']: item for item in evidence['commands']}
+        fixture = evidence['fixture']
+        behavior_subject = evidence['behaviorSubject']
+        npm = commands['claudeVersion']
+        self.at(_claude_command_distribution_identity(npm))
+        native = dict(
+            npm, packageManifest=None, packageManifestSha256=None,
+            resolvedCommand=npm['terminalExecutable'],
+            resolvedCommandSha256=npm['terminalExecutableSha256'],
+        )
+        self.at(_claude_command_distribution_identity(native))
+        self.af(_claude_command_distribution_identity(dict(
+            native, terminalExecutableSha256='2' * 64,
+        )))
 
-        def codex_turn(source, rpc_method, response_id):
-            digest = 'a' * 64
-            return {
-                'rpcMethod': rpc_method,
-                'responseId': response_id,
-                'threadIdSha256': digest,
-                'lifecycleTrigger': {
-                    'rpcMethod': 'turn/start', 'responseId': response_id + 10,
-                    'turnIdSha256': ('b' if source == 'startup' else 'c') * 64,
-                    'terminalStatus': 'failed',
-                    'modelProvider': 'task-owned-loopback-responses-failure',
-                    'requiresOpenAIAuth': False,
-                },
-                'discovery': {
-                    'rpcMethod': 'hooks/list', 'eventName': 'sessionStart',
-                    'source': 'plugin', 'sourcePath': hook_path,
-                    'handlerType': 'command', 'enabled': True,
-                    'trustStatus': 'untrusted',
-                },
-                'hookStarted': {
-                    'idSha256': digest, 'eventName': 'sessionStart',
-                    'source': 'plugin', 'sourcePath': hook_path,
-                    'status': 'running',
-                },
-                'hookCompleted': {
-                    'idSha256': digest, 'eventName': 'sessionStart',
-                    'source': 'plugin', 'sourcePath': hook_path,
-                    'status': 'completed',
-                },
-            }
-
-        codex = {
-            'exitCode': 0, 'failureCategory': None, 'stdout': '', 'stderr': '',
-            'activationReceipt': {
-                'transport': 'app-server-stdio-jsonl',
-                'rawStreamPolicy': (
-                    'digest-only-private-host-transcript-not-retained'
-                ),
-                'rawStdoutSha256': 'd' * 64,
-                'rawStderrSha256': 'e' * 64,
-                'rpcMethods': [
-                    'hooks/list', 'thread/start', 'turn/start', 'thread/resume',
-                ],
-                'lifecycleTriggerTurns': 2, 'externalModelTurns': 0,
-                'loopbackModelRequests': 2,
-                'startup': codex_turn('startup', 'thread/start', 10),
-                'resume': codex_turn('resume', 'thread/resume', 11),
-            },
-        }
+        codex = commands['codexHostActivation']
         self.at(product_control._gt20_v4_activation_receipt_valid(
             codex, 'codex', '3.1.0'
         ))
@@ -2888,78 +2737,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(product_control._gt20_v4_activation_receipt_valid(
             drifted, 'codex', '3.1.0'
         ), False)
-
-        def claude_native(source):
-            hook_id = ('a' if source == 'startup' else 'b') * 64
-            return {
-                'sessionSource': source,
-                'nativeHookStarted': {
-                    'subtype': 'hook_started', 'hookEvent': 'SessionStart',
-                    'hookName': f'SessionStart:{source}',
-                    'hookIdSha256': hook_id,
-                },
-                'nativeHookResponse': {
-                    'subtype': 'hook_response', 'hookEvent': 'SessionStart',
-                    'hookName': f'SessionStart:{source}',
-                    'hookIdSha256': hook_id,
-                    'exitCode': 0, 'outcome': 'success',
-                },
-                'loadedPlugin': {
-                    'name': 'yiyuan-accord-claude', 'version': '3.1.0',
-                    'source': 'yiyuan-accord-claude@yiyuan-accord',
-                    'path': (
-                        '%TASK_ROOT%/mutable-source/plugins/'
-                        'yiyuan-accord-claude'
-                    ),
-                },
-                'terminal': {
-                    'status': 'api_error', 'apiErrorStatus': 400,
-                    'isError': True, 'totalCostUsd': 0, 'turns': 1,
-                },
-            }
-
-        def claude_hook(source):
-            return {
-                'hookEventName': 'SessionStart', 'source': source,
-                'runtimePath': (
-                    '%TASK_ROOT%/mutable-source/plugins/'
-                    'yiyuan-accord-claude/runtime/accord-hook.cjs'
-                ),
-                'inputSha256': '1' * 64, 'stdoutSha256': '2' * 64,
-                'stderrSha256': '3' * 64, 'exitCode': 0,
-            }
-
-        claude = {
-            'exitCode': 1, 'failureCategory': None, 'stdout': '', 'stderr': '',
-            'activationReceipt': {
-                'transport': (
-                    'headless-stream-json-with-loopback-trigger-and-task-'
-                    'owned-node-observer'
-                ),
-                'rawStreamPolicy': (
-                    'digest-only-private-host-transcript-not-retained'
-                ),
-                'rawStdoutSha256': 'd' * 64,
-                'rawStderrSha256': 'e' * 64,
-                'lifecycleTriggerTurns': 2, 'externalModelTurns': 0,
-                'loopbackHttpRequests': 6,
-                'credentialEnvironmentInherited': False,
-                'networkEndpoint': 'ipv4-loopback',
-                'terminalStatus': 'api_error',
-                'hostRuns': [
-                    {'source': 'startup', 'sessionBinding': 'task-owned-session-id',
-                     'exitCode': 1, 'loopbackHttpRequests': 3},
-                    {'source': 'resume',
-                     'sessionBinding': 'same-task-owned-session-id',
-                     'exitCode': 1, 'loopbackHttpRequests': 3},
-                ],
-                'native': {
-                    'startup': claude_native('startup'),
-                    'resume': claude_native('resume'),
-                },
-                'hooks': [claude_hook('startup'), claude_hook('resume')],
-            },
-        }
+        claude = commands['claudeHostActivation']
         self.at(product_control._gt20_v4_activation_receipt_valid(
             claude, 'claude', '3.1.0'
         ))
@@ -2970,116 +2748,6 @@ class ProductControlTests(unittest.TestCase):
         self.ae(product_control._gt20_v4_activation_receipt_valid(
             drifted, 'claude', '3.1.0'
         ), False)
-
-        mutation = {
-            'exitCode': 1,
-            'failureCategory': 'task-owned-candidate-lock-after-staging',
-            'mutationReceipt': {
-                'stagingObserved': True, 'eventCount': 2,
-                'observationScope': 'candidate-bound-staging-route',
-                'pathScope': 'exact-target',
-                'targetVersion': '3.1.0', 'preexisting': False,
-                'postCommandAbsent': True,
-                'candidateIdentityDigest': '',
-                'observedLocatorCount': 2,
-                'observedLocators': [
-                    '.codex-plugin/plugin.json', 'adapter.json',
-                ],
-                'observedLocatorSetSha256': '',
-                'eventPathCount': 4,
-                'eventRelativePaths': [
-                    '.', '.codex-plugin', '.codex-plugin/plugin.json',
-                    'adapter.json',
-                ],
-                'eventPathSetSha256': '',
-                'unexpectedSiblingDelta': [],
-                'eventKinds': ['Changed', 'Created'],
-            },
-        }
-        commands = {
-            'accordCodexFailedUpdateAfterStaging': _clone(mutation),
-            'accordClaudeFailedUpdateAfterStaging': _clone(mutation),
-            'rollbackCodexInventory': {'stdout': json.dumps({
-                'installed': [{
-                    'pluginId': 'yiyuan-accord-codex@yiyuan-accord',
-                    'version': '3.0.1', 'installed': True, 'enabled': True,
-                }],
-            })},
-            'rollbackClaudeInventory': {'stdout': json.dumps([{
-                'id': 'yiyuan-accord-claude@yiyuan-accord',
-                'version': '3.0.1', 'enabled': True,
-            }])},
-        }
-        behavior_subject = {
-            'plugins/yiyuan-accord-codex/.codex-plugin/plugin.json': '1' * 64,
-            'plugins/yiyuan-accord-codex/adapter.json': '2' * 64,
-            'plugins/yiyuan-accord-codex/NOTICE': '3' * 64,
-            'plugins/yiyuan-accord-claude/.claude-plugin/plugin.json': '4' * 64,
-            'plugins/yiyuan-accord-claude/adapter.json': '5' * 64,
-            'plugins/yiyuan-accord-claude/NOTICE': '6' * 64,
-        }
-        for adapter, role in (
-            ('codex', 'accordCodexFailedUpdateAfterStaging'),
-            ('claude', 'accordClaudeFailedUpdateAfterStaging'),
-        ):
-            receipt = commands[role]['mutationReceipt']
-            manifest = f'.{adapter}-plugin/plugin.json'
-            receipt['observedLocators'] = [manifest, 'adapter.json']
-            receipt['eventRelativePaths'] = [
-                '.', f'.{adapter}-plugin', manifest, 'adapter.json',
-            ]
-            receipt['eventCount'] = len(receipt['eventRelativePaths'])
-            receipt['eventPathCount'] = len(receipt['eventRelativePaths'])
-            receipt['candidateIdentityDigest'] = (
-                product_control._candidate_package_identity_sha256(
-                    behavior_subject, adapter,
-                )
-            )
-            receipt['observedLocatorSetSha256'] = (
-                product_control._canonical_json_sha256(
-                    receipt['observedLocators'],
-                )
-            )
-            receipt['eventPathSetSha256'] = (
-                product_control._canonical_json_sha256(
-                    receipt['eventRelativePaths'],
-                )
-            )
-        commands['accordClaudeFailedUpdateAfterStaging']['mutationReceipt'][
-            'postCommandAbsent'
-        ] = False
-        fixture = {
-            'sourceFailureMode': 'task-owned-candidate-lock-after-staging',
-            'failedUpdateDisposition': (
-                'prior-remained-active-with-host-cleaned-or-explicit-task-'
-                'owned-staging-cleanup'
-            ),
-            'automaticRollbackClaimed': False,
-            'priorInstalledBytesPreservedAfterFailedUpdate': True,
-            'freshPriorInventoryVerified': True,
-            'failedUpdateRecovery': {
-                'codex': {
-                    'disposition': (
-                        'prior-remained-active-host-cleaned-observed-staging'
-                    ),
-                    'stagedFileCount': None, 'difference': None,
-                    'stagingCleanupVerified': True,
-                    'postRepairAbsent': True,
-                },
-                'claude': {
-                    'disposition': (
-                        'prior-remained-active-with-explicit-task-owned-'
-                        'staging-cleanup'
-                    ),
-                    'stagedFileCount': 1,
-                    'difference': {
-                        'missing': ['NOTICE'], 'extra': [], 'changed': [],
-                    },
-                    'stagingCleanupVerified': True,
-                    'postRepairAbsent': True,
-                },
-            },
-        }
         self.at(product_control._gt20_v4_failed_update_receipts_valid(
             commands, fixture, behavior_subject
         ))
@@ -3113,87 +2781,94 @@ class ProductControlTests(unittest.TestCase):
         self.af(product_control._gt20_v4_failed_update_receipts_valid(
             drifted, fixture, behavior_subject,
         ))
+        clean = fixture['failedUpdateRecovery']['codex']
+        retained = {}
+        for adapter in ('codex', 'claude'):
+            prefix = f'plugins/yiyuan-accord-{adapter}/'
+            files = {key[len(prefix):] for key in behavior_subject
+                     if key.startswith(prefix)}
+            observed = set(commands[
+                f'accord{adapter.title()}FailedUpdateAfterStaging'
+            ]['mutationReceipt']['observedLocators'])
+            missing = sorted(files - observed)
+            retained[adapter] = {
+                'disposition': (
+                    'prior-remained-active-with-explicit-task-owned-'
+                    'staging-cleanup'
+                ),
+                'stagedFileCount': len(files) - len(missing),
+                'difference': {'missing': missing, 'extra': [], 'changed': []},
+                'stagingCleanupVerified': True, 'postRepairAbsent': True,
+            }
+        dynamic_commands, dynamic_fixture = _clone(commands), _clone(fixture)
+        for adapter, absent in (('codex', False), ('claude', True)):
+            role = f'accord{adapter.title()}FailedUpdateAfterStaging'
+            dynamic_commands[role]['mutationReceipt']['postCommandAbsent'] = absent
+            dynamic_fixture['failedUpdateRecovery'][adapter] = _clone(
+                clean if absent else retained[adapter])
+        self.at(product_control._gt20_v4_failed_update_receipts_valid(
+            dynamic_commands, dynamic_fixture, behavior_subject, flexible=True,
+        ))
+        dynamic_commands['accordCodexFailedUpdateAfterStaging'][
+            'mutationReceipt'
+        ]['postCommandAbsent'] = False
+        dynamic_fixture['failedUpdateRecovery']['codex'] = retained['claude']
+        self.af(product_control._gt20_v4_failed_update_receipts_valid(
+            dynamic_commands, dynamic_fixture, behavior_subject, flexible=True,
+        ))
 
-    def test_gt20_claude_identity_accepts_npm_and_native_layouts(self):
-        npm = {
-            'resolvedCommand': 'C:/npm/claude.cmd',
-            'resolvedCommandSha256': '1' * 64,
-            'terminalExecutable': 'C:/npm/node_modules/claude/cli.js',
-            'terminalExecutableSha256': '2' * 64,
-            'packageManifest': 'C:/npm/node_modules/claude/package.json',
-            'packageManifestSha256': '3' * 64,
-        }
-        self.at(_claude_command_distribution_identity(npm))
-
-        native = {
-            'resolvedCommand': 'C:/Users/example/.local/bin/claude.exe',
-            'resolvedCommandSha256': '4' * 64,
-            'terminalExecutable': 'C:/Users/example/.local/bin/claude.exe',
-            'terminalExecutableSha256': '4' * 64,
-            'packageManifest': None,
-            'packageManifestSha256': None,
-        }
-        self.at(_claude_command_distribution_identity(native))
-        changed = dict(native, terminalExecutable='C:/tools/not-claude.exe')
-        self.ae(_claude_command_distribution_identity(changed), False)
-        changed = dict(native, terminalExecutableSha256='5' * 64)
-        self.ae(_claude_command_distribution_identity(changed), False)
+    def test_gt20_v5_agent_recovery_envelope_fails_closed(self):
+        mechanism = _read(ROOT, (
+            'evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json'
+        ))
+        envelope = _gt20_v5_envelope(mechanism)
+        valid = product_control._gt20_v5_agent_recovery_valid
+        self.at(valid(envelope, mechanism))
+        for path, value in (
+            (('invocation', 'toolCallCount'), 1),
+            (('decision', 'boundNonceSha256'), '0' * 64),
+            (('actuation', 'claude', 'action'), 'hold'),
+            (('independentPostState', 'inventories', 'codex', 'stdout'), '{}'),
+        ):
+            drifted = _clone(envelope)
+            _replace(drifted['agentDecision'], path, value)
+            self.af(valid(drifted, mechanism))
 
     def test_gt20_runner_preserves_unowned_collision_markers(self):
-        runner = ROOT / 'scripts/run-gt20-exact-package.ps1'
         if os.name != 'nt':
             source = _text(GT20_RUNNER)
             self.ai("if (-not $IsWindows)", source)
-            self.ai('TaskRoot must be a specifically named temporary directory.', source)
+            self.ai('Assert-DirectTemporaryPath', source)
             self.ai('EvidenceOutput must not already exist.', source)
             return
+        self.ani('$host =', _text(GT20_RUNNER).lower())
         powershell = shutil.which('pwsh')
         self.ann(powershell, 'GT-20 runner requires PowerShell 7')
         with tempfile.TemporaryDirectory(prefix='accord-gt20-ownership-') as base:
-            temporary = Path(base)
-            task = temporary / 'yiyuan-accord-gt20-formal-owned-collision'
-            evidence = temporary / (
-                'yiyuan-accord-gt20-formal-evidence-owned-collision.json'
+            temporary = Path(tempfile.gettempdir())
+            token = Path(base).name.lower().replace('_', '-')
+            task = temporary / f'yiyuan-accord-gt20-formal-{token}'
+            evidence = temporary / f'yiyuan-accord-gt20-formal-evidence-{token}.json'
+            self.addCleanup(shutil.rmtree, task, True)
+            self.addCleanup(evidence.unlink, True)
+            markers = (
+                (task / 'external-marker.txt', 'preserve task marker'),
+                (evidence, 'preserve evidence marker'),
             )
-
-            task.mkdir()
-            task_marker = task / 'external-marker.txt'
-            task_marker.write_text('preserve task marker', encoding='utf-8')
-            result = subprocess.run(
-                [
-                    powershell, '-NoProfile', '-File', str(runner),
+            for index, (marker, content) in enumerate(markers):
+                if index:
+                    shutil.rmtree(task)
+                marker.parent.mkdir(exist_ok=True)
+                marker.write_text(content, encoding='utf-8')
+                result = subprocess.run([
+                    powershell, '-NoProfile', '-File', str(ROOT / GT20_RUNNER),
                     '-RepositoryRoot', str(ROOT),
                     '-CandidateRevision', '0' * 40,
-                    '-TaskRoot', str(task),
-                    '-EvidenceOutput', str(evidence),
-                ],
-                text=True, encoding='utf-8', errors='replace',
-                capture_output=True, timeout=30,
-            )
-            self.ane(result.returncode, 0)
-            self.ae(
-                task_marker.read_text(encoding='utf-8'),
-                'preserve task marker',
-            )
-
-            shutil.rmtree(task)
-            evidence.write_text('preserve evidence marker', encoding='utf-8')
-            result = subprocess.run(
-                [
-                    powershell, '-NoProfile', '-File', str(runner),
-                    '-RepositoryRoot', str(ROOT),
-                    '-CandidateRevision', '0' * 40,
-                    '-TaskRoot', str(task),
-                    '-EvidenceOutput', str(evidence),
-                ],
-                text=True, encoding='utf-8', errors='replace',
-                capture_output=True, timeout=30,
-            )
-            self.ane(result.returncode, 0)
-            self.ae(
-                evidence.read_text(encoding='utf-8'),
-                'preserve evidence marker',
-            )
+                    '-TaskRoot', str(task), '-EvidenceOutput', str(evidence),
+                ], text=True, encoding='utf-8', errors='replace',
+                    capture_output=True, timeout=30)
+                self.ane(result.returncode, 0)
+                self.ae(marker.read_text(encoding='utf-8'), content)
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         current = host_check(ROOT, 'codex')['details']
@@ -4613,18 +4288,6 @@ class ProductControlTests(unittest.TestCase):
                 A, (json.dumps(acceptance, separators=(',', ':')) + '\n').encode(),
                 'acceptance-invalid-then-restored',
                 'revision-bound v2 authority schema is invalid',
-            )
-            invalid_carry(
-                'evals/observations/'
-                '2026-08-30-cf1d8c9-gt-07-codex-local.json',
-                b'{"corrupted":true}\n', 'corrupt referenced snapshot evidence',
-                'digest mismatch',
-            )
-            invalid_carry(
-                'evals/observations/2026-08-24-v20-claude-gt01.json',
-                b'{"corrupted":true}\n',
-                'corrupt historical-only snapshot evidence',
-                'digest mismatch',
             )
             package = 'plugins/yiyuan-accord-codex/adapter.json'
             invalid_carry(

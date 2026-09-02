@@ -4,7 +4,8 @@ param(
   [Parameter(Mandatory = $true)][string]$RepositoryRoot,
   [Parameter(Mandatory = $true)][string]$CandidateRevision,
   [Parameter(Mandatory = $true)][string]$TaskRoot,
-  [Parameter(Mandatory = $true)][string]$EvidenceOutput
+  [Parameter(Mandatory = $true)][string]$EvidenceOutput,
+  [string]$AgentModel = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -1757,6 +1758,7 @@ function Invoke-UpdateWithCandidateLock {
   }
   $result['_ownedStagingRoot'] = $selectedRoute.ownedRoot
   $result['_candidatePayloadRoot'] = $selectedRoute.payloadRoot
+  $result['_stagingParent'] = $stagingParent
   return $result
 }
 
@@ -1807,11 +1809,103 @@ function Assert-FileMapsEqual {
   return $actual.Count
 }
 
-function Repair-FailedUpdateStaging {
+function Get-StableSiblingDigest {
   param(
+    [Parameter(Mandatory = $true)][string]$StagingParent,
+    [Parameter(Mandatory = $true)][string]$OwnedRoot
+  )
+  $parent = [System.IO.Path]::GetFullPath($StagingParent)
+  $owned = [System.IO.Path]::GetFullPath($OwnedRoot)
+  $prefix = $parent + [System.IO.Path]::DirectorySeparatorChar
+  if (-not $owned.StartsWith(
+      $prefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+    throw 'Owned staging is outside its observed parent.'
+  }
+  $relative = [System.IO.Path]::GetRelativePath($parent, $owned).Replace('\', '/')
+  $relativePrefix = $relative + '/'
+  $outside = [ordered]@{}
+  foreach ($entry in (Get-FileMap $parent).GetEnumerator()) {
+    if ($entry.Key -ne $relative -and -not ([string]$entry.Key).StartsWith(
+        $relativePrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+      $outside[$entry.Key] = $entry.Value
+    }
+  }
+  return Get-FileMapIdentityDigest $outside
+}
+
+function Assert-NoReparsePath {
+  param(
+    [Parameter(Mandatory = $true)][string]$HostRoot,
+    [Parameter(Mandatory = $true)][string]$OwnedRoot,
+    [Parameter(Mandatory = $true)][string]$Label
+  )
+  $hostPath = [System.IO.Path]::GetFullPath($HostRoot).TrimEnd('\', '/')
+  $owned = [System.IO.Path]::GetFullPath($OwnedRoot).TrimEnd('\', '/')
+  $prefix = $hostPath + [System.IO.Path]::DirectorySeparatorChar
+  if (-not $owned.StartsWith(
+      $prefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+    throw "$Label staging path is outside its isolated host root."
+  }
+  $cursor = if (Test-Path -LiteralPath $owned) {
+    $owned
+  } else {
+    [System.IO.Path]::GetDirectoryName($owned)
+  }
+  while ($cursor) {
+    if (Test-Path -LiteralPath $cursor) {
+      $item = Get-Item -LiteralPath $cursor -Force
+      if ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) {
+        throw "$Label staging path or ancestor is a reparse point."
+      }
+    }
+    if ($cursor.Equals($hostPath, [System.StringComparison]::OrdinalIgnoreCase)) {
+      return
+    }
+    $parent = [System.IO.Path]::GetDirectoryName($cursor)
+    if (-not $parent -or $parent -eq $cursor) { break }
+    $cursor = $parent.TrimEnd('\', '/')
+  }
+  throw "$Label staging ancestry did not terminate at the isolated host root."
+}
+
+function Assert-DirectTemporaryPath {
+  param([string]$TemporaryBase, [string]$Target, [string]$Label)
+  $base = [System.IO.Path]::GetFullPath($TemporaryBase).TrimEnd('\', '/')
+  $path = [System.IO.Path]::GetFullPath($Target).TrimEnd('\', '/')
+  if (-not [System.IO.Path]::GetDirectoryName($path).Equals(
+      $base, [System.StringComparison]::OrdinalIgnoreCase) -or
+      (Get-Item -LiteralPath $base -Force).Attributes -band
+      [System.IO.FileAttributes]::ReparsePoint) {
+    throw "$Label must be a direct child of the non-reparse temporary root."
+  }
+}
+
+function Assert-EvaluatorTaskRootOwned {
+  if (-not $script:TaskOwnedForEvidence -or
+      -not (Test-Path -LiteralPath $script:TaskPathForEvidence -PathType Container) -or
+      -not (Test-Path -LiteralPath $script:TaskOwnershipMarker -PathType Leaf) -or
+      (Get-Content -Raw -LiteralPath $script:TaskOwnershipMarker) -ne
+      $script:TaskOwnershipToken) {
+    throw 'Evaluator task-root ownership marker is invalid.'
+  }
+  Assert-DirectTemporaryPath $script:TemporaryBaseForEvidence (
+    $script:TaskPathForEvidence
+  ) 'Evaluator task root'
+  $reparse = @(Get-ChildItem -LiteralPath $script:TaskPathForEvidence -Recurse -Force |
+    Where-Object { $_.Attributes -band [System.IO.FileAttributes]::ReparsePoint })
+  if ((Get-Item -LiteralPath $script:TaskPathForEvidence -Force).Attributes -band
+      [System.IO.FileAttributes]::ReparsePoint -or $reparse.Count -ne 0) {
+    throw 'Evaluator task root contains a reparse point and cannot be removed.'
+  }
+}
+
+function Get-FailedUpdateRecoveryPlan {
+  param(
+    [Parameter(Mandatory = $true)][ValidateSet('codex', 'claude')][string]$Adapter,
     [Parameter(Mandatory = $true)][string]$ExpectedRoot,
     [Parameter(Mandatory = $true)][string]$OwnedStagingRoot,
     [Parameter(Mandatory = $true)][string]$CandidatePayloadRoot,
+    [Parameter(Mandatory = $true)][string]$StagingParent,
     [Parameter(Mandatory = $true)][string]$HostRoot,
     [Parameter(Mandatory = $true)][string]$PriorRoot,
     [Parameter(Mandatory = $true)][System.Collections.IDictionary]$StagingReceipt,
@@ -1835,65 +1929,318 @@ function Repair-FailedUpdateStaging {
       )) {
     throw "$Label candidate staging path is outside its isolated host root."
   }
+  Assert-NoReparsePath $HostRoot $owned $Label
   if ($StagingReceipt.stagingObserved -ne $true -or
       $StagingReceipt.observationScope -ne 'candidate-bound-staging-route' -or
       $StagingReceipt.preexisting -ne $false -or
       @($StagingReceipt.unexpectedSiblingDelta).Count -ne 0) {
     throw "$Label did not produce a bounded exact candidate-staging receipt."
   }
+  $expected = Get-FileMap $ExpectedRoot
+  $candidateIdentity = Get-FileMapIdentityDigest $expected
+  if ($StagingReceipt.candidateIdentityDigest -ne $candidateIdentity) {
+    throw "$Label candidate identity drifted before recovery."
+  }
+  $priorIdentity = Get-FileMapIdentityDigest (Get-FileMap $PriorRoot)
+  $siblingIdentity = Get-StableSiblingDigest $StagingParent $owned
+  $action = 'accept-host-cleaned'
+  $actual = $null
+  $difference = $null
   if ($StagingReceipt.postCommandAbsent -eq $true) {
     if ((Test-Path -LiteralPath $owned) -or (Test-Path -LiteralPath $payload)) {
       throw "$Label host-cleaned staging receipt conflicts with live residue."
     }
-    return [ordered]@{
-      disposition = 'prior-remained-active-host-cleaned-observed-staging'
-      stagedFileCount = $null
-      difference = $null
-      stagingCleanupVerified = $true
-      postRepairAbsent = $true
+  } else {
+    if (-not (Test-Path -LiteralPath $owned -PathType Container) -or
+        -not (Test-Path -LiteralPath $payload -PathType Container)) {
+      throw "$Label retained staging receipt has no attributable payload."
     }
+    $actual = Get-FileMap $payload
+    if ($actual.Count -eq 0 -or
+        (Get-FileMapIdentityDigest $expected) -eq
+        (Get-FileMapIdentityDigest $actual)) {
+      throw "$Label staging is empty or already a complete candidate."
+    }
+    $difference = [ordered]@{
+      missing = @($expected.Keys | Where-Object { -not $actual.Contains($_) } |
+        Sort-Object)
+      extra = @($actual.Keys | Where-Object { -not $expected.Contains($_) } |
+        Sort-Object)
+      changed = @($expected.Keys | Where-Object {
+        $actual.Contains($_) -and $actual[$_] -ne $expected[$_]
+      } | Sort-Object)
+    }
+    if ($difference.missing.Count -eq 0 -or
+        $difference.extra.Count -ne 0 -or
+        $difference.changed.Count -ne 0) {
+      throw "$Label staging is not a strict unmodified subset of the candidate."
+    }
+    $action = 'remove-attributable-incomplete-staging'
   }
-  if (-not (Test-Path -LiteralPath $owned -PathType Container) -or
-      -not (Test-Path -LiteralPath $payload -PathType Container)) {
-    throw "$Label retained staging receipt has no attributable payload."
+  $public = [ordered]@{
+    adapter = $Adapter
+    allowedAction = $action
+    postCommandAbsent = [bool]$StagingReceipt.postCommandAbsent
+    candidateIdentityDigest = $candidateIdentity
+    priorIdentityDigest = $priorIdentity
+    siblingStateSha256 = $siblingIdentity
+    stagedFileCount = if ($null -eq $actual) { $null } else { $actual.Count }
+    difference = $difference
   }
-  if (@(Get-ChildItem -LiteralPath $owned -Recurse -Force |
-      Where-Object {
-        $_.Attributes -band [System.IO.FileAttributes]::ReparsePoint
-      }).Count -ne 0) {
-    throw "$Label staging contains a reparse point."
+  $binding = Get-TextSha256 (ConvertTo-Json $public -Compress -Depth 8)
+  $public['bindingSha256'] = $binding
+  return [pscustomobject]@{
+    Public = $public
+    Adapter = $Adapter
+    ExpectedRoot = $ExpectedRoot
+    OwnedStagingRoot = $owned
+    CandidatePayloadRoot = $payload
+    StagingParent = $StagingParent
+    HostRoot = $HostRoot
+    PriorRoot = $PriorRoot
+    StagingReceipt = $StagingReceipt
+    Label = $Label
   }
-  $expected = Get-FileMap $ExpectedRoot
-  $actual = Get-FileMap $payload
-  if ($actual.Count -eq 0 -or
-      ($expected | ConvertTo-Json -Compress) -eq
-      ($actual | ConvertTo-Json -Compress)) {
-    throw "$Label staging is empty or already a complete candidate."
+}
+
+function Complete-BoundedFailedUpdateRecovery {
+  param(
+    [Parameter(Mandatory = $true)]$Plan,
+    [Parameter(Mandatory = $true)][string]$DecisionAction
+  )
+  $current = Get-FailedUpdateRecoveryPlan `
+    $Plan.Adapter $Plan.ExpectedRoot $Plan.OwnedStagingRoot `
+    $Plan.CandidatePayloadRoot $Plan.StagingParent $Plan.HostRoot `
+    $Plan.PriorRoot $Plan.StagingReceipt $Plan.Label
+  if ($current.Public.bindingSha256 -ne $Plan.Public.bindingSha256 -or
+      $DecisionAction -ne $current.Public.allowedAction) {
+    throw "$($Plan.Label) recovery state or Agent decision drifted."
   }
-  $difference = [ordered]@{
-    missing = @($expected.Keys | Where-Object { -not $actual.Contains($_) } |
-      Sort-Object)
-    extra = @($actual.Keys | Where-Object { -not $expected.Contains($_) } |
-      Sort-Object)
-    changed = @($expected.Keys | Where-Object {
-      $actual.Contains($_) -and $actual[$_] -ne $expected[$_]
-    } | Sort-Object)
+  if ($DecisionAction -eq 'remove-attributable-incomplete-staging') {
+    Remove-Item -LiteralPath $current.OwnedStagingRoot -Recurse -Force
   }
-  if ($difference.missing.Count -eq 0 -or
-      $difference.extra.Count -ne 0 -or
-      $difference.changed.Count -ne 0) {
-    throw "$Label staging is not a strict unmodified subset of the candidate."
-  }
-  Remove-Item -LiteralPath $owned -Recurse -Force
-  if ((Test-Path -LiteralPath $owned) -or (Test-Path -LiteralPath $payload)) {
-    throw "$Label task-owned staging cleanup failed."
+  if ((Test-Path -LiteralPath $current.OwnedStagingRoot) -or
+      (Test-Path -LiteralPath $current.CandidatePayloadRoot)) {
+    throw "$($Plan.Label) task-owned staging cleanup failed."
   }
   return [ordered]@{
-    disposition = 'prior-remained-active-with-explicit-task-owned-staging-cleanup'
-    stagedFileCount = $actual.Count
-    difference = $difference
+    disposition = if ($DecisionAction -eq 'accept-host-cleaned') {
+      'prior-remained-active-host-cleaned-observed-staging'
+    } else {
+      'prior-remained-active-with-explicit-task-owned-staging-cleanup'
+    }
+    stagedFileCount = $current.Public.stagedFileCount
+    difference = $current.Public.difference
     stagingCleanupVerified = $true
     postRepairAbsent = $true
+  }
+}
+
+function Invoke-IsolatedRecoveryDecision {
+  param(
+    [Parameter(Mandatory = $true)][object[]]$Plans,
+    [Parameter(Mandatory = $true)][string]$CandidateSource,
+    [Parameter(Mandatory = $true)][string]$CandidateRevision,
+    [Parameter(Mandatory = $true)][System.Collections.IDictionary]$CodexVersion,
+    [AllowEmptyString()][string]$RequestedModel = ''
+  )
+  if ($Plans.Count -ne 2 -or
+      @($Plans | ForEach-Object { $_.Adapter } | Sort-Object) -join ',' -ne
+      'claude,codex') {
+    throw 'Agent recovery decision requires exactly the Codex and Claude plans.'
+  }
+  $agentRoot = Join-Path $script:TaskPathForEvidence 'agent-decision'
+  New-Item -ItemType Directory -Path $agentRoot -ErrorAction Stop | Out-Null
+  $schemaPath = Join-Path $agentRoot 'decision-schema.json'
+  $skillLocator = 'plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md'
+  $skillPath = Join-Path $CandidateSource $skillLocator
+  $skillText = Get-Content -Raw -LiteralPath $skillPath
+  $skillSha = (Get-FileHash -Algorithm SHA256 -LiteralPath $skillPath).Hash.ToLowerInvariant()
+  $facts = @($Plans | Sort-Object Adapter | ForEach-Object { $_.Public })
+  $failureReceiptSha = Get-TextSha256 (
+    ConvertTo-Json $facts -Compress -Depth 10
+  )
+  $nonceSha = Get-TextSha256 ([Guid]::NewGuid().ToString('N'))
+  $schema = [ordered]@{
+    type = 'object'
+    additionalProperties = $false
+    required = @(
+      'schema', 'decision', 'boundFailureReceiptSha256',
+      'boundNonceSha256', 'boundSubjectRevision', 'adapterActions'
+    )
+    properties = [ordered]@{
+      schema = [ordered]@{ type = 'string'; enum = @('yiyuan-accord-gt20-agent-decision/v1') }
+      decision = [ordered]@{ type = 'string'; enum = @('authorize-bounded-compensation', 'hold') }
+      boundFailureReceiptSha256 = [ordered]@{ type = 'string' }
+      boundNonceSha256 = [ordered]@{ type = 'string' }
+      boundSubjectRevision = [ordered]@{ type = 'string' }
+      adapterActions = [ordered]@{
+        type = 'object'
+        additionalProperties = $false
+        required = @('codex', 'claude')
+        properties = [ordered]@{
+          codex = [ordered]@{ type = 'string'; enum = @('accept-host-cleaned', 'remove-attributable-incomplete-staging', 'hold') }
+          claude = [ordered]@{ type = 'string'; enum = @('accept-host-cleaned', 'remove-attributable-incomplete-staging', 'hold') }
+        }
+      }
+    }
+  }
+  $schemaJson = ConvertTo-Json $schema -Compress -Depth 12
+  [System.IO.File]::WriteAllText(
+    $schemaPath, $schemaJson, [System.Text.UTF8Encoding]::new($false)
+  )
+  $request = [ordered]@{
+    operation = 'decide-bounded-failed-update-recovery'
+    userIntentCount = 1
+    userInterventionCount = 0
+    evaluatedRevision = $CandidateRevision
+    candidateSkillLocator = $skillLocator
+    candidateSkillSha256 = $skillSha
+    failureReceiptSha256 = $failureReceiptSha
+    nonceSha256 = $nonceSha
+    failureFacts = $facts
+  }
+  $prompt = @"
+With zero tools, decide this single recovery from the path-free facts and exact
+Skill. Authorize only when each action equals allowedAction and each retained
+difference has nonempty missing and empty extra/changed; otherwise hold. Return
+only the required JSON, without paths, commands, explanations or targets.
+
+REQUEST:
+$(ConvertTo-Json $request -Compress -Depth 12)
+
+EXACT CANDIDATE SKILL (sha256 $skillSha):
+$skillText
+"@
+  $arguments = [System.Collections.Generic.List[string]]::new()
+  foreach ($item in @(
+    '--disable', 'plugins', '--disable', 'hooks', '--sandbox', 'read-only',
+    '--ask-for-approval', 'never'
+  )) { $arguments.Add($item) }
+  if ($RequestedModel) {
+    $arguments.Add('--model')
+    $arguments.Add($RequestedModel)
+  }
+  foreach ($item in @(
+    '-c', 'model_reasoning_effort="medium"', '-C', $agentRoot, 'exec',
+    '--ephemeral', '--ignore-user-config', '--ignore-rules',
+    '--skip-git-repo-check', '--output-schema', $schemaPath, '--json', '-'
+  )) { $arguments.Add($item) }
+  $authRoot = if ($env:CODEX_HOME) {
+    $env:CODEX_HOME
+  } else {
+    Join-Path $env:USERPROFILE '.codex'
+  }
+  if (-not (Test-Path -LiteralPath $authRoot -PathType Container)) {
+    throw 'Current Codex authentication root is unavailable.'
+  }
+  $result = Invoke-Captured codex @($arguments) $agentRoot @{
+    CODEX_HOME = $authRoot
+  } $prompt 300 310 1048576
+  if ($result.exitCode -ne 0 -or $result.timedOut -or
+      -not $result.terminationConfirmed -or -not $result.streamsDrained -or
+      $result.jobActiveProcesses -ne 0) {
+    throw 'Isolated Codex Agent decision did not terminate successfully.'
+  }
+  $eventTypes = [System.Collections.Generic.List[string]]::new()
+  $messages = [System.Collections.Generic.List[string]]::new()
+  $threadCount = 0
+  $turnStarted = 0
+  $turnCompleted = 0
+  foreach ($line in @($result.stdout -split "`r?`n" | Where-Object { $_.Trim() })) {
+    try { $event = $line | ConvertFrom-Json -Depth 30 } catch {
+      throw 'Codex Agent JSONL contained a non-JSON line.'
+    }
+    if ($event.type -notin @(
+        'thread.started', 'turn.started', 'item.started', 'item.completed',
+        'turn.completed'
+      )) {
+      throw "Codex Agent JSONL contained a forbidden event type: $($event.type)"
+    }
+    $eventTypes.Add([string]$event.type)
+    switch ($event.type) {
+      'thread.started' { $threadCount++ }
+      'turn.started' { $turnStarted++ }
+      'turn.completed' { $turnCompleted++ }
+      'item.started' {
+        if ($event.item.type -notin @('reasoning', 'agent_message')) {
+          throw "Codex Agent started a forbidden item type: $($event.item.type)"
+        }
+      }
+      'item.completed' {
+        if ($event.item.type -notin @('reasoning', 'agent_message')) {
+          throw "Codex Agent completed a forbidden item type: $($event.item.type)"
+        }
+        if ($event.item.type -eq 'agent_message') {
+          $messages.Add([string]$event.item.text)
+        }
+      }
+    }
+  }
+  if ($threadCount -ne 1 -or $turnStarted -ne 1 -or $turnCompleted -ne 1 -or
+      $messages.Count -ne 1) {
+    throw 'Codex Agent JSONL did not contain exactly one thread, turn and decision.'
+  }
+  try { $decision = $messages[0] | ConvertFrom-Json -Depth 10 } catch {
+    throw 'Codex Agent decision was not valid structured JSON.'
+  }
+  if (@($decision.PSObject.Properties).Count -ne 6 -or
+      $decision.schema -ne 'yiyuan-accord-gt20-agent-decision/v1' -or
+      $decision.boundFailureReceiptSha256 -ne $failureReceiptSha -or
+      $decision.boundNonceSha256 -ne $nonceSha -or
+      $decision.boundSubjectRevision -ne $CandidateRevision -or
+      @($decision.adapterActions.PSObject.Properties).Count -ne 2) {
+    throw 'Codex Agent decision did not bind the exact recovery request.'
+  }
+  foreach ($plan in $Plans) {
+    if ($decision.adapterActions.($plan.Adapter) -ne $plan.Public.allowedAction) {
+      throw "Codex Agent decision did not select the exact $($plan.Adapter) action."
+    }
+  }
+  if ($decision.decision -ne 'authorize-bounded-compensation') {
+    throw 'Codex Agent held or rejected bounded compensation.'
+  }
+  return [ordered]@{
+    request = $request
+    invocation = [ordered]@{
+      cliVersion = $CodexVersion.stdout.Trim()
+      resolvedCommandSha256 = $result.resolvedCommandSha256
+      terminalExecutableSha256 = $result.terminalExecutableSha256
+      requestedModel = if ($RequestedModel) { $RequestedModel } else { $null }
+      reasoningEffort = 'medium'
+      isolation = @(
+        'ephemeral', 'ignore-user-config', 'ignore-rules', 'disable-plugins',
+        'disable-hooks', 'read-only-sandbox', 'approval-never',
+        'empty-task-owned-working-directory', 'structured-output'
+      )
+      credentialUse = 'current-user-codex-home-auth-only'
+      inputSha256 = Get-TextSha256 $prompt
+      outputSchemaSha256 = Get-TextSha256 $schemaJson
+      eventStreamSha256 = Get-TextSha256 $result.stdout
+      stderrSha256 = Get-TextSha256 $result.stderr
+      rawStreamPolicy = 'digest-and-safe-structure-only-no-thread-or-turn-id-retained'
+      eventTypes = @($eventTypes)
+      threadCount = $threadCount
+      turnCount = $turnCompleted
+      agentMessageCount = $messages.Count
+      toolCallCount = 0
+      exitCode = $result.exitCode
+      timedOut = $result.timedOut
+      terminationConfirmed = $result.terminationConfirmed
+      streamsDrained = $result.streamsDrained
+      jobActiveProcesses = $result.jobActiveProcesses
+    }
+    decision = [ordered]@{
+      schema = $decision.schema
+      decision = $decision.decision
+      boundFailureReceiptSha256 = $decision.boundFailureReceiptSha256
+      boundNonceSha256 = $decision.boundNonceSha256
+      boundSubjectRevision = $decision.boundSubjectRevision
+      adapterActions = [ordered]@{
+        codex = $decision.adapterActions.codex
+        claude = $decision.adapterActions.claude
+      }
+    }
   }
 }
 
@@ -2350,19 +2697,19 @@ $repository = [System.IO.Path]::GetFullPath($RepositoryRoot)
 $task = [System.IO.Path]::GetFullPath($TaskRoot)
 $evidencePath = [System.IO.Path]::GetFullPath($EvidenceOutput)
 $temporaryBase = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath())
-if (-not $task.StartsWith($temporaryBase, [System.StringComparison]::OrdinalIgnoreCase) -or
-    ([System.IO.Path]::GetFileName($task)) -notmatch '^yiyuan-accord-gt20-formal-[a-z0-9-]+$') {
-  throw 'TaskRoot must be a specifically named temporary directory.'
+Assert-DirectTemporaryPath $temporaryBase $task 'TaskRoot'
+if (([System.IO.Path]::GetFileName($task)) -notmatch '^yiyuan-accord-gt20-formal-[a-z0-9-]+$') {
+  throw 'TaskRoot must use the formal evaluator name.'
 }
 if ($task.StartsWith($repository, [System.StringComparison]::OrdinalIgnoreCase)) {
   throw 'TaskRoot must be outside the repository.'
 }
-if (-not $evidencePath.StartsWith($temporaryBase, [System.StringComparison]::OrdinalIgnoreCase) -or
-    ([System.IO.Path]::GetFileName($evidencePath)) -notmatch '^yiyuan-accord-gt20-formal-evidence-[a-z0-9-]+\.json$' -or
+Assert-DirectTemporaryPath $temporaryBase $evidencePath 'EvidenceOutput'
+if (([System.IO.Path]::GetFileName($evidencePath)) -notmatch '^yiyuan-accord-gt20-formal-evidence-[a-z0-9-]+\.json$' -or
     [System.IO.Path]::GetExtension($evidencePath) -ne '.json' -or
     $evidencePath.StartsWith($task, [System.StringComparison]::OrdinalIgnoreCase) -or
     $evidencePath.StartsWith($repository, [System.StringComparison]::OrdinalIgnoreCase)) {
-  throw 'EvidenceOutput must be a specifically named temporary JSON file outside the task root and repository.'
+  throw 'EvidenceOutput must use the formal JSON name outside the task root and repository.'
 }
 if (Test-Path -LiteralPath $evidencePath) {
   throw 'EvidenceOutput must not already exist.'
@@ -2390,6 +2737,13 @@ try {
 New-Item -ItemType Directory -Path $task -ErrorAction Stop | Out-Null
 $taskOwned = $true
 $script:TaskOwnedForEvidence = $true
+$script:TaskOwnershipToken = Get-TextSha256 ([Guid]::NewGuid().ToString('N'))
+$script:TaskOwnershipMarker = Join-Path $task '.yiyuan-accord-evaluator-owned'
+[System.IO.File]::WriteAllText(
+  $script:TaskOwnershipMarker, $script:TaskOwnershipToken,
+  [System.Text.UTF8Encoding]::new($false)
+)
+Assert-EvaluatorTaskRootOwned
 $commitCheck = Invoke-Captured git @('-C', $repository, 'rev-parse', '--verify', "$CandidateRevision`^{commit}") $repository
 Add-CommandRecord 'candidateCommitCheck' $commitCheck
 Assert-Exit $commitCheck 0 'candidate commit validation'
@@ -2690,24 +3044,82 @@ Assert-PluginInventory $codexRollbackList codex 'lifecycle-neighbor-codex@lifecy
 Assert-PluginInventory $claudeRollbackList claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude neighbor after rollback'
 [void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex neighbor after rollback')
 [void](Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude neighbor after rollback')
-$codexFailedUpdateRecovery = Repair-FailedUpdateStaging (
+$codexRecoveryPlan = Get-FailedUpdateRecoveryPlan codex (
   Join-Path $candidateSource 'plugins/yiyuan-accord-codex'
 ) $codexFailedUpdate._ownedStagingRoot (
   $codexFailedUpdate._candidatePayloadRoot
-) $codexRoot $codexOldInstalled (
+) $codexFailedUpdate._stagingParent $codexRoot $codexOldInstalled (
   $codexFailedUpdate.mutationReceipt
 ) 'Codex failed update'
-$claudeFailedUpdateRecovery = Repair-FailedUpdateStaging (
+$claudeRecoveryPlan = Get-FailedUpdateRecoveryPlan claude (
   Join-Path $candidateSource 'plugins/yiyuan-accord-claude'
 ) $claudeFailedUpdate._ownedStagingRoot (
   $claudeFailedUpdate._candidatePayloadRoot
-) $claudeRoot $claudeOldInstalled (
+) $claudeFailedUpdate._stagingParent $claudeRoot $claudeOldInstalled (
   $claudeFailedUpdate.mutationReceipt
 ) 'Claude failed update'
+$agentDecisionEvidence = Invoke-IsolatedRecoveryDecision @(
+  $codexRecoveryPlan, $claudeRecoveryPlan
+) $candidateSource $CandidateRevision $codexVersion $AgentModel
+$codexDecisionAction = $agentDecisionEvidence.decision.adapterActions.codex
+$claudeDecisionAction = $agentDecisionEvidence.decision.adapterActions.claude
+$codexFailedUpdateRecovery = Complete-BoundedFailedUpdateRecovery (
+  $codexRecoveryPlan
+) $codexDecisionAction
+$claudeFailedUpdateRecovery = Complete-BoundedFailedUpdateRecovery (
+  $claudeRecoveryPlan
+) $claudeDecisionAction
 [void]$codexFailedUpdate.Remove('_ownedStagingRoot')
 [void]$codexFailedUpdate.Remove('_candidatePayloadRoot')
+[void]$codexFailedUpdate.Remove('_stagingParent')
 [void]$claudeFailedUpdate.Remove('_ownedStagingRoot')
 [void]$claudeFailedUpdate.Remove('_candidatePayloadRoot')
+[void]$claudeFailedUpdate.Remove('_stagingParent')
+
+[void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-codex') $codexOldInstalled 'Codex post-Agent prior')
+[void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-claude') $claudeOldInstalled 'Claude post-Agent prior')
+$postAgentCodexInventory = Invoke-Captured codex @('plugin', 'list', '--json') $mutableSource $codexEnvironment
+$postAgentClaudeInventory = Invoke-Captured claude @('plugin', 'list', '--json') $mutableSource $claudeEnvironment
+Assert-Exit $postAgentCodexInventory 0 'Codex post-Agent inventory'
+Assert-Exit $postAgentClaudeInventory 0 'Claude post-Agent inventory'
+Assert-PluginInventory $postAgentCodexInventory codex $CodexAccordPluginId '3.0.1' $true 'Codex post-Agent prior'
+Assert-PluginInventory $postAgentClaudeInventory claude $ClaudeAccordPluginId '3.0.1' $true 'Claude post-Agent prior'
+Assert-PluginInventory $postAgentCodexInventory codex 'lifecycle-neighbor-codex@lifecycle-neighbor' '1.0.0' $true 'Codex post-Agent neighbor'
+Assert-PluginInventory $postAgentClaudeInventory claude 'lifecycle-neighbor-claude@lifecycle-neighbor' '1.0.0' $true 'Claude post-Agent neighbor'
+[void](Assert-FileMapsEqual $neighborCodexPackage $neighborCodexInstalled 'Codex post-Agent neighbor')
+[void](Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude post-Agent neighbor')
+foreach ($path in $sentinels) {
+  $currentHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant()
+  if ($currentHash -ne $sentinelHashes[$path]) {
+    throw 'Agent recovery changed an unmanaged or concurrent user sentinel.'
+  }
+}
+$agentDecisionEvidence['actuation'] = [ordered]@{
+  executor = 'evaluator-runner'
+  targetDerivation = 'bound-private-mutation-receipt-only'
+  codex = [ordered]@{
+    planBindingSha256 = $codexRecoveryPlan.Public.bindingSha256
+    action = $codexDecisionAction
+    safetyRevalidated = $true
+    result = $codexFailedUpdateRecovery
+  }
+  claude = [ordered]@{
+    planBindingSha256 = $claudeRecoveryPlan.Public.bindingSha256
+    action = $claudeDecisionAction
+    safetyRevalidated = $true
+    result = $claudeFailedUpdateRecovery
+  }
+}
+$agentDecisionEvidence['independentPostState'] = [ordered]@{
+  priorInstalledBytesPreserved = $true
+  unrelatedPluginStatePreserved = $true
+  unmanagedAndConcurrentSentinelsPreserved = $true
+  inventories = [ordered]@{
+    codex = $postAgentCodexInventory
+    claude = $postAgentClaudeInventory
+  }
+  completedBeforeIntentReturn = $true
+}
 
 $codexUpdate = Invoke-Captured codex @(
   '--dangerously-bypass-hook-trust',
@@ -3155,6 +3567,7 @@ $record = [ordered]@{
   }
 }
 
+Assert-EvaluatorTaskRootOwned
 Remove-Item -LiteralPath $task -Recurse -Force
 if (Test-Path -LiteralPath $task) { throw 'TaskRoot cleanup failed.' }
 $taskOwned = $false
@@ -3162,6 +3575,22 @@ $script:TaskOwnedForEvidence = $false
 $script:TaskEnvironmentReadyForEvidence = $false
 $record.lifecycle.cleanup = 'verified'
 $record.postState.afterEvaluatorCleanup.taskRootRemoved = $true
+$mechanismRecord = $record
+$record = [ordered]@{
+  schema = 'yiyuan-accord-gt20-exact-package-evidence/v5'
+  taskId = 'GT-20'
+  evaluatedRevision = $CandidateRevision
+  lifecycle = [ordered]@{
+    mechanism = 'verified'
+    agentDecision = 'verified'
+    actuation = 'verified'
+    independentPostState = 'verified'
+    cleanup = 'verified'
+  }
+  claimLimit = 'One isolated, zero-tool Codex Agent decision selected evaluator-derived compensation after native Codex and Claude failed updates; the evaluator revalidated ownership, candidate/prior bytes, retained-subset or host-cleaned state, sibling stability and post-state. The Agent supplied no target or command and deleted nothing. Automatic, in-place or crash-atomic rollback, Claude Agent equivalence, desktop behavior, production, cross-OS value, candidate status and release readiness remain unclaimed.'
+  mechanism = $mechanismRecord
+  agentDecision = $agentDecisionEvidence
+}
 Assert-NoPrivateEvidenceValue $record
 $evidenceJson = $record | ConvertTo-Json -Depth 20
 Assert-NoPrivateEvidenceValue ($evidenceJson | ConvertFrom-Json -Depth 30)
@@ -3171,6 +3600,7 @@ $succeeded = $true
   try {
     if ($taskOwned) {
       if (Test-Path -LiteralPath $task) {
+        Assert-EvaluatorTaskRootOwned
         Remove-Item -LiteralPath $task -Recurse -Force
       }
       if (Test-Path -LiteralPath $task) {
@@ -3191,11 +3621,7 @@ if (-not $succeeded -or $null -eq $evidenceJson) {
   throw 'GT-20 did not reach an evidence publication state.'
 }
 $evidenceDirectory = Split-Path -Parent $evidencePath
-$createdEvidenceDirectory = $false
-if (-not (Test-Path -LiteralPath $evidenceDirectory)) {
-  New-Item -ItemType Directory -Path $evidenceDirectory | Out-Null
-  $createdEvidenceDirectory = $true
-}
+Assert-DirectTemporaryPath $temporaryBase $evidencePath 'EvidenceOutput'
 $pendingEvidencePath = Join-Path $evidenceDirectory (
   ([System.IO.Path]::GetFileName($evidencePath)) + ".pending-$PID-" +
   [Guid]::NewGuid().ToString('N')
@@ -3219,14 +3645,6 @@ try {
 } finally {
   if ($pendingEvidenceOwned -and (Test-Path -LiteralPath $pendingEvidencePath)) {
     Remove-Item -LiteralPath $pendingEvidencePath -Force
-  }
-  if (
-    $createdEvidenceDirectory -and
-    -not (Test-Path -LiteralPath $evidencePath) -and
-    (Test-Path -LiteralPath $evidenceDirectory) -and
-    @(Get-ChildItem -LiteralPath $evidenceDirectory -Force).Count -eq 0
-  ) {
-    Remove-Item -LiteralPath $evidenceDirectory -Force
   }
 }
 Write-Output $evidencePath

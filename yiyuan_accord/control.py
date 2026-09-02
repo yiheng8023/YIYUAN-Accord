@@ -132,6 +132,15 @@ _GT20_V7_PREDECESSOR = "732325e0b00911d295203468faed717bf29db3e2"
 _GT20_V7_EVIDENCE_LOCATOR = (
     "evals/evidence/2026-09-02-v310-gt20-exact-package-v5-source.json"
 )
+_GT20_V5_CLAIM = (
+    "One isolated, zero-tool Codex Agent decision selected evaluator-derived "
+    "compensation after native Codex and Claude failed updates; the evaluator "
+    "revalidated ownership, candidate/prior bytes, retained-subset or host-cleaned "
+    "state, sibling stability and post-state. The Agent supplied no target or "
+    "command and deleted nothing. Automatic, in-place or crash-atomic rollback, "
+    "Claude Agent equivalence, desktop behavior, production, cross-OS value, "
+    "candidate status and release readiness remain unclaimed."
+)
 _SNAPSHOT_V1_AUTHORITY_REFS = (
     "product/constitution.json",
     "product/program.json",
@@ -234,6 +243,25 @@ def _candidate_package_identity_sha256(behavior_subject, adapter):
         return None
     facts.sort(key=lambda item: item["locator"])
     return _canonical_json_sha256(facts)
+
+
+def _candidate_incomplete_subset_valid(
+    behavior_subject, adapter, staged_count, difference,
+):
+    prefix = f"plugins/yiyuan-accord-{adapter}/"
+    candidates = {
+        locator[len(prefix):] for locator in behavior_subject
+        if isinstance(locator, str) and locator.startswith(prefix)
+    } if isinstance(behavior_subject, dict) else set()
+    missing = difference.get("missing") if isinstance(difference, dict) else None
+    return (
+        bool(candidates) and type(staged_count) is int and staged_count > 0
+        and isinstance(missing, list) and missing == sorted(set(missing))
+        and set(missing) < candidates
+        and staged_count + len(missing) == len(candidates)
+        and set(difference) == {"missing", "extra", "changed"}
+        and difference.get("extra") == [] and difference.get("changed") == []
+    )
 
 
 def _candidate_relative_receipt_facts_valid(
@@ -3109,7 +3137,7 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
 
 
 def _gt20_v4_failed_update_receipts_valid(
-    commands, fixture, behavior_subject,
+    commands, fixture, behavior_subject, flexible=False,
 ):
     """Validate mutation reached staging and recovery claims remain factual."""
 
@@ -3166,7 +3194,6 @@ def _gt20_v4_failed_update_receipts_valid(
     claude_mutation = commands["accordClaudeFailedUpdateAfterStaging"][
         "mutationReceipt"
     ]
-    difference = claude.get("difference") if isinstance(claude, dict) else None
     try:
         codex_inventory = json.loads(commands["rollbackCodexInventory"]["stdout"])
         claude_inventory = json.loads(commands["rollbackClaudeInventory"]["stdout"])
@@ -3190,6 +3217,34 @@ def _gt20_v4_failed_update_receipts_valid(
         )
     except (KeyError, TypeError, ValueError, json.JSONDecodeError):
         fresh_inventory_valid = False
+
+    def recovery_valid(adapter, mutation, value):
+        if not isinstance(value, dict) or set(value) != {
+            "disposition", "stagedFileCount", "difference",
+            "stagingCleanupVerified", "postRepairAbsent",
+        } or value.get("stagingCleanupVerified") is not True \
+                or value.get("postRepairAbsent") is not True:
+            return False
+        if mutation.get("postCommandAbsent") is True:
+            return value == {
+                "disposition": (
+                    "prior-remained-active-host-cleaned-observed-staging"
+                ),
+                "stagedFileCount": None, "difference": None,
+                "stagingCleanupVerified": True, "postRepairAbsent": True,
+            }
+        return (
+            mutation.get("postCommandAbsent") is False
+            and value.get("disposition") == (
+                "prior-remained-active-with-explicit-task-owned-staging-"
+                "cleanup"
+            )
+            and _candidate_incomplete_subset_valid(
+                behavior_subject, adapter, value.get("stagedFileCount"),
+                value.get("difference"),
+            )
+        )
+
     return (
         fixture.get("sourceFailureMode")
             == "task-owned-candidate-lock-after-staging"
@@ -3198,36 +3253,284 @@ def _gt20_v4_failed_update_receipts_valid(
             "staging-cleanup"
         )
         and fixture.get("automaticRollbackClaimed") is False
-        and codex_mutation.get("postCommandAbsent") is True
-        and claude_mutation.get("postCommandAbsent") is False
         and fixture.get("priorInstalledBytesPreservedAfterFailedUpdate") is True
         and fixture.get("freshPriorInventoryVerified") is True
         and fresh_inventory_valid
         and isinstance(recovery, dict) and set(recovery) == {"codex", "claude"}
-        and codex == {
-            "disposition": "prior-remained-active-host-cleaned-observed-staging",
-            "stagedFileCount": None, "difference": None,
-            "stagingCleanupVerified": True, "postRepairAbsent": True,
-        }
-        and isinstance(claude, dict)
-        and set(claude) == {
-            "disposition", "stagedFileCount", "difference",
-            "stagingCleanupVerified", "postRepairAbsent",
-        }
-        and claude.get("disposition") == (
-            "prior-remained-active-with-explicit-task-owned-staging-cleanup"
+        and recovery_valid("codex", codex_mutation, codex)
+        and recovery_valid("claude", claude_mutation, claude)
+        and (flexible or (
+            codex_mutation.get("postCommandAbsent") is True
+            and claude_mutation.get("postCommandAbsent") is False
+        ))
+    )
+
+
+def _gt20_post_agent_inventory_valid(receipt, reference):
+    if not isinstance(receipt, dict) or not isinstance(reference, dict):
+        return False
+    volatile = set((
+        "elapsedMilliseconds stdoutBytes stderrBytes timedOut "
+        "terminationRequested terminationConfirmed streamsDrained "
+        "jobActiveProcesses exitCode stdout stderr"
+    ).split())
+    outcome = {
+        "timedOut": False, "terminationRequested": False,
+        "terminationConfirmed": True, "streamsDrained": True,
+        "jobActiveProcesses": 0, "exitCode": 0,
+    }
+    try:
+        same_inventory = _canonical_json_sha256(json.loads(receipt["stdout"])) \
+            == _canonical_json_sha256(json.loads(reference["stdout"]))
+        return (
+            set(receipt) == set(reference) - {"role", "failureCategory"}
+            and all(receipt[key] == reference[key]
+                    for key in set(receipt) - volatile)
+            and type(receipt.get("elapsedMilliseconds")) in {int, float}
+            and receipt["elapsedMilliseconds"] >= 0
+            and receipt.get("stdoutBytes")
+                == len(receipt["stdout"].encode("utf-8"))
+            and receipt.get("stderrBytes")
+                == len(receipt["stderr"].encode("utf-8"))
+            and all(receipt.get(key) == value
+                    for key, value in outcome.items())
+            and same_inventory
         )
-        and type(claude.get("stagedFileCount")) is int
-        and claude["stagedFileCount"] > 0
-        and claude.get("stagingCleanupVerified") is True
-        and claude.get("postRepairAbsent") is True
-        and isinstance(difference, dict)
-        and set(difference) == {"missing", "extra", "changed"}
-        and isinstance(difference.get("missing"), list)
-        and bool(difference["missing"])
-        and difference.get("extra") == [] and difference.get("changed") == []
-        and all(_nonempty_string(item) and not Path(item).is_absolute()
-                for item in difference["missing"])
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+        return False
+
+
+def _gt20_v5_agent_recovery_valid(envelope, mechanism):
+    if not isinstance(envelope, dict) or not isinstance(mechanism, dict):
+        return False
+    agent = envelope.get("agentDecision")
+    request = agent.get("request") if isinstance(agent, dict) else None
+    invocation = agent.get("invocation") if isinstance(agent, dict) else None
+    decision = agent.get("decision") if isinstance(agent, dict) else None
+    actuation = agent.get("actuation") if isinstance(agent, dict) else None
+    post = agent.get("independentPostState") \
+        if isinstance(agent, dict) else None
+    facts = request.get("failureFacts") if isinstance(request, dict) else None
+    fixture = mechanism.get("fixture")
+    recoveries = fixture.get("failedUpdateRecovery") \
+        if isinstance(fixture, dict) else None
+    commands = {
+        item.get("role"): item for item in mechanism.get("commands", [])
+        if isinstance(item, dict) and _nonempty_string(item.get("role"))
+    }
+    if (
+        set(envelope) != set(
+            "schema taskId evaluatedRevision lifecycle claimLimit mechanism "
+            "agentDecision".split()
+        )
+        or envelope.get("schema")
+            != "yiyuan-accord-gt20-exact-package-evidence/v5"
+        or envelope.get("taskId") != "GT-20"
+        or envelope.get("evaluatedRevision")
+            != mechanism.get("evaluatedRevision")
+        or envelope.get("lifecycle") != {
+            "mechanism": "verified", "agentDecision": "verified",
+            "actuation": "verified", "independentPostState": "verified",
+            "cleanup": "verified",
+        }
+        or envelope.get("claimLimit") != _GT20_V5_CLAIM
+        or not isinstance(agent, dict)
+        or set(agent) != set(
+            "request invocation decision actuation independentPostState".split()
+        )
+        or not isinstance(request, dict)
+        or set(request) != set((
+            "operation userIntentCount userInterventionCount evaluatedRevision "
+            "candidateSkillLocator candidateSkillSha256 failureReceiptSha256 "
+            "nonceSha256 failureFacts"
+        ).split())
+        or request.get("operation")
+            != "decide-bounded-failed-update-recovery"
+        or request.get("userIntentCount") != 1
+        or request.get("userInterventionCount") != 0
+        or request.get("evaluatedRevision") != envelope.get("evaluatedRevision")
+        or request.get("candidateSkillLocator") != (
+            "plugins/yiyuan-accord-codex/skills/"
+            "deliver-demand-driven-outcome/SKILL.md"
+        )
+        or request.get("candidateSkillSha256")
+            != mechanism.get("behaviorSubject", {}).get(
+                request.get("candidateSkillLocator")
+            )
+        or any(SHA256_RE.fullmatch(request.get(key) or "") is None for key in (
+            "candidateSkillSha256", "failureReceiptSha256", "nonceSha256",
+        ))
+        or not isinstance(facts, list) or len(facts) != 2
+        or [item.get("adapter") for item in facts if isinstance(item, dict)]
+            != ["claude", "codex"]
+        or request.get("failureReceiptSha256") != _canonical_json_sha256(facts)
+    ):
+        return False
+    fact_by_adapter = {}
+    for fact in facts:
+        if not isinstance(fact, dict) or set(fact) != set((
+            "adapter allowedAction postCommandAbsent candidateIdentityDigest "
+            "priorIdentityDigest siblingStateSha256 stagedFileCount difference "
+            "bindingSha256"
+        ).split()):
+            return False
+        adapter = fact["adapter"]
+        without_binding = {
+            key: value for key, value in fact.items() if key != "bindingSha256"
+        }
+        expected_identity = _candidate_package_identity_sha256(
+            mechanism.get("behaviorSubject"), adapter,
+        )
+        if (
+            fact.get("bindingSha256") != _canonical_json_sha256(without_binding)
+            or fact.get("candidateIdentityDigest") != expected_identity
+            or any(SHA256_RE.fullmatch(fact.get(key) or "") is None for key in (
+                "candidateIdentityDigest", "priorIdentityDigest",
+                "siblingStateSha256", "bindingSha256",
+            ))
+        ):
+            return False
+        if fact.get("postCommandAbsent") is True:
+            if fact.get("allowedAction") != "accept-host-cleaned" or any(
+                fact.get(key) is not None for key in (
+                    "stagedFileCount", "difference",
+                )
+            ):
+                return False
+        else:
+            if (
+                fact.get("postCommandAbsent") is not False
+                or fact.get("allowedAction")
+                    != "remove-attributable-incomplete-staging"
+                or not _candidate_incomplete_subset_valid(
+                    mechanism.get("behaviorSubject"), adapter,
+                    fact.get("stagedFileCount"), fact.get("difference"),
+                )
+            ):
+                return False
+        fact_by_adapter[adapter] = fact
+    version_command = commands.get("codexVersion", {})
+    allowed_events = {
+        "thread.started", "turn.started", "item.started", "item.completed",
+        "turn.completed",
+    }
+    event_types = invocation.get("eventTypes") \
+        if isinstance(invocation, dict) else None
+    if (
+        not isinstance(invocation, dict)
+        or set(invocation) != set((
+            "cliVersion resolvedCommandSha256 terminalExecutableSha256 "
+            "requestedModel reasoningEffort isolation credentialUse inputSha256 "
+            "outputSchemaSha256 eventStreamSha256 stderrSha256 rawStreamPolicy "
+            "eventTypes threadCount turnCount agentMessageCount toolCallCount "
+            "exitCode timedOut terminationConfirmed streamsDrained "
+            "jobActiveProcesses"
+        ).split())
+        or invocation.get("cliVersion") != fixture.get("codexCliVersion")
+        or invocation.get("resolvedCommandSha256")
+            != version_command.get("resolvedCommandSha256")
+        or invocation.get("terminalExecutableSha256")
+            != version_command.get("terminalExecutableSha256")
+        or not (invocation.get("requestedModel") is None
+                or _nonempty_string(invocation.get("requestedModel")))
+        or invocation.get("reasoningEffort") != "medium"
+        or invocation.get("isolation") != [
+            "ephemeral", "ignore-user-config", "ignore-rules",
+            "disable-plugins", "disable-hooks", "read-only-sandbox",
+            "approval-never", "empty-task-owned-working-directory",
+            "structured-output",
+        ]
+        or invocation.get("credentialUse")
+            != "current-user-codex-home-auth-only"
+        or any(SHA256_RE.fullmatch(invocation.get(key) or "") is None for key in (
+            "resolvedCommandSha256", "terminalExecutableSha256",
+            "inputSha256", "outputSchemaSha256", "eventStreamSha256",
+            "stderrSha256",
+        ))
+        or invocation.get("rawStreamPolicy") != (
+            "digest-and-safe-structure-only-no-thread-or-turn-id-retained"
+        )
+        or not isinstance(event_types, list) or not event_types
+        or not set(event_types) <= allowed_events
+        or event_types.count("thread.started") != 1
+        or event_types.count("turn.started") != 1
+        or event_types.count("turn.completed") != 1
+        or invocation.get("threadCount") != 1
+        or invocation.get("turnCount") != 1
+        or invocation.get("agentMessageCount") != 1
+        or invocation.get("toolCallCount") != 0
+        or invocation.get("exitCode") != 0
+        or invocation.get("timedOut") is not False
+        or invocation.get("terminationConfirmed") is not True
+        or invocation.get("streamsDrained") is not True
+        or invocation.get("jobActiveProcesses") != 0
+    ):
+        return False
+    if (
+        not isinstance(decision, dict)
+        or set(decision) != set((
+            "schema decision boundFailureReceiptSha256 boundNonceSha256 "
+            "boundSubjectRevision adapterActions"
+        ).split())
+        or decision.get("schema")
+            != "yiyuan-accord-gt20-agent-decision/v1"
+        or decision.get("decision") != "authorize-bounded-compensation"
+        or decision.get("boundFailureReceiptSha256")
+            != request.get("failureReceiptSha256")
+        or decision.get("boundNonceSha256") != request.get("nonceSha256")
+        or decision.get("boundSubjectRevision")
+            != envelope.get("evaluatedRevision")
+        or not isinstance(decision.get("adapterActions"), dict)
+        or set(decision["adapterActions"]) != {"codex", "claude"}
+        or any(decision["adapterActions"].get(adapter)
+               != fact_by_adapter[adapter].get("allowedAction")
+               for adapter in ("codex", "claude"))
+    ):
+        return False
+    if not isinstance(actuation, dict) or set(actuation) != set(
+        "executor targetDerivation codex claude".split()
+    ) or actuation.get("executor") != "evaluator-runner" or actuation.get(
+        "targetDerivation"
+    ) != "bound-private-mutation-receipt-only":
+        return False
+    for adapter in ("codex", "claude"):
+        item = actuation.get(adapter)
+        if (
+            not isinstance(item, dict)
+            or set(item) != set(
+                "planBindingSha256 action safetyRevalidated result".split()
+            )
+            or item.get("planBindingSha256")
+                != fact_by_adapter[adapter].get("bindingSha256")
+            or item.get("action")
+                != decision["adapterActions"].get(adapter)
+            or item.get("safetyRevalidated") is not True
+            or not isinstance(recoveries, dict)
+            or item.get("result") != recoveries.get(adapter)
+        ):
+            return False
+    inventories = post.get("inventories") if isinstance(post, dict) else None
+    return (
+        isinstance(post, dict)
+        and set(post) == set((
+            "priorInstalledBytesPreserved unrelatedPluginStatePreserved "
+            "unmanagedAndConcurrentSentinelsPreserved inventories "
+            "completedBeforeIntentReturn"
+        ).split())
+        and all(post.get(key) is True for key in (
+            "priorInstalledBytesPreserved", "unrelatedPluginStatePreserved",
+            "unmanagedAndConcurrentSentinelsPreserved",
+            "completedBeforeIntentReturn",
+        ))
+        and isinstance(inventories, dict)
+        and set(inventories) == {"codex", "claude"}
+        and _gt20_post_agent_inventory_valid(
+            inventories.get("codex"), commands.get("rollbackCodexInventory"),
+        )
+        and _gt20_post_agent_inventory_valid(
+            inventories.get("claude"),
+            commands.get("rollbackClaudeInventory"),
+        )
     )
 
 
@@ -3662,15 +3965,22 @@ def _validate_exact_package_evidence_lifecycle(
         return
     if sha256(raw).hexdigest() != evidence.get("sha256"):
         errors.append("exact package evidence record digest mismatch")
+    envelope = record
+    is_v5_envelope = is_v7 and record.get("schema") == (
+        "yiyuan-accord-gt20-exact-package-evidence/v5"
+    )
+    if is_v7:
+        record = record.get("mechanism") if is_v5_envelope else None
+        if not isinstance(record, dict):
+            errors.append("exact package lifecycle record schema is invalid")
+            return
     packages = {
         item.get("id"): item.get("packageSha256")
         for item in program.get("hostProjections", []) if isinstance(item, dict)
     }
     record_schema = record.get("schema")
     expected_record_schema = (
-        "yiyuan-accord-gt20-exact-package-evidence/v5" if is_v7
-        else
-        "yiyuan-accord-gt20-exact-package-evidence/v4" if is_v6
+        "yiyuan-accord-gt20-exact-package-evidence/v4" if is_v6 or is_v7
         else "yiyuan-accord-gt20-exact-package-evidence/v3"
         if is_modern else None
     )
@@ -4326,6 +4636,7 @@ def _validate_exact_package_evidence_lifecycle(
         failed_update_receipts_contract = (
             _gt20_v4_failed_update_receipts_valid(
                 role_commands, fixture_value, frozen_subject,
+                flexible=is_v5_envelope,
             )
         )
     post_state = record.get("postState")
@@ -4592,6 +4903,10 @@ def _validate_exact_package_evidence_lifecycle(
         "postState": "verified",
         "cleanup": "verified",
     }
+    agent_recovery_contract = (
+        _gt20_v5_agent_recovery_valid(envelope, record)
+        if is_v5_envelope else not is_v7
+    )
     record_checks = {
         "fields": set(record) == expected_record_fields,
         "task": record.get("taskId") == "GT-20",
@@ -4612,9 +4927,10 @@ def _validate_exact_package_evidence_lifecycle(
         "fixture": fixture_contract,
         "activation": activation_receipts_contract,
         "failed-update": failed_update_receipts_contract,
+        "agent-recovery": agent_recovery_contract,
         "poststate": post_contract,
         "host-cache": host_cache_contract,
-        "privacy": not _public_evidence_contains_private_material(record),
+        "privacy": not _public_evidence_contains_private_material(envelope),
     }
     failed_record_checks = [
         name for name, valid in record_checks.items() if not valid
