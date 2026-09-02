@@ -295,7 +295,7 @@ The exact public claim ceiling contains five finite statements:
 
 Separate repository evidence includes a side-effect-free reference core and the bounded host scenarios below. It does not expand those five public claims.
 
-Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and historical lifecycle subfacts from one disposable non-empty Windows Codex-and-Claude replay. Exact review cut `c5a0668` rejected the broad GT-20 claim. A later unpublished schema-v6 replay was also invalidated for authority binding, staging recomputability and portable path privacy. Corrected replay, affected-surface reacceptance and four fresh independent exact-tree reviews remain pending. This does not prove automatic rollback, current-desktop behavior, cross-OS equivalence, product value, a repository candidate, or release readiness.
+Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and historical lifecycle subfacts from one disposable non-empty Windows Codex-and-Claude replay. Exact review cut `c5a0668` rejected the broad GT-20 claim. Exact `7a3950e` now verifies the corrected bounded schema-v6 replay after authority-binding, staging-recomputability and portable-path-privacy repair; affected surfaces are reaccepted and four fresh independent exact-tree reviews are active. This does not prove automatic rollback, current-desktop behavior, cross-OS equivalence, product value, a repository candidate, or release readiness.
 
 The observed `bypass_hook_trust` / `bypassPermissions` path was a test control, not a production trust route.
 

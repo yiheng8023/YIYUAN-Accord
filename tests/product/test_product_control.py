@@ -682,7 +682,8 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-schema-v6-review-correction-replay-pending',
+            'gt20-corrected-schema-v6-replay-verified-reacceptance-complete-'
+            'independent-review-active',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -842,12 +843,13 @@ class ProductControlTests(unittest.TestCase):
         )
         self.ae(
             suite['status'],
-            'historical-source-complete-live-carrier-schema-v6-review-'
-            'correction-replay-pending',
+            'historical-source-complete-live-carrier-corrected-schema-v6-'
+            'replay-verified-reacceptance-complete-independent-review-active',
         )
         for marker in (
             'Frozen 0febb415 completed',
-            'affected-surface reacceptance',
+            'Exact 7a3950e verifies',
+            'Affected surfaces are reaccepted',
             'four fresh independent product',
             'candidate or release readiness',
         ):
@@ -1457,7 +1459,7 @@ class ProductControlTests(unittest.TestCase):
         for stages in (program['increment']['fourSurfaceMapping']['process']['orderedSteps'],
                        program['increment']['workItems'][0]['closeoutSequence']):
             self.ae([step['state'] for step in stages[-3:]],
-                             ['active', 'pending', 'pending'])
+                             ['completed', 'completed', 'active'])
         active = '\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
             'README.md', 'README.zh-CN.md', P, 'product/reshaping-guidance.json',
             'docs/architecture.md', 'docs/operations/CONTINUATION.md',
@@ -1467,7 +1469,7 @@ class ProductControlTests(unittest.TestCase):
             r'run gt-20 next|(keep the selected current component set) '
             r'and \1',
             active, re.IGNORECASE))
-        self.ai('corrected replay', active)
+        self.ai('corrected bounded schema-v6 replay', active)
 
     def test_reference_core_is_policy_driven_and_fail_closed(self):
         minimal, native = 'minimal-composition', 'native-no-add'
@@ -2383,8 +2385,12 @@ class ProductControlTests(unittest.TestCase):
         prior = prior_program['increment']['closeoutSnapshot']
         self.ae(_snapshot_v2_transition_errors(node, prior), [])
         self.ae(prior['replay']['evidenceState'], 'pending')
-        self.ae(node['replay']['evidenceState'], 'pending')
-        self.an(node['replay']['evidenceRef'])
+        self.ae(node['replay']['evidenceState'], 'verified')
+        self.ae(
+            node['replay']['evidenceRef'],
+            'evals/evidence/2026-09-02-v310-gt20-'
+            'exact-package-v4-source.json',
+        )
         self.ae(
             node['replay']['correctionId'],
             'independent-evidence-recomputability-and-portable-path-privacy-v2',
@@ -2396,12 +2402,12 @@ class ProductControlTests(unittest.TestCase):
             self.ae(node['replay'][field], prior['replay'][field])
         self.ae(
             node['predecessorSnapshotRef'],
-            '644e01a86a2870c358774d82080a2d916d00251c:'
+            'bed20931b56bffe8c3055631f1c08d65dcb67ec5:'
             'product/program.json#/increment/closeoutSnapshot',
         )
         prior_predecessor = prior['predecessorSnapshotRef'].split(':', 1)[0]
         _, old_program, *_ = _snapshot_documents(
-            ROOT, '661b24a1a7944e1eb66c15f8a5925e6787676856',
+            ROOT, prior_predecessor,
         )
         self.ae(
             _snapshot_v2_transition_errors(
@@ -2409,19 +2415,6 @@ class ProductControlTests(unittest.TestCase):
             ),
             [],
         )
-        review_verified = _clone(node)
-        review_verified['replay'].update(
-            evidenceState='verified',
-            evidenceRef=(
-                'evals/evidence/2026-09-02-v310-gt20-'
-                'exact-package-v4-source.json'
-            ),
-        )
-        self.ae(
-            _snapshot_v2_transition_errors(review_verified, node),
-            [],
-        )
-
         changed = _clone(program)
         changed_node = changed['increment']['closeoutSnapshot']
         changed_node['replay']['preservedTaskIds'] = []
@@ -2500,9 +2493,24 @@ class ProductControlTests(unittest.TestCase):
                 lifecycle['schema'],
                 'yiyuan-accord-exact-package-evidence-lifecycle/v6',
             )
-            self.ae(lifecycle['state'], 'pending')
-            self.an(lifecycle.get('subjectRevision'))
-            self.an(lifecycle['evidence'])
+            self.ae(lifecycle['state'], 'verified')
+            self.ae(
+                lifecycle['subjectRevision'],
+                '7a3950e8faa7b6f3097cfe2c2d01803bbb320173',
+            )
+            self.ae(
+                lifecycle['evidence']['evaluatedRevision'],
+                lifecycle['subjectRevision'],
+            )
+            self.ae(
+                lifecycle['evidence']['locator'],
+                'evals/evidence/2026-09-02-v310-gt20-'
+                'exact-package-v4-source.json',
+            )
+            self.ae(
+                lifecycle['evidence']['sha256'],
+                _file_sha(root, lifecycle['evidence']['locator']),
+            )
             self.ae(
                 lifecycle['earliestAffectedBoundary'],
                 'exact-package-host-activation-and-mutation-phase-failed-'
@@ -2510,7 +2518,7 @@ class ProductControlTests(unittest.TestCase):
             )
             self.ae(
                 lifecycle['predecessorLifecycleRef'],
-                '644e01a86a2870c358774d82080a2d916d00251c:'
+                '7a3950e8faa7b6f3097cfe2c2d01803bbb320173:'
                 'product/program.json#/increment/exactPackageEvidenceLifecycle',
             )
             self.ae(
@@ -2547,7 +2555,7 @@ class ProductControlTests(unittest.TestCase):
             )
             for mutate in (
                 lambda value: value.__setitem__('evidence', {}),
-                lambda value: value.__setitem__('state', 'verified'),
+                lambda value: value.__setitem__('state', 'pending'),
                 lambda value: value.__setitem__('priorEvidenceRef', 'missing'),
                 lambda value: value.__setitem__('subjectRevision', '0' * 40),
             ):

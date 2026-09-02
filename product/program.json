@@ -50,7 +50,7 @@
     "externalFactSource": "task-time-live-github-observation",
     "rule": "This exact admitted public-release snapshot is frozen repository provenance, not live publication proof. Offline validation rejects every unadmitted tail. Only after a matching tag and public Release complete the hosted, named-human, publication and live-verification gates may a separate post-release reconciliation update the code-side admitted snapshot, program, acceptance, recommendation pointer and derived human-readable projection together; no repository field can self-attest that transition. Earlier records are never rewritten. The retired unreleased checkpoint and superseded locally exposed development distribution are provenance only. Historical records are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
-  "releaseIntent": "v3.1.0 remains reopened. Independent review of the unpublished schema-v6 replay found three P1 gaps: current authority was misbound to a pending source, staging digests were not independently recomputable, and public-path privacy was not portable across drive, UNC and POSIX roots. The corrected v6 replay, affected-surface reacceptance and four fresh exact-tree reviews are pending before any replacement repository candidate can form. The public recommendation remains immutable v3.0.1 and every exact-local or external release gate stays closed.",
+  "releaseIntent": "v3.1.0 remains reopened. Exact schema-v6 subject 7a3950e closes the bounded Windows GT-20 native host-activation, independently recomputable staging, portable public-path privacy and mutation-phase failed-update prior-version-preservation boundary. Affected authority, evidence, documentation and finite-claim surfaces are reaccepted; four fresh independent product, specification, implementation and standards reviews are active before any replacement repository candidate can form. The public recommendation remains immutable v3.0.1 and every exact-local or external release gate stays closed.",
   "constitution": "product/constitution.json",
   "acceptance": "product/acceptance.json",
   "maintenancePlan": "docs/architecture.md",
@@ -110,7 +110,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "6939c096d79f25931b41d681b4476625f51f94024382b8d3bd631fae8d107675",
+      "repositorySha256": "52701a34bffa033924b83be6f75c454a7375658c85fbaa0864140e916a551c30",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -158,6 +158,14 @@
       "disposition": "admitted-historical-schema-v5-gt20-counterevidence-with-narrow-subfacts-not-current-gt20-reacceptance-independent-review-candidate-or-release-evidence"
     },
     {
+      "id": "gt20-schema-v6-exact-package-2026-09-02",
+      "kind": "bounded-exact-windows-codex-and-claude-native-host-activation-recomputable-staging-portable-path-privacy-mutation-phase-failed-update-recovery-and-cleanup-replay",
+      "repositoryLocator": "evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json",
+      "repositorySha256": "96d7450c20bea98f813544ff088bd8aee03bd37399408aa0a2bdcaf529c096a4",
+      "latestFailureBoundary": "Exact subject 7a3950e completed all 56 digest-bound v4 commands in disposable isolated Windows host roots. It binds current authority to the frozen evaluated revision, independently recomputes candidate and observed staging identities, projects known host roots without retaining drive, UNC or POSIX absolute paths, proves mutation-phase failed updates preserved exact prior bytes and fresh-process 3.0.1 selection, then verifies native 3.1.0 Codex and Claude startup/resume activation, successful update, neighbor and unmanaged state preservation, removal, cache disposition, process termination and zero task residue. It does not prove automatic rollback, real-account or current-desktop behavior, cross-OS equivalence, comparative value, independent review, repository-candidate readiness or any external release gate.",
+      "disposition": "admitted-current-bounded-schema-v6-gt20-pass-with-independent-review-candidate-and-release-gates-still-open"
+    },
+    {
       "id": "karpathy-primary-method-and-repository-inputs-2026-08-28",
       "kind": "primary-external-simplification-experiment-and-self-evolution-feasibility-input",
       "capturedAt": "2026-08-29",
@@ -175,7 +183,7 @@
       "kind": "exact-source-wheel-provenance-feasibility-ledger-and-p0-p4-results",
       "repositoryLocator": "research/reviews/2026-08-28-self-bootstrapping-feasibility-and-reuse-study.md",
       "repositorySha256": "74a4cc1accb2dac0a3fde7e8e3435d2990b06dd6a2a65d0805e73930e700b00f",
-      "disposition": "admitted-source-bound-reuse-and-historical-whole-system-review-record-preserved-schema-v6-review-correction-replay-reacceptance-and-independent-review-pending-candidate-not-selected-external-release-gates-closed"
+      "disposition": "admitted-source-bound-reuse-and-historical-whole-system-review-record-preserved-corrected-schema-v6-replay-verified-reacceptance-complete-independent-review-active-candidate-not-selected-external-release-gates-closed"
     }
   ],
   "increment": {
@@ -201,7 +209,7 @@
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
       },
-      "predecessorSnapshotRef": "644e01a86a2870c358774d82080a2d916d00251c:product/program.json#/increment/closeoutSnapshot",
+      "predecessorSnapshotRef": "bed20931b56bffe8c3055631f1c08d65dcb67ec5:product/program.json#/increment/closeoutSnapshot",
       "authorityRefs": [
         "product/constitution.json",
         "product/program.json",
@@ -243,7 +251,7 @@
         ],
         "replayRef": "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
       },
-      "evaluationContractSha256": "aff94e0d6242476dfaadd9ecef72105056ab0142419b8c266bb4d3d691652a55",
+      "evaluationContractSha256": "c32985beab5a3ac0d58d95af98c6c434e5fb7e7120450b8330d8bb850476e6ad",
       "gateId": "repository-candidate",
       "nextGateId": "repository-candidate",
       "claimCeilingRef": "product/acceptance.json#/claimCeiling",
@@ -257,8 +265,8 @@
           "GT-21"
         ],
         "correctionId": "independent-evidence-recomputability-and-portable-path-privacy-v2",
-        "evidenceState": "pending",
-        "evidenceRef": null
+        "evidenceState": "verified",
+        "evidenceRef": "evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json"
       }
     },
     "provisionalEvidenceLifecycle": {
@@ -282,19 +290,24 @@
     },
     "exactPackageEvidenceLifecycle": {
       "schema": "yiyuan-accord-exact-package-evidence-lifecycle/v6",
-      "state": "pending",
+      "state": "verified",
       "taskId": "GT-20",
       "earliestAffectedBoundary": "exact-package-host-activation-and-mutation-phase-failed-update-recovery-closure",
       "subjectBinding": "containing-git-commit-complete-declared-packages",
       "preservedTaskIds": [
         "GT-21"
       ],
-      "predecessorLifecycleRef": "644e01a86a2870c358774d82080a2d916d00251c:product/program.json#/increment/exactPackageEvidenceLifecycle",
+      "predecessorLifecycleRef": "7a3950e8faa7b6f3097cfe2c2d01803bbb320173:product/program.json#/increment/exactPackageEvidenceLifecycle",
       "commandContractLocator": "evals/contracts/gt20-v4-command-contract.json",
       "commandContractSha256": "6ff2341846d897c6cb5af1caf879f663a51f7214d9b55742030c48c41fdddd58",
-      "evidence": null
+      "subjectRevision": "7a3950e8faa7b6f3097cfe2c2d01803bbb320173",
+      "evidence": {
+        "locator": "evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json",
+        "sha256": "96d7450c20bea98f813544ff088bd8aee03bd37399408aa0a2bdcaf529c096a4",
+        "evaluatedRevision": "7a3950e8faa7b6f3097cfe2c2d01803bbb320173"
+      }
     },
-    "observedProblem": "The bounded self-bootstrapping core and unchanged GT-14 through GT-19 and GT-21 evidence remain accepted, while candidate 9050114, the fc9c1a7 raw replay and exact review cut c5a0668 remain failed history. Frozen 0febb415 retains narrower historical subfacts only. The unpublished schema-v6 replay was invalidated by three P1 findings: authority misbinding, non-recomputable staging digests and nonportable absolute-path privacy. GT-20 is reopened at that correction boundary; corrected replay, affected-surface reacceptance and four independent reviews remain pending. Real-account or current-desktop behavior, production, cross-OS behavior, comparative value, candidate, exact-local, hosted, authorization, tag, public Release and post-release installation remain later gates; v3.0.1 remains the public fallback.",
+    "observedProblem": "The bounded self-bootstrapping core and unchanged GT-14 through GT-19 and GT-21 evidence remain accepted, while candidate 9050114, fc9c1a7, c5a0668 and the unpublished misbound schema-v6 replay remain failed history. Exact subject 7a3950e closes the corrected GT-20 boundary for authority binding, independently recomputable staging, portable public-path privacy, native 3.1.0 startup/resume activation and mutation-phase failed-update prior-version preservation in disposable isolated Windows roots. Affected authority, evidence, documentation and finite-claim surfaces are reaccepted; four fresh independent exact-tree reviews are active. Real-account or current-desktop behavior, production, cross-OS behavior, comparative value, candidate, exact-local, hosted, authorization, tag, public Release and post-release installation remain later gates; v3.0.1 remains the public fallback.",
     "hypothesis": "A product-form-neutral, complete bounded self-bootstrapping core can turn the existing collaboration contract into a stronger outcome system without defaulting to a plugin, Runtime or control plane. If Accord first reconciles each material consensus against the current proposition set; keeps code and conversation topology independent; senses environment provenance; binds the latest outcome and human authority; reuses suitable native, official and maintained wheels before authorship; allocates minimum deep modules behind narrow shared interfaces; derives sparse host-native and Accord responsibility views plus the current state-authority, admission and closure-lifecycle views; and replaces or retires only exact allocations whose successor independently closes the same consequence and lifecycle with reversible recheck, then it can improve real collaboration closure while limiting contradiction, interference, self-confirmation, proxy optimization and lifecycle burden.",
     "hostCapabilityRefresh": {
       "capturedAt": "2026-09-01",
@@ -334,7 +347,7 @@
     "firstMechanismDecision": {
       "id": "product-form-after-closure-properties",
       "state": "selected-current-component-set-no-added-client",
-      "selected": "Keep the portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and host projection manifests; do not add or distribute an Accord App Server client, bundled MCP, browser bridge, SDK service, daemon, database, persistent controller or second research-specific interface. The existing closure Interface allocates evidence acquisition only for route-changing material gaps; a sufficient route remains a no-op and bounded authorship still requires current task authority. Exact 2f6e3de, fded9a6 and 3878968 retain only their bounded consequence, simple-route and fresh-handoff facts. The task-owned App Server driver and dynamic verifier remain evaluation-only. Frozen 0febb415 retains narrower schema-v5 history after exact c5a0668 review. The schema-v6 GT-20 correction, reacceptance and independent reviews remain pending. This component decision grants no candidate, exact-local, hosted, human, publication or release authority.",
+      "selected": "Keep the portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and host projection manifests; do not add or distribute an Accord App Server client, bundled MCP, browser bridge, SDK service, daemon, database, persistent controller or second research-specific interface. The existing closure Interface allocates evidence acquisition only for route-changing material gaps; a sufficient route remains a no-op and bounded authorship still requires current task authority. Exact 2f6e3de, fded9a6 and 3878968 retain only their bounded consequence, simple-route and fresh-handoff facts. The task-owned App Server driver and dynamic verifier remain evaluation-only. Frozen 0febb415 retains narrower schema-v5 history after exact c5a0668 review. Exact 7a3950e closes the corrected bounded schema-v6 GT-20 route; affected surfaces are reaccepted and independent reviews are active. This component decision grants no candidate, exact-local, hosted, human, publication or release authority.",
       "humanBoundary": "New installation, enablement, trust, account, data, material cost, publication, destructive or irreversible effects still require their exact authority. Read-only environment observation, bounded local modeling and disposable isolated fixtures remain Agent-owned within the current grant.",
       "claimLimit": "The no-added-client allocation is selected for this bounded increment. Exact 3878968 proves one current-host fresh handoff without concrete model binding, exact 4c8bcc3 proves one disposable Windows transactional lifecycle and the 85a917a source-bound ledger reaccepts their unchanged behavior subjects. None proves ordinary activation, production Hook trust, current updated-client compatibility, Claude equivalence, cross-host value, independent review, candidate or release gates."
     },
@@ -343,7 +356,7 @@
       "statement": "Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.",
       "startingState": "The product goal and human boundaries are supplied, but environment provenance, Accord activation, other extensions, capability health, suitable existing wheels, product form, state carrier and longitudinal fitness may be unknown. The current local hosts are explicitly Accord-enabled and extension-composed; no clean baseline or comparative advantage is presumed.",
       "completion": "Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.",
-      "claimLimit": "GT-19 is synthetic. GT-21 covers only bounded hold, no-model route and fresh handoff. fc9c1a7 is invalid; 0febb415 retains bounded install, direct-runtime, preflight preservation, successful update, removal and cleanup. The corrected schema-v6 GT-20 replay, affected-surface reacceptance and independent review remain pending. Automatic rollback, current desktop, production, real-account, cross-OS, value, candidate, hosted and release claims remain unproved.",
+      "claimLimit": "GT-19 is synthetic. GT-21 covers bounded hold, no-model route and fresh handoff. fc9c1a7 and the misbound schema-v6 replay are invalid; 0febb415 retains narrow history. Exact 7a3950e covers one isolated Windows schema-v6 native-host, recomputable staging, portable-path and failed-update prior-version-preservation route; affected surfaces are reaccepted. Automatic rollback, current desktop, production, real account, cross-OS, value, independent review, candidate, hosted and release remain unproved.",
       "firstEvidenceSurfaces": [
         "official-clean",
         "isolated-minimal",
@@ -582,7 +595,7 @@
           },
           {
             "id": "prove-transactional-install-state-preservation-and-removal",
-            "state": "active",
+            "state": "completed",
             "dependsOn": [
               "prove-isolated-live-operational-carrier-and-continuity"
             ],
@@ -595,11 +608,11 @@
               "Q3",
               "Q4"
             ],
-            "completion": "An unpublished schema-v6 replay was invalidated by three P1 findings: current authority still named a pending source, staging digests were not independently recomputable, and public-path rejection was not portable across drive, UNC and POSIX roots. The same v6 boundary is reopened. The runner, digest contract and privacy guard are being corrected before a new exact replay; the failed replay remains counterevidence and no candidate or release claim is made."
+            "completion": "Exact subject 7a3950e and its normalized schema-v6 record close only the bounded Windows GT-20 native host-activation, independently recomputable staging, portable path-minimal public evidence, mutation-phase failed-update prior-version preservation, recovery, privacy, ownership and cleanup obligations against the digest-bound v4 overlay. The earlier misbound replay, fc9c1a7 and c5a0668 remain failed counterevidence. No automatic rollback, current-desktop, production, cross-OS, value, candidate or release claim is made."
           },
           {
             "id": "reaccept-whole-system-after-live-state-closure",
-            "state": "pending",
+            "state": "completed",
             "dependsOn": [
               "prove-transactional-install-state-preservation-and-removal"
             ],
@@ -612,11 +625,11 @@
               "Q3",
               "Q4"
             ],
-            "completion": "After the corrected exact replay, reconcile its independently recomputable staging facts and portable path-minimal public record through authority, Golden Tasks, acceptance, goal projection, operational and release documentation, package identity, legal carriage, complexity budget and finite claims. Preserve GT-14 through GT-19, GT-21 and all failed counterevidence; reacceptance creates no candidate or external release authority."
+            "completion": "The corrected schema-v6 record, exact lifecycle validator, authority state, Golden Task status, acceptance boundaries, goal projection, operational and release documentation, package identity, legal carriage, complexity budget and finite claims are reconciled to exact subject 7a3950e. GT-14 through GT-19, GT-21 and all failed counterevidence remain preserved. Reacceptance creates no repository candidate and promotes no exact-local or external release gate."
           },
           {
             "id": "independent-review-and-form-future-exact-candidate",
-            "state": "pending",
+            "state": "active",
             "dependsOn": [
               "reaccept-whole-system-after-live-state-closure"
             ],
@@ -629,7 +642,7 @@
               "Q3",
               "Q4"
             ],
-            "completion": "After corrected schema-v6 GT-20 verification and affected-surface reacceptance, four fresh zero-history, isolated-no-Accord product, specification, implementation and standards reviews must bind one clean exact tree and close every P0/P1 before a replacement repository candidate can form. The unpublished failed replay, c5a0668 and every earlier failed candidate remain counterevidence; no review grants exact-local or external release authority."
+            "completion": "Active after corrected schema-v6 GT-20 verification and affected-surface reacceptance. Four fresh zero-history, isolated-no-Accord product, specification, implementation and standards reviews must bind one clean exact tree and close every P0/P1 before a replacement repository candidate can form. The unpublished failed replay, c5a0668 and every earlier failed candidate remain counterevidence; no review grants exact-local or external release authority."
           }
         ],
         "degradationRule": "Unknown or confounded environment state first narrows the claim or triggers isolation. An unavailable, failed or uneconomic capability narrows that exact path, preserves counterevidence and triggers relation-and-constraint recomputation. Newly declared, visible or version-labelled native capability does not retire anything; only a same-responsibility selected successor with independent consequence, cleanup, reversible observation and retirement post-state may close that allocation, and drift or evidence expiry recomputes it. The route never transfers supported mechanics to the user, converts current unavailability into permanent retirement, or justifies a larger authored control plane without a demonstrated closure need. Learning or self-evolution that weakens outcome, authority, evidence, rollback, interference or lifecycle is discarded or rolled back."
@@ -869,7 +882,7 @@
           },
           {
             "id": "prove-transactional-install-state-preservation-and-removal",
-            "state": "active",
+            "state": "completed",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -883,7 +896,7 @@
           },
           {
             "id": "reaccept-whole-system-after-live-state-closure",
-            "state": "pending",
+            "state": "completed",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -897,7 +910,7 @@
           },
           {
             "id": "independent-review-and-form-future-exact-candidate",
-            "state": "pending",
+            "state": "active",
             "acceptanceIds": [
               "R1",
               "R2",
@@ -1136,12 +1149,12 @@
         "condition": "The goal carrier directly verifies the selected remote and local tag SHA, maturity, Latest eligibility, tracked body, finite claim ceiling and asset policy; updates a bounded isolated Accord marketplace from the prior immutable ref to that exact version, verifies installed bytes and fresh-carrier activation or rolls back on failure; obtains one context-isolated clean-state evaluator replay of supported installation, confirmation and removal paths against the public immutable tag; removes task-created cloud, evaluator and isolation resources, confirms repository and task residue are absent, and replays local verification."
       }
     ],
-    "rule": "The bounded core remains selected. The raw fc9c1a7 replay is invalidated counterevidence; frozen 0febb415 retains only narrower schema-v5 subfacts after exact c5a0668 review. The corrected schema-v6 GT-20 replay, affected-surface reacceptance and four fresh independent exact-tree reviews remain ordered prerequisites; no replacement repository candidate exists until all close with no P0/P1. Only that later unchanged clean candidate SHA may enter exact-local verification. Hosted verification, named-human authorization, tagged public Release, public verification and cleanup execute strictly afterward. A correction or new evidence returns to the earliest affected boundary, supersedes only dependents, preserves unrelated truth and never promotes a plan, test, commit, push, hosted pass or authorization into a later effect."
+    "rule": "The bounded core remains selected. The raw fc9c1a7 replay, exact c5a0668 and the unpublished misbound schema-v6 replay remain counterevidence; frozen 0febb415 retains only narrower schema-v5 subfacts. Exact 7a3950e closes the corrected bounded schema-v6 GT-20 replay and affected surfaces are reaccepted. Four fresh independent exact-tree reviews are active; no replacement repository candidate exists until all close with no P0/P1. Only that later unchanged clean candidate SHA may enter exact-local verification. Hosted verification, named-human authorization, tagged public Release, public verification and cleanup execute strictly afterward. A correction or new evidence returns to the earliest affected boundary, supersedes only dependents, preserves unrelated truth and never promotes a plan, test, commit, push, hosted pass or authorization into a later effect."
   },
   "goalModePrompt": {
     "state": "active-in-host",
     "authority": "derived-from-current-reviewable-authority-set",
-    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"coherent-bounded-self-bootstrap-with-live-effect-provenance-reuse-topology-safe-continuity-balance-and-consistency\",\"directive\":\"Reconcile affected projections and dynamic evidence applicability; prove typed effect, continuity, lifecycle, evolution, retirement and cleanup before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"GT-19 is synthetic. GT-21 covers only bounded hold, no-model route and fresh handoff. fc9c1a7 is invalid; 0febb415 retains bounded install, direct-runtime, preflight preservation, successful update, removal and cleanup. The corrected schema-v6 GT-20 replay, affected-surface reacceptance and independent review remain pending. Automatic rollback, current desktop, production, real-account, cross-OS, value, candidate, hosted and release claims remain unproved.\",\"completion\":\"Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"From the earliest affected boundary, reconcile each correction against the proposition set across authority, four mappings, implementation, evidence, documentation and claims; preserve unrelated truth and history, and stop affected work while a conflict remains.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"prove-isolated-live-operational-carrier-and-continuity\"],\"id\":\"prove-transactional-install-state-preservation-and-removal\",\"state\":\"active\"}],\"semantics\":\"Bind current target/value receipts; unknown stays unknown and events only invalidate. Acquire evidence only when missing, stale or conflicting facts or unresolved reuse can change the route; sufficient routes do no research, public leads need corroboration and adapters stay authority-, cost- and lifecycle-bound. Host queries and injects, Accord decides and the Agent executes; model identity and version are runtime provenance. Preserve selected components and complete deterministic correction plus independent exact-tree review before candidate selection; add no client or bridge.\",\"work\":[\"prove-transactional-install-state-preservation-and-removal\",\"reaccept-whole-system-after-live-state-closure\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-repository-fork\"]}",
+    "objective": "{\"authority\":{\"challenge\":\"latest-bound-user-correction-or-material-evidence\",\"locators\":[\"product/constitution.json\",\"product/program.json\",\"product/acceptance.json\"],\"mode\":\"reviewable-versioned-current-set\"},\"completion\":\"coherent-bounded-self-bootstrap-with-live-effect-provenance-reuse-topology-safe-continuity-balance-and-consistency\",\"directive\":\"Reconcile affected projections and dynamic evidence applicability; prove typed effect, continuity, lifecycle, evolution, retirement and cleanup before candidate formation.\",\"evidenceSurfaces\":[\"official-clean\",\"isolated-minimal\",\"current-enabled\",\"isolated-no-Accord\",\"candidate-enabled-isolated\",\"condition-fit-host-or-longitudinal-sequence\"],\"outcome\":{\"claimLimit\":\"GT-19 is synthetic. GT-21 covers bounded hold, no-model route and fresh handoff. fc9c1a7 and the misbound schema-v6 replay are invalid; 0febb415 retains narrow history. Exact 7a3950e covers one isolated Windows schema-v6 native-host, recomputable staging, portable-path and failed-update prior-version-preservation route; affected surfaces are reaccepted. Automatic rollback, current desktop, production, real account, cross-OS, value, independent review, candidate, hosted and release remain unproved.\",\"completion\":\"Representative and longitudinal sequences verify one coherent proposition set, minimum deep-module/no-op allocation, source-bound sparse admission, consequence, governed evolution, topology-safe continuity, scoped retirement/recomputation, reconciliation, cleanup and lower burden.\",\"id\":\"outcome.complete-bounded-self-bootstrapping-core\",\"statement\":\"Across successive bounded outcomes, Accord senses its composed environment, reuses or establishes minimum authorized means, verifies consequences, and governs learning, evolution, rollback, retirement and consensus reconciliation.\"},\"pause\":[\"consequential-human-judgment\",\"new-trust-account-data-or-material-cost\",\"publication-deployment-destructive-or-irreversible-effect\"],\"product\":\"yiyuan-accord\",\"route\":{\"alignment\":\"From the earliest affected boundary, reconcile each correction against the proposition set across authority, four mappings, implementation, evidence, documentation and claims; preserve unrelated truth and history, and stop affected work while a conflict remains.\",\"futureReleaseGates\":[\"repository-candidate\",\"exact-local-verification-and-review\",\"exact-candidate-hosted-verification\",\"exact-human-release-authorization\",\"exact-tagged-public-release\",\"release-verification-and-cleanup\"],\"orderedSteps\":[{\"acceptanceIds\":[\"R1\",\"R2\",\"R3\",\"Q1\",\"Q2\",\"Q3\",\"Q4\"],\"dependsOn\":[\"reaccept-whole-system-after-live-state-closure\"],\"id\":\"independent-review-and-form-future-exact-candidate\",\"state\":\"active\"}],\"semantics\":\"Bind current target/value receipts; unknown stays unknown and events only invalidate. Acquire evidence only when missing, stale or conflicting facts or unresolved reuse can change the route; sufficient routes do no research, public leads need corroboration and adapters stay authority-, cost- and lifecycle-bound. Host queries and injects, Accord decides and the Agent executes; model identity and version are runtime provenance. Preserve selected components and complete deterministic correction plus independent exact-tree review before candidate selection; add no client or bridge.\",\"work\":[\"independent-review-and-form-future-exact-candidate\"]},\"schema\":\"yiyuan-accord-goal/v2\",\"workspace\":[\"C:\\\\Projects\\\\YIYUAN-Accord\",\"main\",\"preserve-existing-tags-and-history\",\"no-branch-worktree-or-repository-fork\"]}",
     "workStageIds": [
       "rebaseline-product-and-consensus-impact-map",
       "conduct-self-bootstrapping-feasibility-and-reuse-study",
@@ -1194,7 +1207,7 @@
       "phase-or-authority-boundary",
       "repeated-same-purpose-repair"
     ],
-    "hostLifecycleNote": "The public recommended release remains v3.0.1. Candidate 9050114, fc9c1a7 and exact c5a0668 remain failed history; frozen 0febb415 retains narrower schema-v5 subfacts only. Independent review reopened schema-v6 GT-20 for authority, staging-recomputability and portable-path-privacy correction. Replay, reacceptance and four exact-tree reviews remain pending before candidate selection. The selected product set remains the portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the App Server driver remains evaluation-only. Immutable-tag update remains an explicit replacement and fresh-session operation, not an atomic in-place or already-loaded hot update. Production trust, ordinary activation, current-desktop causality, cross-host behavior, product value and every external release gate remain unknown."
+    "hostLifecycleNote": "The public recommended release remains v3.0.1. Candidate 9050114, fc9c1a7, exact c5a0668 and the unpublished misbound schema-v6 replay remain failed history; frozen 0febb415 retains narrower schema-v5 subfacts only. Exact 7a3950e closes the corrected bounded schema-v6 replay and affected surfaces are reaccepted; four exact-tree reviews are active before candidate selection. The selected product set remains the portable Skill, shared short-lived SessionStart Hook adapter, pure closure core and manifests; the App Server driver remains evaluation-only. Immutable-tag update remains an explicit replacement and fresh-session operation, not an atomic in-place or already-loaded hot update. Production trust, ordinary activation, current-desktop causality, cross-host behavior, product value and every external release gate remain unknown."
   },
   "hostProjections": [
     {
@@ -1371,7 +1384,7 @@
     "resourceRule": "Observe current demand and capacity, attribute identity, owner, lease and state, admit minimum sufficient concurrency and budget, rebalance or degrade under pressure, release only attributable task-owned exposure through authorized native controls, and independently verify post-state and residue. Shared or unknown ownership is never reclaimed automatically; sufficient native whole-loop governance is a no-op and an Accord-specific mechanism retirement trigger.",
     "carrierRule": "Use current source-bound host signals when reliable; if a decision-relevant signal is unavailable, record unknown and transition conservatively. Capacity pressure, summarization and handoff are observed examples rather than an exhaustive trigger list: reconcile whenever goal, state, authority, evidence, resources, topology, time or causality may be lost, distorted, stale or misbound. Normalize each host's project, workspace, task, thread, conversation and session labels into distinct canonical code, outcome, carrier and execution relations before comparing or composing capabilities. Compact only reduces memory on the current carrier, a copied-history fork is a causal branch, and sequential load relief uses a fresh zero-history destination with minimum verified state transfer, destination reconciliation and only then source release. These conversation operations do not change code topology or local/cloud execution placement; bind either separately when required. No universal turn count, context size, token percentage, summary ratio or fixed trigger taxonomy is product authority.",
     "correctionRule": "A material correction, failure, later rule or revision supersedes affected current-candidate evidence from the earliest dependency boundary. It governs direction immediately but is admitted as the next implementation baseline only after proposition-level contradiction, category, boundary and dependency checks; unresolved conflict pauses affected work. The boundary and every downstream gate are replayed while unrelated accepted truth remains stable. A repeated correction or failed same-purpose mechanism pauses the current shape until premise, interface and representation are reconsidered; deletion, replacement, recomposition, native-host delegation and bounded addition are all considered. There is no universal add-or-subtract default, while L2 requires a deletion or replacement attempt before another same-purpose repair layer. Authority surfaces form a reviewable versioned current set; their merge, split, replacement or retirement requires explicit provenance-preserving schema and verifier migration plus the same earliest-boundary replay.",
-    "currentStageRule": "The current stage reopened schema-v6 GT-20 at the authority-binding, staging-recomputability and portable-path-privacy boundary. Frozen 0febb415 retains only narrower history, while GT-21 and unrelated accepted evidence remain preserved. The corrected replay owns current execution first, affected-surface reacceptance second, and four fresh product, specification, implementation and standards reviews third. Only after all close with no P0/P1 may a replacement repository candidate enter ordered exact-local, hosted, named-human, publication and public-verification gates. Failed replays and future candidates cannot silently enter its release scope or borrow its evidence.",
+    "currentStageRule": "The current stage preserves exact 7a3950e as the corrected bounded schema-v6 GT-20 subject after authority-binding, staging-recomputability and portable-path-privacy repair; affected surfaces are reaccepted. Frozen 0febb415 retains only narrower history, while GT-21 and unrelated accepted evidence remain preserved. The independent-review phase owns current execution through four fresh product, specification, implementation and standards reviews. Only after all close with no P0/P1 may a replacement repository candidate enter ordered exact-local, hosted, named-human, publication and public-verification gates. Failed replays and future candidates cannot silently enter its release scope or borrow its evidence.",
     "stageSnapshotState": "latest-recorded-stage-snapshot-with-successor-replay-active",
     "stageSnapshotRule": "Baseline, plan, process, acceptance and goal projection are versioned stage projections. increment.closeoutSnapshot records the current versioned stage node and explicitly distinguishes reopened from closed state without embedding its own commit SHA: it declares a containing-git-commit relation, and after commit the exact external locator is the immutable containing SHA plus its stable repository locator. The canonical locator is the oldest commit in the contiguous first-parent run carrying the identical parsed node object; every later carry is checked against that origin and cannot rebind frozen authority, surfaces, evidence or cutoff. A successor cites the canonical origin of the latest different node. The current verifier recomputes only a bounded, schema-versioned repository snapshot-lineage predicate for every carry and recursively for that predecessor origin using one first-parent history index reused across the walk: strict node shape, origin-bound constitution, program and acceptance, referenced guidance and Golden Tasks, repository-located current and historical evidence bytes and digests, and declared host projection package, manifest, contract, Skill and marketplace identity. Each revision blob uses the admitted JSON byte limit; the index has independent revision-count and aggregate-byte bounds. Every parsed schema-v1 historical program value is also traversed independently of runtime parser behavior and rejected when its visited-value depth exceeds 512. Complete normalized transition state plus raw marketplace identity determines affected criteria. Passing it does not replay the complete historical verifier or attest historical tests, behavior, live host facts, human authority, publication or other external gates. Carry locators, stale or malformed predecessors, missing intervals, excessive JSON value or predecessor depth, resource-bound breaches and non-contiguous replay fail closed. Git preserves superseded nodes without a second registry; only the terminal release gate has a null next gate, and a later version begins a new ordered cycle from that predecessor. The tracked object never self-attests publication, authorization or a later gate.",
     "evolutionHorizonRule": "The future horizon is recomputed on demand from the whole-project panorama, latest accepted stage snapshot and fresh user, host and environment facts. It must consider maintenance and health, iteration, updates, bounded refactoring, host adaptation, retirement or replacement and later outcome-driven development, but remains a derived non-authoritative non-commitment candidate set until one item passes current authority, feasibility, value, lifecycle and acceptance gates into the next bounded increment.",
