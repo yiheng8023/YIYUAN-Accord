@@ -2400,9 +2400,10 @@ def _snapshot_v2_close_projection(root, revision, documents):
     for item in (
         increment["workItems"] + increment["workItems"][0]["closeoutSequence"]
         + increment["fourSurfaceMapping"]["process"]["orderedSteps"]
-        + projection["acceptance"]["criteria"]
     ):
-        item.pop("assessment" if "assessment" in item else "state", None)
+        item.pop("state", None)
+    for criterion in projection["acceptance"]["criteria"]:
+        criterion.pop("assessment", None)
     return projection
 
 
