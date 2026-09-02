@@ -2107,7 +2107,9 @@ def _snapshot_v2_transition_errors(current, predecessor):
     prior_state = predecessor.get("state")
     prior_gate = predecessor.get("gateId") \
         if prior_schema == _SNAPSHOT_V2_SCHEMA else predecessor.get("closedGateId")
-    if current.get("gateId") != prior_gate:
+    allowed_gates = (prior_gate, predecessor.get("nextGateId")) \
+        if prior_state == "closed" else (prior_gate,)
+    if current.get("gateId") not in allowed_gates:
         _v2_error(errors, "predecessor gate is invalid")
     if current.get("state") == "reopened":
         current_replay = current.get("replay")
@@ -2592,9 +2594,9 @@ def _validate_closeout_snapshot(
     transition = value.get("acceptanceTransition")
     if not isinstance(transition, dict) or set(transition) != {
         "kind", "rationaleRef", "affectedCriterionIds", "replayRef",
-    } or transition.get("kind") not in {
+    } or transition.get("kind") not in (
         "snapshot-bootstrap", "unchanged", "changed",
-    } or transition.get("rationaleRef") != (
+    ) or transition.get("rationaleRef") != (
         _V2_PLAN_REF
     ) or transition.get("replayRef") != (
         _V2_STEPS_REF
@@ -3248,9 +3250,9 @@ def _gt20_v4_failed_update_receipts_valid(
             or receipt["eventCount"] < 1
             or receipt.get("observationScope")
                 != "candidate-bound-staging-route"
-            or receipt.get("pathScope") not in {
+            or receipt.get("pathScope") not in (
                 "exact-target", "verified-temp-sibling",
-            }
+            )
             or receipt.get("targetVersion") != "3.1.0"
             or receipt.get("preexisting") is not False
             or type(receipt.get("postCommandAbsent")) is not bool
@@ -3727,20 +3729,15 @@ def _validate_exact_package_evidence_lifecycle(
             predecessor_lifecycle = None
         predecessor_revision = match.group(1) if match else None
         base_predecessor_ref = (
-            f"{_GT20_V7_PREDECESSOR}:"
-            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+            f"{_GT20_V7_PREDECESSOR}{_LIFE_SUFFIX}"
             if is_v7 else
-            f"{_GT20_V6_REVIEW_CORRECTION_PREDECESSOR}:"
-            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+            f"{_GT20_V6_REVIEW_CORRECTION_PREDECESSOR}{_LIFE_SUFFIX}"
             if is_v6_review_correction else
-            f"{_GT20_V6_PREDECESSOR}:"
-            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+            f"{_GT20_V6_PREDECESSOR}{_LIFE_SUFFIX}"
             if is_v6 else
-            "fc9c1a7a64257ddf315f862a091a081c4104d81b:"
-            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+            f"fc9c1a7a64257ddf315f862a091a081c4104d81b{_LIFE_SUFFIX}"
             if is_v5 else
-            "fecbdbc3c557e5145e4f037eb9876a09875f9eba:"
-            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+            f"fecbdbc3c557e5145e4f037eb9876a09875f9eba{_LIFE_SUFFIX}"
         )
         modern_pending = {
             "schema": lifecycle.get("schema"),
@@ -3846,8 +3843,7 @@ def _validate_exact_package_evidence_lifecycle(
                 ),
                 "preservedTaskIds": ["GT-21"],
                 "predecessorLifecycleRef": (
-                    "fecbdbc3c557e5145e4f037eb9876a09875f9eba:"
-                    "product/program.json#/increment/exactPackageEvidenceLifecycle"
+                    f"fecbdbc3c557e5145e4f037eb9876a09875f9eba{_LIFE_SUFFIX}"
                 ),
                 "commandContractLocator": lifecycle.get(
                     "commandContractLocator"
@@ -4244,9 +4240,9 @@ def _validate_exact_package_evidence_lifecycle(
         expected_profile = (
             "isolated-codex" if executable == "codex"
             else "isolated-claude" if executable == "claude"
-            else "preflight-base" if command.get("role") in {
+            else "preflight-base" if command.get("role") in (
                 "candidateCommitCheck", "priorReleaseRevision",
-            }
+            )
             else "isolated-base"
         )
         spec_fields = {
@@ -4270,10 +4266,10 @@ def _validate_exact_package_evidence_lifecycle(
         if is_v4_record and isinstance(spec, dict):
             if "inputPolicy" in spec:
                 expected_command_fields.add("activationReceipt")
-            if spec.get("role") in {
+            if spec.get("role") in (
                 "accordCodexFailedUpdateAfterStaging",
                 "accordClaudeFailedUpdateAfterStaging",
-            }:
+            ):
                 expected_command_fields.add("mutationReceipt")
         return (
             set(command) == expected_command_fields
@@ -5134,7 +5130,13 @@ def _validate_program(
             errors.append("program.goalModePrompt.workStageIds must match closeoutSequence")
 
     process = program.get("processLossControl")
-    if not isinstance(process, dict) or "closeMutableProjectionPaths" in process:
+    process_fields = set((
+        "maxActiveIncrements maxActiveWorkItems samePurposeRepairBeforeReplan "
+        "prohibitedAgentWorkTransfer taskResidueAtCheckpoint alignmentRule resourceRule "
+        "carrierRule correctionRule currentStageRule stageSnapshotState stageSnapshotRule "
+        "evolutionHorizonRule continuingCalibration boundedAutonomyRule"
+    ).split())
+    if not isinstance(process, dict) or set(process) != process_fields:
         errors.append("program.processLossControl shape is invalid")
     else:
         _require_texts(

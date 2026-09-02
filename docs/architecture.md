@@ -1184,8 +1184,9 @@ guidance and Golden Tasks, repository-located current and historical evidence
 bytes and digests, and declared host projection package, manifest, contract,
 Skill and marketplace identity. Each referenced revision blob uses the admitted
 one-megabyte JSON limit; the index admits at most 4096 revisions and 67108864
-aggregate Git batch bytes. Complete normalized transition state plus raw
-marketplace identity determines the affected-criterion set. Passing this
+aggregate Git batch bytes. Complete normalized transition state, validated
+canonical goal derivations and exact raw bytes of every authority-declared
+derived surface plus marketplace determine the affected-criterion set. Passing this
 predicate does not replay the complete historical verifier
 or attest historical tests, behavior, live host facts, human authority,
 publication or other external gates. Malformed intermediates, carry SHAs, stale

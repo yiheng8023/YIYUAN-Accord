@@ -1126,7 +1126,7 @@ def _gt19_longitudinal_semantics(task, event, episodes, dimension_ids):
         and all(isinstance(modes, dict) for modes in baseline_modes + replacement_modes)
         and all(
             baseline_modes[order].get(responsibility)
-            in {"accord-contained", "accord-agent-composed"}
+            in ("accord-contained", "accord-agent-composed")
             and replacement_modes[order].get(responsibility) == "agent-native"
             for order in (1, 2, 3) for responsibility in responsibilities
         )

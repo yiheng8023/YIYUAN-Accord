@@ -62,9 +62,12 @@ TC = unittest.TestCase
 HOOK_PROCESS_TIMEOUT_SECONDS = 60
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 RP = 'representative' 'BehaviorPolicy'
+CBG = 'yiyuan_accord.control._bounded_git_bytes'
+IBG = 'yiyuan_accord.identity._bounded_git_bytes'
+EBG = 'yiyuan_accord.evidence._bounded_git_bytes'
+PKG_ERR = 'package digest is not approved by program'
+FROZEN_ERR = 'frozen GT-20/21 source preimage or retained attempts drifted'
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
-GT11_SOURCE = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
-GT11_OBSERVATION = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json'
 GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json'
 CURRENT_GT17_OBSERVATION = 'evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json'
 GT2021_SOURCE = 'evals/evidence/2026-08-30-v310-gt20-21-source.json'
@@ -547,7 +550,7 @@ def _byte_errors(body, locator='sample.txt'):
         return _history_errors(root, [locator])
 
 def _history_errors(root, locators, research=None):
-    with patch('yiyuan_accord.identity._bounded_git_bytes',
+    with patch(IBG,
                side_effect=_retired_history()):
         return active_tree_errors(root, locators, '0' * 40, research or set())
 
@@ -1078,7 +1081,7 @@ class ProductControlTests(unittest.TestCase):
             _rehash_input(root, GT2021_SOURCE)
             self.has(
                 _errors(root),
-                'frozen GT-20/21 source preimage or retained attempts drifted',
+                FROZEN_ERR,
             )
 
         with _provisional() as root:
@@ -1246,15 +1249,15 @@ class ProductControlTests(unittest.TestCase):
              lambda source: source['records'].pop(
                  'GT-21-simple-native-route-f5f281c')),
             ('task digest',
-             'frozen GT-20/21 source preimage or retained attempts drifted',
+             FROZEN_ERR,
              lambda source: entry(source, 'GT-20').update(
                  goldenTaskSha256='0' * 64)),
             ('evaluation digest',
-             'frozen GT-20/21 source preimage or retained attempts drifted',
+             FROZEN_ERR,
              lambda source: entry(source, 'GT-21').update(
                  evaluationContractSha256='0' * 64)),
             ('behavior subject',
-             'frozen GT-20/21 source preimage or retained attempts drifted',
+             FROZEN_ERR,
              lambda source: entry(source, 'GT-20')['behaviorSubject'].pop(
                  'plugins/yiyuan-accord-codex/adapter.json')),
             ('record payload behavior subject',
@@ -1262,7 +1265,7 @@ class ProductControlTests(unittest.TestCase):
              'GT-21', ('payload', 'behaviorSubject',
                        'yiyuan_accord/closure.py'), _DELETE),
             ('package digest',
-             'frozen GT-20/21 source preimage or retained attempts drifted',
+             FROZEN_ERR,
              lambda source: entry(source, 'GT-20')[
                  'projectionPackageSha256'].update(codex='0' * 64)),
             ('source binding', 'provisional GT-21 source binding is invalid',
@@ -2122,6 +2125,8 @@ class ProductControlTests(unittest.TestCase):
                     'carrierRule'] + ' False.')),
             (P, 'processLossControl', lambda v: v['processLossControl'].update(
                 closeMutableProjectionPaths=['program/releaseIntent'])),
+            (P, 'processLossControl', lambda v: v['processLossControl'].update(
+                closeProjectionPaths=['program/status'])),
             (P, 'program.status must', lambda v: v.update(status={})),
             (P, 'program.increment does not match', lambda v: v[
                 'increment'].update(state={})),
@@ -2251,7 +2256,7 @@ class ProductControlTests(unittest.TestCase):
               'package declared file is unsafe')),
             ('codex', 0, 'icon', lambda root, _: append_bytes(
                 root, 'plugins/yiyuan-accord-codex/assets/yiyuan-nexus-icon-red.svg',
-                b'tampered'), ('package digest is not approved by program',)),
+                b'tampered'), (PKG_ERR,)),
             ('claude-code', 1, 'manifest-marketplace', lambda root, p: (
                 json_change(root, p['manifest'], lambda m: m.update(
                     displayName='YIYUAN Accord for Claude Code')),
@@ -2259,7 +2264,7 @@ class ProductControlTests(unittest.TestCase):
                     source='./plugins/wrong', version='2.0.1-preview.1'))),
              ('manifest displayName is invalid', 'marketplace source is invalid',
               'marketplace presentation is invalid',
-              'package digest is not approved by program')),
+              PKG_ERR)),
             ('claude-code', 1, 'description', lambda root, p: json_change(
                 root, p['marketplace'], lambda m: m['plugins'][0].update(
                     description='Drifted description')),
@@ -2268,14 +2273,14 @@ class ProductControlTests(unittest.TestCase):
                 root, p['mechanismFiles'][0], lambda h: h['hooks'][
                     'SessionStart'][0]['hooks'][0].update(command='echo drifted')),
                ('activation mechanism contract is invalid',
-                'package digest is not approved by program'))
+                PKG_ERR))
               for adapter, index in (('codex', 0), ('claude-code', 1))),
             ('codex', 0, 'missing-legal-declaration', lambda root, _: json_change(
                 root, P, lambda p: p['hostProjections'][0].pop('legalFiles')),
              ('program projection shape is invalid',
               'legal file declaration is invalid',
               'package contains undeclared files',
-              'package digest is not approved by program')),
+              PKG_ERR)),
             ('codex', 0, 'legal-declaration-order', lambda root, p: json_change(
                 root, P, lambda program: program['hostProjections'][0].update(
                     legalFiles=list(reversed(p['legalFiles'])))),
@@ -2283,17 +2288,17 @@ class ProductControlTests(unittest.TestCase):
             ('codex', 0, 'package-license', lambda root, p: append_bytes(
                 root, p['legalFiles'][0], b'changed'),
              ('LICENSE differs from repository authority',
-              'package digest is not approved by program')),
+              PKG_ERR)),
             ('codex', 0, 'package-notice-extra-restriction',
              lambda root, p: append_bytes(
                  root, p['legalFiles'][1],
                  b'Additional commercial restriction.\n'),
              ('NOTICE differs from repository authority',
-              'package digest is not approved by program')),
+              PKG_ERR)),
             ('claude-code', 1, 'missing-package-notice',
              lambda root, p: (root / p['legalFiles'][1]).unlink(),
              ('package declared file is unsafe',
-              'package digest is not approved by program')),
+              PKG_ERR)),
         )
         for adapter, index, name, mutate, fragments in drift_cases:
             with self.subTest(adapter=adapter, mutation=name), _fixture() as root:
@@ -2313,7 +2318,7 @@ class ProductControlTests(unittest.TestCase):
             self.has(
                 host_check(root, 'codex')['errors'],
                 'activation mechanism is unreadable',
-                'package digest is not approved by program',
+                PKG_ERR,
             )
 
         for suffix in (' & extra', '; extra', ' $(extra)', ' `extra`', ' %PATH%'):
@@ -2434,6 +2439,13 @@ class ProductControlTests(unittest.TestCase):
         ):
             drift = _clone(close); _replace(drift, path, value)
             self.has(TE(drift, n), pre + message)
+        gate = p['releaseProcedure']['orderedGates'][1]['id']
+        closed = _clone(close); closed['nextGateId'] = gate
+        advanced = _clone(n); advanced.update(gateId=gate, stage=gate, nextGateId=gate)
+        advanced['acceptanceTransition']['kind'] = 'changed'
+        self.ae(TE(advanced, closed), [])
+        advanced['gateId'] = p['releaseProcedure']['orderedGates'][2]['id']
+        self.has(TE(advanced, closed), pre + 'predecessor gate is invalid')
         docs = list(_snapshot_documents(ROOT))
         project = lambda value: product_control._snapshot_v2_close_projection(
             ROOT, None, value)
@@ -2472,7 +2484,7 @@ class ProductControlTests(unittest.TestCase):
     def test_revision_tree_cache_has_an_aggregate_memory_bound(self):
         listing = b'100644 blob ' + b'1' * 40 + b'\tproduct/program.json\0'
         cache = product_control._SnapshotBlobCache()
-        with patch('yiyuan_accord.control._bounded_git_bytes',
+        with patch(CBG,
                    return_value=listing), patch.object(
             product_control, '_SNAPSHOT_V1_TREE_CACHE_BYTES', len(listing) - 1,
         ), self.assertRaisesRegex(
@@ -2494,7 +2506,7 @@ class ProductControlTests(unittest.TestCase):
             calls.append(tuple(arguments))
             return bounded_git(root, arguments, limit, input_bytes)
 
-        with patch('yiyuan_accord.control._bounded_git_bytes',
+        with patch(CBG,
                    side_effect=capture):
             frozen, valid = product_control._snapshot_v1_run_status(
                 ROOT, expected, (HISTORICAL_REVIEW_CUT,), {},
@@ -2692,6 +2704,11 @@ class ProductControlTests(unittest.TestCase):
         self.ae(product_control._gt20_v4_failed_update_receipts_valid(
             drifted, fixture, behavior_subject
         ), False)
+        drifted = _clone(commands)
+        drifted['accordCodexFailedUpdateAfterStaging']['mutationReceipt'][
+            'pathScope'] = {}
+        self.af(product_control._gt20_v4_failed_update_receipts_valid(
+            drifted, fixture, behavior_subject))
         for role in (
             'accordCodexFailedUpdateAfterStaging',
             'accordClaudeFailedUpdateAfterStaging',
@@ -3044,7 +3061,7 @@ class ProductControlTests(unittest.TestCase):
             malformed, malformed, _time('2026-08-24T00:00:00Z')
         ))
 
-        current = _read(ROOT, GT11_SOURCE)['records']['GT-11']
+        current = _read(ROOT, SRC310)['records']['GT-11']
         current_task = tasks['GT-11']
         captured = _time(current['capturedAt'])
         postcapture = lambda payload: _postcapture_bundle(
@@ -3111,7 +3128,7 @@ class ProductControlTests(unittest.TestCase):
         binding['resultRecordSha256'] = _digest([second])
         with self.subTest(swapped_direct_command_carrier=True):
             self.an(postcapture(swapped))
-        source_bundle = _read(ROOT, GT11_SOURCE)
+        source_bundle = _read(ROOT, SRC310)
         gt12 = source_bundle['records']['GT-12']
         with self.subTest(cross_task_command_bundle=True):
             self.an(_postcapture_bundle(
@@ -3136,7 +3153,7 @@ class ProductControlTests(unittest.TestCase):
             )
             with self.subTest(empty_direct_command_field=field):
                 self.an(postcapture(payload))
-        observation = _read(ROOT, GT11_OBSERVATION)
+        observation = _read(ROOT, OBS11)
         payload = _clone(current['payload'])
         payload.pop('recheckTriggers')
         self.af(_publishable_payload(
@@ -3148,10 +3165,10 @@ class ProductControlTests(unittest.TestCase):
             captured, observation['projectionIdentity'],
         ))
         with _fixture() as root:
-            malformed_observation = _read(root, GT11_OBSERVATION)
+            malformed_observation = _read(root, OBS11)
             malformed_observation['cleanup'] = 'malformed-cleanup'
             errors, _ = _observe(
-                root, GT11_OBSERVATION, malformed_observation
+                root, OBS11, malformed_observation
             )
             self.has(
                 errors,
@@ -3396,13 +3413,13 @@ class ProductControlTests(unittest.TestCase):
         self.at(amendments(unamended))
         injected = _clone(cand_record)
         injected['payload']['evaluatedRevision'] = '--output=unexpected'
-        with patch('yiyuan_accord.evidence._bounded_git_bytes') as git_read:
+        with patch(EBG) as git_read:
             self.af(amendments(injected))
             git_read.assert_not_called()
         malformed_history = [
             b'{"tasks":[null]}', json.dumps(acceptance).encode(),
         ]
-        with patch('yiyuan_accord.evidence._bounded_git_bytes',
+        with patch(EBG,
                    side_effect=malformed_history):
             self.af(amendments())
         revision = cand_record['payload']['evaluatedRevision']
@@ -3410,10 +3427,10 @@ class ProductControlTests(unittest.TestCase):
             _git(ROOT, 'show', f'{revision}:evals/golden-tasks.json'),
             b'{"claimCeiling":null}',
         ]
-        with patch('yiyuan_accord.evidence._bounded_git_bytes',
+        with patch(EBG,
                    side_effect=malformed_acceptance):
             self.af(amendments())
-        with patch('yiyuan_accord.evidence._bounded_git_bytes',
+        with patch(EBG,
                    side_effect=subprocess.CalledProcessError(1, 'git')):
             self.af(amendments())
         changed_a = _clone(acceptance)
@@ -4065,7 +4082,7 @@ class ProductControlTests(unittest.TestCase):
 
         lineage_cache = {}
         with patch(
-            'yiyuan_accord.control._bounded_git_bytes',
+            CBG,
             wraps=_bounded_git_bytes,
         ) as bounded_git:
             _, latest, _, _ = _snapshot_v1_lineage(
@@ -4095,7 +4112,7 @@ class ProductControlTests(unittest.TestCase):
                 )
             raise AssertionError(args)
         with patch(
-            'yiyuan_accord.control._bounded_git_bytes',
+            CBG,
             side_effect=oversized_history,
         ), self.assertRaisesRegex(ValueError, 'blob bound'):
             _snapshot_v1_lineage(
@@ -4113,7 +4130,7 @@ class ProductControlTests(unittest.TestCase):
                 ).encode('ascii') + deeply_nested + b'\n'
             raise AssertionError(args)
         with patch(
-            'yiyuan_accord.control._bounded_git_bytes',
+            CBG,
             side_effect=deeply_nested_history,
         ), self.assertRaisesRegex(ValueError, 'structure'):
             _snapshot_v1_lineage(
@@ -4126,7 +4143,7 @@ class ProductControlTests(unittest.TestCase):
         parser_success = {'a': parser_success}
         self.af(_snapshot_v1_json_structure_is_bounded(parser_success))
         with patch(
-            'yiyuan_accord.control._bounded_git_bytes',
+            CBG,
             side_effect=deeply_nested_history,
         ), patch(
             'yiyuan_accord.control._strict_json_object',
@@ -4243,6 +4260,8 @@ class ProductControlTests(unittest.TestCase):
             _commit(root, 'carry unchanged snapshot')
             carry = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             advance(program, gates, 1, carry)
+            program['increment']['closeoutSnapshot']['acceptanceTransition'].update(
+                kind='changed', affectedCriterionIds=CRITERIA)
             self.has(snapshot_errors(root, program),
                      'predecessor is not latest accepted snapshot')
             program['increment']['closeoutSnapshot']['predecessorSnapshotRef'] = (
@@ -4763,7 +4782,7 @@ class ProductControlTests(unittest.TestCase):
             target.write_bytes(png)
             assets = {locator: _sha(png)}
             def scan(declared=None):
-                with patch('yiyuan_accord.identity._bounded_git_bytes',
+                with patch(IBG,
                            side_effect=_retired_history()):
                     return active_tree_errors(
                         root, [locator], '0' * 40,
@@ -4798,7 +4817,7 @@ class ProductControlTests(unittest.TestCase):
                     raise PermissionError('denied by fixture')
                 return original_open(path, flags, *args)
 
-            with patch('yiyuan_accord.identity._bounded_git_bytes', side_effect=_retired_history()), \
+            with patch(IBG, side_effect=_retired_history()), \
                     patch('yiyuan_accord.identity.os.open', deny_target):
                 errors = active_tree_errors(root, [locator], '0' * 40)
             self.has(errors, 'active tree file is unreadable: sample.txt')
@@ -4812,7 +4831,7 @@ class ProductControlTests(unittest.TestCase):
                     raise AssertionError('active-tree symlink target was read')
                 return original_open(path, flags, *args)
 
-            with patch('yiyuan_accord.identity._bounded_git_bytes', side_effect=_retired_history()), \
+            with patch(IBG, side_effect=_retired_history()), \
                     patch.object(Path, 'is_symlink', active_symlink), \
                     patch('yiyuan_accord.identity.os.open', never_follow_active):
                 errors = active_tree_errors(root, [locator], '0' * 40)
