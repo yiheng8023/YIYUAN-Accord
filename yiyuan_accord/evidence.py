@@ -18,6 +18,7 @@ from .identity import (
 
 STATES = {"passed", "failed", "failed-repeated-same-purpose"}
 _REP_POLICY = "representative" "BehaviorPolicy"
+_REV = "evaluatedRevision"
 _OFFICIAL_HOSTS = {
     "openai.com", "help.openai.com", "platform.openai.com",
     "developers.openai.com", "github.com", "code.claude.com",
@@ -500,7 +501,7 @@ def _continuity_handoff_bundle(payload, task, narrative_hashes=None):
         and topology["reportedTokensUsed"] >= 0
         and isinstance(code, dict)
         and all(_text(code.get(field)) for field in ("repository", "branch", "head"))
-        and code.get("head") == payload.get("evaluatedRevision")
+        and code.get("head") == payload.get(_REV)
         and code.get("changed") is False
         and isinstance(execution, dict) and _text(execution.get("kind"))
         and execution.get("changed") is False
@@ -1322,8 +1323,8 @@ def _longitudinal_bundle(payload, task):
         task, event, episodes, dimension_ids
     )
     valid_revision = (
-        _text(payload.get("evaluatedRevision"))
-        and event.get("revision") == payload.get("evaluatedRevision")
+        _text(payload.get(_REV))
+        and event.get("revision") == payload.get(_REV)
     )
     return event if (
         valid_vector and valid_episodes and valid_edges and valid_semantics
@@ -1380,7 +1381,7 @@ def _embedded_research_source_packet(payload, task, captured_at):
     }
     source_urls = []
     roles = []
-    evaluated_revision = payload.get("evaluatedRevision")
+    evaluated_revision = payload.get(_REV)
     for source in sources.values():
         if not _exact(source, (
             "role", "url", "revision", "license", "maintenance", "facts",
@@ -1461,7 +1462,7 @@ def _embedded_utf8_json(record):
 def _gt16_retained_failure_bundle(payload, task, cleanup):
     if (
         task.get("id") != "GT-16"
-        or payload.get("evaluatedRevision") != _GT16_RETAINED_FAILURE_REVISION
+        or payload.get(_REV) != _GT16_RETAINED_FAILURE_REVISION
     ):
         return {}
     events = payload.get("materialEvents")
@@ -1780,6 +1781,8 @@ def _representative_contract(acceptance, golden):
         "requiredEvidenceClasses",
     )
     criteria = acceptance.get("criteria")
+    ceiling = acceptance.get("claimCeiling")
+    ceiling = ceiling if isinstance(ceiling, dict) else {}
     policy = acceptance.get(_REP_POLICY)
     digest_policy = dict(policy) if isinstance(policy, dict) else policy
     if isinstance(digest_policy, dict):
@@ -1790,12 +1793,13 @@ def _representative_contract(acceptance, golden):
         "evidenceLanes": acceptance.get("evidenceLanes"),
         _REP_POLICY: digest_policy,
         "claimCeiling": {
-            field: acceptance.get("claimCeiling", {}).get(field)
+            field: ceiling.get(field)
             for field in ("finiteReleaseClaims", "notImplied")
         },
         "criteria": [
             {field: item.get(field) for field in semantic_fields}
             for item in criteria if isinstance(item, dict)
+            and isinstance(item.get("requiredEvidenceClasses"), list)
             and "representative-behavior" in item.get("requiredEvidenceClasses", [])
         ] if isinstance(criteria, list) else [],
         "evaluationProtocol": golden.get("evaluationProtocol"),
@@ -1840,7 +1844,7 @@ def _candidate_evaluation_delta(
         not separator or current_rule != expected_rule
         or "requiredCandidateObservationFields" in prior_protocol
         or current_protocol.get("requiredCandidateObservationFields")
-        != ["evaluatedRevision"]
+        != [_REV]
     ):
         return False
     normalized = json.loads(json.dumps(current))
@@ -1939,7 +1943,7 @@ def _source_amendments(
             return False
     elif change_class == "candidate-subject-binding":
         payload = record.get("payload")
-        revision = payload.get("evaluatedRevision") if isinstance(payload, dict) else None
+        revision = payload.get(_REV) if isinstance(payload, dict) else None
         if re.fullmatch(r"[0-9a-f]{40}", revision or "") is None:
             return False
         try:
@@ -2034,7 +2038,7 @@ def _source_amendments(
 
 
 def _behavior_subject_revision_errors(root, label, observation, task):
-    revision, files = observation.get("evaluatedRevision"), task.get(
+    revision, files = observation.get(_REV), task.get(
         "behaviorSubjectFiles"
     )
     if re.fullmatch(r"[0-9a-f]{40}", revision or "") is None:
@@ -2156,8 +2160,8 @@ def _observation_errors(
             and record.get("evaluationContractSha256") == observation.get(
                 "evaluationContractSha256")
             and (not require_current_subject or isinstance(record.get("payload"), dict)
-                 and record["payload"].get("evaluatedRevision")
-                 == observation.get("evaluatedRevision"))
+                 and record["payload"].get(_REV)
+                 == observation.get(_REV))
             and record.get("hostIdentity") == host
             and captured is not None and observed_at is not None and captured <= observed_at
             and _publishable_payload(
@@ -2284,6 +2288,7 @@ def representative_sample_errors(
     users = [
         item for item in criteria if isinstance(item, dict)
         and item.get("assessment") in ("verified", "continuing")
+        and isinstance(item.get("requiredEvidenceClasses"), list)
         and "representative-behavior" in item.get("requiredEvidenceClasses", [])
     ]
     if not users:
@@ -2380,7 +2385,9 @@ def representative_sample_errors(
                 for value in claim.get("excludedClaims", [])
                 if _text(adapter_id) and _text(value)
             )
-    declared = acceptance.get("claimCeiling", {}).get("retainedBehaviorExclusions")
+    ceiling = acceptance.get("claimCeiling")
+    declared = ceiling.get("retainedBehaviorExclusions") \
+        if isinstance(ceiling, dict) else None
     if declared != sorted(set(exclusions)):
         errors.append("retained behavior exclusions mismatch")
     for criterion in users:
@@ -2790,7 +2797,7 @@ def provisional_gt20_21_source_errors(
     }
     fields = (
         "taskId", "recordId", "goldenTaskSha256", "evaluationContractSha256",
-        "evaluatedRevision", "behaviorSubject", "projectionPackageSha256",
+        _REV, "behaviorSubject", "projectionPackageSha256",
         "sourceBindings", "independentPoststate", "cleanup", "claimCeiling",
     )
     for task_id, definition in definitions.items():
@@ -2806,8 +2813,8 @@ def provisional_gt20_21_source_errors(
         authority_record = record.get("authorityAndPrivacy")
         authority_record = authority_record \
             if isinstance(authority_record, dict) else {}
-        revision = record.get("evaluatedRevision") if task_id == "GT-20" \
-            else payload.get("evaluatedRevision")
+        revision = record.get(_REV) if task_id == "GT-20" \
+            else payload.get(_REV)
         if not isinstance(revision, str) or re.fullmatch(
             r"[0-9a-f]{40}", revision
         ) is None:
@@ -2857,11 +2864,11 @@ def provisional_gt20_21_source_errors(
                  or entry.get("evaluationContractSha256") not in admitted_evaluations)
         ):
             errors.append(f"{label} evaluation contract digest mismatch")
-        if entry.get("evaluatedRevision") != revision:
+        if entry.get(_REV) != revision:
             errors.append(f"{label} evaluatedRevision binding mismatch")
         if active_current_gate and isinstance(task, dict) and revision is not None:
             errors.extend(_behavior_subject_revision_errors(
-                root, label, {"evaluatedRevision": revision}, task,
+                root, label, {_REV: revision}, task,
             ))
         subject = entry.get("behaviorSubject")
         subject_valid = (
@@ -3183,7 +3190,7 @@ def frozen_gt20_21_promotion_errors(
                 or item.get("selectedRecordId") != record_id
                 or item.get("selectedRecordSha256") != _digest(record)
                 or item.get("sourceContractEntrySha256") != _digest(entry)
-                or item.get("evaluatedRevision") != entry.get("evaluatedRevision")
+                or item.get(_REV) != entry.get(_REV)
                 or item.get("behaviorSubject") != entry.get("behaviorSubject")
                 or item.get("behaviorSubject") != current_subject
             ):
@@ -3200,7 +3207,7 @@ def frozen_gt20_21_promotion_errors(
             if (
                 not shared_valid
                 or item.get("sourceTaskContractEntrySha256") != _digest(entry)
-                or item.get("evaluatedRevision")
+                or item.get(_REV)
                 != _FROZEN_GT20_21_CURRENT_CONTRACT_REVISION
                 or item.get("candidateBehaviorSubject") != current_subject
                 or not isinstance(selection, dict)
@@ -3226,7 +3233,7 @@ def frozen_gt20_21_promotion_errors(
                     not isinstance(record, dict) or not isinstance(payload, dict)
                     or ancestor_records.get(record_id) != record
                     or component.get("sourceRecordSha256") != _digest(record)
-                    or component.get("evaluatedRevision") != payload.get("evaluatedRevision")
+                    or component.get(_REV) != payload.get(_REV)
                     or component.get("behaviorSubject") != payload.get("behaviorSubject")
                     or component.get("behaviorSubject") != current_subject
                 ):
@@ -3239,7 +3246,7 @@ def frozen_gt20_21_promotion_errors(
                 ))
                 errors.extend(_behavior_subject_revision_errors(
                     root, f"frozen GT-21 {record_id}",
-                    {"evaluatedRevision": component.get("evaluatedRevision")}, task,
+                    {_REV: component.get(_REV)}, task,
                 ))
             components = bound_components
             aggregate = item.get("compositeClaimCeilingBinding", {})
@@ -3255,7 +3262,7 @@ def frozen_gt20_21_promotion_errors(
                 errors.append("frozen GT-21 composite claim ceiling is invalid")
             errors.extend(_behavior_subject_revision_errors(
                 root, "frozen GT-21 promoted candidate",
-                {"evaluatedRevision": item.get("evaluatedRevision")}, task,
+                {_REV: item.get(_REV)}, task,
             ))
 
         for component, record, post, cleanup, claim in components:
@@ -3285,7 +3292,7 @@ def frozen_gt20_21_promotion_errors(
         if task_id == "GT-20":
             errors.extend(_behavior_subject_revision_errors(
                 root, f"frozen {task_id}",
-                {"evaluatedRevision": item.get("evaluatedRevision")}, task,
+                {_REV: item.get(_REV)}, task,
             ))
 
     retained = [
@@ -3303,8 +3310,8 @@ def frozen_gt20_21_promotion_errors(
         if (
             not isinstance(observation, dict) or _digest(observation) != digest
             or not isinstance(task, dict)
-            or observation.get("evaluatedRevision")
-            != promoted.get(task_id, {}).get("evaluatedRevision")
+            or observation.get(_REV)
+            != promoted.get(task_id, {}).get(_REV)
         ):
             errors.append(f"frozen {task_id} current observation is invalid")
         else:

@@ -62,12 +62,13 @@ Then read, in order:
   Exact external review cut `c5a0668` rejected the broad GT-20 claim because
   direct Node runtime calls did not prove host activation and source-absent
   preflight rejection did not prove mutation-phase failed-update recovery.
-  Preserve its narrower historical subfacts. Exact `7a3950e` verifies the
-  corrected bounded schema-v6 replay after authority-binding, staging-
-  recomputability and portable-path-privacy repair. Exact `f4c0251` plus the
-  admitted schema-v7 v5 record verify one isolated Codex Agent decision and
-  evaluator-mediated bounded compensation. Affected-surface reacceptance is
-  active and four replacement exact-tree reviews are pending. No
+  Preserve its narrower historical subfacts. Exact `7a3950e` and `f4c0251`
+  retain only their bounded schema-v6 mechanism and schema-v7 Agent-recovery
+  facts. Exact `369d08b` is pre-review counterevidence after read-only cross-
+  model analysis exposed reproducible malformed-input exception, private-path
+  recognition and derived-surface documentation gaps. Its successor correction
+  preserves the acceptance standard at 0/8; four replacement exact-tree reviews
+  remain pending. No
   repository candidate, hosted status, authorization or publication
   exists.
 - Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
@@ -215,8 +216,9 @@ Then read, in order:
   locator and `containing-git-commit` relation but no embedded self SHA. After
   commit, its exact reference is `<containing-sha>:<self-locator>`; a successor
   cites that predecessor and Git preserves older nodes. Only the terminal
-  ordered release gate has a null next gate; a later version starts a new
-  ordered cycle from that terminal predecessor. Identical first-parent carries
+  ordered release gate has a null next gate. The current schema-v2 predicate
+  does not admit a cross-version cycle from it; a later-version cycle requires
+  a separately reviewed schema or transition-contract successor. Identical first-parent carries
   retain the oldest commit in their contiguous run as the canonical origin; every
   carry is checked and cannot rebind snapshot authority, surfaces, evidence or
   cutoff. A successor cites the most recent different node's origin. The current
@@ -230,7 +232,11 @@ Then read, in order:
   the admitted one-megabyte JSON limit; the history index admits at most 4096
   revisions and 67108864 aggregate Git batch bytes; every parsed schema-v1
   historical program independently fails closed above visited-value depth 512,
-  even if the runtime parser accepts it. Complete normalized transition state,
+  even if the runtime parser accepts it. Current authority/evidence JSON uses
+  the same structural bound; malformed acceptance and exact-package lifecycle
+  schema values become structured fail-closed errors. The evidence privacy guard
+  recognizes concrete Windows, Unix and macOS user-path forms without rejecting
+  non-identifying placeholders. Complete normalized transition state,
   validated canonical goal derivations and the exact raw bytes of every
   authority-declared derived surface plus marketplace determine affected criteria.
   Passing it does not replay the complete historical
@@ -598,8 +604,9 @@ Then read, in order:
   final 90000-byte increase over the
   former 590000-byte ceiling is bounded to canonical snapshot-origin discovery,
   the self-contained schema-v1 historical predicate, revision-bound authority,
-  current and historical evidence, declared projection package and marketplace
-  identity, deterministic malformed-history failure closure, complete
+  current and historical evidence, exact raw bytes of every authority-declared
+  derived surface, declared projection package and marketplace identity,
+  deterministic malformed-history failure closure, complete
   transition comparison, aligned blob admission, one reusable bounded history
   index and their anti-rebinding/anti-washing regressions; it is not general growth allowance
   and does not imply a complete historical verifier. These values are navigation targets, not
@@ -1039,10 +1046,11 @@ Historical superseded review disposition —
 14. `reaccept-whole-system-after-live-state-closure` — active. Prior source-bound
     reacceptance from exact cut `85a917a` remains historical. GT-21 is preserved,
     but exact `c5a0668` review reopens GT-20 at host activation and mutation-
-    phase failed-update recovery. Exact `7a3950e` verifies the corrected bounded
-    schema-v6 replay, and exact `f4c0251` plus the admitted schema-v7 v5 record
-    verify the bounded Agent-recovery evidence. Current affected surfaces are
-    being reaccepted. Production,
+    phase failed-update recovery. Exact `7a3950e` and `f4c0251` retain only their
+    bounded schema-v6 mechanism and schema-v7 Agent-recovery facts. Exact
+    `369d08b` is pre-review counterevidence; its successor closes four
+    reproducible malformed-input, privacy and documentation gaps while leaving
+    acceptance unchanged at 0/8. Current affected surfaces are being reaccepted. Production,
     cross-host and updated-client entry behavior remain
     unknown.
 15. `independent-review-and-form-future-exact-candidate` — prior review history
@@ -1165,12 +1173,11 @@ Historical superseded review disposition —
     remain later; candidate selection alone cannot authorize publication.
 
 The release procedure currently has no selected v3.1.0 repository candidate.
-Exact `fc9c1a7` remains invalidated raw replay counterevidence. Frozen
-`0febb415` retains only narrower bounded schema-v5 subfacts after failed exact
-review cut `c5a0668`. Exact `7a3950e` verifies the corrected bounded schema-v6
-replay. Exact `f4c0251` plus the admitted schema-v7 v5 record verify one bounded
-Agent-recovery replay. Affected-surface reacceptance is active and four fresh
-independent exact-tree reviews are pending. Only
+Exact `fc9c1a7`, `c5a0668` and `369d08b` remain invalidated, failed or pre-review
+counterevidence. Exact `7a3950e` and `f4c0251` retain only their bounded schema-v6
+mechanism and schema-v7 Agent-recovery facts. The current successor correction
+preserves the acceptance standard at 0/8; affected-surface reacceptance is active
+and four fresh independent exact-tree reviews are pending. Only
 after they close may clean exact-local and host
 checks, hosted checks, a named-human decision, tag, Release, public verification
 and post-release cleanup run in their declared order on one unchanged exact

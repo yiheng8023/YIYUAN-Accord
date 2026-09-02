@@ -71,6 +71,11 @@ _PRIVATE_EVIDENCE_JSON_KEY_RE = re.compile(
 )
 _PRIVATE_EVIDENCE_PATH_RES = (
     re.compile(
+        r"(?i)(?:^|[\\/])(?:users|documents and settings|appdata|"
+        r"library[\\/]application support)(?:[\\/])"
+    ),
+    re.compile(r"(?:^|[\s\"'=(:,\[])~[\\/]"),
+    re.compile(
         r"(?i)[a-z]:(?:[\\/]+)(?:users|documents and settings)(?:[\\/]+)"
     ),
     re.compile(
@@ -390,8 +395,10 @@ def _read_json(root, locator, errors):
         if read_state is not None:
             raise ValueError(f"JSON source is {read_state}")
         value = _strict_json_object(raw.decode("utf-8"))
+        if not _snapshot_v1_json_structure_is_bounded(value):
+            raise ValueError("JSON structure exceeds supported depth")
         return value
-    except (OSError, UnicodeError, ValueError) as exc:
+    except (OSError, UnicodeError, ValueError, RecursionError) as exc:
         errors.append(f"invalid JSON {locator}: {exc}")
         return {}
 
@@ -515,6 +522,13 @@ def _validate_stage_guidance(guidance, errors):
     adaptive = guidance.get("adaptiveSystem") if isinstance(guidance, dict) else None
     stage = adaptive.get("stageStateContract") if isinstance(adaptive, dict) else None
     horizon = adaptive.get("evolutionHorizon") if isinstance(adaptive, dict) else None
+    snapshot_rule = stage.get("closeoutSnapshotRule") if isinstance(stage, dict) else None
+    cycle_rule = (
+        _contains_markers(snapshot_rule, ("later version starts a new ordered cycle",))
+        or _contains_markers(snapshot_rule, (
+            "does not admit a cross-version cycle", "separately reviewed schema",
+        ))
+    )
     if not isinstance(stage, dict) or set(stage) != {
         "role", "dynamicSurfaces", "changeRule", "closeoutSnapshotRule", "historyRule",
     } or stage.get("role") != "derived-referenceable-node-not-authority-or-release-evidence" \
@@ -525,14 +539,13 @@ def _validate_stage_guidance(guidance, errors):
                 "versioned, evidence-bound and rebuildable", "prior version",
                 "evidence cutoff", "affected criteria", "earliest replay boundary",
                 "silently weaken acceptance", "erase failed evidence", "future stage",
-            )) or not _contains_markers(stage.get("closeoutSnapshotRule"), (
+            )) or not _contains_markers(snapshot_rule, (
                 "stage identity", "parent node", "authority and surface locators",
                 "acceptance transition", "evaluation contract", "invalidation triggers",
                 "containing-git-commit", "never stores its own SHA",
                 "<containing-sha>:<self-locator>", "successor cites", "cannot self-attest",
-                "next gate is null only", "later version starts a new ordered cycle",
-                "terminal predecessor",
-            )) or not _contains_markers(stage.get("historyRule"), (
+                "next gate is null only", "terminal predecessor",
+            )) or not cycle_rule or not _contains_markers(stage.get("historyRule"), (
                 "latest accepted stage projection", "Git history",
                 "predecessor locator", "do not add a snapshot registry",
             )):
@@ -4054,6 +4067,9 @@ def _validate_exact_package_evidence_lifecycle(
         for item in program.get("hostProjections", []) if isinstance(item, dict)
     }
     record_schema = record.get("schema")
+    if not isinstance(record_schema, str):
+        errors.append("exact package lifecycle record schema is invalid")
+        return
     expected_record_schema = (
         _GT20_RECORD_V4 if is_v6 or is_v7
         else _GT20_RECORD_V3
@@ -5166,7 +5182,9 @@ def _validate_program(
         )) or not _contains_markers(process.get("stageSnapshotRule"), (
             "versioned stage projections", "containing-git-commit",
             "exact external locator", "successor cites", "Git preserves",
-            "terminal release gate", "new ordered cycle", "never self-attests",
+            "terminal release gate", "does not admit a cross-version cycle",
+            "separately reviewed schema",
+            "never self-attests",
             "verifier-owned projection",
         )) or not _contains_markers(process.get("evolutionHorizonRule"), (
             "recomputed on demand", "whole-project panorama",

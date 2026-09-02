@@ -62,6 +62,11 @@ TC = unittest.TestCase
 HOOK_PROCESS_TIMEOUT_SECONDS = 60
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 RP = 'representative' 'BehaviorPolicy'
+(CS, AT, PS, FM, RG, PL) = ('closeoutSnapshot', 'acceptanceTransition',
+    'predecessorSnapshotRef', 'fourSurfaceMapping', 'releaseProcedure',
+    'processLossControl')
+ER = 'evaluatedRevision'
+CC = 'claimCeiling'
 CBG = 'yiyuan_accord.control._bounded_git_bytes'
 IBG = 'yiyuan_accord.identity._bounded_git_bytes'
 EBG = 'yiyuan_accord.evidence._bounded_git_bytes'
@@ -538,7 +543,7 @@ def _gt19_v2_payload(historical_event, revision):
     event['stateCarrierSha256'] = _digest(event['stateCarrier'])
     event['revision'] = revision
     event['sequenceSha256'] = _sequence_digest(event)
-    return {'evaluatedRevision': revision, 'materialEvents': [event]}
+    return {ER: revision, 'materialEvents': [event]}
 
 def _retired_errors(body, locator='sample.txt', encoding='utf-8'):
     return _byte_errors(body.encode(encoding), locator)
@@ -688,8 +693,8 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-schema-v6-mechanism-retained-schema-v7-agent-route-verified-'
-            'reacceptance-active-reviews-pending',
+            'gt20-evidence-preserved-cross-model-pre-review-gaps-confirmed-'
+            'correction-active-reviews-pending',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -989,9 +994,9 @@ class ProductControlTests(unittest.TestCase):
         release_notes = (root / acceptance['publicRelease']['releaseNotes']).read_text(
             encoding='utf-8')
         internal_claims = (
-            acceptance['claimCeiling']['finiteReleaseClaims']
-            + acceptance['claimCeiling']['notImplied']
-            + acceptance['claimCeiling']['retainedBehaviorExclusions']
+            acceptance[CC]['finiteReleaseClaims']
+            + acceptance[CC]['notImplied']
+            + acceptance[CC]['retainedBehaviorExclusions']
         )
         self.at(all(value not in release_notes for value in internal_claims))
         self.at(all(
@@ -1000,7 +1005,7 @@ class ProductControlTests(unittest.TestCase):
                 'publicFiniteReleaseClaims', 'publicNotImplied',
                 'publicRetainedBehaviorExclusions',
             )
-            for value in acceptance['claimCeiling'][field].values()
+            for value in acceptance[CC][field].values()
         ))
         self.ae(
             guidance['resourceStewardship']['decision'],
@@ -1018,7 +1023,7 @@ class ProductControlTests(unittest.TestCase):
                             r'#/[^`\n]+/[0-9]+(?:/|`)')
         self.ani('maxControlBytes', program['complexityBudget']['targets'])
         if report['programStatus'] == 'ready':
-            gate = program['releaseProcedure']['orderedGates'][1]['condition']
+            gate = program[RG]['orderedGates'][1]['condition']
             self.ae(program['complexityBudget']['minimumTestCount'], 36)
             self.ai('without accessing credential or session logs', gate)
             self.ai(
@@ -1031,7 +1036,7 @@ class ProductControlTests(unittest.TestCase):
             ):
                 self.ai(marker, gate)
                 self.ai(marker, acceptance['candidateVerification']['rule'])
-            final_gate = program['releaseProcedure']['orderedGates'][-1]['condition']
+            final_gate = program[RG]['orderedGates'][-1]['condition']
             for marker in (
                 'context-isolated clean-state evaluator replay',
                 'against the public immutable tag',
@@ -1045,7 +1050,7 @@ class ProductControlTests(unittest.TestCase):
                 else {'prepared-host-goal-paused', 'active-in-host'}
             )
             self.ai(prompt['state'], expected_goal_states)
-            mapping = program['increment']['fourSurfaceMapping']
+            mapping = program['increment'][FM]
             self.ae(
                 mapping['outcomeId'],
                 program['increment']['representativeOutcome']['id'],
@@ -1056,7 +1061,7 @@ class ProductControlTests(unittest.TestCase):
                              'no-branch-worktree-or-repository-fork')
             self.ae(
                 projection['route']['alignment'],
-                program['processLossControl']['alignmentRule'],
+                program[PL]['alignmentRule'],
             )
             ordered = projection['route']['orderedSteps']
             self.ale(
@@ -1075,7 +1080,7 @@ class ProductControlTests(unittest.TestCase):
         with _provisional() as root:
             source = _read(root, GT2021_SOURCE)
             source['records']['GT-20-transactional-lifecycle-4c8bcc3'][
-                'evaluatedRevision'
+                ER
             ] = '0' * 40
             _write(root, GT2021_SOURCE, source)
             _rehash_input(root, GT2021_SOURCE)
@@ -1284,11 +1289,11 @@ class ProductControlTests(unittest.TestCase):
              lambda source: entry(source, 'GT-20')['cleanup'].update(
                  taskOwnedResidueCount=1)),
             ('claim ceiling', 'provisional GT-21 claim ceiling is invalid',
-             'GT-21', 'payload.decision.claimLimit', claim, 'claimCeiling'),
+             'GT-21', 'payload.decision.claimLimit', claim, CC),
             ('contradictory synchronized claim',
              'provisional GT-21 claim ceiling is invalid',
              'GT-21', 'payload.decision.claimLimit', contradictory_claim,
-             'claimCeiling'),
+             CC),
             ('malformed decision object',
              'provisional GT-21 claim ceiling is invalid',
              'GT-21', 'payload.decision', []),
@@ -1356,22 +1361,22 @@ class ProductControlTests(unittest.TestCase):
                               'claimLimit'), 'drift'),
             ('marker omission', ('frozenPromotion', 'promotedRecords', 0,
                                  'cleanupBinding', 'requiredMarkers'), {}),
-            ('claim expansion', ('frozenPromotion', 'claimCeiling',
+            ('claim expansion', ('frozenPromotion', CC,
                                  'liveBehaviorClaimed'), True),
             ('current digest', ('frozenPromotion',
                                 'currentEvaluationContractSha256'), '0' * 64),
             ('promoted revision drift', ('frozenPromotion',
                                          'promotedRecords', 1,
-                                         'evaluatedRevision'), '0' * 40),
+                                         ER), '0' * 40),
             ('component revision collapsed', ('frozenPromotion',
                                                'promotedRecords', 1,
                                                'selectedRecordSet', 'components',
-                                               0, 'evaluatedRevision'),
+                                               0, ER),
              'cf1d8c9e57741ed5c353bb630ca8dded7bd225b9'),
             ('component revision drift', ('frozenPromotion',
                                            'promotedRecords', 1,
                                            'selectedRecordSet', 'components',
-                                           1, 'evaluatedRevision'), '0' * 40),
+                                           1, ER), '0' * 40),
             ('composite omission', ('frozenPromotion', 'promotedRecords', 1,
                                     'selectedRecordSet', 'components'), []),
             ('composite order', ('frozenPromotion', 'promotedRecords', 1,
@@ -1402,7 +1407,7 @@ class ProductControlTests(unittest.TestCase):
             for field, value in (
                 ('observedAt', '2026-08-30T00:00:00Z'),
                 ('hostIdentity', {'hostProduct': 'gpt-9'}),
-                ('evaluatedRevision',
+                (ER,
                  '3878968d459adba57792c390eb277876028b0012'),
             ):
                 observation = _read(ROOT, FROZEN_OBS[1])
@@ -1461,12 +1466,12 @@ class ProductControlTests(unittest.TestCase):
 
     def test_reacceptance_projects_current_stage_without_model_binding(self):
         program = _read(ROOT, P)
-        for stages in (program['increment']['fourSurfaceMapping']['process']['orderedSteps'],
+        for stages in (program['increment'][FM]['process']['orderedSteps'],
                        program['increment']['workItems'][0]['closeoutSequence']):
             self.ae([step['state'] for step in stages[-3:]],
                     ['completed', 'active', 'pending'])
         localized = _clone(program['increment'])
-        localized['fourSurfaceMapping']['process']['orderedSteps'][-2][
+        localized[FM]['process']['orderedSteps'][-2][
             'state'
         ] = '进行中'
         localized_errors = []
@@ -2121,11 +2126,11 @@ class ProductControlTests(unittest.TestCase):
             (P, 'digestBoundBinaryAssets must be an object', lambda v: v[
                 'complexityBudget'].pop('digestBoundBinaryAssets')),
             (P, 'stage snapshot and evolution horizon rules', lambda v: v[
-                'processLossControl'].update(carrierRule=v['processLossControl'][
+                PL].update(carrierRule=v[PL][
                     'carrierRule'] + ' False.')),
-            (P, 'processLossControl', lambda v: v['processLossControl'].update(
+            (P, 'processLossControl', lambda v: v[PL].update(
                 closeMutableProjectionPaths=['program/releaseIntent'])),
-            (P, 'processLossControl', lambda v: v['processLossControl'].update(
+            (P, 'processLossControl', lambda v: v[PL].update(
                 closeProjectionPaths=['program/status'])),
             (P, 'program.status must', lambda v: v.update(status={})),
             (P, 'program.increment does not match', lambda v: v[
@@ -2135,7 +2140,7 @@ class ProductControlTests(unittest.TestCase):
             (P, 'exact package evidence lifecycle', lambda v: v['increment'][
                 'exactPackageEvidenceLifecycle'].update(state={})),
             (P, 'state is invalid', lambda v: v['increment'][
-                'fourSurfaceMapping']['process']['orderedSteps'][0].update(state={})),
+                FM]['process']['orderedSteps'][0].update(state={})),
             (A, 'assessment must', lambda v: v['criteria'][
                 0].update(assessment=[])),
             (G, 'static-suite-as-behavior',
@@ -2158,7 +2163,11 @@ class ProductControlTests(unittest.TestCase):
                 RP]['evaluationContractHistory'][-1][
                     'preservedTaskIds'].append('GT-19')),
             (A, 'acceptance.claimCeiling is invalid', lambda v: v[
-                'claimCeiling'].pop('publicFiniteReleaseClaims')),
+                CC].pop('publicFiniteReleaseClaims')),
+            (A, 'acceptance.claimCeiling is invalid',
+             lambda v: v.update(claimCeiling=None)),
+            (A, 'requiredEvidenceClasses',
+             lambda v: v['criteria'][0].update(requiredEvidenceClasses=1)),
             (A, 'finite-release evidence lanes', lambda v: (
                 v['evidenceLanes']['continuingAfterRelease'].append(
                     v['evidenceLanes']['requiredForFiniteRelease'].pop())))
@@ -2348,8 +2357,8 @@ class ProductControlTests(unittest.TestCase):
 
     def test_snapshot_v1_legal_files_are_backward_compatible_and_bound(self):
         current = _read(ROOT, P)
-        predecessor = current['increment']['closeoutSnapshot'][
-            'predecessorSnapshotRef'
+        predecessor = current['increment'][CS][
+            PS
         ].split(':', 1)[0]
         constitution, legacy_program, *_ = _snapshot_documents(ROOT, predecessor)
         self.ae(
@@ -2410,41 +2419,41 @@ class ProductControlTests(unittest.TestCase):
             )
 
     def test_snapshot_v2_reopens_only_the_invalidated_package_boundary(self):
-        p, a = _read(ROOT, P), _read(ROOT, A); n = p['increment']['closeoutSnapshot']
+        p, a = _read(ROOT, P), _read(ROOT, A); n = p['increment'][CS]
         _, old_p, *_ = _snapshot_documents(
-            ROOT, n['predecessorSnapshotRef'].split(':', 1)[0])
-        prior = old_p['increment']['closeoutSnapshot']
+            ROOT, n[PS].split(':', 1)[0])
+        prior = old_p['increment'][CS]
         NE, TE, pre = _snapshot_v2_node_errors, _snapshot_v2_transition_errors, (
             'revision-bound v2 ')
-        bad = _clone(p); bad['increment']['fourSurfaceMapping'][
+        bad = _clone(p); bad['increment'][FM][
             'process']['orderedSteps'][-2]['state'] = 'pending'
         self.has(NE(bad, a), pre + 'reacceptance state is invalid')
         changed = prior
-        while changed['acceptanceTransition']['kind'] != 'changed':
+        while changed[AT]['kind'] != 'changed':
             _, old_p, *_ = _snapshot_documents(
-                ROOT, changed['predecessorSnapshotRef'].split(':', 1)[0])
-            changed = old_p['increment']['closeoutSnapshot']
+                ROOT, changed[PS].split(':', 1)[0])
+            changed = old_p['increment'][CS]
         prev = _clone(changed)
         prev['replay'].update(evidenceState='pending', evidenceRef=None)
         direct = _clone(prev); direct.update(state='closed', replay=_clone(n['replay']))
         skip = pre + 'close skips reacceptance'; self.has(TE(direct, prev), skip)
-        malformed = _clone(prev); malformed['acceptanceTransition'] = None
+        malformed = _clone(prev); malformed[AT] = None
         self.has(TE(direct, malformed), skip)
         close = _clone(n); close['state'] = 'closed'
         for path, value, message in (
             (('replay', 'evidenceRef'), 'alternate', 'replay drifted before close'),
-            (('acceptanceTransition', 'affectedCriterionIds'),
-             n['acceptanceTransition']['affectedCriterionIds'][:-1],
+            ((AT, 'affectedCriterionIds'),
+             n[AT]['affectedCriterionIds'][:-1],
              'acceptance transition drifted before close'),
         ):
             drift = _clone(close); _replace(drift, path, value)
             self.has(TE(drift, n), pre + message)
-        gate = p['releaseProcedure']['orderedGates'][1]['id']
+        gate = p[RG]['orderedGates'][1]['id']
         closed = _clone(close); closed['nextGateId'] = gate
         advanced = _clone(n); advanced.update(gateId=gate, stage=gate, nextGateId=gate)
-        advanced['acceptanceTransition']['kind'] = 'changed'
+        advanced[AT]['kind'] = 'changed'
         self.ae(TE(advanced, closed), [])
-        advanced['gateId'] = p['releaseProcedure']['orderedGates'][2]['id']
+        advanced['gateId'] = p[RG]['orderedGates'][2]['id']
         self.has(TE(advanced, closed), pre + 'predecessor gate is invalid')
         docs = list(_snapshot_documents(ROOT))
         project = lambda value: product_control._snapshot_v2_close_projection(
@@ -2455,10 +2464,10 @@ class ProductControlTests(unittest.TestCase):
         closed = _clone(docs); p, a = closed[1:3]
         inc, prompt = p['increment'], p['goalModePrompt']
         p['status'], prompt['state'], inc['state'] = 'ready', 'retired', 'completed'
-        p['processLossControl']['stageSnapshotState'] = (
+        p[PL]['stageSnapshotState'] = (
             'latest-closed-stage-snapshot-prepared-for-containing-commit-binding')
         for item in [inc['workItems'][0], *inc['workItems'][0]['closeoutSequence'],
-                     *inc['fourSurfaceMapping']['process']['orderedSteps']]:
+                     *inc[FM]['process']['orderedSteps']]:
             item['state'] = 'completed'
         for criterion in a['criteria']: criterion['assessment'] = 'verified'
         prompt['objective'] = canonical_goal_objective(
@@ -2471,11 +2480,11 @@ class ProductControlTests(unittest.TestCase):
                     side_effect=lambda root, locator, revision=None, target=target:
                     read(root, locator, revision) + (b'x' if locator == target else b'')):
                 self.ane(project(docs), base)
-        snap = inc['closeoutSnapshot']
+        snap = inc[CS]
         snap.update(state='closed', id=snap['id'].replace('.reopened', '.closed'),
-            nextGateId=p['releaseProcedure']['orderedGates'][1]['id'],
-            predecessorSnapshotRef=_git(ROOT, 'rev-parse', 'HEAD').decode().strip()
-            + ':product/program.json#/increment/closeoutSnapshot')
+            nextGateId=p[RG]['orderedGates'][1]['id'])
+        snap[PS] = (_git(ROOT, 'rev-parse', 'HEAD').decode().strip()
+                    + ':product/program.json#/increment/closeoutSnapshot')
         errors = []
         _validate_closeout_snapshot_v2(ROOT, p, a, n['evaluationContractSha256'], errors)
         self.ae(errors, [])
@@ -2559,7 +2568,7 @@ class ProductControlTests(unittest.TestCase):
                         'evals/evidence/2026-09-02-v310-gt20-exact-package-'
                         'v5-source.json',
                     ),
-                    'evaluatedRevision': (
+                    ER: (
                         'f4c0251bc82bd5af983d365f8a12751217b88e2d'
                     ),
                 },
@@ -2600,6 +2609,14 @@ class ProductControlTests(unittest.TestCase):
                 validate(wrong_state),
                 'exact package evidence lifecycle is invalid',
             )
+            locator = lifecycle['evidence']['locator']
+            record = _read(root, locator)
+            record['mechanism']['schema'] = []
+            _write(root, locator, record)
+            malformed = _clone(lifecycle)
+            malformed['evidence']['sha256'] = _file_sha(root, locator)
+            self.has(validate(malformed),
+                     'exact package lifecycle record schema is invalid')
 
     def test_public_evidence_privacy_guard_rejects_host_session_material(self):
         private_values = (
@@ -2622,6 +2639,10 @@ class ProductControlTests(unittest.TestCase):
                 'threadId': 'private-thread', 'turnId': 'private-turn',
                 'hookId': 'private-hook',
             }},
+            r'Users\private\AppData\Local\Temp\evidence.json',
+            '~/.claude/projects/private/session.jsonl',
+            'AppData/Roaming/Claude/session.json',
+            'Library/Application Support/Claude/session.json',
         )
         for value in private_values:
             with self.subTest(value=value):
@@ -2638,6 +2659,7 @@ class ProductControlTests(unittest.TestCase):
             'repositoryLocator': 'plugins/yiyuan-accord-codex/adapter.json',
             'commandSwitches': ['/d', '--output=/relative-not-absolute'],
             'hostExecutable': '%HOST_PATH%/git.exe',
+            'packageManifest': '%APPDATA%/npm/node_modules/package.json',
             'activationReceipt': {
                 'rawStreamPolicy': (
                     'digest-only-private-host-transcript-not-retained'
@@ -3237,8 +3259,8 @@ class ProductControlTests(unittest.TestCase):
         event = _event(source['records']['GT-18-2460adc']['payload'],
                        'longitudinal-sequence')
         gt18_payload = {
-            'evaluatedRevision': source['records']['GT-18-2460adc'][
-                'payload']['evaluatedRevision'],
+            ER: source['records']['GT-18-2460adc'][
+                'payload'][ER],
             'materialEvents': [event],
         }
         reject_longitudinal = lambda value, contract: self.an(
@@ -3296,13 +3318,13 @@ class ProductControlTests(unittest.TestCase):
         gt19_event = _event(source['records']['GT-19-2460adc']['payload'],
                             'longitudinal-sequence')
         gt19_payload = {
-            'evaluatedRevision': source['records']['GT-19-2460adc'][
-                'payload']['evaluatedRevision'],
+            ER: source['records']['GT-19-2460adc'][
+                'payload'][ER],
             'materialEvents': [gt19_event],
         }
         reject_longitudinal(gt19_payload, gt19)
         gt19_v2 = _gt19_v2_payload(
-            gt19_event, gt19_payload['evaluatedRevision']
+            gt19_event, gt19_payload[ER]
         )
         self.ann(_longitudinal_bundle(gt19_v2, gt19))
 
@@ -3412,7 +3434,7 @@ class ProductControlTests(unittest.TestCase):
         unamended.pop('amendments')
         self.at(amendments(unamended))
         injected = _clone(cand_record)
-        injected['payload']['evaluatedRevision'] = '--output=unexpected'
+        injected['payload'][ER] = '--output=unexpected'
         with patch(EBG) as git_read:
             self.af(amendments(injected))
             git_read.assert_not_called()
@@ -3422,7 +3444,7 @@ class ProductControlTests(unittest.TestCase):
         with patch(EBG,
                    side_effect=malformed_history):
             self.af(amendments())
-        revision = cand_record['payload']['evaluatedRevision']
+        revision = cand_record['payload'][ER]
         malformed_acceptance = [
             _git(ROOT, 'show', f'{revision}:evals/golden-tasks.json'),
             b'{"claimCeiling":null}',
@@ -3717,7 +3739,7 @@ class ProductControlTests(unittest.TestCase):
             self.has(
                 _errors(root), 'historical claim binding is invalid'
             )
-        excluded = _read(ROOT, A)['claimCeiling']['retainedBehaviorExclusions']
+        excluded = _read(ROOT, A)[CC]['retainedBehaviorExclusions']
         self.ae(excluded, ['GT-07:claude-code:cleanup'])
         archive = _read(ROOT, GT16_SOURCE)['records']
         self.at(all(archive[
@@ -3727,14 +3749,14 @@ class ProductControlTests(unittest.TestCase):
             _enable_current_sample_validation(root)
             acceptance = _read(root, A)
             token = excluded[0]
-            acceptance['claimCeiling']['retainedBehaviorExclusions'].remove(token)
-            acceptance['claimCeiling']['publicRetainedBehaviorExclusions'].pop(token)
+            acceptance[CC]['retainedBehaviorExclusions'].remove(token)
+            acceptance[CC]['publicRetainedBehaviorExclusions'].pop(token)
             _write(root, A, acceptance)
             self.has(
                 _errors(root), 'retained behavior exclusions mismatch'
             )
         self.rejected(A, 'retained behavior exclusions', lambda v:
-                      v['claimCeiling'].update(
+                      v[CC].update(
                           retainedBehaviorExclusions=['GT-07:stale exclusion']))
         self.rejected(
             A, 'historicalTaskContracts', lambda v: v[
@@ -3746,7 +3768,7 @@ class ProductControlTests(unittest.TestCase):
 
         with _fixture() as root:
             acceptance = _read(root, A)
-            ceiling = acceptance['claimCeiling']
+            ceiling = acceptance[CC]
             excluded = next(iter(ceiling['publicNotImplied']))
             ceiling['publicNotImplied'][excluded] = next(iter(
                 ceiling['publicFiniteReleaseClaims'].values()
@@ -3803,7 +3825,7 @@ class ProductControlTests(unittest.TestCase):
         revision = _git(ROOT, 'rev-parse', 'HEAD', text=True).strip()
         task = {'behaviorSubjectFiles': ['yiyuan_accord/closure.py']}
         current_errors = _behavior_subject_revision_errors(
-            ROOT, 'current subject', {'evaluatedRevision': revision}, task)
+            ROOT, 'current subject', {ER: revision}, task)
         subject_dirty = subprocess.run(
             ['git', '-C', str(ROOT), 'diff', '--quiet', 'HEAD', '--',
              'yiyuan_accord/closure.py'],
@@ -3814,13 +3836,13 @@ class ProductControlTests(unittest.TestCase):
         else:
             self.ae(current_errors, [])
         self.has(_behavior_subject_revision_errors(
-            ROOT, 'stale subject', {'evaluatedRevision': '84447a7a1b9557e22ef5585d159459e8701fa40e'}, task),
+            ROOT, 'stale subject', {ER: '84447a7a1b9557e22ef5585d159459e8701fa40e'}, task),
             'behavior subject differs from evaluatedRevision')
 
     def test_plan_process_acceptance_and_release_order_stay_aligned(self):
         with _fixture() as root:
             program = _read(root, P)
-            program['releaseProcedure']['orderedGates'][0]['requiredTaskIds'].remove(
+            program[RG]['orderedGates'][0]['requiredTaskIds'].remove(
                 'GT-13'
             )
             _write(root, P, program)
@@ -3872,17 +3894,17 @@ class ProductControlTests(unittest.TestCase):
             increment['workItems'][0]['acceptanceIds'].remove('Q1')
             increment['workItems'][0]['closeoutSequence'][0]['state'] = 'active'
             increment['workItems'][0]['closeoutSequence'][0]['stopCondition'] = 'opposite'
-            increment['fourSurfaceMapping']['outcomeId'] = 'wrong-outcome'
-            increment['fourSurfaceMapping']['process']['phases'] = []
-            increment['fourSurfaceMapping']['process']['orderedSteps'][1][
+            increment[FM]['outcomeId'] = 'wrong-outcome'
+            increment[FM]['process']['phases'] = []
+            increment[FM]['process']['orderedSteps'][1][
                 'dependsOn'
             ] = []
-            snapshot = increment['closeoutSnapshot']
+            snapshot = increment[CS]
             snapshot['revisionBinding']['exactCommitSha'] = '0' * 40
             snapshot['evaluationContractSha256'] = '0' * 64
-            snapshot['acceptanceTransition']['affectedCriterionIds'].remove('R2')
-            program['processLossControl']['evolutionHorizonRule'] = ''
-            program['releaseProcedure']['orderedGates'][0]['id'] = ''
+            snapshot[AT]['affectedCriterionIds'].remove('R2')
+            program[PL]['evolutionHorizonRule'] = ''
+            program[RG]['orderedGates'][0]['id'] = ''
             program['goalModePrompt']['objective'] = '先推送再审查'
             program['goalModePrompt']['workStageIds'] = ['wrong']
             _write(root, P, program)
@@ -3901,28 +3923,28 @@ class ProductControlTests(unittest.TestCase):
 
         with _indexed() as root:
             program = _read(root, P)
-            snapshot = program['increment']['closeoutSnapshot']
+            snapshot = program['increment'][CS]
             origin = _snapshot_v1_lineage(
                 root, snapshot, 'HEAD', {},
             )[0]
-            snapshot['predecessorSnapshotRef'] = (
+            snapshot[PS] = (
                 f'{origin}:'
                 'product/program.json#/increment/closeoutSnapshot'
             )
-            snapshot['acceptanceTransition']['affectedCriterionIds'].remove('R2')
+            snapshot[AT]['affectedCriterionIds'].remove('R2')
             _write(root, P, program)
             self.has(_errors(root), 'revision-bound v2 acceptance transition')
 
         with _indexed() as root:
             current = _read(root, P)
             prior = _clone(current)
-            prior['increment']['closeoutSnapshot']['id'] += '.different'
+            prior['increment'][CS]['id'] += '.different'
             _write(root, P, prior)
             _git(root, 'add', P)
             _commit(root, 'different prior snapshot')
-            current_snapshot = current['increment']['closeoutSnapshot']
-            current_snapshot['predecessorSnapshotRef'] = None
-            current_snapshot['acceptanceTransition'].update(
+            current_snapshot = current['increment'][CS]
+            current_snapshot[PS] = None
+            current_snapshot[AT].update(
                 kind='snapshot-bootstrap', affectedCriterionIds=CRITERIA)
             _write(root, P, current)
             self.has(_errors(root),
@@ -3938,8 +3960,8 @@ class ProductControlTests(unittest.TestCase):
             return errors
 
         def advance(program, gates, index, predecessor):
-            snapshot = program['increment']['closeoutSnapshot']
-            snapshot['acceptanceTransition'].update(
+            snapshot = program['increment'][CS]
+            snapshot[AT].update(
                 kind='unchanged', affectedCriterionIds=[])
             snapshot.update(id=f'stage.v3.1.0.{gates[index]}.closed',
                             stage=gates[index], closedGateId=gates[index],
@@ -3950,8 +3972,8 @@ class ProductControlTests(unittest.TestCase):
             return snapshot
 
         current = _read(ROOT, P)
-        predecessor = current['increment']['closeoutSnapshot'][
-            'predecessorSnapshotRef'
+        predecessor = current['increment'][CS][
+            PS
         ].split(':', 1)[0]
         historical_v1 = '9bd82876e2b350787edcab09e3835426e069272c'
         prior = json.loads(_git(
@@ -3975,13 +3997,13 @@ class ProductControlTests(unittest.TestCase):
         ):
             self.ae(_snapshot_lineage_contract_errors(
                 ROOT, historical_v1,
-                prior['increment']['closeoutSnapshot'], (historical_v1,), (), {},
+                prior['increment'][CS], (historical_v1,), (), {},
             ), [])
         unsupported = (
             _read(ROOT, C), _clone(current), _read(ROOT, A),
             _read(ROOT, 'product/reshaping-guidance.json'), _read(ROOT, G),
         )
-        unsupported[1]['increment']['closeoutSnapshot']['schema'] = (
+        unsupported[1]['increment'][CS]['schema'] = (
             'yiyuan-accord-stage-closeout-snapshot/v999'
         )
         self.has(
@@ -3992,11 +4014,11 @@ class ProductControlTests(unittest.TestCase):
         exact_documents = _snapshot_documents(ROOT, historical_v1)
         malformed_cases = (
             (0, ('identity',), []),
-            (1, ('releaseProcedure',), []),
-            (1, ('increment', 'closeoutSnapshot',
+            (1, (RG,), []),
+            (1, ('increment', CS,
                  'evaluationContractSha256'), 7),
             (2, ('criteria',), 'not-a-list'),
-            (2, (RP, 'claimCeiling'), []),
+            (2, (RP, CC), []),
         )
         with patch(
             'yiyuan_accord.control._snapshot_v1_projection_package_errors',
@@ -4043,10 +4065,10 @@ class ProductControlTests(unittest.TestCase):
             prior_golden = exact_documents
         successor = _clone(prior_program)
         gates = [
-            item['id'] for item in successor['releaseProcedure']['orderedGates']
+            item['id'] for item in successor[RG]['orderedGates']
         ]
         closed_index = gates.index(
-            successor['increment']['closeoutSnapshot']['closedGateId']
+            successor['increment'][CS]['closedGateId']
         )
         advance(successor, gates, closed_index + 1, historical_v1)
         successor['hostProjections'][0]['activationContext'] += ' Drift.'
@@ -4086,7 +4108,7 @@ class ProductControlTests(unittest.TestCase):
             wraps=_bounded_git_bytes,
         ) as bounded_git:
             _, latest, _, _ = _snapshot_v1_lineage(
-                ROOT, current['increment']['closeoutSnapshot'],
+                ROOT, current['increment'][CS],
                 'HEAD', lineage_cache,
             )
             scans = sum(
@@ -4165,7 +4187,7 @@ class ProductControlTests(unittest.TestCase):
         with _indexed() as root:
             program = _read(root, P)
             drifted = _clone(program)
-            drifted['increment']['fourSurfaceMapping']['plan']['hypothesis'] += ' Drift.'
+            drifted['increment'][FM]['plan']['hypothesis'] += ' Drift.'
             self.ae(snapshot_errors(root, drifted), [])
             readme = root / 'README.md'
             readme.write_text(readme.read_text(encoding='utf-8') + '\ncarry\n',
@@ -4175,7 +4197,7 @@ class ProductControlTests(unittest.TestCase):
         with _indexed() as root:
             original = _read(root, P)
             drifted = _clone(original)
-            drifted['increment']['fourSurfaceMapping']['plan']['hypothesis'] += ' Drift.'
+            drifted['increment'][FM]['plan']['hypothesis'] += ' Drift.'
             _write(root, P, drifted)
             _git(root, 'add', P)
             _commit(root, 'invalid bound-state carry')
@@ -4249,9 +4271,9 @@ class ProductControlTests(unittest.TestCase):
 
         with _indexed(historical_v1) as root:
             program = _read(root, P)
-            gates = [x['id'] for x in program['releaseProcedure']['orderedGates']]
+            gates = [x['id'] for x in program[RG]['orderedGates']]
             origin = _snapshot_v1_lineage(
-                root, program['increment']['closeoutSnapshot'], 'HEAD', {},
+                root, program['increment'][CS], 'HEAD', {},
             )[0]
             readme = root / 'README.md'
             readme.write_text(readme.read_text(encoding='utf-8') + '\ncarry\n',
@@ -4260,11 +4282,11 @@ class ProductControlTests(unittest.TestCase):
             _commit(root, 'carry unchanged snapshot')
             carry = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             advance(program, gates, 1, carry)
-            program['increment']['closeoutSnapshot']['acceptanceTransition'].update(
+            program['increment'][CS][AT].update(
                 kind='changed', affectedCriterionIds=CRITERIA)
             self.has(snapshot_errors(root, program),
                      'predecessor is not latest accepted snapshot')
-            program['increment']['closeoutSnapshot']['predecessorSnapshotRef'] = (
+            program['increment'][CS][PS] = (
                 f'{origin}:{snapshot_ref}'
             )
             self.ae(snapshot_errors(root, program), [])
@@ -4272,9 +4294,9 @@ class ProductControlTests(unittest.TestCase):
         with _indexed(historical_v1) as root:
             original = _read(root, P)
             successor = _clone(original)
-            gates = [x['id'] for x in successor['releaseProcedure']['orderedGates']]
+            gates = [x['id'] for x in successor[RG]['orderedGates']]
             origin = _snapshot_v1_lineage(
-                root, original['increment']['closeoutSnapshot'], 'HEAD', {},
+                root, original['increment'][CS], 'HEAD', {},
             )[0]
             advance(successor, gates, 1, origin)
             _write(root, P, successor)
@@ -4286,12 +4308,12 @@ class ProductControlTests(unittest.TestCase):
         with _indexed(historical_v1) as root:
             program = _read(root, P)
             invalid = _clone(program)
-            invalid['increment']['closeoutSnapshot']['authorityRefs'] = ['invalid']
+            invalid['increment'][CS]['authorityRefs'] = ['invalid']
             _write(root, P, invalid)
             _git(root, 'add', P)
             _commit(root, 'invalid snapshot node')
             revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
-            gates = [x['id'] for x in program['releaseProcedure']['orderedGates']]
+            gates = [x['id'] for x in program[RG]['orderedGates']]
             advance(program, gates, 1, revision)
             _write(root, P, program)
             self.has(snapshot_errors(root, program),
@@ -4300,11 +4322,11 @@ class ProductControlTests(unittest.TestCase):
         with _indexed(historical_v1) as root:
             program = _read(root, P)
             base = _snapshot_v1_lineage(
-                root, program['increment']['closeoutSnapshot'], 'HEAD', {},
+                root, program['increment'][CS], 'HEAD', {},
             )[0]
-            snapshot = program['increment']['closeoutSnapshot']
-            snapshot['predecessorSnapshotRef'] = f'{base}:{snapshot_ref}'
-            snapshot['acceptanceTransition'].update(
+            snapshot = program['increment'][CS]
+            snapshot[PS] = f'{base}:{snapshot_ref}'
+            snapshot[AT].update(
                 kind='unchanged', affectedCriterionIds=[])
             program['distributionVersion'] = 'v3.2.0'
             snapshot['id'] = 'stage.v3.2.0.repository-candidate.closed'
@@ -4313,19 +4335,19 @@ class ProductControlTests(unittest.TestCase):
 
         with _indexed(historical_v1) as root:
             program = _read(root, P)
-            gates = [item['id'] for item in program['releaseProcedure']['orderedGates']]
+            gates = [item['id'] for item in program[RG]['orderedGates']]
             base = _snapshot_v1_lineage(
-                root, program['increment']['closeoutSnapshot'], 'HEAD', {},
+                root, program['increment'][CS], 'HEAD', {},
             )[0]
             snapshot = advance(program, gates, 1, base)
             _write(root, P, program)
             _git(root, 'add', P)
             _commit(root, 'newer accepted snapshot')
             latest = _git(root, 'rev-parse', 'HEAD', text=True).strip()
-            advance(program, gates, 2, snapshot['predecessorSnapshotRef'].split(':')[0])
+            advance(program, gates, 2, snapshot[PS].split(':')[0])
             errors = snapshot_errors(root, program)
             self.has(errors, 'predecessor is not latest accepted snapshot')
-            snapshot['predecessorSnapshotRef'] = f'{latest}:{snapshot_ref}'
+            snapshot[PS] = f'{latest}:{snapshot_ref}'
             errors = snapshot_errors(root, program)
             self.ae(errors, [])
 
@@ -4361,7 +4383,7 @@ class ProductControlTests(unittest.TestCase):
              if stage['state'] == 'active'),
             item['closeoutSequence'][-1],
         )['state'] = 'blocked'
-        steps = increment['fourSurfaceMapping']['process']['orderedSteps']
+        steps = increment[FM]['process']['orderedSteps']
         next(
             (step for step in steps if step['state'] == 'active'),
             steps[-1],
@@ -4398,7 +4420,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.ae(
             projection['route']['semantics'],
-            program['increment']['fourSurfaceMapping']['process']['routeRule'],
+            program['increment'][FM]['process']['routeRule'],
         )
 
     def test_evidence_cannot_self_verify_or_self_authorize(self):
@@ -4473,7 +4495,7 @@ class ProductControlTests(unittest.TestCase):
         )
         self.rejected(
             P, 'required candidate systems are invalid',
-            lambda v: v['releaseProcedure'].update(
+            lambda v: v[RG].update(
                 requiredCandidateVerificationSystemIds=['codex-cloud']
             ),
         )
@@ -4489,7 +4511,7 @@ class ProductControlTests(unittest.TestCase):
                 'codex-cloud': 'https://example.invalid'
             }
             acceptance['publicRelease']['assetPolicy'] = 'allow-assets'
-            acceptance['claimCeiling']['finiteReleaseClaims'].append(acceptance['claimCeiling']['notImplied'][0])
+            acceptance[CC]['finiteReleaseClaims'].append(acceptance[CC]['notImplied'][0])
             _write(root, A, acceptance)
             notes = root / acceptance['publicRelease']['releaseNotes']
             notes.write_text('# expanded\n', encoding='utf-8')
@@ -4500,7 +4522,7 @@ class ProductControlTests(unittest.TestCase):
             acceptance = _read(root, A)
             notes = root / acceptance['publicRelease']['releaseNotes']
             summary = next(iter(
-                acceptance['claimCeiling']['publicNotImplied'].values()))
+                acceptance[CC]['publicNotImplied'].values()))
             notes.write_text(notes.read_text(encoding='utf-8').replace(
                 'It does not imply:', f'- {summary}\n\nIt does not imply:', 1),
                 encoding='utf-8')
@@ -5052,6 +5074,10 @@ class ProductControlTests(unittest.TestCase):
         with _fixture() as root:
             (root / P).write_text('{"schema":2,"schema":2}\n', encoding='utf-8')
             self.assert_has(_errors(root), 'duplicate JSON key')
+        with _fixture() as root:
+            (root / P).write_text('{"a":' * 100_000 + '0' + '}' * 100_000,
+                                  encoding='utf-8')
+            self.assert_has(_errors(root), f'invalid JSON {P}')
         with _fixture() as root:
             target = root / P
             with target.open('wb') as stream:

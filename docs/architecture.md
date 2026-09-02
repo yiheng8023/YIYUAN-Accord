@@ -1125,10 +1125,12 @@ then later evaluator privacy and ownership findings invalidated it as current
 GT-20 evidence. Exact `0febb415` completed the corrected bounded schema-v5
 replay, but exact `c5a0668` review rejected its host-activation and mutation-
 phase failed-update-recovery claims. Preserve its narrower historical subfacts.
-Exact `7a3950e` retains corrected bounded schema-v6 zero-model mechanism facts.
-Exact `f4c0251` plus the admitted schema-v7 v5 record verify one bounded Codex
-Agent decision and evaluator-mediated compensation. Affected-surface
-reacceptance is active, and all four independent exact-tree reviews are
+Exact `7a3950e` and `f4c0251` retain only their bounded schema-v6 mechanism and
+schema-v7 Agent-recovery facts. Exact `369d08b` is pre-review counterevidence:
+read-only cross-model analysis exposed reproducible malformed-input exception,
+private-path recognition and derived-surface documentation gaps. Its successor
+corrects that earliest affected boundary without weakening acceptance; all eight
+criteria remain continuing and all four independent exact-tree reviews are
 pending. A replacement
 candidate does not yet exist;
 exact-local, hosted, named-human, tag, publication and public-verification gates
@@ -1170,8 +1172,10 @@ and `containing-git-commit` relation but never embeds its own SHA. After commit,
 its exact external reference is `<containing-sha>:<self-locator>`; a successor
 cites that exact predecessor while Git preserves older nodes. This avoids
 self-reference without postponing the snapshot or letting it self-attest a
-later release gate. Only the terminal ordered release gate has a null next gate;
-a later version begins a new ordered cycle while citing that terminal snapshot.
+later release gate. Only the terminal ordered release gate has a null next gate.
+The current schema-v2 transition predicate does not admit a cross-version cycle
+from that terminal predecessor; a later-version cycle requires a separately
+reviewed schema or transition-contract successor and cannot be inferred here.
 For a contiguous first-parent run that carries the same parsed node object, the oldest
 commit in that run is the one canonical origin; every later carry is checked and
 cannot rebind the frozen authority, surfaces, evidence or cutoff. A successor
@@ -1193,7 +1197,12 @@ publication or other external gates. Malformed intermediates, carry SHAs, stale
 ancestors, history gaps, excessive predecessor depth and non-contiguous node replay fail closed rather than
 being skipped.
 Sub-limit parser structure failures, including excessive nesting, are normalized
-at the history-reader boundary and fail closed instead of escaping the verifier.
+at both the current authority/evidence reader and history-reader boundaries and
+fail closed instead of escaping the verifier. Malformed acceptance fields and
+exact-package lifecycle schema values likewise become structured verification
+errors. The public-evidence privacy guard recognizes absolute and user-relative
+Windows, Unix and macOS private-path forms; placeholders such as `%APPDATA%`
+remain admissible when they reveal no concrete user or host path.
 
 Project evolution is split into the current executable stage and a future
 evolution horizon. The latter is a sparse, on-demand derived view recomputed
