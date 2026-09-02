@@ -47,8 +47,11 @@ failed-update recovery. Those narrower historical subfacts remain. Exact
 recomputable-staging and path-private mechanism facts. Independent review
 rejected their promotion to atomic or one-intent Agent recovery. Exact
 `f4c0251` plus the admitted schema-v7 v5 record verify one isolated Codex Agent
-decision and evaluator-mediated bounded compensation. Affected-surface
-reacceptance is active and all four fresh reviews are pending before one
+decision and evaluator-mediated bounded compensation. Exact `cb143d3` closed
+the prior pre-review gaps but failed four-axis review on current-guidance
+strictness, terminal schema-v2 transition closure and public-path privacy
+precision. Affected-surface reacceptance is active and all four fresh reviews
+are reset to pending before one
 unchanged clean SHA may become a replacement candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
@@ -1126,12 +1129,14 @@ GT-20 evidence. Exact `0febb415` completed the corrected bounded schema-v5
 replay, but exact `c5a0668` review rejected its host-activation and mutation-
 phase failed-update-recovery claims. Preserve its narrower historical subfacts.
 Exact `7a3950e` and `f4c0251` retain only their bounded schema-v6 mechanism and
-schema-v7 Agent-recovery facts. Exact `369d08b` is pre-review counterevidence:
-read-only cross-model analysis exposed reproducible malformed-input exception,
-private-path recognition and derived-surface documentation gaps. Its successor
-corrects that earliest affected boundary without weakening acceptance; all eight
-criteria remain continuing and all four independent exact-tree reviews are
-pending. A replacement
+schema-v7 Agent-recovery facts. Exact `369d08b` is pre-review counterevidence.
+Exact `cb143d3` closed its malformed-input and documentation gaps but failed
+four-axis review because the current guidance validator admitted the superseded
+cross-version assertion, schema-v2 admitted a terminal predecessor successor,
+and the privacy matcher rejected legitimate public or repository-relative user
+segments. Its successor corrects those affected boundaries without weakening
+acceptance; all eight criteria remain continuing and all four independent
+exact-tree reviews are reset to pending. A replacement
 candidate does not yet exist;
 exact-local, hosted, named-human, tag, publication and public-verification gates
 remain distinct.

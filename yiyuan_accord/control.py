@@ -71,7 +71,7 @@ _PRIVATE_EVIDENCE_JSON_KEY_RE = re.compile(
 )
 _PRIVATE_EVIDENCE_PATH_RES = (
     re.compile(
-        r"(?i)(?:^|[\\/])(?:users|documents and settings|appdata|"
+        r"(?i)(?:^|[\s\"'=(:,\[])(?:users|documents and settings|appdata|"
         r"library[\\/]application support)(?:[\\/])"
     ),
     re.compile(r"(?:^|[\s\"'=(:,\[])~[\\/]"),
@@ -518,16 +518,17 @@ def _validate_constitution(constitution, errors):
     }
 
 
-def _validate_stage_guidance(guidance, errors):
+def _validate_stage_guidance(guidance, errors, allow_legacy_cycle=False):
     adaptive = guidance.get("adaptiveSystem") if isinstance(guidance, dict) else None
     stage = adaptive.get("stageStateContract") if isinstance(adaptive, dict) else None
     horizon = adaptive.get("evolutionHorizon") if isinstance(adaptive, dict) else None
     snapshot_rule = stage.get("closeoutSnapshotRule") if isinstance(stage, dict) else None
     cycle_rule = (
-        _contains_markers(snapshot_rule, ("later version starts a new ordered cycle",))
-        or _contains_markers(snapshot_rule, (
+        _contains_markers(snapshot_rule, (
             "does not admit a cross-version cycle", "separately reviewed schema",
         ))
+        or allow_legacy_cycle and _contains_markers(
+            snapshot_rule, ("later version starts a new ordered cycle",))
     )
     if not isinstance(stage, dict) or set(stage) != {
         "role", "dynamicSurfaces", "changeRule", "closeoutSnapshotRule", "historyRule",
@@ -2226,6 +2227,7 @@ def _snapshot_v2_transition_errors(current, predecessor):
             prior_state == "closed" and prior_schema in (
                 _SNAPSHOT_V1_SCHEMA, _SNAPSHOT_V2_SCHEMA,
             )
+            and predecessor.get("nextGateId") is not None
             and isinstance(current_transition, dict)
             and current_transition.get("kind") == "changed"
         )
@@ -2631,7 +2633,7 @@ def _validate_closeout_snapshot(
             _snapshot_v1_documents(root, _revision)
         )
         context_errors = []
-        _validate_stage_guidance(current_guidance, context_errors)
+        _validate_stage_guidance(current_guidance, context_errors, True)
         if context_errors:
             _closeout_error(errors, "stage guidance is invalid")
     except _SNAPSHOT_V1_FAILURES:

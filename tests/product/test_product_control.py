@@ -77,6 +77,14 @@ GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json
 CURRENT_GT17_OBSERVATION = 'evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json'
 GT2021_SOURCE = 'evals/evidence/2026-08-30-v310-gt20-21-source.json'
 GT20V4 = 'evals/contracts/gt20-v4-command-contract.json'
+GUIDANCE = 'product/reshaping-guidance.json'
+CODEX_PATH = 'plugins/yiyuan-accord-codex/adapter.json'
+CONTINUATION = 'docs/operations/CONTINUATION.md'
+SNAPSHOT_REF = 'product/program.json#/increment/closeoutSnapshot'
+TREE_SCAN_ERR = 'active tree identity scan is indeterminate'
+LIFECYCLE_ERR = 'provisional GT-20/21 lifecycle transition is invalid'
+GT21_POSTSTATE_ERR = 'provisional GT-21 independent post-state is invalid'
+GT21_CLAIM_ERR = 'provisional GT-21 claim ceiling is invalid'
 GT20_RUNNER = 'scripts/run-gt20-exact-package.ps1'
 HISTORICAL_REVIEW_CUT = 'c5a06688feee7e93edc58a309679594bcc32bed6'
 FROZEN_OBS = (
@@ -685,7 +693,7 @@ class ProductControlTests(unittest.TestCase):
         self.at(all(host['staticReady'] for host in report['hostChecks'].values()))
         program, acceptance = _read(root, P), _read(root, A)
         constitution = _read(root, C)
-        guidance = _read(root, 'product/reshaping-guidance.json')
+        guidance = _read(root, GUIDANCE)
         self.ae(guidance['status'], 'accepted-revisable-guidance')
         adaptive = guidance['adaptiveSystem']
         self.ae(adaptive['stageStateContract']['role'],
@@ -701,7 +709,7 @@ class ProductControlTests(unittest.TestCase):
             ('README.zh-CN.md', 'GT-19 宿主漂移任务已经设计但尚未执行'),
             ('docs/architecture.md', 'It is designed but unperformed'),
             ('docs/releases/v3.1.0.md', 'host-drift behavior but is unperformed'),
-            ('docs/operations/CONTINUATION.md', 'behavior, but remains unperformed'),
+            (CONTINUATION, 'behavior, but remains unperformed'),
         ):
             self.ani(stale, (root / locator).read_text(encoding='utf-8'))
         self.ae(
@@ -1120,7 +1128,7 @@ class ProductControlTests(unittest.TestCase):
             _write(root, A, acceptance)
             self.has(
                 _errors(root),
-                'provisional GT-20/21 lifecycle transition is invalid',
+                LIFECYCLE_ERR,
             )
 
             program['status'] = 'ready'
@@ -1146,7 +1154,7 @@ class ProductControlTests(unittest.TestCase):
             retire_to(old_release, '2026-08-30T00:00:00Z')
             self.has(
                 lifecycle_errors(),
-                'provisional GT-20/21 lifecycle transition is invalid',
+                LIFECYCLE_ERR,
             )
 
             release = {**old_release, 'tag': 'v3.1.0', 'revision': 'c' * 40,
@@ -1165,13 +1173,13 @@ class ProductControlTests(unittest.TestCase):
             lifecycle['retiredByPublicRelease']['revision'] = None
             self.has(
                 lifecycle_errors(),
-                'provisional GT-20/21 lifecycle transition is invalid',
+                LIFECYCLE_ERR,
             )
             lifecycle['retiredByPublicRelease']['revision'] = release['revision']
             source = _read(root, GT2021_SOURCE)
             source['provisionalContract']['records'][0][
                 'behaviorSubject'
-            ].pop('plugins/yiyuan-accord-codex/adapter.json')
+            ].pop(CODEX_PATH)
             _write(root, GT2021_SOURCE, source)
             self.has(
                 lifecycle_errors(),
@@ -1264,7 +1272,7 @@ class ProductControlTests(unittest.TestCase):
             ('behavior subject',
              FROZEN_ERR,
              lambda source: entry(source, 'GT-20')['behaviorSubject'].pop(
-                 'plugins/yiyuan-accord-codex/adapter.json')),
+                 CODEX_PATH)),
             ('record payload behavior subject',
              'provisional GT-21 behavior subject binding is invalid',
              'GT-21', ('payload', 'behaviorSubject',
@@ -1276,11 +1284,11 @@ class ProductControlTests(unittest.TestCase):
             ('source binding', 'provisional GT-21 source binding is invalid',
              lambda source: entry(source, 'GT-21')['sourceBindings'][0].update(
                  sha256='0' * 64)),
-            ('independent poststate', 'provisional GT-21 independent post-state is invalid',
+            ('independent poststate', GT21_POSTSTATE_ERR,
              'GT-21', 'payload.liveObservation.independentPoststate.sourceDeleted',
              False, 'independentPoststate'),
             ('malformed poststate object',
-             'provisional GT-21 independent post-state is invalid',
+             GT21_POSTSTATE_ERR,
              'GT-21', 'payload.liveObservation', []),
             ('malformed authority object',
              'provisional GT-20 independent post-state is invalid',
@@ -1288,17 +1296,17 @@ class ProductControlTests(unittest.TestCase):
             ('cleanup', 'provisional GT-20 cleanup contract is invalid',
              lambda source: entry(source, 'GT-20')['cleanup'].update(
                  taskOwnedResidueCount=1)),
-            ('claim ceiling', 'provisional GT-21 claim ceiling is invalid',
+            ('claim ceiling', GT21_CLAIM_ERR,
              'GT-21', 'payload.decision.claimLimit', claim, CC),
             ('contradictory synchronized claim',
-             'provisional GT-21 claim ceiling is invalid',
+             GT21_CLAIM_ERR,
              'GT-21', 'payload.decision.claimLimit', contradictory_claim,
              CC),
             ('malformed decision object',
-             'provisional GT-21 claim ceiling is invalid',
+             GT21_CLAIM_ERR,
              'GT-21', 'payload.decision', []),
             ('null GT-21 observer',
-             'provisional GT-21 independent post-state is invalid',
+             GT21_POSTSTATE_ERR,
              'GT-21', 'payload.liveObservation.independentPoststate.observer',
              None, 'independentPoststate'),
             ('null GT-20 release observation',
@@ -1481,8 +1489,8 @@ class ProductControlTests(unittest.TestCase):
             'increment.fourSurfaceMapping.process.orderedSteps[13].state is invalid',
         )
         active = '\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
-            'README.md', 'README.zh-CN.md', P, 'product/reshaping-guidance.json',
-            'docs/architecture.md', 'docs/operations/CONTINUATION.md',
+            'README.md', 'README.zh-CN.md', P, GUIDANCE,
+            'docs/architecture.md', CONTINUATION,
             'docs/releases/v3.1.0.md'))
         self.an(re.search(
             r'\b(?:gpt|gemini)-\d|claude-(?:\d|opus|sonnet|haiku)|deepseek-[vr]\d|'
@@ -2183,10 +2191,10 @@ class ProductControlTests(unittest.TestCase):
             ('storageRule', 'Persist every unpromoted horizon item in a permanent registry.'),
         ):
             with self.subTest(evolution_horizon=field), _fixture() as root:
-                guidance = _read(root, 'product/reshaping-guidance.json')
+                guidance = _read(root, GUIDANCE)
                 guidance['adaptiveSystem']['evolutionHorizon'][field] = replacement
-                _write(root, 'product/reshaping-guidance.json', guidance)
-                _rehash_input(root, 'product/reshaping-guidance.json')
+                _write(root, GUIDANCE, guidance)
+                _rehash_input(root, GUIDANCE)
                 self.has(_errors(root),
                                 'reshaping guidance evolution horizon contract is invalid')
 
@@ -2455,6 +2463,16 @@ class ProductControlTests(unittest.TestCase):
         self.ae(TE(advanced, closed), [])
         advanced['gateId'] = p[RG]['orderedGates'][2]['id']
         self.has(TE(advanced, closed), pre + 'predecessor gate is invalid')
+        terminal, restart = map(_clone, (closed, n))
+        terminal['nextGateId'] = None; restart[AT]['kind'] = 'changed'
+        self.has(TE(restart, terminal), pre + 'reopen transition is invalid')
+        guidance = _read(ROOT, GUIDANCE)
+        stage = guidance['adaptiveSystem']['stageStateContract']; key = 'closeoutSnapshotRule'
+        stage[key] = stage[key].replace(
+            'does not admit a cross-version cycle',
+            'later version starts a new ordered cycle')
+        strict = []; product_control._validate_stage_guidance(guidance, strict)
+        self.at(strict)
         docs = list(_snapshot_documents(ROOT))
         project = lambda value: product_control._snapshot_v2_close_projection(
             ROOT, None, value)
@@ -2475,7 +2493,7 @@ class ProductControlTests(unittest.TestCase):
         a['canonicalGoalObjectiveSha256'] = _sha(prompt['objective'].encode())
         self.ae(project(closed), base)
         read = product_control._snapshot_or_worktree_bytes
-        for target in ('docs/releases/v3.0.1.md', 'plugins/yiyuan-accord-codex/adapter.json'):
+        for target in ('docs/releases/v3.0.1.md', CODEX_PATH):
             with patch.object(product_control, '_snapshot_or_worktree_bytes',
                     side_effect=lambda root, locator, revision=None, target=target:
                     read(root, locator, revision) + (b'x' if locator == target else b'')):
@@ -2552,10 +2570,10 @@ class ProductControlTests(unittest.TestCase):
                     'product/program.json#/increment/exactPackageEvidenceLifecycle'
                 ),
                 'commandContractLocator': (
-                    'evals/contracts/gt20-v4-command-contract.json'
+                    GT20V4
                 ),
                 'commandContractSha256': _file_sha(
-                    root, 'evals/contracts/gt20-v4-command-contract.json',
+                    root, GT20V4,
                 ),
                 'subjectRevision': 'f4c0251bc82bd5af983d365f8a12751217b88e2d',
                 'evidence': {
@@ -2654,9 +2672,9 @@ class ProductControlTests(unittest.TestCase):
 
         safe = {
             'stdout': '', 'stderr': '',
-            'officialUrl': 'https://platform.openai.com/docs/models',
-            'jsonPointer': 'product/program.json#/increment/closeoutSnapshot',
-            'repositoryLocator': 'plugins/yiyuan-accord-codex/adapter.json',
+            'officialUrl': 'https://example.org/users/public-api',
+            'jsonPointer': SNAPSHOT_REF,
+            'repositoryLocator': 'docs/users/getting-started.md',
             'commandSwitches': ['/d', '--output=/relative-not-absolute'],
             'hostExecutable': '%HOST_PATH%/git.exe',
             'packageManifest': '%APPDATA%/npm/node_modules/package.json',
@@ -3876,7 +3894,7 @@ class ProductControlTests(unittest.TestCase):
                 encoding='utf-8')
             self.has(_errors(root), 'derived surface markers')
             (root / 'README.md').write_text(readme, encoding='utf-8')
-            path = root / 'docs/operations/CONTINUATION.md'
+            path = root / CONTINUATION
             text = path.read_text(encoding='utf-8')
             path.write_text(
                 text.replace(
@@ -3928,8 +3946,7 @@ class ProductControlTests(unittest.TestCase):
                 root, snapshot, 'HEAD', {},
             )[0]
             snapshot[PS] = (
-                f'{origin}:'
-                'product/program.json#/increment/closeoutSnapshot'
+                f'{origin}:' + SNAPSHOT_REF
             )
             snapshot[AT]['affectedCriterionIds'].remove('R2')
             _write(root, P, program)
@@ -3950,7 +3967,7 @@ class ProductControlTests(unittest.TestCase):
             self.has(_errors(root),
                             'revision-bound v2 snapshot predecessor is invalid')
 
-        snapshot_ref = 'product/program.json#/increment/closeoutSnapshot'
+        snapshot_ref = SNAPSHOT_REF
 
         def snapshot_errors(root, program=None, cache=None):
             a, g, errors = _read(root, A), _read(root, G), []
@@ -4001,7 +4018,7 @@ class ProductControlTests(unittest.TestCase):
             ), [])
         unsupported = (
             _read(ROOT, C), _clone(current), _read(ROOT, A),
-            _read(ROOT, 'product/reshaping-guidance.json'), _read(ROOT, G),
+            _read(ROOT, GUIDANCE), _read(ROOT, G),
         )
         unsupported[1]['increment'][CS]['schema'] = (
             'yiyuan-accord-stage-closeout-snapshot/v999'
@@ -4262,7 +4279,7 @@ class ProductControlTests(unittest.TestCase):
                 'acceptance-invalid-then-restored',
                 'revision-bound v2 authority schema is invalid',
             )
-            package = 'plugins/yiyuan-accord-codex/adapter.json'
+            package = CODEX_PATH
             invalid_carry(
                 package, (root / package).read_bytes() + b'\n',
                 'drift declared projection package',
@@ -4720,7 +4737,7 @@ class ProductControlTests(unittest.TestCase):
             _git(root, 'add', '-f', locator)
             with _deny_path('read_bytes', oversized):
                 errors = _errors(root)
-            self.has(errors, f'active tree identity scan is indeterminate: {locator}')
+            self.has(errors, f'{TREE_SCAN_ERR}: {locator}')
 
         with _indexed() as root:
             locator = 'docs/license-policy.md'
@@ -5028,7 +5045,7 @@ class ProductControlTests(unittest.TestCase):
             with self.subTest(shared_python_grammar=body):
                 self.assert_has(
                     _retired_errors(body, 'sample.py'),
-                    'active tree identity scan is indeterminate',
+                    TREE_SCAN_ERR,
                 )
 
         self.assert_has(
@@ -5037,14 +5054,14 @@ class ProductControlTests(unittest.TestCase):
         )
         self.assert_has(
             _retired_errors('safe' * 250_001),
-            'active tree identity scan is indeterminate',
+            TREE_SCAN_ERR,
         )
         self.assert_has(
             _retired_errors(
                 'value = ' + _balanced_add(["'safe'"] * 4_097) + '\n',
                 'sample.py',
             ),
-            'active tree identity scan is indeterminate',
+            TREE_SCAN_ERR,
         )
 
         self.assert_has(

@@ -1235,7 +1235,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "681092a890d0d1e59121cf0b461783e6707f020455b3781e3756a5520dfc96aa",
+    "releaseNotesSha256": "d952d8721fbb63271d52de2d8ffe888c3d8c2c0f62328b634b16cadce77589e3",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,

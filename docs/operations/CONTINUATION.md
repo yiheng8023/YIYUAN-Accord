@@ -64,11 +64,12 @@ Then read, in order:
   preflight rejection did not prove mutation-phase failed-update recovery.
   Preserve its narrower historical subfacts. Exact `7a3950e` and `f4c0251`
   retain only their bounded schema-v6 mechanism and schema-v7 Agent-recovery
-  facts. Exact `369d08b` is pre-review counterevidence after read-only cross-
-  model analysis exposed reproducible malformed-input exception, private-path
-  recognition and derived-surface documentation gaps. Its successor correction
-  preserves the acceptance standard at 0/8; four replacement exact-tree reviews
-  remain pending. No
+  facts. Exact `369d08b` is pre-review counterevidence. Exact `cb143d3` closed
+  those prior malformed-input and documentation gaps but failed four-axis review
+  on current-guidance strictness, terminal schema-v2 transition closure and
+  public-path privacy precision. Its successor correction preserves the
+  acceptance standard at 0/8; four replacement exact-tree reviews are reset to
+  pending. No
   repository candidate, hosted status, authorization or publication
   exists.
 - Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
@@ -1048,9 +1049,11 @@ Historical superseded review disposition —
     but exact `c5a0668` review reopens GT-20 at host activation and mutation-
     phase failed-update recovery. Exact `7a3950e` and `f4c0251` retain only their
     bounded schema-v6 mechanism and schema-v7 Agent-recovery facts. Exact
-    `369d08b` is pre-review counterevidence; its successor closes four
-    reproducible malformed-input, privacy and documentation gaps while leaving
-    acceptance unchanged at 0/8. Current affected surfaces are being reaccepted. Production,
+    `369d08b` is pre-review counterevidence. Exact `cb143d3` closed those prior
+    gaps but failed four-axis review on current-guidance strictness, terminal
+    schema-v2 transition closure and public-path privacy precision. Its successor
+    closes those findings while leaving acceptance unchanged at 0/8. Current
+    affected surfaces are being reaccepted. Production,
     cross-host and updated-client entry behavior remain
     unknown.
 15. `independent-review-and-form-future-exact-candidate` — prior review history
@@ -1173,8 +1176,8 @@ Historical superseded review disposition —
     remain later; candidate selection alone cannot authorize publication.
 
 The release procedure currently has no selected v3.1.0 repository candidate.
-Exact `fc9c1a7`, `c5a0668` and `369d08b` remain invalidated, failed or pre-review
-counterevidence. Exact `7a3950e` and `f4c0251` retain only their bounded schema-v6
+Exact `fc9c1a7`, `c5a0668`, `369d08b` and `cb143d3` remain invalidated, failed
+or pre-review counterevidence. Exact `7a3950e` and `f4c0251` retain only their bounded schema-v6
 mechanism and schema-v7 Agent-recovery facts. The current successor correction
 preserves the acceptance standard at 0/8; affected-surface reacceptance is active
 and four fresh independent exact-tree reviews are pending. Only
