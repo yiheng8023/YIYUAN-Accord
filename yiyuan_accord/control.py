@@ -87,9 +87,17 @@ _PRIVATE_EVIDENCE_PATH_RES = (
 )
 ASSESSMENTS = ("planned", "verified", "blocked", "continuing")
 PROGRAM_STATES = ("active", "ready", "blocked")
+_REP_POLICY = "representative" "BehaviorPolicy"
 
 _SNAPSHOT_V1_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v1"
 _SNAPSHOT_V2_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v2"
+_SNAPSHOT_LOCATOR = 'product/program.json#/increment/closeoutSnapshot'
+_SNAPSHOT_REF_RE = re.compile(r'([0-9a-f]{40}):product/program\.json#/increment/closeoutSnapshot')
+_V2_PLAN_REF = 'product/program.json#/increment/fourSurfaceMapping/plan'
+_V2_PROCESS_REF = 'product/program.json#/increment/fourSurfaceMapping/process'
+_V2_STEPS_REF = 'product/program.json#/increment/fourSurfaceMapping/process/orderedSteps'
+_V2_REVISION = 'After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object.'
+_V2_CUTOFF = 'Only evidenceRefs resolved inside the immutable containing commit belong to this snapshot; later repository or task-time facts require a successor node.'
 _SNAPSHOT_V2_GT20_CORRECTION_ID = (
     "public-evidence-privacy-and-candidate-staging-attribution-v1"
 )
@@ -123,6 +131,11 @@ _SNAPSHOT_V2_GT20_CORRECTION_IDS = frozenset({
     _SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID,
 })
 _GT20_LIFECYCLE_PREFIX = "yiyuan-accord-exact-package-evidence-lifecycle/"
+_GT20_RECORD_V3 = "yiyuan-accord-gt20-exact-package-evidence/v3"
+_GT20_RECORD_V4 = "yiyuan-accord-gt20-exact-package-evidence/v4"
+_PACKAGE_BIND = 'containing-git-commit-complete-declared-packages'
+_LIFE_SUFFIX = ':product/program.json#/increment/exactPackageEvidenceLifecycle'
+_V3_CONTRACT = 'evals/contracts/gt20-v3-command-contract.json'
 _GT20_REPLAY_BOUNDARIES = {
     f"{_GT20_LIFECYCLE_PREFIX}v1": "complete-host-projection-package-identity",
     f"{_GT20_LIFECYCLE_PREFIX}v2": "exact-package-evaluator-failure-closure",
@@ -1643,14 +1656,14 @@ def _snapshot_v1_node_errors(program, acceptance):
         )
         or node.get("revisionBinding") != {
             "kind": "containing-git-commit",
-            "selfLocator": "product/program.json#/increment/closeoutSnapshot",
-            "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object.",
+            "selfLocator": _SNAPSHOT_LOCATOR,
+            "exactLocatorRule": _V2_REVISION,
         }
         or node.get("authorityRefs") != list(_SNAPSHOT_V1_AUTHORITY_REFS)
         or node.get("surfaceRefs") != {
             "baseline": "product/reshaping-guidance.json#/wholeSystemBalanceReview",
-            "plan": "product/program.json#/increment/fourSurfaceMapping/plan",
-            "process": "product/program.json#/increment/fourSurfaceMapping/process",
+            "plan": _V2_PLAN_REF,
+            "process": _V2_PROCESS_REF,
             "acceptance": "product/acceptance.json",
             "goalProjection": "product/program.json#/goalModePrompt",
         }
@@ -1677,7 +1690,7 @@ def _snapshot_v1_node_errors(program, acceptance):
         f"product/program.json#/releaseProcedure/orderedGates/{closed_index}",
     ] or node.get("evidenceCutoff") != {
         "kind": "containing-git-commit",
-        "rule": "Only evidenceRefs resolved inside the immutable containing commit belong to this snapshot; later repository or task-time facts require a successor node.",
+        "rule": _V2_CUTOFF,
     } or node.get("invalidationTriggerRefs") != [
         "product/constitution.json#/evolutionPolicy/feedbackRule",
         "product/program.json#/goalModePrompt/refreshTriggers",
@@ -1688,7 +1701,7 @@ def _snapshot_v1_node_errors(program, acceptance):
     kind = transition.get("kind") if isinstance(transition, dict) else None
     predecessor = node.get("predecessorSnapshotRef")
     predecessor_match = re.fullmatch(
-        r"([0-9a-f]{40}):product/program\.json#/increment/closeoutSnapshot",
+        _SNAPSHOT_REF_RE,
         predecessor or "",
     )
     criteria = acceptance.get("criteria") if isinstance(acceptance, dict) else None
@@ -1706,12 +1719,12 @@ def _snapshot_v1_node_errors(program, acceptance):
         or set(transition) != {
             "kind", "rationaleRef", "affectedCriterionIds", "replayRef",
         }
-        or kind not in {"snapshot-bootstrap", "unchanged", "changed"}
+        or kind not in ("snapshot-bootstrap", "unchanged", "changed")
         or transition.get("rationaleRef") != (
-            "product/program.json#/increment/fourSurfaceMapping/plan"
+            _V2_PLAN_REF
         )
         or transition.get("replayRef") != (
-            "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
+            _V2_STEPS_REF
         )
         or (predecessor is None) != (kind == "snapshot-bootstrap")
         or (predecessor is not None and predecessor_match is None)
@@ -1763,14 +1776,14 @@ def _snapshot_v2_node_errors(program, acceptance):
         or node.get("stage") != gate
         or node.get("revisionBinding") != {
             "kind": "containing-git-commit",
-            "selfLocator": "product/program.json#/increment/closeoutSnapshot",
-            "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object.",
+            "selfLocator": _SNAPSHOT_LOCATOR,
+            "exactLocatorRule": _V2_REVISION,
         }
         or node.get("authorityRefs") != list(_SNAPSHOT_V1_AUTHORITY_REFS)
         or node.get("surfaceRefs") != {
             "baseline": "product/reshaping-guidance.json#/wholeSystemBalanceReview",
-            "plan": "product/program.json#/increment/fourSurfaceMapping/plan",
-            "process": "product/program.json#/increment/fourSurfaceMapping/process",
+            "plan": _V2_PLAN_REF,
+            "process": _V2_PROCESS_REF,
             "acceptance": "product/acceptance.json",
             "goalProjection": "product/program.json#/goalModePrompt",
         }
@@ -1790,7 +1803,7 @@ def _snapshot_v2_node_errors(program, acceptance):
         f"product/program.json#/releaseProcedure/orderedGates/{gate_index}",
     ] or node.get("evidenceCutoff") != {
         "kind": "containing-git-commit",
-        "rule": "Only evidenceRefs resolved inside the immutable containing commit belong to this snapshot; later repository or task-time facts require a successor node.",
+        "rule": _V2_CUTOFF,
     } or node.get("invalidationTriggerRefs") != [
         "product/constitution.json#/evolutionPolicy/feedbackRule",
         "product/program.json#/goalModePrompt/refreshTriggers",
@@ -1820,10 +1833,10 @@ def _snapshot_v2_node_errors(program, acceptance):
         or affected_list is None
         or transition_kind not in ("changed", *_SNAPSHOT_V2_REACCEPTANCE_KINDS)
         or transition.get("rationaleRef") != (
-            "product/program.json#/increment/fourSurfaceMapping/plan"
+            _V2_PLAN_REF
         )
         or transition.get("replayRef") != (
-            "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
+            _V2_STEPS_REF
         )
         or set(affected_list) != (
             criterion_ids if transition_kind ==
@@ -1835,9 +1848,10 @@ def _snapshot_v2_node_errors(program, acceptance):
         _v2_error(errors, "acceptance transition is invalid")
     replay = node.get("replay")
     lifecycle = increment.get("exactPackageEvidenceLifecycle", {})
-    replay_boundary = _GT20_REPLAY_BOUNDARIES.get(
-        lifecycle.get("schema")
-    ) if isinstance(lifecycle, dict) else None
+    lifecycle = lifecycle if isinstance(lifecycle, dict) else {}
+    lifecycle_schema = lifecycle.get("schema")
+    replay_boundary = _GT20_REPLAY_BOUNDARIES.get(lifecycle_schema) \
+        if isinstance(lifecycle_schema, str) else None
     replay_fields = {
         "earliestAffectedBoundary", "invalidatedTaskIds",
         "preservedTaskIds", "evidenceState", "evidenceRef",
@@ -2060,7 +2074,7 @@ def _snapshot_v1_lineage_errors(
             errors.append("revision-bound v1 bootstrap has a predecessor")
     else:
         match = re.fullmatch(
-            r"([0-9a-f]{40}):product/program\.json#/increment/closeoutSnapshot",
+            _SNAPSHOT_REF_RE,
             predecessor or "",
         )
         if match is None or latest is None or match.group(1) != latest[0]:
@@ -2194,9 +2208,9 @@ def _snapshot_v2_transition_errors(current, predecessor):
             and (prior_replay, current_replay) in replay_transitions
         )
         reopening_closed = (
-            prior_state == "closed" and prior_schema in {
+            prior_state == "closed" and prior_schema in (
                 _SNAPSHOT_V1_SCHEMA, _SNAPSHOT_V2_SCHEMA,
-            }
+            )
             and isinstance(current_transition, dict)
             and current_transition.get("kind") == "changed"
         )
@@ -2295,7 +2309,7 @@ def _snapshot_v2_lineage_errors(
         return ["revision-bound v2 lineage is unavailable"]
     predecessor_ref = node.get("predecessorSnapshotRef")
     match = re.fullmatch(
-        r"([0-9a-f]{40}):product/program\.json#/increment/closeoutSnapshot",
+        _SNAPSHOT_REF_RE,
         predecessor_ref or "",
     )
     if match is None or latest is None or match.group(1) != latest[0]:
@@ -2349,9 +2363,28 @@ def _snapshot_v1_transition_projection(
     normalized_acceptance.pop("criteria", None)
     projections = program.get("hostProjections")
     surfaces = program.get("releaseProcedure", {}).get("surfaceMarkers")
-    if not isinstance(projections, list) or not isinstance(surfaces, dict):
+    authority = constitution.get("authority")
+    declared = _string_list(authority.get("derivedSurfaces")) \
+        if isinstance(authority, dict) else None
+    if not isinstance(projections, list) or not isinstance(surfaces, dict) \
+            or not declared:
         raise TypeError("invalid raw surfaces")
     locators = set(surfaces)
+    if revision is None:
+        files, file_errors = _repository_files(root)
+        if file_errors:
+            raise ValueError("raw surface inventory is unavailable")
+    else:
+        files = (_SNAPSHOT_READ_CACHE.get() or _SnapshotBlobCache())._tree(
+            root, revision)[0]
+    for locator in declared:
+        if locator.endswith("/"):
+            members = [item for item in files if item.startswith(locator)]
+            if not members:
+                raise ValueError("raw surface directory is empty")
+            locators.update(members)
+        else:
+            locators.add(locator)
     for projection in projections:
         locator = projection.get("marketplace") \
             if isinstance(projection, dict) else None
@@ -2437,7 +2470,7 @@ def _validate_closeout_snapshot_v2(
     if replay:
         _closeout_error(errors, "lineage replays a non-current node")
     match = re.fullmatch(
-        r"([0-9a-f]{40}):product/program\.json#/increment/closeoutSnapshot",
+        _SNAPSHOT_REF_RE,
         node.get("predecessorSnapshotRef") or "",
     )
     if latest is None or match is None or match.group(1) != latest[0]:
@@ -2514,16 +2547,16 @@ def _validate_closeout_snapshot(
     binding = value.get("revisionBinding")
     if binding != {
         "kind": "containing-git-commit",
-        "selfLocator": "product/program.json#/increment/closeoutSnapshot",
-        "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object.",
+        "selfLocator": _SNAPSHOT_LOCATOR,
+        "exactLocatorRule": _V2_REVISION,
     }:
         _closeout_error(errors, "revision binding is invalid")
     if value.get("authorityRefs") != list(_SNAPSHOT_V1_AUTHORITY_REFS):
         _closeout_error(errors, "authority references are invalid")
     if value.get("surfaceRefs") != {
         "baseline": "product/reshaping-guidance.json#/wholeSystemBalanceReview",
-        "plan": "product/program.json#/increment/fourSurfaceMapping/plan",
-        "process": "product/program.json#/increment/fourSurfaceMapping/process",
+        "plan": _V2_PLAN_REF,
+        "process": _V2_PROCESS_REF,
         "acceptance": "product/acceptance.json",
         "goalProjection": "product/program.json#/goalModePrompt",
     }:
@@ -2547,7 +2580,7 @@ def _validate_closeout_snapshot(
     cutoff = value.get("evidenceCutoff")
     if cutoff != {
         "kind": "containing-git-commit",
-        "rule": "Only evidenceRefs resolved inside the immutable containing commit belong to this snapshot; later repository or task-time facts require a successor node.",
+        "rule": _V2_CUTOFF,
     }:
         _closeout_error(errors, "evidence cutoff is invalid")
     if value.get("invalidationTriggerRefs") != [
@@ -2562,16 +2595,16 @@ def _validate_closeout_snapshot(
     } or transition.get("kind") not in {
         "snapshot-bootstrap", "unchanged", "changed",
     } or transition.get("rationaleRef") != (
-        "product/program.json#/increment/fourSurfaceMapping/plan"
+        _V2_PLAN_REF
     ) or transition.get("replayRef") != (
-        "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
+        _V2_STEPS_REF
     ):
         _closeout_error(errors, "acceptance transition is invalid")
     predecessor = value.get("predecessorSnapshotRef")
     kind = transition.get("kind") if isinstance(transition, dict) else None
     actual_affected = None
     predecessor_match = re.fullmatch(
-        r"([0-9a-f]{40}):product/program\.json#/increment/closeoutSnapshot",
+        _SNAPSHOT_REF_RE,
         predecessor or "",
     )
     if (predecessor is None) != (kind == "snapshot-bootstrap") or (
@@ -2715,7 +2748,7 @@ def _validate_closeout_snapshot(
         if not isinstance(prior, dict) or prior.get("state") != "closed" \
                 or not gate_transition or not isinstance(prior_binding, dict) \
                 or prior_binding.get("selfLocator") != (
-            "product/program.json#/increment/closeoutSnapshot"
+            _SNAPSHOT_LOCATOR
         ) or prior_index < 0 or prior.get("nextGateId") != prior_next \
                 or prior.get("evaluationContractSha256") != prior_evaluation:
             _closeout_error(errors, "predecessor cannot be resolved")
@@ -2739,7 +2772,7 @@ def _validate_closeout_snapshot(
     if affected_list is None or (
         kind == "snapshot-bootstrap" and affected != criterion_ids
     ) or (kind == "unchanged" and affected) or (kind == "changed" and not affected) or (
-        kind in {"unchanged", "changed"}
+        kind in ("unchanged", "changed")
         and (actual_affected is None or affected != actual_affected)
     ):
         _closeout_error(errors, "affected criteria are invalid")
@@ -2830,7 +2863,7 @@ def _gt20_v4_overlay_shape_valid(contract):
             and contract["schema"]
                 == "yiyuan-accord-gt20-command-contract-overlay/v1"
             and contract["baseContract"] == {
-                "locator": "evals/contracts/gt20-v3-command-contract.json",
+                "locator": _V3_CONTRACT,
                 "sha256": (
                     "53b8281282f876b7298da20577de3859ef107cc689c7aa2de99866a70d52355c"
                 ),
@@ -2956,10 +2989,10 @@ def _resolve_gt20_v4_command_contract(overlay, base):
 
 
 def _gt20_v4_activation_receipt_valid(command, host, version):
-    if not isinstance(command, dict) or host not in {"codex", "claude"}:
+    if not isinstance(command, dict) or host not in ("codex", "claude"):
         return False
     receipt = command.get("activationReceipt")
-    if not isinstance(receipt, dict) or version not in {"3.0.1", "3.1.0"}:
+    if not isinstance(receipt, dict) or version not in ("3.0.1", "3.1.0"):
         return False
     digest_only = (
         command.get("stdout") == ""
@@ -3627,8 +3660,8 @@ def _validate_exact_package_evidence_lifecycle(
             None, None,
         ),
     }
-    contract = contracts.get(lifecycle.get("schema")) \
-        if isinstance(lifecycle, dict) else None
+    schema = lifecycle.get("schema") if isinstance(lifecycle, dict) else None
+    contract = contracts.get(schema) if isinstance(schema, str) else None
     is_v4 = isinstance(lifecycle, dict) and lifecycle.get("schema") == (
         "yiyuan-accord-exact-package-evidence-lifecycle/v4"
     )
@@ -3668,7 +3701,7 @@ def _validate_exact_package_evidence_lifecycle(
         or lifecycle.get("taskId") != "GT-20"
         or lifecycle.get("earliestAffectedBoundary") != boundary
         or lifecycle.get("subjectBinding")
-        != "containing-git-commit-complete-declared-packages"
+        != _PACKAGE_BIND
         or lifecycle.get("preservedTaskIds") != ["GT-21"]
         or (not is_modern and lifecycle.get("priorEvidenceRef") != prior_evidence)
         or (subject_revision and lifecycle.get("subjectRevision") != subject_revision)
@@ -3715,7 +3748,7 @@ def _validate_exact_package_evidence_lifecycle(
             "taskId": "GT-20",
             "earliestAffectedBoundary": boundary,
             "subjectBinding": (
-                "containing-git-commit-complete-declared-packages"
+                _PACKAGE_BIND
             ),
             "preservedTaskIds": ["GT-21"],
             "predecessorLifecycleRef": base_predecessor_ref,
@@ -3747,7 +3780,7 @@ def _validate_exact_package_evidence_lifecycle(
                     "taskId": "GT-20",
                     "earliestAffectedBoundary": boundary,
                     "subjectBinding": (
-                        "containing-git-commit-complete-declared-packages"
+                        _PACKAGE_BIND
                     ),
                     "preservedTaskIds": ["GT-21"],
                     "predecessorLifecycleRef": (
@@ -3809,7 +3842,7 @@ def _validate_exact_package_evidence_lifecycle(
                     "surface-closure"
                 ),
                 "subjectBinding": (
-                    "containing-git-commit-complete-declared-packages"
+                    _PACKAGE_BIND
                 ),
                 "preservedTaskIds": ["GT-21"],
                 "predecessorLifecycleRef": (
@@ -3836,7 +3869,7 @@ def _validate_exact_package_evidence_lifecycle(
                     "exact-package-evaluator-privacy-termination-cleanup-closure"
                 ),
                 "subjectBinding": (
-                    "containing-git-commit-complete-declared-packages"
+                    _PACKAGE_BIND
                 ),
                 "preservedTaskIds": ["GT-21"],
                 "priorEvidenceRef": (
@@ -3876,7 +3909,7 @@ def _validate_exact_package_evidence_lifecycle(
             != (
                 "evals/contracts/gt20-v4-command-contract.json"
                 if is_v6 or is_v7
-                else "evals/contracts/gt20-v3-command-contract.json"
+                else _V3_CONTRACT
             )
             or SHA256_RE.fullmatch(command_contract_sha256 or "") is None
         ):
@@ -4026,8 +4059,8 @@ def _validate_exact_package_evidence_lifecycle(
     }
     record_schema = record.get("schema")
     expected_record_schema = (
-        "yiyuan-accord-gt20-exact-package-evidence/v4" if is_v6 or is_v7
-        else "yiyuan-accord-gt20-exact-package-evidence/v3"
+        _GT20_RECORD_V4 if is_v6 or is_v7
+        else _GT20_RECORD_V3
         if is_modern else None
     )
     if is_modern and record_schema != expected_record_schema:
@@ -4046,7 +4079,7 @@ def _validate_exact_package_evidence_lifecycle(
             {"powerShellVersion", "powerShellEdition", "powerShellExecutable",
              "powerShellExecutableSha256"},
         ),
-        "yiyuan-accord-gt20-exact-package-evidence/v3": (
+        _GT20_RECORD_V3: (
             None, None,
             {"gitVersion": "gitVersion", "tarVersion": "tarVersion",
              "codexCliVersion": "codexVersion",
@@ -4057,7 +4090,7 @@ def _validate_exact_package_evidence_lifecycle(
              "claudePackageManifestSha256", "claudeTerminalExecutable",
              "claudeTerminalExecutableSha256"},
         ),
-        "yiyuan-accord-gt20-exact-package-evidence/v4": (
+        _GT20_RECORD_V4: (
             None, None,
             {"gitVersion": "gitVersion", "tarVersion": "tarVersion",
              "codexCliVersion": "codexVersion",
@@ -4090,14 +4123,14 @@ def _validate_exact_package_evidence_lifecycle(
     base_contract_raw = current_base_contract_raw = None
     command_spec = {}
     if record_schema in {
-        "yiyuan-accord-gt20-exact-package-evidence/v3",
-        "yiyuan-accord-gt20-exact-package-evidence/v4",
+        _GT20_RECORD_V3,
+        _GT20_RECORD_V4,
     }:
         try:
             expected_locator = (
                 "evals/contracts/gt20-v4-command-contract.json"
                 if record_schema.endswith("/v4")
-                else "evals/contracts/gt20-v3-command-contract.json"
+                else _V3_CONTRACT
             )
             if contract_locator != expected_locator:
                 raise ValueError("command contract locator")
@@ -4176,7 +4209,7 @@ def _validate_exact_package_evidence_lifecycle(
 
     def _v3_command_matches(command, spec):
         is_v4_record = record_schema == (
-            "yiyuan-accord-gt20-exact-package-evidence/v4"
+            _GT20_RECORD_V4
         )
         profile_name = spec.get("environmentProfile") \
             if isinstance(spec, dict) else None
@@ -4283,7 +4316,7 @@ def _validate_exact_package_evidence_lifecycle(
                 if command.get("role") == "processTreeTerminationProbe"
                 else expected_budgets == contract_budgets
             )
-            and expected_exit in {"zero", "nonzero", "timeout"}
+            and expected_exit in ("zero", "nonzero", "timeout")
             and command.get("failureCategory")
                 == spec.get("expectedFailureCategory")
             and command.get("executionTimeoutSeconds")
@@ -4450,7 +4483,7 @@ def _validate_exact_package_evidence_lifecycle(
                 "codexHostActivation", "claudeHostActivation",
                 "codexHookRuntimeUnitStartup", "codexHookRuntimeUnitResume",
                 "claudeHookRuntimeUnitStartup", "claudeHookRuntimeUnitResume",
-            } if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4"
+            } if record_schema == _GT20_RECORD_V4
                else {
                 "accordCodexFailedUpdate", "accordClaudeFailedUpdate",
                 "codexHookStartup", "codexHookResume", "claudeHookStartup",
@@ -4477,8 +4510,8 @@ def _validate_exact_package_evidence_lifecycle(
     )
     modern_commands = (
         record_schema in {
-            "yiyuan-accord-gt20-exact-package-evidence/v3",
-            "yiyuan-accord-gt20-exact-package-evidence/v4",
+            _GT20_RECORD_V3,
+            _GT20_RECORD_V4,
         }
         and contract_shape
         and isinstance(commands, list)
@@ -4493,11 +4526,11 @@ def _validate_exact_package_evidence_lifecycle(
         and record.get("commandContractSha256")
             == sha256(contract_raw or b"").hexdigest()
         and (
-            record_schema != "yiyuan-accord-gt20-exact-package-evidence/v4"
+            record_schema != _GT20_RECORD_V4
             or (
                 base_contract_raw == current_base_contract_raw
                 and record.get("baseCommandContractLocator")
-                    == "evals/contracts/gt20-v3-command-contract.json"
+                    == _V3_CONTRACT
                 and record.get("baseCommandContractSha256")
                     == sha256(base_contract_raw or b"").hexdigest()
             )
@@ -4537,8 +4570,8 @@ def _validate_exact_package_evidence_lifecycle(
 
     command_contract = (
         modern_commands if record_schema in {
-            "yiyuan-accord-gt20-exact-package-evidence/v3",
-            "yiyuan-accord-gt20-exact-package-evidence/v4",
+            _GT20_RECORD_V3,
+            _GT20_RECORD_V4,
         }
         else (isinstance(commands, list) and len(commands) == command_count
               and _snapshot_v1_node_key(commands) == command_digest)
@@ -4561,7 +4594,7 @@ def _validate_exact_package_evidence_lifecycle(
         "installedBytesMatchDeclaredPackages": True, "startupHookSilent": True,
         "resumeHookTypedContext": True,
     }
-    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4":
+    if record_schema == _GT20_RECORD_V4:
         fixed_fixture.pop("modelTurns")
         fixed_fixture.pop("rollbackBytesMatchPriorRelease")
         fixed_fixture.update({
@@ -4579,21 +4612,21 @@ def _validate_exact_package_evidence_lifecycle(
             "freshPriorInventoryVerified": True,
         })
     if record_schema in {
-        "yiyuan-accord-gt20-exact-package-evidence/v3",
-        "yiyuan-accord-gt20-exact-package-evidence/v4",
+        _GT20_RECORD_V3,
+        _GT20_RECORD_V4,
     }:
         fixed_fixture["priorRevision"] = (
             "24cf9f3750ecd700944988e81a519db54b67b8e8"
         )
-    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4":
+    if record_schema == _GT20_RECORD_V4:
         fixed_fixture["failedUpdateRecovery"] = fixture_value.get(
             "failedUpdateRecovery"
         )
     counts = ("codexInstalledFileCount", "claudeInstalledFileCount") + (
         ("neighborCodexInstalledFileCount", "neighborClaudeInstalledFileCount")
         if record_schema in {
-            "yiyuan-accord-gt20-exact-package-evidence/v3",
-            "yiyuan-accord-gt20-exact-package-evidence/v4",
+            _GT20_RECORD_V3,
+            _GT20_RECORD_V4,
         } else ()
     )
     version_commands = {
@@ -4631,8 +4664,8 @@ def _validate_exact_package_evidence_lifecycle(
             )
         ))
         and (record_schema not in {
-                 "yiyuan-accord-gt20-exact-package-evidence/v3",
-                 "yiyuan-accord-gt20-exact-package-evidence/v4",
+                 _GT20_RECORD_V3,
+                 _GT20_RECORD_V4,
              }
              or (
                  fixture.get("claudePackageManifest")
@@ -4669,7 +4702,7 @@ def _validate_exact_package_evidence_lifecycle(
         }
     except _SNAPSHOT_V1_FAILURES:
         frozen_subject = None
-    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4":
+    if record_schema == _GT20_RECORD_V4:
         activation_receipts_contract = all(
             _gt20_v4_activation_receipt_valid(
                 role_commands.get(role), host, version,
@@ -4687,8 +4720,8 @@ def _validate_exact_package_evidence_lifecycle(
         )
     post_state = record.get("postState")
     if record_schema in {
-        "yiyuan-accord-gt20-exact-package-evidence/v3",
-        "yiyuan-accord-gt20-exact-package-evidence/v4",
+        _GT20_RECORD_V3,
+        _GT20_RECORD_V4,
     }:
         after_accord = post_state.get("afterAccordRemoval") \
             if isinstance(post_state, dict) else None
@@ -4744,8 +4777,8 @@ def _validate_exact_package_evidence_lifecycle(
         )
     host_cache_contract = True
     if record_schema in {
-        "yiyuan-accord-gt20-exact-package-evidence/v3",
-        "yiyuan-accord-gt20-exact-package-evidence/v4",
+        _GT20_RECORD_V3,
+        _GT20_RECORD_V4,
     }:
         disposition = record.get("hostCacheDisposition")
         codex_disposition = disposition.get("codex", {}) \
@@ -4897,7 +4930,7 @@ def _validate_exact_package_evidence_lifecycle(
         "production, unmanaged or cross-OS hosts, ordinary model behavior, "
         "product value and release readiness remain unclaimed."
     )
-    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v3":
+    if record_schema == _GT20_RECORD_V3:
         expected_record_fields |= {
             "commandContractLocator", "commandContractSha256",
             "hostCacheDisposition",
@@ -4914,7 +4947,7 @@ def _validate_exact_package_evidence_lifecycle(
             "or cross-OS hosts, live-session cache behavior, ordinary model "
             "behavior, product value and release readiness remain unclaimed."
         )
-    if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4":
+    if record_schema == _GT20_RECORD_V4:
         expected_record_fields |= {
             "commandContractLocator", "commandContractSha256",
             "baseCommandContractLocator", "baseCommandContractSha256",
@@ -4940,7 +4973,7 @@ def _validate_exact_package_evidence_lifecycle(
         "install": "verified",
         (
             "failedUpdateRecovery" if record_schema
-            == "yiyuan-accord-gt20-exact-package-evidence/v4"
+            == _GT20_RECORD_V4
             else "failedUpdateRollback"
         ): "verified",
         "successfulUpdate": "verified",
@@ -5025,7 +5058,7 @@ def _validate_program(
         "active": ("active", "completed"),
         "ready": ("completed",),
         "blocked": ("blocked",),
-    }.get(program_state, ())
+    }.get(program_state, ()) if isinstance(program_state, str) else ()
     increment_state = increment.get("state") if isinstance(increment, dict) else None
     if increment_state not in allowed_increment_states:
         errors.append("program.increment does not match program status")
@@ -5083,7 +5116,7 @@ def _validate_program(
             "active": ("prepared-host-goal-paused", "active-in-host"),
             "blocked": ("prepared-host-goal-paused",),
             "completed": ("retired",),
-        }.get(increment_state, ())
+        }.get(increment_state, ()) if isinstance(increment_state, str) else ()
         if prompt.get("state") not in goal_states:
             errors.append("program.goalModePrompt does not match increment lifecycle")
         _require_texts(prompt, ("authority", "objective", "hostLifecycleNote"),
@@ -5120,7 +5153,7 @@ def _validate_program(
             "active": (closed_stage_state, replay_stage_state),
             "blocked": (closed_stage_state, replay_stage_state),
             "completed": (closed_stage_state,),
-        }.get(increment_state, ())
+        }.get(increment_state, ()) if isinstance(increment_state, str) else ()
         if _canonical_json_sha256(process.get("carrierRule")) != ( \
                 _V2_CARRIER_RULE_SHA256) or process.get(
             "stageSnapshotState"
@@ -5377,7 +5410,7 @@ def _validate_acceptance(
 
     required_sample_ids = []
     post_release_task_ids = []
-    representative_policy = acceptance.get("representativeBehaviorPolicy")
+    representative_policy = acceptance.get(_REP_POLICY)
     if not isinstance(representative_policy, dict):
         errors.append("acceptance.representativeBehaviorPolicy must be an object")
     else:
@@ -5668,7 +5701,7 @@ def _snapshot_v1_evaluation_digest(acceptance, golden):
         "requiredEvidenceClasses",
     )
     criteria = acceptance.get("criteria")
-    policy = acceptance.get("representativeBehaviorPolicy")
+    policy = acceptance.get(_REP_POLICY)
     digest_policy = dict(policy) if isinstance(policy, dict) else policy
     if isinstance(digest_policy, dict):
         digest_policy.pop("evaluationContractHistory", None)
@@ -5678,7 +5711,7 @@ def _snapshot_v1_evaluation_digest(acceptance, golden):
         "productId": acceptance.get("productId"),
         "release": acceptance.get("release"),
         "evidenceLanes": acceptance.get("evidenceLanes"),
-        "representativeBehaviorPolicy": digest_policy,
+        _REP_POLICY: digest_policy,
         "claimCeiling": {
             field: claim_ceiling.get(field)
             for field in ("finiteReleaseClaims", "notImplied")
@@ -5698,7 +5731,7 @@ def _snapshot_v1_evaluation_digest(acceptance, golden):
 
 
 def _snapshot_v1_evaluation_history_errors(acceptance, golden):
-    policy = acceptance.get("representativeBehaviorPolicy") \
+    policy = acceptance.get(_REP_POLICY) \
         if isinstance(acceptance, dict) else None
     history = policy.get("evaluationContractHistory") \
         if isinstance(policy, dict) else None
@@ -5792,7 +5825,7 @@ def _snapshot_v1_evidence_errors(
         )
     if len(criterion_ids) != len(set(criterion_ids)):
         errors.append("revision-bound criterion ids are not unique")
-    policy = acceptance.get("representativeBehaviorPolicy")
+    policy = acceptance.get(_REP_POLICY)
     historical = policy.get("historicalEvidence") \
         if isinstance(policy, dict) else None
     if not isinstance(historical, list) or not historical:

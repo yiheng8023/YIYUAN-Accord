@@ -110,7 +110,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "2d5da5e575bf75eaabbf5652bc782b1af079546f22d879ed3c48f062c3947582",
+      "repositorySha256": "21cbdff7566e973f0702280c4cf62779975d5ad4c2f950f7f5656ded6ee137ec",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -217,7 +217,7 @@
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
       },
-      "predecessorSnapshotRef": "feb6f8ece0f2ca5fe302aa135795020cca09b8ba:product/program.json#/increment/closeoutSnapshot",
+      "predecessorSnapshotRef": "22dd9da4ebb433fbb439176c66a5889307b6e751:product/program.json#/increment/closeoutSnapshot",
       "authorityRefs": [
         "product/constitution.json",
         "product/program.json",
@@ -260,7 +260,7 @@
         ],
         "replayRef": "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
       },
-      "evaluationContractSha256": "6282c8dfb92f9d4f84bd516f2fb675e3816c5dd27e503d60e0432439bc2a0f6b",
+      "evaluationContractSha256": "9037379bc51cec6ff22edeede600a53b535ff24124e1c7dc5c0ebcd5cd7edfe1",
       "gateId": "repository-candidate",
       "nextGateId": "repository-candidate",
       "claimCeilingRef": "product/acceptance.json#/claimCeiling",
@@ -930,7 +930,7 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[independent-review-and-form-future-exact-candidate] Schema-v7 GT-20 evidence and affected-surface reacceptance must complete first. Exact c5a0668, the exact 732 review, exact a961b18, exact 35a9b08, exact ac7edeb and exact aa8c93e remain failed counterevidence. Four fresh, independent, zero-history, isolated-no-Accord product, specification, implementation and standards reviews must then bind one clean exact tree; every P0/P1 must close before any replacement candidate forms, and no review grants external release authority."
+            "stopCondition": "[independent-review-and-form-future-exact-candidate] Schema-v7 GT-20 evidence and affected-surface reacceptance must complete first. Exact c5a0668, the exact 732 review, exact a961b18, exact 35a9b08, exact ac7edeb, exact aa8c93e and exact 22dd9da remain failed counterevidence. Four fresh, independent, zero-history, isolated-no-Accord product, specification, implementation and standards reviews must then bind one clean exact tree; every P0/P1 must close before any replacement candidate forms, and no review grants external release authority."
           }
         ]
       }

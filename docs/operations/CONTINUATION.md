@@ -230,8 +230,9 @@ Then read, in order:
   the admitted one-megabyte JSON limit; the history index admits at most 4096
   revisions and 67108864 aggregate Git batch bytes; every parsed schema-v1
   historical program independently fails closed above visited-value depth 512,
-  even if the runtime parser accepts it. Complete normalized
-  transition state plus raw marketplace identity determines affected criteria.
+  even if the runtime parser accepts it. Complete normalized transition state,
+  validated canonical goal derivations and the exact raw bytes of every
+  authority-declared derived surface plus marketplace determine affected criteria.
   Passing it does not replay the complete historical
   verifier or attest historical tests, behavior, live host facts, human
   authority, publication or other external gates. Malformed intermediates,

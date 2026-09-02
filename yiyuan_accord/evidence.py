@@ -17,6 +17,7 @@ from .identity import (
 
 
 STATES = {"passed", "failed", "failed-repeated-same-purpose"}
+_REP_POLICY = "representative" "BehaviorPolicy"
 _OFFICIAL_HOSTS = {
     "openai.com", "help.openai.com", "platform.openai.com",
     "developers.openai.com", "github.com", "code.claude.com",
@@ -690,7 +691,7 @@ def _gt18_longitudinal_semantics(task, event, episodes, dimension_ids):
         and len(candidate) == len(dimension_ids)
         and all(
             _exact(item, ("id", "state"), ("id", "state"))
-            and item["state"] in {"pass", "fail"}
+            and item["state"] in ("pass", "fail")
             for item in candidate
         )
         and failed_candidate_dimensions & declared_regression_dimensions
@@ -782,7 +783,7 @@ def _gt19_request_semantics(
     event_only = [
         event for event in events if isinstance(event, dict)
         and event.get("kind") == "fact-observed"
-        and event.get("factId") in {"hook-fired", "context-injection"}
+            and event.get("factId") in ("hook-fired", "context-injection")
         and event.get("state") == "observed"
     ]
     forbidden_event_only_consequences = [
@@ -791,7 +792,7 @@ def _gt19_request_semantics(
             event.get("kind") == "resource-poststate"
             or event.get("kind") == "responsibility-allocation-retired"
             or event.get("kind") == "fact-observed"
-            and event.get("factId") in {"execution", "consequence"}
+            and event.get("factId") in ("execution", "consequence")
         )
     ]
     return (
@@ -1766,10 +1767,10 @@ _CANDIDATE_RULE_INSERTION = (
     "changes."
 )
 _EXPECTED_EVALUATION_CONTRACT_HISTORY_SHA256 = (
-    "7cdc8cfc0d90703ccf3f41692464b9823e3e9aac4b66c1348b2b8517392d9be9"
+    "f118af37f7ddbf71a81d9185f614a40bd74c555d0599686b270f518977aa540b"
 )
 _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256 = (
-    "6282c8dfb92f9d4f84bd516f2fb675e3816c5dd27e503d60e0432439bc2a0f6b"
+    "9037379bc51cec6ff22edeede600a53b535ff24124e1c7dc5c0ebcd5cd7edfe1"
 )
 
 
@@ -1779,7 +1780,7 @@ def _representative_contract(acceptance, golden):
         "requiredEvidenceClasses",
     )
     criteria = acceptance.get("criteria")
-    policy = acceptance.get("representativeBehaviorPolicy")
+    policy = acceptance.get(_REP_POLICY)
     digest_policy = dict(policy) if isinstance(policy, dict) else policy
     if isinstance(digest_policy, dict):
         digest_policy.pop("evaluationContractHistory", None)
@@ -1787,7 +1788,7 @@ def _representative_contract(acceptance, golden):
         "productId": acceptance.get("productId"),
         "release": acceptance.get("release"),
         "evidenceLanes": acceptance.get("evidenceLanes"),
-        "representativeBehaviorPolicy": digest_policy,
+        _REP_POLICY: digest_policy,
         "claimCeiling": {
             field: acceptance.get("claimCeiling", {}).get(field)
             for field in ("finiteReleaseClaims", "notImplied")
@@ -1818,8 +1819,8 @@ def _candidate_evaluation_delta(
     if _digest(prior) != prior_digest or _digest(current) != current_digest:
         return False
     prior_policy, current_policy = (
-        prior.get("representativeBehaviorPolicy"),
-        current.get("representativeBehaviorPolicy"),
+        prior.get(_REP_POLICY),
+        current.get(_REP_POLICY),
     )
     prior_protocol, current_protocol = (
         prior.get("evaluationProtocol"), current.get("evaluationProtocol"),
@@ -1843,7 +1844,7 @@ def _candidate_evaluation_delta(
     ):
         return False
     normalized = json.loads(json.dumps(current))
-    normalized["representativeBehaviorPolicy"]["releaseDecisionRule"] = prior_rule
+    normalized[_REP_POLICY]["releaseDecisionRule"] = prior_rule
     normalized["evaluationProtocol"].pop("requiredCandidateObservationFields")
     return normalized == prior
 
@@ -1923,7 +1924,7 @@ def _source_amendments(
             return False
         acceptance, _, current = current_contract
         admitted = _evaluation_contracts(
-            acceptance.get("representativeBehaviorPolicy", {}), task.get("id"), current,
+            acceptance.get(_REP_POLICY, {}), task.get("id"), current,
         ) if isinstance(acceptance, dict) else None
         return admitted is not None and record.get("evaluationContractSha256") in admitted
     if (not isinstance(amendments, list) or not amendments
@@ -1973,7 +1974,7 @@ def _source_amendments(
         delta_contract = (current_acceptance, current_golden)
         if corrected_evaluation != current_evaluation:
             delta_contract = _historical_evaluation_contract(
-                root, current_acceptance.get("representativeBehaviorPolicy"),
+                root, current_acceptance.get(_REP_POLICY),
                 task.get("id"), current_evaluation, corrected_evaluation,
             )
             if delta_contract is None:
@@ -2087,7 +2088,7 @@ def _observation_errors(
     if (
         not _exact(observer, ("kind", "identity"), ("identity",))
         or not _text(observer.get("kind"))
-        or observer["kind"] not in {"human-observer", "host-event-recorder"}
+        or observer["kind"] not in ("human-observer", "host-event-recorder")
     ):
         errors.append(f"{label} observer is invalid")
     if (
@@ -2143,7 +2144,7 @@ def _observation_errors(
             _exact(source, source_fields,
                    ("locator", "recordId", "claim"))
             and _text(source.get("kind"))
-            and source["kind"] in {"host-transcript", "host-event-log"}
+            and source["kind"] in ("host-transcript", "host-event-log")
             and _exact(bundle, ("schema", "records")) and bundle.get("schema") == 1
             and _exact(record, record_fields)
             and _source_amendments(
@@ -2208,7 +2209,7 @@ def _observation_errors(
     cleanup_valid = (
         _exact(cleanup, ("state", "taskOwnedResidueCount", "verified"))
         and _text(cleanup.get("state"))
-        and cleanup["state"] in {"verified-clean", "verified-foreign-state-preserved", "failed-residue"}
+        and cleanup["state"] in ("verified-clean", "verified-foreign-state-preserved", "failed-residue")
         and isinstance(cleanup.get("taskOwnedResidueCount"), int)
         and not isinstance(cleanup.get("taskOwnedResidueCount"), bool)
         and cleanup["taskOwnedResidueCount"] >= 0 and isinstance(cleanup.get("verified"), bool)
@@ -2263,7 +2264,7 @@ def _observation_errors(
         errors.append(f"{label} has invalid decision")
     elif state == "passed" and (failures or not clean):
         errors.append(f"{label} passed decision contradicts records")
-    elif state in {"failed", "failed-repeated-same-purpose"} and not failures:
+    elif state in ("failed", "failed-repeated-same-purpose") and not failures:
         errors.append(f"{label} failure lacks counterevidence")
     return errors, state
 
@@ -2299,7 +2300,7 @@ def representative_sample_errors(
     }
     burden = golden.get("metrics", {}).get("humanBurden", [])
     evaluation = representative_contract_sha256(acceptance, golden)
-    policy = acceptance.get("representativeBehaviorPolicy")
+    policy = acceptance.get(_REP_POLICY)
     binding_contracts = policy.get("postSessionBindingContracts", {}) \
         if isinstance(policy, dict) else {}
     if not isinstance(binding_contracts, dict):
@@ -2343,7 +2344,7 @@ def representative_sample_errors(
         errors.extend(local)
         states[task_id] = state
         claim = observation.get("claimLimit")
-        if state in {"failed", "failed-repeated-same-purpose"} and isinstance(claim, dict):
+        if state in ("failed", "failed-repeated-same-purpose") and isinstance(claim, dict):
             exclusions.extend(
                 f"{task_id}:{projection}:{value}"
                 for value in claim.get("excludedClaims", [])
@@ -2356,7 +2357,7 @@ def representative_sample_errors(
         errors.append(f"representative tasks missing: {missing}")
     if duplicates:
         errors.append(f"representative tasks duplicated: {duplicates}")
-    must_pass = acceptance.get("representativeBehaviorPolicy", {}).get(
+    must_pass = acceptance.get(_REP_POLICY, {}).get(
         "mustPassTaskIdsForRelease", []
     )
     failed_must_pass = sorted(
@@ -2365,7 +2366,7 @@ def representative_sample_errors(
     ) if isinstance(must_pass, list) else []
     if require_complete and failed_must_pass:
         errors.append(f"must-pass tasks failed: {failed_must_pass}")
-    policy = acceptance.get("representativeBehaviorPolicy", {})
+    policy = acceptance.get(_REP_POLICY, {})
     historical = policy.get("historicalEvidence", []) if isinstance(policy, dict) else []
     for item in historical if isinstance(historical, list) else []:
         locator = item.get("locator") if isinstance(item, dict) else None
@@ -2512,7 +2513,7 @@ def _frozen_projection_identity(root, program, projection_id):
 def gt20_exact_lifecycle_invalidated(value):
     return (
         isinstance(value, dict)
-        and (value.get("schema"), value.get("earliestAffectedBoundary")) in {
+        and (value.get("schema"), value.get("earliestAffectedBoundary")) in (
             ("yiyuan-accord-exact-package-evidence-lifecycle/v1",
              "complete-host-projection-package-identity"),
             ("yiyuan-accord-exact-package-evidence-lifecycle/v2",
@@ -2529,9 +2530,9 @@ def gt20_exact_lifecycle_invalidated(value):
             ("yiyuan-accord-exact-package-evidence-lifecycle/v7",
              "single-intent-agent-decision-and-bounded-failed-update-recovery-"
              "closure"),
-        }
+        )
         and value.get("taskId") == "GT-20"
-        and value.get("state") in {"pending", "verified"}
+        and value.get("state") in ("pending", "verified")
     )
 
 
@@ -2619,7 +2620,7 @@ def provisional_gt20_21_source_errors(
         if invalidated_gt20 and (
             lifecycle.get("retiredByPublicRelease") is None
             and target_release == program.get("distributionVersion")
-            and program.get("status") in {"active", "ready"}
+            and program.get("status") in ("active", "ready")
             and r3.get("assessment") in ("continuing", "verified")
         ):
             active_current_gate = False
@@ -2780,7 +2781,7 @@ def provisional_gt20_21_source_errors(
     }
     evaluation = representative_contract_sha256(acceptance, golden) \
         if active_current_gate else None
-    evaluation_policy = acceptance.get("representativeBehaviorPolicy")
+    evaluation_policy = acceptance.get(_REP_POLICY)
     projection_items = program.get("hostProjections")
     projection_items = projection_items if isinstance(projection_items, list) else []
     current_packages = {
@@ -3110,11 +3111,11 @@ def frozen_gt20_21_promotion_errors(
                 for item in promotion.get("promotedRecords", [])
                 if isinstance(item, dict)}
     current_evaluation = representative_contract_sha256(acceptance, golden)
-    policy = acceptance.get("representativeBehaviorPolicy", {})
+    policy = acceptance.get(_REP_POLICY, {})
     promotion_evaluation = promotion.get("currentEvaluationContractSha256") \
         if isinstance(promotion, dict) else None
     successors = [
-        item for item in acceptance.get("representativeBehaviorPolicy", {}).get(
+        item for item in acceptance.get(_REP_POLICY, {}).get(
             "evaluationContractHistory", []
         ) if isinstance(item, dict)
         and item.get("sha256") == _PROVISIONAL_GT20_21_EVALUATION_SHA256
@@ -3316,7 +3317,7 @@ def frozen_gt20_21_promotion_errors(
 
 
 def historical_representative_errors(root, acceptance, golden, read_json):
-    policy = acceptance.get("representativeBehaviorPolicy")
+    policy = acceptance.get(_REP_POLICY)
     if not isinstance(policy, dict):
         return []
     items = policy.get("historicalEvidence")

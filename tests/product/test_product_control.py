@@ -14,6 +14,7 @@ from yiyuan_accord.control import (
     _snapshot_v1_projection_package_errors,
     _snapshot_v1_projection_shape_errors,
     _snapshot_v2_node_errors, _snapshot_v2_transition_errors,
+    _validate_closeout_snapshot_v2,
     _validate_exact_package_evidence_lifecycle,
     _snapshot_v1_transition_errors, _snapshot_v1_json_structure_is_bounded,
     _SNAPSHOT_V1_MAX_JSON_DEPTH,
@@ -60,6 +61,7 @@ TC = unittest.TestCase
 # CI deadlock guard; not the three-second product Hook timeout.
 HOOK_PROCESS_TIMEOUT_SECONDS = 60
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
+RP = 'representative' 'BehaviorPolicy'
 SOURCE = 'evals/evidence/2026-08-24-v20-representative-source.json'
 GT11_SOURCE = 'evals/evidence/2026-08-27-v310-codex-local-regression-source.json'
 GT11_OBSERVATION = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json'
@@ -246,7 +248,7 @@ def _rehash(root, locator):
     items = [
         item for criterion in acceptance['criteria']
         for item in criterion['evidence']
-    ] + acceptance['representativeBehaviorPolicy']['historicalEvidence']
+    ] + acceptance[RP]['historicalEvidence']
     for item in items:
         if item['locator'] == locator:
             item['sha256'] = digest
@@ -284,7 +286,7 @@ def _observe(
 ):
     golden, observed = _read(root, G), observation or _read(root, locator)
     task = _find(golden['tasks'], 'id', observed['taskId'])
-    policy = _read(root, A)['representativeBehaviorPolicy']
+    policy = _read(root, A)[RP]
     historical = policy['historicalTaskContracts'].get(observed['taskId'])
     if (
         historical is not None
@@ -314,7 +316,7 @@ def _source_errors(
     return _errors(root)
 
 def _source_error_fragment(root, locator):
-    items = _read(root, A)['representativeBehaviorPolicy']['historicalEvidence']
+    items = _read(root, A)[RP]['historicalEvidence']
     index = next(i for i, item in enumerate(items) if item['locator'] == locator)
     return f'historicalEvidence[{index}] sourceEvidence[0] is invalid'
 
@@ -978,7 +980,7 @@ class ProductControlTests(unittest.TestCase):
             {item['id'] for item in constitution['learnedFailureStandards']},
         )
         self.ae(
-            acceptance['representativeBehaviorPolicy']['requiredTaskIdsForRelease'],
+            acceptance[RP]['requiredTaskIdsForRelease'],
             ['GT-07','GT-11','GT-12','GT-13',*[f'GT-{n}' for n in range(14,22)]],
         )
         release_notes = (root / acceptance['publicRelease']['releaseNotes']).read_text(
@@ -1434,7 +1436,7 @@ class ProductControlTests(unittest.TestCase):
             _write(root, locator, raw)
             item['sha256'] = _file_sha(root, locator)
             acceptance = _read(root, A)
-            acceptance['representativeBehaviorPolicy'][
+            acceptance[RP][
                 'evaluationContractHistory'
             ][-1]['reason'] += ' drift'
             promo_errors = frozen_gt20_21_promotion_errors(
@@ -2120,6 +2122,13 @@ class ProductControlTests(unittest.TestCase):
                     'carrierRule'] + ' False.')),
             (P, 'processLossControl', lambda v: v['processLossControl'].update(
                 closeMutableProjectionPaths=['program/releaseIntent'])),
+            (P, 'program.status must', lambda v: v.update(status={})),
+            (P, 'program.increment does not match', lambda v: v[
+                'increment'].update(state={})),
+            (P, 'exact package evidence lifecycle', lambda v: v['increment'][
+                'exactPackageEvidenceLifecycle'].update(schema={})),
+            (P, 'exact package evidence lifecycle', lambda v: v['increment'][
+                'exactPackageEvidenceLifecycle'].update(state={})),
             (P, 'state is invalid', lambda v: v['increment'][
                 'fourSurfaceMapping']['process']['orderedSteps'][0].update(state={})),
             (A, 'assessment must', lambda v: v['criteria'][
@@ -2139,9 +2148,9 @@ class ProductControlTests(unittest.TestCase):
                 for task in v['tasks'] if 'L8' in task['mapsTo']
             ]),
             (A, 'representative post-session binding contracts', lambda v: v[
-                'representativeBehaviorPolicy'].update(postSessionBindingContracts=[])),
+                RP].update(postSessionBindingContracts=[])),
             (A, 'representative evaluation contract history is invalid', lambda v: v[
-                'representativeBehaviorPolicy']['evaluationContractHistory'][-1][
+                RP]['evaluationContractHistory'][-1][
                     'preservedTaskIds'].append('GT-19')),
             (A, 'acceptance.claimCeiling is invalid', lambda v: v[
                 'claimCeiling'].pop('publicFiniteReleaseClaims')),
@@ -2396,55 +2405,68 @@ class ProductControlTests(unittest.TestCase):
             )
 
     def test_snapshot_v2_reopens_only_the_invalidated_package_boundary(self):
-        program, acceptance = _read(ROOT, P), _read(ROOT, A)
-        node = program['increment']['closeoutSnapshot']
-        _, prior_program, *_ = _snapshot_documents(
-            ROOT, node['predecessorSnapshotRef'].split(':', 1)[0])
-        prior = prior_program['increment']['closeoutSnapshot']
-        node_errors, transition_errors = _snapshot_v2_node_errors, _snapshot_v2_transition_errors
-        self.ae(node_errors(program, acceptance), []); self.ae(transition_errors(node, prior), [])
-        prefix = ('increment', 'closeoutSnapshot')
-        def rejects(path, value, message):
-            changed = _clone(program); _replace(changed, path, value)
-            self.has(node_errors(changed, acceptance), 'revision-bound v2 ' + message)
-        rejects(prefix + ('acceptanceTransition', 'affectedCriterionIds'), [{}],
-                'acceptance transition is invalid')
-        changed_node = prior
-        while changed_node['acceptanceTransition']['kind'] != 'changed':
-            _, p, *_ = _snapshot_documents(
-                ROOT, changed_node['predecessorSnapshotRef'].split(':', 1)[0])
-            changed_node = p['increment']['closeoutSnapshot']
-        prev = _clone(changed_node); prev['replay']['evidenceState'] = 'pending'
-        prev['replay']['evidenceRef'] = None
-        closed = _clone(prev); closed.update(state='closed', replay=_clone(node['replay']))
-        self.has(transition_errors(closed, prev),
-                 'revision-bound v2 close skips reacceptance')
-        accepted_close = _clone(node); accepted_close['state'] = 'closed'
-        self.ae(transition_errors(accepted_close, node), [])
-        documents = list(_snapshot_documents(ROOT))
-        project = lambda value: product_control._snapshot_v2_close_projection(ROOT, None, value)
-        projection = project(documents)
-        changed = _clone(documents); _replace(changed, (2, 'criteria', 0,
-            'assessmentScope'), 'semantic drift')
-        self.ane(project(changed), projection)
-        closed = _clone(documents)
-        p, a = closed[1:3]; increment = p['increment']; prompt = p['goalModePrompt']
-        p['status'], prompt['state'], increment['state'] = 'ready', 'retired', 'completed'
+        p, a = _read(ROOT, P), _read(ROOT, A); n = p['increment']['closeoutSnapshot']
+        _, old_p, *_ = _snapshot_documents(
+            ROOT, n['predecessorSnapshotRef'].split(':', 1)[0])
+        prior = old_p['increment']['closeoutSnapshot']
+        NE, TE, pre = _snapshot_v2_node_errors, _snapshot_v2_transition_errors, (
+            'revision-bound v2 ')
+        bad = _clone(p); bad['increment']['fourSurfaceMapping'][
+            'process']['orderedSteps'][-2]['state'] = 'pending'
+        self.has(NE(bad, a), pre + 'reacceptance state is invalid')
+        changed = prior
+        while changed['acceptanceTransition']['kind'] != 'changed':
+            _, old_p, *_ = _snapshot_documents(
+                ROOT, changed['predecessorSnapshotRef'].split(':', 1)[0])
+            changed = old_p['increment']['closeoutSnapshot']
+        prev = _clone(changed)
+        prev['replay'].update(evidenceState='pending', evidenceRef=None)
+        direct = _clone(prev); direct.update(state='closed', replay=_clone(n['replay']))
+        skip = pre + 'close skips reacceptance'; self.has(TE(direct, prev), skip)
+        malformed = _clone(prev); malformed['acceptanceTransition'] = None
+        self.has(TE(direct, malformed), skip)
+        close = _clone(n); close['state'] = 'closed'
+        for path, value, message in (
+            (('replay', 'evidenceRef'), 'alternate', 'replay drifted before close'),
+            (('acceptanceTransition', 'affectedCriterionIds'),
+             n['acceptanceTransition']['affectedCriterionIds'][:-1],
+             'acceptance transition drifted before close'),
+        ):
+            drift = _clone(close); _replace(drift, path, value)
+            self.has(TE(drift, n), pre + message)
+        docs = list(_snapshot_documents(ROOT))
+        project = lambda value: product_control._snapshot_v2_close_projection(
+            ROOT, None, value)
+        base = project(docs); drift = _clone(docs)
+        drift[2]['criteria'][0]['assessmentScope'] = 'semantic drift'
+        self.ane(project(drift), base)
+        closed = _clone(docs); p, a = closed[1:3]
+        inc, prompt = p['increment'], p['goalModePrompt']
+        p['status'], prompt['state'], inc['state'] = 'ready', 'retired', 'completed'
         p['processLossControl']['stageSnapshotState'] = (
             'latest-closed-stage-snapshot-prepared-for-containing-commit-binding')
-        for item in [increment['workItems'][0], *increment['workItems'][0][
-                'closeoutSequence'], *increment['fourSurfaceMapping']['process']['orderedSteps']]:
+        for item in [inc['workItems'][0], *inc['workItems'][0]['closeoutSequence'],
+                     *inc['fourSurfaceMapping']['process']['orderedSteps']]:
             item['state'] = 'completed'
         for criterion in a['criteria']: criterion['assessment'] = 'verified'
-        prompt['objective'] = canonical_goal_objective(p, closed[0]['authority'],
-            prompt['workStageIds'], prompt['releaseGateIds'])
+        prompt['objective'] = canonical_goal_objective(
+            p, closed[0]['authority'], prompt['workStageIds'], prompt['releaseGateIds'])
         a['canonicalGoalObjectiveSha256'] = _sha(prompt['objective'].encode())
-        self.ae(project(closed), projection)
-        original = product_control._snapshot_or_worktree_bytes
-        with patch.object(product_control, '_snapshot_or_worktree_bytes',
-                side_effect=lambda root, locator, revision=None: original(root, locator,
-                    revision) + (b'x' if locator == 'AGENTS.md' else b'')):
-            self.ane(project(documents), projection)
+        self.ae(project(closed), base)
+        read = product_control._snapshot_or_worktree_bytes
+        for target in ('docs/releases/v3.0.1.md', 'plugins/yiyuan-accord-codex/adapter.json'):
+            with patch.object(product_control, '_snapshot_or_worktree_bytes',
+                    side_effect=lambda root, locator, revision=None, target=target:
+                    read(root, locator, revision) + (b'x' if locator == target else b'')):
+                self.ane(project(docs), base)
+        snap = inc['closeoutSnapshot']
+        snap.update(state='closed', id=snap['id'].replace('.reopened', '.closed'),
+            predecessorSnapshotRef=_git(ROOT, 'rev-parse', 'HEAD').decode().strip()
+            + ':product/program.json#/increment/closeoutSnapshot')
+        errors = []
+        _validate_closeout_snapshot_v2(ROOT, p, a, n['evaluationContractSha256'], errors)
+        self.ae(errors, [])
+
 
     def test_revision_tree_cache_has_an_aggregate_memory_bound(self):
         listing = b'100644 blob ' + b'1' * 40 + b'\tproduct/program.json\0'
@@ -3329,7 +3351,7 @@ class ProductControlTests(unittest.TestCase):
         reject_sequence(changed_on_invalidated_receipt, gt19)
 
         acceptance = _read(ROOT, A)
-        policy = acceptance['representativeBehaviorPolicy']
+        policy = acceptance[RP]
         current = _contract_sha(acceptance, _read(ROOT, G))
         history = policy['evaluationContractHistory']
         old = history[0]['sha256']
@@ -3344,7 +3366,7 @@ class ProductControlTests(unittest.TestCase):
         widened['evaluationContractHistory'][-1]['preservedTaskIds'].append('GT-01')
         self.an(_evaluation_contracts(widened, 'GT-19', current))
         changed_a = _clone(acceptance)
-        changed_policy = changed_a['representativeBehaviorPolicy']
+        changed_policy = changed_a[RP]
         changed_policy['releaseDecisionRule'] += ' Unrelated future semantic change.'
         changed_current = _contract_sha(
             changed_a, _read(ROOT, G),
@@ -3394,7 +3416,7 @@ class ProductControlTests(unittest.TestCase):
                    side_effect=subprocess.CalledProcessError(1, 'git')):
             self.af(amendments())
         changed_a = _clone(acceptance)
-        changed_a['representativeBehaviorPolicy'][
+        changed_a[RP][
             'releaseDecisionRule'
         ] += ' Unreviewed semantic expansion.'
         changed_contract = (
@@ -3670,7 +3692,7 @@ class ProductControlTests(unittest.TestCase):
     def test_failed_sample_narrows_claim(self):
         with _fixture() as root:
             acceptance = _read(root, A)
-            acceptance['representativeBehaviorPolicy']['historicalEvidence'][2][
+            acceptance[RP]['historicalEvidence'][2][
                 'claim'
             ] = 'overclaim'
             _write(root, A, acceptance)
@@ -3698,7 +3720,7 @@ class ProductControlTests(unittest.TestCase):
                           retainedBehaviorExclusions=['GT-07:stale exclusion']))
         self.rejected(
             A, 'historicalTaskContracts', lambda v: v[
-                'representativeBehaviorPolicy'
+                RP
             ]['historicalTaskContracts']['GT-07'].update(
                 goldenTaskSha256='0' * 64
             )
@@ -3740,7 +3762,7 @@ class ProductControlTests(unittest.TestCase):
         a,g=_read(ROOT,A),_read(ROOT,G)
         r3 = _find(a['criteria'], 'id', 'R3')
         r3['assessment'] = 'verified'
-        required = a['representativeBehaviorPolicy']['requiredTaskIdsForRelease']
+        required = a[RP]['requiredTaskIdsForRelease']
         e=representative_sample_errors(
             ROOT,a,required,
             g,lambda r,p,_:_read(r,p),True)
@@ -3956,7 +3978,7 @@ class ProductControlTests(unittest.TestCase):
             (1, ('increment', 'closeoutSnapshot',
                  'evaluationContractSha256'), 7),
             (2, ('criteria',), 'not-a-list'),
-            (2, ('representativeBehaviorPolicy', 'claimCeiling'), []),
+            (2, (RP, 'claimCeiling'), []),
         )
         with patch(
             'yiyuan_accord.control._snapshot_v1_projection_package_errors',
@@ -3985,7 +4007,7 @@ class ProductControlTests(unittest.TestCase):
                 'projection package ids are invalid',
             )
         malformed_evidence = list(_clone(exact_documents))
-        malformed_evidence[2]['representativeBehaviorPolicy'][
+        malformed_evidence[2][RP][
             'historicalEvidence'
         ][0]['sha256'] = 7
         with patch(

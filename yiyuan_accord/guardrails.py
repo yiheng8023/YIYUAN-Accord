@@ -600,7 +600,7 @@ def validate_host_projection(
         "claude-code": {"marketplace"},
     }
     expected_shape = _PROJECTION_FIELDS | projection_fields.get(adapter_id, set())
-    if adapter_id not in {"codex", "claude-code"} or not _exact(projection, expected_shape):
+    if adapter_id not in ("codex", "claude-code") or not _exact(projection, expected_shape):
         errors.append(f"{prefix} program projection shape is invalid")
     manifest_locator, marketplace_locator = projection.get("manifest"), projection.get("marketplace")
     contract_locator, skill_locator = projection.get("contract"), projection.get("skill")
@@ -1004,7 +1004,7 @@ def release_procedure_errors(
         return ["program.releaseProcedure required candidate systems are invalid"]
     if procedure.get("assetPolicy") != "no-attached-assets":
         return ["program.releaseProcedure.assetPolicy must be no-attached-assets"]
-    if procedure.get("releaseChannel") not in {"full-release", "public-preview"}:
+    if procedure.get("releaseChannel") not in ("full-release", "public-preview"):
         return ["program.releaseProcedure.releaseChannel is invalid"]
     surfaces = procedure.get("surfaceMarkers")
     if not _exact(surfaces, RELEASE_SURFACES):
