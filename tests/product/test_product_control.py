@@ -682,7 +682,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-schema-v6-replay-verified-reacceptance-complete-independent-review-active',
+            'gt20-schema-v6-review-correction-replay-pending',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -842,14 +842,13 @@ class ProductControlTests(unittest.TestCase):
         )
         self.ae(
             suite['status'],
-            'historical-source-complete-live-carrier-current-schema-v6-host-'
-            'activation-and-failed-update-recovery-verified-reacceptance-'
-            'complete-independent-review-active',
+            'historical-source-complete-live-carrier-schema-v6-review-'
+            'correction-replay-pending',
         )
         for marker in (
             'Frozen 0febb415 completed',
-            'affected surfaces are reaccepted',
-            'four fresh independent exact-tree',
+            'affected-surface reacceptance',
+            'four fresh independent product',
             'candidate or release readiness',
         ):
             self.ai(marker, suite['executionClaimLimit'])
@@ -1173,7 +1172,6 @@ class ProductControlTests(unittest.TestCase):
             self.has(
                 _errors(root),
                 'exact package lifecycle GT-20 subject is invalid',
-                'exact package evidence record contract is invalid: subjects',
             )
 
     def test_provisional_source_contract_is_required_while_r3_is_planned(self):
@@ -1459,7 +1457,7 @@ class ProductControlTests(unittest.TestCase):
         for stages in (program['increment']['fourSurfaceMapping']['process']['orderedSteps'],
                        program['increment']['workItems'][0]['closeoutSequence']):
             self.ae([step['state'] for step in stages[-3:]],
-                             ['completed', 'completed', 'active'])
+                             ['active', 'pending', 'pending'])
         active = '\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
             'README.md', 'README.zh-CN.md', P, 'product/reshaping-guidance.json',
             'docs/architecture.md', 'docs/operations/CONTINUATION.md',
@@ -1469,7 +1467,7 @@ class ProductControlTests(unittest.TestCase):
             r'run gt-20 next|(keep the selected current component set) '
             r'and \1',
             active, re.IGNORECASE))
-        self.ai('affected-surface reacceptance', active)
+        self.ai('corrected replay', active)
 
     def test_reference_core_is_policy_driven_and_fail_closed(self):
         minimal, native = 'minimal-composition', 'native-no-add'
@@ -2385,10 +2383,11 @@ class ProductControlTests(unittest.TestCase):
         prior = prior_program['increment']['closeoutSnapshot']
         self.ae(_snapshot_v2_transition_errors(node, prior), [])
         self.ae(prior['replay']['evidenceState'], 'pending')
-        self.ae(node['replay']['evidenceState'], 'verified')
+        self.ae(node['replay']['evidenceState'], 'pending')
+        self.an(node['replay']['evidenceRef'])
         self.ae(
-            node['replay']['evidenceRef'],
-            'evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json',
+            node['replay']['correctionId'],
+            'independent-evidence-recomputability-and-portable-path-privacy-v2',
         )
         for field in (
             'earliestAffectedBoundary', 'invalidatedTaskIds',
@@ -2397,13 +2396,43 @@ class ProductControlTests(unittest.TestCase):
             self.ae(node['replay'][field], prior['replay'][field])
         self.ae(
             node['predecessorSnapshotRef'],
-            '661b24a1a7944e1eb66c15f8a5925e6787676856:'
+            '644e01a86a2870c358774d82080a2d916d00251c:'
             'product/program.json#/increment/closeoutSnapshot',
+        )
+        prior_predecessor = prior['predecessorSnapshotRef'].split(':', 1)[0]
+        _, old_program, *_ = _snapshot_documents(
+            ROOT, '661b24a1a7944e1eb66c15f8a5925e6787676856',
+        )
+        self.ae(
+            _snapshot_v2_transition_errors(
+                prior, old_program['increment']['closeoutSnapshot'],
+            ),
+            [],
+        )
+        review_verified = _clone(node)
+        review_verified['replay'].update(
+            evidenceState='verified',
+            evidenceRef=(
+                'evals/evidence/2026-09-02-v310-gt20-'
+                'exact-package-v4-source.json'
+            ),
+        )
+        self.ae(
+            _snapshot_v2_transition_errors(review_verified, node),
+            [],
         )
 
         changed = _clone(program)
         changed_node = changed['increment']['closeoutSnapshot']
         changed_node['replay']['preservedTaskIds'] = []
+        self.has(
+            _snapshot_v2_node_errors(changed, acceptance),
+            'revision-bound v2 replay boundary is invalid',
+        )
+        changed = _clone(program)
+        changed['increment']['closeoutSnapshot']['replay'][
+            'correctionId'
+        ] = 'unbound-correction'
         self.has(
             _snapshot_v2_node_errors(changed, acceptance),
             'revision-bound v2 replay boundary is invalid',
@@ -2471,23 +2500,9 @@ class ProductControlTests(unittest.TestCase):
                 lifecycle['schema'],
                 'yiyuan-accord-exact-package-evidence-lifecycle/v6',
             )
-            self.ae(lifecycle['state'], 'verified')
-            self.ae(
-                lifecycle['subjectRevision'],
-                '661b24a1a7944e1eb66c15f8a5925e6787676856',
-            )
-            self.ae(lifecycle['evidence'], {
-                'locator': (
-                    'evals/evidence/2026-09-02-v310-gt20-'
-                    'exact-package-v4-source.json'
-                ),
-                'sha256': (
-                    'f9e6b9a8ce400d0ea98a25edba932d076ae80f2c7b95c3ba0d9a35a9154751f9'
-                ),
-                'evaluatedRevision': (
-                    '661b24a1a7944e1eb66c15f8a5925e6787676856'
-                ),
-            })
+            self.ae(lifecycle['state'], 'pending')
+            self.an(lifecycle.get('subjectRevision'))
+            self.an(lifecycle['evidence'])
             self.ae(
                 lifecycle['earliestAffectedBoundary'],
                 'exact-package-host-activation-and-mutation-phase-failed-'
@@ -2495,7 +2510,7 @@ class ProductControlTests(unittest.TestCase):
             )
             self.ae(
                 lifecycle['predecessorLifecycleRef'],
-                '661b24a1a7944e1eb66c15f8a5925e6787676856:'
+                '644e01a86a2870c358774d82080a2d916d00251c:'
                 'product/program.json#/increment/exactPackageEvidenceLifecycle',
             )
             self.ae(
@@ -2515,21 +2530,6 @@ class ProductControlTests(unittest.TestCase):
                 return errors
 
             self.ae(validate(lifecycle), [])
-            snapshot_or_worktree = product_control._snapshot_or_worktree_bytes
-
-            def fail_runner_snapshot(root_value, locator, revision=None):
-                if locator == 'scripts/run-gt20-exact-package.ps1':
-                    raise ValueError('runner unavailable')
-                return snapshot_or_worktree(root_value, locator, revision)
-
-            with patch(
-                'yiyuan_accord.control._snapshot_or_worktree_bytes',
-                side_effect=fail_runner_snapshot,
-            ):
-                self.has(
-                    validate(lifecycle),
-                    'exact package evidence record contract is invalid: runner',
-                )
             wrong_predecessor = _clone(lifecycle)
             wrong_predecessor['predecessorLifecycleRef'] = (
                 '0' * 40
@@ -2547,16 +2547,9 @@ class ProductControlTests(unittest.TestCase):
             )
             for mutate in (
                 lambda value: value.__setitem__('evidence', {}),
-                lambda value: value.__setitem__('state', 'pending'),
+                lambda value: value.__setitem__('state', 'verified'),
                 lambda value: value.__setitem__('priorEvidenceRef', 'missing'),
                 lambda value: value.__setitem__('subjectRevision', '0' * 40),
-                lambda value: value['evidence'].__setitem__(
-                    'locator', 'evals/evidence/wrong.json',
-                ),
-                lambda value: value['evidence'].__setitem__('sha256', '0' * 64),
-                lambda value: value['evidence'].__setitem__(
-                    'evaluatedRevision', '0' * 40,
-                ),
             ):
                 changed = _clone(lifecycle)
                 mutate(changed)
@@ -2564,6 +2557,9 @@ class ProductControlTests(unittest.TestCase):
 
     def test_public_evidence_privacy_guard_rejects_host_session_material(self):
         private_values = (
+            {'argv': ['tool', r'D:\Org\PrivateUser\workspace\secret.json']},
+            {'stdout': r'opened \\private-server\hidden-share\secret.txt'},
+            {'stderr': 'opened /srv/private-user/secret.txt'},
             {'stdout': (
                 '{"serverName":"private-account",'
                 '"installationId":"1b0665a0-a7f4-43b0-b9c4-962d8f33561c"}'
@@ -2591,6 +2587,11 @@ class ProductControlTests(unittest.TestCase):
 
         safe = {
             'stdout': '', 'stderr': '',
+            'officialUrl': 'https://platform.openai.com/docs/models',
+            'jsonPointer': 'product/program.json#/increment/closeoutSnapshot',
+            'repositoryLocator': 'plugins/yiyuan-accord-codex/adapter.json',
+            'commandSwitches': ['/d', '--output=/relative-not-absolute'],
+            'hostExecutable': '%HOST_PATH%/git.exe',
             'activationReceipt': {
                 'rawStreamPolicy': (
                     'digest-only-private-host-transcript-not-retained'
@@ -2776,6 +2777,19 @@ class ProductControlTests(unittest.TestCase):
         self.ae(proof['forbiddenFailureCategory'], 'source-path-absent')
         self.ae(proof['observationScope'], 'candidate-bound-staging-route')
         self.ae(
+            proof['candidateIdentityAlgorithm'],
+            'ordinal-compact-json-package-file-facts-v1',
+        )
+        self.ae(
+            proof['publicPathPolicy'],
+            'root-marker-or-host-leaf-no-unmarked-absolute-path',
+        )
+        self.ae(proof['requiredReceiptFacts'], [
+            'candidateIdentityDigest', 'observedLocators',
+            'observedLocatorSetSha256', 'eventRelativePaths',
+            'eventPathSetSha256',
+        ])
+        self.ae(
             proof['allowedPathScopes'],
             ['exact-target', 'verified-temp-sibling'],
         )
@@ -2843,6 +2857,11 @@ class ProductControlTests(unittest.TestCase):
         )
         self.ai("$record.stdout = ''", runner)
         self.ai("observationScope = 'candidate-bound-staging-route'", runner)
+        self.ai('candidateIdentityDigest = $candidateIdentityDigest', runner)
+        self.ai('observedLocators = @($observedLocators)', runner)
+        self.ai('eventRelativePaths = @($eventRelativePaths)', runner)
+        self.ai('eventPathCount = $eventRelativePaths.Count', runner)
+        self.ai('Get-FileMapIdentityDigest $expectedMap', runner)
         self.ai('unexpectedSiblingDelta = @()', runner)
         self.ai('postRepairAbsent = $true', runner)
         self.ani(
@@ -3013,10 +3032,18 @@ class ProductControlTests(unittest.TestCase):
                 'pathScope': 'exact-target',
                 'targetVersion': '3.1.0', 'preexisting': False,
                 'postCommandAbsent': True,
-                'candidateIdentityDigest': 'b' * 64,
+                'candidateIdentityDigest': '',
                 'observedLocatorCount': 2,
-                'observedLocatorSetSha256': 'c' * 64,
-                'eventPathSetSha256': 'a' * 64,
+                'observedLocators': [
+                    '.codex-plugin/plugin.json', 'adapter.json',
+                ],
+                'observedLocatorSetSha256': '',
+                'eventPathCount': 4,
+                'eventRelativePaths': [
+                    '.', '.codex-plugin', '.codex-plugin/plugin.json',
+                    'adapter.json',
+                ],
+                'eventPathSetSha256': '',
                 'unexpectedSiblingDelta': [],
                 'eventKinds': ['Changed', 'Created'],
             },
@@ -3035,6 +3062,41 @@ class ProductControlTests(unittest.TestCase):
                 'version': '3.0.1', 'enabled': True,
             }])},
         }
+        behavior_subject = {
+            'plugins/yiyuan-accord-codex/.codex-plugin/plugin.json': '1' * 64,
+            'plugins/yiyuan-accord-codex/adapter.json': '2' * 64,
+            'plugins/yiyuan-accord-codex/NOTICE': '3' * 64,
+            'plugins/yiyuan-accord-claude/.claude-plugin/plugin.json': '4' * 64,
+            'plugins/yiyuan-accord-claude/adapter.json': '5' * 64,
+            'plugins/yiyuan-accord-claude/NOTICE': '6' * 64,
+        }
+        for adapter, role in (
+            ('codex', 'accordCodexFailedUpdateAfterStaging'),
+            ('claude', 'accordClaudeFailedUpdateAfterStaging'),
+        ):
+            receipt = commands[role]['mutationReceipt']
+            manifest = f'.{adapter}-plugin/plugin.json'
+            receipt['observedLocators'] = [manifest, 'adapter.json']
+            receipt['eventRelativePaths'] = [
+                '.', f'.{adapter}-plugin', manifest, 'adapter.json',
+            ]
+            receipt['eventCount'] = len(receipt['eventRelativePaths'])
+            receipt['eventPathCount'] = len(receipt['eventRelativePaths'])
+            receipt['candidateIdentityDigest'] = (
+                product_control._candidate_package_identity_sha256(
+                    behavior_subject, adapter,
+                )
+            )
+            receipt['observedLocatorSetSha256'] = (
+                product_control._canonical_json_sha256(
+                    receipt['observedLocators'],
+                )
+            )
+            receipt['eventPathSetSha256'] = (
+                product_control._canonical_json_sha256(
+                    receipt['eventRelativePaths'],
+                )
+            )
         commands['accordClaudeFailedUpdateAfterStaging']['mutationReceipt'][
             'postCommandAbsent'
         ] = False
@@ -3071,15 +3133,38 @@ class ProductControlTests(unittest.TestCase):
             },
         }
         self.at(product_control._gt20_v4_failed_update_receipts_valid(
-            commands, fixture
+            commands, fixture, behavior_subject
         ))
         drifted = _clone(commands)
         drifted['accordClaudeFailedUpdateAfterStaging']['mutationReceipt'][
             'stagingObserved'
         ] = False
         self.ae(product_control._gt20_v4_failed_update_receipts_valid(
-            drifted, fixture
+            drifted, fixture, behavior_subject
         ), False)
+        for role in (
+            'accordCodexFailedUpdateAfterStaging',
+            'accordClaudeFailedUpdateAfterStaging',
+        ):
+            for field in (
+                'candidateIdentityDigest', 'observedLocatorSetSha256',
+                'eventPathSetSha256',
+            ):
+                with self.subTest(role=role, field=field):
+                    drifted = _clone(commands)
+                    drifted[role]['mutationReceipt'][field] = '0' * 64
+                    self.af(
+                        product_control._gt20_v4_failed_update_receipts_valid(
+                            drifted, fixture, behavior_subject,
+                        )
+                    )
+        drifted = _clone(commands)
+        drifted['accordCodexFailedUpdateAfterStaging']['mutationReceipt'][
+            'eventRelativePaths'
+        ].append('../foreign')
+        self.af(product_control._gt20_v4_failed_update_receipts_valid(
+            drifted, fixture, behavior_subject,
+        ))
 
     def test_gt20_claude_identity_accepts_npm_and_native_layouts(self):
         npm = {

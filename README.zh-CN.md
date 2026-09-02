@@ -1,10 +1,10 @@
 # YIYUAN Accord
 
-把用户想要的结果推进到可验证、可恢复的闭环，同时不让用户管理 Agent 的工具、对话切换或内部工序。
+一份轻量协作契约：把用户想要的结果推进到可验证、可恢复的闭环，同时不让用户管理 Agent 的工具、对话切换或内部工序。
 
 YIYUAN Accord 是一个开放、Agent 中立的人机协作系统。
 
-它帮助 Agent 始终围绕当前目标，在工作变化时动态调整，并以可验证的结果、明确的未知和受控清理完成收尾。
+它要求 Agent 始终围绕当前目标，在工作变化时动态调整，并以与结论相称的证据、明确的未知和受控清理完成收尾。
 
 它可以使用不同宿主与机制。具体工具只是路线的一部分，不是产品本身。
 
@@ -87,6 +87,8 @@ Accord 不是每个任务都必须执行的固定流程。简单请求遇到健�
 
 下列不可变命令指向 `v3.1.0`，只有对应公开 Release 已存在时才可使用。待发布期间，请把相同命令中的精确不可变 ref 改为 `v3.0.1`；不要使用持续移动的 `main`。
 
+在具备相应能力的 Agent 宿主中，只需给出一次生命周期意图，例如：“从精确的 `VERSION_TAG` 安装 YIYUAN Accord，保留无关宿主状态，验证最终登记；遇到新的信任或权限边界时再停下询问。”下列命令块是透明的运维参考和人工后备路线，不要求用户逐个组装 Accord 的内部组件。
+
 本文中的 GUI 标签是 **v3.0.1 最后验证的历史路径**，不是当前客户端入口声明。
 
 后续客户端更新后，Codex、Claude 与 ChatGPT 的 GUI 入口都保持未知，直到在不改设置的前提下重新查看实际宿主。
@@ -125,7 +127,7 @@ codex plugin add yiyuan-accord-codex@yiyuan-accord
 Claude Code 持久安装：
 
 ```powershell
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.1.0 --scope user
+claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.1.0" --scope user
 claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 ```
 
@@ -148,6 +150,8 @@ Hook 适配器不读取私密会话原文，不写持久状态，也不启动后
 `startup` 与 `clear` 保持静默；受支持的 `compact` 与 `resume` 事件只提供非权威连续性提示。
 
 这些提示必须先重新查看当前允许的状态，才能参与决策。
+
+Hook 只能识别对话载体事件，不能理解任务语义：受支持的 `compact` 或 `resume` 即使发生在后续简单请求之前，也可能加入这段有界提示。它不读取对话正文，也不保存跨事件状态。简单路线在 `compact` 或 `resume` 后的干扰仍未经验证，因此明确披露，不能当作零干扰。
 
 安装、启用和可见不等于激活。激活本身也不证明 Agent 已使用、执行完成、结果成立、独立证据充分或产生价值。
 
@@ -291,7 +295,7 @@ Accord 不会静默收集或上传遥测数据。
 
 另有仓库证据支持无副作用参考内核和下述有界宿主场景，但它们不扩大上述五项公开声明。
 
-有界宿主证据只覆盖一条事件到结果路线、一条保持静默的充分路线、一次已验证的新对话交接，以及一次性非空 Windows Codex 与 Claude 重放中的历史生命周期子事实。精确审查切点 `c5a0668` 否定了宽泛 GT-20 结论：直接调用 Node runtime 不能证明宿主激活，源路径缺失的 preflight 拒绝也不能证明变更阶段的失败更新恢复。因此 GT-20 已按 schema-v6 overlay 重开；受影响面重新验收与四项新鲜独立审查均为 pending。
+有界宿主证据只覆盖一条事件到结果路线、一条保持静默的充分路线、一次已验证的新对话交接，以及一次性非空 Windows Codex 与 Claude 重放中的历史生命周期子事实。精确审查切点 `c5a0668` 否定了宽泛 GT-20 结论；后续未发布的 schema-v6 重放又因权威绑定、暂存摘要可重算性和跨平台路径隐私三项问题被否决。纠正后的重放、受影响面重新验收和四项新鲜独立精确树审查仍待完成。这不证明自动回滚、当前客户端行为、跨系统等价、产品价值、仓库候选或发布就绪。
 
 已观察的 `bypass_hook_trust` / `bypassPermissions` 路线只是测试控制，不是生产信任路线。
 
@@ -323,6 +327,8 @@ Accord 不会静默收集或上传遥测数据。
 
 请通过执行安装的同一入口确认生命周期状态。
 
+优先路线是每次更新、回滚或移除只由用户给出一次意图，由 Agent 查看当前宿主、把受支持的原生生命周期作为一个有界操作执行，保留外来状态、核验最终状态，并只在真正出现新信任或权限决定时返回。下列命令用于审计和人工恢复，不把内部组件顺序转嫁给用户。
+
 上次验证 v3.0.1 时，使用过 `codex plugin list --json`、`claude plugin list --json` 与 **Customize > Plugins**。
 
 不同视图显示不同，是应记录的宿主事实，不自动证明另一处安装失败。
@@ -347,7 +353,7 @@ Claude Code 更新或回滚时，先移除当前用户级包和 marketplace，�
 ```powershell
 claude plugin uninstall yiyuan-accord-claude@yiyuan-accord --scope user
 claude plugin marketplace remove yiyuan-accord --scope user
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@VERSION_TAG --scope user
+claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#VERSION_TAG" --scope user
 claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 ```
 
@@ -380,6 +386,8 @@ python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 ```
 
 当前 Release CI 覆盖 CPython 3.10–3.14。
+
+类 Unix 环境若只提供 `python3`，只需把上述命令的启动器替换为 `python3`；Accord 不要求额外创建 `python` 别名。Release 工作流会显式配置 Node.js 24 来测试打包 Hook，不依赖 runner 镜像碰巧自带的版本。
 
 该矩阵只是当前兼容性证据，不是永久版本白名单，也不是 Accord 产品身份的一部分。
 

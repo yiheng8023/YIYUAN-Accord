@@ -410,10 +410,14 @@ function ConvertTo-PortablePath {
     if ($item[0] -and $value.StartsWith(
         [System.IO.Path]::GetFullPath($item[0]),
         [System.StringComparison]::OrdinalIgnoreCase)) {
-      return $item[1] + $value.Substring([System.IO.Path]::GetFullPath($item[0]).Length)
+      $leaf = [System.IO.Path]::GetFileName($value)
+      return if ($leaf) { $item[1] + '/' + $leaf } else { $item[1] }
     }
   }
-  return $value
+  if ([System.IO.Path]::IsPathFullyQualified($value)) {
+    return '%HOST_PATH%/' + [System.IO.Path]::GetFileName($value)
+  }
+  return $value.Replace('\\', '/')
 }
 
 function Get-PrivateRootPattern {
@@ -440,6 +444,23 @@ function Get-TextSha256 {
       [System.Text.Encoding]::UTF8.GetBytes($Value)
     )
   ).ToLowerInvariant()
+}
+
+function ConvertTo-CanonicalStringListJson {
+  param([Parameter(Mandatory = $true)][AllowEmptyCollection()][string[]]$Values)
+  $ordered = [string[]]@($Values)
+  [Array]::Sort($ordered, [System.StringComparer]::Ordinal)
+  return ConvertTo-Json -InputObject @($ordered) -Compress
+}
+
+function Get-FileMapIdentityDigest {
+  param([Parameter(Mandatory = $true)][System.Collections.IDictionary]$Map)
+  $locators = [string[]]@($Map.Keys | ForEach-Object { [string]$_ })
+  [Array]::Sort($locators, [System.StringComparer]::Ordinal)
+  $facts = @($locators | ForEach-Object {
+    [ordered]@{ locator = $_; sha256 = [string]$Map[$_] }
+  })
+  return Get-TextSha256 (ConvertTo-Json -InputObject @($facts) -Compress)
 }
 
 function ConvertTo-PublicEvidenceText {
@@ -479,6 +500,10 @@ function Test-PrivateEvidenceText {
   return (
     $Value -match '(?i)[a-z]:(?:[\\/]+)(?:users|documents and settings)(?:[\\/]+)' -or
     $Value -match '(?i)(?:^|[^a-z0-9])[a-z]--(?:users|documents-and-settings)-' -or
+    $Value -match '(?i)(?:^|[\s"''=(:,\[])[a-z]:[\\/]' -or
+    $Value -match '(?:^|[\s"''=(:,\[])[\\]{2,}[^\\/\s"'']+[\\/]' -or
+    $Value -match '(?i)(?:^|[\s"''=(:,\[])file:(?:/{1,3}|[\\]{1,3})' -or
+    $Value -match '(?:^|[\s"''=(:,\[])/(?!/)(?:(?:home|users|private|tmp|var|opt|usr|etc|root|mnt|volumes|srv)(?:/|$)|(?:[^/\s"''<>]+/)+[^/\s"''<>]+)' -or
     $Value -match '(?i)["''](?:hook_id|hookId|installationId|memory_paths|messaging_socket_path|serverName|session_id|sessionId|threadId|turnId|uuid)["'']\s*:'
   )
 }
@@ -1532,9 +1557,7 @@ function Invoke-UpdateWithCandidateLock {
     throw 'Candidate staging target must not preexist the failed update.'
   }
   $expectedMap = Get-FileMap $expectedPackage
-  $candidateIdentityDigest = Get-TextSha256 (
-    $expectedMap | ConvertTo-Json -Compress
-  )
+  $candidateIdentityDigest = Get-FileMapIdentityDigest $expectedMap
   $beforeMap = Get-FileMap $stagingParent
   $beforeChildren = @(Get-ChildItem -LiteralPath $stagingParent -Force |
     ForEach-Object { $_.FullName })
@@ -1701,6 +1724,10 @@ function Invoke-UpdateWithCandidateLock {
   }
   $eventRelativePaths = @($selectedRoute.relativePayload)
   $observedLocators = @($selectedRoute.observedFiles | Sort-Object -Unique)
+  $eventRelativePaths = [string[]]@($eventRelativePaths | Sort-Object -Unique)
+  [Array]::Sort($eventRelativePaths, [System.StringComparer]::Ordinal)
+  $observedLocators = [string[]]@($observedLocators)
+  [Array]::Sort($observedLocators, [System.StringComparer]::Ordinal)
   $result['mutationReceipt'] = [ordered]@{
     stagingObserved = $true
     eventCount = $selectedRoute.facts.Count
@@ -1711,11 +1738,14 @@ function Invoke-UpdateWithCandidateLock {
     postCommandAbsent = -not (Test-Path -LiteralPath $selectedRoute.ownedRoot)
     candidateIdentityDigest = $candidateIdentityDigest
     observedLocatorCount = $observedLocators.Count
+    observedLocators = @($observedLocators)
     observedLocatorSetSha256 = Get-TextSha256 (
-      $observedLocators | ConvertTo-Json -Compress
+      ConvertTo-CanonicalStringListJson $observedLocators
     )
+    eventPathCount = $eventRelativePaths.Count
+    eventRelativePaths = @($eventRelativePaths)
     eventPathSetSha256 = Get-TextSha256 (
-      $eventRelativePaths | ConvertTo-Json -Compress
+      ConvertTo-CanonicalStringListJson $eventRelativePaths
     )
     unexpectedSiblingDelta = @()
     eventKinds = @($selectedRoute.facts | ForEach-Object {
@@ -1741,8 +1771,14 @@ function Get-FileMap {
   $reparse = @(Get-ChildItem -LiteralPath $resolved -Recurse -Force |
     Where-Object { $_.Attributes -band [System.IO.FileAttributes]::ReparsePoint })
   if ($reparse.Count -ne 0) { throw "File map root contains a reparse point: $Root" }
-  foreach ($file in Get-ChildItem -LiteralPath $resolved -Recurse -File -Force |
-      Sort-Object FullName) {
+  $files = [object[]]@(Get-ChildItem -LiteralPath $resolved -Recurse -File -Force)
+  [Array]::Sort($files, [System.Comparison[object]]{
+    param($left, $right)
+    [System.StringComparer]::Ordinal.Compare(
+      [string]$left.FullName, [string]$right.FullName
+    )
+  })
+  foreach ($file in $files) {
     $relative = [System.IO.Path]::GetRelativePath($resolved, $file.FullName).Replace('\', '/')
     $map[$relative] = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
   }

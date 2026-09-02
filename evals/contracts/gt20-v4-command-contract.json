@@ -77,6 +77,15 @@
     "minimumAcceptedPhase": "host-accepted-update-with-task-owned-staging-observed",
     "forbiddenFailureCategory": "source-path-absent",
     "observationScope": "candidate-bound-staging-route",
+    "candidateIdentityAlgorithm": "ordinal-compact-json-package-file-facts-v1",
+    "publicPathPolicy": "root-marker-or-host-leaf-no-unmarked-absolute-path",
+    "requiredReceiptFacts": [
+      "candidateIdentityDigest",
+      "observedLocators",
+      "observedLocatorSetSha256",
+      "eventRelativePaths",
+      "eventPathSetSha256"
+    ],
     "allowedPathScopes": [
       "exact-target",
       "verified-temp-sibling"

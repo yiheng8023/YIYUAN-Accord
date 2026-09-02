@@ -1,10 +1,10 @@
 # YIYUAN Accord
 
-Turn a desired outcome into a verified, recoverable finish—without forcing the user to manage the Agent's tools, conversation handoffs, or internal mechanics.
+A thin collaboration contract for moving a desired outcome toward a verified, recoverable finish without making the user manage the Agent's tools, conversation handoffs, or internal mechanics.
 
 YIYUAN Accord is an open, Agent-neutral collaboration system.
 
-It helps an Agent stay aligned with the current goal, adapt when the work changes, and finish with a verified result, explicit unknowns, and controlled cleanup.
+It asks an Agent to stay aligned with the current goal, adapt when the work changes, and close with proportionate evidence, explicit unknowns, and controlled cleanup.
 
 It can use different hosts and mechanisms. Specific tools are parts of a route, not the product by themselves.
 
@@ -87,6 +87,8 @@ It does not replace domain expertise, grant authority to an Agent, guarantee aut
 
 The immutable commands below target `v3.1.0`. Use them only after its matching public Release exists. While it is pending, use the same commands with the exact immutable ref changed to `v3.0.1`; do not use moving `main`.
 
+In a capable Agent host, give one lifecycle intent, for example: “Install YIYUAN Accord from the exact `VERSION_TAG`, preserve unrelated host state, verify the resulting registration, and stop if new trust or authority is required.” The command blocks below are transparent operator references and manual fallbacks; they are not a requirement for the user to assemble Accord's internal components one by one.
+
 The GUI labels in this README are **v3.0.1 historical routes**, not current-entry claims.
 
 After later client updates, Codex, Claude, and ChatGPT GUI entry points are unknown until the actual host is inspected again without changing its settings.
@@ -125,7 +127,7 @@ Do not assume that route, wording, or location remains current after a client up
 For a persistent Claude Code installation:
 
 ```powershell
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@v3.1.0 --scope user
+claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.1.0" --scope user
 claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 ```
 
@@ -148,6 +150,8 @@ The Hook adapter does not read private conversation transcripts, write durable s
 `startup` and `clear` remain silent. Supported `compact` and `resume` events provide only non-authoritative continuity hints.
 
 Those hints require the current permitted state to be inspected again before they can support a decision.
+
+The Hook trigger is carrier-event-aware, not task-semantic-aware: a supported `compact` or `resume` event can add this bounded hint even when the next request is simple. It reads no transcript and keeps no cross-event state. Simple-route interference after `compact` or `resume` remains unverified and is disclosed rather than treated as zero.
 
 Installation, enablement, and visibility do not imply activation. Activation does not by itself prove Agent use, execution, outcome, independent evidence, or value.
 
@@ -291,7 +295,7 @@ The exact public claim ceiling contains five finite statements:
 
 Separate repository evidence includes a side-effect-free reference core and the bounded host scenarios below. It does not expand those five public claims.
 
-Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and historical lifecycle subfacts from one disposable non-empty Windows Codex-and-Claude replay. Exact review cut `c5a0668` rejected the broad GT-20 claim: direct Node runtime calls do not prove host activation, and a source-absent preflight rejection does not prove mutation-phase failed-update recovery. GT-20 is therefore active on the schema-v6 overlay; affected-surface reacceptance and four fresh independent reviews are pending.
+Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and historical lifecycle subfacts from one disposable non-empty Windows Codex-and-Claude replay. Exact review cut `c5a0668` rejected the broad GT-20 claim. A later unpublished schema-v6 replay was also invalidated for authority binding, staging recomputability and portable path privacy. Corrected replay, affected-surface reacceptance and four fresh independent exact-tree reviews remain pending. This does not prove automatic rollback, current-desktop behavior, cross-OS equivalence, product value, a repository candidate, or release readiness.
 
 The observed `bypass_hook_trust` / `bypassPermissions` path was a test control, not a production trust route.
 
@@ -323,6 +327,8 @@ The GUI lifecycle labels below remain historical observations. Inspect the curre
 
 Confirm lifecycle state through the same entry point that performed installation.
 
+The preferred Agent-mediated route is one user intent per update, rollback, or removal. The Agent should inspect the current host, execute the supported native lifecycle as one bounded operation, preserve foreign state, verify post-state, and return only for a real trust or authority decision. The commands below expose that operation for audit and manual recovery; they do not turn internal component sequencing into user work.
+
 When v3.0.1 was last verified, useful state views included `codex plugin list --json`, `claude plugin list --json`, and **Customize > Plugins**.
 
 A difference between those views is observed host state, not automatic proof that another installation failed.
@@ -347,7 +353,7 @@ To update or roll back Claude Code, remove its current user-scope package and ma
 ```powershell
 claude plugin uninstall yiyuan-accord-claude@yiyuan-accord --scope user
 claude plugin marketplace remove yiyuan-accord --scope user
-claude plugin marketplace add yiheng8023/YIYUAN-Accord@VERSION_TAG --scope user
+claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#VERSION_TAG" --scope user
 claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 ```
 
@@ -380,6 +386,8 @@ python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 ```
 
 The current Release CI exercises CPython 3.10–3.14.
+
+On Unix-like systems that expose only `python3`, replace only the launcher token above with `python3`; Accord does not require a separate `python` alias. The Release workflow explicitly provisions Node.js 24 for the packaged Hook tests instead of relying on an incidental runner image.
 
 That matrix is current compatibility evidence, not a permanent version whitelist or part of Accord's identity.
 

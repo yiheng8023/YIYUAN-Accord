@@ -42,10 +42,12 @@ created resources and accepted both the bound npm-shim and official native
 Claude executable layouts. Exact external review cut `c5a0668` then rejected
 the broad GT-20 claim because direct Node runtime calls did not prove host
 activation and source-absent preflight rejection did not prove mutation-phase
-failed-update recovery. Those narrower historical subfacts remain; GT-20
-schema-v6 replay is active, affected-surface reacceptance and four fresh
-independent exact-tree reviews are pending before one unchanged clean SHA may
-become the replacement candidate. Production trust,
+failed-update recovery. Those narrower historical subfacts remain. Independent
+review invalidated the unpublished schema-v6 replay for authority binding,
+staging recomputability and portable path privacy. Corrected replay,
+affected-surface reacceptance and four fresh independent exact-tree reviews
+remain pending before one unchanged clean SHA may become the replacement
+candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
 The implementation does not admit an Accord-managed Runtime, durable state
@@ -153,8 +155,8 @@ semantic authority, release or production evidence. Measured: 2026-09-01.
 
 ### Panorama and bottleneck order
 
-The reopened correction tree has 112 tracked files against the structured
-115-file ceiling. Nine
+The exact review tree has 114 tracked files against the structured 120-file
+ceiling. Nine
 Python files contain the product and tests. The three largest maintained code
 surfaces are the product-control test module, `control.py` and `evidence.py`;
 together they dominate code review, coupling and regression cost. The failed
@@ -163,10 +165,13 @@ recalibrated structured 800000-byte ceiling, leaving 47366 bytes or about 5.92
 percent. That revision-bound measurement is history, not a live size claim.
 The first schema-v6 slice recalibrated the structured ceiling to 816000 bytes
 for host activation, mutation-phase failed-update recovery and the bounded
-lineage-read cache. The independent v4 overlay, native activation and failed
-update receipt validators then measured 806997 bytes, so the active ceiling is
-minimally recalibrated to 850000 bytes, leaving 43003 bytes or about 5.06
-percent. The verifier still recomputes the active tree and requires at least
+lineage-read cache. The independent v4 overlay, native activation and failed-
+update receipt validators, privacy-minimal digest-only host receipts, candidate-
+bound staging attribution, per-locator failure diagnostics, verified-replay
+evidence batching and consolidated lineage performance and cross-platform gate
+regressions now measure 819392 bytes, so the active ceiling is 875000 bytes,
+leaving 55608 bytes or about 6.36 percent. The verifier still recomputes the
+active tree and requires at least
 five percent headroom; this increase is not general growth allowance. The
 earlier increase from the
 prior 750000-byte ceiling paid only for the
@@ -242,7 +247,9 @@ The ordered bottlenecks are:
   subfacts from one disposable Windows replay with exact Codex CLI, Claude Code
   and Node identities, but exact c5a0668 review invalidates host activation and
   mutation-phase failed-update recovery. The raw fc9c1a7 environment remains
-  invalidated as current evidence; schema-v6 GT-20 replay is pending.
+  invalidated as current evidence. Independent review also invalidated the
+  unpublished schema-v6 replay; corrected replay and reacceptance remain
+  pending, and no automatic rollback is proved.
   Desktop/ChatGPT, unmanaged-host and cross-OS lifecycle behavior remain
   pending or unknown.
 - Local WSL2 Ubuntu 26.04 on Linux 6.18 with Python 3.14.4 is an available
@@ -1023,10 +1030,11 @@ The `85a917a` source-bound whole-system reacceptance preserves these finite
 claims as history without promoting them to the changed package, production,
 cross-host, updated-client entry or release evidence. Frozen 0febb415 preserves
 only narrower bounded schema-v5 lifecycle subfacts after exact c5a0668 review
-rejected host activation and mutation-phase failed-update recovery. The current
-route is schema-v6 GT-20 replay, affected-surface reacceptance, then four fresh
-independent exact-tree reviews before any replacement candidate or exact-local
-gate.
+rejected host activation and mutation-phase failed-update recovery. Independent
+review invalidated the unpublished schema-v6 replay for authority binding,
+staging recomputability and portable path privacy. Corrected replay and
+affected-surface reacceptance precede four fresh independent exact-tree reviews
+and every replacement-candidate or exact-local gate.
 
 After the authorized tag and Release exist, one evaluator isolated from
 candidate-preparation context exercises the README installation, confirmation
@@ -1102,9 +1110,10 @@ reopened the GT-20 evaluator boundary. Exact `fc9c1a7` completed a raw replay,
 then later evaluator privacy and ownership findings invalidated it as current
 GT-20 evidence. Exact `0febb415` completed the corrected bounded schema-v5
 replay, but exact `c5a0668` review rejected its host-activation and mutation-
-phase failed-update-recovery claims. Preserve its narrower historical subfacts;
-schema-v6 GT-20 replay and affected-surface reacceptance precede four fresh
-independent exact-tree reviews. A replacement candidate does not yet exist;
+phase failed-update-recovery claims. Preserve its narrower historical subfacts.
+Independent review invalidated the unpublished schema-v6 replay; corrected
+replay, affected-surface reacceptance and four fresh independent exact-tree
+reviews remain pending. A replacement candidate does not yet exist;
 exact-local, hosted, named-human, tag, publication and public-verification gates
 remain distinct.
 

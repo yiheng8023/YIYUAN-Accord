@@ -75,6 +75,14 @@ _PRIVATE_EVIDENCE_PATH_RES = (
     re.compile(
         r"(?i)(?:^|[^a-z0-9])[a-z]--(?:users|documents-and-settings)-"
     ),
+    re.compile(r"(?i)(?:^|[\s\"'=(:,\[])[a-z]:[\\/]"),
+    re.compile(r"(?:^|[\s\"'=(:,\[])[\\]{2,}[^\\/\s\"']+[\\/]"),
+    re.compile(r"(?i)(?:^|[\s\"'=(:,\[])file:(?:/{1,3}|[\\]{1,3})"),
+    re.compile(
+        r"(?:^|[\s\"'=(:,\[])/(?!/)(?:"
+        r"(?:home|users|private|tmp|var|opt|usr|etc|root|mnt|volumes|srv)"
+        r"(?:/|$)|(?:[^/\s\"'<>]+/)+[^/\s\"'<>]+)"
+    ),
 )
 ASSESSMENTS = {"planned", "verified", "blocked", "continuing"}
 PROGRAM_STATES = {"active", "ready", "blocked"}
@@ -84,6 +92,13 @@ _SNAPSHOT_V2_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v2"
 _SNAPSHOT_V2_GT20_CORRECTION_ID = (
     "public-evidence-privacy-and-candidate-staging-attribution-v1"
 )
+_SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID = (
+    "independent-evidence-recomputability-and-portable-path-privacy-v2"
+)
+_SNAPSHOT_V2_GT20_CORRECTION_IDS = frozenset({
+    _SNAPSHOT_V2_GT20_CORRECTION_ID,
+    _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
+})
 _GT20_LIFECYCLE_PREFIX = "yiyuan-accord-exact-package-evidence-lifecycle/"
 _GT20_REPLAY_BOUNDARIES = {
     f"{_GT20_LIFECYCLE_PREFIX}v1": "complete-host-projection-package-identity",
@@ -98,6 +113,9 @@ _GT20_REPLAY_BOUNDARIES = {
         "exact-package-host-activation-and-mutation-phase-failed-update-recovery-closure",
 }
 _GT20_V6_PREDECESSOR = "c5a06688feee7e93edc58a309679594bcc32bed6"
+_GT20_V6_REVIEW_CORRECTION_PREDECESSOR = (
+    "644e01a86a2870c358774d82080a2d916d00251c"
+)
 _GT20_V5_EVIDENCE_LOCATOR = (
     "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json"
 )
@@ -172,6 +190,88 @@ def _public_evidence_contains_private_material(value):
         ):
             return True
     return False
+
+
+def _canonical_json_sha256(value):
+    """Hash the UTF-8 compact JSON form shared with the PowerShell runner."""
+
+    return sha256(json.dumps(
+        value, ensure_ascii=False, separators=(",", ":"),
+    ).encode("utf-8")).hexdigest()
+
+
+def _candidate_package_identity_sha256(behavior_subject, adapter):
+    """Derive one package file graph from the revision-bound subject map."""
+
+    if adapter not in {"codex", "claude"} or not isinstance(
+        behavior_subject, dict,
+    ):
+        return None
+    prefix = f"plugins/yiyuan-accord-{adapter}/"
+    facts = []
+    for locator, digest in behavior_subject.items():
+        if not isinstance(locator, str) or not locator.startswith(prefix):
+            continue
+        relative = locator[len(prefix):]
+        if (
+            not relative or "\\" in relative or relative.startswith("/")
+            or any(part in {"", ".", ".."} for part in relative.split("/"))
+            or SHA256_RE.fullmatch(digest or "") is None
+        ):
+            return None
+        facts.append({"locator": relative, "sha256": digest})
+    if not facts:
+        return None
+    facts.sort(key=lambda item: item["locator"])
+    return _canonical_json_sha256(facts)
+
+
+def _candidate_relative_receipt_facts_valid(
+    receipt, behavior_subject, adapter,
+):
+    expected_identity = _candidate_package_identity_sha256(
+        behavior_subject, adapter,
+    )
+    if expected_identity is None:
+        return False
+    prefix = f"plugins/yiyuan-accord-{adapter}/"
+    candidate_locators = sorted(
+        locator[len(prefix):]
+        for locator in behavior_subject
+        if isinstance(locator, str) and locator.startswith(prefix)
+    )
+    candidate_set = set(candidate_locators)
+    candidate_directories = {"."}
+    for locator in candidate_locators:
+        parts = locator.split("/")
+        candidate_directories.update(
+            "/".join(parts[:index]) for index in range(1, len(parts))
+        )
+    observed = receipt.get("observedLocators")
+    events = receipt.get("eventRelativePaths")
+    manifest = f".{adapter}-plugin/plugin.json"
+    if (
+        not isinstance(observed, list) or not observed
+        or observed != sorted(set(observed))
+        or not all(isinstance(item, str) for item in observed)
+        or not set(observed) <= candidate_set
+        or "adapter.json" not in observed or manifest not in observed
+        or receipt.get("observedLocatorCount") != len(observed)
+        or receipt.get("observedLocatorSetSha256")
+            != _canonical_json_sha256(observed)
+        or not isinstance(events, list) or not events
+        or events != sorted(set(events))
+        or not all(isinstance(item, str) for item in events)
+        or not set(events) <= candidate_set | candidate_directories
+        or set(observed) != set(events) & candidate_set
+        or receipt.get("eventPathSetSha256")
+            != _canonical_json_sha256(events)
+        or receipt.get("eventPathCount") != len(events)
+        or receipt.get("candidateIdentityDigest") != expected_identity
+        or receipt.get("eventCount", 0) < len(events)
+    ):
+        return False
+    return True
 
 
 def _gt20_replay(boundary, state, evidence=None):
@@ -1689,7 +1789,7 @@ def _snapshot_v2_node_errors(program, acceptance):
         or replay.get("preservedTaskIds") != ["GT-21"]
         or (
             "correctionId" in replay
-            and replay.get("correctionId") != _SNAPSHOT_V2_GT20_CORRECTION_ID
+            and replay.get("correctionId") not in _SNAPSHOT_V2_GT20_CORRECTION_IDS
         )
     ):
         errors.append("revision-bound v2 replay boundary is invalid")
@@ -1966,6 +2066,30 @@ def _snapshot_v2_transition_errors(current, predecessor):
                 "correctionId": _SNAPSHOT_V2_GT20_CORRECTION_ID,
             }
         )
+        reopened_review_correction = (
+            prior_schema == _SNAPSHOT_V2_SCHEMA
+            and prior_state == "reopened"
+            and isinstance(current_replay, dict)
+            and isinstance(prior_replay, dict)
+            and prior_replay == {
+                **_gt20_replay(
+                    _GT20_REPLAY_BOUNDARIES[
+                        f"{_GT20_LIFECYCLE_PREFIX}v6"
+                    ],
+                    "pending",
+                ),
+                "correctionId": _SNAPSHOT_V2_GT20_CORRECTION_ID,
+            }
+            and current_replay == {
+                **_gt20_replay(
+                    _GT20_REPLAY_BOUNDARIES[
+                        f"{_GT20_LIFECYCLE_PREFIX}v6"
+                    ],
+                    "pending",
+                ),
+                "correctionId": _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
+            }
+        )
         reopened_rebaseline = (
             prior_schema == _SNAPSHOT_V2_SCHEMA
             and prior_state == "reopened"
@@ -2026,7 +2150,8 @@ def _snapshot_v2_transition_errors(current, predecessor):
             }
         )
         if not reopening_closed and not reopened_successor \
-                and not reopened_correction and not reopened_rebaseline \
+                and not reopened_correction and not reopened_review_correction \
+                and not reopened_rebaseline \
                 and not reopened_invalidation:
             errors.append("revision-bound v2 reopen transition is invalid")
     elif current.get("state") == "closed":
@@ -2642,6 +2767,15 @@ def _gt20_v4_overlay_shape_valid(contract):
             and failure["forbiddenFailureCategory"] == "source-path-absent"
             and failure["observationScope"]
                 == "candidate-bound-staging-route"
+            and failure["candidateIdentityAlgorithm"]
+                == "ordinal-compact-json-package-file-facts-v1"
+            and failure["publicPathPolicy"]
+                == "root-marker-or-host-leaf-no-unmarked-absolute-path"
+            and failure["requiredReceiptFacts"] == [
+                "candidateIdentityDigest", "observedLocators",
+                "observedLocatorSetSha256", "eventRelativePaths",
+                "eventPathSetSha256",
+            ]
             and failure["allowedPathScopes"] == [
                 "exact-target", "verified-temp-sibling",
             ]
@@ -2942,14 +3076,16 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
     )
 
 
-def _gt20_v4_failed_update_receipts_valid(commands, fixture):
+def _gt20_v4_failed_update_receipts_valid(
+    commands, fixture, behavior_subject,
+):
     """Validate mutation reached staging and recovery claims remain factual."""
 
     if not isinstance(commands, dict) or not isinstance(fixture, dict):
         return False
-    for role in (
-        "accordCodexFailedUpdateAfterStaging",
-        "accordClaudeFailedUpdateAfterStaging",
+    for adapter, role in (
+        ("codex", "accordCodexFailedUpdateAfterStaging"),
+        ("claude", "accordClaudeFailedUpdateAfterStaging"),
     ):
         command = commands.get(role)
         receipt = command.get("mutationReceipt") \
@@ -2963,7 +3099,9 @@ def _gt20_v4_failed_update_receipts_valid(commands, fixture):
                 "stagingObserved", "eventCount", "observationScope",
                 "pathScope", "targetVersion", "preexisting",
                 "postCommandAbsent", "candidateIdentityDigest",
-                "observedLocatorCount", "observedLocatorSetSha256",
+                "observedLocatorCount", "observedLocators",
+                "observedLocatorSetSha256", "eventPathCount",
+                "eventRelativePaths",
                 "eventPathSetSha256", "unexpectedSiblingDelta", "eventKinds",
             }
             or receipt.get("stagingObserved") is not True
@@ -2977,15 +3115,9 @@ def _gt20_v4_failed_update_receipts_valid(commands, fixture):
             or receipt.get("targetVersion") != "3.1.0"
             or receipt.get("preexisting") is not False
             or type(receipt.get("postCommandAbsent")) is not bool
-            or SHA256_RE.fullmatch(receipt.get("candidateIdentityDigest") or "")
-                is None
-            or type(receipt.get("observedLocatorCount")) is not int
-            or receipt["observedLocatorCount"] < 2
-            or SHA256_RE.fullmatch(
-                receipt.get("observedLocatorSetSha256") or "",
-            ) is None
-            or SHA256_RE.fullmatch(receipt.get("eventPathSetSha256") or "")
-                is None
+            or not _candidate_relative_receipt_facts_valid(
+                receipt, behavior_subject, adapter,
+            )
             or receipt.get("unexpectedSiblingDelta") != []
             or not isinstance(receipt.get("eventKinds"), list)
             or receipt.get("eventKinds") != sorted(set(receipt["eventKinds"]))
@@ -3120,6 +3252,13 @@ def _validate_exact_package_evidence_lifecycle(
     is_v6 = isinstance(lifecycle, dict) and lifecycle.get("schema") == (
         "yiyuan-accord-exact-package-evidence-lifecycle/v6"
     )
+    snapshot_replay = increment.get("closeoutSnapshot", {}).get("replay", {}) \
+        if isinstance(increment.get("closeoutSnapshot"), dict) else {}
+    is_v6_review_correction = (
+        is_v6 and isinstance(snapshot_replay, dict)
+        and snapshot_replay.get("correctionId")
+            == _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID
+    )
     is_modern = is_v4 or is_v5 or is_v6
     expected_fields = fields | (
         {
@@ -3153,6 +3292,7 @@ def _validate_exact_package_evidence_lifecycle(
             r"exactPackageEvidenceLifecycle",
             predecessor or "",
         )
+        predecessor_program = {}
         try:
             predecessor_program = _snapshot_json(
                 root, AUTHORITY_BOOTSTRAP[1], match.group(1),
@@ -3165,6 +3305,9 @@ def _validate_exact_package_evidence_lifecycle(
             predecessor_lifecycle = None
         predecessor_revision = match.group(1) if match else None
         base_predecessor_ref = (
+            f"{_GT20_V6_REVIEW_CORRECTION_PREDECESSOR}:"
+            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+            if is_v6_review_correction else
             f"{_GT20_V6_PREDECESSOR}:"
             "product/program.json#/increment/exactPackageEvidenceLifecycle"
             if is_v6 else
@@ -3196,6 +3339,48 @@ def _validate_exact_package_evidence_lifecycle(
         if lifecycle.get("state") == "verified":
             expected_predecessor = modern_pending
             expected_predecessor_revision = lifecycle.get("subjectRevision")
+        elif is_v6_review_correction:
+            expected_predecessor = predecessor_lifecycle
+            expected_predecessor_revision = (
+                _GT20_V6_REVIEW_CORRECTION_PREDECESSOR
+            )
+            predecessor_snapshot = predecessor_program.get(
+                "increment", {},
+            ).get("closeoutSnapshot", {}) \
+                if isinstance(predecessor_program, dict) else {}
+            predecessor_shape_valid = (
+                predecessor_lifecycle == {
+                    "schema": f"{_GT20_LIFECYCLE_PREFIX}v6",
+                    "state": "pending",
+                    "taskId": "GT-20",
+                    "earliestAffectedBoundary": boundary,
+                    "subjectBinding": (
+                        "containing-git-commit-complete-declared-packages"
+                    ),
+                    "preservedTaskIds": ["GT-21"],
+                    "predecessorLifecycleRef": (
+                        f"{_GT20_V6_PREDECESSOR}:product/program.json#/"
+                        "increment/exactPackageEvidenceLifecycle"
+                    ),
+                    "commandContractLocator": (
+                        "evals/contracts/gt20-v4-command-contract.json"
+                    ),
+                    "commandContractSha256": (
+                        "57b7d80ccf1671007c13fce17e2c5c64a6a3c058c50a7ce99711f208075f2edd"
+                    ),
+                    "evidence": None,
+                }
+                and isinstance(predecessor_snapshot, dict)
+                and predecessor_snapshot.get("replay") == {
+                    **_gt20_replay(
+                        _GT20_REPLAY_BOUNDARIES[
+                            f"{_GT20_LIFECYCLE_PREFIX}v6"
+                        ],
+                        "pending",
+                    ),
+                    "correctionId": _SNAPSHOT_V2_GT20_CORRECTION_ID,
+                }
+            )
         elif is_v6:
             expected_predecessor = predecessor_lifecycle
             expected_predecessor_revision = _GT20_V6_PREDECESSOR
@@ -4055,6 +4240,18 @@ def _validate_exact_package_evidence_lifecycle(
     )
     activation_receipts_contract = True
     failed_update_receipts_contract = True
+    frozen_subject = None
+    try:
+        if not isinstance(subjects, list) or not isinstance(evidence, dict):
+            raise ValueError("GT-20 frozen subject is unavailable")
+        frozen_subject = {
+            locator: sha256(_snapshot_bytes(
+                root, locator, evidence.get("evaluatedRevision"),
+            )).hexdigest()
+            for locator in subjects
+        }
+    except _SNAPSHOT_V1_FAILURES:
+        frozen_subject = None
     if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4":
         activation_receipts_contract = all(
             _gt20_v4_activation_receipt_valid(
@@ -4066,7 +4263,9 @@ def _validate_exact_package_evidence_lifecycle(
             )
         )
         failed_update_receipts_contract = (
-            _gt20_v4_failed_update_receipts_valid(role_commands, fixture_value)
+            _gt20_v4_failed_update_receipts_valid(
+                role_commands, fixture_value, frozen_subject,
+            )
         )
     post_state = record.get("postState")
     if record_schema in {
@@ -4248,6 +4447,7 @@ def _validate_exact_package_evidence_lifecycle(
     subject_map = record.get("behaviorSubject")
     subject_contract = (
         isinstance(subject_map, dict) and set(subject_map) == set(subjects or [])
+        and frozen_subject is not None and subject_map == frozen_subject
         and all(_nonempty_string(locator)
                 and isinstance(digest, str) and SHA256_RE.fullmatch(digest) is not None
                 for locator, digest in subject_map.items())
