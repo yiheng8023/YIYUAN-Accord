@@ -201,7 +201,7 @@
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
       },
-      "predecessorSnapshotRef": "c5a06688feee7e93edc58a309679594bcc32bed6:product/program.json#/increment/closeoutSnapshot",
+      "predecessorSnapshotRef": "661b24a1a7944e1eb66c15f8a5925e6787676856:product/program.json#/increment/closeoutSnapshot",
       "authorityRefs": [
         "product/constitution.json",
         "product/program.json",
@@ -256,6 +256,7 @@
         "preservedTaskIds": [
           "GT-21"
         ],
+        "correctionId": "public-evidence-privacy-and-candidate-staging-attribution-v1",
         "evidenceState": "pending",
         "evidenceRef": null
       }
@@ -290,7 +291,7 @@
       ],
       "predecessorLifecycleRef": "c5a06688feee7e93edc58a309679594bcc32bed6:product/program.json#/increment/exactPackageEvidenceLifecycle",
       "commandContractLocator": "evals/contracts/gt20-v4-command-contract.json",
-      "commandContractSha256": "4dd5d9c2aa8f302da9fe5bab51646c36a0d37113792de30b9a4c13204576bf4c",
+      "commandContractSha256": "57b7d80ccf1671007c13fce17e2c5c64a6a3c058c50a7ce99711f208075f2edd",
       "evidence": null
     },
     "observedProblem": "The bounded self-bootstrapping core and unchanged GT-14 through GT-19 and GT-21 evidence remain accepted, while exact candidate 9050114, the fc9c1a7 raw replay and exact review cut c5a0668 remain failed history. Frozen 0febb415 closes privacy, exclusive ownership, native Claude identity, install, successful update, removal and cleanup subfacts, but its direct Node Hook calls are not host activation and its source-absent preflight failure is not mutation-phase failed-update recovery. GT-20 is therefore reopened against the digest-bound v4 overlay contract; affected-surface reacceptance and independent reviews are pending. Production, ordinary activation, cross-OS behavior, comparative value, candidate, exact-local, hosted, authorization, tag, public Release and post-release installation remain later gates; v3.0.1 remains the public fallback.",
@@ -1288,7 +1289,7 @@
     },
     "targets": {
       "maxTrackedFiles": 115,
-      "maxProductCodeAndTestBytes": 850000,
+      "maxProductCodeAndTestBytes": 875000,
       "maxPrimaryInstructionBytes": 26000
     },
     "minimumProductCodeAndTestHeadroomPercent": 5,

@@ -81,6 +81,9 @@ PROGRAM_STATES = {"active", "ready", "blocked"}
 
 _SNAPSHOT_V1_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v1"
 _SNAPSHOT_V2_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v2"
+_SNAPSHOT_V2_GT20_CORRECTION_ID = (
+    "public-evidence-privacy-and-candidate-staging-attribution-v1"
+)
 _GT20_LIFECYCLE_PREFIX = "yiyuan-accord-exact-package-evidence-lifecycle/"
 _GT20_REPLAY_BOUNDARIES = {
     f"{_GT20_LIFECYCLE_PREFIX}v1": "complete-host-projection-package-identity",
@@ -1671,15 +1674,23 @@ def _snapshot_v2_node_errors(program, acceptance):
     replay_boundary = _GT20_REPLAY_BOUNDARIES.get(
         lifecycle.get("schema")
     ) if isinstance(lifecycle, dict) else None
+    replay_fields = {
+        "earliestAffectedBoundary", "invalidatedTaskIds",
+        "preservedTaskIds", "evidenceState", "evidenceRef",
+    }
     if (
         not isinstance(replay, dict)
-        or set(replay) != {
-            "earliestAffectedBoundary", "invalidatedTaskIds",
-            "preservedTaskIds", "evidenceState", "evidenceRef",
+        or frozenset(replay) not in {
+            frozenset(replay_fields),
+            frozenset(replay_fields | {"correctionId"}),
         }
         or replay.get("earliestAffectedBoundary") != replay_boundary
         or replay.get("invalidatedTaskIds") != ["GT-20"]
         or replay.get("preservedTaskIds") != ["GT-21"]
+        or (
+            "correctionId" in replay
+            and replay.get("correctionId") != _SNAPSHOT_V2_GT20_CORRECTION_ID
+        )
     ):
         errors.append("revision-bound v2 replay boundary is invalid")
         replay = {}
@@ -1929,13 +1940,30 @@ def _snapshot_v2_transition_errors(current, predecessor):
             and {
                 key: current_replay.get(key) for key in (
                     "earliestAffectedBoundary", "invalidatedTaskIds",
-                    "preservedTaskIds",
+                    "preservedTaskIds", "correctionId",
                 )
             } == {
                 key: prior_replay.get(key) for key in (
                     "earliestAffectedBoundary", "invalidatedTaskIds",
-                    "preservedTaskIds",
+                    "preservedTaskIds", "correctionId",
                 )
+            }
+        )
+        reopened_correction = (
+            prior_schema == _SNAPSHOT_V2_SCHEMA
+            and prior_state == "reopened"
+            and isinstance(current_replay, dict)
+            and isinstance(prior_replay, dict)
+            and prior_replay == _gt20_replay(
+                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v6"],
+                "pending",
+            )
+            and current_replay == {
+                **_gt20_replay(
+                    _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v6"],
+                    "pending",
+                ),
+                "correctionId": _SNAPSHOT_V2_GT20_CORRECTION_ID,
             }
         )
         reopened_rebaseline = (
@@ -1974,9 +2002,22 @@ def _snapshot_v2_transition_errors(current, predecessor):
                 _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v5"],
                 "verified", _GT20_V5_EVIDENCE_LOCATOR,
             )
-            and current_replay == _gt20_replay(
-                _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v6"],
-                "pending",
+            and current_replay in (
+                _gt20_replay(
+                    _GT20_REPLAY_BOUNDARIES[
+                        f"{_GT20_LIFECYCLE_PREFIX}v6"
+                    ],
+                    "pending",
+                ),
+                {
+                    **_gt20_replay(
+                        _GT20_REPLAY_BOUNDARIES[
+                            f"{_GT20_LIFECYCLE_PREFIX}v6"
+                        ],
+                        "pending",
+                    ),
+                    "correctionId": _SNAPSHOT_V2_GT20_CORRECTION_ID,
+                },
             )
         )
         reopening_closed = (
@@ -1985,7 +2026,8 @@ def _snapshot_v2_transition_errors(current, predecessor):
             }
         )
         if not reopening_closed and not reopened_successor \
-                and not reopened_rebaseline and not reopened_invalidation:
+                and not reopened_correction and not reopened_rebaseline \
+                and not reopened_invalidation:
             errors.append("revision-bound v2 reopen transition is invalid")
     elif current.get("state") == "closed":
         if prior_schema != _SNAPSHOT_V2_SCHEMA or prior_state != "reopened":
