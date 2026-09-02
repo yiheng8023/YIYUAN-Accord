@@ -107,6 +107,7 @@ _SNAPSHOT_V2_REACCEPTANCE_KINDS = frozenset({
 _SNAPSHOT_V2_CRITERION_IDS = frozenset({
     "R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4",
 })
+_V2_CARRIER_RULE_SHA256 = "a4cdb683f9286e53a483cf91f7b5a47dbb02e3a017c786aceb0106fec917f1ec"
 
 
 def _v2_error(errors, message):
@@ -2382,26 +2383,26 @@ def _snapshot_transition_affected_criteria(
     return affected
 
 
-def _drop_projection_path(value, path):
-    if path[0] == "*":
-        for item in value:
-            _drop_projection_path(item, path[1:])
-    elif len(path) == 1:
-        value.pop(path[0], None)
-    else:
-        _drop_projection_path(value[path[0]], path[1:])
-
-
 def _snapshot_v2_close_projection(root, revision, documents):
     projection = json.loads(json.dumps(_snapshot_v1_transition_projection(
         root, revision, documents[1], documents[2], documents[3],
         documents[0], documents[4],
     )))
     projection["acceptance"] = json.loads(json.dumps(documents[2]))
-    paths = documents[1]["processLossControl"]["closeMutableProjectionPaths"]
-    for path in paths:
-        scope, *parts = path.split("/")
-        _drop_projection_path(projection[scope], parts)
+    program = projection["program"]
+    increment = program["increment"]
+    for owner, key in (
+        (program, "status"), (program["goalModePrompt"], "state"),
+        (increment, "state"),
+        (program["processLossControl"], "stageSnapshotState"),
+    ):
+        owner.pop(key, None)
+    for item in (
+        increment["workItems"] + increment["workItems"][0]["closeoutSequence"]
+        + increment["fourSurfaceMapping"]["process"]["orderedSteps"]
+        + projection["acceptance"]["criteria"]
+    ):
+        item.pop("assessment" if "assessment" in item else "state", None)
     return projection
 
 
@@ -5100,12 +5101,6 @@ def _validate_program(
              "evolutionHorizonRule", "continuingCalibration"),
             "program.processLossControl", errors,
         )
-        close_paths = _string_list(process.get("closeMutableProjectionPaths"))
-        if not close_paths or len(close_paths) != len(set(close_paths)) or any(
-            path.split("/", 1)[0] not in {"program", "acceptance", "guidance"}
-            for path in close_paths
-        ):
-            errors.append("program close mutable projection paths are invalid")
         closed_stage_state = (
             "latest-closed-stage-snapshot-prepared-for-containing-commit-binding"
         )
@@ -5117,11 +5112,10 @@ def _validate_program(
             "blocked": {closed_stage_state, replay_stage_state},
             "completed": {closed_stage_state},
         }.get(increment_state, set())
-        if not _contains_markers(process.get("carrierRule"), (
-            "official English identifiers", "translations are display-only",
-            "Branch and fork", "approval policy and sandbox access",
-            "conversation operations do not change code topology",
-        )) or process.get("stageSnapshotState") not in expected_stage_snapshot_states \
+        if _canonical_json_sha256(process.get("carrierRule")) != ( \
+                _V2_CARRIER_RULE_SHA256) or process.get(
+            "stageSnapshotState"
+        ) not in expected_stage_snapshot_states \
                 or not _contains_markers(process.get("currentStageRule"), (
             "current stage", "owns current execution",
             "cannot silently enter its release scope", "borrow its evidence",
@@ -5129,7 +5123,7 @@ def _validate_program(
             "versioned stage projections", "containing-git-commit",
             "exact external locator", "successor cites", "Git preserves",
             "terminal release gate", "new ordered cycle", "never self-attests",
-            "closeMutableProjectionPaths",
+            "verifier-owned projection",
         )) or not _contains_markers(process.get("evolutionHorizonRule"), (
             "recomputed on demand", "whole-project panorama",
             "latest accepted stage snapshot", "fresh user, host and environment facts",

@@ -2115,10 +2115,9 @@ class ProductControlTests(unittest.TestCase):
              lambda v: v['complexityBudget'].update(minimumTestCount=18)),
             (P, 'digestBoundBinaryAssets must be an object', lambda v: v[
                 'complexityBudget'].pop('digestBoundBinaryAssets')),
-            (P, 'program.processLossControl.carrierRule', lambda v: v[
-                'processLossControl'].pop('carrierRule')),
-            (P, 'program close mutable projection paths', lambda v: v[
-                'processLossControl'].update(closeMutableProjectionPaths=[])),
+            (P, 'stage snapshot and evolution horizon rules', lambda v: v[
+                'processLossControl'].update(carrierRule=v['processLossControl'][
+                    'carrierRule'] + ' False.')),
             (G, 'static-suite-as-behavior',
              lambda v: v['evaluationProtocol'].update(staticSuiteIsNotBehaviorEvidence=False)),
             (G, 'humanBurden metrics', lambda v: v['metrics'].update(help=['self-claim'])),
@@ -2451,10 +2450,14 @@ class ProductControlTests(unittest.TestCase):
                  'revision-bound v2 acceptance transition drifted before close')
         documents = list(_snapshot_documents(ROOT))
         projection = product_control._snapshot_v2_close_projection(ROOT, None, documents)
-        drift = _clone(documents)
-        drift[0]['purpose'] += ' unrelated drift'
-        self.ane(product_control._snapshot_v2_close_projection(
-            ROOT, None, drift), projection)
+        for assertion, path, value in (
+            (self.ae, (1, 'status'), 'ready'),
+            (self.ane, (2, 'criteria', 0, 'assessmentScope'), 'semantic drift'),
+        ):
+            changed = _clone(documents)
+            _replace(changed, path, value)
+            assertion(product_control._snapshot_v2_close_projection(
+                ROOT, None, changed), projection)
 
     def test_revision_tree_cache_has_an_aggregate_memory_bound(self):
         listing = b'100644 blob ' + b'1' * 40 + b'\tproduct/program.json\0'
