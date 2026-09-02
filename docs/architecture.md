@@ -245,9 +245,10 @@ The ordered bottlenecks are:
   three-file headroom. Each new mechanism must close a named responsibility;
   process-only artifacts are removed.
 - An affected-boundary loop should stay below ten minutes on the maintainer
-  host. The latest full product suite cost was 1374.116 seconds, about 22.9
-  minutes, so it remains a pre-candidate deep-regression budget rather than a
-  per-edit loop. The separate hosted ceiling is 240 minutes. A breach opens
+  host. The full product suite remains a pre-candidate deep-regression gate,
+  not a per-edit loop; record its command, environment and duration with the
+  next run before using timing as calibration evidence. The separate hosted
+  ceiling is 240 minutes. A breach opens
   profiling and subtraction review before another timeout increase.
 - Keep Windows Python 3.10/3.14, macOS Python 3.10/3.14 and Linux Python
   3.10-3.14. Historical exact-package lifecycle evidence remains bound to its

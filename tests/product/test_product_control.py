@@ -2389,103 +2389,47 @@ class ProductControlTests(unittest.TestCase):
     def test_snapshot_v2_reopens_only_the_invalidated_package_boundary(self):
         program, acceptance = _read(ROOT, P), _read(ROOT, A)
         node = program['increment']['closeoutSnapshot']
-        self.ae(_snapshot_v2_node_errors(program, acceptance), [])
         predecessor = node['predecessorSnapshotRef'].split(':', 1)[0]
         _, prior_program, *_ = _snapshot_documents(ROOT, predecessor)
         prior = prior_program['increment']['closeoutSnapshot']
-        self.ae(_snapshot_v2_transition_errors(node, prior), [])
-        self.ae(node['acceptanceTransition']['kind'], 'reaccepting')
-        self.ae(prior['acceptanceTransition']['kind'], 'changed')
-        self.ae(node['replay'], prior['replay'])
-        self.ae(node['replay']['evidenceState'], 'verified')
-        self.ae(
-            node['replay']['evidenceRef'],
-            'evals/evidence/2026-09-02-v310-gt20-'
-            'exact-package-v5-source.json',
-        )
-        self.ae(
-            node['replay']['correctionId'],
-            'one-intent-agent-decision-and-bounded-compensation-v3',
-        )
-        self.ae(
-            node['replay']['earliestAffectedBoundary'],
-            'single-intent-agent-decision-and-bounded-'
-            'failed-update-recovery-closure',
-        )
-        self.ae(
-            node['predecessorSnapshotRef'],
-            '6b5c722dc0264196e54c2f7cfa79ed6da00974ae:'
-            'product/program.json#/increment/closeoutSnapshot',
-        )
         prior_predecessor = prior['predecessorSnapshotRef'].split(':', 1)[0]
-        _, old_program, *_ = _snapshot_documents(
-            ROOT, prior_predecessor,
-        )
-        self.ae(
-            _snapshot_v2_transition_errors(
-                prior, old_program['increment']['closeoutSnapshot'],
-            ),
-            [],
-        )
-        skipped_reacceptance = _clone(node)
-        self.has(
-            _snapshot_v2_transition_errors(
-                skipped_reacceptance,
-                old_program['increment']['closeoutSnapshot'],
-            ),
-            'revision-bound v2 reopen transition is invalid',
-        )
-        self.ae(old_program['increment']['closeoutSnapshot']['replay'][
-            'evidenceState'
-        ], 'pending')
+        _, old_program, *_ = _snapshot_documents(ROOT, prior_predecessor)
+        old = old_program['increment']['closeoutSnapshot']
+        invalid = 'revision-bound v2 reopen transition is invalid'
+        self.ae(_snapshot_v2_node_errors(program, acceptance), [])
+        self.ae(_snapshot_v2_transition_errors(node, prior), [])
+        self.has(_snapshot_v2_transition_errors(node, old), invalid)
+        missing = _clone(node)
+        missing['acceptanceTransition']['affectedCriterionIds'].remove('R1')
         changed = _clone(program)
-        changed_node = changed['increment']['closeoutSnapshot']
-        changed_node['replay']['preservedTaskIds'] = []
-        self.has(
-            _snapshot_v2_node_errors(changed, acceptance),
-            'revision-bound v2 replay boundary is invalid',
-        )
-        changed = _clone(program)
-        changed['increment']['closeoutSnapshot']['replay'][
-            'correctionId'
-        ] = 'unbound-correction'
-        self.has(
-            _snapshot_v2_node_errors(changed, acceptance),
-            'revision-bound v2 replay boundary is invalid',
-        )
-
-        self.ae(prior['state'], 'reopened')
-        self.ae(node['state'], 'reopened')
+        changed['increment']['closeoutSnapshot'] = missing
+        self.has(_snapshot_v2_node_errors(changed, acceptance),
+                 'revision-bound v2 acceptance transition is invalid')
+        for key, value in (('preservedTaskIds', []), ('correctionId', 'unbound')):
+            changed = _clone(program)
+            changed['increment']['closeoutSnapshot']['replay'][key] = value
+            self.has(_snapshot_v2_node_errors(changed, acceptance),
+                     'revision-bound v2 replay boundary is invalid')
         wrong_stage = _clone(program)
-        wrong_stage['increment']['fourSurfaceMapping']['process'][
-            'orderedSteps'
-        ][-2]['state'] = 'pending'
-        self.has(
-            _snapshot_v2_node_errors(wrong_stage, acceptance),
-            'revision-bound v2 reacceptance state is invalid',
-        )
+        wrong_stage['increment']['fourSurfaceMapping']['process']['orderedSteps'][-2]['state'] = 'pending'
+        self.has(_snapshot_v2_node_errors(wrong_stage, acceptance),
+                 'revision-bound v2 reacceptance state is invalid')
         arbitrary = _clone(node)
         arbitrary['replay']['earliestAffectedBoundary'] = 'arbitrary-boundary'
-        self.has(
-            _snapshot_v2_transition_errors(arbitrary, prior),
-            'revision-bound v2 reopen transition is invalid',
-        )
         drifted = _clone(node)
         drifted['unknownsRef'] += '.drifted'
-        self.has(
-            _snapshot_v2_transition_errors(drifted, prior),
-            'revision-bound v2 reopen transition is invalid',
-        )
         closed_prior = _clone(prior)
         closed_prior['state'] = 'closed'
-        self.has(
-            _snapshot_v2_transition_errors(node, closed_prior),
-            'revision-bound v2 reopen transition is invalid',
-        )
-        self.has(
-            _snapshot_v2_transition_errors(node, node),
-            'revision-bound v2 reopen transition is invalid',
-        )
+        for current, previous in ((arbitrary, prior), (drifted, prior),
+                                  (node, closed_prior), (node, node)):
+            self.has(_snapshot_v2_transition_errors(current, previous), invalid)
+        direct_close = _clone(old)
+        direct_close['state'] = 'closed'
+        self.has(_snapshot_v2_transition_errors(direct_close, old),
+                 'revision-bound v2 close skips reacceptance')
+        accepted_close = _clone(node)
+        accepted_close['state'] = 'closed'
+        self.ae(_snapshot_v2_transition_errors(accepted_close, node), [])
 
     def test_revision_tree_cache_has_an_aggregate_memory_bound(self):
         listing = b'100644 blob ' + b'1' * 40 + b'\tproduct/program.json\0'

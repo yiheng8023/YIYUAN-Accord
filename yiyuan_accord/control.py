@@ -99,6 +99,7 @@ _SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID = (
     "one-intent-agent-decision-and-bounded-compensation-v3"
 )
 _SNAPSHOT_V2_REACCEPTANCE_KIND = "reaccepting"
+_SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND = "reaccepting-correction"
 _SNAPSHOT_V2_GT20_CORRECTION_IDS = frozenset({
     _SNAPSHOT_V2_GT20_CORRECTION_ID,
     _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
@@ -1797,6 +1798,7 @@ def _snapshot_v2_node_errors(program, acceptance):
     transition = node.get("acceptanceTransition")
     transition_kind = transition.get("kind") \
         if isinstance(transition, dict) else None
+    transition_fields = {"kind", "rationaleRef", "affectedCriterionIds", "replayRef"}
     criteria = acceptance.get("criteria") if isinstance(acceptance, dict) else None
     criterion_ids = {
         item.get("id") for item in criteria or [] if isinstance(item, dict)
@@ -1804,20 +1806,23 @@ def _snapshot_v2_node_errors(program, acceptance):
     }
     if (
         not isinstance(transition, dict)
-        or set(transition) != {
-            "kind", "rationaleRef", "affectedCriterionIds", "replayRef",
+        or set(transition) != transition_fields
+        or transition_kind not in {
+            "changed", _SNAPSHOT_V2_REACCEPTANCE_KIND,
+            _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND,
         }
-        or transition_kind not in {"changed", _SNAPSHOT_V2_REACCEPTANCE_KIND}
         or transition.get("rationaleRef") != (
             "product/program.json#/increment/fourSurfaceMapping/plan"
         )
         or transition.get("replayRef") != (
             "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
         )
-        or set(transition.get("affectedCriterionIds", [])) != {
-            "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4",
-        }
-        or len(transition.get("affectedCriterionIds", [])) != 7
+        or set(transition.get("affectedCriterionIds", [])) != (
+            criterion_ids if transition_kind ==
+            _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND else
+            {"R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"})
+        or len(transition.get("affectedCriterionIds", [])) != (
+            8 if transition_kind == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND else 7)
     ):
         errors.append("revision-bound v2 acceptance transition is invalid")
     replay = node.get("replay")
@@ -1845,37 +1850,23 @@ def _snapshot_v2_node_errors(program, acceptance):
     ):
         errors.append("revision-bound v2 replay boundary is invalid")
         replay = {}
-    if transition_kind == _SNAPSHOT_V2_REACCEPTANCE_KIND:
-        process = increment.get("fourSurfaceMapping", {}).get("process", {}) \
-            if isinstance(increment.get("fourSurfaceMapping"), dict) else {}
-        process_steps = process.get("orderedSteps") \
-            if isinstance(process, dict) else None
+    if transition_kind in {
+        _SNAPSHOT_V2_REACCEPTANCE_KIND,
+        _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND,
+    }:
+        mapping = increment.get("fourSurfaceMapping")
+        process = mapping.get("process", {}) if isinstance(mapping, dict) else {}
         work_items = increment.get("workItems")
-        closeout_steps = work_items[0].get("closeoutSequence") \
-            if isinstance(work_items, list) and len(work_items) == 1 \
-            and isinstance(work_items[0], dict) else None
-        expected_tail = [
-            ("prove-transactional-install-state-preservation-and-removal",
-             "completed"),
+        sequences = (process.get("orderedSteps") if isinstance(process, dict) else None,
+            work_items[0].get("closeoutSequence") if isinstance(work_items, list)
+            and len(work_items) == 1 and isinstance(work_items[0], dict) else None)
+        expected_tail = [("prove-transactional-install-state-preservation-and-removal", "completed"),
             ("reaccept-whole-system-after-live-state-closure", "active"),
-            ("independent-review-and-form-future-exact-candidate", "pending"),
-        ]
-
-        def projected_tail(steps):
-            if not isinstance(steps, list) or len(steps) < len(expected_tail):
-                return None
-            return [
-                (item.get("id"), item.get("state"))
-                if isinstance(item, dict) else None
-                for item in steps[-len(expected_tail):]
-            ]
-
-        if (
-            state != "reopened"
-            or replay != _gt20_v7_verified_replay()
-            or projected_tail(process_steps) != expected_tail
-            or projected_tail(closeout_steps) != expected_tail
-        ):
+            ("independent-review-and-form-future-exact-candidate", "pending")]
+        if state != "reopened" or replay != _gt20_v7_verified_replay() or any(
+            not isinstance(steps, list) or [(item.get("id"), item.get("state"))
+            if isinstance(item, dict) else None for item in steps[-3:]] != expected_tail
+            for steps in sequences):
             errors.append("revision-bound v2 reacceptance state is invalid")
     r3 = next((item for item in criteria or [] if isinstance(item, dict)
                and item.get("id") == "R3"), {})
@@ -2158,6 +2149,23 @@ def _snapshot_v2_transition_errors(current, predecessor):
                 for field in reacceptance_stable_fields
             )
         )
+        reopened_reacceptance_correction = (
+            prior_schema == _SNAPSHOT_V2_SCHEMA
+            and prior_state == "reopened"
+            and current_replay == prior_replay == _gt20_v7_verified_replay()
+            and isinstance(current_transition, dict)
+            and isinstance(prior_transition, dict)
+            and prior_transition.get("kind") == _SNAPSHOT_V2_REACCEPTANCE_KIND
+            and current_transition.get("kind")
+            == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND
+            and set(current_transition.get("affectedCriterionIds", [])) == {
+                "R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4"}
+            and all(current_transition.get(key) == prior_transition.get(key)
+                    for key in ("rationaleRef", "replayRef"))
+            and set(current) == set(predecessor)
+            and all(current.get(field) == predecessor.get(field)
+                    for field in reacceptance_stable_fields)
+        )
         reopened_correction = (
             prior_schema == _SNAPSHOT_V2_SCHEMA
             and prior_state == "reopened"
@@ -2283,6 +2291,7 @@ def _snapshot_v2_transition_errors(current, predecessor):
         )
         if not reopening_closed and not reopened_successor \
                 and not reopened_reacceptance \
+                and not reopened_reacceptance_correction \
                 and not reopened_correction and not reopened_review_correction \
                 and not reopened_agent_recovery_correction \
                 and not reopened_rebaseline \
@@ -2293,6 +2302,10 @@ def _snapshot_v2_transition_errors(current, predecessor):
             errors.append("revision-bound v2 close transition is invalid")
         current_replay = current.get("replay")
         prior_replay = predecessor.get("replay")
+        if prior_replay == _gt20_v7_verified_replay() and predecessor.get(
+            "acceptanceTransition", {}).get("kind") not in {
+                _SNAPSHOT_V2_REACCEPTANCE_KIND, _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND}:
+            errors.append("revision-bound v2 close skips reacceptance")
         if (
             not isinstance(current_replay, dict)
             or not isinstance(prior_replay, dict)

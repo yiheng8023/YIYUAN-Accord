@@ -1008,10 +1008,12 @@ Historical superseded review disposition —
     Exact tracked `v3.0.1` bytes were installed into disposable non-empty Codex
     and Claude scopes alongside user instructions, configuration, an unrelated
     installed plugin and a shared host dependency. After a concurrent user edit,
-    each native update failed against a task-owned source with the plugin path
-    absent; exact `3.0.1` bytes remained and no `3.1.0` cache appeared. Restoring
-    the same marketplace path to the complete tracked `4c8bcc3` archive updated
-    both hosts to exact manifest, Hook and Skill bytes. Enabled/component
+    both native updates failed after staging against task-owned locked candidate
+    files; Claude left four staged files while fresh inventories still selected
+    exact `3.0.1`. One isolated zero-tool Codex Agent decision authorized only
+    evaluator-derived bounded compensation, after which the evaluator revalidated
+    ownership and post-state before the separate successful update to exact
+    `f4c0251` package bytes. Enabled/component
     inventory and installed executable checks were separate from installation.
     Native removal preserved user, concurrent, foreign and shared state and left
     zero active Accord registration, marketplace, process or data state. Codex
