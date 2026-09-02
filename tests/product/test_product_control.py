@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+from collections import Counter
 import copy, hashlib, inspect, json, os, re, shutil, subprocess, tempfile, unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -65,6 +66,9 @@ GT11_OBSERVATION = 'evals/observations/2026-08-28-f4dce57-gt-11-codex-local.json
 GT16_SOURCE = 'evals/evidence/2026-08-28-553f5a9-gt14-16-codex-local-source.json'
 CURRENT_GT17_OBSERVATION = 'evals/observations/2026-08-28-fd4b99a-gt-17-codex-local.json'
 GT2021_SOURCE = 'evals/evidence/2026-08-30-v310-gt20-21-source.json'
+GT20V4 = 'evals/contracts/gt20-v4-command-contract.json'
+GT20_RUNNER = 'scripts/run-gt20-exact-package.ps1'
+HISTORICAL_REVIEW_CUT = 'c5a06688feee7e93edc58a309679594bcc32bed6'
 FROZEN_OBS = (
     'evals/observations/cf1d8c9-gt20-frozen-r3-promotion.json',
     'evals/observations/cf1d8c9-gt21-frozen-r3-promotion.json',
@@ -88,6 +92,8 @@ def _retired_history():
 
 def _read(root, locator):
     return json.loads((root / locator).read_text(encoding='utf-8'))
+
+def _text(locator): return (ROOT / locator).read_text(encoding='utf-8')
 
 def _clone(value): return json.loads(json.dumps(value))
 
@@ -168,6 +174,11 @@ def _git(root, *arguments, **options):
         ['git', '-C', str(root), *arguments], stderr=subprocess.DEVNULL, **options
     )
 
+def _commit(root, message):
+    _git(root, '-c', 'user.name=Accord Fixture',
+         '-c', 'user.email=fixture@example.invalid',
+         'commit', '--quiet', '-m', message)
+
 @contextmanager
 def _fixture():
     with tempfile.TemporaryDirectory(prefix='ya-') as temporary:
@@ -176,25 +187,35 @@ def _fixture():
             '.git', '.tmp', '.remember', '__pycache__', '*.pyc'))
         yield target
 
-def _make_indexed():
+def _make_indexed(revision=None):
     temporary = tempfile.TemporaryDirectory(prefix='ya-index-')
     target = Path(temporary.name) / 'repository'
     subprocess.run(['git', 'clone', '--quiet', '--no-hardlinks', str(ROOT),
                     str(target)], check=True)
+    # Ignore drvfs/ext4 mode drift; fixture identity is content-bound.
+    _git(target, 'config', 'core.filemode', 'false')
+    if revision is not None:
+        _git(target, 'checkout', '--quiet', '--detach', revision)
+        return temporary, target
     shutil.copytree(ROOT, target, dirs_exist_ok=True,
                     ignore=shutil.ignore_patterns(
                         '.git', '.tmp', '.remember', '__pycache__', '*.pyc'))
     for path in _git(ROOT, 'diff', 'HEAD', '--no-renames', '--name-only', '--diff-filter=D', text=True).splitlines():
         (target / path).unlink()
     _git(target, 'add', '-A')
-    _git(target, '-c', 'user.name=Accord Fixture',
-         '-c', 'user.email=fixture@example.invalid', 'commit', '--quiet',
-         '--allow-empty', '-m', 'current fixture')
+    staged = subprocess.run(
+        ['git', '-C', str(target), 'diff', '--cached', '--quiet'],
+        check=False,
+    )
+    if staged.returncode not in (0, 1):
+        raise RuntimeError('unable to inspect indexed fixture changes')
+    if staged.returncode == 1:
+        _commit(target, 'current fixture')
     return temporary, target
 
 @contextmanager
-def _indexed():
-    temporary, target = _make_indexed()
+def _indexed(revision=None):
+    temporary, target = _make_indexed(revision)
     with temporary:
         yield target
 
@@ -661,7 +682,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'reopened-gt20-schema-v5-replay-verified-reacceptance-complete-independent-review-active',
+            'gt20-schema-v6-replay-verified-reacceptance-complete-independent-review-active',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -821,14 +842,14 @@ class ProductControlTests(unittest.TestCase):
         )
         self.ae(
             suite['status'],
-            'historical-source-complete-live-carrier-current-schema-v5-'
-            'transactional-lifecycle-replay-verified-reacceptance-complete-'
-            'independent-exact-tree-review-active',
+            'historical-source-complete-live-carrier-current-schema-v6-host-'
+            'activation-and-failed-update-recovery-verified-reacceptance-'
+            'complete-independent-review-active',
         )
         for marker in (
             'Frozen 0febb415 completed',
             'affected surfaces are reaccepted',
-            'Four fresh independent exact-tree',
+            'four fresh independent exact-tree',
             'candidate or release readiness',
         ):
             self.ai(marker, suite['executionClaimLimit'])
@@ -1151,7 +1172,8 @@ class ProductControlTests(unittest.TestCase):
             _write(root, G, golden)
             self.has(
                 _errors(root),
-                'frozen GT-20 source or digest binding is invalid',
+                'exact package lifecycle GT-20 subject is invalid',
+                'exact package evidence record contract is invalid: subjects',
             )
 
     def test_provisional_source_contract_is_required_while_r3_is_planned(self):
@@ -2362,19 +2384,20 @@ class ProductControlTests(unittest.TestCase):
         _, prior_program, *_ = _snapshot_documents(ROOT, predecessor)
         prior = prior_program['increment']['closeoutSnapshot']
         self.ae(_snapshot_v2_transition_errors(node, prior), [])
-        self.ae(prior['replay']['evidenceState'], 'verified')
-        self.ae(node['replay']['evidenceState'], 'pending')
-        self.an(node['replay']['evidenceRef'])
+        self.ae(prior['replay']['evidenceState'], 'pending')
+        self.ae(node['replay']['evidenceState'], 'verified')
         self.ae(
-            node['replay']['earliestAffectedBoundary'],
-            'exact-package-host-activation-and-mutation-phase-failed-update-'
-            'recovery-closure',
+            node['replay']['evidenceRef'],
+            'evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json',
         )
-        self.ae(node['replay']['invalidatedTaskIds'], ['GT-20'])
-        self.ae(node['replay']['preservedTaskIds'], ['GT-21'])
+        for field in (
+            'earliestAffectedBoundary', 'invalidatedTaskIds',
+            'preservedTaskIds',
+        ):
+            self.ae(node['replay'][field], prior['replay'][field])
         self.ae(
             node['predecessorSnapshotRef'],
-            'c5a06688feee7e93edc58a309679594bcc32bed6:'
+            '661b24a1a7944e1eb66c15f8a5925e6787676856:'
             'product/program.json#/increment/closeoutSnapshot',
         )
 
@@ -2399,6 +2422,47 @@ class ProductControlTests(unittest.TestCase):
             'revision-bound v2 reopen transition is invalid',
         )
 
+    def test_revision_tree_cache_has_an_aggregate_memory_bound(self):
+        listing = b'100644 blob ' + b'1' * 40 + b'\tproduct/program.json\0'
+        cache = product_control._SnapshotBlobCache()
+        with patch('yiyuan_accord.control._bounded_git_bytes',
+                   return_value=listing), patch.object(
+            product_control, '_SNAPSHOT_V1_TREE_CACHE_BYTES', len(listing) - 1,
+        ), self.assertRaisesRegex(
+            ValueError, 'snapshot tree cache aggregate bound is invalid',
+        ):
+            cache.read(ROOT, P, HISTORICAL_REVIEW_CUT)
+
+    def test_one_revision_carry_reuses_bounded_snapshot_blob_reads(self):
+        documents = product_control._snapshot_v1_documents(
+            ROOT, HISTORICAL_REVIEW_CUT,
+        )
+        expected = product_control._snapshot_v1_binding_state(
+            ROOT, documents[1], documents[2], documents[3], documents[0],
+            documents[4], HISTORICAL_REVIEW_CUT,
+        )
+        calls, bounded_git = [], product_control._bounded_git_bytes
+
+        def capture(root, arguments, limit=262_144, input_bytes=None):
+            calls.append(tuple(arguments))
+            return bounded_git(root, arguments, limit, input_bytes)
+
+        with patch('yiyuan_accord.control._bounded_git_bytes',
+                   side_effect=capture):
+            frozen, valid = product_control._snapshot_v1_run_status(
+                ROOT, expected, (HISTORICAL_REVIEW_CUT,), {},
+            )
+        self.at(frozen)
+        self.at(valid)
+        blob_reads = [call for call in calls if call and call[0] in
+                      {'show', 'cat-file'} and not
+                      (call[0] == 'cat-file' and call[1:2] == ('--batch',))]
+        self.ae([key for key, count in Counter(
+            call[-1] for call in blob_reads
+        ).items() if count > 1], [])
+        self.ale(len([call for call in calls if call and call[0] in
+                      {'ls-tree', 'show', 'cat-file'}]), 35)
+
     def test_exact_package_evidence_fails_closed_on_drift(self):
         with _indexed() as root:
             program = _read(root, P)
@@ -2407,9 +2471,23 @@ class ProductControlTests(unittest.TestCase):
                 lifecycle['schema'],
                 'yiyuan-accord-exact-package-evidence-lifecycle/v6',
             )
-            self.ae(lifecycle['state'], 'pending')
-            self.an(lifecycle.get('subjectRevision'))
-            self.an(lifecycle['evidence'])
+            self.ae(lifecycle['state'], 'verified')
+            self.ae(
+                lifecycle['subjectRevision'],
+                '661b24a1a7944e1eb66c15f8a5925e6787676856',
+            )
+            self.ae(lifecycle['evidence'], {
+                'locator': (
+                    'evals/evidence/2026-09-02-v310-gt20-'
+                    'exact-package-v4-source.json'
+                ),
+                'sha256': (
+                    'f9e6b9a8ce400d0ea98a25edba932d076ae80f2c7b95c3ba0d9a35a9154751f9'
+                ),
+                'evaluatedRevision': (
+                    '661b24a1a7944e1eb66c15f8a5925e6787676856'
+                ),
+            })
             self.ae(
                 lifecycle['earliestAffectedBoundary'],
                 'exact-package-host-activation-and-mutation-phase-failed-'
@@ -2417,7 +2495,7 @@ class ProductControlTests(unittest.TestCase):
             )
             self.ae(
                 lifecycle['predecessorLifecycleRef'],
-                'c5a06688feee7e93edc58a309679594bcc32bed6:'
+                '661b24a1a7944e1eb66c15f8a5925e6787676856:'
                 'product/program.json#/increment/exactPackageEvidenceLifecycle',
             )
             self.ae(
@@ -2437,6 +2515,21 @@ class ProductControlTests(unittest.TestCase):
                 return errors
 
             self.ae(validate(lifecycle), [])
+            snapshot_or_worktree = product_control._snapshot_or_worktree_bytes
+
+            def fail_runner_snapshot(root_value, locator, revision=None):
+                if locator == 'scripts/run-gt20-exact-package.ps1':
+                    raise ValueError('runner unavailable')
+                return snapshot_or_worktree(root_value, locator, revision)
+
+            with patch(
+                'yiyuan_accord.control._snapshot_or_worktree_bytes',
+                side_effect=fail_runner_snapshot,
+            ):
+                self.has(
+                    validate(lifecycle),
+                    'exact package evidence record contract is invalid: runner',
+                )
             wrong_predecessor = _clone(lifecycle)
             wrong_predecessor['predecessorLifecycleRef'] = (
                 '0' * 40
@@ -2454,18 +2547,66 @@ class ProductControlTests(unittest.TestCase):
             )
             for mutate in (
                 lambda value: value.__setitem__('evidence', {}),
-                lambda value: value.__setitem__('state', 'verified'),
+                lambda value: value.__setitem__('state', 'pending'),
                 lambda value: value.__setitem__('priorEvidenceRef', 'missing'),
                 lambda value: value.__setitem__('subjectRevision', '0' * 40),
+                lambda value: value['evidence'].__setitem__(
+                    'locator', 'evals/evidence/wrong.json',
+                ),
+                lambda value: value['evidence'].__setitem__('sha256', '0' * 64),
+                lambda value: value['evidence'].__setitem__(
+                    'evaluatedRevision', '0' * 40,
+                ),
             ):
                 changed = _clone(lifecycle)
                 mutate(changed)
                 self.at(validate(changed))
 
-    def test_gt20_runner_cleanup_is_bounded_to_owned_paths(self):
-        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
-            encoding='utf-8'
+    def test_public_evidence_privacy_guard_rejects_host_session_material(self):
+        private_values = (
+            {'stdout': (
+                '{"serverName":"private-account",'
+                '"installationId":"1b0665a0-a7f4-43b0-b9c4-962d8f33561c"}'
+            )},
+            {'stdout': (
+                '{"memory_paths":{"auto":"C--Users-private-AppData-Local-'
+                'Temp-task\\\\memory\\\\"}}'
+            )},
+            {'activationReceipt': {
+                'session_id': 'private-session',
+                'messaging_socket_path': r'\\.\pipe\LOCAL\private',
+            }},
+            {'activationReceipt': {
+                'threadId': 'private-thread', 'turnId': 'private-turn',
+                'hookId': 'private-hook',
+            }},
         )
+        for value in private_values:
+            with self.subTest(value=value):
+                self.at(
+                    product_control._public_evidence_contains_private_material(
+                        value,
+                    ),
+                )
+
+        safe = {
+            'stdout': '', 'stderr': '',
+            'activationReceipt': {
+                'rawStreamPolicy': (
+                    'digest-only-private-host-transcript-not-retained'
+                ),
+                'rawStdoutSha256': '1' * 64,
+                'rawStderrSha256': '2' * 64,
+                'threadIdSha256': '3' * 64,
+                'turnIdSha256': '4' * 64,
+                'hookIdSha256': '5' * 64,
+                'sessionBinding': 'task-owned-session-id',
+            },
+        }
+        self.af(product_control._public_evidence_contains_private_material(safe))
+
+    def test_gt20_runner_cleanup_is_bounded_to_owned_paths(self):
+        runner = _text(GT20_RUNNER)
         self.ani('Get-CimInstance -ClassName Win32_Process', runner)
         self.ani('$_.CommandLine', runner)
         self.ai('$taskOwned = $false', runner)
@@ -2487,34 +2628,31 @@ class ProductControlTests(unittest.TestCase):
         )
 
     def test_gt20_v4_codex_activation_requires_app_server_receipts(self):
-        contract_path = ROOT / 'evals/contracts/gt20-v4-command-contract.json'
+        contract_path = ROOT / GT20V4
         self.at(contract_path.is_file(), 'successor GT-20 contract is absent')
         contract = json.loads(contract_path.read_text(encoding='utf-8'))
         codex = contract['activationProof']['codex']
-        self.ae(codex, {
-            'transport': 'app-server-stdio-jsonl',
-            'requiredRpcMethods': [
-                'hooks/list', 'thread/start', 'turn/start', 'thread/resume',
-            ],
-            'requiredHookNotifications': ['hook/started', 'hook/completed'],
-            'qualifyingCommandRole': 'codexHostActivation',
-            'unitOnlyCommandRoles': [
-                'codexHookRuntimeUnitStartup',
-                'codexHookRuntimeUnitResume',
-            ],
-            'lifecycleTrigger': {
-                'rpcMethod': 'turn/start',
-                'modelProvider': 'task-owned-loopback-responses-failure',
-                'requiresOpenAIAuth': False,
-                'expectedTerminalStatus': 'failed',
-                'purpose': (
-                    'run-pending-session-start-hooks-before-model-request'
-                ),
-            },
-            'lifecycleTriggerTurns': 2,
-            'externalModelTurns': 0,
-            'credentialEnvironmentInherited': False,
+        self.ae(codex['transport'], 'app-server-stdio-jsonl')
+        self.ae(codex['requiredRpcMethods'], [
+            'hooks/list', 'thread/start', 'turn/start', 'thread/resume',
+        ])
+        self.ae(codex['requiredHookNotifications'], [
+            'hook/started', 'hook/completed',
+        ])
+        self.ae(
+            codex['publicTranscriptPolicy'],
+            'digest-only-private-host-transcript-not-retained',
+        )
+        self.ae(codex['identifierPolicy'], 'sha256-only')
+        self.ae(codex['lifecycleTrigger'], {
+            'rpcMethod': 'turn/start',
+            'modelProvider': 'task-owned-loopback-responses-failure',
+            'requiresOpenAIAuth': False,
+            'expectedTerminalStatus': 'failed',
+            'purpose': 'run-pending-session-start-hooks-before-model-request',
         })
+        self.ae((codex['lifecycleTriggerTurns'], codex['externalModelTurns'],
+                 codex['credentialEnvironmentInherited']), (2, 0, False))
         roles = {item['role']: item for item in contract['commands']}
         self.at(codex['qualifyingCommandRole'] in roles)
         self.at(all(role in roles for role in codex['unitOnlyCommandRoles']))
@@ -2537,9 +2675,7 @@ class ProductControlTests(unittest.TestCase):
             'receive it twice during overlay resolution',
         )
 
-        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
-            encoding='utf-8'
-        )
+        runner = _text(GT20_RUNNER)
         self.ai('function Invoke-CodexAppServerActivation', runner)
         self.ai("sandbox = 'read-only'", runner)
         self.ani("sandbox = 'readOnly'", runner)
@@ -2567,41 +2703,35 @@ class ProductControlTests(unittest.TestCase):
         self.assertLess(hooks_list_receipt, request_write)
 
     def test_gt20_v4_claude_activation_requires_native_host_receipts(self):
-        contract = json.loads((
-            ROOT / 'evals/contracts/gt20-v4-command-contract.json'
-        ).read_text(encoding='utf-8'))
+        contract = _read(ROOT, GT20V4)
         claude = contract['activationProof']['claude']
-        self.ae(claude, {
-            'transport': (
-                'headless-stream-json-with-loopback-trigger-and-task-owned-'
-                'node-observer'
-            ),
-            'requiredSessionStartSources': ['startup', 'resume'],
-            'requiredNativeHookEvents': ['hook_started', 'hook_response'],
-            'qualifyingCommandRole': 'claudeHostActivation',
-            'unitOnlyCommandRoles': [
-                'claudeHookRuntimeUnitStartup',
-                'claudeHookRuntimeUnitResume',
-            ],
-            'lifecycleTrigger': {
-                'cliMode': 'print',
-                'modelProvider': 'task-owned-loopback-messages-failure',
-                'requiresUserAnthropicAuth': False,
-                'expectedTerminalStatus': 'api_error',
-                'purpose': (
-                    'establish-resumable-session-and-run-session-start-'
-                    'before-model-response'
-                ),
-            },
-            'lifecycleTriggerTurns': 2,
-            'externalModelTurns': 0,
-            'minimumLoopbackHttpRequests': 2,
-            'requiredLoadedPlugin': {
-                'name': 'yiyuan-accord-claude',
-                'version': '3.1.0',
-            },
-            'credentialEnvironmentInherited': False,
+        self.ae(claude['transport'], (
+            'headless-stream-json-with-loopback-trigger-and-task-owned-'
+            'node-observer'
+        ))
+        self.ae(claude['requiredSessionStartSources'], ['startup', 'resume'])
+        self.ae(claude['requiredNativeHookEvents'], [
+            'hook_started', 'hook_response',
+        ])
+        self.ae(
+            claude['publicTranscriptPolicy'],
+            'digest-only-private-host-transcript-not-retained',
+        )
+        self.ae(claude['identifierPolicy'], 'sha256-only')
+        self.ae(claude['lifecycleTrigger'], {
+            'cliMode': 'print',
+            'modelProvider': 'task-owned-loopback-messages-failure',
+            'requiresUserAnthropicAuth': False,
+            'expectedTerminalStatus': 'api_error',
+            'purpose': ('establish-resumable-session-and-run-session-start-'
+                        'before-model-response'),
         })
+        self.ae(claude['requiredLoadedPlugin'], {
+            'name': 'yiyuan-accord-claude', 'version': '3.1.0',
+        })
+        self.ae((claude['lifecycleTriggerTurns'], claude['externalModelTurns'],
+                 claude['minimumLoopbackHttpRequests'],
+                 claude['credentialEnvironmentInherited']), (2, 0, 2, False))
 
         role = next(
             item for item in contract['commands']
@@ -2623,9 +2753,7 @@ class ProductControlTests(unittest.TestCase):
             'CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL',
         ])
 
-        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
-            encoding='utf-8'
-        )
+        runner = _text(GT20_RUNNER)
         self.ai('function Invoke-ClaudeHostActivation', runner)
         self.ai("$observerShellShim = Join-Path $observerRoot 'node'", runner)
         self.ai("[System.IO.File]::WriteAllText(\n    $observerShellShim", runner)
@@ -2639,15 +2767,16 @@ class ProductControlTests(unittest.TestCase):
         self.ani("Add-CommandRecord 'claudeHookResume'", runner)
 
     def test_gt20_v4_failed_update_starts_before_failure_and_fails_closed(self):
-        contract = json.loads((
-            ROOT / 'evals/contracts/gt20-v4-command-contract.json'
-        ).read_text(encoding='utf-8'))
+        contract = _read(ROOT, GT20V4)
         proof = contract['failedUpdateProof']
         self.ae(
             proof['minimumAcceptedPhase'],
             'host-accepted-update-with-task-owned-staging-observed',
         )
         self.ae(proof['forbiddenFailureCategory'], 'source-path-absent')
+        self.ae(proof['observationScope'], 'exact-candidate-target')
+        self.ae(proof['targetVersion'], '3.1.0')
+        self.ae(proof['unexpectedSiblingDelta'], [])
         self.ae(proof['priorInventoryCommandRoles'], {
             'codex': 'rollbackCodexInventory',
             'claude': 'rollbackClaudeInventory',
@@ -2656,16 +2785,14 @@ class ProductControlTests(unittest.TestCase):
             proof['requiredPoststate']
         ))
 
-        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
-            encoding='utf-8'
-        )
+        runner = _text(GT20_RUNNER)
         self.ai('function Invoke-UpdateWithCandidateLock', runner)
         self.ai('function Repair-FailedUpdateStaging', runner)
         self.ai('[System.IO.FileSystemWatcher]::new($stagingParent)', runner)
         self.ai("$result['mutationReceipt'] = [ordered]@{", runner)
         self.ai("stagingObserved = $stagingObserved", runner)
-        self.ai('$codexFailedUpdate.mutationReceipt.stagingObserved', runner)
-        self.ai('$claudeFailedUpdate.mutationReceipt.stagingObserved', runner)
+        self.ai('$codexFailedUpdate.mutationReceipt', runner)
+        self.ai('$claudeFailedUpdate.mutationReceipt', runner)
         self.ai('$codexFailedUpdateRecovery = Repair-FailedUpdateStaging', runner)
         self.ai('$claudeFailedUpdateRecovery = Repair-FailedUpdateStaging', runner)
         self.ai("Add-CommandRecord 'rollbackCodexInventory'", runner)
@@ -2693,9 +2820,7 @@ class ProductControlTests(unittest.TestCase):
         self.ai("installed bytes differ: $($difference | ConvertTo-Json", runner)
 
     def test_gt20_v4_runner_emits_native_activation_and_recovery_facts(self):
-        runner = (ROOT / 'scripts/run-gt20-exact-package.ps1').read_text(
-            encoding='utf-8'
-        )
+        runner = _text(GT20_RUNNER)
         self.ai(
             "schema = 'yiyuan-accord-gt20-exact-package-evidence/v4'",
             runner,
@@ -2708,6 +2833,19 @@ class ProductControlTests(unittest.TestCase):
         self.ai('lifecycleTriggerTurns = 4', runner)
         self.ai('externalModelTurns = 0', runner)
         self.ai('taskOwnedLoopbackCredential = $true', runner)
+        self.ai(
+            "rawStreamPolicy = 'digest-only-private-host-transcript-not-retained'",
+            runner,
+        )
+        self.ai("$record.stdout = ''", runner)
+        self.ai("observationScope = 'exact-candidate-target'", runner)
+        self.ai('unexpectedSiblingDelta = @()', runner)
+        self.ai('postRepairAbsent = $true', runner)
+        self.ani(
+            "observationScope = 'isolated-marketplace-cache-excluding-"
+            "prior-version'",
+            runner,
+        )
         self.ai('priorInstalledBytesPreservedAfterFailedUpdate = $true', runner)
         self.ai('freshPriorInventoryVerified = $true', runner)
         self.ani('rollbackBytesMatchPriorRelease = $true', runner)
@@ -2725,10 +2863,11 @@ class ProductControlTests(unittest.TestCase):
             return {
                 'rpcMethod': rpc_method,
                 'responseId': response_id,
-                'threadId': 'thread-1',
+                'threadIdSha256': digest,
                 'lifecycleTrigger': {
                     'rpcMethod': 'turn/start', 'responseId': response_id + 10,
-                    'turnId': f'turn-{source}', 'terminalStatus': 'failed',
+                    'turnIdSha256': ('b' if source == 'startup' else 'c') * 64,
+                    'terminalStatus': 'failed',
                     'modelProvider': 'task-owned-loopback-responses-failure',
                     'requiresOpenAIAuth': False,
                 },
@@ -2751,9 +2890,14 @@ class ProductControlTests(unittest.TestCase):
             }
 
         codex = {
-            'exitCode': 0, 'failureCategory': None,
+            'exitCode': 0, 'failureCategory': None, 'stdout': '', 'stderr': '',
             'activationReceipt': {
                 'transport': 'app-server-stdio-jsonl',
+                'rawStreamPolicy': (
+                    'digest-only-private-host-transcript-not-retained'
+                ),
+                'rawStdoutSha256': 'd' * 64,
+                'rawStderrSha256': 'e' * 64,
                 'rpcMethods': [
                     'hooks/list', 'thread/start', 'turn/start', 'thread/resume',
                 ],
@@ -2775,16 +2919,18 @@ class ProductControlTests(unittest.TestCase):
         ), False)
 
         def claude_native(source):
-            hook_id = f'hook-{source}'
+            hook_id = ('a' if source == 'startup' else 'b') * 64
             return {
                 'sessionSource': source,
                 'nativeHookStarted': {
                     'subtype': 'hook_started', 'hookEvent': 'SessionStart',
-                    'hookName': f'SessionStart:{source}', 'hookId': hook_id,
+                    'hookName': f'SessionStart:{source}',
+                    'hookIdSha256': hook_id,
                 },
                 'nativeHookResponse': {
                     'subtype': 'hook_response', 'hookEvent': 'SessionStart',
-                    'hookName': f'SessionStart:{source}', 'hookId': hook_id,
+                    'hookName': f'SessionStart:{source}',
+                    'hookIdSha256': hook_id,
                     'exitCode': 0, 'outcome': 'success',
                 },
                 'loadedPlugin': {
@@ -2813,12 +2959,17 @@ class ProductControlTests(unittest.TestCase):
             }
 
         claude = {
-            'exitCode': 1, 'failureCategory': None,
+            'exitCode': 1, 'failureCategory': None, 'stdout': '', 'stderr': '',
             'activationReceipt': {
                 'transport': (
                     'headless-stream-json-with-loopback-trigger-and-task-'
                     'owned-node-observer'
                 ),
+                'rawStreamPolicy': (
+                    'digest-only-private-host-transcript-not-retained'
+                ),
+                'rawStdoutSha256': 'd' * 64,
+                'rawStderrSha256': 'e' * 64,
                 'lifecycleTriggerTurns': 2, 'externalModelTurns': 0,
                 'loopbackHttpRequests': 6,
                 'credentialEnvironmentInherited': False,
@@ -2854,9 +3005,11 @@ class ProductControlTests(unittest.TestCase):
             'failureCategory': 'task-owned-candidate-lock-after-staging',
             'mutationReceipt': {
                 'stagingObserved': True, 'eventCount': 2,
-                'observationScope': (
-                    'isolated-marketplace-cache-excluding-prior-version'
-                ),
+                'observationScope': 'exact-candidate-target',
+                'targetVersion': '3.1.0', 'preexisting': False,
+                'postCommandAbsent': True,
+                'eventPathSetSha256': 'a' * 64,
+                'unexpectedSiblingDelta': [],
                 'eventKinds': ['Changed', 'Created'],
             },
         }
@@ -2874,6 +3027,9 @@ class ProductControlTests(unittest.TestCase):
                 'version': '3.0.1', 'enabled': True,
             }])},
         }
+        commands['accordClaudeFailedUpdateAfterStaging']['mutationReceipt'][
+            'postCommandAbsent'
+        ] = False
         fixture = {
             'sourceFailureMode': 'task-owned-candidate-lock-after-staging',
             'failedUpdateDisposition': (
@@ -2890,6 +3046,7 @@ class ProductControlTests(unittest.TestCase):
                     ),
                     'stagedFileCount': None, 'difference': None,
                     'stagingCleanupVerified': True,
+                    'postRepairAbsent': True,
                 },
                 'claude': {
                     'disposition': (
@@ -2901,6 +3058,7 @@ class ProductControlTests(unittest.TestCase):
                         'missing': ['NOTICE'], 'extra': [], 'changed': [],
                     },
                     'stagingCleanupVerified': True,
+                    'postRepairAbsent': True,
                 },
             },
         }
@@ -2940,11 +3098,16 @@ class ProductControlTests(unittest.TestCase):
         changed = dict(native, terminalExecutableSha256='5' * 64)
         self.ae(_claude_command_distribution_identity(changed), False)
 
-    @unittest.skipUnless(os.name == 'nt', 'GT-20 runner is Windows-only')
     def test_gt20_runner_preserves_unowned_collision_markers(self):
+        runner = ROOT / 'scripts/run-gt20-exact-package.ps1'
+        if os.name != 'nt':
+            source = _text(GT20_RUNNER)
+            self.ai("if (-not $IsWindows)", source)
+            self.ai('TaskRoot must be a specifically named temporary directory.', source)
+            self.ai('EvidenceOutput must not already exist.', source)
+            return
         powershell = shutil.which('pwsh')
         self.ann(powershell, 'GT-20 runner requires PowerShell 7')
-        runner = ROOT / 'scripts/run-gt20-exact-package.ps1'
         with tempfile.TemporaryDirectory(prefix='accord-gt20-ownership-') as base:
             temporary = Path(base)
             task = temporary / 'yiyuan-accord-gt20-formal-owned-collision'
@@ -3541,36 +3704,15 @@ class ProductControlTests(unittest.TestCase):
         acceptance = _read(ROOT, A)
         policy = acceptance['representativeBehaviorPolicy']
         current = _contract_sha(acceptance, _read(ROOT, G))
-        old = policy['evaluationContractHistory'][0]['sha256']
-        sequence_contract = policy['evaluationContractHistory'][1]['sha256']
-        qualification_contract = policy['evaluationContractHistory'][2]['sha256']
-        dynamic_contract = policy['evaluationContractHistory'][3]['sha256']
-        stage_contract = policy['evaluationContractHistory'][4]['sha256']
-        successor_contract = policy['evaluationContractHistory'][5]['sha256']
-        rebaseline_contract = policy['evaluationContractHistory'][6]['sha256']
-        verified_contract = policy['evaluationContractHistory'][7]['sha256']
-        promoted_contract = policy['evaluationContractHistory'][8]['sha256']
+        history = policy['evaluationContractHistory']
+        old = history[0]['sha256']
         self.ai(old, _evaluation_contracts(policy, 'GT-14', current))
-        for task_id, expected in (
-            ('GT-17', {current, sequence_contract, qualification_contract,
-                       stage_contract, successor_contract,
-                       rebaseline_contract, verified_contract,
-                       promoted_contract}),
-            ('GT-18', {current, sequence_contract, stage_contract,
-                       successor_contract, rebaseline_contract,
-                       verified_contract, promoted_contract}),
-            ('GT-20', {current, dynamic_contract, stage_contract,
-                       successor_contract, verified_contract,
-                       promoted_contract}),
-            ('GT-19', {current, stage_contract, successor_contract,
-                       rebaseline_contract, verified_contract,
-                       promoted_contract}),
-            ('GT-21', {current, dynamic_contract, stage_contract,
-                       successor_contract, rebaseline_contract,
-                       verified_contract, promoted_contract}),
-        ):
-            self.ae(_evaluation_contracts(policy, task_id, current),
-                             expected)
+        for task_id in ('GT-17', 'GT-18', 'GT-20', 'GT-19', 'GT-21'):
+            expected = {current} | {
+                item['sha256'] for item in history
+                if task_id in item['preservedTaskIds']
+            }
+            self.ae(_evaluation_contracts(policy, task_id, current), expected)
         widened = _clone(policy)
         widened['evaluationContractHistory'][-1]['preservedTaskIds'].append('GT-01')
         self.an(_evaluation_contracts(widened, 'GT-19', current))
@@ -4084,9 +4226,9 @@ class ProductControlTests(unittest.TestCase):
                             'fourSurfaceMapping outcomeId',
                             'fourSurfaceMapping.process phases',
                             'orderedSteps[1].dependsOn',
-                            'closeoutSnapshot revision binding',
+                            'revision-bound v2 snapshot identity',
                             'closeoutSnapshot evaluation contract',
-                            'closeoutSnapshot affected criteria',
+                            'revision-bound v2 acceptance transition',
                             'processLossControl.evolutionHorizonRule',
                             )
 
@@ -4100,9 +4242,9 @@ class ProductControlTests(unittest.TestCase):
                 f'{origin}:'
                 'product/program.json#/increment/closeoutSnapshot'
             )
-            snapshot['acceptanceTransition']['affectedCriterionIds'].remove('R1')
+            snapshot['acceptanceTransition']['affectedCriterionIds'].remove('R2')
             _write(root, P, program)
-            self.has(_errors(root), 'closeoutSnapshot affected criteria')
+            self.has(_errors(root), 'revision-bound v2 acceptance transition')
 
         with _indexed() as root:
             current = _read(root, P)
@@ -4110,16 +4252,14 @@ class ProductControlTests(unittest.TestCase):
             prior['increment']['closeoutSnapshot']['id'] += '.different'
             _write(root, P, prior)
             _git(root, 'add', P)
-            _git(root, '-c', 'user.name=Accord Fixture',
-                 '-c', 'user.email=fixture@example.invalid',
-                 'commit', '--quiet', '-m', 'different prior snapshot')
+            _commit(root, 'different prior snapshot')
             current_snapshot = current['increment']['closeoutSnapshot']
             current_snapshot['predecessorSnapshotRef'] = None
             current_snapshot['acceptanceTransition'].update(
                 kind='snapshot-bootstrap', affectedCriterionIds=CRITERIA)
             _write(root, P, current)
             self.has(_errors(root),
-                            'bootstrap breaks predecessor lineage')
+                            'revision-bound v2 snapshot predecessor is invalid')
 
         snapshot_ref = 'product/program.json#/increment/closeoutSnapshot'
 
@@ -4146,8 +4286,9 @@ class ProductControlTests(unittest.TestCase):
         predecessor = current['increment']['closeoutSnapshot'][
             'predecessorSnapshotRef'
         ].split(':', 1)[0]
+        historical_v1 = '9bd82876e2b350787edcab09e3835426e069272c'
         prior = json.loads(_git(
-            ROOT, 'show', f'{predecessor}:{P}', text=True,
+            ROOT, 'show', f'{historical_v1}:{P}', text=True,
         ))
         with patch(
             'yiyuan_accord.control._validate_constitution',
@@ -4166,22 +4307,22 @@ class ProductControlTests(unittest.TestCase):
             side_effect=AssertionError('current release rule leaked into snapshot v1'),
         ):
             self.ae(_snapshot_lineage_contract_errors(
-                ROOT, predecessor,
-                prior['increment']['closeoutSnapshot'], (predecessor,), (), {},
+                ROOT, historical_v1,
+                prior['increment']['closeoutSnapshot'], (historical_v1,), (), {},
             ), [])
         unsupported = (
             _read(ROOT, C), _clone(current), _read(ROOT, A),
             _read(ROOT, 'product/reshaping-guidance.json'), _read(ROOT, G),
         )
         unsupported[1]['increment']['closeoutSnapshot']['schema'] = (
-            'yiyuan-accord-stage-closeout-snapshot/v2'
+            'yiyuan-accord-stage-closeout-snapshot/v999'
         )
         self.has(
             _snapshot_revision_contract_errors(ROOT, predecessor, unsupported),
             'unsupported revision-bound snapshot schema',
         )
 
-        exact_documents = _snapshot_documents(ROOT, predecessor)
+        exact_documents = _snapshot_documents(ROOT, historical_v1)
         malformed_cases = (
             (0, ('identity',), []),
             (1, ('releaseProcedure',), []),
@@ -4202,7 +4343,7 @@ class ProductControlTests(unittest.TestCase):
                 _replace(documents[document_index], path, replacement)
                 self.at(
                     _snapshot_revision_contract_errors(
-                        ROOT, predecessor, tuple(documents),
+                        ROOT, historical_v1, tuple(documents),
                     ),
                     f'malformed v1 history must fail closed: {path}',
                 )
@@ -4212,7 +4353,7 @@ class ProductControlTests(unittest.TestCase):
             )
             self.has(
                 _snapshot_revision_contract_errors(
-                    ROOT, predecessor, tuple(renamed),
+                    ROOT, historical_v1, tuple(renamed),
                 ),
                 'projection package ids are invalid',
             )
@@ -4226,7 +4367,7 @@ class ProductControlTests(unittest.TestCase):
             self.has(
                 _snapshot_v1_evidence_errors(
                     ROOT, malformed_evidence[1], malformed_evidence[2],
-                    predecessor,
+                    historical_v1,
                 ),
                 'historicalEvidence[0] binding is invalid',
             )
@@ -4240,11 +4381,11 @@ class ProductControlTests(unittest.TestCase):
         closed_index = gates.index(
             successor['increment']['closeoutSnapshot']['closedGateId']
         )
-        advance(successor, gates, closed_index + 1, predecessor)
+        advance(successor, gates, closed_index + 1, historical_v1)
         successor['hostProjections'][0]['activationContext'] += ' Drift.'
         self.has(
             _snapshot_v1_transition_errors(
-                ROOT, None, predecessor,
+                ROOT, None, historical_v1,
                 successor, prior_acceptance, prior_guidance,
                 constitution, prior_golden,
                 prior_program, prior_acceptance, prior_guidance,
@@ -4263,7 +4404,7 @@ class ProductControlTests(unittest.TestCase):
         ):
             self.has(
                 _snapshot_v1_transition_errors(
-                    ROOT, None, predecessor,
+                    ROOT, None, historical_v1,
                     successor, prior_acceptance, prior_guidance,
                     constitution, prior_golden,
                     prior_program, prior_acceptance, prior_guidance,
@@ -4350,9 +4491,7 @@ class ProductControlTests(unittest.TestCase):
             raw = b'{"value":"' + (b'x' * 300_000) + b'"}\n'
             (root / locator).write_bytes(raw)
             _git(root, 'add', locator)
-            _git(root, '-c', 'user.name=Accord Fixture',
-                 '-c', 'user.email=fixture@example.invalid',
-                 'commit', '--quiet', '-m', 'large snapshot blob')
+            _commit(root, 'large snapshot blob')
             revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             self.ae(_snapshot_bytes(root, locator, revision), raw)
 
@@ -4360,8 +4499,7 @@ class ProductControlTests(unittest.TestCase):
             program = _read(root, P)
             drifted = _clone(program)
             drifted['increment']['fourSurfaceMapping']['plan']['hypothesis'] += ' Drift.'
-            self.has(snapshot_errors(root, drifted),
-                     'snapshot-bound state drifted without successor')
+            self.ae(snapshot_errors(root, drifted), [])
             readme = root / 'README.md'
             readme.write_text(readme.read_text(encoding='utf-8') + '\ncarry\n',
                               encoding='utf-8')
@@ -4373,30 +4511,24 @@ class ProductControlTests(unittest.TestCase):
             drifted['increment']['fourSurfaceMapping']['plan']['hypothesis'] += ' Drift.'
             _write(root, P, drifted)
             _git(root, 'add', P)
-            _git(root, '-c', 'user.name=Accord Fixture',
-                 '-c', 'user.email=fixture@example.invalid',
-                 'commit', '--quiet', '-m', 'invalid bound-state carry')
+            _commit(root, 'invalid bound-state carry')
             _write(root, P, original)
             _git(root, 'add', P)
-            _git(root, '-c', 'user.name=Accord Fixture',
-                 '-c', 'user.email=fixture@example.invalid',
-                 'commit', '--quiet', '-m', 'restore bound state')
+            _commit(root, 'restore bound state')
             self.has(snapshot_errors(root),
-                     'snapshot-bound state drifted without successor')
+                     'revision-bound v2 carry run is invalid')
 
         with _indexed() as root:
             cache = {}
 
             def invalid_carry(
                 locator, content, label, expected,
-                lineage_expected='revision-bound repository contract is invalid',
+                lineage_expected='revision-bound v2 carry run is invalid',
             ):
                 path, original = root / locator, (root / locator).read_bytes()
                 path.write_bytes(content)
                 _git(root, 'add', locator)
-                _git(root, '-c', 'user.name=Accord Fixture',
-                     '-c', 'user.email=fixture@example.invalid',
-                     'commit', '--quiet', '-m', label)
+                _commit(root, label)
                 revision = _git(
                     root, 'rev-parse', 'HEAD', text=True,
                 ).strip()
@@ -4412,9 +4544,7 @@ class ProductControlTests(unittest.TestCase):
                 )
                 path.write_bytes(original)
                 _git(root, 'add', locator)
-                _git(root, '-c', 'user.name=Accord Fixture',
-                     '-c', 'user.email=fixture@example.invalid',
-                     'commit', '--quiet', '-m', f'restore {label}')
+                _commit(root, f'restore {label}')
                 self.has(
                     snapshot_errors(root, cache=cache),
                     lineage_expected,
@@ -4427,21 +4557,21 @@ class ProductControlTests(unittest.TestCase):
                 marketplace,
                 (json.dumps(changed_marketplace, separators=(',', ':')) + '\n').encode(),
                 'drift valid Codex marketplace surface', None,
-                'snapshot-bound state drifted without successor',
+                'revision-bound v2 carry run is invalid',
             )
             constitution = _read(root, C)
             constitution['identity']['displayName'] = ''
             invalid_carry(
                 C, (json.dumps(constitution, separators=(',', ':')) + '\n').encode(),
                 'constitution-invalid-then-restored',
-                'revision-bound v1 identity is invalid',
+                'revision-bound v2 identity is invalid',
             )
             acceptance = _read(root, A)
             acceptance['schema'] = 2
             invalid_carry(
                 A, (json.dumps(acceptance, separators=(',', ':')) + '\n').encode(),
                 'acceptance-invalid-then-restored',
-                'revision-bound v1 authority schema is invalid',
+                'revision-bound v2 authority schema is invalid',
             )
             invalid_carry(
                 'evals/observations/'
@@ -4462,7 +4592,7 @@ class ProductControlTests(unittest.TestCase):
                 'revision package digest mismatch',
             )
 
-        with _indexed() as root:
+        with _indexed(historical_v1) as root:
             program = _read(root, P)
             gates = [x['id'] for x in program['releaseProcedure']['orderedGates']]
             origin = _snapshot_v1_lineage(
@@ -4472,9 +4602,7 @@ class ProductControlTests(unittest.TestCase):
             readme.write_text(readme.read_text(encoding='utf-8') + '\ncarry\n',
                               encoding='utf-8')
             _git(root, 'add', 'README.md')
-            _git(root, '-c', 'user.name=Accord Fixture',
-                 '-c', 'user.email=fixture@example.invalid',
-                 'commit', '--quiet', '-m', 'carry unchanged snapshot')
+            _commit(root, 'carry unchanged snapshot')
             carry = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             advance(program, gates, 1, carry)
             self.has(snapshot_errors(root, program),
@@ -4484,7 +4612,7 @@ class ProductControlTests(unittest.TestCase):
             )
             self.ae(snapshot_errors(root, program), [])
 
-        with _indexed() as root:
+        with _indexed(historical_v1) as root:
             original = _read(root, P)
             successor = _clone(original)
             gates = [x['id'] for x in successor['releaseProcedure']['orderedGates']]
@@ -4494,21 +4622,17 @@ class ProductControlTests(unittest.TestCase):
             advance(successor, gates, 1, origin)
             _write(root, P, successor)
             _git(root, 'add', P)
-            _git(root, '-c', 'user.name=Accord Fixture',
-                 '-c', 'user.email=fixture@example.invalid',
-                 'commit', '--quiet', '-m', 'new snapshot before replay')
+            _commit(root, 'new snapshot before replay')
             self.has(snapshot_errors(root, original),
                      'lineage replays a non-current node')
 
-        with _indexed() as root:
+        with _indexed(historical_v1) as root:
             program = _read(root, P)
             invalid = _clone(program)
             invalid['increment']['closeoutSnapshot']['authorityRefs'] = ['invalid']
             _write(root, P, invalid)
             _git(root, 'add', P)
-            _git(root, '-c', 'user.name=Accord Fixture',
-                 '-c', 'user.email=fixture@example.invalid',
-                 'commit', '--quiet', '-m', 'invalid snapshot node')
+            _commit(root, 'invalid snapshot node')
             revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             gates = [x['id'] for x in program['releaseProcedure']['orderedGates']]
             advance(program, gates, 1, revision)
@@ -4516,7 +4640,7 @@ class ProductControlTests(unittest.TestCase):
             self.has(snapshot_errors(root, program),
                      'predecessor is not a valid revision-bound snapshot node')
 
-        with _indexed() as root:
+        with _indexed(historical_v1) as root:
             program = _read(root, P)
             base = _snapshot_v1_lineage(
                 root, program['increment']['closeoutSnapshot'], 'HEAD', {},
@@ -4530,7 +4654,7 @@ class ProductControlTests(unittest.TestCase):
             errors = snapshot_errors(root, program)
             self.has(errors, 'predecessor cannot be resolved')
 
-        with _indexed() as root:
+        with _indexed(historical_v1) as root:
             program = _read(root, P)
             gates = [item['id'] for item in program['releaseProcedure']['orderedGates']]
             base = _snapshot_v1_lineage(
@@ -4539,9 +4663,7 @@ class ProductControlTests(unittest.TestCase):
             snapshot = advance(program, gates, 1, base)
             _write(root, P, program)
             _git(root, 'add', P)
-            _git(root, '-c', 'user.name=Accord Fixture',
-                 '-c', 'user.email=fixture@example.invalid',
-                 'commit', '--quiet', '-m', 'newer accepted snapshot')
+            _commit(root, 'newer accepted snapshot')
             latest = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             advance(program, gates, 2, snapshot['predecessorSnapshotRef'].split(':')[0])
             errors = snapshot_errors(root, program)

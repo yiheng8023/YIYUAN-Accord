@@ -35,6 +35,8 @@
       },
       "lifecycleTriggerTurns": 2,
       "externalModelTurns": 0,
+      "publicTranscriptPolicy": "digest-only-private-host-transcript-not-retained",
+      "identifierPolicy": "sha256-only",
       "credentialEnvironmentInherited": false
     },
     "claude": {
@@ -62,6 +64,8 @@
       "lifecycleTriggerTurns": 2,
       "externalModelTurns": 0,
       "minimumLoopbackHttpRequests": 2,
+      "publicTranscriptPolicy": "digest-only-private-host-transcript-not-retained",
+      "identifierPolicy": "sha256-only",
       "requiredLoadedPlugin": {
         "name": "yiyuan-accord-claude",
         "version": "3.1.0"
@@ -72,6 +76,9 @@
   "failedUpdateProof": {
     "minimumAcceptedPhase": "host-accepted-update-with-task-owned-staging-observed",
     "forbiddenFailureCategory": "source-path-absent",
+    "observationScope": "exact-candidate-target",
+    "targetVersion": "3.1.0",
+    "unexpectedSiblingDelta": [],
     "priorInventoryCommandRoles": {
       "codex": "rollbackCodexInventory",
       "claude": "rollbackClaudeInventory"

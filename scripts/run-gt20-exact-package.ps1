@@ -425,6 +425,23 @@ function Get-PrivateRootPattern {
   }) -join '[\\/]+')
 }
 
+function Get-PrivateRootEncodedPattern {
+  param([Parameter(Mandatory = $true)][string]$Path)
+  $resolved = [System.IO.Path]::GetFullPath($Path).TrimEnd('\', '/')
+  return [System.Text.RegularExpressions.Regex]::Escape(
+    ($resolved -replace '[:\\/]', '-')
+  )
+}
+
+function Get-TextSha256 {
+  param([AllowEmptyString()][string]$Value)
+  return [Convert]::ToHexString(
+    [System.Security.Cryptography.SHA256]::HashData(
+      [System.Text.Encoding]::UTF8.GetBytes($Value)
+    )
+  ).ToLowerInvariant()
+}
+
 function ConvertTo-PublicEvidenceText {
   param([AllowEmptyString()][string]$Value)
   $result = $Value
@@ -433,6 +450,11 @@ function ConvertTo-PublicEvidenceText {
       $result = [System.Text.RegularExpressions.Regex]::Replace(
         $result, (Get-PrivateRootPattern $item.path),
         [string]$item.replacement,
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+      )
+      $result = [System.Text.RegularExpressions.Regex]::Replace(
+        $result, (Get-PrivateRootEncodedPattern $item.path),
+        ([string]$item.replacement + '_ENCODED'),
         [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
       )
     }
@@ -448,8 +470,17 @@ function Test-PrivateEvidenceText {
         [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
       return $true
     }
+    if ($item.path -and [System.Text.RegularExpressions.Regex]::IsMatch(
+        $Value, (Get-PrivateRootEncodedPattern $item.path),
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
+      return $true
+    }
   }
-  return $Value -match '(?i)[a-z]:(?:[\\/]+)(?:users|documents and settings)(?:[\\/]+)'
+  return (
+    $Value -match '(?i)[a-z]:(?:[\\/]+)(?:users|documents and settings)(?:[\\/]+)' -or
+    $Value -match '(?i)(?:^|[^a-z0-9])[a-z]--(?:users|documents-and-settings)-' -or
+    $Value -match '(?i)["''](?:hook_id|hookId|installationId|memory_paths|messaging_socket_path|serverName|session_id|sessionId|threadId|turnId|uuid)["'']\s*:'
+  )
 }
 
 function Assert-NoPrivateEvidenceValue {
@@ -463,10 +494,16 @@ function Assert-NoPrivateEvidenceValue {
     }
   } elseif ($Value -is [System.Collections.IDictionary]) {
     foreach ($key in $Value.Keys) {
+      if ([string]$key -match '^(?:hook_id|hookId|installationId|memory_paths|messaging_socket_path|serverName|session_id|sessionId|threadId|turnId|uuid)$') {
+        throw "Evidence retained a private host/session key at $Location.$key."
+      }
       Assert-NoPrivateEvidenceValue $Value[$key] "$Location.$key"
     }
   } elseif ($Value -is [pscustomobject]) {
     foreach ($property in $Value.PSObject.Properties) {
+      if ($property.Name -match '^(?:hook_id|hookId|installationId|memory_paths|messaging_socket_path|serverName|session_id|sessionId|threadId|turnId|uuid)$') {
+        throw "Evidence retained a private host/session key at $Location.$($property.Name)."
+      }
       Assert-NoPrivateEvidenceValue $property.Value (
         "$Location.$($property.Name)"
       )
@@ -1041,11 +1078,7 @@ function Invoke-CodexAppServerConnection {
     }
     # Current Codex Hook run identifiers may embed task-local source paths.
     # Preserve correlation without publishing the host-private identifier.
-    $hookRunIdSha256 = [Convert]::ToHexString(
-      [System.Security.Cryptography.SHA256]::HashData(
-        [System.Text.Encoding]::UTF8.GetBytes($hookRunId)
-      )
-    ).ToLowerInvariant()
+    $hookRunIdSha256 = Get-TextSha256 $hookRunId
     return [ordered]@{
       command = [ordered]@{
         argv = @('codex', '--dangerously-bypass-hook-trust', 'app-server', '--stdio')
@@ -1088,11 +1121,11 @@ function Invoke-CodexAppServerConnection {
       receipt = [ordered]@{
         rpcMethod = $Method
         responseId = $requestId
-        threadId = $observedThreadId
+        threadIdSha256 = Get-TextSha256 $observedThreadId
         lifecycleTrigger = [ordered]@{
           rpcMethod = 'turn/start'
           responseId = $turnRequestId
-          turnId = $observedTurnId
+          turnIdSha256 = Get-TextSha256 $observedTurnId
           terminalStatus = $turnCompleted.params.turn.status
           modelProvider = 'task-owned-loopback-responses-failure'
           requiresOpenAIAuth = $false
@@ -1154,10 +1187,12 @@ function Invoke-CodexAppServerActivation {
   $record.elapsedMilliseconds = (
     $startup.command.elapsedMilliseconds + $resume.command.elapsedMilliseconds
   )
-  $record.stdout = $startup.command.stdout + "`n" + $resume.command.stdout
-  $record.stderr = $startup.command.stderr + $resume.command.stderr
-  $record.stdoutBytes = [System.Text.Encoding]::UTF8.GetByteCount($record.stdout)
-  $record.stderrBytes = [System.Text.Encoding]::UTF8.GetByteCount($record.stderr)
+  $rawStdout = $startup.command.stdout + "`n" + $resume.command.stdout
+  $rawStderr = $startup.command.stderr + $resume.command.stderr
+  $record.stdout = ''
+  $record.stderr = ''
+  $record.stdoutBytes = 0
+  $record.stderrBytes = 0
   $record.inputSha256 = [Convert]::ToHexString(
     [System.Security.Cryptography.SHA256]::HashData(
       [System.Text.Encoding]::UTF8.GetBytes(
@@ -1167,6 +1202,9 @@ function Invoke-CodexAppServerActivation {
   ).ToLowerInvariant()
   $record['activationReceipt'] = [ordered]@{
     transport = 'app-server-stdio-jsonl'
+    rawStreamPolicy = 'digest-only-private-host-transcript-not-retained'
+    rawStdoutSha256 = Get-TextSha256 $rawStdout
+    rawStderrSha256 = Get-TextSha256 $rawStderr
     rpcMethods = @('hooks/list', 'thread/start', 'turn/start', 'thread/resume')
     lifecycleTriggerTurns = 2
     externalModelTurns = 0
@@ -1246,19 +1284,20 @@ function Get-ClaudeNativeLifecycleReceipt {
       "expectedPath=$expectedPublicRoot observed=$observedIdentity"
     )
   }
+  $hookIdSha256 = Get-TextSha256 ([string]$started[0].hook_id)
   return [ordered]@{
     sessionSource = $Source
     nativeHookStarted = [ordered]@{
       subtype = $started[0].subtype
       hookEvent = $started[0].hook_event
       hookName = $started[0].hook_name
-      hookId = $started[0].hook_id
+      hookIdSha256 = $hookIdSha256
     }
     nativeHookResponse = [ordered]@{
       subtype = $responses[0].subtype
       hookEvent = $responses[0].hook_event
       hookName = $responses[0].hook_name
-      hookId = $responses[0].hook_id
+      hookIdSha256 = $hookIdSha256
       exitCode = $responses[0].exit_code
       outcome = $responses[0].outcome
     }
@@ -1421,12 +1460,17 @@ process.exitCode = Number.isInteger(result.status) ? result.status : 125;
   $record.elapsedMilliseconds = (
     $startup.elapsedMilliseconds + $resume.elapsedMilliseconds
   )
-  $record.stdout = $startup.stdout + "`n" + $resume.stdout
-  $record.stderr = $startup.stderr + $resume.stderr
-  $record.stdoutBytes = [System.Text.Encoding]::UTF8.GetByteCount($record.stdout)
-  $record.stderrBytes = [System.Text.Encoding]::UTF8.GetByteCount($record.stderr)
+  $rawStdout = $startup.stdout + "`n" + $resume.stdout
+  $rawStderr = $startup.stderr + $resume.stderr
+  $record.stdout = ''
+  $record.stderr = ''
+  $record.stdoutBytes = 0
+  $record.stderrBytes = 0
   $record['activationReceipt'] = [ordered]@{
     transport = 'headless-stream-json-with-loopback-trigger-and-task-owned-node-observer'
+    rawStreamPolicy = 'digest-only-private-host-transcript-not-retained'
+    rawStdoutSha256 = Get-TextSha256 $rawStdout
+    rawStderrSha256 = Get-TextSha256 $rawStderr
     lifecycleTriggerTurns = 2
     externalModelTurns = 0
     loopbackHttpRequests = $mockRequestCount
@@ -1478,12 +1522,14 @@ function Invoke-UpdateWithCandidateLock {
   $staging = [System.IO.Path]::GetFullPath($CandidateStagingPath)
   $versionRoot = Split-Path -Parent $staging
   $stagingParent = Split-Path -Parent $versionRoot
-  $priorVersion = [System.IO.Path]::GetFullPath((
-    Join-Path $versionRoot '3.0.1'
-  ))
+  $targetVersion = [System.IO.Path]::GetFileName($staging)
   if (-not (Test-Path -LiteralPath $stagingParent -PathType Container)) {
     throw 'Candidate staging parent is unavailable for observation.'
   }
+  if (Test-Path -LiteralPath $staging) {
+    throw 'Candidate staging target must not preexist the failed update.'
+  }
+  $beforeMap = Get-FileMap $stagingParent
   $watcher = [System.IO.FileSystemWatcher]::new($stagingParent)
   $watcher.IncludeSubdirectories = $true
   $watcher.NotifyFilter = (
@@ -1519,27 +1565,47 @@ function Invoke-UpdateWithCandidateLock {
     $watcher.Dispose()
   }
   $stagingPrefix = $staging + [System.IO.Path]::DirectorySeparatorChar
-  $priorPrefix = $priorVersion + [System.IO.Path]::DirectorySeparatorChar
   $stagingEvents = @($events | Where-Object {
     $path = [string]$_.SourceEventArgs.FullPath
     ($path.Equals($staging, [System.StringComparison]::OrdinalIgnoreCase) -or
-      $path.StartsWith($stagingPrefix, [System.StringComparison]::OrdinalIgnoreCase) -or
-      $path.StartsWith(
-        $stagingParent + [System.IO.Path]::DirectorySeparatorChar,
-        [System.StringComparison]::OrdinalIgnoreCase
-      )) -and
-      -not $path.Equals(
-        $priorVersion, [System.StringComparison]::OrdinalIgnoreCase
-      ) -and
-      -not $path.StartsWith(
-        $priorPrefix, [System.StringComparison]::OrdinalIgnoreCase
-      )
+      $path.StartsWith($stagingPrefix, [System.StringComparison]::OrdinalIgnoreCase))
   })
   $stagingObserved = $stagingEvents.Count -ne 0
+  $relativeStaging = [System.IO.Path]::GetRelativePath(
+    $stagingParent, $staging
+  ).Replace('\', '/')
+  $allowedPrefix = $relativeStaging + '/'
+  $afterMap = Get-FileMap $stagingParent
+  $unexpectedSiblingDelta = @(
+    @($beforeMap.Keys) + @($afterMap.Keys) | Sort-Object -Unique | Where-Object {
+      $relative = ([string]$_).Replace('\', '/')
+      -not ($relative -eq $relativeStaging -or $relative.StartsWith(
+        $allowedPrefix, [System.StringComparison]::OrdinalIgnoreCase
+      )) -and (
+        -not $beforeMap.Contains($_) -or -not $afterMap.Contains($_) -or
+        $beforeMap[$_] -ne $afterMap[$_]
+      )
+    }
+  )
+  if ($unexpectedSiblingDelta.Count -ne 0) {
+    throw 'Failed update changed an unexpected staging sibling.'
+  }
+  $eventRelativePaths = @($stagingEvents | ForEach-Object {
+    [System.IO.Path]::GetRelativePath(
+      $staging, [string]$_.SourceEventArgs.FullPath
+    ).Replace('\', '/')
+  } | Sort-Object -Unique)
   $result['mutationReceipt'] = [ordered]@{
     stagingObserved = $stagingObserved
     eventCount = $stagingEvents.Count
-    observationScope = 'isolated-marketplace-cache-excluding-prior-version'
+    observationScope = 'exact-candidate-target'
+    targetVersion = $targetVersion
+    preexisting = $false
+    postCommandAbsent = -not (Test-Path -LiteralPath $staging)
+    eventPathSetSha256 = Get-TextSha256 (
+      $eventRelativePaths | ConvertTo-Json -Compress
+    )
+    unexpectedSiblingDelta = @()
     eventKinds = @($stagingEvents | ForEach-Object {
       $_.SourceEventArgs.ChangeType.ToString()
     } | Sort-Object -Unique)
@@ -1594,7 +1660,7 @@ function Repair-FailedUpdateStaging {
     [Parameter(Mandatory = $true)][string]$StagingRoot,
     [Parameter(Mandatory = $true)][string]$HostRoot,
     [Parameter(Mandatory = $true)][string]$PriorRoot,
-    [Parameter(Mandatory = $true)][bool]$StagingObserved,
+    [Parameter(Mandatory = $true)][System.Collections.IDictionary]$StagingReceipt,
     [Parameter(Mandatory = $true)][string]$Label
   )
   $staging = [System.IO.Path]::GetFullPath($StagingRoot)
@@ -1608,8 +1674,11 @@ function Repair-FailedUpdateStaging {
       )) {
     throw "$Label candidate staging path is outside its isolated host root."
   }
-  if (-not $StagingObserved) {
-    throw "$Label did not produce an observable candidate-staging event."
+  if ($StagingReceipt.stagingObserved -ne $true -or
+      $StagingReceipt.observationScope -ne 'exact-candidate-target' -or
+      $StagingReceipt.preexisting -ne $false -or
+      @($StagingReceipt.unexpectedSiblingDelta).Count -ne 0) {
+    throw "$Label did not produce a bounded exact candidate-staging receipt."
   }
   if (-not (Test-Path -LiteralPath $staging -PathType Container)) {
     return [ordered]@{
@@ -1617,6 +1686,7 @@ function Repair-FailedUpdateStaging {
       stagedFileCount = $null
       difference = $null
       stagingCleanupVerified = $true
+      postRepairAbsent = $true
     }
   }
   if (@(Get-ChildItem -LiteralPath $staging -Recurse -Force |
@@ -1650,6 +1720,7 @@ function Repair-FailedUpdateStaging {
     stagedFileCount = $actual.Count
     difference = $difference
     stagingCleanupVerified = $true
+    postRepairAbsent = $true
   }
 }
 
@@ -2445,12 +2516,12 @@ Assert-PluginInventory $claudeRollbackList claude 'lifecycle-neighbor-claude@lif
 $codexFailedUpdateRecovery = Repair-FailedUpdateStaging (
   Join-Path $candidateSource 'plugins/yiyuan-accord-codex'
 ) $codexCandidateInstalled $codexRoot $codexOldInstalled (
-  $codexFailedUpdate.mutationReceipt.stagingObserved
+  $codexFailedUpdate.mutationReceipt
 ) 'Codex failed update'
 $claudeFailedUpdateRecovery = Repair-FailedUpdateStaging (
   Join-Path $candidateSource 'plugins/yiyuan-accord-claude'
 ) $claudeCandidateInstalled $claudeRoot $claudeOldInstalled (
-  $claudeFailedUpdate.mutationReceipt.stagingObserved
+  $claudeFailedUpdate.mutationReceipt
 ) 'Claude failed update'
 
 $codexUpdate = Invoke-Captured codex @(

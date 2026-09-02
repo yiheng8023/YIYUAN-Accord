@@ -58,6 +58,24 @@ GUIDANCE_FILE = "product/reshaping-guidance.json"
 MAX_JSON_BYTES = 1_000_000
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
+_PRIVATE_EVIDENCE_KEYS = frozenset({
+    "hook_id", "hookId", "installationId", "memory_paths",
+    "messaging_socket_path", "serverName", "session_id", "sessionId",
+    "threadId", "turnId", "uuid",
+})
+_PRIVATE_EVIDENCE_JSON_KEY_RE = re.compile(
+    r"(?i)[\"'](?:" + "|".join(
+        re.escape(value) for value in sorted(_PRIVATE_EVIDENCE_KEYS)
+    ) + r")[\"']\s*:"
+)
+_PRIVATE_EVIDENCE_PATH_RES = (
+    re.compile(
+        r"(?i)[a-z]:(?:[\\/]+)(?:users|documents and settings)(?:[\\/]+)"
+    ),
+    re.compile(
+        r"(?i)(?:^|[^a-z0-9])[a-z]--(?:users|documents-and-settings)-"
+    ),
+)
 ASSESSMENTS = {"planned", "verified", "blocked", "continuing"}
 PROGRAM_STATES = {"active", "ready", "blocked"}
 
@@ -77,8 +95,11 @@ _GT20_REPLAY_BOUNDARIES = {
         "exact-package-host-activation-and-mutation-phase-failed-update-recovery-closure",
 }
 _GT20_V6_PREDECESSOR = "c5a06688feee7e93edc58a309679594bcc32bed6"
-_GT20_EVIDENCE_LOCATOR = (
+_GT20_V5_EVIDENCE_LOCATOR = (
     "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json"
+)
+_GT20_V6_EVIDENCE_LOCATOR = (
+    "evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json"
 )
 _SNAPSHOT_V1_AUTHORITY_REFS = (
     "product/constitution.json",
@@ -128,6 +149,26 @@ _SNAPSHOT_V1_FAILURES = (
     *_SNAPSHOT_V1_IO_EXCEPTIONS, *_SNAPSHOT_V1_STRUCTURE_EXCEPTIONS,
 )
 _SNAPSHOT_READ_CACHE = ContextVar("snapshot-read-cache", default=None)
+
+
+def _public_evidence_contains_private_material(value):
+    """Reject raw host/session material from a publishable evidence record."""
+
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        if isinstance(item, dict):
+            if any(key in _PRIVATE_EVIDENCE_KEYS for key in item):
+                return True
+            pending.extend(item.values())
+        elif isinstance(item, list):
+            pending.extend(item)
+        elif isinstance(item, str) and (
+            _PRIVATE_EVIDENCE_JSON_KEY_RE.search(item)
+            or any(pattern.search(item) for pattern in _PRIVATE_EVIDENCE_PATH_RES)
+        ):
+            return True
+    return False
 
 
 def _gt20_replay(boundary, state, evidence=None):
@@ -648,6 +689,39 @@ def _semantic_version_precedence(value):
     return _snapshot_v1_semantic_version_precedence(value)
 
 
+def _snapshot_batch_blobs(root, requests, limit, bind_ids=False):
+    encoded = [item.encode("ascii") for item in requests]
+    batch = _bounded_git_bytes(
+        root, ["cat-file", "--batch"], limit,
+        b"".join(item + b"\n" for item in encoded),
+    )
+    blobs, offset = [], 0
+    for request in encoded:
+        end = batch.find(b"\n", offset)
+        if end < 0:
+            raise ValueError("invalid Git batch header")
+        header = batch[offset:end].split()
+        offset = end + 1
+        if len(header) == 2 and header[1] == b"missing":
+            blobs.append(None)
+            continue
+        if len(header) != 3 or header[1] != b"blob" or (
+            bind_ids and header[0] != request
+        ):
+            raise ValueError("invalid Git batch header")
+        size = int(header[2])
+        if size < 0 or size > _SNAPSHOT_V1_BLOB_BYTES:
+            raise ValueError("snapshot blob bound is invalid")
+        content = batch[offset:offset + size]
+        offset += size + 1
+        if len(content) != size or batch[offset - 1:offset] != b"\n":
+            raise ValueError("invalid Git batch body")
+        blobs.append(content)
+    if offset != len(batch):
+        raise ValueError("unexpected Git batch suffix")
+    return blobs
+
+
 class _SnapshotBlobCache:
     """Bounded revision tree and immutable blob cache for one validation scope."""
 
@@ -706,24 +780,39 @@ class _SnapshotBlobCache:
         return tree, root_key
 
     def read(self, root, locator, revision):
+        return self.read_many(root, (locator,), revision)[locator]
+
+    def read_many(self, root, locators, revision):
         tree, root_key = self._tree(root, revision)
-        entry = tree.get(locator)
-        if entry is None or entry[0] not in {b"100644", b"100755"} \
-                or entry[1] != b"blob":
-            raise ValueError("snapshot file is not an owned regular blob")
-        object_id = entry[2]
-        key = (root_key, object_id)
-        cached = self._blobs.get(key)
-        if cached is not None:
-            return cached
-        content = _bounded_git_bytes(
-            root, ["cat-file", "blob", object_id], _SNAPSHOT_V1_BLOB_BYTES,
-        )
-        if self._blob_bytes + len(content) > _SNAPSHOT_V1_BLOB_CACHE_BYTES:
-            raise ValueError("snapshot blob cache aggregate bound is invalid")
-        self._blobs[key] = content
-        self._blob_bytes += len(content)
-        return content
+        locator_keys, object_ids = {}, []
+        for locator in dict.fromkeys(locators):
+            entry = tree.get(locator)
+            if entry is None or entry[0] not in {b"100644", b"100755"} \
+                    or entry[1] != b"blob":
+                raise ValueError("snapshot file is not an owned regular blob")
+            key = (root_key, entry[2])
+            locator_keys[locator] = key
+            if key not in self._blobs and entry[2] not in object_ids:
+                object_ids.append(entry[2])
+        if object_ids:
+            contents = _snapshot_batch_blobs(
+                root, object_ids,
+                _SNAPSHOT_V1_BLOB_CACHE_BYTES - self._blob_bytes
+                + len(object_ids) * 96,
+                True,
+            )
+            if any(item is None for item in contents):
+                raise ValueError("snapshot blob is unavailable")
+            additions = {
+                (root_key, object_id): content
+                for object_id, content in zip(object_ids, contents)
+            }
+            added_bytes = sum(map(len, contents))
+            if self._blob_bytes + added_bytes > _SNAPSHOT_V1_BLOB_CACHE_BYTES:
+                raise ValueError("snapshot blob cache aggregate bound is invalid")
+            self._blobs.update(additions)
+            self._blob_bytes += added_bytes
+        return {locator: self._blobs[key] for locator, key in locator_keys.items()}
 
 
 def _snapshot_read_scope(function):
@@ -830,32 +919,18 @@ def _snapshot_v1_history_index(root, anchor, cache):
                for item in revisions)
     ):
         raise ValueError("snapshot lineage revision bound is invalid")
-    requests = b"".join(
-        f"{revision}:{_SNAPSHOT_V1_AUTHORITY_REFS[1]}\n".encode("ascii")
-        for revision in revisions
+    contents = _snapshot_batch_blobs(
+        root, [
+            f"{revision}:{_SNAPSHOT_V1_AUTHORITY_REFS[1]}"
+            for revision in revisions
+        ],
+        _SNAPSHOT_V1_HISTORY_BYTES,
     )
-    batch = _bounded_git_bytes(
-        root, ["cat-file", "--batch"], _SNAPSHOT_V1_HISTORY_BYTES, requests,
-    )
-    records, offset = [], 0
-    for revision in revisions:
-        end = batch.find(b"\n", offset)
-        if end < 0:
-            raise ValueError("invalid Git batch header")
-        header = batch[offset:end].split()
-        offset = end + 1
-        if len(header) == 2 and header[1] == b"missing":
+    records = []
+    for revision, content in zip(revisions, contents):
+        if content is None:
             records.append((revision, None))
             continue
-        if len(header) != 3 or header[1] != b"blob":
-            raise ValueError("invalid Git batch header")
-        size = int(header[2])
-        if size < 0 or size > _SNAPSHOT_V1_BLOB_BYTES:
-            raise ValueError("snapshot lineage blob bound is invalid")
-        content = batch[offset:offset + size]
-        offset += size + 1
-        if len(content) != size or batch[offset - 1:offset] != b"\n":
-            raise ValueError("invalid Git batch body")
         try:
             historical = _strict_json_object(content)
         except _SNAPSHOT_V1_STRUCTURE_EXCEPTIONS as exc:
@@ -868,8 +943,6 @@ def _snapshot_v1_history_index(root, anchor, cache):
         node = increment.get("closeoutSnapshot") \
             if isinstance(increment, dict) else None
         records.append((revision, node))
-    if offset != len(batch):
-        raise ValueError("unexpected Git batch suffix")
     groups = []
     for revision, node in records:
         if groups and groups[-1][1] == node:
@@ -1899,7 +1972,7 @@ def _snapshot_v2_transition_errors(current, predecessor):
             and isinstance(prior_replay, dict)
             and prior_replay == _gt20_replay(
                 _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v5"],
-                "verified", _GT20_EVIDENCE_LOCATOR,
+                "verified", _GT20_V5_EVIDENCE_LOCATOR,
             )
             and current_replay == _gt20_replay(
                 _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v6"],
@@ -2508,10 +2581,16 @@ def _gt20_v4_overlay_shape_valid(contract):
                 == "claudeHostActivation"
             and activation["codex"]["lifecycleTriggerTurns"] == 2
             and activation["codex"]["externalModelTurns"] == 0
+            and activation["codex"]["publicTranscriptPolicy"]
+                == "digest-only-private-host-transcript-not-retained"
+            and activation["codex"]["identifierPolicy"] == "sha256-only"
             and activation["codex"]["credentialEnvironmentInherited"] is False
             and activation["claude"]["lifecycleTriggerTurns"] == 2
             and activation["claude"]["externalModelTurns"] == 0
             and activation["claude"]["minimumLoopbackHttpRequests"] == 2
+            and activation["claude"]["publicTranscriptPolicy"]
+                == "digest-only-private-host-transcript-not-retained"
+            and activation["claude"]["identifierPolicy"] == "sha256-only"
             and activation["claude"]["requiredLoadedPlugin"] == {
                 "name": "yiyuan-accord-claude", "version": "3.1.0",
             }
@@ -2519,6 +2598,9 @@ def _gt20_v4_overlay_shape_valid(contract):
             and failure["minimumAcceptedPhase"]
                 == "host-accepted-update-with-task-owned-staging-observed"
             and failure["forbiddenFailureCategory"] == "source-path-absent"
+            and failure["observationScope"] == "exact-candidate-target"
+            and failure["targetVersion"] == "3.1.0"
+            and failure["unexpectedSiblingDelta"] == []
             and failure["priorInventoryCommandRoles"] == {
                 "codex": "rollbackCodexInventory",
                 "claude": "rollbackClaudeInventory",
@@ -2591,6 +2673,18 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
     receipt = command.get("activationReceipt")
     if not isinstance(receipt, dict) or version not in {"3.0.1", "3.1.0"}:
         return False
+    digest_only = (
+        command.get("stdout") == ""
+        and command.get("stderr") == ""
+        and receipt.get("rawStreamPolicy")
+            == "digest-only-private-host-transcript-not-retained"
+        and SHA256_RE.fullmatch(receipt.get("rawStdoutSha256") or "")
+            is not None
+        and SHA256_RE.fullmatch(receipt.get("rawStderrSha256") or "")
+            is not None
+    )
+    if not digest_only:
+        return False
     if host == "codex":
         expected_path = (
             "%TASK_ROOT%/codex-host/plugins/cache/yiyuan-accord/"
@@ -2602,7 +2696,8 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
             or set(receipt) != {
                 "transport", "rpcMethods", "lifecycleTriggerTurns",
                 "externalModelTurns", "loopbackModelRequests", "startup",
-                "resume",
+                "resume", "rawStreamPolicy", "rawStdoutSha256",
+                "rawStderrSha256",
             }
             or receipt.get("transport") != "app-server-stdio-jsonl"
             or receipt.get("rpcMethods") != [
@@ -2618,8 +2713,9 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
                                    ("resume", "thread/resume")):
             item = receipt.get(source)
             if not isinstance(item, dict) or set(item) != {
-                "rpcMethod", "responseId", "threadId", "lifecycleTrigger",
-                "discovery", "hookStarted", "hookCompleted",
+                "rpcMethod", "responseId", "threadIdSha256",
+                "lifecycleTrigger", "discovery", "hookStarted",
+                "hookCompleted",
             }:
                 return False
             discovery = item.get("discovery")
@@ -2634,11 +2730,17 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
             if (
                 item.get("rpcMethod") != rpc_method
                 or type(item.get("responseId")) is not int
-                or not _nonempty_string(item.get("threadId"))
+                or SHA256_RE.fullmatch(item.get("threadIdSha256") or "")
+                    is None
                 or not isinstance(trigger, dict)
                 or trigger.get("rpcMethod") != "turn/start"
                 or type(trigger.get("responseId")) is not int
-                or not _nonempty_string(trigger.get("turnId"))
+                or set(trigger) != {
+                    "rpcMethod", "responseId", "turnIdSha256",
+                    "terminalStatus", "modelProvider", "requiresOpenAIAuth",
+                }
+                or SHA256_RE.fullmatch(trigger.get("turnIdSha256") or "")
+                    is None
                 or trigger.get("terminalStatus") != "failed"
                 or trigger.get("modelProvider")
                     != "task-owned-loopback-responses-failure"
@@ -2666,7 +2768,7 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
                 or normalized_paths != [expected_path] * 3
             ):
                 return False
-            thread_ids.append(item["threadId"])
+            thread_ids.append(item["threadIdSha256"])
         return len(set(thread_ids)) == 1
 
     expected_runtime = (
@@ -2680,7 +2782,8 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
             "transport", "lifecycleTriggerTurns", "externalModelTurns",
             "loopbackHttpRequests", "credentialEnvironmentInherited",
             "networkEndpoint", "terminalStatus", "hostRuns", "native",
-            "hooks",
+            "hooks", "rawStreamPolicy", "rawStdoutSha256",
+            "rawStderrSha256",
         }
         or receipt.get("transport") != (
             "headless-stream-json-with-loopback-trigger-and-task-owned-"
@@ -2749,8 +2852,15 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
             or response.get("hookEvent") != "SessionStart"
             or started.get("hookName") != f"SessionStart:{source}"
             or response.get("hookName") != f"SessionStart:{source}"
-            or not _nonempty_string(started.get("hookId"))
-            or started.get("hookId") != response.get("hookId")
+            or set(started) != {
+                "subtype", "hookEvent", "hookName", "hookIdSha256",
+            }
+            or set(response) != {
+                "subtype", "hookEvent", "hookName", "hookIdSha256",
+                "exitCode", "outcome",
+            }
+            or SHA256_RE.fullmatch(started.get("hookIdSha256") or "") is None
+            or started.get("hookIdSha256") != response.get("hookIdSha256")
             or response.get("exitCode") != 0
             or response.get("outcome") != "success"
             or plugin != {
@@ -2805,19 +2915,35 @@ def _gt20_v4_failed_update_receipts_valid(commands, fixture):
             or not isinstance(receipt, dict)
             or set(receipt) != {
                 "stagingObserved", "eventCount", "observationScope",
-                "eventKinds",
+                "targetVersion", "preexisting", "postCommandAbsent",
+                "eventPathSetSha256", "unexpectedSiblingDelta", "eventKinds",
             }
             or receipt.get("stagingObserved") is not True
             or type(receipt.get("eventCount")) is not int
             or receipt["eventCount"] < 1
             or receipt.get("observationScope")
-                != "isolated-marketplace-cache-excluding-prior-version"
-            or receipt.get("eventKinds") != ["Changed", "Created"]
+                != "exact-candidate-target"
+            or receipt.get("targetVersion") != "3.1.0"
+            or receipt.get("preexisting") is not False
+            or type(receipt.get("postCommandAbsent")) is not bool
+            or SHA256_RE.fullmatch(receipt.get("eventPathSetSha256") or "")
+                is None
+            or receipt.get("unexpectedSiblingDelta") != []
+            or not isinstance(receipt.get("eventKinds"), list)
+            or receipt.get("eventKinds") != sorted(set(receipt["eventKinds"]))
+            or not set(receipt["eventKinds"]) <= {"Changed", "Created", "Renamed"}
+            or "Created" not in receipt["eventKinds"]
         ):
             return False
     recovery = fixture.get("failedUpdateRecovery")
     codex = recovery.get("codex") if isinstance(recovery, dict) else None
     claude = recovery.get("claude") if isinstance(recovery, dict) else None
+    codex_mutation = commands["accordCodexFailedUpdateAfterStaging"][
+        "mutationReceipt"
+    ]
+    claude_mutation = commands["accordClaudeFailedUpdateAfterStaging"][
+        "mutationReceipt"
+    ]
     difference = claude.get("difference") if isinstance(claude, dict) else None
     try:
         codex_inventory = json.loads(commands["rollbackCodexInventory"]["stdout"])
@@ -2850,6 +2976,8 @@ def _gt20_v4_failed_update_receipts_valid(commands, fixture):
             "staging-cleanup"
         )
         and fixture.get("automaticRollbackClaimed") is False
+        and codex_mutation.get("postCommandAbsent") is True
+        and claude_mutation.get("postCommandAbsent") is False
         and fixture.get("priorInstalledBytesPreservedAfterFailedUpdate") is True
         and fixture.get("freshPriorInventoryVerified") is True
         and fresh_inventory_valid
@@ -2857,12 +2985,12 @@ def _gt20_v4_failed_update_receipts_valid(commands, fixture):
         and codex == {
             "disposition": "prior-remained-active-host-cleaned-observed-staging",
             "stagedFileCount": None, "difference": None,
-            "stagingCleanupVerified": True,
+            "stagingCleanupVerified": True, "postRepairAbsent": True,
         }
         and isinstance(claude, dict)
         and set(claude) == {
             "disposition", "stagedFileCount", "difference",
-            "stagingCleanupVerified",
+            "stagingCleanupVerified", "postRepairAbsent",
         }
         and claude.get("disposition") == (
             "prior-remained-active-with-explicit-task-owned-staging-cleanup"
@@ -2870,6 +2998,7 @@ def _gt20_v4_failed_update_receipts_valid(commands, fixture):
         and type(claude.get("stagedFileCount")) is int
         and claude["stagedFileCount"] > 0
         and claude.get("stagingCleanupVerified") is True
+        and claude.get("postRepairAbsent") is True
         and isinstance(difference, dict)
         and set(difference) == {"missing", "extra", "changed"}
         and isinstance(difference.get("missing"), list)
@@ -3191,9 +3320,10 @@ def _validate_exact_package_evidence_lifecycle(
             errors.append("exact package evidence pending state is invalid")
         return
     evidence = lifecycle.get("evidence")
-    predecessor_revision = snapshot.get("predecessorSnapshotRef", "").split(
-        ":", 1,
-    )[0] if isinstance(snapshot, dict) else None
+    predecessor_ref = snapshot.get("predecessorSnapshotRef") \
+        if isinstance(snapshot, dict) else None
+    predecessor_revision = predecessor_ref.split(":", 1)[0] \
+        if isinstance(predecessor_ref, str) else None
     subject_revision = (
         lifecycle.get("subjectRevision") if is_modern
         else subject_revision or predecessor_revision
@@ -3215,7 +3345,8 @@ def _validate_exact_package_evidence_lifecycle(
         or REVISION_RE.fullmatch(evidence.get("evaluatedRevision") or "") is None
         or evidence.get("evaluatedRevision") != subject_revision
         or (is_modern and evidence.get("locator") != (
-            "evals/evidence/2026-09-01-v310-gt20-exact-package-source.json"
+            _GT20_V6_EVIDENCE_LOCATOR if is_v6
+            else _GT20_V5_EVIDENCE_LOCATOR
         ))
         or not (verified_reopened or verified_closed)
     ):
@@ -3641,19 +3772,31 @@ def _validate_exact_package_evidence_lifecycle(
                 "isolated-claude",
             )
         )
-        and {
-            "neighborCodexMarketplaceAdd", "neighborClaudeMarketplaceAdd",
-            "neighborCodexInstall", "neighborClaudeInstall",
-            "accordCodexInstallPrior", "accordClaudeInstallPrior",
-            "accordCodexFailedUpdate", "accordClaudeFailedUpdate",
-            "accordCodexUpdateCandidate", "accordClaudeUpdateCandidate",
-            "processTreeTerminationProbe",
-            "codexHookStartup", "codexHookResume", "claudeHookStartup",
-            "claudeHookResume", "accordCodexRemove", "accordClaudeRemove",
-            "afterRemoveCodexMarketplaces", "afterRemoveClaudeMarketplaces",
-            "cleanupCodexNeighborRemove", "cleanupClaudeNeighborRemove",
-            "cleanupCodexMarketplaces", "cleanupClaudeMarketplaces",
-        } <= {item.get("role") for item in contract_commands}
+        and (
+            {
+                "neighborCodexMarketplaceAdd", "neighborClaudeMarketplaceAdd",
+                "neighborCodexInstall", "neighborClaudeInstall",
+                "accordCodexInstallPrior", "accordClaudeInstallPrior",
+                "accordCodexUpdateCandidate", "accordClaudeUpdateCandidate",
+                "processTreeTerminationProbe", "accordCodexRemove",
+                "accordClaudeRemove", "afterRemoveCodexMarketplaces",
+                "afterRemoveClaudeMarketplaces", "cleanupCodexNeighborRemove",
+                "cleanupClaudeNeighborRemove", "cleanupCodexMarketplaces",
+                "cleanupClaudeMarketplaces",
+            }
+            | ({
+                "accordCodexFailedUpdateAfterStaging",
+                "accordClaudeFailedUpdateAfterStaging",
+                "codexHostActivation", "claudeHostActivation",
+                "codexHookRuntimeUnitStartup", "codexHookRuntimeUnitResume",
+                "claudeHookRuntimeUnitStartup", "claudeHookRuntimeUnitResume",
+            } if record_schema == "yiyuan-accord-gt20-exact-package-evidence/v4"
+               else {
+                "accordCodexFailedUpdate", "accordClaudeFailedUpdate",
+                "codexHookStartup", "codexHookResume", "claudeHookStartup",
+                "claudeHookResume",
+            })
+        ) <= {item.get("role") for item in contract_commands}
     )
 
     def _command_executable(item):
@@ -4059,9 +4202,14 @@ def _validate_exact_package_evidence_lifecycle(
             root, "scripts/run-gt20-exact-package.ps1",
             evidence["evaluatedRevision"],
         )).hexdigest()
+        runner_digests_valid = all(
+            SHA256_RE.fullmatch(value) is not None
+            for value in (runner_digest, evaluated_runner_digest)
+        )
     except _SNAPSHOT_V1_FAILURES:
         runner_digest = None
         evaluated_runner_digest = None
+        runner_digests_valid = False
     expected_record_fields = {
         "schema", "taskId", "evaluatedRevision", "packageSha256",
         "behaviorSubject", "lifecycle", "claimLimit", "runnerSha256",
@@ -4125,39 +4273,38 @@ def _validate_exact_package_evidence_lifecycle(
         "postState": "verified",
         "cleanup": "verified",
     }
-    private_path = False
-    pending_values = [record]
-    while pending_values:
-        value = pending_values.pop()
-        if isinstance(value, dict):
-            pending_values.extend(value.values())
-        elif isinstance(value, list):
-            pending_values.extend(value)
-        elif isinstance(value, str) and re.search(
-            r"(?i)[a-z]:(?:[\\/]+)(?:users|documents and settings)(?:[\\/]+)",
-            value,
-        ):
-            private_path = True
-            break
-    if (
-        set(record) != expected_record_fields
-        or record.get("taskId") != "GT-20"
-        or record.get("evaluatedRevision") != evidence.get("evaluatedRevision")
-        or record.get("runnerSha256") != runner_digest
-        or record.get("runnerSha256") != evaluated_runner_digest
-        or not command_contract
-        or record.get("packageSha256") != packages
-        or not subject_contract
-        or record.get("lifecycle") != expected_lifecycle
-        or record.get("claimLimit") != expected_claim
-        or not fixture_contract
-        or not activation_receipts_contract
-        or not failed_update_receipts_contract
-        or not post_contract
-        or not host_cache_contract
-        or private_path
-    ):
-        errors.append("exact package evidence record contract is invalid")
+    record_checks = {
+        "fields": set(record) == expected_record_fields,
+        "task": record.get("taskId") == "GT-20",
+        "revision": (
+            record.get("evaluatedRevision") == evidence.get("evaluatedRevision")
+        ),
+        "runner": (
+            runner_digests_valid
+            and SHA256_RE.fullmatch(record.get("runnerSha256") or "") is not None
+            and record.get("runnerSha256") == runner_digest
+            == evaluated_runner_digest
+        ),
+        "commands": command_contract,
+        "packages": record.get("packageSha256") == packages,
+        "subjects": subject_contract,
+        "lifecycle": record.get("lifecycle") == expected_lifecycle,
+        "claim": record.get("claimLimit") == expected_claim,
+        "fixture": fixture_contract,
+        "activation": activation_receipts_contract,
+        "failed-update": failed_update_receipts_contract,
+        "poststate": post_contract,
+        "host-cache": host_cache_contract,
+        "privacy": not _public_evidence_contains_private_material(record),
+    }
+    failed_record_checks = [
+        name for name, valid in record_checks.items() if not valid
+    ]
+    if failed_record_checks:
+        errors.append(
+            "exact package evidence record contract is invalid: "
+            + ",".join(failed_record_checks)
+        )
         return
     try:
         for locator, digest in record["behaviorSubject"].items():
@@ -4909,8 +5056,10 @@ def _snapshot_v1_evaluation_history_errors(acceptance, golden):
     return errors
 
 
-def _snapshot_v1_evidence_errors(root, program, acceptance, revision):
-    errors = []
+def _snapshot_v1_evidence_errors(
+    root, program, acceptance, revision, require_verified_criteria=True,
+):
+    errors, bindings = [], []
 
     def validate(items, locator_field, digest_field, label, require_json=False):
         if not isinstance(items, list):
@@ -4932,14 +5081,7 @@ def _snapshot_v1_evidence_errors(root, program, acceptance, revision):
             ):
                 errors.append(f"{prefix} binding is invalid")
                 continue
-            try:
-                raw = _snapshot_bytes(root, locator, revision)
-                if sha256(raw).hexdigest() != expected:
-                    errors.append(f"{prefix} digest mismatch")
-                if require_json:
-                    _strict_json_object(raw)
-            except _SNAPSHOT_V1_FAILURES:
-                errors.append(f"{prefix} repository evidence is unavailable")
+            bindings.append((prefix, locator, expected, require_json))
 
     validate(
         program.get("inputEvidence"), "repositoryLocator", "repositorySha256",
@@ -4957,7 +5099,7 @@ def _snapshot_v1_evidence_errors(root, program, acceptance, revision):
             errors.append(f"revision-bound criteria[{index}] identity is invalid")
             continue
         criterion_ids.append(criterion["id"])
-        if criterion.get("assessment") != "verified":
+        if require_verified_criteria and criterion.get("assessment") != "verified":
             errors.append(f"revision-bound criteria[{index}] is not verified")
         validate(
             criterion.get("evidence"), "locator", "sha256",
@@ -4975,6 +5117,33 @@ def _snapshot_v1_evidence_errors(root, program, acceptance, revision):
             historical, "locator", "sha256",
             "revision-bound historicalEvidence", True,
         )
+    cache = _SNAPSHOT_READ_CACHE.get()
+    try:
+        content = cache.read_many(
+            root, [item[1] for item in bindings], revision,
+        ) if cache is not None else {
+            item[1]: _snapshot_bytes(root, item[1], revision) for item in bindings
+        }
+    except _SNAPSHOT_V1_FAILURES:
+        content = {}
+        for locator in dict.fromkeys(item[1] for item in bindings):
+            try:
+                content[locator] = (
+                    cache.read(root, locator, revision)
+                    if cache is not None
+                    else _snapshot_bytes(root, locator, revision)
+                )
+            except _SNAPSHOT_V1_FAILURES:
+                pass
+    for prefix, locator, expected, require_json in bindings:
+        try:
+            raw = content[locator]
+            if sha256(raw).hexdigest() != expected:
+                errors.append(f"{prefix} digest mismatch")
+            if require_json:
+                _strict_json_object(raw)
+        except _SNAPSHOT_V1_FAILURES:
+            errors.append(f"{prefix} repository evidence is unavailable")
     return errors
 
 
@@ -5135,9 +5304,13 @@ def _snapshot_v2_contract_errors(root, revision, documents):
     errors.extend(_snapshot_v1_evaluation_history_errors(acceptance, golden))
     node = program.get("increment", {}).get("closeoutSnapshot") \
         if isinstance(program.get("increment"), dict) else None
-    if isinstance(node, dict) and node.get("state") == "closed":
+    closed = isinstance(node, dict) and node.get("state") == "closed"
+    verified_replay = isinstance(node, dict) and isinstance(
+        node.get("replay"), dict,
+    ) and node["replay"].get("evidenceState") == "verified"
+    if closed or verified_replay:
         errors.extend(_snapshot_v1_evidence_errors(
-            root, program, acceptance, revision,
+            root, program, acceptance, revision, closed,
         ))
     public_release = acceptance.get("publicRelease")
     if not isinstance(public_release, dict):
