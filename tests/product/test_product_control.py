@@ -2774,7 +2774,11 @@ class ProductControlTests(unittest.TestCase):
             'host-accepted-update-with-task-owned-staging-observed',
         )
         self.ae(proof['forbiddenFailureCategory'], 'source-path-absent')
-        self.ae(proof['observationScope'], 'exact-candidate-target')
+        self.ae(proof['observationScope'], 'candidate-bound-staging-route')
+        self.ae(
+            proof['allowedPathScopes'],
+            ['exact-target', 'verified-temp-sibling'],
+        )
         self.ae(proof['targetVersion'], '3.1.0')
         self.ae(proof['unexpectedSiblingDelta'], [])
         self.ae(proof['priorInventoryCommandRoles'], {
@@ -2790,7 +2794,7 @@ class ProductControlTests(unittest.TestCase):
         self.ai('function Repair-FailedUpdateStaging', runner)
         self.ai('[System.IO.FileSystemWatcher]::new($stagingParent)', runner)
         self.ai("$result['mutationReceipt'] = [ordered]@{", runner)
-        self.ai("stagingObserved = $stagingObserved", runner)
+        self.ai("stagingObserved = $true", runner)
         self.ai('$codexFailedUpdate.mutationReceipt', runner)
         self.ai('$claudeFailedUpdate.mutationReceipt', runner)
         self.ai('$codexFailedUpdateRecovery = Repair-FailedUpdateStaging', runner)
@@ -2838,7 +2842,7 @@ class ProductControlTests(unittest.TestCase):
             runner,
         )
         self.ai("$record.stdout = ''", runner)
-        self.ai("observationScope = 'exact-candidate-target'", runner)
+        self.ai("observationScope = 'candidate-bound-staging-route'", runner)
         self.ai('unexpectedSiblingDelta = @()', runner)
         self.ai('postRepairAbsent = $true', runner)
         self.ani(
@@ -3005,9 +3009,13 @@ class ProductControlTests(unittest.TestCase):
             'failureCategory': 'task-owned-candidate-lock-after-staging',
             'mutationReceipt': {
                 'stagingObserved': True, 'eventCount': 2,
-                'observationScope': 'exact-candidate-target',
+                'observationScope': 'candidate-bound-staging-route',
+                'pathScope': 'exact-target',
                 'targetVersion': '3.1.0', 'preexisting': False,
                 'postCommandAbsent': True,
+                'candidateIdentityDigest': 'b' * 64,
+                'observedLocatorCount': 2,
+                'observedLocatorSetSha256': 'c' * 64,
                 'eventPathSetSha256': 'a' * 64,
                 'unexpectedSiblingDelta': [],
                 'eventKinds': ['Changed', 'Created'],

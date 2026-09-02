@@ -76,7 +76,11 @@
   "failedUpdateProof": {
     "minimumAcceptedPhase": "host-accepted-update-with-task-owned-staging-observed",
     "forbiddenFailureCategory": "source-path-absent",
-    "observationScope": "exact-candidate-target",
+    "observationScope": "candidate-bound-staging-route",
+    "allowedPathScopes": [
+      "exact-target",
+      "verified-temp-sibling"
+    ],
     "targetVersion": "3.1.0",
     "unexpectedSiblingDelta": [],
     "priorInventoryCommandRoles": {

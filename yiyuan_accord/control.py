@@ -2598,7 +2598,11 @@ def _gt20_v4_overlay_shape_valid(contract):
             and failure["minimumAcceptedPhase"]
                 == "host-accepted-update-with-task-owned-staging-observed"
             and failure["forbiddenFailureCategory"] == "source-path-absent"
-            and failure["observationScope"] == "exact-candidate-target"
+            and failure["observationScope"]
+                == "candidate-bound-staging-route"
+            and failure["allowedPathScopes"] == [
+                "exact-target", "verified-temp-sibling",
+            ]
             and failure["targetVersion"] == "3.1.0"
             and failure["unexpectedSiblingDelta"] == []
             and failure["priorInventoryCommandRoles"] == {
@@ -2915,17 +2919,29 @@ def _gt20_v4_failed_update_receipts_valid(commands, fixture):
             or not isinstance(receipt, dict)
             or set(receipt) != {
                 "stagingObserved", "eventCount", "observationScope",
-                "targetVersion", "preexisting", "postCommandAbsent",
+                "pathScope", "targetVersion", "preexisting",
+                "postCommandAbsent", "candidateIdentityDigest",
+                "observedLocatorCount", "observedLocatorSetSha256",
                 "eventPathSetSha256", "unexpectedSiblingDelta", "eventKinds",
             }
             or receipt.get("stagingObserved") is not True
             or type(receipt.get("eventCount")) is not int
             or receipt["eventCount"] < 1
             or receipt.get("observationScope")
-                != "exact-candidate-target"
+                != "candidate-bound-staging-route"
+            or receipt.get("pathScope") not in {
+                "exact-target", "verified-temp-sibling",
+            }
             or receipt.get("targetVersion") != "3.1.0"
             or receipt.get("preexisting") is not False
             or type(receipt.get("postCommandAbsent")) is not bool
+            or SHA256_RE.fullmatch(receipt.get("candidateIdentityDigest") or "")
+                is None
+            or type(receipt.get("observedLocatorCount")) is not int
+            or receipt["observedLocatorCount"] < 2
+            or SHA256_RE.fullmatch(
+                receipt.get("observedLocatorSetSha256") or "",
+            ) is None
             or SHA256_RE.fullmatch(receipt.get("eventPathSetSha256") or "")
                 is None
             or receipt.get("unexpectedSiblingDelta") != []

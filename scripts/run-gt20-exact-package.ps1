@@ -1517,9 +1517,11 @@ function Invoke-UpdateWithCandidateLock {
     [Parameter(Mandatory = $true)][string]$WorkingDirectory,
     [Parameter(Mandatory = $true)][hashtable]$Environment,
     [Parameter(Mandatory = $true)][string]$CandidateLockPath,
-    [Parameter(Mandatory = $true)][string]$CandidateStagingPath
+    [Parameter(Mandatory = $true)][string]$CandidateStagingPath,
+    [Parameter(Mandatory = $true)][string]$ExpectedPackageRoot
   )
   $staging = [System.IO.Path]::GetFullPath($CandidateStagingPath)
+  $expectedPackage = [System.IO.Path]::GetFullPath($ExpectedPackageRoot)
   $versionRoot = Split-Path -Parent $staging
   $stagingParent = Split-Path -Parent $versionRoot
   $targetVersion = [System.IO.Path]::GetFileName($staging)
@@ -1529,7 +1531,13 @@ function Invoke-UpdateWithCandidateLock {
   if (Test-Path -LiteralPath $staging) {
     throw 'Candidate staging target must not preexist the failed update.'
   }
+  $expectedMap = Get-FileMap $expectedPackage
+  $candidateIdentityDigest = Get-TextSha256 (
+    $expectedMap | ConvertTo-Json -Compress
+  )
   $beforeMap = Get-FileMap $stagingParent
+  $beforeChildren = @(Get-ChildItem -LiteralPath $stagingParent -Force |
+    ForEach-Object { $_.FullName })
   $watcher = [System.IO.FileSystemWatcher]::new($stagingParent)
   $watcher.IncludeSubdirectories = $true
   $watcher.NotifyFilter = (
@@ -1564,22 +1572,123 @@ function Invoke-UpdateWithCandidateLock {
     }
     $watcher.Dispose()
   }
-  $stagingPrefix = $staging + [System.IO.Path]::DirectorySeparatorChar
-  $stagingEvents = @($events | Where-Object {
-    $path = [string]$_.SourceEventArgs.FullPath
-    ($path.Equals($staging, [System.StringComparison]::OrdinalIgnoreCase) -or
-      $path.StartsWith($stagingPrefix, [System.StringComparison]::OrdinalIgnoreCase))
-  })
-  $stagingObserved = $stagingEvents.Count -ne 0
   $relativeStaging = [System.IO.Path]::GetRelativePath(
     $stagingParent, $staging
   ).Replace('\', '/')
-  $allowedPrefix = $relativeStaging + '/'
+  $eventFacts = @($events | ForEach-Object {
+    [pscustomobject]@{
+      fullPath = [string]$_.SourceEventArgs.FullPath
+      relativeParent = [System.IO.Path]::GetRelativePath(
+        $stagingParent, [string]$_.SourceEventArgs.FullPath
+      ).Replace('\', '/')
+      kind = $_.SourceEventArgs.ChangeType.ToString()
+    }
+  })
+  $exactPrefix = $relativeStaging + '/'
+  $exactFacts = @($eventFacts | Where-Object {
+    $_.relativeParent -eq $relativeStaging -or
+    $_.relativeParent.StartsWith(
+      $exactPrefix, [System.StringComparison]::OrdinalIgnoreCase
+    )
+  })
+  $candidateRoutes = [System.Collections.Generic.List[object]]::new()
+  if ($exactFacts.Count -ne 0) {
+    $candidateRoutes.Add([pscustomobject]@{
+      pathScope = 'exact-target'
+      ownedRoot = $staging
+      payloadRoot = $staging
+      facts = $exactFacts
+    })
+  }
+  $candidateSuffix = '/' + $relativeStaging
+  $temporaryRoots = @($eventFacts | ForEach-Object {
+    $marker = $_.relativeParent.IndexOf(
+      $candidateSuffix, [System.StringComparison]::OrdinalIgnoreCase
+    )
+    if ($marker -gt 0) { $_.relativeParent.Substring(0, $marker) }
+  } | Where-Object { $_ } | Sort-Object -Unique)
+  foreach ($temporaryRoot in $temporaryRoots) {
+    $payloadRelative = $temporaryRoot + $candidateSuffix
+    $payloadPrefix = $payloadRelative + '/'
+    $facts = @($eventFacts | Where-Object {
+      $_.relativeParent -eq $payloadRelative -or
+      $_.relativeParent.StartsWith(
+        $payloadPrefix, [System.StringComparison]::OrdinalIgnoreCase
+      )
+    })
+    $candidateRoutes.Add([pscustomobject]@{
+      pathScope = 'verified-temp-sibling'
+      ownedRoot = Join-Path $stagingParent $temporaryRoot
+      payloadRoot = Join-Path $stagingParent $payloadRelative
+      facts = $facts
+    })
+  }
+  $manifestLocator = @($expectedMap.Keys | Where-Object {
+    $_ -match '^\.[^/]+-plugin/plugin\.json$'
+  })
+  $qualifiedRoutes = @($candidateRoutes | Where-Object {
+    $route = $_
+    $payloadPrefix = [System.IO.Path]::GetFullPath($route.payloadRoot) +
+      [System.IO.Path]::DirectorySeparatorChar
+    $relativePayload = @($route.facts | ForEach-Object {
+      $path = [System.IO.Path]::GetFullPath($_.fullPath)
+      if ($path.Equals(
+          [System.IO.Path]::GetFullPath($route.payloadRoot),
+          [System.StringComparison]::OrdinalIgnoreCase
+        )) { return '.' }
+      if (-not $path.StartsWith(
+          $payloadPrefix, [System.StringComparison]::OrdinalIgnoreCase
+        )) { return '__outside__' }
+      [System.IO.Path]::GetRelativePath($route.payloadRoot, $path).Replace('\', '/')
+    } | Sort-Object -Unique)
+    $observedFiles = @($relativePayload | Where-Object {
+      $expectedMap.Contains($_)
+    })
+    $allAllowed = @($relativePayload | Where-Object {
+      $relative = $_
+      if ($relative -eq '.') { return $false }
+      if ($expectedMap.Contains($relative)) { return $false }
+      $prefix = $relative.TrimEnd('/') + '/'
+      -not @($expectedMap.Keys | Where-Object {
+        ([string]$_).StartsWith(
+          $prefix, [System.StringComparison]::OrdinalIgnoreCase
+        )
+      }).Count
+    }).Count -eq 0
+    $route | Add-Member -NotePropertyName relativePayload -NotePropertyValue (
+      $relativePayload
+    ) -Force
+    $route | Add-Member -NotePropertyName observedFiles -NotePropertyValue (
+      $observedFiles
+    ) -Force
+    $allAllowed -and $manifestLocator.Count -eq 1 -and
+      $observedFiles -contains 'adapter.json' -and
+      $observedFiles -contains $manifestLocator[0]
+  })
+  if ($qualifiedRoutes.Count -ne 1) {
+    $relativeDiagnostics = @($events | ForEach-Object {
+      [System.IO.Path]::GetRelativePath(
+        $stagingParent, [string]$_.SourceEventArgs.FullPath
+      ).Replace('\', '/')
+    } | Sort-Object -Unique | Select-Object -First 24)
+    throw (
+      'A unique candidate-bound staging route was not observed; parent-relative events=' +
+      ($relativeDiagnostics | ConvertTo-Json -Compress)
+    )
+  }
+  $selectedRoute = $qualifiedRoutes[0]
+  if ($beforeChildren -contains $selectedRoute.ownedRoot) {
+    throw 'The selected candidate staging route preexisted the update.'
+  }
+  $ownedRelative = [System.IO.Path]::GetRelativePath(
+    $stagingParent, $selectedRoute.ownedRoot
+  ).Replace('\', '/')
+  $allowedPrefix = $ownedRelative + '/'
   $afterMap = Get-FileMap $stagingParent
   $unexpectedSiblingDelta = @(
     @($beforeMap.Keys) + @($afterMap.Keys) | Sort-Object -Unique | Where-Object {
       $relative = ([string]$_).Replace('\', '/')
-      -not ($relative -eq $relativeStaging -or $relative.StartsWith(
+      -not ($relative -eq $ownedRelative -or $relative.StartsWith(
         $allowedPrefix, [System.StringComparison]::OrdinalIgnoreCase
       )) -and (
         -not $beforeMap.Contains($_) -or -not $afterMap.Contains($_) -or
@@ -1590,26 +1699,31 @@ function Invoke-UpdateWithCandidateLock {
   if ($unexpectedSiblingDelta.Count -ne 0) {
     throw 'Failed update changed an unexpected staging sibling.'
   }
-  $eventRelativePaths = @($stagingEvents | ForEach-Object {
-    [System.IO.Path]::GetRelativePath(
-      $staging, [string]$_.SourceEventArgs.FullPath
-    ).Replace('\', '/')
-  } | Sort-Object -Unique)
+  $eventRelativePaths = @($selectedRoute.relativePayload)
+  $observedLocators = @($selectedRoute.observedFiles | Sort-Object -Unique)
   $result['mutationReceipt'] = [ordered]@{
-    stagingObserved = $stagingObserved
-    eventCount = $stagingEvents.Count
-    observationScope = 'exact-candidate-target'
+    stagingObserved = $true
+    eventCount = $selectedRoute.facts.Count
+    observationScope = 'candidate-bound-staging-route'
+    pathScope = $selectedRoute.pathScope
     targetVersion = $targetVersion
     preexisting = $false
-    postCommandAbsent = -not (Test-Path -LiteralPath $staging)
+    postCommandAbsent = -not (Test-Path -LiteralPath $selectedRoute.ownedRoot)
+    candidateIdentityDigest = $candidateIdentityDigest
+    observedLocatorCount = $observedLocators.Count
+    observedLocatorSetSha256 = Get-TextSha256 (
+      $observedLocators | ConvertTo-Json -Compress
+    )
     eventPathSetSha256 = Get-TextSha256 (
       $eventRelativePaths | ConvertTo-Json -Compress
     )
     unexpectedSiblingDelta = @()
-    eventKinds = @($stagingEvents | ForEach-Object {
-      $_.SourceEventArgs.ChangeType.ToString()
+    eventKinds = @($selectedRoute.facts | ForEach-Object {
+      $_.kind
     } | Sort-Object -Unique)
   }
+  $result['_ownedStagingRoot'] = $selectedRoute.ownedRoot
+  $result['_candidatePayloadRoot'] = $selectedRoute.payloadRoot
   return $result
 }
 
@@ -1657,30 +1771,41 @@ function Assert-FileMapsEqual {
 function Repair-FailedUpdateStaging {
   param(
     [Parameter(Mandatory = $true)][string]$ExpectedRoot,
-    [Parameter(Mandatory = $true)][string]$StagingRoot,
+    [Parameter(Mandatory = $true)][string]$OwnedStagingRoot,
+    [Parameter(Mandatory = $true)][string]$CandidatePayloadRoot,
     [Parameter(Mandatory = $true)][string]$HostRoot,
     [Parameter(Mandatory = $true)][string]$PriorRoot,
     [Parameter(Mandatory = $true)][System.Collections.IDictionary]$StagingReceipt,
     [Parameter(Mandatory = $true)][string]$Label
   )
-  $staging = [System.IO.Path]::GetFullPath($StagingRoot)
+  $owned = [System.IO.Path]::GetFullPath($OwnedStagingRoot)
+  $payload = [System.IO.Path]::GetFullPath($CandidatePayloadRoot)
   $hostPrefix = [System.IO.Path]::GetFullPath($HostRoot) +
     [System.IO.Path]::DirectorySeparatorChar
-  if (-not $staging.StartsWith(
+  $ownedPrefix = $owned + [System.IO.Path]::DirectorySeparatorChar
+  if (-not $owned.StartsWith(
       $hostPrefix, [System.StringComparison]::OrdinalIgnoreCase) -or
-      $staging.Equals(
+      -not ($payload.Equals(
+          $owned, [System.StringComparison]::OrdinalIgnoreCase
+        ) -or $payload.StartsWith(
+          $ownedPrefix, [System.StringComparison]::OrdinalIgnoreCase
+        )) -or
+      $owned.Equals(
         [System.IO.Path]::GetFullPath($PriorRoot),
         [System.StringComparison]::OrdinalIgnoreCase
       )) {
     throw "$Label candidate staging path is outside its isolated host root."
   }
   if ($StagingReceipt.stagingObserved -ne $true -or
-      $StagingReceipt.observationScope -ne 'exact-candidate-target' -or
+      $StagingReceipt.observationScope -ne 'candidate-bound-staging-route' -or
       $StagingReceipt.preexisting -ne $false -or
       @($StagingReceipt.unexpectedSiblingDelta).Count -ne 0) {
     throw "$Label did not produce a bounded exact candidate-staging receipt."
   }
-  if (-not (Test-Path -LiteralPath $staging -PathType Container)) {
+  if ($StagingReceipt.postCommandAbsent -eq $true) {
+    if ((Test-Path -LiteralPath $owned) -or (Test-Path -LiteralPath $payload)) {
+      throw "$Label host-cleaned staging receipt conflicts with live residue."
+    }
     return [ordered]@{
       disposition = 'prior-remained-active-host-cleaned-observed-staging'
       stagedFileCount = $null
@@ -1689,14 +1814,18 @@ function Repair-FailedUpdateStaging {
       postRepairAbsent = $true
     }
   }
-  if (@(Get-ChildItem -LiteralPath $staging -Recurse -Force |
+  if (-not (Test-Path -LiteralPath $owned -PathType Container) -or
+      -not (Test-Path -LiteralPath $payload -PathType Container)) {
+    throw "$Label retained staging receipt has no attributable payload."
+  }
+  if (@(Get-ChildItem -LiteralPath $owned -Recurse -Force |
       Where-Object {
         $_.Attributes -band [System.IO.FileAttributes]::ReparsePoint
       }).Count -ne 0) {
     throw "$Label staging contains a reparse point."
   }
   $expected = Get-FileMap $ExpectedRoot
-  $actual = Get-FileMap $staging
+  $actual = Get-FileMap $payload
   if ($actual.Count -eq 0 -or
       ($expected | ConvertTo-Json -Compress) -eq
       ($actual | ConvertTo-Json -Compress)) {
@@ -1711,8 +1840,8 @@ function Repair-FailedUpdateStaging {
       $actual.Contains($_) -and $actual[$_] -ne $expected[$_]
     } | Sort-Object)
   }
-  Remove-Item -LiteralPath $staging -Recurse -Force
-  if (Test-Path -LiteralPath $staging) {
+  Remove-Item -LiteralPath $owned -Recurse -Force
+  if ((Test-Path -LiteralPath $owned) -or (Test-Path -LiteralPath $payload)) {
     throw "$Label task-owned staging cleanup failed."
   }
   return [ordered]@{
@@ -2489,14 +2618,18 @@ $codexFailedUpdate = Invoke-UpdateWithCandidateLock codex @(
   'plugin', 'add', $CodexAccordPluginId, '--json'
 ) $mutableSource $codexEnvironment (
   Join-Path $mutableSource 'plugins/yiyuan-accord-codex/NOTICE'
-) $codexCandidateInstalled
+) $codexCandidateInstalled (
+  Join-Path $candidateSource 'plugins/yiyuan-accord-codex'
+)
 Add-CommandRecord 'accordCodexFailedUpdateAfterStaging' $codexFailedUpdate 'task-owned-candidate-lock-after-staging'
 if ($codexFailedUpdate.exitCode -eq 0) { throw 'Codex failed update unexpectedly succeeded' }
 $claudeFailedUpdate = Invoke-UpdateWithCandidateLock claude @(
   'plugin', 'update', $ClaudeAccordPluginId, '--scope', 'user', '-y'
 ) $mutableSource $claudeEnvironment (
   Join-Path $mutableSource 'plugins/yiyuan-accord-claude/NOTICE'
-) $claudeCandidateInstalled
+) $claudeCandidateInstalled (
+  Join-Path $candidateSource 'plugins/yiyuan-accord-claude'
+)
 Add-CommandRecord 'accordClaudeFailedUpdateAfterStaging' $claudeFailedUpdate 'task-owned-candidate-lock-after-staging'
 if ($claudeFailedUpdate.exitCode -eq 0) { throw 'Claude failed update unexpectedly succeeded' }
 [void](Assert-FileMapsEqual (Join-Path $oldSource 'plugins/yiyuan-accord-codex') $codexOldInstalled 'Codex rollback')
@@ -2515,14 +2648,22 @@ Assert-PluginInventory $claudeRollbackList claude 'lifecycle-neighbor-claude@lif
 [void](Assert-FileMapsEqual $neighborClaudePackage $neighborClaudeInstalled 'Claude neighbor after rollback')
 $codexFailedUpdateRecovery = Repair-FailedUpdateStaging (
   Join-Path $candidateSource 'plugins/yiyuan-accord-codex'
-) $codexCandidateInstalled $codexRoot $codexOldInstalled (
+) $codexFailedUpdate._ownedStagingRoot (
+  $codexFailedUpdate._candidatePayloadRoot
+) $codexRoot $codexOldInstalled (
   $codexFailedUpdate.mutationReceipt
 ) 'Codex failed update'
 $claudeFailedUpdateRecovery = Repair-FailedUpdateStaging (
   Join-Path $candidateSource 'plugins/yiyuan-accord-claude'
-) $claudeCandidateInstalled $claudeRoot $claudeOldInstalled (
+) $claudeFailedUpdate._ownedStagingRoot (
+  $claudeFailedUpdate._candidatePayloadRoot
+) $claudeRoot $claudeOldInstalled (
   $claudeFailedUpdate.mutationReceipt
 ) 'Claude failed update'
+[void]$codexFailedUpdate.Remove('_ownedStagingRoot')
+[void]$codexFailedUpdate.Remove('_candidatePayloadRoot')
+[void]$claudeFailedUpdate.Remove('_ownedStagingRoot')
+[void]$claudeFailedUpdate.Remove('_candidatePayloadRoot')
 
 $codexUpdate = Invoke-Captured codex @(
   '--dangerously-bypass-hook-trust',
