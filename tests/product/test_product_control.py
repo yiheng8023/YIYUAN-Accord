@@ -2461,6 +2461,7 @@ class ProductControlTests(unittest.TestCase):
                 self.ane(project(docs), base)
         snap = inc['closeoutSnapshot']
         snap.update(state='closed', id=snap['id'].replace('.reopened', '.closed'),
+            nextGateId=p['releaseProcedure']['orderedGates'][1]['id'],
             predecessorSnapshotRef=_git(ROOT, 'rev-parse', 'HEAD').decode().strip()
             + ':product/program.json#/increment/closeoutSnapshot')
         errors = []
