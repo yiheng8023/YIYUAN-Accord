@@ -64,8 +64,10 @@ Then read, in order:
   preflight rejection did not prove mutation-phase failed-update recovery.
   Preserve its narrower historical subfacts. Exact `7a3950e` verifies the
   corrected bounded schema-v6 replay after authority-binding, staging-
-  recomputability and portable-path-privacy repair. Affected surfaces are
-  reaccepted and four replacement exact-tree reviews are active. No
+  recomputability and portable-path-privacy repair. Exact `f4c0251` plus the
+  admitted schema-v7 v5 record verify one isolated Codex Agent decision and
+  evaluator-mediated bounded compensation. Affected-surface reacceptance is
+  active and four replacement exact-tree reviews are pending. No
   repository candidate, hosted status, authorization or publication
   exists.
 - Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
@@ -180,8 +182,10 @@ Then read, in order:
   cache-cleanup review. Frozen 0febb415 retains only narrower bounded schema-v5
   subfacts after exact c5a0668 review rejected host activation and mutation-
   phase failed-update recovery. Exact `7a3950e` verifies the corrected bounded
-  schema-v6 replay; completed affected-surface reacceptance precedes
-  four active independent exact-tree reviews and any clean exact-
+  schema-v6 replay. Exact `f4c0251` plus the admitted schema-v7 v5 record verify
+  one bounded Codex Agent-decision and evaluator-mediated-compensation replay;
+  active affected-surface reacceptance precedes four pending independent exact-
+  tree reviews and any clean exact-
   local, hosted, named-human, tag or public Release gate. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
@@ -244,11 +248,14 @@ Then read, in order:
   correctness, cross-host equivalence, broad-field-value or production-safety
   claim.
 - At the tagged v3.0.1 SHA, the released program remains historical `ready`
-  evidence. On current moving `main`, `program.status` is `active`; its one
-  increment and work item remain active, but the first schema-v6 GT-20 evidence
-  package was invalidated by exact-tree privacy and staging-attribution review.
-  Exact `7a3950e` verifies the corrected bounded schema-v6 replay; affected
-  surfaces are reaccepted and four fresh exact-tree reviews now own execution.
+  evidence. On the current v3.1 working line, `program.status` is `active`; its
+  one increment and work item remain active, and the first schema-v6 GT-20
+  evidence package was invalidated by exact-tree privacy and staging-attribution
+  review. Exact `7a3950e` verifies the corrected bounded schema-v6 replay;
+  exact `f4c0251` plus the admitted schema-v7 v5 record verify one bounded
+  Codex Agent-decision and evaluator-mediated-compensation replay. Affected-
+  surface reacceptance now owns execution and four fresh exact-tree reviews are
+  pending.
   Its goal projection is active
   in the host and no v3.1.0 repository candidate is selected. The global
   rebaseline, bounded P0-P3 feasibility/reuse study and complete
@@ -504,8 +511,10 @@ Then read, in order:
   bounded source-bound historical claim; frozen 0febb415 retains only narrower
   schema-v5 lifecycle subfacts after exact c5a0668 review rejected host
   activation and mutation-phase failed-update recovery. Exact `7a3950e`
-  verifies the corrected bounded schema-v6 replay; affected surfaces are
-  reaccepted and four fresh independent reviews are active.
+  verifies the corrected bounded schema-v6 replay; exact `f4c0251` plus the
+  admitted schema-v7 v5 record verify one bounded Codex Agent decision and
+  evaluator-mediated compensation. Affected-surface reacceptance is active and
+  four fresh independent reviews are pending.
   Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
@@ -994,8 +1003,8 @@ Historical superseded review disposition —
     Do not inspect diagnostic content, bind model labels or add a browser bridge,
     MCP, SDK/App Server client or persistent service.
 13. `prove-transactional-install-state-preservation-and-removal` — completed
-    only for the bounded case in
-    `evals/evidence/2026-08-30-v310-gt20-21-source.json`.
+    only for the bounded schema-v7 case in
+    `evals/evidence/2026-09-02-v310-gt20-exact-package-v5-source.json`.
     Exact tracked `v3.0.1` bytes were installed into disposable non-empty Codex
     and Claude scopes alongside user instructions, configuration, an unrelated
     installed plugin and a shared host dependency. After a concurrent user edit,
@@ -1014,17 +1023,27 @@ Historical superseded review disposition —
     post-state printer failure remain counterevidence. No real configuration,
     credentials, session logs or model turn were used. Production, unmanaged or
     cross-OS hosts, actual Claude host Hook triggering, product value and release
-    readiness remain unknown.
-14. `reaccept-whole-system-after-live-state-closure` — prior source-bound
+    readiness remain unknown. Exact subject `f4c0251` then nests the corrected
+    schema-v6 mechanism lane and adds one isolated Codex Agent decision with
+    one thread, one turn, one message and zero tools; only the evaluator applies
+    receipt-bound attributable compensation and independently verifies prior
+    bytes, neighbor and unmanaged sentinel preservation, post-state and cleanup.
+    Codex CLI 0.152.1 and Claude Code 2.1.258 were observed. Desktop
+    26.831.2377.0 is version-known only; its behavior remains unverified. The v5
+    replay covers a mutable local marketplace mechanism, not the public
+    immutable-ref uninstall/reinstall route or atomic hot update.
+14. `reaccept-whole-system-after-live-state-closure` — active. Prior source-bound
     reacceptance from exact cut `85a917a` remains historical. GT-21 is preserved,
     but exact `c5a0668` review reopens GT-20 at host activation and mutation-
     phase failed-update recovery. Exact `7a3950e` verifies the corrected bounded
-    schema-v6 replay; affected surfaces are reaccepted. Production,
+    schema-v6 replay, and exact `f4c0251` plus the admitted schema-v7 v5 record
+    verify the bounded Agent-recovery evidence. Current affected surfaces are
+    being reaccepted. Production,
     cross-host and updated-client entry behavior remain
     unknown.
 15. `independent-review-and-form-future-exact-candidate` — prior review history
     selected a v3.1.0 repository candidate that later failed. This step is now
-    active after current affected-surface reacceptance. The review cycle at pre-remediation cut
+    pending current affected-surface reacceptance. The review cycle at pre-remediation cut
     `523f2ef47df96b76c132525ff432d044e7b1b4b3` completed separate product,
     specification, implementation and standards reviews and produced
     remediation findings. It did not form a candidate, and completion does not
@@ -1134,8 +1153,10 @@ Historical superseded review disposition —
     the corrected schema-v5 replay, but exact `c5a0668` review rejected its host-
     activation and mutation-phase failed-update-recovery claims. Preserve its
     narrower historical subfacts. Exact `7a3950e` verifies the corrected bounded
-    schema-v6 replay. Completed affected-surface reacceptance precedes
-    four active independent exact-tree reviews. Exact-local and the fresh
+    schema-v6 replay, and exact `f4c0251` plus the admitted schema-v7 v5 record
+    verify one bounded Agent-recovery replay. Active affected-surface
+    reacceptance precedes four pending independent exact-tree reviews. Exact-
+    local and the fresh
     full nine-leg hosted matrix
     remain later; candidate selection alone cannot authorize publication.
 
@@ -1143,8 +1164,9 @@ The release procedure currently has no selected v3.1.0 repository candidate.
 Exact `fc9c1a7` remains invalidated raw replay counterevidence. Frozen
 `0febb415` retains only narrower bounded schema-v5 subfacts after failed exact
 review cut `c5a0668`. Exact `7a3950e` verifies the corrected bounded schema-v6
-replay. Affected surfaces are reaccepted and four fresh independent exact-tree
-reviews are active. Only
+replay. Exact `f4c0251` plus the admitted schema-v7 v5 record verify one bounded
+Agent-recovery replay. Affected-surface reacceptance is active and four fresh
+independent exact-tree reviews are pending. Only
 after they close may clean exact-local and host
 checks, hosted checks, a named-human decision, tag, Release, public verification
 and post-release cleanup run in their declared order on one unchanged exact

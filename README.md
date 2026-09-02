@@ -223,6 +223,8 @@ It normalizes only the fields needed by the present outcome. It does not recreat
 
 Conflicts, stale values, missing bindings, and unexposed facts remain unknown.
 
+Machine-facing fields, API/CLI operation names, and official English terms carry normative semantics. Translations are explanatory labels, not accepted aliases: a branch is not a fork, a scheduled automation is not a plan step, task/thread/chat/conversation labels require their object and lifecycle context, and approval policy is distinct from sandbox access.
+
 Shared state, observation, or context injection is not evidence that an Agent used the information or produced the intended effect.
 
 ### Continuity and topology
@@ -295,7 +297,7 @@ The exact public claim ceiling contains five finite statements:
 
 Separate repository evidence includes a side-effect-free reference core and the bounded host scenarios below. It does not expand those five public claims.
 
-Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and historical lifecycle subfacts from one disposable non-empty Windows Codex-and-Claude replay. Exact review cut `c5a0668` rejected the broad GT-20 claim. Exact `7a3950e` retains corrected schema-v6 zero-model native-lifecycle, recomputable-staging and path-private mechanism facts, but independent review rejected their promotion to atomic or one-intent Agent recovery. Schema-v7 Codex Agent-decision and evaluator-mediated bounded-compensation evidence is pending; reacceptance and all four reviews are reset. This does not prove host-automatic, in-place or crash-atomic rollback, Claude Agent equivalence, current-desktop behavior, cross-OS equivalence, product value, a repository candidate, or release readiness.
+Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and lifecycle facts from one disposable non-empty Windows Codex-and-Claude replay. Exact review cut `c5a0668` rejected the broad GT-20 claim. Exact `7a3950e` retains corrected schema-v6 zero-model native-lifecycle, recomputable-staging and path-private mechanism facts. Exact `f4c0251` plus the admitted schema-v7 v5 record verify one isolated Codex Agent decision and evaluator-mediated bounded compensation; affected-surface reacceptance is active and all four fresh reviews are pending. This does not prove host-automatic, in-place or crash-atomic rollback, Claude Agent equivalence, current-desktop behavior, cross-OS equivalence, product value, a repository candidate, or release readiness.
 
 The observed `bypass_hook_trust` / `bypassPermissions` path was a test control, not a production trust route.
 
@@ -365,7 +367,11 @@ Prefer supported native reload and lifecycle operations.
 
 These exact-ref commands perform an explicit replacement, not an atomic in-place update. Record the previous exact tag first; if target installation fails, reinstall that tag, verify health, and report the inactive interval.
 
+The current schema-v7 v5 replay covers a mutable local-marketplace evaluation mechanism only. It does not validate this public immutable-ref uninstall/reinstall path or claim an atomic hot update.
+
 A lifecycle command can refresh installed files without replacing capability already loaded into the current task or session. Open a fresh task or session before judging the new version; a reported version, `/reload-plugins`, or changed cache alone is not hot-update evidence for already loaded behavior.
+
+Desktop `26.831.2377.0` is version-known only; new-task visibility, activation, and post-state have not been verified. Before candidate formation, either obtain that exact Desktop evidence or state a CLI-only supported behavior surface; any candidate installation or hot replacement requires a separate host-behavior authority decision.
 
 Never move an existing tag. Do not edit global host configuration as a substitute for supported lifecycle commands.
 

@@ -45,12 +45,18 @@ activation and source-absent preflight rejection did not prove mutation-phase
 failed-update recovery. Those narrower historical subfacts remain. Exact
 `7a3950e` retains the corrected bounded schema-v6 zero-model native-lifecycle,
 recomputable-staging and path-private mechanism facts. Independent review
-rejected their promotion to atomic or one-intent Agent recovery. Schema-v7
-Codex Agent-decision and evaluator-mediated bounded-compensation evidence is
-pending; affected-surface reacceptance and all four reviews are reset before
-one unchanged clean SHA may become a replacement candidate. Production trust,
+rejected their promotion to atomic or one-intent Agent recovery. Exact
+`f4c0251` plus the admitted schema-v7 v5 record verify one isolated Codex Agent
+decision and evaluator-mediated bounded compensation. Affected-surface
+reacceptance is active and all four fresh reviews are pending before one
+unchanged clean SHA may become a replacement candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
+The v5 replay exercises a mutable local marketplace mechanism, not the public
+immutable-ref uninstall/reinstall route or an atomic hot update. Desktop
+`26.831.2377.0` is version-known only; its new-task visibility, activation and
+post-state remain unverified, and candidate installation or hot replacement is
+a separate host-behavior authority boundary.
 The implementation does not admit an Accord-managed Runtime, durable state
 layer or durable evolution. Selecting the short-lived Hook does not prove
 production trust or broad live-host behavior.
@@ -239,9 +245,10 @@ The ordered bottlenecks are:
   three-file headroom. Each new mechanism must close a named responsibility;
   process-only artifacts are removed.
 - An affected-boundary loop should stay below ten minutes on the maintainer
-  host. The full exact suite remains separately budgeted by observed platform
-  cost and the 240-minute hosted job ceiling. A breach opens profiling and
-  subtraction review before another timeout increase.
+  host. The latest full product suite cost was 1374.116 seconds, about 22.9
+  minutes, so it remains a pre-candidate deep-regression budget rather than a
+  per-edit loop. The separate hosted ceiling is 240 minutes. A breach opens
+  profiling and subtraction review before another timeout increase.
 - Keep Windows Python 3.10/3.14, macOS Python 3.10/3.14 and Linux Python
   3.10-3.14. Historical exact-package lifecycle evidence remains bound to its
   former package. Frozen 0febb415 preserves narrower changed-package schema-v5
@@ -249,9 +256,11 @@ The ordered bottlenecks are:
   and Node identities, but exact c5a0668 review invalidates host activation and
   mutation-phase failed-update recovery. The raw fc9c1a7 environment remains
   invalidated as current evidence. Exact `7a3950e` retains bounded schema-v6
-  zero-model mechanism facts; schema-v7 Agent-decision evidence, reacceptance
-  and four fresh reviews are pending. No automatic, in-place or crash-atomic
-  rollback or Claude Agent equivalence is proved.
+  zero-model mechanism facts; exact `f4c0251` plus the admitted schema-v7 v5
+  record verify one isolated Codex Agent decision and evaluator-mediated
+  bounded compensation. Reacceptance is active and four fresh reviews are
+  pending. No automatic, in-place or crash-atomic rollback or Claude Agent
+  equivalence is proved.
   Desktop/ChatGPT, unmanaged-host and cross-OS lifecycle behavior remain
   pending or unknown.
 - Local WSL2 Ubuntu 26.04 on Linux 6.18 with Python 3.14.4 is an available
@@ -1035,9 +1044,10 @@ only narrower bounded schema-v5 lifecycle subfacts after exact c5a0668 review
 rejected host activation and mutation-phase failed-update recovery. Exact
 `7a3950e` retains corrected bounded schema-v6 zero-model mechanism facts after
 authority-binding, staging-recomputability and portable-path-privacy repair.
-Schema-v7 Codex Agent-decision evidence and affected-surface reacceptance must
-complete before four independent exact-tree reviews restart or any replacement-
-candidate or exact-local gate opens.
+Exact `f4c0251` plus the admitted schema-v7 v5 record verify one bounded Codex
+Agent-decision and evaluator-mediated-compensation replay. Affected-surface
+reacceptance must complete before four independent exact-tree reviews start or
+any replacement-candidate or exact-local gate opens.
 
 After the authorized tag and Release exist, one evaluator isolated from
 candidate-preparation context exercises the README installation, confirmation
@@ -1115,8 +1125,10 @@ GT-20 evidence. Exact `0febb415` completed the corrected bounded schema-v5
 replay, but exact `c5a0668` review rejected its host-activation and mutation-
 phase failed-update-recovery claims. Preserve its narrower historical subfacts.
 Exact `7a3950e` retains corrected bounded schema-v6 zero-model mechanism facts.
-Schema-v7 Codex Agent-decision evidence and affected-surface reacceptance are
-pending, and all four independent exact-tree reviews are reset. A replacement
+Exact `f4c0251` plus the admitted schema-v7 v5 record verify one bounded Codex
+Agent decision and evaluator-mediated compensation. Affected-surface
+reacceptance is active, and all four independent exact-tree reviews are
+pending. A replacement
 candidate does not yet exist;
 exact-local, hosted, named-human, tag, publication and public-verification gates
 remain distinct.

@@ -683,8 +683,8 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-schema-v6-mechanism-retained-schema-v7-agent-route-pending-'
-            'reacceptance-and-reviews-reset',
+            'gt20-schema-v6-mechanism-retained-schema-v7-agent-route-verified-'
+            'reacceptance-active-reviews-pending',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -845,13 +845,15 @@ class ProductControlTests(unittest.TestCase):
         self.ae(
             suite['status'],
             'historical-source-complete-live-carrier-schema-v6-mechanism-'
-            'retained-schema-v7-agent-route-pending',
+            'retained-schema-v7-agent-route-verified-reacceptance-active-'
+            'reviews-pending',
         )
         for marker in (
             'Frozen 0febb415 completed',
             'Exact 7a3950e retains one corrected',
             'Independent review rejected promotion',
-            'Schema-v7 one-intent Codex Agent-decision',
+            'Exact f4c0251',
+            'Affected-surface reacceptance is active',
             'candidate or release readiness',
         ):
             self.ai(marker, suite['executionClaimLimit'])
@@ -1457,7 +1459,17 @@ class ProductControlTests(unittest.TestCase):
         for stages in (program['increment']['fourSurfaceMapping']['process']['orderedSteps'],
                        program['increment']['workItems'][0]['closeoutSequence']):
             self.ae([step['state'] for step in stages[-3:]],
-                    ['active', 'pending', 'pending'])
+                    ['completed', 'active', 'pending'])
+        localized = _clone(program['increment'])
+        localized['fourSurfaceMapping']['process']['orderedSteps'][-2][
+            'state'
+        ] = '进行中'
+        localized_errors = []
+        _validate_four_surface_mapping(localized, set(CRITERIA), localized_errors)
+        self.has(
+            localized_errors,
+            'increment.fourSurfaceMapping.process.orderedSteps[13].state is invalid',
+        )
         active = '\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
             'README.md', 'README.zh-CN.md', P, 'product/reshaping-guidance.json',
             'docs/architecture.md', 'docs/operations/CONTINUATION.md',
@@ -2382,14 +2394,15 @@ class ProductControlTests(unittest.TestCase):
         _, prior_program, *_ = _snapshot_documents(ROOT, predecessor)
         prior = prior_program['increment']['closeoutSnapshot']
         self.ae(_snapshot_v2_transition_errors(node, prior), [])
-        self.ae(prior['replay']['evidenceState'], 'verified')
-        self.ae(node['replay']['evidenceState'], 'pending')
+        self.ae(node['acceptanceTransition']['kind'], 'reaccepting')
+        self.ae(prior['acceptanceTransition']['kind'], 'changed')
+        self.ae(node['replay'], prior['replay'])
+        self.ae(node['replay']['evidenceState'], 'verified')
         self.ae(
-            prior['replay']['evidenceRef'],
+            node['replay']['evidenceRef'],
             'evals/evidence/2026-09-02-v310-gt20-'
-            'exact-package-v4-source.json',
+            'exact-package-v5-source.json',
         )
-        self.an(node['replay']['evidenceRef'])
         self.ae(
             node['replay']['correctionId'],
             'one-intent-agent-decision-and-bounded-compensation-v3',
@@ -2399,11 +2412,9 @@ class ProductControlTests(unittest.TestCase):
             'single-intent-agent-decision-and-bounded-'
             'failed-update-recovery-closure',
         )
-        for field in ('invalidatedTaskIds', 'preservedTaskIds'):
-            self.ae(node['replay'][field], prior['replay'][field])
         self.ae(
             node['predecessorSnapshotRef'],
-            '732325e0b00911d295203468faed717bf29db3e2:'
+            '6b5c722dc0264196e54c2f7cfa79ed6da00974ae:'
             'product/program.json#/increment/closeoutSnapshot',
         )
         prior_predecessor = prior['predecessorSnapshotRef'].split(':', 1)[0]
@@ -2416,6 +2427,17 @@ class ProductControlTests(unittest.TestCase):
             ),
             [],
         )
+        skipped_reacceptance = _clone(node)
+        self.has(
+            _snapshot_v2_transition_errors(
+                skipped_reacceptance,
+                old_program['increment']['closeoutSnapshot'],
+            ),
+            'revision-bound v2 reopen transition is invalid',
+        )
+        self.ae(old_program['increment']['closeoutSnapshot']['replay'][
+            'evidenceState'
+        ], 'pending')
         changed = _clone(program)
         changed_node = changed['increment']['closeoutSnapshot']
         changed_node['replay']['preservedTaskIds'] = []
@@ -2434,10 +2456,30 @@ class ProductControlTests(unittest.TestCase):
 
         self.ae(prior['state'], 'reopened')
         self.ae(node['state'], 'reopened')
+        wrong_stage = _clone(program)
+        wrong_stage['increment']['fourSurfaceMapping']['process'][
+            'orderedSteps'
+        ][-2]['state'] = 'pending'
+        self.has(
+            _snapshot_v2_node_errors(wrong_stage, acceptance),
+            'revision-bound v2 reacceptance state is invalid',
+        )
         arbitrary = _clone(node)
         arbitrary['replay']['earliestAffectedBoundary'] = 'arbitrary-boundary'
         self.has(
             _snapshot_v2_transition_errors(arbitrary, prior),
+            'revision-bound v2 reopen transition is invalid',
+        )
+        drifted = _clone(node)
+        drifted['unknownsRef'] += '.drifted'
+        self.has(
+            _snapshot_v2_transition_errors(drifted, prior),
+            'revision-bound v2 reopen transition is invalid',
+        )
+        closed_prior = _clone(prior)
+        closed_prior['state'] = 'closed'
+        self.has(
+            _snapshot_v2_transition_errors(node, closed_prior),
             'revision-bound v2 reopen transition is invalid',
         )
         self.has(
