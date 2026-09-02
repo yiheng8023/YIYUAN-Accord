@@ -43,11 +43,12 @@ Claude executable layouts. Exact external review cut `c5a0668` then rejected
 the broad GT-20 claim because direct Node runtime calls did not prove host
 activation and source-absent preflight rejection did not prove mutation-phase
 failed-update recovery. Those narrower historical subfacts remain. Exact
-`7a3950e` verifies the corrected bounded schema-v6 replay after authority-
-binding, staging-recomputability and portable-path-privacy repair. Affected
-surfaces are reaccepted and four fresh independent exact-tree reviews are
-active before one unchanged clean SHA may become the replacement
-candidate. Production trust,
+`7a3950e` retains the corrected bounded schema-v6 zero-model native-lifecycle,
+recomputable-staging and path-private mechanism facts. Independent review
+rejected their promotion to atomic or one-intent Agent recovery. Schema-v7
+Codex Agent-decision and evaluator-mediated bounded-compensation evidence is
+pending; affected-surface reacceptance and all four reviews are reset before
+one unchanged clean SHA may become a replacement candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
 The implementation does not admit an Accord-managed Runtime, durable state
@@ -247,9 +248,10 @@ The ordered bottlenecks are:
   subfacts from one disposable Windows replay with exact Codex CLI, Claude Code
   and Node identities, but exact c5a0668 review invalidates host activation and
   mutation-phase failed-update recovery. The raw fc9c1a7 environment remains
-  invalidated as current evidence. Exact `7a3950e` verifies the corrected
-  bounded schema-v6 replay; affected surfaces are reaccepted, four fresh
-  reviews are active, and no automatic rollback is proved.
+  invalidated as current evidence. Exact `7a3950e` retains bounded schema-v6
+  zero-model mechanism facts; schema-v7 Agent-decision evidence, reacceptance
+  and four fresh reviews are pending. No automatic, in-place or crash-atomic
+  rollback or Claude Agent equivalence is proved.
   Desktop/ChatGPT, unmanaged-host and cross-OS lifecycle behavior remain
   pending or unknown.
 - Local WSL2 Ubuntu 26.04 on Linux 6.18 with Python 3.14.4 is an available
@@ -1031,10 +1033,11 @@ claims as history without promoting them to the changed package, production,
 cross-host, updated-client entry or release evidence. Frozen 0febb415 preserves
 only narrower bounded schema-v5 lifecycle subfacts after exact c5a0668 review
 rejected host activation and mutation-phase failed-update recovery. Exact
-`7a3950e` verifies the corrected bounded schema-v6 replay after authority-
-binding, staging-recomputability and portable-path-privacy repair. Completed
-affected-surface reacceptance precedes four active independent exact-tree reviews
-and every replacement-candidate or exact-local gate.
+`7a3950e` retains corrected bounded schema-v6 zero-model mechanism facts after
+authority-binding, staging-recomputability and portable-path-privacy repair.
+Schema-v7 Codex Agent-decision evidence and affected-surface reacceptance must
+complete before four independent exact-tree reviews restart or any replacement-
+candidate or exact-local gate opens.
 
 After the authorized tag and Release exist, one evaluator isolated from
 candidate-preparation context exercises the README installation, confirmation
@@ -1111,9 +1114,10 @@ then later evaluator privacy and ownership findings invalidated it as current
 GT-20 evidence. Exact `0febb415` completed the corrected bounded schema-v5
 replay, but exact `c5a0668` review rejected its host-activation and mutation-
 phase failed-update-recovery claims. Preserve its narrower historical subfacts.
-Exact `7a3950e` verifies the corrected bounded schema-v6 replay. Affected
-surfaces are reaccepted and four fresh independent exact-tree reviews are
-active. A replacement candidate does not yet exist;
+Exact `7a3950e` retains corrected bounded schema-v6 zero-model mechanism facts.
+Schema-v7 Codex Agent-decision evidence and affected-surface reacceptance are
+pending, and all four independent exact-tree reviews are reset. A replacement
+candidate does not yet exist;
 exact-local, hosted, named-human, tag, publication and public-verification gates
 remain distinct.
 

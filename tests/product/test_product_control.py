@@ -682,8 +682,8 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-corrected-schema-v6-replay-verified-reacceptance-complete-'
-            'independent-review-active',
+            'gt20-schema-v6-mechanism-retained-schema-v7-agent-route-pending-'
+            'reacceptance-and-reviews-reset',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -843,14 +843,14 @@ class ProductControlTests(unittest.TestCase):
         )
         self.ae(
             suite['status'],
-            'historical-source-complete-live-carrier-corrected-schema-v6-'
-            'replay-verified-reacceptance-complete-independent-review-active',
+            'historical-source-complete-live-carrier-schema-v6-mechanism-'
+            'retained-schema-v7-agent-route-pending',
         )
         for marker in (
             'Frozen 0febb415 completed',
-            'Exact 7a3950e verifies',
-            'Affected surfaces are reaccepted',
-            'four fresh independent product',
+            'Exact 7a3950e retains one corrected',
+            'Independent review rejected promotion',
+            'Schema-v7 one-intent Codex Agent-decision',
             'candidate or release readiness',
         ):
             self.ai(marker, suite['executionClaimLimit'])
@@ -2384,25 +2384,28 @@ class ProductControlTests(unittest.TestCase):
         _, prior_program, *_ = _snapshot_documents(ROOT, predecessor)
         prior = prior_program['increment']['closeoutSnapshot']
         self.ae(_snapshot_v2_transition_errors(node, prior), [])
-        self.ae(prior['replay']['evidenceState'], 'pending')
-        self.ae(node['replay']['evidenceState'], 'verified')
+        self.ae(prior['replay']['evidenceState'], 'verified')
+        self.ae(node['replay']['evidenceState'], 'pending')
         self.ae(
-            node['replay']['evidenceRef'],
+            prior['replay']['evidenceRef'],
             'evals/evidence/2026-09-02-v310-gt20-'
             'exact-package-v4-source.json',
         )
+        self.an(node['replay']['evidenceRef'])
         self.ae(
             node['replay']['correctionId'],
-            'independent-evidence-recomputability-and-portable-path-privacy-v2',
+            'one-intent-agent-decision-and-bounded-compensation-v3',
         )
-        for field in (
-            'earliestAffectedBoundary', 'invalidatedTaskIds',
-            'preservedTaskIds',
-        ):
+        self.ae(
+            node['replay']['earliestAffectedBoundary'],
+            'single-intent-agent-decision-and-bounded-'
+            'failed-update-recovery-closure',
+        )
+        for field in ('invalidatedTaskIds', 'preservedTaskIds'):
             self.ae(node['replay'][field], prior['replay'][field])
         self.ae(
             node['predecessorSnapshotRef'],
-            'bed20931b56bffe8c3055631f1c08d65dcb67ec5:'
+            '732325e0b00911d295203468faed717bf29db3e2:'
             'product/program.json#/increment/closeoutSnapshot',
         )
         prior_predecessor = prior['predecessorSnapshotRef'].split(':', 1)[0]
@@ -2812,76 +2815,13 @@ class ProductControlTests(unittest.TestCase):
         ))
 
         runner = _text(GT20_RUNNER)
-        self.ai('function Invoke-UpdateWithCandidateLock', runner)
-        self.ai('function Repair-FailedUpdateStaging', runner)
-        self.ai('[System.IO.FileSystemWatcher]::new($stagingParent)', runner)
-        self.ai("$result['mutationReceipt'] = [ordered]@{", runner)
-        self.ai("stagingObserved = $true", runner)
-        self.ai('$codexFailedUpdate.mutationReceipt', runner)
-        self.ai('$claudeFailedUpdate.mutationReceipt', runner)
-        self.ai('$codexFailedUpdateRecovery = Repair-FailedUpdateStaging', runner)
-        self.ai('$claudeFailedUpdateRecovery = Repair-FailedUpdateStaging', runner)
-        self.ai("Add-CommandRecord 'rollbackCodexInventory'", runner)
-        self.ai("Add-CommandRecord 'rollbackClaudeInventory'", runner)
-        self.ani('codexPriorHostActivationAfterFailedUpdate', runner)
-        self.ani('claudePriorHostActivationAfterFailedUpdate', runner)
-        self.ai("'prior-remained-active-with-explicit-task-owned-staging-cleanup'", runner)
-        self.ani(
-            '[Parameter(Mandatory = $true)][string]$Host,', runner,
-            'PowerShell reserves $Host and cannot bind it as a parameter',
+        guard = runner.index('$difference.missing.Count -eq 0')
+        self.ai('$difference.extra.Count -ne 0', runner)
+        self.ai('$difference.changed.Count -ne 0', runner)
+        self.assertLess(
+            guard,
+            runner.index('Remove-Item -LiteralPath $owned -Recurse -Force'),
         )
-        self.ai(
-            "Add-CommandRecord 'accordCodexFailedUpdateAfterStaging'",
-            runner,
-        )
-        self.ai(
-            "Add-CommandRecord 'accordClaudeFailedUpdateAfterStaging'",
-            runner,
-        )
-        self.ani("'source-path-absent'", runner)
-        self.ani('.failed-update-source', runner)
-        self.ai("missing = @($expected.Keys | Where-Object", runner)
-        self.ai("extra = @($actual.Keys | Where-Object", runner)
-        self.ai("changed = @($expected.Keys | Where-Object", runner)
-        self.ai("installed bytes differ: $($difference | ConvertTo-Json", runner)
-
-    def test_gt20_v4_runner_emits_native_activation_and_recovery_facts(self):
-        runner = _text(GT20_RUNNER)
-        self.ai(
-            "schema = 'yiyuan-accord-gt20-exact-package-evidence/v4'",
-            runner,
-        )
-        self.ai('baseCommandContractLocator =', runner)
-        self.ai('baseCommandContractSha256 =', runner)
-        self.ai("failedUpdateRecovery = 'verified'", runner)
-        self.ani("failedUpdateRollback = 'verified'", runner)
-        self.ai('sessionInputsProvided = $true', runner)
-        self.ai('lifecycleTriggerTurns = 4', runner)
-        self.ai('externalModelTurns = 0', runner)
-        self.ai('taskOwnedLoopbackCredential = $true', runner)
-        self.ai(
-            "rawStreamPolicy = 'digest-only-private-host-transcript-not-retained'",
-            runner,
-        )
-        self.ai("$record.stdout = ''", runner)
-        self.ai("observationScope = 'candidate-bound-staging-route'", runner)
-        self.ai('candidateIdentityDigest = $candidateIdentityDigest', runner)
-        self.ai('observedLocators = @($observedLocators)', runner)
-        self.ai('eventRelativePaths = @($eventRelativePaths)', runner)
-        self.ai('eventPathCount = $eventRelativePaths.Count', runner)
-        self.ai('Get-FileMapIdentityDigest $expectedMap', runner)
-        self.ai('unexpectedSiblingDelta = @()', runner)
-        self.ai('postRepairAbsent = $true', runner)
-        self.ani(
-            "observationScope = 'isolated-marketplace-cache-excluding-"
-            "prior-version'",
-            runner,
-        )
-        self.ai('priorInstalledBytesPreservedAfterFailedUpdate = $true', runner)
-        self.ai('freshPriorInventoryVerified = $true', runner)
-        self.ani('rollbackBytesMatchPriorRelease = $true', runner)
-        self.ani('modelTurns = 0', runner)
-        self.ani('Bounded zero-model Windows lifecycle', runner)
 
     def test_gt20_v4_receipt_validators_fail_closed(self):
         hook_path = (

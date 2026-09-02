@@ -95,9 +95,13 @@ _SNAPSHOT_V2_GT20_CORRECTION_ID = (
 _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID = (
     "independent-evidence-recomputability-and-portable-path-privacy-v2"
 )
+_SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID = (
+    "one-intent-agent-decision-and-bounded-compensation-v3"
+)
 _SNAPSHOT_V2_GT20_CORRECTION_IDS = frozenset({
     _SNAPSHOT_V2_GT20_CORRECTION_ID,
     _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
+    _SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID,
 })
 _GT20_LIFECYCLE_PREFIX = "yiyuan-accord-exact-package-evidence-lifecycle/"
 _GT20_REPLAY_BOUNDARIES = {
@@ -111,6 +115,8 @@ _GT20_REPLAY_BOUNDARIES = {
         "exact-package-evaluator-privacy-ownership-and-native-host-adaptation-closure",
     f"{_GT20_LIFECYCLE_PREFIX}v6":
         "exact-package-host-activation-and-mutation-phase-failed-update-recovery-closure",
+    f"{_GT20_LIFECYCLE_PREFIX}v7":
+        "single-intent-agent-decision-and-bounded-failed-update-recovery-closure",
 }
 _GT20_V6_PREDECESSOR = "c5a06688feee7e93edc58a309679594bcc32bed6"
 _GT20_V6_REVIEW_CORRECTION_PREDECESSOR = (
@@ -121,6 +127,10 @@ _GT20_V5_EVIDENCE_LOCATOR = (
 )
 _GT20_V6_EVIDENCE_LOCATOR = (
     "evals/evidence/2026-09-02-v310-gt20-exact-package-v4-source.json"
+)
+_GT20_V7_PREDECESSOR = "732325e0b00911d295203468faed717bf29db3e2"
+_GT20_V7_EVIDENCE_LOCATOR = (
+    "evals/evidence/2026-09-02-v310-gt20-exact-package-v5-source.json"
 )
 _SNAPSHOT_V1_AUTHORITY_REFS = (
     "product/constitution.json",
@@ -2090,6 +2100,27 @@ def _snapshot_v2_transition_errors(current, predecessor):
                 "correctionId": _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
             }
         )
+        reopened_agent_recovery_correction = (
+            prior_schema == _SNAPSHOT_V2_SCHEMA
+            and prior_state == "reopened"
+            and isinstance(current_replay, dict)
+            and isinstance(prior_replay, dict)
+            and prior_replay == {
+                **_gt20_replay(
+                    _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v6"],
+                    "verified", _GT20_V6_EVIDENCE_LOCATOR,
+                ),
+                "correctionId": _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
+            }
+            and current_replay == {
+                **_gt20_replay(
+                    _GT20_REPLAY_BOUNDARIES[f"{_GT20_LIFECYCLE_PREFIX}v7"],
+                    "pending",
+                ),
+                "correctionId":
+                    _SNAPSHOT_V2_GT20_AGENT_RECOVERY_CORRECTION_ID,
+            }
+        )
         reopened_rebaseline = (
             prior_schema == _SNAPSHOT_V2_SCHEMA
             and prior_state == "reopened"
@@ -2151,6 +2182,7 @@ def _snapshot_v2_transition_errors(current, predecessor):
         )
         if not reopening_closed and not reopened_successor \
                 and not reopened_correction and not reopened_review_correction \
+                and not reopened_agent_recovery_correction \
                 and not reopened_rebaseline \
                 and not reopened_invalidation:
             errors.append("revision-bound v2 reopen transition is invalid")
@@ -3240,6 +3272,11 @@ def _validate_exact_package_evidence_lifecycle(
             "recovery-closure",
             None, None,
         ),
+        "yiyuan-accord-exact-package-evidence-lifecycle/v7": (
+            "single-intent-agent-decision-and-bounded-failed-update-recovery-"
+            "closure",
+            None, None,
+        ),
     }
     contract = contracts.get(lifecycle.get("schema")) \
         if isinstance(lifecycle, dict) else None
@@ -3252,6 +3289,9 @@ def _validate_exact_package_evidence_lifecycle(
     is_v6 = isinstance(lifecycle, dict) and lifecycle.get("schema") == (
         "yiyuan-accord-exact-package-evidence-lifecycle/v6"
     )
+    is_v7 = isinstance(lifecycle, dict) and lifecycle.get("schema") == (
+        "yiyuan-accord-exact-package-evidence-lifecycle/v7"
+    )
     snapshot_replay = increment.get("closeoutSnapshot", {}).get("replay", {}) \
         if isinstance(increment.get("closeoutSnapshot"), dict) else {}
     is_v6_review_correction = (
@@ -3259,7 +3299,7 @@ def _validate_exact_package_evidence_lifecycle(
         and snapshot_replay.get("correctionId")
             == _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID
     )
-    is_modern = is_v4 or is_v5 or is_v6
+    is_modern = is_v4 or is_v5 or is_v6 or is_v7
     expected_fields = fields | (
         {
             "predecessorLifecycleRef", "commandContractLocator",
@@ -3305,6 +3345,9 @@ def _validate_exact_package_evidence_lifecycle(
             predecessor_lifecycle = None
         predecessor_revision = match.group(1) if match else None
         base_predecessor_ref = (
+            f"{_GT20_V7_PREDECESSOR}:"
+            "product/program.json#/increment/exactPackageEvidenceLifecycle"
+            if is_v7 else
             f"{_GT20_V6_REVIEW_CORRECTION_PREDECESSOR}:"
             "product/program.json#/increment/exactPackageEvidenceLifecycle"
             if is_v6_review_correction else
@@ -3380,6 +3423,19 @@ def _validate_exact_package_evidence_lifecycle(
                     ),
                     "correctionId": _SNAPSHOT_V2_GT20_CORRECTION_ID,
                 }
+            )
+        elif is_v7:
+            expected_predecessor = predecessor_lifecycle
+            expected_predecessor_revision = _GT20_V7_PREDECESSOR
+            predecessor_shape_valid = (
+                isinstance(predecessor_lifecycle, dict)
+                and predecessor_lifecycle.get("schema")
+                    == f"{_GT20_LIFECYCLE_PREFIX}v6"
+                and predecessor_lifecycle.get("state") == "verified"
+                and predecessor_lifecycle.get("taskId") == "GT-20"
+                and predecessor_lifecycle.get("evidence", {}).get(
+                    "evaluatedRevision"
+                ) == predecessor_lifecycle.get("subjectRevision")
             )
         elif is_v6:
             expected_predecessor = predecessor_lifecycle
@@ -3469,7 +3525,8 @@ def _validate_exact_package_evidence_lifecycle(
         if (
             command_contract_locator
             != (
-                "evals/contracts/gt20-v4-command-contract.json" if is_v6
+                "evals/contracts/gt20-v4-command-contract.json"
+                if is_v6 or is_v7
                 else "evals/contracts/gt20-v3-command-contract.json"
             )
             or SHA256_RE.fullmatch(command_contract_sha256 or "") is None
@@ -3488,7 +3545,7 @@ def _validate_exact_package_evidence_lifecycle(
                     errors.append(
                         "exact package lifecycle command contract digest mismatch"
                     )
-                if is_v6:
+                if is_v6 or is_v7:
                     shape_valid = _gt20_v4_overlay_shape_valid(
                         command_contract_object
                     )
@@ -3588,6 +3645,8 @@ def _validate_exact_package_evidence_lifecycle(
         or REVISION_RE.fullmatch(evidence.get("evaluatedRevision") or "") is None
         or evidence.get("evaluatedRevision") != subject_revision
         or (is_modern and evidence.get("locator") != (
+            _GT20_V7_EVIDENCE_LOCATOR if is_v7
+            else
             _GT20_V6_EVIDENCE_LOCATOR if is_v6
             else _GT20_V5_EVIDENCE_LOCATOR
         ))
@@ -3609,6 +3668,8 @@ def _validate_exact_package_evidence_lifecycle(
     }
     record_schema = record.get("schema")
     expected_record_schema = (
+        "yiyuan-accord-gt20-exact-package-evidence/v5" if is_v7
+        else
         "yiyuan-accord-gt20-exact-package-evidence/v4" if is_v6
         else "yiyuan-accord-gt20-exact-package-evidence/v3"
         if is_modern else None

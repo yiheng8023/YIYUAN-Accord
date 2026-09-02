@@ -1879,6 +1879,11 @@ function Repair-FailedUpdateStaging {
       $actual.Contains($_) -and $actual[$_] -ne $expected[$_]
     } | Sort-Object)
   }
+  if ($difference.missing.Count -eq 0 -or
+      $difference.extra.Count -ne 0 -or
+      $difference.changed.Count -ne 0) {
+    throw "$Label staging is not a strict unmodified subset of the candidate."
+  }
   Remove-Item -LiteralPath $owned -Recurse -Force
   if ((Test-Path -LiteralPath $owned) -or (Test-Path -LiteralPath $payload)) {
     throw "$Label task-owned staging cleanup failed."

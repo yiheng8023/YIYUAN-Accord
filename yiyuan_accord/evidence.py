@@ -1766,10 +1766,10 @@ _CANDIDATE_RULE_INSERTION = (
     "changes."
 )
 _EXPECTED_EVALUATION_CONTRACT_HISTORY_SHA256 = (
-    "28d6d9f3425ad50e9ddd747113a71efd21c74c41a5d6fd8b003b5922df94101d"
+    "152d68151cd2b00f4a918433a2d0722e4263f4b9bf5789ec2fde3e349e23abb6"
 )
 _EXPECTED_EVALUATION_CONTRACT_SUCCESSOR_SHA256 = (
-    "c32985beab5a3ac0d58d95af98c6c434e5fb7e7120450b8330d8bb850476e6ad"
+    "39b741f93c9e3c16918cb9d3d1db4a9ec0212f30a1785803274068342474325a"
 )
 
 
@@ -2526,6 +2526,9 @@ def gt20_exact_lifecycle_invalidated(value):
             ("yiyuan-accord-exact-package-evidence-lifecycle/v6",
              "exact-package-host-activation-and-mutation-phase-failed-update-"
              "recovery-closure"),
+            ("yiyuan-accord-exact-package-evidence-lifecycle/v7",
+             "single-intent-agent-decision-and-bounded-failed-update-recovery-"
+             "closure"),
         }
         and value.get("taskId") == "GT-20"
         and value.get("state") in {"pending", "verified"}
@@ -3127,7 +3130,7 @@ def frozen_gt20_21_promotion_errors(
         or len(successors) != 1
         or any(promotion_evaluation not in (
             _evaluation_contracts(policy, task_id, current_evaluation) or set()
-        ) for task_id in promoted)
+        ) for task_id in promoted if task_id != "GT-20" or not invalidated_gt20)
         or promotion.get("contractSupersessionSha256") != _digest(successors[0])
         or None in projections.values()
         or not invalidated_gt20
