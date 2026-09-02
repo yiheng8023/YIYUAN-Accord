@@ -107,6 +107,14 @@ _SNAPSHOT_V2_REACCEPTANCE_KINDS = frozenset({
 _SNAPSHOT_V2_CRITERION_IDS = frozenset({
     "R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4",
 })
+
+
+def _v2_error(errors, message):
+    errors.append(f"revision-bound v2 {message}")
+
+
+def _closeout_error(errors, message):
+    errors.append(f"increment.closeoutSnapshot {message}")
 _SNAPSHOT_V2_GT20_CORRECTION_IDS = frozenset({
     _SNAPSHOT_V2_GT20_CORRECTION_ID,
     _SNAPSHOT_V2_GT20_REVIEW_CORRECTION_ID,
@@ -201,8 +209,6 @@ _SNAPSHOT_READ_CACHE = ContextVar("snapshot-read-cache", default=None)
 
 
 def _public_evidence_contains_private_material(value):
-    """Reject raw host/session material from a publishable evidence record."""
-
     pending = [value]
     while pending:
         item = pending.pop()
@@ -221,16 +227,12 @@ def _public_evidence_contains_private_material(value):
 
 
 def _canonical_json_sha256(value):
-    """Hash the UTF-8 compact JSON form shared with the PowerShell runner."""
-
     return sha256(json.dumps(
         value, ensure_ascii=False, separators=(",", ":"),
     ).encode("utf-8")).hexdigest()
 
 
 def _candidate_package_identity_sha256(behavior_subject, adapter):
-    """Derive one package file graph from the revision-bound subject map."""
-
     if adapter not in {"codex", "claude"} or not isinstance(
         behavior_subject, dict,
     ):
@@ -886,8 +888,6 @@ def _snapshot_batch_blobs(root, requests, limit, bind_ids=False):
 
 
 class _SnapshotBlobCache:
-    """Bounded revision tree and immutable blob cache for one validation scope."""
-
     def __init__(self):
         self._trees = {}
         self._blobs = {}
@@ -979,7 +979,6 @@ class _SnapshotBlobCache:
 
 
 def _snapshot_read_scope(function):
-    """Share bounded immutable Git reads across one verifier call graph."""
     @wraps(function)
     def scoped(*args, **kwargs):
         if _SNAPSHOT_READ_CACHE.get() is not None:
@@ -1739,7 +1738,6 @@ def _snapshot_v1_node_errors(program, acceptance):
 
 
 def _snapshot_v2_node_errors(program, acceptance):
-    """Validate the narrow reopen/close successor without changing v1 history."""
     errors = []
     increment = program.get("increment") if isinstance(program, dict) else None
     node = increment.get("closeoutSnapshot") \
@@ -1775,7 +1773,7 @@ def _snapshot_v2_node_errors(program, acceptance):
             "goalProjection": "product/program.json#/goalModePrompt",
         }
     ):
-        errors.append("revision-bound v2 snapshot identity is invalid")
+        _v2_error(errors, "snapshot identity is invalid")
     gates = program.get("releaseProcedure", {}).get("orderedGates", []) \
         if isinstance(program.get("releaseProcedure"), dict) else []
     gate_ids = [item.get("id") for item in gates if isinstance(item, dict)]
@@ -1796,15 +1794,17 @@ def _snapshot_v2_node_errors(program, acceptance):
         "product/program.json#/goalModePrompt/refreshTriggers",
         "product/program.json#/processLossControl/correctionRule",
     ]:
-        errors.append("revision-bound v2 snapshot references are invalid")
+        _v2_error(errors, "snapshot references are invalid")
     predecessor = node.get("predecessorSnapshotRef")
     if re.fullmatch(
         r"[0-9a-f]{40}:product/program\.json#/increment/closeoutSnapshot",
         predecessor or "",
     ) is None:
-        errors.append("revision-bound v2 snapshot predecessor is invalid")
+        _v2_error(errors, "snapshot predecessor is invalid")
     transition = node.get("acceptanceTransition")
     transition_kind = transition.get("kind") \
+        if isinstance(transition, dict) else None
+    affected_list = _string_list(transition.get("affectedCriterionIds")) \
         if isinstance(transition, dict) else None
     transition_fields = {"kind", "rationaleRef", "affectedCriterionIds", "replayRef"}
     criteria = acceptance.get("criteria") if isinstance(acceptance, dict) else None
@@ -1815,6 +1815,7 @@ def _snapshot_v2_node_errors(program, acceptance):
     if (
         not isinstance(transition, dict)
         or set(transition) != transition_fields
+        or affected_list is None
         or transition_kind not in {"changed"} | _SNAPSHOT_V2_REACCEPTANCE_KINDS
         or transition.get("rationaleRef") != (
             "product/program.json#/increment/fourSurfaceMapping/plan"
@@ -1822,14 +1823,14 @@ def _snapshot_v2_node_errors(program, acceptance):
         or transition.get("replayRef") != (
             "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
         )
-        or set(transition.get("affectedCriterionIds", [])) != (
+        or set(affected_list) != (
             criterion_ids if transition_kind ==
             _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND else
             _SNAPSHOT_V2_CRITERION_IDS - {"R1"})
-        or len(transition.get("affectedCriterionIds", [])) != (
+        or len(affected_list) != (
             8 if transition_kind == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND else 7)
     ):
-        errors.append("revision-bound v2 acceptance transition is invalid")
+        _v2_error(errors, "acceptance transition is invalid")
     replay = node.get("replay")
     lifecycle = increment.get("exactPackageEvidenceLifecycle", {})
     replay_boundary = _GT20_REPLAY_BOUNDARIES.get(
@@ -1853,7 +1854,7 @@ def _snapshot_v2_node_errors(program, acceptance):
             and replay.get("correctionId") not in _SNAPSHOT_V2_GT20_CORRECTION_IDS
         )
     ):
-        errors.append("revision-bound v2 replay boundary is invalid")
+        _v2_error(errors, "replay boundary is invalid")
         replay = {}
     if state == "reopened" and transition_kind in _SNAPSHOT_V2_REACCEPTANCE_KINDS:
         mapping = increment.get("fourSurfaceMapping")
@@ -1869,7 +1870,7 @@ def _snapshot_v2_node_errors(program, acceptance):
             not isinstance(steps, list) or [(item.get("id"), item.get("state"))
             if isinstance(item, dict) else None for item in steps[-3:]] != expected_tail
             for steps in sequences):
-            errors.append("revision-bound v2 reacceptance state is invalid")
+            _v2_error(errors, "reacceptance state is invalid")
     r3 = next((item for item in criteria or [] if isinstance(item, dict)
                and item.get("id") == "R3"), {})
     expected_next = gate_ids[gate_index + 1] \
@@ -1888,7 +1889,7 @@ def _snapshot_v2_node_errors(program, acceptance):
             or not isinstance(increment, dict) or increment.get("state") != "active"
             or r3.get("assessment") != "continuing"
         ):
-            errors.append("revision-bound v2 reopened state is invalid")
+            _v2_error(errors, "reopened state is invalid")
     elif state == "closed":
         if (
             node.get("nextGateId") != expected_next
@@ -1898,7 +1899,7 @@ def _snapshot_v2_node_errors(program, acceptance):
             or not isinstance(increment, dict) or increment.get("state") != "completed"
             or r3.get("assessment") != "verified"
         ):
-            errors.append("revision-bound v2 closed state is invalid")
+            _v2_error(errors, "closed state is invalid")
     if (
         gate_index < 0
         or node.get("claimCeilingRef") != "product/acceptance.json#/claimCeiling"
@@ -1909,7 +1910,7 @@ def _snapshot_v2_node_errors(program, acceptance):
             node.get("evaluationContractSha256") or ""
         ) is None
     ):
-        errors.append("revision-bound v2 snapshot state is invalid")
+        _v2_error(errors, "snapshot state is invalid")
     return errors
 
 
@@ -2091,7 +2092,7 @@ def _snapshot_v2_transition_errors(current, predecessor):
     prior_gate = predecessor.get("gateId") \
         if prior_schema == _SNAPSHOT_V2_SCHEMA else predecessor.get("closedGateId")
     if current.get("gateId") != prior_gate:
-        errors.append("revision-bound v2 predecessor gate is invalid")
+        _v2_error(errors, "predecessor gate is invalid")
     if current.get("state") == "reopened":
         current_replay = current.get("replay")
         prior_replay = predecessor.get("replay")
@@ -2120,6 +2121,8 @@ def _snapshot_v2_transition_errors(current, predecessor):
         )
         current_transition = current.get("acceptanceTransition")
         prior_transition = predecessor.get("acceptanceTransition")
+        current_affected = _string_list(current_transition.get(
+            "affectedCriterionIds")) if isinstance(current_transition, dict) else None
         reacceptance_stable_fields = set(current) - {
             "predecessorSnapshotRef", "acceptanceTransition",
             "evaluationContractSha256",
@@ -2151,7 +2154,7 @@ def _snapshot_v2_transition_errors(current, predecessor):
             and prior_transition.get("kind") in _SNAPSHOT_V2_REACCEPTANCE_KINDS
             and current_transition.get("kind")
             == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND
-            and set(current_transition.get("affectedCriterionIds", []))
+            and current_affected is not None and set(current_affected)
             == _SNAPSHOT_V2_CRITERION_IDS
             and all(current_transition.get(key) == prior_transition.get(key)
                     for key in ("rationaleRef", "replayRef"))
@@ -2199,10 +2202,10 @@ def _snapshot_v2_transition_errors(current, predecessor):
                 and not reopened_reacceptance \
                 and not reopened_reacceptance_correction \
                 and not reopened_replay_transition:
-            errors.append("revision-bound v2 reopen transition is invalid")
+            _v2_error(errors, "reopen transition is invalid")
     elif current.get("state") == "closed":
         if prior_schema != _SNAPSHOT_V2_SCHEMA or prior_state != "reopened":
-            errors.append("revision-bound v2 close transition is invalid")
+            _v2_error(errors, "close transition is invalid")
         current_replay = current.get("replay")
         prior_replay = predecessor.get("replay")
         prior_transition = predecessor.get("acceptanceTransition")
@@ -2214,11 +2217,11 @@ def _snapshot_v2_transition_errors(current, predecessor):
             not isinstance(prior_transition, dict)
             or prior_transition.get("kind") not in _SNAPSHOT_V2_REACCEPTANCE_KINDS
         ):
-            errors.append("revision-bound v2 close skips reacceptance")
+            _v2_error(errors, "close skips reacceptance")
         elif v7_close and current.get("acceptanceTransition") != prior_transition:
-            errors.append("revision-bound v2 acceptance transition drifted before close")
+            _v2_error(errors, "acceptance transition drifted before close")
         if v7_close and current_replay != prior_replay:
-            errors.append("revision-bound v2 replay drifted before close")
+            _v2_error(errors, "replay drifted before close")
         elif not v7_close and (
             not isinstance(current_replay, dict)
             or not isinstance(prior_replay, dict)
@@ -2234,7 +2237,7 @@ def _snapshot_v2_transition_errors(current, predecessor):
                 )
             }
         ):
-            errors.append("revision-bound v2 replay scope drifted before close")
+            _v2_error(errors, "replay scope drifted before close")
     return errors
 
 
@@ -2279,12 +2282,12 @@ def _snapshot_v2_lineage_errors(
             root, expected, revisions, cache,
         )
         if not frozen or not valid:
-            errors.append("revision-bound v2 carry run is invalid")
+            _v2_error(errors, "carry run is invalid")
         canonical, latest, replay, _ = _snapshot_v1_lineage(
             root, node, origin, cache,
         )
         if canonical != origin or replay:
-            errors.append("revision-bound v2 canonical origin is invalid")
+            _v2_error(errors, "canonical origin is invalid")
     except _SNAPSHOT_V1_FAILURES:
         cache[key] = False
         return ["revision-bound v2 lineage is unavailable"]
@@ -2294,7 +2297,7 @@ def _snapshot_v2_lineage_errors(
         predecessor_ref or "",
     )
     if match is None or latest is None or match.group(1) != latest[0]:
-        errors.append("revision-bound v2 predecessor origin is invalid")
+        _v2_error(errors, "predecessor origin is invalid")
     else:
         prior_origin, prior_node, prior_revisions = latest
         errors.extend(_snapshot_v2_transition_errors(node, prior_node))
@@ -2379,6 +2382,29 @@ def _snapshot_transition_affected_criteria(
     return affected
 
 
+def _drop_projection_path(value, path):
+    if path[0] == "*":
+        for item in value:
+            _drop_projection_path(item, path[1:])
+    elif len(path) == 1:
+        value.pop(path[0], None)
+    else:
+        _drop_projection_path(value[path[0]], path[1:])
+
+
+def _snapshot_v2_close_projection(root, revision, documents):
+    projection = json.loads(json.dumps(_snapshot_v1_transition_projection(
+        root, revision, documents[1], documents[2], documents[3],
+        documents[0], documents[4],
+    )))
+    projection["acceptance"] = json.loads(json.dumps(documents[2]))
+    paths = documents[1]["processLossControl"]["closeMutableProjectionPaths"]
+    for path in paths:
+        scope, *parts = path.split("/")
+        _drop_projection_path(projection[scope], parts)
+    return projection
+
+
 def _validate_closeout_snapshot_v2(
     root, program, acceptance, evaluation_digest, errors,
     revision=None, lineage=(), cache=None,
@@ -2390,22 +2416,22 @@ def _validate_closeout_snapshot_v2(
     if not isinstance(node, dict):
         return
     if node.get("evaluationContractSha256") != evaluation_digest:
-        errors.append("increment.closeoutSnapshot evaluation contract drifted")
+        _closeout_error(errors, "evaluation contract drifted")
     try:
         origin, latest, replay, current_run = _snapshot_v1_lineage(
             root, node, revision or "HEAD", cache,
         )
     except _SNAPSHOT_V1_FAILURES:
-        errors.append("increment.closeoutSnapshot predecessor lineage is unavailable")
+        _closeout_error(errors, "predecessor lineage is unavailable")
         return
     if replay:
-        errors.append("increment.closeoutSnapshot lineage replays a non-current node")
+        _closeout_error(errors, "lineage replays a non-current node")
     match = re.fullmatch(
         r"([0-9a-f]{40}):product/program\.json#/increment/closeoutSnapshot",
         node.get("predecessorSnapshotRef") or "",
     )
     if latest is None or match is None or match.group(1) != latest[0]:
-        errors.append("increment.closeoutSnapshot predecessor is not latest accepted snapshot")
+        _closeout_error(errors, "predecessor is not latest accepted snapshot")
         return
     errors.extend(_snapshot_v2_transition_errors(node, latest[1]))
     prior_transition = latest[1].get("acceptanceTransition")
@@ -2425,10 +2451,15 @@ def _validate_closeout_snapshot_v2(
             actual = _snapshot_transition_affected_criteria(
                 root, latest[0], revision, prior_documents, current_documents,
             )
-            if set(transition.get("affectedCriterionIds", [])) != actual:
-                errors.append("revision-bound v2 affected criteria are invalid")
+            declared = _string_list(transition.get("affectedCriterionIds"))
+            if declared is None or set(declared) != actual:
+                _v2_error(errors, "affected criteria are invalid")
+            if node.get("state") == "closed" and _snapshot_v2_close_projection(
+                root, latest[0], prior_documents,
+            ) != _snapshot_v2_close_projection(root, revision, current_documents):
+                _v2_error(errors, "close projection drifted")
         except _SNAPSHOT_V1_FAILURES:
-            errors.append("revision-bound v2 transition state is unavailable")
+            _v2_error(errors, "transition state is unavailable")
     errors.extend(_snapshot_lineage_contract_errors(
         root, latest[0], latest[1], latest[2], lineage, cache,
     ))
@@ -2459,12 +2490,12 @@ def _validate_closeout_snapshot(
         "claimCeilingRef unknownsRef"
     ).split())
     if not isinstance(value, dict) or set(value) != fields:
-        errors.append("increment.closeoutSnapshot shape is invalid")
+        _closeout_error(errors, "shape is invalid")
         return
     if value.get("schema") != _SNAPSHOT_V1_SCHEMA or value.get(
         "id"
     ) != f"stage.{program.get('distributionVersion')}.{value.get('stage')}.closed":
-        errors.append("increment.closeoutSnapshot schema is invalid")
+        _closeout_error(errors, "schema is invalid")
     _require_texts(
         value, ("id", "stage", "state", "closedGateId",
                 "claimCeilingRef", "unknownsRef"),
@@ -2476,9 +2507,9 @@ def _validate_closeout_snapshot(
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object.",
     }:
-        errors.append("increment.closeoutSnapshot revision binding is invalid")
+        _closeout_error(errors, "revision binding is invalid")
     if value.get("authorityRefs") != list(_SNAPSHOT_V1_AUTHORITY_REFS):
-        errors.append("increment.closeoutSnapshot authority references are invalid")
+        _closeout_error(errors, "authority references are invalid")
     if value.get("surfaceRefs") != {
         "baseline": "product/reshaping-guidance.json#/wholeSystemBalanceReview",
         "plan": "product/program.json#/increment/fourSurfaceMapping/plan",
@@ -2486,11 +2517,11 @@ def _validate_closeout_snapshot(
         "acceptance": "product/acceptance.json",
         "goalProjection": "product/program.json#/goalModePrompt",
     }:
-        errors.append("increment.closeoutSnapshot surface references are invalid")
+        _closeout_error(errors, "surface references are invalid")
     gates = program.get("releaseProcedure", {}).get("orderedGates", [])
     gate_ids = [item.get("id") for item in gates if isinstance(item, dict)]
     if gate_ids != [gate_id for gate_id, _ in GATE_SEQUENCE]:
-        errors.append("increment.closeoutSnapshot release gate sequence is invalid")
+        _closeout_error(errors, "release gate sequence is invalid")
     closed = value.get("closedGateId")
     try:
         closed_index = gate_ids.index(closed)
@@ -2502,19 +2533,19 @@ def _validate_closeout_snapshot(
         _SNAPSHOT_V1_GOLDEN_TASKS_FILE,
         f"product/program.json#/releaseProcedure/orderedGates/{closed_index}",
     ]:
-        errors.append("increment.closeoutSnapshot evidence references are invalid")
+        _closeout_error(errors, "evidence references are invalid")
     cutoff = value.get("evidenceCutoff")
     if cutoff != {
         "kind": "containing-git-commit",
         "rule": "Only evidenceRefs resolved inside the immutable containing commit belong to this snapshot; later repository or task-time facts require a successor node.",
     }:
-        errors.append("increment.closeoutSnapshot evidence cutoff is invalid")
+        _closeout_error(errors, "evidence cutoff is invalid")
     if value.get("invalidationTriggerRefs") != [
         "product/constitution.json#/evolutionPolicy/feedbackRule",
         "product/program.json#/goalModePrompt/refreshTriggers",
         "product/program.json#/processLossControl/correctionRule",
     ]:
-        errors.append("increment.closeoutSnapshot invalidation triggers are invalid")
+        _closeout_error(errors, "invalidation triggers are invalid")
     transition = value.get("acceptanceTransition")
     if not isinstance(transition, dict) or set(transition) != {
         "kind", "rationaleRef", "affectedCriterionIds", "replayRef",
@@ -2525,7 +2556,7 @@ def _validate_closeout_snapshot(
     ) or transition.get("replayRef") != (
         "product/program.json#/increment/fourSurfaceMapping/process/orderedSteps"
     ):
-        errors.append("increment.closeoutSnapshot acceptance transition is invalid")
+        _closeout_error(errors, "acceptance transition is invalid")
     predecessor = value.get("predecessorSnapshotRef")
     kind = transition.get("kind") if isinstance(transition, dict) else None
     actual_affected = None
@@ -2536,7 +2567,7 @@ def _validate_closeout_snapshot(
     if (predecessor is None) != (kind == "snapshot-bootstrap") or (
         predecessor is not None and predecessor_match is None
     ):
-        errors.append("increment.closeoutSnapshot predecessor is invalid")
+        _closeout_error(errors, "predecessor is invalid")
     try:
         current_constitution, _, _, current_guidance, current_golden = (
             _snapshot_v1_documents(root, _revision)
@@ -2544,19 +2575,19 @@ def _validate_closeout_snapshot(
         context_errors = []
         _validate_stage_guidance(current_guidance, context_errors)
         if context_errors:
-            errors.append("increment.closeoutSnapshot stage guidance is invalid")
+            _closeout_error(errors, "stage guidance is invalid")
     except _SNAPSHOT_V1_FAILURES:
         current_constitution, current_guidance, current_golden = {}, {}, {}
-        errors.append("increment.closeoutSnapshot bound state is unavailable")
+        _closeout_error(errors, "bound state is unavailable")
     try:
         origin, latest, replay, current_run = _snapshot_v1_lineage(
             root, value, _revision or "HEAD", _cache,
         )
     except _SNAPSHOT_V1_FAILURES:
         origin, latest, replay, current_run = None, None, False, ()
-        errors.append("increment.closeoutSnapshot predecessor lineage is unavailable")
+        _closeout_error(errors, "predecessor lineage is unavailable")
     if replay:
-        errors.append("increment.closeoutSnapshot lineage replays a non-current node")
+        _closeout_error(errors, "lineage replays a non-current node")
     if origin is not None:
         try:
             origin_constitution, origin_program, origin_acceptance, \
@@ -2580,15 +2611,15 @@ def _validate_closeout_snapshot(
                     "increment.closeoutSnapshot revision-bound repository contract is invalid"
                 )
         except _SNAPSHOT_V1_FAILURES:
-            errors.append("increment.closeoutSnapshot origin state is unavailable")
+            _closeout_error(errors, "origin state is unavailable")
     if kind == "snapshot-bootstrap":
         if latest is not None:
-            errors.append("increment.closeoutSnapshot bootstrap breaks predecessor lineage")
+            _closeout_error(errors, "bootstrap breaks predecessor lineage")
     elif predecessor_match is not None:
         revision = predecessor_match.group(1)
         latest_revision = latest[0] if latest is not None else None
         if revision != latest_revision:
-            errors.append("increment.closeoutSnapshot predecessor is not latest accepted snapshot")
+            _closeout_error(errors, "predecessor is not latest accepted snapshot")
             prior_constitution, prior_program, prior_acceptance, prior_guidance, \
                 prior_golden = {}, {}, {}, {}, {}
         else:
@@ -2677,38 +2708,21 @@ def _validate_closeout_snapshot(
             "product/program.json#/increment/closeoutSnapshot"
         ) or prior_index < 0 or prior.get("nextGateId") != prior_next \
                 or prior.get("evaluationContractSha256") != prior_evaluation:
-            errors.append("increment.closeoutSnapshot predecessor cannot be resolved")
+            _closeout_error(errors, "predecessor cannot be resolved")
         elif kind == "unchanged" and prior.get(
             "evaluationContractSha256"
         ) != evaluation_digest:
-            errors.append("increment.closeoutSnapshot unchanged contract drifted")
-        current_items = acceptance.get("criteria") if isinstance(acceptance, dict) else None
-        if isinstance(prior_items, list) and isinstance(current_items, list) and all(
-            isinstance(item, dict) and _nonempty_string(item.get("id"))
-            for item in prior_items + current_items
-        ):
-            old = {item["id"]: item for item in prior_items}
-            new = {item["id"]: item for item in current_items}
-            actual_affected = {
-                item_id for item_id in set(old) | set(new) if old.get(item_id) != new.get(item_id)
-            }
-            try:
-                transition_changed = _snapshot_v1_transition_projection(
-                    root, revision, prior_program, prior_acceptance,
-                    prior_guidance, prior_constitution, prior_golden,
-                ) != _snapshot_v1_transition_projection(
-                    root, _revision, program, acceptance, current_guidance,
-                    current_constitution, current_golden,
-                )
-            except _SNAPSHOT_V1_FAILURES:
-                transition_changed = True
-                errors.append(
-                    "increment.closeoutSnapshot transition state is unavailable"
-                )
-            if transition_changed:
-                actual_affected.update(set(old) | set(new))
-        else:
-            errors.append("increment.closeoutSnapshot predecessor acceptance is invalid")
+            _closeout_error(errors, "unchanged contract drifted")
+        try:
+            actual_affected = _snapshot_transition_affected_criteria(
+                root, revision, _revision,
+                (prior_constitution, prior_program, prior_acceptance,
+                 prior_guidance, prior_golden),
+                (current_constitution, program, acceptance,
+                 current_guidance, current_golden),
+            )
+        except _SNAPSHOT_V1_FAILURES:
+            _closeout_error(errors, "transition state is unavailable")
     affected_list = _string_list(transition.get("affectedCriterionIds")) \
         if isinstance(transition, dict) else None
     affected = set(affected_list or ())
@@ -2718,18 +2732,18 @@ def _validate_closeout_snapshot(
         kind in {"unchanged", "changed"}
         and (actual_affected is None or affected != actual_affected)
     ):
-        errors.append("increment.closeoutSnapshot affected criteria are invalid")
+        _closeout_error(errors, "affected criteria are invalid")
     if value.get("evaluationContractSha256") != evaluation_digest:
-        errors.append("increment.closeoutSnapshot evaluation contract drifted")
+        _closeout_error(errors, "evaluation contract drifted")
     if value.get("claimCeilingRef") != "product/acceptance.json#/claimCeiling" or value.get(
         "unknownsRef"
     ) != "product/program.json#/increment/hostCapabilityRefresh/unknowns":
-        errors.append("increment.closeoutSnapshot claim and unknown references are invalid")
+        _closeout_error(errors, "claim and unknown references are invalid")
     expected_next = gate_ids[closed_index + 1] \
         if 0 <= closed_index < len(gate_ids) - 1 else None
     if value.get("state") != "closed" or value.get("stage") != closed \
             or closed_index < 0 or value.get("nextGateId") != expected_next:
-        errors.append("increment.closeoutSnapshot gate transition is invalid")
+        _closeout_error(errors, "gate transition is invalid")
 
 
 def _exact_package_subject_files(root, program, errors, revision=None):
@@ -2766,14 +2780,6 @@ def _exact_package_subject_files(root, program, errors, revision=None):
 
 
 def _claude_command_distribution_identity(command):
-    """Accept either the legacy npm shim or the native executable layout.
-
-    The lifecycle record binds exact executable bytes in both cases.  The npm
-    layout additionally binds its package manifest; the recommended native
-    Windows distribution has no npm manifest and must resolve directly to
-    ``claude.exe`` rather than an unbound shim.
-    """
-
     manifest = command.get("packageManifest")
     manifest_sha = command.get("packageManifestSha256")
     if _nonempty_string(manifest):
@@ -2889,8 +2895,6 @@ def _gt20_v4_overlay_shape_valid(contract):
 
 
 def _resolve_gt20_v4_command_contract(overlay, base):
-    """Resolve the bounded v4 overlay without trusting the runner's result."""
-
     if (
         not _gt20_v4_overlay_shape_valid(overlay)
         or not isinstance(base, dict)
@@ -2942,8 +2946,6 @@ def _resolve_gt20_v4_command_contract(overlay, base):
 
 
 def _gt20_v4_activation_receipt_valid(command, host, version):
-    """Validate host-native startup/resume receipts, independent of the runner."""
-
     if not isinstance(command, dict) or host not in {"codex", "claude"}:
         return False
     receipt = command.get("activationReceipt")
@@ -3175,8 +3177,6 @@ def _gt20_v4_activation_receipt_valid(command, host, version):
 def _gt20_v4_failed_update_receipts_valid(
     commands, fixture, behavior_subject, flexible=False,
 ):
-    """Validate mutation reached staging and recovery claims remain factual."""
-
     if not isinstance(commands, dict) or not isinstance(fixture, dict):
         return False
     for adapter, role in (
@@ -5096,10 +5096,16 @@ def _validate_program(
     else:
         _require_texts(
             process,
-            ("currentStageRule", "stageSnapshotState", "stageSnapshotRule",
+            ("carrierRule", "currentStageRule", "stageSnapshotState", "stageSnapshotRule",
              "evolutionHorizonRule", "continuingCalibration"),
             "program.processLossControl", errors,
         )
+        close_paths = _string_list(process.get("closeMutableProjectionPaths"))
+        if not close_paths or len(close_paths) != len(set(close_paths)) or any(
+            path.split("/", 1)[0] not in {"program", "acceptance", "guidance"}
+            for path in close_paths
+        ):
+            errors.append("program close mutable projection paths are invalid")
         closed_stage_state = (
             "latest-closed-stage-snapshot-prepared-for-containing-commit-binding"
         )
@@ -5111,7 +5117,11 @@ def _validate_program(
             "blocked": {closed_stage_state, replay_stage_state},
             "completed": {closed_stage_state},
         }.get(increment_state, set())
-        if process.get("stageSnapshotState") not in expected_stage_snapshot_states \
+        if not _contains_markers(process.get("carrierRule"), (
+            "official English identifiers", "translations are display-only",
+            "Branch and fork", "approval policy and sandbox access",
+            "conversation operations do not change code topology",
+        )) or process.get("stageSnapshotState") not in expected_stage_snapshot_states \
                 or not _contains_markers(process.get("currentStageRule"), (
             "current stage", "owns current execution",
             "cannot silently enter its release scope", "borrow its evidence",
@@ -5119,6 +5129,7 @@ def _validate_program(
             "versioned stage projections", "containing-git-commit",
             "exact external locator", "successor cites", "Git preserves",
             "terminal release gate", "new ordered cycle", "never self-attests",
+            "closeMutableProjectionPaths",
         )) or not _contains_markers(process.get("evolutionHorizonRule"), (
             "recomputed on demand", "whole-project panorama",
             "latest accepted stage snapshot", "fresh user, host and environment facts",
@@ -5917,12 +5928,12 @@ def _snapshot_v2_contract_errors(root, revision, documents):
     if any(item.get("schema") != 3 for item in (
         constitution, program, acceptance,
     )):
-        errors.append("revision-bound v2 authority schema is invalid")
+        _v2_error(errors, "authority schema is invalid")
     if not _nonempty_string(product_id) or {
         product_id, program.get("productId"), acceptance.get("productId"),
         guidance.get("productId"),
     } != {product_id}:
-        errors.append("revision-bound v2 product identities differ")
+        _v2_error(errors, "product identities differ")
     if (
         program.get("release") != acceptance.get("release")
         or program.get("distributionVersion") != acceptance.get("distributionVersion")
@@ -5931,7 +5942,7 @@ def _snapshot_v2_contract_errors(root, revision, documents):
         or acceptance.get("constitution") != _SNAPSHOT_V1_AUTHORITY_REFS[0]
         or acceptance.get("program") != _SNAPSHOT_V1_AUTHORITY_REFS[1]
     ):
-        errors.append("revision-bound v2 authority references differ")
+        _v2_error(errors, "authority references differ")
     identity = constitution.get("identity")
     plugin_ids = identity.get("pluginIds") if isinstance(identity, dict) else None
     if (
@@ -5953,7 +5964,7 @@ def _snapshot_v2_contract_errors(root, revision, documents):
         or any(not item.startswith(f"{product_id}-") for item in plugin_ids)
         or identity.get("compatibilityAliases") != []
     ):
-        errors.append("revision-bound v2 identity is invalid")
+        _v2_error(errors, "identity is invalid")
     adaptive = guidance.get("adaptiveSystem") \
         if isinstance(guidance, dict) else None
     if (
@@ -5962,7 +5973,7 @@ def _snapshot_v2_contract_errors(root, revision, documents):
         or not isinstance(adaptive, dict)
         or not isinstance(adaptive.get("stageStateContract"), dict)
     ):
-        errors.append("revision-bound v2 guidance is invalid")
+        _v2_error(errors, "guidance is invalid")
     tasks = golden.get("tasks") if isinstance(golden, dict) else None
     task_ids = [item.get("id") for item in tasks or [] if isinstance(item, dict)]
     if (
@@ -5970,7 +5981,7 @@ def _snapshot_v2_contract_errors(root, revision, documents):
         or len(task_ids) != len(tasks) or len(task_ids) != len(set(task_ids))
         or any(not _nonempty_string(item) for item in task_ids)
     ):
-        errors.append("revision-bound v2 Golden Tasks are invalid")
+        _v2_error(errors, "Golden Tasks are invalid")
     errors.extend(_snapshot_v1_projection_shape_errors(program, constitution))
     errors.extend(_snapshot_v1_evaluation_history_errors(acceptance, golden))
     node = program.get("increment", {}).get("closeoutSnapshot") \
@@ -5985,7 +5996,7 @@ def _snapshot_v2_contract_errors(root, revision, documents):
         ))
     public_release = acceptance.get("publicRelease")
     if not isinstance(public_release, dict):
-        errors.append("revision-bound v2 public release record is invalid")
+        _v2_error(errors, "public release record is invalid")
     else:
         locator = public_release.get("releaseNotes")
         expected = public_release.get("releaseNotesSha256")
@@ -5994,16 +6005,16 @@ def _snapshot_v2_contract_errors(root, revision, documents):
             if actual != expected or not _SNAPSHOT_V1_SHA256_RE.fullmatch(
                 expected or ""
             ):
-                errors.append("revision-bound v2 release notes digest mismatch")
+                _v2_error(errors, "release notes digest mismatch")
         except _SNAPSHOT_V1_FAILURES:
-            errors.append("revision-bound v2 release notes are unavailable")
+            _v2_error(errors, "release notes are unavailable")
     errors.extend(_snapshot_v1_projection_package_errors(
         root, program, constitution, revision,
     ))
     if not isinstance(node, dict) or node.get(
         "evaluationContractSha256"
     ) != _snapshot_v1_evaluation_digest(acceptance, golden):
-        errors.append("revision-bound v2 evaluation contract digest mismatch")
+        _v2_error(errors, "evaluation contract digest mismatch")
     return errors
 
 

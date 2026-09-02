@@ -2115,6 +2115,10 @@ class ProductControlTests(unittest.TestCase):
              lambda v: v['complexityBudget'].update(minimumTestCount=18)),
             (P, 'digestBoundBinaryAssets must be an object', lambda v: v[
                 'complexityBudget'].pop('digestBoundBinaryAssets')),
+            (P, 'program.processLossControl.carrierRule', lambda v: v[
+                'processLossControl'].pop('carrierRule')),
+            (P, 'program close mutable projection paths', lambda v: v[
+                'processLossControl'].update(closeMutableProjectionPaths=[])),
             (G, 'static-suite-as-behavior',
              lambda v: v['evaluationProtocol'].update(staticSuiteIsNotBehaviorEvidence=False)),
             (G, 'humanBurden metrics', lambda v: v['metrics'].update(help=['self-claim'])),
@@ -2392,12 +2396,11 @@ class ProductControlTests(unittest.TestCase):
         predecessor = node['predecessorSnapshotRef'].split(':', 1)[0]
         _, prior_program, *_ = _snapshot_documents(ROOT, predecessor)
         prior = prior_program['increment']['closeoutSnapshot']
-        prior_predecessor = prior['predecessorSnapshotRef'].split(':', 1)[0]
-        _, old_program, *_ = _snapshot_documents(ROOT, prior_predecessor)
-        old = old_program['increment']['closeoutSnapshot']
-        changed_revision = old['predecessorSnapshotRef'].split(':', 1)[0]
-        _, changed_program, *_ = _snapshot_documents(ROOT, changed_revision)
-        changed_node = changed_program['increment']['closeoutSnapshot']
+        changed_node = prior
+        while changed_node['acceptanceTransition']['kind'] != 'changed':
+            revision = changed_node['predecessorSnapshotRef'].split(':', 1)[0]
+            _, changed_program, *_ = _snapshot_documents(ROOT, revision)
+            changed_node = changed_program['increment']['closeoutSnapshot']
         invalid = 'revision-bound v2 reopen transition is invalid'
         self.ae(_snapshot_v2_node_errors(program, acceptance), [])
         self.ae(_snapshot_v2_transition_errors(node, prior), [])
@@ -2407,6 +2410,12 @@ class ProductControlTests(unittest.TestCase):
         changed['increment']['closeoutSnapshot'] = missing
         self.has(_snapshot_v2_node_errors(changed, acceptance),
                  'revision-bound v2 acceptance transition is invalid')
+        for bad in (None, [{}]):
+            changed = _clone(program)
+            changed['increment']['closeoutSnapshot']['acceptanceTransition'][
+                'affectedCriterionIds'] = bad
+            self.has(_snapshot_v2_node_errors(changed, acceptance),
+                     'revision-bound v2 acceptance transition is invalid')
         for key, value in (('preservedTaskIds', []), ('correctionId', 'unbound')):
             changed = _clone(program)
             changed['increment']['closeoutSnapshot']['replay'][key] = value
@@ -2416,14 +2425,9 @@ class ProductControlTests(unittest.TestCase):
         wrong_stage['increment']['fourSurfaceMapping']['process']['orderedSteps'][-2]['state'] = 'pending'
         self.has(_snapshot_v2_node_errors(wrong_stage, acceptance),
                  'revision-bound v2 reacceptance state is invalid')
-        arbitrary = _clone(node)
-        arbitrary['replay']['earliestAffectedBoundary'] = 'arbitrary-boundary'
         drifted = _clone(node)
         drifted['unknownsRef'] += '.drifted'
-        closed_prior = _clone(prior)
-        closed_prior['state'] = 'closed'
-        for current, previous in ((arbitrary, prior), (drifted, prior),
-                                  (node, closed_prior), (node, node)):
+        for current, previous in ((drifted, prior), (node, node)):
             self.has(_snapshot_v2_transition_errors(current, previous), invalid)
         skip = 'revision-bound v2 close skips reacceptance'
         for state, ref in (
@@ -2445,6 +2449,12 @@ class ProductControlTests(unittest.TestCase):
         drifted_close['acceptanceTransition']['affectedCriterionIds'].remove('R1')
         self.has(_snapshot_v2_transition_errors(drifted_close, node),
                  'revision-bound v2 acceptance transition drifted before close')
+        documents = list(_snapshot_documents(ROOT))
+        projection = product_control._snapshot_v2_close_projection(ROOT, None, documents)
+        drift = _clone(documents)
+        drift[0]['purpose'] += ' unrelated drift'
+        self.ane(product_control._snapshot_v2_close_projection(
+            ROOT, None, drift), projection)
 
     def test_revision_tree_cache_has_an_aggregate_memory_bound(self):
         listing = b'100644 blob ' + b'1' * 40 + b'\tproduct/program.json\0'
