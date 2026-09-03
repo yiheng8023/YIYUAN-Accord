@@ -1036,7 +1036,7 @@ class ProductControlTests(unittest.TestCase):
         self.ani('maxControlBytes', program['complexityBudget']['targets'])
         if report['programStatus'] == 'ready':
             gate = program[RG]['orderedGates'][1]['condition']
-            self.ae(program['complexityBudget']['minimumTestCount'], 36)
+            self.ae(program['complexityBudget']['minimumTestCount'], 37)
             self.ai('without accessing credential or session logs', gate)
             self.ai(
                 'without credential or session logs',
@@ -2431,7 +2431,10 @@ class ProductControlTests(unittest.TestCase):
             )
 
     def test_snapshot_v2_reopens_only_the_invalidated_package_boundary(self):
-        p, a = _read(ROOT, P), _read(ROOT, A); n = p['increment'][CS]
+        current=_read(ROOT,P)['increment'][CS]
+        r=current[PS].split(':',1)[0] if current['state']=='closed' else None
+        _,p,a,*_=_snapshot_documents(ROOT,r)
+        n=p['increment'][CS]
         _, old_p, *_ = _snapshot_documents(
             ROOT, n[PS].split(':', 1)[0])
         prior = old_p['increment'][CS]
@@ -2475,7 +2478,7 @@ class ProductControlTests(unittest.TestCase):
         stage[key] += ' A later version starts a new ordered cycle.'
         strict = []; product_control._validate_stage_guidance(guidance, strict)
         self.at(strict)
-        docs = list(_snapshot_documents(ROOT))
+        docs = list(_snapshot_documents(ROOT, r))
         project = lambda value: product_control._snapshot_v2_close_projection(
             ROOT, None, value)
         base = project(docs); drift = _clone(docs)
@@ -2503,7 +2506,7 @@ class ProductControlTests(unittest.TestCase):
         snap = inc[CS]
         snap.update(state='closed', id=snap['id'].replace('.reopened', '.closed'),
             nextGateId=p[RG]['orderedGates'][1]['id'])
-        snap[PS] = (_git(ROOT, 'rev-parse', 'HEAD').decode().strip()
+        snap[PS] = ((r or _git(ROOT, 'rev-parse', 'HEAD').decode().strip())
                     + ':product/program.json#/increment/closeoutSnapshot')
         errors = []
         _validate_closeout_snapshot_v2(ROOT, p, a, n['evaluationContractSha256'], errors)
