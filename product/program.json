@@ -217,7 +217,7 @@
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
       },
-      "predecessorSnapshotRef": "9788f837f7a2e9c7e3dbb2a840d597a66e6247db:product/program.json#/increment/closeoutSnapshot",
+      "predecessorSnapshotRef": "c357d4eabc9293844694728b54e7bebef0009789:product/program.json#/increment/closeoutSnapshot",
       "authorityRefs": [
         "product/constitution.json",
         "product/program.json",
@@ -246,9 +246,10 @@
         "product/program.json#/processLossControl/correctionRule"
       ],
       "acceptanceTransition": {
-        "kind": "reaccepting",
+        "kind": "reaccepting-correction",
         "rationaleRef": "product/program.json#/increment/fourSurfaceMapping/plan",
         "affectedCriterionIds": [
+          "R1",
           "R2",
           "R3",
           "R4",
@@ -378,9 +379,9 @@
       "outcomeId": "outcome.complete-bounded-self-bootstrapping-core",
       "plan": {
         "hypothesis": "Complete bounded self-bootstrapping, not a particular plugin, fixed catalogue of forms or self-evolution loop, is the product-core hypothesis. Complete means every responsibility inside the named bound is closed, explicitly retired or honestly left unknown; it is not universal completeness. Evidence acquisition, including external research, is itself a dynamically applicable responsibility: omit it when current admitted evidence is sufficient, allocate it only for a route-changing material gap, and treat a public lead as inquiry rather than consequential authority. Establish the semantic loop, environment and authority model, reuse ledger, responsibility-to-form decision rule, cross-form coherence contract, representative and longitudinal evaluations, then implement only the smallest demonstrated closure. A new consensus governs direction but reaches implementation baseline status only after proposition-level contradiction, category, boundary and dependency checks. Preserve each superseded baseline as history and replay every globally affected surface from the earliest dependency boundary.",
-        "earliestAffectedBoundary": "tests/product/test_product_control.py#/ProductControlTests.test_external_review_runtime_binds_r4_to_exact_current_head,product/program.json#/increment/closeoutSnapshot,product/acceptance.json#/criteria,product/reshaping-guidance.json#/wholeSystemBalanceReview,README.md,README.zh-CN.md,docs/architecture.md,docs/operations/CONTINUATION.md,docs/releases/v3.1.0.md",
-        "slice": "Preserve exact 8a06ee9 as the evidence-language correction with zero product, specification and implementation findings and one non-blocking standards P3. Replace the position-coupled exact diagnostic assertion with semantic error and readiness assertions, then express candidate disposition on every current authority and raw derived surface as a function of lifecycle state plus an exact task-time review bundle so the same bytes remain truthful across the required state-only close. Change no GT-20/21 evidence, product mechanism, criterion meaning, candidate state or external gate.",
-        "stopCondition": "The close-predecessor projection is ready when the P3 no longer depends on criterion position or error-list uniqueness; active/reopened plus continuing criteria unambiguously means no candidate; ready/closed plus all verified criteria and one exact passing runtime review bundle selects only that unchanged exact SHA; missing review input holds readiness and invalid input fails closed; production, cross-host and value remain unknown; production-verifier, focused, current-contract and alignment checks pass with at least five percent Python/test headroom; and four fresh exact-tree reviews bind the clean successor before the state-only candidate close."
+        "earliestAffectedBoundary": "tests/product/test_product_control.py#/ProductControlTests.test_current_contract_is_valid_and_explicitly_incomplete,tests/product/test_product_control.py#/ProductControlTests.test_snapshot_v2_reopens_only_the_invalidated_package_boundary,product/program.json#/increment/closeoutSnapshot,product/acceptance.json#/criteria",
+        "slice": "Preserve exact 6124c63 as failed close-state counterevidence. Calibrate its ready-state test-count assertion to 37 and make the snapshot-v2 test select the reopened current node or closed node's reopened predecessor without changing product code, GT-20/21 evidence, criterion meaning, candidate state or external gates.",
+        "stopCondition": "The correction is ready when the active and synthetic closed paths pass the focused, current-contract, snapshot-lineage and review-bundle checks with at least five percent Python/test headroom; active/reopened remains no candidate; ready/closed still requires 8/8 and one exact passing review bundle; four fresh exact-tree reviews must bind the clean close predecessor."
       },
       "process": {
         "routeRule": "Bind current target/value receipts; unknown stays unknown; events only invalidate. Acquire evidence only if missing/stale/conflicting facts or unresolved reuse may change route; sufficient routes skip research, public leads need corroboration, adapters stay authority/cost/lifecycle-bound. Hosts query/inject; Accord decides; Agent executes; model/version are runtime provenance. Preserve selected components; deterministic correction and independent exact-tree review precede candidate selection; add no client/bridge.",
