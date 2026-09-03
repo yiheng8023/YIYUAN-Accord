@@ -706,7 +706,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-evidence-preserved-9f66def-standards-and-spec-review-failed-reviews-pending',
+            'candidate-state-derived-from-lifecycle-and-exact-review',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -5306,5 +5306,6 @@ class ProductControlTests(unittest.TestCase):
         self.ae(_r4_validation(decision), ([], True))
         self.ai('review_bundle', inspect.signature(verify_product).parameters)
         self.ae(_r4_validation(), ([], False))
-        self.ae(_r4_validation('fail'),
-                (['criteria[3] R4 external review bundle failed'], False))
+        errors, criteria_verified = _r4_validation('fail')
+        self.has(errors, 'R4 external review bundle failed')
+        self.af(criteria_verified)

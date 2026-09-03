@@ -297,7 +297,7 @@ The exact public claim ceiling contains five finite statements:
 
 Separate repository evidence includes a side-effect-free reference core and the bounded host scenarios below. It does not expand those five public claims.
 
-Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and lifecycle facts from one disposable non-empty Windows Codex-and-Claude replay. Exact review cut `c5a0668` rejected the broad GT-20 claim. Exact `7a3950e` retains corrected schema-v6 zero-model native-lifecycle, recomputable-staging and path-private mechanism facts. Exact `f4c0251` plus the admitted schema-v7 v5 record verify one isolated Codex Agent decision and evaluator-mediated bounded compensation; affected-surface reacceptance is active and all four fresh reviews are pending. This does not prove host-automatic, in-place or crash-atomic rollback, Claude Agent equivalence, current-desktop behavior, cross-OS equivalence, product value, a repository candidate, or release readiness.
+Bounded host evidence covers one event-to-consequence path, one silent sufficient route, one verified fresh handoff, and lifecycle facts from one disposable non-empty Windows Codex-and-Claude replay. Exact review cut `c5a0668` rejected the broad GT-20 claim. Exact `7a3950e` retains corrected schema-v6 zero-model native-lifecycle, recomputable-staging and path-private mechanism facts. Exact `f4c0251` plus the admitted schema-v7 v5 record verify one isolated Codex Agent decision and evaluator-mediated bounded compensation. Candidate disposition comes only from the machine lifecycle state and an exact task-time review bundle: an active/reopened projection has no candidate, while an unchanged raw-surface ready/closed projection with all criteria verified and an exact passing bundle selects that exact SHA. Neither state proves host-automatic, in-place or crash-atomic rollback, Claude Agent equivalence, current-desktop behavior, cross-OS equivalence, product value, or a later release gate.
 
 The observed `bypass_hook_trust` / `bypassPermissions` path was a test control, not a production trust route.
 
@@ -371,7 +371,7 @@ The current schema-v7 v5 replay covers a mutable local-marketplace evaluation me
 
 A lifecycle command can refresh installed files without replacing capability already loaded into the current task or session. Open a fresh task or session before judging the new version; a reported version, `/reload-plugins`, or changed cache alone is not hot-update evidence for already loaded behavior.
 
-Desktop `26.831.2377.0` is version-known only; new-task visibility, activation, and post-state have not been verified. Before candidate formation, either obtain that exact Desktop evidence or state a CLI-only supported behavior surface; any candidate installation or hot replacement requires a separate host-behavior authority decision.
+Desktop `26.831.2377.0` is version-known only; new-task visibility, activation, and post-state have not been verified. Without that exact Desktop evidence, the supported candidate behavior surface is CLI-only; any Desktop installation or hot replacement requires a separate host-behavior authority decision.
 
 Never move an existing tag. Do not edit global host configuration as a substitute for supported lifecycle commands.
 

@@ -61,11 +61,15 @@ an absent task-time exact review bundle made ordinary structural and host
 verification invalid instead of valid but not candidate-ready. Exact `9f66def`
 corrected that three-state mechanism, then standards and specification review
 found production-ambiguous local-check wording, unclear helper contracts and stale
-no-caller-receipt text. The successor corrects those surfaces while absence
-remains a readiness hold and malformed, mismatched or blocking bundles still fail
-closed. Affected-surface reacceptance is active and all four fresh reviews are
-reset to pending on those changed bytes before one
-unchanged clean SHA may become a replacement candidate. Production trust,
+no-caller-receipt text. Exact `8a06ee9` corrected those surfaces and passed
+product, specification and implementation review with no findings; standards
+review found only one non-blocking brittle diagnostic assertion. The successor
+removes that coupling and prepares raw derived surfaces that remain truthful on
+both sides of the state-only close. Candidate disposition is machine-derived: an
+active/reopened projection has no candidate, while a ready/closed projection with
+all criteria verified and one exact passing runtime review bundle selects its
+unchanged exact SHA. Missing input remains a readiness hold; malformed,
+mismatched or blocking bundles fail closed. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
 The v5 replay exercises a mutable local marketplace mechanism, not the public
@@ -1155,12 +1159,14 @@ acceptance. Exact `c0b3c1a` carries that correction but remains failed current-
 contract counterevidence because one derived review-status expectation was
 stale; its successor replaces that projection.
 Exact `e3d7ad2` then failed fresh product and specification review because the
-superseded and current cross-version assertions could coexist. Its successor
-rejects that contradiction. All eight criteria remain continuing and all four
-independent exact-tree reviews are reset to pending. A replacement
-candidate does not yet exist;
-exact-local, hosted, named-human, tag, publication and public-verification gates
-remain distinct.
+superseded and current cross-version assertions could coexist. Exact `39c24e9`
+rejects that contradiction, `9f66def` corrects three-state review readiness and
+`8a06ee9` closes the resulting evidence-language findings. The current raw
+surfaces express candidate disposition only through machine state: continuing
+criteria plus active/reopened means no candidate; all verified plus ready/closed
+and an exact passing runtime review bundle selects that unchanged SHA. Exact-
+local, hosted, named-human, tag, publication and public-verification gates remain
+distinct.
 
 ## Complexity and evolution
 

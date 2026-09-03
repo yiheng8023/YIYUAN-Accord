@@ -76,11 +76,14 @@ Then read, in order:
   bundle structural-verification defect. Exact `9f66def` corrected that three-
   state mechanism, then standards and specification review found production-
   ambiguous local-check wording, unclear helper contracts and stale no-caller-
-  receipt text. The successor corrects those surfaces, keeps absence as a
-  readiness hold, keeps invalid input fail-closed and preserves 0/8; four
-  replacement exact-tree reviews are reset to pending. No
-  repository candidate, hosted status, authorization or publication
-  exists.
+  receipt text. Exact `8a06ee9` corrected those surfaces and passed three review
+  axes with no findings; standards review found one non-blocking brittle
+  diagnostic assertion. The successor removes that coupling and uses lifecycle-
+  conditioned candidate language: active/reopened with continuing criteria means
+  no candidate; ready/closed with all criteria verified and an exact passing
+  runtime review bundle selects its unchanged exact SHA. Missing input holds
+  readiness and invalid input fails closed. Hosted status, authorization and
+  publication remain later gates in either state.
 - Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
   frozen replay attempt. It failed before evidence publication because two
   inventory helpers used `return if`, which PowerShell treated as an external
@@ -530,8 +533,9 @@ Then read, in order:
   activation and mutation-phase failed-update recovery. Exact `7a3950e`
   verifies the corrected bounded schema-v6 replay; exact `f4c0251` plus the
   admitted schema-v7 v5 record verify one bounded Codex Agent decision and
-  evaluator-mediated compensation. Affected-surface reacceptance is active and
-  four fresh independent reviews are pending.
+  evaluator-mediated compensation. Candidate disposition is derived from the
+  active/reopened or ready/closed lifecycle state plus exact task-time review,
+  never from this narrative alone.
   Exact checkpoint
   `553f5a97e08390117e877e7b913c7a501018bfa5` retains failed GT-14, GT-15
   and GT-16 attempts whose cleanup passed but source facts were incomplete.
@@ -1071,19 +1075,23 @@ Historical superseded review disposition —
     and host checks instead of only holding candidate readiness. Exact `9f66def`
     corrected that three-state mechanism, then standards and specification review
     found production-ambiguous local-check wording, unclear helper contracts and
-    stale no-caller-receipt text. The current successor corrects those surfaces,
-    treats absence as a readiness hold, preserves fail-closed malformed, mismatched
-    or blocking evidence and leaves acceptance unchanged at 0/8.
-    Reviews reset on its changed bytes. Production,
+    stale no-caller-receipt text. Exact `8a06ee9` corrected those surfaces and
+    passed three review axes with no findings; standards review found one non-
+    blocking brittle diagnostic assertion. The successor removes that coupling
+    and prepares state-conditioned raw surfaces. In active/reopened state its
+    criteria remain continuing; in ready/closed state all eight must be verified
+    and one exact runtime review bundle must pass. Production,
     cross-host and updated-client entry behavior remain
     unknown.
 15. `independent-review-and-form-future-exact-candidate` — prior review history
     selected a v3.1.0 repository candidate that later failed. Exact `39c24e9`
     completed the latest pre-candidate review cycle but its following readiness
     probe found the verifier-state defect above. Exact `9f66def` corrected the
-    mechanism but failed the standards and specification findings above, so the
-    current corrected bytes require another exact-tree cycle before candidate
-    formation. The review cycle at pre-remediation cut
+    mechanism but failed the standards and specification findings above. Exact
+    `8a06ee9` corrected them; its standards review retained one non-blocking test-
+    coupling finding and close-projection audit required state-conditioned raw
+    surfaces. The successor resolves both before the final exact-tree cycle and
+    state-only candidate close. The review cycle at pre-remediation cut
     `523f2ef47df96b76c132525ff432d044e7b1b4b3` completed separate product,
     specification, implementation and standards reviews and produced
     remediation findings. It did not form a candidate, and completion does not
@@ -1200,18 +1208,18 @@ Historical superseded review disposition —
     full nine-leg hosted matrix
     remain later; candidate selection alone cannot authorize publication.
 
-The release procedure currently has no selected v3.1.0 repository candidate.
+Candidate disposition is read from the machine lifecycle state, not fixed prose.
 Exact `fc9c1a7`, `c5a0668`, `369d08b`, `cb143d3`, `c0b3c1a` and `e3d7ad2` remain invalidated, failed
 or pre-review counterevidence. Exact `39c24e9` is passed pre-candidate review
 history whose later readiness probe failed. Exact `9f66def` corrected the
-mechanism but failed standards and specification review; neither is a candidate.
-Exact `7a3950e` and `f4c0251` retain only their bounded schema-v6 mechanism and
-schema-v7 Agent-recovery facts. The current successor preserves 0/8, holds
-readiness when task-time review input is absent, fails closed on invalid input,
-and resets four
-fresh independent exact-tree reviews. Only
-after they close may clean exact-local and host
-checks, hosted checks, a named-human decision, tag, Release, public verification
+mechanism but failed standards and specification review; exact `8a06ee9` corrected
+those issues and retained only one non-blocking test-coupling finding. Exact
+`7a3950e` and `f4c0251` retain only their bounded schema-v6 mechanism and schema-v7
+Agent-recovery facts. An active/reopened projection with continuing criteria has
+no candidate; an unchanged raw-surface ready/closed projection with all criteria
+verified and an exact passing runtime review bundle selects its exact SHA. Only
+that selected SHA may enter clean exact-local and host checks, hosted checks, a
+named-human decision, tag, Release, public verification
 and post-release cleanup run in their declared order on one unchanged exact
 revision. After the client update, all Codex, Claude and ChatGPT GUI entry
 points remain unknown; read-only re-sensing must precede any current-entry claim
