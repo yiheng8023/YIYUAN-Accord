@@ -52,7 +52,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "4647649f1f5d3113f5f980213bfd9c60a47eb662806daf60c90b8d794ab884e1",
+  "canonicalGoalObjectiveSha256": "0c7fc822ef28761480aa5fe67f766ebcaa3345171d798148aabc44c0ccddceba",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -613,7 +613,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": []
     },
     {
@@ -644,7 +644,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": []
     },
     {
@@ -675,8 +675,8 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
-      "latestAssessmentBoundary": "Exact 7a3950e retains bounded schema-v6 zero-model lifecycle mechanics. Exact f4c0251 and the admitted schema-v7 v5 record verify the bounded Codex Agent-decision and evaluator-mediated-compensation replay; affected-surface reacceptance is active, all four reviews are pending, and GT-21 remains unchanged.",
+      "assessment": "continuing",
+      "latestAssessmentBoundary": "Exact 7a3950e retains bounded schema-v6 zero-model lifecycle mechanics. Exact f4c0251 and the admitted schema-v7 v5 record verify the bounded Codex Agent-decision and evaluator-mediated-compensation replay; GT-21 remains unchanged, while current reacceptance, review and candidate disposition are derived only from lifecycle fields and an exact review bundle.",
       "assessmentScope": "Earlier GT-14 through GT-19 observations and unchanged GT-21 retain only their finite claims. Frozen 0febb415 retains narrower historical subfacts. Exact 7a3950e establishes bounded isolated Windows schema-v6 zero-model lifecycle mechanics; exact f4c0251 additionally establishes one isolated Codex Agent decision followed by evaluator-mediated bounded compensation and independent post-state. No automatic, in-place or crash-atomic rollback, Claude Agent equivalence, reacceptance completion, independent review, current-client compatibility, product value, candidate, exact-local, hosted, authorization, publication, production, cross-OS or field-value claim is promoted.",
       "evidence": [
         {
@@ -779,11 +779,11 @@
         "L7"
       ],
       "statement": "The v3.1.0 repository-candidate projection is lifecycle-gated: active/reopened plus continuing criteria is incomplete, while ready/closed plus all verified criteria is only a closed review subject. Exact fc9c1a7 and exact c5a0668 are retained as failed counterevidence; frozen 0febb415 binds only narrower schema-v5 subfacts. Exact 7a3950e retains bounded schema-v6 mechanism facts; exact f4c0251 and the admitted schema-v7 v5 record verify one bounded GT-20 Agent-recovery replay. Four fresh independent exact-tree reviews must pass before the chosen product form, authority, implementation, environment and lifecycle contracts, evidence and finite prospective public claim form a replacement candidate without moving an immutable tag.",
-      "passRule": "R4 is verified at the repository-candidate stage only when every core stage, feasibility question, required Golden Task including one current frozen schema-v7 GT-20 record with separately bound mechanism and Codex Agent-decision lanes and unchanged GT-21, environment baseline, longitudinal result, whole-system balance review, justified remediation, affected-surface reacceptance and candidate-forming external product, specification, implementation and standards reviews are complete in four unique zero-history, isolated-no-Accord contexts bound to the same exact revision and tree, and the semantic version and repository candidate are selected. This verifies only the internal release-surface contract. One later clean committed SHA must pass exact local verification and review, hosted systems, named-human authorization, public tag and Release, installed update or rollback and final cleanup in order. Repository self-report, invalidated candidate 9050114, failed review cut c5a0668, static package contents or earlier hosted passes cannot satisfy those gates.",
+      "passRule": "R4 is verified at the repository-candidate stage when every core stage, feasibility question, required Golden Task including one current frozen schema-v7 GT-20 record with separately bound mechanism and Codex Agent-decision lanes and unchanged GT-21, environment baseline, longitudinal result, whole-system balance review, justified remediation and affected-surface reacceptance are complete, the semantic version is fixed, and ready/closed plus all verified criteria defines one exact closed review subject. Four unique zero-history, isolated-no-Accord product, specification, implementation and standards reviews then bind that unchanged revision and tree; one exact passing bundle selects it as the repository candidate. This verifies only the internal release-surface contract. One later clean committed SHA must pass exact local verification and review, hosted systems, named-human authorization, public tag and Release, installed update or rollback and final cleanup in order. Repository self-report, invalidated candidate 9050114, failed review cut c5a0668, static package contents or earlier hosted passes cannot satisfy those gates.",
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": []
     },
     {
@@ -804,7 +804,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -906,7 +906,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -1010,7 +1010,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -1115,7 +1115,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "verified",
+      "assessment": "continuing",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-07-codex-local.json",
@@ -1216,7 +1216,7 @@
       "github-actions-windows-latest",
       "github-actions-macos-latest"
     ],
-    "rule": "Candidate 9050114 remains invalid, and exact fc9c1a7 and c5a0668 remain failed counterevidence. Exact 39c24e9 passed pre-candidate review but failed readiness probing; 9f66def corrected the mechanism but failed evidence-language review; 8a06ee9 closed those findings but retained one non-blocking brittle diagnostic assertion and active-only close prose. Later failed cuts remain bounded history. Candidate disposition is state-bound: active/reopened plus continuing criteria means no candidate; ready/closed plus all verified criteria and one exact passing task-time review bundle, obtained without credential or session logs through context-isolated, outcome-bound, identity-neutral reviews, selects the unchanged exact SHA. Missing input holds readiness, and malformed, mismatched or blocking input fails closed. This does not claim public-tag installation before the immutable tag exists. Only the selected SHA may enter exact-local verification; hosted verification and named-human release authorization remain later gates. Current criterion narratives use lifecycle-neutral predicates; lifecycle fields, assessments and exact review govern current disposition."
+    "rule": "Candidate 9050114 remains invalid, and exact fc9c1a7 and c5a0668 remain failed counterevidence. Exact 39c24e9 passed pre-candidate review but failed readiness probing; 9f66def corrected the mechanism but failed evidence-language review; 8a06ee9 closed those findings but retained one non-blocking brittle diagnostic assertion and active-only close prose. Later failed cuts remain bounded history. Candidate disposition is state-bound: active/reopened plus continuing criteria means no candidate; ready/closed plus all verified criteria and one exact passing task-time review bundle, obtained without credential or session logs through context-isolated, outcome-bound, identity-neutral reviews, selects the unchanged exact SHA. Missing input holds readiness, and malformed, mismatched or blocking input fails closed. This does not claim public-tag installation before the immutable tag exists. Only the selected SHA may enter exact-local verification; hosted verification and named-human release authorization remain later gates. representativeBehaviorPolicy.sampleRationale plus R3 and Q4 passRule clauses that report active or pending review state or old GT-21 lane names are frozen pre-close evidence-contract history, not current disposition or current environment-arm authority. Current disposition derives only from lifecycle fields, assessments and exact review; current GT-21 arm semantics derive from the exact Golden Task and environment admission contract. R3 and Q4 latest assessment boundaries plus R4 predicates remain lifecycle-neutral."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",

@@ -71,7 +71,7 @@ _PRIVATE_EVIDENCE_JSON_KEY_RE = re.compile(
 )
 _PRIVATE_EVIDENCE_PATH_RES = (
     re.compile(
-        r"(?i)(?:^|[\s\"'=(:,\[])(?:users|documents and settings|appdata|"
+        r"(?i)(?:^|[\s\"'=(:,\[])(?:(?:\.{1,2})?[\\/]+)*(?:users|documents and settings|appdata|"
         r"library[\\/]application support)(?:[\\/])"
     ),
     re.compile(r"(?:^|[\s\"'=(:,\[])~[\\/]"),
@@ -82,7 +82,7 @@ _PRIVATE_EVIDENCE_PATH_RES = (
         r"(?i)(?:^|[^a-z0-9])[a-z]--(?:users|documents-and-settings)-"
     ),
     re.compile(r"(?i)(?:^|[\s\"'=(:,\[])[a-z]:[\\/]"),
-    re.compile(r"(?:^|[\s\"'=(:,\[])[\\]{2,}[^\\/\s\"']+[\\/]"),
+    re.compile(r"(?:^|[\s\"'=(:,\[])(?:[\\]{2,}|(?<!:)/{2})[^\\/\s\"']+[\\/]"),
     re.compile(r"(?i)(?:^|[\s\"'=(:,\[])file:(?:/{1,3}|[\\]{1,3})"),
     re.compile(
         r"(?:^|[\s\"'=(:,\[])/(?!/)(?:"

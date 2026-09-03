@@ -1478,12 +1478,13 @@ class ProductControlTests(unittest.TestCase):
 
     def test_reacceptance_projects_current_stage_without_model_binding(self):
         p=_read(ROOT,P);want=(['completed','active','pending'],['completed']*3)[p['status']=='ready']
+        a=_read(ROOT,A);self.ai('frozen pre-close',a['candidateVerification']['rule'])
         for stages in (p['increment'][FM]['process']['orderedSteps'],p['increment']['workItems'][0]['closeoutSequence']):
             self.ae([step['state'] for step in stages[-3:]],want)
-        localized=_clone(p['increment'])
-        localized[FM]['process']['orderedSteps'][-2]['state']='进行中'
+        x=_clone(p['increment'])
+        x[FM]['process']['orderedSteps'][-2]['state']='进行中'
         e=[]
-        _validate_four_surface_mapping(localized,set(CRITERIA),e)
+        _validate_four_surface_mapping(x,set(CRITERIA),e)
         self.has(
             e,
             'increment.fourSurfaceMapping.process.orderedSteps[13].state is invalid',
@@ -2658,18 +2659,14 @@ class ProductControlTests(unittest.TestCase):
                 'threadId': 'private-thread', 'turnId': 'private-turn',
                 'hookId': 'private-hook',
             }},
-            r'Users\private\AppData\Local\Temp\evidence.json',
+            *(p+r'Users\private\AppData\x' for p in ('\\','..\\','./')),
+            r'//server/share/evidence.json',
             '~/.claude/projects/private/session.jsonl',
             'AppData/Roaming/Claude/session.json',
             'Library/Application Support/Claude/session.json',
         )
-        for value in private_values:
-            with self.subTest(value=value):
-                self.at(
-                    product_control._public_evidence_contains_private_material(
-                        value,
-                    ),
-                )
+        for v in private_values:
+            self.at(product_control._public_evidence_contains_private_material(v))
 
         safe = {
             'stdout': '', 'stderr': '',
