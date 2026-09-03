@@ -217,7 +217,7 @@
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
       },
-      "predecessorSnapshotRef": "339accd38097362926992ccec17c4ee75d421d1f:product/program.json#/increment/closeoutSnapshot",
+      "predecessorSnapshotRef": "0618552587d4dedcba942888ded92da4d985e1e4:product/program.json#/increment/closeoutSnapshot",
       "authorityRefs": [
         "product/constitution.json",
         "product/program.json",
@@ -246,7 +246,7 @@
         "product/program.json#/processLossControl/correctionRule"
       ],
       "acceptanceTransition": {
-        "kind": "changed",
+        "kind": "reaccepting",
         "rationaleRef": "product/program.json#/increment/fourSurfaceMapping/plan",
         "affectedCriterionIds": [
           "R2",
