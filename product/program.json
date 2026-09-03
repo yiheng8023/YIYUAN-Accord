@@ -217,7 +217,7 @@
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
       },
-      "predecessorSnapshotRef": "3dba837805a605fbf1241141d568df3bbfd067fa:product/program.json#/increment/closeoutSnapshot",
+      "predecessorSnapshotRef": "83ce4a30d3c27974de10e1d177cdaf22b8c090ce:product/program.json#/increment/closeoutSnapshot",
       "authorityRefs": [
         "product/constitution.json",
         "product/program.json",
@@ -246,9 +246,10 @@
         "product/program.json#/processLossControl/correctionRule"
       ],
       "acceptanceTransition": {
-        "kind": "reaccepting",
+        "kind": "reaccepting-correction",
         "rationaleRef": "product/program.json#/increment/fourSurfaceMapping/plan",
         "affectedCriterionIds": [
+          "R1",
           "R2",
           "R3",
           "R4",
@@ -315,7 +316,7 @@
         "evaluatedRevision": "f4c0251bc82bd5af983d365f8a12751217b88e2d"
       }
     },
-    "observedProblem": "The bounded self-bootstrapping core and unchanged GT-14 through GT-19 and GT-21 evidence remain accepted, while candidate 9050114, fc9c1a7 and c5a0668 remain failed counterevidence. Exact 39c24e9 passed pre-candidate review but its readiness probe exposed the missing-bundle structural defect. Exact 9f66def corrected that three-state mechanism but failed evidence-language review. Exact 8a06ee9 corrected those surfaces and passed product, specification and implementation review; standards retained one non-blocking exact-diagnostic test coupling. A close-projection audit also showed that active-only prose would contradict a state-only candidate close. The successor removes the brittle assertion and expresses candidate disposition conditionally without changing behavior evidence: active/reopened plus continuing criteria has no candidate; ready/closed plus all verified criteria and one exact passing runtime review bundle selects its unchanged exact SHA. Missing input holds readiness; malformed, mismatched or blocking input fails closed. Real-account or exact Desktop behavior, production, cross-OS behavior, comparative value and every later release gate remain unknown; v3.0.1 remains the public fallback.",
+    "observedProblem": "The bounded self-bootstrapping core and unchanged GT-14 through GT-19 and GT-21 evidence remain accepted, while candidate 9050114, fc9c1a7 and c5a0668 remain failed counterevidence. Exact 39c24e9 passed pre-candidate review but its readiness probe exposed the missing-bundle structural defect. Exact 9f66def corrected that three-state mechanism but failed evidence-language review. Exact 8a06ee9 corrected those surfaces and passed product, specification and implementation review; standards retained one non-blocking exact-diagnostic test coupling. A close-projection audit also showed that active-only prose would contradict a state-only candidate close. The successor removes the brittle assertion and expresses candidate disposition conditionally without changing behavior evidence: active/reopened plus continuing criteria has no candidate; ready/closed plus all verified criteria and one exact passing runtime review bundle selects its unchanged exact SHA. Missing input holds readiness; malformed, mismatched or blocking input fails closed. Full regression then exposed that ordinary reacceptance close misclassified the lifecycle-only R1 assessment promotion as a new semantic impact. Real-account or exact Desktop behavior, production, cross-OS behavior, comparative value and every later release gate remain unknown; v3.0.1 remains the public fallback.",
     "hypothesis": "A product-form-neutral, complete bounded self-bootstrapping core can turn the existing collaboration contract into a stronger outcome system without defaulting to a plugin, Runtime or control plane. If Accord first reconciles each material consensus against the current proposition set; keeps code and conversation topology independent; senses environment provenance; binds the latest outcome and human authority; reuses suitable native, official and maintained wheels before authorship; allocates minimum deep modules behind narrow shared interfaces; derives sparse host-native and Accord responsibility views plus the current state-authority, admission and closure-lifecycle views; and replaces or retires only exact allocations whose successor independently closes the same consequence and lifecycle with reversible recheck, then it can improve real collaboration closure while limiting contradiction, interference, self-confirmation, proxy optimization and lifecycle burden.",
     "hostCapabilityRefresh": {
       "capturedAt": "2026-09-01",

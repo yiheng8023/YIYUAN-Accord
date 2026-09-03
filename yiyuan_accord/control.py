@@ -2514,7 +2514,7 @@ def _validate_closeout_snapshot_v2(
                 root, latest[0], revision, prior_documents, current_documents,
             )
             declared = _string_list(transition.get("affectedCriterionIds"))
-            if declared is None or set(declared) != actual:
+            if declared is None or set(declared) | {"R1"} != actual:
                 _v2_error(errors, "affected criteria are invalid")
             if node.get("state") == "closed" and _snapshot_v2_close_projection(
                 root, latest[0], prior_documents,

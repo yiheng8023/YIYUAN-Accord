@@ -197,7 +197,7 @@ overlay, native activation and failed-update receipt validators, privacy-minimal
 digest-only host receipts, candidate-bound staging attribution, per-locator
 failure diagnostics, verified-replay evidence batching, consolidated lineage
 performance, cross-platform gate regressions and portable-path privacy measured
-831197 bytes, so the active 875000-byte ceiling retains 43803 bytes, or about 5.01 percent,
+831206 bytes, so the active 875000-byte ceiling retains 43794 bytes, or about 5.01 percent,
 remaining. The verifier still recomputes the
 active tree and requires at least
 five percent headroom; this increase is not general growth allowance. The
