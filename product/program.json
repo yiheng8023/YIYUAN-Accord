@@ -110,7 +110,7 @@
       "id": "product-premise-reset-2026-08-25",
       "kind": "accepted-revisable-reshaping-guidance",
       "repositoryLocator": "product/reshaping-guidance.json",
-      "repositorySha256": "a8ccba8518d152d42f52058b20c616265283d97efa9c3443891924f6613b1e56",
+      "repositorySha256": "d1aaf863fe67bb07de9d24f7245b981b2fceaacb9ff99122310eea4a79128f9b",
       "disposition": "current-revisable-guidance-including-context-adaptive-collaboration-closure-not-release-authority"
     },
     {
@@ -217,7 +217,7 @@
         "selfLocator": "product/program.json#/increment/closeoutSnapshot",
         "exactLocatorRule": "After commit, prefix selfLocator with the immutable containing commit SHA; never store that SHA inside this object."
       },
-      "predecessorSnapshotRef": "c357d4eabc9293844694728b54e7bebef0009789:product/program.json#/increment/closeoutSnapshot",
+      "predecessorSnapshotRef": "5315e27a5b59dc26d9ef8cf178b21077882a3f5e:product/program.json#/increment/closeoutSnapshot",
       "authorityRefs": [
         "product/constitution.json",
         "product/program.json",
@@ -381,7 +381,7 @@
         "hypothesis": "Complete bounded self-bootstrapping, not a particular plugin, fixed catalogue of forms or self-evolution loop, is the product-core hypothesis. Complete means every responsibility inside the named bound is closed, explicitly retired or honestly left unknown; it is not universal completeness. Evidence acquisition, including external research, is itself a dynamically applicable responsibility: omit it when current admitted evidence is sufficient, allocate it only for a route-changing material gap, and treat a public lead as inquiry rather than consequential authority. Establish the semantic loop, environment and authority model, reuse ledger, responsibility-to-form decision rule, cross-form coherence contract, representative and longitudinal evaluations, then implement only the smallest demonstrated closure. A new consensus governs direction but reaches implementation baseline status only after proposition-level contradiction, category, boundary and dependency checks. Preserve each superseded baseline as history and replay every globally affected surface from the earliest dependency boundary.",
         "earliestAffectedBoundary": "tests/product/test_product_control.py#/ProductControlTests.test_current_contract_is_valid_and_explicitly_incomplete,tests/product/test_product_control.py#/ProductControlTests.test_snapshot_v2_reopens_only_the_invalidated_package_boundary,product/program.json#/increment/closeoutSnapshot,product/acceptance.json#/criteria",
         "slice": "Preserve exact 6124c63 as failed close-state counterevidence. Calibrate its ready-state test-count assertion to 37 and make the snapshot-v2 test select the reopened current node or closed node's reopened predecessor without changing product code, GT-20/21 evidence, criterion meaning, candidate state or external gates.",
-        "stopCondition": "The correction is ready when the active and synthetic closed paths pass the focused, current-contract, snapshot-lineage and review-bundle checks with at least five percent Python/test headroom; active/reopened remains no candidate; ready/closed still requires 8/8 and one exact passing review bundle; four fresh exact-tree reviews must bind the clean close predecessor."
+        "stopCondition": "The correction is ready when active and synthetic closed paths pass focused, current-contract, snapshot-lineage and review-bundle checks with at least five percent Python/test headroom. A clean active/reopened predecessor may then close state-only without becoming a candidate; four fresh exact-tree reviews bind only the closed SHA before candidate selection."
       },
       "process": {
         "routeRule": "Bind current target/value receipts; unknown stays unknown; events only invalidate. Acquire evidence only if missing/stale/conflicting facts or unresolved reuse may change route; sufficient routes skip research, public leads need corroboration, adapters stay authority/cost/lifecycle-bound. Hosts query/inject; Accord decides; Agent executes; model/version are runtime provenance. Preserve selected components; deterministic correction and independent exact-tree review precede candidate selection; add no client/bridge.",
@@ -651,7 +651,7 @@
               "Q3",
               "Q4"
             ],
-            "completion": "Four fresh zero-history, isolated-no-Accord product, specification, implementation and standards reviews bind the clean close predecessor and close every P0/P1 before a state-only successor can form a replacement repository candidate. In active/reopened state the criteria remain continuing and no candidate exists; in ready/closed state all eight must be verified and one exact passing runtime review bundle must bind the unchanged exact SHA. Earlier failures remain counterevidence, and no review grants exact-local or external release authority."
+            "completion": "The clean close predecessor passes deterministic active and synthetic closed-path checks before one state-only successor. That ready/closed SHA still has no candidate until four fresh zero-history, isolated-no-Accord product, specification, implementation and standards reviews bind it through one exact passing runtime bundle. Earlier failures remain counterevidence; no review grants exact-local or external release authority."
           }
         ],
         "degradationRule": "Unknown or confounded environment state first narrows the claim or triggers isolation. An unavailable, failed or uneconomic capability narrows that exact path, preserves counterevidence and triggers relation-and-constraint recomputation. Newly declared, visible or version-labelled native capability does not retire anything; only a same-responsibility selected successor with independent consequence, cleanup, reversible observation and retirement post-state may close that allocation, and drift or evidence expiry recomputes it. The route never transfers supported mechanics to the user, converts current unavailability into permanent retirement, or justifies a larger authored control plane without a demonstrated closure need. Learning or self-evolution that weakens outcome, authority, evidence, rollback, interference or lifecycle is discarded or rolled back."
@@ -930,7 +930,7 @@
               "Q3",
               "Q4"
             ],
-            "stopCondition": "[independent-review-and-form-future-exact-candidate] Exact 8a06ee9 closed the evidence-language findings and passed three review axes with no findings; standards retained one non-blocking diagnostic-coupling P3, and close audit found its active-only raw narratives could not remain truthful through the state-only close. Its successor removes both problems and must pass the production verifier, current-contract and alignment checks. Four fresh, independent, zero-history, isolated-no-Accord product, specification, implementation and standards reviews must bind that clean exact tree before a state-only close; every P0/P1 must close, and no review grants external release authority."
+            "stopCondition": "[independent-review-and-form-future-exact-candidate] Exact 6124c63 failed its newly active closed-state test paths. The successor corrects those tests under the byte budget and must pass production, focused, current-contract, snapshot-lineage and synthetic closed-path checks. Only then may one state-only close occur; four fresh, independent, zero-history, isolated-no-Accord product, specification, implementation and standards reviews bind that closed exact SHA before candidate selection. Every P0/P1 blocks, and no review grants external release authority."
           }
         ]
       }

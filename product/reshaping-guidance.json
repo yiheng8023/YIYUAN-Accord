@@ -1898,19 +1898,19 @@
   "nextAuthorityBoundary": {
     "first": "derive-current-boundary-from-lifecycle-state-active-reopened-requires-review-and-close-ready-closed-requires-exact-local",
     "then": [
-      "if-active-reopened-four-fresh-independent-reviews-then-state-only-repository-candidate-close",
+      "if-active-reopened-pass-deterministic-active-and-synthetic-closed-checks-then-state-only-close",
       "exact-local-verification-and-review-of-the-clean-committed-v3.1.0-candidate",
       "current-client-entry-instance-read-only-resensing-before-any-current-entry-claim",
       "promoted-task-current-semantics-projection-ancestor-and-unchanged-sparse-behavior-subject-binding",
       "exact-candidate-hosted-verification-only-after-the-local-gate-passes",
       "named-human-tagged-release-and-cleanup-gates-remain-closed-until-their-dependencies-pass"
     ],
-    "minimumNextSlice": "Retain every attempt and bounded GT-18 through GT-21 facts and claim ceilings. Preserve 39c24e9 as failed readiness-probe history, 9f66def as the corrected three-state mechanism that failed evidence-language review, and 8a06ee9 as the evidence-language correction with one non-blocking diagnostic-coupling P3 and active-only close prose. Remove both 8a06ee9 findings, commit one clean close-predecessor projection with at least five percent Python/test headroom and obtain four fresh exact-tree reviews. If it remains active/reopened, form only a state-only ready/closed successor; if it is already ready/closed, run exact-local verification on that exact SHA. Current Desktop behavior remains unverified, so the candidate surface is CLI-only unless separate evidence and authority are obtained.",
+    "minimumNextSlice": "Retain bounded GT-18 through GT-21 facts, claim ceilings and every failed attempt. Exact 6124c63 remains failed closed-path counterevidence. Correct only its test-count and reopened-predecessor tests within five percent Python/test headroom; pass active and synthetic closed checks, then form one state-only ready/closed SHA. Obtain four fresh exact-tree reviews only for that closed SHA before candidate selection. Desktop behavior remains unverified, so any candidate surface is CLI-only absent separate evidence and authority.",
     "latestFailureBoundary": "Candidate 9050114 and its GT-20 record remain failed history. Exact fc9c1a7, c5a0668 and the unpublished schema-v6 replay retain their stated invalidated or failed boundaries. Exact 7a3950e and f4c0251 retain only bounded schema-v6 mechanism and schema-v7 Agent-recovery facts. Exact 39c24e9 passed pre-candidate review but failed readiness probing; 9f66def corrected the mechanism but failed evidence-language review; 8a06ee9 closed those findings but retained one non-blocking diagnostic-coupling P3 and active-only close prose. The successor removes both. Candidate disposition is derived from lifecycle state and exact task-time review; missing input holds readiness and invalid input fails closed. Exact-local, hosted, named-human authorization, tag, public Release and cleanup remain separate gates. Current entry-instance, production, cross-host and value claims remain unknown.",
     "requiredReplay": [
       "preserve-the-85a917a-source-bound-whole-system-reacceptance-as-history-every-bounded-counterexample-and-failed-c5a0668-independent-review",
       "complete-current-affected-surface-reacceptance-without-promoting-a-candidate-or-external-gate",
-      "obtain-four-fresh-independent-reviews-before-repository-candidate-formation",
+      "after-state-only-close-obtain-four-fresh-independent-reviews-before-candidate-selection",
       "run-exact-local-verification-and-review-on-the-clean-committed-v3.1.0-candidate",
       "verify-current-task-and-evaluation-semantics-exact-projection-source-recorded-ancestor-and-unchanged-sparse-behavior-subject-bytes-before-promoting-any-observation",
       "read-only-resense-the-updated-client-entry-instance-before-any-current-host-activation-compatibility-installation-or-entry-surface-claim",
