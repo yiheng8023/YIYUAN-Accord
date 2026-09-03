@@ -69,7 +69,9 @@ Then read, in order:
   on current-guidance strictness, terminal schema-v2 transition closure and
   public-path privacy precision. Exact `c0b3c1a` closed those findings but
   failed the current-contract test on a stale derived review-status expectation.
-  Its successor correction replaces that projection and preserves the
+  Its successor replaced that projection, but exact `e3d7ad2` failed fresh
+  product and specification review because current and superseded cross-version
+  assertions could coexist. The next successor rejects that contradiction and preserves the
   acceptance standard at 0/8; four replacement exact-tree reviews are reset to
   pending. No
   repository candidate, hosted status, authorization or publication
@@ -1056,7 +1058,9 @@ Historical superseded review disposition —
     schema-v2 transition closure and public-path privacy precision. Its successor
     closes those findings, while exact `c0b3c1a` remains failed current-contract
     counterevidence because one derived review-status expectation stayed stale.
-    The next successor replaces that projection while leaving acceptance unchanged at 0/8. Current
+    Exact `e3d7ad2` then failed fresh product and specification review because
+    contradictory cross-version assertions could coexist. The next successor
+    rejects that contradiction while leaving acceptance unchanged at 0/8. Current
     affected surfaces are being reaccepted. Production,
     cross-host and updated-client entry behavior remain
     unknown.
@@ -1180,7 +1184,7 @@ Historical superseded review disposition —
     remain later; candidate selection alone cannot authorize publication.
 
 The release procedure currently has no selected v3.1.0 repository candidate.
-Exact `fc9c1a7`, `c5a0668`, `369d08b`, `cb143d3` and `c0b3c1a` remain invalidated, failed
+Exact `fc9c1a7`, `c5a0668`, `369d08b`, `cb143d3`, `c0b3c1a` and `e3d7ad2` remain invalidated, failed
 or pre-review counterevidence. Exact `7a3950e` and `f4c0251` retain only their bounded schema-v6
 mechanism and schema-v7 Agent-recovery facts. The current successor correction
 preserves the acceptance standard at 0/8; affected-surface reacceptance is active

@@ -527,6 +527,8 @@ def _validate_stage_guidance(guidance, errors, allow_legacy_cycle=False):
         _contains_markers(snapshot_rule, (
             "does not admit a cross-version cycle", "separately reviewed schema",
         ))
+        and (allow_legacy_cycle or not _contains_markers(
+            snapshot_rule, ("later version starts a new ordered cycle",)))
         or allow_legacy_cycle and _contains_markers(
             snapshot_rule, ("later version starts a new ordered cycle",))
     )

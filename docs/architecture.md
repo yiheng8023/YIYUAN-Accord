@@ -52,7 +52,10 @@ the prior pre-review gaps but failed four-axis review on current-guidance
 strictness, terminal schema-v2 transition closure and public-path privacy
 precision. Exact `c0b3c1a` closed those findings but failed the current-contract
 test because its derived review-status expectation remained stale. The successor
-replaces that status projection. Affected-surface reacceptance is active and all four fresh reviews
+replaced that status projection, but exact `e3d7ad2` failed fresh product and
+specification review because current guidance could contain both the superseded
+and current cross-version assertions. Its successor rejects that contradiction.
+Affected-surface reacceptance is active and all four fresh reviews
 are reset to pending before one
 unchanged clean SHA may become a replacement candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
@@ -1139,8 +1142,11 @@ and the privacy matcher rejected legitimate public or repository-relative user
 segments. Its successor corrects those affected boundaries without weakening
 acceptance. Exact `c0b3c1a` carries that correction but remains failed current-
 contract counterevidence because one derived review-status expectation was
-stale; its successor replaces that projection. All eight criteria remain continuing and all four independent
-exact-tree reviews are reset to pending. A replacement
+stale; its successor replaces that projection.
+Exact `e3d7ad2` then failed fresh product and specification review because the
+superseded and current cross-version assertions could coexist. Its successor
+rejects that contradiction. All eight criteria remain continuing and all four
+independent exact-tree reviews are reset to pending. A replacement
 candidate does not yet exist;
 exact-local, hosted, named-human, tag, publication and public-verification gates
 remain distinct.

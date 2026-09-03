@@ -701,7 +701,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-evidence-preserved-c0b3c1a-contract-test-failed-reviews-pending',
+            'gt20-evidence-preserved-e3d7ad2-review-failed-reviews-pending',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -2467,9 +2467,7 @@ class ProductControlTests(unittest.TestCase):
         self.has(TE(restart, terminal), pre + 'reopen transition is invalid')
         guidance = _read(ROOT, GUIDANCE)
         stage = guidance['adaptiveSystem']['stageStateContract']; key = 'closeoutSnapshotRule'
-        stage[key] = stage[key].replace(
-            'does not admit a cross-version cycle',
-            'later version starts a new ordered cycle')
+        stage[key] += ' A later version starts a new ordered cycle.'
         strict = []; product_control._validate_stage_guidance(guidance, strict)
         self.at(strict)
         docs = list(_snapshot_documents(ROOT))
