@@ -55,11 +55,14 @@ test because its derived review-status expectation remained stale. The successor
 replaced that status projection, but exact `e3d7ad2` failed fresh product and
 specification review because current guidance could contain both the superseded
 and current cross-version assertions. Exact `39c24e9` rejected that contradiction
-and passed production, focused, current-contract, alignment and all four fresh
-pre-candidate reviews. Its following readiness probe found that an absent
-task-time exact review bundle made ordinary structural and host verification
-invalid instead of valid but not candidate-ready. The successor treats absence
-as a readiness hold while malformed, mismatched or blocking bundles still fail
+and passed the production verifier, focused and current-contract tests, alignment,
+and all four fresh pre-candidate reviews. Its following readiness probe found that
+an absent task-time exact review bundle made ordinary structural and host
+verification invalid instead of valid but not candidate-ready. Exact `9f66def`
+corrected that three-state mechanism, then standards and specification review
+found production-ambiguous local-check wording, unclear helper contracts and stale
+no-caller-receipt text. The successor corrects those surfaces while absence
+remains a readiness hold and malformed, mismatched or blocking bundles still fail
 closed. Affected-surface reacceptance is active and all four fresh reviews are
 reset to pending on those changed bytes before one
 unchanged clean SHA may become a replacement candidate. Production trust,
@@ -185,12 +188,13 @@ recalibrated structured 800000-byte ceiling, leaving 47366 bytes or about 5.92
 percent. That revision-bound measurement is history, not a live size claim.
 The first schema-v6 slice recalibrated the structured ceiling to 816000 bytes
 for host activation, mutation-phase failed-update recovery and the bounded
-lineage-read cache. The independent v4 overlay, native activation and failed-
-update receipt validators, privacy-minimal digest-only host receipts, candidate-
-bound staging attribution, per-locator failure diagnostics, verified-replay
-evidence batching and consolidated lineage performance and cross-platform gate
-regressions now measure 819392 bytes, so the active ceiling is 875000 bytes,
-leaving 55608 bytes or about 6.36 percent. The verifier still recomputes the
+lineage-read cache. At the ceiling-calibration revision, the independent v4
+overlay, native activation and failed-update receipt validators, privacy-minimal
+digest-only host receipts, candidate-bound staging attribution, per-locator
+failure diagnostics, verified-replay evidence batching and consolidated lineage
+performance and cross-platform gate regressions measured 819392 bytes, so the
+active ceiling became 875000 bytes with 55608 bytes, or about 6.36 percent, then
+remaining. The verifier still recomputes the
 active tree and requires at least
 five percent headroom; this increase is not general growth allowance. The
 earlier increase from the
@@ -629,10 +633,12 @@ report means only that the authority and projections are
 structurally conformant at their current declared lifecycle state. It is not
 evidence that the tree is a candidate. Candidate readiness additionally
 requires all applicable live-computed and representative criteria, a ready
-program, one retained completed increment and a clean checkout. Exact local
-review, hosted results, human authority, publication and cleanup are task-time
-facts; the verifier accepts no caller-supplied receipt and never computes
-release eligibility or completion.
+program, one retained completed increment, a clean checkout and one exact
+caller-supplied task-time external-review bundle for runtime R4. A missing
+bundle holds readiness without invalidating structural conformance; malformed,
+mismatched or blocking input fails closed. The bundle cannot prove hosted
+results, human authority, publication or cleanup, and the verifier never
+computes release eligibility or completion.
 
 ## Host admission
 

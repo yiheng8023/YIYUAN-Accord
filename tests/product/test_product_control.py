@@ -193,7 +193,7 @@ def _git(root, *arguments, **options):
         ['git', '-C', str(root), *arguments], stderr=subprocess.DEVNULL, **options
     )
 
-def _head(root):
+def _head_subject(root):
     return tuple(_git(root, 'rev-parse', '--verify', ref, text=True).strip()
                  for ref in ('HEAD^{commit}', 'HEAD^{tree}'))
 
@@ -623,7 +623,7 @@ def _external_review_bundle(revision='1' * 40, tree='2' * 40):
         'decision': 'pass',
     }
 
-def _external_r4_static_errors(review_decision=None):
+def _r4_validation(review_decision=None):
     constitution = _read(ROOT, C)
     acceptance = _read(ROOT, A)
     golden = _read(ROOT, G)
@@ -640,11 +640,11 @@ def _external_r4_static_errors(review_decision=None):
         errors,
         FROZEN_GT20_21_REPRESENTATIVE_LANES,
     )
-    result = product_control._validate_acceptance(
+    _, criteria_verified, _, _ = product_control._validate_acceptance(
         *arguments,
         independent_review_decision=review_decision,
     )
-    return errors, result[1]
+    return errors, criteria_verified
 
 class ProductControlTests(unittest.TestCase):
 
@@ -693,7 +693,7 @@ class ProductControlTests(unittest.TestCase):
             self.ae(report['criteria']['verified'], 8)
             self.af(report['repositoryCandidateReady'])
             reviewed = verify_product(
-                root, _external_review_bundle(*_head(root)))
+                root, _external_review_bundle(*_head_subject(root)))
             self.ae(reviewed['repositoryCandidateReady'], reviewed['checkoutClean'])
         self.at(all(host['staticReady'] for host in report['hostChecks'].values()))
         program, acceptance = _read(root, P), _read(root, A)
@@ -706,7 +706,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-evidence-preserved-39c24e9-readiness-probe-failed-reviews-pending',
+            'gt20-evidence-preserved-9f66def-standards-and-spec-review-failed-reviews-pending',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -5294,7 +5294,7 @@ class ProductControlTests(unittest.TestCase):
                 self.has(first['errors'], fragment)
 
     def test_external_review_runtime_binds_r4_to_exact_current_head(self):
-        revision, tree = _head(ROOT)
+        revision, tree = _head_subject(ROOT)
         acceptance = {'criteria': [{
             'id': 'R4', 'assessment': 'verified', 'evidence': [],
         }]}
@@ -5303,13 +5303,8 @@ class ProductControlTests(unittest.TestCase):
             ROOT, acceptance, _external_review_bundle(revision, tree), errors)
         self.ae(decision, 'pass')
         self.ae(errors, [])
-        errors, verified = _external_r4_static_errors(decision)
-        self.ae(errors, [])
-        self.at(verified)
+        self.ae(_r4_validation(decision), ([], True))
         self.ai('review_bundle', inspect.signature(verify_product).parameters)
-        errors, verified = _external_r4_static_errors()
-        self.ae(errors, [])
-        self.af(verified)
-        errors, verified = _external_r4_static_errors('fail')
-        self.has(errors, 'R4 external review bundle failed')
-        self.af(verified)
+        self.ae(_r4_validation(), ([], False))
+        self.ae(_r4_validation('fail'),
+                (['criteria[3] R4 external review bundle failed'], False))
