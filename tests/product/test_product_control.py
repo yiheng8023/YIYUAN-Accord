@@ -1477,22 +1477,18 @@ class ProductControlTests(unittest.TestCase):
             self.ae(errors, [])
 
     def test_reacceptance_projects_current_stage_without_model_binding(self):
-        program = _read(ROOT, P)
-        for stages in (program['increment'][FM]['process']['orderedSteps'],
-                       program['increment']['workItems'][0]['closeoutSequence']):
-            self.ae([step['state'] for step in stages[-3:]],
-                    ['completed', 'active', 'pending'])
-        localized = _clone(program['increment'])
-        localized[FM]['process']['orderedSteps'][-2][
-            'state'
-        ] = '进行中'
-        localized_errors = []
-        _validate_four_surface_mapping(localized, set(CRITERIA), localized_errors)
+        p=_read(ROOT,P);want=(['completed','active','pending'],['completed']*3)[p['status']=='ready']
+        for stages in (p['increment'][FM]['process']['orderedSteps'],p['increment']['workItems'][0]['closeoutSequence']):
+            self.ae([step['state'] for step in stages[-3:]],want)
+        localized=_clone(p['increment'])
+        localized[FM]['process']['orderedSteps'][-2]['state']='进行中'
+        e=[]
+        _validate_four_surface_mapping(localized,set(CRITERIA),e)
         self.has(
-            localized_errors,
+            e,
             'increment.fourSurfaceMapping.process.orderedSteps[13].state is invalid',
         )
-        active = '\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
+        s='\n'.join((ROOT / name).read_text(encoding='utf-8') for name in (
             'README.md', 'README.zh-CN.md', P, GUIDANCE,
             'docs/architecture.md', CONTINUATION,
             'docs/releases/v3.1.0.md'))
@@ -1500,8 +1496,8 @@ class ProductControlTests(unittest.TestCase):
             r'\b(?:gpt|gemini)-\d|claude-(?:\d|opus|sonnet|haiku)|deepseek-[vr]\d|'
             r'run gt-20 next|(keep the selected current component set) '
             r'and \1',
-            active, re.IGNORECASE))
-        self.ai('corrected bounded schema-v6 replay', active)
+            s,re.IGNORECASE))
+        self.ai('corrected bounded schema-v6 replay',s)
 
     def test_reference_core_is_policy_driven_and_fail_closed(self):
         minimal, native = 'minimal-composition', 'native-no-add'
@@ -4206,7 +4202,7 @@ class ProductControlTests(unittest.TestCase):
             revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             self.ae(_snapshot_bytes(root, locator, revision), raw)
 
-        with _indexed() as root:
+        with _indexed(predecessor if current['status']=='ready' else None) as root:
             program = _read(root, P)
             drifted = _clone(program)
             drifted['increment'][FM]['plan']['hypothesis'] += ' Drift.'
