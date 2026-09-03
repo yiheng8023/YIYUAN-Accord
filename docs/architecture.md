@@ -54,9 +54,14 @@ precision. Exact `c0b3c1a` closed those findings but failed the current-contract
 test because its derived review-status expectation remained stale. The successor
 replaced that status projection, but exact `e3d7ad2` failed fresh product and
 specification review because current guidance could contain both the superseded
-and current cross-version assertions. Its successor rejects that contradiction.
-Affected-surface reacceptance is active and all four fresh reviews
-are reset to pending before one
+and current cross-version assertions. Exact `39c24e9` rejected that contradiction
+and passed production, focused, current-contract, alignment and all four fresh
+pre-candidate reviews. Its following readiness probe found that an absent
+task-time exact review bundle made ordinary structural and host verification
+invalid instead of valid but not candidate-ready. The successor treats absence
+as a readiness hold while malformed, mismatched or blocking bundles still fail
+closed. Affected-surface reacceptance is active and all four fresh reviews are
+reset to pending on those changed bytes before one
 unchanged clean SHA may become a replacement candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.

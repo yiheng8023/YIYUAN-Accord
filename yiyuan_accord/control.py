@@ -5391,10 +5391,9 @@ def _validate_acceptance(
             and not evidence
             and independent_review_decision != "pass"
         ):
-            errors.append(
-                f"{label} R4 cannot self-attest independent review completion"
-            )
             verified = False
+            if independent_review_decision == "fail":
+                errors.append(f"{label} R4 external review bundle failed")
         if assessment == "verified" and stored_classes and not evidence:
             errors.append(f"{label} is verified without direct evidence")
         elif assessment == "verified" and accepted_classes != required_class_set:

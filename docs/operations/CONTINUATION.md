@@ -71,9 +71,11 @@ Then read, in order:
   failed the current-contract test on a stale derived review-status expectation.
   Its successor replaced that projection, but exact `e3d7ad2` failed fresh
   product and specification review because current and superseded cross-version
-  assertions could coexist. The next successor rejects that contradiction and preserves the
-  acceptance standard at 0/8; four replacement exact-tree reviews are reset to
-  pending. No
+  assertions could coexist. Exact `39c24e9` rejected that contradiction and
+  passed four pre-candidate reviews, but its readiness probe exposed the absent-
+  bundle structural-verification defect. The successor treats absence as a
+  readiness hold, keeps invalid input fail-closed and preserves 0/8; four
+  replacement exact-tree reviews are reset to pending. No
   repository candidate, hosted status, authorization or publication
   exists.
 - Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
@@ -1059,14 +1061,21 @@ Historical superseded review disposition —
     closes those findings, while exact `c0b3c1a` remains failed current-contract
     counterevidence because one derived review-status expectation stayed stale.
     Exact `e3d7ad2` then failed fresh product and specification review because
-    contradictory cross-version assertions could coexist. The next successor
-    rejects that contradiction while leaving acceptance unchanged at 0/8. Current
-    affected surfaces are being reaccepted. Production,
+    contradictory cross-version assertions could coexist. Exact `39c24e9`
+    rejected that contradiction and passed production, focused, current-contract,
+    alignment and all four pre-candidate reviews. Its following readiness probe
+    found that absent task-time exact review input invalidated ordinary structural
+    and host checks instead of only holding candidate readiness. The current
+    successor treats absence as a readiness hold, preserves fail-closed malformed,
+    mismatched or blocking evidence and leaves acceptance unchanged at 0/8.
+    Reviews reset on its changed bytes. Production,
     cross-host and updated-client entry behavior remain
     unknown.
 15. `independent-review-and-form-future-exact-candidate` — prior review history
-    selected a v3.1.0 repository candidate that later failed. This step is now
-    pending current affected-surface reacceptance. The review cycle at pre-remediation cut
+    selected a v3.1.0 repository candidate that later failed. Exact `39c24e9`
+    completed the latest pre-candidate review cycle but its following readiness
+    probe found the verifier-state defect above, so the current corrected bytes
+    require another exact-tree cycle before candidate formation. The review cycle at pre-remediation cut
     `523f2ef47df96b76c132525ff432d044e7b1b4b3` completed separate product,
     specification, implementation and standards reviews and produced
     remediation findings. It did not form a candidate, and completion does not
@@ -1185,10 +1194,12 @@ Historical superseded review disposition —
 
 The release procedure currently has no selected v3.1.0 repository candidate.
 Exact `fc9c1a7`, `c5a0668`, `369d08b`, `cb143d3`, `c0b3c1a` and `e3d7ad2` remain invalidated, failed
-or pre-review counterevidence. Exact `7a3950e` and `f4c0251` retain only their bounded schema-v6
-mechanism and schema-v7 Agent-recovery facts. The current successor correction
-preserves the acceptance standard at 0/8; affected-surface reacceptance is active
-and four fresh independent exact-tree reviews are pending. Only
+or pre-review counterevidence. Exact `39c24e9` is passed pre-candidate review
+history whose later readiness probe failed; it is not a candidate. Exact `7a3950e`
+and `f4c0251` retain only their bounded schema-v6 mechanism and schema-v7
+Agent-recovery facts. The current successor preserves 0/8, holds readiness when
+task-time review input is absent, fails closed on invalid input, and resets four
+fresh independent exact-tree reviews. Only
 after they close may clean exact-local and host
 checks, hosted checks, a named-human decision, tag, Release, public verification
 and post-release cleanup run in their declared order on one unchanged exact

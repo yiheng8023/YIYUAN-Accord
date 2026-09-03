@@ -193,6 +193,10 @@ def _git(root, *arguments, **options):
         ['git', '-C', str(root), *arguments], stderr=subprocess.DEVNULL, **options
     )
 
+def _head(root):
+    return tuple(_git(root, 'rev-parse', '--verify', ref, text=True).strip()
+                 for ref in ('HEAD^{commit}', 'HEAD^{tree}'))
+
 def _commit(root, message):
     _git(root, '-c', 'user.name=Accord Fixture',
          '-c', 'user.email=fixture@example.invalid',
@@ -624,9 +628,7 @@ def _external_r4_static_errors(review_decision=None):
     acceptance = _read(ROOT, A)
     golden = _read(ROOT, G)
     for criterion in acceptance['criteria']:
-        if criterion['id'] == 'R4':
-            criterion['assessment'] = 'verified'
-            criterion['evidence'] = []
+        criterion['assessment'] = 'verified'
     errors = []
     contract_ids = product_control._validate_constitution(constitution, errors)
     arguments = (
@@ -638,11 +640,11 @@ def _external_r4_static_errors(review_decision=None):
         errors,
         FROZEN_GT20_21_REPRESENTATIVE_LANES,
     )
-    product_control._validate_acceptance(
+    result = product_control._validate_acceptance(
         *arguments,
         independent_review_decision=review_decision,
     )
-    return errors
+    return errors, result[1]
 
 class ProductControlTests(unittest.TestCase):
 
@@ -689,7 +691,10 @@ class ProductControlTests(unittest.TestCase):
         else:
             self.ae(report['programStatus'], 'ready')
             self.ae(report['criteria']['verified'], 8)
-            self.ae(report['repositoryCandidateReady'], report['checkoutClean'])
+            self.af(report['repositoryCandidateReady'])
+            reviewed = verify_product(
+                root, _external_review_bundle(*_head(root)))
+            self.ae(reviewed['repositoryCandidateReady'], reviewed['checkoutClean'])
         self.at(all(host['staticReady'] for host in report['hostChecks'].values()))
         program, acceptance = _read(root, P), _read(root, A)
         constitution = _read(root, C)
@@ -701,7 +706,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-evidence-preserved-e3d7ad2-review-failed-reviews-pending',
+            'gt20-evidence-preserved-39c24e9-readiness-probe-failed-reviews-pending',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),
@@ -5289,14 +5294,7 @@ class ProductControlTests(unittest.TestCase):
                 self.has(first['errors'], fragment)
 
     def test_external_review_runtime_binds_r4_to_exact_current_head(self):
-        revision = subprocess.run(
-            ['git', 'rev-parse', '--verify', 'HEAD^{commit}'], cwd=ROOT,
-            check=True, text=True, encoding='ascii', capture_output=True,
-        ).stdout.strip()
-        tree = subprocess.run(
-            ['git', 'rev-parse', '--verify', 'HEAD^{tree}'], cwd=ROOT,
-            check=True, text=True, encoding='ascii', capture_output=True,
-        ).stdout.strip()
+        revision, tree = _head(ROOT)
         acceptance = {'criteria': [{
             'id': 'R4', 'assessment': 'verified', 'evidence': [],
         }]}
@@ -5305,12 +5303,13 @@ class ProductControlTests(unittest.TestCase):
             ROOT, acceptance, _external_review_bundle(revision, tree), errors)
         self.ae(decision, 'pass')
         self.ae(errors, [])
-        self.af(any(
-            'R4 cannot self-attest independent review completion' in error
-            for error in _external_r4_static_errors(decision)
-        ))
+        errors, verified = _external_r4_static_errors(decision)
+        self.ae(errors, [])
+        self.at(verified)
         self.ai('review_bundle', inspect.signature(verify_product).parameters)
-        self.has(
-            _external_r4_static_errors(),
-            'R4 cannot self-attest independent review completion',
-        )
+        errors, verified = _external_r4_static_errors()
+        self.ae(errors, [])
+        self.af(verified)
+        errors, verified = _external_r4_static_errors('fail')
+        self.has(errors, 'R4 external review bundle failed')
+        self.af(verified)
