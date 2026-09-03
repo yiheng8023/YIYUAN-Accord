@@ -269,16 +269,16 @@ Then read, in order:
   correctness, cross-host equivalence, broad-field-value or production-safety
   claim.
 - At the tagged v3.0.1 SHA, the released program remains historical `ready`
-  evidence. On the current v3.1 working line, `program.status` is `active`; its
-  one increment and work item remain active, and the first schema-v6 GT-20
+  evidence. On the current v3.1 working line, lifecycle state is authoritative:
+  active/reopened plus continuing criteria means no candidate; ready/closed plus
+  all verified criteria and one exact passing runtime review bundle selects only
+  that unchanged exact SHA. The first schema-v6 GT-20
   evidence package was invalidated by exact-tree privacy and staging-attribution
   review. Exact `7a3950e` verifies the corrected bounded schema-v6 replay;
   exact `f4c0251` plus the admitted schema-v7 v5 record verify one bounded
-  Codex Agent-decision and evaluator-mediated-compensation replay. Affected-
-  surface reacceptance now owns execution and four fresh exact-tree reviews are
-  pending.
-  Its goal projection is active
-  in the host and no v3.1.0 repository candidate is selected. The global
+  Codex Agent-decision and evaluator-mediated-compensation replay. Goal state,
+  reacceptance, review and candidate disposition follow that lifecycle rule.
+  The global
   rebaseline, bounded P0-P3 feasibility/reuse study and complete
   self-bootstrapping semantic model and environment-admission design are
   complete. The representative/longitudinal evaluation design is complete.
