@@ -52,7 +52,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "437935248109d7d11d61f6fda80762bdd799e4f266733378503a0e2864454a6c",
+  "canonicalGoalObjectiveSha256": "d8f43dca4a275037c7bff1f1987fe94d2c6220942184dfd14fa8b0d8d7785465",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
