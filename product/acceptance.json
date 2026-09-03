@@ -52,7 +52,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "329b431ff93f90a4ab2794f89d1c38894c07b18f4f1c400c50607c3abe2eb885",
+  "canonicalGoalObjectiveSha256": "d8bf8d4a34fc7c366d439603e001372cc4b8e6f818eb1d3ff172047ec1633ff0",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -1216,7 +1216,7 @@
       "github-actions-windows-latest",
       "github-actions-macos-latest"
     ],
-    "rule": "Candidate 9050114 remains invalid, and exact fc9c1a7 and c5a0668 remain failed counterevidence. Exact 39c24e9 passed pre-candidate review but failed readiness probing; 9f66def corrected the mechanism but failed evidence-language review; 8a06ee9 closed those findings but retained one non-blocking brittle diagnostic assertion and active-only close prose. The successor removes both without changing GT-20/21 evidence or criterion meaning. Candidate disposition is state-bound: active/reopened plus continuing criteria means no candidate; ready/closed plus all verified criteria and one exact passing task-time review bundle selects the unchanged exact SHA. Missing input holds readiness, and malformed, mismatched or blocking input fails closed. Only the selected SHA may enter exact-local verification; hosted verification and named-human release authorization remain later gates. Criterion narrative fields that say reopened or pending remain frozen pre-close evidence-contract context; after a valid state-only close, lifecycle fields and assessments are current and those sentences remain historical context rather than current disposition."
+    "rule": "Candidate 9050114 remains invalid, and exact fc9c1a7 and c5a0668 remain failed counterevidence. Exact 39c24e9 passed pre-candidate review but failed readiness probing; 9f66def corrected the mechanism but failed evidence-language review; 8a06ee9 closed those findings but retained one non-blocking brittle diagnostic assertion and active-only close prose. The successor removes both without changing GT-20/21 evidence or criterion meaning. Candidate disposition is state-bound: active/reopened plus continuing criteria means no candidate; ready/closed plus all verified criteria and one exact passing task-time review bundle selects the unchanged exact SHA. Missing input holds readiness, and malformed, mismatched or blocking input fails closed. Only the selected SHA may enter exact-local verification; hosted verification and named-human release authorization remain later gates. representativeBehaviorPolicy.sampleRationale and criterion narratives reporting active, reopened or pending are frozen pre-close evidence-contract history, not current disposition after a valid state-only close; lifecycle fields, assessments and exact review then govern."
   },
   "releaseAuthorization": {
     "mode": "task-time-human-authority",
@@ -1235,7 +1235,7 @@
     "releaseApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/releases/tags/v3.1.0",
     "tagApi": "https://api.github.com/repos/yiheng8023/YIYUAN-Accord/git/ref/tags/v3.1.0",
     "releaseNotes": "docs/releases/v3.1.0.md",
-    "releaseNotesSha256": "d60dfd2bbf67eb80d183aa19d3db069ea276c0f1eeb0c0c1dac8af9b36e2694b",
+    "releaseNotesSha256": "9c4f19538a682267dac40c5e7d3e4d0fe9d329cd79bfdaf9b3fb7a86c7bfdc74",
     "assetPolicy": "no-attached-assets",
     "maturity": "full-release",
     "prerelease": false,

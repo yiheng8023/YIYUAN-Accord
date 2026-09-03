@@ -280,8 +280,10 @@ The ordered bottlenecks are:
   invalidated as current evidence. Exact `7a3950e` retains bounded schema-v6
   zero-model mechanism facts; exact `f4c0251` plus the admitted schema-v7 v5
   record verify one isolated Codex Agent decision and evaluator-mediated
-  bounded compensation. Reacceptance is active and four fresh reviews are
-  pending. No automatic, in-place or crash-atomic rollback or Claude Agent
+  bounded compensation. Reacceptance and review are state-derived: active/
+  reopened plus continuing criteria means incomplete; ready/closed plus all
+  verified criteria and one exact passing runtime review bundle completes them
+  and selects only that unchanged SHA. No automatic, in-place or crash-atomic rollback or Claude Agent
   equivalence is proved.
   Desktop/ChatGPT, unmanaged-host and cross-OS lifecycle behavior remain
   pending or unknown.

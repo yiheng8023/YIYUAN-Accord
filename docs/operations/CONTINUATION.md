@@ -197,10 +197,11 @@ Then read, in order:
   subfacts after exact c5a0668 review rejected host activation and mutation-
   phase failed-update recovery. Exact `7a3950e` verifies the corrected bounded
   schema-v6 replay. Exact `f4c0251` plus the admitted schema-v7 v5 record verify
-  one bounded Codex Agent-decision and evaluator-mediated-compensation replay;
-  active affected-surface reacceptance precedes four pending independent exact-
-  tree reviews and any clean exact-
-  local, hosted, named-human, tag or public Release gate. Accord
+  one bounded Codex Agent-decision and evaluator-mediated-compensation replay.
+  Reacceptance and review are state-derived: active/reopened plus continuing is
+  incomplete; ready/closed plus all verified and one exact passing runtime
+  review bundle selects only that unchanged SHA. Exact-local, hosted, named-
+  human, tag and public Release remain later gates. Accord
   remains a context-adaptive
   collaboration closure rather than a capability set difference, but the new
   product target is broader: complete bounded self-bootstrapping across
@@ -1202,9 +1203,8 @@ Historical superseded review disposition —
     activation and mutation-phase failed-update-recovery claims. Preserve its
     narrower historical subfacts. Exact `7a3950e` verifies the corrected bounded
     schema-v6 replay, and exact `f4c0251` plus the admitted schema-v7 v5 record
-    verify one bounded Agent-recovery replay. Active affected-surface
-    reacceptance precedes four pending independent exact-tree reviews. Exact-
-    local and the fresh
+    verify one bounded Agent-recovery replay. Reacceptance, review and candidate
+    disposition follow lifecycle state and exact task-time review. Exact-local and the fresh
     full nine-leg hosted matrix
     remain later; candidate selection alone cannot authorize publication.
 

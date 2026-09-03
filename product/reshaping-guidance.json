@@ -882,7 +882,7 @@
     },
     "environmentAdmissionContract": {
       "id": "composed-environment-admission/v1",
-      "status": "current-receipt-and-gt21-preserved-schema-v6-mechanism-retained-schema-v7-agent-route-verified-reacceptance-active-reviews-pending",
+      "status": "current-receipt-and-gt21-preserved-schema-v6-v7-facts-reacceptance-review-candidate-state-derived",
       "admissionUnit": "one-bounded-claim-under-one-provenance-bound-composition-and-freshness-window",
       "purpose": "Decide whether an environment observation may support one named claim, whether a comparison arm is required, and which minimum isolation or honest degradation is proportionate to material confounding. It does not certify a host as globally clean.",
       "snapshot": {
