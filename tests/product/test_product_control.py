@@ -701,8 +701,7 @@ class ProductControlTests(unittest.TestCase):
         self.ae(len(adaptive['evolutionHorizon']['candidateClasses']), 7)
         self.ae(
             guidance['wholeSystemBalanceReview']['status'],
-            'gt20-evidence-preserved-cross-model-pre-review-gaps-confirmed-'
-            'correction-active-reviews-pending',
+            'gt20-evidence-preserved-c0b3c1a-contract-test-failed-reviews-pending',
         )
         for locator, stale in (
             ('README.md', 'GT-19 host-drift lane is designed but'),

@@ -50,7 +50,9 @@ rejected their promotion to atomic or one-intent Agent recovery. Exact
 decision and evaluator-mediated bounded compensation. Exact `cb143d3` closed
 the prior pre-review gaps but failed four-axis review on current-guidance
 strictness, terminal schema-v2 transition closure and public-path privacy
-precision. Affected-surface reacceptance is active and all four fresh reviews
+precision. Exact `c0b3c1a` closed those findings but failed the current-contract
+test because its derived review-status expectation remained stale. The successor
+replaces that status projection. Affected-surface reacceptance is active and all four fresh reviews
 are reset to pending before one
 unchanged clean SHA may become a replacement candidate. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
@@ -1135,7 +1137,9 @@ four-axis review because the current guidance validator admitted the superseded
 cross-version assertion, schema-v2 admitted a terminal predecessor successor,
 and the privacy matcher rejected legitimate public or repository-relative user
 segments. Its successor corrects those affected boundaries without weakening
-acceptance; all eight criteria remain continuing and all four independent
+acceptance. Exact `c0b3c1a` carries that correction but remains failed current-
+contract counterevidence because one derived review-status expectation was
+stale; its successor replaces that projection. All eight criteria remain continuing and all four independent
 exact-tree reviews are reset to pending. A replacement
 candidate does not yet exist;
 exact-local, hosted, named-human, tag, publication and public-verification gates
