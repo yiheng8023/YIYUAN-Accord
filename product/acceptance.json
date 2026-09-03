@@ -52,7 +52,7 @@
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",
-  "canonicalGoalObjectiveSha256": "0c7fc822ef28761480aa5fe67f766ebcaa3345171d798148aabc44c0ccddceba",
+  "canonicalGoalObjectiveSha256": "4647649f1f5d3113f5f980213bfd9c60a47eb662806daf60c90b8d794ab884e1",
   "completionExpression": "R1 && R2 && R3 && R4 && Q1 && Q2 && Q3 && Q4 && exactLocalVerificationAndReview && exactCandidateHostedVerification && namedHumanReleaseAuthorization && exactTaggedPublicRelease && releaseVerificationAndCleanup",
   "evidenceLanes": {
     "requiredForFiniteRelease": [
@@ -613,7 +613,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": []
     },
     {
@@ -644,7 +644,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": []
     },
     {
@@ -675,7 +675,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "latestAssessmentBoundary": "Exact 7a3950e retains bounded schema-v6 zero-model lifecycle mechanics. Exact f4c0251 and the admitted schema-v7 v5 record verify the bounded Codex Agent-decision and evaluator-mediated-compensation replay; GT-21 remains unchanged, while current reacceptance, review and candidate disposition are derived only from lifecycle fields and an exact review bundle.",
       "assessmentScope": "Earlier GT-14 through GT-19 observations and unchanged GT-21 retain only their finite claims. Frozen 0febb415 retains narrower historical subfacts. Exact 7a3950e establishes bounded isolated Windows schema-v6 zero-model lifecycle mechanics; exact f4c0251 additionally establishes one isolated Codex Agent decision followed by evaluator-mediated bounded compensation and independent post-state. No automatic, in-place or crash-atomic rollback, Claude Agent equivalence, reacceptance completion, independent review, current-client compatibility, product value, candidate, exact-local, hosted, authorization, publication, production, cross-OS or field-value claim is promoted.",
       "evidence": [
@@ -783,7 +783,7 @@
       "requiredEvidenceClasses": [
         "deterministic-conformance"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": []
     },
     {
@@ -804,7 +804,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -906,7 +906,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -1010,7 +1010,7 @@
         "deterministic-conformance",
         "representative-behavior"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-11-codex-local.json",
@@ -1115,7 +1115,7 @@
       "requiredEvidenceClasses": [
         "representative-behavior"
       ],
-      "assessment": "continuing",
+      "assessment": "verified",
       "evidence": [
         {
           "locator": "evals/observations/2026-08-30-cf1d8c9-gt-07-codex-local.json",
