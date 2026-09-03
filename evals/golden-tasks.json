@@ -48,7 +48,7 @@
   },
   "suiteDesign": {
     "id": "representative-and-longitudinal-self-bootstrapping-evaluation/v1",
-    "status": "historical-source-complete-live-carrier-schema-v6-v7-facts-reacceptance-review-candidate-state-derived",
+    "status": "historical-source-complete-live-carrier-schema-v6-mechanism-retained-schema-v7-agent-route-verified-reacceptance-active-reviews-pending",
     "candidateStateRule": "The executionClaimLimit report that reacceptance is active and review is pending records the frozen pre-close f4c0251 evidence cut, not current disposition. Active/reopened plus continuing remains incomplete with no candidate; ready/closed plus all verified and one exact passing runtime review bundle selects only that unchanged SHA.",
     "attemptedTaskIds": ["GT-14", "GT-15", "GT-16", "GT-17", "GT-18", "GT-19", "GT-20", "GT-21"],
     "unperformedTaskIds": [],
