@@ -1,5 +1,19 @@
 # YIYUAN Accord
 
+<p align="center">
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/yiheng8023/YIYUAN-Accord/validate.yml?branch=main&amp;label=CI&amp;logo=github" alt="CI 状态"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/releases/latest"><img src="https://img.shields.io/github/v/release/yiheng8023/YIYUAN-Accord?color=blue&amp;label=Release" alt="最新发布版本"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub Stars"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub Forks"></a>
+  <img src="https://img.shields.io/badge/Python-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10 至 3.14 CI">
+  <img src="https://img.shields.io/badge/CI-Ubuntu%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="Ubuntu、Windows 与 macOS CI">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 许可证"></a>
+</p>
+
+<p align="center">
+  <a href="README.zh-CN.md">简体中文</a> | <a href="README.md">English</a>
+</p>
+
 一份轻量协作契约：把用户想要的结果推进到可验证、可恢复的闭环，同时不让用户管理 Agent 的工具、对话切换或内部工序。
 
 YIYUAN Accord 是一个开放、Agent 中立的人机协作系统。
@@ -9,8 +23,6 @@ YIYUAN Accord 是一个开放、Agent 中立的人机协作系统。
 它可以使用不同宿主与机制。具体工具只是路线的一部分，不是产品本身。
 
 项目的广义使命是改善人与 AI 的协作；当前产品面与证据严格限定为人与 Agent 的协作场景。
-
-[English](README.md)
 
 > **当前发布版本线：** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0)，精确、非预发行、无附加资产，且项目治理要求不得移动或改写。
 >
@@ -454,6 +466,24 @@ Codex 与 Claude 包共享 `deliver-demand-driven-outcome` Skill 名，同时保
 
 ---
 
+## 社区
+
+### 贡献者
+
+诚挚感谢所有贡献代码、评审、文档、问题报告与证据的参与者。
+
+<p align="center">
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=yiheng8023/YIYUAN-Accord" alt="YIYUAN Accord 贡献者">
+  </a>
+</p>
+
+### Star 增长趋势
+
+[![YIYUAN Accord Star History](https://api.star-history.com/svg?repos=yiheng8023/YIYUAN-Accord&type=Date)](https://star-history.com/#yiheng8023/YIYUAN-Accord&Date)
+
+---
+
 ## 项目支持与法律
 
 ### 项目与许可
@@ -480,9 +510,16 @@ YIYUAN Accord、YIYUAN NEXUS 名称与图形商标保持独立，详见 [`NOTICE
 
 如果 Accord 对你有所帮助，可以通过仓库所有者的[公开 PayPal 页面](https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY)支持维护。
 
-| 微信支付（人民币） | 支付宝（人民币） |
-| --- | --- |
-| ![微信支付收款码](docs/assets/sponsoring/wechat-pay.png) | ![支付宝收款码](docs/assets/sponsoring/alipay.png) |
+<table>
+  <tr>
+    <th width="300">微信支付（人民币）</th>
+    <th width="300">支付宝（人民币）</th>
+  </tr>
+  <tr>
+    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/wechat-pay.png" alt="微信支付自愿赞助收款码" width="260"></td>
+    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/alipay.png" alt="支付宝自愿赞助收款码" width="260"></td>
+  </tr>
+</table>
 
 付款前请核对收款方。完整条款见 [`SPONSORING.zh-CN.md`](SPONSORING.zh-CN.md)。
 

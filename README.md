@@ -1,5 +1,19 @@
 # YIYUAN Accord
 
+<p align="center">
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/yiheng8023/YIYUAN-Accord/validate.yml?branch=main&amp;label=CI&amp;logo=github" alt="CI status"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/releases/latest"><img src="https://img.shields.io/github/v/release/yiheng8023/YIYUAN-Accord?color=blue&amp;label=Release" alt="Latest release"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub stars"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub forks"></a>
+  <img src="https://img.shields.io/badge/Python-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10 through 3.14 CI">
+  <img src="https://img.shields.io/badge/CI-Ubuntu%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="CI on Ubuntu, Windows, and macOS">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 license"></a>
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
+</p>
+
 A thin collaboration contract for moving a desired outcome toward a verified, recoverable finish without making the user manage the Agent's tools, conversation handoffs, or internal mechanics.
 
 YIYUAN Accord is an open, Agent-neutral collaboration system.
@@ -9,8 +23,6 @@ It asks an Agent to stay aligned with the current goal, adapt when the work chan
 It can use different hosts and mechanisms. Specific tools are parts of a route, not the product by themselves.
 
 The broader mission is better human-AI collaboration. The current product surface and evidence are deliberately limited to human-Agent collaboration.
-
-[简体中文](README.zh-CN.md)
 
 > **Current Release line:** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0), an exact, non-prerelease, zero-asset full Release that project governance treats as never-move/rewrite.
 >
@@ -455,6 +467,24 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) to participate. Submit problems and sug
 
 ---
 
+## Community
+
+### Contributors
+
+Thank you to everyone who contributes code, reviews, documentation, issue reports, and evidence.
+
+<p align="center">
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=yiheng8023/YIYUAN-Accord" alt="YIYUAN Accord contributors">
+  </a>
+</p>
+
+### Star history
+
+[![YIYUAN Accord Star History](https://api.star-history.com/svg?repos=yiheng8023/YIYUAN-Accord&type=Date)](https://star-history.com/#yiheng8023/YIYUAN-Accord&Date)
+
+---
+
 ## Project support and legal
 
 ### Project and license
@@ -488,9 +518,16 @@ It does not purchase a support SLA, priority, release authority, safety guarante
 
 If Accord is useful, you may support maintenance through the repository owner's [published PayPal page](https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY).
 
-| WeChat Pay (CNY) | Alipay (CNY) |
-| --- | --- |
-| ![WeChat Pay QR code](docs/assets/sponsoring/wechat-pay.png) | ![Alipay QR code](docs/assets/sponsoring/alipay.png) |
+<table>
+  <tr>
+    <th width="300">WeChat Pay (CNY)</th>
+    <th width="300">Alipay (CNY)</th>
+  </tr>
+  <tr>
+    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/wechat-pay.png" alt="WeChat Pay voluntary sponsorship QR code" width="260"></td>
+    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/alipay.png" alt="Alipay voluntary sponsorship QR code" width="260"></td>
+  </tr>
+</table>
 
 Verify the recipient before paying. See [`SPONSORING.md`](SPONSORING.md) for the complete terms.
 
