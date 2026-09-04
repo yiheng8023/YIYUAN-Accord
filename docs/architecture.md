@@ -2,7 +2,11 @@
 
 YIYUAN Accord combines one small portable kernel with an adaptive,
 mechanism-neutral and product-form-neutral outcome-delivery system. The active
-authority is no longer a release-ready v3.1 plan: bounded P0-P3 feasibility
+v3.1.0 package is now an exact, non-prerelease, zero-asset public Release
+at exact revision `258611be47c47a884b6d1a2e96889cf688ca7e68`. The detailed
+candidate-formation record below remains historical evidence rather than an
+unfinished release plan. The active authority is no longer a release-ready v3.1
+plan: bounded P0-P3 feasibility
 research, semantic and isolation design, evaluation design and the P4
 product-form-neutral vertical slice are complete. P4 admits only the minimum
 deterministic, side-effect-free plain-data reference core, whose implementation
@@ -72,17 +76,19 @@ unchanged exact SHA. Missing input remains a readiness hold; malformed,
 mismatched or blocking bundles fail closed. Production trust,
 desktop-host behavior, live Claude triggering, cross-OS equivalence and product
 value remain unknown.
-The v5 replay exercises a mutable local marketplace mechanism, not the public
-immutable-ref uninstall/reinstall route or an atomic hot update. Desktop
-`26.831.2377.0` is version-known only; its new-task visibility, activation and
-post-state remain unverified, and candidate installation or hot replacement is
-a separate host-behavior authority boundary.
+The pre-release v5 replay exercised a mutable local marketplace mechanism, not
+the later public-tag uninstall/reinstall route or an atomic hot update. The
+Desktop `26.831.2377.0` observation is historical. Later public-tag installation
+and version observations remain task-time notes rather than repository-bound
+behavior evidence. They do not establish fresh-task Skill visibility,
+activation, atomic hot replacement, current Claude native-model behavior,
+universal client compatibility or production value.
 The implementation does not admit an Accord-managed Runtime, durable state
 layer or durable evolution. Selecting the short-lived Hook does not prove
 production trust or broad live-host behavior.
 Earlier v3.1 package checkpoints remain bounded historical evidence. The raw
 fc9c1a7 replay is exact invalidated counterevidence, not current GT-20. Public
-v3.0.1 remains the recommended release reference, and preview.2 remains an
+v3.1.0 is the recommended release reference, and preview.2 remains an
 unreleased historical checkpoint.
 
 ~~~text
@@ -655,7 +661,7 @@ by that projection. Each standalone package explicitly carries a top-level
 `LICENSE` and `NOTICE`; both are bound into the complete package digest and must
 match the repository legal text byte for byte. Public v3.0.1 adds no runtime,
 Hook, MCP server, App or state store.
-The prospective v3.1.0 package set additionally declares one shared,
+The public v3.1.0 package set additionally declares one shared,
 short-lived `SessionStart` command adapter. Neither package shape is a permanent
 product identity or mechanism prohibition; Hook trust, firing and behavior
 remain separate from static package conformance. Both current host projections
@@ -1123,7 +1129,7 @@ After the required representative and longitudinal core evidence, but before
 independent candidate review, Accord performs a source-bound whole-system
 balance self-audit. Each comparison first binds a versioned claim-scoped
 baseline, target, counterfactual, evidence cutoff, known confounders, claim
-limit and invalidation triggers. Public v3.0.1, historical unreleased exact
+limit and invalidation triggers. Public v3.0.1 and v3.1.0, historical unreleased exact
 checkpoints, the moving audit snapshot and controlled environment arms are
 separate baselines for separate claims; an Accord-enabled composed host cannot
 self-attest an official-clean or no-Accord baseline. The current review model covers product value and capability

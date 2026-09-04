@@ -1161,14 +1161,7 @@ class ProductControlTests(unittest.TestCase):
                 LIFECYCLE_ERR,
             )
 
-            release = {**old_release, 'tag': 'v3.1.0', 'revision': 'c' * 40,
-                       'publishedAt': '2026-09-01T00:00:00Z'}
-            program['historicalRelease']['publicReleases'].append(release)
-            program['historicalRelease']['recommendedPublicRelease'] = 'v3.1.0'
-            acceptance['historicalRelease'] = _clone(
-                program['historicalRelease']
-            )
-            retire_to(release, '2026-09-01T00:05:00Z')
+            retire_to(old_release, '2026-09-03T15:00:00Z')
             local = lifecycle_errors()
             self.at(
                 _lacks(local, 'provisional GT-20', 'provisional GT-21'),
@@ -1179,7 +1172,7 @@ class ProductControlTests(unittest.TestCase):
                 lifecycle_errors(),
                 LIFECYCLE_ERR,
             )
-            lifecycle['retiredByPublicRelease']['revision'] = release['revision']
+            lifecycle['retiredByPublicRelease']['revision'] = old_release['revision']
             source = _read(root, GT2021_SOURCE)
             source['provisionalContract']['records'][0][
                 'behaviorSubject'
@@ -2428,87 +2421,62 @@ class ProductControlTests(unittest.TestCase):
             )
 
     def test_snapshot_v2_reopens_only_the_invalidated_package_boundary(self):
-        current=_read(ROOT,P)['increment'][CS]
+        NE,TE,D,C=_snapshot_v2_node_errors,_snapshot_v2_transition_errors,_snapshot_documents,_clone
+        current=_read(ROOT,P)['increment'][CS]; rev=None
+        if current[AT]['kind'] == 'post-release-reconciliation':
+            post=C(current); rev=current[PS].split(':',1)[0]
+            current=D(ROOT,rev)[1]['increment'][CS]
+            self.ae(TE(post,current),[]); post['replay']['evidenceRef']='alternate'
+            self.has(TE(post,current),'post-release transition')
         r=current[PS].split(':',1)[0] if current['state']=='closed' else None
-        _,p,a,*_=_snapshot_documents(ROOT,r)
-        n=p['increment'][CS]
-        _, old_p, *_ = _snapshot_documents(
-            ROOT, n[PS].split(':', 1)[0])
-        prior = old_p['increment'][CS]
-        NE, TE, pre = _snapshot_v2_node_errors, _snapshot_v2_transition_errors, (
-            'revision-bound v2 ')
-        bad = _clone(p); bad['increment'][FM][
-            'process']['orderedSteps'][-2]['state'] = 'pending'
-        self.has(NE(bad, a), pre + 'reacceptance state is invalid')
-        changed = prior
+        _,p,a,*_=D(ROOT,r); n=p['increment'][CS]
+        prior=D(ROOT,n[PS].split(':',1)[0])[1]['increment'][CS]
+        pre='revision-bound v2 '; bad=C(p)
+        bad['increment'][FM]['process']['orderedSteps'][-2]['state']='pending'
+        self.has(NE(bad,a),pre+'reacceptance state is invalid'); changed=prior
         while changed[AT]['kind'] != 'changed':
-            _, old_p, *_ = _snapshot_documents(
-                ROOT, changed[PS].split(':', 1)[0])
-            changed = old_p['increment'][CS]
-        prev = _clone(changed)
-        prev['replay'].update(evidenceState='pending', evidenceRef=None)
-        direct = _clone(prev); direct.update(state='closed', replay=_clone(n['replay']))
-        skip = pre + 'close skips reacceptance'; self.has(TE(direct, prev), skip)
-        malformed = _clone(prev); malformed[AT] = None
-        self.has(TE(direct, malformed), skip)
-        close = _clone(n); close['state'] = 'closed'
+            changed=D(ROOT,changed[PS].split(':',1)[0])[1]['increment'][CS]
+        prev=C(changed); prev['replay'].update(evidenceState='pending',evidenceRef=None)
+        direct=C(prev); direct.update(state='closed',replay=C(n['replay']))
+        skip=pre+'close skips reacceptance'; self.has(TE(direct,prev),skip)
+        mal=C(prev); mal[AT]=None; self.has(TE(direct,mal),skip)
+        close=C(n); close['state']='closed'
         for path, value, message in (
-            (('replay', 'evidenceRef'), 'alternate', 'replay drifted before close'),
-            ((AT, 'affectedCriterionIds'),
-             n[AT]['affectedCriterionIds'][:-1],
-             'acceptance transition drifted before close'),
+            (('replay','evidenceRef'),'alternate','replay drifted before close'),
+            ((AT,'affectedCriterionIds'),n[AT]['affectedCriterionIds'][:-1],
+             'acceptance transition drifted before close')
         ):
-            drift = _clone(close); _replace(drift, path, value)
-            self.has(TE(drift, n), pre + message)
-        gate = p[RG]['orderedGates'][1]['id']
-        closed = _clone(close); closed['nextGateId'] = gate
-        advanced = _clone(n); advanced.update(gateId=gate, stage=gate, nextGateId=gate)
-        advanced[AT]['kind'] = 'changed'
-        self.ae(TE(advanced, closed), [])
-        advanced['gateId'] = p[RG]['orderedGates'][2]['id']
-        self.has(TE(advanced, closed), pre + 'predecessor gate is invalid')
-        terminal, restart = map(_clone, (closed, n))
-        terminal['nextGateId'] = None; restart[AT]['kind'] = 'changed'
-        self.has(TE(restart, terminal), pre + 'reopen transition is invalid')
-        guidance = _read(ROOT, GUIDANCE)
-        stage = guidance['adaptiveSystem']['stageStateContract']; key = 'closeoutSnapshotRule'
-        stage[key] += ' A later version starts a new ordered cycle.'
-        strict = []; product_control._validate_stage_guidance(guidance, strict)
+            drift=C(close); _replace(drift,path,value); self.has(TE(drift,n),pre+message)
+        gate=p[RG]['orderedGates'][1]['id']; closed=C(close); closed['nextGateId']=gate
+        adv=C(n); adv.update(gateId=gate,stage=gate,nextGateId=gate)
+        adv[AT]['kind']='changed'; self.ae(TE(adv,closed),[])
+        adv['gateId']=p[RG]['orderedGates'][2]['id']
+        self.has(TE(adv,closed),pre+'predecessor gate is invalid')
+        term,restart=map(C,(closed,n)); term['nextGateId']=None
+        restart[AT]['kind']='changed'
+        self.has(TE(restart,term),pre+'reopen transition is invalid')
+        g=_read(ROOT,GUIDANCE); stage=g['adaptiveSystem']['stageStateContract']
+        stage['closeoutSnapshotRule']+=' A later version starts a new ordered cycle.'
+        strict=[]; product_control._validate_stage_guidance(g,strict)
         self.at(strict)
-        docs = list(_snapshot_documents(ROOT, r))
-        project = lambda value: product_control._snapshot_v2_close_projection(
-            ROOT, None, value)
-        base = project(docs); drift = _clone(docs)
-        drift[2]['criteria'][0]['assessmentScope'] = 'semantic drift'
-        self.ane(project(drift), base)
-        closed = _clone(docs); p, a = closed[1:3]
-        inc, prompt = p['increment'], p['goalModePrompt']
-        p['status'], prompt['state'], inc['state'] = 'ready', 'retired', 'completed'
-        p[PL]['stageSnapshotState'] = (
-            'latest-closed-stage-snapshot-prepared-for-containing-commit-binding')
-        for item in [inc['workItems'][0], *inc['workItems'][0]['closeoutSequence'],
-                     *inc[FM]['process']['orderedSteps']]:
-            item['state'] = 'completed'
-        for criterion in a['criteria']: criterion['assessment'] = 'verified'
-        prompt['objective'] = canonical_goal_objective(
-            p, closed[0]['authority'], prompt['workStageIds'], prompt['releaseGateIds'])
-        a['canonicalGoalObjectiveSha256'] = _sha(prompt['objective'].encode())
-        self.ae(project(closed), base)
-        read = product_control._snapshot_or_worktree_bytes
+        docs=list(D(ROOT,r)); project=lambda v:product_control._snapshot_v2_close_projection(ROOT,None,v)
+        base=project(docs); drift=C(docs); drift[2]['criteria'][0]['assessmentScope']='semantic drift'
+        self.ane(project(drift),base); closed=C(docs); p,a=closed[1:3]
+        inc,prompt=p['increment'],p['goalModePrompt']
+        p['status'],prompt['state'],inc['state']='ready','retired','completed'
+        p[PL]['stageSnapshotState']='latest-closed-stage-snapshot-prepared-for-containing-commit-binding'
+        for item in [inc['workItems'][0],*inc['workItems'][0]['closeoutSequence'],*inc[FM]['process']['orderedSteps']]: item['state']='completed'
+        for criterion in a['criteria']: criterion['assessment']='verified'
+        prompt['objective']=canonical_goal_objective(p,closed[0]['authority'],prompt['workStageIds'],prompt['releaseGateIds'])
+        a['canonicalGoalObjectiveSha256']=_sha(prompt['objective'].encode())
+        self.ae(project(closed),base); read=product_control._snapshot_or_worktree_bytes
         for target in ('docs/releases/v3.0.1.md', CODEX_PATH):
-            with patch.object(product_control, '_snapshot_or_worktree_bytes',
-                    side_effect=lambda root, locator, revision=None, target=target:
-                    read(root, locator, revision) + (b'x' if locator == target else b'')):
-                self.ane(project(docs), base)
-        snap = inc[CS]
-        snap.update(state='closed', id=snap['id'].replace('.reopened', '.closed'),
-            nextGateId=p[RG]['orderedGates'][1]['id'])
-        snap[PS] = ((r or _git(ROOT, 'rev-parse', 'HEAD').decode().strip())
-                    + ':product/program.json#/increment/closeoutSnapshot')
-        errors = []
-        _validate_closeout_snapshot_v2(ROOT, p, a, n['evaluationContractSha256'], errors)
-        self.ae(errors, [])
-
+            effect=lambda root,locator,revision=None,target=target:read(root,locator,revision)+(b'x' if locator==target else b'')
+            with patch.object(product_control,'_snapshot_or_worktree_bytes',side_effect=effect): self.ane(project(docs),base)
+        snap=inc[CS]; snap.update(state='closed',id=snap['id'].replace('.reopened','.closed'),nextGateId=p[RG]['orderedGates'][1]['id'])
+        snap[PS]=(r or _git(ROOT,'rev-parse','HEAD').decode().strip())+':'+SNAPSHOT_REF
+        errors=[]; _validate_closeout_snapshot_v2(ROOT,p,a,n['evaluationContractSha256'],errors,revision=rev)
+        self.ae(errors,[])
 
     def test_revision_tree_cache_has_an_aggregate_memory_bound(self):
         listing = b'100644 blob ' + b'1' * 40 + b'\tproduct/program.json\0'
@@ -3918,7 +3886,7 @@ class ProductControlTests(unittest.TestCase):
             snapshot = increment[CS]
             snapshot['revisionBinding']['exactCommitSha'] = '0' * 40
             snapshot['evaluationContractSha256'] = '0' * 64
-            snapshot[AT]['affectedCriterionIds'].remove('R2')
+            snapshot[AT]['affectedCriterionIds'] = ['R2']
             program[PL]['evolutionHorizonRule'] = ''
             program[RG]['orderedGates'][0]['id'] = ''
             program['goalModePrompt']['objective'] = '先推送再审查'
@@ -3946,7 +3914,7 @@ class ProductControlTests(unittest.TestCase):
             snapshot[PS] = (
                 f'{origin}:' + SNAPSHOT_REF
             )
-            snapshot[AT]['affectedCriterionIds'].remove('R2')
+            snapshot[AT]['affectedCriterionIds'] = ['R2']
             _write(root, P, program)
             self.has(_errors(root), 'revision-bound v2 acceptance transition')
 
@@ -4199,7 +4167,7 @@ class ProductControlTests(unittest.TestCase):
             revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             self.ae(_snapshot_bytes(root, locator, revision), raw)
 
-        with _indexed(predecessor if current['status']=='ready' else None) as root:
+        with _indexed(latest[1][PS].split(':',1)[0] if current['status']=='ready' else None) as root:
             program = _read(root, P)
             drifted = _clone(program)
             drifted['increment'][FM]['plan']['hypothesis'] += ' Drift.'
@@ -4546,137 +4514,62 @@ class ProductControlTests(unittest.TestCase):
             self.has(_errors(root), 'release notes do not expose the complete claim ceiling')
 
     def test_public_release_history_freezes_admitted_snapshot_and_rejects_tail(self):
-        program = _read(ROOT, P)
-        acceptance = _read(ROOT, A)
-        identity = _read(ROOT, C)['identity']
-        ledger = (ROOT / 'docs/operations/HISTORY.md').read_text(
-            encoding='utf-8'
-        )
+        program,acceptance=_read(ROOT,P),_read(ROOT,A)
+        identity=_read(ROOT,C)['identity']
+        ledger=(ROOT/'docs/operations/HISTORY.md').read_text(encoding='utf-8')
 
         def history_errors(history, projection=ledger):
-            changed_program = _clone(program)
-            changed_a = _clone(acceptance)
-            changed_program['historicalRelease'] = _clone(history)
-            changed_a['historicalRelease'] = _clone(history)
-            return release_identity_errors(
-                identity, changed_program, changed_a, projection,
-            )
+            p,a=_clone(program),_clone(acceptance)
+            p['historicalRelease']=_clone(history); a['historicalRelease']=_clone(history)
+            return release_identity_errors(identity,p,a,projection)
 
         def add_release(value, recommend=None, **changes):
-            value['publicReleases'].append({
-                **value['publicReleases'][-1], **changes})
-            if recommend:
-                value['recommendedPublicRelease'] = recommend
+            value['publicReleases'].append({**value['publicReleases'][-1],**changes})
+            if recommend: value['recommendedPublicRelease']=recommend
 
-        baseline = _clone(program['historicalRelease'])
-        legacy_future = {**baseline['publicReleases'][-1], 'tag': 'v4.0'}
-        self.af(_public_release_record_valid(legacy_future))
-        self.af(any(
-            'historicalRelease provenance is invalid' in error
-            for error in history_errors(baseline)
-        ))
+        baseline=_clone(program['historicalRelease']); invalid='historicalRelease provenance is invalid'
+        self.af(_public_release_record_valid({**baseline['publicReleases'][-1],'tag':'v4.0'}))
+        self.af(any(invalid in error for error in history_errors(baseline)))
 
         for name, mutation in (
-            ('known-revision-type', lambda value: value['publicReleases'][3].update(
-                revision=7)),
-            ('non-object-record', lambda value: value['publicReleases'].__setitem__(
-                0, None)),
-            ('known-order', lambda value: value['publicReleases'].__setitem__(
-                slice(0, 2), list(reversed(value['publicReleases'][:2])))),
-            ('duplicate-tag', lambda value: add_release(
-                value, revision='a' * 40, publishedAt='2026-08-28T00:00:00Z')),
-            ('duplicate-revision', lambda value: add_release(
-                value, tag='v3.1.0', publishedAt='2026-08-28T00:00:00Z')),
-            ('kind-mismatch', lambda value: value['publicReleases'][2].update(
-                releaseKind='full-release')),
-            ('preview-as-full', lambda value: add_release(
-                value, 'v3.1.0-preview.2', tag='v3.1.0-preview.2',
-                revision='a' * 40, publishedAt='2026-09-01T00:00:00Z')),
-            ('legacy-tail', lambda value: add_release(
-                value, tag='v4.0', revision='a' * 40,
-                publishedAt='2026-09-01T00:00:00Z')),
-            ('noncanonical-time', lambda value: add_release(
-                value, tag='v3.1.0-preview.2', revision='a' * 40,
-                releaseKind='public-preview', prerelease=True,
-                publishedAt='2026-9-1T0:0:0Z')),
-            ('fictional-full-tail', lambda value: add_release(
-                value, 'v3.1.0', tag='v3.1.0', revision='b' * 40,
-                publishedAt='2026-09-02T00:00:00Z')),
-            ('semantic-authority-field', lambda value: (
-                value.__setitem__('authority', value.pop('provenanceProjection')),
-            )),
-            ('repository-fact-source', lambda value: value.update(
-                externalFactSource='repository-declared'
-            )),
+            ('known-revision-type',lambda v:v['publicReleases'][3].update(revision=7)),
+            ('non-object-record',lambda v:v['publicReleases'].__setitem__(0,None)),
+            ('known-order',lambda v:v['publicReleases'].__setitem__(slice(0,2),list(reversed(v['publicReleases'][:2])))),
+            ('duplicate-tag',lambda v:add_release(v,revision='a'*40,publishedAt='2026-08-28T00:00:00Z')),
+            ('duplicate-revision',lambda v:add_release(v,tag='v3.1.0',publishedAt='2026-08-28T00:00:00Z')),
+            ('kind-mismatch',lambda v:v['publicReleases'][2].update(releaseKind='full-release')),
+            ('preview-as-full',lambda v:add_release(v,'v3.1.0-preview.2',tag='v3.1.0-preview.2',revision='a'*40,publishedAt='2026-09-01T00:00:00Z')),
+            ('legacy-tail',lambda v:add_release(v,tag='v4.0',revision='a'*40,publishedAt='2026-09-01T00:00:00Z')),
+            ('noncanonical-time',lambda v:add_release(v,tag='v3.1.0-preview.2',revision='a'*40,releaseKind='public-preview',prerelease=True,publishedAt='2026-9-1T0:0:0Z')),
+            ('fictional-full-tail',lambda v:add_release(v,'v3.1.0',tag='v3.1.0',revision='b'*40,publishedAt='2026-09-02T00:00:00Z')),
+            ('semantic-authority-field',lambda v:v.__setitem__('authority',v.pop('provenanceProjection'))),
+            ('repository-fact-source',lambda v:v.update(externalFactSource='repository-declared')),
         ):
             with self.subTest(invalid_history=name):
-                changed = _clone(baseline)
-                mutation(changed)
-                self.at(any(
-                    'historicalRelease provenance is invalid' in error
-                    for error in history_errors(changed)
-                ))
+                changed=_clone(baseline); mutation(changed)
+                self.at(any(invalid in error for error in history_errors(changed)))
 
-        fictional_projection_tail = ledger.replace(
+        tail=ledger.replace(
             '\nThe recorded recommendation pointer',
             '\n| `v9.9.9` | `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa` | '
             '`2026-09-09T09:09:09Z` | full Release | no attached assets |\n'
             '\nThe recorded recommendation pointer',
         )
-        table_lines = [
-            line for line in ledger.splitlines()
-            if line.startswith('|')
-        ]
-        reversed_projection = ledger.replace(
-            '\n'.join(table_lines[2:4]),
-            '\n'.join(reversed(table_lines[2:4])),
-        )
-        hidden_table = ledger.replace(
-            '\n'.join(table_lines), '<!--\n' + '\n'.join(table_lines) + '\n-->',
-        )
+        lines=[line for line in ledger.splitlines() if line.startswith('|')]
+        table='\n'.join(lines)
         for projection in (
-            ledger.replace(
-                '`24cf9f3750ecd700944988e81a519db54b67b8e8`',
-                '`0000000000000000000000000000000000000000`',
-            ),
-            fictional_projection_tail,
-            fictional_projection_tail.replace(
-                '\n| `v9.9.9`', '\n | `v9.9.9`',
-            ),
-            reversed_projection,
-          hidden_table,
-          ledger.replace(
-              '## Public Release ledger',
-              '```markdown\n## Public Release ledger', 1,
-          ).replace('## Major boundaries', '## Major boundaries\n```', 1),
-          ledger.replace(
-              '## Public Release ledger', '<!--\n## Public Release ledger', 1,
-          ).replace('## Major boundaries', '## Major boundaries\n-->', 1),
-          ledger.replace(
-              '## Public Release ledger', '<div hidden>\n## Public Release ledger', 1,
-          ).replace('## Major boundaries', '## Major boundaries\n</div>', 1),
-          ledger.replace(
-                'It is not semantic authority or live publication',
-                'It is not live authority or publication', 1,
-            ) + '\n<!-- It is not semantic authority or live publication -->',
-            ledger.replace(
-                'It is not semantic authority or live publication',
-                'It is semantic authority and live publication', 1,
-            ).replace(
-                '\n## Major boundaries',
-                '\n<!-- It is not semantic authority or live publication -->'
-                '\n\n## Major boundaries',
-            ),
-            ledger.replace(
-                '\n## Major boundaries',
-                '\nThis ledger is semantic authority and live publication; '
-                'the actual recommendation is `v9.9.9`.\n\n## Major boundaries',
-            ),
+            ledger.replace('`24cf9f3750ecd700944988e81a519db54b67b8e8`','`'+'0'*40+'`'),
+            tail,tail.replace('\n| `v9.9.9`','\n | `v9.9.9`'),
+            ledger.replace('\n'.join(lines[2:4]),'\n'.join(reversed(lines[2:4]))),
+            ledger.replace(table,'<!--\n'+table+'\n-->'),
+            ledger.replace('## Public Release ledger','```markdown\n## Public Release ledger',1).replace('## Major boundaries','## Major boundaries\n```',1),
+            ledger.replace('## Public Release ledger','<!--\n## Public Release ledger',1).replace('## Major boundaries','## Major boundaries\n-->',1),
+            ledger.replace('## Public Release ledger','<div hidden>\n## Public Release ledger',1).replace('## Major boundaries','## Major boundaries\n</div>',1),
+            ledger.replace('It is not semantic authority or live publication','It is not live authority or publication',1)+'\n<!-- It is not semantic authority or live publication -->',
+            ledger.replace('It is not semantic authority or live publication','It is semantic authority and live publication',1).replace('\n## Major boundaries','\n<!-- It is not semantic authority or live publication -->\n\n## Major boundaries'),
+            ledger.replace('\n## Major boundaries','\nThis ledger is semantic authority and live publication; the actual recommendation is `v9.9.9`.\n\n## Major boundaries'),
         ):
-            self.has(
-                history_errors(baseline, projection),
-                'historicalRelease provenance is invalid',
-            )
+            self.has(history_errors(baseline,projection),invalid)
 
     def test_complexity_identity_and_paths_fail_closed(self):
         with _fixture() as root:

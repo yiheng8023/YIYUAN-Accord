@@ -12,9 +12,9 @@ The broader mission is better human-AI collaboration. The current product surfac
 
 [简体中文](README.zh-CN.md)
 
-> **Published stable fallback:** [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1). **Release line (pending):** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0).
+> **Current Release line:** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0), an exact, non-prerelease, zero-asset full Release that project governance treats as never-move/rewrite.
 >
-> Use v3.1.0 only after its link resolves to the matching immutable, non-prerelease GitHub Release; until then use v3.0.1. Repository text cannot self-attest publication.
+> GitHub remains the publication authority. This repository records the observed release without claiming that repository text can self-attest publication.
 >
 > Never install from a moving `main` checkout.
 
@@ -85,7 +85,7 @@ It does not replace domain expertise, grant authority to an Agent, guarantee aut
 
 ### Before installation
 
-The immutable commands below target `v3.1.0`. Use them only after its matching public Release exists. While it is pending, use the same commands with the exact immutable ref changed to `v3.0.1`; do not use moving `main`.
+The exact-tag commands below target the current public release, `v3.1.0`. Do not replace that ref with moving `main`.
 
 In a capable Agent host, give one lifecycle intent, for example: “Install YIYUAN Accord from the exact `VERSION_TAG`, preserve unrelated host state, verify the resulting registration, and stop if new trust or authority is required.” The command blocks below are transparent operator references and manual fallbacks; they are not a requirement for the user to assemble Accord's internal components one by one.
 
@@ -110,7 +110,7 @@ codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.1.0
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
-When v3.0.1 was last verified, the next step was to restart the desktop client or open a new CLI session.
+After installation, check the host-reported registration. Installation or registration does not establish visibility, activation, or behavior. Open a fresh CLI task or session before checking newly loaded visibility or behavior; Desktop clients require separate current-host verification.
 
 Open **Plugins** or run `/plugins`, then look for `YIYUAN Accord for Codex` and `deliver-demand-driven-outcome`.
 
@@ -279,9 +279,13 @@ See [`docs/architecture.md`](docs/architecture.md) for the complete portable int
 
 ## Release status and evidence limits
 
-The matching immutable GitHub tag and Release determine whether `v3.1.0` is publicly released.
-
-Repository text, tests, a local tag, or a candidate record cannot self-attest that external fact.
+The exact, non-prerelease, zero-asset GitHub Release for `v3.1.0` was
+published from exact revision
+[`258611be47c47a884b6d1a2e96889cf688ca7e68`](https://github.com/yiheng8023/YIYUAN-Accord/commit/258611be47c47a884b6d1a2e96889cf688ca7e68)
+on 2026-09-03 and is the current public recommendation; project governance
+requires the tag and Release not to be moved or rewritten. This is a derived
+record of task-time live GitHub observation; repository text, tests, a local
+tag, or a candidate record cannot self-attest that external fact.
 
 A full project release is a finite statement about the exact repository, packages, declared claims, and completed release gates.
 
@@ -371,7 +375,7 @@ The current schema-v7 v5 replay covers a mutable local-marketplace evaluation me
 
 A lifecycle command can refresh installed files without replacing capability already loaded into the current task or session. Open a fresh task or session before judging the new version; a reported version, `/reload-plugins`, or changed cache alone is not hot-update evidence for already loaded behavior.
 
-Desktop `26.831.2377.0` is version-known only; new-task visibility, activation, and post-state have not been verified. Without that exact Desktop evidence, the supported candidate behavior surface is CLI-only; any Desktop installation or hot replacement requires a separate host-behavior authority decision.
+A Desktop version observation alone does not verify new-task visibility, activation, or post-state. The repository retains only the bounded CLI observations described above; they do not establish general CLI support, and no Desktop behavior claim follows. Desktop installation or hot replacement requires separate current-host behavior evidence and authority.
 
 Never move an existing tag. Do not edit global host configuration as a substitute for supported lifecycle commands.
 
@@ -438,6 +442,16 @@ Report problems through [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Acc
 Include the exact tag and revision, host and version, installation route, requested outcome, starting state, observed result, human intervention, material effects, residue, and unknowns.
 
 Never submit credentials, private session content, or unsanitized host transcripts.
+
+---
+
+## Vision and collaboration
+
+YIYUAN NEXUS will continue to explore human-machine collaboration and related fields. YIYUAN Accord is not intended to exist forever: it will evolve as frontier intelligence, human and machine capabilities, and patterns of collaboration change. Progress in frontier intelligence both gives Accord new capabilities and continually tests its necessity, boundaries, and real-world value. When its mission has been fulfilled, carried forward by better mechanisms, or is no longer needed, the project should be able to conclude responsibly and in an orderly way.
+
+YIYUAN NEXUS currently has one author-maintainer, with limited capacity, time, and resources. We welcome the community to create and advance it together. Within those practical limits, Accord will continue to be maintained and evolved, with progressively broader host adaptation as an ongoing direction. A roadmap direction is not a claim of current support or a commitment to a release date or compatibility outcome.
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) to participate. Submit problems and suggestions through [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues).
 
 ---
 

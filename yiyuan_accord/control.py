@@ -118,6 +118,11 @@ _SNAPSHOT_V2_REACCEPTANCE_KINDS = frozenset({
     _SNAPSHOT_V2_REACCEPTANCE_KIND,
     _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND,
 })
+_SNAPSHOT_V2_POST_RELEASE_KIND = "post-release-reconciliation"
+_POST_RELEASE_DELTA_SHA256 = (
+    "f686e09842c75a27782d9b9153134bad37d5ee9b2f4e33d4a547a626c19a0658",
+    "0c78ac19812928f508901ca40d87b74c9460a0b05792425e6068c53631504aa8",
+)
 _SNAPSHOT_V2_CRITERION_IDS = frozenset({
     "R1", "R2", "R3", "R4", "Q1", "Q2", "Q3", "Q4",
 })
@@ -126,6 +131,13 @@ _V2_CARRIER_RULE_SHA256 = "a4cdb683f9286e53a483cf91f7b5a47dbb02e3a017c786aceb010
 
 def _v2_error(errors, message):
     errors.append(f"revision-bound v2 {message}")
+
+
+def _snapshot_v2_is_post_release(node):
+    transition = node.get("acceptanceTransition") if isinstance(node, dict) else None
+    return isinstance(node, dict) and node.get("state") == "closed" \
+        and isinstance(transition, dict) \
+        and transition.get("kind") == _SNAPSHOT_V2_POST_RELEASE_KIND
 
 
 def _closeout_error(errors, message):
@@ -1843,23 +1855,29 @@ def _snapshot_v2_node_errors(program, acceptance):
         item.get("id") for item in criteria or [] if isinstance(item, dict)
         and _nonempty_string(item.get("id"))
     }
+    post_release = transition_kind == _SNAPSHOT_V2_POST_RELEASE_KIND
+    expected = set() if post_release else (
+        criterion_ids if transition_kind == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND
+        else _SNAPSHOT_V2_CRITERION_IDS - {"R1"}
+    )
     if (
         not isinstance(transition, dict)
         or set(transition) != transition_fields
         or affected_list is None
-        or transition_kind not in ("changed", *_SNAPSHOT_V2_REACCEPTANCE_KINDS)
+        or transition_kind not in (
+            "changed", *_SNAPSHOT_V2_REACCEPTANCE_KINDS,
+            _SNAPSHOT_V2_POST_RELEASE_KIND,
+        )
         or transition.get("rationaleRef") != (
-            _V2_PLAN_REF
+            "product/program.json#/historicalRelease/rule"
+            if post_release else _V2_PLAN_REF
         )
         or transition.get("replayRef") != (
-            _V2_STEPS_REF
+            "product/program.json#/increment/provisionalEvidenceLifecycle"
+            if post_release else _V2_STEPS_REF
         )
-        or set(affected_list) != (
-            criterion_ids if transition_kind ==
-            _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND else
-            _SNAPSHOT_V2_CRITERION_IDS - {"R1"})
-        or len(affected_list) != (
-            8 if transition_kind == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND else 7)
+        or set(affected_list) != expected
+        or len(affected_list) != len(expected)
     ):
         _v2_error(errors, "acceptance transition is invalid")
     replay = node.get("replay")
@@ -2127,6 +2145,15 @@ def _snapshot_v2_transition_errors(current, predecessor):
         if prior_state == "closed" else (prior_gate,)
     if current.get("gateId") not in allowed_gates:
         _v2_error(errors, "predecessor gate is invalid")
+    if _snapshot_v2_is_post_release(current):
+        stable = set(current) - {"predecessorSnapshotRef", "acceptanceTransition"}
+        if (
+            prior_schema != _SNAPSHOT_V2_SCHEMA or prior_state != "closed"
+            or set(current) != set(predecessor)
+            or any(current.get(field) != predecessor.get(field) for field in stable)
+        ):
+            _v2_error(errors, "post-release transition is invalid")
+        return errors
     if current.get("state") == "reopened":
         current_replay = current.get("replay")
         prior_replay = predecessor.get("replay")
@@ -2336,6 +2363,15 @@ def _snapshot_v2_lineage_errors(
     else:
         prior_origin, prior_node, prior_revisions = latest
         errors.extend(_snapshot_v2_transition_errors(node, prior_node))
+        if _snapshot_v2_is_post_release(node):
+            try:
+                prior_documents = _snapshot_v1_documents(root, prior_origin)
+                if not _snapshot_v2_post_release_delta_valid(
+                    root, prior_origin, origin, prior_documents, documents,
+                ):
+                    _v2_error(errors, "post-release delta is invalid")
+            except _SNAPSHOT_V1_FAILURES:
+                _v2_error(errors, "post-release delta is unavailable")
         errors.extend(_snapshot_lineage_contract_errors(
             root, prior_origin, prior_node, prior_revisions,
             (*lineage, origin), cache,
@@ -2467,6 +2503,25 @@ def _snapshot_v2_close_projection(root, revision, documents):
     return projection
 
 
+def _snapshot_v2_post_release_digest(root, revision, documents):
+    projection = _snapshot_v2_close_projection(root, revision, documents)
+    return _canonical_json_sha256([
+        projection,
+        *[sha256(_snapshot_or_worktree_bytes(root, locator, revision)).hexdigest()
+          for locator in ("SECURITY.md", "docs/operations/HISTORY.md")],
+    ])
+
+
+def _snapshot_v2_post_release_delta_valid(
+    root, prior_revision, current_revision, prior_documents, current_documents,
+):
+    return tuple(_snapshot_v2_post_release_digest(root, revision, documents)
+                 for revision, documents in (
+                     (prior_revision, prior_documents),
+                     (current_revision, current_documents),
+                 )) == _POST_RELEASE_DELTA_SHA256
+
+
 def _validate_closeout_snapshot_v2(
     root, program, acceptance, evaluation_digest, errors,
     revision=None, lineage=(), cache=None,
@@ -2501,7 +2556,21 @@ def _validate_closeout_snapshot_v2(
     affected_transition = isinstance(transition, dict) and (
         node.get("state") == "closed" or transition.get("kind")
         == _SNAPSHOT_V2_REACCEPTANCE_CORRECTION_KIND)
-    if affected_transition and isinstance(prior_transition, dict) \
+    if _snapshot_v2_is_post_release(node):
+        try:
+            prior_documents = _snapshot_v1_documents(root, latest[0])
+            current_documents = _snapshot_v1_documents(root, revision)
+            current_documents = (
+                current_documents[0], program, acceptance,
+                current_documents[3], current_documents[4],
+            )
+            if not _snapshot_v2_post_release_delta_valid(
+                root, latest[0], revision, prior_documents, current_documents,
+            ):
+                _v2_error(errors, "post-release delta is invalid")
+        except _SNAPSHOT_V1_FAILURES:
+            _v2_error(errors, "post-release delta is unavailable")
+    elif affected_transition and isinstance(prior_transition, dict) \
             and prior_transition.get("kind") in _SNAPSHOT_V2_REACCEPTANCE_KINDS:
         try:
             prior_documents = _snapshot_v1_documents(root, latest[0])

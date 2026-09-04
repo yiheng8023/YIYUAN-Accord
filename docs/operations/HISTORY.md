@@ -21,8 +21,9 @@ live tag and public Release observation.
 | `v2.0` | `71ff4a2687b54f26c8dbf3a94384257f1fc0f532` | `2026-08-25T02:04:49Z` | full Release | no attached assets |
 | `v2.0.1-preview.1` | `e3a6eeb3fbb87ce2966c1015f90b0dea09ebbe07` | `2026-08-25T08:46:58Z` | public prerelease | no attached assets |
 | `v3.0.1` | `24cf9f3750ecd700944988e81a519db54b67b8e8` | `2026-08-27T07:13:18Z` | full Release | no attached assets |
+| `v3.1.0` | `258611be47c47a884b6d1a2e96889cf688ca7e68` | `2026-09-03T14:06:12Z` | full Release | no attached assets |
 
-The recorded recommendation pointer currently selects `v3.0.1`, the latest
+The recorded recommendation pointer currently selects `v3.1.0`, the latest
 admitted full Release. A later public record may enter the snapshot only after
 its external gates and live verification complete; a later full Release may
 then advance the pointer without altering any earlier row.
@@ -62,10 +63,15 @@ then advance the pointer without altering any earlier row.
   inheriting earlier evidence or waiving local, hosted, human and cleanup gates.
 - Public `v3.0.1` was subsequently released on 2026-08-27 from exact commit
   `24cf9f3750ecd700944988e81a519db54b67b8e8` as a non-prerelease full Release
-  with no attached assets. It remains the recommended immutable public release
-  while the later unreleased working projection reopens product evidence. This
-  fact is append-only history, not candidate identity or authority to move the
-  tag, publish current main, or inherit release evidence for changed bytes.
+  with no attached assets. It remains immutable public history after the later
+  recommendation advances. This fact is not candidate identity or authority to
+  move the tag, publish current main, or inherit evidence for changed bytes.
+- Public `v3.1.0` was subsequently released on 2026-09-03 from exact commit
+  `258611be47c47a884b6d1a2e96889cf688ca7e68` as a non-prerelease full Release
+  with no attached assets. Live observation after publication confirmed its
+  lightweight tag resolves directly to that commit; the admitted recommendation
+  now advances to this immutable release without rewriting earlier rows or
+  turning repository text into publication authority.
 
 Use Git to inspect an exact historical file:
 

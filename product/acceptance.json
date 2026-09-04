@@ -39,16 +39,24 @@
         "prerelease": false,
         "assetPolicy": "no-attached-assets",
         "publishedAt": "2026-08-27T07:13:18Z"
+      },
+      {
+        "tag": "v3.1.0",
+        "revision": "258611be47c47a884b6d1a2e96889cf688ca7e68",
+        "releaseKind": "full-release",
+        "prerelease": false,
+        "assetPolicy": "no-attached-assets",
+        "publishedAt": "2026-09-03T14:06:12Z"
       }
     ],
-    "recommendedPublicRelease": "v3.0.1",
+    "recommendedPublicRelease": "v3.1.0",
     "unreleasedCheckpoint": "v2.0.1-preview.2",
     "supersededDevelopmentDistributions": [
       "v3.0.0"
     ],
     "provenanceProjection": "docs/operations/HISTORY.md",
     "externalFactSource": "task-time-live-github-observation",
-    "rule": "This exact admitted public-release snapshot is frozen repository provenance, not live publication proof. Offline validation rejects every unadmitted tail. Only after a matching tag and public Release complete the hosted, named-human, publication and live-verification gates may a separate post-release reconciliation update the code-side admitted snapshot, program, acceptance, recommendation pointer and derived human-readable projection together; no repository field can self-attest that transition. Earlier records are never rewritten. The retired unreleased checkpoint and superseded locally exposed development distribution are provenance only. Historical records are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
+    "rule": "This exact admitted public-release snapshot is frozen repository provenance, not live publication proof. Offline validation rejects every unadmitted tail. Only after a matching tag and public Release complete the hosted, named-human, publication and live-verification gates may a separate post-release reconciliation update the code-side admitted snapshot, program, acceptance, recommendation pointer and derived human-readable projection together; no repository field can self-attest that transition. Earlier records are never rewritten. The retired unreleased checkpoint and superseded locally exposed development distribution are provenance only. Pre-release pending-review or closed-gate clauses embedded in frozen representativeBehaviorPolicy and criteria passRule strings remain exact evaluation-contract history; current disposition is determined by the lifecycle state, this ledger and the current process projection, and those frozen strings are not rewritten because their bytes bind R3 evidence. Historical records are not the current candidate, cannot identify changed package bytes, do not bind fresh reshaping evidence and grant no push, tag or release authority."
   },
   "constitution": "product/constitution.json",
   "program": "product/program.json",

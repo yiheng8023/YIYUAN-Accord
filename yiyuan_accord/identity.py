@@ -32,18 +32,11 @@ _PUBLIC_RELEASE_FIELDS = (
     "tag", "revision", "releaseKind", "prerelease", "assetPolicy",
     "publishedAt",
 )
-_EXPECTED_PUBLIC_RELEASE_HISTORY = (
-    ("v1.2", "6d857517455b6f3f86a4c9cbd79fc618febbbe00",
-     "full-release", False, "no-attached-assets", "2026-08-20T18:27:42Z"),
-    ("v2.0", "71ff4a2687b54f26c8dbf3a94384257f1fc0f532",
-     "full-release", False, "no-attached-assets", "2026-08-25T02:04:49Z"),
-    ("v2.0.1-preview.1", "e3a6eeb3fbb87ce2966c1015f90b0dea09ebbe07",
-     "public-preview", True, "no-attached-assets", "2026-08-25T08:46:58Z"),
-    ("v3.0.1", "24cf9f3750ecd700944988e81a519db54b67b8e8",
-     "full-release", False, "no-attached-assets", "2026-08-27T07:13:18Z"),
+_EXPECTED_PUBLIC_RELEASE_HISTORY_SHA256 = (
+    "f78e018c9607e9928ed6879b3177c0f82ef33e5effa6f58f4d04f57afa6cb938"
 )
 _EXPECTED_PUBLIC_RELEASE_PROJECTION_SHA256 = (
-    "ffa5fdabb016044a4edda0977cdffb670658323cc3212f997faee0f1a54f2e17"
+    "519f08164b98edc3277cb8fb00914e386375b46970517228cdb7ee60b73e6f23"
 )
 
 
@@ -803,27 +796,14 @@ def release_identity_errors(
     public_releases = (
         historical.get("publicReleases") if isinstance(historical, dict) else None
     )
-    public_records = (
-        tuple(
-            tuple(item.get(field) for field in _PUBLIC_RELEASE_FIELDS)
-            if _public_release_record_valid(
-                item, isinstance(item, dict) and item.get("tag") in {"v1.2", "v2.0"},
-            )
-            else ()
-            for item in public_releases
-        )
-        if isinstance(public_releases, list) else None
+    public_valid = isinstance(public_releases, list) and all(
+        _public_release_record_valid(
+            item, isinstance(item, dict) and item.get("tag") in {"v1.2", "v2.0"},
+        ) for item in public_releases
     )
     public_tags = (
         [item.get("tag") for item in public_releases]
-        if isinstance(public_releases, list)
-        and all(
-            _public_release_record_valid(
-                item, isinstance(item, dict) and item.get("tag") in {"v1.2", "v2.0"},
-            )
-            for item in public_releases
-        )
-        else None
+        if public_valid else None
     )
     public_revisions = (
         [item.get("revision") for item in public_releases]
@@ -846,8 +826,9 @@ def release_identity_errors(
         and set(historical) == historical_fields
         and acceptance.get("historicalRelease") == historical
         and historical.get("schema") == 3
-        and isinstance(public_records, tuple)
-        and public_records == _EXPECTED_PUBLIC_RELEASE_HISTORY
+        and sha256(json.dumps(public_releases, sort_keys=True,
+                              separators=(",", ":")).encode()).hexdigest()
+        == _EXPECTED_PUBLIC_RELEASE_HISTORY_SHA256
         and isinstance(public_tags, list)
         and len(public_tags) == len(set(public_tags))
         and len(public_revisions) == len(set(public_revisions))

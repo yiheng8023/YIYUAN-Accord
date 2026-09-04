@@ -38,6 +38,29 @@ Then read, in order:
   at exact SHA `24cf9f3750ecd700944988e81a519db54b67b8e8`. Its lightweight tag
   resolves directly to that commit and remains immutable. Later `main`
   documentation or maintenance does not change the released package.
+- Public `v3.1.0` was published on 2026-09-03 from exact revision
+  `258611be47c47a884b6d1a2e96889cf688ca7e68` as a non-prerelease,
+  zero-asset full Release and is now the recorded recommendation. Its
+  lightweight tag resolves directly to that revision, and tag-triggered GitHub
+  Actions run `33764857791` completed 9/9 jobs. These are task-time GitHub
+  observations; repository text cannot self-attest them, and project governance
+  requires the tag and Release not to be moved or rewritten.
+- The tracked post-release reconciliation appends only that public record,
+  advances the recommendation, retires the provisional GT-20/21 lifecycle and
+  records a same-gate closed successor. It does not fill the task-time human
+  authorization object, change the public-release policy object, advance a
+  prospective gate, prove production or host equivalence, or claim cleanup of
+  task-owned temporary resources.
+- A 2026-09-04 post-update host observation found Codex CLI `0.153.1`, Windows
+  Codex package `26.901.2854.0`, Claude Code `2.1.259` and Windows Claude
+  package `1.44121.4.0`. Both CLIs reported their Accord `3.1.0` plugin installed
+  and enabled; the Claude marketplace reported exact ref `v3.1.0`, while the
+  Codex plugin list exposed no immutable marketplace ref or Git SHA. These are
+  current version, registration and source-list facts only: no fresh-task
+  Desktop behavior, hot replacement, broad client compatibility or production
+  value follows.
+- Candidate formation, review and gate narratives below are historical unless
+  a paragraph explicitly identifies a later current observation.
 - Historical Commit A `7ea91dad811d337f00f75eb521cffacabd73b05f` froze one
   former v3.1.0 Codex and Claude package set, including LICENSE and NOTICE. Candidate
   `90501145346f81e02ebdc88fcf3001b39bfdf3d4` and its schema-v2 GT-20
@@ -82,8 +105,8 @@ Then read, in order:
   conditioned candidate language: active/reopened with continuing criteria means
   no candidate; ready/closed with all criteria verified and an exact passing
   runtime review bundle selects its unchanged exact SHA. Missing input holds
-  readiness and invalid input fails closed. Hosted status, authorization and
-  publication remain later gates in either state.
+  readiness and invalid input fails closed. At that candidate cut, hosted
+  status, authorization and publication remained later gates in either state.
 - Exact `2d7379598635b398b7ae881cee59bc7e3be5fb31` was the first schema-v4
   frozen replay attempt. It failed before evidence publication because two
   inventory helpers used `return if`, which PowerShell treated as an external
@@ -159,7 +182,7 @@ Then read, in order:
   later accountable product consensus superseded its `ready` state from
   `product/constitution.json#/purpose,/successDefinition,/productBoundary,/evolutionPolicy`.
   It is not the current candidate and grants no tag or Release authority.
-- The saved `main` checkout carries a reopened, unreleased v3.1.0
+- Before publication, the saved `main` checkout carried a reopened, unreleased v3.1.0
   repository-candidate-stage projection formed from the `a1cccb0` behavior/evidence
   baseline. Exact correction SHAs `0988b223`, `0da23a21`, `b202c40` and
   `39f4f69` failed later exact-tree or exact-local review and remain canonical
@@ -222,10 +245,12 @@ Then read, in order:
   selected components are the existing Skill, short-lived Hook adapter, pure
   core and host manifests; the direct App Server client remains evaluator-only.
   No second API, browser bridge, MCP, SDK/App Server client or persistent
-  service is admitted. No v3.1.0 tag or Release exists, and no earlier tag may
-  be moved.
+  service is admitted. At that historical point no v3.1.0 tag or Release
+  existed, and no earlier tag could be moved.
 - Baseline, plan, process, acceptance and goal projection are current
-  versioned stage surfaces, not permanent truth. The reopened successor is
+  versioned stage surfaces, not permanent truth. The current post-release
+  successor remains closed at the repository-candidate gate, cites the exact
+  released predecessor and advances no gate. It is
   recorded at `product/program.json#/increment/closeoutSnapshot` with a stable
   locator and `containing-git-commit` relation but no embedded self SHA. After
   commit, its exact reference is `<containing-sha>:<self-locator>`; a successor
@@ -269,7 +294,7 @@ Then read, in order:
   correctness, cross-host equivalence, broad-field-value or production-safety
   claim.
 - At the tagged v3.0.1 SHA, the released program remains historical `ready`
-  evidence. On the current v3.1 working line, lifecycle state is authoritative:
+  evidence. During v3.1 candidate formation, lifecycle state was authoritative:
   active/reopened plus continuing criteria means no candidate; ready/closed plus
   all verified criteria and one exact passing runtime review bundle selects only
   that unchanged exact SHA. The first schema-v6 GT-20
@@ -277,7 +302,9 @@ Then read, in order:
   review. Exact `7a3950e` verifies the corrected bounded schema-v6 replay;
   exact `f4c0251` plus the admitted schema-v7 v5 record verify one bounded
   Codex Agent-decision and evaluator-mediated-compensation replay. Goal state,
-  reacceptance, review and candidate disposition follow that lifecycle rule.
+  reacceptance, review and candidate disposition followed that lifecycle rule.
+  The recorded v3.1.0 public release now retires the provisional lifecycle;
+  this does not rewrite its candidate-time evidence.
   The global
   rebaseline, bounded P0-P3 feasibility/reuse study and complete
   self-bootstrapping semantic model and environment-admission design are
@@ -451,7 +478,7 @@ Then read, in order:
   `deliver-demand-driven-outcome` through host-qualified packages at version
   `3.0.1`. Those packages add no Runtime, Hook, MCP server, App or
   state store; this is a versioned package fact, not a permanent prohibition.
-- The unreleased v3.1.0 packages add one shared short-lived `SessionStart`
+- The public v3.1.0 packages add one shared short-lived `SessionStart`
   command adapter behind the Skill. It reads no transcript, writes no state,
   starts no background process and depends only on a host-path Node executable. Both host
   projections now use only the documented `startup`, `resume`, `clear` and
@@ -1208,7 +1235,8 @@ Historical superseded review disposition —
     full nine-leg hosted matrix
     remain later; candidate selection alone cannot authorize publication.
 
-Candidate disposition is read from the machine lifecycle state, not fixed prose.
+The following candidate disposition was read from the machine lifecycle state,
+not fixed prose, and is retained as pre-publication history.
 Exact `fc9c1a7`, `c5a0668`, `369d08b`, `cb143d3`, `c0b3c1a` and `e3d7ad2` remain invalidated, failed
 or pre-review counterevidence. Exact `39c24e9` is passed pre-candidate review
 history whose later readiness probe failed. Exact `9f66def` corrected the
@@ -1221,9 +1249,11 @@ verified and an exact passing runtime review bundle selects its exact SHA. Only
 that selected SHA may enter clean exact-local and host checks, hosted checks, a
 named-human decision, tag, Release, public verification
 and post-release cleanup run in their declared order on one unchanged exact
-revision. After the client update, all Codex, Claude and ChatGPT GUI entry
-points remain unknown; read-only re-sensing must precede any current-entry claim
-or installation guidance. A prior foreign-residue incident and one mistaken
+revision. Post-tag installation and version observations remain task-time notes
+rather than repository-bound behavior evidence; fresh-task Skill visibility,
+current Claude native-model behavior and unobserved GUI entry points remain
+unclaimed. Read-only re-sensing must precede any broader
+current-entry claim or installation guidance. A prior foreign-residue incident and one mistaken
 pruned verifier invocation remain historical process counterevidence; neither
 is the current candidate blocker. The previous push, Actions and Cloud results
 do not qualify changed authority or current candidate bytes.

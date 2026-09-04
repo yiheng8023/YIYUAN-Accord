@@ -12,9 +12,9 @@ YIYUAN Accord 是一个开放、Agent 中立的人机协作系统。
 
 [English](README.md)
 
-> **已发布稳定后备版本：** [`v3.0.1`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.0.1)；**待发布版本线：** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0)
+> **当前发布版本线：** [`v3.1.0`](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0)，精确、非预发行、无附加资产，且项目治理要求不得移动或改写。
 >
-> 只有 v3.1.0 链接对应的不可变、非预发行 GitHub Release 已存在时，才可使用该版本；此前请使用 v3.0.1。仓库文本不能自证发布。
+> GitHub 仍是发布事实的权威来源；本仓库只记录已观察到的 Release，不声称仓库文本能够自证发布。
 >
 > 不要从持续移动的 `main` checkout 安装。
 
@@ -85,7 +85,7 @@ Accord 不是每个任务都必须执行的固定流程。简单请求遇到健�
 
 ### 安装前确认
 
-下列不可变命令指向 `v3.1.0`，只有对应公开 Release 已存在时才可使用。待发布期间，请把相同命令中的精确不可变 ref 改为 `v3.0.1`；不要使用持续移动的 `main`。
+下列精确 tag 命令指向当前公开版本 `v3.1.0`。不得把这个 ref 换成持续移动的 `main`。
 
 在具备相应能力的 Agent 宿主中，只需给出一次生命周期意图，例如：“从精确的 `VERSION_TAG` 安装 YIYUAN Accord，保留无关宿主状态，验证最终登记；遇到新的信任或权限边界时再停下询问。”下列命令块是透明的运维参考和人工后备路线，不要求用户逐个组装 Accord 的内部组件。
 
@@ -110,7 +110,7 @@ codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.1.0
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 ```
 
-上次验证 v3.0.1 时，后续操作是重启桌面端或新建 CLI 会话。
+安装后先检查宿主报告的登记状态。安装或登记不能证明可见、激活或行为；检查新加载的可见性或行为前，应新建 CLI 任务或会话。Desktop 客户端必须另行完成当前宿主验证。
 
 打开 **Plugins** 或运行 `/plugins`，确认 `YIYUAN Accord for Codex` 与 `deliver-demand-driven-outcome` 可见。
 
@@ -279,9 +279,12 @@ Accord 不会静默收集或上传遥测数据。
 
 ## 发布状态、证据与能力边界
 
-匹配的不可变 GitHub tag 与 Release 决定 `v3.1.0` 是否已经公开发布。
-
-仓库文本、测试、本地 tag 或候选记录都不能自证这个外部事实。
+精确、非预发行、无附加资产的 `v3.1.0` GitHub Release 已于
+2026-09-03 从精确 revision
+[`258611be47c47a884b6d1a2e96889cf688ca7e68`](https://github.com/yiheng8023/YIYUAN-Accord/commit/258611be47c47a884b6d1a2e96889cf688ca7e68)
+发布，现为公开推荐版本；项目治理要求不得移动或改写该 tag 与 Release。
+这是对 GitHub 任务时实时观察的派生记录；仓库文本、
+测试、本地 tag 或候选记录都不能自证这个外部事实。
 
 项目正式版只对精确仓库、包、声明的有限结论与已完成发布门负责。
 
@@ -371,7 +374,7 @@ claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 
 生命周期命令可以刷新安装文件，但不会替换当前任务或会话已经加载的能力。判断新版本前必须新建任务或会话；自报版本、`/reload-plugins` 或缓存变化本身都不是已加载行为完成热更新的证据。
 
-Desktop `26.831.2377.0` 目前只确认版本号；新任务可见性、激活和后状态尚未验证。缺少该精确 Desktop 证据时，候选只支持 CLI 行为面；如需 Desktop 安装或热替换，必须先进入新的宿主行为授权门。
+仅观察到 Desktop 版本并不能验证新任务可见性、激活或后状态。仓库目前只保留上文所述的有限 CLI 观察；它们不能证明一般性的 CLI 支持，也不能推出任何 Desktop 行为结论。如需 Desktop 安装或热替换，必须另行取得当前宿主行为证据与授权。
 
 不得移动已有 tag，也不得直接编辑全局宿主配置来代替受支持的生命周期命令。
 
@@ -438,6 +441,16 @@ Codex 与 Claude 包共享 `deliver-demand-driven-outcome` Skill 名，同时保
 请提供精确 tag 与 revision、宿主与版本、安装路线、目标、初始状态、实际结果、人工介入、物质影响、残留和未知。
 
 不得提交凭据、私密会话原文或未净化的宿主日志。
+
+---
+
+## 愿景与共创
+
+易元联创（YIYUAN NEXUS）将持续探索人机协作及其相关领域。YIYUAN Accord 并不以永久存在为目标：它会随前沿智能、人类与机器能力及协作方式的变化而演进。前沿智能的进步既为 Accord 提供新的能力，也持续检验其必要性、边界与实际价值；当使命已经完成、被更好的机制承接，或不再需要时，项目也应能够负责任地有序谢幕。
+
+易元联创目前仅有一名作者兼维护者，能力、精力和资源有限。我们期待与社区联合创作、协同前行。在现实能力与资源边界内，Accord 将持续维护和演进，逐步增加更多宿主适配。路线方向不代表当前已经支持，也不构成发布时间或兼容性承诺。
+
+参与方式见 [`CONTRIBUTING.md`](CONTRIBUTING.md)；问题与建议可通过 [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues) 提交。
 
 ---
 

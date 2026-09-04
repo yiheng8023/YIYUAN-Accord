@@ -7,7 +7,7 @@ sandbox, identity or authorization system, secret store, dependency scanner or
 production runtime.
 
 The public v3.0.1 projections add no Hook, MCP, App, background process,
-private capture state or fixed host-version dependency. The unreleased v3.1.0
+private capture state or fixed host-version dependency. The public v3.1.0
 projections add one stateless `SessionStart` context Hook but no MCP, App,
 background process or private capture state; its files or enablement prove
 neither firing, behavior nor value. Repository verification does not authorize
