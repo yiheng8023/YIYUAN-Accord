@@ -141,6 +141,40 @@ limitations. People, models and their shared information are finite, so a
 machine-native route is valid when it delivers the human outcome with lower net
 burden, preserves authority and leaves honest evidence.
 
+## Post-v3.1 successor boundary
+
+The current program is active in a post-v3.1 maintenance cycle. Its schema-v3
+successor baseline is a closed, referenceable transition node whose exact
+predecessor is the post-release reconciliation at `299ae401`; it does not alter
+the immutable v3.1.0 release ledger, host-projection package bytes, distribution version,
+criterion assessments, pass rules, evaluation contract or historical
+exact-package evidence. Release history,
+current maintenance and any future release candidate are separate lifecycle
+nodes. The maintenance cycle has no release intent and is explicitly
+candidate-ineligible; a future candidate requires a new separately reviewed
+successor schema or transition contract with release intent, affected-surface
+replay and its own ordered gates.
+
+The authorized successor work has two bounded batches. The first migrates the
+stage-transition contract, verifier, tests, structured documentation and the
+matching complexity-assessment boundary without changing Runtime, Skills,
+Hooks or host packages. The second changes only lifecycle bookkeeping plus the
+two bilingual README presentation surfaces. Their byte digests are preauthorized by the first node,
+and the verifier recomputes them from the worktree rather than trusting the
+successor's declaration. Neither batch starts Grok Build, ZCode, Runtime or
+host-adapter implementation, tags a release or changes `main`.
+
+After these batches, comprehensive system optimization is a new review and
+planning boundary rather than implicit implementation authority. That review
+must include large-module and test latency, projection duplication, host
+adaptation, evidence cost, and the current Skill and Hook responsibility seams.
+Runtime remains conditional: use host-native or short-lived existing execution
+first and add a managed runtime only for an evidenced residual obligation that
+cannot be closed at lower lifecycle cost. Skills and Hooks likewise have no
+arbitrary numeric cap; the governing target is the minimum sufficient set, with
+distinct responsibility, activation and no-op behavior, interference,
+rollback, cleanup and retirement evidence for every retained element.
+
 ## Portable interface
 
 K1–K5 are the product interface:
@@ -183,14 +217,14 @@ compatibility, feedback and regression route is recorded below.
 
 ## Maintenance baseline
 
-Status: measured planning baseline referenced by `product/program.json`, not
-semantic authority, release or production evidence. Measured: 2026-09-01.
+Status: historical measured planning baseline referenced by
+`product/program.json`, not semantic authority, release or production evidence.
+Measured at exact review cut `c5a0668` on 2026-09-01.
 
 ### Panorama and bottleneck order
 
-The exact review tree has 114 tracked files against the structured 120-file
-ceiling. Nine
-Python files contain the product and tests. The three largest maintained code
+That exact review tree had 112 tracked files against the structured 120-file
+ceiling. Nine Python files contained the product and tests. The three largest maintained code
 surfaces are the product-control test module, `control.py` and `evidence.py`;
 together they dominate code review, coupling and regression cost. The failed
 exact review cut `c5a0668` had 752634 Python-and-product-test bytes against the
@@ -203,10 +237,12 @@ overlay, native activation and failed-update receipt validators, privacy-minimal
 digest-only host receipts, candidate-bound staging attribution, per-locator
 failure diagnostics, verified-replay evidence batching, consolidated lineage
 performance, cross-platform gate regressions and portable-path privacy measured
-831206 bytes, so the active 875000-byte ceiling retains 43794 bytes, or about 5.01 percent,
-remaining. The verifier still recomputes the
-active tree and requires at least
-five percent headroom; this increase is not general growth allowance. The
+831206 bytes, so the former 875000-byte ceiling retained 43794 bytes, or about
+5.01 percent, remaining. The schema-v3 lifecycle migration calibrates the
+current ceiling to 960000 bytes solely for its transition module, integration,
+committed-lineage and fail-closed carry tests. This is not general growth allowance. The verifier still
+recomputes the active tree and requires at least five percent code-and-test
+headroom plus three tracked-file slots. The
 earlier increase from the
 prior 750000-byte ceiling paid only for the
 ordered command contract, evidence sanitization, process ownership before

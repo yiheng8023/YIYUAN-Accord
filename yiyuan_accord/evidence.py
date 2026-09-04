@@ -14,6 +14,7 @@ from .identity import (
     _bounded_git_bytes, _exact, _nonempty_string as _text,
     _safe_https_locator, _strict_json_object,
 )
+from .stage_lifecycle import is_structurally_valid_closed_maintenance_snapshot
 
 
 STATES = {"passed", "failed", "failed-repeated-same-purpose"}
@@ -2586,6 +2587,11 @@ def provisional_gt20_21_source_errors(
         if isinstance(increment, dict) else None
     exact_lifecycle = increment.get("exactPackageEvidenceLifecycle") \
         if isinstance(increment, dict) else None
+    maintenance_successor = (
+        is_structurally_valid_closed_maintenance_snapshot(
+            program, acceptance, golden,
+        )
+    )
     invalidated_gt20 = gt20_exact_lifecycle_invalidated(exact_lifecycle)
     lifecycle_fields = (
         "schema", "state", "criterionId", "taskIds", "sourceLocator",
@@ -2660,10 +2666,17 @@ def provisional_gt20_21_source_errors(
             if isinstance(retirement, dict) else None
         published_at = _time(matching_release[0].get("publishedAt")) \
             if len(matching_release) == 1 else None
+        retired_program_state = (
+            program.get("status") == "ready"
+            or (
+                program.get("status") == "active"
+                and maintenance_successor
+            )
+        )
         if (
             target_release != program.get("distributionVersion")
             or target_release != acceptance.get("distributionVersion")
-            or program.get("status") != "ready"
+            or not retired_program_state
             or r3.get("assessment") != "verified"
             or not isinstance(retirement, dict)
             or set(retirement) != retirement_fields

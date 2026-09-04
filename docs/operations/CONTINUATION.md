@@ -51,14 +51,42 @@ Then read, in order:
   authorization object, change the public-release policy object, advance a
   prospective gate, prove production or host equivalence, or claim cleanup of
   task-owned temporary resources.
-- A 2026-09-04 post-update host observation found Codex CLI `0.153.1`, Windows
-  Codex package `26.901.2854.0`, Claude Code `2.1.259` and Windows Claude
-  package `1.44121.4.0`. Both CLIs reported their Accord `3.1.0` plugin installed
-  and enabled; the Claude marketplace reported exact ref `v3.1.0`, while the
-  Codex plugin list exposed no immutable marketplace ref or Git SHA. These are
-  current version, registration and source-list facts only: no fresh-task
-  Desktop behavior, hot replacement, broad client compatibility or production
-  value follows.
+- The program is active in a post-v3.1 maintenance cycle. Its chain begins with
+  a closed schema-v3 successor baseline, which cites exact predecessor
+  `299ae4011b0e48df586a137a2fbdcaff715e55c7:product/program.json#/increment/closeoutSnapshot`,
+  preserves the immutable v3.1.0 ledger and package lifecycle, has no release
+  intent and is candidate-ineligible. Release history, maintenance and any
+  future candidate are separate lifecycle nodes; Git preserves the baseline
+  when the presentation successor becomes current, and neither transition can
+  reopen or borrow completed release gates. The machine-readable maintenance
+  cycle, not this narrative, owns the live boundary.
+- The authorized work has two batches. Batch 1 changes only the schema-v3
+  transition contract, verifier, tests, structured documentation and matching
+  complexity-assessment boundary; it does not change host-projection package
+  bytes, Runtime,
+  Skills or Hooks. Batch 2 changes only lifecycle bookkeeping plus the two
+  bilingual README presentation surfaces.
+  Batch 1 preauthorizes exact SHA-256 values for both README blobs, and the
+  verifier observes the worktree bytes instead of accepting a self-declared
+  successor digest. Neither batch changes `main`, creates a tag or Release, or
+  starts Grok Build, ZCode, Runtime or host-adapter implementation.
+- After both batches pass exact-SHA verification, conduct a separate
+  whole-system optimization review before authorizing implementation. Reassess
+  large-module and test cost, projection duplication, host adaptation and the
+  current Skill and Hook seams. Runtime is admitted only for a demonstrated
+  residual obligation after lower-cost host-native or short-lived paths fail.
+  Skills and Hooks have no mechanical count ceiling, but prefer the minimum
+  sufficient set and require distinct responsibility, activation/no-op,
+  interference, rollback, cleanup and retirement evidence for each retained
+  element.
+- A later 2026-09-04 post-update observation found Codex CLI `0.153.2`, Windows
+  Codex package `26.901.4073.0`, Claude Code `2.1.260` and Windows Claude
+  package `1.46388.2.0`. Claude Code reported the Accord `3.1.0` plugin installed
+  and enabled. The current Codex task exposes the Accord `3.1.0` Skill, while
+  this Codex CLI no longer accepts the former `plugins list` query; that is
+  capability exposure, not a CLI registration or activation receipt. These are
+  version and bounded availability facts only: no fresh-task Desktop behavior,
+  hot replacement, broad client compatibility or production value follows.
 - Candidate formation, review and gate narratives below are historical unless
   a paragraph explicitly identifies a later current observation.
 - Historical Commit A `7ea91dad811d337f00f75eb521cffacabd73b05f` froze one
@@ -248,16 +276,21 @@ Then read, in order:
   service is admitted. At that historical point no v3.1.0 tag or Release
   existed, and no earlier tag could be moved.
 - Baseline, plan, process, acceptance and goal projection are current
-  versioned stage surfaces, not permanent truth. The current post-release
-  successor remains closed at the repository-candidate gate, cites the exact
-  released predecessor and advances no gate. It is
-  recorded at `product/program.json#/increment/closeoutSnapshot` with a stable
-  locator and `containing-git-commit` relation but no embedded self SHA. After
+  versioned stage surfaces, not permanent truth. The current schema-v3
+  successor baseline closes only the transition into post-v3.1 maintenance,
+  cites the exact post-release predecessor and advances no release gate. It is
+  recorded at `product/program.json#/maintenanceCycle/closeoutSnapshot` with a
+  stable locator and `containing-git-commit` relation but no embedded self SHA. After
   commit, its exact reference is `<containing-sha>:<self-locator>`; a successor
   cites that predecessor and Git preserves older nodes. Only the terminal
   ordered release gate has a null next gate. The current schema-v2 predicate
   does not admit a cross-version cycle from it; a later-version cycle requires
-  a separately reviewed schema or transition-contract successor. Identical first-parent carries
+  a separately reviewed schema or transition-contract successor. Schema v3 is
+  that reviewed maintenance successor contract: it keeps the immutable release
+  ledger, active maintenance and any future candidate separate, and remains
+  candidate-ineligible. A future candidate requires a new separately reviewed
+  successor schema or transition contract with release intent,
+  affected-surface replay and its own ordered gates. Identical first-parent carries
   retain the oldest commit in their contiguous run as the canonical origin; every
   carry is checked and cannot rebind snapshot authority, surfaces, evidence or
   cutoff. A successor cites the most recent different node's origin. The current
@@ -783,9 +816,11 @@ cost is justified.
 
 ## Ordered work disposition
 
-The current machine authority is `product/program.json`. It is `ready` and
-retains one completed increment and one completed work item for auditability,
-with no active item. Its completed ordered work is:
+The current machine authority is `product/program.json`. It is `active` in the
+post-v3.1 maintenance cycle and retains the completed release increment and
+work item for auditability. The closed schema-v3 successor baseline is a
+transition boundary, not a release candidate or an implicit active work item.
+Its historical completed ordered work is:
 
 1. `rebaseline-product-and-consensus-impact-map` — completed after full local
    structural reconciliation.

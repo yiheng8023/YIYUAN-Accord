@@ -143,11 +143,12 @@ CONSTITUTION_FIELDS = set((
     "hostAdapterStandard learnedFailureStandards qualityInvariants humanAuthority "
     "productBoundary resourceStewardship evidenceBoundary evolutionPolicy authority"
 ).split())
-PROGRAM_FIELDS = set((
+_LEGACY_PROGRAM_FIELDS = set((
     "schema id productId release distributionVersion historicalRelease releaseIntent constitution acceptance maintenancePlan "
     "status inputEvidence increment releaseProcedure goalModePrompt hostProjections "
     "complexityBudget processLossControl"
 ).split())
+PROGRAM_FIELDS = _LEGACY_PROGRAM_FIELDS | {"maintenanceCycle"}
 ACCEPTANCE_FIELDS = set((
     "schema id productId release distributionVersion historicalRelease constitution program canonicalGoalObjectiveSha256 "
     "completionExpression evidenceLanes representativeBehaviorPolicy criteria "
@@ -782,7 +783,7 @@ def release_identity_errors(
     identity, program, acceptance, history_text,
 ):
     errors = []
-    if set(program) != PROGRAM_FIELDS:
+    if set(program) not in (_LEGACY_PROGRAM_FIELDS, PROGRAM_FIELDS):
         errors.append("program top-level shape is invalid")
     if set(acceptance) != ACCEPTANCE_FIELDS:
         errors.append("acceptance top-level shape is invalid")

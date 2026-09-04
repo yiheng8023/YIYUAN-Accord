@@ -47,6 +47,13 @@ from .identity import (
     release_identity_errors,
 )
 from .reviews import evaluate_review_bundle
+from .stage_lifecycle import (
+    PRESENTATION_SURFACE_SHA256,
+    SNAPSHOT_V3_SCHEMA,
+    closed_maintenance_snapshot_errors,
+    evaluate_stage_transition,
+    is_structurally_valid_closed_maintenance_snapshot,
+)
 
 
 AUTHORITY_BOOTSTRAP = (
@@ -98,6 +105,10 @@ _SNAPSHOT_V1_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v1"
 _SNAPSHOT_V2_SCHEMA = "yiyuan-accord-stage-closeout-snapshot/v2"
 _SNAPSHOT_LOCATOR = 'product/program.json#/increment/closeoutSnapshot'
 _SNAPSHOT_REF_RE = re.compile(r'([0-9a-f]{40}):product/program\.json#/increment/closeoutSnapshot')
+_SNAPSHOT_V3_PREDECESSOR_RE = re.compile(
+    r'([0-9a-f]{40}):product/program\.json#/'
+    r'(?:increment|maintenanceCycle)/closeoutSnapshot'
+)
 _V2_PLAN_REF = 'product/program.json#/increment/fourSurfaceMapping/plan'
 _V2_PROCESS_REF = 'product/program.json#/increment/fourSurfaceMapping/process'
 _V2_STEPS_REF = 'product/program.json#/increment/fourSurfaceMapping/process/orderedSteps'
@@ -131,6 +142,10 @@ _V2_CARRIER_RULE_SHA256 = "a4cdb683f9286e53a483cf91f7b5a47dbb02e3a017c786aceb010
 
 def _v2_error(errors, message):
     errors.append(f"revision-bound v2 {message}")
+
+
+def _v3_error(errors, message):
+    errors.append(f"revision-bound v3 {message}")
 
 
 def _snapshot_v2_is_post_release(node):
@@ -698,6 +713,16 @@ def _validate_complexity(root, program, python_module, files, errors):
     instruction_bytes = len(
         str(program.get("goalModePrompt", {}).get("objective", "")).encode("utf-8")
     )
+    maintenance = program.get("maintenanceCycle")
+    maintenance_goal = maintenance.get("goalProjection") \
+        if isinstance(maintenance, dict) else None
+    if isinstance(maintenance_goal, dict):
+        instruction_bytes += len(json.dumps(
+            maintenance_goal,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8"))
     for locator in instruction_paths or []:
         path = _safe_file(root, locator, errors)
         if path is not None:
@@ -1077,6 +1102,18 @@ def _snapshot_v1_node_key(node):
     ).encode("utf-8")).hexdigest()
 
 
+def _snapshot_node_from_program(program):
+    if not isinstance(program, dict):
+        return None
+    if "maintenanceCycle" in program:
+        cycle = program.get("maintenanceCycle")
+        return cycle.get("closeoutSnapshot") \
+            if isinstance(cycle, dict) else None
+    increment = program.get("increment")
+    return increment.get("closeoutSnapshot") \
+        if isinstance(increment, dict) else None
+
+
 def _snapshot_v1_json_structure_is_bounded(value):
     pending = [(value, 1)]
     while pending:
@@ -1144,9 +1181,7 @@ def _snapshot_v1_history_index(root, anchor, cache):
             ) from exc
         if not _snapshot_v1_json_structure_is_bounded(historical):
             raise ValueError("snapshot lineage program structure is invalid")
-        increment = historical.get("increment")
-        node = increment.get("closeoutSnapshot") \
-            if isinstance(increment, dict) else None
+        node = _snapshot_node_from_program(historical)
         records.append((revision, node))
     groups = []
     for revision, node in records:
@@ -1216,6 +1251,55 @@ def _snapshot_or_worktree_bytes(root, locator, revision=None):
     return raw
 
 
+def _snapshot_v3_presentation_sha256(root, revision=None):
+    return {
+        locator: sha256(_snapshot_or_worktree_bytes(
+            root, locator, revision,
+        )).hexdigest()
+        for locator in PRESENTATION_SURFACE_SHA256
+    }
+
+
+def _snapshot_v3_changed_paths(root, predecessor_revision, revision=None):
+    """Return a bounded, repository-relative transition surface."""
+    if (
+        not isinstance(predecessor_revision, str)
+        or _SNAPSHOT_V1_REVISION_RE.fullmatch(predecessor_revision) is None
+        or revision is not None and (
+            not isinstance(revision, str)
+            or _SNAPSHOT_V1_REVISION_RE.fullmatch(revision) is None
+        )
+    ):
+        raise ValueError("revision-bound v3 diff identity is invalid")
+    arguments = [
+        "diff", "--name-only", "-z", "--no-renames", "--no-ext-diff",
+        "--diff-filter=ACDMRTUXB", predecessor_revision,
+    ]
+    if revision is not None:
+        arguments.append(revision)
+    arguments.append("--")
+    raw = _bounded_git_bytes(root, arguments, _SNAPSHOT_V1_TREE_BYTES)
+    if revision is None:
+        raw += _bounded_git_bytes(
+            root, ["ls-files", "--others", "--exclude-standard", "-z"],
+            _SNAPSHOT_V1_TREE_BYTES - len(raw),
+        )
+    paths = []
+    for item in (item for item in raw.split(b"\0") if item):
+        locator = item.decode("utf-8")
+        relative = Path(locator)
+        if (
+            not locator or "\\" in locator or relative.is_absolute()
+            or relative.drive or any(part in {"", ".", ".."} for part in relative.parts)
+            or repository_relative_path(Path(root), locator) is None
+        ):
+            raise ValueError("revision-bound v3 diff path is invalid")
+        paths.append(locator)
+    if len(paths) > _SNAPSHOT_V1_MAX_TREE_ENTRIES or len(paths) != len(set(paths)):
+        raise ValueError("revision-bound v3 diff surface is invalid")
+    return tuple(sorted(paths))
+
+
 def _snapshot_v1_surface_digests(root, program, acceptance, revision=None):
     if not isinstance(program, dict) or not isinstance(acceptance, dict):
         raise TypeError("revision-bound v1 authority is not an object")
@@ -1259,6 +1343,35 @@ def _snapshot_v1_binding_state(
     gates = gates if isinstance(gates, list) else []
     closed = snapshot.get("closedGateId") if isinstance(snapshot, dict) else None
     gate = next((item for item in gates if isinstance(item, dict)
+                 and item.get("id") == closed), None)
+    adaptive = guidance.get("adaptiveSystem") \
+        if isinstance(guidance, dict) else None
+    return {
+        "authority": [constitution, program, acceptance],
+        "baseline": guidance.get("wholeSystemBalanceReview"),
+        "stageContract": adaptive.get("stageStateContract") \
+            if isinstance(adaptive, dict) else None,
+        "evidence": [program.get("inputEvidence"), acceptance.get("criteria"),
+                     golden, gate],
+        "surfaceDigests": _snapshot_v1_surface_digests(
+            root, program, acceptance, revision,
+        ),
+    }
+
+
+def _snapshot_v3_binding_state(
+    root, program, acceptance, guidance, constitution, golden, revision=None,
+):
+    if any(not isinstance(item, dict) for item in (
+        program, acceptance, guidance, constitution, golden,
+    )):
+        raise TypeError("revision-bound v3 document is not an object")
+    node = _snapshot_node_from_program(program)
+    cycle = program.get("maintenanceCycle")
+    transitions = cycle.get("orderedTransitions") \
+        if isinstance(cycle, dict) else None
+    closed = node.get("closedGateId") if isinstance(node, dict) else None
+    gate = next((item for item in transitions or [] if isinstance(item, dict)
                  and item.get("id") == closed), None)
     adaptive = guidance.get("adaptiveSystem") \
         if isinstance(guidance, dict) else None
@@ -1645,12 +1758,14 @@ def _snapshot_v1_projection_package_errors(
 
 
 @_snapshot_read_scope
-def _snapshot_v1_run_status(root, expected, revisions, cache):
+def _snapshot_v1_run_status(
+    root, expected, revisions, cache, binding_state=_snapshot_v1_binding_state,
+):
     frozen, contract_valid = True, True
     for revision in revisions:
         documents = _snapshot_v1_documents(root, revision)
         constitution, program, acceptance, guidance, golden = documents
-        if _snapshot_v1_binding_state(
+        if binding_state(
             root, program, acceptance, guidance, constitution, golden, revision,
         ) != expected:
             frozen = False
@@ -2303,6 +2418,50 @@ def _snapshot_v2_transition_errors(current, predecessor):
     return errors
 
 
+def _snapshot_v3_decision_errors(
+    current_documents, predecessor_documents, changed_paths,
+    changed_surface_sha256=None,
+):
+    errors = []
+    try:
+        decision = evaluate_stage_transition(
+            current_documents, predecessor_documents, changed_paths,
+            changed_surface_sha256,
+        )
+    except _SNAPSHOT_V1_FAILURES:
+        return ["revision-bound v3 transition decision is unavailable"]
+    if not all(hasattr(decision, field) for field in (
+        "errors", "changed_paths", "affected_criterion_ids", "candidate_eligible",
+    )):
+        return ["revision-bound v3 transition decision is malformed"]
+    errors.extend(f"revision-bound v3 {message}" for message in decision.errors)
+    program = current_documents[1]
+    node = _snapshot_node_from_program(program)
+    transition = node.get("acceptanceTransition") \
+        if isinstance(node, dict) else None
+    declared_affected = _string_list(transition.get("affectedCriterionIds")) \
+        if isinstance(transition, dict) else None
+    cycle = node.get("cycle") if isinstance(node, dict) else None
+    declared_changed = _string_list(transition.get("changedPaths")) \
+        if isinstance(transition, dict) else None
+    if declared_changed is None or tuple(declared_changed) != tuple(
+        decision.changed_paths
+    ):
+        _v3_error(errors, "declared changed paths are invalid")
+    if (
+        declared_affected is None
+        or set(declared_affected) != set(decision.affected_criterion_ids)
+        or len(declared_affected) != len(decision.affected_criterion_ids)
+    ):
+        _v3_error(errors, "affected criteria are invalid")
+    if (
+        not isinstance(cycle, dict)
+        or cycle.get("candidateEligible") is not decision.candidate_eligible
+    ):
+        _v3_error(errors, "candidate eligibility is invalid")
+    return errors
+
+
 @_snapshot_read_scope
 def _snapshot_v2_lineage_errors(
     root, origin, node, revisions, lineage, cache,
@@ -2380,6 +2539,89 @@ def _snapshot_v2_lineage_errors(
     return errors
 
 
+@_snapshot_read_scope
+def _snapshot_v3_lineage_errors(
+    root, origin, node, revisions, lineage, cache,
+):
+    if not isinstance(lineage, (list, tuple)) or not isinstance(cache, dict):
+        return ["revision-bound v3 lineage state is invalid"]
+    if len(lineage) >= _SNAPSHOT_V1_MAX_LINEAGE_DEPTH:
+        return ["revision-bound v3 lineage exceeds supported depth"]
+    if (
+        not isinstance(origin, str)
+        or _SNAPSHOT_V1_REVISION_RE.fullmatch(origin) is None
+        or not isinstance(revisions, (list, tuple)) or not revisions
+        or any(_SNAPSHOT_V1_REVISION_RE.fullmatch(item or "") is None
+               for item in revisions)
+        or not isinstance(node, dict)
+    ):
+        return ["revision-bound v3 lineage identity is invalid"]
+    if origin in lineage:
+        return ["revision-bound v3 lineage contains a cycle"]
+    try:
+        node_key = _snapshot_v1_node_key(node)
+    except _SNAPSHOT_V1_FAILURES:
+        return ["revision-bound v3 lineage node is malformed"]
+    key = ("snapshot-v3-lineage", origin, node_key, tuple(revisions))
+    if key in cache:
+        return [] if cache[key] else ["revision-bound v3 lineage is invalid"]
+    errors = []
+    try:
+        documents = _snapshot_v1_documents(root, origin)
+        program, acceptance = documents[1], documents[2]
+        historical = _snapshot_node_from_program(program)
+        if historical != node or revisions[-1] != origin:
+            raise ValueError("revision-bound v3 origin is not canonical")
+        expected = _snapshot_v3_binding_state(
+            root, program, acceptance, documents[3], documents[0],
+            documents[4], origin,
+        )
+        frozen, valid = _snapshot_v1_run_status(
+            root, expected, revisions, cache, _snapshot_v3_binding_state,
+        )
+        if not frozen or not valid:
+            _v3_error(errors, "carry run is invalid")
+        if any(_snapshot_v3_changed_paths(root, origin, item)
+               for item in revisions[:-1]):
+            _v3_error(errors, "carry run changes repository content")
+        canonical, latest, replay, _ = _snapshot_v1_lineage(
+            root, node, origin, cache,
+        )
+        if canonical != origin or replay:
+            _v3_error(errors, "canonical origin is invalid")
+    except _SNAPSHOT_V1_FAILURES:
+        cache[key] = False
+        return ["revision-bound v3 lineage is unavailable"]
+    match = re.fullmatch(
+        _SNAPSHOT_V3_PREDECESSOR_RE,
+        node.get("predecessorSnapshotRef") or "",
+    )
+    if latest is None or match is None or match.group(1) != latest[0]:
+        _v3_error(errors, "predecessor origin is invalid")
+    else:
+        prior_origin, prior_node, prior_revisions = latest
+        try:
+            prior_documents = _snapshot_v1_documents(root, prior_origin)
+            changed_paths = _snapshot_v3_changed_paths(root, prior_origin, origin)
+            transition = node.get("acceptanceTransition")
+            surface_sha256 = _snapshot_v3_presentation_sha256(
+                root, origin,
+            ) if isinstance(transition, dict) and transition.get(
+                "kind"
+            ) == "repository-presentation" else {}
+            errors.extend(_snapshot_v3_decision_errors(
+                documents, prior_documents, changed_paths, surface_sha256,
+            ))
+        except _SNAPSHOT_V1_FAILURES:
+            _v3_error(errors, "transition state is unavailable")
+        errors.extend(_snapshot_lineage_contract_errors(
+            root, prior_origin, prior_node, prior_revisions,
+            (*lineage, origin), cache,
+        ))
+    cache[key] = not errors
+    return errors
+
+
 def _snapshot_lineage_contract_errors(
     root, origin, node, revisions, lineage, cache,
 ):
@@ -2391,6 +2633,10 @@ def _snapshot_lineage_contract_errors(
             )
         if schema == _SNAPSHOT_V2_SCHEMA:
             return _snapshot_v2_lineage_errors(
+                root, origin, node, revisions, lineage, cache,
+            )
+        if schema == SNAPSHOT_V3_SCHEMA:
+            return _snapshot_v3_lineage_errors(
                 root, origin, node, revisions, lineage, cache,
             )
         return [f"unsupported revision-bound snapshot schema: {schema!r}"]
@@ -2600,14 +2846,87 @@ def _validate_closeout_snapshot_v2(
         ))
 
 
+def _validate_closeout_snapshot_v3(
+    root, program, acceptance, evaluation_digest, errors,
+    revision=None, lineage=(), cache=None,
+):
+    cache = {} if cache is None else cache
+    node = _snapshot_node_from_program(program)
+    if not isinstance(node, dict):
+        _closeout_error(errors, "shape is invalid")
+        return
+    try:
+        golden = _snapshot_v1_documents(root, revision)[4]
+    except _SNAPSHOT_V1_FAILURES:
+        golden = {}
+    errors.extend(
+        f"revision-bound v3 {message}"
+        for message in closed_maintenance_snapshot_errors(
+            program, acceptance, golden,
+        )
+    )
+    if node.get("evaluationContractSha256") != evaluation_digest:
+        _closeout_error(errors, "evaluation contract drifted")
+    try:
+        origin, latest, replay, current_run = _snapshot_v1_lineage(
+            root, node, revision or "HEAD", cache,
+        )
+    except _SNAPSHOT_V1_FAILURES:
+        _closeout_error(errors, "predecessor lineage is unavailable")
+        return
+    if replay:
+        _closeout_error(errors, "lineage replays a non-current node")
+    match = re.fullmatch(
+        _SNAPSHOT_V3_PREDECESSOR_RE,
+        node.get("predecessorSnapshotRef") or "",
+    )
+    if latest is None or match is None or match.group(1) != latest[0]:
+        _closeout_error(errors, "predecessor is not latest accepted snapshot")
+        return
+    try:
+        current_documents = _snapshot_v1_documents(root, revision)
+        current_documents = (
+            current_documents[0], program, acceptance,
+            current_documents[3], current_documents[4],
+        )
+        prior_documents = _snapshot_v1_documents(root, latest[0])
+        changed_paths = _snapshot_v3_changed_paths(root, latest[0], revision)
+        transition = node.get("acceptanceTransition")
+        surface_sha256 = _snapshot_v3_presentation_sha256(
+            root, revision,
+        ) if isinstance(transition, dict) and transition.get(
+            "kind"
+        ) == "repository-presentation" else {}
+        errors.extend(_snapshot_v3_decision_errors(
+            current_documents, prior_documents, changed_paths, surface_sha256,
+        ))
+        if origin is not None and revision is None \
+                and _snapshot_v3_changed_paths(root, origin):
+            _v3_error(errors, "worktree changed without a successor snapshot")
+    except _SNAPSHOT_V1_FAILURES:
+        _v3_error(errors, "transition state is unavailable")
+    errors.extend(_snapshot_lineage_contract_errors(
+        root, latest[0], latest[1], latest[2], lineage, cache,
+    ))
+    if origin is not None:
+        errors.extend(_snapshot_v3_lineage_errors(
+            root, origin, node, current_run, lineage, cache,
+        ))
+
+
 @_snapshot_read_scope
 def _validate_closeout_snapshot(
     root, program, acceptance, criterion_ids, evaluation_digest, errors,
     _revision=None, _lineage=(), _cache=None,
 ):
     _cache = {} if _cache is None else _cache
-    increment = program.get("increment", {})
-    value = increment.get("closeoutSnapshot")
+    value = _snapshot_node_from_program(program)
+    if isinstance(value, dict) and value.get("schema") == SNAPSHOT_V3_SCHEMA:
+        _validate_closeout_snapshot_v3(
+            root, program, acceptance, evaluation_digest, errors,
+            _revision, _lineage, _cache,
+        )
+        return
     if isinstance(value, dict) and value.get("schema") == _SNAPSHOT_V2_SCHEMA:
         _validate_closeout_snapshot_v2(
             root, program, acceptance, evaluation_digest, errors,
@@ -3702,7 +4021,7 @@ def _gt20_v5_agent_recovery_valid(envelope, mechanism):
 
 
 def _validate_exact_package_evidence_lifecycle(
-    root, program, errors, revision=None,
+    root, program, acceptance, errors, revision=None,
 ):
     increment = program.get("increment") if isinstance(program, dict) else None
     lifecycle = increment.get("exactPackageEvidenceLifecycle") \
@@ -4101,6 +4420,12 @@ def _validate_exact_package_evidence_lifecycle(
         isinstance(snapshot, dict) and snapshot.get("state") == "closed"
         and program.get("status") == "ready"
     )
+    verified_maintenance = (
+        is_modern
+        and is_structurally_valid_closed_maintenance_snapshot(
+            program, acceptance, golden,
+        )
+    )
     if (
         not isinstance(evidence, dict)
         or set(evidence) != {"locator", "sha256", "evaluatedRevision"}
@@ -4114,7 +4439,7 @@ def _validate_exact_package_evidence_lifecycle(
             _GT20_V6_EVIDENCE_LOCATOR if is_v6
             else _GT20_V5_EVIDENCE_LOCATOR
         ))
-        or not (verified_reopened or verified_closed)
+        or not (verified_reopened or verified_closed or verified_maintenance)
     ):
         errors.append("exact package evidence verified state is invalid")
         return
@@ -5173,7 +5498,7 @@ def _validate_program(
                 errors, revision,
             )
         _validate_exact_package_evidence_lifecycle(
-            root, program, errors, revision,
+            root, program, acceptance, errors, revision,
         )
 
     prompt = program.get("goalModePrompt")
@@ -5811,6 +6136,7 @@ def _snapshot_v1_evaluation_digest(acceptance, golden):
         "criteria": [
             {field: item.get(field) for field in semantic_fields}
             for item in criteria if isinstance(item, dict)
+            and isinstance(item.get("requiredEvidenceClasses"), list)
             and "representative-behavior" in item.get("requiredEvidenceClasses", [])
         ] if isinstance(criteria, list) else [],
         "evaluationProtocol": golden.get("evaluationProtocol"),
@@ -6146,6 +6472,111 @@ def _snapshot_v2_contract_errors(root, revision, documents):
     return errors
 
 
+def _snapshot_v3_contract_errors(root, revision, documents):
+    constitution, program, acceptance, guidance, golden = documents
+    errors = []
+    node = _snapshot_node_from_program(program)
+    match = re.fullmatch(
+        _SNAPSHOT_V3_PREDECESSOR_RE,
+        node.get("predecessorSnapshotRef") if isinstance(node, dict) else "",
+    )
+    if match is None:
+        _v3_error(errors, "snapshot predecessor is invalid")
+    else:
+        try:
+            predecessor = _snapshot_v1_documents(root, match.group(1))
+            changed_paths = _snapshot_v3_changed_paths(
+                root, match.group(1), revision,
+            )
+            transition = node.get("acceptanceTransition")
+            surface_sha256 = _snapshot_v3_presentation_sha256(
+                root, revision,
+            ) if isinstance(transition, dict) and transition.get(
+                "kind"
+            ) == "repository-presentation" else {}
+            errors.extend(_snapshot_v3_decision_errors(
+                documents, predecessor, changed_paths, surface_sha256,
+            ))
+        except _SNAPSHOT_V1_FAILURES:
+            _v3_error(errors, "transition state is unavailable")
+    product_id = constitution.get("productId")
+    if any(item.get("schema") != 3 for item in (
+        constitution, program, acceptance,
+    )):
+        _v3_error(errors, "authority schema is invalid")
+    if not _nonempty_string(product_id) or {
+        product_id, program.get("productId"), acceptance.get("productId"),
+        guidance.get("productId"),
+    } != {product_id}:
+        _v3_error(errors, "product identities differ")
+    if (
+        program.get("release") != acceptance.get("release")
+        or program.get("distributionVersion") != acceptance.get(
+            "distributionVersion"
+        )
+        or program.get("constitution") != _SNAPSHOT_V1_AUTHORITY_REFS[0]
+        or program.get("acceptance") != _SNAPSHOT_V1_AUTHORITY_REFS[2]
+        or acceptance.get("constitution") != _SNAPSHOT_V1_AUTHORITY_REFS[0]
+        or acceptance.get("program") != _SNAPSHOT_V1_AUTHORITY_REFS[1]
+    ):
+        _v3_error(errors, "authority references differ")
+    identity = constitution.get("identity")
+    plugin_ids = identity.get("pluginIds") if isinstance(identity, dict) else None
+    if (
+        identity_contract_errors(product_id, identity)
+        or re.fullmatch(r"https://github\.com/[^/]+/[^/]+", identity.get(
+            "repository", ""
+        )) is None
+        or not isinstance(plugin_ids, list)
+        or len(plugin_ids) != len(set(plugin_ids))
+    ):
+        _v3_error(errors, "identity is invalid")
+    adaptive = guidance.get("adaptiveSystem") \
+        if isinstance(guidance, dict) else None
+    if (
+        guidance.get("schema") != 1
+        or not isinstance(guidance.get("wholeSystemBalanceReview"), dict)
+        or not isinstance(adaptive, dict)
+        or not isinstance(adaptive.get("stageStateContract"), dict)
+    ):
+        _v3_error(errors, "guidance is invalid")
+    tasks = golden.get("tasks") if isinstance(golden, dict) else None
+    task_ids = [item.get("id") for item in tasks or [] if isinstance(item, dict)]
+    if (
+        golden.get("schema") != 1 or not isinstance(tasks, list) or not tasks
+        or len(task_ids) != len(tasks) or len(task_ids) != len(set(task_ids))
+        or any(not _nonempty_string(item) for item in task_ids)
+    ):
+        _v3_error(errors, "Golden Tasks are invalid")
+    errors.extend(_snapshot_v1_projection_shape_errors(program, constitution))
+    errors.extend(_snapshot_v1_evaluation_history_errors(acceptance, golden))
+    errors.extend(_snapshot_v1_evidence_errors(
+        root, program, acceptance, revision, False,
+    ))
+    public_release = acceptance.get("publicRelease")
+    if not isinstance(public_release, dict):
+        _v3_error(errors, "public release record is invalid")
+    else:
+        locator = public_release.get("releaseNotes")
+        expected = public_release.get("releaseNotesSha256")
+        try:
+            actual = sha256(_snapshot_bytes(root, locator, revision)).hexdigest()
+            if actual != expected or not _SNAPSHOT_V1_SHA256_RE.fullmatch(
+                expected or ""
+            ):
+                _v3_error(errors, "release notes digest mismatch")
+        except _SNAPSHOT_V1_FAILURES:
+            _v3_error(errors, "release notes are unavailable")
+    errors.extend(_snapshot_v1_projection_package_errors(
+        root, program, constitution, revision,
+    ))
+    if not isinstance(node, dict) or node.get(
+        "evaluationContractSha256"
+    ) != _snapshot_v1_evaluation_digest(acceptance, golden):
+        _v3_error(errors, "evaluation contract digest mismatch")
+    return errors
+
+
 @_snapshot_read_scope
 def _snapshot_revision_contract_errors(root, revision, documents=None):
     if (
@@ -6163,14 +6594,14 @@ def _snapshot_revision_contract_errors(root, revision, documents=None):
         ):
             raise TypeError("revision-bound snapshot documents are malformed")
         program = documents[1]
-        increment = program.get("increment")
-        node = increment.get("closeoutSnapshot") \
-            if isinstance(increment, dict) else None
+        node = _snapshot_node_from_program(program)
         schema = node.get("schema") if isinstance(node, dict) else None
         if schema == _SNAPSHOT_V1_SCHEMA:
             return _snapshot_v1_contract_errors(root, revision, documents)
         if schema == _SNAPSHOT_V2_SCHEMA:
             return _snapshot_v2_contract_errors(root, revision, documents)
+        if schema == SNAPSHOT_V3_SCHEMA:
+            return _snapshot_v3_contract_errors(root, revision, documents)
         return [f"unsupported revision-bound snapshot schema: {schema!r}"]
     except _SNAPSHOT_V1_IO_EXCEPTIONS:
         return ["revision-bound snapshot authority documents are unavailable"]
@@ -6391,11 +6822,20 @@ def verify_product(root, review_bundle=None):
         if isinstance(criterion, dict) and criterion.get("assessment") == "verified"
     )
     checkout_clean = clean_git_checkout(root)
+    cycle = program.get("maintenanceCycle")
+    closeout = _snapshot_node_from_program(program)
+    v3_candidate_eligible = (
+        not isinstance(closeout, dict)
+        or closeout.get("schema") != SNAPSHOT_V3_SCHEMA
+        or isinstance(cycle, dict)
+        and cycle.get("candidateEligible") is True
+    )
     repository_ready = (
         criteria_verified
         and program.get("status") == "ready"
-        and isinstance(program.get("increment"), dict)
-        and program["increment"].get("state") == "completed"
+        and isinstance(increment, dict)
+        and increment.get("state") == "completed"
+        and v3_candidate_eligible
         and checkout_clean
         and not errors
     )
@@ -6417,6 +6857,19 @@ def verify_product(root, review_bundle=None):
             if isinstance(program.get("goalModePrompt"), dict)
             else None
         ),
+        "maintenanceCycle": {
+            "id": cycle.get("id"),
+            "state": cycle.get("state"),
+            "currentBoundaryId": cycle.get("currentBoundaryId"),
+            "transitions": [
+                {
+                    "id": item.get("id"),
+                    "state": item.get("state"),
+                }
+                for item in cycle.get("orderedTransitions", [])
+                if isinstance(item, dict)
+            ],
+        } if isinstance(cycle, dict) else None,
         "externalGates": {
             operand: "not-evaluated-by-verifier"
             for operand in EXTERNAL_COMPLETION_OPERANDS

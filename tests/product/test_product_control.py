@@ -81,6 +81,7 @@ GUIDANCE = 'product/reshaping-guidance.json'
 CODEX_PATH = 'plugins/yiyuan-accord-codex/adapter.json'
 CONTINUATION = 'docs/operations/CONTINUATION.md'
 SNAPSHOT_REF = 'product/program.json#/increment/closeoutSnapshot'
+V3_SNAPSHOT_REF = 'product/program.json#/maintenanceCycle/closeoutSnapshot'
 TREE_SCAN_ERR = 'active tree identity scan is indeterminate'
 LIFECYCLE_ERR = 'provisional GT-20/21 lifecycle transition is invalid'
 GT21_POSTSTATE_ERR = 'provisional GT-21 independent post-state is invalid'
@@ -678,8 +679,38 @@ class ProductControlTests(unittest.TestCase):
         report = verify_product(root)
         self.at(report['valid'], report['errors'])
         self.ae(report['criteria']['ids'], CRITERIA)
+        program = _read(root, P)
+        maintenance_kind = program['maintenanceCycle'][CS][AT]['kind']
+        expected_progress = {
+            'transition-contract-migration': (
+                'repository-presentation',
+                ['completed', 'active', 'pending'],
+            ),
+            'repository-presentation': (
+                'whole-system-review',
+                ['completed', 'completed', 'active'],
+            ),
+        }[maintenance_kind]
+        self.ae(
+            report['maintenanceCycle'],
+            {
+                'id': 'post-v3.1-maintenance',
+                'state': 'active',
+                'currentBoundaryId': expected_progress[0],
+                'transitions': [
+                    {'id': stage_id, 'state': stage_state}
+                    for stage_id, stage_state in zip(
+                        (
+                            'successor-baseline',
+                            'repository-presentation',
+                            'whole-system-review',
+                        ),
+                        expected_progress[1],
+                    )
+                ],
+            },
+        )
         if report['programStatus'] == 'active':
-            program = _read(root, P)
             stages = program['increment']['workItems'][0]['closeoutSequence']
             self.ai('self-audit-remediate-and-reaccept-whole-system-balance',
                           {stage['id'] for stage in stages})
@@ -1088,6 +1119,20 @@ class ProductControlTests(unittest.TestCase):
                  if step['state'] in {'active', 'blocked'}],
             )
 
+    def test_v3_unchanged_node_carry_rejects_repository_drift(self):
+        with _indexed() as root:
+            path = root / 'docs/architecture.md'
+            path.write_text(
+                path.read_text(encoding='utf-8') + '\nUnbound carry drift.\n',
+                encoding='utf-8',
+            )
+            _git(root, 'add', 'docs/architecture.md')
+            _commit(root, 'invalid unchanged-node carry')
+            self.has(
+                _errors(root),
+                'revision-bound v3 carry run changes repository content',
+            )
+
     def test_provisional_gt20_revision_is_validated_while_r3_is_planned(self):
         with _provisional() as root:
             source = _read(root, GT2021_SOURCE)
@@ -1470,10 +1515,20 @@ class ProductControlTests(unittest.TestCase):
             self.ae(errors, [])
 
     def test_reacceptance_projects_current_stage_without_model_binding(self):
-        p=_read(ROOT,P);want=(['completed','active','pending'],['completed']*3)[p['status']=='ready']
+        p=_read(ROOT,P)
+        maintenance = p['maintenanceCycle']
+        maintenance_kind = maintenance[CS][AT]['kind']
+        want = {
+            'transition-contract-migration': ['completed', 'active', 'pending'],
+            'repository-presentation': ['completed', 'completed', 'active'],
+        }[maintenance_kind]
         a=_read(ROOT,A);self.ai('frozen pre-close',a['candidateVerification']['rule'])
         for stages in (p['increment'][FM]['process']['orderedSteps'],p['increment']['workItems'][0]['closeoutSequence']):
-            self.ae([step['state'] for step in stages[-3:]],want)
+            self.ae([step['state'] for step in stages[-3:]], ['completed'] * 3)
+        self.ae(
+            [step['state'] for step in maintenance['orderedTransitions']],
+            want,
+        )
         x=_clone(p['increment'])
         x[FM]['process']['orderedSteps'][-2]['state']='进行中'
         e=[]
@@ -2423,6 +2478,8 @@ class ProductControlTests(unittest.TestCase):
     def test_snapshot_v2_reopens_only_the_invalidated_package_boundary(self):
         NE,TE,D,C=_snapshot_v2_node_errors,_snapshot_v2_transition_errors,_snapshot_documents,_clone
         current=_read(ROOT,P)['increment'][CS]; rev=None
+        if current.get('schema') == product_control.SNAPSHOT_V3_SCHEMA:
+            current=D(ROOT,current[PS].split(':',1)[0])[1]['increment'][CS]
         if current[AT]['kind'] == 'post-release-reconciliation':
             post=C(current); rev=current[PS].split(':',1)[0]
             current=D(ROOT,rev)[1]['increment'][CS]
@@ -2522,6 +2579,7 @@ class ProductControlTests(unittest.TestCase):
     def test_exact_package_evidence_fails_closed_on_drift(self):
         with _indexed() as root:
             program = _read(root, P)
+            acceptance = _read(root, A)
             lifecycle = program['increment']['exactPackageEvidenceLifecycle']
             self.ae(lifecycle, {
                 'schema': 'yiyuan-accord-exact-package-evidence-lifecycle/v7',
@@ -2566,7 +2624,9 @@ class ProductControlTests(unittest.TestCase):
                 changed = _clone(program)
                 changed['increment']['exactPackageEvidenceLifecycle'] = value
                 errors = []
-                _validate_exact_package_evidence_lifecycle(root, changed, errors)
+                _validate_exact_package_evidence_lifecycle(
+                    root, changed, acceptance, errors,
+                )
                 return errors
 
             self.ae(validate(lifecycle), [])
@@ -3883,7 +3943,7 @@ class ProductControlTests(unittest.TestCase):
             increment[FM]['process']['orderedSteps'][1][
                 'dependsOn'
             ] = []
-            snapshot = increment[CS]
+            snapshot = program['maintenanceCycle'][CS]
             snapshot['revisionBinding']['exactCommitSha'] = '0' * 40
             snapshot['evaluationContractSha256'] = '0' * 64
             snapshot[AT]['affectedCriterionIds'] = ['R2']
@@ -3899,39 +3959,39 @@ class ProductControlTests(unittest.TestCase):
                             'fourSurfaceMapping outcomeId',
                             'fourSurfaceMapping.process phases',
                             'orderedSteps[1].dependsOn',
-                            'revision-bound v2 snapshot identity',
+                            'revision-bound v3 revision binding is invalid',
                             'closeoutSnapshot evaluation contract',
-                            'revision-bound v2 acceptance transition',
+                            'revision-bound v3 acceptance transition',
                             'processLossControl.evolutionHorizonRule',
                             )
 
         with _indexed() as root:
             program = _read(root, P)
-            snapshot = program['increment'][CS]
+            snapshot = program['maintenanceCycle'][CS]
             origin = _snapshot_v1_lineage(
                 root, snapshot, 'HEAD', {},
             )[0]
             snapshot[PS] = (
-                f'{origin}:' + SNAPSHOT_REF
+                f'{origin}:' + V3_SNAPSHOT_REF
             )
             snapshot[AT]['affectedCriterionIds'] = ['R2']
             _write(root, P, program)
-            self.has(_errors(root), 'revision-bound v2 acceptance transition')
+            self.has(_errors(root), 'revision-bound v3 acceptance transition')
 
         with _indexed() as root:
             current = _read(root, P)
             prior = _clone(current)
-            prior['increment'][CS]['id'] += '.different'
+            prior['maintenanceCycle'][CS]['id'] += '.different'
             _write(root, P, prior)
             _git(root, 'add', P)
             _commit(root, 'different prior snapshot')
-            current_snapshot = current['increment'][CS]
+            current_snapshot = current['maintenanceCycle'][CS]
             current_snapshot[PS] = None
             current_snapshot[AT].update(
                 kind='snapshot-bootstrap', affectedCriterionIds=CRITERIA)
             _write(root, P, current)
             self.has(_errors(root),
-                            'revision-bound v2 snapshot predecessor is invalid')
+                            'revision-bound v3 maintenance snapshot predecessor is invalid')
 
         snapshot_ref = SNAPSHOT_REF
 
@@ -3959,6 +4019,10 @@ class ProductControlTests(unittest.TestCase):
             PS
         ].split(':', 1)[0]
         historical_v1 = '9bd82876e2b350787edcab09e3835426e069272c'
+        historical_v2_open = 'b159b5e44a8ec5d4247434b5a34a4755e1462b61'
+        historical_v2_post_release = (
+            '299ae4011b0e48df586a137a2fbdcaff715e55c7'
+        )
         prior = json.loads(_git(
             ROOT, 'show', f'{historical_v1}:{P}', text=True,
         ))
@@ -3986,7 +4050,7 @@ class ProductControlTests(unittest.TestCase):
             _read(ROOT, C), _clone(current), _read(ROOT, A),
             _read(ROOT, GUIDANCE), _read(ROOT, G),
         )
-        unsupported[1]['increment'][CS]['schema'] = (
+        unsupported[1]['maintenanceCycle'][CS]['schema'] = (
             'yiyuan-accord-stage-closeout-snapshot/v999'
         )
         self.has(
@@ -4167,7 +4231,7 @@ class ProductControlTests(unittest.TestCase):
             revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             self.ae(_snapshot_bytes(root, locator, revision), raw)
 
-        with _indexed(latest[1][PS].split(':',1)[0] if current['status']=='ready' else None) as root:
+        with _indexed(historical_v2_open) as root:
             program = _read(root, P)
             drifted = _clone(program)
             drifted['increment'][FM]['plan']['hypothesis'] += ' Drift.'
@@ -4177,7 +4241,7 @@ class ProductControlTests(unittest.TestCase):
                               encoding='utf-8')
             self.ae(snapshot_errors(root, program), [])
 
-        with _indexed() as root:
+        with _indexed(historical_v2_post_release) as root:
             original = _read(root, P)
             drifted = _clone(original)
             drifted['increment'][FM]['plan']['hypothesis'] += ' Drift.'
@@ -4190,7 +4254,7 @@ class ProductControlTests(unittest.TestCase):
             self.has(snapshot_errors(root),
                      'revision-bound v2 carry run is invalid')
 
-        with _indexed() as root:
+        with _indexed(historical_v2_post_release) as root:
             cache = {}
 
             def invalid_carry(
