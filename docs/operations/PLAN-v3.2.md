@@ -11,7 +11,7 @@
 |---|---|---|---|
 | 源头校准与继承基线 | 本地实现，未发布 | 从必要用户结果反证现有立意与职责分工，不预设 Skill、Hook、核心、索引、图或数量正确；区分任务执行、用户生命周期和维护验收，校准受影响基线与映射，保留无关的已验证事实及历史。 | 职责必要性、实际承担者与剩余缺口已明确；受影响源、计划、工序和验收一致且本地回归通过。这只关闭本轮源头校准，不证明宿主效果或最终架构充分。 |
 | 系统短板与工程优化 | 本地实现，未发布 | 核对相关官方能力、实际宿主暴露和职责；需要时从同一事实源派生关系视图或索引，按真实调用者、影响及成本删减或补强，再测量受影响工程路径。 | 已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。 |
-| 当前开发证据准入通路 | 进行中 | 有版本的公开证据入口及正反回归已本地实现；继续绑定真实作用域、入口及关键环境轴、验收用例和独立来源核验。先提交定义、测试判据及被测实现 A，再观察 E，最后在候选 B 计算准入并接受绑定 B 的真实独立评审。按受影响依赖复用证据，不跨入口或环境拼接；保持历史隔离、静态检查和有据复杂度预算。 | 同一公开验证入口按作用域分别计算功能、增量价值、生命周期和候选资格；拒绝换主体、旧定义、来源不足、终态过期、环境漂移、跨事件或矛盾后态、未闭合残留及缺失独立评审。合成回归仅验证准入器；真实作用域和来源接入仍未完成，实际来源核验、授权、精确推送、托管及公共后态须独立成立。 |
+| 当前开发证据准入通路 | 进行中 | 按获批校准预绑定整版必需范围，分别落实每宿主功能、适用生命周期及整体价值；每宿主完整职责/质量/场景只记一次总账，不对三类声明重复展开全集。继续绑定真实作用域、入口、关键环境轴、判据和独立来源。先提交定义及实现 A，再观察 E，最后在候选 B 计算准入并接受绑定 B 的真实独立评审。调整必需清单或适用范围须按验收变更复核；按受影响依赖复用证据，保留静态检查和有据成本预算。 | 同一公开入口区分必需功能声明闭合与整版资格；漏范围、删用例、跨宿主拼半套或换入口/环境不能掩盖缺口。继续拒绝旧定义、来源不足、过期/漂移、跨事件或矛盾后态、未闭合残留及缺失独立评审。合成回归仅验证准入器；真实范围、判据充分性和来源接入仍未完成，授权、精确推送、托管及公共后态独立成立。 |
 | 整体执行链、原生覆盖与遗留形态审查 | 待开展 | 用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、发现与比较、执行及状态、故障接管、验收和清理检查整体连接；原生是起点而非停止规则，缺口或可信净收益机会才扩展检索，复用足够的宿主发现与执行链。自举同理。检查资产必要性、调用者、过期导航与维护负担，按证据保留、合并、替换或退役；同步受影响声明、工序和验收，历史证据不改写，功能不降格。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
 | 动态适应、干扰与故障验收 | 待开展 | 按声明选择原生对照、最小可交付组合与受控混合环境；同一被测执行/状态变化联合核验适用纠正、恢复及资源后态，实际跨载体或来源转移才核验目的端与来源释放，不强制交接。精确包安装前和卸载后由仍可用的生命周期执行者承担；不依赖评估器救援或被移除的 Skill。 | 普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。 |
 | 3.2 定版、发布与收尾 | 待开展 | 依据已建立的当前证据准入通路计算候选资格，不将静态 PASS 当作功能验收。复核资产必要性与受影响功能，按精确候选及证据校准 CHANGELOG.md；提交并推送完整候选，核对精确包、独立评审与托管检查，再依已有条件授权发布新的 3.2。发布后按用户新增授权，盘点其现有 Codex/Claude 中 Accord 的安装来源及共享关系，经受支持的宿主或实际管理器将已安装 Accord 升至该精确版本；先确认备份和可用回退路径，保护配置、模型路线、其他扩展及正在运行的任务。不顺带升级宿主应用、安装缺失组件或绕过账户限制。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。另核验本机选定 Accord 的安装版本、实际激活和普通入口效果，不把缓存更新当生效；更新失败须恢复最后安全版本并披露未完成项，未经验证不关闭本机升级。 |
@@ -53,11 +53,15 @@ The inherited responsibilities below are a review inventory, not an immutable fe
 
 ## 当前证据准入
 
-准入契约：`yiyuan-accord-evidence-admission/v1`；已声明 0 个作用域、0 个用例。数量不是通过记录。
+准入契约：`yiyuan-accord-evidence-admission/v2`；已声明 0 个作用域、0 个用例。数量不是通过记录。
 
-Static claimCeiling remains source-conformance only. Bind actual case oracles and explicit claim scopes before collecting evidence: each scope fixes its entry, decisive environment axes and applicable required duties, quality and scenarios; cases may vary other conditions for legitimate transition tests. Different scopes cannot borrow effects, and declaring a scope does not authenticate its adequacy. Do not require every inventoried entry. A caller-selected authenticated, independent, bounded read-only observer supplies checked source facts, same-episode facets, current conditions and authentic final-candidate reviews; callable shape and digest echo prove none of that trust. The verifier computes conditional admission by exact source/package/oracle identity, scope, facts and final freshness, never stored assessments or diagnostic observations. Empty scopes/cases mean no functional qualification. Review claim completeness and applicability against actual needs. Human authority, external gates and publication remain separate.
+Bind requiredCoverage from authorized product needs before collecting evidence, independently of available or successful cases. All three claim groups remain required. An undefined required scope stays unbound; removing its cases, scope or claim cannot erase the obligation. Every delivered host needs required function and package-lifecycle scopes, plus complete duty, quality and scenario accounting across its required scopes once, not once per claim. Overall incremental value requires suitable bounded comparisons; native-sufficient duties need not individually demonstrate Accord gain, and one host's value cannot be attributed to another. Scope and oracle adequacy, representative whole-chain coverage and the legitimacy of any reduction require independent review; fresh hashes alone do not validate them. Each scope fixes its entry, decisive environment axes and applicable requirements; cases may vary other conditions for legitimate transitions but cannot borrow another scope's effects. The entry inventory is not a promise to test every entry. A caller-selected authenticated, independent, bounded read-only observer supplies checked same-episode facts, current conditions and authentic final-candidate reviews. Callable shape and digest echo do not authenticate those sources. Compute conditional admission by exact source/package/oracle identity, applicable coverage and final freshness, not stored assessments or diagnostics. Changes to requiredCoverage or applicable definitions invalidate dependent evidence. Static claimCeiling, empty cases and undeclared or unresolved requirements cannot grant qualification. Human authority, hosted checks and publication remain separate.
 
 计划只投影验收定义；实际资格由受检来源、精确主体和当前条件计算。静态 CLI 与合成测试不证明实际功能。
+
+- `function` 必需作用域：codex-function, claude-code-function；未绑定或缺证据仍未完成。
+- `package-lifecycle` 必需作用域：codex-lifecycle, claude-code-lifecycle；未绑定或缺证据仍未完成。
+- `incremental-value` 必需作用域：product-value；未绑定或缺证据仍未完成。
 
 
 ## 宿主家族与入口边界

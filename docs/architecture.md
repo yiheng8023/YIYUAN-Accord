@@ -133,10 +133,9 @@ unchanged predecessor, declared package identity, namespace/legal carriage,
 hint transport, complexity and bounded changed paths. Their PASS does not
 establish functionality, value or candidate eligibility.
 
-The schema-v4 source adds `acceptance.admission`: explicit claim scopes, case
-oracles, relevant conditions, freshness windows and responsibility/quality/scenario
-mappings. Current scopes and cases are empty. Stored duty assessments, diagnostic observations and
-the static claim ceiling remain unverified; editing them cannot grant acceptance.
+The schema-v4 source's `acceptance.admission` v2 prebinds required scope IDs for
+function, package lifecycle and overall incremental value. Actual scope/case
+definitions remain open. Stored assessments and diagnostics grant no acceptance.
 
 The Python entry `verify_product(root, evidence=observer)` reuses bounded Git
 reads, exact package identity and independent-review validation. The caller must
@@ -163,15 +162,24 @@ and per-case conditions. The caller owns source authentication, observation
 deadlines, independent attribution and revocation checks; echoing a digest proves
 none of them. The verifier rechecks Git, cleanliness and time before qualification.
 
-Scopes bind the claimed host entry, decisive environment axes and applicable
-requirements independently of which cases pass. Cases may vary other conditions
-for legitimate transitions, but must stay within their declared scope. Coverage
-is evaluated per scope and claim: complementary CLI/desktop results, or different
-environment profiles, cannot be merged into one complete experience. Unbound
-required coverage remains visible; the inventory of other entries does not become
-an automatic adaptation promise. Scope and shared entry rules also bind the digest.
+`requiredCoverage` comes from authorized needs, not successful samples. Missing
+IDs stay unbound; deleting scopes or cases cannot erase their obligations. Each
+delivered host needs required function and lifecycle scopes. Whole-product duty,
+quality and scenario accounting runs once per host over its required scopes,
+not once per claim. Overall value uses its own required comparisons; it need not
+claim a gain for every native-sufficient duty or every host. A local benefit
+cannot be attributed to unobserved hosts. Optional scopes cannot fill this ledger.
 
-Reports distinguish accepted cases, scoped open/unbound coverage, functionality,
+Scopes bind entry, decisive conditions and applicable requirements. Cases may
+vary other conditions for legitimate transitions but cannot borrow another
+scope's effects. Complementary hosts cannot fill each other's inventory gaps.
+`functionalCompletion` closes only required function scopes, not the product's
+lifecycle, value or total-coverage gates. The entry inventory is not a promise to
+test every entry. Requirement/definition changes invalidate dependent evidence;
+independent review must still judge coverage, oracle adequacy and the legitimacy
+of any reduction. A valid hash does not make a convenient sample representative.
+
+Reports distinguish accepted cases, scoped open/unbound and product coverage, functionality,
 incremental value and conditional candidate eligibility. Missing, conflicting or
 stale facts do not qualify; unaffected accepted cases remain visible. Structured
 fixtures validate this admission logic only. Real case adequacy, actual entry and

@@ -216,13 +216,22 @@ class DevelopmentContractTests(unittest.TestCase):
         rendered = render_development_plan(self.contract)
         self.assertTrue(policy["rule"] in rendered, "source admission rule missing from plan")
         self.assertTrue(policy["schema"] in rendered, "admission version missing from plan")
+        for claim, ids in policy["requiredCoverage"].items():
+            self.assertTrue(claim in rendered, claim)
+            for scope_id in ids:
+                self.assertTrue(scope_id in rendered, scope_id)
 
     def test_current_admission_policy_requires_bounded_explicit_definitions(self):
-        for field, value in (("schema", "unversioned"), ("rule", ""),
-                             ("reviewMaxAgeSeconds", True), ("scopes", {}), ("cases", [{}])):
+        for field, value in (("schema", "yiyuan-accord-evidence-admission/v1"), ("rule", ""),
+                             ("reviewMaxAgeSeconds", True), ("scopes", {}), ("cases", [{}]),
+                             ("requiredCoverage", {}), ("requiredCoverage", [])):
             altered = copy.deepcopy(self.contract)
             altered["acceptance"]["admission"][field] = value
             self.assertTrue(self.errors(altered), field)
+        for value in ([], None, [["nested"]], [""], ["x", "x"], ["x"] * 129):
+            altered = copy.deepcopy(self.contract)
+            altered["acceptance"]["admission"]["requiredCoverage"]["function"] = value
+            self.assertTrue(self.errors(altered), value)
 
     def test_quality_mapping_rejects_missing_malformed_or_unknown_references(self):
         for value in (None, {}, [], ["unknown-quality"], [["nested"]],

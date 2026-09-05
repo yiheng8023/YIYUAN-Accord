@@ -42,8 +42,12 @@ caller must do so through bounded read-only sources. See the architecture for
 the two-query boundary. No real cases or accepted records have been declared.
 The old maintenance state machine remains separate.
 
-Continue `development-evidence-admission` by binding concrete current case oracles,
-applicability and real source verification before evidence collection. Commit the
+Continue `development-evidence-admission` from the prebound required scope IDs in
+admission v2. Bind their actual applicability, whole-chain oracles and independent
+sources before collecting evidence. Missing scopes stay unbound; revise required
+coverage only as an acceptance change, never from the cases that happen to pass.
+Each host retains its complete inventory and applicable lifecycle; overall value
+has its own required comparison scope. Commit the
 evaluated implementation and acceptance definition as A; admit only compatible
 observations at candidate B with actual final-candidate reviews. Reuse unaffected
 evidence by dependencies, not by old PASS labels. Do not promote
@@ -76,8 +80,9 @@ whether the available host composition closes the duty.
   not the unavailable official Claude account. Keep provider/model and host
   attribution distinct. Other account-bound entries remain untested.
 - Controlled existing-host work and publication of accepted 3.2 are authorized.
-  New trust, data, accounts, material cost, personal installation/enablement or
-  unrelated effects still require their own bounded authority.
+  After publication, the source also binds the authorized upgrade of existing
+  Accord installations. Other personal changes, new trust, data, accounts,
+  material cost or unrelated effects still require bounded authority.
 - Maintain the unpublished CHANGELOG, commit and push the complete exact
   candidate before release, then satisfy the independent evidence, review,
   hosted, publication and post-state gates. Follow the source's ordered

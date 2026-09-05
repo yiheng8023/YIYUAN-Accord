@@ -553,6 +553,9 @@ def render_development_plan(contract):
               f"准入契约：`{admission['schema']}`；已声明 {len(admission['scopes'])} 个作用域、{len(admission['cases'])} 个用例。数量不是通过记录。", "",
               admission["rule"], "",
               "计划只投影验收定义；实际资格由受检来源、精确主体和当前条件计算。静态 CLI 与合成测试不证明实际功能。", ""]
+    for claim, ids in admission["requiredCoverage"].items():
+        lines.append(f"- `{claim}` 必需作用域：{', '.join(ids)}；未绑定或缺证据仍未完成。")
+    lines.append("")
     for scope in admission["scopes"]:
         case_ids = [c["id"] for c in admission["cases"] if c["scope"] == scope["id"]]
         lines.append(f"- `{scope['id']}` — `{scope['host']}/{scope['entry']}`；{scope['rule']} 用例：{', '.join(case_ids) or '尚未绑定'}。")

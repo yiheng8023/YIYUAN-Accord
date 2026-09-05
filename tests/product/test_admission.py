@@ -28,9 +28,11 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         # Isolate admission regressions from the separately tested production budget.
         c["changeBoundary"]["complexityBudget"]["maxProductCodeAndTestBytes"] += 50000
         c["acceptance"]["admission"] = {
-            "schema": "yiyuan-accord-evidence-admission/v1",
+            "schema": "yiyuan-accord-evidence-admission/v2",
             "rule": "Fixture-only independent source contract, not accepted product evidence.",
             "reviewMaxAgeSeconds": 3600, "scopes": [], "cases": [],
+            "requiredCoverage": {claim: ["codex", "claude-code"] for claim in (
+                "function", "incremental-value", "package-lifecycle")},
         }
         for projection in c["delivery"]["hostProjections"]:
             entry = next(row for row in c["capabilityMap"]["entrySurfaces"]["rows"]
@@ -180,14 +182,19 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         return verify_product(self.root, evidence=observer)
 
     def test_shared_admission_rule_change_invalidates_earlier_records(self):
-        with self.history():
-            records = self.capture_records()
-            contract = copy.deepcopy(self.contract)
-            contract["acceptance"]["admission"]["rule"] += " Revised independent-source requirement."
-            self.commit_contract(contract)
-            report = self.replay(records)
-        self.assertFalse(report["repositoryCandidateReady"])
-        self.assertEqual(report["evidenceAdmission"]["acceptedCases"], [])
+        for field in ("rule", "requiredCoverage"):
+            with self.subTest(field=field), self.history():
+                records = self.capture_records()
+                contract = copy.deepcopy(self.contract)
+                policy = contract["acceptance"]["admission"]
+                if field == "rule":
+                    policy[field] += " Revised independent-source requirement."
+                else:
+                    policy[field]["incremental-value"].append("future-comparison")
+                self.commit_contract(contract)
+                report = self.replay(records)
+                self.assertFalse(report["repositoryCandidateReady"])
+                self.assertEqual(report["evidenceAdmission"]["acceptedCases"], [])
 
     def test_independent_review_cannot_predate_its_final_subject(self):
         committed = int(self.git("show", "-s", "--format=%ct", "HEAD"))
@@ -227,8 +234,62 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["repositoryCandidateReady"])
         admission = report["evidenceAdmission"]
         self.assertFalse(any(admission["openCoverage"]["codex"]["claims"]["function"].values()))
-        self.assertTrue(admission["unboundCoverage"]["codex"]["incremental-value"]["duties"])
-        self.assertTrue(admission["unboundCoverage"]["codex"]["package-lifecycle"]["duties"])
+        self.assertEqual(admission["unboundCoverage"]["incremental-value"], ["claude-code", "codex"])
+        self.assertEqual(admission["unboundCoverage"]["package-lifecycle"], ["claude-code", "codex"])
+
+    def test_required_claims_use_bound_scopes_not_a_full_cross_product(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        policy.update(schema="yiyuan-accord-evidence-admission/v2", requiredCoverage={
+            "function": ["codex", "claude-code"],
+            "package-lifecycle": ["codex-lifecycle", "claude-code-lifecycle"],
+            "incremental-value": ["codex-value"],
+        })
+        for case, scope in zip(policy["cases"][:], policy["scopes"][:]):
+            case["claims"] = scope["claims"] = ["function"]
+            for claim, suffix, duty, axis in (
+                    ("package-lifecycle", "lifecycle", "package-lifecycle", "recovery-and-lifecycle"),
+                    ("incremental-value", "value", "verification-and-value", "user-burden-and-interference")):
+                if claim == "incremental-value" and case["host"] != "codex":
+                    continue
+                scoped = {**copy.deepcopy(scope), "id": case["id"] + "-" + suffix,
+                          "claims": [claim], "duties": [duty], "qualityAxes": [axis], "scenarios": []}
+                policy["scopes"].append(scoped)
+                policy["cases"].append({**copy.deepcopy(case), **{
+                    k: copy.deepcopy(scoped[k]) for k in ("id", "duties", "qualityAxes", "scenarios", "claims")},
+                    "scope": scoped["id"]})
+        with self.history():
+            self.commit_contract(contract)
+            report = verify_product(self.root, evidence=self.observer)
+        self.assertTrue(report["functionalCompletion"], report["errors"])
+        self.assertTrue(report["repositoryCandidateReady"], report["errors"])
+
+    def test_removing_scopes_and_cases_leaves_the_required_claims_unbound(self):
+        contract = copy.deepcopy(self.contract)
+        for field in ("scopes", "cases"):
+            contract["acceptance"]["admission"][field].pop(0)
+        with self.history():
+            self.commit_contract(contract)
+            report = verify_product(self.root, evidence=self.observer)
+        self.assertFalse(report["repositoryCandidateReady"])
+        self.assertFalse(report["functionalCompletion"])
+        self.assertEqual(report["evidenceAdmission"]["unboundCoverage"]["function"], ["codex"])
+
+    def test_complementary_hosts_cannot_erase_product_inventory_gaps(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        for field in ("duties", "qualityAxes", "scenarios"):
+            values = policy["scopes"][0][field]
+            middle = len(values) // 2
+            for index, part in enumerate((values[:middle], values[middle:])):
+                policy["scopes"][index][field] = policy["cases"][index][field] = part
+        with self.history():
+            self.commit_contract(contract)
+            report = verify_product(self.root, evidence=self.observer)
+        self.assertTrue(report["functionalCompletion"], report["errors"])
+        self.assertFalse(report["repositoryCandidateReady"])
+        for host in ("codex", "claude-code"):
+            self.assertTrue(all(report["evidenceAdmission"]["productCoverage"][host].values()))
 
     def test_invalid_prior_declaration_cannot_enter_the_revision_cache(self):
         with self.history():

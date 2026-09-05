@@ -18,7 +18,7 @@ from .guardrails import clean_git_checkout
 from .reviews import evaluate_review_bundle
 
 
-SCHEMA = "yiyuan-accord-evidence-admission/v1"
+SCHEMA = "yiyuan-accord-evidence-admission/v2"
 _LIMIT = 1_000_000
 _CLAIMS = {"function", "incremental-value", "package-lifecycle"}
 _CASE_FIELDS = set("id scope host entry duties qualityAxes scenarios claims oracle oracleFiles conditions maxAgeSeconds expected".split())
@@ -57,13 +57,19 @@ def _locator(value):
 def admission_contract_errors(contract):
     """Check declarations, not empirical adequacy of oracles or coverage claims."""
     policy = contract.get("acceptance", {}).get("admission")
-    if (not isinstance(policy, dict) or set(policy) != {"schema", "rule", "reviewMaxAgeSeconds", "scopes", "cases"}
+    if (not isinstance(policy, dict) or set(policy) != {"schema", "rule", "reviewMaxAgeSeconds", "requiredCoverage", "scopes", "cases"}
             or policy.get("schema") != SCHEMA or not _text(policy.get("rule"))
             or type(policy.get("reviewMaxAgeSeconds")) is not int or policy["reviewMaxAgeSeconds"] <= 0
             or any(not isinstance(policy.get(k), list) or len(policy[k]) > 128 for k in ("scopes", "cases"))):
         return ["current evidence admission policy is missing or invalid"]
     try:
         _json(policy)
+        required = policy["requiredCoverage"]
+        if (not isinstance(required, dict) or set(required) != _CLAIMS
+                or any(not isinstance(ids, list) or not 0 < len(ids) <= 128
+                       or not all(_text(v) for v in ids) or len(ids) != len(set(ids))
+                       for ids in required.values())):
+            return ["all three qualification claims must prebind required scope IDs"]
         sets = {
             "duties": {v["id"] for v in contract["acceptance"]["duties"]},
             "qualityAxes": {v["id"] for v in contract["systemOptimization"]["qualityAxes"]},
@@ -173,8 +179,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
               "acceptedCases": [], "openCoverage": {}, "unboundCoverage": {}, "functionalCompletion": False,
               "incrementalValue": "unverified", "candidateEligible": False,
               "checkoutClean": None, "errors": []}
-    cases = {v["id"]: v for v in contract["acceptance"]["admission"]["cases"]}
-    scopes = {v["id"]: v for v in contract["acceptance"]["admission"]["scopes"]}
+    policy = contract["acceptance"]["admission"]
+    cases = {v["id"]: v for v in policy["cases"]}
+    scopes = {v["id"]: v for v in policy["scopes"]}
     errors = report["errors"]
     hosts = {v["id"]: v for v in contract["delivery"]["hostProjections"]}
     required = {
@@ -302,18 +309,19 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             errors.append("evidence observer unavailable, invalid or subject changed")
             admitted.clear()
     report["acceptedCases"] = sorted(admitted)
-    completed = {claim: bool(cases) and not errors for claim in _CLAIMS}
+    bound = {claim: {key for key in ids if key in scopes and claim in scopes[key]["claims"]}
+             for claim, ids in policy["requiredCoverage"].items()}
+    report["unboundCoverage"] = {claim: sorted(set(ids) - bound[claim])
+                                 for claim, ids in policy["requiredCoverage"].items()}
+    completed = {claim: bool(bound[claim]) and not report["unboundCoverage"][claim] and not errors
+                 for claim in _CLAIMS}
+    report["productCoverage"] = {}
     for host in hosts:
-        report["unboundCoverage"][host] = {}
-        for claim in sorted(_CLAIMS):
-            declared = {k: set() for k in required}
-            for scope in scopes.values():
-                if scope["host"] == host and claim in scope["claims"]:
-                    for field in declared:
-                        declared[field].update(scope[field])
-            missing = {k: sorted(values - declared[k]) for k, values in required.items()}
-            report["unboundCoverage"][host][claim] = missing
-            completed[claim] &= not any(missing.values())
+        selected = [scopes[key] for key in set().union(*bound.values()) if scopes[key]["host"] == host]
+        report["productCoverage"][host] = {
+            k: sorted(values - {v for scope in selected for v in scope[k]}) for k, values in required.items()}
+        for claim in ("function", "package-lifecycle"):
+            completed[claim] &= any(scopes[key]["host"] == host for key in bound[claim])
     for scope_id, scope in scopes.items():
         row = {"host": scope["host"], "entry": scope["entry"],
                "conditions": copy.deepcopy(scope["conditions"]), "claims": {}}
@@ -326,8 +334,10 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     covered[field].update(cases[key][field])
             missing = {k: sorted(set(scope[k]) - values) for k, values in covered.items()}
             row["claims"][claim] = missing
-            completed[claim] &= bool(relevant) and relevant <= admitted and not any(missing.values())
+            if scope_id in bound[claim]:
+                completed[claim] &= bool(relevant) and relevant <= admitted and not any(missing.values())
     report["functionalCompletion"] = completed["function"]
     report["incrementalValue"] = "supported-for-bound-cases" if completed["incremental-value"] else "unverified"
-    report["candidateEligible"] = all(completed.values()) and len(admitted) == len(cases)
+    report["candidateEligible"] = (all(completed.values()) and len(admitted) == len(cases)
+                                   and not any(v for row in report["productCoverage"].values() for v in row.values()))
     return report
