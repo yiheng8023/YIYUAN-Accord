@@ -216,8 +216,8 @@
           "name": "Codex web / 云端任务",
           "officialSource": "https://learn.chatgpt.com/docs/cloud",
           "execution": "托管隔离环境",
-          "environment": "仓库、账户、依赖、网络与环境配置独立；本地插件不自动存在。",
-          "observation": "官方资料支持；本轮无云端候选实测。",
+          "environment": "触发前端与托管执行分开；绑定账户、仓库、实际分支/SHA、初始化/维护脚本、网络及缓存状态。本地插件不自动存在，旧缓存也不能代表当前包；不与 ChatGPT Work 或本地入口互相继承证据。",
+          "observation": "2026-09-06 复核官方云端及环境文档（https://learn.chatgpt.com/docs/environments/cloud-environment）；仍未进行云端候选实测，未新增账户/仓库连接或修改云环境。",
           "currentEffect": "unverified"
         },
         {
@@ -257,7 +257,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex-sdk",
           "execution": "调用方与目标 Codex 执行器",
           "environment": "SDK、协议与直接模型 API 不等同；版本、身份、配置及会话路由需绑定。",
-          "observation": "源码/CLI schema 观察；未安装 SDK 或运行认证调用。",
+          "observation": "2026-09-06：0.153.4 本地 App Server 零模型探测观察到 standalone Skill 临时暴露及撤销；不是 SDK、完整插件、普通入口或云端效果验收。未安装 SDK 或运行认证调用。",
           "currentEffect": "unverified"
         },
         {
@@ -405,6 +405,14 @@
         "claimLimit": "CLI configuration and help snapshot only, not all Desktop feature state or task-fit behavior."
       },
       {
+        "id": "codex-cli-standalone-skill-exposure",
+        "host": "codex",
+        "subject": "2026-09-05T16:33:26Z; Codex CLI 0.153.4 binary SHA256 444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b; dev.5 Skill SHA256 e5d9d484d4f9062256ab587d4b12362e9530e5981a54dee8166d3873971aae08 from committed 9ba285aa092d1b26a48f3c3e2863cc4d5c0b62c5",
+        "method": "One task-owned stdio app-server process, empty CODEX_HOME and cwd, process-local plugins/hooks/apps disabled. Stable initialize then initialized; skills/list with cwds and forceReload; skills/extraRoots/set to the exact candidate skills root; list, set empty roots, list. Official reference: https://learn.chatgpt.com/docs/app-server. No thread/start or turn/start; no personal configuration or credential read by the probe.",
+        "finding": "The exact candidate Skill was absent, then listed enabled, then absent (0/1/0); each listing had zero discovery errors and 39 other Skills. The process exited normally with code 0 after stdin closed, without forced termination or config.toml creation; the Skill bytes were unchanged. The task-owned process was absent and all 75 temporary files (2718512 bytes) were removed with the temporary root verified absent. An initial parser-only attempt exited 2: --ignore-user-config and --ignore-rules belong to exec, not global app-server options.",
+        "claimLimit": "Bounded no-model native discovery/withdrawal observation, not Agent use, ordinary-entry autonomy, Hook execution, complete plugin loading/lifecycle, functional acceptance, incremental value or Codex cloud/Desktop engine evidence. Empty CODEX_HOME did not eliminate other Skill discovery; their origins, private/managed configuration and causal effects were not established, so this is not official-pristine or fully controlled composition evidence. No personal Accord installation was changed. The temporary probe and host state were disposable diagnostics, not an authenticated admission or final-review bundle."
+      },
+      {
         "id": "claude-cli-help",
         "host": "claude-code",
         "subject": "Claude Code 2.1.261; existing authorized DeepSeek route",
@@ -422,7 +430,8 @@
         "surface": "model/list、provider capabilities、feature、skills/hooks/apps、配置与配额查询。",
         "conditions": "按实际运行客户端复核；模式目录不是模型质量排名；查询权限与秘密字段需另行约束。",
         "localObservationIds": [
-          "codex-cli-schema"
+          "codex-cli-schema",
+          "codex-cli-standalone-skill-exposure"
         ],
         "currentEffect": "unverified",
         "layer": "host-runtime"
