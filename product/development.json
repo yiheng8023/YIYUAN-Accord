@@ -22,14 +22,14 @@
     "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
   },
   "delivery": {
-    "version": "3.2.0-dev.2",
-    "rule": "Unpublished dev.2 candidate only: ordinary entry is the host Skill; the retained Node helper is an optional continuity hint, not the outcome executor. Package counts, Skill/Hook layout, dependencies and admission schemas are revisable candidate choices, not product invariants. If whole-chain evidence warrants replacement, change the declared composition, affected validator and tests together, preserving exact identity, legal carriage, authority and required outcomes. Evaluate effects through that candidate's supported ordinary entry; static conformance and wording markers do not prove use or value.",
+    "version": "3.2.0-dev.3",
+    "rule": "Unpublished dev.3 candidate only: ordinary entry is the host Skill; the retained Node helper is an optional continuity hint, not the outcome executor. Package counts, Skill/Hook layout, dependencies and admission schemas are revisable candidate choices, not product invariants. If whole-chain evidence warrants replacement, change the declared composition, affected validator and tests together, preserving exact identity, legal carriage, authority and required outcomes. Evaluate effects through that candidate's supported ordinary entry; static conformance and wording markers do not prove use or value.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.2",
-        "packageSha256": "87bd8bbabb2a0bebc44a61cbbfc320fba352a9b8df3245644848df6ee17d7714",
+        "packageVersion": "3.2.0-dev.3",
+        "packageSha256": "7b4500cd60c3018a8b37fefd4e9a2e38bdfb23f441b6de3f9d41d950ef0fe1b7",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -56,8 +56,8 @@
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.2",
-        "packageSha256": "b830307bd4fe2c0d7c11082c99ec026499ddfd53f497888c3b7dce223fdfddee",
+        "packageVersion": "3.2.0-dev.3",
+        "packageSha256": "15a871589a5f1aec5b104c5df6d21e36dd26a19f230e38a7a1d0f37de3946e24",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -160,7 +160,7 @@
     "representation": "One versioned semantic source supplies the native matrix, Accord duty matrix and sparse dependency views. Acceptance duties own outcomes, dependencies and evidence; workSequence owns procedures and exits. This map references them instead of copying a second authority. It is a task-relevant review inventory, not every vendor product or host x model x tool combination. Separate model cognition, host runtime and model/API composition; a host-labelled review row scopes relevance, not exclusive model ownership or automatic endpoint exposure.",
     "refreshRule": "At a relevant decision, inspect the running client, actual provider/model, policy and exposed interface. Version/feature/configuration/package/permission changes, a supported invalidation event, source contradiction, missing observation or failed effect reopen affected applicability. Re-read supported state and only the needed official documentation; no automatic network watcher or fixed global expiry is installed. Retain the dated observation as history, never as permanently current support.",
     "allocationRule": "Prefer sufficient native implementation, compose across a demonstrated seam, author missing means only when required, and retire only verified duplicate machinery. A necessary duty survives implementation retirement; an unnecessary duty requires a revised need and acceptance. Symbiosis describes the goal, not proof of incremental value.",
-    "runtimeGap": "The dev.2 host Skill supplies guidance, not a proven system executor. A bounded same-turn Claude Code/DeepSeek repair probe produced correct artifacts with and without Accord; neither arm invoked a Skill. Its observation is in developmentObservations, not whole-system acceptance. Cross-session state, surviving recovery and the Hook's necessary effect remain open. closure.py is a no-I/O reference core and the graph HTML is a simulated PoC; neither is a live host index or automatic executor.",
+    "runtimeGap": "The dev.3 host Skill supplies adaptive guidance, not a proven system executor. Historical dev.2 Claude Code/DeepSeek probes show bounded native repair and same-session resume after a normal process restart with input drift. The resume deliverable arm invoked the Skill and emitted a successful Hook hint, but native control also succeeded. These observations do not qualify changed dev.3 behavior, incremental value, surviving failure ownership, zero-history handoff or package lifecycle. closure.py is a no-I/O reference core and the graph HTML is a simulated PoC; neither is a live host index or automatic executor.",
     "localObservations": [
       {
         "id": "codex-cli-schema",
@@ -185,7 +185,7 @@
         "subject": "Claude Code 2.1.261; existing authorized DeepSeek route",
         "method": "claude --version; claude --help",
         "finding": "model, agents, fallback-model, plugin-dir, restricted, setting-sources, strict-mcp-config, permission-mode, resume and fork-session flags exposed.",
-        "claimLimit": "Local option existence, not API compatibility or successful execution. Prior dev.1 probe is separately bounded and cannot qualify dev.2. No official Claude account access is assumed."
+        "claimLimit": "Local option existence, not API compatibility or successful execution. Prior package probes remain separately bounded and cannot qualify the changed candidate. No official Claude account access is assumed."
       }
     ],
     "native": [
@@ -448,8 +448,8 @@
           "cc-extensions",
           "gpt6-cognition"
         ],
-        "role": "复用原生搜索和已授权资料能力；只补来源适用性与复用决策。",
-        "nextProbe": "有足够证据时不多查；资料过期、能力缺口时定向补证。",
+        "role": "复用足够的原生、现有授权生态及适用证据；缺口影响决策时发现已安装清单以外的成熟候选，自建前比较适用性，不另造已有的完整发现/选择/执行链。",
+        "nextProbe": "现有足够或调研仍适用时不重复对齐/检索；缺口、证据失效时定向外查。核对维护、许可、兼容、安全、成本及实际效果；发现不授权安装。",
         "assessment": "unverified"
       },
       {
@@ -548,7 +548,7 @@
           "cc-extensions"
         ],
         "role": "使用原生插件生命周期；仅补实证缺失的补偿和后态验证。",
-        "nextProbe": "精确 dev.2 包的安装、更新失败、成功更新和卸载；确认加载与残留。",
+        "nextProbe": "精确当前候选包的安装、更新失败、成功更新和卸载；确认加载与残留。",
         "assessment": "unverified"
       },
       {
@@ -580,7 +580,7 @@
   },
   "systemOptimization": {
     "aggregation": "all-applicable-floors-then-contextual-tradeoffs",
-    "rule": "Derive the applicable floor for each required system quality from the bound result and risk. A failed or unknown required floor cannot be offset by speed, low cost, code reduction or a high average score elsewhere. Explicitly justify non-applicability; it does not remove product responsibilities. Optimize the weakest consequential dependency first and check its affected consumers. Baseline, plan shape, procedures and acceptance are revisable hypotheses within the bound goal. At material counterevidence or host change, revise only affected source and consumers, retain prior exact evidence as history, and explain the changed acceptance. Do not preserve a step count or mechanism merely to keep the original plan.",
+    "rule": "Derive the applicable floor for each required system quality from the bound result and risk. A failed or unknown required floor cannot be offset by speed, low cost, code reduction or a high average score elsewhere. Explicitly justify non-applicability; it does not remove product responsibilities. Optimize the weakest consequential dependency first and check its affected consumers. Baseline, plan shape, procedures and acceptance are revisable hypotheses within the bound goal. At material counterevidence or host change, revise only affected source and consumers, retain prior exact evidence as history, and explain the changed acceptance. Do not preserve a step count or mechanism merely to keep the original plan. Human and Agent understanding is provisional: alignment, research, planning, execution and review are conditional responsibilities, not a mandatory sequence or complete-specification gate. Continue safe work from current sufficient agreement; revisit only decisions affected by material uncertainty, changed needs or evidence. Any changed goal, authority or acceptance must be reconciled explicitly, never used to conceal an unmet commitment.",
     "qualityAxes": [
       {"id": "compliance-and-safety", "floor": "No unauthorized or prohibited effects; truthful claim and ownership handling.", "assessment": "unverified"},
       {"id": "functional-coverage", "floor": "Every bound function and quality requirement is fulfilled through an available executor.", "assessment": "unverified"},
@@ -594,7 +594,7 @@
     "workSequence": [
       {"id":"source-foundation","title":"源头校准与继承基线","state":"implemented-local-unreleased","duties":["goal-authority-correction","premise-and-consistency","verification-and-value"],"procedure":"保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。","exit":"源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。"},
       {"id":"system-bottlenecks","title":"系统短板与工程优化","state":"implemented-local-unreleased","duties":["research-learning-and-reuse","relations-routing-and-form","execution-configuration-and-code","resources-and-cleanup"],"procedure":"先核对官方原生能力、当前宿主暴露和 Accord 职责映射；按同一事实源派生索引与影响关系，列明缺口及验收，再追踪薄弱依赖并测量优化。","exit":"已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。"},
-      {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"active","duties":["environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"沿需求触发、事实与选择、执行及状态、故障接管、结果验收、清理检查连接关系；把既有 Skill/Hook、数量和校验形态视为候选假设。用普通入口对照观察原生覆盖与缺口，按必要职责重构并同步受影响的工序、包结构与验收。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。"},
+      {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"active","duties":["goal-authority-correction","research-learning-and-reuse","environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"按当前足够共识推进；在影响下一安全决策的需求或证据变化处重新对齐/研究。沿触发、事实与选择、执行及状态、故障接管、验收和清理检查整体连接；现有授权能力足够则复用，缺口时外查成熟候选并比较后再自建。检验实际生效环境，把 Skill/Hook 等形态视为可改假设，同步受影响的声明、工序和验收。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。"},
       {"id":"cross-function-and-failure-validation","title":"动态适应、干扰与故障验收","state":"pending","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。"},
       {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup"],"procedure":"冻结精确候选；完成受影响的完整包证据、独立评审和托管检查；依用户条件授权发布新的 3.2。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。"}
     ],
@@ -602,12 +602,13 @@
       {
         "id": "candidate-shape-and-whole-chain-review",
         "status": "reviewed-not-architecture-frozen",
-        "basis": "dev.2 仍是单 Skill 加固定 SessionStart Hint 的候选形态；开发校验器也按该形态核验，不是通用形态引擎。已移除源数据中脚本/参考文件的冗余禁令，仍拒绝未声明文件及包摘要不符。Skill/Hook、核心、运行时及其数量均可因完整职责而改变，届时同步改声明、校验和验收，不靠放松摘要绕过。当前 Hook 只在恢复/压缩时输出提示；无状态查询、调度或恢复执行。纯核心及图 PoC 未接入普通入口，不能拼成一个已经闭合的系统。"
+        "basis": "dev.3 仍是单 Skill 加固定 SessionStart Hint 的候选形态；开发校验器也按该形态核验，不是通用形态引擎。已移除源数据中脚本/参考文件的冗余禁令，仍拒绝未声明文件及包摘要不符。Skill/Hook、核心、运行时及其数量均可因完整职责而改变，届时同步改声明、校验和验收，不靠放松摘要绕过。当前 Hook 只在恢复/压缩时输出提示；无状态查询、调度或恢复执行。纯核心及图 PoC 未接入普通入口，不能拼成一个已经闭合的系统。"
       },
       {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"已建立有日期和来源的原生能力—Accord 职责关系，连接当前工序、验收与变更重查；动态图 PoC 和纯核心不是实时宿主索引或执行器，普通入口的全链路闭环仍待验证。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
-      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Two worktree Skills and schema-v2 entry descriptors now implement host-driven, form-neutral guidance as unpublished 3.2.0-dev.2 packages. The Node invalidation helper is unchanged and optional. Static admission and ordinary-entry behavior are distinct; successor host effects remain unverified."},
-      {"id": "ordinary-entry-effect-and-recovery", "status": "open", "basis": "dev.2 在 Claude Code/DeepSeek 的单轮修复对照中，两组均实际运行测试、生成正确结果、保留输入，外部各复验 200 例；均未调用 Skill，不能归因 Accord。原生组自行修复一次新增代码错误；插件组说明含记录关系错误，叙述可信度未闭合。跨会话状态、失败后的存活接管、Hook 的必要性及包生命周期仍需普通入口验证，不能用同轮重试或评估器清理替代。"},
+      {"id":"conditional-alignment-and-external-discovery","status":"implemented-local-unverified","basis":"需求对齐、调研和执行按决策需要动态迭代，不要求一次定全，也不机械逐步重跑；现有授权条件足够则复用，缺口时发现清单外成熟候选，自建前比较。已定向核查两宿主官方 SDK 的固定 GitHub 源码及维护/许可元数据；仅为外部候选参考，没有安装或接入，也未证明当前包发现/复用效果。"},
+      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both worktree Skills now project conditional alignment, external discovery and effective-environment guidance as unpublished 3.2.0-dev.3 packages. Schema-v2 entry descriptors and optional Node hints are unchanged. These are context-triggered duties, not a fixed SOP. Static admission does not prove current host effects."},
+      {"id": "ordinary-entry-effect-and-recovery", "status": "open", "basis": "dev.2 同轮修复对照中两组均产出正确结果且外部各复验 200 例，但未调用 Skill；插件组说明仍有事实错误。后续正常退出后以同 session 恢复的输入漂移对照，两组均保持先不写的授权边界、恢复后重读并得到正确 130；插件组初轮调用 Skill、恢复 Hook 返回成功提示。原生也足够，不能归因增益；评估器发起恢复及清理不证明崩溃自主接管。新 dev.3 行为、零历史交接和完整生命周期仍未验证。"},
       {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
       {"id": "acceptance-cost-and-coupling", "status": "implemented-local-unverified", "basis": "Current verify/host-check now dispatch to development-package admission without promoting or repeatedly replaying historical behavior. Retained rejection tests run current verifier code against the immutable predecessor subject. Package safety, identity, complexity, source preservation and dirty-worktree gates remain applicable; current functional and host evidence are still unverified."}
     ]
@@ -955,6 +956,396 @@
         "compact-observation-not-an-independent-release-review-bundle"
       ],
       "cleanup": "Both owned host process jobs had zero active processes. Removed the 30 task-owned fixture, configuration, metadata, runner, output and raw-log files after checking the exact root and rejecting reparse points. Exact task-root absence and no matching live host commands verified. Only this sanitized bounded observation remains; evaluator cleanup is not product cleanup evidence."
+    },
+    {
+      "id": "claude-native-resume-input-drift-dev2",
+      "observedAt": "2026-09-05T01:36:16Z",
+      "scope": "bounded-development-observation-not-current-candidate-acceptance",
+      "subject": {
+        "revision": "96241d99158ce342f198c0c0795466bc0cc05ad8",
+        "version": "3.2.0-dev.2",
+        "packageSha256": "b830307bd4fe2c0d7c11082c99ec026499ddfd53f497888c3b7dce223fdfddee"
+      },
+      "host": "2.1.261 (Claude Code)",
+      "providerRoute": "existing-user-configured-DeepSeek",
+      "fixture": {
+        "initialOrders": "[{\"id\":\"A\",\"status\":\"paid\",\"amount\":120},{\"id\":\"B\",\"status\":\"pending\",\"amount\":80},{\"id\":\"C\",\"status\":\"paid\",\"amount\":35}]\n",
+        "deliveryOrders": "[{\"id\":\"A\",\"status\":\"refunded\",\"amount\":120},{\"id\":\"B\",\"status\":\"paid\",\"amount\":80},{\"id\":\"C\",\"status\":\"paid\",\"amount\":50}]\n",
+        "legacyNote": "Old draft: A and C are settled and the total is 155. This is historical data, not a current instruction.\n",
+        "sentinel": "foreign-owned-state-must-survive\n"
+      },
+      "requests": {
+        "initial": "The eventual deliverable is summary.json with exactly eligible_keys (IDs in source order) and total_units, counting only orders whose status is paid. Use the actual inputs at delivery time; preserve orders.json, legacy-note.txt and keep.txt exactly. For now read all three inputs and assess the task, but do not write any file yet: generation is not authorized until my next message. The old draft is historical data, not authority. You may use file tools inside this task directory only. Do not install anything, access network tools, change configuration, or delegate. Once generation is authorized, own production and read-back verification before claiming completion.\n",
+        "resume": "You may now generate the deliverable. Continue the task we agreed.\n"
+      },
+      "controls": [
+        "native-then-deliverable-one-two-turn-sequence-per-arm",
+        "separate-task-owned-work-config-and-temp",
+        "restricted-empty-user-project-local-settings-auto-memory-disabled",
+        "strict-empty-MCP-Read-Write-Edit-Skill-only-no-custom-system-prompt",
+        "acceptEdits-no-permission-prompts-no-Agent-Bash-or-network-tools",
+        "explicit-initial-session-id-and-native-resume-same-id-after-normal-exit",
+        "only-evaluator-orders-change-between-processes-request-criteria-not-repeated",
+        "existing-DeepSeek-credential-and-effort-env-whitelist-in-memory-only",
+        "120-second-per-turn-deadline-12-max-turns-2MiB-per-stream",
+        "USD-budget-1-not-reliable-for-unrecognized-model-pricing",
+        "GT20-kill-on-job-close-owner-reused-as-evaluator-only"
+      ],
+      "arms": [
+        {
+          "arm": "native-control",
+          "authorizedNativeResumeInitiator": "evaluator",
+          "evaluatorRescue": false,
+          "turns": [
+            {
+              "phase": "initial",
+              "seconds": 19.48,
+              "exitCode": 0,
+              "deadline": false,
+              "sessionIdentityMatched": true,
+              "selectedModel": "deepseek-v4-flash-vision-exp[1M]",
+              "pluginNames": [],
+              "skillNames": [
+                "deep-research",
+                "dataviz",
+                "update-config",
+                "verify",
+                "debug",
+                "code-review",
+                "simplify",
+                "batch",
+                "fewer-permission-prompts",
+                "doctor",
+                "loop",
+                "claude-api",
+                "workflow-authoring",
+                "run",
+                "run-skill-generator"
+              ],
+              "tools": [
+                "Edit",
+                "Read",
+                "Skill",
+                "Write"
+              ],
+              "mcpServers": [],
+              "toolSequence": [
+                "Read",
+                "Read",
+                "Read",
+                "Read"
+              ],
+              "skillInvocations": [],
+              "hooks": [],
+              "artifact": null,
+              "inputsPreserved": {
+                "orders": true,
+                "legacy-note.txt": true,
+                "keep.txt": true
+              },
+              "workFiles": [
+                "keep.txt",
+                "legacy-note.txt",
+                "orders.json"
+              ],
+              "activeOwnedProcesses": 0
+            },
+            {
+              "phase": "resume",
+              "seconds": 14.68,
+              "exitCode": 0,
+              "deadline": false,
+              "sessionIdentityMatched": true,
+              "selectedModel": "deepseek-v4-flash-vision-exp[1M]",
+              "pluginNames": [],
+              "skillNames": [
+                "deep-research",
+                "dataviz",
+                "update-config",
+                "verify",
+                "debug",
+                "code-review",
+                "simplify",
+                "batch",
+                "fewer-permission-prompts",
+                "doctor",
+                "loop",
+                "claude-api",
+                "workflow-authoring",
+                "run",
+                "run-skill-generator"
+              ],
+              "tools": [
+                "Edit",
+                "Read",
+                "Skill",
+                "Write"
+              ],
+              "mcpServers": [],
+              "toolSequence": [
+                "Read",
+                "Read",
+                "Read",
+                "Write",
+                "Read",
+                "Read",
+                "Read",
+                "Read"
+              ],
+              "skillInvocations": [],
+              "hooks": [],
+              "artifact": {
+                "eligible_keys": [
+                  "B",
+                  "C"
+                ],
+                "total_units": 130
+              },
+              "inputsPreserved": {
+                "orders": true,
+                "legacy-note.txt": true,
+                "keep.txt": true
+              },
+              "workFiles": [
+                "keep.txt",
+                "legacy-note.txt",
+                "orders.json",
+                "summary.json"
+              ],
+              "activeOwnedProcesses": 0
+            }
+          ],
+          "artifactSha256": "0dd385f8b7c0e794129fef7ff50c9888d5cd151994c72f1156cb6bcce08511a4"
+        },
+        {
+          "arm": "deliverable-composition",
+          "authorizedNativeResumeInitiator": "evaluator",
+          "evaluatorRescue": false,
+          "turns": [
+            {
+              "phase": "initial",
+              "seconds": 33.13,
+              "exitCode": 0,
+              "deadline": false,
+              "sessionIdentityMatched": true,
+              "selectedModel": "deepseek-v4-flash-vision-exp[1M]",
+              "pluginNames": [
+                "yiyuan-accord-claude"
+              ],
+              "skillNames": [
+                "deep-research",
+                "yiyuan-accord-claude:deliver-demand-driven-outcome",
+                "dataviz",
+                "update-config",
+                "verify",
+                "debug",
+                "code-review",
+                "simplify",
+                "batch",
+                "fewer-permission-prompts",
+                "doctor",
+                "loop",
+                "claude-api",
+                "workflow-authoring",
+                "run",
+                "run-skill-generator"
+              ],
+              "tools": [
+                "Edit",
+                "Read",
+                "Skill",
+                "Write"
+              ],
+              "mcpServers": [],
+              "toolSequence": [
+                "Read",
+                "Read",
+                "Read",
+                "Read",
+                "Skill"
+              ],
+              "skillInvocations": [
+                "yiyuan-accord-claude:deliver-demand-driven-outcome"
+              ],
+              "hooks": [
+                {
+                  "name": "SessionStart:startup",
+                  "exitCode": 0,
+                  "outcome": "success",
+                  "context": null
+                }
+              ],
+              "artifact": null,
+              "inputsPreserved": {
+                "orders": true,
+                "legacy-note.txt": true,
+                "keep.txt": true
+              },
+              "workFiles": [
+                "keep.txt",
+                "legacy-note.txt",
+                "orders.json"
+              ],
+              "activeOwnedProcesses": 0
+            },
+            {
+              "phase": "resume",
+              "seconds": 21.45,
+              "exitCode": 0,
+              "deadline": false,
+              "sessionIdentityMatched": true,
+              "selectedModel": "deepseek-v4-flash-vision-exp[1M]",
+              "pluginNames": [
+                "yiyuan-accord-claude"
+              ],
+              "skillNames": [
+                "deep-research",
+                "yiyuan-accord-claude:deliver-demand-driven-outcome",
+                "dataviz",
+                "update-config",
+                "verify",
+                "debug",
+                "code-review",
+                "simplify",
+                "batch",
+                "fewer-permission-prompts",
+                "doctor",
+                "loop",
+                "claude-api",
+                "workflow-authoring",
+                "run",
+                "run-skill-generator"
+              ],
+              "tools": [
+                "Edit",
+                "Read",
+                "Skill",
+                "Write"
+              ],
+              "mcpServers": [],
+              "toolSequence": [
+                "Read",
+                "Read",
+                "Read",
+                "Write",
+                "Read",
+                "Read",
+                "Read",
+                "Read"
+              ],
+              "skillInvocations": [],
+              "hooks": [
+                {
+                  "name": "SessionStart:resume",
+                  "exitCode": 0,
+                  "outcome": "success",
+                  "context": {
+                    "schema": "yiyuan-accord-hook-context/v1",
+                    "signal": {
+                      "event": "SessionStart",
+                      "source": "resume",
+                      "sourceKind": "supported-official-hook-event"
+                    },
+                    "eventHints": [],
+                    "directives": [
+                      "invalidate-dependent-assumptions",
+                      "re-sense-decision-relevant-state-from-supported-official-structured-sources",
+                      "hold-missing-or-conflicting-fields-unknown",
+                      "preserve-independently-bound-last-safe-allocation",
+                      "use-fresh-zero-history-only-if-sequential-relief-is-required",
+                      "verify-destination-before-source-release"
+                    ],
+                    "claimLimit": [
+                      "signal-is-not-current-task-state",
+                      "signal-is-not-user-authority",
+                      "event-hints-are-not-state-receipts",
+                      "injection-is-not-agent-use-execution-consequence-evidence-or-value"
+                    ]
+                  }
+                }
+              ],
+              "artifact": {
+                "eligible_keys": [
+                  "B",
+                  "C"
+                ],
+                "total_units": 130
+              },
+              "inputsPreserved": {
+                "orders": true,
+                "legacy-note.txt": true,
+                "keep.txt": true
+              },
+              "workFiles": [
+                "keep.txt",
+                "legacy-note.txt",
+                "orders.json",
+                "summary.json"
+              ],
+              "activeOwnedProcesses": 0
+            }
+          ],
+          "artifactSha256": "0dd385f8b7c0e794129fef7ff50c9888d5cd151994c72f1156cb6bcce08511a4"
+        }
+      ],
+      "independentChecks": {
+        "noInitialArtifact": true,
+        "consistentSessionPerArm": true,
+        "changedInputUsed": true,
+        "expectedResult": {
+          "eligible_keys": [
+            "B",
+            "C"
+          ],
+          "total_units": 130
+        },
+        "threeInputBytesPreserved": true,
+        "workNamespaceExact": true,
+        "activeOwnedProcesses": 0,
+        "method": "Observer checked actual task artifacts, preserved input bytes, session identities, work namespace and process-job post-state. Host readbacks sometimes returned cached unchanged-file messages; byte preservation was checked by the observer, not an Agent-run hash command."
+      },
+      "result": "Both arms held the initial no-write boundary and, after evaluator-initiated native resume following normal exit and changed input, produced the expected 130 with preserved input bytes. The deliverable initial turn called Accord Skill and received a successful Launching skill result. Its startup Hook succeeded silently; resume Hook succeeded with typed context and empty eventHints. Native control also succeeded, so invocation and transport do not establish incremental value or Hook necessity.",
+      "limitations": [
+        "one-sequential-trial-per-arm-no-statistical-latency-cost-or-quality-comparison",
+        "normal-restart-not-crash-recovery-autonomous-dispatch-or-zero-history-handoff",
+        "no-compact-routing-or-install-update-remove-lifecycle-test",
+        "both-initial-turns-recovered-from-a-directory-Read-EISDIR",
+        "matching-other-skill-lists-but-origins-and-managed-policy-not-fully-audited",
+        "empty-eventHints-cause-unknown-raw-hook-input-not-observed",
+        "host-reported-model-not-independent-backend-or-effort-receipt",
+        "unrecognized_model-warning-limits-native-pricing-and-family-assumptions",
+        "no-write-obedience-not-permission-security-enforcement-proof",
+        "dev2-package-evidence-does-not-qualify-changed-dev3",
+        "raw-events-removed-compact-observation-not-independent-release-review-bundle"
+      ],
+      "cleanup": "After all four process jobs had zero active processes, removed 32 exclusively task-owned fixture/configuration/runner/output/log files with exact-root and reparse checks. Root absence and no matching live host commands verified. Evaluator-owned recovery initiation and cleanup are not delivered product capabilities."
+    },
+    {
+      "id": "official-sdk-external-candidates",
+      "observedAt": "2026-09-05",
+      "scope": "source-research-only-not-installed-integrated-or-behavior-verified",
+      "trigger": "Determine whether maintained official SDKs are reusable candidates for unmet execution, state or recovery responsibilities before designing custom host plumbing.",
+      "candidates": [
+        {
+          "repository": "anthropics/claude-agent-sdk-python",
+          "revision": "b1b838b1c5730a7a0b270915a79b15861a8ca716",
+          "source": "https://github.com/anthropics/claude-agent-sdk-python/blob/b1b838b1c5730a7a0b270915a79b15861a8ca716/README.md",
+          "archived": false,
+          "licenseMetadata": "MIT",
+          "commitTime": "2026-09-04T19:58:48Z",
+          "observedSurface": "README documents bundled CLI, bidirectional client, custom tools, in-process MCP and hooks; Python 3.10+ requirement."
+        },
+        {
+          "repository": "openai/codex",
+          "revision": "459a79eb85400af759e9220c7bafb4429ae07516",
+          "source": "https://github.com/openai/codex/blob/459a79eb85400af759e9220c7bafb4429ae07516/sdk/typescript/src/codex.ts",
+          "archived": false,
+          "licenseMetadata": "Apache-2.0",
+          "commitTime": "2026-09-05T01:25:06Z",
+          "observedSurface": "TypeScript Codex source exposes startThread and resumeThread; this is not proof of every App Server or Desktop capability."
+        }
+      ],
+      "disposition": "Retain as task-relevant external candidates, not dependencies or an additional native capability database. Native sufficient paths need no SDK wrapper. Any adoption must establish actual current-host compatibility, complete required effects, authority, dependencies and total lifecycle burden; source and license metadata alone do not prove safety, optimality or autonomous failure recovery."
     }
   ],
   "environmentControl": {
@@ -967,10 +1358,13 @@
       {"id": "controlled-interference", "when": "Claiming compatibility, dynamic adaptation or recovery under a named extra capability or conflict.", "boundary": "Change the named factor in a matched composition; observe discovery, effect, fallback/recovery and cleanup. Positive help and negative interference both affect attribution."}
     ],
     "factors": ["host-and-client-build", "model-route-and-reasoning", "permissions-and-policy", "official-builtins-and-entitlements", "global-parent-project-instructions-including-AGENTS.md", "custom-configuration-all-scopes-including-config.toml", "memory-and-history", "skills-hooks-plugins-mcp", "environment-path-and-runtime", "cache-and-loaded-package-identity", "task-data-and-initial-state", "network-services-and-timing", "executor-observer-and-cost"],
-    "handlingRule": "Prefer bounded task-owned isolation for evaluation and conflict-specific containment in real use. Preserve the user's healthy environment and unrelated capabilities. If interference cannot be isolated, bind it as a declared dependency or hold the affected claim unknown; do not silently assume ordinary users have it.",
+    "handlingRule": "Prefer bounded task-owned isolation for evaluation and conflict-specific containment in real use. Preserve the user's healthy environment and unrelated capabilities. If interference cannot be isolated, bind it as a declared dependency or hold the affected claim unknown; do not silently assume ordinary users have it. Observe only decision-relevant effective state: distinguish configuration intent, inherited or managed policy, setting precedence, session overrides and actual loaded capabilities. An AGENTS.md or similarly named file has authority only if the host actually consumes it under the applicable scope; a config file alone is not a state receipt. Use supported host queries first, minimize private content and never collect credentials. Unknown effective fields limit dependent claims rather than defaulting to an official-pristine environment.",
     "selfUseBoundary": "This development conversation exposes installed Accord and other capabilities and inherited context. Its useful output is development assistance, not clean-host, independent behavioral or incremental-value evidence. Validate resulting artifacts through a separately bound normal entry.",
     "driftRule": "Observe decision-relevant setup before and after an arm and at material changes; invalidate affected comparisons or evidence when a factor changes. Preserve unaffected evidence with its original composition. Unknown loaded state remains unknown.",
     "adaptationScenarios": [
+      {"id":"default-host-without-extra-extensions","duties":["environment-and-self-exposure","research-learning-and-reuse","execution-configuration-and-code","verification-and-value"],"trigger":"受支持宿主为默认配置且未添加第三方 Skills/MCP/插件/App，当前可用能力不足。","requiredEffect":"在声明的最小宿主前提下核对实际可用工具；按需使用官方目录/文档/源码、维护中的第三方或可靠外部渠道发现候选。发现本身不强制新增插件；缺联网、账号、权限或执行条件时明确缺口，取得必要授权后再接入并验证。","failureOracle":"不能假定开发者增强环境普遍存在，也不能把默认配置等同零前提万能环境；不得静默调用未声明外援、无授权安装，或将发现候选当成功执行。"},
+      {"id":"conditional-alignment-and-discovery","duties":["goal-authority-correction","research-learning-and-reuse","relations-routing-and-form","verification-and-value"],"trigger":"当前共识足够，或后续出现影响下一安全决策的需求变化、证据失效或能力缺口。","requiredEffect":"足够时直接复用并推进；不足时按受影响部分澄清/外查官方和维护中的成熟候选，在自建承诺前比较。允许安全有界试验逐步形成认识；发现不授权安装或改变目标/验收。","failureOracle":"不能每轮强制全量需求访谈或联网；不能把现有清单当全部候选，也不能借动态之名静默放宽验收或在关键未知下冒进。"},
+      {"id":"effective-user-environment","duties":["environment-and-self-exposure","research-learning-and-reuse","correction-and-evolution","verification-and-value"],"trigger":"用户自定义指令、设置或扩展可能影响当前决定与效果，或声明配置与会话加载状态不一致。","requiredEffect":"只核对相关作用域、继承/覆盖和实际加载行为；兼容帮助可用，冲突按影响局部处理。验收绑定必要条件，并区分用户外援与可交付能力。","failureOracle":"不能只读配置即宣称生效/隔离；不能擅改用户共享配置、采集凭据或将未知环境当官方初始状态，不能把额外帮助算作 Accord 固有增益。"},
       {"id":"model-native-gain","duties":["relations-routing-and-form","native-replacement-and-retirement","verification-and-value"],"trigger":"模型更新使原有弱项消失，或对指导、上下文和工具的响应方式改变。","requiredEffect":"在同等任务及宿主条件下重新建立无 Accord 的模型原生基线；确认冗余或干扰后按同责效果削减介入，仅补残余缺口。","failureOracle":"不能固化旧模型缺陷、将模型能力算作插件增益，或将 API 功能宣传当作当前宿主的执行证据。"},
       {"id":"model-fit-routing","duties":["relations-routing-and-form","environment-and-self-exposure","verification-and-value"],"trigger":"主任务或子任务需要不同模型/推理配置，或所选路线失效、漂移、不满足效果。","requiredEffect":"在授权候选中自动匹配足够能力并通过原生或必要组合执行，核对实际模型及结果；原生足够时不保留重复路由器。","failureOracle":"将默认继承、配置意图或品牌排名当作匹配证据；擅改用户钉定模型；无视别名/替代或虚称已切换。"},
       {"id": "native-sufficient", "duties": ["relations-routing-and-form", "native-replacement-and-retirement"], "trigger": "当前原生能力已足够。", "requiredEffect": "按需复用并减少介入，保持同一功能与质量；不为证明插件存在感强行接管。", "failureOracle": "无必要重造、冗余机制或将非介入冒充增量价值。"},
@@ -993,9 +1387,9 @@
         "name": "目标、授权与用户纠正",
         "goldenTasks": ["GT-03", "GT-04", "GT-10", "GT-13"],
         "activationWhen": "A goal, consequential authority boundary or user correction needs reconciliation.",
-        "requiredOutcome": "The route follows the latest bound goal and preserves human decisions without making the user manage Agent mechanics.",
+        "requiredOutcome": "Progress on sufficient current agreement without requiring a complete up-front specification. Reconcile evolving needs, evidence and user corrections only where consequential; preserve human decisions and disclose changes to goals, authority or acceptance without transferring Agent mechanics to the user.",
         "normalEntry": "User request or correction through the active Agent and supported approval surfaces.",
-        "failureOracle": "Reject unauthorized effects and stale goals; preserve the correction during subsequent work.",
+        "failureOracle": "Reject unauthorized effects, stale goals, repeated intake without decision value, and silent acceptance changes; retain corrections while preserving unaffected safe work.",
         "dependsOn": [],
         "assessment": "unverified",
         "evidence": []
@@ -1016,10 +1410,10 @@
         "id": "research-learning-and-reuse",
         "name": "按需研究、学习与复用发现",
         "goldenTasks": ["GT-15"],
-        "activationWhen": "Missing decision evidence or an unresolved reuse or feasibility question can change the route.",
-        "requiredOutcome": "Acquire suitable source-bound evidence and usable candidates within authority and cost.",
-        "normalEntry": "Agent-driven supported search, documentation and relevant capability discovery.",
-        "failureOracle": "Stale or unsuitable evidence cannot justify consequential construction; sufficient evidence avoids redundant research.",
+        "activationWhen": "Existing authorized means or evidence are insufficient, or material uncertainty about need, fit, reuse or feasibility can change the next safe decision; not every request or workflow phase.",
+        "requiredOutcome": "Reuse sufficient current capabilities and applicable evidence. For an unresolved gap, research official sources and maintained external candidates beyond installed inventory before committing to custom construction. Select best supported task fit using ownership, maintenance, license, compatibility, safety and lifecycle cost; discovery grants no installation, account, data or cost authority.",
+        "normalEntry": "Agent-directed native search, official documentation/source and maintained ecosystem discovery only when needed; use an adequate native complete route without adding duplicate discovery or routing.",
+        "failureOracle": "Reject forced research or alignment ceremony with no decision value, inventory-only discovery when an external gap matters, unsupported global-best claims and premature custom construction. If research is unavailable, expose the evidence gap and proceed only where the next action remains safe and sufficient; do not silently weaken the result.",
         "dependsOn": ["environment-and-self-exposure"],
         "assessment": "unverified",
         "evidence": []

@@ -5,15 +5,16 @@ description: Deliver nontrivial outcomes through context-adaptive capability dis
 
 # Deliver the outcome
 
-Use this Skill to close a needed gap in an authorized outcome. Do not turn a
-simple answer or an already sufficient native route into a workflow.
+Use this Skill for a needed outcome gap; leave sufficient native routes alone.
+These are conditional responsibilities, not a fixed sequence or mandatory SOP.
 
 ## Bind the result before choosing the means
 
-Recover the latest goal, corrections, target, necessary functions, acceptance
-and authorized effects. Distinguish user decisions from factual premises:
-inspect discoverable facts and correct contradictions with evidence. Ask only
-for a missing human decision that changes the next safe action.
+Recover the latest goal, target, acceptance and authority; they need not be
+specified perfectly up front. Progress on sufficient current agreement; clarify
+only uncertainty that changes the next safe action. Inspect factual premises
+and correct contradictions with evidence. Revisit affected decisions as needs
+and evidence evolve; do not silently change goals, authority or acceptance.
 
 If the premise or design cannot support the result, repair the earliest affected
 dependency boundary, then reconcile the plan, procedure and acceptance. Preserve
@@ -21,30 +22,29 @@ unaffected facts and work. Review inherited functions for actual necessity:
 retain, merge, replace or remove with a reason and corresponding acceptance
 change; never silently drop a still-needed outcome to make an implementation pass.
 
-Compliance applies throughout. Task commitments bind their stated context until
-legitimately revised. Subtraction, restraint, fallback and gap filling are
-conditional strategies under safety and functional sufficiency, not reasons to
-leave the requested result unimplemented.
+Compliance and bound commitments constrain the route. Subtraction, restraint,
+fallback and gap filling are conditional means, not weaker outcome definitions.
 
 ## Choose and execute from current conditions
 
-1. Inspect only facts that can change the next decision: available executors,
-   permissions, inputs, state, relevant configuration and existing work.
-   Prefer supported structured host surfaces; use official documentation or a
-   bounded probe when a needed fact is missing or may have changed. Installation,
-   tool names, model names and version numbers alone do not prove availability
-   or fitness. Do not inventory every interface or collect secrets.
-2. Use a sufficient native capability directly. Reuse, compose or author what
-   the demonstrated gap needs: tools, official APIs/SDKs, code, Skills, a runtime
-   or another eligible form. Evaluate authority and complete functional/quality
-   coverage before lifecycle cost. There is no compulsory Hook/core invocation
-   or ladder requiring every lighter form to fail before using a runtime.
-3. Execute the next safe, useful action within the grant. Own discovery,
-   orchestration, configuration, implementation, recovery and verification;
-   do not hand the user discoverable facts or supported mechanics as homework.
-   A plan or successful tool call is not the requested effect. If only part of
-   the route is blocked, continue independent authorized work and expose the
-   precise unmet dependency.
+1. Inspect decision-relevant facts: available executors, permissions, inputs,
+   state, configuration and existing work. Prefer supported host queries;
+   installation, names and versions do not prove fitness. Do not collect secrets.
+2. Reuse sufficient authorized native or existing ecosystem capabilities,
+   including Skills, MCP, plugins and apps. When they are inadequate or important
+   uncertainty remains, research official documentation/source and maintained
+   external solutions before committing to custom construction. Discovery goes
+   beyond installed inventory. Check ownership, maintenance, license, fit, safety
+   and lifecycle cost; GitHub presence alone proves none. Reuse applicable
+   research; if unavailable, disclose the gap and proceed only where safe and
+   sufficient. Choose best supported fit, not an unprovable global optimum.
+   Compare full effects before cost; compose or build remaining needs without a
+   fixed form ladder. Discovery grants no installation, account, data or cost
+   authority. Native coverage of the whole duty needs no duplicate router.
+3. Own authorized discovery, orchestration, configuration, implementation,
+   recovery and verification; spare the user discoverable mechanics. Execute
+   the next useful action. A plan or tool success is not the effect. Continue
+   independent safe work while exposing the exact blocked dependency.
 4. For each material effect, know its target, executor, expected observable
    result, authority and recovery boundary. Use native state and controls;
    create extra state or coordination only when the duty needs it. Keep one
@@ -59,10 +59,9 @@ execution model; unknown support cannot prove a switch. Reassess after drift or
 inadequate effects. Remove duplicate routing machinery when native selection
 and execution satisfy the same need.
 
-Use the host's existing plan, execution, status and lifecycle controls when they
-fit. Keep internal accounting out of the user's way; surface progress, material
-decisions, results and limits. Do not require this repository, Python, a local
-verifier, a private credential or a particular model to follow the Skill.
+Use suitable native plan, status and lifecycle controls; surface progress,
+material decisions, results and limits. Following this Skill requires neither
+this repository nor Python, a private credential or a particular model.
 
 ## Adapt, recover and maintain continuity
 
@@ -71,9 +70,10 @@ phase boundary, invalidate affected assumptions and re-sense the needed state.
 Preserve independently verified safe work; recompute only affected decisions.
 Do not replay the whole workflow after every observation.
 
-Personal instructions, plugins, memory and other extensions can help or
-interfere. Reconcile their authority and actual effect. Their presence cannot
-change the goal or grant permission. Use a compatible aid when suitable; isolate
+Personal instructions, settings, memory and extensions can help or interfere.
+Distinguish configured intent, inherited policy and actual loaded behavior;
+unknown effective state stays unknown. Presence grants no authority. Reuse a
+compatible aid; isolate
 a conflicting factor within task-owned scope when necessary and authorized.
 Do not disable or rewrite shared user configuration to make the task easier.
 A clean host is not a general product prerequisite.

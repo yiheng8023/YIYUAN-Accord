@@ -27,7 +27,7 @@ The four v3.1 authority documents, Golden Tasks and package evidence remain
 historical inputs. Their old `verified` criteria and maintenance boundary do not
 describe the successor's functional acceptance. Run `verify-development` for
 source conformance and `verify` / `host-check` for current development admission.
-The unpublished worktree packages are `3.2.0-dev.2`; user installations are not
+The unpublished worktree packages are `3.2.0-dev.3`; user installations are not
 updated. Retained historical regression tests use the immutable predecessor;
 current package rejection tests are in `tests/product/test_development.py`.
 Current-host functionality and value remain unverified. Next exercise ordinary
@@ -38,12 +38,12 @@ account access. Keep provider, model, host and configuration attribution separat
 
 The dev.1 native-sufficient fixture passed with and without Accord; neither arm
 invoked the Skill. The sanitized observation, exact old package identity and
-limits are in `development.json#/developmentObservations`, not current dev.2
+limits are in `development.json#/developmentObservations`, not current candidate
 acceptance. Its temporary directories and raw logs were removed. Dev.2 adds
 main/subagent model-fit guidance; validate actual task matching and execution,
 including inherited/substituted models, before claiming routing capability.
 
-The current dev.2 same-turn repair probe also produced correct artifacts in both
+The historical dev.2 same-turn repair probe also produced correct artifacts in both
 arms, with preserved inputs and four fixture plus 200 independent deterministic
 cases per arm. Neither arm invoked a Skill. The native arm repaired its own
 introduced TypeError; the plugin arm's final explanation misstated a record
@@ -54,12 +54,29 @@ containment and cleanup are not delivered recovery or cleanup capabilities.
 
 The user explicitly reopened the entire v3.1 chain, including Skill/Hook design
 and counts. Review the whole required chain before optimizing individual parts.
-Dev.2 admission describes one candidate; change it with a justified replacement
+Current admission describes one candidate; change it with a justified replacement
 instead of treating its layout as product law. Script/reference form bans were
 removed from development projections; exact package identity, declared files
-and legal checks still apply. Next test native cross-session state and failure
-ownership and the Hook's necessity, then revise the weakest actual connection.
+and legal checks still apply. The later dev.2 input-drift probe now observes
+native same-session resume after normal exit: both arms produced 130 with
+preserved inputs; the plugin arm called Skill initially and emitted a successful
+resume Hook hint with empty eventHints. The evaluator initiated native resume,
+so crash recovery, surviving failure ownership, zero-history handoff and Hook
+necessity remain unproven. All 32 task files were removed and root absence
+verified. This old-package observation cannot qualify changed dev.3.
 Do not force a Skill invocation or invent a runtime merely to create a contrast.
+
+Dev.3 makes alignment and research conditional rather than a fixed SOP:
+progress on sufficient agreement, revisit consequential changes, reuse adequate
+authorized native/ecosystem capabilities, and research maintained external
+candidates for an actual gap before committing to custom construction.
+Default supported hosts without extra extensions and customized effective
+environments both need applicable verification. Do not equate configuration
+intent with loaded state, discovery with adoption authority, or current developer
+assistance with delivered capability. Pinned official SDK sources are candidates
+only; none was installed or integrated. Next exercise changed discovery/reuse
+and environmental paths where consequential, plus the unresolved failure owner,
+with exact-candidate observations and explicit prerequisites.
 
 The shared native/Accord capability map is in `development.json#/capabilityMap`
 and the generated plan. Its dated official references and local CLI/interface

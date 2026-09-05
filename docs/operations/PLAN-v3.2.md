@@ -11,7 +11,7 @@
 |---|---|---|---|
 | 源头校准与继承基线 | 本地实现，未发布 | 保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。 | 源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。 |
 | 系统短板与工程优化 | 本地实现，未发布 | 先核对官方原生能力、当前宿主暴露和 Accord 职责映射；按同一事实源派生索引与影响关系，列明缺口及验收，再追踪薄弱依赖并测量优化。 | 已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。 |
-| 整体执行链、原生覆盖与遗留形态审查 | 进行中 | 沿需求触发、事实与选择、执行及状态、故障接管、结果验收、清理检查连接关系；把既有 Skill/Hook、数量和校验形态视为候选假设。用普通入口对照观察原生覆盖与缺口，按必要职责重构并同步受影响的工序、包结构与验收。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
+| 整体执行链、原生覆盖与遗留形态审查 | 进行中 | 按当前足够共识推进；在影响下一安全决策的需求或证据变化处重新对齐/研究。沿触发、事实与选择、执行及状态、故障接管、验收和清理检查整体连接；现有授权能力足够则复用，缺口时外查成熟候选并比较后再自建。检验实际生效环境，把 Skill/Hook 等形态视为可改假设，同步受影响的声明、工序和验收。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
 | 动态适应、干扰与故障验收 | 待开展 | 按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。 | 普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。 |
 | 3.2 定版、发布与收尾 | 待开展 | 冻结精确候选；完成受影响的完整包证据、独立评审和托管检查；依用户条件授权发布新的 3.2。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。 |
 
@@ -21,9 +21,9 @@
 
 | 职责 | 所属工序 | 历史需求与反例参考 |
 |---|---|---|
-| 目标、授权与用户纠正 | 源头校准与继承基线、3.2 定版、发布与收尾 | GT-03, GT-04, GT-10, GT-13 |
+| 目标、授权与用户纠正 | 源头校准与继承基线、整体执行链、原生覆盖与遗留形态审查、3.2 定版、发布与收尾 | GT-03, GT-04, GT-10, GT-13 |
 | 环境感知与自身能力识别 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收 | GT-08, GT-14, GT-19 |
-| 按需研究、学习与复用发现 | 系统短板与工程优化 | GT-15 |
+| 按需研究、学习与复用发现 | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | GT-15 |
 | 关系、动态索引、路线与形态选择 | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | GT-13, GT-16, GT-17 |
 | 执行、配置与代码操作 | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | GT-02, GT-11, GT-16 |
 | 源头变更与全局一致性 | 源头校准与继承基线 | GT-17 |
@@ -65,7 +65,7 @@
 |---|---|---|---|
 | 目标、授权与用户纠正 | cx-state, cx-execution, cc-permissions, cc-tools, gpt6-cognition, gpt6-protocol | 用原生审批与交互；Accord 只补目标、纠正与后续行动的一致性。 | 用户中途纠正或撤权，观察后续实际效果而不只看答复。 |
 | 环境感知与自身能力识别 | cx-state, cx-hooks, cx-extensions, cc-extensions, cc-hooks, cc-permissions | 按需读取当前事实；分别绑定宿主、提供商、插件与个人配置，不建第二套全量宿主目录。 | 对比声明、配置、实际暴露；制造一个局部未知并观察受影响决策。 |
-| 按需研究、学习与复用发现 | cc-tools, cx-extensions, cc-extensions, gpt6-cognition | 复用原生搜索和已授权资料能力；只补来源适用性与复用决策。 | 有足够证据时不多查；资料过期、能力缺口时定向补证。 |
+| 按需研究、学习与复用发现 | cc-tools, cx-extensions, cc-extensions, gpt6-cognition | 复用足够的原生、现有授权生态及适用证据；缺口影响决策时发现已安装清单以外的成熟候选，自建前比较适用性，不另造已有的完整发现/选择/执行链。 | 现有足够或调研仍适用时不重复对齐/检索；缺口、证据失效时定向外查。核对维护、许可、兼容、安全、成本及实际效果；发现不授权安装。 |
 | 关系、动态索引、路线与形态选择 | cx-state, cx-actors, cc-actors, cc-model-policy, cc-advisor, cc-sdk, gpt6-cognition, gpt6-protocol | 从需求与现状推导稀疏路线；主/子代理选型走原生接口，必要时组合，不另设固定模型排名。 | 匹配不同需求、显式选型和不足后的重选；核对实际模型、效果与成本。 |
 | 执行、配置与代码操作 | cx-execution, cc-tools, cc-sdk | 原生工具承担操作；缺少的执行能力才组合或实现。 | 普通入口下完成实际变更，保留无关状态，禁止评估器救援冒充产品执行。 |
 | 源头变更与全局一致性 | cx-execution, cc-tools, cc-memory, gpt6-cognition | 复用编辑与检查工具；Accord 补源头变更对计划、实现和验收的影响追踪。 | 改变一项前提，只更新受影响关系与声明；检查遗漏的消费者。 |
@@ -73,7 +73,7 @@
 | 故障恢复与回滚 | cx-execution, cc-recovery, cc-tools | 优先原生恢复；仅为未覆盖副作用补偿，明确幸存执行者与可恢复范围。 | 注入中途失败，核对独立后态、并发及外部状态保护。 |
 | 上下文与任务连续性 | cx-continuity, cc-actors, cc-sdk, cc-memory, gpt6-protocol | 复用会话/上下文能力；Accord 补最小语义移交和目标核对。 | 目标与代码身份在接收端核对后再释放来源；接收失败保留安全来源。 |
 | 资源管理与清理 | cx-state, cx-execution, cx-hooks, cc-tools, cc-hooks, cc-sdk | 优先宿主配额、中断和资源控制；补归属判断及独立清理核对。 | 任务资源释放且共享资源不变；未知资源不得据推断删除。 |
-| 安装、更新与卸载生命周期 | cx-extensions, cc-extensions | 使用原生插件生命周期；仅补实证缺失的补偿和后态验证。 | 精确 dev.2 包的安装、更新失败、成功更新和卸载；确认加载与残留。 |
+| 安装、更新与卸载生命周期 | cx-extensions, cc-extensions | 使用原生插件生命周期；仅补实证缺失的补偿和后态验证。 | 精确当前候选包的安装、更新失败、成功更新和卸载；确认加载与残留。 |
 | 原生接替、旁路与退役 | cx-state, cx-extensions, cc-extensions, cc-model-policy, gpt6-cognition | 原生同责效果足够则旁路或退役重复实现，保留必要结果责任。 | 新原生能力接替后核对效果、恢复及清理；其后失效时重新评估。 |
 | 结果验证、独立证据与实际价值 | cx-execution, cc-tools, cc-sdk, gpt6-cognition | 复用宿主测试/观察；按声明补独立验收、对照与贡献归因。 | 全链路结果及后态可观察；区分宿主本来就会与 Accord 的必要帮助。 |
 
@@ -83,7 +83,7 @@ One versioned semantic source supplies the native matrix, Accord duty matrix and
 
 At a relevant decision, inspect the running client, actual provider/model, policy and exposed interface. Version/feature/configuration/package/permission changes, a supported invalidation event, source contradiction, missing observation or failed effect reopen affected applicability. Re-read supported state and only the needed official documentation; no automatic network watcher or fixed global expiry is installed. Retain the dated observation as history, never as permanently current support.
 
-The dev.2 host Skill supplies guidance, not a proven system executor. A bounded same-turn Claude Code/DeepSeek repair probe produced correct artifacts with and without Accord; neither arm invoked a Skill. Its observation is in developmentObservations, not whole-system acceptance. Cross-session state, surviving recovery and the Hook's necessary effect remain open. closure.py is a no-I/O reference core and the graph HTML is a simulated PoC; neither is a live host index or automatic executor.
+The dev.3 host Skill supplies adaptive guidance, not a proven system executor. Historical dev.2 Claude Code/DeepSeek probes show bounded native repair and same-session resume after a normal process restart with input drift. The resume deliverable arm invoked the Skill and emitted a successful Hook hint, but native control also succeeded. These observations do not qualify changed dev.3 behavior, incremental value, surviving failure ownership, zero-history handoff or package lifecycle. closure.py is a no-I/O reference core and the graph HTML is a simulated PoC; neither is a live host index or automatic executor.
 
 运行时分配要求：依赖运行时不等于必须自建运行时。按所需可靠性绑定触发者、实际执行者、必要状态载体和故障后的接管者；一轮任务可只需宿主现有 Agent 循环和上下文。要求确定触发、强制约束、跨轮或跨会话状态、无人值守推进或故障后继续执行时，核验宿主是否覆盖这些职责；缺失则组合或实现最小足够运行时，包括必要的持久机制。Skill 是 Agent 可解释的指导，不是独立调度器或强制执行保证。运行时增加也不自动证明业务效果；仍验收普通入口、失败及独立后态。当前缺口未闭合前不宣称仅靠 Skill 足够。
 
@@ -93,7 +93,7 @@ The dev.2 host Skill supplies guidance, not a proven system executor. A bounded 
 
 - `codex-cli-schema` — Codex CLI 0.153.3; default non-experimental generated ClientRequest.json。99 method variants; model/list, modelProvider/capabilities/read, experimentalFeature/list, skills/list, hooks/list, app/installed, plugin/list/install/uninstall, thread/start/read/resume/fork/compact/start, turn/start/interrupt, config/read, configRequirements/read, account/rateLimits/read and command/exec are present. Background-terminal list/clean are absent from the default schema, not proven unsupported. Schema existence only; no daemon query, model request or method effect. CLI version is not Desktop engine identity. Generated task-owned schema files are disposable.
 - `codex-cli-flags` — Codex CLI 0.153.3。multi_agent, hooks and plugins stable/enabled; step_model_switching under-development/disabled. Plugin add/list/marketplace/remove subcommands exposed. CLI configuration and help snapshot only, not all Desktop feature state or task-fit behavior.
-- `claude-cli-help` — Claude Code 2.1.261; existing authorized DeepSeek route。model, agents, fallback-model, plugin-dir, restricted, setting-sources, strict-mcp-config, permission-mode, resume and fork-session flags exposed. Local option existence, not API compatibility or successful execution. Prior dev.1 probe is separately bounded and cannot qualify dev.2. No official Claude account access is assumed.
+- `claude-cli-help` — Claude Code 2.1.261; existing authorized DeepSeek route。model, agents, fallback-model, plugin-dir, restricted, setting-sources, strict-mcp-config, permission-mode, resume and fork-session flags exposed. Local option existence, not API compatibility or successful execution. Prior package probes remain separately bounded and cannot qualify the changed candidate. No official Claude account access is assumed.
 
 ## 动态适应的必查链路
 
@@ -102,6 +102,9 @@ The dev.2 host Skill supplies guidance, not a proven system executor. A bounded 
 
 | 环境变化 | 要观察的功能效果 | 失败判据 |
 |---|---|---|
+| 受支持宿主为默认配置且未添加第三方 Skills/MCP/插件/App，当前可用能力不足。 | 在声明的最小宿主前提下核对实际可用工具；按需使用官方目录/文档/源码、维护中的第三方或可靠外部渠道发现候选。发现本身不强制新增插件；缺联网、账号、权限或执行条件时明确缺口，取得必要授权后再接入并验证。 | 不能假定开发者增强环境普遍存在，也不能把默认配置等同零前提万能环境；不得静默调用未声明外援、无授权安装，或将发现候选当成功执行。 |
+| 当前共识足够，或后续出现影响下一安全决策的需求变化、证据失效或能力缺口。 | 足够时直接复用并推进；不足时按受影响部分澄清/外查官方和维护中的成熟候选，在自建承诺前比较。允许安全有界试验逐步形成认识；发现不授权安装或改变目标/验收。 | 不能每轮强制全量需求访谈或联网；不能把现有清单当全部候选，也不能借动态之名静默放宽验收或在关键未知下冒进。 |
+| 用户自定义指令、设置或扩展可能影响当前决定与效果，或声明配置与会话加载状态不一致。 | 只核对相关作用域、继承/覆盖和实际加载行为；兼容帮助可用，冲突按影响局部处理。验收绑定必要条件，并区分用户外援与可交付能力。 | 不能只读配置即宣称生效/隔离；不能擅改用户共享配置、采集凭据或将未知环境当官方初始状态，不能把额外帮助算作 Accord 固有增益。 |
 | 模型更新使原有弱项消失，或对指导、上下文和工具的响应方式改变。 | 在同等任务及宿主条件下重新建立无 Accord 的模型原生基线；确认冗余或干扰后按同责效果削减介入，仅补残余缺口。 | 不能固化旧模型缺陷、将模型能力算作插件增益，或将 API 功能宣传当作当前宿主的执行证据。 |
 | 主任务或子任务需要不同模型/推理配置，或所选路线失效、漂移、不满足效果。 | 在授权候选中自动匹配足够能力并通过原生或必要组合执行，核对实际模型及结果；原生足够时不保留重复路由器。 | 将默认继承、配置意图或品牌排名当作匹配证据；擅改用户钉定模型；无视别名/替代或虚称已切换。 |
 | 当前原生能力已足够。 | 按需复用并减少介入，保持同一功能与质量；不为证明插件存在感强行接管。 | 无必要重造、冗余机制或将非介入冒充增量价值。 |
@@ -112,11 +115,12 @@ The dev.2 host Skill supplies guidance, not a proven system executor. A bounded 
 
 ## 当前短板及证据边界
 
-- `candidate-shape-and-whole-chain-review` — `reviewed-not-architecture-frozen`：dev.2 仍是单 Skill 加固定 SessionStart Hint 的候选形态；开发校验器也按该形态核验，不是通用形态引擎。已移除源数据中脚本/参考文件的冗余禁令，仍拒绝未声明文件及包摘要不符。Skill/Hook、核心、运行时及其数量均可因完整职责而改变，届时同步改声明、校验和验收，不靠放松摘要绕过。当前 Hook 只在恢复/压缩时输出提示；无状态查询、调度或恢复执行。纯核心及图 PoC 未接入普通入口，不能拼成一个已经闭合的系统。
+- `candidate-shape-and-whole-chain-review` — `reviewed-not-architecture-frozen`：dev.3 仍是单 Skill 加固定 SessionStart Hint 的候选形态；开发校验器也按该形态核验，不是通用形态引擎。已移除源数据中脚本/参考文件的冗余禁令，仍拒绝未声明文件及包摘要不符。Skill/Hook、核心、运行时及其数量均可因完整职责而改变，届时同步改声明、校验和验收，不靠放松摘要绕过。当前 Hook 只在恢复/压缩时输出提示；无状态查询、调度或恢复执行。纯核心及图 PoC 未接入普通入口，不能拼成一个已经闭合的系统。
 - `native-accord-capability-map` — `mapped-interface-evidence-not-runtime-closure`：已建立有日期和来源的原生能力—Accord 职责关系，连接当前工序、验收与变更重查；动态图 PoC 和纯核心不是实时宿主索引或执行器，普通入口的全链路闭环仍待验证。
 - `needs-based-model-and-subagent-routing` — `implemented-guidance-native-coverage-under-review`：主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。
-- `source-to-projection-convergence` — `implemented-local-unverified`：Two worktree Skills and schema-v2 entry descriptors now implement host-driven, form-neutral guidance as unpublished 3.2.0-dev.2 packages. The Node invalidation helper is unchanged and optional. Static admission and ordinary-entry behavior are distinct; successor host effects remain unverified.
-- `ordinary-entry-effect-and-recovery` — `open`：dev.2 在 Claude Code/DeepSeek 的单轮修复对照中，两组均实际运行测试、生成正确结果、保留输入，外部各复验 200 例；均未调用 Skill，不能归因 Accord。原生组自行修复一次新增代码错误；插件组说明含记录关系错误，叙述可信度未闭合。跨会话状态、失败后的存活接管、Hook 的必要性及包生命周期仍需普通入口验证，不能用同轮重试或评估器清理替代。
+- `conditional-alignment-and-external-discovery` — `implemented-local-unverified`：需求对齐、调研和执行按决策需要动态迭代，不要求一次定全，也不机械逐步重跑；现有授权条件足够则复用，缺口时发现清单外成熟候选，自建前比较。已定向核查两宿主官方 SDK 的固定 GitHub 源码及维护/许可元数据；仅为外部候选参考，没有安装或接入，也未证明当前包发现/复用效果。
+- `source-to-projection-convergence` — `implemented-local-unverified`：Both worktree Skills now project conditional alignment, external discovery and effective-environment guidance as unpublished 3.2.0-dev.3 packages. Schema-v2 entry descriptors and optional Node hints are unchanged. These are context-triggered duties, not a fixed SOP. Static admission does not prove current host effects.
+- `ordinary-entry-effect-and-recovery` — `open`：dev.2 同轮修复对照中两组均产出正确结果且外部各复验 200 例，但未调用 Skill；插件组说明仍有事实错误。后续正常退出后以同 session 恢复的输入漂移对照，两组均保持先不写的授权边界、恢复后重读并得到正确 130；插件组初轮调用 Skill、恢复 Hook 返回成功提示。原生也足够，不能归因增益；评估器发起恢复及清理不证明崩溃自主接管。新 dev.3 行为、零历史交接和完整生命周期仍未验证。
 - `verification-io-amplification` — `implemented-local-measured`：同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。
 - `acceptance-cost-and-coupling` — `implemented-local-unverified`：Current verify/host-check now dispatch to development-package admission without promoting or repeatedly replaying historical behavior. Retained rejection tests run current verifier code against the immutable predecessor subject. Package safety, identity, complexity, source preservation and dirty-worktree gates remain applicable; current functional and host evidence are still unverified.
 

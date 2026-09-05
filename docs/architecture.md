@@ -25,6 +25,22 @@ total lifecycle burden. A runtime is eligible on the same basis as any other
 form. No universal event, Hook, pure-core invocation or exhaust-every-lighter-form
 ladder is required. A rule's scope and activation are part of its meaning.
 
+Alignment, research, implementation and review are conditional responsibilities,
+not a fixed SOP or a demand for perfect up-front requirements. Progress on
+sufficient current agreement and revisit only materially affected decisions;
+changes to goals, authority or acceptance must be explicit. Reuse sufficient
+authorized native or ecosystem capabilities and applicable prior evidence.
+For a decision-relevant gap, discover maintained external candidates beyond
+installed inventory before committing to custom construction. Assess source,
+maintenance, license, fit, safety and lifecycle cost; a GitHub listing is not a
+trust guarantee and discovery does not authorize installation or new access.
+Supported default hosts without extra extensions and customized hosts both
+matter: neither development-only assistance nor a pristine setup is assumed.
+Use available official or reliable external discovery routes; expose missing
+network, account, permission or execution prerequisites. Observe relevant
+effective policy and loaded state, not configuration intent alone; minimize
+private data and preserve unknowns. Isolate only consequential conflicts.
+
 The 13 inherited responsibilities are a necessity-review inventory, not an
 immutable feature list. Retain needed outcomes, delegate sufficient work to the
 host, merge or retire unnecessary functions, and fill evidenced gaps. Bind each
@@ -50,11 +66,11 @@ The retained contract regression suite runs current verifier code against its
 immutable predecessor subject; successor rejection tests exercise current bytes.
 Neither suite alone establishes host behavior, outcome completion or value.
 
-The two worktree packages are now `3.2.0-dev.2`, unpublished and not installed.
+The two worktree packages are now `3.2.0-dev.3`, unpublished and not installed.
 Their schema-v2 descriptors make the host Skill the ordinary executor entry.
-This describes the dev.2 candidate, not an immutable architecture. Skill/Hook
+This describes the dev.3 candidate, not an immutable architecture. Skill/Hook
 count, layout, dependency choices and their validators can change with the
-required whole-chain outcome. Current admission still pins the exact dev.2
+required whole-chain outcome. Current admission still pins the exact current
 descriptor and Hook transport; it is not a universal implementation engine.
 The development source no longer bans scripts or disclosed references by form;
 exact declared-file, digest and legal checks still reject unadmitted contents.
@@ -108,9 +124,19 @@ artifacts on the existing Claude Code/DeepSeek route. Both arms passed the code
 checks without calling a Skill; the plugin arm also made a factual mistake in
 its final explanation. This does not establish Accord value, explanation
 reliability, cross-session state, surviving-executor recovery or Hook necessity.
-The test observer owned process containment and residue cleanup, not the DUT.
-Prioritize those remaining connections instead of turning this local pass into
-system acceptance or mandating more guidance for an already sufficient route.
+A later dev.2 normal-restart, same-session resume probe changed the input
+between turns without repeating the result criteria. Both arms held the initial
+no-write boundary, reread current inputs after authorization and produced 130,
+not the historical 155. The plugin arm called the Skill in its initial turn;
+its resume Hook succeeded with typed context but empty event hints. Invocation
+and transport are now observed for that exact old subject, not incremental
+value, Hook necessity or changed dev.3 behavior. The evaluator initiated resume
+and owned process containment and cleanup; this is not autonomous crash
+recovery, a zero-history handoff or delivered lifecycle evidence.
+Pinned official SDK source candidates are separately recorded in
+developmentObservations. They remain uninstalled, unintegrated references,
+not proof of a surviving execution owner. Prioritize those remaining connections
+without mandating extra guidance for an already sufficient native route.
 
 The open successor validates its actual changed paths. The predecessor's closed
 transition is checked at its immutable revision rather than against new worktree
