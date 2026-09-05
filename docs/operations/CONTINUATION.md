@@ -74,8 +74,10 @@ whether the available host composition closes the duty.
   status narrative here. Prior diagnostic details are
   [recoverable at exact revision 1e5ef96](https://github.com/yiheng8023/YIYUAN-Accord/blob/1e5ef9635b41c576edd622001fd477f391944b59/docs/operations/CONTINUATION.md).
 - Current conversation extensions and inherited context are development help,
-  not ordinary-user evidence. Do not change personal settings or weaken effective
-  policy to manufacture a test. Bind transport limits, actual tool access,
+  not ordinary-user evidence. Necessary user-authorized configuration changes
+  require a bound target, backup, affected-session accounting and verified
+  restoration; an unchanged personal configuration is not a universal prerequisite.
+  Do not weaken effective policy to manufacture a pass. Bind transport limits, actual tool access,
   normal termination and task-owned post-state separately.
 - Existing Claude CLI evaluation uses the authorized CC Switch/DeepSeek route,
   not the unavailable official Claude account. Keep provider/model and host

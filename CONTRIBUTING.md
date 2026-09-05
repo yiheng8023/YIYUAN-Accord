@@ -45,8 +45,9 @@ or material improvement. A size target cannot excuse lost function or quality.
 For material corrections or failures, return to the earliest affected dependency.
 Preserve unrelated verified work and superseded evidence; recheck affected claims.
 Repeated same-purpose repair calls for premise and replacement review.
-Keep one writer per mutable target; do not change user or shared host configuration
-to make an evaluation easier. Additional host adaptation remains deferred.
+Keep one writer per mutable target. Bind necessary user-authorized configuration
+changes to a specific scope, verified backup, affected sessions and recovery;
+do not change settings to manufacture a pass. Additional host adaptation remains deferred.
 
 ## Verification and publication
 
