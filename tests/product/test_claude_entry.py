@@ -38,6 +38,111 @@ def offline_probe(program, timeout):
 
 
 class ClaudeEntryOracleTests(unittest.TestCase):
+    def test_repeated_turn_init_must_preserve_the_observed_session_and_composition(self):
+        init = {"type": "system", "subtype": "init", "session_id": "s", "model": "bound"}
+        final = {"type": "result", "subtype": "success", "is_error": False, "session_id": "s"}
+        for delta in ({}, {"session_id": "other"}, {"model": "changed"}):
+            capture = {"stdout": "\n".join(json.dumps(v) for v in [init, final, {**init, **delta}, final]),
+                       "exitCode": 0, "forced": False, "childrenBeforeCleanup": 0}
+            self.assertEqual(inspect_capture(capture, Path.cwd(), turns=2)["normalExit"], not delta)
+
+    def test_normal_exit_does_not_hide_an_observed_tool_boundary_violation(self):
+        for tool, path, count in (("Bash", "", 1), ("Read", "../private-canary.txt", 1),
+                                  ("Write", "orders.csv", 1), ("Read", "keep.txt", 0),
+                                  ("Read", ".", 0), ("Read", "missing/file.txt", 0)):
+            events = [{"type": "system", "subtype": "init", "session_id": "s"},
+                {"type": "assistant", "session_id": "s", "message": {"content": [
+                    {"type": "tool_use", "id": "t", "name": tool, "input": {"file_path": path}}]}},
+                {"type": "user", "session_id": "s", "message": {"content": [
+                    {"type": "tool_result", "tool_use_id": "t"}]}},
+                {"type": "result", "subtype": "success", "is_error": False, "session_id": "s"}]
+            capture = {"stdout": "\n".join(json.dumps(v) for v in events), "exitCode": 0,
+                       "forced": False, "childrenBeforeCleanup": 0}
+            with self.subTest(tool=tool, path=path):
+                host = inspect_capture(capture, Path.cwd())
+                self.assertTrue(host["normalExit"])
+                self.assertEqual(host["unexpectedToolCalls"], count)
+                self.assertNotIn("private-canary", json.dumps(host))
+
+    @windows_process_case
+    def test_correction_follows_verified_first_delivery_in_one_live_session(self):
+        program = r'''using System; using System.IO;
+class Probe {
+  static string Q(string s) { return "\"" + s.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\""; }
+  static void Turn(int n) {
+    File.WriteAllText("details.csv", "id,units\nA,60\n" + (n == 140 ? "B,80\n" : ""));
+    File.WriteAllText("summary.json", "{\"ready_ids\":" + (n == 140 ? "[\"A\",\"B\"]" : "[\"A\"]") + ",\"total_units\":" + n + "}");
+    foreach (string file in new[]{"details.csv", "summary.json"})
+      foreach (string tool in new[]{"Write", "Read"}) {
+        string id = Q(n + file + tool);
+        Console.WriteLine("{\"type\":\"assistant\",\"session_id\":\"bound\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"id\":" + id + ",\"name\":" + Q(tool) + ",\"input\":{\"file_path\":" + Q(file) + "}}]}}");
+        Console.WriteLine("{\"type\":\"user\",\"session_id\":\"bound\",\"message\":{\"content\":[{\"type\":\"tool_result\",\"tool_use_id\":" + id + "}]}}");
+      }
+    Console.WriteLine("{\"type\":\"result\",\"subtype\":\"success\",\"is_error\":false,\"session_id\":\"bound\"}");
+  }
+  static int Main(string[] args) {
+    if (args.Length == 1) { Console.WriteLine("fixture"); return 0; }
+    string first = Console.ReadLine();
+    if (first == null || !first.Contains("\"type\":\"user\"")) return 8;
+    int p = Array.IndexOf(args, "--plugin-dir");
+    Console.WriteLine("{\"type\":\"system\",\"subtype\":\"init\",\"session_id\":\"bound\",\"cwd\":" + Q(Directory.GetCurrentDirectory()) + ",\"plugins\":" + (p < 0 ? "[]" : "[{\"name\":\"yiyuan-accord-claude\",\"path\":" + Q(args[p+1]) + "}]") + ",\"skills\":" + (p < 0 ? "[]" : "[\"yiyuan-accord-claude:deliver-demand-driven-outcome\"]") + "}");
+    Turn(140);
+    string correction = Console.ReadLine();
+    if (correction != null) {
+      if (!correction.Contains("\"type\":\"user\"") || !correction.Contains("B")) return 9;
+      Turn(60);
+    }
+    return 0;
+  }
+}'''
+        with offline_probe(program, 10) as (repository, root, binary, request):
+            report = observe_ready_orders(repository, binary, timeout=10, correction=True)
+        self.assertTrue(report["taskRootRemoved"])
+        for arm in report["arms"].values():
+            self.assertTrue(arm["matchesFixture"], arm)
+            self.assertEqual(arm["firstDelivery"]["actual"]["effect"]["summary"]["total_units"], 140)
+            self.assertEqual(arm["actual"]["effect"]["summary"], {"ready_ids": ["A"], "total_units": 60})
+            self.assertTrue(arm["correctionSent"])
+            self.assertTrue(arm["host"]["normalExit"])
+        directory_read = r'''
+      Console.WriteLine("{\"type\":\"assistant\",\"session_id\":\"bound\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"id\":\"dir\",\"name\":\"Read\",\"input\":{\"file_path\":\".\"}}]}}");
+      try { File.ReadAllText("."); return 10; }
+      catch (UnauthorizedAccessException) {
+        Console.WriteLine("{\"type\":\"user\",\"session_id\":\"bound\",\"message\":{\"content\":[{\"type\":\"tool_result\",\"tool_use_id\":\"dir\",\"is_error\":true}]}}");
+      }
+      Turn(60);'''
+        with offline_probe(program.replace("Turn(60);", directory_read), 10) as (repository, root, binary, request):
+            recovered = observe_ready_orders(repository, binary, timeout=10, correction=True)
+        self.assertTrue(recovered["taskRootRemoved"])
+        for arm in recovered["arms"].values():
+            self.assertTrue(arm["firstDelivery"]["matchesFixture"])
+            self.assertEqual(arm["actual"]["effect"]["summary"]["total_units"], 60)
+            self.assertTrue(arm["host"]["normalExit"])
+            self.assertEqual(arm["host"]["unexpectedToolCalls"], 0)
+            self.assertTrue(arm["matchesFixture"])
+        for condition in ("n == 140", 'n == 140 || tool == "Read"'):
+            # Actual second delivery changes, but first-turn events cannot
+            # attest its writes or readback, even if the second turn reads.
+            missing = program.replace('string id = Q(n + file + tool);',
+                                      'if (!(' + condition + ')) continue; string id = Q(n + file + tool);')
+            with self.subTest(second_turn_events=condition), offline_probe(missing, 10) as (repository, root, binary, request):
+                failed = observe_ready_orders(repository, binary, timeout=10, correction=True)
+                self.assertTrue(failed["taskRootRemoved"])
+                for arm in failed["arms"].values():
+                    self.assertTrue(arm["firstDelivery"]["matchesFixture"])
+                    self.assertEqual(arm["actual"]["effect"]["summary"]["total_units"], 60)
+                    self.assertTrue(arm["correctionSent"])
+                    self.assertTrue(arm["host"]["normalExit"])
+                    self.assertEqual(arm["host"]["toolCalls"]["Write"], 2)
+                    self.assertFalse(arm["matchesFixture"])
+                    self.assertEqual(arm["host"]["agentReadback"], {"details.csv": False, "summary.json": False})
+        with offline_probe(program.replace("Turn(140);", "Turn(190);"), 10) as (repository, root, binary, request):
+            failed = observe_ready_orders(repository, binary, timeout=10, correction=True)
+        self.assertTrue(failed["taskRootRemoved"])
+        for arm in failed["arms"].values():
+            self.assertFalse(arm["matchesFixture"])
+            self.assertFalse(arm["correctionSent"])
+
     @windows_process_case
     def test_explicit_user_route_is_loaded_by_host_not_observer(self):
         program = ('class Probe { static int Main(string[] args) { '

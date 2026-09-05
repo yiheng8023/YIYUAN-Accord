@@ -63,8 +63,9 @@ whether the available host composition closes the duty.
 
 ## Evidence and authority limits
 
-- The unpublished packages remain `3.2.0-dev.5`; this maintainer-validation change
-  does not change package bytes or installed 3.1.
+- The unpublished packages are `3.2.0-dev.6`; continuity guidance now separates
+  destination takeover from fact checks and requires explicit user authority
+  for archival. Installed 3.1 is unchanged; fresh affected evidence is required.
 - Ordinary-entry functionality and incremental value remain unverified. Prior
   samples include native sufficiency, unused guidance, incomplete delivery and
   unsupported verification claims. Explicit Skill use is a different condition.

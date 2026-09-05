@@ -304,9 +304,10 @@ _Avoid_: context relief, source replacement, implicit state reconciliation
 
 **Sequential handoff**:
 A transition to a fresh zero-inherited-history carrier that transfers only the
-minimum verified state, verifies destination goal, checkout and current state,
-then releases the source.
-_Source_: `product/constitution.json#/learnedFailureStandards (id: L6)`
+minimum verified state, verifies destination facts, then delivers and confirms
+takeover with one writer before releasing source resources. User task/history
+archival requires explicit user authorization; handoff grants none.
+_Source_: `product/development.json#/acceptance/duties (id: context-and-task-continuity)`
 _Avoid_: fork, copy-only continuation, release before destination verification
 
 **Process-loss control**:

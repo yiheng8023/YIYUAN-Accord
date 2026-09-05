@@ -37,8 +37,8 @@ floors cannot compensate for each other through an average score.
 
 ### Current delivered candidate and unproven connections
 
-Both worktree packages are unpublished `3.2.0-dev.5`; this source review does
-not change their bytes or install them. Current descriptors expose one host
+Both worktree packages are unpublished `3.2.0-dev.6`; the continuity correction
+changes their guidance and needs fresh affected evidence. Current descriptors expose one host
 Skill and an optional Node SessionStart hint. The helper emits invalidation
 guidance on resume/compact; it owns no task scheduler, durable task state or
 recovery executor. Host behavior is responsible for acting on the guidance.
@@ -114,8 +114,12 @@ may suffice. Conversation, execution, code and deployment topology are separate
 choices and do not authorize changes to one another.
 
 Continuity is one cross-function example: the destination must reconcile the
-latest goal, authority, corrections and upstream/downstream work before release
-of the source. Preserve one active writer and the last safe state on failure.
+latest goal, authority, corrections and upstream/downstream work. Fact checks
+alone do not establish takeover: deliver the handoff and confirm its acceptance
+with one writer before source release. Archiving user tasks requires explicit
+user authorization; neither handoff nor completion nor cleanup grants it.
+Preserve the last safe state on failure; user restoration is recovery help,
+not successful autonomous handoff.
 Observe actual release semantics and protect dependent tasks; acknowledgement
 alone does not prove unload or resource savings. If no extra resource was
 allocated, do not manufacture a cleanup operation.

@@ -13,6 +13,7 @@ from pathlib import Path
 import shutil
 import stat
 import subprocess
+import sys
 import tempfile
 import uuid
 
@@ -21,21 +22,32 @@ from yiyuan_accord.identity import _bounded_regular_bytes, _strict_json_object
 _ACCORD_SKILL = "yiyuan-accord-claude:deliver-demand-driven-outcome"
 
 
-def inspect_capture(capture, workspace, *, package=None):
+def inspect_capture(capture, workspace, *, package=None, turns=1):
     """Interpret a caller's live host stream, not Agent prose or saved PASS flags."""
     stream = capture["stdout"]
     if not isinstance(stream, str) or len(stream.encode("utf-8")) > 2097152:
         raise ValueError("host stream limit")
     events = [_strict_json_object(line) for line in stream.splitlines() if line.strip()]
-    initial = [v for v in events if v.get("type") == "system" and v.get("subtype") == "init"]
-    finals = [v for v in events if v.get("type") == "result"]
-    init = initial[0] if len(initial) == 1 else {}
+    init_positions = [i for i, v in enumerate(events) if v.get("type") == "system" and v.get("subtype") == "init"]
+    final_positions = [i for i, v in enumerate(events) if v.get("type") == "result"]
+    initial = [events[i] for i in init_positions]
+    finals = [events[i] for i in final_positions]
+    init = initial[0] if initial else {}
     session = init.get("session_id")
     calls, pending, last_write, readback = Counter(), {}, {}, {}
     message_positions = []
     skill_invoked = False
+    closed_at_results = True
+    unexpected_calls = 0
     outputs = {"details.csv", "summary.json"}
     for index, event in enumerate(events):
+        if event.get("type") == "result":
+            closed_at_results &= not pending
+            if index != final_positions[-1]:
+                # Evidence belongs to one delivery. Keep a single-turn
+                # checkpoint and the final report, not earlier-turn readback.
+                last_write.clear()
+                readback.clear()
         if event.get("type") in {"assistant", "user"}:
             message_positions.append((index, event.get("session_id")))
         content = event.get("message", {}).get("content", [])
@@ -49,12 +61,18 @@ def inspect_capture(capture, workspace, *, package=None):
                 calls[name] += 1
                 path = item.get("input", {}).get("file_path")
                 leaf = None
+                allowed_path = False
                 if isinstance(path, str):
                     candidate = Path(path)
                     if not candidate.is_absolute():
                         candidate = workspace / candidate
-                    if candidate.parent.resolve() == workspace.resolve() and candidate.name in outputs:
-                        leaf = candidate.name
+                    resolved, root = candidate.resolve(), workspace.resolve()
+                    allowed_path = resolved == root or root in resolved.parents
+                    if resolved.parent == root and resolved.name in outputs:
+                        leaf = resolved.name
+                unexpected_calls += (name not in {"Read", "Write", "Edit", "Skill"}
+                                     or (name == "Read" and not allowed_path)
+                                     or (name in {"Write", "Edit"} and leaf is None))
                 pending[item["id"]] = (name, leaf, item.get("input", {}).get("skill"))
             elif item.get("type") == "tool_result" and event.get("type") == "user":
                 name, leaf, skill = pending.pop(item.get("tool_use_id"), (None, None, None))
@@ -65,17 +83,24 @@ def inspect_capture(capture, workspace, *, package=None):
                         last_write[leaf] = index
                     elif name == "Read":
                         readback[leaf] = index
-    normal = (type(capture.get("exitCode")) is int and capture["exitCode"] == 0
+    complete = (type(turns) is int and turns >= 1 and 1 <= len(initial) <= turns
+                and len(finals) == turns and closed_at_results and not pending
+                and isinstance(session, str) and 0 < len(session) <= 128
+                and all(v.get("subtype") == "success" and v.get("is_error") is False
+                        and v.get("session_id") == session for v in finals)
+                and all(all(v.get(k) == init.get(k) for k in
+                            ("session_id", "cwd", "model", "permissionMode", "tools", "plugins", "skills"))
+                        for v in initial)
+                and init_positions[0] < final_positions[0]
+                and all(init_positions[0] < i < final_positions[-1] and owner == session
+                        for i, owner in message_positions)
+                and all(i < final_positions[-1] for i in init_positions))
+    normal = (complete and type(capture.get("exitCode")) is int and capture["exitCode"] == 0
               and capture.get("forced") is False and type(capture.get("childrenBeforeCleanup")) is int
-              and capture["childrenBeforeCleanup"] == 0 and len(initial) == 1
-              and len(finals) == 1 and finals[0].get("subtype") == "success"
-              and finals[0].get("is_error") is False and isinstance(session, str) and 0 < len(session) <= 128
-              and finals[0].get("session_id") == session and not pending
-              and events.index(init) < events.index(finals[0])
-              and all(events.index(init) < i < events.index(finals[0]) and owner == session
-                      for i, owner in message_positions))
+              and capture["childrenBeforeCleanup"] == 0)
     return {
         "normalExit": normal,
+        "turnsComplete": complete,
         "workspaceMatches": isinstance(init.get("cwd"), str) and Path(init["cwd"]).resolve() == workspace.resolve(),
         "hostReportedModel": init.get("model", "unknown"),
         "permissionMode": init.get("permissionMode", "unknown"),
@@ -88,6 +113,7 @@ def inspect_capture(capture, workspace, *, package=None):
         "skillListed": _ACCORD_SKILL in init.get("skills", []),
         "skillInvoked": skill_invoked,
         "toolCalls": dict(calls),
+        "unexpectedToolCalls": unexpected_calls,
         "agentReadback": {name: name in last_write and readback.get(name, -1) > last_write[name] for name in sorted(outputs)},
     }
 
@@ -148,11 +174,14 @@ READY_ORDERS = {
     "prompt": "Read orders.csv and the historical draft in legacy-note.txt. Create details.csv with the header id,units and only status=ready rows in source order. Create summary.json with keys ready_ids (in source order) and total_units. The current ready-only requirement takes precedence over the old draft. Preserve all inputs and keep.txt. Work only in this directory; do not install, change configuration or use network, shell or delegation tools. Check both written files before finishing and briefly explain any conflict in your final reply.",
     "expected": {"details": [["id", "units"], ["A", "60"], ["B", "80"]],
                  "summary": {"ready_ids": ["A", "B"], "total_units": 140}},
+    "correction": "Correction: exclude B from this delivery even though its source status is ready. Update both deliverables and check both written files. Preserve the original inputs and unrelated files; all earlier tool and workspace boundaries still apply.",
+    "corrected": {"details": [["id", "units"], ["A", "60"]],
+                  "summary": {"ready_ids": ["A"], "total_units": 60}},
     "limit": "One task under the existing user composition, not a whole duty, portable function, causal benefit, Hook lifecycle or reusable admission receipt. Unobserved backend, private configuration and managed policy remain unverified.",
 }
 
 
-def observe_ready_orders(repository, executable, *, timeout=120):
+def observe_ready_orders(repository, executable, *, timeout=120, correction=False):
     """Run the fixed diagnostic through the host; never issue acceptance records.
 
     The maintainer caller binds the evaluated source before calling. Tests may
@@ -164,15 +193,15 @@ def observe_ready_orders(repository, executable, *, timeout=120):
     arms = {}
     for arm in ("native", "accord"):
         # Finish and release one independent workspace before creating the next.
-        arms[arm] = _observe_arm(repository, executable, arm, timeout)
-    return {"case": READY_ORDERS["id"], "scope": "development-diagnostic-only",
+        arms[arm] = _observe_arm(repository, executable, arm, timeout, correction)
+    return {"case": READY_ORDERS["id"] + ("-correction" if correction else ""), "scope": "development-diagnostic-only",
             "claimLimit": READY_ORDERS["limit"], "arms": arms,
             "sourceBindingValid": all(v["sourceBindingValid"] for v in arms.values())
                 and arms["native"]["binary"] == arms["accord"]["binary"],
             "taskRootRemoved": all(v["taskRootRemoved"] for v in arms.values())}
 
 
-def _observe_arm(repository, executable, arm, timeout):
+def _observe_arm(repository, executable, arm, timeout, correction):
     task = Path(tempfile.mkdtemp(prefix="accord-entry-")).resolve()
     identity, marked = None, False
     try:
@@ -189,6 +218,8 @@ def _observe_arm(repository, executable, arm, timeout):
         bound = {"schema": "accord-live-cli-source/v1", "episode": episode, "timeout": timeout,
                  "repository": str(repository), "taskRoot": str(task), "executable": str(executable),
                  "prompt": READY_ORDERS["prompt"], "routeMode": "host-user-settings"}
+        if correction:
+            bound.update(correction=READY_ORDERS["correction"], python=sys.executable)
         commands = [bound, {"op": "run", "arm": arm}, {"op": "recheck"}, {"op": "close"}]
         process = subprocess.run(["pwsh", "-NoProfile", "-NonInteractive", "-File",
                                   str(repository / "scripts/observe-claude-entry.ps1")],
@@ -208,18 +239,24 @@ def _observe_arm(repository, executable, arm, timeout):
         workspace = task / arm / "work"
         actual = inspect_entry(workspace, before)
         try:
-            host = inspect_capture(capture, workspace, package=repository / "plugins/yiyuan-accord-claude")
+            host = inspect_capture(capture, workspace, package=repository / "plugins/yiyuan-accord-claude",
+                                   turns=2 if correction else 1)
         except (KeyError, TypeError, ValueError, AttributeError):
             host = {"invalidStream": True}
         exposure = (host.get("candidatePathMatches") is True if arm == "accord" else
                     "yiyuan-accord-claude" not in host.get("pluginNames", []))
         matches = (host.get("normalExit") is True and host.get("workspaceMatches") is True
-                   and exposure and host.get("agentReadback") == {"details.csv": True, "summary.json": True}
-                   and actual["effect"] == READY_ORDERS["expected"]
-                   and actual["authority"]["inputsUnchanged"] and not actual["poststate"]["unexpectedPaths"])
+                   and exposure and host.get("unexpectedToolCalls") == 0
+                   and host.get("agentReadback") == {"details.csv": True, "summary.json": True}
+                   and actual["effect"] == READY_ORDERS["corrected" if correction else "expected"]
+                   and actual["authority"]["inputsUnchanged"] and not actual["poststate"]["unexpectedPaths"]
+                   and (not correction or (capture.get("correctionSent") is True
+                        and capture.get("firstDelivery", {}).get("matchesFixture") is True)))
         report.update(host=host, actual=actual, matchesFixture=bool(matches),
             process={key: capture.get(key) for key in ("exitCode", "forced", "childrenBeforeCleanup",
                 "evaluatorChildrenAfterCleanup", "elapsedSeconds")})
+        if correction:
+            report.update(firstDelivery=capture.get("firstDelivery"), correctionSent=capture.get("correctionSent"))
         report["recheck"] = {key: replies[2].get(key) for key in
                              ("binaryUnchanged", "profileUnchanged", "routeUnchanged")}
         # Profile equality concerns inherited paths, not private configuration
@@ -239,3 +276,16 @@ def _observe_arm(repository, executable, arm, timeout):
         shutil.rmtree(task)
     report["taskRootRemoved"] = not task.exists()
     return report
+
+
+def checkpoint():
+    """Private subprocess oracle: read the first delivery before any follow-up."""
+    request = _strict_json_object(sys.stdin.read(4194305))
+    workspace = Path(request["workspace"])
+    actual = inspect_entry(workspace, {k: v.encode() for k, v in READY_ORDERS["inputs"].items()})
+    host = inspect_capture({"stdout": request["stdout"]}, workspace)
+    matches = (host["turnsComplete"] and host["workspaceMatches"] and host["unexpectedToolCalls"] == 0
+               and host["agentReadback"] == {"details.csv": True, "summary.json": True}
+               and actual["effect"] == READY_ORDERS["expected"]
+               and actual["authority"]["inputsUnchanged"] and not actual["poststate"]["unexpectedPaths"])
+    print(json.dumps({"actual": actual, "host": host, "matchesFixture": bool(matches)}))

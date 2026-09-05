@@ -88,12 +88,13 @@ Use supported rollback or a sufficient alternative where authorized. Repeated
 same-purpose repair triggers premise and necessity review, not endless retries.
 A safe stop is honest containment, not functional completion.
 
-For real context/carrier limits, use supported continuity controls. Compact for
-same-carrier memory reduction; do not copy an exhausted history as sequential
-relief. Where a fresh task is supported and authorized, transfer minimum verified
-goal, code/state identity, decisions, unfinished work and boundaries; verify the
-destination before releasing the source. Preserve the bound checkout and one
-active writer. Static instructions and a handoff document are not current state.
+For carrier limits, use supported continuity controls. Compact within a carrier;
+never copy exhausted history for sequential relief. For an authorized fresh task,
+transfer verified goal, code/state, decisions, unfinished work and boundaries.
+Deliver the handoff and confirm takeover and one writer before releasing source
+resources; fact checks are not takeover. Preserve checkout and task history.
+Archiving requires explicit user authorization; handoff, completion and cleanup
+grant none. Instructions are not state.
 
 The packaged SessionStart helper, when supported with Node available, supplies
 only optional invalidation hints on resume/compact. It does not execute the task,

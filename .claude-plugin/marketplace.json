@@ -9,7 +9,7 @@
       "name": "yiyuan-accord-claude",
       "source": "./plugins/yiyuan-accord-claude",
       "description": "Adaptive Claude Skill projection for YIYUAN Accord outcome delivery.",
-      "version": "3.2.0-dev.5"
+      "version": "3.2.0-dev.6"
     }
   ]
 }

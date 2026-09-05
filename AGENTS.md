@@ -31,8 +31,8 @@ validation error, not a return to the frozen predecessor's review-only authority
   static instructions are not state. Compact only for same-carrier reduction,
   reserve copied-history forks for causal conversation branches, and use a verified fresh
   zero-inheritance destination for sequential load relief. Keep the bound
-  checkout and release the source only after destination reconciliation; do not
-  make the user guess.
+  checkout; confirm takeover and one writer before source release. Archiving
+  requires explicit user authorization; handoff, completion and cleanup grant none.
 - Do not infer a missing source, target, scope, authority, account, data, cost,
   or irreversible effect. Ask only when the missing condition changes the next
   safe action and cannot be discovered read-only. Never ask the user to provide
