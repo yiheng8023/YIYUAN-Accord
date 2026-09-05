@@ -59,7 +59,7 @@ Bind requiredCoverage from authorized product needs before collecting evidence, 
 
 计划只投影验收定义；实际资格由受检来源、精确主体和当前条件计算。静态 CLI 与合成测试不证明实际功能。
 
-- `function` 必需作用域：codex-function, claude-code-function；未绑定或缺证据仍未完成。
+- `function` 必需作用域：codex-function, claude-code-function, codex-desktop-continuity；未绑定或缺证据仍未完成。
 - `package-lifecycle` 必需作用域：codex-lifecycle, claude-code-lifecycle；未绑定或缺证据仍未完成。
 - `incremental-value` 必需作用域：product-value；未绑定或缺证据仍未完成。
 
@@ -73,7 +73,7 @@ Bind requiredCoverage from authorized product needs before collecting evidence, 
 | 入口 / 官方来源 | 执行位置 | 环境与权限边界 | 当前观察与未实测项 |
 |---|---|---|---|
 | `cx-cli` [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) | 本地终端；远程终端仍由该机器执行 | 绑定该 CLI 的配置、权限、提供商与工作目录。 | 2026-09-05 更新后复核：本机 0.153.4（前次 0.153.3）；仅接口观察，不继承旧行为证据。 |
-| `cx-desktop` [Codex 桌面入口](https://learn.chatgpt.com/docs/app) | 本地项目/工作树或委派云端，按任务区分 | 界面入口、内嵌引擎与独立 CLI 版本分别识别。 | 2026-09-05 更新后复核：OpenAI.Codex 26.901.5280.0（前次 26.901.4073.0）；内嵌引擎未据此识别，非候选效果验收。 |
+| `cx-desktop` [Codex 桌面入口](https://learn.chatgpt.com/docs/app) | 本地项目/工作树或委派云端，按任务区分 | 界面入口、内嵌引擎与独立 CLI 版本分别识别。 | 2026-09-06 只读复核：OpenAI.Codex 26.901.5280.0。当前工具进程的父链为该 Desktop 应用→npm Codex 执行器→PowerShell；执行器路径当前磁盘字节对应 0.153.4，SHA256 444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b。该事实不证明驻留映像未漂移、有效权限、候选任务局部加载或普通入口效果；个人安装仍为3.1。 |
 | `cx-vscode` [Codex VS Code / 兼容编辑器](https://learn.chatgpt.com/docs/codex/ide) | 本地交互或云端委派 | 编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。 | 本机 openai.chatgpt 26.901.22334 仅安装记录；兼容编辑器未测。 |
 | `cx-jetbrains` [Codex JetBrains 集成](https://learn.chatgpt.com/docs/codex/ide) | IDE 自有集成；执行后端待核 | 不是 VS Code 扩展的同一入口；不继承其配置或插件效果。 | 官方资料支持；未实测。 |
 | `cx-xcode` [Codex Xcode 集成](https://learn.chatgpt.com/docs/codex/ide) | IDE 自有集成；执行后端待核 | 按 Xcode 代理接口与权限核对，不假设加载相同 Skill/Hook。 | 官方资料支持；未实测。 |
@@ -83,8 +83,8 @@ Bind requiredCoverage from authorized product needs before collecting evidence, 
 | `chatgpt-mobile` [ChatGPT iOS / Android](https://help.openai.com/en/collections/3742473-chatgpt) | 移动客户端；执行位置按具体能力核对 | 不默认获得本地 Codex 的配置、Shell 或插件入口。 | 官方入口资料支持；未实测。 |
 | `cx-sdk` [Codex SDK / App Server](https://learn.chatgpt.com/docs/codex-sdk) | 调用方与目标 Codex 执行器 | SDK、协议与直接模型 API 不等同；版本、身份、配置及会话路由需绑定。 | 2026-09-06：0.153.4 本地 App Server 零模型探测观察到 standalone Skill 临时暴露及撤销；不是 SDK、完整插件、普通入口或云端效果验收。未安装 SDK 或运行认证调用。 |
 | `cx-integrations` [Codex GitHub / GitLab / Linear / Slack 等触发入口](https://learn.chatgpt.com/docs/cloud) | 触发前端与云端执行器分离 | 组织授权、连接和任务环境另验；入口目录不授权连接或发布。 | 官方资料支持；未实测、未新增连接。 |
-| `cc-cli` [Claude Code CLI](https://code.claude.com/docs/en/platforms) | 本地或远程终端机器 | 现有授权 CC Switch / DeepSeek 路线仅归因到已观察 CLI 会话。 | 2.1.261；dev.3 观察有失败，整体效果未验证。 |
-| `cc-desktop` [Claude Desktop Code](https://code.claude.com/docs/en/desktop) | 本地、SSH 或云端会话分别绑定 | 本地 Code 可消费桌面 MCP 配置且有不同优先级；网关资料不证明本机 DeepSeek 路线可用。 | 本机 Claude 1.46388.3.0 仅安装记录；Code 候选效果未测。 |
+| `cc-cli` [Claude Code CLI](https://code.claude.com/docs/en/platforms) | 本地或远程终端机器 | 现有授权 CC Switch / DeepSeek 路线仅归因到已观察 CLI 会话。 | 2026-09-06 桌面更新后复核仍为2.1.261，执行文件SHA256 f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852未变。dev.6双轮140→60诊断两组通过且均未调用Skill；不由桌面更新自动废弃该有界CLI事实，也不外推整项功能或桌面效果。 |
+| `cc-desktop` [Claude Desktop Code](https://code.claude.com/docs/en/desktop) | 本地、SSH 或云端会话分别绑定 | 本地 Code 可消费桌面 MCP 配置且有不同优先级；网关资料不证明本机 DeepSeek 路线可用。 | 2026-09-06 用户报告客户端更新后，只读安装包复核为 Claude 1.46388.4.0（前次1.46388.3.0）；本次未观测到运行中的Claude进程。安装版本不证明Code模式、现有模型路线、候选激活或桌面效果，相关入口证据仍待核。 |
 | `cc-vscode` [Claude Code VS Code](https://code.claude.com/docs/en/vs-code) | 编辑器会话；具体执行目标待核 | 官方说明支持第三方提供商；实际扩展配置/加载/权限与该路线仍须验证。 | 本机 anthropic.claude-code 2.1.261 仅安装记录；未实测。 |
 | `cc-jetbrains` [Claude Code JetBrains](https://code.claude.com/docs/en/platforms) | IDE 终端内 CLI | IDE 上下文桥接仍是独立边界；不能用 CLI 成功证明集成效果。 | 官方资料支持；未实测。 |
 | `cc-cloud` [Claude Code web / 云端](https://code.claude.com/docs/en/web-quickstart) | 默认托管云端；组织自托管条件另核 | 账户、计划、仓库及环境独立；不假设现有第三方路线能调用。 | 官方资料支持；用户报告官方账户不可用，未实测、不绕过访问限制。 |
@@ -179,7 +179,7 @@ The current host Skill supplies adaptive guidance, not a proven system executor.
 
 ## 当前短板及证据边界
 
-- `handoff-archive-authority` — `guidance-corrected-behavior-unverified`：主线程18在只读接收后、实际移交消息送达前调用自身归档，执行随即中断；用户手动恢复。当前任务曾误以恢复后的未归档状态和不完整工具摘要否认历史动作。已回查原始调用；已安装3.1 Skill及当前指令的释放来源含义未细分，是可能促因，不能单独归因。修复明确任务归档必须由用户授权，接收核对不等于接管，先确认移交和单写者再释放来源资源。无仓库归档执行器可作确定性回归，不新增虚假拦截器或归档实验；当前仅源/指令修复，宿主行为仍须独立验证。
+- `handoff-archive-authority` — `guidance-corrected-behavior-unverified`：主线程18在只读接收后、实际移交消息送达前调用自身归档，执行随即中断；用户手动恢复。当前任务曾误以恢复后的未归档状态和不完整工具摘要否认历史动作。已回查原始调用；已安装3.1 Skill及当前指令的释放来源含义未细分，是可能促因，不能单独归因。修复明确任务归档必须由用户授权，接收核对不等于接管，先确认移交和单写者再释放来源资源。无仓库归档执行器可作确定性回归，不新增虚假拦截器或归档实验；当前仅源/指令修复，宿主行为仍须独立验证。 独立范围审查将此次受影响Desktop结果显式纳入必需功能范围codex-desktop-continuity；原五项义务保留。该范围暂未绑定，有效会话状态、候选任务局部加载、同次移交的独立动作/接管/后态来源及失败判据仍需核对。CLI或App Server结果不得替代Desktop；不新增归档实验或提前变更个人安装的权限。
 - `sequential-correction-observer` — `implemented-live-diagnostic-verified`：两个跨轮证据反例及目录内Read误判均先失败再最小修复；单轮checkpoint、末轮记录和其他越界拒绝保留。96项相关回归、读取修复后的18项观察器回归及独立复核通过。完整实现与判据A=bc1195f先提交并推送，随后真实双轮E两组均由140改为60，逐轮回读、输入保护、正常结束和任务清理成立。详细观测见claude-ready-orders-correction-dev6；这是观察通路诊断，不补齐整项职责、自主恢复、归档修复行为或增量价值。真实scopes/cases及独立来源准入仍未完成。
 - `readme-source-and-claim-alignment` — `implemented-local-not-functional-acceptance`：文案审查发现中英文 README 把冻结 schema-v3 当作当前开发权威、称条件策略为固定常量，并使用未经证明的 30 秒开始标题。已重写定位、实际包内容、版本与证据边界；保留安装和历史生命周期参考、社区与法律信息。由内容和源码事实判断，不因旧模型参与写作就认定缺陷；文案清晰不证明运行时收益。
 - `candidate-shape-and-whole-chain-review` — `source-allocation-reopened-effects-unverified`：当前 dev.6 是单 Skill 加可选 SessionStart Hint；Hint 没有查询、调度或恢复执行。普通入口引导、纯参考判定和维护验收应按实际职责分开，未连接核心或图本身不构成缺陷。13 项是覆盖清单，不是 13 个自建模块。已区分当前纠错与跨任务学习、任务核验与产品价值对照，并明确安装前/卸载后须由仍可用的执行者接管；组合充分性仍待真实普通入口、失败和后态证据。

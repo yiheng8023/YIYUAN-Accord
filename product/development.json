@@ -177,7 +177,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "本地项目/工作树或委派云端，按任务区分",
           "environment": "界面入口、内嵌引擎与独立 CLI 版本分别识别。",
-          "observation": "2026-09-05 更新后复核：OpenAI.Codex 26.901.5280.0（前次 26.901.4073.0）；内嵌引擎未据此识别，非候选效果验收。",
+          "observation": "2026-09-06 只读复核：OpenAI.Codex 26.901.5280.0。当前工具进程的父链为该 Desktop 应用→npm Codex 执行器→PowerShell；执行器路径当前磁盘字节对应 0.153.4，SHA256 444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b。该事实不证明驻留映像未漂移、有效权限、候选任务局部加载或普通入口效果；个人安装仍为3.1。",
           "currentEffect": "unverified"
         },
         {
@@ -277,7 +277,7 @@
           "officialSource": "https://code.claude.com/docs/en/platforms",
           "execution": "本地或远程终端机器",
           "environment": "现有授权 CC Switch / DeepSeek 路线仅归因到已观察 CLI 会话。",
-          "observation": "2.1.261；dev.3 观察有失败，整体效果未验证。",
+          "observation": "2026-09-06 桌面更新后复核仍为2.1.261，执行文件SHA256 f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852未变。dev.6双轮140→60诊断两组通过且均未调用Skill；不由桌面更新自动废弃该有界CLI事实，也不外推整项功能或桌面效果。",
           "currentEffect": "unverified"
         },
         {
@@ -287,7 +287,7 @@
           "officialSource": "https://code.claude.com/docs/en/desktop",
           "execution": "本地、SSH 或云端会话分别绑定",
           "environment": "本地 Code 可消费桌面 MCP 配置且有不同优先级；网关资料不证明本机 DeepSeek 路线可用。",
-          "observation": "本机 Claude 1.46388.3.0 仅安装记录；Code 候选效果未测。",
+          "observation": "2026-09-06 用户报告客户端更新后，只读安装包复核为 Claude 1.46388.4.0（前次1.46388.3.0）；本次未观测到运行中的Claude进程。安装版本不证明Code模式、现有模型路线、候选激活或桌面效果，相关入口证据仍待核。",
           "currentEffect": "unverified"
         },
         {
@@ -835,7 +835,7 @@
       {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup","recovery-and-rollback"],"procedure":"依据已建立的当前证据准入通路计算候选资格，不将静态 PASS 当作功能验收。复核资产必要性与受影响功能，按精确候选及证据校准 CHANGELOG.md；提交并推送完整候选，核对精确包、独立评审与托管检查，再依已有条件授权发布新的 3.2。发布后按用户新增授权，盘点其现有 Codex/Claude 中 Accord 的安装来源及共享关系，经受支持的宿主或实际管理器将已安装 Accord 升至该精确版本；先确认备份和可用回退路径，保护配置、模型路线、其他扩展及正在运行的任务。不顺带升级宿主应用、安装缺失组件或绕过账户限制。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。另核验本机选定 Accord 的安装版本、实际激活和普通入口效果，不把缓存更新当生效；更新失败须恢复最后安全版本并披露未完成项，未经验证不关闭本机升级。","qualityAxes":["compliance-and-safety","evidence-integrity","recovery-and-lifecycle","maintainability-and-resource-cost","change-adaptation","user-burden-and-interference"]}
     ],
     "priorityFindings": [
-      {"id":"handoff-archive-authority","status":"guidance-corrected-behavior-unverified","basis":"主线程18在只读接收后、实际移交消息送达前调用自身归档，执行随即中断；用户手动恢复。当前任务曾误以恢复后的未归档状态和不完整工具摘要否认历史动作。已回查原始调用；已安装3.1 Skill及当前指令的释放来源含义未细分，是可能促因，不能单独归因。修复明确任务归档必须由用户授权，接收核对不等于接管，先确认移交和单写者再释放来源资源。无仓库归档执行器可作确定性回归，不新增虚假拦截器或归档实验；当前仅源/指令修复，宿主行为仍须独立验证。"},
+      {"id":"handoff-archive-authority","status":"guidance-corrected-behavior-unverified","basis":"主线程18在只读接收后、实际移交消息送达前调用自身归档，执行随即中断；用户手动恢复。当前任务曾误以恢复后的未归档状态和不完整工具摘要否认历史动作。已回查原始调用；已安装3.1 Skill及当前指令的释放来源含义未细分，是可能促因，不能单独归因。修复明确任务归档必须由用户授权，接收核对不等于接管，先确认移交和单写者再释放来源资源。无仓库归档执行器可作确定性回归，不新增虚假拦截器或归档实验；当前仅源/指令修复，宿主行为仍须独立验证。 独立范围审查将此次受影响Desktop结果显式纳入必需功能范围codex-desktop-continuity；原五项义务保留。该范围暂未绑定，有效会话状态、候选任务局部加载、同次移交的独立动作/接管/后态来源及失败判据仍需核对。CLI或App Server结果不得替代Desktop；不新增归档实验或提前变更个人安装的权限。"},
       {"id":"sequential-correction-observer","status":"implemented-live-diagnostic-verified","basis":"两个跨轮证据反例及目录内Read误判均先失败再最小修复；单轮checkpoint、末轮记录和其他越界拒绝保留。96项相关回归、读取修复后的18项观察器回归及独立复核通过。完整实现与判据A=bc1195f先提交并推送，随后真实双轮E两组均由140改为60，逐轮回读、输入保护、正常结束和任务清理成立。详细观测见claude-ready-orders-correction-dev6；这是观察通路诊断，不补齐整项职责、自主恢复、归档修复行为或增量价值。真实scopes/cases及独立来源准入仍未完成。"},
       {"id":"readme-source-and-claim-alignment","status":"implemented-local-not-functional-acceptance","basis":"文案审查发现中英文 README 把冻结 schema-v3 当作当前开发权威、称条件策略为固定常量，并使用未经证明的 30 秒开始标题。已重写定位、实际包内容、版本与证据边界；保留安装和历史生命周期参考、社区与法律信息。由内容和源码事实判断，不因旧模型参与写作就认定缺陷；文案清晰不证明运行时收益。"},
       {
@@ -1944,7 +1944,7 @@
       "rule": "Bind requiredCoverage from authorized product needs before collecting evidence, independently of available or successful cases. All three claim groups remain required. An undefined required scope stays unbound; removing its cases, scope or claim cannot erase the obligation. Every delivered host needs required function and package-lifecycle scopes, plus complete duty, quality and scenario accounting across its required scopes once, not once per claim. Overall incremental value requires suitable bounded comparisons; native-sufficient duties need not individually demonstrate Accord gain, and one host's value cannot be attributed to another. Scope and oracle adequacy, representative whole-chain coverage and the legitimacy of any reduction require independent review; fresh hashes alone do not validate them. Each scope fixes its entry, decisive environment axes and applicable requirements; cases may vary other conditions for legitimate transitions but cannot borrow another scope's effects. The entry inventory is not a promise to test every entry. A caller-selected authenticated, independent, bounded read-only observer supplies checked same-episode facts, current conditions and authentic final-candidate reviews. Callable shape and digest echo do not authenticate those sources. Compute conditional admission by exact source/package/oracle identity, applicable coverage and final freshness, not stored assessments or diagnostics. Changes to requiredCoverage or applicable definitions invalidate dependent evidence. Static claimCeiling, empty cases and undeclared or unresolved requirements cannot grant qualification. Human authority, hosted checks and publication remain separate.",
       "reviewMaxAgeSeconds": 86400,
       "requiredCoverage": {
-        "function": ["codex-function", "claude-code-function"],
+        "function": ["codex-function", "claude-code-function", "codex-desktop-continuity"],
         "package-lifecycle": ["codex-lifecycle", "claude-code-lifecycle"],
         "incremental-value": ["product-value"]
       },
