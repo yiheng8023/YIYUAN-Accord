@@ -81,6 +81,42 @@ class DevelopmentContractTests(unittest.TestCase):
             altered["capabilityMap"][collection].append(copy.deepcopy(altered["capabilityMap"][collection][0]))
             self.assertTrue(self.errors(altered))
 
+    def test_entry_surfaces_cannot_promote_shared_engine_or_installation_to_effect(self):
+        for field, value in (("rule", ""), ("reviewedAt", "yesterday"),
+                             ("reviewedAt", "2026-09-05T00:00:00"), ("rows", []),
+                             ("rows", None), ("rows", [None])):
+            altered = copy.deepcopy(self.contract)
+            altered["capabilityMap"]["entrySurfaces"][field] = value
+            self.assertTrue(self.errors(altered))
+        for field, value in (("host", "new-vendor"), ("host", []),
+                             ("officialSource", "https://unrelated.example"),
+                             ("officialSource", "https://[invalid"),
+                             ("execution", ""), ("environment", ""),
+                             ("observation", ""), ("currentEffect", "verified")):
+            altered = copy.deepcopy(self.contract)
+            altered["capabilityMap"]["entrySurfaces"]["rows"][0][field] = value
+            self.assertTrue(self.errors(altered))
+        altered = copy.deepcopy(self.contract)
+        rows = altered["capabilityMap"]["entrySurfaces"]["rows"]
+        rows.append(copy.deepcopy(rows[0]))
+        self.assertTrue(self.errors(altered))
+
+    def test_entry_surface_set_is_revisable_and_visible_from_one_source(self):
+        from yiyuan_accord.development import render_development_plan
+        altered = copy.deepcopy(self.contract)
+        entries = altered["capabilityMap"]["entrySurfaces"]
+        entries["rule"] = "Bind the actual execution surface."
+        row = copy.deepcopy(entries["rows"][0])
+        row.update(id="newly-reviewed-entry", name="Newly reviewed entry")
+        entries["rows"].append(row)
+        self.assertEqual(self.errors(altered), [])
+        rendered = render_development_plan(altered)
+        self.assertIn(entries["rule"], rendered)
+        for row in entries["rows"]:
+            self.assertIn(row["name"], rendered)
+            self.assertIn(row["environment"], rendered)
+            self.assertIn(row["observation"], rendered)
+
     def test_shared_capability_mapping_does_not_force_a_native_route_or_a_runtime(self):
         altered = copy.deepcopy(self.contract)
         altered["capabilityMap"]["accord"][0]["nativeIds"] = []
@@ -143,6 +179,21 @@ class DevelopmentContractTests(unittest.TestCase):
         with patch.object(development, "_bounded_regular_bytes", side_effect=stale):
             self.assertIn("visible plan is missing or out of sync with the development contract",
                           verify_development(ROOT)["errors"])
+
+    def test_visible_environment_policy_follows_current_source(self):
+        from yiyuan_accord.development import render_development_plan
+        altered = copy.deepcopy(self.contract)
+        policy = "Inspect only the currently consequential environment fields."
+        altered["environmentControl"]["handlingRule"] = policy
+        rendered = render_development_plan(altered)
+        self.assertIn(policy, rendered)
+        self.assertNotIn("核对全局、父目录与项目的 AGENTS.md、config.toml 等全部生效配置", rendered)
+
+    def test_visible_coverage_follows_revised_acceptance_not_a_fixed_issue_list(self):
+        from yiyuan_accord.development import render_development_plan
+        altered = copy.deepcopy(self.contract)
+        altered["acceptance"]["coverageRule"] = "Discover unlisted gaps in the required outcomes."
+        self.assertIn(altered["acceptance"]["coverageRule"], render_development_plan(altered))
 
     def test_contextual_variation_and_order_are_not_frozen(self):
         altered = copy.deepcopy(self.contract)

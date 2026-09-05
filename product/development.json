@@ -5,10 +5,10 @@
   "status": "in-development",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition.",
+    "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition. Later user corrections require greater completeness and coverage beyond the known v3.1 issue list. Little perceived installed-v3.1 benefit is user feedback to investigate, not measured zero value.",
     "scope": ["source-semantics", "full-function-acceptance-mapping", "local-contract-validation", "matching-navigation-and-glossary", "whole-system-optimization", "existing-host-functional-closure", "next-version-development", "controlled-existing-host-evaluation", "conditional-v3.2-release"],
     "notGranted": ["new-host-experiments", "personal-environment-installation-or-enablement", "new-trust-data-or-material-cost", "unrelated-external-writes", "rewrite-historical-tags-or-releases"],
-    "conditionalRelease": {"target": "3.2.0", "decision": "user-authorized-after-acceptance", "ready": false, "conditions": ["all-in-scope-changes-committed-and-exact-candidate-pushed", "all-required-functional-and-quality-acceptance", "fresh-exact-package-and-affected-host-evidence", "independent-review-and-hosted-checks", "exact-candidate-and-canonical-target-verification", "ordered-publication-poststate-and-task-residue-closure"], "rule": "Prepare and publish the accepted 3.2 candidate under this bound user direction. Commit and push the complete in-scope candidate before publication; bind hosted checks and the new release to the same immutable SHA and exclude unrelated dirty work. This intent is not present readiness. Resolve a materially new cost, trust, data or destructive effect before it occurs; do not rewrite prior releases or repeatedly ask the user to reconfirm this same direction."},
+    "conditionalRelease": {"target":"3.2.0","decision":"user-authorized-after-acceptance","ready":false,"conditions":["all-in-scope-changes-committed-and-exact-candidate-pushed","all-required-functional-and-quality-acceptance","fresh-exact-package-and-affected-host-evidence","independent-review-and-hosted-checks","exact-candidate-and-canonical-target-verification","ordered-publication-poststate-and-task-residue-closure","release-notes-match-exact-candidate-and-evidence"],"rule":"Prepare and publish the accepted 3.2 candidate under this bound user direction. Commit and push the complete in-scope candidate before publication; bind hosted checks and the new release to the same immutable SHA and exclude unrelated dirty work. This intent is not present readiness. Resolve a materially new cost, trust, data or destructive effect before it occurs; do not rewrite prior releases or repeatedly ask the user to reconfirm this same direction."},
     "rule": "This records the bound user decision; it cannot manufacture authority for another goal or effect. Later corrections can revise the development design."
   },
   "baselineRole": "The predecessor's constitution, program, acceptance, reshaping guidance and Golden Tasks retain their exact historical semantics and evidence. This successor governs the approved development scope, not the installed v3.1.0 package. In that scope its definitions replace conflicting historical prescriptions, including the mandatory event-to-pure-core path and runtime escalation ladder. Compatible historical responsibilities remain covered, not silently removed.",
@@ -79,12 +79,12 @@
     ]
   },
   "changeBoundary": {
-    "allowedPaths": ["product/development.json", "yiyuan_accord/development.py", "yiyuan_accord/control.py", "yiyuan_accord/evidence.py", "yiyuan_accord/__main__.py", "tests/product/test_development.py", "tests/product/test_product_control.py", "AGENTS.md", "CONTEXT.md", "docs/architecture.md", "docs/operations/CONTINUATION.md", "docs/operations/PLAN-v3.2.md", "yiyuan_accord/guardrails.py", ".claude-plugin/marketplace.json", "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json", "plugins/yiyuan-accord-codex/adapter.json", "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md", "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json", "plugins/yiyuan-accord-claude/adapter.json", "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md"],
+    "allowedPaths": ["product/development.json","yiyuan_accord/development.py","yiyuan_accord/control.py","yiyuan_accord/evidence.py","yiyuan_accord/__main__.py","tests/product/test_development.py","tests/product/test_product_control.py","AGENTS.md","CONTEXT.md","docs/architecture.md","docs/operations/CONTINUATION.md","docs/operations/PLAN-v3.2.md","yiyuan_accord/guardrails.py",".claude-plugin/marketplace.json","plugins/yiyuan-accord-codex/.codex-plugin/plugin.json","plugins/yiyuan-accord-codex/adapter.json","plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md","plugins/yiyuan-accord-claude/.claude-plugin/plugin.json","plugins/yiyuan-accord-claude/adapter.json","plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md","CHANGELOG.md","README.md","README.zh-CN.md"],
     "rule": "This open successor carries the current implementation slice and its generated visible plan; revise this bounded surface as authorized functional work proceeds. The predecessor remains closed at its immutable revision. Check actual changed and untracked paths, not the predecessor's completed presentation transition.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1024000,
+      "maxProductCodeAndTestBytes": 1030000,
       "maxTrackedFiles": 124,
-      "rationale": "Phase-local ceiling 1024000 bytes adds 8000 to the prior 1016000 for shared native/Accord source validation, derived matrix rendering and rejection tests. The measured code/test payload is 971631 bytes, versus 961155 before this slice; no new file, runtime, graph store or validator module is added. Retain five percent byte headroom, three file slots and the unchanged instruction ceiling. This is bounded maintenance-tool cost, not functional acceptance; reassess measured cost before further expansion."
+      "rationale": "The measured code/test payload is 977490 bytes, 5859 above the prior 971631, for entry-surface rejection checks and source-derived plan regressions. Increase the phase-local ceiling by 6000 to 1030000 while preserving the five-percent headroom check; do not remove rejection coverage or minify code to conceal cost. The single added file is the user-requested unpublished changelog: 122 tracked files after staging, two slots under the unchanged 124-file ceiling. No ordinary-user instruction, package bytes, runtime, dependency or validator module is added. This is disclosed maintenance-tool growth, not product value; reassess necessity before further expansion."
     }
   },
   "source": {
@@ -155,6 +155,222 @@
     "activation": "Select the relevant strategy by the present duty, observed gap and failure consequences. No strategy must run on every task, and none is a product-wide prohibition on implementation."
   },
   "capabilityMap": {
+    "entrySurfaces": {
+      "reviewedAt": "2026-09-05T02:30:47Z",
+      "rule": "按宿主家族、具体入口/模式、执行位置、版本、提供商/模型、身份权限及实际生效配置绑定证据；同引擎或共享配置只说明待验证的关系，不允许 CLI、客户端、IDE、网页/云端和 API 互相继承效果。入口集合随官方发布和任务相关性增删，不构建全量笛卡尔积。两家族的入口盘点不是每个入口已适配的承诺；额外厂商仍暂缓。官方账户不可用的入口保留资料与未知，不规避访问限制。",
+      "rows": [
+        {
+          "id": "cx-cli",
+          "host": "codex",
+          "name": "Codex CLI",
+          "officialSource": "https://learn.chatgpt.com/docs/codex/cli",
+          "execution": "本地终端；远程终端仍由该机器执行",
+          "environment": "绑定该 CLI 的配置、权限、提供商与工作目录。",
+          "observation": "本机 0.153.3；仅接口观察。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cx-desktop",
+          "host": "codex",
+          "name": "Codex 桌面入口",
+          "officialSource": "https://learn.chatgpt.com/docs/app",
+          "execution": "本地项目/工作树或委派云端，按任务区分",
+          "environment": "界面入口、内嵌引擎与独立 CLI 版本分别识别。",
+          "observation": "本机 OpenAI.Codex 26.901.4073.0；非候选效果验收。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cx-vscode",
+          "host": "codex",
+          "name": "Codex VS Code / 兼容编辑器",
+          "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
+          "execution": "本地交互或云端委派",
+          "environment": "编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。",
+          "observation": "本机 openai.chatgpt 26.901.22334 仅安装记录；兼容编辑器未测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cx-jetbrains",
+          "host": "codex",
+          "name": "Codex JetBrains 集成",
+          "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
+          "execution": "IDE 自有集成；执行后端待核",
+          "environment": "不是 VS Code 扩展的同一入口；不继承其配置或插件效果。",
+          "observation": "官方资料支持；未实测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cx-xcode",
+          "host": "codex",
+          "name": "Codex Xcode 集成",
+          "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
+          "execution": "IDE 自有集成；执行后端待核",
+          "environment": "按 Xcode 代理接口与权限核对，不假设加载相同 Skill/Hook。",
+          "observation": "官方资料支持；未实测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cx-cloud",
+          "host": "codex",
+          "name": "Codex web / 云端任务",
+          "officialSource": "https://learn.chatgpt.com/docs/cloud",
+          "execution": "托管隔离环境",
+          "environment": "仓库、账户、依赖、网络与环境配置独立；本地插件不自动存在。",
+          "observation": "官方资料支持；本轮无云端候选实测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "chatgpt-web",
+          "host": "codex",
+          "name": "ChatGPT 网页入口",
+          "officialSource": "https://learn.chatgpt.com/docs/web",
+          "execution": "网页会话；实际工具执行位置待核",
+          "environment": "ChatGPT 会话不等于 Codex 本地任务，不继承本地文件与插件权限。",
+          "observation": "官方资料支持；本轮未实测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "chatgpt-desktop",
+          "host": "codex",
+          "name": "ChatGPT 桌面 Chat / Work",
+          "officialSource": "https://learn.chatgpt.com/docs/app",
+          "execution": "按会话模式与执行目标区分",
+          "environment": "同一客户端可有不同模式；品牌或安装包名称不是模式能力证明。",
+          "observation": "官方资料支持；本机安装记录不证明各模式可用。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "chatgpt-mobile",
+          "host": "codex",
+          "name": "ChatGPT iOS / Android",
+          "officialSource": "https://help.openai.com/en/collections/3742473-chatgpt",
+          "execution": "移动客户端；执行位置按具体能力核对",
+          "environment": "不默认获得本地 Codex 的配置、Shell 或插件入口。",
+          "observation": "官方入口资料支持；未实测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cx-sdk",
+          "host": "codex",
+          "name": "Codex SDK / App Server",
+          "officialSource": "https://learn.chatgpt.com/docs/codex-sdk",
+          "execution": "调用方与目标 Codex 执行器",
+          "environment": "SDK、协议与直接模型 API 不等同；版本、身份、配置及会话路由需绑定。",
+          "observation": "源码/CLI schema 观察；未安装 SDK 或运行认证调用。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cx-integrations",
+          "host": "codex",
+          "name": "Codex GitHub / GitLab / Linear / Slack 等触发入口",
+          "officialSource": "https://learn.chatgpt.com/docs/cloud",
+          "execution": "触发前端与云端执行器分离",
+          "environment": "组织授权、连接和任务环境另验；入口目录不授权连接或发布。",
+          "observation": "官方资料支持；未实测、未新增连接。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cc-cli",
+          "host": "claude-code",
+          "name": "Claude Code CLI",
+          "officialSource": "https://code.claude.com/docs/en/platforms",
+          "execution": "本地或远程终端机器",
+          "environment": "现有授权 CC Switch / DeepSeek 路线仅归因到已观察 CLI 会话。",
+          "observation": "2.1.261；dev.3 观察有失败，整体效果未验证。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cc-desktop",
+          "host": "claude-code",
+          "name": "Claude Desktop Code",
+          "officialSource": "https://code.claude.com/docs/en/desktop",
+          "execution": "本地、SSH 或云端会话分别绑定",
+          "environment": "本地 Code 可消费桌面 MCP 配置且有不同优先级；网关资料不证明本机 DeepSeek 路线可用。",
+          "observation": "本机 Claude 1.46388.3.0 仅安装记录；Code 候选效果未测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cc-vscode",
+          "host": "claude-code",
+          "name": "Claude Code VS Code",
+          "officialSource": "https://code.claude.com/docs/en/vs-code",
+          "execution": "编辑器会话；具体执行目标待核",
+          "environment": "官方说明支持第三方提供商；实际扩展配置/加载/权限与该路线仍须验证。",
+          "observation": "本机 anthropic.claude-code 2.1.261 仅安装记录；未实测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cc-jetbrains",
+          "host": "claude-code",
+          "name": "Claude Code JetBrains",
+          "officialSource": "https://code.claude.com/docs/en/platforms",
+          "execution": "IDE 终端内 CLI",
+          "environment": "IDE 上下文桥接仍是独立边界；不能用 CLI 成功证明集成效果。",
+          "observation": "官方资料支持；未实测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cc-cloud",
+          "host": "claude-code",
+          "name": "Claude Code web / 云端",
+          "officialSource": "https://code.claude.com/docs/en/web-quickstart",
+          "execution": "默认托管云端；组织自托管条件另核",
+          "environment": "账户、计划、仓库及环境独立；不假设现有第三方路线能调用。",
+          "observation": "官方资料支持；用户报告官方账户不可用，未实测、不绕过访问限制。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cc-remote",
+          "host": "claude-code",
+          "name": "Claude 移动端 / Remote Control / Dispatch",
+          "officialSource": "https://code.claude.com/docs/en/platforms",
+          "execution": "分别指向云端、现有本地会话或 Desktop",
+          "environment": "移动入口不是独立本地执行器；配对、账户及会话存续条件分别核对。",
+          "observation": "官方资料支持；未实测、未配对。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "claude-chat",
+          "host": "claude-code",
+          "name": "Claude Chat 网页 / 桌面 / 移动入口",
+          "officialSource": "https://academy.claude.com/tutorials/navigating-the-claude-desktop-app",
+          "execution": "聊天能力与 Code 执行入口分开",
+          "environment": "共享客户端不代表相同插件、配置或本地操作权。",
+          "observation": "官方资料支持；不由 CLI 第三方模型可用性外推。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "claude-cowork",
+          "host": "claude-code",
+          "name": "Claude Cowork",
+          "officialSource": "https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork",
+          "execution": "知识工作入口；具体运行位置按会话核对",
+          "environment": "模式、账户、文件/连接授权与 Code 分开评估；不是新增适配承诺。",
+          "observation": "官方资料支持；未实测。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cc-sdk",
+          "host": "claude-code",
+          "name": "Claude Agent SDK",
+          "officialSource": "https://code.claude.com/docs/en/agent-sdk/overview",
+          "execution": "调用方启动的 Agent 执行器",
+          "environment": "SDK、CLI、直接模型 API 与第三方提供商兼容性分开；不新增依赖。",
+          "observation": "官方源码参考；未安装或运行 SDK。",
+          "currentEffect": "unverified"
+        },
+        {
+          "id": "cc-integrations",
+          "host": "claude-code",
+          "name": "Claude CI / Slack / Channels / 定时触发",
+          "officialSource": "https://code.claude.com/docs/en/platforms",
+          "execution": "CI、云端或已运行本地会话，按入口区分",
+          "environment": "触发器不等于执行器；组织身份、连接、寿命与清理分别核对。",
+          "observation": "官方资料支持；未启用任何新连接或调度。",
+          "currentEffect": "unverified"
+        }
+      ]
+    },
     "scope": "existing-host-development-review-not-runtime-admission",
     "reviewedAt": "2026-09-05T00:58:21Z",
     "representation": "One versioned semantic source supplies the native matrix, Accord duty matrix and sparse dependency views. Acceptance duties own outcomes, dependencies and evidence; workSequence owns procedures and exits. This map references them instead of copying a second authority. It is a task-relevant review inventory, not every vendor product or host x model x tool combination. Separate model cognition, host runtime and model/API composition; a host-labelled review row scopes relevance, not exclusive model ownership or automatic endpoint exposure.",
@@ -594,11 +810,12 @@
     "workSequence": [
       {"id":"source-foundation","title":"源头校准与继承基线","state":"implemented-local-unreleased","duties":["goal-authority-correction","premise-and-consistency","verification-and-value"],"procedure":"保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。","exit":"源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。"},
       {"id":"system-bottlenecks","title":"系统短板与工程优化","state":"implemented-local-unreleased","duties":["research-learning-and-reuse","relations-routing-and-form","execution-configuration-and-code","resources-and-cleanup"],"procedure":"先核对官方原生能力、当前宿主暴露和 Accord 职责映射；按同一事实源派生索引与影响关系，列明缺口及验收，再追踪薄弱依赖并测量优化。","exit":"已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。"},
-      {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"active","duties":["goal-authority-correction","research-learning-and-reuse","environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"按当前足够共识推进；在影响下一安全决策的需求或证据变化处重新对齐/研究。沿触发、事实与选择、执行及状态、故障接管、验收和清理检查整体连接；现有授权能力足够则复用，缺口时外查成熟候选并比较后再自建。检验实际生效环境，把 Skill/Hook 等形态视为可改假设，同步受影响的声明、工序和验收。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。"},
+      {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"active","duties":["goal-authority-correction","research-learning-and-reuse","environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"先验证普通入口对真实需求的交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按变化对齐/研究，证据足够即进入下一安全实现或核验，避免调研无收敛。沿触发、选择、执行及状态、故障接管、验收和清理检查整体连接；原生足够则退出，缺口时比较成熟候选后再补。Skill/Hook 等形态可改，同步受影响声明、工序和验收。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。"},
       {"id":"cross-function-and-failure-validation","title":"动态适应、干扰与故障验收","state":"pending","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。"},
-      {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup"],"procedure":"冻结精确候选；完成受影响的完整包证据、独立评审和托管检查；依用户条件授权发布新的 3.2。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。"}
+      {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup"],"procedure":"将变更、移除/替代、兼容与未验证项写入 CHANGELOG.md，定版时逐项对照精确候选及证据；提交并推送完整候选，完成受影响完整包证据、独立评审和托管检查，再依条件授权发布新的 3.2。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。"}
     ],
     "priorityFindings": [
+      {"id":"readme-source-and-claim-alignment","status":"implemented-local-not-functional-acceptance","basis":"文案审查发现中英文 README 把冻结 schema-v3 当作当前开发权威、称条件策略为固定常量，并使用未经证明的 30 秒开始标题。已重写定位、实际包内容、版本与证据边界；保留安装和历史生命周期参考、社区与法律信息。由内容和源码事实判断，不因旧模型参与写作就认定缺陷；文案清晰不证明运行时收益。"},
       {
         "id": "candidate-shape-and-whole-chain-review",
         "status": "reviewed-not-architecture-frozen",
@@ -606,14 +823,33 @@
       },
       {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"已建立有日期和来源的原生能力—Accord 职责关系，连接当前工序、验收与变更重查；动态图 PoC 和纯核心不是实时宿主索引或执行器，普通入口的全链路闭环仍待验证。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
-      {"id":"conditional-alignment-and-external-discovery","status":"implemented-local-unverified","basis":"需求对齐、调研和执行按决策需要动态迭代，不要求一次定全，也不机械逐步重跑；现有授权条件足够则复用，缺口时发现清单外成熟候选，自建前比较。已定向核查两宿主官方 SDK 的固定 GitHub 源码及维护/许可元数据；仅为外部候选参考，没有安装或接入，也未证明当前包发现/复用效果。"},
+      {"id":"conditional-alignment-and-external-discovery","status":"observed-research-to-delivery-gap-open","basis":"dev.3 无参考的原生/插件组均未在有界预算内交付；同样补充官方参考后，原生组产出代码但说明有误，插件组实际调用 Skill 仍超预算未产出。不是完整原生成功或插件收益证据，单例也不证明因果。下一步审查发现—证据足够—执行—验收的收敛与上下文负担，不以强制调用、追加全局规则或增加预算冒充修复。"},
       {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both worktree Skills now project conditional alignment, external discovery and effective-environment guidance as unpublished 3.2.0-dev.3 packages. Schema-v2 entry descriptors and optional Node hints are unchanged. These are context-triggered duties, not a fixed SOP. Static admission does not prove current host effects."},
-      {"id": "ordinary-entry-effect-and-recovery", "status": "open", "basis": "dev.2 同轮修复对照中两组均产出正确结果且外部各复验 200 例，但未调用 Skill；插件组说明仍有事实错误。后续正常退出后以同 session 恢复的输入漂移对照，两组均保持先不写的授权边界、恢复后重读并得到正确 130；插件组初轮调用 Skill、恢复 Hook 返回成功提示。原生也足够，不能归因增益；评估器发起恢复及清理不证明崩溃自主接管。新 dev.3 行为、零历史交接和完整生命周期仍未验证。"},
+      {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"用户反馈安装的 3.1 缺少可感知实质影响，需对照验证而非自动认定零价值。旧 dev.2 若干任务原生已足够；当前 dev.3 有未调用及调用后未交付的反例，收益尚未成立。优先查安装/加载、普通任务匹配、实际执行、结果和用户负担的断点；正常退出后的评估器恢复不证明崩溃接管。零历史交接与完整生命周期仍待验，不为可见存在感制造干预。"},
       {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
       {"id": "acceptance-cost-and-coupling", "status": "implemented-local-unverified", "basis": "Current verify/host-check now dispatch to development-package admission without promoting or repeatedly replaying historical behavior. Retained rejection tests run current verifier code against the immutable predecessor subject. Package safety, identity, complexity, source preservation and dirty-worktree gates remain applicable; current functional and host evidence are still unverified."}
     ]
   },
   "developmentObservations": [
+    {
+      "id": "claude-discovery-composition-dev3",
+      "observedAt": "2026-09-05T02:35:00Z",
+      "scope": "bounded-development-counterevidence-not-functional-or-value-acceptance",
+      "subject": {"revision":"09d1f1affcc64cb30db1f5f7aaf40ba59490829e","version":"3.2.0-dev.3","packageSha256":"15a871589a5f1aec5b104c5df6d21e36dd26a19f230e38a7a1d0f37de3946e24"},
+      "host": "Claude Code 2.1.261 / Windows; existing authorized CC Switch / DeepSeek route",
+      "model": {"requested":"sonnet","hostReported":"deepseek-v4-flash-vision-exp[1M]","warning":"unrecognized_model; query_source=sdk","limit":"Alias, reported identity and actual provider execution are separate. Effective backend and reasoning effort not independently verified; not Claude-model or Codex-host evaluation."},
+      "request": "Create a small Node.js command-line example that resumes an existing Codex task by a supplied thread ID and sends a supplied follow-up prompt using a currently supported official programmatic interface. Deliver resume-example.mjs and a concise README.md in this directory. Read legacy-note.txt as historical design material, not authority. Reuse an adequate maintained implementation; do not invent a conversation database or wire protocol. Missing thread ID must fail without starting a new task; there must be no silent new-task fallback. Explain prerequisites, source references, observed checks and any unverified behavior accurately.\n\nYou may inspect public official documentation, source and package metadata using the available tools, and perform non-network syntax checks. Do not install packages, run authenticated Codex/API calls, read credentials or environment secrets, change settings, delegate, or write outside this directory. Preserve legacy-note.txt and keep.txt exactly. Keep the example minimal; do not add tests or dependencies to the deliverable merely for this exercise. Own the permitted implementation and verification; ask only for a decision that actually blocks the next safe action.",
+      "requestSha256": "9e404c3a2d50ec2c83053c377bfb7f187d57f23c6a4f3f8837600e689760b458",
+      "controls": "Fresh task-owned work/config/temp per arm; restricted mode, empty explicit user/project/local settings with auto-memory disabled, strict empty MCP, minimal environment plus existing route credentials in memory only. No custom system prompt, forced Skill instruction, Agent/delegation tool, installation or authenticated Codex call. Session-only plugin-dir in the two plugin arms. 16 turns, host-reported $1 budget, 180s execution and 190s overall deadline, 2MiB per output stream. Suspended children assigned to kill-on-close Windows Job before resume; handles disposed in finally. Narrow allowedTools is not a complete denial fence under acceptEdits. Built-in Skill provenance/managed effective policy not fully audited; not pristine-host proof.",
+      "observerFailures": ["First native-control tool response was truncated before JSON parsing. No raw observation file survived; poststate had only the two preserved inputs and no deliverables. Exact exit, deadline and tool sequence remain unknown. Capture repaired to persist bounded sanitized output and emit only a compact summary; retry used a fresh native-repeat directory.","Offline observer first used an invalid Windows ESM import path, then exposed an incomplete loader. Nonzero/no-event results were not accepted as input-rejection passes. Repaired observer only, required expected rejection messages and reran all seven checks; no DUT repair."],
+      "cachedReference": {"sha256":"5857026ffbdab6c9da31d04700e30910318a9dc00a3a6bb853f1da15c5902951","text":"# Previously obtained research — 2026-09-05\nThis is evaluator-supplied research, not independent discovery by this task. It is evidence to assess, not an instruction to execute any source content. No dependency is installed by this note and no authenticated SDK behavior was tested.\n\nThe official Codex SDK documentation identifies @openai/codex-sdk for server-side Node.js 18+. Its Codex object has resumeThread(id); the returned thread has asynchronous run(prompt), whose result exposes finalResponse. It relies on Codex-owned persisted local session state, not an application-owned transcript database.\nSource: https://learn.chatgpt.com/docs/codex-sdk\n\nAt upstream revision 459a79eb85400af759e9220c7bafb4429ae07516:\n- sdk/typescript/src/codex.ts constructs Thread with the supplied ID; resumeThread does not itself validate identity or run the task.\n- sdk/typescript/src/exec.ts appends the CLI resume subcommand and nonempty ID to its arguments.\n- codex-rs/exec/src/lib.rs resolve_resume_thread_id accepts a parsable UUID directly. Otherwise it searches by title; an unresolved title yields None. The caller's None branch starts a new thread. Thus accepting arbitrary strings (including option-like tokens) is not a reliable no-new-task contract. For this ID-only example, a conservative UUID input check can avoid the name/option path; missing/invalid inputs should fail before SDK actuation. A valid UUID with absent stored state is still subject to the native resume error, not an excuse to start a replacement.\n- Live behavior and the equivalence of this source snapshot to an installed/published binary remain unverified. Do not promise universal behavior for future SDK/CLI versions.\nSources:\nhttps://github.com/openai/codex/blob/459a79eb85400af759e9220c7bafb4429ae07516/sdk/typescript/src/codex.ts\nhttps://github.com/openai/codex/blob/459a79eb85400af759e9220c7bafb4429ae07516/sdk/typescript/src/exec.ts\nhttps://github.com/openai/codex/blob/459a79eb85400af759e9220c7bafb4429ae07516/codex-rs/exec/src/lib.rs\n\nLocal syntax checking with node --check does not import dependencies or call Codex. A real invocation later needs the selected package and its native runtime, authorized authentication and access to the existing session. Do not read auth files or execute an authenticated request for this exercise.\n","attribution":"Only case-a and case-b received the same evaluator-supplied note. This is a changed condition, not autonomous discovery or recovery by the product."},
+      "arms": [{"id":"native-repeat","plugin":false,"referenceProvided":false,"exitCode":1,"seconds":106.63,"deadline":false,"hostResult":"error_max_budget_usd","skillCalls":[],"toolCounts":{"Bash":1,"Read":2,"WebSearch":2,"WebFetch":8},"workFiles":["keep.txt","legacy-note.txt"],"inputsPreserved":{"keep.txt":true,"legacy-note.txt":true},"activeOwnedProcesses":0},{"id":"deliverable-composition","plugin":true,"referenceProvided":false,"exitCode":124,"seconds":180.04,"deadline":true,"hostResult":"no-final-result-event","skillCalls":[],"toolCounts":{"Bash":2,"Read":2,"WebFetch":16},"workFiles":["keep.txt","legacy-note.txt"],"inputsPreserved":{"legacy-note.txt":true,"keep.txt":true},"activeOwnedProcesses":0},{"id":"case-a","plugin":false,"referenceProvided":true,"exitCode":0,"seconds":127.12,"deadline":false,"hostResult":"success","skillCalls":[],"toolCounts":{"Bash":2,"Read":3,"WebFetch":4,"Write":2},"workFiles":["keep.txt","legacy-note.txt","README.md","reference-note.md","resume-example.mjs"],"inputsPreserved":{"keep.txt":true,"legacy-note.txt":true,"reference-note.md":true},"activeOwnedProcesses":0},{"id":"case-b","plugin":true,"referenceProvided":true,"exitCode":1,"seconds":162.81,"deadline":false,"hostResult":"error_max_budget_usd","skillCalls":["yiyuan-accord-claude:deliver-demand-driven-outcome"],"toolCounts":{"Bash":3,"Read":3,"Skill":1,"WebFetch":10},"workFiles":["keep.txt","legacy-note.txt","reference-note.md"],"inputsPreserved":{"keep.txt":true,"legacy-note.txt":true,"reference-note.md":true},"activeOwnedProcesses":0}],
+      "independentChecks": {"artifactSha256":{"script":"b2af9f9302dd3fbd6474d6ecb9fbb29f82d65fce78c86d399623222e29f5d27d","readme":"13edda6169155d9409f65521db71ae69ce47c20040004dab64d3d9f0f65a24ba"},"offlineScope":"Node 24.19.0 syntax check plus observer-owned module interception; no real SDK, authenticated call or thread was executed.","cases":[{"case":"missing-id","pass":true,"exitCode":1,"events":[]},{"case":"empty-id","pass":true,"exitCode":1,"events":[]},{"case":"missing-prompt","pass":true,"exitCode":1,"events":[]},{"case":"title-not-id","pass":true,"exitCode":1,"events":[]},{"case":"option-like-id","pass":true,"exitCode":1,"events":[]},{"case":"valid-id","pass":true,"exitCode":0,"events":[{"kind":"construct","value":null},{"kind":"resume","value":"00000000-0000-4000-8000-000000000123"},{"kind":"run","value":"follow up"}]},{"case":"resume-failure","pass":true,"exitCode":1,"events":[{"kind":"construct","value":null},{"kind":"resume","value":"00000000-0000-4000-8000-000000000123"},{"kind":"run","value":"follow up"}]}],"documentationFindings":["README mixes Python CodexConfig(codex_bin=...) into a Node/TypeScript SDK example.","README names a CLI history command absent from observed Codex 0.153.3 --help.","README/final says all three pinned source files were fetched; trace contains two pinned source fetches, with exec.ts only in the inherited evaluator note. Source supplied by a reference is not a direct fetch.","No authenticated end-to-end resume was performed; pinned upstream source is not a proven match to installed or latest SDK/CLI bytes."],"originalArtifactsChangedByObserver":false},
+      "result": "Without the reference neither arm delivered artifacts; native-repeat reached host budget and plugin arm the deadline. With identical reference the native arm delivered syntax-valid code but inaccurate documentation; the plugin arm invoked its Skill and still hit host budget before producing artifacts. This exposes research-to-delivery and evidence-quality gaps; it does not establish incremental benefit, full native success, global model ranking or causality.",
+      "limitations": "One sample per usable condition; paired arms ran concurrently. Initial route-labelled directory names were visible and contaminated one native narrative; later case names were opaque but not a blinded study. Both routes fetched public sources; plugin no-reference arm over-fetched full CLI npm metadata and source paths. More budget is not itself a remedy or proof. Official built-in capabilities may help; no default-host, Desktop/IDE/cloud, failed-process surviving owner, automatic handoff or lifecycle acceptance follows.",
+      "cleanup": "All captured host jobs reported zero active owned processes; each runner disposed its kill-on-close job in finally. The initial capture-loss attempt has no retained exact terminal receipt. After exact-root/parent and recursive reparse checks, removed all 61 task-owned fixture/configuration/runner/observer/artifact/raw-log files and verified the root absent. Only this sanitized development summary remains; hashes identify removed observations, not retained replayable release evidence. No personal configuration or installed plugin changed. Evaluator containment, reference help and cleanup are not product effects.",
+      "observationSha256": {"nativeRepeat":"35f4a4bd470dbab9220bbb9cbe4fb8621a3baf035d08e5972029824f4429d946","pluginNoReference":"4c2b6f8d1aea7f224f8772c84a0453696d85988f826a369343b7fca0f58230f5","nativeReference":"6e6ded728ecde7c89c4dc80a0e1b777b5f085dba31ec2554dbb5e4ec1593b640","pluginReference":"3c2b4c9c5100b63ce5e4af90492e1ed8b0d457cb0d6bf0eca1d9652ad6c0e8c4"}
+    },
     {
       "id": "claude-native-sufficient-entry-dev1",
       "observedAt": "2026-09-05T00:01:22Z",
@@ -1375,7 +1611,7 @@
     ]
   },
   "acceptance": {
-    "coverageRule": "The inherited responsibilities below are a review inventory, not an immutable feature list. Review necessity against the user's actual goal: retain, delegate to the host, merge, retire or fill a demonstrated gap. Record retired/merged responsibilities and their changed acceptance explicitly rather than silently dropping coverage. Preserve the outcomes that remain necessary, not every historical implementation or test. Decomposition and test identifiers are revisable mappings.",
+    "coverageRule": "The inherited responsibilities below are a review inventory, not an immutable feature list. Review necessity against the user's actual goal: retain, delegate to the host, merge, retire or fill a demonstrated gap. Record retired/merged responsibilities and their changed acceptance explicitly rather than silently dropping coverage. Preserve the outcomes that remain necessary, not every historical implementation or test. Decomposition and test identifiers are revisable mappings. Actively discover unlisted design defects, broken cross-function relations, entry/configuration blind spots and unnecessary mechanisms through task-relevant official changes, realistic normal-entry work, counterexamples and failure observations. Known findings seed but never bound the review. Prioritize consequences and affected dependencies; end a research branch when sufficient evidence supports the next safe implementation or validation. Complete outcomes and independently observed value, not counts of documents, tests, rules or components, determine completeness.",
     "functionReview": "For each item establish the user need, sufficient current native capabilities, Accord's necessary intervention, observable effect and lifecycle cost. A host-native function needs no duplicate Accord implementation. If the need itself no longer applies, revise the active requirement and its dependent acceptance; if only the implementation is redundant, preserve the result through a verified replacement. This distinction prevents both feature hoarding and convenience-driven scope reduction.",
     "retiredDuties": [],
     "evidenceUnit": ["responsibility", "bound-result-and-quality", "entry-and-executor", "composition-and-active-package", "trigger-and-conditions", "observed-effect", "failure-and-lifecycle", "independent-observation", "freshness-and-limit"],
@@ -1531,7 +1767,7 @@
         "name": "结果验证、独立证据与实际价值",
         "goldenTasks": ["GT-04", "GT-06", "GT-14"],
         "activationWhen": "A result, functional availability, completion or value claim is proposed.",
-        "requiredOutcome": "Suitable observations support exactly the claim and its scope, with all required outcomes and applicable post-state accounted for.",
+        "requiredOutcome": "Suitable observations support exactly the claim and its scope, with all required outcomes and applicable post-state accounted for. For claimed incremental benefit, compare suitable native-only and exact-package normal-entry paths under declared conditions; observe delivered outcomes, user intervention/correction/recovery burden and relevant cost. Installation or invocation alone is not value; do not add visible ceremony to simulate benefit.",
         "normalEntry": "Outcome-specific independent observation; matched comparison only where the claim requires it.",
         "failureOracle": "Reject self-attested success, evaluator rescue presented as product function and safety-only or static-only proof of complete functionality.",
         "dependsOn": ["goal-authority-correction"],
@@ -1548,7 +1784,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Continue the v3.2.0-targeted whole-system development sequence, reconcile existing-host package paths with the approved source and close demonstrated functional gaps. Additional hosts remain deferred.",
+    "work": "Continue toward 3.2 by diagnosing observed discovery-to-delivery and ordinary-entry value gaps while actively seeking unlisted design and cross-function failures. Bind the exact affected entry, effective environment, native baseline and complete required effect; revise or remove ineffective mechanisms rather than expanding guidance by default. The entry inventory is not universal support. Additional vendors remain deferred.",
     "requires": "The user authorized controlled existing-host work and publication of the accepted 3.2 candidate. Use task-owned bounded test resources, not changes to the personal host. Bind any new account, trust/data or material cost before effects; evidence and exact-candidate checks still precede the conditional publication."
   },
   "claimCeiling": {

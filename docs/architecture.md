@@ -99,6 +99,18 @@ views must not become another authoritative host database. The current local
 Codex protocol export establishes interface existence only, not daemon behavior
 or Desktop capability. Re-sense changed dependencies before relying on them.
 
+An entry surface is a separate applicability boundary within a host family:
+CLI, desktop mode, IDE integration, web/cloud, mobile/remote front end and SDK
+may differ in executor, account, policy, loaded configuration and state. The
+source's `capabilityMap.entrySurfaces` is a dated review inventory, not inherited
+support or another adapter family. Similar engines and shared configuration
+are evidence to investigate, never a substitute for the target entry's effects.
+Unavailable authenticated entries remain untested; official references cannot
+close that gap. Review coverage also includes newly discovered defects and
+cross-function blind spots, not just the known-issue list. Product value means
+better supported outcomes or less avoidable user burden, not more visible
+guidance, mandatory invocation or a larger capability inventory.
+
 Native coverage also includes the model's own cognition and collaboration, not
 just host interfaces. The matrix distinguishes model, host-runtime and
 model/API-composed capabilities. Re-establish the same-task model-plus-host

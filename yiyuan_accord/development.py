@@ -72,6 +72,50 @@ def delivery_adapter_contract(adapter_id, package_id):
     }
 
 
+def _entry_surface_errors(entries):
+    """Validate a revisable review inventory, never cross-entry admission."""
+    if not isinstance(entries, dict):
+        return ["entry surface review must be an object"]
+    errors = []
+    if not _text(entries.get("rule")):
+        errors.append("entry surface review needs an attribution rule")
+    try:
+        captured = datetime.fromisoformat(entries.get("reviewedAt", "").replace("Z", "+00:00"))
+        if captured.utcoffset() is None:
+            raise ValueError("undated")
+    except (ValueError, TypeError, AttributeError):
+        errors.append("entry surface review needs a timezone-bound date")
+    rows = entries.get("rows")
+    if not isinstance(rows, list) or not rows:
+        return errors + ["entry surface rows are missing"]
+    domains = {"codex": {"learn.chatgpt.com", "developers.openai.com", "help.openai.com"},
+               "claude-code": {"code.claude.com", "platform.claude.com",
+                               "support.claude.com", "academy.claude.com"}}
+    ids, hosts = set(), set()
+    for row in rows:
+        if not isinstance(row, dict) or not all(_text(row.get(field)) for field in (
+                "id", "host", "name", "officialSource", "execution", "environment", "observation")):
+            errors.append("entry surface must bind execution, environment, source and observation")
+            continue
+        if row["id"] in ids:
+            errors.append("entry surface ids must be unique")
+        ids.add(row["id"])
+        hosts.add(row["host"])
+        try:
+            url = urlsplit(row["officialSource"])
+            official = (url.scheme == "https" and url.hostname in domains.get(row["host"], set())
+                        and url.username is None and url.password is None)
+        except ValueError:
+            official = False
+        if not official:
+            errors.append("entry surface needs the relevant official family source")
+        if row.get("currentEffect") != "unverified":
+            errors.append("shared engine, documentation or installation is not entry effect evidence")
+    if hosts != set(domains):
+        errors.append("entry review must cover the two bound families without adding vendors")
+    return errors
+
+
 def development_contract_errors(contract, golden_task_ids):
     """Check structure/coverage; prose and real effects still require review."""
     errors = []
@@ -276,6 +320,7 @@ def development_contract_errors(contract, golden_task_ids):
     capability_map = section("capabilityMap", (
         "representation", "refreshRule", "allocationRule", "runtimeGap",
     ))
+    errors.extend(_entry_surface_errors(capability_map.get("entrySurfaces")))
     require(capability_map.get("scope") == "existing-host-development-review-not-runtime-admission",
             "capability inventory cannot establish runtime admission")
     try:
@@ -468,7 +513,7 @@ def render_development_plan(contract):
     for stage in contract["systemOptimization"]["workSequence"]:
         lines.append(f"| {stage['title']} | {states[stage['state']]} | {stage['procedure']} | {stage['exit']} |")
     lines += ["", "## 完整职责覆盖", "",
-              "这是现有职责的必要性评审清单，不是必须原样保留的功能集。保留项需当前效果证据，合并或删除项需说明需求判断及验收变更。", "",
+              contract["acceptance"]["coverageRule"], "",
               "| 职责 | 所属工序 | 历史需求与反例参考 |", "|---|---|---|"]
     for duty_id, duty in duties.items():
         stages = "、".join(stage["title"] for stage in contract["systemOptimization"]["workSequence"]
@@ -477,6 +522,14 @@ def render_development_plan(contract):
     for retired in contract["acceptance"]["retiredDuties"]:
         lines.append(f"| {retired['id']}（已处置） | {retired['reason']}；{retired['acceptanceChange']} | {', '.join(retired['goldenTasks'])} |")
     capability_map = contract["capabilityMap"]
+    entries = capability_map["entrySurfaces"]
+    lines += ["", "## 宿主家族与入口边界", "",
+              f"入口资料核对时间：`{entries['reviewedAt']}`。以下是开发盘点，不是各入口已适配或验收通过。", "",
+              entries["rule"], "",
+              "| 入口 / 官方来源 | 执行位置 | 环境与权限边界 | 当前观察与未实测项 |",
+              "|---|---|---|---|"]
+    for row in entries["rows"]:
+        lines.append(f"| `{row['id']}` [{row['name']}]({row['officialSource']}) | {row['execution']} | {row['environment']} | {row['observation']} |")
     lines += ["", "## 原生能力与 Accord 职责矩阵", "",
               f"资料核对时间：`{capability_map['reviewedAt']}`。这是现有两宿主的开发评审快照，不是永久能力目录或当前行为验收。",
               "原生项的条件和效果尚需在实际客户端、模型路线及权限下核对。接口存在、配置可见、实际执行和结果成立分别取证。", "",
@@ -498,7 +551,7 @@ def render_development_plan(contract):
         lines.append(f"- `{observation['id']}` — {observation['subject']}。{observation['finding']} {observation['claimLimit']}")
     lines += ["", "## 动态适应的必查链路", "",
               "按具体声明选择原生对照、可交付最小组合和受控干扰；不把干净宿主规定为通用运行前提。",
-              "核对全局、父目录与项目的 AGENTS.md、config.toml 等全部生效配置，以及记忆、历史、插件和环境变量；记录来源与影响，不复制秘密。", "",
+              "环境处理：" + contract["environmentControl"]["handlingRule"], "",
               "| 环境变化 | 要观察的功能效果 | 失败判据 |", "|---|---|---|"]
     for scenario in contract["environmentControl"]["adaptationScenarios"]:
         lines.append(f"| {scenario['trigger']} | {scenario['requiredEffect']} | {scenario['failureOracle']} |")
@@ -506,6 +559,7 @@ def render_development_plan(contract):
     for finding in contract["systemOptimization"]["priorityFindings"]:
         lines.append(f"- `{finding['id']}` — `{finding['status']}`：{finding['basis']}")
     lines += ["", "## 发布顺序", "",
+              "更新日志：[CHANGELOG.md](../../CHANGELOG.md)。当前为未发布开发摘要；定版时以精确候选及验收证据核对，不混入历史发布账本。", "",
               "版本内改动提交 → 推送精确候选 → 精确提交的验收与独立评审 → 发布同一提交 → 公共结果及清理核验。",
               "提交不能夹带无关工作；推送成功、工作区干净或本地测试通过都不能单独代替发布验收。", "",
               "当前对话含已启用的 Accord、其他能力及继承上下文，只作为开发辅助；不能用它证明普通用户环境下的效果。",

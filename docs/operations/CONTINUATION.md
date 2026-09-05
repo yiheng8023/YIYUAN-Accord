@@ -30,9 +30,11 @@ source conformance and `verify` / `host-check` for current development admission
 The unpublished worktree packages are `3.2.0-dev.3`; user installations are not
 updated. Retained historical regression tests use the immutable predecessor;
 current package rejection tests are in `tests/product/test_development.py`.
-Current-host functionality and value remain unverified. Next exercise ordinary
-entry, sufficient execution and adaptation against the exact package, observing
-effects without evaluator rescue. Claude Code evaluation uses the user's
+Current-host functionality and value remain unverified. Prioritize the observed
+ordinary-entry and research-to-delivery gaps; actively discover unlisted design
+and cross-function failures, not only known v3.1 issues. Compare actual outcomes
+and avoidable user intervention with a suitable native baseline; do not force
+invocation or add visible ceremony to simulate value. Claude Code evaluation uses the user's
 authorized existing CC Switch / DeepSeek route, not unavailable official Claude
 account access. Keep provider, model, host and configuration attribution separate.
 
@@ -74,9 +76,15 @@ Default supported hosts without extra extensions and customized effective
 environments both need applicable verification. Do not equate configuration
 intent with loaded state, discovery with adoption authority, or current developer
 assistance with delivered capability. Pinned official SDK sources are candidates
-only; none was installed or integrated. Next exercise changed discovery/reuse
-and environmental paths where consequential, plus the unresolved failure owner,
-with exact-candidate observations and explicit prerequisites.
+only; none was installed or integrated. The dev.3 discovery probe now records
+four usable arms and one observer-capture failure. Without reference help neither
+arm delivered in budget. With the same source-bound evaluator note, native
+produced code but inaccurate documentation; the plugin invoked its Skill and
+still hit budget without artifacts. Seven observer-owned offline control-flow
+cases passed for the native script, not authenticated Codex resume. No DUT was
+repaired. All 61 task-owned files were removed and root absence verified.
+Retain attribution, observer defects and sampling limits in the source observation;
+do not turn this into a causal ranking, a complete native pass or product value.
 
 The shared native/Accord capability map is in `development.json#/capabilityMap`
 and the generated plan. Its dated official references and local CLI/interface
@@ -86,6 +94,26 @@ and surviving recovery actor for reliability-sensitive duties. Use or build
 runtime support where a real gap requires it. The historical no-I/O core and
 simulated graph PoC are not delivered automatic host integration. Source
 validation and linked matrices cannot close that functional acceptance gap.
+
+The source's `capabilityMap.entrySurfaces` distinguishes the two host families'
+CLI, desktop modes, IDE variants, web/cloud, mobile/remote, SDK and integration
+entries. This review is not an adaptation or test claim for every row. Official
+Claude account access is user-reported unavailable: keep cloud documentation
+and live evidence separate, and do not infer Desktop/IDE third-party support
+from the tested CLI route. Effective configuration can differ despite a shared
+engine; current official Desktop documentation even differs from stale search
+snippets about MCP configuration sharing. Reconcile the actual entry before use.
+
+Maintain `CHANGELOG.md` as an unpublished development summary. At qualification,
+reconcile changes, removals, compatibility and limitations against the exact
+candidate and accepted evidence before release. Do not append prospective 3.2
+to the immutable published ledger. The visible plan now derives environment
+and coverage policy from the source, not a hardcoded exhaustive-audit rule.
+Both READMEs now separate the desired user experience from the actual package,
+published 3.1 evidence and unverified 3.2 development. The old fixed-constants
+pitch, unsupported thirty-second title and stale schema-v3 development entry
+were removed; detailed historical lifecycle commands remain linked at v3.1.0.
+This documentation correction does not close the ordinary-entry value gap.
 
 The navigation and current-state narrative below belong to the predecessor;
 consult them for historical evidence or unchanged contracts, not as a second

@@ -11,13 +11,13 @@
 |---|---|---|---|
 | 源头校准与继承基线 | 本地实现，未发布 | 保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。 | 源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。 |
 | 系统短板与工程优化 | 本地实现，未发布 | 先核对官方原生能力、当前宿主暴露和 Accord 职责映射；按同一事实源派生索引与影响关系，列明缺口及验收，再追踪薄弱依赖并测量优化。 | 已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。 |
-| 整体执行链、原生覆盖与遗留形态审查 | 进行中 | 按当前足够共识推进；在影响下一安全决策的需求或证据变化处重新对齐/研究。沿触发、事实与选择、执行及状态、故障接管、验收和清理检查整体连接；现有授权能力足够则复用，缺口时外查成熟候选并比较后再自建。检验实际生效环境，把 Skill/Hook 等形态视为可改假设，同步受影响的声明、工序和验收。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
+| 整体执行链、原生覆盖与遗留形态审查 | 进行中 | 先验证普通入口对真实需求的交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按变化对齐/研究，证据足够即进入下一安全实现或核验，避免调研无收敛。沿触发、选择、执行及状态、故障接管、验收和清理检查整体连接；原生足够则退出，缺口时比较成熟候选后再补。Skill/Hook 等形态可改，同步受影响声明、工序和验收。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
 | 动态适应、干扰与故障验收 | 待开展 | 按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。 | 普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。 |
-| 3.2 定版、发布与收尾 | 待开展 | 冻结精确候选；完成受影响的完整包证据、独立评审和托管检查；依用户条件授权发布新的 3.2。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。 |
+| 3.2 定版、发布与收尾 | 待开展 | 将变更、移除/替代、兼容与未验证项写入 CHANGELOG.md，定版时逐项对照精确候选及证据；提交并推送完整候选，完成受影响完整包证据、独立评审和托管检查，再依条件授权发布新的 3.2。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。 |
 
 ## 完整职责覆盖
 
-这是现有职责的必要性评审清单，不是必须原样保留的功能集。保留项需当前效果证据，合并或删除项需说明需求判断及验收变更。
+The inherited responsibilities below are a review inventory, not an immutable feature list. Review necessity against the user's actual goal: retain, delegate to the host, merge, retire or fill a demonstrated gap. Record retired/merged responsibilities and their changed acceptance explicitly rather than silently dropping coverage. Preserve the outcomes that remain necessary, not every historical implementation or test. Decomposition and test identifiers are revisable mappings. Actively discover unlisted design defects, broken cross-function relations, entry/configuration blind spots and unnecessary mechanisms through task-relevant official changes, realistic normal-entry work, counterexamples and failure observations. Known findings seed but never bound the review. Prioritize consequences and affected dependencies; end a research branch when sufficient evidence supports the next safe implementation or validation. Complete outcomes and independently observed value, not counts of documents, tests, rules or components, determine completeness.
 
 | 职责 | 所属工序 | 历史需求与反例参考 |
 |---|---|---|
@@ -34,6 +34,36 @@
 | 安装、更新与卸载生命周期 | 动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-20 |
 | 原生接替、旁路与退役 | 整体执行链、原生覆盖与遗留形态审查 | GT-01, GT-19 |
 | 结果验证、独立证据与实际价值 | 源头校准与继承基线、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-04, GT-06, GT-14 |
+
+## 宿主家族与入口边界
+
+入口资料核对时间：`2026-09-05T02:30:47Z`。以下是开发盘点，不是各入口已适配或验收通过。
+
+按宿主家族、具体入口/模式、执行位置、版本、提供商/模型、身份权限及实际生效配置绑定证据；同引擎或共享配置只说明待验证的关系，不允许 CLI、客户端、IDE、网页/云端和 API 互相继承效果。入口集合随官方发布和任务相关性增删，不构建全量笛卡尔积。两家族的入口盘点不是每个入口已适配的承诺；额外厂商仍暂缓。官方账户不可用的入口保留资料与未知，不规避访问限制。
+
+| 入口 / 官方来源 | 执行位置 | 环境与权限边界 | 当前观察与未实测项 |
+|---|---|---|---|
+| `cx-cli` [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) | 本地终端；远程终端仍由该机器执行 | 绑定该 CLI 的配置、权限、提供商与工作目录。 | 本机 0.153.3；仅接口观察。 |
+| `cx-desktop` [Codex 桌面入口](https://learn.chatgpt.com/docs/app) | 本地项目/工作树或委派云端，按任务区分 | 界面入口、内嵌引擎与独立 CLI 版本分别识别。 | 本机 OpenAI.Codex 26.901.4073.0；非候选效果验收。 |
+| `cx-vscode` [Codex VS Code / 兼容编辑器](https://learn.chatgpt.com/docs/codex/ide) | 本地交互或云端委派 | 编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。 | 本机 openai.chatgpt 26.901.22334 仅安装记录；兼容编辑器未测。 |
+| `cx-jetbrains` [Codex JetBrains 集成](https://learn.chatgpt.com/docs/codex/ide) | IDE 自有集成；执行后端待核 | 不是 VS Code 扩展的同一入口；不继承其配置或插件效果。 | 官方资料支持；未实测。 |
+| `cx-xcode` [Codex Xcode 集成](https://learn.chatgpt.com/docs/codex/ide) | IDE 自有集成；执行后端待核 | 按 Xcode 代理接口与权限核对，不假设加载相同 Skill/Hook。 | 官方资料支持；未实测。 |
+| `cx-cloud` [Codex web / 云端任务](https://learn.chatgpt.com/docs/cloud) | 托管隔离环境 | 仓库、账户、依赖、网络与环境配置独立；本地插件不自动存在。 | 官方资料支持；本轮无云端候选实测。 |
+| `chatgpt-web` [ChatGPT 网页入口](https://learn.chatgpt.com/docs/web) | 网页会话；实际工具执行位置待核 | ChatGPT 会话不等于 Codex 本地任务，不继承本地文件与插件权限。 | 官方资料支持；本轮未实测。 |
+| `chatgpt-desktop` [ChatGPT 桌面 Chat / Work](https://learn.chatgpt.com/docs/app) | 按会话模式与执行目标区分 | 同一客户端可有不同模式；品牌或安装包名称不是模式能力证明。 | 官方资料支持；本机安装记录不证明各模式可用。 |
+| `chatgpt-mobile` [ChatGPT iOS / Android](https://help.openai.com/en/collections/3742473-chatgpt) | 移动客户端；执行位置按具体能力核对 | 不默认获得本地 Codex 的配置、Shell 或插件入口。 | 官方入口资料支持；未实测。 |
+| `cx-sdk` [Codex SDK / App Server](https://learn.chatgpt.com/docs/codex-sdk) | 调用方与目标 Codex 执行器 | SDK、协议与直接模型 API 不等同；版本、身份、配置及会话路由需绑定。 | 源码/CLI schema 观察；未安装 SDK 或运行认证调用。 |
+| `cx-integrations` [Codex GitHub / GitLab / Linear / Slack 等触发入口](https://learn.chatgpt.com/docs/cloud) | 触发前端与云端执行器分离 | 组织授权、连接和任务环境另验；入口目录不授权连接或发布。 | 官方资料支持；未实测、未新增连接。 |
+| `cc-cli` [Claude Code CLI](https://code.claude.com/docs/en/platforms) | 本地或远程终端机器 | 现有授权 CC Switch / DeepSeek 路线仅归因到已观察 CLI 会话。 | 2.1.261；dev.3 观察有失败，整体效果未验证。 |
+| `cc-desktop` [Claude Desktop Code](https://code.claude.com/docs/en/desktop) | 本地、SSH 或云端会话分别绑定 | 本地 Code 可消费桌面 MCP 配置且有不同优先级；网关资料不证明本机 DeepSeek 路线可用。 | 本机 Claude 1.46388.3.0 仅安装记录；Code 候选效果未测。 |
+| `cc-vscode` [Claude Code VS Code](https://code.claude.com/docs/en/vs-code) | 编辑器会话；具体执行目标待核 | 官方说明支持第三方提供商；实际扩展配置/加载/权限与该路线仍须验证。 | 本机 anthropic.claude-code 2.1.261 仅安装记录；未实测。 |
+| `cc-jetbrains` [Claude Code JetBrains](https://code.claude.com/docs/en/platforms) | IDE 终端内 CLI | IDE 上下文桥接仍是独立边界；不能用 CLI 成功证明集成效果。 | 官方资料支持；未实测。 |
+| `cc-cloud` [Claude Code web / 云端](https://code.claude.com/docs/en/web-quickstart) | 默认托管云端；组织自托管条件另核 | 账户、计划、仓库及环境独立；不假设现有第三方路线能调用。 | 官方资料支持；用户报告官方账户不可用，未实测、不绕过访问限制。 |
+| `cc-remote` [Claude 移动端 / Remote Control / Dispatch](https://code.claude.com/docs/en/platforms) | 分别指向云端、现有本地会话或 Desktop | 移动入口不是独立本地执行器；配对、账户及会话存续条件分别核对。 | 官方资料支持；未实测、未配对。 |
+| `claude-chat` [Claude Chat 网页 / 桌面 / 移动入口](https://academy.claude.com/tutorials/navigating-the-claude-desktop-app) | 聊天能力与 Code 执行入口分开 | 共享客户端不代表相同插件、配置或本地操作权。 | 官方资料支持；不由 CLI 第三方模型可用性外推。 |
+| `claude-cowork` [Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork) | 知识工作入口；具体运行位置按会话核对 | 模式、账户、文件/连接授权与 Code 分开评估；不是新增适配承诺。 | 官方资料支持；未实测。 |
+| `cc-sdk` [Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview) | 调用方启动的 Agent 执行器 | SDK、CLI、直接模型 API 与第三方提供商兼容性分开；不新增依赖。 | 官方源码参考；未安装或运行 SDK。 |
+| `cc-integrations` [Claude CI / Slack / Channels / 定时触发](https://code.claude.com/docs/en/platforms) | CI、云端或已运行本地会话，按入口区分 | 触发器不等于执行器；组织身份、连接、寿命与清理分别核对。 | 官方资料支持；未启用任何新连接或调度。 |
 
 ## 原生能力与 Accord 职责矩阵
 
@@ -98,7 +128,7 @@ The dev.3 host Skill supplies adaptive guidance, not a proven system executor. H
 ## 动态适应的必查链路
 
 按具体声明选择原生对照、可交付最小组合和受控干扰；不把干净宿主规定为通用运行前提。
-核对全局、父目录与项目的 AGENTS.md、config.toml 等全部生效配置，以及记忆、历史、插件和环境变量；记录来源与影响，不复制秘密。
+环境处理：Prefer bounded task-owned isolation for evaluation and conflict-specific containment in real use. Preserve the user's healthy environment and unrelated capabilities. If interference cannot be isolated, bind it as a declared dependency or hold the affected claim unknown; do not silently assume ordinary users have it. Observe only decision-relevant effective state: distinguish configuration intent, inherited or managed policy, setting precedence, session overrides and actual loaded capabilities. An AGENTS.md or similarly named file has authority only if the host actually consumes it under the applicable scope; a config file alone is not a state receipt. Use supported host queries first, minimize private content and never collect credentials. Unknown effective fields limit dependent claims rather than defaulting to an official-pristine environment.
 
 | 环境变化 | 要观察的功能效果 | 失败判据 |
 |---|---|---|
@@ -115,16 +145,19 @@ The dev.3 host Skill supplies adaptive guidance, not a proven system executor. H
 
 ## 当前短板及证据边界
 
+- `readme-source-and-claim-alignment` — `implemented-local-not-functional-acceptance`：文案审查发现中英文 README 把冻结 schema-v3 当作当前开发权威、称条件策略为固定常量，并使用未经证明的 30 秒开始标题。已重写定位、实际包内容、版本与证据边界；保留安装和历史生命周期参考、社区与法律信息。由内容和源码事实判断，不因旧模型参与写作就认定缺陷；文案清晰不证明运行时收益。
 - `candidate-shape-and-whole-chain-review` — `reviewed-not-architecture-frozen`：dev.3 仍是单 Skill 加固定 SessionStart Hint 的候选形态；开发校验器也按该形态核验，不是通用形态引擎。已移除源数据中脚本/参考文件的冗余禁令，仍拒绝未声明文件及包摘要不符。Skill/Hook、核心、运行时及其数量均可因完整职责而改变，届时同步改声明、校验和验收，不靠放松摘要绕过。当前 Hook 只在恢复/压缩时输出提示；无状态查询、调度或恢复执行。纯核心及图 PoC 未接入普通入口，不能拼成一个已经闭合的系统。
 - `native-accord-capability-map` — `mapped-interface-evidence-not-runtime-closure`：已建立有日期和来源的原生能力—Accord 职责关系，连接当前工序、验收与变更重查；动态图 PoC 和纯核心不是实时宿主索引或执行器，普通入口的全链路闭环仍待验证。
 - `needs-based-model-and-subagent-routing` — `implemented-guidance-native-coverage-under-review`：主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。
-- `conditional-alignment-and-external-discovery` — `implemented-local-unverified`：需求对齐、调研和执行按决策需要动态迭代，不要求一次定全，也不机械逐步重跑；现有授权条件足够则复用，缺口时发现清单外成熟候选，自建前比较。已定向核查两宿主官方 SDK 的固定 GitHub 源码及维护/许可元数据；仅为外部候选参考，没有安装或接入，也未证明当前包发现/复用效果。
+- `conditional-alignment-and-external-discovery` — `observed-research-to-delivery-gap-open`：dev.3 无参考的原生/插件组均未在有界预算内交付；同样补充官方参考后，原生组产出代码但说明有误，插件组实际调用 Skill 仍超预算未产出。不是完整原生成功或插件收益证据，单例也不证明因果。下一步审查发现—证据足够—执行—验收的收敛与上下文负担，不以强制调用、追加全局规则或增加预算冒充修复。
 - `source-to-projection-convergence` — `implemented-local-unverified`：Both worktree Skills now project conditional alignment, external discovery and effective-environment guidance as unpublished 3.2.0-dev.3 packages. Schema-v2 entry descriptors and optional Node hints are unchanged. These are context-triggered duties, not a fixed SOP. Static admission does not prove current host effects.
-- `ordinary-entry-effect-and-recovery` — `open`：dev.2 同轮修复对照中两组均产出正确结果且外部各复验 200 例，但未调用 Skill；插件组说明仍有事实错误。后续正常退出后以同 session 恢复的输入漂移对照，两组均保持先不写的授权边界、恢复后重读并得到正确 130；插件组初轮调用 Skill、恢复 Hook 返回成功提示。原生也足够，不能归因增益；评估器发起恢复及清理不证明崩溃自主接管。新 dev.3 行为、零历史交接和完整生命周期仍未验证。
+- `ordinary-entry-effect-and-recovery` — `open`：用户反馈安装的 3.1 缺少可感知实质影响，需对照验证而非自动认定零价值。旧 dev.2 若干任务原生已足够；当前 dev.3 有未调用及调用后未交付的反例，收益尚未成立。优先查安装/加载、普通任务匹配、实际执行、结果和用户负担的断点；正常退出后的评估器恢复不证明崩溃接管。零历史交接与完整生命周期仍待验，不为可见存在感制造干预。
 - `verification-io-amplification` — `implemented-local-measured`：同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。
 - `acceptance-cost-and-coupling` — `implemented-local-unverified`：Current verify/host-check now dispatch to development-package admission without promoting or repeatedly replaying historical behavior. Retained rejection tests run current verifier code against the immutable predecessor subject. Package safety, identity, complexity, source preservation and dirty-worktree gates remain applicable; current functional and host evidence are still unverified.
 
 ## 发布顺序
+
+更新日志：[CHANGELOG.md](../../CHANGELOG.md)。当前为未发布开发摘要；定版时以精确候选及验收证据核对，不混入历史发布账本。
 
 版本内改动提交 → 推送精确候选 → 精确提交的验收与独立评审 → 发布同一提交 → 公共结果及清理核验。
 提交不能夹带无关工作；推送成功、工作区干净或本地测试通过都不能单独代替发布验收。
