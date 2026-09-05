@@ -103,12 +103,11 @@ _Avoid_: plugin-first, runtime-first, fixed form catalogue, mechanism
 prohibition, flexibility without verification
 
 **Responsibility-to-form allocation**:
-A freshness- and context-bound derived relation assigning each currently
-relevant outcome responsibility to no added artifact, one sufficient form or
-several cooperating replaceable forms under a shared coherence contract.
-_Source_: `product/reshaping-guidance.json#/selfBootstrappingCore/productFormRule`,
-`product/reshaping-guidance.json#/dynamicIndex/graphProjection`
-_Avoid_: permanent architecture, form identity, unverified composition
+Assign a needed outcome to sufficient host execution, justified Accord means or
+their composition, with observable effects and failure ownership. A direct
+decision can suffice; an index or graph is not a required intermediate layer.
+_Source_: `product/development.json#/implementation`
+_Avoid_: one module per duty, permanent architecture, unverified composition
 
 **Deep module**:
 A cohesive responsibility-bearing unit whose narrow interface hides substantial
@@ -415,18 +414,22 @@ retirement relations.
 _Source_: `product/reshaping-guidance.json#/factorApplicabilityContract`
 _Avoid_: global visibility, installation, unconditional SOP
 
-**Dynamic index**:
-A source- and freshness-bound query view that joins durable semantic records
-with current environment observations without turning a snapshot into truth.
-_Source_: `product/reshaping-guidance.json#/dynamicIndex`
-_Avoid_: manually duplicated catalog, committed host snapshot, authority replacement
+**Decision representation**:
+A replaceable view used by real callers to support a needed choice or check.
+Compare query speed and decision quality with construction, refresh, staleness,
+resource and maintenance cost. Direct queries, indexes and graphs are candidates;
+none is a product obligation. Current duty references serve maintainer review,
+not live host execution.
+_Source_: `product/development.json#/capabilityMap/representation`,
+`product/development.json#/implementation/reconstructionRule`
+_Avoid_: a second authority, graph size as coverage, mandatory maintained index
 
-**Sparse capability-surface views**:
-Derived H (host-native responsibility incidence) and A (Accord responsibility
-allocation) views, filtered by current admission and closure-lifecycle masks.
-Their overlap opens redundancy evaluation but never proves retirement.
-_Source_: `product/reshaping-guidance.json#/dynamicIndex/sparseMatrixViews`
-_Avoid_: Cartesian capability catalog, binary-overlap retirement, second authority
+The predecessor's dynamic index, H/A views and graph vocabulary are
+[historical design terms](https://github.com/yiheng8023/YIYUAN-Accord/blob/1e5ef9635b41c576edd622001fd477f391944b59/CONTEXT.md#human-and-agent-roles),
+not required successor modules. Its
+[self-contained graph demonstration](https://github.com/yiheng8023/YIYUAN-Accord/blob/1e5ef9635b41c576edd622001fd477f391944b59/research/PROTOTYPE-dynamic-relation-graph.html)
+is retained in Git, not in the current delivery tree. Frozen source paths to
+that demonstration resolve in their original revision.
 
 **Capability provenance**:
 The observed origin of a capability: model-inherent, host-native,
@@ -442,14 +445,6 @@ carrier, model route, tool set, configuration, permission, context and time.
 Fitness and health belong to this combination and expire on material drift.
 _Source_: `product/reshaping-guidance.json#/capabilityDiscovery/effectiveCapabilityIdentity`
 _Avoid_: universal model ability, permanent host feature, duplicate semantic capability
-
-**Graph projection**:
-A derived node-and-edge view used to find feasible routes, affected evidence
-and retirement dependencies, including responsibility-to-form allocations and
-their coherence, replacement and lifecycle relations; it does not imply a
-graph database.
-_Source_: `product/reshaping-guidance.json#/dynamicIndex/graphProjection`
-_Avoid_: second source of truth, mandatory database
 
 **Closure**:
 A state transition supported by consequence-level evidence, reconciled effects

@@ -171,7 +171,7 @@ class DevelopmentContractTests(unittest.TestCase):
         stages[0]["duties"] = sorted(set(stages[0]["duties"] + removed["duties"]))
         removed = stages.pop(1)
         stages[0]["duties"] = sorted(set(stages[0]["duties"] + removed["duties"]))
-        self.assertEqual(len(stages), 4)
+        self.assertEqual(len(stages), len(self.contract["systemOptimization"]["workSequence"]) - 1)
         self.assertEqual(self.errors(altered), [])
 
     def test_quality_floor_cannot_be_listed_without_an_execution_stage(self):

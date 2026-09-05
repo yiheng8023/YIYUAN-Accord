@@ -564,7 +564,7 @@ def render_development_plan(contract):
               "|---|---|---|---|"]
     for row in capability_map["accord"]:
         lines.append(f"| {duties[row['dutyId']]['name']} | {', '.join(row['nativeIds'])} | {row['role']} | {row['nextProbe']} |")
-    lines += ["", "### 事实、索引、图与运行时", "",
+    lines += ["", "### 当前能力依据与执行边界", "",
               capability_map["representation"], "", capability_map["refreshRule"], "",
               capability_map["runtimeGap"], "",
               "运行时分配要求：" + contract["implementation"]["runtimeRequirement"], "",
