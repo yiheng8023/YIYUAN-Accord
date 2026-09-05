@@ -53,6 +53,13 @@ class DevelopmentContractTests(unittest.TestCase):
                 altered["authority"]["conditionalRelease"]["conditions"].remove(condition)
                 self.assertTrue(self.errors(altered), "bound publication condition was lost")
 
+    def test_post_release_accord_update_is_not_general_install_authority(self):
+        self.assertFalse(self.errors(self.contract))
+        for scope in ("install", "upgrade-host-applications", "upgrade-accord-now"):
+            altered = copy.deepcopy(self.contract)
+            altered["authority"]["scope"].append(scope)
+            self.assertTrue(self.errors(altered))
+
     def test_release_plan_follows_bound_conditions_without_freezing_extra_guards(self):
         from yiyuan_accord.development import render_development_plan
         altered = copy.deepcopy(self.contract)

@@ -14,7 +14,7 @@
 | 当前开发证据准入通路 | 进行中 | 有版本的公开证据入口及正反回归已本地实现；继续绑定真实作用域、入口及关键环境轴、验收用例和独立来源核验。先提交定义、测试判据及被测实现 A，再观察 E，最后在候选 B 计算准入并接受绑定 B 的真实独立评审。按受影响依赖复用证据，不跨入口或环境拼接；保持历史隔离、静态检查和有据复杂度预算。 | 同一公开验证入口按作用域分别计算功能、增量价值、生命周期和候选资格；拒绝换主体、旧定义、来源不足、终态过期、环境漂移、跨事件或矛盾后态、未闭合残留及缺失独立评审。合成回归仅验证准入器；真实作用域和来源接入仍未完成，实际来源核验、授权、精确推送、托管及公共后态须独立成立。 |
 | 整体执行链、原生覆盖与遗留形态审查 | 待开展 | 用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、发现与比较、执行及状态、故障接管、验收和清理检查整体连接；原生是起点而非停止规则，缺口或可信净收益机会才扩展检索，复用足够的宿主发现与执行链。自举同理。检查资产必要性、调用者、过期导航与维护负担，按证据保留、合并、替换或退役；同步受影响声明、工序和验收，历史证据不改写，功能不降格。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
 | 动态适应、干扰与故障验收 | 待开展 | 按声明选择原生对照、最小可交付组合与受控混合环境；同一被测执行/状态变化联合核验适用纠正、恢复及资源后态，实际跨载体或来源转移才核验目的端与来源释放，不强制交接。精确包安装前和卸载后由仍可用的生命周期执行者承担；不依赖评估器救援或被移除的 Skill。 | 普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。 |
-| 3.2 定版、发布与收尾 | 待开展 | 依据已建立的当前证据准入通路计算候选资格，不将静态 PASS 当作功能验收。复核资产必要性与受影响功能，按精确候选及证据校准 CHANGELOG.md；提交并推送完整候选，核对精确包、独立评审与托管检查，再依已有条件授权发布新的 3.2。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。 |
+| 3.2 定版、发布与收尾 | 待开展 | 依据已建立的当前证据准入通路计算候选资格，不将静态 PASS 当作功能验收。复核资产必要性与受影响功能，按精确候选及证据校准 CHANGELOG.md；提交并推送完整候选，核对精确包、独立评审与托管检查，再依已有条件授权发布新的 3.2。发布后按用户新增授权，盘点其现有 Codex/Claude 中 Accord 的安装来源及共享关系，经受支持的宿主或实际管理器将已安装 Accord 升至该精确版本；先确认备份和可用回退路径，保护配置、模型路线、其他扩展及正在运行的任务。不顺带升级宿主应用、安装缺失组件或绕过账户限制。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。另核验本机选定 Accord 的安装版本、实际激活和普通入口效果，不把缓存更新当生效；更新失败须恢复最后安全版本并披露未完成项，未经验证不关闭本机升级。 |
 
 ## 系统质量与工序映射
 
@@ -26,9 +26,9 @@ Derive the applicable floor for each required system quality from the bound resu
 | 功能覆盖 | Every bound function and quality requirement is fulfilled through an available executor. | 源头校准与继承基线、系统短板与工程优化、当前开发证据准入通路、整体执行链、原生覆盖与遗留形态审查 | 未验证 |
 | 普通入口集成 | The selected ordinary entry connects trigger, current facts, decision, execution and independent post-state. | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | 未验证 |
 | 恢复与生命周期 | Applicable failure, restoration, continuity, update and removal paths preserve user state and close attributable residue. | 当前开发证据准入通路、整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
-| 变化适应 | Relevant host, model, permission and active-package drift invalidates and revalidates only dependent assumptions and claims. | 动态适应、干扰与故障验收 | 未验证 |
+| 变化适应 | Relevant host, model, permission and active-package drift invalidates and revalidates only dependent assumptions and claims. | 动态适应、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
 | 证据完整性 | Current claims bind current subjects; independent observation and experimental execution remain distinguished. | 源头校准与继承基线、当前开发证据准入通路、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
-| 用户负担与干扰 | Necessary human decisions remain human-owned while Agent mechanics and unnecessary ceremony are not transferred to the user. | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收 | 未验证 |
+| 用户负担与干扰 | Necessary human decisions remain human-owned while Agent mechanics and unnecessary ceremony are not transferred to the user. | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
 | 可维护性与资源成本 | Verification, context, modules and resource use remain sustainable without weakening functional or evidence guarantees. | 系统短板与工程优化、当前开发证据准入通路、3.2 定版、发布与收尾 | 未验证 |
 
 ## 完整职责覆盖
@@ -44,7 +44,7 @@ The inherited responsibilities below are a review inventory, not an immutable fe
 | 执行、配置与代码操作 | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | GT-02, GT-11, GT-16 |
 | 源头变更与全局一致性 | 源头校准与继承基线、当前开发证据准入通路 | GT-17 |
 | 纠错、经验吸收与受控演进 | 动态适应、干扰与故障验收 | GT-05, GT-18 |
-| 故障恢复与回滚 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收 | GT-18, GT-20 |
+| 故障恢复与回滚 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-18, GT-20 |
 | 上下文与任务连续性 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收 | GT-07, GT-21 |
 | 资源管理与清理 | 系统短板与工程优化、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-09, GT-12 |
 | 安装、更新与卸载生命周期 | 当前开发证据准入通路、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-20 |
@@ -180,7 +180,7 @@ The current host Skill supplies adaptive guidance, not a proven system executor.
 - `needs-based-model-and-subagent-routing` — `implemented-guidance-native-coverage-under-review`：主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。
 - `conditional-alignment-and-external-discovery` — `observed-research-to-delivery-gap-open`：保留自然预算失败与产物反例，但调用数不等于成功取回。新诊断发现进度事件触发采集上限、WebFetch 列出但权限拒绝两项干扰；合并已知进度并维持有界采集后，无网页组正常结束并调用 Skill，但有提示参数和文案缺陷；列出未放行组的 4 次获取全部被拒，代码参数与参考不符；仅临时放行两个公开域名后 7 次获取成功、3 次域外拒绝，产物通过 8 项离线检查，却在截止时没有正常终态。详见 claude-effective-research-and-capture-dev3。旧取数成功无法重查的字段保留未知；不归咎模型或正文，不撤销旧自然失败，不以禁网、改描述或扩大预算冒充修复。下一步核验有效权限、资料取回、按证据执行及 Agent 自主核验的完整结果。
 - `source-to-projection-convergence` — `implemented-local-unverified`：Both current worktree Skills are unpublished 3.2.0-dev.5, correcting bounded discovery, comparative fit and temporary exposure/retirement. The kernel and contribution entry now follow the current source without a duplicate executor. Schema-v2 descriptors and optional Node hints remain unchanged. Historical dev.4 ordinary-entry approval tests delivered files but did not call the Skill; the candidate claimed actual-file verification without promised post-write reads. These observations do not qualify dev.5; functional acceptance and incremental value remain open.
-- `ordinary-entry-effect-and-recovery` — `open`：整体目标仍是 Agent 承担必要任务机制；交接、按钮、Git 或 Shell 都只是例子，用户无需先学习内部操作词汇。当前 dev.3 的自然语言订单场景与原生对照都产生正确结果并保护全部输入，无额外用户操作；两组均未调用 Skill，支持该场景原生足够，不证明 Accord 增量收益、任意配置兼容或资源回收能力。按需求、能力发现/匹配、执行、状态/资源、纠偏、恢复和验收的依赖继续闭合。历史状态 Hook 与原生 Agent 接续组合只是已追溯案例，自动交接、幸存接管者与完整生命周期仍待验。
+- `ordinary-entry-effect-and-recovery` — `open`：整体目标仍是 Agent 承担必要任务机制；交接、按钮、Git 或 Shell 都只是例子，用户无需先学习内部操作词汇。历史 dev.3 订单对照曾有正确交付；当前 dev.5 在已提交判据的 Claude 用户配置诊断中，两组均交付 140、保护输入并在写入后回读产物，但都未调用 Accord Skill。原生组保留其他用户扩展，因此不称干净宿主或独立原生归因；该样本不证明 Accord 增量收益、整项职责、任意配置兼容或用户生命周期。按需求、能力发现/匹配、执行、状态/资源、纠偏、恢复和验收的依赖继续闭合。历史状态 Hook 与原生 Agent 接续组合只是已追溯案例，自动交接、幸存接管者与完整生命周期仍待验。
 - `historical-reference-identity-coupling` — `implemented-bounded-regression-verified`：当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。
 - `verification-io-amplification` — `implemented-local-measured`：同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。
 - `acceptance-cost-and-coupling` — `conditional-evaluator-implemented-real-scope-and-source-binding-open`：当前公开 Python 验证入口可接入由调用方独立认证的有界只读观察者，按显式入口/环境作用域核对完整包、定义/判据、同次执行后态、当前条件及绑定候选的独立评审。静态 CLI、历史阶段及 developmentObservations 不晋升。正反合成回归已覆盖合法复用与错误准入，但真实 scopes/cases 为空，尚无实际候选资格；调用函数或摘要回显不能认证事实。已实现有界 Claude 诊断入口与固定 ready-orders 判据，逐臂独立工作区、即时回读和清理；显式复用宿主用户配置，不由观察器私读凭据。该样本不覆盖整项职责，也不证明私有配置未变或增量收益，暂不计入准入。继续绑定充分的真实判据、适用范围和来源核验，不能把维护者工具当作用户功能或收益。
