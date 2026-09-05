@@ -76,10 +76,10 @@ _Avoid_: thin contract alone, universal runtime, fixed workflow
 
 **Complete bounded self-bootstrapping**:
 The target bounded ability to sense the composed environment, bind the current
-outcome and authority, evaluate and reuse existing capabilities, establish the
-minimum missing means, execute and verify consequences, learn through an
-observed carrier, evolve through bounded experiments, and roll back, release
-or retire its own replaceable mechanisms.
+outcome and authority, discover and compare suitable means, then execute, verify,
+adapt and release through available host capabilities or justified additions.
+Injection is an entry, not an independent executor. Reuse and subtraction preserve
+required effects; owning every mechanism is not the goal.
 _Source_: `product/development.json#/source/purpose`,
 `product/development.json#/source/bootstrapBoundary`
 _Avoid_: unrestricted autonomy, self-authorizing modification, plugin activation, self-evolution alone
@@ -352,18 +352,16 @@ _Source_: `product/reshaping-guidance.json#/topology/execution`,
 _Avoid_: code branch, conversation fork, cloud placement as repository mutation
 
 **Lifecycle**:
-The path from observed gap through admission, operation, evaluation,
-replacement and retirement.
-_Source_: `product/constitution.json#/domainModel/crossCuttingObjects (value: lifecycle)`,
-`product/constitution.json#/evolutionPolicy`
-_Avoid_: permanent installation
+The conditional path through discovery, admission, use, evaluation and exit.
+Stopping use, disabling, uninstalling and retirement have distinct effects.
+_Source_: `product/development.json#/acceptance/duties (id: resources-and-cleanup)`
+_Avoid_: permanent installation, task completion as uninstall authority
 
 **Responsibility-scoped retirement**:
-The composition-bound end of one Accord responsibility allocation after an
-admitted successor closes the same obligation and the transition remains
-reversible, observed and recheckable. It does not imply whole-product retirement.
-_Source_: `product/constitution.json#/evolutionPolicy/retirementRule`,
-`product/reshaping-guidance.json#/selfBootstrappingCore/semanticModel`
+The authorized end of an allocation after verified replacement preserves the
+required effect, or a reconciled need no longer justifies it. Check callers,
+recovery and ownership; uncertain reuse favors supported reversible inactivity.
+_Source_: `product/development.json#/acceptance/duties (id: native-replacement-and-retirement)`
 _Avoid_: host-version cutoff, declaration-driven removal, global uninstall,
 permanent retirement across environment drift
 

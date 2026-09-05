@@ -18,7 +18,7 @@ Accord's goal is simple: users focus on ideas and decisions; the Agent takes car
 
 Today, Accord supplies collaboration guidance through Codex and Claude plugins, plus repository tools for checking its contracts and evidence. It is not a separate autonomous worker. Reliable end-to-end behavior and added value must be demonstrated in the host where it is used.
 
-> **This branch develops 3.2.** Its packages are `3.2.0-dev.4`, not a published release or an update to your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
+> **This branch develops 3.2.** Its packages are `3.2.0-dev.5`, not a published release or an update to your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
 >
 > Start with [current limitations](#what-is-proven-and-what-is-not), the [development plan](docs/operations/PLAN-v3.2.md), or the [unreleased changelog](CHANGELOG.md). Do not install from moving `main` or this development branch.
 
@@ -50,7 +50,7 @@ This describes the present package, not a permanent ban on runtime support. 3.2 
 
 Safety and the agreed result come before reducing code, cost or intervention. Within those limits, the route adapts to the task rather than following a universal SOP.
 
-Use sufficient native or already-authorized ecosystem capabilities. When a meaningful gap remains, inspect official sources and maintained alternatives before building another implementation. Research should resolve a decision and lead back to delivery.
+Use native capabilities as a low-burden starting point, not a stopping rule. A meaningful gap or plausible improvement can justify comparing maintained alternatives beyond installed tools, using supported host discovery and reliable external sources. Compare full effects and lifecycle cost; discovery does not authorize installation. Stop research when further search is unlikely to change the choice, then return to delivery.
 
 Review covers known failures **and unlisted design, integration and environmental blind spots**. A necessary outcome cannot disappear merely because its implementation is inconvenient; a redundant mechanism need not survive because it existed in 3.1.
 

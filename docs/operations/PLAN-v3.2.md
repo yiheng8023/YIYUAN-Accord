@@ -11,9 +11,9 @@
 |---|---|---|---|
 | 源头校准与继承基线 | 本地实现，未发布 | 保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。 | 源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。 |
 | 系统短板与工程优化 | 本地实现，未发布 | 先核对官方原生能力、当前宿主暴露和 Accord 职责映射；按同一事实源派生索引与影响关系，列明缺口及验收，再追踪薄弱依赖并测量优化。 | 已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。 |
-| 整体执行链、原生覆盖与遗留形态审查 | 进行中 | 用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、选择、执行及状态、故障接管、验收和清理检查整体连接；能力/按钮清单要服务于实际操作，原生足够则退出，缺口时比较成熟候选后再补。Skill/Hook 等形态可改，同步受影响声明、工序和验收。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
+| 整体执行链、原生覆盖与遗留形态审查 | 进行中 | 用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、发现与比较、执行及状态、故障接管、验收和清理检查整体连接；原生是起点而非停止规则，缺口或可信净收益机会才扩展检索，复用足够的宿主发现与执行链。自举同理。检查资产必要性、调用者、过期导航与维护负担，按证据保留、合并、替换或退役；同步受影响声明、工序和验收，历史证据不改写，功能不降格。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
 | 动态适应、干扰与故障验收 | 待开展 | 按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。 | 普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。 |
-| 3.2 定版、发布与收尾 | 待开展 | 将变更、移除/替代、兼容与未验证项写入 CHANGELOG.md，定版时逐项对照精确候选及证据；提交并推送完整候选，完成受影响完整包证据、独立评审和托管检查，再依条件授权发布新的 3.2。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。 |
+| 3.2 定版、发布与收尾 | 待开展 | 复核候选资产必要性、活跃入口及历史引用，落实已论证的删减/替代并复验受影响功能。将变更、移除/替代、兼容与未验证项写入 CHANGELOG.md，对照精确候选及证据；提交并推送完整候选，完成受影响完整包证据、独立评审和托管检查，再依条件授权发布新的 3.2。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。 |
 
 ## 系统质量与工序映射
 
@@ -110,16 +110,16 @@ The inherited responsibilities below are a review inventory, not an immutable fe
 |---|---|---|---|
 | 目标、授权与用户纠正 | cx-state, cx-execution, cc-permissions, cc-tools, gpt6-cognition, gpt6-protocol | 用原生审批与交互；Accord 只补目标、纠正与后续行动的一致性。 | 用户中途纠正或撤权，观察后续实际效果而不只看答复。 |
 | 环境感知与自身能力识别 | cx-state, cx-hooks, cx-extensions, cc-extensions, cc-hooks, cc-permissions | 按需读取当前事实；分别绑定宿主、提供商、插件与个人配置，不建第二套全量宿主目录。 | 对比声明、配置、实际暴露；制造一个局部未知并观察受影响决策。 |
-| 按需研究、学习与复用发现 | cc-tools, cx-extensions, cc-extensions, gpt6-cognition | 复用足够的原生、现有授权生态及适用证据；缺口影响决策时发现已安装清单以外的成熟候选，自建前比较适用性，不另造已有的完整发现/选择/执行链。 | 现有足够或调研仍适用时不重复对齐/检索；缺口、证据失效时定向外查。核对维护、许可、兼容、安全、成本及实际效果；发现不授权安装。 |
-| 关系、动态索引、路线与形态选择 | cx-state, cx-actors, cc-actors, cc-model-policy, cc-advisor, cc-sdk, gpt6-cognition, gpt6-protocol | 从需求与现状推导稀疏路线；主/子代理选型走原生接口，必要时组合，不另设固定模型排名。 | 匹配不同需求、显式选型和不足后的重选；核对实际模型、效果与成本。 |
+| 按需研究、学习与复用发现 | cc-tools, cx-extensions, cc-extensions, gpt6-cognition | 借用实际可调用的宿主发现/推荐与生命周期；缺口或可信净收益机会触发已安装清单外的有界比较，不建第二套目录。 | 原生能完成但外部候选更合适；领域变化、目录不可调用、无新增收益反例。核对证据、许可、权限及总成本，发现不等于安装授权。 |
+| 关系、动态索引、路线与形态选择 | cx-state, cx-actors, cc-actors, cc-model-policy, cc-advisor, cc-sdk, gpt6-cognition, gpt6-protocol | 按完整效果与全生命周期负担推导稀疏路线；原生仅作低负担起点或同等适配偏好，复用已有比较核心与宿主调度。 | 更优外部方案胜出、同等适配选择原生、无裁决依据保留未知、未安装候选不得冒充可执行；核对主/子代理实际模型。 |
 | 执行、配置与代码操作 | cx-execution, cc-tools, cc-sdk | 原生工具承担操作；缺少的执行能力才组合或实现。 | 普通入口下完成实际变更，保留无关状态，禁止评估器救援冒充产品执行。 |
 | 源头变更与全局一致性 | cx-execution, cc-tools, cc-memory, gpt6-cognition | 复用编辑与检查工具；Accord 补源头变更对计划、实现和验收的影响追踪。 | 改变一项前提，只更新受影响关系与声明；检查遗漏的消费者。 |
 | 纠错、经验吸收与受控演进 | cx-continuity, cc-memory, cc-tools, gpt6-cognition | 复用授权状态载体；记录适用条件与反例，避免局部经验变成全局规则。 | 纠正后再次触发同类任务，核对适用性、恢复和不相关任务不受影响。 |
 | 故障恢复与回滚 | cx-execution, cc-recovery, cc-tools | 优先原生恢复；仅为未覆盖副作用补偿，明确幸存执行者与可恢复范围。 | 注入中途失败，核对独立后态、并发及外部状态保护。 |
 | 上下文与任务连续性 | cx-continuity, cc-actors, cc-sdk, cc-memory, gpt6-protocol | 优先用宿主运行时闭合自主触发、必要状态、接收核对和安全释放；按实际缺口补执行、持久状态或幸存接管者，不预设仅缺语义提示。 | 从普通入口观察无需反复人工提示的接续：目的端核对最新目标、纠正、未完工作和上下游，再释放来源；注入目的端失败、移交中变更及重复信号，验证安全来源、单一写入者和无误伤。归档成功不得代替资源释放后态。 |
-| 资源管理与清理 | cx-state, cx-execution, cx-hooks, cc-tools, cc-hooks, cc-sdk | 优先宿主配额、中断和资源控制；补归属判断及独立清理核对。 | 任务资源释放且共享资源不变；未知资源不得据推断删除。 |
+| 资源管理与清理 | cx-state, cx-execution, cx-hooks, cc-tools, cc-hooks, cc-sdk | 借用宿主控制释放任务资源与临时暴露；停止使用、停用、卸载、退役分别判断，保护用户与共享资产。 | 任务结束后核验归属和后态；缺少局部停用接口不扩大为全局卸载，复用未知时可逆保留，漂移后重验。 |
 | 安装、更新与卸载生命周期 | cx-extensions, cc-extensions | 使用原生插件生命周期；仅补实证缺失的补偿和后态验证。 | 精确当前候选包的安装、更新失败、成功更新和卸载；确认加载与残留。 |
-| 原生接替、旁路与退役 | cx-state, cx-extensions, cc-extensions, cc-model-policy, gpt6-cognition | 原生同责效果足够则旁路或退役重复实现，保留必要结果责任。 | 新原生能力接替后核对效果、恢复及清理；其后失效时重新评估。 |
+| 原生接替、旁路与退役 | cx-state, cx-extensions, cc-extensions, cc-model-policy, gpt6-cognition | 必要功能由已验证同责方案接替；无必要资产按需求、调用关系和维护成本退役，自举也不预设自带执行器。 | 核对宿主接替的完整效果、故障与清理；识别误导现行导航的历史资产，删减不能丢失仍需功能或历史证据。 |
 | 结果验证、独立证据与实际价值 | cx-execution, cc-tools, cc-sdk, gpt6-cognition | 复用宿主测试/观察；按声明补独立验收、对照与贡献归因。 | 全链路结果及后态可观察；区分宿主本来就会与 Accord 的必要帮助。 |
 
 ### 事实、索引、图与运行时
@@ -128,7 +128,7 @@ One versioned semantic source supplies the native matrix, Accord duty matrix and
 
 At a relevant decision, inspect the running client, actual provider/model, policy and exposed interface. Version/feature/configuration/package/permission changes, a supported invalidation event, source contradiction, missing observation or failed effect reopen affected applicability. Re-read supported state and only the needed official documentation; no automatic network watcher or fixed global expiry is installed. Retain the dated observation as history, never as permanently current support.
 
-The dev.3 host Skill supplies adaptive guidance, not a proven system executor. Historical dev.2 Claude Code/DeepSeek probes show bounded native repair and same-session resume after a normal process restart with input drift. The resume deliverable arm invoked the Skill and emitted a successful Hook hint, but native control also succeeded. These observations do not qualify changed dev.3 behavior, incremental value, surviving failure ownership, zero-history handoff or package lifecycle. closure.py is a no-I/O reference core and the graph HTML is a simulated PoC; neither is a live host index or automatic executor.
+The current host Skill supplies adaptive guidance, not a proven system executor. Historical dev.2 Claude Code/DeepSeek probes show bounded native repair and same-session resume after normal restart with input drift; native control also succeeded. These do not qualify changed candidate behavior, incremental value, surviving failure ownership, zero-history handoff or package lifecycle. closure.py is a no-I/O reference core: callers supply candidates and comparison facts. It neither discovers tools nor establishes those facts. The graph HTML is a simulated PoC, not a live host index or executor.
 
 运行时分配要求：不预设必须依赖独立运行时，也不预设无运行时足够。按所需可靠性绑定触发者、实际执行者、必要状态载体和故障后的接管者，再判断宿主原生机制、Hook、脚本、Skill 或其它对象的组合是否兑现；一轮任务可只需宿主现有 Agent 循环和上下文。对确定触发、强制约束、跨轮状态、无人值守推进或故障后继续执行，核验实际职责与效果，而非用对象名称代替判断。仅在现有组合确有执行、状态或恢复缺口时补足相应机制，包括有依据的持久运行时。Skill 是可解释指导，不是独立调度器或强制执行保证；历史良好体验也不能单独归因于运行时。任何组合仍须验收普通入口、失败及独立后态。
 
@@ -148,16 +148,19 @@ The dev.3 host Skill supplies adaptive guidance, not a proven system executor. H
 
 | 环境变化 | 要观察的功能效果 | 失败判据 |
 |---|---|---|
-| 受支持宿主为默认配置且未添加第三方 Skills/MCP/插件/App，当前可用能力不足。 | 在声明的最小宿主前提下核对实际可用工具；按需使用官方目录/文档/源码、维护中的第三方或可靠外部渠道发现候选。发现本身不强制新增插件；缺联网、账号、权限或执行条件时明确缺口，取得必要授权后再接入并验证。 | 不能假定开发者增强环境普遍存在，也不能把默认配置等同零前提万能环境；不得静默调用未声明外援、无授权安装，或将发现候选当成功执行。 |
-| 当前共识足够，或后续出现影响下一安全决策的需求变化、证据失效或能力缺口。 | 足够时直接复用并推进；不足时按受影响部分澄清/外查官方和维护中的成熟候选，在自建承诺前比较。允许安全有界试验逐步形成认识；发现不授权安装或改变目标/验收。 | 不能每轮强制全量需求访谈或联网；不能把现有清单当全部候选，也不能借动态之名静默放宽验收或在关键未知下冒进。 |
+| 受支持宿主未添加第三方扩展；现有能力有缺口或存在值得核实的净收益机会。 | 在声明的最小宿主前提下核对实际可用工具；按需使用官方目录/文档/源码、维护中的第三方或可靠外部渠道发现候选。发现本身不强制新增插件；缺联网、账号、权限或执行条件时明确缺口，取得必要授权后再接入并验证。 | 不能假定开发者增强环境普遍存在，也不能把默认配置等同零前提万能环境；不得静默调用未声明外援、无授权安装，或将发现候选当成功执行。 |
+| 当前共识与证据足够，或出现影响下一安全决策的需求/领域变化、证据失效、能力缺口或可信净收益机会。 | 没有决策相关收益时复用并推进；否则有界澄清/外查，比较适用原生、官方支持渠道及可靠外部候选，证据足够即交付。原生可完成不等于最合适；发现不授权安装或改变目标/验收。 | 不能每轮强制全量需求访谈或联网；不能把现有清单当全部候选，也不能借动态之名静默放宽验收或在关键未知下冒进。 |
 | 用户自定义指令、设置或扩展可能影响当前决定与效果，或声明配置与会话加载状态不一致。 | 只核对相关作用域、继承/覆盖和实际加载行为；兼容帮助可用，冲突按影响局部处理。验收绑定必要条件，并区分用户外援与可交付能力。 | 不能只读配置即宣称生效/隔离；不能擅改用户共享配置、采集凭据或将未知环境当官方初始状态，不能把额外帮助算作 Accord 固有增益。 |
 | 模型更新使原有弱项消失，或对指导、上下文和工具的响应方式改变。 | 在同等任务及宿主条件下重新建立无 Accord 的模型原生基线；确认冗余或干扰后按同责效果削减介入，仅补残余缺口。 | 不能固化旧模型缺陷、将模型能力算作插件增益，或将 API 功能宣传当作当前宿主的执行证据。 |
 | 主任务或子任务需要不同模型/推理配置，或所选路线失效、漂移、不满足效果。 | 在授权候选中自动匹配足够能力并通过原生或必要组合执行，核对实际模型及结果；原生足够时不保留重复路由器。 | 将默认继承、配置意图或品牌排名当作匹配证据；擅改用户钉定模型；无视别名/替代或虚称已切换。 |
-| 当前原生能力已足够。 | 按需复用并减少介入，保持同一功能与质量；不为证明插件存在感强行接管。 | 无必要重造、冗余机制或将非介入冒充增量价值。 |
+| 当前原生路线足够、负担合理，且没有值得继续比较的决策相关改善机会。 | 按需复用并减少介入，保持同一功能与质量；不为证明插件存在感强行接管。 | 无必要重造、冗余机制或将非介入冒充增量价值。 |
 | 所依赖能力不可用、降级或权限变化。 | 识别受影响职责，选择足够的原生、组合或自建替代并验证；不可行时明确尚未完成。 | 不能静默削减功能，安全停止不能算成功。 |
 | 外部插件、记忆或开发辅助让任务变得容易。 | 区分贡献来源；在移除未声明外援后复验，或把必要条件纳入可交付依赖与成本。 | 不能把当前增强环境的成功直接推广给普通用户。 |
 | 第三方规则、工具或插件与当前目标或执行链发生冲突。 | 按实际影响局部隔离或改道，保留无关用户状态并验证恢复与清理。 | 不能无界关闭用户环境，不能让外部规则新增授权或改写目标。 |
 | 任务中宿主更新、缓存与加载版本分离、接口或上下文发生变化。 | 重新感知相关事实，仅重算受影响分配与证据；经验证继续、恢复或交接。 | 不能沿用失效假设，也不能把宿主版本变化当作全量重做的固定理由。 |
+| 原生能完成，但未安装的外部候选可能显著改善质量、风险或总成本。 | 复用宿主可调用目录/推荐，有界外查并验证比较依据；更优且已准入的候选可胜出。缺少安装、连接或数据授权时只推荐并解释必要条件，继续可独立执行的安全工作。 | 不能以原生足够终止必要比较、因市场支持就信任候选，或把目录可见当作已安装/可执行。 |
+| 任务从原工作领域转向需更深证据或高风险判断的领域，例如软件用户提出医学知识问题。 | 按问题深度与风险判断需要权威资料、专项工具、模型或专业人员；先复用可靠现有能力，必要时发现外部候选并说明能力与授权边界。 | 不能自动把领域标签等同专业资质、把专项插件作为唯一答案、未经授权外发敏感信息，或将通用回答/工具结果冒充专业诊断。 |
+| 能力临时参与任务后不再需要，或未来复用、维护成本与可信状态发生变化。 | 核对归属及依赖，释放任务资源和临时暴露并验证后态；复用不确定时在支持范围内可逆停用而非猜测永久卸载。未来重用时按漂移重验；无必要的任务资产在授权范围内退役。 | 不能任务一结束便卸载用户共享工具、将不再调用冒充已停用，或没有作用域控制便无界清理。 |
 
 ## 当前短板及证据边界
 
@@ -166,7 +169,7 @@ The dev.3 host Skill supplies adaptive guidance, not a proven system executor. H
 - `native-accord-capability-map` — `mapped-interface-evidence-not-runtime-closure`：已建立有日期和来源的原生能力—Accord 职责关系，连接当前工序、验收与变更重查；动态图 PoC 和纯核心不是实时宿主索引或执行器，普通入口的全链路闭环仍待验证。
 - `needs-based-model-and-subagent-routing` — `implemented-guidance-native-coverage-under-review`：主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。
 - `conditional-alignment-and-external-discovery` — `observed-research-to-delivery-gap-open`：保留自然预算失败与产物反例，但调用数不等于成功取回。新诊断发现进度事件触发采集上限、WebFetch 列出但权限拒绝两项干扰；合并已知进度并维持有界采集后，无网页组正常结束并调用 Skill，但有提示参数和文案缺陷；列出未放行组的 4 次获取全部被拒，代码参数与参考不符；仅临时放行两个公开域名后 7 次获取成功、3 次域外拒绝，产物通过 8 项离线检查，却在截止时没有正常终态。详见 claude-effective-research-and-capture-dev3。旧取数成功无法重查的字段保留未知；不归咎模型或正文，不撤销旧自然失败，不以禁网、改描述或扩大预算冒充修复。下一步核验有效权限、资料取回、按证据执行及 Agent 自主核验的完整结果。
-- `source-to-projection-convergence` — `implemented-local-unverified`：Both worktree Skills are now unpublished 3.2.0-dev.4: clarify agreement within an active goal, persistence through authorized work and verification at the delivered interface. The project kernel distinguishes approval of an existing next step from standalone discussion. Schema-v2 entry descriptors and optional Node hints remain unchanged. Ordinary-entry approval tests delivered correct files, but no Accord Skill was called and the candidate omitted promised post-write reads while claiming actual-file verification; full functional acceptance and incremental value remain open.
+- `source-to-projection-convergence` — `implemented-local-unverified`：Both current worktree Skills are unpublished 3.2.0-dev.5, correcting bounded discovery, comparative fit and temporary exposure/retirement. The kernel and contribution entry now follow the current source without a duplicate executor. Schema-v2 descriptors and optional Node hints remain unchanged. Historical dev.4 ordinary-entry approval tests delivered files but did not call the Skill; the candidate claimed actual-file verification without promised post-write reads. These observations do not qualify dev.5; functional acceptance and incremental value remain open.
 - `ordinary-entry-effect-and-recovery` — `open`：整体目标仍是 Agent 承担必要任务机制；交接、按钮、Git 或 Shell 都只是例子，用户无需先学习内部操作词汇。当前 dev.3 的自然语言订单场景与原生对照都产生正确结果并保护全部输入，无额外用户操作；两组均未调用 Skill，支持该场景原生足够，不证明 Accord 增量收益、任意配置兼容或资源回收能力。按需求、能力发现/匹配、执行、状态/资源、纠偏、恢复和验收的依赖继续闭合。历史状态 Hook 与原生 Agent 接续组合只是已追溯案例，自动交接、幸存接管者与完整生命周期仍待验。
 - `historical-reference-identity-coupling` — `implemented-bounded-regression-verified`：当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。
 - `verification-io-amplification` — `implemented-local-measured`：同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。

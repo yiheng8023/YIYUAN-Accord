@@ -1,11 +1,11 @@
 ---
 name: deliver-demand-driven-outcome
-description: Deliver nontrivial outcomes through context-adaptive capability discovery, routing, execution, correction, continuity, verification, and cleanup while preserving human authority. Stay silent for simple answers and sufficient native behavior.
+description: Deliver nontrivial outcomes through adaptive capability discovery, best-fit routing, execution, correction, verification and cleanup. Intervene for unmet needs or a plausible material improvement; leave simple answers and well-supported low-burden routes alone.
 ---
 
 # Deliver the outcome
 
-Use this Skill for a needed outcome gap; leave sufficient native routes alone.
+Use this Skill for an outcome gap or a material improvement worth evaluating.
 These are conditional responsibilities, not a fixed sequence or mandatory SOP.
 
 ## Bind the result before choosing the means
@@ -18,11 +18,10 @@ uncertainty that changes the next safe action. Inspect factual premises
 and correct contradictions with evidence. Revisit affected decisions as needs
 and evidence evolve; do not silently change goals, authority or acceptance.
 
-If the premise or design cannot support the result, repair the earliest affected
-dependency boundary, then reconcile the plan, procedure and acceptance. Preserve
-unaffected facts and work. Review inherited functions for actual necessity:
-retain, merge, replace or remove with a reason and corresponding acceptance
-change; never silently drop a still-needed outcome to make an implementation pass.
+Repair broken premises from the earliest affected dependency, then reconcile
+plan, procedure and acceptance; preserve unaffected work. Retain, merge, replace
+or retire inherited functions by actual need, with reasons and aligned acceptance.
+Preserve still-needed outcomes, not every inherited asset or mechanism.
 
 Compliance and bound commitments constrain the route. Subtraction, restraint,
 fallback and gap filling are conditional means, not weaker outcome definitions.
@@ -32,17 +31,21 @@ fallback and gap filling are conditional means, not weaker outcome definitions.
 1. Inspect decision-relevant facts: available executors, permissions, inputs,
    state, configuration and existing work. Prefer supported host queries;
    installation, names and versions do not prove fitness. Do not collect secrets.
-2. Reuse sufficient authorized native or existing ecosystem capabilities,
-   including Skills, MCP, plugins and apps. When they are inadequate or important
-   uncertainty remains, research official documentation/source and maintained
-   external solutions before committing to custom construction. Discovery goes
-   beyond installed inventory. Check ownership, maintenance, license, fit, safety
-   and lifecycle cost; GitHub presence alone proves none. Reuse applicable
-   research; if unavailable, disclose the gap and proceed only where safe and
-   sufficient. Choose best supported fit, not an unprovable global optimum.
-   Compare full effects before cost; compose or build remaining needs without a
-   fixed form ladder. Discovery grants no installation, account, data or cost
-   authority. Native coverage of the whole duty needs no duplicate router.
+2. Treat native means as a low-burden starting point or equal-fit preference,
+   not a stopping rule. A material gap, uncertainty, domain shift or plausible
+   net benefit can justify comparing external candidates even when native can
+   finish. Reuse relevant host discovery, recommendation and lifecycle surfaces;
+   check what is actually callable, not just named in a Skill. Search beyond
+   installed tools through supported markets and reliable external sources.
+   Expand only when the decision warrants it; stop when further search is
+   unlikely to change the choice. Reuse sound prior research. Compare full
+   required effects, evidence, fit, maintenance, license, permissions and total
+   adoption/use/recovery/exit cost; a specialist label or supported marketplace
+   is not proof of quality. Domain depth may need authoritative data, a tool,
+   another model or professional review, not necessarily a plugin. Select the
+   best supported fit, not a claimed global optimum. Compose or build where
+   justified; reuse an adequate native discovery/selection chain. Discovery and
+   recommendation grant no installation, account, data or cost authority.
 3. Own authorized discovery, orchestration, configuration, implementation,
    recovery and verification; spare the user discoverable mechanics. Execute
    through the next useful action and its verification while safe authorized
@@ -62,9 +65,8 @@ execution model; unknown support cannot prove a switch. Reassess after drift or
 inadequate effects. Remove duplicate routing machinery when native selection
 and execution satisfy the same need.
 
-Use suitable native plan, status and lifecycle controls; surface progress,
-material decisions, results and limits. Following this Skill requires neither
-this repository nor Python, a private credential or a particular model.
+Reuse native planning and lifecycle controls; surface progress, decisions and
+limits. This Skill requires no repository, Python or particular model.
 
 ## Adapt, recover and maintain continuity
 
@@ -117,10 +119,13 @@ is not evidence that a deliverable independently supplies the same capability.
 A changed package or material host condition needs fresh affected evidence;
 historical passes keep their original subject and scope.
 
-Track task-owned resources as needed. Release attributable allocations and
-temporary exposure through authorized native controls; preserve shared, foreign
-or unknown state. Verify cleanup post-state. Replace or retire an old mechanism
-only after the sufficient successor and recovery/lifecycle effects are supported.
+Release attributable task allocations and temporary exposure through supported,
+authorized controls; verify post-state and preserve shared or unknown resources.
+Stopping use, disabling, uninstalling and retiring are distinct. Task completion
+does not authorize removing user-owned tools. When reuse is uncertain, prefer a
+reversible inactive state if supported; weigh reuse, expiry and upkeep before
+authorized retirement. Revalidate fit and trust on reuse after material drift.
+Preserve still-needed effects through a verified successor and recovery path.
 
 Before ending, reconcile remaining work against the bound outcome. Continue
 when authorized work is executable; otherwise name the real decision, wait or

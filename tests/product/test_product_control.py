@@ -1869,6 +1869,20 @@ class ProductControlTests(unittest.TestCase):
         self.ae(native_decision['selectedRouteId'], native)
         self.ae(native_decision['disposition'], 'no-op')
         self.at(native_decision['lifecycle']['completionAllowed'])
+        for nc, ec, pref, want in (
+            ((4, 4), (1, 1), [native], minimal),
+            ((1, 1), (1, 1), [], native),
+            ((1, 4), (4, 1), [], None),
+            ((1, 4), (4, 1), [minimal], minimal),
+        ):
+            req = fixture(native_ok=True)
+            req['policy'].update(comparisonDimensions=dimensions[:2],
+                                 contextPreference=pref)
+            for index, cost in ((0, nc), (2, ec), (3, (100, 100))):
+                req['routes'][index]['lifecycle'].update(zip(dimensions[:2], cost))
+            result = reconcile(req)
+            self.at(result['valid'], result['errors'])
+            self.ae(result['selectedRouteId'], want)
         self.ani(
             'acquire-current-decision-evidence',
             fixture(native_ok=True)['outcome']['responsibilities'],

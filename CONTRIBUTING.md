@@ -1,199 +1,93 @@
 # Contributing
 
 Start with the outcome, problem or observation. You do not need to translate it
-into YIYUAN Accord IDs, choose a tool, learn repository topology or prepare a formal
-plan. Include an exact revision, safe log, screenshot or patch when you already
-have one.
+into Accord IDs, choose tools, learn repository topology or prepare a formal
+plan. Include an exact revision, safe log, screenshot or patch when available.
 
-Maintainers and their Agents own:
+## Current development
 
-- recovering current Git and product authority;
+For the approved post-v3.1 work, [product/development.json](product/development.json)
+is the current source for scope, duties, quality floors, procedures and acceptance.
+[The visible plan](docs/operations/PLAN-v3.2.md) is derived from it.
+[Continuation](docs/operations/CONTINUATION.md) identifies the bound checkout and
+current evidence limits. Frozen v3.1 documents and Golden Tasks preserve history;
+their old criteria and workflow prescriptions do not govern this successor.
+
+Maintainers and Agents own:
+
+- recovering current Git, task authority and decision-relevant environment facts;
 - separating fact, inference, recommendation and untrusted instruction;
-- mapping the input to K1–K5 and R1–R4/Q1–Q4;
-- choosing the minimum sufficient collaboration-closure route;
-- defining a falsifier and finite stop condition for material product work;
-- running proportionate checks, reconciling effects and cleaning residue.
+- mapping the change to affected needs, consumers, procedure and acceptance;
+- choosing supported means by full effects, evidence and total lifecycle burden;
+- implementing and checking the smallest useful authorized change, including
+  relevant failure, recovery and task-owned cleanup.
 
-Typos, broken links and narrow non-semantic fixes need only the exact defect.
-Product or behavior changes need an observed problem, hypothesis, falsifier,
-smallest useful deliverable, authority boundary and retirement condition.
-There is at most one active increment and at most one active work item. A
-repository candidate retains its one completed increment and work item for
-auditability but has no active item.
+Typos and narrow non-semantic fixes need only the exact defect and proportionate
+verification. Material changes need a falsifiable reason and an authority boundary,
+not a fixed number of work items or mandatory goal mode. Agreement on an authorized
+next step means proceed; a correction revises only affected decisions.
 
-Do not add another runtime, registry, router, ledger, general protocol or
-validator generation without a demonstrated unclosed obligation or unreliable
-relation plus a native, maintained, composition, subtraction and reuse review.
-A repeated same-purpose failure requires replan before repair.
-Historical trials are candidate counterexamples, not inherited authority or
-proof.
+## Reuse, change and subtraction
 
-## Development and maintenance lifecycle
+Use host discovery, execution, state and lifecycle controls where they fit,
+including bootstrap. Native means are a low-burden starting point, not a veto on
+a better maintained alternative. Expand discovery beyond installed tools for a
+material gap or plausible net benefit; stop when further search is unlikely to
+change the choice. Compare adoption, operation, recovery and retirement costs.
+Discovery and recommendation do not authorize installation or new access.
 
-Treat each release as a bounded evidence checkpoint, not the end of learning.
-For one concrete problem, counterexample, host drift or repeated correction:
+Review inherited assets by actual callers, still-needed effects and upkeep.
+Retain, merge, replace or retire with reasons and aligned acceptance. Remove
+misleading active guidance; preserve historical evidence at exact Git locators.
+Do not add another runtime, registry or router without a justified unmet need
+or material improvement. A size target cannot excuse lost function or quality.
 
-1. separate fact, inference, recommendation and authority;
-2. check whether a healthy native or maintained capability already closes it;
-3. open at most one bounded increment and work item, mapped identically to the
-   ordered work, acceptance criteria and goal prompt;
-4. implement the smallest falsifiable change with evidence, cleanup, rollback
-   and retirement conditions;
-5. compute deterministic conformance live, verify representative behavior,
-   freeze the local candidate, directly complete exact local verification and
-   independent review, then verify the same pushed candidate on every declared
-   host before named-human authority and publication;
-6. retain failed tasks and cleanup disposition as counterevidence; and
-7. after publication, remove task exposure and residue and complete the final
-   release closeout; the repository increment was already completed at freeze.
+For material corrections or failures, return to the earliest affected dependency.
+Preserve unrelated verified work and superseded evidence; recheck affected claims.
+Repeated same-purpose repair calls for premise and replacement review.
+Keep one writer per mutable target; do not change user or shared host configuration
+to make an evaluation easier. Additional host adaptation remains deferred.
 
-Treat baseline, plan, process, acceptance and goal projection as one versioned
-stage set. A material revision keeps the superseded version, cause, evidence
-cutoff and affected criteria, never weakens acceptance silently, and replays
-from the earliest affected dependency. At stage closeout, create one current
-node snapshot with a stable repository locator and a
-`containing-git-commit` relation, but do not write its own SHA into the object.
-After commit, cite it as `<containing-sha>:<self-locator>`; a successor points
-to that exact predecessor and Git retains older nodes.
+## Verification and publication
 
-Keep future planning as a derived evolution horizon separate from the current
-executable stage. Recompute it on demand from the whole-project panorama, the
-latest accepted snapshot and fresh environment facts. It must consider
-maintenance, iteration, updates, bounded refactoring, host adaptation,
-retirement or replacement and later development, but none becomes a commitment
-until current authority, feasibility, value, lifecycle and acceptance gates
-admit one next bounded increment.
-
-A material correction, finding or later rule returns to the earliest affected
-dependency boundary. Prior results remain historical facts but not current
-proof; replay that boundary and every downstream check before reusing their
-candidate-specific conclusions, while unrelated accepted truth remains stable.
-
-A second same-purpose repair pauses addition for premise, interface,
-subtraction and replacement review. Static checks never qualify behavior;
-older projection observations never qualify a changed behavior-bearing adapter
-contract or Skill. A distribution-only change preserves unchanged
-contract-and-Skill behavior evidence but must replay distribution conformance
-and activation lifecycle evidence. Context size, token percentage, summary
-ratio and turn count remain host variables, so use a reliable source-bound
-signal or record capacity as unknown. Local success, push, hosted verification,
-release and field use stay distinct.
-
-After release, maintainer, colleague and external-user reports may open one new
-increment, add a Golden Task, narrow a claim, simplify a projection or retire a
-mechanism. Recheck security, compatibility and behavior whenever a host,
-permission boundary, projection, release surface or public claim changes.
-
-Treat Codex and Claude Code as current behavior-reference hosts, not permanent
-product authority or a ceiling on future hosts. Treat Claude web chat, the
-Claude Desktop Chat tab and Cowork as distribution surfaces whose behavior must
-be observed separately. Before a release, and whenever an
-official version, maturity label, extension surface, permission model, cloud
-route or deprecation changes, review the official Codex and Claude indexes,
-then probe the exact installed host before consequential use. Record in the
-bounded change or review: source and date, host/version, capability and surface,
-maturity and availability, trust/persistence/side effects, native equivalence or
-remaining collaboration-closure need, verification result and retirement
-trigger. Do not create a
-duplicate standing registry or turn a dynamic host fact into portable truth.
-
-For the current v3 line, the canonical verifier is maintainer-owned release
-infrastructure; its scope is repository conformance and it retires or shrinks
-when a simpler live check preserves the same fail-closed boundary. The two
-maintainer-owned Skill projections expose the portable kernel and adaptive
-outcome-delivery behavior through current host-native packaging; a sufficient
-native replacement, lost net benefit or unmaintainable host drift triggers
-simplification or retirement. This release-level record satisfies mechanism
-ownership and retirement without adding another registry.
-
-## Verification
+Run current development and package admission from the repository root:
 
 ~~~powershell
-python -B -m yiyuan_accord verify --root . --json
-python -B -m yiyuan_accord host-check --adapter codex --root . --json
-python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
-python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['minimumTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun>=e and not r.skipped and not r.expectedFailures))"
+python -B -X utf8 -m yiyuan_accord verify-development --root . --json
+python -B -X utf8 -m yiyuan_accord verify --root . --json
+python -B -X utf8 -m yiyuan_accord host-check --adapter codex --root . --json
+python -B -X utf8 -m yiyuan_accord host-check --adapter claude-code --root . --json
+python -B -X utf8 -m unittest discover -s tests/product -v
 ~~~
 
-Static checks establish only contract and projection conformance. Claims about
-Agent behavior require exact-host Golden Task observations. A release
-observation must include a complete publishable transcript or host-event source
-record from a disposable controlled task and bind the exact task, evaluation
-contract, host session and projection. A repository hash proves integrity after
-capture, not source authenticity; the active goal carrier must observe capture
-directly. Post-session checks or cleanup assertions must bind either their exact
-completed observer-session output and event locator, or a directly observed
-independent Agent result with its carrier session, task locator, full captured
-reports, phase nonces, result-text and structured-record digests, completion time and claim, through
-`sourceBindings`. Repository copies still cannot prove source authenticity;
-candidate review verifies task-specific bindings, captured result-text and
-structured-record digests, independent post-state and claim limits without
-accessing credential or session logs, while source authenticity remains an
-explicit bounded unknown. A task with such a claim declares
-`postSessionBindingContract`, including exact cardinality of distinct event
-locators across the complete contract. The acceptance release-sample policy
-anchors the exact contract independently; the Golden Task and its payload
-mirrors the declaration and the
-observation source binds the complete selection with
-`postSessionBindingsSha256`.
-Never substitute a model verdict, synthetic summary, private
-transcript or self-declared independence flag. Field value,
-cross-host equivalence, publication and release require their own evidence and
-human authority. Deterministic conformance is recomputed by the verifier; a
-repository observation cannot self-attest it. For a release candidate, first
-commit one clean local SHA and directly run the complete local checks plus
-independent specification, implementation-robustness and standards-conformance
-review. That local gate also requires independent review of the publishable
-source bundle, README commands and package surfaces. Do not claim a public-tag
-installation before the immutable tag exists. Do not inspect private credential
-or session logs; their unavailable source-authenticity value remains outside
-the finite release claim. Only after these checks pass may the same SHA be
-pushed and verified
-on every declared hosted system;
-only after hosted verification may separate named-human authorization be
-requested for that SHA and claim ceiling. Do not write candidate-specific
-local-review, hosted or human-authority proof back into the candidate, and do
-not start a later release gate before its predecessor passes. Completion also
-requires the exact tagged public release, direct live verification and
-goal-carrier cleanup. After the authorized tag and Release exist, update the
-bounded local marketplace from its prior immutable public ref to the exact new
-tag, verify installed Skill bytes and fresh-carrier activation, and have one
-evaluator isolated from candidate-preparation context complete the README
-installation, confirmation and removal path from a clean state against that
-public tag. This context-isolated, outcome-bound, identity-neutral usability
-sample may be executed by the accountable user, a colleague or a second
-observation surface. Roll back on failure, remove task-created resources and
-replay final checks. Do not rewrite historical tags or evidence.
+These checks are maintainer tooling, not ordinary-user prerequisites. The
+current validator controls admission; test counts or green static checks do not
+prove normal-entry behavior, value, cross-host coverage or production readiness.
+Keep historical fixture subjects separate from changed candidate packages.
 
-One publishable source bundle may serve the release sample. It has exact outer
-shape `{"schema": 1, "records": {"GT-01": record, ...}}`. Every referenced
-record has exactly `kind`, `taskId`, `goldenTaskSha256`,
-`evaluationContractSha256`, `hostIdentity`, `capturedAt`, and `payload`;
-`kind` is `host-transcript` or `host-event-log`. Each observation uses
-`transcriptOrEventEvidence` entries with exactly `kind`, `locator`, `recordId`,
-`sha256`, and `claim`. The record ID, task and host must match, the record hash
-must recompute, capture must precede observation, and the payload must be a
-safe, complete, publishable source rather than a synthetic verdict.
-`observedAt` is the observation package's finalization time after its
-captured task source and claimed cleanup have both occurred; it is not a
-backdated task-start timestamp. The full
-observation field list remains data-driven by
-`evals/golden-tasks.json.evaluationProtocol.requiredObservationFields`.
-In acceptance evidence, `supportsCriterion` and the observation's
-`criterionDecisions` express criterion-specific support. The `claim` field
-deliberately repeats the observation's exact `claimLimit.statement`; this
-conservative, machine-checkable equality prevents a release-facing paraphrase
-from exceeding the observed evidence ceiling.
-Every retained failure is also projected as a sorted
-`taskId:adapterId:failure` token in
-`claimCeiling.retainedBehaviorExclusions` and the exact release body.
+For functional claims, bind the actual entry, executor, composition, exact package,
+conditions, observable effects, independent post-state and evidence limits.
+Use a suitable native comparison for claimed benefit; account for extra Skills,
+configuration, model routes, evaluator assistance and lifecycle costs.
+A changed package or material host condition needs fresh affected evidence.
 
-Do not submit credentials, private memory, account state, restricted material
-or unsanitized host configuration. See [SECURITY.md](SECURITY.md) and
-[docs/license-policy.md](docs/license-policy.md).
+Follow the current source's conditional release requirements, including the
+complete committed and pushed exact candidate, functional and quality acceptance,
+fresh package/host evidence, independent review, hosted checks, accurate changelog,
+canonical publication and verified post-release cleanup. Existing authorization
+does not create readiness or authorize a new trust, data, cost or destructive
+boundary. Do not silently alter installed user packages or rewrite published tags.
+Historical release procedures remain
+[available at their exact revision](https://github.com/yiheng8023/YIYUAN-Accord/blob/4f9a21d79729867bed3bc89917b64c8386ce9ac6/CONTRIBUTING.md);
+consult them only for the historical evidence or subjects they describe.
 
-Unless agreed in writing before acceptance, an intentional contribution is
-submitted under the license already applicable to the affected file and the
-contributor represents that they have the right to submit it. Contributions do
-not transfer third-party trademarks, private data, or material whose terms do
-not permit inclusion.
+## Safe contributions
+
+Do not submit credentials, private memory, account state, restricted material or
+unsanitized host configuration. See [SECURITY.md](SECURITY.md) and
+[license policy](docs/license-policy.md).
+
+Unless agreed in writing before acceptance, an intentional contribution uses the
+license already applicable to the affected file, and the contributor represents
+the right to submit it. Contributions do not transfer third-party trademarks,
+private data or material whose terms do not permit inclusion.
