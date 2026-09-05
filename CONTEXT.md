@@ -1,7 +1,9 @@
 # YIYUAN Accord
 
-YIYUAN Accord is the derived glossary for the domain model defined by
-`product/constitution.json`. It explains an open, Agent-neutral,
+This is the derived glossary for YIYUAN Accord. `product/development.json`
+defines the active source-development successor; selectors into the unchanged
+v3.1 documents below describe the predecessor and remain useful where compatible.
+The glossary explains an open, Agent-neutral,
 mechanism-neutral and product-form-neutral collaboration system without adding semantic authority. Its
 broad mission concerns human-AI collaboration; its current product surface
 concerns human-Agent work.
@@ -9,6 +11,42 @@ concerns human-Agent work.
 positions, so reordering authority data cannot silently retarget a definition.
 
 ## Identity and scope
+
+**Compliance boundary**:
+The non-waivable boundary of applicable obligations, safety, human authority,
+privacy, ownership and truthful evidence and claims.
+_Source_: `product/development.json#/source/globalInvariants (id: compliance)`
+_Avoid_: optional strategy, fixed implementation
+
+**Bound commitment**:
+The authorized goal, required functions, quality and accepted result criteria
+for a named task and revision; it remains binding until legitimately revised.
+_Source_: `product/development.json#/source/boundCommitment`
+_Avoid_: permanent global constant, silent scope reduction
+
+**Conditional strategy**:
+A rule, logic or mechanism whose applicability belongs to a supported context
+and purpose, including its conflict, failure, expiry and recheck conditions.
+_Source_: `product/development.json#/applicability/classes/strategy`
+_Avoid_: universally active rule, installation as applicability
+
+**Responsibility accounting**:
+An explicit disposition for every required responsibility, including supported
+results and unresolved gaps; it is not functional success.
+_Source_: `product/development.json#/source/successStates/responsibilities-accounted`
+_Avoid_: complete functionality, completed outcome
+
+**Functional verification**:
+Evidence that a named function achieves its required effect through an available
+normal entry under the bound composition and relevant failure conditions.
+_Source_: `product/development.json#/source/successStates/function-verified`
+_Avoid_: static conformance, declared capability, experimental executor as delivered function
+
+**Outcome completion**:
+Sufficiently verified satisfaction of every necessary bound result and applicable
+post-state condition; an unresolved necessary result prevents completion.
+_Source_: `product/development.json#/source/successStates/outcome-complete`
+_Avoid_: safe stop, responsibility accounting, test pass
 
 **YIYUAN Accord**:
 The canonical project and product name. It always includes `YIYUAN`; `Accord`
@@ -37,13 +75,13 @@ _Source_: `product/constitution.json#/domainModel/productCategory`,
 _Avoid_: thin contract alone, universal runtime, fixed workflow
 
 **Complete bounded self-bootstrapping**:
-Accord's bounded ability to sense the composed environment, bind the current
+The target bounded ability to sense the composed environment, bind the current
 outcome and authority, evaluate and reuse existing capabilities, establish the
 minimum missing means, execute and verify consequences, learn through an
 observed carrier, evolve through bounded experiments, and roll back, release
 or retire its own replaceable mechanisms.
-_Source_: `product/constitution.json#/purpose`,
-`product/reshaping-guidance.json#/selfBootstrappingCore`
+_Source_: `product/development.json#/source/purpose`,
+`product/development.json#/source/bootstrapBoundary`
 _Avoid_: unrestricted autonomy, self-authorizing modification, plugin activation, self-evolution alone
 
 **Self-evolution**:
@@ -60,8 +98,7 @@ required closure properties and total lifecycle cost rather than product
 identity. One form may close a bounded outcome and several replaceable forms
 may cooperate; shared outcome, authority, evidence and lifecycle contracts
 provide coherence.
-_Source_: `product/constitution.json#/productBoundary/hostRule`,
-`product/reshaping-guidance.json#/selfBootstrappingCore/productFormRule`
+_Source_: `product/development.json#/implementation`
 _Avoid_: plugin-first, runtime-first, fixed form catalogue, mechanism
 prohibition, flexibility without verification
 

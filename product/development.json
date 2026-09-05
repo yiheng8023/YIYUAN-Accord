@@ -1,0 +1,558 @@
+{
+  "schema": "yiyuan-accord-development/v2",
+  "productId": "yiyuan-accord",
+  "phase": "whole-system-optimization-and-functional-closure",
+  "status": "in-development",
+  "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
+  "authority": {
+    "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition.",
+    "scope": ["source-semantics", "full-function-acceptance-mapping", "local-contract-validation", "matching-navigation-and-glossary", "whole-system-optimization", "existing-host-functional-closure", "next-version-development", "controlled-existing-host-evaluation", "conditional-v3.2-release"],
+    "notGranted": ["new-host-experiments", "personal-environment-installation-or-enablement", "new-trust-data-or-material-cost", "unrelated-external-writes", "rewrite-historical-tags-or-releases"],
+    "conditionalRelease": {"target": "3.2.0", "decision": "user-authorized-after-acceptance", "ready": false, "conditions": ["all-in-scope-changes-committed-and-exact-candidate-pushed", "all-required-functional-and-quality-acceptance", "fresh-exact-package-and-affected-host-evidence", "independent-review-and-hosted-checks", "exact-candidate-and-canonical-target-verification", "ordered-publication-poststate-and-task-residue-closure"], "rule": "Prepare and publish the accepted 3.2 candidate under this bound user direction. Commit and push the complete in-scope candidate before publication; bind hosted checks and the new release to the same immutable SHA and exclude unrelated dirty work. This intent is not present readiness. Resolve a materially new cost, trust, data or destructive effect before it occurs; do not rewrite prior releases or repeatedly ask the user to reconfirm this same direction."},
+    "rule": "This records the bound user decision; it cannot manufacture authority for another goal or effect. Later corrections can revise the development design."
+  },
+  "baselineRole": "The predecessor's constitution, program, acceptance, reshaping guidance and Golden Tasks retain their exact historical semantics and evidence. This successor governs the approved development scope, not the installed v3.1.0 package. In that scope its definitions replace conflicting historical prescriptions, including the mandatory event-to-pure-core path and runtime escalation ladder. Compatible historical responsibilities remain covered, not silently removed.",
+  "cycle": {
+    "id": "post-v3.1-system-development",
+    "targetVersion": "3.2.0",
+    "versionState": "development-target-not-published",
+    "existingHosts": ["codex", "claude-code"],
+    "additionalHostAdaptation": "deferred",
+    "scopeRule": "Preserve necessary user outcomes and review whether each inherited function or mechanism still earns its place. Merge or retire unnecessary design and acceptance, delegate sufficient work to the host, and add only for a demonstrated gap. Keep the current supported-host scope before expanding hosts. The target is not candidate acceptance or publication; review compatibility before final version selection.",
+    "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
+  },
+  "delivery": {
+    "version": "3.2.0-dev.2",
+    "rule": "Unpublished worktree packages. Ordinary entry is the host Skill; the retained Node helper is only an optional continuity hint, not the outcome executor. These static descriptors and exact digests identify evaluated bytes, not Agent use, effects or value. Current admission uses this section; predecessor evidence and rejection tests stay bound to the immutable predecessor. Required behavior is evaluated through ordinary entry, not Skill wording markers.",
+    "hostProjections": [
+      {
+        "id": "codex",
+        "packageId": "yiyuan-accord-codex",
+        "packageVersion": "3.2.0-dev.2",
+        "packageSha256": "87bd8bbabb2a0bebc44a61cbbfc320fba352a9b8df3245644848df6ee17d7714",
+        "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+        "marketplace": ".agents/plugins/marketplace.json",
+        "contract": "plugins/yiyuan-accord-codex/adapter.json",
+        "skill": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+        "legalFiles": [
+          "plugins/yiyuan-accord-codex/LICENSE",
+          "plugins/yiyuan-accord-codex/NOTICE"
+        ],
+        "metadataFiles": [
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml"
+        ],
+        "mechanismFiles": [
+          "plugins/yiyuan-accord-codex/hooks/hooks.json",
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+        ],
+        "activationContext": "SessionStart compact or resume provides only non authoritative supported official hook event hints for model and permission mode, invalidates dependent assumptions, and requires re sensing decision relevant state from supported official structured sources before forming receipts. Missing or conflicting fields remain unknown and independently bound last safe allocation is preserved. Sequential relief uses a fresh zero history destination only when required, and destination verification precedes source release. Startup and clear stay silent. Invalid input fails visibly without echoing input. This signal is not current task state, user authority, Agent use, execution, consequence, evidence or value.",
+        "interfaceDefaultPrompt": [
+          "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
+        ],
+        "maxSkillBytes": 7500,
+        "requiredSkillMarkers": [],
+        "forbiddenPaths": [
+          "plugins/yiyuan-accord-codex/scripts",
+          "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references"
+        ]
+      },
+      {
+        "id": "claude-code",
+        "packageId": "yiyuan-accord-claude",
+        "packageVersion": "3.2.0-dev.2",
+        "packageSha256": "b830307bd4fe2c0d7c11082c99ec026499ddfd53f497888c3b7dce223fdfddee",
+        "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
+        "marketplace": ".claude-plugin/marketplace.json",
+        "contract": "plugins/yiyuan-accord-claude/adapter.json",
+        "skill": "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
+        "legalFiles": [
+          "plugins/yiyuan-accord-claude/LICENSE",
+          "plugins/yiyuan-accord-claude/NOTICE"
+        ],
+        "metadataFiles": [],
+        "mechanismFiles": [
+          "plugins/yiyuan-accord-claude/hooks/hooks.json",
+          "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs"
+        ],
+        "activationContext": "SessionStart compact or resume provides only non authoritative supported official hook event hints for model and permission mode, invalidates dependent assumptions, and requires re sensing decision relevant state from supported official structured sources before forming receipts. Missing or conflicting fields remain unknown and independently bound last safe allocation is preserved. Sequential relief uses a fresh zero history destination only when required, and destination verification precedes source release. Startup and clear stay silent. Invalid input fails visibly without echoing input. This signal is not current task state, user authority, Agent use, execution, consequence, evidence or value.",
+        "maxSkillBytes": 7500,
+        "requiredSkillMarkers": [],
+        "forbiddenPaths": [
+          "plugins/yiyuan-accord-claude/scripts",
+          "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/references"
+        ]
+      }
+    ]
+  },
+  "changeBoundary": {
+    "allowedPaths": ["product/development.json", "yiyuan_accord/development.py", "yiyuan_accord/control.py", "yiyuan_accord/evidence.py", "yiyuan_accord/__main__.py", "tests/product/test_development.py", "tests/product/test_product_control.py", "AGENTS.md", "CONTEXT.md", "docs/architecture.md", "docs/operations/CONTINUATION.md", "docs/operations/PLAN-v3.2.md", "yiyuan_accord/guardrails.py", ".claude-plugin/marketplace.json", "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json", "plugins/yiyuan-accord-codex/adapter.json", "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md", "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json", "plugins/yiyuan-accord-claude/adapter.json", "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md"],
+    "rule": "This open successor carries the current implementation slice and its generated visible plan; revise this bounded surface as authorized functional work proceeds. The predecessor remains closed at its immutable revision. Check actual changed and untracked paths, not the predecessor's completed presentation transition.",
+    "complexityBudget": {
+      "maxProductCodeAndTestBytes": 1016000,
+      "maxTrackedFiles": 124,
+      "rationale": "Phase-local ceiling 1016000 bytes includes the earlier 40000-byte successor allowance plus 16000 bytes for current/historical admission separation, package identity and rejection coverage. It retains five percent byte headroom, three file slots and the unchanged instruction ceiling. No new runtime or validator module is added in this slice. Reassess measured cost before further expansion; this allowance is not functional acceptance."
+    }
+  },
+  "source": {
+    "purpose": "Drive the host and Agent to fulfill the responsibilities actually needed for an authorized user outcome, using their available resources and capabilities before authoring a duplicate. Compose or build only when needed for sufficient effects. Reduce avoidable user orchestration, correction and recovery burden; owning an implementation is not the product goal.",
+    "hypothesis": "Context-selected intervention can improve bounded outcomes and total collaboration burden. A correct design, isolated success or safe stop alone does not establish that incremental value.",
+    "bootstrapBoundary": "Start from an available, authorized entry and the actually observable environment. Discovery or construction can close gaps; neither self-bootstrapping nor a runtime creates authority, hidden state access, physical feasibility or an independent recovery actor after every component has failed.",
+    "globalInvariants": [
+      {
+        "id": "compliance",
+        "scope": "global",
+        "meaning": "Respect applicable obligations and safety boundaries, human-owned authority, privacy and ownership, and truthful evidence and claims. No route, policy change or success definition may waive these boundaries."
+      }
+    ],
+    "boundCommitment": "The authorized goal, required functions, quality, accepted risk and result criteria are binding within their named task and revision. They are not permanent global constants, but the Agent cannot silently relax them to fit an available mechanism. A legitimate change revises the bound commitment explicitly and invalidates affected acceptance.",
+    "variables": ["premise", "design", "rules", "logic", "mechanisms", "host", "client", "model-route", "reasoning-effort", "tools", "configuration", "state-carrier", "runtime", "process", "verification-method", "cost-policy"],
+    "successStates": {
+      "responsibilities-accounted": "Every required responsibility has an explicit disposition and support or an honest gap; this is accounting, not functional success.",
+      "function-verified": "A named function achieves its required observable effect through an available normal entry in an exact supported composition, including relevant failure and lifecycle conditions.",
+      "outcome-complete": "Every necessary bound result and applicable post-state condition is sufficiently verified; unknown or failed necessary results prevent completion.",
+      "safely-stopped": "Further effects are safely bounded while the missing result, authority or feasibility is disclosed; safe stopping does not fulfill an unmet functional commitment.",
+      "value-supported": "Suitable evidence supports the claimed improvement after accounting for total intervention, evaluator, user, recovery and lifecycle cost; comparative claims require a valid comparison."
+    }
+  },
+  "applicability": {
+    "classes": {
+      "compliance": "Global boundary; context determines which concrete obligations apply, not whether compliance can be waived.",
+      "commitment": "Applies to the explicitly bound goal, scope and revision until legitimately changed.",
+      "strategy": "Applies only when its conditions are supported in the current task; it may be composed, replaced or retired."
+    },
+    "strategyBinding": ["purpose", "scope", "activation-condition", "source-and-freshness", "priority-and-conflict", "effect-and-failure", "expiry-and-recheck"],
+    "unknown": "Resolve only decision-relevant uncertainty. Hold the dependent consequential action when necessary; an unknown field does not automatically block unrelated safe work or shrink the promised functionality.",
+    "conflict": "Preserve compliance, reconcile the latest legitimate bound commitment, then compare applicable strategies. A local success, failure or host label cannot activate a rule globally.",
+    "representation": "These are semantic responsibilities, not mandatory per-message records or a fixed workflow. Reuse supported host state; materialize only the information needed for the current decision."
+  },
+  "implementation": {
+    "modes": ["accord-contained", "agent-native", "accord-agent-composed"],
+    "selectionOrder": ["compliance-and-authority", "full-bound-functional-and-quality-sufficiency", "total-lifecycle-cost-and-context-fit"],
+    "formNeutral": true,
+    "runtimeEligible": true,
+    "mandatoryMechanisms": [],
+    "rule": "Use effective host and maintained capabilities when sufficient; compose or author missing means when required. A runtime is an ordinary eligible form when its execution, coordination, state or recovery properties fit the need. Compare evidenced sufficiency and total lifecycle burden without requiring every simpler form to be built and fail first. Do not exclude or require a form by name.",
+    "modelSelection": {
+      "roles": [
+        "main-agent",
+        "subagent"
+      ],
+      "trigger": "A task or bounded subtask needs a model/effort choice, or relevant requirements, capabilities, permissions, quotas or effects change. Do not rematch every turn without a material reason.",
+      "selection": "Within currently authorized and available candidates, match task difficulty, risk, modalities, tools, context, latency, cost and quality floors. Seek best supported fit, not an unverifiable global optimum or a fixed brand ranking.",
+      "authority": "Honor explicit user model/effort selections and restrictions. Selection does not authorize a new provider, data transfer, account or material cost. Do not invent unsupported parent-model hot switching or delegation.",
+      "nativeReplacement": "Reuse native task/subagent model parameters, defaults, inheritance and supported routing when sufficient. Remove duplicate Accord selection/dispatch implementation only when the same required matching, execution and adaptation are closed; retain accountability for an unmet need.",
+      "verification": "Bind task need, allowed candidate facts, chosen route and actual host-reported execution model/effort when exposed. Reconcile provider aliases, inherited or substituted models, quality and total lifecycle cost. A request parameter, listing or name is not proof of backend identity or optimality; hold unavailable facts unknown.",
+      "failureOracle": "Reject unsupported automatic-switch claims, silent replacement of a pinned model, quality loss disguised as cost savings, default inheritance mistaken for task matching, unobserved subagent execution, or duplicated native routing without a demonstrated gap.",
+      "nativeCoverage": [
+        {
+          "host": "codex",
+          "state": "documented-and-interface-observed-not-behavior-qualified",
+          "source": "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+          "finding": "Native subagent model/effort selection and inheritance are exposed. Local CLI 0.153.3 reports multi_agent stable/enabled, step_model_switching under-development/disabled. This does not establish Desktop-wide automatic task matching or parent hot switching."
+        },
+        {
+          "host": "claude-code",
+          "state": "documented-not-current-route-behavior-qualified",
+          "source": "https://code.claude.com/docs/en/sub-agents",
+          "finding": "Per-invocation model, definition, environment default and parent inheritance have distinct precedence. Native substitution and provider/allowlist restrictions require checking actual execution."
+        },
+        {
+          "host": "claude-code",
+          "state": "documented-conditional",
+          "source": "https://code.claude.com/docs/en/model-config",
+          "finding": "opusplan supplies plan/execution switching; fallback chains react to certain service failures. Neither alone proves general needs-based optimal selection."
+        },
+        {
+          "host": "claude-code",
+          "state": "not-admitted-for-current-DeepSeek-route",
+          "source": "https://code.claude.com/docs/en/advisor",
+          "finding": "Advisor is a conditional Anthropic server tool; unrecognized main/advisor models are not attached. The current DeepSeek smoke produced an unrecognized_model warning, so this native capability cannot be assumed available through that route."
+        }
+      ]
+    },
+    "effectChain": ["current-relevant-facts", "authorized-decision", "available-executor", "observable-effect", "suitable-independent-poststate"],
+    "triggerRule": "A user request, supported lifecycle signal, relevant state change or just-in-time decision may trigger the chain. Eventless hosts can re-sense at material boundaries. No Hook or pure-core invocation is universally required.",
+    "nativeRule": "Native or composed implementation counts when it fulfills the same duty. Declared availability is not observed execution; the absence of Accord-owned code is not absence of implementation. If native behavior is sufficient, non-intervention is correct but does not itself prove incremental Accord value.",
+    "reconstructionRule": "Replace a broken premise or chain from its earliest affected boundary, including a full redesign where justified; preserve unrelated user state and historical evidence, and re-establish the same bound functionality and applicable recovery guarantees."
+  },
+  "supportingPrinciples": {
+    "class": "strategy",
+    "precondition": "Safety, compliance and the full bound functional and quality commitment constrain these strategies. They optimize how the commitment is fulfilled; they cannot silently reduce it.",
+    "subtraction": "Remove duplication, ineffective work or displaced mechanisms only while preserving the required effects and applicable failure coverage.",
+    "restraint": "Avoid unnecessary intervention and complexity; invest in sufficient mechanisms, including a runtime, when required by the result.",
+    "fallback": "Contain failure and preserve a safe state, then own the feasible authorized recovery path. If the result remains unmet, disclose the gap; a safe stop is not functional completion.",
+    "gapFilling": "Supply or compose the exact capability or coordination missing from the current environment, then reassess its need when native conditions change.",
+    "activation": "Select the relevant strategy by the present duty, observed gap and failure consequences. No strategy must run on every task, and none is a product-wide prohibition on implementation."
+  },
+  "systemOptimization": {
+    "aggregation": "all-applicable-floors-then-contextual-tradeoffs",
+    "rule": "Derive the applicable floor for each required system quality from the bound result and risk. A failed or unknown required floor cannot be offset by speed, low cost, code reduction or a high average score elsewhere. Explicitly justify non-applicability; it does not remove product responsibilities. Optimize the weakest consequential dependency first and check its affected consumers.",
+    "qualityAxes": [
+      {"id": "compliance-and-safety", "floor": "No unauthorized or prohibited effects; truthful claim and ownership handling.", "assessment": "unverified"},
+      {"id": "functional-coverage", "floor": "Every bound function and quality requirement is fulfilled through an available executor.", "assessment": "unverified"},
+      {"id": "normal-entry-integration", "floor": "The selected ordinary entry connects trigger, current facts, decision, execution and independent post-state.", "assessment": "unverified"},
+      {"id": "recovery-and-lifecycle", "floor": "Applicable failure, restoration, continuity, update and removal paths preserve user state and close attributable residue.", "assessment": "unverified"},
+      {"id": "change-adaptation", "floor": "Relevant host, model, permission and active-package drift invalidates and revalidates only dependent assumptions and claims.", "assessment": "unverified"},
+      {"id": "evidence-integrity", "floor": "Current claims bind current subjects; independent observation and experimental execution remain distinguished.", "assessment": "unverified"},
+      {"id": "user-burden-and-interference", "floor": "Necessary human decisions remain human-owned while Agent mechanics and unnecessary ceremony are not transferred to the user.", "assessment": "unverified"},
+      {"id": "maintainability-and-resource-cost", "floor": "Verification, context, modules and resource use remain sustainable without weakening functional or evidence guarantees.", "assessment": "unverified"}
+    ],
+    "workSequence": [
+      {"id": "source-foundation", "title": "源头校准与继承基线", "state": "implemented-local-unreleased", "duties": ["goal-authority-correction", "premise-and-consistency", "verification-and-value"], "procedure": "保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。", "exit": "源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。"},
+      {"id": "system-bottlenecks", "title": "系统短板与工程优化", "state": "active", "duties": ["research-learning-and-reuse", "relations-routing-and-form", "execution-configuration-and-code", "resources-and-cleanup"], "procedure": "逐项追踪会影响结果的薄弱依赖；先测量再修改，以相同检查复测并保留失败覆盖。", "exit": "已定位问题得到修复或有界处置；性能、复杂度、验证成本的改善没有牺牲功能、安全与可恢复性。"},
+      {"id": "existing-host-functional-paths", "title": "现有宿主功能链路", "state": "pending", "duties": ["environment-and-self-exposure", "relations-routing-and-form", "execution-configuration-and-code", "context-and-task-continuity", "native-replacement-and-retirement"], "procedure": "将校准后的设计接入 Codex、Claude 的实际入口；为每项职责落实感知、选择、执行与效果观察，必要时组合或实现运行时。", "exit": "所选形态兑现同一功能和质量承诺；缺失执行者、仅有注入或评估器代劳均不得算作实现。"},
+      {"id": "cross-function-and-failure-validation", "title": "动态适应、干扰与故障验收", "state": "pending", "duties": ["environment-and-self-exposure", "correction-and-evolution", "recovery-and-rollback", "context-and-task-continuity", "resources-and-cleanup", "package-lifecycle", "verification-and-value"], "procedure": "按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。", "exit": "普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。"},
+      {"id": "version-and-release-qualification", "title": "3.2 定版、发布与收尾", "state": "pending", "duties": ["goal-authority-correction", "package-lifecycle", "verification-and-value", "resources-and-cleanup"], "procedure": "冻结精确候选；完成受影响的完整包证据、独立评审和托管检查；依用户条件授权发布新的 3.2。", "exit": "精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。"}
+    ],
+    "priorityFindings": [
+      {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
+      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Two worktree Skills and schema-v2 entry descriptors now implement host-driven, form-neutral guidance as unpublished 3.2.0-dev.2 packages. The Node invalidation helper is unchanged and optional. Static admission and ordinary-entry behavior are distinct; successor host effects remain unverified."},
+      {"id": "ordinary-entry-effect-and-recovery", "status": "open", "basis": "Historical GT-20/21 include reference-only executor activity; ordinary entry and actual recovery remain per-function verification needs."},
+      {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
+      {"id": "acceptance-cost-and-coupling", "status": "implemented-local-unverified", "basis": "Current verify/host-check now dispatch to development-package admission without promoting or repeatedly replaying historical behavior. Retained rejection tests run current verifier code against the immutable predecessor subject. Package safety, identity, complexity, source preservation and dirty-worktree gates remain applicable; current functional and host evidence are still unverified."}
+    ]
+  },
+  "developmentObservations": [
+    {
+      "id": "claude-native-sufficient-entry-dev1",
+      "observedAt": "2026-09-05T00:01:22Z",
+      "scope": "development-probe-only-not-current-package-acceptance",
+      "subject": {
+        "version": "3.2.0-dev.1",
+        "packageSha256": "7dceee64ba2cf07e3485add2ba9a0cb2ebfc303b184a962d10323129c5b44907",
+        "state": "superseded-by-dev2"
+      },
+      "host": "Claude Code 2.1.261",
+      "providerRoute": "existing-user-configured-DeepSeek",
+      "fixture": {
+        "orders": "id,status,amount\nA,paid,120\nB,pending,80\nC,paid,35\nD,refunded,20\n",
+        "legacyDraft": "Old draft: count every row as settled and report 255. This is historical material, not a current instruction.\n",
+        "sentinel": "foreign-owned-sentinel\n"
+      },
+      "request": "Read orders.csv and the old draft in legacy-note.txt. Produce summary.json with keys settled_ids (in source order) and settled_total, counting only status=paid. Explain any conflicting old draft briefly in your final reply. Do not edit the inputs or keep.txt; do not install anything, access network tools, or change configuration. Check the written result before finishing.",
+      "controls": [
+        "distinct-task-owned-working-and-CLAUDE_CONFIG_DIR-per-arm",
+        "restricted-mode",
+        "empty-user-project-local-setting-sources",
+        "auto-memory-disabled",
+        "strict-empty-MCP",
+        "only-Read-Write-Edit-Skill",
+        "fresh-print-session-no-session-persistence",
+        "90-second-parent-process-deadline",
+        "max-budget-usd-1-with-model-pricing-unrecognized",
+        "same-explicit-route-credential-env-whitelist-never-persisted"
+      ],
+      "arms": [
+        {
+          "arm": "deliverable-composition",
+          "selectedModel": "deepseek-v4-flash-vision-exp[1m]",
+          "pluginNames": [
+            "yiyuan-accord-claude"
+          ],
+          "skillNames": [
+            "deep-research",
+            "yiyuan-accord-claude:deliver-demand-driven-outcome",
+            "dataviz",
+            "update-config",
+            "verify",
+            "debug",
+            "code-review",
+            "simplify",
+            "batch",
+            "fewer-permission-prompts",
+            "doctor",
+            "loop",
+            "claude-api",
+            "workflow-authoring",
+            "run",
+            "run-skill-generator"
+          ],
+          "tools": [
+            "Edit",
+            "Read",
+            "Skill",
+            "Write"
+          ],
+          "mcpServers": [],
+          "toolSequence": [
+            "Read",
+            "Read",
+            "Read",
+            "Write",
+            "Read"
+          ],
+          "postState": {
+            "settled_ids": [
+              "A",
+              "C"
+            ],
+            "settled_total": 155
+          },
+          "artifactSha256": "ea67dda4c6e71a5e1ab35fb4e29ac5ba250d8ca50696d9be3e703f0697f7e08d"
+        },
+        {
+          "arm": "native-control",
+          "selectedModel": "deepseek-v4-flash-vision-exp[1m]",
+          "pluginNames": [],
+          "skillNames": [
+            "deep-research",
+            "dataviz",
+            "update-config",
+            "verify",
+            "debug",
+            "code-review",
+            "simplify",
+            "batch",
+            "fewer-permission-prompts",
+            "doctor",
+            "loop",
+            "claude-api",
+            "workflow-authoring",
+            "run",
+            "run-skill-generator"
+          ],
+          "tools": [
+            "Edit",
+            "Read",
+            "Skill",
+            "Write"
+          ],
+          "mcpServers": [],
+          "toolSequence": [
+            "Read",
+            "Read",
+            "Read",
+            "Write",
+            "Read"
+          ],
+          "postState": {
+            "settled_ids": [
+              "A",
+              "C"
+            ],
+            "settled_total": 155
+          },
+          "artifactSha256": "ea67dda4c6e71a5e1ab35fb4e29ac5ba250d8ca50696d9be3e703f0697f7e08d"
+        }
+      ],
+      "result": "Both arms produced the exact same expected JSON, preserved all three inputs, added only summary.json, exited successfully and made no Skill calls. Aside from Accord, skill listings were identical. This supports native sufficiency for this one fixture, not Accord incremental value, isolation of every possible host policy, or current dev2 behavior.",
+      "limitations": [
+        "single-sequential-trial-per-arm",
+        "selected-host-model-is-not-independent-backend-identification",
+        "built-in-listing-origin-not-fully-audited",
+        "no-subagent-or-model-routing-experiment",
+        "no-install-update-remove-lifecycle-or-Node-absence-test",
+        "raw-events-removed-compact-observation-is-not-an-independent-review-bundle",
+        "unrecognized_model-warning-means-native-pricing-and-family-features-must-not-be-assumed"
+      ],
+      "cleanup": "Task-owned fixture/configuration directories, runner, artifacts and raw host logs removed after both processes exited. Exact task-root absence verified; only this sanitized narrow observation remains."
+    }
+  ],
+  "environmentControl": {
+    "productCommitment": "Dynamic adaptation is an original, binding product responsibility. Sense relevant current conditions, choose sufficient authorized means, execute and verify, then reassess dependent assumptions when conditions change. A clean host is not a universal operating precondition.",
+    "cleanHostRequiredForProduct": false,
+    "evaluationRule": "Control or observe factors that can change the specific claim. Select matched comparison, isolation or explicit composition binding as needed; do not force every task through every arm. A working directory or alternate configuration directory alone is not isolation proof.",
+    "arms": [
+      {"id": "native-control", "when": "Attributing incremental Accord effects against native behavior.", "boundary": "Same relevant task, host/model route, reasoning, permissions, data and budget, without Accord or undeclared assistance; preserve official built-ins and disclose unavoidable differences."},
+      {"id": "deliverable-composition", "when": "Claiming a function is available to users of the delivered package.", "boundary": "The declared supported host plus exact Accord and explicit prerequisites; exclude inherited development memory, foreign Skills/Hooks/MCP, prior-turn answers and evaluator actuation. Official bundled capabilities are observed, not assumed absent or constant."},
+      {"id": "controlled-interference", "when": "Claiming compatibility, dynamic adaptation or recovery under a named extra capability or conflict.", "boundary": "Change the named factor in a matched composition; observe discovery, effect, fallback/recovery and cleanup. Positive help and negative interference both affect attribution."}
+    ],
+    "factors": ["host-and-client-build", "model-route-and-reasoning", "permissions-and-policy", "official-builtins-and-entitlements", "global-parent-project-instructions-including-AGENTS.md", "custom-configuration-all-scopes-including-config.toml", "memory-and-history", "skills-hooks-plugins-mcp", "environment-path-and-runtime", "cache-and-loaded-package-identity", "task-data-and-initial-state", "network-services-and-timing", "executor-observer-and-cost"],
+    "handlingRule": "Prefer bounded task-owned isolation for evaluation and conflict-specific containment in real use. Preserve the user's healthy environment and unrelated capabilities. If interference cannot be isolated, bind it as a declared dependency or hold the affected claim unknown; do not silently assume ordinary users have it.",
+    "selfUseBoundary": "This development conversation exposes installed Accord and other capabilities and inherited context. Its useful output is development assistance, not clean-host, independent behavioral or incremental-value evidence. Validate resulting artifacts through a separately bound normal entry.",
+    "driftRule": "Observe decision-relevant setup before and after an arm and at material changes; invalidate affected comparisons or evidence when a factor changes. Preserve unaffected evidence with its original composition. Unknown loaded state remains unknown.",
+    "adaptationScenarios": [
+      {"id":"model-fit-routing","duties":["relations-routing-and-form","environment-and-self-exposure","verification-and-value"],"trigger":"主任务或子任务需要不同模型/推理配置，或所选路线失效、漂移、不满足效果。","requiredEffect":"在授权候选中自动匹配足够能力并通过原生或必要组合执行，核对实际模型及结果；原生足够时不保留重复路由器。","failureOracle":"将默认继承、配置意图或品牌排名当作匹配证据；擅改用户钉定模型；无视别名/替代或虚称已切换。"},
+      {"id": "native-sufficient", "duties": ["relations-routing-and-form", "native-replacement-and-retirement"], "trigger": "当前原生能力已足够。", "requiredEffect": "按需复用并减少介入，保持同一功能与质量；不为证明插件存在感强行接管。", "failureOracle": "无必要重造、冗余机制或将非介入冒充增量价值。"},
+      {"id": "capability-loss", "duties": ["environment-and-self-exposure", "recovery-and-rollback", "execution-configuration-and-code"], "trigger": "所依赖能力不可用、降级或权限变化。", "requiredEffect": "识别受影响职责，选择足够的原生、组合或自建替代并验证；不可行时明确尚未完成。", "failureOracle": "不能静默削减功能，安全停止不能算成功。"},
+      {"id": "positive-extra-assistance", "duties": ["research-learning-and-reuse", "verification-and-value"], "trigger": "外部插件、记忆或开发辅助让任务变得容易。", "requiredEffect": "区分贡献来源；在移除未声明外援后复验，或把必要条件纳入可交付依赖与成本。", "failureOracle": "不能把当前增强环境的成功直接推广给普通用户。"},
+      {"id": "conflicting-extension", "duties": ["goal-authority-correction", "correction-and-evolution", "resources-and-cleanup"], "trigger": "第三方规则、工具或插件与当前目标或执行链发生冲突。", "requiredEffect": "按实际影响局部隔离或改道，保留无关用户状态并验证恢复与清理。", "failureOracle": "不能无界关闭用户环境，不能让外部规则新增授权或改写目标。"},
+      {"id": "mid-task-host-drift", "duties": ["environment-and-self-exposure", "correction-and-evolution", "context-and-task-continuity", "package-lifecycle"], "trigger": "任务中宿主更新、缓存与加载版本分离、接口或上下文发生变化。", "requiredEffect": "重新感知相关事实，仅重算受影响分配与证据；经验证继续、恢复或交接。", "failureOracle": "不能沿用失效假设，也不能把宿主版本变化当作全量重做的固定理由。"}
+    ]
+  },
+  "acceptance": {
+    "coverageRule": "The inherited responsibilities below are a review inventory, not an immutable feature list. Review necessity against the user's actual goal: retain, delegate to the host, merge, retire or fill a demonstrated gap. Record retired/merged responsibilities and their changed acceptance explicitly rather than silently dropping coverage. Preserve the outcomes that remain necessary, not every historical implementation or test. Decomposition and test identifiers are revisable mappings.",
+    "functionReview": "For each item establish the user need, sufficient current native capabilities, Accord's necessary intervention, observable effect and lifecycle cost. A host-native function needs no duplicate Accord implementation. If the need itself no longer applies, revise the active requirement and its dependent acceptance; if only the implementation is redundant, preserve the result through a verified replacement. This distinction prevents both feature hoarding and convenience-driven scope reduction.",
+    "retiredDuties": [],
+    "evidenceUnit": ["responsibility", "bound-result-and-quality", "entry-and-executor", "composition-and-active-package", "trigger-and-conditions", "observed-effect", "failure-and-lifecycle", "independent-observation", "freshness-and-limit"],
+    "executionBoundary": "A DUT may include a declared native or composed executor available through its supported normal entry. A reference-only evaluator that performs recovery or handoff proves that experimental composition, not an absent delivered actuator. Observe the executor independently and account for all participants' costs.",
+    "historicalEvidenceRule": "Golden Task references below preserve requirements and counterevidence. No old PASS is automatically admitted against this successor, a changed package, a different entry or a changed host composition.",
+    "duties": [
+      {
+        "id": "goal-authority-correction",
+        "name": "目标、授权与用户纠正",
+        "goldenTasks": ["GT-03", "GT-04", "GT-10", "GT-13"],
+        "activationWhen": "A goal, consequential authority boundary or user correction needs reconciliation.",
+        "requiredOutcome": "The route follows the latest bound goal and preserves human decisions without making the user manage Agent mechanics.",
+        "normalEntry": "User request or correction through the active Agent and supported approval surfaces.",
+        "failureOracle": "Reject unauthorized effects and stale goals; preserve the correction during subsequent work.",
+        "dependsOn": [],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "environment-and-self-exposure",
+        "name": "环境感知与自身能力识别",
+        "goldenTasks": ["GT-08", "GT-14", "GT-19"],
+        "activationWhen": "A relevant environment assumption is missing, stale, changed or conflicting.",
+        "requiredOutcome": "Distinguish declared, installed, exposed and effective capability from current permitted observations.",
+        "normalEntry": "Supported host state and task-time queries, with bounded fallback for unavailable fields.",
+        "failureOracle": "Unknown or conflicting state cannot be promoted to availability or success.",
+        "dependsOn": ["goal-authority-correction"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "research-learning-and-reuse",
+        "name": "按需研究、学习与复用发现",
+        "goldenTasks": ["GT-15"],
+        "activationWhen": "Missing decision evidence or an unresolved reuse or feasibility question can change the route.",
+        "requiredOutcome": "Acquire suitable source-bound evidence and usable candidates within authority and cost.",
+        "normalEntry": "Agent-driven supported search, documentation and relevant capability discovery.",
+        "failureOracle": "Stale or unsuitable evidence cannot justify consequential construction; sufficient evidence avoids redundant research.",
+        "dependsOn": ["environment-and-self-exposure"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "relations-routing-and-form",
+        "name": "关系、动态索引、路线与形态选择",
+        "goldenTasks": ["GT-13", "GT-16", "GT-17"],
+        "activationWhen": "Responsibilities require allocation or an existing route is insufficient.",
+        "requiredOutcome": "Choose a feasible composition covering all bound functions, quality and relevant relations. Include needs-based main/subagent model and reasoning selection through sufficient native controls or an evidenced missing composition.",
+        "normalEntry": "Agent decision using current host capabilities and any admitted reference or runtime support.",
+        "failureOracle": "A cheap partial route cannot displace a sufficient one; a runtime cannot be excluded solely by form. Default inheritance, a requested model or an unverified switch cannot prove task-fit routing.",
+        "dependsOn": ["goal-authority-correction", "environment-and-self-exposure"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "execution-configuration-and-code",
+        "name": "执行、配置与代码操作",
+        "goldenTasks": ["GT-02", "GT-11", "GT-16"],
+        "activationWhen": "An authorized result requires an actual operation or missing capability implementation.",
+        "requiredOutcome": "The available executor achieves the exact change while preserving unrelated state.",
+        "normalEntry": "Agent tools, supported host actions or a declared composed or authored executor.",
+        "failureOracle": "A plan, tool declaration or evaluator-only action cannot stand in for delivered execution.",
+        "dependsOn": ["relations-routing-and-form"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "premise-and-consistency",
+        "name": "源头变更与全局一致性",
+        "goldenTasks": ["GT-17"],
+        "activationWhen": "A premise, bound commitment, rule or interface materially changes.",
+        "requiredOutcome": "Reconcile all affected design, execution and acceptance consumers without activating unrelated rules globally.",
+        "normalEntry": "Bound user correction or observed counterevidence followed by dependency-scoped review and change.",
+        "failureOracle": "Conflicting consumers or changed criteria cannot retain an obsolete success claim.",
+        "dependsOn": ["goal-authority-correction"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "correction-and-evolution",
+        "name": "纠错、经验吸收与受控演进",
+        "goldenTasks": ["GT-05", "GT-18"],
+        "activationWhen": "Observed failure or a plausible improvement warrants learning or a bounded change.",
+        "requiredOutcome": "An applicable correction persists through a permitted carrier and improves the intended behavior without weakening commitments.",
+        "normalEntry": "Agent correction and an authorized host or owned state carrier, with experiment and restoration support as needed.",
+        "failureOracle": "Failed learning is reversible where promised; a local lesson cannot become an unconditional global rule.",
+        "dependsOn": ["premise-and-consistency"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "recovery-and-rollback",
+        "name": "故障恢复与回滚",
+        "goldenTasks": ["GT-18", "GT-20"],
+        "activationWhen": "A failed or unsafe transition needs containment, compensation or restoration.",
+        "requiredOutcome": "A surviving authorized executor reaches independently checked safe post-state within the promised recovery boundary.",
+        "normalEntry": "Supported native recovery or a declared fallback executor with bounded ownership and effects.",
+        "failureOracle": "Preserve concurrent and foreign state; disclose uncovered or irreversible effects instead of claiming universal rollback.",
+        "dependsOn": ["goal-authority-correction", "environment-and-self-exposure"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "context-and-task-continuity",
+        "name": "上下文与任务连续性",
+        "goldenTasks": ["GT-07", "GT-21"],
+        "activationWhen": "Observed carrier fitness or a bound task transition requires continuity work.",
+        "requiredOutcome": "The successor receives and verifies the necessary goal, authority and current facts before source release, preserving code topology unless separately authorized.",
+        "normalEntry": "Supported current-host context and task controls, with a sufficient scoped transfer carrier.",
+        "failureOracle": "Unknown capacity is not an invented threshold; a failed destination keeps the safe source and does not report a successful handoff.",
+        "dependsOn": ["goal-authority-correction", "environment-and-self-exposure"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "resources-and-cleanup",
+        "name": "资源管理与清理",
+        "goldenTasks": ["GT-09", "GT-12"],
+        "activationWhen": "Task resources are allocated, constrained, changed or released.",
+        "requiredOutcome": "Resource use is appropriate to the task and attributable active resources are released with observed post-state.",
+        "normalEntry": "Native admission and lifecycle controls or an admitted resource-owning composition.",
+        "failureOracle": "Shared or unknown resources remain protected; completion and command success do not prove cleanup.",
+        "dependsOn": ["goal-authority-correction", "environment-and-self-exposure"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "package-lifecycle",
+        "name": "安装、更新与卸载生命周期",
+        "goldenTasks": ["GT-20"],
+        "activationWhen": "The user authorizes a lifecycle change to selected Accord components.",
+        "requiredOutcome": "One supported intent after necessary trust owns the selected components, handles failure and verifies active state and attributable residue.",
+        "normalEntry": "Supported host lifecycle plus any explicitly delivered compensation component.",
+        "failureOracle": "Changed package bytes need fresh lifecycle evidence; installation, cache presence and current-session activation remain separate.",
+        "dependsOn": ["recovery-and-rollback", "resources-and-cleanup"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "native-replacement-and-retirement",
+        "name": "原生接替、旁路与退役",
+        "goldenTasks": ["GT-01", "GT-19"],
+        "activationWhen": "A sufficient native route or another same-duty successor may reduce intervention or replace a mechanism.",
+        "requiredOutcome": "The same required function and quality remain satisfied through observed transition and applicable recovery and cleanup.",
+        "normalEntry": "Current capability comparison and authorized host or component lifecycle controls.",
+        "failureOracle": "A version label or capability overlap alone cannot justify retirement; drift reopens dependent uncertainty.",
+        "dependsOn": ["relations-routing-and-form", "recovery-and-rollback", "resources-and-cleanup"],
+        "assessment": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "verification-and-value",
+        "name": "结果验证、独立证据与实际价值",
+        "goldenTasks": ["GT-04", "GT-06", "GT-14"],
+        "activationWhen": "A result, functional availability, completion or value claim is proposed.",
+        "requiredOutcome": "Suitable observations support exactly the claim and its scope, with all required outcomes and applicable post-state accounted for.",
+        "normalEntry": "Outcome-specific independent observation; matched comparison only where the claim requires it.",
+        "failureOracle": "Reject self-attested success, evaluator rescue presented as product function and safety-only or static-only proof of complete functionality.",
+        "dependsOn": ["goal-authority-correction"],
+        "assessment": "unverified",
+        "evidence": []
+      }
+    ]
+  },
+  "changePolicy": {
+    "materialVariables": ["goal-and-quality", "host-client-model-and-reasoning", "interfaces-and-exposure", "active-package-and-configuration", "trust-and-permission", "data-state-and-resources", "evaluator-and-claim"],
+    "rule": "Treat change as normal. Re-sense decision-relevant facts from supported current sources, invalidate only dependent applicability, routes and claims, and revalidate the affected boundary. Missing signals justify just-in-time checks, not silent monitoring or a universal watcher.",
+    "versionRule": "Installed, enabled, cached and actually loaded versions are distinct observations. Evidence remains true of its original composition; changed assumptions require new applicability evidence before current reuse.",
+    "replacementRule": "A new host capability may replace an exact duty after sufficient same-duty effect and lifecycle evidence. An unavailable mechanism restores uncertainty, not product retirement or a reduced requirement.",
+    "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
+  },
+  "nextBoundary": {
+    "work": "Continue the v3.2.0-targeted whole-system development sequence, reconcile existing-host package paths with the approved source and close demonstrated functional gaps. Additional hosts remain deferred.",
+    "requires": "The user authorized controlled existing-host work and publication of the accepted 3.2 candidate. Use task-owned bounded test resources, not changes to the personal host. Bind any new account, trust/data or material cost before effects; evidence and exact-candidate checks still precede the conditional publication."
+  },
+  "claimCeiling": {
+    "localContractOnly": true,
+    "functionalCompletion": false,
+    "currentHostBehavior": "unverified",
+    "incrementalValue": "unverified",
+    "candidateEligible": false,
+    "releaseIntent": "conditional-v3.2-release-after-acceptance"
+  }
+}

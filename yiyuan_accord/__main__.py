@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 from .control import host_check, verify_product
+from .development import verify_development
 
 
 def _emit(report, as_json):
@@ -14,7 +15,7 @@ def main():
     parser = argparse.ArgumentParser(prog="python -m yiyuan_accord")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    for command in ("verify", "host-check"):
+    for command in ("verify", "host-check", "verify-development"):
         child = subparsers.add_parser(command)
         child.add_argument("--root", type=Path, default=Path.cwd())
         child.add_argument("--json", action="store_true")
@@ -22,8 +23,12 @@ def main():
             child.add_argument("--adapter", required=True)
 
     args = parser.parse_args()
-    report = (host_check(args.root, args.adapter) if args.command == "host-check"
-              else verify_product(args.root))
+    if args.command == "host-check":
+        report = host_check(args.root, args.adapter)
+    elif args.command == "verify-development":
+        report = verify_development(args.root)
+    else:
+        report = verify_product(args.root)
     _emit(report, args.json)
     return 0 if report["valid"] else 1
 

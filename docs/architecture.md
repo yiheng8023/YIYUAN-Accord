@@ -1,5 +1,78 @@
 # Architecture
 
+## Active post-v3.1 development successor
+
+`product/development.json` is the source and acceptance authority for the
+user-approved whole-system optimization and functional-closure phase, targeting
+v3.2.0 development. The target does not change published or installed v3.1.0
+packages. Additional host adaptation is deferred; preserve Codex and Claude.
+The v3.1 architecture and evidence
+below are the unchanged predecessor, not a restriction on the new design.
+
+The successor separates a global compliance boundary, revision-bound task
+commitments and context-conditioned strategies. Host, model, reasoning effort,
+rules, logic, state, mechanisms and runtime are variables. Required functionality
+and quality remain binding until the authorized commitment changes. A cheaper
+incomplete route is not an acceptable substitute.
+
+Subtraction, restraint, fallback and gap filling are conditional supporting
+strategies under that safety and functional floor. Remove redundant burden,
+avoid unnecessary intervention, contain failure and recover, and supply genuine
+gaps. None licenses a weaker result; safe stopping leaves an unmet result open.
+
+Native, maintained, composed and authored means compete on sufficient effect and
+total lifecycle burden. A runtime is eligible on the same basis as any other
+form. No universal event, Hook, pure-core invocation or exhaust-every-lighter-form
+ladder is required. A rule's scope and activation are part of its meaning.
+
+The 13 inherited responsibilities are a necessity-review inventory, not an
+immutable feature list. Retain needed outcomes, delegate sufficient work to the
+host, merge or retire unnecessary functions, and fill evidenced gaps. Bind each
+decision to its changed acceptance; the 21 predecessor Golden Tasks remain
+historical references, not mandatory unchanged successor tests. Every successor
+functional assessment starts unverified. Implementation binds normal-entry executors
+and fills evidenced gaps, followed by scoped effect, failure and lifecycle
+validation. Reference-only evaluator actions do not become delivered functions.
+
+The system-quality floors cover safety, complete functionality, normal-entry
+integration, recovery/lifecycle, change adaptation, evidence, user burden and
+maintainability/cost. Required failures or unknowns cannot be averaged away.
+The active work sequence and unresolved cross-function findings are in
+`development.json#/systemOptimization`; a local performance improvement closes
+only its measured optimization, not these other functional obligations.
+
+Run `python -B -m yiyuan_accord verify-development --json` for development-contract
+conformance. `verify` and `host-check` select current development admission when
+the successor is declared; missing or invalid source fails closed. They check
+the current package identities, namespace, legal carriage, activation hints,
+complexity and source integrity without importing historical behavior passes.
+The retained contract regression suite runs current verifier code against its
+immutable predecessor subject; successor rejection tests exercise current bytes.
+Neither suite alone establishes host behavior, outcome completion or value.
+
+The two worktree packages are now `3.2.0-dev.2`, unpublished and not installed.
+Their schema-v2 descriptors make the host Skill the ordinary executor entry.
+The unchanged Node SessionStart helper is an optional invalidation hint, not a
+required task runtime or a complete recovery implementation. Repository Python
+checks are maintainer tooling, not ordinary-user prerequisites. The installed
+3.1 packages, published tags and historical evidence are unchanged.
+
+Main/subagent model and reasoning selection belongs to the existing routing
+responsibility. Prefer native task-time selection and dispatch; match authorized
+candidate capabilities to the need, then verify actual execution and effects.
+Do not equate default inheritance, requested aliases or a fixed brand ranking
+with effective matching. Native completeness can retire duplicate machinery,
+not erase a still-needed responsibility. Host-specific coverage and restrictions
+are recorded in `development.json#/implementation/modelSelection`; this is not
+permission to override a pinned user selection or create a new provider route.
+
+The open successor validates its actual changed paths. The predecessor's closed
+transition is checked at its immutable revision rather than against new worktree
+changes. A justified phase-local code/test ceiling preserves five percent
+headroom and three file slots; the primary-instruction ceiling remains unchanged.
+
+## Frozen predecessor architecture and evidence
+
 YIYUAN Accord combines one small portable kernel with an adaptive,
 mechanism-neutral and product-form-neutral outcome-delivery system. The active
 v3.1.0 package is now an exact, non-prerelease, zero-asset public Release

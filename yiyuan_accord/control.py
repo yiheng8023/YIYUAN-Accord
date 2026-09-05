@@ -47,6 +47,9 @@ from .identity import (
     release_identity_errors,
 )
 from .reviews import evaluate_review_bundle
+from .development import (
+    _inspect_development, delivery_adapter_contract, development_is_declared,
+)
 from .stage_lifecycle import (
     PRESENTATION_SURFACE_SHA256,
     SNAPSHOT_V3_SCHEMA,
@@ -1389,14 +1392,18 @@ def _snapshot_v3_binding_state(
 
 
 def _snapshot_v1_documents(root, revision=None):
-    constitution, program, acceptance, guidance, golden = (
-        _snapshot_json(root, locator, revision) for locator in (
-            _SNAPSHOT_V1_AUTHORITY_REFS[0], _SNAPSHOT_V1_AUTHORITY_REFS[1],
-            _SNAPSHOT_V1_AUTHORITY_REFS[2], _SNAPSHOT_V1_GUIDANCE_FILE,
-            _SNAPSHOT_V1_GOLDEN_TASKS_FILE,
-        )
+    locators = (
+        *_SNAPSHOT_V1_AUTHORITY_REFS, _SNAPSHOT_V1_GUIDANCE_FILE,
+        _SNAPSHOT_V1_GOLDEN_TASKS_FILE,
     )
-    return constitution, program, acceptance, guidance, golden
+    cache = _SNAPSHOT_READ_CACHE.get()
+    if cache is not None and revision is not None:
+        if not isinstance(revision, str) or not _SNAPSHOT_V1_REVISION_RE.fullmatch(revision):
+            raise ValueError("snapshot revision is invalid")
+        # Only immutable bytes are shared. Parsing and mutable worktree reads
+        # retain their existing validation and fresh-object semantics.
+        cache.read_many(root, locators, revision)
+    return tuple(_snapshot_json(root, locator, revision) for locator in locators)
 
 
 _snapshot_documents = _snapshot_v1_documents
@@ -6629,8 +6636,58 @@ def host_check(root, adapter_id):
     }
 
 
+def _verify_development_product(root):
+    """Current static admission; never replay predecessor passes as current evidence."""
+    development, contract = _inspect_development(root)
+    errors = list(development["errors"])
+    hosts, complexity = {}, None
+    delivery = contract.get("delivery", {})
+    if development["valid"]:
+        constitution, program, *_ = _snapshot_documents(root, development["historicalEvidenceRevision"])
+        identity = constitution["identity"]
+        for projection in delivery["hostProjections"]:
+            local_errors = []
+            details = validate_host_projection(
+                root, projection, {}, "yiyuan-accord", identity, local_errors,
+                _read_json, GOLDEN_TASKS_FILE,
+                expected_contract=delivery_adapter_contract(projection["id"], projection.get("packageId")),
+            )
+            hosts[projection["id"]] = {**details, "errors": local_errors}
+            errors.extend(local_errors)
+        files, file_errors = _repository_files(root)
+        errors.extend(file_errors)
+        historical = program.get("inputEvidence", [])
+        errors.extend(active_tree_errors(
+            root, files,
+            next((item.get("revision") for item in historical
+                  if item.get("kind") == "historical-release-and-counterevidence-boundary"), None),
+            {item["repositoryLocator"] for item in historical if "repositoryLocator" in item},
+            program["complexityBudget"].get("digestBoundBinaryAssets"),
+        ))
+        for field in ("maxProductCodeAndTestBytes", "maxTrackedFiles"):
+            program["complexityBudget"]["targets"][field] = development["complexityBudget"][field]
+        complexity = _validate_complexity(root, program, identity["pythonModule"], files, errors)
+        residue = known_task_residue(root)
+        if residue:
+            errors.append(f"known task residue remains: {residue}")
+    return {
+        "productId": "yiyuan-accord", "activeDevelopment": development,
+        "baselineContractRole": "historical-predecessor-integrity-only",
+        "release": delivery.get("version") if isinstance(delivery, dict) else None,
+        "programStatus": "in-development", "contractValid": not errors,
+        "checkoutClean": clean_git_checkout(root), "repositoryCandidateReady": False,
+        "completionState": "development-unverified", "functionalCompletion": False,
+        "currentHostBehavior": "unverified", "incrementalValue": "unverified",
+        "externalGates": {operand: "not-evaluated-by-verifier" for operand in EXTERNAL_COMPLETION_OPERANDS},
+        "hostChecks": hosts, "complexity": complexity, "valid": not errors, "errors": errors,
+    }
+
+
+@_snapshot_read_scope
 def verify_product(root, review_bundle=None):
     root = Path(root)
+    if development_is_declared(root):
+        return _verify_development_product(root)
     errors = []
     constitution = _read_json(root, AUTHORITY_BOOTSTRAP[0], errors)
     program = _read_json(root, AUTHORITY_BOOTSTRAP[1], errors)
@@ -6841,6 +6898,8 @@ def verify_product(root, review_bundle=None):
     )
     return {
         "productId": constitution.get("productId"),
+        "activeDevelopment": None,
+        "baselineContractRole": "current",
         "release": program.get("release"),
         "programStatus": program.get("status"),
         "contractValid": not errors,

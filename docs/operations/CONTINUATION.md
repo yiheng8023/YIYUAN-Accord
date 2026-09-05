@@ -7,6 +7,46 @@ route by being readable.
 
 ## Start
 
+For the current post-v3.1 whole-system development task, first read
+`product/development.json`, then the active-successor section of
+`docs/architecture.md` and the corresponding terms in `CONTEXT.md`.
+The user approved continuation into next-version development and whole-system
+optimization after the source-semantics slice. Target v3.2.0 as development
+planning, preserve current Codex/Claude functionality, and defer additional hosts.
+The user subsequently authorized controlled existing-host evaluation and
+publication of the accepted 3.2 candidate, with in-scope changes committed and
+the exact candidate pushed before release. Personal host changes and materially
+new trust, data or cost still need their own authority. Read the generated
+`docs/operations/PLAN-v3.2.md` for visible progress and mapped acceptance.
+Continue in the bound `phase/post-v3.1-successor` checkout and preserve
+unrelated work.
+
+The immutable predecessor is
+`2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot`.
+The four v3.1 authority documents, Golden Tasks and package evidence remain
+historical inputs. Their old `verified` criteria and maintenance boundary do not
+describe the successor's functional acceptance. Run `verify-development` for
+source conformance and `verify` / `host-check` for current development admission.
+The unpublished worktree packages are `3.2.0-dev.2`; user installations are not
+updated. Retained historical regression tests use the immutable predecessor;
+current package rejection tests are in `tests/product/test_development.py`.
+Current-host functionality and value remain unverified. Next exercise ordinary
+entry, sufficient execution and adaptation against the exact package, observing
+effects without evaluator rescue. Claude Code evaluation uses the user's
+authorized existing CC Switch / DeepSeek route, not unavailable official Claude
+account access. Keep provider, model, host and configuration attribution separate.
+
+The dev.1 native-sufficient fixture passed with and without Accord; neither arm
+invoked the Skill. The sanitized observation, exact old package identity and
+limits are in `development.json#/developmentObservations`, not current dev.2
+acceptance. Its temporary directories and raw logs were removed. Dev.2 adds
+main/subagent model-fit guidance; validate actual task matching and execution,
+including inherited/substituted models, before claiming routing capability.
+
+The navigation and current-state narrative below belong to the predecessor;
+consult them for historical evidence or unchanged contracts, not as a second
+active plan.
+
 ```powershell
 git branch --show-current
 git status --short --untracked-files=no

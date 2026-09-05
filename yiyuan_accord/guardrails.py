@@ -590,7 +590,7 @@ def validate_projection_package(
 
 def validate_host_projection(
     root, projection, contract_ids, product_id, identity, errors, read_json,
-    golden_tasks_file,
+    golden_tasks_file, *, expected_contract=None,
 ):
     initial_error_count = len(errors)
     adapter_id = projection.get("id")
@@ -661,7 +661,7 @@ def validate_host_projection(
     errors.extend(activation_mechanism_errors(
         root, adapter_id, mechanism_locators, activation_context,
     ))
-    expected_contract = {
+    expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,
         "adapterId": adapter_id, "kernelIds": contract_ids["kernel"],
         "hostStandardIds": contract_ids["host"],

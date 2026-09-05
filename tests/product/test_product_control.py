@@ -57,6 +57,31 @@ from yiyuan_accord.identity import (
     release_identity_errors,
 )
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def setUpModule():
+    """Run the retained contract suite on its immutable subject, using current code.
+
+    Successor worktree admission has separate tests in test_development. Moving
+    package bytes must not either inherit old passes or erase old rejection tests.
+    """
+    global ROOT
+    source = ROOT / 'product/development.json'
+    if not source.is_file():
+        return
+    revision = json.loads(source.read_text(encoding='utf-8'))['predecessorSnapshot'].split(':', 1)[0]
+    temporary = tempfile.TemporaryDirectory(prefix='accord-predecessor-tests-')
+    unittest.addModuleCleanup(temporary.cleanup)
+    original = ROOT
+    unittest.addModuleCleanup(lambda: globals().__setitem__('ROOT', original))
+    target = Path(temporary.name) / 'repository'
+    subprocess.run(['git', 'clone', '--quiet', '--no-hardlinks', str(ROOT), str(target)],
+                   check=True, timeout=60)
+    subprocess.run(['git', '-C', str(target), 'checkout', '--quiet', '--detach', revision],
+                   check=True, timeout=30)
+    ROOT = target
+
+
 TC = unittest.TestCase
 # CI deadlock guard; not the three-second product Hook timeout.
 HOOK_PROCESS_TIMEOUT_SECONDS = 60

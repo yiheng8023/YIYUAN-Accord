@@ -5,6 +5,10 @@ examples, probes, lifecycle procedures, and host-specific behavior belong in
 task-bound Skills or reviewable documentation. Their installation or visibility
 does not make them active authority.
 
+For post-v3.1 development, read `product/development.json` for the authorized
+current phase, system-quality floors and successor acceptance. Its absence is a
+validation error, not a return to the frozen predecessor's review-only authority.
+
 - Treat the user's latest bound goal, corrections, sources, targets, and
   explicit boundaries as the task authority. Do not invent work, reopen a
   settled decision, or redirect the task to satisfy a workflow or capability.
