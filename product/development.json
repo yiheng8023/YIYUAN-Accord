@@ -832,7 +832,7 @@
       },
       {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"已建立有日期和来源的原生能力—Accord 职责关系，连接当前工序、验收与变更重查；动态图 PoC 和纯核心不是实时宿主索引或执行器，普通入口的全链路闭环仍待验证。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
-      {"id":"conditional-alignment-and-external-discovery","status":"observed-research-to-delivery-gap-open","basis":"保留 dev.3 首轮反例；本轮同参考复测中原生组交付两文件但说明有误，当前包组达到宿主预算时只完成脚本。只改发现描述的实验组交付两文件，但三个可用组均未调用 Skill，不能归因于正文或证明描述修复了激活/取数；该变体未合入。三份脚本各通过 7 项评估器离线控制流检查，不是真实 SDK 运行。论证应区分事实、推断和未知，把必要条件转为可执行路径，证据足够即推进；下一步须区分普通入口选择、研究取数和模型/工具波动，不叠加全局规则或靠增加预算宣称修复。"},
+      {"id":"conditional-alignment-and-external-discovery","status":"observed-research-to-delivery-gap-open","basis":"保留自然预算失败与产物反例，但调用数不等于成功取回。新诊断发现进度事件触发采集上限、WebFetch 列出但权限拒绝两项干扰；合并已知进度并维持有界采集后，无网页组正常结束并调用 Skill，但有提示参数和文案缺陷；列出未放行组的 4 次获取全部被拒，代码参数与参考不符；仅临时放行两个公开域名后 7 次获取成功、3 次域外拒绝，产物通过 8 项离线检查，却在截止时没有正常终态。详见 claude-effective-research-and-capture-dev3。旧取数成功无法重查的字段保留未知；不归咎模型或正文，不撤销旧自然失败，不以禁网、改描述或扩大预算冒充修复。下一步核验有效权限、资料取回、按证据执行及 Agent 自主核验的完整结果。"},
       {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both worktree Skills now project conditional alignment, external discovery and effective-environment guidance as unpublished 3.2.0-dev.3 packages. Schema-v2 entry descriptors and optional Node hints are unchanged. These are context-triggered duties, not a fixed SOP. Static admission does not prove current host effects."},
       {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"整体目标仍是 Agent 承担必要任务机制；交接、按钮、Git 或 Shell 都只是例子，用户无需先学习内部操作词汇。当前 dev.3 的自然语言订单场景与原生对照都产生正确结果并保护全部输入，无额外用户操作；两组均未调用 Skill，支持该场景原生足够，不证明 Accord 增量收益、任意配置兼容或资源回收能力。按需求、能力发现/匹配、执行、状态/资源、纠偏、恢复和验收的依赖继续闭合。历史状态 Hook 与原生 Agent 接续组合只是已追溯案例，自动交接、幸存接管者与完整生命周期仍待验。"},
       {"id":"historical-reference-identity-coupling","status":"implemented-bounded-regression-verified","basis":"当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。"},
@@ -897,6 +897,128 @@
       "result": "Both entries delivered the correct business result without asking the user to operate tools or reading unrelated references. Native behavior sufficed for this bounded task; no duplicate mechanism is justified by this observation. This does not prove Accord incremental benefit, autonomy over all buttons or unfamiliar users' real-world learning burden.",
       "limits": "One sample per arm, no human usability study, no custom-extension conflict, host upgrade, interruption, external publication or resource-release task. Output correctness was independently observed; evaluator cleanup is not delivered resource management.",
       "cleanup": "Shared verified 69-file cleanup is recorded in claude-research-recheck-and-rejected-description-dev3; root absence confirmed. Only this sanitized source summary remains, not raw behavioral replay evidence or a delivered resource-release receipt."
+    },
+    {
+      "id": "claude-effective-research-and-capture-dev3",
+      "observedAt": "2026-09-05T05:28:15Z",
+      "scope": "bounded-observer-and-permission-diagnosis-not-functional-or-release-acceptance",
+      "subject": {
+        "revision": "78d787d02e4de3d5e9bbba12aa240d60c848be5d",
+        "version": "3.2.0-dev.3",
+        "packageSha256": "15a871589a5f1aec5b104c5df6d21e36dd26a19f230e38a7a1d0f37de3946e24"
+      },
+      "controls": "Four serial fresh CLI entries on Claude Code 2.1.261 / Windows with the existing authorized CC Switch route: requested sonnet, reported deepseek-v4-flash-vision-exp[1M], unrecognized_model warning; backend/effort not independently verified. Exact dev.3 plugin-dir, restricted task-owned work/config/home/temp, minimal OS and existing ANTHROPIC route environment only, strict empty MCP, no auto-memory/session persistence/Chrome/shell/delegation. No personal setting or installed package changed. Built-in Skills and managed policy remain possible composition factors, not pristine-host proof. Same request and reference as claude-research-recheck-and-rejected-description-dev3; new preservation fixtures were identical across these four arms, not byte-identical to every older probe.",
+      "requestSha256": "8085abb8e38b501f0480266ef16e93d94ef3f80408bd764121808249e8e9a7bc",
+      "referenceSha256": "5857026ffbdab6c9da31d04700e30910318a9dc00a3a6bb853f1da15c5902951",
+      "observerBoundary": {
+        "initialFailure": "case-a had no WebFetch tool. Its retained stream contained 10671 system/thinking_tokens events, only three Read calls and no deliverables. The 2MiB raw-stream limit terminated the owned job at 93.25 seconds; this is observer-induced termination, not a natural product verdict. It disproves treating stream size alone as retrieved-content or conversation-input size.",
+        "correction": "A temporary stream reader coalesced only the observed exact six-field thinking_tokens shape into a counter. Unknown, malformed, duplicate-field or extra-field events were retained. A real captured-prefix classification and 14 offline checks covered terminal preservation, malformed/unknown events, EOF, UTF-8, line, retained and transport bounds. Subsequent arms kept 2MiB retained content, at most 2MiB per line and added a separate 32MiB transport cap. This changed the observer, not the product.",
+        "unchangedLimits": "16 turns, host-accounted USD 1 per arm, 180-second execution and 190-second termination boundary; suspended children assigned to kill-on-close Windows Job before resume. No result repaired by the observer."
+      },
+      "arms": [
+        {
+          "id": "case-b",
+          "tools": "Read/Write/Edit/Skill",
+          "seconds": 163.52,
+          "terminal": "success",
+          "skillCalls": 1,
+          "webFetchCalls": 0,
+          "progressEventsCoalesced": 15781,
+          "retainedBytes": 123147,
+          "transportBytes": 3199671,
+          "deliveredFiles": 2,
+          "inputsPreserved": true,
+          "activeOwnedProcesses": 0
+        },
+        {
+          "id": "case-c",
+          "tools": "same plus WebFetch, without an explicit domain allow rule",
+          "seconds": 133.12,
+          "terminal": "success",
+          "skillCalls": 0,
+          "webFetchCalls": 4,
+          "webFetchPermissionDenials": 4,
+          "successfulFetches": 0,
+          "progressEventsCoalesced": 11361,
+          "retainedBytes": 113421,
+          "transportBytes": 2327253,
+          "deliveredFiles": 2,
+          "inputsPreserved": true,
+          "activeOwnedProcesses": 0
+        },
+        {
+          "id": "case-d",
+          "tools": "same as case-c, session-only allow rules for learn.chatgpt.com and github.com",
+          "seconds": 180.13,
+          "terminal": "observer-deadline-no-result-event",
+          "skillCalls": 0,
+          "webFetchCalls": 10,
+          "webFetchPermissionDenials": 3,
+          "successfulFetches": 7,
+          "progressEventsCoalesced": 11309,
+          "retainedBytes": 122255,
+          "transportBytes": 2322359,
+          "deliveredFiles": 2,
+          "inputsPreserved": true,
+          "activeOwnedProcesses": 0
+        }
+      ],
+      "accessFindings": "The case-c tool listing did not imply effective permission. In case-d seven WebFetch results contained retrieved content, while raw.githubusercontent.com and the two registry.npmjs.org requests remained denied; no catch-all permission or personal configuration change was used. Successful GitHub views used main, not an immutable fetched revision; some extraction was truncated. The observer did not establish universal source freshness, unrestricted internet access or backend extraction fidelity.",
+      "artifactChecks": {
+        "method": "Node 24.19.0 syntax plus independent module interception; loader-ready receipt required in every case. No installed SDK, authenticated call or actual Codex task was executed.",
+        "cases": [
+          "missing-id",
+          "empty-id",
+          "missing-prompt",
+          "title-not-id",
+          "option-like-id",
+          "valid-id",
+          "resume-failure",
+          "option-shaped-prompt"
+        ],
+        "results": [
+          {
+            "arm": "case-b",
+            "syntax": true,
+            "passed": 7,
+            "total": 8,
+            "failure": "The documented positional prompt --help exits zero with usage text and no resume/run. README also presents unobserved prerequisites as absent and an unverified CLI-on-PATH requirement; these are not established by its supplied reference."
+          },
+          {
+            "arm": "case-c",
+            "syntax": true,
+            "passed": 5,
+            "total": 8,
+            "failure": "The valid and resume-failure cases pass {prompt:'hello'} instead of the required string 'hello'; the option-shaped prompt is rejected. The README knowingly chooses that unsupported alternative to its reference and asks the user to reconcile it. Correct documented argument shape was independently checked against the official SDK documentation."
+          },
+          {
+            "arm": "case-d",
+            "syntax": true,
+            "passed": 8,
+            "total": 8,
+            "failure": "No failure in these offline cases, but the observer deadline prevented a normal terminal result; not complete ordinary-entry acceptance. The SDK import precedes input validation, so no-SDK diagnostics were not established by the mock."
+          }
+        ],
+        "scriptSha256": {
+          "case-b": "72f624848f89c2b4d5954e778996f903a66264827545b8e7156b0e62ba967823",
+          "case-c": "4d6b066a0c2bc38cc0d196e219f573475ca7964fad9c520a380a76a1f9fb1a31",
+          "case-d": "294518c5f11cfdd68e1d4acc2d3e68000826d6c03be02fc57de9703c377d6e58"
+        },
+        "readmeSha256": {
+          "case-b": "d648694bfc792dbbf71321b93a0a9587895ee246c729cd3e1d60100a96799ef1",
+          "case-c": "253054bcb53fde1181414ef60de57d33117dad4fc92c088bbac2cc75f0947d16",
+          "case-d": "78856e96e6624f2bfffddf671171e7877e8a15c805809e67b8b361ba58da829f"
+        }
+      },
+      "attributionCorrection": "Earlier WebFetch counts establish calls, not successful acquisition. Earlier prose that calls them fetched sources or over-fetching is not sufficient effect evidence where the removed raw receipts cannot be rechecked; effective access remains unknown for those old calls. Their retained host-budget and artifact facts remain bounded counterevidence. The new capture correction does not erase earlier natural budget failures or prove their cause.",
+      "conclusion": "Separate observer termination, effective tool permission, model-selected Skill use, retrieved evidence, artifact correctness and normal terminal completion. No new Skill description/body, runtime, duplicate research engine or broader global permission is justified by these samples. Keep dev.3 and the research-to-complete-delivery/value gaps open; do not force Skill invocation or turn a successful mock into integration acceptance.",
+      "nextDecision": "Use the corrected observation boundary and actual permitted acquisition receipts in the next outcome test. Focus on evidence-consistent implementation and Agent-owned checking without user compensation. Choose product changes only after a discriminating normal-entry comparison supports them, not another uncategorized retry or permanent research prohibition.",
+      "officialReferences": [
+        "https://code.claude.com/docs/en/tools-reference#webfetch-tool-behavior",
+        "https://code.claude.com/docs/en/skills#control-who-invokes-a-skill",
+        "https://learn.chatgpt.com/docs/codex-sdk"
+      ],
+      "cleanup": "All four host jobs reported zero active owned processes. After exact-root/parent and recursive reparse checks, removed all 50 task-owned fixture/configuration/trace/artifact/runner/observer files and verified root absence. Only this sanitized diagnosis remains; hashes identify removed artifacts, not retained replayable release evidence. Evaluator permission setup, containment and cleanup are not delivered product effects."
     },
     {
       "id": "claude-native-sufficient-entry-dev1",

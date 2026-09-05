@@ -146,7 +146,7 @@ judgment to the existing mapped duties, not new capability/button catalogues.
 The dev.3 research recheck produced one native two-file result with documentation
 issues, one current-package partial delivery, and one two-file description-only
 variant. No usable arm called Skill. The description-only variant was not
-adopted: one favorable result cannot establish a repair, and fetch count did not
+adopted: one favorable result cannot establish a repair, and call count did not
 fall. Three scripts passed seven observer-owned offline cases each; this is not
 real SDK execution. Separate business-result native/package arms both produced
 the independently verified IDs A/C/E and total 14 while preserving all inputs
@@ -155,6 +155,17 @@ mechanism for this native-sufficient sample or promote it to general UX value.
 Keep ordinary-entry discovery, lookup sufficiency and model/tool variability
 separate when selecting the next diagnostic or implementation. The exact dev.3
 packages remain unchanged and functional acceptance remains open.
+
+Before another research-to-delivery evaluation, read the source observation
+`claude-effective-research-and-capture-dev3`. Progress events exhausted the old
+raw capture cap, and listing WebFetch did not establish effective permission.
+Use bounded semantic-event capture with separate transport accounting, and
+verify allowed acquisition by its actual result. Earlier removed raw receipts
+cannot be reconstructed from call counts. The corrected arms still exposed
+argument/documentation defects or lacked a normal terminal result; source,
+offline, observer, host and complete-outcome claims remain separate. No Skill
+or runtime change was adopted. Next target evidence-consistent execution and
+Agent-owned verification, not another uncategorized retry or a global deny/allow.
 
 The navigation and current-state narrative below belong to the predecessor;
 consult them for historical evidence or unchanged contracts, not as a second

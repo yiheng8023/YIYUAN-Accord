@@ -168,11 +168,18 @@ It ends when sufficient evidence supports the next safe action.
 
 The later dev.3 ordinary-entry recheck retained a research-to-delivery failure.
 Changing only the Skill description did not cause an implicit invocation or
-reduce fetch count, so that experimental variant was not adopted. A separate
+reduce call count, so that experimental variant was not adopted. A separate
 Chinese business-result case completed correctly with and without the unchanged
 package, without user tool selection or unrelated-reference reads. This supports
 native sufficiency for that sample, not a universal user-experience claim or
 incremental product value. See the two dated recheck observations in the source.
+
+The later `claude-effective-research-and-capture-dev3` observation separates
+progress-stream capture limits, exposed-but-denied tools, successful acquisition,
+artifact correctness and normal termination. Earlier invocation counts cannot
+establish successful fetches. Its bounded observer repair and session-only
+public-domain permissions are evaluation controls, not product features or a
+general permission policy; the exact packages remain unchanged.
 
 The dev.2 same-turn repair observation in `developmentObservations` covers
 native tool execution, correction, preserved inputs and independently rechecked
