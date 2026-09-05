@@ -48,6 +48,52 @@ class DevelopmentContractTests(unittest.TestCase):
         altered["authority"]["conditionalRelease"]["conditions"] = ["some-check"]
         self.assertTrue(self.errors(altered))
 
+    def test_capability_matrix_requires_sources_conditions_and_complete_duty_mapping(self):
+        cases = [
+            ("scope", "runtime-ready"), ("reviewedAt", "yesterday"),
+            ("reviewedAt", "2026-09-05T00:45:00"), ("reviewedAt", None),
+            ("refreshRule", ""), ("runtimeGap", ""), ("localObservations", []),
+            ("native", []), ("accord", []),
+        ]
+        for field, value in cases:
+            with self.subTest(field=field, value=value):
+                altered = copy.deepcopy(self.contract)
+                altered["capabilityMap"][field] = value
+                self.assertTrue(self.errors(altered))
+        for collection, field, value in (
+            ("native", "officialSource", "https://unrelated.example/capability"),
+            ("native", "officialSource", "https://[invalid"),
+            ("native", "host", "new-host"), ("native", "conditions", ""),
+            ("native", "currentEffect", "verified"),
+            ("native", "layer", "universal-guarantee"),
+            ("native", "localObservationIds", ["missing"]),
+            ("native", "localObservationIds", ["claude-cli-help"]),
+            ("accord", "nativeIds", ["missing"]), ("accord", "nextProbe", ""),
+            ("accord", "assessment", "verified"),
+            ("localObservations", "subject", ""), ("localObservations", "claimLimit", ""),
+        ):
+            with self.subTest(collection=collection, field=field, value=value):
+                altered = copy.deepcopy(self.contract)
+                altered["capabilityMap"][collection][0][field] = value
+                self.assertTrue(self.errors(altered))
+        for collection in ("native", "accord", "localObservations"):
+            altered = copy.deepcopy(self.contract)
+            altered["capabilityMap"][collection].append(copy.deepcopy(altered["capabilityMap"][collection][0]))
+            self.assertTrue(self.errors(altered))
+
+    def test_shared_capability_mapping_does_not_force_a_native_route_or_a_runtime(self):
+        altered = copy.deepcopy(self.contract)
+        altered["capabilityMap"]["accord"][0]["nativeIds"] = []
+        altered["capabilityMap"]["accord"][0]["role"] = "No sufficient native candidate demonstrated; inspect the gap."
+        self.assertEqual(self.errors(altered), [])
+        for field, value in (("runtimeRequirement", ""),):
+            altered = copy.deepcopy(self.contract)
+            altered["implementation"][field] = value
+            self.assertTrue(self.errors(altered))
+        altered = copy.deepcopy(self.contract)
+        altered["implementation"]["modelSelection"]["capabilityRefs"] = ["missing"]
+        self.assertTrue(self.errors(altered))
+
     def test_plan_mapping_cannot_lose_a_function_or_an_acceptance_exit(self):
         for field, value in (("duties", ["unknown-function"]), ("procedure", ""),
                              ("exit", ""), ("state", "published")):
@@ -58,6 +104,22 @@ class DevelopmentContractTests(unittest.TestCase):
         for stage in altered["systemOptimization"]["workSequence"]:
             stage["duties"] = [item for item in stage["duties"] if item != "verification-and-value"]
         self.assertTrue(self.errors(altered))
+
+    def test_work_sequence_can_change_shape_without_losing_acceptance(self):
+        altered = copy.deepcopy(self.contract)
+        stages = altered["systemOptimization"]["workSequence"]
+        extra = copy.deepcopy(stages[0])
+        extra["id"] = "bounded-source-counterexample"
+        extra["title"] = "A newly evidenced source check"
+        extra["state"] = "pending"
+        stages.insert(1, extra)
+        self.assertEqual(self.errors(altered), [])
+        removed = stages.pop(0)
+        stages[0]["duties"] = sorted(set(stages[0]["duties"] + removed["duties"]))
+        removed = stages.pop(1)
+        stages[0]["duties"] = sorted(set(stages[0]["duties"] + removed["duties"]))
+        self.assertEqual(len(stages), 4)
+        self.assertEqual(self.errors(altered), [])
 
     def test_isolation_is_not_a_clean_host_product_requirement(self):
         for field, value in (("cleanHostRequiredForProduct", True),
@@ -183,6 +245,14 @@ class DevelopmentContractTests(unittest.TestCase):
                 item["duties"] = list(dict.fromkeys(
                     "relations-routing-and-form" if key == duty["id"] else key for key in item["duties"]
                 ))
+        self.assertTrue(self.errors(altered))  # Stale capability consumer still refers to the retired duty.
+        rows = altered["capabilityMap"]["accord"]
+        retired_row = next(row for row in rows if row["dutyId"] == duty["id"])
+        routing = next(row for row in rows if row["dutyId"] == "relations-routing-and-form")
+        routing["nativeIds"] = sorted(set(routing["nativeIds"] + retired_row["nativeIds"]))
+        routing["role"] += " " + retired_row["role"]
+        routing["nextProbe"] += " " + retired_row["nextProbe"]
+        rows.remove(retired_row)
         self.assertEqual(self.errors(altered), [])
         altered["acceptance"]["retiredDuties"][0]["acceptanceChange"] = ""
         self.assertTrue(self.errors(altered))

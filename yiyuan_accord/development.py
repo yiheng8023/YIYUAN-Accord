@@ -6,7 +6,9 @@ this check. These versioned checks bind their phase, not every future form.
 """
 
 from pathlib import Path
+from datetime import datetime
 import re
+from urllib.parse import urlsplit
 
 from .identity import _bounded_git_bytes, _bounded_regular_bytes, _strict_json_object
 
@@ -197,7 +199,7 @@ def development_contract_errors(contract, golden_task_ids):
             "global compliance, bound commitments and conditional strategies must be distinct")
     require(_strings(applicability.get("strategyBinding")), "strategy applicability binding is missing")
 
-    implementation = section("implementation", ("rule", "triggerRule", "nativeRule", "reconstructionRule"))
+    implementation = section("implementation", ("rule", "triggerRule", "nativeRule", "reconstructionRule", "runtimeRequirement"))
     modes = implementation.get("modes")
     require(_strings(modes) and set(modes) == {
         "accord-contained", "agent-native", "accord-agent-composed",
@@ -271,8 +273,73 @@ def development_contract_errors(contract, golden_task_ids):
     require(covered == set(golden_task_ids), "historical Golden Task disposition is incomplete")
     require(_BASELINE_DUTIES <= ids | retired_ids, "functional responsibility coverage or disposition is incomplete")
     require(all(deps <= ids for deps in edges.values()), "duty dependency is unresolved")
+    capability_map = section("capabilityMap", (
+        "representation", "refreshRule", "allocationRule", "runtimeGap",
+    ))
+    require(capability_map.get("scope") == "existing-host-development-review-not-runtime-admission",
+            "capability inventory cannot establish runtime admission")
+    try:
+        captured = datetime.fromisoformat(capability_map.get("reviewedAt", "").replace("Z", "+00:00"))
+        require(captured.utcoffset() is not None, "capability snapshot must have a timezone")
+    except (ValueError, TypeError, AttributeError):
+        errors.append("capability snapshot needs a dated source review")
+    observations = capability_map.get("localObservations")
+    observation_ids = set()
+    for observation in observations if isinstance(observations, list) else []:
+        if (not isinstance(observation, dict) or not all(_text(observation.get(field))
+                for field in ("id", "host", "subject", "method", "finding", "claimLimit"))):
+            errors.append("capability observation must bind subject, method and claim limit")
+            continue
+        require(observation["id"] not in observation_ids
+                and observation["host"] in ("codex", "claude-code"), "capability observation identity is invalid")
+        observation_ids.add(observation["id"])
+    require(isinstance(observations, list) and bool(observation_ids), "capability local observations are missing")
+    native = capability_map.get("native")
+    native_ids = set()
+    for capability in native if isinstance(native, list) else []:
+        if (not isinstance(capability, dict) or not all(_text(capability.get(field))
+                for field in ("id", "host", "name", "officialSource", "surface", "conditions"))):
+            errors.append("native capability must bind its surface, source and conditions")
+            continue
+        require(capability["id"] not in native_ids, "native capability ids must be unique")
+        native_ids.add(capability["id"])
+        require(capability.get("layer") in ("model", "host-runtime", "model-api-composition"),
+                "model, host runtime and API composition must remain distinct")
+        domains = {"codex": {"learn.chatgpt.com", "developers.openai.com"},
+                   "claude-code": {"code.claude.com", "platform.claude.com"}}
+        try:
+            url = urlsplit(capability["officialSource"])
+            official = (url.scheme == "https" and url.hostname in domains.get(capability["host"], set())
+                        and url.username is None and url.password is None)
+        except ValueError:
+            official = False
+        require(official, "native capability needs the relevant official host source")
+        refs = capability.get("localObservationIds")
+        require(_strings(refs, empty=True) and set(refs) <= observation_ids
+                and all(observation.get("host") == capability["host"]
+                        for observation in observations if isinstance(observation, dict)
+                        and observation.get("id") in refs),
+                "native capability observation reference is unresolved")
+        require(capability.get("currentEffect") == "unverified",
+                "documentation or interface presence cannot establish current effects")
+    require(isinstance(native, list) and bool(native_ids), "native capability review is missing")
+    mapped_duties = set()
+    for row in capability_map.get("accord", []) if isinstance(capability_map.get("accord"), list) else []:
+        if (not isinstance(row, dict) or not all(_text(row.get(field))
+                for field in ("dutyId", "role", "nextProbe"))):
+            errors.append("Accord capability mapping needs a duty, role and next effect probe")
+            continue
+        require(row["dutyId"] not in mapped_duties, "duplicate Accord capability duty")
+        mapped_duties.add(row["dutyId"])
+        require(_strings(row.get("nativeIds"), empty=True) and set(row["nativeIds"]) <= native_ids,
+                "Accord capability mapping has an unresolved native reference")
+        require(row.get("assessment") == "unverified", "capability mapping is not functional acceptance")
+    require(mapped_duties == ids, "capability matrix must account for all current duties")
+    require(isinstance(model_route, dict) and _strings(model_route.get("capabilityRefs"))
+            and set(model_route["capabilityRefs"]) <= native_ids,
+            "model selection must reference the shared capability facts")
     stages = optimization.get("workSequence")
-    require(isinstance(stages, list) and len(stages) == 5,
+    require(isinstance(stages, list) and bool(stages),
             "development work sequence is missing")
     mapped, stage_ids = set(), set()
     for stage in stages if isinstance(stages, list) else []:
@@ -409,6 +476,26 @@ def render_development_plan(contract):
         lines.append(f"| {duty['name']} | {stages} | {', '.join(duty['goldenTasks'])} |")
     for retired in contract["acceptance"]["retiredDuties"]:
         lines.append(f"| {retired['id']}（已处置） | {retired['reason']}；{retired['acceptanceChange']} | {', '.join(retired['goldenTasks'])} |")
+    capability_map = contract["capabilityMap"]
+    lines += ["", "## 原生能力与 Accord 职责矩阵", "",
+              f"资料核对时间：`{capability_map['reviewedAt']}`。这是现有两宿主的开发评审快照，不是永久能力目录或当前行为验收。",
+              "原生项的条件和效果尚需在实际客户端、模型路线及权限下核对。接口存在、配置可见、实际执行和结果成立分别取证。", "",
+              "| 原生能力 / 来源 | 能力层 | 已核对的接口或能力 | 适用条件与未证实边界 |",
+              "|---|---|---|---|"]
+    for capability in capability_map["native"]:
+        lines.append(f"| `{capability['id']}` [{capability['name']}]({capability['officialSource']}) | {capability['layer']} | {capability['surface']} | {capability['conditions']} |")
+    lines += ["", "| Accord 职责 | 原生候选关系 | Accord 必要介入的假设 | 下一效果验证 |",
+              "|---|---|---|---|"]
+    for row in capability_map["accord"]:
+        lines.append(f"| {duties[row['dutyId']]['name']} | {', '.join(row['nativeIds'])} | {row['role']} | {row['nextProbe']} |")
+    lines += ["", "### 事实、索引、图与运行时", "",
+              capability_map["representation"], "", capability_map["refreshRule"], "",
+              capability_map["runtimeGap"], "",
+              "运行时分配要求：" + contract["implementation"]["runtimeRequirement"], "",
+              "源数据中的职责依赖、工序、场景和能力引用构成评审关系；它们不证明插件已经执行该链路。", "",
+              "### 本机接口观察（非行为验收）", ""]
+    for observation in capability_map["localObservations"]:
+        lines.append(f"- `{observation['id']}` — {observation['subject']}。{observation['finding']} {observation['claimLimit']}")
     lines += ["", "## 动态适应的必查链路", "",
               "按具体声明选择原生对照、可交付最小组合和受控干扰；不把干净宿主规定为通用运行前提。",
               "核对全局、父目录与项目的 AGENTS.md、config.toml 等全部生效配置，以及记忆、历史、插件和环境变量；记录来源与影响，不复制秘密。", "",

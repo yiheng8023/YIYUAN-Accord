@@ -43,6 +43,15 @@ acceptance. Its temporary directories and raw logs were removed. Dev.2 adds
 main/subagent model-fit guidance; validate actual task matching and execution,
 including inherited/substituted models, before claiming routing capability.
 
+The shared native/Accord capability map is in `development.json#/capabilityMap`
+and the generated plan. Its dated official references and local CLI/interface
+observations do not establish current behavior. Inspect the task-relevant
+native entry before adding machinery; bind trigger, executor, necessary state
+and surviving recovery actor for reliability-sensitive duties. Use or build
+runtime support where a real gap requires it. The historical no-I/O core and
+simulated graph PoC are not delivered automatic host integration. Source
+validation and linked matrices cannot close that functional acceptance gap.
+
 The navigation and current-state narrative below belong to the predecessor;
 consult them for historical evidence or unchanged contracts, not as a second
 active plan.

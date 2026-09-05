@@ -88,13 +88,13 @@
     "allowedPaths": ["product/development.json", "yiyuan_accord/development.py", "yiyuan_accord/control.py", "yiyuan_accord/evidence.py", "yiyuan_accord/__main__.py", "tests/product/test_development.py", "tests/product/test_product_control.py", "AGENTS.md", "CONTEXT.md", "docs/architecture.md", "docs/operations/CONTINUATION.md", "docs/operations/PLAN-v3.2.md", "yiyuan_accord/guardrails.py", ".claude-plugin/marketplace.json", "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json", "plugins/yiyuan-accord-codex/adapter.json", "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md", "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json", "plugins/yiyuan-accord-claude/adapter.json", "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md"],
     "rule": "This open successor carries the current implementation slice and its generated visible plan; revise this bounded surface as authorized functional work proceeds. The predecessor remains closed at its immutable revision. Check actual changed and untracked paths, not the predecessor's completed presentation transition.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1016000,
+      "maxProductCodeAndTestBytes": 1024000,
       "maxTrackedFiles": 124,
-      "rationale": "Phase-local ceiling 1016000 bytes includes the earlier 40000-byte successor allowance plus 16000 bytes for current/historical admission separation, package identity and rejection coverage. It retains five percent byte headroom, three file slots and the unchanged instruction ceiling. No new runtime or validator module is added in this slice. Reassess measured cost before further expansion; this allowance is not functional acceptance."
+      "rationale": "Phase-local ceiling 1024000 bytes adds 8000 to the prior 1016000 for shared native/Accord source validation, derived matrix rendering and rejection tests. The measured code/test payload is 971631 bytes, versus 961155 before this slice; no new file, runtime, graph store or validator module is added. Retain five percent byte headroom, three file slots and the unchanged instruction ceiling. This is bounded maintenance-tool cost, not functional acceptance; reassess measured cost before further expansion."
     }
   },
   "source": {
-    "purpose": "Drive the host and Agent to fulfill the responsibilities actually needed for an authorized user outcome, using their available resources and capabilities before authoring a duplicate. Compose or build only when needed for sufficient effects. Reduce avoidable user orchestration, correction and recovery burden; owning an implementation is not the product goal.",
+    "purpose": "Drive the host and Agent to fulfill the responsibilities actually needed for an authorized user outcome, using their available resources and capabilities before authoring a duplicate. Compose or build only when needed for sufficient effects. Own supported task mechanics across functions, settings, configuration, interaction, resource scheduling, context, handoff and lifecycle, not just capability selection. User decision authority is distinct from manual operation; preserve intervention and revocation. Observable or visible controls are not automatically actionable or authorized, and no unmeasured majority-of-host-controls claim is made. Reduce avoidable user orchestration, correction and recovery burden; owning an implementation is not the product goal.",
     "hypothesis": "Context-selected intervention can improve bounded outcomes and total collaboration burden. A correct design, isolated success or safe stop alone does not establish that incremental value.",
     "bootstrapBoundary": "Start from an available, authorized entry and the actually observable environment. Discovery or construction can close gaps; neither self-bootstrapping nor a runtime creates authority, hidden state access, physical feasibility or an independent recovery actor after every component has failed.",
     "globalInvariants": [
@@ -105,7 +105,7 @@
       }
     ],
     "boundCommitment": "The authorized goal, required functions, quality, accepted risk and result criteria are binding within their named task and revision. They are not permanent global constants, but the Agent cannot silently relax them to fit an available mechanism. A legitimate change revises the bound commitment explicitly and invalidates affected acceptance.",
-    "variables": ["premise", "design", "rules", "logic", "mechanisms", "host", "client", "model-route", "reasoning-effort", "tools", "configuration", "state-carrier", "runtime", "process", "verification-method", "cost-policy"],
+    "variables": ["premise", "design", "rules", "logic", "mechanisms", "host", "client", "model-route", "reasoning-effort", "tools", "configuration", "state-carrier", "runtime", "execution-and-state-topology", "process", "verification-method", "cost-policy"],
     "successStates": {
       "responsibilities-accounted": "Every required responsibility has an explicit disposition and support or an honest gap; this is accounting, not functional success.",
       "function-verified": "A named function achieves its required observable effect through an available normal entry in an exact supported composition, including relevant failure and lifecycle conditions.",
@@ -130,6 +130,7 @@
     "selectionOrder": ["compliance-and-authority", "full-bound-functional-and-quality-sufficiency", "total-lifecycle-cost-and-context-fit"],
     "formNeutral": true,
     "runtimeEligible": true,
+    "runtimeRequirement": "依赖运行时不等于必须自建运行时。按所需可靠性绑定触发者、实际执行者、必要状态载体和故障后的接管者；一轮任务可只需宿主现有 Agent 循环和上下文。要求确定触发、强制约束、跨轮或跨会话状态、无人值守推进或故障后继续执行时，核验宿主是否覆盖这些职责；缺失则组合或实现最小足够运行时，包括必要的持久机制。Skill 是 Agent 可解释的指导，不是独立调度器或强制执行保证。运行时增加也不自动证明业务效果；仍验收普通入口、失败及独立后态。当前缺口未闭合前不宣称仅靠 Skill 足够。",
     "mandatoryMechanisms": [],
     "rule": "Use effective host and maintained capabilities when sufficient; compose or author missing means when required. A runtime is an ordinary eligible form when its execution, coordination, state or recovery properties fit the need. Compare evidenced sufficiency and total lifecycle burden without requiring every simpler form to be built and fail first. Do not exclude or require a form by name.",
     "modelSelection": {
@@ -143,36 +144,11 @@
       "nativeReplacement": "Reuse native task/subagent model parameters, defaults, inheritance and supported routing when sufficient. Remove duplicate Accord selection/dispatch implementation only when the same required matching, execution and adaptation are closed; retain accountability for an unmet need.",
       "verification": "Bind task need, allowed candidate facts, chosen route and actual host-reported execution model/effort when exposed. Reconcile provider aliases, inherited or substituted models, quality and total lifecycle cost. A request parameter, listing or name is not proof of backend identity or optimality; hold unavailable facts unknown.",
       "failureOracle": "Reject unsupported automatic-switch claims, silent replacement of a pinned model, quality loss disguised as cost savings, default inheritance mistaken for task matching, unobserved subagent execution, or duplicated native routing without a demonstrated gap.",
-      "nativeCoverage": [
-        {
-          "host": "codex",
-          "state": "documented-and-interface-observed-not-behavior-qualified",
-          "source": "https://learn.chatgpt.com/docs/agent-configuration/subagents",
-          "finding": "Native subagent model/effort selection and inheritance are exposed. Local CLI 0.153.3 reports multi_agent stable/enabled, step_model_switching under-development/disabled. This does not establish Desktop-wide automatic task matching or parent hot switching."
-        },
-        {
-          "host": "claude-code",
-          "state": "documented-not-current-route-behavior-qualified",
-          "source": "https://code.claude.com/docs/en/sub-agents",
-          "finding": "Per-invocation model, definition, environment default and parent inheritance have distinct precedence. Native substitution and provider/allowlist restrictions require checking actual execution."
-        },
-        {
-          "host": "claude-code",
-          "state": "documented-conditional",
-          "source": "https://code.claude.com/docs/en/model-config",
-          "finding": "opusplan supplies plan/execution switching; fallback chains react to certain service failures. Neither alone proves general needs-based optimal selection."
-        },
-        {
-          "host": "claude-code",
-          "state": "not-admitted-for-current-DeepSeek-route",
-          "source": "https://code.claude.com/docs/en/advisor",
-          "finding": "Advisor is a conditional Anthropic server tool; unrecognized main/advisor models are not attached. The current DeepSeek smoke produced an unrecognized_model warning, so this native capability cannot be assumed available through that route."
-        }
-      ]
+      "capabilityRefs": ["cx-state", "cx-actors", "cc-actors", "cc-model-policy", "cc-advisor", "gpt6-cognition", "gpt6-protocol"]
     },
     "effectChain": ["current-relevant-facts", "authorized-decision", "available-executor", "observable-effect", "suitable-independent-poststate"],
     "triggerRule": "A user request, supported lifecycle signal, relevant state change or just-in-time decision may trigger the chain. Eventless hosts can re-sense at material boundaries. No Hook or pure-core invocation is universally required.",
-    "nativeRule": "Native or composed implementation counts when it fulfills the same duty. Declared availability is not observed execution; the absence of Accord-owned code is not absence of implementation. If native behavior is sufficient, non-intervention is correct but does not itself prove incremental Accord value.",
+    "nativeRule": "Native or composed implementation counts when it fulfills the same duty. Declared availability is not observed execution; the absence of Accord-owned code is not absence of implementation. If native behavior is sufficient, non-intervention is correct but does not itself prove incremental Accord value. Native sufficiency includes the current model's own reasoning, task decomposition, tool selection, correction and delegation behavior, not only host interfaces. Reassess former model deficits and Accord guidance after model change; preserve useful native behavior and remove intervention that no longer earns its cost.",
     "reconstructionRule": "Replace a broken premise or chain from its earliest affected boundary, including a full redesign where justified; preserve unrelated user state and historical evidence, and re-establish the same bound functionality and applicable recovery guarantees."
   },
   "supportingPrinciples": {
@@ -184,9 +160,433 @@
     "gapFilling": "Supply or compose the exact capability or coordination missing from the current environment, then reassess its need when native conditions change.",
     "activation": "Select the relevant strategy by the present duty, observed gap and failure consequences. No strategy must run on every task, and none is a product-wide prohibition on implementation."
   },
+  "capabilityMap": {
+    "scope": "existing-host-development-review-not-runtime-admission",
+    "reviewedAt": "2026-09-05T00:58:21Z",
+    "representation": "One versioned semantic source supplies the native matrix, Accord duty matrix and sparse dependency views. Acceptance duties own outcomes, dependencies and evidence; workSequence owns procedures and exits. This map references them instead of copying a second authority. It is a task-relevant review inventory, not every vendor product or host x model x tool combination. Separate model cognition, host runtime and model/API composition; a host-labelled review row scopes relevance, not exclusive model ownership or automatic endpoint exposure.",
+    "refreshRule": "At a relevant decision, inspect the running client, actual provider/model, policy and exposed interface. Version/feature/configuration/package/permission changes, a supported invalidation event, source contradiction, missing observation or failed effect reopen affected applicability. Re-read supported state and only the needed official documentation; no automatic network watcher or fixed global expiry is installed. Retain the dated observation as history, never as permanently current support.",
+    "allocationRule": "Prefer sufficient native implementation, compose across a demonstrated seam, author missing means only when required, and retire only verified duplicate machinery. A necessary duty survives implementation retirement; an unnecessary duty requires a revised need and acceptance. Symbiosis describes the goal, not proof of incremental value.",
+    "runtimeGap": "The delivered host Skill guides task-time discovery, decision, execution and verification, but its actual use and end-to-end effects remain unverified for dev.2. closure.py is a no-I/O reference decision core; research/PROTOTYPE-dynamic-relation-graph.html is a simulated in-memory PoC. Neither is a live host index or automatic executor. This development view does not close that ordinary-entry integration gap.",
+    "localObservations": [
+      {
+        "id": "codex-cli-schema",
+        "host": "codex",
+        "subject": "Codex CLI 0.153.3; default non-experimental generated ClientRequest.json",
+        "method": "codex app-server generate-json-schema --out <task-owned-directory>",
+        "finding": "99 method variants; model/list, modelProvider/capabilities/read, experimentalFeature/list, skills/list, hooks/list, app/installed, plugin/list/install/uninstall, thread/start/read/resume/fork/compact/start, turn/start/interrupt, config/read, configRequirements/read, account/rateLimits/read and command/exec are present. Background-terminal list/clean are absent from the default schema, not proven unsupported.",
+        "sha256": "25bc001b5dfe3b35785597b8f9ad9e5aaf7e437331fa9921f041c9e0e03fc9f3",
+        "claimLimit": "Schema existence only; no daemon query, model request or method effect. CLI version is not Desktop engine identity. Generated task-owned schema files are disposable."
+      },
+      {
+        "id": "codex-cli-flags",
+        "host": "codex",
+        "subject": "Codex CLI 0.153.3",
+        "method": "codex --version; codex features list; codex plugin --help",
+        "finding": "multi_agent, hooks and plugins stable/enabled; step_model_switching under-development/disabled. Plugin add/list/marketplace/remove subcommands exposed.",
+        "claimLimit": "CLI configuration and help snapshot only, not all Desktop feature state or task-fit behavior."
+      },
+      {
+        "id": "claude-cli-help",
+        "host": "claude-code",
+        "subject": "Claude Code 2.1.261; existing authorized DeepSeek route",
+        "method": "claude --version; claude --help",
+        "finding": "model, agents, fallback-model, plugin-dir, restricted, setting-sources, strict-mcp-config, permission-mode, resume and fork-session flags exposed.",
+        "claimLimit": "Local option existence, not API compatibility or successful execution. Prior dev.1 probe is separately bounded and cannot qualify dev.2. No official Claude account access is assumed."
+      }
+    ],
+    "native": [
+      {
+        "id": "cx-state",
+        "host": "codex",
+        "name": "模型、能力和配置查询",
+        "officialSource": "https://learn.chatgpt.com/docs/app-server",
+        "surface": "model/list、provider capabilities、feature、skills/hooks/apps、配置与配额查询。",
+        "conditions": "按实际运行客户端复核；模式目录不是模型质量排名；查询权限与秘密字段需另行约束。",
+        "localObservationIds": [
+          "codex-cli-schema"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cx-actors",
+        "host": "codex",
+        "name": "子代理与模型配置",
+        "officialSource": "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+        "surface": "子代理原生调度与 model / reasoning 配置、继承。",
+        "conditions": "用户选型和委派授权优先；实际执行模型与任务适配待验，不能由默认继承推得最优。",
+        "localObservationIds": [
+          "codex-cli-flags"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cx-execution",
+        "host": "codex",
+        "name": "执行与中断",
+        "officialSource": "https://learn.chatgpt.com/docs/app-server",
+        "surface": "turn/start、turn/interrupt、command/exec 及结构化交互。",
+        "conditions": "接口存在不等于本任务获准调用，也不等于目标结果完成。",
+        "localObservationIds": [
+          "codex-cli-schema"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cx-continuity",
+        "host": "codex",
+        "name": "会话与上下文连续性",
+        "officialSource": "https://learn.chatgpt.com/docs/app-server",
+        "surface": "thread/start/read/resume/fork/compact/start。",
+        "conditions": "原生会话操作不能独自证明语义交接正确；新任务、历史分叉和同会话压缩用途不同。",
+        "localObservationIds": [
+          "codex-cli-schema"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cx-extensions",
+        "host": "codex",
+        "name": "插件、Skills 与 MCP",
+        "officialSource": "https://learn.chatgpt.com/docs/plugins",
+        "surface": "原生打包、发现、安装、信任与工具连接入口。",
+        "conditions": "官方、第三方、自定义能力分层；安装、启用、暴露和效果分开核对。",
+        "localObservationIds": [
+          "codex-cli-schema",
+          "codex-cli-flags"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cx-hooks",
+        "host": "codex",
+        "name": "生命周期事件与扩展",
+        "officialSource": "https://learn.chatgpt.com/docs/hooks",
+        "surface": "SessionStart、压缩、工具、子代理和结束等事件。",
+        "conditions": "事件不是完整当前状态；失效、超时、信任与处理器类型有不同边界，不默认保证阻断或恢复。",
+        "localObservationIds": [
+          "codex-cli-flags"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-tools",
+        "host": "claude-code",
+        "name": "工具执行与原生工作循环",
+        "officialSource": "https://code.claude.com/docs/en/how-claude-code-works",
+        "surface": "文件、搜索、命令、网络工具及观察—行动—验证循环。",
+        "conditions": "模型和权限影响执行；语言服务器等额外能力仍有安装条件。",
+        "localObservationIds": [
+          "claude-cli-help"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-actors",
+        "host": "claude-code",
+        "name": "子代理与模型覆盖",
+        "officialSource": "https://code.claude.com/docs/en/sub-agents",
+        "surface": "独立子代理上下文、调用级选型、定义、环境与父模型继承。",
+        "conditions": "按当前版本核对优先级及替代模型；第三方提供商是否支持每项行为仍待验。",
+        "localObservationIds": [
+          "claude-cli-help"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-model-policy",
+        "host": "claude-code",
+        "name": "模型切换与故障回退",
+        "officialSource": "https://code.claude.com/docs/en/model-config",
+        "surface": "模型选项、opusplan 阶段切换、条件故障回退。",
+        "conditions": "不是通用最优匹配；模型别名与服务端身份分开，不向 DeepSeek 移植 Claude 专有模型语义。",
+        "localObservationIds": [
+          "claude-cli-help"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-advisor",
+        "host": "claude-code",
+        "name": "条件式专家咨询",
+        "officialSource": "https://code.claude.com/docs/en/advisor",
+        "surface": "实验性的 Anthropic 服务端 advisor 工具。",
+        "conditions": "有模型、服务端与网关条件；当前 DeepSeek 路线尚不具备可采信支持证据。",
+        "localObservationIds": [],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-extensions",
+        "host": "claude-code",
+        "name": "Skills、插件与连接扩展",
+        "officialSource": "https://code.claude.com/docs/en/features-overview",
+        "surface": "Skills、MCP、插件及按需工作流的可组合入口。",
+        "conditions": "安装与可见不能证明使用；额外技能、连接或服务能力须单独归因。",
+        "localObservationIds": [
+          "claude-cli-help"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-hooks",
+        "host": "claude-code",
+        "name": "事件处理与工具约束",
+        "officialSource": "https://code.claude.com/docs/en/hooks",
+        "surface": "工具、会话、压缩、子代理等事件处理器。",
+        "conditions": "须核对事件、处理器支持和失败语义；现有 Accord helper 仅失效提示。",
+        "localObservationIds": [],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-memory",
+        "host": "claude-code",
+        "name": "指令与记忆载体",
+        "officialSource": "https://code.claude.com/docs/en/memory",
+        "surface": "CLAUDE.md、条件规则及自动记忆承载上下文。",
+        "conditions": "记忆不是强制权限或实时状态；尊重用户记忆写入授权，纳入干扰与版本归因。",
+        "localObservationIds": [],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-recovery",
+        "host": "claude-code",
+        "name": "文件检查点与回溯",
+        "officialSource": "https://code.claude.com/docs/en/checkpointing",
+        "surface": "直接文件编辑的检查点与 rewind。",
+        "conditions": "不覆盖 Bash 修改或所有外部副作用，不能代替 Git 或普遍回滚保证。",
+        "localObservationIds": [],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-sdk",
+        "host": "claude-code",
+        "name": "可编程 Agent 宿主接口",
+        "officialSource": "https://code.claude.com/docs/en/agent-sdk/overview",
+        "surface": "Python / TypeScript SDK 复用工具、Agent 循环、会话、Hooks 与权限。",
+        "conditions": "SDK 与直接模型 Client API 不是同一能力；授权、依赖和当前提供商兼容性待核，尚未引入。",
+        "localObservationIds": [],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "cc-permissions",
+        "host": "claude-code",
+        "name": "权限与策略",
+        "officialSource": "https://code.claude.com/docs/en/permissions",
+        "surface": "宿主执行权限、允许/询问/拒绝规则及配置层次。",
+        "conditions": "提示词不是权限强制；配置优先级、工具可见性和任务权限应分别验证。",
+        "localObservationIds": [
+          "claude-cli-help"
+        ],
+        "currentEffect": "unverified",
+        "layer": "host-runtime"
+      },
+      {
+        "id": "gpt6-cognition",
+        "host": "codex",
+        "layer": "model",
+        "name": "GPT-6 Astra 模型原生判断与协作",
+        "officialSource": "https://developers.openai.com/api/docs/guides/latest-model",
+        "surface": "官方说明涵盖多步工作、需求纠正、指令理解及子任务委派能力。",
+        "conditions": "这是特定模型的官方描述，不是本项目效果验收；上下文冲突或过度指导仍可能干扰它。先观察无 Accord 基线，不固定假设模型存在旧缺陷。",
+        "localObservationIds": [],
+        "currentEffect": "unverified"
+      },
+      {
+        "id": "gpt6-protocol",
+        "host": "codex",
+        "layer": "model-api-composition",
+        "name": "GPT-6 Astra 与 API 协作能力",
+        "officialSource": "https://developers.openai.com/api/docs/guides/latest-model",
+        "surface": "异步工具调用、执行中接收纠正、会话内推理配置调整。",
+        "conditions": "依赖具体 API、模式及宿主接入；应用仍执行工具并管理待完成工作。API 文档支持不证明当前 Desktop/CLI 已暴露，也不能推断为独立持久执行器。",
+        "localObservationIds": [],
+        "currentEffect": "unverified"
+      }
+    ],
+    "accord": [
+      {
+        "dutyId": "goal-authority-correction",
+        "nativeIds": [
+          "cx-state",
+          "cx-execution",
+          "cc-permissions",
+          "cc-tools",
+          "gpt6-cognition",
+          "gpt6-protocol"
+        ],
+        "role": "用原生审批与交互；Accord 只补目标、纠正与后续行动的一致性。",
+        "nextProbe": "用户中途纠正或撤权，观察后续实际效果而不只看答复。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "environment-and-self-exposure",
+        "nativeIds": [
+          "cx-state",
+          "cx-hooks",
+          "cx-extensions",
+          "cc-extensions",
+          "cc-hooks",
+          "cc-permissions"
+        ],
+        "role": "按需读取当前事实；分别绑定宿主、提供商、插件与个人配置，不建第二套全量宿主目录。",
+        "nextProbe": "对比声明、配置、实际暴露；制造一个局部未知并观察受影响决策。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "research-learning-and-reuse",
+        "nativeIds": [
+          "cc-tools",
+          "cx-extensions",
+          "cc-extensions",
+          "gpt6-cognition"
+        ],
+        "role": "复用原生搜索和已授权资料能力；只补来源适用性与复用决策。",
+        "nextProbe": "有足够证据时不多查；资料过期、能力缺口时定向补证。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "relations-routing-and-form",
+        "nativeIds": [
+          "cx-state",
+          "cx-actors",
+          "cc-actors",
+          "cc-model-policy",
+          "cc-advisor",
+          "cc-sdk",
+          "gpt6-cognition",
+          "gpt6-protocol"
+        ],
+        "role": "从需求与现状推导稀疏路线；主/子代理选型走原生接口，必要时组合，不另设固定模型排名。",
+        "nextProbe": "匹配不同需求、显式选型和不足后的重选；核对实际模型、效果与成本。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "execution-configuration-and-code",
+        "nativeIds": [
+          "cx-execution",
+          "cc-tools",
+          "cc-sdk"
+        ],
+        "role": "原生工具承担操作；缺少的执行能力才组合或实现。",
+        "nextProbe": "普通入口下完成实际变更，保留无关状态，禁止评估器救援冒充产品执行。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "premise-and-consistency",
+        "nativeIds": [
+          "cx-execution",
+          "cc-tools",
+          "cc-memory",
+          "gpt6-cognition"
+        ],
+        "role": "复用编辑与检查工具；Accord 补源头变更对计划、实现和验收的影响追踪。",
+        "nextProbe": "改变一项前提，只更新受影响关系与声明；检查遗漏的消费者。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "correction-and-evolution",
+        "nativeIds": [
+          "cx-continuity",
+          "cc-memory",
+          "cc-tools",
+          "gpt6-cognition"
+        ],
+        "role": "复用授权状态载体；记录适用条件与反例，避免局部经验变成全局规则。",
+        "nextProbe": "纠正后再次触发同类任务，核对适用性、恢复和不相关任务不受影响。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "recovery-and-rollback",
+        "nativeIds": [
+          "cx-execution",
+          "cc-recovery",
+          "cc-tools"
+        ],
+        "role": "优先原生恢复；仅为未覆盖副作用补偿，明确幸存执行者与可恢复范围。",
+        "nextProbe": "注入中途失败，核对独立后态、并发及外部状态保护。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "context-and-task-continuity",
+        "nativeIds": [
+          "cx-continuity",
+          "cc-actors",
+          "cc-sdk",
+          "cc-memory",
+          "gpt6-protocol"
+        ],
+        "role": "复用会话/上下文能力；Accord 补最小语义移交和目标核对。",
+        "nextProbe": "目标与代码身份在接收端核对后再释放来源；接收失败保留安全来源。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "resources-and-cleanup",
+        "nativeIds": [
+          "cx-state",
+          "cx-execution",
+          "cx-hooks",
+          "cc-tools",
+          "cc-hooks",
+          "cc-sdk"
+        ],
+        "role": "优先宿主配额、中断和资源控制；补归属判断及独立清理核对。",
+        "nextProbe": "任务资源释放且共享资源不变；未知资源不得据推断删除。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "package-lifecycle",
+        "nativeIds": [
+          "cx-extensions",
+          "cc-extensions"
+        ],
+        "role": "使用原生插件生命周期；仅补实证缺失的补偿和后态验证。",
+        "nextProbe": "精确 dev.2 包的安装、更新失败、成功更新和卸载；确认加载与残留。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "native-replacement-and-retirement",
+        "nativeIds": [
+          "cx-state",
+          "cx-extensions",
+          "cc-extensions",
+          "cc-model-policy",
+          "gpt6-cognition"
+        ],
+        "role": "原生同责效果足够则旁路或退役重复实现，保留必要结果责任。",
+        "nextProbe": "新原生能力接替后核对效果、恢复及清理；其后失效时重新评估。",
+        "assessment": "unverified"
+      },
+      {
+        "dutyId": "verification-and-value",
+        "nativeIds": [
+          "cx-execution",
+          "cc-tools",
+          "cc-sdk",
+          "gpt6-cognition"
+        ],
+        "role": "复用宿主测试/观察；按声明补独立验收、对照与贡献归因。",
+        "nextProbe": "全链路结果及后态可观察；区分宿主本来就会与 Accord 的必要帮助。",
+        "assessment": "unverified"
+      }
+    ]
+  },
   "systemOptimization": {
     "aggregation": "all-applicable-floors-then-contextual-tradeoffs",
-    "rule": "Derive the applicable floor for each required system quality from the bound result and risk. A failed or unknown required floor cannot be offset by speed, low cost, code reduction or a high average score elsewhere. Explicitly justify non-applicability; it does not remove product responsibilities. Optimize the weakest consequential dependency first and check its affected consumers.",
+    "rule": "Derive the applicable floor for each required system quality from the bound result and risk. A failed or unknown required floor cannot be offset by speed, low cost, code reduction or a high average score elsewhere. Explicitly justify non-applicability; it does not remove product responsibilities. Optimize the weakest consequential dependency first and check its affected consumers. Baseline, plan shape, procedures and acceptance are revisable hypotheses within the bound goal. At material counterevidence or host change, revise only affected source and consumers, retain prior exact evidence as history, and explain the changed acceptance. Do not preserve a step count or mechanism merely to keep the original plan.",
     "qualityAxes": [
       {"id": "compliance-and-safety", "floor": "No unauthorized or prohibited effects; truthful claim and ownership handling.", "assessment": "unverified"},
       {"id": "functional-coverage", "floor": "Every bound function and quality requirement is fulfilled through an available executor.", "assessment": "unverified"},
@@ -198,13 +598,14 @@
       {"id": "maintainability-and-resource-cost", "floor": "Verification, context, modules and resource use remain sustainable without weakening functional or evidence guarantees.", "assessment": "unverified"}
     ],
     "workSequence": [
-      {"id": "source-foundation", "title": "源头校准与继承基线", "state": "implemented-local-unreleased", "duties": ["goal-authority-correction", "premise-and-consistency", "verification-and-value"], "procedure": "保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。", "exit": "源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。"},
-      {"id": "system-bottlenecks", "title": "系统短板与工程优化", "state": "active", "duties": ["research-learning-and-reuse", "relations-routing-and-form", "execution-configuration-and-code", "resources-and-cleanup"], "procedure": "逐项追踪会影响结果的薄弱依赖；先测量再修改，以相同检查复测并保留失败覆盖。", "exit": "已定位问题得到修复或有界处置；性能、复杂度、验证成本的改善没有牺牲功能、安全与可恢复性。"},
-      {"id": "existing-host-functional-paths", "title": "现有宿主功能链路", "state": "pending", "duties": ["environment-and-self-exposure", "relations-routing-and-form", "execution-configuration-and-code", "context-and-task-continuity", "native-replacement-and-retirement"], "procedure": "将校准后的设计接入 Codex、Claude 的实际入口；为每项职责落实感知、选择、执行与效果观察，必要时组合或实现运行时。", "exit": "所选形态兑现同一功能和质量承诺；缺失执行者、仅有注入或评估器代劳均不得算作实现。"},
-      {"id": "cross-function-and-failure-validation", "title": "动态适应、干扰与故障验收", "state": "pending", "duties": ["environment-and-self-exposure", "correction-and-evolution", "recovery-and-rollback", "context-and-task-continuity", "resources-and-cleanup", "package-lifecycle", "verification-and-value"], "procedure": "按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。", "exit": "普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。"},
-      {"id": "version-and-release-qualification", "title": "3.2 定版、发布与收尾", "state": "pending", "duties": ["goal-authority-correction", "package-lifecycle", "verification-and-value", "resources-and-cleanup"], "procedure": "冻结精确候选；完成受影响的完整包证据、独立评审和托管检查；依用户条件授权发布新的 3.2。", "exit": "精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。"}
+      {"id":"source-foundation","title":"源头校准与继承基线","state":"implemented-local-unreleased","duties":["goal-authority-correction","premise-and-consistency","verification-and-value"],"procedure":"保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。","exit":"源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。"},
+      {"id":"system-bottlenecks","title":"系统短板与工程优化","state":"implemented-local-unreleased","duties":["research-learning-and-reuse","relations-routing-and-form","execution-configuration-and-code","resources-and-cleanup"],"procedure":"先核对官方原生能力、当前宿主暴露和 Accord 职责映射；按同一事实源派生索引与影响关系，列明缺口及验收，再追踪薄弱依赖并测量优化。","exit":"已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。"},
+      {"id":"existing-host-functional-paths","title":"模型、宿主原生覆盖与运行时拓扑核验","state":"active","duties":["environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"从实际需求与能力矩阵选择关键职责；按所需可靠性核对触发者、执行者、必要状态和故障接管者，选择适合的执行及状态拓扑；先验证宿主原生运行时，缺失时组合或实现必要机制。","exit":"普通入口实际兑现同一功能与质量；需确定触发、持续状态或恢复的职责有相应运行时支持，Skill 宣示、模拟图或评估器代劳不计完成。"},
+      {"id":"cross-function-and-failure-validation","title":"动态适应、干扰与故障验收","state":"pending","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。"},
+      {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup"],"procedure":"冻结精确候选；完成受影响的完整包证据、独立评审和托管检查；依用户条件授权发布新的 3.2。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。"}
     ],
     "priorityFindings": [
+      {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"已建立有日期和来源的原生能力—Accord 职责关系，连接当前工序、验收与变更重查；动态图 PoC 和纯核心不是实时宿主索引或执行器，普通入口的全链路闭环仍待验证。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
       {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Two worktree Skills and schema-v2 entry descriptors now implement host-driven, form-neutral guidance as unpublished 3.2.0-dev.2 packages. The Node invalidation helper is unchanged and optional. Static admission and ordinary-entry behavior are distinct; successor host effects remain unverified."},
       {"id": "ordinary-entry-effect-and-recovery", "status": "open", "basis": "Historical GT-20/21 include reference-only executor activity; ordinary entry and actual recovery remain per-function verification needs."},
@@ -351,7 +752,7 @@
   "environmentControl": {
     "productCommitment": "Dynamic adaptation is an original, binding product responsibility. Sense relevant current conditions, choose sufficient authorized means, execute and verify, then reassess dependent assumptions when conditions change. A clean host is not a universal operating precondition.",
     "cleanHostRequiredForProduct": false,
-    "evaluationRule": "Control or observe factors that can change the specific claim. Select matched comparison, isolation or explicit composition binding as needed; do not force every task through every arm. A working directory or alternate configuration directory alone is not isolation proof.",
+    "evaluationRule": "Control or observe factors that can change the specific claim. Select matched comparison, isolation or explicit composition binding as needed; do not force every task through every arm. A working directory or alternate configuration directory alone is not isolation proof. For model-related claims, include the model-plus-host baseline without Accord. Compare the same task, host, tools, permissions, model/effort and material context before attributing help or interference to Accord; a separate model-change comparison must identify that changed factor. Stronger model cognition is not equivalent to durable execution or universal task reliability.",
     "arms": [
       {"id": "native-control", "when": "Attributing incremental Accord effects against native behavior.", "boundary": "Same relevant task, host/model route, reasoning, permissions, data and budget, without Accord or undeclared assistance; preserve official built-ins and disclose unavoidable differences."},
       {"id": "deliverable-composition", "when": "Claiming a function is available to users of the delivered package.", "boundary": "The declared supported host plus exact Accord and explicit prerequisites; exclude inherited development memory, foreign Skills/Hooks/MCP, prior-turn answers and evaluator actuation. Official bundled capabilities are observed, not assumed absent or constant."},
@@ -362,6 +763,7 @@
     "selfUseBoundary": "This development conversation exposes installed Accord and other capabilities and inherited context. Its useful output is development assistance, not clean-host, independent behavioral or incremental-value evidence. Validate resulting artifacts through a separately bound normal entry.",
     "driftRule": "Observe decision-relevant setup before and after an arm and at material changes; invalidate affected comparisons or evidence when a factor changes. Preserve unaffected evidence with its original composition. Unknown loaded state remains unknown.",
     "adaptationScenarios": [
+      {"id":"model-native-gain","duties":["relations-routing-and-form","native-replacement-and-retirement","verification-and-value"],"trigger":"模型更新使原有弱项消失，或对指导、上下文和工具的响应方式改变。","requiredEffect":"在同等任务及宿主条件下重新建立无 Accord 的模型原生基线；确认冗余或干扰后按同责效果削减介入，仅补残余缺口。","failureOracle":"不能固化旧模型缺陷、将模型能力算作插件增益，或将 API 功能宣传当作当前宿主的执行证据。"},
       {"id":"model-fit-routing","duties":["relations-routing-and-form","environment-and-self-exposure","verification-and-value"],"trigger":"主任务或子任务需要不同模型/推理配置，或所选路线失效、漂移、不满足效果。","requiredEffect":"在授权候选中自动匹配足够能力并通过原生或必要组合执行，核对实际模型及结果；原生足够时不保留重复路由器。","failureOracle":"将默认继承、配置意图或品牌排名当作匹配证据；擅改用户钉定模型；无视别名/替代或虚称已切换。"},
       {"id": "native-sufficient", "duties": ["relations-routing-and-form", "native-replacement-and-retirement"], "trigger": "当前原生能力已足够。", "requiredEffect": "按需复用并减少介入，保持同一功能与质量；不为证明插件存在感强行接管。", "failureOracle": "无必要重造、冗余机制或将非介入冒充增量价值。"},
       {"id": "capability-loss", "duties": ["environment-and-self-exposure", "recovery-and-rollback", "execution-configuration-and-code"], "trigger": "所依赖能力不可用、降级或权限变化。", "requiredEffect": "识别受影响职责，选择足够的原生、组合或自建替代并验证；不可行时明确尚未完成。", "failureOracle": "不能静默削减功能，安全停止不能算成功。"},
@@ -419,7 +821,7 @@
         "name": "关系、动态索引、路线与形态选择",
         "goldenTasks": ["GT-13", "GT-16", "GT-17"],
         "activationWhen": "Responsibilities require allocation or an existing route is insufficient.",
-        "requiredOutcome": "Choose a feasible composition covering all bound functions, quality and relevant relations. Include needs-based main/subagent model and reasoning selection through sufficient native controls or an evidenced missing composition.",
+        "requiredOutcome": "Choose a feasible composition and execution/state topology covering all bound functions, quality and relevant relations. Include needs-based main/subagent model and reasoning selection through sufficient native controls or an evidenced missing composition; reconcile actor, ownership, permission and recovery relations when topology changes.",
         "normalEntry": "Agent decision using current host capabilities and any admitted reference or runtime support.",
         "failureOracle": "A cheap partial route cannot displace a sufficient one; a runtime cannot be excluded solely by form. Default inheritance, a requested model or an unverified switch cannot prove task-fit routing.",
         "dependsOn": ["goal-authority-correction", "environment-and-self-exposure"],
@@ -537,8 +939,8 @@
     ]
   },
   "changePolicy": {
-    "materialVariables": ["goal-and-quality", "host-client-model-and-reasoning", "interfaces-and-exposure", "active-package-and-configuration", "trust-and-permission", "data-state-and-resources", "evaluator-and-claim"],
-    "rule": "Treat change as normal. Re-sense decision-relevant facts from supported current sources, invalidate only dependent applicability, routes and claims, and revalidate the affected boundary. Missing signals justify just-in-time checks, not silent monitoring or a universal watcher.",
+    "materialVariables": ["goal-and-quality", "host-client-model-and-reasoning", "interfaces-and-exposure", "active-package-and-configuration", "trust-and-permission", "data-state-and-resources", "execution-state-and-failure-topology", "evaluator-and-claim"],
+    "rule": "Treat change as normal. Re-sense decision-relevant facts from supported current sources, invalidate only dependent applicability, routes and claims, and revalidate the affected boundary. Missing signals justify just-in-time checks, not silent monitoring or a universal watcher. Topology is also context-selected: keep it when sufficient, change it for an evidenced fit, failure or benefit, and reconcile actors, state ownership, permissions, surviving recovery and acceptance. Conversation, execution, code and deployment topology are distinct; a change to one does not authorize changes to the others or new consequential effects.",
     "versionRule": "Installed, enabled, cached and actually loaded versions are distinct observations. Evidence remains true of its original composition; changed assumptions require new applicability evidence before current reuse.",
     "replacementRule": "A new host capability may replace an exact duty after sufficient same-duty effect and lifecycle evidence. An unavailable mechanism restores uncertainty, not product retirement or a reduced requirement.",
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."

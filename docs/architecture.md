@@ -63,8 +63,36 @@ candidate capabilities to the need, then verify actual execution and effects.
 Do not equate default inheritance, requested aliases or a fixed brand ranking
 with effective matching. Native completeness can retire duplicate machinery,
 not erase a still-needed responsibility. Host-specific coverage and restrictions
-are recorded in `development.json#/implementation/modelSelection`; this is not
+are referenced by `development.json#/implementation/modelSelection` from the
+shared `capabilityMap`; this is not
 permission to override a pinned user selection or create a new provider route.
+
+The dated native-capability and Accord-duty matrices share `capabilityMap` in
+the development source, with official references, local interface observations,
+conditions, unverified effects and next probes. Duty ids join the existing
+outcome/dependency, procedure/exit and adaptation-scenario relations; derived
+views must not become another authoritative host database. The current local
+Codex protocol export establishes interface existence only, not daemon behavior
+or Desktop capability. Re-sense changed dependencies before relying on them.
+
+Native coverage also includes the model's own cognition and collaboration, not
+just host interfaces. The matrix distinguishes model, host-runtime and
+model/API-composed capabilities. Re-establish the same-task model-plus-host
+baseline without Accord after a relevant model change; retire redundant or
+interfering guidance instead of preserving assumptions about older models.
+Official GPT-6 Astra descriptions are dated candidates, not present-host effect
+receipts. Protocol support still needs an admitted application executor.
+
+Reliable execution needs a runtime, which may already be the host's Agent loop,
+tools, permissions, events and state carriers. A Skill alone is interpreted
+guidance, not a scheduler or guaranteed enforcement. For a required effect,
+identify the trigger, executor, necessary state and surviving failure owner.
+When native coverage is insufficient, compose or implement the needed runtime,
+including persistent machinery where justified. Keep no-op/native-sufficient
+paths light; do not let a runtime-free preference weaken the promised result.
+Neither the pure `closure.py` reference core nor the simulated graph PoC is a
+live discovery/execution layer. The development matrix makes this integration
+gap explicit; ordinary-entry effect and failure tests must close it.
 
 The open successor validates its actual changed paths. The predecessor's closed
 transition is checked at its immutable revision rather than against new worktree
