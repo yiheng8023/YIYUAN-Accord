@@ -43,6 +43,24 @@ acceptance. Its temporary directories and raw logs were removed. Dev.2 adds
 main/subagent model-fit guidance; validate actual task matching and execution,
 including inherited/substituted models, before claiming routing capability.
 
+The current dev.2 same-turn repair probe also produced correct artifacts in both
+arms, with preserved inputs and four fixture plus 200 independent deterministic
+cases per arm. Neither arm invoked a Skill. The native arm repaired its own
+introduced TypeError; the plugin arm's final explanation misstated a record
+relationship. Preserve these narrow findings and limits in
+`developmentObservations`; they are not full behavior or value acceptance.
+Both process jobs ended, and all 30 task-created files were removed. Evaluator
+containment and cleanup are not delivered recovery or cleanup capabilities.
+
+The user explicitly reopened the entire v3.1 chain, including Skill/Hook design
+and counts. Review the whole required chain before optimizing individual parts.
+Dev.2 admission describes one candidate; change it with a justified replacement
+instead of treating its layout as product law. Script/reference form bans were
+removed from development projections; exact package identity, declared files
+and legal checks still apply. Next test native cross-session state and failure
+ownership and the Hook's necessity, then revise the weakest actual connection.
+Do not force a Skill invocation or invent a runtime merely to create a contrast.
+
 The shared native/Accord capability map is in `development.json#/capabilityMap`
 and the generated plan. Its dated official references and local CLI/interface
 observations do not establish current behavior. Inspect the task-relevant

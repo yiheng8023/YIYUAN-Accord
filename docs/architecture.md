@@ -52,6 +52,14 @@ Neither suite alone establishes host behavior, outcome completion or value.
 
 The two worktree packages are now `3.2.0-dev.2`, unpublished and not installed.
 Their schema-v2 descriptors make the host Skill the ordinary executor entry.
+This describes the dev.2 candidate, not an immutable architecture. Skill/Hook
+count, layout, dependency choices and their validators can change with the
+required whole-chain outcome. Current admission still pins the exact dev.2
+descriptor and Hook transport; it is not a universal implementation engine.
+The development source no longer bans scripts or disclosed references by form;
+exact declared-file, digest and legal checks still reject unadmitted contents.
+When changing shape, revise its declaration and affected tests together rather
+than weakening identity checks or treating old rejection cases as design law.
 The unchanged Node SessionStart helper is an optional invalidation hint, not a
 required task runtime or a complete recovery implementation. Repository Python
 checks are maintainer tooling, not ordinary-user prerequisites. The installed
@@ -93,6 +101,16 @@ paths light; do not let a runtime-free preference weaken the promised result.
 Neither the pure `closure.py` reference core nor the simulated graph PoC is a
 live discovery/execution layer. The development matrix makes this integration
 gap explicit; ordinary-entry effect and failure tests must close it.
+
+The dev.2 same-turn repair observation in `developmentObservations` covers
+native tool execution, correction, preserved inputs and independently rechecked
+artifacts on the existing Claude Code/DeepSeek route. Both arms passed the code
+checks without calling a Skill; the plugin arm also made a factual mistake in
+its final explanation. This does not establish Accord value, explanation
+reliability, cross-session state, surviving-executor recovery or Hook necessity.
+The test observer owned process containment and residue cleanup, not the DUT.
+Prioritize those remaining connections instead of turning this local pass into
+system acceptance or mandating more guidance for an already sufficient route.
 
 The open successor validates its actual changed paths. The predecessor's closed
 transition is checked at its immutable revision rather than against new worktree

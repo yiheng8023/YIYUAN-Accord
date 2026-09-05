@@ -11,7 +11,7 @@
 |---|---|---|---|
 | 源头校准与继承基线 | 本地实现，未发布 | 保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。 | 源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。 |
 | 系统短板与工程优化 | 本地实现，未发布 | 先核对官方原生能力、当前宿主暴露和 Accord 职责映射；按同一事实源派生索引与影响关系，列明缺口及验收，再追踪薄弱依赖并测量优化。 | 已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。 |
-| 模型、宿主原生覆盖与运行时拓扑核验 | 进行中 | 从实际需求与能力矩阵选择关键职责；按所需可靠性核对触发者、执行者、必要状态和故障接管者，选择适合的执行及状态拓扑；先验证宿主原生运行时，缺失时组合或实现必要机制。 | 普通入口实际兑现同一功能与质量；需确定触发、持续状态或恢复的职责有相应运行时支持，Skill 宣示、模拟图或评估器代劳不计完成。 |
+| 整体执行链、原生覆盖与遗留形态审查 | 进行中 | 沿需求触发、事实与选择、执行及状态、故障接管、结果验收、清理检查连接关系；把既有 Skill/Hook、数量和校验形态视为候选假设。用普通入口对照观察原生覆盖与缺口，按必要职责重构并同步受影响的工序、包结构与验收。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
 | 动态适应、干扰与故障验收 | 待开展 | 按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。 | 普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。 |
 | 3.2 定版、发布与收尾 | 待开展 | 冻结精确候选；完成受影响的完整包证据、独立评审和托管检查；依用户条件授权发布新的 3.2。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。 |
 
@@ -22,17 +22,17 @@
 | 职责 | 所属工序 | 历史需求与反例参考 |
 |---|---|---|
 | 目标、授权与用户纠正 | 源头校准与继承基线、3.2 定版、发布与收尾 | GT-03, GT-04, GT-10, GT-13 |
-| 环境感知与自身能力识别 | 模型、宿主原生覆盖与运行时拓扑核验、动态适应、干扰与故障验收 | GT-08, GT-14, GT-19 |
+| 环境感知与自身能力识别 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收 | GT-08, GT-14, GT-19 |
 | 按需研究、学习与复用发现 | 系统短板与工程优化 | GT-15 |
-| 关系、动态索引、路线与形态选择 | 系统短板与工程优化、模型、宿主原生覆盖与运行时拓扑核验 | GT-13, GT-16, GT-17 |
-| 执行、配置与代码操作 | 系统短板与工程优化、模型、宿主原生覆盖与运行时拓扑核验 | GT-02, GT-11, GT-16 |
+| 关系、动态索引、路线与形态选择 | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | GT-13, GT-16, GT-17 |
+| 执行、配置与代码操作 | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | GT-02, GT-11, GT-16 |
 | 源头变更与全局一致性 | 源头校准与继承基线 | GT-17 |
 | 纠错、经验吸收与受控演进 | 动态适应、干扰与故障验收 | GT-05, GT-18 |
-| 故障恢复与回滚 | 模型、宿主原生覆盖与运行时拓扑核验、动态适应、干扰与故障验收 | GT-18, GT-20 |
-| 上下文与任务连续性 | 模型、宿主原生覆盖与运行时拓扑核验、动态适应、干扰与故障验收 | GT-07, GT-21 |
+| 故障恢复与回滚 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收 | GT-18, GT-20 |
+| 上下文与任务连续性 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收 | GT-07, GT-21 |
 | 资源管理与清理 | 系统短板与工程优化、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-09, GT-12 |
 | 安装、更新与卸载生命周期 | 动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-20 |
-| 原生接替、旁路与退役 | 模型、宿主原生覆盖与运行时拓扑核验 | GT-01, GT-19 |
+| 原生接替、旁路与退役 | 整体执行链、原生覆盖与遗留形态审查 | GT-01, GT-19 |
 | 结果验证、独立证据与实际价值 | 源头校准与继承基线、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-04, GT-06, GT-14 |
 
 ## 原生能力与 Accord 职责矩阵
@@ -83,7 +83,7 @@ One versioned semantic source supplies the native matrix, Accord duty matrix and
 
 At a relevant decision, inspect the running client, actual provider/model, policy and exposed interface. Version/feature/configuration/package/permission changes, a supported invalidation event, source contradiction, missing observation or failed effect reopen affected applicability. Re-read supported state and only the needed official documentation; no automatic network watcher or fixed global expiry is installed. Retain the dated observation as history, never as permanently current support.
 
-The delivered host Skill guides task-time discovery, decision, execution and verification, but its actual use and end-to-end effects remain unverified for dev.2. closure.py is a no-I/O reference decision core; research/PROTOTYPE-dynamic-relation-graph.html is a simulated in-memory PoC. Neither is a live host index or automatic executor. This development view does not close that ordinary-entry integration gap.
+The dev.2 host Skill supplies guidance, not a proven system executor. A bounded same-turn Claude Code/DeepSeek repair probe produced correct artifacts with and without Accord; neither arm invoked a Skill. Its observation is in developmentObservations, not whole-system acceptance. Cross-session state, surviving recovery and the Hook's necessary effect remain open. closure.py is a no-I/O reference core and the graph HTML is a simulated PoC; neither is a live host index or automatic executor.
 
 运行时分配要求：依赖运行时不等于必须自建运行时。按所需可靠性绑定触发者、实际执行者、必要状态载体和故障后的接管者；一轮任务可只需宿主现有 Agent 循环和上下文。要求确定触发、强制约束、跨轮或跨会话状态、无人值守推进或故障后继续执行时，核验宿主是否覆盖这些职责；缺失则组合或实现最小足够运行时，包括必要的持久机制。Skill 是 Agent 可解释的指导，不是独立调度器或强制执行保证。运行时增加也不自动证明业务效果；仍验收普通入口、失败及独立后态。当前缺口未闭合前不宣称仅靠 Skill 足够。
 
@@ -112,10 +112,11 @@ The delivered host Skill guides task-time discovery, decision, execution and ver
 
 ## 当前短板及证据边界
 
+- `candidate-shape-and-whole-chain-review` — `reviewed-not-architecture-frozen`：dev.2 仍是单 Skill 加固定 SessionStart Hint 的候选形态；开发校验器也按该形态核验，不是通用形态引擎。已移除源数据中脚本/参考文件的冗余禁令，仍拒绝未声明文件及包摘要不符。Skill/Hook、核心、运行时及其数量均可因完整职责而改变，届时同步改声明、校验和验收，不靠放松摘要绕过。当前 Hook 只在恢复/压缩时输出提示；无状态查询、调度或恢复执行。纯核心及图 PoC 未接入普通入口，不能拼成一个已经闭合的系统。
 - `native-accord-capability-map` — `mapped-interface-evidence-not-runtime-closure`：已建立有日期和来源的原生能力—Accord 职责关系，连接当前工序、验收与变更重查；动态图 PoC 和纯核心不是实时宿主索引或执行器，普通入口的全链路闭环仍待验证。
 - `needs-based-model-and-subagent-routing` — `implemented-guidance-native-coverage-under-review`：主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。
 - `source-to-projection-convergence` — `implemented-local-unverified`：Two worktree Skills and schema-v2 entry descriptors now implement host-driven, form-neutral guidance as unpublished 3.2.0-dev.2 packages. The Node invalidation helper is unchanged and optional. Static admission and ordinary-entry behavior are distinct; successor host effects remain unverified.
-- `ordinary-entry-effect-and-recovery` — `open`：Historical GT-20/21 include reference-only executor activity; ordinary entry and actual recovery remain per-function verification needs.
+- `ordinary-entry-effect-and-recovery` — `open`：dev.2 在 Claude Code/DeepSeek 的单轮修复对照中，两组均实际运行测试、生成正确结果、保留输入，外部各复验 200 例；均未调用 Skill，不能归因 Accord。原生组自行修复一次新增代码错误；插件组说明含记录关系错误，叙述可信度未闭合。跨会话状态、失败后的存活接管、Hook 的必要性及包生命周期仍需普通入口验证，不能用同轮重试或评估器清理替代。
 - `verification-io-amplification` — `implemented-local-measured`：同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。
 - `acceptance-cost-and-coupling` — `implemented-local-unverified`：Current verify/host-check now dispatch to development-package admission without promoting or repeatedly replaying historical behavior. Retained rejection tests run current verifier code against the immutable predecessor subject. Package safety, identity, complexity, source preservation and dirty-worktree gates remain applicable; current functional and host evidence are still unverified.
 
