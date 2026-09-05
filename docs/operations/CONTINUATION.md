@@ -91,7 +91,8 @@ and the generated plan. Its dated official references and local CLI/interface
 observations do not establish current behavior. Inspect the task-relevant
 native entry before adding machinery; bind trigger, executor, necessary state
 and surviving recovery actor for reliability-sensitive duties. Use or build
-runtime support where a real gap requires it. The historical no-I/O core and
+needed mechanisms where a real gap requires them, without presuming that the
+solution is a runtime. The historical no-I/O core and
 simulated graph PoC are not delivered automatic host integration. Source
 validation and linked matrices cannot close that functional acceptance gap.
 
@@ -119,7 +120,7 @@ The latest user correction reports some installed Accord influence and a valued
 pre-Accord experience: autonomous handoff, destination verification before
 source release, and ongoing correction aligned with upstream/downstream work.
 The user explicitly clarified that handoff is an example, not a narrowed main
-task. Continue whole-system functional closure and runtime allocation across
+task. Continue whole-system functional closure and mechanism allocation across
 applicable responsibilities and their dependencies; use continuity as one
 cross-function scenario. Do not describe zero perceived value or optimize size
 at the expense of necessary functionality and user experience. Source review found
@@ -128,6 +129,17 @@ a Hook-owned scheduler. See `capabilityMap.localObservations` entry
 `codex-continuity-history-review` and the revised continuity duty for exact
 history, current native release caveats and next failure probes. This review
 did not run a handoff, restore a runtime or change either delivered package.
+The latest correction also leaves runtime necessity open: Hooks, scripts,
+native controls or another combination may explain the experience. Attribute
+effects to verified responsibilities and execution, not an artifact name.
+
+The historical-reference scanner now admits verified immutable inline Markdown
+citations in current development, without exempting whole files or relaxing the
+legacy default. It checks the canonical repository, ancestor commit and typed
+target through bounded local Git reads. Surrounding text, executable/literal
+contexts and unverified targets still fail. General uncited historical prose
+and JSON strings remain outside this bounded correction. It improves maintainer
+traceability, not ordinary-entry functionality or release eligibility.
 
 The navigation and current-state narrative below belong to the predecessor;
 consult them for historical evidence or unchanged contracts, not as a second

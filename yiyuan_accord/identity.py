@@ -533,12 +533,95 @@ def _bounded_regular_bytes(path):
     return source, None
 
 
+def _historical_markdown_text(root, text, repository, matches_identity, checked):
+    """Discount verified citation spans, never their surrounding prose or code."""
+    link = re.compile(r"(?<!!)\[([^\[\]\r\n]{1,256})\]\((https://[^\s()<>]+)\)")
+    target = re.compile(
+        re.escape(repository.rstrip("/"))
+        + r"/(commit|blob|tree)/([0-9a-f]{40})(/[^?#%\\\s]+)?$"
+    )
+
+    def replace(match):
+        nonlocal citation_end, bracket_depth
+        prefix = match.string[citation_end:match.start()]
+        bracket_depth += prefix.count("[") - prefix.count("]")
+        citation_end = match.end()
+        if bracket_depth:
+            return match.group(0)
+        if not matches_identity(_folded_visible_text(match.group(0))):
+            return match.group(0)
+        url = match.group(2)
+        if url not in checked:
+            if len(checked) >= 32:
+                raise _IdentityScanUnknown("historical citation budget exceeded")
+            checked[url] = False
+            parts = target.fullmatch(url)
+            if parts:
+                kind, revision, suffix = parts.groups()
+                path = suffix[1:] if suffix else None
+                valid_path = (path is not None and all(
+                    part not in {"", ".", ".."} for part in path.split("/")))
+                if (kind == "commit" and path is None) or (kind != "commit" and valid_path):
+                    try:
+                        commit_type = _bounded_git_bytes(root, (
+                            "--no-replace-objects", "cat-file", "-t", revision), 128)
+                        _bounded_git_bytes(root, (
+                            "--no-replace-objects", "merge-base", "--is-ancestor", revision, "HEAD"), 128)
+                        object_type = commit_type if path is None else _bounded_git_bytes(root, (
+                            "--no-replace-objects", "cat-file", "-t", f"{revision}:{path}"), 128)
+                        checked[url] = (commit_type.strip() == b"commit"
+                                        and object_type.strip().decode("ascii") == kind)
+                    except (OSError, UnicodeError, subprocess.SubprocessError):
+                        pass
+        return "[verified historical citation]" if checked[url] else match.group(0)
+
+    lines, fence, inline_ticks, html_end = [], None, None, None
+    for line in text.splitlines(keepends=True):
+        marker = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line.rstrip("\r\n"))
+        html_tag = re.match(r"^ {0,3}<([A-Za-z][A-Za-z0-9-]*)\b", line)
+        if fence:
+            if (marker and marker[1][0] == fence[0] and len(marker[1]) >= len(fence)
+                    and not marker[2].strip()):
+                fence = None
+        elif marker:
+            fence = marker[1]
+        elif html_end:
+            if re.search(html_end, line, re.IGNORECASE):
+                html_end = None
+            if line.rfind("<!--") > line.rfind("-->"):
+                html_end = "-->"
+        elif "<!--" in line:
+            html_end = "-->" if line.rfind("<!--") > line.rfind("-->") else None
+        elif html_tag:
+            tag = html_tag[1].casefold()
+            end = rf"</{re.escape(tag)}\s*>" if tag in {
+                "script", "style", "pre", "textarea", "code",
+            } else r"^\s*$"
+            html_end = None if re.search(end, line, re.IGNORECASE) else end
+        else:
+            was_inline = inline_ticks is not None
+            for ticks in re.finditer(r"(?<!\\)`+", line):
+                if inline_ticks is None:
+                    inline_ticks = len(ticks[0])
+                elif inline_ticks == len(ticks[0]):
+                    inline_ticks = None
+            if (not was_inline and inline_ticks is None
+                    and not re.match(r"^(?: {4}|\t| {0,3}#)", line)
+                    and not any(character in line for character in "`\\<>")):
+                citation_end, bracket_depth = 0, 0
+                line = link.sub(replace, line)
+        lines.append(line)
+    return "".join(lines)
+
+
 def active_tree_errors(
     root,
     locators,
     historical_revision,
     historical_reference_locators=(),
     digest_bound_binary_assets=None,
+    *,
+    historical_repository=None,
 ):
     locators = list(locators)
     locator_set = set(locators)
@@ -598,11 +681,22 @@ def active_tree_errors(
     except (OSError, ValueError, json.JSONDecodeError, subprocess.SubprocessError):
         return sorted(errors + ["historical identity boundary is unavailable"])
 
+    if historical_repository is not None and (
+        not isinstance(historical_repository, str)
+        or re.fullmatch(r"https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", historical_repository) is None
+    ):
+        return sorted(errors + ["historical citation repository is invalid"])
+    checked_citations = {}
     exact_tokens = tuple(
         normalize("NFKC", value).casefold() for value in (product_id, title)
     )
     exact_matchers = tuple(_identity_token(token) for token in exact_tokens)
     module_token = _identity_word(module)
+
+    def matches_identity(text):
+        return (any(matcher.search(text) for matcher in exact_matchers)
+                or bool(module_token.search(text)))
+
     for locator in locators:
         if locator in symlinks:
             continue
@@ -648,8 +742,12 @@ def active_tree_errors(
         if locator in references:
             continue
 
-        folded_text = _folded_visible_text(text)
         try:
+            if historical_repository is not None and suffix == ".md":
+                text = _historical_markdown_text(
+                    root, text, historical_repository, matches_identity, checked_citations,
+                )
+            folded_text = _folded_visible_text(text)
             if is_python:
                 identity_present = _python_ref(
                     text, module, exact_tokens

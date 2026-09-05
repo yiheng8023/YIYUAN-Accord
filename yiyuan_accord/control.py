@@ -6663,6 +6663,7 @@ def _verify_development_product(root):
                   if item.get("kind") == "historical-release-and-counterevidence-boundary"), None),
             {item["repositoryLocator"] for item in historical if "repositoryLocator" in item},
             program["complexityBudget"].get("digestBoundBinaryAssets"),
+            historical_repository=identity["repository"],
         ))
         for field in ("maxProductCodeAndTestBytes", "maxTrackedFiles"):
             program["complexityBudget"]["targets"][field] = development["complexityBudget"][field]

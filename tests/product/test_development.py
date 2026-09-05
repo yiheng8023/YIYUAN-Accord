@@ -452,6 +452,120 @@ class DevelopmentDeliveryTests(unittest.TestCase):
             self.assertTrue(host["staticReady"])
             self.assertEqual(host["behaviorEvidenceState"], "unverified")
 
+    def historical_source(self):
+        program = json.loads((self.root / "product/program.json").read_text(encoding="utf-8"))
+        revision = next(item["revision"] for item in program["inputEvidence"]
+                        if item["kind"] == "historical-release-and-counterevidence-boundary")
+        historical_readme = subprocess.check_output(
+            ["git", "show", f"{revision}:README.md"], cwd=self.root, encoding="utf-8")
+        title = next(line[2:] for line in historical_readme.splitlines() if line.startswith("# "))
+        repository = json.loads((self.root / "product/constitution.json").read_text(
+            encoding="utf-8"))["identity"]["repository"]
+        return revision, title, repository
+
+    def test_exact_historical_citation_is_not_an_active_identity(self):
+        revision, title, repository = self.historical_source()
+        locator = "docs/architecture.md"
+        original = (self.root / locator).read_bytes()
+        citation = f"\nHistorical source: [{title}]({repository}/blob/{revision}/README.md)\n"
+        with self.changed(locator, original + citation.encode("utf-8")):
+            report = self.report()
+            self.assertTrue(report["valid"], report["errors"])
+            self.assertFalse(report["functionalCompletion"])
+
+    def test_historical_links_do_not_exempt_surrounding_text_or_executable_surfaces(self):
+        from yiyuan_accord.identity import active_tree_errors
+        revision, title, repository = self.historical_source()
+        link = f"[{title}]({repository}/blob/{revision}/README.md)"
+        cases = [
+            ("fixture.md", f"{link}\nActive identity: {title}\n"),
+            ("fixture.md", f"# {link}\n"),
+            ("fixture.md", f"`{link}`\n"),
+            ("fixture.md", f"`literal\n{link}\n`\n"),
+            ("fixture.md", f"<!--\n{link}\n-->\n"),
+            ("fixture.md", f"<pre>\n{link}\n</pre>\n"),
+            ("fixture.md", f"```text\n{link}\n```\n"),
+            ("fixture.md", f"~~~text\n{link}\n~~~\n"),
+            ("fixture.md", f"    {link}\n"),
+            ("fixture.md", f"![{title}]({repository}/blob/{revision}/README.md)\n"),
+            ("fixture.md", f"![nested {link}](image.png)\n"),
+            ("fixture.md", f"[nested {link}](https://example.invalid)\n"),
+            ("fixture.py", f"value = {link!r}\n"),
+            ("fixture.json", json.dumps({"module": link})),
+            ("fixture.sh", f"echo '{link}'\n"),
+        ]
+        for locator, body in cases:
+            with self.subTest(locator=locator, body=body), self.changed(locator, body.encode()):
+                errors = active_tree_errors(self.root, [locator], revision,
+                                            historical_repository=repository)
+                self.assertTrue(any("superseded identity" in error for error in errors), errors)
+        with self.changed("fixture.md", link.encode()):
+            self.assertTrue(any("superseded identity" in error for error in active_tree_errors(
+                self.root, ["fixture.md"], revision)))
+
+    def test_historical_link_targets_are_exact_local_history_not_textual_allowlisting(self):
+        from yiyuan_accord.identity import active_tree_errors
+        revision, title, repository = self.historical_source()
+        prefix = f"{repository}/blob/{revision}"
+        urls = [
+            f"{repository}/blob/main/README.md", f"{repository}/blob/{revision[:7]}/README.md",
+            f"{repository}/blob/{'0' * 40}/README.md", f"{prefix}/missing-source.md",
+            f"{repository}/blob/{revision}/product", f"{repository}/tree/{revision}/README.md",
+            f"{prefix}/../README.md", f"{prefix}/%52EADME.md", f"{prefix}/README.md?raw=true",
+            f"{prefix}/README.md#unverified", f"{prefix}/README.md/",
+            f"{repository}.invalid/blob/{revision}/README.md",
+        ]
+        tree = subprocess.check_output(["git", "rev-parse", f"{revision}^{{tree}}"],
+                                       cwd=self.root, encoding="ascii").strip()
+        orphan = subprocess.check_output(
+            ["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+             "commit-tree", tree], input=b"isolated unrelated history\n", cwd=self.root).decode().strip()
+        urls += [f"{repository}/commit/{orphan}", f"{repository}/commit/{tree}"]
+        for url in urls:
+            with self.subTest(url=url), self.changed("fixture.md", f"[{title}]({url})".encode()):
+                errors = active_tree_errors(self.root, ["fixture.md"], revision,
+                                            historical_repository=repository)
+                self.assertTrue(any("superseded identity" in error for error in errors), errors)
+        for route in (f"commit/{revision}", f"tree/{revision}/product", f"blob/{revision}/README.md"):
+            with self.subTest(route=route), self.changed(
+                    "fixture.md", f"Historical source: [{title}]({repository}/{route})".encode()):
+                self.assertEqual(active_tree_errors(self.root, ["fixture.md"], revision,
+                                                   historical_repository=repository), [])
+
+    def test_historical_reference_checks_are_bounded_cached_and_fail_closed(self):
+        from yiyuan_accord import identity
+        revision, title, repository = self.historical_source()
+        link = f"[{title}]({repository}/blob/{revision}/README.md)\n"
+        original, calls = identity._bounded_git_bytes, []
+
+        def capture(root, arguments, *args, **kwargs):
+            calls.append(arguments)
+            return original(root, arguments, *args, **kwargs)
+
+        for body in (link * 100, (link.rstrip() + " ") * 100):
+            calls.clear()
+            with self.changed("fixture.md", body.encode()), patch.object(
+                    identity, "_bounded_git_bytes", side_effect=capture):
+                self.assertEqual(identity.active_tree_errors(self.root, ["fixture.md"], revision,
+                                                            historical_repository=repository), [])
+            self.assertEqual(sum(args[0] == "--no-replace-objects" for args in calls), 3)
+
+        def unavailable(root, arguments, *args, **kwargs):
+            if arguments[0] == "--no-replace-objects":
+                raise subprocess.SubprocessError("probe unavailable")
+            return original(root, arguments, *args, **kwargs)
+
+        with self.changed("fixture.md", link.encode()), patch.object(
+                identity, "_bounded_git_bytes", side_effect=unavailable):
+            errors = identity.active_tree_errors(self.root, ["fixture.md"], revision,
+                                                historical_repository=repository)
+            self.assertTrue(any("superseded identity" in error for error in errors), errors)
+        links = "\n".join(f"[{title}]({repository}/blob/{revision}/missing-{i})" for i in range(33))
+        with self.changed("fixture.md", links.encode()):
+            errors = identity.active_tree_errors(self.root, ["fixture.md"], revision,
+                                                historical_repository=repository)
+            self.assertTrue(any("indeterminate" in error for error in errors), errors)
+
     def test_static_source_pass_cannot_hide_changed_or_missing_skill(self):
         for projection in self.contract["delivery"]["hostProjections"]:
             locator = projection["skill"]

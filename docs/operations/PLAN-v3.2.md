@@ -115,7 +115,7 @@ At a relevant decision, inspect the running client, actual provider/model, polic
 
 The dev.3 host Skill supplies adaptive guidance, not a proven system executor. Historical dev.2 Claude Code/DeepSeek probes show bounded native repair and same-session resume after a normal process restart with input drift. The resume deliverable arm invoked the Skill and emitted a successful Hook hint, but native control also succeeded. These observations do not qualify changed dev.3 behavior, incremental value, surviving failure ownership, zero-history handoff or package lifecycle. closure.py is a no-I/O reference core and the graph HTML is a simulated PoC; neither is a live host index or automatic executor.
 
-运行时分配要求：依赖运行时不等于必须自建运行时。按所需可靠性绑定触发者、实际执行者、必要状态载体和故障后的接管者；一轮任务可只需宿主现有 Agent 循环和上下文。要求确定触发、强制约束、跨轮或跨会话状态、无人值守推进或故障后继续执行时，核验宿主是否覆盖这些职责；缺失则组合或实现最小足够运行时，包括必要的持久机制。Skill 是 Agent 可解释的指导，不是独立调度器或强制执行保证。运行时增加也不自动证明业务效果；仍验收普通入口、失败及独立后态。当前缺口未闭合前不宣称仅靠 Skill 足够。
+运行时分配要求：不预设必须依赖独立运行时，也不预设无运行时足够。按所需可靠性绑定触发者、实际执行者、必要状态载体和故障后的接管者，再判断宿主原生机制、Hook、脚本、Skill 或其它对象的组合是否兑现；一轮任务可只需宿主现有 Agent 循环和上下文。对确定触发、强制约束、跨轮状态、无人值守推进或故障后继续执行，核验实际职责与效果，而非用对象名称代替判断。仅在现有组合确有执行、状态或恢复缺口时补足相应机制，包括有依据的持久运行时。Skill 是可解释指导，不是独立调度器或强制执行保证；历史良好体验也不能单独归因于运行时。任何组合仍须验收普通入口、失败及独立后态。
 
 源数据中的职责依赖、工序、场景和能力引用构成评审关系；它们不证明插件已经执行该链路。
 
@@ -153,7 +153,7 @@ The dev.3 host Skill supplies adaptive guidance, not a proven system executor. H
 - `conditional-alignment-and-external-discovery` — `observed-research-to-delivery-gap-open`：dev.3 无参考的原生/插件组均未在有界预算内交付；同样补充官方参考后，原生组产出代码但说明有误，插件组实际调用 Skill 仍超预算未产出。不是完整原生成功或插件收益证据，单例也不证明因果。下一步审查发现—证据足够—执行—验收的收敛与上下文负担，不以强制调用、追加全局规则或增加预算冒充修复。
 - `source-to-projection-convergence` — `implemented-local-unverified`：Both worktree Skills now project conditional alignment, external discovery and effective-environment guidance as unpublished 3.2.0-dev.3 packages. Schema-v2 entry descriptors and optional Node hints are unchanged. These are context-triggered duties, not a fixed SOP. Static admission does not prove current host effects.
 - `ordinary-entry-effect-and-recovery` — `open`：用户已校准为能感受到一定影响；项目重塑前自动交接和持续纠偏是体验例证，不是新主线或全部功能范围，也不证明旧运行时的因果收益。整体目标仍是 Agent 承担必要任务机制，避免把可自主完成的工作转回用户。按需求、能力发现/匹配、执行、状态/资源、纠偏、恢复和验收的实际依赖闭合，不按单个例子或包大小裁剪。历史状态 Hook 与原生 Agent 的接续组合是一个已追溯案例；当前普通入口的整体功能、自动交接、幸存接管者与完整生命周期仍待验。保留调研未交付及评估器恢复的证据边界。
-- `historical-reference-identity-coupling` — `observed-open`：本轮完整校验把明确标为历史的旧名称及不可变提交中的旧路径也判为活动身份残留，5 个当前说明/源文件被拒绝。当前用精确历史提交定位保持迁移身份约束，但并未修复语义误判。后续区分现役包、模块、导入与可审阅历史引用，保留身份/路径防回退和恶意伪装拒绝；不能靠全文件豁免或统一字符串禁令代替职责适用性判断。
+- `historical-reference-identity-coupling` — `implemented-bounded-regression-verified`：当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。
 - `verification-io-amplification` — `implemented-local-measured`：同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。
 - `acceptance-cost-and-coupling` — `implemented-local-unverified`：Current verify/host-check now dispatch to development-package admission without promoting or repeatedly replaying historical behavior. Retained rejection tests run current verifier code against the immutable predecessor subject. Package safety, identity, complexity, source preservation and dirty-worktree gates remain applicable; current functional and host evidence are still unverified.
 

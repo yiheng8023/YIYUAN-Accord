@@ -119,13 +119,13 @@ interfering guidance instead of preserving assumptions about older models.
 Official GPT-6 Astra descriptions are dated candidates, not present-host effect
 receipts. Protocol support still needs an admitted application executor.
 
-Reliable execution needs a runtime, which may already be the host's Agent loop,
-tools, permissions, events and state carriers. A Skill alone is interpreted
-guidance, not a scheduler or guaranteed enforcement. For a required effect,
-identify the trigger, executor, necessary state and surviving failure owner.
-When native coverage is insufficient, compose or implement the needed runtime,
-including persistent machinery where justified. Keep no-op/native-sufficient
-paths light; do not let a runtime-free preference weaken the promised result.
+Reliable execution needs sufficient mechanisms, not a predetermined artifact
+called a runtime. Identify the trigger, executor, necessary state and surviving
+failure owner for the required effect. Verify whether native Agent tools, Hooks,
+scripts, interpreted guidance or another composition cover those duties. A Skill
+alone is not a scheduler or guaranteed enforcement. Fill evidenced execution,
+state or recovery gaps, including persistent machinery where justified. Neither
+a mandatory-runtime premise nor a runtime-free preference may weaken the result.
 Neither the pure `closure.py` reference core nor the simulated graph PoC is a
 live discovery/execution layer. The development matrix makes this integration
 gap explicit; ordinary-entry effect and failure tests must close it.
@@ -133,13 +133,14 @@ gap explicit; ordinary-entry effect and failure tests must close it.
 The user's later feedback is some perceived Accord influence, with a stronger
 pre-Accord experience of autonomous handoff and ongoing upstream/downstream
 correction. It is a useful outcome target, not measured runtime causality.
-The reviewed historical Hook at `65466c5` stored lifecycle counters but delegated
+The reviewed [Agent Autonomy Harness Hook](https://github.com/yiheng8023/YIYUAN-Accord/blob/65466c565096b5c175c8b3b1242aa5bf6439b82d/adapters/agent-autonomy-harness-codex/scripts/carrier_hook.py)
+stored lifecycle counters but delegated
 transition and verification to the Agent's native tools. Its fixed compaction
 threshold and copied-history fork are historical choices, not a successor design.
 Continuity is one example of the whole-system responsibility floor, not a new
-primary scope or the entire runtime rationale. Review required duties and their
-cross-function dependencies against user outcomes; runtime allocation serves
-all applicable execution, state, correction, recovery and resource needs.
+primary scope or proof that a runtime is necessary. Review required duties and
+cross-function dependencies against user outcomes; allocate mechanisms to the
+applicable execution, state, correction, recovery and resource needs.
 For the continuity example, the development source binds:
 observed need, an authorized executor, necessary state, destination reconciliation
 and safe source release without repeated manual prompting. On failure, retain
@@ -150,6 +151,13 @@ archiving can affect spawned descendants; unsubscribing is not immediate runtime
 unload. These are interface findings, not tested Desktop effects or permission
 to change an existing user's tasks. Recheck actual entry semantics and observe
 the promised post-state before claiming release or resource savings.
+
+Current development identity checks admit simple inline Markdown citations to
+the canonical repository's full ancestor commits and existing typed objects.
+Only the verified link span is discounted; surrounding text, active paths and
+executable/literal contexts remain checked. Bounded, cached local Git queries
+fail closed on unverifiable targets. This is not a general historical-prose
+exception or a full Markdown parser; legacy default scanning is unchanged.
 
 The dev.2 same-turn repair observation in `developmentObservations` covers
 native tool execution, correction, preserved inputs and independently rechecked
