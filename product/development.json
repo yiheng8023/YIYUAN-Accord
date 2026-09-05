@@ -5,7 +5,7 @@
   "status": "in-development",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition. Later user corrections require greater completeness and coverage beyond the known v3.1 issue list. Little perceived installed-v3.1 benefit is user feedback to investigate, not measured zero value.",
+    "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition. Later corrections require coverage beyond known v3.1 issues. The user does perceive some installed-v3.1 influence and recalls stronger pre-Accord automatic verified handoff and ongoing correction. Preserve this as reported experience, not measured causal runtime benefit or a zero-value finding. Size reduction must preserve necessary functionality and user experience; runtime retirement is not a goal.",
     "scope": ["source-semantics", "full-function-acceptance-mapping", "local-contract-validation", "matching-navigation-and-glossary", "whole-system-optimization", "existing-host-functional-closure", "next-version-development", "controlled-existing-host-evaluation", "conditional-v3.2-release"],
     "notGranted": ["new-host-experiments", "personal-environment-installation-or-enablement", "new-trust-data-or-material-cost", "unrelated-external-writes", "rewrite-historical-tags-or-releases"],
     "conditionalRelease": {"target":"3.2.0","decision":"user-authorized-after-acceptance","ready":false,"conditions":["all-in-scope-changes-committed-and-exact-candidate-pushed","all-required-functional-and-quality-acceptance","fresh-exact-package-and-affected-host-evidence","independent-review-and-hosted-checks","exact-candidate-and-canonical-target-verification","ordered-publication-poststate-and-task-residue-closure","release-notes-match-exact-candidate-and-evidence"],"rule":"Prepare and publish the accepted 3.2 candidate under this bound user direction. Commit and push the complete in-scope candidate before publication; bind hosted checks and the new release to the same immutable SHA and exclude unrelated dirty work. This intent is not present readiness. Resolve a materially new cost, trust, data or destructive effect before it occurs; do not rewrite prior releases or repeatedly ask the user to reconfirm this same direction."},
@@ -148,7 +148,7 @@
   "supportingPrinciples": {
     "class": "strategy",
     "precondition": "Safety, compliance and the full bound functional and quality commitment constrain these strategies. They optimize how the commitment is fulfilled; they cannot silently reduce it.",
-    "subtraction": "Remove duplication, ineffective work or displaced mechanisms only while preserving the required effects and applicable failure coverage.",
+    "subtraction": "Remove duplication, ineffective work or displaced mechanisms only while preserving required effects, user experience and applicable failure coverage. Smaller code, fewer dependencies or less persistent state are not improvements if necessary orchestration or recovery work returns to the user.",
     "restraint": "Avoid unnecessary intervention and complexity; invest in sufficient mechanisms, including a runtime, when required by the result.",
     "fallback": "Contain failure and preserve a safe state, then own the feasible authorized recovery path. If the result remains unmet, disclose the gap; a safe stop is not functional completion.",
     "gapFilling": "Supply or compose the exact capability or coordination missing from the current environment, then reassess its need when native conditions change.",
@@ -379,6 +379,14 @@
     "runtimeGap": "The dev.3 host Skill supplies adaptive guidance, not a proven system executor. Historical dev.2 Claude Code/DeepSeek probes show bounded native repair and same-session resume after a normal process restart with input drift. The resume deliverable arm invoked the Skill and emitted a successful Hook hint, but native control also succeeded. These observations do not qualify changed dev.3 behavior, incremental value, surviving failure ownership, zero-history handoff or package lifecycle. closure.py is a no-I/O reference core and the graph HTML is a simulated PoC; neither is a live host index or automatic executor.",
     "localObservations": [
       {
+        "id": "codex-continuity-history-review",
+        "host": "codex",
+        "subject": "2026-09-05 source review: pre-Accord 65466c565096b5c175c8b3b1242aa5bf6439b82d; current dev.3 Hook; Codex CLI 0.153.3 help and official App Server documentation",
+        "method": "git show of the package-owned carrier_hook.py at the exact historical revision; read current package Hook; codex --version; codex app-server --help; https://learn.chatgpt.com/docs/app-server",
+        "finding": "The old Hook stored bounded session lifecycle counters and advised the Agent to perform a native transition; it did not create or verify destinations itself. Its two-compaction threshold and copied-history fork route are historical choices, not current requirements. Dev.3 emits a stateless resume/compact hint. Current official documentation exposes token-usage and status events, fresh start/read and distinct archive/unsubscribe controls; archive can cascade to spawned descendants, while unsubscribe is not immediate runtime unload.",
+        "claimLimit": "Historical and current source/interface inspection, not an observed automatic handoff or a causal comparison of runtimes. The old Hook was labelled an unbound mechanism candidate at this revision. Documentation does not prove current Desktop exposure or lifecycle effects; CLI help does not verify these method semantics. Recheck the target entry/version before execution. No task was created, archived or unloaded by this review."
+      },
+      {
         "id": "codex-cli-schema",
         "host": "codex",
         "subject": "Codex CLI 0.153.3; default non-experimental generated ClientRequest.json",
@@ -449,10 +457,11 @@
         "host": "codex",
         "name": "会话与上下文连续性",
         "officialSource": "https://learn.chatgpt.com/docs/app-server",
-        "surface": "thread/start/read/resume/fork/compact/start。",
-        "conditions": "原生会话操作不能独自证明语义交接正确；新任务、历史分叉和同会话压缩用途不同。",
+        "surface": "thread/start/read/resume/fork/compact/start；tokenUsage/status 事件；archive、unsubscribe 与 closed 后态。",
+        "conditions": "原生接口不等于接通自动交接。2026-09-05 官方文档区分归档与卸载：archive 可影响派生后代；unsubscribe 不保证立即卸载。核对实际入口、版本、所有权和依赖，保护目的端；新任务、历史分叉和同会话压缩用途不同。",
         "localObservationIds": [
-          "codex-cli-schema"
+          "codex-cli-schema",
+          "codex-continuity-history-review"
         ],
         "currentEffect": "unverified",
         "layer": "host-runtime"
@@ -739,8 +748,8 @@
           "cc-memory",
           "gpt6-protocol"
         ],
-        "role": "复用会话/上下文能力；Accord 补最小语义移交和目标核对。",
-        "nextProbe": "目标与代码身份在接收端核对后再释放来源；接收失败保留安全来源。",
+        "role": "优先用宿主运行时闭合自主触发、必要状态、接收核对和安全释放；按实际缺口补执行、持久状态或幸存接管者，不预设仅缺语义提示。",
+        "nextProbe": "从普通入口观察无需反复人工提示的接续：目的端核对最新目标、纠正、未完工作和上下游，再释放来源；注入目的端失败、移交中变更及重复信号，验证安全来源、单一写入者和无误伤。归档成功不得代替资源释放后态。",
         "assessment": "unverified"
       },
       {
@@ -825,7 +834,8 @@
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
       {"id":"conditional-alignment-and-external-discovery","status":"observed-research-to-delivery-gap-open","basis":"dev.3 无参考的原生/插件组均未在有界预算内交付；同样补充官方参考后，原生组产出代码但说明有误，插件组实际调用 Skill 仍超预算未产出。不是完整原生成功或插件收益证据，单例也不证明因果。下一步审查发现—证据足够—执行—验收的收敛与上下文负担，不以强制调用、追加全局规则或增加预算冒充修复。"},
       {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both worktree Skills now project conditional alignment, external discovery and effective-environment guidance as unpublished 3.2.0-dev.3 packages. Schema-v2 entry descriptors and optional Node hints are unchanged. These are context-triggered duties, not a fixed SOP. Static admission does not prove current host effects."},
-      {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"用户反馈安装的 3.1 缺少可感知实质影响，需对照验证而非自动认定零价值。旧 dev.2 若干任务原生已足够；当前 dev.3 有未调用及调用后未交付的反例，收益尚未成立。优先查安装/加载、普通任务匹配、实际执行、结果和用户负担的断点；正常退出后的评估器恢复不证明崩溃接管。零历史交接与完整生命周期仍待验，不为可见存在感制造干预。"},
+      {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"用户已校准为能感受到一定影响；项目重塑前自动交接和持续纠偏是体验例证，不是新主线或全部功能范围，也不证明旧运行时的因果收益。整体目标仍是 Agent 承担必要任务机制，避免把可自主完成的工作转回用户。按需求、能力发现/匹配、执行、状态/资源、纠偏、恢复和验收的实际依赖闭合，不按单个例子或包大小裁剪。历史状态 Hook 与原生 Agent 的接续组合是一个已追溯案例；当前普通入口的整体功能、自动交接、幸存接管者与完整生命周期仍待验。保留调研未交付及评估器恢复的证据边界。"},
+      {"id":"historical-reference-identity-coupling","status":"observed-open","basis":"本轮完整校验把明确标为历史的旧名称及不可变提交中的旧路径也判为活动身份残留，5 个当前说明/源文件被拒绝。当前用精确历史提交定位保持迁移身份约束，但并未修复语义误判。后续区分现役包、模块、导入与可审阅历史引用，保留身份/路径防回退和恶意伪装拒绝；不能靠全文件豁免或统一字符串禁令代替职责适用性判断。"},
       {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
       {"id": "acceptance-cost-and-coupling", "status": "implemented-local-unverified", "basis": "Current verify/host-check now dispatch to development-package admission without promoting or repeatedly replaying historical behavior. Retained rejection tests run current verifier code against the immutable predecessor subject. Package safety, identity, complexity, source preservation and dirty-worktree gates remain applicable; current functional and host evidence are still unverified."}
     ]
@@ -1719,9 +1729,9 @@
         "name": "上下文与任务连续性",
         "goldenTasks": ["GT-07", "GT-21"],
         "activationWhen": "Observed carrier fitness or a bound task transition requires continuity work.",
-        "requiredOutcome": "The successor receives and verifies the necessary goal, authority and current facts before source release, preserving code topology unless separately authorized.",
-        "normalEntry": "Supported current-host context and task controls, with a sufficient scoped transfer carrier.",
-        "failureOracle": "Unknown capacity is not an invented threshold; a failed destination keeps the safe source and does not report a successful handoff.",
+        "requiredOutcome": "Within bound authority, own continuity without repeated user reminders or manual carrier management. Before releasing the source, the successor independently reconciles the latest goal, authority, corrections, unresolved work and relevant upstream/downstream state against current sources. Preserve one active writer and code topology unless separately authorized; verify the promised source-release post-state without damaging the destination.",
+        "normalEntry": "Supported current-host signals and task controls with a sufficient scoped transfer carrier. Declare who detects the need, executes the transition, preserves necessary state and survives a failed transition. Compose runtime support for missing duties; evaluator-triggered rescue does not establish ordinary-entry autonomy.",
+        "failureOracle": "Unknown capacity is not an invented threshold. Reject missed necessary transitions, repeated handoff loops, stale or self-attested destination readiness, concurrent source/destination writes and release before verification. Destination failure or a mid-transfer correction preserves the last safe carrier/state and requires reconciliation. Archive acknowledgement is not runtime unload; source release must protect dependent and foreign tasks, including a successor affected by native cascade semantics.",
         "dependsOn": ["goal-authority-correction", "environment-and-self-exposure"],
         "assessment": "unverified",
         "evidence": []

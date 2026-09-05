@@ -130,6 +130,27 @@ Neither the pure `closure.py` reference core nor the simulated graph PoC is a
 live discovery/execution layer. The development matrix makes this integration
 gap explicit; ordinary-entry effect and failure tests must close it.
 
+The user's later feedback is some perceived Accord influence, with a stronger
+pre-Accord experience of autonomous handoff and ongoing upstream/downstream
+correction. It is a useful outcome target, not measured runtime causality.
+The reviewed historical Hook at `65466c5` stored lifecycle counters but delegated
+transition and verification to the Agent's native tools. Its fixed compaction
+threshold and copied-history fork are historical choices, not a successor design.
+Continuity is one example of the whole-system responsibility floor, not a new
+primary scope or the entire runtime rationale. Review required duties and their
+cross-function dependencies against user outcomes; runtime allocation serves
+all applicable execution, state, correction, recovery and resource needs.
+For the continuity example, the development source binds:
+observed need, an authorized executor, necessary state, destination reconciliation
+and safe source release without repeated manual prompting. On failure, retain
+the last safe state and an accountable recovery actor. Size reductions must
+preserve this experience. The dated `codex-continuity-history-review` records the
+source comparison and [current native lifecycle distinctions](https://learn.chatgpt.com/docs/app-server):
+archiving can affect spawned descendants; unsubscribing is not immediate runtime
+unload. These are interface findings, not tested Desktop effects or permission
+to change an existing user's tasks. Recheck actual entry semantics and observe
+the promised post-state before claiming release or resource savings.
+
 The dev.2 same-turn repair observation in `developmentObservations` covers
 native tool execution, correction, preserved inputs and independently rechecked
 artifacts on the existing Claude Code/DeepSeek route. Both arms passed the code

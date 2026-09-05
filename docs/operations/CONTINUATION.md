@@ -115,6 +115,20 @@ pitch, unsupported thirty-second title and stale schema-v3 development entry
 were removed; detailed historical lifecycle commands remain linked at v3.1.0.
 This documentation correction does not close the ordinary-entry value gap.
 
+The latest user correction reports some installed Accord influence and a valued
+pre-Accord experience: autonomous handoff, destination verification before
+source release, and ongoing correction aligned with upstream/downstream work.
+The user explicitly clarified that handoff is an example, not a narrowed main
+task. Continue whole-system functional closure and runtime allocation across
+applicable responsibilities and their dependencies; use continuity as one
+cross-function scenario. Do not describe zero perceived value or optimize size
+at the expense of necessary functionality and user experience. Source review found
+historical lifecycle counters delegating execution to native Agent tools, not
+a Hook-owned scheduler. See `capabilityMap.localObservations` entry
+`codex-continuity-history-review` and the revised continuity duty for exact
+history, current native release caveats and next failure probes. This review
+did not run a handoff, restore a runtime or change either delivered package.
+
 The navigation and current-state narrative below belong to the predecessor;
 consult them for historical evidence or unchanged contracts, not as a second
 active plan.
