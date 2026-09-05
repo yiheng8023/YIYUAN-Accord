@@ -39,7 +39,7 @@ Synthetic regressions cover source/package/oracle binding, final freshness,
 same-episode consequences, current conditions and independent-review input.
 Callable shape does not authenticate an observer, facts or reviews; the trusted
 caller must do so through bounded read-only sources. See the architecture for
-the two-query boundary. No real cases or accepted records have been declared.
+the two-query boundary. One native component case is declared; no record is admitted.
 The old maintenance state machine remains separate.
 
 Continue `development-evidence-admission` from the prebound required scope IDs in
