@@ -43,7 +43,7 @@ the two-query boundary. No real cases or accepted records have been declared.
 The old maintenance state machine remains separate.
 
 Continue `development-evidence-admission` from the prebound required scope IDs in
-admission v2. Bind their actual applicability, whole-chain oracles and independent
+admission v3 and its explicit review policy. Bind actual applicability, whole-chain oracles and independent
 sources before collecting evidence. Missing scopes stay unbound; revise required
 coverage only as an acceptance change, never from the cases that happen to pass.
 Each host retains its complete inventory and applicable lifecycle; overall value

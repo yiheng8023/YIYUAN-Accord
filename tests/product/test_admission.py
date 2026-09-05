@@ -11,7 +11,7 @@ from unittest.mock import patch
 import tests.product.test_development as development_fixtures
 from yiyuan_accord.control import verify_product
 from yiyuan_accord.development import DEVELOPMENT_FILE, PLAN_FILE, render_development_plan
-from yiyuan_accord.reviews import REVIEW_AXES, REVIEW_BUNDLE_SCHEMA
+from yiyuan_accord.reviews import REVIEW_AXES
 
 
 FACTS = {"effect": {"total": 130}, "authority": {"inputPreserved": True},
@@ -28,11 +28,20 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         # Isolate admission regressions from the separately tested production budget.
         c["changeBoundary"]["complexityBudget"]["maxProductCodeAndTestBytes"] += 50000
         c["acceptance"]["admission"] = {
-            "schema": "yiyuan-accord-evidence-admission/v2",
+            "schema": "yiyuan-accord-evidence-admission/v3",
             "rule": "Fixture-only independent source contract, not accepted product evidence.",
             "reviewMaxAgeSeconds": 3600, "scopes": [], "cases": [],
             "requiredCoverage": {claim: ["codex", "claude-code"] for claim in (
                 "function", "incremental-value", "package-lifecycle")},
+            "reviewPolicy": {
+                "requiredAxes": list(REVIEW_AXES), "minimumReviewers": 2,
+                "independentAxes": [["specification", "implementation"]],
+                "contexts": {"isolation": ["context-isolated"],
+                             "history": ["zero-inherited-history", "inherited-history-disclosed"],
+                             "environment": ["isolated-no-accord", "shared-environment-disclosed"],
+                             "accordExposure": ["absent", "present-disclosed"]},
+                "rule": "Fixture policy only; independent provenance is a caller responsibility.",
+            },
         }
         for projection in c["delivery"]["hostProjections"]:
             entry = next(row for row in c["capabilityMap"]["entrySurfaces"]["rows"]
@@ -90,7 +99,7 @@ class DevelopmentEvidenceTests(unittest.TestCase):
                     "observationSha256": request["observationSha256"]}
         self.conditions = {key: copy.deepcopy(value["case"]["conditions"])
                            for key, value in request["cases"].items()}
-        review = {"schema": REVIEW_BUNDLE_SCHEMA, "subject": request["subject"],
+        review = {"schema": "yiyuan-accord-development-review-bundle/v1", "subject": request["subject"],
                   "decision": "pass", "reviews": []}
         for axis in REVIEW_AXES:
             review["reviews"].append({
@@ -120,6 +129,30 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         self.assertTrue(report["functionalCompletion"])
         self.assertEqual(set(report["externalGates"].values()), {"not-evaluated-by-verifier"})
         self.assertIn("caller", report["evidenceAdmission"]["trustBoundary"])
+
+    def test_declared_review_duties_can_share_reviewers_with_disclosed_context(self):
+        def observer(request):
+            result = self.observer(request)
+            if request["phase"] == "observe":
+                for index, review in enumerate(result["reviewBundle"]["reviews"]):
+                    review["reviewerId"] = "fixture-reviewer-" + str(index // 2)
+                    if index % 2:
+                        review["context"].update(history="inherited-history-disclosed",
+                                                environment="shared-environment-disclosed",
+                                                accordExposure="present-disclosed")
+            return result
+
+        report = verify_product(self.root, evidence=observer)
+        self.assertTrue(report["repositoryCandidateReady"], report["errors"])
+
+    def test_review_context_cannot_be_both_no_accord_and_accord_exposed(self):
+        def observer(request):
+            result = self.observer(request)
+            if request["phase"] == "observe":
+                result["reviewBundle"]["reviews"][0]["context"]["accordExposure"] = "present-disclosed"
+            return result
+
+        self.assertFalse(verify_product(self.root, evidence=observer)["repositoryCandidateReady"])
 
     def test_evidence_that_expires_during_recheck_cannot_qualify(self):
         class Clock(datetime):
@@ -240,7 +273,7 @@ class DevelopmentEvidenceTests(unittest.TestCase):
     def test_required_claims_use_bound_scopes_not_a_full_cross_product(self):
         contract = copy.deepcopy(self.contract)
         policy = contract["acceptance"]["admission"]
-        policy.update(schema="yiyuan-accord-evidence-admission/v2", requiredCoverage={
+        policy.update(schema="yiyuan-accord-evidence-admission/v3", requiredCoverage={
             "function": ["codex", "claude-code"],
             "package-lifecycle": ["codex-lifecycle", "claude-code-lifecycle"],
             "incremental-value": ["codex-value"],
@@ -458,7 +491,8 @@ class DevelopmentEvidenceTests(unittest.TestCase):
                 self.assertEqual(report["evidenceAdmission"]["acceptedCases"], [])
 
     def test_review_must_be_current_independent_and_observer_checked(self):
-        for reason in ("missing", "subject", "stale", "not-independent", "recheck"):
+        for reason in ("missing", "subject", "stale", "not-independent", "recheck",
+                       "one-reviewer", "dependent-axes", "legacy-schema"):
             with self.subTest(reason=reason):
                 def observer(request):
                     result = self.observer(request)
@@ -472,6 +506,13 @@ class DevelopmentEvidenceTests(unittest.TestCase):
                             review["reviews"][0]["reviewedAt"] = "2000-01-01T00:00:00Z"
                         elif reason == "not-independent":
                             review["reviews"][0]["context"]["accordExposure"] = "present"
+                        elif reason == "one-reviewer":
+                            for row in review["reviews"]:
+                                row["reviewerId"] = "same-native-identity"
+                        elif reason == "dependent-axes":
+                            review["reviews"][2]["reviewerId"] = review["reviews"][1]["reviewerId"]
+                        elif reason == "legacy-schema":
+                            review["schema"] = "yiyuan-accord-external-review-bundle/v1"
                     elif reason == "recheck":
                         result["observationSha256"] = "0" * 64
                     return result

@@ -15,10 +15,10 @@ import subprocess
 
 from .identity import _bounded_git_bytes, _strict_json_object
 from .guardrails import clean_git_checkout
-from .reviews import evaluate_review_bundle
+from .reviews import evaluate_review_bundle, review_policy_errors
 
 
-SCHEMA = "yiyuan-accord-evidence-admission/v2"
+SCHEMA = "yiyuan-accord-evidence-admission/v3"
 _LIMIT = 1_000_000
 _CLAIMS = {"function", "incremental-value", "package-lifecycle"}
 _CASE_FIELDS = set("id scope host entry duties qualityAxes scenarios claims oracle oracleFiles conditions maxAgeSeconds expected".split())
@@ -57,11 +57,13 @@ def _locator(value):
 def admission_contract_errors(contract):
     """Check declarations, not empirical adequacy of oracles or coverage claims."""
     policy = contract.get("acceptance", {}).get("admission")
-    if (not isinstance(policy, dict) or set(policy) != {"schema", "rule", "reviewMaxAgeSeconds", "requiredCoverage", "scopes", "cases"}
+    if (not isinstance(policy, dict) or set(policy) != {"schema", "rule", "reviewPolicy", "reviewMaxAgeSeconds", "requiredCoverage", "scopes", "cases"}
             or policy.get("schema") != SCHEMA or not _text(policy.get("rule"))
             or type(policy.get("reviewMaxAgeSeconds")) is not int or policy["reviewMaxAgeSeconds"] <= 0
             or any(not isinstance(policy.get(k), list) or len(policy[k]) > 128 for k in ("scopes", "cases"))):
         return ["current evidence admission policy is missing or invalid"]
+    if errors := review_policy_errors(policy["reviewPolicy"]):
+        return errors
     try:
         _json(policy)
         required = policy["requiredCoverage"]
@@ -267,7 +269,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             review = data["reviewBundle"]
             if review_bundle is not None and _json(review_bundle) != _json(review):
                 errors.append("review input differs from the observer-checked bundle")
-            review_result = evaluate_review_bundle(review, subject["revision"], subject["tree"])
+            review_result = evaluate_review_bundle(review, subject["revision"], subject["tree"],
+                                                   policy=policy["reviewPolicy"])
             errors.extend("independent review: " + error for error in review_result["errors"])
             candidate_time = int(_git(root, "show", "-s", "--format=%ct", subject["revision"]).strip())
             if review_result["decision"] == "pass" and any(

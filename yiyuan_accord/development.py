@@ -552,6 +552,8 @@ def render_development_plan(contract):
     lines += ["", "## 当前证据准入", "",
               f"准入契约：`{admission['schema']}`；已声明 {len(admission['scopes'])} 个作用域、{len(admission['cases'])} 个用例。数量不是通过记录。", "",
               admission["rule"], "",
+              f"开发评审：覆盖 {', '.join(admission['reviewPolicy']['requiredAxes'])}；至少 {admission['reviewPolicy']['minimumReviewers']} 名独立评审者。", "",
+              admission["reviewPolicy"]["rule"], "",
               "计划只投影验收定义；实际资格由受检来源、精确主体和当前条件计算。静态 CLI 与合成测试不证明实际功能。", ""]
     for claim, ids in admission["requiredCoverage"].items():
         lines.append(f"- `{claim}` 必需作用域：{', '.join(ids)}；未绑定或缺证据仍未完成。")
