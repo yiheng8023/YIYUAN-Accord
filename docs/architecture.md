@@ -125,29 +125,60 @@ of runtime causality. Historical observations, failed probes, observer defects
 and their exact attribution remain in `developmentObservations`. They are not
 current acceptance receipts.
 
-### Static admission and the missing qualification path
+### Static checks and caller-observed qualification
 
-Run `verify-development` for source conformance. Current `verify` and
-`host-check` dispatch to development static admission: source integrity,
+Run `verify-development` for source conformance. CLI `verify` and
+`host-check` retain development static checks: source integrity,
 unchanged predecessor, declared package identity, namespace/legal carriage,
 hint transport, complexity and bounded changed paths. Their PASS does not
 establish functionality, value or candidate eligibility.
 
-The current schema-v3 validator intentionally accepts only unverified duty
-assessments and empty acceptance evidence. Diagnostic observations are not
-consumed as acceptance. The missing successor evidence-admission path is now
-an explicit work item, not a reason to flip constant failure fields or reuse
-the frozen maintenance state machine.
+The schema-v4 source adds `acceptance.admission`: explicit claim scopes, case
+oracles, relevant conditions, freshness windows and responsibility/quality/scenario
+mappings. Current scopes and cases are empty. Stored duty assessments, diagnostic observations and
+the static claim ceiling remain unverified; editing them cannot grant acceptance.
 
-The planned seam reuses bounded reads, exact package/subject identity and
-independent review validation. Fix and commit the evaluated implementation and
-acceptance definition, collect source-bound observations, then admit evidence
-against the unchanged affected subject. Final review binds the final candidate.
-Reject mismatched or stale subjects, unsupported provenance, self-attestation,
-contradictory post-state, residue and missing independent review. Structural
-fixtures test the validator, not the truth of real-world claims. External
-authority, hosted checks, ordered publication and public post-state remain
-separate gates. The generated work sequence owns the detailed procedure and exit.
+The Python entry `verify_product(root, evidence=observer)` reuses bounded Git
+reads, exact package identity and independent-review validation. The caller must
+select a trusted, authenticated, independent, bounded read-only observer; a
+callable or a JSON record does not establish those properties. The CLI neither
+loads observer code from data nor accepts a receipt file as authentication.
+No new executor, service, database or host dependency is installed.
+
+Commit the implementation, case definition and oracle files as A before observing
+E. At candidate B, the verifier binds HEAD/tree before static reads, verifies A
+is an ancestor, and checks the full affected package and oracle files. Case
+digests bind shared goal/authority/acceptance semantics and selected dependencies;
+progress-only or unrelated case changes do not invalidate unaffected observations.
+Changed shared rules, packages or relevant oracles do. Reviews bind exact B/tree,
+must postdate B and remain current. No observer result can switch the subject.
+
+The observer receives `phase: observe`, the verifier's subject and computed case,
+definition and package identities. It returns independently checked records and
+the external review bundle. Each record binds provenance, capture time, conditions
+and same-episode effect, authority, post-state, cleanup and applicable comparison
+facts to its oracle. During `phase: recheck`, the observer rechecks those sources
+and reviews, acknowledges their `observationSha256`, and returns current subject
+and per-case conditions. The caller owns source authentication, observation
+deadlines, independent attribution and revocation checks; echoing a digest proves
+none of them. The verifier rechecks Git, cleanliness and time before qualification.
+
+Scopes bind the claimed host entry, decisive environment axes and applicable
+requirements independently of which cases pass. Cases may vary other conditions
+for legitimate transitions, but must stay within their declared scope. Coverage
+is evaluated per scope and claim: complementary CLI/desktop results, or different
+environment profiles, cannot be merged into one complete experience. Unbound
+required coverage remains visible; the inventory of other entries does not become
+an automatic adaptation promise. Scope and shared entry rules also bind the digest.
+
+Reports distinguish accepted cases, scoped open/unbound coverage, functionality,
+incremental value and conditional candidate eligibility. Missing, conflicting or
+stale facts do not qualify; unaffected accepted cases remain visible. Structured
+fixtures validate this admission logic only. Real case adequacy, actual entry and
+host effects, independent provenance and final reviews remain to be established.
+Authority, hosted checks, ordered publication and public post-state are separate
+gates, never outputs promoted by this evaluator. The generated work sequence owns
+the remaining implementation and real-evidence procedure.
 
 Current development budgets are explicit, including five-percent code/test
 headroom; they are revisable cost controls, not product functionality. Measure

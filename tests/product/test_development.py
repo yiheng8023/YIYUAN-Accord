@@ -198,8 +198,24 @@ class DevelopmentContractTests(unittest.TestCase):
 
     def test_old_development_schema_cannot_claim_the_new_mapping_contract(self):
         altered = copy.deepcopy(self.contract)
-        altered["schema"] = "yiyuan-accord-development/v2"
-        self.assertTrue(self.errors(altered))
+        for version in (2, 3):
+            altered["schema"] = f"yiyuan-accord-development/v{version}"
+            self.assertTrue(self.errors(altered))
+
+    def test_plan_exposes_current_admission_scope_and_not_a_pass_ledger(self):
+        from yiyuan_accord.development import render_development_plan
+        policy = self.contract["acceptance"]["admission"]
+        policy["rule"] = "Fixture source and scope rule; this is not functional evidence."
+        rendered = render_development_plan(self.contract)
+        self.assertTrue(policy["rule"] in rendered, "source admission rule missing from plan")
+        self.assertTrue(policy["schema"] in rendered, "admission version missing from plan")
+
+    def test_current_admission_policy_requires_bounded_explicit_definitions(self):
+        for field, value in (("schema", "unversioned"), ("rule", ""),
+                             ("reviewMaxAgeSeconds", True), ("scopes", {}), ("cases", [{}])):
+            altered = copy.deepcopy(self.contract)
+            altered["acceptance"]["admission"][field] = value
+            self.assertTrue(self.errors(altered), field)
 
     def test_quality_mapping_rejects_missing_malformed_or_unknown_references(self):
         for value in (None, {}, [], ["unknown-quality"], [["nested"]],
@@ -508,6 +524,13 @@ class DevelopmentDeliveryTests(unittest.TestCase):
     def report(self):
         from yiyuan_accord.control import verify_product
         return verify_product(self.root)
+
+    def test_json_cannot_authenticate_its_own_development_evidence(self):
+        from yiyuan_accord.control import verify_product
+        report = verify_product(self.root, evidence={"verified": True})
+        self.assertFalse(report["valid"])
+        self.assertTrue(any("caller-selected observer" in error for error in report["errors"]))
+        self.assertFalse(report["repositoryCandidateReady"])
 
     def test_current_delivery_never_inherits_predecessor_behavior_or_review(self):
         from yiyuan_accord import control

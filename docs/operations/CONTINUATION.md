@@ -33,15 +33,23 @@ modules or a universal SOP. The uncalled graph demonstration is retired from the
 current tree and remains in exact Git history. Active maps still serve source
 validation and plan generation; they do not constitute a live host graph.
 
-The next missing implementation is current-development evidence admission.
-Current `verify-development`, `verify` and `host-check` are static checks
-with functional/candidate results deliberately unverified or false. The old
-maintenance state machine is not a successor qualification path.
-Follow the source's `development-evidence-admission` work item: reuse existing
-identity, bounded-read, full-package and independent-review checks, keep historical
-isolation, and test both legitimate admission and rejection. Measure the necessary
-cost; no budget target licenses deleting required guards. Do not promote
-`developmentObservations` or hand-enter verified states to simulate completion.
+The schema-v4 development source and public `verify_product(..., evidence=observer)`
+now provide a conditional evidence-admission evaluator. The CLI stays static.
+Synthetic regressions cover source/package/oracle binding, final freshness,
+same-episode consequences, current conditions and independent-review input.
+Callable shape does not authenticate an observer, facts or reviews; the trusted
+caller must do so through bounded read-only sources. See the architecture for
+the two-query boundary. No real cases or accepted records have been declared.
+The old maintenance state machine remains separate.
+
+Continue `development-evidence-admission` by binding concrete current case oracles,
+applicability and real source verification before evidence collection. Commit the
+evaluated implementation and acceptance definition as A; admit only compatible
+observations at candidate B with actual final-candidate reviews. Reuse unaffected
+evidence by dependencies, not by old PASS labels. Do not promote
+`developmentObservations`, hand-enter verified states or use the synthetic observer
+as a real source adapter. Measure implementation and test cost without deleting
+necessary safeguards to satisfy a number.
 
 Then continue ordinary-entry, whole-chain and relevant failure/lifecycle evidence
 against the bound definition. Existing source, engineering and diagnostic facts
@@ -51,7 +59,7 @@ whether the available host composition closes the duty.
 
 ## Evidence and authority limits
 
-- The unpublished packages remain `3.2.0-dev.5`; this source/asset correction
+- The unpublished packages remain `3.2.0-dev.5`; this maintainer-validation change
   does not change package bytes or installed 3.1.
 - Ordinary-entry functionality and incremental value remain unverified. Prior
   samples include native sufficiency, unused guidance, incomplete delivery and

@@ -11,6 +11,7 @@ import re
 from urllib.parse import urlsplit
 
 from .identity import _bounded_git_bytes, _bounded_regular_bytes, _strict_json_object
+from .admission import admission_contract_errors
 
 
 DEVELOPMENT_FILE = "product/development.json"
@@ -146,7 +147,7 @@ def development_contract_errors(contract, golden_task_ids):
     if not isinstance(contract, dict):
         return ["development contract must be an object"]
     schema = contract.get("schema")
-    require(schema == "yiyuan-accord-development/v3",
+    require(schema == "yiyuan-accord-development/v4",
             "unsupported development schema")
     require(contract.get("productId") == "yiyuan-accord", "product identity mismatch")
     phase = "whole-system-optimization-and-functional-closure"
@@ -436,6 +437,8 @@ def development_contract_errors(contract, golden_task_ids):
 
     change = section("changePolicy", ("rule", "versionRule", "replacementRule", "sourceRevisionRule"))
     require(_strings(change.get("materialVariables")), "change-dependent revalidation is missing")
+    if not errors:
+        errors.extend(admission_contract_errors(contract))
     section("nextBoundary", ("work", "requires"))
     ceiling = section("claimCeiling")
     require(ceiling.get("localContractOnly") is True
@@ -544,6 +547,14 @@ def render_development_plan(contract):
         lines.append(f"| {duty['name']} | {stages} | {', '.join(duty['goldenTasks'])} |")
     for retired in contract["acceptance"]["retiredDuties"]:
         lines.append(f"| {retired['id']}（已处置） | {retired['reason']}；{retired['acceptanceChange']} | {', '.join(retired['goldenTasks'])} |")
+    admission = contract["acceptance"]["admission"]
+    lines += ["", "## 当前证据准入", "",
+              f"准入契约：`{admission['schema']}`；已声明 {len(admission['scopes'])} 个作用域、{len(admission['cases'])} 个用例。数量不是通过记录。", "",
+              admission["rule"], "",
+              "计划只投影验收定义；实际资格由受检来源、精确主体和当前条件计算。静态 CLI 与合成测试不证明实际功能。", ""]
+    for scope in admission["scopes"]:
+        case_ids = [c["id"] for c in admission["cases"] if c["scope"] == scope["id"]]
+        lines.append(f"- `{scope['id']}` — `{scope['host']}/{scope['entry']}`；{scope['rule']} 用例：{', '.join(case_ids) or '尚未绑定'}。")
     capability_map = contract["capabilityMap"]
     entries = capability_map["entrySurfaces"]
     lines += ["", "## 宿主家族与入口边界", "",

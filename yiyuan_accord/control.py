@@ -6,6 +6,8 @@ from pathlib import Path
 import re
 import subprocess
 
+from .admission import assess_development_evidence, evidence_subject
+
 from .evidence import (
     FROZEN_GT20_21_REPRESENTATIVE_LANES,
     evaluation_contract_history_valid,
@@ -6636,10 +6638,18 @@ def host_check(root, adapter_id):
     }
 
 
-def _verify_development_product(root):
-    """Current static admission; never replay predecessor passes as current evidence."""
+def _verify_development_product(root, evidence=None, review_bundle=None):
+    """Static admission plus explicitly delegated, source-bound observation."""
+    subject, subject_errors = None, []
+    if callable(evidence):
+        try:
+            subject = evidence_subject(root)
+        except (OSError, subprocess.SubprocessError, ValueError, UnicodeError):
+            subject_errors.append("development evidence subject cannot be bound")
     development, contract = _inspect_development(root)
-    errors = list(development["errors"])
+    errors = list(development["errors"]) + subject_errors
+    if evidence is not None and not callable(evidence):
+        errors.append("development evidence requires a caller-selected observer; JSON cannot authenticate itself")
     hosts, complexity = {}, None
     delivery = contract.get("delivery", {})
     if development["valid"]:
@@ -6671,24 +6681,44 @@ def _verify_development_product(root):
         residue = known_task_residue(root)
         if residue:
             errors.append(f"known task residue remains: {residue}")
+    contract_valid = not errors
+    clean = clean_git_checkout(root)
+    admission = None
+    if not errors:
+        if evidence is not None and not clean:
+            errors.append("evidence observer requires a clean bound checkout")
+        else:
+            admission = assess_development_evidence(root, contract, evidence, review_bundle, subject=subject)
+            errors.extend(admission["errors"])
+            if evidence is not None:
+                clean = admission["checkoutClean"]
+                if clean is None:
+                    clean = clean_git_checkout(root)
+    qualified = bool(admission and admission["candidateEligible"] and clean and not errors)
     return {
         "productId": "yiyuan-accord", "activeDevelopment": development,
         "baselineContractRole": "historical-predecessor-integrity-only",
         "release": delivery.get("version") if isinstance(delivery, dict) else None,
-        "programStatus": "in-development", "contractValid": not errors,
-        "checkoutClean": clean_git_checkout(root), "repositoryCandidateReady": False,
-        "completionState": "development-unverified", "functionalCompletion": False,
-        "currentHostBehavior": "unverified", "incrementalValue": "unverified",
+        "programStatus": "in-development", "contractValid": contract_valid,
+        "checkoutClean": clean, "repositoryCandidateReady": qualified,
+        "completionState": "candidate-evidence-admitted" if qualified else "development-unverified",
+        "functionalCompletion": bool(admission and admission["functionalCompletion"] and not errors),
+        "currentHostBehavior": "verified-for-bound-cases" if admission and admission["functionalCompletion"] and not errors else "unverified",
+        "incrementalValue": admission["incrementalValue"] if admission and not errors else "unverified",
+        "evidenceAdmission": admission,
         "externalGates": {operand: "not-evaluated-by-verifier" for operand in EXTERNAL_COMPLETION_OPERANDS},
         "hostChecks": hosts, "complexity": complexity, "valid": not errors, "errors": errors,
     }
 
 
 @_snapshot_read_scope
-def verify_product(root, review_bundle=None):
+def verify_product(root, review_bundle=None, *, evidence=None):
     root = Path(root)
     if development_is_declared(root):
-        return _verify_development_product(root)
+        return _verify_development_product(root, evidence, review_bundle)
+    if evidence is not None:
+        return {"valid": False, "repositoryCandidateReady": False,
+                "errors": ["task-time evidence belongs to the declared development successor"]}
     errors = []
     constitution = _read_json(root, AUTHORITY_BOOTSTRAP[0], errors)
     program = _read_json(root, AUTHORITY_BOOTSTRAP[1], errors)
