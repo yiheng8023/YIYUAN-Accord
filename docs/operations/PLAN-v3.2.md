@@ -183,7 +183,7 @@ The current host Skill supplies adaptive guidance, not a proven system executor.
 - `ordinary-entry-effect-and-recovery` — `open`：整体目标仍是 Agent 承担必要任务机制；交接、按钮、Git 或 Shell 都只是例子，用户无需先学习内部操作词汇。当前 dev.3 的自然语言订单场景与原生对照都产生正确结果并保护全部输入，无额外用户操作；两组均未调用 Skill，支持该场景原生足够，不证明 Accord 增量收益、任意配置兼容或资源回收能力。按需求、能力发现/匹配、执行、状态/资源、纠偏、恢复和验收的依赖继续闭合。历史状态 Hook 与原生 Agent 接续组合只是已追溯案例，自动交接、幸存接管者与完整生命周期仍待验。
 - `historical-reference-identity-coupling` — `implemented-bounded-regression-verified`：当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。
 - `verification-io-amplification` — `implemented-local-measured`：同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。
-- `acceptance-cost-and-coupling` — `conditional-evaluator-implemented-real-scope-and-source-binding-open`：当前公开 Python 验证入口可接入由调用方独立认证的有界只读观察者，按显式入口/环境作用域核对完整包、定义/判据、同次执行后态、当前条件及绑定候选的独立评审。静态 CLI、历史阶段及 developmentObservations 不晋升。正反合成回归已覆盖合法复用与错误准入，但真实 scopes/cases 为空，尚无实际候选资格；调用函数或摘要回显不能认证事实。继续绑定真实判据、适用范围和来源核验，不能把维护者工具当作用户功能或收益。
+- `acceptance-cost-and-coupling` — `conditional-evaluator-implemented-real-scope-and-source-binding-open`：当前公开 Python 验证入口可接入由调用方独立认证的有界只读观察者，按显式入口/环境作用域核对完整包、定义/判据、同次执行后态、当前条件及绑定候选的独立评审。静态 CLI、历史阶段及 developmentObservations 不晋升。正反合成回归已覆盖合法复用与错误准入，但真实 scopes/cases 为空，尚无实际候选资格；调用函数或摘要回显不能认证事实。已实现有界 Claude 诊断入口与固定 ready-orders 判据，逐臂独立工作区、即时回读和清理；显式复用宿主用户配置，不由观察器私读凭据。该样本不覆盖整项职责，也不证明私有配置未变或增量收益，暂不计入准入。继续绑定充分的真实判据、适用范围和来源核验，不能把维护者工具当作用户功能或收益。
 
 ## 发布与收尾约束
 

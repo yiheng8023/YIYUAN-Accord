@@ -367,6 +367,8 @@ class DevelopmentEvidenceTests(unittest.TestCase):
             oracle.write_text("# Initial synthetic oracle.\n", encoding="utf-8")
             contract = copy.deepcopy(self.contract)
             contract["changeBoundary"]["allowedPaths"].append(path)
+            # This fixture owns one extra file; the production ceiling is unchanged.
+            contract["changeBoundary"]["complexityBudget"]["maxTrackedFiles"] += 1
             for case in contract["acceptance"]["admission"]["cases"]:
                 case["oracleFiles"] = [path]
             self.git("add", path)
