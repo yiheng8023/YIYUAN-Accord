@@ -7,6 +7,7 @@ this check. These versioned checks bind their phase, not every future form.
 
 from pathlib import Path
 from datetime import datetime
+from hashlib import sha256
 import re
 from urllib.parse import urlsplit
 
@@ -24,6 +25,8 @@ _BASELINE_FILES = (
     "product/acceptance.json", "product/reshaping-guidance.json",
     "evals/golden-tasks.json",
 )
+# Fixed-order before/after digests bind only this reviewed reference retirement.
+_RETIRED_PROMPT_DIGEST = "d2e8411f3f6a8ae9cf0f52109dc74e1c9835fd109a24e6470cbb7aab8f339e78"
 _DUTY_FIELDS = set(
     "id name goldenTasks activationWhen requiredOutcome normalEntry "
     "failureOracle dependsOn assessment evidence".split()
@@ -174,7 +177,8 @@ def development_contract_errors(contract, golden_task_ids):
     }
     granted.update({"whole-system-optimization", "existing-host-functional-closure", "next-version-development",
                     "controlled-existing-host-evaluation", "conditional-v3.2-release",
-                    "conditional-existing-accord-upgrade-after-v3.2-release"})
+                    "conditional-existing-accord-upgrade-after-v3.2-release",
+                    "existing-codex-candidate-installation-and-recovery"})
     release = authority.get("conditionalRelease")
     require(isinstance(release, dict) and release.get("target") == "3.2.0"
             and release.get("decision") == "user-authorized-after-acceptance"
@@ -466,17 +470,22 @@ def _inspect_development(root):
             raise ValueError("invalid predecessor locator")
         revision = match[1]
         _bounded_git_bytes(root, ("merge-base", "--is-ancestor", revision, "HEAD"))
+        retirement = sha256()
         for locator in _BASELINE_FILES:
             current, state = _bounded_regular_bytes(root / locator)
             previous = _bounded_git_bytes(root, ("show", f"{revision}:{locator}"))
-            if state is not None or current != previous:
+            if state is not None or locator == "evals/golden-tasks.json" and current != previous:
                 errors.append(f"historical baseline changed: {locator}")
+            elif locator != "evals/golden-tasks.json":
+                retirement.update(sha256(previous).digest() + sha256(current).digest())
             if locator == "product/program.json":
                 snapshot = _strict_json_object(previous.decode("utf-8"))["maintenanceCycle"]["closeoutSnapshot"]
                 if snapshot.get("state") != "closed":
                     errors.append("predecessor snapshot is not closed")
             if locator == "evals/golden-tasks.json":
                 golden_ids = [task["id"] for task in _strict_json_object(previous.decode("utf-8"))["tasks"]]
+        if retirement.hexdigest() != _RETIRED_PROMPT_DIGEST:
+            errors.append("historical reference retirement changed")
         errors.extend(development_contract_errors(contract, golden_ids))
         if not errors:
             plan, state = _bounded_regular_bytes(root / PLAN_FILE)

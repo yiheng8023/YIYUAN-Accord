@@ -10,7 +10,7 @@ For the approved post-v3.1 work, [product/development.json](product/development.
 is the current source for scope, duties, quality floors, procedures and acceptance.
 [The visible plan](docs/operations/PLAN-v3.2.md) is derived from it.
 [Continuation](docs/operations/CONTINUATION.md) identifies the bound checkout and
-current evidence limits. Frozen v3.1 documents and Golden Tasks preserve history;
+current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
 
 Maintainers and Agents own:
@@ -24,7 +24,7 @@ Maintainers and Agents own:
 
 Typos and narrow non-semantic fixes need only the exact defect and proportionate
 verification. Material changes need a falsifiable reason and an authority boundary,
-not a fixed number of work items or mandatory goal mode. Agreement on an authorized
+not a fixed number of work items. Agreement on an authorized
 next step means proceed; a correction revises only affected decisions.
 
 ## Reuse, change and subtraction
@@ -65,6 +65,30 @@ These checks are maintainer tooling, not ordinary-user prerequisites. The
 current validator controls admission; test counts or green static checks do not
 prove normal-entry behavior, value, cross-host coverage or production readiness.
 Keep historical fixture subjects separate from changed candidate packages.
+
+Encode testable, risk-relevant constraints in repeatable checks tied to the
+authorized requirement and observable result. Challenge critical checks with
+known failures; use targeted mutation or fault injection when it adds confidence.
+Keep mutation survivors, equivalent changes, timeouts and tool errors distinct;
+[PIT explains these limits](https://pitest.org/quickstart/basic_concepts/).
+Broad mutation campaigns and universal score thresholds are not prerequisites.
+
+Complexity, coverage and CRAP help locate change risk; they cannot establish
+requirement coverage, architecture quality or product value. Define the measured
+unit, coverage kind and justified threshold before using a metric as a gate.
+[CRAP's original rationale](https://www.artima.com/weblogs/viewpost.jsp?thread=210575)
+also warns against making metrics the objective. Preserve behavior and cohesive
+interfaces rather than splitting code merely to lower a score.
+
+Keep intent, authority, rationale and unencoded requirements alongside executable
+checks; both can become wrong or stale. Gherkin needs
+[step implementations](https://cucumber.io/docs/cucumber/step-definitions/)
+and meaningful assertions. Agent-written QA is not independent ground truth.
+Prefer supported controls at the action boundary for consequential constraints,
+and verify their enforcement; when unavailable, disclose the limit of guidance.
+Choose reviewer roles and fresh contexts by actual risk and coordination cost,
+not a fixed five-Agent pipeline. Changes to checks need affected review and
+counterexamples, not permission to redefine an unmet requirement as a pass.
 
 For functional claims, bind the actual entry, executor, composition, exact package,
 conditions, observable effects, independent post-state and evidence limits.

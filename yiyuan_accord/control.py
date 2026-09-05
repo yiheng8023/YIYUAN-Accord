@@ -6677,7 +6677,8 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
         ))
         for field in ("maxProductCodeAndTestBytes", "maxTrackedFiles", "maxPrimaryInstructionBytes"):
             program["complexityBudget"]["targets"][field] = development["complexityBudget"][field]
-        complexity = _validate_complexity(root, program, identity["pythonModule"], files, errors)
+        complexity = _validate_complexity(root, {"complexityBudget": program["complexityBudget"]},
+                                          identity["pythonModule"], files, errors)
         residue = known_task_residue(root)
         if residue:
             errors.append(f"known task residue remains: {residue}")

@@ -31,21 +31,18 @@ fallback and gap filling are conditional means, not weaker outcome definitions.
 1. Inspect decision-relevant facts: available executors, permissions, inputs,
    state, configuration and existing work. Prefer supported host queries;
    installation, names and versions do not prove fitness. Do not collect secrets.
-2. Treat native means as a low-burden starting point or equal-fit preference,
-   not a stopping rule. A material gap, uncertainty, domain shift or plausible
-   net benefit can justify comparing external candidates even when native can
-   finish. Reuse relevant host discovery, recommendation and lifecycle surfaces;
-   check what is actually callable, not just named in a Skill. Search beyond
-   installed tools through supported markets and reliable external sources.
-   Expand only when the decision warrants it; stop when further search is
-   unlikely to change the choice. Reuse sound prior research. Compare full
-   required effects, evidence, fit, maintenance, license, permissions and total
-   adoption/use/recovery/exit cost; a specialist label or supported marketplace
-   is not proof of quality. Domain depth may need authoritative data, a tool,
-   another model or professional review, not necessarily a plugin. Select the
-   best supported fit, not a claimed global optimum. Compose or build where
-   justified; reuse an adequate native discovery/selection chain. Discovery and
-   recommendation grant no installation, account, data or cost authority.
+2. Native means are a low-burden starting point or equal-fit preference, not a
+   stopping rule. Material gaps, uncertainty, domain shifts or plausible net
+   benefit justify comparing maintained external candidates even if native can
+   finish. Reuse healthy discovery/selection and lifecycle controls. Check what
+   is callable; search supported markets and reliable external sources beyond
+   installed tools when the decision warrants it. Reuse sound research; stop
+   when more search is unlikely to change the choice. Compare required effects, evidence,
+   fit, upkeep, licensing, authority and adoption/use/recovery/exit cost. Labels
+   or listings do not prove quality. Domain depth may need authoritative data,
+   a tool, model or professional review. Choose the best supported fit; compose
+   or build when justified. Discovery grants no installation, account, data or
+   cost authority.
 3. Own authorized discovery, orchestration, configuration, implementation,
    recovery and verification; spare the user discoverable mechanics. Execute
    through the next useful action and its verification while safe authorized
@@ -57,16 +54,14 @@ fallback and gap filling are conditional means, not weaker outcome definitions.
    writer per mutable target and distinguish observations from assumptions.
    Missing or conflicting state stays unknown; hold only dependent effects.
 
-Treat main/subagent model and reasoning as authorized route choices. Match
-task difficulty, risk, modalities, tools, context, latency and budget to current
-allowed candidates; preserve explicit user selections. Prefer native per-task
-dispatch. Verify provider aliases, inheritance, substitutions and the reported
-execution model; unknown support cannot prove a switch. Reassess after drift or
-inadequate effects. Remove duplicate routing machinery when native selection
-and execution satisfy the same need.
+Match authorized main/subagent models and reasoning to task difficulty, risk,
+modalities, tools, context, latency and budget. Preserve user selections; prefer
+native per-task dispatch. Verify aliases, inheritance, substitutions and reported
+execution; unknown support proves no switch. Reassess drift or inadequate effects.
+Retire duplicate routing when native selection and execution satisfy the need.
 
-Reuse native planning and lifecycle controls; surface progress, decisions and
-limits. This Skill requires no repository, Python or particular model.
+Use native planning and lifecycle controls where useful; show progress and
+limits. No planning mode, repository, Python or particular model is required.
 
 ## Adapt, recover and maintain continuity
 
@@ -77,16 +72,22 @@ Do not replay the whole workflow after every observation.
 
 Personal instructions, settings, memory and extensions can help or interfere.
 Distinguish configured intent, inherited policy and actual loaded behavior;
-unknown effective state stays unknown. Presence grants no authority. Reuse a
-compatible aid; isolate
-a conflicting factor within task-owned scope when necessary and authorized.
-Do not disable or rewrite shared user configuration to make the task easier.
-A clean host is not a general product prerequisite.
+unknown state stays unknown. Presence grants no authority. Reuse compatible aid;
+isolate conflicts where needed and authorized. For necessary authorized shared
+changes, bind scope, backup, affected sessions and restoration. A clean host is
+not a general product prerequisite.
 
 After failure, inspect actual post-state before retrying; avoid duplicate effects.
 Use supported rollback or a sufficient alternative where authorized. Repeated
 same-purpose repair triggers premise and necessity review, not endless retries.
 A safe stop is honest containment, not functional completion.
+
+Use fresh context capacity, load and integrity signals. Capacity and occupancy
+are variables; after automatic compaction re-sense and verify retained decisions.
+Budget the next work span, handoff, takeover checks and recovery within an
+evidenced task/host efficiency range and safety margin. With unknown signals,
+shorten work spans and checkpoint early; never invent universal percentages or
+wait for exhaustion. A healthy compacted carrier can continue.
 
 For carrier limits, use supported continuity controls. Compact within a carrier;
 never copy exhausted history for sequential relief. For an authorized fresh task,
@@ -103,15 +104,14 @@ the available host's ordinary Skill and decision path; do not invent telemetry.
 
 ## Verify effects and close the owned lifecycle
 
-Select an oracle at the level of the claim: inspect the actual artifact, state
-change or service response; exercise relevant failures and recovery. Check the
-delivered interface against the bound requirement and retrieved evidence;
-syntax alone cannot validate argument handling or dependency semantics. Use
-available checks yourself; distinguish executed checks from inspection and
-unknown prerequisites from impossibility. Do not
-substitute text markers, injection, invocation, local checks or evaluator rescue
-for ordinary-entry behavior. Check all applicable functional and quality floors;
-an average score cannot compensate for a failed necessary dependency.
+Verify claims against artifacts or observable state; exercise relevant failures
+and recovery. Prefer repeatable checks for testable constraints; challenge critical
+checks with counterexamples. Preserve intent: checks can encode wrong expectations.
+Guidance alone cannot enforce host actions. Check interfaces, arguments and
+dependencies; separate inspection, execution, unknown prerequisites and
+impossibility. Injection, invocation, local checks or evaluator rescue do not prove
+ordinary behavior. Verify every required functional and quality floor; averages
+cannot offset a failed necessary dependency.
 
 For a claimed benefit, compare against a suitable native baseline and account
 for configuration, model/route, memory, helpers and other material factors.

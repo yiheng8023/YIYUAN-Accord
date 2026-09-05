@@ -63,9 +63,10 @@ whether the available host composition closes the duty.
 
 ## Evidence and authority limits
 
-- The unpublished packages are `3.2.0-dev.6`; continuity guidance now separates
-  destination takeover from fact checks and requires explicit user authority
-  for archival. Installed 3.1 is unchanged; fresh affected evidence is required.
+- The unpublished packages are `3.2.0-dev.7`; continuity guidance requires early
+  handoff budgeting, fresh sensing after compaction, confirmed destination
+  takeover and explicit user authority for archival. Installed 3.1 is unchanged;
+  these guidance changes still require fresh behavioral evidence.
 - Ordinary-entry functionality and incremental value remain unverified. Prior
   samples include native sufficiency, unused guidance, incomplete delivery and
   unsupported verification claims. Explicit Skill use is a different condition.
@@ -83,15 +84,17 @@ whether the available host composition closes the duty.
   not the unavailable official Claude account. Keep provider/model and host
   attribution distinct. Other account-bound entries remain untested.
 - Controlled existing-host work and publication of accepted 3.2 are authorized.
-  After publication, the source also binds the authorized upgrade of existing
-  Accord installations. Other personal changes, new trust, data, accounts,
-  material cost or unrelated effects still require bounded authority.
+  Apply and verify project changes first; the user also authorizes a backed-up
+  Codex candidate installation before publication with affected-session control
+  and recovery, followed by the already bound upgrade of existing Accord
+  installations after publication. Other personal changes, new trust, data,
+  accounts, material cost or unrelated effects still require bounded authority.
 - Maintain the unpublished CHANGELOG, commit and push the complete exact
   candidate before release, then satisfy the independent evidence, review,
   hosted, publication and post-state gates. Follow the source's ordered
   conditions; a local PASS or this navigation cannot grant readiness.
 
-Use the source and generated plan for progress; native goal mode is unnecessary.
+Use update plan to show progress mapped from the current source and plan.
 Later corrections can change or pause affected work. Continue the next safe
 authorized slice without repeated intake or asking the user to operate mechanics.
 
@@ -99,9 +102,10 @@ authorized slice without repeated intake or asking the user to operate mechanics
 
 The immutable predecessor is
 `2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot`.
-Its four authority documents and Golden Tasks remain unchanged historical input.
+Git retains the exact historical inputs. Current reference copies remove the
+user-retired dedicated prompt and its dependencies; all other content is checked.
 
 Predecessor state and release procedures remain
 [available at exact revision 4f9a21d](https://github.com/yiheng8023/YIYUAN-Accord/blob/4f9a21d79729867bed3bc89917b64c8386ce9ac6/docs/operations/CONTINUATION.md#current-state)
-and in [the published ledger](HISTORY.md). Old headings named current state,
-fixed work sequences and goal-mode procedures do not govern this successor.
+and in [the published ledger](HISTORY.md). Old headings named current state
+and fixed work sequences do not govern this successor.

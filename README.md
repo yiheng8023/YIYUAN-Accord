@@ -18,7 +18,7 @@ Accord's goal is simple: users focus on ideas and decisions; the Agent takes car
 
 Today, Accord supplies collaboration guidance through Codex and Claude plugins, plus repository tools for checking its contracts and evidence. It is not a separate autonomous worker. Reliable end-to-end behavior and added value must be demonstrated in the host where it is used.
 
-> **This branch develops 3.2.** Its packages are `3.2.0-dev.6`, not a published release or an update to your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
+> **This branch develops 3.2.** Its packages are `3.2.0-dev.7`, not a published release or an update to your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
 >
 > Start with [current limitations](#what-is-proven-and-what-is-not), the [development plan](docs/operations/PLAN-v3.2.md), or the [unreleased changelog](CHANGELOG.md). Do not install from moving `main` or this development branch.
 
@@ -46,9 +46,23 @@ The packages add no persistent service, MCP server, SDK dependency, conversation
 
 This describes the present package, not a permanent ban on runtime support. 3.2 may replace a Skill, Hook or other mechanism when the required outcome and evidence justify it.
 
+## Operating costs and capability limits
+
+Accord injects guidance and optional hints to influence Agent decisions and actions. Loaded content uses context; extra checks or tool calls may also add tokens, latency and charges. These are operating costs to measure, not evidence of harm or benefit by themselves. Evaluate outcomes, reliability, rework, user effort and full lifecycle cost together, while preserving required safety and authorization. Small successful samples do not establish savings.
+
+Possible adverse effects include conflicting instructions, displaced useful context, excessive intervention, unnecessary questions or checks, misrouting and variable behavior. Development observations have included unused Skills, non-delivery within budget, inaccurate output descriptions and an unauthorized attempt to archive a source task during handoff. Guidance has been revised; that does not prove these problems are resolved on every host, or that Accord caused every failure. See the scoped counterevidence in the [development source](product/development.json). Ordinary-use gains remain unverified.
+
+Accord organizes and guides existing capabilities. **It does not train or modify the model, enlarge its native context capacity, or bypass host interfaces, permissions and execution limits.** It cannot guarantee completion, automatic recovery or reliable handoff. Authorized external tools can extend the composed system's task range while adding dependencies and cost; this does not raise the intrinsic capability ceiling of the model or host.
+
+Testable critical constraints should use repeatable checks, with counterexamples that challenge the checks themselves. Checks may omit requirements or encode wrong expectations; reconcile intent, authority, decision criteria and actual results. The current plugins provide guidance and context hints, do not intercept host tool calls, and are not a permission barrier. Repository checks do not prove host enforcement. See the [contributor guidance](CONTRIBUTING.md#verification-and-publication).
+
+Compare the intervention's value on verified tasks. When costs or interference outweigh benefits, narrow its use, disable it or remove it through supported host controls and verify the remaining state.
+
 ## How 3.2 is being judged
 
 Safety and the agreed result come before reducing code, cost or intervention. Within those limits, the route adapts to the task rather than following a universal SOP.
+
+User intent and authority, revisable plans, and progress presentation have separate roles. New evidence can change the route, procedure and explicitly justified acceptance; the progress view maps the current plan. No planning or scheduling tool is a mandatory execution prerequisite for the project.
 
 Use native capabilities as a low-burden starting point, not a stopping rule. A meaningful gap or plausible improvement can justify comparing maintained alternatives beyond installed tools, using supported host discovery and reliable external sources. Compare full effects and lifecycle cost; discovery does not authorize installation. Stop research when further search is unlikely to change the choice, then return to delivery.
 

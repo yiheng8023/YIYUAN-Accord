@@ -312,7 +312,7 @@ _Avoid_: fork, copy-only continuation, release before destination verification
 
 **Process-loss control**:
 End-to-end reconciliation of the latest demand, accountable consensus and
-corrections with authority, plan, process, acceptance, goal projection, route,
+corrections with authority, plan, process, acceptance, route,
 implementation, evidence, documentation and final claim. It
 applies even when the current carrier is healthy; continuity transition is only
 one possible response to an observed divergence.

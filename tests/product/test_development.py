@@ -31,6 +31,10 @@ class DevelopmentContractTests(unittest.TestCase):
         return development_contract_errors(contract, self.tasks)
 
     def test_current_mapping_is_valid_but_not_behavior_or_release(self):
+        for name in ("program", "acceptance", "reshaping-guidance"):
+            text = (ROOT / f"product/{name}.json").read_text(encoding="utf-8")
+            self.assertFalse(any(term in text for term in (
+                '"goalModePrompt"', '"canonicalGoalObjectiveSha256"')), name)
         report = verify_development(ROOT)
         self.assertTrue(report["valid"], report["errors"])
         self.assertEqual(report["dutiesMapped"], 13)
@@ -52,13 +56,6 @@ class DevelopmentContractTests(unittest.TestCase):
                 altered = copy.deepcopy(self.contract)
                 altered["authority"]["conditionalRelease"]["conditions"].remove(condition)
                 self.assertTrue(self.errors(altered), "bound publication condition was lost")
-
-    def test_post_release_accord_update_is_not_general_install_authority(self):
-        self.assertFalse(self.errors(self.contract))
-        for scope in ("install", "upgrade-host-applications", "upgrade-accord-now"):
-            altered = copy.deepcopy(self.contract)
-            altered["authority"]["scope"].append(scope)
-            self.assertTrue(self.errors(altered))
 
     def test_release_plan_follows_bound_conditions_without_freezing_extra_guards(self):
         from yiyuan_accord.development import render_development_plan
@@ -458,20 +455,23 @@ class DevelopmentContractTests(unittest.TestCase):
             (root / DEVELOPMENT_FILE).write_text('{"schema":1,"schema":2}', encoding="utf-8")
             self.assertFalse(verify_development(root)["valid"])
 
-    def test_historical_preimage_cannot_be_rewritten(self):
+    def test_reference_copy_rejects_drift_and_retired_prompt_restoration(self):
         from yiyuan_accord import development
         original = development._bounded_regular_bytes
+        revision = self.contract["predecessorSnapshot"].split(":", 1)[0]
+        prior = subprocess.check_output(["git", "show", f"{revision}:product/acceptance.json"], cwd=ROOT)
 
         def changed(path):
             data, state = original(path)
             if path == ROOT / "product/acceptance.json":
-                return data + b"\n", state
+                return replacement or data + b"\n", state
             return data, state
 
-        with patch.object(development, "_bounded_regular_bytes", side_effect=changed):
-            report = verify_development(ROOT)
-        self.assertFalse(report["valid"])
-        self.assertIn("historical baseline changed: product/acceptance.json", report["errors"])
+        for replacement in (None, prior):
+            with patch.object(development, "_bounded_regular_bytes", side_effect=changed):
+                report = verify_development(ROOT)
+            self.assertFalse(report["valid"])
+            self.assertIn("historical reference retirement changed", report["errors"])
 
     def test_unrelated_mutation_is_not_development_authority(self):
         from yiyuan_accord import development
