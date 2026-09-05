@@ -58,8 +58,8 @@ The inherited responsibilities below are a review inventory, not an immutable fe
 
 | 入口 / 官方来源 | 执行位置 | 环境与权限边界 | 当前观察与未实测项 |
 |---|---|---|---|
-| `cx-cli` [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) | 本地终端；远程终端仍由该机器执行 | 绑定该 CLI 的配置、权限、提供商与工作目录。 | 本机 0.153.3；仅接口观察。 |
-| `cx-desktop` [Codex 桌面入口](https://learn.chatgpt.com/docs/app) | 本地项目/工作树或委派云端，按任务区分 | 界面入口、内嵌引擎与独立 CLI 版本分别识别。 | 本机 OpenAI.Codex 26.901.4073.0；非候选效果验收。 |
+| `cx-cli` [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) | 本地终端；远程终端仍由该机器执行 | 绑定该 CLI 的配置、权限、提供商与工作目录。 | 2026-09-05 更新后复核：本机 0.153.4（前次 0.153.3）；仅接口观察，不继承旧行为证据。 |
+| `cx-desktop` [Codex 桌面入口](https://learn.chatgpt.com/docs/app) | 本地项目/工作树或委派云端，按任务区分 | 界面入口、内嵌引擎与独立 CLI 版本分别识别。 | 2026-09-05 更新后复核：OpenAI.Codex 26.901.5280.0（前次 26.901.4073.0）；内嵌引擎未据此识别，非候选效果验收。 |
 | `cx-vscode` [Codex VS Code / 兼容编辑器](https://learn.chatgpt.com/docs/codex/ide) | 本地交互或云端委派 | 编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。 | 本机 openai.chatgpt 26.901.22334 仅安装记录；兼容编辑器未测。 |
 | `cx-jetbrains` [Codex JetBrains 集成](https://learn.chatgpt.com/docs/codex/ide) | IDE 自有集成；执行后端待核 | 不是 VS Code 扩展的同一入口；不继承其配置或插件效果。 | 官方资料支持；未实测。 |
 | `cx-xcode` [Codex Xcode 集成](https://learn.chatgpt.com/docs/codex/ide) | IDE 自有集成；执行后端待核 | 按 Xcode 代理接口与权限核对，不假设加载相同 Skill/Hook。 | 官方资料支持；未实测。 |
@@ -171,6 +171,18 @@ The dev.3 host Skill supplies adaptive guidance, not a proven system executor. H
 - `historical-reference-identity-coupling` — `implemented-bounded-regression-verified`：当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。
 - `verification-io-amplification` — `implemented-local-measured`：同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。
 - `acceptance-cost-and-coupling` — `implemented-local-unverified`：Current verify/host-check now dispatch to development-package admission without promoting or repeatedly replaying historical behavior. Retained rejection tests run current verifier code against the immutable predecessor subject. Package safety, identity, complexity, source preservation and dirty-worktree gates remain applicable; current functional and host evidence are still unverified.
+
+## 发布与收尾约束
+
+以下逐项来自当前发布条件；列出不等于通过。发布前证据和发布后收尾按下节顺序落实，不能相互替代。
+
+- 完整改动已提交并推送精确候选
+- 必要功能与质量验收全部成立
+- 精确包及受影响宿主具有新鲜证据
+- 独立评审及托管检查通过
+- 精确候选与正式发布目标核对一致
+- 按序发布并核验公共后态及任务残留
+- 更新日志与精确候选及证据相符
 
 ## 发布顺序
 

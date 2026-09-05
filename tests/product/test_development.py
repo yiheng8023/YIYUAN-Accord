@@ -47,6 +47,23 @@ class DevelopmentContractTests(unittest.TestCase):
         altered = copy.deepcopy(self.contract)
         altered["authority"]["conditionalRelease"]["conditions"] = ["some-check"]
         self.assertTrue(self.errors(altered))
+        for condition in self.contract["authority"]["conditionalRelease"]["conditions"]:
+            with self.subTest(removed=condition):
+                altered = copy.deepcopy(self.contract)
+                altered["authority"]["conditionalRelease"]["conditions"].remove(condition)
+                self.assertTrue(self.errors(altered), "bound publication condition was lost")
+
+    def test_release_plan_follows_bound_conditions_without_freezing_extra_guards(self):
+        from yiyuan_accord.development import render_development_plan
+        altered = copy.deepcopy(self.contract)
+        conditions = altered["authority"]["conditionalRelease"]["conditions"]
+        conditions.reverse()
+        conditions.append("additional task-bound release check")
+        self.assertFalse(self.errors(altered))
+        plan = render_development_plan(altered)
+        self.assertIn("additional task-bound release check", plan)
+        self.assertLess(plan.index("更新日志与精确候选及证据相符"),
+                        plan.index("完整改动已提交并推送精确候选"))
 
     def test_capability_matrix_requires_sources_conditions_and_complete_duty_mapping(self):
         cases = [

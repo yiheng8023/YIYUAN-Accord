@@ -39,6 +39,16 @@ _BASELINE_DUTIES = set(
     "resources-and-cleanup package-lifecycle native-replacement-and-retirement "
     "verification-and-value".split()
 )
+# Bound v3.2 publication conditions, not an immutable global workflow.
+_RELEASE_CONDITIONS = {
+    "all-in-scope-changes-committed-and-exact-candidate-pushed": "完整改动已提交并推送精确候选",
+    "all-required-functional-and-quality-acceptance": "必要功能与质量验收全部成立",
+    "fresh-exact-package-and-affected-host-evidence": "精确包及受影响宿主具有新鲜证据",
+    "independent-review-and-hosted-checks": "独立评审及托管检查通过",
+    "exact-candidate-and-canonical-target-verification": "精确候选与正式发布目标核对一致",
+    "ordered-publication-poststate-and-task-residue-closure": "按序发布并核验公共后态及任务残留",
+    "release-notes-match-exact-candidate-and-evidence": "更新日志与精确候选及证据相符",
+}
 
 
 def development_is_declared(root):
@@ -168,7 +178,7 @@ def development_contract_errors(contract, golden_task_ids):
             and release.get("decision") == "user-authorized-after-acceptance"
             and release.get("ready") is False
             and _strings(release.get("conditions")) and _text(release.get("rule"))
-            and "all-in-scope-changes-committed-and-exact-candidate-pushed" in release["conditions"],
+            and _RELEASE_CONDITIONS.keys() <= set(release["conditions"]),
             "conditional publication authority is not present readiness")
     cycle = section("cycle", ("id", "scopeRule", "sourceDecision"))
     require(isinstance(cycle.get("targetVersion"), str)
@@ -571,6 +581,10 @@ def render_development_plan(contract):
     lines += ["", "## 当前短板及证据边界", ""]
     for finding in contract["systemOptimization"]["priorityFindings"]:
         lines.append(f"- `{finding['id']}` — `{finding['status']}`：{finding['basis']}")
+    lines += ["", "## 发布与收尾约束", "",
+              "以下逐项来自当前发布条件；列出不等于通过。发布前证据和发布后收尾按下节顺序落实，不能相互替代。", ""]
+    for condition in contract["authority"]["conditionalRelease"]["conditions"]:
+        lines.append("- " + _RELEASE_CONDITIONS.get(condition, condition))
     lines += ["", "## 发布顺序", "",
               "更新日志：[CHANGELOG.md](../../CHANGELOG.md)。当前为未发布开发摘要；定版时以精确候选及验收证据核对，不混入历史发布账本。", "",
               "版本内改动提交 → 推送精确候选 → 精确提交的验收与独立评审 → 发布同一提交 → 公共结果及清理核验。",

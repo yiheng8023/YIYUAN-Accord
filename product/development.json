@@ -167,7 +167,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/cli",
           "execution": "本地终端；远程终端仍由该机器执行",
           "environment": "绑定该 CLI 的配置、权限、提供商与工作目录。",
-          "observation": "本机 0.153.3；仅接口观察。",
+          "observation": "2026-09-05 更新后复核：本机 0.153.4（前次 0.153.3）；仅接口观察，不继承旧行为证据。",
           "currentEffect": "unverified"
         },
         {
@@ -177,7 +177,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "本地项目/工作树或委派云端，按任务区分",
           "environment": "界面入口、内嵌引擎与独立 CLI 版本分别识别。",
-          "observation": "本机 OpenAI.Codex 26.901.4073.0；非候选效果验收。",
+          "observation": "2026-09-05 更新后复核：OpenAI.Codex 26.901.5280.0（前次 26.901.4073.0）；内嵌引擎未据此识别，非候选效果验收。",
           "currentEffect": "unverified"
         },
         {
@@ -842,6 +842,16 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "codex-updated-cli-policy-boundary-dev4",
+      "observedAt": "2026-09-05T07:06:29Z",
+      "scope": "bounded-ordinary-skill-entry-diagnostic-not-full-package-or-function-acceptance",
+      "subject": "Codex CLI 0.153.4, executable SHA256 444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b; dev.4 Skill SHA256 62074e86c985f19eb22530ea6b0eaf7e9b80a99c019664876a2a651f44410bd8 (8344 bytes), metadata SHA256 e0e5d0fb6f8f62cd67bd8e28abe79484a860bceb386751dc68ed8b51f7a15068 (321 bytes). Package based on 16aa0bb9657a17f843ad2c9966a849dacf51d194; exact Skill and metadata projected only in the candidate fixture, not installed as a plugin.",
+      "control": "Sequential native/candidate arms with identical five-row paid-order CSV and preserved keep.txt. Ordinary request: produce customer totals.csv and Chinese summary.md, preserve inputs and actually verify outputs; no forced Skill or custom system instructions. Explicit gpt-6-astra/xhigh request; actual backend identity and effort unexposed. Existing native authentication without reading/copying credentials; --ignore-user-config, --ephemeral, --json, workspace-write, approval never, hooks/web/remote_plugin disabled for this invocation. Global instructions/Skills, managed policies and effective permission source not isolated; not an official-clean host.",
+      "observation": "Both arms reached exit 0 and turn.completed but all attempted shell reads were blocked by policy: native 2 rejections in 43.385 seconds, candidate 3 in 46.213 seconds. Both explicitly reported no completion, generation or verification. Neither output existed, inputs were unchanged, and no Skill-use evidence was observed. Parent independently checked finite result records, output absence, input hashes and decimal expectations (Alice 10.30, Bob 4.25, 3 paid orders, total 14.55). Host normal termination is not task completion. Cause of the effective read-only/policy boundary remains unknown; do not infer an Accord or model defect.",
+      "limits": "150 seconds, 2 MiB stdout and 256 KiB stderr per arm; actual stdout/stderr 902/937 and 892/1038 bytes. Suspended child assigned to a kill-on-close Job before resume; both jobs reported zero processes. No retry, elevation, personal installation or policy change. The observer's final console projection showed null fields due to OrderedDictionary presentation; the separately inspected full records were intact. This is failed outcome admission and honest stop evidence, not incremental value, authenticated package lifecycle or product recovery/cleanup.",
+      "retention": "Only this sanitized bounded observation is retained after parent post-state inspection and removal of the nine task-owned temporary files. Raw records and runner are not retained release evidence. Host-owned caches and global configuration were not audited or certified clean; no personal installation or configuration edit was performed."
+    },
     {
       "id": "completion-native-interface-review",
       "observedAt": "2026-09-05T06:18:58Z",
