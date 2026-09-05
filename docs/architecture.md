@@ -159,6 +159,21 @@ executable/literal contexts remain checked. Bounded, cached local Git queries
 fail closed on unverifiable targets. This is not a general historical-prose
 exception or a full Markdown parser; legacy default scanning is unchanged.
 
+The successor accepts outcome language without requiring users to learn host
+buttons, commands or topology. Capability views support authorized selection,
+execution, verification and owned cleanup; they are not user operation manuals.
+Feasibility research distinguishes goals from means, evidence from inference,
+missing prerequisites from impossibility, and viable routes from authority.
+It ends when sufficient evidence supports the next safe action.
+
+The later dev.3 ordinary-entry recheck retained a research-to-delivery failure.
+Changing only the Skill description did not cause an implicit invocation or
+reduce fetch count, so that experimental variant was not adopted. A separate
+Chinese business-result case completed correctly with and without the unchanged
+package, without user tool selection or unrelated-reference reads. This supports
+native sufficiency for that sample, not a universal user-experience claim or
+incremental product value. See the two dated recheck observations in the source.
+
 The dev.2 same-turn repair observation in `developmentObservations` covers
 native tool execution, correction, preserved inputs and independently rechecked
 artifacts on the existing Claude Code/DeepSeek route. Both arms passed the code

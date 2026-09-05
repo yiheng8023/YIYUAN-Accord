@@ -141,6 +141,21 @@ contexts and unverified targets still fail. General uncited historical prose
 and JSON strings remain outside this bounded correction. It improves maintainer
 traceability, not ordinary-entry functionality or release eligibility.
 
+The whole-project continuation adds outcome-language operation and feasibility
+judgment to the existing mapped duties, not new capability/button catalogues.
+The dev.3 research recheck produced one native two-file result with documentation
+issues, one current-package partial delivery, and one two-file description-only
+variant. No usable arm called Skill. The description-only variant was not
+adopted: one favorable result cannot establish a repair, and fetch count did not
+fall. Three scripts passed seven observer-owned offline cases each; this is not
+real SDK execution. Separate business-result native/package arms both produced
+the independently verified IDs A/C/E and total 14 while preserving all inputs
+and avoiding user operation or unrelated-reference reads. Do not add a duplicate
+mechanism for this native-sufficient sample or promote it to general UX value.
+Keep ordinary-entry discovery, lookup sufficiency and model/tool variability
+separate when selecting the next diagnostic or implementation. The exact dev.3
+packages remain unchanged and functional acceptance remains open.
+
 The navigation and current-state narrative below belong to the predecessor;
 consult them for historical evidence or unchanged contracts, not as a second
 active plan.
