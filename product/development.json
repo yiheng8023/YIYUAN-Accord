@@ -850,7 +850,7 @@
       {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"整体目标仍是Agent承担必要任务机制；用户无需先学习交接、按钮、Git或Shell等内部操作词汇。历史dev.3/dev.5诊断保持原样；dev.6在已提交判据的Claude用户配置双轮观察中，两组均从140改为60并核验实际产物，但都未调用Accord Skill。其他用户扩展仍在，不称干净宿主、独立原生归因或Accord增量价值；样本不证明整项职责、任意环境兼容或生命周期。继续从具体声明绑定普通入口、必要作用域、整体及故障判据与独立来源，沿发现/匹配、执行、状态/资源、纠偏、恢复和验收闭合。自动交接、幸存接管者与完整生命周期仍待验。"},
       {"id":"historical-reference-identity-coupling","status":"implemented-bounded-regression-verified","basis":"当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。"},
       {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
-      {"id": "acceptance-cost-and-coupling", "status": "conditional-evaluator-implemented-real-scope-and-source-binding-open", "basis": "当前公开 Python 验证入口可接入由调用方独立认证的有界只读观察者，按显式入口/环境作用域核对完整包、定义/判据、同次执行后态、当前条件及绑定候选的独立评审。静态 CLI、历史阶段及 developmentObservations 不晋升。正反合成回归已覆盖合法复用与错误准入，但真实 scopes/cases 为空，尚无实际候选资格；调用函数或摘要回显不能认证事实。已实现有界 Claude 诊断入口与固定 ready-orders 判据，逐臂独立工作区、即时回读和清理；显式复用宿主用户配置，不由观察器私读凭据。该样本不覆盖整项职责，也不证明私有配置未变或增量收益，暂不计入准入。继续绑定充分的真实判据、适用范围和来源核验，不能把维护者工具当作用户功能或收益。 独立复核发现开发准入机械调用冻结四人评审规则；现已改为v3受检源策略，保留四视角，按本轮风险声明人数、独立职责和允许上下文。精确主体、来源认证、未知/矛盾拒绝及问题处置保持；允许经认证且处置污染的上下文变化，不强制同一身份各次回执全等。旧v1默认规则与调用者不变，尚不构成真实评审或宿主验收。"}
+      {"id": "acceptance-cost-and-coupling", "status": "conditional-evaluator-implemented-real-scope-and-source-binding-open", "basis": "当前公开 Python 验证入口可接入由调用方独立认证的有界只读观察者，按显式入口/环境作用域核对完整包、定义/判据、同次执行后态、当前条件及绑定候选的独立评审。静态 CLI、历史阶段及 developmentObservations 不晋升。正反合成回归已覆盖合法复用与错误准入，首个Codex原生生命周期scope/case已预绑定，尚无真实通过记录或候选资格；调用函数或摘要回显不能认证事实。已实现有界 Claude 诊断入口与固定 ready-orders 判据，逐臂独立工作区、即时回读和清理；显式复用宿主用户配置，不由观察器私读凭据。该样本不覆盖整项职责，也不证明私有配置未变或增量收益，暂不计入准入。继续绑定充分的真实判据、适用范围和来源核验，不能把维护者工具当作用户功能或收益。 独立复核发现开发准入机械调用冻结四人评审规则；现已改为v3受检源策略，保留四视角，按本轮风险声明人数、独立职责和允许上下文。精确主体、来源认证、未知/矛盾拒绝及问题处置保持；允许经认证且处置污染的上下文变化，不强制同一身份各次回执全等。旧v1默认规则与调用者不变，尚不构成真实评审或宿主验收。"}
     ]
   },
   "developmentObservations": [
@@ -1960,8 +1960,113 @@
         "package-lifecycle": ["codex-lifecycle", "claude-code-lifecycle"],
         "incremental-value": ["product-value"]
       },
-      "cases": [],
-      "scopes": []
+      "cases": [
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "duties": [
+            "environment-and-self-exposure",
+            "resources-and-cleanup"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "mid-task-host-drift",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "package-lifecycle"
+          ],
+          "conditions": {
+            "hostVersion": "0.153.4",
+            "hostBinarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
+            "transport": "local-app-server-stdio",
+            "profile": "task-owned-CODEX_HOME-without-private-auth",
+            "requestedOptionalHooks": "disabled",
+            "requestedRemotePlugins": "disabled",
+            "configurationRequirements": "none-reported"
+          },
+          "id": "codex-native-plugin-lifecycle",
+          "scope": "codex-lifecycle",
+          "oracle": "This component case contributes environment and resource observations only. Whole package-lifecycle/recovery duties and normal-entry/recovery quality remain missing in the parent scope until complementary adequate cases are bound and observed; preparatory checks cannot close those obligations. Use the exact existing Codex binary in a task-owned Windows Job and disposable CODEX_HOME, with no private authentication or personal configuration changes. Bind direct parent-owned RPC request/response provenance, process identity and package bytes before observations; receipt labels alone are insufficient. First check config/read, configRequirements/read, plugin/list and plugin/installed. Against a task-owned local marketplace, install the exact candidate from an empty profile, independently inspect native state and a fresh session, then uninstall. Install the immutable 3.1.0 package from commit 258611be47c47a884b6d1a2e96889cf688ca7e68, try a deliberately invalid candidate manifest. Immediately after failure, before restoring candidate inputs or invoking any further lifecycle operation, independently check the old 3.1 package bytes, native registration/enabled state, fresh-session exposure and attributable staging/cache residue against the pre-failure safe state. Any installation-state mutation prevents a rejection-before-write claim; later update or cleanup cannot repair the recorded failure. Only after this checkpoint, restore the exact candidate source and perform a supported update. Bind every successful stage to actual package files and fresh-session loaded exposure, separately from discovery or invocation. Finally uninstall and inspect native registry, enabled state, active exposure and attributable caches before disposing the process or deleting the test root. Those final evaluator actions must not hide failed native transitions or residue. Recheck host/source identities and user-installation invariance. Preserve raw failures; missing loading, compensation, single-intent ownership or independent post-state makes the corresponding facet fail or unknown, never true by assumption. The caller authenticates the live pipe and independent observations rather than reading self-authored PASS files. Human-readable oracle governs this bounded manual observation; no fixture or scripted receipt establishes a real result.",
+          "oracleFiles": [
+            ".agents/plugins/marketplace.json",
+            "scripts/run-gt20-exact-package.ps1"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "freshInstallExactCandidate": true,
+              "supportedExactUpdate": true,
+              "freshSessionLoadedExposureVerified": true,
+              "selectedOptionalHookStateAccounted": true
+            },
+            "authority": {
+              "onlyTaskOwnedTargetsChanged": true,
+              "privateAuthAndUserConfigurationPreserved": true,
+              "onlyAuthorizedLifecycleOperations": true
+            },
+            "poststate": {
+              "invalidUpdatePreservesLastSafeState": true,
+              "oneNativeIntentOwnsEachTransition": true,
+              "uninstallRemovesSelectedActiveExposure": true,
+              "nativeResidueObservedBeforeEvaluatorCleanup": true,
+              "unexpectedNativeResidue": []
+            },
+            "cleanup": {
+              "hostExitedWithoutForcedRescue": true,
+              "ownedChildrenAfterCleanup": 0,
+              "taskRootRemoved": true
+            }
+          }
+        }
+      ],
+      "scopes": [
+        {
+          "id": "codex-lifecycle",
+          "host": "codex",
+          "entry": "cx-sdk",
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "package-lifecycle"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "mid-task-host-drift",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "package-lifecycle"
+          ],
+          "conditions": {
+            "hostVersion": "0.153.4",
+            "hostBinarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
+            "transport": "local-app-server-stdio",
+            "profile": "task-owned-CODEX_HOME-without-private-auth",
+            "requestedOptionalHooks": "disabled",
+            "requestedRemotePlugins": "disabled",
+            "configurationRequirements": "none-reported"
+          },
+          "rule": "Controlled native Codex plugin lifecycle in a disposable profile. The native manager executes each authorized operation; the maintainer orchestrates the experiment and separately observes raw RPC, files, active exposure and process state. One install/update/uninstall intent must own its required transitions without evaluator repair. Fresh-session exposure is distinct from Skill use; a cache or catalogue alone cannot prove loaded state. The initial invalid-update case covers rejection before writing and preservation of the last safe state, not rollback after partial mutation. Uncovered failure windows and ordinary-entry activation remain open until observed. This scope cannot establish Desktop continuity, model behavior, whole-product functionality or incremental value."
+        }
+      ]
     },
     "coverageRule": "The inherited responsibilities below are a review inventory, not an immutable feature list. Review necessity against the user's actual goal: retain, delegate to the host, merge, retire or fill a demonstrated gap. Record retired/merged responsibilities and their changed acceptance explicitly rather than silently dropping coverage. Preserve the outcomes that remain necessary, not every historical implementation or test. Decomposition and test identifiers are revisable mappings. Actively discover unlisted design defects, broken cross-function relations, entry/configuration blind spots and unnecessary mechanisms through task-relevant official changes, realistic normal-entry work, counterexamples and failure observations. Known findings seed but never bound the review. Prioritize consequences and affected dependencies; end a research branch when sufficient evidence supports the next safe implementation or validation. Complete outcomes and independently observed value, not counts of documents, tests, rules or components, determine completeness.",
     "functionReview": "For each applicable result establish the user need, current sufficient host responsibility, necessary Accord intervention, observable effect and lifecycle cost. Judge native sufficiency against prebound outcomes, quality, authority and applicable post-state in the actual entry and composition; use risk-scaled effect/failure evidence and acceptable total burden, not capability names or one lucky success. Simple reversible work can execute and verify directly. Unknowns limit dependent claims; sufficiency is contextual and is not optimality or product retirement. The inventory requires neither one module per duty nor one stage per action. Separate task delivery and verification from optional cross-task learning, authorized package lifecycle and maintainer product/value qualification. If a need no longer applies, revise its dependent acceptance explicitly; if only its representation or implementation is redundant, preserve the result through a verified replacement. Machine-suited means need no human-workflow imitation, but still need evidence and necessary human control.",

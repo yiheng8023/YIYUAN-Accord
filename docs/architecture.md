@@ -138,8 +138,8 @@ hint transport, complexity and bounded changed paths. Their PASS does not
 establish functionality, value or candidate eligibility.
 
 The schema-v4 source's `acceptance.admission` v3 prebinds required scope IDs and a
-risk-bound review policy for function, package lifecycle and overall incremental value. Actual scope/case
-definitions remain open. Stored assessments and diagnostics grant no acceptance.
+risk-bound review policy for function, package lifecycle and overall incremental value. The first native Codex lifecycle case is prebound; remaining definitions
+and real evidence stay open. Stored assessments and diagnostics grant no acceptance.
 
 The Python entry `verify_product(root, evidence=observer)` reuses bounded Git
 reads, exact package identity and independent-review validation. The caller must
