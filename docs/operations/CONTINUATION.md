@@ -27,7 +27,7 @@ The four v3.1 authority documents, Golden Tasks and package evidence remain
 historical inputs. Their old `verified` criteria and maintenance boundary do not
 describe the successor's functional acceptance. Run `verify-development` for
 source conformance and `verify` / `host-check` for current development admission.
-The unpublished worktree packages are `3.2.0-dev.3`; user installations are not
+The unpublished worktree packages are `3.2.0-dev.4`; user installations are not
 updated. Retained historical regression tests use the immutable predecessor;
 current package rejection tests are in `tests/product/test_development.py`.
 Current-host functionality and value remain unverified. Prioritize the observed
@@ -37,6 +37,19 @@ and avoidable user intervention with a suitable native baseline; do not force
 invocation or add visible ceremony to simulate value. Claude Code evaluation uses the user's
 authorized existing CC Switch / DeepSeek route, not unavailable official Claude
 account access. Keep provider, model, host and configuration attribution separate.
+
+Dev.4 clarifies active-goal approval and continued execution, but the ordinary
+Claude approval probe did not invoke the Skill. Both native and candidate arms
+delivered correct artifacts; the candidate omitted promised post-write reads
+and overstated directory knowledge. Its explicit-stop arm made no writes.
+Independent explicit-Skill use produced correct files but is not ordinary-entry
+or incremental-value proof. Keep these distinct observations in
+`developmentObservations`; prioritize the activation/verification gap.
+
+Quality floors are now explicitly mapped to stages alongside duties; the plan
+is generated from those mappings. Native goal mode is optional, not a planning
+or execution prerequisite. Current user corrections and source/evidence govern
+the next action; stop affected effects and recalibrate on material conflict.
 
 The dev.1 native-sufficient fixture passed with and without Accord; neither arm
 invoked the Skill. The sanitized observation, exact old package identity and

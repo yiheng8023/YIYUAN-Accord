@@ -18,7 +18,7 @@ Accord's goal is simple: users focus on ideas and decisions; the Agent takes car
 
 Today, Accord supplies collaboration guidance through Codex and Claude plugins, plus repository tools for checking its contracts and evidence. It is not a separate autonomous worker. Reliable end-to-end behavior and added value must be demonstrated in the host where it is used.
 
-> **This branch develops 3.2.** Its packages are `3.2.0-dev.3`, not a published release or an update to your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
+> **This branch develops 3.2.** Its packages are `3.2.0-dev.4`, not a published release or an update to your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
 >
 > Start with [current limitations](#what-is-proven-and-what-is-not), the [development plan](docs/operations/PLAN-v3.2.md), or the [unreleased changelog](CHANGELOG.md). Do not install from moving `main` or this development branch.
 

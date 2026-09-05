@@ -157,6 +157,61 @@ class DevelopmentContractTests(unittest.TestCase):
         self.assertEqual(len(stages), 4)
         self.assertEqual(self.errors(altered), [])
 
+    def test_quality_floor_cannot_be_listed_without_an_execution_stage(self):
+        altered = copy.deepcopy(self.contract)
+        axes = [axis["id"] for axis in altered["systemOptimization"]["qualityAxes"]]
+        for stage in altered["systemOptimization"]["workSequence"]:
+            stage["qualityAxes"] = axes[:]
+        self.assertEqual(self.errors(altered), [])
+        for stage in altered["systemOptimization"]["workSequence"]:
+            stage["qualityAxes"].remove("maintainability-and-resource-cost")
+        self.assertTrue(self.errors(altered))
+
+    def test_current_instruction_budget_is_explicit_not_inherited_from_history(self):
+        altered = copy.deepcopy(self.contract)
+        budget = altered["changeBoundary"]["complexityBudget"]
+        budget["maxPrimaryInstructionBytes"] = 28000
+        self.assertEqual(self.errors(altered), [])
+        for value in (None, True, 0, -1, "28000"):
+            with self.subTest(value=value):
+                budget["maxPrimaryInstructionBytes"] = value
+                self.assertTrue(self.errors(altered))
+        del budget["maxPrimaryInstructionBytes"]
+        self.assertTrue(self.errors(altered))
+
+    def test_old_development_schema_cannot_claim_the_new_mapping_contract(self):
+        altered = copy.deepcopy(self.contract)
+        altered["schema"] = "yiyuan-accord-development/v2"
+        self.assertTrue(self.errors(altered))
+
+    def test_quality_mapping_rejects_missing_malformed_or_unknown_references(self):
+        for value in (None, {}, [], ["unknown-quality"], [["nested"]],
+                      ["functional-coverage", "functional-coverage"]):
+            with self.subTest(value=value):
+                altered = copy.deepcopy(self.contract)
+                altered["systemOptimization"]["workSequence"][0]["qualityAxes"] = value
+                self.assertTrue(self.errors(altered))
+        altered = copy.deepcopy(self.contract)
+        del altered["systemOptimization"]["workSequence"][0]["qualityAxes"]
+        self.assertTrue(self.errors(altered))
+        altered = copy.deepcopy(self.contract)
+        altered["systemOptimization"]["qualityAxes"][0]["name"] = ""
+        self.assertTrue(self.errors(altered))
+
+    def test_quality_plan_follows_source_floor_and_stage_allocation(self):
+        from yiyuan_accord.development import render_development_plan
+        altered = copy.deepcopy(self.contract)
+        axis = altered["systemOptimization"]["qualityAxes"][-1]
+        axis.update(name="Revised maintenance need", floor="Bounded verification cost.")
+        stages = altered["systemOptimization"]["workSequence"]
+        for stage in stages:
+            stage["qualityAxes"] = [item for item in stage["qualityAxes"] if item != axis["id"]]
+        stages[0]["qualityAxes"].append(axis["id"])
+        self.assertEqual(self.errors(altered), [])
+        rendered = render_development_plan(altered)
+        self.assertIn(f"| {axis['name']} | {axis['floor']} | {stages[0]['title']} | 未验证 |", rendered)
+        self.assertIn(altered["systemOptimization"]["rule"], rendered)
+
     def test_isolation_is_not_a_clean_host_product_requirement(self):
         for field, value in (("cleanHostRequiredForProduct", True),
                              ("evaluationRule", ""), ("selfUseBoundary", ""),
@@ -451,6 +506,15 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         for host in report["hostChecks"].values():
             self.assertTrue(host["staticReady"])
             self.assertEqual(host["behaviorEvidenceState"], "unverified")
+
+    def test_current_admission_enforces_the_declared_instruction_budget(self):
+        declaration = copy.deepcopy(self.contract)
+        declaration["changeBoundary"]["complexityBudget"]["maxPrimaryInstructionBytes"] = 1
+        with self.changed(DEVELOPMENT_FILE, json.dumps(declaration).encode()):
+            report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertTrue(any("primaryInstructionBytes=" in error for error in report["errors"]))
+        self.assertFalse(report["repositoryCandidateReady"])
 
     def historical_source(self):
         program = json.loads((self.root / "product/program.json").read_text(encoding="utf-8"))

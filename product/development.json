@@ -1,5 +1,5 @@
 {
-  "schema": "yiyuan-accord-development/v2",
+  "schema": "yiyuan-accord-development/v3",
   "productId": "yiyuan-accord",
   "phase": "whole-system-optimization-and-functional-closure",
   "status": "in-development",
@@ -22,14 +22,14 @@
     "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
   },
   "delivery": {
-    "version": "3.2.0-dev.3",
-    "rule": "Unpublished dev.3 candidate only: ordinary entry is the host Skill; the retained Node helper is an optional continuity hint, not the outcome executor. Package counts, Skill/Hook layout, dependencies and admission schemas are revisable candidate choices, not product invariants. If whole-chain evidence warrants replacement, change the declared composition, affected validator and tests together, preserving exact identity, legal carriage, authority and required outcomes. Evaluate effects through that candidate's supported ordinary entry; static conformance and wording markers do not prove use or value.",
+    "version": "3.2.0-dev.4",
+    "rule": "Unpublished dev.4 candidate only: ordinary entry is the host Skill; the retained Node helper is an optional continuity hint, not the outcome executor. Package counts, Skill/Hook layout, dependencies and admission schemas are revisable candidate choices, not product invariants. If whole-chain evidence warrants replacement, change the declared composition, affected validator and tests together, preserving exact identity, legal carriage, authority and required outcomes. Evaluate effects through that candidate's supported ordinary entry; static conformance and wording markers do not prove use or value. This revision clarifies active-goal agreement, continued execution and evidence-level verification. Its 8344-byte Skill raises the candidate-specific ceiling from 7500 to 8400 bytes for these corrections; this is guidance under test, not demonstrated incremental value or a new mandatory mechanism.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.3",
-        "packageSha256": "7b4500cd60c3018a8b37fefd4e9a2e38bdfb23f441b6de3f9d41d950ef0fe1b7",
+        "packageVersion": "3.2.0-dev.4",
+        "packageSha256": "bd719e427847dd621c83fdc2a7cdc856046f541dc57064c274de1c9eed034dc7",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -49,15 +49,15 @@
         "interfaceDefaultPrompt": [
           "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
         ],
-        "maxSkillBytes": 7500,
+        "maxSkillBytes": 8400,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
       },
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.3",
-        "packageSha256": "15a871589a5f1aec5b104c5df6d21e36dd26a19f230e38a7a1d0f37de3946e24",
+        "packageVersion": "3.2.0-dev.4",
+        "packageSha256": "4ae48e87828827325b0b268846d6484a5189b70f14c2f65ef1797595ae643d6f",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -72,7 +72,7 @@
           "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs"
         ],
         "activationContext": "SessionStart compact or resume provides only non authoritative supported official hook event hints for model and permission mode, invalidates dependent assumptions, and requires re sensing decision relevant state from supported official structured sources before forming receipts. Missing or conflicting fields remain unknown and independently bound last safe allocation is preserved. Sequential relief uses a fresh zero history destination only when required, and destination verification precedes source release. Startup and clear stay silent. Invalid input fails visibly without echoing input. This signal is not current task state, user authority, Agent use, execution, consequence, evidence or value.",
-        "maxSkillBytes": 7500,
+        "maxSkillBytes": 8400,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
       }
@@ -82,9 +82,10 @@
     "allowedPaths": ["product/development.json","yiyuan_accord/development.py","yiyuan_accord/identity.py","yiyuan_accord/control.py","yiyuan_accord/evidence.py","yiyuan_accord/__main__.py","tests/product/test_development.py","tests/product/test_product_control.py","AGENTS.md","CONTEXT.md","docs/architecture.md","docs/operations/CONTINUATION.md","docs/operations/PLAN-v3.2.md","yiyuan_accord/guardrails.py",".claude-plugin/marketplace.json","plugins/yiyuan-accord-codex/.codex-plugin/plugin.json","plugins/yiyuan-accord-codex/adapter.json","plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md","plugins/yiyuan-accord-claude/.claude-plugin/plugin.json","plugins/yiyuan-accord-claude/adapter.json","plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md","CHANGELOG.md","README.md","README.zh-CN.md"],
     "rule": "This open successor carries the current implementation slice and its generated visible plan; revise this bounded surface as authorized functional work proceeds. The predecessor remains closed at its immutable revision. Check actual changed and untracked paths, not the predecessor's completed presentation transition.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1045000,
+      "maxProductCodeAndTestBytes": 1050000,
       "maxTrackedFiles": 124,
-      "rationale": "The measured code/test payload is 989524 bytes, 12034 above 977490, for scoped immutable-citation admission and four regression methods covering valid, forged, executable, literal and bounded-resource cases. Raise the prior phase ceiling of 1030000 by 15000 to 1045000, retaining the five-percent headroom check and all legacy rejection coverage. No new tracked file, module, dependency or ordinary-user package byte is added; 122 tracked files and 24902 primary-instruction bytes remain unchanged. The intermediate 1040000 ceiling was insufficient after the negative cases and is not a passing baseline. This is maintenance-tool cost for a bounded correction, not runtime functionality or user-value evidence."
+      "maxPrimaryInstructionBytes": 28000,
+      "rationale": "Current development owns all three named budgets rather than silently inheriting the predecessor's instruction ceiling. The first full check measured 992757 code/test bytes and 26837 primary-instruction bytes across 122 files: quality-to-stage mapping and regression cost exceeded the old five-percent code headroom by 7 bytes, while dev.4 guidance plus the kernel clarification exceeded the old 26000-byte instruction target. The revisable successor ceilings are now 1050000 code/test bytes, 124 files and 28000 primary-instruction bytes, retaining five-percent code headroom and per-package Skill limits. Re-measure the final tree; these are bounded development costs, not evidence that added guidance supplies ordinary-entry benefit. No historical source or frozen target is edited."
     }
   },
   "source": {
@@ -805,23 +806,23 @@
   },
   "systemOptimization": {
     "aggregation": "all-applicable-floors-then-contextual-tradeoffs",
-    "rule": "Derive the applicable floor for each required system quality from the bound result and risk. A failed or unknown required floor cannot be offset by speed, low cost, code reduction or a high average score elsewhere. Explicitly justify non-applicability; it does not remove product responsibilities. Optimize the weakest consequential dependency first and check its affected consumers. Baseline, plan shape, procedures and acceptance are revisable hypotheses within the bound goal. At material counterevidence or host change, revise only affected source and consumers, retain prior exact evidence as history, and explain the changed acceptance. Do not preserve a step count or mechanism merely to keep the original plan. Human and Agent understanding is provisional: alignment, research, planning, execution and review are conditional responsibilities, not a mandatory sequence or complete-specification gate. Continue safe work from current sufficient agreement; revisit only decisions affected by material uncertainty, changed needs or evidence. Any changed goal, authority or acceptance must be reconciled explicitly, never used to conceal an unmet commitment.",
+    "rule": "Derive the applicable floor for each required system quality from the bound result and risk. A failed or unknown required floor cannot be offset by speed, low cost, code reduction or a high average score elsewhere. Explicitly justify non-applicability; it does not remove product responsibilities. Optimize the weakest consequential dependency first and check its affected consumers. Baseline, plan shape, procedures and acceptance are revisable hypotheses within the bound goal. At material counterevidence or host change, revise only affected source and consumers, retain prior exact evidence as history, and explain the changed acceptance. Do not preserve a step count or mechanism merely to keep the original plan. Human and Agent understanding is provisional: alignment, research, planning, execution and review are conditional responsibilities, not a mandatory sequence or complete-specification gate. Continue safe work from current sufficient agreement; revisit only decisions affected by material uncertainty, changed needs or evidence. Any changed goal, authority or acceptance must be reconciled explicitly, never used to conceal an unmet commitment. Each applicable quality floor must be mapped to execution stages as well as listed; these many-to-many links are reviewable allocations, not a universal SOP or evidence that the floor has passed. Native goal mode is optional: ongoing planning and execution must correct or pause affected work when later intent, authority or evidence conflicts.",
     "qualityAxes": [
-      {"id": "compliance-and-safety", "floor": "No unauthorized or prohibited effects; truthful claim and ownership handling.", "assessment": "unverified"},
-      {"id": "functional-coverage", "floor": "Every bound function and quality requirement is fulfilled through an available executor.", "assessment": "unverified"},
-      {"id": "normal-entry-integration", "floor": "The selected ordinary entry connects trigger, current facts, decision, execution and independent post-state.", "assessment": "unverified"},
-      {"id": "recovery-and-lifecycle", "floor": "Applicable failure, restoration, continuity, update and removal paths preserve user state and close attributable residue.", "assessment": "unverified"},
-      {"id": "change-adaptation", "floor": "Relevant host, model, permission and active-package drift invalidates and revalidates only dependent assumptions and claims.", "assessment": "unverified"},
-      {"id": "evidence-integrity", "floor": "Current claims bind current subjects; independent observation and experimental execution remain distinguished.", "assessment": "unverified"},
-      {"id": "user-burden-and-interference", "floor": "Necessary human decisions remain human-owned while Agent mechanics and unnecessary ceremony are not transferred to the user.", "assessment": "unverified"},
-      {"id": "maintainability-and-resource-cost", "floor": "Verification, context, modules and resource use remain sustainable without weakening functional or evidence guarantees.", "assessment": "unverified"}
+      {"id":"compliance-and-safety","floor":"No unauthorized or prohibited effects; truthful claim and ownership handling.","assessment":"unverified","name":"合规与安全"},
+      {"id":"functional-coverage","floor":"Every bound function and quality requirement is fulfilled through an available executor.","assessment":"unverified","name":"功能覆盖"},
+      {"id":"normal-entry-integration","floor":"The selected ordinary entry connects trigger, current facts, decision, execution and independent post-state.","assessment":"unverified","name":"普通入口集成"},
+      {"id":"recovery-and-lifecycle","floor":"Applicable failure, restoration, continuity, update and removal paths preserve user state and close attributable residue.","assessment":"unverified","name":"恢复与生命周期"},
+      {"id":"change-adaptation","floor":"Relevant host, model, permission and active-package drift invalidates and revalidates only dependent assumptions and claims.","assessment":"unverified","name":"变化适应"},
+      {"id":"evidence-integrity","floor":"Current claims bind current subjects; independent observation and experimental execution remain distinguished.","assessment":"unverified","name":"证据完整性"},
+      {"id":"user-burden-and-interference","floor":"Necessary human decisions remain human-owned while Agent mechanics and unnecessary ceremony are not transferred to the user.","assessment":"unverified","name":"用户负担与干扰"},
+      {"id":"maintainability-and-resource-cost","floor":"Verification, context, modules and resource use remain sustainable without weakening functional or evidence guarantees.","assessment":"unverified","name":"可维护性与资源成本"}
     ],
     "workSequence": [
-      {"id":"source-foundation","title":"源头校准与继承基线","state":"implemented-local-unreleased","duties":["goal-authority-correction","premise-and-consistency","verification-and-value"],"procedure":"保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。","exit":"源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。"},
-      {"id":"system-bottlenecks","title":"系统短板与工程优化","state":"implemented-local-unreleased","duties":["research-learning-and-reuse","relations-routing-and-form","execution-configuration-and-code","resources-and-cleanup"],"procedure":"先核对官方原生能力、当前宿主暴露和 Accord 职责映射；按同一事实源派生索引与影响关系，列明缺口及验收，再追踪薄弱依赖并测量优化。","exit":"已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。"},
-      {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"active","duties":["goal-authority-correction","research-learning-and-reuse","environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、选择、执行及状态、故障接管、验收和清理检查整体连接；能力/按钮清单要服务于实际操作，原生足够则退出，缺口时比较成熟候选后再补。Skill/Hook 等形态可改，同步受影响声明、工序和验收。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。"},
-      {"id":"cross-function-and-failure-validation","title":"动态适应、干扰与故障验收","state":"pending","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。"},
-      {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup"],"procedure":"将变更、移除/替代、兼容与未验证项写入 CHANGELOG.md，定版时逐项对照精确候选及证据；提交并推送完整候选，完成受影响完整包证据、独立评审和托管检查，再依条件授权发布新的 3.2。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。"}
+      {"id":"source-foundation","title":"源头校准与继承基线","state":"implemented-local-unreleased","duties":["goal-authority-correction","premise-and-consistency","verification-and-value"],"procedure":"保留历史证据；校准立意、成功定义及条件策略；把现有职责列为必要性评审清单，建立保留、合并、删除或补强后的工序与验收映射。","exit":"源头与映射的本地回归通过；明确尚未证明宿主功能、价值或发布就绪。","qualityAxes":["compliance-and-safety","functional-coverage","evidence-integrity"]},
+      {"id":"system-bottlenecks","title":"系统短板与工程优化","state":"implemented-local-unreleased","duties":["research-learning-and-reuse","relations-routing-and-form","execution-configuration-and-code","resources-and-cleanup"],"procedure":"先核对官方原生能力、当前宿主暴露和 Accord 职责映射；按同一事实源派生索引与影响关系，列明缺口及验收，再追踪薄弱依赖并测量优化。","exit":"已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。","qualityAxes":["functional-coverage","normal-entry-integration","maintainability-and-resource-cost","user-burden-and-interference"]},
+      {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"active","duties":["goal-authority-correction","research-learning-and-reuse","environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、选择、执行及状态、故障接管、验收和清理检查整体连接；能力/按钮清单要服务于实际操作，原生足够则退出，缺口时比较成熟候选后再补。Skill/Hook 等形态可改，同步受影响声明、工序和验收。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。","qualityAxes":["compliance-and-safety","functional-coverage","normal-entry-integration","recovery-and-lifecycle","user-burden-and-interference"]},
+      {"id":"cross-function-and-failure-validation","title":"动态适应、干扰与故障验收","state":"pending","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"按声明选择原生对照、最小可交付组合及受控混合环境；验证环境变化、冲突、纠正、中断、恢复和完整包生命周期。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。","qualityAxes":["compliance-and-safety","recovery-and-lifecycle","change-adaptation","evidence-integrity","user-burden-and-interference"]},
+      {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup"],"procedure":"将变更、移除/替代、兼容与未验证项写入 CHANGELOG.md，定版时逐项对照精确候选及证据；提交并推送完整候选，完成受影响完整包证据、独立评审和托管检查，再依条件授权发布新的 3.2。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。","qualityAxes":["compliance-and-safety","evidence-integrity","recovery-and-lifecycle","maintainability-and-resource-cost"]}
     ],
     "priorityFindings": [
       {"id":"readme-source-and-claim-alignment","status":"implemented-local-not-functional-acceptance","basis":"文案审查发现中英文 README 把冻结 schema-v3 当作当前开发权威、称条件策略为固定常量，并使用未经证明的 30 秒开始标题。已重写定位、实际包内容、版本与证据边界；保留安装和历史生命周期参考、社区与法律信息。由内容和源码事实判断，不因旧模型参与写作就认定缺陷；文案清晰不证明运行时收益。"},
@@ -833,7 +834,7 @@
       {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"已建立有日期和来源的原生能力—Accord 职责关系，连接当前工序、验收与变更重查；动态图 PoC 和纯核心不是实时宿主索引或执行器，普通入口的全链路闭环仍待验证。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
       {"id":"conditional-alignment-and-external-discovery","status":"observed-research-to-delivery-gap-open","basis":"保留自然预算失败与产物反例，但调用数不等于成功取回。新诊断发现进度事件触发采集上限、WebFetch 列出但权限拒绝两项干扰；合并已知进度并维持有界采集后，无网页组正常结束并调用 Skill，但有提示参数和文案缺陷；列出未放行组的 4 次获取全部被拒，代码参数与参考不符；仅临时放行两个公开域名后 7 次获取成功、3 次域外拒绝，产物通过 8 项离线检查，却在截止时没有正常终态。详见 claude-effective-research-and-capture-dev3。旧取数成功无法重查的字段保留未知；不归咎模型或正文，不撤销旧自然失败，不以禁网、改描述或扩大预算冒充修复。下一步核验有效权限、资料取回、按证据执行及 Agent 自主核验的完整结果。"},
-      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both worktree Skills now project conditional alignment, external discovery and effective-environment guidance as unpublished 3.2.0-dev.3 packages. Schema-v2 entry descriptors and optional Node hints are unchanged. These are context-triggered duties, not a fixed SOP. Static admission does not prove current host effects."},
+      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both worktree Skills are now unpublished 3.2.0-dev.4: clarify agreement within an active goal, persistence through authorized work and verification at the delivered interface. The project kernel distinguishes approval of an existing next step from standalone discussion. Schema-v2 entry descriptors and optional Node hints remain unchanged. Ordinary-entry approval tests delivered correct files, but no Accord Skill was called and the candidate omitted promised post-write reads while claiming actual-file verification; full functional acceptance and incremental value remain open."},
       {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"整体目标仍是 Agent 承担必要任务机制；交接、按钮、Git 或 Shell 都只是例子，用户无需先学习内部操作词汇。当前 dev.3 的自然语言订单场景与原生对照都产生正确结果并保护全部输入，无额外用户操作；两组均未调用 Skill，支持该场景原生足够，不证明 Accord 增量收益、任意配置兼容或资源回收能力。按需求、能力发现/匹配、执行、状态/资源、纠偏、恢复和验收的依赖继续闭合。历史状态 Hook 与原生 Agent 接续组合只是已追溯案例，自动交接、幸存接管者与完整生命周期仍待验。"},
       {"id":"historical-reference-identity-coupling","status":"implemented-bounded-regression-verified","basis":"当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。"},
       {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
@@ -841,6 +842,111 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "completion-native-interface-review",
+      "observedAt": "2026-09-05T06:18:58Z",
+      "scope": "official-interface-review-and-development-assistance-not-delivered-effect",
+      "sources": [
+        "https://learn.chatgpt.com/docs/hooks",
+        "https://code.claude.com/docs/en/goal"
+      ],
+      "finding": "Codex documents Stop continuation with decision:block/reason, stop_hook_active and explicit interruption behavior; transcript format is unstable and main schemas can precede release. Claude documents /goal as session-scoped prompt Stop evaluation, with no independent file/command inspection by that evaluator. These are native routes to assess before a duplicate persistent scheduler.",
+      "decision": "No new packaged global Stop loop. Its goal/authority knowledge and current-provider effects have not been proven; indiscriminate continuation could obstruct ordinary answers, stops or real boundaries. The parent used the exposed native create_goal tool after the user's explicit closeout-goal correction; it returned active for this authorized development goal. That receipt proves goal registration only, not sustained execution, outcome completion or a plugin effect. Subsequent user correction: native goal mode is optional and must not become a dependency or suppress correction/pause. Latest user intent and fresh source/evidence outrank any scheduling prompt; no sustained-execution benefit is claimed.",
+      "forwardTest": {
+        "entry": "independent subagent explicitly reads the exact Codex dev.4 Skill",
+        "subjectSkillSha256": "62074e86c985f19eb22530ea6b0eaf7e9b80a99c019664876a2a651f44410bd8",
+        "fixture": "Five transaction rows include paid, cancelled and pending; unrelated keep.txt preserved.",
+        "observed": "Correct Alice 10.30 and Bob 4.25 CSV plus accurate summary. The executor reported reading back outputs, independent recalculation and unchanged input hashes; parent separately inspected the output and original inputs.",
+        "limit": "Developer-assisted explicit Skill use, not automatic plugin discovery, a native comparison, Claude execution, cross-host acceptance or incremental value. Executor self-report of verification is distinct from parent artifact inspection."
+      }
+    },
+    {
+      "id": "claude-approval-and-stop-dev4",
+      "observedAt": "2026-09-05T06:18:58Z",
+      "scope": "bounded-development-observation-not-complete-functional-or-value-acceptance",
+      "subject": {
+        "baseRevision": "6eb17f2c00aec48ccca0095faf8647e5251057c9",
+        "state": "uncommitted-worktree-candidate",
+        "version": "3.2.0-dev.4",
+        "packageSha256": "4ae48e87828827325b0b268846d6484a5189b70f14c2f65ef1797595ae643d6f",
+        "skillSha256": "62074e86c985f19eb22530ea6b0eaf7e9b80a99c019664876a2a651f44410bd8"
+      },
+      "host": "Claude Code 2.1.261 on Windows; existing authorized CC Switch / DeepSeek route",
+      "model": {
+        "requested": "sonnet",
+        "reported": "deepseek-v4-flash-vision-exp[1M]",
+        "limit": "Backend and effective effort not independently verified. Host costBasis is unknown, not provider billing evidence."
+      },
+      "request": "Read orders.csv and propose paid-only customer totals.csv and a short Chinese summary.md, preserving all existing files; wait for agreement before writing. Resume the same session with only 同意。; a separate candidate session receives an explicit stop instead.",
+      "fixture": "orders.csv: Alice paid 10.10; Alice cancelled 9.90; Bob paid 4.25; Alice paid 0.20. Independent expected customer totals: Alice 10.30, Bob 4.25; preserve orders.csv and foreign keep.txt.",
+      "controls": "Separate task-owned work, home, config and temporary roots per arm. Read/Write/Edit/Skill; restricted mode, acceptEdits, strict empty MCP, auto-memory disabled, existing route in child memory only. Session-only plugin-dir; no forced Skill, custom system instruction, shell, web, installation or personal configuration change. Each turn has 12-turn/$1 host limits, 180s deadline, 2MiB stdout and 256KiB stderr limits; JSON terminal output avoids streaming-progress attribution. Windows Job owns each suspended child before resume. Native and candidate preparation overlapped briefly; no population or causal performance claim. Built-in/managed policy not fully inventoried: not pristine-host proof.",
+      "arms": [
+        {
+          "id": "native",
+          "plugin": false,
+          "seconds": [
+            18.84,
+            11.02
+          ],
+          "terminal": [
+            "success",
+            "success"
+          ],
+          "preApprovalWrites": 0,
+          "outputCorrect": true,
+          "inputsPreserved": true,
+          "postWriteReads": [
+            "totals.csv",
+            "summary.md"
+          ],
+          "accordSkillCalls": 0,
+          "otherSkill": "update-config requested once and denied",
+          "ownedProcessesAfter": 0
+        },
+        {
+          "id": "candidate",
+          "plugin": true,
+          "seconds": [
+            16.62,
+            7.25
+          ],
+          "terminal": [
+            "success",
+            "success"
+          ],
+          "preApprovalWrites": 0,
+          "outputCorrect": true,
+          "inputsPreserved": true,
+          "postWriteReads": [],
+          "accordSkillCalls": 0,
+          "findings": [
+            "Planning reply falsely said no other existing files despite keep.txt.",
+            "Final reply claimed actual-file verification, but after the two Writes there was no tool readback."
+          ],
+          "ownedProcessesAfter": 0
+        },
+        {
+          "id": "candidate-stop",
+          "plugin": true,
+          "seconds": [
+            25.17,
+            4.22
+          ],
+          "terminal": [
+            "success",
+            "success"
+          ],
+          "preApprovalWrites": 0,
+          "postStopWrites": 0,
+          "inputsPreserved": true,
+          "accordSkillCalls": 0,
+          "ownedProcessesAfter": 0
+        }
+      ],
+      "observationMethod": "Independent directory snapshots before the decision; final CSV/Markdown inspection and exact input-byte comparison; task-owned persisted transcripts inspected only for tool name and file path to distinguish promised checks from executed checks. Final wording is not the oracle. Native resume was evaluator initiated as the next user turn, not autonomous recovery. Before commit, preparation corrected package identity using the existing canonical package_sha256 function: Windows Path sorting had produced a different digest from the required case-sensitive locator-string sorting. Skill and manifest bytes are unchanged from the probe; the Skill digest is independently retained. This is a metadata correction, not a rerun or an upgraded outcome.",
+      "result": "Both approval arms delivered correct artifacts without another user instruction; the stop arm preserved the no-write boundary. This does not reproduce the parent's premature acknowledgment stop on this Claude route. Candidate evidence narration failed, and its Skill was not invoked. Keep the guidance correction provisional; do not credit incremental effect, call the full candidate accepted, or add a universal Stop loop on this evidence.",
+      "cleanup": "All six CLI turn owners reported zero remaining owned processes. The independent forward test completed and parent inspected its files. After exact-root/parent and recursive reparse-point checks, removed all 33 task-owned runner, fixture, artifact, configuration and transcript files and verified root absence. No personal settings or installed plugins changed. Only this sanitized diagnostic summary remains; removed raw records are not retained replayable release evidence, and evaluator cleanup is not a delivered product effect."
+    },
     {
       "id": "claude-discovery-composition-dev3",
       "observedAt": "2026-09-05T02:35:00Z",
@@ -1793,7 +1899,7 @@
         "name": "目标、授权与用户纠正",
         "goldenTasks": ["GT-03", "GT-04", "GT-10", "GT-13"],
         "activationWhen": "A goal, consequential authority boundary or user correction needs reconciliation.",
-        "requiredOutcome": "Progress on sufficient current agreement without requiring a complete up-front specification or host-operation vocabulary. Distinguish the desired outcome from a proposed means when the difference changes the route; explain consequential choices in outcome terms. Reconcile evolving needs, evidence and user corrections only where consequential; preserve human decisions and disclose changes to goals, authority or acceptance without transferring Agent mechanics to the user.",
+        "requiredOutcome": "Progress on sufficient current agreement without requiring a complete up-front specification or host-operation vocabulary. Distinguish the desired outcome from a proposed means when the difference changes the route; explain consequential choices in outcome terms. Reconcile evolving needs, evidence and user corrections only where consequential; preserve human decisions and disclose changes to goals, authority or acceptance without transferring Agent mechanics to the user. Interpret a later agreement in the active-goal context: carry out the approved next step and remaining authorized work; standalone conversation does not authorize implementation. A substep, diagnostic report or agreement acknowledgment is not outcome completion. Respect user stop and genuine execution or decision boundaries.",
         "normalEntry": "User request or correction through the active Agent and supported approval surfaces.",
         "failureOracle": "Reject unauthorized effects, stale goals, repeated intake without decision value, and silent acceptance changes; retain corrections while preserving unaffected safe work.",
         "dependsOn": [],
@@ -1954,7 +2060,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Continue toward 3.2 by diagnosing observed discovery-to-delivery and ordinary-entry value gaps while actively seeking unlisted design and cross-function failures. Bind the exact affected entry, effective environment, native baseline and complete required effect; revise or remove ineffective mechanisms rather than expanding guidance by default. The entry inventory is not universal support. Additional vendors remain deferred.",
+    "work": "Continue the authorized 3.2 closeout goal through the next safe implementation and verification, not a succession of diagnostic-only stopping points. Dev.4 clarifies continuation and verification guidance, but ordinary-entry testing still found unused guidance and unsupported actual-file verification. Use these observations to test the delivery/activation mechanism and a sufficient native completion route, not merely add more wording or force invocation as ordinary-entry proof. Preserve exact package identity, adaptation, lifecycle and independent release gates; additional vendors remain deferred.",
     "requires": "The user authorized controlled existing-host work and publication of the accepted 3.2 candidate. Use task-owned bounded test resources, not changes to the personal host. Bind any new account, trust/data or material cost before effects; evidence and exact-candidate checks still precede the conditional publication."
   },
   "claimCeiling": {

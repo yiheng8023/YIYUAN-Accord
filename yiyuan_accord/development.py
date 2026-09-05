@@ -136,7 +136,7 @@ def development_contract_errors(contract, golden_task_ids):
     if not isinstance(contract, dict):
         return ["development contract must be an object"]
     schema = contract.get("schema")
-    require(schema == "yiyuan-accord-development/v2",
+    require(schema == "yiyuan-accord-development/v3",
             "unsupported development schema")
     require(contract.get("productId") == "yiyuan-accord", "product identity mismatch")
     phase = "whole-system-optimization-and-functional-closure"
@@ -150,10 +150,8 @@ def development_contract_errors(contract, golden_task_ids):
     require(_strings(boundary.get("allowedPaths")), "source change boundary is missing")
     budget = boundary.get("complexityBudget")
     require(isinstance(budget, dict)
-            and type(budget.get("maxProductCodeAndTestBytes")) is int
-            and budget["maxProductCodeAndTestBytes"] > 0
-            and type(budget.get("maxTrackedFiles")) is int
-            and budget["maxTrackedFiles"] > 0
+            and all(type(budget.get(field)) is int and budget[field] > 0 for field in (
+                "maxProductCodeAndTestBytes", "maxTrackedFiles", "maxPrimaryInstructionBytes"))
             and _text(budget.get("rationale")), "phase-local complexity rationale is missing")
     authority = section("authority", ("basis", "rule"))
     for field in ("scope", "notGranted"):
@@ -202,6 +200,7 @@ def development_contract_errors(contract, golden_task_ids):
     }
     require(isinstance(axes, list) and len(axes) == len(required_axes)
             and all(isinstance(axis, dict) and _text(axis.get("id"))
+                    and _text(axis.get("name"))
                     and _text(axis.get("floor"))
                     and axis.get("assessment") == "unverified" for axis in axes)
             and {axis.get("id") for axis in axes} == required_axes,
@@ -386,7 +385,7 @@ def development_contract_errors(contract, golden_task_ids):
     stages = optimization.get("workSequence")
     require(isinstance(stages, list) and bool(stages),
             "development work sequence is missing")
-    mapped, stage_ids = set(), set()
+    mapped, stage_ids, mapped_quality = set(), set(), set()
     for stage in stages if isinstance(stages, list) else []:
         if (not isinstance(stage, dict)
                 or not all(_text(stage.get(field)) for field in ("id", "title", "procedure", "exit"))
@@ -396,10 +395,17 @@ def development_contract_errors(contract, golden_task_ids):
         require(stage["id"] not in stage_ids, "plan step ids must be unique")
         stage_ids.add(stage["id"])
         require(set(stage["duties"]) <= ids, "plan step refers to an unknown responsibility")
+        quality_refs = stage.get("qualityAxes")
+        if not _strings(quality_refs) or not set(quality_refs) <= required_axes:
+            errors.append("plan step must reference applicable declared quality floors")
+        else:
+            mapped_quality.update(quality_refs)
         require(stage.get("state") in ("pending", "active", "implemented-local-unreleased"),
                 "plan progress cannot claim functional or release completion")
         mapped.update(stage["duties"])
     require(mapped == ids, "plan, process and acceptance must cover every responsibility")
+    require(mapped_quality == required_axes,
+            "plan, process and acceptance must cover every quality floor")
     scenarios = environment.get("adaptationScenarios")
     require(isinstance(scenarios, list) and bool(scenarios), "dynamic adaptation acceptance is missing")
     for scenario in scenarios if isinstance(scenarios, list) else []:
@@ -512,6 +518,13 @@ def render_development_plan(contract):
              "| 工序 | 当前进度 | 执行步骤 | 验收出口 |", "|---|---|---|---|"]
     for stage in contract["systemOptimization"]["workSequence"]:
         lines.append(f"| {stage['title']} | {states[stage['state']]} | {stage['procedure']} | {stage['exit']} |")
+    lines += ["", "## 系统质量与工序映射", "",
+              contract["systemOptimization"]["rule"], "",
+              "| 质量维度 | 必要底线 | 承担工序 | 当前验收 |", "|---|---|---|---|"]
+    for axis in contract["systemOptimization"]["qualityAxes"]:
+        stages = "、".join(stage["title"] for stage in contract["systemOptimization"]["workSequence"]
+                          if axis["id"] in stage["qualityAxes"])
+        lines.append(f"| {axis['name']} | {axis['floor']} | {stages} | 未验证 |")
     lines += ["", "## 完整职责覆盖", "",
               contract["acceptance"]["coverageRule"], "",
               "| 职责 | 所属工序 | 历史需求与反例参考 |", "|---|---|---|"]

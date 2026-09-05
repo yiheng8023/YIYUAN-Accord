@@ -6665,7 +6665,7 @@ def _verify_development_product(root):
             program["complexityBudget"].get("digestBoundBinaryAssets"),
             historical_repository=identity["repository"],
         ))
-        for field in ("maxProductCodeAndTestBytes", "maxTrackedFiles"):
+        for field in ("maxProductCodeAndTestBytes", "maxTrackedFiles", "maxPrimaryInstructionBytes"):
             program["complexityBudget"]["targets"][field] = development["complexityBudget"][field]
         complexity = _validate_complexity(root, program, identity["pythonModule"], files, errors)
         residue = known_task_residue(root)

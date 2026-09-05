@@ -57,6 +57,17 @@ The active work sequence and unresolved cross-function findings are in
 `development.json#/systemOptimization`; a local performance improvement closes
 only its measured optimization, not these other functional obligations.
 
+Each floor now has an explicit many-to-many allocation to execution stages.
+The development source is schema v3 because quality-stage references and the
+current instruction budget are now required; older v2 snapshots retain their
+old meaning and cannot pass as this contract. Host descriptors remain schema v2.
+Validation rejects missing, unknown or duplicated references and floors with
+no responsible stage. The visible plan derives the floor, stage and unverified
+assessment from the same source; structural coverage is not acceptance.
+Long-range planning does not require native goal mode. Later user corrections,
+authority changes and counterevidence can revise or pause affected work even
+when a scheduler retains an older objective.
+
 Run `python -B -m yiyuan_accord verify-development --json` for development-contract
 conformance. `verify` and `host-check` select current development admission when
 the successor is declared; missing or invalid source fails closed. They check
@@ -66,9 +77,9 @@ The retained contract regression suite runs current verifier code against its
 immutable predecessor subject; successor rejection tests exercise current bytes.
 Neither suite alone establishes host behavior, outcome completion or value.
 
-The two worktree packages are now `3.2.0-dev.3`, unpublished and not installed.
+The two worktree packages are now `3.2.0-dev.4`, unpublished and not installed.
 Their schema-v2 descriptors make the host Skill the ordinary executor entry.
-This describes the dev.3 candidate, not an immutable architecture. Skill/Hook
+This describes the dev.4 candidate, not an immutable architecture. Skill/Hook
 count, layout, dependency choices and their validators can change with the
 required whole-chain outcome. Current admission still pins the exact current
 descriptor and Hook transport; it is not a universal implementation engine.
@@ -203,8 +214,10 @@ without mandating extra guidance for an already sufficient native route.
 
 The open successor validates its actual changed paths. The predecessor's closed
 transition is checked at its immutable revision rather than against new worktree
-changes. A justified phase-local code/test ceiling preserves five percent
-headroom and three file slots; the primary-instruction ceiling remains unchanged.
+changes. The development source explicitly owns code/test, file-count and
+primary-instruction ceilings; the inherited instruction limit is not a hidden
+design invariant. Code/test headroom remains five percent. These static
+maintenance metrics are not measurements of actual host context or user value.
 
 ## Frozen predecessor architecture and evidence
 
