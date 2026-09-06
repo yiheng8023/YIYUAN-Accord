@@ -3,6 +3,27 @@
 Current navigation, not product authority. Recover live Git, bound user intent
 and relevant host facts before acting; an older observation is not current state.
 
+## User-requested pause for client update
+
+On 2026-09-06 the user requested a pause at a safe point to update the client.
+The bounded capability-loss/conflicting-extension experiment has ended. Its
+original readback failure, confirmed fixture ACL cause, changed-fixture retry
+and limitations are recorded under
+`developmentObservations/codex-task-local-capability-loss-and-conflict`.
+All task model processes, temporary exposure, test trust entries and temporary
+directories are closed or removed; retained evidence is hash-verified in
+`C:\Users\15521\.codex\backups\accord-evaluation-20260905T215550Z-8ff0643a\capability-loss-conflict`.
+The shared Codex candidate remains uninstalled and the original marketplace pin
+remains restored. Do not start another experiment while the user updates.
+
+The evaluated implementation is `e5d2d243e3fb4d9d57e31a19a7274100244fd4a3`;
+56 focused development tests and all nine hosted jobs passed. This checkpoint
+adds observations and navigation, not functional qualification or release readiness.
+After the user resumes, verify live Git and the updated host versions,
+configuration, installed packages and relevant effective capabilities before
+reusing affected observations or choosing the next authorized acceptance slice.
+Do not infer that updating the client reinstalls or activates Accord.
+
 ## Bound work
 
 Continue the authorized 3.2 whole-system development in
