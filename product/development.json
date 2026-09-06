@@ -855,6 +855,73 @@
   },
   "developmentObservations": [
     {
+      "id": "claude-dev7-functional-and-directory-lifecycle",
+      "scope": "bounded-development-observation-not-whole-scope-admission",
+      "evaluatedRevision": "0688fc9bdaa678f109bf18a2291143e97bd5e12e",
+      "hostVersion": "2.1.261",
+      "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
+      "reportedModel": "deepseek-v4-flash-vision-exp[1M]",
+      "ordinaryEntry": {
+        "arms": [
+          "native",
+          "candidate"
+        ],
+        "totalsPerArm": [
+          140,
+          60
+        ],
+        "actualWriteThenReadEachTurn": true,
+        "inputsUnchanged": true,
+        "unexpectedToolCalls": 0,
+        "skillInvoked": false,
+        "candidateListedAndPathMatched": true,
+        "seconds": [
+          26.098,
+          31.811
+        ],
+        "incrementalValue": "not-established",
+        "selectedSharedMetadataUnchanged": true,
+        "nativeStderrBytesPerArm": 291,
+        "stderrContent": "not-retained-or-judged",
+        "reportSha256": {
+          "native": "65bebe411be678500797220e85d8f552df9676efb88749c1f1bc7f9740c0c344",
+          "candidate": "13614f8dca680d912dd390a67b557a519a0ac8b0b63f7ee91b08d096c772644a"
+        }
+      },
+      "directoryLifecycle": {
+        "nativeInstallAndSelectedSkillActivation": true,
+        "correctedFixtureTotal": 140,
+        "correctedFixtureInputsUnchangedAndAgentReadback": true,
+        "normalExitAndZeroOwnedProcesses": true,
+        "nativeUninstallEmptyListingAndMarketplaceRemoval": true,
+        "actualLoadedTree": "registered local marketplace source directory, distinct from the listed install-cache path",
+        "badUpdate": "not-attempted-because-changing-publisher-directory-would-also-change-the-effective-source"
+      },
+      "observerCorrections": [
+        "First/secondary capture errors and bounded native stdout survive parse/checkpoint/stream failure; an incremental owned journal retains its recorded prefix after controller termination. No-model regressions and independent review passed.",
+        "The first directory activation used Windows write_text CRLF while its oracle assumed LF. Preserve that failed input-integrity predicate; do not promote it or repair the output. A fresh empty-profile attempt used byte-exact inputs and prior workspace snapshots.",
+        "The revised observer snapshots all redirected profile directories plus workspace and stops on selected shared-state drift. Its expanded binding covers seven existing shared package files and one pre-existing in-use marker, not the entire personal environment."
+      ],
+      "review": "Independent read-only review confirmed both ordinary-entry event/file chains and the directory-source path mismatch. A checkpoint lacks final exit metadata by design; a path comparison without a package argument is not host drift.",
+      "qualificationRoot": "C:\\Users\\15521\\AppData\\Local\\Temp\\accord-claude-qualification-x2sdv2ah",
+      "correctedDirectoryRoot": "C:\\Users\\15521\\AppData\\Local\\Temp\\accord-claude-lifecycle-ihgkosu3",
+      "remaining": "A separately prebound Git-source lifecycle including actual predecessor activation and failed-update checkpoint; remaining host scopes, Desktop continuity and value.",
+      "limits": [
+        "Ordinary-entry routeUnchanged is null; inherited-path equality and selected file hashes do not prove all route/configuration state.",
+        "The selected directory-marketplace activation does not establish implicit Skill selection, Git-marketplace cache execution, safe failed-update recovery or hot update.",
+        "The updated Git case is future work, not a relabeling of these directory observations."
+      ],
+      "retainedEvidence": "C:\\Users\\15521\\.codex\\backups\\accord-evaluation-20260905T215550Z-8ff0643a\\claude-native-20260906",
+      "cleanup": {
+        "verifiedRetainedFiles": 579,
+        "temporaryRootsRemoved": 4,
+        "selectedCredentialValueMatches": 0,
+        "allOwnedModelAndNativeJobsClosed": true,
+        "nativeUninstallAndOwnedMarketplaceRemoval": true,
+        "userTaskArchival": "none"
+      }
+    },
+    {
       "id": "codex-task-local-implicit-adaptation-dev7",
       "observedAt": "2026-09-06T04:24:06Z",
       "scope": "bounded-development-comparison-not-whole-host-or-value-admission",
@@ -2459,7 +2526,7 @@
             "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
             "transport": "native-cli-plugin-manager-and-stream-json",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
-            "packageSource": "task-owned-local-marketplace-exact-source-bytes",
+            "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
             "sharedInstallationAllowed": false,
             "authentication": "none-for-manager-operations; existing-authorized-route-in-memory-only-for-activation",
             "requestedActivationModel": "sonnet",
@@ -2467,7 +2534,7 @@
             "candidate": "3.2.0-dev.7",
             "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68"
           },
-          "oracle": "Prebind exact host/package/helper bytes, operation order, selected shared-state hashes and root ownership. First verify task-owned CLAUDE_CONFIG_DIR/home/cache/temp isolate listing and writes; unknown isolation blocks installation. Use a local owned marketplace and native CLI: empty listing; install exact candidate; independently check cached bytes, enabled registration and discovery; activate that installed package in a fresh stream-json process through its native selected Skill with READY_ORDERS; require actual Skill loading, A/B=140, preserved inputs and Agent readback; uninstall and inspect absence/residue. No --plugin-dir or copied body may supply installed activation. Then install immutable 3.1 and snapshot its safe state. Present a deliberately invalid candidate manifest and request update. Require source-bound native evidence that this operation actually selected the corrupted candidate and rejected its invalid manifest. A cached prior version, successful no-op or an unexercised invalid-manifest window is untested, not failure-recovery success. Before any source restoration or later lifecycle action independently inspect old files, registration, discovery and staging/cache/data residue. Any mutation prevents a rejection-before-write claim; later repair cannot revise that checkpoint. Preserve failures, restore exact candidate source, request native update, check exact installed bytes, then repeat fresh-session selected activation and independent 140 verification. Finally uninstall, inspect disabled/absent registration, discovery and attributable caches/data, then remove the owned marketplace. Do not require lazy body loading before the named selection. Manager operations use no authentication. Activation uses only the existing authorized CC Switch/DeepSeek route in memory, never copied credentials in fixtures/logs/arguments; bind source identity and recheck selected shared settings. If unavailable, activation stays unknown while independent no-model work continues. Capture actual model/tools/plugin/Skill/Hook facts; preserve first errors, partial events and separate checkpoints, with no output repair or stale readback. Bound each activation to 180 seconds, 16 turns and requested USD 1; bound native commands/output and own all child processes. Distinguish natural exit from containment, restart activation from hot update, and component effects from whole-host/value claims. Preserve foreign state and inspect prior to verified retention and removal of only owned roots. Do not enable global update/cleanup controls.",
+          "oracle": "Prebind exact host/package/helper bytes, operation order, selected shared-state hashes, byte-exact task inputs and owned roots. Verify an empty task-owned CLAUDE_CONFIG_DIR/home/cache/temp and native Git-marketplace support before installation. A task-owned file:// Git URL is a candidate route only: require native acceptance and independent evidence that the actual loading tree has no shared writable path with the publisher or mutable marketplace checkout. Unsupported transport or unresolved isolation remains untested; do not silently substitute a directory marketplace. Use immutable publisher commits containing exact package bytes. Install the candidate, independently inspect cached bytes, registration and discovery, then activate the registered package through its native selected Skill in a fresh stream-json process: actual Skill loading, A/B=140, preserved byte-bound inputs and Agent readback. No --plugin-dir or copied body supplies activation. Uninstall and inspect absence/residue. Then publish/install immutable 3.1, verify its actual selected activation and safe loaded tree, and snapshot files, registration/enabled state, discovery and residues. Commit the deliberately invalid candidate only in the publisher; request native marketplace refresh and then plugin update. Snapshot after each operation. Require evidence that the bad candidate was actually selected and its invalid manifest rejected; cached versions, no-op or an unexercised window are untested. Before restoration, inspect the predecessor loading tree and installation state plus staging/cache/data in all redirected directories. If refresh itself changes the safe loaded tree, record that failure rather than attributing safety to plugin update. Any native mutation prevents a rejection-before-write claim; later repair cannot revise that checkpoint. Preserve failures, publish exact corrected candidate bytes, refresh the marketplace, request native update and check installed/loaded bytes, then repeat selected activation and independent 140/readback verification. Finally uninstall, inspect registration/discovery and active caches/data, remove the marketplace, verify retained evidence and remove only owned roots. Manager operations need no authentication. Activation uses only the existing authorized CC Switch/DeepSeek route in memory; never copy credentials into fixtures/logs/arguments or invent a route. Missing authentication leaves activation unknown while independent no-model work continues. Compare selected shared metadata/package paths before and after every operation; drift stops subsequent work without automatic restoration. Keep partial events, first/secondary errors and distinct checkpoints; no evaluator repair of outputs or reuse of earlier-turn readback. Bound each activation to 180 seconds, 16 turns and requested USD 1, and bound native commands/output/children. Separate natural exit from containment, installed activation from hot update, and this lifecycle from whole-host/value claims. Do not enable global update/cleanup controls.",
           "oracleFiles": [
             "scripts/observe_claude_entry.py",
             "scripts/observe-claude-entry.ps1",
@@ -2478,6 +2545,7 @@
             "effect": {
               "exactCandidateInstalledAndUpdated": true,
               "nativeSelectedInstalledActivationAfterInstallAndUpdate": true,
+            "predecessorSelectedActivationBeforeUpdate": true,
               "activationArtifactTotal": 140,
               "activationReadback": true
             },
@@ -2492,7 +2560,8 @@
               "nativeUninstallAndDiscoveryAbsence": true,
               "ownedActiveCacheAndDataAbsent": true,
               "foreignStatePreserved": true,
-              "corruptedCandidateSelectedAndNativeRejectionObserved": true
+              "corruptedCandidateSelectedAndNativeRejectionObserved": true,
+            "nativeGitSourceAcceptedAndLoadedTreeIsolated": true
             },
             "cleanup": {
               "normalExitWithoutForcedRescue": true,
@@ -2851,7 +2920,7 @@
             "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
             "transport": "native-cli-plugin-manager-and-stream-json",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
-            "packageSource": "task-owned-local-marketplace-exact-source-bytes",
+            "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
             "sharedInstallationAllowed": false
           },
           "rule": "Use a verified task-owned configuration/cache/profile only; no shared candidate installation before accepted publication. Check live manager state and independent installed bytes. Complement installation state with the same installed candidate loading/activation and selected normal-entry effect under the existing authorized route, bound before a model call. The native manager survives Skill absence and owns each supported operation. Observe failed-update post-state before later operations; evaluator restoration cannot supply native recovery. Restart activation is not hot reload, whole-host functionality or a new account/route."

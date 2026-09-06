@@ -59,6 +59,24 @@ Finalize README and changelog after implementation and acceptance stabilize.
 Before publication, align source intent, implementation, acceptance, package
 identity, versions, documentation and release claims globally.
 
+Claude ordinary native/candidate entry at `0688fc9` completed 140 then 60
+with independent per-turn readback, no input changes and no extra tool calls.
+Neither arm invoked the Skill; no incremental gain is established. All 579 raw
+files were copied and hash-verified under the existing evaluation backup in
+`claude-native-20260906`; four owned temporary roots have been removed. The two directory
+marketplace attempts are now natively uninstalled with empty listings and their
+marketplaces removed. The first input fixture had a CRLF/LF baseline mismatch;
+its failed predicate stays recorded. The corrected attempt verified native
+selected Skill activation and 140/readback with a byte-exact baseline.
+
+Actual directory-marketplace activation loaded the publisher source directory,
+not the registry's cache path. Do not inject a bad update into that shared
+writable path. The source now prebinds native Git acceptance, independent
+loading-tree isolation and immutable publisher commits before the refresh/update
+experiment. A file URL remains a feasibility candidate, not verified support.
+See `developmentObservations/claude-dev7-functional-and-directory-lifecycle`
+for originals and limits. README and changelog still wait for final acceptance.
+
 ## Bound work
 
 Continue the authorized 3.2 whole-system development in
