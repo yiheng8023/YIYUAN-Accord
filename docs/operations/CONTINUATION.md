@@ -132,6 +132,24 @@ code defect or model-wide limit has been established. Corrected update,
 independent recovery, remaining function, Desktop continuity and product value
 stay open. README and changelog remain last.
 
+The zero-model command-source boundary comparison is now retained. Both native
+and extra-validator arms rejected the malformed source, preserved the prior
+registration and payload at the immediate checkpoint, and installed exact
+corrected content. The native branch had copied the malformed manifest to a
+temporary cache; no bad active registration or persistent version entry remained.
+This is not repair of an installed same-version bad cache. Three extra validator
+processes supplied no demonstrated additional protection in this sample, so do
+not ship the redundant provider. All 26 native operations and both native
+retirements closed; 733 files were hash-verified before owned-root disposal.
+
+Do not replace the current relative-directory marketplace by git-subdir on
+this evidence: exact marketplace tags already fix the content, same declared
+versions can still reuse cached Git-source content, and acquisition or offline
+cost may increase. Trace a bounded callable operation for the necessary checks
+and hold result against the native-resolved source and dependent post-state.
+Agent choice, independent recovery, function, Desktop continuity and net impact
+remain open; the original failures and formal lifecycle oracle are unchanged.
+
 The byte-identical read-only 2.1.263 runtime copy remains task-owned at
 `C:\Users\15521\AppData\Local\Temp\accord-claude-runtime-263-5yoxqfig` for
 unfinished qualification; its binding is in the existing evaluation backup.
