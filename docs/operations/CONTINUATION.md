@@ -3,26 +3,31 @@
 Current navigation, not product authority. Recover live Git, bound user intent
 and relevant host facts before acting; an older observation is not current state.
 
-## User-requested pause for client update
+## Resumed after client update
 
-On 2026-09-06 the user requested a pause at a safe point to update the client.
-The bounded capability-loss/conflicting-extension experiment has ended. Its
-original readback failure, confirmed fixture ACL cause, changed-fixture retry
-and limitations are recorded under
-`developmentObservations/codex-task-local-capability-loss-and-conflict`.
-All task model processes, temporary exposure, test trust entries and temporary
-directories are closed or removed; retained evidence is hash-verified in
-`C:\Users\15521\.codex\backups\accord-evaluation-20260905T215550Z-8ff0643a\capability-loss-conflict`.
-The shared Codex candidate remains uninstalled and the original marketplace pin
-remains restored. Do not start another experiment while the user updates.
+The user resumed on 2026-09-06 after updating the client. The installed and
+running Desktop is `26.901.6511.0`; the independent CLI remains `0.153.4` with
+unchanged executable bytes. Preserve the updated runtime/notification settings.
+The shared Codex Accord candidate remains uninstalled. The new task-local
+selected-Skill observation is bound to `8994172fd69d5e9eb765e445942b86f81a9fd3e5`;
+see `developmentObservations/codex-task-local-selected-continuation-dev7` for
+the actual answer-then-continue window, separate 140/60 checkpoints and limits.
+All test processes, temporary exposure, owned trust entries and temporary
+directories are closed or removed. Retained evidence and configuration backups
+are under `C:\Users\15521\.codex\backups\accord-evaluation-20260905T215550Z-8ff0643a`.
+The historical observer's failure-retention limitation is recorded; fix it
+before any reuse without modifying the retained original or rerunning an
+unaffected successful episode merely to replace that evidence.
 
-The evaluated implementation is `e5d2d243e3fb4d9d57e31a19a7274100244fd4a3`;
-56 focused development tests and all nine hosted jobs passed. This checkpoint
-adds observations and navigation, not functional qualification or release readiness.
-After the user resumes, verify live Git and the updated host versions,
-configuration, installed packages and relevant effective capabilities before
-reusing affected observations or choosing the next authorized acceptance slice.
-Do not infer that updating the client reinstalls or activates Accord.
+The user's further examples clarify existing capability-orchestration and
+resource-lifecycle duties: the Agent should choose and operate applicable
+controls, including supported background routes, without asking the user to
+learn buttons. Host automatic cleanup is assistance, not the only release path.
+Account for compound effects, retained/integrated results and dependent tasks.
+The current source records a settings worktree-delete/archival coupling as code
+evidence only; it does not replace the original task-18 action record or grant
+any archival authority. Continue the remaining ordinary-entry, whole-chain,
+lifecycle and value work; these bounded diagnostics do not qualify 3.2.
 
 ## Bound work
 

@@ -177,7 +177,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "本地项目/工作树或委派云端，按任务区分",
           "environment": "界面入口、内嵌引擎与独立 CLI 版本分别识别。",
-          "observation": "2026-09-06 只读复核：OpenAI.Codex 26.901.5280.0。当前工具进程的父链为该 Desktop 应用→npm Codex 执行器→PowerShell；执行器路径当前磁盘字节对应 0.153.4，SHA256 444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b。该事实不证明驻留映像未漂移、有效权限、候选任务局部加载或普通入口效果。随后经授权安装 Codex dev.7、实际回退至 3.1 并重装；详见 codex-installed-dev7-and-recovery，仍不是 Desktop 效果验收。",
+          "observation": "2026-09-06 用户更新后复核：OpenAI.Codex 安装版本及运行中的 ChatGPT.exe 路径均为 26.901.6511.0；独立 npm Codex CLI 仍为 0.153.4，执行文件 SHA256 444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b 未变。配置变化限于客户端 node_repl 运行时及通知入口；本次测试前基线已备份，清理后完整配置语义及哈希恢复。共享 Codex Accord 注册及缓存目录均缺席，保持发布后再安装。较早安装/回退诊断见 codex-installed-dev7-and-recovery；本次显式任务局部 Skill 的插问/纠偏诊断见 codex-task-local-selected-continuation-dev7。两者都不代替 Desktop 效果验收。",
           "currentEffect": "unverified"
         },
         {
@@ -237,7 +237,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "按会话模式与执行目标区分",
           "environment": "客户端顶层分为 ChatGPT 与 Codex，ChatGPT 内部再分 Chat 与 Work；按实际入口、执行位置、加载及权限判断适用性，界面分组不是插件的硬性适配边界。",
-          "observation": "2026-09-06 复核 https://learn.chatgpt.com/docs/plugins 与 https://learn.chatgpt.com/docs/enterprise/skills：Chat、Work 与 Codex 支持插件并共享公共目录，但本地文件分发、工作区 Skill 和各入口安装/授权仍有边界。本机 26.901.5280.0 的 composer-work-home-plugins-control 与 plugin-picker-menu-content 接入插件选择及宿主路由。界面代码和官方能力不证明某个 Work 会话已加载 Accord；正文使用、Hook 执行、实际效果及云端安装仍未验证。 用户随后提供同一客户端的 Chat 与 Work 插件选择器截图，两处均直接显示 YIYUAN Accord for Codex；本机两入口的可发现/可选状态已确认。截图不包含调用后结果，不能单独证明正文加载、Hook 执行或交付效果。",
+          "observation": "2026-09-06 复核 https://learn.chatgpt.com/docs/plugins 与 https://learn.chatgpt.com/docs/enterprise/skills：Chat、Work 与 Codex 支持插件并共享公共目录，但本地文件分发、工作区 Skill 和各入口安装/授权仍有边界。本机 26.901.5280.0 的 composer-work-home-plugins-control 与 plugin-picker-menu-content 接入插件选择及宿主路由。界面代码和官方能力不证明某个 Work 会话已加载 Accord；正文使用、Hook 执行、实际效果及云端安装仍未验证。 用户随后提供同一客户端的 Chat 与 Work 插件选择器截图，两处均直接显示 YIYUAN Accord for Codex；本机两入口的可发现/可选状态已确认。截图不包含调用后结果，不能单独证明正文加载、Hook 执行或交付效果。 随后客户端更新为 26.901.6511.0，运行路径已核对；共享 Accord 已按后续用户方向卸载，旧截图仅保留历史可发现性。此次未调用 Chat/Work 候选，不把客户端升级或 App Server 诊断当成其当前加载/效果。",
           "currentEffect": "unverified"
         },
         {
@@ -854,6 +854,119 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "codex-task-local-selected-continuation-dev7",
+      "observedAt": "2026-09-06T02:45:54Z",
+      "scope": "bounded-development-observation-not-release-admission",
+      "caseId": "codex-task-local-selected-continuation",
+      "subject": {
+        "revision": "8994172fd69d5e9eb765e445942b86f81a9fd3e5",
+        "version": "3.2.0-dev.7",
+        "codexPackageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d"
+      },
+      "host": {
+        "entry": "native-Codex-App-Server-ephemeral-task-with-explicit-task-local-Skill-selection",
+        "cliVersion": "0.153.4",
+        "executableSha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
+        "requestedAndReportedModel": "gpt-6-astra",
+        "requestedEffort": "high",
+        "reportedProvider": "openai",
+        "environment": "Existing user configuration, global instruction source and 41 listed Skills. Native status reported all five configured MCP servers disabled; plugin/App disabling was requested through process overrides without separate activation-state proof. Exact native Skill selection and successful file read observed; the native Hook listing was empty. No pristine-host or Desktop effect claim."
+      },
+      "caseSha256": "a966d8ff4a14781508a51a68c84492017f59fe84ee79669b060d161fb70ac79f",
+      "reportSha256": "cb5453938d6f925aeb7e31647eb4cbd77b22cf2d569e46a376cf1cbcbb54f48e",
+      "preflight": "Before the model turn, the same native sandbox wrote a disposable probe, the independent observer read it and removed it, and the candidate Skill read hash matched. All 11 package files, three input files, prompt/correction, source oracles and helper bytes were bound before execution.",
+      "firstTurn": {
+        "turnId": "01a0749b-b0cb-7752-8511-1a115c0ed6b1",
+        "firstReadCommandStartedMilliseconds": 11118,
+        "bothOutputsAbsentCheckpointMilliseconds": 11119,
+        "steerAcceptedForSameActiveTurn": true,
+        "question": "Why keep both CSV and JSON?",
+        "answerCompletedMilliseconds": 15696,
+        "bothOutputsStillAbsentCheckpointMilliseconds": 15698,
+        "newRequiredWriteAndReadbackCommandStartedMilliseconds": 32650,
+        "independentEffect": {
+          "details": [
+            [
+              "id",
+              "units"
+            ],
+            [
+              "A",
+              "60"
+            ],
+            [
+              "B",
+              "80"
+            ]
+          ],
+          "summary": {
+            "ready_ids": [
+              "A",
+              "B"
+            ],
+            "total_units": 140
+          }
+        }
+      },
+      "secondTurn": {
+        "turnId": "01a0749c-48a0-7370-8be5-05a4a6164f62",
+        "correctionSentOnlyAfterIndependentFirstInspection": true,
+        "freshAgentWriteAndReadbackObserved": true,
+        "independentEffect": {
+          "details": [
+            [
+              "id",
+              "units"
+            ],
+            [
+              "A",
+              "60"
+            ]
+          ],
+          "summary": {
+            "ready_ids": [
+              "A"
+            ],
+            "total_units": 60
+          }
+        }
+      },
+      "result": "The exact stop-after-answer window was reached: the Agent answered while both required outputs remained absent, then initiated new required writing and verification without a continuation reminder. A separately planned correction changed both outputs from 140 to 60. Both independent checkpoints preserved all inputs and found no unexpected paths. The evaluator supplied only the prebound question/correction and did not repair outputs.",
+      "cleanup": {
+        "elapsedSeconds": 77.065,
+        "normalExitCode": 0,
+        "ownedProcessesAfterCleanup": 0,
+        "taskSkillRemovedAndNativeAbsenceVerified": true,
+        "userConfigUnchangedDuringEpisode": false,
+        "configurationRestoredAfterEpisode": true,
+        "restoration": "Only the native-created task workspace trust entry was removed through fresh expectedVersion-bound config/value/write. Independent TOML comparison and SHA256 matched the post-client-update pretest baseline. Shared Accord remained absent. Fourteen private evidence files were hash-verified before deleting the exact owned temporary root and confirming its absence. Recovery and cleanup were evaluator-owned, not product capabilities."
+      },
+      "review": "Independent specification review confirmed the actual event/turn order and new post-answer work. Implementation review identified failure-path exception overwrite and missing partial-event retention in the disposable observer; this normal, complete episode is unaffected. Retain the used helper unchanged as historical evidence and fix failure retention before any reuse.",
+      "limitations": [
+        "explicit-selection-only",
+        "one-bounded-steering-and-correction-case",
+        "no-native-control-or-incremental-value-proof",
+        "no-Desktop-Chat-Work-Hook-context-pressure-handoff-crash-or-complete-lifecycle-proof",
+        "no-formal-admission-or-whole-duty-qualification"
+      ]
+    },
+    {
+      "id": "desktop-worktree-delete-compound-effects",
+      "observedAt": "2026-09-06",
+      "scope": "installed-client-code-observation-not-executed-behavior",
+      "clientVersion": "26.901.6511.0",
+      "asset": "webview/assets/worktrees-settings-page-24f4c1e6837b.js",
+      "assetSha256": "d88354017b348303e9f3fb1381d51f1dc77bd703b86373c3c3d36ab1aa80d711",
+      "observation": "The settings deletion handler invokes archiveConversation for its supplied associated tasks, with cleanupWorktree false, before dispatching worktree-delete with reason settings-delete-targeted. The automatic-cleanup-off description says native pruning stops; this does not prove that every independent scoped cleanup path is unavailable.",
+      "implication": "Inspect complete effects before selecting a supported backend or UI operation. Worktree disposal cannot silently grant task archival or a global setting change. Verify stored/integrated results, ownership, active dependents and post-state; use an authorized separable route where available. The Agent owns those decisions within bound authority, rather than requiring the user to know controls.",
+      "limits": [
+        "no-worktree-deletion-setting-toggle-or-archival-executed",
+        "no-proof-of-all-delete-paths-or-autonomous-cleanup",
+        "not-the-causal-record-of-main-task-18-archival",
+        "visible-settings-do-not-prove-a-callable-supported-backend-for-every-option"
+      ]
+    },
     {
       "id": "codex-task-local-capability-loss-and-conflict",
       "observedAt": "2026-09-06T02:26:34Z",
@@ -2091,7 +2204,7 @@
       {"id": "mid-task-host-drift", "duties": ["environment-and-self-exposure","correction-and-evolution","context-and-task-continuity","recovery-and-rollback","resources-and-cleanup","package-lifecycle"], "trigger": "任务中宿主更新、缓存与加载版本分离、接口或上下文发生变化。", "requiredEffect": "仅重算受影响事实与分配；对同一被测执行/状态变化联合核验适用的纠正、恢复及资源后态。原位继续可原位核对；实际跨载体或来源转移时才要求目的端核对后安全释放来源。失败保留最后安全状态及适用幸存接管者，重复信号不造成多写入者或循环交接。 For context changes, independently vary available capacity, occupancy and retained-information integrity, including automatic compaction. Re-sense affected readings and budget the next work span plus completed takeover and recovery; preserve useful verified state and continue a healthy carrier. Unknown signals require bounded early checkpoints, not guessed percentages or delayed emergency handoff.", "failureOracle": "不能沿用失效假设、以版本变化强制全量重做、用各项孤立 PASS 拼成整体闭环，或在目的端未核对前释放来源。 Reject stale pre-compaction thresholds, transcript-length or account-limit proxies for current context, token reduction as integrity proof and source release before safe destination reconciliation."},
       {"id":"native-capable-external-better","duties":["research-learning-and-reuse","relations-routing-and-form","verification-and-value"],"trigger":"原生能完成，但未安装的外部候选可能显著改善质量、风险或总成本。","requiredEffect":"复用宿主可调用目录/推荐，有界外查并验证比较依据；更优且已准入的候选可胜出。缺少安装、连接或数据授权时只推荐并解释必要条件，继续可独立执行的安全工作。","failureOracle":"不能以原生足够终止必要比较、因市场支持就信任候选，或把目录可见当作已安装/可执行。"},
       {"id":"cross-domain-depth","duties":["goal-authority-correction","research-learning-and-reuse","relations-routing-and-form","verification-and-value"],"trigger":"任务从原工作领域转向需更深证据或高风险判断的领域，例如软件用户提出医学知识问题。","requiredEffect":"按问题深度与风险判断需要权威资料、专项工具、模型或专业人员；先复用可靠现有能力，必要时发现外部候选并说明能力与授权边界。","failureOracle":"不能自动把领域标签等同专业资质、把专项插件作为唯一答案、未经授权外发敏感信息，或将通用回答/工具结果冒充专业诊断。"},
-      {"id":"task-exposure-and-reuse","duties":["resources-and-cleanup","native-replacement-and-retirement","environment-and-self-exposure"],"trigger":"能力临时参与任务后不再需要，或未来复用、维护成本与可信状态发生变化。","requiredEffect":"核对归属及依赖，释放任务资源和临时暴露并验证后态；复用不确定时在支持范围内可逆停用而非猜测永久卸载。未来重用时按漂移重验；无必要的任务资产在授权范围内退役。","failureOracle":"不能任务一结束便卸载用户共享工具、将不再调用冒充已停用，或没有作用域控制便无界清理。"}
+      {"id":"task-exposure-and-reuse","duties":["resources-and-cleanup","native-replacement-and-retirement","environment-and-self-exposure"],"trigger":"能力临时参与任务后不再需要，或未来复用、维护成本与可信状态发生变化。","requiredEffect":"核对归属及依赖，释放任务资源和临时暴露并验证后态；复用不确定时在支持范围内可逆停用而非猜测永久卸载。未来重用时按漂移重验；无必要的任务资产在授权范围内退役。 用户只给出意图和边界时，Agent按需要自主选择、启停及回收适用能力；优先使用受支持的后台接口。原生自动清理未启用时仍核对本任务分配、成果回流、归属、依赖及必要回收，不依赖用户逐项操作。","failureOracle":"不能任务一结束便卸载用户共享工具、将不再调用冒充已停用，或没有作用域控制便无界清理。 不得把按钮可见等同后台可调用，也不得将宿主自动删除开关视为唯一回收机制。识别复合操作的全部后果；工作树清理不能夹带未授权归档，明确保留意图和未知归属均须保护。"}
     ]
   },
   "acceptance": {
@@ -2500,7 +2613,7 @@
         "name": "执行、配置与代码操作",
         "goldenTasks": ["GT-02", "GT-11", "GT-16"],
         "activationWhen": "An authorized result requires an actual operation or missing capability implementation.",
-        "requiredOutcome": "Translate the authorized outcome into suitable native actions, interfaces or a sufficient composition, then verify the exact change while preserving unrelated state. Users need not identify buttons, commands, shell or code/conversation topology. Discoverability is not actionability or authority; select and operate only applicable supported controls, keep meaningful intervention/revocation available, and close attributable resources through the mapped lifecycle duties.",
+        "requiredOutcome": "Translate the authorized outcome into suitable native actions, interfaces or a sufficient composition, then verify the exact change while preserving unrelated state. Users need not identify buttons, commands, shell or code/conversation topology. Discoverability is not actionability or authority; select and operate only applicable supported controls, keep meaningful intervention/revocation available, and close attributable resources through the mapped lifecycle duties. The Agent chooses when applicable capabilities and temporary controls are needed, including branch exploration, worktrees and feature activation. Prefer supported background APIs, CLI or bounded configuration interfaces; inspect actual effects and restore scoped state without requiring the user to learn internal controls. A visible button or editable file suggests a candidate route, not proof that a supported autonomous interface exists.",
         "normalEntry": "Agent tools, supported host actions or a declared composed or authored executor.",
         "failureOracle": "A plan, capability/button inventory, tool declaration or evaluator-only action cannot stand in for delivered execution. Reject unnecessary requests that the user choose internal commands or operate discoverable mechanics; an outcome request cannot silently authorize unrelated configuration, code topology or external writes.",
         "dependsOn": ["relations-routing-and-form"],
@@ -2560,9 +2673,9 @@
         "name": "资源管理与清理",
         "goldenTasks": ["GT-09", "GT-12"],
         "activationWhen": "Task resources are allocated, constrained, changed or released.",
-        "requiredOutcome": "Use task-fit allocations and release attributable active resources and temporary exposure through supported authorized controls, with observed post-state. Separate stopping use, disabling, uninstalling and retirement. Preserve user-owned/shared resources; uncertain reuse favors a reversible inactive state where supported, with fit and trust revalidated after material drift.",
+        "requiredOutcome": "Use task-fit allocations and release attributable active resources and temporary exposure through supported authorized controls, with observed post-state. Separate stopping use, disabling, uninstalling and retirement. Preserve user-owned/shared resources; uncertain reuse favors a reversible inactive state where supported, with fit and trust revalidated after material drift. Complete applicable allocation, result integration and release even when host automatic cleanup is unavailable or disabled, within existing authority. Before releasing a temporary worktree, verify retained or integrated changes, dependent tasks and active writers; preserve explicit retention decisions. Inspect compound effects of native operations: filesystem release, settings changes and task archival carry separate authority.",
         "normalEntry": "Native admission and lifecycle controls or an admitted resource-owning composition.",
-        "failureOracle": "Completion or command success does not prove cleanup or authorize removing user-owned tools. Protect shared and unknown resources; unavailable scoped controls are an explicit limit, not permission for global disablement. User tasks and history are not disposable residue; archival requires explicit user authorization.",
+        "failureOracle": "Completion or command success does not prove cleanup or authorize removing user-owned tools. Protect shared and unknown resources; unavailable scoped controls are an explicit limit, not permission for global disablement. User tasks and history are not disposable residue; archival requires explicit user authorization. Reject treating an unchecked auto-cleanup option as an excuse to leave attributable allocations unmanaged, silently enabling global cleanup, or using a worktree-deletion path that also archives tasks without archive authority. If available operations cannot separate required release from an unauthorized effect, preserve state and expose that specific unresolved boundary.",
         "dependsOn": ["goal-authority-correction", "environment-and-self-exposure"],
         "assessment": "unverified",
         "evidence": []

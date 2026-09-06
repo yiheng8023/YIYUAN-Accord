@@ -55,6 +55,18 @@ extensions and their output cannot promote themselves to user authority. A Hook
 can guard supported execution points; do not extend that claim to other paths or
 confuse a model interpreting conflict advice with deterministic enforcement.
 
+The Agent owns the choice, activation, operation and release of applicable
+capabilities within bound authority. Users can state outcomes without knowing
+buttons, worktrees or conversation topology. Prefer supported background APIs,
+CLI and bounded configuration interfaces; verify actual availability and all
+effects before acting. A visible control alone does not prove a callable route.
+Temporary worktree use includes result integration and release of unneeded owned
+allocations, even when host automatic cleanup is off. Preserve active dependents
+and explicit retention decisions. Native operations can combine effects: the
+observed Desktop settings deletion handler archives supplied tasks before
+deleting a worktree. Those effects need their respective authority. The source
+records this code observation and its limits; no deletion experiment was run.
+
 ### Current delivered candidate and unproven connections
 
 Both worktree packages are unpublished `3.2.0-dev.7`; the continuity correction
