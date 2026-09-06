@@ -22,14 +22,14 @@
     "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
   },
   "delivery": {
-    "version": "3.2.0-dev.10",
-    "rule": "Unpublished dev.10 adds a caller-invoked Claude source inspection entry for the observed execution gap. It resolves the native marketplace and installed user target, calls native validation and checks source, target and registration post-state. Hold and unknown are bounded inspection conclusions, not command interception; success is neither update permission nor lifecycle completion. No daemon, persistent state or new package dependency is added. Node and a caller-bound Claude CLI/profile are conditional prerequisites. Unsupported source forms retain direct native checks and explicit unknowns. Fresh native and affected Agent behavior evidence remain required; historical failures and observations retain their exact subjects. Shared candidate installation remains deferred until accepted publication.",
+    "version": "3.2.0-dev.11",
+    "rule": "Unpublished dev.11 corrects the inspection guidance to use the caller-bound Node executable instead of a bare node example. The dev.10 native probe established exact-command callability despite denied directory listing; it did not establish Agent choice or lifecycle success. The inspection runtime and original lifecycle predicates are unchanged. The next composed observation also gives the selected management package native directory access and identifies the exact executable-path permission boundary. Keep earlier convergence failures and all subject identities. No new dependency, shared candidate installation or expanded budget is introduced. Fresh affected behavior and the remaining whole-product acceptance are required before publication.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.10",
-        "packageSha256": "be352df5419ea9ef566fe55a44a75fd6d2560af60f3d15f8316f36c98e3e6994",
+        "packageVersion": "3.2.0-dev.11",
+        "packageSha256": "4faf627cfaf76817fcfcd4b9a452ef713cc58264442be52b3cdc450c46019fc1",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -56,8 +56,8 @@
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.10",
-        "packageSha256": "f38fc83d8c5dbffce6704dfda53d344e92cac4f96afda7398b99c94047066d4a",
+        "packageVersion": "3.2.0-dev.11",
+        "packageSha256": "3d5b99ba13fa681445599657c7db4b348c6361ce9b531289ac87b387a27941b0",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -855,6 +855,92 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "claude-dev10-exact-inspector-callability",
+      "date": "2026-09-07",
+      "sourceRevision": "f05d0cd255f9e9dcbd808557c3ef79147d3f2713",
+      "scope": "zero-model-native-permission-and-callability-only",
+      "subject": {
+        "version": "3.2.0-dev.10",
+        "packageSha256": "f38fc83d8c5dbffce6704dfda53d344e92cac4f96afda7398b99c94047066d4a",
+        "helperSha256": "34a973d5d8f10f0cfacd0eec0cf835fb5faaf707857dfb0aad88915db2a3ab8f"
+      },
+      "bindingSha256": "a9c289983f70e0ed8f567d95b813eb6836ca8a97b483c68799167512689ce728",
+      "conditions": "Two fresh empty profiles and a local nonforwarding HTTP protocol fixture; no real route or inference. Original and helper-readable differ only by the exact management-package directory in native add-dir. The fixture scripts five native tool calls; it cannot supply Agent decisions.",
+      "results": {
+        "original": {
+          "elapsedSeconds": 4.412,
+          "toolCalls": 5,
+          "directoryListingDenied": true,
+          "exactHelperInvoked": true,
+          "helperStatus": "unknown",
+          "helperReason": "missing-or-ambiguous-native-target",
+          "newInspectionJsonWritten": true,
+          "originalInputWriteDeniedAndBytesPreserved": true
+        },
+        "helper-readable": {
+          "elapsedSeconds": 4.485,
+          "toolCalls": 5,
+          "directoryListingDenied": false,
+          "exactHelperInvoked": true,
+          "helperStatus": "unknown",
+          "helperReason": "missing-or-ambiguous-native-target",
+          "newInspectionJsonWritten": true,
+          "originalInputWriteDeniedAndBytesPreserved": true
+        }
+      },
+      "interpretation": "The original directory listing was denied, but exact Node/helper help and request execution succeeded in both arms. The helper reached native marketplace list and returned unknown for an empty registry; source validation was not reached. New inspection JSON was permitted while original-input overwrite was denied and original bytes survived. Directory visibility and subprocess callability are distinct.",
+      "limits": "No Agent choice, bad-source protection, installed-state recovery, lifecycle or value pass. The prebound HTTP400 stop explains both native exit1 results. No claim of filesystem-wide sandboxing or continuous immutability.",
+      "review": "Independent raw review matched 12 HTTP originals, 10 tool results, journal/stdout and post-state. Both process jobs were empty and local server threads stopped.",
+      "retention": {
+        "directory": "inspection-callability-20260907",
+        "files": 59,
+        "manifestSha256": "7dad03071ee901eea8345d22ce88cdcdfd0495a8f69087792d1a763e4bce4a8a",
+        "closeoutSha256": "aff266f643ed3cffb1cefd2171889753fb0c94b150d20ae7f3b617e3e04136a3",
+        "removalSha256": "bf2bd70c6e272cd8819b7f398b4102d44ebe9c774553cf5891dcca4b8351849c"
+      }
+    },
+    {
+      "id": "claude-dev10-agent-lifecycle-convergence-failure",
+      "date": "2026-09-07",
+      "sourceRevision": "f05d0cd255f9e9dcbd808557c3ef79147d3f2713",
+      "scope": "selected-development-lifecycle-observation-failed-and-incomplete",
+      "subject": {
+        "version": "3.2.0-dev.10",
+        "packageSha256": "f38fc83d8c5dbffce6704dfda53d344e92cac4f96afda7398b99c94047066d4a",
+        "helperSha256": "34a973d5d8f10f0cfacd0eec0cf835fb5faaf707857dfb0aad88915db2a3ab8f"
+      },
+      "definitionSha256": "f594b6ed064c67d1b588d68db6043d07099876e145f0eea16e154aba849df90c",
+      "installation": "Exact registered dev.10 activation delivered 140 and read both outputs back. The original observer rejected a literal Skill comparison; retain that report. A separately bound reader accepted only the supported single plugin-root substitution in the same raw body, with all other predicates unchanged. No new model run replaced the failure. Independent review confirmed exact rendering.",
+      "update": {
+        "priorActivation": "Exact installed 3.1 activation passed before source fault exposure.",
+        "seconds": 70.254,
+        "requestedTurns": 16,
+        "reportedTurns": 17,
+        "nativeExit": "error_max_turns",
+        "toolCalls": 24,
+        "permissionDenials": 7,
+        "helperExecuted": false,
+        "nativeValidationExecuted": false,
+        "conclusionDelivered": false,
+        "finding": "The loaded Skill showed a bare node example while command permission bound the supplied exact Node path. The Agent attempted bare-node help and never tried the authorized spelling. Earlier repeated denied Git exploration and insufficient convergence remain actual failures; this interface mismatch cannot explain the entire episode.",
+        "poststate": "Prior seven-file package, registry and settings matched. The task-profile .claude.json and two backups changed; candidate cache remained absent. A compound cat/sha256sum command masked an earlier wrong-path cat failure with a later successful hash exit. Preserve that component error. Unchanged old installation is not Accord protection.",
+        "assessmentSha256": "40b06d4936a05ae0d7516a83d359d77fdfd08e3dbd8399f1481f0a25028581b0"
+      },
+      "unexecuted": [
+        "corrected Agent update",
+        "independent Agent recovery"
+      ],
+      "cleanup": "23 outer operations: installation 10, update 11, unused recovery profile 2 absence queries. The one Agent failure exited normally; no forced jobs or descendants remained. Native final lists were empty. Selected shared and runtime hashes matched; exact raw retention preceded owned-root disposal.",
+      "review": "Independent reviews checked the activation reanalysis and actual failed management commands/results; no lifecycle completion or net-value claim was admitted.",
+      "retention": {
+        "directory": "claude-dev10-cycle-20260907",
+        "files": 1407,
+        "manifestSha256": "7522c07b4cbab09aa2d115f1c5cd85b49dc9cc3ad1067ca7ca1602bee37a736d",
+        "closeoutSha256": "ce6fe1e00e4faf09189be169de99a2ab8a9c1bc88489df64ad1297a45282e945",
+        "removalSha256": "515d402cb054ad71f8d9cab5bb4fa50c3a8d022a4566b3b0e6bc6911d0b10404"
+      }
+    },
     {"id":"claude-caller-bound-source-inspection","date":"2026-09-07","sourceRevision":"fad06983955d00aaf543551c011f85debaf3ae6d","scope":"uncommitted-helper-exact-byte-native-smoke-only","implementation":"A conditional Node CLI resolves the native marketplace and installed user target, checks source/current identity, invokes native structured validation and checks complete source/target and native mapping post-state. Its hold/unknown result governs no host command by itself.","regressions":"Preserve V1 counterexamples for unverified plugin identity, validator execution failure and BOM handling. Real native JSON exposed the fixture target-path mismatch; the corrected fixture first failed, then the matching source-manifest path check passed. Local fixtures are not host or Agent evidence.","nativeInterface":{"episode":"accord-update-inspection-uld41qt3","operations":11,"helperExecuted":false,"finding":"Claude 2.1.263 validate --json reports the plugin manifest path in target and manifest.file, not the supplied directory.","retainedAt":"update-inspection-interface-20260907","retentionSha256":"df3dbb8a5b06c2fbf8444c9d0726d12dca2e0987fee82e84bdf76159ad246209","files":219,"originalRootRemoved":true},"nativeHelper":{"episode":"accord-update-inspection-kdkgiujm","definitionSha256":"a3a192f66d57ce0cc0fc5fe98f58e0cb8e00b2ae3ca8166d20e3bee1991510cb","bindingSha256":"38eafc96b3a1ff7d8624d0b02d2a1f08c4771318db4102a871a7915a1f49288d","helperSha256":"459daefe6ebd7ac60bb940e3414538ad22cdbf680612d73e6fec95d95c583ddf","hostVersion":"2.1.263","hostSha256":"0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03","nodeVersion":"24.20.0","nodeSha256":"5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5","results":[{"source":"invalid-json","status":"hold","nativeExitCodes":[0,0,1,0,0],"helperMilliseconds":3085},{"source":"corrected","status":"inspection-complete","nativeExitCodes":[0,0,0,0,0],"helperMilliseconds":3739}],"poststate":"Independent complete profile-file hashes matched before/after each inspection, including the two installed files and registration. All 12 outer operations exited normally, with zero Job children before and after cleanup; 12 selected shared hashes matched. Native uninstall/removal produced empty final lists; orphan cache was then removed with the owned root.","retainedAt":"update-inspection-helper-20260907","retentionSha256":"9ddcb0b98d9ed0ddedb9c7214f0a2288b061865b76d2d7727913043b11634695","closeoutSha256":"015a96c47c08aa8d93de65e038cc888f37e708d84c2643a2713c3db9846bc196","files":240,"originalRootRemoved":true},"review":"Independent review verified every retained hash and the native post-state/cleanup limits. Separate code review required identity, execution-failure and BOM fixes and preservation of an outside-component recovery actor.","laterBoundedChange":{"currentHelperSha256":"34a973d5d8f10f0cfacd0eec0cf835fb5faaf707857dfb0aad88915db2a3ab8f","change":"Clamp each child timeout to at least one millisecond so a near-deadline zero cannot disable the native timeout; state explicitly that filesystem deadline checks are cooperative. The earlier smoke remains bound to its original bytes; current changed-package and affected behavior evidence remain required."},"cost":"Each inspection invokes five native operations, including one validation. No model ran, so these timings and file snapshots cannot establish Agent token/attention cost, incremental value, ordinary selection or bounded convergence. Native maintenance writes remain possible between snapshots; internal native output is retained only as length/hash/status, not full raw diagnostics.","next":"Finish reviewed dev.10 integration and reconcile its declared file/code budget, then commit definition/implementation A and bind fresh actual Agent use of the inspection entry under the existing route. Preserve invalid-source hold, corrected update, fresh activation/readback, independent outside-component recovery and all ordinary-function, Desktop-continuity and value duties. No shared pre-release install or unchanged prompt/model/budget retries."},
     {
       "id": "claude-native-command-source-boundary",
@@ -3199,7 +3285,7 @@
             "authentication": "none-required-for-pure-manager-commands; existing-authorized-route-in-memory-only-for-management-Agent-and-installed-activation",
             "requestedActivationModel": "sonnet",
             "activationSelection": "native-selected-installed-Skill-after-install-update-and-recovery; no-inline-plugin-or-copied-body-for-activation",
-            "candidate": "3.2.0-dev.10",
+            "candidate": "3.2.0-dev.11",
             "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68",
             "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks",
             "lifecycleDecisionActor": "host-Agent-using-exact-task-local-Skill-and-supported-native-validation-and-manager-commands",
@@ -3207,13 +3293,13 @@
             "agentTools": "Read-Skill-Write-and-native-Bash-with-bound-command-path-and-effect-audit; Write only for new inspection-request JSON in the owned management workspace",
             "managementOutputLimitBytes": 4194304,
             "managementBudgetVisibility": "180 seconds, 16 turns and requested USD 1 supplied as bound task facts, without answers or a command sequence",
-            "managementReadAccess": "native add-dir only for owned config, publisher and frozen CLI directory; the selected candidate supplies its bundled files; other reads remain prohibited by task scope and require effect auditing",
+            "managementReadAccess": "native add-dir only for owned config, publisher, frozen CLI directory and the exact selected management package; other reads remain prohibited by task scope and require effect auditing",
             "optionalInspectionRuntime": {
               "version": "24.20.0",
               "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5",
               "scope": "caller-bound existing Node; exact candidate helper in the independent management package; no runtime installation or profile change"
             },
-            "optionalInspectionUse": "The dev.10 management Agent may choose the shipped inspection entry through its exact caller-bound Node executable and candidate helper. Bind those bytes, inherited profile and input request before the call; supply available runtime facts, not an inspection result or prescribed sequence. Only new inspection-request JSON may be written in its owned management workspace; source, existing task inputs and unrelated files stay unchanged. Capture actual Bash tool requests/results and independently check source/installed post-state. A helper call or its status alone cannot establish the required Agent decision, update, recovery, installed activation, resource closure or value. All original required predicates and episode bounds remain unchanged."
+            "optionalInspectionUse": "The dev.11 management Agent may choose the shipped inspection entry through its exact caller-bound Node executable and candidate helper. Bind those bytes, inherited profile and input request before the call; supply available runtime facts and their exact executable-path permission boundary, not an inspection result or prescribed sequence. Only new inspection-request JSON may be written in its owned management workspace; source, existing task inputs and unrelated files stay unchanged. Capture actual Bash tool requests/results and independently check source/installed post-state. A helper call or its status alone cannot establish the required Agent decision, update, recovery, installed activation, resource closure or value. All original required predicates and episode bounds remain unchanged."
           },
           "oracle": "Prebind exact host/package/helper bytes, source refs, requests, operation order, owned roots, selected shared-state hashes and byte-exact inputs. Use three independent task-owned profiles. Bind supported native Git input and actual transport; a complete unique reserved-domain alias may use process-only Git insteadOf to an owned file URI, with child/transport evidence and no suffix/network fallback or HTTPS claim. Require loading trees isolated from publisher/marketplace and exact immutable commit bytes. Unsupported transport remains untested. The fresh-install profile installs the candidate, verifies cached bytes, registration/discovery, then activates the registered package in a fresh selected-Skill process: actual body loading, 140, both-file readback and unchanged inputs. No inline plugin/body supplies installed activation. Uninstall and inspect absence/residue.\nIn the independent update profile, first install immutable 3.1 and verify its selected activation, safe bytes/state and absence of any candidate cache, registration, orphaned or staged version. Expose the exact candidate Skill session-locally outside the installed tree only to the management Agent; it must remain usable if the installed component fails. Give an authorized update outcome and boundaries, not the answer or prescribed command sequence. The Agent must discover and invoke supported validation against the actual selected invalid source and hold the update before installation-state mutation. Capture tool requests/results and post-state; an evaluator deciding or skipping the update does not satisfy this predicate. Native validation scope is limited; independently verify exact source/cache files, registration and loaded identity. A validator result, version or exit code alone is not whole-package or usability proof. Preserve this invalid-source checkpoint before correction. Publish exact corrected candidate bytes, then have the Agent re-sense and perform the supported update; independently check installed state/bytes and fresh registered selected activation with 140/readback.\nIn the separate recovery profile, verify the prior 3.1 state, then reproduce the known native bad-update fault with a never-cached candidate and retain the immediate installed-bad-state checkpoint before starting recovery. The healthy management Agent/Skill outside that installation must choose and execute authorized supported recovery to exact prior source/state. Independently verify the restored registration/cache and fresh selected 3.1 activation with 140/readback. No evaluator repair/deletion, supplied compensation decision or already cached candidate may stand in for Agent recovery. Same-version corrected source cannot be assumed to repair a bad cache; do not overwrite shared caches or invent force options. Earlier failed native-only episodes remain failures and supply neither these Agent decisions nor their resulting effects.\nFinally uninstall and remove each marketplace through native operations, inspect discovery/active-state absence and all redirected cache/data, retain and hash-check originals, then dispose only owned roots. Native orphan retention is distinct from active registration and evaluator disposal. Compare selected shared paths before/after every operation; drift holds subsequent work without automatic restoration. Manager calls need no new auth; Agent/activation use the existing authorized CC Switch/DeepSeek route in memory only, without credential persistence. Bound each Agent/model episode to 180 seconds, 16 turns and requested USD 1; expose those same budget facts without a command sequence. Bind management stdout to 4194304 bytes, remaining output/child limits and actual command/effect auditing. Keep original/secondary errors, normal exit and Job cleanup separate. This selected composed route is not universal command interception, hot reload, whole-host/value acceptance or a new account/route.",
           "oracleFiles": [

@@ -228,15 +228,38 @@ observed bytes. See `developmentObservations/claude-caller-bound-source-inspecti
 On 2026-09-07 the user approved the reviewed 1,180,000-byte code/test ceiling
 and 127 files, with at least five-percent code reserve and unchanged instruction
 limits. The separate proposal-copy full regression retains its original subject.
-Recheck affected current files and the exact contract before committing A, then
-collect fresh Agent use and lifecycle evidence. The formal dev.10 case permits
+The exact `f05d0cd` CI passed all nine Linux, Windows and macOS jobs; the separate
+proposal-copy suite passed 169 tests and retains its distinct source snapshot.
+The formal lifecycle case permits
 only new inspection-request JSON in the management workspace and the exact
 bundled helper through caller-bound Node; its original lifecycle predicates,
-180-second/16-turn/requested-USD-1 bounds and outside-component actor remain. No shared candidate installation or archival is authorized.
+180-second/16-turn/requested-USD-1 bounds and outside-component actor remain.
+No shared candidate installation or archival is authorized.
+
+The dev.10 installation activation passed after an exact native path-rendering
+reanalysis of the same retained raw body; the original observer report remains.
+Update management failed at the turn limit without inspector use or a final
+conclusion. Corrected update and independent recovery were not exercised.
+Native retirement, 1,407-file retention and owned-root disposal are verified.
+See `claude-dev10-agent-lifecycle-convergence-failure` for the actual commands,
+task-profile writes and limits; unchanged old installation is not protection.
+
+The subsequent zero-model native probe established that the exact Node/helper
+command was callable even when listing its directory was denied. Both arms
+reached only an empty-registry unknown; they supply no Agent decision or source
+validation. All 59 files were verified in retention before owned-root removal.
+See `claude-dev10-exact-inspector-callability`. The dev.11 change corrects the
+bare-node Skill example to the bound executable. Existing denied-retry guidance
+already states the intended duty; do not pile on equivalent prohibitions.
+The next bounded composition also exposes the selected package through native
+add-dir and the actual executable-path permission facts. It keeps the original
+oracle, acceptance and budget. Repeated earlier exploration failures remain
+unresolved; do not attribute the entire failure or any future improvement to
+one wording change. The inspector runtime itself is unchanged.
 
 ## Evidence and authority limits
 
-- The unpublished packages are `3.2.0-dev.10`; continuity guidance requires early
+- The unpublished packages are `3.2.0-dev.11`; continuity guidance requires early
   handoff budgeting, fresh sensing after compaction, confirmed destination
   takeover and explicit user authority for archival. The earlier Codex install,
   3.1 rollback and reinstall are historical diagnostics. The user subsequently

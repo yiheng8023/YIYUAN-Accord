@@ -70,10 +70,10 @@ for shared changes. A clean host is not a product prerequisite.
 
 For package changes, preserve exact prior source/state and a recovery actor
 available outside the changed component. Validate the native-selected source
-before mutation. For Claude
-relative-directory user installs with Node and a bound CLI/profile, invoke
-`node "${CLAUDE_PLUGIN_ROOT}/runtime/inspect-plugin-update.cjs" REQUEST.json`
-(`--help` for input). Hold invalid/unknown changes; `inspection-complete` is a
+before mutation. For Claude relative-directory user installs with bound Node
+and CLI/profile, run `${CLAUDE_PLUGIN_ROOT}/runtime/inspect-plugin-update.cjs`
+via that Node path with a JSON file; see `--help`.
+Hold invalid/unknown changes; `inspection-complete` is a
 snapshot, not update permission. Use supported native checks for other sources.
 Verify installed bytes, registration and fresh loading; version/exit success
 proves neither content nor usability. On mismatch, stop dependent use and
