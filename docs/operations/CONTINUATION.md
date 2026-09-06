@@ -113,15 +113,24 @@ inline-plugin condition. This does not establish a paths-based fix, model
 behavior or product gain. All four native processes and local servers stopped;
 the complete 91-file evidence copy was verified before owned-root disposal.
 
-Next bind one same-candidate ordinary/native-selected neutral maintenance pair.
-Keep body, permissions, route and budget unchanged. Test whether early delivery
-improves required validation, authorized bounded hold and convergence; explicit
-selection is not ordinary adoption. The previous selected failures already
-prevent treating activation alone as sufficient. Follow the earliest evidenced
-execution/control gap if this condition is also insufficient; no deterministic
-product code defect has yet been located. Corrected update, independent recovery,
-remaining ordinary-function, Desktop continuity and whole-product value stay
-open. README and changelog remain last.
+The same-candidate ordinary/native-selected neutral maintenance pair is now
+retained. Both failed to reach the required bounded task conclusion after
+sufficient bad-source and prior-state facts. Neither executed native validation;
+that is a separate observation, not an added E6 failure criterion. The original
+lifecycle validation requirement remains unchanged. First-request body
+delivery in the selected arm is inferred from E5; E6 stdout does not expose it.
+Both task profiles changed, while prior installed bytes and the selected shared
+files matched; this is not an Accord protection or no-side-effect finding.
+All 24 native process observations and both profile retirements are closed.
+The 1,174-file evidence copy was verified before owned-root disposal.
+
+Stop repeated activation/body/budget/route trials. Next trace the necessary
+decision/execution/hold duty to its actual delivered actor and available control,
+reusing unaffected Codex evidence only at its original scope. A new mechanism
+needs a located gap, real caller and bounded effects; no deterministic product
+code defect or model-wide limit has been established. Corrected update,
+independent recovery, remaining function, Desktop continuity and product value
+stay open. README and changelog remain last.
 
 The byte-identical read-only 2.1.263 runtime copy remains task-owned at
 `C:\Users\15521\AppData\Local\Temp\accord-claude-runtime-263-5yoxqfig` for
