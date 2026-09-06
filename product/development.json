@@ -177,7 +177,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "本地项目/工作树或委派云端，按任务区分",
           "environment": "界面入口、内嵌引擎与独立 CLI 版本分别识别。",
-          "observation": "2026-09-06 只读复核：OpenAI.Codex 26.901.5280.0。当前工具进程的父链为该 Desktop 应用→npm Codex 执行器→PowerShell；执行器路径当前磁盘字节对应 0.153.4，SHA256 444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b。该事实不证明驻留映像未漂移、有效权限、候选任务局部加载或普通入口效果；个人安装仍为3.1。",
+          "observation": "2026-09-06 只读复核：OpenAI.Codex 26.901.5280.0。当前工具进程的父链为该 Desktop 应用→npm Codex 执行器→PowerShell；执行器路径当前磁盘字节对应 0.153.4，SHA256 444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b。该事实不证明驻留映像未漂移、有效权限、候选任务局部加载或普通入口效果。随后经授权安装 Codex dev.7、实际回退至 3.1 并重装；详见 codex-installed-dev7-and-recovery，仍不是 Desktop 效果验收。",
           "currentEffect": "unverified"
         },
         {
@@ -236,8 +236,8 @@
           "name": "ChatGPT 桌面 Chat / Work",
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "按会话模式与执行目标区分",
-          "environment": "同一客户端可有不同模式；品牌或安装包名称不是模式能力证明。",
-          "observation": "官方资料支持；本机安装记录不证明各模式可用。",
+          "environment": "客户端顶层分为 ChatGPT 与 Codex，ChatGPT 内部再分 Chat 与 Work；按实际入口、执行位置、加载及权限判断适用性，界面分组不是插件的硬性适配边界。",
+          "observation": "2026-09-06 复核 https://learn.chatgpt.com/docs/plugins 与 https://learn.chatgpt.com/docs/enterprise/skills：Chat、Work 与 Codex 支持插件并共享公共目录，但本地文件分发、工作区 Skill 和各入口安装/授权仍有边界。本机 26.901.5280.0 的 composer-work-home-plugins-control 与 plugin-picker-menu-content 接入插件选择及宿主路由。界面代码和官方能力不证明某个 Work 会话已加载 Accord；正文使用、Hook 执行、实际效果及云端安装仍未验证。",
           "currentEffect": "unverified"
         },
         {
@@ -257,7 +257,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex-sdk",
           "execution": "调用方与目标 Codex 执行器",
           "environment": "SDK、协议与直接模型 API 不等同；版本、身份、配置及会话路由需绑定。",
-          "observation": "2026-09-06：0.153.4 本地 App Server 零模型探测观察到 standalone Skill 临时暴露及撤销；不是 SDK、完整插件、普通入口或云端效果验收。未安装 SDK 或运行认证调用。",
+          "observation": "2026-09-06：较早的 0.153.4 本地 App Server 零模型探测仅观察到 standalone Skill 临时暴露及撤销。随后使用既有认证、精确 dev.7 安装包运行直接 App Server 双轮诊断，完成 140→60，原生目录列出准确 Skill，但未观察到正文读取；详见 codex-installed-dev7-and-recovery。未安装或测试 SDK 库，未完成整项职责、完整生命周期或云端验收。",
           "currentEffect": "unverified"
         },
         {
@@ -846,14 +846,48 @@
       {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"当前有来源的矩阵及职责关系用于开发评审，不是实时能力库或已经运行的图。索引/图是可删改手段，保住的是关系判断与必要效果；工序 dependsOn 不证明运行反馈、交接或清理。先查真实调用者，再按同次转移的可观察后态验证宿主组合。 已删除未被插件、代码或测试调用的 39982 B 内存模拟 HTML，保留精确历史定位；当前术语入口不再把旧图模型当成必需架构。这是活跃资产删减，不是宿主运行加速或动态发现功能验收。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
       {"id":"conditional-alignment-and-external-discovery","status":"observed-research-to-delivery-gap-open","basis":"保留自然预算失败与产物反例，但调用数不等于成功取回。新诊断发现进度事件触发采集上限、WebFetch 列出但权限拒绝两项干扰；合并已知进度并维持有界采集后，无网页组正常结束并调用 Skill，但有提示参数和文案缺陷；列出未放行组的 4 次获取全部被拒，代码参数与参考不符；仅临时放行两个公开域名后 7 次获取成功、3 次域外拒绝，产物通过 8 项离线检查，却在截止时没有正常终态。详见 claude-effective-research-and-capture-dev3。旧取数成功无法重查的字段保留未知；不归咎模型或正文，不撤销旧自然失败，不以禁网、改描述或扩大预算冒充修复。下一步核验有效权限、资料取回、按证据执行及 Agent 自主核验的完整结果。"},
-      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both current worktree Skills are unpublished 3.2.0-dev.7. Guidance separates revisable plans from task authority, budgets continuity early, re-senses after compaction, distinguishes fact checks from confirmed takeover and requires explicit user authorization for task archival. Current reference copies remove the retired prompt and its bindings; exact historical definitions remain in Git. Installed 3.1 is unchanged. Fresh exact-package ordinary-entry, failure and lifecycle evidence remains required."},
-      {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"整体目标仍是Agent承担必要任务机制；用户无需先学习交接、按钮、Git或Shell等内部操作词汇。历史dev.3/dev.5诊断保持原样；dev.6在已提交判据的Claude用户配置双轮观察中，两组均从140改为60并核验实际产物，但都未调用Accord Skill。其他用户扩展仍在，不称干净宿主、独立原生归因或Accord增量价值；样本不证明整项职责、任意环境兼容或生命周期。继续从具体声明绑定普通入口、必要作用域、整体及故障判据与独立来源，沿发现/匹配、执行、状态/资源、纠偏、恢复和验收闭合。自动交接、幸存接管者与完整生命周期仍待验。"},
+      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both current worktree Skills are unpublished 3.2.0-dev.7. Guidance separates revisable plans from task authority, budgets continuity early, re-senses after compaction, distinguishes fact checks from confirmed takeover and requires explicit user authorization for task archival. Current reference copies remove the retired prompt and its bindings; exact historical definitions remain in Git. Codex now has the exact dev.7 candidate after a verified 3.1 rollback; Claude remains on 3.1. The controlled App Server sample delivered 140 then 60, with no observed Skill body read. Whole-duty, Desktop, failure, lifecycle and value acceptance remain open; see codex-installed-dev7-and-recovery."},
+      {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"整体目标仍是Agent承担必要任务机制；用户无需先学习交接、按钮、Git或Shell等内部操作词汇。历史dev.3/dev.5诊断保持原样；dev.6在已提交判据的Claude用户配置双轮观察中，两组均从140改为60并核验实际产物，但都未调用Accord Skill。其他用户扩展仍在，不称干净宿主、独立原生归因或Accord增量价值；样本不证明整项职责、任意环境兼容或生命周期。继续从具体声明绑定普通入口、必要作用域、整体及故障判据与独立来源，沿发现/匹配、执行、状态/资源、纠偏、恢复和验收闭合。自动交接、幸存接管者与完整生命周期仍待验。 dev.7 的 Codex 已安装包受控 App Server 双轮观察也完成 140→60、产物读回和输入保护；未观察到 Skill 正文读取，不归因于 Accord 增益。共享安装已实际恢复至 3.1 并逐字节核对，再重装同一 dev.7；临时测试信任项和目录已清除。下一步补足实际介入、Desktop 连续性与独立价值证据，而非重复核对静态包。"},
       {"id":"historical-reference-identity-coupling","status":"implemented-bounded-regression-verified","basis":"当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。"},
       {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
       {"id": "acceptance-cost-and-coupling", "status": "conditional-evaluator-implemented-real-scope-and-source-binding-open", "basis": "当前公开 Python 验证入口可接入由调用方独立认证的有界只读观察者，按显式入口/环境作用域核对完整包、定义/判据、同次执行后态、当前条件及绑定候选的独立评审。静态 CLI、历史阶段及 developmentObservations 不晋升。正反合成回归已覆盖合法复用与错误准入，首个Codex原生生命周期scope/case已预绑定，尚无真实通过记录或候选资格；调用函数或摘要回显不能认证事实。已实现有界 Claude 诊断入口与固定 ready-orders 判据，逐臂独立工作区、即时回读和清理；显式复用宿主用户配置，不由观察器私读凭据。该样本不覆盖整项职责，也不证明私有配置未变或增量收益，暂不计入准入。继续绑定充分的真实判据、适用范围和来源核验，不能把维护者工具当作用户功能或收益。 独立复核发现开发准入机械调用冻结四人评审规则；现已改为v3受检源策略，保留四视角，按本轮风险声明人数、独立职责和允许上下文。精确主体、来源认证、未知/矛盾拒绝及问题处置保持；允许经认证且处置污染的上下文变化，不强制同一身份各次回执全等。旧v1默认规则与调用者不变，尚不构成真实评审或宿主验收。 首个原生生命周期观察已确认部分安装/更新/写入前拒绝保护和撤销事实；正文加载仍未知，原生空缓存容器与最终任务根清理分别记账，该用例尚不准入。无模型预览也未填补 SDK 加载证据。临时调用遗漏 Windows 环境表的缺陷已通过无模型对照识别，复用原工具已有环境表后原生显式 Skill 判断完成；这不补齐普通入口或安装包加载，失败记录继续保留，不新增替代框架。"}
     ]
   },
   "developmentObservations": [
+    {
+      "id": "codex-installed-dev7-and-recovery",
+      "observedAt": "2026-09-06T00:05:42.076550+00:00",
+      "scope": "development-diagnostic-only-not-admission",
+      "subject": {
+        "revision": "0cf69a3f122145b4c936e040586f1ad0a970ade0",
+        "packageVersion": "3.2.0-dev.7",
+        "packageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d",
+        "hostVersion": "Codex CLI 0.153.4",
+        "binarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b"
+      },
+      "route": "Authorized existing Codex profile and native pin write with fresh expectedVersion, targeted marketplace upgrade and plugin add. Existing native authentication; no observer credential access or new account. Both candidate installation and restoration bound all 11 files to source/backup. No user task was archived.",
+      "appServerSample": {
+        "fixture": "scripts/observe_claude_entry.py:READY_ORDERS",
+        "conditions": "Fresh ephemeral App Server thread; ordinary text input, no forced Skill input or body injection. Existing profile, gpt-6-astra/high requested, openai provider reported, workspace-write and network disabled requested. Scoped shell allowed, no delegation. Requested disabling other configured MCP/plugin exposure through temporary flags and enabling the selected Accord; 41 Skills listed and four MCP startup events observed, so not a pristine or fully isolated host. Requested model/provider are not backend attestation.",
+        "firstTotal": 140,
+        "separatelyDeliveredCorrectionTotal": 60,
+        "bothArtifactsMatchedEachTurn": true,
+        "agentPostWriteReadbackEachTurn": true,
+        "allThreeInputsUnchanged": true,
+        "unexpectedPaths": [],
+        "naturalExit": true,
+        "forced": false,
+        "ownedProcessesAfterCleanup": 0,
+        "seconds": 71.46,
+        "exactCandidateListed": true,
+        "observedSkillBodyRead": false
+      },
+      "lifecycle": "Installed dev.7; restored v3.1.0 with all 11 package files and configuration matching the backup byte-for-byte and fresh native discovery of enabled 3.1; then reinstalled the same dev.7 and independently rechecked all files, owned pin and fresh discovery. Final Codex state is dev.7; Claude seven-file 3.1 package remains unchanged. The App Server host added one task-directory trust entry; only that entry was removed and pre-sample configuration bytes restored. Final personal configuration differs from the original only in the authorized Accord pin. Native update/install/pin operations exited normally and owned Job counts settled to zero. Test root and its temporary files were removed; private recovery backup retained.",
+      "observerCorrection": "Two initial no-model configuration reads returned successfully but the observer classified nine remaining children at 500 ms and contained its own Job. A bounded five-second settling window and process attribution showed native Git metadata children finishing naturally (642 ms in the diagnostic control). Temporary MCP disabling alone had not removed the symptom. Keep the early forced classifications; they do not establish persistent host or plugin failure.",
+      "followupInspection": "At 2026-09-06T00:23:20Z a read-only check reported 11 cache mismatches and a different raw configuration hash while the Accord pin remained unchanged. By 00:24:38Z, separate reads matched all 11 files to the exact committed candidate and configuration bytes to the expected owned-pin-only state. The parent and both reviewers made no intervening host mutations. Available Desktop logs show plugin listing near this interval, not the cause or writer. Preserve the transient discrepancy as unexplained; do not claim persistent drift, a repaired product defect or continuous installation invariance.",
+      "checkSensitivity": "Two selected in-memory implementation mutations disabled the reference-retirement digest check and the final-review chronological check. Each corresponding existing regression passed on the original, failed by assertion on the mutant without infrastructure error, and passed after restoration. No source files changed; this is bounded check sensitivity, not comprehensive mutation coverage.",
+      "limits": "Native and independent file observations are retained in the bound parent transcript and a private recovery record. These are diagnostic observations without an admitted case or authenticated observer/review bundle. Fresh discovery is not Skill body use. No incremental value, full lifecycle, ordinary Desktop continuity, archive prevention or overall release readiness claim."
+    },
     {
       "id": "codex-explicit-skill-native-judgment-dev6",
       "observedAt": "2026-09-05T21:22:58Z",
@@ -2291,7 +2325,7 @@
   },
   "nextBoundary": {
     "work": "The conditional current-development evidence evaluator is implemented locally; bind concrete claim scopes, real case oracles and trusted independent read-only source verification before collecting qualifying evidence. Commit evaluated implementation and acceptance A, collect observations E, and review final candidate B under unchanged affected dependencies. Keep diagnostic observations and synthetic fixtures separate from acceptance. Continue ordinary-entry whole-chain, failure, lifecycle and value work; package sufficiency and release gates remain open. Additional vendors remain deferred.",
-    "requires": "The user authorized controlled existing-host work and publication of the accepted 3.2 candidate. Use task-owned bounded test resources, not changes to the personal host. Bind any new account, trust/data or material cost before effects; evidence and exact-candidate checks still precede the conditional publication."
+    "requires": "The user authorized controlled existing-host work, backed-up installation and recovery of the existing Codex candidate before publication, and publication of accepted 3.2. Use task-owned bounded test resources; bind necessary authorized configuration changes, affected sessions, prior state and restoration. New accounts, unrelated trust/data, material cost or personal changes outside that scope still require authority. Fresh evidence and exact-candidate checks precede conditional publication."
   },
   "claimCeiling": {
     "localContractOnly": true,

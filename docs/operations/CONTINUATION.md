@@ -65,8 +65,9 @@ whether the available host composition closes the duty.
 
 - The unpublished packages are `3.2.0-dev.7`; continuity guidance requires early
   handoff budgeting, fresh sensing after compaction, confirmed destination
-  takeover and explicit user authority for archival. Installed 3.1 is unchanged;
-  these guidance changes still require fresh behavioral evidence.
+  takeover and explicit user authority for archival. The exact Codex candidate
+  is installed after a verified 3.1 rollback and reinstall; Claude remains on 3.1.
+  These guidance changes still require fresh behavioral evidence.
 - Ordinary-entry functionality and incremental value remain unverified. Prior
   samples include native sufficiency, unused guidance, incomplete delivery and
   unsupported verification claims. Explicit Skill use is a different condition.
