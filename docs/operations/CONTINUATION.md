@@ -77,6 +77,17 @@ experiment. A file URL remains a feasibility candidate, not verified support.
 See `developmentObservations/claude-dev7-functional-and-directory-lifecycle`
 for originals and limits. README and changelog still wait for final acceptance.
 
+The native Git route now has actual clone/transport and exact cached-Skill
+activation evidence. Its first invalid update reused an orphaned intact dev.7
+cache and changed registration rather than rejecting the bad source; the original
+failure window stays untested. The registry commit label did not establish cache
+provenance. All 1,832 files are retained and hash-verified under
+`claude-git-20260906`; the original owned root is removed. The source now binds
+a separate fresh predecessor-first update profile with candidate-cache absence
+checked before fault injection. Preserve the unchanged acceptance criteria and
+record native orphan-cache retention separately from later owned-root disposal.
+See `developmentObservations/claude-native-git-cache-reuse-dev7`.
+
 ## Bound work
 
 Continue the authorized 3.2 whole-system development in

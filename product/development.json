@@ -855,6 +855,62 @@
   },
   "developmentObservations": [
     {
+      "id": "claude-native-git-cache-reuse-dev7",
+      "observedAt": "2026-09-06T06:44:31Z",
+      "scope": "bounded-native-lifecycle-prefix-and-unexercised-failure-window",
+      "subject": {
+        "revision": "bb08b3164505a2e01a59edbbc38e5c918db494d7",
+        "version": "3.2.0-dev.7",
+        "hostVersion": "2.1.261 (Claude Code)",
+        "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852"
+      },
+      "transport": {
+        "directFileUrl": "native source-format rejection, exit 1, no install",
+        "acceptedRoute": "native Git manager with process-only full reserved-domain URL prefix rewritten to the exact owned publisher file URI",
+        "nativeEvidence": "Claude-spawned Git clone and transport/file git-upload-pack in Trace2; not HTTPS-network validation"
+      },
+      "activation": {
+        "candidate": {
+          "seconds": 17.258,
+          "skillCalls": 1,
+          "reads": 5,
+          "writes": 2
+        },
+        "predecessor": {
+          "seconds": 23.357,
+          "skillCalls": 1,
+          "reads": 7,
+          "writes": 2
+        },
+        "result": "Both selected installed Skills completed A/B=140 and both-file post-write readback, preserved inputs, loaded exact seven-file version caches physically independent of publisher and marketplace, and exited normally with Job count zero. Existing authorized DeepSeek route; actual model deepseek-v4-flash-vision-exp[1M]. Model stderr was 99 bytes per activation, contents unjudged. Startup Hook success with empty output does not prove a guardrail effect."
+      },
+      "invalidUpdate": {
+        "publisherCommit": "54fc3aa44057194ab69e50acbab2443543077199",
+        "invalidManifestSha256": "9b769ae65ac0a4dc98c40bfe2f7bd6eb921e4b5791f911232053200c6efbb977",
+        "refresh": "Native refresh selected the invalid source. Predecessor package and installation registry remained unchanged; marketplace metadata changed.",
+        "update": "Exit 0 reused the previously installed intact dev.7 cache, changed installation from 3.1 and adjusted orphaned markers. The registry gitCommitSha became the invalid publisher commit while the cache retained earlier valid bytes. No invalid-manifest rejection was observed; no file-read trace proves whether the bad manifest was read.",
+        "qualification": "untested failure/recovery window; preserved 3.1 bytes are not preserved 3.1 installation state. Original checkpoints precede any later cleanup."
+      },
+      "correction": "Prebind separate fresh installation and predecessor-first update profiles. Verify candidate/orphaned/staging cache absence and actual predecessor activation within the update profile before fault injection. Keep the same rejection, poststate, activation and cleanup requirements; do not manually clear old caches to manufacture the window.",
+      "retention": {
+        "root": "C:\\Users\\15521\\.codex\\backups\\accord-evaluation-20260905T215550Z-8ff0643a\\claude-git-20260906",
+        "files": 1832,
+        "bytes": 4372978,
+        "manifestSha256": "44f0a15193ec348342650329ccec5e6e9b2861ed76af0ed1c5d14f5c730c5e1a",
+        "disposalSha256": "d7ba8d6240c7ad11f55cebed30d8b58cc014d207b04103c43fb9c2726b371e04",
+        "caseSha256": "85609e26ff619f8eda6216341d275bdb912c5779d2c55a9d67f8092e3cb768b8",
+        "invalidUpdateCheckpointSha256": "6d934a91fa17be47882eea3d95e56a0e681f70d135acc9076126c1abf46c775a"
+      },
+      "review": "Independent standards review verified native transport, exact loaded Skill body, actual artifacts/readback, full checkpoint snapshots, cache reuse and limits. This is a bounded evidence review, not a final candidate review.",
+      "cleanup": "Native plugin and marketplace listings empty; selected shared metadata/package hashes unchanged. All retained originals hash-verified, selected credential-value scan zero matches, task-owned processes zero and original root removed. Orphaned version-cache deletion was evaluator-owned root disposal, not native immediate cache removal.",
+      "limits": [
+        "no-HTTPS-network-claim",
+        "no-hot-update-claim",
+        "no-failed-update-rejection-or-recovery-claim",
+        "no-whole-host-or-value-qualification"
+      ]
+    },
+    {
       "id": "claude-dev7-functional-and-directory-lifecycle",
       "scope": "bounded-development-observation-not-whole-scope-admission",
       "evaluatedRevision": "0688fc9bdaa678f109bf18a2291143e97bd5e12e",
@@ -2527,6 +2583,7 @@
             "transport": "native-cli-plugin-manager-and-stream-json",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
             "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
+            "profileTopology": "fresh-install-profile-and-independent-predecessor-first-update-profile-without-candidate-cache",
             "sharedInstallationAllowed": false,
             "authentication": "none-for-manager-operations; existing-authorized-route-in-memory-only-for-activation",
             "requestedActivationModel": "sonnet",
@@ -2534,7 +2591,7 @@
             "candidate": "3.2.0-dev.7",
             "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68"
           },
-          "oracle": "Prebind exact host/package/helper bytes, operation order, selected shared-state hashes, byte-exact task inputs and owned roots. Verify an empty task-owned CLAUDE_CONFIG_DIR/home/cache/temp and native Git-marketplace support before installation. A task-owned file:// Git URL is a candidate route only: require native acceptance and independent evidence that the actual loading tree has no shared writable path with the publisher or mutable marketplace checkout. Unsupported transport or unresolved isolation remains untested; do not silently substitute a directory marketplace. Use immutable publisher commits containing exact package bytes. Install the candidate, independently inspect cached bytes, registration and discovery, then activate the registered package through its native selected Skill in a fresh stream-json process: actual Skill loading, A/B=140, preserved byte-bound inputs and Agent readback. No --plugin-dir or copied body supplies activation. Uninstall and inspect absence/residue. Then publish/install immutable 3.1, verify its actual selected activation and safe loaded tree, and snapshot files, registration/enabled state, discovery and residues. Commit the deliberately invalid candidate only in the publisher; request native marketplace refresh and then plugin update. Snapshot after each operation. Require evidence that the bad candidate was actually selected and its invalid manifest rejected; cached versions, no-op or an unexercised window are untested. Before restoration, inspect the predecessor loading tree and installation state plus staging/cache/data in all redirected directories. If refresh itself changes the safe loaded tree, record that failure rather than attributing safety to plugin update. Any native mutation prevents a rejection-before-write claim; later repair cannot revise that checkpoint. Preserve failures, publish exact corrected candidate bytes, refresh the marketplace, request native update and check installed/loaded bytes, then repeat selected activation and independent 140/readback verification. Finally uninstall, inspect registration/discovery and active caches/data, remove the marketplace, verify retained evidence and remove only owned roots. Manager operations need no authentication. Activation uses only the existing authorized CC Switch/DeepSeek route in memory; never copy credentials into fixtures/logs/arguments or invent a route. Missing authentication leaves activation unknown while independent no-model work continues. Compare selected shared metadata/package paths before and after every operation; drift stops subsequent work without automatic restoration. Keep partial events, first/secondary errors and distinct checkpoints; no evaluator repair of outputs or reuse of earlier-turn readback. Bound each activation to 180 seconds, 16 turns and requested USD 1, and bound native commands/output/children. Separate natural exit from containment, installed activation from hot update, and this lifecycle from whole-host/value claims. Do not enable global update/cleanup controls.",
+          "oracle": "Prebind exact host/package/helper bytes, operation order, selected shared-state hashes, byte-exact task inputs and owned roots. Verify empty task-owned CLAUDE_CONFIG_DIR/home/cache/temp roots and native Git-marketplace support before installation. Prebind the full native source and actual Git transport. A complete unique reserved-domain alias may use Git command-scope insteadOf to a task-owned file URI; retain native Git child/transport evidence, permit no unbound URL suffix or network fallback, and make no HTTPS-network claim. Direct file-URL rejection remains a separate observation. Require native acceptance and independent evidence that the actual loading tree has no shared writable path with the publisher or mutable marketplace checkout. Unsupported transport or unresolved isolation remains untested; do not silently substitute a directory marketplace. Use immutable publisher commits containing exact package bytes. Install the candidate, independently inspect cached bytes, registration and discovery, then activate the registered package through its native selected Skill in a fresh stream-json process: actual Skill loading, A/B=140, preserved byte-bound inputs and Agent readback. No --plugin-dir or copied body supplies activation. Uninstall and inspect absence/residue in the installation profile. Native uninstall may retain inactive orphaned version caches; record that state separately from registration/discovery absence and later evaluator disposal. Use a second fresh task-owned profile for the update path in this prebound episode. It must never have installed or cached the candidate. Publish/install immutable 3.1 there, verify its actual selected activation and safe loaded tree, and snapshot files, registration/enabled state, discovery and residues. Independently verify no candidate version cache or registration, orphaned candidate version or staged candidate package exists in any redirected directory before the invalid update; the first profile cannot supply the second profile's predecessor facts. Commit the deliberately invalid candidate only in the publisher; request native marketplace refresh and then plugin update. Snapshot after each operation. Require evidence that the bad candidate was actually selected and its invalid manifest rejected; cached versions, no-op or an unexercised window are untested. Compare actual cached/loaded package bytes with the selected source; a native version or gitCommitSha label alone is not package provenance. Before restoration, inspect the predecessor loading tree and installation state plus staging/cache/data in all redirected directories. If refresh itself changes the safe loaded tree, record that failure rather than attributing safety to plugin update. Any native mutation prevents a rejection-before-write claim; later repair cannot revise that checkpoint. Preserve failures, publish exact corrected candidate bytes, refresh the marketplace, request native update and check installed/loaded bytes, then repeat selected activation and independent 140/readback verification. Finally uninstall, inspect registration/discovery and active caches/data, remove the marketplace, verify retained evidence and remove only owned roots. Manager operations need no authentication. Activation uses only the existing authorized CC Switch/DeepSeek route in memory; never copy credentials into fixtures/logs/arguments or invent a route. Missing authentication leaves activation unknown while independent no-model work continues. Compare selected shared metadata/package paths before and after every operation; drift stops subsequent work without automatic restoration. Keep partial events, first/secondary errors and distinct checkpoints; no evaluator repair of outputs or reuse of earlier-turn readback. Bound each activation to 180 seconds, 16 turns and requested USD 1, and bound native commands/output/children. Separate natural exit from containment, installed activation from hot update, and this lifecycle from whole-host/value claims. Do not enable global update/cleanup controls.",
           "oracleFiles": [
             "scripts/observe_claude_entry.py",
             "scripts/observe-claude-entry.ps1",
@@ -2921,6 +2978,7 @@
             "transport": "native-cli-plugin-manager-and-stream-json",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
             "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
+            "profileTopology": "fresh-install-profile-and-independent-predecessor-first-update-profile-without-candidate-cache",
             "sharedInstallationAllowed": false
           },
           "rule": "Use a verified task-owned configuration/cache/profile only; no shared candidate installation before accepted publication. Check live manager state and independent installed bytes. Complement installation state with the same installed candidate loading/activation and selected normal-entry effect under the existing authorized route, bound before a model call. The native manager survives Skill absence and owns each supported operation. Observe failed-update post-state before later operations; evaluator restoration cannot supply native recovery. Restart activation is not hot reload, whole-host functionality or a new account/route."
