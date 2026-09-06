@@ -88,6 +88,17 @@ checked before fault injection. Preserve the unchanged acceptance criteria and
 record native orphan-cache retention separately from later owned-root disposal.
 See `developmentObservations/claude-native-git-cache-reuse-dev7`.
 
+The user then upgraded Claude CLI to `2.1.263` during the two-profile
+episode. Initial dev.7 installation/activation/uninstall completed under 2.1.261;
+the second profile was stopped by the executable hash guard before any native
+command or model call. Its state directories stayed empty. All 614 originals
+are retained under `claude-cycle-interrupted-20260906`, and that episode root is
+removed. The current Claude cases now bind 2.1.263 and a single task-owned
+byte-identical executable copy for stable per-episode execution. This is
+maintainer isolation, not an Accord effect or a freeze of the user environment.
+Reconcile the shared host at final qualification and dispose the owned copy
+after use. See `developmentObservations/claude-cli-upgrade-interrupted-two-profile-qualification`.
+
 ## Bound work
 
 Continue the authorized 3.2 whole-system development in

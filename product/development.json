@@ -855,6 +855,36 @@
   },
   "developmentObservations": [
     {
+      "id": "claude-cli-upgrade-interrupted-two-profile-qualification",
+      "observedAt": "2026-09-06T07:03:40Z",
+      "scope": "bounded-install-prefix-and-maintainer-executor-drift-check",
+      "subject": {
+        "revision": "ba43b841677831078226674ab4ad5e922b3f6d2a",
+        "version": "3.2.0-dev.7",
+        "boundHost": "2.1.261 (Claude Code)"
+      },
+      "installationProfile": "Fresh native Git install loaded the exact seven-file dev.7 version cache; selected Skill 1, Read 7, Write 2, A/B=140, both-file post-write readback, unchanged inputs, natural exit in 17.55 seconds and Job zero. Native uninstall plus plugin/marketplace empty listings completed.",
+      "interruption": "The user upgraded the shared CLI to 2.1.263. Before the second profile's first native command, the bound executable hash check rejected executor drift. No native stdout journal was created, no Claude/model process was started in that profile, and all five redirected state directories remained empty. The task-owned publisher had been prepared with immutable 3.1 bytes; no predecessor installation or activation occurred there.",
+      "attribution": "This is the maintainer observer's source-bound guard, not evidence that Accord itself adapted, prevented an unsafe update or completed a host scope. Prior results remain tied to 2.1.261.",
+      "newHost": {
+        "version": "2.1.263 (Claude Code)",
+        "binarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+        "bytes": 218746016,
+        "sourceAndCopyHashesMatch": true,
+        "copyVersionProbe": "2.1.263 (Claude Code), exit 0",
+        "isolation": "One task-owned read-only byte-identical native executable copy fixes each episode without changing the user's shared CLI or update settings. Bind its actual path and environment before execution; copy/hash/version alone does not establish functional compatibility. Reconcile the current shared host again before final claims."
+      },
+      "retention": {
+        "root": "C:\\Users\\15521\\.codex\\backups\\accord-evaluation-20260905T215550Z-8ff0643a\\claude-cycle-interrupted-20260906",
+        "files": 614,
+        "bytes": 1589635,
+        "manifestSha256": "f14d4419dc31d7ed455d12f2683b538e9e66c7998862ce14eb8078b9de0f97ac",
+        "disposalSha256": "1418ef4a3348d712ee1b41aacee6defc465db3757d3c1d88eb35b0bd35a7bf0d"
+      },
+      "cleanup": "All originals copied and hash-verified; selected credential-value scan zero matches; selected shared metadata/package paths unchanged. Original episode root removed with no owned processes. The separately owned 2.1.263 executor copy remains only for the next qualification work and must be disposed after use.",
+      "remaining": "Fresh current-host functional and complete lifecycle evidence; Desktop continuity and product value remain independently open."
+    },
+    {
       "id": "claude-native-git-cache-reuse-dev7",
       "observedAt": "2026-09-06T06:44:31Z",
       "scope": "bounded-native-lifecycle-prefix-and-unexercised-failure-window",
@@ -2507,15 +2537,16 @@
             "function"
           ],
           "conditions": {
-            "hostVersion": "2.1.261 (Claude Code)",
-            "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
+            "hostVersion": "2.1.263 (Claude Code)",
+            "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
             "transport": "native-cli-stream-json",
             "profile": "authorized-existing-user-profile-with-session-local-candidate",
             "requestedModel": "sonnet",
             "providerRoute": "existing-CC-Switch-DeepSeek-no-fallback",
             "entrySelection": "ordinary-text-without-forced-Skill-invocation",
             "comparison": "one-native-arm-then-one-exact-candidate-arm",
-            "optionalExposure": "strict-empty-MCP; scoped Hooks/memory disable request; actual remaining extensions observed"
+            "optionalExposure": "strict-empty-MCP; scoped Hooks/memory disable request; actual remaining extensions observed",
+            "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks"
           },
           "oracle": "Use committed READY_ORDERS inputs, prompt, exclude-B correction and file/capture oracles from scripts/observe_claude_entry.py with the existing native stream-json source. Bind exact source, binary, package, helpers, caller and episode before execution. Run one native then one dev.7 --plugin-dir arm in fresh owned workspaces, without forced Skill use, copied body, rescue or output repair. Session-local exposure is not installation. Retain live pipe captures and actual files before disposal; do not use the wrapper that deletes raw evidence at return. Independently check completed first-turn A/B=140 and both-file readback before sending the bound correction in the same process; then independently check A=60 and new post-write readback of both files. Earlier readback cannot satisfy the later turn. Inspect all actual Read/Write/Edit/Skill calls and task boundaries; preserve inputs and reject extra files or out-of-scope attempts. Record actual model, plugins, Skill/Hook observations and policy limits. Preserve first failures, partial captures and secondary observation/cleanup errors; unavailable facts stay unknown. Each arm has 180 seconds, 16 turns per request and requested USD 1; unknown model pricing does not remove time/turn bounds. Before root disposal verify natural exit, zero owned processes, retention, and unchanged selected shared package/configuration bytes. Do not silently change route, account, permissions or criteria. This covers only ordinary delivery/correction, not the remaining inventory or value.",
           "oracleFiles": [
@@ -2578,8 +2609,8 @@
             "package-lifecycle"
           ],
           "conditions": {
-            "hostVersion": "2.1.261 (Claude Code)",
-            "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
+            "hostVersion": "2.1.263 (Claude Code)",
+            "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
             "transport": "native-cli-plugin-manager-and-stream-json",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
             "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
@@ -2589,7 +2620,8 @@
             "requestedActivationModel": "sonnet",
             "activationSelection": "native-selected-installed-Skill; no-inline-plugin-or-copied-system-body",
             "candidate": "3.2.0-dev.7",
-            "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68"
+            "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68",
+            "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks"
           },
           "oracle": "Prebind exact host/package/helper bytes, operation order, selected shared-state hashes, byte-exact task inputs and owned roots. Verify empty task-owned CLAUDE_CONFIG_DIR/home/cache/temp roots and native Git-marketplace support before installation. Prebind the full native source and actual Git transport. A complete unique reserved-domain alias may use Git command-scope insteadOf to a task-owned file URI; retain native Git child/transport evidence, permit no unbound URL suffix or network fallback, and make no HTTPS-network claim. Direct file-URL rejection remains a separate observation. Require native acceptance and independent evidence that the actual loading tree has no shared writable path with the publisher or mutable marketplace checkout. Unsupported transport or unresolved isolation remains untested; do not silently substitute a directory marketplace. Use immutable publisher commits containing exact package bytes. Install the candidate, independently inspect cached bytes, registration and discovery, then activate the registered package through its native selected Skill in a fresh stream-json process: actual Skill loading, A/B=140, preserved byte-bound inputs and Agent readback. No --plugin-dir or copied body supplies activation. Uninstall and inspect absence/residue in the installation profile. Native uninstall may retain inactive orphaned version caches; record that state separately from registration/discovery absence and later evaluator disposal. Use a second fresh task-owned profile for the update path in this prebound episode. It must never have installed or cached the candidate. Publish/install immutable 3.1 there, verify its actual selected activation and safe loaded tree, and snapshot files, registration/enabled state, discovery and residues. Independently verify no candidate version cache or registration, orphaned candidate version or staged candidate package exists in any redirected directory before the invalid update; the first profile cannot supply the second profile's predecessor facts. Commit the deliberately invalid candidate only in the publisher; request native marketplace refresh and then plugin update. Snapshot after each operation. Require evidence that the bad candidate was actually selected and its invalid manifest rejected; cached versions, no-op or an unexercised window are untested. Compare actual cached/loaded package bytes with the selected source; a native version or gitCommitSha label alone is not package provenance. Before restoration, inspect the predecessor loading tree and installation state plus staging/cache/data in all redirected directories. If refresh itself changes the safe loaded tree, record that failure rather than attributing safety to plugin update. Any native mutation prevents a rejection-before-write claim; later repair cannot revise that checkpoint. Preserve failures, publish exact corrected candidate bytes, refresh the marketplace, request native update and check installed/loaded bytes, then repeat selected activation and independent 140/readback verification. Finally uninstall, inspect registration/discovery and active caches/data, remove the marketplace, verify retained evidence and remove only owned roots. Manager operations need no authentication. Activation uses only the existing authorized CC Switch/DeepSeek route in memory; never copy credentials into fixtures/logs/arguments or invent a route. Missing authentication leaves activation unknown while independent no-model work continues. Compare selected shared metadata/package paths before and after every operation; drift stops subsequent work without automatic restoration. Keep partial events, first/secondary errors and distinct checkpoints; no evaluator repair of outputs or reuse of earlier-turn readback. Bound each activation to 180 seconds, 16 turns and requested USD 1, and bound native commands/output/children. Separate natural exit from containment, installed activation from hot update, and this lifecycle from whole-host/value claims. Do not enable global update/cleanup controls.",
           "oracleFiles": [
@@ -2935,12 +2967,13 @@
             "function"
           ],
           "conditions": {
-            "hostVersion": "2.1.261 (Claude Code)",
-            "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
+            "hostVersion": "2.1.263 (Claude Code)",
+            "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
             "transport": "native-cli-stream-json",
             "profile": "authorized-existing-user-profile-with-session-local-candidate",
             "requestedModel": "sonnet",
-            "providerRoute": "existing-CC-Switch-DeepSeek-no-fallback"
+            "providerRoute": "existing-CC-Switch-DeepSeek-no-fallback",
+            "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks"
           },
           "rule": "Bind the existing authorized Claude Code CLI and provider route, not every listed Claude entry. Retain the complete necessary functional inventory; each case covers only its actual effects. Current user customizations are declared conditions, not an excuse for drift or proof of a pristine profile. Requested flags do not establish effective policy, backend identity, Hook execution or a filesystem barrier. No other vendor, official account, Claude Desktop, cross-carrier continuity or incremental-value qualification follows."
         },
@@ -2973,13 +3006,14 @@
             "package-lifecycle"
           ],
           "conditions": {
-            "hostVersion": "2.1.261 (Claude Code)",
-            "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
+            "hostVersion": "2.1.263 (Claude Code)",
+            "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
             "transport": "native-cli-plugin-manager-and-stream-json",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
             "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
             "profileTopology": "fresh-install-profile-and-independent-predecessor-first-update-profile-without-candidate-cache",
-            "sharedInstallationAllowed": false
+            "sharedInstallationAllowed": false,
+            "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks"
           },
           "rule": "Use a verified task-owned configuration/cache/profile only; no shared candidate installation before accepted publication. Check live manager state and independent installed bytes. Complement installation state with the same installed candidate loading/activation and selected normal-entry effect under the existing authorized route, bound before a model call. The native manager survives Skill absence and owns each supported operation. Observe failed-update post-state before later operations; evaluator restoration cannot supply native recovery. Restart activation is not hot reload, whole-host functionality or a new account/route."
         },
