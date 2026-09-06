@@ -29,6 +29,14 @@ evidence only; it does not replace the original task-18 action record or grant
 any archival authority. Continue the remaining ordinary-entry, whole-chain,
 lifecycle and value work; these bounded diagnostics do not qualify 3.2.
 
+The latest upstream-context concern is mapped to the existing interference
+scenario. A no-model CLI preview at `cf3dcfe` reduced rendered text by 8,941 bytes
+with a process-only catalogue budget: all 50 names/paths remained, while 48
+descriptions shortened. See `codex-native-context-catalogue-budget` for exact
+conditions and limits. Personal configuration is unchanged. Discovery quality,
+conflict resolution and retained-state integrity need task evidence; do not turn
+this diagnostic setting into a universal default or an Accord efficacy claim.
+
 ## Bound work
 
 Continue the authorized 3.2 whole-system development in

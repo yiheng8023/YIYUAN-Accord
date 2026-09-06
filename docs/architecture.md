@@ -55,6 +55,16 @@ extensions and their output cannot promote themselves to user authority. A Hook
 can guard supported execution points; do not extend that claim to other paths or
 confuse a model interpreting conflict advice with deterministic enforcement.
 
+Context exposure is part of that responsibility. Keep controllable standing
+guidance small and load applicable detail on demand. Distinguish a capability
+catalogue from full instructions, tool output and retained history. Resolve
+instruction conflicts through the actual instruction hierarchy and applicable
+authority; reconcile factual disagreements with evidence. Disabling a capability
+does not retract earlier text or repair decisions already influenced by it.
+Measure reduced exposure alongside discovery, task results and necessary state
+integrity. The recorded native CLI budget probe demonstrates a smaller rendered
+catalogue, not a universal budget or improved Agent behavior.
+
 The Agent owns the choice, activation, operation and release of applicable
 capabilities within bound authority. Users can state outcomes without knowing
 buttons, worktrees or conversation topology. Prefer supported background APIs,
