@@ -68,9 +68,12 @@ whether the available host composition closes the duty.
 
 - The unpublished packages are `3.2.0-dev.7`; continuity guidance requires early
   handoff budgeting, fresh sensing after compaction, confirmed destination
-  takeover and explicit user authority for archival. The exact Codex candidate
-  is installed after a verified 3.1 rollback and reinstall; Claude remains on 3.1.
-  These guidance changes still require fresh behavioral evidence.
+  takeover and explicit user authority for archival. The earlier Codex install,
+  3.1 rollback and reinstall are historical diagnostics. The user subsequently
+  chose no shared Codex candidate installation until publication; native removal
+  and restoration of the original marketplace pin are verified. Backups remain.
+  Necessary pre-release evaluation uses task-local exposure. These changes still
+  require fresh behavioral evidence and do not erase already loaded context.
 - Ordinary-entry functionality and incremental value remain unverified. Prior
   samples include native sufficiency, unused guidance, incomplete delivery and
   unsupported verification claims. Explicit Skill use is a different condition.
@@ -88,11 +91,11 @@ whether the available host composition closes the duty.
   not the unavailable official Claude account. Keep provider/model and host
   attribution distinct. Other account-bound entries remain untested.
 - Controlled existing-host work and publication of accepted 3.2 are authorized.
-  Apply and verify project changes first; the user also authorizes a backed-up
-  Codex candidate installation before publication with affected-session control
-  and recovery, followed by the already bound upgrade of existing Accord
-  installations after publication. Other personal changes, new trust, data,
-  accounts, material cost or unrelated effects still require bounded authority.
+  Pre-release observation uses bounded task-local candidate exposure; the earlier
+  shared Codex installation permission was withdrawn. Shared installation follows
+  accepted publication with the bound backup and recovery checks. Other personal
+  changes, new trust, data, accounts, material cost or unrelated effects still
+  require bounded authority.
 - Maintain the unpublished CHANGELOG, commit and push the complete exact
   candidate before release, then satisfy the independent evidence, review,
   hosted, publication and post-state gates. Follow the source's ordered

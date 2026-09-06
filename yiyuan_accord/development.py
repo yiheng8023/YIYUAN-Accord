@@ -177,8 +177,7 @@ def development_contract_errors(contract, golden_task_ids):
     }
     granted.update({"whole-system-optimization", "existing-host-functional-closure", "next-version-development",
                     "controlled-existing-host-evaluation", "conditional-v3.2-release",
-                    "conditional-existing-accord-upgrade-after-v3.2-release",
-                    "existing-codex-candidate-installation-and-recovery"})
+                    "conditional-existing-accord-upgrade-after-v3.2-release"})
     release = authority.get("conditionalRelease")
     require(isinstance(release, dict) and release.get("target") == "3.2.0"
             and release.get("decision") == "user-authorized-after-acceptance"

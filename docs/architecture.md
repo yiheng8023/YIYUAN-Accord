@@ -24,7 +24,7 @@ execution and failure window:
 
 | Work | Responsible means and activation | Required evidence |
 |---|---|---|
-| Task delivery, immediate correction and result verification | The active host Agent and available supported tools; Accord guidance or added means only where justified | Authorized actions, correct result and relevant post-state; a current correction must not wait for a cross-task learning pipeline |
+| Task delivery, immediate correction and result verification | Accord owns faithful goal/authority propagation, applicability and result criteria; the active host Agent and supported tools supply reasoning and operations | Authorized actions, correct result and relevant post-state; a current correction must not wait for a cross-task learning pipeline |
 | Continuity, recovery and resource exit | Available host controls or a declared composition with necessary state and an applicable surviving failure owner | Check relevant duties against the same execution/state change; in-place continuation need not hand off. An actual carrier/source transfer requires destination reconciliation before safe source release |
 | User-authorized package lifecycle | Host lifecycle controls available before installation and after removal, plus any necessary independent compensation | Exact selected components, active state and residue; an absent Skill cannot execute its own unavailable recovery |
 | Maintainer assurance and optional reusable learning | Product qualification or an authorized, useful persistence task, separate from ordinary use | Evidence appropriate to the claimed product effect, comparison or reusable correction; these activities are not required ceremony for every user task |
@@ -35,13 +35,34 @@ Unknown irrelevant state need not block safe work; unknown necessary state
 cannot be silently promoted. Safety, functional and other applicable quality
 floors cannot compensate for each other through an average score.
 
+This allocation applies to every duty, not only adaptation. User decisions and
+authorization remain user-owned. Accord must retain the policy, necessary state,
+dependency checks and verification needed for its declared result. It may reuse
+host reasoning, events, storage and execution, but must verify those dependencies
+and respond when they cease to suffice. Machine-checkable consequential controls
+need an actual delivered caller; prose or unused reference code is insufficient.
+Customized settings and extensions are normal operating conditions. Reuse
+compatible help and contain conflicts within their affected scope. Unknown or
+broken host facilities require a specific unmet condition and feasible recovery
+route, not blanket environmental blame or unconditional compatibility claims.
+Open-source, noncommercial delivery retains the same agreed functional, quality,
+recovery and maintenance standards; production readiness must be demonstrated.
+
+Accord is open to surrounding ecosystems. Its middle or mixed-layer role is a
+logical allocation, not a universal proxy. Resolve collisions by verified source,
+applicable scope, current user authorization and actual host limits. Installed
+extensions and their output cannot promote themselves to user authority. A Hook
+can guard supported execution points; do not extend that claim to other paths or
+confuse a model interpreting conflict advice with deterministic enforcement.
+
 ### Current delivered candidate and unproven connections
 
-Both worktree packages are unpublished `3.2.0-dev.6`; the continuity correction
+Both worktree packages are unpublished `3.2.0-dev.7`; the continuity correction
 changes their guidance and needs fresh affected evidence. Current descriptors expose one host
 Skill and an optional Node SessionStart hint. The helper emits invalidation
 guidance on resume/compact; it owns no task scheduler, durable task state or
-recovery executor. Host behavior is responsible for acting on the guidance.
+recovery executor. The host Agent currently interprets and acts on that guidance;
+this describes the implementation gap, not a transfer of Accord's responsibility.
 
 This is a candidate shape, not architecture law. Skill/Hook count, dependencies,
 layout and admission may change together when evidence supports the change.
@@ -61,6 +82,10 @@ The repository has separate roles:
 These roles need not all run inside a user's task. Not connecting the reference
 core to the Skill is not itself a defect. Add a connection only for a necessary
 effect and a real caller, and validate that composition through the actual entry.
+The current core's existing callers are historical evidence recalculation and
+tests. Source labels and tri-state facts are supplied by callers; the core does
+not authenticate or collect them. Its whole-observation invalidation is not yet
+an implementation of dependency-scoped adaptation in an ordinary host session.
 
 ### Optional representations and host cooperation
 
@@ -100,6 +125,12 @@ identify candidates and limitations, not verified coverage across every desktop,
 CLI, IDE, cloud, mobile or SDK surface. Account-unavailable entries remain
 untested. Both default supported hosts and customized environments matter;
 development-only extensions or evaluator help cannot be counted as product value.
+Isolation is an experimental control, not a product prerequisite. Under the
+user's current direction, the shared Codex development host has no installed
+Accord candidate; pre-release tests use bounded task-local exposure. Publication
+precedes installation into that shared host. Loading, hot update and recovery
+need separate evidence in the supported host; replacing files cannot undo earlier
+decisions or erase instructions already present in a conversation.
 
 Re-sense only decision-relevant changes, including model-native gains, invalidate
 dependent assumptions and preserve independently safe work. Retire redundant

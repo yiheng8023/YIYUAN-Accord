@@ -392,11 +392,13 @@ class DevelopmentContractTests(unittest.TestCase):
             "reason": "Fixture: merge native replacement into context-dependent routing.",
             "acceptanceChange": "Fixture: routing now owns sufficient replacement, failure and cleanup.",
         }]
-        for section, field in (("systemOptimization", "workSequence"), ("environmentControl", "adaptationScenarios")):
-            for item in altered[section][field]:
-                item["duties"] = list(dict.fromkeys(
-                    "relations-routing-and-form" if key == duty["id"] else key for key in item["duties"]
-                ))
+        for item in (altered["systemOptimization"]["workSequence"]
+                     + altered["environmentControl"]["adaptationScenarios"]
+                     + altered["acceptance"]["admission"]["scopes"]
+                     + altered["acceptance"]["admission"]["cases"]):
+            item["duties"] = list(dict.fromkeys(
+                "relations-routing-and-form" if key == duty["id"] else key for key in item["duties"]
+            ))
         self.assertTrue(self.errors(altered))  # Stale capability consumer still refers to the retired duty.
         rows = altered["capabilityMap"]["accord"]
         retired_row = next(row for row in rows if row["dutyId"] == duty["id"])
@@ -427,7 +429,7 @@ class DevelopmentContractTests(unittest.TestCase):
             ("claimCeiling", "releaseIntent", "publish"),
             ("claimCeiling", "currentHostBehavior", "verified"),
             ("claimCeiling", "incrementalValue", "verified"),
-            ("authority", "scope", self.contract["authority"]["scope"] + ["install"]),
+            ("authority", "scope", self.contract["authority"]["scope"] + ["existing-codex-candidate-installation-and-recovery"]),
         ]
         for section, field, value in mutations:
             with self.subTest(section=section, field=field):
