@@ -219,9 +219,24 @@ remain reusable at their proven scope; reopening the premise does not erase them
 There is no mandate to connect the reference core or add a runtime before checking
 whether the available host composition closes the duty.
 
+The dev.10 source-inspection entry is implemented and declared. Its prior exact-byte
+native smoke returned hold for malformed JSON and completed inspection for the
+corrected source while preserving installed bytes and registration. Native
+cleanup, independent retained-hash review and both owned-root removals are done.
+A later child-timeout edge correction remains explicitly separate from those
+observed bytes. See `developmentObservations/claude-caller-bound-source-inspection`.
+On 2026-09-07 the user approved the reviewed 1,180,000-byte code/test ceiling
+and 127 files, with at least five-percent code reserve and unchanged instruction
+limits. The separate proposal-copy full regression retains its original subject.
+Recheck affected current files and the exact contract before committing A, then
+collect fresh Agent use and lifecycle evidence. The formal dev.10 case permits
+only new inspection-request JSON in the management workspace and the exact
+bundled helper through caller-bound Node; its original lifecycle predicates,
+180-second/16-turn/requested-USD-1 bounds and outside-component actor remain. No shared candidate installation or archival is authorized.
+
 ## Evidence and authority limits
 
-- The unpublished packages are `3.2.0-dev.9`; continuity guidance requires early
+- The unpublished packages are `3.2.0-dev.10`; continuity guidance requires early
   handoff budgeting, fresh sensing after compaction, confirmed destination
   takeover and explicit user authority for archival. The earlier Codex install,
   3.1 rollback and reinstall are historical diagnostics. The user subsequently

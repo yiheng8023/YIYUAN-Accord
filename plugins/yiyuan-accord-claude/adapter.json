@@ -10,5 +10,14 @@
   "persistentProcessAdded": false,
   "persistentStateAdded": false,
   "requiresFixedHostVersion": false,
-  "behaviorEvidenceState": "unverified"
+  "behaviorEvidenceState": "unverified",
+  "optionalUpdateInspection": {
+    "entry": "runtime/inspect-plugin-update.cjs",
+    "prerequisites": [
+      "host-path-node",
+      "caller-bound-claude-cli-and-profile"
+    ],
+    "scope": "native-resolved-relative-directory-user-installation",
+    "effect": "inspect-current-source-validation-and-poststate-only"
+  }
 }

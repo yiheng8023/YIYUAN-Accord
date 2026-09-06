@@ -75,7 +75,7 @@ def _strings(value, *, empty=False):
 
 def delivery_adapter_contract(adapter_id, package_id):
     """Describe this development package, not a mandatory product mechanism."""
-    return {
+    contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
         "adapterId": adapter_id, "entry": "host-skill",
         "ordinaryPrerequisites": [],
@@ -84,6 +84,14 @@ def delivery_adapter_contract(adapter_id, package_id):
         "persistentProcessAdded": False, "persistentStateAdded": False,
         "requiresFixedHostVersion": False, "behaviorEvidenceState": "unverified",
     }
+    if adapter_id == "claude-code":
+        contract["optionalUpdateInspection"] = {
+            "entry": "runtime/inspect-plugin-update.cjs",
+            "prerequisites": ["host-path-node", "caller-bound-claude-cli-and-profile"],
+            "scope": "native-resolved-relative-directory-user-installation",
+            "effect": "inspect-current-source-validation-and-poststate-only",
+        }
+    return contract
 
 
 def _entry_surface_errors(entries):

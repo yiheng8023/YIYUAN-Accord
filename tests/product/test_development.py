@@ -20,6 +20,136 @@ from yiyuan_accord.development import (
 ROOT = Path(__file__).resolve().parents[2]
 
 
+class ClaudeUpdateInspectionTests(unittest.TestCase):
+    def run_fixture(self, **conditions):
+        expected_validations = conditions.pop("expectedValidations", 1)
+        request_overrides = conditions.pop("request", {})
+        node = shutil.which("node")
+        self.assertIsNotNone(node, "the existing delivered Hook already requires Node")
+        with tempfile.TemporaryDirectory(prefix="accord-inspection-") as temporary:
+            root = Path(temporary).resolve()
+            market, source, installed = root / "market", root / "market/plugins/target", root / "installed"
+            for directory in (market / ".claude-plugin", source / ".claude-plugin", installed / ".claude-plugin"):
+                directory.mkdir(parents=True, exist_ok=True)
+            entry = {"name": "target", "source": "./plugins/target", **conditions.pop("entry", {})}
+            (market / ".claude-plugin/marketplace.json").write_text(json.dumps({
+                "name": "fixture", "plugins": [entry]}))
+            (source / ".claude-plugin/plugin.json").write_text(
+                json.dumps({"name": conditions.get("sourceName", "target"), "version": "1.1.0"})
+                if conditions.get("validSource") else '{"name":"target",')
+            if conditions.get("sourceBom"):
+                manifest = source / ".claude-plugin/plugin.json"
+                manifest.write_bytes(b"\xef\xbb\xbf" + manifest.read_bytes())
+            (installed / ".claude-plugin/plugin.json").write_text(json.dumps({
+                "name": "target", "version": conditions.get("currentVersion", "1.0.0")}))
+            (installed / "retained.txt").write_bytes(b"prior payload\n")
+            state = {"market": str(market), "source": str(source), "installed": str(installed), **conditions}
+            (root / "state.json").write_text(json.dumps(state))
+            cli = root / "native-fixture.cjs"
+            cli.write_text('''const fs = require('node:fs');
+const path = require('node:path');
+const root = __dirname, state = JSON.parse(fs.readFileSync(path.join(root, 'state.json')));
+const args = process.argv.slice(2);
+fs.appendFileSync(path.join(root, 'calls.jsonl'), JSON.stringify(args) + '\\n');
+const calls = fs.readFileSync(path.join(root, 'calls.jsonl'), 'utf8').trim().split('\\n').map(JSON.parse);
+if (state.truncateAfterValidation && args[1] !== 'validate' && calls.some(a => a[1] === 'validate')) {
+  process.stdout.write('[{"name":'); process.exit(0);
+}
+if (args.join(' ') === 'plugin marketplace list --json') {
+  console.log(JSON.stringify([{name: 'fixture', source: 'directory', path: state.market, installLocation: state.market}]));
+} else if (args.join(' ') === 'plugin list --json') {
+  console.log(JSON.stringify([{id: 'target@fixture', scope: 'user', version: '1.0.0', installPath: state.installed}]));
+} else if (args.length === 4 && args[0] === 'plugin' && args[1] === 'validate' && args[3] === '--json') {
+  if (state.validationUnavailable) { console.error('inspection unavailable'); process.exit(7); }
+  let success = true;
+  try { JSON.parse(fs.readFileSync(path.join(args[2], '.claude-plugin/plugin.json'), 'utf8').replace(/^\\uFEFF/, '')); }
+  catch { success = !!state.validationSucceeds; }
+  process.exitCode = success ? 0 : 1;
+  const file = path.join(args[2], '.claude-plugin/plugin.json');
+  console.log(JSON.stringify({success, strict: false, target: state.validationTarget || file,
+    manifest: {file, type: 'plugin', errors: success ? [] : [{message: 'Invalid JSON syntax'}], warnings: [], notes: []}, contents: []}));
+  if (state.sourceDrift) fs.writeFileSync(path.join(state.source, '.claude-plugin/plugin.json'), '{"name":"target"}');
+} else { fs.writeFileSync(path.join(state.installed, 'unexpected-mutation'), 'wrong operation'); process.exitCode = 9; }
+''', encoding="utf-8")
+            request = root / "request.json"
+            request.write_text(json.dumps({"cli": [node, str(cli)], "plugin": "target@fixture", "scope": "user", **request_overrides}))
+            result = subprocess.run([node, str(ROOT / "plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs"),
+                                     str(request)], cwd=root, capture_output=True, text=True, timeout=40)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads(result.stdout)
+            calls = [json.loads(line) for line in (root / "calls.jsonl").read_text().splitlines()]
+            self.assertEqual(sum(call == ["plugin", "validate", str(source), "--json"] for call in calls), expected_validations)
+            self.assertFalse(any("update" in call or "install" in call for call in calls))
+            self.assertEqual((installed / "retained.txt").read_bytes(), b"prior payload\n")
+            self.assertEqual({p.relative_to(installed).as_posix() for p in installed.rglob('*') if p.is_file()},
+                             {"retained.txt", ".claude-plugin/plugin.json"})
+            return report, str(source)
+
+    def test_invalid_native_resolved_source_finishes_with_hold_and_preserves_target(self):
+        report, source = self.run_fixture()
+        self.assertEqual(report["status"], "hold")
+        self.assertEqual(report["reason"], "native-validation-rejected")
+        self.assertFalse(report["sourceManifestJsonValid"])
+        self.assertEqual(report["source"]["path"], source)
+        self.assertTrue(report["poststate"]["targetMatchesBefore"])
+
+    def test_native_success_cannot_override_observed_invalid_source(self):
+        report, _ = self.run_fixture(validationSucceeds=True)
+        self.assertEqual(report["status"], "unknown")
+        self.assertEqual(report["reason"], "conflicting-validation-result")
+        self.assertFalse(report["sourceManifestJsonValid"])
+        self.assertTrue(report["nativeValidationPassed"])
+
+    def test_marketplace_components_cannot_be_ignored_by_directory_only_inspection(self):
+        report, _ = self.run_fixture(entry={"hooks": {"PreToolUse": []}}, expectedValidations=0)
+        self.assertEqual(report["status"], "unknown")
+        self.assertEqual(report["reason"], "unsupported-entry-overrides")
+
+    def test_source_drift_preserves_the_earlier_invalid_fact_but_is_unknown(self):
+        report, _ = self.run_fixture(sourceDrift=True)
+        self.assertEqual(report["status"], "unknown")
+        self.assertEqual(report["reason"], "observed-state-drift")
+        self.assertFalse(report["sourceManifestJsonValid"])
+        self.assertFalse(report["poststate"]["sourceMatchesBefore"])
+
+    def test_unreadable_poststate_preserves_the_native_failure(self):
+        report, _ = self.run_fixture(truncateAfterValidation=True)
+        self.assertEqual(report["status"], "unknown")
+        self.assertEqual(report["failedStage"], "locate-after")
+        self.assertFalse(report["sourceManifestJsonValid"])
+        self.assertFalse(report["nativeValidationPassed"])
+        validation = next(item for item in report["nativeCalls"] if item["arguments"][1] == "validate")
+        self.assertEqual(validation["exitCode"], 1)
+
+    def test_valid_inspection_is_not_approval_and_expected_identity_still_binds(self):
+        report, _ = self.run_fixture(validSource=True)
+        self.assertEqual(report["status"], "inspection-complete")
+        self.assertIsNone(report["expectedSourceMatches"])
+        report, _ = self.run_fixture(validSource=True, request={"expectedSourceSha256": "0" * 64})
+        self.assertEqual(report["status"], "hold")
+        self.assertEqual(report["reason"], "expected-source-mismatch")
+
+    def test_valid_json_does_not_prove_the_requested_source_or_current_identity(self):
+        for conditions in ({"sourceName": "other"}, {"currentVersion": "0.9.0"}):
+            with self.subTest(conditions=conditions):
+                report, _ = self.run_fixture(validSource=True, **conditions)
+                self.assertEqual(report["status"], "unknown")
+                self.assertEqual(report["reason"], "plugin-identity-mismatch")
+
+    def test_unavailable_validator_is_not_reported_as_source_rejection(self):
+        report, _ = self.run_fixture(validSource=True, validationUnavailable=True)
+        self.assertEqual(report["status"], "unknown")
+        self.assertEqual(report["reason"], "native-validation-inconclusive")
+        report, _ = self.run_fixture(validSource=True, validationTarget="different-target")
+        self.assertEqual(report["status"], "unknown")
+        self.assertFalse(report["nativeValidationReportMatches"])
+
+    def test_supported_manifest_encoding_does_not_manufacture_an_invalid_fact(self):
+        report, _ = self.run_fixture(validSource=True, sourceBom=True)
+        self.assertEqual(report["status"], "inspection-complete")
+        self.assertTrue(report["sourceManifestJsonValid"])
+
+
 class DevelopmentContractTests(unittest.TestCase):
     def setUp(self):
         self.contract = json.loads((ROOT / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
@@ -572,6 +702,16 @@ class DevelopmentDeliveryTests(unittest.TestCase):
             report = self.report()
         self.assertFalse(report["valid"])
         self.assertTrue(any("primaryInstructionBytes=" in error for error in report["errors"]))
+        self.assertFalse(report["repositoryCandidateReady"])
+
+    def test_current_cost_includes_runtime_sources_and_delivered_copies(self):
+        report = self.report()
+        python_bytes = sum(p.stat().st_size for folder in ("yiyuan_accord", "tests/product")
+                           for p in (self.root / folder).rglob("*.py"))
+        runtime_bytes = sum(p.stat().st_size for folder in ("runtime", "plugins")
+                            for p in (self.root / folder).rglob("*.cjs"))
+        self.assertGreater(runtime_bytes, 0)
+        self.assertEqual(report["complexity"]["productCodeAndTestBytes"], python_bytes + runtime_bytes)
         self.assertFalse(report["repositoryCandidateReady"])
 
     def historical_source(self):

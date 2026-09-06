@@ -639,7 +639,7 @@ def _validate_input_evidence(root, program, errors, revision=None):
             errors.append(f"inputEvidence[{index}].revision is not an exact Git revision")
 
 
-def _repository_files(root):
+def _repository_files(root, *, include_untracked=False):
     try:
         output = _bounded_git_bytes(root, ("ls-files", "--stage", "-z"))
         files, errors = set(), set()
@@ -668,6 +668,13 @@ def _repository_files(root):
                     "tracked repository entry is not a regular file: "
                     f"{locator} (mode {mode})"
                 )
+        if include_untracked:
+            pending = _bounded_git_bytes(root, ("ls-files", "--others", "--exclude-standard", "-z"))
+            path_errors = []
+            for locator in pending.decode("utf-8").split("\0"):
+                if locator and _safe_file(root, locator, path_errors) is not None:
+                    files.add(locator)
+            errors.update(path_errors)
         return sorted(files), sorted(errors)
     except (OSError, ValueError, subprocess.SubprocessError, UnicodeError):
         return [], ["tracked repository surface is unavailable"]
@@ -684,7 +691,7 @@ def _python_bytes(root, relative_root):
     )
 
 
-def _validate_complexity(root, program, python_module, files, errors):
+def _validate_complexity(root, program, python_module, files, errors, *, runtime_code_files=()):
     budget = program.get("complexityBudget")
     if not isinstance(budget, dict):
         errors.append("program.complexityBudget must be an object")
@@ -712,6 +719,10 @@ def _validate_complexity(root, program, python_module, files, errors):
     product_code_and_tests = _python_bytes(root, python_module) + _python_bytes(
         root, "tests/product"
     )
+    for locator in runtime_code_files:
+        path = _safe_file(root, locator, errors)
+        if path is not None:
+            product_code_and_tests += path.stat().st_size
     instruction_paths = _string_list(budget.get("primaryInstructionPaths"))
     if not instruction_paths:
         errors.append("primaryInstructionPaths must be non-empty")
@@ -6664,7 +6675,7 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
             )
             hosts[projection["id"]] = {**details, "errors": local_errors}
             errors.extend(local_errors)
-        files, file_errors = _repository_files(root)
+        files, file_errors = _repository_files(root, include_untracked=True)
         errors.extend(file_errors)
         historical = program.get("inputEvidence", [])
         errors.extend(active_tree_errors(
@@ -6678,7 +6689,10 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
         for field in ("maxProductCodeAndTestBytes", "maxTrackedFiles", "maxPrimaryInstructionBytes"):
             program["complexityBudget"]["targets"][field] = development["complexityBudget"][field]
         complexity = _validate_complexity(root, {"complexityBudget": program["complexityBudget"]},
-                                          identity["pythonModule"], files, errors)
+                                          identity["pythonModule"], files, errors,
+                                          runtime_code_files=[locator for locator in files
+                                              if Path(locator).parts[0] in ("runtime", "plugins")
+                                              and Path(locator).suffix in (".js", ".mjs", ".cjs")])
         residue = known_task_residue(root)
         if residue:
             errors.append(f"known task residue remains: {residue}")

@@ -435,7 +435,7 @@ def plugin_file_locators(root, plugin_root):
 
 
 def activation_mechanism_errors(
-    root, adapter_id, mechanism_locators, activation_context,
+    root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -454,7 +454,7 @@ def activation_mechanism_errors(
         f"plugins/yiyuan-accord-{package}/hooks/hooks.json",
         f"plugins/yiyuan-accord-{package}/runtime/accord-hook.cjs",
     ]
-    if mechanism_locators != expected_locators:
+    if mechanism_locators != expected_locators + list(additional_mechanisms):
         return errors + [f"{prefix} activation mechanism locator is invalid"]
     path = repository_relative_path(root, mechanism_locators[0])
     runtime_path = repository_relative_path(root, mechanism_locators[1])
@@ -660,6 +660,10 @@ def validate_host_projection(
         ))
     errors.extend(activation_mechanism_errors(
         root, adapter_id, mechanism_locators, activation_context,
+        additional_mechanisms=[
+            (Path(manifest_locator).parent.parent / expected_contract["optionalUpdateInspection"]["entry"]).as_posix()
+        ] if isinstance(manifest_locator, str) and expected_contract
+        and "optionalUpdateInspection" in expected_contract else (),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,

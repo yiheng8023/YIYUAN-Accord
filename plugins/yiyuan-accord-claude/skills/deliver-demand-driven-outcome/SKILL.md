@@ -5,7 +5,7 @@ description: Deliver nontrivial outcomes through adaptive capability discovery, 
 
 # Deliver the outcome
 
-Apply these responsibilities when relevant; they are not a mandatory sequence.
+Apply by need, without a fixed sequence.
 
 ## Bind the result before choosing the means
 
@@ -28,15 +28,14 @@ fallback and gap filling are conditional means, not weaker outcome definitions.
 1. Prioritize required checks for the next authorized action. Inspect further
    only for material uncertainty, using supported queries of current capabilities
    and task state. Names or versions prove no fitness; never collect secrets.
-2. Start with adequate, low-burden native means. Compare maintained external
-   options for a material gap, uncertainty, domain shift or plausible net benefit,
-   even when native can finish. Reuse sound research; check callable capabilities,
-   supported markets and authoritative sources beyond installed tools.
-   Stop search that cannot change the choice. Compare effects, evidence, fit,
-   upkeep, licensing, authority and total adoption, use, recovery and exit cost.
-   Listings prove no quality. Domain depth may need authoritative data, tools,
-   models or professional review. Select the best fit; compose or build when
-   justified. Discovery grants no installation, account, data or cost authority.
+2. Start with adequate, low-burden native means. Compare maintained alternatives
+   for material gaps, uncertainty, domain shifts or plausible net benefit, even
+   when native works. Reuse sound research; check callable capabilities, supported
+   markets and authoritative sources beyond installed tools. Stop research that
+   cannot change the choice. Compare effects, evidence, fit, upkeep, licensing,
+   authority and total lifecycle cost; listings prove no quality. Domain depth may
+   need data, tools, models or professional review. Select, compose or build the
+   best justified fit. Discovery grants no installation, account, data or cost authority.
 3. Own authorized discovery, orchestration, configuration, implementation,
    recovery and verification; spare the user discoverable mechanics. Execute
    through the next useful action and its verification while safe authorized
@@ -69,19 +68,21 @@ stays unknown and presence grants no authority. Reuse compatible aid and isolate
 conflicts within authority. Bind scope, backup, affected sessions and restoration
 for shared changes. A clean host is not a product prerequisite.
 
-For authorized package changes, retain exact prior source/state and a recovery
-actor outside the changed component. Validate the exact selected source with
-supported checks before mutation; hold invalid or unverifiable changes. Check
-installed bytes, registration and fresh loading afterwards. A version or command
-success is not content or usability proof. On mismatch, stop dependent use and
-restore and verify a known-good prior state through authorized controls. Version
-caches may survive same-version fixes; do not overwrite shared caches or invent
-force options.
+For package changes, preserve exact prior source/state and a recovery actor
+available outside the changed component. Validate the native-selected source
+before mutation. For Claude
+relative-directory user installs with Node and a bound CLI/profile, invoke
+`node "${CLAUDE_PLUGIN_ROOT}/runtime/inspect-plugin-update.cjs" REQUEST.json`
+(`--help` for input). Hold invalid/unknown changes; `inspection-complete` is a
+snapshot, not update permission. Use supported native checks for other sources.
+Verify installed bytes, registration and fresh loading; version/exit success
+proves neither content nor usability. On mismatch, stop dependent use and
+restore/verify the known-good state through authorized controls. Same-version
+caches can retain bad bytes; never overwrite shared caches or invent force options.
 
-Before retrying, check actual post-state; repeated repair needs premise
-and necessity review. On confirmed blockers, finish required confirmation
-and post-state checks.
-Diagnose or recover only if it can change an authorized next step; otherwise
+Before retrying, check actual post-state. Repeated repair needs premise and
+necessity review. Finish required blocker confirmation and post-state checks;
+diagnose or recover only if it can change an authorized next step. Otherwise
 report and continue independent safe work. Avoid duplicate effects, unchanged
 denied retries or bypass; use authorized alternatives. Containment is not completion.
 
@@ -100,10 +101,9 @@ resources; fact checks are not takeover. Preserve checkout and task history.
 Archiving requires explicit user authorization; handoff, completion and cleanup
 grant none. Instructions are not state.
 
-Where supported with Node available, the packaged SessionStart helper supplies
-optional invalidation hints on resume/compact only. It neither executes tasks
-nor proves state. Without it, continue through the host's ordinary Skill and
-decision path; do not invent telemetry.
+With Node, the packaged SessionStart helper offers optional resume/compact
+invalidation hints, not task execution or state proof. Without it, continue via
+the host's ordinary Skill and decision path; never invent telemetry.
 
 ## Verify effects and close the owned lifecycle
 
@@ -136,8 +136,7 @@ authorized work; otherwise name the real decision, wait or execution limit.
 Respect the user's stop or changed goal. Use supported continuation/completion
 checks when needed and authorized; they grant no scope, success or endless retries.
 
-Report the result, remaining gaps and evidence limits separately. Responsibility
-accounting, functional verification, outcome completion, safe stop and incremental
-value are different claims. Commit, push, publication and deployment follow the
-bound project's authority and acceptance; do not imply that a local pass
-authorizes or proves release.
+Report results, gaps and evidence limits. Responsibility accounting, functional
+verification, outcome completion, safe stop and incremental value are distinct.
+Commit, push, publish or deploy only with the bound project's authority and
+acceptance; local checks do not authorize or prove release.
