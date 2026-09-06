@@ -559,7 +559,7 @@
         "name": "Skills、插件与连接扩展",
         "officialSource": "https://code.claude.com/docs/en/features-overview",
         "surface": "Skills、MCP、插件及按需工作流的可组合入口。",
-        "conditions": "安装与可见不能证明使用；额外技能、连接或服务能力须单独归因。",
+        "conditions": "安装与可见不能证明使用；额外技能、连接或服务能力须单独归因。 2.1.263 独立诊断发现市场刷新后的 list --available 会生成候选缓存，坏 manifest 可关联到旧版安装条目；查询名称和零退出码不证明只读或可用。见 claude-dev9-cache-command-and-model-condition-diagnostics；该零模型结果本身不能将副作用归因于 Accord；项目若改变 Agent 的调用选择，仍须将间接影响计入匹配对照。",
         "localObservationIds": [
           "claude-cli-help"
         ],
@@ -831,7 +831,7 @@
       {"id":"system-bottlenecks","title":"系统短板与工程优化","state":"implemented-local-unreleased","duties":["research-learning-and-reuse","relations-routing-and-form","execution-configuration-and-code","resources-and-cleanup"],"procedure":"核对相关官方能力、实际宿主暴露和职责；需要时从同一事实源派生关系视图或索引，按真实调用者、影响及成本删减或补强，再测量受影响工程路径。","exit":"已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。","qualityAxes":["functional-coverage","normal-entry-integration","maintainability-and-resource-cost","user-burden-and-interference"]},
       {"id":"development-evidence-admission","title":"当前开发证据准入通路","state":"active","duties":["verification-and-value","premise-and-consistency","package-lifecycle"],"procedure":"按获批校准预绑定整版必需范围，分别落实每宿主功能、适用生命周期及整体价值；每宿主完整职责/质量/场景只记一次总账，不对三类声明重复展开全集。继续绑定真实作用域、入口、关键环境轴、判据和独立来源。先提交定义及实现 A，再观察 E，最后在候选 B 计算准入并接受绑定 B 的真实独立评审。调整必需清单或适用范围须按验收变更复核；按受影响依赖复用证据，保留静态检查和有据成本预算。","exit":"同一公开入口区分必需功能声明闭合与整版资格；漏范围、删用例、跨宿主拼半套或换入口/环境不能掩盖缺口。继续拒绝旧定义、来源不足、过期/漂移、跨事件或矛盾后态、未闭合残留及缺失独立评审。合成回归仅验证准入器；真实范围、判据充分性和来源接入仍未完成，授权、精确推送、托管及公共后态独立成立。","qualityAxes":["functional-coverage","evidence-integrity","recovery-and-lifecycle","maintainability-and-resource-cost"]},
       {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"active","duties":["goal-authority-correction","research-learning-and-reuse","environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、发现与比较、执行及状态、故障接管、验收和清理检查整体连接；原生是起点而非停止规则，缺口或可信净收益机会才扩展检索，复用足够的宿主发现与执行链。自举同理。检查资产必要性、调用者、过期导航与维护负担，按证据保留、合并、替换或退役；同步受影响声明、工序和验收，历史证据不改写，功能不降格。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。","qualityAxes":["compliance-and-safety","functional-coverage","normal-entry-integration","recovery-and-lifecycle","user-burden-and-interference"]},
-      {"id":"cross-function-and-failure-validation","title":"动态适应、干扰与故障验收","state":"active","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"按声明选择原生对照、最小可交付组合与受控混合环境；同一被测执行/状态变化联合核验适用纠正、恢复及资源后态，实际跨载体或来源转移才核验目的端与来源释放，不强制交接。精确包安装前和卸载后由仍可用的生命周期执行者承担；不依赖评估器救援或被移除的 Skill。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。","qualityAxes":["compliance-and-safety","recovery-and-lifecycle","change-adaptation","evidence-integrity","user-burden-and-interference"]},
+      {"id":"cross-function-and-failure-validation","title":"Accord 对 Agent 的净影响、干扰与故障验收","state":"active","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"以 Accord 对 Agent 的实际影响为主问题，按声明选择同条件原生对照、最小可交付组合与受控混合环境。先核实各臂实际插件、Skill、Hook 及其他注入，避免旧版污染对照；先比较交付、授权、必要检查与正常收束，再核算额外 Token、耗时、无效探索、人工补救和残留，Token 增量本身不等于净副作用。宿主查询写缓存和模型条件变化只是局部诊断，不能代替项目影响的因果判断。同一被测执行/状态变化联合核验适用纠正、恢复及资源后态，实际跨载体或来源转移才核验目的端与来源释放，不强制交接。精确包安装前和卸载后由仍可用的生命周期执行者承担；不依赖评估器救援或被移除的 Skill。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。","qualityAxes":["compliance-and-safety","recovery-and-lifecycle","change-adaptation","evidence-integrity","user-burden-and-interference"]},
       {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup","recovery-and-rollback"],"procedure":"依据已建立的当前证据准入通路计算候选资格，不将静态 PASS 当作功能验收。复核资产必要性与受影响功能，实现与验收稳定后，按实际变更及其因果统一更新 README.md、README.zh-CN.md 和 CHANGELOG.md，并检查源头、实现、验收、包、版本与发布说明的全局一致性；提交并推送完整候选，核对精确包、独立评审与托管检查，再依已有条件授权发布新的 3.2。发布后按用户新增授权，盘点其现有 Codex/Claude 中 Accord 的安装来源及共享关系，经受支持的宿主或实际管理器将已安装 Accord 升至该精确版本；先确认备份和可用回退路径，保护配置、模型路线、其他扩展及正在运行的任务。不顺带升级宿主应用、安装缺失组件或绕过账户限制。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。另核验本机选定 Accord 的安装版本、实际激活和普通入口效果，不把缓存更新当生效；更新失败须恢复最后安全版本并披露未完成项，未经验证不关闭本机升级。","qualityAxes":["compliance-and-safety","evidence-integrity","recovery-and-lifecycle","maintainability-and-resource-cost","change-adaptation","user-burden-and-interference"]}
     ],
     "priorityFindings": [
@@ -846,7 +846,7 @@
       {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"当前有来源的矩阵及职责关系用于开发评审，不是实时能力库或已经运行的图。索引/图是可删改手段，保住的是关系判断与必要效果；工序 dependsOn 不证明运行反馈、交接或清理。先查真实调用者，再按同次转移的可观察后态验证宿主组合。 已删除未被插件、代码或测试调用的 39982 B 内存模拟 HTML，保留精确历史定位；当前术语入口不再把旧图模型当成必需架构。这是活跃资产删减，不是宿主运行加速或动态发现功能验收。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
       {"id":"conditional-alignment-and-external-discovery","status":"observed-research-to-delivery-gap-open","basis":"保留自然预算失败与产物反例，但调用数不等于成功取回。新诊断发现进度事件触发采集上限、WebFetch 列出但权限拒绝两项干扰；合并已知进度并维持有界采集后，无网页组正常结束并调用 Skill，但有提示参数和文案缺陷；列出未放行组的 4 次获取全部被拒，代码参数与参考不符；仅临时放行两个公开域名后 7 次获取成功、3 次域外拒绝，产物通过 8 项离线检查，却在截止时没有正常终态。详见 claude-effective-research-and-capture-dev3。旧取数成功无法重查的字段保留未知；不归咎模型或正文，不撤销旧自然失败，不以禁网、改描述或扩大预算冒充修复。下一步核验有效权限、资料取回、按证据执行及 Agent 自主核验的完整结果。"},
-      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both current Skills are unpublished 3.2.0-dev.9. The dev.8 exact installed Skill loaded and completed the selected 140/readback sample, but management attempts did not finish the required guarded-update conclusion. Native source validation rejected the bad manifest in one complete diagnostic; budget visibility alone did not resolve over-inspection. The current minimal change prioritizes required checks and failure convergence while preserving pre-retry post-state, premise review, confirmation, recovery and independent work. It is not yet verified behavior. Historical failures and successful sub-observations retain their original identity and scope. Full-function, guarded update, independent recovery, Desktop continuity and value remain open; shared installation stays deferred."},
+      {"id": "source-to-projection-convergence", "status": "observed-management-failures-impact-attribution-open", "basis": "Both current Skills remain unpublished 3.2.0-dev.9. The prebound sonnet management episode failed at the turn limit, and a separate opus-condition diagnostic timed out; neither completed native validation and the hold conclusion. Required checks and convergence remain unverified despite exact guidance loading. A zero-model per-command diagnostic located malformed-cache creation at list --available after refresh; that host effect does not establish Accord side effects. The Opus run also read out-of-scope Git history and exposed a fixture label. Preserve every failure and evidence limit; prioritize a matched ordinary-input native/candidate comparison with actual exposure, outcome/authority/convergence first and total burden second. No further prompt, model or budget change is established as a fix. Full function, guarded update, independent recovery, Desktop continuity and value remain open; shared installation stays deferred."},
       {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"整体目标仍是Agent承担必要任务机制；用户无需先学习交接、按钮、Git或Shell等内部操作词汇。历史dev.3/dev.5诊断保持原样；dev.6在已提交判据的Claude用户配置双轮观察中，两组均从140改为60并核验实际产物，但都未调用Accord Skill。其他用户扩展仍在，不称干净宿主、独立原生归因或Accord增量价值；样本不证明整项职责、任意环境兼容或生命周期。继续从具体声明绑定普通入口、必要作用域、整体及故障判据与独立来源，沿发现/匹配、执行、状态/资源、纠偏、恢复和验收闭合。自动交接、幸存接管者与完整生命周期仍待验。 dev.7 的 Codex 已安装包受控 App Server 双轮观察也完成 140→60、产物读回和输入保护；未观察到 Skill 正文读取，不归因于 Accord 增益。共享安装已实际恢复至 3.1 并逐字节核对，再重装同一 dev.7；临时测试信任项和目录已清除。下一步补足实际介入、Desktop 连续性与独立价值证据，而非重复核对静态包。 用户随后要求降低开发环境变量，已撤下共享 Codex 候选并恢复原市场版本固定，后续普通入口取证使用任务局部暴露；已定义但未运行的安装态续做用例据此在观察前改绑，未产生可晋升或需隐藏的通过/失败记录。"},
       {"id":"historical-reference-identity-coupling","status":"implemented-bounded-regression-verified","basis":"当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。"},
       {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
@@ -854,6 +854,126 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "claude-dev9-cache-command-and-model-condition-diagnostics",
+      "observedAt": "2026-09-06T12:06:51Z",
+      "scope": "separate-local-diagnostics-not-Accord-impact-or-acceptance",
+      "subject": {
+        "sourceRevision": "7573ce2c32be2a35d6e9b40965c1397b9a7f4625",
+        "episodeId": "43d3d365b92a4486af26ce73dc8b4439",
+        "bindingSha256": "5cd25007cfd3312cd9671d534e4db5e31193f3b856cbae64ff2fc97b31e0e084",
+        "baseFailedEpisodeId": "0f0f1e7176214d3f9f99c2e3284bd16a"
+      },
+      "host": "Frozen byte-identical Claude Code 2.1.263; existing authorized CC Switch route; no shared candidate installation.",
+      "nativeCacheDiagnostic": {
+        "method": "Fresh task-owned 3.1 installation, exact invalid dev.9 Git source, then one native marketplace update and one list --available --json. Each natural exit was immediately followed by a complete independent file snapshot; available before-state equals refresh after-state.",
+        "publicationSha256": "4543f3aa860533229c5c27b9ba4727783f62d617ded1e4af2a4c3e8a92403f7f",
+        "refreshCheckpointSha256": "696b69efb10a9533bfec3284254a6a84845795bf3cb5f9d0ef839a9568d4b9a1",
+        "availableCheckpointSha256": "f5cc5ef450a7517a7702e2bec649ebb0f4bcf7f8dcc24f8a75c6c26528a0a5d6",
+        "result": "Refresh left only the 3.1 installed cache. The subsequent available query created seven dev.9 cache files including the malformed manifest and reported that corrupt cache against the installed 3.1 entry. Both commands returned zero; registration, settings and prior seven files remained.",
+        "limit": "This sequence identifies a cache-writing query in this host composition. It is a native-command effect, not evidence of Accord-caused side effects, universal query behavior or current installed activation usability."
+      },
+      "modelConditionDiagnostic": {
+        "method": "A separate fresh predecessor-first profile retained the E2 task, permission rules, exact dev.9 management package and 180 seconds/16 turns/requested USD 1/4MiB. After necessary path/ref normalization only management --model changed from sonnet to opus. Prior selected installed 3.1 activation used sonnet and passed 140/readback at 22.245 seconds.",
+        "requestedModel": "opus",
+        "hostReportedModel": "deepseek-v4-pro[1M]",
+        "identityLimit": "Configured alias and host report are not independent backend verification, optimality or autonomous model selection.",
+        "requestSha256": "d857525e1c745b1139a33edeed682c53ad7959a3f3e777b763e862e0516adce8",
+        "captureSha256": "b4157167adb5d5ae80d2b6bfd7db68638f4df225bd9acf60ff0aae05c1d7be17",
+        "stdoutSha256": "2e7d10e85b2965aa74381122e11c7dae7b7c41a3a56277c5445171155579fc18",
+        "checkpointSha256": "fbf5ff1a5c91957f9efda82d455d8f16fcde6ee4c4348bd8a3c9717bf1b1f924",
+        "elapsedSeconds": 180.087,
+        "forcedExitCode": 124,
+        "jobBeforeCleanup": 2,
+        "jobAfterCleanup": 0,
+        "stdoutBytes": 2617030,
+        "pairedToolCalls": 33,
+        "nativeValidationCalls": 0,
+        "nativePluginUpdateCalls": 0,
+        "terminalResultObserved": false,
+        "result": "Actual bad source bytes and a hash mismatch were followed by further directory and history exploration. No completed validation/hold conclusion was observed. Prior registration/settings/seven files remained and no candidate cache appeared.",
+        "scopeDeviation": "Calls 31 and 33 read publisher Git logs and COMMIT_EDITMSG outside the listed package/catalog inputs, exposing a diagnostic fixture label. Do not claim zero out-of-scope reads or uncontaminated task input. Rejected Git commands alone do not establish bypass of an identical data restriction.",
+        "costLimit": "No terminal model usage or cost report was observed; stdout bytes are not Token counts. Requested budget is not independently verified billing.",
+        "attributionLimit": "Both compared model episodes included Accord and differ in requested model and fresh episode conditions. Neither is a same-condition native control, so failures cannot establish Accord causality or the benefit of a stronger model."
+      },
+      "sharedStateAndObserverLimits": {
+        "immediateSharedStateMatched": true,
+        "lateChangeRecordSha256": "0ae47d12a1feac0e3ab641eb0fc2f4a3933c3bbbc61b51127f1e3a52add5a553",
+        "handling": "The immediate operation preserved its selected shared hashes. Later settings.json and .claude.json changes were recorded without actor attribution or restoration. Only credential-free native retirement rebound to fresh hashes. Later shared-state drift does not prevent retaining and removing an already stopped owned fixture; its writer remains unknown.",
+        "credentialLimit": "Pre-model original-value scans and the immediate shared-state identity are retained. Late scans found no then-current selected values; an independent post-run scan of the original values was not re-established after route-file change. Preserve this limit and the late checkpoint failures."
+      },
+      "retention": {
+        "root": "C:\\Users\\15521\\.codex\\backups\\accord-evaluation-20260905T215550Z-8ff0643a\\claude-dev9-diagnostics-20260906\\accord-dev9-diagnostics-ppm7h_ya",
+        "manifestSha256": "5ce6de9fb6c304907fe14289d449a93aeadfe583546a3b91e6e5b6de5b2509c8",
+        "fileCount": 1592,
+        "bytes": 14240075,
+        "allHashesVerified": true,
+        "ownedRootRemovedAt": "2026-09-06T12:06:51.3995206Z",
+        "nativeRegistrationAndMarketsRemoved": true,
+        "frozenRuntime": "byte-identical task copy retained for unfinished qualification"
+      },
+      "disposition": "Keep E2 and the Opus diagnostic failed. The main acceptance question is Accord impact on Agent delivery, authority, convergence, burden and recovery, not the native update/query side effect. Prebind a matched ordinary-input native/candidate comparison with verified actual exposure; a native arm containing old Accord is not a clean control. Evaluate outcome and authority before Token/time/exploration/residue. Do not infer net harm from Token increase alone, attribute host behavior to Accord, weaken budgets, add another prompt repair without a mechanism hypothesis, or promote this diagnosis to whole-product value."
+    },
+    {
+      "id": "claude-dev9-management-convergence-failure",
+      "observedAt": "2026-09-06T11:32:52Z",
+      "scope": "failed-prebound-Agent-lifecycle-not-functional-or-value-acceptance",
+      "subject": {
+        "sourceRevision": "7573ce2c32be2a35d6e9b40965c1397b9a7f4625",
+        "definitionSha256": "947ac3050b74aa25197951371f15f898e9bd82bff5943ee65667cce5a732daac",
+        "episodeId": "0f0f1e7176214d3f9f99c2e3284bd16a",
+        "requestBindingSha256": "c12217b81c54fa1fd35d0496ebba93c97a3005c89060b575fbb4535cebbb11c6"
+      },
+      "host": "Frozen byte-identical Claude Code 2.1.263; requested sonnet; host-reported deepseek-v4-flash-vision-exp[1M]; existing authorized route.",
+      "narrowActivationResults": {
+        "candidate": {
+          "seconds": 20.83,
+          "checkSha256": "2121eb2d26ea2f43bb60c50a5f433feb547e64e100dade8d3e3a4c7f176c9232"
+        },
+        "predecessor": {
+          "seconds": 24.286,
+          "checkSha256": "2d2e6800938ffe6df6d28fb09bc1b9e28fa2989fe4329a041ad5cfa1c958d426"
+        },
+        "limits": "Both fresh registered selected-Skill activations loaded exact package bodies, delivered 140 with readback and preserved inputs. These are separate from management convergence and do not qualify the whole lifecycle."
+      },
+      "management": {
+        "captureSha256": "2a0e5594ec870aea3983be013b5212f49762f9274057d3c2cbd75d95b8b0fd88",
+        "stdoutSha256": "655d3def4a13b507784d64d5a7f0ff4b233459f4d39239a42126e0b1d072658d",
+        "checkpointSha256": "8c868ad93aaa624008d36062c420a08c9fcf96269817f765b159d37421469a33",
+        "elapsedSeconds": 85.985,
+        "exitCode": 1,
+        "result": "error_max_turns",
+        "reportedTurns": 17,
+        "forced": false,
+        "jobAfterCleanup": 0,
+        "stdoutBytes": 1125099,
+        "pairedToolCalls": 36,
+        "nativeValidationCalls": 0,
+        "nativePluginUpdateCalls": 0,
+        "hostReportedCostUsd": 0.38251000000000007,
+        "billingBasis": "unknown",
+        "finding": "Exact dev.9 guidance loaded, but the Agent read the malformed source, refreshed the marketplace and queried available plugins without native validation or a final hold conclusion. Seven unregistered dev.9 cache files appeared, including the bad manifest. The availability response reported that cache against installed 3.1. Original per-command cache attribution was unresolved and the later independent native diagnostic cannot rewrite this original observation.",
+        "preserved": "Prior seven files, installation registration, settings and selected shared hashes remained; raw capture was complete, all calls paired, selected credential scan found zero and Job count closed to zero. Preserved registration is not a fresh post-failure activation proof."
+      },
+      "retention": {
+        "root": "C:\\Users\\15521\\.codex\\backups\\accord-evaluation-20260905T215550Z-8ff0643a\\claude-dev9-cycle-20260906\\accord-dev9-lifecycle-b0wl0be9",
+        "manifestSha256": "c4d0ea52bbe8a29bc33c9f5e62260aa62b67aeb4344b851da6d8770fb671f86a",
+        "fileCount": 1509,
+        "bytes": 11590453,
+        "allHashesVerified": true,
+        "ownedRootRemovedAt": "2026-09-06T11:32:52.9612440Z",
+        "nativeRegistrationAndMarketsRemoved": true,
+        "frozenRuntime": "byte-identical task copy retained for unfinished qualification"
+      },
+      "hostedCheck": {
+        "sourceRevision": "7573ce2c32be2a35d6e9b40965c1397b9a7f4625",
+        "runId": "34028766067",
+        "conclusion": "success",
+        "matrixJobs": 9,
+        "limit": "Hosted engineering checks do not override the failed Agent lifecycle."
+      },
+      "disposition": "Original management phase failed/incomplete. Corrected update and independent recovery were not executed. Do not retry by adding wording or budget without a discriminating mechanism hypothesis; ordinary entry, matched value and remaining continuity/lifecycle obligations stay open."
+    },
     {
       "id": "claude-dev8-validated-lifecycle-and-convergence-failures",
       "observedAt": "2026-09-06T09:24:22.986213+00:00",

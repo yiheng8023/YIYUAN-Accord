@@ -13,7 +13,7 @@
 | 系统短板与工程优化 | 本地实现，未发布 | 核对相关官方能力、实际宿主暴露和职责；需要时从同一事实源派生关系视图或索引，按真实调用者、影响及成本删减或补强，再测量受影响工程路径。 | 已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。 |
 | 当前开发证据准入通路 | 进行中 | 按获批校准预绑定整版必需范围，分别落实每宿主功能、适用生命周期及整体价值；每宿主完整职责/质量/场景只记一次总账，不对三类声明重复展开全集。继续绑定真实作用域、入口、关键环境轴、判据和独立来源。先提交定义及实现 A，再观察 E，最后在候选 B 计算准入并接受绑定 B 的真实独立评审。调整必需清单或适用范围须按验收变更复核；按受影响依赖复用证据，保留静态检查和有据成本预算。 | 同一公开入口区分必需功能声明闭合与整版资格；漏范围、删用例、跨宿主拼半套或换入口/环境不能掩盖缺口。继续拒绝旧定义、来源不足、过期/漂移、跨事件或矛盾后态、未闭合残留及缺失独立评审。合成回归仅验证准入器；真实范围、判据充分性和来源接入仍未完成，授权、精确推送、托管及公共后态独立成立。 |
 | 整体执行链、原生覆盖与遗留形态审查 | 进行中 | 用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、发现与比较、执行及状态、故障接管、验收和清理检查整体连接；原生是起点而非停止规则，缺口或可信净收益机会才扩展检索，复用足够的宿主发现与执行链。自举同理。检查资产必要性、调用者、过期导航与维护负担，按证据保留、合并、替换或退役；同步受影响声明、工序和验收，历史证据不改写，功能不降格。 | 必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。 |
-| 动态适应、干扰与故障验收 | 进行中 | 按声明选择原生对照、最小可交付组合与受控混合环境；同一被测执行/状态变化联合核验适用纠正、恢复及资源后态，实际跨载体或来源转移才核验目的端与来源释放，不强制交接。精确包安装前和卸载后由仍可用的生命周期执行者承担；不依赖评估器救援或被移除的 Skill。 | 普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。 |
+| Accord 对 Agent 的净影响、干扰与故障验收 | 进行中 | 以 Accord 对 Agent 的实际影响为主问题，按声明选择同条件原生对照、最小可交付组合与受控混合环境。先核实各臂实际插件、Skill、Hook 及其他注入，避免旧版污染对照；先比较交付、授权、必要检查与正常收束，再核算额外 Token、耗时、无效探索、人工补救和残留，Token 增量本身不等于净副作用。宿主查询写缓存和模型条件变化只是局部诊断，不能代替项目影响的因果判断。同一被测执行/状态变化联合核验适用纠正、恢复及资源后态，实际跨载体或来源转移才核验目的端与来源释放，不强制交接。精确包安装前和卸载后由仍可用的生命周期执行者承担；不依赖评估器救援或被移除的 Skill。 | 普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。 |
 | 3.2 定版、发布与收尾 | 待开展 | 依据已建立的当前证据准入通路计算候选资格，不将静态 PASS 当作功能验收。复核资产必要性与受影响功能，实现与验收稳定后，按实际变更及其因果统一更新 README.md、README.zh-CN.md 和 CHANGELOG.md，并检查源头、实现、验收、包、版本与发布说明的全局一致性；提交并推送完整候选，核对精确包、独立评审与托管检查，再依已有条件授权发布新的 3.2。发布后按用户新增授权，盘点其现有 Codex/Claude 中 Accord 的安装来源及共享关系，经受支持的宿主或实际管理器将已安装 Accord 升至该精确版本；先确认备份和可用回退路径，保护配置、模型路线、其他扩展及正在运行的任务。不顺带升级宿主应用、安装缺失组件或绕过账户限制。 | 精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。另核验本机选定 Accord 的安装版本、实际激活和普通入口效果，不把缓存更新当生效；更新失败须恢复最后安全版本并披露未完成项，未经验证不关闭本机升级。 |
 
 ## 系统质量与工序映射
@@ -22,13 +22,13 @@ Derive the applicable floor for each required system quality from the bound resu
 
 | 质量维度 | 必要底线 | 承担工序 | 当前验收 |
 |---|---|---|---|
-| 合规与安全 | No unauthorized or prohibited effects; truthful claim and ownership handling. | 源头校准与继承基线、整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
+| 合规与安全 | No unauthorized or prohibited effects; truthful claim and ownership handling. | 源头校准与继承基线、整体执行链、原生覆盖与遗留形态审查、Accord 对 Agent 的净影响、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
 | 功能覆盖 | Every bound function and quality requirement is fulfilled through an available executor. | 源头校准与继承基线、系统短板与工程优化、当前开发证据准入通路、整体执行链、原生覆盖与遗留形态审查 | 未验证 |
 | 普通入口集成 | The selected ordinary entry connects trigger, current facts, decision, execution and independent post-state. | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | 未验证 |
-| 恢复与生命周期 | Applicable failure, restoration, continuity, update and removal paths preserve user state and close attributable residue. | 当前开发证据准入通路、整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
-| 变化适应 | Relevant host, model, permission and active-package drift invalidates and revalidates only dependent assumptions and claims. | 动态适应、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
-| 证据完整性 | Current claims bind current subjects; independent observation and experimental execution remain distinguished. | 源头校准与继承基线、当前开发证据准入通路、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
-| 用户负担与干扰 | Necessary human decisions remain human-owned while Agent mechanics and unnecessary ceremony are not transferred to the user. | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
+| 恢复与生命周期 | Applicable failure, restoration, continuity, update and removal paths preserve user state and close attributable residue. | 当前开发证据准入通路、整体执行链、原生覆盖与遗留形态审查、Accord 对 Agent 的净影响、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
+| 变化适应 | Relevant host, model, permission and active-package drift invalidates and revalidates only dependent assumptions and claims. | Accord 对 Agent 的净影响、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
+| 证据完整性 | Current claims bind current subjects; independent observation and experimental execution remain distinguished. | 源头校准与继承基线、当前开发证据准入通路、Accord 对 Agent 的净影响、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
+| 用户负担与干扰 | Necessary human decisions remain human-owned while Agent mechanics and unnecessary ceremony are not transferred to the user. | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查、Accord 对 Agent 的净影响、干扰与故障验收、3.2 定版、发布与收尾 | 未验证 |
 | 可维护性与资源成本 | Verification, context, modules and resource use remain sustainable without weakening functional or evidence guarantees. | 系统短板与工程优化、当前开发证据准入通路、3.2 定版、发布与收尾 | 未验证 |
 
 ## 完整职责覆盖
@@ -38,18 +38,18 @@ The inherited responsibilities below are a review inventory, not an immutable fe
 | 职责 | 所属工序 | 历史需求与反例参考 |
 |---|---|---|
 | 目标、授权与用户纠正 | 源头校准与继承基线、整体执行链、原生覆盖与遗留形态审查、3.2 定版、发布与收尾 | GT-03, GT-04, GT-10, GT-13 |
-| 环境感知与自身能力识别 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收 | GT-08, GT-14, GT-19 |
+| 环境感知与自身能力识别 | 整体执行链、原生覆盖与遗留形态审查、Accord 对 Agent 的净影响、干扰与故障验收 | GT-08, GT-14, GT-19 |
 | 按需研究、学习与复用发现 | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | GT-15 |
 | 关系判断、路线与形态选择 | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | GT-13, GT-16, GT-17 |
 | 执行、配置与代码操作 | 系统短板与工程优化、整体执行链、原生覆盖与遗留形态审查 | GT-02, GT-11, GT-16 |
 | 源头变更与全局一致性 | 源头校准与继承基线、当前开发证据准入通路 | GT-17 |
-| 纠错、经验吸收与受控演进 | 动态适应、干扰与故障验收 | GT-05, GT-18 |
-| 故障恢复与回滚 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-18, GT-20 |
-| 上下文与任务连续性 | 整体执行链、原生覆盖与遗留形态审查、动态适应、干扰与故障验收 | GT-07, GT-21 |
-| 资源管理与清理 | 系统短板与工程优化、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-09, GT-12 |
-| 安装、更新与卸载生命周期 | 当前开发证据准入通路、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-20 |
+| 纠错、经验吸收与受控演进 | Accord 对 Agent 的净影响、干扰与故障验收 | GT-05, GT-18 |
+| 故障恢复与回滚 | 整体执行链、原生覆盖与遗留形态审查、Accord 对 Agent 的净影响、干扰与故障验收、3.2 定版、发布与收尾 | GT-18, GT-20 |
+| 上下文与任务连续性 | 整体执行链、原生覆盖与遗留形态审查、Accord 对 Agent 的净影响、干扰与故障验收 | GT-07, GT-21 |
+| 资源管理与清理 | 系统短板与工程优化、Accord 对 Agent 的净影响、干扰与故障验收、3.2 定版、发布与收尾 | GT-09, GT-12 |
+| 安装、更新与卸载生命周期 | 当前开发证据准入通路、Accord 对 Agent 的净影响、干扰与故障验收、3.2 定版、发布与收尾 | GT-20 |
 | 原生接替、旁路与退役 | 整体执行链、原生覆盖与遗留形态审查 | GT-01, GT-19 |
-| 结果验证、独立证据与实际价值 | 源头校准与继承基线、当前开发证据准入通路、动态适应、干扰与故障验收、3.2 定版、发布与收尾 | GT-04, GT-06, GT-14 |
+| 结果验证、独立证据与实际价值 | 源头校准与继承基线、当前开发证据准入通路、Accord 对 Agent 的净影响、干扰与故障验收、3.2 定版、发布与收尾 | GT-04, GT-06, GT-14 |
 
 ## 当前证据准入
 
@@ -119,7 +119,7 @@ This 3.2 candidate needs four perspectives, allocated to at least two independen
 | `cc-actors` [子代理与模型覆盖](https://code.claude.com/docs/en/sub-agents) | host-runtime | 独立子代理上下文、调用级选型、定义、环境与父模型继承。 | 按当前版本核对优先级及替代模型；第三方提供商是否支持每项行为仍待验。 |
 | `cc-model-policy` [模型切换与故障回退](https://code.claude.com/docs/en/model-config) | host-runtime | 模型选项、opusplan 阶段切换、条件故障回退。 | 不是通用最优匹配；模型别名与服务端身份分开，不向 DeepSeek 移植 Claude 专有模型语义。 |
 | `cc-advisor` [条件式专家咨询](https://code.claude.com/docs/en/advisor) | host-runtime | 实验性的 Anthropic 服务端 advisor 工具。 | 有模型、服务端与网关条件；当前 DeepSeek 路线尚不具备可采信支持证据。 |
-| `cc-extensions` [Skills、插件与连接扩展](https://code.claude.com/docs/en/features-overview) | host-runtime | Skills、MCP、插件及按需工作流的可组合入口。 | 安装与可见不能证明使用；额外技能、连接或服务能力须单独归因。 |
+| `cc-extensions` [Skills、插件与连接扩展](https://code.claude.com/docs/en/features-overview) | host-runtime | Skills、MCP、插件及按需工作流的可组合入口。 | 安装与可见不能证明使用；额外技能、连接或服务能力须单独归因。 2.1.263 独立诊断发现市场刷新后的 list --available 会生成候选缓存，坏 manifest 可关联到旧版安装条目；查询名称和零退出码不证明只读或可用。见 claude-dev9-cache-command-and-model-condition-diagnostics；该零模型结果本身不能将副作用归因于 Accord；项目若改变 Agent 的调用选择，仍须将间接影响计入匹配对照。 |
 | `cc-hooks` [事件处理与工具约束](https://code.claude.com/docs/en/hooks) | host-runtime | 工具、会话、压缩、子代理等事件处理器。 | 须核对事件、处理器支持和失败语义；现有 Accord helper 仅失效提示。 |
 | `cc-memory` [指令与记忆载体](https://code.claude.com/docs/en/memory) | host-runtime | CLAUDE.md、条件规则及自动记忆承载上下文。 | 记忆不是强制权限或实时状态；尊重用户记忆写入授权，纳入干扰与版本归因。 |
 | `cc-recovery` [文件检查点与回溯](https://code.claude.com/docs/en/checkpointing) | host-runtime | 直接文件编辑的检查点与 rewind。 | 不覆盖 Bash 修改或所有外部副作用，不能代替 Git 或普遍回滚保证。 |
@@ -195,7 +195,7 @@ The current host Skill supplies adaptive guidance, not a proven system executor.
 - `native-accord-capability-map` — `mapped-interface-evidence-not-runtime-closure`：当前有来源的矩阵及职责关系用于开发评审，不是实时能力库或已经运行的图。索引/图是可删改手段，保住的是关系判断与必要效果；工序 dependsOn 不证明运行反馈、交接或清理。先查真实调用者，再按同次转移的可观察后态验证宿主组合。 已删除未被插件、代码或测试调用的 39982 B 内存模拟 HTML，保留精确历史定位；当前术语入口不再把旧图模型当成必需架构。这是活跃资产删减，不是宿主运行加速或动态发现功能验收。
 - `needs-based-model-and-subagent-routing` — `implemented-guidance-native-coverage-under-review`：主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。
 - `conditional-alignment-and-external-discovery` — `observed-research-to-delivery-gap-open`：保留自然预算失败与产物反例，但调用数不等于成功取回。新诊断发现进度事件触发采集上限、WebFetch 列出但权限拒绝两项干扰；合并已知进度并维持有界采集后，无网页组正常结束并调用 Skill，但有提示参数和文案缺陷；列出未放行组的 4 次获取全部被拒，代码参数与参考不符；仅临时放行两个公开域名后 7 次获取成功、3 次域外拒绝，产物通过 8 项离线检查，却在截止时没有正常终态。详见 claude-effective-research-and-capture-dev3。旧取数成功无法重查的字段保留未知；不归咎模型或正文，不撤销旧自然失败，不以禁网、改描述或扩大预算冒充修复。下一步核验有效权限、资料取回、按证据执行及 Agent 自主核验的完整结果。
-- `source-to-projection-convergence` — `implemented-local-unverified`：Both current Skills are unpublished 3.2.0-dev.9. The dev.8 exact installed Skill loaded and completed the selected 140/readback sample, but management attempts did not finish the required guarded-update conclusion. Native source validation rejected the bad manifest in one complete diagnostic; budget visibility alone did not resolve over-inspection. The current minimal change prioritizes required checks and failure convergence while preserving pre-retry post-state, premise review, confirmation, recovery and independent work. It is not yet verified behavior. Historical failures and successful sub-observations retain their original identity and scope. Full-function, guarded update, independent recovery, Desktop continuity and value remain open; shared installation stays deferred.
+- `source-to-projection-convergence` — `observed-management-failures-impact-attribution-open`：Both current Skills remain unpublished 3.2.0-dev.9. The prebound sonnet management episode failed at the turn limit, and a separate opus-condition diagnostic timed out; neither completed native validation and the hold conclusion. Required checks and convergence remain unverified despite exact guidance loading. A zero-model per-command diagnostic located malformed-cache creation at list --available after refresh; that host effect does not establish Accord side effects. The Opus run also read out-of-scope Git history and exposed a fixture label. Preserve every failure and evidence limit; prioritize a matched ordinary-input native/candidate comparison with actual exposure, outcome/authority/convergence first and total burden second. No further prompt, model or budget change is established as a fix. Full function, guarded update, independent recovery, Desktop continuity and value remain open; shared installation stays deferred.
 - `ordinary-entry-effect-and-recovery` — `open`：整体目标仍是Agent承担必要任务机制；用户无需先学习交接、按钮、Git或Shell等内部操作词汇。历史dev.3/dev.5诊断保持原样；dev.6在已提交判据的Claude用户配置双轮观察中，两组均从140改为60并核验实际产物，但都未调用Accord Skill。其他用户扩展仍在，不称干净宿主、独立原生归因或Accord增量价值；样本不证明整项职责、任意环境兼容或生命周期。继续从具体声明绑定普通入口、必要作用域、整体及故障判据与独立来源，沿发现/匹配、执行、状态/资源、纠偏、恢复和验收闭合。自动交接、幸存接管者与完整生命周期仍待验。 dev.7 的 Codex 已安装包受控 App Server 双轮观察也完成 140→60、产物读回和输入保护；未观察到 Skill 正文读取，不归因于 Accord 增益。共享安装已实际恢复至 3.1 并逐字节核对，再重装同一 dev.7；临时测试信任项和目录已清除。下一步补足实际介入、Desktop 连续性与独立价值证据，而非重复核对静态包。 用户随后要求降低开发环境变量，已撤下共享 Codex 候选并恢复原市场版本固定，后续普通入口取证使用任务局部暴露；已定义但未运行的安装态续做用例据此在观察前改绑，未产生可晋升或需隐藏的通过/失败记录。
 - `historical-reference-identity-coupling` — `implemented-bounded-regression-verified`：当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。
 - `verification-io-amplification` — `implemented-local-measured`：同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。

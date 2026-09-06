@@ -84,14 +84,27 @@ alone did not resolve over-inspection. Native profile retirement and hash-verifi
 retention of all 1,686 files preceded owned-root disposal. See
 `developmentObservations/claude-dev8-validated-lifecycle-and-convergence-failures`.
 
-The new dev.9 candidate prioritizes required checks and bounded failure
-convergence while preserving actual post-state before retry, premise/necessity
-review, required confirmation, authorized recovery and independent work. Bind a
-new exact candidate before fresh management observation; keep the fixed budget
-visible and the bounded native access/capture conditions explicit. Corrected
-update and independent bad-installation recovery are still unexecuted. A text
-change or prior selected activation does not qualify this lifecycle. Preserve
-remaining ordinary-function, Desktop continuity and matched-value work.
+The dev.9 management episode at `7573ce2` failed at the turn limit. A separate
+opus-condition diagnostic timed out; neither completed validation and the hold
+conclusion. Exact guidance loading and selected 140/readback sub-results do not
+close management. A zero-model sequence located malformed-cache creation at the
+availability query after marketplace refresh. This native-only result cannot
+alone attribute Accord impact; changed Agent choices can still carry indirect cost. The Opus run also read out-of-scope publisher Git
+history and exposed a fixture label. See the two current dev.9 observations for
+raw identities, retained failures, limits and verified owned-root retirement.
+
+The user corrected the progress framing: the main acceptance question is Accord
+impact on the Agent, including benefit, burden, behavior interference and recovery
+cost. Keep native cache and model diagnostics subordinate to it. Bind a matched
+ordinary-input native/candidate comparison and verify actual plugin/Skill/Hook
+exposure, including absence of old Accord in the control. Judge delivery,
+authority and convergence before Token/time/exploration/intervention/residue;
+Token increase alone is not net harm. Do not promote these failures to causal
+Accord harm or silently replace them with a different model or budget. Reuse the
+existing caller; no new runtime or another prompt patch is justified yet.
+Corrected update, independent recovery, remaining ordinary-function, Desktop
+continuity and whole-product value remain open. README and changelog stay in the
+final alignment stage.
 
 The byte-identical read-only 2.1.263 runtime copy remains task-owned at
 `C:\Users\15521\AppData\Local\Temp\accord-claude-runtime-263-5yoxqfig` for
