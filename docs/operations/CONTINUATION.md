@@ -29,13 +29,15 @@ evidence only; it does not replace the original task-18 action record or grant
 any archival authority. Continue the remaining ordinary-entry, whole-chain,
 lifecycle and value work; these bounded diagnostics do not qualify 3.2.
 
-The next bound functional comparison is
-`codex-task-local-implicit-adaptation`: native default, implicit candidate and
-implicit candidate with a process-only smaller catalogue. Its controlled source
-failure, contradictory advice and temporary snapshot lease connect recovery,
-delivery and Agent-owned release. No Skill invocation or rescue is forced.
-Keep evaluator teardown distinct from a lease the Agent released before exit.
-The definition is not execution or acceptance evidence.
+The three prebound implicit-adaptation arms now each completed the source
+failure, conflict, correct 140 delivery, readback and Agent-owned lease release.
+Native also succeeded and neither candidate showed Skill-body reading; no
+incremental value is established. The 2000 catalogue budget was requested, but
+actual model-input reduction remains unknown. Retained files and independent
+review are bound in `developmentObservations/codex-task-local-implicit-adaptation-dev7`;
+temporary roots and trust were removed and configuration bytes restored.
+Continue Claude functional/lifecycle evidence, Desktop continuity and the bound
+overall value comparison; this sample does not qualify those scopes.
 
 The latest upstream-context concern is mapped to the existing interference
 scenario. A no-model CLI preview at `cf3dcfe` reduced rendered text by 8,941 bytes

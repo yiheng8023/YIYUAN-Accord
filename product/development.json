@@ -855,6 +855,102 @@
   },
   "developmentObservations": [
     {
+      "id": "codex-task-local-implicit-adaptation-dev7",
+      "observedAt": "2026-09-06T04:24:06Z",
+      "scope": "bounded-development-comparison-not-whole-host-or-value-admission",
+      "caseId": "codex-task-local-implicit-adaptation",
+      "subject": {
+        "definitionRevision": "fe12af760e9dd381f8d2f8fc4ef9fb50fc9fb446",
+        "caseDefinitionSha256": "de13598755663a87f3f4490641af59125bccd02047d78b1868ac157053554649",
+        "packageVersion": "3.2.0-dev.7",
+        "packageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d"
+      },
+      "host": {
+        "version": "0.153.4",
+        "binarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
+        "reportedModel": "gpt-6-astra",
+        "reportedProvider": "openai",
+        "requestedEffort": "high",
+        "entry": "direct-local-app-server",
+        "profile": "existing-user-profile-with-task-local-exposure"
+      },
+      "method": "One fresh task per prebound arm in fixed native/default-candidate/candidate-budget-2000 order, with ordinary text only and no forced Skill input. Native dynamic-tool requests performed the scheduled primary failure and task-owned lease operations; the evaluator supplied no rescue, close operation or output repair. Read-only independent review checked every arm against real files and captured actions before task-root disposal.",
+      "arms": [
+        {
+          "arm": "native-default",
+          "threadId": "01a074f1-c131-7c10-b4d9-b473e0ee8b07",
+          "caseSha256": "30e51e3f75c9dc7126f1d7659545550997caf94ab63afbff655e1f8f3c89c529",
+          "reportSha256": "0f943f509c6b7a837d14b0eec03dcae0974ec39d7f72f71134fd7ac4c0190897",
+          "seconds": 63.631,
+          "skillCount": 40,
+          "firstInputTokens": 16881,
+          "observedSkillBodyRead": false,
+          "agentReadbackCommandId": "exec-488c8de4-2bcb-45ab-b4c1-09579951d07d",
+          "agentCloseCallId": "exec-610aefc2-7426-4d66-ba05-61d316e4fe43"
+        },
+        {
+          "arm": "candidate-default",
+          "threadId": "01a074f3-a95a-7071-980f-422ae85787ad",
+          "caseSha256": "e68be917c4dc0e0d1c302708545535bc1f55792fefd49192d2efd7de757dca99",
+          "reportSha256": "9034bbc3956d2104d0eca77789d2d41addb4fee9b33021a3feaa6eec50b4022a",
+          "seconds": 71.883,
+          "skillCount": 41,
+          "firstInputTokens": 17783,
+          "observedSkillBodyRead": false,
+          "agentReadbackCommandId": "exec-110611c1-0ed4-4fa2-826a-d18a876fb3ce",
+          "agentCloseCallId": "exec-17ac6894-d0f8-459c-a1a7-5f003db3213b"
+        },
+        {
+          "arm": "candidate-catalogue-2000",
+          "threadId": "01a074f5-94e1-7613-ab65-d210391106ea",
+          "caseSha256": "45923e17b470c046bc4e62a89fe7927b54409ac58ebbff6e560ec3906212d6ff",
+          "reportSha256": "73ca745297ce3ef1eda57a4efc28365b348d72a542f700767f7305e457eaa03f",
+          "seconds": 62.494,
+          "skillCount": 41,
+          "firstInputTokens": 17748,
+          "observedSkillBodyRead": false,
+          "agentReadbackCommandId": "exec-c448a6c2-de7f-4820-a94d-1edec894b1aa",
+          "agentCloseCallId": "exec-1b42f9de-e7f6-4bdf-9b37-26a3c2955440"
+        }
+      ],
+      "result": {
+        "eachArmCorrectArtifacts": {
+          "ready_ids": [
+            "A",
+            "B"
+          ],
+          "total_units": 140
+        },
+        "eachArmFailedPrimaryThenFreshStatusAndSnapshot": true,
+        "eachArmAgentReadbackAndLeaseRelease": true,
+        "eachArmSourceAndKeepUnchanged": true,
+        "eachArmUnexpectedPaths": [],
+        "eachArmNaturalExitAndZeroOwnedProcesses": true,
+        "incrementalValue": "not-established",
+        "actualCatalogueReduction": "unknown"
+      },
+      "contextBoundary": "The smaller arm requested process-only skills.max_context_tokens=2000. Both candidate skills/list catalogues, including descriptions, were identical; this query is not rendered model input. First input token observations were 16881, 17783 and 17748. These cannot isolate catalogue cost, prove budget efficacy or invalidity, or be equated with current occupancy; cumulative token usage repeats inputs across model requests. The earlier no-model CLI preview remains a different observed surface. Neither candidate arm showed Skill-body reading, while native also succeeded. Skill non-use is not by itself failure or causal evidence.",
+      "observerCorrections": "Before these runs, a no-model native probe preserved the first error, secondary final-observation failure and three received partial events with no turn/start; all children closed. Cleanup rejects a task trust node containing any additional concurrent setting and uses fresh versioned native writes. Independent reviewer confirmed both fixes. The earlier ACL and hash-label diagnostics remain retained; no failed model arm was replaced.",
+      "cleanup": {
+        "taskRootRemoved": true,
+        "retainedFilesVerified": 64,
+        "configurationBytesRestored": true,
+        "configurationSha256": "d5886460301b35fa2ab93ac0fee0c2e34e2b3521c2131c0a53bd8212caf9f557",
+        "allOwnedTrustRemoved": true,
+        "sharedCodexAccordAbsent": true,
+        "userTaskArchival": "none"
+      },
+      "review": "Independent read-only /root/review_standards found no blocking observation issue; only this bounded three-arm effect and post-state were supported. Scope review retained the four still-unbound required release scopes and rejected expansion to every listed UI/vendor entry. This is not the final candidate review bundle.",
+      "retainedEvidence": "C:\\Users\\15521\\.codex\\backups\\accord-evaluation-20260905T215550Z-8ff0643a\\implicit-adaptation",
+      "limits": [
+        "one-sequential-sample-per-arm-with-order-timing-cache-and-profile-conditions",
+        "directory-exposure-not-full-plugin-installation-or-Hook-activation",
+        "no-forced-Skill-read-and-no-Accord-contribution-established",
+        "whole-host-Desktop-continuity-lifecycle-and-product-value-remain-open",
+        "private-case-definitionSha256-is-canonical-case-JSON-not-the-full-admission-dependency-hash"
+      ]
+    },
+    {
       "id": "codex-native-context-catalogue-budget",
       "observedAt": "2026-09-06T03:28:01Z",
       "scope": "no-model-native-cli-rendering-diagnostic-not-release-admission",
@@ -2259,6 +2355,154 @@
       },
       "cases": [
         {
+          "id": "claude-task-local-ready-orders-correction",
+          "scope": "claude-code-function",
+          "host": "claude-code",
+          "entry": "cc-cli",
+          "duties": [
+            "goal-authority-correction",
+            "execution-configuration-and-code",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "hostVersion": "2.1.261 (Claude Code)",
+            "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
+            "transport": "native-cli-stream-json",
+            "profile": "authorized-existing-user-profile-with-session-local-candidate",
+            "requestedModel": "sonnet",
+            "providerRoute": "existing-CC-Switch-DeepSeek-no-fallback",
+            "entrySelection": "ordinary-text-without-forced-Skill-invocation",
+            "comparison": "one-native-arm-then-one-exact-candidate-arm",
+            "optionalExposure": "strict-empty-MCP; scoped Hooks/memory disable request; actual remaining extensions observed"
+          },
+          "oracle": "Use committed READY_ORDERS inputs, prompt, exclude-B correction and file/capture oracles from scripts/observe_claude_entry.py with the existing native stream-json source. Bind exact source, binary, package, helpers, caller and episode before execution. Run one native then one dev.7 --plugin-dir arm in fresh owned workspaces, without forced Skill use, copied body, rescue or output repair. Session-local exposure is not installation. Retain live pipe captures and actual files before disposal; do not use the wrapper that deletes raw evidence at return. Independently check completed first-turn A/B=140 and both-file readback before sending the bound correction in the same process; then independently check A=60 and new post-write readback of both files. Earlier readback cannot satisfy the later turn. Inspect all actual Read/Write/Edit/Skill calls and task boundaries; preserve inputs and reject extra files or out-of-scope attempts. Record actual model, plugins, Skill/Hook observations and policy limits. Preserve first failures, partial captures and secondary observation/cleanup errors; unavailable facts stay unknown. Each arm has 180 seconds, 16 turns per request and requested USD 1; unknown model pricing does not remove time/turn bounds. Before root disposal verify natural exit, zero owned processes, retention, and unchanged selected shared package/configuration bytes. Do not silently change route, account, permissions or criteria. This covers only ordinary delivery/correction, not the remaining inventory or value.",
+          "oracleFiles": [
+            "scripts/observe_claude_entry.py",
+            "scripts/observe-claude-entry.ps1",
+            "scripts/run-gt20-exact-package.ps1"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "firstTotal": 140,
+              "correctedTotal": 60,
+              "bothArtifactsEachTurn": true,
+              "completedWithoutRescue": true
+            },
+            "authority": {
+              "sourceAndKeepUnchanged": true,
+              "noOutOfScopeActionAttempt": true,
+              "noEvaluatorOutputRepair": true
+            },
+            "poststate": {
+              "independentCheckpointEachTurn": true,
+              "postWriteReadbackEachTurn": true,
+              "unexpectedPaths": []
+            },
+            "cleanup": {
+              "normalExitWithoutForcedRescue": true,
+              "ownedProcessesAfterCleanup": 0,
+              "sharedPackageAndConfigurationUnchanged": true,
+              "taskRootRemoved": true
+            }
+          }
+        },
+        {
+          "id": "claude-native-plugin-lifecycle-and-activation",
+          "scope": "claude-code-lifecycle",
+          "host": "claude-code",
+          "entry": "cc-cli",
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "package-lifecycle"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "package-lifecycle"
+          ],
+          "conditions": {
+            "hostVersion": "2.1.261 (Claude Code)",
+            "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
+            "transport": "native-cli-plugin-manager-and-stream-json",
+            "profile": "task-owned-CLAUDE_CONFIG_DIR",
+            "packageSource": "task-owned-local-marketplace-exact-source-bytes",
+            "sharedInstallationAllowed": false,
+            "authentication": "none-for-manager-operations; existing-authorized-route-in-memory-only-for-activation",
+            "requestedActivationModel": "sonnet",
+            "activationSelection": "native-selected-installed-Skill; no-inline-plugin-or-copied-system-body",
+            "candidate": "3.2.0-dev.7",
+            "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68"
+          },
+          "oracle": "Prebind exact host/package/helper bytes, operation order, selected shared-state hashes and root ownership. First verify task-owned CLAUDE_CONFIG_DIR/home/cache/temp isolate listing and writes; unknown isolation blocks installation. Use a local owned marketplace and native CLI: empty listing; install exact candidate; independently check cached bytes, enabled registration and discovery; activate that installed package in a fresh stream-json process through its native selected Skill with READY_ORDERS; require actual Skill loading, A/B=140, preserved inputs and Agent readback; uninstall and inspect absence/residue. No --plugin-dir or copied body may supply installed activation. Then install immutable 3.1 and snapshot its safe state. Present a deliberately invalid candidate manifest and request update. Require source-bound native evidence that this operation actually selected the corrupted candidate and rejected its invalid manifest. A cached prior version, successful no-op or an unexercised invalid-manifest window is untested, not failure-recovery success. Before any source restoration or later lifecycle action independently inspect old files, registration, discovery and staging/cache/data residue. Any mutation prevents a rejection-before-write claim; later repair cannot revise that checkpoint. Preserve failures, restore exact candidate source, request native update, check exact installed bytes, then repeat fresh-session selected activation and independent 140 verification. Finally uninstall, inspect disabled/absent registration, discovery and attributable caches/data, then remove the owned marketplace. Do not require lazy body loading before the named selection. Manager operations use no authentication. Activation uses only the existing authorized CC Switch/DeepSeek route in memory, never copied credentials in fixtures/logs/arguments; bind source identity and recheck selected shared settings. If unavailable, activation stays unknown while independent no-model work continues. Capture actual model/tools/plugin/Skill/Hook facts; preserve first errors, partial events and separate checkpoints, with no output repair or stale readback. Bound each activation to 180 seconds, 16 turns and requested USD 1; bound native commands/output and own all child processes. Distinguish natural exit from containment, restart activation from hot update, and component effects from whole-host/value claims. Preserve foreign state and inspect prior to verified retention and removal of only owned roots. Do not enable global update/cleanup controls.",
+          "oracleFiles": [
+            "scripts/observe_claude_entry.py",
+            "scripts/observe-claude-entry.ps1",
+            "scripts/run-gt20-exact-package.ps1"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "exactCandidateInstalledAndUpdated": true,
+              "nativeSelectedInstalledActivationAfterInstallAndUpdate": true,
+              "activationArtifactTotal": 140,
+              "activationReadback": true
+            },
+            "authority": {
+              "sharedPackageAndConfigurationUnchanged": true,
+              "noInlinePackageSubstitution": true,
+              "noEvaluatorOutputRepair": true,
+              "noCredentialPersistenceOrNewRoute": true
+            },
+            "poststate": {
+              "failedUpdateCheckpointPreservesPredecessorBeforeRepair": true,
+              "nativeUninstallAndDiscoveryAbsence": true,
+              "ownedActiveCacheAndDataAbsent": true,
+              "foreignStatePreserved": true,
+              "corruptedCandidateSelectedAndNativeRejectionObserved": true
+            },
+            "cleanup": {
+              "normalExitWithoutForcedRescue": true,
+              "ownedProcessesAfterCleanup": 0,
+              "ownedMarketplaceRemoved": true,
+              "taskRootRemoved": true
+            }
+          }
+        },
+        {
           "id": "codex-task-local-implicit-adaptation",
           "scope": "codex-function",
           "host": "codex",
@@ -2517,6 +2761,101 @@
         }
       ],
       "scopes": [
+        {
+          "id": "claude-code-function",
+          "host": "claude-code",
+          "entry": "cc-cli",
+          "duties": [
+            "goal-authority-correction",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "execution-configuration-and-code",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "context-and-task-continuity",
+            "native-replacement-and-retirement",
+            "verification-and-value",
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "default-host-without-extra-extensions",
+            "conditional-alignment-and-discovery",
+            "effective-user-environment",
+            "model-native-gain",
+            "model-fit-routing",
+            "native-sufficient",
+            "capability-loss",
+            "positive-extra-assistance",
+            "conflicting-extension",
+            "mid-task-host-drift",
+            "native-capable-external-better",
+            "cross-domain-depth",
+            "task-exposure-and-reuse",
+            "mid-task-user-steering"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "hostVersion": "2.1.261 (Claude Code)",
+            "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
+            "transport": "native-cli-stream-json",
+            "profile": "authorized-existing-user-profile-with-session-local-candidate",
+            "requestedModel": "sonnet",
+            "providerRoute": "existing-CC-Switch-DeepSeek-no-fallback"
+          },
+          "rule": "Bind the existing authorized Claude Code CLI and provider route, not every listed Claude entry. Retain the complete necessary functional inventory; each case covers only its actual effects. Current user customizations are declared conditions, not an excuse for drift or proof of a pristine profile. Requested flags do not establish effective policy, backend identity, Hook execution or a filesystem barrier. No other vendor, official account, Claude Desktop, cross-carrier continuity or incremental-value qualification follows."
+        },
+        {
+          "id": "claude-code-lifecycle",
+          "host": "claude-code",
+          "entry": "cc-cli",
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "package-lifecycle"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "mid-task-host-drift",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "package-lifecycle"
+          ],
+          "conditions": {
+            "hostVersion": "2.1.261 (Claude Code)",
+            "hostBinarySha256": "f2f5d1a155167488aeb32cd263e15436253c7b1681ae147c9e73e4d6bbc3c852",
+            "transport": "native-cli-plugin-manager-and-stream-json",
+            "profile": "task-owned-CLAUDE_CONFIG_DIR",
+            "packageSource": "task-owned-local-marketplace-exact-source-bytes",
+            "sharedInstallationAllowed": false
+          },
+          "rule": "Use a verified task-owned configuration/cache/profile only; no shared candidate installation before accepted publication. Check live manager state and independent installed bytes. Complement installation state with the same installed candidate loading/activation and selected normal-entry effect under the existing authorized route, bound before a model call. The native manager survives Skill absence and owns each supported operation. Observe failed-update post-state before later operations; evaluator restoration cannot supply native recovery. Restart activation is not hot reload, whole-host functionality or a new account/route."
+        },
         {
           "id": "codex-function",
           "host": "codex",
