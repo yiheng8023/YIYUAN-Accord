@@ -29,6 +29,14 @@ evidence only; it does not replace the original task-18 action record or grant
 any archival authority. Continue the remaining ordinary-entry, whole-chain,
 lifecycle and value work; these bounded diagnostics do not qualify 3.2.
 
+The next bound functional comparison is
+`codex-task-local-implicit-adaptation`: native default, implicit candidate and
+implicit candidate with a process-only smaller catalogue. Its controlled source
+failure, contradictory advice and temporary snapshot lease connect recovery,
+delivery and Agent-owned release. No Skill invocation or rescue is forced.
+Keep evaluator teardown distinct from a lease the Agent released before exit.
+The definition is not execution or acceptance evidence.
+
 The latest upstream-context concern is mapped to the existing interference
 scenario. A no-model CLI preview at `cf3dcfe` reduced rendered text by 8,941 bytes
 with a process-only catalogue budget: all 50 names/paths remained, while 48
