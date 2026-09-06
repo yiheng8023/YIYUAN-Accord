@@ -93,18 +93,26 @@ alone attribute Accord impact; changed Agent choices can still carry indirect co
 history and exposed a fixture label. See the two current dev.9 observations for
 raw identities, retained failures, limits and verified owned-root retirement.
 
-The user corrected the progress framing: the main acceptance question is Accord
-impact on the Agent, including benefit, burden, behavior interference and recovery
-cost. Keep native cache and model diagnostics subordinate to it. Bind a matched
-ordinary-input native/candidate comparison and verify actual plugin/Skill/Hook
-exposure, including absence of old Accord in the control. Judge delivery,
-authority and convergence before Token/time/exploration/intervention/residue;
-Token increase alone is not net harm. Do not promote these failures to causal
-Accord harm or silently replace them with a different model or budget. Reuse the
-existing caller; no new runtime or another prompt patch is justified yet.
-Corrected update, independent recovery, remaining ordinary-function, Desktop
-continuity and whole-product value remain open. README and changelog stay in the
-final alignment stage.
+The main acceptance question is Accord impact on the Agent: benefit, burden,
+behavior interference and recovery cost. A new ordinary-input neutral-target
+matched pair is now retained in the development observations. Native without
+Accord failed at the turn limit; candidate catalogue and empty startup Hook
+exposure did not lead to Skill/body use or a completed task conclusion before
+timeout. Neither side completed native validation. Preserve the actual scope
+violations and denied actions: unchanged old installation is not Accord
+protection. Path rewriting and permission interaction may be random or indirect
+exposure effects; do not exclude them from net impact or over-attribute a single
+sample. Compare delivery, authority and convergence before cost; no gain is
+established. Both profiles completed native retirement, full evidence retention
+and owned-root disposal; the selected shared-file hashes stayed unchanged.
+
+Next inspect the ordinary-entry trigger, actual caller and existing activation
+semantics. Another unread Skill-body edit cannot directly repair this observed
+path. Bind any minimal mechanism change to the earliest evidenced gap rather
+than forcing every task through a Skill or presuming a runtime. Preserve earlier
+selected and native lifecycle failures, permissions and budgets. Corrected
+update, independent recovery, remaining ordinary-function, Desktop continuity
+and whole-product value stay open. README and changelog remain last.
 
 The byte-identical read-only 2.1.263 runtime copy remains task-owned at
 `C:\Users\15521\AppData\Local\Temp\accord-claude-runtime-263-5yoxqfig` for
