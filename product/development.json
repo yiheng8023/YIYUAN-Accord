@@ -237,7 +237,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "按会话模式与执行目标区分",
           "environment": "客户端顶层分为 ChatGPT 与 Codex，ChatGPT 内部再分 Chat 与 Work；按实际入口、执行位置、加载及权限判断适用性，界面分组不是插件的硬性适配边界。",
-          "observation": "2026-09-06 复核 https://learn.chatgpt.com/docs/plugins 与 https://learn.chatgpt.com/docs/enterprise/skills：Chat、Work 与 Codex 支持插件并共享公共目录，但本地文件分发、工作区 Skill 和各入口安装/授权仍有边界。本机 26.901.5280.0 的 composer-work-home-plugins-control 与 plugin-picker-menu-content 接入插件选择及宿主路由。界面代码和官方能力不证明某个 Work 会话已加载 Accord；正文使用、Hook 执行、实际效果及云端安装仍未验证。",
+          "observation": "2026-09-06 复核 https://learn.chatgpt.com/docs/plugins 与 https://learn.chatgpt.com/docs/enterprise/skills：Chat、Work 与 Codex 支持插件并共享公共目录，但本地文件分发、工作区 Skill 和各入口安装/授权仍有边界。本机 26.901.5280.0 的 composer-work-home-plugins-control 与 plugin-picker-menu-content 接入插件选择及宿主路由。界面代码和官方能力不证明某个 Work 会话已加载 Accord；正文使用、Hook 执行、实际效果及云端安装仍未验证。 用户随后提供同一客户端的 Chat 与 Work 插件选择器截图，两处均直接显示 YIYUAN Accord for Codex；本机两入口的可发现/可选状态已确认。截图不包含调用后结果，不能单独证明正文加载、Hook 执行或交付效果。",
           "currentEffect": "unverified"
         },
         {
@@ -830,8 +830,8 @@
       {"id":"source-foundation","title":"源头校准与继承基线","state":"implemented-local-unreleased","duties":["goal-authority-correction","premise-and-consistency","verification-and-value"],"procedure":"从必要用户结果反证现有立意与职责分工，不预设 Skill、Hook、核心、索引、图或数量正确；区分任务执行、用户生命周期和维护验收，校准受影响基线与映射，保留无关的已验证事实及历史。","exit":"职责必要性、实际承担者与剩余缺口已明确；受影响源、计划、工序和验收一致且本地回归通过。这只关闭本轮源头校准，不证明宿主效果或最终架构充分。","qualityAxes":["compliance-and-safety","functional-coverage","evidence-integrity"]},
       {"id":"system-bottlenecks","title":"系统短板与工程优化","state":"implemented-local-unreleased","duties":["research-learning-and-reuse","relations-routing-and-form","execution-configuration-and-code","resources-and-cleanup"],"procedure":"核对相关官方能力、实际宿主暴露和职责；需要时从同一事实源派生关系视图或索引，按真实调用者、影响及成本删减或补强，再测量受影响工程路径。","exit":"已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。","qualityAxes":["functional-coverage","normal-entry-integration","maintainability-and-resource-cost","user-burden-and-interference"]},
       {"id":"development-evidence-admission","title":"当前开发证据准入通路","state":"active","duties":["verification-and-value","premise-and-consistency","package-lifecycle"],"procedure":"按获批校准预绑定整版必需范围，分别落实每宿主功能、适用生命周期及整体价值；每宿主完整职责/质量/场景只记一次总账，不对三类声明重复展开全集。继续绑定真实作用域、入口、关键环境轴、判据和独立来源。先提交定义及实现 A，再观察 E，最后在候选 B 计算准入并接受绑定 B 的真实独立评审。调整必需清单或适用范围须按验收变更复核；按受影响依赖复用证据，保留静态检查和有据成本预算。","exit":"同一公开入口区分必需功能声明闭合与整版资格；漏范围、删用例、跨宿主拼半套或换入口/环境不能掩盖缺口。继续拒绝旧定义、来源不足、过期/漂移、跨事件或矛盾后态、未闭合残留及缺失独立评审。合成回归仅验证准入器；真实范围、判据充分性和来源接入仍未完成，授权、精确推送、托管及公共后态独立成立。","qualityAxes":["functional-coverage","evidence-integrity","recovery-and-lifecycle","maintainability-and-resource-cost"]},
-      {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"pending","duties":["goal-authority-correction","research-learning-and-reuse","environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、发现与比较、执行及状态、故障接管、验收和清理检查整体连接；原生是起点而非停止规则，缺口或可信净收益机会才扩展检索，复用足够的宿主发现与执行链。自举同理。检查资产必要性、调用者、过期导航与维护负担，按证据保留、合并、替换或退役；同步受影响声明、工序和验收，历史证据不改写，功能不降格。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。","qualityAxes":["compliance-and-safety","functional-coverage","normal-entry-integration","recovery-and-lifecycle","user-burden-and-interference"]},
-      {"id":"cross-function-and-failure-validation","title":"动态适应、干扰与故障验收","state":"pending","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"按声明选择原生对照、最小可交付组合与受控混合环境；同一被测执行/状态变化联合核验适用纠正、恢复及资源后态，实际跨载体或来源转移才核验目的端与来源释放，不强制交接。精确包安装前和卸载后由仍可用的生命周期执行者承担；不依赖评估器救援或被移除的 Skill。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。","qualityAxes":["compliance-and-safety","recovery-and-lifecycle","change-adaptation","evidence-integrity","user-burden-and-interference"]},
+      {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"active","duties":["goal-authority-correction","research-learning-and-reuse","environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、发现与比较、执行及状态、故障接管、验收和清理检查整体连接；原生是起点而非停止规则，缺口或可信净收益机会才扩展检索，复用足够的宿主发现与执行链。自举同理。检查资产必要性、调用者、过期导航与维护负担，按证据保留、合并、替换或退役；同步受影响声明、工序和验收，历史证据不改写，功能不降格。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。","qualityAxes":["compliance-and-safety","functional-coverage","normal-entry-integration","recovery-and-lifecycle","user-burden-and-interference"]},
+      {"id":"cross-function-and-failure-validation","title":"动态适应、干扰与故障验收","state":"active","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"按声明选择原生对照、最小可交付组合与受控混合环境；同一被测执行/状态变化联合核验适用纠正、恢复及资源后态，实际跨载体或来源转移才核验目的端与来源释放，不强制交接。精确包安装前和卸载后由仍可用的生命周期执行者承担；不依赖评估器救援或被移除的 Skill。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。","qualityAxes":["compliance-and-safety","recovery-and-lifecycle","change-adaptation","evidence-integrity","user-burden-and-interference"]},
       {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup","recovery-and-rollback"],"procedure":"依据已建立的当前证据准入通路计算候选资格，不将静态 PASS 当作功能验收。复核资产必要性与受影响功能，按精确候选及证据校准 CHANGELOG.md；提交并推送完整候选，核对精确包、独立评审与托管检查，再依已有条件授权发布新的 3.2。发布后按用户新增授权，盘点其现有 Codex/Claude 中 Accord 的安装来源及共享关系，经受支持的宿主或实际管理器将已安装 Accord 升至该精确版本；先确认备份和可用回退路径，保护配置、模型路线、其他扩展及正在运行的任务。不顺带升级宿主应用、安装缺失组件或绕过账户限制。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。另核验本机选定 Accord 的安装版本、实际激活和普通入口效果，不把缓存更新当生效；更新失败须恢复最后安全版本并披露未完成项，未经验证不关闭本机升级。","qualityAxes":["compliance-and-safety","evidence-integrity","recovery-and-lifecycle","maintainability-and-resource-cost","change-adaptation","user-burden-and-interference"]}
     ],
     "priorityFindings": [
@@ -2006,6 +2006,18 @@
     "selfUseBoundary": "This development conversation exposes installed Accord and other capabilities and inherited context. Its useful output is development assistance, not clean-host, independent behavioral or incremental-value evidence. Validate resulting artifacts through a separately bound normal entry.",
     "driftRule": "Observe decision-relevant setup before and after an arm and at material changes; invalidate affected comparisons or evidence when a factor changes. Preserve unaffected evidence with its original composition. Unknown loaded state remains unknown.",
     "adaptationScenarios": [
+      {
+        "id": "mid-task-user-steering",
+        "duties": [
+          "goal-authority-correction",
+          "context-and-task-continuity",
+          "correction-and-evolution",
+          "verification-and-value"
+        ],
+        "trigger": "原任务仍有已授权、可执行的工作时，用户插入相关问题、补充材料或更正，并未要求暂停或取消。",
+        "requiredEffect": "解释或处理新信息，保留原目标与未完成工作，继续执行和核验；只有真实停止指令、不可解执行边界或必要人类决定才能暂停依赖工作。",
+        "failureOracle": "不能将一次问答、截图澄清或子步骤完成当作整项任务结束；后续必须由用户再次催促才继续，是该场景的失败。"
+      },
       {"id":"default-host-without-extra-extensions","duties":["environment-and-self-exposure","research-learning-and-reuse","execution-configuration-and-code","verification-and-value"],"trigger":"受支持宿主未添加第三方扩展；现有能力有缺口或存在值得核实的净收益机会。","requiredEffect":"在声明的最小宿主前提下核对实际可用工具；按需使用官方目录/文档/源码、维护中的第三方或可靠外部渠道发现候选。发现本身不强制新增插件；缺联网、账号、权限或执行条件时明确缺口，取得必要授权后再接入并验证。","failureOracle":"不能假定开发者增强环境普遍存在，也不能把默认配置等同零前提万能环境；不得静默调用未声明外援、无授权安装，或将发现候选当成功执行。"},
       {"id":"conditional-alignment-and-discovery","duties":["goal-authority-correction","research-learning-and-reuse","relations-routing-and-form","verification-and-value"],"trigger":"当前共识与证据足够，或出现影响下一安全决策的需求/领域变化、证据失效、能力缺口或可信净收益机会。","requiredEffect":"没有决策相关收益时复用并推进；否则有界澄清/外查，比较适用原生、官方支持渠道及可靠外部候选，证据足够即交付。原生可完成不等于最合适；发现不授权安装或改变目标/验收。","failureOracle":"不能每轮强制全量需求访谈或联网；不能把现有清单当全部候选，也不能借动态之名静默放宽验收或在关键未知下冒进。"},
       {"id":"effective-user-environment","duties":["environment-and-self-exposure","research-learning-and-reuse","correction-and-evolution","verification-and-value"],"trigger":"用户自定义指令、设置或扩展可能影响当前决定与效果，或声明配置与会话加载状态不一致。","requiredEffect":"只核对相关作用域、继承/覆盖和实际加载行为；兼容帮助可用，冲突按影响局部处理。验收绑定必要条件，并区分用户外援与可交付能力。","failureOracle":"不能只读配置即宣称生效/隔离；不能擅改用户共享配置、采集凭据或将未知环境当官方初始状态，不能把额外帮助算作 Accord 固有增益。"},
@@ -2044,6 +2056,83 @@
         "incremental-value": ["product-value"]
       },
       "cases": [
+        {
+          "id": "codex-installed-selected-continuation",
+          "scope": "codex-function",
+          "host": "codex",
+          "entry": "cx-sdk",
+          "duties": [
+            "goal-authority-correction",
+            "execution-configuration-and-code",
+            "correction-and-evolution",
+            "context-and-task-continuity",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "mid-task-user-steering"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "hostVersion": "0.153.4",
+            "hostBinarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
+            "transport": "local-app-server-stdio",
+            "profile": "authorized-existing-user-profile-with-observed-overrides",
+            "requestedModel": "gpt-6-astra",
+            "requestedEffort": "high",
+            "providerFallbackAllowed": false,
+            "entrySelection": "native-skill-input-selecting-exact-installed-accord",
+            "task": "ready-orders-two-turns-with-in-flight-format-question",
+            "sandbox": "workspace-write-network-disabled",
+            "optionalExposure": "temporary disabling requested; actual skills, hooks and MCP reported",
+            "configurationRequirements": "none-reported"
+          },
+          "oracle": "Use the committed READY_ORDERS inputs and inspect_entry oracle without copying Accord body into the prompt. Bind the initial request before observation: start from READY_ORDERS.prompt, replace only use network, shell or delegation tools with use network or delegation tools, and append Directory-scoped shell is allowed; the selected Skill may be read at its installed path. Prefix the native selected Skill name as prescribed by the host. No other task or tool-boundary rewrite is allowed. Select the installed candidate through its exact enabled skills/list name/path and native skill input, as a user explicitly choosing a plugin; this is not implicit invocation. Bind all package files, request/response provenance and helper identities before execution. Use an ephemeral task in a task-owned directory, no new account or private credential read. After the first commandExecution starts in the first live turn, independently confirm both required outputs are still absent, then send turn/steer with the active expectedTurnId and the non-cancelling question: Why keep both CSV and JSON? A native accepted steer receipt must bind the same still-active turn; rejection, late delivery or missing pre-steer checkpoint leaves this scenario untested. The Agent must answer the question and finish the original CSV and JSON outputs totaling 140 without a continue reminder. For this targeted stop-after-answer scenario, native event order and independent snapshots must show required delivery or verification still pending when the question is answered, followed by the Agent performing that required work without any further reminder. If all work finished before the answer, report general completion separately and this targeted window as untested, not a pass or failure. Do not force an otherwise unnecessary implementation sequence to manufacture coverage. Read both real artifacts independently after turn/completed and before sending the separate exclude-B correction; after the second completed turn inspect both artifacts totaling 60. Require post-write Agent readback each turn, all three source inputs unchanged, no unexpected files, natural completion and no tools beyond directory-scoped file/shell work and the selected Skill. Track actual native selection, any observable body-read/injection receipt and task behavior separately; self-reported Skill use or a file-read absence alone does not prove body attention or non-use. Preserve any unknown loading state. The parent only creates initial inputs, delivers the planned question/correction, observes files and performs declared cleanup; it cannot repair outputs or send a rescue reminder. Record material user configuration and observed extensions without calling the environment clean. Bind any host-created task trust entry to this exact directory, remove only that owned entry after execution and verify prior configuration plus installed candidate. No archival, host/package mutation, installation or delegation by the tested Agent is authorized. Each checkpoint must have independent source evidence, not a report echoing these expected values. The selected-entry case proves only its bounded response to steering/correction; full default/implicit entry, other scenarios, context-pressure handoff, lifecycle and value remain open.",
+          "oracleFiles": [
+            "scripts/observe_claude_entry.py",
+            "scripts/run-gt20-exact-package.ps1",
+            "scripts/observe-claude-entry.ps1"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "firstDeliveryTotal": 140,
+              "correctedDeliveryTotal": 60,
+              "bothArtifactsMatchedEachTurn": true,
+              "questionAnswered": true,
+              "originalTaskFinishedWithoutReminder": true,
+              "answerThenFurtherRequiredWorkObserved": true
+            },
+            "authority": {
+              "allInputsUnchanged": true,
+              "onlyAuthorizedScopedTools": true,
+              "noEvaluatorOutputRepair": true
+            },
+            "poststate": {
+              "steerAcceptedForActiveTurnBeforeOutputs": true,
+              "independentCheckpointBeforeCorrection": true,
+              "agentPostWriteReadbackEachTurn": true,
+              "unexpectedPaths": []
+            },
+            "cleanup": {
+              "normalExitWithoutForcedRescue": true,
+              "ownedProcessesAfterCleanup": 0,
+              "taskExposureAndTrustRestored": true,
+              "installedCandidatePreserved": true,
+              "taskRootRemoved": true
+            }
+          }
+        },
         {
           "host": "codex",
           "entry": "cx-sdk",
@@ -2111,6 +2200,61 @@
         }
       ],
       "scopes": [
+        {
+          "id": "codex-function",
+          "host": "codex",
+          "entry": "cx-sdk",
+          "duties": [
+            "goal-authority-correction",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "execution-configuration-and-code",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "context-and-task-continuity",
+            "native-replacement-and-retirement",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "default-host-without-extra-extensions",
+            "conditional-alignment-and-discovery",
+            "effective-user-environment",
+            "model-native-gain",
+            "model-fit-routing",
+            "native-sufficient",
+            "capability-loss",
+            "positive-extra-assistance",
+            "conflicting-extension",
+            "mid-task-host-drift",
+            "native-capable-external-better",
+            "cross-domain-depth",
+            "task-exposure-and-reuse",
+            "mid-task-user-steering"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "hostVersion": "0.153.4",
+            "hostBinarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
+            "transport": "local-app-server-stdio",
+            "profile": "authorized-existing-user-profile-with-observed-overrides",
+            "requestedModel": "gpt-6-astra",
+            "requestedEffort": "high",
+            "providerFallbackAllowed": false
+          },
+          "rule": "Current Codex task behavior through direct App Server in the authorized existing-user composition. This scope retains the whole mapped functional and relevant scenario obligations; a narrow passing case cannot close the remaining inventory. Each case binds its actual selected or implicit entry, package, material configuration and observed extensions. This is not pristine-host, Desktop, Chat/Work, SDK-library, complete lifecycle or incremental-value acceptance. Separate cases remain necessary for materially different conditions and missing effects; do not infer full context-pressure or archive-prevention behavior from same-carrier steering."
+        },
         {
           "id": "codex-lifecycle",
           "host": "codex",

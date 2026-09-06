@@ -39,24 +39,27 @@ Synthetic regressions cover source/package/oracle binding, final freshness,
 same-episode consequences, current conditions and independent-review input.
 Callable shape does not authenticate an observer, facts or reviews; the trusted
 caller must do so through bounded read-only sources. See the architecture for
-the two-query boundary. One native component case is declared; no record is admitted.
+the two-query boundary. Native lifecycle and selected-entry continuation cases are
+declared; no record is admitted.
 The old maintenance state machine remains separate.
 
-Continue `development-evidence-admission` from the prebound required scope IDs in
-admission v3 and its explicit review policy. Bind actual applicability, whole-chain oracles and independent
+Continue real ordinary-entry, whole-chain and relevant failure/lifecycle work
+against the prebound required scope IDs in admission v3. The implemented evaluator
+supports that work; completing more evaluator machinery is not its prerequisite.
+Bind actual applicability, whole-chain oracles and independent
 sources before collecting evidence. Missing scopes stay unbound; revise required
 coverage only as an acceptance change, never from the cases that happen to pass.
 Each host retains its complete inventory and applicable lifecycle; overall value
-has its own required comparison scope. Commit the
-evaluated implementation and acceptance definition as A; admit only compatible
-observations at candidate B with actual final-candidate reviews. Reuse unaffected
+has its own required comparison scope. Commit the evaluated implementation and
+acceptance definition as A, collect real execution and post-state evidence E,
+then evaluate compatible observations at candidate B with actual final-candidate
+reviews under the explicit review policy. Reuse unaffected
 evidence by dependencies, not by old PASS labels. Do not promote
 `developmentObservations`, hand-enter verified states or use the synthetic observer
 as a real source adapter. Measure implementation and test cost without deleting
 necessary safeguards to satisfy a number.
 
-Then continue ordinary-entry, whole-chain and relevant failure/lifecycle evidence
-against the bound definition. Existing source, engineering and diagnostic facts
+Existing source, engineering and diagnostic facts
 remain reusable at their proven scope; reopening the premise does not erase them.
 There is no mandate to connect the reference core or add a runtime before checking
 whether the available host composition closes the duty.
