@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from pathlib import Path
 import tempfile
 import subprocess
+import time
 import unittest
 import uuid
 from unittest.mock import patch
@@ -142,6 +143,77 @@ class Probe {
         for arm in failed["arms"].values():
             self.assertFalse(arm["matchesFixture"])
             self.assertFalse(arm["correctionSent"])
+
+    @windows_process_case
+    def test_capture_failure_preserves_native_prefix_and_contains_the_child(self):
+        for line, stage, overflow in (("not-json", "event-decode", False),
+                                     ('{"type":"result"}', "checkpoint", False),
+                                     ("{}", "capture-read", True)):
+            prefix = '{"type":"system","subtype":"init","session_id":"fixture"}\n' + line + '\n'
+            literal = json.dumps(prefix)
+            program = ('class Probe { static void Main(string[] args) { '
+                'if (args.Length == 1) { System.Console.WriteLine("fixture"); return; } '
+                'System.Console.Write(' + literal + '); '
+                'System.Console.Error.Write("private-stderr-canary"); ' +
+                ('System.Console.Write(new string(\'x\', 3000000)); ' if overflow else '') +
+                'System.Threading.Thread.Sleep(6000); } }')
+            with self.subTest(stage=stage), offline_probe(program, 3) as (repository, root, binary, request):
+                request.update(correction="bound correction", python=str(root / "missing.exe"))
+                environment = {**os.environ, "ANTHROPIC_BASE_URL": "http://127.0.0.1:9",
+                               "ANTHROPIC_AUTH_TOKEN": "fixture-not-a-real-token"}
+                result = subprocess.run(["pwsh", "-NoProfile", "-NonInteractive", "-File",
+                    str(repository / "scripts/observe-claude-entry.ps1")],
+                    input=json.dumps(request) + '\n{"op":"run","arm":"native"}\n{"op":"close"}\n',
+                    capture_output=True, text=True, env=environment, timeout=20)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                capture = json.loads(result.stdout.splitlines()[1])
+                self.assertTrue(capture["stdout"].startswith(prefix))
+                self.assertLessEqual(len(capture["stdout"].encode()), 2097152)
+                self.assertEqual(capture["failure"]["stage"], stage)
+                if overflow:
+                    self.assertIn("stdout-final", [v["stage"] for v in capture["secondaryFailures"]])
+                self.assertTrue(capture["forced"])
+                self.assertEqual(capture["evaluatorChildrenAfterCleanup"], 0)
+                self.assertNotIn("private-stderr-canary", result.stdout + result.stderr)
+                self.assertNotIn("fixture-not-a-real-token", result.stdout + result.stderr)
+                self.assertEqual((root / 'native/native-stdout.jsonl').read_text(), capture["stdout"])
+
+    @windows_process_case
+    def test_controller_timeout_retains_recorded_prefix_and_kills_the_owned_job(self):
+        import ctypes
+        program = ('class Probe { static void Main(string[] args) { '
+            'if (args.Length == 1) { System.Console.WriteLine("fixture"); return; } '
+            'System.IO.File.WriteAllText("pid", System.Diagnostics.Process.GetCurrentProcess().Id.ToString()); '
+            'System.Console.WriteLine("recorded-prefix"); System.Threading.Thread.Sleep(30000); } }')
+        with offline_probe(program, 30) as (repository, root, binary, request):
+            request["routeMode"] = "host-user-settings"
+            with subprocess.Popen(["pwsh", "-NoProfile", "-NonInteractive", "-File",
+                str(repository / "scripts/observe-claude-entry.ps1")], stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as controller:
+                try:
+                    controller.stdin.write(json.dumps(request) + '\n{"op":"run","arm":"native"}\n')
+                    controller.stdin.flush()
+                    journal = root / 'native/native-stdout.jsonl'
+                    deadline = time.monotonic() + 10
+                    while not journal.exists() or 'recorded-prefix' not in journal.read_text():
+                        self.assertLess(time.monotonic(), deadline, "no incremental native capture")
+                        time.sleep(.05)
+                    pid = int((root / 'native/work/pid').read_text())
+                    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+                    kernel.OpenProcess.restype = ctypes.c_void_p
+                    handle = kernel.OpenProcess(0x100000, False, pid)
+                    self.assertTrue(handle)
+                    try:
+                        controller.kill()
+                        controller.communicate(timeout=10)
+                        self.assertEqual(kernel.WaitForSingleObject(ctypes.c_void_p(handle), 5000), 0)
+                    finally:
+                        kernel.CloseHandle(ctypes.c_void_p(handle))
+                    self.assertEqual(journal.read_text().strip(), 'recorded-prefix')
+                finally:
+                    if controller.poll() is None:
+                        controller.kill()
+                    controller.communicate(timeout=10)
 
     @windows_process_case
     def test_explicit_user_route_is_loaded_by_host_not_observer(self):

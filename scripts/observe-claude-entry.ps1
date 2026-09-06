@@ -44,30 +44,40 @@ function Host-Profile {
 }
 
 function Invoke-OwnedCapture($application, $arguments, $workspace, $environment, $inputText,
-    [int]$seconds, [int]$outputLimit = 2097152, [int]$errorLimit = 262144, $followup = $null) {
+    [int]$seconds, [int]$outputLimit = 2097152, [int]$errorLimit = 262144, $followup = $null,
+    $capturePath = $null) {
   $job = [AccordProcessJob]::new()
-  $child = $null; $forced = $false; $beforeCleanup = $null; $capture = $null
+  $child = $null; $forced = $false; $beforeCleanup = $null; $afterCleanup = $null
+  $output = $null; $errors = $null; $writing = $null; $exitCode = $null; $stderrBytes = $null
+  $firstDelivery = $null; $sent = $false; $stage = 'journal-open'; $journal = $null
+  $failures = [Collections.Generic.List[object]]::new()
+  $chunks = [Collections.Concurrent.ConcurrentQueue[string]]::new()
   $watch = [Diagnostics.Stopwatch]::StartNew()
   try {
+    if ($capturePath) {
+      $journal = [IO.File]::Open($capturePath, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    }
+    $stage = 'start'
     $child = [AccordSuspendedProcess]::Start($application, $arguments, $workspace, $environment, $job)
     $lines = [Collections.Concurrent.ConcurrentQueue[string]]::new()
-    $output = if ($followup) { [AccordEntryInput]::ReadLines($child.StandardOutput, $outputLimit, $lines) }
-              else { [AccordSuspendedProcess]::ReadBoundedAsync($child.StandardOutput, $outputLimit) }
+    $output = [AccordEntryInput]::ReadLines($child.StandardOutput, $outputLimit, $lines, $chunks, $journal)
     $errors = [AccordSuspendedProcess]::ReadBoundedAsync($child.StandardError, $errorLimit)
     # Writing stdin belongs to the same deadline; a non-reading child must not
     # block the monitor before it can enforce timeout and close its whole job.
     $writing = if ($followup) { [AccordEntryInput]::Send($child, $inputText, $true) }
                else { [AccordEntryInput]::Resume($child, $inputText) }
-    $seen = [Text.StringBuilder]::new(); $results = 0; $firstDelivery = $null; $sent = $false
+    $seen = [Text.StringBuilder]::new(); $results = 0
     while ($true) {
       if ($followup) {
         $line = $null
         while ($lines.TryDequeue([ref]$line)) {
           [void]$seen.AppendLine($line)
+          $stage = 'event-decode'
           $event = $line | ConvertFrom-Json -AsHashtable
           if ($event.type -ne 'result') { continue }
           $results++
           if ($results -eq 1) {
+            $stage = 'checkpoint'
             $remaining = [Math]::Floor($seconds - $watch.Elapsed.TotalSeconds)
             if ($remaining -lt 1) { throw 'checkpoint-deadline' }
             $query = @{workspace=$workspace; stdout=$seen.ToString()} | ConvertTo-Json -Compress
@@ -88,6 +98,7 @@ function Invoke-OwnedCapture($application, $arguments, $workspace, $environment,
           else { throw 'unexpected-turn' }
         }
       }
+      $stage = 'capture-read'
       if ($child.Process.WaitForExit(100)) { break }
       if ($watch.Elapsed.TotalSeconds -gt $seconds -or $output.IsFaulted -or
           $errors.IsFaulted -or $writing.IsFaulted) {
@@ -109,22 +120,48 @@ function Invoke-OwnedCapture($application, $arguments, $workspace, $environment,
       throw 'capture-unclosed'
     }
     if (-not $writing.Result) { $forced = $true }
-    $capture = @{stdout=$output.Result; exitCode=$child.Process.ExitCode; forced=$forced;
-      childrenBeforeCleanup=$beforeCleanup; stderrBytes=[Text.Encoding]::UTF8.GetByteCount($errors.Result);
-      elapsedSeconds=[Math]::Round($watch.Elapsed.TotalSeconds,3)}
-    if ($followup) {
-      $capture.firstDelivery = $firstDelivery
-      $capture.correctionSent = ($sent -and $writing.Result)
-    }
+  } catch {
+    $failures.Add(@{stage=$stage; type=$_.Exception.GetType().FullName})
   } finally {
-    if ($job.ActiveProcessCount -ne 0) { $job.Terminate(125) }
-    $settle = [Diagnostics.Stopwatch]::StartNew()
-    while ($job.ActiveProcessCount -ne 0 -and $settle.Elapsed.TotalSeconds -lt 5) { Start-Sleep -Milliseconds 50 }
-    $afterCleanup = $job.ActiveProcessCount
-    try { if ($child) { $child.Dispose() } } finally { $job.Dispose() }
+    try {
+      if ($null -eq $beforeCleanup) { $beforeCleanup = $job.ActiveProcessCount }
+      if ($job.ActiveProcessCount -ne 0) { $forced = $true; $job.Terminate(125) }
+      $settle = [Diagnostics.Stopwatch]::StartNew()
+      while ($job.ActiveProcessCount -ne 0 -and $settle.Elapsed.TotalSeconds -lt 5) { Start-Sleep -Milliseconds 50 }
+      $afterCleanup = $job.ActiveProcessCount
+      if ($afterCleanup -ne 0) { throw 'residue-unclosed' }
+      if ($child -and $child.Process.WaitForExit(5000)) { $exitCode = $child.Process.ExitCode }
+    } catch { $failures.Add(@{stage='containment'; type=$_.Exception.GetType().FullName}) }
+    foreach ($reader in @(@{name='stdout-final'; task=$output}, @{name='stderr-final'; task=$errors},
+        @{name='stdin-final'; task=$writing})) {
+      try {
+        if ($reader.task -and -not $reader.task.Wait(5000)) { throw 'pipe-unclosed' }
+      } catch { $failures.Add(@{stage=$reader.name; type=$_.Exception.GetType().FullName}) }
+    }
+    if ($errors -and $errors.Status -eq 'RanToCompletion') {
+      $stderrBytes = [Text.Encoding]::UTF8.GetByteCount($errors.Result)
+    }
+    try { if ($journal) { $journal.Dispose() } }
+    catch { $failures.Add(@{stage='journal-disposal'; type=$_.Exception.GetType().FullName}) }
+    try { if ($child) { $child.Dispose() } }
+    catch { $failures.Add(@{stage='child-disposal'; type=$_.Exception.GetType().FullName}) }
+    try { $job.Dispose() }
+    catch { $failures.Add(@{stage='job-disposal'; type=$_.Exception.GetType().FullName}) }
   }
-  if ($afterCleanup -ne 0) { throw 'residue-unclosed' }
-  $capture.evaluatorChildrenAfterCleanup = $afterCleanup
+  # Raw stdout survives parsing/checkpoint failures. Keep error stages and types,
+  # never exception messages or raw stderr, which can contain private route data.
+  $capture = @{stdout=[string]::Concat($chunks.ToArray()); exitCode=$exitCode;
+    forced=($forced -or $failures.Count -gt 0); childrenBeforeCleanup=$beforeCleanup;
+    stderrBytes=$stderrBytes; evaluatorChildrenAfterCleanup=$afterCleanup;
+    elapsedSeconds=[Math]::Round($watch.Elapsed.TotalSeconds,3)}
+  if ($failures.Count) {
+    $capture.failure = $failures[0]
+    $capture.secondaryFailures = @($failures | Select-Object -Skip 1)
+  }
+  if ($followup) {
+    $capture.firstDelivery = $firstDelivery
+    $capture.correctionSent = ($sent -and $writing -and $writing.Status -eq 'RanToCompletion' -and $writing.Result)
+  }
   return $capture
 }
 
@@ -170,14 +207,23 @@ public static class AccordEntryInput {
     });
   }
   public static async System.Threading.Tasks.Task<string> ReadLines(System.IO.StreamReader reader,
-      int limit, System.Collections.Concurrent.ConcurrentQueue<string> lines) {
+      int limit, System.Collections.Concurrent.ConcurrentQueue<string> lines,
+      System.Collections.Concurrent.ConcurrentQueue<string> chunks, System.IO.Stream journal) {
     var all = new System.Text.StringBuilder(); var line = new System.Text.StringBuilder();
     var buffer = new char[4096]; int bytes = 0;
+    var encoder = System.Text.Encoding.UTF8.GetEncoder();
+    var data = new byte[System.Text.Encoding.UTF8.GetMaxByteCount(buffer.Length)];
     while (true) {
       int count = await reader.ReadAsync(buffer, 0, buffer.Length);
       if (count == 0) break;
-      bytes = checked(bytes + System.Text.Encoding.UTF8.GetByteCount(buffer, 0, count));
+      int encoded = encoder.GetBytes(buffer, 0, count, data, 0, false);
+      bytes = checked(bytes + encoded);
       if (bytes > limit) throw new System.IO.InvalidDataException("Stream limit.");
+      if (journal != null) {
+        await journal.WriteAsync(data, 0, encoded);
+        await journal.FlushAsync();
+      }
+      chunks.Enqueue(System.Text.Encoding.UTF8.GetString(data, 0, encoded));
       all.Append(buffer, 0, count);
       for (int i = 0; i < count; i++) {
         if (buffer[i] == '\n') { if (line.Length > 0) lines.Enqueue(line.ToString()); line.Clear(); }
@@ -279,7 +325,8 @@ public static class AccordEntryInput {
         message=(@{type='user'; message=@{role='user'; content=$bound.correction};
           parent_tool_use_id=$null; uuid=[guid]::NewGuid().ToString()} | ConvertTo-Json -Depth 5 -Compress)}
     }
-    $capture = Invoke-OwnedCapture $executable $arguments $workspace $environment $inputText $bound.timeout -followup $followup
+    $capture = Invoke-OwnedCapture $executable $arguments $workspace $environment $inputText $bound.timeout `
+      -followup $followup -capturePath (Join-Path $armRoot 'native-stdout.jsonl')
     $capture.episode = $bound.episode
     $capture.arm = $request.arm
     Reply $capture

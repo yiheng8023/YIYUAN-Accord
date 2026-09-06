@@ -47,6 +47,18 @@ conditions and limits. Personal configuration is unchanged. Discovery quality,
 conflict resolution and retained-state integrity need task evidence; do not turn
 this diagnostic setting into a universal default or an Accord efficacy claim.
 
+The current Claude pipe-source repair preserves bounded native stdout across
+parse/checkpoint/stream-limit failures and flushes a task-owned journal before
+consuming events, so an outer controller timeout retains its recorded prefix.
+Error stages/types, secondary failures and Job cleanup remain separate; no raw
+stderr or exception messages are published. These no-model checks qualify the
+observer boundary only. The user approved a 1,150,000-byte code/test ceiling
+with at least five-percent headroom for necessary regression coverage.
+
+Finalize README and changelog after implementation and acceptance stabilize.
+Before publication, align source intent, implementation, acceptance, package
+identity, versions, documentation and release claims globally.
+
 ## Bound work
 
 Continue the authorized 3.2 whole-system development in
