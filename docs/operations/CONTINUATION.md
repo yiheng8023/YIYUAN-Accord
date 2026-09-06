@@ -106,13 +106,22 @@ sample. Compare delivery, authority and convergence before cost; no gain is
 established. Both profiles completed native retirement, full evidence retention
 and owned-root disposal; the selected shared-file hashes stayed unchanged.
 
-Next inspect the ordinary-entry trigger, actual caller and existing activation
-semantics. Another unread Skill-body edit cannot directly repair this observed
-path. Bind any minimal mechanism change to the earliest evidenced gap rather
-than forcing every task through a Skill or presuming a runtime. Preserve earlier
-selected and native lifecycle failures, permissions and budgets. Corrected
-update, independent recovery, remaining ordinary-function, Desktop continuity
-and whole-product value stay open. README and changelog remain last.
+The zero-model native activation probe is complete and retained. The namespaced
+command supplies the exact Skill body before the first request. Ordinary input
+and the narrow paths/read diagnostic did not deliver recognizable body in this
+inline-plugin condition. This does not establish a paths-based fix, model
+behavior or product gain. All four native processes and local servers stopped;
+the complete 91-file evidence copy was verified before owned-root disposal.
+
+Next bind one same-candidate ordinary/native-selected neutral maintenance pair.
+Keep body, permissions, route and budget unchanged. Test whether early delivery
+improves required validation, authorized bounded hold and convergence; explicit
+selection is not ordinary adoption. The previous selected failures already
+prevent treating activation alone as sufficient. Follow the earliest evidenced
+execution/control gap if this condition is also insufficient; no deterministic
+product code defect has yet been located. Corrected update, independent recovery,
+remaining ordinary-function, Desktop continuity and whole-product value stay
+open. README and changelog remain last.
 
 The byte-identical read-only 2.1.263 runtime copy remains task-owned at
 `C:\Users\15521\AppData\Local\Temp\accord-claude-runtime-263-5yoxqfig` for
