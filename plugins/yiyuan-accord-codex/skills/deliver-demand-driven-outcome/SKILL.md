@@ -5,23 +5,21 @@ description: Deliver nontrivial outcomes through adaptive capability discovery, 
 
 # Deliver the outcome
 
-Use this Skill for an outcome gap or a material improvement worth evaluating.
-These are conditional responsibilities, not a fixed sequence or mandatory SOP.
+Use these conditional responsibilities for an outcome gap or material
+improvement; they are not a mandatory sequence.
 
 ## Bind the result before choosing the means
 
-Recover the latest goal, target, acceptance and authority; they need not be
-specified perfectly up front. Interpret agreement against that goal: approval
-of an authorized next step means execute it, not merely acknowledge it. A
-standalone discussion grants no implementation authority. Clarify only
-uncertainty that changes the next safe action. Inspect factual premises
-and correct contradictions with evidence. Revisit affected decisions as needs
-and evidence evolve; do not silently change goals, authority or acceptance.
+Recover the latest goal, target, acceptance and authority as they become clear.
+Execute an agreed, authorized step within that goal. Standalone discussion grants
+no implementation authority. Clarify only what changes the next safe action;
+inspect premises and correct contradictions with evidence. Revisit affected
+decisions as needs change; do not silently change goals, authority or acceptance.
 
-Repair broken premises from the earliest affected dependency, then reconcile
-plan, procedure and acceptance; preserve unaffected work. Retain, merge, replace
-or retire inherited functions by actual need, with reasons and aligned acceptance.
-Preserve still-needed outcomes, not every inherited asset or mechanism.
+Repair premises at the earliest affected dependency; reconcile plan, procedure
+and acceptance while preserving unaffected work. Retain, merge, replace or retire
+functions by need, with reasons and aligned acceptance. Preserve required
+outcomes, not every inherited asset.
 
 Compliance and bound commitments constrain the route. Subtraction, restraint,
 fallback and gap filling are conditional means, not weaker outcome definitions.
@@ -31,18 +29,17 @@ fallback and gap filling are conditional means, not weaker outcome definitions.
 1. Inspect decision-relevant facts: available executors, permissions, inputs,
    state, configuration and existing work. Prefer supported host queries;
    installation, names and versions do not prove fitness. Do not collect secrets.
-2. Native means are a low-burden starting point or equal-fit preference, not a
-   stopping rule. Material gaps, uncertainty, domain shifts or plausible net
-   benefit justify comparing maintained external candidates even if native can
-   finish. Reuse healthy discovery/selection and lifecycle controls. Check what
-   is callable; search supported markets and reliable external sources beyond
-   installed tools when the decision warrants it. Reuse sound research; stop
-   when more search is unlikely to change the choice. Compare required effects, evidence,
-   fit, upkeep, licensing, authority and adoption/use/recovery/exit cost. Labels
-   or listings do not prove quality. Domain depth may need authoritative data,
-   a tool, model or professional review. Choose the best supported fit; compose
-   or build when justified. Discovery grants no installation, account, data or
-   cost authority.
+2. Start with native means when adequate and low burden; this is not a stopping
+   rule. A material gap, uncertainty, domain shift or plausible net benefit
+   warrants comparing maintained external options even when native can finish.
+   Check callable capabilities and search supported markets or authoritative
+   sources beyond installed tools where relevant. Reuse sound research and
+   discovery; stop when further search would not change the choice. Compare
+   required effects, evidence, fit, upkeep, licensing, authority and total
+   adoption, use, recovery and exit cost. Names or listings prove no quality.
+   Domain depth may require authoritative data, tools, models or professional
+   review. Select the best supported fit; compose or build when justified.
+   Discovery grants no installation, account, data or cost authority.
 3. Own authorized discovery, orchestration, configuration, implementation,
    recovery and verification; spare the user discoverable mechanics. Execute
    through the next useful action and its verification while safe authorized
@@ -54,11 +51,11 @@ fallback and gap filling are conditional means, not weaker outcome definitions.
    writer per mutable target and distinguish observations from assumptions.
    Missing or conflicting state stays unknown; hold only dependent effects.
 
-Match authorized main/subagent models and reasoning to task difficulty, risk,
-modalities, tools, context, latency and budget. Preserve user selections; prefer
-native per-task dispatch. Verify aliases, inheritance, substitutions and reported
-execution; unknown support proves no switch. Reassess drift or inadequate effects.
-Retire duplicate routing when native selection and execution satisfy the need.
+Match authorized main/subagent models and reasoning to difficulty, risk, tools,
+modalities, context, latency and budget. Preserve user selections; prefer native
+per-task dispatch. Verify aliases, inheritance, substitutions and actual execution;
+unknown support proves no switch. Reassess drift or inadequate effects. Retire
+duplicate routing only when native selection and execution satisfy the need.
 
 Use native planning and lifecycle controls where useful; show progress and
 limits. No planning mode, repository, Python or particular model is required.
@@ -70,17 +67,23 @@ phase boundary, invalidate affected assumptions and re-sense the needed state.
 Preserve independently verified safe work; recompute only affected decisions.
 Do not replay the whole workflow after every observation.
 
-Personal instructions, settings, memory and extensions can help or interfere.
-Distinguish configured intent, inherited policy and actual loaded behavior;
-unknown state stays unknown. Presence grants no authority. Reuse compatible aid;
-isolate conflicts where needed and authorized. For necessary authorized shared
-changes, bind scope, backup, affected sessions and restoration. A clean host is
-not a general product prerequisite.
+Personal instructions, settings, memory and extensions may help or interfere.
+Separate configured intent, inherited policy and actual behavior; unknown state
+stays unknown and presence grants no authority. Reuse compatible aid and isolate
+conflicts within authority. Bind scope, backup, affected sessions and restoration
+for shared changes. A clean host is not a product prerequisite.
 
-After failure, inspect actual post-state before retrying; avoid duplicate effects.
-Use supported rollback or a sufficient alternative where authorized. Repeated
-same-purpose repair triggers premise and necessity review, not endless retries.
-A safe stop is honest containment, not functional completion.
+For authorized package changes, retain exact prior source/state and a recovery
+actor outside the changed component. Validate the exact selected source with
+supported checks before mutation; hold invalid or unverifiable changes. Check
+installed bytes, registration and fresh loading afterwards. A version or command
+success is not content or usability proof. On mismatch, stop dependent use and
+restore and verify a known-good prior state through authorized controls. Version
+caches may survive same-version fixes; do not overwrite shared caches or invent
+force options.
+
+Inspect actual failure post-state before retrying; avoid duplicate effects.
+Repeated repair needs a premise and necessity review. Containment is not completion.
 
 Use fresh context capacity, load and integrity signals. Capacity and occupancy
 are variables; after automatic compaction re-sense and verify retained decisions.
@@ -97,21 +100,21 @@ resources; fact checks are not takeover. Preserve checkout and task history.
 Archiving requires explicit user authorization; handoff, completion and cleanup
 grant none. Instructions are not state.
 
-The packaged SessionStart helper, when supported with Node available, supplies
-only optional invalidation hints on resume/compact. It does not execute the task,
-prove current state or make the helper mandatory. If absent, continue through
-the available host's ordinary Skill and decision path; do not invent telemetry.
+Where supported with Node available, the packaged SessionStart helper supplies
+optional invalidation hints on resume/compact only. It neither executes tasks
+nor proves state. Without it, continue through the host's ordinary Skill and
+decision path; do not invent telemetry.
 
 ## Verify effects and close the owned lifecycle
 
-Verify claims against artifacts or observable state; exercise relevant failures
-and recovery. Prefer repeatable checks for testable constraints; challenge critical
-checks with counterexamples. Preserve intent: checks can encode wrong expectations.
-Guidance alone cannot enforce host actions. Check interfaces, arguments and
-dependencies; separate inspection, execution, unknown prerequisites and
-impossibility. Injection, invocation, local checks or evaluator rescue do not prove
-ordinary behavior. Verify every required functional and quality floor; averages
-cannot offset a failed necessary dependency.
+Verify claims against artifacts and observed state; exercise relevant failures
+and recovery. Use repeatable checks and challenge critical checks with
+counterexamples; they can encode wrong expectations. Guidance cannot enforce
+host actions. Check interfaces, arguments and dependencies; distinguish
+inspection, execution, unknown prerequisites and impossibility. Injection,
+invocation, local checks or evaluator rescue do not prove ordinary behavior.
+Verify every required functional and quality floor; averages cannot offset a
+failed necessary dependency.
 
 For a claimed benefit, compare against a suitable native baseline and account
 for configuration, model/route, memory, helpers and other material factors.
@@ -128,11 +131,10 @@ reversible inactive state if supported; weigh reuse, expiry and upkeep before
 authorized retirement. Revalidate fit and trust on reuse after material drift.
 Preserve still-needed effects through a verified successor and recovery path.
 
-Before ending, reconcile remaining work against the bound outcome. Continue
-when authorized work is executable; otherwise name the real decision, wait or
-execution limit. Respect a user's stop or changed goal. Reuse supported native
-continuation or completion checks when needed and authorized; they do not grant
-new scope, prove success or justify unlimited retries.
+Before ending, reconcile remaining work with the bound outcome. Continue safe
+authorized work; otherwise name the real decision, wait or execution limit.
+Respect the user's stop or changed goal. Use supported continuation/completion
+checks when needed and authorized; they grant no scope, success or endless retries.
 
 Report the result, remaining gaps and evidence limits separately. Responsibility
 accounting, functional verification, outcome completion, safe stop and incremental

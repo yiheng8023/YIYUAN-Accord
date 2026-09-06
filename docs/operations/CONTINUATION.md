@@ -15,9 +15,9 @@ the actual answer-then-continue window, separate 140/60 checkpoints and limits.
 All test processes, temporary exposure, owned trust entries and temporary
 directories are closed or removed. Retained evidence and configuration backups
 are under `C:\Users\15521\.codex\backups\accord-evaluation-20260905T215550Z-8ff0643a`.
-The historical observer's failure-retention limitation is recorded; fix it
-before any reuse without modifying the retained original or rerunning an
-unaffected successful episode merely to replace that evidence.
+The historical observer failure is retained; its current bounded stdout and
+checkpoint repair is locally verified. Do not overwrite originals or rerun
+unaffected episodes merely to replace their evidence.
 
 The user's further examples clarify existing capability-orchestration and
 resource-lifecycle duties: the Agent should choose and operate applicable
@@ -59,45 +59,36 @@ Finalize README and changelog after implementation and acceptance stabilize.
 Before publication, align source intent, implementation, acceptance, package
 identity, versions, documentation and release claims globally.
 
-Claude ordinary native/candidate entry at `0688fc9` completed 140 then 60
-with independent per-turn readback, no input changes and no extra tool calls.
-Neither arm invoked the Skill; no incremental gain is established. All 579 raw
-files were copied and hash-verified under the existing evaluation backup in
-`claude-native-20260906`; four owned temporary roots have been removed. The two directory
-marketplace attempts are now natively uninstalled with empty listings and their
-marketplaces removed. The first input fixture had a CRLF/LF baseline mismatch;
-its failed predicate stays recorded. The corrected attempt verified native
-selected Skill activation and 140/readback with a byte-exact baseline.
+Claude 2.1.263 now has a completed native lifecycle experiment at source
+`53ce27686e0f8eac250f45294005ed6c8faca21e`. Exact dev.7 installed activation
+and the fresh profile's 3.1 activation succeeded. The invalid update actually
+installed the malformed manifest and changed registration; the corrected
+same-version source did not repair the cache. This required case failed.
+Native validation detected the manifest error, and a separately selected native
+3.1 rollback restored exact bytes and fresh 140/readback behavior. That recovery
+was maintainer-selected, not an Accord autonomy result. All 3,107 raw files are
+hash-verified in `claude-263-cycle-20260906`; the owned episode root is removed.
+See `developmentObservations/claude-263-native-invalid-update-and-version-cache`.
+Earlier directory/cache-interference trials and the CLI-upgrade interruption
+retain their original subjects and limits in the source observations.
 
-Actual directory-marketplace activation loaded the publisher source directory,
-not the registry's cache path. Do not inject a bad update into that shared
-writable path. The source now prebinds native Git acceptance, independent
-loading-tree isolation and immutable publisher commits before the refresh/update
-experiment. A file URL remains a feasibility candidate, not verified support.
-See `developmentObservations/claude-dev7-functional-and-directory-lifecycle`
-for originals and limits. README and changelog still wait for final acceptance.
+The new dev.8 guidance and `claude-agent-validated-plugin-lifecycle` case correct
+the delegation premise while retaining the safety outcome. Next, bind the exact
+current package/helper/host and task roots, then observe the actual healthy host
+Agent calling supported source checks, updating and recovering. Its session-local
+Skill must survive the changed installed component, but that exposure cannot
+supply installed-package activation. A private observer preflight, text edit or
+later cleanup does not close the gap. Keep invalid-source hold and installed-
+fault recovery checkpoints separate. Native validation does not replace exact
+content, registration and fresh loading checks.
 
-The native Git route now has actual clone/transport and exact cached-Skill
-activation evidence. Its first invalid update reused an orphaned intact dev.7
-cache and changed registration rather than rejecting the bad source; the original
-failure window stays untested. The registry commit label did not establish cache
-provenance. All 1,832 files are retained and hash-verified under
-`claude-git-20260906`; the original owned root is removed. The source now binds
-a separate fresh predecessor-first update profile with candidate-cache absence
-checked before fault injection. Preserve the unchanged acceptance criteria and
-record native orphan-cache retention separately from later owned-root disposal.
-See `developmentObservations/claude-native-git-cache-reuse-dev7`.
-
-The user then upgraded Claude CLI to `2.1.263` during the two-profile
-episode. Initial dev.7 installation/activation/uninstall completed under 2.1.261;
-the second profile was stopped by the executable hash guard before any native
-command or model call. Its state directories stayed empty. All 614 originals
-are retained under `claude-cycle-interrupted-20260906`, and that episode root is
-removed. The current Claude cases now bind 2.1.263 and a single task-owned
-byte-identical executable copy for stable per-episode execution. This is
-maintainer isolation, not an Accord effect or a freeze of the user environment.
-Reconcile the shared host at final qualification and dispose the owned copy
-after use. See `developmentObservations/claude-cli-upgrade-interrupted-two-profile-qualification`.
+The byte-identical read-only 2.1.263 runtime copy remains task-owned at
+`C:\Users\15521\AppData\Local\Temp\accord-claude-runtime-263-5yoxqfig` for
+unfinished qualification; its binding is in the existing evaluation backup.
+Recheck it and the actual shared host for affected evidence and dispose the copy
+after use. This is reproducibility isolation, not a freeze of user updates or
+proof of Accord adaptation. Ordinary functional evidence for the upgraded CLI,
+Desktop continuity and overall matched value work also remain open.
 
 ## Bound work
 
@@ -162,7 +153,7 @@ whether the available host composition closes the duty.
 
 ## Evidence and authority limits
 
-- The unpublished packages are `3.2.0-dev.7`; continuity guidance requires early
+- The unpublished packages are `3.2.0-dev.8`; continuity guidance requires early
   handoff budgeting, fresh sensing after compaction, confirmed destination
   takeover and explicit user authority for archival. The earlier Codex install,
   3.1 rollback and reinstall are historical diagnostics. The user subsequently

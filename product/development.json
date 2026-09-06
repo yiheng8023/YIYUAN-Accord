@@ -22,14 +22,14 @@
     "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
   },
   "delivery": {
-    "version": "3.2.0-dev.7",
-    "rule": "Unpublished dev.7 candidate: planning and scheduling mechanisms remain optional; current intent and evidence govern adaptable plans. Context continuity uses fresh variable capacity, occupancy and integrity after automatic compaction, with enough margin to finish transfer, takeover verification and recovery before exhaustion. Necessary authorized shared configuration changes bind backup and restoration. Explicit user archive authority and sole-writer takeover remain required. Both Skills keep the 8800-byte ceiling. Complete affected package and host acceptance is fresh work; old observations keep their original dev.6 or earlier subjects. Apply and verify project changes before installing this exact candidate on existing hosts.",
+    "version": "3.2.0-dev.8",
+    "rule": "Unpublished dev.8 adds explicit Agent responsibility for source validation before package changes, exact installed/loaded checks and a surviving recovery actor. The dev.7 native-update experiment failed on Claude 2.1.263: native command success did not reject invalid content or preserve prior installation state, and a corrected same-version source did not repair the cache. This motivates a composed checked route, not a weaker safety floor. Existing planning, early continuity budgeting, fresh sensing after compaction, archive authority and sole-writer takeover remain. Both Skills stay below 8800 bytes without new runtime files. Changed package behavior needs fresh affected evidence; historical observations keep their original subject. Shared candidate installation remains deferred until accepted publication.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.7",
-        "packageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d",
+        "packageVersion": "3.2.0-dev.8",
+        "packageSha256": "2d1ef84b1972c6acbf52d93b262badd080b7bb19c183694fa8797982df4d7ff7",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -56,8 +56,8 @@
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.7",
-        "packageSha256": "3b7555bfdab300a185f35797005f3761275cdb12f724ba88fb55b8d0f8bc977d",
+        "packageVersion": "3.2.0-dev.8",
+        "packageSha256": "9f088918c1c40b2ef08382a0eeaec75e5b061e816e1e81f66035807c13a53695",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -85,7 +85,7 @@
       "maxProductCodeAndTestBytes": 1150000,
       "maxTrackedFiles": 126,
       "maxPrimaryInstructionBytes": 28000,
-      "rationale": "On 2026-09-06 the user approved increasing the existing code/test ceiling from 1140000 to 1150000 bytes to preserve necessary failure regressions and at least five-percent headroom. The current tree measures 1087797 code/test bytes, leaving 62203 below the ceiling (4703 beyond the required 57500 reserve). The limits remain 126 tracked files and 28000 primary instruction bytes; actual primary instructions remain 24226 bytes and both dev.7 Skills remain 8792 bytes under 8800. This metric counts Python product modules and product tests, not PowerShell observation code; review that additional code independently. These cost controls do not qualify host behavior or value; remeasure final candidates before admission."
+      "rationale": "On 2026-09-06 the user approved increasing the existing code/test ceiling from 1140000 to 1150000 bytes to preserve necessary failure regressions and at least five-percent headroom. The current tree measures 1087797 code/test bytes, leaving 62203 below the ceiling (4703 beyond the required 57500 reserve). The limits remain 126 tracked files and 28000 primary instruction bytes; dev.8 keeps 126 files and both Skills are 8763 bytes under 8800. Actual primary instructions are 24168 bytes. This metric counts Python product modules and product tests, not PowerShell observation code; review that additional code independently. These cost controls do not qualify host behavior or value; remeasure final candidates before admission."
     }
   },
   "source": {
@@ -846,7 +846,7 @@
       {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"当前有来源的矩阵及职责关系用于开发评审，不是实时能力库或已经运行的图。索引/图是可删改手段，保住的是关系判断与必要效果；工序 dependsOn 不证明运行反馈、交接或清理。先查真实调用者，再按同次转移的可观察后态验证宿主组合。 已删除未被插件、代码或测试调用的 39982 B 内存模拟 HTML，保留精确历史定位；当前术语入口不再把旧图模型当成必需架构。这是活跃资产删减，不是宿主运行加速或动态发现功能验收。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
       {"id":"conditional-alignment-and-external-discovery","status":"observed-research-to-delivery-gap-open","basis":"保留自然预算失败与产物反例，但调用数不等于成功取回。新诊断发现进度事件触发采集上限、WebFetch 列出但权限拒绝两项干扰；合并已知进度并维持有界采集后，无网页组正常结束并调用 Skill，但有提示参数和文案缺陷；列出未放行组的 4 次获取全部被拒，代码参数与参考不符；仅临时放行两个公开域名后 7 次获取成功、3 次域外拒绝，产物通过 8 项离线检查，却在截止时没有正常终态。详见 claude-effective-research-and-capture-dev3。旧取数成功无法重查的字段保留未知；不归咎模型或正文，不撤销旧自然失败，不以禁网、改描述或扩大预算冒充修复。下一步核验有效权限、资料取回、按证据执行及 Agent 自主核验的完整结果。"},
-      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both current worktree Skills are unpublished 3.2.0-dev.7. Guidance separates revisable plans from task authority, budgets continuity early, re-senses after compaction, distinguishes fact checks from confirmed takeover and requires explicit user authorization for task archival. Current reference copies remove the retired prompt and its bindings; exact historical definitions remain in Git. Codex dev.7 installation and a verified 3.1 rollback remain historical diagnostics; the candidate is now uninstalled under the user’s revised publication-first direction. Claude was not changed. The controlled App Server sample delivered 140 then 60, with no observed Skill body read. Whole-duty, Desktop, failure, lifecycle and value acceptance remain open; see codex-installed-dev7-and-recovery."},
+      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both current worktree Skills are unpublished 3.2.0-dev.8. The host-Agent now has explicit package preflight, installed/loading checks and surviving recovery responsibility after the native-update safety premise failed. Guidance remains conditional; early context budgeting, compaction re-sensing, confirmed takeover and explicit archive authority persist. This is a local projection change, not verified Agent execution. Historical dev.7 and earlier observations keep their original package/host subjects. Shared Codex candidate installation remains withdrawn; shared Claude stays at 3.1. Current selected composed lifecycle, full-function, Desktop and value acceptance remain open."},
       {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"整体目标仍是Agent承担必要任务机制；用户无需先学习交接、按钮、Git或Shell等内部操作词汇。历史dev.3/dev.5诊断保持原样；dev.6在已提交判据的Claude用户配置双轮观察中，两组均从140改为60并核验实际产物，但都未调用Accord Skill。其他用户扩展仍在，不称干净宿主、独立原生归因或Accord增量价值；样本不证明整项职责、任意环境兼容或生命周期。继续从具体声明绑定普通入口、必要作用域、整体及故障判据与独立来源，沿发现/匹配、执行、状态/资源、纠偏、恢复和验收闭合。自动交接、幸存接管者与完整生命周期仍待验。 dev.7 的 Codex 已安装包受控 App Server 双轮观察也完成 140→60、产物读回和输入保护；未观察到 Skill 正文读取，不归因于 Accord 增益。共享安装已实际恢复至 3.1 并逐字节核对，再重装同一 dev.7；临时测试信任项和目录已清除。下一步补足实际介入、Desktop 连续性与独立价值证据，而非重复核对静态包。 用户随后要求降低开发环境变量，已撤下共享 Codex 候选并恢复原市场版本固定，后续普通入口取证使用任务局部暴露；已定义但未运行的安装态续做用例据此在观察前改绑，未产生可晋升或需隐藏的通过/失败记录。"},
       {"id":"historical-reference-identity-coupling","status":"implemented-bounded-regression-verified","basis":"当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。"},
       {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
@@ -854,6 +854,87 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "claude-263-native-invalid-update-and-version-cache",
+      "observedAt": "2026-09-06T07:32:50.528714+00:00",
+      "scope": "failed-prebound-native-lifecycle-case-with-separate-recovery-diagnosis-not-acceptance",
+      "subject": {
+        "revision": "53ce27686e0f8eac250f45294005ed6c8faca21e",
+        "version": "3.2.0-dev.7",
+        "packageSha256": "3b7555bfdab300a185f35797005f3761275cdb12f724ba88fb55b8d0f8bc977d",
+        "definitionSha256": "9051bc437b140e8a9024d2976c5321d41d3db4357f7e3e7892667e1ccb6fa3ac"
+      },
+      "host": {
+        "version": "2.1.263 (Claude Code)",
+        "sha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+        "executor": "byte-identical-read-only-task-owned-native-copy; shared binary still matched at retention",
+        "reportedModel": "deepseek-v4-flash-vision-exp[1M]",
+        "providerRoute": "existing-authorized-CC-Switch-DeepSeek"
+      },
+      "profileTopology": "fresh candidate installation plus independent fresh predecessor-first update profile; no candidate cache before invalid update",
+      "findings": {
+        "candidateInstallAndSelectedActivation": {
+          "seconds": 17.433,
+          "total": 140,
+          "readback": true,
+          "inputsUnchanged": true,
+          "exactCachedSkillLoaded": true
+        },
+        "predecessorSelectedActivation": {
+          "seconds": 17.363,
+          "total": 140,
+          "readback": true,
+          "inputsUnchanged": true
+        },
+        "invalidUpdate": {
+          "nativeExitCode": 0,
+          "invalidManifestActuallyCached": true,
+          "manifestSha256": "9b769ae65ac0a4dc98c40bfe2f7bd6eb921e4b5791f911232053200c6efbb977",
+          "registeredVersionAfter": "3.2.0-dev.7",
+          "predecessorSevenFilesPreserved": true,
+          "predecessorInstallationStatePreserved": false,
+          "nativeRejectionObserved": false,
+          "checkpointSha256": "0443d7ae48a49f6e9b1e5e0abe34acdc67c33fea2c2d055213510a4745b47425"
+        },
+        "correctedSameVersionUpdate": {
+          "nativeExitCode": 0,
+          "nativeResult": "already at latest version",
+          "actualCachedManifestStillInvalid": true,
+          "correctedSourceBytesVerified": true,
+          "badInstalledPackageActivated": false
+        },
+        "separateNativeValidation": {
+          "badManifestExitCode": 1,
+          "correctManifestExitCode": 0,
+          "profileFilesUnchanged": true,
+          "coverage": "manifest only; native contents result was empty, not whole-package proof"
+        },
+        "separateMaintainerSelectedRollback": {
+          "nativeUpdateRestored": "3.1.0",
+          "priorSevenFilesMatch": true,
+          "freshSelectedActivationSeconds": 21.664,
+          "total": 140,
+          "readback": true,
+          "inputsUnchanged": true,
+          "notAutomaticAccordRecovery": true
+        }
+      },
+      "retention": {
+        "locator": "C:\\Users\\15521\\.codex\\backups\\accord-evaluation-20260905T215550Z-8ff0643a\\claude-263-cycle-20260906",
+        "manifestSha256": "59d6762c7e282514d4b5a4d6ed191a3c51d7c68655c73d727dee015c8b5336ec",
+        "files": 3107,
+        "bytes": 7073363,
+        "sourceRootRemovedAt": "2026-09-06T08:45:08.3410126Z",
+        "nativeOperations": 33,
+        "allJobsClosed": true,
+        "bothRegistrationsAndMarketplacesAbsent": true,
+        "inactiveCachesDisposedOnlyAfterRetention": true,
+        "selectedSharedPathsUnchanged": true,
+        "selectedCredentialValueMatches": 0,
+        "runtimeCopyStillOwnedForUnfinishedQualification": true
+      },
+      "disposition": "Original required case failed, not untested. Preserve both before-repair checkpoints. Replace the unsupported native update-as-validation delegation with an actual Agent caller of supported validation, independent package/state checks and authorized verified recovery. A private observer preflight or revised text alone is not a delivered effect. Do not change prior results or claim complete lifecycle, hot reload, autonomous recovery or value."
+    },
     {
       "id": "claude-cli-upgrade-interrupted-two-profile-qualification",
       "observedAt": "2026-09-06T07:03:40Z",
@@ -2548,7 +2629,7 @@
             "optionalExposure": "strict-empty-MCP; scoped Hooks/memory disable request; actual remaining extensions observed",
             "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks"
           },
-          "oracle": "Use committed READY_ORDERS inputs, prompt, exclude-B correction and file/capture oracles from scripts/observe_claude_entry.py with the existing native stream-json source. Bind exact source, binary, package, helpers, caller and episode before execution. Run one native then one dev.7 --plugin-dir arm in fresh owned workspaces, without forced Skill use, copied body, rescue or output repair. Session-local exposure is not installation. Retain live pipe captures and actual files before disposal; do not use the wrapper that deletes raw evidence at return. Independently check completed first-turn A/B=140 and both-file readback before sending the bound correction in the same process; then independently check A=60 and new post-write readback of both files. Earlier readback cannot satisfy the later turn. Inspect all actual Read/Write/Edit/Skill calls and task boundaries; preserve inputs and reject extra files or out-of-scope attempts. Record actual model, plugins, Skill/Hook observations and policy limits. Preserve first failures, partial captures and secondary observation/cleanup errors; unavailable facts stay unknown. Each arm has 180 seconds, 16 turns per request and requested USD 1; unknown model pricing does not remove time/turn bounds. Before root disposal verify natural exit, zero owned processes, retention, and unchanged selected shared package/configuration bytes. Do not silently change route, account, permissions or criteria. This covers only ordinary delivery/correction, not the remaining inventory or value.",
+          "oracle": "Use committed READY_ORDERS inputs, prompt, exclude-B correction and file/capture oracles from scripts/observe_claude_entry.py with the existing native stream-json source. Bind exact source, binary, package, helpers, caller and episode before execution. Run one native then one current exact candidate --plugin-dir arm in fresh owned workspaces, without forced Skill use, copied body, rescue or output repair. Session-local exposure is not installation. Retain live pipe captures and actual files before disposal; do not use the wrapper that deletes raw evidence at return. Independently check completed first-turn A/B=140 and both-file readback before sending the bound correction in the same process; then independently check A=60 and new post-write readback of both files. Earlier readback cannot satisfy the later turn. Inspect all actual Read/Write/Edit/Skill calls and task boundaries; preserve inputs and reject extra files or out-of-scope attempts. Record actual model, plugins, Skill/Hook observations and policy limits. Preserve first failures, partial captures and secondary observation/cleanup errors; unavailable facts stay unknown. Each arm has 180 seconds, 16 turns per request and requested USD 1; unknown model pricing does not remove time/turn bounds. Before root disposal verify natural exit, zero owned processes, retention, and unchanged selected shared package/configuration bytes. Do not silently change route, account, permissions or criteria. This covers only ordinary delivery/correction, not the remaining inventory or value.",
           "oracleFiles": [
             "scripts/observe_claude_entry.py",
             "scripts/observe-claude-entry.ps1",
@@ -2581,7 +2662,7 @@
           }
         },
         {
-          "id": "claude-native-plugin-lifecycle-and-activation",
+          "id": "claude-agent-validated-plugin-lifecycle",
           "scope": "claude-code-lifecycle",
           "host": "claude-code",
           "entry": "cc-cli",
@@ -2611,19 +2692,22 @@
           "conditions": {
             "hostVersion": "2.1.263 (Claude Code)",
             "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
-            "transport": "native-cli-plugin-manager-and-stream-json",
+            "transport": "native-cli-Agent-tools-plugin-manager-and-stream-json",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
             "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
-            "profileTopology": "fresh-install-profile-and-independent-predecessor-first-update-profile-without-candidate-cache",
+            "profileTopology": "fresh-install-profile; independent-predecessor-first-guarded-update-profile; independent-native-bad-update-recovery-profile",
             "sharedInstallationAllowed": false,
-            "authentication": "none-for-manager-operations; existing-authorized-route-in-memory-only-for-activation",
+            "authentication": "none-required-for-pure-manager-commands; existing-authorized-route-in-memory-only-for-management-Agent-and-installed-activation",
             "requestedActivationModel": "sonnet",
-            "activationSelection": "native-selected-installed-Skill; no-inline-plugin-or-copied-system-body",
-            "candidate": "3.2.0-dev.7",
+            "activationSelection": "native-selected-installed-Skill-after-install-update-and-recovery; no-inline-plugin-or-copied-body-for-activation",
+            "candidate": "3.2.0-dev.8",
             "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68",
-            "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks"
+            "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks",
+            "lifecycleDecisionActor": "host-Agent-using-exact-task-local-Skill-and-supported-native-validation-and-manager-commands",
+            "managementExposure": "session-local-exact-candidate-outside-the-changed-installed-tree; this exposure cannot supply installed activation",
+            "agentTools": "Read-Skill-and-native-Bash-with-bound-command-path-and-effect-audit"
           },
-          "oracle": "Prebind exact host/package/helper bytes, operation order, selected shared-state hashes, byte-exact task inputs and owned roots. Verify empty task-owned CLAUDE_CONFIG_DIR/home/cache/temp roots and native Git-marketplace support before installation. Prebind the full native source and actual Git transport. A complete unique reserved-domain alias may use Git command-scope insteadOf to a task-owned file URI; retain native Git child/transport evidence, permit no unbound URL suffix or network fallback, and make no HTTPS-network claim. Direct file-URL rejection remains a separate observation. Require native acceptance and independent evidence that the actual loading tree has no shared writable path with the publisher or mutable marketplace checkout. Unsupported transport or unresolved isolation remains untested; do not silently substitute a directory marketplace. Use immutable publisher commits containing exact package bytes. Install the candidate, independently inspect cached bytes, registration and discovery, then activate the registered package through its native selected Skill in a fresh stream-json process: actual Skill loading, A/B=140, preserved byte-bound inputs and Agent readback. No --plugin-dir or copied body supplies activation. Uninstall and inspect absence/residue in the installation profile. Native uninstall may retain inactive orphaned version caches; record that state separately from registration/discovery absence and later evaluator disposal. Use a second fresh task-owned profile for the update path in this prebound episode. It must never have installed or cached the candidate. Publish/install immutable 3.1 there, verify its actual selected activation and safe loaded tree, and snapshot files, registration/enabled state, discovery and residues. Independently verify no candidate version cache or registration, orphaned candidate version or staged candidate package exists in any redirected directory before the invalid update; the first profile cannot supply the second profile's predecessor facts. Commit the deliberately invalid candidate only in the publisher; request native marketplace refresh and then plugin update. Snapshot after each operation. Require evidence that the bad candidate was actually selected and its invalid manifest rejected; cached versions, no-op or an unexercised window are untested. Compare actual cached/loaded package bytes with the selected source; a native version or gitCommitSha label alone is not package provenance. Before restoration, inspect the predecessor loading tree and installation state plus staging/cache/data in all redirected directories. If refresh itself changes the safe loaded tree, record that failure rather than attributing safety to plugin update. Any native mutation prevents a rejection-before-write claim; later repair cannot revise that checkpoint. Preserve failures, publish exact corrected candidate bytes, refresh the marketplace, request native update and check installed/loaded bytes, then repeat selected activation and independent 140/readback verification. Finally uninstall, inspect registration/discovery and active caches/data, remove the marketplace, verify retained evidence and remove only owned roots. Manager operations need no authentication. Activation uses only the existing authorized CC Switch/DeepSeek route in memory; never copy credentials into fixtures/logs/arguments or invent a route. Missing authentication leaves activation unknown while independent no-model work continues. Compare selected shared metadata/package paths before and after every operation; drift stops subsequent work without automatic restoration. Keep partial events, first/secondary errors and distinct checkpoints; no evaluator repair of outputs or reuse of earlier-turn readback. Bound each activation to 180 seconds, 16 turns and requested USD 1, and bound native commands/output/children. Separate natural exit from containment, installed activation from hot update, and this lifecycle from whole-host/value claims. Do not enable global update/cleanup controls.",
+          "oracle": "Prebind exact host/package/helper bytes, source refs, requests, operation order, owned roots, selected shared-state hashes and byte-exact inputs. Use three independent task-owned profiles. Bind supported native Git input and actual transport; a complete unique reserved-domain alias may use process-only Git insteadOf to an owned file URI, with child/transport evidence and no suffix/network fallback or HTTPS claim. Require loading trees isolated from publisher/marketplace and exact immutable commit bytes. Unsupported transport remains untested. The fresh-install profile installs the candidate, verifies cached bytes, registration/discovery, then activates the registered package in a fresh selected-Skill process: actual body loading, 140, both-file readback and unchanged inputs. No inline plugin/body supplies installed activation. Uninstall and inspect absence/residue.\nIn the independent update profile, first install immutable 3.1 and verify its selected activation, safe bytes/state and absence of any candidate cache, registration, orphaned or staged version. Expose the exact candidate Skill session-locally outside the installed tree only to the management Agent; it must remain usable if the installed component fails. Give an authorized update outcome and boundaries, not the answer or prescribed command sequence. The Agent must discover and invoke supported validation against the actual selected invalid source and hold the update before installation-state mutation. Capture tool requests/results and post-state; an evaluator deciding or skipping the update does not satisfy this predicate. Native validation scope is limited; independently verify exact source/cache files, registration and loaded identity. A validator result, version or exit code alone is not whole-package or usability proof. Preserve this invalid-source checkpoint before correction. Publish exact corrected candidate bytes, then have the Agent re-sense and perform the supported update; independently check installed state/bytes and fresh registered selected activation with 140/readback.\nIn the separate recovery profile, verify the prior 3.1 state, then reproduce the known native bad-update fault with a never-cached candidate and retain the immediate installed-bad-state checkpoint before starting recovery. The healthy management Agent/Skill outside that installation must choose and execute authorized supported recovery to exact prior source/state. Independently verify the restored registration/cache and fresh selected 3.1 activation with 140/readback. No evaluator repair/deletion, supplied compensation decision or already cached candidate may stand in for Agent recovery. Same-version corrected source cannot be assumed to repair a bad cache; do not overwrite shared caches or invent force options. Earlier failed native-only episodes remain failures and supply neither these Agent decisions nor their resulting effects.\nFinally uninstall and remove each marketplace through native operations, inspect discovery/active-state absence and all redirected cache/data, retain and hash-check originals, then dispose only owned roots. Native orphan retention is distinct from active registration and evaluator disposal. Compare selected shared paths before/after every operation; drift holds subsequent work without automatic restoration. Manager calls need no new auth; Agent/activation use the existing authorized CC Switch/DeepSeek route in memory only, without credential persistence. Bound each Agent/model episode to 180 seconds, 16 turns and requested USD 1; bind output/child limits and audit actual commands/effects. Keep original/secondary errors, normal exit and Job cleanup separate. This selected composed route is not universal command interception, hot reload, whole-host/value acceptance or a new account/route.",
           "oracleFiles": [
             "scripts/observe_claude_entry.py",
             "scripts/observe-claude-entry.ps1",
@@ -2634,9 +2718,10 @@
             "effect": {
               "exactCandidateInstalledAndUpdated": true,
               "nativeSelectedInstalledActivationAfterInstallAndUpdate": true,
-            "predecessorSelectedActivationBeforeUpdate": true,
+              "predecessorSelectedActivationBeforeUpdate": true,
               "activationArtifactTotal": 140,
-              "activationReadback": true
+              "activationReadback": true,
+              "agentOwnsPreflightUpdateAndRecovery": true
             },
             "authority": {
               "sharedPackageAndConfigurationUnchanged": true,
@@ -2645,12 +2730,12 @@
               "noCredentialPersistenceOrNewRoute": true
             },
             "poststate": {
-              "failedUpdateCheckpointPreservesPredecessorBeforeRepair": true,
               "nativeUninstallAndDiscoveryAbsence": true,
               "ownedActiveCacheAndDataAbsent": true,
               "foreignStatePreserved": true,
-              "corruptedCandidateSelectedAndNativeRejectionObserved": true,
-            "nativeGitSourceAcceptedAndLoadedTreeIsolated": true
+              "nativeGitSourceAcceptedAndLoadedTreeIsolated": true,
+              "invalidSourceHeldBeforeInstalledStateMutation": true,
+              "independentBadInstallationRestoredAndActivated": true
             },
             "cleanup": {
               "normalExitWithoutForcedRescue": true,
@@ -3008,14 +3093,15 @@
           "conditions": {
             "hostVersion": "2.1.263 (Claude Code)",
             "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
-            "transport": "native-cli-plugin-manager-and-stream-json",
+            "transport": "native-cli-Agent-tools-plugin-manager-and-stream-json",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
             "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
-            "profileTopology": "fresh-install-profile-and-independent-predecessor-first-update-profile-without-candidate-cache",
+            "profileTopology": "fresh-install-profile; independent-predecessor-first-guarded-update-profile; independent-native-bad-update-recovery-profile",
             "sharedInstallationAllowed": false,
-            "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks"
+            "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks",
+            "lifecycleDecisionActor": "host-Agent-using-exact-task-local-Skill-and-supported-native-validation-and-manager-commands"
           },
-          "rule": "Use a verified task-owned configuration/cache/profile only; no shared candidate installation before accepted publication. Check live manager state and independent installed bytes. Complement installation state with the same installed candidate loading/activation and selected normal-entry effect under the existing authorized route, bound before a model call. The native manager survives Skill absence and owns each supported operation. Observe failed-update post-state before later operations; evaluator restoration cannot supply native recovery. Restart activation is not hot reload, whole-host functionality or a new account/route."
+          "rule": "Use owned profiles and no shared candidate installation before accepted publication. A healthy host Agent remains the actual management caller; the exact session-local Skill may guide management independently of the changed installed tree, but cannot supply installed activation. Invoke supported validation before installation-state mutation, then inspect exact installed bytes, registration and fresh loaded behavior. Native manager command success is not a validation/recovery transaction. Retain invalid-source and installed-fault checkpoints separately; require actual Agent-selected supported recovery and its loaded effect, not evaluator repair. Native orphan caches and evaluator disposal are separate. Full inventory, relevant drift, state and lifecycle duties remain required; this selected composition proves neither automatic interception nor hot reload or value."
         },
         {
           "id": "codex-function",
