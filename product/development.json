@@ -22,14 +22,14 @@
     "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
   },
   "delivery": {
-    "version": "3.2.0-dev.8",
-    "rule": "Unpublished dev.8 adds explicit Agent responsibility for source validation before package changes, exact installed/loaded checks and a surviving recovery actor. The dev.7 native-update experiment failed on Claude 2.1.263: native command success did not reject invalid content or preserve prior installation state, and a corrected same-version source did not repair the cache. This motivates a composed checked route, not a weaker safety floor. Existing planning, early continuity budgeting, fresh sensing after compaction, archive authority and sole-writer takeover remain. Both Skills stay below 8800 bytes without new runtime files. Changed package behavior needs fresh affected evidence; historical observations keep their original subject. Shared candidate installation remains deferred until accepted publication.",
+    "version": "3.2.0-dev.9",
+    "rule": "Unpublished dev.9 prioritizes required decision checks and bounded failure convergence after the dev.8 management Agent repeatedly exhausted its turn limit. Required confirmation, actual post-state before retry, premise/necessity review, authorized recovery and independent safe work remain; unchanged denied retries do not justify bypass. Native package source checks, installed/loading verification and a surviving recovery actor remain required. The preserved dev.8 episode includes successful selected installed activation but no completed guarded-update or independent recovery result. This text change requires fresh affected behavior evidence. Both Skills remain under 8800 bytes without new runtime files; historical observations keep their exact subjects. Shared candidate installation remains deferred until accepted publication.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.8",
-        "packageSha256": "2d1ef84b1972c6acbf52d93b262badd080b7bb19c183694fa8797982df4d7ff7",
+        "packageVersion": "3.2.0-dev.9",
+        "packageSha256": "66a1c90094a98f7e12d023afbedfba5e0098073276401b6c3d70e130df88aab9",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -56,8 +56,8 @@
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.8",
-        "packageSha256": "9f088918c1c40b2ef08382a0eeaec75e5b061e816e1e81f66035807c13a53695",
+        "packageVersion": "3.2.0-dev.9",
+        "packageSha256": "9f66cd16dbaf6ff0b4ae8f68e960f7ebc20d375c5d6c224d27dde0b2f9a2a546",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -85,7 +85,7 @@
       "maxProductCodeAndTestBytes": 1150000,
       "maxTrackedFiles": 126,
       "maxPrimaryInstructionBytes": 28000,
-      "rationale": "On 2026-09-06 the user approved increasing the existing code/test ceiling from 1140000 to 1150000 bytes to preserve necessary failure regressions and at least five-percent headroom. The current tree measures 1087797 code/test bytes, leaving 62203 below the ceiling (4703 beyond the required 57500 reserve). The limits remain 126 tracked files and 28000 primary instruction bytes; dev.8 keeps 126 files and both Skills are 8763 bytes under 8800. Actual primary instructions are 24168 bytes. This metric counts Python product modules and product tests, not PowerShell observation code; review that additional code independently. These cost controls do not qualify host behavior or value; remeasure final candidates before admission."
+      "rationale": "On 2026-09-06 the user approved a 1150000-byte code/test ceiling to preserve necessary failure regressions and at least five-percent headroom. The current tree measures 1087797 code/test bytes, leaving 62203 below the ceiling and 4703 beyond the required 57500 reserve. Limits remain 126 tracked files and 28000 primary instruction bytes; dev.9 keeps 126 files, both Skills are 8761 bytes under 8800, and actual primary instructions are 24164 bytes. Python modules and product tests are counted here; review PowerShell observation code separately. Cost conformance does not qualify host behavior or value; remeasure final candidates before admission."
     }
   },
   "source": {
@@ -846,7 +846,7 @@
       {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"当前有来源的矩阵及职责关系用于开发评审，不是实时能力库或已经运行的图。索引/图是可删改手段，保住的是关系判断与必要效果；工序 dependsOn 不证明运行反馈、交接或清理。先查真实调用者，再按同次转移的可观察后态验证宿主组合。 已删除未被插件、代码或测试调用的 39982 B 内存模拟 HTML，保留精确历史定位；当前术语入口不再把旧图模型当成必需架构。这是活跃资产删减，不是宿主运行加速或动态发现功能验收。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
       {"id":"conditional-alignment-and-external-discovery","status":"observed-research-to-delivery-gap-open","basis":"保留自然预算失败与产物反例，但调用数不等于成功取回。新诊断发现进度事件触发采集上限、WebFetch 列出但权限拒绝两项干扰；合并已知进度并维持有界采集后，无网页组正常结束并调用 Skill，但有提示参数和文案缺陷；列出未放行组的 4 次获取全部被拒，代码参数与参考不符；仅临时放行两个公开域名后 7 次获取成功、3 次域外拒绝，产物通过 8 项离线检查，却在截止时没有正常终态。详见 claude-effective-research-and-capture-dev3。旧取数成功无法重查的字段保留未知；不归咎模型或正文，不撤销旧自然失败，不以禁网、改描述或扩大预算冒充修复。下一步核验有效权限、资料取回、按证据执行及 Agent 自主核验的完整结果。"},
-      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both current worktree Skills are unpublished 3.2.0-dev.8. The host-Agent now has explicit package preflight, installed/loading checks and surviving recovery responsibility after the native-update safety premise failed. Guidance remains conditional; early context budgeting, compaction re-sensing, confirmed takeover and explicit archive authority persist. This is a local projection change, not verified Agent execution. Historical dev.7 and earlier observations keep their original package/host subjects. Shared Codex candidate installation remains withdrawn; shared Claude stays at 3.1. Current selected composed lifecycle, full-function, Desktop and value acceptance remain open."},
+      {"id": "source-to-projection-convergence", "status": "implemented-local-unverified", "basis": "Both current Skills are unpublished 3.2.0-dev.9. The dev.8 exact installed Skill loaded and completed the selected 140/readback sample, but management attempts did not finish the required guarded-update conclusion. Native source validation rejected the bad manifest in one complete diagnostic; budget visibility alone did not resolve over-inspection. The current minimal change prioritizes required checks and failure convergence while preserving pre-retry post-state, premise review, confirmation, recovery and independent work. It is not yet verified behavior. Historical failures and successful sub-observations retain their original identity and scope. Full-function, guarded update, independent recovery, Desktop continuity and value remain open; shared installation stays deferred."},
       {"id":"ordinary-entry-effect-and-recovery","status":"open","basis":"整体目标仍是Agent承担必要任务机制；用户无需先学习交接、按钮、Git或Shell等内部操作词汇。历史dev.3/dev.5诊断保持原样；dev.6在已提交判据的Claude用户配置双轮观察中，两组均从140改为60并核验实际产物，但都未调用Accord Skill。其他用户扩展仍在，不称干净宿主、独立原生归因或Accord增量价值；样本不证明整项职责、任意环境兼容或生命周期。继续从具体声明绑定普通入口、必要作用域、整体及故障判据与独立来源，沿发现/匹配、执行、状态/资源、纠偏、恢复和验收闭合。自动交接、幸存接管者与完整生命周期仍待验。 dev.7 的 Codex 已安装包受控 App Server 双轮观察也完成 140→60、产物读回和输入保护；未观察到 Skill 正文读取，不归因于 Accord 增益。共享安装已实际恢复至 3.1 并逐字节核对，再重装同一 dev.7；临时测试信任项和目录已清除。下一步补足实际介入、Desktop 连续性与独立价值证据，而非重复核对静态包。 用户随后要求降低开发环境变量，已撤下共享 Codex 候选并恢复原市场版本固定，后续普通入口取证使用任务局部暴露；已定义但未运行的安装态续做用例据此在观察前改绑，未产生可晋升或需隐藏的通过/失败记录。"},
       {"id":"historical-reference-identity-coupling","status":"implemented-bounded-regression-verified","basis":"当前开发校验允许简单 Markdown 正文中的不可变历史链接：仓库须与正式身份一致，完整提交须为本地 HEAD 的祖先，目标对象类型和路径须存在。仅排除已核验引用片段，周边文本、现役文件路径、代码/配置、代码块、图像和嵌套伪装仍受扫描；查询有界、单次缓存，无法核验则拒绝。旧版默认扫描不变，无整文件新增豁免、网络访问或依赖。四项新增回归覆盖正常引用、伪造目标、可执行/字面量语境及资源边界。范围不含任意未链接历史叙述、JSON 文本或完整 Markdown 语义识别；这是维护工具修正，不是宿主功能或价值证据。"},
       {"id": "verification-io-amplification", "status": "implemented-local-measured", "basis": "同一检出的完整校验 cProfile 单次前后对比：81.077 → 59.392 秒，755 → 493 次有界 Git 调用，均 valid=true、无错误。共享单次调用内的有界不可变内容缓存，合批读取相关历史文档；工作区读取保持新鲜，未删检查或子进程边界。这是本地测量，不是统计性能保证、宿主功能或产品增量价值证明。"},
@@ -854,6 +854,168 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "claude-dev8-validated-lifecycle-and-convergence-failures",
+      "observedAt": "2026-09-06T09:24:22.986213+00:00",
+      "scope": "failed-prebound-Agent-lifecycle-with-separate-diagnostics-not-acceptance",
+      "subject": {
+        "revision": "90cd286997387516331deee01840f2fd6d3912a9",
+        "version": "3.2.0-dev.8",
+        "packageSha256": "9f088918c1c40b2ef08382a0eeaec75e5b061e816e1e81f66035807c13a53695",
+        "definitionSha256": "a16c15534c41c8cf2fe2c2082651c05747277f8f855ed3f6e0a8a46538d58a40"
+      },
+      "host": {
+        "version": "2.1.263 (Claude Code)",
+        "sha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+        "reportedModel": "deepseek-v4-flash-vision-exp[1M]",
+        "route": "existing-authorized-CC-Switch-DeepSeek-in-memory-only"
+      },
+      "topology": "Independent installation/update/recovery profiles. Healthy management Skill outside installed component. Four sequential management attempts reused the update profile with separate processes and workspaces; later diagnostics are not isolated causal comparisons or replacement passes.",
+      "findings": {
+        "candidateInstalledActivation": {
+          "seconds": 21.765,
+          "total": 140,
+          "bothFilesReadBack": true,
+          "inputsPreserved": true,
+          "exactRegisteredSkillBodyLoaded": true,
+          "checkSha256": "d75b4dfadc1dee114ed7a60197559b3da9abd4322c385e30b6bae2e9731baa12"
+        },
+        "predecessorInstalledActivation": {
+          "seconds": 15.292,
+          "total": 140,
+          "bothFilesReadBack": true,
+          "inputsPreserved": true,
+          "candidateCacheAbsentBeforeFault": true,
+          "safeCheckpointSha256": "33d596d47fa613453cd5dfe185e731fb06791203d8580bf35eb8912cebc7b23f"
+        },
+        "managementAttempts": [
+          {
+            "id": "maintenance-1",
+            "conditionChange": "original",
+            "requestSha256": "e3ab37fec9190dd0158adf0e81f53a4160369a683b358cd1ab8f59680365bc58",
+            "captureSha256": "aac6ef9dc32dd539e83b07706afc3417f6b043561961b2d74f9e100a0b3c683a",
+            "checkpointSha256": "8a68545a3eb6067052dab46d45ebce460deeed43b262a5a2ec848f6c5a024706",
+            "process": {
+              "exitCode": 124,
+              "failure": {
+                "stage": "capture-read",
+                "type": "System.Management.Automation.MethodInvocationException"
+              },
+              "forced": true,
+              "childrenBeforeCleanup": 2,
+              "evaluatorChildrenAfterCleanup": 0,
+              "id": "maintenance-1",
+              "stdoutBytes": 2093709,
+              "elapsedSeconds": 101.676
+            }
+          },
+          {
+            "id": "maintenance-permission-diagnostic",
+            "conditionChange": "additional permitted directories and native help",
+            "requestSha256": "4d37bda116d87d384a4f702619c38944cab109607dfb27537986e6c3e1151b50",
+            "captureSha256": "618512e538505c9b975b401f36cf5aefc14f3d8ccb89b8b848a670b63b612467",
+            "checkpointSha256": "8a416c7c5e624cf9914b4785b8afa0c2601cdc2210a3e0f6f2c3c31ad26dc8d8",
+            "process": {
+              "elapsedSeconds": 116.643,
+              "id": "maintenance-permission-diagnostic",
+              "childrenBeforeCleanup": 2,
+              "exitCode": 124,
+              "failure": {
+                "stage": "capture-read",
+                "type": "System.Management.Automation.MethodInvocationException"
+              },
+              "forced": true,
+              "evaluatorChildrenAfterCleanup": 0,
+              "stdoutBytes": 2097077
+            }
+          },
+          {
+            "id": "maintenance-output-diagnostic",
+            "conditionChange": "management raw stdout raised to a prebound 4 MiB",
+            "requestSha256": "f3db00ad19698540d653222441d91adde098d31a9c5d4fb40c1d99f5ff796892",
+            "captureSha256": "b22dd502d0f4a3c7c38e9f5af5d7ed66730d6f6da66fe11deabda470ffc87805",
+            "checkpointSha256": "e9e1ab85ac055f567940293ad8e6d1bef91597d90ddd3f2d428952c6ad176dea",
+            "process": {
+              "elapsedSeconds": 148.313,
+              "failure": null,
+              "evaluatorChildrenAfterCleanup": 0,
+              "childrenBeforeCleanup": 0,
+              "forced": false,
+              "exitCode": 1,
+              "id": "maintenance-output-diagnostic",
+              "stdoutBytes": 2551012
+            },
+            "final": [
+              {
+                "subtype": "error_max_turns",
+                "is_error": true,
+                "num_turns": 17,
+                "result": null,
+                "session_id": "1310f1cf-73d4-4a9f-b061-ad369a0ce6b5"
+              }
+            ],
+            "toolCalls": 38,
+            "nativeValidationCalls": 1
+          },
+          {
+            "id": "maintenance-budget-diagnostic",
+            "conditionChange": "same budget facts made visible in task input",
+            "requestSha256": "fa486879fa96a479b9f462fa28a1d1942e138b04f04b5f3ed07dfc7c1510d147",
+            "captureSha256": "c4a09016c6031e42b5e20f6475b80c020bef4954d5a72361ca9003d414a7fb28",
+            "checkpointSha256": "2e00e930d1e2ae209146045e59b612207b6e73c79f11fa6221504bdba3cbed93",
+            "process": {
+              "exitCode": 1,
+              "failure": null,
+              "forced": false,
+              "id": "maintenance-budget-diagnostic",
+              "evaluatorChildrenAfterCleanup": 0,
+              "childrenBeforeCleanup": 0,
+              "stdoutBytes": 1496507,
+              "elapsedSeconds": 92.151
+            },
+            "final": [
+              {
+                "subtype": "error_max_turns",
+                "is_error": true,
+                "num_turns": 17,
+                "result": null,
+                "session_id": "953446f7-8e0f-4db6-880a-3d83deeb2dde"
+              }
+            ],
+            "toolCalls": 30,
+            "nativeValidationCalls": 0
+          }
+        ],
+        "unexecuted": [
+          "corrected-source Agent update",
+          "independent bad-installation Agent recovery"
+        ],
+        "protectedState": "All four attempts retained exact 3.1 package files, registration/settings and selected shared state. Task session metadata, backups and directories changed and were accounted for separately.",
+        "interpretation": "One complete diagnostic reached native validation and rejected malformed JSON, but no attempt completed the required stop conclusion. Actual invalid bytes and mismatching hashes were followed by further directory/history checks. The budget-visible diagnostic also retried unchanged denied Git queries; all five denials were non-executions. This supports a bounded priority/convergence repair, not a necessary budget increase or a causal product-value claim."
+      },
+      "retention": {
+        "locator": "C:\\Users\\15521\\.codex\\backups\\accord-evaluation-20260905T215550Z-8ff0643a\\claude-dev8-cycle-20260906",
+        "manifestSha256": "6c3154e2df889af26a5be4180ef1986eebb9848ae85f0494153a72033195d850",
+        "files": 1686,
+        "bytes": 27957011,
+        "sourceRootRemovedAt": "2026-09-06T10:30:28.8518749Z",
+        "nativeOperations": 24,
+        "allJobsClosed": true,
+        "usedRegistrationsAndMarketplacesAbsent": true,
+        "recoveryProfileNeverExecuted": true,
+        "inactiveCachesDisposedOnlyAfterRetention": true,
+        "selectedSharedPathsUnchanged": true,
+        "selectedCredentialValueMatches": 0,
+        "runtimeCopyStillOwnedForUnfinishedQualification": true
+      },
+      "hostedCheck": {
+        "revision": "90cd286997387516331deee01840f2fd6d3912a9",
+        "result": "success",
+        "run": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/34024418102",
+        "scope": "repository CI, not management behavior"
+      },
+      "disposition": "Original required episode remains failed/incomplete. Preserve raw forced prefixes, complete max-turn failures and permission/output/budget diagnostic bindings. dev.9 must obtain fresh affected observations under a new exact binding; it cannot repair these historical results. No complete lifecycle, hot reload, whole-host or incremental-value acceptance follows."
+    },
     {
       "id": "claude-263-native-invalid-update-and-version-cache",
       "observedAt": "2026-09-06T07:32:50.528714+00:00",
@@ -2700,14 +2862,17 @@
             "authentication": "none-required-for-pure-manager-commands; existing-authorized-route-in-memory-only-for-management-Agent-and-installed-activation",
             "requestedActivationModel": "sonnet",
             "activationSelection": "native-selected-installed-Skill-after-install-update-and-recovery; no-inline-plugin-or-copied-body-for-activation",
-            "candidate": "3.2.0-dev.8",
+            "candidate": "3.2.0-dev.9",
             "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68",
             "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks",
             "lifecycleDecisionActor": "host-Agent-using-exact-task-local-Skill-and-supported-native-validation-and-manager-commands",
             "managementExposure": "session-local-exact-candidate-outside-the-changed-installed-tree; this exposure cannot supply installed activation",
-            "agentTools": "Read-Skill-and-native-Bash-with-bound-command-path-and-effect-audit"
+            "agentTools": "Read-Skill-and-native-Bash-with-bound-command-path-and-effect-audit",
+            "managementOutputLimitBytes": 4194304,
+            "managementBudgetVisibility": "180 seconds, 16 turns and requested USD 1 supplied as bound task facts, without answers or a command sequence",
+            "managementReadAccess": "native add-dir only for owned config, publisher and frozen CLI directory; other reads remain prohibited by task scope and require effect auditing"
           },
-          "oracle": "Prebind exact host/package/helper bytes, source refs, requests, operation order, owned roots, selected shared-state hashes and byte-exact inputs. Use three independent task-owned profiles. Bind supported native Git input and actual transport; a complete unique reserved-domain alias may use process-only Git insteadOf to an owned file URI, with child/transport evidence and no suffix/network fallback or HTTPS claim. Require loading trees isolated from publisher/marketplace and exact immutable commit bytes. Unsupported transport remains untested. The fresh-install profile installs the candidate, verifies cached bytes, registration/discovery, then activates the registered package in a fresh selected-Skill process: actual body loading, 140, both-file readback and unchanged inputs. No inline plugin/body supplies installed activation. Uninstall and inspect absence/residue.\nIn the independent update profile, first install immutable 3.1 and verify its selected activation, safe bytes/state and absence of any candidate cache, registration, orphaned or staged version. Expose the exact candidate Skill session-locally outside the installed tree only to the management Agent; it must remain usable if the installed component fails. Give an authorized update outcome and boundaries, not the answer or prescribed command sequence. The Agent must discover and invoke supported validation against the actual selected invalid source and hold the update before installation-state mutation. Capture tool requests/results and post-state; an evaluator deciding or skipping the update does not satisfy this predicate. Native validation scope is limited; independently verify exact source/cache files, registration and loaded identity. A validator result, version or exit code alone is not whole-package or usability proof. Preserve this invalid-source checkpoint before correction. Publish exact corrected candidate bytes, then have the Agent re-sense and perform the supported update; independently check installed state/bytes and fresh registered selected activation with 140/readback.\nIn the separate recovery profile, verify the prior 3.1 state, then reproduce the known native bad-update fault with a never-cached candidate and retain the immediate installed-bad-state checkpoint before starting recovery. The healthy management Agent/Skill outside that installation must choose and execute authorized supported recovery to exact prior source/state. Independently verify the restored registration/cache and fresh selected 3.1 activation with 140/readback. No evaluator repair/deletion, supplied compensation decision or already cached candidate may stand in for Agent recovery. Same-version corrected source cannot be assumed to repair a bad cache; do not overwrite shared caches or invent force options. Earlier failed native-only episodes remain failures and supply neither these Agent decisions nor their resulting effects.\nFinally uninstall and remove each marketplace through native operations, inspect discovery/active-state absence and all redirected cache/data, retain and hash-check originals, then dispose only owned roots. Native orphan retention is distinct from active registration and evaluator disposal. Compare selected shared paths before/after every operation; drift holds subsequent work without automatic restoration. Manager calls need no new auth; Agent/activation use the existing authorized CC Switch/DeepSeek route in memory only, without credential persistence. Bound each Agent/model episode to 180 seconds, 16 turns and requested USD 1; bind output/child limits and audit actual commands/effects. Keep original/secondary errors, normal exit and Job cleanup separate. This selected composed route is not universal command interception, hot reload, whole-host/value acceptance or a new account/route.",
+          "oracle": "Prebind exact host/package/helper bytes, source refs, requests, operation order, owned roots, selected shared-state hashes and byte-exact inputs. Use three independent task-owned profiles. Bind supported native Git input and actual transport; a complete unique reserved-domain alias may use process-only Git insteadOf to an owned file URI, with child/transport evidence and no suffix/network fallback or HTTPS claim. Require loading trees isolated from publisher/marketplace and exact immutable commit bytes. Unsupported transport remains untested. The fresh-install profile installs the candidate, verifies cached bytes, registration/discovery, then activates the registered package in a fresh selected-Skill process: actual body loading, 140, both-file readback and unchanged inputs. No inline plugin/body supplies installed activation. Uninstall and inspect absence/residue.\nIn the independent update profile, first install immutable 3.1 and verify its selected activation, safe bytes/state and absence of any candidate cache, registration, orphaned or staged version. Expose the exact candidate Skill session-locally outside the installed tree only to the management Agent; it must remain usable if the installed component fails. Give an authorized update outcome and boundaries, not the answer or prescribed command sequence. The Agent must discover and invoke supported validation against the actual selected invalid source and hold the update before installation-state mutation. Capture tool requests/results and post-state; an evaluator deciding or skipping the update does not satisfy this predicate. Native validation scope is limited; independently verify exact source/cache files, registration and loaded identity. A validator result, version or exit code alone is not whole-package or usability proof. Preserve this invalid-source checkpoint before correction. Publish exact corrected candidate bytes, then have the Agent re-sense and perform the supported update; independently check installed state/bytes and fresh registered selected activation with 140/readback.\nIn the separate recovery profile, verify the prior 3.1 state, then reproduce the known native bad-update fault with a never-cached candidate and retain the immediate installed-bad-state checkpoint before starting recovery. The healthy management Agent/Skill outside that installation must choose and execute authorized supported recovery to exact prior source/state. Independently verify the restored registration/cache and fresh selected 3.1 activation with 140/readback. No evaluator repair/deletion, supplied compensation decision or already cached candidate may stand in for Agent recovery. Same-version corrected source cannot be assumed to repair a bad cache; do not overwrite shared caches or invent force options. Earlier failed native-only episodes remain failures and supply neither these Agent decisions nor their resulting effects.\nFinally uninstall and remove each marketplace through native operations, inspect discovery/active-state absence and all redirected cache/data, retain and hash-check originals, then dispose only owned roots. Native orphan retention is distinct from active registration and evaluator disposal. Compare selected shared paths before/after every operation; drift holds subsequent work without automatic restoration. Manager calls need no new auth; Agent/activation use the existing authorized CC Switch/DeepSeek route in memory only, without credential persistence. Bound each Agent/model episode to 180 seconds, 16 turns and requested USD 1; expose those same budget facts without a command sequence. Bind management stdout to 4194304 bytes, remaining output/child limits and actual command/effect auditing. Keep original/secondary errors, normal exit and Job cleanup separate. This selected composed route is not universal command interception, hot reload, whole-host/value acceptance or a new account/route.",
           "oracleFiles": [
             "scripts/observe_claude_entry.py",
             "scripts/observe-claude-entry.ps1",

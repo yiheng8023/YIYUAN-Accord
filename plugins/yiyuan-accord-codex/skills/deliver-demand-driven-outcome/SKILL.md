@@ -5,8 +5,7 @@ description: Deliver nontrivial outcomes through adaptive capability discovery, 
 
 # Deliver the outcome
 
-Use these conditional responsibilities for an outcome gap or material
-improvement; they are not a mandatory sequence.
+Apply these responsibilities when relevant; they are not a mandatory sequence.
 
 ## Bind the result before choosing the means
 
@@ -26,20 +25,18 @@ fallback and gap filling are conditional means, not weaker outcome definitions.
 
 ## Choose and execute from current conditions
 
-1. Inspect decision-relevant facts: available executors, permissions, inputs,
-   state, configuration and existing work. Prefer supported host queries;
-   installation, names and versions do not prove fitness. Do not collect secrets.
-2. Start with native means when adequate and low burden; this is not a stopping
-   rule. A material gap, uncertainty, domain shift or plausible net benefit
-   warrants comparing maintained external options even when native can finish.
-   Check callable capabilities and search supported markets or authoritative
-   sources beyond installed tools where relevant. Reuse sound research and
-   discovery; stop when further search would not change the choice. Compare
-   required effects, evidence, fit, upkeep, licensing, authority and total
-   adoption, use, recovery and exit cost. Names or listings prove no quality.
-   Domain depth may require authoritative data, tools, models or professional
-   review. Select the best supported fit; compose or build when justified.
-   Discovery grants no installation, account, data or cost authority.
+1. Prioritize required checks for the next authorized action. Inspect further
+   only for material uncertainty, using supported queries of current capabilities
+   and task state. Names or versions prove no fitness; never collect secrets.
+2. Start with adequate, low-burden native means. Compare maintained external
+   options for a material gap, uncertainty, domain shift or plausible net benefit,
+   even when native can finish. Reuse sound research; check callable capabilities,
+   supported markets and authoritative sources beyond installed tools.
+   Stop search that cannot change the choice. Compare effects, evidence, fit,
+   upkeep, licensing, authority and total adoption, use, recovery and exit cost.
+   Listings prove no quality. Domain depth may need authoritative data, tools,
+   models or professional review. Select the best fit; compose or build when
+   justified. Discovery grants no installation, account, data or cost authority.
 3. Own authorized discovery, orchestration, configuration, implementation,
    recovery and verification; spare the user discoverable mechanics. Execute
    through the next useful action and its verification while safe authorized
@@ -62,10 +59,9 @@ limits. No planning mode, repository, Python or particular model is required.
 
 ## Adapt, recover and maintain continuity
 
-On correction, relevant failure, host/configuration change, stale evidence or a
-phase boundary, invalidate affected assumptions and re-sense the needed state.
-Preserve independently verified safe work; recompute only affected decisions.
-Do not replay the whole workflow after every observation.
+On correction, failure, host/configuration change, stale evidence or a phase
+boundary, recheck affected assumptions and decisions. Preserve independently
+verified safe work; do not replay the whole workflow.
 
 Personal instructions, settings, memory and extensions may help or interfere.
 Separate configured intent, inherited policy and actual behavior; unknown state
@@ -82,8 +78,12 @@ restore and verify a known-good prior state through authorized controls. Version
 caches may survive same-version fixes; do not overwrite shared caches or invent
 force options.
 
-Inspect actual failure post-state before retrying; avoid duplicate effects.
-Repeated repair needs a premise and necessity review. Containment is not completion.
+Before retrying, check actual post-state; repeated repair needs premise
+and necessity review. On confirmed blockers, finish required confirmation
+and post-state checks.
+Diagnose or recover only if it can change an authorized next step; otherwise
+report and continue independent safe work. Avoid duplicate effects, unchanged
+denied retries or bypass; use authorized alternatives. Containment is not completion.
 
 Use fresh context capacity, load and integrity signals. Capacity and occupancy
 are variables; after automatic compaction re-sense and verify retained decisions.

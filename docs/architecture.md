@@ -79,7 +79,7 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current delivered candidate and unproven connections
 
-Both worktree packages are unpublished `3.2.0-dev.8`; the continuity correction
+Both worktree packages are unpublished `3.2.0-dev.9`; the continuity correction
 changes their guidance and needs fresh affected evidence. Current descriptors expose one host
 Skill and an optional Node SessionStart hint. The helper emits invalidation
 guidance on resume/compact; it owns no task scheduler, durable task state or

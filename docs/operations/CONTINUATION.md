@@ -12,8 +12,8 @@ The shared Codex Accord candidate remains uninstalled. The new task-local
 selected-Skill observation is bound to `8994172fd69d5e9eb765e445942b86f81a9fd3e5`;
 see `developmentObservations/codex-task-local-selected-continuation-dev7` for
 the actual answer-then-continue window, separate 140/60 checkpoints and limits.
-All test processes, temporary exposure, owned trust entries and temporary
-directories are closed or removed. Retained evidence and configuration backups
+Those Codex test processes, temporary exposure, owned trust entries and
+temporary directories are closed or removed. Retained evidence and configuration backups
 are under `C:\Users\15521\.codex\backups\accord-evaluation-20260905T215550Z-8ff0643a`.
 The historical observer failure is retained; its current bounded stdout and
 checkpoint repair is locally verified. Do not overwrite originals or rerun
@@ -56,6 +56,9 @@ observer boundary only. The user approved a 1,150,000-byte code/test ceiling
 with at least five-percent headroom for necessary regression coverage.
 
 Finalize README and changelog after implementation and acceptance stabilize.
+The user agreed to avoid a standalone learning disclaimer: explain actual value
+and limits, and remove any implication that users no longer need understanding
+or judgment from the underlying claims.
 Before publication, align source intent, implementation, acceptance, package
 identity, versions, documentation and release claims globally.
 
@@ -72,15 +75,23 @@ See `developmentObservations/claude-263-native-invalid-update-and-version-cache`
 Earlier directory/cache-interference trials and the CLI-upgrade interruption
 retain their original subjects and limits in the source observations.
 
-The new dev.8 guidance and `claude-agent-validated-plugin-lifecycle` case correct
-the delegation premise while retaining the safety outcome. Next, bind the exact
-current package/helper/host and task roots, then observe the actual healthy host
-Agent calling supported source checks, updating and recovering. Its session-local
-Skill must survive the changed installed component, but that exposure cannot
-supply installed-package activation. A private observer preflight, text edit or
-later cleanup does not close the gap. Keep invalid-source hold and installed-
-fault recovery checkpoints separate. Native validation does not replace exact
-content, registration and fresh loading checks.
+The dev.8 Agent-owned lifecycle episode at `90cd286` is retained as failed and
+incomplete. Exact registered dev.8 and predecessor activation each delivered
+140 with readback, but management attempts did not complete the invalid-source
+stop conclusion. Separate permission/output/budget diagnostics retain their
+original failures; one reached native validation, while explicit budget facts
+alone did not resolve over-inspection. Native profile retirement and hash-verified
+retention of all 1,686 files preceded owned-root disposal. See
+`developmentObservations/claude-dev8-validated-lifecycle-and-convergence-failures`.
+
+The new dev.9 candidate prioritizes required checks and bounded failure
+convergence while preserving actual post-state before retry, premise/necessity
+review, required confirmation, authorized recovery and independent work. Bind a
+new exact candidate before fresh management observation; keep the fixed budget
+visible and the bounded native access/capture conditions explicit. Corrected
+update and independent bad-installation recovery are still unexecuted. A text
+change or prior selected activation does not qualify this lifecycle. Preserve
+remaining ordinary-function, Desktop continuity and matched-value work.
 
 The byte-identical read-only 2.1.263 runtime copy remains task-owned at
 `C:\Users\15521\AppData\Local\Temp\accord-claude-runtime-263-5yoxqfig` for
@@ -153,7 +164,7 @@ whether the available host composition closes the duty.
 
 ## Evidence and authority limits
 
-- The unpublished packages are `3.2.0-dev.8`; continuity guidance requires early
+- The unpublished packages are `3.2.0-dev.9`; continuity guidance requires early
   handoff budgeting, fresh sensing after compaction, confirmed destination
   takeover and explicit user authority for archival. The earlier Codex install,
   3.1 rollback and reinstall are historical diagnostics. The user subsequently
