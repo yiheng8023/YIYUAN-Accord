@@ -965,7 +965,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "Claude 声明组合的安装、坏源保护、恢复、真实更新、新加载使用与退出已闭合，保留原失败和方法修订。Codex 单次共享安装例外也已实际完成：原生安装精确 dev.16、真实安装缓存 Hook 执行、显式 Skill 选择、140 文件交付与自验、原生卸载和状态恢复。完整 Skill 正文未在流中独立捕获，不宣称隐式发现、默认信任流程或 Desktop；本次未 bind checkpoint，不能当 Stop 续做试验。复核既有升级/恢复记录的真实适用依赖并完成当前证据绑定，不为已成立的安装与使用重复安装。用户批准的单次例外已用完，发布前共享安装恢复为撤回状态；执行边界缺失只约束其依赖工作。 依赖复核定位到当前12文件包与旧11文件包的真实转换缺口；预绑定一次无认证任务profile的3.1→dev.16→3.1及卸载，核对原生选中路径、全部包文件与残留。不重复已成立的模型使用，不把原生组件转换当完整加载或整版准入。",
+        "procedure": "Claude 声明组合的安装、坏源保护、恢复、真实更新、新加载使用与退出已闭合，保留原失败和方法修订。Codex 单次共享安装例外也已实际完成：原生安装精确 dev.16、真实安装缓存 Hook 执行、显式 Skill 选择、140 文件交付与自验、原生卸载和状态恢复。完整 Skill 正文未在流中独立捕获，不宣称隐式发现、默认信任流程或 Desktop；本次未 bind checkpoint，不能当 Stop 续做试验。复核既有升级/恢复记录的真实适用依赖并完成当前证据绑定，不为已成立的安装与使用重复安装。用户批准的单次例外已用完，发布前共享安装恢复为撤回状态；执行边界缺失只约束其依赖工作。 当前12文件包与旧11文件包的真实转换已补齐：fe1dee5 预绑定的无认证任务profile一次完成3.1→dev.16→3.1及卸载，原生选中路径与11/12/11/0文件图一致；3.20984秒自然退出，零子进程。独立复核、122文件保全和任务根处置均已完成。现在只核对既有失败保护/恢复证据的适用依赖及正式来源绑定，不重复安装或模型使用；组件转换不等于完整加载、部分写入恢复或整版准入。",
         "exit": "用户所需生命周期与失败后态成立，且变更/卸载后仍有可用执行者完成必要恢复与核验。安装登记、实际激活、市场缓存和受影响配置分别取证；未更新而旧包不变不能证明保护。该项未通过只约束依赖它的工作与整版资格。",
         "qualityAxes": [
           "functional-coverage",
@@ -1056,6 +1056,35 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "codex-dev16-native-exact-transition-and-owned-disposal",
+      "observedAt": "2026-09-07T15:32:07.1457037+00:00",
+      "scope": "same-id-native-installed-replacement-return-and-uninstall-component",
+      "subject": {
+        "revision": "fe1dee55f9a14d353047cc8b82d5ee35a72b8474",
+        "case": "codex-native-exact-update-and-return-dev16"
+      },
+      "effect": "One no-auth task-owned App Server completed same-ID native plugin/install selection of immutable 3.1.0, exact dev.16, and return to immutable 3.1.0, then native plugin/uninstall. Immediate physical file maps and native selected Skill paths matched 11/12/11/0 files; no extra plugin or other-version cache files were observed. Independent read-only review found no blocking inconsistency.",
+      "execution": {
+        "startedAt": "2026-09-07T15:19:17.4310166+00:00",
+        "finishedAt": "2026-09-07T15:19:20.6498435+00:00",
+        "nativeSeconds": 3.20984,
+        "modelRequests": 0,
+        "naturalExit": true,
+        "exitCode": 0,
+        "forced": false,
+        "childrenAfterCleanup": 0
+      },
+      "postState": "Independent review checked the still-present originals without changes. Parent verified all 122 files / 3114852 bytes against the retained copy before and after deleting only the closed owned run-01 root. Original PID and all command-line references to that root were absent. Retained evidence and sibling receipts remain intentionally; shared installation, authentication and user configuration were not used or changed.",
+      "limits": "No model/Skill-body execution, implicit activation, partial-write fault recovery, automatic manager benefit, Desktop behavior or full-candidate admission claim. Native installed replacement uses supported plugin/install for the same ID, not an invented plugin/update API. Independent review and later cleanup are separate timestamped receipts; original report status and pending cleanup fields remain immutable. Outbound request parameters were retained by the bound runner, without a separate outbound wire capture.",
+      "evidence": {
+        "retainedAt": "task20-functional-chain-20260907/codex-exact-transition-draft/retained-run-01",
+        "executionReportSha256": "ba369585b56453595abbc3e1fe1497570d099a5d2a7d2db94092c063f9dbcaf7",
+        "retentionSha256": "751436a999cd507d133cac90946039c9faf9f2ef14c4faaa68a9637b78959028",
+        "independentReviewSha256": "1405786d806ce38e7c186581a94c9aeed7533abeb474baeef6b3be28cfb9fcf5",
+        "cleanupSha256": "be86f8a870aea46760f45bd443e1f767db93b13f8fa66f309adccb01208f215a"
+      }
+    },
     {
       "id": "dev16-retained-delivery-current-independent-reassessment",
       "observedAt": "2026-09-07T14:59:02.631632+00:00",
