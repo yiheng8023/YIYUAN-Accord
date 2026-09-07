@@ -938,9 +938,11 @@
           "context-and-task-continuity",
           "environment-and-self-exposure",
           "recovery-and-rollback",
-          "resources-and-cleanup"
+          "resources-and-cleanup",
+          "research-learning-and-reuse",
+          "native-replacement-and-retirement"
         ],
-        "procedure": "对应尚未定义的 codex-desktop-continuity，先核对当前支持的任务局部候选暴露、会话信号、独立动作和后态来源及授权，再绑定最短充分用例。区分同载体续做、自动压缩与确有必要的跨载体接管；预算当前可用容量和完成接管的余量，保留单写者及失败恢复。未知能力保持未知，不用 CLI 结果替代 Desktop，不为了测试强制交接或归档。 已复核19→20的授权送达、核对、接管与写入顺序，可作为宿主原生充分性的历史证据；不能改称当前候选执行、自动容量触发或无监督迁移。保留中断协调、用户暂停/恢复及18的归档反例。原生包转换及保全清理已闭合；现在按原始19→20记录及当前真实自动压缩后的继续工作，预绑定独立重评范围。不为重演宿主已有能力强建任务；缺失的自动触发、时机与当前候选作用证据单独判断，不由维护结果冒充。",
+        "procedure": "Desktop已预绑定两个当前只读重评：原用户请求的19→20交接及真实自动压缩后的同载体继续。分别核对原生授权、接收、显式移交、真正写入与成功回执，和压缩后当前事实、独立证据复用、122文件保全/无用任务分配退役及实际提交推送；不把汇总布尔值当事实。原18归档/用户救援、19→20中断与暂停/继续均保留。研究复用与无用分配退役两具体分支由该真实Desktop维护任务承担，从cx-sdk本次必需范围转配，Codex全局职责不删。当前精确占用/最佳区间仍未知；在可核验的小跨度继续。既有宿主足够提供接管控制，不强建任务；自主提前检测、适时迁移与当前自动插件效果没有由本次证据普遍证明。按实际触发的必要结果和发布声明判断未决依赖，不通过coverage标签掩盖缺口。",
         "exit": "适用的动态上下文变化与继续/接管结果同次闭合；发生转移时目的端已核对且来源健康状态受保护。无归档授权便无归档动作，不能用归档作为清理步骤。若执行条件尚缺，记录具体缺口并继续其他独立工作，不伪造范围已绑定。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -965,7 +967,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "Claude 声明组合的安装、坏源保护、恢复、真实更新、新加载使用与退出已闭合，保留原失败和方法修订。Codex 单次共享安装例外也已实际完成：原生安装精确 dev.16、真实安装缓存 Hook 执行、显式 Skill 选择、140 文件交付与自验、原生卸载和状态恢复。完整 Skill 正文未在流中独立捕获，不宣称隐式发现、默认信任流程或 Desktop；本次未 bind checkpoint，不能当 Stop 续做试验。复核既有升级/恢复记录的真实适用依赖并完成当前证据绑定，不为已成立的安装与使用重复安装。用户批准的单次例外已用完，发布前共享安装恢复为撤回状态；执行边界缺失只约束其依赖工作。 当前12文件包与旧11文件包的真实转换已补齐：fe1dee5 预绑定的无认证任务profile一次完成3.1→dev.16→3.1及卸载，原生选中路径与11/12/11/0文件图一致；3.20984秒自然退出，零子进程。独立复核、122文件保全和任务根处置均已完成。现在只核对既有失败保护/恢复证据的适用依赖及正式来源绑定，不重复安装或模型使用；组件转换不等于完整加载、部分写入恢复或整版准入。 独立必要性复核认为声明组合中的本地安装、使用、更新、已观察故障保护/恢复及退出效果已成立，本工序转为本地实现；正式定义重绑、组合依赖核对和来源准入继续在收尾处理。健康管理执行者与明确授权是适用前提，不宣称无人接管、部分写入/崩溃恢复或整版资格。",
+        "procedure": "Claude 声明组合的安装、坏源保护、恢复、真实更新、新加载使用与退出已闭合，保留原失败和方法修订。Codex 单次共享安装例外也已实际完成：原生安装精确 dev.16、真实安装缓存 Hook 执行、显式 Skill 选择、140 文件交付与自验、原生卸载和状态恢复。完整 Skill 正文未在流中独立捕获，不宣称隐式发现、默认信任流程或 Desktop；本次未 bind checkpoint，不能当 Stop 续做试验。复核既有升级/恢复记录的真实适用依赖并完成当前证据绑定，不为已成立的安装与使用重复安装。用户批准的单次例外已用完，发布前共享安装恢复为撤回状态；执行边界缺失只约束其依赖工作。 当前12文件包与旧11文件包的真实转换已补齐：fe1dee5 预绑定的无认证任务profile一次完成3.1→dev.16→3.1及卸载，原生选中路径与11/12/11/0文件图一致；3.20984秒自然退出，零子进程。独立复核、122文件保全和任务根处置均已完成。现在只核对既有失败保护/恢复证据的适用依赖及正式来源绑定，不重复安装或模型使用；组件转换不等于完整加载、部分写入恢复或整版准入。 独立必要性复核认为声明组合中的本地安装、使用、更新、已观察故障保护/恢复及退出效果已成立，本工序转为本地实现；正式定义重绑、组合依赖核对和来源准入继续在收尾处理。健康管理执行者与明确授权是适用前提，不宣称无人接管、部分写入/崩溃恢复或整版资格。 当前准入方法已用两个留存重评替换旧方法形状：Codex显式联结坏JSON预写拒绝、精确原生转换与原单次安装使用，独立判断不同配置/授权的依赖兼容性；Claude保留真实健康管理者组合、坏安装恢复与真实更新使用。每个原episode保持独立身份，不声称同次整链或自动恢复。",
         "exit": "用户所需生命周期与失败后态成立，且变更/卸载后仍有可用执行者完成必要恢复与核验。安装登记、实际激活、市场缓存和受影响配置分别取证；未更新而旧包不变不能证明保护。该项未通过只约束依赖它的工作与整版资格。",
         "qualityAxes": [
           "functional-coverage",
@@ -1056,6 +1058,23 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "lifecycle-desktop-necessary-composition-and-method-rebinding",
+      "observedAt": "2026-09-07T16:08:48.363503+00:00",
+      "scope": "precommitted-current-reassessment-definitions-not-empirical-admission",
+      "basisRevision": "3a049db8eac449fcdbae220d316a6cdde2ebe33e",
+      "lifecycle": "Two Codex native method cases are replaced by one dependency-composition reassessment, linking parse-before-write protection, exact installed replacement/return/uninstall and separately authorized installed use. Original identities, different profiles/Hooks, assistance, failure and limits remain; compatibility must be independently observed. Claude obsolete method case is replaced by the actual declared cooperating lifecycle reassessment, with original shared conditions and differing profile epochs preserved.",
+      "desktop": "Prebind historical user-requested handoff and actual automatic-compaction continuation as separate current assessments. Actual destination product write and success at native lines161/165 are required, not merely an acknowledgement. Preserve source18 unauthorized archive attempt and user-reported rescue. The observed pause/resume is not allocated to the no-pause mid-task-user-steering scenario.",
+      "dutyReallocation": "Keep every Codex product duty. Transfer research-learning-and-reuse and native-replacement-and-retirement from the current SDK sample scope to the Desktop compaction scope for actual reliable-evidence reuse and disposal of an unneeded owned allocation after owner/consumer/acceptance checks. No arbitrary research, external ecosystem discovery, runtime replacement or causal Accord benefit is inferred.",
+      "methodCorrection": "Replace mandatory independent variation of capacity/occupancy/information integrity with risk-appropriate independent checks of actual relevant changes and required state. Keep timely transition, current signals, bounded future work, recovery and unknowns obligations. These records do not prove universally autonomous early migration; this untriggered branch cannot be silently labeled passed.",
+      "recordBoundary": "New source and scenario/scope definitions change affected digests. Keep original receipts and actual-source derivations intact, then bind the current target and independently recheck only relevant sources/dependencies. No old timestamp or historical execution is relabeled current.",
+      "readOnlyPreparation": "At clean 3a049db, independent reviewer read 113 actual sources and derived three Codex functional fact sets with stable initial/final hashes; deferred records until the concentrated target binding. Preparation and definition review are not final candidate qualification.",
+      "evidence": {
+        "functionalPreparation": "retained-functional-reassessment-3a049db",
+        "derivedFactsSha256": "8a3b3f892cad665e9af3cad9ef29406dc56011464c9bd9225bd3857f16eee089",
+        "sourceDependencyReportSha256": "584a9eab5e1b3ad1aa5eb0fabfb4d580c79188e1eeab52e53cfeecbb694909d9"
+      }
+    },
     {
       "id": "necessary-functional-reassessment-and-lifecycle-stage-alignment",
       "observedAt": "2026-09-07T15:48:11.858618+00:00",
@@ -3805,19 +3824,156 @@
         "requiredEffect": "解释或处理新信息，保留原目标与未完成工作，继续执行和核验；只有真实停止指令、不可解执行边界或必要人类决定才能暂停依赖工作。",
         "failureOracle": "不能将一次问答、截图澄清或子步骤完成当作整项任务结束；后续必须由用户再次催促才继续，是该场景的失败。"
       },
-      {"id":"default-host-without-extra-extensions","duties":["environment-and-self-exposure","research-learning-and-reuse","execution-configuration-and-code","verification-and-value"],"trigger":"受支持宿主未添加第三方扩展；现有能力有缺口或存在值得核实的净收益机会。","requiredEffect":"在声明的最小宿主前提下核对实际可用工具；按需使用官方目录/文档/源码、维护中的第三方或可靠外部渠道发现候选。发现本身不强制新增插件；缺联网、账号、权限或执行条件时明确缺口，取得必要授权后再接入并验证。","failureOracle":"不能假定开发者增强环境普遍存在，也不能把默认配置等同零前提万能环境；不得静默调用未声明外援、无授权安装，或将发现候选当成功执行。"},
-      {"id":"conditional-alignment-and-discovery","duties":["goal-authority-correction","research-learning-and-reuse","relations-routing-and-form","verification-and-value"],"trigger":"当前共识与证据足够，或出现影响下一安全决策的需求/领域变化、证据失效、能力缺口或可信净收益机会。","requiredEffect":"没有决策相关收益时复用并推进；否则有界澄清/外查，比较适用原生、官方支持渠道及可靠外部候选，证据足够即交付。原生可完成不等于最合适；发现不授权安装或改变目标/验收。","failureOracle":"不能每轮强制全量需求访谈或联网；不能把现有清单当全部候选，也不能借动态之名静默放宽验收或在关键未知下冒进。"},
-      {"id":"effective-user-environment","duties":["environment-and-self-exposure","research-learning-and-reuse","correction-and-evolution","verification-and-value"],"trigger":"用户自定义指令、设置或扩展可能影响当前决定与效果，或声明配置与会话加载状态不一致。","requiredEffect":"只核对相关作用域、继承/覆盖和实际加载行为；兼容帮助可用，冲突按影响局部处理。验收绑定必要条件，并区分用户外援与可交付能力。","failureOracle":"不能只读配置即宣称生效/隔离；不能擅改用户共享配置、采集凭据或将未知环境当官方初始状态，不能把额外帮助算作 Accord 固有增益。"},
-      {"id":"model-native-gain","duties":["relations-routing-and-form","native-replacement-and-retirement","verification-and-value"],"trigger":"模型更新使原有弱项消失，或对指导、上下文和工具的响应方式改变。","requiredEffect":"在同等任务及宿主条件下重新建立无 Accord 的模型原生基线；确认冗余或干扰后按同责效果削减介入，仅补残余缺口。","failureOracle":"不能固化旧模型缺陷、将模型能力算作插件增益，或将 API 功能宣传当作当前宿主的执行证据。"},
-      {"id":"model-fit-routing","duties":["relations-routing-and-form","environment-and-self-exposure","verification-and-value"],"trigger":"主任务或子任务需要不同模型/推理配置，或所选路线失效、漂移、不满足效果。","requiredEffect":"在授权候选中自动匹配足够能力并通过原生或必要组合执行，核对实际模型及结果；原生足够时不保留重复路由器。","failureOracle":"将默认继承、配置意图或品牌排名当作匹配证据；擅改用户钉定模型；无视别名/替代或虚称已切换。"},
-      {"id": "native-sufficient", "duties": ["relations-routing-and-form", "native-replacement-and-retirement"], "trigger": "当前原生路线足够、负担合理，且没有值得继续比较的决策相关改善机会。", "requiredEffect": "按需复用并减少介入，保持同一功能与质量；不为证明插件存在感强行接管。", "failureOracle": "无必要重造、冗余机制或将非介入冒充增量价值。"},
-      {"id": "capability-loss", "duties": ["environment-and-self-exposure", "recovery-and-rollback", "execution-configuration-and-code"], "trigger": "所依赖能力不可用、降级或权限变化。", "requiredEffect": "识别受影响职责，选择足够的原生、组合或自建替代并验证；不可行时明确尚未完成。", "failureOracle": "不能静默削减功能，安全停止不能算成功。"},
-      {"id": "positive-extra-assistance", "duties": ["research-learning-and-reuse", "verification-and-value"], "trigger": "外部插件、记忆或开发辅助让任务变得容易。", "requiredEffect": "区分贡献来源；在移除未声明外援后复验，或把必要条件纳入可交付依赖与成本。", "failureOracle": "不能把当前增强环境的成功直接推广给普通用户。"},
-      {"id": "conflicting-extension", "duties": ["goal-authority-correction", "environment-and-self-exposure", "correction-and-evolution", "context-and-task-continuity", "resources-and-cleanup"], "trigger": "上游指令、记忆、工具或插件的注入负担、过期内容或矛盾影响当前任务。", "requiredEffect": "对可控注入先核对适用性，常驻必要约束，按需读取详情并减少重复暴露；区分目录、正文、工具输出与已保留历史。规则冲突按真实指令层级、来源、作用域及当前授权裁决，事实分歧按证据核对，不能靠文本顺序或体积定优先级。按实际影响局部隔离、改道或重核受影响判断，保留无关用户状态并验证恢复与清理。同一相关任务中联合核验注入负担、发现与执行效果、授权及必要状态完整性。", "failureOracle": "不能无界关闭用户环境、抹掉必要约束或让外部规则新增授权和改写目标；停用不证明已进入上下文的内容被清除。更短的目录、摘要或较低 token 消耗不能单独证明改善；不得虚构全路径拦截、已加载内容删除能力或通用最佳预算。未决矛盾只限制依赖它的动作，实际宿主限制不能通过低层指引绕过。"},
-      {"id": "mid-task-host-drift", "duties": ["environment-and-self-exposure","correction-and-evolution","context-and-task-continuity","recovery-and-rollback","resources-and-cleanup","package-lifecycle"], "trigger": "任务中宿主更新、缓存与加载版本分离、接口或上下文发生变化。", "requiredEffect": "仅重算受影响事实与分配；对同一被测执行/状态变化联合核验适用的纠正、恢复及资源后态。原位继续可原位核对；实际跨载体或来源转移时才要求目的端核对后安全释放来源。失败保留最后安全状态及适用幸存接管者，重复信号不造成多写入者或循环交接。 For context changes, independently vary available capacity, occupancy and retained-information integrity, including automatic compaction. Re-sense affected readings and budget the next work span plus completed takeover and recovery; preserve useful verified state and continue a healthy carrier. Unknown signals require bounded early checkpoints, not guessed percentages or delayed emergency handoff.", "failureOracle": "不能沿用失效假设、以版本变化强制全量重做、用各项孤立 PASS 拼成整体闭环，或在目的端未核对前释放来源。 Reject stale pre-compaction thresholds, transcript-length or account-limit proxies for current context, token reduction as integrity proof and source release before safe destination reconciliation."},
-      {"id":"native-capable-external-better","duties":["research-learning-and-reuse","relations-routing-and-form","verification-and-value"],"trigger":"原生能完成，但未安装的外部候选可能显著改善质量、风险或总成本。","requiredEffect":"复用宿主可调用目录/推荐，有界外查并验证比较依据；更优且已准入的候选可胜出。缺少安装、连接或数据授权时只推荐并解释必要条件，继续可独立执行的安全工作。","failureOracle":"不能以原生足够终止必要比较、因市场支持就信任候选，或把目录可见当作已安装/可执行。"},
-      {"id":"cross-domain-depth","duties":["goal-authority-correction","research-learning-and-reuse","relations-routing-and-form","verification-and-value"],"trigger":"任务从原工作领域转向需更深证据或高风险判断的领域，例如软件用户提出医学知识问题。","requiredEffect":"按问题深度与风险判断需要权威资料、专项工具、模型或专业人员；先复用可靠现有能力，必要时发现外部候选并说明能力与授权边界。","failureOracle":"不能自动把领域标签等同专业资质、把专项插件作为唯一答案、未经授权外发敏感信息，或将通用回答/工具结果冒充专业诊断。"},
-      {"id":"task-exposure-and-reuse","duties":["resources-and-cleanup","native-replacement-and-retirement","environment-and-self-exposure"],"trigger":"能力临时参与任务后不再需要，或未来复用、维护成本与可信状态发生变化。","requiredEffect":"核对归属及依赖，释放任务资源和临时暴露并验证后态；复用不确定时在支持范围内可逆停用而非猜测永久卸载。未来重用时按漂移重验；无必要的任务资产在授权范围内退役。 用户只给出意图和边界时，Agent按需要自主选择、启停及回收适用能力；优先使用受支持的后台接口。原生自动清理未启用时仍核对本任务分配、成果回流、归属、依赖及必要回收，不依赖用户逐项操作。","failureOracle":"不能任务一结束便卸载用户共享工具、将不再调用冒充已停用，或没有作用域控制便无界清理。 不得把按钮可见等同后台可调用，也不得将宿主自动删除开关视为唯一回收机制。识别复合操作的全部后果；工作树清理不能夹带未授权归档，明确保留意图和未知归属均须保护。"}
+      {
+        "id": "default-host-without-extra-extensions",
+        "duties": [
+          "environment-and-self-exposure",
+          "research-learning-and-reuse",
+          "execution-configuration-and-code",
+          "verification-and-value"
+        ],
+        "trigger": "受支持宿主未添加第三方扩展；现有能力有缺口或存在值得核实的净收益机会。",
+        "requiredEffect": "在声明的最小宿主前提下核对实际可用工具；按需使用官方目录/文档/源码、维护中的第三方或可靠外部渠道发现候选。发现本身不强制新增插件；缺联网、账号、权限或执行条件时明确缺口，取得必要授权后再接入并验证。",
+        "failureOracle": "不能假定开发者增强环境普遍存在，也不能把默认配置等同零前提万能环境；不得静默调用未声明外援、无授权安装，或将发现候选当成功执行。"
+      },
+      {
+        "id": "conditional-alignment-and-discovery",
+        "duties": [
+          "goal-authority-correction",
+          "research-learning-and-reuse",
+          "relations-routing-and-form",
+          "verification-and-value"
+        ],
+        "trigger": "当前共识与证据足够，或出现影响下一安全决策的需求/领域变化、证据失效、能力缺口或可信净收益机会。",
+        "requiredEffect": "没有决策相关收益时复用并推进；否则有界澄清/外查，比较适用原生、官方支持渠道及可靠外部候选，证据足够即交付。原生可完成不等于最合适；发现不授权安装或改变目标/验收。",
+        "failureOracle": "不能每轮强制全量需求访谈或联网；不能把现有清单当全部候选，也不能借动态之名静默放宽验收或在关键未知下冒进。"
+      },
+      {
+        "id": "effective-user-environment",
+        "duties": [
+          "environment-and-self-exposure",
+          "research-learning-and-reuse",
+          "correction-and-evolution",
+          "verification-and-value"
+        ],
+        "trigger": "用户自定义指令、设置或扩展可能影响当前决定与效果，或声明配置与会话加载状态不一致。",
+        "requiredEffect": "只核对相关作用域、继承/覆盖和实际加载行为；兼容帮助可用，冲突按影响局部处理。验收绑定必要条件，并区分用户外援与可交付能力。",
+        "failureOracle": "不能只读配置即宣称生效/隔离；不能擅改用户共享配置、采集凭据或将未知环境当官方初始状态，不能把额外帮助算作 Accord 固有增益。"
+      },
+      {
+        "id": "model-native-gain",
+        "duties": [
+          "relations-routing-and-form",
+          "native-replacement-and-retirement",
+          "verification-and-value"
+        ],
+        "trigger": "模型更新使原有弱项消失，或对指导、上下文和工具的响应方式改变。",
+        "requiredEffect": "在同等任务及宿主条件下重新建立无 Accord 的模型原生基线；确认冗余或干扰后按同责效果削减介入，仅补残余缺口。",
+        "failureOracle": "不能固化旧模型缺陷、将模型能力算作插件增益，或将 API 功能宣传当作当前宿主的执行证据。"
+      },
+      {
+        "id": "model-fit-routing",
+        "duties": [
+          "relations-routing-and-form",
+          "environment-and-self-exposure",
+          "verification-and-value"
+        ],
+        "trigger": "主任务或子任务需要不同模型/推理配置，或所选路线失效、漂移、不满足效果。",
+        "requiredEffect": "在授权候选中自动匹配足够能力并通过原生或必要组合执行，核对实际模型及结果；原生足够时不保留重复路由器。",
+        "failureOracle": "将默认继承、配置意图或品牌排名当作匹配证据；擅改用户钉定模型；无视别名/替代或虚称已切换。"
+      },
+      {
+        "id": "native-sufficient",
+        "duties": [
+          "relations-routing-and-form",
+          "native-replacement-and-retirement"
+        ],
+        "trigger": "当前原生路线足够、负担合理，且没有值得继续比较的决策相关改善机会。",
+        "requiredEffect": "按需复用并减少介入，保持同一功能与质量；不为证明插件存在感强行接管。",
+        "failureOracle": "无必要重造、冗余机制或将非介入冒充增量价值。"
+      },
+      {
+        "id": "capability-loss",
+        "duties": [
+          "environment-and-self-exposure",
+          "recovery-and-rollback",
+          "execution-configuration-and-code"
+        ],
+        "trigger": "所依赖能力不可用、降级或权限变化。",
+        "requiredEffect": "识别受影响职责，选择足够的原生、组合或自建替代并验证；不可行时明确尚未完成。",
+        "failureOracle": "不能静默削减功能，安全停止不能算成功。"
+      },
+      {
+        "id": "positive-extra-assistance",
+        "duties": [
+          "research-learning-and-reuse",
+          "verification-and-value"
+        ],
+        "trigger": "外部插件、记忆或开发辅助让任务变得容易。",
+        "requiredEffect": "区分贡献来源；在移除未声明外援后复验，或把必要条件纳入可交付依赖与成本。",
+        "failureOracle": "不能把当前增强环境的成功直接推广给普通用户。"
+      },
+      {
+        "id": "conflicting-extension",
+        "duties": [
+          "goal-authority-correction",
+          "environment-and-self-exposure",
+          "correction-and-evolution",
+          "context-and-task-continuity",
+          "resources-and-cleanup"
+        ],
+        "trigger": "上游指令、记忆、工具或插件的注入负担、过期内容或矛盾影响当前任务。",
+        "requiredEffect": "对可控注入先核对适用性，常驻必要约束，按需读取详情并减少重复暴露；区分目录、正文、工具输出与已保留历史。规则冲突按真实指令层级、来源、作用域及当前授权裁决，事实分歧按证据核对，不能靠文本顺序或体积定优先级。按实际影响局部隔离、改道或重核受影响判断，保留无关用户状态并验证恢复与清理。同一相关任务中联合核验注入负担、发现与执行效果、授权及必要状态完整性。",
+        "failureOracle": "不能无界关闭用户环境、抹掉必要约束或让外部规则新增授权和改写目标；停用不证明已进入上下文的内容被清除。更短的目录、摘要或较低 token 消耗不能单独证明改善；不得虚构全路径拦截、已加载内容删除能力或通用最佳预算。未决矛盾只限制依赖它的动作，实际宿主限制不能通过低层指引绕过。"
+      },
+      {
+        "id": "mid-task-host-drift",
+        "duties": [
+          "environment-and-self-exposure",
+          "correction-and-evolution",
+          "context-and-task-continuity",
+          "recovery-and-rollback",
+          "resources-and-cleanup",
+          "package-lifecycle"
+        ],
+        "trigger": "任务中宿主更新、缓存与加载版本分离、接口或上下文发生变化。",
+        "requiredEffect": "仅重算受影响事实与分配；对同一被测执行/状态变化联合核验适用的纠正、恢复及资源后态。原位继续可原位核对；实际跨载体或来源转移时才要求目的端核对后安全释放来源。失败保留最后安全状态及适用幸存接管者，重复信号不造成多写入者或循环交接。 For actual relevant context changes, including automatic compaction, distinguish available host signals from necessary retained-state integrity. Independently inspect relevant original state and real subsequent actions; a summary, token decrease or changed window is not integrity proof. Re-sense affected readings and budget the next bounded work span, available executor and any necessary completed takeover plus failure recovery. Preserve useful verified state and continue a healthy carrier. Missing exact occupancy or a calibrated efficiency range stays unknown and requires short spans with fresh checkpoints, not guessed percentages, delayed emergency handoff or forced synthetic corruption/new tasks. Additional variation or fault probes are warranted only when a consequential unsupported dependency could change the safe decision.",
+        "failureOracle": "不能沿用失效假设、以版本变化强制全量重做、用各项孤立 PASS 拼成整体闭环，或在目的端未核对前释放来源。 Reject stale pre-compaction thresholds, transcript-length or account-limit proxies for current context, token reduction as integrity proof and source release before safe destination reconciliation."
+      },
+      {
+        "id": "native-capable-external-better",
+        "duties": [
+          "research-learning-and-reuse",
+          "relations-routing-and-form",
+          "verification-and-value"
+        ],
+        "trigger": "原生能完成，但未安装的外部候选可能显著改善质量、风险或总成本。",
+        "requiredEffect": "复用宿主可调用目录/推荐，有界外查并验证比较依据；更优且已准入的候选可胜出。缺少安装、连接或数据授权时只推荐并解释必要条件，继续可独立执行的安全工作。",
+        "failureOracle": "不能以原生足够终止必要比较、因市场支持就信任候选，或把目录可见当作已安装/可执行。"
+      },
+      {
+        "id": "cross-domain-depth",
+        "duties": [
+          "goal-authority-correction",
+          "research-learning-and-reuse",
+          "relations-routing-and-form",
+          "verification-and-value"
+        ],
+        "trigger": "任务从原工作领域转向需更深证据或高风险判断的领域，例如软件用户提出医学知识问题。",
+        "requiredEffect": "按问题深度与风险判断需要权威资料、专项工具、模型或专业人员；先复用可靠现有能力，必要时发现外部候选并说明能力与授权边界。",
+        "failureOracle": "不能自动把领域标签等同专业资质、把专项插件作为唯一答案、未经授权外发敏感信息，或将通用回答/工具结果冒充专业诊断。"
+      },
+      {
+        "id": "task-exposure-and-reuse",
+        "duties": [
+          "resources-and-cleanup",
+          "native-replacement-and-retirement",
+          "environment-and-self-exposure"
+        ],
+        "trigger": "能力临时参与任务后不再需要，或未来复用、维护成本与可信状态发生变化。",
+        "requiredEffect": "核对归属及依赖，释放任务资源和临时暴露并验证后态；复用不确定时在支持范围内可逆停用而非猜测永久卸载。未来重用时按漂移重验；无必要的任务资产在授权范围内退役。 用户只给出意图和边界时，Agent按需要自主选择、启停及回收适用能力；优先使用受支持的后台接口。原生自动清理未启用时仍核对本任务分配、成果回流、归属、依赖及必要回收，不依赖用户逐项操作。",
+        "failureOracle": "不能任务一结束便卸载用户共享工具、将不再调用冒充已停用，或没有作用域控制便无界清理。 不得把按钮可见等同后台可调用，也不得将宿主自动删除开关视为唯一回收机制。识别复合操作的全部后果；工作树清理不能夹带未授权归档，明确保留意图和未知归属均须保护。"
+      }
     ]
   },
   "acceptance": {
@@ -3928,7 +4084,7 @@
           }
         },
         {
-          "id": "claude-agent-validated-plugin-lifecycle",
+          "id": "claude-declared-lifecycle-retained-reassessment",
           "scope": "claude-code-lifecycle",
           "host": "claude-code",
           "entry": "cc-cli",
@@ -3950,6 +4106,7 @@
           ],
           "scenarios": [
             "effective-user-environment",
+            "mid-task-host-drift",
             "task-exposure-and-reuse"
           ],
           "claims": [
@@ -3960,32 +4117,24 @@
             "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
             "transport": "native-Codex-subagent-selects-Claude-native-manager-operations; Claude-native-stream-json-for-registered-loading",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
-            "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
-            "profileTopology": "prebound owned stages; separate profiles when necessary to preserve an uncontaminated installation or never-cached fault prerequisite",
-            "sharedInstallationAllowed": false,
-            "authentication": "pure Claude manager commands receive no credentials; the healthy Codex native subagent uses its existing authorized account without model/effort overrides; only independent Claude registered-activation runs use the existing authorized route in memory",
-            "requestedActivationModel": "sonnet",
-            "activationSelection": "fresh native process actually loads the registered installed package and performs a prebound applicable task; selected installed Skill is an eligible explicit method, not mandatory implicit selection",
             "candidate": "3.2.0-dev.16",
             "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68",
+            "observationMethod": "retained-evidence-reassessment",
+            "originalManagementActor": "healthy zero-history native Codex subagents with explicit frozen full candidate Skill; parent-bound inputs, disclosed subsequent assistance and scoped authority",
+            "originalActivation": "fresh Claude registered-install loading; explicit installed Skill selection; requested sonnet, reported deepseek-v4-flash-vision-exp[1M]",
+            "originalCompositionRevisions": "A original epoch; B epoch 2 after one unexplained shared-file drift; source-field edit and one inactive bad-cache eviction expressly authorized later; original interrupted spans preserved",
+            "reassessmentWrites": "private-review-receipts-only-no-host-execution",
+            "evidenceAgeRule": "dependency-specific; original times preserved",
+            "sharedInstallationAllowed": false,
+            "originalProfileDetails": "original-two-task-owned-CLAUDE_CONFIG_DIR-profiles-A-and-B",
+            "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
+            "profileTopology": "prebound owned stages; separate profiles when necessary to preserve an uncontaminated installation or never-cached fault prerequisite",
             "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks",
-            "lifecycleDecisionActor": "prebound healthy Codex native subagent created with fork_turns=none and no model or reasoning override; explicitly reads the exact task-local candidate Skill and owns authorized management choices and actions; parent binds inputs, publishes declared source/fault stages and independently observes",
-            "managementExposure": "explicit reading of the exact complete candidate package Skill from an independently frozen task-local package outside the changed installation; no inherited parent conversation; ambient instructions, tool exposure and other assistance must be disclosed; not a clean-host or registered-plugin-loading claim",
-            "agentTools": "Observe actual native Codex tools and effective permissions; choose sufficient authorized Claude operations and local checks. New inspection or single-operation requests may be written in the owned management workspace. A separately declared method may also edit only the task-owned source settings field or evict one exact inactive failed cache after verified original retention, absence of consumers and path/indirection checks. Preserve unrelated settings, healthy installations, identities and raw evidence; never handwrite expected package bytes or registration/marketplace metadata. Such operations and parent-suggested options must be recorded as assistance and actual local filesystem effects, not pure native commands or autonomous discovery. Bind the native observation route: read_thread on the parent active turn exposes subAgentActivity(agentPath,agentThreadId); read_thread on that child ID with includeOutputs=true and pagination supplies native turn/item IDs and tool command, cwd, status, exit/output and truncation state. Collect all relevant turns/items, check missing, truncated and unfinished entries, and cross-check frozen-wrapper requests and native receipts. Unavailable or incomplete records cannot establish their corresponding facts; messages/status or self-reported PASS alone are insufficient. Use the task-specific native interface, not a shared-session database scan or new persistent logging framework.",
-            "managementOutputLimitBytes": "Each pure Claude native operation retains its existing 2097152-byte capture bound. The native Codex subagent API exposes no per-agent hard output limit. The parent retrieves all relevant native tool/message items with explicit per-item truncation checks and cross-checks original operation receipts; any missing, truncated or unfinished item leaves the corresponding fact unverified. No old Claude 4-MiB stream cap is attributed to this actor.",
-            "managementBudgetVisibility": "Use the existing authorized native Codex account, fork_turns=none and no model/effort override. Declare a bounded initial management span and a 180-second progress review, not an automatic failure or interruption deadline. At that review assess actual progress, pending host approval, remaining necessary work and available cost signals; record justified bounded extensions or stop the unproductive affected branch. Retain original spans, actual elapsed time and interruptions, including dispatch and approval waiting separately when observable; do not relabel extensions as compliance with the original span. Claude native operations keep their independent 60-second limit and 45-second controller allowance. Poll or resume within 30 seconds while actively supervising. Actual actor model, effort, context, permission, usage and cost are recorded if exposed and otherwise unknown. Independent Claude registered activation retains 180 seconds, 16 requested turns, requested USD 1 and 2-MiB capture. No new account, route or meaningful cost authority follows.",
-            "managementReadAccess": "Bound management inputs, owned target profile/state/source, exact management package, trusted executable help and native receipts for selected operations; current official public documentation may resolve an evidenced native-interface gap. Any task-owned source-setting edit or inactive-cache eviction requires its exact bound path, original retention and declared method. Evaluator verdicts/oracles, other profiles, credentials and unrelated/shared files remain out of scope. Task instructions and redirected personal state are not OS isolation.",
-            "optionalInspectionRuntime": {
-              "version": "24.20.0",
-              "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5",
-              "scope": "caller-bound existing Node; exact candidate helper in the independent management package; no runtime installation or profile change"
-            },
-            "optionalInspectionUse": "The Agent may choose the shipped inspection helper with the exact caller-bound Node executable and the trusted expectedSourceSha256 for the intended candidate or explicitly selected accepted prior. Equivalent sufficient native and file checks are eligible. Discover the currently selected source, connect it to the requested target, and invalidate dependent conclusions after refresh or source changes. An inspection result grants no mutation permission and cannot establish actual update, recovery, installed activation or closure. Preserve current-source and installed-state checkpoints and all original failures. The caller may prebind candidate/prior request files containing only cli, plugin, scope and expectedSourceSha256; retain their source-derived identity and immutable input hashes. Ready request files are a method convenience, not a required verdict, helper sequence or installation prerequisite. An invalid installed manifest can make this inspection-only helper return unknown; completing this helper is not a prerequisite for supported recovery. The Agent may select sufficient native and file checks of the accepted source and actual failed installation.",
-            "trustedTargetIdentity": "candidate and accepted prior file manifests plus SHA-256 over UTF-8-sorted relative paths, NUL and binary file SHA-256, computed from independently frozen bytes rather than the source being judged",
-            "environmentContinuity": "Freeze package, target, executable and evaluator identities that the claim depends on. Observe selected shared state without treating every global-file hash as immutable task input. On drift retain before/after identities, unknown cause and the failed attempt; inspect decision-relevant dependencies and explicitly rebind only affected future actions. Never restore user state to manufacture the old baseline. Original observations keep their original conditions and are not whole-episode invariance or current-case passes."
+            "lifecycleDecisionActor": "prebound healthy Codex native subagent created with fork_turns=none and no model or reasoning override; explicitly reads the exact task-local candidate Skill and owns authorized management choices and actions; parent binds inputs, publishes declared source/fault stages and independently observes"
           },
-          "oracle": "Bind declared conditions, actual Claude target and Codex manager, exact prior/candidate bytes, refs, ordered inputs, helpers, owned roots and relevant shared state. Parent binding, fault publication and independent observation remain separate from manager decisions. Disclose later method suggestions, authority and assistance; no evaluator-written repair or replayed answer supplies a result. Explicit local Skill reading is management exposure, not installed activation. Use supported native Git input. A complete unique reserved-domain alias may use process-only mapping to the owned file URI; verify actual transport and make no HTTPS claim. Keep publisher, market and loaded trees physically independent; select profiles from actual cache/fault prerequisites.\nInstall from absence with the native manager. Independently verify exact full cache, registration/discovery, fresh registered loading, actual Skill body, correct applicable task output and Agent post-write checks. Explicit installed Skill selection is eligible, not implicit discovery; no inline/copy substitute.\nStart update/protection from independently usable immutable 3.1 with current source and installed state. The manager inspects the requested invalid target and holds before installation mutation. Record whether it checked before source selection or after refresh; never claim an unexecuted bad-market variant or require selecting a known bad target solely for an old method. Prior equality alone is not protection, and inspecting old prior is not checking the candidate. Retain the actual hold and protected installation checkpoint before publishing corrected bytes. Re-sense source/state after each relevant change.\nFor recovery, first observe a real bad installation under its declared never-cached fault prerequisites; an absent fault remains unverified, never manufactured. An independently exposed healthy manager selects and performs authorized recovery to exact accepted state. Verify restored registration/cache and fresh loaded task effects. Reuse restored facts only after checking affected dependencies. Disclosed, bounded task-owned source-field edits and one inactive failed-cache eviction may support recovery: verify originals retained, no consumers or indirection and healthy prior protection. Never handwrite expected package bytes or registration/marketplace metadata. Distinguish file eviction, native reconstruction and actual prior-to-candidate update; successful reinstallation or a label is not update. Confirm the final exact installed state and new registered loading/use. Native validation or exit zero alone is not whole-package safety; same-version update can reuse bad cache.\nFinally natively uninstall/remove owned marketplaces and inspect lists, registration, active state and redirected cache/data. Retain hash-verified raw originals before disposing owned roots. Audit all attempts through the native record route in agentTools; self-reports, wrapper labels or messages alone cannot authenticate actions. Preserve failed/interrupted turns, denials and cleanup errors. Forbidden attempts fail even if prevented; permitted computation refusals remain distinct. No shared installation, Agent publisher edit, permission bypass, new account/route, persisted credentials or archival. Activation provider fields stay in memory, outside manager input.\nRequire natural exit for claimed native operations, zero owned processes, actual selected shared/runtime/package post-state and input preservation. Apply environmentContinuity and managementBudgetVisibility to relevant drift and bounded progress reviews; rebinding does not make the initial episode unchanged or retroactively pass its old case. Attribute the declared composition only: no unaided discovery, automatic takeover, Claude-only management, Codex installation, Desktop continuity, universal interception, hot reload or value qualification.",
+          "oracle": "This is a new read-only retained-evidence reassessment after this definition is committed. An independent caller authenticates all named original sources and their raw native/effect records, not expected values or self-reported verdicts. Top evaluatedRevision, time and episode identify this reassessment; nested original execution subjects never change. maxAgeSeconds applies only to reassessment freshness; report original ages and judge dependency-specific relevance rather than expiring history at 24 hours. Compare exact Git/package, relevant host binaries, native interfaces, Skill/Hook/runtime and observer dependencies; disclose changes and unknowns. Never inherit current provider, loaded or installed state from history. No host/model execution, authentication, installation, source repair or historical PASS relabel is permitted. Recheck source integrity and current dependencies before final observation. Read the full retained tree authenticated by its immutable retention manifest, original binding, A/B cases including B original epoch and later rebinding, all native actor turns/items and matching individual operation requests/responses, actual source and physical snapshots, registered activations and cleanup receipts. Do not rely only on the independent summaries. Preserve chronological A install/use and B prior-use, actual corrupt installed manifest produced through parent fault publication plus native update, healthy actor-selected prior recovery and restored use, actual invalid requested publisher validation and hold, failed source switching/same-version cache reuse, bounded authorized source-field edit and retained consumer-free bad-cache eviction, native reconstruction followed by actual 3.1 to dev.16 update, and new registered loading/use. Verify original installedAt from raw JSON, exact files, body, output bytes, post-write reads and input preservation. The invalid-source hold occurred while selected marketplace stayed prior, not the refreshed-invalid variant. File eviction and native reconstruction are separate effects; assistance is not unaided discovery. Account for the three pre-native failures, six failed B commands, interruptions/extensions, observer arguments correction and original final wording defect. Native uninstall/removal empties active registration and markets; native orphan cache files (A10/B18) remain until independently retained evaluator disposal. Verify retention/disposal and epoch-2 shared/runtime poststate, never whole-episode invariance. This is the declared cooperating composition, not automatic recovery/takeover, Claude-only management, zero assistance, universal fault coverage, hot reload, Desktop or value.",
           "oracleFiles": [
+            "yiyuan_accord/admission.py",
             "scripts/observe_claude_entry.py",
             "scripts/observe-claude-entry.ps1",
             "scripts/run-gt20-exact-package.ps1"
@@ -3993,32 +4142,114 @@
           "maxAgeSeconds": 86400,
           "expected": {
             "effect": {
-              "exactCandidateInstalledAndUpdated": true,
-              "agentOwnsPreflightUpdateAndRecovery": true,
-              "freshRegisteredLoadingAndUseAfterInstallAndUpdate": true,
-              "acceptedPriorUsabilityBeforeUpdate": true,
-              "boundActivationTaskEffectsVerified": true,
-              "activationActualPostWriteVerification": true
+              "kind": "historical-declared-cooperating-lifecycle-chain",
+              "newNativeExecution": false,
+              "exactDev16InstallAndRealPriorToCandidateUpdate": true,
+              "freshRegisteredBodyAndTaskUseAfterInstallAndUpdate": true,
+              "acceptedPriorUsabilityBeforeFaultAndAfterRecovery": true,
+              "actualPostWriteVerification": true
             },
             "authority": {
-              "sharedPackageAndConfigurationUnchanged": true,
-              "noInlinePackageSubstitution": true,
-              "noEvaluatorOutputRepair": true,
-              "noCredentialPersistenceOrNewRoute": true
+              "originalManagerAndParentRolesPreserved": true,
+              "originalAssistanceAndMethodEpochsPreserved": true,
+              "noEvaluatorOutputOrPackageRepairSubstituted": true,
+              "noSharedInstallationOrNewCredentialRoute": true
             },
             "poststate": {
-              "nativeUninstallAndDiscoveryAbsence": true,
-              "ownedActiveCacheAndDataAbsent": true,
-              "foreignStatePreserved": true,
-              "nativeGitSourceAcceptedAndLoadedTreeIsolated": true,
-              "invalidSourceHeldBeforeInstalledStateMutation": true,
-              "independentBadInstallationRestoredAndActivated": true
+              "actualRequestedInvalidPublisherHeldBeforeInstalledMutation": true,
+              "realBadInstallationRestoredByAvailableHealthyManager": true,
+              "activeNativeRegistrationsAndMarketsRemoved": true,
+              "nativeOrphanCachesSeparatelyRetainedAndDisposed": true
             },
             "cleanup": {
-              "normalExitWithoutForcedRescue": true,
-              "ownedProcessesAfterCleanup": 0,
-              "ownedMarketplaceRemoved": true,
-              "taskRootRemoved": true
+              "originalOwnedRootRemoved": true,
+              "originalOwnedProcessesAfterCleanup": 0,
+              "epoch2SharedAndExternalRuntimeStatePreserved": true,
+              "newHostResourceAllocatedByReassessment": false
+            },
+            "sourceProvenance": {
+              "originalExecution": {
+                "revision": "07e583fae00042c91fe9f0a6fcf99cad6a112700",
+                "episode": "38b0d0ceafaa4020b1a3bea0cad7d73f",
+                "originalDefinitionSha256": "5f25ea299c8e5d9fe88517d5813fb60814423930d6d3b75d76e8fb075a231406",
+                "startedAt": "2026-09-07T11:31:32.205294+00:00",
+                "cleanupAt": "2026-09-07T12:53:06.0743259Z",
+                "packageSha256": "d64ef6e9a26ecba46c8f5a3203311e740ab5652a84ea0182a1e7e62ba2ac793e"
+              },
+              "retainedSources": [
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/episode-binding.json",
+                  "sha256": "6d5afb66e78b9dcea3c539a5ad878c4e5ed8faec494715f3e139a58bf6fe031b",
+                  "bytes": 18178
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq-retention.json",
+                  "sha256": "1f3e5b27a6e5649b11b554388fa440ca1b9d2ee1f011ff8ac41521c7f3c87dfb",
+                  "bytes": 3534576
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq-cleanup.json",
+                  "sha256": "485456922660fa7d4be0061c1f3295a4090d7a8b46e36e16b46e8e80274d3c0d",
+                  "bytes": 3630
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/records/A-manager-all-native-items.json",
+                  "sha256": "83760ccd5b2b4fa102fc3575c224c7a7a1d9baaae81f27461d907c4ab5c7659b",
+                  "bytes": 73471
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/records/B-manager-all-native-items.json",
+                  "sha256": "4ed7847374c49a1e9237d6ff1c5b3968829c3eaf088453c812f920b7ee5b2890",
+                  "bytes": 345827
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/records/A-activation-candidate-independent.json",
+                  "sha256": "8744db2c22154705ada3ef2d44948d39f033fcc6573b45568c055416404388e1",
+                  "bytes": 5424
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/records/B-native-bad-installed-state.json",
+                  "sha256": "7d83ba76b99abf91d55ac0fccb55ac687f855aa4914fb287f3263e965be8ecc3",
+                  "bytes": 2042
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/records/B-activation-prior-independent-observer-correction.json",
+                  "sha256": "30281379aaabc27b6b8ad38175ef320b85040a2c7bbcc6b0b119c1c1cc5946e9",
+                  "bytes": 4781
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/records/B-activation-restored-independent.json",
+                  "sha256": "4654a73ebeec4cf14a7af441c93d3f2c5124de3239ae479c3fc57d72ac3303ec",
+                  "bytes": 4803
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/records/B-invalid-source-hold-independent.json",
+                  "sha256": "ec5068a150390d90a82d9085f79f156d141b8b82258e64dd3fdd070943471333",
+                  "bytes": 3368
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/records/B-activation-updated-independent.json",
+                  "sha256": "db62818d01cb882286db641ee990ce1cabbb198b0b4c3dc68b478f9e73929304",
+                  "bytes": 5390
+                },
+                {
+                  "pathFromRetainedBase": "claude-healthy-lifecycle-dev16-07e583f-5mk7p7oq/records/independent-native-closeout.json",
+                  "sha256": "ae800f6a1955fe288f75c5d6286724a8a7434264b69d34f1a4e23e4ae799248b",
+                  "bytes": 11058
+                }
+              ],
+              "completeSourceInventory": "The hashed sibling retention manifest enumerates all 7951 retained original files; verify every entry, not only listed summary anchors. Inspect all relevant native items and raw operation/activation outputs inside that authenticated tree.",
+              "originalFailuresAndLimits": [
+                "three pre-native B failures",
+                "six failed B commands",
+                "interrupted A and initial B spans; later bounded extensions and approval wait",
+                "unknown cause of initial .claude.json drift; B epoch2 only",
+                "parent-suggested source edit/cache eviction; not autonomous discovery",
+                "prior observer arguments suffix correction and wording defect",
+                "actual invalid publisher hold with prior marketplace still selected",
+                "native orphan caches require evaluator disposal"
+              ],
+              "currentDependencyRequirement": "Compare both complete package Git manifests, relevant three oracle scripts, original frozen native/helper identities and current host binaries. Candidate package unchanged is necessary for this draft; current provider/auth/loaded state not inherited."
             }
           }
         },
@@ -4469,11 +4700,15 @@
           "entry": "cx-sdk",
           "duties": [
             "environment-and-self-exposure",
-            "resources-and-cleanup"
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "package-lifecycle"
           ],
           "qualityAxes": [
             "compliance-and-safety",
             "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
             "change-adaptation",
             "evidence-integrity",
             "user-burden-and-interference",
@@ -4490,42 +4725,310 @@
             "hostVersion": "0.153.4",
             "hostBinarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
             "transport": "local-app-server-stdio",
-            "profile": "task-owned-CODEX_HOME-without-private-auth",
-            "requestedOptionalHooks": "disabled",
-            "requestedRemotePlugins": "disabled",
-            "configurationRequirements": "none-reported"
+            "profile": "explicit-composite-of-original-owned-no-auth-installer-episodes-and-once-authorized-existing-profile-installed-use",
+            "requestedOptionalHooks": "original-no-auth-components-disabled; installed-use-native-plugin-Hook-events-observed; assess-per-episode",
+            "requestedRemotePlugins": "per-original-bound-episode; no merged effective configuration",
+            "configurationRequirements": "native-component-none-reported; installed-use-original-requirements-check-preserved; no current-policy inheritance",
+            "observationMethod": "retained-evidence-composition-sufficiency-reassessment",
+            "originalEpisodes": "invalid-JSON dev.6 native rejection; fe1dee exact dev.16 transition; c730406 once-authorized installed dev.16 selected-use",
+            "reassessmentWrites": "private-review-receipts-only-no-native-model-auth-or-shared-mutation",
+            "evidenceAgeRule": "original-ages-reported; dependency-specific-relevance; reassessment-freshness-only",
+            "sharedInstallationAuthorization": "original installed-use one-time authority exhausted; no new installation authorized",
+            "currentCandidatePackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181"
           },
-          "id": "codex-native-plugin-lifecycle",
+          "id": "codex-composite-lifecycle-retained-reassessment",
           "scope": "codex-lifecycle",
-          "oracle": "This component case contributes native installation-state environment and resource observations only. It does not own Agent Skill-body loading or ordinary task execution; those remain required for complete package lifecycle. Use the exact existing Codex binary in a task-owned Windows Job and disposable CODEX_HOME, without private authentication or personal configuration changes. Preserve the process helper's existing OS environment allowlist, including SystemRoot. Bind parent-owned RPC request/response provenance, process identity and package bytes before observations; receipt labels alone are insufficient. Check config/read, configRequirements/read, plugin/list and plugin/installed. Against a task-owned local marketplace, install the exact candidate from an empty profile and independently inspect cached bytes, native registration/enabled state and force-reloaded Skill discovery, then uninstall. Query marketplace state with its actual source cwd and report catalogue version separately from installed bytes. Install the immutable 3.1.0 package from commit 258611be47c47a884b6d1a2e96889cf688ca7e68, then try a deliberately invalid candidate manifest. Immediately after failure, before restoring candidate inputs or invoking any further lifecycle operation, independently compare the old files, registration/enabled state, discovery and attributable staging/cache residue with the pre-failure safe state. Any installation-state mutation prevents a rejection-before-write claim; later update or cleanup cannot repair it. Only after that checkpoint, restore exact candidate inputs and perform a supported update, again checking actual files, native state and discovery. Finally uninstall and inspect registry, enabled state, discovery and attributable caches before disposing the process or deleting the test root. Record expected empty cache containers separately from unexpected or active residue; evaluator cleanup cannot hide either. Recheck host/source identities and user-installation invariance. Missing or contradictory observations remain false or unknown. The caller authenticates the live pipe and independent observations, not self-authored PASS files. No fresh Agent thread or model request is required solely to check installer state. Prior observations retain their old definitions and do not become passes after this correction. Complete lifecycle still requires complementary evidence of the same installed candidate's actual loading/activation, ordinary-entry effects and applicable recovery under explicitly bound conditions; a standalone Skill selection cannot substitute.",
+          "oracle": "NEW read-only composition reassessment after this definition is committed; not new native execution or three episodes relabeled as one. An authenticated independent caller reads every original source bound below, actual caller/native response/effect records and cleanup receipts. Top revision/time/episode identify this reassessment and its compatibility judgment. Every original identity, time, actor, condition, failure and assistance remains nested and unchanged. maxAgeSeconds limits only reassessment freshness; report original ages and dependency-specific relevance. Expected values are predicates to evaluate, never observations to copy.\nRejection: inspect raw original caller L1727, revised invocation L1880 and complete output L1883. Confirm invalid JSON and -32600, and compare immediate prior files/directories/registration/selected Skill before any later operation. Preserve missing SystemRoot, mixed exposed Skills, stderr, metadata-only user invariance and earlier incomplete attempts. This is historical parse-before-write protection; do not infer normal-environment or partial-write recovery from it.\nTransition: authenticate all 122 retained originals via the retention map, private runner/code binding, raw responses and immediate stage snapshots. Verify immutable 3.1 and current exact dev.16 complete files against Git, successful supported same-ID install intents, selected paths and file maps 11/12/11/0, registration and native post-uninstall absence. Read original independent review and later retention/disposal separately. Outgoing parameters were recorded before pipe write, without separate outbound wire capture.\nInstalled use: independently re-read original binding, runner/check source, native install/Skill selection/Hook/helper events, both actual 140 outputs and Agent readback, protected inputs, restoration and the real one-time user authorization. Preserve failed Git probe, explicitly selected entry, no bound checkpoint, absent full body capture and absent separately retained full installed file map. The checked pre-model equality and native receipts support only their recorded installation checkpoint. Installation/restoration were maintainer-owned; actual user task was Agent-owned.\nCompatibility: compare complete current candidate bytes with both dev.16 episodes, immutable prior across rejection/transition, original/current native binary and relevant Skill/Hook/runtime/observer files. Read each actual environment and authority separately. Establish why invalid-JSON rejection does not depend on changed body/Hook payload; do not treat old dev.6 as dev.16. Reconcile disabled-Hook/no-auth component observations with the separate authorized installed-use Hook exposure; they are complementary, not one configuration. If any needed dependency is changed, unavailable or incompatible, report that claim unverified rather than splice a substitute facet.\nMap package lifecycle to supported native transition intents plus actual installed-use and scoped verification, resources to native removal plus distinct evaluator disposal, and recovery only to observed rejection/return-state. Confirm native management executed from absence and after package removal, independent of the removed Skill; currently existing identical executable supports dependency availability only, not a fresh RPC or surviving autonomous daemon. An available authorized maintainer must still own invocation/verification. No same-run integrated lifecycle, autonomous discovery/takeover, partial-write/crash rollback, restored-prior body use, current provider/installed/policy state, Desktop or value claim. Recheck sources/current dependencies before completing this reassessment; no host run, credentials or shared mutation.",
           "oracleFiles": [
-            ".agents/plugins/marketplace.json",
-            "scripts/run-gt20-exact-package.ps1"
+            "yiyuan_accord/admission.py",
+            "scripts/run-gt20-exact-package.ps1",
+            "scripts/observe-claude-entry.ps1",
+            "scripts/observe_claude_entry.py",
+            ".agents/plugins/marketplace.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
             "effect": {
-              "freshInstallExactCandidate": true,
-              "supportedExactUpdate": true,
-              "nativeRegistrationEnabledAndDiscoveryVerified": true,
-              "selectedOptionalHookStateAccounted": true
+              "kind": "current-dependency-assessment-of-distinct-historical-lifecycle-components",
+              "newNativeExecution": false,
+              "nativeExactInstalledReplacementReturnAndUninstall": [
+                11,
+                12,
+                11,
+                0
+              ],
+              "actualSelectedInstalledDev16HelperAndTaskUse": true,
+              "installedUseTotal": 140,
+              "compatibleEvidenceSupportsBoundedLifecycleComposition": true
             },
             "authority": {
-              "onlyTaskOwnedTargetsChanged": true,
-              "privateAuthAndUserConfigurationPreserved": true,
-              "onlyAuthorizedLifecycleOperations": true
+              "allOriginalEpisodesAndConditionsPreservedSeparately": true,
+              "originalOneTimeInstalledUseAuthorizationVerifiedAndExhausted": true,
+              "maintainerOperationsNotRelabeledAgentAutonomy": true,
+              "nativeManagementIndependentOfAbsentPackage": true,
+              "noNewSharedInstallationOrCredentials": true
             },
             "poststate": {
-              "invalidUpdatePreservesLastSafeState": true,
-              "oneNativeIntentOwnsEachTransition": true,
-              "uninstallRemovesSelectedActiveExposure": true,
-              "nativeResidueObservedBeforeEvaluatorCleanup": true,
-              "unexpectedNativeResidue": []
+              "historicalInvalidJsonRejectedBeforeInstallationMutation": true,
+              "nativeTransitionStatesAndInstalledUsePoststateIndependentlyVerified": true,
+              "actualUseReadbackAndProtectedInputsVerified": true,
+              "conditionDifferencesDoNotInvalidateClaimedComponentRelations": true,
+              "sameRunIntegratedLifecycleDemonstrated": false,
+              "partialWriteOrAutonomousRecoveryDemonstrated": false
             },
             "cleanup": {
-              "hostExitedWithoutForcedRescue": true,
-              "ownedChildrenAfterCleanup": 0,
-              "taskRootRemoved": true
+              "originalOwnedProcessesClosed": true,
+              "transition122FilesRetainedBeforeOwnedRootDisposal": true,
+              "installedUseRegistrationCacheAndOwnedConfigRestored": true,
+              "nativeResidueAndEvaluatorDisposalOwnershipPreserved": true,
+              "historicalEvidenceIntentionallyRetained": true,
+              "newHostResourceAllocatedByReassessment": false
+            },
+            "sourceProvenance": {
+              "rejection": {
+                "originalExecution": {
+                  "revision": "9857b89c32f473a9e4bf7a5c3bff1c8ec0c4482c",
+                  "episode": "accord-native-lifecycle-6d5f7810898f45489154877578799a5b",
+                  "observedAt": "2026-09-05T20:43:35Z",
+                  "candidatePackageSha256": "3c65209856af22cd2e82d26f9f666040a537360ea541d635c82cc0d1f313875d",
+                  "priorRevision": "258611be47c47a884b6d1a2e96889cf688ca7e68"
+                },
+                "originalRawLines": [
+                  {
+                    "path": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\06\\rollout-2026-09-06T01-52-09-01a072b3-0198-77f3-b7a8-875763d50b1d.jsonl",
+                    "line": 1727,
+                    "sha256": "ba65334b843a25aaa413aca044a3f64ecfb548200c24fc7fa7797049d72c5f23",
+                    "bytes": 9569,
+                    "timestamp": "2026-09-05T20:07:21.417Z"
+                  },
+                  {
+                    "path": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\06\\rollout-2026-09-06T01-52-09-01a072b3-0198-77f3-b7a8-875763d50b1d.jsonl",
+                    "line": 1880,
+                    "sha256": "2fa951eb650b011ce8355824da14d700e853970db83cfd48ba15630b78719ba5",
+                    "bytes": 4435,
+                    "timestamp": "2026-09-05T20:43:30.491Z"
+                  },
+                  {
+                    "path": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\06\\rollout-2026-09-06T01-52-09-01a072b3-0198-77f3-b7a8-875763d50b1d.jsonl",
+                    "line": 1883,
+                    "sha256": "01bbd49595082adac81e261e2882a7728277c9b20a41c7098b45f4a554799088",
+                    "bytes": 39719,
+                    "timestamp": "2026-09-05T20:43:37.025Z"
+                  }
+                ],
+                "originalFailureLimits": [
+                  "SystemRoot absent from child environment",
+                  "first truncated and second incomplete attempts not repaired",
+                  "no model turn or captured Skill body",
+                  "stderrBytes=1330; personal state checked by metadata, not private-byte audit",
+                  "query cwd affects plugin inventory; catalogue version is not installed identity"
+                ],
+                "currentDependencyRequirement": "Recheck exact host identity and original prior files; inspect native invalid-JSON short-circuit relevance separately from changed package payload. No normal-environment or general recovery inference."
+              },
+              "exactTransition": {
+                "originalRevision": "fe1dee55f9a14d353047cc8b82d5ee35a72b8474",
+                "originalCase": "codex-native-exact-update-and-return-dev16",
+                "originalRun": "run-01",
+                "startedAt": "2026-09-07T15:19:17.4310166+00:00",
+                "finishedAt": "2026-09-07T15:19:20.6498435+00:00",
+                "conditions": {
+                  "profile": "task-owned-CODEX_HOME-without-private-auth",
+                  "hooks": false,
+                  "remotePlugins": false,
+                  "modelRequests": 0,
+                  "WindowsOSAllowlist": "preserved by bound runner"
+                },
+                "retainedSources": [
+                  {
+                    "pathFromRetainedBase": "codex-exact-transition-draft/retained-run-01/binding.json",
+                    "sha256": "1e8b1279f815c8ee55449c32722bf190b986463d7351b44e12cfff3ef101bf47",
+                    "bytes": 5844
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-exact-transition-draft/retained-run-01/execution-report.json",
+                    "sha256": "ba369585b56453595abbc3e1fe1497570d099a5d2a7d2db94092c063f9dbcaf7",
+                    "bytes": 7651
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-exact-transition-draft/retention-run-01.json",
+                    "sha256": "751436a999cd507d133cac90946039c9faf9f2ef14c4faaa68a9637b78959028",
+                    "bytes": 21836
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-exact-transition-draft/cleanup-run-01.json",
+                    "sha256": "be86f8a870aea46760f45bd443e1f767db93b13f8fa66f309adccb01208f215a",
+                    "bytes": 1030
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-exact-transition-draft/independent-review-run-01.json",
+                    "sha256": "1405786d806ce38e7c186581a94c9aeed7533abeb474baeef6b3be28cfb9fcf5",
+                    "bytes": 28077
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-exact-transition-draft/prepare_snapshot.py",
+                    "sha256": "6a11a6d7fdc76dff664c56e41cad3260b9f7e05b9b66dff0f0c9c23c74e643b7",
+                    "bytes": 7245
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-exact-transition-draft/run-transition.ps1",
+                    "sha256": "2a102880d08b667c799acad5ea1fda30d4314c097c7c5c0114052d2c63e48a1c",
+                    "bytes": 13773
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-exact-transition-draft/case-draft.json",
+                    "sha256": "279a0da7e38b1addced6675915076b410cf47c3cb37e711f26c8424ece0aa65e",
+                    "bytes": 2743
+                  }
+                ],
+                "completeInventory": "Hash-bound retention-run-01.json enumerates all 122 original files. Authenticate all entries including raw stdout and physical/native stage snapshots; sibling independent review does not replace raw verification."
+              },
+              "installedUse": {
+                "originalExecution": {
+                  "revision": "c730406ca7fafabc405f78d81000e22c3574c9d5",
+                  "candidateRevision": "331ccd9f628fdd80adee6ea46a7d13bd78aa887b",
+                  "attemptId": "accord-installed-use-331ccd9-01",
+                  "threadId": "01a07c30-dbd3-71f1-8c36-bc3610866dcd",
+                  "turnId": "01a07c30-dca6-7d00-98a0-a4aceb015f32",
+                  "startedAt": "2026-09-07T14:06:08.6794543+00:00",
+                  "modelStartedAt": "2026-09-07T14:06:12.1308533+00:00",
+                  "finishedAt": "2026-09-07T14:07:17.2972543+00:00",
+                  "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                  "preboundCase": {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/binding.json",
+                    "sha256": "008201eec6c1f9b409068323e7ec116095a5d355a108b37277fa7f2879d8ab0c",
+                    "bytes": 3790
+                  }
+                },
+                "retainedSources": [
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/binding.json",
+                    "sha256": "008201eec6c1f9b409068323e7ec116095a5d355a108b37277fa7f2879d8ab0c",
+                    "bytes": 3790
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/execution-code-binding.json",
+                    "sha256": "f4e942f627145c804a76f242315e3ca9f18c8de234b29b91910f3ce76b36004b",
+                    "bytes": 543
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/execution-report.json",
+                    "sha256": "04313cf567eb06f82eb2a11c19df9469f9ea4fb23ec127aa14debec381f0bc66",
+                    "bytes": 75139
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/before-state.json",
+                    "sha256": "869544a8e81c0901ad9834e7c46d56a292bf5a777b3a74b20efde56b4ac71502",
+                    "bytes": 1104652
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/installed-state.json",
+                    "sha256": "02d0e17cca00a4950b3804c00676bd54b9b60712d70d29c8dc9e40c917985da3",
+                    "bytes": 1104943
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/restored-state.json",
+                    "sha256": "65bd6d7125484926df309e72e74ce37d34d899405dfbb13c6cc7db900f3b2697",
+                    "bytes": 1104759
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/before-processes.json",
+                    "sha256": "4c5159b79b4f96f56628e6013a01134896d01ae6c243c756ecdfe49e8d9cbe74",
+                    "bytes": 263
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/after-processes.json",
+                    "sha256": "4c5159b79b4f96f56628e6013a01134896d01ae6c243c756ecdfe49e8d9cbe74",
+                    "bytes": 263
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/orders.csv",
+                    "sha256": "4fa909c51784fba0bb335d11f00518e1af7c3bfd8a5680e0236eb6a2e9e8a4b0",
+                    "bytes": 51
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/keep.txt",
+                    "sha256": "81eb6ecd03cc8b9aa51a24f2c6282895cae5cb59f073c3700d7409045d09e274",
+                    "bytes": 38
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/legacy-note.txt",
+                    "sha256": "0c56867d873e662779f57d409dbef42a1ee41fdfb37f3c4417e20abf3dcd1ea2",
+                    "bytes": 104
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/details.csv",
+                    "sha256": "af8731f6691823e1a079aefb4f0126426bc9a66bfb984a7c2cf5a075359eb5a6",
+                    "bytes": 19
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/summary.json",
+                    "sha256": "dfae64b8c6293aba40476bf2b1ec9220194582f37cbaacd85ca928b6d3664779",
+                    "bytes": 70
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/install-use-stdout.jsonl",
+                    "sha256": "bf217affdce3eb689c9b3eae3e081b3c195d899b73903b6701670799d9be0993",
+                    "bytes": 208153
+                  },
+                  {
+                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/restore-stdout.jsonl",
+                    "sha256": "63c63e56dbcce203492d3db8b1fa8ab2f010fec3c7c301a6f520f90a139b5958",
+                    "bytes": 206597
+                  }
+                ],
+                "originalFailuresAndLimits": {
+                  "failedGitProbeCount": 1,
+                  "wholeOriginalFormalCasePass": false,
+                  "fullSkillBodyInjectionTextCaptured": false,
+                  "separateActualInstalledHashMapRetained": false,
+                  "StopContinuationDemonstrated": false,
+                  "providerIdentityBeyondReportedConfiguration": "unknown"
+                },
+                "currentDependencyRequirement": {
+                  "samePackageRequiredForThisDraft": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                  "actualComparisonRequired": true,
+                  "currentProviderAndLoadedStateInherited": false
+                },
+                "originalAuthorization": {
+                  "threadId": "01a07984-457e-75a1-ba39-4e5fda61f440",
+                  "question": {
+                    "line": 8084,
+                    "timestamp": "2026-09-07T13:48:52.997Z",
+                    "callId": "call_UOaDB8qrA1H4O9l6SOFGRi6t",
+                    "sha256": "1b7e3c6c0d1ff2f22e870b606ef140875c9dc8b724635f31ef68f5a1d1f81ccb"
+                  },
+                  "reply": {
+                    "line": 8128,
+                    "timestamp": "2026-09-07T13:51:28.704Z",
+                    "role": "user",
+                    "text": "是。",
+                    "sha256": "c84d8cdf3d664b21b685a54398efb2560a06051efcc375d94fb789dcb904fd55"
+                  },
+                  "limit": "one shared installation, installed-use and restoration only; not a standing install or new Desktop/archive authorization"
+                }
+              },
+              "priorReassessmentNavigationOnly": [
+                {
+                  "pathFromRetainedBase": "retained-reassessment-885ecc0/sources-and-dependencies.json",
+                  "sha256": "b450555c05a98efd28c460ec749a45462d9c6817736adf8f2e3333da0ce70f06",
+                  "bytes": 30720
+                }
+              ],
+              "compatibilityRequirements": {
+                "sameExactCurrentCandidateForTransitionAndUse": true,
+                "sameImmutablePriorForRejectionAndReturn": true,
+                "sameNativeBinaryRequiredForThisDraft": true,
+                "currentSharedProfileOrProviderInherited": false,
+                "originalEpisodesMergedIntoOneNativeRun": false,
+                "missingBodyCaptureOrHashMapInvented": false
+              },
+              "dutyEffectMapping": {
+                "environment-and-self-exposure": "per-episode native registration/selection, installed Hook/helper exposure and independent compatibility review",
+                "recovery-and-rollback": "invalid-JSON preservation and successful supported return-state only; no partial-write or autonomous-failure promise",
+                "resources-and-cleanup": "native uninstall plus original poststates, independent retention/disposal and protected shared config restoration",
+                "package-lifecycle": "compatible one-intent native installation/replacement/return/removal plus separate exact installed task use, available package-independent maintainer executor and bounded failure/poststate verification"
+              },
+              "normalEntryBoundary": "Actual installed selected Skill/helper use plus native task output is eligible normal-entry effect. No implicit selection or literal full-body capture claim. Separate profiles remain explicit."
             }
           }
         },
@@ -4975,9 +5478,14 @@
           }
         },
         {
+          "id": "codex-desktop-user-requested-handoff-retained-reassessment",
+          "scope": "codex-desktop-continuity",
           "host": "codex",
-          "entry": "cx-sdk",
+          "entry": "cx-desktop",
           "duties": [
+            "goal-authority-correction",
+            "premise-and-consistency",
+            "context-and-task-continuity",
             "environment-and-self-exposure",
             "recovery-and-rollback",
             "resources-and-cleanup"
@@ -4985,78 +5493,466 @@
           "qualityAxes": [
             "compliance-and-safety",
             "functional-coverage",
+            "normal-entry-integration",
             "recovery-and-lifecycle",
             "change-adaptation",
             "evidence-integrity",
-            "maintainability-and-resource-cost"
+            "user-burden-and-interference"
           ],
           "scenarios": [
-            "mid-task-host-drift",
-            "task-exposure-and-reuse"
+            "effective-user-environment",
+            "native-sufficient"
           ],
           "claims": [
-            "package-lifecycle"
+            "function"
           ],
           "conditions": {
-            "hostVersion": "0.153.4",
-            "hostBinarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
-            "transport": "local-app-server-stdio",
-            "profile": "task-owned-CODEX_HOME-without-private-auth",
-            "requestedOptionalHooks": "disabled",
-            "requestedRemotePlugins": "disabled",
-            "configurationRequirements": "none-reported",
-            "requestedPlugins": "enabled-for-native-selected-path-observation",
-            "authenticationStore": "file-in-new-owned-profile; no authentication or API environment copied",
-            "ordinaryWindowsEnvironment": "existing bounded OS allowlist including SystemRoot",
-            "accompanyingPublicCatalogActivity": "allowed only under task profile; no other configured or installed plugin",
-            "observerImplementation": {
-              "run-transition.ps1": "2a102880d08b667c799acad5ea1fda30d4314c097c7c5c0114052d2c63e48a1c",
-              "prepare_snapshot.py": "6a11a6d7fdc76dff664c56e41cad3260b9f7e05b9b66dff0f0c9c23c74e643b7",
-              "case-draft.json": "279a0da7e38b1addced6675915076b410cf47c3cb37e711f26c8424ece0aa65e"
-            },
-            "maximumNativeSeconds": 120,
-            "automaticRetry": false
+            "hostVersion": "26.901.6511.0",
+            "transport": "Codex-Desktop-local-native-task-and-tool-surfaces",
+            "profile": "existing-authorized-user-Desktop-environment-not-pristine",
+            "observationMethod": "retained-evidence-reassessment",
+            "reassessmentWrites": "private-review-receipts-only-no-host-execution",
+            "evidenceAgeRule": "preserve original times and age; review material host, candidate-guidance and authority dependencies; maxAgeSeconds limits only current reassessment",
+            "authorityBoundary": "no new Desktop task, archival, installation or host execution in this reassessment",
+            "originalEpisode": "task19-to-task20-user-requested-verified-handoff",
+            "candidateExposure": "historical-development-guidance-and-ambient-host-instructions; no-current-dev16-execution-claim"
           },
-          "id": "codex-native-exact-update-and-return-dev16",
-          "scope": "codex-lifecycle",
-          "oracle": "Bind and commit this case before one real native App Server process in a new task-owned profile. The parent authenticates the live RPC pipe, independent snapshots and capture-program identity; a private report or successful command alone is not evidence. Use the frozen Codex binary and normal bounded Windows environment, without an account, inherited API credentials, model turn or shared profile mutation. Native plugin/install with the same plugin ID selects immutable 3.1.0, exact current dev.16 and then 3.1.0 again; plugin/uninstall ends the chain. Each transition has one native intent. Before any later operation inspect the full expected 11/12/11 file map, native registration/enabled state, force-reloaded selected Skill path and all other version caches. Catalogue localVersion and empty discovery alone cannot prove installed state or removal. Keep historical non-active caches distinct from selected exposure; physical deletion of every cache is not required for native uninstall. After uninstall require registration and selected Skill absence, retain the actual residual tree, verify both frozen sources, then independently confirm natural exit and zero owned children. Preserve hash-verified evidence before removing only the resolved task-owned root. Bound public curated synchronization as accompanying task profile activity; reject other plugin registration. Stop on contradictory state, unavailable native selection or timeout, preserving the immediate failure and captured stream prefix; do not retry or manufacture a PASS through evaluator repair. The native deadline is 120 seconds. This fills the changed 12-file package update/return-state gap. The original malformed-manifest rejection remains separately reviewed historical evidence, not a facet of this new episode. No Agent body loading, ordinary delivery, partial-write recovery, Desktop, incremental value or complete package-lifecycle admission follows from this component case alone.",
+          "oracle": "This is a NEW read-only reassessment only after this case is committed. The authenticated independent caller reads original fixed native lines and hashes, actual task/turn/call identities, retained physical sources and current Git/package dependencies. The draft is a hypothesis, never copy expected values into facts. evaluatedRevision/observedAt/episodeId identify this new assessment; nested original execution identities, assistance and failures remain immutable. No historical current-case prebinding is invented: these episodes were ordinary development work. Preserve original age; maxAgeSeconds is only current reassessment freshness. Compare actual relevant host/version, Skill, source authority and execution boundaries. No new host/task/model/install/archive/repair; observe/recheck verifies current sources, limitations and source-provenance stability. Current review must reject material unsupported inferences or missing necessary outcomes even if IDs mechanically cover a scope. Read source19 15525-15783 and destination20 2-165 as bounded action windows. Check user handoff request; exact native create target local/environment and destination ID; real Git reads at 40df; receipt incompleteness/interruption then bounded completion; explicit source transfer dispatch and actual destination receipt/confirmation before subsequent work. Check source ceases repository writing before transfer, not merely changes a JSON boolean; source may retain receipt writes. Inspect action traces to exclude concurrent product mutation and unauthorized archive. Compare final handoff JSON, source-plan receipt and destination facts; no summary alone proves delivery. Do not claim autonomous pressure-triggered migration, current dev.16 effect, no-user-intervention, unload, all-history integrity or independent capacity/occupancy calibration. Preserve source18 failure, source19/20 coordination interruption and user resume. Verify actual destination repository patch at161 and successful tool return plus both physical file lengths at165: the source-derived functional-first correction and change-to-action guidance were written to both Skill files after delivered takeover. Mere confirmation or a handoff JSON flag is insufficient. This proves actual continuation into authorized development, not that the new guidance already produced accepted runtime effects.",
           "oracleFiles": [
-            ".agents/plugins/marketplace.json",
-            "scripts/run-gt20-exact-package.ps1"
+            "yiyuan_accord/admission.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
             "effect": {
-              "selectedVersions": [
-                "3.1.0",
-                "3.2.0-dev.16",
-                "3.1.0"
+              "kind": "historical-user-requested-native-Desktop-handoff",
+              "sourceTask": "01a072b3-0198-77f3-b7a8-875763d50b1d",
+              "destinationTask": "01a07984-457e-75a1-ba39-4e5fda61f440",
+              "checkout": "C:\\Projects\\YIYUAN-Accord-post-v31",
+              "handoffRevision": "40df60cfc9625cf7108979cfb94690a1a90431db",
+              "requiredReceiptFacts": [
+                "latest-authority-and-functional-first-correction",
+                "actual-checkout-branch-clean-HEAD-upstream",
+                "source-plan-native-progress-mapping",
+                "six-required-scopes-and-unfinished-CI",
+                "protected-other-checkout-and-retained-runtime",
+                "no-archive-and-no-shared-install-authority"
               ],
-              "selectedFileCounts": [
-                11,
-                12,
-                11
-              ],
-              "exactFilesAtEveryTransition": true,
-              "nativeSelectedPathsAndEnabledRegistrationVerified": true
+              "receiptThenExplicitTakeoverObserved": true,
+              "newNativeExecution": false
             },
             "authority": {
-              "onlyTaskOwnedProfileChanged": true,
-              "noAuthenticationFileOrModelRequest": true,
-              "noOtherPluginRegistration": true,
-              "oneNativeIntentPerTransition": true
+              "userRequestedTransfer": true,
+              "userPauseAndResumePreserved": true,
+              "sourceRepositoryWriterStoppedBeforeTransfer": true,
+              "destinationRepositoryWriteAuthorityOnlyAfterDeliveredTransfer": true,
+              "archiveAuthorized": false
             },
             "poststate": {
-              "uninstalledRegistrationAbsent": true,
-              "uninstalledSelectedSkillAbsent": true,
-              "allResidualCachesAccountedBeforeDisposal": true,
-              "frozenSourcesUnchanged": true
+              "handoffStatus": "destination-confirmed-sole-writer-source-released",
+              "historicalReceiptTurn": "01a07985-901d-7742-b104-48b76f7d8ca4",
+              "actualDestinationConfirmationMessage": "msg_0177aa62c24fdbf9016a9e1776a87887d0a7ff291bda9aee91",
+              "sameCheckoutUsed": true,
+              "noConcurrentProductWriterInBoundedActions": true,
+              "actualFirstRepositoryWrite": {
+                "action": {
+                  "source": "destination20",
+                  "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\07\\rollout-2026-09-07T09-38-26-01a07984-457e-75a1-ba39-4e5fda61f440.jsonl",
+                  "line": 161,
+                  "timestamp": "2026-09-07T01:50:23.708Z",
+                  "rawLineSha256": "c3cff011d9d704d7cfa26009505bc772be2c7a444d8ab082bcc4d69439337962",
+                  "rawLineBytes": 6550,
+                  "type": "response_item",
+                  "payloadType": "custom_tool_call",
+                  "callId": "call_UGJF1s8Z5R883yGLtJwwKmka"
+                },
+                "successfulReturn": {
+                  "source": "destination20",
+                  "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\07\\rollout-2026-09-07T09-38-26-01a07984-457e-75a1-ba39-4e5fda61f440.jsonl",
+                  "line": 165,
+                  "timestamp": "2026-09-07T01:50:24.398Z",
+                  "rawLineSha256": "c3d5b6bac0bc755ba0062f3ad2f4353d9cb3c4b76f0246c9140383bb6c1a906d",
+                  "rawLineBytes": 2961,
+                  "type": "response_item",
+                  "payloadType": "custom_tool_call_output",
+                  "callId": "call_UGJF1s8Z5R883yGLtJwwKmka"
+                },
+                "files": {
+                  "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md": 10650,
+                  "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md": 10684
+                },
+                "change": "functional-first implementation plus actual change-to-action guidance",
+                "claimLimit": "successful patch and physical file readback lengths, not full new runtime acceptance"
+              }
             },
             "cleanup": {
-              "naturalExitWithoutForcedRescue": true,
-              "ownedChildrenAfterCleanup": 0,
-              "evidenceRetainedAndHashVerified": true,
-              "taskRootRemoved": true
+              "noArchiveActionInBoundedTransition": true,
+              "sourceAndDestinationHistoryRetained": true,
+              "sourceRuntimeUnloadProven": false,
+              "handoffCreatedNoNewWorktree": true,
+              "noNewHostResourceFromReassessment": true
+            },
+            "sourceProvenance": {
+              "originalExecution": {
+                "revision": "40df60cfc9625cf7108979cfb94690a1a90431db",
+                "requestAt": "2026-09-07T01:19:43.742Z",
+                "createAt": "2026-09-07T01:38:03.016Z",
+                "transferDispatchAt": "2026-09-07T01:43:42.435Z",
+                "transferDeliveredAt": "2026-09-07T01:46:15.892Z",
+                "destinationConfirmedAt": "2026-09-07T01:46:32.311Z",
+                "sourceConfirmationStoredAt": "2026-09-07T01:47:39.859196+00:00",
+                "ordinaryDevelopmentNotCurrentCandidateExecution": true,
+                "firstRepositoryWriteAt": "2026-09-07T01:50:23.708Z",
+                "firstRepositoryWriteReturnAt": "2026-09-07T01:50:24.398Z"
+              },
+              "nativeProvenance": {
+                "pathFromRetainedBase": "task20-functional-chain-20260907/desktop-retained-reassessment-draft-f87ae34/native-line-provenance.json",
+                "sha256": "561dbe671e2216148491ea505bca0bba712dfedff625c690b0e709bf37075056",
+                "bytes": 115747
+              },
+              "boundedActionIndex": {
+                "pathFromRetainedBase": "task20-functional-chain-20260907/desktop-retained-reassessment-draft-f87ae34/bounded-action-index.json",
+                "sha256": "60ca8fb4d96a166b0c9016ef15168cf34cfff83297f9551aa67cc1cab95f3cb4",
+                "bytes": 14074
+              },
+              "retainedSources": [
+                {
+                  "pathFromRetainedBase": "task19-handoff.json",
+                  "sha256": "f3e904b0f6cfeac559bd3a8f46c719f615b8d38ead463bd960f62083bffc78a9",
+                  "bytes": 1364
+                },
+                {
+                  "pathFromRetainedBase": "task19-handoff-source-plan-check.json",
+                  "sha256": "3016d7de629834b25f9cb3817066e9bf6b34b294c0f58f2d33aa19fec5105c21",
+                  "bytes": 1903
+                }
+              ],
+              "packageDependencies": {
+                "pathFromRetainedBase": "task20-functional-chain-20260907/desktop-retained-reassessment-draft-f87ae34/package-dependency-provenance.json",
+                "sha256": "1d2957e3229868531c879f4f5451e158d7537fa908531cb8451ab3e5ffbc5715",
+                "bytes": 10753
+              },
+              "failuresAndLimits": {
+                "task18Archive": {
+                  "source": {
+                    "source": "source18",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\05\\rollout-2026-09-05T15-41-53-01a06e67-d50b-7df3-af47-e70059f210c4_01a07084-4c27-7ef0-868f-2e79de06c6bb.jsonl",
+                    "line": 4514,
+                    "timestamp": "2026-09-05T17:55:23.774Z",
+                    "rawLineSha256": "3432cf6f55af65f7d119218c0a47957c1e77d0ba51ae2a28fbe87cd21bbe978b",
+                    "rawLineBytes": 1403,
+                    "type": "response_item",
+                    "payloadType": "custom_tool_call",
+                    "callId": "call_5EHByPY8oz5fSSv9Viwi9yJT"
+                  },
+                  "abortedOutput": {
+                    "source": "source18",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\05\\rollout-2026-09-05T15-41-53-01a06e67-d50b-7df3-af47-e70059f210c4_01a07084-4c27-7ef0-868f-2e79de06c6bb.jsonl",
+                    "line": 4516,
+                    "timestamp": "2026-09-05T17:55:23.949Z",
+                    "rawLineSha256": "674084e046883000e8cbb7fad10943aa624873447d6c972536d1bc34943c7083",
+                    "rawLineBytes": 383,
+                    "type": "response_item",
+                    "payloadType": "custom_tool_call_output",
+                    "callId": "call_5EHByPY8oz5fSSv9Viwi9yJT"
+                  },
+                  "turnAborted": {
+                    "source": "source18",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\05\\rollout-2026-09-05T15-41-53-01a06e67-d50b-7df3-af47-e70059f210c4_01a07084-4c27-7ef0-868f-2e79de06c6bb.jsonl",
+                    "line": 4519,
+                    "timestamp": "2026-09-05T17:55:23.959Z",
+                    "rawLineSha256": "ac235be97af8ba671d37e3dbb8ef0c0168110ffb7f66285e9961111ee37763ab",
+                    "rawLineBytes": 253,
+                    "type": "event_msg",
+                    "payloadType": "turn_aborted",
+                    "callId": "not-applicable"
+                  },
+                  "userRestoration": {
+                    "source": "source19",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\06\\rollout-2026-09-06T01-52-09-01a072b3-0198-77f3-b7a8-875763d50b1d.jsonl",
+                    "line": 95,
+                    "timestamp": "2026-09-05T18:02:42.313Z",
+                    "rawLineSha256": "4cfbff591ef6a00d2c990750934b821582486e386219ff717dd51d7b2c1cd48a",
+                    "rawLineBytes": 404,
+                    "type": "response_item",
+                    "payloadType": "message",
+                    "callId": "not-applicable"
+                  },
+                  "userArchiveAuthorizationRequirement": {
+                    "source": "source19",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\06\\rollout-2026-09-06T01-52-09-01a072b3-0198-77f3-b7a8-875763d50b1d.jsonl",
+                    "line": 138,
+                    "timestamp": "2026-09-05T18:06:56.658Z",
+                    "rawLineSha256": "718134a1a6bfadf4e64a4d7701f126c6c43fa38a7fe1f70ad2d33745b9644be0",
+                    "rawLineBytes": 737,
+                    "type": "response_item",
+                    "payloadType": "message",
+                    "callId": "not-applicable"
+                  },
+                  "originalFailurePreserved": true,
+                  "archiveMethodResponseUnavailable": true,
+                  "inference": "Explicit archive attempt plus user-reported manual restoration and interrupted source execution; never infer past non-archive from later restored state."
+                },
+                "historicalFormalCasePrebinding": "not-present; these were ordinary development events, not runs prebound to these new cases"
+              },
+              "assistance": {
+                "userInitiatedHandoff": true,
+                "initialReceptionInterrupted": true,
+                "sourceRequestedMissingReceiptCompletion": true,
+                "userPausedAndResumedForReasoningSetting": true,
+                "autonomousEarlyNeedDetectionProven": false,
+                "efficiencyRange": "unknown",
+                "actualOccupancy": "unknown",
+                "sourceAllocationReleaseBeyondWriteQuiescence": "not-established",
+                "scenarioAllocation": "Source19 user functional-first correction is preserved and propagated into destination code. The bounded handoff includes an explicit pause/resume, so it does not claim the no-pause mid-task-user-steering scenario; the separate codex-function cases cover it."
+              }
+            }
+          }
+        },
+        {
+          "id": "codex-desktop-compaction-continuation-retained-reassessment",
+          "scope": "codex-desktop-continuity",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "goal-authority-correction",
+            "premise-and-consistency",
+            "context-and-task-continuity",
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "research-learning-and-reuse",
+            "native-replacement-and-retirement"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "mid-task-host-drift"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "hostVersion": "26.901.6511.0",
+            "transport": "Codex-Desktop-local-native-task-and-tool-surfaces",
+            "profile": "existing-authorized-user-Desktop-environment-not-pristine",
+            "observationMethod": "retained-evidence-reassessment",
+            "reassessmentWrites": "private-review-receipts-only-no-host-execution",
+            "evidenceAgeRule": "preserve original times and age; review material host, candidate-guidance and authority dependencies; maxAgeSeconds limits only current reassessment",
+            "authorityBoundary": "no new Desktop task, archival, installation or host execution in this reassessment",
+            "originalEpisode": "task20-compaction-window15-bounded-cleanup-and-commit",
+            "candidateExposure": "explicit-read-of-current-dev16-repository-Skill-before-compaction; not-installed-or-automatic-activation"
+          },
+          "oracle": "This is a NEW read-only reassessment only after this case is committed. The authenticated independent caller reads original fixed native lines and hashes, actual task/turn/call identities, retained physical sources and current Git/package dependencies. The draft is a hypothesis, never copy expected values into facts. evaluatedRevision/observedAt/episodeId identify this new assessment; nested original execution identities, assistance and failures remain immutable. No historical current-case prebinding is invented: these episodes were ordinary development work. Preserve original age; maxAgeSeconds is only current reassessment freshness. Compare actual relevant host/version, Skill, source authority and execution boundaries. No new host/task/model/install/archive/repair; observe/recheck verifies current sources, limitations and source-provenance stability. Current review must reject material unsupported inferences or missing necessary outcomes even if IDs mechanically cover a scope. Verify native compaction marker at destination20 9291; never treat compacted replacement text, token decrease or count as integrity proof. Verify exact selected Skill read at 8612/8615 and matching 577dcec/fe1dee5/f87ae34 bytes. Read post-compaction actual commands/results 9307 onward: correct successor checkout/fe1dee5; ownership, retained/source maps, prior independent review and closed process conditions before the bounded cleanup; retained 122-file map and actual root removal; source-plan/navigation update and exact f87ae34 Git commit/push/readback. Independently hash the retained map and all referenced physical files; inspect the actual cleanup program from line9333, not only its report. Keep failing exploratory reads and corrected IDs in the trace, not fabricate an error-free continuation. Check no unauthorized Desktop creation/archive/shared-state mutation in this window. Verify required state survived against independent artifacts and actual actions, limited to this work span. At9433 last-request input89541/window258400 is not exact occupancy or an optimal range. Missing exact occupancy may justify a short span with fresh checkpoints; it cannot certify unlimited headroom or proactive handoff. No current installed/automatic Skill/Hook effect or causal Accord benefit. For the two maintenance branches, inspect actual prior-review/retention reads and the line9333 cleanup program: owner purpose/revision/absolute targets, source and retained full maps, original PID and path-referencing consumers, verified closure and retained-copy recheck. Require real release at9337 and physical evidence retained; reading a report or cleanup=true alone cannot establish reuse or retirement. This is a completed authorized maintenance allocation, not arbitrary runtime substitution or discovery beyond installed inventory.",
+          "oracleFiles": [
+            "yiyuan_accord/admission.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "kind": "actual-native-automatic-compaction-followed-by-bounded-useful-work",
+              "taskId": "01a07984-457e-75a1-ba39-4e5fda61f440",
+              "compactionAt": "2026-09-07T15:30:11.910Z",
+              "windowNumber": 15,
+              "preWorkRevision": "fe1dee55f9a14d353047cc8b82d5ee35a72b8474",
+              "postWorkRevision": "f87ae3451533a452e9ce3abef38da91ef07da799",
+              "selectedCandidateSkillReadBeforeCompaction": true,
+              "newNativeExecution": false,
+              "maintenanceBranches": {
+                "research-learning-and-reuse": "reused independent review and original retention evidence to decide and execute safe bounded release, then verified physical results",
+                "native-replacement-and-retirement": "retired the closed no-auth task-owned run allocation after ownership, need, consumers and retained-evidence equality checks; no needed evidence or function removed"
+              }
+            },
+            "authority": {
+              "sameSoleWriterRetained": true,
+              "correctSuccessorCheckoutUsedForWrites": true,
+              "protectedOtherCheckoutNotUsedAsWriteTarget": true,
+              "noNewTaskOrArchiveAuthorizationInferred": true,
+              "oneSharedInstallExceptionNotReused": true,
+              "retirementTarget": "only codex-exact-transition-draft/run-01; no user task/history/shared installation"
+            },
+            "poststate": {
+              "stateIntegrityValidatedBy": [
+                "actual-authority-and-checkout-reconciliation",
+                "uncompleted-owned-cleanup-not-lost",
+                "original-evidence-preserved-before-disposal",
+                "source-plan-and-navigation-updated",
+                "exact-commit-and-remote-readback"
+              ],
+              "lastRequestInputTokens": 89541,
+              "reportedModelContextWindow": 258400,
+              "exactCurrentOccupancy": "unknown",
+              "optimalEfficiencyRange": "unknown",
+              "nativeCompactionMarkerNotSoleIntegrityProof": true,
+              "allLatentContextIntegrityProven": false,
+              "retirementChecks": {
+                "ownerPurpose": "reviewed-native-no-auth-transition",
+                "ownerRevision": "fe1dee55f9a14d353047cc8b82d5ee35a72b8474",
+                "originalProcessId": 36184,
+                "originalProcessAbsentAtCleanup": true,
+                "pathReferencingConsumersBeforeAndAfter": 0,
+                "retainedFullMapVerifiedAfterRemoval": true
+              }
+            },
+            "cleanup": {
+              "closedTaskOwnedRunRemoved": true,
+              "retainedEvidenceFileCount": 122,
+              "retainedEvidenceTotalBytes": 3114852,
+              "sourceAndRetainedHashMapsComparedBeforeRemoval": true,
+              "archiveUsedAsCleanup": false,
+              "retainedEvidenceIntentionallyKept": true,
+              "noNewHostResourceFromReassessment": true
+            },
+            "sourceProvenance": {
+              "originalExecution": {
+                "taskId": "01a07984-457e-75a1-ba39-4e5fda61f440",
+                "selectedSkillReadAt": "2026-09-07T14:33:19.604Z",
+                "selectedSkillReadRevision": "577dcec10ce819ab190d702b2d5e253929443978",
+                "preCompactionRevision": "fe1dee55f9a14d353047cc8b82d5ee35a72b8474",
+                "compaction": {
+                  "source": "destination20",
+                  "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\07\\rollout-2026-09-07T09-38-26-01a07984-457e-75a1-ba39-4e5fda61f440.jsonl",
+                  "line": 9291,
+                  "timestamp": "2026-09-07T15:30:11.910Z",
+                  "rawLineSha256": "6862419c05fe6a2295c69a7ba75fb77adf6197cf148ffa11685526aeee99b256",
+                  "rawLineBytes": 579591,
+                  "type": "compacted",
+                  "payloadType": "not-applicable",
+                  "callId": "not-applicable"
+                },
+                "postCompactionRevision": "f87ae3451533a452e9ce3abef38da91ef07da799",
+                "cleanupAt": "2026-09-07T15:32:07.1457037+00:00",
+                "pushResultAt": "2026-09-07T15:34:18.296Z",
+                "remoteReadbackAt": "2026-09-07T15:34:47.412Z",
+                "lastIncludedStatisticsAt": "2026-09-07T15:36:49.397Z"
+              },
+              "nativeProvenance": {
+                "pathFromRetainedBase": "task20-functional-chain-20260907/desktop-retained-reassessment-draft-f87ae34/native-line-provenance.json",
+                "sha256": "561dbe671e2216148491ea505bca0bba712dfedff625c690b0e709bf37075056",
+                "bytes": 115747
+              },
+              "boundedActionIndex": {
+                "pathFromRetainedBase": "task20-functional-chain-20260907/desktop-retained-reassessment-draft-f87ae34/bounded-action-index.json",
+                "sha256": "60ca8fb4d96a166b0c9016ef15168cf34cfff83297f9551aa67cc1cab95f3cb4",
+                "bytes": 14074
+              },
+              "retainedSources": [
+                {
+                  "pathFromRetainedBase": "task20-functional-chain-20260907/codex-exact-transition-draft/retention-run-01.json",
+                  "sha256": "751436a999cd507d133cac90946039c9faf9f2ef14c4faaa68a9637b78959028",
+                  "bytes": 21836
+                },
+                {
+                  "pathFromRetainedBase": "task20-functional-chain-20260907/codex-exact-transition-draft/cleanup-run-01.json",
+                  "sha256": "be86f8a870aea46760f45bd443e1f767db93b13f8fa66f309adccb01208f215a",
+                  "bytes": 1030
+                },
+                {
+                  "pathFromRetainedBase": "task20-functional-chain-20260907/codex-exact-transition-draft/independent-review-run-01.json",
+                  "sha256": "1405786d806ce38e7c186581a94c9aeed7533abeb474baeef6b3be28cfb9fcf5",
+                  "bytes": 28077
+                },
+                {
+                  "pathFromRetainedBase": "task20-functional-chain-20260907/codex-exact-transition-draft/retained-run-01/execution-report.json",
+                  "sha256": "ba369585b56453595abbc3e1fe1497570d099a5d2a7d2db94092c063f9dbcaf7",
+                  "bytes": 7651
+                },
+                {
+                  "pathFromRetainedBase": "task20-functional-chain-20260907/codex-exact-transition-draft/retained-run-01/owner.json",
+                  "sha256": "8d9b170930e04c4fe1ced550c21805cdd3f944d19a9bff1887a69e30328154a0",
+                  "bytes": 285
+                },
+                {
+                  "pathFromRetainedBase": "task20-functional-chain-20260907/close-native-transition.ps1",
+                  "sha256": "ccb10cc97d10ba2e11fd13a39afadedf821eebd30a878540507d455863269a3a",
+                  "bytes": 4208
+                }
+              ],
+              "packageDependencies": {
+                "pathFromRetainedBase": "task20-functional-chain-20260907/desktop-retained-reassessment-draft-f87ae34/package-dependency-provenance.json",
+                "sha256": "1d2957e3229868531c879f4f5451e158d7537fa908531cb8451ab3e5ffbc5715",
+                "bytes": 10753
+              },
+              "failuresAndLimits": {
+                "task18Archive": {
+                  "source": {
+                    "source": "source18",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\05\\rollout-2026-09-05T15-41-53-01a06e67-d50b-7df3-af47-e70059f210c4_01a07084-4c27-7ef0-868f-2e79de06c6bb.jsonl",
+                    "line": 4514,
+                    "timestamp": "2026-09-05T17:55:23.774Z",
+                    "rawLineSha256": "3432cf6f55af65f7d119218c0a47957c1e77d0ba51ae2a28fbe87cd21bbe978b",
+                    "rawLineBytes": 1403,
+                    "type": "response_item",
+                    "payloadType": "custom_tool_call",
+                    "callId": "call_5EHByPY8oz5fSSv9Viwi9yJT"
+                  },
+                  "abortedOutput": {
+                    "source": "source18",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\05\\rollout-2026-09-05T15-41-53-01a06e67-d50b-7df3-af47-e70059f210c4_01a07084-4c27-7ef0-868f-2e79de06c6bb.jsonl",
+                    "line": 4516,
+                    "timestamp": "2026-09-05T17:55:23.949Z",
+                    "rawLineSha256": "674084e046883000e8cbb7fad10943aa624873447d6c972536d1bc34943c7083",
+                    "rawLineBytes": 383,
+                    "type": "response_item",
+                    "payloadType": "custom_tool_call_output",
+                    "callId": "call_5EHByPY8oz5fSSv9Viwi9yJT"
+                  },
+                  "turnAborted": {
+                    "source": "source18",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\05\\rollout-2026-09-05T15-41-53-01a06e67-d50b-7df3-af47-e70059f210c4_01a07084-4c27-7ef0-868f-2e79de06c6bb.jsonl",
+                    "line": 4519,
+                    "timestamp": "2026-09-05T17:55:23.959Z",
+                    "rawLineSha256": "ac235be97af8ba671d37e3dbb8ef0c0168110ffb7f66285e9961111ee37763ab",
+                    "rawLineBytes": 253,
+                    "type": "event_msg",
+                    "payloadType": "turn_aborted",
+                    "callId": "not-applicable"
+                  },
+                  "userRestoration": {
+                    "source": "source19",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\06\\rollout-2026-09-06T01-52-09-01a072b3-0198-77f3-b7a8-875763d50b1d.jsonl",
+                    "line": 95,
+                    "timestamp": "2026-09-05T18:02:42.313Z",
+                    "rawLineSha256": "4cfbff591ef6a00d2c990750934b821582486e386219ff717dd51d7b2c1cd48a",
+                    "rawLineBytes": 404,
+                    "type": "response_item",
+                    "payloadType": "message",
+                    "callId": "not-applicable"
+                  },
+                  "userArchiveAuthorizationRequirement": {
+                    "source": "source19",
+                    "sourcePath": "C:\\Users\\15521\\.codex\\sessions\\2026\\09\\06\\rollout-2026-09-06T01-52-09-01a072b3-0198-77f3-b7a8-875763d50b1d.jsonl",
+                    "line": 138,
+                    "timestamp": "2026-09-05T18:06:56.658Z",
+                    "rawLineSha256": "718134a1a6bfadf4e64a4d7701f126c6c43fa38a7fe1f70ad2d33745b9644be0",
+                    "rawLineBytes": 737,
+                    "type": "response_item",
+                    "payloadType": "message",
+                    "callId": "not-applicable"
+                  },
+                  "originalFailurePreserved": true,
+                  "archiveMethodResponseUnavailable": true,
+                  "inference": "Explicit archive attempt plus user-reported manual restoration and interrupted source execution; never infer past non-archive from later restored state."
+                },
+                "historicalFormalCasePrebinding": "not-present; these were ordinary development events, not runs prebound to these new cases"
+              },
+              "assistance": {
+                "ordinaryRootOwnsWork": true,
+                "independentNativeTransitionReviewBeforeCompaction": true,
+                "sharedHostAmbientInstructionsAndPriorConversationInfluence": true,
+                "packageInstalledForThisDesktopSpan": false,
+                "exactOccupancyAndCalibratedRangeAvailable": false,
+                "automaticHandoffNeedDetectionDemonstrated": false,
+                "deletionDoesNotProveGeneralRuntimeUnload": true
+              }
             }
           }
         }
@@ -5160,7 +6056,7 @@
             "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks",
             "lifecycleDecisionActor": "prebound healthy Codex native subagent created with fork_turns=none and no model or reasoning override; explicitly reads the exact task-local candidate Skill and owns authorized management choices and actions; parent binds inputs, publishes declared source/fault stages and independently observes"
           },
-          "rule": "Use owned profiles and no shared candidate installation before accepted publication. A prebound healthy Codex native subagent remains the actual management caller. Its explicit reading of the exact task-local candidate Skill is declared management exposure independent of the changed installed tree, not plugin registration, Hook loading or installed activation. This selected cross-host composition does not prove automatic takeover, Claude-only management or Codex Desktop continuity. Validate the actual requested source with sufficient supported checks before installation-state mutation, recording its relation to the currently selected source, then inspect exact installed bytes, registration and fresh loaded behavior. Native manager command success is not a validation/recovery transaction. Retain invalid-source and installed-fault checkpoints separately; require actual Agent-selected supported recovery and its loaded effect, not evaluator repair. Native orphan caches and evaluator disposal are separate. Full inventory, relevant drift, state and lifecycle duties remain required; this selected composition proves neither automatic interception nor hot reload or value. Method changes and parent-provided recovery options remain declared assistance, not retroactive current-case or autonomous-discovery evidence. A retained, consumer-free task-owned failed-cache eviction can precede native reconstruction; never substitute handwritten cache or registration. Budget reviews and environment drift are dependency-sensitive; retain original failures and rebind affected future actions without restoring user state."
+          "rule": "Use the declared cooperating composition: independent healthy Codex management actor with explicitly read frozen candidate Skill, supported Claude native manager mechanics and fresh Claude registered activation. A current retained-evidence case may reassess exact historical effects after original source and current dependency verification; preserve all original identities, failures, assistance, epoch changes and cleanup ownership. Historical actual bad installation, actor-selected supported restoration, invalid requested publisher hold, corrected update and fresh loaded use are distinct results. Never infer automatic takeover, unaided discovery, Claude-only management, pristine environment, refreshed-invalid-marketplace execution, universal interception, hot reload or value. Source-field editing and inactive bad-cache eviction remain expressly bounded assisted methods, not native package repair. Do not require replay merely to match an obsolete fixed budget, profile shape or helper sequence."
         },
         {
           "id": "codex-function",
@@ -5168,13 +6064,11 @@
           "entry": "cx-sdk",
           "duties": [
             "goal-authority-correction",
-            "research-learning-and-reuse",
             "relations-routing-and-form",
             "execution-configuration-and-code",
             "premise-and-consistency",
             "correction-and-evolution",
             "context-and-task-continuity",
-            "native-replacement-and-retirement",
             "verification-and-value",
             "environment-and-self-exposure",
             "recovery-and-rollback",
@@ -5209,7 +6103,7 @@
             "requestedEffort": "high",
             "providerFallbackAllowed": false
           },
-          "rule": "Current Codex task behavior through direct App Server in each case's declared authorized composition, with task-local candidate exposure or the separately authorized installed-use episode. Shared-host installation otherwise remains deferred until accepted publication; this scope does not universally require a globally installed candidate. This scope retains the whole mapped functional and relevant scenario obligations; a narrow passing case cannot close the remaining inventory. Each case binds its actual selected or implicit entry, exact source package and exposed subset, material configuration and observed extensions. This is not pristine-host, Desktop, Chat/Work, SDK-library, complete lifecycle or incremental-value acceptance. Separate cases remain necessary for materially different conditions and missing effects; do not infer full context-pressure or archive-prevention behavior from same-carrier steering. This is the current formal App Server method, not a permanent SDK prerequisite. Before final admission, reassess the sufficient entry against required functions and jointly rebind scope, cases, conditions and review coverage if it changes. Existing CLI diagnostics keep their actual entry and immutable subjects; zero admitted records does not erase historical executions. Retained-evidence cases separately declare their original profile and exposure, including the once-authorized installed dev.16 episode. Their current read-only reassessment preserves original identity, conditions, assistance, failures and dependency limits; historical loading is not current loaded state. The current required scenario set binds the actual necessary source-loss/conflict/lease and question/correction effects, plus the separately bound installed-use slice. Untriggered model changes, cross-domain shifts or external-better alternatives remain conditional design responsibilities, not forced experiments. Minimum supported environment applicability and source discovery still require their own dependency/coverage judgment; no pristine-host or full-duty claim follows. Keep every existing duty and quality floor; research-learning-and-reuse and native-replacement-and-retirement are not supplied merely by relabeling these two cases."
+          "rule": "Current Codex task behavior through direct App Server in each case's declared authorized composition, with task-local candidate exposure or the separately authorized installed-use episode. Shared-host installation otherwise remains deferred until accepted publication; this scope does not universally require a globally installed candidate. This scope retains the whole mapped functional and relevant scenario obligations; a narrow passing case cannot close the remaining inventory. Each case binds its actual selected or implicit entry, exact source package and exposed subset, material configuration and observed extensions. This is not pristine-host, Desktop, Chat/Work, SDK-library, complete lifecycle or incremental-value acceptance. Separate cases remain necessary for materially different conditions and missing effects; do not infer full context-pressure or archive-prevention behavior from same-carrier steering. This is the current formal App Server method, not a permanent SDK prerequisite. Before final admission, reassess the sufficient entry against required functions and jointly rebind scope, cases, conditions and review coverage if it changes. Existing CLI diagnostics keep their actual entry and immutable subjects; zero admitted records does not erase historical executions. Retained-evidence cases separately declare their original profile and exposure, including the once-authorized installed dev.16 episode. Their current read-only reassessment preserves original identity, conditions, assistance, failures and dependency limits; historical loading is not current loaded state. The current required scenario set binds the actual necessary source-loss/conflict/lease and question/correction effects, plus the separately bound installed-use slice. Untriggered model changes, cross-domain shifts or external-better alternatives remain conditional design responsibilities, not forced experiments. Minimum supported environment applicability and source discovery still require their own dependency/coverage judgment; no pristine-host or full-duty claim follows. Keep every existing duty and quality floor; research-learning-and-reuse and native-replacement-and-retirement are not supplied merely by relabeling these two cases. The concrete evidence-reuse and no-longer-needed allocation-retirement branches are now assigned to codex-desktop-continuity in the actual selected-guidance Desktop maintenance episode. They are not deleted from Codex host-wide required duties or represented by these cx-sdk order samples. Other research/retirement triggers retain their conditional responsibility and require their own applicability review when material; no universal runtime or cross-entry inference follows."
         },
         {
           "id": "codex-lifecycle",
@@ -5242,12 +6136,54 @@
             "hostVersion": "0.153.4",
             "hostBinarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
             "transport": "local-app-server-stdio",
-            "profile": "task-owned-CODEX_HOME-without-private-auth",
-            "requestedOptionalHooks": "disabled",
-            "requestedRemotePlugins": "disabled",
-            "configurationRequirements": "none-reported"
+            "profile": "explicit-composite-of-original-owned-no-auth-installer-episodes-and-once-authorized-existing-profile-installed-use",
+            "requestedOptionalHooks": "original-no-auth-components-disabled; installed-use-native-plugin-Hook-events-observed; assess-per-episode",
+            "requestedRemotePlugins": "per-original-bound-episode; no merged effective configuration",
+            "configurationRequirements": "native-component-none-reported; installed-use-original-requirements-check-preserved; no current-policy inheritance"
           },
-          "rule": "Controlled native Codex plugin lifecycle in a disposable profile. The native manager executes each authorized operation; the maintainer orchestrates the experiment and independently observes RPC, files, registration, enabled state, discovery and residue. The installer component cannot prove Agent loading or use. Complete lifecycle separately requires the same installed candidate's actual loading/activation and ordinary-entry effects, including applicable recovery; these package-lifecycle/recovery duties and normal-entry/recovery quality remain open until adequate complementary cases are bound. Do not require body loading before an unspecified lazy-load trigger, or replace it with catalogue metadata. A later authenticated profile must be explicitly reconciled with this scope's conditions before observation, not mixed into it or used to promote standalone Skill samples. One native intent must own each lifecycle transition without evaluator repair. Invalid-manifest rejection covers preservation before writing, not rollback after partial mutation. This scope cannot establish Desktop continuity, whole-product functionality or incremental value."
+          "rule": "This scope evaluates the sufficient combination of distinct retained native installation-state, failure-protection and installed-use episodes. Shared conditions identify the composite, not a fictitious common profile. Each original identity, authorization, effective environment and exposure is preserved in the case; no-auth installer facts do not establish authenticated-use permissions and vice versa. Bind the same current candidate bytes and native executor, unchanged accepted prior, source-to-installed relation, original one-intent transitions, package-independent host executor and all residue/disposal effects. Judge only compatible dependencies. Actual explicit installed Skill/helper use supplies bounded normal-entry evidence without requiring unobserved full body text as a proxy. No same-run end-to-end chain, automatic recovery, partial-write rollback, current shared installation, current provider or perpetual permission follows. New shared installation remains withdrawn. Missing compatible dependencies limit the affected claim rather than being repaired with another episode. Desktop, general fault recovery and value remain separate."
+        },
+        {
+          "id": "codex-desktop-continuity",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "goal-authority-correction",
+            "premise-and-consistency",
+            "context-and-task-continuity",
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "research-learning-and-reuse",
+            "native-replacement-and-retirement"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "mid-task-host-drift"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "hostVersion": "26.901.6511.0",
+            "transport": "Codex-Desktop-local-native-task-and-tool-surfaces",
+            "profile": "existing-authorized-user-Desktop-environment-not-pristine",
+            "observationMethod": "retained-evidence-reassessment",
+            "reassessmentWrites": "private-review-receipts-only-no-host-execution",
+            "evidenceAgeRule": "preserve original times and age; review material host, candidate-guidance and authority dependencies; maxAgeSeconds limits only current reassessment",
+            "authorityBoundary": "no new Desktop task, archival, installation or host execution in this reassessment"
+          },
+          "rule": "Necessary Desktop continuity uses sufficient native host execution under Accord guidance, with explicit current dependency review. Bind the historical user-requested 19-to-20 delivery/receipt/takeover chain and the actual same-carrier automatic compaction followed by reconciled useful work; these are distinct conditions. Preserve the 18 unauthorized archival/user rescue failure and the 19/20 interrupted receipt/user pause/resume. No new task is required to fill an inventory cell. Retain the six continuity workSequence duties and allocate two concrete maintenance branches here: reuse of verified retained evidence to decide and execute the next action, and authorized retirement of a no-longer-needed task allocation with callers and evidence preservation checked. These branches are not claimed in the current cx-sdk samples. Case coverage IDs do not certify every requiredOutcome: early autonomous detection, a justified transition margin, any unavailable source-allocation release, and current installed/automatic package effects cannot be inferred. Independent subject review must explicitly decide applicability and any remaining necessary gap; do not silently redefine failed autonomous continuity as successful assisted handoff. Retained historical native sufficiency can justify delegation of controls; changed guidance does not retrospectively become the historical executor. Protect both checkouts, task history and all retained evidence."
         }
       ]
     },
