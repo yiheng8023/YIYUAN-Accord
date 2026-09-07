@@ -1,11 +1,11 @@
 ---
 name: deliver-demand-driven-outcome
-description: Deliver nontrivial outcomes through adaptive capability discovery, best-fit routing, execution, correction, verification and cleanup. Intervene for unmet needs or a plausible material improvement; leave simple answers and well-supported low-burden routes alone.
+description: Deliver nontrivial outcomes through capability discovery, routing, execution, correction, verification and cleanup. Use for authorized package installation, update or independent recovery and other unmet needs or material improvements; leave simple answers and sufficient low-burden routes alone.
 ---
 
 # Deliver the outcome
 
-Apply by need, without a fixed sequence.
+Apply by need, without a fixed sequence. Package changes: [Manage packages](#manage-packages).
 
 ## Bind the result before choosing the means
 
@@ -118,17 +118,31 @@ stays unknown and presence grants no authority. Reuse compatible aid and isolate
 conflicts within authority. Bind scope, backup, affected sessions and restoration
 for shared changes. A clean host is not a product prerequisite.
 
-For package changes, preserve exact prior source/state and a recovery actor
-available outside the changed component. Validate the native-selected source
-before mutation. For Claude relative-directory user installs with bound Node
-and CLI/profile, run `${CLAUDE_PLUGIN_ROOT}/runtime/inspect-plugin-update.cjs`
-via that Node path with a JSON file; see `--help`.
-Hold invalid/unknown changes; `inspection-complete` is a
-snapshot, not update permission. Use supported native checks for other sources.
-Verify installed bytes, registration and fresh loading; version/exit success
-proves neither content nor usability. On mismatch, stop dependent use and
-restore/verify the known-good state through authorized controls. Same-version
-caches can retain bad bytes; never overwrite shared caches or invent force options.
+### Manage packages
+
+For authorized package changes, preserve prior source/state and a recovery
+actor outside the changed component. Reconcile the requested target with the
+host-selected source before installation-state mutation. When supported checks
+prove that source invalid, decide against the change, verify protected state
+and report what remains; stop unrelated exploration. Unknown prerequisites
+hold only dependent changes.
+
+For existing Claude user installs with relative-directory sources, the optional
+checker is `${CLAUDE_PLUGIN_ROOT}/runtime/inspect-plugin-update.cjs`, or that
+relative path in the bound independent management package. Invoke its absolute
+path with the authorized Node executable and bound JSON request path. Keep the
+caller-bound working directory and CLI/profile. Only these keys:
+`cli` (argv starting with a trusted absolute Claude path), `plugin`
+(`name@marketplace`), `scope` (`user`), and optional `expectedSourceSha256`
+(trusted lowercase SHA-256). Reuse caller-provided candidate/prior requests
+after checking their bindings. The target's current digest is not its own
+trusted baseline. Other sufficient native checks remain valid choices.
+
+Inspection is not permission. Verify installed bytes, registration and fresh
+loading; a version or successful exit does not prove usability. On mismatch,
+stop dependent use and restore/verify known-good state within authority.
+Same-version caches may retain bad bytes; use supported recovery, never
+overwrite shared caches or invent force options.
 
 Finish required blocker confirmation and post-state checks. Never bypass denied
 or out-of-scope effects; use authorized alternatives. Containment is not completion.

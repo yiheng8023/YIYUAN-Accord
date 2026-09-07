@@ -1,11 +1,11 @@
 ---
 name: deliver-demand-driven-outcome
-description: Deliver nontrivial outcomes through adaptive capability discovery, best-fit routing, execution, correction, verification and cleanup. Intervene for unmet needs or a plausible material improvement; leave simple answers and well-supported low-burden routes alone.
+description: Deliver nontrivial outcomes through capability discovery, routing, execution, correction, verification and cleanup. Use for authorized package installation, update or independent recovery and other unmet needs or material improvements; leave simple answers and sufficient low-burden routes alone.
 ---
 
 # Deliver the outcome
 
-Apply these responsibilities when relevant; they are not a mandatory sequence.
+Apply by need, without a fixed sequence. Package changes: [Manage packages](#manage-packages).
 
 ## Bind the result before choosing the means
 
@@ -119,14 +119,22 @@ stays unknown and presence grants no authority. Reuse compatible aid and isolate
 conflicts within authority. Bind scope, backup, affected sessions and restoration
 for shared changes. A clean host is not a product prerequisite.
 
-For authorized package changes, retain exact prior source/state and a recovery
-actor outside the changed component. Validate the exact selected source with
-supported checks before mutation; hold invalid or unverifiable changes. Check
-installed bytes, registration and fresh loading afterwards. A version or command
-success is not content or usability proof. On mismatch, stop dependent use and
-restore and verify a known-good prior state through authorized controls. Version
-caches may survive same-version fixes; do not overwrite shared caches or invent
-force options.
+### Manage packages
+
+For authorized package changes, preserve prior source/state and a recovery
+actor outside the changed component. Reconcile the requested target with the
+host-selected source before installation-state mutation. When supported checks
+prove that source invalid, decide against the change, verify protected state
+and report what remains; stop unrelated exploration. Unknown prerequisites
+hold only dependent changes.
+
+Verify caller-provided candidate/prior bindings and use supported host controls.
+
+Inspection is not permission. Verify installed bytes, registration and fresh
+loading; a version or successful exit does not prove usability. On mismatch,
+stop dependent use and restore/verify known-good state within authority.
+Same-version caches may retain bad bytes; use supported recovery, never
+overwrite shared caches or invent force options.
 
 Finish required blocker confirmation and post-state checks. Never bypass denied
 or out-of-scope effects; use authorized alternatives. Containment is not completion.

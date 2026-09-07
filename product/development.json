@@ -22,14 +22,14 @@
     "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
   },
   "delivery": {
-    "version": "3.2.0-dev.15",
-    "rule": "The unpublished dev.15 packages deliver an optional task-local file checkpoint and supported native input, Stop and session-end callers; Codex also connects Interrupt. The Agent chooses meaningful predicates, reconciles intent and owns execution. The helper samples real bytes, detects observed drift, preserves input freshness and unfinished work, and requests bounded continuation. Pause does not reconcile old contracts; failed input publication keeps a recoverable lock, and proven dead input-lock recovery requires guarded replay of actual native input. A surviving caller may retire only the current unbound receipt after verified exit, with revision zero and a reason. This is neither an external-writer transaction nor a daemon or host authority barrier. Claude PostToolBatch also supplies fixed, advisory scope/verification/residue feedback for the observed Bash refusal format; unknown batches stay silent and matched text grants no authority. Both Skills assign ongoing retrospective correction to Accord, reusing sufficient host execution and recovery. Handoff guidance separates receipt, takeover, one writer, allocation release and explicit archive authority. Shared candidate installation remains withdrawn; use bounded task-local evaluation on the existing hosts. The failed Claude dev.11 lifecycle episode remains historical. A subsequent dev.15 episode supplied trusted target identity and proved installed loading, but its management Agent still failed to complete an invalid-source hold. Management discovery and decision linkage now require correction; historical outcomes remain unchanged. Exact historical and current observations, their failures, repairs and limits live in developmentObservations rather than expanding this rule. Local helper checks, synthetic transport, native task effects, lifecycle, Desktop and causal value remain distinct; formal evidence must match its actual package, entry, conditions and reviewed outcomes.",
+    "version": "3.2.0-dev.16",
+    "rule": "The unpublished dev.16 packages deliver an optional task-local file checkpoint and supported native input, Stop and session-end callers; Codex also connects Interrupt. The Agent chooses meaningful predicates, reconciles intent and owns execution. The helper samples real bytes, detects observed drift, preserves input freshness and unfinished work, and requests bounded continuation. Pause does not reconcile old contracts; failed input publication keeps a recoverable lock, and proven dead input-lock recovery requires guarded replay of actual native input. A surviving caller may retire only the current unbound receipt after verified exit, with revision zero and a reason. This is neither an external-writer transaction nor a daemon or host authority barrier. Claude PostToolBatch also supplies fixed, advisory scope/verification/residue feedback for the observed Bash refusal format; unknown batches stay silent and matched text grants no authority. Both Skills assign ongoing retrospective correction to Accord, reusing sufficient host execution and recovery. Handoff guidance separates receipt, takeover, one writer, allocation release and explicit archive authority. Shared candidate installation remains withdrawn; use bounded task-local evaluation on the existing hosts. The failed Claude dev.11 lifecycle episode remains historical. A subsequent dev.15 episode supplied trusted target identity and proved installed loading, but its management Agent still failed to complete an invalid-source hold. Dev.16 exposes management triggers, a direct management section and the existing optional typed inspection entry; its actual use and decisions still need fresh evidence. Historical outcomes remain unchanged. Exact historical and current observations, their failures, repairs and limits live in developmentObservations rather than expanding this rule. Local helper checks, synthetic transport, native task effects, lifecycle, Desktop and causal value remain distinct; formal evidence must match its actual package, entry, conditions and reviewed outcomes.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.15",
-        "packageSha256": "4cdf1a9ec621682de7abe8c4c4ee969504a5eef1eab0fc7f21b660a5ddea2aa9",
+        "packageVersion": "3.2.0-dev.16",
+        "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -50,15 +50,15 @@
         "interfaceDefaultPrompt": [
           "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
         ],
-        "maxSkillBytes": 12800,
+        "maxSkillBytes": 13600,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
       },
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.15",
-        "packageSha256": "55a59202bd2e8de9b54b741356e7e84a9ced9ad3f76d22c6b89a386891dce99d",
+        "packageVersion": "3.2.0-dev.16",
+        "packageSha256": "d64ef6e9a26ecba46c8f5a3203311e740ab5652a84ea0182a1e7e62ba2ac793e",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -75,7 +75,7 @@
           "plugins/yiyuan-accord-claude/runtime/task-checkpoint.cjs"
         ],
         "activationContext": "SessionStart resume and compact hints remain advisory. Supported UserPromptSubmit records a fresh task input epoch. A caller bound checkpoint inspects workspace file predicates and stale inputs. Stop can request continuation for unmet results once per changed observation. New input and Codex Interrupt invalidate old decisions. SessionEnd removes unbound receipts and preserves unfinished checkpoints. Explicit retirement removes only checkpoint files. The host Agent owns semantic adequacy, authority and execution. Native coverage and ordinary behavior require observed evidence. Claude PostToolBatch can add brief scope feedback for an observed Bash denial template. This text does not grant permission.",
-        "maxSkillBytes": 12800,
+        "maxSkillBytes": 13600,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
       }
@@ -105,6 +105,7 @@
       "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "plugins/yiyuan-accord-codex/adapter.json",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+      "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
       "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
       "plugins/yiyuan-accord-claude/adapter.json",
       "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
@@ -135,8 +136,8 @@
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 1300000,
       "maxTrackedFiles": 132,
-      "maxPrimaryInstructionBytes": 32000,
-      "rationale": "The user requires functioning behavior before final budget balancing and permits justified, aligned revisions. Dev.15 repairs independently reproduced file-observation, pause and native-input recovery defects in one canonical helper and both delivered copies, with discriminating regressions. It also preserves safe diagnostics for the still-unexplained Windows observer timeout. The development code/test ceiling is 1300000 bytes with at least five percent headroom; 132 files, 32000 primary instruction bytes and 12800 per Skill remain unchanged. These are revisable development bounds, not measured product value. The additional current-source Hook regression file and both complete delivered feedback helpers are included. Exact worktree metrics are checked after integration; necessary failure behavior and historical evidence are retained."
+      "maxPrimaryInstructionBytes": 34000,
+      "rationale": "The user requires functioning behavior before final budget balancing and permits justified, aligned revisions. Dev.15 retains the independently checked observation, native-input recovery and feedback implementation. Dev.16 repairs management discovery and documents the existing inspection input after a real lifecycle decision failure. The initial clear integrated Claude Skill was 12854 bytes, 54 above the former per-Skill bound, and combined primary instructions were 32022 bytes, 22 above the former bound. Preserve necessary scope and invocation details: revise development limits to 13600 per Skill and 34000 primary instruction bytes with room for correction, instead of treating the previous numbers as functional authority. Code/test ceiling 1300000 bytes, at least five percent headroom and 132 files remain unchanged. These are revisable development bounds, not measured value; final quality and cost alignment still follows usable functionality. No runtime, helper, dependency or test file is added by this entry correction."
     }
   },
   "source": {
@@ -218,7 +219,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/cli",
           "execution": "本地终端；远程终端仍由该机器执行",
           "environment": "绑定该 CLI 的配置、权限、提供商与工作目录。",
-          "observation": "2026-09-07：冻结 Codex 0.153.4 的 dev.13/14 任务局部组合已观察到普通文件交付、检查点实际调用及已有产物失效后的100→60返工。保留各自精确包与配置，不能替代 cx-sdk/桌面、整项功能、生命周期或净价值准入；当前 dev.15 修改需验证受影响行为。",
+          "observation": "2026-09-07：冻结 Codex 0.153.4 的 dev.13/14 任务局部组合已观察到普通文件交付、检查点实际调用及已有产物失效后的100→60返工。保留各自精确包与配置，不能替代 cx-sdk/桌面、整项功能、生命周期或净价值准入；当前 dev.16 管理入口变更需验证受影响行为。",
           "currentEffect": "unverified"
         },
         {
@@ -964,7 +965,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "对应 codex-lifecycle 与 claude-code-lifecycle，保留精确包、授权、坏源保护、实际更新、幸存接管者、恢复和清理底线。当前焦点：修复管理入口与判定衔接。dev.15 已实际安装并加载，两个独立 profile 的 3.1 也已实际可用；补齐可信目标摘要后，管理 Agent 仍未读取 Skill 正文，且在原生校验已指出坏源后继续探索至轮次上限，未完成保护决定。原失败、实际加载树隔离和清理已保全；不把旧包未变记为主动保护。先使包的管理适用入口及现有检查器输入契约可发现，再按真实受影响范围验证 Agent 判断、真实更新与独立损坏恢复。三 profile、激活样本和 helper 调用是可调整方法；缓存隔离按实际前提选择，不新增无证据需要的 MCP、Hook 或执行框架。",
+        "procedure": "对应 codex-lifecycle 与 claude-code-lifecycle，保留精确包、授权、坏源保护、实际更新、幸存接管者、恢复和清理底线。当前焦点：验证管理入口与实际判定。dev.15 已实际安装并加载，两个独立 profile 的 3.1 也已实际可用；补齐可信目标摘要后，管理 Agent 仍未读取 Skill 正文，且在原生校验已指出坏源后继续探索至轮次上限，未完成保护决定。原失败、实际加载树隔离和清理已保全；不把旧包未变记为主动保护。dev.16 已补齐管理发现描述、直达管理段及现有可选检查器输入契约；现按真实受影响范围验证 Agent 判断、真实更新与独立损坏恢复。三 profile、激活样本和 helper 调用是可调整方法；缓存隔离按实际前提选择，不新增无证据需要的 MCP、Hook 或执行框架。",
         "exit": "用户所需生命周期与失败后态成立，且变更/卸载后仍有可用执行者完成必要恢复与核验。安装登记、实际激活、市场缓存和受影响配置分别取证；未更新而旧包不变不能证明保护。该项未通过只约束依赖它的工作与整版资格。",
         "qualityAxes": [
           "functional-coverage",
@@ -1042,7 +1043,7 @@
       {
         "id": "candidate-shape-and-whole-chain-review",
         "status": "source-allocation-reopened-effects-unverified",
-        "basis": "dev.6 的单 Skill 加 SessionStart Hint 形态属于历史。当前 dev.15 含实际宿主任务事件调用和文件检查点，Claude 另有既存更新检查器；原生Agent仍承担执行，检查点只补必要观察、状态和有界续做连接。普通入口引导、纯参考判定和维护验收应按实际职责分开，未连接核心或图本身不构成缺陷。13 项是覆盖清单，不是 13 个自建模块。已区分当前纠错与跨任务学习、任务核验与产品价值对照，并明确安装前/卸载后须由仍可用的执行者接管；组合充分性仍待真实普通入口、失败和后态证据。"
+        "basis": "dev.6 的单 Skill 加 SessionStart Hint 形态属于历史。当前 dev.16 含实际宿主任务事件调用和文件检查点，Claude 另有既存更新检查器；原生Agent仍承担执行，检查点只补必要观察、状态和有界续做连接。普通入口引导、纯参考判定和维护验收应按实际职责分开，未连接核心或图本身不构成缺陷。13 项是覆盖清单，不是 13 个自建模块。已区分当前纠错与跨任务学习、任务核验与产品价值对照，并明确安装前/卸载后须由仍可用的执行者接管；组合充分性仍待真实普通入口、失败和后态证据。"
       },
       {"id":"native-accord-capability-map","status":"mapped-interface-evidence-not-runtime-closure","basis":"当前有来源的矩阵及职责关系用于开发评审，不是实时能力库或已经运行的图。索引/图是可删改手段，保住的是关系判断与必要效果；工序 dependsOn 不证明运行反馈、交接或清理。先查真实调用者，再按同次转移的可观察后态验证宿主组合。 已删除未被插件、代码或测试调用的 39982 B 内存模拟 HTML，保留精确历史定位；当前术语入口不再把旧图模型当成必需架构。这是活跃资产删减，不是宿主运行加速或动态发现功能验收。"},
       {"id":"needs-based-model-and-subagent-routing","status":"implemented-guidance-native-coverage-under-review","basis":"主/子代理模型与推理按任务需求纳入现有路由职责；两宿主已提供部分原生选型和调度接口，不另造重复引擎。dev.2 Skill 增加匹配、别名/继承/替代核对及效果不足后的重选；自动匹配与实际执行仍需当前包效果证据。"},
@@ -3690,7 +3691,7 @@
             "authentication": "none-required-for-pure-manager-commands; existing-authorized-route-in-memory-only-for-management-Agent-and-installed-activation",
             "requestedActivationModel": "sonnet",
             "activationSelection": "fresh native process actually loads the registered installed package and performs a prebound applicable task; selected installed Skill is an eligible explicit method, not mandatory implicit selection",
-            "candidate": "3.2.0-dev.15",
+            "candidate": "3.2.0-dev.16",
             "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68",
             "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks",
             "lifecycleDecisionActor": "host-Agent given the authorized result, trusted target identity and actual available means; no prescribed manager/helper sequence",
@@ -3704,7 +3705,7 @@
               "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5",
               "scope": "caller-bound existing Node; exact candidate helper in the independent management package; no runtime installation or profile change"
             },
-            "optionalInspectionUse": "The Agent may choose the shipped inspection helper with the exact caller-bound Node executable and the trusted expectedSourceSha256 for the intended candidate or explicitly selected accepted prior. Equivalent sufficient native and file checks are eligible. Discover the currently selected source, connect it to the requested target, and invalidate dependent conclusions after refresh or source changes. An inspection result grants no mutation permission and cannot establish actual update, recovery, installed activation or closure. Preserve current-source and installed-state checkpoints and all original failures.",
+            "optionalInspectionUse": "The Agent may choose the shipped inspection helper with the exact caller-bound Node executable and the trusted expectedSourceSha256 for the intended candidate or explicitly selected accepted prior. Equivalent sufficient native and file checks are eligible. Discover the currently selected source, connect it to the requested target, and invalidate dependent conclusions after refresh or source changes. An inspection result grants no mutation permission and cannot establish actual update, recovery, installed activation or closure. Preserve current-source and installed-state checkpoints and all original failures. The caller may prebind candidate/prior request files containing only cli, plugin, scope and expectedSourceSha256; retain their source-derived identity and immutable input hashes. Ready request files are a method convenience, not a required verdict, helper sequence or installation prerequisite.",
             "trustedTargetIdentity": "candidate and accepted prior file manifests plus SHA-256 over UTF-8-sorted relative paths, NUL and binary file SHA-256, computed from independently frozen bytes rather than the source being judged"
           },
           "oracle": "Before execution bind the exact host, complete candidate and accepted prior bytes, source refs, trusted target digests, requests, stage order, caller/helper bytes, owned roots, selected shared state and immutable inputs. Use supported native Git input; a complete unique reserved-domain alias may use process-only Git insteadOf to an owned file URI with actual transport evidence and no suffix/network fallback or HTTPS claim. Loading trees must be isolated from publisher edits and mutable marketplace refreshes. Choose profile isolation from actual cache/registration/fault prerequisites; fixed three-profile topology is not a user result. Unsupported setup remains unknown.\nInstall the candidate from an absent state using the supported manager. Independently inspect exact cached bytes, registration/discovery and actual registered package loading in a fresh native process, plus the prebound applicable task result and actual verification of written deliverables. Selected installed Skill is an eligible loading check, not an implicit-selection claim. No inline package or copied body may supply installed activation. Observe native uninstall, registration absence and retained inactive cache separately.\nFor update begin with independently verified usable immutable 3.1 and an unambiguous actual installed/source state. Give the independent healthy management Agent the authorized outcome and trusted target facts, not a verdict or command sequence. It must inspect the actual selected invalid source and decide to hold before installation mutation. Unchanged old bytes alone do not prove protection. A check of old 3.1 is not candidate inspection; refreshing the marketplace invalidates dependent old-source conclusions. Retain the actual invalid-source decision and protected installed-state/actual-loaded-tree checkpoint before the declared publisher supplies correct candidate bytes. Then the Agent must re-sense and execute a real prior-to-candidate update, followed by independent installed-byte/state checks and fresh registered loading/use. Reinstallation or a version label cannot stand in for update.\nFor recovery establish usable accepted prior state and the never-cached candidate prerequisite of the known native bad-update fault. Use a separate profile if absence of cache/registration/staging contamination cannot otherwise be proved. Reproduce and retain the actual installed-bad-state checkpoint before the independent healthy management Agent acts. That surviving Agent chooses and executes supported authorized recovery to exact accepted source/state, then verify restored registration/cache and fresh registered loading/use. No evaluator repair, supplied compensation decision or already cached candidate substitutes for recovery. Native validation, snapshot equality or exit zero alone proves neither whole-package safety nor continuous immutability; same-version corrected sources cannot be assumed to repair bad caches.\nFinally uninstall and remove owned marketplaces through native operations, inspect discovery/active-state absence and all redirected cache/data, retain hash-verified originals, then dispose only owned roots. Audit all attempted actions and actual effects, preserving denied attempts, first failures and secondary cleanup errors. Task-forbidden attempts fail even if the host prevents their effect; a permitted local computation refusal is separately observed, not a zero-denial floor. No shared installation, publisher edit by the management Agent, direct cache rewrite, permission bypass, new account/route, credential persistence or archival. Existing authorized provider fields remain in memory only. Retain the declared requested budgets, actual native counts, unverified provider billing and output limit. Require independent natural exit, zero owned processes, selected shared/runtime/package post-state and input preservation. Redirected personal state is not a pristine machine. The installed activation and management exposures stay distinct; no universal interception, hot reload, whole-host or value qualification follows.",
@@ -4375,7 +4376,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "沿已打通的Codex局部功能链修复当前反例并验证受影响后态，同时处理Claude普通入口的局部失败误判、实际调用与清理缺口：查证与能力选择、执行交付、识别偏移、作出调整、实际续做或恢复、独立后态与必要能力退出；按真实依赖推进其余两宿主功能。先实现可用功能并检查直接结果，完整价值对照、预算收敛及全维度权衡随后完成；遇到无新增信息的失败应改变方法或暂停受影响支线。用户自有 AGENTS.md 是外部环境变量，不能通过替换开发宿主指导补足 Accord 内功，也不能成为打包、安装或功能前提；未应用的指导草稿已停止。六个必需范围保留其必要结果；当前CLI诊断与既有SDK准入方法明确分开，正式方法按功能证据重绑后再准入。公开准入局部错误回归已通过，但 Desktop、净价值与安装态闭环等缺口仍开放。Claude dev.15 安装及既有 3.1 实际加载已确认；更新管理仍未完成坏源保护决定，已保全并回收。当前修复管理发现入口及判定衔接，不重复未改变的失败方法。最终统一 README、更新日志和全局一致性；条件发布、共享安装及归档授权边界保持。",
+    "work": "沿已打通的Codex局部功能链修复当前反例并验证受影响后态，同时处理Claude普通入口的局部失败误判、实际调用与清理缺口：查证与能力选择、执行交付、识别偏移、作出调整、实际续做或恢复、独立后态与必要能力退出；按真实依赖推进其余两宿主功能。先实现可用功能并检查直接结果，完整价值对照、预算收敛及全维度权衡随后完成；遇到无新增信息的失败应改变方法或暂停受影响支线。用户自有 AGENTS.md 是外部环境变量，不能通过替换开发宿主指导补足 Accord 内功，也不能成为打包、安装或功能前提；未应用的指导草稿已停止。六个必需范围保留其必要结果；当前CLI诊断与既有SDK准入方法明确分开，正式方法按功能证据重绑后再准入。公开准入局部错误回归已通过，但 Desktop、净价值与安装态闭环等缺口仍开放。Claude dev.15 安装及既有 3.1 实际加载已确认；更新管理仍未完成坏源保护决定，已保全并回收。当前验证已修复的管理发现入口及判定衔接，不重复未改变的失败方法。最终统一 README、更新日志和全局一致性；条件发布、共享安装及归档授权边界保持。",
     "requires": "Current user direction defers installation into the shared development host until accepted publication. The Codex candidate has been uninstalled, its temporary marketplace pin restored, and backups retained. Before publication use bounded task-local candidate exposure and existing authorized host access for necessary evaluation; do not reinstall a shared candidate. New accounts, unrelated trust/data, material cost or other personal changes remain outside this authority. Fresh evidence and exact-candidate checks precede conditional publication."
   },
   "claimCeiling": {

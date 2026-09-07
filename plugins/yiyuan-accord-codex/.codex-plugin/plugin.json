@@ -1,7 +1,7 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "3.2.0-dev.15",
-  "description": "Adaptive Codex Skill projection for YIYUAN Accord outcome delivery.",
+  "version": "3.2.0-dev.16",
+  "description": "YIYUAN Accord outcome delivery for Codex, including authorized package installation, update and independent recovery.",
   "author": {
     "name": "yiheng8023",
     "url": "https://github.com/yiheng8023"
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "YIYUAN Accord for Codex",
     "shortDescription": "Adaptive outcome delivery with human authority",
-    "longDescription": "One progressively disclosed Skill that discovers live capabilities, selects a context-fit route, owns supported mechanics, recomputes on drift, and verifies cleanup without binding Accord to one host version or mechanism.",
+    "longDescription": "One progressively disclosed Skill for outcome delivery, including authorized package installation, update and independent recovery. It discovers capabilities, selects a context-fit route, corrects drift, and verifies effects and cleanup.",
     "developerName": "yiheng8023",
     "category": "Developer Tools",
     "capabilities": [
