@@ -1,404 +1,151 @@
 # Continuation
 
-Current navigation, not a second source of product authority. This checkpoint
-supports the user-requested transition from 主线程19 to a fresh task. Read the
-current source and only the evidence needed for the next decision; preserve
-history rather than copying the entire old conversation into the new context.
+当前导航；产品事实、授权及验收源仍是 `product/development.json`。旧交接和试验过程
+保留在 Git 与 `developmentObservations`，不把历史快照继续写成当前状态。
 
-## Current writer checkpoint: 主线程20
+## 写入目标与授权
 
-The source explicitly transferred the sole writer to 主线程20
-(`01a07984-457e-75a1-ba39-4e5fda61f440`) after its complete receipt. 主线程19 is
-quiescent; neither source nor destination is to be archived. The handoff revision
-is `40df60cfc9625cf7108979cfb94690a1a90431db`; the bound checkout is unchanged.
-The private `task19-handoff.json` confirms the transfer, separately from receipt.
+- 唯一开发写入位置：`C:\Projects\YIYUAN-Accord-post-v31`，分支
+  `phase/post-v3.1-successor`，跟踪 `origin/phase/post-v3.1-successor`。
+  每个仓库命令显式使用这个目录。桌面项目的 `C:\Projects\YIYUAN-Accord`
+  是另一个受保护的脏 checkout；不得改动，也不为继续而创建新 worktree。
+- 当前主写者为主线程20，`01a07984-457e-75a1-ba39-4e5fda61f440`。
+  主线程19 `01a072b3-0198-77f3-b7a8-875763d50b1d` 已静默并明确转移写入权；
+  `40df60cfc9625cf7108979cfb94690a1a90431db` 与私有 `task19-handoff.json`
+  记录其交接。接收回执不等于接管，接管不授权归档。两个任务都应保留。
+- 已授权范围内实现、提交、推送及验收后的 3.2 发布；当前发布条件未满足。
+  实现稳定后再统一完成双语 README、CHANGELOG 和全局核对。
+- 用户已撤回发布前向共享宿主安装候选的路线。继续使用受控的任务局部暴露；
+  验收发布后的既有 Accord 更新仍已授权，须备份、恢复和实际激活核验。
+  不新增账号、信任、数据访问、显著成本或无关个人配置变更。
+- 不替换共享 AGENTS/CLAUDE 指导或 ASSETS 内容。用户指导是宿主环境变量，
+  不可作为只存在于开发环境的隐含产品依赖。
+- 变更前核对实时 branch、status、HEAD、upstream 和 ahead/behind，保留无关变化。
+  不改写历史标签、发布或失败证据。3.1.0 为
+  `258611be47c47a884b6d1a2e96889cf688ca7e68`；开发 predecessor 为
+  `2d09d6d089453d165f5bacb6c1f1492ddfc618aa`。
 
-The current unpublished packages are dev.15. Both now carry an executable local
-task checkpoint and supported native input/Stop/session-end callers; Codex also
-connects Interrupt. The helper checks real file predicates and changed inputs,
-protects new input during retirement, suppresses unchanged continuation retries,
-retains unfinished work and supports explicit pause, retirement and dead-lock
-recovery. Dev.14 also permits a surviving
-caller to retire only the current unbound receipt after verified native exit,
-with revision zero and a reason. Bound unfinished work and newer input are kept.
-The Agent still owns semantic adequacy, authority and execution. No shared
-candidate installation is involved; the failed Claude dev.11 lifecycle branch
-remains paused.
+## 当前路线
 
-Dev.15 repairs five independently reproduced checkpoint failures: mixed output
-bytes, source drift during inspection, pause falsely reconciling an old contract,
-dead input-lock recovery retaining stale authority, and real Windows readonly
-input publication failure leaving old continuation usable. Fifteen executable
-tests passed in 18.242 seconds. Independent review reproduced the old failures
-and checked their correction plus complete fault recovery against runtime SHA256
-`6490e186e300c2c0a7fc76bc126a468b8e705ea4271623d25337f94220450fbe`.
-Pause preserves the bound contract epoch; failed native input publication keeps
-a recoverable lock. Recovery invalidates old input, and replay of actual native
-input uses an epoch guard. Rejected stale replay leaves current input intact.
-File sampling detects observed drift but does not lock external file producers.
-These local checks do not establish current native or complete function admission.
+用户要求必要功能先形成可用实现，再综合校准质量、成本、预算与净价值。
+保持输入保护、真实授权和必要失败后态；不把门禁、文档或测试数量当成结果。
+反复失败而无新信息时变更方法或暂停支线，不继续挤字节、扩框架或重复模型试验。
 
-A third native Codex CLI episode on exact dev.14 at `a5320d8` exercised actual
-repair of existing artifacts. Both files first contained 100; the producer changed
-B ready to held at 47.6968853 seconds. Native verification failed and a premature
-retire was rejected. The Agent rebound revision 2 and rewrote both files to 60,
-then verified and retired. The controller made no output repairs or extra user
-prompt. Execution took 142.7424732 seconds, exited naturally with zero children;
-the exact workspace, source and keep-file checks passed. Thirty files and their
-hash manifest are retained, the temporary root removed, owned checkpoint state
-absent and original shared configuration restored. This supplies the existing
-artifact repair that the earlier dev.13 episode did not exercise; native Stop
-forced continuation, broader duties and value remain open. CLI observations do
-not count as the still-bound App Server admission definitions.
+持续纠偏覆盖历史判断、工序、已做产物、开发、维护和迭代，并是 Accord 的职责。
+用户和 Agent 的事实判断均可被证据纠正。Accord 与宿主是共生、协同、互补关系，
+各自责任与决定边界独立；这不意味着 Accord 脱离宿主权限和运行能力。
+优先借助充分的宿主执行，只有真实必要缺口才新增设施。
 
-The user requires live calibration of progress, baseline, plan and acceptance
-mappings. Current source, work sequence and generated plan now reflect the
-checkpoint implementation, CLI evidence and active failure repairs. Historical
-current-tense dev.6/7 statements were corrected without changing their evidence.
-The Windows observer timeout still has no established root cause; the test now
-preserves safe stage/cleanup diagnostics, and controlled timeout checks confirmed
-parent and descendant termination. No runtime timeout was raised or skipped.
+`systemOptimization.workSequence` 是唯一可编辑工序源；`PLAN-v3.2.md` 由
+`render_development_plan` 派生，原生 `update_plan` 显示相同六项。变化后先核对
+下一动作、依赖、状态含义及未闭合结果，再做机械映射检查。
 
-Claude's existing helper now receives PostToolBatch and emits fixed short scope,
-verification and residue feedback only for the observed Bash refusal template.
-Two isolated frozen-host probes verified real native refusal delivery and then
-feedback inclusion in the next local synthetic request. They used three synthetic
-HTTP responses and no real model, and cleaned both owned process trees and roots.
-Five current-source feedback tests passed in 1.542 seconds; captured old/native
-receipts also replayed correctly. The helper adds no state, permission, executor
-or block, and response text is explicitly not authenticated permission evidence.
-The current implementation still needs an ordinary native model observation.
-
-Current conformance passed with 132 files, 1,226,349 code/test bytes and 30,860
-primary instruction bytes. The updated 1,300,000 / 132 / 32,000 bounds cover the
-actual repairs and focused current-package regression file with five-percent
-code headroom. The changed native Hook contract also passed five historical
-Hook compatibility tests in 2.185 seconds and all 66 development checks in
-92.209 seconds. All candidate facts here remain local, not whole functional or
-release acceptance. The private dev15-slice-check.json binds the integrated
-files, local checks and independent checkpoint review before the next native run.
-
-On dev.13 at `b908dedf3128f220d6ca804a920df5334530fe73`, two native Codex CLI
-episodes completed ordinary file delivery and correction of a stale checkpoint
-binding, with independent file checks and actual checkpoint retirement. The
-producer changed B from ready to held after revision 1; revision 2 correctly
-required 60 instead of 100. Files were generated after that change, so this did
-not exercise repair of already generated wrong artifacts or Stop-forced
-continuation. Task-local Skill/Hook composition is not installed lifecycle proof.
-Owned trust entries were restored with scoped native APIs and the original
-configuration hash. The second cleanup required containment of five surviving
-owned child processes; final children were zero, but its natural-exit cause is
-unresolved.
-
-Claude 2.1.263 on the existing DeepSeek route produced correct files and preserved
-inputs, but left verify.py and incorrectly called all Bash locked after two
-Python commands were denied. Earlier Bash had succeeded. No checkpoint or Skill
-invocation was observed. A separate zero-model observer Hook then proved native
-UserPromptSubmit and candidate receipt creation. It blocked the input; the host
-exited without observed Stop/SessionEnd, leaving an unbound receipt. The new
-dev.14 helper retired that real receipt through a surviving maintainer caller,
-preserving other files. This is executed local recovery on native post-state,
-not automatic ordinary-entry cleanup. All four episodes are hash-retained and
-their task roots removed; shared Claude state was unchanged.
-
-Retrospective inspection found the old SessionStart helper still emitted an
-ambiguous source-release instruction after the Skill archive repair. Canonical
-and delivered copies now distinguish receipt, takeover, one writer, allocation
-release and explicit archival authority. This is guidance correction, not a
-physical archive interceptor. Continuous correction covers historical decisions,
-processes, completed items and current assets; it is not limited to future steps
-or phase boundaries. The first completed plan item is only startup reconciliation.
-
-The initial dev.14 draft passed 10 executable tests in 10.089 seconds and 66
-development tests in 103.042 seconds. Retrospective review then reproduced loss
-of a new unbound input if an older Stop deleted its receipt. That unnecessary
-Stop cleanup was removed. Final checks passed 10 behavior tests in 11.459
-seconds, the affected descriptor test in 14.210 seconds, current product
-conformance and diff whitespace. The private dev14-slice-check.json binds this
-slice; these results do not promote whole-function or release readiness. Functional
-completion and release readiness remain false and value unverified. That dev.14
-worktree measured 1,190,584 code/test
-bytes, 131 files and 30,860 primary instruction bytes against its development
-bounds of 1,260,000 / 132 / 32,000, retaining five-percent code headroom. These are
-local implementation facts, not native functional acceptance. All nine hosted
-jobs passed for b908ded in run 34077164648 and for a5320d8 in run 34080913330. Earlier Windows failures remain
-unexplained: 181ad42 exceeded the observer test's outer 20-second timeout during
-event-decode, whereas the older failure lacked calls.jsonl. A later PASS does
-not establish either root cause or qualify the changed dev.14 package.
-
-The latest relation is symbiosis, cooperation, complementarity and mutual benefit,
-with distinct responsibility and decision boundaries; it is not consensus or
-operational independence from host permissions. The user also explicitly requires
-independent criticism and correction of all parties' factual and implementation
-judgments, including historical and current statements. User intent and authority
-remain binding; assertions and proposed methods are not automatic empirical truth.
-
-The sections below retain the source checkpoint and its evidence. Package and
-budget values there are the dev.11 handoff snapshot; use the live development
-source for the current candidate. Task20 evidence is retained under
-`task20-functional-chain-20260907` in the same private evidence base.
-
-## Bind the checkout and writer first
-
-- The ONLY development write target is `C:\Projects\YIYUAN-Accord-post-v31`, branch
-  `phase/post-v3.1-successor`, tracking the same branch on `origin`.
-- The desktop saved project points to `C:\Projects\YIYUAN-Accord`. That other
-  checkout has unrelated work and is NOT this continuation's command cwd. Use
-  the bound absolute development directory for every repository operation.
-  Do not create a new worktree merely to continue.
-- The verified code baseline is `ed946133521788af34811fbb6d64fdc298921e69`.
-  The handoff revision is the later commit containing this navigation and the
-  functional-first source/plan correction; the dispatch supplies its exact SHA.
-  Recheck branch, status, HEAD, upstream and ahead/behind before any mutation.
-- Immutable 3.1.0 is `258611be47c47a884b6d1a2e96889cf688ca7e68`; the 3.2
-  development predecessor is `2d09d6d089453d165f5bacb6c1f1492ddfc618aa`.
-  Do not rewrite earlier releases, tags or observations.
-- Source task: 主线程19, `01a072b3-0198-77f3-b7a8-875763d50b1d`.
-  Previous task: 主线程18, `01a06e67-d50b-7df3-af47-e70059f210c4`.
-  Use the previous task only for a specific missing clue; current source and
-  fresh repository facts govern. Both tasks must remain available.
-- Destination first reconciles read-only and acknowledges the bound checkout,
-  revision, source/plan, unresolved work and boundaries. Receipt is not takeover.
-  Only after the source becomes quiescent and explicitly transfers writing may
-  the destination act as the sole main writer. A task handoff grants no archive
-  authority. No archive is authorized. This maintainer handoff is not candidate
-  Desktop behavior acceptance.
-
-## Latest development correction and plan authority
-
-The user explicitly requires **working necessary functionality first, followed
-by multidimensional alignment and release acceptance**. Earlier repeated Claude
-lifecycle trials, measurement preparation and local-check maintenance displaced
-functional progress. Closed release gates did not prevent that scheduling drift;
-the verifier did not impose it. The developer owns this correction.
-
-Addition, subtraction, restraint, fallback and complementarity are means judged
-by fulfilled functions and delivery, not absolute preferences. Establish what
-works, then weigh actual cost, impact and necessary redundancy. Revisit a budget,
-threshold or method that prevents necessary function; do not cut the function to
-fit a number or repeat an unproductive route.
-
-First connect a real ordinary-entry result through relevant facts and capability
-selection, execution, drift recognition, adjustment, actual continuation or
-recovery, independent post-state and necessary resource retirement. Reuse direct
-observations as work proceeds. Full comparative value, budget convergence,
-cost/interference optimization and overall alignment follow a usable functional
-chain. Do not perfect the measuring apparatus before implementing the result.
-Required authority, input protection and consequential-effect boundaries still
-apply during development; formal evidence must still match the evaluated subject.
-
-Plans and thresholds are revisable with explicit reasons. If a repeated failure
-provides no new information, change the method or pause that branch. Do not keep
-re-running the same procedure, invent prerequisites or reduce a requirement just
-to pass. Stages express a default route, not universal serial dependencies.
-
-Authority is the latest bound user intent, decisions and actual evidence.
-`product/development.json#/systemOptimization/workSequence` records the current
-route; `docs/operations/PLAN-v3.2.md` is generated from it; `update_plan` maps those
-same stages for convenient progress. None independently overrides the user.
-After a material change, check next action, real dependencies, status meaning and
-retained gaps, then verify the generated plan and update the native progress view.
-Mechanical equality alone does not prove a sensible route. No separate plan
-panel or dedicated host execution mode is required.
-
-## Current progress and next useful result
-
-| Stage | State | Remaining result |
+| 工序 | 状态 | 下一结果 |
 |---|---|---|
-| 本轮启动事实与方向核对 | Locally corrected | Startup reconciliation only; past and current work remain subject to ongoing correction. |
-| 普通入口必要功能链实现与实际纠偏 | Active | Connect and exercise one necessary usable delivery/correction chain; then complete applicable results on each host. |
-| Desktop 连续性与归档授权边界 | Open | Actual dynamic-context continuation/takeover, destination receipts, source protection and explicit archival boundary. |
-| 两宿主安装、更新与独立恢复 | Open | Installed activation, actual update, independent surviving recovery and task-owned retirement. |
-| 功能完成后的净影响、质量与成本对齐 | Open | Matched useful-result comparison and applicable quality, burden, interference, failure and reserve alignment. |
-| 3.2 定版、发布与收尾 | Open | Stable implementation/acceptance, final README/CHANGELOG, global consistency, exact-candidate review/CI/publication and post-release host update. |
+| 本轮启动事实与方向核对 | 本轮已完成 | 持续纠偏仍贯穿后续，不能关闭为一次性职责。 |
+| 普通入口必要功能链实现与实际纠偏 | 进行中 | 核对原生续做与新输入边界，补齐必要资料/能力选择、返工和如实收尾。 |
+| Desktop 连续性与归档授权边界 | 待开展 | 按实际信号继续或接管，单写者、来源保全及失败恢复同次成立。 |
+| 两宿主安装、更新与独立恢复 | 待开展 | 安装后生效、实际更新、坏源保护、损坏后的幸存接管者恢复及退出。 |
+| 功能完成后的净影响、质量与成本对齐 | 待开展 | 合适的同条件比较，质量底线、成本、干扰及净价值。 |
+| 3.2 定版、发布与收尾 | 待开展 | 精确候选独立评审、CI、发布、公开核验和发布后既有安装更新。 |
 
-The six required admission scopes remain `codex-function`,
-`claude-code-function`, `codex-desktop-continuity`, `codex-lifecycle`,
-`claude-code-lifecycle` and `product-value`. Four scopes have six case definitions;
-Desktop continuity and product value remain undefined. No real record is admitted.
-Functional completion is false, incremental value unverified, release readiness
-false. Keep the full necessary duties and applicable scenarios; labels and sample
-counts cannot substitute for results. Definitions and methods may be revised for
-actual needs with traceable reasons, not selected from whichever trials passed.
+六个必需范围是 `codex-function`、`claude-code-function`、
+`codex-desktop-continuity`、`codex-lifecycle`、`claude-code-lifecycle`、
+`product-value`。目前四个范围有六个定义；Desktop 与 value 尚未定义；无已准入
+记录。0 条准入不等于没有执行过试验。功能完成、发布就绪仍为 false，净价值未验证。
+Claude 的现有 ready-orders 用例已重绑为单候选 policy 更新：读取必要资料、改写旧产物、
+普通同进程后续需求及如实核验；比较移到 value。个人状态重定向并非初始机器，仍须
+核对或声明实际环境影响。该定义待执行，不能晋升原观察。
+定义可按必要结果调整，并同步重绑入口、条件、判据及独立评审；不能给历史结果改名
+晋升。固定多臂、目录预算、轮次或每个任务调用 Skill/checkpoint 均非必要用户结果。
 
-The six shortest paths were independently reviewed in
-`developmentObservations/development-paths-and-input-control-feasibility`:
+## 当前实现与可复用证据
 
-- Codex ordinary entry: needed source-backed delivery with actual discovery,
-  choice, useful output and retirement; use relevant correction/conflict/fallback
-  observations without claiming unexercised scenarios.
-- Claude ordinary entry: corresponding useful delivery; 140-to-60 correction is
-  a bounded earlier result, not all duties. Active-turn input receipt, independent
-  continuation/recovery and cleanup still need actual behavior.
-- Desktop: capacity, recent usage, compaction and same-carrier continuation are
-  distinct signals. A real transfer needs destination/request/receipt/post-state;
-  CLI evidence or explicit maintainer instruction cannot qualify plugin behavior.
-- Codex lifecycle: native RPC/snapshots are available; installed authenticated
-  activation and independently executed recovery/retirement remain incomplete.
-- Claude lifecycle: dev.11 is closed and paused. Candidate-to-inspected-source
-  binding, invalidation after refresh, actual conclusion/update and independent
-  recovery remain open. No default dev.12 or new helper/model/budget trial.
-- Value: use a working necessary function and declared environment for matched
-  comparison. Existing native arms also succeeded; no incremental gain is proven.
-  Loaded global guidance and maintainer rescue are separate contributions.
+代码基点 `e527e1dda26edbeaa2806928e89a494d0c8dda9f`，两个完整包均为
+`3.2.0-dev.15`。证据和导航编辑不改变包版本。
 
-## Product boundaries retained from user corrections
+| 对象 | SHA256 |
+|---|---|
+| Codex 包 | `4cdf1a9ec621682de7abe8c4c4ee969504a5eef1eab0fc7f21b660a5ddea2aa9` |
+| Claude 包 | `55a59202bd2e8de9b54b741356e7e84a9ced9ad3f76d22c6b89a386891dce99d` |
+| task-checkpoint.cjs | `6490e186e300c2c0a7fc76bc126a468b8e705ea4271623d25337f94220450fbe` |
+| accord-hook.cjs | `c12bd3f3749779f1b54ccbd6703a1843e29a5f6add150022474b3541fd89673d` |
 
-Accord must own the policy and connections needed to preserve user intent,
-resolve applicable conflicts, adapt and correct; it can use healthy host
-executors without outsourcing these responsibilities. User-configurable,
-non-initial environments are normal conditions, not an excuse for drift.
-Supported capabilities, settings, forks, worktrees and background interfaces
-should be selected and operated when useful within their actual authority and
-compound effects. Availability or a visible button is not proof of callability.
-Necessary integration, recovery and resource retirement remain part of the work.
+任务 checkpoint 已连接受支持的原生输入、Stop 和会话结束，Codex 另接 Interrupt。
+它检查绑定文件和输入新鲜度、保留未完成任务，并对变化后的未满足观察请求一次续做。
+暂停不能把旧合同标成符合新要求；输入发布失败保留可恢复锁；已证实失去所有者的 input 锁恢复使旧回执失效，
+重放真实输入须匹配 epoch。Agent 仍负责语义、谓词选择与执行。没有守护进程、
+通用宿主权限拦截或外部写入者原子锁。
 
-No delivered AGENTS.md/CLAUDE.md dependency or installation path was found. The
-user explicitly stopped replacing the development host's AGENTS.md to supply
-Accord's correction. The private draft was never applied; ASSETS originals were
-read only. Keep user guidance external. The Skill tells the host Agent to
-re-evaluate; the new task checkpoint checks bound files and stale inputs through
-native callers, while semantic goal interpretation remains with the Agent.
-The reference core evaluates supplied facts; its callers are
-historical recalculation/tests, not an ordinary live controller. The Claude
-inspector checks native source/state but does not update, roll back or intercept.
-The complete actual detection/decision/continuation/recovery connection still
-needs implementation and proof; existing evidence does not mandate a new daemon,
-MCP, framework or blanket host instruction change.
+- `checkpoint-adversarial-correction-dev15`：五个真实反例修复及独立复验；
+  15 项执行测试通过，包含 Windows 只读输入回执失败与完整恢复。
+- `codex-existing-artifacts-correction-dev14`：两份文件先实际为 100；生产者
+  改变输入后，Agent 经失败核验及被拒的提前 retire，重新绑定并把两份旧产物改为 60。
+  142.742 秒、自然退出、0 子进程。该证据绑定 dev.14 CLI；不是 dev.15 整体准入。
+- `codex-native-stop-transport-dev15`：真实 Stop 理由进入第二次无认证回环请求；
+  情况未变时不无限重复，未完成状态保留。原生工具写入遭只读策略拒绝，文件交付未证明；
+  最后一轮完整捕获 stdout/stderr。三轮自然退出、0 子进程、三个临时根均已删除。
+  普通模型自主行为、App Server 与 Desktop 仍不能由合成传输证据推得。
+- `claude-dev15-ordinary-delivery-and-package-feedback`：当前完整包的真实任务正确
+  交付总额 100，输入保留，Agent 实际删除自建 verify.py；40.849 秒、自然退出、
+  0 子进程。仍重复三次被拒 Python 命令，并把内容/目录核对称为字节级验证。
+  独立检查确认字节未变，但不能倒记成 Agent 执行过字节比较；真实性缺陷必须修正。
+- 同一观察中的独立零真实模型试验：完整九文件 Claude 包的 339 字节 PostToolBatch
+  反馈实际进入第二次回环请求。没有额外观察者 Hook；仅在 stdout 缺少事件不能推断
+  未执行。此项证明投递，不证明模型收益。不要无新证据重跑相同普通任务。
+- 较早 `claude-ready-orders-correction-dev6`、Codex capability-loss/conflict 及
+  selected-continuation 观察按原主体复用。若需新正式用例，先核对其未覆盖效果，
+  不为沿用旧入口重复完整测量。
+- Claude dev.11 生命周期失败线保持暂停：检查后源被刷新，旧检查失效；后续更新与
+  独立恢复未执行。仅当新证据能区分原因并改变方案时重开。三 profile、固定版本、
+  激活样本及强制 Skill 调用是可调整手段，必要生效和恢复结果须保留。
 
-The archive incident is real: 主线程18 archived itself after read-only receipt but
-before the actual transfer message; execution was interrupted and the user
-manually restored it. Earlier denial based on its restored state was incorrect.
-Ambiguous installed-3.1/source-release wording is a possible contributor, not
-proven sole cause. Guidance now separates receipt, takeover, source resource
-release and archival. No repository archive executor exists; no fake deterministic
-interceptor or destructive archive experiment was added. Behavior remains open.
-A separate Desktop worktree-delete handler observation showed combined archival
-and deletion effects; it is not the cause record or permission for those effects.
+当前局部验证：checkpoint 15 项；PostToolBatch 5 项；历史 Hook 兼容 5 项；
+development 66 项均通过。产品源一致性通过；132 个代码/测试文件、1,226,349 字节，
+主指令 30,860 字节。当前开发界限为 1,300,000 / 132 / 32,000，保留至少 5% 代码余量。
+纯导航和观察编辑不构成重跑全部测试的理由。修复后的本地 PASS 不代表宿主、Desktop、
+生命周期、价值或发布验收。
 
-The user's Chat/Work/Codex and Claude Chat/Cowork/Code observations inform actual
-entry compatibility. Distinguish listing, selection, loading, invocation and
-functional behavior. Do not invent missing account/backend access or expand to
-new-host experiments. Existing Claude evaluation uses the authorized CC Switch /
-DeepSeek route, not the unavailable official account. Refresh affected host facts
-when changes matter; compaction makes context capacity and useful evidence dynamic.
+## 未决故障与历史位置
 
-Absorb useful deterministic checks and fault/mutation testing proportionately;
-metrics or eminent opinions do not define complete truth. Avoid mandatory
-five-agent pipelines, universal scores and unnecessary ecosystem dependencies.
-Industrial production quality means observable function, recovery, compatibility
-and maintainability, not a marketing claim. Final README should honestly describe
-Accord's possible impact on the Agent, including input/attention/cost/conflicts;
-Token consumption alone is not necessarily harm. Accord cannot raise model/host
-capability limits. Keep the agreed user-learning statement natural, not defensive.
-Finalize both READMEs and CHANGELOG only after the implementation stabilizes, then
-check source, target, acceptance, implementation and claims globally.
+主线程18 曾在只读回执后、真正接管前归档自己，用户随后手动恢复。恢复后的状态不能
+否认此前归档。旧 source-release 措辞是可能因素，非已证实唯一原因；当前指导已分清
+回执、接管、来源资源释放和归档授权。没有产品 archive executor，不伪造确定性拦截。
+主线程19→20 的维护交接不能作为候选 Desktop 验收。
 
-Pre-release shared-host candidate installation was withdrawn by the user. Do not
-reinstall it; necessary evaluation may use authorized bounded task-local exposure.
-After acceptance/publication, updating existing Accord remains authorized with
-backup, recovery and actual activation checks. New accounts/trust/data/material
-cost and unrelated personal changes are not authorized. Commit/push in-scope work
-and accepted 3.2 publication are already conditionally authorized; do not repeatedly
-ask for the same approval or treat the permission as present release readiness.
+`768fe62` 的 Windows/Python 3.14 缺少 calls.jsonl，以及 `181ad42` 同平台原生观察
+测试超过外层 20 秒，根因仍未知。现有测试改善了安全诊断，受控超时确认父/子进程
+被清理；未增加运行时超时或跳过判据。b908ded、a5320d8 各九个 CI job 通过。
+e527e1d 的 run `34083855429` 现已九项全通过。此结果绑定 e527e1d；后续 SHA
+须使用各自检查，较晚 PASS 也不能解释早期失败根因。
 
-## Finished implementation and retained evidence
+原交接详细快照见 `e527e1d:docs/operations/CONTINUATION.md`；更早导航见
+`ed94613:docs/operations/CONTINUATION.md`。开发源的观察索引保留原始失败、检查对象、
+原始/修复运行时及适用边界，按下一决策所需定点读取。
 
-Code baseline `ed94613` fixes scoped claim failure isolation in `admission.py`
-and `control.py`. A public regression first retained six failing subcases. Source,
-identity, package/definition, timestamp ownership and complete same-episode
-structure are checked before isolating attributable expiry, condition drift and
-consequence mismatch. Independent claims now survive case-local failures, while
-all errors, whole-candidate refusal and global source/identity/review failures
-remain. External fact/reviewer authenticity is still the trusted caller's job;
-nonempty source references do not authenticate it.
+## 运行与残留
 
-The full admission module passed 25 tests in 296.982 seconds. Implementation and
-wording received independent review. This is local verifier evidence, not host,
-Desktop, value or release qualification. The current plan/handoff changes do not
-change code, the six definitions or delivered package bytes. Do not rerun the
-entire already-passed module merely for navigation edits.
+私有证据根：
+`C:\Users\15521\.codex\backups\accord-evaluation-20260905T215550Z-8ff0643a`。
+本任务主要目录为 `task20-functional-chain-20260907`，每个 episode 都有绑定、
+实际输出和哈希保留/清理记录。完成任务临时资源前核对所属根、进程、重解析点和
+保留证据，使用已解析的精确路径清理；有意保留的备份和证据不作为残留删除。
 
-Private evidence base:
-`C:\Users\15521\.codex\backups\accord-evaluation-20260905T215550Z-8ff0643a`.
+现有 Claude 经授权 CC Switch/DeepSeek 路由；不静默替换账号、供应方或模型。
+配置文件中的 effort 不等于子进程实际生效。凭证只在内存传递，不输出或写入证据。
+真实 provider 与无认证回环合成探针分开记录。
 
-- `claim-isolation-closeout.json` binds the tested files and code commit; SHA
-  `6117c3dbae1ab0f3bb801db26022b84be420aca69ef53544be09ad505792b55a`.
-  Before/after stdout/stderr, regression binding and patches remain beside it.
-- `input-profile-feasibility-20260907/accord-input-profile-y0o7euv3`: 23 files
-  verified before owned-temp removal. Three corrected zero-model prompt previews
-  exited normally. Project-doc budget zero left global guidance identical;
-  disabling 40 known paths removed the actual 25-entry Skill catalogue only.
-  This is input discovery, not an initial host, runtime effect or Token benefit.
-  The rejected quoting attempt and original/replayed evidence limits remain.
-- `claude-dev11-cycle-20260907/accord-dev11-lifecycle-avzsuk1z`: 1,561 verified
-  retained files, owned root removed. The exact inspector checked the old 3.1
-  source; a later refresh selected malformed dev.11, then the management turn
-  limit ended before reinspection/conclusion. No install followed the stale
-  result. Corrected update/recovery were unexecuted. Activation is narrower than
-  lifecycle success. All 23 native process observations closed; native retirement completed,
-  final native lists were empty and Job children zero. Do not reopen without discriminating evidence.
-- Earlier dev.10, callability, helper-draft suite, native-source and context-preview
-  evidence remains under this base and is indexed by `developmentObservations`.
-  Their temporary task roots were removed; older suites keep their exact subjects.
-- `AGENTS.meta-guidance.disposition.json` closes the unexecuted private draft.
-  Last verified global guidance SHA is
-  `0ca29a7d476f7cce29a1ff66a120f789d5d1acc4a995fb69c02273cbd868692f`.
+- Python：`C:\Users\15521\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe`，
+  使用 `-X utf8 -B`；文件显式 UTF-8/LF。
+- Codex 冻结版本 0.153.4，SHA256
+  `444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b`。
+- Claude 冻结版本 2.1.263，
+  `C:\Users\15521\AppData\Local\Temp\accord-claude-runtime-263-5yoxqfig\bin\claude.exe`，
+  SHA256 `0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03`。
+  该运行时仍供未完成验收使用，禁止当临时残留删除。
+- 最近核对共享 Codex config SHA256
+  `d5886460301b35fa2ab93ac0fee0c2e34e2b3521c2131c0a53bd8212caf9f557`；
+  Claude route config SHA256
+  `29992472fa4fb8c1b190296385826525b91ead49e0963f882bc66d778de8482f`。
 
-Original sequential-observer failures were also preserved before minimum repair;
-single-round checkpoints, final-round records and other boundary rejection remain.
-The later 140-to-60 episodes validate only their bounded observation/correction
-paths. See `sequential-correction-observer` and `claude-ready-orders-correction-dev6`
-in the source rather than replaying old histories.
-
-## Unresolved CI feedback
-
-`165d2f5` passed all nine CI jobs. `768fe62` failed only Windows / Python 3.14 at
-`test_unavailable_validator_is_not_reported_as_source_rejection`:
-`tests/product/test_development.py` attempted to read missing `calls.jsonl` from
-the native-inspection fixture. The reason no calls log was written is UNKNOWN;
-the structured native report was parsed but not preserved in the assertion
-failure. Do not call this proven timeout/flakiness, silently skip the test or
-inflate timeouts. A bounded next diagnostic can preserve that report when the
-fixture is absent, without changing the behavior predicate or running model trials.
-The original log is `ci-768fe62-windows314-failure.log` under the evidence base.
-
-At handoff preparation, `ed94613` CI run `34072458833` had five successful Linux
-jobs and four Windows/macOS jobs still running. Refresh its actual result and the
-handoff commit's CI when consequential; an earlier green SHA does not qualify a
-later one. This known CI issue stays visible while independent functional work
-continues; it is not a reason to resume the paused Claude model experiment loop.
-
-## Package, budget and resource snapshot
-
-Both unpublished packages are `3.2.0-dev.11`, unchanged by the latest code and
-navigation correction. Codex SHA:
-`4faf627cfaf76817fcfcd4b9a452ef713cc58264442be52b3cdc450c46019fc1`.
-Claude SHA:
-`3d5b99ba13fa681445599657c7db4b348c6361ce9b531289ac87b387a27941b0`.
-
-The approved code/test ceiling is 1,180,000 bytes / 127 files, with at least 5%
-reserve and unchanged instruction limits. Last measured code/test size is
-1,120,528 bytes; primary instructions 24,233 bytes. Total code headroom is 59,472
-bytes, 472 beyond the required reserve. Record these honestly; do not spend the
-next phase squeezing bytes before achieving functionality. Reassess an evidenced
-budget conflict and affected authority explicitly rather than weakening necessary
-behavior or repeating an impossible check.
-
-No local evaluation process or temporary exposure is active at this checkpoint.
-Retained evidence and backups are intentional. The frozen Claude runtime remains
-needed for unfinished qualification; do not delete it as residue:
-`C:\Users\15521\AppData\Local\Temp\accord-claude-runtime-263-5yoxqfig\bin\claude.exe`,
-version 2.1.263, SHA
-`0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03`.
-
-Last observed Desktop version is `26.901.6511.0`, CLI `0.153.4`, Node `24.20.0`.
-Use the bundled Python with `-X utf8 -B`:
-`C:\Users\15521\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe`.
-Host facts are a dated snapshot; recheck only those affecting the next operation.
-Preserve foreign configuration, shared resources and the unrelated main checkout.
-
-Detailed prior navigation remains in Git at `ed94613:docs/operations/CONTINUATION.md`;
-all diagnostic observations and exact evidence references remain in the development
-source. Read them on demand. This handoff closes no product acceptance gap merely
-by recording it.
+宿主版本和共享状态是有日期的观察，执行相关动作前只重核受影响项。
