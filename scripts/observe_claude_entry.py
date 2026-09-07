@@ -50,9 +50,17 @@ def inspect_capture(capture, workspace, *, package=None, turns=1):
                 readback.clear()
         if event.get("type") in {"assistant", "user"}:
             message_positions.append((index, event.get("session_id")))
-        content = event.get("message", {}).get("content", [])
-        if not isinstance(content, list):
+        else:
+            # Native system diagnostics can have a plain-text message.
             continue
+        message = event.get("message")
+        if not isinstance(message, dict):
+            raise ValueError("malformed native conversation message")
+        content = message.get("content", [])
+        if event.get("type") == "user" and isinstance(content, str):
+            continue
+        if not isinstance(content, list):
+            raise ValueError("malformed native conversation content")
         for item in content:
             if not isinstance(item, dict):
                 continue

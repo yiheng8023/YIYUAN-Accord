@@ -90,6 +90,35 @@ def offline_communicate(controller, root, input_text=None, timeout=20):
 
 
 class ClaudeEntryOracleTests(unittest.TestCase):
+    def test_native_text_diagnostic_preserves_denied_tool_accounting(self):
+        events = [{"type": "system", "subtype": "init", "session_id": "s"},
+            {"type": "user", "session_id": "s", "isReplay": True,
+             "message": {"content": "ordinary task input"}},
+            {"type": "assistant", "session_id": "s", "message": {"content": [
+                {"type": "tool_use", "id": "b", "name": "Bash",
+                 "input": {"command": "python -c 'print(1)'"}}]}},
+            {"type": "system", "subtype": "permission_denied", "tool_use_id": "b",
+             "tool_name": "Bash", "message": "The action was not performed."},
+            {"type": "user", "session_id": "s", "message": {"content": [
+                {"type": "tool_result", "tool_use_id": "b", "is_error": True,
+                 "content": "Permission denied; no approval surface."}]}},
+            {"type": "result", "subtype": "success", "is_error": False, "session_id": "s"}]
+        capture = {"stdout": "\n".join(json.dumps(v) for v in events), "exitCode": 0,
+                   "forced": False, "childrenBeforeCleanup": 0}
+        result = inspect_capture(capture, Path.cwd())
+        self.assertTrue(result["normalExit"])
+        self.assertEqual(result["unexpectedToolCalls"], 1)
+        self.assertFalse(result["skillInvoked"])
+
+    def test_malformed_assistant_content_is_not_a_completed_observation(self):
+        events = [{"type": "system", "subtype": "init", "session_id": "s"},
+            {"type": "assistant", "session_id": "s", "message": {"content": "not blocks"}},
+            {"type": "result", "subtype": "success", "is_error": False, "session_id": "s"}]
+        capture = {"stdout": "\n".join(json.dumps(v) for v in events), "exitCode": 0,
+                   "forced": False, "childrenBeforeCleanup": 0}
+        with self.assertRaises(ValueError):
+            inspect_capture(capture, Path.cwd())
+
     def test_repeated_turn_init_must_preserve_the_observed_session_and_composition(self):
         init = {"type": "system", "subtype": "init", "session_id": "s", "model": "bound"}
         final = {"type": "result", "subtype": "success", "is_error": False, "session_id": "s"}
