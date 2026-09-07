@@ -79,14 +79,18 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current delivered candidate and unproven connections
 
-Both worktree packages are unpublished `3.2.0-dev.11`. Each exposes one host
+Both worktree packages are unpublished `3.2.0-dev.12`. Each exposes one host
 Skill and an optional Node SessionStart hint. The hint emits invalidation
 guidance on resume/compact. Claude also includes a caller-bound native plugin
 update inspector; it checks the selected source and pre/post-state, but does not
 update, roll back or intercept actions. Neither helper owns a task scheduler,
-durable task state or recovery executor. The host Agent currently interprets the
-guidance and must connect observations to decisions and actual continuation;
-that complete ordinary-entry correction path remains unverified. User-owned
+durable task state or recovery executor. The delivered Skill now connects a
+material change to affected obligations and claims, a discriminating next action,
+execution and observed post-state. It keeps the latest task binding in available
+host context/state and directs function-first development before full comparative
+alignment. The host Agent interprets this policy; these instructions do not
+establish automatic detection or enforcement. The complete ordinary-entry
+correction path still needs behavioral evidence. User-owned
 AGENTS.md files are external conditions, not a delivered dependency or a
 substitute for Accord's responsibility.
 

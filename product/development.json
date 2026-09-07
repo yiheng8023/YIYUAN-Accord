@@ -22,14 +22,14 @@
     "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
   },
   "delivery": {
-    "version": "3.2.0-dev.11",
-    "rule": "Unpublished dev.11 corrects the inspection guidance to use the caller-bound Node executable instead of a bare node example. The dev.10 native probe established exact-command callability despite denied directory listing; it did not establish Agent choice or lifecycle success. The inspection runtime and original lifecycle predicates are unchanged. The next composed observation also gives the selected management package native directory access and identifies the exact executable-path permission boundary. Keep earlier convergence failures and all subject identities. No new dependency, shared candidate installation or expanded budget is introduced. Fresh affected behavior and the remaining whole-product acceptance are required before publication.",
+    "version": "3.2.0-dev.12",
+    "rule": "Unpublished dev.12 projects the functional-first development correction into both delivered Skills and connects material changes to affected obligations, invalidated claims, a discriminating next action, actual execution and observed post-state. The former general retry paragraph is merged into this action path. This is an interpreted policy carried by the host Agent, not a deterministic guard or independent scheduler. Ordinary source-backed delivery and affected correction behavior need fresh observation. The per-Skill allowance increases from 8800 to 11000 bytes for this concrete duty connection; overall instruction, code/test and file ceilings remain unchanged. Package lifecycle code is unchanged and the failed Claude dev.11 lifecycle branch remains paused. No shared candidate installation, new runtime, dependency or host guidance change is introduced. Old observations retain their original identities and cannot qualify these packages.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.11",
-        "packageSha256": "4faf627cfaf76817fcfcd4b9a452ef713cc58264442be52b3cdc450c46019fc1",
+        "packageVersion": "3.2.0-dev.12",
+        "packageSha256": "2c7d4d765e227ef9ff2e266dd8df32f619bbc50b75be64b9e48b7cf5529b9eac",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -49,15 +49,15 @@
         "interfaceDefaultPrompt": [
           "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
         ],
-        "maxSkillBytes": 8800,
+        "maxSkillBytes": 11000,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
       },
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.11",
-        "packageSha256": "3d5b99ba13fa681445599657c7db4b348c6361ce9b531289ac87b387a27941b0",
+        "packageVersion": "3.2.0-dev.12",
+        "packageSha256": "96adb74f7e6d8d9ebb6cc80e27e9071eac92b9c41c9af94a6bf851946b6b3e11",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -73,7 +73,7 @@
           "plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs"
         ],
         "activationContext": "SessionStart compact or resume supplies non authoritative model and permission hints only. Re sense decision relevant state from supported official sources. Missing or conflicting fields remain unknown. Preserve the independently bound last safe allocation. Use a fresh zero history destination only when required. Deliver and confirm takeover before source allocation release. Task archival requires explicit user authorization. Startup and clear stay silent. Invalid input fails visibly without echoing input. Hints prove neither current task state nor authority, Agent use, execution, effect, evidence or value.",
-        "maxSkillBytes": 8800,
+        "maxSkillBytes": 11000,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
       }
@@ -86,7 +86,7 @@
       "maxProductCodeAndTestBytes": 1180000,
       "maxTrackedFiles": 127,
       "maxPrimaryInstructionBytes": 28000,
-      "rationale": "On 2026-09-07 the user approved 1180000 code/test bytes and 127 files, retaining at least five-percent code headroom and the unchanged 28000-byte primary instruction ceiling. Current development counts Python modules/product tests plus runtime/plugins JavaScript sources and physical delivered copies, including untracked candidate files; frozen predecessor accounting is unchanged. The verified worktree measures 1120528 code/test bytes, 127 files and 24233 instruction bytes, leaving 59472 code bytes (472 beyond the required 59000 reserve). Necessary regression and recovery safeguards are retained. Maintainer PowerShell observation code remains separately reviewed. Cost conformance and isolated proposal-copy tests cannot qualify host behavior or value."
+      "rationale": "On 2026-09-07 the user approved 1180000 code/test bytes and 127 files, retaining at least five-percent code headroom and the unchanged 28000-byte primary instruction ceiling. Current development counts Python modules/product tests plus runtime/plugins JavaScript sources and physical delivered copies, including untracked candidate files; frozen predecessor accounting is unchanged. The dev.12 worktree measures 1120722 code/test bytes, 127 files and 27536 instruction bytes, leaving 59278 code bytes (278 beyond the required 59000 reserve). The instruction increase carries the concrete change-to-action path in both independently delivered Skills; duplicate retry guidance was merged without losing the boundary. Necessary regression and recovery safeguards are retained. Maintainer PowerShell observation code remains separately reviewed. Cost conformance and isolated proposal-copy tests cannot qualify host behavior or value."
     }
   },
   "source": {

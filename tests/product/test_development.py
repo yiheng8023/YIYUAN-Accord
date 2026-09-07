@@ -77,7 +77,10 @@ if (args.join(' ') === 'plugin marketplace list --json') {
                                      str(request)], cwd=root, capture_output=True, text=True, timeout=40)
             self.assertEqual(result.returncode, 0, result.stderr)
             report = json.loads(result.stdout)
-            calls = [json.loads(line) for line in (root / "calls.jsonl").read_text().splitlines()]
+            calls_path = root / "calls.jsonl"
+            self.assertTrue(calls_path.is_file(),
+                            f"native fixture produced no calls log; inspection report: {json.dumps(report)}")
+            calls = [json.loads(line) for line in calls_path.read_text().splitlines()]
             self.assertEqual(sum(call == ["plugin", "validate", str(source), "--json"] for call in calls), expected_validations)
             self.assertFalse(any("update" in call or "install" in call for call in calls))
             self.assertEqual((installed / "retained.txt").read_bytes(), b"prior payload\n")

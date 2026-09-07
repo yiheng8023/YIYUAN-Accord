@@ -5,6 +5,29 @@ supports the user-requested transition from 主线程19 to a fresh task. Read th
 current source and only the evidence needed for the next decision; preserve
 history rather than copying the entire old conversation into the new context.
 
+## Current writer checkpoint: 主线程20
+
+The source explicitly transferred the sole writer to 主线程20
+(`01a07984-457e-75a1-ba39-4e5fda61f440`) after its complete receipt. 主线程19 is
+quiescent; neither source nor destination is to be archived. The handoff revision
+is `40df60cfc9625cf7108979cfb94690a1a90431db`; the bound checkout is unchanged.
+The private `task19-handoff.json` confirms the transfer, separately from receipt.
+
+The current unpublished packages are dev.12. This slice projects the latest
+function-first correction into both Skills and connects material changes to
+affected obligations, invalidated claims, actual action and observed post-state.
+It merges the former general retry paragraph. No new runtime or shared candidate
+installation is involved, and the failed Claude dev.11 lifecycle branch remains
+paused. Ordinary-entry behavior still needs fresh observation; text conformance
+is not functional completion. A missing native fixture log now retains the parsed
+inspection report in its assertion failure. The earlier Windows root cause
+remains unknown; the diagnostic does not change its behavior predicate or timeout.
+
+The sections below retain the source checkpoint and its evidence. Package and
+budget values there are the dev.11 handoff snapshot; use the live development
+source for the current candidate. Task20 evidence is retained under
+`task20-functional-chain-20260907` in the same private evidence base.
+
 ## Bind the checkout and writer first
 
 - The ONLY development write target is `C:\Projects\YIYUAN-Accord-post-v31`, branch
