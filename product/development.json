@@ -931,7 +931,7 @@
       {
         "id": "desktop-continuity",
         "title": "Desktop 连续性与归档授权边界",
-        "state": "active",
+        "state": "pending",
         "duties": [
           "goal-authority-correction",
           "premise-and-consistency",
@@ -940,7 +940,7 @@
           "recovery-and-rollback",
           "resources-and-cleanup"
         ],
-        "procedure": "对应尚未定义的 codex-desktop-continuity，先核对当前支持的任务局部候选暴露、会话信号、独立动作和后态来源及授权，再绑定最短充分用例。区分同载体续做、自动压缩与确有必要的跨载体接管；预算当前可用容量和完成接管的余量，保留单写者及失败恢复。未知能力保持未知，不用 CLI 结果替代 Desktop，不为了测试强制交接或归档。",
+        "procedure": "对应尚未定义的 codex-desktop-continuity，先核对当前支持的任务局部候选暴露、会话信号、独立动作和后态来源及授权，再绑定最短充分用例。区分同载体续做、自动压缩与确有必要的跨载体接管；预算当前可用容量和完成接管的余量，保留单写者及失败恢复。未知能力保持未知，不用 CLI 结果替代 Desktop，不为了测试强制交接或归档。 已复核19→20的授权送达、核对、接管与写入顺序，可作为宿主原生充分性的历史证据；不能改称当前候选执行、自动容量触发或无监督迁移。保留中断协调、用户暂停/恢复及18的归档反例。当前先闭合独立的原生包转换缺口，不为重演宿主已有能力强建任务。",
         "exit": "适用的动态上下文变化与继续/接管结果同次闭合；发生转移时目的端已核对且来源健康状态受保护。无归档授权便无归档动作，不能用归档作为清理步骤。若执行条件尚缺，记录具体缺口并继续其他独立工作，不伪造范围已绑定。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -955,7 +955,7 @@
       {
         "id": "package-lifecycle",
         "title": "两宿主安装、更新与独立恢复",
-        "state": "pending",
+        "state": "active",
         "duties": [
           "environment-and-self-exposure",
           "execution-configuration-and-code",
@@ -965,7 +965,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "Claude 声明组合的安装、坏源保护、恢复、真实更新、新加载使用与退出已闭合，保留原失败和方法修订。Codex 单次共享安装例外也已实际完成：原生安装精确 dev.16、真实安装缓存 Hook 执行、显式 Skill 选择、140 文件交付与自验、原生卸载和状态恢复。完整 Skill 正文未在流中独立捕获，不宣称隐式发现、默认信任流程或 Desktop；本次未 bind checkpoint，不能当 Stop 续做试验。复核既有升级/恢复记录的真实适用依赖并完成当前证据绑定，不为已成立的安装与使用重复安装。用户批准的单次例外已用完，发布前共享安装恢复为撤回状态；执行边界缺失只约束其依赖工作。",
+        "procedure": "Claude 声明组合的安装、坏源保护、恢复、真实更新、新加载使用与退出已闭合，保留原失败和方法修订。Codex 单次共享安装例外也已实际完成：原生安装精确 dev.16、真实安装缓存 Hook 执行、显式 Skill 选择、140 文件交付与自验、原生卸载和状态恢复。完整 Skill 正文未在流中独立捕获，不宣称隐式发现、默认信任流程或 Desktop；本次未 bind checkpoint，不能当 Stop 续做试验。复核既有升级/恢复记录的真实适用依赖并完成当前证据绑定，不为已成立的安装与使用重复安装。用户批准的单次例外已用完，发布前共享安装恢复为撤回状态；执行边界缺失只约束其依赖工作。 依赖复核定位到当前12文件包与旧11文件包的真实转换缺口；预绑定一次无认证任务profile的3.1→dev.16→3.1及卸载，核对原生选中路径、全部包文件与残留。不重复已成立的模型使用，不把原生组件转换当完整加载或整版准入。",
         "exit": "用户所需生命周期与失败后态成立，且变更/卸载后仍有可用执行者完成必要恢复与核验。安装登记、实际激活、市场缓存和受影响配置分别取证；未更新而旧包不变不能证明保护。该项未通过只约束依赖它的工作与整版资格。",
         "qualityAxes": [
           "functional-coverage",
@@ -1056,6 +1056,29 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "dev16-retained-delivery-current-independent-reassessment",
+      "observedAt": "2026-09-07T14:59:02.631632+00:00",
+      "scope": "two-current-read-only-reassessment-records-not-final-candidate-admission",
+      "subject": {
+        "revision": "885ecc02e6de55826d7bc982d5733ea009382ad5",
+        "tree": "cd4219ca84839aa4e460b0530b0576906a4ecfbd"
+      },
+      "cases": [
+        "codex-installed-delivery-retained-reassessment",
+        "claude-external-delivery-correction-retained-reassessment"
+      ],
+      "observer": "codex-native-subagent:/root/current_binding_review; originally zero-inherited bounded review task, then disclosed reuse of its independent review context; neither original producer nor definition author",
+      "effect": "Two precommitted case records formed after actual independent read-only checks. All 33 original source hashes/lengths matched before and after; complete current/original Git/package maps and both native host binary hashes matched. Original once-only Codex authorization was checked against native user/tool records. Original failures, times, actors and exposure remain unchanged.",
+      "limits": "No new native run, current provider or active installed-state inference. Current full-candidate reviewBundle and verifier observe/recheck are not complete; these records do not qualify either whole function scope or release.",
+      "methodCorrections": "Two earlier read-only parser shape errors, Codex command wrapping and Claude Edit bullet prefix, stopped before record output; their failed receipts are retained. They are observer corrections, not host or product failures.",
+      "evidence": {
+        "retainedAt": "task20-functional-chain-20260907/retained-reassessment-885ecc0",
+        "observationsSha256": "e09eb5294e74ce428932b8762e589c29096c081b2b13a0c78678afcd808cbfcd",
+        "dependencyReportSha256": "b450555c05a98efd28c460ec749a45462d9c6817736adf8f2e3333da0ce70f06",
+        "finalReadbackSha256": "a3cd04836e72e1c75687e311ab4e3e47c866ff4bc68fcc4959e425a861f39281"
+      }
+    },
     {
       "id": "codex-dev16-installed-selected-use-and-restoration",
       "observedAt": "2026-09-07T14:07:17.2972543Z",
@@ -4700,6 +4723,92 @@
                 "actualComparisonRequired": true,
                 "currentExternalReleaseFactsOrProviderStateInherited": false
               }
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "mid-task-host-drift",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "package-lifecycle"
+          ],
+          "conditions": {
+            "hostVersion": "0.153.4",
+            "hostBinarySha256": "444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b",
+            "transport": "local-app-server-stdio",
+            "profile": "task-owned-CODEX_HOME-without-private-auth",
+            "requestedOptionalHooks": "disabled",
+            "requestedRemotePlugins": "disabled",
+            "configurationRequirements": "none-reported",
+            "requestedPlugins": "enabled-for-native-selected-path-observation",
+            "authenticationStore": "file-in-new-owned-profile; no authentication or API environment copied",
+            "ordinaryWindowsEnvironment": "existing bounded OS allowlist including SystemRoot",
+            "accompanyingPublicCatalogActivity": "allowed only under task profile; no other configured or installed plugin",
+            "observerImplementation": {
+              "run-transition.ps1": "2a102880d08b667c799acad5ea1fda30d4314c097c7c5c0114052d2c63e48a1c",
+              "prepare_snapshot.py": "6a11a6d7fdc76dff664c56e41cad3260b9f7e05b9b66dff0f0c9c23c74e643b7",
+              "case-draft.json": "279a0da7e38b1addced6675915076b410cf47c3cb37e711f26c8424ece0aa65e"
+            },
+            "maximumNativeSeconds": 120,
+            "automaticRetry": false
+          },
+          "id": "codex-native-exact-update-and-return-dev16",
+          "scope": "codex-lifecycle",
+          "oracle": "Bind and commit this case before one real native App Server process in a new task-owned profile. The parent authenticates the live RPC pipe, independent snapshots and capture-program identity; a private report or successful command alone is not evidence. Use the frozen Codex binary and normal bounded Windows environment, without an account, inherited API credentials, model turn or shared profile mutation. Native plugin/install with the same plugin ID selects immutable 3.1.0, exact current dev.16 and then 3.1.0 again; plugin/uninstall ends the chain. Each transition has one native intent. Before any later operation inspect the full expected 11/12/11 file map, native registration/enabled state, force-reloaded selected Skill path and all other version caches. Catalogue localVersion and empty discovery alone cannot prove installed state or removal. Keep historical non-active caches distinct from selected exposure; physical deletion of every cache is not required for native uninstall. After uninstall require registration and selected Skill absence, retain the actual residual tree, verify both frozen sources, then independently confirm natural exit and zero owned children. Preserve hash-verified evidence before removing only the resolved task-owned root. Bound public curated synchronization as accompanying task profile activity; reject other plugin registration. Stop on contradictory state, unavailable native selection or timeout, preserving the immediate failure and captured stream prefix; do not retry or manufacture a PASS through evaluator repair. The native deadline is 120 seconds. This fills the changed 12-file package update/return-state gap. The original malformed-manifest rejection remains separately reviewed historical evidence, not a facet of this new episode. No Agent body loading, ordinary delivery, partial-write recovery, Desktop, incremental value or complete package-lifecycle admission follows from this component case alone.",
+          "oracleFiles": [
+            ".agents/plugins/marketplace.json",
+            "scripts/run-gt20-exact-package.ps1"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "selectedVersions": [
+                "3.1.0",
+                "3.2.0-dev.16",
+                "3.1.0"
+              ],
+              "selectedFileCounts": [
+                11,
+                12,
+                11
+              ],
+              "exactFilesAtEveryTransition": true,
+              "nativeSelectedPathsAndEnabledRegistrationVerified": true
+            },
+            "authority": {
+              "onlyTaskOwnedProfileChanged": true,
+              "noAuthenticationFileOrModelRequest": true,
+              "noOtherPluginRegistration": true,
+              "oneNativeIntentPerTransition": true
+            },
+            "poststate": {
+              "uninstalledRegistrationAbsent": true,
+              "uninstalledSelectedSkillAbsent": true,
+              "allResidualCachesAccountedBeforeDisposal": true,
+              "frozenSourcesUnchanged": true
+            },
+            "cleanup": {
+              "naturalExitWithoutForcedRescue": true,
+              "ownedChildrenAfterCleanup": 0,
+              "evidenceRetainedAndHashVerified": true,
+              "taskRootRemoved": true
             }
           }
         }
