@@ -1,6 +1,6 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "3.2.0-dev.16",
+  "version": "3.2.0-dev.17",
   "description": "YIYUAN Accord outcome delivery for Codex, including authorized package installation, update and independent recovery.",
   "author": {
     "name": "yiheng8023",

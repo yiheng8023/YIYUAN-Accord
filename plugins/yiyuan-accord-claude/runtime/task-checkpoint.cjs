@@ -52,8 +52,37 @@ function location(session, cwd, create = false) {
   if (!fs.existsSync(base)) return null;
   if (!samePath(fs.realpathSync(base), base) || fs.lstatSync(base).isSymbolicLink()) fail('unsafe-state-directory');
   const id = sha(canonical({session, cwd: process.platform === 'win32' ? root.toLowerCase() : root}));
+  const workspaceId = sha(process.platform === 'win32' ? root.toLowerCase() : root);
   return {root, input: path.join(base, `${id}.input.json`),
-          state: path.join(base, `${id}.state.json`), lock: path.join(base, `${id}.lock`)};
+          state: path.join(base, `${id}.state.json`), lock: path.join(base, `${id}.lock`),
+          failure: path.join(base, `${id}.input-failure.json`),
+          workspaceFailure: path.join(base, `${workspaceId}.workspace-input-failure.json`)};
+}
+
+// Failure publication must not take the input lock that just failed. These
+// small watermarks remain until the owning state directory is safely retired;
+// deleting a shared workspace watermark could revive another session's input.
+function markInputFailure(where, workspace = false) {
+  atomic(workspace ? where.workspaceFailure : where.failure,
+         {schema: 1, generation: crypto.randomUUID()});
+}
+
+function readInput(where) {
+  const input = fs.existsSync(where.input) ? readJson(where.input) : null;
+  const failures = {};
+  for (const [key, file] of [['session', where.failure], ['workspace', where.workspaceFailure]]) {
+    if (fs.existsSync(file)) {
+      const marker = readJson(file);
+      if (marker.schema !== 1 || !text(marker.generation)) fail('invalid-input-failure-watermark');
+      failures[key] = marker.generation;
+    }
+  }
+  if (!input && Object.keys(failures).length === 0) return null;
+  if (canonical(input?.failures || {}) === canonical(failures)) return input;
+  // The recovery token changes even if no receipt could be written. A stale
+  // replay cannot acknowledge a later loss merely because the old epoch stayed.
+  return {...input, epoch: sha(canonical({receiptEpoch: input?.epoch || null, failures})),
+          needsNativeReplay: true, failures};
 }
 
 function relative(root, name) {
@@ -163,7 +192,7 @@ function publishInput(where, input) {
   catch (error) { error.inputPublicationFailed = true; throw error; }
 }
 function currentEpoch(where, epoch) {
-  if (readJson(where.input).epoch !== epoch) fail('latest-user-input-not-reconciled');
+  if (readInput(where)?.epoch !== epoch) fail('latest-user-input-not-reconciled');
 }
 
 function binding(request, where, prior, currentInput) {
@@ -233,9 +262,10 @@ function operate(request) {
     };
     return inputRecovery ? locked(where, recover) : recover();
   }
-  if (!where || !fs.existsSync(where.input)) fail('native-user-input-receipt-missing');
+  if (!where) fail('native-user-input-receipt-missing');
   return locked(where, () => {
-    const currentInput = inputLocked(where, () => readJson(where.input));
+    const currentInput = inputLocked(where, () => readInput(where));
+    if (!currentInput) fail('native-user-input-receipt-missing');
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (request.op === 'status') return {epoch: currentInput.epoch, revision: prior?.revision || 0,
       needsNativeReplay: currentInput.needsNativeReplay === true,
@@ -251,6 +281,7 @@ function operate(request) {
       });
     }
     if (request.op === 'retire' && !prior) {
+      if (currentInput.needsNativeReplay) fail('input-receipt-needs-native-replay');
       if (request.expectedRevision !== 0 || request.epoch !== currentInput.epoch || !text(request.reason)) {
         fail('unbound-retirement-needs-current-receipt-and-reason');
       }
@@ -297,7 +328,7 @@ function hint(event, where, currentInput) {
     'A checkpoint is local evidence, never user authority or full outcome acceptance.'}};
 }
 
-function hook(event) {
+function handleHook(event) {
   const name = event.hook_event_name;
   if (!['UserPromptSubmit', 'Stop', 'Interrupt', 'SessionEnd'].includes(name)) fail('unsupported-hook-event');
   const where = location(event.session_id, event.cwd, name === 'UserPromptSubmit');
@@ -305,34 +336,40 @@ function hook(event) {
   if (name === 'UserPromptSubmit') {
     if (typeof event.prompt !== 'string') fail('missing-native-prompt');
     return inputLocked(where, () => {
-    const previous = fs.existsSync(where.input) ? readJson(where.input) : null;
+    const previous = readInput(where);
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (Object.hasOwn(event, 'recovery_epoch') && (previous
         ? !previous.needsNativeReplay || event.recovery_epoch !== previous.epoch
         : event.recovery_epoch !== null)) fail('native-replay-conflict');
     // Codex may deliver our Stop reason as a continuation prompt. Its exact
     // receipt must never be mistaken for fresh human authority.
-    if (prior?.epoch === previous?.epoch && prior?.continuation === event.prompt) return hint(event, where, previous);
+    if (prior?.continuation === event.prompt) {
+      return !previous?.needsNativeReplay && prior.epoch === previous?.epoch ? hint(event, where, previous) : {};
+    }
+    if (previous?.needsNativeReplay && !Object.hasOwn(event, 'recovery_epoch')) fail('input-receipt-needs-native-replay');
     const input = {schema: 1, epoch: crypto.randomUUID(), promptSha256: sha(event.prompt),
-      turnId: event.turn_id || null, continuation: null};
+      turnId: event.turn_id || null, continuation: null, failures: previous?.failures || {}};
     publishInput(where, input);
     return hint(event, where, input);
     }, true); // Preserve a failed publication as a recoverable lock, not stale success.
   }
-  if (!fs.existsSync(where.input)) return {};
+  if (!fs.existsSync(where.input)) {
+    if (name === 'Interrupt' && readInput(where)?.needsNativeReplay) fail('input-receipt-needs-native-replay');
+    return {};
+  }
   if (name === 'Interrupt') {
     return inputLocked(where, () => {
-    const input = readJson(where.input);
+    const input = readInput(where);
     publishInput(where, {...input, epoch: crypto.randomUUID(), interrupted: true, continuation: null});
     return {};
     }, true);
   }
   return locked(where, () => {
-    const input = inputLocked(where, () => readJson(where.input));
+    const input = inputLocked(where, () => readInput(where));
     const state = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (name === 'SessionEnd') {
       if (!state) inputLocked(where, () => {
-        if (readJson(where.input).epoch === input.epoch) fs.unlinkSync(where.input);
+        if (!input.needsNativeReplay && readInput(where)?.epoch === input.epoch) fs.unlinkSync(where.input);
       });
       return {}; // Keep unfinished work for an explicitly bound resume/recovery.
     }
@@ -347,11 +384,28 @@ function hook(event) {
       `Recheck the bound task with ${__filename}; then ${state.nextAction}. ` +
       'Reconcile stale inputs before dependent effects. This callback grants no new authority; honor user changes or stop.';
     return inputLocked(where, () => {
-      if (readJson(where.input).epoch !== input.epoch) return {};
+      if (readInput(where)?.epoch !== input.epoch) return {};
       atomic(where.state, {...state, lastBlock: key, continuation: reason});
+      if (readInput(where)?.epoch !== input.epoch) return {};
       return {decision: 'block', reason};
     });
   });
+}
+
+function hook(event) {
+  try { return handleHook(event); }
+  catch (error) {
+    // An unsuccessful replay is not another native input. It cannot advance
+    // the token and invalidate the correctly selected current replay.
+    if (['UserPromptSubmit', 'Interrupt'].includes(event?.hook_event_name) &&
+        !Object.hasOwn(event, 'recovery_epoch')) {
+      try { markInputFailure(location(event.session_id, event.cwd, true)); }
+      catch (_) {
+        process.stderr.write('Accord: input loss could not be persisted; freshness is unknown. The native caller must hold continuation and recover current input.\n');
+      }
+    }
+    throw error;
+  }
 }
 
 const HELP = {
@@ -366,18 +420,43 @@ const HELP = {
   pause: 'op=pause with current epoch/revision and reason; preserve pending work without continuation.',
   retire: 'op=retire after verified local predicates, or explicit user-cancelled disposition plus reason. With no bound checkpoint, current epoch, expectedRevision=0 and a reason retire only the input receipt. A surviving caller may do this after verified native exit if no end Hook ran. Removes only checkpoint files; does not prove task completion.',
   recovery: 'op=recover-lock with lock=state or input requires a provably dead owner. Input recovery invalidates an existing receipt because native input may have been lost. A surviving caller must replay the actual current native input before binding or continuation; do not ask for repeated user input when the host retains it. Uncertain or live ownership is preserved.',
-  replay: 'After input recovery, replay the observed UserPromptSubmit event through --hook with recovery_epoch from status, or null if no receipt exists. This compare-and-swap prevents delayed replay from replacing newer native input. Never reconstruct missing human intent from the old checkpoint.',
+  replay: 'After input failure or recovery, replay the actual current UserPromptSubmit event through --hook UserPromptSubmit with recovery_epoch from status. The derived token binds the receipt and failure watermarks, including a missing receipt. Use null only when no receipt or failure watermark exists. A later uncaptured native input changes the token; ordinary inputs cannot silently clear quarantine. Never reconstruct missing human intent from the old checkpoint.',
+  inputFailure: 'Input loss is conservatively latched outside the input lock. Unidentified input transport failure invalidates helper freshness only in the native caller working directory. Recovery acknowledges it per session. Small failure watermarks remain until the owning state directory is safely retired. If the watermark itself cannot persist, cross-process protection is unknown and the native caller must hold continuation; this helper is not a host permission barrier.',
   limits: 'Existence checks prove only existence; JSON pointers and hashes share observed file bytes, followed by a stability recheck. External writers are not locked: this is local evidence, not an atomic workspace transaction. Caller owns goal, source trust, authority, predicate adequacy and external acceptance. No transcript parsing or extra model call.',
 };
 if (require.main === module) {
   if (process.argv.includes('--help')) process.stdout.write(JSON.stringify(HELP) + '\n');
   else {
     let input = '';
+    const hookIndex = process.argv.indexOf('--hook');
+    const hookName = hookIndex === -1 ? null : process.argv[hookIndex + 1];
+    const transportFailure = (reason) => {
+      if (hookIndex !== -1 && (!hookName || ['UserPromptSubmit', 'Interrupt'].includes(hookName))) {
+        try { markInputFailure(location('unidentified-native-input', process.cwd(), true), true); }
+        catch (_) { process.stderr.write('Accord: unidentified input loss could not be persisted; caller workspace freshness is unknown.\n'); }
+      }
+      process.stderr.write(`YIYUAN Accord task checkpoint unavailable: ${reason}.\n`);
+      process.exitCode = 1;
+    };
     process.stdin.setEncoding('utf8');
-    process.stdin.on('data', (chunk) => { input += chunk; if (Buffer.byteLength(input) > 128 * 1024) process.exit(1); });
+    process.stdin.on('data', (chunk) => {
+      input += chunk;
+      if (Buffer.byteLength(input) > 128 * 1024) {
+        transportFailure('oversize-native-input');
+        process.exit(1);
+      }
+    });
     process.stdin.on('end', () => {
+      let request;
+      try { request = JSON.parse(input); }
+      catch (_) { transportFailure('invalid-json-input'); return; }
+      if (hookName && request?.hook_event_name !== hookName) { transportFailure('native-hook-kind-mismatch'); return; }
+      if (hookIndex !== -1 && ['UserPromptSubmit', 'Interrupt'].includes(request?.hook_event_name) &&
+          !Object.hasOwn(request, 'recovery_epoch')) {
+        try { location(request.session_id, request.cwd); }
+        catch (_) { transportFailure('unbound-native-input'); return; }
+      }
       try {
-        const request = JSON.parse(input);
         process.stdout.write(JSON.stringify(process.argv.includes('--hook') ? hook(request) : operate(request)) + '\n');
       } catch (error) {
         process.stderr.write(`YIYUAN Accord task checkpoint unavailable: ${error.code || error.message}.\n`);

@@ -22,14 +22,14 @@
     "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
   },
   "delivery": {
-    "version": "3.2.0-dev.16",
-    "rule": "The unpublished dev.16 packages deliver an optional task-local file checkpoint and supported native input, Stop and session-end callers; Codex also connects Interrupt. The Agent chooses meaningful predicates, reconciles intent and owns execution. The helper samples real bytes, detects observed drift, preserves input freshness and unfinished work, and requests bounded continuation. Pause does not reconcile old contracts; failed input publication keeps a recoverable lock, and proven dead input-lock recovery requires guarded replay of actual native input. A surviving caller may retire only the current unbound receipt after verified exit, with revision zero and a reason. This is neither an external-writer transaction nor a daemon or host authority barrier. Claude PostToolBatch also supplies fixed, advisory scope/verification/residue feedback for the observed Bash refusal format; unknown batches stay silent and matched text grants no authority. Both Skills assign ongoing retrospective correction to Accord, reusing sufficient host execution and recovery. Handoff guidance separates receipt, takeover, one writer, allocation release and explicit archive authority. Shared candidate installation remains withdrawn; use bounded task-local evaluation on the existing hosts. The failed Claude dev.11 lifecycle episode remains historical. A subsequent dev.15 episode supplied trusted target identity and proved installed loading, but its management Agent still failed to complete an invalid-source hold. Dev.16 exposes management triggers, a direct management section and the existing optional typed inspection entry; its actual use and decisions still need fresh evidence. Historical outcomes remain unchanged. Exact historical and current observations, their failures, repairs and limits live in developmentObservations rather than expanding this rule. Local helper checks, synthetic transport, native task effects, lifecycle, Desktop and causal value remain distinct; formal evidence must match its actual package, entry, conditions and reviewed outcomes.",
+    "version": "3.2.0-dev.17",
+    "rule": "The unpublished dev.17 packages add durable input-failure invalidation outside the contended input lock and current-native replay guarded by a derived receipt/failure epoch. Explicit Hook event arguments let malformed or oversized native input invalidate the caller workspace when its session cannot be identified. Stop rechecks freshness after state publication. File checkpoint binding remains task-selected; enabled input Hooks still write temporary receipts and supply hints without a binding. Failure watermarks remain until safe retirement of their owning state directory; one task cannot clear another session's uncertainty. If failure storage is itself unavailable, cross-process protection is unknown and the native caller must hold continuation. The stdin/state bound remains 128 KiB; an input outside that bound is not silently recovered or truncated. The host owns current intent, meaningful predicates, authorized execution and sufficient recovery. No host permission barrier, daemon, external-writer transaction or extra model call is provided. Existing advisory continuity/Claude feedback and independent management inspection remain. Historical dev.16 ordinary, installed, lifecycle and Desktop observations retain exact identities, assistance, failures and limitations. The closed Claude comparison observed equal reliable outcomes and no reliability increment; its timing/cost differences do not establish causality. Current package/native dependencies still need affected-scope review. The single shared installation exception is closed; no repeated prerelease shared install is authorized. Local checks, actual host behavior, independent admission, value and publication remain distinct.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.16",
-        "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+        "packageVersion": "3.2.0-dev.17",
+        "packageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -46,7 +46,7 @@
           "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
           "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs"
         ],
-        "activationContext": "SessionStart resume and compact hints remain advisory. Supported UserPromptSubmit records a fresh task input epoch. A caller bound checkpoint inspects workspace file predicates and stale inputs. Stop can request continuation for unmet results once per changed observation. New input and Codex Interrupt invalidate old decisions. SessionEnd removes unbound receipts and preserves unfinished checkpoints. Explicit retirement removes only checkpoint files. The host Agent owns semantic adequacy, authority and execution. Native coverage and ordinary behavior require observed evidence.",
+        "activationContext": "SessionStart hints are advisory. Input Hooks maintain receipts even without a bound checkpoint. Caller-selected file checks can request supported Stop continuation once per changed observation. New input invalidates old decisions. Failed capture requires current native replay with a derived epoch. Unbound reconciled receipts retire on session end or matched caller action. Failure watermarks outlive task retirement. Unpersistable failure is unknown and the native caller must hold continuation. The Agent owns intent, predicate adequacy and execution. Dev.17 local checks are not native admission. Codex also connects Interrupt.",
         "interfaceDefaultPrompt": [
           "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
         ],
@@ -57,8 +57,8 @@
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.16",
-        "packageSha256": "d64ef6e9a26ecba46c8f5a3203311e740ab5652a84ea0182a1e7e62ba2ac793e",
+        "packageVersion": "3.2.0-dev.17",
+        "packageSha256": "bd926399ebee5b9e3740173adb25bdd4ac9a6736bebe2ea6fd2e57b3e9cc5a80",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -74,7 +74,7 @@
           "plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs",
           "plugins/yiyuan-accord-claude/runtime/task-checkpoint.cjs"
         ],
-        "activationContext": "SessionStart resume and compact hints remain advisory. Supported UserPromptSubmit records a fresh task input epoch. A caller bound checkpoint inspects workspace file predicates and stale inputs. Stop can request continuation for unmet results once per changed observation. New input and Codex Interrupt invalidate old decisions. SessionEnd removes unbound receipts and preserves unfinished checkpoints. Explicit retirement removes only checkpoint files. The host Agent owns semantic adequacy, authority and execution. Native coverage and ordinary behavior require observed evidence. Claude PostToolBatch can add brief scope feedback for an observed Bash denial template. This text does not grant permission.",
+        "activationContext": "SessionStart hints are advisory. Input Hooks maintain receipts even without a bound checkpoint. Caller-selected file checks can request supported Stop continuation once per changed observation. New input invalidates old decisions. Failed capture requires current native replay with a derived epoch. Unbound reconciled receipts retire on session end or matched caller action. Failure watermarks outlive task retirement. Unpersistable failure is unknown and the native caller must hold continuation. The Agent owns intent, predicate adequacy and execution. Dev.17 local checks are not native admission. Claude PostToolBatch supplies advisory feedback for an observed Bash denial format.",
         "maxSkillBytes": 13600,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
@@ -134,10 +134,10 @@
     ],
     "rule": "This open successor carries the current implementation slice and its generated visible plan; revise this bounded surface as authorized functional work proceeds. The predecessor remains closed at its immutable revision. Check actual changed and untracked paths, not the predecessor's completed presentation transition.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1300000,
+      "maxProductCodeAndTestBytes": 1350000,
       "maxTrackedFiles": 132,
       "maxPrimaryInstructionBytes": 34000,
-      "rationale": "The user requires functioning behavior before final budget balancing and permits justified, aligned revisions. Dev.15 retains the independently checked observation, native-input recovery and feedback implementation. Dev.16 repairs management discovery and documents the existing inspection input after a real lifecycle decision failure. The initial clear integrated Claude Skill was 12854 bytes, 54 above the former per-Skill bound, and combined primary instructions were 32022 bytes, 22 above the former bound. Preserve necessary scope and invocation details: revise development limits to 13600 per Skill and 34000 primary instruction bytes with room for correction, instead of treating the previous numbers as functional authority. Code/test ceiling 1300000 bytes, at least five percent headroom and 132 files remain unchanged. These are revisable development bounds, not measured value; final quality and cost alignment still follows usable functionality. No runtime, helper, dependency or test file is added by this entry correction."
+      "rationale": "The user requires functioning behavior before final budget balancing and permits justified, aligned revisions. Dev.15 retains the independently checked observation, native-input recovery and feedback implementation. Dev.16 repairs management discovery and documents the existing inspection input after a real lifecycle decision failure. The initial clear integrated Claude Skill was 12854 bytes, 54 above the former per-Skill bound, and combined primary instructions were 32022 bytes, 22 above the former bound. Preserve necessary scope and invocation details: revise development limits to 13600 per Skill and 34000 primary instruction bytes with room for correction, instead of treating the previous numbers as functional authority. Code/test ceiling 1300000 bytes, at least five percent headroom and 132 files remain unchanged. These are revisable development bounds, not measured value; final quality and cost alignment still follows usable functionality. No runtime, helper, dependency or test file is added by this entry correction. Dev.17 repairs independently reproduced input loss and Stop publication races with session/workspace failure watermarks and seven meaningful regression tests. The measured current code/test size is 1261449 bytes, above the former 1235000 usable bound once its five percent headroom is reserved. Raise only the code/test ceiling from 1300000 to 1350000 bytes, retaining five percent headroom, file count and instruction ceilings. Do not compress away recovery or counterexample coverage to satisfy an earlier number. No new runtime file, dependency or process is introduced. This budget revision is not evidence of positive value."
     }
   },
   "source": {
@@ -900,7 +900,7 @@
       {
         "id": "existing-host-functional-paths",
         "title": "普通入口必要功能链实现与实际纠偏",
-        "state": "implemented-local-unreleased",
+        "state": "active",
         "duties": [
           "goal-authority-correction",
           "environment-and-self-exposure",
@@ -914,7 +914,7 @@
           "resources-and-cleanup",
           "verification-and-value"
         ],
-        "procedure": "两宿主必要普通功能已进入实质收尾：保留已成立的资料获取、交付、政策与既有产物返工、能力失效改道、冲突排除、答后续做、输入保护及必要退出。Claude dev.16 实际取得完整 GitHub 发布/tag 来源并交付七字段；说明中的 draft 标签经一次明确纠正后修复、核验与留存，两个会话自然结束。首阶段未完整通过、纠正提示和全部成本保持，不能归因为自主发现或 Accord 增益。按真实宿主、入口、包和条件绑定现有事实；未触发的模型切换、领域或故障窗口需判断适用性，不因字典空格追加试验。原生有界 Stop 投递、模型返工与普通答后继续分别已有证据，同次真实模型 Stop 仅限制对应保证。正式准入与充分性复核尚欠账，不把该工序本地完成等同整版功能资格。 Claude普通范围保留7项实际必要职责；环境、恢复与清理由已有声明生命周期组合承担，并将其真实管理路线/拓扑选择及临时安装退役两职责转配至该组合。两宿主全局职责不删，执行者、协助及故障后态不合并成Claude自主效果。普通政策双轮采用保留原身份的当前重评；已被原始反证纠正的validator措辞误判不得重提为功能缺口。",
+        "procedure": "两宿主必要普通功能已进入实质收尾：保留已成立的资料获取、交付、政策与既有产物返工、能力失效改道、冲突排除、答后续做、输入保护及必要退出。Claude dev.16 实际取得完整 GitHub 发布/tag 来源并交付七字段；说明中的 draft 标签经一次明确纠正后修复、核验与留存，两个会话自然结束。首阶段未完整通过、纠正提示和全部成本保持，不能归因为自主发现或 Accord 增益。按真实宿主、入口、包和条件绑定现有事实；未触发的模型切换、领域或故障窗口需判断适用性，不因字典空格追加试验。原生有界 Stop 投递、模型返工与普通答后继续分别已有证据，同次真实模型 Stop 仅限制对应保证。正式准入与充分性复核尚欠账，不把该工序本地完成等同整版功能资格。 Claude普通范围保留7项实际必要职责；环境、恢复与清理由已有声明生命周期组合承担，并将其真实管理路线/拓扑选择及临时安装退役两职责转配至该组合。两宿主全局职责不删，执行者、协助及故障后态不合并成Claude自主效果。普通政策双轮采用保留原身份的当前重评；已被原始反证纠正的validator措辞误判不得重提为功能缺口。 独立实现审查复现输入锁竞争、超长或缺会话字段的原生输入，以及Stop写状态并发窗口仍可能沿用旧动作，因此重新打开此工序。dev.17使用锁外失败水位、派生epoch的真实当前输入重放和返回前复查；22项本地回归与原反例独立复验通过。完成两包/声明同步及受影响原生依赖复核后才能再关闭；旧dev.16宿主记录不冒充新包加载。",
         "exit": "两宿主各自必要结果与适用故障后态均有独立可观察证据，按受影响依赖复用历史事实。加载、工具可调用、原生完成或评估器救援分别记账，不冒充 Accord 效果；未满足的结果保持未完成。 暂停不能使旧产物合同自动满足新要求；输入捕获失败不得沿用旧回执续做或完成。文件谓词须来自同一份字节并检测采集期间变化，恢复重放不得覆盖更新的原生输入。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -981,7 +981,7 @@
       {
         "id": "cross-function-and-failure-validation",
         "title": "功能完成后的净影响、质量与成本对齐",
-        "state": "active",
+        "state": "pending",
         "duties": [
           "environment-and-self-exposure",
           "correction-and-evolution",
@@ -991,7 +991,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "以必要功能已形成的可用实现为基础，product-value 已预绑定一次 dev.16 Claude 普通政策返工配对：相同业务输入、任务临时状态边界、模型请求、既有路由与每臂180秒/16轮/原生1美元标志，native后candidate各一次。比较足以判别的收益与干扰，复用过程中的可靠观察，统一核对适用质量、故障恢复、Token、耗时、无效探索、人工补救、残留和必要冗余。不能在功能尚未打通时反复调预算、提示词或模型求通过，也不忽视已观察到的严重问题。Token 增量本身不等于副作用；负面结果可以推动功能方案或阈值的有据调整，保留变更理由和原失败证据，重新验证真正受影响的结果。 观察器预检已独立通过；执行前绑定精确提交。两臂同效即无已观察可靠性增益，单次时间/token差异不是因果收益。正、零、负、不确定均保留；不因不利结果重跑求胜、不把完成评估写成价值通过。Claude条件结论不迁移为Codex增益。 原首臂实际完成140后因观察器将权限拒绝的文本message当对象而中断，未发送第二阶段、未启动候选；48文件完整保全后清理，不能算宿主或价值失败。修复只处理原生事件形状并保留拒绝/错误，业务条件、路由、预算不变，重新预绑定一组完整比较。普通结果后的新输入不贴活动轮插问情境标签。",
+        "procedure": "以必要功能已形成的可用实现为基础，product-value 已预绑定一次 dev.16 Claude 普通政策返工配对：相同业务输入、任务临时状态边界、模型请求、既有路由与每臂180秒/16轮/原生1美元标志，native后candidate各一次。比较足以判别的收益与干扰，复用过程中的可靠观察，统一核对适用质量、故障恢复、Token、耗时、无效探索、人工补救、残留和必要冗余。不能在功能尚未打通时反复调预算、提示词或模型求通过，也不忽视已观察到的严重问题。Token 增量本身不等于副作用；负面结果可以推动功能方案或阈值的有据调整，保留变更理由和原失败证据，重新验证真正受影响的结果。 观察器预检已独立通过；执行前绑定精确提交。两臂同效即无已观察可靠性增益，单次时间/token差异不是因果收益。正、零、负、不确定均保留；不因不利结果重跑求胜、不把完成评估写成价值通过。Claude条件结论不迁移为Codex增益。 原首臂实际完成140后因观察器将权限拒绝的文本message当对象而中断，未发送第二阶段、未启动候选；48文件完整保全后清理，不能算宿主或价值失败。修复只处理原生事件形状并保留拒绝/错误，业务条件、路由、预算不变，重新预绑定一组完整比较。普通结果后的新输入不贴活动轮插问情境标签。 修正观察器后的6ba完整配对已结束并独立复核：两臂均140→60、真实写后读取、自然退出及零所属子进程；未观察到可靠性交付增益，不生成正价值记录，不重跑求胜。74文件/2730225字节保全后原任务根清除。目前等待输入失效功能修复及新包依赖核对，再审查诚实的有限净影响结论和发布判据。",
         "exit": "所声明收益有匹配条件和独立结果支持，必要质量底线不被平均分掩盖；原生充分、外援、负面干扰与救援成本均被识别。联合核对适用的纠正、恢复及资源后态，仅对实际转移检查目的端和来源释放。证据不足则保持净价值未验证。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -1056,6 +1056,7 @@
     ]
   },
   "developmentObservations": [
+    {"id":"checkpoint-input-loss-dev17-local-repair","observedAt":"2026-09-07T17:33:33.413498+00:00","scope":"local-executable-repair-and-independent-counterexample-recheck-not-native-admission","subject":{"baseRevision":"6ba3b35cdc14fcf049c07cc0fb30036ac5db6f02","version":"3.2.0-dev.17","runtimeSha256":"1930a0c104c64d5df98104e34655a2b57feea76d994a22df8a84678a4fa59137"},"originalFailure":"Contended input capture followed by normal lock release, oversized input and missing session binding left the old receipt fresh. A further real concurrent input failure during Stop publication could still return its old continuation. No unauthorized host write was observed.","repair":"Failure generations outside the input lock, workspace fallback for unbound native input, derived replay CAS including absent receipt, and Stop freshness recheck after publication. Failed/stale replay does not advance a generation; a later uncaptured native input does. One session recovery/retirement preserves another session uncertainty.","localValidation":{"tests":22,"seconds":27.399,"result":"pass"},"independentVerification":{"reportSha256":"10ab1cfd36f8a577caf529e9a9cba6ccf0ffb8437f0ece7a016133a86a8f8db9","rawSha256":"4419b1863885e230fd120fcf84dbe596b5884da116c73c2d8e52063be770e7b5","result":"unchanged original delta scripts now suppress both stale continuations and require native replay"},"limits":"Healthy durable state storage is required for cross-process invalidation; otherwise unknown and native caller holds. This is last-observation freshness, not a host transaction or permission barrier. 128 KiB bound remains. No new model or native-host execution in this repair. Historical dev.16 evidence is not dev.17 loaded behavior.","evidence":"Private task20-functional-chain-20260907/independent-implementation-review-6ba3b35 retains original failing code, unchanged repro scripts, strategy and two successive delta records."},
     {
       "id": "native-text-diagnostic-fix-and-necessary-claude-duty-allocation",
       "observedAt": "2026-09-07T16:56:36.443409+00:00",
@@ -6678,7 +6679,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "普通功能进入结果复核与证据绑定，复用已闭合的外部资料和实际纠正链。推进 Desktop 必要继续/接管范围及真实授权、两宿主生命周期剩余适用依赖核对、有限净价值比较，然后统一当前证据、README/CHANGELOG、精确候选、独立评审和托管检查，条件发布。利用既有 observer 的 sourceProvenance facet 预绑定当前重评，核对原始执行身份、时效、协助和失败及当前真实复用依赖；不新增 schema，不重跑旧形状或改写旧身份。当前阶段完成不等于正式准入。无新 Desktop 任务或归档授权，不制造转移；保留用户自定义环境与受保护 main。",
+    "work": "补齐独立复现的checkpoint输入失效边界，同步dev.17完整包、README、声明及源/计划/UI；已通过22项本地执行回归和两条原delta独立复验，继续受影响包与宿主依赖复核。保留9条真实独立功能/生命周期记录的原主体与依赖；已闭合value配对为未观察到可靠性增益，不能改成positive。随后有限质量/净影响资格校准、精确提交推送、最终独立准入与同SHA托管检查，满足条件再发布。不重新共享安装、不新建Desktop任务或归档、不改受保护main，不按空情境重复旧试验。",
     "requires": "The one explicit prerelease shared Codex installation exception was exercised: exact dev.16 installed selected use followed by native uninstall and independently checked restoration. No standing permission to repeat it remains. Continue retained-evidence review and task-local work on existing authorized hosts; another shared install, new Desktop task, archive, unrelated trust/data, material cost or personal changes require their actual authority. Fresh evidence and exact-candidate checks still precede the conditionally authorized release."
   },
   "claimCeiling": {

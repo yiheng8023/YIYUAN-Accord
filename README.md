@@ -18,7 +18,7 @@ Accord's goal is simple: users focus on ideas and decisions; the Agent takes car
 
 Today, Accord supplies collaboration guidance through Codex and Claude plugins, plus repository tools for checking its contracts and evidence. It is not a separate autonomous worker. Reliable end-to-end behavior and added value must be demonstrated in the host where it is used.
 
-> **This branch develops 3.2.** Its packages are `3.2.0-dev.16`, remain unpublished, and do not automatically update your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
+> **This branch develops 3.2.** Its packages are `3.2.0-dev.17`, remain unpublished, and do not automatically update your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
 >
 > Start with [current limitations](#what-is-proven-and-what-is-not), the [development plan](docs/operations/PLAN-v3.2.md), or the [unreleased changelog](CHANGELOG.md). Do not install from moving `main` or this development branch.
 
@@ -87,9 +87,15 @@ Its finite claims cover collaboration-contract conformance, static Codex/Claude 
 
 Those checks do not prove broad user benefit, automatic crash recovery, current-client compatibility, production safety or every entry point. They also do not qualify changed 3.2 bytes.
 
-**3.2 is not yet ready for release.** Some native-only development probes already completed the task without Accord. Current discovery probes also expose non-delivery within budget and inaccurate output descriptions. Invocation has not established added value.
+**3.2 is not yet ready for release.** The completed, bounded Claude comparison delivered and checked both stages with and without Accord. It found no observed reliability increment; differences in one pair's time, tool denials or reported cost do not establish a causal benefit. Earlier non-delivery and inaccurate descriptions remain in the evidence. Dev.17 repairs input-loss boundaries found during independent review; its changed Hook behavior still needs affected-host verification.
 
-The [changelog](CHANGELOG.md) and [development source](product/development.json) separate implemented changes, counterevidence and open work. Ordinary-entry effects, environment adaptation, surviving failure ownership, handoff and full package lifecycle still need suitable verification.
+The [changelog](CHANGELOG.md) and [development source](product/development.json) separate implemented changes, retained ordinary-task/lifecycle observations, counterevidence and remaining candidate qualification.
+
+Development observations cover specific Windows local Codex and Claude Code entries, with an existing authorized model route, required file/command permissions and observed package loading. Codex App Server evidence does not automatically cover Desktop, IDE or cloud entries. Desktop observations cover the declared maintenance continuation and user-authorized takeover. Other combinations require their own applicability check. Ordinary Claude use does not require Codex, Python or the development evaluation scripts.
+
+The host Agent interprets the Skill. Enabled Hooks require Node on `PATH`, the relevant native events and host trust support. Each input Hook maintains a temporary freshness receipt and supplies a hint even when no file checkpoint is bound. Unbound, reconciled receipts are removed on a supported session end or by a surviving caller after verified exit. Input-failure watermarks remain until their owning state directory can safely be retired; one task must not clear another session's uncertainty. If a failure cannot be stored, freshness is unknown and the native caller must hold continuation. Input/state JSON is limited to 128 KiB; an oversized input requires recovery through a sufficient native path, not silent truncation. Without Hook support, the host's ordinary task path remains responsible and any missing continuation effect must be disclosed.
+
+Installation, update and recovery need a healthy executor independent of the damaged/replaced plugin, a verifiable accepted source and the necessary authority. The retained Claude damaged-cache/source-conflict recovery used a healthy Codex manager with explicit authorization and assistance. It does not prove automatic manager discovery or unattended Claude recovery, and it does not make those development tools ordinary-use prerequisites.
 
 ## Try the published version
 

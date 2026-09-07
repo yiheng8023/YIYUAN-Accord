@@ -109,6 +109,7 @@ all host actions. Pause on an actual stop; after full task verification retire
 only its checkpoint files. Preserve unfinished state for a needed resume and
 use `recover-lock` only for a proven dead owner. No extra model call or daemon
 is added; this local evidence does not prove full outcome acceptance.
+If status needs native replay, hold dependent work and replay the actual current native input with recovery_epoch from status; never reconstruct intent from old state. Input failures retain small session/workspace watermarks until the owning state directory is safely retired. One task must not clear another task's watermark. If storage cannot record failure, freshness is unknown: the native caller must hold continuation.
 Answer an in-flight side question, then resume the still-authorized work without
 requiring a reminder. Respect an actual pause, cancellation or changed goal.
 

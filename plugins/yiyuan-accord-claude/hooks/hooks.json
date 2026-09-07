@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/runtime/task-checkpoint.cjs\" --hook",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/runtime/task-checkpoint.cjs\" --hook UserPromptSubmit",
             "timeout": 3
           }
         ]
@@ -39,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/runtime/task-checkpoint.cjs\" --hook",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/runtime/task-checkpoint.cjs\" --hook Stop",
             "timeout": 3
           }
         ]
@@ -50,7 +50,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/runtime/task-checkpoint.cjs\" --hook",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/runtime/task-checkpoint.cjs\" --hook SessionEnd",
             "timeout": 3
           }
         ]

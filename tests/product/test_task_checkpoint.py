@@ -29,7 +29,7 @@ class TaskCheckpointTests(unittest.TestCase):
 
     def invoke(self, request, *, hook=False, success=True):
         request = {"session_id": "test-session", "cwd": str(self.work), **request}
-        result = subprocess.run([self.node, str(RUNTIME), *(["--hook"] if hook else [])],
+        result = subprocess.run([self.node, str(RUNTIME), *(["--hook", request['hook_event_name']] if hook else [])],
                                 input=json.dumps(request), text=True, encoding="utf-8",
                                 capture_output=True, env=self.environment, cwd=self.work, timeout=10)
         if success:
@@ -104,6 +104,188 @@ class TaskCheckpointTests(unittest.TestCase):
         self.event("Interrupt")
         self.assertEqual(self.event("Stop", stop_hook_active=False), {})
         self.assertFalse((self.work / "summary.json").exists())
+
+    def test_lost_native_input_stays_invalid_after_contended_lock_is_released(self):
+        self.bind()
+        earlier = self.status()
+        lock = Path(str(next(self.state.glob('*.input.json'))) + '.lock')
+        lock.write_text(json.dumps({'pid': os.getpid()}), encoding='utf-8')
+        try:
+            self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop; do not write.'},
+                        hook=True, success=False)
+        finally:
+            lock.unlink()  # This test owns the still-live competing lock.
+        current = self.status()
+        self.assertTrue(current['needsNativeReplay'])
+        self.assertFalse(current['currentInputReconciled'])
+        self.assertNotEqual(current['epoch'], earlier['epoch'])
+        self.assertEqual(self.event('Stop'), {})
+        self.assertIn('replay', self.invoke({'op': 'bind', 'epoch': current['epoch'],
+                      'expectedRevision': current['revision']}, success=False))
+        # A later real input that cannot be captured must obsolete the earlier
+        # recovery token; a rejected stale replay must not obsolete the new one.
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Still paused; new correction.'},
+                    hook=True, success=False)
+        later = self.status()
+        self.assertNotEqual(later['epoch'], current['epoch'])
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop; do not write.',
+                     'recovery_epoch': current['epoch']}, hook=True, success=False)
+        self.assertEqual(self.status()['epoch'], later['epoch'])
+        self.event('UserPromptSubmit', prompt='Still paused; new correction.', recovery_epoch=later['epoch'])
+        self.assertFalse(self.status()['needsNativeReplay'])
+        self.assertEqual(self.event('Stop'), {})
+
+    def test_unidentified_oversize_input_requires_each_workspace_session_to_replay(self):
+        self.bind()
+        other_work = self.root / 'unrelated-work'
+        other_work.mkdir()
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'cwd': str(other_work),
+                     'prompt': 'Unrelated workspace task.'}, hook=True)
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'session_id': 'second-session',
+                     'prompt': 'Separate task.'}, hook=True)
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop. ' + 'x' * 140000},
+                    hook=True, success=False)
+        first = self.status()
+        second = self.invoke({'op': 'status', 'session_id': 'second-session'})
+        self.assertTrue(first['needsNativeReplay'])
+        self.assertTrue(second['needsNativeReplay'])
+        self.assertFalse(self.invoke({'op': 'status', 'cwd': str(other_work)})['needsNativeReplay'])
+        self.assertEqual(self.event('Stop'), {})
+        self.event('UserPromptSubmit', prompt='Stop.', recovery_epoch=first['epoch'])
+        self.assertFalse(self.status()['needsNativeReplay'])
+        self.assertEqual(self.invoke({'op': 'status', 'session_id': 'second-session'})['epoch'], second['epoch'])
+        self.assertTrue(self.invoke({'op': 'status', 'session_id': 'second-session'})['needsNativeReplay'])
+        # Ending one session must not clear another session's workspace failure.
+        current = self.status()
+        self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': current['revision'],
+                     'disposition': 'user-cancelled', 'reason': 'The user explicitly stopped this task.'})
+        self.assertTrue(self.invoke({'op': 'status', 'session_id': 'second-session'})['needsNativeReplay'])
+
+    def test_missing_receipt_failure_has_a_recovery_token_and_new_interrupt_invalidates_it(self):
+        input_path = next(self.state.glob('*.input.json'))
+        input_path.unlink()  # The native receipt was never created in this scenario.
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop. ' + 'x' * 140000},
+                    hook=True, success=False)
+        before = self.status()
+        self.assertTrue(before['needsNativeReplay'])
+        self.assertFalse(input_path.exists())
+        self.invoke({'hook_event_name': 'Interrupt'}, hook=True, success=False)
+        after = self.status()
+        self.assertNotEqual(after['epoch'], before['epoch'])
+        self.assertFalse(input_path.exists(), 'failure status must not fabricate a native receipt')
+        for token in (None, before['epoch']):
+            self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Old event',
+                         'recovery_epoch': token}, hook=True, success=False)
+            self.assertEqual(self.status()['epoch'], after['epoch'])
+        self.event('UserPromptSubmit', prompt='The actual current stop input.', recovery_epoch=after['epoch'])
+        self.assertFalse(self.status()['needsNativeReplay'])
+        self.assertTrue(input_path.exists())
+
+    def test_input_failure_during_replay_publication_is_not_acknowledged_by_old_token(self):
+        self.bind()
+        lock = Path(str(next(self.state.glob('*.input.json'))) + '.lock')
+        lock.write_text(json.dumps({'pid': os.getpid()}), encoding='utf-8')
+        try:
+            self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Earlier uncaptured input.'},
+                        hook=True, success=False)
+        finally:
+            lock.unlink()
+        before = self.status()
+        request = {'session_id': 'test-session', 'cwd': str(self.work), 'hook_event_name': 'UserPromptSubmit',
+                   'prompt': 'Earlier uncaptured input.', 'recovery_epoch': before['epoch']}
+        script = r'''
+const fs = require('node:fs'), child = require('node:child_process');
+const helper = require(process.argv[1]), event = JSON.parse(process.argv[2]);
+const rename = fs.renameSync;
+let injected = false;
+fs.renameSync = function(from, to) {
+  if (!injected && String(to).endsWith('.input.json')) {
+    injected = true;
+    const lost = child.spawnSync(process.execPath, [process.argv[1], '--hook', 'UserPromptSubmit'], {
+      cwd: event.cwd, encoding: 'utf8', input: JSON.stringify({...event, recovery_epoch: undefined,
+        prompt: 'Newer native input: stop now.'}), timeout: 3000});
+    if (lost.status === 0) throw new Error('fixture failed to contend on input publication');
+  }
+  return rename.call(this, from, to);
+};
+helper.hook(event);
+process.stdout.write(JSON.stringify({injected}));
+'''
+        result = subprocess.run([self.node, '-e', script, str(RUNTIME), json.dumps(request)],
+            env=self.environment, cwd=self.work, text=True, encoding='utf-8', capture_output=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(json.loads(result.stdout)['injected'])
+        after = self.status()
+        self.assertTrue(after['needsNativeReplay'])
+        self.assertNotEqual(after['epoch'], before['epoch'])
+        self.assertEqual(self.event('Stop'), {})
+
+    def test_unbound_native_input_invalidates_the_known_caller_workspace(self):
+        self.bind()
+        for missing in ('session_id', 'cwd'):
+            with self.subTest(missing=missing):
+                event = {'session_id': 'test-session', 'cwd': str(self.work),
+                         'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop.'}
+                del event[missing]
+                before = self.status()['epoch']
+                result = subprocess.run([self.node, str(RUNTIME), '--hook', 'UserPromptSubmit'],
+                    input=json.dumps(event), env=self.environment, cwd=self.work,
+                    text=True, encoding='utf-8', capture_output=True, timeout=10)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('unbound-native-input', result.stderr)
+                self.assertTrue(self.status()['needsNativeReplay'])
+                self.assertNotEqual(self.status()['epoch'], before)
+                self.assertEqual(self.event('Stop'), {})
+
+    def test_input_failure_during_stop_publication_suppresses_old_continuation(self):
+        self.bind()
+        script = r'''
+const fs = require('node:fs'), child = require('node:child_process');
+const helper = require(process.argv[1]), cwd = process.argv[2], rename = fs.renameSync;
+let injected = false;
+fs.renameSync = function(from, to) {
+  if (!injected && String(to).endsWith('.state.json')) {
+    injected = true;
+    const lost = child.spawnSync(process.execPath, [process.argv[1], '--hook', 'UserPromptSubmit'], {
+      cwd, encoding: 'utf8', input: JSON.stringify({session_id: 'test-session', cwd,
+        hook_event_name: 'UserPromptSubmit', prompt: 'Newer native input: stop now.'}), timeout: 3000});
+    if (lost.status === 0) throw new Error('fixture failed to contend on Stop publication');
+  }
+  return rename.call(this, from, to);
+};
+const output = helper.hook({session_id: 'test-session', cwd, hook_event_name: 'Stop'});
+process.stdout.write(JSON.stringify({injected, output}));
+'''
+        result = subprocess.run([self.node, '-e', script, str(RUNTIME), str(self.work)],
+            env=self.environment, cwd=self.work, text=True, encoding='utf-8', capture_output=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout), {'injected': True, 'output': {}})
+        self.assertTrue(self.status()['needsNativeReplay'])
+        self.assertFalse(self.status()['currentInputReconciled'])
+
+    def test_unpersistable_input_failure_is_reported_unknown_not_durably_protected(self):
+        self.bind()
+        lock = Path(str(next(self.state.glob('*.input.json'))) + '.lock')
+        lock.write_text(json.dumps({'pid': os.getpid()}), encoding='utf-8')
+        fault = self.root / 'fail-watermark.cjs'
+        fault.write_text('''
+const fs = require('node:fs'), rename = fs.renameSync;
+fs.renameSync = function(from, to) {
+  if (String(to).endsWith('.input-failure.json')) throw Object.assign(new Error('denied'), {code:'EPERM'});
+  return rename.call(this, from, to);
+};
+''', encoding='utf-8')
+        try:
+            result = subprocess.run([self.node, '-r', str(fault), str(RUNTIME), '--hook', 'UserPromptSubmit'],
+                input=json.dumps({'session_id': 'test-session', 'cwd': str(self.work),
+                                  'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop.'}),
+                env=self.environment, cwd=self.work, text=True, encoding='utf-8', capture_output=True, timeout=10)
+        finally:
+            lock.unlink()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, '')
+        self.assertIn('freshness is unknown', result.stderr)
+        self.assertFalse(list(self.state.glob('*.input-failure.json')))
 
     def test_unchanged_failure_does_not_loop_but_changed_observation_can_continue(self):
         self.bind()
@@ -364,7 +546,9 @@ fs.renameSync = function(from, to) {
         current = self.status()
         self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': current['revision'],
                      'disposition': 'user-cancelled', 'reason': 'Replayed the actual native cancellation.'})
-        self.assertEqual(list(self.state.iterdir()), [])
+        self.assertEqual(list(self.state.iterdir()), list(self.state.glob('*.input-failure.json')))
+        self.assertEqual(len(list(self.state.iterdir())), 1,
+                         'keep the failure watermark until its owning state directory is safely retired')
         self.assertFalse((self.work / 'summary.json').exists())
 
 

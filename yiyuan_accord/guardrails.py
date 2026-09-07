@@ -502,7 +502,7 @@ def activation_mechanism_errors(
         for event in ["UserPromptSubmit", "Stop", "SessionEnd"] + (["Interrupt"] if adapter_id == "codex" else []):
             expected_value["hooks"][event] = [{"hooks": [{
                 "type": "command",
-                "command": f'node "${{{root_variable}}}/runtime/task-checkpoint.cjs" --hook',
+                "command": f'node "${{{root_variable}}}/runtime/task-checkpoint.cjs" --hook {event}',
                 "timeout": 3,
             }]}]
         checkpoint = repository_relative_path(root, checkpoint_locator)
