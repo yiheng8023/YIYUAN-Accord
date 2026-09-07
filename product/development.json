@@ -900,7 +900,7 @@
       {
         "id": "existing-host-functional-paths",
         "title": "普通入口必要功能链实现与实际纠偏",
-        "state": "pending",
+        "state": "active",
         "duties": [
           "goal-authority-correction",
           "research-learning-and-reuse",
@@ -955,7 +955,7 @@
       {
         "id": "package-lifecycle",
         "title": "两宿主安装、更新与独立恢复",
-        "state": "active",
+        "state": "pending",
         "duties": [
           "environment-and-self-exposure",
           "execution-configuration-and-code",
@@ -965,7 +965,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "对应 codex-lifecycle 与 claude-code-lifecycle，保留精确包、授权、坏源保护、真实更新、幸存执行者、恢复和退出结果。07e583f 下声明的健康 Codex 管理者与 Claude 组合已完成：缺席状态安装及实际使用、拒绝请求坏源并保护 prior、真实坏安装恢复、同版本坏缓存恢复、真实 3.1→dev.16 更新和新会话使用。两个配置均原生卸载、移除市场并完成留存与任务根处置；不再为旧方法固定形状重跑已成立操作。原始失败、环境重绑、软监督延长、父方提出恢复选项、任务局部设置编辑及一次坏缓存驱逐分别记账，不能追认旧整 case PASS、自动接管或 Claude 单独管理。当前推进 Codex 安装态的实际加载/使用及恢复缺口；当前 CLI 未找到兼容既有账号、任务局部安装且不写共享缓存的受支持路径，不复制凭据或重复原探针。该缺口不阻塞普通功能、Desktop 能力盘点或价值准备等无真实依赖工作。方法和验收按必要结果同步校准，原身份和独立证据核验保持。",
+        "procedure": "对应 codex-lifecycle 与 claude-code-lifecycle，保留精确包、授权、坏源保护、真实更新、幸存执行者、恢复和退出结果。07e583f 下声明的健康 Codex 管理者与 Claude 组合已完成：缺席状态安装及实际使用、拒绝请求坏源并保护 prior、真实坏安装恢复、同版本坏缓存恢复、真实 3.1→dev.16 更新和新会话使用。两个配置均原生卸载、移除市场并完成留存与任务根处置；不再为旧方法固定形状重跑已成立操作。原始失败、环境重绑、软监督延长、父方提出恢复选项、任务局部设置编辑及一次坏缓存驱逐分别记账，不能追认旧整 case PASS、自动接管或 Claude 单独管理。后续推进 Codex 安装态的实际加载/使用及恢复缺口；当前 CLI 未找到兼容既有账号、任务局部安装且不写共享缓存的受支持路径，不复制凭据或重复原探针。该缺口不阻塞普通功能、Desktop 能力盘点或价值准备等无真实依赖工作。方法和验收按必要结果同步校准，原身份和独立证据核验保持。",
         "exit": "用户所需生命周期与失败后态成立，且变更/卸载后仍有可用执行者完成必要恢复与核验。安装登记、实际激活、市场缓存和受影响配置分别取证；未更新而旧包不变不能证明保护。该项未通过只约束依赖它的工作与整版资格。",
         "qualityAxes": [
           "functional-coverage",
