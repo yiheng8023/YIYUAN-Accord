@@ -19,6 +19,7 @@ from .reviews import evaluate_review_bundle, review_policy_errors
 
 
 SCHEMA = "yiyuan-accord-evidence-admission/v3"
+IMPACT_SCHEMA = "yiyuan-accord-evidence-admission/v4"
 _LIMIT = 1_000_000
 _CLAIMS = {"function", "incremental-value", "package-lifecycle"}
 _CASE_FIELDS = set("id scope host entry duties qualityAxes scenarios claims oracle oracleFiles conditions maxAgeSeconds expected".split())
@@ -58,7 +59,7 @@ def admission_contract_errors(contract):
     """Check declarations, not empirical adequacy of oracles or coverage claims."""
     policy = contract.get("acceptance", {}).get("admission")
     if (not isinstance(policy, dict) or set(policy) != {"schema", "rule", "reviewPolicy", "reviewMaxAgeSeconds", "requiredCoverage", "scopes", "cases"}
-            or policy.get("schema") != SCHEMA or not _text(policy.get("rule"))
+            or policy.get("schema") not in {SCHEMA, IMPACT_SCHEMA} or not _text(policy.get("rule"))
             or type(policy.get("reviewMaxAgeSeconds")) is not int or policy["reviewMaxAgeSeconds"] <= 0
             or any(not isinstance(policy.get(k), list) or len(policy[k]) > 128 for k in ("scopes", "cases"))):
         return ["current evidence admission policy is missing or invalid"]
@@ -67,16 +68,18 @@ def admission_contract_errors(contract):
     try:
         _json(policy)
         required = policy["requiredCoverage"]
-        if (not isinstance(required, dict) or set(required) != _CLAIMS
-                or any(not isinstance(ids, list) or not 0 < len(ids) <= 128
+        impact_policy = policy["schema"] == IMPACT_SCHEMA
+        claims = _CLAIMS | ({"impact-assessment"} if impact_policy else set())
+        if (not isinstance(required, dict) or set(required) != claims
+                or any(not isinstance(ids, list) or not (0 if impact_policy and claim == "incremental-value" else 1) <= len(ids) <= 128
                        or not all(_text(v) for v in ids) or len(ids) != len(set(ids))
-                       for ids in required.values())):
-            return ["all three qualification claims must prebind required scope IDs"]
+                       for claim, ids in required.items())):
+            return ["qualification claims must prebind required scope IDs; only v4 incremental value may be undeclared"]
         sets = {
             "duties": {v["id"] for v in contract["acceptance"]["duties"]},
             "qualityAxes": {v["id"] for v in contract["systemOptimization"]["qualityAxes"]},
             "scenarios": {v["id"] for v in contract["environmentControl"]["adaptationScenarios"]},
-            "claims": _CLAIMS,
+            "claims": claims,
         }
         entries = {v["id"]: v["host"] for v in contract["capabilityMap"]["entrySurfaces"]["rows"]}
         hosts = {v["id"] for v in contract["delivery"]["hostProjections"]}
@@ -93,6 +96,8 @@ def admission_contract_errors(contract):
                     or any(v is None for v in scope["conditions"].values())):
                 return ["evidence scope must bind its entry, relevant environment axes and required coverage"]
             scopes[scope["id"]] = scope
+        if impact_policy and {key for key, scope in scopes.items() if "incremental-value" in scope["claims"]} != set(required["incremental-value"]):
+            return ["every active incremental-value claim must be required; undeclared claims belong in history"]
         ids = set()
         for case in policy["cases"]:
             if (not isinstance(case, dict) or set(case) != _CASE_FIELDS
@@ -111,7 +116,7 @@ def admission_contract_errors(contract):
                     or not isinstance(case.get("expected"), dict)
                     or not {"effect", "authority", "poststate", "cleanup"} <= case["expected"].keys()
                     or any(not isinstance(v, dict) or not v for v in case["expected"].values())
-                    or ("incremental-value" in case["claims"] and "comparison" not in case["expected"])):
+                    or (set(case["claims"]) & {"incremental-value", "impact-assessment"} and "comparison" not in case["expected"])):
                 return ["evidence case must bind its applicable need, entry, oracle, conditions and post-state"]
             ids.add(case["id"])
             scope = scopes.get(case.get("scope"))
@@ -129,7 +134,7 @@ def _definition(contract, case):
     def selected(rows, ids):
         return sorted((v for v in rows if v["id"] in ids), key=lambda v: v["id"])
     return _hash({
-        "schema": SCHEMA, "case": {**case, **{k: sorted(case[k]) for k in
+        "schema": contract["acceptance"]["admission"]["schema"], "case": {**case, **{k: sorted(case[k]) for k in
             ("duties", "qualityAxes", "scenarios", "claims", "oracleFiles")}},
         "shared": {k: contract[k] for k in ("schema", "productId", "predecessorSnapshot", "authority",
                    "baselineRole", "cycle", "source", "applicability", "implementation",
@@ -337,13 +342,13 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     report["unboundCoverage"] = {claim: sorted(set(ids) - bound[claim])
                                  for claim, ids in policy["requiredCoverage"].items()}
     completed = {claim: bool(bound[claim]) and not report["unboundCoverage"][claim] and not errors
-                 for claim in _CLAIMS}
+                 for claim in bound}
     report["productCoverage"] = {}
     for host in hosts:
         selected = [scopes[key] for key in set().union(*bound.values()) if scopes[key]["host"] == host]
         report["productCoverage"][host] = {
             k: sorted(values - {v for scope in selected for v in scope[k]}) for k, values in required.items()}
-        for claim in ("function", "package-lifecycle"):
+        for claim in ("function", "package-lifecycle") + (("impact-assessment",) if policy["schema"] == IMPACT_SCHEMA else ()):
             completed[claim] &= any(scopes[key]["host"] == host for key in bound[claim])
     for scope_id, scope in scopes.items():
         row = {"host": scope["host"], "entry": scope["entry"],
@@ -361,7 +366,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 completed[claim] &= bool(relevant) and relevant <= admitted and not any(missing.values())
     report["functionalCompletion"] = completed["function"]
     report["incrementalValue"] = "supported-for-bound-cases" if completed["incremental-value"] else "unverified"
+    report["impactAssessment"] = "complete-for-bound-scopes" if completed.get("impact-assessment") else "unverified"
     errors.extend(case_errors)
-    report["candidateEligible"] = (not errors and all(completed.values()) and len(admitted) == len(cases)
+    required_claims = {claim for claim, ids in policy["requiredCoverage"].items() if ids}
+    report["candidateEligible"] = (not errors and all(completed[claim] for claim in required_claims) and len(admitted) == len(cases)
                                    and not any(v for row in report["productCoverage"].values() for v in row.values()))
     return report

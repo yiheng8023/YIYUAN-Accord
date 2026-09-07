@@ -6720,6 +6720,7 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
         "functionalCompletion": bool(admission and admission["functionalCompletion"]),
         "currentHostBehavior": "verified-for-bound-cases" if admission and admission["functionalCompletion"] else "unverified",
         "incrementalValue": admission["incrementalValue"] if admission else "unverified",
+        "impactAssessment": admission.get("impactAssessment", "unverified") if admission else "unverified",
         "evidenceAdmission": admission,
         "externalGates": {operand: "not-evaluated-by-verifier" for operand in EXTERNAL_COMPLETION_OPERANDS},
         "hostChecks": hosts, "complexity": complexity, "valid": not errors, "errors": errors,

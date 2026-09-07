@@ -145,6 +145,90 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         report = verify_product(self.root, evidence=observer)
         self.assertTrue(report["repositoryCandidateReady"], report["errors"])
 
+    def impact_contract(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract['acceptance']['admission']
+        policy['schema'] = 'yiyuan-accord-evidence-admission/v4'
+        policy['requiredCoverage']['incremental-value'] = []
+        policy['requiredCoverage']['impact-assessment'] = []
+        for rows in (policy['scopes'], policy['cases']):
+            for row in rows:
+                row['claims'].remove('incremental-value')
+        for original in list(policy['cases']):
+            case = copy.deepcopy(original)
+            case.update(id=original['host'] + '-impact', scope=original['host'] + '-impact',
+                        claims=['impact-assessment'])
+            case['expected']['comparison'] = {'assessmentCompleted': True, 'observedResult': 'neutral',
+                                              'unresolvedMaterialRegression': False}
+            policy['cases'].append(case)
+            policy['scopes'].append({**{k: copy.deepcopy(case[k]) for k in
+                ('id', 'host', 'entry', 'duties', 'qualityAxes', 'scenarios', 'claims', 'conditions')},
+                'rule': 'Synthetic bounded impact assessment, not an incremental-benefit witness.'})
+            policy['requiredCoverage']['impact-assessment'].append(case['scope'])
+        return contract
+
+    def impact_observer(self, request):
+        result = self.observer(request)
+        if request['phase'] == 'observe':
+            for record in result['records']:
+                if record['case'].endswith('-impact'):
+                    record['facts']['comparison']['value'] = {
+                        'assessmentCompleted': True, 'observedResult': 'neutral',
+                        'unresolvedMaterialRegression': False}
+        return result
+
+    def test_neutral_impact_qualification_cannot_claim_incremental_support(self):
+        with self.history():
+            self.commit_contract(self.impact_contract())
+            report = verify_product(self.root, evidence=self.impact_observer)
+        self.assertTrue(report['repositoryCandidateReady'], report['errors'])
+        self.assertEqual(report['impactAssessment'], 'complete-for-bound-scopes')
+        self.assertEqual(report['incrementalValue'], 'unverified')
+
+    def test_impact_evidence_and_material_regressions_cannot_be_skipped(self):
+        for missing in (True, False):
+            with self.subTest(missing=missing), self.history():
+                self.commit_contract(self.impact_contract())
+                def observer(request):
+                    result = self.impact_observer(request)
+                    if request['phase'] == 'observe':
+                        if missing:
+                            result['records'] = [r for r in result['records'] if r['case'] != 'codex-impact']
+                        else:
+                            next(r for r in result['records'] if r['case'] == 'codex-impact')['facts']['comparison']['value']['unresolvedMaterialRegression'] = True
+                    return result
+                report = verify_product(self.root, evidence=observer)
+                self.assertTrue(report['functionalCompletion'], report['errors'])
+                self.assertFalse(report['repositoryCandidateReady'])
+                self.assertEqual(report['impactAssessment'], 'unverified')
+
+    def test_v4_cannot_drop_required_floors_or_hide_an_active_gain_claim(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        for claim in ('function', 'package-lifecycle', 'impact-assessment'):
+            contract = self.impact_contract()
+            contract['acceptance']['admission']['requiredCoverage'][claim] = []
+            self.assertTrue(admission_contract_errors(contract), claim)
+        contract = self.impact_contract()
+        for rows in ('cases', 'scopes'):
+            contract['acceptance']['admission'][rows][0]['claims'].append('incremental-value')
+        self.assertTrue(admission_contract_errors(contract))
+        contract['acceptance']['admission']['requiredCoverage']['incremental-value'] = ['codex']
+        self.assertEqual(admission_contract_errors(contract), [])
+
+    def test_declared_gain_still_requires_its_positive_evidence_under_v4(self):
+        contract = self.impact_contract()
+        policy = contract['acceptance']['admission']
+        for rows in ('cases', 'scopes'):
+            policy[rows][0]['claims'].append('incremental-value')
+        policy['requiredCoverage']['incremental-value'] = ['codex']
+        policy['cases'][0]['expected']['comparison']['positiveWitness'] = True
+        with self.history():
+            self.commit_contract(contract)
+            report = verify_product(self.root, evidence=self.impact_observer)
+        self.assertFalse(report['repositoryCandidateReady'])
+        self.assertEqual(report['incrementalValue'], 'unverified')
+        self.assertEqual(report['impactAssessment'], 'complete-for-bound-scopes')
+
     def test_review_context_cannot_be_both_no_accord_and_accord_exposed(self):
         def observer(request):
             result = self.observer(request)
@@ -498,7 +582,8 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         with self.history():
             records = self.capture_records()
             contract = copy.deepcopy(self.contract)
-            contract["systemOptimization"]["workSequence"][2]["state"] = "implemented-local-unreleased"
+            stage = contract["systemOptimization"]["workSequence"][2]
+            stage["state"] = "active" if stage["state"] != "active" else "implemented-local-unreleased"
             self.commit_contract(contract)
             report = self.replay(records)
         self.assertTrue(report["repositoryCandidateReady"], report["errors"])

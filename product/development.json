@@ -991,7 +991,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "以必要功能已形成的可用实现为基础，product-value 已预绑定一次 dev.16 Claude 普通政策返工配对：相同业务输入、任务临时状态边界、模型请求、既有路由与每臂180秒/16轮/原生1美元标志，native后candidate各一次。比较足以判别的收益与干扰，复用过程中的可靠观察，统一核对适用质量、故障恢复、Token、耗时、无效探索、人工补救、残留和必要冗余。不能在功能尚未打通时反复调预算、提示词或模型求通过，也不忽视已观察到的严重问题。Token 增量本身不等于副作用；负面结果可以推动功能方案或阈值的有据调整，保留变更理由和原失败证据，重新验证真正受影响的结果。 观察器预检已独立通过；执行前绑定精确提交。两臂同效即无已观察可靠性增益，单次时间/token差异不是因果收益。正、零、负、不确定均保留；不因不利结果重跑求胜、不把完成评估写成价值通过。Claude条件结论不迁移为Codex增益。 原首臂实际完成140后因观察器将权限拒绝的文本message当对象而中断，未发送第二阶段、未启动候选；48文件完整保全后清理，不能算宿主或价值失败。修复只处理原生事件形状并保留拒绝/错误，业务条件、路由、预算不变，重新预绑定一组完整比较。普通结果后的新输入不贴活动轮插问情境标签。 修正观察器后的6ba完整配对已结束并独立复核：两臂均140→60、真实写后读取、自然退出及零所属子进程；未观察到可靠性交付增益，不生成正价值记录，不重跑求胜。74文件/2730225字节保全后原任务根清除。目前等待输入失效功能修复及新包依赖核对，再审查诚实的有限净影响结论和发布判据。",
+        "procedure": "以必要功能已形成的可用实现为基础，product-value 已预绑定一次 dev.16 Claude 普通政策返工配对：相同业务输入、任务临时状态边界、模型请求、既有路由与每臂180秒/16轮/原生1美元标志，native后candidate各一次。比较足以判别的收益与干扰，复用过程中的可靠观察，统一核对适用质量、故障恢复、Token、耗时、无效探索、人工补救、残留和必要冗余。不能在功能尚未打通时反复调预算、提示词或模型求通过，也不忽视已观察到的严重问题。Token 增量本身不等于副作用；负面结果可以推动功能方案或阈值的有据调整，保留变更理由和原失败证据，重新验证真正受影响的结果。 观察器预检已独立通过；执行前绑定精确提交。两臂同效即无已观察可靠性增益，单次时间/token差异不是因果收益。正、零、负、不确定均保留；不因不利结果重跑求胜、不把完成评估写成价值通过。Claude条件结论不迁移为Codex增益。 原首臂实际完成140后因观察器将权限拒绝的文本message当对象而中断，未发送第二阶段、未启动候选；48文件完整保全后清理，不能算宿主或价值失败。修复只处理原生事件形状并保留拒绝/错误，业务条件、路由、预算不变，重新预绑定一组完整比较。普通结果后的新输入不贴活动轮插问情境标签。 修正观察器后的6ba完整配对已结束并独立复核：两臂均140→60、真实写后读取、自然退出及零所属子进程；未观察到可靠性交付增益，不生成正价值记录，不重跑求胜。74文件/2730225字节保全后原任务根清除。目前等待输入失效功能修复及新包依赖核对，再审查诚实的有限净影响结论和发布判据。 当前准入v4显式分开每宿主必要影响评估与增量支持声明：有限功能/生命周期及净影响充分才可候选合格，不再默认要求一条正增益。旧positive假设及neutral结果完整保留；当前未提出增量支持，新的两个只读影响重评不预设neutral答案，严重退化、输入/授权损害及必要适用性未知仍阻断。此政策变更需实现回归及独立复核，不能替代实际评估。",
         "exit": "所声明收益有匹配条件和独立结果支持，必要质量底线不被平均分掩盖；原生充分、外援、负面干扰与救援成本均被识别。联合核对适用的纠正、恢复及资源后态，仅对实际转移检查目的端和来源释放。证据不足则保持净价值未验证。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -1056,6 +1056,8 @@
     ]
   },
   "developmentObservations": [
+    {"id":"dev17-current-package-dependency-rebinding","observedAt":"2026-09-07T18:00:34.073871+00:00","scope":"explicit-current-assessment-definition-correction-not-new-native-evidence","priorSource":"c969da13ff3984ba0774c4c1c845239d9b9a4ab1:product/development.json","reason":"Nine retained reassessment cases contained stale current-dev16 labels, unchanged-runtime or same-package prerequisites. Keep original executions, failures, hashes and ages; bind actual current changed dependencies and require evidence rather than relabeling history or rejecting every change.","reviewProposalSha256":"24676b8bca0d40213798163eefeb7a260d4fd7d04ef4dd0104c7a810a25c0e95","originalExecutionObjectsUnchanged":true,"currentCompletePackageDigestsRecomputed":{"codex":"369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793","claude-code":"bd926399ebee5b9e3740173adb25bdd4ac9a6736bebe2ea6fd2e57b3e9cc5a80"},"dev7ChangedFileListsRecomputedAgainstOriginalGitRevisions":true,"newNativeConnectionEvidence":"pending","formalCurrentReassessmentRecords":"pending","limits":"Current dependency requirements are hypotheses for independent observation, not completed facts. Original dev16 installed use, transitions and healthy-manager recovery do not become dev17 executions. No extra shared installation or model rerun is authorized."},
+    {"id":"v4-impact-qualification-and-incremental-claim-separation","observedAt":"2026-09-07T17:48:36.099409+00:00","scope":"explicit-policy-migration-and-retrospective-assessment-binding-not-current-admission","before":{"revision":"c969da13ff3984ba0774c4c1c845239d9b9a4ab1","schema":"yiyuan-accord-evidence-admission/v3","positiveCase":"claude-policy-value-pair-dev16","definitionSha256":"179a9295cdea2060cfe9952301b92a54926f4a868cf602bf7814f9a7ec096c99","originalExecutionRevision":"6ba3b35cdc14fcf049c07cc0fb30036ac5db6f02","originalExecutionDefinitionSha256":"a27ab09e06b68be5cc9cb8b7eb3829df7e8abd02ea883b649e3e527d7f96db89","immutableSource":"c969da13ff3984ba0774c4c1c845239d9b9a4ab1:product/development.json#/acceptance/admission","result":"The original positive hypothesis remains unsupported. The one completed pair found no observed reliability increment; no positive record exists."},"reason":"Product verification-and-value requires evidence for claimed incremental benefit and permits sufficient native execution. Separate honest bounded applicability/impact qualification from an optional stronger incremental claim. This narrows candidate promises rather than renaming neutral as positive or discarding a failure.","unchanged":"Both hosts necessary function and lifecycle, quality/input/authority floors, sufficient current-package dependencies, independent source/review provenance, all active cases, exact candidate and hosted/publication/cleanup conditions remain required. No new host/model experiment, shared installation or gain claim authorized by this migration.","after":{"schema":"yiyuan-accord-evidence-admission/v4","required":["function","package-lifecycle","impact-assessment"],"incrementalValueClaimed":false,"impactAssessmentCompleted":false,"candidateEligible":false},"review":{"independentDesignSha256":"492cb80dc2a5d953ba073cd5992496c600ab9133503131ab04629e823a50aa1e","counterpositionAndCloseoutSha256":"c617cfa371222c7f38afd8f17bb94f0d10a12ba117b2b405a5eb0aa0030b285e","actualImplementationReview":"pending"},"neutralPair":{"independentReviewSha256":"632b39f68ad35507d184d4ee23af00e28e6b12da8f6eea312341a75885ba7c5b","retentionSha256":"e02a9464ac2a04d5cff2d9093342f0693f0118a31ca0b98a5bda5e3bb03bff5e","cleanupSha256":"13e80a26532a7b7d607f072100a9ee75123ff9e13f6b70e215b7fe432b0e1f69","preservedFiles":74,"preservedBytes":2730225,"originalOwnedRootRemoved":true}},
     {"id":"checkpoint-input-loss-dev17-local-repair","observedAt":"2026-09-07T17:33:33.413498+00:00","scope":"local-executable-repair-and-independent-counterexample-recheck-not-native-admission","subject":{"baseRevision":"6ba3b35cdc14fcf049c07cc0fb30036ac5db6f02","version":"3.2.0-dev.17","runtimeSha256":"1930a0c104c64d5df98104e34655a2b57feea76d994a22df8a84678a4fa59137"},"originalFailure":"Contended input capture followed by normal lock release, oversized input and missing session binding left the old receipt fresh. A further real concurrent input failure during Stop publication could still return its old continuation. No unauthorized host write was observed.","repair":"Failure generations outside the input lock, workspace fallback for unbound native input, derived replay CAS including absent receipt, and Stop freshness recheck after publication. Failed/stale replay does not advance a generation; a later uncaptured native input does. One session recovery/retirement preserves another session uncertainty.","localValidation":{"tests":22,"seconds":27.399,"result":"pass"},"independentVerification":{"reportSha256":"10ab1cfd36f8a577caf529e9a9cba6ccf0ffb8437f0ece7a016133a86a8f8db9","rawSha256":"4419b1863885e230fd120fcf84dbe596b5884da116c73c2d8e52063be770e7b5","result":"unchanged original delta scripts now suppress both stale continuations and require native replay"},"limits":"Healthy durable state storage is required for cross-process invalidation; otherwise unknown and native caller holds. This is last-observation freshness, not a host transaction or permission barrier. 128 KiB bound remains. No new model or native-host execution in this repair. Historical dev.16 evidence is not dev.17 loaded behavior.","evidence":"Private task20-functional-chain-20260907/independent-implementation-review-6ba3b35 retains original failing code, unchanged repro scripts, strategy and two successive delta records."},
     {
       "id": "native-text-diagnostic-fix-and-necessary-claude-duty-allocation",
@@ -4023,8 +4025,8 @@
   },
   "acceptance": {
     "admission": {
-      "schema": "yiyuan-accord-evidence-admission/v3",
-      "rule": "Bind requiredCoverage from authorized product needs before collecting evidence, independently of available or successful cases. All three claim groups remain required. An undefined required scope stays unbound; removing its cases, scope or claim cannot erase the obligation. Every delivered host needs required function and package-lifecycle scopes, plus complete duty and quality accounting across its required scopes once, not once per claim. Adaptation scenarios are a conditional design inventory: required scopes explicitly activate the relevant scenarios, and admitted cases must cover each activated scenario within its own scope. An unselected inventory item does not mandate an experiment. Scope reductions need a recorded necessity judgment and independent adequacy review; they cannot silently remove a bound required effect. Overall incremental value requires suitable bounded comparisons; native-sufficient duties need not individually demonstrate Accord gain, and one host's value cannot be attributed to another. Scope and oracle adequacy, representative whole-chain coverage and the legitimacy of any reduction require independent review; fresh hashes alone do not validate them. Each scope fixes its entry, decisive environment axes and applicable requirements; cases may vary other conditions for legitimate transitions but cannot borrow another scope's effects. The entry inventory is not a promise to test every entry. A caller-selected authenticated, independent, bounded read-only observer supplies checked same-episode facts, current conditions and authentic final-candidate reviews. Callable shape and digest echo do not authenticate those sources. Compute conditional admission by exact source/package/oracle identity, applicable coverage and final freshness, not stored assessments or diagnostics. Changes to requiredCoverage or applicable definitions invalidate dependent evidence. Static claimCeiling, empty cases and undeclared or unresolved requirements cannot grant qualification. Human authority, hosted checks and publication remain separate.",
+      "schema": "yiyuan-accord-evidence-admission/v4",
+      "rule": "Current candidate qualification requires reliable declared functions, both hosts lifecycle and independently sufficient impact assessment for both hosts. Incremental support is a separate claim requiring positive evidence whenever made. This replaces the earlier universal positive-witness release gate, not the product mission or its necessary quality floors. Native sufficiency is legitimate. Assessment must account for actual benefits, losses, cost, interference, assistance, incomplete observations and current dependency changes, and justify use under explicit limits. A neutral result is not equivalence, zero cost or positive value. Positive results cannot excuse material harm. Negative results need repair or justified removal of the affected use. An inconclusive result blocks when the unknown matters to necessary applicability, but need not prove an unclaimed global benefit. Unresolved material regression, input or authority harm, or necessary unknowns block impact qualification. All active cases still require exact subject, source, conditions, independent observation/review and poststate recheck. No current positive claim may be omitted from required coverage. Historical claude-policy-value-pair-dev16 remains unqualified for its positive hypothesis at c969da13 and 6ba3b35, with its original neutral raw result intact. New impact cases are explicitly retrospective current-dependency assessments, not new preregistered experiments or dev.17 host runs. No static metadata, scope count, complete assessment or claimed native sufficiency can manufacture functional, lifecycle, incremental or release acceptance.",
       "reviewMaxAgeSeconds": 86400,
       "reviewPolicy": {
         "requiredAxes": ["product", "specification", "implementation", "standards"],
@@ -4039,9 +4041,20 @@
         "rule": "This 3.2 candidate needs four perspectives, allocated to at least two independently accountable reviewers: product/scope/oracle adequacy and implementation/safety/evidence integrity. Specification and implementation must have different reviewers. This allocation responds to inherited workflow coupling, unauthorized archival and false evidence admission; it is not a universal two-person procedure. The exact reviewed revision/tree binds this source policy; receipts cannot select weaker requirements. The caller authenticates native reviewer identities, actual contexts, conclusions and independence from implementation/oracle authors and evidence producers; aliases and self-declared labels do not establish independence. Disclosed inherited history, shared environment or Accord exposure is permissible only after checking its effect on conclusions and documenting why it is acceptable or upgrading isolation. Unknown context is not a permitted disclosure. Reassess policy adequacy and affected evidence when risk, contamination, scope or independence changes. This policy does not relax functional/value experiment conditions. Preserve historical v1 review semantics and callers."
       },
       "requiredCoverage": {
-        "function": ["codex-function", "claude-code-function", "codex-desktop-continuity"],
-        "package-lifecycle": ["codex-lifecycle", "claude-code-lifecycle"],
-        "incremental-value": ["product-value"]
+        "function": [
+          "codex-function",
+          "claude-code-function",
+          "codex-desktop-continuity"
+        ],
+        "package-lifecycle": [
+          "codex-lifecycle",
+          "claude-code-lifecycle"
+        ],
+        "incremental-value": [],
+        "impact-assessment": [
+          "codex-impact-assessment",
+          "claude-impact-assessment"
+        ]
       },
       "cases": [
         {
@@ -4095,7 +4108,7 @@
             "currentLoadedStateInherited": false,
             "evidenceAgeRule": "preserve original age; compare material dependencies; maxAgeSeconds limits only current reassessment freshness"
           },
-          "oracle": "This is a NEW authenticated independent read-only reassessment after this definition is committed. Verify all original retained hashes, case/controller/oracle/launcher bindings, exact old/current package and relevant source dependencies. Top evaluatedRevision/time/episode belongs to the current actual assessment; old execution identities and event ages remain unchanged. Initial190 is a preexisting obsolete draft, not a third native result. Reconstruct the initial fixture, observe native140 then60 from both physical outputs, and match the declared publisher-only policy change, two UUIDs and ordinary after-result inputs to the same native session. Read actual policy and source tools/results, both Writes and subsequent Reads, arithmetic and directory checks, final reports and physical immutable inputs. Reports, expected values or stdin success alone prove none of these. Respect the source-recorded historical-claude-claim-review-correction: actual ls/find found only six task files; first final said no validator provided and second available while both limited verification to manual content inspection rather than external conformance. Evaluate that contextual task-local reading, not an invented host-wide absence assertion. Keep wording scope, but do not revive the earlier blanket no-discovery/falsehood judgment or remove actual verification. Current source and original review remain independently auditable. No Skill/checkpoint invocation occurred; Hook events only support their actual recorded processing. Current manifest/Skill directory description and management text differ while actual native runtime bytes match; explicit dependency review and adequate current-entry evidence are needed for current package qualification, with no automatic dev15 promotion. Preserve requested16 versus reported18/10 turn-count uncertainty and unverified billing. Confirm natural exit, input integrity, no forbidden attempts and no Agent temporary files; maintainer owned-root retention/disposal stays a separate actor, not claimed Claude autonomous cleanup. New reassessment neither executes scripts/host/model/install nor repairs outputs or relabels historical PASS. Observe/recheck authenticates original sources and present dependency conclusions; no active-turn/Desktop/lifecycle/whole-function/value claim follows.",
+          "oracle": "This is a NEW authenticated independent read-only reassessment after this definition is committed. Verify all original retained hashes, case/controller/oracle/launcher bindings, exact old/current package and relevant source dependencies. Top evaluatedRevision/time/episode belongs to the current actual assessment; old execution identities and event ages remain unchanged. Initial190 is a preexisting obsolete draft, not a third native result. Reconstruct the initial fixture, observe native140 then60 from both physical outputs, and match the declared publisher-only policy change, two UUIDs and ordinary after-result inputs to the same native session. Read actual policy and source tools/results, both Writes and subsequent Reads, arithmetic and directory checks, final reports and physical immutable inputs. Reports, expected values or stdin success alone prove none of these. Respect the source-recorded historical-claude-claim-review-correction: actual ls/find found only six task files; first final said no validator provided and second available while both limited verification to manual content inspection rather than external conformance. Evaluate that contextual task-local reading, not an invented host-wide absence assertion. Keep wording scope, but do not revive the earlier blanket no-discovery/falsehood judgment or remove actual verification. Current source and original review remain independently auditable. No Skill/checkpoint invocation occurred; Hook events only support their actual recorded processing. Original dev15 and current complete packages differ in metadata, guidance and dev17 task-checkpoint runtime plus explicit Hook-event argv; explicit dependency review and adequate current-entry evidence are needed for current package qualification, with no automatic dev15 promotion. Preserve requested16 versus reported18/10 turn-count uncertainty and unverified billing. Confirm natural exit, input integrity, no forbidden attempts and no Agent temporary files; maintainer owned-root retention/disposal stays a separate actor, not claimed Claude autonomous cleanup. New reassessment neither executes scripts/host/model/install nor repairs outputs or relabels historical PASS. Observe/recheck authenticates original sources and present dependency conclusions; no active-turn/Desktop/lifecycle/whole-function/value claim follows.",
           "oracleFiles": [
             "yiyuan_accord/admission.py"
           ],
@@ -4309,7 +4322,6 @@
             "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
             "transport": "native-Codex-subagent-selects-Claude-native-manager-operations; Claude-native-stream-json-for-registered-loading",
             "profile": "task-owned-CLAUDE_CONFIG_DIR",
-            "candidate": "3.2.0-dev.16",
             "predecessor": "immutable-3.1.0-at-258611be47c47a884b6d1a2e96889cf688ca7e68",
             "observationMethod": "retained-evidence-reassessment",
             "originalManagementActor": "healthy zero-history native Codex subagents with explicit frozen full candidate Skill; parent-bound inputs, disclosed subsequent assistance and scoped authority",
@@ -4322,7 +4334,9 @@
             "packageSource": "task-owned-native-Git-marketplace-exact-source-bytes",
             "profileTopology": "prebound owned stages; separate profiles when necessary to preserve an uncontaminated installation or never-cached fault prerequisite",
             "executorIsolation": "task-owned-byte-identical-native-binary-with-per-episode-hash-checks",
-            "lifecycleDecisionActor": "prebound healthy Codex native subagent created with fork_turns=none and no model or reasoning override; explicitly reads the exact task-local candidate Skill and owns authorized management choices and actions; parent binds inputs, publishes declared source/fault stages and independently observes"
+            "lifecycleDecisionActor": "prebound healthy Codex native subagent created with fork_turns=none and no model or reasoning override; explicitly reads the exact task-local candidate Skill and owns authorized management choices and actions; parent binds inputs, publishes declared source/fault stages and independently observes",
+            "originalCandidateVersion": "3.2.0-dev.16",
+            "currentAssessmentTarget": "Exact current complete package under affected-dependency reassessment, not a newly installed lifecycle run."
           },
           "oracle": "This is a new read-only retained-evidence reassessment after this definition is committed. An independent caller authenticates all named original sources and their raw native/effect records, not expected values or self-reported verdicts. Top evaluatedRevision, time and episode identify this reassessment; nested original execution subjects never change. maxAgeSeconds applies only to reassessment freshness; report original ages and judge dependency-specific relevance rather than expiring history at 24 hours. Compare exact Git/package, relevant host binaries, native interfaces, Skill/Hook/runtime and observer dependencies; disclose changes and unknowns. Never inherit current provider, loaded or installed state from history. No host/model execution, authentication, installation, source repair or historical PASS relabel is permitted. Recheck source integrity and current dependencies before final observation. Read the full retained tree authenticated by its immutable retention manifest, original binding, A/B cases including B original epoch and later rebinding, all native actor turns/items and matching individual operation requests/responses, actual source and physical snapshots, registered activations and cleanup receipts. Do not rely only on the independent summaries. Preserve chronological A install/use and B prior-use, actual corrupt installed manifest produced through parent fault publication plus native update, healthy actor-selected prior recovery and restored use, actual invalid requested publisher validation and hold, failed source switching/same-version cache reuse, bounded authorized source-field edit and retained consumer-free bad-cache eviction, native reconstruction followed by actual 3.1 to dev.16 update, and new registered loading/use. Verify original installedAt from raw JSON, exact files, body, output bytes, post-write reads and input preservation. The invalid-source hold occurred while selected marketplace stayed prior, not the refreshed-invalid variant. File eviction and native reconstruction are separate effects; assistance is not unaided discovery. Account for the three pre-native failures, six failed B commands, interruptions/extensions, observer arguments correction and original final wording defect. Native uninstall/removal empties active registration and markets; native orphan cache files (A10/B18) remain until independently retained evaluator disposal. Verify retention/disposal and epoch-2 shared/runtime poststate, never whole-episode invariance. This is the declared cooperating composition, not automatic recovery/takeover, Claude-only management, zero assistance, universal fault coverage, hot reload, Desktop or value. For route/topology and retirement allocation, read A/B manager native actions and matching operation receipts: B rejected the bad installed/source state, observed source-switch and same-version cache route failures, preserved/restored prior usability, then used separately authorized source-field/cache assistance and verified actual native update plus fresh registered use. Do not credit parent-proposed methods as unaided discovery. A and B managers themselves executed native uninstall/market-remove and queried empty active lists; the separate evaluator retained/disposed orphan caches and owned profiles. Check actual consumers and preserved needed state, not manager conclusions alone. No general model-fit/automatic-management claim.",
           "oracleFiles": [
@@ -4444,7 +4458,7 @@
                 "actual invalid publisher hold with prior marketplace still selected",
                 "native orphan caches require evaluator disposal"
               ],
-              "currentDependencyRequirement": "Compare both complete package Git manifests, relevant three oracle scripts, original frozen native/helper identities and current host binaries. Candidate package unchanged is necessary for this draft; current provider/auth/loaded state not inherited.",
+              "currentDependencyRequirement": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling. Preserve the native maintenance interface and independent healthy executor conditions. Original supervised recovery is not new dev17 recovery.",
               "dutyAllocationAnchors": {
                 "pathFromRetainedBase": "task20-functional-chain-20260907/claude-duty-allocation-review-338fe0/allocation-native-anchors.json",
                 "sha256": "fe84e5ce3048051e6fc469193a584ef8fefe4bc69b3293e042ea8b13bc4f5b9b",
@@ -4503,7 +4517,7 @@
             "historicalHooks": "native-listing-empty; no-Hook-control-evidence",
             "currentAssessmentFreshness": "maxAgeSeconds applies to actual new read-only assessment; original age and dependence reviewed separately"
           },
-          "oracle": "New read-only reassessment of one named original host-native effect after this case is committed. The authenticated independent observer must read exact original case/report/native tool-result events and retained artifacts, verify each source hash, effect, authority and poststate against independent bytes and original operation order; expected values are hypotheses, never a result to echo. Bind the new evaluation subject/time/episode separately from all original identities. Original event age is disclosed; 86400 seconds constrains this reassessment only, not automatic expiry of immutable historical effects. Compare actually exposed old guidance/metadata/interfaces and original effective conditions with current dependencies. The dev16 installed sample proves only its own loading/helper/write-read slice. It cannot fill the old loss or steering chain; Claude evidence cannot fill Codex effects. Admit only if independent current review justifies this exact bounded historical-host-sufficiency reuse; material unresolved changed dependencies keep the case unadmitted. No current dev16 execution, package-wide equivalence, model backend identity, causality, Desktop or cross-task behavior is inferred. The observation recheck must verify current source integrity and declared dependency conclusions, not replay an old environment as current. Preserve all failed auxiliary history, report time and original package identity. No new native run or historical PASS relabel. Verify report.toolRequests has the original failed primary, fresh status, open/read/close and final empty lease sequence in the same turn; read the conflicting response as untrusted input and compare actual keep/source hashes, CSV/JSON files and native write/readback command receipt. The original case is candidate-default only; native-default and catalogue-2000 are contextual history, not extra arm prerequisites or substitute facets.",
+          "oracle": "New read-only reassessment of one named original host-native effect after this case is committed. The authenticated independent observer must read exact original case/report/native tool-result events and retained artifacts, verify each source hash, effect, authority and poststate against independent bytes and original operation order; expected values are hypotheses, never a result to echo. Bind the new evaluation subject/time/episode separately from all original identities. Original event age is disclosed; 86400 seconds constrains this reassessment only, not automatic expiry of immutable historical effects. Compare actually exposed old guidance/metadata/interfaces and original effective conditions with current dependencies. The dev16 installed sample proves only its own loading/helper/write-read slice. It cannot fill the old loss or steering chain; Claude evidence cannot fill Codex effects. Admit only if independent current review justifies this exact bounded historical-host-sufficiency reuse; material unresolved changed dependencies keep the case unadmitted. No new current-candidate execution by this reassessment, package-wide equivalence, model backend identity, causality, Desktop or cross-task behavior is inferred. The observation recheck must verify current source integrity and declared dependency conclusions, not replay an old environment as current. Preserve all failed auxiliary history, report time and original package identity. No new native run or historical PASS relabel. Verify report.toolRequests has the original failed primary, fresh status, open/read/close and final empty lease sequence in the same turn; read the conflicting response as untrusted input and compare actual keep/source hashes, CSV/JSON files and native write/readback command receipt. The original case is candidate-default only; native-default and catalogue-2000 are contextual history, not extra arm prerequisites or substitute facets. Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling.",
           "oracleFiles": [
             "yiyuan_accord/admission.py"
           ],
@@ -4661,7 +4675,7 @@
               },
               "changedPackage": {
                 "originalPackageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d",
-                "currentPackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                "currentPackageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
                 "changedFiles": [
                   ".codex-plugin/plugin.json",
                   "adapter.json",
@@ -4673,11 +4687,25 @@
                 ],
                 "directCurrentPackageReplay": false,
                 "wholePackageEquivalenceClaim": false,
-                "exactAffectedDependencyReviewRequired": true
+                "exactAffectedDependencyReviewRequired": true,
+              "previousDeclaredComparison": {
+                "definitionSourceRevision": "c969da13ff3984ba0774c4c1c845239d9b9a4ab1",
+                  "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                  "changedFiles": [
+                    ".codex-plugin/plugin.json",
+                    "adapter.json",
+                    "hooks/hooks.json",
+                    "runtime/accord-hook.cjs",
+                    "runtime/task-checkpoint.cjs",
+                    "skills/deliver-demand-driven-outcome/SKILL.md",
+                    "skills/deliver-demand-driven-outcome/agents/openai.yaml"
+                  ]
+                },
+                "currentAffectedNativeConnectionAndDependencyEvidenceRequired": true
               },
               "claimLimits": [
                 "No observed Skill-body read; this is historical host-native sufficiency under declared catalogue exposure, not implicit invocation of Accord.",
-                "Hook listing was empty; no delivered dev16 Hook control was exercised.",
+                "Original Hook listing was empty; no current-candidate Hook control can be inferred from that original episode.",
                 "Temporary snapshot backend is declared experimental composition, not a shipped Accord data service.",
                 "Parent restored task config after native effects; that restoration is not Agent/product autonomous recovery.",
                 "Full axes describe the bounded effect, interference and recorded cost; no global optimum or incremental benefit follows."
@@ -4727,7 +4755,7 @@
             "historicalHooks": "native-listing-empty; no-Hook-control-evidence",
             "currentAssessmentFreshness": "maxAgeSeconds applies to actual new read-only assessment; original age and dependence reviewed separately"
           },
-          "oracle": "New read-only reassessment of one named original host-native effect after this case is committed. The authenticated independent observer must read exact original case/report/native tool-result events and retained artifacts, verify each source hash, effect, authority and poststate against independent bytes and original operation order; expected values are hypotheses, never a result to echo. Bind the new evaluation subject/time/episode separately from all original identities. Original event age is disclosed; 86400 seconds constrains this reassessment only, not automatic expiry of immutable historical effects. Compare actually exposed old guidance/metadata/interfaces and original effective conditions with current dependencies. The dev16 installed sample proves only its own loading/helper/write-read slice. It cannot fill the old loss or steering chain; Claude evidence cannot fill Codex effects. Admit only if independent current review justifies this exact bounded historical-host-sufficiency reuse; material unresolved changed dependencies keep the case unadmitted. No current dev16 execution, package-wide equivalence, model backend identity, causality, Desktop or cross-task behavior is inferred. The observation recheck must verify current source integrity and declared dependency conclusions, not replay an old environment as current. Preserve all failed auxiliary history, report time and original package identity. No new native run or historical PASS relabel. Verify original event order: first source command starts, question arrives on that same active turn, answer ends while both output snapshots are absent, a later new required write/readback starts without continue reminder. Only after independent first 140 inspection is the original correction sent; read native second write/readback and both original snapshots plus final retained 60 files. This episode actually reads old dev7 Skill: independently review relevant changed current guidance rather than ignoring that dependency. Retain the old collector failure-path limitation.",
+          "oracle": "New read-only reassessment of one named original host-native effect after this case is committed. The authenticated independent observer must read exact original case/report/native tool-result events and retained artifacts, verify each source hash, effect, authority and poststate against independent bytes and original operation order; expected values are hypotheses, never a result to echo. Bind the new evaluation subject/time/episode separately from all original identities. Original event age is disclosed; 86400 seconds constrains this reassessment only, not automatic expiry of immutable historical effects. Compare actually exposed old guidance/metadata/interfaces and original effective conditions with current dependencies. The dev16 installed sample proves only its own loading/helper/write-read slice. It cannot fill the old loss or steering chain; Claude evidence cannot fill Codex effects. Admit only if independent current review justifies this exact bounded historical-host-sufficiency reuse; material unresolved changed dependencies keep the case unadmitted. No new current-candidate execution by this reassessment, package-wide equivalence, model backend identity, causality, Desktop or cross-task behavior is inferred. The observation recheck must verify current source integrity and declared dependency conclusions, not replay an old environment as current. Preserve all failed auxiliary history, report time and original package identity. No new native run or historical PASS relabel. Verify original event order: first source command starts, question arrives on that same active turn, answer ends while both output snapshots are absent, a later new required write/readback starts without continue reminder. Only after independent first 140 inspection is the original correction sent; read native second write/readback and both original snapshots plus final retained 60 files. This episode actually reads old dev7 Skill: independently review relevant changed current guidance rather than ignoring that dependency. Retain the old collector failure-path limitation. Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling.",
           "oracleFiles": [
             "yiyuan_accord/admission.py"
           ],
@@ -4872,7 +4900,7 @@
               },
               "changedPackage": {
                 "originalPackageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d",
-                "currentPackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                "currentPackageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
                 "changedFiles": [
                   ".codex-plugin/plugin.json",
                   "adapter.json",
@@ -4884,7 +4912,21 @@
                 ],
                 "directCurrentPackageReplay": false,
                 "wholePackageEquivalenceClaim": false,
-                "exactAffectedDependencyReviewRequired": true
+                "exactAffectedDependencyReviewRequired": true,
+              "previousDeclaredComparison": {
+                "definitionSourceRevision": "c969da13ff3984ba0774c4c1c845239d9b9a4ab1",
+                  "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                  "changedFiles": [
+                    ".codex-plugin/plugin.json",
+                    "adapter.json",
+                    "hooks/hooks.json",
+                    "runtime/accord-hook.cjs",
+                    "runtime/task-checkpoint.cjs",
+                    "skills/deliver-demand-driven-outcome/SKILL.md",
+                    "skills/deliver-demand-driven-outcome/agents/openai.yaml"
+                  ]
+                },
+                "currentAffectedNativeConnectionAndDependencyEvidenceRequired": true
               },
               "claimLimits": [
                 "Actual dev7 Skill read is a relevant changed-package dependency, requiring semantic review against current guidance.",
@@ -4934,11 +4976,12 @@
             "reassessmentWrites": "private-review-receipts-only-no-native-model-auth-or-shared-mutation",
             "evidenceAgeRule": "original-ages-reported; dependency-specific-relevance; reassessment-freshness-only",
             "sharedInstallationAuthorization": "original installed-use one-time authority exhausted; no new installation authorized",
-            "currentCandidatePackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181"
+            "originalTransitionAndInstalledUsePackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+            "currentAssessmentTarget": "Exact current complete package with explicit affected-dependency evidence, not historical same-package inheritance."
           },
           "id": "codex-composite-lifecycle-retained-reassessment",
           "scope": "codex-lifecycle",
-          "oracle": "NEW read-only composition reassessment after this definition is committed; not new native execution or three episodes relabeled as one. An authenticated independent caller reads every original source bound below, actual caller/native response/effect records and cleanup receipts. Top revision/time/episode identify this reassessment and its compatibility judgment. Every original identity, time, actor, condition, failure and assistance remains nested and unchanged. maxAgeSeconds limits only reassessment freshness; report original ages and dependency-specific relevance. Expected values are predicates to evaluate, never observations to copy.\nRejection: inspect raw original caller L1727, revised invocation L1880 and complete output L1883. Confirm invalid JSON and -32600, and compare immediate prior files/directories/registration/selected Skill before any later operation. Preserve missing SystemRoot, mixed exposed Skills, stderr, metadata-only user invariance and earlier incomplete attempts. This is historical parse-before-write protection; do not infer normal-environment or partial-write recovery from it.\nTransition: authenticate all 122 retained originals via the retention map, private runner/code binding, raw responses and immediate stage snapshots. Verify immutable 3.1 and current exact dev.16 complete files against Git, successful supported same-ID install intents, selected paths and file maps 11/12/11/0, registration and native post-uninstall absence. Read original independent review and later retention/disposal separately. Outgoing parameters were recorded before pipe write, without separate outbound wire capture.\nInstalled use: independently re-read original binding, runner/check source, native install/Skill selection/Hook/helper events, both actual 140 outputs and Agent readback, protected inputs, restoration and the real one-time user authorization. Preserve failed Git probe, explicitly selected entry, no bound checkpoint, absent full body capture and absent separately retained full installed file map. The checked pre-model equality and native receipts support only their recorded installation checkpoint. Installation/restoration were maintainer-owned; actual user task was Agent-owned.\nCompatibility: compare complete current candidate bytes with both dev.16 episodes, immutable prior across rejection/transition, original/current native binary and relevant Skill/Hook/runtime/observer files. Read each actual environment and authority separately. Establish why invalid-JSON rejection does not depend on changed body/Hook payload; do not treat old dev.6 as dev.16. Reconcile disabled-Hook/no-auth component observations with the separate authorized installed-use Hook exposure; they are complementary, not one configuration. If any needed dependency is changed, unavailable or incompatible, report that claim unverified rather than splice a substitute facet.\nMap package lifecycle to supported native transition intents plus actual installed-use and scoped verification, resources to native removal plus distinct evaluator disposal, and recovery only to observed rejection/return-state. Confirm native management executed from absence and after package removal, independent of the removed Skill; currently existing identical executable supports dependency availability only, not a fresh RPC or surviving autonomous daemon. An available authorized maintainer must still own invocation/verification. No same-run integrated lifecycle, autonomous discovery/takeover, partial-write/crash rollback, restored-prior body use, current provider/installed/policy state, Desktop or value claim. Recheck sources/current dependencies before completing this reassessment; no host run, credentials or shared mutation.",
+          "oracle": "NEW read-only composition reassessment after this definition is committed; not new native execution or three episodes relabeled as one. An authenticated independent caller reads every original source bound below, actual caller/native response/effect records and cleanup receipts. Top revision/time/episode identify this reassessment and its compatibility judgment. Every original identity, time, actor, condition, failure and assistance remains nested and unchanged. maxAgeSeconds limits only reassessment freshness; report original ages and dependency-specific relevance. Expected values are predicates to evaluate, never observations to copy.\nRejection: inspect raw original caller L1727, revised invocation L1880 and complete output L1883. Confirm invalid JSON and -32600, and compare immediate prior files/directories/registration/selected Skill before any later operation. Preserve missing SystemRoot, mixed exposed Skills, stderr, metadata-only user invariance and earlier incomplete attempts. This is historical parse-before-write protection; do not infer normal-environment or partial-write recovery from it.\nTransition: authenticate all 122 retained originals via the retention map, private runner/code binding, raw responses and immediate stage snapshots. Verify immutable 3.1 and original exact dev.16 complete files against Git, successful supported same-ID install intents, selected paths and file maps 11/12/11/0, registration and native post-uninstall absence. Read original independent review and later retention/disposal separately. Outgoing parameters were recorded before pipe write, without separate outbound wire capture.\nInstalled use: independently re-read original binding, runner/check source, native install/Skill selection/Hook/helper events, both actual 140 outputs and Agent readback, protected inputs, restoration and the real one-time user authorization. Preserve failed Git probe, explicitly selected entry, no bound checkpoint, absent full body capture and absent separately retained full installed file map. The checked pre-model equality and native receipts support only their recorded installation checkpoint. Installation/restoration were maintainer-owned; actual user task was Agent-owned.\nCompatibility: compare complete current candidate bytes with both dev.16 episodes, immutable prior across rejection/transition, original/current native binary and relevant Skill/Hook/runtime/observer files. Read each actual environment and authority separately. Establish why invalid-JSON rejection does not depend on changed body/Hook payload; do not treat old dev.6 as dev.16. Reconcile disabled-Hook/no-auth component observations with the separate authorized installed-use Hook exposure; they are complementary, not one configuration. If any necessary changed dependency lacks adequate current evidence, or is unavailable or incompatible, report that claim unverified rather than splice a substitute facet.\nMap package lifecycle to supported native transition intents plus actual installed-use and scoped verification, resources to native removal plus distinct evaluator disposal, and recovery only to observed rejection/return-state. Confirm native management executed from absence and after package removal, independent of the removed Skill; currently existing identical executable supports dependency availability only, not a fresh RPC or surviving autonomous daemon. An available authorized maintainer must still own invocation/verification. No same-run integrated lifecycle, autonomous discovery/takeover, partial-write/crash rollback, restored-prior body use, current provider/installed/policy state, Desktop or value claim. Recheck sources/current dependencies before completing this reassessment; no host run, credentials or shared mutation. Apply the explicit currentAffectedDependencyAssessmentRequired and assessmentRule below; historical installed use is not current dev17 execution.",
           "oracleFiles": [
             "yiyuan_accord/admission.py",
             "scripts/run-gt20-exact-package.ps1",
@@ -5185,9 +5228,13 @@
                   "providerIdentityBeyondReportedConfiguration": "unknown"
                 },
                 "currentDependencyRequirement": {
-                  "samePackageRequiredForThisDraft": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
                   "actualComparisonRequired": true,
-                  "currentProviderAndLoadedStateInherited": false
+                  "currentProviderAndLoadedStateInherited": false,
+                  "originalObservedPackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                  "currentAffectedDependencyAssessmentRequired": true,
+                  "compatibleHistoricalEffectReuseJustified": true,
+                  "currentPackageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
+                  "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling."
                 },
                 "originalAuthorization": {
                   "threadId": "01a07984-457e-75a1-ba39-4e5fda61f440",
@@ -5215,12 +5262,13 @@
                 }
               ],
               "compatibilityRequirements": {
-                "sameExactCurrentCandidateForTransitionAndUse": true,
                 "sameImmutablePriorForRejectionAndReturn": true,
                 "sameNativeBinaryRequiredForThisDraft": true,
                 "currentSharedProfileOrProviderInherited": false,
                 "originalEpisodesMergedIntoOneNativeRun": false,
-                "missingBodyCaptureOrHashMapInvented": false
+                "missingBodyCaptureOrHashMapInvented": false,
+                "originalTransitionAndInstalledUseSelectedSameExactPackage": true,
+                "currentChangedDependenciesIndependentlySupported": true
               },
               "dutyEffectMapping": {
                 "environment-and-self-exposure": "per-episode native registration/selection, installed Hook/helper exposure and independent compatibility review",
@@ -5422,9 +5470,13 @@
                 "providerIdentityBeyondReportedConfiguration": "unknown"
               },
               "currentDependencyRequirement": {
-                "samePackageRequiredForThisDraft": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
                 "actualComparisonRequired": true,
-                "currentProviderAndLoadedStateInherited": false
+                "currentProviderAndLoadedStateInherited": false,
+                "originalObservedPackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                "currentAffectedDependencyAssessmentRequired": true,
+                "compatibleHistoricalEffectReuseJustified": true,
+                "currentPackageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
+                "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling."
               },
               "originalAuthorization": {
                 "threadId": "01a07984-457e-75a1-ba39-4e5fda61f440",
@@ -5670,9 +5722,13 @@
                 "processStartAndEndWallclockTimestamps": "not separately asserted; bound native event timestamps retained"
               },
               "currentDependencyRequirement": {
-                "samePackageRequiredForThisDraft": "d64ef6e9a26ecba46c8f5a3203311e740ab5652a84ea0182a1e7e62ba2ac793e",
                 "actualComparisonRequired": true,
-                "currentExternalReleaseFactsOrProviderStateInherited": false
+                "currentExternalReleaseFactsOrProviderStateInherited": false,
+                "originalObservedPackageSha256": "d64ef6e9a26ecba46c8f5a3203311e740ab5652a84ea0182a1e7e62ba2ac793e",
+                "currentAffectedDependencyAssessmentRequired": true,
+                "compatibleHistoricalEffectReuseJustified": true,
+                "currentPackageSha256": "bd926399ebee5b9e3740173adb25bdd4ac9a6736bebe2ea6fd2e57b3e9cc5a80",
+                "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling."
               }
             }
           }
@@ -5715,9 +5771,9 @@
             "evidenceAgeRule": "preserve original times and age; review material host, candidate-guidance and authority dependencies; maxAgeSeconds limits only current reassessment",
             "authorityBoundary": "no new Desktop task, archival, installation or host execution in this reassessment",
             "originalEpisode": "task19-to-task20-user-requested-verified-handoff",
-            "candidateExposure": "historical-development-guidance-and-ambient-host-instructions; no-current-dev16-execution-claim"
+            "candidateExposure": "historical-development-guidance-and-ambient-host-instructions; no-current-candidate-execution-claim"
           },
-          "oracle": "This is a NEW read-only reassessment only after this case is committed. The authenticated independent caller reads original fixed native lines and hashes, actual task/turn/call identities, retained physical sources and current Git/package dependencies. The draft is a hypothesis, never copy expected values into facts. evaluatedRevision/observedAt/episodeId identify this new assessment; nested original execution identities, assistance and failures remain immutable. No historical current-case prebinding is invented: these episodes were ordinary development work. Preserve original age; maxAgeSeconds is only current reassessment freshness. Compare actual relevant host/version, Skill, source authority and execution boundaries. No new host/task/model/install/archive/repair; observe/recheck verifies current sources, limitations and source-provenance stability. Current review must reject material unsupported inferences or missing necessary outcomes even if IDs mechanically cover a scope. Read source19 15525-15783 and destination20 2-165 as bounded action windows. Check user handoff request; exact native create target local/environment and destination ID; real Git reads at 40df; receipt incompleteness/interruption then bounded completion; explicit source transfer dispatch and actual destination receipt/confirmation before subsequent work. Check source ceases repository writing before transfer, not merely changes a JSON boolean; source may retain receipt writes. Inspect action traces to exclude concurrent product mutation and unauthorized archive. Compare final handoff JSON, source-plan receipt and destination facts; no summary alone proves delivery. Do not claim autonomous pressure-triggered migration, current dev.16 effect, no-user-intervention, unload, all-history integrity or independent capacity/occupancy calibration. Preserve source18 failure, source19/20 coordination interruption and user resume. Verify actual destination repository patch at161 and successful tool return plus both physical file lengths at165: the source-derived functional-first correction and change-to-action guidance were written to both Skill files after delivered takeover. Mere confirmation or a handoff JSON flag is insufficient. This proves actual continuation into authorized development, not that the new guidance already produced accepted runtime effects.",
+          "oracle": "This is a NEW read-only reassessment only after this case is committed. The authenticated independent caller reads original fixed native lines and hashes, actual task/turn/call identities, retained physical sources and current Git/package dependencies. The draft is a hypothesis, never copy expected values into facts. evaluatedRevision/observedAt/episodeId identify this new assessment; nested original execution identities, assistance and failures remain immutable. No historical current-case prebinding is invented: these episodes were ordinary development work. Preserve original age; maxAgeSeconds is only current reassessment freshness. Compare actual relevant host/version, Skill, source authority and execution boundaries. No new host/task/model/install/archive/repair; observe/recheck verifies current sources, limitations and source-provenance stability. Current review must reject material unsupported inferences or missing necessary outcomes even if IDs mechanically cover a scope. Read source19 15525-15783 and destination20 2-165 as bounded action windows. Check user handoff request; exact native create target local/environment and destination ID; real Git reads at 40df; receipt incompleteness/interruption then bounded completion; explicit source transfer dispatch and actual destination receipt/confirmation before subsequent work. Check source ceases repository writing before transfer, not merely changes a JSON boolean; source may retain receipt writes. Inspect action traces to exclude concurrent product mutation and unauthorized archive. Compare final handoff JSON, source-plan receipt and destination facts; no summary alone proves delivery. Do not claim autonomous pressure-triggered migration, current candidate effect, no-user-intervention, unload, all-history integrity or independent capacity/occupancy calibration. Preserve source18 failure, source19/20 coordination interruption and user resume. Verify actual destination repository patch at161 and successful tool return plus both physical file lengths at165: the source-derived functional-first correction and change-to-action guidance were written to both Skill files after delivered takeover. Mere confirmation or a handoff JSON flag is insufficient. This proves actual continuation into authorized development, not that the new guidance already produced accepted runtime effects.",
           "oracleFiles": [
             "yiyuan_accord/admission.py"
           ],
@@ -5949,7 +6005,7 @@
             "evidenceAgeRule": "preserve original times and age; review material host, candidate-guidance and authority dependencies; maxAgeSeconds limits only current reassessment",
             "authorityBoundary": "no new Desktop task, archival, installation or host execution in this reassessment",
             "originalEpisode": "task20-compaction-window15-bounded-cleanup-and-commit",
-            "candidateExposure": "explicit-read-of-current-dev16-repository-Skill-before-compaction; not-installed-or-automatic-activation"
+            "candidateExposure": "explicit-read-of-original-dev16-at-577dcec-repository-Skill-before-compaction; not-installed-or-automatic-activation"
           },
           "oracle": "This is a NEW read-only reassessment only after this case is committed. The authenticated independent caller reads original fixed native lines and hashes, actual task/turn/call identities, retained physical sources and current Git/package dependencies. The draft is a hypothesis, never copy expected values into facts. evaluatedRevision/observedAt/episodeId identify this new assessment; nested original execution identities, assistance and failures remain immutable. No historical current-case prebinding is invented: these episodes were ordinary development work. Preserve original age; maxAgeSeconds is only current reassessment freshness. Compare actual relevant host/version, Skill, source authority and execution boundaries. No new host/task/model/install/archive/repair; observe/recheck verifies current sources, limitations and source-provenance stability. Current review must reject material unsupported inferences or missing necessary outcomes even if IDs mechanically cover a scope. Verify native compaction marker at destination20 9291; never treat compacted replacement text, token decrease or count as integrity proof. Verify exact selected Skill read at 8612/8615 and matching 577dcec/fe1dee5/f87ae34 bytes. Read post-compaction actual commands/results 9307 onward: correct successor checkout/fe1dee5; ownership, retained/source maps, prior independent review and closed process conditions before the bounded cleanup; retained 122-file map and actual root removal; source-plan/navigation update and exact f87ae34 Git commit/push/readback. Independently hash the retained map and all referenced physical files; inspect the actual cleanup program from line9333, not only its report. Keep failing exploratory reads and corrected IDs in the trace, not fabricate an error-free continuation. Check no unauthorized Desktop creation/archive/shared-state mutation in this window. Verify required state survived against independent artifacts and actual actions, limited to this work span. At9433 last-request input89541/window258400 is not exact occupancy or an optimal range. Missing exact occupancy may justify a short span with fresh checkpoints; it cannot certify unlimited headroom or proactive handoff. No current installed/automatic Skill/Hook effect or causal Accord benefit. For the two maintenance branches, inspect actual prior-review/retention reads and the line9333 cleanup program: owner purpose/revision/absolute targets, source and retained full maps, original PID and path-referencing consumers, verified closure and retained-copy recheck. Require real release at9337 and physical evidence retained; reading a report or cleanup=true alone cannot establish reuse or retirement. This is a completed authorized maintenance allocation, not arbitrary runtime substitution or discovery beyond installed inventory.",
           "oracleFiles": [
@@ -6157,8 +6213,78 @@
           }
         },
         {
-          "id": "claude-policy-value-pair-dev16",
-          "scope": "product-value",
+          "id": "codex-dev17-bounded-impact-current-assessment",
+          "host": "codex",
+          "entry": "cx-sdk",
+          "duties": [
+            "verification-and-value",
+            "correction-and-evolution",
+            "resources-and-cleanup"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient"
+          ],
+          "claims": [
+            "impact-assessment"
+          ],
+          "conditions": {
+            "evaluationKind": "independent-retrospective-impact-and-current-dependency-assessment-not-a-new-host-episode",
+            "candidate": "exact-current-dev17-complete-package-and-declared-local-Windows-composition",
+            "entryBoundary": "Original records keep actual entries, hosts, models, configurations, loaded packages and assistance. No cross-host causal transfer.",
+            "comparison": "Retained Codex ordinary/native-sufficiency and lifecycle/maintenance observations; no new paired experiment and no incremental claim.",
+            "changedDependencies": "dev17 input-failure watermark/replay, explicit Hook event argv and recovery guidance need current exact-code/package and affected native-connection evidence. Old packages are not relabeled.",
+            "minimumComposition": "Declared supported native entry, actual authorized model route and needed permissions; Hook Node/events/trust; independent healthy lifecycle executor and explicit assistance where actually required.",
+            "decisionBoundary": "No unresolved material regression, input or authority harm, or unknown necessary to declared use. Known limited cost may be accepted only with reasons and public bounds.",
+            "forbiddenInference": "No statistical equivalence, universal best, zero interference or causal reliability improvement from neutral outcomes, empty state directories, package exposure or local repair tests."
+          },
+          "scope": "codex-impact-assessment",
+          "oracle": "Independent read-only source/dependency and impact review under the current declared-use floors. Compare actual native records, all known failures and current exact-package evidence; no evaluator-created host outcome or unsupported benefit.",
+          "oracleFiles": [
+            "yiyuan_accord/admission.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "boundedUseAssessmentSufficient": true,
+              "actualResultsVerificationAndFailuresReviewed": true,
+              "allApplicableQualityFloorsDispositioned": true
+            },
+            "authority": {
+              "originalAuthorityAndAssistancePreserved": true,
+              "unresolvedInputOrAuthorityHarm": false
+            },
+            "poststate": {
+              "currentChangedPackageDependenciesSupported": true,
+              "minimumCompositionAndPublicLimitsAccurate": true,
+              "unresolvedMaterialRegression": false,
+              "necessaryApplicabilityUnknown": false
+            },
+            "cleanup": {
+              "OriginalEvidenceAndKnownCleanupFailuresPreserved": true,
+              "AttributableResourcesAndSharedStatePoststateChecked": true
+            },
+            "comparison": {
+              "benefitsLossesCostInterferenceAndUnknownsJointlyAssessed": true,
+              "boundedUseDecisionSupportedByEvidence": true,
+              "noUnclaimedIncrementalSupportOrEquivalenceInferred": true,
+              "noCrossHostCausalTransfer": true,
+              "positiveNeutralNegativeAndInconclusiveJudgedSymmetrically": true
+            }
+          }
+        },
+        {
+          "id": "claude-dev17-bounded-impact-current-assessment",
           "host": "claude-code",
           "entry": "cc-cli",
           "duties": [
@@ -6181,67 +6307,50 @@
             "native-sufficient"
           ],
           "claims": [
-            "incremental-value"
+            "impact-assessment"
           ],
           "conditions": {
-            "hostVersion": "2.1.263 (Claude Code)",
-            "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
-            "transport": "native-Claude-stream-json-ordinary-two-turn-policy-followup",
-            "profile": "separate-fresh-task-owned-personal-state-per-arm; inherited-machine-policy-and-existing-authorized-route-declared",
-            "candidate": "complete-3.2.0-dev.16-inline-package-with-native-Hooks",
-            "nativeControl": "no-Accord-plugin-or-Skill-or-Hook-exposure; no-inline-package-argument",
-            "requestedModel": "sonnet; actual reported model must match across arms",
-            "route": "same-already-authorized-source-hash-and-seven-whitelisted-fields; no-new-account-or-route",
-            "ordinaryPrompt": "identical-policy-source-correction-fixture-no-Skill-cue",
-            "nativeSecondsPerArm": 180,
-            "maximumTurnsPerArm": 16,
-            "nativeBudgetFlagUsdPerArm": 1,
-            "automaticRetry": false,
-            "observerImplementation": {
-              "controller.ps1": "b47453d255660d445f01f0554e9e71c2329ef2997761bc5a3c2b6ea2fcf33eed",
-              "oracle.py": "acb82ae425718c37a790d16b648bd125a339f52ef2c9d169e3e4b75c26692197",
-              "fixture.json": "38465531843b2a7fdfc5e6d88e899ca43af1800ceb5492c731bc5d7d1cd6b6c8",
-              "prepare-pair.py": "e953b8eb47f4f8047c730d4faac9a0ae54e47ad5c26f54ba2f53e1727116bce1",
-              "launch-pair-arm.ps1": "c9c1f6577374754d69c69bd9ea9f8ee433646368752f601cb65ee6f369c131fd"
-            },
-            "comparisonOrder": "native-then-candidate; one run each; order/cache/route variability disclosed",
-            "sharedInstallationAllowed": false,
-            "businessAndTemporaryStateBoundary": "Same business boundary for both arms: business inputs and deliverables stay in work; already provided capabilities may read their own implementation and use only that arm task TEMP for necessary state, subject to semantic review. No new trust, installation, shared settings, outside business data, network or delegation; no explicit Skill/checkpoint cue."
+            "evaluationKind": "independent-retrospective-impact-and-current-dependency-assessment-not-a-new-host-episode",
+            "candidate": "exact-current-dev17-complete-package-and-declared-local-Windows-composition",
+            "entryBoundary": "Original records keep actual entries, hosts, models, configurations, loaded packages and assistance. No cross-host causal transfer.",
+            "comparison": "Original prebound dev16 two-arm Claude policy comparison and failed-instrument attempt, plus retained lifecycle/ordinary observations; original positive hypothesis remains unsupported.",
+            "changedDependencies": "dev17 input-failure watermark/replay, explicit Hook event argv and recovery guidance need current exact-code/package and affected native-connection evidence. Old packages are not relabeled.",
+            "minimumComposition": "Declared supported native entry, actual authorized model route and needed permissions; Hook Node/events/trust; independent healthy lifecycle executor and explicit assistance where actually required.",
+            "decisionBoundary": "No unresolved material regression, input or authority harm, or unknown necessary to declared use. Known limited cost may be accepted only with reasons and public bounds.",
+            "forbiddenInference": "No statistical equivalence, universal best, zero interference or causal reliability improvement from neutral outcomes, empty state directories, package exposure or local repair tests."
           },
-          "oracle": "Commit this definition before executing exactly two separately owned native sessions. Authenticate live native journals, caller/binary/route/package identities and complete retained bytes, not a report verdict. Compare identical initial obsolete 190 assets and source policy v1, independent first 140 outputs, the same after-result policy-only publisher and ordinary follow-up, then actual final 60 and truthful Agent post-write verification. No output repair or answer injection by the observer. Native must have explicit inventories proving no Accord exposure; missing inventory is unknown. Candidate must select the exact full current dev16 inline package with native Hook processing retained; independently attribute relevant actual Hook events and distinguish discovery from literal body reading. Compare actual model, tools, permissions, environment, failures, forbidden attempts, unproductive calls, rescue, token/cache usage, wall time, inherited limits and residue. Positive, zero, negative or inconclusive raw comparisons are all retained. Candidate meeting both effects while native has a concretely worse required outcome or extra rescue is only a bounded positive witness if candidate has no authority/integrity/material burden regression defeating it. Both satisfying the same outcomes is no observed reliability increment; one-pair timing/token differences alone are not causal gain. Candidate worse is negative; materially nonmatched or missing evidence is inconclusive. Independent final judgment must state benefit, loss and cost with limits, never infer global optimality. The positive expected comparison below is only the admission hypothesis: do not create matching facts for zero/negative/inconclusive outcomes or treat evaluation completed as claim supported. Retain then independently dispose only owned profiles and prove zero owned children. No new account, changed route, shared auth copying/installation, automatic retry or broad release result. This corrected instrument follows a retained invalid native-only attempt: a system permission_denied text message crashed the earlier oracle after real first delivery, terminating the process before stage two; candidate was never started. Preserve that entire attempt and actual cost. The same fixture, permissions, route, budgets and fixed arm order are retained. The parser correction handles system text separately without suppressing denial metadata and rejects malformed conversation blocks. This after-result followup is not an active-turn steering witness. This is a deliberate instrument repair and one freshly bound complete pair, not automatic retry or result selection.",
+          "scope": "claude-impact-assessment",
+          "oracle": "Independent read-only source/dependency and impact review under the current declared-use floors. Compare actual native records, all known failures and current exact-package evidence; no evaluator-created host outcome or unsupported benefit.",
           "oracleFiles": [
-            "scripts/observe_claude_entry.py",
-            "scripts/observe-claude-entry.ps1",
-            "scripts/run-gt20-exact-package.ps1",
             "yiyuan_accord/admission.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
             "effect": {
-              "candidateBothPolicyStagesCorrect": true,
-              "actualAgentPostWriteVerificationAndTruthfulClosure": true,
-              "matchedControlOutcomeIndependentlyObserved": true
+              "boundedUseAssessmentSufficient": true,
+              "actualResultsVerificationAndFailuresReviewed": true,
+              "allApplicableQualityFloorsDispositioned": true
             },
             "authority": {
-              "sameAuthorizedCompositionExceptBoundPackageExposure": true,
-              "noObserverDeliveryRepairOrAdditionalRescue": true,
-              "candidateNoForbiddenActionAttemptOrInputDamage": true
+              "originalAuthorityAndAssistancePreserved": true,
+              "unresolvedInputOrAuthorityHarm": false
             },
             "poststate": {
-              "bothOriginalOutcomesAndFailedPrefixesRetained": true,
-              "sourcePolicyAndUnrelatedStatePreservedWithinPublishedStages": true,
-              "noMaterialCandidateBurdenRegressionDefeatingBenefit": true
+              "currentChangedPackageDependenciesSupported": true,
+              "minimumCompositionAndPublicLimitsAccurate": true,
+              "unresolvedMaterialRegression": false,
+              "necessaryApplicabilityUnknown": false
             },
             "cleanup": {
-              "bothOwnedProcessTreesAccountedAndReleased": true,
-              "hashVerifiedEvidenceRetainedBeforeOwnedDisposal": true,
-              "sharedStatePreservedAndOwnedRootsRemoved": true
+              "OriginalEvidenceAndKnownCleanupFailuresPreserved": true,
+              "AttributableResourcesAndSharedStatePoststateChecked": true
             },
             "comparison": {
-              "conditionalPositiveUserBenefitWitnessedAgainstNative": true,
-              "benefitLossAndCostIndependentlyJudgedAgainstPreboundFloors": true,
-              "evaluationCompletionNotUsedAsGainEvidence": true,
-              "globalOptimalityOrStatisticalSpeedClaimMade": false
+              "benefitsLossesCostInterferenceAndUnknownsJointlyAssessed": true,
+              "boundedUseDecisionSupportedByEvidence": true,
+              "noUnclaimedIncrementalSupportOrEquivalenceInferred": true,
+              "noCrossHostCausalTransfer": true,
+              "positiveNeutralNegativeAndInconclusiveJudgedSymmetrically": true
             }
           }
         }
@@ -6461,7 +6570,45 @@
           "rule": "Necessary Desktop continuity uses sufficient native host execution under Accord guidance, with explicit current dependency review. Bind the historical user-requested 19-to-20 delivery/receipt/takeover chain and the actual same-carrier automatic compaction followed by reconciled useful work; these are distinct conditions. Preserve the 18 unauthorized archival/user rescue failure and the 19/20 interrupted receipt/user pause/resume. No new task is required to fill an inventory cell. Retain the six continuity workSequence duties and allocate two concrete maintenance branches here: reuse of verified retained evidence to decide and execute the next action, and authorized retirement of a no-longer-needed task allocation with callers and evidence preservation checked. These branches are not claimed in the current cx-sdk samples. Case coverage IDs do not certify every requiredOutcome: early autonomous detection, a justified transition margin, any unavailable source-allocation release, and current installed/automatic package effects cannot be inferred. Independent subject review must explicitly decide applicability and any remaining necessary gap; do not silently redefine failed autonomous continuity as successful assisted handoff. Retained historical native sufficiency can justify delegation of controls; changed guidance does not retrospectively become the historical executor. Protect both checkouts, task history and all retained evidence."
         },
         {
-          "id": "product-value",
+          "id": "codex-impact-assessment",
+          "host": "codex",
+          "entry": "cx-sdk",
+          "duties": [
+            "verification-and-value",
+            "correction-and-evolution",
+            "resources-and-cleanup"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient"
+          ],
+          "claims": [
+            "impact-assessment"
+          ],
+          "conditions": {
+            "evaluationKind": "independent-retrospective-impact-and-current-dependency-assessment-not-a-new-host-episode",
+            "candidate": "exact-current-dev17-complete-package-and-declared-local-Windows-composition",
+            "entryBoundary": "Original records keep actual entries, hosts, models, configurations, loaded packages and assistance. No cross-host causal transfer.",
+            "comparison": "Retained Codex ordinary/native-sufficiency and lifecycle/maintenance observations; no new paired experiment and no incremental claim.",
+            "changedDependencies": "dev17 input-failure watermark/replay, explicit Hook event argv and recovery guidance need current exact-code/package and affected native-connection evidence. Old packages are not relabeled.",
+            "minimumComposition": "Declared supported native entry, actual authorized model route and needed permissions; Hook Node/events/trust; independent healthy lifecycle executor and explicit assistance where actually required.",
+            "decisionBoundary": "No unresolved material regression, input or authority harm, or unknown necessary to declared use. Known limited cost may be accepted only with reasons and public bounds.",
+            "forbiddenInference": "No statistical equivalence, universal best, zero interference or causal reliability improvement from neutral outcomes, empty state directories, package exposure or local repair tests."
+          },
+          "rule": "Assess this host declared composition using original retained observations and current affected dependencies. Judge actual results, verification, reversals, denied/repeated attempts, delays, reported cost and its units, model/route uncertainty, Hook hints and state even without binding, installation/recovery/exit burden, necessary redundancy and public limitations together. Every applicable quality floor and necessary unknown receives a reasoned disposition. The bounded use decision must remain defensible after known costs, failures and limits; neither positive benefit nor neutral outcome is an expected answer. No extra experiment is required merely for this scope shape, but unresolved concrete evidence gaps still block. Current independent observation retains immutable historical identities and source hashes. Assessment completion is separate from incremental support and whole release readiness."
+        },
+        {
+          "id": "claude-impact-assessment",
           "host": "claude-code",
           "entry": "cc-cli",
           "duties": [
@@ -6484,25 +6631,19 @@
             "native-sufficient"
           ],
           "claims": [
-            "incremental-value"
+            "impact-assessment"
           ],
           "conditions": {
-            "hostVersion": "2.1.263 (Claude Code)",
-            "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
-            "transport": "native-Claude-stream-json-ordinary-two-turn-policy-followup",
-            "profile": "separate-fresh-task-owned-personal-state-per-arm; inherited-machine-policy-and-existing-authorized-route-declared",
-            "candidate": "complete-3.2.0-dev.16-inline-package-with-native-Hooks",
-            "nativeControl": "no-Accord-plugin-or-Skill-or-Hook-exposure; no-inline-package-argument",
-            "requestedModel": "sonnet; actual reported model must match across arms",
-            "route": "same-already-authorized-source-hash-and-seven-whitelisted-fields; no-new-account-or-route",
-            "ordinaryPrompt": "identical-policy-source-correction-fixture-no-Skill-cue",
-            "nativeSecondsPerArm": 180,
-            "maximumTurnsPerArm": 16,
-            "nativeBudgetFlagUsdPerArm": 1,
-            "automaticRetry": false,
-            "businessAndTemporaryStateBoundary": "Same business boundary for both arms: business inputs and deliverables stay in work; already provided capabilities may read their own implementation and use only that arm task TEMP for necessary state, subject to semantic review. No new trust, installation, shared settings, outside business data, network or delegation; no explicit Skill/checkpoint cue."
+            "evaluationKind": "independent-retrospective-impact-and-current-dependency-assessment-not-a-new-host-episode",
+            "candidate": "exact-current-dev17-complete-package-and-declared-local-Windows-composition",
+            "entryBoundary": "Original records keep actual entries, hosts, models, configurations, loaded packages and assistance. No cross-host causal transfer.",
+            "comparison": "Original prebound dev16 two-arm Claude policy comparison and failed-instrument attempt, plus retained lifecycle/ordinary observations; original positive hypothesis remains unsupported.",
+            "changedDependencies": "dev17 input-failure watermark/replay, explicit Hook event argv and recovery guidance need current exact-code/package and affected native-connection evidence. Old packages are not relabeled.",
+            "minimumComposition": "Declared supported native entry, actual authorized model route and needed permissions; Hook Node/events/trust; independent healthy lifecycle executor and explicit assistance where actually required.",
+            "decisionBoundary": "No unresolved material regression, input or authority harm, or unknown necessary to declared use. Known limited cost may be accepted only with reasons and public bounds.",
+            "forbiddenInference": "No statistical equivalence, universal best, zero interference or causal reliability improvement from neutral outcomes, empty state directories, package exposure or local repair tests."
           },
-          "rule": "One prebound matched Claude ordinary-entry policy correction pair may establish only a conditional observed user-benefit witness in the declared composition. Judge independent effects, actual post-write verification, authority, material interference, rescue, failure and cleanup together. Native sufficiency is a legitimate neutral outcome. Assessment completion, native success, package discovery or a fixed matching report is not Accord incremental value. Preserve positive, zero, negative and inconclusive raw outcomes; only a genuine positive witness meeting the prebound quality floors can support this claim. No retry-until-win, forced greater budget, cross-host transfer, statistical speed claim, initial-host/minimal-composition proof or whole-product qualification follows."
+          "rule": "Assess this host declared composition using original retained observations and current affected dependencies. Judge actual results, verification, reversals, denied/repeated attempts, delays, reported cost and its units, model/route uncertainty, Hook hints and state even without binding, installation/recovery/exit burden, necessary redundancy and public limitations together. Every applicable quality floor and necessary unknown receives a reasoned disposition. The bounded use decision must remain defensible after known costs, failures and limits; neither positive benefit nor neutral outcome is an expected answer. No extra experiment is required merely for this scope shape, but unresolved concrete evidence gaps still block. Current independent observation retains immutable historical identities and source hashes. Assessment completion is separate from incremental support and whole release readiness."
         }
       ]
     },
