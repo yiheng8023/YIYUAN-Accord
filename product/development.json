@@ -86,7 +86,7 @@
       "maxProductCodeAndTestBytes": 1180000,
       "maxTrackedFiles": 127,
       "maxPrimaryInstructionBytes": 28000,
-      "rationale": "On 2026-09-07 the user approved 1180000 code/test bytes and 127 files, retaining at least five-percent code headroom and the unchanged 28000-byte primary instruction ceiling. Current development counts Python modules/product tests plus runtime/plugins JavaScript sources and physical delivered copies, including untracked candidate files; frozen predecessor accounting is unchanged. The reviewed draft measures 1116158 code/test bytes, 127 files and 24229 instruction bytes, leaving 63842 code bytes (4842 beyond the required 59000 reserve). Necessary regression and recovery safeguards are retained. Maintainer PowerShell observation code remains separately reviewed. Cost conformance and isolated proposal-copy tests cannot qualify host behavior or value."
+      "rationale": "On 2026-09-07 the user approved 1180000 code/test bytes and 127 files, retaining at least five-percent code headroom and the unchanged 28000-byte primary instruction ceiling. Current development counts Python modules/product tests plus runtime/plugins JavaScript sources and physical delivered copies, including untracked candidate files; frozen predecessor accounting is unchanged. The verified worktree measures 1120528 code/test bytes, 127 files and 24233 instruction bytes, leaving 59472 code bytes (472 beyond the required 59000 reserve). Necessary regression and recovery safeguards are retained. Maintainer PowerShell observation code remains separately reviewed. Cost conformance and isolated proposal-copy tests cannot qualify host behavior or value."
     }
   },
   "source": {
@@ -982,8 +982,8 @@
       },
       {
         "id": "claim-error-isolation",
-        "status": "source-reviewed-public-regression-open",
-        "basis": "独立复核定位 admission.py 的全局 not errors 及 control.py 公共返回的同类合并条件：单个生命周期证据错误会连带使未受影响的功能/价值声明失效。局部计算反例成立，公开验证入口回归尚未运行。需要最小隔离个案与全局主体/来源/评审错误，同时保留所有错误及整版拒绝；此缺陷不解释此前默认追逐 Claude 的排程选择，也不优先于必要结果验证设计。"
+        "status": "public-regression-verified-local",
+        "basis": "独立复核定位 admission.py 与 control.py 的全局错误耦合。公开 verify_product 入口已保留六个失败反例；完成必要结果路径复核后，最小修复先核对主体、来源结构、包/定义、时间归属与同 episode 完整性，再将可归属的过期、条件漂移或结果不符限定到相关声明。所有错误与整版拒绝保留；来源结构/身份校验、跨 episode 及全局评审/recheck 错误仍否决全部声明。真实外部来源与评审真实性仍由调用方独立认证，不能由非空引用或验证器自行证明。完整 admission 模块 25 项回归于 296.982 秒通过，不构成真实宿主或产品价值验收；此前默认追逐 Claude 的排程选择仍由开发执行负责。"
       },
       {"id":"handoff-archive-authority","status":"guidance-corrected-behavior-unverified","basis":"主线程18在只读接收后、实际移交消息送达前调用自身归档，执行随即中断；用户手动恢复。当前任务曾误以恢复后的未归档状态和不完整工具摘要否认历史动作。已回查原始调用；已安装3.1 Skill及当前指令的释放来源含义未细分，是可能促因，不能单独归因。修复明确任务归档必须由用户授权，接收核对不等于接管，先确认移交和单写者再释放来源资源。无仓库归档执行器可作确定性回归，不新增虚假拦截器或归档实验；当前仅源/指令修复，宿主行为仍须独立验证。 独立范围审查将此次受影响Desktop结果显式纳入必需功能范围codex-desktop-continuity；原五项义务保留。该范围暂未绑定，有效会话状态、候选任务局部加载、同次移交的独立动作/接管/后态来源及失败判据仍需核对。CLI或App Server结果不得替代Desktop；不新增归档实验或提前变更个人安装的权限。"},
       {"id":"sequential-correction-observer","status":"implemented-live-diagnostic-verified","basis":"两个跨轮证据反例及目录内Read误判均先失败再最小修复；单轮checkpoint、末轮记录和其他越界拒绝保留。96项相关回归、读取修复后的18项观察器回归及独立复核通过。完整实现与判据A=bc1195f先提交并推送，随后真实双轮E两组均由140改为60，逐轮回读、输入保护、正常结束和任务清理成立。详细观测见claude-ready-orders-correction-dev6；这是观察通路诊断，不补齐整项职责、自主恢复、归档修复行为或增量价值。真实scopes/cases及独立来源准入仍未完成。"},
@@ -1004,6 +1004,40 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "user-guidance-is-environment-not-accord-dependency",
+      "observedAt": "2026-09-07",
+      "scope": "user-boundary-and-read-only-guidance-review-not-product-admission",
+      "finding": "The user clarified that their current global AGENTS.md was not their original meta-guidance design. ASSETS contains a general framework and an AI-facing form; both describe contextual, revisable principles and limits of the interpreting actor. A private condensed global-file draft was prepared but never applied. The user's subsequent correction stopped that route: changing the development host would alter the evaluation environment, users own their own guidance, and Accord must deliver continuous correction itself.",
+      "boundary": "Treat user AGENTS.md and other upstream guidance as declared external conditions. Do not replace, bundle, require installation of, or rely on a particular personal guidance file to supply Accord's missing capability. Project development guidance is a maintainer aid, not runtime evidence or a substitute for the delivered correction path. Necessary detection, revision, recovery and result verification must map to an actual delivered actor or declared supported host capability and be tested under relevant user conditions.",
+      "poststate": "Global AGENTS.md remains 4,086 bytes with SHA256 0ca29a7d476f7cce29a1ff66a120f789d5d1acc4a995fb69c02273cbd868692f; no global override was created. ASSETS originals and Accord packages were not changed. The private unexecuted draft is retained only as development history, not an active proposal or installation prerequisite."
+    },
+    {
+      "id": "development-paths-and-input-control-feasibility",
+      "observedAt": "2026-09-07",
+      "scope": "reviewed-development-paths-and-zero-model-input-preview-not-functional-or-value-admission",
+      "sourceRevision": "768fe62cbbec2327b5024ff92d245547e6876889",
+      "paths": {
+        "codex-function": "Reuse the existing correction, interruption, fallback, conflict and lease observations at their original scopes. Bind a necessary source-backed delivery that exercises discovery, justified selection, actual output and retirement of temporary assistance; independently check sources, authority, artifacts and post-state. Model-fit judgment need not force a model switch. Unrepresented scenarios require justified applicability, not added labels.",
+        "claude-code-function": "Use the same necessary delivery shape where applicable. The 140-to-60 oracle remains only a delivery/correction baseline. Confirm relevant tool callability and the active-turn non-cancelling input/receipt path before claiming question-then-continue, fallback or Agent-owned cleanup; evaluator prompting or rescue cannot supply these effects.",
+        "codex-desktop-continuity": "Existing Desktop rollout provides separate capacity, recent usage and compaction-window facts. A same-carrier necessary-work slice with explicitly read exact guidance can be bound, but is neither plugin activation nor value evidence. Full takeover still requires a bound destination, explicit new-task request where the host tool requires it, and same-transfer reconciliation/one-writer receipts. Do not manufacture compaction or archive authority.",
+        "codex-lifecycle": "Reuse native RPC and independent package/registration/residue snapshots. Bind a legitimate authenticated installed-activation path before connecting installation, actual use, applicable failure recovery and retirement. Another standalone Skill session cannot supply installed behavior; pre-write rejection cannot stand for partial-write rollback.",
+        "claude-code-lifecycle": "Keep dev.11 failed and this branch paused. The open result connects the requested candidate to the inspected source, invalidates conclusions after refresh, and reaches actual hold or completion, update and independent recovery. Reopen only for new discriminating evidence, not another body/budget/install-prefix trial.",
+        "product-value": "Bind a user benefit and acceptable burden before a matched ordinary-function comparison. Observe actual exposure, independent delivery, correction/rescue, authority, resources and cost. An effective-user-profile pair only supports a conditional candidate increment in that profile; it cannot replace the separately required minimal composition or no-extra-extension condition, establish initial-host behavior, or transfer benefit between hosts. Preserve neutral and adverse results."
+      },
+      "inputPreview": {
+        "hostVersion": "0.153.4",
+        "method": "Native debug prompt-input with process-only controls; no model turn or shared configuration mutation.",
+        "result": "The default preview and project_doc_max_bytes=0 preview had exactly equal role/text blocks. Disabling 40 known on-disk Skill paths removed the sole 8,363-character Skills block containing 25 actual catalogue entries; every remaining role/text block was identical. Exact global AGENTS.md remained in all three inputs.",
+        "failures": "The original invocation and exact-argument replay exited naturally with code 1 because quoted dotted-key names created an invalid MCP transport entry. The initial stderr text was not retained; replay retained the diagnostic. Correcting only key quoting produced three exit-0 previews. An unexecuted key-count preparation assertion and the earlier runner preparation remain separately preserved.",
+        "limits": "This establishes rendered input differences only, not actual model behavior, tool selection, tokens, delivery gain, plugin/Hook loading or Desktop equivalence. Earlier matched observations remain at their original effective-profile scope.",
+        "retainedEvidence": "Private evaluation backup input-profile-feasibility-20260907; all 23 files verified before owned-root removal; zero owned process references; selected source/configuration hashes unchanged.",
+        "manifestSha256": "22ff42b92c896dcf54f1c0560f40cfdb26543cef2cb4e6b29385eb6a3fbd76bb",
+        "closeoutSha256": "bd932647d72aaaada442305ac1285c971fc890714903cfd51a6624b007db8ae8",
+        "removalSha256": "f9040c8542538aa23e30e7e27ba858319be8d11a94598cf60e9a3d80d269e24c"
+      },
+      "disposition": "The six paths received independent read-only review; no case, scope, acceptance requirement or package was changed or admitted. This closes the bounded feasibility review, not the required outcomes. Continue ordinary-function and early value work without waiting for the paused Claude lifecycle branch."
+    },
     {
       "id": "claude-dev11-selected-source-and-development-route",
       "date": "2026-09-07",
@@ -4164,7 +4198,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "先完成六个必需范围的最短充分验证路径复核，优先补齐未定义的 Desktop 连续性和净价值路径，以及现有普通功能用例未表达的必要结果。核对范围、权限、判据、独立来源、真实依赖和预计能关闭的缺口；无法现场取得的条件明确保留，继续不依赖它的工作。Claude dev.11 已失败、保全并回收，不再作为全项目默认下一步；仅在新证据能改变决策时重开该线，不直接增加 dev.12、模型试验或机制。维护验证器的已确认错误单独保留回归后最小修复，不把工具维护代替开发结果。按修订计划推进功能及早期净影响比较，必要定义先于观察，受影响资格后于独立证据。README 和更新日志仍最后定稿；条件发布、共享安装与归档授权边界保持。",
+    "work": "六个必需范围的最短验证路径已独立复核，准入局部错误隔离已完成公开回归。下一结果是普通入口中的查证、适配、交付、持续纠偏与必要能力退出，并联合取得早期净影响对照；先绑定实际任务输入、条件、独立判据及预算，不补标签结清职责。用户自有 AGENTS.md 是外部环境变量，不能通过替换开发宿主指导来补足 Accord 内功，也不能成为打包、安装或功能前提。全局指导草稿未应用，该线已停止；回到 Accord 自身可交付的检测、调整、恢复和结果链路。Desktop 实际接管与 Codex 安装态激活各保留具体条件缺口，继续不依赖它们的工作。Claude dev.11 已失败、保全并回收；仅在新证据能改变决策时重开，不默认增加版本或试验。README 和更新日志仍最后定稿；条件发布、共享安装与归档授权边界保持。",
     "requires": "Current user direction defers installation into the shared development host until accepted publication. The Codex candidate has been uninstalled, its temporary marketplace pin restored, and backups retained. Before publication use bounded task-local candidate exposure and existing authorized host access for necessary evaluation; do not reinstall a shared candidate. New accounts, unrelated trust/data, material cost or other personal changes remain outside this authority. Fresh evidence and exact-candidate checks precede conditional publication."
   },
   "claimCeiling": {

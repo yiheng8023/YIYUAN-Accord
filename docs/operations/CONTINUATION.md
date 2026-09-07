@@ -3,6 +3,16 @@
 Current navigation, not product authority. Recover live Git, bound user intent
 and relevant host facts before acting; an older observation is not current state.
 
+## User guidance boundary
+
+The user explicitly stopped replacing the development host's AGENTS.md as a
+route to Accord correction. Only a private draft was prepared; it was never
+applied. Global guidance remains unchanged, and ASSETS meta-guidance was read
+only. Users own their guidance files. Treat these as external conditions, not
+files to bundle or require, nor substitutes for Accord's delivered correction
+capability. Resume the actual detection/revision/recovery/result path under the
+declared user environment. The maintainer's own routing remains their duty.
+
 ## Development-route correction
 
 On 2026-09-07 the user again required correction of the development process,
@@ -26,8 +36,28 @@ The dev.11 episode is finished, failed and retained; its 1,561-file copy was
 verified before removing the owned temporary root. Do not start dev.12 or another
 model/mechanism trial by default. Resume that branch only for new evidence that
 can distinguish a cause and change the next decision. The identified claim-error
-coupling in the verifier is a separate bounded defect, not the reason the
-developer selected this work order. See the source's current priority findings.
+coupling in the verifier was a separate bounded defect, not the reason the
+developer selected this work order. Its public regression retained six failures
+before the minimum fix; all 25 admission tests then passed. Attributable case
+failures now preserve independent claims, while global source/identity/review
+failures and whole-candidate refusal remain. This is verifier validation, not
+host or product-value acceptance.
+
+The six necessary validation paths have now received independent read-only
+review; see `development-paths-and-input-control-feasibility`. Ordinary-function
+and early value work can share a necessary source-backed delivery, with separate
+effect, authority, cost and cleanup predicates. Desktop takeover still needs its
+actual destination/authority/receipts; installed Codex activation needs its bound
+authentication/loading path. Neither missing condition blocks independent work.
+
+The bounded no-model input preview is closed and its 23-file evidence copy was
+verified before owned-root removal. `project_doc_max_bytes=0` left the exact
+global AGENTS instructions intact. Per-Skill disable entries removed the actual
+25-entry catalogue and its surrounding Skills block only. This does not create
+an initial host or establish product gain. Keep the prior comparisons within
+their declared user environment; bind and inspect the actual inputs before
+claiming a minimal composition or no-extra-extension control. Shared settings
+remain unchanged; do not extend this preflight into another default trial chain.
 
 ## Resumed after client update
 

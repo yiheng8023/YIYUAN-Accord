@@ -270,7 +270,7 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(admission["unboundCoverage"]["incremental-value"], ["claude-code", "codex"])
         self.assertEqual(admission["unboundCoverage"]["package-lifecycle"], ["claude-code", "codex"])
 
-    def test_required_claims_use_bound_scopes_not_a_full_cross_product(self):
+    def scoped_contract(self):
         contract = copy.deepcopy(self.contract)
         policy = contract["acceptance"]["admission"]
         policy.update(schema="yiyuan-accord-evidence-admission/v3", requiredCoverage={
@@ -291,11 +291,84 @@ class DevelopmentEvidenceTests(unittest.TestCase):
                 policy["cases"].append({**copy.deepcopy(case), **{
                     k: copy.deepcopy(scoped[k]) for k in ("id", "duties", "qualityAxes", "scenarios", "claims")},
                     "scope": scoped["id"]})
+        return contract
+
+    def test_required_claims_use_bound_scopes_not_a_full_cross_product(self):
         with self.history():
-            self.commit_contract(contract)
+            self.commit_contract(self.scoped_contract())
             report = verify_product(self.root, evidence=self.observer)
         self.assertTrue(report["functionalCompletion"], report["errors"])
         self.assertTrue(report["repositoryCandidateReady"], report["errors"])
+
+    def test_case_failures_do_not_erase_independent_claims(self):
+        class Clock(datetime):
+            offset = 0
+
+            @classmethod
+            def now(cls, tz=None):
+                return datetime.now(tz) + timedelta(seconds=cls.offset)
+
+        for reason, key in [(r, "claude-code-lifecycle") for r in (
+                "effect", "conditions", "recheck", "expired")] + [("effect", "codex"), ("effect", "codex-value")]:
+            with self.subTest(reason=reason, case=key), self.history():
+                contract = self.scoped_contract()
+                if reason == "expired":
+                    next(c for c in contract["acceptance"]["admission"]["cases"] if c["id"] == key)["maxAgeSeconds"] = 1
+                self.commit_contract(contract)
+                Clock.offset = 0
+
+                def observer(request):
+                    result = self.observer(request)
+                    if request["phase"] == "observe":
+                        record = next(r for r in result["records"] if r["case"] == key)
+                        if reason == "effect":
+                            record["facts"]["effect"]["value"]["total"] = 999
+                        elif reason == "conditions":
+                            record["conditions"] = {"hostVersion": "changed"}
+                    elif reason == "recheck":
+                        del result["conditions"][key]
+                    elif reason == "expired":
+                        Clock.offset = 2
+                    return result
+
+                with patch("yiyuan_accord.admission.datetime", Clock):
+                    report = verify_product(self.root, evidence=observer)
+                self.assertFalse(report["valid"])
+                self.assertFalse(report["repositoryCandidateReady"])
+                self.assertTrue(report["errors"])
+                self.assertEqual(report["functionalCompletion"], key != "codex")
+                self.assertEqual(report["currentHostBehavior"], "unverified" if key == "codex" else "verified-for-bound-cases")
+                self.assertEqual(report["incrementalValue"], "unverified" if key == "codex-value" else "supported-for-bound-cases")
+                self.assertEqual(set(report["evidenceAdmission"]["acceptedCases"]),
+                                 {c["id"] for c in contract["acceptance"]["admission"]["cases"]} - {key})
+
+    def test_untrusted_evidence_still_blocks_all_independent_claims(self):
+        with self.history():
+            self.commit_contract(self.scoped_contract())
+            for reason in ("source", "identity", "episode", "review", "recheck"):
+                with self.subTest(reason=reason):
+                    def observer(request):
+                        result = self.observer(request)
+                        if request["phase"] == "observe":
+                            record = next(r for r in result["records"] if r["case"] == "claude-code-lifecycle")
+                            record["facts"]["effect"]["value"]["total"] = 999
+                            if reason == "source":
+                                record["sourceRef"] = ""
+                            elif reason == "identity":
+                                record["packageSha256"] = "f" * 64
+                            elif reason == "episode":
+                                record["facts"]["cleanup"]["episodeId"] = "another"
+                            elif reason == "review":
+                                result["reviewBundle"]["reviews"] = []
+                        elif reason == "recheck":
+                            result["observationSha256"] = "f" * 64
+                        return result
+
+                    report = verify_product(self.root, evidence=observer)
+                    self.assertFalse(report["valid"])
+                    self.assertFalse(report["repositoryCandidateReady"])
+                    self.assertFalse(report["functionalCompletion"])
+                    self.assertEqual(report["incrementalValue"], "unverified")
 
     def test_removing_scopes_and_cases_leaves_the_required_claims_unbound(self):
         contract = copy.deepcopy(self.contract)

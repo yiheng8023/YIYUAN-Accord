@@ -185,6 +185,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     cases = {v["id"]: v for v in policy["cases"]}
     scopes = {v["id"]: v for v in policy["scopes"]}
     errors = report["errors"]
+    case_errors = []
     hosts = {v["id"]: v for v in contract["delivery"]["hostProjections"]}
     required = {
         "duties": {v["id"] for v in contract["acceptance"]["duties"]},
@@ -227,7 +228,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 seen.add(key)
                 case, bound = cases[key], request["cases"][key]
                 try:
-                    at = _fresh(record["observedAt"], case["maxAgeSeconds"], now)
+                    at = _fresh(record["observedAt"], float("inf"), now)
                     if at is None:
                         raise ValueError("future, undated or expired observation")
                     revision = record["evaluatedRevision"]
@@ -250,20 +251,24 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     for path in case["oracleFiles"]:
                         _git(root, "cat-file", "blob", f"{revision}:{path}")
                     committed = int(_git(root, "show", "-s", "--format=%ct", revision).strip())
-                    if at.timestamp() < committed or _json(record["conditions"]) != _json(case["conditions"]):
-                        raise ValueError("unbound capture time or conditions")
+                    if at.timestamp() < committed:
+                        raise ValueError("unbound capture time")
                     if not all(_text(record[k]) for k in ("episodeId", "sourceRef", "observerId")):
                         raise ValueError("source, observer and episode must be bound")
                     facts = record["facts"]
                     if not isinstance(facts, dict) or set(facts) != set(case["expected"]):
                         raise ValueError("incomplete effect and post-state facets")
-                    for facet, expected in case["expected"].items():
-                        actual = facts[facet]
+                    for actual in facts.values():
                         if (not isinstance(actual, dict) or set(actual) != {"episodeId", "value"}
-                                or actual["episodeId"] != record["episodeId"]
-                                or _json(actual["value"]) != _json(expected)):
-                            raise ValueError("failed or cross-episode effect/post-state")
-                    admitted.add(key)
+                                or actual["episodeId"] != record["episodeId"]):
+                            raise ValueError("unbound effect/post-state")
+                    # Only attributable consequences can leave independent claims intact.
+                    if (_fresh(record["observedAt"], case["maxAgeSeconds"], now) is None
+                            or _json(record["conditions"]) != _json(case["conditions"])
+                            or any(_json(facts[k]["value"]) != _json(v) for k, v in case["expected"].items())):
+                        case_errors.append(f"{key}: freshness, conditions or consequence not admitted")
+                    else:
+                        admitted.add(key)
                 except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration):
                     errors.append(f"{key}: source, identity, freshness, conditions or consequence not admitted")
             review = data["reviewBundle"]
@@ -289,7 +294,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             for key in list(admitted):
                 if _json(recheck["conditions"].get(key)) != _json(cases[key]["conditions"]):
                     admitted.remove(key)
-                    errors.append(f"{key}: current conditions changed or unavailable")
+                    case_errors.append(f"{key}: current conditions changed or unavailable")
             if evidence_subject(root) != subject:
                 raise ValueError("subject changed during observation")
             _git(root, "diff", "--quiet", "--no-ext-diff", "--no-textconv", subject["revision"], "--")
@@ -302,7 +307,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     key = record["case"]
                     if _fresh(record["observedAt"], cases[key]["maxAgeSeconds"], final_now) is None:
                         admitted.remove(key)
-                        errors.append(f"{key}: observation expired before final qualification")
+                        case_errors.append(f"{key}: observation expired before final qualification")
             if review_result["decision"] == "pass" and any(
                     _fresh(v["reviewedAt"], contract["acceptance"]["admission"]["reviewMaxAgeSeconds"], final_now) is None
                     for v in review["reviews"]):
@@ -341,6 +346,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 completed[claim] &= bool(relevant) and relevant <= admitted and not any(missing.values())
     report["functionalCompletion"] = completed["function"]
     report["incrementalValue"] = "supported-for-bound-cases" if completed["incremental-value"] else "unverified"
-    report["candidateEligible"] = (all(completed.values()) and len(admitted) == len(cases)
+    errors.extend(case_errors)
+    report["candidateEligible"] = (not errors and all(completed.values()) and len(admitted) == len(cases)
                                    and not any(v for row in report["productCoverage"].values() for v in row.values()))
     return report
