@@ -828,14 +828,163 @@
       {"id":"maintainability-and-resource-cost","floor":"Verification, context, modules and resource use remain sustainable without weakening functional or evidence guarantees.","assessment":"unverified","name":"可维护性与资源成本"}
     ],
     "workSequence": [
-      {"id":"source-foundation","title":"源头校准与继承基线","state":"active","duties":["goal-authority-correction","premise-and-consistency","verification-and-value"],"procedure":"从必要用户结果反证现有立意与职责分工，不预设 Skill、Hook、核心、索引、图或数量正确；区分任务执行、用户生命周期和维护验收，校准受影响基线与映射，保留无关的已验证事实及历史。","exit":"职责必要性、实际承担者与剩余缺口已明确；受影响源、计划、工序和验收一致且本地回归通过。这只关闭本轮源头校准，不证明宿主效果或最终架构充分。","qualityAxes":["compliance-and-safety","functional-coverage","evidence-integrity"]},
-      {"id":"system-bottlenecks","title":"系统短板与工程优化","state":"implemented-local-unreleased","duties":["research-learning-and-reuse","relations-routing-and-form","execution-configuration-and-code","resources-and-cleanup"],"procedure":"核对相关官方能力、实际宿主暴露和职责；需要时从同一事实源派生关系视图或索引，按真实调用者、影响及成本删减或补强，再测量受影响工程路径。","exit":"已定位工程问题与映射在本地回归通过；未闭合的实际执行、恢复和适应职责转入下一工序，不据此宣称全部系统质量已验证。","qualityAxes":["functional-coverage","normal-entry-integration","maintainability-and-resource-cost","user-burden-and-interference"]},
-      {"id":"development-evidence-admission","title":"当前开发证据准入通路","state":"active","duties":["verification-and-value","premise-and-consistency","package-lifecycle"],"procedure":"按获批校准预绑定整版必需范围，分别落实每宿主功能、适用生命周期及整体价值；每宿主完整职责/质量/场景只记一次总账，不对三类声明重复展开全集。继续绑定真实作用域、入口、关键环境轴、判据和独立来源。先提交定义及实现 A，再观察 E，最后在候选 B 计算准入并接受绑定 B 的真实独立评审。调整必需清单或适用范围须按验收变更复核；按受影响依赖复用证据，保留静态检查和有据成本预算。","exit":"同一公开入口区分必需功能声明闭合与整版资格；漏范围、删用例、跨宿主拼半套或换入口/环境不能掩盖缺口。继续拒绝旧定义、来源不足、过期/漂移、跨事件或矛盾后态、未闭合残留及缺失独立评审。合成回归仅验证准入器；真实范围、判据充分性和来源接入仍未完成，授权、精确推送、托管及公共后态独立成立。","qualityAxes":["functional-coverage","evidence-integrity","recovery-and-lifecycle","maintainability-and-resource-cost"]},
-      {"id":"existing-host-functional-paths","title":"整体执行链、原生覆盖与遗留形态审查","state":"active","duties":["goal-authority-correction","research-learning-and-reuse","environment-and-self-exposure","relations-routing-and-form","execution-configuration-and-code","context-and-task-continuity","native-replacement-and-retirement","recovery-and-rollback"],"procedure":"用无需内部操作术语的真实需求验证普通入口交付与用户负担，并与适用原生基线比较；主动发现未列出的设计盲区和跨功能断点。按需论证目标、手段、可行条件和授权，证据足够即进入下一安全实现或核验。沿触发、发现与比较、执行及状态、故障接管、验收和清理检查整体连接；原生是起点而非停止规则，缺口或可信净收益机会才扩展检索，复用足够的宿主发现与执行链。自举同理。检查资产必要性、调用者、过期导航与维护负担，按证据保留、合并、替换或退役；同步受影响声明、工序和验收，历史证据不改写，功能不降格。","exit":"必要端到端链路和适用故障后态兑现；局部功能 PASS、指令加载或评估器代劳不能代替整体完成。若改变形态，应有配套入口、依赖、执行者与精确包验证。","qualityAxes":["compliance-and-safety","functional-coverage","normal-entry-integration","recovery-and-lifecycle","user-burden-and-interference"]},
-      {"id":"cross-function-and-failure-validation","title":"Accord 对 Agent 的净影响、干扰与故障验收","state":"active","duties":["environment-and-self-exposure","correction-and-evolution","recovery-and-rollback","context-and-task-continuity","resources-and-cleanup","package-lifecycle","verification-and-value"],"procedure":"以 Accord 对 Agent 的实际影响为主问题，按声明选择同条件原生对照、最小可交付组合与受控混合环境。先核实各臂实际插件、Skill、Hook 及其他注入，避免旧版污染对照；先比较交付、授权、必要检查与正常收束，再核算额外 Token、耗时、无效探索、人工补救和残留，Token 增量本身不等于净副作用。宿主查询写缓存和模型条件变化只是局部诊断，不能代替项目影响的因果判断。同一被测执行/状态变化联合核验适用纠正、恢复及资源后态，实际跨载体或来源转移才核验目的端与来源释放，不强制交接。精确包安装前和卸载后由仍可用的生命周期执行者承担；不依赖评估器救援或被移除的 Skill。","exit":"普通入口产生可独立观察的效果；正向外援、负向干扰及评估器救援均被识别；所需功能与后置状态全部有证据，不能取平均掩盖短板。","qualityAxes":["compliance-and-safety","recovery-and-lifecycle","change-adaptation","evidence-integrity","user-burden-and-interference"]},
-      {"id":"version-and-release-qualification","title":"3.2 定版、发布与收尾","state":"pending","duties":["goal-authority-correction","package-lifecycle","verification-and-value","resources-and-cleanup","recovery-and-rollback"],"procedure":"依据已建立的当前证据准入通路计算候选资格，不将静态 PASS 当作功能验收。复核资产必要性与受影响功能，实现与验收稳定后，按实际变更及其因果统一更新 README.md、README.zh-CN.md 和 CHANGELOG.md，并检查源头、实现、验收、包、版本与发布说明的全局一致性；提交并推送完整候选，核对精确包、独立评审与托管检查，再依已有条件授权发布新的 3.2。发布后按用户新增授权，盘点其现有 Codex/Claude 中 Accord 的安装来源及共享关系，经受支持的宿主或实际管理器将已安装 Accord 升至该精确版本；先确认备份和可用回退路径，保护配置、模型路线、其他扩展及正在运行的任务。不顺带升级宿主应用、安装缺失组件或绕过账户限制。","exit":"精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。另核验本机选定 Accord 的安装版本、实际激活和普通入口效果，不把缓存更新当生效；更新失败须恢复最后安全版本并披露未完成项，未经验证不关闭本机升级。","qualityAxes":["compliance-and-safety","evidence-integrity","recovery-and-lifecycle","maintainability-and-resource-cost","change-adaptation","user-burden-and-interference"]}
+      {
+        "id": "source-foundation",
+        "title": "本轮源头与开发路线校准",
+        "state": "implemented-local-unreleased",
+        "duties": [
+          "goal-authority-correction",
+          "premise-and-consistency",
+          "verification-and-value"
+        ],
+        "procedure": "按原始需求核对用户结果、必要底线、实际缺口和当前投入；区分用户要求与自选试验手段。用户纠正、重复失败而无新增信息、阶段切换或投入不能关闭关键缺口时，先复核开发路线并调整受影响工序，停止无效支线，继续无真实依赖的工作。沿用源数据与 update plan 的映射，不新增常驻监控或每步审查仪式。",
+        "exit": "本轮方向偏移、原因、保留与停止的工作及下一选择依据明确；源、计划和交接一致并完成受影响检查。进度以必要缺口闭合衡量，不能由提交数、测试数、局部 PASS 或关闭发布门禁代替。此出口仅关闭本轮路线校准。",
+        "qualityAxes": [
+          "compliance-and-safety",
+          "functional-coverage",
+          "evidence-integrity"
+        ]
+      },
+      {
+        "id": "existing-host-functional-paths",
+        "title": "普通入口交付、能力适配与实际纠偏",
+        "state": "active",
+        "duties": [
+          "goal-authority-correction",
+          "research-learning-and-reuse",
+          "relations-routing-and-form",
+          "execution-configuration-and-code",
+          "premise-and-consistency",
+          "correction-and-evolution",
+          "context-and-task-continuity",
+          "native-replacement-and-retirement",
+          "verification-and-value",
+          "environment-and-self-exposure",
+          "recovery-and-rollback",
+          "resources-and-cleanup"
+        ],
+        "procedure": "对应 codex-function 与 claude-code-function，补齐现有用例未表达的必要职责和场景。先从真实用户结果选择最短充分的端到端验证，核对普通入口、有效权限、实际介入、交付、纠正与收束。按已证明的功能缺口修复或删并机制，工程优化随受影响结果推进。此阶段同步准备可复用的价值对照；不以 Claude 生命周期通过为前置，也不把多列覆盖标签当充分判据。",
+        "exit": "两宿主各自必要结果与适用故障后态均有独立可观察证据，按受影响依赖复用历史事实。加载、工具可调用、原生完成或评估器救援分别记账，不冒充 Accord 效果；未满足的结果保持未完成。",
+        "qualityAxes": [
+          "compliance-and-safety",
+          "functional-coverage",
+          "normal-entry-integration",
+          "change-adaptation",
+          "recovery-and-lifecycle",
+          "evidence-integrity",
+          "maintainability-and-resource-cost",
+          "user-burden-and-interference"
+        ]
+      },
+      {
+        "id": "desktop-continuity",
+        "title": "Desktop 连续性与归档授权边界",
+        "state": "pending",
+        "duties": [
+          "goal-authority-correction",
+          "premise-and-consistency",
+          "context-and-task-continuity",
+          "environment-and-self-exposure",
+          "recovery-and-rollback",
+          "resources-and-cleanup"
+        ],
+        "procedure": "对应尚未定义的 codex-desktop-continuity，先核对当前支持的任务局部候选暴露、会话信号、独立动作和后态来源及授权，再绑定最短充分用例。区分同载体续做、自动压缩与确有必要的跨载体接管；预算当前可用容量和完成接管的余量，保留单写者及失败恢复。未知能力保持未知，不用 CLI 结果替代 Desktop，不为了测试强制交接或归档。",
+        "exit": "适用的动态上下文变化与继续/接管结果同次闭合；发生转移时目的端已核对且来源健康状态受保护。无归档授权便无归档动作，不能用归档作为清理步骤。若执行条件尚缺，记录具体缺口并继续其他独立工作，不伪造范围已绑定。",
+        "qualityAxes": [
+          "compliance-and-safety",
+          "functional-coverage",
+          "normal-entry-integration",
+          "recovery-and-lifecycle",
+          "change-adaptation",
+          "evidence-integrity",
+          "user-burden-and-interference"
+        ]
+      },
+      {
+        "id": "package-lifecycle",
+        "title": "两宿主安装、更新与独立恢复",
+        "state": "pending",
+        "duties": [
+          "environment-and-self-exposure",
+          "execution-configuration-and-code",
+          "correction-and-evolution",
+          "recovery-and-rollback",
+          "resources-and-cleanup",
+          "package-lifecycle",
+          "verification-and-value"
+        ],
+        "procedure": "对应 codex-lifecycle 与 claude-code-lifecycle，保留精确包、授权、坏源保护、实际更新、幸存接管者、恢复和清理底线。暂停已反复失败的 Claude 试验线；仅有新证据能区分原因并改变下一决策时才重开。三 profile、激活样本、helper 调用和轮次编排都是可调整手段，不是用户结果。当前保留候选身份、检查对象和刷新后证据失效之间的未闭合连接，不预设新增 MCP、Hook 或框架。",
+        "exit": "用户所需生命周期与失败后态成立，且变更/卸载后仍有可用执行者完成必要恢复与核验。安装登记、实际激活、市场缓存和受影响配置分别取证；未更新而旧包不变不能证明保护。该项未通过只约束依赖它的工作与整版资格。",
+        "qualityAxes": [
+          "functional-coverage",
+          "evidence-integrity",
+          "recovery-and-lifecycle",
+          "maintainability-and-resource-cost",
+          "compliance-and-safety",
+          "normal-entry-integration",
+          "change-adaptation",
+          "user-burden-and-interference"
+        ]
+      },
+      {
+        "id": "cross-function-and-failure-validation",
+        "title": "Accord 对 Agent 的净影响、干扰与故障验收",
+        "state": "pending",
+        "duties": [
+          "environment-and-self-exposure",
+          "correction-and-evolution",
+          "recovery-and-rollback",
+          "context-and-task-continuity",
+          "resources-and-cleanup",
+          "package-lifecycle",
+          "verification-and-value"
+        ],
+        "procedure": "对应尚未定义的 product-value，先复核普通入口及最小可交付组合，预绑定能辨别实际增益与干扰的同条件比较，尽早随相关功能用例采集，不能等所有支线完结才考虑价值。先核对各臂真实注入、交付、授权、必要检查和正常收束，再比较 Token、耗时、无效探索、人工补救与残留。Token 增量本身不等于副作用；无增益或负面结果必须允许推翻机制选择，不能靠换提示词、模型或预算反复寻求通过。",
+        "exit": "所声明收益有匹配条件和独立结果支持，必要质量底线不被平均分掩盖；原生充分、外援、负面干扰与救援成本均被识别。联合核对适用的纠正、恢复及资源后态，仅对实际转移检查目的端和来源释放。证据不足则保持净价值未验证。",
+        "qualityAxes": [
+          "compliance-and-safety",
+          "recovery-and-lifecycle",
+          "change-adaptation",
+          "evidence-integrity",
+          "user-burden-and-interference"
+        ]
+      },
+      {
+        "id": "version-and-release-qualification",
+        "title": "3.2 定版、发布与收尾",
+        "state": "pending",
+        "duties": [
+          "goal-authority-correction",
+          "package-lifecycle",
+          "verification-and-value",
+          "resources-and-cleanup",
+          "recovery-and-rollback",
+          "premise-and-consistency"
+        ],
+        "procedure": "将必要定义、实现 A 和真实观察 E 与最终候选 B 逐项核对，使用已有准入器区分功能、生命周期和价值，不再把维护验证器本身列为用户结果。修复已证实的准入缺陷，保留全局主体/来源/独立评审错误阻断及受影响声明边界。实现与验收稳定后最后统一更新双语 README 和 CHANGELOG，检查全局一致性，完成精确候选提交、推送、独立评审与托管检查，依条件授权发布。发布后通过受支持的宿主或实际管理器更新既有 Accord，事前备份、回退和事后实际激活核验均须成立。",
+        "exit": "精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。另核验本机选定 Accord 的安装版本、实际激活和普通入口效果，不把缓存更新当生效；更新失败须恢复最后安全版本并披露未完成项，未经验证不关闭本机升级。",
+        "qualityAxes": [
+          "compliance-and-safety",
+          "evidence-integrity",
+          "recovery-and-lifecycle",
+          "maintainability-and-resource-cost",
+          "change-adaptation",
+          "user-burden-and-interference",
+          "functional-coverage"
+        ]
+      }
     ],
     "priorityFindings": [
+      {
+        "id": "development-route-feedback",
+        "status": "route-corrected-whole-result-open",
+        "basis": "2026-09-07 用户再次明确开发过程本身必须纠偏。复核确认近期默认下一步长期围绕同一 Claude lifecycle，而六个必需范围只有四个定义；Desktop 连续性和净价值仍未绑定，已有普通功能用例也未表达全部必要结果。门禁未放行不能反证方向正确，代码也未强制先 Claude，排程偏移由开发执行负责。停止追加该试验、版本和辅助机制；将计划改按必要结果排程，工程优化与证据工具回归其支撑职责。无真实依赖的工作不等待该支线；重开试验须有可区分原因的新证据、明确要改变的决策及停止条件。每次材料性纠正均同步此源、派生计划和原生进度视图，不追加产品常驻提示词。"
+      },
+      {
+        "id": "claim-error-isolation",
+        "status": "source-reviewed-public-regression-open",
+        "basis": "独立复核定位 admission.py 的全局 not errors 及 control.py 公共返回的同类合并条件：单个生命周期证据错误会连带使未受影响的功能/价值声明失效。局部计算反例成立，公开验证入口回归尚未运行。需要最小隔离个案与全局主体/来源/评审错误，同时保留所有错误及整版拒绝；此缺陷不解释此前默认追逐 Claude 的排程选择，也不优先于必要结果验证设计。"
+      },
       {"id":"handoff-archive-authority","status":"guidance-corrected-behavior-unverified","basis":"主线程18在只读接收后、实际移交消息送达前调用自身归档，执行随即中断；用户手动恢复。当前任务曾误以恢复后的未归档状态和不完整工具摘要否认历史动作。已回查原始调用；已安装3.1 Skill及当前指令的释放来源含义未细分，是可能促因，不能单独归因。修复明确任务归档必须由用户授权，接收核对不等于接管，先确认移交和单写者再释放来源资源。无仓库归档执行器可作确定性回归，不新增虚假拦截器或归档实验；当前仅源/指令修复，宿主行为仍须独立验证。 独立范围审查将此次受影响Desktop结果显式纳入必需功能范围codex-desktop-continuity；原五项义务保留。该范围暂未绑定，有效会话状态、候选任务局部加载、同次移交的独立动作/接管/后态来源及失败判据仍需核对。CLI或App Server结果不得替代Desktop；不新增归档实验或提前变更个人安装的权限。"},
       {"id":"sequential-correction-observer","status":"implemented-live-diagnostic-verified","basis":"两个跨轮证据反例及目录内Read误判均先失败再最小修复；单轮checkpoint、末轮记录和其他越界拒绝保留。96项相关回归、读取修复后的18项观察器回归及独立复核通过。完整实现与判据A=bc1195f先提交并推送，随后真实双轮E两组均由140改为60，逐轮回读、输入保护、正常结束和任务清理成立。详细观测见claude-ready-orders-correction-dev6；这是观察通路诊断，不补齐整项职责、自主恢复、归档修复行为或增量价值。真实scopes/cases及独立来源准入仍未完成。"},
       {"id":"readme-source-and-claim-alignment","status":"implemented-local-not-functional-acceptance","basis":"文案审查发现中英文 README 把冻结 schema-v3 当作当前开发权威、称条件策略为固定常量，并使用未经证明的 30 秒开始标题。已重写定位、实际包内容、版本与证据边界；保留安装和历史生命周期参考、社区与法律信息。由内容和源码事实判断，不因旧模型参与写作就认定缺陷；文案清晰不证明运行时收益。"},
@@ -855,6 +1004,53 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "claude-dev11-selected-source-and-development-route",
+      "date": "2026-09-07",
+      "sourceRevision": "165d2f5196dd0e9b6fa62b8c97c279d46c4e42e1",
+      "scope": "selected-lifecycle-failure-and-development-route-review-not-qualification",
+      "definitionSha256": "6998bfd5fb417f27f118cbb066c6da33bc9c80a4b859d753dc523699045aa290",
+      "captureSha256": "752329a24227efcb838aa4ea10651a6b54f7ed5608b21b9f732a57664a363a38",
+      "activation": "Candidate installation and prior 3.1 activation met their ten narrow prebound predicates; neither is whole-function or value qualification.",
+      "management": {
+        "seconds": 151.995,
+        "nativeExitCode": 1,
+        "terminal": "error_max_turns",
+        "toolCalls": 32,
+        "deniedCalls": [
+          21,
+          22,
+          24,
+          25,
+          26,
+          29
+        ],
+        "inspection": "Call 31 executed the exact caller-bound Node/helper. Five native queries/validation succeeded for the prior selected 3.1 source, matching installed digest f7547e1f1d3602ef46b080e8c32d211469c053db3a2aa6c5b2e6301372e88fea. No expected candidate digest was supplied.",
+        "followingAction": "Call 32 refreshed the marketplace to malformed dev.11, manifest 4f88f059cb8c3e3564f674c585196b6f3eee444713e694e4aab87037a5e01739. No later inspection, invalid-source conclusion or installed update occurred before the turn limit.",
+        "poststate": "Prior seven-file payload, installed registration and settings matched. Marketplace registration/source/Git, task profile metadata and two backups changed; the authorized inspection request was created. Twelve selected shared files and ten runtime files matched. No selected credentials persisted.",
+        "unexecuted": [
+          "corrected Agent update",
+          "independent Agent recovery"
+        ]
+      },
+      "interpretation": "Actual helper use is established. Its old-source snapshot result is not a wrong response or evidence of stale approval being reused for installation. The target-to-inspection-to-refresh connection remains incomplete. Repeated local experiment progress displaced whole-result work; the development route was reordered without weakening acceptance or adding another mechanism.",
+      "cleanup": {
+        "nativeOperations": 23,
+        "forced": false,
+        "ownedProcessesAfterCleanup": 0,
+        "finalNativeListsEmpty": true,
+        "ownedRootRemoved": true,
+        "sharedCandidateInstalled": false
+      },
+      "review": "Two existing independent reviewers checked the raw failure/post-state and the separate development-route/coverage problem. A release gate is not ongoing development correction.",
+      "retention": {
+        "directory": "claude-dev11-cycle-20260907",
+        "files": 1561,
+        "manifestSha256": "460769e960aa7b423e4ffe97d7e5f71a24c917497c393a987906348b7881514d",
+        "closeoutSha256": "6e3ae3e85674f1825dd100d990b7b8dd3166921aa0b5182fbef5ac0585733d68",
+        "removalSha256": "dd4856dcb0553c4a08d0d85eb5c820b311aced44c8bd9d4f4a8806266c3623ba"
+      }
+    },
     {
       "id": "claude-dev10-exact-inspector-callability",
       "date": "2026-09-07",
@@ -3968,7 +4164,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "The conditional current-development evidence evaluator is implemented locally; bind concrete claim scopes, real case oracles and trusted independent read-only source verification before collecting qualifying evidence. Commit evaluated implementation and acceptance A, collect observations E, and review final candidate B under unchanged affected dependencies. Keep diagnostic observations and synthetic fixtures separate from acceptance. Continue ordinary-entry whole-chain, failure, lifecycle and value work; package sufficiency and release gates remain open. Additional vendors remain deferred. Finalize README and changelog from stable implementation and acceptance results, then verify global consistency before publication.",
+    "work": "先完成六个必需范围的最短充分验证路径复核，优先补齐未定义的 Desktop 连续性和净价值路径，以及现有普通功能用例未表达的必要结果。核对范围、权限、判据、独立来源、真实依赖和预计能关闭的缺口；无法现场取得的条件明确保留，继续不依赖它的工作。Claude dev.11 已失败、保全并回收，不再作为全项目默认下一步；仅在新证据能改变决策时重开该线，不直接增加 dev.12、模型试验或机制。维护验证器的已确认错误单独保留回归后最小修复，不把工具维护代替开发结果。按修订计划推进功能及早期净影响比较，必要定义先于观察，受影响资格后于独立证据。README 和更新日志仍最后定稿；条件发布、共享安装与归档授权边界保持。",
     "requires": "Current user direction defers installation into the shared development host until accepted publication. The Codex candidate has been uninstalled, its temporary marketplace pin restored, and backups retained. Before publication use bounded task-local candidate exposure and existing authorized host access for necessary evaluation; do not reinstall a shared candidate. New accounts, unrelated trust/data, material cost or other personal changes remain outside this authority. Fresh evidence and exact-candidate checks precede conditional publication."
   },
   "claimCeiling": {

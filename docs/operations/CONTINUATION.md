@@ -3,6 +3,32 @@
 Current navigation, not product authority. Recover live Git, bound user intent
 and relevant host facts before acting; an older observation is not current state.
 
+## Development-route correction
+
+On 2026-09-07 the user again required correction of the development process,
+not only a product capability. Review confirmed that repeated Claude lifecycle
+work displaced overall closeout: six required scopes have only four definitions;
+Desktop continuity, net value and parts of ordinary-function coverage still lack
+an executable validation path. The verifier imposes no Claude-first work order.
+Closed release gates did not prevent this development priority drift.
+
+The revised source and derived plan now organize work by necessary outcomes.
+Engineering optimization and evidence tooling support those outcomes. First
+reconcile the shortest sufficient paths, real dependencies, permissions and
+independent sources for the remaining results; proceed with independent work
+when one path lacks a condition. At a material user correction, repeated failure
+without new information, phase boundary or effort that closes no necessary gap,
+reassess the affected route and update its plan. Do not turn this into a per-step
+ceremony or more always-on product text. Required acceptance, all six existing
+case definitions and delivered package bytes are unchanged by this route update.
+
+The dev.11 episode is finished, failed and retained; its 1,561-file copy was
+verified before removing the owned temporary root. Do not start dev.12 or another
+model/mechanism trial by default. Resume that branch only for new evidence that
+can distinguish a cause and change the next decision. The identified claim-error
+coupling in the verifier is a separate bounded defect, not the reason the
+developer selected this work order. See the source's current priority findings.
+
 ## Resumed after client update
 
 The user resumed on 2026-09-06 after updating the client. The installed and
@@ -251,11 +277,15 @@ validation. All 59 files were verified in retention before owned-root removal.
 See `claude-dev10-exact-inspector-callability`. The dev.11 change corrects the
 bare-node Skill example to the bound executable. Existing denied-retry guidance
 already states the intended duty; do not pile on equivalent prohibitions.
-The next bounded composition also exposes the selected package through native
-add-dir and the actual executable-path permission facts. It keeps the original
-oracle, acceptance and budget. Repeated earlier exploration failures remain
-unresolved; do not attribute the entire failure or any future improvement to
-one wording change. The inspector runtime itself is unchanged.
+The dev.11 composition used native add-dir and the actual executable-path
+permission facts under the unchanged oracle, acceptance and budget. The Agent
+called the exact inspector on the prior source, then refreshed the marketplace
+to malformed dev.11 and reached its turn limit without a new inspection or
+conclusion. Corrected update and independent recovery were not exercised.
+See `claude-dev11-selected-source-and-development-route` for the preserved
+failure and distinct installed, marketplace and task-profile post-states.
+The inspector runtime itself is unchanged; actual invocation is not lifecycle
+protection or net value. Follow the revised development route above.
 
 ## Evidence and authority limits
 
