@@ -203,7 +203,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     required = {
         "duties": {v["id"] for v in contract["acceptance"]["duties"]},
         "qualityAxes": {v["id"] for v in contract["systemOptimization"]["qualityAxes"]},
-        "scenarios": {v["id"] for v in contract["environmentControl"]["adaptationScenarios"]},
+        # The inventory names possible conditions; required scopes activate them.
+        # Keep this axis so each scope still requires its selected case evidence.
+        "scenarios": set(),
     }
     admitted = set()
     if observer is not None:

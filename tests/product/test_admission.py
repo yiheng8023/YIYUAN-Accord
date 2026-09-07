@@ -395,7 +395,33 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         self.assertTrue(report["functionalCompletion"], report["errors"])
         self.assertFalse(report["repositoryCandidateReady"])
         for host in ("codex", "claude-code"):
-            self.assertTrue(all(report["evidenceAdmission"]["productCoverage"][host].values()))
+            for field in ("duties", "qualityAxes"):
+                self.assertTrue(report["evidenceAdmission"]["productCoverage"][host][field])
+            self.assertEqual(report["evidenceAdmission"]["productCoverage"][host]["scenarios"], [])
+
+    def test_unselected_scenario_inventory_does_not_require_a_host_experiment(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        scenario = contract["environmentControl"]["adaptationScenarios"][0]["id"]
+        for row in policy["scopes"] + policy["cases"]:
+            row["scenarios"].remove(scenario)
+        with self.history():
+            self.commit_contract(contract)
+            report = verify_product(self.root, evidence=self.observer)
+        self.assertTrue(report["repositoryCandidateReady"], report["errors"])
+
+    def test_selected_scenario_without_case_evidence_still_blocks_completion(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        scenario = policy["scopes"][0]["scenarios"][0]
+        policy["cases"][0]["scenarios"].remove(scenario)
+        with self.history():
+            self.commit_contract(contract)
+            report = verify_product(self.root, evidence=self.observer)
+        self.assertFalse(report["repositoryCandidateReady"])
+        self.assertFalse(report["functionalCompletion"])
+        self.assertEqual(report["evidenceAdmission"]["openCoverage"]["codex"]
+                         ["claims"]["function"]["scenarios"], [scenario])
 
     def test_invalid_prior_declaration_cannot_enter_the_revision_cache(self):
         with self.history():
