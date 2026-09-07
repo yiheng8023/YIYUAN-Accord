@@ -79,7 +79,7 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current delivered candidate and unproven connections
 
-Both worktree packages are unpublished `3.2.0-dev.13`. Each exposes one host
+Both worktree packages are unpublished `3.2.0-dev.14`. Each exposes one host
 Skill, the existing optional resume/compact hint, and a Node task checkpoint
 connected to supported UserPromptSubmit, Stop and SessionEnd events. Codex also
 connects Interrupt. The Agent binds necessary file inputs, output predicates and
@@ -95,6 +95,12 @@ express the goal. It leaves semantic judgment, execution and unsupported paths
 with the host Agent. Unfinished checkpoints survive session end; verified or
 explicitly cancelled tasks can retire only their checkpoint files. Proven dead
 locks have an explicit recovery operation. Input text is hashed, not retained.
+SessionEnd removes unbound receipts. A native input blocked by another
+Hook can exit without either callback; a surviving caller that verifies this
+exit can retire only the matching unbound receipt using its current epoch,
+revision zero and a reason. This operation cannot retire a bound checkpoint or
+establish task completion. Without a callback or surviving caller, automatic
+retirement is not established; the helper does not supply its own scheduler.
 The default temporary state directory may remain empty; it is not an installed
 package cache or an archive executor. CLI checks establish local behavior; exact
 native loading and ordinary task use still require separate observation.
@@ -109,8 +115,8 @@ substitute for Accord's responsibility.
 
 This is a candidate shape, not architecture law. Skill/Hook count, dependencies,
 layout and admission may change together when evidence supports the change.
-Ordinary-entry effect, failure behavior, lifecycle and incremental value remain
-unverified. Native success can satisfy a duty but does not prove Accord benefit;
+Full ordinary-entry coverage, failure behavior, lifecycle and incremental value
+remain unverified. Native success can satisfy a duty but does not prove Accord benefit;
 forcing a Skill invocation or evaluator rescue cannot establish ordinary-entry
 autonomy.
 

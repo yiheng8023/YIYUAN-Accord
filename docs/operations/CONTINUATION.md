@@ -13,14 +13,40 @@ quiescent; neither source nor destination is to be archived. The handoff revisio
 is `40df60cfc9625cf7108979cfb94690a1a90431db`; the bound checkout is unchanged.
 The private `task19-handoff.json` confirms the transfer, separately from receipt.
 
-The current unpublished packages are dev.13. Both now carry an executable local
+The current unpublished packages are dev.14. Both now carry an executable local
 task checkpoint and supported native input/Stop/session-end callers; Codex also
 connects Interrupt. The helper checks real file predicates and changed inputs,
 protects new input during retirement, suppresses unchanged continuation retries,
 retains unfinished work and supports explicit pause, retirement and dead-lock
-recovery. The Agent still owns semantic adequacy, authority and execution. Native
-loading and ordinary behavior remain unverified. No shared candidate installation
-is involved; the failed Claude dev.11 lifecycle branch remains paused.
+recovery. Dev.14 also permits a surviving
+caller to retire only the current unbound receipt after verified native exit,
+with revision zero and a reason. Bound unfinished work and newer input are kept.
+The Agent still owns semantic adequacy, authority and execution. No shared
+candidate installation is involved; the failed Claude dev.11 lifecycle branch
+remains paused.
+
+On dev.13 at `b908dedf3128f220d6ca804a920df5334530fe73`, two native Codex CLI
+episodes completed ordinary file delivery and correction of a stale checkpoint
+binding, with independent file checks and actual checkpoint retirement. The
+producer changed B from ready to held after revision 1; revision 2 correctly
+required 60 instead of 100. Files were generated after that change, so this did
+not exercise repair of already generated wrong artifacts or Stop-forced
+continuation. Task-local Skill/Hook composition is not installed lifecycle proof.
+Owned trust entries were restored with scoped native APIs and the original
+configuration hash. The second cleanup required containment of five surviving
+owned child processes; final children were zero, but its natural-exit cause is
+unresolved.
+
+Claude 2.1.263 on the existing DeepSeek route produced correct files and preserved
+inputs, but left verify.py and incorrectly called all Bash locked after two
+Python commands were denied. Earlier Bash had succeeded. No checkpoint or Skill
+invocation was observed. A separate zero-model observer Hook then proved native
+UserPromptSubmit and candidate receipt creation. It blocked the input; the host
+exited without observed Stop/SessionEnd, leaving an unbound receipt. The new
+dev.14 helper retired that real receipt through a surviving maintainer caller,
+preserving other files. This is executed local recovery on native post-state,
+not automatic ordinary-entry cleanup. All four episodes are hash-retained and
+their task roots removed; shared Claude state was unchanged.
 
 Retrospective inspection found the old SessionStart helper still emitted an
 ambiguous source-release instruction after the Skill archive repair. Canonical
@@ -30,14 +56,29 @@ physical archive interceptor. Continuous correction covers historical decisions,
 processes, completed items and current assets; it is not limited to future steps
 or phase boundaries. The first completed plan item is only startup reconciliation.
 
-The new executable behavior suite passed 9 tests in 8.323 seconds. The affected
-development suite passed 66 tests in 93.518 seconds. A later current-tree product
-check is valid with no errors, while functional completion and release readiness
-remain false and value unverified. The current worktree measures 1,186,798 code/test
+The initial dev.14 draft passed 10 executable tests in 10.089 seconds and 66
+development tests in 103.042 seconds. Retrospective review then reproduced loss
+of a new unbound input if an older Stop deleted its receipt. That unnecessary
+Stop cleanup was removed. Final checks passed 10 behavior tests in 11.459
+seconds, the affected descriptor test in 14.210 seconds, current product
+conformance and diff whitespace. The private dev14-slice-check.json binds this
+slice; these results do not promote whole-function or release readiness. Functional
+completion and release readiness remain false and value unverified. The current
+worktree measures 1,190,584 code/test
 bytes, 131 files and 30,860 primary instruction bytes against revised development
 bounds of 1,260,000 / 132 / 32,000, retaining five-percent code headroom. These are
-local implementation facts, not native functional acceptance. The existing missing
-fixture-log diagnostic remains; the earlier Windows root cause is still unknown.
+local implementation facts, not native functional acceptance. All nine hosted
+jobs passed for b908ded in run 34077164648. Earlier Windows failures remain
+unexplained: 181ad42 exceeded the observer test's outer 20-second timeout during
+event-decode, whereas the older failure lacked calls.jsonl. A later PASS does
+not establish either root cause or qualify the changed dev.14 package.
+
+The latest relation is symbiosis, cooperation, complementarity and mutual benefit,
+with distinct responsibility and decision boundaries; it is not consensus or
+operational independence from host permissions. The user also explicitly requires
+independent criticism and correction of all parties' factual and implementation
+judgments, including historical and current statements. User intent and authority
+remain binding; assertions and proposed methods are not automatic empirical truth.
 
 The sections below retain the source checkpoint and its evidence. Package and
 budget values there are the dev.11 handoff snapshot; use the live development
@@ -111,7 +152,7 @@ panel or dedicated host execution mode is required.
 
 | Stage | State | Remaining result |
 |---|---|---|
-| 本轮启动事实与方向核对 | Locally corrected | This closes this correction only; revise again for material new evidence. |
+| 本轮启动事实与方向核对 | Locally corrected | Startup reconciliation only; past and current work remain subject to ongoing correction. |
 | 普通入口必要功能链实现与实际纠偏 | Active | Connect and exercise one necessary usable delivery/correction chain; then complete applicable results on each host. |
 | Desktop 连续性与归档授权边界 | Open | Actual dynamic-context continuation/takeover, destination receipts, source protection and explicit archival boundary. |
 | 两宿主安装、更新与独立恢复 | Open | Installed activation, actual update, independent surviving recovery and task-owned retirement. |
@@ -163,8 +204,9 @@ No delivered AGENTS.md/CLAUDE.md dependency or installation path was found. The
 user explicitly stopped replacing the development host's AGENTS.md to supply
 Accord's correction. The private draft was never applied; ASSETS originals were
 read only. Keep user guidance external. The Skill tells the host Agent to
-re-evaluate, but the optional Hook only emits hints on resume/compact and does not
-detect goal drift. The reference core evaluates supplied facts; its callers are
+re-evaluate; the new task checkpoint checks bound files and stale inputs through
+native callers, while semantic goal interpretation remains with the Agent.
+The reference core evaluates supplied facts; its callers are
 historical recalculation/tests, not an ordinary live controller. The Claude
 inspector checks native source/state but does not update, roll back or intercept.
 The complete actual detection/decision/continuation/recovery connection still

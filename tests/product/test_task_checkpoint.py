@@ -132,10 +132,34 @@ class TaskCheckpointTests(unittest.TestCase):
         (self.work / "nested/summary.json").write_text('{"flag":false}', encoding="utf-8")
         self.assertEqual(self.status()["inspection"]["status"], "incomplete")
 
-    def test_unbound_session_has_no_continuation_and_no_retained_input_after_end(self):
-        self.assertEqual(self.event("Stop", stop_hook_active=False), {})
+    def test_unbound_session_keeps_new_input_until_explicit_retirement_or_end(self):
+        self.event("UserPromptSubmit", prompt="A new request arrived.", turn_id="newer")
+        current = self.status()
+        self.assertEqual(self.event("Stop", stop_hook_active=False, turn_id="older"), {})
+        self.assertEqual(self.status()["epoch"], current["epoch"])
         self.assertEqual(self.event("SessionEnd"), {})
         self.assertEqual(list(self.state.iterdir()), [])
+
+    def test_surviving_caller_can_retire_only_the_current_unbound_input_receipt(self):
+        # A native prompt blocked by another Hook can exit without Stop/SessionEnd.
+        # Cleanup has its own receipt and must not manufacture outcome acceptance.
+        current = self.status()
+        request = {"op": "retire", "epoch": current["epoch"], "expectedRevision": 0}
+        self.assertIn("reason", self.invoke(request, success=False))
+        request["reason"] = "Native process exited before the task was bound."
+        self.event("UserPromptSubmit", prompt="A later request must survive old cleanup.")
+        self.assertIn("current-receipt", self.invoke(request, success=False))
+        self.assertTrue(list(self.state.glob("*.input.json")))
+        current = self.status()
+        retired = self.invoke({**request, "epoch": current["epoch"]})
+        self.assertEqual(retired, {"retired": True, "scope": "unbound-input-receipt-only", "inspection": None})
+        self.assertEqual(list(self.state.iterdir()), [])
+        self.event("UserPromptSubmit", prompt="Deliver both files.")
+        self.bind()
+        current = self.status()
+        self.assertIn("conflict", self.invoke({**request, "epoch": current["epoch"]}, success=False))
+        self.assertEqual(self.status()["inspection"]["status"], "incomplete")
+        self.assertEqual({p.name for p in self.work.iterdir()}, {"source.json", "keep.txt"})
 
     def test_recovery_keeps_live_locks_and_removes_only_dead_owned_lock(self):
         input_path = next(self.state.glob('*.input.json'))

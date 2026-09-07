@@ -91,6 +91,7 @@ def delivery_adapter_contract(adapter_id, package_id):
             "scope": "session-and-workspace-bound-file-predicates",
             "effect": "inspect-local-results-and-request-supported-stop-continuation",
             "state": "task-receipts-and-bound-checkpoints-until-explicit-retirement",
+            "cleanup": "unbound-receipts-on-session-end; receipt-matched-surviving-caller-after-missing-end-hook; preserve-unfinished-checkpoints",
             "authority": "caller-reconciles-user-intent-and-predicate-adequacy",
         },
     }

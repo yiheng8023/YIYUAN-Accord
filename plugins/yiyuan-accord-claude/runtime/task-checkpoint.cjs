@@ -214,6 +214,16 @@ function operate(request) {
         return {revision: state.revision, inspection};
       });
     }
+    if (request.op === 'retire' && !prior) {
+      if (request.expectedRevision !== 0 || request.epoch !== currentInput.epoch || !text(request.reason)) {
+        fail('unbound-retirement-needs-current-receipt-and-reason');
+      }
+      return inputLocked(where, () => {
+        currentEpoch(where, currentInput.epoch);
+        fs.unlinkSync(where.input);
+        return {retired: true, scope: 'unbound-input-receipt-only', inspection: null};
+      });
+    }
     if (!prior || request.expectedRevision !== prior.revision || request.epoch !== currentInput.epoch) {
       fail('task-revision-or-input-conflict');
     }
@@ -314,7 +324,7 @@ const HELP = {
     nextAction: 'finish and verify both affected files', canContinue: true},
   revise: 'Call bind with the current epoch/revision and a revisionReason for changed output checks; old inputs are re-observed.',
   pause: 'op=pause with current epoch/revision and reason; preserve pending work without continuation.',
-  retire: 'op=retire after verified local predicates, or explicit user-cancelled disposition plus reason. Removes only checkpoint files.',
+  retire: 'op=retire after verified local predicates, or explicit user-cancelled disposition plus reason. With no bound checkpoint, current epoch, expectedRevision=0 and a reason retire only the input receipt. A surviving caller may do this after verified native exit if no end Hook ran. Removes only checkpoint files; does not prove task completion.',
   recovery: 'op=recover-lock with lock=state or input removes only a lock whose recorded process no longer exists; uncertain or live ownership is preserved.',
   limits: 'Existence checks prove only existence; JSON pointers and hashes check specified facts. Caller owns goal, source trust, authority, predicate adequacy and external acceptance. No transcript parsing or extra model call.',
 };
