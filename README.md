@@ -18,7 +18,7 @@ Accord's goal is simple: users focus on ideas and decisions; the Agent takes car
 
 Today, Accord supplies collaboration guidance through Codex and Claude plugins, plus repository tools for checking its contracts and evidence. It is not a separate autonomous worker. Reliable end-to-end behavior and added value must be demonstrated in the host where it is used.
 
-> **This branch develops 3.2.** Its packages are `3.2.0-dev.9`, remain unpublished, and do not automatically update your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
+> **This branch develops 3.2.** Its packages are `3.2.0-dev.16`, remain unpublished, and do not automatically update your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
 >
 > Start with [current limitations](#what-is-proven-and-what-is-not), the [development plan](docs/operations/PLAN-v3.2.md), or the [unreleased changelog](CHANGELOG.md). Do not install from moving `main` or this development branch.
 
@@ -36,10 +36,11 @@ This is a design objective, not a promise that installing a plugin makes every h
 
 ## What you actually get
 
-Both released 3.1 packages contain a `deliver-demand-driven-outcome` Skill, host metadata and a short-lived `SessionStart` Hook helper. The current 3.2 development packages retain that shape while revising the guidance.
+Both released 3.1 packages contain a `deliver-demand-driven-outcome` Skill, host metadata and a short-lived `SessionStart` Hook helper. The 3.2 development packages also include an optional task-local file checkpoint and supported native event callers. The Claude package adds advisory tool-result feedback and an optional update-inspection helper.
 
 - **Skill:** instructions the host Agent can use for an applicable task. Visibility and invocation are separate from a useful effect.
-- **Hook:** a stateless hint on supported `compact` or `resume` events. It stays silent on `startup` and `clear`; it does not inspect task meaning, recover a failed process or complete a handoff.
+- **Session hint:** a stateless hint on supported `compact` or `resume` events; this hint stays silent on `startup` and `clear`.
+- **Optional checkpoint:** checks task files against Agent-selected conditions, tracks input freshness and unfinished work, and requests bounded continuation through supported native events. The Agent owns task meaning, execution and recovery.
 - **Repository tools:** contract checks and a reference core for maintainers. The reference core is not installed or called by either plugin.
 
 The packages add no persistent service, MCP server, SDK dependency, conversation database or telemetry collector. They do not replace your instruction or configuration files. Installation still changes the host's plugin registration and cache through its lifecycle.

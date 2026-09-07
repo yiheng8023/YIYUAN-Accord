@@ -5,7 +5,7 @@
   "status": "in-development",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition. Later corrections require coverage beyond known v3.1 issues. The user does perceive some installed-v3.1 influence and recalls stronger pre-Accord automatic verified handoff and ongoing correction. Preserve this as reported experience, not measured causal runtime benefit or a zero-value finding. Size reduction must preserve necessary functionality and user experience; runtime retirement is not a goal. On 2026-09-05 the user additionally authorized upgrading their existing host-installed Accord packages after 3.2 is accepted and published. That initial upgrade direction was limited to the post-release package. On 2026-09-06 the user explicitly required user authorization for task archival and authorized the successor task to investigate and repair this handoff failure, then continue the existing 3.2 work. Handoff, completion, task creation and resource cleanup do not grant archive authority; no archive is authorized in this continuation. Later the user clarified that necessary configuration adjustments can be prepared and carried out with backups and rollback, rather than forcing an increasingly complex zero-change test route. Bind the actual settings, affected sessions, prior state, restoration and verification; the user then explicitly allowed installing the existing Codex candidate before publication, with development interference controlled and a verified backup/recovery path. This permits the bounded Accord transition already proposed, not host application upgrades or unrelated extension changes. The user also directed removal of dedicated host planning-mode prompts and their bindings from current v3.1-and-later surfaces, preserving earlier versions. Current intent and authority govern; plans, procedures and acceptance adapt to justified corrections and evidence, and the native progress UI maps the current plan without becoming task authority. The user subsequently withdrew the pre-release shared-host installation route to reduce development self-interference and unpredictable propagation. The existing Codex candidate is to remain uninstalled until an accepted release; bounded task-local exposure may support necessary evaluation. Prior installation/rollback observations remain historical facts, not standing authorization to reinstall. Hot-update behavior depends on the host and requires observed activation/recovery; replacing files cannot undo prior conversation influence. On 2026-09-07 the user further corrected development order: implement the necessary functional chain first, then balance quality, budgets, cost and Accord impact across dimensions before release. Repeatedly running an unchanged failing procedure is not progress; methods and thresholds are revisable with explicit reasons. This does not waive human authority or permit unbounded effects. The user requested an early verified continuation from the long task, with no omitted work and source/plan/progress reconciliation before transfer.",
+    "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition. Later corrections require coverage beyond known v3.1 issues. The user does perceive some installed-v3.1 influence and recalls stronger pre-Accord automatic verified handoff and ongoing correction. Preserve this as reported experience, not measured causal runtime benefit or a zero-value finding. Size reduction must preserve necessary functionality and user experience; runtime retirement is not a goal. On 2026-09-05 the user additionally authorized upgrading their existing host-installed Accord packages after 3.2 is accepted and published. That initial upgrade direction was limited to the post-release package. On 2026-09-06 the user explicitly required user authorization for task archival and authorized the successor task to investigate and repair this handoff failure, then continue the existing 3.2 work. Handoff, completion, task creation and resource cleanup do not grant archive authority; no archive is authorized in this continuation. Later the user clarified that necessary configuration adjustments can be prepared and carried out with backups and rollback, rather than forcing an increasingly complex zero-change test route. Bind the actual settings, affected sessions, prior state, restoration and verification; the user then explicitly allowed installing the existing Codex candidate before publication, with development interference controlled and a verified backup/recovery path. This permits the bounded Accord transition already proposed, not host application upgrades or unrelated extension changes. The user also directed removal of dedicated host planning-mode prompts and their bindings from current v3.1-and-later surfaces, preserving earlier versions. Current intent and authority govern; plans, procedures and acceptance adapt to justified corrections and evidence, and the native progress UI maps the current plan without becoming task authority. The user subsequently withdrew the pre-release shared-host installation route to reduce development self-interference and unpredictable propagation. The existing Codex candidate is to remain uninstalled until an accepted release; bounded task-local exposure may support necessary evaluation. Prior installation/rollback observations remain historical facts, not standing authorization to reinstall. Hot-update behavior depends on the host and requires observed activation/recovery; replacing files cannot undo prior conversation influence. On 2026-09-07 the user further corrected development order: implement the necessary functional chain first, then balance quality, budgets, cost and Accord impact across dimensions before release. Repeatedly running an unchanged failing procedure is not progress; methods and thresholds are revisable with explicit reasons. This does not waive human authority or permit unbounded effects. The user requested an early verified continuation from the long task, with no omitted work and source/plan/progress reconciliation before transfer. On 2026-09-07, after reviewing the exact single-use proposal, the user explicitly approved one temporary shared Codex dev.16 installation, one installed selected-use turn, native uninstall and restoration. That exception has now been exercised and closed; it does not authorize another prerelease shared installation, other plugin upgrades, a new Desktop task or archival. Preserve the original withdrawal and prior execution identities. Necessary read-only evaluation of retained evidence remains within the existing development scope.",
     "scope": ["source-semantics", "full-function-acceptance-mapping", "local-contract-validation", "matching-navigation-and-glossary", "whole-system-optimization", "existing-host-functional-closure", "next-version-development", "controlled-existing-host-evaluation", "conditional-v3.2-release", "conditional-existing-accord-upgrade-after-v3.2-release"],
     "notGranted": ["new-host-experiments", "personal-environment-changes-outside-bound-evaluation-and-post-release-upgrade", "new-trust-data-or-material-cost", "unrelated-external-writes", "rewrite-historical-tags-or-releases"],
     "conditionalRelease": {"target":"3.2.0","decision":"user-authorized-after-acceptance","ready":false,"conditions":["all-in-scope-changes-committed-and-exact-candidate-pushed","all-required-functional-and-quality-acceptance","fresh-exact-package-and-affected-host-evidence","independent-review-and-hosted-checks","exact-candidate-and-canonical-target-verification","ordered-publication-poststate-and-task-residue-closure","release-notes-match-exact-candidate-and-evidence"],"rule":"Prepare and publish the accepted 3.2 candidate under this bound user direction. Commit and push the complete in-scope candidate before publication; bind hosted checks and the new release to the same immutable SHA and exclude unrelated dirty work. This intent is not present readiness. Resolve a materially new cost, trust, data or destructive effect before it occurs; do not rewrite prior releases or repeatedly ask the user to reconfirm this same direction. The user requires README and changelog finalization after implementation and acceptance stabilize, followed by global alignment of source intent, implementation, acceptance, package/version identity and release claims."},
@@ -900,7 +900,7 @@
       {
         "id": "existing-host-functional-paths",
         "title": "普通入口必要功能链实现与实际纠偏",
-        "state": "active",
+        "state": "implemented-local-unreleased",
         "duties": [
           "goal-authority-correction",
           "research-learning-and-reuse",
@@ -915,7 +915,7 @@
           "recovery-and-rollback",
           "resources-and-cleanup"
         ],
-        "procedure": "对应 codex-function 与 claude-code-function，完成必要资料获取、能力选择、实际交付、识别偏移、调整续做及必要退出；优先复用充分宿主能力，简单任务不强制 Skill/checkpoint。输入新鲜度、暂停、文件采样反例已修复；已有真实原生 Stop 理由投递、有界续做、普通答后继续和模型 100→60 返工，当前未发现 Stop 代码失效。真实模型同次 Stop 分支尚未观察，只限制对应保证，不自动成为新增整版门槛。Claude 的政策 190→140→60 返工、写后核验及临时脚本清理已经成立。复读原始目录与终态记录后，验证器措辞属于任务局部含义的范围备注，不能当作未发现工具或功能未完成；重复被拒命令仍计质量/成本。当前先核对必要外部资料实际取得→正确使用→独立交付核验→自然退出的存量证据，若仍缺仅补最短充分样本。固定多臂、预算、轮次、某一入口或故障窗口是可修订方法；保留原失败身份和实际结果，按真正变化的依赖核验。必要功能形成后执行有限净价值与成本比较，不为原方法形状重复已成立链。",
+        "procedure": "两宿主必要普通功能已进入实质收尾：保留已成立的资料获取、交付、政策与既有产物返工、能力失效改道、冲突排除、答后续做、输入保护及必要退出。Claude dev.16 实际取得完整 GitHub 发布/tag 来源并交付七字段；说明中的 draft 标签经一次明确纠正后修复、核验与留存，两个会话自然结束。首阶段未完整通过、纠正提示和全部成本保持，不能归因为自主发现或 Accord 增益。按真实宿主、入口、包和条件绑定现有事实；未触发的模型切换、领域或故障窗口需判断适用性，不因字典空格追加试验。原生有界 Stop 投递、模型返工与普通答后继续分别已有证据，同次真实模型 Stop 仅限制对应保证。正式准入与充分性复核尚欠账，不把该工序本地完成等同整版功能资格。",
         "exit": "两宿主各自必要结果与适用故障后态均有独立可观察证据，按受影响依赖复用历史事实。加载、工具可调用、原生完成或评估器救援分别记账，不冒充 Accord 效果；未满足的结果保持未完成。 暂停不能使旧产物合同自动满足新要求；输入捕获失败不得沿用旧回执续做或完成。文件谓词须来自同一份字节并检测采集期间变化，恢复重放不得覆盖更新的原生输入。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -931,7 +931,7 @@
       {
         "id": "desktop-continuity",
         "title": "Desktop 连续性与归档授权边界",
-        "state": "pending",
+        "state": "active",
         "duties": [
           "goal-authority-correction",
           "premise-and-consistency",
@@ -965,7 +965,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "对应 codex-lifecycle 与 claude-code-lifecycle，保留精确包、授权、坏源保护、真实更新、幸存执行者、恢复和退出结果。07e583f 下声明的健康 Codex 管理者与 Claude 组合已完成：缺席状态安装及实际使用、拒绝请求坏源并保护 prior、真实坏安装恢复、同版本坏缓存恢复、真实 3.1→dev.16 更新和新会话使用。两个配置均原生卸载、移除市场并完成留存与任务根处置；不再为旧方法固定形状重跑已成立操作。原始失败、环境重绑、软监督延长、父方提出恢复选项、任务局部设置编辑及一次坏缓存驱逐分别记账，不能追认旧整 case PASS、自动接管或 Claude 单独管理。后续推进 Codex 安装态的实际加载/使用及恢复缺口；当前 CLI 未找到兼容既有账号、任务局部安装且不写共享缓存的受支持路径，不复制凭据或重复原探针。该缺口不阻塞普通功能、Desktop 能力盘点或价值准备等无真实依赖工作。方法和验收按必要结果同步校准，原身份和独立证据核验保持。",
+        "procedure": "Claude 声明组合的安装、坏源保护、恢复、真实更新、新加载使用与退出已闭合，保留原失败和方法修订。Codex 单次共享安装例外也已实际完成：原生安装精确 dev.16、真实安装缓存 Hook 执行、显式 Skill 选择、140 文件交付与自验、原生卸载和状态恢复。完整 Skill 正文未在流中独立捕获，不宣称隐式发现、默认信任流程或 Desktop；本次未 bind checkpoint，不能当 Stop 续做试验。复核既有升级/恢复记录的真实适用依赖并完成当前证据绑定，不为已成立的安装与使用重复安装。用户批准的单次例外已用完，发布前共享安装恢复为撤回状态；执行边界缺失只约束其依赖工作。",
         "exit": "用户所需生命周期与失败后态成立，且变更/卸载后仍有可用执行者完成必要恢复与核验。安装登记、实际激活、市场缓存和受影响配置分别取证；未更新而旧包不变不能证明保护。该项未通过只约束依赖它的工作与整版资格。",
         "qualityAxes": [
           "functional-coverage",
@@ -1056,6 +1056,67 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "codex-dev16-installed-selected-use-and-restoration",
+      "observedAt": "2026-09-07T14:07:17.2972543Z",
+      "scope": "one-authorized-existing-account-installed-selected-use-not-retroactive-case-or-desktop-or-value-admission",
+      "subject": {
+        "revision": "c730406ca7fafabc405f78d81000e22c3574c9d5",
+        "candidateRevision": "331ccd9f628fdd80adee6ea46a7d13bd78aa887b",
+        "version": "3.2.0-dev.16",
+        "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+        "bindingSha256": "008201eec6c1f9b409068323e7ec116095a5d355a108b37277fa7f2879d8ab0c"
+      },
+      "execution": {
+        "entry": "existing-account direct App Server 0.153.4, global plugins disabled, selected thread plugins and reviewed hooks enabled",
+        "model": "gpt-6-astra",
+        "effort": "high",
+        "thread": "01a07c30-dbd3-71f1-8c36-bc3610866dcd",
+        "turn": "01a07c30-dca6-7d00-98a0-a4aceb015f32",
+        "modelTurns": 1,
+        "seconds": 64.2283684
+      },
+      "result": "Native installation compared all 12 installed files against bound hashes and verified registration. Native plugin-source SessionStart, UserPromptSubmit and Stop completed from the actual installed cache. Explicit native Skill selection was accepted; the Agent used the cache helper, wrote/read both correct 140 outputs and compared protected input hashes. Five commands included one non-repository Git probe failure; the completed work and original command failure are both retained.",
+      "limits": "No full Skill-body injection text was independently captured. This proves selected installed use, not implicit discovery, default trust workflow, Desktop continuity, update recovery or net value. Agent respected workspace-only writes and did not bind the external checkpoint location; the empty Stop result is not a continuation failure or proof. Installed file hashes were checked during execution by the bound program, not separately retained as a complete actual hash map.",
+      "restoration": "Native uninstall removed registration/cache; the owned workspace trust entry remained absent. Original v3.1.0 market pin and config semantics were preserved; 6656 other plugin-file metadata entries matched. Both owned native processes naturally exited zero with zero Job children; original Desktop was preserved. Normal host logs/session/SQLite writes and the intentionally retained evidence/workspace are disclosed, not whole-host zero-write claims.",
+      "evidence": {
+        "stdoutSha256": "bf217affdce3eb689c9b3eae3e081b3c195d899b73903b6701670799d9be0993",
+        "restoredStateSha256": "65bd6d7125484926df309e72e74ce37d34d899405dfbb13c6cc7db900f3b2697",
+        "retainedAt": "task20-functional-chain-20260907/codex-installed-use-proposal-331ccd9/run-01",
+        "independentReview": "Fresh read-only review checked raw native events, actual artifacts, protected inputs, source candidate and recovery snapshots/current absence."
+      }
+    },
+    {
+      "id": "claude-dev16-external-release-facts-and-correction",
+      "observedAt": "2026-09-07T14:02:02.0466439Z",
+      "scope": "ordinary-public-source-delivery-and-explicit-next-session-correction-not-autonomous-discovery-or-causal-value",
+      "subject": {
+        "revision": "c730406ca7fafabc405f78d81000e22c3574c9d5",
+        "version": "3.2.0-dev.16",
+        "packageSha256": "d64ef6e9a26ecba46c8f5a3203311e740ab5652a84ea0182a1e7e62ba2ac793e"
+      },
+      "firstStage": {
+        "seconds": 59.404,
+        "actualRetrieval": "One successful curl command fetched both official repository release/tag APIs; Agent read the complete 53863-byte retained response. Both parsed objects matched independent GitHub queries. Seven structured fields were correct.",
+        "quality": "The note mislabeled draft=false as formal release=no. Agent did not read back both newly written outputs; the prebound case condition was unmet, while delivered prompt only requested verification and native Write receipts said content was current. Two distinct shell refusals were retained.",
+        "originalCaseComplete": false
+      },
+      "correction": {
+        "seconds": 27.264,
+        "trigger": "One explicit maintainer correction, no new network fetch and no output repair by the observer.",
+        "effect": "Agent changed only the draft label, actually read the edited note and earlier read the unchanged facts; a subsequent native facts Read returned unchanged-since-read confirmation. Correct facts, sources and keep input remained byte-identical."
+      },
+      "poststate": "Both separate native sessions naturally exited zero, no forced cleanup and zero Job children. Nine candidate files and four selected shared Claude files remained unchanged. Original 25-file stage and final 30-file state were fully retained and rehashed, then the owned temporary root was removed. This is personal-state redirection on the existing DeepSeek route, not a pristine host or filesystem sandbox.",
+      "cost": "59.404 plus 27.264 seconds and an explicit correction prompt are part of the composed cost. Existing route reports deepseek-v4-flash-vision-exp[1M]; native dollar estimates have unknown cost basis and are not actual billing. No observed Skill/checkpoint invocation or Accord incremental-value attribution.",
+      "evidence": {
+        "firstJournalSha256": "2aa0efe0ba3f7861ee427733b11adbd50ddae7d9ca73457a7b4b553ddfbbe41f",
+        "correctionJournalSha256": "847d6188cedc5bffde71f58a826a9a1f7bbc8af694fb76aac78cf2eb45962904",
+        "retentionSha256": "b73832541696bb1bbfecc32c4d478a8ef617ec3f1bacf3248ceae63f2bbe0935",
+        "cleanupSha256": "989e67c1da9b0fc11f08dc091c54eb0e4faa3cc21343f3b705db786fdde53b02",
+        "retainedAt": "task20-functional-chain-20260907/release-source-dev16-9rlg4byb-final",
+        "independentReview": "Parent and separate reviewer checked full source retrieval, file diffs, native receipts, hashes and terminal states."
+      }
+    },
     {
       "id": "historical-claude-claim-review-correction",
       "observedAt": "2026-09-07T13:28:42.025186+00:00",
@@ -4519,8 +4580,8 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "按已承诺结果收敛有限收尾：先纠正历史误判并复用既有功能事实，核对外部资料到交付链是否确有缺证；选择一次受支持且获授权的 Codex 安装态实际加载入口；Desktop 连续性按本版实际承诺和真实转移需要确定最小范围，不因空 scope 强制建任务或归档；完成足以判别收益与干扰的有限比较；最后统一 README/CHANGELOG、当前证据准入、精确候选、独立评审和托管检查，再条件发布。Claude 声明组合的完整物理生命周期已闭合，不再重跑；原生 Stop 已有界投递与既有自主返工不因缺某种同次试验而全部作废。六 scope/六 case 是可修订映射，已承诺功能和必要质量底线仍须兑现；不按旧方法原形填表，也不追认历史失败为 PASS。未获支持或授权的分支记录具体依赖并推进其他工作，不复制凭据、写共享候选或制造转移。用户自定义指导、受保护 main、已有任务及归档边界保持。",
-    "requires": "Current user direction defers installation into the shared development host until accepted publication. The Codex candidate has been uninstalled, its temporary marketplace pin restored, and backups retained. Before publication use bounded task-local candidate exposure and existing authorized host access for necessary evaluation; do not reinstall a shared candidate. New accounts, unrelated trust/data, material cost or other personal changes remain outside this authority. Fresh evidence and exact-candidate checks precede conditional publication."
+    "work": "普通功能进入结果复核与证据绑定，复用已闭合的外部资料和实际纠正链。推进 Desktop 必要继续/接管范围及真实授权、两宿主生命周期剩余适用依赖核对、有限净价值比较，然后统一当前证据、README/CHANGELOG、精确候选、独立评审和托管检查，条件发布。利用既有 observer 的 sourceProvenance facet 预绑定当前重评，核对原始执行身份、时效、协助和失败及当前真实复用依赖；不新增 schema，不重跑旧形状或改写旧身份。当前阶段完成不等于正式准入。无新 Desktop 任务或归档授权，不制造转移；保留用户自定义环境与受保护 main。",
+    "requires": "The one explicit prerelease shared Codex installation exception was exercised: exact dev.16 installed selected use followed by native uninstall and independently checked restoration. No standing permission to repeat it remains. Continue retained-evidence review and task-local work on existing authorized hosts; another shared install, new Desktop task, archive, unrelated trust/data, material cost or personal changes require their actual authority. Fresh evidence and exact-candidate checks still precede the conditionally authorized release."
   },
   "claimCeiling": {
     "localContractOnly": true,
