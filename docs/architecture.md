@@ -79,7 +79,7 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current delivered candidate and unproven connections
 
-Both worktree packages are unpublished `3.2.0-dev.14`. Each exposes one host
+Both worktree packages are unpublished `3.2.0-dev.15`. Each exposes one host
 Skill, the existing optional resume/compact hint, and a Node task checkpoint
 connected to supported UserPromptSubmit, Stop and SessionEnd events. Codex also
 connects Interrupt. The Agent binds necessary file inputs, output predicates and
@@ -88,13 +88,24 @@ checks actual file hashes and specified JSON facts, detects stale inputs, and
 can request native continuation when results remain unmet. An unchanged failure
 does not request endless retries. Fresh user input invalidates an unreconciled
 old continuation; receipt publication and retirement protect concurrent input.
+All predicates on a file use the same observed bytes, followed by output and
+input stability checks. External writers remain independent; these observations
+are not an atomic workspace transaction. Pause retains the old contract epoch
+until an explicit rebind reconciles new requirements.
 
 This adds scoped task state, no daemon, command executor or extra model call.
 The helper never decides user authority or whether the selected predicates fully
 express the goal. It leaves semantic judgment, execution and unsupported paths
 with the host Agent. Unfinished checkpoints survive session end; verified or
 explicitly cancelled tasks can retire only their checkpoint files. Proven dead
-locks have an explicit recovery operation. Input text is hashed, not retained.
+locks have an explicit recovery operation. Failed native input publication keeps
+its owned lock so status, continuation and retirement cannot use a stale receipt.
+Recovery of a proven dead input owner invalidates that receipt before unlocking;
+the surviving caller replays the actual native input with a recovery-epoch guard.
+A delayed replay cannot replace newer input. No receipt is invented if the first
+publication failed. Failure to create any state still limits durable guarantees;
+the native error is visible, and this optional helper does not control the host.
+Input text is hashed, not retained.
 SessionEnd removes unbound receipts. A native input blocked by another
 Hook can exit without either callback; a surviving caller that verifies this
 exit can retire only the matching unbound receipt using its current epoch,
@@ -104,6 +115,15 @@ retirement is not established; the helper does not supply its own scheduler.
 The default temporary state directory may remain empty; it is not an installed
 package cache or an archive executor. CLI checks establish local behavior; exact
 native loading and ordinary task use still require separate observation.
+
+Claude also connects the same small helper to PostToolBatch. An observed Bash
+denial display template produces a short reminder to check its actual scope,
+use already authorized means and reconcile claims and task-created residue.
+Ordinary or unknown batches are silent. Native transport was checked with a
+frozen host and local synthetic responses; model behavior remains a separate
+claim. The batch drops the native is_error flag, so response text only triggers
+advice. It cannot grant permission, execute commands, remove files or block the
+tool loop. This entry adds no persistent state or model request.
 
 Claude retains the caller-bound native plugin update inspector. It checks the
 selected source and pre/post-state, but does not update, roll back or intercept

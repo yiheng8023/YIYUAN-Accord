@@ -25,6 +25,8 @@
     ],
     "scope": "session-and-workspace-bound-file-predicates",
     "effect": "inspect-local-results-and-request-supported-stop-continuation",
+    "verification": "same-byte-predicates-and-post-collection-stability; no-external-writer-lock",
+    "recovery": "failed-input-publication-retains-lock; dead-owner-invalidation-and-native-replay-with-epoch-guard",
     "state": "task-receipts-and-bound-checkpoints-until-explicit-retirement",
     "cleanup": "unbound-receipts-on-session-end; receipt-matched-surviving-caller-after-missing-end-hook; preserve-unfinished-checkpoints",
     "authority": "caller-reconciles-user-intent-and-predicate-adequacy"

@@ -38,6 +38,36 @@ def offline_probe(program, timeout):
             "repository": str(repository), "taskRoot": str(root), "executable": str(binary), "prompt": "fixture"}
 
 
+def offline_communicate(controller, root, input_text=None, timeout=20):
+    """Preserve safe timeout diagnostics after containing the owned controller."""
+    try:
+        return controller.communicate(input_text, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        controller.kill()  # Closing its Job handle also contains native descendants.
+        closed = False
+        try:
+            stdout, stderr = controller.communicate(timeout=5)
+            closed = True
+        except subprocess.TimeoutExpired as failure:
+            stdout, stderr = failure.stdout or b"", failure.stderr or b""
+        output = stdout.decode("utf-8", errors="replace") if isinstance(stdout, bytes) else stdout
+        ready = False
+        for line in output.splitlines():
+            try:
+                reply = json.loads(line)
+                ready |= isinstance(reply, dict) and reply.get("ready") is True
+            except (ValueError, TypeError):
+                pass
+        journal = root / "native/native-stdout.jsonl"
+        size = journal.stat().st_size if journal.exists() else None
+        diagnostic = {"readyReceived": ready, "nativeJournalBytes": size,
+            "controllerExited": controller.poll() is not None, "controllerPipesClosed": closed,
+            "controllerStdoutBytes": len(output.encode("utf-8")),
+            "controllerStderrBytes": len(stderr if isinstance(stderr, bytes) else stderr.encode("utf-8"))}
+        # No raw stdout/stderr, exception message, prompt or inherited route data.
+        raise AssertionError("offline observer timeout: " + json.dumps(diagnostic)) from None
+
+
 class ClaudeEntryOracleTests(unittest.TestCase):
     def test_repeated_turn_init_must_preserve_the_observed_session_and_composition(self):
         init = {"type": "system", "subtype": "init", "session_id": "s", "model": "bound"}
@@ -161,12 +191,13 @@ class Probe {
                 request.update(correction="bound correction", python=str(root / "missing.exe"))
                 environment = {**os.environ, "ANTHROPIC_BASE_URL": "http://127.0.0.1:9",
                                "ANTHROPIC_AUTH_TOKEN": "fixture-not-a-real-token"}
-                result = subprocess.run(["pwsh", "-NoProfile", "-NonInteractive", "-File",
-                    str(repository / "scripts/observe-claude-entry.ps1")],
-                    input=json.dumps(request) + '\n{"op":"run","arm":"native"}\n{"op":"close"}\n',
-                    capture_output=True, text=True, env=environment, timeout=20)
-                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                capture = json.loads(result.stdout.splitlines()[1])
+                with subprocess.Popen(["pwsh", "-NoProfile", "-NonInteractive", "-File",
+                    str(repository / "scripts/observe-claude-entry.ps1")], stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=environment) as controller:
+                    stdout, stderr = offline_communicate(controller, root,
+                        json.dumps(request) + '\n{"op":"run","arm":"native"}\n{"op":"close"}\n')
+                self.assertEqual(controller.returncode, 0, {"stdoutBytes": len(stdout), "stderrBytes": len(stderr)})
+                capture = json.loads(stdout.splitlines()[1])
                 self.assertTrue(capture["stdout"].startswith(prefix))
                 self.assertLessEqual(len(capture["stdout"].encode()), 2097152)
                 self.assertEqual(capture["failure"]["stage"], stage)
@@ -174,19 +205,54 @@ class Probe {
                     self.assertIn("stdout-final", [v["stage"] for v in capture["secondaryFailures"]])
                 self.assertTrue(capture["forced"])
                 self.assertEqual(capture["evaluatorChildrenAfterCleanup"], 0)
-                self.assertNotIn("private-stderr-canary", result.stdout + result.stderr)
-                self.assertNotIn("fixture-not-a-real-token", result.stdout + result.stderr)
+                self.assertFalse("private-stderr-canary" in stdout + stderr)
+                self.assertFalse("fixture-not-a-real-token" in stdout + stderr)
                 self.assertEqual((root / 'native/native-stdout.jsonl').read_text(), capture["stdout"])
 
     @windows_process_case
-    def test_controller_timeout_retains_recorded_prefix_and_kills_the_owned_job(self):
+    def test_controller_timeout_reports_safe_stage_and_kills_the_owned_process_tree(self):
         import ctypes
         program = ('class Probe { static void Main(string[] args) { '
+            'if (args.Length == 2) { '
+            'System.IO.File.WriteAllText("descendant-pid", System.Diagnostics.Process.GetCurrentProcess().Id.ToString()); '
+            'System.Threading.Thread.Sleep(30000); return; } '
             'if (args.Length == 1) { System.Console.WriteLine("fixture"); return; } '
             'System.IO.File.WriteAllText("pid", System.Diagnostics.Process.GetCurrentProcess().Id.ToString()); '
+            'System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo('
+            'System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName, "descendant fixture") '
+            '{ UseShellExecute = false, CreateNoWindow = true }); '
+            'while (!System.IO.File.Exists("descendant-pid")) System.Threading.Thread.Sleep(10); '
+            'System.Console.Error.Write("private-stderr-canary"); '
             'System.Console.WriteLine("recorded-prefix"); System.Threading.Thread.Sleep(30000); } }')
         with offline_probe(program, 30) as (repository, root, binary, request):
             request["routeMode"] = "host-user-settings"
+            marker = root / "controller-started"
+            delayed = ("[Console]::Error.Write('private-stderr-canary'); "
+                "[Console]::WriteLine('fixture-not-a-real-token'); "
+                "[IO.File]::WriteAllText('" + str(marker).replace("'", "''") + "', 'started'); "
+                "Start-Sleep -Seconds 30")
+            with subprocess.Popen(["pwsh", "-NoProfile", "-NonInteractive", "-Command",
+                delayed], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE, text=True) as controller:
+                deadline = time.monotonic() + 10
+                while not marker.exists():
+                    if time.monotonic() >= deadline:
+                        controller.kill()
+                        controller.communicate(timeout=5)
+                        self.fail("controlled startup did not reach its delay")
+                    time.sleep(.05)
+                with self.assertRaises(AssertionError) as timeout:
+                    offline_communicate(controller, root, timeout=.1)
+                diagnostic = str(timeout.exception)
+                self.assertNotIn("private-stderr-canary", diagnostic)
+                self.assertNotIn("fixture-not-a-real-token", diagnostic)
+                before = json.loads(diagnostic.split(": ", 1)[1])
+                self.assertFalse(before["readyReceived"])
+                self.assertIsNone(before["nativeJournalBytes"])
+                self.assertTrue(before["controllerExited"])
+                self.assertTrue(before["controllerPipesClosed"])
+                self.assertGreater(before["controllerStdoutBytes"], 0)
+                self.assertGreater(before["controllerStderrBytes"], 0)
             with subprocess.Popen(["pwsh", "-NoProfile", "-NonInteractive", "-File",
                 str(repository / "scripts/observe-claude-entry.ps1")], stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as controller:
@@ -198,17 +264,29 @@ class Probe {
                     while not journal.exists() or 'recorded-prefix' not in journal.read_text():
                         self.assertLess(time.monotonic(), deadline, "no incremental native capture")
                         time.sleep(.05)
-                    pid = int((root / 'native/work/pid').read_text())
                     kernel = ctypes.WinDLL("kernel32", use_last_error=True)
                     kernel.OpenProcess.restype = ctypes.c_void_p
-                    handle = kernel.OpenProcess(0x100000, False, pid)
-                    self.assertTrue(handle)
+                    handles = []
                     try:
-                        controller.kill()
-                        controller.communicate(timeout=10)
-                        self.assertEqual(kernel.WaitForSingleObject(ctypes.c_void_p(handle), 5000), 0)
+                        for name in ("pid", "descendant-pid"):
+                            handle = kernel.OpenProcess(0x100000, False, int((root / 'native/work' / name).read_text()))
+                            self.assertTrue(handle)
+                            handles.append(handle)
+                        with self.assertRaises(AssertionError) as timeout:
+                            offline_communicate(controller, root, timeout=.1)
+                        diagnostic = str(timeout.exception)
+                        self.assertNotIn("private-stderr-canary", diagnostic)
+                        self.assertNotIn("recorded-prefix", diagnostic)
+                        after = json.loads(diagnostic.split(": ", 1)[1])
+                        self.assertTrue(after["readyReceived"])
+                        self.assertGreater(after["nativeJournalBytes"], 0)
+                        self.assertTrue(after["controllerExited"])
+                        self.assertTrue(after["controllerPipesClosed"])
+                        for handle in handles:
+                            self.assertEqual(kernel.WaitForSingleObject(ctypes.c_void_p(handle), 5000), 0)
                     finally:
-                        kernel.CloseHandle(ctypes.c_void_p(handle))
+                        for handle in handles:
+                            kernel.CloseHandle(ctypes.c_void_p(handle))
                     self.assertEqual(journal.read_text().strip(), 'recorded-prefix')
                 finally:
                     if controller.poll() is None:

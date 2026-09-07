@@ -1,5 +1,6 @@
 """Executable local task behavior; native Hook loading and model behavior are separate."""
 import json
+import hashlib
 import os
 from pathlib import Path
 import shutil
@@ -112,6 +113,23 @@ class TaskCheckpointTests(unittest.TestCase):
         self.assertEqual(self.event("Stop", stop_hook_active=True)["decision"], "block")
         self.assertNotIn("decision", self.event("Stop", stop_hook_active=True))
 
+    def test_pause_does_not_reconcile_an_old_output_contract_with_new_requirements(self):
+        self.bind()
+        self.write_outputs()
+        earlier = self.status()
+        self.event('UserPromptSubmit', prompt='Pause; the deliverable now also needs an audit.json file.')
+        current = self.status()
+        self.invoke({'op': 'pause', 'epoch': current['epoch'], 'expectedRevision': current['revision'],
+                     'reason': 'Pause now; the newly requested output has not been bound or produced.'})
+        paused = self.status()
+        self.assertFalse(paused['currentInputReconciled'])
+        self.assertEqual(self.event('Stop'), {})
+        self.assertIn('latest-user-input', self.invoke({'op': 'retire', 'epoch': paused['epoch'],
+                      'expectedRevision': paused['revision']}, success=False))
+        state = json.loads(next(self.state.glob('*.state.json')).read_text(encoding='utf-8'))
+        self.assertEqual(state['epoch'], earlier['epoch'])
+        self.assertFalse((self.work / 'audit.json').exists())
+
     def test_predicates_revision_and_reference_boundaries_are_real_checks(self):
         self.bind()
         current = self.status()
@@ -223,6 +241,131 @@ catch (error) { process.stdout.write(error.message); }
         self.assertNotEqual(self.status()['epoch'], current['epoch'])
         self.assertEqual(self.status()['revision'], current['revision'])
         self.assertEqual(self.event('Stop'), {})
+
+    def test_retirement_rejects_mixed_output_bytes_and_mid_inspection_source_change(self):
+        # Deterministic file-read boundaries exercise actual predicate evaluation,
+        # not timing sleeps. No single output satisfies the mixed predicates.
+        script = '''
+const fs = require('node:fs');
+const path = require('node:path');
+const runtime = require(process.argv[1]);
+const request = JSON.parse(process.argv[2]);
+const mode = process.argv[3], original = fs.readFileSync;
+let changed = false;
+fs.readFileSync = function(file, ...args) {
+  const bytes = original.call(this, file, ...args);
+  if (!changed && String(file).endsWith('summary.json')) {
+    changed = true;
+    fs.writeFileSync(path.join(request.cwd, mode === 'output' ? 'summary.json' : 'source.json'),
+      mode === 'output' ? '{"total":70}' : '{"units":70}');
+  }
+  return bytes;
+};
+try { runtime.operate(request); process.exitCode = 2; }
+catch (error) { process.stdout.write(error.message); }
+'''
+        for mode in ('output', 'input'):
+            with self.subTest(mode=mode):
+                self.event('UserPromptSubmit', prompt='Check this independent file-change case.')
+                (self.work / 'source.json').write_bytes(b'{"units":60}')
+                self.write_outputs()
+                outputs = [{'path': 'summary.json', 'json': {'/total': 60}}]
+                if mode == 'output':
+                    outputs[0].update(sha256=hashlib.sha256((self.work / 'summary.json').read_bytes()).hexdigest(),
+                                      json={'/total': 70})
+                self.bind(outputs=outputs, revisionReason='Exercise the specified file-change boundary.')
+                current = self.status()
+                request = {'op': 'retire', 'session_id': 'test-session', 'cwd': str(self.work),
+                           'epoch': current['epoch'], 'expectedRevision': current['revision']}
+                result = subprocess.run([self.node, '-e', script, str(RUNTIME), json.dumps(request), mode],
+                    env=self.environment, capture_output=True, text=True, encoding='utf-8', timeout=10)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn('unmet-output', result.stdout)
+                self.assertTrue(list(self.state.glob('*.state.json')))
+                self.assertTrue(list(self.state.glob('*.input.json')))
+
+    def test_input_lock_recovery_requires_native_replay_before_old_task_can_continue(self):
+        self.bind()
+        before = self.status()
+        input_path = next(self.state.glob('*.input.json'))
+        dead = subprocess.check_output([self.node, '-e', 'process.stdout.write(String(process.pid))'],
+                                       text=True, encoding='utf-8', timeout=10)
+        Path(str(input_path) + '.lock').write_text(json.dumps({'pid': int(dead)}), encoding='utf-8')
+        self.assertIn('EEXIST', self.invoke({'hook_event_name': 'UserPromptSubmit',
+                      'prompt': 'Pause this task.'}, hook=True, success=False))
+        self.assertTrue(self.invoke({'op': 'recover-lock', 'lock': 'input'})['recovered'])
+        current = self.status()
+        self.assertNotEqual(current['epoch'], before['epoch'])
+        self.assertFalse(current['currentInputReconciled'])
+        self.assertEqual(self.event('Stop'), {})
+        self.assertIn('native-replay', self.invoke({'op': 'bind', 'epoch': current['epoch'],
+                      'expectedRevision': current['revision']}, success=False))
+        self.invoke({'op': 'pause', 'epoch': current['epoch'], 'expectedRevision': current['revision'],
+                     'reason': 'Hold while the surviving caller reconciles the actual native event.'})
+        current = self.status()
+        self.assertFalse(current['currentInputReconciled'])
+        self.assertIn('native-replay', self.invoke({'op': 'retire', 'epoch': current['epoch'],
+                      'expectedRevision': current['revision']}, success=False))
+        # The surviving caller replays the observed native event, without asking
+        # the user to repeat it or treating the old checkpoint as fresh authority.
+        self.event('UserPromptSubmit', prompt='Pause this task.', recovery_epoch=current['epoch'])
+        current = self.status()
+        self.invoke({'op': 'pause', 'epoch': current['epoch'], 'expectedRevision': current['revision'],
+                     'reason': 'Reconciled the actual native pause input after receipt failure.'})
+        self.assertEqual(self.event('Stop'), {})
+        self.assertFalse((self.work / 'summary.json').exists())
+
+    def test_initial_input_recovery_does_not_fabricate_or_overwrite_native_input(self):
+        input_path = next(self.state.glob('*.input.json'))
+        input_path.unlink()  # The first receipt was never published before its owner died.
+        dead = subprocess.check_output([self.node, '-e', 'process.stdout.write(String(process.pid))'],
+                                       text=True, encoding='utf-8', timeout=10)
+        Path(str(input_path) + '.lock').write_text(json.dumps({'pid': int(dead)}), encoding='utf-8')
+        self.assertTrue(self.invoke({'op': 'recover-lock', 'lock': 'input'})['needsNativeReplay'])
+        self.assertFalse(input_path.exists())
+        self.assertIn('receipt-missing', self.invoke({'op': 'status'}, success=False))
+        self.assertEqual(self.event('Stop'), {})
+        self.event('UserPromptSubmit', prompt='Replay the observed native input.', recovery_epoch=None)
+        self.event('UserPromptSubmit', prompt='A newer actual native input.')
+        current = self.status()
+        for expected in (None, current['epoch']):
+            self.assertIn('replay-conflict', self.invoke({'hook_event_name': 'UserPromptSubmit',
+                          'prompt': 'Old replay must not replace the newer input.', 'recovery_epoch': expected},
+                          hook=True, success=False))
+        self.assertEqual(self.status()['epoch'], current['epoch'])
+
+    def test_failed_native_receipt_publication_cannot_leave_an_old_task_usable(self):
+        self.bind()
+        fault = self.root / 'fail-publish.cjs'
+        fault.write_text('''
+const fs = require('node:fs'), rename = fs.renameSync;
+fs.renameSync = function(from, to) {
+  if (String(to).endsWith('.input.json')) throw Object.assign(new Error('publish denied'), {code: 'EPERM'});
+  return rename.call(this, from, to);
+};
+''', encoding='utf-8')
+        event = {'session_id': 'test-session', 'cwd': str(self.work),
+                 'hook_event_name': 'UserPromptSubmit', 'prompt': 'Cancel the old task.'}
+        result = subprocess.run([self.node, '-r', str(fault), str(RUNTIME), '--hook'],
+            input=json.dumps(event), env=self.environment, capture_output=True, text=True,
+            encoding='utf-8', timeout=10)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, '')
+        self.assertIn('EPERM', result.stderr)
+        self.assertTrue(list(self.state.glob('*.input.json.lock')))
+        self.assertIn('EEXIST', self.invoke({'op': 'status'}, success=False))
+        self.assertIn('EEXIST', self.invoke({'hook_event_name': 'Stop'}, hook=True, success=False))
+        self.invoke({'op': 'recover-lock', 'lock': 'input'})
+        current = self.status()
+        self.assertTrue(current['needsNativeReplay'])
+        self.assertFalse(current['currentInputReconciled'])
+        self.assertEqual(self.event('Stop'), {})
+        self.event('UserPromptSubmit', prompt=event['prompt'], recovery_epoch=current['epoch'])
+        current = self.status()
+        self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': current['revision'],
+                     'disposition': 'user-cancelled', 'reason': 'Replayed the actual native cancellation.'})
+        self.assertEqual(list(self.state.iterdir()), [])
+        self.assertFalse((self.work / 'summary.json').exists())
 
 
 if __name__ == "__main__":

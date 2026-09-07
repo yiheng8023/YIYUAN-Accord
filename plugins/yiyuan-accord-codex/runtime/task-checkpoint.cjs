@@ -71,14 +71,17 @@ function relative(root, name) {
   return file;
 }
 
-function fingerprint(root, name) {
+function snapshot(root, name) {
   const file = relative(root, name);
-  if (!fs.existsSync(file)) return {present: false};
+  if (!fs.existsSync(file)) return {current: {present: false}};
   const stat = fs.lstatSync(file);
   if (stat.isSymbolicLink()) fail('unsafe-reference');
   if (!stat.isFile()) fail('reference-is-not-a-file');
-  return {present: true, sha256: sha(regular(file))};
+  const bytes = regular(file);
+  return {current: {present: true, sha256: sha(bytes)}, bytes};
 }
+
+const fingerprint = (root, name) => snapshot(root, name).current;
 
 function pointer(value, key) {
   if (key === '') return {present: true, value};
@@ -96,12 +99,12 @@ function inspect(where, state) {
     return {path: input.path, current, unchanged: canonical(current) === canonical(input.observed)};
   });
   const outputs = state.outputs.map((output) => {
-    const current = fingerprint(where.root, output.path);
+    const {current, bytes} = snapshot(where.root, output.path);
     let matched = current.present;
     if (matched && output.sha256) matched = current.sha256 === output.sha256;
     if (matched && output.json) {
       try {
-        const parsed = JSON.parse(regular(relative(where.root, output.path)).toString('utf8'));
+        const parsed = JSON.parse(bytes.toString('utf8'));
         matched = Object.entries(output.json).every(([key, expected]) => {
           const found = pointer(parsed, key);
           return found.present && canonical(found.value) === canonical(expected);
@@ -113,12 +116,23 @@ function inspect(where, state) {
     }
     return {path: output.path, current, matched};
   });
+  // Hashes and predicates describe one read per file. Recheck after collection
+  // so a producer changing an earlier file cannot pass using mixed observations.
+  // This detects observed drift; it does not lock external writers or provide a
+  // transactional workspace snapshot. Check inputs last, after output reads.
+  for (const [items, flag] of [[outputs, 'matched'], [inputs, 'unchanged']]) {
+    for (const item of items) {
+      item.stable = canonical(fingerprint(where.root, item.path)) === canonical(item.current);
+      item[flag] = item[flag] && item.stable;
+    }
+  }
   return {status: inputs.some((item) => !item.unchanged) ? 'stale-inputs'
     : outputs.some((item) => !item.matched) ? 'incomplete' : 'verified-local', inputs, outputs};
 }
 
-function locked(where, callback, wait = false) {
+function locked(where, callback, wait = false, retainOnFailure = false) {
   let fd;
+  let keepLock = false;
   const deadline = Date.now() + 500;
   while (fd === undefined) {
     try { fd = fs.openSync(where.lock, 'wx', 0o600); }
@@ -130,16 +144,24 @@ function locked(where, callback, wait = false) {
   try {
     fs.writeSync(fd, JSON.stringify({pid: process.pid}));
     return callback();
+  } catch (error) {
+    keepLock = retainOnFailure && error.inputPublicationFailed === true;
+    throw error;
   } finally {
     fs.closeSync(fd);
-    fs.unlinkSync(where.lock);
+    if (!keepLock) fs.unlinkSync(where.lock);
   }
 }
 
 // Only short receipt/state publication sections hold this lock. Expensive file
 // inspection never delays input invalidation. Lock order is state then input;
 // native input handling never takes the state lock.
-const inputLocked = (where, callback) => locked({...where, lock: where.input + '.lock'}, callback, true);
+const inputLocked = (where, callback, retainOnFailure = false) =>
+  locked({...where, lock: where.input + '.lock'}, callback, true, retainOnFailure);
+function publishInput(where, input) {
+  try { atomic(where.input, input); }
+  catch (error) { error.inputPublicationFailed = true; throw error; }
+}
 function currentEpoch(where, epoch) {
   if (readJson(where.input).epoch !== epoch) fail('latest-user-input-not-reconciled');
 }
@@ -147,6 +169,7 @@ function currentEpoch(where, epoch) {
 function binding(request, where, prior, currentInput) {
   if (!currentInput || request.epoch !== currentInput.epoch) fail('latest-user-input-not-reconciled');
   if (currentInput.interrupted) fail('interrupted-task-needs-new-user-input');
+  if (currentInput.needsNativeReplay) fail('input-receipt-needs-native-replay');
   if (request.expectedRevision !== (prior?.revision || 0)) fail('task-revision-conflict');
   if (!text(request.result) || !text(request.nextAction) || typeof request.canContinue !== 'boolean' ||
       !Array.isArray(request.inputs) || !Array.isArray(request.outputs) || request.outputs.length === 0 ||
@@ -188,22 +211,35 @@ function operate(request) {
   const where = location(request.session_id, request.cwd);
   if (where && request.op === 'recover-lock') {
     if (!['state', 'input'].includes(request.lock || 'state')) fail('unknown-lock-kind');
-    const file = request.lock === 'input' ? where.input + '.lock' : where.lock;
+    const inputRecovery = request.lock === 'input';
+    const file = inputRecovery ? where.input + '.lock' : where.lock;
+    const recover = () => {
     const original = regular(file, 1024);
     const owner = JSON.parse(original.toString('utf8'));
     if (!Number.isSafeInteger(owner.pid) || owner.pid <= 0) fail('unknown-lock-owner');
     try { process.kill(owner.pid, 0); fail('lock-owner-still-running'); }
     catch (error) { if (error.code !== 'ESRCH') throw error; }
     if (!regular(file, 1024).equals(original)) fail('lock-owner-changed');
+    // A failed native input Hook can be nonblocking: an old receipt is no
+    // longer evidence that the latest input was captured. Invalidate it before
+    // releasing the dead input lock; a surviving caller must replay the actual
+    // current native event. Do not invent a receipt when none ever existed.
+    if (inputRecovery && fs.existsSync(where.input)) {
+      atomic(where.input, {...readJson(where.input), epoch: crypto.randomUUID(), needsNativeReplay: true});
+    }
     fs.unlinkSync(file);
-    return {recovered: true, scope: 'dead-owner-checkpoint-lock-only'};
+    return {recovered: true, scope: inputRecovery ? 'dead-input-lock-and-receipt-invalidation'
+      : 'dead-owner-checkpoint-lock-only', needsNativeReplay: inputRecovery};
+    };
+    return inputRecovery ? locked(where, recover) : recover();
   }
   if (!where || !fs.existsSync(where.input)) fail('native-user-input-receipt-missing');
   return locked(where, () => {
-    const currentInput = readJson(where.input);
+    const currentInput = inputLocked(where, () => readJson(where.input));
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (request.op === 'status') return {epoch: currentInput.epoch, revision: prior?.revision || 0,
-      mode: prior?.mode || 'unbound', currentInputReconciled: prior?.epoch === currentInput.epoch,
+      needsNativeReplay: currentInput.needsNativeReplay === true,
+      mode: prior?.mode || 'unbound', currentInputReconciled: !currentInput.needsNativeReplay && prior?.epoch === currentInput.epoch,
       inspection: prior ? inspect(where, prior) : null};
     if (request.op === 'bind') {
       const state = binding(request, where, prior, currentInput);
@@ -232,11 +268,12 @@ function operate(request) {
       const pending = inspect(where, prior);
       return inputLocked(where, () => {
         currentEpoch(where, currentInput.epoch);
-        atomic(where.state, {...prior, revision: prior.revision + 1, mode: 'paused', epoch: currentInput.epoch, reason: request.reason});
+        atomic(where.state, {...prior, revision: prior.revision + 1, mode: 'paused', reason: request.reason});
         return {mode: 'paused', revision: prior.revision + 1, pending};
       });
     }
     if (request.op === 'retire') {
+      if (currentInput.needsNativeReplay && request.disposition !== 'user-cancelled') fail('input-receipt-needs-native-replay');
       if (prior.epoch !== currentInput.epoch && request.disposition !== 'user-cancelled') fail('latest-user-input-not-reconciled');
       const result = inspect(where, prior);
       if (result.status !== 'verified-local' && request.disposition !== 'user-cancelled') fail('unmet-output-cannot-retire');
@@ -270,25 +307,28 @@ function hook(event) {
     return inputLocked(where, () => {
     const previous = fs.existsSync(where.input) ? readJson(where.input) : null;
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
+    if (Object.hasOwn(event, 'recovery_epoch') && (previous
+        ? !previous.needsNativeReplay || event.recovery_epoch !== previous.epoch
+        : event.recovery_epoch !== null)) fail('native-replay-conflict');
     // Codex may deliver our Stop reason as a continuation prompt. Its exact
     // receipt must never be mistaken for fresh human authority.
     if (prior?.epoch === previous?.epoch && prior?.continuation === event.prompt) return hint(event, where, previous);
     const input = {schema: 1, epoch: crypto.randomUUID(), promptSha256: sha(event.prompt),
       turnId: event.turn_id || null, continuation: null};
-    atomic(where.input, input);
+    publishInput(where, input);
     return hint(event, where, input);
-    });
+    }, true); // Preserve a failed publication as a recoverable lock, not stale success.
   }
   if (!fs.existsSync(where.input)) return {};
   if (name === 'Interrupt') {
     return inputLocked(where, () => {
     const input = readJson(where.input);
-    atomic(where.input, {...input, epoch: crypto.randomUUID(), interrupted: true, continuation: null});
+    publishInput(where, {...input, epoch: crypto.randomUUID(), interrupted: true, continuation: null});
     return {};
-    });
+    }, true);
   }
   return locked(where, () => {
-    const input = readJson(where.input);
+    const input = inputLocked(where, () => readJson(where.input));
     const state = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (name === 'SessionEnd') {
       if (!state) inputLocked(where, () => {
@@ -296,7 +336,7 @@ function hook(event) {
       });
       return {}; // Keep unfinished work for an explicitly bound resume/recovery.
     }
-    if (!state || state.mode !== 'active' || !state.canContinue || input.interrupted ||
+    if (!state || state.mode !== 'active' || !state.canContinue || input.interrupted || input.needsNativeReplay ||
         state.epoch !== input.epoch) return {};
     const result = inspect(where, state);
     if (result.status === 'verified-local') return {};
@@ -325,8 +365,9 @@ const HELP = {
   revise: 'Call bind with the current epoch/revision and a revisionReason for changed output checks; old inputs are re-observed.',
   pause: 'op=pause with current epoch/revision and reason; preserve pending work without continuation.',
   retire: 'op=retire after verified local predicates, or explicit user-cancelled disposition plus reason. With no bound checkpoint, current epoch, expectedRevision=0 and a reason retire only the input receipt. A surviving caller may do this after verified native exit if no end Hook ran. Removes only checkpoint files; does not prove task completion.',
-  recovery: 'op=recover-lock with lock=state or input removes only a lock whose recorded process no longer exists; uncertain or live ownership is preserved.',
-  limits: 'Existence checks prove only existence; JSON pointers and hashes check specified facts. Caller owns goal, source trust, authority, predicate adequacy and external acceptance. No transcript parsing or extra model call.',
+  recovery: 'op=recover-lock with lock=state or input requires a provably dead owner. Input recovery invalidates an existing receipt because native input may have been lost. A surviving caller must replay the actual current native input before binding or continuation; do not ask for repeated user input when the host retains it. Uncertain or live ownership is preserved.',
+  replay: 'After input recovery, replay the observed UserPromptSubmit event through --hook with recovery_epoch from status, or null if no receipt exists. This compare-and-swap prevents delayed replay from replacing newer native input. Never reconstruct missing human intent from the old checkpoint.',
+  limits: 'Existence checks prove only existence; JSON pointers and hashes share observed file bytes, followed by a stability recheck. External writers are not locked: this is local evidence, not an atomic workspace transaction. Caller owns goal, source trust, authority, predicate adequacy and external acceptance. No transcript parsing or extra model call.',
 };
 if (require.main === module) {
   if (process.argv.includes('--help')) process.stdout.write(JSON.stringify(HELP) + '\n');

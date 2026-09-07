@@ -90,12 +90,20 @@ def delivery_adapter_contract(adapter_id, package_id):
                 + (["Interrupt"] if adapter_id == "codex" else []),
             "scope": "session-and-workspace-bound-file-predicates",
             "effect": "inspect-local-results-and-request-supported-stop-continuation",
+            "verification": "same-byte-predicates-and-post-collection-stability; no-external-writer-lock",
+            "recovery": "failed-input-publication-retains-lock; dead-owner-invalidation-and-native-replay-with-epoch-guard",
             "state": "task-receipts-and-bound-checkpoints-until-explicit-retirement",
             "cleanup": "unbound-receipts-on-session-end; receipt-matched-surviving-caller-after-missing-end-hook; preserve-unfinished-checkpoints",
             "authority": "caller-reconciles-user-intent-and-predicate-adequacy",
         },
     }
     if adapter_id == "claude-code":
+        contract["optionalToolBatchFeedback"] = {
+            "entry": "runtime/accord-hook.cjs", "nativeEvent": "PostToolBatch",
+            "prerequisites": ["host-path-node", "supported-native-post-tool-batch"],
+            "effect": "brief-reconciliation-hint-on-observed-bash-denial-template",
+            "limits": "tool-response-text-is-not-permission-authority; no-state-executor-or-block",
+        }
         contract["optionalUpdateInspection"] = {
             "entry": "runtime/inspect-plugin-update.cjs",
             "prerequisites": ["host-path-node", "caller-bound-claude-cli-and-profile"],

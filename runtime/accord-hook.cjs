@@ -19,6 +19,27 @@ process.stdin.on('end', () => {
     fail();
     return;
   }
+  if (event?.hook_event_name === 'PostToolBatch') {
+    // Observed Claude 2.1.263 display template, not authenticated permission state.
+    // A successful command can print it too; only emit fixed, non-authorizing advice.
+    const refusalPrefix = 'Permission for this tool use was denied. It requires approval, and this ' +
+      'session has no approval surface — nobody can answer a permission prompt here — so it was denied automatically. ' +
+      'The action was NOT performed; do not claim it succeeded, and do not retry it: this action, and anything ' +
+      'else that requires approval, will be denied the same way for the rest of this session. Tell the user ' +
+      'what was blocked and why you needed it, then continue with the parts of the task that do not require approval. ' +
+      'What required approval: ';
+    const matches = Array.isArray(event.tool_calls) && event.tool_calls.some((call) =>
+      call?.tool_name === 'Bash' && typeof call.tool_response === 'string' &&
+      call.tool_response.startsWith(refusalPrefix) && call.tool_response.length > refusalPrefix.length);
+    process.stdout.write(JSON.stringify(matches ? {hookSpecificOutput: {
+      hookEventName: 'PostToolBatch',
+      additionalContext: "A Bash result matches the host's no-approval-surface format. Check the actual receipt's scope; " +
+        'it does not establish that all Bash operations are unavailable. Honor refusals and use already authorized means. ' +
+        'Match verification claims to observed evidence and reconcile task-created residue before completion. ' +
+        'This hint grants no authority.',
+    }} : {}));
+    return;
+  }
   if (
     event === null ||
     typeof event !== 'object' ||

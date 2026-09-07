@@ -436,7 +436,7 @@ def plugin_file_locators(root, plugin_root):
 
 def activation_mechanism_errors(
     root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
-    task_checkpoint=False,
+    task_checkpoint=False, tool_batch_feedback=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -494,6 +494,10 @@ def activation_mechanism_errors(
             }],
         },
     }
+    if tool_batch_feedback:
+        if adapter_id != "claude-code":
+            errors.append(f"{prefix} tool batch feedback has no bound native event")
+        expected_value["hooks"]["PostToolBatch"] = [{"hooks": [handler]}]
     if task_checkpoint:
         for event in ["UserPromptSubmit", "Stop", "SessionEnd"] + (["Interrupt"] if adapter_id == "codex" else []):
             expected_value["hooks"][event] = [{"hooks": [{
@@ -685,6 +689,7 @@ def validate_host_projection(
         ] if isinstance(manifest_locator, str) and expected_contract
         and "optionalUpdateInspection" in expected_contract else (),
         task_checkpoint=bool(expected_contract and "optionalTaskCheckpoint" in expected_contract),
+        tool_batch_feedback=bool(expected_contract and "optionalToolBatchFeedback" in expected_contract),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,

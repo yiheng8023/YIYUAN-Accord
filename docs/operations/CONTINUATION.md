@@ -13,7 +13,7 @@ quiescent; neither source nor destination is to be archived. The handoff revisio
 is `40df60cfc9625cf7108979cfb94690a1a90431db`; the bound checkout is unchanged.
 The private `task19-handoff.json` confirms the transfer, separately from receipt.
 
-The current unpublished packages are dev.14. Both now carry an executable local
+The current unpublished packages are dev.15. Both now carry an executable local
 task checkpoint and supported native input/Stop/session-end callers; Codex also
 connects Interrupt. The helper checks real file predicates and changed inputs,
 protects new input during retirement, suppresses unchanged continuation retries,
@@ -24,6 +24,59 @@ with revision zero and a reason. Bound unfinished work and newer input are kept.
 The Agent still owns semantic adequacy, authority and execution. No shared
 candidate installation is involved; the failed Claude dev.11 lifecycle branch
 remains paused.
+
+Dev.15 repairs five independently reproduced checkpoint failures: mixed output
+bytes, source drift during inspection, pause falsely reconciling an old contract,
+dead input-lock recovery retaining stale authority, and real Windows readonly
+input publication failure leaving old continuation usable. Fifteen executable
+tests passed in 18.242 seconds. Independent review reproduced the old failures
+and checked their correction plus complete fault recovery against runtime SHA256
+`6490e186e300c2c0a7fc76bc126a468b8e705ea4271623d25337f94220450fbe`.
+Pause preserves the bound contract epoch; failed native input publication keeps
+a recoverable lock. Recovery invalidates old input, and replay of actual native
+input uses an epoch guard. Rejected stale replay leaves current input intact.
+File sampling detects observed drift but does not lock external file producers.
+These local checks do not establish current native or complete function admission.
+
+A third native Codex CLI episode on exact dev.14 at `a5320d8` exercised actual
+repair of existing artifacts. Both files first contained 100; the producer changed
+B ready to held at 47.6968853 seconds. Native verification failed and a premature
+retire was rejected. The Agent rebound revision 2 and rewrote both files to 60,
+then verified and retired. The controller made no output repairs or extra user
+prompt. Execution took 142.7424732 seconds, exited naturally with zero children;
+the exact workspace, source and keep-file checks passed. Thirty files and their
+hash manifest are retained, the temporary root removed, owned checkpoint state
+absent and original shared configuration restored. This supplies the existing
+artifact repair that the earlier dev.13 episode did not exercise; native Stop
+forced continuation, broader duties and value remain open. CLI observations do
+not count as the still-bound App Server admission definitions.
+
+The user requires live calibration of progress, baseline, plan and acceptance
+mappings. Current source, work sequence and generated plan now reflect the
+checkpoint implementation, CLI evidence and active failure repairs. Historical
+current-tense dev.6/7 statements were corrected without changing their evidence.
+The Windows observer timeout still has no established root cause; the test now
+preserves safe stage/cleanup diagnostics, and controlled timeout checks confirmed
+parent and descendant termination. No runtime timeout was raised or skipped.
+
+Claude's existing helper now receives PostToolBatch and emits fixed short scope,
+verification and residue feedback only for the observed Bash refusal template.
+Two isolated frozen-host probes verified real native refusal delivery and then
+feedback inclusion in the next local synthetic request. They used three synthetic
+HTTP responses and no real model, and cleaned both owned process trees and roots.
+Five current-source feedback tests passed in 1.542 seconds; captured old/native
+receipts also replayed correctly. The helper adds no state, permission, executor
+or block, and response text is explicitly not authenticated permission evidence.
+The current implementation still needs an ordinary native model observation.
+
+Current conformance passed with 132 files, 1,226,349 code/test bytes and 30,860
+primary instruction bytes. The updated 1,300,000 / 132 / 32,000 bounds cover the
+actual repairs and focused current-package regression file with five-percent
+code headroom. The changed native Hook contract also passed five historical
+Hook compatibility tests in 2.185 seconds and all 66 development checks in
+92.209 seconds. All candidate facts here remain local, not whole functional or
+release acceptance. The private dev15-slice-check.json binds the integrated
+files, local checks and independent checkpoint review before the next native run.
 
 On dev.13 at `b908dedf3128f220d6ca804a920df5334530fe73`, two native Codex CLI
 episodes completed ordinary file delivery and correction of a stale checkpoint
@@ -63,12 +116,12 @@ Stop cleanup was removed. Final checks passed 10 behavior tests in 11.459
 seconds, the affected descriptor test in 14.210 seconds, current product
 conformance and diff whitespace. The private dev14-slice-check.json binds this
 slice; these results do not promote whole-function or release readiness. Functional
-completion and release readiness remain false and value unverified. The current
-worktree measures 1,190,584 code/test
-bytes, 131 files and 30,860 primary instruction bytes against revised development
+completion and release readiness remain false and value unverified. That dev.14
+worktree measured 1,190,584 code/test
+bytes, 131 files and 30,860 primary instruction bytes against its development
 bounds of 1,260,000 / 132 / 32,000, retaining five-percent code headroom. These are
 local implementation facts, not native functional acceptance. All nine hosted
-jobs passed for b908ded in run 34077164648. Earlier Windows failures remain
+jobs passed for b908ded in run 34077164648 and for a5320d8 in run 34080913330. Earlier Windows failures remain
 unexplained: 181ad42 exceeded the observer test's outer 20-second timeout during
 event-decode, whereas the older failure lacked calls.jsonl. A later PASS does
 not establish either root cause or qualify the changed dev.14 package.
