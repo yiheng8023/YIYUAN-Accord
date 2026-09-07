@@ -79,12 +79,16 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current delivered candidate and unproven connections
 
-Both worktree packages are unpublished `3.2.0-dev.9`; the continuity correction
-changes their guidance and needs fresh affected evidence. Current descriptors expose one host
-Skill and an optional Node SessionStart hint. The helper emits invalidation
-guidance on resume/compact; it owns no task scheduler, durable task state or
-recovery executor. The host Agent currently interprets and acts on that guidance;
-this describes the implementation gap, not a transfer of Accord's responsibility.
+Both worktree packages are unpublished `3.2.0-dev.11`. Each exposes one host
+Skill and an optional Node SessionStart hint. The hint emits invalidation
+guidance on resume/compact. Claude also includes a caller-bound native plugin
+update inspector; it checks the selected source and pre/post-state, but does not
+update, roll back or intercept actions. Neither helper owns a task scheduler,
+durable task state or recovery executor. The host Agent currently interprets the
+guidance and must connect observations to decisions and actual continuation;
+that complete ordinary-entry correction path remains unverified. User-owned
+AGENTS.md files are external conditions, not a delivered dependency or a
+substitute for Accord's responsibility.
 
 This is a candidate shape, not architecture law. Skill/Hook count, dependencies,
 layout and admission may change together when evidence supports the change.
@@ -95,7 +99,8 @@ autonomy.
 
 The repository has separate roles:
 
-- Host projections supply delivered guidance and optional hints.
+- Host projections supply guidance, optional continuity hints and the Claude
+  update inspector described above.
 - The no-I/O reference core evaluates supplied facts and policy; it does not
   discover capabilities, authenticate facts or actuate the host.
 - Maintainer validation checks source, package identity, evidence and historical
