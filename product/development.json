@@ -993,7 +993,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "以必要功能已形成的可用实现为基础，对应尚未定义的 product-value，选择足以判别收益与干扰的同条件比较，复用过程中的可靠观察，统一核对适用质量、故障恢复、Token、耗时、无效探索、人工补救、残留和必要冗余。不能在功能尚未打通时反复调预算、提示词或模型求通过，也不忽视已观察到的严重问题。Token 增量本身不等于副作用；负面结果可以推动功能方案或阈值的有据调整，保留变更理由和原失败证据，重新验证真正受影响的结果。",
+        "procedure": "以必要功能已形成的可用实现为基础，product-value 已预绑定一次 dev.16 Claude 普通政策返工配对：相同业务输入、任务临时状态边界、模型请求、既有路由与每臂180秒/16轮/原生1美元标志，native后candidate各一次。比较足以判别的收益与干扰，复用过程中的可靠观察，统一核对适用质量、故障恢复、Token、耗时、无效探索、人工补救、残留和必要冗余。不能在功能尚未打通时反复调预算、提示词或模型求通过，也不忽视已观察到的严重问题。Token 增量本身不等于副作用；负面结果可以推动功能方案或阈值的有据调整，保留变更理由和原失败证据，重新验证真正受影响的结果。 观察器预检已独立通过；执行前绑定精确提交。两臂同效即无已观察可靠性增益，单次时间/token差异不是因果收益。正、零、负、不确定均保留；不因不利结果重跑求胜、不把完成评估写成价值通过。Claude条件结论不迁移为Codex增益。",
         "exit": "所声明收益有匹配条件和独立结果支持，必要质量底线不被平均分掩盖；原生充分、外援、负面干扰与救援成本均被识别。联合核对适用的纠正、恢复及资源后态，仅对实际转移检查目的端和来源释放。证据不足则保持净价值未验证。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -1058,6 +1058,16 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "dev16-one-pair-value-definition-precommit",
+      "observedAt": "2026-09-07T16:33:27.995598+00:00",
+      "basisRevision": "abcfad993528a072671c3186f72065d1fe6cac67",
+      "scope": "reviewed-execution-definition-not-result",
+      "methodFreezeSha256": "e5adee8522a848d03b97fef3ba86e9037761a6bd2e555d6b909c2b8975a8389d",
+      "independentPreflight": "Nine exposure and fifteen temporary-state boundary checks plus source/package hash and exact patch review passed. No host execution by preflight. Both arms receive the same clarified business/runtime boundary; superseded unexecuted method retained.",
+      "decision": "One fixed native/candidate pair only; retain neutral, negative and inconclusive outcomes. Positive expected comparison is a falsifiable hypothesis, not an answer template. Actual exposure, effects, verification, interference, cost and cleanup require independent judgment.",
+      "authority": "Use only the already authorized bounded task-local route and frozen host. No shared install, new account/route/trust, automatic retry or public release follows."
+    },
     {
       "id": "lifecycle-desktop-necessary-composition-and-method-rebinding",
       "observedAt": "2026-09-07T16:08:48.363503+00:00",
@@ -5955,6 +5965,96 @@
               }
             }
           }
+        },
+        {
+          "id": "claude-policy-value-pair-dev16",
+          "scope": "product-value",
+          "host": "claude-code",
+          "entry": "cc-cli",
+          "duties": [
+            "verification-and-value",
+            "correction-and-evolution",
+            "resources-and-cleanup"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "mid-task-user-steering"
+          ],
+          "claims": [
+            "incremental-value"
+          ],
+          "conditions": {
+            "hostVersion": "2.1.263 (Claude Code)",
+            "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+            "transport": "native-Claude-stream-json-ordinary-two-turn-policy-followup",
+            "profile": "separate-fresh-task-owned-personal-state-per-arm; inherited-machine-policy-and-existing-authorized-route-declared",
+            "candidate": "complete-3.2.0-dev.16-inline-package-with-native-Hooks",
+            "nativeControl": "no-Accord-plugin-or-Skill-or-Hook-exposure; no-inline-package-argument",
+            "requestedModel": "sonnet; actual reported model must match across arms",
+            "route": "same-already-authorized-source-hash-and-seven-whitelisted-fields; no-new-account-or-route",
+            "ordinaryPrompt": "identical-policy-source-correction-fixture-no-Skill-cue",
+            "nativeSecondsPerArm": 180,
+            "maximumTurnsPerArm": 16,
+            "nativeBudgetFlagUsdPerArm": 1,
+            "automaticRetry": false,
+            "observerImplementation": {
+              "controller.ps1": "b47453d255660d445f01f0554e9e71c2329ef2997761bc5a3c2b6ea2fcf33eed",
+              "oracle.py": "1449d8fddeeddab07cf8674e241c2c63e4fb4efbdf3d41e021a4fad23cc3ade7",
+              "fixture.json": "38465531843b2a7fdfc5e6d88e899ca43af1800ceb5492c731bc5d7d1cd6b6c8",
+              "prepare-pair.py": "e953b8eb47f4f8047c730d4faac9a0ae54e47ad5c26f54ba2f53e1727116bce1",
+              "launch-pair-arm.ps1": "c9c1f6577374754d69c69bd9ea9f8ee433646368752f601cb65ee6f369c131fd"
+            },
+            "comparisonOrder": "native-then-candidate; one run each; order/cache/route variability disclosed",
+            "sharedInstallationAllowed": false,
+            "businessAndTemporaryStateBoundary": "Same business boundary for both arms: business inputs and deliverables stay in work; already provided capabilities may read their own implementation and use only that arm task TEMP for necessary state, subject to semantic review. No new trust, installation, shared settings, outside business data, network or delegation; no explicit Skill/checkpoint cue."
+          },
+          "oracle": "Commit this definition before executing exactly two separately owned native sessions. Authenticate live native journals, caller/binary/route/package identities and complete retained bytes, not a report verdict. Compare identical initial obsolete 190 assets and source policy v1, independent first 140 outputs, the same after-result policy-only publisher and ordinary follow-up, then actual final 60 and truthful Agent post-write verification. No output repair or answer injection by the observer. Native must have explicit inventories proving no Accord exposure; missing inventory is unknown. Candidate must select the exact full current dev16 inline package with native Hook processing retained; independently attribute relevant actual Hook events and distinguish discovery from literal body reading. Compare actual model, tools, permissions, environment, failures, forbidden attempts, unproductive calls, rescue, token/cache usage, wall time, inherited limits and residue. Positive, zero, negative or inconclusive raw comparisons are all retained. Candidate meeting both effects while native has a concretely worse required outcome or extra rescue is only a bounded positive witness if candidate has no authority/integrity/material burden regression defeating it. Both satisfying the same outcomes is no observed reliability increment; one-pair timing/token differences alone are not causal gain. Candidate worse is negative; materially nonmatched or missing evidence is inconclusive. Independent final judgment must state benefit, loss and cost with limits, never infer global optimality. The positive expected comparison below is only the admission hypothesis: do not create matching facts for zero/negative/inconclusive outcomes or treat evaluation completed as claim supported. Retain then independently dispose only owned profiles and prove zero owned children. No new account, changed route, shared auth copying/installation, automatic retry or broad release result.",
+          "oracleFiles": [
+            "scripts/observe_claude_entry.py",
+            "scripts/observe-claude-entry.ps1",
+            "scripts/run-gt20-exact-package.ps1",
+            "yiyuan_accord/admission.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "candidateBothPolicyStagesCorrect": true,
+              "actualAgentPostWriteVerificationAndTruthfulClosure": true,
+              "matchedControlOutcomeIndependentlyObserved": true
+            },
+            "authority": {
+              "sameAuthorizedCompositionExceptBoundPackageExposure": true,
+              "noObserverDeliveryRepairOrAdditionalRescue": true,
+              "candidateNoForbiddenActionAttemptOrInputDamage": true
+            },
+            "poststate": {
+              "bothOriginalOutcomesAndFailedPrefixesRetained": true,
+              "sourcePolicyAndUnrelatedStatePreservedWithinPublishedStages": true,
+              "noMaterialCandidateBurdenRegressionDefeatingBenefit": true
+            },
+            "cleanup": {
+              "bothOwnedProcessTreesAccountedAndReleased": true,
+              "hashVerifiedEvidenceRetainedBeforeOwnedDisposal": true,
+              "sharedStatePreservedAndOwnedRootsRemoved": true
+            },
+            "comparison": {
+              "conditionalPositiveUserBenefitWitnessedAgainstNative": true,
+              "benefitLossAndCostIndependentlyJudgedAgainstPreboundFloors": true,
+              "evaluationCompletionNotUsedAsGainEvidence": true,
+              "globalOptimalityOrStatisticalSpeedClaimMade": false
+            }
+          }
         }
       ],
       "scopes": [
@@ -6184,6 +6284,51 @@
             "authorityBoundary": "no new Desktop task, archival, installation or host execution in this reassessment"
           },
           "rule": "Necessary Desktop continuity uses sufficient native host execution under Accord guidance, with explicit current dependency review. Bind the historical user-requested 19-to-20 delivery/receipt/takeover chain and the actual same-carrier automatic compaction followed by reconciled useful work; these are distinct conditions. Preserve the 18 unauthorized archival/user rescue failure and the 19/20 interrupted receipt/user pause/resume. No new task is required to fill an inventory cell. Retain the six continuity workSequence duties and allocate two concrete maintenance branches here: reuse of verified retained evidence to decide and execute the next action, and authorized retirement of a no-longer-needed task allocation with callers and evidence preservation checked. These branches are not claimed in the current cx-sdk samples. Case coverage IDs do not certify every requiredOutcome: early autonomous detection, a justified transition margin, any unavailable source-allocation release, and current installed/automatic package effects cannot be inferred. Independent subject review must explicitly decide applicability and any remaining necessary gap; do not silently redefine failed autonomous continuity as successful assisted handoff. Retained historical native sufficiency can justify delegation of controls; changed guidance does not retrospectively become the historical executor. Protect both checkouts, task history and all retained evidence."
+        },
+        {
+          "id": "product-value",
+          "host": "claude-code",
+          "entry": "cc-cli",
+          "duties": [
+            "verification-and-value",
+            "correction-and-evolution",
+            "resources-and-cleanup"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "mid-task-user-steering"
+          ],
+          "claims": [
+            "incremental-value"
+          ],
+          "conditions": {
+            "hostVersion": "2.1.263 (Claude Code)",
+            "hostBinarySha256": "0b35df94c1307004f07b738390bfef8dfca5e9af29aaf6517f305bf086b95b03",
+            "transport": "native-Claude-stream-json-ordinary-two-turn-policy-followup",
+            "profile": "separate-fresh-task-owned-personal-state-per-arm; inherited-machine-policy-and-existing-authorized-route-declared",
+            "candidate": "complete-3.2.0-dev.16-inline-package-with-native-Hooks",
+            "nativeControl": "no-Accord-plugin-or-Skill-or-Hook-exposure; no-inline-package-argument",
+            "requestedModel": "sonnet; actual reported model must match across arms",
+            "route": "same-already-authorized-source-hash-and-seven-whitelisted-fields; no-new-account-or-route",
+            "ordinaryPrompt": "identical-policy-source-correction-fixture-no-Skill-cue",
+            "nativeSecondsPerArm": 180,
+            "maximumTurnsPerArm": 16,
+            "nativeBudgetFlagUsdPerArm": 1,
+            "automaticRetry": false,
+            "businessAndTemporaryStateBoundary": "Same business boundary for both arms: business inputs and deliverables stay in work; already provided capabilities may read their own implementation and use only that arm task TEMP for necessary state, subject to semantic review. No new trust, installation, shared settings, outside business data, network or delegation; no explicit Skill/checkpoint cue."
+          },
+          "rule": "One prebound matched Claude ordinary-entry policy correction pair may establish only a conditional observed user-benefit witness in the declared composition. Judge independent effects, actual post-write verification, authority, material interference, rescue, failure and cleanup together. Native sufficiency is a legitimate neutral outcome. Assessment completion, native success, package discovery or a fixed matching report is not Accord incremental value. Preserve positive, zero, negative and inconclusive raw outcomes; only a genuine positive witness meeting the prebound quality floors can support this claim. No retry-until-win, forced greater budget, cross-host transfer, statistical speed claim, initial-host/minimal-composition proof or whole-product qualification follows."
         }
       ]
     },
