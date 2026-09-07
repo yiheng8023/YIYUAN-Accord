@@ -23,7 +23,7 @@
   },
   "delivery": {
     "version": "3.2.0-dev.15",
-    "rule": "The unpublished dev.15 packages deliver an optional task-local file checkpoint and supported native input, Stop and session-end callers; Codex also connects Interrupt. The Agent chooses meaningful predicates, reconciles intent and owns execution. The helper samples real bytes, detects observed drift, preserves input freshness and unfinished work, and requests bounded continuation. Pause does not reconcile old contracts; failed input publication keeps a recoverable lock, and proven dead input-lock recovery requires guarded replay of actual native input. A surviving caller may retire only the current unbound receipt after verified exit, with revision zero and a reason. This is neither an external-writer transaction nor a daemon or host authority barrier. Claude PostToolBatch also supplies fixed, advisory scope/verification/residue feedback for the observed Bash refusal format; unknown batches stay silent and matched text grants no authority. Both Skills assign ongoing retrospective correction to Accord, reusing sufficient host execution and recovery. Handoff guidance separates receipt, takeover, one writer, allocation release and explicit archive authority. Shared candidate installation remains withdrawn; use bounded task-local evaluation on the existing hosts. The failed Claude dev.11 lifecycle episode remains historical. A revised task-local method now binds trusted requested-source identity and rechecks after refresh; this is not a repaired historical result. Exact historical and current observations, their failures, repairs and limits live in developmentObservations rather than expanding this rule. Local helper checks, synthetic transport, native task effects, lifecycle, Desktop and causal value remain distinct; formal evidence must match its actual package, entry, conditions and reviewed outcomes.",
+    "rule": "The unpublished dev.15 packages deliver an optional task-local file checkpoint and supported native input, Stop and session-end callers; Codex also connects Interrupt. The Agent chooses meaningful predicates, reconciles intent and owns execution. The helper samples real bytes, detects observed drift, preserves input freshness and unfinished work, and requests bounded continuation. Pause does not reconcile old contracts; failed input publication keeps a recoverable lock, and proven dead input-lock recovery requires guarded replay of actual native input. A surviving caller may retire only the current unbound receipt after verified exit, with revision zero and a reason. This is neither an external-writer transaction nor a daemon or host authority barrier. Claude PostToolBatch also supplies fixed, advisory scope/verification/residue feedback for the observed Bash refusal format; unknown batches stay silent and matched text grants no authority. Both Skills assign ongoing retrospective correction to Accord, reusing sufficient host execution and recovery. Handoff guidance separates receipt, takeover, one writer, allocation release and explicit archive authority. Shared candidate installation remains withdrawn; use bounded task-local evaluation on the existing hosts. The failed Claude dev.11 lifecycle episode remains historical. A subsequent dev.15 episode supplied trusted target identity and proved installed loading, but its management Agent still failed to complete an invalid-source hold. Management discovery and decision linkage now require correction; historical outcomes remain unchanged. Exact historical and current observations, their failures, repairs and limits live in developmentObservations rather than expanding this rule. Local helper checks, synthetic transport, native task effects, lifecycle, Desktop and causal value remain distinct; formal evidence must match its actual package, entry, conditions and reviewed outcomes.",
     "hostProjections": [
       {
         "id": "codex",
@@ -964,7 +964,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "对应 codex-lifecycle 与 claude-code-lifecycle，保留精确包、授权、坏源保护、实际更新、幸存接管者、恢复和清理底线。新证据表明 dev.11 已有足够 manager/helper 入口，但请求未提供与 helper 同算法的可信候选摘要，且刷新后尚未重核便遇到轮次上限。现从已冻结文件清单补齐目标身份，重绑当前候选，先验证来源选择、刷新后重核和实际决定，再接通真实更新与独立损坏恢复。三 profile、激活样本和 helper 调用是可调整方法；本次可按缓存隔离需要继续使用独立 profile。原失败保留，不预设新增 MCP、Hook 或执行框架。",
+        "procedure": "对应 codex-lifecycle 与 claude-code-lifecycle，保留精确包、授权、坏源保护、实际更新、幸存接管者、恢复和清理底线。当前焦点：修复管理入口与判定衔接。dev.15 已实际安装并加载，两个独立 profile 的 3.1 也已实际可用；补齐可信目标摘要后，管理 Agent 仍未读取 Skill 正文，且在原生校验已指出坏源后继续探索至轮次上限，未完成保护决定。原失败、实际加载树隔离和清理已保全；不把旧包未变记为主动保护。先使包的管理适用入口及现有检查器输入契约可发现，再按真实受影响范围验证 Agent 判断、真实更新与独立损坏恢复。三 profile、激活样本和 helper 调用是可调整方法；缓存隔离按实际前提选择，不新增无证据需要的 MCP、Hook 或执行框架。",
         "exit": "用户所需生命周期与失败后态成立，且变更/卸载后仍有可用执行者完成必要恢复与核验。安装登记、实际激活、市场缓存和受影响配置分别取证；未更新而旧包不变不能证明保护。该项未通过只约束依赖它的工作与整版资格。",
         "qualityAxes": [
           "functional-coverage",
@@ -1055,6 +1055,108 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "claude-dev15-installed-loading-and-management-decision-failure",
+      "observedAt": "2026-09-07T08:30:37.373817+00:00",
+      "scope": "actual-installed-loading-and-failed-update-management-not-lifecycle-admission",
+      "subject": {
+        "revision": "9a21f408a628d03b89040e5191fc02aa7030ea6f",
+        "version": "3.2.0-dev.15",
+        "case": "claude-agent-validated-plugin-lifecycle",
+        "definitionSha256": "24a99eea62a72a4117ebc2fbd0f59c85a198b4c43e27883415d7c093b2562596",
+        "packageSha256": "55a59202bd2e8de9b54b741356e7e84a9ced9ad3f76d22c6b89a386891dce99d"
+      },
+      "installedEffect": "Native installation from an absent profile produced exact nine-file dev.15 registration/cache. A fresh process actually invoked the registered Skill and received its installed body, wrote both 140 deliverables and read them back. Separate update/recovery profiles each installed accepted seven-file 3.1, actually loaded its registered Skill and verified the same applicable result. Per-file physical identity checks showed distinct cache, mutable marketplace and publisher trees at observation time; this is not continuous immutability.",
+      "failure": {
+        "toolCalls": 44,
+        "bashCalls": 29,
+        "readCalls": 15,
+        "skillOrHelperInvocation": false,
+        "nativeInvalidPublisherValidation": true,
+        "completedHoldDecision": false,
+        "nativeSourceRefresh": false,
+        "installedUpdate": false,
+        "nativeResult": "error_max_turns",
+        "deniedAttempts": 6,
+        "nativeValidationErrorIsNotPermissionDenial": true
+      },
+      "failureDetail": "Trusted candidate/prior digests were present, but the manager read only helper source, not the Skill body, and never invoked the helper. Native list/validate worked and validation identified the declared candidate publisher manifest as invalid JSON. The native-selected marketplace still contained old 3.1; it was not refreshed or validated as the bad candidate. Six denied attempts and continued exploration ended in error_max_turns without a completed hold decision, source refresh or installed update. Protected prior bytes stayed equal, which alone is not active protection. The wrapper failure=null describes process supervision, not task success.",
+      "correction": "The earlier claim that supplying trusted target identity was a sufficient next remedy is disproved. Make the delivered management trigger and existing typed inspection input discoverable, preserving Agent method/verdict choice. Existing native validation was enough to stop the affected mutation; no new runtime or forced helper sequence is justified.",
+      "sourcePrerequisite": "A separate native marketplace add of the exact Git URL#accepted-3.1.0 selected that ref, materialized the exact accepted 3.1 files and left no active installation. This resolves the earlier frozen-host ref-syntax unknown; it is not Agent-selected recovery.",
+      "unexecuted": [
+        "actual-prior-to-candidate-update",
+        "installed-bad-state-injection",
+        "independent-Agent-recovery",
+        "updated-and-restored-activation"
+      ],
+      "poststate": {
+        "nativeOperations": 36,
+        "realModelProcesses": 4,
+        "nativeSeconds": 270.258,
+        "managerSeconds": 170.415,
+        "managerNativeExitCode": 1,
+        "managerResult": "error_max_turns",
+        "naturalExit": true,
+        "ownedProcessesAtRemoval": 0,
+        "retainedFiles": 2345,
+        "retainedBytes": 13622963,
+        "temporaryRootRemoved": true
+      },
+      "cleanup": "All three profiles were natively uninstalled and their marketplaces removed with empty final lists. Inactive caches were recorded separately, originals retained and verified before exact owned-root disposal. Selected 13 shared files and frozen runtime stayed unchanged during this episode. No credential value was found in the pre-cleanup scan; inherited or unmonitored machine state remains unknown.",
+      "evidence": "Private task20-functional-chain-20260907/claude-lifecycle-dev15-9a21f40/accord-lifecycle-jpynrxmi; original requests, frozen source/oracle, actual native streams, assessments and evaluator source retained.",
+      "evidenceSha256": {
+        "retention": "cb35148b3165be3fdb7d95df81efa869ccddec17637f6db5f848bee55767f7d5",
+        "managerAssessment": "559c4b577877ac30946cd5a326f59dd8f3d0b37fa5dc087b01c30d2adfa5fdeb",
+        "episodeClose": "a6d596b8112e0336e649c68c38622f154bbc4cfb73d618f2ec5eadbc5a8bebcd",
+        "pinnedSourceProof": "b07e13df1829b8b40a1523e841d739b044c7d547473190093af59f07cfdef4ab"
+      },
+      "limits": "Requested 16-turn, 180-second and USD 1 bounds are retained; native reported 17 turns and provider billing is unverified. Inline management exposure cannot supply installed activation. No whole-host, lifecycle, Desktop, release or causal-value qualification follows."
+    },
+    {
+      "id": "codex-windows-effective-policy-text-only-pair",
+      "observedAt": "2026-09-07T08:30:37.373817+00:00",
+      "scope": "paired initial effective-policy transport observation only; no file-delivery or real native write validation",
+      "subject": {
+        "revision": "042a2cf8433af41734e272ecff208f7a8320ecd7",
+        "packageRevision": "e527e1dda26edbeaa2806928e89a494d0c8dda9f",
+        "version": "3.2.0-dev.15",
+        "host": "Codex 0.153.4",
+        "frozenInterfaceSha256": "b480962ce082aee957812b2100671792a27941c0e3506526560e97e84b2da878"
+      },
+      "method": "Two task-owned profiles and exact native binary/package; both requested workspace-write. The only semantic initial difference was windows.sandbox=unelevated, verified against pre-call hashes. A no-auth loopback returned only text; each arm made two requests and zero model or tool calls. Common feature flags and allocated paths/ports remain explicit conditions.",
+      "effect": {
+        "control": {
+          "actualSandbox": "none",
+          "actualSandboxMode": "read-only",
+          "nativeSeconds": 4.635,
+          "nativeExitCode": 0,
+          "ownedChildren": 0
+        },
+        "unelevated": {
+          "actualSandbox": "windows_sandbox",
+          "actualSandboxMode": "workspace-write",
+          "nativeSeconds": 5.433,
+          "nativeExitCode": 0,
+          "ownedChildren": 0
+        }
+      },
+      "correction": "On this frozen host, absent Windows sandbox enablement resolved requested workspace-write to read-only; explicit unelevated resolved it to windows_sandbox/workspace-write. The pair supports the exact source condition, not actual sandbox command execution or file delivery. Product adaptation must observe effective permissions instead of treating the requested policy or redirected profile as the effective environment.",
+      "preservedFailure": "The native candidate added trust_level=trusted for its own private workspace, causing the first post-run config comparison to fail. Original post-state and analysis failure were retained; the initial comparison was reconstructed and verified without normalizing or rerunning either arm.",
+      "poststate": "Both native/server/driver and inner/outer Jobs exited normally with zero owned children. Fifteen selected shared-state entries were unchanged at arm completion. After task-root cleanup, default.rules changed while the host reported saving two exact delete-command approval prefixes; no broader unchanged-host or causal storage claim is made. No real sandbox command, NUL ACL access or shared denybin mutation was executed.",
+      "cleanup": {
+        "retainedFilesPerArm": 121,
+        "ownedRootsRemoved": true,
+        "pendingCleanup": false,
+        "initialCleanupInterruptionCause": "unknown-no-rejection-returned"
+      },
+      "evidence": "Private task20-functional-chain-20260907/codex-policy-text-pair-042a2cf-e86c0b43; retained per-arm originals, first analysis failure, pair-result.json and cleanup-report.json.",
+      "evidenceSha256": {
+        "pairResult": "5cbce5eaad5ff961e235390ee7d7ea01cab5f918180fd0d04d917ab081d2b2f1",
+        "cleanupReport": "24d5ba755216c34d87d509e558a87259393f866a0e98c5bc2e36ee5e79456c06",
+        "retention": "d22c789600b4b1449092d4b52f05de1d13e32f85c77b0bdb90810bc9ef084c9e"
+      },
+      "limits": "Only the initial effective-policy transport is verified. No real model, tool execution, ordinary output, sandbox-write safety, Desktop, lifecycle or Accord incremental value is established."
+    },
     {"id":"claude-lifecycle-target-identity-rebinding","observedAt":"2026-09-07T06:39:33.028235+00:00","scope":"reviewable-method-correction-before-new-execution-not-lifecycle-acceptance","case":"claude-agent-validated-plugin-lifecycle","beforeDefinitionSha256":"102943054d00a93330ddcd579ad6f060ebfd3d60d63ec6d9945a5e14e8dc0f2a","afterDefinitionSha256":"24a99eea62a72a4117ebc2fbd0f59c85a198b4c43e27883415d7c093b2562596","basis":"Independent reinspection of dev.11 actual calls 31/32 showed a successful old-3.1 snapshot with expectedSourceMatches=null followed by marketplace refresh to bad source and a native turn limit. Existing manager/helper execution was available; no candidate hold, successful update or independent recovery was observed.","correction":"Bind expectedSourceSha256 from independently frozen candidate and accepted-prior file manifests using the already shipped algorithm. Keep Agent method choice, actual selected-source and refresh invalidation. Fixed profile count, selected Skill/helper and numeric activation sample are adjustable means; necessary installed loading, real update, invalid-source protection and surviving-actor recovery remain required.","offlineEvidence":"Private lifecycle-rebinding-draft/request_identity.py matched the historical actual prior digest f7547e1f1d3602ef46b080e8c32d211469c053db3a2aa6c5b2e6301372e88fea; ordering/slash equivalence, changed-content distinction and invalid-input checks passed without native or model execution.","limits":"No source is approved by its expected digest, no shared installation is authorized and no historical failure is promoted. New preparation, manager operations, decisions, activation and recovery remain to execute under frozen actual bindings."},
     {"id":"customized-environment-attribution-boundary","observedAt":"2026-09-07T06:16:47.059549+00:00","scope":"source-consistency-correction-not-new-environment-control-or-retroactive-acceptance","reason":"The deliverable-composition wording excluded foreign Skills/Hooks/MCP without qualification, conflicting with the existing no-pristine-host commitment and declared-composition handling. Independent review found no evidenced need for a new environment scanner or runtime.","correction":"Preserve relevant customization, bind its actual role and prerequisites, and attribute its contribution. Exclude undeclared development assistance from independent product claims. Source/scope/current authority and actual host constraints still govern conflicts; no shared user guidance or configuration is changed.","evidenceBoundary":"Working/config directory redirection proves only those redirected paths. Inherited PATH, native/managed policy, ancestor guidance and authorized provider remain observed conditions or unknown. Existing native observations keep their original definitions and are not relabelled under this clarification.","affectedDefinitionHashes":{"claude-task-local-ready-orders-correction":{"before":"413632ac8e03f9789cbecedd52fb9eeb47534af9024180afc4e3a3c7a18f4a6b","after":"902ecdc3abe8fd07d8c39c9d7b7045358589e7cff9f053ca922ae3dec6065ea4"},"claude-agent-validated-plugin-lifecycle":{"before":"083456c84f4bf170a7ef2ea1f1dfbd46cab9707a962434a2a34cfbbc278a3ea6","after":"102943054d00a93330ddcd579ad6f060ebfd3d60d63ec6d9945a5e14e8dc0f2a"},"codex-task-local-implicit-adaptation":{"before":"fa447f495d32822fbf29a4b05a607c47cc609f83c30ab09ac38ed4a6ba60236e","after":"b6f838ed7202e1205a7aa859bd35215c6df4461b9a3fe2a3b2de34f90ae605a8"},"codex-task-local-capability-loss-conflict":{"before":"0eb5370291bd4fd63170d29dd0815866ddf9bfae31c0096377af04f25268d3ef","after":"0943b62f26fae19c06dd985b2825218b17dd91c208daeefa3f81544e4bea6101"},"codex-task-local-selected-continuation":{"before":"a778a647a0a1a2d2841a22a62fb2a1e0250f2fa8a70c87ca51436745317a902b","after":"86275936962727afb706f857a86eb727f67950e2ffad410abe07ac7d4def3d0a"},"codex-native-plugin-lifecycle":{"before":"25e6bdefb59f06c809ee771e9fd1bfdbf110b24a340c5eccfc8e23fd4cfd31eb","after":"ffffb6606ab5409e3169c8a7ff7afac2e72e4f19e519c753aab2ecb93ce215cf"}}},
     {"id":"claude-policy-two-stage-dev15","observedAt":"2026-09-07T06:16:47.059549+00:00","scope":"ordinary-after-result-source-correction-and-rework-with-remaining-claim-quality-limit","subject":{"revision":"24cc6aa3c53f0a8c3d36ae0c8ab86bbc091787f4","version":"3.2.0-dev.15","case":"claude-task-local-ready-orders-correction","definitionSha256":"413632ac8e03f9789cbecedd52fb9eeb47534af9024180afc4e3a3c7a18f4a6b","packageSha256":"55a59202bd2e8de9b54b741356e7e84a9ced9ad3f76d22c6b89a386891dce99d"},"effect":"The ordinary first request replaces both obsolete 190 drafts with ready A/B=140. Only after that actual result, the bound publisher changes policy to v2 and a new ordinary input UUID arrives in the same native session. The Agent rereads the policy, rewrites both existing outputs to A=60 and actually reads both back. Native source unchanged-since-last-Read receipts support the native-host confirmation wording; no independent Agent byte-comparison claim is inferred.","review":"Independent content and transport reviewers confirmed both policy consultations, both write/readback chains, exact replayed inputs and queued/started/completed lifecycle. Twenty-six calls: 18 Read, 4 Write, 4 Bash; no task-forbidden attempt/effect or Agent-created temporary file. Independent physical checks confirm both snapshots, publisher-only policy mutation, immutable inputs, package/shared bytes, credential-value absence and empty selected checkpoint namespaces.","remainingQualityIssue":"The second final says no automated schema/validator was available without establishing that capability absence. What is established is non-use and actual content inspection. This does not invalidate the observed files but prevents unconditional truthful-claim or whole-case acceptance.","poststate":{"nativeSeconds":63.245,"supervisorSeconds":66.333,"exitCode":0,"forced":false,"ownedChildren":0,"retainedFiles":49,"temporaryRootRemoved":true},"conditions":"Exact complete inline dev.15 package, Claude 2.1.263, existing authorized DeepSeek route, personal-state redirection and declared inherited system/ancestor/machine-policy limits. No Skill or checkpoint invocation was required or observed.","turnAccounting":{"requestedMaxTurns":16,"nativeReportedTurns":[18,10],"reason":"unknown"},"evidence":"Private task20-functional-chain-20260907/accord-claude-policy-t7aagsui and 49-file retention manifest, original v2 observer reports plus separate semantic/physical checks.","journalSha256":"3a71e05a2b1a45018a6d284b505e45ed72d57ed8a8522be00d3d51da0c044461","reportSha256":"cfaabfd3b6031373482e9ca27213a494635f0eab862b7db2db5a57a7380d5364","limits":"The previous observer failure remains intact. This is an after-result ordinary followup, not active-turn interruption, installed lifecycle, Desktop, whole-function, release or causal-value qualification."},
@@ -4273,7 +4375,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "沿已打通的Codex局部功能链修复当前反例并验证受影响后态，同时处理Claude普通入口的局部失败误判、实际调用与清理缺口：查证与能力选择、执行交付、识别偏移、作出调整、实际续做或恢复、独立后态与必要能力退出；按真实依赖推进其余两宿主功能。先实现可用功能并检查直接结果，完整价值对照、预算收敛及全维度权衡随后完成；遇到无新增信息的失败应改变方法或暂停受影响支线。用户自有 AGENTS.md 是外部环境变量，不能通过替换开发宿主指导补足 Accord 内功，也不能成为打包、安装或功能前提；未应用的指导草稿已停止。六个必需范围保留其必要结果；当前CLI诊断与既有SDK准入方法明确分开，正式方法按功能证据重绑后再准入。公开准入局部错误回归已通过，但 Desktop、净价值与安装态闭环等缺口仍开放。Claude dev.11 已失败、保全并回收，不默认追加同类版本或试验。最终统一 README、更新日志和全局一致性；条件发布、共享安装及归档授权边界保持。",
+    "work": "沿已打通的Codex局部功能链修复当前反例并验证受影响后态，同时处理Claude普通入口的局部失败误判、实际调用与清理缺口：查证与能力选择、执行交付、识别偏移、作出调整、实际续做或恢复、独立后态与必要能力退出；按真实依赖推进其余两宿主功能。先实现可用功能并检查直接结果，完整价值对照、预算收敛及全维度权衡随后完成；遇到无新增信息的失败应改变方法或暂停受影响支线。用户自有 AGENTS.md 是外部环境变量，不能通过替换开发宿主指导补足 Accord 内功，也不能成为打包、安装或功能前提；未应用的指导草稿已停止。六个必需范围保留其必要结果；当前CLI诊断与既有SDK准入方法明确分开，正式方法按功能证据重绑后再准入。公开准入局部错误回归已通过，但 Desktop、净价值与安装态闭环等缺口仍开放。Claude dev.15 安装及既有 3.1 实际加载已确认；更新管理仍未完成坏源保护决定，已保全并回收。当前修复管理发现入口及判定衔接，不重复未改变的失败方法。最终统一 README、更新日志和全局一致性；条件发布、共享安装及归档授权边界保持。",
     "requires": "Current user direction defers installation into the shared development host until accepted publication. The Codex candidate has been uninstalled, its temporary marketplace pin restored, and backups retained. Before publication use bounded task-local candidate exposure and existing authorized host access for necessary evaluation; do not reinstall a shared candidate. New accounts, unrelated trust/data, material cost or other personal changes remain outside this authority. Fresh evidence and exact-candidate checks precede conditional publication."
   },
   "claimCeiling": {
