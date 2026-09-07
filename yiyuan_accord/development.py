@@ -557,7 +557,7 @@ def verify_development(root):
 
 def render_development_plan(contract):
     """Derived human view; the contract remains the only editable progress source."""
-    states = {"pending": "待开展", "active": "进行中", "implemented-local-unreleased": "本地实现，未发布"}
+    states = {"pending": "待完成", "active": "进行中", "implemented-local-unreleased": "本地实现，未发布"}
     duties = {item["id"]: item for item in contract["acceptance"]["duties"]}
     lines = ["# YIYUAN Accord 3.2 开发计划与进度", "",
              "由 `product/development.json` 派生；修改源数据后同步本页，校验会拒绝不一致。", "",
