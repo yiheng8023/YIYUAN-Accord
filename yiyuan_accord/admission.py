@@ -150,6 +150,19 @@ def _definition(contract, case):
     })
 
 
+def _reuse_definition(contract, case):
+    """Compare meaning without changing the original stored-record digest."""
+    projections = [v for v in contract["delivery"]["hostProjections"] if v["id"] == case["host"]]
+    if (len(projections) != 1 or type(projections[0].get("maxSkillBytes")) is not int
+            or projections[0]["maxSkillBytes"] <= 0):
+        raise ValueError("invalid Skill budget")
+    projection = {k: v for k, v in projections[0].items() if k != "maxSkillBytes"}
+    # The current static validator still enforces the actual Skill byte limit.
+    return _definition({**contract, "delivery": {
+        **contract["delivery"], "hostProjections": [projection],
+    }}, case)
+
+
 def _git(root, *args):
     return _bounded_git_bytes(root, ("--no-replace-objects", "--literal-pathspecs", *args), _LIMIT)
 
@@ -242,8 +255,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                             raise ValueError("evaluated admission declaration is invalid")
                         prior[revision] = original_contract
                     original = next(v for v in prior[revision]["acceptance"]["admission"]["cases"] if v["id"] == key)
-                    if (record["definitionSha256"] != bound["definitionSha256"]
-                            or _definition(prior[revision], original) != bound["definitionSha256"]
+                    if (record["definitionSha256"] != _definition(prior[revision], original)
+                            or _reuse_definition(prior[revision], original) != _reuse_definition(contract, case)
                             or record["packageSha256"] != bound["packageSha256"]):
                         raise ValueError("definition or package identity changed")
                     package = Path(hosts[case["host"]]["manifest"]).parents[1].as_posix()

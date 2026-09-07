@@ -477,15 +477,93 @@ class DevelopmentEvidenceTests(unittest.TestCase):
             report = self.replay(records)
         self.assertTrue(report["repositoryCandidateReady"], report["errors"])
 
+    def test_skill_budget_reuse_preserves_original_record_digests(self):
+        for relabel in (False, True):
+            with self.subTest(relabel=relabel), self.history():
+                records = self.capture_records()
+                original = copy.deepcopy(records)
+                contract = copy.deepcopy(self.contract)
+                for projection in contract["delivery"]["hostProjections"]:
+                    projection["maxSkillBytes"] += 1
+                self.commit_contract(contract)
+
+                def observer(request):
+                    result = self.observer(request)
+                    if request["phase"] == "observe":
+                        result["records"] = copy.deepcopy(records)
+                        for record in result["records"]:
+                            current = request["cases"][record["case"]]["definitionSha256"]
+                            self.assertNotEqual(record["definitionSha256"], current)
+                            if relabel:
+                                record["definitionSha256"] = current
+                    return result
+
+                report = verify_product(self.root, evidence=observer)
+                self.assertEqual(records, original)
+                self.assertEqual(report["repositoryCandidateReady"], not relabel, report["errors"])
+                self.assertEqual(report["evidenceAdmission"]["acceptedCases"],
+                                 [] if relabel else ["claude-code", "codex"])
+
+    def test_invalid_current_skill_budgets_and_insufficient_caps_fail_static_admission(self):
+        for value in (None, "13600", True, 0, -1, 1.5, 1, "missing"):
+            with self.subTest(cap=value), self.history():
+                contract = copy.deepcopy(self.contract)
+                contract["delivery"]["hostProjections"][0]["maxSkillBytes"] = value
+                if value == "missing":
+                    del contract["delivery"]["hostProjections"][0]["maxSkillBytes"]
+                self.commit_contract(contract)
+                report = verify_product(self.root, evidence=self.observer)
+                self.assertFalse(report["contractValid"], report["errors"])
+                self.assertFalse(report["repositoryCandidateReady"])
+                self.assertTrue(any("Skill" in error and "budget" in error for error in report["errors"]))
+
+    def test_invalid_historical_skill_budget_cannot_be_laundered_by_a_valid_current_cap(self):
+        from yiyuan_accord.admission import _definition
+
+        for value in (None, "13600", True, 0, -1, 1.5, "missing"):
+            with self.subTest(prior_cap=value), self.history():
+                prior = copy.deepcopy(self.contract)
+                prior["delivery"]["hostProjections"][0]["maxSkillBytes"] = value
+                if value == "missing":
+                    del prior["delivery"]["hostProjections"][0]["maxSkillBytes"]
+                self.commit_contract(prior)
+                revision = self.git("rev-parse", "HEAD")
+                self.commit_contract(self.contract)
+
+                def observer(request):
+                    result = self.observer(request)
+                    if request["phase"] == "observe":
+                        record = next(r for r in result["records"] if r["case"] == "codex")
+                        case = next(c for c in prior["acceptance"]["admission"]["cases"] if c["id"] == "codex")
+                        record.update(evaluatedRevision=revision, definitionSha256=_definition(prior, case))
+                    return result
+
+                report = verify_product(self.root, evidence=observer)
+                self.assertFalse(report["repositoryCandidateReady"])
+                self.assertEqual(report["evidenceAdmission"]["acceptedCases"], ["claude-code"])
+
     def test_changed_case_definition_invalidates_only_its_dependents(self):
-        with self.history():
-            records = self.capture_records()
-            contract = copy.deepcopy(self.contract)
-            contract["acceptance"]["admission"]["cases"][0]["oracle"] += " Revised Codex-specific oracle."
-            self.commit_contract(contract)
-            report = self.replay(records)
-        self.assertEqual(report["evidenceAdmission"]["acceptedCases"], ["claude-code"])
-        self.assertFalse(report["repositoryCandidateReady"])
+        records = self.capture_records()
+        for change in ("oracle", "permission", "outcome", "marker"):
+            with self.subTest(change=change), self.history():
+                contract = copy.deepcopy(self.contract)
+                projection = contract["delivery"]["hostProjections"][0]
+                projection["maxSkillBytes"] += 1
+                policy = contract["acceptance"]["admission"]
+                case = policy["cases"][0]
+                if change == "oracle":
+                    case["oracle"] += " Revised Codex-specific oracle."
+                elif change == "permission":
+                    case["conditions"]["effectivePolicy"] = "changed-permission"
+                    policy["scopes"][0]["conditions"]["effectivePolicy"] = "changed-permission"
+                elif change == "outcome":
+                    case["expected"]["effect"]["total"] = 999
+                else:
+                    projection["requiredSkillMarkers"].append("name: deliver-demand-driven-outcome")
+                self.commit_contract(contract)
+                report = self.replay(records)
+                self.assertEqual(report["evidenceAdmission"]["acceptedCases"], ["claude-code"])
+                self.assertFalse(report["repositoryCandidateReady"])
 
     def test_complementary_entries_cannot_be_combined_into_complete_coverage(self):
         self.assert_incomplete_scopes("cx-desktop", "fixture-1")

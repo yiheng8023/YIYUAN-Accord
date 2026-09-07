@@ -43,6 +43,7 @@ def offline_communicate(controller, root, input_text=None, timeout=20):
     try:
         return controller.communicate(input_text, timeout=timeout)
     except subprocess.TimeoutExpired:
+        before_kill = controller.poll()
         controller.kill()  # Closing its Job handle also contains native descendants.
         closed = False
         try:
@@ -50,6 +51,25 @@ def offline_communicate(controller, root, input_text=None, timeout=20):
             closed = True
         except subprocess.TimeoutExpired as failure:
             stdout, stderr = failure.stdout or b"", failure.stderr or b""
+        startup = "unobserved"
+        try:
+            trace = root / "observer-startup.jsonl"
+            if trace.is_symlink():
+                raise ValueError("nonordinary diagnostic")
+            with trace.open("rb") as stream:
+                payload = stream.read(4097)
+            if len(payload) > 4096:
+                raise ValueError("diagnostic limit")
+            stages = {"request-bound", "runtime-compile", "runtime-ready",
+                      "version-capture", "version-captured", "ready-emitted"}
+            for line in payload.splitlines():
+                item = json.loads(line)
+                if (isinstance(item, dict) and set(item) == {"pid", "stage"}
+                        and type(item["pid"]) is int and item["pid"] == controller.pid
+                        and item["stage"] in stages):
+                    startup = item["stage"]
+        except (OSError, ValueError, TypeError):
+            pass  # Missing/partial diagnostics do not change timeout or cleanup.
         output = stdout.decode("utf-8", errors="replace") if isinstance(stdout, bytes) else stdout
         ready = False
         for line in output.splitlines():
@@ -61,6 +81,7 @@ def offline_communicate(controller, root, input_text=None, timeout=20):
         journal = root / "native/native-stdout.jsonl"
         size = journal.stat().st_size if journal.exists() else None
         diagnostic = {"readyReceived": ready, "nativeJournalBytes": size,
+            "controllerReturncodeBeforeKill": before_kill, "observerStartupStage": startup,
             "controllerExited": controller.poll() is not None, "controllerPipesClosed": closed,
             "controllerStdoutBytes": len(output.encode("utf-8")),
             "controllerStderrBytes": len(stderr if isinstance(stderr, bytes) else stderr.encode("utf-8"))}
@@ -248,6 +269,8 @@ class Probe {
                 self.assertNotIn("fixture-not-a-real-token", diagnostic)
                 before = json.loads(diagnostic.split(": ", 1)[1])
                 self.assertFalse(before["readyReceived"])
+                self.assertIsNone(before["controllerReturncodeBeforeKill"])
+                self.assertEqual(before["observerStartupStage"], "unobserved")
                 self.assertIsNone(before["nativeJournalBytes"])
                 self.assertTrue(before["controllerExited"])
                 self.assertTrue(before["controllerPipesClosed"])
@@ -279,6 +302,8 @@ class Probe {
                         self.assertNotIn("recorded-prefix", diagnostic)
                         after = json.loads(diagnostic.split(": ", 1)[1])
                         self.assertTrue(after["readyReceived"])
+                        self.assertIsNone(after["controllerReturncodeBeforeKill"])
+                        self.assertEqual(after["observerStartupStage"], "ready-emitted")
                         self.assertGreater(after["nativeJournalBytes"], 0)
                         self.assertTrue(after["controllerExited"])
                         self.assertTrue(after["controllerPipesClosed"])

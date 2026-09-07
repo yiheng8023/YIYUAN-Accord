@@ -1,9 +1,15 @@
 #requires -Version 7.0
 # Private pipe source for observe_claude_entry.py. No saved receipt is authority.
 $ErrorActionPreference = 'Stop'
+$startupTrace = $null
 [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
 
 function Reply($value) { [Console]::WriteLine(($value | ConvertTo-Json -Depth 30 -Compress)) }
+function Startup-Stage([string]$stage) {
+  if ($startupTrace) {
+    try { $startupTrace.WriteLine((@{pid=$PID; stage=$stage} | ConvertTo-Json -Compress)) } catch { }
+  }
+}
 function Ordinary-Directory([string]$path) {
   $item = Get-Item -LiteralPath $path -Force
   if (-not $item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
@@ -181,6 +187,15 @@ try {
       (Get-Content -LiteralPath (Join-Path $taskRoot 'owner') -Raw).Trim() -ne $bound.episode) { throw 'unbound' }
   $executable = (Get-Item -LiteralPath $bound.executable).FullName
   $binaryHash = (Get-FileHash -LiteralPath $executable -Algorithm SHA256).Hash.ToLowerInvariant()
+  # Optional diagnostics start only after the existing owned-root validation.
+  # CreateNew cannot replace a pre-existing file; diagnostic failure is not a verdict.
+  try {
+    $startupTrace = [IO.StreamWriter]::new([IO.File]::Open(
+      (Join-Path $taskRoot 'observer-startup.jsonl'), [IO.FileMode]::CreateNew,
+      [IO.FileAccess]::Write, [IO.FileShare]::Read), [Text.UTF8Encoding]::new($false))
+    $startupTrace.AutoFlush = $true
+  } catch { }
+  Startup-Stage 'request-bound'
 } catch {
   Reply @{error='unbound-observation-request'}
   exit 2
@@ -246,13 +261,17 @@ public static class AccordEntryInput {
   }
 }
 '@
+  Startup-Stage 'runtime-compile'
   Add-Type -TypeDefinition ($literal.Value + [Environment]::NewLine + $inputHelper)
+  Startup-Stage 'runtime-ready'
   $versionEnvironment = [Collections.Generic.Dictionary[string,string]]::new()
   foreach ($name in @('COMSPEC', 'PATH', 'PATHEXT', 'SystemRoot', 'WINDIR', 'TEMP', 'TMP')) {
     $value = [Environment]::GetEnvironmentVariable($name)
     if ($value) { $versionEnvironment[$name] = $value }
   }
+  Startup-Stage 'version-capture'
   $versionCapture = Invoke-OwnedCapture $executable @('--version') $taskRoot $versionEnvironment '' ([Math]::Min(10, $bound.timeout)) 4096 4096
+  Startup-Stage 'version-captured'
   if ($versionCapture.forced -or $versionCapture.exitCode -ne 0 -or -not $versionCapture.stdout.Trim()) {
     Reply @{error='version-query-not-completed'; forced=$versionCapture.forced;
       evaluatorChildrenAfterCleanup=$versionCapture.evaluatorChildrenAfterCleanup}
@@ -262,6 +281,7 @@ public static class AccordEntryInput {
   $route = $null
   $ran = [Collections.Generic.HashSet[string]]::new()
   Reply @{ready=$true; binarySha256=$binaryHash; version=$version; episode=$bound.episode}
+  Startup-Stage 'ready-emitted'
   while ($line = [Console]::ReadLine()) {
     $request = $line | ConvertFrom-Json -AsHashtable
     if ($request.op -eq 'close') { break }
@@ -335,4 +355,6 @@ public static class AccordEntryInput {
   # Never expose route data, stderr, private paths or exception text.
   Reply @{error='live-observation-unavailable'}
   exit 3
+} finally {
+  if ($startupTrace) { try { $startupTrace.Dispose() } catch { } }
 }

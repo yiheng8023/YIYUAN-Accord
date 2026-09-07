@@ -708,11 +708,14 @@ def validate_host_projection(
         errors.append(f"{prefix} contract does not match declared authority")
     behavior_state = contract.get("behaviorEvidenceState")
 
+    max_bytes = projection.get("maxSkillBytes")
+    valid_skill_budget = type(max_bytes) is int and max_bytes > 0
+    if not valid_skill_budget:
+        errors.append(f"{prefix} Skill budget must be a positive integer")
     skill_bytes = 0
     if skill_path is not None:
         skill_bytes = skill_path.stat().st_size
-        max_bytes = projection.get("maxSkillBytes")
-        if isinstance(max_bytes, int) and skill_bytes > max_bytes:
+        if valid_skill_budget and skill_bytes > max_bytes:
             errors.append(f"{prefix} Skill exceeds budget: {skill_bytes} > {max_bytes}")
         try:
             skill_text = _owned_text(skill_path)
