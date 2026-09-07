@@ -424,6 +424,73 @@ catch (error) { process.stdout.write(error.message); }
         self.assertEqual(self.status()['revision'], current['revision'])
         self.assertEqual(self.event('Stop'), {})
 
+    def check_retirement_deletion_failure(self, suffix, *, injected_input=True):
+        current = self.status()
+        before = {p.name: p.read_bytes() for p in self.state.iterdir() if p.name.endswith(('.state.json', '.input.json'))}
+        script = '''
+const fs = require('node:fs'), cp = require('node:child_process');
+const runtime = require(process.argv[1]), request = JSON.parse(process.argv[2]);
+const suffix = process.argv[3], inject = process.argv[4] === 'true';
+const unlink = fs.unlinkSync; let delivered = false, child = null;
+fs.unlinkSync = function(file, ...args) {
+  if (!delivered && String(file).endsWith(suffix)) {
+    delivered = true;
+    if (!inject) throw Object.assign(new Error('test-delete-denied'), {code: 'EACCES'});
+    child = cp.spawnSync(process.execPath, [process.argv[1], '--hook', 'UserPromptSubmit'], {
+      env: process.env, cwd: request.cwd, encoding: 'utf8', timeout: 3000,
+      input: JSON.stringify({session_id: request.session_id, cwd: request.cwd,
+        hook_event_name: 'UserPromptSubmit', prompt: 'New input during checkpoint deletion.'})});
+  }
+  return unlink.call(this, file, ...args);
+};
+let result, error;
+try { result = runtime.operate(request); } catch (e) { error = e.message; }
+process.stdout.write(JSON.stringify({delivered, result, error,
+  child: child && {status: child.status, stderr: child.stderr}}));
+'''
+        request = {'op': 'retire', 'session_id': 'test-session', 'cwd': str(self.work),
+                   'epoch': current['epoch'], 'expectedRevision': current['revision'], 'reason': 'Owned test exit.'}
+        result = subprocess.run([self.node, '-e', script, str(RUNTIME), json.dumps(request), suffix,
+                                 str(injected_input).lower()], env=self.environment, capture_output=True,
+                                text=True, encoding='utf8', timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        self.assertTrue(report['delivered'])
+        self.assertNotIn('result', report)
+        self.assertIn('latest-user-input' if injected_input else 'test-delete-denied', report['error'])
+        if injected_input:
+            self.assertEqual(report['child']['status'], 1)
+            self.assertIn('EEXIST', report['child']['stderr'])
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()
+                          if p.name.endswith(('.state.json', '.input.json'))}, before)
+        after = self.status()
+        self.assertEqual(after['revision'], current['revision'])
+        self.assertEqual(after['needsNativeReplay'], injected_input)
+        return after
+
+    def test_failed_input_during_bound_deletion_preserves_recovery_context(self):
+        self.bind()
+        self.write_outputs()
+        for suffix in ('.state.json', '.input.json'):
+            with self.subTest(suffix=suffix):
+                after = self.check_retirement_deletion_failure(suffix)
+                self.assertIsNotNone(after['inspection'])
+                self.event('UserPromptSubmit', prompt='New input during checkpoint deletion.',
+                           recovery_epoch=after['epoch'])
+                self.bind()
+        current = self.status()
+        self.assertTrue(self.invoke({'op': 'retire', 'epoch': current['epoch'],
+                                    'expectedRevision': current['revision']})['retired'])
+
+    def test_failed_input_during_unbound_deletion_preserves_receipt(self):
+        after = self.check_retirement_deletion_failure('.input.json')
+        self.assertEqual(after['mode'], 'unbound')
+
+    def test_partial_checkpoint_deletion_restores_prior_files(self):
+        self.bind()
+        self.write_outputs()
+        self.check_retirement_deletion_failure('.input.json', injected_input=False)
+
     def test_retirement_rejects_mixed_output_bytes_and_mid_inspection_source_change(self):
         # Deterministic file-read boundaries exercise actual predicate evaluation,
         # not timing sleeps. No single output satisfies the mixed predicates.

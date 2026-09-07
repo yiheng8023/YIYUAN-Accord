@@ -9,7 +9,7 @@
       "name": "yiyuan-accord-claude",
       "source": "./plugins/yiyuan-accord-claude",
       "description": "YIYUAN Accord outcome delivery for Claude, including authorized package installation, update and independent recovery.",
-      "version": "3.2.0-dev.17"
+      "version": "3.2.0"
     }
   ]
 }

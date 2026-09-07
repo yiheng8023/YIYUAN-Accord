@@ -18,9 +18,9 @@ Accord 的目标很简单：用户专注创造与决策，Agent 承担实现目�
 
 当前，Accord 通过 Codex 和 Claude 插件提供协作指引，并在仓库中提供合同与证据检查工具。它不是一个独立工作的自治助手。是否真正完成任务、减少人工介入，需要在实际宿主中验证。
 
-> **当前分支正在开发 3.2。** 包版本为 `3.2.0-dev.17`，尚未正式发布，也不会自动更新你安装的版本。已发布的 [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) 保持不变。
+> **包版本：3.2.0。** 版本号本身不证明已发布或已验收。安装前核对同名 GitHub Release 与不可变 tag；已安装版本不会自动更新。已发布的 [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) 保持不变。
 >
-> 可先看[当前能力边界](#已经证明什么还有什么没证明)、[开发计划](docs/operations/PLAN-v3.2.md)或[未发布更新日志](CHANGELOG.md)。不要从持续变化的 `main` 或本开发分支安装。
+> 可先看[能力边界](#已经证明什么还有什么没证明)、[版本变更](CHANGELOG.md)或[维护计划](docs/operations/PLAN-v3.2.md)。使用已接受的精确 tag，不从持续变化的分支安装。
 
 ## 它想解决什么问题
 
@@ -36,7 +36,7 @@ Accord 希望减少这些额外负担。用户表达意图，参与关键决策�
 
 ## 装上后实际得到什么
 
-已发布的 3.1 两个插件包都包含一个 `deliver-demand-driven-outcome` Skill、宿主元数据，以及短时运行的 `SessionStart` Hook 辅助程序。3.2 开发包还包含可选的任务局部文件检查点及受支持的原生事件调用。Claude 包另有建议性的工具结果反馈和可选更新检查器。
+3.2 两个插件包都包含一个 `deliver-demand-driven-outcome` Skill、宿主元数据、短时运行的 `SessionStart` 提示，以及连接受支持原生事件的可选任务局部文件检查点。Claude 包另有建议性的工具结果反馈和可选更新检查器。
 
 - **Skill**：宿主 Agent 可在适用任务中使用的协作指引。可见、调用和产生有用效果是不同的事。
 - **会话提示**：在受支持的 `compact` 或 `resume` 事件上提供无状态提示；这一提示在 `startup` 和 `clear` 时保持静默。
@@ -87,23 +87,29 @@ Accord 组织和引导已有能力的使用，**不训练或改写模型、不�
 
 这些检查不证明广泛用户收益、自动崩溃恢复、当前客户端兼容、生产安全或所有入口可用，也不能用于验收已经改变的 3.2 包。
 
-**3.2 目前尚未达到发布条件。** 已完成的有限 Claude 配对比较中，有无 Accord 均交付并核验了两个阶段，未观察到可靠性增益；单次配对的时间、工具拒绝次数或报告成本差异不能证明因果收益。早期未交付和说明不准确的失败记录继续保留。dev.17 修复了独立审查发现的输入丢失边界，变更后的 Hook 行为仍需受影响宿主验证。
+保留的本地观察覆盖真实交付与纠正、在途问题后的续做、能力失效与来源冲突、已声明的安装/更新/恢复组合，以及两个 Desktop 连续性分支。当前适用性按完整包变化重评，包括 dev.17 真实原生输入回调和本地失效/恢复检查。这些是带有明确人工或健康管理者协助的有限事实，不是普遍自主行为保证。
 
-[更新日志](CHANGELOG.md)与[开发源](product/development.json)分别记录已实现变更、已留存的普通任务及生命周期观察、反例和剩余候选资格。
+有限 Claude 配对中，有无 Accord 均交付并核验了两个阶段，未观察到可靠性增益；单次时间、拒绝或报告成本差异不能证明因果收益。早期未交付和说明不准确的失败记录继续保留。最终检查点还修复了退役期间输入失败导致恢复上下文丢失的问题；25 项本地运行时回归通过。
+
+最近两个原生输入观察方法整体仍记为失败：Claude 出现一次用途未知的回环请求；Codex 主进程退出后，需要强制清理身份未捕获的子进程。已捕获的输入回执仍是有限事实。Codex 记录了收到输入上下文；Claude 对应提示的消费未证明。退出后的本地重放不是宿主自主恢复。完整证据已保全，所属运行目录已移除。
+
+[更新日志](CHANGELOG.md)与[源文件](product/development.json)分别记录实现、原始观察、反例和当前资格。精确版本的验收及托管结果以同名 Release 为准；CLI 的静态 PASS 不提供这些证明。
 
 候选资格要求必要功能、生命周期，以及每个宿主充分的净影响评估；“优于原生行为”的声明另须正向证据，当前候选不提出这项已获支持的声明。原先必须取得正增益的发布门槛及未满足的假设继续保留在历史中。修订后的门槛仍拒绝未解决的严重退化、输入/授权损害，以及影响声明用途的必要未知；完成评估本身不等于适用或可以发布。
 
 开发观察覆盖特定 Windows 本地 Codex、Claude Code 入口，前提是已有获授权的模型路线、必要文件/命令权限及实际包加载。Codex App Server 的证据不自动覆盖 Desktop、IDE 或云端；Desktop 目前覆盖已声明的维护继续与用户授权接管。其他组合按实际条件核对。普通 Claude 使用不需要另装 Codex、Python 或开发评估脚本。
 
+健康自动压缩后核源并继续有用工作，支持同载体继续；用户要求后的实际接管支持该次迁移，不证明自主提前检测。预测、最优迁移余量与运行时卸载仍未证明。若实际任务依赖这些保证，缺证就重新成为必要缺口，不能用旧样本豁免。
+
 Skill 由宿主 Agent 解释执行。启用 Hook 需要 `PATH` 中的 Node、对应原生事件和宿主信任支持。即使未绑定文件检查点，输入 Hook 也会维护临时新鲜度回执并提供提示；已核对的未绑定回执在受支持的会话结束时清除，缺少结束事件时由幸存调用者在核验退出后处置。输入失败水位保留到所属状态目录可以安全退役，单个任务不能清除另一会话的不确定状态。若失败本身无法落盘，新鲜度未知，原生调用者必须暂停续做。输入/状态 JSON 上限为 128 KiB；超长输入须由充分的原生路径恢复，不能静默截断。缺少 Hook 支持时，宿主普通工作路径仍负责交付，并须说明缺失的续做效果。
 
 安装、更新与恢复需要独立于损坏或被替换插件的健康执行者、可核验的已接受来源和必要授权。已留存的 Claude 损坏缓存/来源冲突恢复使用了健康 Codex 管理者、明确授权与协助；这不证明自动发现接管者或 Claude 无人介入恢复，也不把开发工具变成普通使用的前置依赖。
 
-## 尝试已发布版本
+## 安装已接受的精确版本
 
 可以让有相应能力的 Agent 宿主接管安装：
 
-> 先检查当前宿主，再从精确的 v3.1.0 tag 安装 YIYUAN Accord。保留无关配置和插件，遇到必要信任时请我决定，并验证登记、新任务中的可见性和仍未确认的部分。
+> 先核对 v3.2.0 已有对应、已接受的 GitHub Release，再检查当前宿主并安装这个精确 tag。保留无关配置和插件，遇到必要信任时请我决定，并验证登记、新任务中的可见性和仍未确认的部分。若发布不存在就停止，不改装移动中的开发分支。
 
 这是期望的交互方式，不保证每个宿主都能无人介入地完成。前提是宿主支持插件、能访问仓库，且获准修改插件状态。Hook 还需要 `PATH` 中的 Node 和宿主支持的信任流程。
 
@@ -112,12 +118,12 @@ Skill 由宿主 Agent 解释执行。启用 Hook 需要 `PATH` 中的 Node、对
 <details>
 <summary>CLI 安装参考命令</summary>
 
-这是已记录的精确 tag 路线，不是对所有当前客户端重新完成的生命周期验收。改变状态前先核对实际命令支持。
+以下沿用已记录的精确 tag 路线，选择 3.2 tag。先核对对应 Release 和当前命令支持；这不是对所有客户端重新完成的生命周期验收。
 
 Codex：
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.1.0
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.2.0
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 codex plugin list --json
 ```
@@ -125,7 +131,7 @@ codex plugin list --json
 Claude Code：
 
 ```powershell
-claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.1.0" --scope user
+claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.2.0" --scope user
 claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 claude plugin marketplace list --json
 claude plugin list --json
@@ -166,7 +172,7 @@ python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 
 只有 `python3` 时替换启动器即可。CI 覆盖 Ubuntu、Windows、macOS 上的 Python 3.10–3.14，并使用 Node 24 检查 Hook。这是维护工具验证，不是跨宿主行为验收，也不是用户必须安装 Python 的要求。
 
-发布 3.2 前，更新日志须与精确候选对应；提交、推送全部版本内变更，完成必要功能、价值、生命周期、独立评审与托管检查，再按已绑定的人工授权发布同一提交并核验后态。
+发布要求更新日志、提交推送的版本内变更、必要功能/生命周期/净影响证据、独立评审与托管检查相符，再按已绑定的人工授权发布同一提交并核验公共后态。冻结候选不是发布凭证。
 
 参与方式见 [CONTRIBUTING.md](CONTRIBUTING.md)、[SECURITY.md](SECURITY.md)和 [SUPPORT.md](SUPPORT.md)。[报告问题](https://github.com/yiheng8023/YIYUAN-Accord/issues)时说明期望与实际结果、精确版本、宿主入口、相关自定义因素和人工介入，不提交凭据或私密会话原文。
 

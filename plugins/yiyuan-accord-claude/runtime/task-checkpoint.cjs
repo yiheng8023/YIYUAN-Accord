@@ -192,7 +192,30 @@ function publishInput(where, input) {
   catch (error) { error.inputPublicationFailed = true; throw error; }
 }
 function currentEpoch(where, epoch) {
-  if (readInput(where)?.epoch !== epoch) fail('latest-user-input-not-reconciled');
+  const input = readInput(where);
+  if (input?.epoch !== epoch) fail('latest-user-input-not-reconciled');
+  return input;
+}
+
+function retireFiles(where, epoch, prior = null) {
+  return inputLocked(where, () => {
+    const input = currentEpoch(where, epoch);
+    const receipt = fs.existsSync(where.input) ? readJson(where.input) : null;
+    const files = [[where.state, prior], [where.input, receipt]].filter(([, value]) => value !== null);
+    try {
+      for (const [file] of files) fs.unlinkSync(file);
+      // Input failures publish outside this lock. Keep the recovery context if
+      // one arrives during deletion; an acknowledged old watermark is harmless.
+      if (canonical(readInput(where)?.failures || {}) !== canonical(input.failures || {})) {
+        fail('latest-user-input-not-reconciled');
+      }
+    } catch (error) {
+      // Both locks are still held; restore only our missing checkpoint files,
+      // never erase failure watermarks. Storage failure still requires a caller.
+      for (const [file, value] of files) if (!fs.existsSync(file)) atomic(file, value);
+      throw error;
+    }
+  });
 }
 
 function binding(request, where, prior, currentInput) {
@@ -285,11 +308,8 @@ function operate(request) {
       if (request.expectedRevision !== 0 || request.epoch !== currentInput.epoch || !text(request.reason)) {
         fail('unbound-retirement-needs-current-receipt-and-reason');
       }
-      return inputLocked(where, () => {
-        currentEpoch(where, currentInput.epoch);
-        fs.unlinkSync(where.input);
-        return {retired: true, scope: 'unbound-input-receipt-only', inspection: null};
-      });
+      retireFiles(where, currentInput.epoch);
+      return {retired: true, scope: 'unbound-input-receipt-only', inspection: null};
     }
     if (!prior || request.expectedRevision !== prior.revision || request.epoch !== currentInput.epoch) {
       fail('task-revision-or-input-conflict');
@@ -309,12 +329,8 @@ function operate(request) {
       const result = inspect(where, prior);
       if (result.status !== 'verified-local' && request.disposition !== 'user-cancelled') fail('unmet-output-cannot-retire');
       if (request.disposition === 'user-cancelled' && !text(request.reason)) fail('cancellation-reason-required');
-      return inputLocked(where, () => {
-        currentEpoch(where, currentInput.epoch);
-        fs.unlinkSync(where.state);
-        fs.unlinkSync(where.input);
-        return {retired: true, scope: 'task-checkpoint-files-only', inspection: result};
-      });
+      retireFiles(where, currentInput.epoch, prior);
+      return {retired: true, scope: 'task-checkpoint-files-only', inspection: result};
     }
     fail('unknown-operation');
   });

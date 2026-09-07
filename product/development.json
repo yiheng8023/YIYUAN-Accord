@@ -2,7 +2,7 @@
   "schema": "yiyuan-accord-development/v4",
   "productId": "yiyuan-accord",
   "phase": "whole-system-optimization-and-functional-closure",
-  "status": "in-development",
+  "status": "candidate-frozen",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
     "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition. Later corrections require coverage beyond known v3.1 issues. The user does perceive some installed-v3.1 influence and recalls stronger pre-Accord automatic verified handoff and ongoing correction. Preserve this as reported experience, not measured causal runtime benefit or a zero-value finding. Size reduction must preserve necessary functionality and user experience; runtime retirement is not a goal. On 2026-09-05 the user additionally authorized upgrading their existing host-installed Accord packages after 3.2 is accepted and published. That initial upgrade direction was limited to the post-release package. On 2026-09-06 the user explicitly required user authorization for task archival and authorized the successor task to investigate and repair this handoff failure, then continue the existing 3.2 work. Handoff, completion, task creation and resource cleanup do not grant archive authority; no archive is authorized in this continuation. Later the user clarified that necessary configuration adjustments can be prepared and carried out with backups and rollback, rather than forcing an increasingly complex zero-change test route. Bind the actual settings, affected sessions, prior state, restoration and verification; the user then explicitly allowed installing the existing Codex candidate before publication, with development interference controlled and a verified backup/recovery path. This permits the bounded Accord transition already proposed, not host application upgrades or unrelated extension changes. The user also directed removal of dedicated host planning-mode prompts and their bindings from current v3.1-and-later surfaces, preserving earlier versions. Current intent and authority govern; plans, procedures and acceptance adapt to justified corrections and evidence, and the native progress UI maps the current plan without becoming task authority. The user subsequently withdrew the pre-release shared-host installation route to reduce development self-interference and unpredictable propagation. The existing Codex candidate is to remain uninstalled until an accepted release; bounded task-local exposure may support necessary evaluation. Prior installation/rollback observations remain historical facts, not standing authorization to reinstall. Hot-update behavior depends on the host and requires observed activation/recovery; replacing files cannot undo prior conversation influence. On 2026-09-07 the user further corrected development order: implement the necessary functional chain first, then balance quality, budgets, cost and Accord impact across dimensions before release. Repeatedly running an unchanged failing procedure is not progress; methods and thresholds are revisable with explicit reasons. This does not waive human authority or permit unbounded effects. The user requested an early verified continuation from the long task, with no omitted work and source/plan/progress reconciliation before transfer. On 2026-09-07, after reviewing the exact single-use proposal, the user explicitly approved one temporary shared Codex dev.16 installation, one installed selected-use turn, native uninstall and restoration. That exception has now been exercised and closed; it does not authorize another prerelease shared installation, other plugin upgrades, a new Desktop task or archival. Preserve the original withdrawal and prior execution identities. Necessary read-only evaluation of retained evidence remains within the existing development scope.",
@@ -15,21 +15,24 @@
   "cycle": {
     "id": "post-v3.1-system-development",
     "targetVersion": "3.2.0",
-    "versionState": "development-target-not-published",
-    "existingHosts": ["codex", "claude-code"],
+    "versionState": "final-candidate-not-publication-proof",
+    "existingHosts": [
+      "codex",
+      "claude-code"
+    ],
     "additionalHostAdaptation": "deferred",
     "scopeRule": "Preserve necessary outcomes; review each inherited function and mechanism for actual need. Delegate to suitable host capabilities; compare maintained alternatives for a material gap or plausible net benefit, not only native failure. Merge or retire unnecessary assets with callers and acceptance reconciled. Keep existing Codex/Claude scope before expanding hosts. Development is not candidate acceptance or publication; review compatibility before final version selection.",
-    "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
+    "sourceDecision": "This source freezes the exact 3.2 candidate and its required acceptance. The version label does not authenticate host effects, independent qualification, CI, publication or installed activation. Historical executions retain their original revisions, packages and dates; current changes require scoped independent reassessment."
   },
   "delivery": {
-    "version": "3.2.0-dev.17",
-    "rule": "The unpublished dev.17 packages add durable input-failure invalidation outside the contended input lock and current-native replay guarded by a derived receipt/failure epoch. Explicit Hook event arguments let malformed or oversized native input invalidate the caller workspace when its session cannot be identified. Stop rechecks freshness after state publication. File checkpoint binding remains task-selected; enabled input Hooks still write temporary receipts and supply hints without a binding. Failure watermarks remain until safe retirement of their owning state directory; one task cannot clear another session's uncertainty. If failure storage is itself unavailable, cross-process protection is unknown and the native caller must hold continuation. The stdin/state bound remains 128 KiB; an input outside that bound is not silently recovered or truncated. The host owns current intent, meaningful predicates, authorized execution and sufficient recovery. No host permission barrier, daemon, external-writer transaction or extra model call is provided. Existing advisory continuity/Claude feedback and independent management inspection remain. Historical dev.16 ordinary, installed, lifecycle and Desktop observations retain exact identities, assistance, failures and limitations. The closed Claude comparison observed equal reliable outcomes and no reliability increment; its timing/cost differences do not establish causality. Current package/native dependencies still need affected-scope review. The single shared installation exception is closed; no repeated prerelease shared install is authorized. Local checks, actual host behavior, independent admission, value and publication remain distinct.",
+    "version": "3.2.0",
+    "rule": "The 3.2 candidate delivers one Skill per existing host, supported native Hook callers and an optional file checkpoint. Input-failure watermarks invalidate stale receipts outside the input lock; current-event replay uses a derived epoch. Stop rechecks freshness after state publication. Retirement preserves recovery context when a failed input arrives during deletion, and compensates partial deletion before returning failure. It never clears failure watermarks; storage or compensation failure needs a sufficient native caller and does not provide a host permission barrier or external-writer transaction. Enabled input Hooks write receipts and hints even without a checkpoint binding; state is bounded to 128 KiB. No daemon, new model call or ordinary-use Python dependency is added. Retained dev.17 native input connections and current local regressions support only their stated dependencies; historical business/lifecycle/continuity effects keep their original identities. The bounded Claude comparison found no reliability increment. Exact current function, lifecycle and impact reassessment plus final independent review still precede conditional publication; frozen metadata and static checks cannot establish readiness.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.17",
-        "packageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
+        "packageVersion": "3.2.0",
+        "packageSha256": "edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -57,8 +60,8 @@
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.17",
-        "packageSha256": "bd926399ebee5b9e3740173adb25bdd4ac9a6736bebe2ea6fd2e57b3e9cc5a80",
+        "packageVersion": "3.2.0",
+        "packageSha256": "9a5056261f77a84636527f2883dedec3e1e56a01a7563ba5ab7402f851c949c6",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -900,7 +903,7 @@
       {
         "id": "existing-host-functional-paths",
         "title": "普通入口必要功能链实现与实际纠偏",
-        "state": "active",
+        "state": "implemented-local-unreleased",
         "duties": [
           "goal-authority-correction",
           "environment-and-self-exposure",
@@ -914,7 +917,7 @@
           "resources-and-cleanup",
           "verification-and-value"
         ],
-        "procedure": "两宿主必要普通功能已进入实质收尾：保留已成立的资料获取、交付、政策与既有产物返工、能力失效改道、冲突排除、答后续做、输入保护及必要退出。Claude dev.16 实际取得完整 GitHub 发布/tag 来源并交付七字段；说明中的 draft 标签经一次明确纠正后修复、核验与留存，两个会话自然结束。首阶段未完整通过、纠正提示和全部成本保持，不能归因为自主发现或 Accord 增益。按真实宿主、入口、包和条件绑定现有事实；未触发的模型切换、领域或故障窗口需判断适用性，不因字典空格追加试验。原生有界 Stop 投递、模型返工与普通答后继续分别已有证据，同次真实模型 Stop 仅限制对应保证。正式准入与充分性复核尚欠账，不把该工序本地完成等同整版功能资格。 Claude普通范围保留7项实际必要职责；环境、恢复与清理由已有声明生命周期组合承担，并将其真实管理路线/拓扑选择及临时安装退役两职责转配至该组合。两宿主全局职责不删，执行者、协助及故障后态不合并成Claude自主效果。普通政策双轮采用保留原身份的当前重评；已被原始反证纠正的validator措辞误判不得重提为功能缺口。 独立实现审查复现输入锁竞争、超长或缺会话字段的原生输入，以及Stop写状态并发窗口仍可能沿用旧动作，因此重新打开此工序。dev.17使用锁外失败水位、派生epoch的真实当前输入重放和返回前复查；22项本地回归与原反例独立复验通过。完成两包/声明同步及受影响原生依赖复核后才能再关闭；旧dev.16宿主记录不冒充新包加载。",
+        "procedure": "必要普通功能保留原始交付、纠正、失效改道、冲突排除与输入保护的独立事实。dev.17真实输入连接及显式本地失效/恢复补验已保全；Claude未知回环请求、Codex未知子进程强制清理及两方法FAILED保持。最终审查另复现退役删除窗口丢旧检查点，已改为保留/恢复缺失检查点与回执并拒绝并发新输入失败，保留失败水位；25项本地执行回归通过。当前阶段只完成实现；最终修复/完整包依赖重评和整版外部准入在定版工序，不把历史dev.17或本地补验变成新业务交付、原生自主恢复或权限屏障。",
         "exit": "两宿主各自必要结果与适用故障后态均有独立可观察证据，按受影响依赖复用历史事实。加载、工具可调用、原生完成或评估器救援分别记账，不冒充 Accord 效果；未满足的结果保持未完成。 暂停不能使旧产物合同自动满足新要求；输入捕获失败不得沿用旧回执续做或完成。文件谓词须来自同一份字节并检测采集期间变化，恢复重放不得覆盖更新的原生输入。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -981,7 +984,7 @@
       {
         "id": "cross-function-and-failure-validation",
         "title": "功能完成后的净影响、质量与成本对齐",
-        "state": "pending",
+        "state": "implemented-local-unreleased",
         "duties": [
           "environment-and-self-exposure",
           "correction-and-evolution",
@@ -991,7 +994,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "以必要功能已形成的可用实现为基础，product-value 已预绑定一次 dev.16 Claude 普通政策返工配对：相同业务输入、任务临时状态边界、模型请求、既有路由与每臂180秒/16轮/原生1美元标志，native后candidate各一次。比较足以判别的收益与干扰，复用过程中的可靠观察，统一核对适用质量、故障恢复、Token、耗时、无效探索、人工补救、残留和必要冗余。不能在功能尚未打通时反复调预算、提示词或模型求通过，也不忽视已观察到的严重问题。Token 增量本身不等于副作用；负面结果可以推动功能方案或阈值的有据调整，保留变更理由和原失败证据，重新验证真正受影响的结果。 观察器预检已独立通过；执行前绑定精确提交。两臂同效即无已观察可靠性增益，单次时间/token差异不是因果收益。正、零、负、不确定均保留；不因不利结果重跑求胜、不把完成评估写成价值通过。Claude条件结论不迁移为Codex增益。 原首臂实际完成140后因观察器将权限拒绝的文本message当对象而中断，未发送第二阶段、未启动候选；48文件完整保全后清理，不能算宿主或价值失败。修复只处理原生事件形状并保留拒绝/错误，业务条件、路由、预算不变，重新预绑定一组完整比较。普通结果后的新输入不贴活动轮插问情境标签。 修正观察器后的6ba完整配对已结束并独立复核：两臂均140→60、真实写后读取、自然退出及零所属子进程；未观察到可靠性交付增益，不生成正价值记录，不重跑求胜。74文件/2730225字节保全后原任务根清除。目前等待输入失效功能修复及新包依赖核对，再审查诚实的有限净影响结论和发布判据。 当前准入v4显式分开每宿主必要影响评估与增量支持声明：有限功能/生命周期及净影响充分才可候选合格，不再默认要求一条正增益。旧positive假设及neutral结果完整保留；当前未提出增量支持，新的两个只读影响重评不预设neutral答案，严重退化、输入/授权损害及必要适用性未知仍阻断。此政策变更需实现回归及独立复核，不能替代实际评估。",
+        "procedure": "446d916已形成9条当前功能/生命周期重评和2条独立有限影响记录；所有原执行、失败、干预和未知保持原身份。Claude有界配对两臂均140→60，未观察到可靠性增益，费用/时间差不支持因果优势，不重跑求胜。两宿主声明条件下使用可辩护，不支持默认必装、零开销或增量收益。八项质量底线联合判断，真实损害和必要未知仍阻断。最终退役修复与版本变化必须在定版时有针对性复核；旧记录不能自动提升新包资格。",
         "exit": "所声明收益有匹配条件和独立结果支持，必要质量底线不被平均分掩盖；原生充分、外援、负面干扰与救援成本均被识别。联合核对适用的纠正、恢复及资源后态，仅对实际转移检查目的端和来源释放。证据不足则保持净价值未验证。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -1004,7 +1007,7 @@
       {
         "id": "version-and-release-qualification",
         "title": "3.2 定版、发布与收尾",
-        "state": "pending",
+        "state": "active",
         "duties": [
           "goal-authority-correction",
           "package-lifecycle",
@@ -1056,6 +1059,7 @@
     ]
   },
   "developmentObservations": [
+    {"id":"dev17-input-closure-and-final-retirement-correction","observedAt":"2026-09-07T18:46:35.679561+00:00","scope":"retained-native-input-local-guard-and-final-candidate-transition-not-publication","priorSource":"446d916aa8ec37662d23b312158917cf9183c190:product/development.json","retainedRecords":{"codexThree":"9a130312d40c99cf4c833a782ee52c2ef98438942a983b411c52e2ac8092975d","sixFunctionalLifecycle":"fdd08d988f9420d570522078adbb5a1cc13cba8944bd03c09a269588b2a738eb","twoImpact":"52713091a4ee6153b1ec221b57efe3ceb67d249e3c1fe0ba0f3e5146e0719d4d"},"inputObservations":"Both dev17 native UserPromptSubmit commands created matching receipts. Codex context receipt is captured; Claude hint consumption is not. Claude whole method failed with one unknown-purpose loopback request; Codex whole method failed after natural main exit0 and forced unknown-child cleanup, final Job0. Neither is rewritten PASS. Explicit local callers replayed retained actual events and checked invalidation/recovery, not host autonomy.","retention":{"claudeFinalFiles":47,"claudeBytes":162527,"codexFinalFiles":136,"codexBytes":3798706,"cleanupSha256":"5a42f98e92b692b1fc73cc507fbddb85f893cabda4319f0b2a1dbeb342ef7b07"},"finalCounterexample":"A new failed input in the retirement deletion window retained the failure marker but lost prior checkpoint recovery context. The final guard restores missing owned checkpoint/input on concurrent failure or partial deletion and rejects retirement; 25 local runtime tests pass. Independent exact-delta review and current qualification remain necessary.","versionSemantics":"Only the exact authorized target may be candidate-frozen. Static readiness remains false; no new shared installation, host/model rerun or publication occurs in this change.","currentPackages":{"codex":"edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f","claude-code":"9a5056261f77a84636527f2883dedec3e1e56a01a7563ba5ab7402f851c949c6"},"currentRuntimeSha256":"ec9b259b4332a42b95fc33c75b41e9f5698b49ee8f174ca0887cbc1c70dc3b6a"},
     {"id":"dev17-current-package-dependency-rebinding","observedAt":"2026-09-07T18:00:34.073871+00:00","scope":"explicit-current-assessment-definition-correction-not-new-native-evidence","priorSource":"c969da13ff3984ba0774c4c1c845239d9b9a4ab1:product/development.json","reason":"Nine retained reassessment cases contained stale current-dev16 labels, unchanged-runtime or same-package prerequisites. Keep original executions, failures, hashes and ages; bind actual current changed dependencies and require evidence rather than relabeling history or rejecting every change.","reviewProposalSha256":"24676b8bca0d40213798163eefeb7a260d4fd7d04ef4dd0104c7a810a25c0e95","originalExecutionObjectsUnchanged":true,"currentCompletePackageDigestsRecomputed":{"codex":"369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793","claude-code":"bd926399ebee5b9e3740173adb25bdd4ac9a6736bebe2ea6fd2e57b3e9cc5a80"},"dev7ChangedFileListsRecomputedAgainstOriginalGitRevisions":true,"newNativeConnectionEvidence":"pending","formalCurrentReassessmentRecords":"pending","limits":"Current dependency requirements are hypotheses for independent observation, not completed facts. Original dev16 installed use, transitions and healthy-manager recovery do not become dev17 executions. No extra shared installation or model rerun is authorized."},
     {"id":"v4-impact-qualification-and-incremental-claim-separation","observedAt":"2026-09-07T17:48:36.099409+00:00","scope":"explicit-policy-migration-and-retrospective-assessment-binding-not-current-admission","before":{"revision":"c969da13ff3984ba0774c4c1c845239d9b9a4ab1","schema":"yiyuan-accord-evidence-admission/v3","positiveCase":"claude-policy-value-pair-dev16","definitionSha256":"179a9295cdea2060cfe9952301b92a54926f4a868cf602bf7814f9a7ec096c99","originalExecutionRevision":"6ba3b35cdc14fcf049c07cc0fb30036ac5db6f02","originalExecutionDefinitionSha256":"a27ab09e06b68be5cc9cb8b7eb3829df7e8abd02ea883b649e3e527d7f96db89","immutableSource":"c969da13ff3984ba0774c4c1c845239d9b9a4ab1:product/development.json#/acceptance/admission","result":"The original positive hypothesis remains unsupported. The one completed pair found no observed reliability increment; no positive record exists."},"reason":"Product verification-and-value requires evidence for claimed incremental benefit and permits sufficient native execution. Separate honest bounded applicability/impact qualification from an optional stronger incremental claim. This narrows candidate promises rather than renaming neutral as positive or discarding a failure.","unchanged":"Both hosts necessary function and lifecycle, quality/input/authority floors, sufficient current-package dependencies, independent source/review provenance, all active cases, exact candidate and hosted/publication/cleanup conditions remain required. No new host/model experiment, shared installation or gain claim authorized by this migration.","after":{"schema":"yiyuan-accord-evidence-admission/v4","required":["function","package-lifecycle","impact-assessment"],"incrementalValueClaimed":false,"impactAssessmentCompleted":false,"candidateEligible":false},"review":{"independentDesignSha256":"492cb80dc2a5d953ba073cd5992496c600ab9133503131ab04629e823a50aa1e","counterpositionAndCloseoutSha256":"c617cfa371222c7f38afd8f17bb94f0d10a12ba117b2b405a5eb0aa0030b285e","actualImplementationReview":"pending"},"neutralPair":{"independentReviewSha256":"632b39f68ad35507d184d4ee23af00e28e6b12da8f6eea312341a75885ba7c5b","retentionSha256":"e02a9464ac2a04d5cff2d9093342f0693f0118a31ca0b98a5bda5e3bb03bff5e","cleanupSha256":"13e80a26532a7b7d607f072100a9ee75123ff9e13f6b70e215b7fe432b0e1f69","preservedFiles":74,"preservedBytes":2730225,"originalOwnedRootRemoved":true}},
     {"id":"checkpoint-input-loss-dev17-local-repair","observedAt":"2026-09-07T17:33:33.413498+00:00","scope":"local-executable-repair-and-independent-counterexample-recheck-not-native-admission","subject":{"baseRevision":"6ba3b35cdc14fcf049c07cc0fb30036ac5db6f02","version":"3.2.0-dev.17","runtimeSha256":"1930a0c104c64d5df98104e34655a2b57feea76d994a22df8a84678a4fa59137"},"originalFailure":"Contended input capture followed by normal lock release, oversized input and missing session binding left the old receipt fresh. A further real concurrent input failure during Stop publication could still return its old continuation. No unauthorized host write was observed.","repair":"Failure generations outside the input lock, workspace fallback for unbound native input, derived replay CAS including absent receipt, and Stop freshness recheck after publication. Failed/stale replay does not advance a generation; a later uncaptured native input does. One session recovery/retirement preserves another session uncertainty.","localValidation":{"tests":22,"seconds":27.399,"result":"pass"},"independentVerification":{"reportSha256":"10ab1cfd36f8a577caf529e9a9cba6ccf0ffb8437f0ece7a016133a86a8f8db9","rawSha256":"4419b1863885e230fd120fcf84dbe596b5884da116c73c2d8e52063be770e7b5","result":"unchanged original delta scripts now suppress both stale continuations and require native replay"},"limits":"Healthy durable state storage is required for cross-process invalidation; otherwise unknown and native caller holds. This is last-observation freshness, not a host transaction or permission barrier. 128 KiB bound remains. No new model or native-host execution in this repair. Historical dev.16 evidence is not dev.17 loaded behavior.","evidence":"Private task20-functional-chain-20260907/independent-implementation-review-6ba3b35 retains original failing code, unchanged repro scripts, strategy and two successive delta records."},
@@ -4458,7 +4462,7 @@
                 "actual invalid publisher hold with prior marketplace still selected",
                 "native orphan caches require evaluator disposal"
               ],
-              "currentDependencyRequirement": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling. Preserve the native maintenance interface and independent healthy executor conditions. Original supervised recovery is not new dev17 recovery.",
+              "currentDependencyRequirement": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling. Preserve the native maintenance interface and independent healthy executor conditions. Original supervised recovery is not new dev17 recovery. Review the final manifest-only version change and current retirement deletion-window guard against the retained native connection and independent local counterexample/regressions; do not relabel dev17 as a new host execution.",
               "dutyAllocationAnchors": {
                 "pathFromRetainedBase": "task20-functional-chain-20260907/claude-duty-allocation-review-338fe0/allocation-native-anchors.json",
                 "sha256": "fe84e5ce3048051e6fc469193a584ef8fefe4bc69b3293e042ea8b13bc4f5b9b",
@@ -4675,7 +4679,7 @@
               },
               "changedPackage": {
                 "originalPackageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d",
-                "currentPackageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
+                "currentPackageSha256": "edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f",
                 "changedFiles": [
                   ".codex-plugin/plugin.json",
                   "adapter.json",
@@ -4688,8 +4692,8 @@
                 "directCurrentPackageReplay": false,
                 "wholePackageEquivalenceClaim": false,
                 "exactAffectedDependencyReviewRequired": true,
-              "previousDeclaredComparison": {
-                "definitionSourceRevision": "c969da13ff3984ba0774c4c1c845239d9b9a4ab1",
+                "previousDeclaredComparison": {
+                  "definitionSourceRevision": "c969da13ff3984ba0774c4c1c845239d9b9a4ab1",
                   "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
                   "changedFiles": [
                     ".codex-plugin/plugin.json",
@@ -4900,7 +4904,7 @@
               },
               "changedPackage": {
                 "originalPackageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d",
-                "currentPackageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
+                "currentPackageSha256": "edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f",
                 "changedFiles": [
                   ".codex-plugin/plugin.json",
                   "adapter.json",
@@ -4913,8 +4917,8 @@
                 "directCurrentPackageReplay": false,
                 "wholePackageEquivalenceClaim": false,
                 "exactAffectedDependencyReviewRequired": true,
-              "previousDeclaredComparison": {
-                "definitionSourceRevision": "c969da13ff3984ba0774c4c1c845239d9b9a4ab1",
+                "previousDeclaredComparison": {
+                  "definitionSourceRevision": "c969da13ff3984ba0774c4c1c845239d9b9a4ab1",
                   "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
                   "changedFiles": [
                     ".codex-plugin/plugin.json",
@@ -5066,7 +5070,7 @@
                   "stderrBytes=1330; personal state checked by metadata, not private-byte audit",
                   "query cwd affects plugin inventory; catalogue version is not installed identity"
                 ],
-                "currentDependencyRequirement": "Recheck exact host identity and original prior files; inspect native invalid-JSON short-circuit relevance separately from changed package payload. No normal-environment or general recovery inference."
+                "currentDependencyRequirement": "Recheck exact host identity and original prior files; inspect native invalid-JSON short-circuit relevance separately from changed package payload. No normal-environment or general recovery inference. Review the final manifest-only version change and current retirement deletion-window guard against the retained native connection and independent local counterexample/regressions; do not relabel dev17 as a new host execution."
               },
               "exactTransition": {
                 "originalRevision": "fe1dee55f9a14d353047cc8b82d5ee35a72b8474",
@@ -5233,8 +5237,8 @@
                   "originalObservedPackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
                   "currentAffectedDependencyAssessmentRequired": true,
                   "compatibleHistoricalEffectReuseJustified": true,
-                  "currentPackageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
-                  "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling."
+                  "currentPackageSha256": "edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f",
+                  "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling. Review the final manifest-only version change and current retirement deletion-window guard against the retained native connection and independent local counterexample/regressions; do not relabel dev17 as a new host execution."
                 },
                 "originalAuthorization": {
                   "threadId": "01a07984-457e-75a1-ba39-4e5fda61f440",
@@ -5475,8 +5479,8 @@
                 "originalObservedPackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
                 "currentAffectedDependencyAssessmentRequired": true,
                 "compatibleHistoricalEffectReuseJustified": true,
-                "currentPackageSha256": "369a1d4fa4f8533e39ac50396a6e424474cf2eb9780cfc0108be0e279afee793",
-                "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling."
+                "currentPackageSha256": "edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f",
+                "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling. Review the final manifest-only version change and current retirement deletion-window guard against the retained native connection and independent local counterexample/regressions; do not relabel dev17 as a new host execution."
               },
               "originalAuthorization": {
                 "threadId": "01a07984-457e-75a1-ba39-4e5fda61f440",
@@ -5727,8 +5731,8 @@
                 "originalObservedPackageSha256": "d64ef6e9a26ecba46c8f5a3203311e740ab5652a84ea0182a1e7e62ba2ac793e",
                 "currentAffectedDependencyAssessmentRequired": true,
                 "compatibleHistoricalEffectReuseJustified": true,
-                "currentPackageSha256": "bd926399ebee5b9e3740173adb25bdd4ac9a6736bebe2ea6fd2e57b3e9cc5a80",
-                "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling."
+                "currentPackageSha256": "9a5056261f77a84636527f2883dedec3e1e56a01a7563ba5ab7402f851c949c6",
+                "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling. Review the final manifest-only version change and current retirement deletion-window guard against the retained native connection and independent local counterexample/regressions; do not relabel dev17 as a new host execution."
               }
             }
           }
@@ -6820,7 +6824,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "补齐独立复现的checkpoint输入失效边界，同步dev.17完整包、README、声明及源/计划/UI；已通过22项本地执行回归和两条原delta独立复验，继续受影响包与宿主依赖复核。保留9条真实独立功能/生命周期记录的原主体与依赖；已闭合value配对为未观察到可靠性增益，不能改成positive。随后有限质量/净影响资格校准、精确提交推送、最终独立准入与同SHA托管检查，满足条件再发布。不重新共享安装、不新建Desktop任务或归档、不改受保护main，不按空情境重复旧试验。",
+    "work": "冻结3.2精确候选：同步两包、源、派生计划、README、CHANGELOG及旧架构描述；对最终退役删除窗口修复和版本变化作独立依赖重评，使用现有两阶段observer完成11案及四视角最终准入、同SHA托管检查。满足条件后推送正式目标、发布并核公共后态，再按已有授权备份/更新既有Accord。旧包运行/失败保持，不因标签重复模型或宿主试验；不改受保护main工作区，不新建Desktop任务或归档。",
     "requires": "The one explicit prerelease shared Codex installation exception was exercised: exact dev.16 installed selected use followed by native uninstall and independently checked restoration. No standing permission to repeat it remains. Continue retained-evidence review and task-local work on existing authorized hosts; another shared install, new Desktop task, archive, unrelated trust/data, material cost or personal changes require their actual authority. Fresh evidence and exact-candidate checks still precede the conditionally authorized release."
   },
   "claimCeiling": {

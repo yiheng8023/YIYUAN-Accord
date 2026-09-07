@@ -448,6 +448,50 @@ class DevelopmentContractTests(unittest.TestCase):
                 altered["cycle"][field] = value
                 self.assertTrue(self.errors(altered))
 
+    def test_final_candidate_freeze_keeps_external_qualification_required(self):
+        from yiyuan_accord.development import render_development_plan
+        candidate = copy.deepcopy(self.contract)
+        candidate["status"] = "candidate-frozen"
+        candidate["cycle"]["versionState"] = "final-candidate-not-publication-proof"
+        candidate["delivery"]["version"] = candidate["cycle"]["targetVersion"]
+        for projection in candidate["delivery"]["hostProjections"]:
+            projection["packageVersion"] = candidate["delivery"]["version"]
+        self.assertEqual(self.errors(candidate), [])
+        self.assertIn("版本冻结不证明外部验收或发布", render_development_plan(candidate))
+        for section, field in (("authority", "conditionalRelease"), ("claimCeiling", "candidateEligible"),
+                               ("claimCeiling", "functionalCompletion")):
+            altered = copy.deepcopy(candidate)
+            if section == "authority":
+                altered[section][field]["ready"] = True
+            else:
+                altered[section][field] = True
+            self.assertTrue(self.errors(altered))
+        for section, field, value in (("cycle", "versionState", "published"),
+                                       ("cycle", "versionState", "development-target-not-published"),
+                                       ("delivery", "version", "3.2.0-dev.17"),
+                                       ("delivery", "version", "3.3.0")):
+            altered = copy.deepcopy(candidate)
+            altered[section][field] = value
+            self.assertTrue(self.errors(altered))
+        altered = copy.deepcopy(candidate)
+        altered["status"] = "in-development"
+        self.assertTrue(self.errors(altered))
+        for malformed in (None, [], "published"):
+            altered = copy.deepcopy(candidate)
+            altered["authority"]["conditionalRelease"] = malformed
+            self.assertTrue(self.errors(altered))
+
+    def test_development_package_phase_remains_valid_after_candidate_support(self):
+        altered = copy.deepcopy(self.contract)
+        altered["status"] = "in-development"
+        altered["cycle"]["versionState"] = "development-target-not-published"
+        altered["delivery"]["version"] = altered["cycle"]["targetVersion"] + "-dev.17"
+        for projection in altered["delivery"]["hostProjections"]:
+            projection["packageVersion"] = altered["delivery"]["version"]
+        self.assertEqual(self.errors(altered), [])
+        altered["status"] = "candidate-frozen"
+        self.assertTrue(self.errors(altered))
+
     def test_system_floors_cannot_be_deleted_averaged_or_promoted(self):
         for field, value in (("aggregation", "weighted-average"),
                              ("qualityAxes", self.contract["systemOptimization"]["qualityAxes"][:-1]),

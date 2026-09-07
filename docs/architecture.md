@@ -77,9 +77,9 @@ observed Desktop settings deletion handler archives supplied tasks before
 deleting a worktree. Those effects need their respective authority. The source
 records this code observation and its limits; no deletion experiment was run.
 
-### Current delivered candidate and unproven connections
+### Current candidate and scoped connections
 
-Both worktree packages are unpublished `3.2.0-dev.15`. Each exposes one host
+Both packages target `3.2.0`; a frozen version is not publication evidence. Each exposes one host
 Skill, the existing optional resume/compact hint, and a Node task checkpoint
 connected to supported UserPromptSubmit, Stop and SessionEnd events. Codex also
 connects Interrupt. The Agent binds necessary file inputs, output predicates and
@@ -98,15 +98,21 @@ The helper never decides user authority or whether the selected predicates fully
 express the goal. It leaves semantic judgment, execution and unsupported paths
 with the host Agent. Unfinished checkpoints survive session end; verified or
 explicitly cancelled tasks can retire only their checkpoint files. Proven dead
-locks have an explicit recovery operation. Failed native input publication keeps
-its owned lock so status, continuation and retirement cannot use a stale receipt.
-Recovery of a proven dead input owner invalidates that receipt before unlocking;
-the surviving caller replays the actual native input with a recovery-epoch guard.
-A delayed replay cannot replace newer input. No receipt is invented if the first
-publication failed. Failure to create any state still limits durable guarantees;
-the native error is visible, and this optional helper does not control the host.
-Input text is hashed, not retained.
-SessionEnd removes unbound receipts. A native input blocked by another
+locks have an explicit recovery operation. Input failure is latched outside the
+input lock with session/workspace generation watermarks, including malformed or
+oversized transport whose session cannot be bound. The epoch combines the receipt
+and current failures. The surviving caller must reconcile and replay the actual
+current native input using that recovery epoch; an old replay cannot acknowledge
+a newer loss. Stop rechecks freshness after state publication. Retirement checks
+failure generations after deletion and restores its missing checkpoint/receipt
+before rejecting a concurrent input failure; partial deletion is also compensated.
+These operations preserve failure watermarks and are not an external-writer
+transaction. If failure storage or compensation itself cannot work, the native
+caller must hold and recover through sufficient means; cross-process protection
+is unknown. Input/state JSON is bounded to 128 KiB, never silently truncated.
+Input text is hashed, not retained. Failure watermarks remain until their owning
+state directory can safely be retired, without clearing another task's uncertainty.
+SessionEnd removes only reconciled unbound receipts. A native input blocked by another
 Hook can exit without either callback; a surviving caller that verifies this
 exit can retire only the matching unbound receipt using its current epoch,
 revision zero and a reason. This operation cannot retire a bound checkpoint or
@@ -114,7 +120,12 @@ establish task completion. Without a callback or surviving caller, automatic
 retirement is not established; the helper does not supply its own scheduler.
 The default temporary state directory may remain empty; it is not an installed
 package cache or an archive executor. CLI checks establish local behavior; exact
-native loading and ordinary task use still require separate observation.
+native loading and ordinary task use remain separate observations. The retained
+dev.17 input observations establish exact package/argv/event/receipt connection
+on both local hosts; Codex also reports receipt of the context. Claude hint
+consumption remains unproven. The later retirement guard is locally exercised
+against the independently reproduced deletion window. Final package changes need
+explicit affected-dependency review, not a new date on a historical run.
 
 Claude also connects the same small helper to PostToolBatch. An observed Bash
 denial display template produces a short reminder to check its actual scope,
@@ -127,16 +138,20 @@ tool loop. This entry adds no persistent state or model request.
 
 Claude retains the caller-bound native plugin update inspector. It checks the
 selected source and pre/post-state, but does not update, roll back or intercept
-actions. The complete ordinary-entry correction path still needs behavioral
-evidence. Continuous correction applies throughout development, including after
+actions. Retained ordinary correction, external-source delivery and declared
+healthy-manager lifecycle observations have their own scope and assistance.
+Ordinary Claude use does not require the development manager or Python.
+Continuous correction applies throughout development, including after
 a function works; it is not a once-completed planning phase. User-owned
 AGENTS.md files are external conditions, not a delivered dependency or a
 substitute for Accord's responsibility.
 
 This is a candidate shape, not architecture law. Skill/Hook count, dependencies,
 layout and admission may change together when evidence supports the change.
-Full ordinary-entry coverage, failure behavior, lifecycle and incremental value
-remain unverified. Native success can satisfy a duty but does not prove Accord benefit;
+Whole-entry autonomy and incremental value remain unverified. Nine retained
+functional/lifecycle cases and two current impact assessments support only their
+declared conditions, subject to current dependencies and independent qualification.
+Native success can satisfy a duty but does not prove Accord benefit;
 forcing a Skill invocation or evaluator rescue cannot establish ordinary-entry
 autonomy.
 
@@ -225,6 +240,17 @@ Observe actual release semantics and protect dependent tasks; acknowledgement
 alone does not prove unload or resource savings. If no extra resource was
 allocated, do not manufacture a cleanup operation.
 
+The current Desktop scope separates an actual user-requested takeover from
+useful continuation after healthy automatic compaction. The latter exercises the
+permitted same-carrier branch; no newly necessary forced migration was observed.
+The former verifies receipt, transfer of writing responsibility and actual work,
+not autonomous detection. Prior user rescue remains a failed autonomous result.
+Unknown capacity/efficiency signals require short work spans and early checkpoints;
+that fallback rule is not proof of historical prediction or an optimal margin.
+If a task needs migration before compaction or integrity loss becomes unsafe,
+unknown timing or takeover capacity becomes a necessary gap again. Source writer
+quiescence is the observed release boundary, not runtime unloading.
+
 The user's favorable pre-Accord experience is a useful result target, not proof
 of runtime causality. Historical observations, failed probes, observer defects
 and their exact attribution remain in `developmentObservations`. They are not
@@ -238,9 +264,17 @@ unchanged predecessor, declared package identity, namespace/legal carriage,
 hint transport, complexity and bounded changed paths. Their PASS does not
 establish functionality, value or candidate eligibility.
 
-The schema-v4 source's `acceptance.admission` v3 prebinds required scope IDs and a
-risk-bound review policy for function, package lifecycle and overall incremental value. The first native Codex lifecycle case is prebound; remaining definitions
-and real evidence stay open. Stored assessments and diagnostics grant no acceptance.
+The schema-v4 source's `acceptance.admission` v4 binds seven required scopes and
+eleven cases with a risk-bound independent review policy. Each host requires
+function, package lifecycle and impact assessment. Incremental benefit is a
+separate claim requiring positive comparison evidence; none is supported for
+this candidate. The former positive hypothesis and neutral result keep their
+original identities. Negative results, input/authority harm and unknowns necessary
+to the declared use cannot be hidden by a neutral label. Stored assessments and
+diagnostics grant no acceptance. A `candidate-frozen` source pairs only the exact
+authorized target with `final-candidate-not-publication-proof`; dev packages retain
+their development state. Neither representation can promote the static source
+booleans or replace external qualification and publication checks.
 
 The Python entry `verify_product(root, evidence=observer)` reuses bounded Git
 reads, exact package identity and independent-review validation. The caller must
@@ -271,8 +305,8 @@ none of them. The verifier rechecks Git, cleanliness and time before qualificati
 IDs stay unbound; deleting scopes or cases cannot erase their obligations. Each
 delivered host needs required function and lifecycle scopes. Whole-product duty,
 quality and scenario accounting runs once per host over its required scopes,
-not once per claim. Overall value uses its own required comparisons; it need not
-claim a gain for every native-sufficient duty or every host. A local benefit
+not once per claim. Impact requires a sufficient assessment for each host, while
+any active incremental claim must bind its own required comparison. A local benefit
 cannot be attributed to unobserved hosts. Optional scopes cannot fill this ledger.
 
 Scopes bind entry, decisive conditions and applicable requirements. Cases may
@@ -285,10 +319,11 @@ independent review must still judge coverage, oracle adequacy and the legitimacy
 of any reduction. A valid hash does not make a convenient sample representative.
 
 Reports distinguish accepted cases, scoped open/unbound and product coverage, functionality,
-incremental value and conditional candidate eligibility. Missing, conflicting or
+impact assessment, incremental value and conditional candidate eligibility. Missing, conflicting or
 stale facts do not qualify; unaffected accepted cases remain visible. Structured
 fixtures validate this admission logic only. Real case adequacy, actual entry and
-host effects, independent provenance and final reviews remain to be established.
+host effects and independent provenance must be checked against the actual
+records; final reviews bind the exact candidate rather than a development draft.
 Authority, hosted checks, ordered publication and public post-state are separate
 gates, never outputs promoted by this evaluator. The generated work sequence owns
 the remaining implementation and real-evidence procedure.

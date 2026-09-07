@@ -182,7 +182,8 @@ def development_contract_errors(contract, golden_task_ids):
     require(contract.get("productId") == "yiyuan-accord", "product identity mismatch")
     phase = "whole-system-optimization-and-functional-closure"
     require(contract.get("phase") == phase
-            and contract.get("status") == "in-development", "source-phase boundary mismatch")
+            and contract.get("status") in ("in-development", "candidate-frozen"),
+            "source-phase boundary mismatch")
     require(bool(_PREDECESSOR.fullmatch(contract.get("predecessorSnapshot", "")))
             if isinstance(contract.get("predecessorSnapshot"), str) else False,
             "predecessor must be an immutable closed-snapshot locator")
@@ -215,16 +216,24 @@ def development_contract_errors(contract, golden_task_ids):
     cycle = section("cycle", ("id", "scopeRule", "sourceDecision"))
     require(isinstance(cycle.get("targetVersion"), str)
             and re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", cycle["targetVersion"]) is not None
-            and cycle.get("versionState") == "development-target-not-published",
-            "a development version target is not a published version")
+            and cycle.get("versionState") in ("development-target-not-published",
+                                              "final-candidate-not-publication-proof"),
+            "a declared version is not publication evidence")
     require(cycle.get("existingHosts") == ["codex", "claude-code"]
             and cycle.get("additionalHostAdaptation") == "deferred",
             "preserve existing hosts and defer additional adaptation")
     delivery = section("delivery", ("rule",))
     version = delivery.get("version")
-    require(isinstance(version, str) and isinstance(cycle.get("targetVersion"), str)
-            and re.fullmatch(re.escape(cycle["targetVersion"]) + r"-dev\.[1-9][0-9]*", version) is not None,
-            "delivery must identify an unpublished development package")
+    target = cycle.get("targetVersion")
+    development_version = (isinstance(version, str) and isinstance(target, str)
+                           and re.fullmatch(re.escape(target) + r"-dev\.[1-9][0-9]*", version) is not None)
+    final_version = (isinstance(target, str) and isinstance(release, dict)
+                     and version == target == release.get("target"))
+    require((development_version and contract.get("status") == "in-development"
+             and cycle.get("versionState") == "development-target-not-published")
+            or (final_version and contract.get("status") == "candidate-frozen"
+                and cycle.get("versionState") == "final-candidate-not-publication-proof"),
+            "delivery version and source phase must agree without claiming publication")
     projections = delivery.get("hostProjections")
     require(isinstance(projections, list) and len(projections) == 2
             and all(isinstance(item, dict) and isinstance(item.get("id"), str)
@@ -561,7 +570,9 @@ def render_development_plan(contract):
     duties = {item["id"]: item for item in contract["acceptance"]["duties"]}
     lines = ["# YIYUAN Accord 3.2 开发计划与进度", "",
              "由 `product/development.json` 派生；修改源数据后同步本页，校验会拒绝不一致。", "",
-             "当前为未冻结的开发基线；目标是完成验收后发布新的 3.2，不改写 3.1。",
+             ("当前为冻结的 3.2 候选；版本冻结不证明外部验收或发布，不改写 3.1。"
+              if contract.get("status") == "candidate-frozen" else
+              "当前为未冻结的开发基线；目标是完成验收后发布新的 3.2，不改写 3.1。"),
              "动态自适应是原有核心承诺；驱动宿主实现必要结果，按证据保留、合并、删除或补强，暂缓增加宿主适配。", "",
              contract["systemOptimization"].get("continuousCorrection", ""), "",
              "## 工序与验收映射", "",

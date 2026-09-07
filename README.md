@@ -18,9 +18,9 @@ Accord's goal is simple: users focus on ideas and decisions; the Agent takes car
 
 Today, Accord supplies collaboration guidance through Codex and Claude plugins, plus repository tools for checking its contracts and evidence. It is not a separate autonomous worker. Reliable end-to-end behavior and added value must be demonstrated in the host where it is used.
 
-> **This branch develops 3.2.** Its packages are `3.2.0-dev.17`, remain unpublished, and do not automatically update your installed version. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
+> **Package version: 3.2.0.** A version label is not proof of publication or acceptance. Before installing, verify the matching GitHub Release and immutable tag; installed versions do not update automatically. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
 >
-> Start with [current limitations](#what-is-proven-and-what-is-not), the [development plan](docs/operations/PLAN-v3.2.md), or the [unreleased changelog](CHANGELOG.md). Do not install from moving `main` or this development branch.
+> Start with [scope and limitations](#what-is-proven-and-what-is-not), [what changed](CHANGELOG.md), or the [maintainer plan](docs/operations/PLAN-v3.2.md). Use an accepted exact tag rather than a moving branch.
 
 ## What problem it addresses
 
@@ -36,7 +36,7 @@ This is a design objective, not a promise that installing a plugin makes every h
 
 ## What you actually get
 
-Both released 3.1 packages contain a `deliver-demand-driven-outcome` Skill, host metadata and a short-lived `SessionStart` Hook helper. The 3.2 development packages also include an optional task-local file checkpoint and supported native event callers. The Claude package adds advisory tool-result feedback and an optional update-inspection helper.
+Both 3.2 packages contain a `deliver-demand-driven-outcome` Skill, host metadata, a short-lived `SessionStart` hint and an optional task-local file checkpoint connected to supported native events. The Claude package adds advisory tool-result feedback and an optional update-inspection helper.
 
 - **Skill:** instructions the host Agent can use for an applicable task. Visibility and invocation are separate from a useful effect.
 - **Session hint:** a stateless hint on supported `compact` or `resume` events; this hint stays silent on `startup` and `clear`.
@@ -87,23 +87,29 @@ Its finite claims cover collaboration-contract conformance, static Codex/Claude 
 
 Those checks do not prove broad user benefit, automatic crash recovery, current-client compatibility, production safety or every entry point. They also do not qualify changed 3.2 bytes.
 
-**3.2 is not yet ready for release.** The completed, bounded Claude comparison delivered and checked both stages with and without Accord. It found no observed reliability increment; differences in one pair's time, tool denials or reported cost do not establish a causal benefit. Earlier non-delivery and inaccurate descriptions remain in the evidence. Dev.17 repairs input-loss boundaries found during independent review; its changed Hook behavior still needs affected-host verification.
+The retained local observations cover real delivery and correction, response to an in-flight question, capability failure and source conflict, declared installation/update/recovery compositions, and two Desktop continuity branches. Current applicability is assessed against complete package changes, including actual dev.17 native input callbacks and local failure/recovery checks. These are finite observations with explicit human or surviving-manager assistance, not universal autonomous behavior.
 
-The [changelog](CHANGELOG.md) and [development source](product/development.json) separate implemented changes, retained ordinary-task/lifecycle observations, counterevidence and remaining candidate qualification.
+The bounded Claude comparison delivered and checked both stages with and without Accord. It found no observed reliability increment; one pair's time, denials or reported costs cannot establish causal benefit. Earlier non-delivery and inaccurate descriptions remain in the evidence. The final checkpoint also preserves recovery context when input fails during retirement; 25 local runtime regressions passed.
+
+The two latest native input methods remain recorded as failed overall: Claude made one loopback request of unknown purpose, while Codex needed forced cleanup of an unidentified child after its main process exited. Their captured input receipts remain valid limited facts. Codex reports receiving the input context; Claude's corresponding hint consumption is unproven. Post-exit local replay is not autonomous host recovery. Complete evidence was retained and the owned roots removed.
+
+The [changelog](CHANGELOG.md) and [source](product/development.json) separate implementation, original observations, counterevidence and current qualification. Exact release acceptance and hosted results belong to the matching Release; a CLI static PASS does not supply them.
 
 Candidate qualification requires the declared functions, lifecycle and a sufficient impact assessment for each host. A claim of improvement over native behavior separately requires positive evidence; this candidate makes no such supported claim. The earlier positive-witness release gate and its unmet hypothesis remain in history. The revised gate still rejects unresolved material regressions, input/authority harm and unknowns essential to the declared use. Completing an assessment alone does not establish suitability or release readiness.
 
 Development observations cover specific Windows local Codex and Claude Code entries, with an existing authorized model route, required file/command permissions and observed package loading. Codex App Server evidence does not automatically cover Desktop, IDE or cloud entries. Desktop observations cover the declared maintenance continuation and user-authorized takeover. Other combinations require their own applicability check. Ordinary Claude use does not require Codex, Python or the development evaluation scripts.
 
+Healthy automatic compaction followed by reconciled useful work supports same-carrier continuation. A user-requested takeover supports that actual transfer, not autonomous early detection. Prediction, optimal transfer margins and runtime unloading remain unproven. If a task depends on those guarantees, the missing evidence becomes a necessary gap; the retained samples cannot waive it.
+
 The host Agent interprets the Skill. Enabled Hooks require Node on `PATH`, the relevant native events and host trust support. Each input Hook maintains a temporary freshness receipt and supplies a hint even when no file checkpoint is bound. Unbound, reconciled receipts are removed on a supported session end or by a surviving caller after verified exit. Input-failure watermarks remain until their owning state directory can safely be retired; one task must not clear another session's uncertainty. If a failure cannot be stored, freshness is unknown and the native caller must hold continuation. Input/state JSON is limited to 128 KiB; an oversized input requires recovery through a sufficient native path, not silent truncation. Without Hook support, the host's ordinary task path remains responsible and any missing continuation effect must be disclosed.
 
 Installation, update and recovery need a healthy executor independent of the damaged/replaced plugin, a verifiable accepted source and the necessary authority. The retained Claude damaged-cache/source-conflict recovery used a healthy Codex manager with explicit authorization and assistance. It does not prove automatic manager discovery or unattended Claude recovery, and it does not make those development tools ordinary-use prerequisites.
 
-## Try the published version
+## Install an accepted exact version
 
 Ask a capable Agent host to handle the lifecycle:
 
-> Inspect this host and install YIYUAN Accord from the exact v3.1.0 tag. Preserve unrelated configuration and plugins, request any necessary trust, and verify registration, newly loaded visibility and remaining limitations.
+> Verify that v3.2.0 has a matching accepted GitHub Release, then inspect this host and install that exact tag. Preserve unrelated configuration and plugins, request necessary trust, and verify registration, newly loaded visibility and remaining limitations. If the release is unavailable, stop rather than installing a moving development branch.
 
 This is the intended interaction, not a guarantee that every host can complete it unattended. Plugin support, repository access and authority to change plugin state are prerequisites. The Hook additionally needs Node on `PATH` and a supported host trust flow.
 
@@ -112,12 +118,12 @@ Do not bypass trust or edit global settings to simulate supported installation. 
 <details>
 <summary>CLI installation references</summary>
 
-These are recorded exact-tag routes, not a fresh lifecycle acceptance result for every client. Inspect current command support before changing state.
+These use the recorded exact-tag route with the selected 3.2 tag. First verify its Release and current command support; this is not fresh lifecycle acceptance for every client.
 
 Codex:
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.1.0
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.2.0
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 codex plugin list --json
 ```
@@ -125,7 +131,7 @@ codex plugin list --json
 Claude Code:
 
 ```powershell
-claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.1.0" --scope user
+claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.2.0" --scope user
 claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 claude plugin marketplace list --json
 claude plugin list --json
@@ -166,7 +172,7 @@ python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 
 Use `python3` where that is the available launcher. CI exercises Python 3.10–3.14 across Ubuntu, Windows and macOS, with Node 24 for Hook checks. That is maintainer validation, not cross-host behavior acceptance or an end-user Python requirement.
 
-Before releasing 3.2, reconcile release notes with the exact candidate; commit and push all in-scope changes; complete necessary functional, value and lifecycle evidence, independent review and hosted checks; then publish and verify the same commit under the bound human authorization.
+Publication requires matching release notes, committed and pushed in-scope changes, necessary functional/lifecycle/impact evidence, independent review and hosted checks, followed by publication and public verification of the same commit under the bound human authorization. A frozen candidate is not a release receipt.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md) and [SUPPORT.md](SUPPORT.md). In an [issue](https://github.com/yiheng8023/YIYUAN-Accord/issues), describe the desired and observed result, exact version, host/entry, relevant customization and human intervention. Never upload credentials or private raw transcripts.
 
