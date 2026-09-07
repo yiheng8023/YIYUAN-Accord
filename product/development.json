@@ -22,14 +22,14 @@
     "sourceDecision": "The approved source semantics are carried forward in this open development successor. A development commit records code identity, not an accepted source-phase closeout or release receipt."
   },
   "delivery": {
-    "version": "3.2.0-dev.12",
-    "rule": "Unpublished dev.12 projects the functional-first development correction into both delivered Skills and connects material changes to affected obligations, invalidated claims, a discriminating next action, actual execution and observed post-state. The former general retry paragraph is merged into this action path. This is an interpreted policy carried by the host Agent, not a deterministic guard or independent scheduler. Ordinary source-backed delivery and affected correction behavior need fresh observation. The per-Skill allowance increases from 8800 to 11000 bytes for this concrete duty connection; overall instruction, code/test and file ceilings remain unchanged. Package lifecycle code is unchanged and the failed Claude dev.11 lifecycle branch remains paused. No shared candidate installation, new runtime, dependency or host guidance change is introduced. Old observations retain their original identities and cannot qualify these packages.",
+    "version": "3.2.0-dev.13",
+    "rule": "Unpublished dev.13 implements task-local file checking and supported native continuation, with actual delivered callers in both packages. The Agent selects meaningful predicates and reconciles human intent; the helper observes file content, invalidates stale input bindings and requests bounded Stop continuation. New input, explicit pause, interruption, retirement and proven dead-lock recovery are part of this function. This adds scoped persisted receipts and checkpoints, not a daemon, universal guard, task/archive executor or extra model call. Ordinary host behavior is not established by local helper tests. Shared candidate installation remains withdrawn; native evaluation uses bounded task-local exposure. The earlier Claude lifecycle branch remains paused. Existing observations keep their exact earlier packages and limits. Retrospective caller inspection also found that the retained SessionStart helper still used ambiguous destination-before-source-release wording after the Skill archive repair. Current canonical and delivered helpers now distinguish receipt, actual takeover, one writer, source allocation release and explicit archive authorization. Original historical helper bytes and failure evidence remain at their immutable revisions; this guidance repair is not a demonstrated archive interceptor. Both delivered Skills make ongoing retrospective correction a product responsibility across ordinary work, development, maintenance and iteration. Accord retains judgment and verification, while sufficient host execution, context, state, scheduling and recovery are reused; the new helper is a scoped missing connection, not a duplicate host executor. Its adequacy and benefit remain subject to actual native observation.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.0-dev.12",
-        "packageSha256": "2c7d4d765e227ef9ff2e266dd8df32f619bbc50b75be64b9e48b7cf5529b9eac",
+        "packageVersion": "3.2.0-dev.13",
+        "packageSha256": "09d125fc58a67c52e597d4569520792c5795b0ffccf32e494736a9a68a36de54",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -43,21 +43,22 @@
         ],
         "mechanismFiles": [
           "plugins/yiyuan-accord-codex/hooks/hooks.json",
-          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs"
+          "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+          "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs"
         ],
-        "activationContext": "SessionStart compact or resume supplies non authoritative model and permission hints only. Re sense decision relevant state from supported official sources. Missing or conflicting fields remain unknown. Preserve the independently bound last safe allocation. Use a fresh zero history destination only when required. Deliver and confirm takeover before source allocation release. Task archival requires explicit user authorization. Startup and clear stay silent. Invalid input fails visibly without echoing input. Hints prove neither current task state nor authority, Agent use, execution, effect, evidence or value.",
+        "activationContext": "SessionStart resume and compact hints remain advisory. Supported UserPromptSubmit records a fresh task input epoch. A caller bound checkpoint inspects workspace file predicates and stale inputs. Stop can request continuation for unmet results once per changed observation. New input and Codex Interrupt invalidate old decisions. SessionEnd removes unbound receipts and preserves unfinished checkpoints. Explicit retirement removes only checkpoint files. The host Agent owns semantic adequacy, authority and execution. Native coverage and ordinary behavior require observed evidence.",
         "interfaceDefaultPrompt": [
           "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
         ],
-        "maxSkillBytes": 11000,
+        "maxSkillBytes": 12800,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
       },
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.0-dev.12",
-        "packageSha256": "96adb74f7e6d8d9ebb6cc80e27e9071eac92b9c41c9af94a6bf851946b6b3e11",
+        "packageVersion": "3.2.0-dev.13",
+        "packageSha256": "3f907e48a9cd164750a61f4c2fcb08dde8c16d287b8b547b15c566824a05a69c",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -70,23 +71,71 @@
         "mechanismFiles": [
           "plugins/yiyuan-accord-claude/hooks/hooks.json",
           "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs",
-          "plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs"
+          "plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs",
+          "plugins/yiyuan-accord-claude/runtime/task-checkpoint.cjs"
         ],
-        "activationContext": "SessionStart compact or resume supplies non authoritative model and permission hints only. Re sense decision relevant state from supported official sources. Missing or conflicting fields remain unknown. Preserve the independently bound last safe allocation. Use a fresh zero history destination only when required. Deliver and confirm takeover before source allocation release. Task archival requires explicit user authorization. Startup and clear stay silent. Invalid input fails visibly without echoing input. Hints prove neither current task state nor authority, Agent use, execution, effect, evidence or value.",
-        "maxSkillBytes": 11000,
+        "activationContext": "SessionStart resume and compact hints remain advisory. Supported UserPromptSubmit records a fresh task input epoch. A caller bound checkpoint inspects workspace file predicates and stale inputs. Stop can request continuation for unmet results once per changed observation. New input and Codex Interrupt invalidate old decisions. SessionEnd removes unbound receipts and preserves unfinished checkpoints. Explicit retirement removes only checkpoint files. The host Agent owns semantic adequacy, authority and execution. Native coverage and ordinary behavior require observed evidence.",
+        "maxSkillBytes": 12800,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
       }
     ]
   },
   "changeBoundary": {
-    "allowedPaths": ["product/development.json","product/constitution.json","product/program.json","product/acceptance.json","product/reshaping-guidance.json","yiyuan_accord/development.py","yiyuan_accord/identity.py","yiyuan_accord/control.py","yiyuan_accord/evidence.py","yiyuan_accord/__main__.py","tests/product/test_development.py","tests/product/test_product_control.py","AGENTS.md","CONTEXT.md","docs/architecture.md","docs/operations/CONTINUATION.md","docs/operations/PLAN-v3.2.md","yiyuan_accord/guardrails.py",".claude-plugin/marketplace.json","plugins/yiyuan-accord-codex/.codex-plugin/plugin.json","plugins/yiyuan-accord-codex/adapter.json","plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md","plugins/yiyuan-accord-claude/.claude-plugin/plugin.json","plugins/yiyuan-accord-claude/adapter.json","plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md","CONTRIBUTING.md","CHANGELOG.md","README.md","README.zh-CN.md","research/PROTOTYPE-dynamic-relation-graph.html","yiyuan_accord/admission.py","yiyuan_accord/reviews.py","tests/product/test_admission.py","scripts/observe-claude-entry.ps1","scripts/observe_claude_entry.py","tests/product/test_claude_entry.py","plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs"],
+    "allowedPaths": [
+      "product/development.json",
+      "product/constitution.json",
+      "product/program.json",
+      "product/acceptance.json",
+      "product/reshaping-guidance.json",
+      "yiyuan_accord/development.py",
+      "yiyuan_accord/identity.py",
+      "yiyuan_accord/control.py",
+      "yiyuan_accord/evidence.py",
+      "yiyuan_accord/__main__.py",
+      "tests/product/test_development.py",
+      "tests/product/test_product_control.py",
+      "AGENTS.md",
+      "CONTEXT.md",
+      "docs/architecture.md",
+      "docs/operations/CONTINUATION.md",
+      "docs/operations/PLAN-v3.2.md",
+      "yiyuan_accord/guardrails.py",
+      ".claude-plugin/marketplace.json",
+      "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+      "plugins/yiyuan-accord-codex/adapter.json",
+      "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+      "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
+      "plugins/yiyuan-accord-claude/adapter.json",
+      "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
+      "CONTRIBUTING.md",
+      "CHANGELOG.md",
+      "README.md",
+      "README.zh-CN.md",
+      "research/PROTOTYPE-dynamic-relation-graph.html",
+      "yiyuan_accord/admission.py",
+      "yiyuan_accord/reviews.py",
+      "tests/product/test_admission.py",
+      "scripts/observe-claude-entry.ps1",
+      "scripts/observe_claude_entry.py",
+      "tests/product/test_claude_entry.py",
+      "plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs",
+      "runtime/task-checkpoint.cjs",
+      "tests/product/test_task_checkpoint.py",
+      "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
+      "plugins/yiyuan-accord-claude/runtime/task-checkpoint.cjs",
+      "plugins/yiyuan-accord-codex/hooks/hooks.json",
+      "plugins/yiyuan-accord-claude/hooks/hooks.json",
+      "runtime/accord-hook.cjs",
+      "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+      "plugins/yiyuan-accord-claude/runtime/accord-hook.cjs"
+    ],
     "rule": "This open successor carries the current implementation slice and its generated visible plan; revise this bounded surface as authorized functional work proceeds. The predecessor remains closed at its immutable revision. Check actual changed and untracked paths, not the predecessor's completed presentation transition.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1180000,
-      "maxTrackedFiles": 127,
-      "maxPrimaryInstructionBytes": 28000,
-      "rationale": "On 2026-09-07 the user approved 1180000 code/test bytes and 127 files, retaining at least five-percent code headroom and the unchanged 28000-byte primary instruction ceiling. Current development counts Python modules/product tests plus runtime/plugins JavaScript sources and physical delivered copies, including untracked candidate files; frozen predecessor accounting is unchanged. The dev.12 worktree measures 1120722 code/test bytes, 127 files and 27536 instruction bytes, leaving 59278 code bytes (278 beyond the required 59000 reserve). The instruction increase carries the concrete change-to-action path in both independently delivered Skills; duplicate retry guidance was merged without losing the boundary. Necessary regression and recovery safeguards are retained. Maintainer PowerShell observation code remains separately reviewed. Cost conformance and isolated proposal-copy tests cannot qualify host behavior or value."
+      "maxProductCodeAndTestBytes": 1260000,
+      "maxTrackedFiles": 132,
+      "maxPrimaryInstructionBytes": 32000,
+      "rationale": "The user requires reliable functionality before overall budget alignment and permits justified revisions with all mappings reconciled. The task checkpoint adds one canonical executable, two complete delivered copies and behavior tests, plus existing caller validation. Current worktree code and test bytes measure 1186798, files 131, primary instructions 30860. The revised 1260000-byte code ceiling retains at least five percent headroom; 132 files and 32000 instruction bytes cover this concrete capability and its conditional usage. Each delivered Skill allowance is 12800 bytes to include the user-confirmed retrospective product responsibility and explicit host delegation; the overall instruction bound remains 32000 bytes. These are current development bounds, not measured net value or permanent limits; reassess actual benefit, burden and maintenance after native function works. No required behavior or failure evidence was removed to fit prior numbers."
     }
   },
   "source": {
@@ -815,6 +864,7 @@
     ]
   },
   "systemOptimization": {
+    "continuousCorrection": "持续纠偏覆盖全部工作及其历史形成物，不以某个节点为起点，也不限于后续改进。主动审视仍在使用的历史判断、过程、已完成项、代码、文档、规则和验收资产；发现问题就追溯原因与受影响依赖，必要时回退、重做、合并或退役，并验证实际后态。完成标签和历史身份均不构成豁免，不必等到新阶段或最终交付才处理。保留可追溯的原始事实和失败证据，修正现行资产及其权威关系。同步基线、计划、工序、验收和原生进度；功能跑通后对照项目立意与最终目标属于整体复核，不是唯一纠偏时点。",
     "aggregation": "all-applicable-floors-then-contextual-tradeoffs",
     "rule": "Derive the applicable floor for each required system quality from the bound result and risk. A failed or unknown required floor cannot be offset by speed, low cost, code reduction or a high average score elsewhere. Explicitly justify non-applicability; it does not remove product responsibilities. Optimize the weakest consequential dependency first and check its affected consumers. Baseline, plan shape, procedures and acceptance are revisable hypotheses within the bound goal. At material counterevidence or host change, revise only affected source and consumers, retain prior exact evidence as history, and explain the changed acceptance. Do not preserve a step count or mechanism merely to keep the original plan. Human and Agent understanding is provisional: alignment, research, planning, execution and review are conditional responsibilities, not a mandatory sequence or complete-specification gate. Continue safe work from current sufficient agreement; revisit only decisions affected by material uncertainty, changed needs or evidence. Any changed goal, authority or acceptance must be reconciled explicitly, never used to conceal an unmet commitment. Each applicable quality floor must be mapped to execution stages as well as listed; these many-to-many links are reviewable allocations, not a universal SOP or evidence that the floor has passed. Current user intent and authority govern. Plans, procedures and acceptance are revisable with explicit reasons; the native progress view maps the current plan. A scheduler or presentation tool cannot become a mandatory execution dependency. Correct or pause affected work when later intent, authority or evidence conflicts. Prefer repeatable checks for testable, risk-relevant constraints and challenge critical checks with known failures or bounded mutation/fault injection. Retain authorized intent, rationale and unencoded requirements; tools and metrics may encode wrong or incomplete expectations. Use independent observable post-state, not Agent-authored QA or a score as ground truth. Verify supported enforcement at consequential action boundaries before claiming prevention; guidance alone cannot supply it. Select metrics, mutation scope and reviewer topology by the actual risk and lifecycle cost; no universal score, Gherkin format or five-role pipeline is required. Revise checks transparently when their premises change, preserving prior counterevidence. These are outcome and release criteria, not a demand to perfect every dimension before implementing a function. First build the shortest necessary usable functional chain and verify its direct result and required failure behavior. Capture readily available observations as work proceeds; schedule full comparative value, budget, cost and interference alignment after functionality exists. Do not let measurement preparation, byte squeezing or repeated unchanged checks displace implementation. Change the method, dependency or transparently justified threshold when evidence shows the current route cannot advance; preserve actual authorization and consequential-effect boundaries throughout. Work stages express the default route, not universal serial prerequisites. Reconcile source, derived plan and native progress semantically as well as mechanically: next action, dependencies, status meaning and retained gaps must agree.",
     "qualityAxes": [
@@ -830,7 +880,7 @@
     "workSequence": [
       {
         "id": "source-foundation",
-        "title": "本轮源头与开发路线校准",
+        "title": "本轮启动事实与方向核对",
         "state": "implemented-local-unreleased",
         "duties": [
           "goal-authority-correction",
@@ -838,7 +888,7 @@
           "verification-and-value"
         ],
         "procedure": "按原始需求核对用户结果、真实依赖、实际缺口与投入。先完成必要功能链，再对质量、预算、成本、净影响等维度综合权衡并验收；过程中的授权、输入保护及必要失败后态持续有效。重复失败而无新增信息时改变方法或暂停该支线，不再把重复检查当进度。修正源记录后核对派生计划与 update plan 的内容、依赖和进度含义，再做机械映射检查；不新增常驻监控或每步审查仪式。",
-        "exit": "本轮方向偏移、原因、保留与停止的工作及下一选择依据明确；源、计划和交接一致并完成受影响检查。进度以必要缺口闭合衡量，不能由提交数、测试数、局部 PASS 或关闭发布门禁代替。此出口仅关闭本轮路线校准。",
+        "exit": "本轮方向偏移、原因、保留与停止的工作及下一选择依据明确；源、计划和交接一致并完成受影响检查。进度以必要缺口闭合衡量，不能由提交数、测试数、局部 PASS 或关闭发布门禁代替。此出口仅关闭本轮启动核对；持续纠偏贯穿全部后续工作，没有一次性完成状态。",
         "qualityAxes": [
           "compliance-and-safety",
           "functional-coverage",

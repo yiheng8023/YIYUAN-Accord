@@ -13,15 +13,31 @@ quiescent; neither source nor destination is to be archived. The handoff revisio
 is `40df60cfc9625cf7108979cfb94690a1a90431db`; the bound checkout is unchanged.
 The private `task19-handoff.json` confirms the transfer, separately from receipt.
 
-The current unpublished packages are dev.12. This slice projects the latest
-function-first correction into both Skills and connects material changes to
-affected obligations, invalidated claims, actual action and observed post-state.
-It merges the former general retry paragraph. No new runtime or shared candidate
-installation is involved, and the failed Claude dev.11 lifecycle branch remains
-paused. Ordinary-entry behavior still needs fresh observation; text conformance
-is not functional completion. A missing native fixture log now retains the parsed
-inspection report in its assertion failure. The earlier Windows root cause
-remains unknown; the diagnostic does not change its behavior predicate or timeout.
+The current unpublished packages are dev.13. Both now carry an executable local
+task checkpoint and supported native input/Stop/session-end callers; Codex also
+connects Interrupt. The helper checks real file predicates and changed inputs,
+protects new input during retirement, suppresses unchanged continuation retries,
+retains unfinished work and supports explicit pause, retirement and dead-lock
+recovery. The Agent still owns semantic adequacy, authority and execution. Native
+loading and ordinary behavior remain unverified. No shared candidate installation
+is involved; the failed Claude dev.11 lifecycle branch remains paused.
+
+Retrospective inspection found the old SessionStart helper still emitted an
+ambiguous source-release instruction after the Skill archive repair. Canonical
+and delivered copies now distinguish receipt, takeover, one writer, allocation
+release and explicit archival authority. This is guidance correction, not a
+physical archive interceptor. Continuous correction covers historical decisions,
+processes, completed items and current assets; it is not limited to future steps
+or phase boundaries. The first completed plan item is only startup reconciliation.
+
+The new executable behavior suite passed 9 tests in 8.323 seconds. The affected
+development suite passed 66 tests in 93.518 seconds. A later current-tree product
+check is valid with no errors, while functional completion and release readiness
+remain false and value unverified. The current worktree measures 1,186,798 code/test
+bytes, 131 files and 30,860 primary instruction bytes against revised development
+bounds of 1,260,000 / 132 / 32,000, retaining five-percent code headroom. These are
+local implementation facts, not native functional acceptance. The existing missing
+fixture-log diagnostic remains; the earlier Windows root cause is still unknown.
 
 The sections below retain the source checkpoint and its evidence. Package and
 budget values there are the dev.11 handoff snapshot; use the live development
@@ -95,7 +111,7 @@ panel or dedicated host execution mode is required.
 
 | Stage | State | Remaining result |
 |---|---|---|
-| 本轮源头与开发路线校准 | Locally corrected | This closes this correction only; revise again for material new evidence. |
+| 本轮启动事实与方向核对 | Locally corrected | This closes this correction only; revise again for material new evidence. |
 | 普通入口必要功能链实现与实际纠偏 | Active | Connect and exercise one necessary usable delivery/correction chain; then complete applicable results on each host. |
 | Desktop 连续性与归档授权边界 | Open | Actual dynamic-context continuation/takeover, destination receipts, source protection and explicit archival boundary. |
 | 两宿主安装、更新与独立恢复 | Open | Installed activation, actual update, independent surviving recovery and task-owned retirement. |

@@ -64,7 +64,9 @@ process.stdin.on('end', () => {
       'hold-missing-or-conflicting-fields-unknown',
       'preserve-independently-bound-last-safe-allocation',
       'use-fresh-zero-history-only-if-sequential-relief-is-required',
-      'verify-destination-before-source-release',
+      'confirm-takeover-and-single-writer-before-source-allocation-release',
+      'receipt-is-not-takeover',
+      'archive-only-with-explicit-user-authorization',
     ],
     claimLimit: [
       'signal-is-not-current-task-state',

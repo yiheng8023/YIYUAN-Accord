@@ -81,8 +81,18 @@ def delivery_adapter_contract(adapter_id, package_id):
         "ordinaryPrerequisites": [],
         "optionalContinuityHint": "session-start-invalidation",
         "optionalHintDependency": "host-path-node",
-        "persistentProcessAdded": False, "persistentStateAdded": False,
+        "persistentProcessAdded": False, "persistentStateAdded": True,
         "requiresFixedHostVersion": False, "behaviorEvidenceState": "unverified",
+        "optionalTaskCheckpoint": {
+            "entry": "runtime/task-checkpoint.cjs",
+            "prerequisites": ["host-path-node", "supported-native-task-hooks"],
+            "nativeEvents": ["UserPromptSubmit", "Stop", "SessionEnd"]
+                + (["Interrupt"] if adapter_id == "codex" else []),
+            "scope": "session-and-workspace-bound-file-predicates",
+            "effect": "inspect-local-results-and-request-supported-stop-continuation",
+            "state": "task-receipts-and-bound-checkpoints-until-explicit-retirement",
+            "authority": "caller-reconciles-user-intent-and-predicate-adequacy",
+        },
     }
     if adapter_id == "claude-code":
         contract["optionalUpdateInspection"] = {
@@ -544,6 +554,7 @@ def render_development_plan(contract):
              "由 `product/development.json` 派生；修改源数据后同步本页，校验会拒绝不一致。", "",
              "当前为未冻结的开发基线；目标是完成验收后发布新的 3.2，不改写 3.1。",
              "动态自适应是原有核心承诺；驱动宿主实现必要结果，按证据保留、合并、删除或补强，暂缓增加宿主适配。", "",
+             contract["systemOptimization"].get("continuousCorrection", ""), "",
              "## 工序与验收映射", "",
              "| 工序 | 当前进度 | 执行步骤 | 验收出口 |", "|---|---|---|---|"]
     for stage in contract["systemOptimization"]["workSequence"]:

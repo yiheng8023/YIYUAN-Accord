@@ -79,18 +79,31 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current delivered candidate and unproven connections
 
-Both worktree packages are unpublished `3.2.0-dev.12`. Each exposes one host
-Skill and an optional Node SessionStart hint. The hint emits invalidation
-guidance on resume/compact. Claude also includes a caller-bound native plugin
-update inspector; it checks the selected source and pre/post-state, but does not
-update, roll back or intercept actions. Neither helper owns a task scheduler,
-durable task state or recovery executor. The delivered Skill now connects a
-material change to affected obligations and claims, a discriminating next action,
-execution and observed post-state. It keeps the latest task binding in available
-host context/state and directs function-first development before full comparative
-alignment. The host Agent interprets this policy; these instructions do not
-establish automatic detection or enforcement. The complete ordinary-entry
-correction path still needs behavioral evidence. User-owned
+Both worktree packages are unpublished `3.2.0-dev.13`. Each exposes one host
+Skill, the existing optional resume/compact hint, and a Node task checkpoint
+connected to supported UserPromptSubmit, Stop and SessionEnd events. Codex also
+connects Interrupt. The Agent binds necessary file inputs, output predicates and
+the next authorized action against the current native input receipt. The helper
+checks actual file hashes and specified JSON facts, detects stale inputs, and
+can request native continuation when results remain unmet. An unchanged failure
+does not request endless retries. Fresh user input invalidates an unreconciled
+old continuation; receipt publication and retirement protect concurrent input.
+
+This adds scoped task state, no daemon, command executor or extra model call.
+The helper never decides user authority or whether the selected predicates fully
+express the goal. It leaves semantic judgment, execution and unsupported paths
+with the host Agent. Unfinished checkpoints survive session end; verified or
+explicitly cancelled tasks can retire only their checkpoint files. Proven dead
+locks have an explicit recovery operation. Input text is hashed, not retained.
+The default temporary state directory may remain empty; it is not an installed
+package cache or an archive executor. CLI checks establish local behavior; exact
+native loading and ordinary task use still require separate observation.
+
+Claude retains the caller-bound native plugin update inspector. It checks the
+selected source and pre/post-state, but does not update, roll back or intercept
+actions. The complete ordinary-entry correction path still needs behavioral
+evidence. Continuous correction applies throughout development, including after
+a function works; it is not a once-completed planning phase. User-owned
 AGENTS.md files are external conditions, not a delivered dependency or a
 substitute for Accord's responsibility.
 

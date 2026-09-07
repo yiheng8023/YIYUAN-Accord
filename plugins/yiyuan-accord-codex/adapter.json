@@ -8,7 +8,24 @@
   "optionalContinuityHint": "session-start-invalidation",
   "optionalHintDependency": "host-path-node",
   "persistentProcessAdded": false,
-  "persistentStateAdded": false,
+  "persistentStateAdded": true,
   "requiresFixedHostVersion": false,
-  "behaviorEvidenceState": "unverified"
+  "behaviorEvidenceState": "unverified",
+  "optionalTaskCheckpoint": {
+    "entry": "runtime/task-checkpoint.cjs",
+    "prerequisites": [
+      "host-path-node",
+      "supported-native-task-hooks"
+    ],
+    "nativeEvents": [
+      "UserPromptSubmit",
+      "Stop",
+      "SessionEnd",
+      "Interrupt"
+    ],
+    "scope": "session-and-workspace-bound-file-predicates",
+    "effect": "inspect-local-results-and-request-supported-stop-continuation",
+    "state": "task-receipts-and-bound-checkpoints-until-explicit-retirement",
+    "authority": "caller-reconciles-user-intent-and-predicate-adequacy"
+  }
 }

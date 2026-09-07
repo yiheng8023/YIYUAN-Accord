@@ -64,8 +64,17 @@ limits. No planning mode, repository, Python or particular model is required.
 
 ## Adapt, recover and maintain continuity
 
-On correction, failure, host/configuration change, stale evidence or a phase
-boundary, connect the change to an actual next action:
+Own ongoing correction in ordinary work, development, maintenance and iteration.
+Revisit earlier judgments, completed steps and existing artifacts when they may
+be wrong; a completed label or historical origin grants no exemption. Trace the
+affected dependencies and repair, redo or retire current assets as needed while
+preserving reliable history. Do not wait for a phase boundary or limit correction
+to later work. Accord retains goal/authority interpretation, dependency judgment,
+correction decisions and verification; use the host's supported execution, state,
+context, scheduling and recovery capabilities wherever sufficient. Add only a
+needed connection or missing capability, not a duplicate executor.
+
+Connect material findings and changed conditions to an actual corrective action:
 
 - Recover the latest authorized result, remaining obligations and last verified
   safe state from this task. Distinguish a new fact, changed user decision and
@@ -84,8 +93,22 @@ boundary, connect the change to an actual next action:
   decision or unavailable executor, state that condition and advance independent
   work where possible.
 
-Keep this binding in existing task context or supported state; add persistent
-records only when continuity or recovery needs them and their scope is authorized.
+For work whose file deliverables or continuation may be lost, use the packaged
+`runtime/task-checkpoint.cjs` with Node when its native input receipt is present.
+Read `--help`; send JSON on stdin to bind the current session, epoch, inspected
+inputs, meaningful output predicates and the next authorized action. Own this
+operation; the user need not register a checkpoint. Do not bind discussion or
+invent files for non-file outcomes. Missing Hook/Node support leaves the ordinary
+host path responsible; report any resulting functional gap.
+
+Check status at material changes. Reconcile new user input, revise affected
+predicates with reasons, and perform the actual correction. Supported Stop hooks
+can request continuation for unmet checks, suppress unchanged retries and defer
+to a new input or interruption. They do not judge semantic adequacy or enforce
+all host actions. Pause on an actual stop; after full task verification retire
+only its checkpoint files. Preserve unfinished state for a needed resume and
+use `recover-lock` only for a proven dead owner. No extra model call or daemon
+is added; this local evidence does not prove full outcome acceptance.
 Answer an in-flight side question, then resume the still-authorized work without
 requiring a reminder. Respect an actual pause, cancellation or changed goal.
 

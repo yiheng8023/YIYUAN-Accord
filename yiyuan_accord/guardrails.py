@@ -436,6 +436,7 @@ def plugin_file_locators(root, plugin_root):
 
 def activation_mechanism_errors(
     root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
+    task_checkpoint=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -454,6 +455,9 @@ def activation_mechanism_errors(
         f"plugins/yiyuan-accord-{package}/hooks/hooks.json",
         f"plugins/yiyuan-accord-{package}/runtime/accord-hook.cjs",
     ]
+    checkpoint_locator = f"plugins/yiyuan-accord-{package}/runtime/task-checkpoint.cjs"
+    if task_checkpoint:
+        additional_mechanisms = [*additional_mechanisms, checkpoint_locator]
     if mechanism_locators != expected_locators + list(additional_mechanisms):
         return errors + [f"{prefix} activation mechanism locator is invalid"]
     path = repository_relative_path(root, mechanism_locators[0])
@@ -490,6 +494,22 @@ def activation_mechanism_errors(
             }],
         },
     }
+    if task_checkpoint:
+        for event in ["UserPromptSubmit", "Stop", "SessionEnd"] + (["Interrupt"] if adapter_id == "codex" else []):
+            expected_value["hooks"][event] = [{"hooks": [{
+                "type": "command",
+                "command": f'node "${{{root_variable}}}/runtime/task-checkpoint.cjs" --hook',
+                "timeout": 3,
+            }]}]
+        checkpoint = repository_relative_path(root, checkpoint_locator)
+        canonical_checkpoint = repository_relative_path(root, "runtime/task-checkpoint.cjs")
+        try:
+            if (checkpoint is None or canonical_checkpoint is None
+                    or checkpoint.is_symlink() or canonical_checkpoint.is_symlink()
+                    or _owned_bytes(checkpoint) != _owned_bytes(canonical_checkpoint)):
+                errors.append(f"{prefix} task-checkpoint module differs from canonical bytes")
+        except OSError:
+            errors.append(f"{prefix} task-checkpoint module is unreadable")
     if value != expected_value:
         errors.append(f"{prefix} activation mechanism contract is invalid")
     try:
@@ -664,6 +684,7 @@ def validate_host_projection(
             (Path(manifest_locator).parent.parent / expected_contract["optionalUpdateInspection"]["entry"]).as_posix()
         ] if isinstance(manifest_locator, str) and expected_contract
         and "optionalUpdateInspection" in expected_contract else (),
+        task_checkpoint=bool(expected_contract and "optionalTaskCheckpoint" in expected_contract),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,
