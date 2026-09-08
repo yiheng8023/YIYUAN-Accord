@@ -20,7 +20,7 @@ Today, Accord supplies collaboration guidance through Codex and Claude plugins, 
 
 > **Current release: [v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1).** Before installing, verify the matching GitHub Release and immutable tag; installed versions do not update automatically. Earlier release tags remain unchanged.
 >
-> Start with [scope and limitations](#what-is-proven-and-what-is-not), [what changed](CHANGELOG.md), or the [3.3 plan](docs/operations/PLAN-v3.3.md) (baseline, procedure and acceptance drafted; implementation not started). The [historical 3.2 plan](docs/operations/PLAN-v3.2.md) retains its original scope. Use an accepted exact tag rather than a moving branch.
+> Start with [scope and limitations](#what-is-proven-and-what-is-not), [what changed](CHANGELOG.md), or the [3.3 plan](docs/operations/PLAN-v3.3.md) (development starts with ChatGPT/Codex; functionality not yet accepted). The [historical 3.2 plan](docs/operations/PLAN-v3.2.md) retains its original scope. Use an accepted exact tag rather than a moving branch.
 
 ## What problem it addresses
 

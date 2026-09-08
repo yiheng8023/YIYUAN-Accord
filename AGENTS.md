@@ -9,11 +9,11 @@ For post-v3.1 development, read `product/development.json` for the authorized
 current phase, system-quality floors and successor acceptance. Its absence is a
 validation error, not a return to the frozen predecessor's review-only authority.
 
-For the user-authorized v3.3 planning work, start with
+For the user-authorized v3.3 ChatGPT/Codex development, start with
 `docs/operations/CONTINUATION.md` and `docs/operations/PLAN-v3.3.md`, which link the
-aligned baseline, procedure and acceptance draft. `product/development.json`
-retains its v3.2.1 candidate scope; it is not the v3.3 progress record. Planning
-does not itself authorize implementation, host mutations or a new release.
+aligned baseline, procedure and acceptance. `product/development.json` retains
+its v3.2.1 candidate scope, not v3.3 progress. Follow the latest bound development
+and environment authority; a new release still requires its own authorization.
 
 - Treat the user's latest bound goal, corrections, sources, targets, and
   explicit boundaries as the task authority. Do not invent work, reopen a
