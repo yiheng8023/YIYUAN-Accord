@@ -18,7 +18,7 @@ Accord's goal is simple: users focus on ideas and decisions; the Agent takes car
 
 Today, Accord supplies collaboration guidance through Codex and Claude plugins, plus repository tools for checking its contracts and evidence. It is not a separate autonomous worker. Reliable end-to-end behavior and added value must be demonstrated in the host where it is used.
 
-> **Package version: 3.2.0.** A version label is not proof of publication or acceptance. Before installing, verify the matching GitHub Release and immutable tag; installed versions do not update automatically. Published [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) remains unchanged.
+> **Current release: [v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1).** Before installing, verify the matching GitHub Release and immutable tag; installed versions do not update automatically. Earlier release tags remain unchanged.
 >
 > Start with [scope and limitations](#what-is-proven-and-what-is-not), [what changed](CHANGELOG.md), or the [maintainer plan](docs/operations/PLAN-v3.2.md). Use an accepted exact tag rather than a moving branch.
 

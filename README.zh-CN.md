@@ -18,7 +18,7 @@ Accord 的目标很简单：用户专注创造与决策，Agent 承担实现目�
 
 当前，Accord 通过 Codex 和 Claude 插件提供协作指引，并在仓库中提供合同与证据检查工具。它不是一个独立工作的自治助手。是否真正完成任务、减少人工介入，需要在实际宿主中验证。
 
-> **包版本：3.2.0。** 版本号本身不证明已发布或已验收。安装前核对同名 GitHub Release 与不可变 tag；已安装版本不会自动更新。已发布的 [v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) 保持不变。
+> **当前发布：[v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1)。** 安装前核对同名 GitHub Release 与不可变 tag；已安装版本不会自动更新。此前的发布标签保持不变。
 >
 > 可先看[能力边界](#已经证明什么还有什么没证明)、[版本变更](CHANGELOG.md)或[维护计划](docs/operations/PLAN-v3.2.md)。使用已接受的精确 tag，不从持续变化的分支安装。
 
