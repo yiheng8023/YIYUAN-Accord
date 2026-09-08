@@ -159,6 +159,16 @@ function inspect(where, state) {
     : outputs.some((item) => !item.matched) ? 'incomplete' : 'verified-local', inputs, outputs};
 }
 
+// Inspection failures are diagnostics for status, pause and explicit cancellation.
+// Binding and successful completion still require strict inspection; this never
+// upgrades an unreadable result or relaxes state/input concurrency checks.
+function inspectDiagnostic(where, state) {
+  try { return inspect(where, state); }
+  catch (error) {
+    return {status: 'inspection-unavailable', error: String(error.code || error.message).slice(0, 512)};
+  }
+}
+
 function locked(where, callback, wait = false, retainOnFailure = false) {
   let fd;
   let keepLock = false;
@@ -293,7 +303,7 @@ function operate(request) {
     if (request.op === 'status') return {epoch: currentInput.epoch, revision: prior?.revision || 0,
       needsNativeReplay: currentInput.needsNativeReplay === true,
       mode: prior?.mode || 'unbound', currentInputReconciled: !currentInput.needsNativeReplay && prior?.epoch === currentInput.epoch,
-      inspection: prior ? inspect(where, prior) : null};
+      inspection: prior ? inspectDiagnostic(where, prior) : null};
     if (request.op === 'bind') {
       const state = binding(request, where, prior, currentInput);
       const inspection = inspect(where, state);
@@ -316,7 +326,7 @@ function operate(request) {
     }
     if (request.op === 'pause') {
       if (!text(request.reason)) fail('pause-reason-required');
-      const pending = inspect(where, prior);
+      const pending = inspectDiagnostic(where, prior);
       return inputLocked(where, () => {
         currentEpoch(where, currentInput.epoch);
         atomic(where.state, {...prior, revision: prior.revision + 1, mode: 'paused', reason: request.reason});
@@ -326,7 +336,8 @@ function operate(request) {
     if (request.op === 'retire') {
       if (currentInput.needsNativeReplay && request.disposition !== 'user-cancelled') fail('input-receipt-needs-native-replay');
       if (prior.epoch !== currentInput.epoch && request.disposition !== 'user-cancelled') fail('latest-user-input-not-reconciled');
-      const result = inspect(where, prior);
+      const result = request.disposition === 'user-cancelled'
+        ? inspectDiagnostic(where, prior) : inspect(where, prior);
       if (result.status !== 'verified-local' && request.disposition !== 'user-cancelled') fail('unmet-output-cannot-retire');
       if (request.disposition === 'user-cancelled' && !text(request.reason)) fail('cancellation-reason-required');
       retireFiles(where, currentInput.epoch, prior);
@@ -337,10 +348,15 @@ function operate(request) {
 }
 
 function hint(event, where, currentInput) {
+  const skill = path.join(__dirname, '..', 'skills', 'deliver-demand-driven-outcome', 'SKILL.md');
   return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
     `Accord task checkpoint: session=${event.session_id}; epoch=${currentInput.epoch}. ` +
-    `For authorized work whose deliverables or continuation may be lost, use node "${__filename}" --help ` +
-    'to bind necessary file outcomes and inspected inputs. Reconcile later user steering; pause on an actual stop. ' +
+    `For authorized nontrivial work, or material continuation, correction or recovery within it, apply "${skill}" ` +
+    'through the supported Skill or file-reading tool. Reuse fully loaded guidance while applicable; ' +
+    'keep standalone simple answers lightweight and preserve active work across side questions. ' +
+    `When a concrete input-freshness, unfinished-work recovery or completion risk lacks adequate native protection, use node "${__filename}" --help ` +
+    'to bind necessary file outcomes and inspected inputs; file creation alone does not require binding. Honor existing bindings. Retire task-owned checkpoints after verified completion; ' +
+    'preserve unfinished work. Reconcile later user steering; pause on an actual stop. ' +
     'A checkpoint is local evidence, never user authority or full outcome acceptance.'}};
 }
 

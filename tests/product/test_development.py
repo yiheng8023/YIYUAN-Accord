@@ -481,6 +481,30 @@ class DevelopmentContractTests(unittest.TestCase):
             altered["authority"]["conditionalRelease"] = malformed
             self.assertTrue(self.errors(altered))
 
+    def test_patch_cycle_requires_matching_bounded_release_authority(self):
+        from yiyuan_accord.development import render_development_plan
+        for target in ("3.2.0", "3.2.1"):
+            with self.subTest(target=target):
+                altered = copy.deepcopy(self.contract)
+                altered["status"] = "in-development"
+                altered["cycle"]["targetVersion"] = target
+                altered["cycle"]["versionState"] = "development-target-not-published"
+                altered["authority"]["conditionalRelease"]["target"] = target
+                altered["delivery"]["version"] = target + "-dev.1"
+                for projection in altered["delivery"]["hostProjections"]:
+                    projection["packageVersion"] = altered["delivery"]["version"]
+                self.assertEqual(self.errors(altered), [])
+                self.assertIn(f"Accord {target} 开发计划", render_development_plan(altered))
+                altered["authority"]["conditionalRelease"]["target"] = (
+                    "3.2.1" if target == "3.2.0" else "3.2.0")
+                self.assertIn("conditional release target must match", " ".join(self.errors(altered)))
+        altered["cycle"]["targetVersion"] = "3.3.0"
+        altered["authority"]["conditionalRelease"]["target"] = "3.3.0"
+        altered["delivery"]["version"] = "3.3.0-dev.1"
+        for projection in altered["delivery"]["hostProjections"]:
+            projection["packageVersion"] = altered["delivery"]["version"]
+        self.assertTrue(self.errors(altered), "future planning is not release authority")
+
     def test_development_package_phase_remains_valid_after_candidate_support(self):
         altered = copy.deepcopy(self.contract)
         altered["status"] = "in-development"

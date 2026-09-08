@@ -109,7 +109,7 @@ Installation, update and recovery need a healthy executor independent of the dam
 
 Ask a capable Agent host to handle the lifecycle:
 
-> Verify that v3.2.0 has a matching accepted GitHub Release, then inspect this host and install that exact tag. Preserve unrelated configuration and plugins, request necessary trust, and verify registration, newly loaded visibility and remaining limitations. If the release is unavailable, stop rather than installing a moving development branch.
+> Verify that v3.2.0 has a matching accepted GitHub Release, then inspect this host and install that exact tag. Preserve unrelated configuration and plugins, request necessary trust, and verify registration, visibility in the session actually being used and remaining limitations. If the release is unavailable, stop rather than installing a moving development branch.
 
 This is the intended interaction, not a guarantee that every host can complete it unattended. Plugin support, repository access and authority to change plugin state are prerequisites. The Hook additionally needs Node on `PATH` and a supported host trust flow.
 
@@ -143,7 +143,11 @@ The repository root is the marketplace, not the package subdirectory. Preserve s
 
 ### Check the effect, not just the installation
 
-Let the Agent verify the exact source and installed bytes, enabled registration, newly loaded Skill visibility and relevant invocation separately. Open a fresh task/session before judging changed loaded behavior. A listing or reload command alone is insufficient.
+Let the Agent verify the exact source and installed bytes, enabled registration, Skill visibility in the session actually being used, and relevant invocation separately. An already open session may retain an older Skill catalog after installation or update; successful loading in another fresh session does not establish that the original session refreshed. Prefer supported host refresh or re-entry controls and check actual exposure in the original task. An independent CLI/App Server query does not establish that an already running Desktop process refreshed. If Desktop still exposes the old catalog even in a new task, use the supported application restart, preserve unfinished work, and check the actually loaded version afterwards. [Official skill refresh guidance](https://learn.chatgpt.com/docs/build-skills). If a new task is necessary, obtain the applicable authorization and preserve the goal and unfinished work; do not automatically create or archive tasks. A listing or reload command alone is insufficient.
+
+When an installation appears inactive, distinguish missing Skill exposure, exposure without selection, selection followed by failed execution, and execution without observable benefit. A Hook hint does not mean the full Skill was loaded. Checkpoint `unbound` means no file-result conditions are bound; it alone does not prove plugin failure. The Agent should own these checks and supported recovery without requiring the user to keep naming the Skill during ordinary use.
+
+When checking input-triggered behavior, distinguish a message submitted in the user input box from a tool-output task continuation; the latter is not automatically equivalent to `UserPromptSubmit`. Check the delivered event, Skill loading and outcome for the actual entry separately.
 
 Then inspect a real, authorized task: what was delivered, what the user still had to manage, and whether unrelated state or residue was left behind. Explicit Skill selection can test exposure; it cannot prove ordinary activation or incremental value.
 

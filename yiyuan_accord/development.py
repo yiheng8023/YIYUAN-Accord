@@ -207,13 +207,15 @@ def development_contract_errors(contract, golden_task_ids):
                     "controlled-existing-host-evaluation", "conditional-v3.2-release",
                     "conditional-existing-accord-upgrade-after-v3.2-release"})
     release = authority.get("conditionalRelease")
-    require(isinstance(release, dict) and release.get("target") == "3.2.0"
+    require(isinstance(release, dict) and release.get("target") in ("3.2.0", "3.2.1")
             and release.get("decision") == "user-authorized-after-acceptance"
             and release.get("ready") is False
             and _strings(release.get("conditions")) and _text(release.get("rule"))
             and _RELEASE_CONDITIONS.keys() <= set(release["conditions"]),
             "conditional publication authority is not present readiness")
     cycle = section("cycle", ("id", "scopeRule", "sourceDecision"))
+    require(isinstance(release, dict) and release.get("target") == cycle.get("targetVersion"),
+            "conditional release target must match the authorized development cycle")
     require(isinstance(cycle.get("targetVersion"), str)
             and re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", cycle["targetVersion"]) is not None
             and cycle.get("versionState") in ("development-target-not-published",
@@ -568,11 +570,13 @@ def render_development_plan(contract):
     """Derived human view; the contract remains the only editable progress source."""
     states = {"pending": "待完成", "active": "进行中", "implemented-local-unreleased": "本地实现，未发布"}
     duties = {item["id"]: item for item in contract["acceptance"]["duties"]}
-    lines = ["# YIYUAN Accord 3.2 开发计划与进度", "",
+    target = contract["cycle"]["targetVersion"]
+    lines = [f"# YIYUAN Accord {target} 开发计划与进度", "",
              "由 `product/development.json` 派生；修改源数据后同步本页，校验会拒绝不一致。", "",
-             ("当前为冻结的 3.2 候选；版本冻结不证明外部验收或发布，不改写 3.1。"
+             (f"当前为冻结的 {target} 候选；版本冻结不证明外部验收或发布，不改写历史版本。"
               if contract.get("status") == "candidate-frozen" else
-              "当前为未冻结的开发基线；目标是完成验收后发布新的 3.2，不改写 3.1。"),
+              f"当前为未冻结的开发基线；技术目标 {target} 不构成发布决定，最终路线服从当前用户决定，不改写历史版本。"),
+             contract["cycle"]["sourceDecision"], "",
              "动态自适应是原有核心承诺；驱动宿主实现必要结果，按证据保留、合并、删除或补强，暂缓增加宿主适配。", "",
              contract["systemOptimization"].get("continuousCorrection", ""), "",
              "## 工序与验收映射", "",
@@ -654,6 +658,6 @@ def render_development_plan(contract):
               "更新日志：[CHANGELOG.md](../../CHANGELOG.md)。当前为未发布开发摘要；定版时以精确候选及验收证据核对，不混入历史发布账本。", "",
               "版本内改动提交 → 推送精确候选 → 精确提交的验收与独立评审 → 发布同一提交 → 公共结果及清理核验。",
               "提交不能夹带无关工作；推送成功、工作区干净或本地测试通过都不能单独代替发布验收。", "",
-              "当前对话含已启用的 Accord、其他能力及继承上下文，只作为开发辅助；不能用它证明普通用户环境下的效果。",
+              "开发对话可能保留先前 Accord 暴露、其他能力及继承上下文；停用登记不会抹去既有上下文，不能用开发对话证明普通用户环境下的效果。",
               "本页是计划的可见投影，不是宿主原生计划面板修复，也不是功能完成或发布凭证。", ""]
     return "\n".join(lines)

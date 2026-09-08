@@ -105,6 +105,45 @@ class TaskCheckpointTests(unittest.TestCase):
         self.assertEqual(self.event("Stop", stop_hook_active=False), {})
         self.assertFalse((self.work / "summary.json").exists())
 
+    def test_uninspectable_files_do_not_block_status_pause_or_explicit_cancellation(self):
+        for name in ('summary.json', 'source.json'):
+            with self.subTest(path=name):
+                self.event('UserPromptSubmit', prompt='Produce the approved files.')
+                self.bind()
+                current = self.status()
+                path = self.work / name
+                original = path.read_bytes() if path.exists() else None
+                if path.exists():
+                    path.unlink()
+                path.mkdir()
+                try:
+                    request = {'epoch': current['epoch'], 'expectedRevision': current['revision']}
+                    self.assertIn('reference-is-not-a-file', self.invoke(
+                        {'op': 'retire', **request}, success=False))
+                    status = self.status()
+                    self.assertEqual(status['inspection']['status'], 'inspection-unavailable')
+                    self.assertIn('reference-is-not-a-file', status['inspection']['error'])
+                    paused = self.invoke({'op': 'pause', **request, 'reason': 'User paused.'})
+                    self.assertEqual(paused['mode'], 'paused')
+                    self.assertEqual(paused['pending']['status'], 'inspection-unavailable')
+                    self.assertEqual(self.event('Stop'), {})
+                    self.assertIn('task-revision-or-input-conflict', self.invoke(
+                        {'op': 'retire', **request, 'disposition': 'user-cancelled',
+                         'reason': 'User cancelled.'}, success=False))
+                    retired = self.invoke({'op': 'retire', 'epoch': current['epoch'],
+                        'expectedRevision': paused['revision'], 'disposition': 'user-cancelled',
+                        'reason': 'User cancelled; preserve all workspace contents.'})
+                    self.assertTrue(retired['retired'])
+                    self.assertEqual(retired['inspection']['status'], 'inspection-unavailable')
+                    self.assertTrue(path.is_dir())
+                    self.assertEqual((self.work / 'keep.txt').read_bytes(), b'user-owned input\n')
+                    self.assertFalse(list(self.state.glob('*.state.json')))
+                    self.assertFalse(list(self.state.glob('*.input.json')))
+                finally:
+                    path.rmdir()
+                    if original is not None:
+                        path.write_bytes(original)
+
     def test_lost_native_input_stays_invalid_after_contended_lock_is_released(self):
         self.bind()
         earlier = self.status()

@@ -1,11 +1,13 @@
 ---
 name: deliver-demand-driven-outcome
-description: Deliver nontrivial outcomes through capability discovery, routing, execution, correction, verification and cleanup. Use for authorized package installation, update or independent recovery and other unmet needs or material improvements; leave simple answers and sufficient low-burden routes alone.
+description: Use for nontrivial task entry and continuation, changed requirements, or recovery. Coordinate capability selection, execution, correction, continuity and verified delivery with domain Skills. Includes authorized package changes. Keep standalone simple answers lightweight; side questions do not end active work.
 ---
 
 # Deliver the outcome
 
-Apply by need, without a fixed sequence. Package changes: [Manage packages](#manage-packages).
+Apply at entry and material changes, without a fixed sequence or reloading
+unchanged guidance. Work with domain Skills and adequate native execution;
+keep ownership of the full result. Package changes: [Manage packages](#manage-packages).
 
 ## Bind the result before choosing the means
 
@@ -94,14 +96,20 @@ Connect material findings and changed conditions to an actual corrective action:
   decision or unavailable executor, state that condition and advance independent
   work where possible.
 
-For work whose file deliverables or continuation may be lost, use the packaged
-`runtime/task-checkpoint.cjs` with Node when its native input receipt is present.
+Use the packaged file checkpoint for a concrete risk to input freshness,
+unfinished-work recovery or completion checking that supported native handling
+does not adequately cover. Anticipate evidenced risks; file creation alone does
+not require binding. Short, bounded work with sufficient native verification
+and continuity can proceed directly. Preserve required protection with the
+least burdensome adequate route. When needed, use `runtime/task-checkpoint.cjs`
+with Node when its native input receipt is present.
 Read `--help`; send JSON on stdin to bind the current session, epoch, inspected
 inputs, meaningful output predicates and the next authorized action. Own this
 operation; the user need not register a checkpoint. Do not bind discussion or
 invent files for non-file outcomes. Missing Hook/Node support leaves the ordinary
 host path responsible; report any resulting functional gap.
 
+Once bound, do not bypass existing checks to reduce steps or obtain a pass.
 Check status at material changes. Reconcile new user input, revise affected
 predicates with reasons, and perform the actual correction. Supported Stop hooks
 can request continuation for unmet checks, suppress unchanged retries and defer
