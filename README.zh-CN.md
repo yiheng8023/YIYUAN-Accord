@@ -20,7 +20,7 @@ Accord 的目标很简单：用户专注创造与决策，Agent 承担实现目�
 
 > **当前发布：[v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1)。** 安装前核对同名 GitHub Release 与不可变 tag；已安装版本不会自动更新。此前的发布标签保持不变。
 >
-> 可先看[能力边界](#已经证明什么还有什么没证明)、[版本变更](CHANGELOG.md)或[维护计划](docs/operations/PLAN-v3.2.md)。使用已接受的精确 tag，不从持续变化的分支安装。
+> 可先看[能力边界](#已经证明什么还有什么没证明)、[版本变更](CHANGELOG.md)或[3.3 规划](docs/operations/PLAN-v3.3.md)（基线、工序与验收标准已建立，尚未实施）。[3.2 历史计划](docs/operations/PLAN-v3.2.md)保留原范围。使用已接受的精确 tag，不从持续变化的分支安装。
 
 ## 它想解决什么问题
 
