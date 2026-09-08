@@ -109,7 +109,7 @@ Installation, update and recovery need a healthy executor independent of the dam
 
 Ask a capable Agent host to handle the lifecycle:
 
-> Verify that v3.2.0 has a matching accepted GitHub Release, then inspect this host and install that exact tag. Preserve unrelated configuration and plugins, request necessary trust, and verify registration, visibility in the session actually being used and remaining limitations. If the release is unavailable, stop rather than installing a moving development branch.
+> Verify that v3.2.1 has a matching accepted GitHub Release, then inspect this host and install that exact tag. Preserve unrelated configuration and plugins, request necessary trust, and verify registration, visibility in the session actually being used and remaining limitations. If the release is unavailable, stop rather than installing a moving development branch.
 
 This is the intended interaction, not a guarantee that every host can complete it unattended. Plugin support, repository access and authority to change plugin state are prerequisites. The Hook additionally needs Node on `PATH` and a supported host trust flow.
 
@@ -123,7 +123,7 @@ These use the recorded exact-tag route with the selected 3.2 tag. First verify i
 Codex:
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.2.0
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.2.1
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 codex plugin list --json
 ```
@@ -131,7 +131,7 @@ codex plugin list --json
 Claude Code:
 
 ```powershell
-claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.2.0" --scope user
+claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.2.1" --scope user
 claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 claude plugin marketplace list --json
 claude plugin list --json

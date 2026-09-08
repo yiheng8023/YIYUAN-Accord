@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "yiyuan-accord-claude",
   "displayName": "YIYUAN Accord for Claude",
-  "version": "3.2.1-dev.3",
+  "version": "3.2.1",
   "description": "YIYUAN Accord for nontrivial task delivery, capability selection, continuous correction, continuity and verification alongside domain Skills in Claude.",
   "author": {
     "name": "yiheng8023",

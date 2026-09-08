@@ -109,7 +109,7 @@ Skill 由宿主 Agent 解释执行。启用 Hook 需要 `PATH` 中的 Node、对
 
 可以让有相应能力的 Agent 宿主接管安装：
 
-> 先核对 v3.2.0 已有对应、已接受的 GitHub Release，再检查当前宿主并安装这个精确 tag。保留无关配置和插件，遇到必要信任时请我决定，并验证登记、实际使用会话中的可见性和仍未确认的部分。若发布不存在就停止，不改装移动中的开发分支。
+> 先核对 v3.2.1 已有对应、已接受的 GitHub Release，再检查当前宿主并安装这个精确 tag。保留无关配置和插件，遇到必要信任时请我决定，并验证登记、实际使用会话中的可见性和仍未确认的部分。若发布不存在就停止，不改装移动中的开发分支。
 
 这是期望的交互方式，不保证每个宿主都能无人介入地完成。前提是宿主支持插件、能访问仓库，且获准修改插件状态。Hook 还需要 `PATH` 中的 Node 和宿主支持的信任流程。
 
@@ -123,7 +123,7 @@ Skill 由宿主 Agent 解释执行。启用 Hook 需要 `PATH` 中的 Node、对
 Codex：
 
 ```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.2.0
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.2.1
 codex plugin add yiyuan-accord-codex@yiyuan-accord
 codex plugin list --json
 ```
@@ -131,7 +131,7 @@ codex plugin list --json
 Claude Code：
 
 ```powershell
-claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.2.0" --scope user
+claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.2.1" --scope user
 claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
 claude plugin marketplace list --json
 claude plugin list --json

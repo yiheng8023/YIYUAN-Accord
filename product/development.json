@@ -2,10 +2,10 @@
   "schema": "yiyuan-accord-development/v4",
   "productId": "yiyuan-accord",
   "phase": "whole-system-optimization-and-functional-closure",
-  "status": "in-development",
+  "status": "candidate-frozen",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition. Later corrections require coverage beyond known v3.1 issues. The user does perceive some installed-v3.1 influence and recalls stronger pre-Accord automatic verified handoff and ongoing correction. Preserve this as reported experience, not measured causal runtime benefit or a zero-value finding. Size reduction must preserve necessary functionality and user experience; runtime retirement is not a goal. On 2026-09-05 the user additionally authorized upgrading their existing host-installed Accord packages after 3.2 is accepted and published. That initial upgrade direction was limited to the post-release package. On 2026-09-06 the user explicitly required user authorization for task archival and authorized the successor task to investigate and repair this handoff failure, then continue the existing 3.2 work. Handoff, completion, task creation and resource cleanup do not grant archive authority; no archive is authorized in this continuation. Later the user clarified that necessary configuration adjustments can be prepared and carried out with backups and rollback, rather than forcing an increasingly complex zero-change test route. Bind the actual settings, affected sessions, prior state, restoration and verification; the user then explicitly allowed installing the existing Codex candidate before publication, with development interference controlled and a verified backup/recovery path. This permits the bounded Accord transition already proposed, not host application upgrades or unrelated extension changes. The user also directed removal of dedicated host planning-mode prompts and their bindings from current v3.1-and-later surfaces, preserving earlier versions. Current intent and authority govern; plans, procedures and acceptance adapt to justified corrections and evidence, and the native progress UI maps the current plan without becoming task authority. The user subsequently withdrew the pre-release shared-host installation route to reduce development self-interference and unpredictable propagation. The existing Codex candidate is to remain uninstalled until an accepted release; bounded task-local exposure may support necessary evaluation. Prior installation/rollback observations remain historical facts, not standing authorization to reinstall. Hot-update behavior depends on the host and requires observed activation/recovery; replacing files cannot undo prior conversation influence. On 2026-09-07 the user further corrected development order: implement the necessary functional chain first, then balance quality, budgets, cost and Accord impact across dimensions before release. Repeatedly running an unchanged failing procedure is not progress; methods and thresholds are revisable with explicit reasons. This does not waive human authority or permit unbounded effects. The user requested an early verified continuation from the long task, with no omitted work and source/plan/progress reconciliation before transfer. On 2026-09-07, after reviewing the exact single-use proposal, the user explicitly approved one temporary shared Codex dev.16 installation, one installed selected-use turn, native uninstall and restoration. That exception has now been exercised and closed; it does not authorize another prerelease shared installation, other plugin upgrades, a new Desktop task or archival. Preserve the original withdrawal and prior execution identities. Necessary read-only evaluation of retained evidence remains within the existing development scope. On 2026-09-08 the user reported that 3.2 ordinary-entry Skill selection felt weaker than 3.1 and required investigation of triggering itself, not merely correct outputs. The user authorized bounded disabling if necessary, repair and verification before a new release, then reinstallation/enablement and only afterwards promotion. This reopens 3.2.1 repair of the existing two host projections; it does not initiate the paper-only 3.3 plan or expand host support. Both hosts require separate loading, selection, execution and recovery observations; a Codex observation cannot qualify Claude, and CLI cannot qualify Desktop. Historical shared-install exceptions remain closed. Candidate exposure must remain within the presently bound task-local or specifically authorized test route, with actual effects and restoration checked. Later on 2026-09-08 the user explicitly paused haste toward a 3.2.1 release and asked to compare the remaining 3.3 scope after the necessary repair: if bounded and economical, a combined 3.3 may be preferable. Current 3.2.1-dev.1 is a repair work identity only. Keep repair moving, retain promotion issues and prepare a verified handoff when context requires it; final release version and whether to begin 3.3 implementation remain for discussion. Earlier conditional publication direction does not override this newer release pause. The user subsequently decided to release 3.2.1 first because the remaining 3.3 plan is not a small immediate addition. This resolves the temporary version discussion and publication pause: continue repair and required verification, then publish the accepted 3.2.1 under the existing conditional direction. Do not bypass acceptance or initiate 3.3; it remains future paper-only planning.",
+    "basis": "The user approved post-v3.1 development, whole-system optimization, a mapped successor baseline/plan/process/acceptance, controlled environmental interference, and publication of 3.2 after completion. Additional host adaptation is deferred. Dynamic adaptation is an original product commitment, not a newly invented capability or a clean-host-only precondition. Later corrections require coverage beyond known v3.1 issues. The user does perceive some installed-v3.1 influence and recalls stronger pre-Accord automatic verified handoff and ongoing correction. Preserve this as reported experience, not measured causal runtime benefit or a zero-value finding. Size reduction must preserve necessary functionality and user experience; runtime retirement is not a goal. On 2026-09-05 the user additionally authorized upgrading their existing host-installed Accord packages after 3.2 is accepted and published. That initial upgrade direction was limited to the post-release package. On 2026-09-06 the user explicitly required user authorization for task archival and authorized the successor task to investigate and repair this handoff failure, then continue the existing 3.2 work. Handoff, completion, task creation and resource cleanup do not grant archive authority; no archive is authorized in this continuation. Later the user clarified that necessary configuration adjustments can be prepared and carried out with backups and rollback, rather than forcing an increasingly complex zero-change test route. Bind the actual settings, affected sessions, prior state, restoration and verification; the user then explicitly allowed installing the existing Codex candidate before publication, with development interference controlled and a verified backup/recovery path. This permits the bounded Accord transition already proposed, not host application upgrades or unrelated extension changes. The user also directed removal of dedicated host planning-mode prompts and their bindings from current v3.1-and-later surfaces, preserving earlier versions. Current intent and authority govern; plans, procedures and acceptance adapt to justified corrections and evidence, and the native progress UI maps the current plan without becoming task authority. The user subsequently withdrew the pre-release shared-host installation route to reduce development self-interference and unpredictable propagation. The existing Codex candidate is to remain uninstalled until an accepted release; bounded task-local exposure may support necessary evaluation. Prior installation/rollback observations remain historical facts, not standing authorization to reinstall. Hot-update behavior depends on the host and requires observed activation/recovery; replacing files cannot undo prior conversation influence. On 2026-09-07 the user further corrected development order: implement the necessary functional chain first, then balance quality, budgets, cost and Accord impact across dimensions before release. Repeatedly running an unchanged failing procedure is not progress; methods and thresholds are revisable with explicit reasons. This does not waive human authority or permit unbounded effects. The user requested an early verified continuation from the long task, with no omitted work and source/plan/progress reconciliation before transfer. On 2026-09-07, after reviewing the exact single-use proposal, the user explicitly approved one temporary shared Codex dev.16 installation, one installed selected-use turn, native uninstall and restoration. That exception has now been exercised and closed; it does not authorize another prerelease shared installation, other plugin upgrades, a new Desktop task or archival. Preserve the original withdrawal and prior execution identities. Necessary read-only evaluation of retained evidence remains within the existing development scope. On 2026-09-08 the user reported that 3.2 ordinary-entry Skill selection felt weaker than 3.1 and required investigation of triggering itself, not merely correct outputs. The user authorized bounded disabling if necessary, repair and verification before a new release, then reinstallation/enablement and only afterwards promotion. This reopens 3.2.1 repair of the existing two host projections; it does not initiate the paper-only 3.3 plan or expand host support. Both hosts require separate loading, selection, execution and recovery observations; a Codex observation cannot qualify Claude, and CLI cannot qualify Desktop. Historical shared-install exceptions remain closed. Candidate exposure must remain within the presently bound task-local or specifically authorized test route, with actual effects and restoration checked. Later on 2026-09-08 the user explicitly paused haste toward a 3.2.1 release and asked to compare the remaining 3.3 scope after the necessary repair: if bounded and economical, a combined 3.3 may be preferable. Current 3.2.1-dev.1 is a repair work identity only. Keep repair moving, retain promotion issues and prepare a verified handoff when context requires it; final release version and whether to begin 3.3 implementation remain for discussion. Earlier conditional publication direction does not override this newer release pause. The user subsequently decided to release 3.2.1 first because the remaining 3.3 plan is not a small immediate addition. This resolves the temporary version discussion and publication pause: continue repair and required verification, then publish the accepted 3.2.1 under the existing conditional direction. Do not bypass acceptance or initiate 3.3; it remains future paper-only planning. The latest user also authorized archiving or deleting no-longer-reused Accord test sessions, including historical/current/future Claude tests. Preserve evidence and exclude development/unknown sessions; use native ephemeral modes where no persistent continuity is needed. CLI remains a first-class entry with its own actual capabilities; Desktop is not a common prerequisite. The bounded dev.3 shared Desktop use has been restored to original disabled 3.2.0 state.",
     "scope": ["source-semantics", "full-function-acceptance-mapping", "local-contract-validation", "matching-navigation-and-glossary", "whole-system-optimization", "existing-host-functional-closure", "next-version-development", "controlled-existing-host-evaluation", "conditional-v3.2-release", "conditional-existing-accord-upgrade-after-v3.2-release"],
     "notGranted": ["new-host-experiments", "personal-environment-changes-outside-bound-evaluation-and-post-release-upgrade", "new-trust-data-or-material-cost", "unrelated-external-writes", "rewrite-historical-tags-or-releases"],
     "conditionalRelease": {
@@ -21,24 +21,24 @@
   "cycle": {
     "id": "v3.2.1-ordinary-entry-repair",
     "targetVersion": "3.2.1",
-    "versionState": "development-target-not-published",
+    "versionState": "final-candidate-not-publication-proof",
     "existingHosts": [
       "codex",
       "claude-code"
     ],
     "additionalHostAdaptation": "deferred",
     "scopeRule": "Preserve necessary outcomes; review each inherited function and mechanism for actual need. Delegate to suitable host capabilities; compare maintained alternatives for a material gap or plausible net benefit, not only native failure. Merge or retire unnecessary assets with callers and acceptance reconciled. Keep existing Codex/Claude scope before expanding hosts. Development is not candidate acceptance or publication; review compatibility before final version selection.",
-    "sourceDecision": "2026-09-08 最新决定：先发布修复版 3.2.1，不等待 3.3。当前 3.2.1-dev.3 继续普通入口触发与受影响恢复修复，尚未冻结、验收或发布。以 14693d58e2296cbe0b7b4cf15eacc9cb54462bad 的 v3.2.0 为不可变已发布基线；必要功能验证和相关质量、证据对齐完成后才发布，再重新安装启用并恢复传播。3.3 仅保留未来纸面规划；旧加载、交付、纠偏、失败及准入保留原身份。"
+    "sourceDecision": "3.2.1 正式候选：Skill、Hook 与运行时代码保持 dev.3 已验证字节，仅同步发行标识及当前验收范围。CLI、Desktop 实际输入框、Claude 双轮分别重评；旧十一项证据核对受影响依赖，不直接改为通过。精确候选评审、托管检查与当前准入未完成前不得发布；3.3 仍仅纸面规划。"
   },
   "delivery": {
-    "version": "3.2.1-dev.3",
+    "version": "3.2.1",
     "rule": "The 3.2.1 development candidate retains the existing two-host Skill, native Hook and optional file-checkpoint composition. Repair ordinary-outcome discovery and applicable selection without forcing every conversation through a Skill or checkpoint. Investigate and repair evidenced affected recovery defects; exact implementation and package identity follow the current source, not the historical 3.2.0 summary. Check loading, selection, execution and recovery independently for Codex CLI, Codex Desktop and Claude Code where claims depend on them. Correct artifacts alone do not establish Accord selection or benefit; unbound checkpoint state does not mean all plugin capabilities failed. Existing runtime and native effects may be reused only through explicit affected-dependency review. Package identity, local regression checks and past qualification cannot establish current host acceptance or readiness.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.2.1-dev.3",
-        "packageSha256": "be5fda72eaac98030461537212c0613068931807bacceabf296dd4af43387203",
+        "packageVersion": "3.2.1",
+        "packageSha256": "2b503dfd70bf6a1a51b6b46264d6425e44de634c1d95bba021730ab7c6d4e721",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -66,8 +66,8 @@
       {
         "id": "claude-code",
         "packageId": "yiyuan-accord-claude",
-        "packageVersion": "3.2.1-dev.3",
-        "packageSha256": "c45dcc1befd38e8d557cae384f998f15428567ad441cd465e21e07ef87be0755",
+        "packageVersion": "3.2.1",
+        "packageSha256": "cbe31c339f5df225b8bb1638938523cfd7d41b683f4c2641f151448c8f61a6f3",
         "manifest": "plugins/yiyuan-accord-claude/.claude-plugin/plugin.json",
         "marketplace": ".claude-plugin/marketplace.json",
         "contract": "plugins/yiyuan-accord-claude/adapter.json",
@@ -4239,7 +4239,10 @@
         "function": [
           "codex-function",
           "claude-code-function",
-          "codex-desktop-continuity"
+          "codex-desktop-continuity",
+          "codex-cli-ordinary-entry",
+          "codex-desktop-direct-input-verification",
+          "claude-code-ordinary-correction"
         ],
         "package-lifecycle": [
           "codex-lifecycle",
@@ -4315,9 +4318,9 @@
               "firstNativeTotal": 140,
               "secondNativeTotal": 60,
               "firstReadyIds": [
-                "A",
-                "B"
-              ],
+                  "A",
+                  "B"
+                ],
               "secondReadyIds": [
                 "A"
               ],
@@ -4725,9 +4728,9 @@
               "freshStatusAfterFailure": true,
               "permittedSnapshotRead": true,
               "readyIds": [
-                "A",
-                "B"
-              ],
+                  "A",
+                  "B"
+                ],
               "totalUnits": 140
             },
             "authority": {
@@ -4872,14 +4875,14 @@
                 "originalPackageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d",
                 "currentPackageSha256": "edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f",
                 "changedFiles": [
-                  ".codex-plugin/plugin.json",
-                  "adapter.json",
-                  "hooks/hooks.json",
-                  "runtime/accord-hook.cjs",
-                  "runtime/task-checkpoint.cjs",
-                  "skills/deliver-demand-driven-outcome/SKILL.md",
-                  "skills/deliver-demand-driven-outcome/agents/openai.yaml"
-                ],
+                    ".codex-plugin/plugin.json",
+                    "adapter.json",
+                    "hooks/hooks.json",
+                    "runtime/accord-hook.cjs",
+                    "runtime/task-checkpoint.cjs",
+                    "skills/deliver-demand-driven-outcome/SKILL.md",
+                    "skills/deliver-demand-driven-outcome/agents/openai.yaml"
+                  ],
                 "directCurrentPackageReplay": false,
                 "wholePackageEquivalenceClaim": false,
                 "exactAffectedDependencyReviewRequired": true,
@@ -4962,9 +4965,9 @@
               "outputsAbsentAfterAnswer": true,
               "newWriteWithoutContinueReminder": true,
               "firstReadyIds": [
-                "A",
-                "B"
-              ],
+                  "A",
+                  "B"
+                ],
               "firstTotalUnits": 140,
               "secondReadyIds": [
                 "A"
@@ -5097,14 +5100,14 @@
                 "originalPackageSha256": "cd0fe57493d055d550aea7dcba28d890f25542f12b44dcb5adbed03dc03f946d",
                 "currentPackageSha256": "edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f",
                 "changedFiles": [
-                  ".codex-plugin/plugin.json",
-                  "adapter.json",
-                  "hooks/hooks.json",
-                  "runtime/accord-hook.cjs",
-                  "runtime/task-checkpoint.cjs",
-                  "skills/deliver-demand-driven-outcome/SKILL.md",
-                  "skills/deliver-demand-driven-outcome/agents/openai.yaml"
-                ],
+                    ".codex-plugin/plugin.json",
+                    "adapter.json",
+                    "hooks/hooks.json",
+                    "runtime/accord-hook.cjs",
+                    "runtime/task-checkpoint.cjs",
+                    "skills/deliver-demand-driven-outcome/SKILL.md",
+                    "skills/deliver-demand-driven-outcome/agents/openai.yaml"
+                  ],
                 "directCurrentPackageReplay": false,
                 "wholePackageEquivalenceClaim": false,
                 "exactAffectedDependencyReviewRequired": true,
@@ -5321,134 +5324,134 @@
                 "completeInventory": "Hash-bound retention-run-01.json enumerates all 122 original files. Authenticate all entries including raw stdout and physical/native stage snapshots; sibling independent review does not replace raw verification."
               },
               "installedUse": {
-                "originalExecution": {
-                  "revision": "c730406ca7fafabc405f78d81000e22c3574c9d5",
-                  "candidateRevision": "331ccd9f628fdd80adee6ea46a7d13bd78aa887b",
-                  "attemptId": "accord-installed-use-331ccd9-01",
-                  "threadId": "01a07c30-dbd3-71f1-8c36-bc3610866dcd",
-                  "turnId": "01a07c30-dca6-7d00-98a0-a4aceb015f32",
-                  "startedAt": "2026-09-07T14:06:08.6794543+00:00",
-                  "modelStartedAt": "2026-09-07T14:06:12.1308533+00:00",
-                  "finishedAt": "2026-09-07T14:07:17.2972543+00:00",
-                  "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
-                  "preboundCase": {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/binding.json",
-                    "sha256": "008201eec6c1f9b409068323e7ec116095a5d355a108b37277fa7f2879d8ab0c",
-                    "bytes": 3790
-                  }
-                },
-                "retainedSources": [
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/binding.json",
-                    "sha256": "008201eec6c1f9b409068323e7ec116095a5d355a108b37277fa7f2879d8ab0c",
-                    "bytes": 3790
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/execution-code-binding.json",
-                    "sha256": "f4e942f627145c804a76f242315e3ca9f18c8de234b29b91910f3ce76b36004b",
-                    "bytes": 543
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/execution-report.json",
-                    "sha256": "04313cf567eb06f82eb2a11c19df9469f9ea4fb23ec127aa14debec381f0bc66",
-                    "bytes": 75139
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/before-state.json",
-                    "sha256": "869544a8e81c0901ad9834e7c46d56a292bf5a777b3a74b20efde56b4ac71502",
-                    "bytes": 1104652
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/installed-state.json",
-                    "sha256": "02d0e17cca00a4950b3804c00676bd54b9b60712d70d29c8dc9e40c917985da3",
-                    "bytes": 1104943
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/restored-state.json",
-                    "sha256": "65bd6d7125484926df309e72e74ce37d34d899405dfbb13c6cc7db900f3b2697",
-                    "bytes": 1104759
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/before-processes.json",
-                    "sha256": "4c5159b79b4f96f56628e6013a01134896d01ae6c243c756ecdfe49e8d9cbe74",
-                    "bytes": 263
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/after-processes.json",
-                    "sha256": "4c5159b79b4f96f56628e6013a01134896d01ae6c243c756ecdfe49e8d9cbe74",
-                    "bytes": 263
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/orders.csv",
-                    "sha256": "4fa909c51784fba0bb335d11f00518e1af7c3bfd8a5680e0236eb6a2e9e8a4b0",
-                    "bytes": 51
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/keep.txt",
-                    "sha256": "81eb6ecd03cc8b9aa51a24f2c6282895cae5cb59f073c3700d7409045d09e274",
-                    "bytes": 38
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/legacy-note.txt",
-                    "sha256": "0c56867d873e662779f57d409dbef42a1ee41fdfb37f3c4417e20abf3dcd1ea2",
-                    "bytes": 104
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/details.csv",
-                    "sha256": "af8731f6691823e1a079aefb4f0126426bc9a66bfb984a7c2cf5a075359eb5a6",
-                    "bytes": 19
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/summary.json",
-                    "sha256": "dfae64b8c6293aba40476bf2b1ec9220194582f37cbaacd85ca928b6d3664779",
-                    "bytes": 70
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/install-use-stdout.jsonl",
-                    "sha256": "bf217affdce3eb689c9b3eae3e081b3c195d899b73903b6701670799d9be0993",
-                    "bytes": 208153
-                  },
-                  {
-                    "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/restore-stdout.jsonl",
-                    "sha256": "63c63e56dbcce203492d3db8b1fa8ab2f010fec3c7c301a6f520f90a139b5958",
-                    "bytes": 206597
-                  }
-                ],
-                "originalFailuresAndLimits": {
-                  "failedGitProbeCount": 1,
-                  "wholeOriginalFormalCasePass": false,
-                  "fullSkillBodyInjectionTextCaptured": false,
-                  "separateActualInstalledHashMapRetained": false,
-                  "StopContinuationDemonstrated": false,
-                  "providerIdentityBeyondReportedConfiguration": "unknown"
-                },
-                "currentDependencyRequirement": {
-                  "actualComparisonRequired": true,
-                  "currentProviderAndLoadedStateInherited": false,
-                  "originalObservedPackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
-                  "currentAffectedDependencyAssessmentRequired": true,
-                  "compatibleHistoricalEffectReuseJustified": true,
-                  "currentPackageSha256": "edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f",
-                  "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling. Review the final manifest-only version change and current retirement deletion-window guard against the retained native connection and independent local counterexample/regressions; do not relabel dev17 as a new host execution."
-                },
-                "originalAuthorization": {
-                  "threadId": "01a07984-457e-75a1-ba39-4e5fda61f440",
-                  "question": {
-                    "line": 8084,
-                    "timestamp": "2026-09-07T13:48:52.997Z",
-                    "callId": "call_UOaDB8qrA1H4O9l6SOFGRi6t",
-                    "sha256": "1b7e3c6c0d1ff2f22e870b606ef140875c9dc8b724635f31ef68f5a1d1f81ccb"
-                  },
-                  "reply": {
-                    "line": 8128,
-                    "timestamp": "2026-09-07T13:51:28.704Z",
-                    "role": "user",
-                    "text": "是。",
-                    "sha256": "c84d8cdf3d664b21b685a54398efb2560a06051efcc375d94fb789dcb904fd55"
-                  },
-                  "limit": "one shared installation, installed-use and restoration only; not a standing install or new Desktop/archive authorization"
+              "originalExecution": {
+                "revision": "c730406ca7fafabc405f78d81000e22c3574c9d5",
+                "candidateRevision": "331ccd9f628fdd80adee6ea46a7d13bd78aa887b",
+                "attemptId": "accord-installed-use-331ccd9-01",
+                "threadId": "01a07c30-dbd3-71f1-8c36-bc3610866dcd",
+                "turnId": "01a07c30-dca6-7d00-98a0-a4aceb015f32",
+                "startedAt": "2026-09-07T14:06:08.6794543+00:00",
+                "modelStartedAt": "2026-09-07T14:06:12.1308533+00:00",
+                "finishedAt": "2026-09-07T14:07:17.2972543+00:00",
+                "packageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                "preboundCase": {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/binding.json",
+                  "sha256": "008201eec6c1f9b409068323e7ec116095a5d355a108b37277fa7f2879d8ab0c",
+                  "bytes": 3790
                 }
               },
+              "retainedSources": [
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/binding.json",
+                  "sha256": "008201eec6c1f9b409068323e7ec116095a5d355a108b37277fa7f2879d8ab0c",
+                  "bytes": 3790
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/execution-code-binding.json",
+                  "sha256": "f4e942f627145c804a76f242315e3ca9f18c8de234b29b91910f3ce76b36004b",
+                  "bytes": 543
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/execution-report.json",
+                  "sha256": "04313cf567eb06f82eb2a11c19df9469f9ea4fb23ec127aa14debec381f0bc66",
+                  "bytes": 75139
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/before-state.json",
+                  "sha256": "869544a8e81c0901ad9834e7c46d56a292bf5a777b3a74b20efde56b4ac71502",
+                  "bytes": 1104652
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/installed-state.json",
+                  "sha256": "02d0e17cca00a4950b3804c00676bd54b9b60712d70d29c8dc9e40c917985da3",
+                  "bytes": 1104943
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/restored-state.json",
+                  "sha256": "65bd6d7125484926df309e72e74ce37d34d899405dfbb13c6cc7db900f3b2697",
+                  "bytes": 1104759
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/before-processes.json",
+                  "sha256": "4c5159b79b4f96f56628e6013a01134896d01ae6c243c756ecdfe49e8d9cbe74",
+                  "bytes": 263
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/after-processes.json",
+                  "sha256": "4c5159b79b4f96f56628e6013a01134896d01ae6c243c756ecdfe49e8d9cbe74",
+                  "bytes": 263
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/orders.csv",
+                  "sha256": "4fa909c51784fba0bb335d11f00518e1af7c3bfd8a5680e0236eb6a2e9e8a4b0",
+                  "bytes": 51
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/keep.txt",
+                  "sha256": "81eb6ecd03cc8b9aa51a24f2c6282895cae5cb59f073c3700d7409045d09e274",
+                  "bytes": 38
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/legacy-note.txt",
+                  "sha256": "0c56867d873e662779f57d409dbef42a1ee41fdfb37f3c4417e20abf3dcd1ea2",
+                  "bytes": 104
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/details.csv",
+                  "sha256": "af8731f6691823e1a079aefb4f0126426bc9a66bfb984a7c2cf5a075359eb5a6",
+                  "bytes": 19
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/workspace/summary.json",
+                  "sha256": "dfae64b8c6293aba40476bf2b1ec9220194582f37cbaacd85ca928b6d3664779",
+                  "bytes": 70
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/install-use-stdout.jsonl",
+                  "sha256": "bf217affdce3eb689c9b3eae3e081b3c195d899b73903b6701670799d9be0993",
+                  "bytes": 208153
+                },
+                {
+                  "pathFromRetainedBase": "codex-installed-use-proposal-331ccd9/run-01/restore-stdout.jsonl",
+                  "sha256": "63c63e56dbcce203492d3db8b1fa8ab2f010fec3c7c301a6f520f90a139b5958",
+                  "bytes": 206597
+                }
+              ],
+              "originalFailuresAndLimits": {
+                "failedGitProbeCount": 1,
+                "wholeOriginalFormalCasePass": false,
+                "fullSkillBodyInjectionTextCaptured": false,
+                "separateActualInstalledHashMapRetained": false,
+                "StopContinuationDemonstrated": false,
+                "providerIdentityBeyondReportedConfiguration": "unknown"
+              },
+              "currentDependencyRequirement": {
+                "actualComparisonRequired": true,
+                "currentProviderAndLoadedStateInherited": false,
+                "originalObservedPackageSha256": "d5fe93741bfb68a621c42f11978cfba9acc3563d0a585f83a2ceb3b336989181",
+                "currentAffectedDependencyAssessmentRequired": true,
+                "compatibleHistoricalEffectReuseJustified": true,
+                "currentPackageSha256": "edd4f5958313555d76e8906d36b1781ff5d47d11dbcccaee958c5521c234697f",
+                "assessmentRule": "Authenticate complete original and current package maps and enumerate exact differences. Require independent review of their actual effect on the retained result and adequate current dev17 native input connection plus local failure-watermark, replay and Hook-event checks for dependent current behavior. An unresolved necessary change blocks the dependent claim. No whole-package equivalence, current installed/model/provider inheritance or historical-run relabeling. Review the final manifest-only version change and current retirement deletion-window guard against the retained native connection and independent local counterexample/regressions; do not relabel dev17 as a new host execution."
+              },
+              "originalAuthorization": {
+                "threadId": "01a07984-457e-75a1-ba39-4e5fda61f440",
+                "question": {
+                  "line": 8084,
+                  "timestamp": "2026-09-07T13:48:52.997Z",
+                  "callId": "call_UOaDB8qrA1H4O9l6SOFGRi6t",
+                  "sha256": "1b7e3c6c0d1ff2f22e870b606ef140875c9dc8b724635f31ef68f5a1d1f81ccb"
+                },
+                "reply": {
+                  "line": 8128,
+                  "timestamp": "2026-09-07T13:51:28.704Z",
+                  "role": "user",
+                  "text": "是。",
+                  "sha256": "c84d8cdf3d664b21b685a54398efb2560a06051efcc375d94fb789dcb904fd55"
+                },
+                "limit": "one shared installation, installed-use and restoration only; not a standing install or new Desktop/archive authorization"
+              }
+            },
               "priorReassessmentNavigationOnly": [
                 {
                   "pathFromRetainedBase": "retained-reassessment-885ecc0/sources-and-dependencies.json",
@@ -5786,10 +5789,10 @@
                   "lastTimestampedEventAt": "2026-09-07T13:44:41.933Z",
                   "timeMeaning": "Native event timestamps, not inferred process start/end or today's execution.",
                   "journal": {
-                    "pathFromRetainedBase": "release-source-dev16-9rlg4byb-final/records/release-source-dev16.stdout",
-                    "sha256": "2aa0efe0ba3f7861ee427733b11adbd50ddae7d9ca73457a7b4b553ddfbbe41f",
-                    "bytes": 802155
-                  }
+                  "pathFromRetainedBase": "release-source-dev16-9rlg4byb-final/records/release-source-dev16.stdout",
+                  "sha256": "2aa0efe0ba3f7861ee427733b11adbd50ddae7d9ca73457a7b4b553ddfbbe41f",
+                  "bytes": 802155
+                }
                 },
                 "correction": {
                   "sessionId": "f7aea56b-8970-4474-8af8-c688bbf17acb",
@@ -5797,10 +5800,10 @@
                   "lastTimestampedEventAt": "2026-09-07T13:51:47.641Z",
                   "timeMeaning": "Native event timestamps, not inferred process start/end or today's execution.",
                   "journal": {
-                    "pathFromRetainedBase": "release-source-dev16-9rlg4byb-final/records/release-source-correction-dev16.stdout",
-                    "sha256": "847d6188cedc5bffde71f58a826a9a1f7bbc8af694fb76aac78cf2eb45962904",
-                    "bytes": 241555
-                  }
+                  "pathFromRetainedBase": "release-source-dev16-9rlg4byb-final/records/release-source-correction-dev16.stdout",
+                  "sha256": "847d6188cedc5bffde71f58a826a9a1f7bbc8af694fb76aac78cf2eb45962904",
+                  "bytes": 241555
+                }
                 },
                 "firstPreboundCase": {
                   "pathFromRetainedBase": "release-source-dev16-9rlg4byb-final/case.json",
@@ -6548,6 +6551,282 @@
               "positiveNeutralNegativeAndInconclusiveJudgedSymmetrically": true
             }
           }
+        },
+        {
+          "id": "codex-cli-ordinary-entry-dev3-retained-reassessment",
+          "host": "codex",
+          "entry": "cx-cli",
+          "duties": [
+            "execution-configuration-and-code",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "evidence-integrity"
+          ],
+          "scenarios": [
+            "effective-user-environment"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "route": "Codex CLI 0.153.4 / gpt-6-astra high",
+            "inputKind": "ordinary-stdin-user-prompt",
+            "profile": "isolated-home-reusing-authorized-existing-login-workspace-write-unelevated",
+            "observationMethod": "retained-dev3-evidence-reassessment",
+            "newNativeExecution": false
+          },
+          "scope": "codex-cli-ordinary-entry",
+          "oracle": "This is a new read-only retained-evidence reassessment of the specifically bound dev.3 episode after the final source definition is committed, not a new native execution. Independently parse native events and recompute source/output facts, verify retained byte hashes and the current package dependency delta. Preserve original event timestamps, model route, input kind, failures, controller actions and cleanup actors. A manifest-only final version change may preserve observed body behavior only when every Skill, Hook and runtime byte is unchanged; do not call the old native episode a final-version installation. Recheck sources in both observer phases and bind the current immutable candidate. Explicit use, metadata exposure and correct results are different facts. Never manufacture observation facts from this expected map. Unknown relevant dependencies hold affected claims.",
+          "oracleFiles": [
+            "yiyuan_accord/admission.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "fullSkillRead": true,
+              "orders": 2,
+              "quantity": 15,
+              "amount": "358.50",
+              "currency": "CNY",
+              "allThreeOutputsVerified": true
+            },
+            "authority": {
+              "ordinaryPromptDidNotNameAccord": true,
+              "originalTestAuthorityPreserved": true,
+              "reassessmentHasNoHostMutation": true
+            },
+            "poststate": {
+              "protectedInputsUnchanged": true,
+              "fileCheckpointBound": false
+            },
+            "cleanup": {
+              "inputReceiptRetired": true,
+              "temporaryCredentialLinkRemoved": true,
+              "testSessionArchived": true
+            },
+            "sourceProvenance": {
+              "originalCandidate": "3.2.1-dev.3",
+              "retainedSources": [
+                {
+                  "path": "C:/Users/15521/AppData/Local/Temp/accord-321-native-discovery-20260908/ordinary-dev3-events.jsonl",
+                  "sha256": "3a8a1d5651335b8bc502c65e45be260829d41043e90d182eb5e3ccaf4e680f3b",
+                  "bytes": 39423
+                },
+                {
+                  "path": "C:/Users/15521/.codex/backups/accord-321-repair-20260908/dev3-ordinary-independent-check.json",
+                  "sha256": "96858eb18838cca146f306f8be407a226b07dc02930fbc650ef6fc7ad49fe1c1",
+                  "bytes": 1117
+                },
+                {
+                  "path": "C:/Users/15521/.codex/backups/accord-321-repair-20260908/codex-test-session-cleanup/result.json",
+                  "sha256": "de398c80bd7fd81413c2fc725178e6d3fa8a03fe5b75889b64ec2f386b941db0",
+                  "bytes": 6200
+                }
+              ],
+              "newNativeExecution": false
+            }
+          }
+        },
+        {
+          "id": "codex-desktop-direct-input-verification-dev3-retained-reassessment",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "verification-and-value",
+            "environment-and-self-exposure"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "evidence-integrity"
+          ],
+          "scenarios": [
+            "effective-user-environment"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "route": "Codex Desktop 26.901.6511.0 / gpt-6-astra",
+            "inputKind": "user-input-box-verification-after-restart",
+            "profile": "once-authorized-shared-dev3-use-then-original-disabled-state-restoration",
+            "observationMethod": "retained-dev3-evidence-reassessment",
+            "newNativeExecution": false
+          },
+          "scope": "codex-desktop-direct-input-verification",
+          "oracle": "This is a new read-only retained-evidence reassessment of the specifically bound dev.3 episode after the final source definition is committed, not a new native execution. Independently parse native events and recompute source/output facts, verify retained byte hashes and the current package dependency delta. Preserve original event timestamps, model route, input kind, failures, controller actions and cleanup actors. A manifest-only final version change may preserve observed body behavior only when every Skill, Hook and runtime byte is unchanged; do not call the old native episode a final-version installation. Recheck sources in both observer phases and bind the current immutable candidate. Explicit use, metadata exposure and correct results are different facts. Never manufacture observation facts from this expected map. Unknown relevant dependencies hold affected claims.",
+          "oracleFiles": [
+            "yiyuan_accord/admission.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "inputHintObserved": true,
+              "fullSkillRead": true,
+              "allThreeExistingOutputsVerified": true,
+              "orders": 1,
+              "quantity": 4,
+              "amount": "100.00",
+              "currency": "CNY",
+              "newOutputGenerationClaimed": false
+            },
+            "authority": {
+              "ordinaryPromptDidNotNameAccord": true,
+              "originalTestAuthorityPreserved": true,
+              "reassessmentHasNoHostMutation": true
+            },
+            "poststate": {
+              "allSixBusinessFilesUnchanged": true,
+              "toolOutputTurnSeparatelyClassified": true
+            },
+            "cleanup": {
+              "testSessionArchived": true,
+              "originalPluginAndMarketRestored": true,
+              "freshSkillAndHookCounts": [
+                0,
+                0
+              ],
+              "unrelatedConfigurationDifferencesPreserved": true
+            },
+            "sourceProvenance": {
+              "originalCandidate": "3.2.1-dev.3",
+              "retainedSources": [
+                {
+                  "path": "C:/Users/15521/.codex/backups/accord-321-repair-20260908/desktop-temporary-use/direct-input-desktop-trace.jsonl",
+                  "sha256": "cb7c7bc875794b6519089f36bf01439bca7507b5146168ac6cd4cfbbff14a14f",
+                  "bytes": 1635193
+                },
+                {
+                  "path": "C:/Users/15521/.codex/backups/accord-321-repair-20260908/desktop-temporary-use/direct-input-desktop-result.json",
+                  "sha256": "3781af8ddf52ed549622c0541db7c91c4aa4b5d4bbe571c709d48a0b07954fa6",
+                  "bytes": 576
+                },
+                {
+                  "path": "C:/Users/15521/.codex/backups/accord-321-repair-20260908/desktop-temporary-use/restarted-tool-entry-result.json",
+                  "sha256": "15da79389a3016a3e2b01f8e9127f67643049e2eda915278259c7ec0819d50c4",
+                  "bytes": 706
+                },
+                {
+                  "path": "C:/Users/15521/.codex/backups/accord-321-repair-20260908/desktop-temporary-use/restoration-verification.json",
+                  "sha256": "d1d5bf051c22af90da85f5d4fb44ee0797ddf4b2f0228b0ebd643bec67e83373",
+                  "bytes": 851
+                }
+              ],
+              "newNativeExecution": false
+            }
+          }
+        },
+        {
+          "id": "claude-code-ordinary-correction-dev3-retained-reassessment",
+          "host": "claude-code",
+          "entry": "cc-cli",
+          "duties": [
+            "execution-configuration-and-code",
+            "correction-and-evolution",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "evidence-integrity"
+          ],
+          "scenarios": [
+            "effective-user-environment"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "route": "Claude Code 2.1.263 / existing DeepSeek route",
+            "inputKind": "ordinary-stream-json-user-inputs-second-after-first-result",
+            "profile": "per-process-plugin-dir-existing-user-settings-no-session-persistence",
+            "observationMethod": "retained-dev3-evidence-reassessment",
+            "newNativeExecution": false
+          },
+          "scope": "claude-code-ordinary-correction",
+          "oracle": "This is a new read-only retained-evidence reassessment of the specifically bound dev.3 episode after the final source definition is committed, not a new native execution. Independently parse native events and recompute source/output facts, verify retained byte hashes and the current package dependency delta. Preserve original event timestamps, model route, input kind, failures, controller actions and cleanup actors. A manifest-only final version change may preserve observed body behavior only when every Skill, Hook and runtime byte is unchanged; do not call the old native episode a final-version installation. Recheck sources in both observer phases and bind the current immutable candidate. Explicit use, metadata exposure and correct results are different facts. Never manufacture observation facts from this expected map. Unknown relevant dependencies hold affected claims.",
+          "oracleFiles": [
+            "yiyuan_accord/admission.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "fullSkillCalledFirstTurn": true,
+              "secondTurnReusesLoadedGuidance": true,
+              "nativeResults": [
+            "success",
+            "success"
+          ],
+              "orders": [
+                2,
+                1
+              ],
+              "quantity": [
+                15,
+                4
+              ],
+              "amount": [
+                "358.50",
+                "100.00"
+              ],
+              "currency": "CNY",
+              "allThreeOutputsVerifiedEachTurn": true,
+              "inFlightCorrectionClaimed": false
+            },
+            "authority": {
+              "ordinaryPromptDidNotNameAccord": true,
+              "originalTestAuthorityPreserved": true,
+              "reassessmentHasNoHostMutation": true
+            },
+            "poststate": {
+              "protectedInputsUnchanged": true,
+              "sharedSettingsUnchanged": true,
+              "fileCheckpointBound": false
+            },
+            "cleanup": {
+              "nativeExitCode": 0,
+              "forcedCleanupUsed": false,
+              "checkpointFiles": [],
+              "persistentSessionTranscriptAbsent": true
+            },
+            "sourceProvenance": {
+              "originalCandidate": "3.2.1-dev.3",
+              "retainedSources": [
+                {
+                  "path": "C:/Users/15521/AppData/Local/Temp/accord-321-claude-correction-dev3-20260908/events.jsonl",
+                  "sha256": "0dde96f036b6998870981c9a016ae2751b7f36994a9ad6a95ce19b9f96dd70ec",
+                  "bytes": 2645666
+                },
+                {
+                  "path": "C:/Users/15521/AppData/Local/Temp/accord-321-claude-correction-dev3-20260908/result.json",
+                  "sha256": "4588f8026f71c51c976f78c4f888b318a0c1b7ae73be7cf80f110581062333ca",
+                  "bytes": 1004
+                },
+                {
+                  "path": "C:/Users/15521/AppData/Local/Temp/accord-321-claude-correction-dev3-20260908/independent-verification.json",
+                  "sha256": "bd854dd8af9a458b70376d67164bba66d91372cecfa3ef4c3beaf6e177dc81cf",
+                  "bytes": 2045
+                },
+                {
+                  "path": "C:/Users/15521/AppData/Local/Temp/accord-321-claude-correction-dev3-20260908/poststate.json",
+                  "sha256": "31c404080afd9e78b614d05b3d0acf8db793b80114d66e74bdb76c71354da41b",
+                  "bytes": 840
+                },
+                {
+                  "path": "C:/Users/15521/.codex/backups/accord-321-repair-20260908/claude-test-session-cleanup/result.json",
+                  "sha256": "0ccd0c89acf883387ed01465ea53f6d8437793e6e91de81d789f3ba57af12419",
+                  "bytes": 2422
+                }
+              ],
+              "newNativeExecution": false
+            }
+          }
         }
       ],
       "scopes": [
@@ -6839,6 +7118,94 @@
             "forbiddenInference": "No statistical equivalence, universal best, zero interference or causal reliability improvement from neutral outcomes, empty state directories, package exposure or local repair tests."
           },
           "rule": "Assess this host declared composition using original retained observations and current affected dependencies. Judge actual results, verification, reversals, denied/repeated attempts, delays, reported cost and its units, model/route uncertainty, Hook hints and state even without binding, installation/recovery/exit burden, necessary redundancy and public limitations together. Every applicable quality floor and necessary unknown receives a reasoned disposition. The bounded use decision must remain defensible after known costs, failures and limits; neither positive benefit nor neutral outcome is an expected answer. No extra experiment is required merely for this scope shape, but unresolved concrete evidence gaps still block. Current independent observation retains immutable historical identities and source hashes. Assessment completion is separate from incremental support and whole release readiness."
+        },
+        {
+          "id": "codex-cli-ordinary-entry",
+          "host": "codex",
+          "entry": "cx-cli",
+          "duties": [
+            "execution-configuration-and-code",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "evidence-integrity"
+          ],
+          "scenarios": [
+            "effective-user-environment"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "route": "Codex CLI 0.153.4 / gpt-6-astra high",
+            "inputKind": "ordinary-stdin-user-prompt",
+            "profile": "isolated-home-reusing-authorized-existing-login-workspace-write-unelevated",
+            "observationMethod": "retained-dev3-evidence-reassessment",
+            "newNativeExecution": false
+          },
+          "rule": "Qualify only the declared ordinary entry and effects. CLI, Desktop input-box and tool-output continuations, and Claude model/provider routes are distinct. Reassess dev.3 evidence against unchanged final Skill/Hook/runtime bodies. No stable trigger-rate, universal host coverage or causal benefit claim."
+        },
+        {
+          "id": "codex-desktop-direct-input-verification",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "verification-and-value",
+            "environment-and-self-exposure"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "evidence-integrity"
+          ],
+          "scenarios": [
+            "effective-user-environment"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "route": "Codex Desktop 26.901.6511.0 / gpt-6-astra",
+            "inputKind": "user-input-box-verification-after-restart",
+            "profile": "once-authorized-shared-dev3-use-then-original-disabled-state-restoration",
+            "observationMethod": "retained-dev3-evidence-reassessment",
+            "newNativeExecution": false
+          },
+          "rule": "Qualify only the declared ordinary entry and effects. CLI, Desktop input-box and tool-output continuations, and Claude model/provider routes are distinct. Reassess dev.3 evidence against unchanged final Skill/Hook/runtime bodies. No stable trigger-rate, universal host coverage or causal benefit claim."
+        },
+        {
+          "id": "claude-code-ordinary-correction",
+          "host": "claude-code",
+          "entry": "cc-cli",
+          "duties": [
+            "execution-configuration-and-code",
+            "correction-and-evolution",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "evidence-integrity"
+          ],
+          "scenarios": [
+            "effective-user-environment"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "route": "Claude Code 2.1.263 / existing DeepSeek route",
+            "inputKind": "ordinary-stream-json-user-inputs-second-after-first-result",
+            "profile": "per-process-plugin-dir-existing-user-settings-no-session-persistence",
+            "observationMethod": "retained-dev3-evidence-reassessment",
+            "newNativeExecution": false
+          },
+          "rule": "Qualify only the declared ordinary entry and effects. CLI, Desktop input-box and tool-output continuations, and Claude model/provider routes are distinct. Reassess dev.3 evidence against unchanged final Skill/Hook/runtime bodies. No stable trigger-rate, universal host coverage or causal benefit claim."
         }
       ]
     },
