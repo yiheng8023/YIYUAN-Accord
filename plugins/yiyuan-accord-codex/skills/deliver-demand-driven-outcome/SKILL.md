@@ -64,7 +64,7 @@ and unfinished work, and retire only after verified completion or explicit
 cancellation. Stored readiness does not grant current authority.
 
 When needed and Node/native input receipts are available, read
-`runtime/task-checkpoint.cjs --help` from the plugin root for the current status,
+`node runtime/task-checkpoint.cjs --help` from the plugin root for the current status,
 bind/revise, pause, retire and recovery interface. Use inspected inputs and
 meaningful output predicates; existence is not semantic adequacy. Input recovery
 requires actual retained native input, never a reconstruction from old state.

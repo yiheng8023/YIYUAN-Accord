@@ -31,8 +31,10 @@ def offline_probe(program, timeout):
             (root / "native" / name).mkdir(parents=True)
         source, binary = root / "probe.cs", root / "probe.exe"
         source.write_text(program, encoding="utf-8")
+        # Hosted Windows compilation can exceed 15 s before the probe runs.
+        # Keep setup bounded separately from the supplied behavior deadline.
         subprocess.run(["C:/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe", "/nologo",
-                        "/out:" + str(binary), str(source)], check=True, capture_output=True, timeout=15)
+                        "/out:" + str(binary), str(source)], check=True, capture_output=True, timeout=60)
         yield repository, root, binary, {
             "schema": "accord-live-cli-source/v1", "episode": episode, "timeout": timeout,
             "repository": str(repository), "taskRoot": str(root), "executable": str(binary), "prompt": "fixture"}
