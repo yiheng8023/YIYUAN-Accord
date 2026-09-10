@@ -4,7 +4,10 @@ import copy
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 import json
+from pathlib import Path
 import subprocess
+import shutil
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -21,9 +24,34 @@ FACTS = {"effect": {"total": 130}, "authority": {"inputPreserved": True},
 
 
 class DevelopmentEvidenceTests(unittest.TestCase):
+    def test_successor_cannot_promote_retained_cases_even_with_an_observer(self):
+        from pathlib import Path
+        from yiyuan_accord.admission import assess_development_evidence
+        root = Path(__file__).resolve().parents[2]
+        current = json.loads((root / DEVELOPMENT_FILE).read_text(encoding='utf-8'))
+        # Reproduce the earlier successor snapshot with retained predecessor
+        # policy; current v5 declarations now have their own admission path.
+        current['acceptance']['admission'] = development_fixtures.historical_development()['acceptance']['admission']
+        current['acceptance']['currentQualification'] = 'not-bound-for-v3.3'
+        called = []
+        result = assess_development_evidence(root, current, lambda request: called.append(request))
+        self.assertEqual(result['scope'], 'current-v3.3-admission-not-yet-bound')
+        self.assertFalse(result['candidateEligible'])
+        self.assertFalse(result['functionalCompletion'])
+        self.assertEqual(called, [])
+
     @classmethod
     def setUpClass(cls):
-        development_fixtures.DevelopmentDeliveryTests.setUpClass.__func__(cls)
+        # These cases exercise the v4 observer/admission API, not successor
+        # acceptance. Retain the exact released files as well as the definition.
+        temporary = tempfile.TemporaryDirectory(prefix='accord-v4-admission-')
+        cls.addClassCleanup(temporary.cleanup)
+        cls.root = Path(temporary.name) / 'repository'
+        subprocess.run(['git', 'clone', '--quiet', '--no-hardlinks', str(development_fixtures.ROOT), str(cls.root)],
+                       check=True, timeout=60)
+        subprocess.run(['git', '-C', str(cls.root), 'checkout', '--quiet', '--detach',
+                        'cf13486db9e5d0e9a6eef2d9df187d5e0405ee88'], check=True, timeout=60)
+        cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding='utf-8'))
         c = cls.contract
         # Isolate admission regressions from the separately tested production budget.
         c["changeBoundary"]["complexityBudget"]["maxProductCodeAndTestBytes"] += 50000
@@ -784,6 +812,218 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         report = verify_product(self.root, review_bundle={"decision": "pass"}, evidence=self.observer)
         self.assertFalse(report["repositoryCandidateReady"])
         self.assertIn("review input differs from the observer-checked bundle", report["errors"])
+
+
+class CurrentDevelopmentEvidenceTests(unittest.TestCase):
+    """Committed synthetic current subjects, never real host or review evidence."""
+    git = DevelopmentEvidenceTests.__dict__["git"]
+    history = DevelopmentEvidenceTests.history
+
+    @classmethod
+    def setUpClass(cls):
+        temporary = tempfile.TemporaryDirectory(prefix="accord-v33-admission-")
+        cls.addClassCleanup(temporary.cleanup)
+        cls.root = Path(temporary.name) / "repository"
+        subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(development_fixtures.ROOT), str(cls.root)],
+                       check=True, timeout=60)
+        shutil.copytree(development_fixtures.ROOT, cls.root, dirs_exist_ok=True,
+                        ignore=shutil.ignore_patterns(".git", ".tmp", ".remember", "__pycache__", "*.pyc"))
+        for locator in ("plugins/yiyuan-accord-claude", ".claude-plugin"):
+            if not (development_fixtures.ROOT / locator).exists():
+                target = (cls.root / locator).resolve()
+                if not target.is_relative_to(cls.root.resolve()):
+                    raise ValueError("fixture cleanup escaped the owned repository")
+                if target.exists():
+                    shutil.rmtree(target)
+        cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
+        cls.git("add", ".")
+        cls.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                "commit", "--quiet", "-m", "Bind synthetic v3.3 admission subject")
+
+    def assess(self, contract=None, observer=None):
+        from yiyuan_accord.admission import assess_development_evidence, evidence_subject
+        return assess_development_evidence(self.root, contract or self.contract, observer,
+                                            subject=evidence_subject(self.root))
+
+    def observer(self, request):
+        result = DevelopmentEvidenceTests.observer(self, request)
+        if request["phase"] == "observe":
+            for record in result["records"]:
+                record["facts"] = {name: {"episodeId": record["episodeId"], "value": copy.deepcopy(value)}
+                                   for name, value in request["cases"][record["case"]]["case"]["expected"].items()}
+        return result
+
+    def commit(self, contract):
+        (self.root / DEVELOPMENT_FILE).write_text(json.dumps(contract, ensure_ascii=False), encoding="utf-8")
+        self.git("add", ".")
+        self.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                 "commit", "--quiet", "-m", "Revise synthetic current subject")
+
+    def test_current_case_can_be_admitted_without_closing_missing_requirements(self):
+        report = self.assess(observer=self.observer)
+        self.assertEqual(report["errors"], [])
+        self.assertEqual(report["acceptedCases"], sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]))
+        self.assertFalse(report["functionalCompletion"])
+        self.assertFalse(report["candidateEligible"])
+        self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
+        self.assertFalse(any(r["complete"] for r in report["acceptanceRequirements"].values()))
+        self.assertIn("v33-chatgpt-entry-coverage", report["unboundCoverage"]["function"])
+        self.assertNotIn("claude-code", report["productCoverage"])
+        self.assertEqual(report["progress"]["coverageVerified"], 3)
+        self.assertEqual(report["progress"]["requirementsComplete"], 0)
+        # SDK sub-scopes cannot discharge other entries or autonomous adaptation.
+        missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
+        self.assertIn("v33-codex-lifecycle", missing["package-lifecycle"])
+        self.assertIn("v33-environment-adaptation", missing["function"])
+        self.assertNotIn("v33-codex-sdk-lifecycle", missing["package-lifecycle"])
+        self.assertNotIn("v33-codex-sdk-scoped-exposure", missing["function"])
+
+    def test_current_declaration_without_observer_reports_actual_missing_coverage(self):
+        report = self.assess()
+        self.assertEqual(report["errors"], [])
+        self.assertEqual(report["acceptedCases"], [])
+        self.assertFalse(report["candidateEligible"])
+        self.assertIn("v33-codex-cli-ordinary-delivery", report["acceptanceRequirements"]["A03"]["missingScopes"]["function"])
+        self.assertEqual(report["progress"], {
+            "scope": "acceptance-evidence-coverage-not-effort-or-implementation-completion",
+            "requirementsTotal": 8, "requirementsComplete": 0,
+            "coverageTotal": 17, "coverageDefined": 3, "coverageVerified": 0,
+            "coverageScorePercent": 0.0,
+            "coverageUnbound": 14, "coverageDefinedButUnverified": 3,
+            "casesDefined": 3, "casesAccepted": 0,
+        })
+
+    def test_incomplete_mapping_or_old_policy_cannot_dispatch_current_observer(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        variants = []
+        for change in (lambda p: p["acceptanceRequirements"].pop(),
+                       lambda p: p["requiredCoverage"]["function"].append("unmapped-scope"),
+                       lambda p: p["cases"][0]["oracleFiles"].remove("docs/operations/ACCEPTANCE-v3.3.md"),
+                       lambda p: p["cases"][0]["oracleFiles"].remove("docs/operations/PLAN-v3.3.md"),
+                       lambda p: p.update(requiredHosts=[])):
+            contract = copy.deepcopy(self.contract)
+            change(contract["acceptance"]["admission"])
+            variants.append(contract)
+        for contract in variants:
+            self.assertTrue(admission_contract_errors(contract))
+            calls = []
+            self.assertTrue(self.assess(contract, lambda request: calls.append(request))["errors"])
+            self.assertEqual(calls, [])
+
+    def test_old_case_wrong_package_and_changed_conditions_cannot_supply_current_evidence(self):
+        for kind in ("old-case", "package", "conditions", "recheck"):
+            def observer(request):
+                result = self.observer(request)
+                if request["phase"] == "observe":
+                    record = result["records"][0]
+                    if kind == "old-case": record["case"] = "codex-cli-ordinary-entry-dev3-retained-reassessment"
+                    if kind == "package": record["packageSha256"] = "0" * 64
+                    if kind == "conditions": record["conditions"]["model"] = "unverified-replacement"
+                elif kind == "recheck": result["conditions"] = {}
+                return result
+            with self.subTest(kind=kind):
+                report = self.assess(observer=observer)
+                self.assertNotIn(self.contract["acceptance"]["admission"]["cases"][0]["id"], report["acceptedCases"])
+                self.assertFalse(report["candidateEligible"])
+                self.assertTrue(report["errors"])
+
+    def test_changed_acceptance_document_invalidates_retained_current_case(self):
+        retained = None
+        def capture(request):
+            nonlocal retained
+            result = self.observer(request)
+            if request["phase"] == "observe": retained = copy.deepcopy(result["records"])
+            return result
+        self.assertTrue(self.assess(observer=capture)["acceptedCases"])
+        with self.history():
+            path = self.root / "docs/operations/ACCEPTANCE-v3.3.md"
+            path.write_text(path.read_text(encoding="utf-8") + "\nChanged synthetic acceptance dependency.\n", encoding="utf-8")
+            self.commit(self.contract)
+            def replay(request):
+                result = self.observer(request)
+                if request["phase"] == "observe": result["records"] = retained
+                return result
+            self.assertEqual(self.assess(observer=replay)["acceptedCases"], [])
+
+    def test_complete_synthetic_coverage_uses_existing_review_and_recheck_chain(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        template = policy["cases"][0]
+        policy["cases"], policy["scopes"] = [], []
+        for claim, scope_ids in policy["requiredCoverage"].items():
+            for scope_id in scope_ids:
+                case = copy.deepcopy(template)
+                case.update(id="fixture-" + scope_id, scope=scope_id, claims=[claim],
+                            duties=[r["id"] for r in contract["acceptance"]["duties"]],
+                            qualityAxes=[r["id"] for r in contract["systemOptimization"]["qualityAxes"]])
+                if claim == "impact-assessment": case["expected"]["comparison"] = {"fixtureAssessment": True}
+                policy["cases"].append(case)
+                policy["scopes"].append({**{k: copy.deepcopy(case[k]) for k in
+                    ("host", "entry", "duties", "qualityAxes", "scenarios", "claims", "conditions")},
+                    "id": scope_id, "rule": "Synthetic scope for algorithm exercise, not actual coverage."})
+        with self.history():
+            self.commit(contract)
+            phases = []
+            def observer(request):
+                phases.append(request["phase"])
+                return self.observer(request)
+            report = self.assess(contract, observer)
+            self.assertEqual(report["errors"], [])
+            self.assertEqual(phases, ["observe", "recheck"])
+            self.assertTrue(report["candidateEligible"])
+            self.assertTrue(all(r["complete"] for r in report["acceptanceRequirements"].values()))
+            self.assertEqual(report["incrementalValue"], "unverified")
+            self.assertEqual(report["progress"]["requirementsComplete"], 8)
+            self.assertEqual(report["progress"]["coverageVerified"], 17)
+            def missing_continuity(request):
+                result = self.observer(request)
+                if request["phase"] == "observe":
+                    result["records"] = [r for r in result["records"]
+                                         if r["case"] != "fixture-v33-autonomous-continuity"]
+                return result
+            report = self.assess(contract, missing_continuity)
+            self.assertFalse(report["acceptanceRequirements"]["A05"]["complete"])
+            self.assertFalse(report["acceptanceRequirements"]["A08"]["complete"])
+            self.assertEqual(report["acceptanceRequirements"]["A08"]["blockedBy"], ["A05"])
+            self.assertTrue(report["acceptanceRequirements"]["A01"]["complete"])
+            self.assertEqual(report["progress"]["requirementsComplete"], 6)
+            self.assertEqual(report["progress"]["coverageVerified"], 16)
+            def missing(request):
+                result = self.observer(request)
+                if request["phase"] == "observe": result["records"] = result["records"][:-1]
+                return result
+            report = self.assess(contract, missing)
+            self.assertFalse(report["candidateEligible"])
+            self.assertFalse(report["acceptanceRequirements"]["A08"]["complete"])
+            self.assertTrue(report["acceptanceRequirements"]["A01"]["complete"])
+
+        # Individually valid episodes cannot be unioned into an integrated run.
+        integration = next(c for c in policy["cases"] if c["scope"] == "v33-system-integration")
+        second = copy.deepcopy(integration)
+        second["id"] += "-separate-episode"
+        duties = integration["duties"]
+        integration["duties"], second["duties"] = duties[:1], duties[1:]
+        policy["cases"].append(second)
+        with self.history():
+            self.commit(contract)
+            report = self.assess(contract, self.observer)
+            self.assertEqual(report["errors"], [])
+            self.assertEqual(len(report["acceptedCases"]), len(policy["cases"]))
+            self.assertFalse(report["candidateEligible"])
+            self.assertFalse(report["functionalCompletion"])
+            self.assertIn("v33-system-integration", report["unjoinedCoverage"]["function"])
+            self.assertFalse(report["acceptanceRequirements"]["A08"]["complete"])
+            def failed_impact(request):
+                result = self.observer(request)
+                if request["phase"] == "observe":
+                    record = next(r for r in result["records"]
+                                  if r["case"] == "fixture-v33-system-impact-assessment")
+                    record["facts"]["comparison"]["value"]["fixtureAssessment"] = False
+                return result
+            report = self.assess(contract, failed_impact)
+            self.assertFalse(report["candidateEligible"])
+            self.assertFalse(report["acceptanceRequirements"]["A08"]["complete"])
+            self.assertTrue(report["acceptanceRequirements"]["A01"]["complete"])
 
 
 if __name__ == "__main__":

@@ -104,17 +104,33 @@ class ToolBatchFeedbackTests(unittest.TestCase):
             self.assertIn('archive-only-with-explicit-user-authorization', context['directives'])
             self.assertEqual(list(Path(folder).iterdir()), [])
 
-    def test_current_packages_preserve_helper_identity_and_claude_only_registration(self):
+    def test_current_and_retained_packages_keep_separate_hook_registration(self):
+        development = json.loads((ROOT / 'product/development.json').read_bytes())
+        self.assertEqual([p['id'] for p in development['delivery']['hostProjections']],
+                         ['codex'])
         canonical = (ROOT / 'runtime/accord-hook.cjs').read_bytes()
-        for host in ('claude', 'codex'):
-            package = ROOT / f'plugins/yiyuan-accord-{host}'
-            self.assertEqual((package / 'runtime/accord-hook.cjs').read_bytes(), canonical)
-            hooks = json.loads((package / 'hooks/hooks.json').read_bytes())['hooks']
-            if host == 'claude':
-                self.assertEqual(hooks.get('PostToolBatch'), [{'hooks': [{
-                    'type': 'command',
-                    'command': 'node "${CLAUDE_PLUGIN_ROOT}/runtime/accord-hook.cjs"',
-                    'timeout': 3,
-                }]}])
-            else:
-                self.assertNotIn('PostToolBatch', hooks)
+        package = ROOT / 'plugins/yiyuan-accord-codex'
+        self.assertEqual((package / 'runtime/accord-hook.cjs').read_bytes(), canonical)
+        hooks = json.loads((package / 'hooks/hooks.json').read_bytes())['hooks']
+        self.assertNotIn('PostToolBatch', hooks)
+        self.assertFalse((ROOT / 'plugins/yiyuan-accord-claude').exists())
+
+        # Retain the previous adapter's regression on its immutable subject;
+        # it must not require restoring a deferred host to current distribution.
+        revision = development['previousDevelopmentSnapshot'].split(':', 1)[0]
+
+        def historical(path):
+            return subprocess.run(
+                ['git', '-C', str(ROOT), 'show', f'{revision}:{path}'],
+                check=True, capture_output=True, timeout=10,
+            ).stdout
+
+        legacy = 'plugins/yiyuan-accord-claude/'
+        self.assertEqual(historical(legacy + 'runtime/accord-hook.cjs'),
+                         historical('runtime/accord-hook.cjs'))
+        retained_hooks = json.loads(historical(legacy + 'hooks/hooks.json'))['hooks']
+        self.assertEqual(retained_hooks.get('PostToolBatch'), [{'hooks': [{
+            'type': 'command',
+            'command': 'node "${CLAUDE_PLUGIN_ROOT}/runtime/accord-hook.cjs"',
+            'timeout': 3,
+        }]}])

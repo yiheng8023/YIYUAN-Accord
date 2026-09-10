@@ -9,14 +9,19 @@ from pathlib import Path
 from datetime import datetime
 from hashlib import sha256
 import re
+import subprocess
 from urllib.parse import urlsplit
 
 from .identity import _bounded_git_bytes, _bounded_regular_bytes, _strict_json_object
-from .admission import admission_contract_errors
+from .admission import CURRENT_SCHEMA, admission_contract_errors
 
 
 DEVELOPMENT_FILE = "product/development.json"
 PLAN_FILE = "docs/operations/PLAN-v3.2.md"
+V5_SCHEMA = "yiyuan-accord-development/v5"
+PREVIOUS_DEVELOPMENT = "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json"
+V5_DOCUMENTS = {name: f"docs/operations/{name}-v3.3.md"
+                for name in ("BASELINE", "PLAN", "PROCEDURE", "ACCEPTANCE")}
 _PREDECESSOR = re.compile(
     r"([0-9a-f]{40}):product/program\.json#/maintenanceCycle/closeoutSnapshot"
 )
@@ -73,7 +78,7 @@ def _strings(value, *, empty=False):
             and len(value) == len(set(value)))
 
 
-def delivery_adapter_contract(adapter_id, package_id):
+def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None):
     """Describe this development package, not a mandatory product mechanism."""
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
@@ -97,6 +102,31 @@ def delivery_adapter_contract(adapter_id, package_id):
             "authority": "caller-reconciles-user-intent-and-predicate-adequacy",
         },
     }
+    if adapter_id == "codex" and development_schema == V5_SCHEMA:
+        contract["entry"] = "direct-native-input-duties"
+        contract["ordinaryPrerequisites"] = [
+            "host-path-node", "supported-native-task-hooks",
+            "enabled-currently-trusted-input-hook",
+        ]
+        contract["optionalTaskCheckpoint"]["nativeEvents"].append("SessionStart")
+        contract["optionalTaskCheckpoint"]["resumeReconciliation"] = "SessionStart/resume-gates-old-binding; new-native-input-or-retained-input-replay; caller-rechecks-authority-effects-and-writer; input-loss-replay-remains-strict"
+        contract["optionalTaskCheckpoint"]["contextAssessment"] = "assess-context: read-only caller-bound forecasts; native-window-not-occupancy; reserve-takeover-and-recovery; unknown-without-evidence; no-dispatch-or-release-authority"
+        contract["optionalTaskCheckpoint"]["contextSignals"] = "--context-signals: caller-owned App Server notifications; connection-and-turn-bound capacity; invalidate-on-reroute-compaction-disconnect-expiry; no-live-occupancy-inference"
+        contract["optionalTaskCheckpoint"]["nativeHostObservation"] = "UserPromptSubmit model/permission_mode snapshots; missing-is-unknown; changed-host-continuation-invalidates-old-readiness-without-new-user-authority; no-collaboration-mode-or-all-settings-inference"
+        contract["optionalTaskCheckpoint"]["storage"] = {
+            "default": "user-home/.yiyuan-accord/task-state",
+            "override": "YIYUAN_ACCORD_TASK_STATE_DIR",
+            "legacy": "reuse-exact-session-temporary-state; conflicting-locations-fail-without-merge",
+            "write": "flush-file-before-atomic-replacement",
+            "limits": "no-cross-session-adoption-wakeup-or-power-loss-guarantee; stored-state-grants-no-authority",
+        }
+        contract["ordinaryInputParticipation"] = {
+            "nativeEvent": "UserPromptSubmit",
+            "effect": "inject-necessary-task-duties-without-skill-selection-prerequisite",
+            "existingCheckpoint": "inspect-status-and-reconcile-current-input-before-continuing-unfinished-or-paused-work",
+            "limits": "advisory-agent-guidance; no-state-transition-or-stop-gate-change; prerequisites-must-hold-in-actual-execution-environment; skill-only-use-does-not-prove-ordinary-input-participation",
+            "detailGuidance": "demand-driven-host-skill",
+        }
     if adapter_id == "claude-code":
         contract["optionalToolBatchFeedback"] = {
             "entry": "runtime/accord-hook.cjs", "nativeEvent": "PostToolBatch",
@@ -177,7 +207,8 @@ def development_contract_errors(contract, golden_task_ids):
     if not isinstance(contract, dict):
         return ["development contract must be an object"]
     schema = contract.get("schema")
-    require(schema == "yiyuan-accord-development/v4",
+    successor = schema == V5_SCHEMA
+    require(schema in ("yiyuan-accord-development/v4", V5_SCHEMA),
             "unsupported development schema")
     require(contract.get("productId") == "yiyuan-accord", "product identity mismatch")
     phase = "whole-system-optimization-and-functional-closure"
@@ -206,9 +237,13 @@ def development_contract_errors(contract, golden_task_ids):
     granted.update({"whole-system-optimization", "existing-host-functional-closure", "next-version-development",
                     "controlled-existing-host-evaluation", "conditional-v3.2-release",
                     "conditional-existing-accord-upgrade-after-v3.2-release"})
+    if successor:
+        granted.difference_update({"conditional-v3.2-release",
+                                   "conditional-existing-accord-upgrade-after-v3.2-release"})
+        granted.add("chatgpt-codex-functional-development")
     release = authority.get("conditionalRelease")
-    require(isinstance(release, dict) and release.get("target") in ("3.2.0", "3.2.1")
-            and release.get("decision") == "user-authorized-after-acceptance"
+    require(isinstance(release, dict) and release.get("target") in (("3.3.0",) if successor else ("3.2.0", "3.2.1"))
+            and release.get("decision") == ("not-authorized" if successor else "user-authorized-after-acceptance")
             and release.get("ready") is False
             and _strings(release.get("conditions")) and _text(release.get("rule"))
             and _RELEASE_CONDITIONS.keys() <= set(release["conditions"]),
@@ -221,9 +256,36 @@ def development_contract_errors(contract, golden_task_ids):
             and cycle.get("versionState") in ("development-target-not-published",
                                               "final-candidate-not-publication-proof"),
             "a declared version is not publication evidence")
-    require(cycle.get("existingHosts") == ["codex", "claude-code"]
+    if successor:
+        require(contract.get("status") == "in-development"
+                and cycle.get("targetVersion") == "3.3.0"
+                and cycle.get("versionState") == "development-target-not-published",
+                "3.3 development is not a frozen or authorized release")
+        require(contract.get("previousDevelopmentSnapshot") == PREVIOUS_DEVELOPMENT,
+                "3.2.1 development evidence must retain its immutable identity")
+        require(cycle.get("priorityHosts") == ["chatgpt", "codex"]
+                and cycle.get("claudeAdaptation") == "next-version-not-in-v3.3-distribution",
+                "3.3 distributes only OpenAI adaptation; other adaptation belongs to a later version")
+        require(contract.get("navigation") == V5_DOCUMENTS,
+                "3.3 development must resolve the plan and its result, acceptance and historical views")
+        node = section("consensusNode", ("id", "revision", "path", "evaluation", "procedures",
+                                          "historicalUse", "reviewState"))
+        require(isinstance(node.get("id"), str) and re.fullmatch(r"N33-[0-9]{8}", node["id"])
+                and isinstance(node.get("revision"), str) and re.fullmatch(r"r[1-9][0-9]*", node["revision"])
+                and node.get("path") == V5_DOCUMENTS["PLAN"]
+                and node.get("evaluation") == V5_DOCUMENTS["PLAN"] + "#全维度动态评价框架"
+                and node.get("procedures") == V5_DOCUMENTS["PLAN"] + "#工序与依赖"
+                and node.get("historicalUse") == "reassess-applicability-preserve-original-evidence"
+                and node.get("reviewState") == "bounded-source-review-not-functional-acceptance",
+                "current consensus owns evaluation and procedures without claiming functional proof")
+        user = section("ordinaryUser", ("rule", "necessaryHumanAction"))
+        require(user.get("input") == "natural-language-only"
+                and user.get("technicalOrchestration") == "agent-owned"
+                and user.get("manualRescueAcceptance") is False,
+                "ordinary users cannot supply technical orchestration or rescue acceptance")
+    require(cycle.get("existingHosts") == (["codex"] if successor else ["codex", "claude-code"])
             and cycle.get("additionalHostAdaptation") == "deferred",
-            "preserve existing hosts and defer additional adaptation")
+            "delivery hosts must match the authorized version scope")
     delivery = section("delivery", ("rule",))
     version = delivery.get("version")
     target = cycle.get("targetVersion")
@@ -237,11 +299,13 @@ def development_contract_errors(contract, golden_task_ids):
                 and cycle.get("versionState") == "final-candidate-not-publication-proof"),
             "delivery version and source phase must agree without claiming publication")
     projections = delivery.get("hostProjections")
-    require(isinstance(projections, list) and len(projections) == 2
+    delivery_hosts = {"codex"} if successor else {"codex", "claude-code"}
+    require(isinstance(projections, list) and len(projections) == len(delivery_hosts)
             and all(isinstance(item, dict) and isinstance(item.get("id"), str)
-                    and item.get("packageVersion") == version for item in projections)
-            and {item["id"] for item in projections} == {"codex", "claude-code"},
-            "current delivery must bind both existing host packages")
+                    and item.get("packageVersion") == version
+                    for item in projections)
+            and {item["id"] for item in projections} == delivery_hosts,
+            "current delivery must bind exactly the version-scoped host packages")
     optimization = section("systemOptimization", ("rule",))
     require(optimization.get("aggregation") == "all-applicable-floors-then-contextual-tradeoffs",
             "required system floors cannot be offset by an average score")
@@ -323,6 +387,12 @@ def development_contract_errors(contract, golden_task_ids):
             "subtraction, restraint, fallback and gap filling are conditional strategies")
 
     acceptance = section("acceptance", ("coverageRule", "executionBoundary", "historicalEvidenceRule"))
+    if successor:
+        qualification = acceptance.get("currentQualification")
+        require(qualification == "not-bound-for-v3.3" or (
+                    qualification == "current-v3.3-policy-bound"
+                    and acceptance.get("admission", {}).get("schema") == CURRENT_SCHEMA),
+                "historical admission cases cannot qualify current 3.3 development")
     require(_strings(acceptance.get("evidenceUnit")), "per-duty evidence binding is missing")
     duties = acceptance.get("duties")
     if not isinstance(duties, list) or not duties:
@@ -488,7 +558,7 @@ def development_contract_errors(contract, golden_task_ids):
             and ceiling.get("currentHostBehavior") == "unverified"
             and ceiling.get("incrementalValue") == "unverified"
             and ceiling.get("candidateEligible") is False
-            and ceiling.get("releaseIntent") == "conditional-v3.2-release-after-acceptance",
+            and ceiling.get("releaseIntent") == ("not-authorized" if successor else "conditional-v3.2-release-after-acceptance"),
             "source-phase checks cannot establish behavior, value or release eligibility")
     return errors
 
@@ -524,7 +594,18 @@ def _inspect_development(root):
         if retirement.hexdigest() != _RETIRED_PROMPT_DIGEST:
             errors.append("historical reference retirement changed")
         errors.extend(development_contract_errors(contract, golden_ids))
-        if not errors:
+        if not errors and contract.get("schema") == V5_SCHEMA:
+            historical = _strict_json_object(_bounded_git_bytes(
+                root, ("show", PREVIOUS_DEVELOPMENT), limit=1_000_000).decode("utf-8"))
+            if {p["id"] for p in historical["delivery"]["hostProjections"]} != {"codex", "claude-code"}:
+                errors.append("historical host scope lost its original identity")
+            # Historical packages stay in immutable Git objects, outside current discovery.
+            for locator in ("plugins/yiyuan-accord-claude", ".claude-plugin/marketplace.json"):
+                path = root / locator
+                if path.exists() or path.is_symlink():
+                    errors.append(f"out-of-scope package remains in current distribution: {locator}")
+            errors.extend(_successor_navigation_errors(root, contract["consensusNode"]))
+        elif not errors:
             plan, state = _bounded_regular_bytes(root / PLAN_FILE)
             if state is not None or plan.decode("utf-8").replace("\r\n", "\n") != render_development_plan(contract):
                 errors.append("visible plan is missing or out of sync with the development contract")
@@ -536,7 +617,8 @@ def _inspect_development(root):
         allowed = boundary.get("allowedPaths") if isinstance(boundary, dict) else None
         if not _strings(allowed) or set(changed_paths) - set(allowed):
             errors.append("observed changes exceed the development implementation boundary")
-    except (OSError, ValueError, TypeError, KeyError, UnicodeError, RecursionError) as exc:
+    except (OSError, ValueError, TypeError, KeyError, UnicodeError, RecursionError,
+            subprocess.SubprocessError) as exc:
         errors.append(f"development source cannot be verified: {exc}")
     acceptance = contract.get("acceptance")
     duties = acceptance.get("duties") if isinstance(acceptance, dict) else None
@@ -566,8 +648,36 @@ def verify_development(root):
     return _inspect_development(root)[0]
 
 
+def _successor_navigation_errors(root, node):
+    """Check bounded cross-document identifiers, not prose adequacy or behavior."""
+    errors = []
+    expected = {"BASELINE": {f"F{i:02}" for i in range(1, 9)},
+                "PLAN": {f"{p}{i:02}" for p in ("F", "W", "A") for i in range(1, 9)}
+                        | {f"S{i}" for i in range(6)},
+                "PROCEDURE": set(),
+                "ACCEPTANCE": {f"A{i:02}" for i in range(1, 9)}}
+    for name, locator in V5_DOCUMENTS.items():
+        data, state = _bounded_regular_bytes(Path(root) / locator)
+        if state is not None:
+            errors.append(f"current development document unavailable: {locator}")
+            continue
+        text = data.decode("utf-8")
+        if name == "PLAN":
+            identity = re.search(r"^节点：([^\s·]+) · 修订：([^\s·]+) ·", text, re.MULTILINE)
+            if not identity or identity.groups() != (node["id"], node["revision"]):
+                errors.append("current consensus node metadata differs between plan and machine projection")
+        ids = set(re.findall(r"\b(?:[FWA][0-9]{2}|S[0-9])\b", text))
+        links = ([other for key, other in V5_DOCUMENTS.items() if key != name]
+                 if name == "PLAN" else [V5_DOCUMENTS["PLAN"]])
+        if not expected[name] <= ids or any(Path(other).name not in text for other in links):
+            errors.append(f"current development navigation or mappings unresolved: {locator}")
+    return errors
+
+
 def render_development_plan(contract):
-    """Derived human view; the contract remains the only editable progress source."""
+    """Historical v4 derived view; v5 uses independently maintained documents."""
+    if contract.get("schema") == V5_SCHEMA:
+        raise ValueError("3.3 uses human-maintained dynamic documents, not the historical plan renderer")
     states = {"pending": "待完成", "active": "进行中", "implemented-local-unreleased": "本地实现，未发布"}
     duties = {item["id"]: item for item in contract["acceptance"]["duties"]}
     target = contract["cycle"]["targetVersion"]

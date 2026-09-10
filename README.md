@@ -14,156 +14,63 @@
   <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
 </p>
 
-Accord's goal is simple: users focus on ideas and decisions; the Agent takes care of the authorized work needed to deliver them.
+Accord provides coordination and reliability support for long-term human–AI collaboration. When a user presents a goal or initial idea, the Agent clarifies the requirements, assesses feasibility, establishes necessary conditions, and owns authorized execution, correction, recovery and result verification. Users should not need to learn tool coordination, configuration, model routing or task handoff first; experienced users retain control over their own actions and changes of direction.
 
-Today, Accord supplies collaboration guidance through Codex and Claude plugins, plus repository tools for checking its contracts and evidence. It is not a separate autonomous worker. Reliable end-to-end behavior and added value must be demonstrated in the host where it is used.
+The project is open source and not driven by profit. It aims for industrial and commercial production quality, equitable access and user autonomy. Project decisions are guided by user interests, verifiable value and sustainable maintenance. Commercial funding and platform relationships do not change its supplier independence. Its general collaboration design is separate from host adapters; native and mature external capabilities are used according to their actual value.
 
-> **Current release: [v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1).** Before installing, verify the matching GitHub Release and immutable tag; installed versions do not update automatically. Earlier release tags remain unchanged.
+> **3.3 is in development; acceptance and publication are unfinished.** This version targets OpenAI adaptations, with applicable ChatGPT and Codex entry points verified separately. Claude is outside the 3.3 distribution scope. A version's implementation focus does not change the project's independence.
 >
-> Start with [scope and limitations](#what-is-proven-and-what-is-not), [what changed](CHANGELOG.md), or the [3.3 plan](docs/operations/PLAN-v3.3.md) (development starts with ChatGPT/Codex; functionality not yet accepted). The [historical 3.2 plan](docs/operations/PLAN-v3.2.md) retains its original scope. Use an accepted exact tag rather than a moving branch.
+> The [3.3 consensus node and plan](docs/operations/PLAN-v3.3.md) is the current entry for design, the system diagram, historical disposition, outstanding work and completion criteria. [v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1) remains a historical release baseline; its exact tag defines its scope and evidence, not 3.3 support.
 
 ## What problem it addresses
 
-Agents can produce substantial work while losing the goal, repeating decisions, leaving interrupted tasks unfinished, or confusing a successful check with a delivered result. Users then become coordinators of the tool.
+An Agent may do substantial work while losing the goal, overlooking part of a message, dropping unfinished responsibilities after interruption, or treating local test success as completed delivery. Users then become tool coordinators and recovery operators.
 
-Accord aims to reduce that avoidable work. The user supplies intent, consequential decisions, acceptance and accountability. Within that authority, the Agent should handle discovery, execution, correction, verification, continuity and cleanup.
+Accord aims to return those duties to the Agent: interpret continuous input, research and establish feasible conditions, compose host, Accord and external capabilities when needed, correct affected earlier judgments and artifacts, and verify outcomes and resource state. Explain only decisions, authorization or personal actions that actually require the user.
 
-You should not have to learn internal terminology or invoke a special command on every task. For example:
+These are goals to verify continuously. World-class quality is an ambition; actual maturity depends on ordinary-use results, reliability, user burden and total cost.
 
-> Continue this project toward the agreed release. Preserve existing work, check the actual result, and ask me only when a decision or new authority is genuinely needed.
+## How it works
 
-This is a design objective, not a promise that installing a plugin makes every host capable of it. If the native Agent already handles the task adequately, Accord should not add ceremony.
+Starting conditions, process and results form relationships that can run in parallel, nest and feed back. Semantics explains changes, events trigger relevant reassessment, and negative boundaries protect goals, authority and evidence. Routes remain task-dependent. Deterministic local procedures can be standardized without prescribing one fixed end-to-end SOP.
 
-## What you actually get
+A plugin is the delivery form for a particular host. Accord's responsibilities span user intent, the host and surrounding capabilities, and actual results. Important decisions, state changes and feedback need working connections, without requiring every call to pass through one proxy or granting authority above the user or host. Confirm the intended outcome when a user action has material consequences and ambiguous intent; respect clear choices and do not silently restore user settings.
 
-Both 3.2 packages contain a `deliver-demand-driven-outcome` Skill, host metadata, a short-lived `SessionStart` hint and an optional task-local file checkpoint connected to supported native events. The Claude package adds advisory tool-result feedback and an optional update-inspection helper.
+Adaptation addresses the environment actually encountered. Accord should use the host's existing authorized capabilities to establish missing conditions, verify that they work and provide recovery paths: a host-assisted bootstrap. Users should not have to reset to default settings. Development isolation helps identify causes; adaptation and bootstrap still require evidence from real tasks.
 
-- **Skill:** instructions the host Agent can use for an applicable task. Visibility and invocation are separate from a useful effect.
-- **Session hint:** a stateless hint on supported `compact` or `resume` events; this hint stays silent on `startup` and `clear`.
-- **Optional checkpoint:** checks task files against Agent-selected conditions, tracks input freshness and unfinished work, and requests bounded continuation through supported native events. The Agent owns task meaning, execution and recovery.
-- **Repository tools:** contract checks and a reference core for maintainers. The reference core is not installed or called by either plugin.
+Knowing its own conditions, maintaining coherence, governing its work, learning, correcting errors, recovering, providing verifiable evidence and improving over time are supporting capability dimensions. Cognitive monitoring and adjustment need working execution, feedback and recovery; engineering bootstrap does not require subjective consciousness. Experience must be validated before reuse, judgments and results remain open to counterevidence, and improvements must detect regressions and allow harmful changes to be reversed. These are [design and acceptance directions](docs/operations/PLAN-v3.3.md#自举的能力维度与证据), not a claim that all eight are implemented.
 
-The packages add no persistent service, MCP server, SDK dependency, conversation database or telemetry collector. They do not replace your instruction or configuration files. Installation still changes the host's plugin registration and cache through its lifecycle.
+The current development package participates through a Skill, native event hints and optional task-state mechanisms; repository tools check contracts and evidence. Visibility, invocation, execution and reliable effects are separate. Component count, runtime needs and implementation form follow demonstrated gaps and lifecycle costs.
 
-This describes the present package, not a permanent ban on runtime support. 3.2 may replace a Skill, Hook or other mechanism when the required outcome and evidence justify it.
+Host buttons, menus, shortcuts, settings, task and project operations, models, permissions, memory, automations, execution environments and extensions all belong in discovery. The currently exposed tool list is not its boundary. The Agent assesses each capability's purpose and conditions, activates it when useful, and verifies effects and exit state. Coverage does not require enabling everything; unknown is not covered.
 
-## Operating costs and capability limits
+Managing the ecosystem is also a core duty: plugins, Apps, Skills and MCP capabilities have combinations, dependencies, conflicts and lifecycles. Check installation, context exposure, connections and running resources separately; choose suitable scope, activate and reuse when needed, and retire unnecessary exposure or activity instead of accumulating global residency. Preserve user choices and dependencies still serving other tasks, and verify actual release. Uninstalling does not establish that content already loaded into context has disappeared.
 
-Accord injects guidance and optional hints to influence Agent decisions and actions. Loaded content uses context; extra checks or tool calls may also add tokens, latency and charges. These are operating costs to measure, not evidence of harm or benefit by themselves. Evaluate outcomes, reliability, rework, user effort and full lifecycle cost together, while preserving required safety and authorization. Small successful samples do not establish savings.
+## Capability limits and current evidence
 
-Possible adverse effects include conflicting instructions, displaced useful context, excessive intervention, unnecessary questions or checks, misrouting and variable behavior. Development observations have included unused Skills, non-delivery within budget, inaccurate output descriptions and an unauthorized attempt to archive a source task during handoff. Guidance has been revised; that does not prove these problems are resolved on every host, or that Accord caused every failure. See the scoped counterevidence in the [development source](product/development.json). Ordinary-use gains remain unverified.
+3.3 has bounded observations for ordinary tasks, input correction, file state, context assessment and controlled takeover. Complete ordinary-entry behavior, autonomous continuity, recovery, environment changes and system impact remain unaccepted. One entry, version or configuration cannot validate another; development scripts, controller assistance and explicit prompts do not demonstrate ordinary autonomous use.
 
-Accord organizes and guides existing capabilities. **It does not train or modify the model, enlarge its native context capacity, or bypass host interfaces, permissions and execution limits.** It cannot guarantee completion, automatic recovery or reliable handoff. Authorized external tools can extend the composed system's task range while adding dependencies and cost; this does not raise the intrinsic capability ceiling of the model or host.
+Accord does not train models, expand native context windows or bypass host permissions and interfaces. The Agent investigates feasible alternatives and missing conditions; real limits must still be reported with unfinished responsibilities preserved. A reference core or prompt alone cannot guarantee execution or enforce permissions.
 
-Testable critical constraints should use repeatable checks, with counterexamples that challenge the checks themselves. Checks may omit requirements or encode wrong expectations; reconcile intent, authority, decision criteria and actual results. The current plugins provide guidance and context hints, do not intercept host tool calls, and are not a permission barrier. Repository checks do not prove host enforcement. See the [contributor guidance](CONTRIBUTING.md#verification-and-publication).
+Intervention can add context load, latency, cost, instruction conflict and maintenance burden. Assess net effects on real outcomes; prefer lower burden for equivalent results, narrowing, replacing or retiring intervention when warranted. Trace and correct effects already caused by a faulty component.
 
-Compare the intervention's value on verified tasks. When costs or interference outweigh benefits, narrow its use, disable it or remove it through supported host controls and verify the remaining state.
+See the [consensus node](docs/operations/PLAN-v3.3.md) for outstanding work, the [acceptance view](docs/operations/ACCEPTANCE-v3.3.md) for criteria and the [historical trial record](docs/operations/PROCEDURE-v3.3.md) for qualified observations. The [changelog](CHANGELOG.md) and versioned releases preserve history; old PASS results do not validate changed bytes.
 
-## How 3.2 is being judged
+## Installation and maintenance
 
-Safety and the agreed result come before reducing code, cost or intervention. Within those limits, the route adapts to the task rather than following a universal SOP.
+The [post-release plan](docs/operations/PLAN-v3.3.md#发布后的部署传播与治理) covers host installation, revised communication materials, OpenAI plugin marketplace submission and project governance. Marketplace inclusion is a future objective, not a completed milestone. Long-term administration should rest with the project or an organization, rather than depend on a personal account as the sole point of control.
 
-User intent and authority, revisable plans, and progress presentation have separate roles. New evidence can change the route, procedure and explicitly justified acceptance; the progress view maps the current plan. No planning or scheduling tool is a mandatory execution prerequisite for the project.
+3.3 has no accepted release for normal installation yet. For a historical version, verify its matching GitHub Release and immutable tag; do not treat a changing development branch as a stable distribution.
 
-Use native capabilities as a low-burden starting point, not a stopping rule. A meaningful gap or plausible improvement can justify comparing maintained alternatives beyond installed tools, using supported host discovery and reliable external sources. Compare full effects and lifecycle cost; discovery does not authorize installation. Stop research when further search is unlikely to change the choice, then return to delivery.
+An Agent with suitable capabilities can own installation:
 
-Review covers known failures **and unlisted design, integration and environmental blind spots**. A necessary outcome cannot disappear merely because its implementation is inconvenient; a redundant mechanism need not survive because it existed in 3.1.
+> Verify an accepted exact version and the current host conditions, preserve unrelated configuration and plugins, install within my authority and verify actual participation. Prepare any necessary trust decision or personal action before asking me.
 
-The key question is whether ordinary use produces better supported outcomes or less avoidable user intervention, correction and recovery. More rules, visible activity, Skill calls or green checks are not evidence of benefit.
-
-### Hosts and entry points
-
-The review distinguishes Codex/ChatGPT and Claude families, then their CLI, desktop modes, IDE integrations, web/cloud, mobile/remote and programmatic entries. Other vendors are deferred.
-
-A shared engine does not imply identical settings, permissions, installed capabilities or execution locations. A successful CLI test cannot qualify Desktop, an IDE or cloud. Model/provider identity is also separate from the host name.
-
-See the dated [entry and capability matrix](docs/operations/PLAN-v3.2.md#宿主家族与入口边界). A listed entry is not a compatibility promise. Default hosts and customized hosts both need applicable evidence; development-only extensions must not be assumed available to other users.
-
-## What is proven and what is not
-
-[v3.1.0](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.1.0) was published on 2026-09-03 at [258611b](https://github.com/yiheng8023/YIYUAN-Accord/commit/258611be47c47a884b6d1a2e96889cf688ca7e68). Its tag and Release are immutable.
-
-Its finite claims cover collaboration-contract conformance, static Codex/Claude package conformance, one bounded internal-use result, local continuity/repair/resource regressions and reproducibility from the exact checkout. See the [release evidence and exclusions](docs/releases/v3.1.0.md).
-
-Those checks do not prove broad user benefit, automatic crash recovery, current-client compatibility, production safety or every entry point. They also do not qualify changed 3.2 bytes.
-
-The retained local observations cover real delivery and correction, response to an in-flight question, capability failure and source conflict, declared installation/update/recovery compositions, and two Desktop continuity branches. Current applicability is assessed against complete package changes, including actual dev.17 native input callbacks and local failure/recovery checks. These are finite observations with explicit human or surviving-manager assistance, not universal autonomous behavior.
-
-The bounded Claude comparison delivered and checked both stages with and without Accord. It found no observed reliability increment; one pair's time, denials or reported costs cannot establish causal benefit. Earlier non-delivery and inaccurate descriptions remain in the evidence. The final checkpoint also preserves recovery context when input fails during retirement; 25 local runtime regressions passed.
-
-The two latest native input methods remain recorded as failed overall: Claude made one loopback request of unknown purpose, while Codex needed forced cleanup of an unidentified child after its main process exited. Their captured input receipts remain valid limited facts. Codex reports receiving the input context; Claude's corresponding hint consumption is unproven. Post-exit local replay is not autonomous host recovery. Complete evidence was retained and the owned roots removed.
-
-The [changelog](CHANGELOG.md) and [source](product/development.json) separate implementation, original observations, counterevidence and current qualification. Exact release acceptance and hosted results belong to the matching Release; a CLI static PASS does not supply them.
-
-Candidate qualification requires the declared functions, lifecycle and a sufficient impact assessment for each host. A claim of improvement over native behavior separately requires positive evidence; this candidate makes no such supported claim. The earlier positive-witness release gate and its unmet hypothesis remain in history. The revised gate still rejects unresolved material regressions, input/authority harm and unknowns essential to the declared use. Completing an assessment alone does not establish suitability or release readiness.
-
-Development observations cover specific Windows local Codex and Claude Code entries, with an existing authorized model route, required file/command permissions and observed package loading. Codex App Server evidence does not automatically cover Desktop, IDE or cloud entries. Desktop observations cover the declared maintenance continuation and user-authorized takeover. Other combinations require their own applicability check. Ordinary Claude use does not require Codex, Python or the development evaluation scripts.
-
-Healthy automatic compaction followed by reconciled useful work supports same-carrier continuation. A user-requested takeover supports that actual transfer, not autonomous early detection. Prediction, optimal transfer margins and runtime unloading remain unproven. If a task depends on those guarantees, the missing evidence becomes a necessary gap; the retained samples cannot waive it.
-
-The host Agent interprets the Skill. Enabled Hooks require Node on `PATH`, the relevant native events and host trust support. Each input Hook maintains a temporary freshness receipt and supplies a hint even when no file checkpoint is bound. Unbound, reconciled receipts are removed on a supported session end or by a surviving caller after verified exit. Input-failure watermarks remain until their owning state directory can safely be retired; one task must not clear another session's uncertainty. If a failure cannot be stored, freshness is unknown and the native caller must hold continuation. Input/state JSON is limited to 128 KiB; an oversized input requires recovery through a sufficient native path, not silent truncation. Without Hook support, the host's ordinary task path remains responsible and any missing continuation effect must be disclosed.
-
-Installation, update and recovery need a healthy executor independent of the damaged/replaced plugin, a verifiable accepted source and the necessary authority. The retained Claude damaged-cache/source-conflict recovery used a healthy Codex manager with explicit authorization and assistance. It does not prove automatic manager discovery or unattended Claude recovery, and it does not make those development tools ordinary-use prerequisites.
-
-## Install an accepted exact version
-
-Ask a capable Agent host to handle the lifecycle:
-
-> Verify that v3.2.1 has a matching accepted GitHub Release, then inspect this host and install that exact tag. Preserve unrelated configuration and plugins, request necessary trust, and verify registration, visibility in the session actually being used and remaining limitations. If the release is unavailable, stop rather than installing a moving development branch.
-
-This is the intended interaction, not a guarantee that every host can complete it unattended. Plugin support, repository access and authority to change plugin state are prerequisites. The Hook additionally needs Node on `PATH` and a supported host trust flow.
-
-Do not bypass trust or edit global settings to simulate supported installation. If a prerequisite is absent, report it. GUI labels change; use the actual client's supported entry instead of an old screenshot.
-
-<details>
-<summary>CLI installation references</summary>
-
-These use the recorded exact-tag route with the selected 3.2 tag. First verify its Release and current command support; this is not fresh lifecycle acceptance for every client.
-
-Codex:
-
-```powershell
-codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.2.1
-codex plugin add yiyuan-accord-codex@yiyuan-accord
-codex plugin list --json
-```
-
-Claude Code:
-
-```powershell
-claude plugin marketplace add "https://github.com/yiheng8023/YIYUAN-Accord.git#v3.2.1" --scope user
-claude plugin install yiyuan-accord-claude@yiyuan-accord --scope user
-claude plugin marketplace list --json
-claude plugin list --json
-```
-
-The repository root is the marketplace, not the package subdirectory. Preserve same-named state owned by other scopes or installations.
-
-</details>
-
-### Check the effect, not just the installation
-
-Let the Agent verify the exact source and installed bytes, enabled registration, Skill visibility in the session actually being used, and relevant invocation separately. An already open session may retain an older Skill catalog after installation or update; successful loading in another fresh session does not establish that the original session refreshed. Prefer supported host refresh or re-entry controls and check actual exposure in the original task. An independent CLI/App Server query does not establish that an already running Desktop process refreshed. If Desktop still exposes the old catalog even in a new task, use the supported application restart, preserve unfinished work, and check the actually loaded version afterwards. [Official skill refresh guidance](https://learn.chatgpt.com/docs/build-skills). If a new task is necessary, obtain the applicable authorization and preserve the goal and unfinished work; do not automatically create or archive tasks. A listing or reload command alone is insufficient.
-
-When an installation appears inactive, distinguish missing Skill exposure, exposure without selection, selection followed by failed execution, and execution without observable benefit. A Hook hint does not mean the full Skill was loaded. Checkpoint `unbound` means no file-result conditions are bound; it alone does not prove plugin failure. The Agent should own these checks and supported recovery without requiring the user to keep naming the Skill during ordinary use.
-
-When checking input-triggered behavior, distinguish a message submitted in the user input box from a tool-output task continuation; the latter is not automatically equivalent to `UserPromptSubmit`. Check the delivered event, Skill loading and outcome for the actual entry separately.
-
-Then inspect a real, authorized task: what was delivered, what the user still had to manage, and whether unrelated state or residue was left behind. Explicit Skill selection can test exposure; it cannot prove ordinary activation or incremental value.
-
-If there is little observable benefit, record that finding. Do not invent a missing native capability or add activity to make Accord noticeable.
-
-### Update, roll back or remove
-
-Give one bounded lifecycle intent. The Agent should identify the current registration, preserve foreign/shared state, use supported host operations and verify the result. Record the old exact tag before changing versions.
-
-Exact tags do not advance automatically. The recorded replacement route removes the Accord package and its owned marketplace registration, then installs the chosen exact tag. This is not an atomic hot update; a failed target may require restoring the previous tag and verifying recovery.
-
-Loaded sessions and installed files are different states. Do not delete host-owned caches outside supported lifecycle rules or call an inert cache physical zero residue. CLI commands and historical limits remain available in the [immutable 3.1 README](https://github.com/yiheng8023/YIYUAN-Accord/blob/v3.1.0/README.md#update-rollback-removal-and-source-verification); recheck current host support before use.
+Check registration, installed bytes, visibility in the actual task, participation and effects separately. Hooks require their runtime, native events and host trust. Update, rollback and removal need a healthy executor and recovery path; loaded context, installed state and runtime resources have distinct lifecycles. Historical commands and boundaries remain in the [v3.2.1 README](https://github.com/yiheng8023/YIYUAN-Accord/blob/v3.2.1/README.md); recheck current host support before execution.
 
 ## Develop, evaluate or contribute
 
-For this branch, start with [product/development.json](product/development.json), the [visible plan](docs/operations/PLAN-v3.2.md), [architecture](docs/architecture.md) and [continuation](docs/operations/CONTINUATION.md). Frozen 3.1 authority and Golden Tasks are historical inputs, not current development acceptance.
+For this branch, start with the [consensus node and plan](docs/operations/PLAN-v3.3.md) and [continuation](docs/operations/CONTINUATION.md); consult the [machine projection](product/development.json) and [architecture](docs/architecture.md) as needed. Frozen 3.1 authority and Golden Tasks are historical inputs, not current development acceptance.
 
 Maintainer checks do not require plugin installation:
 
@@ -171,7 +78,6 @@ Maintainer checks do not require plugin installation:
 python -B -m yiyuan_accord verify-development --json
 python -B -m yiyuan_accord verify --root . --json
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
-python -B -m yiyuan_accord host-check --adapter claude-code --root . --json
 ```
 
 Use `python3` where that is the available launcher. CI exercises Python 3.10–3.14 across Ubuntu, Windows and macOS, with Node 24 for Hook checks. That is maintainer validation, not cross-host behavior acceptance or an end-user Python requirement.
@@ -226,7 +132,7 @@ version as official, sponsored, or endorsed.
 
 The canonical public source is this repository. Official versions are
 identified by matching Git tags and GitHub Release records, and each standalone
-Codex or Claude plugin package carries its own `LICENSE` and `NOTICE` after
+distributed plugin package carries its own `LICENSE` and `NOTICE` after
 installation.
 
 The YIYUAN Accord and YIYUAN NEXUS names and symbols remain separate
@@ -260,7 +166,7 @@ Verify the recipient before paying. See [`SPONSORING.md`](SPONSORING.md) for the
 
 YIYUAN Accord is an independent community open-source project.
 
-It is not an OpenAI, Anthropic, Codex, Claude, Claude Code, or GitHub product. Those parties do not sponsor or endorse it.
+It is not an OpenAI, Codex, or GitHub product. Those parties do not sponsor or endorse it.
 
 Third-party names and marks belong to their respective owners.
 

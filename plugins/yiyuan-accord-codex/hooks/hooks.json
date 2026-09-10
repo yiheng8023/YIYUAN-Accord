@@ -11,6 +11,16 @@
             "additionalContextLimit": 700
           }
         ]
+      },
+      {
+        "matcher": "resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${PLUGIN_ROOT}/runtime/task-checkpoint.cjs\" --hook SessionStart",
+            "timeout": 3
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [

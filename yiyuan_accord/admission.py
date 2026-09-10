@@ -20,6 +20,7 @@ from .reviews import evaluate_review_bundle, review_policy_errors
 
 SCHEMA = "yiyuan-accord-evidence-admission/v3"
 IMPACT_SCHEMA = "yiyuan-accord-evidence-admission/v4"
+CURRENT_SCHEMA = "yiyuan-accord-evidence-admission/v5"
 _LIMIT = 1_000_000
 _CLAIMS = {"function", "incremental-value", "package-lifecycle"}
 _CASE_FIELDS = set("id scope host entry duties qualityAxes scenarios claims oracle oracleFiles conditions maxAgeSeconds expected".split())
@@ -58,8 +59,12 @@ def _locator(value):
 def admission_contract_errors(contract):
     """Check declarations, not empirical adequacy of oracles or coverage claims."""
     policy = contract.get("acceptance", {}).get("admission")
-    if (not isinstance(policy, dict) or set(policy) != {"schema", "rule", "reviewPolicy", "reviewMaxAgeSeconds", "requiredCoverage", "scopes", "cases"}
-            or policy.get("schema") not in {SCHEMA, IMPACT_SCHEMA} or not _text(policy.get("rule"))
+    current = isinstance(policy, dict) and policy.get("schema") == CURRENT_SCHEMA
+    fields = {"schema", "rule", "reviewPolicy", "reviewMaxAgeSeconds", "requiredCoverage", "scopes", "cases"}
+    if current:
+        fields |= {"requiredHosts", "acceptanceRequirements"}
+    if (not isinstance(policy, dict) or set(policy) != fields
+            or policy.get("schema") not in {SCHEMA, IMPACT_SCHEMA, CURRENT_SCHEMA} or not _text(policy.get("rule"))
             or type(policy.get("reviewMaxAgeSeconds")) is not int or policy["reviewMaxAgeSeconds"] <= 0
             or any(not isinstance(policy.get(k), list) or len(policy[k]) > 128 for k in ("scopes", "cases"))):
         return ["current evidence admission policy is missing or invalid"]
@@ -68,7 +73,7 @@ def admission_contract_errors(contract):
     try:
         _json(policy)
         required = policy["requiredCoverage"]
-        impact_policy = policy["schema"] == IMPACT_SCHEMA
+        impact_policy = policy["schema"] in {IMPACT_SCHEMA, CURRENT_SCHEMA}
         claims = _CLAIMS | ({"impact-assessment"} if impact_policy else set())
         if (not isinstance(required, dict) or set(required) != claims
                 or any(not isinstance(ids, list) or not (0 if impact_policy and claim == "incremental-value" else 1) <= len(ids) <= 128
@@ -83,6 +88,26 @@ def admission_contract_errors(contract):
         }
         entries = {v["id"]: v["host"] for v in contract["capabilityMap"]["entrySurfaces"]["rows"]}
         hosts = {v["id"] for v in contract["delivery"]["hostProjections"]}
+        if current:
+            if (contract.get("schema") != "yiyuan-accord-development/v5"
+                    or contract["acceptance"].get("currentQualification") != "current-v3.3-policy-bound"
+                    or not _refs(policy["requiredHosts"], hosts) or not policy["requiredHosts"]):
+                return ["current admission must bind the successor and its required delivery hosts"]
+            requirements = policy["acceptanceRequirements"]
+            if (not isinstance(requirements, list) or len(requirements) != 8
+                    or any(not isinstance(r, dict) or set(r) != {"id", "requiredCoverage"} for r in requirements)
+                    or {r["id"] for r in requirements} != {f"A{i:02}" for i in range(1, 9)}):
+                return ["current admission must map A01 through A08 exactly once"]
+            mapped = {claim: set() for claim in claims}
+            for row in requirements:
+                coverage = row["requiredCoverage"]
+                if (not isinstance(coverage, dict) or not coverage or not set(coverage) <= claims
+                        or any(not _refs(ids, set(required[claim])) or not ids for claim, ids in coverage.items())):
+                    return ["current acceptance requirements must bind declared nonempty claim scopes"]
+                for claim, ids in coverage.items():
+                    mapped[claim].update(ids)
+            if any(mapped[claim] != set(ids) for claim, ids in required.items()):
+                return ["current acceptance mappings and required claim coverage differ"]
         scopes = {}
         for scope in policy["scopes"]:
             if (not isinstance(scope, dict) or set(scope) != _SCOPE_FIELDS
@@ -96,6 +121,8 @@ def admission_contract_errors(contract):
                     or any(v is None for v in scope["conditions"].values())):
                 return ["evidence scope must bind its entry, relevant environment axes and required coverage"]
             scopes[scope["id"]] = scope
+        if current and any(scope["host"] not in policy["requiredHosts"] for scope in scopes.values()):
+            return ["current scopes cannot silently activate a deferred delivery host"]
         if impact_policy and {key for key, scope in scopes.items() if "incremental-value" in scope["claims"]} != set(required["incremental-value"]):
             return ["every active incremental-value claim must be required; undeclared claims belong in history"]
         ids = set()
@@ -119,6 +146,8 @@ def admission_contract_errors(contract):
                     or (set(case["claims"]) & {"incremental-value", "impact-assessment"} and "comparison" not in case["expected"])):
                 return ["evidence case must bind its applicable need, entry, oracle, conditions and post-state"]
             ids.add(case["id"])
+            if current and not {"docs/operations/ACCEPTANCE-v3.3.md", "docs/operations/PLAN-v3.3.md"} <= set(case["oracleFiles"]):
+                return ["current cases must bind the acceptance document and its consensus/criteria source as oracle dependencies"]
             scope = scopes.get(case.get("scope"))
             if (scope is None or any(case[k] != scope[k] for k in ("host", "entry"))
                     or any(not set(case[k]) <= set(scope[k]) for k in sets)
@@ -199,6 +228,19 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
               "acceptedCases": [], "openCoverage": {}, "unboundCoverage": {}, "functionalCompletion": False,
               "incrementalValue": "unverified", "candidateEligible": False,
               "checkoutClean": None, "errors": []}
+    successor = contract.get("schema") == "yiyuan-accord-development/v5"
+    if successor and contract.get("acceptance", {}).get("admission", {}).get("schema") != CURRENT_SCHEMA:
+        # Retained v4 case definitions are regression inputs, not the new
+        # ordinary-entry/continuity/resource acceptance for the successor.
+        # Do not even dispatch an observer that could promote those old cases.
+        report["scope"] = "current-v3.3-admission-not-yet-bound"
+        report["unboundCoverage"] = {"currentAcceptance": "docs/operations/ACCEPTANCE-v3.3.md"}
+        return report
+    if successor:
+        if errors := admission_contract_errors(contract):
+            report["errors"] = errors
+            return report
+        report["scope"] = "current-v3.3-caller-observed-candidate"
     policy = contract["acceptance"]["admission"]
     cases = {v["id"]: v for v in policy["cases"]}
     scopes = {v["id"]: v for v in policy["scopes"]}
@@ -343,12 +385,20 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                                  for claim, ids in policy["requiredCoverage"].items()}
     completed = {claim: bool(bound[claim]) and not report["unboundCoverage"][claim] and not errors
                  for claim in bound}
+    # A08 integration requires one complete episode, not a union of unrelated
+    # successes. Case admission already checks all facets against its episode.
+    joint_scopes = (set(next(r for r in policy["acceptanceRequirements"] if r["id"] == "A08")
+                        ["requiredCoverage"].get("function", []))
+                    if policy["schema"] == CURRENT_SCHEMA else set())
+    if policy["schema"] == CURRENT_SCHEMA:
+        report["unjoinedCoverage"] = {"function": []}
     report["productCoverage"] = {}
-    for host in hosts:
+    required_hosts = policy["requiredHosts"] if policy["schema"] == CURRENT_SCHEMA else hosts
+    for host in required_hosts:
         selected = [scopes[key] for key in set().union(*bound.values()) if scopes[key]["host"] == host]
         report["productCoverage"][host] = {
             k: sorted(values - {v for scope in selected for v in scope[k]}) for k, values in required.items()}
-        for claim in ("function", "package-lifecycle") + (("impact-assessment",) if policy["schema"] == IMPACT_SCHEMA else ()):
+        for claim in ("function", "package-lifecycle") + (("impact-assessment",) if policy["schema"] in {IMPACT_SCHEMA, CURRENT_SCHEMA} else ()):
             completed[claim] &= any(scopes[key]["host"] == host for key in bound[claim])
     for scope_id, scope in scopes.items():
         row = {"host": scope["host"], "entry": scope["entry"],
@@ -364,11 +414,53 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             row["claims"][claim] = missing
             if scope_id in bound[claim]:
                 completed[claim] &= bool(relevant) and relevant <= admitted and not any(missing.values())
+            if claim == "function" and scope_id in joint_scopes:
+                if not any(all(set(scope[field]) <= set(cases[key][field]) for field in required)
+                           for key in admitted & relevant):
+                    report["unjoinedCoverage"][claim].append(scope_id)
+                    completed[claim] = False
     report["functionalCompletion"] = completed["function"]
     report["incrementalValue"] = "supported-for-bound-cases" if completed["incremental-value"] else "unverified"
     report["impactAssessment"] = "complete-for-bound-scopes" if completed.get("impact-assessment") else "unverified"
+    global_errors = bool(errors)
     errors.extend(case_errors)
     required_claims = {claim for claim, ids in policy["requiredCoverage"].items() if ids}
     report["candidateEligible"] = (not errors and all(completed[claim] for claim in required_claims) and len(admitted) == len(cases)
                                    and not any(v for row in report["productCoverage"].values() for v in row.values()))
+    if policy["schema"] == CURRENT_SCHEMA:
+        report["acceptanceRequirements"] = {}
+        for requirement in policy["acceptanceRequirements"]:
+            missing = {}
+            for claim, ids in requirement["requiredCoverage"].items():
+                missing[claim] = [scope_id for scope_id in ids if scope_id not in bound[claim]
+                    or not (relevant := {key for key, case in cases.items()
+                                         if case["scope"] == scope_id and claim in case["claims"]})
+                    or not relevant <= admitted
+                    or scope_id in report["unjoinedCoverage"].get(claim, [])
+                    or any(report["openCoverage"][scope_id]["claims"][claim].values())]
+            report["acceptanceRequirements"][requirement["id"]] = {
+                "complete": not global_errors and not any(missing.values()), "missingScopes": missing}
+        requirements = report["acceptanceRequirements"]
+        requirements["A08"]["blockedBy"] = sorted(key for key, row in requirements.items()
+                                                   if key != "A08" and not row["complete"])
+        requirements["A08"]["complete"] &= not requirements["A08"]["blockedBy"]
+        # Derived counts and coverage expose remaining work without adding a gate.
+        required_pairs = {(claim, scope) for claim, ids in policy["requiredCoverage"].items() for scope in ids}
+        missing_pairs = {(claim, scope) for row in requirements.values()
+                         for claim, ids in row["missingScopes"].items() for scope in ids}
+        defined_pairs = {(claim, scope) for claim, ids in bound.items() for scope in ids}
+        verified_pairs = required_pairs - missing_pairs if not global_errors else set()
+        report["progress"] = {
+            "scope": "acceptance-evidence-coverage-not-effort-or-implementation-completion",
+            "requirementsTotal": len(requirements),
+            "requirementsComplete": sum(bool(row["complete"]) for row in requirements.values()),
+            "coverageTotal": len(required_pairs),
+            "coverageDefined": len(required_pairs & defined_pairs),
+            "coverageVerified": len(verified_pairs),
+            "coverageScorePercent": round(100 * len(verified_pairs) / len(required_pairs), 2) if required_pairs else None,
+            "coverageUnbound": len(required_pairs - defined_pairs),
+            "coverageDefinedButUnverified": len((required_pairs & defined_pairs) - verified_pairs),
+            "casesDefined": len(cases),
+            "casesAccepted": len(admitted),
+        }
     return report

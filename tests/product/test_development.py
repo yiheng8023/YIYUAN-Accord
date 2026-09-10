@@ -18,6 +18,12 @@ from yiyuan_accord.development import (
 
 
 ROOT = Path(__file__).resolve().parents[2]
+V4_REVISION = "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88"
+
+
+def historical_development():
+    return json.loads(subprocess.check_output(
+        ["git", "show", f"{V4_REVISION}:{DEVELOPMENT_FILE}"], cwd=ROOT))
 
 
 class ClaudeUpdateInspectionTests(unittest.TestCase):
@@ -28,6 +34,11 @@ class ClaudeUpdateInspectionTests(unittest.TestCase):
         self.assertIsNotNone(node, "the existing delivered Hook already requires Node")
         with tempfile.TemporaryDirectory(prefix="accord-inspection-") as temporary:
             root = Path(temporary).resolve()
+            # Preserve the regression against its immutable historical implementation.
+            inspector = root / "historical-inspect-plugin-update.cjs"
+            inspector.write_bytes(subprocess.check_output([
+                "git", "show", f"{V4_REVISION}:plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs"
+            ], cwd=ROOT))
             market, source, installed = root / "market", root / "market/plugins/target", root / "installed"
             for directory in (market / ".claude-plugin", source / ".claude-plugin", installed / ".claude-plugin"):
                 directory.mkdir(parents=True, exist_ok=True)
@@ -73,7 +84,7 @@ if (args.join(' ') === 'plugin marketplace list --json') {
 ''', encoding="utf-8")
             request = root / "request.json"
             request.write_text(json.dumps({"cli": [node, str(cli)], "plugin": "target@fixture", "scope": "user", **request_overrides}))
-            result = subprocess.run([node, str(ROOT / "plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs"),
+            result = subprocess.run([node, str(inspector),
                                      str(request)], cwd=root, capture_output=True, text=True, timeout=40)
             self.assertEqual(result.returncode, 0, result.stderr)
             report = json.loads(result.stdout)
@@ -155,7 +166,7 @@ if (args.join(' ') === 'plugin marketplace list --json') {
 
 class DevelopmentContractTests(unittest.TestCase):
     def setUp(self):
-        self.contract = json.loads((ROOT / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
+        self.contract = historical_development()
         self.tasks = [task["id"] for task in json.loads(
             (ROOT / "evals/golden-tasks.json").read_text(encoding="utf-8")
         )["tasks"]]
@@ -175,7 +186,7 @@ class DevelopmentContractTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(report["currentHostBehavior"], "unverified")
-        self.assertEqual(report["releaseIntent"], "conditional-v3.2-release-after-acceptance")
+        self.assertEqual(report["releaseIntent"], "not-authorized")
 
     def test_conditional_release_requires_commit_push_and_remaining_evidence(self):
         altered = copy.deepcopy(self.contract)
@@ -406,6 +417,8 @@ class DevelopmentContractTests(unittest.TestCase):
         self.assertEqual((ROOT / development.PLAN_FILE).read_text(encoding="utf-8"), expected)
 
         def stale(path):
+            if path == ROOT / DEVELOPMENT_FILE:
+                return json.dumps(self.contract).encode(), None
             if path == ROOT / development.PLAN_FILE:
                 return b"stale progress\n", None
             return original(path)
@@ -712,6 +725,140 @@ class DevelopmentContractTests(unittest.TestCase):
 
 
 
+class SuccessorDevelopmentTests(unittest.TestCase):
+    def setUp(self):
+        self.contract = json.loads((ROOT / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
+        self.tasks = [row["id"] for row in json.loads(
+            (ROOT / "evals/golden-tasks.json").read_text(encoding="utf-8"))["tasks"]]
+
+    def errors(self, contract):
+        return development_contract_errors(contract, self.tasks)
+
+    def test_current_and_historical_contracts_keep_separate_authority(self):
+        self.assertEqual(self.errors(self.contract), [])
+        old = historical_development()
+        self.assertEqual(self.errors(old), [])
+        self.assertEqual(old["status"], "candidate-frozen")
+        self.assertEqual(old["authority"]["conditionalRelease"]["decision"],
+                         "user-authorized-after-acceptance")
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"], "not-authorized")
+        self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
+        self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
+        self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})
+
+    def test_development_cannot_borrow_publication_or_expand_hosts(self):
+        for section, field, value in (
+                ("authority", "scope", self.contract["authority"]["scope"] + ["conditional-v3.2-release"]),
+                ("cycle", "priorityHosts", ["codex"]),
+                ("cycle", "claudeAdaptation", "automatically-enabled"),
+                ("cycle", "existingHosts", ["codex", "claude-code", "new-host"]),
+                ("cycle", "versionState", "final-candidate-not-publication-proof"),
+                ("claimCeiling", "functionalCompletion", True),
+                ("claimCeiling", "releaseIntent", "conditional-v3.2-release-after-acceptance"),
+                ("acceptance", "currentQualification", "qualified"),
+                ("ordinaryUser", "manualRescueAcceptance", True),
+                ("ordinaryUser", "technicalOrchestration", "user-owned")):
+            with self.subTest(section=section, field=field):
+                changed = copy.deepcopy(self.contract)
+                changed[section][field] = value
+                self.assertTrue(self.errors(changed))
+        for field, value in (("decision", "user-authorized-after-acceptance"), ("ready", True)):
+            changed = copy.deepcopy(self.contract)
+            changed["authority"]["conditionalRelease"][field] = value
+            self.assertTrue(self.errors(changed))
+
+    def test_previous_identity_and_current_scope_cannot_be_rewritten(self):
+        changed = copy.deepcopy(self.contract)
+        changed["previousDevelopmentSnapshot"] = "main:product/development.json"
+        self.assertTrue(self.errors(changed))
+        changed = copy.deepcopy(self.contract)
+        changed["delivery"]["hostProjections"].append(historical_development()["delivery"]["hostProjections"][1])
+        self.assertTrue(self.errors(changed))
+        for field, value in (("path", "docs/operations/BASELINE-v3.3.md"),
+                             ("procedures", "docs/operations/PROCEDURE-v3.3.md"),
+                             ("reviewState", "functionally-complete"),
+                             ("id", None), ("id", "unbound"),
+                             ("revision", None), ("revision", "r0")):
+            changed = copy.deepcopy(self.contract)
+            changed["consensusNode"][field] = value
+            self.assertTrue(self.errors(changed))
+
+    def test_consensus_revision_is_data_but_must_match_the_plan(self):
+        from yiyuan_accord import development
+        changed = copy.deepcopy(self.contract)
+        changed["consensusNode"]["revision"] = "r91"
+        self.assertEqual(self.errors(changed), [])
+        self.assertIn("current consensus node metadata differs between plan and machine projection",
+                      development._successor_navigation_errors(ROOT, changed["consensusNode"]))
+        original = development._bounded_regular_bytes
+        plan = ROOT / development.V5_DOCUMENTS["PLAN"]
+        def revised(path):
+            data, state = original(path)
+            if path == plan:
+                old = ("修订：" + self.contract["consensusNode"]["revision"]).encode()
+                data = data.replace(old, "修订：r91".encode(), 1)
+            return data, state
+        with patch.object(development, "_bounded_regular_bytes", side_effect=revised):
+            self.assertEqual(development._successor_navigation_errors(ROOT, changed["consensusNode"]), [])
+
+    def test_dynamic_documents_allow_prose_updates_but_require_mappings(self):
+        from yiyuan_accord import development
+        original = development._bounded_regular_bytes
+        baseline = ROOT / development.V5_DOCUMENTS["BASELINE"]
+        replacement = None
+
+        def changed(path):
+            data, state = original(path)
+            if path == baseline:
+                return (replacement if replacement is not None else data + b"\nRevised prose.\n"), state
+            return data, state
+
+        with patch.object(development, "_bounded_regular_bytes", side_effect=changed):
+            self.assertTrue(verify_development(ROOT)["valid"])
+            replacement = baseline.read_bytes().replace(b"F08", b"missing")
+            self.assertTrue(any("mappings unresolved" in error for error in verify_development(ROOT)["errors"]))
+        with self.assertRaisesRegex(ValueError, "human-maintained"):
+            development.render_development_plan(self.contract)
+
+    def test_input_adapter_change_is_versioned_and_codex_only(self):
+        from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract
+        previous = delivery_adapter_contract("codex", "yiyuan-accord-codex")
+        current = delivery_adapter_contract("codex", "yiyuan-accord-codex", development_schema=V5_SCHEMA)
+        self.assertEqual(previous["entry"], "host-skill")
+        self.assertEqual(current["entry"], "direct-native-input-duties")
+        self.assertEqual(previous["ordinaryPrerequisites"], [])
+        self.assertIn("host-path-node", current["ordinaryPrerequisites"])
+        self.assertIn("supported-native-task-hooks", current["ordinaryPrerequisites"])
+        self.assertIn("enabled-currently-trusted-input-hook", current["ordinaryPrerequisites"])
+        current_checkpoint = dict(current["optionalTaskCheckpoint"])
+        self.assertEqual(current_checkpoint["nativeEvents"][-1], "SessionStart")
+        current_checkpoint["nativeEvents"] = current_checkpoint["nativeEvents"][:-1]
+        self.assertIn("caller-rechecks-authority", current_checkpoint.pop("resumeReconciliation"))
+        self.assertIn("native-window-not-occupancy", current_checkpoint.pop("contextAssessment"))
+        self.assertIn("connection-and-turn-bound", current_checkpoint.pop("contextSignals"))
+        self.assertIn("missing-is-unknown", current_checkpoint.pop("nativeHostObservation"))
+        storage = current_checkpoint.pop("storage")
+        self.assertEqual(storage["override"], "YIYUAN_ACCORD_TASK_STATE_DIR")
+        self.assertEqual(storage["default"], "user-home/.yiyuan-accord/task-state")
+        self.assertEqual(previous["optionalTaskCheckpoint"], current_checkpoint)
+        self.assertEqual(delivery_adapter_contract("claude-code", "yiyuan-accord-claude"),
+                         delivery_adapter_contract("claude-code", "yiyuan-accord-claude", development_schema=V5_SCHEMA))
+
+    def test_unavailable_previous_definition_fails_as_a_report(self):
+        from yiyuan_accord import development
+        original = development._bounded_git_bytes
+
+        def unavailable(root, args, **kwargs):
+            if args == ("show", development.PREVIOUS_DEVELOPMENT):
+                raise subprocess.SubprocessError("historical object unavailable")
+            return original(root, args, **kwargs)
+
+        with patch.object(development, "_bounded_git_bytes", side_effect=unavailable):
+            result = verify_development(ROOT)
+        self.assertFalse(result["valid"])
+        self.assertTrue(any("historical object unavailable" in error for error in result["errors"]))
+
+
 class DevelopmentDeliveryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -722,6 +869,14 @@ class DevelopmentDeliveryTests(unittest.TestCase):
                        check=True, timeout=60)
         shutil.copytree(ROOT, cls.root, dirs_exist_ok=True, ignore=shutil.ignore_patterns(
             ".git", ".tmp", ".remember", "__pycache__", "*.pyc"))
+        # A working-tree overlay must also carry deletions, not resurrect old packages.
+        for locator in ("plugins/yiyuan-accord-claude", ".claude-plugin"):
+            if not (ROOT / locator).exists():
+                target = (cls.root / locator).resolve()
+                if not target.is_relative_to(cls.root.resolve()):
+                    raise ValueError("fixture cleanup escaped the owned repository")
+                if target.exists():
+                    shutil.rmtree(target)
         cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
 
     @contextmanager
@@ -928,6 +1083,7 @@ class DevelopmentDeliveryTests(unittest.TestCase):
             locator = projection["contract"]
             original = json.loads((self.root / locator).read_text(encoding="utf-8"))
             for field, value in (("ordinaryPrerequisites", ["private-python-engine"]),
+                                 ("ordinaryPrerequisites", []),
                                  ("behaviorEvidenceState", "verified")):
                 altered = {**original, field: value}
                 with self.subTest(host=projection["id"], field=field), self.changed(
@@ -937,17 +1093,23 @@ class DevelopmentDeliveryTests(unittest.TestCase):
                     self.assertTrue(any("contract does not match" in error for error in report["errors"]))
 
     def test_manifest_version_and_marketplace_remain_bound(self):
-        for locator in (self.contract["delivery"]["hostProjections"][0]["manifest"],
-                        ".claude-plugin/marketplace.json"):
-            changed = (self.root / locator).read_bytes().replace(
-                self.contract["delivery"]["version"].encode(), b"3.1.0")
-            with self.changed(locator, changed):
+        projections = self.contract["delivery"]["hostProjections"]
+        cases = [(p["manifest"], p["packageVersion"]) for p in projections]
+        for locator, version in cases:
+            original = (self.root / locator).read_bytes()
+            changed = original.replace(version.encode(), b"3.1.0")
+            self.assertNotEqual(original, changed, locator)
+            with self.subTest(locator=locator), self.changed(locator, changed):
                 self.assertFalse(self.report()["valid"])
+        marketplace = projections[0]["marketplace"]
+        original = (self.root / marketplace).read_bytes()
+        with self.changed(marketplace, original.replace(b"yiyuan-accord-codex", b"unbound-package")):
+            self.assertFalse(self.report()["valid"])
 
     def test_current_package_namespace_and_license_guards_are_not_bypassed(self):
         for locator, data, fragment in (
             ("plugins/yiyuan-accord-codex/hidden-state.txt", b"undeclared", "undeclared"),
-            ("plugins/yiyuan-accord-claude/LICENSE", b"changed license", "LICENSE"),
+            ("plugins/yiyuan-accord-codex/LICENSE", b"changed license", "LICENSE"),
         ):
             declaration = copy.deepcopy(self.contract)
             declaration["changeBoundary"]["allowedPaths"].append(locator)
@@ -956,6 +1118,18 @@ class DevelopmentDeliveryTests(unittest.TestCase):
                 report = self.report()
                 self.assertFalse(report["valid"])
                 self.assertTrue(any(fragment in error for error in report["errors"]), report["errors"])
+
+    def test_retired_installation_entry_cannot_reenter_current_distribution(self):
+        directory = self.root / ".claude-plugin"
+        directory.mkdir()
+        try:
+            with self.changed(".claude-plugin/marketplace.json", b'{"plugins":[]}'):
+                report = self.report()
+                self.assertFalse(report["valid"])
+                self.assertTrue(any("out-of-scope package remains" in error for error in report["errors"]),
+                                report["errors"])
+        finally:
+            directory.rmdir()
 
     def test_missing_or_malformed_successor_never_falls_back_to_old_passes(self):
         for data in (None, b"{}", b'{"delivery":null}', b'{"schema":1,"schema":2}'):
@@ -977,12 +1151,13 @@ class DevelopmentDeliveryTests(unittest.TestCase):
 
     def test_host_check_keeps_static_claim_and_rejects_unknown_host(self):
         from yiyuan_accord.control import host_check
-        for host in ("codex", "claude-code"):
+        for host in ("codex",):
             report = host_check(self.root, host)
             self.assertTrue(report["valid"], report["errors"])
             self.assertEqual(report["claim"], "static host-admission conformance only")
             self.assertEqual(report["behaviorEvidenceState"], "unverified")
         self.assertFalse(host_check(self.root, "future-host")["valid"])
+        self.assertFalse(host_check(self.root, "claude-code")["valid"])
 
 
 class SnapshotReadOptimizationTests(unittest.TestCase):

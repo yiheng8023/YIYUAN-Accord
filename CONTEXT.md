@@ -1,7 +1,8 @@
 # YIYUAN Accord
 
-This is the derived glossary for YIYUAN Accord. `product/development.json`
-defines the active source-development successor; selectors into the unchanged
+This is the derived glossary for YIYUAN Accord. The current consensus, dynamic
+evaluation and procedures live in `docs/operations/PLAN-v3.3.md`.
+`product/development.json` is its machine validation projection; selectors into the unchanged
 v3.1 documents below describe the predecessor and remain useful where compatible.
 The glossary explains an open, Agent-neutral,
 mechanism-neutral and product-form-neutral collaboration system without adding semantic authority. Its

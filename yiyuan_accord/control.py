@@ -6671,12 +6671,37 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
             details = validate_host_projection(
                 root, projection, {}, "yiyuan-accord", identity, local_errors,
                 _read_json, GOLDEN_TASKS_FILE,
-                expected_contract=delivery_adapter_contract(projection["id"], projection.get("packageId")),
+                expected_contract=delivery_adapter_contract(projection["id"], projection.get("packageId"),
+                    development_schema=contract.get("schema")),
+                unified_name=contract.get("schema") == "yiyuan-accord-development/v5",
+                retained_checkpoint_revision=(contract["previousDevelopmentSnapshot"].split(":", 1)[0]
+                    if contract.get("schema") == "yiyuan-accord-development/v5"
+                    and projection["id"] == "claude-code"
+                    else None),
             )
             hosts[projection["id"]] = {**details, "errors": local_errors}
             errors.extend(local_errors)
         files, file_errors = _repository_files(root, include_untracked=True)
         errors.extend(file_errors)
+        if contract.get("schema") == "yiyuan-accord-development/v5":
+            # Git's index still lists an authorized deletion before it is staged.
+            # Exclude only the immutable, explicitly retired package inventory;
+            # missing current package files must continue to fail validation.
+            previous = _strict_json_object(_bounded_git_bytes(
+                root, ("show", contract["previousDevelopmentSnapshot"]), limit=1_000_000
+            ).decode("utf-8"))
+            current_ids = {projection["id"] for projection in delivery["hostProjections"]}
+            retired_files = set()
+            for projection in previous["delivery"]["hostProjections"]:
+                if projection["id"] not in current_ids:
+                    retired_files.update(projection[key] for key in ("manifest", "marketplace", "contract", "skill"))
+                    for key in ("legalFiles", "metadataFiles", "mechanismFiles"):
+                        retired_files.update(projection[key])
+            files = [locator for locator in files if locator not in retired_files]
+            program["complexityBudget"]["primaryInstructionPaths"] = [
+                locator for locator in program["complexityBudget"]["primaryInstructionPaths"]
+                if locator not in retired_files
+            ]
         historical = program.get("inputEvidence", [])
         errors.extend(active_tree_errors(
             root, files,

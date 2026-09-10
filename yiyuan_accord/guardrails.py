@@ -301,7 +301,7 @@ def codex_metadata_errors(path, skill_name):
 
 
 def manifest_shape_errors(
-    adapter_id, manifest, identity, product_id, declared_prompt,
+    adapter_id, manifest, identity, product_id, declared_prompt, *, unified_name=False,
 ):
     errors = []
     prefix = f"adapter {adapter_id}"
@@ -343,7 +343,8 @@ def manifest_shape_errors(
                 "displayName", "shortDescription", "longDescription", "developerName",
                 "category", "websiteURL",
             ))
-            or interface.get("displayName") != f"{identity.get('displayName')} for Codex"
+            or interface.get("displayName") != (identity.get('displayName') if unified_name
+                                               else f"{identity.get('displayName')} for Codex")
             or interface.get("developerName") != publisher
             or interface.get("websiteURL") != identity.get("repository")
             or interface.get("capabilities") != ["Interactive", "Read"]
@@ -361,7 +362,8 @@ def manifest_shape_errors(
             "https://json.schemastore.org/claude-code-plugin-manifest.json"
         ):
             errors.append("adapter claude-code manifest schema is invalid")
-        if manifest.get("displayName") != f"{identity.get('displayName')} for Claude":
+        if manifest.get("displayName") != (identity.get('displayName') if unified_name
+                                          else f"{identity.get('displayName')} for Claude"):
             errors.append("adapter claude-code manifest displayName is invalid")
     return errors
 
@@ -436,7 +438,8 @@ def plugin_file_locators(root, plugin_root):
 
 def activation_mechanism_errors(
     root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
-    task_checkpoint=False, tool_batch_feedback=False,
+    task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
+    resume_reconciliation=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -499,6 +502,12 @@ def activation_mechanism_errors(
             errors.append(f"{prefix} tool batch feedback has no bound native event")
         expected_value["hooks"]["PostToolBatch"] = [{"hooks": [handler]}]
     if task_checkpoint:
+        if resume_reconciliation:
+            expected_value["hooks"]["SessionStart"].append({"matcher": "resume", "hooks": [{
+                "type": "command",
+                "command": f'node "${{{root_variable}}}/runtime/task-checkpoint.cjs" --hook SessionStart',
+                "timeout": 3,
+            }]})
         for event in ["UserPromptSubmit", "Stop", "SessionEnd"] + (["Interrupt"] if adapter_id == "codex" else []):
             expected_value["hooks"][event] = [{"hooks": [{
                 "type": "command",
@@ -508,11 +517,15 @@ def activation_mechanism_errors(
         checkpoint = repository_relative_path(root, checkpoint_locator)
         canonical_checkpoint = repository_relative_path(root, "runtime/task-checkpoint.cjs")
         try:
+            canonical_bytes = (_bounded_git_bytes(root, (
+                "show", f"{retained_checkpoint_revision}:runtime/task-checkpoint.cjs",
+            )) if retained_checkpoint_revision is not None else
+                _owned_bytes(canonical_checkpoint) if canonical_checkpoint is not None else None)
             if (checkpoint is None or canonical_checkpoint is None
                     or checkpoint.is_symlink() or canonical_checkpoint.is_symlink()
-                    or _owned_bytes(checkpoint) != _owned_bytes(canonical_checkpoint)):
+                    or _owned_bytes(checkpoint) != canonical_bytes):
                 errors.append(f"{prefix} task-checkpoint module differs from canonical bytes")
-        except OSError:
+        except (OSError, subprocess.SubprocessError, ValueError):
             errors.append(f"{prefix} task-checkpoint module is unreadable")
     if value != expected_value:
         errors.append(f"{prefix} activation mechanism contract is invalid")
@@ -614,7 +627,7 @@ def validate_projection_package(
 
 def validate_host_projection(
     root, projection, contract_ids, product_id, identity, errors, read_json,
-    golden_tasks_file, *, expected_contract=None,
+    golden_tasks_file, *, expected_contract=None, retained_checkpoint_revision=None, unified_name=False,
 ):
     initial_error_count = len(errors)
     adapter_id = projection.get("id")
@@ -655,7 +668,7 @@ def validate_host_projection(
         if manifest.get(field) != expected:
             errors.append(f"{prefix} manifest {field} does not match declared identity")
     errors.extend(manifest_shape_errors(
-        adapter_id, manifest, identity, product_id, projection.get("interfaceDefaultPrompt")
+        adapter_id, manifest, identity, product_id, projection.get("interfaceDefaultPrompt"), unified_name=unified_name
     ))
     asset_locators = []
     if adapter_id == "codex" and isinstance(manifest_locator, str):
@@ -690,6 +703,8 @@ def validate_host_projection(
         and "optionalUpdateInspection" in expected_contract else (),
         task_checkpoint=bool(expected_contract and "optionalTaskCheckpoint" in expected_contract),
         tool_batch_feedback=bool(expected_contract and "optionalToolBatchFeedback" in expected_contract),
+        retained_checkpoint_revision=retained_checkpoint_revision,
+        resume_reconciliation=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("resumeReconciliation")),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,

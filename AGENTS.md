@@ -9,11 +9,18 @@ For post-v3.1 development, read `product/development.json` for the authorized
 current phase, system-quality floors and successor acceptance. Its absence is a
 validation error, not a return to the frozen predecessor's review-only authority.
 
-For the user-authorized v3.3 ChatGPT/Codex development, start with
-`docs/operations/CONTINUATION.md` and `docs/operations/PLAN-v3.3.md`, which link the
-aligned baseline, procedure and acceptance. `product/development.json` retains
-its v3.2.1 candidate scope, not v3.3 progress. Follow the latest bound development
-and environment authority; a new release still requires its own authorization.
+For v3.3 development and continuation, read the current consensus node in
+`docs/operations/PLAN-v3.3.md` and the brief state in
+`docs/operations/CONTINUATION.md`. The plan owns consensus, source-consistency
+review, dynamic evaluation, historical disposition and non-linear procedures.
+Detailed result and acceptance views are linked there; the former procedure
+file contains historical observations only. `product/development.json` is the
+machine validation projection, not a competing source of user decisions.
+Version 3.3 distributes only the applicable ChatGPT/Codex adaptation. Preserve
+vendor-independent design and immutable historical identities. Reconcile all
+editable or usable host surfaces, including UI-only controls, settings and
+commands; discovery is not enablement, and unobserved coverage remains unknown.
+A new release still requires its own authorization.
 
 - Treat the user's latest bound goal, corrections, sources, targets, and
   explicit boundaries as the task authority. Do not invent work, reopen a
@@ -63,6 +70,10 @@ and environment authority; a new release still requires its own authorization.
   hosted or cross-host evidence, real-world acceptance, release, and production
   distinct. Do not mutate a completion state without a bound target, sufficient
   evidence, and authority.
+- Use precise, consistent terminology and clear professional language across
+  current artifacts. Preserve intended meaning, user accessibility, authority and
+  evidence limits; correct underlying concepts before wording, and preserve
+  original quotations and immutable historical records.
 - Plans, research, tests, inventories, reports, and process artifacts support a
   result but do not become the result. A plan is a revisable hypothesis, not
   authority over newer evidence.

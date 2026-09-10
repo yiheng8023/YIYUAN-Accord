@@ -3,8 +3,12 @@
   "productId": "yiyuan-accord",
   "packageId": "yiyuan-accord-codex",
   "adapterId": "codex",
-  "entry": "host-skill",
-  "ordinaryPrerequisites": [],
+  "entry": "direct-native-input-duties",
+  "ordinaryPrerequisites": [
+    "host-path-node",
+    "supported-native-task-hooks",
+    "enabled-currently-trusted-input-hook"
+  ],
   "optionalContinuityHint": "session-start-invalidation",
   "optionalHintDependency": "host-path-node",
   "persistentProcessAdded": false,
@@ -21,7 +25,8 @@
       "UserPromptSubmit",
       "Stop",
       "SessionEnd",
-      "Interrupt"
+      "Interrupt",
+      "SessionStart"
     ],
     "scope": "session-and-workspace-bound-file-predicates",
     "effect": "inspect-local-results-and-request-supported-stop-continuation",
@@ -29,6 +34,24 @@
     "recovery": "input-failure-watermarks-outside-lock; current-native-replay-with-derived-epoch; unpersistable-loss-remains-unknown",
     "state": "input-hooks-maintain-receipts-even-without-binding; checkpoints-and-failure-watermarks",
     "cleanup": "unbound-reconciled-receipts-on-session-end-or-matched-caller; preserve-unfinished-checkpoints; watermarks-until-owning-state-directory-retirement",
-    "authority": "caller-reconciles-user-intent-and-predicate-adequacy"
+    "authority": "caller-reconciles-user-intent-and-predicate-adequacy",
+    "resumeReconciliation": "SessionStart/resume-gates-old-binding; new-native-input-or-retained-input-replay; caller-rechecks-authority-effects-and-writer; input-loss-replay-remains-strict",
+    "contextAssessment": "assess-context: read-only caller-bound forecasts; native-window-not-occupancy; reserve-takeover-and-recovery; unknown-without-evidence; no-dispatch-or-release-authority",
+    "contextSignals": "--context-signals: caller-owned App Server notifications; connection-and-turn-bound capacity; invalidate-on-reroute-compaction-disconnect-expiry; no-live-occupancy-inference",
+    "nativeHostObservation": "UserPromptSubmit model/permission_mode snapshots; missing-is-unknown; changed-host-continuation-invalidates-old-readiness-without-new-user-authority; no-collaboration-mode-or-all-settings-inference",
+    "storage": {
+      "default": "user-home/.yiyuan-accord/task-state",
+      "override": "YIYUAN_ACCORD_TASK_STATE_DIR",
+      "legacy": "reuse-exact-session-temporary-state; conflicting-locations-fail-without-merge",
+      "write": "flush-file-before-atomic-replacement",
+      "limits": "no-cross-session-adoption-wakeup-or-power-loss-guarantee; stored-state-grants-no-authority"
+    }
+  },
+  "ordinaryInputParticipation": {
+    "nativeEvent": "UserPromptSubmit",
+    "effect": "inject-necessary-task-duties-without-skill-selection-prerequisite",
+    "existingCheckpoint": "inspect-status-and-reconcile-current-input-before-continuing-unfinished-or-paused-work",
+    "limits": "advisory-agent-guidance; no-state-transition-or-stop-gate-change; prerequisites-must-hold-in-actual-execution-environment; skill-only-use-does-not-prove-ordinary-input-participation",
+    "detailGuidance": "demand-driven-host-skill"
   }
 }

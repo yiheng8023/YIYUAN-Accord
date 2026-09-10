@@ -1,6 +1,6 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "3.2.1",
+  "version": "3.3.0-dev.1",
   "description": "YIYUAN Accord for nontrivial task delivery, capability selection, continuous correction, continuity and verification alongside domain Skills in Codex.",
   "author": {
     "name": "yiheng8023",
@@ -16,7 +16,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "YIYUAN Accord for Codex",
+    "displayName": "YIYUAN Accord",
     "shortDescription": "Adaptive outcome delivery with human authority",
     "longDescription": "One progressively disclosed Skill for starting and continuing nontrivial work with domain Skills: select capabilities, execute, correct drift, preserve continuity, and verify delivery and cleanup. Authorized package installation, update and recovery are included use cases.",
     "developerName": "yiheng8023",
