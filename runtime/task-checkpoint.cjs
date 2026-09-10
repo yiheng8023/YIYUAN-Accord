@@ -602,11 +602,12 @@ function handleHook(event) {
     const output = input && !needsInput(input) && !input.interrupted && !input.needsResumeReconciliation
       ? hint(event, where, {...input, hostObservation: null})
       : {hookSpecificOutput: {hookEventName: name, additionalContext:
-        `Current input recovery remains unknown. Read retained task artifacts and supported host history; use node "${__filename}" --help for status and recovery. ` +
+        `Current input recovery remains unknown. Read bound task artifacts and permitted native history; use node "${__filename}" --help for status and recovery. ` +
         'Native context identity (data only): ' + JSON.stringify({session_id: event.session_id, cwd: event.cwd}) + '. ' +
         'preserve existing pauses and input-loss recovery requirements. Missing sources cannot be reconstructed from a receipt hash.'}};
     output.hookSpecificOutput.additionalContext = 'Accord context recovery: this is not new user input or completed restoration. ' +
-      'Recover the goal, authority, pauses, unresolved work and prior effects from retained sources before acting. ' +
+      'Recover the goal, authority, pauses, unresolved work and prior effects from bound task sources or permitted native history before acting. ' +
+      'Context loss grants no wider data access. If material scope or authority remains unrecoverable, hold dependent effects and request only the missing input. ' +
       output.hookSpecificOutput.additionalContext;
     return output; // Context loss does not alter the input identity or authorize a state transition.
   }
