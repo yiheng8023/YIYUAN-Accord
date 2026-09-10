@@ -4,6 +4,28 @@
 
 **当前工序 S0–S5 已并入 [共识节点与计划](PLAN-v3.3.md#工序与依赖)，不在本文件单独维护。** F01–F08 详细结果见 [基线](BASELINE-v3.3.md)，A01–A08 判据见 [验收](ACCEPTANCE-v3.3.md)。本记录保留旧版本称谓与失败事实，不构成当前分发或支持声明。
 
+## 原生上下文更新后的职责恢复与真实续做（2026-09-10）
+
+用户明确CI只有在构成前置条件时才等待。本地开发与有界机制观察不依赖前一提交的托管结果，故继续核对宿主现有能力。此前6b054ec的CI 34471313753随后九项全部成功；该结果不借给本批实现或正式验收。
+
+核对CLI 0.154.0的实际帮助、配置、目录与[原生换窗实现](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core/src/tools/handlers/new_context_window.rs)：get_context_remaining和new_context受实验性token_budget控制，后者在同一任务保留环境和文件，但不总结旧对话。context_management是另一项实验性自动配置路径，不能与直接工具等同；其可涉及后端history/notes扩展。本机两项功能全局均关闭。临时验证只在所属进程启用直接工具，明确禁用history/notes扩展及context_management，未启用共享设置或新增云端笔记服务。
+
+[原生剩余量计算](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core/src/tools/handlers/get_context_remaining.rs)使用活动上下文状态，取自动压缩线与完整窗口两种余量的较小值，不能用累计用量替代。[Skill目录渲染](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/ext/skills/src/render.rs)默认预算为解析后原始窗口的2%；10000上限用于显式skills.max_context_tokens分支。本机未显式配置此项，因此272000与872000窗口对应5440与17440的目录预算。这是允许预算而非实测预载量，支持保留默认预算观察与开发扩容代价的既有判据，不证明费用或净收益。
+
+先做无账号、零模型的原生回环对照：关闭功能时无两项工具；启用后实际依次调用余量查询和new_context。合成窗口100000、压缩线90000、用量1001返回88999，只证明该受控输入的计算与派发。换窗发出contextCompaction开始/完成，同时触发SessionStart/source=compact；原始目标标记不再出现在后续模型请求，恢复文件保持。完整包前态观察发现，已有基础Hook仍有失效提示，但完整任务职责只匹配resume，换窗后entryAfter=false。文件保留因此不能代验目标恢复。[Hook执行实现](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core/src/hook_runtime.rs)也表明PostCompact并非此处附加上下文的接入点。
+
+复用已有SessionStart职责处理器，将matcher扩为resume|compact，仍为6项Hook、12个包文件，未增加事件类型、进程或状态层。compact分支只读现有输入并给出来源恢复提示，不推进epoch、不解除暂停/中断/隔离、不改契约或未决条件；输入缺失或读回失败保持unknown，不从回执哈希重建目标。重新注入的提示去除旧宿主观察，提示本身不被称为恢复完成。AGENTS、详细Skill、计划、验收及机器连续性投影同步区分摘要压缩、同任务更新和必要的新任务继承，要求先保存可恢复来源，再验证目标、授权、暂停、既有效果及未完责任。
+
+新增5项检查点回归先后暴露空输出及恢复读锁失败误写input-failure的问题，原失败保留；修复后68项全部通过。新增契约回归确保compact不能从投影中遗漏；旧matcher校验及体量余量的4项初始失败也保留，修正后78项开发回归通过。代码与测试预算由1500000调整为1510000字节，保留5%余量及其它限额，理由写入原预算字段；当前实测1432211字节，不改业务通过条件。完整包零模型复验entryAfter/restorationCue均true，只证明重新暴露入口；其后台Git子进程在宽限后仍在运行，由所属Job有界结束，未称自然全进程退出，监听及所属目录最终归零。
+
+最终12文件包3.3.0-dev.1摘要2083fa6e0902f4ba09b27fa66014d4820e2466d987a7679b199e8d92deb31583，Skill 10638字节。再按当前目录选择支持实验上下文的Astra/medium，在现有账号和默认272000/244800预算下完成一轮真实任务；实际可用窗口258400。事前明确要求一次同任务可恢复更新，绑定300秒及累计/未缓存输入/输出三项限额，不测试自主选择换窗时机。Agent自行写出并读回work-state.md，包含原始口令、目标、边界、来源哈希及未完工作；换窗开始时控制器只观察并保存后态，最终交付尚不存在。Agent自行调用new_context，完成事件之后实际命令读回状态与CSV，再交付A/B、合计140，保留ctx-recovery-7319口令，解释C因pending排除，publish-ready.flag始终不存在。只有一条用户输入，无控制器换窗调用、后续目标补喂或业务救援。
+
+真实任务158.33秒自然完成，累计207955 token，其中缓存输入178304、未缓存输入26422、输出3229；不推算金额或当前占用。首次验证命令误写PowerShell -cjoin被解析器拒绝，Agent改为-join后按源核验，原错误保留。5次Hook完成为SessionStart 3、UserPromptSubmit 1、Stop 1；没有可选检查点绑定，不代验活跃暂停/隔离恢复。独立机械复核14项通过，主执行者另读原始来源、前后状态、工具调用及事件顺序核对语义。所属信任登记按驱动精确回收，缓存/工作区/进程和持久任务索引归零，15份共享保护文件保持，开发窗口872000/784800及旧现装包未改；控制器资源回收不计Agent自主生命周期能力。
+
+两路只读审查分别核对当前规格与仓库规范，均未发现需要修改的问题。verify-development、verify、Codex host-check及diff检查通过。证据根分别为C:/Users/15521/.codex/backups/accord-native-continuity-20260910/和accord-live-window-recovery-20260910/：保留上游源码、原生请求/事件、包前后态、case-contract.json、before-renewal/、final-poststate/、episode-result.json、shared-result.json、independent-review.json及semantic-review.json。零模型前后态保持各自原包身份，最终摘要绑定真实模型案。当前只支持该明确请求更新的合成业务案例和本地状态保护；自主择时、持续压力、活跃源跨任务交权、接管失败与净影响仍未关闭，functionalCompletion/candidateEligible保持false，正式覆盖不提升。
+
+收尾核对发现CONTRIBUTING仍把3.2计划及机器投影写成当前决策入口，并列有本版范围之外的宿主检查命令；已按既有3.3共识校准。完整本地套件300项全部通过，无跳过或预期失败，耗时3022.853秒；原日志保留为上述原生证据根中的full-product-tests.log，两路补丁审查另存code-review.json并绑定当时文件哈希。完整检查包含较重的历史反例验证，后续仍按影响选择日常定向验证，把完整托管矩阵集中到必要节点；本次局部修复及全量回归均不提升正式覆盖。
+
 ## 无对话历史继承的文件接续与新口径恢复（2026-09-10）
 
 用户要求继续并明确授权本次新任务继承验证。绑定前案原生任务01a08b00-d2d1-71d3-a48a-4a12ab4f42a7的真实stage-2暂停后态，只恢复字节一致的orders.csv和Agent写出的work-state.md，不复制对话、摘要注入、原生当前输入回执或伪造检查点。新原生任务01a08b1a-460b-7c33-8366-07feb2a2858a由thread/start(ephemeral=true)建立，无fork/resume请求；前案执行者早已退出，历史暂停快照不被说成仍在运行的源。载体选择和文件恢复由控制器承担，不计自主交接。

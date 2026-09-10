@@ -126,6 +126,7 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
             "existingCheckpoint": "inspect-status-and-reconcile-current-input-before-continuing-unfinished-or-paused-work",
             "limits": "advisory-agent-guidance; no-state-transition-or-stop-gate-change; prerequisites-must-hold-in-actual-execution-environment; skill-only-use-does-not-prove-ordinary-input-participation",
             "detailGuidance": "demand-driven-host-skill",
+            "contextReentry": "SessionStart/compact restores task duties and a source-recovery cue; preserves input identity, pauses and quarantine; no restored-goal, fresh-authority or completed-takeover claim",
         }
     if adapter_id == "claude-code":
         contract["optionalToolBatchFeedback"] = {

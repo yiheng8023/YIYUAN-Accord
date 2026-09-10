@@ -906,6 +906,13 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         self.assertTrue(any("caller-selected observer" in error for error in report["errors"]))
         self.assertFalse(report["repositoryCandidateReady"])
 
+    def test_current_context_reentry_requires_the_compact_matcher(self):
+        locator = "plugins/yiyuan-accord-codex/hooks/hooks.json"
+        hooks = json.loads((self.root / locator).read_text(encoding="utf-8"))
+        hooks["hooks"]["SessionStart"][1]["matcher"] = "resume"
+        with self.changed(locator, json.dumps(hooks).encode()):
+            self.assertTrue(any("activation mechanism contract" in error for error in self.report()["errors"]))
+
     def test_current_delivery_never_inherits_predecessor_behavior_or_review(self):
         from yiyuan_accord import control
         with patch.object(control, "_validate_acceptance", side_effect=AssertionError("historical replay")):

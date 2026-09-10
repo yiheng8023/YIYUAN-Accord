@@ -92,15 +92,21 @@ leaves the ordinary host responsible; report any resulting functional gap.
 
 Use supported host continuation and resource controls. Re-sense material
 host/model/context changes; window size, occupancy and compression efficiency
-are distinct. Unknown measurements stay unknown. Before long work, reserve
+are distinct. Check the basis of native remaining-budget signals: they may count
+to a compaction threshold rather than the full window. Unknown stays unknown.
+Before long work, reserve
 capacity for the next span, handoff, takeover verification and failed-transfer
 recovery using sourced estimates. With unknown capacity or loss, shorten spans
 and checkpoint early; do not invent universal percentages or wait for exhaustion.
 The helper's `--context-signals` and `assess-context` interfaces are documented in
 `--help`; they require genuine bound native observations and do not dispatch.
 
-Compact for same-carrier reduction; use an authorized fresh zero-history task
-for sequential relief. Keep the bound checkout. Quiesce source writes while
+Choose supported summarization, same-task context renewal or a fresh zero-history
+task by the needed effect and authority. Copied-history forks serve causal branches.
+Renewal can preserve files while omitting the goal and corrections. Save recoverable
+goal, authority, pauses, unresolved work and effects before it; verify restoration
+against current sources before resuming effects, retaining recovery until then.
+Keep the bound checkout. For task transfer, quiesce source writes while
 retaining recovery capacity. The exact target must inspect and accept the latest
 goal, authority, decisions, completed effects and unfinished obligations, resolve
 consequential inheritance loss, and demonstrate safe continuation before commit

@@ -13,7 +13,7 @@
         ]
       },
       {
-        "matcher": "resume",
+        "matcher": "resume|compact",
         "hooks": [
           {
             "type": "command",

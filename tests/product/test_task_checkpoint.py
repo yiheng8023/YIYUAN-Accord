@@ -62,6 +62,74 @@ class TaskCheckpointTests(unittest.TestCase):
         (self.work / "summary.json").write_text(json.dumps({"total": total}), encoding="utf-8")
         (self.work / "details.csv").write_text(f"id,units\nA,{total}\n", encoding="utf-8")
 
+    def test_compact_reentry_preserves_pause_identity_and_pending_contract(self):
+        self.bind(unresolved=['The customer scope remains undecided.'])
+        self.pause('Wait for the customer decision.')
+        original = self.status()
+        files = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        output = self.event('SessionStart', source='compact', model='changed-host-model')
+        context = output['hookSpecificOutput']['additionalContext']
+        self.assertEqual(output['hookSpecificOutput']['hookEventName'], 'SessionStart')
+        self.assertIn('Accord context recovery', context)
+        self.assertIn('Accord task entry', context)
+        self.assertNotIn('Native host observations', context)
+        restored = self.status()
+        self.assertEqual(restored['epoch'], original['epoch'])
+        self.assertEqual(restored['checkpoint'], original['checkpoint'])
+        self.assertEqual(restored['mode'], 'paused')
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, files)
+        self.assertEqual(self.event('Stop'), {})
+
+    def test_compact_without_input_receipt_does_not_manufacture_state(self):
+        files = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        output = self.event('SessionStart', source='compact', session_id='new-unbound-session')
+        context = output['hookSpecificOutput']['additionalContext']
+        self.assertIn('Accord context recovery', context)
+        self.assertIn('unknown', context)
+        self.assertNotIn('Native input receipt:', context)
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, files)
+
+    def test_compact_reentry_does_not_clear_an_interruption(self):
+        self.bind()
+        self.event('Interrupt')
+        files = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        original = self.status()
+        self.event('SessionStart', source='compact')
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, files)
+        self.assertEqual(self.status(), original)
+        self.assertEqual(self.event('Stop'), {})
+
+    def test_compact_read_failure_does_not_fabricate_native_input_loss(self):
+        self.bind()
+        self.pause()
+        files = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        lock = Path(str(next(self.state.glob('*.input.json'))) + '.lock')
+        lock.write_text(json.dumps({'pid':os.getpid()}), encoding='utf-8')
+        try:
+            output = self.event('SessionStart', source='compact')
+            self.assertIn('unknown', output['hookSpecificOutput']['additionalContext'])
+        finally:
+            lock.unlink()
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, files)
+        self.assertFalse(self.status()['needsNativeReplay'])
+
+    def test_compact_reentry_preserves_existing_input_loss_quarantine(self):
+        self.bind()
+        lock = Path(str(next(self.state.glob('*.input.json'))) + '.lock')
+        lock.write_text(json.dumps({'pid':os.getpid()}), encoding='utf-8')
+        try:
+            self.invoke({'hook_event_name':'UserPromptSubmit','prompt':'Changed scope.'}, hook=True, success=False)
+        finally:
+            lock.unlink()
+        original = self.status()
+        self.assertTrue(original['needsNativeReplay'])
+        files = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        context = self.event('SessionStart', source='compact')['hookSpecificOutput']['additionalContext']
+        self.assertIn('unknown', context)
+        self.assertNotIn('Native input receipt:', context)
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, files)
+        self.assertEqual(self.status(), original)
+
     def test_rebinding_after_side_question_preserves_pause_and_unfinished_contract(self):
         self.bind(unresolved=['Operating facts still need confirmation.'])
         self.pause('User paused execution pending review.')

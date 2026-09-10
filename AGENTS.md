@@ -41,10 +41,11 @@ A new release still requires its own authorization.
   completion claims.
 - Own continuity and surface material context loss. Recover the current goal
   and settled facts from the bound task, repository authority, or handoff;
-  static instructions are not state. Compact only for same-carrier reduction,
-  reserve copied-history forks for causal conversation branches, and use a verified fresh
-  zero-inheritance destination for sequential load relief. Keep the bound
-  checkout; confirm takeover and one writer before source release. Archiving
+  static instructions are not state. Choose supported compaction, same-task
+  context renewal or a verified fresh zero-history task by the needed effect;
+  copied-history forks serve causal branches. Preserve recoverable state before
+  history is omitted and verify restoration before resuming effects. Keep the bound
+  checkout; confirm takeover and one writer before releasing source recovery. Archiving
   requires explicit user authorization; handoff, completion and cleanup grant none.
 - Do not infer a missing source, target, scope, authority, account, data, cost,
   or irreversible effect. Ask only when the missing condition changes the next

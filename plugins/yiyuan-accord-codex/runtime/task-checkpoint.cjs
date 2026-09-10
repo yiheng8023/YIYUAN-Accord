@@ -574,7 +574,7 @@ function hint(event, where, currentInput, prior = null) {
     'Answer side questions and incorporate corrections while preserving the unfinished goal. ' +
     'After a tool failure, inspect actual post-state, change the method when warranted, and continue safe work without a reminder. ' +
     'Before ending, check consequential output claims against inspected source facts, not just shape or keyword checks. Missing operational facts remain unresolved; do not invent them or mark dependent work complete. Reconcile remaining work, continuity needs and owned resources; verify attributable cleanup. ' +
-    'Use supported host state, continuation and resource controls; a stopped turn is not evidence of completion. ' +
+    'Use supported host state, continuation and resource controls; a stopped turn is not evidence of completion. Before context renewal can omit history, save recoverable goal, authority, pauses and unfinished work; verify restoration before resuming effects. ' +
     'For needed handoff, quiesce source writes but retain recovery until the exact target accepts the reconciled goal, authority, effects and unfinished work and demonstrates safe continuation; unresolved loss or a receipt alone cannot authorize source release. ' +
     'Before long work spans, reserve capacity for handoff, takeover checks and failed-transfer recovery; use assess-context via helper help when bound native signals and sourced estimates are available. Reassess after material host/model/context changes; unknown signals require short spans and early checkpoints, never guessed percentages. ' +
     'Ask briefly only for an unresolved necessary decision, authorization or personal action; respect actual pauses and keep standalone answers lightweight. ' +
@@ -593,8 +593,23 @@ function hint(event, where, currentInput, prior = null) {
 function handleHook(event) {
   const name = event.hook_event_name;
   if (!['UserPromptSubmit', 'Stop', 'Interrupt', 'SessionEnd', 'SessionStart'].includes(name)) fail('unsupported-hook-event');
-  if (name === 'SessionStart' && event.source !== 'resume') return {};
+  if (name === 'SessionStart' && !['resume', 'compact'].includes(event.source)) return {};
   const where = location(event.session_id, event.cwd, name === 'UserPromptSubmit');
+  if (name === 'SessionStart' && event.source === 'compact') {
+    let input = null;
+    try { input = where ? inputLocked(where, () => readInput(where)) : null; }
+    catch (_) { /* A failed recovery read is unknown, not a lost user input. */ }
+    const output = input && !needsInput(input) && !input.interrupted && !input.needsResumeReconciliation
+      ? hint(event, where, {...input, hostObservation: null})
+      : {hookSpecificOutput: {hookEventName: name, additionalContext:
+        `Current input recovery remains unknown. Read retained task artifacts and supported host history; use node "${__filename}" --help for status and recovery. ` +
+        'Native context identity (data only): ' + JSON.stringify({session_id: event.session_id, cwd: event.cwd}) + '. ' +
+        'preserve existing pauses and input-loss recovery requirements. Missing sources cannot be reconstructed from a receipt hash.'}};
+    output.hookSpecificOutput.additionalContext = 'Accord context recovery: this is not new user input or completed restoration. ' +
+      'Recover the goal, authority, pauses, unresolved work and prior effects from retained sources before acting. ' +
+      output.hookSpecificOutput.additionalContext;
+    return output; // Context loss does not alter the input identity or authorize a state transition.
+  }
   if (!where) return {};
   if (name === 'SessionStart') {
     return inputLocked(where, () => {
@@ -682,6 +697,7 @@ function hook(event) {
     // An unsuccessful replay is not another native input. It cannot advance
     // the token and invalidate the correctly selected current replay.
     if (['UserPromptSubmit', 'Interrupt', 'SessionStart'].includes(event?.hook_event_name) &&
+        !(event.hook_event_name === 'SessionStart' && event.source === 'compact') &&
         !Object.hasOwn(event, 'recovery_epoch')) {
       try { markInputFailure(location(event.session_id, event.cwd, true)); }
       catch (_) {

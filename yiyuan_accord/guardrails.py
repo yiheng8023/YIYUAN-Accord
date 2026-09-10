@@ -439,7 +439,7 @@ def plugin_file_locators(root, plugin_root):
 def activation_mechanism_errors(
     root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
     task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
-    resume_reconciliation=False,
+    resume_reconciliation=False, context_reentry=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -503,7 +503,7 @@ def activation_mechanism_errors(
         expected_value["hooks"]["PostToolBatch"] = [{"hooks": [handler]}]
     if task_checkpoint:
         if resume_reconciliation:
-            expected_value["hooks"]["SessionStart"].append({"matcher": "resume", "hooks": [{
+            expected_value["hooks"]["SessionStart"].append({"matcher": "resume|compact" if context_reentry else "resume", "hooks": [{
                 "type": "command",
                 "command": f'node "${{{root_variable}}}/runtime/task-checkpoint.cjs" --hook SessionStart',
                 "timeout": 3,
@@ -705,6 +705,7 @@ def validate_host_projection(
         tool_batch_feedback=bool(expected_contract and "optionalToolBatchFeedback" in expected_contract),
         retained_checkpoint_revision=retained_checkpoint_revision,
         resume_reconciliation=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("resumeReconciliation")),
+        context_reentry=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("contextReentry")),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,

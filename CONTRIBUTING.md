@@ -6,9 +6,10 @@ plan. Include an exact revision, safe log, screenshot or patch when available.
 
 ## Current development
 
-For the approved post-v3.1 work, [product/development.json](product/development.json)
-is the current source for scope, duties, quality floors, procedures and acceptance.
-[The visible plan](docs/operations/PLAN-v3.2.md) is derived from it.
+For current v3.3 work, [the consensus and plan](docs/operations/PLAN-v3.3.md)
+owns the approved scope, decisions and procedures; its linked acceptance view
+defines the criteria. [product/development.json](product/development.json) is
+the machine validation projection, not a competing source of user decisions.
 [Continuation](docs/operations/CONTINUATION.md) identifies the bound checkout and
 current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
@@ -57,7 +58,6 @@ Run current development and package admission from the repository root:
 python -B -X utf8 -m yiyuan_accord verify-development --root . --json
 python -B -X utf8 -m yiyuan_accord verify --root . --json
 python -B -X utf8 -m yiyuan_accord host-check --adapter codex --root . --json
-python -B -X utf8 -m yiyuan_accord host-check --adapter claude-code --root . --json
 python -B -X utf8 -m unittest discover -s tests/product -v
 ~~~
 
