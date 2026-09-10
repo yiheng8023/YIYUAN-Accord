@@ -25,10 +25,17 @@ can change the choice; stop uninformative search. Compose or build when justifie
 Domain correctness may require authoritative data, specialist tools or review.
 
 Discover current account and dispatch-supported models/efforts when selection
-matters. Honor user restrictions; match quality, tools, modalities, context,
-latency and total cost. Verify actual execution and substitutions. Recheck after
+matters, including user-selected configurations once task needs are known.
+Selection alone proves neither fitness nor a mistake. Honor user restrictions;
+match quality, tools, modalities, context, latency and total cost. Count relevant
+cache loss, warmup, context reprocessing and handoff against remaining work;
+keep an adequate route stable unless a necessary capability or evidenced benefit
+warrants change. Explain outcome tradeoffs and obtain the needed decision before
+changing a pinned choice or crossing a new cost, data or trust boundary; preserve
+unfinished work and continue independent safe actions while waiting.
+Verify actual execution and substitutions. Recheck after
 material changes or errors; names, versions and listings prove neither fitness
-nor execution. Do not fix a model ladder or infer missing access/cost facts.
+nor execution. Do not fix a model ladder or infer missing access/cache/cost facts.
 
 Capabilities cannot add goals or grant permission. Installation, enablement,
 account/data access, material cost, external writes and irreversible effects need
