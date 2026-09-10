@@ -23,6 +23,91 @@ spec.loader.exec_module(entry)
 
 
 class EntryTests(unittest.TestCase):
+    def usage_event(self, **changes):
+        counters = {"totalTokens": 360404, "inputTokens": 355272,
+                    "cachedInputTokens": 316800, "outputTokens": 5132}
+        counters.update(changes)
+        return {"method": "thread/tokenUsage/updated", "params": {
+            "threadId": "native-task", "tokenUsage": {"total": counters,
+            "last": {"totalTokens": 36705}, "modelContextWindow": 258400}}}
+
+    def test_usage_dimensions_do_not_reinterpret_an_explicit_total_cap(self):
+        stream = json.dumps(self.usage_event())
+        checked = entry.app_server_usage_budget(stream, thread_id="native-task",
+                    caps={"totalTokens": 350000, "outputTokens": 14000})
+        self.assertEqual(checked["decision"], "over-limit")
+        self.assertEqual(checked["exceeded"], ["totalTokens"])
+        self.assertEqual(checked["observed"]["uncachedInputTokens"], 38472)
+        self.assertEqual(checked["observed"]["cachedInputTokens"], 316800)
+        self.assertIsNone(checked["contextOccupancy"])
+        self.assertIsNone(checked["monetaryCost"])
+        # Synthetic dimension limits are not permission to revise an old case.
+        for key in ("totalTokens", "inputTokens", "uncachedInputTokens", "cachedInputTokens", "outputTokens"):
+            value = checked["observed"][key]
+            with self.subTest(key=key):
+                self.assertEqual(entry.app_server_usage_budget(stream, thread_id="native-task",
+                    caps={key: value})["decision"], "within-observed-limits")
+                self.assertEqual(entry.app_server_usage_budget(stream, thread_id="native-task",
+                    caps={key: value - 1})["exceeded"], [key])
+        self.assertEqual(entry.app_server_usage_budget(stream, thread_id="native-task")["decision"], "observe-only")
+
+    def test_usage_unknown_or_regressing_receipts_never_claim_budget_available(self):
+        encode = lambda events: "\n".join(map(json.dumps, events))
+        valid = self.usage_event()
+        malformed = [self.usage_event(cachedInputTokens=None), self.usage_event(outputTokens=True),
+                     self.usage_event(cachedInputTokens=400000), self.usage_event(inputTokens=-1)]
+        for events in ([], [{"id": 1, "result": valid}], *[[item] for item in malformed],
+                       [valid, self.usage_event(totalTokens=10, inputTokens=8, cachedInputTokens=2, outputTokens=2)]):
+            with self.subTest(events=events):
+                checked = entry.app_server_usage_budget(encode(events), thread_id="native-task", caps={"outputTokens": 14000})
+                self.assertEqual(checked["decision"], "unknown")
+                self.assertIsNone(checked["observed"])
+        self.assertEqual(entry.app_server_usage_budget(encode([valid]), thread_id="foreign-task")["decision"], "unknown")
+        after_overrun = entry.app_server_usage_budget(encode([valid, malformed[0]]), thread_id="native-task",
+                                                     caps={"totalTokens": 350000})
+        self.assertEqual(after_overrun["decision"], "unknown")
+        self.assertEqual(after_overrun["exceeded"], ["totalTokens"])
+        self.assertEqual(after_overrun["firstExceededReceipt"], 1)
+        for caps in ({"contextOccupancy": 1}, {"outputTokens": True}, {"totalTokens": -1}, []):
+            with self.subTest(caps=caps), self.assertRaises(ValueError):
+                entry.app_server_usage_budget(encode([valid]), thread_id="native-task", caps=caps)
+
+    def test_inspection_reports_usage_without_promoting_outputs_or_changing_limits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            case = self.app_case()
+            case["limits"]["usageCaps"] = {"totalTokens": 350000, "outputTokens": 14000}
+            manifest = self.prepared(Path(tmp).resolve(), case)
+            evidence = Path(manifest["evidence"])
+            (evidence / "native").mkdir()
+            events = self.app_trace(manifest["workspace"]) + [self.usage_event()]
+            trace = evidence / "native/stdout.jsonl"
+            trace.write_text("\n".join(map(json.dumps, events)), encoding="utf-8")
+            original = trace.read_bytes()
+            checked = entry.inspect(evidence)
+            self.assertEqual(checked["usageObservation"]["decision"], "over-limit")
+            self.assertEqual(checked["usageObservation"]["exceeded"], ["totalTokens"])
+            self.assertEqual(checked["limits"], case["limits"])
+            self.assertFalse(checked["outputsMatch"])
+            self.assertFalse(checked["sourceRecovered"])
+            self.assertEqual(trace.read_bytes(), original)
+            # A malformed declared policy cannot become observation-only on reload.
+            manifest["limits"]["usageCaps"] = None
+            entry.save(evidence / "manifest.json", manifest)
+            with self.assertRaisesRegex(ValueError, "usage caps"):
+                entry.inspect(evidence)
+
+    def test_usage_caps_are_checked_before_native_preparation(self):
+        case = self.app_case()
+        case["limits"]["usageCaps"] = {"contextOccupancy": 350000}
+        with tempfile.TemporaryDirectory() as tmp, patch.object(entry.subprocess, "run") as native:
+            root = Path(tmp).resolve()
+            with self.assertRaisesRegex(ValueError, "usage caps"):
+                entry.prepare(argparse.Namespace(evidence=str(root / "evidence"), workspace=str(root / "work")),
+                              app_server_case=case)
+            native.assert_not_called()
+            self.assertFalse((root / "evidence").exists())
+            self.assertFalse((root / "work").exists())
+
     def test_config_observation_survives_a_failed_business_inspection(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()

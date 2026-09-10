@@ -9,6 +9,9 @@ does not initialize/install a sandbox or edit shared configuration.
 Evidence and deliverables are retained for review; owned live processes are released.
 The Python prepare API accepts an explicit app_server_case for a caller-owned
 dispatcher; inspect then checks that protocol and its actual input receipts.
+Optional limits.usageCaps names native cumulative token dimensions explicitly.
+Inspection reports those limits without changing them or controlling execution;
+the dispatcher still owns prospective time, cost, interruption and cleanup bounds.
 """
 
 import argparse
@@ -89,6 +92,67 @@ def save(path, value):
     Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def _usage_caps(caps):
+    allowed = {"totalTokens", "inputTokens", "uncachedInputTokens", "cachedInputTokens", "outputTokens"}
+    if (not isinstance(caps, dict) or set(caps) - allowed
+            or any(type(value) is not int or value < 0 for value in caps.values())):
+        raise ValueError("usage caps must name supported token dimensions with nonnegative integer limits")
+    return dict(caps)
+
+
+def app_server_usage_budget(stream, *, thread_id, caps=None):
+    """Read cumulative native receipts, preserving explicit limits and unknowns.
+
+The caller binds the actual connection/thread and a prospective case. These are
+reported thread totals, not a resumed turn's incremental cost. Never sum repeated
+cumulative receipts, substitute last/total for occupancy, or assign token prices.
+Missing, invalid or decreasing counters leave budget availability unknown; the
+caller retains independent deadlines and must not interpret unknown as permission.
+This read-only diagnostic neither enforces a spending cap nor authenticates logs.
+"""
+    caps = _usage_caps({} if caps is None else caps)
+    result = {"decision": "unknown", "observed": None, "caps": caps, "exceeded": [],
+              "receipts": 0, "firstExceededReceipt": None, "contextOccupancy": None, "monetaryCost": None,
+              "scope": "reported cumulative thread usage; not current occupancy, per-turn cost or completion"}
+    if not isinstance(thread_id, str) or not thread_id:
+        return result
+    try:
+        if len(stream.encode("utf-8")) > 32 * 1024 * 1024:
+            return result
+        previous = None
+        for line in stream.splitlines():
+            if not line.strip():
+                continue
+            event = json.loads(line)
+            if not isinstance(event, dict):
+                return result
+            if event.get("method") != "thread/tokenUsage/updated" or "id" in event:
+                continue
+            params = event["params"]
+            if params["threadId"] != thread_id:
+                continue
+            total = params["tokenUsage"]["total"]
+            current = {key: total[key] for key in ("totalTokens", "inputTokens", "cachedInputTokens", "outputTokens")}
+            if (any(type(value) is not int or value < 0 for value in current.values())
+                    or current["cachedInputTokens"] > current["inputTokens"]):
+                return result
+            current["uncachedInputTokens"] = current["inputTokens"] - current["cachedInputTokens"]
+            if previous is not None and any(current[key] < previous[key] for key in current):
+                return result
+            previous = current
+            result["receipts"] += 1
+            result["exceeded"] = sorted(set(result["exceeded"]) | {key for key, limit in caps.items() if current[key] > limit})
+            if result["exceeded"] and result["firstExceededReceipt"] is None:
+                result["firstExceededReceipt"] = result["receipts"]
+        if previous is not None:
+            result["observed"] = previous
+            result["decision"] = ("over-limit" if result["exceeded"] else
+                                  "within-observed-limits" if caps else "observe-only")
+    except (KeyError, TypeError, AttributeError, ValueError, UnicodeError):
+        pass
+    return result
+
+
 def shared_config_snapshot(config, workspace):
     """Observe the exact workspace registration without exposing other config values."""
     try:
@@ -132,6 +196,8 @@ def load_manifest(evidence):
     if protocol == "app-server" and ("command" in manifest or "promptSha256" in manifest
                                      or manifest.get("tracePath") != "native/stdout.jsonl"):
         raise ValueError("App Server manifest contains incompatible CLI or trace metadata")
+    if protocol == "app-server" and "usageCaps" in manifest["limits"]:
+        _usage_caps(manifest["limits"]["usageCaps"])
     ordinary_dir(manifest["workspace"])
     return manifest
 
@@ -173,6 +239,8 @@ def prepare(args, *, app_server_case=None):
                 or not isinstance(app_server_case["limits"], dict) or not app_server_case["limits"]):
             raise ValueError("App Server case must prebind prompts, exact expected outputs and limits")
         app_server_case = json.loads(json.dumps(app_server_case, allow_nan=False))
+        if "usageCaps" in app_server_case["limits"]:
+            _usage_caps(app_server_case["limits"]["usageCaps"])
     evidence, workspace = Path(args.evidence).absolute(), Path(args.workspace).absolute()
     package = ordinary_dir(args.package)
     if not args.model.strip() or not args.reasoning.strip():
@@ -614,6 +682,9 @@ def inspect(evidence):
     summary = read_output("summary.json", json.loads)
     report = read_output("report.md", str)
     attempts = read_output(".source-attempts.json", json.loads)
+    usage = None
+    if manifest.get("entryProtocol") == "app-server":
+        usage = app_server_usage_budget("", thread_id=None, caps=manifest["limits"].get("usageCaps"))
     try:
         protocol = manifest.get("entryProtocol", "exec")
         trace_path = "native/stdout.jsonl" if protocol == "app-server" else "stdout.jsonl"
@@ -623,6 +694,9 @@ def inspect(evidence):
         recovery = source_recovery_from_events(trace.decode("utf-8"), manifest["python"], protocol=protocol,
                                               request_stream=requests.decode("utf-8") if requests is not None else None,
                                               workspace=root)
+        if protocol == "app-server":
+            usage = app_server_usage_budget(trace.decode("utf-8"), thread_id=recovery.get("threadId"),
+                                            caps=manifest["limits"].get("usageCaps"))
         recovery["traceSha256"] = hashlib.sha256(trace).hexdigest()
         if requests is not None:
             recovery["requestTraceSha256"] = hashlib.sha256(requests).hexdigest()
@@ -651,6 +725,7 @@ def inspect(evidence):
             "inputsUnchanged": unchanged, "sourceAttempts": attempts,
             "sourceRecovered": input_binding is not False and recovery["recovered"] and recovery["sourceUnchanged"],
             "sourceRecoveryEvidence": recovery,
+            "usageObservation": usage,
             "hookResults": events, "runtimeStateResidue": state,
             "unexpectedWorkspacePaths": sorted(set(p.name for p in root.iterdir()) - set(manifest["inputs"]) - {"details.csv", "summary.json", "report.md", ".source-attempts.json"}),
             "limits": manifest["limits"]}
