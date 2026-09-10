@@ -14,6 +14,8 @@ ASSETS英文源已校准；旧中文仅在归档中找到，归档保持，在AS
 
 用户明确授权临时启动Docker并恢复，随后自行启动原有assets-graph-db。核对其项目目录及挂载归属后保存图谱前态，按既有受限脚本同步并验证：1个面、140项检查、36个关联产物、14个锚点；中文→英文和AI→通用源的关系均核。完成后容器exited，Docker Desktop停止，相关进程及引擎管道已不在，未删除数据卷。全局文件原SHA `0ca29a7d…`保留备份；新SHA `511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc`、4444字节，config.toml保持。用户所需AI版中文纯文本已放桌面并与中文正文核对。记录、原件、审查、图谱快照及反例位于C:/Users/15521/.codex/backups/meta-guidance-review-20260911/。
 
+关联仓推送后的首次CI分别为34525555216与34525563439：文件及现有配置兼容性检查通过，但官方配置根新增allow_symlinked_codex_home、mcp_optional_startup_grace_ms、thread_unload_delay_secs触发基线漂移失败。逐项读取官方schema后，仅更新两仓的已审阅基线，不启用新设置、不放宽校验器。后续私仓c75088c的[CI 34528324260](https://github.com/yiheng8023/codex-user-config/actions/runs/34528324260)三平台成功，公仓0db8ab9的[CI 34528333083](https://github.com/yiheng8023/codex-user-config-template/actions/runs/34528333083)成功；原失败保留。ASSETS该推送未观察到自动CI，不借配置仓结果代验。最终源、部署、资源与CI记录见上述私有证据根completion.json，早期候选评估已明确标为历史。
+
 随后用户提供个性化设置中的Codex说明页截图，可见英文段落与新全局元指导一致，支持界面已显示新内容；不据此认定所有存量任务的已载入上下文已重建。
 
 同时只读发现共享Accord缓存12文件已与当前源码2083fa6e…一致；本批未执行其安装，变化原因不作推断。旧缓存/信任和旧全局指导均不能再当成当前环境条件。3.3仍按原目标及r11推进，后续实模记录需绑定新的上游变量，不把私人元指导补足的行为记为产品新增能力，也不把元指导普遍有效性研究变成收官前置。
