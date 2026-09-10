@@ -4,6 +4,18 @@
 
 **当前工序 S0–S5 已并入 [共识节点与计划](PLAN-v3.3.md#工序与依赖)，不在本文件单独维护。** F01–F08 详细结果见 [基线](BASELINE-v3.3.md)，A01–A08 判据见 [验收](ACCEPTANCE-v3.3.md)。本记录保留旧版本称谓与失败事实，不构成当前分发或支持声明。
 
+## 新包原生暂停链路与独立沙箱前提（2026-09-10）
+
+本次绑定源码 `59d0c207edffdd129241437f4ba590b33afe89f6`，完整12文件包仍为 `58ff6adadd69c51228556028ee07e866e0073b72c4f616315fe461b8a88188b8`。先在自有配置目录使用原生市场登记、安装、发现及卸载；缓存与源码逐文件一致，按原生当前散列仅在测试进程信任6项Hook，排除其余39项Skill后仅1项启用。共享3份配置及12份现装文件保持；未覆盖旧包，未连接账号或调用模型。
+
+独立home的windowsSandbox/readiness返回updateRequired，因此未进行普通模型命令执行。先前共享home的准备成功不能替代此新目录的状态。CLI的`sandbox windows --help`被当成待执行命令并以CreateProcessAsUserW找不到文件失败，未作为帮助或边界通过；后续采用已核对的App Server接口。[官方Windows沙箱说明](https://learn.chatgpt.com/docs/windows/windows-sandbox)确认elevated准备依赖管理员批准，可能涉及本地用户、ACL、防火墙及策略；本次查阅未建立跨home复用准备状态的受支持路径。没有复制沙箱凭据、降级隔离或再次执行setupStart。已准备独立可复用测试home的具体原生准备请求和复验脚本；该新增共享系统变更待用户确认，脚本仅作语法及不执行预览。
+
+独立的零模型原生链路复用无认证回环协议fixture，3次传输请求、真实模型0次。实际原生输入后由控制器绑定并暂停；中断、源进程退出和同一任务thread/resume后，原合同、暂停原因与未决条件保留。新输入只修订计划时，控制器按当前回执重绑为70仍保持paused；控制器写入匹配文件后，正常retire被paused-task-cannot-retire拒绝且状态未变。第三条原生输入明确恢复及处置口径后，控制器携带resumeReason和revisionReason恢复、核验并退役成功。控制器写入、绑定、恢复处置和退出选择均不归因于Agent；不是普通自主续做、自然交付、择时交接或完整准入。
+
+原始请求/响应及另存复核确认：同一原生任务，9次Hook完成通知（SessionStart 3、UserPromptSubmit 3、Interrupt 1、Stop 2）；其中恢复时两个SessionStart回调均出现。未观察到SessionEnd完成通知，不补造证据。3个App Server均exit0，所属进程在预定5秒宽限内自然归零；回环监听已关闭。原生卸载成功后，宿主Git临时克隆的只读文件使常规目录清理失败；原失败记录保留，核验绝对路径及无重解析点后以PowerShell原生强制清理自有目录。复用共享SQLite还留下该控制测试任务的索引，已用原生delete精确回收本次fixture编号并只读复核索引消失，未触及开发对话。目录、进程及该索引均已闭合；不把失败后的控制器回收记成Agent自治。
+
+证据根 `C:/Users/15521/.codex/backups/accord-pause-native-20260910`：preparation.json、package-files.json、hooks-active.json记录安装和环境前提；native-chain/内case-contract.json、两阶段原始请求/响应、helper-receipts.jsonl、state-transitions.json、result.json及review.json记录有限机制效果与原失败；cleanup-recovery.json和native-index-cleanup.json记录后续回收。sandbox-plan.json与prepare_test_sandbox.py是未执行的待确认准备方案。正式范围覆盖未增加，普通新包Agent行为仍待验证。前一提交8afd1f1的CI 34447357960已九项成功，新包修复及本记录集中推送后单独核验自身CI。
+
 ## 暂停状态在继承和退役中的保护（2026-09-10）
 
 核对W01/W03/W05/W07的继承链时发现实际断点：当前bind无条件设为active，重新核对输入、更新计划或产物谓词会抹掉既有暂停；retire也可能仅凭文件匹配删除暂停状态。执行反例已复现，包含原生形状的resume事件、普通侧问、计划修订、未完责任及Stop/SessionEnd组合；属于直接运行检查点的本地机制证据，不是原生宿主或模型自主行为。
