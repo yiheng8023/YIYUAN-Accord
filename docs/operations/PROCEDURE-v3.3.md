@@ -4,6 +4,14 @@
 
 **当前工序 S0–S5 已并入 [共识节点与计划](PLAN-v3.3.md#工序与依赖)，不在本文件单独维护。** F01–F08 详细结果见 [基线](BASELINE-v3.3.md)，A01–A08 判据见 [验收](ACCEPTANCE-v3.3.md)。本记录保留旧版本称谓与失败事实，不构成当前分发或支持声明。
 
+## 共享沙箱恢复与重启前上下文设置（2026-09-10）
+
+用户确认随时可完成系统交互，并要求先修改上下文再重启继续。在保留原失败的独立证据目录重新发起已授权的异步原生恢复；本次setupStart.started=true、setupCompleted.success=true、readiness=ready。随后两项真实命令验证CodexSandboxOffline身份、工作内写入成功且相邻写入拒绝，进程exit0、未强制退出且Job归零。失败独立home与测试工作区在核验所有权、实际绝对路径及无重解析后回收；两处恢复空目录非递归移除。保留本次及旧失败日志，没有复制沙箱凭据、删除共享Windows账户、新模型调用或测试对话。记录在既有证据根shared-native-recovery-confirmed/result.json、failed-home-retirement.json与test-home-final-native.log；前一节所记的待恢复状态已由本次结果取代，原失败身份不变。
+
+上下文调整按Codex订阅入口处理。用户记得Astra/Sol的1.05M公开上限及Tibo的config.toml设置方式；两款模型的官方API页均标1,050,000，但API规格不直接证明订阅客户端生效值。本机原生目录当前为两者默认272000、最大872000、effective_context_window_percent=95；核对CLI 0.154.0的with_config_overrides及auto_compact_token_limit实现，配置窗口会与目录最大值取小，压缩线最高90%。这证明当前代码与目录的计算方式，不证明订阅永久上限或已完成重启实测。X直接抓取403后，按用户指示通过已登录的内置浏览器核对两条原帖：[配置说明](https://x.com/thsottiaux/status/2089082893804896524)给出Sol的1000000/900000配置；[补充说明](https://x.com/thsottiaux/status/2089143488696705077)明确已适用于ChatGPT账号。两帖均针对Sol，不据此宣称Tibo已发布Astra说明。
+
+共享config.toml先备份并新增1050000/945000；用户随后明确采用客户端实际上限，故最终改为顶层model_context_window=872000与model_auto_compact_token_limit=784800。原始配置与中间态分别保留，Astra及所有其它配置保持，TOML语义对比及原生CLI解析通过。未改models_cache.json、自建模型目录或切换API。按当前目录与源码，重启后预计窗口872000、可用828400、压缩线784800；实际生效仍待重启后读取宿主回执。备份与两阶段变更记录位于`C:/Users/15521/.codex/backups/context-window-20260910T101630Z/`，最终config SHA256为`3ad4986ba9eda884a10cc4193701c66a3a5bb291bd392c30cfd6f9fa667fa3e0`。这是用户授权的环境变更，不能被后续试验按旧保护哈希恢复掉。开发目标及验收不变，接续已记录环境恢复、配置变更和下一依赖，等待用户重启后继续。
+
 ## 独立配置目录的系统账户冲突与恢复（2026-09-10）
 
 用户明确确认上一切片的独立测试home原生elevated准备，授权与原sandbox-plan.json分别保存在证据根；本批实际执行，原计划中的待确认文字不再代表当前权限。首次原生setupStart返回started，完成通知却为helper_sandbox_lock_failed / SetNamedSecurityInfoW错误5；随后的readiness仍为ready，而实际命令同样失败。必须分别保留准备回执、就绪提示与执行结果。
