@@ -16,6 +16,18 @@
 
 证据根 `C:/Users/15521/.codex/backups/accord-sandbox-boundary-20260910` 保留当前 schema、原始请求/响应、无模型探针、readiness-result.json、准备标记前态及共享文件后态。原生沙箱日志为观察后副本，不是本轮动作前完整快照。当前只阻止依赖该沙箱的后续模型试验；静态修复、云端核对和其他独立工作继续，功能准入不变。
 
+用户随后明确授权该项原生更新及复验。首次 setupStart 返回 started=true 后，以 `only managed permission profiles can be enforced by the Windows sandbox` 失败；readiness 仍为 updateRequired，准备标记及三份共享配置散列一致。当前共享 sandbox_mode 为 danger-full-access，因此仅在下一次准备进程覆盖为 workspace-write，未改全局配置。第二次原生返回 started=true，系统 consent.exe 出现，但尚未收到完成通知。更新进程保留等待系统 UAC；此记录为进行中状态，非准备或恢复成功。首案 setup-result.json 保留，后案使用独立 setup-managed-execution 记录与 setup-managed-result.json，不覆盖原失败。
+
+用户完成 UAC 后，第二次原生准备返回 success=true、readiness=ready，setup-managed-result.json 记录准备标记更新和三份共享配置保持。所属更新助手及 conhost 在约 0.1 秒宽限内自然结束，最终 Job 为 0，没有强制回收。已授权的原生更新完成；前述进行中记录保留其历史时点，不再要求同一授权或 UAC。
+
+更新后探针首先在初始化阶段超时，未进入 command/exec；该次共享 CODEX_HOME 配置了新的独立 CODEX_SQLITE_HOME，所属进程 CPU 约 32 秒，最终强制回收。仅移除这个状态库覆盖、复用现有宿主库后，同一探针在数秒内正常执行。该对照支持初始化问题与这一组合有关，不足以确定内部迁移/索引根因；保留 recovered-result.json，不把此前独立 home 的命令超时混作同一故障。
+
+实际执行使用 workspaceWrite、networkAccess=false、显式私有桌面和禁用 Hook/插件/Apps 的维护进程。父子进程均成功写入自有工作区、相邻自有目标写入被拒；两者属于同一 CodexSandboxDesktop，正常退出后 Job 为 0，回环监听器和临时根均已回收。进一步只读身份探针将账户 SID 的摘要与本机原生账户核对，确认两者都是 CodexSandboxOffline，区别于控制侧身份；不保存用户名以外的身份凭据。
+
+两项限制不能被通过项抵销：自有回环 TCP 服务在 networkAccess=false 下仍可访问；OpenInputDesktop 使用读取对象权限仍能打开 Default 桌面。没有测试外部网络或输入/GUI 控制，因此不能将其描述为完全断网、完整桌面不可访问或文件关联无副作用。只读环境复核显示本轮进程未设置 CODEX_NETWORK_ALLOW_LOCAL_BINDING，准备标记 allow_local_binding=false、proxy_ports=[]，防火墙三类配置启用且 BFE/MpsSvc 运行；未调整防火墙以迎合探针结果。对照[上游防火墙实现](https://github.com/openai/codex/blob/main/codex-rs/windows-sandbox-rs/src/bin/setup_main/win/firewall.rs)只用于定位待核边界，不把随 main 变化的代码当作本机精确版本或成功证据。
+
+existing-store-result.json 与 identity-result.json 保留边界和身份结果，原失败各自保留。此次关闭原生准备与有界复验工作，不证明普通 Agent 自主保护、业务语义恢复、完全环境隔离或 3.3 准入。后续按场景实际副作用选择能力，不再为追求笼统的“完全隔离”无限重开已通过的文件/资源检查。
+
 ## 干净检出与跨系统测试准备修复（2026-09-10）
 
 提交 `896d1a87933c953c53cfc1074fcf2be133ffe911` 的 GitHub 检查 `34433873668` 暴露测试准备缺陷。已完成的 Ubuntu Python 3.10/3.12 日志均为 270 项、3 失败和 1 类初始化错误；产品及 Codex 静态步骤通过。原始失败保留，不将先前工作区检查当作该提交的云端通过。
