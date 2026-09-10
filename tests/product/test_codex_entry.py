@@ -12,6 +12,10 @@ import time
 import unittest
 from unittest.mock import patch
 
+# The preparer binds resolved executable bytes; synthetic traces must use
+# that same identity even when the interpreter was launched through a symlink.
+PYTHON = str(Path(sys.executable).resolve())
+
 SCRIPT = Path(__file__).resolve().parents[2] / "scripts/observe_codex_entry.py"
 spec = importlib.util.spec_from_file_location("observe_codex_entry", SCRIPT)
 entry = importlib.util.module_from_spec(spec)
@@ -90,7 +94,7 @@ class EntryTests(unittest.TestCase):
         (package / "runtime").mkdir(parents=True)
         (package / "runtime/task-checkpoint.cjs").write_text("// fixture", encoding="utf-8")
         args = argparse.Namespace(package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
-                                  codex=sys.executable, node=sys.executable, model="explicit-offline-model",
+                                  codex=PYTHON, node=PYTHON, model="explicit-offline-model",
                                   reasoning="high", timeout=10, windows_sandbox="elevated")
         fake = subprocess.CompletedProcess([], 0, b"app-server --ephemeral --ignore-user-config --dangerously-bypass-hook-trust --sandbox", b"")
         with patch.object(entry.subprocess, "run", return_value=fake) as calls:
@@ -111,7 +115,7 @@ class EntryTests(unittest.TestCase):
         result = [{"method": "thread/started", "params": {"thread": {"id": "native-task"}}}]
         for event in original[1:]:
             old = event["item"]
-            body = "& '" + sys.executable + "' -B order_source.py; $exitCode = $LASTEXITCODE; \"SOURCE_EXIT=$exitCode\"; exit 0"
+            body = "& '" + PYTHON + "' -B order_source.py; $exitCode = $LASTEXITCODE; \"SOURCE_EXIT=$exitCode\"; exit 0"
             completed = event["type"] == "item.completed"
             code = 75 if old["id"] == "failed" else 0
             result.append({"method": event["type"].replace(".", "/"), "params": {
@@ -156,11 +160,11 @@ class EntryTests(unittest.TestCase):
     def test_resume_requires_native_request_response_and_live_turn_window(self):
         events, requests = self.resumed_trace()
         encode = lambda rows: "\n".join(map(json.dumps, rows))
-        observed = entry.source_recovery_from_events(encode(events), sys.executable, protocol="app-server",
+        observed = entry.source_recovery_from_events(encode(events), PYTHON, protocol="app-server",
                                                      request_stream=encode(requests))
         self.assertTrue(observed["recovered"])
         self.assertEqual(observed["entryEvidence"], "matched-resume-request-response")
-        self.assertFalse(entry.source_recovery_from_events(encode(events), sys.executable, protocol="app-server")["recovered"])
+        self.assertFalse(entry.source_recovery_from_events(encode(events), PYTHON, protocol="app-server")["recovered"])
         for mutation in ("wrong-request-id", "wrong-request-method", "wrong-response-thread", "duplicate-response",
                          "duplicate-request", "history-override", "response-error", "missing-turn-end",
                          "wrong-turn", "failed-turn", "command-before-turn", "conflicting-start", "changed-cwd"):
@@ -179,7 +183,7 @@ class EntryTests(unittest.TestCase):
             elif mutation == "conflicting-start": log.insert(0, self.app_trace()[0])
             elif mutation == "changed-cwd": log[3]["params"]["item"]["cwd"] = "foreign"
             with self.subTest(mutation=mutation):
-                self.assertFalse(entry.source_recovery_from_events(encode(log), sys.executable, protocol="app-server",
+                self.assertFalse(entry.source_recovery_from_events(encode(log), PYTHON, protocol="app-server",
                                                                    request_stream=encode(outgoing))["recovered"])
 
     def test_resume_inspection_reads_request_log_without_rewriting_old_result(self):
@@ -237,20 +241,20 @@ class EntryTests(unittest.TestCase):
     def test_app_server_recovery_rejects_cross_task_turn_action_and_child_status_splicing(self):
         original = self.app_trace()
         encode = lambda events: "\n".join(map(json.dumps, events))
-        self.assertTrue(entry.source_recovery_from_events(encode(original), sys.executable, protocol="app-server")["recovered"])
-        self.assertFalse(entry.source_recovery_from_events(encode(original), sys.executable)["recovered"])
+        self.assertTrue(entry.source_recovery_from_events(encode(original), PYTHON, protocol="app-server")["recovered"])
+        self.assertFalse(entry.source_recovery_from_events(encode(original), PYTHON)["recovered"])
         malformed = original + [{"method": "item/completed", "params": {"threadId": "native-task", "item": None}}]
-        self.assertFalse(entry.source_recovery_from_events(encode(malformed), sys.executable, protocol="app-server")["recovered"])
+        self.assertFalse(entry.source_recovery_from_events(encode(malformed), PYTHON, protocol="app-server")["recovered"])
         for field, value in (("threadId", "foreign"), ("turnId", "different")):
             events = json.loads(json.dumps(original))
             events[-1]["params"][field] = value
-            self.assertFalse(entry.source_recovery_from_events(encode(events), sys.executable, protocol="app-server")["recovered"])
+            self.assertFalse(entry.source_recovery_from_events(encode(events), PYTHON, protocol="app-server")["recovered"])
         for mutate in (lambda x: x.update(aggregatedOutput="SOURCE_EXIT=0\n"),
                        lambda x: x.update(exitCode=2),
                        lambda x: x["commandActions"][0].update(command="Write-Output 'SOURCE_EXIT=0'")):
             events = json.loads(json.dumps(original))
             mutate(events[-1]["params"]["item"])
-            self.assertFalse(entry.source_recovery_from_events(encode(events), sys.executable, protocol="app-server")["recovered"])
+            self.assertFalse(entry.source_recovery_from_events(encode(events), PYTHON, protocol="app-server")["recovered"])
 
     def propagated_exit_trace(self):
         events = self.app_trace()
@@ -259,7 +263,7 @@ class EntryTests(unittest.TestCase):
             failed = item["id"] == "failed"
             tail = 'if ($code -ne 0) { exit $code }' if failed else 'exit $code'
             item["commandActions"][0]["command"] = (
-                "& '" + sys.executable + "' -B order_source.py; "
+                "& '" + PYTHON + "' -B order_source.py; "
                 '$code = $LASTEXITCODE; Write-Output "EXIT=$code"; ' + tail)
             if event["method"] == "item/completed":
                 item["exitCode"] = 75 if failed else 0
@@ -269,7 +273,7 @@ class EntryTests(unittest.TestCase):
 
     def test_app_server_recognizes_propagated_native_exit_status(self):
         events = self.propagated_exit_trace()
-        observed = entry.source_recovery_from_events("\n".join(map(json.dumps, events)), sys.executable, protocol="app-server")
+        observed = entry.source_recovery_from_events("\n".join(map(json.dumps, events)), PYTHON, protocol="app-server")
         self.assertTrue(observed["recovered"])
         self.assertEqual((observed["failedItemId"], observed["successfulItemId"]), ("failed", "success"))
 
@@ -315,7 +319,7 @@ class EntryTests(unittest.TestCase):
                     item["commandActions"][0]["command"] = body
                     item["command"] = '"C:\\PowerShell\\pwsh.exe" -Command "' + body + '"'
             with self.subTest(prefix=prefix):
-                result = entry.source_recovery_from_events("\n".join(map(json.dumps, events)), sys.executable, protocol="app-server")
+                result = entry.source_recovery_from_events("\n".join(map(json.dumps, events)), PYTHON, protocol="app-server")
                 self.assertEqual(result["recovered"], expected)
 
     def test_propagated_status_rejects_mismatch_and_forged_shell_suffix(self):
@@ -336,7 +340,7 @@ class EntryTests(unittest.TestCase):
                 elif mutation == "fixed-exit":
                     item["commandActions"][0]["command"] = item["commandActions"][0]["command"].replace("exit $code", "exit 75")
             with self.subTest(mutation=mutation):
-                self.assertFalse(entry.source_recovery_from_events("\n".join(map(json.dumps, events)), sys.executable, protocol="app-server")["recovered"])
+                self.assertFalse(entry.source_recovery_from_events("\n".join(map(json.dumps, events)), PYTHON, protocol="app-server")["recovered"])
 
     def test_prepare_is_model_free_and_command_preserves_boundaries(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -370,8 +374,8 @@ class EntryTests(unittest.TestCase):
             manifest = self.prepared(root)
             work = Path(manifest["workspace"])
             original = (work / "orders.csv").read_bytes()
-            first = subprocess.run([sys.executable, "-B", str(work / "order_source.py")], capture_output=True)
-            second = subprocess.run([sys.executable, "-B", str(work / "order_source.py")], capture_output=True)
+            first = subprocess.run([PYTHON, "-B", str(work / "order_source.py")], capture_output=True)
+            second = subprocess.run([PYTHON, "-B", str(work / "order_source.py")], capture_output=True)
             self.assertEqual(first.returncode, 75)
             self.assertIn(b"temporarily unavailable", first.stderr)
             self.assertEqual(second.returncode, 0)
@@ -383,7 +387,7 @@ class EntryTests(unittest.TestCase):
             self.assertFalse(result["outputsMatch"])
 
     def trace(self, *, first_code=1, second_code=0, first_command=None, reverse=False):
-        command = '"C:\\Program Files\\PowerShell\\7\\pwsh.exe" -Command "& \'' + sys.executable + "' -B order_source.py\""
+        command = '"C:\\Program Files\\PowerShell\\7\\pwsh.exe" -Command "& \'' + PYTHON + "' -B order_source.py\""
         failure = "Local order source temporarily unavailable. Retry this same command.\r\n"
         def pair(identity, code, text, native_command):
             item = {"id": identity, "type": "command_execution", "command": native_command}
@@ -413,14 +417,14 @@ class EntryTests(unittest.TestCase):
     def test_recovery_rejects_successes_reversed_order_and_printed_error_templates(self):
         commands = [
             '"C:\\Program Files\\PowerShell\\7\\pwsh.exe" -Command "Get-Content order_source.py"',
-            '"C:\\Program Files\\PowerShell\\7\\pwsh.exe" -Command "Write-Output \'Local order source temporarily unavailable. Retry this same command.\'; & \'' + sys.executable + "' -B order_source.py\"",
-            '"C:\\Program Files\\PowerShell\\7\\pwsh.exe" -Command "Write-Output \'& ' + sys.executable + " -B order_source.py'\"",
+            '"C:\\Program Files\\PowerShell\\7\\pwsh.exe" -Command "Write-Output \'Local order source temporarily unavailable. Retry this same command.\'; & \'' + PYTHON + "' -B order_source.py\"",
+            '"C:\\Program Files\\PowerShell\\7\\pwsh.exe" -Command "Write-Output \'& ' + PYTHON + " -B order_source.py'\"",
         ]
         counterexamples = [self.trace(first_code=0), self.trace(second_code=1), self.trace(reverse=True)]
         counterexamples += [self.trace(first_command=command) for command in commands]
         for stream in counterexamples:
             with self.subTest(stream=stream):
-                self.assertFalse(entry.source_recovery_from_events(stream, sys.executable)["recovered"])
+                self.assertFalse(entry.source_recovery_from_events(stream, PYTHON)["recovered"])
 
     def test_recovery_requires_matching_unique_native_start_completion_pairs(self):
         events = [json.loads(line) for line in self.trace().splitlines()]
@@ -433,7 +437,7 @@ class EntryTests(unittest.TestCase):
         mutations.append(wrong_csv)
         for mutation in mutations:
             stream = "\n".join(json.dumps(event) for event in mutation)
-            self.assertFalse(entry.source_recovery_from_events(stream, sys.executable)["recovered"])
+            self.assertFalse(entry.source_recovery_from_events(stream, PYTHON)["recovered"])
 
     def test_file_oracle_rejects_wrong_total_and_reports_input_damage(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -481,7 +485,7 @@ class EntryTests(unittest.TestCase):
         process = None
         try:
             code = "import subprocess,sys,time; subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)']); time.sleep(2)"
-            process = subprocess.Popen([sys.executable, "-c", code], creationflags=subprocess.CREATE_NO_WINDOW | 4)
+            process = subprocess.Popen([PYTHON, "-c", code], creationflags=subprocess.CREATE_NO_WINDOW | 4)
             job.attach_and_resume(process)
             deadline = time.monotonic() + 5
             observed = job.sample()

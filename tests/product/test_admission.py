@@ -838,7 +838,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
         cls.git("add", ".")
         cls.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
-                "commit", "--quiet", "-m", "Bind synthetic v3.3 admission subject")
+                "commit", "--quiet", "--allow-empty", "-m", "Bind synthetic v3.3 admission subject")
 
     def assess(self, contract=None, observer=None):
         from yiyuan_accord.admission import assess_development_evidence, evidence_subject
