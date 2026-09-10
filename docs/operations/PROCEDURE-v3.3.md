@@ -4,6 +4,14 @@
 
 **当前工序 S0–S5 已并入 [共识节点与计划](PLAN-v3.3.md#工序与依赖)，不在本文件单独维护。** F01–F08 详细结果见 [基线](BASELINE-v3.3.md)，A01–A08 判据见 [验收](ACCEPTANCE-v3.3.md)。本记录保留旧版本称谓与失败事实，不构成当前分发或支持声明。
 
+## 进程配置驱动的独立插件缓存预验证（2026-09-10）
+
+为复用已恢复的共享Windows沙箱而避免再次生成冲突账户，核对原生CLI 0.154.0帮助、配置schema及[插件管理实现](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core-plugins/src/manager.rs)。直接install会同时写用户启用配置；当前schema没有独立cache/沙箱凭据根，但[原生加载器](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core-plugins/src/loader.rs)可按有效配置中的本地市场与插件键生成缓存，[市场配置解析](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core-plugins/src/installed_marketplaces.rs)接受进程配置层。此路线使用不同测试市场身份，保持完整插件包字节，不改产品名称、源码版本或现装包。
+
+在自有临时home中实际运行plugin/list与skills/list(forceReload)：原生生成的12文件缓存与当前源码逐字节一致，第二次发现读取到1项目标Skill，home中没有持久config.toml。首次准备因将共享MCP的disable-only配置投射到空home，缺少transport而原生退出；去除空home中不适用的覆盖后复验通过，原失败、脚本和回执保留。两次均无模型、测试任务或沙箱准备调用；复验进程exit0、未强制退出、Job归零，临时home/工作区/市场回收，共享3配置及现装12文件保持。原生内部缓存刷新存在异步阶段，不能把首次未发现直接判成配置失效。
+
+证据根`C:/Users/15521/.codex/backups/accord-shared-sandbox-projection-20260910/`保留upstream-*.rs、rehearsal-result.json、rehearsal-v2-result.json及两次原生记录。共享阶段已准备可预览的shared_preflight.py与shared-test-plan.json，精确目标为plugins/cache/accord-eval-20260910；拟只在试验进程启用当前包及信任6项精确Hook，核对既有沙箱ready、工作内写入/相邻拒绝、配置保护及归属清理，180秒原生请求上限另留清理余量。默认预览不安装、不启用；共享执行尚未授权及运行。原生插件发现仍可能维护通常的目录缓存，不能声称整个宿主完全隔离。此结果解决候选路径的局部可行性，不计普通Agent暂停恢复、自主协调或正式验收通过。
+
 ## 重启后的上下文窗口显示验证（2026-09-10）
 
 用户重启后首张截图仍显示258k总窗口、已用82k（32%）。只读核对共享配置仍为872000/784800，实际桌面后端使用原生CLI，刷新目录版本0.154.0，Astra目录最大值872000。排查期间用户明确报告已生效，并提供当前Astra界面截图：总828k、已用98k（12%），与872000×95%=828400的预期可用窗口一致。本次确认当前任务的扩大窗口显示已生效；未观察到自动压缩触发，不推算其次数或收益，也不把旧显示的具体刷新原因写成已确诊。没有进一步配置变更、新测试任务或后台运行器；停止已无必要的排查，不要求再次重启。两张用户截图分别为codex-clipboard-efbc80b2-0a93-43e2-aa86-d87bbfb9d286.png与codex-clipboard-fdcf8d2d-2e2f-4b27-9ee5-c218893e3c3e.png，原始附件在本任务中保留；下节的待重启状态为此前时点。
