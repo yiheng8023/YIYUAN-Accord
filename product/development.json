@@ -4599,7 +4599,6 @@
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
-            "docs/operations/PROCEDURE-v3.3.md",
             "plugins/yiyuan-accord-codex/hooks/hooks.json",
             "runtime/task-checkpoint.cjs",
             "tests/product/test_task_checkpoint.py",
@@ -4679,7 +4678,6 @@
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
-            "docs/operations/PROCEDURE-v3.3.md",
             "plugins/yiyuan-accord-codex/hooks/hooks.json",
             "runtime/task-checkpoint.cjs",
             "tests/product/test_task_checkpoint.py",

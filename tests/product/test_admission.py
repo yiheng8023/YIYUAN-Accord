@@ -945,6 +945,33 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 return result
             self.assertEqual(self.assess(observer=replay)["acceptedCases"], [])
 
+    def test_history_append_preserves_current_evidence_but_plan_change_does_not(self):
+        retained = None
+        def capture(request):
+            nonlocal retained
+            result = self.observer(request)
+            if request["phase"] == "observe": retained = copy.deepcopy(result["records"])
+            return result
+        expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"])
+        self.assertEqual(self.assess(observer=capture)["acceptedCases"], expected)
+        def replay(request):
+            result = self.observer(request)  # Reviews still bind the current candidate.
+            if request["phase"] == "observe": result["records"] = copy.deepcopy(retained)
+            return result
+        with self.history():
+            for name in ("PROCEDURE-v3.3.md", "CONTINUATION.md"):
+                path = self.root / "docs/operations" / name
+                path.write_text(path.read_text(encoding="utf-8") + "\nSynthetic historical observation only.\n", encoding="utf-8")
+            self.commit(self.contract)
+            report = self.assess(observer=replay)
+            self.assertEqual(report["errors"], [])
+            self.assertEqual(report["acceptedCases"], expected)
+            self.assertFalse(report["candidateEligible"])
+            plan = self.root / "docs/operations/PLAN-v3.3.md"
+            plan.write_text(plan.read_text(encoding="utf-8") + "\nChanged synthetic normative decision.\n", encoding="utf-8")
+            self.commit(self.contract)
+            self.assertEqual(self.assess(observer=replay)["acceptedCases"], [])
+
     def test_complete_synthetic_coverage_uses_existing_review_and_recheck_chain(self):
         contract = copy.deepcopy(self.contract)
         policy = contract["acceptance"]["admission"]
