@@ -867,7 +867,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
         self.assertFalse(any(r["complete"] for r in report["acceptanceRequirements"].values()))
-        self.assertIn("v33-chatgpt-entry-coverage", report["unboundCoverage"]["function"])
+        self.assertIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
         self.assertEqual(report["progress"]["coverageVerified"], 3)
         self.assertEqual(report["progress"]["requirementsComplete"], 0)
