@@ -62,6 +62,139 @@ class TaskCheckpointTests(unittest.TestCase):
         (self.work / "summary.json").write_text(json.dumps({"total": total}), encoding="utf-8")
         (self.work / "details.csv").write_text(f"id,units\nA,{total}\n", encoding="utf-8")
 
+    def test_native_text_survives_side_question_compact_and_pause_without_new_authority(self):
+        goal = '交付 review.json 和 review.md；不得读取上级目录。原样保留 🌱 与 "引文"。'
+        correction = '同意，补充检查引用；保持暂停，先不要交付。'
+        self.event('UserPromptSubmit', prompt=goal)
+        self.bind(unresolved=['Await the requested review.'])
+        self.pause('User decision remains pending.')
+        self.event('UserPromptSubmit', prompt=correction)
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.event('SessionStart', source='compact')
+        page = self.invoke({'op': 'read-native-input'})
+        self.assertEqual([row['text'] for row in page['entries']][1:], [goal, correction])
+        self.assertIsNone(page['next'])
+        status = self.status()
+        self.assertEqual(status['mode'], 'paused')
+        self.assertFalse(status['currentInputReconciled'])
+        self.assertEqual(status['checkpoint']['unresolved'], ['Await the requested review.'])
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_native_text_paging_preserves_unicode_and_captured_order(self):
+        expected = ['甲🌱乙\n"丙"', '', '同意。']
+        for prompt in expected:
+            self.event('UserPromptSubmit', prompt=prompt)
+        cursor = {'index': 1, 'offset': 0}
+        restored = {index: '' for index in range(1, 4)}
+        before = self.status()
+        while cursor is not None:
+            page = self.invoke({'op': 'read-native-input', 'maxChars': 2, **cursor})
+            self.assertLessEqual(sum(len(row['text']) for row in page['entries']), 2)
+            for row in page['entries']:
+                restored[row['index']] += row['text']
+                self.assertEqual(row['promptSha256'], hashlib.sha256(expected[row['index'] - 1].encode()).hexdigest())
+            self.assertNotEqual(page['next'], cursor)
+            cursor = page['next']
+        self.assertEqual(list(restored.values()), expected)
+        self.assertEqual(self.status(), before)
+        for fields in ({'index': -1}, {'offset': -1}, {'offset': 9999}, {'maxChars': 0}, {'maxChars': 16001}):
+            self.assertIn('invalid-input-page', self.invoke({'op': 'read-native-input', **fields}, success=False))
+
+    def test_legacy_receipt_does_not_invent_missing_native_text(self):
+        path = next(self.state.glob('*.input.json'))
+        legacy = json.loads(path.read_text(encoding='utf-8'))
+        del legacy['nativeInputs']
+        path.write_text(json.dumps(legacy), encoding='utf-8')
+        before = path.read_bytes()
+        page = self.invoke({'op': 'read-native-input'})
+        self.assertFalse(page['available'])
+        self.assertEqual(page['entries'], [])
+        self.assertEqual(path.read_bytes(), before)
+        self.event('UserPromptSubmit', prompt='A newly captured side question.')
+        page = self.invoke({'op': 'read-native-input'})
+        self.assertEqual(page['coverage'], 'captured-hook-inputs-only')
+        self.assertEqual([row['text'] for row in page['entries']], ['A newly captured side question.'])
+
+    def test_host_continuation_is_not_retained_as_a_new_user_request(self):
+        self.bind()
+        continuation = self.event('Stop')['reason']
+        original = self.invoke({'op': 'read-native-input'})['entries']
+        self.event('UserPromptSubmit', prompt=continuation)
+        self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'], original)
+        self.event('SessionStart', source='resume')
+        recovery_epoch = self.status()['epoch']
+        self.event('UserPromptSubmit', prompt='Actual retained native input.', recovery_epoch=recovery_epoch)
+        page = self.invoke({'op': 'read-native-input'})
+        self.assertEqual(page['entries'][-1]['source'], 'retained-native-replay')
+        self.assertEqual(page['entries'][-1]['text'], 'Actual retained native input.')
+        self.assertEqual(page['entries'][-1]['recoveryEpoch'], recovery_epoch)
+        self.assertNotEqual(page['entries'][-1]['epoch'], recovery_epoch)
+
+    def test_large_retained_inputs_survive_failed_publication_recovery_and_retirement(self):
+        for prompt in ('a' * 80000, 'b' * 80000):
+            self.event('UserPromptSubmit', prompt=prompt)
+        self.bind()
+        path = next(self.state.glob('*.input.json'))
+        self.assertGreater(path.stat().st_size, 128 * 1024)
+        before = path.read_bytes()
+        self.preload = self.root / 'fail-input-write.cjs'
+        self.preload.write_text("const fs=require('node:fs');const rename=fs.renameSync;"
+            "fs.renameSync=(a,b)=>{if(String(b).endsWith('.input.json'))throw Error('receipt-write-failed');return rename(a,b)};", encoding='utf-8')
+        self.assertIn('receipt-write-failed', self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Still paused.'}, hook=True, success=False))
+        del self.preload
+        self.assertEqual(path.read_bytes(), before)
+        self.assertIn('EEXIST', self.invoke({'op': 'status'}, success=False))
+        self.invoke({'op': 'recover-lock', 'lock': 'input'})
+        page = self.invoke({'op': 'read-native-input', 'index': 2, 'maxChars': 1})
+        self.assertEqual(page['entries'][0]['text'], 'b')
+        self.assertTrue(self.status()['needsNativeReplay'])
+        self.event('UserPromptSubmit', prompt='Finish the approved delivery.', recovery_epoch=self.status()['epoch'])
+        self.bind()
+        self.event('SessionEnd')
+        self.assertEqual(self.status()['recoveryInputs']['count'], 4)
+        self.write_outputs()
+        current = self.status()
+        self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': current['revision']})
+        self.assertFalse(list(self.state.glob('*.input.json')))
+
+    def test_corrupt_retained_text_is_not_returned_or_repaired_by_readback(self):
+        path = next(self.state.glob('*.input.json'))
+        value = json.loads(path.read_text(encoding='utf-8'))
+        value['nativeInputs'][0]['prompt'] = 'Corrupted goal and authority.'
+        path.write_text(json.dumps(value), encoding='utf-8')
+        before = path.read_bytes()
+        self.assertIn('invalid-retained-input', self.invoke({'op': 'read-native-input'}, success=False))
+        self.assertEqual(path.read_bytes(), before)
+        value['nativeInputs'][0]['promptSha256'] = hashlib.sha256(value['nativeInputs'][0]['prompt'].encode()).hexdigest()
+        value['nativeInputs'][0]['recoveryEpoch'] = 'contradictory-replay-identity'
+        path.write_text(json.dumps(value), encoding='utf-8')
+        before = path.read_bytes()
+        self.assertIn('invalid-retained-input', self.invoke({'op': 'read-native-input'}, success=False))
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_full_input_receipt_rejects_capture_without_silently_dropping_history(self):
+        path = next(self.state.glob('*.input.json'))
+        value = json.loads(path.read_text(encoding='utf-8'))
+        prompt = 'x' * 120000
+        value['nativeInputs'] = [dict(epoch=f'fixture-{index}', turnId=None, source='native-input-event',
+            prompt=prompt, promptSha256=hashlib.sha256(prompt.encode()).hexdigest()) for index in range(69)]
+        path.write_text(json.dumps(value), encoding='utf-8')
+        self.assertLess(path.stat().st_size, 8 * 1024 * 1024)
+        before = path.read_bytes()
+        self.assertIn('oversize-state-object', self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt}, hook=True, success=False))
+        self.assertEqual(path.read_bytes(), before)
+        self.assertIn('EEXIST', self.invoke({'op': 'status'}, success=False))
+        self.invoke({'op': 'recover-lock', 'lock': 'input'})
+        self.assertTrue(self.status()['needsNativeReplay'])
+        self.assertEqual(self.status()['recoveryInputs']['count'], 69)
+
+    def test_unbound_input_retirement_removes_text_without_touching_other_sessions(self):
+        self.event('UserPromptSubmit', session_id='other-session', prompt='Other task data.')
+        self.event('SessionEnd')
+        self.assertIn('native-user-input-receipt-missing', self.invoke({'op': 'read-native-input'}, success=False))
+        other = self.invoke({'op': 'read-native-input', 'session_id': 'other-session'})
+        self.assertEqual([row['text'] for row in other['entries']], ['Other task data.'])
+
     def test_compact_reentry_preserves_pause_identity_and_pending_contract(self):
         self.bind(unresolved=['The customer scope remains undecided.'])
         self.pause('Wait for the customer decision.')

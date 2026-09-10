@@ -16,6 +16,7 @@ const samePath = (left, right) => process.platform === 'win32'
 const fail = (message) => { throw new Error(message); };
 const text = (value) => typeof value === 'string' && value.trim().length > 0;
 const needsInput = (input) => input?.needsNativeReplay || input?.needsResumeReconciliation;
+const INPUT_RECEIPT_LIMIT = 8 * 1024 * 1024;
 
 function regular(file, limit = 8 * 1024 * 1024) {
   const stat = fs.lstatSync(file);
@@ -24,15 +25,15 @@ function regular(file, limit = 8 * 1024 * 1024) {
   return fs.readFileSync(file);
 }
 
-function readJson(file) {
-  const value = JSON.parse(regular(file, 128 * 1024).toString('utf8'));
+function readJson(file, limit = 128 * 1024) {
+  const value = JSON.parse(regular(file, limit).toString('utf8'));
   if (!value || typeof value !== 'object' || Array.isArray(value)) fail('invalid-state-object');
   return value;
 }
 
-function atomic(file, value) {
+function atomic(file, value, limit = 128 * 1024) {
   const encoded = JSON.stringify(value);
-  if (Buffer.byteLength(encoded) > 128 * 1024) fail('oversize-state-object');
+  if (Buffer.byteLength(encoded) > limit) fail('oversize-state-object');
   const temporary = `${file}.${crypto.randomUUID()}.tmp`;
   let descriptor = null;
   try {
@@ -41,7 +42,7 @@ function atomic(file, value) {
     fs.fsyncSync(descriptor);
     fs.closeSync(descriptor);
     descriptor = null;
-    if (fs.existsSync(file)) regular(file, 128 * 1024);
+    if (fs.existsSync(file)) regular(file, limit);
     fs.renameSync(temporary, file);
   } finally {
     if (descriptor !== null) fs.closeSync(descriptor);
@@ -102,7 +103,7 @@ function markInputFailure(where, workspace = false) {
 }
 
 function readInput(where) {
-  const input = fs.existsSync(where.input) ? readJson(where.input) : null;
+  const input = fs.existsSync(where.input) ? readJson(where.input, INPUT_RECEIPT_LIMIT) : null;
   const failures = {};
   for (const [key, file] of [['session', where.failure], ['workspace', where.workspaceFailure]]) {
     if (fs.existsSync(file)) {
@@ -117,6 +118,45 @@ function readInput(where) {
   // replay cannot acknowledge a later loss merely because the old epoch stayed.
   return {...input, epoch: sha(canonical({receiptEpoch: input?.epoch || null, failures})),
           needsNativeReplay: true, failures};
+}
+
+function retainedInputs(input) {
+  if (!Object.hasOwn(input || {}, 'nativeInputs')) return null;
+  const entries = input.nativeInputs;
+  if (!Array.isArray(entries) || entries.some((entry) => !entry || !text(entry.epoch) ||
+      typeof entry.prompt !== 'string' || entry.promptSha256 !== sha(entry.prompt) ||
+      Object.hasOwn(entry, 'recoveryEpoch') && (entry.source !== 'retained-native-replay' ||
+        entry.recoveryEpoch !== null && !text(entry.recoveryEpoch)) ||
+      !['native-input-event', 'retained-native-replay'].includes(entry.source))) fail('invalid-retained-input');
+  return entries;
+}
+
+// Recovery evidence only. Paging does not reconcile current input or grant access
+// to another session, attachments, work progress or unrecorded earlier history.
+function readNativeInput(request, input) {
+  const entries = retainedInputs(input);
+  const result = {available: entries !== null, coverage: 'captured-hook-inputs-only',
+    receiptEpoch: input.epoch, count: entries?.length || 0, entries: [], next: null};
+  if (entries === null) return result;
+  let index = request.index ?? 0;
+  let offset = request.offset ?? 0;
+  let remaining = request.maxChars ?? 4000;
+  if (![index, offset, remaining].every(Number.isSafeInteger) || index < 0 || index > entries.length ||
+      offset < 0 || remaining < 1 || remaining > 16000 || index === entries.length && offset !== 0) fail('invalid-input-page');
+  while (index < entries.length && remaining > 0 && result.entries.length < 20) {
+    const entry = entries[index];
+    const characters = Array.from(entry.prompt);
+    if (offset > characters.length) fail('invalid-input-page');
+    const content = characters.slice(offset, offset + remaining);
+    result.entries.push({index, epoch: entry.epoch, turnId: entry.turnId, source: entry.source,
+      ...(Object.hasOwn(entry, 'recoveryEpoch') ? {recoveryEpoch: entry.recoveryEpoch} : {}),
+      promptSha256: entry.promptSha256, totalChars: characters.length, offset, text: content.join('')});
+    remaining -= content.length;
+    offset += content.length;
+    if (offset === characters.length) { index++; offset = 0; }
+  }
+  if (index < entries.length) result.next = {index, offset};
+  return result;
 }
 
 function relative(root, name) {
@@ -245,7 +285,7 @@ function locked(where, callback, wait = false, retainOnFailure = false) {
 const inputLocked = (where, callback, retainOnFailure = false) =>
   locked({...where, lock: where.input + '.lock'}, callback, true, retainOnFailure);
 function publishInput(where, input) {
-  try { atomic(where.input, input); }
+  try { atomic(where.input, input, INPUT_RECEIPT_LIMIT); }
   catch (error) { error.inputPublicationFailed = true; throw error; }
 }
 function currentEpoch(where, epoch) {
@@ -257,7 +297,7 @@ function currentEpoch(where, epoch) {
 function retireFiles(where, epoch, prior = null) {
   return inputLocked(where, () => {
     const input = currentEpoch(where, epoch);
-    const receipt = fs.existsSync(where.input) ? readJson(where.input) : null;
+    const receipt = fs.existsSync(where.input) ? readJson(where.input, INPUT_RECEIPT_LIMIT) : null;
     const files = [[where.state, prior], [where.input, receipt]].filter(([, value]) => value !== null);
     try {
       for (const [file] of files) fs.unlinkSync(file);
@@ -269,7 +309,9 @@ function retireFiles(where, epoch, prior = null) {
     } catch (error) {
       // Both locks are still held; restore only our missing checkpoint files,
       // never erase failure watermarks. Storage failure still requires a caller.
-      for (const [file, value] of files) if (!fs.existsSync(file)) atomic(file, value);
+      for (const [file, value] of files) if (!fs.existsSync(file)) {
+        atomic(file, value, file === where.input ? INPUT_RECEIPT_LIMIT : 128 * 1024);
+      }
       throw error;
     }
   });
@@ -472,7 +514,7 @@ function operate(request) {
     // releasing the dead input lock; a surviving caller must replay the actual
     // current native event. Do not invent a receipt when none ever existed.
     if (inputRecovery && fs.existsSync(where.input)) {
-      atomic(where.input, {...readJson(where.input), epoch: crypto.randomUUID(), needsNativeReplay: true});
+      publishInput(where, {...readJson(where.input, INPUT_RECEIPT_LIMIT), epoch: crypto.randomUUID(), needsNativeReplay: true});
     }
     fs.unlinkSync(file);
     return {recovered: true, scope: inputRecovery ? 'dead-input-lock-and-receipt-invalidation'
@@ -484,10 +526,12 @@ function operate(request) {
   return locked(where, () => {
     const currentInput = inputLocked(where, () => readInput(where));
     if (!currentInput) fail('native-user-input-receipt-missing');
+    if (request.op === 'read-native-input') return readNativeInput(request, currentInput);
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (request.op === 'assess-context') return assessContext(request, prior, currentInput);
     if (request.op === 'status') return {epoch: currentInput.epoch, revision: prior?.revision || 0,
       storage: where.storage,
+      recoveryInputs: {available: Array.isArray(currentInput.nativeInputs), count: currentInput.nativeInputs?.length || 0},
       inputSource: currentInput.inputSource || 'unspecified-legacy-receipt',
       hostObservation: currentInput.hostObservation || null,
       hostObservationCurrent: Boolean(currentInput.hostObservation) && !needsInput(currentInput) && !currentInput.interrupted,
@@ -607,6 +651,7 @@ function handleHook(event) {
         'preserve existing pauses and input-loss recovery requirements. Missing sources cannot be reconstructed from a receipt hash.'}};
     output.hookSpecificOutput.additionalContext = 'Accord context recovery: this is not new user input or completed restoration. ' +
       'Recover the goal, authority, pauses, unresolved work and prior effects from bound task sources or permitted native history before acting. ' +
+      'Use read-native-input via helper help for retained input text when needed; its captured range does not include all history, attachments or work progress. ' +
       'Context loss grants no wider data access. If material scope or authority remains unrecoverable, hold dependent effects and request only the missing input. ' +
       output.hookSpecificOutput.additionalContext;
     return output; // Context loss does not alter the input identity or authorize a state transition.
@@ -649,6 +694,10 @@ function handleHook(event) {
     const input = {schema: 1, epoch: crypto.randomUUID(), promptSha256: sha(event.prompt),
       turnId: event.turn_id || null, continuation: null, failures: previous?.failures || {},
       inputSource: 'native-input-event', hostObservation: observeNativeHost(event, previous)};
+    input.nativeInputs = [...(retainedInputs(previous) || []), {epoch: input.epoch, turnId: input.turnId,
+      source: Object.hasOwn(event, 'recovery_epoch') ? 'retained-native-replay' : 'native-input-event',
+      ...(Object.hasOwn(event, 'recovery_epoch') ? {recoveryEpoch: event.recovery_epoch} : {}),
+      promptSha256: input.promptSha256, prompt: event.prompt}];
     publishInput(where, input);
     return hint(event, where, input, prior);
     }, true); // Preserve a failed publication as a recoverable lock, not stale success.
@@ -714,6 +763,12 @@ const HELP = {
   input: 'One JSON object on stdin. Use --hook only for native events; other calls need the current native session/cwd receipt.',
   storage: 'YIYUAN_ACCORD_TASK_STATE_DIR selects an explicit scoped directory. Otherwise use ~/.yiyuan-accord/task-state. Exact-session legacy temporary records remain at their original location; competing locations fail without merge. status.storage reports the selected path and kind. No automatic migration, cross-session adoption, scheduler or power-loss guarantee. State file contents are flushed before atomic replacement; filesystem and directory-entry durability need separate validation.',
   status: {op: 'status', session_id: 'native-session-id', cwd: 'absolute-workspace'},
+  retainedInputs: {
+    read: {op: 'read-native-input', session_id: 'native-session-id', cwd: 'absolute-workspace', index: 0, offset: 0, maxChars: 4000},
+    paging: 'Defaults read from the first captured event, with at most 4000 Unicode code points and 20 entries. maxChars may be 1..16000. Pass returned next.index and next.offset unchanged for the next page; null means the captured end, not the end of all task history. Text hashes cover full original strings, not fragments. Legacy receipts report unavailable instead of inventing text.',
+    scope: 'Retains successful native input-event text and explicitly identified native replays in the existing local receipt. Replay entries preserve the consumed recoveryEpoch; missing is unknown, while null denotes an explicit replay without a prior receipt. Our recognized Stop continuation does not add a user input. Events and embedded quotations are not automatically new human decisions; reconcile original source, current input, authority and effects. Capture is not complete conversation, attachment content, model reasoning, a semantic checkpoint or an access grant. Reads preserve pause, quarantine and checkpoint state.',
+    lifecycle: 'Input receipts, including captured text, are bounded to 8 MiB and never silently truncated; full storage fails capture and preserves existing failure/replay protection. Transport and bound checkpoint JSON remain limited to 128 KiB. Existing scoped storage and retirement apply: bound work retains the receipt at session end; reconciled unbound receipts end with SessionEnd or verified caller retirement. No new service, transcript scan or model call. Preserve a compatible executor; older versions may not retain or expose text. This local copy may contain sensitive user text and must not be published as routine evidence.'
+  },
   contextBudget: {
     operation: 'assess-context',
     binding: 'Use status session/cwd/epoch/expectedRevision plus current conditions: threadId, turnId, hostVersion, model, contextGeneration. The native caller must independently bind these; shared session is not thread/writer identity.',

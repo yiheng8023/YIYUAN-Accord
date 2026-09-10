@@ -78,6 +78,9 @@ When needed and Node/native input receipts are available, read
 bind/revise, pause, retire and recovery interface. Use inspected inputs and
 meaningful output predicates; existence is not semantic adequacy. Input recovery
 requires actual retained native input, never a reconstruction from old state.
+When that text is missing from context, use the helper's `read-native-input`
+pages if available. They cover captured input only, not all history, attachments
+or progress, and do not reconcile current authority or clear a pause.
 For already identified unmet result or fact conditions that need this protection,
 use the helper's `unresolved` binding described in `--help`; matched files cannot
 clear those conditions. Verify evidence or an authorized scope change before

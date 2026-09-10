@@ -2,11 +2,12 @@
 
 ## Active post-v3.1 development successor
 
-[product/development.json](../product/development.json) owns the current goal,
-source assumptions, conditional strategies, duties, quality floors and acceptance.
-[The visible plan](operations/PLAN-v3.2.md) is generated from that source.
-Targeting 3.2 does not change installed or released 3.1. Codex/ChatGPT and Claude
-remain the bound host families; additional vendors are deferred.
+[The v3.3 consensus and plan](operations/PLAN-v3.3.md) owns current decisions,
+source assumptions, duties, quality floors and non-linear procedures; its linked
+acceptance view defines the criteria. [product/development.json](../product/development.json)
+is the machine validation projection. Version 3.3 distributes only the applicable
+OpenAI adaptation. Earlier releases and host observations keep their historical
+identities; current implementation or documentation does not grant publication.
 
 Begin design review with necessary user results and actual conditions, not
 confidence in inherited assets. Goals and human decision authority constrain
@@ -79,8 +80,8 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current candidate and scoped connections
 
-Both packages target `3.2.0`; a frozen version is not publication evidence. Each exposes one host
-Skill, the existing optional resume/compact hint, and a Node task checkpoint
+The current Codex package targets `3.3.0-dev.1`; versioning is not publication
+evidence. It exposes one host Skill, the existing resume/compact hint, and a Node task checkpoint
 connected to supported UserPromptSubmit, Stop and SessionEnd events. Codex also
 connects Interrupt. The Agent binds necessary file inputs, output predicates and
 the next authorized action against the current native input receipt. The helper
@@ -109,8 +110,21 @@ before rejecting a concurrent input failure; partial deletion is also compensate
 These operations preserve failure watermarks and are not an external-writer
 transaction. If failure storage or compensation itself cannot work, the native
 caller must hold and recover through sufficient means; cross-process protection
-is unknown. Input/state JSON is bounded to 128 KiB, never silently truncated.
-Input text is hashed, not retained. Failure watermarks remain until their owning
+is unknown. Transport and bound checkpoint JSON remain bounded to 128 KiB.
+The input receipt retains successfully captured native input text and its hash
+in event order, bounded to 8 MiB without silent truncation. Recognized own Stop
+callbacks are not appended as user input; explicit recovery replays remain labeled.
+`read-native-input` returns bounded Unicode-safe pages only when requested, with
+original hashes and a continuation cursor. It does not replay an event, clear
+quarantine or a pause, or authorize effects. Legacy receipts report unavailable
+text; the captured range is not complete prior history, attachments, progress
+or proof that embedded text represents a new human decision. Corrupt text is
+rejected. Full storage fails capture using the existing failure/replay protection.
+This local copy can contain sensitive user text and must not be included in routine
+public evidence. It follows the same receipt retirement rules below, without a
+new service, transcript scan or model request. An older executor may omit this
+field or reader; retain a compatible executor for unfinished recovery needs.
+Failure watermarks remain until their owning
 state directory can safely be retired, without clearing another task's uncertainty.
 SessionEnd removes only reconciled unbound receipts. A native input blocked by another
 Hook can exit without either callback; a surviving caller that verifies this
@@ -118,7 +132,9 @@ exit can retire only the matching unbound receipt using its current epoch,
 revision zero and a reason. This operation cannot retire a bound checkpoint or
 establish task completion. Without a callback or surviving caller, automatic
 retirement is not established; the helper does not supply its own scheduler.
-The default temporary state directory may remain empty; it is not an installed
+The default durable directory is `~/.yiyuan-accord/task-state`; an explicit scoped
+directory can override it. Exact-session legacy temporary data stays in place;
+conflicting locations are not merged. An empty state directory is not an installed
 package cache or an archive executor. CLI checks establish local behavior; exact
 native loading and ordinary task use remain separate observations. The retained
 dev.17 input observations establish exact package/argv/event/receipt connection
