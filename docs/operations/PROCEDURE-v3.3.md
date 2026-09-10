@@ -4,6 +4,16 @@
 
 **当前工序 S0–S5 已并入 [共识节点与计划](PLAN-v3.3.md#工序与依赖)，不在本文件单独维护。** F01–F08 详细结果见 [基线](BASELINE-v3.3.md)，A01–A08 判据见 [验收](ACCEPTANCE-v3.3.md)。本记录保留旧版本称谓与失败事实，不构成当前分发或支持声明。
 
+## 暂停状态在继承和退役中的保护（2026-09-10）
+
+核对W01/W03/W05/W07的继承链时发现实际断点：当前bind无条件设为active，重新核对输入、更新计划或产物谓词会抹掉既有暂停；retire也可能仅凭文件匹配删除暂停状态。执行反例已复现，包含原生形状的resume事件、普通侧问、计划修订、未完责任及Stop/SessionEnd组合；属于直接运行检查点的本地机制证据，不是原生宿主或模型自主行为。
+
+修复沿用既有绑定：暂停及其原因默认保留，单独的resumeReason才表达恢复处置；它必须有已暂停对象及非空有界理由，实际授权仍由调用者核实。bind回读最终mode，status回读恢复理由；一般revisionReason、新输入或文件匹配都不解除暂停。正常退役要求先处置暂停，明确用户取消路径仍保留。旧输入、输入丢失、未完条件、并发与有界Stop约束不放宽。首次全63项运行的两项失败是新增暂停检查遮盖了旧输入/丢失输入的更早诊断，已恢复原检查顺序并保留失败记录。一个既有中断测试也明确建立真实active前态，避免默认暂停让其空转通过。
+
+整包体量检查曾因代码与测试余量不足拒绝本批；没有提高1500000字节上限或减少75000字节保留量。收紧重复接口说明、提取同义暂停准备，保留原行为断言后，最终63项检查点回归及4项受影响交付回归通过；最终开发、产品与Codex静态准入检查均valid=true，functionalCompletion/candidateEligible仍false。新12文件包摘要 `58ff6adadd69c51228556028ee07e866e0073b72c4f616315fe461b8a88188b8`，Skill 10195字节；源码与包内运行时一致，包内帮助实际执行成功。当前共享缓存仍是 `40bbebb5991954bce76041fd6b3c73467982d0137d0db61d7851e1af280d90a3`，12文件未被本批修改，不把新源码当现装行为。旧helper可能在bind时隐式激活，指导要求按精确实际接口判断兼容性。
+
+证据根 `C:/Users/15521/.codex/backups/accord-pause-inheritance-20260910`：regression-red.log、resume-marker-red.log及checkpoint-green.log保留反例和中间失败；checkpoint-final-compact.log、delivery-regression.log、static-development-final-pass.json、static-product-final-pass.json、static-codex-final-pass.json、packaged-help.json及package-final.json保留最终复验与包后态。无新模型调用、安装或持久测试任务，自有测试目录随夹具回收。`8afd1f1`的[CI 34447357960](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/34447357960)最新Ubuntu五项通过，Windows/macOS四项仍运行；本批先本地提交，不打断矩阵。新包普通入口恢复、明确暂停处置及完整继承仍待验，历史通过不迁入新包准入。
+
 ## 观察用量的分项诊断与旧限额保留（2026-09-10）
 
 用原生日志重放上一观察器源码中的实际条件，确认第11次用量回执触发总token 350000上限；原生终态约228秒，尚余约252秒且输出低于14000。校准此前解释：累计总量可以作明确的保守上限，不是错误公式；问题在于试验没有充分区分成本、耗时和上下文需求，提前截断了自然结束观察。缓存并非免费，不能简单减掉缓存、提高旧上限后再跑同案取PASS。原用量、中断和结果身份全部保留。

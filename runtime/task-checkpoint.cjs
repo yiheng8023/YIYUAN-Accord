@@ -408,6 +408,13 @@ function binding(request, where, prior, currentInput) {
   if (!text(request.result) || !text(request.nextAction) || typeof request.canContinue !== 'boolean' ||
       !Array.isArray(request.inputs) || !Array.isArray(request.outputs) || request.outputs.length === 0 ||
       request.inputs.length + request.outputs.length > 100) fail('incomplete-task-binding');
+  const resuming = Object.hasOwn(request, 'resumeReason');
+  if (resuming && (prior?.mode !== 'paused' || !text(request.resumeReason) || request.resumeReason.length > 2048)) {
+    fail('resume-needs-paused-task-and-explicit-reason');
+  }
+  // Reconciliation and revised predicates do not lift a user pause. The caller
+  // must establish actual authority before explicitly disposing of that pause.
+  const paused = prior?.mode === 'paused' && !resuming;
   const inherited = savedUnresolved(prior);
   const unresolved = Object.hasOwn(request, 'unresolved') ? unresolvedConditions(request.unresolved) : inherited;
   if (inherited.some((item) => !unresolved.includes(item)) && !text(request.revisionReason)) {
@@ -440,7 +447,8 @@ function binding(request, where, prior, currentInput) {
     return {path: name, observed};
   });
   return {schema: 1, session: request.session_id, cwd: where.root, epoch: currentInput.epoch,
-    revision: (prior?.revision || 0) + 1, mode: 'active', result: request.result,
+    revision: (prior?.revision || 0) + 1, mode: paused ? 'paused' : 'active', result: request.result,
+    reason: paused ? prior.reason : null, resumeReason: resuming ? request.resumeReason : null,
     inputs, outputs, unresolved, nextAction: request.nextAction, canContinue: request.canContinue,
     revisionReason: request.revisionReason || null,
     lastBlock: prior?.epoch === currentInput.epoch ? prior.lastBlock : null};
@@ -488,7 +496,7 @@ function operate(request) {
       mode: prior?.mode || 'unbound', currentInputReconciled: !needsInput(currentInput) && prior?.epoch === currentInput.epoch,
       checkpoint: prior ? {epoch: prior.epoch, result: prior.result, inputs: prior.inputs, outputs: prior.outputs,
         nextAction: prior.nextAction, canContinue: prior.canContinue, unresolved: savedUnresolved(prior),
-        revisionReason: prior.revisionReason, reason: prior.reason || null} : null,
+        revisionReason: prior.revisionReason, reason: prior.reason || null, resumeReason: prior.resumeReason || null} : null,
       inspection: prior ? inspectDiagnostic(where, prior) : null};
     if (request.op === 'bind') {
       const state = binding(request, where, prior, currentInput);
@@ -496,7 +504,7 @@ function operate(request) {
       return inputLocked(where, () => {
         currentEpoch(where, currentInput.epoch);
         atomic(where.state, state);
-        return {revision: state.revision, inspection};
+        return {revision: state.revision, mode: state.mode, inspection};
       });
     }
     if (request.op === 'retire' && !prior) {
@@ -523,6 +531,7 @@ function operate(request) {
     if (request.op === 'retire') {
       if (currentInput.needsNativeReplay && request.disposition !== 'user-cancelled') fail('input-receipt-needs-native-replay');
       if (prior.epoch !== currentInput.epoch && request.disposition !== 'user-cancelled') fail('latest-user-input-not-reconciled');
+      if (prior.mode === 'paused' && request.disposition !== 'user-cancelled') fail('paused-task-cannot-retire');
       const result = request.disposition === 'user-cancelled'
         ? inspectDiagnostic(where, prior) : inspect(where, prior);
       if (result.status !== 'verified-local' && request.disposition !== 'user-cancelled') fail('unmet-output-cannot-retire');
@@ -708,10 +717,10 @@ const HELP = {
     result: 'latest authorized result', inputs: ['source.json'],
     outputs: [{path: 'summary.json', json: {'/total': 60}}, {path: 'details.csv'}],
     nextAction: 'finish and verify both affected files', canContinue: true},
-  revise: 'Call bind with the current epoch/revision and a revisionReason for changed output checks; old inputs are re-observed.',
+  revise: 'bind rechecks inputs; changed output checks require revisionReason. Pause and its reason survive rebinding unless an authorized resumeReason (nonempty, at most 2048 characters) explicitly lifts it. bind returns mode; status.checkpoint exposes resumeReason, not proof of authority. Older helpers may implicitly activate: inspect the installed interface.',
   unresolved: 'Optional bind.unresolved is a list of up to 32 distinct nonempty strings, each at most 2048 characters, describing known unmet result or fact conditions. Omission inherits existing conditions; an explicit list replaces them, and removing or rewording a prior condition requires revisionReason. status.checkpoint and inspection expose them independently of matched files; any remaining condition prevents verified-local and successful retirement. canContinue means safe authorized work remains, not that the gap is resolved; use false or pause for a necessary external wait. Existing pause, input freshness and bounded Stop retry rules still apply. The caller must verify the evidence or authorized scope change behind a disposition; a reason is not proof. This neither discovers undeclared gaps nor validates semantics. Older helpers do not enforce this field; retain the compatible executor for unfinished state.',
   pause: 'op=pause with current epoch/revision and reason; preserve pending work without continuation.',
-  retire: 'op=retire after verified local predicates, or explicit user-cancelled disposition plus reason. With no bound checkpoint, current epoch, expectedRevision=0 and a reason retire only the input receipt. A surviving caller may do this after verified native exit if no end Hook ran. Removes only checkpoint files; does not prove task completion.',
+  retire: 'op=retire requires verified local predicates and a resolved pause, or explicit user-cancelled disposition plus reason. Without a checkpoint, use current epoch, expectedRevision=0 and reason to retire only the receipt, including after verified exit without an end Hook. Removes only checkpoint files; does not prove task completion.',
   recovery: 'op=recover-lock with lock=state or input requires a provably dead owner. Input recovery invalidates an existing receipt because native input may have been lost. A surviving caller must replay the actual current native input before binding or continuation; do not ask for repeated user input when the host retains it. Uncertain or live ownership is preserved.',
   resume: 'SessionStart/resume sets needsResumeReconciliation without changing the contract or pause state. New native user input enters normally; absent new input, the native caller may replay actual current retained input with recovery_epoch. Neither route resumes paused work or reconciles the saved binding automatically. Existing needsNativeReplay quarantine from real input loss remains strict. Inspect current authority, effects and writer ownership before binding. No cross-task adoption, writer lock or host permission enforcement.',
   replay: 'After input failure or recovery, replay the actual current UserPromptSubmit event through --hook UserPromptSubmit with recovery_epoch from status. The derived token binds the receipt and failure watermarks, including a missing receipt. Use null only when no receipt or failure watermark exists. A later uncaptured native input changes the token; ordinary inputs cannot silently clear quarantine. Never reconstruct missing human intent from the old checkpoint.',

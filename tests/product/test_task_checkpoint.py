@@ -47,6 +47,10 @@ class TaskCheckpointTests(unittest.TestCase):
     def status(self):
         return self.invoke({"op": "status"})
 
+    def pause(self, reason='User paused.'):
+        current = self.status()
+        return self.invoke(dict(op='pause', epoch=current['epoch'], expectedRevision=current['revision'], reason=reason))
+
     def bind(self, **fields):
         current = self.status()
         return self.invoke({"op": "bind", "epoch": current["epoch"], "expectedRevision": current["revision"],
@@ -57,6 +61,62 @@ class TaskCheckpointTests(unittest.TestCase):
     def write_outputs(self, total=60):
         (self.work / "summary.json").write_text(json.dumps({"total": total}), encoding="utf-8")
         (self.work / "details.csv").write_text(f"id,units\nA,{total}\n", encoding="utf-8")
+
+    def test_rebinding_after_side_question_preserves_pause_and_unfinished_contract(self):
+        self.bind(unresolved=['Operating facts still need confirmation.'])
+        self.pause('User paused execution pending review.')
+        self.event('SessionStart', source='resume')
+        self.event('UserPromptSubmit', prompt='Explain progress and adjust the plan to 70; execution remains paused.')
+        outputs = [{'path': 'summary.json', 'json': {'/total': 70}}, {'path': 'details.csv'}]
+        rebound = self.bind(outputs=outputs, revisionReason='The user corrected the planned total; the pause remains in force.')
+        self.assertEqual(rebound['mode'], 'paused')
+        checked = self.status()
+        self.assertEqual(checked['mode'], 'paused')
+        self.assertEqual(checked['checkpoint']['reason'], 'User paused execution pending review.')
+        self.assertEqual(checked['checkpoint']['outputs'], outputs)
+        self.assertEqual(checked['checkpoint']['unresolved'], ['Operating facts still need confirmation.'])
+        self.assertTrue(checked['currentInputReconciled'])
+        self.assertEqual(self.event('Stop'), {})
+        self.event('SessionEnd')
+        self.assertEqual(self.status()['checkpoint'], checked['checkpoint'])
+        self.assertFalse((self.work / 'summary.json').exists())
+
+    def test_pause_requires_explicit_resume_disposition_before_successful_retirement(self):
+        self.bind()
+        self.write_outputs()
+        self.pause()
+        paused = self.status()
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.assertIn('paused-task', self.invoke(dict(op='retire', epoch=paused['epoch'],
+                      expectedRevision=paused['revision']), success=False))
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+        self.event('UserPromptSubmit', prompt='Resume the approved work and finish the verified local delivery.')
+        reason = 'The current user input explicitly resumes this paused local delivery.'
+        self.assertEqual(self.bind(resumeReason=reason)['mode'], 'active')
+        resumed = self.status()
+        self.assertEqual(resumed['mode'], 'active')
+        self.assertEqual(resumed['checkpoint']['resumeReason'], reason)
+        self.assertIsNone(resumed['checkpoint']['reason'])
+        self.assertTrue(self.invoke(dict(op='retire', epoch=resumed['epoch'], expectedRevision=resumed['revision']))['retired'])
+        self.assertEqual(list(self.state.iterdir()), [])
+
+    def test_invalid_resume_disposition_preserves_existing_state(self):
+        self.bind()
+        active = self.status()
+        request = dict(op='bind', epoch=active['epoch'], expectedRevision=active['revision'],
+                       result='Preserve current work', inputs=['source.json', 'keep.txt'],
+                       outputs=active['checkpoint']['outputs'], nextAction='Continue if allowed', canContinue=True)
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.assertIn('resume', self.invoke({**request, 'resumeReason': 'No pause exists.'}, success=False))
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+        self.pause()
+        paused = self.status()
+        request['expectedRevision'] = paused['revision']
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        for reason in ('', ' ', None, False, 'x' * 2049):
+            with self.subTest(reason=repr(reason)[:20]):
+                self.assertIn('resume', self.invoke({**request, 'resumeReason': reason}, success=False))
+                self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
 
     def test_recorded_unresolved_work_survives_green_files_and_prevents_retirement(self):
         question = 'Verify the operating instructions against the actual tool.'
@@ -134,8 +194,7 @@ class TaskCheckpointTests(unittest.TestCase):
     def test_native_host_change_is_exposed_without_rewriting_paused_work(self):
         self.event('UserPromptSubmit', prompt='Deliver the files.', model='first-model', permission_mode='default')
         self.bind()
-        old = self.status()
-        self.invoke(dict(op='pause', epoch=old['epoch'], expectedRevision=old['revision'], reason='User paused.'))
+        self.pause()
         checkpoint = self.status()['checkpoint']
         reply = self.event('UserPromptSubmit', prompt='Keep the pause. I chose this setting.',
                            model='second-model', permission_mode='future-mode', turn_id='next-turn')
@@ -267,8 +326,7 @@ class TaskCheckpointTests(unittest.TestCase):
 
     def test_context_budget_cannot_clear_pause_or_input_loss(self):
         self.bind()
-        current = self.status()
-        self.invoke(dict(op="pause", epoch=current["epoch"], expectedRevision=current["revision"], reason="user stopped"))
+        self.pause('user stopped')
         self.assertEqual(self.invoke(self.context_request())["decision"], "paused")
         self.assertEqual(self.status()["mode"], "paused")
         self.event("SessionStart", source="resume")
@@ -411,8 +469,7 @@ process.kill(process.pid, 'SIGKILL');
         self.default_storage_fixture()
         self.event('UserPromptSubmit', prompt='Prepare the files.')
         self.bind()
-        current = self.status()
-        self.invoke({'op':'pause','epoch':current['epoch'],'expectedRevision':current['revision'],'reason':'User paused.'})
+        self.pause()
         self.environment['ACCORD_TEST_TEMP'] = str(self.root / 'temp-b')
         self.event('UserPromptSubmit', prompt='Explain progress; work remains paused.')
         restored = self.status()
@@ -480,8 +537,7 @@ process.kill(process.pid, 'SIGKILL');
 
     def test_resume_preserves_pause_and_other_sessions(self):
         self.bind()
-        current = self.status()
-        self.invoke({'op':'pause','epoch':current['epoch'],'expectedRevision':current['revision'],'reason':'User paused.'})
+        self.pause()
         before = {p.name:p.read_bytes() for p in self.state.iterdir()}
         self.event('SessionStart', source='resume', session_id='unrelated')
         self.event('SessionStart', source='compact')
@@ -659,9 +715,7 @@ catch(e){process.stdout.write(e.message);}
 
     def test_contract_readback_does_not_resume_pause_or_acknowledge_lost_input(self):
         self.bind()
-        initial = self.status()
-        self.invoke({'op':'pause', 'epoch':initial['epoch'], 'expectedRevision':initial['revision'],
-                     'reason':'The user has paused work.'})
+        self.pause('The user has paused work.')
         paused = self.status()
         self.assertEqual(paused['mode'], 'paused')
         self.assertEqual(paused['checkpoint']['reason'], 'The user has paused work.')
@@ -724,7 +778,8 @@ catch(e){process.stdout.write(e.message);}
                      "reason": "The user explicitly paused this task."})
         self.assertEqual(self.event("Stop", stop_hook_active=False), {})
         self.event("UserPromptSubmit", prompt="Continue the same work.")
-        self.bind()
+        self.bind(resumeReason="The latest user input explicitly continues the paused work.")
+        self.assertEqual(self.status()['mode'], 'active')
         self.event("Interrupt")
         self.assertEqual(self.event("Stop", stop_hook_active=False), {})
         self.assertFalse((self.work / "summary.json").exists())

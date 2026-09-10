@@ -69,6 +69,9 @@ File creation alone does not require binding. Existing bindings must be honored:
 read their saved contract, reconcile new input and actual effects, preserve pauses
 and unfinished work, and retire only after verified completion or explicit
 cancellation. Stored readiness does not grant current authority.
+When revising a paused binding, preserve the pause; use the helper's explicit
+resume disposition only after checking current authorization. Changed inputs,
+revised output checks or matching files alone do not lift or retire that pause.
 
 When needed and Node/native input receipts are available, read
 `node runtime/task-checkpoint.cjs --help` from the plugin root for the current status,
