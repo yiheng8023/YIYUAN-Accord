@@ -874,7 +874,7 @@
       {"id":"change-adaptation","floor":"Relevant host, model, permission and active-package drift invalidates and revalidates only dependent assumptions and claims.","assessment":"unverified","name":"变化适应"},
       {"id":"evidence-integrity","floor":"Current claims bind current subjects; independent observation and experimental execution remain distinguished.","assessment":"unverified","name":"证据完整性"},
       {"id":"user-burden-and-interference","floor":"Necessary human decisions remain human-owned while Agent mechanics and unnecessary ceremony are not transferred to the user.","assessment":"unverified","name":"用户负担与干扰"},
-      {"id":"maintainability-and-resource-cost","floor":"Verification, context, modules and resource use remain sustainable without weakening functional or evidence guarantees.","assessment":"unverified","name":"可维护性与资源成本"}
+      {"id":"maintainability-and-resource-cost","floor":"Verification, context, modules and resource use remain sustainable under relevant observed host-default and custom context conditions without weakening functional or evidence guarantees. Expanded development context cannot be an undeclared delivery prerequisite; retained history, initial exposure, actual input/cache use, quality and total burden require scoped evidence rather than inferred benefit from window size or compaction count.","assessment":"unverified","name":"可维护性与资源成本"}
     ],
     "workSequence": [
       {

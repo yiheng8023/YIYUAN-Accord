@@ -4,6 +4,28 @@
 
 **当前工序 S0–S5 已并入 [共识节点与计划](PLAN-v3.3.md#工序与依赖)，不在本文件单独维护。** F01–F08 详细结果见 [基线](BASELINE-v3.3.md)，A01–A08 判据见 [验收](ACCEPTANCE-v3.3.md)。本记录保留旧版本称谓与失败事实，不构成当前分发或支持声明。
 
+## 默认上下文预算下的暂停、补充与恢复交付（2026-09-10）
+
+用户确认共享测试缓存与精确进程启用，并要求考虑开发扩容对默认用户、预载、费用与交付的影响。沿用已有账号的完整原生model/list，按普通数据交付和跨轮语义判断选择Sol/medium，无fallback、子代理或新增账号。当前目录与0.154.0原生计算规则给出默认窗口272000、压缩线244800；只覆盖测试进程，保留开发872000/784800。三轮实际tokenUsage均回报258400可用窗口。仅1项Accord Skill启用、6项精确Hook信任，保留共享用户指令等已知条件，不称初始环境或扩容净收益对照。
+
+事前绑定一例三段普通输入、真实CSV、源顺序及筛选/汇总判据、600秒整体/240秒单段期限和分项用量上限。对错误排序、错误纳入与错误总数的本地反例检查通过。第一段要求暂停最终交付，Agent核对A/B ready共140、C pending共50，把暂停原因、未决范围和步骤记录在work-state.md。第二段“同意”加报告补充及排序侧问只更新原方案，明确仍待客户口径，三份最终文件保持不存在。第三段获得明确ready-only决定后恢复，交付A、B原顺序、140合计，报告准确解释C因pending被排除，续作记录与实际完成一致。各段均自然完成，原始输入字节保持，无控制器业务修复或人为预置检查点。
+
+三段约69.8/52.5/132.1秒，合计254.4秒。累计244104 token，输入238076（缓存184576、未缓存53500）、输出6028；首次模型请求输入11252，包含完整请求，不等于单独预加载量。累计用量不是当前窗口占用，未测得金额或扩容收益。7次原生Hook完成为SessionStart 1、UserPromptSubmit 3、Stop 3；未观察到SessionEnd、Interrupt或resume变体执行。Agent没有调用可选检查点，因此不能将业务暂停正确归为bind/rebind/retire、自主载体切换或压缩恢复已验。
+
+原执行器以exit1结束：业务和自然完成判据通过，但共享config保护失败，唯一差异是此次临时工作目录的trusted登记。目录/缓存/进程已归零，原失败记录保留；复用有界登记清理，仅当移除此精确所属项目表即可恢复事前SHA时写入，并检查并发变化。原配置已恢复，重复清理为无操作；此逻辑接回测试驱动，属于控制器资源处置，不计Agent业务救援或自主环境退役。只读SQLite确认原生临时任务无持久索引。独立读源核验了CSV、全部阶段记录、报告和真实回执；当前受保护15文件均与事前一致。
+
+证据根`C:/Users/15521/.codex/backups/accord-default-context-pause-20260910/`：case-contract.json、available-models.json、native-context-defaults.json、thread.json、shared-active/、stage-*-poststate/、episode-result.json、shared-result.json、independent-review.json、semantic-review.json和registration-cleanup.json分别保留前提、执行、局部成功、原清理失败及恢复。当前结果只支持此默认预算的普通暂停/补充/恢复案例；跨任务继承、必要检查点使用、压力及完整正式范围仍未关闭，不将试验宿主控制器的准备/清理归因为产品自主能力。
+
+收尾补验：用实际原生登记失败后态的私有副本回放清理，并加入无关配置改动反例；前者精确恢复，后者拒绝写入且保留改动，副本已回收。77项开发回归、开发投影与diff检查通过；本批未修改12文件插件包，functionalCompletion/candidateEligible仍false。前一390ab73的CI已九项成功，本批按用户授权集中提交推送，新的托管结果须绑定新SHA单独核对。
+
+## 共享沙箱中的独立测试缓存验证（2026-09-10）
+
+用户明确确认前案的限定安装/启用，并补充上下文扩容可能影响开发与产品效果。执行前重查当前12文件源码和15份受保护文件，与已绑定方案一致；重启后原生管道字段已在方案基线中更新，不按此前上下文编辑的旧哈希回滚用户配置。授权单独保存在shared-authorization.json，原方案的pending字段保留为准备时点。
+
+实际共享home中通过进程配置生成独立accord-eval-20260910缓存：完整包与源码逐字节一致，启用回读仅1项目标Skill和6项精确信任Hook。既有沙箱readiness=ready，真实命令工作内写入成功、相邻写入拒绝；没有新Windows账户准备、凭据复制或持久测试插件登记。两个所属进程组均exit0，正常宽限后归零，未强制退出；已观察到原生Git后台维护，故不把15份保护检查等同整个宿主不变。新缓存、可选插件数据根和测试工作区均在核验归属后回收，源码及受保护配置/现装包保持。
+
+证据根仍为accord-shared-sandbox-projection-20260910：shared-result.json、shared-discovery/、shared-active/与实际执行脚本快照shared_preflight.executed.py保留结果。这关闭了该本机测试路径的前提缺口，不代表已运行普通Agent或Hook行为链。后续普通案例按当前账号目录选择模型并单独绑定默认上下文预算、实际用量及语义判据；开发保留用户的872000/784800设置，默认预算不等于全新初始环境。相关扩容代价与隐含依赖要求已细化到现有计划、A05/A06/A08及机器质量底线，不新增一套评价体系或扩容前提。
+
 ## 进程配置驱动的独立插件缓存预验证（2026-09-10）
 
 为复用已恢复的共享Windows沙箱而避免再次生成冲突账户，核对原生CLI 0.154.0帮助、配置schema及[插件管理实现](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core-plugins/src/manager.rs)。直接install会同时写用户启用配置；当前schema没有独立cache/沙箱凭据根，但[原生加载器](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core-plugins/src/loader.rs)可按有效配置中的本地市场与插件键生成缓存，[市场配置解析](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core-plugins/src/installed_marketplaces.rs)接受进程配置层。此路线使用不同测试市场身份，保持完整插件包字节，不改产品名称、源码版本或现装包。
