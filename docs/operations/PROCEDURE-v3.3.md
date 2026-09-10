@@ -4,6 +4,20 @@
 
 **当前工序 S0–S5 已并入 [共识节点与计划](PLAN-v3.3.md#工序与依赖)，不在本文件单独维护。** F01–F08 详细结果见 [基线](BASELINE-v3.3.md)，A01–A08 判据见 [验收](ACCEPTANCE-v3.3.md)。本记录保留旧版本称谓与失败事实，不构成当前分发或支持声明。
 
+## 独立配置目录的系统账户冲突与恢复（2026-09-10）
+
+用户明确确认上一切片的独立测试home原生elevated准备，授权与原sandbox-plan.json分别保存在证据根；本批实际执行，原计划中的待确认文字不再代表当前权限。首次原生setupStart返回started，完成通知却为helper_sandbox_lock_failed / SetNamedSecurityInfoW错误5；随后的readiness仍为ready，而实际命令同样失败。必须分别保留准备回执、就绪提示与执行结果。
+
+与当前CLI 0.154.0的[官方实现](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/windows-sandbox-rs/src/bin/setup_main/win.rs)及共享工作目录对照：新home的空.sandbox-bin由Administrators所有，其保护DACL未授予普通刷新进程WRITE_DAC。核对任务归属、绝对路径、非重解析点及空目录后，仅重建该空目录为当前用户所有；未手工放宽保护，后续由原生流程重新施加DACL并生成helper。权限错误消失，执行改报CreateProcessWithLogonW错误267。Windows解析证明逻辑AppData路径被重定向到Codex包的LocalCache；使用同一目录的实际路径后，原生命令exit0、CodexSandboxOffline身份、工作内可写且相邻写入拒绝，所属进程自然退出。原失败不改写为通过。
+
+随后共享home复验失败并触发重新准备。当前版本的[账户准备源码](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/windows-sandbox-rs/src/bin/setup_main/win/sandbox_users.rs)明确为固定名称的Windows账户生成密码，账户存在时调用NetUserSetInfo重设密码，再把凭据保存在本次codex_home。结合两home的实际准备顺序与共享登录失败，足以否定本机双home分别准备后可稳定共用的假设。不能通过交替准备、复制凭据或放宽隔离解决。用户配置目录隔离不等于系统账户、沙箱及状态库隔离；尚未观察到的跨任务影响仍未知。
+
+恢复还暴露观察器缺口：command/exec的20秒RPC期限在等待UAC时关闭了请求进程；用户随后报告已点击，但未形成成功恢复回执。其首次异常处理又先清理仍被进程占用的工作目录，PermissionError遮盖原超时；原始请求/响应、失败和清理错误均保留。改为先关闭进程再回收目录，并用原生异步windowsSandbox/setupStart保持等待，不把系统交互套用普通命令期限。该次实际完成通知仍为orchestrator_helper_launch_canceled / 1223，readiness为updateRequired；来源无法区分用户取消、系统取消等原因，不归咎用户。共享沙箱尚未恢复，授权继续有效，但必须等待一次成功的Windows交互与实际执行复验，停止自动连环弹窗。
+
+本批没有模型调用、新包安装、Hook信任更改或持久测试任务，完整12文件源码及共享旧包保持。3份共享配置和12份缓存保持；原生沙箱准备标记受恢复流程影响，不能盲目还原旧字节冒充修复。异步恢复进程exit0、Job归零，未观察到残留consent/setup进程；两个超时观察器的强制退出身份保留。首次共存试验遗留的两层空目录在验证归属后已非递归回收。独立home与恢复目录保留，尚未完成处置，不能称零残留或环境闭合。后续先恢复共享宿主，再研究复用其沙箱、隔离测试包与配置的受支持方式；当前schema与插件管理源码尚未给出独立cache/凭据根，原生安装会写本home，不能声称替代路线已实现。
+
+证据根 `C:/Users/15521/.codex/backups/accord-pause-native-20260910`：sandbox-authorization.json、sandbox-setup/、sandbox-recheck/、sandbox-resolved-recheck/、sandbox-coexistence/、shared-recovery/、shared-native-recovery/、coexistence-cleanup.json及upstream-rust-v0.154.0/保留授权、失败、有限成功、取消和精确版本来源。脚本与安装/恢复材料属于维护试验，不能归因于Accord普通自主能力。正式验收覆盖不变。本批按用户请求给出的工程收官估计为2–4周，置信度中低；若持续暴露环境或系统缺口可延至4–6周以上，不含正式发布决定、市场审核及传播，不是期限承诺或修改验收范围。
+
 ## 新包原生暂停链路与独立沙箱前提（2026-09-10）
 
 本次绑定源码 `59d0c207edffdd129241437f4ba590b33afe89f6`，完整12文件包仍为 `58ff6adadd69c51228556028ee07e866e0073b72c4f616315fe461b8a88188b8`。先在自有配置目录使用原生市场登记、安装、发现及卸载；缓存与源码逐文件一致，按原生当前散列仅在测试进程信任6项Hook，排除其余39项Skill后仅1项启用。共享3份配置及12份现装文件保持；未覆盖旧包，未连接账号或调用模型。
