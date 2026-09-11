@@ -1,6 +1,6 @@
 ---
 name: deliver-demand-driven-outcome
-description: Resolve coordination gaps in changed goals, capability choice, recovery, continuity, or package lifecycle. Use when ordinary task handling or already supplied entry duties need these details; do not load just to begin a bounded task those duties already cover. Explicit invocation remains supported.
+description: Resolve coordination gaps in changed goals, capability choice, verification, recovery, continuity, or package lifecycle. Use when ordinary task handling or already supplied entry duties need these details; do not load just to begin a bounded task those duties already cover. Explicit invocation remains supported.
 ---
 
 # Deliver the outcome
@@ -23,6 +23,25 @@ can finish. Check actual capability, evidence, fit, upkeep, licensing, authority
 and total adoption/use/recovery/exit cost. Search beyond installed tools when that
 can change the choice; stop uninformative search. Compose or build when justified.
 Domain correctness may require authoritative data, specialist tools or review.
+
+For a material verification gap that benefits from an independent perspective,
+delegate a bounded review to a native subagent when host rules permit and useful
+non-overlapping work can continue locally. Bind the goal, source/artifact snapshot,
+read-only scope, expected findings and resource limits. Give the reviewer raw
+evidence rather than the proposed verdict. Select context inheritance explicitly
+using the current host controls. A fresh independent review normally needs the
+bound brief and raw artifacts, not copied conversation; use history only when
+needed and its prerequisites hold. Inspect findings, correct confirmed
+defects and recheck affected outputs; reviewer completion or agreement is not
+proof of correctness. After needed results are incorporated, release unneeded
+allocations through the host's supported lifecycle. Check whether explicit close
+or host-managed reclamation applies; completion alone need not release retained
+state. Preserve still-needed descendants and shared resources.
+Retain returned handles through structured host references or storage, and use
+the exact owned target on later calls. Verify closure against that allocation;
+a wrong-target or not-found result does not prove the original agent was closed.
+Reconcile failed or unknown release before declaring resource closure.
+Keep adequate simple work local, and do not impose review on every task.
 
 Discover current account and dispatch-supported models/efforts when selection
 matters, including user-selected configurations once task needs are known.
