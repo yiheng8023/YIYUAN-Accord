@@ -246,8 +246,11 @@ class Probe {
                 with subprocess.Popen(["pwsh", "-NoProfile", "-NonInteractive", "-File",
                     str(repository / "scripts/observe-claude-entry.ps1")], stdin=subprocess.PIPE,
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=environment) as controller:
+                    # Add-Type cold compilation precedes ready and the tested capture.
+                    # Allow bounded setup/pipe cleanup; keep the native 3 s deadline.
                     stdout, stderr = offline_communicate(controller, root,
-                        json.dumps(request) + '\n{"op":"run","arm":"native"}\n{"op":"close"}\n')
+                        json.dumps(request) + '\n{"op":"run","arm":"native"}\n{"op":"close"}\n',
+                        timeout=60 + request["timeout"] + 15)
                 self.assertEqual(controller.returncode, 0, {"stdoutBytes": len(stdout), "stderrBytes": len(stderr)})
                 capture = json.loads(stdout.splitlines()[1])
                 self.assertTrue(capture["stdout"].startswith(prefix))

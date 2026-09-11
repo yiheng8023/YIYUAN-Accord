@@ -760,7 +760,7 @@ function hook(event) {
 
 const HELP = {
   scope: 'Task-local file evidence and supported native Stop continuation; no command, archive or handoff executor.',
-  input: 'One JSON object on stdin. Use --hook only for native events; other calls need the current native session/cwd receipt.',
+  input: 'One JSON object on piped stdin, not an interactive terminal. In PowerShell, pipe $request through ConvertTo-Json -Depth 8 -Compress to node <helper-path>. Use --hook only for native events; other calls need the current native session/cwd receipt.',
   storage: 'YIYUAN_ACCORD_TASK_STATE_DIR selects an explicit scoped directory. Otherwise use ~/.yiyuan-accord/task-state. Exact-session legacy temporary records remain at their original location; competing locations fail without merge. status.storage reports the selected path and kind. No automatic migration, cross-session adoption, scheduler or power-loss guarantee. State file contents are flushed before atomic replacement; filesystem and directory-entry durability need separate validation.',
   status: {op: 'status', session_id: 'native-session-id', cwd: 'absolute-workspace'},
   retainedInputs: {
@@ -813,6 +813,10 @@ if (require.main === module) {
       process.stderr.write(`YIYUAN Accord task checkpoint unavailable: ${reason}.\n`);
       process.exitCode = 1;
     };
+    if (process.stdin.isTTY) {
+      transportFailure('interactive-stdin-not-supported: pipe one JSON object or use --help');
+      return;
+    }
     process.stdin.setEncoding('utf8');
     process.stdin.on('data', (chunk) => {
       input += chunk;

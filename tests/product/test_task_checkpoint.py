@@ -62,6 +62,29 @@ class TaskCheckpointTests(unittest.TestCase):
         (self.work / "summary.json").write_text(json.dumps({"total": total}), encoding="utf-8")
         (self.work / "details.csv").write_text(f"id,units\nA,{total}\n", encoding="utf-8")
 
+    def test_interactive_stdin_fails_promptly_without_waiting_or_mutating_task_state(self):
+        preload = self.root / 'interactive-stdin.cjs'
+        preload.write_text("Object.defineProperty(process.stdin,'isTTY',{value:true});", encoding='utf-8')
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        process = subprocess.Popen([self.node, '--require', str(preload), str(RUNTIME)],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            cwd=self.work, env=self.environment)
+        try:
+            self.assertEqual(process.wait(timeout=3), 1)
+            stdout, stderr = process.communicate()
+            self.assertEqual(stdout, b'')
+            self.assertIn(b'pipe one JSON object or use --help', stderr)
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.communicate()
+        self.assertEqual({p.name:p.read_bytes() for p in self.state.iterdir()}, before)
+        help_result = subprocess.run([self.node, '--require', str(preload), str(RUNTIME), '--help'],
+            capture_output=True, text=True, encoding='utf-8', timeout=3, cwd=self.work, env=self.environment)
+        self.assertEqual(help_result.returncode, 0)
+        self.assertIn('status', json.loads(help_result.stdout))
+        self.assertEqual(self.status()['mode'], 'unbound')
+
     def test_native_text_survives_side_question_compact_and_pause_without_new_authority(self):
         goal = '交付 review.json 和 review.md；不得读取上级目录。原样保留 🌱 与 "引文"。'
         correction = '同意，补充检查引用；保持暂停，先不要交付。'
