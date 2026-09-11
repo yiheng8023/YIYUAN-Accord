@@ -28,6 +28,15 @@ verification. Material changes need a falsifiable reason and an authority bounda
 not a fixed number of work items. Agreement on an authorized
 next step means proceed; a correction revises only affected decisions.
 
+Keep the Mermaid system and procedure diagrams in the consensus plan, together
+with the overview in both [English](README.md#how-it-works) and
+[Chinese](README.zh-CN.md#如何工作) READMEs, as maintained views of that design.
+When a change affects depicted duties, relationships, boundaries or dependencies,
+update the affected diagrams and surrounding explanations in the same change.
+Keep the bilingual overviews equivalent, check links and Mermaid syntax, and
+preserve feedback and conditional ordering. Diagrams explain the current design;
+completion and support claims still require the plan's linked acceptance evidence.
+
 ## Reuse, change and subtraction
 
 Use host discovery, execution, state and lifecycle controls where they fit,

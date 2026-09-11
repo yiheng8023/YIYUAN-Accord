@@ -32,6 +32,24 @@ These are goals to verify continuously. World-class quality is an ambition; actu
 
 ## How it works
 
+```mermaid
+flowchart TD
+    U["User ideas, additions and changes"] --> T["Goal, constraints and authority<br/>Acceptance criteria"]
+    T --> C["Assess feasibility<br/>Establish necessary conditions"]
+    H["Host, Accord and ecosystem capabilities<br/>Reuse, compose or build as needed"] <--> C
+    C --> E["Agent execution and observation<br/>Correction and recovery"]
+    E --> V["Verify results and system effects<br/>Completeness, weak points and net value"]
+    V -->|Gaps remain| C
+    V -->|Goal or constraints change| T
+    V -->|Criteria met| R["Delivery and resource state<br/>Remaining and follow-up responsibilities"]
+    S["Continuous state<br/>Goal, sources, dependencies and decisions<br/>Evidence and unfinished responsibilities"] --- T
+    S --- C
+    S --- E
+    S --- V
+```
+
+This overview shows Accord's coordination duties and their feedback relationships. The [detailed system view](docs/operations/PLAN-v3.3.md#稳定关系与动态方法) and [development dependencies](docs/operations/PLAN-v3.3.md#工序与依赖) remain in the consensus plan. Implementation and acceptance progress are described under [current evidence](#capability-limits-and-current-evidence).
+
 Starting conditions, process and results form relationships that can run in parallel, nest and feed back. Semantics explains changes, events trigger relevant reassessment, and negative boundaries protect goals, authority and evidence. Routes remain task-dependent. Deterministic local procedures can be standardized without prescribing one fixed end-to-end SOP.
 
 A plugin is the delivery form for a particular host. Accord's responsibilities span user intent, the host and surrounding capabilities, and actual results. Important decisions, state changes and feedback need working connections, without requiring every call to pass through one proxy or granting authority above the user or host. Confirm the intended outcome when a user action has material consequences and ambiguous intent; respect clear choices and do not silently restore user settings.
