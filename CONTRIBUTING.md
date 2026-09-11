@@ -91,6 +91,20 @@ meaning-preserving variants and contrasting meanings in the same wording;
 observe actual actions and effects, not a growing synonym list or self-reported
 intent labels. Keep each result within the semantic situations actually tested.
 
+Native contextual intent understanding is the starting capability. Accord
+preserves and coordinates the goal, authority, dependencies, actions and evidence;
+it does not need a separate language interpreter. Inspect the full input and
+available context before locating a failure in interpretation, state transfer,
+execution or verification. Do not turn every character into an independent
+instruction, drop a meaningful qualifier, or let one blocked unit suppress clear
+independent work. Historical Skills and upstream rules are evidence for reusable
+problems and methods, not authority to restore an entire instruction chain.
+
+Keep diagnostic workspace names and visible metadata free of expected actions.
+For contextual contrasts, use the same neutral workspace and retained snapshots
+when feasible; disclose remaining differences, user instructions and ordering.
+Native-only observations do not add Accord function or value coverage.
+
 For ephemeral App Server tasks, retain native input/item/turn events while they
 occur. Codex 0.154 rejects `thread/read(includeTurns=true)` for these tasks;
 do not append that unsupported history read as a completion prerequisite.
