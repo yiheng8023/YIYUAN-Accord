@@ -283,6 +283,14 @@ The former verifies receipt, transfer of writing responsibility and actual work,
 not autonomous detection. Prior user rescue remains a failed autonomous result.
 Unknown capacity/efficiency signals require short work spans and early checkpoints;
 that fallback rule is not proof of historical prediction or an optimal margin.
+Large source reads consume the same capacity as other work. Preserve reusable
+verified intermediate results with source and verification references, observed
+effects, uncertainties and remaining work in a task-suitable representation.
+Recovery should reuse still-valid results and recheck affected or missing facts.
+Repeated reading or renewal without result progress is a reason to reconsider
+work-unit size, evidence organization and permitted topology, not evidence that
+another context change is required. These are conditional guidance duties;
+their presence does not prove autonomous timing or successful convergence.
 If a task needs migration before compaction or integrity loss becomes unsafe,
 unknown timing or takeover capacity becomes a necessary gap again. Source writer
 quiescence is the observed release boundary, not runtime unloading.

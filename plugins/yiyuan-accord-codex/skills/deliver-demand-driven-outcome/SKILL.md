@@ -116,18 +116,23 @@ Use supported host continuation and resource controls. Re-sense material
 host/model/context changes; window size, occupancy and compression efficiency
 are distinct. Check the basis of native remaining-budget signals: they may count
 to a compaction threshold rather than the full window. Unknown stays unknown.
-Before long work, reserve
-capacity for the next span, handoff, takeover verification and failed-transfer
-recovery using sourced estimates. With unknown capacity or loss, shorten spans
+Before large reads or long work, use available native context/budget observations
+and sourced estimates to size the next useful unit, reserving capacity for
+verification, handoff and failed-transfer recovery. With unknown capacity or loss, shorten spans
 and checkpoint early; do not invent universal percentages or wait for exhaustion.
 The helper's `--context-signals` and `assess-context` interfaces are documented in
 `--help`; they require genuine bound native observations and do not dispatch.
 
 Choose supported summarization, same-task context renewal or a fresh zero-history
 task by the needed effect and authority. Copied-history forks serve causal branches.
-Renewal can preserve files while omitting the goal and corrections. Save recoverable
-goal, authority, pauses, unresolved work and effects before it; verify restoration
-against current sources before resuming effects, retaining recovery until then.
+Renewal can preserve files while omitting the goal and corrections. Preserve the
+current goal, authority, pauses, reusable verified results with source and
+verification references, observed effects, uncertainties and remaining work. Choose a task-suitable representation;
+partial deliverables may already carry completed units. Distinguish checked work
+from unresolved questions. On recovery, reuse unchanged verified results and
+recheck affected or missing facts before further effects, retaining recovery until
+then. If repeated reading or renewal stops advancing results, reconsider work-unit
+size, evidence organization or permitted topology before another expensive span.
 Keep the bound checkout. For task transfer, quiesce source writes while
 retaining recovery capacity. The exact target must inspect and accept the latest
 goal, authority, decisions, completed effects and unfinished obligations, resolve
