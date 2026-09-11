@@ -181,7 +181,7 @@ class EntryTests(unittest.TestCase):
         args = argparse.Namespace(package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
                                   codex=PYTHON, node=PYTHON, model="explicit-offline-model",
                                   reasoning="high", timeout=10, windows_sandbox="elevated")
-        fake = subprocess.CompletedProcess([], 0, b"app-server --ephemeral --ignore-user-config --dangerously-bypass-hook-trust --sandbox", b"")
+        fake = subprocess.CompletedProcess([], 0, b"app-server --ephemeral --ignore-user-config --dangerously-bypass-hook-trust --sandbox --output-last-message", b"")
         with patch.object(entry.subprocess, "run", return_value=fake) as calls:
             entry.prepare(args, app_server_case=case)
         self.assertEqual(calls.call_count, 2)
@@ -433,6 +433,7 @@ class EntryTests(unittest.TestCase):
             manifest = self.prepared(root)
             command = manifest["command"]
             self.assertIn("--ephemeral", command)
+            self.assertEqual(command[command.index("--output-last-message") + 1], str(root / "evidence/last-message.txt"))
             self.assertIn("--ignore-user-config", command)
             self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
             self.assertEqual(command[command.index("--sandbox") + 1], "workspace-write")
@@ -538,6 +539,23 @@ class EntryTests(unittest.TestCase):
             result = entry.inspect(manifest["evidence"])
             self.assertFalse(result["inputsUnchanged"]["keep.txt"])
             self.assertFalse(result["sourceRecovered"])
+
+    def test_cli_accepts_exact_safe_bare_executable_but_not_quoted_or_printed_commands(self):
+        executable = r"C:\Python314\python.exe"
+        body = executable + " -B order_source.py"
+        def trace(command_body):
+            events = [json.loads(line) for line in self.trace().splitlines()]
+            command = '"C:\\Program Files\\PowerShell\\7\\pwsh.exe" -Command "' + command_body + '"'
+            for event in events:
+                if "item" in event:
+                    event["item"]["command"] = command
+            return "\n".join(map(json.dumps, events))
+        self.assertTrue(entry.source_recovery_from_events(trace(body), executable)["recovered"])
+        for literal in ("'" + body + "'", '\\"' + body + '\\"',
+                        "Write-Output '" + body + "'", body + "; Write-Output 'extra'",
+                        body.replace(executable, r"C:\Other\python.exe")):
+            with self.subTest(command=literal):
+                self.assertFalse(entry.source_recovery_from_events(trace(literal), executable)["recovered"])
 
     def test_run_rejects_source_drift_before_creating_model_receipt(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -215,6 +215,7 @@ def build_command(manifest):
                      + ",timeout=" + str(timeout) + "}]}]")
     return [manifest["codex"], "exec", "--ignore-user-config", "--disable", "plugins", "--disable", "apps", "--enable", "hooks",
             "--ephemeral", "--skip-git-repo-check", "--sandbox", "workspace-write", "--json", "--color", "never",
+            "--output-last-message", str(Path(manifest["evidence"]) / "last-message.txt"),
             "--dangerously-bypass-hook-trust", "-C", manifest["workspace"], "-m", manifest["model"],
             "--add-dir", str(Path(manifest["evidence"]) / "state"),
             "-c", "approval_policy=\"never\"", "-c", "model_reasoning_effort=" + json.dumps(manifest["reasoning"]),
@@ -263,7 +264,7 @@ def prepare(args, *, app_server_case=None):
     protocol = "app-server" if app_server_case is not None else "exec"
     help_run = subprocess.run([str(paths["codex"]), protocol, "--help"], capture_output=True, timeout=15)
     help_text = help_run.stdout.decode("utf-8", "replace")
-    required = ("--ephemeral", "--ignore-user-config", "--dangerously-bypass-hook-trust", "--sandbox") if protocol == "exec" else ("app-server",)
+    required = ("--ephemeral", "--ignore-user-config", "--dangerously-bypass-hook-trust", "--sandbox", "--output-last-message") if protocol == "exec" else ("app-server",)
     if help_run.returncode or any(flag not in help_text for flag in required):
         raise ValueError("native CLI help does not support required boundary")
     version = subprocess.run([str(paths["codex"]), "--version"], capture_output=True, timeout=15)
@@ -557,9 +558,10 @@ does not identify a resume. Saved logs are diagnostic, not attestations.
     invocation = r"&\s+(?:'" + re.escape(executable) + r"'|\"" + re.escape(executable) + r"\"|" + re.escape(executable) + r")"
     # A plain Windows path without whitespace or shell syntax is itself an
     # invocation. Quoted strings still require &: they are not executions.
-    # Admit this only from the App Server's native parsed action, not a guess
-    # at display quoting. Keep the exact prepared executable and direct-call tail.
-    if protocol == "app-server" and re.fullmatch(r"[A-Za-z]:[\\/][A-Za-z0-9_./\\-]+", executable):
+    # CLI and App Server both emit this legal direct invocation. CLI display
+    # quoting is removed once below; an inner quoted string is not execution.
+    # Keep the exact prepared executable and the bounded direct-call tail.
+    if re.fullmatch(r"[A-Za-z]:[\\/][A-Za-z0-9_./\\-]+", executable):
         invocation = r"(?:" + invocation + "|" + re.escape(executable) + ")"
     call = re.compile(invocation + r"\s+-B\s+(?:order_source\.py|'order_source\.py'|\"order_source\.py\")\s*$", re.I)
     preludes = (
@@ -747,7 +749,10 @@ def run(args):
     # Exclusive receipt forbids retrying the model under the same evidence identity.
     with (evidence / "run-started.json").open("x", encoding="utf-8") as receipt:
         json.dump({"time": time.time(), "command": manifest["command"], "nativeCliInvocationsAllowed": 1}, receipt)
-    env = dict(os.environ, YIYUAN_ACCORD_TASK_STATE_DIR=str(evidence / "state"), TEMP=str(evidence / "temp"), TMP=str(evidence / "temp"))
+    # The CLI's JSON projection omits bootstrap configuration. Its version-bound
+    # codex_exec INFO event records the native start response; no HTTP debug log.
+    env = dict(os.environ, YIYUAN_ACCORD_TASK_STATE_DIR=str(evidence / "state"), TEMP=str(evidence / "temp"), TMP=str(evidence / "temp"),
+               RUST_LOG="error,codex_exec=info")
     shared_config = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "config.toml"
     config_before = shared_config_snapshot(shared_config, manifest["workspace"])
     config_observation = {
