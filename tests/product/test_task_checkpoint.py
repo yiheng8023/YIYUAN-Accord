@@ -1282,6 +1282,29 @@ fs.renameSync = function(from, to) {
         self.assertEqual(self.event("SessionEnd"), {})
         self.assertEqual(list(self.state.iterdir()), [])
 
+    def test_session_end_preserves_interrupted_unbound_input_until_explicit_retirement(self):
+        original = self.invoke({'op': 'read-native-input'})['entries']
+        self.event('Interrupt')
+        interrupted = self.status()
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.event('SessionEnd')
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+        self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'], original)
+        self.assertFalse(self.status()['hostObservationCurrent'])
+        self.assertEqual(self.status()['mode'], 'unbound')
+        self.event('SessionStart', source='resume')
+        self.assertTrue(self.status()['needsResumeReconciliation'])
+        self.event('SessionEnd')
+        self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'], original)
+        self.event('UserPromptSubmit', prompt='The task is cancelled; retain the original files.')
+        current = self.status()
+        self.assertIn('current-receipt', self.invoke({'op': 'retire', 'epoch': interrupted['epoch'],
+            'expectedRevision': 0, 'reason': 'Old cleanup must not discard new input.'}, success=False))
+        self.assertTrue(self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': 0,
+            'reason': 'Current explicit cancellation; no unfinished fixture effects remain.'})['retired'])
+        self.assertEqual(list(self.state.iterdir()), [])
+        self.assertEqual({p.name for p in self.work.iterdir()}, {'source.json', 'keep.txt'})
+
     def test_surviving_caller_can_retire_only_the_current_unbound_input_receipt(self):
         # A native prompt blocked by another Hook can exit without Stop/SessionEnd.
         # Cleanup has its own receipt and must not manufacture outcome acceptance.

@@ -126,7 +126,12 @@ new service, transcript scan or model request. An older executor may omit this
 field or reader; retain a compatible executor for unfinished recovery needs.
 Failure watermarks remain until their owning
 state directory can safely be retired, without clearing another task's uncertainty.
-SessionEnd removes only reconciled unbound receipts. A native input blocked by another
+SessionEnd removes only unbound receipts with no pending input recovery or
+interruption. An interrupted receipt remains available even if no checkpoint was
+created; ending the native session is not evidence that its unfinished goal was
+cancelled. Later native input can be reconciled normally, and explicit current-epoch
+retirement remains available to a caller with verified cleanup authority.
+A native input blocked by another
 Hook can exit without either callback; a surviving caller that verifies this
 exit can retire only the matching unbound receipt using its current epoch,
 revision zero and a reason. This operation cannot retire a bound checkpoint or

@@ -718,7 +718,7 @@ function handleHook(event) {
     const state = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (name === 'SessionEnd') {
       if (!state) inputLocked(where, () => {
-        if (!needsInput(input) && readInput(where)?.epoch === input.epoch) fs.unlinkSync(where.input);
+        if (!needsInput(input) && !input.interrupted && readInput(where)?.epoch === input.epoch) fs.unlinkSync(where.input);
       });
       return {}; // Keep unfinished work for an explicitly bound resume/recovery.
     }
