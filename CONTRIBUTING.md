@@ -83,6 +83,19 @@ review open; the caller must also bind and inspect actual native inputs, termina
 states, authorization, prose and resource recovery. Do not apply this fixture as
 a general workflow or supply rescue prompts to obtain a passing case.
 
+Exact prompt comparison checks input provenance, not keyword-based authorization.
+Evaluate the contextual meaning, referent, conditions and scope of each input,
+and preserve the relationships between simultaneous decisions, questions and
+unfinished work. Agreement wording alone cannot establish this coverage. Use
+meaning-preserving variants and contrasting meanings in the same wording;
+observe actual actions and effects, not a growing synonym list or self-reported
+intent labels. Keep each result within the semantic situations actually tested.
+
+For ephemeral App Server tasks, retain native input/item/turn events while they
+occur. Codex 0.154 rejects `thread/read(includeTurns=true)` for these tasks;
+do not append that unsupported history read as a completion prerequisite.
+Preserve any auxiliary observation error separately from the required evidence.
+
 For serialized App Server observers, [BoundedRpc](scripts/codex_rpc.py) separates
 the work deadline from a fixed recovery window. Bind work, per-request and recovery
 limits before execution. At a work deadline or failure, call `begin_recovery` with
