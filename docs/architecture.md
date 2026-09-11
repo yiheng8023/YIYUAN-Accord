@@ -141,45 +141,52 @@ The default durable directory is `~/.yiyuan-accord/task-state`; an explicit scop
 directory can override it. Exact-session legacy temporary data stays in place;
 conflicting locations are not merged. An empty state directory is not an installed
 package cache or an archive executor. CLI checks establish local behavior; exact
-native loading and ordinary task use remain separate observations. The retained
-dev.17 input observations establish exact package/argv/event/receipt connection
-on both local hosts; Codex also reports receipt of the context. Claude hint
-consumption remains unproven. The later retirement guard is locally exercised
-against the independently reproduced deletion window. Final package changes need
+native loading and ordinary task use remain separate observations. Current
+evidence and unresolved conditions are linked from
+[continuation](operations/CONTINUATION.md). Earlier host-specific mechanisms and
+observations remain recoverable at their
+[exact historical revision](https://github.com/yiheng8023/YIYUAN-Accord/blob/22f99b0e02e3ed8d0061262654953c6e2dcbfd46/docs/architecture.md#current-candidate-and-scoped-connections);
+they do not describe the current distribution. Final package changes need
 explicit affected-dependency review, not a new date on a historical run.
 
-Claude also connects the same small helper to PostToolBatch. An observed Bash
-denial display template produces a short reminder to check its actual scope,
-use already authorized means and reconcile claims and task-created residue.
-Ordinary or unknown batches are silent. Native transport was checked with a
-frozen host and local synthetic responses; model behavior remains a separate
-claim. The batch drops the native is_error flag, so response text only triggers
-advice. It cannot grant permission, execute commands, remove files or block the
-tool loop. This entry adds no persistent state or model request.
-
-Claude retains the caller-bound native plugin update inspector. It checks the
-selected source and pre/post-state, but does not update, roll back or intercept
-actions. Retained ordinary correction, external-source delivery and declared
-healthy-manager lifecycle observations have their own scope and assistance.
-Ordinary Claude use does not require the development manager or Python.
 Continuous correction applies throughout development, including after
 a function works; it is not a once-completed planning phase. User-owned
 AGENTS.md files are external conditions, not a delivered dependency or a
 substitute for Accord's responsibility.
 
+The current package supplies its entry and recovery duties through supported
+native events, without requiring user or project instruction files. An isolated
+no-model native probe with no `AGENTS.md` confirmed those connections, including
+retained input and renewed recovery hints after native context renewal. This
+does not prove autonomous restoration or a complete user outcome. Reading the
+retained input still needs a permitted executor: the probe's read-only,
+never-approve policy rejected the helper command. Preserve that boundary and
+obtain a sufficient supported route before dependent effects.
+
+Context signals also depend on the actual entry. The helper's `--context-signals`
+interface consumes caller-supplied native events; it does not subscribe to a
+Desktop event stream. Native context tools may offer a direct alternative when
+actually exposed and authorized. In the inspected host version, their remaining
+budget uses the tighter applicable auto-compaction or full-window bound; it is
+not an efficiency measurement. An experimental setting is not a package
+prerequisite. Tool absence, unknown data or a policy denial must remain distinct
+from a successful query, renewal or recovery. Source and probe limits are in the
+[bounded observation](operations/PROCEDURE-v3.3.md#无agents入口与原生上下文工具边界2026-09-11).
+
 This is a candidate shape, not architecture law. Skill/Hook count, dependencies,
 layout and admission may change together when evidence supports the change.
-Whole-entry autonomy and incremental value remain unverified. Nine retained
-functional/lifecycle cases and two current impact assessments support only their
-declared conditions, subject to current dependencies and independent qualification.
+Whole-entry autonomy and incremental value remain unverified. Accepted cases and
+impact assessments support only their declared conditions, subject to current
+dependencies and independent qualification; use the bound evidence in continuation
+instead of treating a historical count as the current state.
 Native success can satisfy a duty but does not prove Accord benefit;
 forcing a Skill invocation or evaluator rescue cannot establish ordinary-entry
 autonomy.
 
 The repository has separate roles:
 
-- Host projections supply guidance, optional continuity hints and the Claude
-  update inspector described above.
+- The current host package supplies guidance, native entry and recovery hints,
+  and the scoped task-state helper described above.
 - The no-I/O reference core evaluates supplied facts and policy; it does not
   discover capabilities, authenticate facts or actuate the host.
 - Maintainer validation checks source, package identity, evidence and historical
@@ -231,10 +238,10 @@ identify candidates and limitations, not verified coverage across every desktop,
 CLI, IDE, cloud, mobile or SDK surface. Account-unavailable entries remain
 untested. Both default supported hosts and customized environments matter;
 development-only extensions or evaluator help cannot be counted as product value.
-Isolation is an experimental control, not a product prerequisite. Under the
-user's current direction, the shared Codex development host has no installed
-Accord candidate; pre-release tests use bounded task-local exposure. Publication
-precedes installation into that shared host. Loading, hot update and recovery
+Isolation is an experimental control, not a product prerequisite. Inspect the
+shared development environment and exact installed candidate when they affect
+a decision; do not infer an empty or default profile. Pre-release tests use
+bounded task-local exposure. Loading, hot update and recovery
 need separate evidence in the supported host; replacing files cannot undo earlier
 decisions or erase instructions already present in a conversation.
 
@@ -285,9 +292,9 @@ unchanged predecessor, declared package identity, namespace/legal carriage,
 hint transport, complexity and bounded changed paths. Their PASS does not
 establish functionality, value or candidate eligibility.
 
-The schema-v4 source's `acceptance.admission` v4 binds seven required scopes and
-eleven cases with a risk-bound independent review policy. Each host requires
-function, package lifecycle and impact assessment. Incremental benefit is a
+The development source's `acceptance.admission` binds required coverage, defined
+scopes and cases with a risk-bound independent review policy. Each claimed host
+requires function, package lifecycle and impact assessment. Incremental benefit is a
 separate claim requiring positive comparison evidence; none is supported for
 this candidate. The former positive hypothesis and neutral result keep their
 original identities. Negative results, input/authority harm and unknowns necessary
@@ -346,8 +353,8 @@ fixtures validate this admission logic only. Real case adequacy, actual entry an
 host effects and independent provenance must be checked against the actual
 records; final reviews bind the exact candidate rather than a development draft.
 Authority, hosted checks, ordered publication and public post-state are separate
-gates, never outputs promoted by this evaluator. The generated work sequence owns
-the remaining implementation and real-evidence procedure.
+gates, never outputs promoted by this evaluator. The consensus plan owns the
+remaining implementation and evidence procedure; generated views support it.
 
 Current development budgets are explicit, including five-percent code/test
 headroom; they are revisable cost controls, not product functionality. Measure

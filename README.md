@@ -60,6 +60,8 @@ Knowing its own conditions, maintaining coherence, governing its work, learning,
 
 The current development package participates through a Skill, native event hints and optional task-state mechanisms; repository tools check contracts and evidence. Visibility, invocation, execution and reliable effects are separate. Component count, runtime needs and implementation form follow demonstrated gaps and lifecycle costs.
 
+Users do not need to create or replace `AGENTS.md` to supply Accord's entry duties. Existing user and project instructions remain external conditions to respect and reconcile; earlier Skills can contribute particular responsibilities without defining the entire collaboration chain.
+
 When its input Hook is enabled, the development package retains received native input text in the existing local task receipt for recovery. Each receipt is bounded to 8 MiB; text is read on demand and follows the receipt's task lifecycle. Interrupted input remains available for recovery even when no checkpoint was created; session exit alone does not remove it. This local copy may contain sensitive text. It is not a complete conversation or progress record, and does not establish new authority. See the [architecture](docs/architecture.md#current-candidate-and-scoped-connections) for retention and failure boundaries.
 
 Host buttons, menus, shortcuts, settings, task and project operations, models, permissions, memory, automations, execution environments and extensions all belong in discovery. The currently exposed tool list is not its boundary. The Agent assesses each capability's purpose and conditions, activates it when useful, and verifies effects and exit state. Coverage does not require enabling everything; unknown is not covered.
