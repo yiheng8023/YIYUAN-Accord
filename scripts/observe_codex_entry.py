@@ -5,7 +5,9 @@ one ephemeral exec, explicit model/effort, workspace-write, and reviewed task-lo
 hooks. It does not establish installed-plugin, multi-turn or full resource acceptance.
 Windows Job Objects contain descendants before the suspended CLI starts executing.
 The caller must select an existing Windows sandbox backend explicitly; this runner
-does not initialize/install a sandbox or edit shared configuration.
+does not initialize/install a sandbox or directly edit shared configuration.
+Native thread startup may persist workspace trust. The caller owns authorization
+and exact recovery of that registration; before/after observations do not undo it.
 Evidence and deliverables are retained for review; owned live processes are released.
 The Python prepare API accepts an explicit app_server_case for a caller-owned
 dispatcher; inspect then checks that protocol and its actual input receipts.
@@ -23,6 +25,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import stat
 import subprocess
 import sys
@@ -291,7 +294,7 @@ def prepare(args, *, app_server_case=None):
                 **{k: str(p) for k, p in paths.items()}, "sourceHashes": hashes,
                 "model": args.model, "reasoning": args.reasoning, "timeoutSeconds": args.timeout,
                 "windowsSandbox": args.windows_sandbox,
-                "sandboxSetup": "caller-selected existing backend; no setup/install or shared config mutation by runner",
+                "sandboxSetup": "caller-selected existing backend; no setup/install or direct shared config mutation by runner; native workspace trust requires caller-authorized recovery",
                 "inputs": {k: hashlib.sha256(v).hexdigest() for k, v in inputs.items()},
                 "expected": {"details": [["id", "units"], ["A", "60"], ["B", "80"]],
                              "summary": {"ready_ids": ["A", "B"], "total_units": 140}}, "limits": LIMITS,
@@ -575,33 +578,41 @@ does not identify a resume. Saved logs are diagnostic, not attestations.
     child_status = re.compile(r';\s*\$exitCode = \$LASTEXITCODE;\s*"(?:`n)?SOURCE_EXIT=\$exitCode";\s*exit 0\s*$', re.I)
     propagated_status = re.compile(
         r';\s*\$(?P<code>[a-z_][a-z_0-9]*)\s*=\s*\$LASTEXITCODE;\s*'
-        r'Write-Output\s+"EXIT=\$(?P=code)";\s*'
+        r'Write-Output\s+"(?P<label>[a-z_][a-z_0-9]*)=\$(?P=code)";\s*'
         r'(?:exit\s+\$(?P=code)|if\s*\(\$(?P=code)\s+-ne\s+0\)\s*'
         r'\{\s*exit\s+\$(?P=code)\s*\})\s*$', re.I)
 
     def direct_source(command, actions):
         if not isinstance(command, str):
             return False, False
-        normalized = command.replace("\\\\", "\\")
-        wrapper = re.fullmatch(r'"[^"\r\n]+[\\/]pwsh\.exe" -Command ([\s\S]+)', normalized, re.I)
-        if not wrapper:
-            return False, False
-        body = wrapper[1]
         if protocol == "app-server":
+            normalized = command.replace("\\\\", "\\")
+            if not re.fullmatch(r'"[^"\r\n]+[\\/]pwsh\.exe" -Command ([\s\S]+)', normalized, re.I):
+                return False, False
             if (not isinstance(actions, list) or len(actions) != 1 or not isinstance(actions[0], dict)
                     or actions[0].get("type") != "unknown" or not isinstance(actions[0].get("command"), str)):
                 return False, False
             # Native parsed action avoids interpreting display-only shell quoting.
             # Both action and displayed command must match their start event.
             body = actions[0]["command"]
-        elif len(body) >= 2 and body[0] in ("'", '"') and body[-1] == body[0]:
-            body = body[1:-1]
+        else:
+            # Native CommandExecutionPresentation uses shlex_join(argv), even
+            # on Windows. Decode that display layer, not PowerShell syntax;
+            # stripping outer quotes corrupts adjacent mixed-quote segments.
+            try:
+                argv = shlex.split(command)
+            except ValueError:
+                return False, False
+            if (len(argv) != 3 or not re.fullmatch(r'[^\r\n]+[\\/]pwsh\.exe', argv[0], re.I)
+                    or argv[1].lower() != "-command"):
+                return False, False
+            body = argv[2]
         status_mode = None
         if protocol == "app-server" and child_status.search(body) is not None:
             status_mode = "wrapped"
             body = child_status.sub("", body)
-        elif protocol == "app-server" and propagated_status.search(body) is not None:
-            status_mode = "propagated"
+        elif (status := propagated_status.search(body)) is not None:
+            status_mode = ("propagated", status["label"])
             body = propagated_status.sub("", body)
         match = call.search(body)
         if not match:
@@ -643,8 +654,8 @@ does not identify a resume. Saved logs are diagnostic, not attestations.
                 if code != 0 or item.get("status") != "completed" or not lines or not re.fullmatch(r"SOURCE_EXIT=-?\d+", lines[-1]):
                     continue
                 code = int(lines.pop().split("=")[1])
-            elif status_mode == "propagated":
-                if (not lines or not re.fullmatch(r"EXIT=-?\d+", lines[-1])
+            elif isinstance(status_mode, tuple) and status_mode[0] == "propagated":
+                if (not lines or not re.fullmatch(re.escape(status_mode[1]) + r"=-?\d+", lines[-1])
                         or int(lines.pop().split("=")[1]) != code):
                     continue
             # Native status proves failure of the bound direct invocation. Error

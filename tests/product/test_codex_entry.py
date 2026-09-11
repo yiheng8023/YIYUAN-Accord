@@ -5,6 +5,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -361,6 +362,48 @@ class EntryTests(unittest.TestCase):
         observed = entry.source_recovery_from_events("\n".join(map(json.dumps, events)), PYTHON, protocol="app-server")
         self.assertTrue(observed["recovered"])
         self.assertEqual((observed["failedItemId"], observed["successfulItemId"]), ("failed", "success"))
+
+    def test_cli_mixed_display_quotes_preserve_the_executed_script(self):
+        # Native 0.154 display shape from a failed observation, with private
+        # paths shortened. Adjacent quotes encode one argv element, not a shell.
+        command = r'''"C:\\Program Files\\PowerShell\\7\\pwsh.exe" -Command "& 'C:\\Python\\python.exe' -B order_source.py; "'$code=$LASTEXITCODE; Write-Output "EXIT_CODE=$code"; exit $code' '''.strip()
+        events = [json.loads(line) for line in self.trace(first_code=75).splitlines()]
+        for event in events[1:]:
+            item = event["item"]
+            item["command"] = command
+            if event["type"] == "item.completed":
+                item["aggregated_output"] += f'EXIT_CODE={item["exit_code"]}\n'
+        observed = entry.source_recovery_from_events("\n".join(map(json.dumps, events)), r"C:\Python\python.exe")
+        self.assertTrue(observed["recovered"])
+        self.assertEqual((observed["failedItemId"], observed["successfulItemId"]), ("failed", "success"))
+
+    def test_cli_status_propagation_requires_exact_call_tail_and_native_receipt(self):
+        for mutation in (None, "wrong-native-code", "wrong-printed-code", "wrong-label", "extra-command",
+                         "wrong-variable", "fixed-exit", "printed-call", "foreign-executable",
+                         "extra-argv", "broken-display"):
+            events = [json.loads(line) for line in self.trace(first_code=75).splitlines()]
+            for event in events[1:]:
+                item = event["item"]
+                body = "& '" + PYTHON + "' -B order_source.py; " + '$code=$LASTEXITCODE; Write-Output "STATUS=$code"; exit $code'
+                if item["id"] == "failed":
+                    if mutation == "extra-command": body += "; Write-Output 'STATUS=75'"
+                    elif mutation == "wrong-variable": body = body.replace("exit $code", "exit $other")
+                    elif mutation == "fixed-exit": body = body.replace("exit $code", "exit 75")
+                    elif mutation == "printed-call": body = "Write-Output " + body
+                    elif mutation == "foreign-executable": body = body.replace(PYTHON, PYTHON + ".other")
+                argv = [r"C:\PowerShell\pwsh.exe", "-Command", body]
+                if mutation == "extra-argv": argv.append("extra")
+                item["command"] = shlex.join(argv) + ("'" if mutation == "broken-display" else "")
+                if event["type"] == "item.completed":
+                    printed = item["exit_code"]
+                    if item["id"] == "failed":
+                        if mutation == "wrong-native-code": item["exit_code"] = 0
+                        elif mutation == "wrong-printed-code": printed = 0
+                    label = "FOREIGN" if mutation == "wrong-label" else "STATUS"
+                    item["aggregated_output"] += f'{label}={printed}\n'
+            with self.subTest(mutation=mutation):
+                observed = entry.source_recovery_from_events("\n".join(map(json.dumps, events)), PYTHON)
+                self.assertEqual(observed["recovered"], mutation is None)
 
     def test_app_server_accepts_bare_native_executable_but_not_literal_or_similar_commands(self):
         executable = r"C:\Python\python.exe"
