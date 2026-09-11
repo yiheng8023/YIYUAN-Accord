@@ -4423,7 +4423,7 @@
             "package-lifecycle"
           ],
           "conditions": {
-            "codexVersion": "0.153.4",
+            "codexVersion": "0.154.0",
             "entryProtocol": "app-server",
             "executionOwner": "caller-owned stdio process and Windows Job; 5-second descendant grace then bounded owned cleanup",
             "model": "fixture-no-model",
@@ -4461,7 +4461,7 @@
             "function"
           ],
           "conditions": {
-            "codexVersion": "0.153.4",
+            "codexVersion": "0.154.0",
             "entryProtocol": "app-server",
             "executionOwner": "caller-owned stdio process and Windows Job; 5-second descendant grace then bounded owned cleanup",
             "model": "fixture-no-model",
@@ -4583,7 +4583,7 @@
             "package-lifecycle"
           ],
           "conditions": {
-            "codexVersion": "0.153.4",
+            "codexVersion": "0.154.0",
             "entryProtocol": "app-server",
             "executionOwner": "caller-owned stdio process and Windows Job; 5-second descendant grace then bounded owned cleanup",
             "model": "fixture-no-model",
@@ -4662,7 +4662,7 @@
             "function"
           ],
           "conditions": {
-            "codexVersion": "0.153.4",
+            "codexVersion": "0.154.0",
             "entryProtocol": "app-server",
             "executionOwner": "caller-owned stdio process and Windows Job; 5-second descendant grace then bounded owned cleanup",
             "model": "fixture-no-model",
