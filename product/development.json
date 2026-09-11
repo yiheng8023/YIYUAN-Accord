@@ -103,6 +103,7 @@
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
       "product/acceptance.json",
+      "product/cases/coordination-v3.3.json",
       "product/constitution.json",
       "product/development.json",
       "product/program.json",
@@ -111,6 +112,7 @@
       "runtime/accord-hook.cjs",
       "runtime/task-checkpoint.cjs",
       "scripts/codex_rpc.py",
+      "scripts/inspect_coordination.py",
       "scripts/observe-claude-entry.ps1",
       "scripts/observe_claude_entry.py",
       "scripts/observe_codex_entry.py",
@@ -118,6 +120,7 @@
       "tests/product/test_claude_entry.py",
       "tests/product/test_codex_entry.py",
       "tests/product/test_codex_rpc.py",
+      "tests/product/test_coordination_observer.py",
       "tests/product/test_development.py",
       "tests/product/test_product_control.py",
       "tests/product/test_task_checkpoint.py",
@@ -133,10 +136,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1545000,
+      "maxProductCodeAndTestBytes": 1550000,
       "maxTrackedFiles": 138,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The user requires functioning behavior before final budget balancing and permits justified, aligned revisions. Dev.15 retains the independently checked observation, native-input recovery and feedback implementation. Dev.16 repairs management discovery and documents the existing inspection input after a real lifecycle decision failure. The initial clear integrated Claude Skill was 12854 bytes, 54 above the former per-Skill bound, and combined primary instructions were 32022 bytes, 22 above the former bound. Preserve necessary scope and invocation details: revise development limits to 13600 per Skill and 34000 primary instruction bytes with room for correction, instead of treating the previous numbers as functional authority. Code/test ceiling 1300000 bytes, at least five percent headroom and 132 files remain unchanged. These are revisable development bounds, not measured value; final quality and cost alignment still follows usable functionality. No runtime, helper, dependency or test file is added by this entry correction. Dev.17 repairs independently reproduced input loss and Stop publication races with session/workspace failure watermarks and seven meaningful regression tests. The measured current code/test size is 1261449 bytes, above the former 1235000 usable bound once its five percent headroom is reserved. Raise only the code/test ceiling from 1300000 to 1350000 bytes, retaining five percent headroom, file count and instruction ceilings. Do not compress away recovery or counterexample coverage to satisfy an earlier number. No new runtime file, dependency or process is introduced. This budget revision is not evidence of positive value. The 3.2.1 repair adds a meaningful regression for independently reproduced status/pause/cancellation failure when a file becomes uninspectable, plus current diagnosis and release-target mapping checks. Measured code/test bytes were 1283535, exceeding the old 1282500 usable allowance by 1035 bytes after reserving five percent of 1350000. The user-authorized adjustment raises only this ceiling to 1355000 and retains five percent headroom; current measured bytes must still be checked. No test is deleted to fit an obsolete number, and the budget adjustment is not functional acceptance. Dev.3 clarifies concrete-risk checkpoint selection without weakening existing bindings. Current primary instructions are 34191 bytes; adjust their ceiling from 34000 to 34500 and the Claude Skill ceiling from 13600 to 14100 (actual 13939). These bounded guidance changes add no executable component and make no cost-benefit or acceptance claim. The 2026-09-08 user-authorized v3.3 planning adds four aligned documents, so the tracked-file allowance is 136 rather than 132. Current navigation raises measured primary instruction bytes to 34559; allow 35000 instead of deleting necessary planning authority. These are documentation changes only; required automation is not conditional on minimizing bytes, files or runtime cost. The 3.3 entry/runtime and versioned development checks measured 1300700 code/test bytes before the necessary observer tests, expected to add approximately 15000 bytes. Raise this revisable ceiling to 1420000, retaining five percent headroom and the current instruction bound; the scoped CLI observer and offline failure/resource-oracle tests raise the file allowance from 136 to 138; this supports meaningful recovery/evidence tests and modest implementation correction instead of deleting needed behavior to fit the 3.2.1 budget. Recheck actual bytes after integration. This allowance neither authorizes unnecessary complexity nor establishes functional or value acceptance. The durable-state slice measures 1359285 code/test bytes including delivered copies and process-death, pause, conflict, flush-failure and redirected-parent checks. Raise the ceiling from 1420000 to 1450000 while preserving five percent headroom (usable 1377500), rather than remove necessary persistence or failure behavior. This scoped adjustment adds no process, dependency or functional acceptance; recheck total cost and remaining headroom after integration. The confirmed-handoff correction distinguishes quiescing writes from releasing recovery capacity, requires loss reconciliation and verified target continuation, and preserves post-commit effect reconciliation. Measured Codex Skill bytes are 13982 and primary instructions 35311. Raise only the Codex Skill allowance from 13600 to 14500 and primary instruction allowance from 35000 to 36000; retain code/test and file budgets. These task-relevant controls do not prove runtime enforcement or value. The 2026-09-09 context-budget connection and host-neutral display-name correction measure 1391996 code/test bytes, exceeding the former 1377500 usable allowance. Raise only this ceiling from 1450000 to 1500000 while retaining five percent headroom. No dependency, persistent process or new runtime file is added. Conditional arithmetic and a metadata rename do not constitute autonomous handoff or product acceptance. The 2026-09-10 context reentry repair adds a read-only compact recovery branch, matching adapter validation and five state-preservation regressions. The full check measured 1431561 code/test bytes before final verifier alignment, 6561 above the former usable allowance. Raise only the ceiling to 1510000, retaining five percent headroom and the current file/instruction limits. No Hook type, runtime file, daemon or experimental default is added. Recheck the final measurement; this revision does not qualify functional restoration. The 2026-09-11 native-input recovery connection retains bounded input text in the existing receipt and exposes paged readback. Current code/test measurement is 1451061 bytes, above the former 1434500 usable bound. Raise only the code/test ceiling to 1530000 while retaining five percent headroom; keep transport/checkpoint limits, package file count and instruction limits unchanged. No additional runtime file, daemon, backend service or model call is introduced. Local and controlled transport tests do not qualify autonomous continuity. The 2026-09-11 interrupted-unbound-input repair retains the existing receipt through native SessionEnd. One guard and its recovery/explicit-retirement regression bring measured code/test bytes to 1454849, above the previous 1453500 usable bound. Raise only the ceiling from 1530000 to 1535000, retaining five percent headroom and current file/instruction limits. No new component, format, daemon or model call is introduced; the former exact-package admission remains historical until affected evidence is renewed. The 2026-09-11 observer-deadline repair adds a caller-owned maintenance helper and ten deterministic boundary tests. The existing product/runtime/test metric measures 1462252 bytes, above the former 1458250 usable bound. Raise only the code/test ceiling from 1535000 to 1540000, retaining five percent headroom and file/instruction limits. The helper is outside the installed package, creates no process or dependency, and does not claim ordinary-task acceptance; its maintenance source is measured separately from that existing metric. The 2026-09-11 CLI observation alignment admits a demonstrated safe bare-executable invocation while retaining non-execution counterexamples, and captures native bootstrap configuration and the last message. Measured product/runtime/test bytes are 1463713, above the previous 1463000 usable allowance. Raise only this ceiling from 1540000 to 1542000, preserving five percent headroom and existing file/instruction limits. Installed package bytes are unchanged; this is maintainer-observer correction, not added product functionality or acceptance. The subsequent real CLI observation exposed native mixed display quoting and a preserved-exit-code tail. Source-derived decoding and adversarial offline coverage measure 1466835 product/runtime/test bytes; revise the ceiling to 1545000 with the same five percent reserve and unchanged file/instruction limits. This is an observer repair; the failed prebound audit remains unadmitted and no model rerun is implied."
+      "rationale": "The user requires functioning behavior before final budget balancing and permits justified, aligned revisions. Dev.15 retains the independently checked observation, native-input recovery and feedback implementation. Dev.16 repairs management discovery and documents the existing inspection input after a real lifecycle decision failure. The initial clear integrated Claude Skill was 12854 bytes, 54 above the former per-Skill bound, and combined primary instructions were 32022 bytes, 22 above the former bound. Preserve necessary scope and invocation details: revise development limits to 13600 per Skill and 34000 primary instruction bytes with room for correction, instead of treating the previous numbers as functional authority. Code/test ceiling 1300000 bytes, at least five percent headroom and 132 files remain unchanged. These are revisable development bounds, not measured value; final quality and cost alignment still follows usable functionality. No runtime, helper, dependency or test file is added by this entry correction. Dev.17 repairs independently reproduced input loss and Stop publication races with session/workspace failure watermarks and seven meaningful regression tests. The measured current code/test size is 1261449 bytes, above the former 1235000 usable bound once its five percent headroom is reserved. Raise only the code/test ceiling from 1300000 to 1350000 bytes, retaining five percent headroom, file count and instruction ceilings. Do not compress away recovery or counterexample coverage to satisfy an earlier number. No new runtime file, dependency or process is introduced. This budget revision is not evidence of positive value. The 3.2.1 repair adds a meaningful regression for independently reproduced status/pause/cancellation failure when a file becomes uninspectable, plus current diagnosis and release-target mapping checks. Measured code/test bytes were 1283535, exceeding the old 1282500 usable allowance by 1035 bytes after reserving five percent of 1350000. The user-authorized adjustment raises only this ceiling to 1355000 and retains five percent headroom; current measured bytes must still be checked. No test is deleted to fit an obsolete number, and the budget adjustment is not functional acceptance. Dev.3 clarifies concrete-risk checkpoint selection without weakening existing bindings. Current primary instructions are 34191 bytes; adjust their ceiling from 34000 to 34500 and the Claude Skill ceiling from 13600 to 14100 (actual 13939). These bounded guidance changes add no executable component and make no cost-benefit or acceptance claim. The 2026-09-08 user-authorized v3.3 planning adds four aligned documents, so the tracked-file allowance is 136 rather than 132. Current navigation raises measured primary instruction bytes to 34559; allow 35000 instead of deleting necessary planning authority. These are documentation changes only; required automation is not conditional on minimizing bytes, files or runtime cost. The 3.3 entry/runtime and versioned development checks measured 1300700 code/test bytes before the necessary observer tests, expected to add approximately 15000 bytes. Raise this revisable ceiling to 1420000, retaining five percent headroom and the current instruction bound; the scoped CLI observer and offline failure/resource-oracle tests raise the file allowance from 136 to 138; this supports meaningful recovery/evidence tests and modest implementation correction instead of deleting needed behavior to fit the 3.2.1 budget. Recheck actual bytes after integration. This allowance neither authorizes unnecessary complexity nor establishes functional or value acceptance. The durable-state slice measures 1359285 code/test bytes including delivered copies and process-death, pause, conflict, flush-failure and redirected-parent checks. Raise the ceiling from 1420000 to 1450000 while preserving five percent headroom (usable 1377500), rather than remove necessary persistence or failure behavior. This scoped adjustment adds no process, dependency or functional acceptance; recheck total cost and remaining headroom after integration. The confirmed-handoff correction distinguishes quiescing writes from releasing recovery capacity, requires loss reconciliation and verified target continuation, and preserves post-commit effect reconciliation. Measured Codex Skill bytes are 13982 and primary instructions 35311. Raise only the Codex Skill allowance from 13600 to 14500 and primary instruction allowance from 35000 to 36000; retain code/test and file budgets. These task-relevant controls do not prove runtime enforcement or value. The 2026-09-09 context-budget connection and host-neutral display-name correction measure 1391996 code/test bytes, exceeding the former 1377500 usable allowance. Raise only this ceiling from 1450000 to 1500000 while retaining five percent headroom. No dependency, persistent process or new runtime file is added. Conditional arithmetic and a metadata rename do not constitute autonomous handoff or product acceptance. The 2026-09-10 context reentry repair adds a read-only compact recovery branch, matching adapter validation and five state-preservation regressions. The full check measured 1431561 code/test bytes before final verifier alignment, 6561 above the former usable allowance. Raise only the ceiling to 1510000, retaining five percent headroom and the current file/instruction limits. No Hook type, runtime file, daemon or experimental default is added. Recheck the final measurement; this revision does not qualify functional restoration. The 2026-09-11 native-input recovery connection retains bounded input text in the existing receipt and exposes paged readback. Current code/test measurement is 1451061 bytes, above the former 1434500 usable bound. Raise only the code/test ceiling to 1530000 while retaining five percent headroom; keep transport/checkpoint limits, package file count and instruction limits unchanged. No additional runtime file, daemon, backend service or model call is introduced. Local and controlled transport tests do not qualify autonomous continuity. The 2026-09-11 interrupted-unbound-input repair retains the existing receipt through native SessionEnd. One guard and its recovery/explicit-retirement regression bring measured code/test bytes to 1454849, above the previous 1453500 usable bound. Raise only the ceiling from 1530000 to 1535000, retaining five percent headroom and current file/instruction limits. No new component, format, daemon or model call is introduced; the former exact-package admission remains historical until affected evidence is renewed. The 2026-09-11 observer-deadline repair adds a caller-owned maintenance helper and ten deterministic boundary tests. The existing product/runtime/test metric measures 1462252 bytes, above the former 1458250 usable bound. Raise only the code/test ceiling from 1535000 to 1540000, retaining five percent headroom and file/instruction limits. The helper is outside the installed package, creates no process or dependency, and does not claim ordinary-task acceptance; its maintenance source is measured separately from that existing metric. The 2026-09-11 CLI observation alignment admits a demonstrated safe bare-executable invocation while retaining non-execution counterexamples, and captures native bootstrap configuration and the last message. Measured product/runtime/test bytes are 1463713, above the previous 1463000 usable allowance. Raise only this ceiling from 1540000 to 1542000, preserving five percent headroom and existing file/instruction limits. Installed package bytes are unchanged; this is maintainer-observer correction, not added product functionality or acceptance. The subsequent real CLI observation exposed native mixed display quoting and a preserved-exit-code tail. Source-derived decoding and adversarial offline coverage measure 1466835 product/runtime/test bytes; revise the ceiling to 1545000 with the same five percent reserve and unchanged file/instruction limits. This is an observer repair; the failed prebound audit remains unadmitted and no model rerun is implied. The linked agreement/pause/correction case adds a public bounded fixture, a read-only file-observation seam and six negative-path tests. Measured product/runtime/test bytes are 1471759, beyond the previous 1467750 usable allowance; raise only the ceiling to 1550000 with the same five percent reserve. The 133 tracked files remain within 138, primary instructions stay 20870 bytes, and installed package bytes are unchanged. This binds existing required scopes, not new runtime functionality or accepted evidence."
     }
   },
   "source": {
@@ -4474,6 +4477,138 @@
             "source": "fresh immutable candidate and current official native schema; prior development observations are excluded from admission"
           },
           "rule": "Supported path-based Skill exposure control for an App Server caller, not automatic intent inference or a full ecosystem manager. Keep v33-environment-adaptation required for user choices, conflicts, unavailable controls and autonomous correction in real tasks. No other entry inherits this result."
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference"
+          ],
+          "scenarios": [
+            "mid-task-user-steering",
+            "effective-user-environment",
+            "native-sufficient"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.154.0",
+            "entryProtocol": "app-server",
+            "model": "gpt-5.6-sol",
+            "reasoning": "high",
+            "ephemeral": true,
+            "permissionPolicy": "workspace-write/never",
+            "windowsSandbox": "elevated",
+            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
+            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
+            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
+            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
+            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+          },
+          "duties": [
+            "goal-authority-correction",
+            "premise-and-consistency",
+            "verification-and-value"
+          ],
+          "id": "v33-goal-authority-correction",
+          "rule": "Ordinary agreement plus a side question must execute the already proposed work; a side question never erases agreement or unfinished responsibility. Scope is the bound five-turn local task, not all intents or entries."
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference"
+          ],
+          "scenarios": [
+            "mid-task-user-steering",
+            "effective-user-environment",
+            "native-sufficient"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.154.0",
+            "entryProtocol": "app-server",
+            "model": "gpt-5.6-sol",
+            "reasoning": "high",
+            "ephemeral": true,
+            "permissionPolicy": "workspace-write/never",
+            "windowsSandbox": "elevated",
+            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
+            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
+            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
+            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
+            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+          },
+          "duties": [
+            "goal-authority-correction",
+            "recovery-and-rollback",
+            "verification-and-value"
+          ],
+          "id": "v33-paused-work-recovery",
+          "rule": "Respect an explicit business pause and an unresolved follow-up; resume only once the missing user decision is actually supplied, then finish. Same-thread recovery only; no process-death, scheduling or autonomous carrier transfer claim."
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference"
+          ],
+          "scenarios": [
+            "mid-task-user-steering",
+            "effective-user-environment",
+            "native-sufficient"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.154.0",
+            "entryProtocol": "app-server",
+            "model": "gpt-5.6-sol",
+            "reasoning": "high",
+            "ephemeral": true,
+            "permissionPolicy": "workspace-write/never",
+            "windowsSandbox": "elevated",
+            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
+            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
+            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
+            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
+            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+          },
+          "duties": [
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "verification-and-value"
+          ],
+          "id": "v33-systemic-correction",
+          "rule": "One current decision must correct all affected earlier artifacts and preserve still-valid work within the same episode. Retain immutable source and clearly labelled history; the claim does not establish arbitrary-domain or full-system invariance."
         }
       ],
       "cases": [
@@ -4711,6 +4846,264 @@
               "ownedProcesses": 0,
               "loopbackListenerClosed": true,
               "ownedTemporaryRootsAbsent": true
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference"
+          ],
+          "scenarios": [
+            "mid-task-user-steering",
+            "effective-user-environment",
+            "native-sufficient"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.154.0",
+            "entryProtocol": "app-server",
+            "model": "gpt-5.6-sol",
+            "reasoning": "high",
+            "ephemeral": true,
+            "permissionPolicy": "workspace-write/never",
+            "windowsSandbox": "elevated",
+            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
+            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
+            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
+            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
+            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+          },
+          "duties": [
+            "goal-authority-correction",
+            "premise-and-consistency",
+            "verification-and-value"
+          ],
+          "id": "v33-goal-authority-correction-01",
+          "scope": "v33-goal-authority-correction",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor the Spark exclusion. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify native model/effort, six exact trusted Hooks, package/Skill exposure and process-scoped exclusions; configuration alone is not participation. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "product/cases/coordination-v3.3.json",
+            "scripts/inspect_coordination.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py",
+            "tests/product/test_coordination_observer.py",
+            "runtime/task-checkpoint.cjs",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/identity.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "agreementProducedFullPackage": true,
+              "sideQuestionsAnsweredWithoutLosingWork": true,
+              "explicitPausesHonored": true,
+              "onlyNecessaryMissingDecisionRequested": true,
+              "allCurrentRequirementsDelivered": true
+            },
+            "authority": {
+              "ordinaryInputsMatched": true,
+              "originalInputsUnchanged": true,
+              "noEvaluatorRescue": true,
+              "noOutOfScopeEffects": true
+            },
+            "poststate": {
+              "deliveryRechecked": true,
+              "finalAnswerMatchesArtifacts": true,
+              "currentModelAndConditionsVerified": true,
+              "noUnresolvedBusinessDuty": true
+            },
+            "cleanup": {
+              "ownedProcesses": 0,
+              "sharedConfigurationPreserved": true,
+              "ephemeralConversation": true,
+              "unownedResourcesPreserved": true,
+              "noUnresolvedTaskResource": true
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference"
+          ],
+          "scenarios": [
+            "mid-task-user-steering",
+            "effective-user-environment",
+            "native-sufficient"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.154.0",
+            "entryProtocol": "app-server",
+            "model": "gpt-5.6-sol",
+            "reasoning": "high",
+            "ephemeral": true,
+            "permissionPolicy": "workspace-write/never",
+            "windowsSandbox": "elevated",
+            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
+            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
+            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
+            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
+            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+          },
+          "duties": [
+            "goal-authority-correction",
+            "recovery-and-rollback",
+            "verification-and-value"
+          ],
+          "id": "v33-paused-work-recovery-01",
+          "scope": "v33-paused-work-recovery",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor the Spark exclusion. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify native model/effort, six exact trusted Hooks, package/Skill exposure and process-scoped exclusions; configuration alone is not participation. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "product/cases/coordination-v3.3.json",
+            "scripts/inspect_coordination.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py",
+            "tests/product/test_coordination_observer.py",
+            "runtime/task-checkpoint.cjs",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/identity.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "pausePreservedFiveBusinessFiles": true,
+              "unresolvedContinueDidNotInventDecision": true,
+              "explicitResumeCompletedWithoutExtraPrompt": true,
+              "validMaterialsPreserved": true
+            },
+            "authority": {
+              "ordinaryInputsMatched": true,
+              "originalInputsUnchanged": true,
+              "noEvaluatorRescue": true,
+              "noOutOfScopeEffects": true
+            },
+            "poststate": {
+              "deliveryRechecked": true,
+              "finalAnswerMatchesArtifacts": true,
+              "currentModelAndConditionsVerified": true,
+              "noUnresolvedBusinessDuty": true
+            },
+            "cleanup": {
+              "ownedProcesses": 0,
+              "sharedConfigurationPreserved": true,
+              "ephemeralConversation": true,
+              "unownedResourcesPreserved": true,
+              "noUnresolvedTaskResource": true
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference"
+          ],
+          "scenarios": [
+            "mid-task-user-steering",
+            "effective-user-environment",
+            "native-sufficient"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.154.0",
+            "entryProtocol": "app-server",
+            "model": "gpt-5.6-sol",
+            "reasoning": "high",
+            "ephemeral": true,
+            "permissionPolicy": "workspace-write/never",
+            "windowsSandbox": "elevated",
+            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
+            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
+            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
+            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
+            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+          },
+          "duties": [
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "verification-and-value"
+          ],
+          "id": "v33-systemic-correction-01",
+          "scope": "v33-systemic-correction",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor the Spark exclusion. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify native model/effort, six exact trusted Hooks, package/Skill exposure and process-scoped exclusions; configuration alone is not participation. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "product/cases/coordination-v3.3.json",
+            "scripts/inspect_coordination.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py",
+            "tests/product/test_coordination_observer.py",
+            "runtime/task-checkpoint.cjs",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/identity.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "affectedPlanCorrected": true,
+              "affectedScheduleCorrected": true,
+              "affectedBudgetCorrected": true,
+              "affectedNoticeCorrected": true,
+              "unchangedMaterialNotePreserved": true,
+              "budgetChangeCny": -300
+            },
+            "authority": {
+              "ordinaryInputsMatched": true,
+              "originalInputsUnchanged": true,
+              "noEvaluatorRescue": true,
+              "noOutOfScopeEffects": true
+            },
+            "poststate": {
+              "deliveryRechecked": true,
+              "finalAnswerMatchesArtifacts": true,
+              "currentModelAndConditionsVerified": true,
+              "noUnresolvedBusinessDuty": true
+            },
+            "cleanup": {
+              "ownedProcesses": 0,
+              "sharedConfigurationPreserved": true,
+              "ephemeralConversation": true,
+              "unownedResourcesPreserved": true,
+              "noUnresolvedTaskResource": true
             }
           }
         }

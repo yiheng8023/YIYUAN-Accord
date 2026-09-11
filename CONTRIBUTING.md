@@ -75,6 +75,14 @@ current validator controls admission; test counts or green static checks do not
 prove normal-entry behavior, value, cross-host coverage or production readiness.
 Keep historical fixture subjects separate from changed candidate packages.
 
+The [five-turn collaboration fixture](product/cases/coordination-v3.3.json)
+binds one local agreement, pause and correction episode. Its read-only
+[file observer](scripts/inspect_coordination.py) requires pre-turn original
+identities and observed predecessor snapshots. A structural pass leaves semantic
+review open; the caller must also bind and inspect actual native inputs, terminal
+states, authorization, prose and resource recovery. Do not apply this fixture as
+a general workflow or supply rescue prompts to obtain a passing case.
+
 For serialized App Server observers, [BoundedRpc](scripts/codex_rpc.py) separates
 the work deadline from a fixed recovery window. Bind work, per-request and recovery
 limits before execution. At a work deadline or failure, call `begin_recovery` with

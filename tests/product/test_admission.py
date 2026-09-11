@@ -866,11 +866,11 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        self.assertFalse(any(r["complete"] for r in report["acceptanceRequirements"].values()))
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A04"})
         self.assertIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 3)
-        self.assertEqual(report["progress"]["requirementsComplete"], 0)
+        self.assertEqual(report["progress"]["coverageVerified"], 6)
+        self.assertEqual(report["progress"]["requirementsComplete"], 1)
         # SDK sub-scopes cannot discharge other entries or autonomous adaptation.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
         self.assertIn("v33-codex-lifecycle", missing["package-lifecycle"])
@@ -887,10 +887,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report["progress"], {
             "scope": "acceptance-evidence-coverage-not-effort-or-implementation-completion",
             "requirementsTotal": 8, "requirementsComplete": 0,
-            "coverageTotal": 17, "coverageDefined": 3, "coverageVerified": 0,
+            "coverageTotal": 17, "coverageDefined": 6, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
-            "coverageUnbound": 14, "coverageDefinedButUnverified": 3,
-            "casesDefined": 3, "casesAccepted": 0,
+            "coverageUnbound": 11, "coverageDefinedButUnverified": 6,
+            "casesDefined": 6, "casesAccepted": 0,
         })
 
     def test_incomplete_mapping_or_old_policy_cannot_dispatch_current_observer(self):
