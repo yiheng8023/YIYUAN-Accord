@@ -103,6 +103,64 @@ class TaskCheckpointTests(unittest.TestCase):
         self.assertEqual(status['checkpoint']['unresolved'], ['Await the requested review.'])
         self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
 
+    def test_native_text_read_needs_no_filesystem_writes(self):
+        self.bind(unresolved=['Decision pending.'])
+        self.pause()
+        self.event('SessionStart', source='compact')
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.preload = self.root / 'deny-writes.cjs'
+        self.preload.write_text("const fs=require('node:fs'),open=fs.openSync;"
+            "const deny=()=>{throw Object.assign(new Error('read-only filesystem'),{code:'EROFS'});};"
+            "fs.openSync=(p,f,...a)=>f==='r'?open(p,f,...a):deny();"
+            "for(const k of ['writeSync','writeFileSync','mkdirSync','renameSync','unlinkSync'])fs[k]=deny;",
+            encoding='utf-8')
+        page = self.invoke({'op': 'read-native-input'})
+        self.assertTrue(page['available'])
+        self.assertEqual(page['entries'][0]['text'],
+                         'Deliver both files from the source and preserve the input.')
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_native_text_read_preserves_existing_publication_locks(self):
+        receipt = next(self.state.glob('*.input.json'))
+        for lock in [receipt.with_name(receipt.name + '.lock'),
+                     receipt.with_name(receipt.name.replace('.input.json', '.lock'))]:
+            with self.subTest(lock=lock.name):
+                lock.write_text(json.dumps({'pid': os.getpid()}), encoding='utf-8')
+                before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+                self.assertIn('input-read-busy', self.invoke({'op': 'read-native-input'}, success=False))
+                self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+                lock.unlink()
+
+    def test_native_text_read_rejects_changed_receipt_or_failure_evidence(self):
+        receipt = next(self.state.glob('*.input.json'))
+        failure = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        for change in ['receipt', 'failure']:
+            with self.subTest(change=change):
+                self.preload = self.root / 'concurrent-input.cjs'
+                self.preload.write_text("const fs=require('node:fs'),read=fs.readFileSync;let n=0;"
+                    f"const target={json.dumps(str(receipt))},failure={json.dumps(str(failure))};"
+                    "fs.readFileSync=(p,...a)=>{let b=read(p,...a);if(String(p)===target&&++n===2){"
+                    + ("let v=JSON.parse(b);v.epoch='concurrent-input';b=Buffer.from(JSON.stringify(v));"
+                       if change == 'receipt' else
+                       "fs.writeFileSync(failure,JSON.stringify({schema:1,generation:'concurrent-failure'}));")
+                    + "}return b;};", encoding='utf-8')
+                self.assertIn('input-changed-during-read',
+                              self.invoke({'op': 'read-native-input'}, success=False))
+        del self.preload
+        self.assertTrue(self.status()['needsNativeReplay'])
+        self.assertEqual(json.loads(failure.read_text())['generation'], 'concurrent-failure')
+
+    def test_native_text_read_rejects_publication_started_during_read(self):
+        receipt = next(self.state.glob('*.input.json'))
+        lock = receipt.with_name(receipt.name + '.lock')
+        self.preload = self.root / 'publication-start.cjs'
+        self.preload.write_text("const fs=require('node:fs'),read=fs.readFileSync;"
+            f"const target={json.dumps(str(receipt))},lock={json.dumps(str(lock))};"
+            "fs.readFileSync=(p,...a)=>{const b=read(p,...a);if(String(p)===target)"
+            "fs.writeFileSync(lock,JSON.stringify({pid:process.pid}));return b;};", encoding='utf-8')
+        self.assertIn('input-read-busy', self.invoke({'op': 'read-native-input'}, success=False))
+        self.assertTrue(lock.exists())
+
     def test_native_text_paging_preserves_unicode_and_captured_order(self):
         expected = ['甲🌱乙\n"丙"', '', '同意。']
         for prompt in expected:

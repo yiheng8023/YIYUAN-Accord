@@ -159,6 +159,26 @@ function readNativeInput(request, input) {
   return result;
 }
 
+// Recovery text is observational: do not require write permission just to read
+// it. Reject overlapping publication or changed input/failure evidence instead
+// of acquiring write locks. This snapshot never reconciles or authorizes work.
+function readNativeInputSnapshot(request, where) {
+  const idle = () => {
+    if (fs.existsSync(where.lock) || fs.existsSync(where.input + '.lock')) fail('input-read-busy');
+  };
+  const read = () => {
+    idle();
+    const input = readInput(where);
+    idle();
+    if (!input) fail('native-user-input-receipt-missing');
+    return input;
+  };
+  const input = read();
+  const result = readNativeInput(request, input);
+  if (canonical(input) !== canonical(read())) fail('input-changed-during-read');
+  return result;
+}
+
 function relative(root, name) {
   if (!text(name) || path.isAbsolute(name) || name.split(/[\\/]/).some((part) => part === '.' || part === '..' || !part)) {
     fail('reference-must-be-workspace-relative');
@@ -523,10 +543,10 @@ function operate(request) {
     return inputRecovery ? locked(where, recover) : recover();
   }
   if (!where) fail('native-user-input-receipt-missing');
+  if (request.op === 'read-native-input') return readNativeInputSnapshot(request, where);
   return locked(where, () => {
     const currentInput = inputLocked(where, () => readInput(where));
     if (!currentInput) fail('native-user-input-receipt-missing');
-    if (request.op === 'read-native-input') return readNativeInput(request, currentInput);
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (request.op === 'assess-context') return assessContext(request, prior, currentInput);
     if (request.op === 'status') return {epoch: currentInput.epoch, revision: prior?.revision || 0,
@@ -766,7 +786,7 @@ const HELP = {
   status: {op: 'status', session_id: 'native-session-id', cwd: 'absolute-workspace'},
   retainedInputs: {
     read: {op: 'read-native-input', session_id: 'native-session-id', cwd: 'absolute-workspace', index: 0, offset: 0, maxChars: 4000},
-    paging: 'Defaults read from the first captured event, with at most 4000 Unicode code points and 20 entries. maxChars may be 1..16000. Pass returned next.index and next.offset unchanged for the next page; null means the captured end, not the end of all task history. Text hashes cover full original strings, not fragments. Legacy receipts report unavailable instead of inventing text.',
+    paging: 'Defaults read from the first captured event, with at most 4000 Unicode code points and 20 entries. maxChars may be 1..16000. Pass returned next.index and next.offset unchanged for the next page; null means the captured end, not the end of all task history. Text hashes cover full original strings, not fragments. Legacy receipts report unavailable instead of inventing text. Reads create no locks or files; observed publication locks or changed input/failure evidence reject the read. A stable snapshot does not establish later freshness or permission to act.',
     scope: 'Retains successful native input-event text and explicitly identified native replays in the existing local receipt. Replay entries preserve the consumed recoveryEpoch; missing is unknown, while null denotes an explicit replay without a prior receipt. Our recognized Stop continuation does not add a user input. Events and embedded quotations are not automatically new human decisions; reconcile original source, current input, authority and effects. Capture is not complete conversation, attachment content, model reasoning, a semantic checkpoint or an access grant. Reads preserve pause, quarantine and checkpoint state.',
     lifecycle: 'Input receipts, including captured text, are bounded to 8 MiB and never silently truncated; full storage fails capture and preserves existing failure/replay protection. Transport and bound checkpoint JSON remain limited to 128 KiB. Existing scoped storage and retirement apply: bound work retains the receipt at session end; reconciled unbound receipts end with SessionEnd or verified caller retirement. No new service, transcript scan or model call. Preserve a compatible executor; older versions may not retain or expose text. This local copy may contain sensitive user text and must not be published as routine evidence.'
   },

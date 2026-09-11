@@ -115,7 +115,10 @@ The input receipt retains successfully captured native input text and its hash
 in event order, bounded to 8 MiB without silent truncation. Recognized own Stop
 callbacks are not appended as user input; explicit recovery replays remain labeled.
 `read-native-input` returns bounded Unicode-safe pages only when requested, with
-original hashes and a continuation cursor. It does not replay an event, clear
+original hashes and a continuation cursor. It creates no files or locks: observed
+publication locks or changed input/failure evidence reject the read. A stable
+snapshot establishes neither later freshness nor transactional isolation from
+external writers. It does not replay an event, clear
 quarantine or a pause, or authorize effects. Legacy receipts report unavailable
 text; the captured range is not complete prior history, attachments, progress
 or proof that embedded text represents a new human decision. Corrupt text is
@@ -158,10 +161,15 @@ The current package supplies its entry and recovery duties through supported
 native events, without requiring user or project instruction files. An isolated
 no-model native probe with no `AGENTS.md` confirmed those connections, including
 retained input and renewed recovery hints after native context renewal. This
-does not prove autonomous restoration or a complete user outcome. Reading the
-retained input still needs a permitted executor: the probe's read-only,
-never-approve policy rejected the helper command. Preserve that boundary and
-obtain a sufficient supported route before dependent effects.
+does not prove autonomous restoration or a complete user outcome. The earlier
+Windows probe lacked an enabled sandbox backend, so managed read-only permissions
+with approval disabled could not admit the command. With a real restricted-token
+backend and the same read-only/never policy, the old reader then failed because
+it created lock files. The corrected reader retrieved the captured original text
+after native context renewal without those writes. This controlled transport
+does not demonstrate autonomous choice, semantic restoration or subsequent task
+delivery. Source, original failures and limits are recorded in the
+[read-only recovery observation](operations/PROCEDURE-v3.3.md#只读恢复的沙箱前提与读锁修正2026-09-11).
 
 Context signals also depend on the actual entry. The helper's `--context-signals`
 interface consumes caller-supplied native events; it does not subscribe to a
