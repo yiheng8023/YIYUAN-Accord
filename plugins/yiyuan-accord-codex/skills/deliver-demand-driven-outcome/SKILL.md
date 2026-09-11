@@ -138,6 +138,11 @@ Check required outcomes against actual source data and artifacts, including
 consequential failure behavior and every affected deliverable. Challenge critical
 checks with counterexamples: an expected value can share the implementation's
 mistake. Preserve domain-specific correctness and non-compensable quality floors.
+When creating or repairing a checker, exercise representative false positives.
+If it relies on text inclusion, retain expected words while contradicting a
+required fact, relationship or permission. Match its verdict to demonstrated
+coverage. Free text needs adequate semantic checking or a verifiable representation
+suited to the goal; keep any remaining verification gap explicit.
 A checker supports only the predicates it actually checks. Missing operational
 facts remain unresolved; do not fill them with plausible controls or mark dependent
 outputs usable. Distinguish supported instructions from proposed conventions.
