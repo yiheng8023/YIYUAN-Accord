@@ -75,6 +75,24 @@ current validator controls admission; test counts or green static checks do not
 prove normal-entry behavior, value, cross-host coverage or production readiness.
 Keep historical fixture subjects separate from changed candidate packages.
 
+For serialized App Server observers, [BoundedRpc](scripts/codex_rpc.py) separates
+the work deadline from a fixed recovery window. Bind work, per-request and recovery
+limits before execution. At a work deadline or failure, call `begin_recovery` with
+the independently verified owned thread ID; only interruption, state reading and
+unsubscribe for that target remain available. Recovery cannot renew its window
+or resume work. An expired request is rejected before dispatch. After a send
+attempt, a timeout means an uncertain effect, so reconcile the native state instead
+of blindly retrying. A received RPC error is distinct from a deadline; an interrupt
+acknowledgement alone does not prove that the turn stopped.
+
+This helper does not supply a transport, authenticate ownership, cancel a turn
+automatically or control the host's permissions. The caller retains raw events,
+supplies the required `on_event` handler for interleaved notifications/requests,
+provides bounded send/receive callbacks
+using the same monotonic clock, and independently bounds process/resource cleanup.
+Other transport/protocol failures also require post-state reconciliation. Keep
+historical observers unchanged when their bytes are part of earlier evidence.
+
 Encode testable, risk-relevant constraints in repeatable checks tied to the
 authorized requirement and observable result. Challenge critical checks with
 known failures; use targeted mutation or fault injection when it adds confidence.
