@@ -4,6 +4,25 @@
 
 **当前工序 S0–S5 已并入 [共识节点与计划](PLAN-v3.3.md#工序与依赖)，不在本文件单独维护。** F01–F08 详细结果见 [基线](BASELINE-v3.3.md)，A01–A08 判据见 [验收](ACCEPTANCE-v3.3.md)。本记录保留旧版本称谓与失败事实，不构成当前分发或支持声明。
 
+## 接续者生命周期与源释放的原生对照（2026-09-12）
+
+在d8ce198核对可用控制后，区分宿主子代理分派、同任务上下文刷新、存量任务恢复及执行位置迁移，不按工具名称推定交接语义。[官方子代理说明](https://learn.chatgpt.com/docs/agent-configuration/subagents)将主任务与子代理结果收集分开，[App Server说明](https://learn.chatgpt.com/docs/app-server)也区分start/resume/fork/unsubscribe；取消订阅不等于立即卸载或释放。新鲜查询官方`rust-v0.154.0`标签，经对象36eab010定位6b9826e3aa83b1a5947db50f4332cb9c65f1b340；当前CLI仍0.154.0，程序SHA与此前相同。其[close_agent实现](https://github.com/openai/codex/blob/6b9826e3aa83b1a5947db50f4332cb9c65f1b340/codex-rs/core/src/agent/control/legacy.rs)会关闭目标及其存活后代，构成源释放前必须考虑的共同生命周期。
+
+实际对照使用凭据为空的独立HOME和本机SSE夹具，禁止Authorization、插件、Hook、Goal及业务写入；没有真实模型或账号调用。Luna/V1只作为该次已观测协议选择，不成为产品路由或账号资格声明。前绑两臂、每臂40秒、最多12次夹具请求及10秒恢复。监督者OVER创建SOURCE；后代臂由SOURCE创建TARGET，同级臂由OVER创建二者。两臂均先等到SOURCE与TARGET的原生completed，再由OVER关闭SOURCE，随后分别请求TARGET继续执行。就绪文本由夹具提供，不证明业务目标继承或接管判断。
+
+- 后代臂：TARGET/SOURCE的完成事件在关闭开始之前；关闭后loaded列表只余OVER。对原TARGET的turn/start返回精确thread not found，夹具请求数保持10，没有借旧完成状态冒称目标继续可用。
+- 同级臂：SOURCE关闭后loaded列表仍含TARGET。对TARGET发起的新轮实际completed并返回TARGET_STILL_USABLE，夹具请求数9→10。它证明此处关闭SOURCE没有终止该同级目标，不推断所有共享执行器、父级或宿主退出都安全。
+
+r1在首个请求误读顶层tools字段，r2仍把直接目录缺项当成无V1能力，两者在创建SOURCE前失败并回收。实际工具位于延迟能力集合；r3先通过原生functions.exec查询ALL_TOOLS，再按返回的multi_agent_v1实际名称调用spawn/wait/close，对照才完成。配置表示启用、直接列表无项与实际可发现/可执行三者不能互相替代；r2修改开关未建立关闭工具模式的效果，不补写成新的宿主能力限制。原失败和配置保持。
+
+执行来源绑定同时覆盖已注册本地模块和可到达的未注册模块、函数全局、继承方法；本次6个Python源包含SDK probe的from bounds模块，另绑定Codex/Python/PowerShell三程序。两臂使用同一前绑定义，派发前/臂间/执行后核验源；不是OS、标准库、子进程内部或未来加载的完整来源声明。两个原生App Server均exit0、无强制终止、Job进程0，本机监听器关闭，两个所属临时根回收，15项共享保护保持。两臂各10次夹具请求，SSE中的合成token计数不作为用量、费用或效率证据。
+
+由此在交接段补充必要检查：核对拟执行的源释放对目标、协调者和恢复路径的影响；保留必要支撑或选择合适拓扑，再核验释放后目标仍可继续。没有强制同级结构、要求每次另起任务或统一显式close。变更仅在按需Skill正文增加240字节，运行时、Hook和分发文件数均未变，当前12文件包摘要为`aaca9266025a5074ae6a4642ab1b9a18e2729c6a0ac1a5431640a08dedf89ecc`，Skill为13540字节。初次更新摘要因Windows Path排序与规范的POSIX字符串排序不一致被静态校验拒绝；按既定算法修正，首报保留。Skill校验、产品/开发静态校验及2项受影响回归通过，回归10.163秒，没有提高预算。
+
+规格与标准两项既有独立任务复核了原生ID、创建关系、完成/关闭顺序及关闭后的实际继续，未发现当前指导的可操作问题；继承历史、共享环境与Accord暴露明确披露。这仍是d8ce198下的宿主V1机制证据，未启用新的Accord包，不能升级为自主风险发现、业务交权、接续方案选择、完整A05或正式准入。旧276a8592及更早证据保持原包/来源身份。
+
+证据在`C:/Users/15521/.codex/backups/accord-native-transfer-lifetime-20260912`及其`-r2`、`-r3`根；r3包含两臂原生流、前绑、实际延迟工具定义、关闭后请求、独立回读和评审/校验记录。各根保留原生产文件，以raw-evidence.json封存。下一步将此存活前提用于普通任务的自主择时、继承校验、单写者交权与失败回退，而不是再次机械重复宿主关闭对照。
+
 ## 真实中断成果的冷恢复与执行来源补强（2026-09-12）
 
 在a308624/tree `320454a82934678358679211d5bac7e54a6da2eb`、未变276a8592包上，按[官方新建/恢复接口](https://learn.chatgpt.com/docs/app-server)区分新的执行者与已结束的临时源任务。先验证r4封存清单、匹配interrupted及源Job归零，再复制原有7份业务文件和1份真实输入回执；五条历史文本逐一匹配原生userMessage、turn及摘要。历史状态目录改名为`previous-episode-state`，字节/mtime保持，不伪装成目标当前身份。没有编写交接摘要、修复业务文件或注入答案。新ephemeral目标仅收到“继续完成这里上次中断的工作。”；这是一条控制器安排的冷恢复观察，不是活跃源自主交接，也不补算r4原五阶段完成。

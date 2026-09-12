@@ -137,7 +137,10 @@ Keep the bound checkout. For task transfer, quiesce source writes while
 retaining recovery capacity. The exact target must inspect and accept the latest
 goal, authority, decisions, completed effects and unfinished obligations, resolve
 consequential inheritance loss, and demonstrate safe continuation before commit
-to one writer and source release. A receipt or summary is not completed takeover.
+to one writer and source release. Check how the proposed release affects the
+target, coordinator and recovery path: a parent close can terminate descendants.
+Preserve necessary support or choose a suitable topology before release, then
+verify the target can still continue. A receipt or summary is not completed takeover.
 Revalidate affected readiness after material context/host/model changes. Failed
 preparation retains source recovery; after commit, reconcile target effects before
 rollback to avoid duplicate work. Handoff grants no archiving authority.
