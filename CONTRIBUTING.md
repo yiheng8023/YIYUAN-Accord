@@ -80,6 +80,14 @@ complete, prospectively bound set of process-record labels. It rejects missing,
 unexpected or malformed records; valid record shape does not prove process
 ownership, successful exit or protection of unobserved filesystem locations.
 
+Bind the code that actually executes, observes and recovers a maintainer case,
+including dynamic imports, inherited controller methods and late cleanup code.
+`sys.modules` alone is not a complete dependency inventory. Check the expected
+source set as well as each digest before dispatch; keep native programs and data
+roles explicit. Prefer a task-independent adapter over importing an old business
+episode for its wrapper. A later source audit does not retroactively establish
+prebinding; retain valid behavior evidence and limit the affected provenance claim.
+
 The [five-turn collaboration fixture](product/cases/coordination-v3.3.json)
 binds one local agreement, pause and correction episode. Its read-only
 [file observer](scripts/inspect_coordination.py) requires pre-turn original
