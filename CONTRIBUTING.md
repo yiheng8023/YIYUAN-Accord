@@ -75,6 +75,11 @@ current validator controls admission; test counts or green static checks do not
 prove normal-entry behavior, value, cross-host coverage or production readiness.
 Keep historical fixture subjects separate from changed candidate packages.
 
+The [native-resource reader](scripts/inspect_native_resources.py) requires the
+complete, prospectively bound set of process-record labels. It rejects missing,
+unexpected or malformed records; valid record shape does not prove process
+ownership, successful exit or protection of unobserved filesystem locations.
+
 The [five-turn collaboration fixture](product/cases/coordination-v3.3.json)
 binds one local agreement, pause and correction episode. Its read-only
 [file observer](scripts/inspect_coordination.py) requires pre-turn original

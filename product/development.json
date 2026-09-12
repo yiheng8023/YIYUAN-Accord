@@ -132,7 +132,9 @@
       "yiyuan_accord/evidence.py",
       "yiyuan_accord/guardrails.py",
       "yiyuan_accord/identity.py",
-      "yiyuan_accord/reviews.py"
+      "yiyuan_accord/reviews.py",
+      "scripts/inspect_native_resources.py",
+      "tests/product/test_native_resources.py"
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
@@ -4735,14 +4737,16 @@
           },
           "id": "v33-codex-sdk-lifecycle-01",
           "scope": "v33-codex-sdk-lifecycle",
-          "oracle": "Before dispatch bind package/native/controller bytes, absolute owned paths, exact Hook keys and all deadlines. Install with native marketplace/add and plugin/add. Compare enabled versus disabled SessionEnd on unbound native receipts; no controller may synthesize Hook input. For interruption/resume bind and pause the fixture only after a real UserPromptSubmit, interrupt a held loopback response, restart the native process and resume the same locally stored test task. Verify retained goal/input hashes/output predicates/pause/revision and stale binding before any new effect. A later native Continue receipt cannot itself resume the binding. Correlate native Hook events and raw state transitions; absent SessionEnd notification needs the enabled/disabled causal contrast, not a fabricated receipt. Separately corrupt only the owned marketplace manifest: rejection must preserve healthy installed bytes and pending state; restore source and verify healthy retry. Native uninstall must remove exact cache and future discovery, while preserving independently owned unfinished state. Sample Job members before and after a prebound grace; name forced owned cleanup without claiming natural exit. Verify source/config preservation, shut down the loopback listener, retain unfinished fixture evidence and remove only fixture resources. Read-only observer/recheck and independent review must use a fresh immutable source; the earlier diagnostic run is not this case.",
+          "oracle": "Before dispatch bind package/native/controller bytes, absolute owned paths, exact Hook keys and all deadlines. Install with native marketplace/add and plugin/add. Compare enabled versus disabled SessionEnd on unbound native receipts; no controller may synthesize Hook input. For interruption/resume bind and pause the fixture only after a real UserPromptSubmit, interrupt a held loopback response, restart the native process and resume the same locally stored test task. Verify retained goal/input hashes/output predicates/pause/revision and stale binding before any new effect. A later native Continue receipt cannot itself resume the binding. Correlate native Hook events and raw state transitions; absent SessionEnd notification needs the enabled/disabled causal contrast, not a fabricated receipt. Separately corrupt only the owned marketplace manifest: rejection must preserve healthy installed bytes and pending state; restore source and verify healthy retry. Native uninstall must remove exact cache and future discovery, while preserving independently owned unfinished state. Sample Job members before and after a prebound grace; name forced owned cleanup without claiming natural exit. Verify source/config preservation, shut down the loopback listener, retain unfinished fixture evidence and remove only fixture resources. Read-only observer/recheck and independent review must use a fresh immutable source; the earlier diagnostic run is not this case. Prebind the complete set of seven named native resource records (discovery, end-enabled, end-disabled, interrupted, resumed, restored-exposure, after-remove) and correlate each with its invocation. Missing or unexpected records cannot establish zero remaining processes; preserve nonzero exits and forced cleanup for judgment. Protected-file checks cover only their bound inputs and files, not an OS-wide proof that no other path changed; controller mutation authority remains independently reviewed and parent lifecycle/authority obligations remain open.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
             "plugins/yiyuan-accord-codex/hooks/hooks.json",
             "runtime/task-checkpoint.cjs",
             "tests/product/test_task_checkpoint.py",
-            "yiyuan_accord/admission.py"
+            "yiyuan_accord/admission.py",
+            "scripts/inspect_native_resources.py",
+            "tests/product/test_native_resources.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -4760,7 +4764,7 @@
               "controllerFixtureDisclosed": true,
               "noSynthesizedHookInputs": true,
               "noRealModelOrAccount": true,
-              "onlyOwnedResourcesMutated": true
+              "observedInputsAndProtectedFilesUnchanged": true
             },
             "poststate": {
               "unfinishedStatePreservedAcrossExitAndUninstall": true,
@@ -4814,14 +4818,16 @@
           },
           "id": "v33-codex-sdk-scoped-exposure-01",
           "scope": "v33-codex-sdk-scoped-exposure",
-          "oracle": "Use supported skills/list to bind current shared Skill paths and enabled state. Apply skills.config path selectors only in the owned process; do not edit or uninstall shared Skills. Read back disabled status and inspect actual auth-free loopback provider request bodies to verify those exact paths/catalog entries are absent while the installed Accord entry remains available. Visibility is not execution, installation count is not context cost, and absence in a new request does not erase earlier context. Check untouched original shared settings and files, stop the selected process, and confirm a fresh process without these overrides again reflects the original enabled states. Record unknowns and scope; no Agent model or autonomous choice is asserted. Bind all source bytes, cases and raw evidence before an immutable-candidate execution; admit only after independent observation/recheck/review.",
+          "oracle": "Use supported skills/list to bind current shared Skill paths and enabled state. Apply skills.config path selectors only in the owned process; do not edit or uninstall shared Skills. Read back disabled status and inspect actual auth-free loopback provider request bodies to verify those exact paths/catalog entries are absent while the installed Accord entry remains available. Visibility is not execution, installation count is not context cost, and absence in a new request does not erase earlier context. Check untouched original shared settings and files, stop the selected process, and confirm a fresh process without these overrides again reflects the original enabled states. Record unknowns and scope; no Agent model or autonomous choice is asserted. Bind all source bytes, cases and raw evidence before an immutable-candidate execution; admit only after independent observation/recheck/review. Prebind the complete set of seven named native resource records (discovery, end-enabled, end-disabled, interrupted, resumed, restored-exposure, after-remove) and correlate each with its invocation. Missing or unexpected records cannot establish zero remaining processes; preserve nonzero exits and forced cleanup for judgment. Protected-file checks cover only their bound inputs and files, not an OS-wide proof that no other path changed; controller mutation authority remains independently reviewed and parent lifecycle/authority obligations remain open.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
             "plugins/yiyuan-accord-codex/hooks/hooks.json",
             "runtime/task-checkpoint.cjs",
             "tests/product/test_task_checkpoint.py",
-            "yiyuan_accord/admission.py"
+            "yiyuan_accord/admission.py",
+            "scripts/inspect_native_resources.py",
+            "tests/product/test_native_resources.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
