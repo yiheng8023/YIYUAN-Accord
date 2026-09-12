@@ -43,13 +43,6 @@ a wrong-target or not-found result does not prove the original agent was closed.
 Reconcile failed or unknown release before declaring resource closure.
 Keep adequate simple work local, and do not impose review on every task.
 
-When the validity of a checker is itself disputed, assess its interpretation of
-the original requirements independently of the implementation/checker pair.
-A separately justified reference may close that gap; otherwise use a fresh
-bounded native reviewer with the original requirements and actual artifacts.
-Resolve findings against sources and recheck affected results before completion.
-Rewriting the checker and passing its examples alone does not settle that dispute.
-
 Discover current account and dispatch-supported models/efforts when selection
 matters, including user-selected configurations once task needs are known.
 Selection alone proves neither fitness nor a mistake. Honor user restrictions;
