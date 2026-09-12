@@ -83,6 +83,7 @@
       "docs/operations/ACCEPTANCE-v3.3.md",
       "docs/operations/BASELINE-v3.3.md",
       "docs/operations/CONTINUATION.md",
+      "docs/operations/LAUNCH-v3.3.md",
       "docs/operations/PLAN-v3.2.md",
       "docs/operations/PLAN-v3.3.md",
       "docs/operations/PROCEDURE-v3.3.md",
@@ -5316,7 +5317,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r11",
+    "revision": "r12",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",
