@@ -75,10 +75,13 @@ unaffected results and reliable history. Reconcile the goal, plan, dependencies
 and acceptance instead of treating a past completed label as proof. Tool advice
 is not a new user decision.
 
-After failure, inspect actual post-state, including partial outputs. Without a
-changed premise or a discriminating check, another identical attempt adds no
-evidence: change the method or pause that branch. Execute the correction and
-verify its effects; diagnosis, a report or a safe stop is not the missing result.
+After failure, inspect actual post-state, including partial outputs. Recover
+through a supported route, then reconcile affected artifacts and explanations
+with later verification and cleanup facts. A requested account of encountered
+issues retains resolved failures; a report of current blockers distinguishes
+what remains pending. Without a changed premise or a discriminating check,
+another identical attempt adds no evidence. Execute and verify the correction;
+diagnosis, a report or a safe stop is not the missing result.
 Respect real user pauses. Never infer user intent or collaboration mode from a
 permission-mode observation, or automatically restore a changed setting.
 
