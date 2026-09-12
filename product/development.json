@@ -244,7 +244,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
           "execution": "本地交互或云端委派",
           "environment": "编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。",
-          "observation": "本机 openai.chatgpt 26.901.22334 仅安装记录；兼容编辑器未测。",
+          "observation": "2026-09-12：升级前26.903.61454/CLI0.153.4保留为历史。用户更新后登记为26.908.40401，提供VS Code中插件管理页、YIYUAN Accord市场条目及钩子入口截图；只读进程观察确认Code启动该扩展目录内的0.154.0-alpha.6.2 app-server，与扩展启动参数一致。已撤回依据https://learn.chatgpt.com/docs/plugins概括性表述作出的本机IDE不支持插件判断及相应暂缓建议；公开页面与当前构建的适用性冲突未推广到所有版本/账户。当前界面及实际后端已确认，具体Accord包加载、Hook执行、全链路及兼容编辑器仍未验收；详见PROCEDURE-v3.3.md的IDE实际界面纠正记录。",
           "currentEffect": "unverified"
         },
         {
@@ -5317,7 +5317,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r12",
+    "revision": "r13",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",
