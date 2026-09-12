@@ -1220,3 +1220,20 @@ r8 共识后的实际实现切片，对应 W01/W02/W03/W06/W07 的 S2/S3 局部�
 独立只读审查确认业务、角色、保留和该退出后态，支持保留当前入口澄清；并未建立不可绕过边界、异常退出保证、全宿主支持、独立价值或自主交接。若其它相关条件仍暴露原始文件绕过，应比较更强接口或隔离，不继续堆提示。三份原生Job正常退出，15项共享保护和原始66文件证据均保持，三个所属根回收。67文件清单SHA256 `2e3c1e4498b054e7a031b9d5fa3e6772adbb64aae89918594fc2ca7c35949a43`，私人根accord-frozen-closure-20260912-interface。前述零模型回放3文件清单SHA256 `cd3281971721d8841737af93bdd8487de3f4c91ea2faa93400c82ebeabd268a5`。
 
 当前入口变更经退役相关既有10项回归12.007秒、产品及开发检查通过；无新增组件、依赖、常驻执行器或规则文件。原始冻结轮仍保持interrupted，新任务已兑现其剩余业务交付，历史检查点不再作为待运行尾项。后续聚焦自主需要发现、择时、活跃源接管及失败回退，不重复同类库存或用两个恢复样本代验完整W05。
+
+
+## 子代理原生输入与根回执隔离（2026-09-12）
+
+在071f706上重新核对[官方App Server](https://learn.chatgpt.com/docs/app-server)、[子代理](https://learn.chatgpt.com/docs/agent-configuration/subagents)和[Hook](https://learn.chatgpt.com/docs/hooks)资料，并按rust-v0.154.0树获取源码、逐文件Git blob/SHA复核。独立零历史来源审查确定：[session/session.rs](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core/src/session/session.rs)中session_id由根及所有后代共享；[hook_runtime.rs](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core/src/hook_runtime.rs)为子UserInput另附agent_id/type。当前V2初始spawn使用InterAgentCommunication，不进入UserPromptSubmit；legacy初始派发和直接子UserInput则能进入。子任务start/stop改派SubagentStart/SubagentStop，子Interrupt跳过，不能把一般Root事件支持外推全部子生命周期。
+
+现有helper仅以session_id/cwd定位，故同cwd子UserInput可覆盖根epoch/文本；并发锁只会串行化同一错误归属。两个本地反例在0.951秒内先红：暂停根回执被改写，不同子cwd又冒建根记录。修复将明确子身份留给原生子任务状态，不读写根回执；部分/无效身份通过既有失败水位保守失效，保留旧文本及检查点。三个新回归包含四类坏身份；早期未知状态测试误把当前回执代际变化当成内容变化、又误用字段名，修正为读取真实receiptEpoch及保留entries后通过。根键/格式、暂停/输入保护及执行协议不变，无迁移、独立子检查点或认证边界声明。两份runtime一致，README中英文及架构同步说明根作用域。
+
+完整检查点94项112.879秒通过。开发78项104.215秒中4项只因code/test体量1504331超旧可用余量1501000而失败；按已授权可修订预算，仅将体量上限1580000调至1590000，保留5%预留、文件/指令上限及验收底线。四个失败项单独复验全部通过；不能称原78项运行一次全绿，也没有因实现变化重跑未受影响测试。
+
+随后原生零模型对照使用相同0.154.0可执行文件、只监听本机的脚本响应服务、全新无凭据配置和临时任务。Hook relay记录真实UserPromptSubmit后转交精确旧/新helper，Node可执行文件及13项代码/程序来源前绑；不是完整插件安装或真实模型判断。每臂均实际产生1条根与3条子输入，共享session且两名子actor独立：旧回执存4条且最后文本属于子任务，新回执仅原根1条。子任务仍完成；关闭source工作者后，同级target收到原生UserInput并再次completed，服务请求增加1次。没有验证descendant关闭；复用夹具中保留的该分支及旧oracle说明未执行，不能移用本次结论。
+
+首个夹具在原生初始化前因TOML数组编码错误失败；第二个初始化成功但Hook启动失败，未取得relay事件；改变启动方式、采用已工作过的package风格node命令并显式传递所属路径后完成。前两次失败及恢复保留，不计产品失败或事后改成成功。最终两臂均exit0、无强杀、进程0、服务线程结束，原件及3项共享配置保持，所属根回收；没有真实模型请求、凭据文件或外部AI服务调用。维护者独立审查另行完成，不属于“零模型”的夹具范围。
+
+私人证据：首根accord-native-subagent-receipt-20260912为16文件，清单SHA256 `48371f61d6ac7f96d988e2a24678bf105a7815abaf249fe8609b74570170337f`；r2为28文件，`540caee87a39c3b50bff9ca7298a2e497b6f085c0e09437d2c18fdb8587d0d96`；r3为54文件，`1fbd5877365544eacca22fd8f430707e387f23c52a96006ec00dded3a973851c`。官方源码与发现22文件根accord-autonomous-continuity-source-20260912，清单`17f463bfbf8cb0a851176617af4f1f7e528173b54c0138daad528723bd3dc495`。
+
+当前包6c8d2981e9be9fc2c04c13b892ad51168c8eb58a1606af45ee95cc2a3b0510d1。本轮关闭的是一个自主协作前置组合缺陷，未完成A05：之后仍需观察真实任务下自主需要发现、分工/继续/交接的选择、接收核对及失败回退。已可用原生能力优先作为低负担起点并与必要组合比较，不强制所有任务交接。当前缓存所见实验上下文与history/notes默认关闭只是当时来源，不是全局不可用结论；本轮未强开这些后端或Goal。旧案例/包/CI身份全部保留，不迁移为当前候选验收。

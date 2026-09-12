@@ -62,6 +62,44 @@ class TaskCheckpointTests(unittest.TestCase):
         (self.work / "summary.json").write_text(json.dumps({"total": total}), encoding="utf-8")
         (self.work / "details.csv").write_text(f"id,units\nA,{total}\n", encoding="utf-8")
 
+    def test_subagent_user_input_preserves_root_receipt_and_paused_checkpoint(self):
+        self.bind(unresolved=['Root approval is still required.'])
+        self.pause('Root user paused this work.')
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        for child in ['child-one', 'child-two']:
+            self.event('UserPromptSubmit', agent_id=child, agent_type='worker',
+                       turn_id='child-turn', prompt='Deliver the child task only.')
+            self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+        current = self.status()
+        self.assertEqual(current['mode'], 'paused')
+        self.assertEqual(current['checkpoint']['unresolved'], ['Root approval is still required.'])
+        self.assertNotIn('child', json.dumps(self.invoke({'op': 'read-native-input'})))
+
+    def test_subagent_user_input_does_not_create_root_state_at_its_cwd(self):
+        child_work = self.root / 'child-work'
+        child_work.mkdir()
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.event('UserPromptSubmit', cwd=str(child_work), agent_id='child-one',
+                   agent_type='worker', prompt='Work independently in this child directory.')
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_unknown_subagent_identity_cannot_be_captured_as_fresh_root_input(self):
+        self.bind(unresolved=['Root work remains.'])
+        before = self.invoke({'op': 'read-native-input'})
+        for identity in [{'agent_type': 'worker'}, {'agent_id': 'child-one'},
+                         {'agent_id': 'child-one', 'agent_type': ' '},
+                         {'agent_id': 'child-one', 'agent_type': 1}]:
+            with self.subTest(identity=identity):
+                error = self.invoke({'hook_event_name': 'UserPromptSubmit', **identity,
+                                     'prompt': 'Unknown actor input.'}, hook=True, success=False)
+                self.assertIn('unknown-native-agent-identity', error)
+                current = self.status()
+                self.assertTrue(current['needsNativeReplay'])
+                self.assertEqual(current['checkpoint']['unresolved'], ['Root work remains.'])
+                after = self.invoke({'op': 'read-native-input'})
+                self.assertEqual(after['entries'], before['entries'])
+                self.assertNotEqual(after['receiptEpoch'], before['receiptEpoch'])
+
     def test_interactive_stdin_fails_promptly_without_waiting_or_mutating_task_state(self):
         preload = self.root / 'interactive-stdin.cjs'
         preload.write_text("Object.defineProperty(process.stdin,'isTTY',{value:true});", encoding='utf-8')

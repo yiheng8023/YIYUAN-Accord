@@ -702,6 +702,13 @@ function hint(event, where, currentInput, prior = null) {
 function handleHook(event) {
   const name = event.hook_event_name;
   if (!['UserPromptSubmit', 'Stop', 'Interrupt', 'SessionEnd', 'SessionStart'].includes(name)) fail('unsupported-hook-event');
+  // Codex descendants share the root session_id; agent_id identifies their actor.
+  // This checkpoint belongs to the root task, not to a descendant's native state.
+  if (Object.hasOwn(event, 'agent_id') || Object.hasOwn(event, 'agent_type')) {
+    if (!text(event.agent_id) || event.agent_id.length > 200 || !text(event.agent_type)) fail('unknown-native-agent-identity');
+    return {hookSpecificOutput: {hookEventName: name, additionalContext:
+      'Accord root checkpoint is unchanged. This event belongs to a subagent; reconcile its input, authority and continuation through its own native task state. Parent checkpoint files are not this task\'s state.'}};
+  }
   if (name === 'SessionStart' && !['resume', 'compact'].includes(event.source)) return {};
   const where = location(event.session_id, event.cwd, name === 'UserPromptSubmit');
   if (name === 'SessionStart' && event.source === 'compact') {
@@ -824,7 +831,7 @@ function hook(event) {
 }
 
 const HELP = {
-  scope: 'Task-local file evidence and supported native Stop continuation; no command, archive or handoff executor.',
+  scope: 'Root-task file evidence and supported native Stop continuation; no command, archive or handoff executor. Native subagent events carry agent_id because session_id is shared with the root. They leave root state unchanged; subagent continuation uses native task state. This helper does not provide independent subagent checkpoints or enforce caller authorization.',
   input: 'One JSON object on piped stdin, not an interactive terminal. In PowerShell, pipe $request through ConvertTo-Json -Depth 8 -Compress to node <helper-path>. Use --hook only for native events; other calls need the current native session/cwd receipt.',
   storage: 'YIYUAN_ACCORD_TASK_STATE_DIR selects an explicit scoped directory. Otherwise use ~/.yiyuan-accord/task-state. Exact-session legacy temporary records remain at their original location; competing locations fail without merge. status.storage reports the selected path and kind. No automatic migration, cross-session adoption, scheduler or power-loss guarantee. State file contents are flushed before atomic replacement; filesystem and directory-entry durability need separate validation.',
   operations: ['status', 'read-native-input', 'assess-context', 'bind', 'pause', 'retire', 'recover-lock'],

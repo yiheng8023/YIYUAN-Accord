@@ -111,7 +111,7 @@ These operations preserve failure watermarks and are not an external-writer
 transaction. If failure storage or compensation itself cannot work, the native
 caller must hold and recover through sufficient means; cross-process protection
 is unknown. Transport and bound checkpoint JSON remain bounded to 128 KiB.
-The input receipt retains successfully captured native input text and its hash
+The root-task input receipt retains successfully captured native input text and its hash
 in event order, bounded to 8 MiB without silent truncation. Recognized own Stop
 callbacks are not appended as user input; explicit recovery replays remain labeled.
 `read-native-input` returns bounded Unicode-safe pages only when requested, with
@@ -392,3 +392,22 @@ This anchor remains for published release-document references. The v3.1
 maintenance baseline is
 [historical, at exact revision 4f9a21d](https://github.com/yiheng8023/YIYUAN-Accord/blob/4f9a21d79729867bed3bc89917b64c8386ce9ac6/docs/architecture.md#maintenance-baseline).
 Use the active development source above for current work.
+
+
+### Native root and subagent identity
+
+Codex 0.154.0 uses one `session_id` for a root task and its descendants. Native
+subagent `UserInput` events additionally carry `agent_id` and `agent_type`.
+The checkpoint's unchanged `session_id`/cwd key represents root-task state;
+subagent events leave it untouched and use native subagent state. Partial or
+invalid actor metadata is unknown and follows the existing failure-watermark
+path, preserving old text and checkpoints while invalidating stale freshness.
+No root-state migration or independent subagent checkpoint store is introduced.
+
+The current V2 spawn path sends inter-agent communication, which skips
+UserPromptSubmit. Legacy spawn and directly submitted child UserInput can take
+the other path. Subagent start/stop and root start/stop/interrupt are distinct
+native routes; do not infer root-event coverage from subagent availability.
+This actor separation is not caller authentication or a complete permission
+barrier. Actual delegation, receiver reconciliation and safe source release
+still require their own execution evidence.
