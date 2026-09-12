@@ -995,6 +995,188 @@ catch(e){process.stdout.write(e.message);}
         self.assertTrue(self.invoke({'op':'retire', 'epoch':revised['epoch'],
                                     'expectedRevision':revised['revision']})['retired'])
 
+    def test_output_revision_cannot_silently_rebaseline_changed_inputs(self):
+        self.bind()
+        original_contract = self.status()['checkpoint']
+        self.event('UserPromptSubmit', prompt='Calculate with 55; preserve source.json and keep.txt.')
+        (self.work/'source.json').write_text('{"units":55}', encoding='utf-8')
+        self.write_outputs(55)
+        current = self.status()
+        self.assertEqual(current['inspection']['status'], 'stale-inputs')
+        self.assertIn('input-revision-required', self.invoke({
+            'op':'bind', 'epoch':current['epoch'], 'expectedRevision':current['revision'],
+            'result':'Updated calculation only', 'inputs':['source.json','keep.txt'],
+            'outputs':[{'path':'summary.json','json':{'/total':55}},{'path':'details.csv'}],
+            'nextAction':'verify the revision', 'canContinue':True,
+            'revisionReason':'The user changed the calculated total.'}, success=False))
+        after = self.status()
+        self.assertEqual(after['checkpoint'], original_contract)
+        self.assertEqual(after['inspection']['status'], 'stale-inputs')
+        self.assertIn('latest-user-input-not-reconciled', self.invoke({
+            'op':'retire', 'epoch':after['epoch'], 'expectedRevision':after['revision']}, success=False))
+
+    def test_input_protection_cannot_be_dropped_by_a_generic_rebind(self):
+        self.bind()
+        before = self.status()
+        self.assertIn('input-revision-required', self.invoke({
+            'op':'bind', 'epoch':before['epoch'], 'expectedRevision':before['revision'],
+            'result':'Same delivery', 'inputs':['source.json'],
+            'outputs':before['checkpoint']['outputs'], 'nextAction':'verify', 'canContinue':True,
+            'revisionReason':'A generic output revision is not an input disposition.'}, success=False))
+        self.assertEqual(self.status()['checkpoint'], before['checkpoint'])
+
+    def revision_request(self, current=None, **fields):
+        current = current or self.status()
+        contract = current['checkpoint']
+        return dict(op='bind', epoch=current['epoch'], expectedRevision=current['revision'],
+                    result=contract['result'], inputs=[row['path'] for row in contract['inputs']],
+                    outputs=contract['outputs'], nextAction='verify current authorized work',
+                    canContinue=True, **fields)
+
+    def test_explicit_input_refresh_preserves_other_protection_and_pause(self):
+        self.bind()
+        original = self.status()['checkpoint']['inputs']
+        self.pause('Execution remains paused.')
+        self.event('UserPromptSubmit', prompt='The source is intentionally updated to 55; reconcile the plan, keep execution paused.')
+        (self.work/'source.json').write_text('{"units":55}', encoding='utf-8')
+        self.write_outputs(55)
+        current = self.status()
+        request = self.revision_request(current,
+            inputRevisions=[{'path':'source.json', 'observed':current['inspection']['inputs'][0]['current'],
+                             'reason':'The user explicitly authorized this source update; keep.txt stays protected.'}],
+            revisionReason='The planned result follows the authorized updated source.')
+        request['outputs'][0]['json']['/total'] = 55
+        self.assertEqual(self.invoke(request)['mode'], 'paused')
+        after = self.status()
+        self.assertEqual(after['inspection']['status'], 'verified-local')
+        self.assertEqual(after['checkpoint']['inputs'][1], original[1])
+        accepted = after['checkpoint']['inputRevisions'][0]
+        self.assertEqual(accepted['previous'], original[0]['observed'])
+        self.assertEqual(accepted['observed'], request['inputRevisions'][0]['observed'])
+        self.assertEqual((accepted['disposition'], accepted['epoch']), ('refresh', current['epoch']))
+        self.assertIn('paused-task-cannot-retire', self.invoke({
+            'op':'retire', 'epoch':after['epoch'], 'expectedRevision':after['revision']}, success=False))
+        self.invoke(self.revision_request(after))
+        self.assertEqual(self.status()['checkpoint']['inputRevisions'], [accepted])
+
+    def test_explicit_removal_and_input_to_output_transition_remain_available(self):
+        self.bind()
+        self.event('UserPromptSubmit', prompt='Remove keep.txt; source.json may now be updated as a deliverable.')
+        (self.work/'keep.txt').unlink()
+        current = self.status()
+        request = self.revision_request(current, inputRevisions=[{
+            'path':'keep.txt', 'observed':{'present':False}, 'reason':'User-authorized removal of this input.'}])
+        request['inputs'] = ['source.json']
+        self.invoke(request)
+        self.assertEqual(self.status()['checkpoint']['inputRevisions'][0]['disposition'], 'remove')
+        (self.work/'source.json').write_text('{"units":55}', encoding='utf-8')
+        self.write_outputs()
+        current = self.status()
+        request = self.revision_request(current, inputRevisions=[{
+            'path':'source.json', 'observed':current['inspection']['inputs'][0]['current'],
+            'reason':'Explicitly move this revised source into the output contract.'}],
+            revisionReason='The user made the updated source part of the deliverable.')
+        request['inputs'] = []
+        request['outputs'].append({'path':'source.json','json':{'/units':55}})
+        self.assertEqual(self.invoke(request)['inspection']['status'], 'verified-local')
+        after = self.status()
+        self.assertEqual(after['checkpoint']['inputs'], [])
+        self.assertEqual(after['checkpoint']['inputRevisions'][0]['disposition'], 'remove')
+
+    def test_input_dispositions_reject_stale_partial_duplicate_and_unrelated_claims(self):
+        self.bind()
+        original = self.status()
+        (self.work/'source.json').write_text('{"units":55}', encoding='utf-8')
+        current = self.status()
+        good = {'path':'source.json','observed':current['inspection']['inputs'][0]['current'],
+                'reason':'An explicit source revision, not an output-only reason.'}
+        cases = [
+            (None, 'invalid-input-revision'),
+            ({}, 'invalid-input-revision'),
+            ([{**good,'reason':' '}], 'invalid-input-revision'),
+            ([{**good,'reason':'x'*2049}], 'invalid-input-revision'),
+            ([{**good,'observed':{'present':True,'sha256':['a'*64]}}], 'invalid-input-revision'),
+            ([{**good,'observed':original['checkpoint']['inputs'][0]['observed']}], 'input-revision-observation-changed'),
+            ([good,good], 'invalid-input-revision'),
+            ([good,{'path':'keep.txt','observed':original['checkpoint']['inputs'][1]['observed'],'reason':'Unrelated.'}], 'input-revision-not-needed'),
+            ([{**good,'path':'missing.txt','observed':{'present':False}}], 'input-revision-required'),
+        ]
+        if os.name == 'nt':
+            cases.append(([good,{**good,'path':'SOURCE.JSON'}], 'invalid-input-revision'))
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        for edits,error in cases:
+            with self.subTest(edits=edits):
+                self.assertIn(error, self.invoke(self.revision_request(current, inputRevisions=edits), success=False))
+                self.assertEqual({p.name:p.read_bytes() for p in self.state.iterdir()}, before)
+        (self.work/'keep.txt').write_bytes(b'also changed')
+        self.assertIn('input-revision-required', self.invoke(
+            self.revision_request(inputRevisions=[good]), success=False))
+
+    def test_missing_retained_input_cannot_be_refreshed_into_a_valid_basis(self):
+        self.bind()
+        (self.work/'source.json').unlink()
+        self.assertIn('input-unavailable', self.invoke(self.revision_request(inputRevisions=[{
+            'path':'source.json','observed':{'present':False},'reason':'Cannot refresh a missing retained input.'}]), success=False))
+        self.assertEqual(len(self.status()['checkpoint']['inputs']), 2)
+
+    def test_removed_reference_is_rechecked_after_output_inspection(self):
+        self.bind()
+        self.write_outputs()
+        current = self.status()
+        request = self.revision_request(current, inputRevisions=[{
+            'path':'keep.txt','observed':current['inspection']['inputs'][1]['current'],
+            'reason':'Bounded removal after inspected state.'}])
+        request['inputs'] = ['source.json']
+        self.preload = self.root/'change-removed-input.cjs'
+        self.preload.write_text("const fs=require('node:fs'),path=require('node:path'),open=fs.openSync;let changed=false;"
+            "fs.openSync=(p,f,...args)=>{if(f==='r'&&path.basename(String(p))==='summary.json'&&!changed){"
+            "changed=true;fs.writeFileSync(path.join(path.dirname(String(p)),'keep.txt'),'external change');}"
+            "return open(p,f,...args);};", encoding='utf-8')
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        try:
+            self.assertIn('input-revision-unstable', self.invoke(request, success=False))
+        finally:
+            del self.preload
+        self.assertEqual({p.name:p.read_bytes() for p in self.state.iterdir()}, before)
+        self.assertEqual(self.status()['inspection']['status'], 'stale-inputs')
+
+    def test_legacy_binding_reorder_and_added_protection_need_no_input_revision(self):
+        self.bind()
+        state_file = next(self.state.glob('*.state.json'))
+        legacy = json.loads(state_file.read_text())
+        legacy.pop('inputRevisions')
+        state_file.write_text(json.dumps(legacy), encoding='utf-8')
+        self.assertEqual(self.status()['checkpoint']['inputRevisions'], [])
+        (self.work/'additional.txt').write_text('new protected input', encoding='utf-8')
+        request = self.revision_request()
+        request['inputs'] = ['keep.txt','source.json','additional.txt']
+        self.invoke(request)
+        current = self.status()
+        self.assertEqual(len(current['checkpoint']['inputs']), 3)
+        self.assertEqual(current['checkpoint']['inputRevisions'], [])
+        if os.name == 'nt':
+            request = self.revision_request(current)
+            request['inputs'] = ['KEEP.TXT','SOURCE.JSON','ADDITIONAL.TXT']
+            self.invoke(request)
+        (self.work/'source.json').write_text('{"units":55}', encoding='utf-8')
+        self.assertIn('input-revision-required', self.invoke(self.revision_request(), success=False))
+
+    def test_drive_relative_alias_cannot_bypass_reference_identity(self):
+        self.bind()
+        before = self.status()
+        request = self.revision_request(before)
+        reference = (self.work.drive or 'C:')+'source.json'
+        request['outputs'] = [{'path':reference}]
+        request['revisionReason'] = 'A second spelling cannot turn a protected input into an unrelated output.'
+        if os.name == 'nt':
+            self.assertIn('reference-must-be-workspace-relative', self.invoke(request, success=False))
+            self.assertEqual(self.status()['checkpoint'], before['checkpoint'])
+        else:
+            # On POSIX this is a distinct literal name, not a Windows alias.
+            (self.work/reference).write_text('a distinct output', encoding='utf-8')
+            self.assertEqual(self.invoke(request)['inspection']['status'], 'verified-local')
+            self.assertEqual(self.status()['checkpoint']['inputs'], before['checkpoint']['inputs'])
+
     def test_contract_readback_does_not_resume_pause_or_acknowledge_lost_input(self):
         self.bind()
         self.pause('The user has paused work.')
@@ -1042,8 +1224,12 @@ catch(e){process.stdout.write(e.message);}
         self.assertIn("unmet-output", self.invoke({"op": "retire", "epoch": current["epoch"],
                       "expectedRevision": current["revision"]}, success=False))
         self.assertEqual(self.event("Stop", stop_hook_active=False)["decision"], "block")
+        self.event('UserPromptSubmit', prompt='I intentionally replaced source.json with the 70-unit source; use this version and preserve keep.txt.')
         changed = [{"path": "summary.json", "json": {"/total": 70}}, {"path": "details.csv"}]
-        self.bind(outputs=changed, revisionReason="The selected source changed; both outputs must use its current value.")
+        self.bind(outputs=changed, revisionReason="Both outputs must use the explicitly updated source.",
+                  inputRevisions=[{'path':'source.json',
+                      'observed':self.status()['inspection']['inputs'][0]['current'],
+                      'reason':'The user explicitly adopted this source version.'}])
         self.assertEqual(self.status()["inspection"]["status"], "incomplete")
         self.write_outputs(70)
         self.assertEqual(self.status()["inspection"]["status"], "verified-local")

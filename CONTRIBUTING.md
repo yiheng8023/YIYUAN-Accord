@@ -88,6 +88,15 @@ roles explicit. Prefer a task-independent adapter over importing an old business
 episode for its wrapper. A later source audit does not retroactively establish
 prebinding; retain valid behavior evidence and limit the affected provenance claim.
 
+For an existing file checkpoint, revising outputs does not adopt changed input
+bytes or remove an input's protection. Use the installed helper's `--help` and
+current `status`: each changed or removed reference needs an explicit
+`inputRevisions` disposition with its exact observed fingerprint and scoped reason.
+Verify the actual authority first; the helper checks the bound observation, not
+the truth of that reason. Ordinary unchanged rebinding and added protections stay
+lightweight. Older helpers silently refreshed inputs; keep unfinished work with a
+compatible executor and do not infer installed support from repository code.
+
 The [five-turn collaboration fixture](product/cases/coordination-v3.3.json)
 binds one local agreement, pause and correction episode. Its read-only
 [file observer](scripts/inspect_coordination.py) requires pre-turn original

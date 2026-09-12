@@ -180,7 +180,8 @@ function readNativeInputSnapshot(request, where) {
 }
 
 function relative(root, name) {
-  if (!text(name) || path.isAbsolute(name) || name.split(/[\\/]/).some((part) => part === '.' || part === '..' || !part)) {
+  if (!text(name) || path.isAbsolute(name) || process.platform === 'win32' && path.win32.parse(name).root ||
+      name.split(/[\\/]/).some((part) => part === '.' || part === '..' || !part)) {
     fail('reference-must-be-workspace-relative');
   }
   const file = path.resolve(root, name);
@@ -461,6 +462,41 @@ function assessContext(request, prior, input, now = Date.now()) {
   return stop('continue-bounded', 'forecast-fits-sourced-range-recheck-before-next-span');
 }
 
+// A generic output revision cannot silently replace or discard an input basis.
+// These explicit dispositions bind observations, not proof of human authority.
+function reviseInputs(request, where, prior, inputs, epoch) {
+  const key = (name) => process.platform === 'win32' ? name.replace(/\\/g, '/').toLowerCase() : name;
+  const requested = Object.hasOwn(request, 'inputRevisions') ? request.inputRevisions : [];
+  if (!Array.isArray(requested) || requested.length > 100) fail('invalid-input-revision');
+  const pending = new Map();
+  for (const item of requested) {
+    if (!item || Object.keys(item).sort().join(',') !== 'observed,path,reason' ||
+        !text(item.reason) || item.reason.length > 2048) fail('invalid-input-revision');
+    relative(where.root, item.path);
+    const observed = item.observed;
+    if (!observed || typeof observed.present !== 'boolean' ||
+        Object.keys(observed).sort().join(',') !== (observed.present ? 'present,sha256' : 'present') ||
+        observed.present && (typeof observed.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(observed.sha256))) fail('invalid-input-revision');
+    if (pending.has(key(item.path))) fail('invalid-input-revision');
+    pending.set(key(item.path), item);
+  }
+  const next = new Map(inputs.map((item) => [key(item.path), item]));
+  const revisions = [];
+  for (const previous of prior?.inputs || []) {
+    const current = next.get(key(previous.path));
+    if (current && canonical(previous.observed) === canonical(current.observed)) continue;
+    const item = pending.get(key(previous.path));
+    if (!item) fail('input-revision-required');
+    const observed = current?.observed || fingerprint(where.root, previous.path);
+    if (canonical(item.observed) !== canonical(observed)) fail('input-revision-observation-changed');
+    revisions.push({path: previous.path, previous: previous.observed, observed,
+      disposition: current ? 'refresh' : 'remove', reason: item.reason, epoch});
+    pending.delete(key(previous.path));
+  }
+  if (pending.size) fail('input-revision-not-needed');
+  return revisions;
+}
+
 function binding(request, where, prior, currentInput) {
   if (!currentInput || request.epoch !== currentInput.epoch) fail('latest-user-input-not-reconciled');
   if (currentInput.interrupted) fail('interrupted-task-needs-new-user-input');
@@ -508,10 +544,12 @@ function binding(request, where, prior, currentInput) {
     if (!observed.present) fail('input-unavailable');
     return {path: name, observed};
   });
+  const inputRevisions = reviseInputs(request, where, prior, inputs, currentInput.epoch);
   return {schema: 1, session: request.session_id, cwd: where.root, epoch: currentInput.epoch,
     revision: (prior?.revision || 0) + 1, mode: paused ? 'paused' : 'active', result: request.result,
     reason: paused ? prior.reason : null, resumeReason: resuming ? request.resumeReason : null,
-    inputs, outputs, unresolved, nextAction: request.nextAction, canContinue: request.canContinue,
+    inputs, outputs, unresolved, inputRevisions: inputRevisions.length ? inputRevisions : prior?.inputRevisions || [],
+    nextAction: request.nextAction, canContinue: request.canContinue,
     revisionReason: request.revisionReason || null,
     lastBlock: prior?.epoch === currentInput.epoch ? prior.lastBlock : null};
 }
@@ -560,11 +598,17 @@ function operate(request) {
       mode: prior?.mode || 'unbound', currentInputReconciled: !needsInput(currentInput) && prior?.epoch === currentInput.epoch,
       checkpoint: prior ? {epoch: prior.epoch, result: prior.result, inputs: prior.inputs, outputs: prior.outputs,
         nextAction: prior.nextAction, canContinue: prior.canContinue, unresolved: savedUnresolved(prior),
+        inputRevisions: prior.inputRevisions || [],
         revisionReason: prior.revisionReason, reason: prior.reason || null, resumeReason: prior.resumeReason || null} : null,
       inspection: prior ? inspectDiagnostic(where, prior) : null};
     if (request.op === 'bind') {
       const state = binding(request, where, prior, currentInput);
       const inspection = inspect(where, state);
+      // Removed inputs are absent from inspect(state); recheck every current
+      // disposition after output reads, without holding the native-input lock.
+      for (const item of request.inputRevisions || []) {
+        if (canonical(fingerprint(where.root, item.path)) !== canonical(item.observed)) fail('input-revision-unstable');
+      }
       return inputLocked(where, () => {
         currentEpoch(where, currentInput.epoch);
         atomic(where.state, state);
@@ -810,7 +854,7 @@ const HELP = {
     result: 'latest authorized result', inputs: ['source.json'],
     outputs: [{path: 'summary.json', json: {'/total': 60}}, {path: 'details.csv'}],
     nextAction: 'finish and verify both affected files', canContinue: true},
-  revise: 'bind rechecks inputs; changed output checks require revisionReason. Pause and its reason survive rebinding unless an authorized resumeReason (nonempty, at most 2048 characters) explicitly lifts it. bind returns mode; status.checkpoint exposes resumeReason, not proof of authority. Older helpers may implicitly activate: inspect the installed interface.',
+  revise: 'bind rechecks inputs; changed output checks require revisionReason. Changed or removed existing inputs additionally require inputRevisions, one {path, observed, reason} per affected input. observed must exactly match its current status.inspection.inputs[].current fingerprint; for a removed reference it may be {present:false}. No extra or duplicate dispositions; each reason is nonempty and at most 2048 characters. Initial binding and added protections need no inputRevisions. Explicit dispositions are caller claims, not human authorization: check the actual user decision and affected scope first. The latest accepted dispositions, including prior fingerprints and their input epoch, remain in status.checkpoint.inputRevisions; this is not full revision history. Failed or drifting revisions preserve the prior checkpoint. Older helpers may silently rebaseline inputs. Pause and its reason survive rebinding unless an authorized resumeReason (nonempty, at most 2048 characters) explicitly lifts it. bind returns mode; status.checkpoint exposes resumeReason, not proof of authority. Inspect the installed interface.',
   unresolved: 'Optional bind.unresolved is a list of up to 32 distinct nonempty strings, each at most 2048 characters, describing known unmet result or fact conditions. Omission inherits existing conditions; an explicit list replaces them, and removing or rewording a prior condition requires revisionReason. status.checkpoint and inspection expose them independently of matched files; any remaining condition prevents verified-local and successful retirement. canContinue means safe authorized work remains, not that the gap is resolved; use false or pause for a necessary external wait. Existing pause, input freshness and bounded Stop retry rules still apply. The caller must verify the evidence or authorized scope change behind a disposition; a reason is not proof. This neither discovers undeclared gaps nor validates semantics. Older helpers do not enforce this field; retain the compatible executor for unfinished state.',
   pause: 'op=pause with current epoch/revision and reason; preserve pending work without continuation.',
   retire: 'op=retire requires verified local predicates and a resolved pause, or explicit user-cancelled disposition plus reason. Without a checkpoint, use current epoch, expectedRevision=0 and reason to retire only the receipt, including after verified exit without an end Hook. Removes only checkpoint files; does not prove task completion.',
