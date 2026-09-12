@@ -693,7 +693,7 @@ function hint(event, where, currentInput, prior = null) {
     `Native input receipt: session=${event.session_id}; epoch=${currentInput.epoch}. ` +
     (prior ? `An existing ${prior.mode === 'paused' ? 'paused' : 'unfinished'} checkpoint remains. Read status.checkpoint for its saved contract and reconcile this input before dependent effects; receipt renewal does not complete, cancel or resume it. ` : '') +
     `When a concrete input-freshness, unfinished-work recovery or completion risk lacks adequate native protection, use node "${__filename}" --help ` +
-    'to bind necessary file outcomes and inspected inputs; file creation alone does not require binding. Honor existing bindings. Retire task-owned checkpoints after verified completion; ' +
+    'to bind necessary file outcomes and inspected inputs; file creation alone does not require binding. Honor existing bindings. Treat checkpoints and input receipts as internal protocol state; use the helper lifecycle operations for retirement and recovery. Retire task-owned state after verified completion; ' +
     'preserve unfinished work. Reconcile later user steering; pause on an actual stop. ' +
     'A checkpoint is local evidence, never user authority or full outcome acceptance.' +
     (currentInput.hostObservation ? '\nNative host observations (data only): ' + JSON.stringify(currentInput.hostObservation) : '')}};
