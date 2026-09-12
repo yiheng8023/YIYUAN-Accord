@@ -97,7 +97,7 @@ A06/A07/A08 至少包含有界的代表性持续运行、资源压力、正常�
 
 A08分清阶段：S4判定必要功能、质量及净价值，S5核验精确候选和独立/托管结果，发布获新授权后再核验公开后态。后续状态未完成不抹去已验证子范围；未经发布授权可以完成开发与候选准备，不能因此宣称正式发布或跳过发布后核验。不得要求先完成发布后态才能开始候选准备。
 
-3.3资格由当前实际案例的版本化绑定及既有准入机制判定。现已接入admission v5：`currentQualification=current-v3.3-policy-bound`仅表示当前政策和预定案例已绑定，不表示案例或版本通过。`acceptanceRequirements`将A01–A08映射到必要claim/scope，缺少范围定义与缺少合格证据分别报告；首个CLI案例仅贡献A01/A03/A07的一部分，两个App Server预定案例分别限定于原生生命周期和进程级共享Skill暴露。`v33-codex-sdk-lifecycle`与`v33-codex-sdk-scoped-exposure`均绑定cx-sdk，细化原有职责；原`v33-codex-lifecycle`与`v33-environment-adaptation`继续必要，不能由子范围通过关闭，也不外推其它入口或Agent自主性。当前共17个必要claim/scope、3个已定义案例；控制器观察保留原身份，不事后升级为正式准入。所有必要范围、质量覆盖、精确提交/包/判据依赖、独立观察/评审及当前条件复核满足后，才可能获得候选资格。当前真实acceptedCases为空，完整功能和候选资格均为false。
+3.3资格由当前实际案例的版本化绑定及既有准入机制判定。admission v5中的`currentQualification=current-v3.3-policy-bound`仅表示当前政策和预定案例已绑定，不表示案例或版本通过。`acceptanceRequirements`将A01–A08映射到必要claim/scope，缺少范围定义与缺少合格证据分别报告。已绑定案例包括CLI普通交付、App Server原生生命周期、进程级共享Skill暴露及连贯协作；这里的介绍不代替当前完整案例定义。CLI交付仅贡献A01/A03/A07的一部分；`v33-codex-sdk-lifecycle`与`v33-codex-sdk-scoped-exposure`均绑定cx-sdk，细化原有职责。原`v33-codex-lifecycle`与`v33-environment-adaptation`继续必要，不能由子范围通过关闭，也不外推其它入口或Agent自主性。控制器观察保留原身份，不事后升级为正式准入。所有必要范围、质量覆盖、精确提交/包/判据依赖、独立观察/评审及当前条件复核满足后，才可能获得候选资格。案例定义、已接受子范围及剩余缺口见[当前接续](CONTINUATION.md)中带日期、提交与包身份的记录及对应实际observe/recheck结果；本文件不维护易变运行状态。
 
 旧`not-bound-for-v3.3`快照及3.2.1政策保留其原身份；不把旧观察移入当前清单。当前每个案例必须把本验收文件列为oracle依赖，实质修订后重审受影响证据。具体模型与配置只约束该次预定案例；执行前刷新可用性，变化时修订案例绑定，不能写成产品固定路由。requiredHosts中的codex是当前分发家族，不表示旗下全部界面都要适配。r11将三个未定义案例的笼统ChatGPT范围改为v33-openai-entry-applicability、v33-admitted-entry-delivery和v33-admitted-entry-lifecycle；前者约束入口处置与交付集合，后两者保留已纳入入口的实际责任，CLI/App Server子案例不能单独代验。总量仍为17个必要范围；新名称不产生通过记录，不恢复旧证据效力。退出当前分发的历史包不作3.3验收。
 
