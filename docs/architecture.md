@@ -342,6 +342,21 @@ If a task needs migration before compaction or integrity loss becomes unsafe,
 unknown timing or takeover capacity becomes a necessary gap again. Source writer
 quiescence is the observed release boundary, not runtime unloading.
 
+Development controllers can use `scripts/codex_events.py` for passive, per-request
+`NativeTurnWatch` instances. A normal turn needs its own successful terminal and
+an observed nonempty final answer, including one carried by the terminal itself.
+A compaction watch binds the next new compaction item and requires its matching
+completion and turn terminal. Its immutable view records protocol facts only;
+raw messages, semantic acceptance, ownership and source release remain separate.
+Create the watch before dispatch when possible and retain any notifications that
+arrive before the RPC reply. Feed only the bound connection's new ordered window;
+quiesce unrelated same-thread work before requesting manual compaction. An early
+failure without a compaction item remains unbound and needs the caller's RPC
+error/deadline and scoped recovery, never an invented interrupt target.
+The observer contains no paths, budgets, model settings, file operations or
+callbacks. Controllers must bind those separately to their own run instances;
+copying a helper's code identity does not validate its captured configuration.
+
 The user's favorable pre-Accord experience is a useful result target, not proof
 of runtime causality. Historical observations, failed probes, observer defects
 and their exact attribution remain in `developmentObservations`. They are not

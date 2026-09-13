@@ -113,6 +113,7 @@
       "runtime/accord-hook.cjs",
       "runtime/task-checkpoint.cjs",
       "scripts/codex_rpc.py",
+      "scripts/codex_events.py",
       "scripts/inspect_coordination.py",
       "scripts/observe-claude-entry.ps1",
       "scripts/observe_claude_entry.py",
@@ -121,6 +122,7 @@
       "tests/product/test_claude_entry.py",
       "tests/product/test_codex_entry.py",
       "tests/product/test_codex_rpc.py",
+      "tests/product/test_codex_events.py",
       "tests/product/test_coordination_observer.py",
       "tests/product/test_development.py",
       "tests/product/test_product_control.py",
@@ -139,10 +141,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1630000,
+      "maxProductCodeAndTestBytes": 1640000,
       "maxTrackedFiles": 138,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current development limits are 138 tracked files, 1630000 product/runtime/test bytes and 36000 primary-instruction bytes, retaining the five-percent code/test reserve. Read-only compact recovery and its coherent-source, input-order, pause, byte-budget and exact-locator regressions measure 1541501 code/test bytes, exceeding the former 1520000 usable allowance by 21501. Raise only the code/test ceiling from 1600000 to 1630000; retain useful regression coverage, the reserve and other limits. No runtime file, dependency, service or model call is added. These user-authorized, revisable bounds are not functional, value or release acceptance. Prior limits and measurements remain at 3294b33d50669856b8964e6351b6663855354e4a:product/development.json#/changeBoundary/complexityBudget; older adjustment history remains at 1f4873976f86c4e3acf8140d7368f850e2ab09ab. Recheck actual size and justify further changes."
+      "rationale": "Current limits are 138 tracked files, 1640000 product/runtime/test bytes and 36000 primary-instruction bytes, retaining the five-percent code/test reserve. The passive developer lifecycle observer and necessary identity, missing-event, malformed-input and instance-isolation tests measure 1552051 code/test bytes, exceeding the former 1548500 usable allowance by 3551. Raise only the code/test ceiling from 1630000 to 1640000; keep the reserve, file/instruction limits and meaningful tests. The two files reach the existing 138-file limit. The 12-file delivered candidate, BoundedRpc, dependencies and live model execution remain unchanged. These revisable development bounds are not functional or release acceptance. Previous limits and measurements remain at 6ce9e3bd55cc68a6ff4e28b9fedd772ea709fc97:product/development.json#/changeBoundary/complexityBudget. Recheck actual cost and justify further revisions."
     }
   },
   "source": {
