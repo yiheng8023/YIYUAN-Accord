@@ -1417,3 +1417,18 @@ Source在receiver工作期间未再写入；receiver已完成实际续做后，r
 独立Sol/high复核与主代理回读接受“明确请求后的原生协作者交接子案例”：支持Agent自备接收信息、无继承child、成果复用、修订传播、单业务写者和验证后的角色收尾。两次child Stop均警告无法解析ephemeral parent transcript path，不能将该Hook/父转录恢复链计为通过。自主提前择时、主载体交权/减负、跨根接收失败回退、其它宿主、A05及整版验收仍开放；本轮不修改产品包或重复业务样本以消除限制。
 
 私有根accord-agent-handoff-20260913。run/assessment.json摘要59d109020ddaa500ad3ec4dc09a71818fadbf2f4755335ae652fe18be4f21d83；case.json摘要fe64b837e4a212074714e64283c7927f5176b71fa921421450df668bc7c3c0d1。补充宿主证据只读提取logs_2.sqlite内三actor对应的8行，按主键/线程/时间核对，另存context-and-policy-receipts.json，摘要c93f6618c01111d88aa32aceb20bcfd5890e3f3fe856f01a20050b927d6014a6；没有复制整个数据库。独立复核后按精确路径/哈希和替代来源退役38个文件、1136270字节，包含专用市场/缓存、局部配置、空状态目录、未被模型使用的旧资格记录和可由唯一原生流恢复的派生副本。五个目录与四个单文件目标均确认不存在，retirement-plan摘要4251466eefb75fd1be8a25f55939c1dc0b6312dffc039663d040e7e3be712519。保留一份原件/成果、真实失败、执行来源和必要原生记录；用户IDE、云环境、开发对话与共享状态均不在删除目标中。
+
+
+## 共享插件停用与子代理父转录路径对照（2026-09-13）
+
+用户明确允许停用干扰开发的Accord，并要求计划/接续随实际需要校准。核对共享安装仍启用、当前开发包参与及缓存多次重选后，仅将现有yiyuan-accord-codex@yiyuan-accord的enabled由true改为false。通过同一Windows独占文件句柄保存前后散列并回读，保留其它当前字节；没有沿用旧配置快照覆盖用户后来的修改，也未创建完整配置副本、卸载或改市场ref。配置散列7d3778d8e627fc8561e8507b3e79d50507d5c802d7506dd8f738586b203e0b0f→f90f8325601612ee0047e9d0234acdaeeb5def0fd31ea15535a56f20ff3b5c46。新原生进程在项目内外读回目标enabled=false、目标Skill/Hook为空，配置/全局指导/Hook文件与缓存保持，执行器自然退出；没有启动模型或任务。它证明后续发现状态，不会移除当前会话已经加载的指导。
+
+r15收拢活动计划中r8/r9以来的多代“下一步”和旧包叙述，前态保留于91c998d，详细历史继续由PROCEDURE承载。把2026-09-09的3/17基点明确降为历史，实时覆盖只取验证器和接续状态；保留F01–F08、A01–A08、17项必要范围、11项未绑定及所有授权/质量底线。PLAN由79036减为62332字节，CONTINUATION由15802减为9752字节。最新已有成果、未完依赖和使用边界集中到接续页；顺序按实际阻塞、结果与用户负担调整，不重新实施已完成的“首个切片”。
+
+为避免把上一轮child Stop警告直接归于Accord，先做无真实模型的同构原生对照：同一0.154.0-alpha.6.2二进制、无凭据独立HOME、plugins=false、不加载Accord；使用相同六项事件声明，但命令全部为node process.exit(0)。两个控制臂仅改变原生thread/start的ephemeral选择，目录/端口/原生ID由各自独立运行生成。父记录由宿主按正常接口产生，没有手造或导入JSONL历史。两臂本机固定响应服务各收到9次协议请求并拒绝Authorization；Luna标识用于原生协议选择，不代表真实模型执行或用量。
+
+Ephemeral臂没有rollout，结构化stderr出现两条匹配该父ID的“failed to resolve parent transcript path for subagent hook”；persisted臂有宿主生成的三个rollout，没有该警告。两臂均只有parent Stop完成事件，没有child Stop完成事件；当前包及对照声明均不包含SubagentStop。官方[Hook事件说明](https://learn.chatgpt.com/docs/hooks#subagentstop)也将SubagentStop与Stop区分。因此这组反例撤回了“应修改Accord child checkpoint”的初步建议：已知警告是该宿主条件下的父转录解析问题，不要求新建子状态层或静默吞错。确实需要父历史/恢复来源的路径仍保持缺失边界；无警告不代验完整child Hook链、模型行为或A05/A06整体。
+
+首次汇总只查SQLite的feedback_log_body，得到两臂警告数0；独立读取已有结构化stderr后纠正为2/0，原结果和采集器保留，没有重跑以取得该更正。两臂分别6.089和3.678秒，发现/执行器自然exit0，无强制，所属进程归零，读写线程结束，共享保护保持；这些是有限原生机制事实。独立Sol/high复核接受反证并撤回其直接产品实现建议。私有根accord-development-disable-20260913的child-stop-readback.json摘要18b42c39f59cad3a02ed274929b9b46674d0b89bd9476a441488da288db841a1，setting-receipt.json和fresh-discovery保留停用依据。未修改产品包、提高验收分数或恢复共享自动加载；下一步回到主载体连续性、入口适配和压力恢复的真实未完职责。
+
+对照核对结束后，保留一份事件/告警、执行来源、配置定义和三个原生rollout副本，删除两个已退出的所属HOME/work/temp树及空发现目录，共163文件、8637966字节，三处目标均确认不存在；共享安装缓存、原用户环境和对话不在清理目标中。验证器与开发检查通过，33个本地文档链接有效。覆盖分的分母表述按现有代码明确为全部必要范围，未改变阈值或实现。
