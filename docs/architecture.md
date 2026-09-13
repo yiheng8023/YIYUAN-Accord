@@ -296,6 +296,15 @@ The former verifies receipt, transfer of writing responsibility and actual work,
 not autonomous detection. Prior user rescue remains a failed autonomous result.
 Unknown capacity/efficiency signals require short work spans and early checkpoints;
 that fallback rule is not proof of historical prediction or an optimal margin.
+The helper's `assess-context` keeps `capacityFit` separate from its combined
+`decision`. With valid, current evidence, `capacityFit` compares the sourced
+context and next-work upper bounds plus transfer, recovery and safety reserves
+against the hard native window. It can be `fits` while efficiency remains unknown
+or a stricter evidenced efficiency ceiling still calls for handoff or recovery.
+Invalid assessment evidence, pauses and stale bindings leave it unknown.
+`remainingAfterReserves` continues to use the tighter applicable ceiling.
+A capacity fit neither measures live occupancy nor overrides the combined
+recommendation, task authority, integrity checks or source-release protection.
 Large source reads consume the same capacity as other work. Preserve reusable
 verified intermediate results with source and verification references, observed
 effects, uncertainties and remaining work in a task-suitable representation.

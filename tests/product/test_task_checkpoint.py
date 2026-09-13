@@ -620,6 +620,48 @@ class TaskCheckpointTests(unittest.TestCase):
         request["assessment"]["estimates"].update(efficiencyCeilingTokens=None, nextWorkTokens=5000)
         self.assertEqual(self.invoke(request)["decision"], "prepare-handoff")
 
+    def test_context_budget_separates_capacity_fit_from_efficiency(self):
+        self.bind()
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        for efficiency, work, context, decision, capacity in (
+            (None, 1000, 5000, "unknown", "fits"),
+            (8000, 1000, 5000, "continue-bounded", "fits"),
+            (7000, 1000, 5000, "prepare-handoff", "fits"),
+            (6000, 1000, 5000, "preserve-recovery", "fits"),
+            (None, 3500, 5000, "prepare-handoff", "does-not-fit"),
+            (None, 0, 8500, "preserve-recovery", "does-not-fit"),
+        ):
+            with self.subTest(efficiency=efficiency, work=work, context=context):
+                request = self.context_request()
+                request["assessment"]["estimates"].update(efficiencyCeilingTokens=efficiency,
+                    nextWorkTokens=work, contextUpperBoundTokens=context)
+                answer = self.invoke(request)
+                self.assertEqual(answer["decision"], decision)
+                self.assertEqual(answer["capacityFit"], capacity)
+                self.assertEqual(answer["efficiencyCeilingTokens"], efficiency)
+                self.assertFalse(answer["sourceReleaseAllowed"])
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+
+    def test_capacity_fit_requires_fresh_intact_bound_evidence(self):
+        for path, value in (("conditions.model", "changed"), ("assessment.validUntilMs", 0),
+                            ("assessment.integrity", "unknown"), ("assessment.sourceRef", ""),
+                            ("assessment.usageEvent.params.tokenUsage.modelContextWindow", None),
+                            ("assessment.estimates.contextUpperBoundTokens", None),
+                            ("assessment.estimates.sourceRef", ""),
+                            ("assessment.estimates.nextWorkTokens", 9007199254740991)):
+            with self.subTest(path=path):
+                request = self.context_request()
+                target = request
+                keys = path.split(".")
+                for key in keys[:-1]:
+                    target = target[key]
+                target[keys[-1]] = value
+                self.assertEqual(self.invoke(request)["capacityFit"], "unknown")
+        self.bind()
+        self.pause("user stopped")
+        answer = self.invoke(self.context_request())
+        self.assertEqual((answer["decision"], answer["capacityFit"]), ("paused", "unknown"))
+
     def test_context_budget_invalidates_changed_carrier_input_and_expired_evidence(self):
         for field in ("model", "hostVersion", "contextGeneration", "threadId", "turnId"):
             request = self.context_request()

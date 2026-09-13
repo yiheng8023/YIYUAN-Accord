@@ -409,7 +409,7 @@ function observeContext(request, now = Date.now()) {
 // Read-only, caller-bound planning evidence. Native usage is not live occupancy;
 // a forecast cannot authorize a transfer, clear a pause or trigger host actions.
 function assessContext(request, prior, input, now = Date.now()) {
-  const result = {decision: 'unknown', sourceReleaseAllowed: false,
+  const result = {decision: 'unknown', capacityFit: 'unknown', sourceReleaseAllowed: false,
     scope: 'conditional-context-budget-only', reasons: [], windowTokens: null,
     remainingAfterReserves: null, efficiencyCeilingTokens: null};
   const stop = (decision, reason) => ({...result, decision, reasons: [reason]});
@@ -463,6 +463,9 @@ function assessContext(request, prior, input, now = Date.now()) {
   result.efficiencyCeilingTokens = efficiency ?? null;
   const reserve = estimate.contextUpperBoundTokens + estimate.handoffTokens + estimate.recoveryTokens + estimate.safetyMarginTokens;
   if (!Number.isSafeInteger(reserve + estimate.nextWorkTokens)) return stop('unknown', 'forecast-overflow');
+  // Capacity uses the hard window; a stricter efficiency range still controls
+  // the combined decision below. A fit is conditional arithmetic, not permission.
+  result.capacityFit = reserve + estimate.nextWorkTokens < window ? 'fits' : 'does-not-fit';
   result.remainingAfterReserves = limit - reserve;
   if (result.remainingAfterReserves <= 0) return stop('preserve-recovery', 'transfer-reserve-already-at-risk');
   if (estimate.nextWorkTokens >= result.remainingAfterReserves) return stop('prepare-handoff', 'next-span-would-consume-transfer-reserve');
@@ -855,6 +858,7 @@ const HELP = {
     binding: 'Use status session/cwd/epoch/expectedRevision plus current conditions: threadId, turnId, hostVersion, model, contextGeneration. The native caller must independently bind these; shared session is not thread/writer identity.',
     assessment: 'Provide assessment with matching conditions and epoch, observedAtMs/validUntilMs, sourceRef, integrity (verified/degraded/unknown), and the actual matching thread/tokenUsage/updated notification as usageEvent. Never restamp old evidence as fresh. Change contextGeneration after compaction or other material context changes and recheck affected estimates.',
     estimates: 'assessment.estimates needs sourceRef and nonnegative integer token upper bounds for contextUpperBoundTokens and nextWorkTokens, positive handoffTokens (including takeover verification), recoveryTokens and safetyMarginTokens. Optional efficiencyCeilingTokens requires efficiencySourceRef. Estimates include additions since the usage event; all bounds must apply to current source-carrier conditions. Target capacity needs its own assessment.',
+    result: 'capacityFit compares all sourced upper bounds and reserves with the hard native window: fits, does-not-fit, or unknown. It is independent of efficiency; decision and remainingAfterReserves also honor any stricter evidenced efficiency ceiling. Missing efficiency can leave decision unknown with capacityFit fits, supporting a caller-selected short span and early checkpoint within existing authority, not a claim of efficient or unrestricted continuation. Never override a pause, reassessment or recovery/handoff recommendation with capacityFit.',
     limits: 'Read-only advisory arithmetic; does not authenticate caller evidence, measure live occupancy, dispatch, compact, transfer, release or change checkpoint state. Native last/total/cached usage and compression count never substitute for occupancy, efficiency or integrity. Missing data returns unknown; shorten spans and checkpoint early. Never treat a fit as permission or evidence of completed handoff.',
   },
   contextSignals: {
