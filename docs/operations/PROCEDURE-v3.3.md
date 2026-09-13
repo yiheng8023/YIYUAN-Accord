@@ -1618,3 +1618,17 @@ Sol/high独立维护者复核承接有用的静态工作。原报告关于完整
 其二，以无工具调用、只读线程做全新双进程寿命试验。source与target各在独立Native进程/Job及独立HOME中先完成一轮本地固定响应；两个PID不同且当时均存活。source unsubscribe并自然退出、Job为0后，同一target进程/线程仍完成下一轮；随后target也正常退出。全部3个响应均由localhost夹具生成，0真实模型，业务work目录一直为空。1.222秒，source/target各累计2进程；读写线程、本地服务结束，auth文件未产生，源码保持。证明范围只到该受控拓扑：父Python协调者及服务在目标继续时仍存活，未证明语义交权、自动选路、整个协调者/宿主故障恢复或A05整链。
 
 私有accord-native-failure-20260913保留三次原失败、工具声明/实际权限、历史效果回放及lifetimes的独立原生记录，independent-review.json接受上述分开的局部观察。三个执行分支的初次作用尚未发生，因此不能把别处预置的数据冒充本轮原生写后状态。复核后退役五个所属临时根目录，共460文件16923213字节，五目标均不存在；旧proactive来源、用户配置、IDE/云端和用户对话未被改动。当前观察模块及501b分发候选不改；c66ce4e的九项跨平台CI均已成功。下一依赖仍是实际需要判断、语义接管与源释放闭环，并在需要写入的环境中先核验已授权且实际生效的权限，不能把工具广告或请求参数代作执行证据。
+
+## 权限降级路径与模型前检（2026-09-14）
+
+在b5b67fb上追查上述测试前提。[官方Windows沙箱说明](https://learn.chatgpt.com/docs/windows/windows-sandbox)与固定上游6f39a47bb3b04de4c804187bfbf55edc56939aab源码分别核对：[config_toml.rs的782–787行](https://github.com/openai/codex/blob/6f39a47bb3b04de4c804187bfbf55edc56939aab/codex-rs/config/src/config_toml.rs#L782)明确在WindowsSandboxLevel为Disabled时将WorkspaceWrite降为ReadOnly；core配置将未选Windows后端解析为Disabled。该分支与旧r3的空HOME、windows配置缺失及实际只读回执吻合，但没有把当前上游源码认证为已安装二进制的完全同源构建。旧记录中的“尚未证明完整根因”保留原时点；本轮补充的是明确代码解释及一致的原生观察，没有启动更高权限的对照写入。
+
+私有accord-permission-cause-20260914的前检复用已有有界传输，保留原r3脚本/请求/结果，不重放旧业务试验。首轮执行字节现保留为preflight-executed.py。前检比较本案的provider、cwd、ephemeral身份、审批策略和实际sandbox，而非只看请求值；即使匹配也仅返回receipt-matches-only，不认证OS权限、工具效果或用户授权。先记录所属thread身份，再判定前提，保证不匹配仍能unsubscribe和收回本次进程。新无凭据HOME仍按原条件请求workspace-write，回读windows=null、sandbox=readOnly；与旧回执均判为hold。没有turn/start、本地provider请求、真实模型调用、工具写入或业务文件，原写后503维持not-dispatched。首轮0.497秒，原生退出0、无强制、读写线程及本地服务结束、Job进程0，累计2进程；auth文件未产生，源绑定和共享配置/指导摘要在该次运行期间保持。
+
+同时按实际缺口核对[官方Python SDK](https://learn.chatgpt.com/docs/codex-sdk)及同一固定源码，未安装或执行。类型化消息、单reader分发、订阅与同步/异步API可减少自制通信逻辑；[sandbox预设](https://github.com/openai/codex/blob/6f39a47bb3b04de4c804187bfbf55edc56939aab/sdk/python/src/openai_codex/_sandbox.py#L36)只转换请求，[高层thread_start](https://github.com/openai/codex/blob/6f39a47bb3b04de4c804187bfbf55edc56939aab/sdk/python/src/openai_codex/api.py#L172)没有比较实际权限。[该版低层客户端](https://github.com/openai/codex/blob/6f39a47bb3b04de4c804187bfbf55edc56939aab/sdk/python/src/openai_codex/client.py#L368)的RPC等待与管道写入未设期限；其关闭流程不是Windows Job子孙回收，[默认批准处理](https://github.com/openai/codex/blob/6f39a47bb3b04de4c804187bfbf55edc56939aab/sdk/python/src/openai_codex/client.py#L833)会接受两类命令/文件审批请求，与当前控制器拒绝意外server request的边界不同。故本轮不直接迁移，也不再扩展自制通用控制层；今后采用时仍需显式接回本案所需的审批、期限、效果核对和回收责任。结论仅针对所核固定实现，不是拒绝官方SDK或将现有控制器永久化。
+
+独立复核发现前检本身的异常清理缺口：旧版服务先启动，部分准备在try外；原生关闭或日志保存抛错也可能跳过服务关闭。本次首轮正常后态不受影响，实际执行字节保留并绑定摘要。修正后将有资源的准备纳入try，以独立finally收回服务；当前preflight.py最终字节在final中重验，0.444秒，同样hold、零模型/工具调用、自然退出和Job进程0。另以真实本地socket、模拟Native分别注入绑定文件写失败及native.close失败，两条异常路径都关闭socket且无新增活动线程；这两项不是原生故障回收验收。四个所属临时目录共157文件5648809字节已退役，目标均不存在；唯一脚本/原生回执、检查结果和官方固定源码保留，本次未修改用户配置或历史任务。
+
+最终来源核对识别到两次前检之间共享config.toml从20e017e1摘要变为9cd9f34d，后一次与收尾一致；其它绑定源码/全局指导保持。两次均用独立HOME，各自原生运行期间的来源校验通过，不能扩大为整段期间共享配置未变。变化字段和写者未知，未以摘要推断原因或恢复旧配置。当前只读检查确认保存的Accord enabled=false及用户上下文设置仍在，具体时点值保留shared-drift.json，不作为默认参数或产品规格。
+
+分发候选和正式验收不变，计划r15已覆盖能力组合及前提变化，无需重复新增共识节点。下一步仍以实际需要和接管闭环为主；不可将前检停下包装成写后恢复完成，也不应继续在同一不满足写入前提的空配置中派发模型。
