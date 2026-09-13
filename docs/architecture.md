@@ -99,7 +99,17 @@ The helper never decides user authority or whether the selected predicates fully
 express the goal. It leaves semantic judgment, execution and unsupported paths
 with the host Agent. Unfinished checkpoints survive session end; verified or
 explicitly cancelled tasks can retire only their checkpoint files. Proven dead
-locks have an explicit recovery operation. Input failure is latched outside the
+locks have an explicit recovery operation.
+Recovery callers serialize owner inspection through deletion using a shared
+`.lock.recovery` gate; ordinary operations keep their existing state/input locks.
+State-lock recovery does not acquire the input lock, so two locks left by dead
+owners can be recovered in order without a new lock-order cycle. A leftover
+recovery gate is not automatically reclaimed: the caller must establish
+quiescence and bounded maintenance authority. All copies recovering the same
+session must honor the gate, or maintenance needs external exclusivity; an older
+recovery helper can bypass this protocol. A gate-only legacy location remains
+visible rather than silently selecting a different state directory.
+Input failure is latched outside the
 input lock with session/workspace generation watermarks, including malformed or
 oversized transport whose session cannot be bound. The epoch combines the receipt
 and current failures. The surviving caller must reconcile and replay the actual

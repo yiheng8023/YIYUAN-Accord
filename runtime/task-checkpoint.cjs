@@ -59,7 +59,7 @@ function location(session, cwd, create = false) {
   const relevant = (base) => {
     if (!fs.existsSync(base)) return false;
     if (!samePath(fs.realpathSync(base), base) || fs.lstatSync(base).isSymbolicLink()) fail('unsafe-state-directory');
-    return [`${id}.input.json`, `${id}.input.json.lock`, `${id}.state.json`, `${id}.lock`,
+    return [`${id}.input.json`, `${id}.input.json.lock`, `${id}.state.json`, `${id}.lock`, `${id}.lock.recovery`,
             `${id}.input-failure.json`, `${workspaceId}.workspace-input-failure.json`]
       .some((name) => fs.existsSync(path.join(base, name)));
   };
@@ -589,7 +589,11 @@ function operate(request) {
     return {recovered: true, scope: inputRecovery ? 'dead-input-lock-and-receipt-invalidation'
       : 'dead-owner-checkpoint-lock-only', needsNativeReplay: inputRecovery};
     };
-    return inputRecovery ? locked(where, recover) : recover();
+    // Serialize recovery callers from owner inspection through deletion. Without
+    // this gate, a second recovery can replace the checked lock with a live one.
+    // Do not use the input lock here: both original locks may be left by a crash.
+    return locked({...where, lock: where.lock + '.recovery'},
+      () => inputRecovery ? locked(where, recover) : recover());
   }
   if (!where) fail('native-user-input-receipt-missing');
   if (request.op === 'read-native-input') return readNativeInputSnapshot(request, where);
@@ -878,7 +882,7 @@ const HELP = {
   unresolved: 'Optional bind.unresolved is a list of up to 32 distinct nonempty strings, each at most 2048 characters, describing known unmet result or fact conditions. Omission inherits existing conditions; an explicit list replaces them, and removing or rewording a prior condition requires revisionReason. status.checkpoint and inspection expose them independently of matched files; any remaining condition prevents verified-local and successful retirement. canContinue means safe authorized work remains, not that the gap is resolved; use false or pause for a necessary external wait. Existing pause, input freshness and bounded Stop retry rules still apply. The caller must verify the evidence or authorized scope change behind a disposition; a reason is not proof. This neither discovers undeclared gaps nor validates semantics. Older helpers do not enforce this field; retain the compatible executor for unfinished state.',
   pause: 'op=pause with current epoch/revision and reason; preserve pending work without continuation.',
   retire: 'op=retire requires verified local predicates and a resolved pause, or explicit user-cancelled disposition plus reason. Without a checkpoint, use current epoch, expectedRevision=0 and reason to retire only the receipt, including after verified exit without an end Hook. Removes only checkpoint files; does not prove task completion.',
-  recovery: 'op=recover-lock with lock=state or input requires a provably dead owner. Input recovery invalidates an existing receipt because native input may have been lost. A surviving caller must replay the actual current native input before binding or continuation; do not ask for repeated user input when the host retains it. Uncertain or live ownership is preserved.',
+  recovery: 'op=recover-lock with lock=state or input requires a provably dead owner. Input recovery invalidates an existing receipt because native input may have been lost. A surviving caller must replay the actual current native input before binding or continuation; do not ask for repeated user input when the host retains it. Uncertain or live ownership is preserved. Cooperating recovery callers share a .lock.recovery gate; all copies recovering the same session must honor it, or the caller must establish exclusive maintenance. A leftover gate is not automatically reclaimed, even with a dead PID: preserve it until a caller establishes quiescence and bounded maintenance authority. Normal task operations do not acquire this recovery gate.',
   resume: 'SessionStart/resume sets needsResumeReconciliation without changing the contract or pause state. New native user input enters normally; absent new input, the native caller may replay actual current retained input with recovery_epoch. Neither route resumes paused work or reconciles the saved binding automatically. Existing needsNativeReplay quarantine from real input loss remains strict. Inspect current authority, effects and writer ownership before binding. No cross-task adoption, writer lock or host permission enforcement.',
   replay: 'After input failure or recovery, replay the actual current UserPromptSubmit event through --hook UserPromptSubmit with recovery_epoch from status. The derived token binds the receipt and failure watermarks, including a missing receipt. Use null only when no receipt or failure watermark exists. A later uncaptured native input changes the token; ordinary inputs cannot silently clear quarantine. Never reconstruct missing human intent from the old checkpoint.',
   inputFailure: 'Input loss is conservatively latched outside the input lock. Unidentified input transport failure invalidates helper freshness only in the native caller working directory. Recovery acknowledges it per session. Small failure watermarks remain until the owning state directory is safely retired. If the watermark itself cannot persist, cross-process protection is unknown and the native caller must hold continuation; this helper is not a host permission barrier.',

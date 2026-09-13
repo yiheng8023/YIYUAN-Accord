@@ -1026,6 +1026,14 @@ process.kill(process.pid, 'SIGKILL');
         before = {str(p):p.read_bytes() for folder in (legacy,stable) for p in folder.iterdir()}
         self.assertIn('conflicting-state-locations', self.invoke({'op':'status'}, success=False))
         self.assertEqual(before, {str(p):p.read_bytes() for folder in (legacy,stable) for p in folder.iterdir()})
+        guard = next(legacy.glob('*.input.json')).with_name(
+            next(legacy.glob('*.input.json')).name.replace('.input.json', '.lock.recovery'))
+        for file in legacy.iterdir():
+            file.unlink()
+        guard.write_text(json.dumps({'pid': os.getpid()}), encoding='utf-8')
+        before = {str(p):p.read_bytes() for folder in (legacy,stable) for p in folder.iterdir()}
+        self.assertIn('conflicting-state-locations', self.invoke({'op':'status'}, success=False))
+        self.assertEqual(before, {str(p):p.read_bytes() for folder in (legacy,stable) for p in folder.iterdir()})
 
     def test_flush_failure_does_not_publish_a_new_checkpoint(self):
         self.bind()
@@ -1739,6 +1747,61 @@ fs.renameSync = function(from, to) {
         input_lock.write_text(json.dumps({'pid': int(dead)}), encoding='utf-8')
         self.assertTrue(self.invoke({'op': 'recover-lock', 'lock': 'input'})['recovered'])
         self.assertTrue(input_path.exists())
+
+    def test_dead_lock_recovery_serializes_recoverers(self):
+        receipt = next(self.state.glob('*.input.json'))
+        lock = receipt.with_name(receipt.name.replace('.input.json', '.lock'))
+        dead = subprocess.check_output([self.node, '-e', 'console.log(process.pid)'], text=True, timeout=10)
+        lock.write_text(json.dumps({'pid': int(dead)}), encoding='utf-8')
+        script = '''
+const fs=require('node:fs'), cp=require('node:child_process'), runtime=require(process.argv[1]);
+const request=JSON.parse(process.argv[2]), target=process.argv[3], unlink=fs.unlinkSync;
+let child, result, error;
+fs.unlinkSync=function(file,...args){
+  if(!child && String(file)===target) child=cp.spawnSync(process.execPath,[process.argv[1]],{
+    input:JSON.stringify(request),env:process.env,cwd:request.cwd,encoding:'utf8',timeout:3000});
+  return unlink.call(this,file,...args);
+};
+try{result=runtime.operate(request);}catch(e){error=e.message;}
+console.log(JSON.stringify({result,error,child:child&&{status:child.status,stderr:child.stderr}}));
+'''
+        request = {'op': 'recover-lock', 'session_id': 'test-session', 'cwd': str(self.work)}
+        run = subprocess.run([self.node, '-e', script, str(RUNTIME), json.dumps(request), str(lock)],
+                             env=self.environment, cwd=self.work, capture_output=True, text=True, timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        result = json.loads(run.stdout)
+        self.assertEqual(result['child']['status'], 1)
+        self.assertIn('EEXIST', result['child']['stderr'])
+        self.assertTrue(result['result']['recovered'])
+        self.assertFalse(lock.exists())
+        self.assertFalse(Path(str(lock) + '.recovery').exists())
+        self.assertEqual(self.status()['mode'], 'unbound')
+
+    def test_recovery_guard_is_not_automatically_reclaimed(self):
+        receipt = next(self.state.glob('*.input.json'))
+        lock = receipt.with_name(receipt.name.replace('.input.json', '.lock'))
+        dead = subprocess.check_output([self.node, '-e', 'console.log(process.pid)'], text=True, timeout=10)
+        lock.write_text(json.dumps({'pid': int(dead)}), encoding='utf-8')
+        guard = Path(str(lock) + '.recovery')
+        for owner in [os.getpid(), int(dead)]:
+            guard.write_text(json.dumps({'pid': owner}), encoding='utf-8')
+            before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+            for kind in ['state', 'input']:
+                self.assertIn('EEXIST', self.invoke({'op': 'recover-lock', 'lock': kind}, success=False))
+                self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+
+    def test_both_dead_locks_can_be_recovered_without_lock_order_cycle(self):
+        receipt = next(self.state.glob('*.input.json'))
+        state_lock = receipt.with_name(receipt.name.replace('.input.json', '.lock'))
+        input_lock = Path(str(receipt) + '.lock')
+        dead = subprocess.check_output([self.node, '-e', 'console.log(process.pid)'], text=True, timeout=10)
+        for lock in [state_lock, input_lock]:
+            lock.write_text(json.dumps({'pid': int(dead)}), encoding='utf-8')
+        self.assertTrue(self.invoke({'op': 'recover-lock', 'lock': 'state'})['recovered'])
+        self.assertTrue(input_lock.exists())
+        self.assertTrue(self.invoke({'op': 'recover-lock', 'lock': 'input'})['recovered'])
+        self.assertTrue(self.status()['needsNativeReplay'])
+        self.assertFalse(Path(str(state_lock) + '.recovery').exists())
 
     def test_cancellation_preserves_inputs_and_unfinished_state_survives_session_end(self):
         self.bind()
