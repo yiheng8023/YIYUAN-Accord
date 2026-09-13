@@ -1478,3 +1478,15 @@ Agent另用.NET FileStream、GZipStream、SHA-256及64 KiB缓冲逐个读取原�
 四个新增回归在修前全部失败、修后通过，98项检查点回归通过（107.037秒）；按审查建议补齐fallback用例的turn/completed事件后，该用例再验通过。两个Sol/high独立审查未发现阻塞问题。两份runtime镜像一致，包仍为12文件3.3.0-dev.1，新摘要e86195fe9f8b511dc7cc4f6c85d428d396bc175f677a3459f2b6797444f8833d。未修改能力选型原则、计划共识或完整验收标准；新包的真实模型轮次与完整调用方执行链仍待验。按现有集中验证安排，本轮以本地回归、静态检查和独立审查收尾，使用skip-ci提交，将完整托管矩阵留给下一集中验证节点；不冒充新托管通过或发布资格。
 
 私有accord-settings-integration-20260913保留本机schema、真实元数据通知、前后机制回放和执行来源；临时schema导出目录及已退出的独立HOME/work已退役，旧helper临时副本映射回765561a。原生进程自然exit0、无强制、进程0，读写线程结束，共享保护文件保持；未改用户模型、插件启用状态、IDE/云环境或对话。此修复推进动态条件绑定，尚不等于完成SDK集成、主动交接或主载体连续性。
+
+## 有序信号工具往返与历史交接复用（2026-09-13）
+
+在270a8e88、未变e861候选上继续核对调用方连接，使用0.154.0本机二进制及现有BoundedRpc/Windows Job，与Python标准库本地固定响应服务组合。没有安装SDK、启用共享插件或真实模型调用。前三轮原生任务初始Astra，首轮覆盖Sol；该响应等待期间排队Terra，第二轮省略model并采用Terra，第三轮显式覆盖Astra。三份实际provider请求与原生通知前缀回放一致，首轮未被未来配置改写；每轮started后缺新usage保持unknown，usage后观察容量，completed或断连保持unknown。回放使用实际管道接收时间和逐条原始前缀，不补造turn/usage事件。固定响应中的10/2/12用量与文本为合成值，258400是宿主容量元数据，不是测得占用或效率。原生退出0、无强制、所属Job进程0，耗时0.844秒。
+
+随后按本机导出的DynamicToolCallParams/Response和ThreadStartParams，将同一helper接入[官方动态工具往返](https://learn.chatgpt.com/docs/app-server#dynamic-tool-calls-experimental)。首版夹具误以为tools必在顶层，实际工具通过additional_tools及functions.exec暴露，因KeyError失败；之后对已失败轮次发出interrupt，收到no-active-turn错误，跳过后续read/unsubscribe。该失败及恢复遗漏原样保留，进程最终仍自然退出，不能把退出等同于退订成功。新夹具据实际工具声明调用并跳过已结束轮次的中断，不改宿主配置来迎合旧假设。
+
+两次首次查询的修正版均completed且正确返回unknown：真实用量通知位于工具返回之后。回查9月9日已存在首次unknown、后续可观察的真实查询记录，本轮是当前版本及模型变化条件下的复核，不当作新发现或新增能力。进一步绑定两轮各两次查询，四次结果依次unknown(Sol)、window-observed(Sol)、unknown(Terra)、window-observed(Terra)。六次固定provider请求实际模型分别Sol三次、Terra三次；四个helper响应、原生dynamicToolCall完成内容、后续provider中的对应call输出一致。快照均不含其求值起点之后的通知；时间戳在管道reader处记录，不在消费队列时重置。两轮自然completed，总1.264秒；工具缺信号时立即返回，不能等待依赖本工具完成才发送的通知。这不要求产品重复轮询，也没有测量或证明模型自主决定查询/交接。
+
+用户提醒Harness时期已有较粗糙的自动交接经验，强调时机与动态上下文感知。按Git回查到[c538667的压力分类器](https://github.com/yiheng8023/YIYUAN-Accord/blob/c53866726834d79a68c61a5b87b4f7ce90698a2c/scripts/evaluate_context_pressure_advisory.py)、同版handoff Skill/交接包、[17ec4d6保存的真实接收差异](https://github.com/yiheng8023/YIYUAN-Accord/blob/17ec4d68a6bbdfb83700e618b0a0d27fe1ad3403/product/evidence/context-continuity-fresh-receiver-2026-08-11.json)，以及534a77a的harness/continuation.py与源释放保护。它们分别承载来源分类、减少重复搬运、恢复目标/授权/未完责任及释放前核对；旧classifier为离线建议，旧projection明确remainingContextCapacity=unknown，接收记录也不认证自主择时。这些边界不否定用户的实际使用经验，但不把不完整的历史证据提升为当前动态感知证明。复用有效职责与反例，旧的漂移一律转用户决策等规则不原样恢复。现有PLAN r15已覆盖时机、工作量预测、继承与恢复余量，不重复修订共识。
+
+Sol/high独立只读复核确认上述前缀、四次调用快照、原生完成和provider回读关联，没有发现实质缺陷。证据直接绑定270a8e88及helper摘要65e8243c，未安装完整候选；源码中的包摘要映射不能把helper机制观察扩成完整包验收。私有accord-ordered-settings-20260913保留执行源码、实际通知、失败、工具回执、三份本机schema及回放。前三轮trace摘要68b7482a1e98004e78f75dafe0482eb56024fb924170441368e8e103f502d1be。四次原生执行均自然退出、Job进程0，读写线程和本地服务线程结束；helper调用也由同步子进程返回。清理四个所属HOME/work/temp树与schema导出树，共733文件、15484623字节，五目标均不存在。共享配置/指导/Hook保护保持，未改IDE、云环境、用户对话或模型选择。产品代码和正式验收状态不变；下一依赖集中于时机判断及安全接管/回退，避免重复已成立的查询与显式child接续。

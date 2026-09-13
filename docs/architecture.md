@@ -178,6 +178,14 @@ with the turn events in transport receive order; a turn-only subscription is
 not a complete input stream. Settings snapshots describe the next turn, while
 `model/rerouted` changes only the active turn's observed model. The next
 `turn/started` adopts the latest configured model and requires fresh usage.
+Record receive times at the transport reader, not when a delayed queue consumer
+handles events. In the tested 0.154.0 dynamic-tool flow, the first tool call
+preceded its usage notification; that notification followed the tool response.
+Return unknown promptly when it is missing rather than waiting for data whose
+delivery depends on completing that same call. A later query can use fresh
+events, but this does not prescribe repeated polling or measure occupancy.
+The current-model and queued-settings tool roundtrips are recorded in the
+[controlled connection observation](operations/PROCEDURE-v3.3.md#有序信号工具往返与历史交接复用2026-09-13).
 Native context tools may offer a direct alternative when
 actually exposed and authorized. In the inspected host version, their remaining
 budget uses the tighter applicable auto-compaction or full-window bound; it is
