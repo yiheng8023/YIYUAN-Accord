@@ -165,11 +165,14 @@ blocker's disposition and post-state. Containment is not task completion.
 ## Verify and release
 
 Check required outcomes against actual source data and artifacts, including
-consequential failure behavior and every affected deliverable. Challenge critical
-checks with counterexamples: an expected value can share the implementation's
-mistake. Preserve domain-specific correctness and non-compensable quality floors.
-When creating or repairing a checker, exercise valid variations of supported
-source states and representative false positives. Check dependent outputs as
+consequential failure behavior and every affected deliverable. For one-off outputs,
+start with existing checks or direct source/artifact comparisons; add verification
+for material risks or gaps. Preserve domain-specific correctness and
+non-compensable quality floors.
+For maintained or reusable checkers and gates controlling consequential state
+changes, exercise valid variations of supported source states and representative
+false positives: an expected value can share the implementation's mistake.
+Check dependent outputs as
 well as accepted inputs; unsupported cases must not receive an unqualified pass.
 For text inclusion, retain expected words while contradicting a required fact,
 relationship or permission. Match the verdict to demonstrated coverage. Free text
