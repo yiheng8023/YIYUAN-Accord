@@ -25,11 +25,12 @@ function regular(file, limit = 8 * 1024 * 1024) {
   return fs.readFileSync(file);
 }
 
-function readJson(file, limit = 128 * 1024) {
-  const value = JSON.parse(regular(file, limit).toString('utf8'));
+function jsonObject(bytes) {
+  const value = JSON.parse(bytes.toString('utf8'));
   if (!value || typeof value !== 'object' || Array.isArray(value)) fail('invalid-state-object');
   return value;
 }
+const readJson = (file, limit = 128 * 1024) => jsonObject(regular(file, limit));
 
 function atomic(file, value, limit = 128 * 1024) {
   const encoded = JSON.stringify(value);
@@ -102,12 +103,12 @@ function markInputFailure(where, workspace = false) {
          {schema: 1, generation: crypto.randomUUID()});
 }
 
-function readInput(where) {
-  const input = fs.existsSync(where.input) ? readJson(where.input, INPUT_RECEIPT_LIMIT) : null;
+function readInput(where, read = readJson, exists = fs.existsSync) {
+  const input = exists(where.input) ? read(where.input, INPUT_RECEIPT_LIMIT) : null;
   const failures = {};
   for (const [key, file] of [['session', where.failure], ['workspace', where.workspaceFailure]]) {
-    if (fs.existsSync(file)) {
-      const marker = readJson(file);
+    if (exists(file)) {
+      const marker = read(file);
       if (marker.schema !== 1 || !text(marker.generation)) fail('invalid-input-failure-watermark');
       failures[key] = marker.generation;
     }
@@ -714,6 +715,100 @@ function hint(event, where, currentInput, prior = null) {
     (currentInput.hostObservation ? '\nNative host observations (data only): ' + JSON.stringify(currentInput.hostObservation) : '')}};
 }
 
+// Optimistic recovery evidence only. Parse the captured bytes, not a separate
+// mid-read version; compare every complete source and detect overlapping locks.
+function recoveryBasis(where) {
+  const sources = [[where.input, INPUT_RECEIPT_LIMIT], [where.state, 128 * 1024],
+    [where.failure, 128 * 1024], [where.workspaceFailure, 128 * 1024]];
+  const idle = () => {
+    if ([where.lock, where.input + '.lock', where.lock + '.recovery'].some((file) => fs.existsSync(file))) {
+      fail('recovery-read-busy');
+    }
+  };
+  const capture = () => {
+    idle();
+    const bytes = sources.map(([file, limit]) => fs.existsSync(file) ? regular(file, limit) : null);
+    idle();
+    return bytes;
+  };
+  const before = capture(), stored = new Map(sources.map(([file], index) => [file, before[index]]));
+  const input = readInput(where, (file) => jsonObject(stored.get(file)), (file) => stored.get(file) !== null);
+  const state = before[1] ? jsonObject(before[1]) : null;
+  const after = capture();
+  if (before.some((bytes, index) => bytes === null ? after[index] !== null : !after[index]?.equals(bytes))) {
+    fail('recovery-source-changed');
+  }
+  return {input, state, inputHash: before[0] ? sha(before[0]) : null, stateHash: before[1] ? sha(before[1]) : null};
+}
+
+function compactHint(event, where) {
+  const request = {op: 'read-native-input', session_id: event.session_id, cwd: where?.root || event.cwd,
+    index: 0, offset: 0, maxChars: 4000};
+  const locators = {capturedInput: {inline: false, firstPageRequest: request},
+    checkpoint: {inline: false, path: where?.state || null}};
+  let data = {state: 'unknown', restorationComplete: false, session_id: event.session_id, cwd: request.cwd, ...locators};
+  const fits = (value) => Buffer.byteLength(JSON.stringify(value)) <= 6000;
+  try {
+    if (!where) fail('recovery-storage-unavailable');
+    const {input, state, inputHash, stateHash} = recoveryBasis(where);
+    if (input && !text(input.epoch)) fail('invalid-recovery-input');
+    if (input && ['interrupted', 'needsNativeReplay', 'needsResumeReconciliation'].some((key) =>
+      Object.hasOwn(input, key) && typeof input[key] !== 'boolean')) fail('invalid-recovery-flags');
+    if (state && (state.schema !== 1 || state.session !== event.session_id || !samePath(state.cwd, where.root) ||
+        !text(state.epoch) || !Number.isSafeInteger(state.revision) || state.revision < 1 ||
+        !['active', 'paused'].includes(state.mode) || typeof state.canContinue !== 'boolean' ||
+        !text(state.result) || !text(state.nextAction) || !Array.isArray(state.inputs) || !Array.isArray(state.outputs))) {
+      fail('invalid-recovery-checkpoint');
+    }
+    if (state) savedUnresolved(state);
+    const flags = input ? {interrupted: input.interrupted === true, needsNativeReplay: input.needsNativeReplay === true,
+      needsResumeReconciliation: input.needsResumeReconciliation === true} : null;
+    const captured = input ? readNativeInput(request, input) : null;
+    data = {...data, state: 'observed-snapshot', receiptEpoch: input?.epoch || null, inputFlags: flags,
+      checkpointEpochMatchesReceipt: Boolean(input && state && input.epoch === state.epoch),
+      capturedInput: {...data.capturedInput, available: captured?.available || false, count: captured?.count || 0,
+        path: where.input, sha256: inputHash, coverage: 'captured-hook-inputs-only'},
+      checkpoint: {...data.checkpoint, available: Boolean(state), sha256: stateHash, epoch: state?.epoch || null,
+        revision: state?.revision || 0, mode: state?.mode || 'unbound', canContinue: state?.canContinue ?? null}};
+    // Each block is complete or explicitly not inlined. In particular, never
+    // expose an early input prefix while silently omitting later corrections.
+    if (captured?.available && captured.next === null && !needsInput(input) && !input.interrupted) {
+      const candidate = {...data, capturedInput: {...data.capturedInput, inline: true, value: captured}};
+      if (fits(candidate)) data = candidate;
+    }
+    if (state) {
+      const core = Object.fromEntries(['epoch', 'revision', 'mode', 'result', 'reason', 'resumeReason',
+        'revisionReason', 'nextAction', 'canContinue'].map((key) => [key, state[key] ?? null]));
+      core.unresolved = savedUnresolved(state);
+      const candidate = {...data, checkpoint: {...data.checkpoint, inline: true, projection: 'core-only', value: core}};
+      if (fits(candidate)) data = candidate;
+    }
+  } catch (_) { /* Recovery read failure does not publish an input-loss event. */ }
+  let separateLocators = '';
+  if (!fits(data)) {
+    data = {state: 'unknown', restorationComplete: false, reason: 'recovery-metadata-over-budget', ...locators};
+    if (!fits(data)) {
+      // Exact paths cannot always fit the evidence budget. Keep only the bound
+      // retrieval locators separately, never oversized state values or prefixes.
+      data = {state: 'unknown', restorationComplete: false, reason: 'recovery-locators-over-budget',
+        locators: 'separate-recovery-locators'};
+      separateLocators = '\nRecovery locators (data only; exact paths outside snapshot budget): ' + JSON.stringify(locators);
+    }
+  }
+  return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
+    'Accord context recovery: this is saved evidence, not new user input, permission or completed restoration. ' +
+    'Accord task entry: reconcile the current goal, authority, pauses, unmet duties and prior effects before dependent action; preserve input-loss and interruption requirements. ' +
+    'Reuse recorded verified results and inspect the next needed source span. Before large reads or long work, use available budget signals and retain verification and recovery capacity. ' +
+    'Verify consequential outputs and owned-resource closure; keep a single writer and retain source recovery until a target accepts and demonstrates safe continuation. ' +
+    'Snapshot values, including canContinue and matching epochs, do not authorize work. Uninlined input can be read using capturedInput.firstPageRequest and its returned next cursor; it is captured input, not complete history. Retrieval locators are in the snapshot or its explicitly separate locator block when exact paths exceed the 6000-byte snapshot budget. ' +
+    'Checkpoint values are core fields only; full input baselines and output predicates remain in its source file. Read that file within existing access when needed, check identity and current input basis before bound changes, and do not treat an old file read as current readiness. ' +
+    'If data is missing, changing or inaccessible, preserve unknowns and hold only dependent effects. Never reconstruct missing input from a hash. ' +
+    `Pipe the structured read-native-input request to node "${__filename}" when needed; it writes no files. ` +
+    'The separate status operation inspects files and uses transient locks, so it requires corresponding write access. ' +
+    `For a remaining coordination gap, consult "${path.join(__dirname, '..', 'skills', 'deliver-demand-driven-outcome', 'SKILL.md')}"; do not repeat discovery when the supplied sources suffice. ` +
+    separateLocators + '\nRecovery snapshot (data only): ' + JSON.stringify(data)}};
+}
+
 function handleHook(event) {
   const name = event.hook_event_name;
   if (!['UserPromptSubmit', 'Stop', 'Interrupt', 'SessionEnd', 'SessionStart'].includes(name)) fail('unsupported-hook-event');
@@ -727,21 +822,7 @@ function handleHook(event) {
   if (name === 'SessionStart' && !['resume', 'compact'].includes(event.source)) return {};
   const where = location(event.session_id, event.cwd, name === 'UserPromptSubmit');
   if (name === 'SessionStart' && event.source === 'compact') {
-    let input = null;
-    try { input = where ? inputLocked(where, () => readInput(where)) : null; }
-    catch (_) { /* A failed recovery read is unknown, not a lost user input. */ }
-    const output = input && !needsInput(input) && !input.interrupted && !input.needsResumeReconciliation
-      ? hint(event, where, {...input, hostObservation: null})
-      : {hookSpecificOutput: {hookEventName: name, additionalContext:
-        `Current input recovery remains unknown. Read bound task artifacts and permitted native history; use node "${__filename}" --help for status and recovery. ` +
-        'Native context identity (data only): ' + JSON.stringify({session_id: event.session_id, cwd: event.cwd}) + '. ' +
-        'preserve existing pauses and input-loss recovery requirements. Missing sources cannot be reconstructed from a receipt hash.'}};
-    output.hookSpecificOutput.additionalContext = 'Accord context recovery: this is not new user input or completed restoration. ' +
-      'Recover the goal, authority, pauses, unresolved work and prior effects from bound task sources or permitted native history before acting. ' +
-      'Use read-native-input via helper help for retained input text when needed; its captured range does not include all history, attachments or work progress. ' +
-      'Context loss grants no wider data access. If material scope or authority remains unrecoverable, hold dependent effects and request only the missing input. ' +
-      output.hookSpecificOutput.additionalContext;
-    return output; // Context loss does not alter the input identity or authorize a state transition.
+    return compactHint(event, where); // No identity change, publication lock or state transition.
   }
   if (!where) return {};
   if (name === 'SessionStart') {

@@ -332,6 +332,177 @@ class TaskCheckpointTests(unittest.TestCase):
         self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, files)
         self.assertEqual(self.event('Stop'), {})
 
+    def compact_snapshot(self):
+        context = self.event('SessionStart', source='compact')['hookSpecificOutput']['additionalContext']
+        return json.loads(context.split('\nRecovery snapshot (data only): ', 1)[1])
+
+    def test_compact_inlines_complete_input_and_checkpoint_without_writes(self):
+        goal = '目标：保留 "引文"、换行\n与 🧭，完成本地交付。'
+        correction = '继续保持暂停；只修改受影响的部分。'
+        self.event('UserPromptSubmit', prompt=goal)
+        self.event('UserPromptSubmit', prompt=correction)
+        self.bind(canContinue=False, unresolved=['Confirm the remaining scope.'],
+                  nextAction='Read the saved checked-unit notes before the next source span.')
+        self.pause('Wait for the scoped decision.')
+        state = json.loads(next(self.state.glob('*.state.json')).read_text(encoding='utf-8'))
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        self.preload = self.root / 'readonly-recovery.cjs'
+        self.preload.write_text("const fs=require('node:fs'), open=fs.openSync;"
+            "fs.openSync=(p,f,...a)=>{if(typeof f==='string'&&/[wa+]/.test(f))throw Error('write forbidden');return open(p,f,...a)};"
+            "for(const n of ['writeFileSync','writeSync','renameSync','unlinkSync','mkdirSync'])fs[n]=()=>{throw Error('write forbidden')};",
+            encoding='utf-8')
+        data = self.compact_snapshot()
+        self.assertTrue(data['capturedInput']['inline'])
+        self.assertEqual([e['text'] for e in data['capturedInput']['value']['entries']][-2:], [goal, correction])
+        self.assertIsNone(data['capturedInput']['value']['next'])
+        self.assertEqual(data['checkpoint']['projection'], 'core-only')
+        self.assertEqual(data['checkpoint']['value'], {key:state.get(key) for key in
+            ['epoch','revision','mode','result','reason','resumeReason','revisionReason','nextAction','canContinue','unresolved']})
+        self.assertEqual(data['checkpoint']['mode'], 'paused')
+        self.assertFalse(data['checkpoint']['canContinue'])
+        self.assertTrue(data['checkpointEpochMatchesReceipt'])
+        self.assertFalse(data['restorationComplete'])
+        self.assertEqual(before, {p.name:p.read_bytes() for p in self.state.iterdir()})
+
+    def test_compact_snapshot_detects_changes_outside_its_visible_core(self):
+        self.bind()
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        script = '''
+const fs=require('node:fs'), runtime=require(process.argv[1]);
+const event=JSON.parse(process.argv[2]), kind=process.argv[3], read=fs.readFileSync;
+let injected=false, stateReads=0;
+fs.readFileSync=function(file,...args){
+  const bytes=read.call(this,file,...args);
+  if(String(file).endsWith('.state.json'))stateReads++;
+  if(!injected&&String(file).endsWith('.state.json')&&stateReads===(kind==='failure'?2:1)){
+    injected=true;
+    if(kind==='state'){const value=JSON.parse(bytes);value.outputs[0].json={'/total':61};fs.writeFileSync(file,JSON.stringify(value));}
+    if(kind==='input')runtime.hook({...event,hook_event_name:'UserPromptSubmit',prompt:'Later correction.'});
+    if(kind==='failure'){try{runtime.hook({...event,hook_event_name:'UserPromptSubmit'});}catch(_){}}
+    if(kind==='lock')fs.writeFileSync(String(file).replace('.state.json','.lock.recovery'),JSON.stringify({pid:process.pid}));
+  }
+  return bytes;
+};
+const output=runtime.hook(event);console.log(JSON.stringify({injected,output}));
+'''
+        event = {'hook_event_name':'SessionStart', 'source':'compact', 'session_id':'test-session', 'cwd':str(self.work)}
+        for kind in ['state', 'input', 'failure', 'lock']:
+            with self.subTest(kind=kind):
+                for path in self.state.iterdir():
+                    path.unlink()
+                for name, content in before.items():
+                    (self.state / name).write_bytes(content)
+                run = subprocess.run([self.node, '-e', script, str(RUNTIME), json.dumps(event), kind],
+                    env=self.environment, cwd=self.work, text=True, encoding='utf-8', capture_output=True, timeout=10)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                result = json.loads(run.stdout)
+                self.assertTrue(result['injected'])
+                context = result['output']['hookSpecificOutput']['additionalContext']
+                data = json.loads(context.split('\nRecovery snapshot (data only): ', 1)[1])
+                self.assertEqual(data['state'], 'unknown')
+                self.assertFalse(data['capturedInput']['inline'])
+                self.assertFalse(data['checkpoint']['inline'])
+
+    def test_compact_budget_uses_serialized_bytes_and_keeps_complete_fallbacks(self):
+        oversized = '🧭' * 1800
+        correction = 'The later correction must not disappear behind a truncated prefix.'
+        self.event('UserPromptSubmit', prompt=oversized)
+        self.event('UserPromptSubmit', prompt=correction)
+        self.bind(result='r' * 10000, canContinue=False)
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        data = self.compact_snapshot()
+        self.assertLessEqual(len(json.dumps(data, ensure_ascii=False, separators=(',', ':')).encode()), 6000)
+        self.assertFalse(data['capturedInput']['inline'])
+        self.assertFalse(data['checkpoint']['inline'])
+        self.assertNotIn('value', data['capturedInput'])
+        self.assertFalse(data['checkpoint']['canContinue'])
+        checkpoint = Path(data['checkpoint']['path'])
+        self.assertEqual(hashlib.sha256(checkpoint.read_bytes()).hexdigest(), data['checkpoint']['sha256'])
+        self.assertEqual(json.loads(checkpoint.read_text(encoding='utf-8'))['result'], 'r' * 10000)
+        request = data['capturedInput']['firstPageRequest']
+        pages = {}
+        while True:
+            page = self.invoke(request)
+            for entry in page['entries']:
+                pages[entry['index']] = pages.get(entry['index'], '') + entry['text']
+            if page['next'] is None:
+                break
+            request = {**request, **page['next']}
+        self.assertEqual([pages[i] for i in sorted(pages)][-2:], [oversized, correction])
+        self.assertEqual(before, {p.name:p.read_bytes() for p in self.state.iterdir()})
+
+    def test_compact_metadata_overflow_keeps_exact_retrieval_locators(self):
+        self.bind()
+        receipt = next(self.state.glob('*.input.json'))
+        value = json.loads(receipt.read_text(encoding='utf-8'))
+        value['epoch'] = 'oversized-epoch-' * 600
+        receipt.write_text(json.dumps(value), encoding='utf-8')
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        data = self.compact_snapshot()
+        self.assertEqual(data['state'], 'unknown')
+        self.assertEqual(data['reason'], 'recovery-metadata-over-budget')
+        self.assertLessEqual(len(json.dumps(data, separators=(',', ':')).encode()), 6000)
+        self.assertTrue(self.invoke(data['capturedInput']['firstPageRequest'])['available'])
+        self.assertEqual(Path(data['checkpoint']['path']), next(self.state.glob('*.state.json')))
+        self.assertEqual(before, {p.name:p.read_bytes() for p in self.state.iterdir()})
+
+        # Virtual long-path filesystem: cross-platform formatting/dispatch
+        # coverage, not a claim about OS long-path support or ACL enforcement.
+        script = '''
+const fs=require('node:fs'), path=require('node:path'), runtime=require(process.argv[1]);
+const root=path.resolve('virtual-work',...Array(45).fill('w'.repeat(80)));
+const base=path.resolve('virtual-state',...Array(45).fill('s'.repeat(80)));
+process.env.YIYUAN_ACCORD_TASK_STATE_DIR=base;
+fs.realpathSync=p=>p; fs.existsSync=p=>p===base;
+fs.statSync=fs.lstatSync=()=>({isDirectory:()=>true,isSymbolicLink:()=>false});
+for(const key of ['openSync','writeFileSync','writeSync','renameSync','unlinkSync','mkdirSync'])
+  fs[key]=()=>{throw Error('write forbidden')};
+const context=runtime.hook({hook_event_name:'SessionStart',source:'compact',session_id:'long-session',cwd:root})
+  .hookSpecificOutput.additionalContext;
+const marker='\\nRecovery snapshot (data only): ';
+const locators=JSON.parse(context.split('\\nRecovery locators (data only; exact paths outside snapshot budget): ')[1].split(marker)[0]);
+let readError=null;try{runtime.operate(locators.capturedInput.firstPageRequest)}catch(error){readError=error.message}
+console.log(JSON.stringify({context,locators,root,base,readError}));
+'''
+        run = subprocess.run([self.node, '-e', script, str(RUNTIME)], cwd=self.work,
+            env=self.environment, text=True, encoding='utf-8', capture_output=True, timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        result = json.loads(run.stdout)
+        data = json.loads(result['context'].split('\nRecovery snapshot (data only): ', 1)[1])
+        self.assertEqual(data['reason'], 'recovery-locators-over-budget')
+        self.assertLessEqual(len(json.dumps(data).encode()), 6000)
+        request = result['locators']['capturedInput']['firstPageRequest']
+        self.assertEqual(request['cwd'], result['root'])
+        self.assertEqual(request['session_id'], 'long-session')
+        self.assertEqual(Path(result['locators']['checkpoint']['path']).parent, Path(result['base']))
+        self.assertEqual(result['readError'], 'native-user-input-receipt-missing')
+
+    def test_compact_snapshot_keeps_recovery_flags_and_epoch_mismatch(self):
+        self.bind(canContinue=False)
+        self.event('Interrupt')
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        data = self.compact_snapshot()
+        self.assertTrue(data['inputFlags']['interrupted'])
+        self.assertFalse(data['checkpointEpochMatchesReceipt'])
+        self.assertFalse(data['capturedInput']['inline'])
+        self.assertFalse(data['checkpoint']['canContinue'])
+        self.assertEqual(before, {p.name:p.read_bytes() for p in self.state.iterdir()})
+        self.event('SessionStart', source='resume')
+        data = self.compact_snapshot()
+        self.assertTrue(data['inputFlags']['needsResumeReconciliation'])
+        self.assertFalse(data['checkpointEpochMatchesReceipt'])
+        lock = Path(str(next(self.state.glob('*.input.json'))) + '.lock')
+        lock.write_text(json.dumps({'pid':os.getpid()}), encoding='utf-8')
+        try:
+            self.invoke({'hook_event_name':'UserPromptSubmit', 'prompt':'Uncaptured change.'}, hook=True, success=False)
+        finally:
+            lock.unlink()
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        data = self.compact_snapshot()
+        self.assertTrue(data['inputFlags']['needsNativeReplay'])
+        self.assertFalse(data['capturedInput']['inline'])
+        self.assertEqual(before, {p.name:p.read_bytes() for p in self.state.iterdir()})
+
     def test_compact_without_input_receipt_does_not_manufacture_state(self):
         files = {p.name: p.read_bytes() for p in self.state.iterdir()}
         output = self.event('SessionStart', source='compact', session_id='new-unbound-session')

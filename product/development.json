@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "ead5a42f664f179a39f8e6e0117cd9a4a11f21c27a012e8ffb8da877656a5ade",
+        "packageSha256": "501b425dd68af412ca61432130d603f21c2f60143eedce74fea3dfada199a3fa",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -139,10 +139,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1600000,
+      "maxProductCodeAndTestBytes": 1630000,
       "maxTrackedFiles": 138,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current development limits are 138 tracked files, 1600000 product/runtime/test bytes and 36000 primary-instruction bytes, with the existing five-percent code/test reserve. The capacity-fit clarification and its boundary/invalid-evidence regressions measure 1513443 code/test bytes, exceeding the former 1510500 usable allowance by 2943. Raise only the code/test ceiling from 1590000 to 1600000; retain the reserve, file/instruction limits and useful tests. No runtime file, dependency, process or model call is added. These user-authorized, revisable bounds are not functional, value or release acceptance. Historical adjustment reasons and measurements remain at 1f4873976f86c4e3acf8140d7368f850e2ab09ab:product/development.json#/changeBoundary/complexityBudget/rationale. This concise rationale retires the accumulated historical narrative; that documentation reduction does not reduce the separately measured code/test bytes. Recheck actual size and justify any future bound revision."
+      "rationale": "Current development limits are 138 tracked files, 1630000 product/runtime/test bytes and 36000 primary-instruction bytes, retaining the five-percent code/test reserve. Read-only compact recovery and its coherent-source, input-order, pause, byte-budget and exact-locator regressions measure 1541501 code/test bytes, exceeding the former 1520000 usable allowance by 21501. Raise only the code/test ceiling from 1600000 to 1630000; retain useful regression coverage, the reserve and other limits. No runtime file, dependency, service or model call is added. These user-authorized, revisable bounds are not functional, value or release acceptance. Prior limits and measurements remain at 3294b33d50669856b8964e6351b6663855354e4a:product/development.json#/changeBoundary/complexityBudget; older adjustment history remains at 1f4873976f86c4e3acf8140d7368f850e2ab09ab. Recheck actual size and justify further changes."
     }
   },
   "source": {

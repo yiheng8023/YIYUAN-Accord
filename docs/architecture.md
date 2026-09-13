@@ -137,6 +137,21 @@ This local copy can contain sensitive user text and must not be included in rout
 public evidence. It follows the same receipt retirement rules below, without a
 new service, transcript scan or model request. An older executor may omit this
 field or reader; retain a compatible executor for unfinished recovery needs.
+On `SessionStart` with `source=compact`, a read-only recovery snapshot replaces
+repeated generic entry discovery. It compares complete captured bytes of the
+input, checkpoint and both failure watermarks, rejects overlapping publication
+or recovery locks, and changes no epoch or state. Within 6000 serialized UTF-8
+bytes it supplies complete captured input when it fits and checkpoint core fields
+when they fit; later corrections are never hidden behind an inline input prefix.
+Source paths, hashes and a prepared input-page request support further inspection.
+Checkpoint inputs and output predicates remain in the full source file. Oversized
+metadata falls back to unknown with retrieval locators; when exact paths alone
+exceed the snapshot budget, those locators are emitted separately and intact.
+This is optimistic evidence delivery, not completed restoration, current authority
+or a transaction with external writers. Pauses, interruption, replay requirements
+and epoch differences remain explicit. The separate `status` operation still
+uses transient write locks. Resume reconciliation and input publication retain
+their existing lifecycle semantics.
 Failure watermarks remain until their owning
 state directory can safely be retired, without clearing another task's uncertainty.
 SessionEnd removes only unbound receipts with no pending input recovery or
