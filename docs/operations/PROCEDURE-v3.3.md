@@ -1644,3 +1644,15 @@ Sol/high独立维护者复核承接有用的静态工作。原报告关于完整
 独立复核原生事件、provider输出及实际文件后，Root确认原标记的SHA和mtime与源失败后记录一致，保存effect-retained.txt及原始字节/时间信息；未以外层读取代替目标读取成功。2.098秒、4次本地请求（source/target各2）、0真实模型；source/target均unsubscribe、退出0、无强制，Job进程0且读写线程结束，本地服务结束，累计进程分别4和3。原脚本最后缺少服务/流线程布尔值断言，Root逐项核对实际字段；这项外层收尾不修复原业务失败，也不将脚本提升为完整自验证控制器。全局配置/指导及其它绑定源码在本次运行和收尾保持，auth文件未产生；未请求Windows沙箱初始化或ACL修改，不据此声明全系统ACL后态验收。
 
 Root核对解析后的唯一owned目标、无reparse、原生/服务已关闭及保留效果一致后，用PowerShell LiteralPath退役该目录156文件5653480字节，目标不存在。方案、授权、原脚本、事件/请求、独立后态与唯一标记保留在owned外；用户IDE、云环境和对话保持。当前501b分发候选和正式验收不变。下一直接处理目标的适用只读路径，复用已发生效果与未完责任，再判断是否具备继续接管的条件；不重复源端已完成的写后失败片段，也不将本次受控后态与先前无工具寿命试验拼成完整交接。
+
+## 只读文件接口接收既有失败证据（2026-09-14）
+
+在b95bf06上继续接收端缺口，保留上次源端单次授权已使用及原试验失败身份。[官方沙箱说明](https://learn.chatgpt.com/docs/sandboxing)区分只读文件检查和需批准的命令执行；[App Server](https://learn.chatgpt.com/docs/app-server)另提供fs/readFile及实验性dynamicTools。参考当前已有schema、已核动态工具调用形态和有界传输，选择只读文件API组合，不重跑Get-Content、不启用Windows沙箱后端、不修改原目标或共享配置。fs/readFile是客户端host API，并非某个线程的沙箱内命令；调用者明确承担路径和数据范围约束，不能把线程readOnly字段当成这个API的权限屏障。
+
+私有accord-readonly-receiver-20260914/probe.py的新客户端仅临时注册一个无参数读取工具，硬绑定旧accord-write-effect-20260914中的effect-retained.txt和closeout.json。Agent不能传入路径或命令；每个文件核对单链接普通非reparse、小文件界限、前后状态、返回长度和SHA。工具请求必须是本连接的已确认thread/turn、准确名称/namespace、非空callId及首次调用；八项外来身份、参数注入和重复调用反例被纯校验拒绝，未启动原生进程。实际server request只进入队列，turn/start回执取得身份后，在外层循环顺序执行两个fs/readFile，再答复原工具请求，避免在RPC等待回调中嵌套另一个请求而误消费应答。此工具没有安装到分发包或全局环境，其支持者是本次存活客户端。
+
+新ephemeral接收者01a09cf5-8a86-74b2-a5bc-87b8152724e6维持readOnly/networkAccess=false、never及固定本地provider。一次动态工具调用触发两次原生fs/readFile：标记返回b25lDQo=，解码为one加原CRLF；收尾记录返回原partial/failed、sourceInvocationCount=1、targetReadVerified=false等实际内容。独立核对磁盘保留原件、原生响应、tool response、发回server request的result、dynamicToolCall完成项和下一provider请求，字节一致。Code Mode外层说明之外，后续请求实际收到同一1134字符JSON。两份文件SHA及mtime保持；标记SHA仍为5259d46a49644bf76792231ef7315b5293677c49ddd7e69d95557013e10320d4。固定provider只在收到并核对工具输出后返回final，仍标明originalCaseStillFailed=true、handoffAccepted=false，不把旧目标失败改成通过。
+
+0.480秒，2次本地provider请求、0真实模型。原生事件仅有userMessage、dynamicToolCall、agentMessage，无commandExecution/fileChange；本次work为空，原源未重启，未再写标记。NativeTurnWatch确认当前协议完成；接收者unsubscribe、退出0、无强制、Job进程0、读写线程及本地服务结束，累计3进程，auth文件未产生。源绑定和共享配置/指导保持。Root及独立审查完成上述逐字核对后，以解析后的唯一owned路径和PowerShell LiteralPath退役76文件2793916字节，目标不存在；旧原件及其失败记录位于清理范围外并保持。
+
+本次只支持“固定响应条件下，调用者用限定host API把真实保留证据送入新的只读原生轮”。选择读取路径、文件范围和响应判据均由开发客户端/夹具承担，不证明真实模型自主选择或理解、原失败目标恢复、交权完成、原生沙箱对外部API的强制或安装后的普通插件行为。当前501b包和正式资格不变；计划r15已覆盖这类能力组合，无需增加共识节点。下一将已核方法用于有实际需要的普通Agent承接，明确执行者和支持寿命，并检验语义及必要续做；不再为相同接口反复运行探针。
