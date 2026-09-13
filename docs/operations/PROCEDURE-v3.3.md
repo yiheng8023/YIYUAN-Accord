@@ -1464,3 +1464,17 @@ Agent另用.NET FileStream、GZipStream、SHA-256及64 KiB缓冲逐个读取原�
 派发前审查指出，Agent可写的run-records及非空说明不能自动认证调用、同cache复用和语义。观察器因此只给机械检查结果，原生产result保留caseAccepted=false/semanticReview=pending；原生命令、输出UUID、缓存路径与前后态关联和说明语义由两个Sol/high独立核对。两项复核及主代理原始输出比对均通过后，另存independent-review.json，摘要de29efd84eccb151dae95dda0d94b4e481a82c48d295bbbd602a7f93fecefa55，接受上述有限子案。累计256663 token，其中输出6639；不作费用、模型排名或指导改动因果收益判断。本次没有重跑源码审阅案例、增加运行时或提高正式验收计数。
 
 外层执行器exit0、未强制、进程0且读写线程结束，unsubscribe成功；任务内部状态目录在退出后为空。私有accord-batch-continuation-20260913保留契约、原生流、独立审查、唯一成果及运行记录，原始材料映射到经散列核对的旧唯一来源。验证后的三个临时工作区/市场/缓存目标退役50文件、6498374字节，同名数据目录原本不存在；retirement-plan摘要e6cd6325d8daa8b89dd576c18fa2b457540b87da39c66be45f8ad9fd73dd3ac7。该结果支持必要状态继承后的正确接续与所属资源收尾；主载体交权、运行中自主压力响应、其它入口、全资源恢复与整体3.3仍未完成。
+
+## 设置通知与当前执行模型的集成修正（2026-09-13）
+
+用户再次强调原生、官方、本地、互联网、市场扩展、外围生态及系统集成方案都按合规、可靠性和整体效果选择组合，计划已覆盖则不更新。核对PLAN第78/113/117行、implementation.selectionOrder/formNeutral及Skill能力选择段，未发现“必须先耗尽原生”的产品约束；计划保持r15，执行方式按既有标准纠偏。CodeGraph在本项目没有索引，未为这次检查创建索引或升级插件。继续核对[官方Codex SDK](https://learn.chatgpt.com/docs/codex-sdk)及[LangGraph状态恢复](https://docs.langchain.com/oss/python/langgraph/persistence)等现成集成，复用已有比较，不新增持久层、服务或SDK安装。所核对的Python SDK将全局通知和turn通知分别路由，单读turn流不保证完整的设置来源；回到真实通知与现有helper的连接发现了具体遗漏。
+
+旧observeContext仅处理model/rerouted等当前轮事件，没有消费thread/settings/updated，导致启动时绑定A模型后，后续配置改为B，新的turn仍可能被标为A。[官方协议字段](https://github.com/openai/codex/blob/1715e55076737158ba61d43158ede504de6d4ce1/codex-rs/app-server-protocol/src/protocol/v2/thread.rs#L253)明确将model设置用于后续轮次；同版[通知实现](https://github.com/openai/codex/blob/1715e55076737158ba61d43158ede504de6d4ce1/codex-rs/app-server/src/bespoke_event_handling.rs)在ThreadSettingsApplied后从配置快照生成settings通知。它不是当前轮已经切换模型的证明。当前0.154.0本机导出的schema另行确认threadId和完整threadSettings结构，model为必需字符串；固定上游源码与本机二进制证据分别保留，不将两者等同为同一构建。
+
+在无凭据独立HOME内只调用initialize、thread/start、thread/settings/update、thread/read和unsubscribe：元数据从gpt-6-astra变为gpt-5.6-sol，并收到同一线程的真实settings通知。没有turn/start、真实模型请求、Goal或压缩动作。其后将实际settings与明确标为合成的后续turn/usage/时间一起回放，旧helper仍给Astra，新helper给Sol；这只证明通知消费语义，不能当作实际新模型执行、活跃窗口或效率观察。native-shape-replay.json摘要c8267e54b66e4326012f7203d60396080eb56d431e831d9558287d52119d9862。
+
+修复在现有函数中分别保持nextModel和当前轮model：settings只更新下一轮配置，当前轮和已经发生的reroute不改写；新的turn/started采用最后配置并继续要求新usage。当前轮fallback不自动成为下一轮配置。缺失/无效模型返回unknown，外线程通知不污染当前观察；断连、过期、乱序、压缩、暂停/输入约束及sourceReleaseAllowed=false均保持。调用方仍须保全原始接收顺序和必要全局通知，不能把设置更新或helper建议当作执行、授权或已完成交接。
+
+四个新增回归在修前全部失败、修后通过，98项检查点回归通过（107.037秒）；按审查建议补齐fallback用例的turn/completed事件后，该用例再验通过。两个Sol/high独立审查未发现阻塞问题。两份runtime镜像一致，包仍为12文件3.3.0-dev.1，新摘要e86195fe9f8b511dc7cc4f6c85d428d396bc175f677a3459f2b6797444f8833d。未修改能力选型原则、计划共识或完整验收标准；新包的真实模型轮次与完整调用方执行链仍待验。按现有集中验证安排，本轮以本地回归、静态检查和独立审查收尾，使用skip-ci提交，将完整托管矩阵留给下一集中验证节点；不冒充新托管通过或发布资格。
+
+私有accord-settings-integration-20260913保留本机schema、真实元数据通知、前后机制回放和执行来源；临时schema导出目录及已退出的独立HOME/work已退役，旧helper临时副本映射回765561a。原生进程自然exit0、无强制、进程0，读写线程结束，共享保护文件保持；未改用户模型、插件启用状态、IDE/云环境或对话。此修复推进动态条件绑定，尚不等于完成SDK集成、主动交接或主载体连续性。

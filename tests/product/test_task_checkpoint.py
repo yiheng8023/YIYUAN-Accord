@@ -729,6 +729,79 @@ class TaskCheckpointTests(unittest.TestCase):
             "method": "turn/completed", "params": {"threadId": "thread", "turn": {"id": "turn"}}}))
         self.assertEqual(self.signals(request)["state"], "unknown")
 
+    def settings_event(self, request, model, **settings):
+        return dict(receivedAtMs=request["events"][-1]["receivedAtMs"], event={
+            "method": "thread/settings/updated", "params": {
+                "threadId": "thread", "threadSettings": {"model": model, **settings}}})
+
+    def test_native_settings_select_next_turn_model_before_usage(self):
+        request = self.signal_request()
+        settings = self.settings_event(request, "user-selected-model", effort="medium")
+        settings["receivedAtMs"] = request["events"][0]["receivedAtMs"]
+        request["events"].insert(0, settings)
+        result = self.signals(request)
+        self.assertEqual(result["state"], "window-observed")
+        self.assertEqual(result["conditions"]["model"], "user-selected-model")
+        self.assertFalse(result["sourceReleaseAllowed"])
+
+    def test_pending_settings_do_not_relabel_the_active_turn(self):
+        request = self.signal_request()
+        current = self.signals(request)
+        request["events"].append(self.settings_event(request, "next-model", effort="high"))
+        self.assertEqual(self.signals(request), current)
+        at = request["events"][-1]["receivedAtMs"]
+        request["events"] += [
+            dict(receivedAtMs=at, event={"method": "turn/completed", "params": {
+                "threadId": "thread", "turn": {"id": "turn"}}}),
+            dict(receivedAtMs=at, event={"method": "turn/started", "params": {
+                "threadId": "thread", "turn": {"id": "next-turn"}}}),
+        ]
+        request["turnId"] = "next-turn"
+        self.assertEqual(self.signals(request)["state"], "unknown")
+        usage = copy.deepcopy(request["events"][1])
+        usage["event"]["params"]["turnId"] = "next-turn"
+        request["events"].append(usage)
+        result = self.signals(request)
+        self.assertEqual(result["conditions"]["model"], "next-model")
+        self.assertNotEqual(result["observationId"], current["observationId"])
+
+    def test_settings_snapshot_restores_configured_model_after_a_turn_reroute(self):
+        request = self.signal_request()
+        settings = self.settings_event(request, "configured-model")
+        settings["receivedAtMs"] = request["events"][0]["receivedAtMs"]
+        request["events"].insert(0, settings)
+        at = request["events"][-1]["receivedAtMs"]
+        request["events"].append(dict(receivedAtMs=at, event={"method": "model/rerouted", "params": {
+            "threadId": "thread", "turnId": "turn", "toModel": "fallback-model"}}))
+        request["events"].append(copy.deepcopy(request["events"][2]))
+        current = self.signals(request)
+        self.assertEqual(current["conditions"]["model"], "fallback-model")
+        duplicate = copy.deepcopy(settings); duplicate["receivedAtMs"] = at
+        request["events"].append(duplicate)
+        self.assertEqual(self.signals(request), current)
+        request["events"].append(dict(receivedAtMs=at, event={"method": "turn/completed", "params": {
+            "threadId": "thread", "turn": {"id": "turn"}}}))
+        request["events"].append(dict(receivedAtMs=at, event={"method": "turn/started", "params": {
+            "threadId": "thread", "turn": {"id": "next-turn"}}}))
+        request["turnId"] = "next-turn"
+        usage = copy.deepcopy(request["events"][2]); usage["event"]["params"]["turnId"] = "next-turn"
+        request["events"].append(usage)
+        self.assertEqual(self.signals(request)["conditions"]["model"], "configured-model")
+
+    def test_settings_reject_missing_model_and_ignore_other_threads(self):
+        for settings in (None, [], {}, {"model": None}, {"model": ""}):
+            request = self.signal_request()
+            event = self.settings_event(request, "unused")
+            event["event"]["params"]["threadSettings"] = settings
+            request["events"].append(event)
+            self.assertEqual(self.signals(request)["state"], "unknown")
+        request = self.signal_request()
+        current = self.signals(request)
+        foreign = self.settings_event(request, "foreign-model")
+        foreign["event"]["params"]["threadId"] = "another-thread"
+        request["events"].append(foreign)
+        self.assertEqual(self.signals(request), current)
+
     def test_budget_with_native_signals_rejects_a_superseded_observation(self):
         request = self.context_request()
         request["signals"] = signals = self.signal_request()

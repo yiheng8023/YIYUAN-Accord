@@ -351,7 +351,7 @@ function observeContext(request, now = Date.now()) {
       !text(request.turnId) || !integer(request.maxAgeMs) || request.maxAgeMs === 0) return unknown('unbound-connection');
   if (request.connected !== true) return unknown('connection-not-live');
   if (!Array.isArray(request.events)) return unknown('notification-stream-unavailable');
-  let turn = null, model = b.model, generation = sha(canonical(b)), usage = null, observed = null;
+  let turn = null, nextModel = b.model, model = b.model, generation = sha(canonical(b)), usage = null, observed = null;
   let active = false, compacting = false, lastTime = -1;
   const invalidate = (kind, identity) => {
     generation = sha(canonical({generation, kind, identity})); usage = null; observed = null;
@@ -362,9 +362,17 @@ function observeContext(request, now = Date.now()) {
     lastTime = at;
     const p = event.params;
     if (!p || p.threadId !== b.threadId) continue;
-    if (event.method === 'turn/started') {
+    if (event.method === 'thread/settings/updated') {
+      // This snapshot describes next-turn settings, not an active-turn reroute.
+      // Keep the current turn's observed model and usage until its own boundary.
+      const settings = p.threadSettings;
+      if (!settings || typeof settings !== 'object' || Array.isArray(settings) || !text(settings.model)) {
+        return unknown('next-turn-model-unavailable');
+      }
+      nextModel = settings.model;
+    } else if (event.method === 'turn/started') {
       if (!text(p.turn?.id)) return unknown('invalid-turn-start');
-      turn = p.turn.id; active = true; compacting = false;
+      turn = p.turn.id; model = nextModel; active = true; compacting = false;
       invalidate('turn-start', {turn, sequence});
     } else if (event.method === 'turn/completed' && p.turn?.id === turn) {
       active = false; invalidate('turn-completed', {turn, sequence});
@@ -851,7 +859,7 @@ const HELP = {
   },
   contextSignals: {
     invocation: '--context-signals reads one JSON object; no input receipt or state write is required',
-    input: 'binding {connectionId, threadId, hostVersion, model} from the actual current connection and thread/start result; turnId from the active native call; connected from live transport; maxAgeMs chosen for the task; events [{receivedAtMs, event}] in receive order from this connection. Preserve turn/started and turn/completed, model/rerouted, contextCompaction item starts/completions, legacy thread/compacted and thread/tokenUsage/updated. Do not mix connections or remove invalidations.',
+    input: 'binding {connectionId, threadId, hostVersion, model} from the actual current connection and thread/start result; turnId from the active native call; connected from live transport; maxAgeMs chosen for the task; events [{receivedAtMs, event}] in receive order from this connection. Preserve thread/settings/updated, turn/started and turn/completed, model/rerouted, contextCompaction item starts/completions, legacy thread/compacted and thread/tokenUsage/updated. Settings snapshots update the next-turn model; reroutes belong to their active turn. Do not mix connections or remove invalidations.',
     output: 'Capacity-only observation plus condition generation and observationId. New turn, reroute, compaction or unknown capacity discards old usage; a post-change matching observation is required. Disconnection, expired or missing data stays unknown. Never restamp historical events. A reconnection gets a new connectionId.',
     integration: 'The owning App Server client may expose this through native dynamic tools. For assess-context pass signals containing the current observation request and assessment.observationId from the earlier query; the helper re-observes and rejects changed/unavailable evidence. Keep current input epoch and independently inspected integrity/forecasts. The helper does not subscribe itself, authenticate supplied transport records or establish an efficiency range. No installed Desktop event integration is implied.',
   },

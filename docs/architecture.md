@@ -173,7 +173,12 @@ delivery. Source, original failures and limits are recorded in the
 
 Context signals also depend on the actual entry. The helper's `--context-signals`
 interface consumes caller-supplied native events; it does not subscribe to a
-Desktop event stream. Native context tools may offer a direct alternative when
+Desktop event stream. Collect connection-level `thread/settings/updated` together
+with the turn events in transport receive order; a turn-only subscription is
+not a complete input stream. Settings snapshots describe the next turn, while
+`model/rerouted` changes only the active turn's observed model. The next
+`turn/started` adopts the latest configured model and requires fresh usage.
+Native context tools may offer a direct alternative when
 actually exposed and authorized. In the inspected host version, their remaining
 budget uses the tighter applicable auto-compaction or full-window bound; it is
 not an efficiency measurement. An experimental setting is not a package
