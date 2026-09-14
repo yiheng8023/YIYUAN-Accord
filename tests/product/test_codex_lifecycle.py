@@ -28,8 +28,11 @@ class CodexLifecycleTests(unittest.TestCase):
         codex, node = root / "codex.exe", root / "node.exe"
         codex.write_bytes(b"codex fixture")
         node.write_bytes(b"node fixture")
+        protected = root / "protected-config.toml"
+        protected.write_text("[projects]\n", encoding="utf-8")
         args = argparse.Namespace(package=str(package.resolve()), evidence=str((root / "evidence").resolve()),
             marketplace_manifest=str(marketplace.resolve()), codex=str(codex.resolve()), node=str(node.resolve()),
+            protected_file=[str(protected.resolve())],
             timeout=180, request_timeout=30, recovery_timeout=10)
         lifecycle.prepare(args)
         return args, lifecycle._load(args.evidence)
@@ -44,6 +47,7 @@ class CodexLifecycleTests(unittest.TestCase):
             self.assertEqual(set(manifest["binaryHashes"]), {"codex", "node", "python"})
             self.assertEqual(tuple(manifest["nativeCommandLabels"]), lifecycle.COMMAND_LABELS)
             self.assertEqual(manifest["standaloneSkill"]["role"], "task-owned-fixed-control")
+            self.assertEqual(len(manifest["protectedFiles"]), 1)
             self.assertFalse((Path(args.evidence) / "run-started.json").exists())
             self.assertEqual(json.loads((Path(args.evidence) / "workspace/source.json").read_text()), {"total": 140})
 
@@ -55,6 +59,10 @@ class CodexLifecycleTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "prepared source set changed"):
                 lifecycle._validate_prebound(manifest)
             manifest["sourcePaths"]["rpc"] = original
+            manifest["python"] = manifest["codex"]
+            manifest["binaryHashes"]["python"] = manifest["binaryHashes"]["codex"]
+            with self.assertRaisesRegex(ValueError, "running Python differs"):
+                lifecycle._validate_prebound(manifest)
 
     def test_owned_environment_does_not_forward_credentials_endpoints_or_proxies(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -79,6 +87,13 @@ class CodexLifecycleTests(unittest.TestCase):
             (Path(manifest["ownedRoots"]["home"]) / "auth.json").write_text("{}", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "prepared owned root changed"):
                 lifecycle._validate_prebound(manifest)
+            (Path(manifest["ownedRoots"]["home"]) / "auth.json").unlink()
+            protected = Path(next(iter(manifest["protectedFiles"])))
+            original = protected.read_text(encoding="utf-8")
+            protected.write_text(original + "# changed\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "prepared protected file changed"):
+                lifecycle._validate_prebound(manifest)
+            protected.write_text(original, encoding="utf-8")
             nested = argparse.Namespace(**vars(args))
             nested.evidence = str((Path(args.package) / "evidence").resolve())
             with self.assertRaisesRegex(ValueError, "separate non-nested"):
@@ -99,6 +114,7 @@ class CodexLifecycleTests(unittest.TestCase):
                 def close(self): pass
             process = Process()
             with patch.object(lifecycle.subprocess, "Popen", return_value=process), \
+                    patch.object(lifecycle.subprocess, "CREATE_NO_WINDOW", 0, create=True), \
                     patch.object(lifecycle, "WindowsJob", return_value=Job()), \
                     self.assertRaisesRegex(RuntimeError, "attach failed"):
                 lifecycle._run_cli(manifest, "attach-control", ["plugin", "list", "--json"], {},
@@ -123,6 +139,7 @@ class CodexLifecycleTests(unittest.TestCase):
                 def close(self): pass
             process = Process()
             with patch.object(lifecycle.subprocess, "Popen", return_value=process), \
+                    patch.object(lifecycle.subprocess, "CREATE_NO_WINDOW", 0, create=True), \
                     patch.object(lifecycle, "WindowsJob", return_value=Job()), \
                     self.assertRaisesRegex(RuntimeError, "attach failed"):
                 lifecycle._App(manifest, "discovery", [manifest["codex"], "app-server"], {},
@@ -157,10 +174,11 @@ class CodexLifecycleTests(unittest.TestCase):
                 root = evidence / "commands" / label
                 root.mkdir()
                 lifecycle.save(root / "record.json", {"exitCode": 1 if label == "invalid-candidate" else 0,
-                    "forced": False, "after": {"activeProcesses": 0}})
+                    "forced": False, "arguments": ["-c", 'cli_auth_credentials_store="file"'],
+                    "after": {"activeProcesses": 0}})
                 (root / "stdout.json").write_text("", encoding="utf-8")
                 (root / "stderr.txt").write_text("", encoding="utf-8")
-            installed = str(evidence / "removed-home/plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.3.0-dev.1")
+            installed = str(Path(manifest["ownedRoots"]["home"]) / "plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.3.0-dev.1")
             (evidence / "commands/package-add/stdout.json").write_text(json.dumps({"installedPath": installed}), encoding="utf-8")
             with (evidence / "retained/provider-requests.jsonl").open("w", encoding="utf-8") as stream:
                 for ordinal in range(1, 5):
@@ -195,6 +213,9 @@ class CodexLifecycleTests(unittest.TestCase):
             lifecycle.save(evidence / "retained/state-after-uninstall.json", retained_state)
             facts = {"failure": None, "modelCalls": 0, "credentialHeaderSeen": False,
                 "ownedRootsAbsent": {name: True for name in lifecycle.OWNED_ROOTS},
+                "protectedSharedFilesUnchanged": True,
+                "sharedSettingsAndSelectionsPreserved": True,
+                "protectedFileHashesAfter": manifest["protectedFiles"],
                 "installedPathReturned": installed, "loadedObject": {"installedPath": installed,
                     "hookSourcePaths": [str(Path(installed) / "hooks/hooks.json")],
                     "skillPaths": [str(Path(installed) / "skills/demo/SKILL.md")]}}

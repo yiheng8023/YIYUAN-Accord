@@ -137,14 +137,16 @@
       "yiyuan_accord/identity.py",
       "yiyuan_accord/reviews.py",
       "scripts/inspect_native_resources.py",
-      "tests/product/test_native_resources.py"
+      "tests/product/test_native_resources.py",
+      "scripts/observe_codex_lifecycle.py",
+      "tests/product/test_codex_lifecycle.py"
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1680000,
-      "maxTrackedFiles": 138,
+      "maxProductCodeAndTestBytes": 1700000,
+      "maxTrackedFiles": 140,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The current source/criteria reuse correction, persistent writable-root preservation, graceful cleanup and cumulative-usage protection require the measured code and tests. Raise the revisable code/test ceiling to 1680000 while retaining the five-percent reserve, 138 tracked files and existing instruction limits. Size is a planning signal, not a reason to omit necessary functionality or retain redundant code; adjust the bound on demonstrated need. Current package bytes are unchanged by these developer execution and acceptance changes."
+      "rationale": "The public lifecycle entry replaces the need to execute private backup scripts and adds necessary source, path, deadline, raw-evidence and cleanup counterexamples. The integrated product-code/test measurement is about 1.61 million bytes; use a 1700000 ceiling to retain at least five-percent reserve, and 140 tracked files for the two new maintainer files. Keep the existing primary-instruction ceiling. This metric does not count every maintainer script byte or measure product value; assess the complete added execution path by its purpose and maintenance burden. The twelve-file runtime package is unchanged."
     }
   },
   "source": {
@@ -226,7 +228,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/cli",
           "execution": "本地终端；远程终端仍由该机器执行",
           "environment": "绑定该 CLI 的配置、权限、提供商与工作目录。",
-          "observation": "2026-09-07：冻结 Codex 0.153.4 的 dev.13/14 任务局部组合已观察到普通文件交付、检查点实际调用及已有产物失效后的100→60返工。保留各自精确包与配置，不能替代 cx-sdk/桌面、整项功能、生命周期或净价值准入；当前 dev.16 管理入口变更需验证受影响行为。",
+          "observation": "2026-09-14只读核对：独立CLI为0.154.0，原生plugin list/marketplace list支持JSON；Accord登记为installed=true、enabled=false、version=3.3.0-dev.1。注册Git市场位于用户Codex临时市场目录，HEAD cf13486、源manifest 3.2.1；唯一安装缓存为3.3.0-dev.1，runtime/Skill与当前99ca35包不同。此次共享配置散列未变，没有安装或启用。既有exec/resume及普通交付结果保留各自原条件；当前包的完整安装态行为与正式准入仍未验证。",
           "currentEffect": "unverified"
         },
         {
@@ -236,7 +238,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "本地项目/工作树或委派云端，按任务区分",
           "environment": "界面入口、内嵌引擎与独立 CLI 版本分别识别。",
-          "observation": "2026-09-06 用户更新后复核：OpenAI.Codex 安装版本及运行中的 ChatGPT.exe 路径均为 26.901.6511.0；独立 npm Codex CLI 仍为 0.153.4，执行文件 SHA256 444a3f0008050605cae73cd9b7a2dcac61294062dfaab56dd20430fd6498518b 未变。配置变化限于客户端 node_repl 运行时及通知入口；本次测试前基线已备份，清理后完整配置语义及哈希恢复。共享 Codex Accord 注册及缓存目录均缺席，保持发布后再安装。较早安装/回退诊断见 codex-installed-dev7-and-recovery；本次显式任务局部 Skill 的插问/纠偏诊断见 codex-task-local-selected-continuation-dev7。两者都不代替 Desktop 效果验收。",
+          "observation": "2026-09-14只读核对：安装和运行中的OpenAI.Codex均为26.908.4834.0；主ChatGPT.exe直接启动npm目录的Codex后端，该可执行文件当前版本0.154.0。后台进程及同源实现不证明具体GUI任务已采用当前包、Hook执行或全链路通过。旧版本、截图与任务局部指导观察保留原身份；当前Desktop实际加载、任务参与及生命周期仍需按所选入口验证。",
           "currentEffect": "unverified"
         },
         {
@@ -246,7 +248,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
           "execution": "本地交互或云端委派",
           "environment": "编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。",
-          "observation": "2026-09-12：升级前26.903.61454/CLI0.153.4保留为历史。用户更新后登记为26.908.40401，提供VS Code中插件管理页、YIYUAN Accord市场条目及钩子入口截图；只读进程观察确认Code启动该扩展目录内的0.154.0-alpha.6.2 app-server，与扩展启动参数一致。已撤回依据https://learn.chatgpt.com/docs/plugins概括性表述作出的本机IDE不支持插件判断及相应暂缓建议；公开页面与当前构建的适用性冲突未推广到所有版本/账户。当前界面及实际后端已确认，具体Accord包加载、Hook执行、全链路及兼容编辑器仍未验收；详见PROCEDURE-v3.3.md的IDE实际界面纠正记录。",
+          "observation": "2026-09-14只读核对：openai.chatgpt扩展仍为26.908.40401，当前无运行中的Code进程。2026-09-12的实际UI插件管理/市场/Hook入口和扩展自带0.154.0-alpha.6.2后端观察仍有效于当时构建；官方插件页概括性不支持IDE表述与该本机观察的冲突保留，不扩展为所有版本/账户结论。当前包加载、Hook执行、完整生命周期和兼容编辑器尚未验收；不为检查重启用户已有任务。",
           "currentEffect": "unverified"
         },
         {
@@ -4437,13 +4439,14 @@
           "conditions": {
             "codexVersion": "0.154.0",
             "entryProtocol": "app-server",
-            "executionOwner": "caller-owned stdio process and Windows Job; 5-second descendant grace then bounded owned cleanup",
+            "executionOwner": "scripts/observe_codex_lifecycle.py owns the stdio processes and Windows Jobs under one prebound whole-work deadline; each process cleanup has one non-renewing recovery deadline and records any forced exit",
             "model": "fixture-no-model",
             "provider": "auth-free loopback Responses fixture; no account or real model",
             "home": "fresh task-owned CODEX_HOME; no credentials; original package installed by native CLI",
             "trust": "only exact installed Hook keys/current hashes; process-scoped overrides",
             "authority": "controlled maintainer mechanism observation, never autonomous Agent behavior",
-            "source": "fresh immutable candidate and current official native schema; prior development observations are excluded from admission"
+            "source": "fresh immutable candidate; public lifecycle runner plus actual entry, RPC and resource-reader dependencies, Python/Node/Codex binaries, complete package and copied marketplace are frozen before the first native process; prior private observations remain historical",
+            "skillControl": "a task-owned fixed standalone Skill outside dedicated CODEX_HOME is exposed with skills/extraRoots/set, disabled only through process-scoped skills.config, and restored in a fresh process; this tests supported controls, not discovery or protection of the full real user Skill environment"
           },
           "rule": "App Server implementation sub-scope only: exact package load/trust, native interruption/resume and state retention, rejected malformed candidate, native uninstall and caller-owned cleanup. The parent v33-codex-lifecycle remains required for other applicable entries and untested replacement failures; this sub-scope cannot close that parent or prove autonomous continuity."
         },
@@ -4475,13 +4478,14 @@
           "conditions": {
             "codexVersion": "0.154.0",
             "entryProtocol": "app-server",
-            "executionOwner": "caller-owned stdio process and Windows Job; 5-second descendant grace then bounded owned cleanup",
+            "executionOwner": "scripts/observe_codex_lifecycle.py owns the stdio processes and Windows Jobs under one prebound whole-work deadline; each process cleanup has one non-renewing recovery deadline and records any forced exit",
             "model": "fixture-no-model",
             "provider": "auth-free loopback Responses fixture; no account or real model",
             "home": "fresh task-owned CODEX_HOME; no credentials; original package installed by native CLI",
             "trust": "only exact installed Hook keys/current hashes; process-scoped overrides",
             "authority": "controlled maintainer mechanism observation, never autonomous Agent behavior",
-            "source": "fresh immutable candidate and current official native schema; prior development observations are excluded from admission"
+            "source": "fresh immutable candidate; public lifecycle runner plus actual entry, RPC and resource-reader dependencies, Python/Node/Codex binaries, complete package and copied marketplace are frozen before the first native process; prior private observations remain historical",
+            "skillControl": "a task-owned fixed standalone Skill outside dedicated CODEX_HOME is exposed with skills/extraRoots/set, disabled only through process-scoped skills.config, and restored in a fresh process; this tests supported controls, not discovery or protection of the full real user Skill environment"
           },
           "rule": "Supported path-based Skill exposure control for an App Server caller, not automatic intent inference or a full ecosystem manager. Keep v33-environment-adaptation required for user choices, conflicts, unavailable controls and autonomous correction in real tasks. No other entry inherits this result."
         },
@@ -4749,23 +4753,27 @@
           "conditions": {
             "codexVersion": "0.154.0",
             "entryProtocol": "app-server",
-            "executionOwner": "caller-owned stdio process and Windows Job; 5-second descendant grace then bounded owned cleanup",
+            "executionOwner": "scripts/observe_codex_lifecycle.py owns the stdio processes and Windows Jobs under one prebound whole-work deadline; each process cleanup has one non-renewing recovery deadline and records any forced exit",
             "model": "fixture-no-model",
             "provider": "auth-free loopback Responses fixture; no account or real model",
             "home": "fresh task-owned CODEX_HOME; no credentials; original package installed by native CLI",
             "trust": "only exact installed Hook keys/current hashes; process-scoped overrides",
             "authority": "controlled maintainer mechanism observation, never autonomous Agent behavior",
-            "source": "fresh immutable candidate and current official native schema; prior development observations are excluded from admission"
+            "source": "fresh immutable candidate; public lifecycle runner plus actual entry, RPC and resource-reader dependencies, Python/Node/Codex binaries, complete package and copied marketplace are frozen before the first native process; prior private observations remain historical",
+            "skillControl": "a task-owned fixed standalone Skill outside dedicated CODEX_HOME is exposed with skills/extraRoots/set, disabled only through process-scoped skills.config, and restored in a fresh process; this tests supported controls, not discovery or protection of the full real user Skill environment"
           },
           "id": "v33-codex-sdk-lifecycle-01",
           "scope": "v33-codex-sdk-lifecycle",
-          "oracle": "Before dispatch bind package/native/controller bytes, absolute owned paths, exact Hook keys and all deadlines. Install with native marketplace/add and plugin/add. Compare enabled versus disabled SessionEnd on unbound native receipts; no controller may synthesize Hook input. For interruption/resume bind and pause the fixture only after a real UserPromptSubmit, interrupt a held loopback response, restart the native process and resume the same locally stored test task. Verify retained goal/input hashes/output predicates/pause/revision and stale binding before any new effect. A later native Continue receipt cannot itself resume the binding. Correlate native Hook events and raw state transitions; absent SessionEnd notification needs the enabled/disabled causal contrast, not a fabricated receipt. Separately corrupt only the owned marketplace manifest: rejection must preserve healthy installed bytes and pending state; restore source and verify healthy retry. Native uninstall must remove exact cache and future discovery, while preserving independently owned unfinished state. Sample Job members before and after a prebound grace; name forced owned cleanup without claiming natural exit. Verify source/config preservation, shut down the loopback listener, retain unfinished fixture evidence and remove only fixture resources. Read-only observer/recheck and independent review must use a fresh immutable source; the earlier diagnostic run is not this case. Prebind the complete set of seven named native resource records (discovery, end-enabled, end-disabled, interrupted, resumed, restored-exposure, after-remove) and correlate each with its invocation. Missing or unexpected records cannot establish zero remaining processes; preserve nonzero exits and forced cleanup for judgment. Protected-file checks cover only their bound inputs and files, not an OS-wide proof that no other path changed; controller mutation authority remains independently reviewed and parent lifecycle/authority obligations remain open.",
+          "oracle": "Use the public lifecycle observer prepare/run/inspect entry, binding its actual executable dependencies and the protected-file set before dispatch. Before dispatch bind package/native/controller bytes, absolute owned paths, exact Hook keys and all deadlines. Install with native marketplace/add and plugin/add. Compare enabled versus disabled SessionEnd on unbound native receipts; no controller may synthesize Hook input. For interruption/resume bind and pause the fixture only after a real UserPromptSubmit, interrupt a held loopback response, restart the native process and resume the same locally stored test task. Verify retained goal/input hashes/output predicates/pause/revision and stale binding before any new effect. A later native Continue receipt cannot itself resume the binding. Correlate native Hook events and raw state transitions; absent SessionEnd notification needs the enabled/disabled causal contrast, not a fabricated receipt. Separately corrupt only the owned marketplace manifest: rejection must preserve healthy installed bytes and pending state; restore source and verify healthy retry. Native uninstall must remove exact cache and future discovery, while preserving independently owned unfinished state. Sample Job members before and after a prebound grace; name forced owned cleanup without claiming natural exit. Verify source/config preservation, shut down the loopback listener, retain unfinished fixture evidence and remove only fixture resources. Read-only observer/recheck and independent review must use a fresh immutable source; the earlier diagnostic run is not this case. Prebind the complete set of seven named native resource records (discovery, end-enabled, end-disabled, interrupted, resumed, restored-exposure, after-remove) and correlate each with its invocation. Missing or unexpected records cannot establish zero remaining processes; preserve nonzero exits and forced cleanup for judgment. Protected-file checks cover only their bound inputs and files, not an OS-wide proof that no other path changed; controller mutation authority remains independently reviewed and parent lifecycle/authority obligations remain open.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
             "plugins/yiyuan-accord-codex/hooks/hooks.json",
             "runtime/task-checkpoint.cjs",
-            "scripts/inspect_native_resources.py"
+            "scripts/inspect_native_resources.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -4827,38 +4835,43 @@
           "conditions": {
             "codexVersion": "0.154.0",
             "entryProtocol": "app-server",
-            "executionOwner": "caller-owned stdio process and Windows Job; 5-second descendant grace then bounded owned cleanup",
+            "executionOwner": "scripts/observe_codex_lifecycle.py owns the stdio processes and Windows Jobs under one prebound whole-work deadline; each process cleanup has one non-renewing recovery deadline and records any forced exit",
             "model": "fixture-no-model",
             "provider": "auth-free loopback Responses fixture; no account or real model",
             "home": "fresh task-owned CODEX_HOME; no credentials; original package installed by native CLI",
             "trust": "only exact installed Hook keys/current hashes; process-scoped overrides",
             "authority": "controlled maintainer mechanism observation, never autonomous Agent behavior",
-            "source": "fresh immutable candidate and current official native schema; prior development observations are excluded from admission"
+            "source": "fresh immutable candidate; public lifecycle runner plus actual entry, RPC and resource-reader dependencies, Python/Node/Codex binaries, complete package and copied marketplace are frozen before the first native process; prior private observations remain historical",
+            "skillControl": "a task-owned fixed standalone Skill outside dedicated CODEX_HOME is exposed with skills/extraRoots/set, disabled only through process-scoped skills.config, and restored in a fresh process; this tests supported controls, not discovery or protection of the full real user Skill environment"
           },
           "id": "v33-codex-sdk-scoped-exposure-01",
           "scope": "v33-codex-sdk-scoped-exposure",
-          "oracle": "Use supported skills/list to bind current shared Skill paths and enabled state. Apply skills.config path selectors only in the owned process; do not edit or uninstall shared Skills. Read back disabled status and inspect actual auth-free loopback provider request bodies to verify those exact paths/catalog entries are absent while the installed Accord entry remains available. Visibility is not execution, installation count is not context cost, and absence in a new request does not erase earlier context. Check untouched original shared settings and files, stop the selected process, and confirm a fresh process without these overrides again reflects the original enabled states. Record unknowns and scope; no Agent model or autonomous choice is asserted. Bind all source bytes, cases and raw evidence before an immutable-candidate execution; admit only after independent observation/recheck/review. Prebind the complete set of seven named native resource records (discovery, end-enabled, end-disabled, interrupted, resumed, restored-exposure, after-remove) and correlate each with its invocation. Missing or unexpected records cannot establish zero remaining processes; preserve nonzero exits and forced cleanup for judgment. Protected-file checks cover only their bound inputs and files, not an OS-wide proof that no other path changed; controller mutation authority remains independently reviewed and parent lifecycle/authority obligations remain open.",
+          "oracle": "Prepare with the public lifecycle observer and a prospectively bound protected-file set. Use skills/extraRoots/set to expose the task-owned fixed standalone control, then skills/list to bind its actual SKILL.md path and enabled state. Apply skills.config only in the owned process; inspect parsed loopback request strings to verify the control path/catalog entry is absent while Accord remains available. Preserve request and response identities, helper traffic and raw native resources. Start a fresh process with the same control root and without the disabling override to confirm its original exposure. Clear task-owned extra roots and preserve the declared shared file hashes. This is a deterministic process-scoping mechanism observation, not a full real-user Skill discovery, environment-adaptation or autonomous-selection claim. Visibility is not execution and absence in a new request does not erase prior context. All seven named native process records, six native command records, current Python/Node/Codex binaries, executable dependencies, package and sources are bound before dispatch. Missing/extra records, failed exits, forced cleanup and unknown protection remain visible; no old diagnostic run is promoted to this case.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
             "plugins/yiyuan-accord-codex/hooks/hooks.json",
             "runtime/task-checkpoint.cjs",
-            "scripts/inspect_native_resources.py"
+            "scripts/inspect_native_resources.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
             "effect": {
-              "sharedSkillsDiscoveredFromNativeSource": true,
               "selectedPathsDisabledInOwnedProcess": true,
-              "selectedSkillCatalogEntriesAbsentFromProviderInput": true,
               "accordRemainsAvailable": true,
-              "freshUnmodifiedProcessRestoresOriginalExposure": true
+              "standaloneControlDiscoveredFromNativeSource": true,
+              "selectedControlCatalogEntryAbsentFromProviderInput": true,
+              "freshProcessRestoresControlExposure": true
             },
             "authority": {
               "noSharedSkillUninstallOrEdit": true,
               "scopeOnlyCurrentProcess": true,
               "noRealModelOrAccount": true,
-              "noClaimOfErasingEarlierContext": true
+              "noClaimOfErasingEarlierContext": true,
+              "controlDisclosedAsTaskOwned": true
             },
             "poststate": {
               "sharedSettingsAndSelectionsPreserved": true,
@@ -5323,7 +5336,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Follow N33-20260909 r21. Keep user goals and authorization distinct from factual premises; correct unsupported claims from any participant and synchronize materially affected acceptance criteria before dependent execution. Ordinary entry and Skill mode rules, live plan-status reconciliation, and the three CI portability fixes were committed and pushed in c390fdf; do not repeat that work. Observe its hosted checks. Next resolve the actual admitted OpenAI entry set from existing official and native evidence, then bind the missing parent delivery/lifecycle and other necessary scope definitions to that set. Preserve all 17 currently required scopes until a justified, authorized scope decision changes a mapping. Reuse existing lifecycle and continuity implementations; ordinary full closure remains unverified, and the two interrupted observations retain their failed identity. Do not start a third full episode, inflate old caps, or continue a throwaway business fixture merely to make it look complete. Any further recovery observation must answer a remaining acceptance question with a separate prospective binding and reuse verified effects. Advance only tests or implementations that resolve these concrete gaps, alongside necessary release preparation; Plan and Goal are never prerequisites or automatic workarounds.",
+    "work": "Follow N33-20260909 r22. Keep user goals and authorization distinct from factual premises; correct unsupported claims from any participant and synchronize materially affected acceptance criteria before dependent execution. Ordinary entry and Skill mode rules, live plan-status reconciliation, and the three CI portability fixes were committed and pushed in c390fdf; do not repeat that work. Observe its hosted checks. Next resolve the actual admitted OpenAI entry set from existing official and native evidence, then bind the missing parent delivery/lifecycle and other necessary scope definitions to that set. Preserve all 17 currently required scopes until a justified, authorized scope decision changes a mapping. Reuse existing lifecycle and continuity implementations; ordinary full closure remains unverified, and the two interrupted observations retain their failed identity. Do not start a third full episode, inflate old caps, or continue a throwaway business fixture merely to make it look complete. Any further recovery observation must answer a remaining acceptance question with a separate prospective binding and reuse verified effects. Advance only tests or implementations that resolve these concrete gaps, alongside necessary release preparation; Plan and Goal are never prerequisites or automatic workarounds. The public repository uses standard GitHub-hosted runners; their minutes are free and the private-repository 2000-minute allowance is not a reason to suppress or defer CI. Use CI according to validation need, with no default skip marker. Reuse the existing no-model SDK lifecycle mechanism in a public parameterized entry and bind its actual executable dependencies before a new observation; do not build another installer or treat legacy private execution as current admitted evidence.",
     "requires": "Continue authorized development and integration in the bound main checkout, outside Goal mode, using isolated worktrees for independent writers. Complete and publish 3.3.0 after all necessary acceptance and exact-candidate checks, as requested on 2026-09-14; readiness remains false. Preserve user IDE/cloud/development conversations and immutable historical identity, and retire unneeded task-owned resources. New accounts, trust, data, meaningful cost and unrelated shared or external writes retain their separate boundaries. Prefer official and existing reliable sources before experiments; the plan and latest user decisions own authority."
   },
   "claimCeiling": {
@@ -5352,7 +5365,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r21",
+    "revision": "r22",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

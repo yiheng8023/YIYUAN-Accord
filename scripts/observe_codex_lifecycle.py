@@ -215,6 +215,9 @@ def prepare(args):
     _validate_marketplace_manifest(marketplace_manifest)
     codex, node = _regular_file(args.codex), _regular_file(args.node)
     python = _regular_file(sys.executable)
+    protected = [_regular_file(path) for path in args.protected_file]
+    if not protected or len({str(path) for path in protected}) != len(protected):
+        raise ValueError("at least one distinct protected file must be bound")
     if evidence.exists() or not evidence.parent.is_dir() or evidence.parent.resolve() != evidence.parent:
         raise ValueError("evidence must be a fresh root with an ordinary parent")
     if evidence == package or package in evidence.parents or evidence in package.parents:
@@ -258,6 +261,7 @@ def prepare(args):
         "preparedMarketplaceHashes": _tree_hashes(market),
         "sourceHashes": {name: digest(path) for name, path in sources.items()},
         "sourcePaths": {name: str(path) for name, path in sources.items()},
+        "protectedFiles": {str(path): digest(path) for path in protected},
         "nativeResourceLabels": list(RESOURCE_LABELS),
         "nativeCommandLabels": list(COMMAND_LABELS),
         "ownedRoots": {name: str(evidence / name) for name in OWNED_ROOTS},
@@ -286,6 +290,7 @@ def _load(evidence):
             or set(manifest.get("ownedRoots", {})) != set(OWNED_ROOTS)
             or set(manifest.get("initialRootHashes", {})) != set(OWNED_ROOTS)
             or set(manifest.get("binaryHashes", {})) != {"codex", "node", "python"}
+            or not isinstance(manifest.get("protectedFiles"), dict) or not manifest["protectedFiles"]
             or set(manifest.get("limits", {})) != {"workSeconds", "requestSeconds", "recoverySeconds",
                                                     "providerRequests", "providerRequestBytes"}
             or any(type(manifest["limits"][name]) is not int or manifest["limits"][name] <= 0
@@ -303,9 +308,14 @@ def _validate_prebound(manifest):
     if (set(manifest.get("sourceHashes", {})) != set(sources)
             or manifest.get("sourcePaths") != {name: str(path) for name, path in sources.items()}):
         raise ValueError("prepared source set changed")
+    if manifest.get("python") != str(_regular_file(sys.executable)):
+        raise ValueError("running Python differs from the prepared interpreter")
     for name in ("codex", "node", "python"):
         if digest(_regular_file(manifest[name])) != manifest["binaryHashes"][name]:
             raise ValueError("prepared native binary changed: " + name)
+    for path, expected in manifest["protectedFiles"].items():
+        if digest(_regular_file(path)) != expected:
+            raise ValueError("prepared protected file changed")
     for name, expected in manifest["sourceHashes"].items():
         if digest(manifest["sourcePaths"][name]) != expected:
             raise ValueError("prepared source changed: " + name)
@@ -346,6 +356,7 @@ def _run_cli(manifest, label, arguments, env, work_deadline):
     root.mkdir()
     job, process, forced, failure, recovery_deadline = WindowsJob(), None, False, None, None
     stdout_path, stderr_path = root / "stdout.json", root / "stderr.txt"
+    arguments = ["-c", 'cli_auth_credentials_store="file"', *arguments]
     try:
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
             process = subprocess.Popen([manifest["codex"], *arguments], cwd=manifest["ownedRoots"]["workspace"],
@@ -620,16 +631,29 @@ def _helper(manifest, installed, env, work_deadline, thread, op, **fields):
     receipt = Path(manifest["evidence"]) / "retained/helper.jsonl"
     with receipt.open("a", encoding="utf-8") as stream:
         stream.write(json.dumps({"phase": "request", "request": request}, ensure_ascii=False) + "\n")
-    process = subprocess.run([manifest["node"], str(installed / "runtime/task-checkpoint.cjs")],
-        input=json.dumps(request).encode(), capture_output=True,
-        timeout=min(manifest["limits"]["requestSeconds"], _remaining(work_deadline)),
-        env=env, cwd=manifest["ownedRoots"]["workspace"])
-    if process.returncode:
-        raise RuntimeError("checkpoint helper failed")
-    result = json.loads(process.stdout)
+    try:
+        process = subprocess.run([manifest["node"], str(installed / "runtime/task-checkpoint.cjs")],
+            input=json.dumps(request).encode(), capture_output=True,
+            timeout=min(manifest["limits"]["requestSeconds"], _remaining(work_deadline)),
+            env=env, cwd=manifest["ownedRoots"]["workspace"])
+    except subprocess.TimeoutExpired as error:
+        with receipt.open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps({"phase": "response", "op": op, "timeout": True,
+                "stdout": (error.stdout or b"").decode("utf-8", "replace"),
+                "stderr": (error.stderr or b"").decode("utf-8", "replace")}, ensure_ascii=False) + "\n")
+        raise
+    terminal = {"phase": "response", "op": op, "exitCode": process.returncode,
+                "stdout": process.stdout.decode("utf-8", "replace"),
+                "stderr": process.stderr.decode("utf-8", "replace")}
+    try:
+        terminal["result"] = json.loads(process.stdout)
+    except (ValueError, UnicodeError):
+        terminal["parseError"] = True
     with receipt.open("a", encoding="utf-8") as stream:
-        stream.write(json.dumps({"phase": "response", "op": op, "result": result}, ensure_ascii=False) + "\n")
-    return result
+        stream.write(json.dumps(terminal, ensure_ascii=False) + "\n")
+    if process.returncode or terminal.get("parseError"):
+        raise RuntimeError("checkpoint helper failed; inspect retained/helper.jsonl")
+    return terminal["result"]
 
 
 def _start_turn(app, ephemeral, prompt):
@@ -903,10 +927,21 @@ def run(args):
                 except OSError:
                     result.setdefault("cleanupErrors", []).append(name)
         result["ownedRootsAbsent"] = {name: not Path(manifest["ownedRoots"][name]).exists() for name in OWNED_ROOTS}
+        protected_after = {}
+        for path, expected in manifest["protectedFiles"].items():
+            try:
+                observed = digest(_regular_file(path))
+            except (OSError, ValueError):
+                observed = None
+            protected_after[path] = observed
+        result["protectedFileHashesAfter"] = protected_after
+        result["protectedSharedFilesUnchanged"] = protected_after == manifest["protectedFiles"]
+        result["sharedSettingsAndSelectionsPreserved"] = result["protectedSharedFilesUnchanged"]
         if (result.get("failure") is None
-                and (not all(result["ownedRootsAbsent"].values()) or result.get("cleanupErrors"))):
+                and (not all(result["ownedRootsAbsent"].values()) or result.get("cleanupErrors")
+                     or not result["protectedSharedFilesUnchanged"])):
             result["failure"] = "CleanupError"
-            result["failureReason"] = "owned lifecycle cleanup incomplete"
+            result["failureReason"] = "owned cleanup or protected-file poststate differs"
             result["failureStage"] = "cleanup"
         save(evidence / "result.json", result)
     return result
@@ -942,10 +977,15 @@ def inspect(evidence):
         if (any(command_records[label].get("exitCode") != 0 for label in COMMAND_LABELS if label != "invalid-candidate")
                 or command_records["invalid-candidate"].get("exitCode") in (None, 0)):
             raise ValueError("command terminal differs")
+        if any(record.get("arguments", [])[:2] != ["-c", 'cli_auth_credentials_store="file"']
+               for record in command_records.values()):
+            raise ValueError("command credential-store boundary differs")
         installed_payload = json.loads(read_regular(root / "commands/package-add/stdout.json"))
         loaded = result.get("loadedObject", {})
         installed_path = installed_payload.get("installedPath")
-        if (not isinstance(installed_path, str) or installed_path != result.get("installedPathReturned")
+        if (not isinstance(installed_path, str)
+                or not Path(installed_path).is_relative_to(Path(manifest["ownedRoots"]["home"]))
+                or installed_path != result.get("installedPathReturned")
                 or loaded.get("installedPath") != installed_path
                 or not loaded.get("hookSourcePaths") or not loaded.get("skillPaths")
                 or any(not Path(path).is_relative_to(Path(installed_path))
@@ -1004,10 +1044,12 @@ def inspect(evidence):
         "nativeUninstallRemovesCacheAndDiscovery", "unfinishedStatePreservedAcrossExitAndUninstall",
         "exactPackageLoadedAndTrusted", "sessionEndEnabledDisabledContrast",
         "nativeInterruptInvalidatesReadiness", "nativeResumePreservesPausedBinding",
-        "continueReceiptDoesNotResumeBinding", "selectedPathsDisabledInOwnedProcess")
+        "continueReceiptDoesNotResumeBinding", "selectedPathsDisabledInOwnedProcess",
+        "protectedSharedFilesUnchanged", "sharedSettingsAndSelectionsPreserved")
     decision = (result.get("failure") is None and result.get("modelCalls") == 0
         and result.get("credentialHeaderSeen") is False and resources_ok and command_raw_complete
         and all(result.get(key) is True for key in required_true)
+        and result.get("protectedFileHashesAfter") == manifest["protectedFiles"]
         and result.get("ownedRootsAbsent") == {name: True for name in OWNED_ROOTS})
     return {"decision": "pass" if decision else "fail", "nativeResources": records,
         "resourceError": resource_error, "nativeCommands": command_records, "rawEvidenceError": raw_error,
@@ -1020,6 +1062,8 @@ def main():
     prep = sub.add_parser("prepare")
     for name in ("package", "evidence", "marketplace-manifest", "codex", "node"):
         prep.add_argument("--" + name, required=True)
+    prep.add_argument("--protected-file", action="append", required=True,
+                      help="repeat for each necessary shared file; hashes only, contents are not copied")
     prep.add_argument("--timeout", type=int, required=True,
                       help="prospectively justified whole-episode limit; no product default")
     prep.add_argument("--request-timeout", type=int, required=True,

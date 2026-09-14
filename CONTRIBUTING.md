@@ -80,6 +80,18 @@ complete, prospectively bound set of process-record labels. It rejects missing,
 unexpected or malformed records; valid record shape does not prove process
 ownership, successful exit or protection of unobserved filesystem locations.
 
+The [native lifecycle observer](scripts/observe_codex_lifecycle.py) reuses Codex's
+plugin and App Server controls for a bounded, credential-free protocol fixture.
+Use `prepare --help` to bind the current package, marketplace manifest, native
+Codex and Node executables, a fresh evidence root, necessary protected files
+(repeat `--protected-file`; hashes only), and workload-based deadlines.
+Review that manifest before `run --evidence <prepared-root>`; a prepared root
+permits one run. `inspect --evidence <prepared-root>` checks retained evidence
+without dispatching another native task. Preserve failed attempts separately.
+The fixed local response tests lifecycle mechanisms, not model judgment or
+ordinary-user delivery. Raw requests, native responses, state, package bytes and
+all seven process records remain inputs to independent review and admission.
+
 Bind the code that actually executes, observes and recovers a maintainer case,
 including dynamic imports, inherited controller methods and late cleanup code.
 `sys.modules` alone is not a complete dependency inventory. Check the expected

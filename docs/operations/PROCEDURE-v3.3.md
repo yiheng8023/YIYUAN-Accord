@@ -1778,3 +1778,13 @@ Root及独立Agent核对dispatch为41字节、east-01/12、west-02/7、south-04/
 五个turn_context均为default，限定到此thread的原生Goal数据库查询未见记录，复核未见实际create_goal/update_plan调用；该有限观察不能替代整个无模式闭环或手动模式兼容验收。五个Job结束时所属进程均为0。启动增加的此任务workspace trusted行已按只插入差异核验并逐字节恢复，配置SHA回到9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b，单独记录config-protection.json。临时运行目录及冗余配置副本已回收，业务成果、原始轨迹、快照和未完输入回执保留；supplemental-observation.json记录补充复核与恢复，原始result.json及sharedConfigurationPreserved=false保持不变。
 
 纠正落实到现有入口指导和按需Skill：批准后更新当前计划/进度，保留早期状态时明确历史身份；入口也直接承担不依赖Plan/Goal、仅明确选择才启用、遵守用户所选模式的有效约束。未改业务案例目标或旧限制，未启动第三次整案。8a1d255的托管检查另暴露三个新增Windows模拟测试在Linux缺CREATE_NO_WINDOW常量；修复只补测试上下文，不跳过平台或修改生产边界。模拟缺该常量的三项回归、暂停重入及模式声明保护共5项本机通过，另有入口全文件40项、产品/Codex包静态校验通过。接下来复用已有成果处理实际未完责任，任何恢复另绑条件和范围，不把评估者救场当作原始普通入口通过。
+
+## 本地入口来源与现成生命周期路径核对（2026-09-14）
+
+在42e508f基础上只读核对：独立Codex CLI为0.154.0，原生plugin list/marketplace list均返回JSON。Accord为installed=true、enabled=false、version=3.3.0-dev.1；注册Git市场检出为cf13486，源manifest仍为3.2.1，唯一安装缓存目录为3.3.0-dev.1，12文件中runtime/task-checkpoint.cjs和Skill与当前99ca35包不同。此处区分登记来源、安装缓存及当前仓库，不从停用缓存推定运行中任务的采用。两条读取命令前后共享配置摘要相同，未安装、启用或覆盖共享包。
+
+Desktop安装与运行版本为26.908.4834.0，主ChatGPT.exe直接启动npm位置的Codex后端。VS Code扩展仍为26.908.40401，当前没有运行中的Code进程。由此刷新三个本地入口的观察，不代替GUI任务或其它入口的加载与行为验收；其余入口仍保留各自日期和未知。
+
+已读取上游rust-v0.154.0的[plugin store](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core-plugins/src/store.rs)，Git blob为4f37bbef9ca47b1ca15a6a3f8d32b459f2ca6dc8。169–205按有效缓存目录决定活动版本/根；340–375的安装返回实际路径；656–735先暂存并检查manifest，再激活、清旧版本或备份/回滚，同版本替换失败且回滚失败时保留备份位置。无需由Accord另造安装器；调用成功、返回安装路径、有效发现和真实加载仍需分别核对。当前机制来源已定位，但不据此补造旧时版本重选的完整因果。
+
+独立来源复核确认09-12-r2的无模型SDK流程可复用，包含安装、精确信任、暴露/恢复、暂停中断与同身份恢复、坏manifest拒绝、健康重试和卸载。实际执行仍在私人备份脚本，而正式case的oracleFiles未包含这些执行脚本和直接依赖；该缺口应由公开参数化入口及准确来源绑定解决。旧诊断保持原对象与未准入身份，不因找到源码升级为当前证据。
