@@ -383,6 +383,7 @@ class EntryTests(unittest.TestCase):
                 kwargs["stderr"].flush()
                 return process
             with patch.object(entry, "WindowsJob", return_value=job), \
+                    patch.object(entry.subprocess, "CREATE_NO_WINDOW", 0, create=True), \
                     patch.object(entry.subprocess, "Popen", side_effect=spawn), \
                     patch.object(entry.time, "sleep"):
                 receipt = entry._run_persistent_stage(
@@ -460,6 +461,7 @@ class EntryTests(unittest.TestCase):
                 (evidence / "last-message-1.txt").write_text("done", encoding="utf-8")
                 return process
             with patch.object(entry, "WindowsJob", return_value=job), \
+                    patch.object(entry.subprocess, "CREATE_NO_WINDOW", 0, create=True), \
                     patch.object(entry.subprocess, "Popen", side_effect=spawn), \
                     patch.object(entry.time, "sleep"):
                 receipt = entry._run_persistent_stage(
@@ -480,6 +482,7 @@ class EntryTests(unittest.TestCase):
             job.sample.side_effect = [
                 {"activeProcesses": 1}, {"activeProcesses": 1}, {"activeProcesses": 0}]
             with patch.object(entry, "WindowsJob", return_value=job), \
+                    patch.object(entry.subprocess, "CREATE_NO_WINDOW", 0, create=True), \
                     patch.object(entry.subprocess, "Popen", return_value=process), \
                     patch.object(entry.time, "sleep"):
                 receipt = entry._run_persistent_stage(manifest, 0, None, {}, time.monotonic() - 1)

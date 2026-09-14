@@ -23,7 +23,7 @@
       "uncachedInputTokens": 200000,
       "outputTokens": 14000
     },
-    "usageScope": "Guard the native CLI turn.completed cumulative thread totals observed at each stage. Do not sum values across resume turns or treat them as a prediction of future usage or exact monetary cost."
+    "usageScope": "Guard observed cumulative thread totals from the bound native rollout token_count during execution and from CLI turn.completed at each completed stage. Do not sum values across resume turns or treat them as a prediction of future usage or exact monetary cost."
   },
   "schedule_header": ["id", "title", "time", "participants", "venue"],
   "stages": [

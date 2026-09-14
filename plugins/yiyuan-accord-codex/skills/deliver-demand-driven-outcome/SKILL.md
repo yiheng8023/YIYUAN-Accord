@@ -69,11 +69,13 @@ dependent actions and continue safe independent work. Keep one writer per target
 
 ## Correct and recover
 
-When facts or requirements change, trace affected decisions and artifacts back
-to their earliest wrong premise. Repair, redo or retire those effects; preserve
-unaffected results and reliable history. Reconcile the goal, plan, dependencies
-and acceptance instead of treating a past completed label as proof. Tool advice
-is not a new user decision.
+When facts, requirements or authorization change, reconcile affected decisions,
+artifacts and their current status. Update live plans and progress claims after
+approved work; mark retained earlier states as historical so they cannot appear
+to withhold approval or deny completed effects. Trace errors to their earliest
+wrong premise and repair, redo or retire affected results while preserving valid
+work. Reconcile the goal, dependencies and acceptance; a completed label is not
+proof, and tool advice is not a new user decision.
 
 After failure, inspect actual post-state, including partial outputs. Recover
 through a supported route, then reconcile affected artifacts and explanations
