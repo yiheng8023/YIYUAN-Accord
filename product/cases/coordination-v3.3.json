@@ -58,6 +58,7 @@
     }
   ],
   "observation": {
+    "persistent_execution": "For v33-paused-work-recovery, use scripts/observe_codex_entry.py with this case: one normal persisted codex exec turn per stage, then codex exec resume with the first native thread id for every later stage. Keep the existing user configuration except the case-bound model, effort, permission, sandbox and reviewed task-local Hook overrides. Bind fresh whole-case, per-turn and recovery deadlines for that invocation; stop after the first failed or mismatched native receipt and preserve the known thread id without automatic retry.",
     "stage_boundaries": "Capture each native thread/turn input, nonempty final_answer and completed terminal, then read actual files before the next prebound input. Abort dependent stages on failed or missing prerequisites; never repair the Agent's files.",
     "authority": "No Accord/Skill/tool name or checkpoint operation in the ordinary prompts. The controller supplies only these five prospectively bound user inputs, starts/ends its owned native session and observes; it does not prebind Accord task state or supply rescue prompts.",
     "protection": "Hash and modification time of both original inputs must match the pre-turn snapshot at every stage. Paused stages preserve all five business files. After final completion, inspect task-owned resources and runtime state; retained evidence is explicitly owned, not an undisclosed deliverable.",

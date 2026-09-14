@@ -22,9 +22,9 @@ def snapshot(workspace, names):
             for name in names if (root/name).exists()}
 
 
-def inspect_stage(workspace, stage_id, *, originals, history):
+def inspect_stage(workspace, stage_id, *, originals, history, fixture_path=FIXTURE):
     root = Path(workspace)
-    fixture = json.loads(read_regular(FIXTURE))
+    fixture = json.loads(read_regular(fixture_path))
     stage = next((row for row in fixture['stages'] if row['id'] == stage_id), None)
     if stage is None:
         raise ValueError('unknown prospective stage')
