@@ -197,6 +197,9 @@ def load_manifest(evidence):
     protocol = manifest.get("entryProtocol", "exec")
     if protocol not in ("exec", "exec-resume", "app-server"):
         raise ValueError("unsupported entry protocol")
+    if (protocol == "exec-resume" and manifest.get("caseSchema", "yiyuan-accord-coordination-case/v1")
+            not in ("yiyuan-accord-coordination-case/v1", "yiyuan-accord-scoped-task-case/v1")):
+        raise ValueError("unsupported persistent case schema")
     if protocol == "app-server" and ("command" in manifest or "promptSha256" in manifest
                                      or manifest.get("tracePath") != "native/stdout.jsonl"):
         raise ValueError("App Server manifest contains incompatible CLI or trace metadata")
@@ -258,18 +261,9 @@ def build_command(manifest, *, stage=0, thread_id=None):
 def load_persistent_case(path):
     path = Path(path).resolve()
     raw = read_regular(path)
-    case = json.loads(raw)
-    names = list(case.get("inputs", {})) + list(case.get("deliverables", []))
-    if (case.get("schema") != "yiyuan-accord-coordination-case/v1"
-            or not isinstance(case.get("inputs"), dict) or not case["inputs"]
-            or not isinstance(case.get("deliverables"), list) or not case["deliverables"]
-            or any(not isinstance(name, str) or not name or Path(name).name != name
-                   or any(c in name for c in "/\\:") or name in (".", "..") for name in names)
-            or any(not isinstance(value, (str, dict, list)) for value in case["inputs"].values())
-            or not isinstance(case.get("stages"), list) or not 2 <= len(case["stages"]) <= 16
-            or any(not isinstance(stage.get("prompt"), str) or not stage["prompt"].strip()
-                   for stage in case["stages"])):
-        raise ValueError("unsupported persistent case")
+    observer = coordination_observer()
+    case = observer._strict_json(raw.decode("utf-8"))
+    observer.validate_case(case)
     return path, raw, case
 
 
@@ -323,7 +317,9 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
              "runtime": package / "runtime/task-checkpoint.cjs"}
     if persistent_case is not None:
         paths["case"] = case_path
-        paths["coordinationObserver"] = Path(__file__).with_name("inspect_coordination.py").resolve()
+        observer_key = ("coordinationObserver" if case["schema"] == "yiyuan-accord-coordination-case/v1"
+                        else "scopedTaskObserver")
+        paths[observer_key] = Path(__file__).with_name("inspect_coordination.py").resolve()
     if any(any(c in str(p) for c in ('"', '\n', '\r', '%', '!', '`', '$', '&', '|', '<', '>', '^')) for p in (*paths.values(), evidence, workspace)):
         raise ValueError("shell-sensitive path cannot be used in hook command")
     if os.name == "nt" and paths["codex"].suffix.lower() != ".exe":
@@ -354,7 +350,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     for name in ("hooks", "state", "temp"):
         (evidence / name).mkdir()
     if persistent_case is not None:
-        inputs = {name: ((json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        inputs = {name: ((json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8")
                          if isinstance(value, (dict, list)) else value.encode("utf-8"))
                   for name, value in case["inputs"].items()}
     else:
@@ -390,6 +386,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     elif protocol == "exec-resume":
         manifest.pop("expected")
         manifest.update({"entryProtocol": protocol,
+                         "caseSchema": case["schema"],
+                         "casePurpose": case["purpose"],
                          "prompts": [stage["prompt"] for stage in case["stages"]],
                          "promptSha256s": [digest(evidence / f"prompt-{index + 1}.txt")
                                            for index in range(len(case["stages"]))],
@@ -791,15 +789,23 @@ def inspect(evidence):
     manifest = load_manifest(evidence)
     if manifest.get("entryProtocol") == "exec-resume":
         evidence = Path(evidence)
+        observer_key = ("coordinationObserver" if manifest.get("caseSchema", "yiyuan-accord-coordination-case/v1")
+                        == "yiyuan-accord-coordination-case/v1" else "scopedTaskObserver")
+        for key in ("case", observer_key):
+            if digest(manifest[key]) != manifest["sourceHashes"][key]:
+                raise ValueError("bound persistent inspection source changed: " + key)
         recorded = json.loads(read_regular(evidence / "result.json"))
-        if not recorded["stages"]:
-            raise ValueError("no persistent stage was observed")
+        if (recorded.get("schema") != "accord-codex-persistent-exec/v1"
+                or recorded.get("episode") != manifest["episode"]
+                or not isinstance(recorded.get("stages"), list) or not recorded["stages"]):
+            raise ValueError("persistent result binding mismatch")
         stage_id = recorded["stages"][-1]["fileObservation"]["stage"]
         current = coordination_observer().inspect_stage(
             manifest["workspace"], stage_id,
             originals=json.loads(read_regular(evidence / "originals.json")),
             history=json.loads(read_regular(evidence / "history.json")), fixture_path=manifest["case"])
-        return {"entryProtocol": "exec-resume", "recordedExecution": recorded,
+        return {"entryProtocol": "exec-resume", "caseSchema": manifest.get("caseSchema"),
+                "recordedExecution": recorded,
                 "currentFileObservation": current,
                 "claimLimit": "Fresh file check and retained execution receipts; no automatic admission."}
     root, evidence = Path(manifest["workspace"]), Path(evidence)
@@ -1219,7 +1225,7 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
 
 
 def run_persistent(args):
-    # Reuse the existing case oracle, including pause and original-file protection.
+    # Reuse the bound read-only case oracle; it never supplies prompts or repairs files.
     observer = coordination_observer()
 
     manifest = load_manifest(args.evidence)

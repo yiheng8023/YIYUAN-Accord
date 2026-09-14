@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from scripts.inspect_coordination import FIXTURE, inspect_stage, snapshot
+from scripts.inspect_coordination import FIXTURE, inspect_stage, snapshot, validate_case
 
 
 class CoordinationObserverTests(unittest.TestCase):
@@ -91,6 +91,87 @@ class CoordinationObserverTests(unittest.TestCase):
         result = self.read('agree-and-question')
         self.assertEqual(result['decision'], 'fail')
         self.assertTrue(any('invalid structured output: budget.json' in v for v in result['violations']))
+
+
+class ScopedTaskObserverTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        container = Path(self.temp.name)
+        self.root = container / 'work'
+        self.root.mkdir()
+        self.case = {
+            'schema': 'yiyuan-accord-scoped-task-case/v1',
+            'purpose': 'Verify a bounded report update without deciding its semantics.',
+            'inputs': {'candidate.json': {'revision': 'abc'}, 'cache.json': {'installed': 'old'}},
+            'allowedPaths': ['readiness.json', 'readiness.md'],
+            'deliverables': ['readiness.json', 'readiness.md'],
+            'limits': {'usageCaps': {'totalTokens': 10000, 'outputTokens': 1000},
+                       'usageScope': 'native cumulative thread counters'},
+            'stages': [
+                {'id': 'candidate-readiness', 'prompt': 'Create both reports.',
+                 'files': {
+                     'candidate.json': {'state': 'preserved', 'from': 'input'},
+                     'cache.json': {'state': 'preserved', 'from': 'input'},
+                     'readiness.json': {'state': 'required', 'format': 'json', 'jsonType': 'object',
+                                        'requiredKeys': ['candidate', 'coverage', 'release_ready']},
+                     'readiness.md': {'state': 'required', 'format': 'utf8', 'nonempty': True}},
+                 'semanticReview': 'Independently verify candidate, CI and coverage claims.'},
+                {'id': 'cache-correction', 'prompt': 'Add the observed installed cache distinction.',
+                 'files': {
+                     'candidate.json': {'state': 'preserved', 'from': 'input'},
+                     'cache.json': {'state': 'preserved', 'from': 'input'},
+                     'readiness.json': {'state': 'required', 'format': 'json', 'jsonType': 'object',
+                                        'requiredKeys': ['candidate', 'installed_cache', 'coverage', 'release_ready'],
+                                        'changedFrom': 'candidate-readiness'},
+                     'readiness.md': {'state': 'required', 'format': 'utf8', 'nonempty': True,
+                                      'changedFrom': 'candidate-readiness'}},
+                 'semanticReview': 'Independently verify both reports distinguish installed cache from candidate identity.'},
+            ],
+        }
+        self.fixture = container / 'case.json'
+        self.fixture.write_text(json.dumps(self.case), encoding='utf-8')
+        for name, value in self.case['inputs'].items():
+            (self.root/name).write_text(json.dumps(value), encoding='utf-8')
+        self.originals = snapshot(self.root, self.case['inputs'])
+        self.history = {}
+
+    def inspect(self, stage):
+        return inspect_stage(self.root, stage, originals=self.originals,
+                             history=self.history, fixture_path=self.fixture)
+
+    def test_scoped_case_checks_only_declared_boundaries_structure_and_content_change(self):
+        (self.root/'readiness.json').write_text(json.dumps({
+            'candidate': {}, 'coverage': {}, 'release_ready': False}), encoding='utf-8')
+        (self.root/'readiness.md').write_text('Candidate report\n', encoding='utf-8')
+        first = self.inspect('candidate-readiness')
+        self.assertEqual(first['decision'], 'pass')
+        self.assertEqual(first['semanticDecision'], 'unreviewed')
+        self.history['candidate-readiness'] = first['files']
+        unchanged = self.inspect('cache-correction')
+        self.assertEqual(unchanged['decision'], 'fail')
+        self.assertEqual(sum('did not change' in row for row in unchanged['violations']), 2)
+        (self.root/'readiness.json').write_text(json.dumps({
+            'candidate': {}, 'installed_cache': {}, 'coverage': {}, 'release_ready': False}), encoding='utf-8')
+        (self.root/'readiness.md').write_text('Candidate and installed cache are distinct.\n', encoding='utf-8')
+        self.assertEqual(self.inspect('cache-correction')['decision'], 'pass')
+        (self.root/'candidate.json').write_text('{}', encoding='utf-8')
+        (self.root/'extra.txt').write_text('outside declaration', encoding='utf-8')
+        violations = self.inspect('cache-correction')['violations']
+        self.assertTrue(any('original changed' in row for row in violations))
+        self.assertTrue(any('unclassified workspace path' in row for row in violations))
+
+    def test_scoped_case_rejects_expected_facts_unsafe_paths_and_incomplete_final_structure(self):
+        mutations = []
+        changed = json.loads(json.dumps(self.case)); changed['expected'] = {'release_ready': True}; mutations.append(changed)
+        changed = json.loads(json.dumps(self.case)); changed['allowedPaths'][0] = '../outside.json'; mutations.append(changed)
+        changed = json.loads(json.dumps(self.case)); changed['stages'] *= 3; mutations.append(changed)
+        changed = json.loads(json.dumps(self.case)); changed['stages'][-1]['files'].pop('readiness.md'); mutations.append(changed)
+        changed = json.loads(json.dumps(self.case)); changed['stages'][-1]['files']['readiness.json']['changedFrom'] = 'future'; mutations.append(changed)
+        for case in mutations:
+            with self.subTest(case=case):
+                with self.assertRaises(ValueError):
+                    validate_case(case)
 
 
 if __name__ == '__main__':

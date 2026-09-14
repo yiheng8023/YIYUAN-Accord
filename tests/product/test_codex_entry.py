@@ -190,7 +190,7 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(calls.call_args_list[1].args[0][-1], "--version")
         return entry.load_manifest(args.evidence)
 
-    def prepared_persistent(self, root):
+    def prepared_persistent(self, root, case_path=None):
         package = root / "package"
         (package / "runtime").mkdir(parents=True)
         (package / "runtime/task-checkpoint.cjs").write_text("// fixture", encoding="utf-8")
@@ -198,13 +198,60 @@ class EntryTests(unittest.TestCase):
             package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
             codex=PYTHON, node=PYTHON, model="explicit-offline-model", reasoning="high",
             timeout=600, turn_timeout=180, recovery_timeout=20, windows_sandbox="elevated")
-        case_path = SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
+        case_path = case_path or SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
         help_exec = subprocess.CompletedProcess([], 0, b"--dangerously-bypass-hook-trust --sandbox --output-last-message", b"")
         help_resume = subprocess.CompletedProcess([], 0, b"--json --output-last-message --model", b"")
         version = subprocess.CompletedProcess([], 0, b"codex-cli fixture", b"")
         with patch.object(entry.subprocess, "run", side_effect=[help_exec, help_resume, version]):
             entry.prepare(args, persistent_case=entry.load_persistent_case(case_path))
         return entry.load_manifest(args.evidence)
+
+    def scoped_case(self, root):
+        case = {
+            "schema": "yiyuan-accord-scoped-task-case/v1",
+            "purpose": "Create one structurally checked local report.",
+            "inputs": {"source.json": {"candidate": "abc"}},
+            "allowedPaths": ["report.json"], "deliverables": ["report.json"],
+            "limits": {"usageCaps": {"totalTokens": 10000, "outputTokens": 1000},
+                       "usageScope": "native cumulative thread counters"},
+            "stages": [{"id": "report", "prompt": "Create report.json from source.json.",
+                        "files": {
+                            "source.json": {"state": "preserved", "from": "input"},
+                            "report.json": {"state": "required", "format": "json",
+                                            "jsonType": "object", "requiredKeys": ["candidate"]}},
+                        "semanticReview": "Independently verify the report meaning."}],
+        }
+        path = root / "scoped-case.json"
+        path.write_text(json.dumps(case), encoding="utf-8")
+        return path
+
+    def test_scoped_case_reuses_persistent_transport_and_inspect_is_read_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared_persistent(root, self.scoped_case(root))
+            self.assertEqual(manifest["caseSchema"], "yiyuan-accord-scoped-task-case/v1")
+            self.assertEqual(manifest["casePurpose"], "Create one structurally checked local report.")
+            self.assertEqual(len(manifest["prompts"]), 1)
+            self.assertIn("scopedTaskObserver", manifest["sourceHashes"])
+            def execute(manifest, *_):
+                (Path(manifest["workspace"]) / "report.json").write_text(
+                    json.dumps({"candidate": "abc"}), encoding="utf-8")
+                return {"valid": True, "threadId": "native-thread"}
+            with patch.object(entry, "_run_persistent_stage", side_effect=execute) as run_stage:
+                result = entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            self.assertTrue(result["caseComplete"])
+            before = {path: path.read_bytes() for path in Path(manifest["evidence"]).rglob("*") if path.is_file()}
+            with patch.object(entry, "_run_persistent_stage") as forbidden:
+                inspected = entry.inspect(manifest["evidence"])
+            self.assertEqual(inspected["currentFileObservation"]["decision"], "pass")
+            forbidden.assert_not_called()
+            self.assertEqual(before, {path: path.read_bytes() for path in Path(manifest["evidence"]).rglob("*") if path.is_file()})
+            result_path = Path(manifest["evidence"]) / "result.json"
+            substituted = json.loads(result_path.read_text(encoding="utf-8"))
+            substituted["episode"] = "foreign-episode"
+            result_path.write_text(json.dumps(substituted), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "result binding"):
+                entry.inspect(manifest["evidence"])
 
     def test_persistent_cli_preparation_uses_normal_config_and_exact_native_resume(self):
         with tempfile.TemporaryDirectory() as tmp:
