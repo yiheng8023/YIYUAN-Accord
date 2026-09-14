@@ -322,6 +322,10 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(resumed["observed"]["totalTokens"], 863000)
             self.assertEqual(resumed["observed"]["uncachedInputTokens"], 190000)
             self.assertEqual(resumed["source"]["ordinal"], 3)
+            replacement = sessions / "replacement.jsonl"
+            replacement.write_bytes(rollout.read_bytes() + b"{}\n")
+            replacement.replace(rollout)
+            self.assertEqual(observer.poll()["decision"], "unknown")
 
     def test_native_rollout_usage_rejects_foreign_task_and_outside_path(self):
         caps = {"totalTokens": 900000}
@@ -341,6 +345,9 @@ class EntryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "outside the sessions root"):
                 entry.NativeRolloutUsage(outside, sessions_root=sessions,
                     thread_id="native-thread", cwd=workspace, caps=caps)
+            with self.assertRaisesRegex(ValueError, "outside the sessions root"):
+                entry.NativeRolloutUsage(sessions / ".." / "outside.jsonl", sessions_root=sessions,
+                    thread_id="native-thread", cwd=workspace, caps=caps)
 
     def test_persistent_stage_stops_on_running_usage_without_terminal(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -349,8 +356,13 @@ class EntryTests(unittest.TestCase):
             identity = "01a09f0c-7449-7400-8632-b5e6d27057b5"
             configuration = ('Codex initialized with event: SessionConfiguredEvent { '
                 'session_id: SessionId { uuid: ' + identity + ' }, '
+                'thread_id: ThreadId { uuid: ' + identity + ' }, '
                 'cwd: AbsolutePathBuf("' + manifest["workspace"].replace("\\", "\\\\") + '"), '
                 'rollout_path: Some("C:\\\\fake\\\\rollout.jsonl") }\n')
+            other = "01a09f0c-7449-7400-8632-b5e6d27057b6"
+            changed = configuration.replace('thread_id: ThreadId { uuid: ' + identity,
+                                            'thread_id: ThreadId { uuid: ' + other)
+            self.assertEqual(entry._session_configuration([changed.encode()])["threadId"], other)
             process = Mock(returncode=124)
             process.poll.return_value = None
             process.wait.return_value = 124

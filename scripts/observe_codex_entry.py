@@ -924,15 +924,18 @@ class _IncrementalLines:
     def __init__(self, path, *, limit, chunk=256 * 1024):
         self.path, self.limit, self.chunk = Path(path), limit, chunk
         self.offset, self.pending, self.unavailable = 0, b"", None
+        self.identity = None
 
     def read(self):
         if self.unavailable:
             return []
         try:
             before = self.path.lstat()
+            identity = (before.st_dev, before.st_ino)
             if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or self.path.is_symlink()
                     or getattr(before, "st_file_attributes", 0) & 0x400
-                    or before.st_size < self.offset or before.st_size > self.limit):
+                    or before.st_size < self.offset or before.st_size > self.limit
+                    or self.identity is not None and identity != self.identity):
                 raise ValueError("not a bounded ordinary incremental source")
             with self.path.open("rb") as stream:
                 opened = os.fstat(stream.fileno())
@@ -940,6 +943,7 @@ class _IncrementalLines:
                     raise ValueError("incremental source changed")
                 stream.seek(self.offset)
                 data = stream.read(min(self.chunk, before.st_size - self.offset))
+            self.identity = identity
             self.offset += len(data)
             data = self.pending + data
             lines = data.split(b"\n")
@@ -964,7 +968,7 @@ def _session_configuration(lines):
             continue
         if "Codex initialized with event: SessionConfiguredEvent" not in line:
             continue
-        identity = re.search(r"session_id: SessionId \{ uuid: ([0-9a-f-]+) \}", line)
+        identity = re.search(r"thread_id: ThreadId \{ uuid: ([0-9a-f-]+) \}", line)
         cwd = re.search(r'cwd: AbsolutePathBuf\("((?:[^"\\]|\\.)*)"\)', line)
         rollout = re.search(r'rollout_path: Some\("((?:[^"\\]|\\.)*)"\)', line)
         try:
@@ -990,6 +994,8 @@ def _stdout_thread(lines):
 def _ordinary_rollout(path, sessions_root):
     root = ordinary_dir(sessions_root)
     candidate = Path(path).absolute()
+    if ".." in candidate.parts:
+        raise ValueError("native rollout is outside the sessions root")
     try:
         relative = candidate.relative_to(root)
     except ValueError as error:
