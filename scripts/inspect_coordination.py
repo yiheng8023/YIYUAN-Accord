@@ -110,7 +110,7 @@ def validate_case(case):
 def snapshot(workspace, names):
     root = Path(workspace)
     return {name: {'sha256': digest(root/name), 'mtimeNs': (root/name).stat().st_mtime_ns}
-            for name in names if (root/name).exists()}
+            for name in names if (root/name).exists() or (root/name).is_symlink()}
 
 
 def _strict_json(text):
@@ -171,11 +171,18 @@ def _inspect_scoped(root, fixture, stage, originals, history):
                 errors.append('missing observed predecessor snapshot: ' + changed_from)
             elif current[name]['sha256'] == reference[name]['sha256']:
                 violations.append('required file content did not change from stage: ' + name)
-    allowed = declared | {'.accord-task-state'}
+    allowed = declared
     try:
         violations.extend('unclassified workspace path: ' + path.name
                           for path in root.iterdir() if path.name not in allowed)
     except OSError as error:
+        errors.append(str(error))
+    try:
+        after = snapshot(root, declared)
+        if after != current:
+            errors.append('workspace changed during inspection')
+            current = after
+    except (OSError, ValueError) as error:
         errors.append(str(error))
     return {'stage': stage['id'], 'decision': 'unknown' if errors else 'fail' if violations else 'pass',
             'violations': violations, 'observationErrors': errors, 'files': current,

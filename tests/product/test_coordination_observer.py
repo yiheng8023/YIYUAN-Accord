@@ -5,7 +5,9 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
+import scripts.inspect_coordination as inspection
 from scripts.inspect_coordination import FIXTURE, inspect_stage, snapshot, validate_case
 
 
@@ -34,6 +36,8 @@ class CoordinationObserverTests(unittest.TestCase):
 
     def test_agreement_is_not_satisfied_by_only_answering_the_side_question(self):
         (self.root/'plan.md').write_text('Bound plan', encoding='utf-8')
+        self.assertEqual(self.read('plan')['decision'], 'pass')
+        (self.root/'.accord-task-state').mkdir()
         self.assertEqual(self.read('plan')['decision'], 'pass')
         result = self.read('agree-and-question')
         self.assertEqual(result['decision'], 'fail')
@@ -172,6 +176,36 @@ class ScopedTaskObserverTests(unittest.TestCase):
             with self.subTest(case=case):
                 with self.assertRaises(ValueError):
                     validate_case(case)
+
+    def test_scoped_case_does_not_implicitly_allow_runtime_state_directory(self):
+        (self.root/'readiness.json').write_text(json.dumps({
+            'candidate': {}, 'coverage': {}, 'release_ready': False}), encoding='utf-8')
+        (self.root/'readiness.md').write_text('Candidate report\n', encoding='utf-8')
+        (self.root/'.accord-task-state').mkdir()
+        result = self.inspect('candidate-readiness')
+        self.assertEqual(result['decision'], 'fail')
+        self.assertIn('unclassified workspace path: .accord-task-state', result['violations'])
+
+    def test_scoped_case_reports_unknown_when_a_file_changes_during_structure_check(self):
+        (self.root/'readiness.json').write_text(json.dumps({
+            'candidate': {}, 'coverage': {}, 'release_ready': False}), encoding='utf-8')
+        report = self.root/'readiness.md'
+        report.write_text('Candidate report\n', encoding='utf-8')
+        def change_after_snapshot(text):
+            report.write_text('Changed during inspection\n', encoding='utf-8')
+            return json.loads(text)
+        with patch.object(inspection, '_strict_json', side_effect=change_after_snapshot):
+            result = self.inspect('candidate-readiness')
+        self.assertEqual(result['decision'], 'unknown')
+        self.assertIn('workspace changed during inspection', result['observationErrors'])
+
+    def test_scoped_case_does_not_treat_a_broken_symlink_as_absent(self):
+        self.case['stages'][0]['files']['readiness.md'] = {'state': 'absent'}
+        self.fixture.write_text(json.dumps(self.case), encoding='utf-8')
+        os.symlink('missing-target.txt', self.root/'readiness.md')
+        result = self.inspect('candidate-readiness')
+        self.assertEqual(result['decision'], 'unknown')
+        self.assertTrue(result['observationErrors'])
 
 
 if __name__ == '__main__':
