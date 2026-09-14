@@ -26,6 +26,12 @@ _CLAIMS = {"function", "incremental-value", "package-lifecycle"}
 _CASE_FIELDS = set("id scope host entry duties qualityAxes scenarios claims oracle oracleFiles conditions maxAgeSeconds expected".split())
 _SCOPE_FIELDS = set("id host entry duties qualityAxes scenarios claims conditions rule".split())
 _RECORD_FIELDS = set("case evaluatedRevision definitionSha256 packageSha256 observedAt conditions observerId sourceRef episodeId facts".split())
+_ENTRY_PARENT_SCOPES = {
+    "v33-openai-entry-applicability": "entryApplicability",
+    "v33-admitted-entry-delivery": "entryDelivery",
+    "v33-admitted-entry-lifecycle": "entryLifecycle",
+}
+_ENTRY_DISPOSITIONS = {"selected", "pending", "deferred", "inapplicable"}
 _TRUST = ("Conditional on the caller's authenticated, independent, bounded read-only observer "
           "and review provenance; callable shape and this verifier do not authenticate external facts.")
 _CURRENT_REVIEW_FILES = {"docs/operations/ACCEPTANCE-v3.3.md", "docs/operations/PLAN-v3.3.md"}
@@ -55,6 +61,49 @@ def _locator(value):
     return (_text(value) and not any(c in value for c in "\\:\0\n\r")
             and not value.startswith("/") and PurePosixPath(value).as_posix() == value
             and not {".", ".."} & set(PurePosixPath(value).parts))
+
+
+def _entry_selection(policy, entries):
+    """Validate and return the current v5 multi-entry parent selection."""
+    scopes = {row["id"]: row for row in policy["scopes"] if isinstance(row, dict) and _text(row.get("id"))}
+    present = set(scopes) & set(_ENTRY_PARENT_SCOPES)
+    if not present:
+        return None
+    if present != set(_ENTRY_PARENT_SCOPES):
+        raise ValueError("entry parent scopes must be declared together")
+    applicability = scopes["v33-openai-entry-applicability"]
+    candidates = {key for key, host in entries.items() if host == applicability["host"]}
+    if set(applicability["subjectEntries"]) != candidates:
+        raise ValueError("entry applicability must disposition every host entry")
+    conditions = applicability["conditions"]
+    dispositions = conditions.get("entryDispositions")
+    final = conditions.get("selectionFinal")
+    if (not isinstance(dispositions, dict) or set(dispositions) != candidates or type(final) is not bool
+            or any(not isinstance(row, dict) or set(row) != {"status", "basis"}
+                   or row.get("status") not in _ENTRY_DISPOSITIONS or not _text(row.get("basis"))
+                   for row in dispositions.values())):
+        raise ValueError("entry dispositions must bind every candidate, status and basis")
+    selected = {key for key, row in dispositions.items() if row["status"] == "selected"}
+    if not selected:
+        raise ValueError("entry selection cannot be empty")
+    for scope_id in ("v33-admitted-entry-delivery", "v33-admitted-entry-lifecycle"):
+        scope = scopes[scope_id]
+        if (scope["host"] != applicability["host"] or set(scope["subjectEntries"]) != selected
+                or _json(scope["conditions"].get("entryDispositions")) != _json(dispositions)
+                or scope["conditions"].get("selectionFinal") is not final):
+            raise ValueError("entry parent scopes must share the selected entry set and conditions")
+    cases = [row for row in policy["cases"] if isinstance(row, dict) and row.get("scope") in _ENTRY_PARENT_SCOPES]
+    for case in cases:
+        scope = scopes[case["scope"]]
+        expected_key = _ENTRY_PARENT_SCOPES[case["scope"]]
+        expected = case.get("expected", {}).get("effect", {}).get(expected_key)
+        if (case.get("subjectEntries") != scope["subjectEntries"] or not isinstance(expected, dict)
+                or set(expected) != set(case["subjectEntries"])
+                or any(not isinstance(value, dict) or not value for value in expected.values())):
+            raise ValueError("entry parent case must bind per-entry expected effects")
+    pending = any(row["status"] == "pending" for row in dispositions.values())
+    return {"final": final and not pending, "scopeIds": set(_ENTRY_PARENT_SCOPES),
+            "caseIds": {row["id"] for row in cases}, "selected": selected}
 
 
 def admission_contract_errors(contract):
@@ -111,10 +160,15 @@ def admission_contract_errors(contract):
                 return ["current acceptance mappings and required claim coverage differ"]
         scopes = {}
         for scope in policy["scopes"]:
-            if (not isinstance(scope, dict) or set(scope) != _SCOPE_FIELDS
-                    or not _text(scope.get("id")) or scope["id"] in scopes
+            scope_id = scope.get("id") if isinstance(scope, dict) else None
+            fields = _SCOPE_FIELDS | ({"subjectEntries"} if current and scope_id in _ENTRY_PARENT_SCOPES else set())
+            if (not isinstance(scope, dict) or set(scope) != fields
+                    or not _text(scope_id) or scope_id in scopes
                     or not isinstance(scope.get("host"), str) or scope["host"] not in hosts
                     or not isinstance(scope.get("entry"), str) or entries.get(scope["entry"]) != scope["host"]
+                    or current and scope_id in _ENTRY_PARENT_SCOPES
+                    and (not _refs(scope.get("subjectEntries"), set(entries)) or not scope["subjectEntries"]
+                         or any(entries[key] != scope["host"] for key in scope["subjectEntries"]))
                     or any(not _refs(scope.get(k), values) for k, values in sets.items())
                     or not scope["duties"] or not scope["qualityAxes"] or not scope["claims"]
                     or not _text(scope.get("rule"))
@@ -128,10 +182,15 @@ def admission_contract_errors(contract):
             return ["every active incremental-value claim must be required; undeclared claims belong in history"]
         ids = set()
         for case in policy["cases"]:
-            if (not isinstance(case, dict) or set(case) != _CASE_FIELDS
+            parent = case.get("scope") if isinstance(case, dict) else None
+            fields = _CASE_FIELDS | ({"subjectEntries"} if current and parent in _ENTRY_PARENT_SCOPES else set())
+            if (not isinstance(case, dict) or set(case) != fields
                     or not _text(case.get("id")) or case["id"] in ids
                     or not isinstance(case.get("host"), str) or case["host"] not in hosts
                     or not isinstance(case.get("entry"), str) or entries.get(case["entry"]) != case["host"]
+                    or current and parent in _ENTRY_PARENT_SCOPES
+                    and (not _refs(case.get("subjectEntries"), set(entries)) or not case["subjectEntries"]
+                         or any(entries[key] != case["host"] for key in case["subjectEntries"]))
                     or any(not _refs(case.get(k), values) for k, values in sets.items())
                     or not case["duties"] or not case["qualityAxes"] or not case["claims"]
                     or not _text(case.get("oracle"))
@@ -151,10 +210,16 @@ def admission_contract_errors(contract):
                 return ["current cases must bind the acceptance document and its consensus/criteria source as oracle dependencies"]
             scope = scopes.get(case.get("scope"))
             if (scope is None or any(case[k] != scope[k] for k in ("host", "entry"))
+                    or current and parent in _ENTRY_PARENT_SCOPES
+                    and case["subjectEntries"] != scope["subjectEntries"]
                     or any(not set(case[k]) <= set(scope[k]) for k in sets)
                     or any(k not in case["conditions"] or _json(case["conditions"][k]) != _json(v)
                            for k, v in scope["conditions"].items())):
                 return ["evidence case differs from its declared claim scope"]
+        try:
+            _entry_selection(policy, entries) if current else None
+        except ValueError as error:
+            return [str(error)]
     except (KeyError, TypeError, ValueError, RecursionError):
         return ["evidence admission dependencies or bounded JSON are invalid"]
     return []
@@ -163,7 +228,7 @@ def admission_contract_errors(contract):
 def _definition(contract, case):
     def selected(rows, ids):
         return sorted((v for v in rows if v["id"] in ids), key=lambda v: v["id"])
-    return _hash({
+    definition = {
         "schema": contract["acceptance"]["admission"]["schema"], "case": {**case, **{k: sorted(case[k]) for k in
             ("duties", "qualityAxes", "scenarios", "claims", "oracleFiles")}},
         "shared": {k: contract[k] for k in ("schema", "productId", "predecessorSnapshot", "authority",
@@ -182,7 +247,11 @@ def _definition(contract, case):
         "environment": {k: v for k, v in contract["environmentControl"].items() if k != "adaptationScenarios"},
         "entry": selected(contract["capabilityMap"]["entrySurfaces"]["rows"], [case["entry"]]),
         "entryRule": contract["capabilityMap"]["entrySurfaces"]["rule"],
-    })
+    }
+    if "subjectEntries" in case:
+        definition["subjectEntries"] = selected(
+            contract["capabilityMap"]["entrySurfaces"]["rows"], case["subjectEntries"])
+    return _hash(definition)
 
 
 def _reuse_definition(contract, case):
@@ -257,6 +326,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     policy = contract["acceptance"]["admission"]
     cases = {v["id"]: v for v in policy["cases"]}
     scopes = {v["id"]: v for v in policy["scopes"]}
+    entry_selection = (_entry_selection(policy, {row["id"]: row["host"]
+                       for row in contract["capabilityMap"]["entrySurfaces"]["rows"]})
+                       if policy["schema"] == CURRENT_SCHEMA else None)
     errors = report["errors"]
     case_errors = []
     hosts = {v["id"]: v for v in contract["delivery"]["hostProjections"]}
@@ -398,6 +470,12 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             # External exception text may contain private source data or credentials.
             errors.append("evidence observer unavailable, invalid or subject changed")
             admitted.clear()
+    if entry_selection is not None and not entry_selection["final"]:
+        for key in sorted(admitted & entry_selection["caseIds"]):
+            admitted.remove(key)
+    if entry_selection is not None:
+        report["entrySelection"] = {"final": entry_selection["final"],
+                                    "selected": sorted(entry_selection["selected"])}
     report["acceptedCases"] = sorted(admitted)
     bound = {claim: {key for key in ids if key in scopes and claim in scopes[key]["claims"]}
              for claim, ids in policy["requiredCoverage"].items()}
@@ -423,6 +501,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     for scope_id, scope in scopes.items():
         row = {"host": scope["host"], "entry": scope["entry"],
                "conditions": copy.deepcopy(scope["conditions"]), "claims": {}}
+        if "subjectEntries" in scope:
+            row["subjectEntries"] = copy.deepcopy(scope["subjectEntries"])
         report["openCoverage"][scope_id] = row
         for claim in scope["claims"]:
             relevant = {key for key in cases if cases[key]["scope"] == scope_id and claim in cases[key]["claims"]}

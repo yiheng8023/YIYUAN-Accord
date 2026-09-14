@@ -862,12 +862,24 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_current_case_can_be_admitted_without_closing_missing_requirements(self):
         report = self.assess(observer=self.observer)
         self.assertEqual(report["errors"], [])
-        self.assertEqual(report["acceptedCases"], sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]))
+        parent_scopes = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
+                         "v33-admitted-entry-lifecycle"}
+        self.assertEqual(report["acceptedCases"], sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
+                                                          if case["scope"] not in parent_scopes))
+        self.assertEqual(report["entrySelection"], {
+            "final": False, "selected": ["cx-cli", "cx-desktop", "cx-sdk", "cx-vscode"]})
+        applicability = report["openCoverage"]["v33-openai-entry-applicability"]
+        self.assertEqual(applicability["entry"], "cx-desktop")
+        self.assertEqual(set(applicability["subjectEntries"]), {
+            row["id"] for row in self.contract["capabilityMap"]["entrySurfaces"]["rows"]
+            if row["host"] == "codex"})
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
         self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A04"})
-        self.assertIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
+        self.assertNotIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
+        self.assertIn("v33-openai-entry-applicability",
+                      report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
         self.assertEqual(report["progress"]["coverageVerified"], 6)
         self.assertEqual(report["progress"]["requirementsComplete"], 1)
@@ -887,10 +899,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report["progress"], {
             "scope": "acceptance-evidence-coverage-not-effort-or-implementation-completion",
             "requirementsTotal": 8, "requirementsComplete": 0,
-            "coverageTotal": 17, "coverageDefined": 6, "coverageVerified": 0,
+            "coverageTotal": 17, "coverageDefined": 9, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
-            "coverageUnbound": 11, "coverageDefinedButUnverified": 6,
-            "casesDefined": 6, "casesAccepted": 0,
+            "coverageUnbound": 8, "coverageDefinedButUnverified": 9,
+            "casesDefined": 9, "casesAccepted": 0,
         })
 
     def test_incomplete_mapping_or_old_policy_cannot_dispatch_current_observer(self):
@@ -909,6 +921,107 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             calls = []
             self.assertTrue(self.assess(contract, lambda request: calls.append(request))["errors"])
             self.assertEqual(calls, [])
+
+    def test_entry_parent_contract_rejects_omissions_and_cross_scope_drift(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        parent_ids = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
+                      "v33-admitted-entry-lifecycle"}
+        def parts(contract, scope_id):
+            policy = contract["acceptance"]["admission"]
+            return (next(row for row in policy["scopes"] if row["id"] == scope_id),
+                    next(row for row in policy["cases"] if row["scope"] == scope_id))
+        variants = []
+        missing_candidate = copy.deepcopy(self.contract)
+        for scope_id in parent_ids:
+            scope, case = parts(missing_candidate, scope_id)
+            scope["conditions"]["entryDispositions"].pop("cx-xcode")
+            case["conditions"]["entryDispositions"].pop("cx-xcode")
+        scope, case = parts(missing_candidate, "v33-openai-entry-applicability")
+        scope["subjectEntries"].remove("cx-xcode")
+        case["subjectEntries"].remove("cx-xcode")
+        case["expected"]["effect"]["entryApplicability"].pop("cx-xcode")
+        variants.append(missing_candidate)
+        missing_selected = copy.deepcopy(self.contract)
+        scope, case = parts(missing_selected, "v33-admitted-entry-delivery")
+        scope["subjectEntries"].remove("cx-vscode")
+        case["subjectEntries"].remove("cx-vscode")
+        case["expected"]["effect"]["entryDelivery"].pop("cx-vscode")
+        variants.append(missing_selected)
+        missing_expected = copy.deepcopy(self.contract)
+        parts(missing_expected, "v33-admitted-entry-lifecycle")[1]["expected"]["effect"]["entryLifecycle"].pop("cx-sdk")
+        variants.append(missing_expected)
+        empty_expected = copy.deepcopy(self.contract)
+        parts(empty_expected, "v33-admitted-entry-delivery")[1]["expected"]["effect"]["entryDelivery"]["cx-cli"] = {}
+        variants.append(empty_expected)
+        changed_conditions = copy.deepcopy(self.contract)
+        scope, case = parts(changed_conditions, "v33-admitted-entry-delivery")
+        scope["conditions"]["entryDispositions"]["cx-cli"]["basis"] += " Changed."
+        case["conditions"] = copy.deepcopy(scope["conditions"])
+        variants.append(changed_conditions)
+        for contract in variants:
+            with self.subTest(error=admission_contract_errors(contract)):
+                self.assertTrue(admission_contract_errors(contract))
+
+    def test_entry_parent_cases_stay_unaccepted_until_selection_is_final(self):
+        parent_ids = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
+                      "v33-admitted-entry-lifecycle"}
+        for selection_final, clear_pending in ((False, False), (True, False), (False, True)):
+            contract = copy.deepcopy(self.contract)
+            policy = contract["acceptance"]["admission"]
+            for row in [*policy["scopes"], *policy["cases"]]:
+                if row.get("scope", row.get("id")) not in parent_ids:
+                    continue
+                row["conditions"]["selectionFinal"] = selection_final
+                if clear_pending:
+                    for disposition in row["conditions"]["entryDispositions"].values():
+                        if disposition["status"] == "pending":
+                            disposition["status"] = "deferred"
+            with self.subTest(selectionFinal=selection_final, clearPending=clear_pending), self.history():
+                self.commit(contract)
+                report = self.assess(contract, self.observer)
+            parent_cases = {case["id"] for case in policy["cases"] if case["scope"] in parent_ids}
+            self.assertFalse(parent_cases & set(report["acceptedCases"]))
+            self.assertFalse(report["entrySelection"]["final"])
+            self.assertFalse(report["acceptanceRequirements"]["A02"]["complete"])
+
+    def test_final_entry_selection_can_admit_all_three_parent_cases(self):
+        contract = copy.deepcopy(self.contract)
+        parent_ids = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
+                      "v33-admitted-entry-lifecycle"}
+        policy = contract["acceptance"]["admission"]
+        for row in [*policy["scopes"], *policy["cases"]]:
+            scope_id = row.get("scope", row.get("id"))
+            if scope_id not in parent_ids:
+                continue
+            row["conditions"]["selectionFinal"] = True
+            for disposition in row["conditions"]["entryDispositions"].values():
+                if disposition["status"] == "pending":
+                    disposition["status"] = "deferred"
+        with self.history():
+            self.commit(contract)
+            report = self.assess(contract, self.observer)
+        parent_cases = {case["id"] for case in policy["cases"] if case["scope"] in parent_ids}
+        self.assertEqual(report["errors"], [])
+        self.assertTrue(report["entrySelection"]["final"])
+        self.assertTrue(parent_cases <= set(report["acceptedCases"]))
+
+    def test_subject_entry_semantics_are_bound_without_changing_old_case_identity(self):
+        from yiyuan_accord.admission import _definition, _reuse_definition
+        policy = self.contract["acceptance"]["admission"]
+        old_case = next(case for case in policy["cases"] if "subjectEntries" not in case)
+        without_parents = copy.deepcopy(self.contract)
+        without_parents["acceptance"]["admission"]["scopes"] = [
+            row for row in without_parents["acceptance"]["admission"]["scopes"] if "subjectEntries" not in row]
+        without_parents["acceptance"]["admission"]["cases"] = [
+            row for row in without_parents["acceptance"]["admission"]["cases"] if "subjectEntries" not in row]
+        self.assertEqual(_definition(self.contract, old_case), _definition(without_parents, old_case))
+        parent = next(case for case in policy["cases"] if case["scope"] == "v33-admitted-entry-delivery")
+        before = _reuse_definition(self.contract, parent)
+        changed = copy.deepcopy(self.contract)
+        entry = next(row for row in changed["capabilityMap"]["entrySurfaces"]["rows"]
+                     if row["id"] == "cx-vscode")
+        entry["environment"] += " Changed subject-entry semantics."
+        self.assertNotEqual(before, _reuse_definition(changed, parent))
 
     def test_old_case_wrong_package_and_changed_conditions_cannot_supply_current_evidence(self):
         for kind in ("old-case", "package", "conditions", "recheck"):
@@ -944,8 +1057,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 result = self.observer(request)
                 if request["phase"] == "observe": result["records"] = retained
                 return result
+            parents = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
+                       "v33-admitted-entry-lifecycle"}
             expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
-                              if locator not in case["oracleFiles"])
+                              if locator not in case["oracleFiles"] and case["scope"] not in parents)
             self.assertEqual(self.assess(observer=replay)["acceptedCases"], expected)
 
     def test_navigation_updates_preserve_evidence_but_changed_case_criteria_do_not(self):
@@ -955,7 +1070,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             result = self.observer(request)
             if request["phase"] == "observe": retained = copy.deepcopy(result["records"])
             return result
-        expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"])
+        parents = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
+                   "v33-admitted-entry-lifecycle"}
+        expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
+                          if case["scope"] not in parents)
         self.assertEqual(self.assess(observer=capture)["acceptedCases"], expected)
         def replay(request):
             result = self.observer(request)  # Reviews still bind the current candidate.
@@ -1003,9 +1121,24 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         contract = copy.deepcopy(self.contract)
         policy = contract["acceptance"]["admission"]
         template = policy["cases"][0]
+        parent_ids = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
+                      "v33-admitted-entry-lifecycle"}
+        parent_cases = {scope_id: copy.deepcopy(next(case for case in policy["cases"] if case["scope"] == scope_id))
+                        for scope_id in parent_ids}
+        parent_scopes = {scope_id: copy.deepcopy(next(scope for scope in policy["scopes"] if scope["id"] == scope_id))
+                         for scope_id in parent_ids}
+        for row in [*parent_cases.values(), *parent_scopes.values()]:
+            row["conditions"]["selectionFinal"] = True
+            for disposition in row["conditions"]["entryDispositions"].values():
+                if disposition["status"] == "pending":
+                    disposition["status"] = "deferred"
         policy["cases"], policy["scopes"] = [], []
         for claim, scope_ids in policy["requiredCoverage"].items():
             for scope_id in scope_ids:
+                if scope_id in parent_ids:
+                    policy["cases"].append(parent_cases[scope_id])
+                    policy["scopes"].append(parent_scopes[scope_id])
+                    continue
                 case = copy.deepcopy(template)
                 case.update(id="fixture-" + scope_id, scope=scope_id, claims=[claim],
                             duties=[r["id"] for r in contract["acceptance"]["duties"]],

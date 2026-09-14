@@ -263,7 +263,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
           "execution": "IDE 自有集成；执行后端待核",
           "environment": "不是 VS Code 扩展的同一入口；不继承其配置或插件效果。",
-          "observation": "官方资料支持；未实测。",
+          "observation": "2026-09-15通过OpenAI IDE页核对JetBrains官方Codex说明（https://www.jetbrains.com/help/ai-assistant/codex-agent.html，页标2026-08-05）：支持AGENTS.md、Skill发现/调用、受设置控制的MCP传入及独立权限/模式。存在可比较的复用路线；未安装或运行本机集成，Accord整包/Hook及持久恢复仍未验证，不借用VS Code证据。",
           "currentEffect": "unverified"
         },
         {
@@ -283,7 +283,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/cloud",
           "execution": "托管隔离环境",
           "environment": "r11：有官方执行能力依据的候选，Accord全链路可行性与版本纳入仍待判；缺少当前组件时先比较合理替代。触发前端与托管执行分开；绑定账户、仓库、实际分支/SHA、初始化/维护脚本、网络及缓存状态。本地插件不自动存在，旧缓存也不能代表当前包；不与 ChatGPT Work 或本地入口互相继承证据。",
-          "observation": "2026-09-06 复核官方云端及环境文档（https://learn.chatgpt.com/docs/environments/cloud-environment）；仍未进行云端候选实测，未新增账户/仓库连接或修改云环境。",
+          "observation": "2026-09-15复核官方云环境文档及现有账号设置页：环境/仓库均为yiheng8023/YIYUAN-Accord，目录/workspace/YIYUAN-Accord，3项历史任务；universal、自动初始化、Agent网络关闭、缓存开启，未见维护脚本。仅查看详情/编辑表单后退出，未保存、重置缓存、连接终端或启动任务。仓库检出和初始化是可利用的通道，当前包的实际加载、原生事件、恢复与生命周期仍未知。",
           "currentEffect": "unverified"
         },
         {
@@ -293,7 +293,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/web",
           "execution": "网页 Chat 与 Work 分别核对；官方说明网页 Work 在云端运行",
           "environment": "r11：Work为执行候选，普通Chat仅考虑有价值的辅助用途；先判断职责闭环可行性，不能从界面名称决定适配。Work Cloud 不继承设备文件、应用、浏览器会话或私网；与 Codex 共享执行核心不等于工具、权限相同。网页安装插件不部署 Hook 脚本，须在实际执行环境核对脚本、Node、事件及当前信任。",
-          "observation": "2026-09-09 已在现有账号网页检查 Work 入口、插件目录和项目选择，未发模型请求或安装。官方 https://learn.chatgpt.com/docs/enterprise/chatgpt-work-cloud-security 与 https://developers.openai.com/plugins/build/plugins 已核对；已查看菜单未给出本地整包入口，不推定全部不支持。当前包尚无该入口的实际执行证据。",
+          "observation": "2026-09-15复核Work云安全和插件文档：网页Work运行于平台管理的环境，不继承设备文件/浏览器会话；公开插件可发现不代表其本地Hook脚本已部署。2026-09-09现有账号Work、目录和项目选择的只读观察保留，当前未新增模型请求或安装。任务/项目文件、已有宿主状态和获准工具连接是需比较的组合路径，当前包实际参与和完整职责仍待验证。",
           "currentEffect": "unverified"
         },
         {
@@ -4263,7 +4263,7 @@
   "acceptance": {
     "admission": {
       "schema": "yiyuan-accord-evidence-admission/v5",
-      "rule": "Current v3.3 cases use the existing immutable-source observe/recheck and independent-review mechanism. All A01-A08 requirements remain explicit, with absent scope definitions and absent evidence reported separately. Retained v3.2.1 policy and observations remain at previousDevelopmentSnapshot and are not current cases. A partial case cannot establish whole-system completion. Required delivery host codex identifies the current distribution family, not a commitment to every interface. v33-openai-entry-applicability must bind candidate dispositions, their evidence and the selected delivery set, including actual mode, executor, authority and state boundaries. Unknown is not inapplicable. v33-admitted-entry-delivery and v33-admitted-entry-lifecycle must cover that same selected set; CLI/App Server child cases cannot stand in for the parent coverage. Ordinary Chat has no default standalone delivery obligation. Shared implementations can be reused, but relevant differences need evidence. Hook absence requires analysis of native, Agent, MCP or other duty-equivalent alternatives, not automatic exclusion. The decision must preserve necessary reliability, recovery and lifecycle duties and record justified deferrals. All three renamed ranges remain unbound; no functional requirement, historical failure or unknown is converted into a pass. Claude is excluded from the current distribution and acceptance scope; retained historical observations are not current support. No incremental-value claim is made; complete independent impact assessment is required. No publication authority is created. Explicit App Server lifecycle and scoped-exposure child scopes refine already required responsibilities. Parent host/environment scopes stay open; no App Server result substitutes for CLI/Desktop/ChatGPT or for autonomous behavior. Counts change because scope decomposition is now explicit, not because new product duties were added. Execution evidence binds the actual case, scope, conditions, quality criteria, package and executed oracle sources. Planning prose, progress descriptions and non-executed tests are reviewed against the current candidate without automatically requiring new host execution. A substantive requirement or oracle change must revise its affected binding and invalidate dependent evidence; original observation digests remain immutable. One prospectively bound episode may support several applicable cases through independently assessed records, not through duplicate execution or automatic copying of expected facts.",
+      "rule": "Current v3.3 cases use the existing immutable-source observe/recheck and independent-review mechanism. All A01-A08 requirements remain explicit, with absent scope definitions and absent evidence reported separately. Retained v3.2.1 policy and observations remain at previousDevelopmentSnapshot and are not current cases. A partial case cannot establish whole-system completion. Required delivery host codex identifies the current distribution family, not a commitment to every interface. v33-openai-entry-applicability must bind candidate dispositions, their evidence and the selected delivery set, including actual mode, executor, authority and state boundaries. Unknown is not inapplicable. v33-admitted-entry-delivery and v33-admitted-entry-lifecycle must cover that same selected set; CLI/App Server child cases cannot stand in for the parent coverage. Ordinary Chat has no default standalone delivery obligation. Shared implementations can be reused, but relevant differences need evidence. Hook absence requires analysis of native, Agent, MCP or other duty-equivalent alternatives, not automatic exclusion. The decision must preserve necessary reliability, recovery and lifecycle duties and record justified deferrals. The three entry ranges now bind subject entries and per-entry predicates. Selection remains provisional and pending, so definitions grant no acceptance; no functional requirement, failure or unknown becomes a pass. Claude is excluded from the current distribution and acceptance scope; retained historical observations are not current support. No incremental-value claim is made; complete independent impact assessment is required. No publication authority is created. Explicit App Server lifecycle and scoped-exposure child scopes refine already required responsibilities. Parent host/environment scopes stay open; no App Server result substitutes for CLI/Desktop/ChatGPT or for autonomous behavior. Counts change because scope decomposition is now explicit, not because new product duties were added. Execution evidence binds the actual case, scope, conditions, quality criteria, package and executed oracle sources. Planning prose, progress descriptions and non-executed tests are reviewed against the current candidate without automatically requiring new host execution. A substantive requirement or oracle change must revise its affected binding and invalidate dependent evidence; original observation digests remain immutable. One prospectively bound episode may support several applicable cases through independently assessed records, not through duplicate execution or automatic copying of expected facts.",
       "reviewPolicy": {
         "requiredAxes": [
           "product",
@@ -4677,6 +4677,279 @@
           ],
           "id": "v33-systemic-correction",
           "rule": "One current decision must correct all affected earlier artifacts and preserve still-valid work within the same episode. Retain immutable source and clearly labelled history; the claim does not establish arbitrary-domain or full-system invariance."
+        },
+        {
+          "id": "v33-openai-entry-applicability",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "subjectEntries": [
+            "chatgpt-desktop",
+            "chatgpt-mobile",
+            "chatgpt-web",
+            "cx-cli",
+            "cx-cloud",
+            "cx-desktop",
+            "cx-integrations",
+            "cx-jetbrains",
+            "cx-sdk",
+            "cx-vscode",
+            "cx-xcode"
+          ],
+          "duties": [
+            "goal-authority-correction",
+            "environment-and-self-exposure",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
+            "selectionFinal": false,
+            "entryDispositions": {
+              "chatgpt-desktop": {
+                "status": "pending",
+                "basis": "待判：Chat/Work及本地/云端分别核对，不能借用Codex桌面结论；目录显示不等于实际参与。"
+              },
+              "chatgpt-mobile": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云任务分别判断；移动界面不能一律视为非执行入口或继承设备文件权限。"
+              },
+              "chatgpt-web": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云执行分开；平台环境不继承本地脚本，需确定职责组合及可获得连接。"
+              },
+              "cx-cli": {
+                "status": "selected",
+                "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
+              },
+              "cx-cloud": {
+                "status": "pending",
+                "basis": "待判：仓库检出和初始化通道可用，现有环境已只读核对；候选加载、事件和恢复职责的组合尚未证明。"
+              },
+              "cx-desktop": {
+                "status": "selected",
+                "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
+              },
+              "cx-integrations": {
+                "status": "pending",
+                "basis": "待判：外部触发与实际执行器分开；账户、数据、触发授权和归属未明确，不新增连接。"
+              },
+              "cx-jetbrains": {
+                "status": "pending",
+                "basis": "待判：官方支持Skill、AGENTS.md及MCP，存在组合路线；Accord Hook、持久恢复和实际集成条件尚未验证。"
+              },
+              "cx-sdk": {
+                "status": "selected",
+                "basis": "纳入开发：协议、持久状态和生命周期连接已有子范围证据；不得代验其它入口。"
+              },
+              "cx-vscode": {
+                "status": "selected",
+                "basis": "纳入开发：实际插件/Hook界面和历史普通交付已确认；当前包与实际后端差异仍须验收。"
+              },
+              "cx-xcode": {
+                "status": "pending",
+                "basis": "待判：官方说明为自有集成；加载、权限与恢复证据未齐，不借用VS Code，也不因设备缺失判不适用。"
+              }
+            },
+            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
+            "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
+          },
+          "rule": "Bind every current OpenAI entry and relevant mode. Judge user value, feasible responsibility composition, authority/data/state boundaries, recovery and burden. Unknown is not inapplicable; missing local Hooks or devices alone cannot exclude an entry. A selected development set is not a finalized support claim. Pending decisions or selectionFinal=false prevent parent acceptance."
+        },
+        {
+          "id": "v33-admitted-entry-delivery",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "subjectEntries": [
+            "cx-cli",
+            "cx-desktop",
+            "cx-sdk",
+            "cx-vscode"
+          ],
+          "duties": [
+            "goal-authority-correction",
+            "execution-configuration-and-code",
+            "correction-and-evolution",
+            "context-and-task-continuity",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost",
+            "normal-entry-integration",
+            "change-adaptation"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "task-exposure-and-reuse",
+            "mid-task-user-steering"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
+            "selectionFinal": false,
+            "entryDispositions": {
+              "chatgpt-desktop": {
+                "status": "pending",
+                "basis": "待判：Chat/Work及本地/云端分别核对，不能借用Codex桌面结论；目录显示不等于实际参与。"
+              },
+              "chatgpt-mobile": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云任务分别判断；移动界面不能一律视为非执行入口或继承设备文件权限。"
+              },
+              "chatgpt-web": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云执行分开；平台环境不继承本地脚本，需确定职责组合及可获得连接。"
+              },
+              "cx-cli": {
+                "status": "selected",
+                "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
+              },
+              "cx-cloud": {
+                "status": "pending",
+                "basis": "待判：仓库检出和初始化通道可用，现有环境已只读核对；候选加载、事件和恢复职责的组合尚未证明。"
+              },
+              "cx-desktop": {
+                "status": "selected",
+                "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
+              },
+              "cx-integrations": {
+                "status": "pending",
+                "basis": "待判：外部触发与实际执行器分开；账户、数据、触发授权和归属未明确，不新增连接。"
+              },
+              "cx-jetbrains": {
+                "status": "pending",
+                "basis": "待判：官方支持Skill、AGENTS.md及MCP，存在组合路线；Accord Hook、持久恢复和实际集成条件尚未验证。"
+              },
+              "cx-sdk": {
+                "status": "selected",
+                "basis": "纳入开发：协议、持久状态和生命周期连接已有子范围证据；不得代验其它入口。"
+              },
+              "cx-vscode": {
+                "status": "selected",
+                "basis": "纳入开发：实际插件/Hook界面和历史普通交付已确认；当前包与实际后端差异仍须验收。"
+              },
+              "cx-xcode": {
+                "status": "pending",
+                "basis": "待判：官方说明为自有集成；加载、权限与恢复证据未齐，不借用VS Code，也不因设备缺失判不适用。"
+              }
+            },
+            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
+            "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
+          },
+          "rule": "Review delivered effects for exactly the finalized selected set. Reuse CLI business semantics and SDK protocol facts where applicable; each GUI/IDE still needs current loading, instruction/event participation, permissions, steering and result-path evidence. The observing carrier cannot stand in for target entries. Pending decisions or selectionFinal=false prevent parent acceptance."
+        },
+        {
+          "id": "v33-admitted-entry-lifecycle",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "subjectEntries": [
+            "cx-cli",
+            "cx-desktop",
+            "cx-sdk",
+            "cx-vscode"
+          ],
+          "duties": [
+            "environment-and-self-exposure",
+            "package-lifecycle",
+            "recovery-and-rollback",
+            "context-and-task-continuity",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost",
+            "recovery-and-lifecycle"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "package-lifecycle"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
+            "selectionFinal": false,
+            "entryDispositions": {
+              "chatgpt-desktop": {
+                "status": "pending",
+                "basis": "待判：Chat/Work及本地/云端分别核对，不能借用Codex桌面结论；目录显示不等于实际参与。"
+              },
+              "chatgpt-mobile": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云任务分别判断；移动界面不能一律视为非执行入口或继承设备文件权限。"
+              },
+              "chatgpt-web": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云执行分开；平台环境不继承本地脚本，需确定职责组合及可获得连接。"
+              },
+              "cx-cli": {
+                "status": "selected",
+                "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
+              },
+              "cx-cloud": {
+                "status": "pending",
+                "basis": "待判：仓库检出和初始化通道可用，现有环境已只读核对；候选加载、事件和恢复职责的组合尚未证明。"
+              },
+              "cx-desktop": {
+                "status": "selected",
+                "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
+              },
+              "cx-integrations": {
+                "status": "pending",
+                "basis": "待判：外部触发与实际执行器分开；账户、数据、触发授权和归属未明确，不新增连接。"
+              },
+              "cx-jetbrains": {
+                "status": "pending",
+                "basis": "待判：官方支持Skill、AGENTS.md及MCP，存在组合路线；Accord Hook、持久恢复和实际集成条件尚未验证。"
+              },
+              "cx-sdk": {
+                "status": "selected",
+                "basis": "纳入开发：协议、持久状态和生命周期连接已有子范围证据；不得代验其它入口。"
+              },
+              "cx-vscode": {
+                "status": "selected",
+                "basis": "纳入开发：实际插件/Hook界面和历史普通交付已确认；当前包与实际后端差异仍须验收。"
+              },
+              "cx-xcode": {
+                "status": "pending",
+                "basis": "待判：官方说明为自有集成；加载、权限与恢复证据未齐，不借用VS Code，也不因设备缺失判不适用。"
+              }
+            },
+            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
+            "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
+          },
+          "rule": "Review loading/install, update and rejected replacement, disable/uninstall, interruption/recovery and owned exit for the same finalized selected set. Reuse backend lifecycle facts with exact entry-difference binding. Cache bytes, enablement, actual task participation and retained context are separate; SDK child cases alone cannot close this parent. Pending decisions or selectionFinal=false prevent parent acceptance."
         }
       ],
       "cases": [
@@ -5201,6 +5474,467 @@
               "noUnresolvedTaskResource": true
             }
           }
+        },
+        {
+          "id": "v33-openai-entry-applicability-01",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "subjectEntries": [
+            "chatgpt-desktop",
+            "chatgpt-mobile",
+            "chatgpt-web",
+            "cx-cli",
+            "cx-cloud",
+            "cx-desktop",
+            "cx-integrations",
+            "cx-jetbrains",
+            "cx-sdk",
+            "cx-vscode",
+            "cx-xcode"
+          ],
+          "duties": [
+            "goal-authority-correction",
+            "environment-and-self-exposure",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
+            "selectionFinal": false,
+            "entryDispositions": {
+              "chatgpt-desktop": {
+                "status": "pending",
+                "basis": "待判：Chat/Work及本地/云端分别核对，不能借用Codex桌面结论；目录显示不等于实际参与。"
+              },
+              "chatgpt-mobile": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云任务分别判断；移动界面不能一律视为非执行入口或继承设备文件权限。"
+              },
+              "chatgpt-web": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云执行分开；平台环境不继承本地脚本，需确定职责组合及可获得连接。"
+              },
+              "cx-cli": {
+                "status": "selected",
+                "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
+              },
+              "cx-cloud": {
+                "status": "pending",
+                "basis": "待判：仓库检出和初始化通道可用，现有环境已只读核对；候选加载、事件和恢复职责的组合尚未证明。"
+              },
+              "cx-desktop": {
+                "status": "selected",
+                "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
+              },
+              "cx-integrations": {
+                "status": "pending",
+                "basis": "待判：外部触发与实际执行器分开；账户、数据、触发授权和归属未明确，不新增连接。"
+              },
+              "cx-jetbrains": {
+                "status": "pending",
+                "basis": "待判：官方支持Skill、AGENTS.md及MCP，存在组合路线；Accord Hook、持久恢复和实际集成条件尚未验证。"
+              },
+              "cx-sdk": {
+                "status": "selected",
+                "basis": "纳入开发：协议、持久状态和生命周期连接已有子范围证据；不得代验其它入口。"
+              },
+              "cx-vscode": {
+                "status": "selected",
+                "basis": "纳入开发：实际插件/Hook界面和历史普通交付已确认；当前包与实际后端差异仍须验收。"
+              },
+              "cx-xcode": {
+                "status": "pending",
+                "basis": "待判：官方说明为自有集成；加载、权限与恢复证据未齐，不借用VS Code，也不因设备缺失判不适用。"
+              }
+            },
+            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
+            "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
+          },
+          "scope": "v33-openai-entry-applicability",
+          "oracle": "Bind every current OpenAI entry and relevant mode. Judge user value, feasible responsibility composition, authority/data/state boundaries, recovery and burden. Unknown is not inapplicable; missing local Hooks or devices alone cannot exclude an entry. A selected development set is not a finalized support claim. Freeze the definition before observation. Independently inspect per-entry source identities, current conditions and raw effect records; expected predicates are never observations. Actual sources and independent review must justify every fact. Missing/conflicting evidence remains open, historical failures stay unchanged, and a documented path does not require a repeated business-model experiment.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "entryApplicability": {
+                "chatgpt-desktop": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "chatgpt-mobile": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "chatgpt-web": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "cx-cli": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "cx-cloud": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "cx-desktop": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "cx-integrations": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "cx-jetbrains": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "cx-sdk": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "cx-vscode": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                },
+                "cx-xcode": {
+                  "decisionSupported": true,
+                  "necessaryResponsibilitiesAccounted": true,
+                  "alternativesCompared": true
+                }
+              }
+            },
+            "authority": {
+              "currentSelectionRespected": true,
+              "noInferredAccessOrEffects": true,
+              "noUnrequestedModeActivation": true
+            },
+            "poststate": {
+              "selectionFinal": true,
+              "pendingEntries": 0,
+              "sourceAndCurrentConditionsRechecked": true,
+              "evidenceLimitsPreserved": true
+            },
+            "cleanup": {
+              "unrelatedStateUnchanged": true,
+              "ownedTemporaryResourcesReleased": true
+            }
+          }
+        },
+        {
+          "id": "v33-admitted-entry-delivery-01",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "subjectEntries": [
+            "cx-cli",
+            "cx-desktop",
+            "cx-sdk",
+            "cx-vscode"
+          ],
+          "duties": [
+            "goal-authority-correction",
+            "execution-configuration-and-code",
+            "correction-and-evolution",
+            "context-and-task-continuity",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost",
+            "normal-entry-integration",
+            "change-adaptation"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "task-exposure-and-reuse",
+            "mid-task-user-steering"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
+            "selectionFinal": false,
+            "entryDispositions": {
+              "chatgpt-desktop": {
+                "status": "pending",
+                "basis": "待判：Chat/Work及本地/云端分别核对，不能借用Codex桌面结论；目录显示不等于实际参与。"
+              },
+              "chatgpt-mobile": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云任务分别判断；移动界面不能一律视为非执行入口或继承设备文件权限。"
+              },
+              "chatgpt-web": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云执行分开；平台环境不继承本地脚本，需确定职责组合及可获得连接。"
+              },
+              "cx-cli": {
+                "status": "selected",
+                "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
+              },
+              "cx-cloud": {
+                "status": "pending",
+                "basis": "待判：仓库检出和初始化通道可用，现有环境已只读核对；候选加载、事件和恢复职责的组合尚未证明。"
+              },
+              "cx-desktop": {
+                "status": "selected",
+                "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
+              },
+              "cx-integrations": {
+                "status": "pending",
+                "basis": "待判：外部触发与实际执行器分开；账户、数据、触发授权和归属未明确，不新增连接。"
+              },
+              "cx-jetbrains": {
+                "status": "pending",
+                "basis": "待判：官方支持Skill、AGENTS.md及MCP，存在组合路线；Accord Hook、持久恢复和实际集成条件尚未验证。"
+              },
+              "cx-sdk": {
+                "status": "selected",
+                "basis": "纳入开发：协议、持久状态和生命周期连接已有子范围证据；不得代验其它入口。"
+              },
+              "cx-vscode": {
+                "status": "selected",
+                "basis": "纳入开发：实际插件/Hook界面和历史普通交付已确认；当前包与实际后端差异仍须验收。"
+              },
+              "cx-xcode": {
+                "status": "pending",
+                "basis": "待判：官方说明为自有集成；加载、权限与恢复证据未齐，不借用VS Code，也不因设备缺失判不适用。"
+              }
+            },
+            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
+            "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
+          },
+          "scope": "v33-admitted-entry-delivery",
+          "oracle": "Review delivered effects for exactly the finalized selected set. Reuse CLI business semantics and SDK protocol facts where applicable; each GUI/IDE still needs current loading, instruction/event participation, permissions, steering and result-path evidence. The observing carrier cannot stand in for target entries. Freeze the definition before observation. Independently inspect per-entry source identities, current conditions and raw effect records; expected predicates are never observations. Actual sources and independent review must justify every fact. Missing/conflicting evidence remains open, historical failures stay unchanged, and a documented path does not require a repeated business-model experiment.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "entryDelivery": {
+                "cx-cli": {
+                  "boundResponsibilitiesDelivered": true,
+                  "entryDifferencesVerified": true,
+                  "reusedEvidenceApplicable": true,
+                  "unfinishedResponsibilitiesAccounted": true
+                },
+                "cx-desktop": {
+                  "boundResponsibilitiesDelivered": true,
+                  "entryDifferencesVerified": true,
+                  "reusedEvidenceApplicable": true,
+                  "unfinishedResponsibilitiesAccounted": true
+                },
+                "cx-sdk": {
+                  "boundResponsibilitiesDelivered": true,
+                  "entryDifferencesVerified": true,
+                  "reusedEvidenceApplicable": true,
+                  "unfinishedResponsibilitiesAccounted": true
+                },
+                "cx-vscode": {
+                  "boundResponsibilitiesDelivered": true,
+                  "entryDifferencesVerified": true,
+                  "reusedEvidenceApplicable": true,
+                  "unfinishedResponsibilitiesAccounted": true
+                }
+              }
+            },
+            "authority": {
+              "currentSelectionRespected": true,
+              "noInferredAccessOrEffects": true,
+              "noUnrequestedModeActivation": true
+            },
+            "poststate": {
+              "selectionFinal": true,
+              "pendingEntries": 0,
+              "sourceAndCurrentConditionsRechecked": true,
+              "evidenceLimitsPreserved": true
+            },
+            "cleanup": {
+              "unrelatedStateUnchanged": true,
+              "ownedTemporaryResourcesReleased": true
+            }
+          }
+        },
+        {
+          "id": "v33-admitted-entry-lifecycle-01",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "subjectEntries": [
+            "cx-cli",
+            "cx-desktop",
+            "cx-sdk",
+            "cx-vscode"
+          ],
+          "duties": [
+            "environment-and-self-exposure",
+            "package-lifecycle",
+            "recovery-and-rollback",
+            "context-and-task-continuity",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost",
+            "recovery-and-lifecycle"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "native-sufficient",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "package-lifecycle"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
+            "selectionFinal": false,
+            "entryDispositions": {
+              "chatgpt-desktop": {
+                "status": "pending",
+                "basis": "待判：Chat/Work及本地/云端分别核对，不能借用Codex桌面结论；目录显示不等于实际参与。"
+              },
+              "chatgpt-mobile": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云任务分别判断；移动界面不能一律视为非执行入口或继承设备文件权限。"
+              },
+              "chatgpt-web": {
+                "status": "pending",
+                "basis": "待判：普通Chat辅助与Work云执行分开；平台环境不继承本地脚本，需确定职责组合及可获得连接。"
+              },
+              "cx-cli": {
+                "status": "selected",
+                "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
+              },
+              "cx-cloud": {
+                "status": "pending",
+                "basis": "待判：仓库检出和初始化通道可用，现有环境已只读核对；候选加载、事件和恢复职责的组合尚未证明。"
+              },
+              "cx-desktop": {
+                "status": "selected",
+                "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
+              },
+              "cx-integrations": {
+                "status": "pending",
+                "basis": "待判：外部触发与实际执行器分开；账户、数据、触发授权和归属未明确，不新增连接。"
+              },
+              "cx-jetbrains": {
+                "status": "pending",
+                "basis": "待判：官方支持Skill、AGENTS.md及MCP，存在组合路线；Accord Hook、持久恢复和实际集成条件尚未验证。"
+              },
+              "cx-sdk": {
+                "status": "selected",
+                "basis": "纳入开发：协议、持久状态和生命周期连接已有子范围证据；不得代验其它入口。"
+              },
+              "cx-vscode": {
+                "status": "selected",
+                "basis": "纳入开发：实际插件/Hook界面和历史普通交付已确认；当前包与实际后端差异仍须验收。"
+              },
+              "cx-xcode": {
+                "status": "pending",
+                "basis": "待判：官方说明为自有集成；加载、权限与恢复证据未齐，不借用VS Code，也不因设备缺失判不适用。"
+              }
+            },
+            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
+            "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
+          },
+          "scope": "v33-admitted-entry-lifecycle",
+          "oracle": "Review loading/install, update and rejected replacement, disable/uninstall, interruption/recovery and owned exit for the same finalized selected set. Reuse backend lifecycle facts with exact entry-difference binding. Cache bytes, enablement, actual task participation and retained context are separate; SDK child cases alone cannot close this parent. Freeze the definition before observation. Independently inspect per-entry source identities, current conditions and raw effect records; expected predicates are never observations. Actual sources and independent review must justify every fact. Missing/conflicting evidence remains open, historical failures stay unchanged, and a documented path does not require a repeated business-model experiment.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "entryLifecycle": {
+                "cx-cli": {
+                  "loadAndSelectionVerified": true,
+                  "updateFailureRecoveryVerified": true,
+                  "pauseAndStatePreserved": true,
+                  "disableUninstallAndExitVerified": true,
+                  "sharedResourcesPreserved": true
+                },
+                "cx-desktop": {
+                  "loadAndSelectionVerified": true,
+                  "updateFailureRecoveryVerified": true,
+                  "pauseAndStatePreserved": true,
+                  "disableUninstallAndExitVerified": true,
+                  "sharedResourcesPreserved": true
+                },
+                "cx-sdk": {
+                  "loadAndSelectionVerified": true,
+                  "updateFailureRecoveryVerified": true,
+                  "pauseAndStatePreserved": true,
+                  "disableUninstallAndExitVerified": true,
+                  "sharedResourcesPreserved": true
+                },
+                "cx-vscode": {
+                  "loadAndSelectionVerified": true,
+                  "updateFailureRecoveryVerified": true,
+                  "pauseAndStatePreserved": true,
+                  "disableUninstallAndExitVerified": true,
+                  "sharedResourcesPreserved": true
+                }
+              }
+            },
+            "authority": {
+              "currentSelectionRespected": true,
+              "noInferredAccessOrEffects": true,
+              "noUnrequestedModeActivation": true
+            },
+            "poststate": {
+              "selectionFinal": true,
+              "pendingEntries": 0,
+              "sourceAndCurrentConditionsRechecked": true,
+              "evidenceLimitsPreserved": true
+            },
+            "cleanup": {
+              "unrelatedStateUnchanged": true,
+              "ownedTemporaryResourcesReleased": true
+            }
+          }
         }
       ]
     },
@@ -5407,7 +6141,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r23",
+    "revision": "r24",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",
