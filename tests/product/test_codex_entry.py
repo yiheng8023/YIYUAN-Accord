@@ -190,6 +190,99 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(calls.call_args_list[1].args[0][-1], "--version")
         return entry.load_manifest(args.evidence)
 
+    def prepared_persistent(self, root):
+        package = root / "package"
+        (package / "runtime").mkdir(parents=True)
+        (package / "runtime/task-checkpoint.cjs").write_text("// fixture", encoding="utf-8")
+        args = argparse.Namespace(
+            package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
+            codex=PYTHON, node=PYTHON, model="explicit-offline-model", reasoning="high",
+            timeout=600, turn_timeout=180, recovery_timeout=20, windows_sandbox="elevated")
+        case_path = SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
+        help_exec = subprocess.CompletedProcess([], 0, b"--dangerously-bypass-hook-trust --sandbox --output-last-message", b"")
+        help_resume = subprocess.CompletedProcess([], 0, b"--json --output-last-message --model", b"")
+        version = subprocess.CompletedProcess([], 0, b"codex-cli fixture", b"")
+        with patch.object(entry.subprocess, "run", side_effect=[help_exec, help_resume, version]):
+            entry.prepare(args, persistent_case=entry.load_persistent_case(case_path))
+        return entry.load_manifest(args.evidence)
+
+    def test_persistent_cli_preparation_uses_normal_config_and_exact_native_resume(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            initial = manifest["initialCommand"]
+            resumed = entry.build_command(manifest, stage=1, thread_id="native-thread")
+            for command in (initial, resumed):
+                self.assertNotIn("--ephemeral", command)
+                self.assertNotIn("--ignore-user-config", command)
+                self.assertEqual(command[command.index("-m") + 1], "explicit-offline-model")
+                self.assertIn('sandbox_mode="workspace-write"', command)
+                self.assertIn('model_reasoning_effort="high"', command)
+            self.assertEqual(resumed[-2:], ["native-thread", "-"])
+            self.assertEqual(manifest["timeoutSeconds"], 600)
+            self.assertEqual(manifest["turnTimeoutSeconds"], 180)
+            self.assertEqual(manifest["recoveryTimeoutSeconds"], 20)
+            self.assertEqual(len(manifest["prompts"]), 5)
+            self.assertEqual(json.loads((Path(manifest["workspace"]) / "source.json").read_text(encoding="utf-8"))["venue"], "A厅")
+
+    def test_persistent_cli_receipt_requires_same_thread_completed_terminal_and_final(self):
+        events = [
+            {"type": "thread.started", "thread_id": "native-thread"},
+            {"type": "turn.started"},
+            {"type": "item.completed", "item": {"type": "agent_message", "text": "done"}},
+            {"type": "turn.completed", "usage": {"output_tokens": 4}},
+        ]
+        encode = lambda rows: "\n".join(map(json.dumps, rows))
+        self.assertTrue(entry.persistent_cli_turn_receipt(encode(events), "done", expected_thread_id="native-thread")["valid"])
+        for name, changed, final, identity in (
+            ("foreign-thread", events, "done", "other"),
+            ("failed-terminal", events[:-1] + [{"type": "turn.failed"}], "done", "native-thread"),
+            ("missing-final", events, "", "native-thread"),
+            ("stale-final", events, "older answer", "native-thread"),
+            ("duplicate-terminal", events + [events[-1]], "done", "native-thread"),
+        ):
+            with self.subTest(name=name):
+                self.assertFalse(entry.persistent_cli_turn_receipt(encode(changed), final, expected_thread_id=identity)["valid"])
+
+    def test_persistent_case_rejects_workspace_escape_names(self):
+        source = SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
+        case = json.loads(source.read_text(encoding="utf-8"))
+        for name in ("../outside.txt", "sub/file.txt", str(Path(source).resolve())):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                changed = json.loads(json.dumps(case))
+                changed["inputs"][name] = "escape"
+                path = Path(tmp) / "case.json"
+                path.write_text(json.dumps(changed), encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "unsupported persistent case"):
+                    entry.load_persistent_case(path)
+
+    def test_persistent_cli_stops_after_first_failed_stage_and_reports_known_source_identity(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            first = {"valid": True, "threadId": "native-thread"}
+            failed = {"valid": False, "threadId": "native-thread"}
+            def execute(manifest, stage, *_):
+                if stage == 0:
+                    (Path(manifest["workspace"]) / "plan.md").write_text("Pending approval.", encoding="utf-8")
+                return first if stage == 0 else failed
+            with patch.object(entry, "_run_persistent_stage", side_effect=execute) as stages:
+                result = entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            self.assertEqual(stages.call_count, 2)
+            self.assertFalse(result["caseComplete"])
+            self.assertEqual(result["completedStages"], 1)
+            self.assertEqual(result["threadId"], "native-thread")
+            self.assertTrue(result["sourceThreadIdKnown"])
+            self.assertFalse(result["nativeResumeSucceeded"])
+
+    def test_persistent_cli_stops_before_agreement_when_required_plan_is_missing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            with patch.object(entry, "_run_persistent_stage", return_value={
+                    "valid": True, "threadId": "native-thread"}) as stages:
+                result = entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            self.assertEqual(stages.call_count, 1)
+            self.assertFalse(result["caseComplete"])
+            self.assertIn("required file missing: plan.md", result["stages"][0]["fileObservation"]["violations"])
+
     def app_case(self):
         return {"prompts": ["Pause delivery; explain only.", "Resume: deliver id,status,units CSV and summary."],
                 "expected": {"details": [["id", "status", "units"], ["A", "ready", "60"], ["B", "ready", "80"]],

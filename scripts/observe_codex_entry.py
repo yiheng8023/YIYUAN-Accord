@@ -194,7 +194,7 @@ def load_manifest(evidence):
     if manifest["evidence"] != str(evidence) or manifest["schema"] != "accord-codex-entry/v1":
         raise ValueError("manifest binding mismatch")
     protocol = manifest.get("entryProtocol", "exec")
-    if protocol not in ("exec", "app-server"):
+    if protocol not in ("exec", "exec-resume", "app-server"):
         raise ValueError("unsupported entry protocol")
     if protocol == "app-server" and ("command" in manifest or "promptSha256" in manifest
                                      or manifest.get("tracePath") != "native/stdout.jsonl"):
@@ -205,17 +205,43 @@ def load_manifest(evidence):
     return manifest
 
 
-def build_command(manifest):
-    if manifest.get("entryProtocol", "exec") != "exec":
-        raise ValueError("CLI command cannot represent an App Server case")
+def _hook_configuration(manifest):
     hooks = []
     for event in EVENTS:
         parts = [manifest["python"], "-B", manifest["runner"], "hook", "--evidence", manifest["evidence"], "--event", event]
-        # No shell metacharacters or untrusted prompt text are interpolated here.
         command = subprocess.list2cmdline(parts)
         timeout = 3 if event in ("SessionEnd", "Interrupt") else 10
         hooks.append(event + "=[{hooks=[{type=\"command\",command=" + json.dumps(command)
                      + ",timeout=" + str(timeout) + "}]}]")
+    return "hooks={" + ",".join(hooks) + "}"
+
+
+def build_command(manifest, *, stage=0, thread_id=None):
+    protocol = manifest.get("entryProtocol", "exec")
+    if protocol not in ("exec", "exec-resume"):
+        raise ValueError("CLI command cannot represent an App Server case")
+    hooks = _hook_configuration(manifest)
+    if protocol == "exec-resume":
+        if type(stage) is not int or not 0 <= stage < len(manifest["prompts"]):
+            raise ValueError("invalid persistent stage")
+        output = str(Path(manifest["evidence"]) / f"last-message-{stage + 1}.txt")
+        config = ["--enable", "hooks", "-m", manifest["model"],
+                  "-c", "approval_policy=\"never\"",
+                  "-c", "sandbox_mode=\"workspace-write\"",
+                  "-c", "model_reasoning_effort=" + json.dumps(manifest["reasoning"]),
+                  "-c", "windows.sandbox=" + json.dumps(manifest["windowsSandbox"]),
+                  "-c", hooks]
+        if stage == 0:
+            if thread_id is not None:
+                raise ValueError("initial persistent stage cannot resume a thread")
+            return [manifest["codex"], "exec", "--skip-git-repo-check", "--sandbox", "workspace-write",
+                    "--json", "--color", "never", "--output-last-message", output,
+                    "--dangerously-bypass-hook-trust", "-C", manifest["workspace"],
+                    "--add-dir", str(Path(manifest["evidence"]) / "state"), *config, "-"]
+        if not isinstance(thread_id, str) or not thread_id:
+            raise ValueError("persistent resume requires the observed thread id")
+        return [manifest["codex"], "exec", "resume", "--json", "--output-last-message", output,
+                "--dangerously-bypass-hook-trust", "--skip-git-repo-check", *config, thread_id, "-"]
     return [manifest["codex"], "exec", "--ignore-user-config", "--disable", "plugins", "--disable", "apps", "--enable", "hooks",
             "--ephemeral", "--skip-git-repo-check", "--sandbox", "workspace-write", "--json", "--color", "never",
             "--output-last-message", str(Path(manifest["evidence"]) / "last-message.txt"),
@@ -223,15 +249,35 @@ def build_command(manifest):
             "--add-dir", str(Path(manifest["evidence"]) / "state"),
             "-c", "approval_policy=\"never\"", "-c", "model_reasoning_effort=" + json.dumps(manifest["reasoning"]),
             "-c", "windows.sandbox=" + json.dumps(manifest["windowsSandbox"]),
-            "-c", "hooks={" + ",".join(hooks) + "}", "-"]
+            "-c", hooks, "-"]
 
 
-def prepare(args, *, app_server_case=None):
+def load_persistent_case(path):
+    path = Path(path).resolve()
+    raw = read_regular(path)
+    case = json.loads(raw)
+    names = list(case.get("inputs", {})) + list(case.get("deliverables", []))
+    if (case.get("schema") != "yiyuan-accord-coordination-case/v1"
+            or not isinstance(case.get("inputs"), dict) or not case["inputs"]
+            or not isinstance(case.get("deliverables"), list) or not case["deliverables"]
+            or any(not isinstance(name, str) or not name or Path(name).name != name
+                   or any(c in name for c in "/\\:") or name in (".", "..") for name in names)
+            or any(not isinstance(value, (str, dict, list)) for value in case["inputs"].values())
+            or not isinstance(case.get("stages"), list) or not 2 <= len(case["stages"]) <= 16
+            or any(not isinstance(stage.get("prompt"), str) or not stage["prompt"].strip()
+                   for stage in case["stages"])):
+        raise ValueError("unsupported persistent case")
+    return path, raw, case
+
+
+def prepare(args, *, app_server_case=None, persistent_case=None):
     """Prepare CLI execution, or explicitly bind a caller-owned App Server case.
 
     App Server lifecycle/dispatch remains caller-owned; preparing its fixtures
     must not fabricate a CLI command or silently supply a different prompt.
     """
+    if app_server_case is not None and persistent_case is not None:
+        raise ValueError("choose one App Server or persistent CLI case")
     if app_server_case is not None:
         if (not isinstance(app_server_case, dict) or set(app_server_case) != {"prompts", "expected", "limits"}
                 or not isinstance(app_server_case["prompts"], list) or not 1 <= len(app_server_case["prompts"]) <= 16
@@ -245,6 +291,13 @@ def prepare(args, *, app_server_case=None):
         app_server_case = json.loads(json.dumps(app_server_case, allow_nan=False))
         if "usageCaps" in app_server_case["limits"]:
             _usage_caps(app_server_case["limits"]["usageCaps"])
+    if persistent_case is not None:
+        case_path, case_bytes, case = persistent_case
+        turn_timeout, recovery_timeout = args.turn_timeout, args.recovery_timeout
+        if (type(turn_timeout) is not int or type(recovery_timeout) is not int
+                or not 1 <= turn_timeout <= args.timeout <= 3600
+                or not 1 <= recovery_timeout <= 300):
+            raise ValueError("persistent case requires per-instance work, turn and recovery deadlines")
     evidence, workspace = Path(args.evidence).absolute(), Path(args.workspace).absolute()
     package = ordinary_dir(args.package)
     if not args.model.strip() or not args.reasoning.strip():
@@ -259,17 +312,29 @@ def prepare(args, *, app_server_case=None):
     paths = {"codex": Path(args.codex).resolve(), "node": Path(args.node).resolve(),
              "python": Path(sys.executable).resolve(), "runner": Path(__file__).resolve(),
              "runtime": package / "runtime/task-checkpoint.cjs"}
+    if persistent_case is not None:
+        paths["case"] = case_path
+        paths["coordinationObserver"] = Path(__file__).with_name("inspect_coordination.py").resolve()
     if any(any(c in str(p) for c in ('"', '\n', '\r', '%', '!', '`', '$', '&', '|', '<', '>', '^')) for p in (*paths.values(), evidence, workspace)):
         raise ValueError("shell-sensitive path cannot be used in hook command")
     if os.name == "nt" and paths["codex"].suffix.lower() != ".exe":
         raise ValueError("bind the native codex.exe, not an npm shell wrapper")
     hashes = {k: digest(p) for k, p in paths.items()}
-    protocol = "app-server" if app_server_case is not None else "exec"
-    help_run = subprocess.run([str(paths["codex"]), protocol, "--help"], capture_output=True, timeout=15)
+    protocol = "app-server" if app_server_case is not None else "exec-resume" if persistent_case is not None else "exec"
+    help_protocol = "app-server" if protocol == "app-server" else "exec"
+    help_run = subprocess.run([str(paths["codex"]), help_protocol, "--help"], capture_output=True, timeout=15)
     help_text = help_run.stdout.decode("utf-8", "replace")
-    required = ("--ephemeral", "--ignore-user-config", "--dangerously-bypass-hook-trust", "--sandbox", "--output-last-message") if protocol == "exec" else ("app-server",)
+    required = (("--ephemeral", "--ignore-user-config", "--dangerously-bypass-hook-trust", "--sandbox", "--output-last-message")
+                if protocol == "exec" else ("--dangerously-bypass-hook-trust", "--sandbox", "--output-last-message")
+                if protocol == "exec-resume" else ("app-server",))
     if help_run.returncode or any(flag not in help_text for flag in required):
         raise ValueError("native CLI help does not support required boundary")
+    resume_help = None
+    if protocol == "exec-resume":
+        resume_help = subprocess.run([str(paths["codex"]), "exec", "resume", "--help"], capture_output=True, timeout=15)
+        resume_text = resume_help.stdout.decode("utf-8", "replace")
+        if resume_help.returncode or any(flag not in resume_text for flag in ("--json", "--output-last-message", "--model")):
+            raise ValueError("native CLI resume help does not support required boundary")
     version = subprocess.run([str(paths["codex"]), "--version"], capture_output=True, timeout=15)
     if version.returncode:
         raise ValueError("native version probe failed")
@@ -279,15 +344,25 @@ def prepare(args, *, app_server_case=None):
     ordinary_dir(workspace)
     for name in ("hooks", "state", "temp"):
         (evidence / name).mkdir()
-    inputs = {"orders.csv": ORDERS, "order_source.py": SOURCE.encode(), "keep.txt": b"Unrelated original. Preserve exactly.\n",
-              "README.txt": ("订单数据接口是 order_source.py；从本目录运行以下本地命令获取 CSV：\n"
-                             + subprocess.list2cmdline([str(paths["python"]), "-B", "order_source.py"])
-                             + "\norders.csv 为接口原始存档，请保留。\n").encode()}
+    if persistent_case is not None:
+        inputs = {name: ((json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+                         if isinstance(value, (dict, list)) else value.encode("utf-8"))
+                  for name, value in case["inputs"].items()}
+    else:
+        inputs = {"orders.csv": ORDERS, "order_source.py": SOURCE.encode(), "keep.txt": b"Unrelated original. Preserve exactly.\n",
+                  "README.txt": ("订单数据接口是 order_source.py；从本目录运行以下本地命令获取 CSV：\n"
+                                 + subprocess.list2cmdline([str(paths["python"]), "-B", "order_source.py"])
+                                 + "\norders.csv 为接口原始存档，请保留。\n").encode()}
     for name, data in inputs.items():
         (workspace / name).write_bytes(data)
     if protocol == "exec":
         (evidence / "prompt.txt").write_text(PROMPT, encoding="utf-8")
+    elif protocol == "exec-resume":
+        for index, stage in enumerate(case["stages"]):
+            (evidence / f"prompt-{index + 1}.txt").write_text(stage["prompt"], encoding="utf-8")
     (evidence / "native-help.txt").write_bytes(help_run.stdout + help_run.stderr)
+    if resume_help is not None:
+        (evidence / "native-resume-help.txt").write_bytes(resume_help.stdout + resume_help.stderr)
     (evidence / "native-version.txt").write_bytes(version.stdout + version.stderr)
     manifest = {"schema": "accord-codex-entry/v1", "episode": uuid.uuid4().hex,
                 "evidence": str(evidence), "workspace": str(workspace), "package": str(package),
@@ -303,6 +378,21 @@ def prepare(args, *, app_server_case=None):
     if protocol == "exec":
         manifest["promptSha256"] = digest(evidence / "prompt.txt")
         manifest["command"] = build_command(manifest)
+    elif protocol == "exec-resume":
+        manifest.update({"entryProtocol": protocol,
+                         "prompts": [stage["prompt"] for stage in case["stages"]],
+                         "promptSha256s": [digest(evidence / f"prompt-{index + 1}.txt")
+                                           for index in range(len(case["stages"]))],
+                         "deliverables": case["deliverables"],
+                         "caseSha256": hashlib.sha256(case_bytes).hexdigest(),
+                         "turnTimeoutSeconds": turn_timeout,
+                         "recoveryTimeoutSeconds": recovery_timeout,
+                         "limits": {"interaction": "persistent native exec followed by exact-id exec resume",
+                                    "workSeconds": args.timeout, "turnSeconds": turn_timeout,
+                                    "recoverySeconds": recovery_timeout,
+                                    "acceptance": "native execution receipt; business semantics and admission remain separate"},
+                         "initialCommand": build_command({**manifest, "entryProtocol": protocol,
+                                                          "prompts": [stage["prompt"] for stage in case["stages"]]})})
     else:
         manifest.update(app_server_case)
         manifest["entryProtocol"] = "app-server"
@@ -744,6 +834,166 @@ def inspect(evidence):
             "limits": manifest["limits"]}
 
 
+def persistent_cli_turn_receipt(stream, last_message, *, expected_thread_id=None):
+    """Read the native exec JSON terminal for one initial or resumed turn."""
+    result = {"valid": False, "threadId": None, "terminal": None, "finalMessageSha256": None}
+    try:
+        if len(stream.encode("utf-8")) > 32 * 1024 * 1024:
+            return result
+        events = [json.loads(line) for line in stream.splitlines() if line.strip()]
+        starts = [event.get("thread_id") for event in events if event.get("type") == "thread.started"]
+        terminals = [event for event in events if event.get("type") in ("turn.completed", "turn.failed")]
+        messages = [event.get("item", {}).get("text") for event in events
+                    if event.get("type") == "item.completed"
+                    and event.get("item", {}).get("type") == "agent_message"
+                    and isinstance(event.get("item", {}).get("text"), str)
+                    and event["item"]["text"].strip()]
+        if (len(starts) != 1 or not isinstance(starts[0], str) or not starts[0]
+                or expected_thread_id is not None and starts[0] != expected_thread_id
+                or len(terminals) != 1 or terminals[0].get("type") != "turn.completed"
+                or not isinstance(last_message, str) or not last_message.strip()
+                or not messages or messages[-1].rstrip("\r\n") != last_message.rstrip("\r\n")):
+            return result
+        final_message = last_message.rstrip("\r\n")
+        result.update(valid=True, threadId=starts[0], terminal="completed",
+                      finalMessageSha256=hashlib.sha256(final_message.encode("utf-8")).hexdigest())
+    except (ValueError, UnicodeError, AttributeError):
+        pass
+    return result
+
+
+def _run_persistent_stage(manifest, stage, thread_id, env, deadline):
+    evidence = Path(manifest["evidence"])
+    command = build_command(manifest, stage=stage, thread_id=thread_id)
+    prompt_path = evidence / f"prompt-{stage + 1}.txt"
+    stdout_path = evidence / f"stdout-{stage + 1}.jsonl"
+    stderr_path = evidence / f"stderr-{stage + 1}.txt"
+    process, job, samples = None, WindowsJob(), []
+    forced, failure, after = False, None, {"activeProcesses": None}
+    started = time.monotonic()
+    stage_deadline = min(deadline, started + manifest["turnTimeoutSeconds"])
+    try:
+        with prompt_path.open("rb") as stdin, stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+            process = subprocess.Popen(command, cwd=manifest["workspace"], env=env, stdin=stdin,
+                                       stdout=stdout, stderr=stderr,
+                                       creationflags=subprocess.CREATE_NO_WINDOW | 4)
+            job.attach_and_resume(process)
+            while process.poll() is None:
+                samples.append(job.sample())
+                if (time.monotonic() >= stage_deadline
+                        or stdout_path.stat().st_size + stderr_path.stat().st_size > 32 * 1024 * 1024):
+                    forced, failure = True, "turn-time-or-output-limit"
+                    break
+                time.sleep(0.25)
+    except BaseException as error:
+        failure = type(error).__name__ + ": " + str(error)
+    finally:
+        try:
+            before = job.sample()
+            if before["activeProcesses"]:
+                forced = True
+                job.terminate()
+            if process is not None:
+                if process.poll() is None and not before["activeProcesses"]:
+                    forced = True
+                    process.kill()
+                process.wait(timeout=manifest["recoveryTimeoutSeconds"])
+            recovery_deadline = time.monotonic() + manifest["recoveryTimeoutSeconds"]
+            after = job.sample()
+            while after["activeProcesses"] and time.monotonic() < recovery_deadline:
+                time.sleep(0.1)
+                after = job.sample()
+        finally:
+            job.close()
+    try:
+        stream = read_regular(stdout_path, 32 * 1024 * 1024).decode("utf-8")
+        final = read_regular(evidence / f"last-message-{stage + 1}.txt").decode("utf-8")
+        receipt = persistent_cli_turn_receipt(stream, final, expected_thread_id=thread_id)
+    except (OSError, ValueError, UnicodeError):
+        receipt = {"valid": False, "threadId": thread_id, "terminal": None, "finalMessageSha256": None}
+    receipt.update({"stage": stage + 1, "command": command, "exitCode": process.returncode if process else None,
+                    "forced": forced, "failure": failure, "elapsedSeconds": time.monotonic() - started,
+                    "remainingOwnedProcesses": after["activeProcesses"], "samples": samples})
+    receipt["valid"] &= (receipt["exitCode"] == 0 and not forced and failure is None
+                         and receipt["remainingOwnedProcesses"] == 0)
+    return receipt
+
+
+def run_persistent(args):
+    # Reuse the existing case oracle, including pause and original-file protection.
+    project = str(Path(__file__).resolve().parents[1])
+    if project not in sys.path:
+        sys.path.insert(0, project)
+    from scripts.inspect_coordination import inspect_stage, snapshot
+
+    manifest = load_manifest(args.evidence)
+    if manifest.get("entryProtocol") != "exec-resume":
+        raise ValueError("persistent runner requires an exec-resume case")
+    evidence = Path(args.evidence)
+    for key, expected in manifest["sourceHashes"].items():
+        if digest(manifest[key]) != expected:
+            raise ValueError("prepared source changed; prepare a fresh observation: " + key)
+    for index, expected in enumerate(manifest["promptSha256s"]):
+        if digest(evidence / f"prompt-{index + 1}.txt") != expected:
+            raise ValueError("prepared prompt changed")
+    if build_command(manifest) != manifest["initialCommand"]:
+        raise ValueError("prepared initial command changed")
+    for name, expected in manifest["inputs"].items():
+        if digest(Path(manifest["workspace"]) / name) != expected:
+            raise ValueError("prepared input changed")
+    started, deadline = time.monotonic(), time.monotonic() + manifest["timeoutSeconds"]
+    with (evidence / "run-started.json").open("x", encoding="utf-8") as receipt:
+        json.dump({"time": time.time(), "deadlineSeconds": manifest["timeoutSeconds"],
+                   "turnTimeoutSeconds": manifest["turnTimeoutSeconds"],
+                   "recoveryTimeoutSeconds": manifest["recoveryTimeoutSeconds"],
+                   "nativeCliInvocationsAllowed": len(manifest["prompts"])}, receipt)
+    env = dict(os.environ, YIYUAN_ACCORD_TASK_STATE_DIR=str(evidence / "state"),
+               TEMP=str(evidence / "temp"), TMP=str(evidence / "temp"), RUST_LOG="error,codex_exec=info")
+    shared_config = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "config.toml"
+    config_before = shared_config_snapshot(shared_config, manifest["workspace"])
+    fixture = json.loads(read_regular(manifest["case"]))
+    originals = snapshot(manifest["workspace"], fixture["inputs"])
+    save(evidence / "originals.json", originals)
+    thread_id, stages, history = None, [], {}
+    for stage in range(len(manifest["prompts"])):
+        if time.monotonic() >= deadline:
+            break
+        observed = _run_persistent_stage(manifest, stage, thread_id, env, deadline)
+        stage_id = fixture["stages"][stage]["id"]
+        files = inspect_stage(manifest["workspace"], stage_id, originals=originals,
+                              history=history, fixture_path=manifest["case"])
+        retained = evidence / f"stage-{stage + 1}"
+        retained.mkdir()
+        try:
+            for name in files["files"]:
+                (retained / name).write_bytes(read_regular(Path(manifest["workspace"]) / name))
+        except (OSError, ValueError) as error:
+            files["decision"] = "unknown"
+            files["observationErrors"].append(str(error))
+        save(retained / "inspection.json", files)
+        history[stage_id] = files["files"]
+        observed["fileObservation"] = files
+        observed["valid"] &= files["decision"] == "pass"
+        stages.append(observed)
+        thread_id = observed.get("threadId") or thread_id
+        if not observed["valid"]:
+            break
+    config_after = shared_config_snapshot(shared_config, manifest["workspace"])
+    result = {"schema": "accord-codex-persistent-exec/v1", "episode": manifest["episode"],
+              "threadId": thread_id, "stages": stages,
+              "completedStages": sum(bool(stage["valid"]) for stage in stages),
+              "caseComplete": len(stages) == len(manifest["prompts"]) and all(stage["valid"] for stage in stages),
+              "sourceThreadIdKnown": bool(thread_id),
+              "nativeResumeSucceeded": any(stage["valid"] for stage in stages[1:]),
+              "elapsedSeconds": time.monotonic() - started,
+              "sharedConfigObservation": {"before": config_before, "after": config_after,
+                  "unchanged": (config_before["sha256"] == config_after["sha256"]
+                                if config_before["state"] == config_after["state"] == "observed" else None)},
+              "claimLimit": "native persistent execution receipt only; business semantics and formal admission remain independently reviewed"}
+    save(evidence / "result.json", result)
+    return result
+
+
 def run(args):
     manifest = load_manifest(args.evidence)
     if manifest.get("entryProtocol", "exec") != "exec":
@@ -838,6 +1088,9 @@ def main():
     for name in ("package", "evidence", "workspace", "codex", "node", "model", "reasoning"):
         prep.add_argument("--" + name, required=True)
     prep.add_argument("--timeout", type=int, required=True, help="one invocation wall-clock cap, 1..900 seconds")
+    prep.add_argument("--persistent-case", help="existing coordination case to run through native exec/resume")
+    prep.add_argument("--turn-timeout", type=int, help="per-turn cap for a persistent case")
+    prep.add_argument("--recovery-timeout", type=int, help="owned process recovery cap for a persistent case")
     prep.add_argument("--windows-sandbox", choices=("elevated", "unelevated"), required=True,
                       help="existing native backend, independent of workspace-write policy; no setup is performed")
     for name in ("run", "inspect", "hook"):
@@ -850,7 +1103,13 @@ def main():
         parser.error("timeout must be 1..900 seconds")
     if args.action == "hook":
         raise SystemExit(hook(args))
-    result = prepare(args) if args.action == "prepare" else run(args) if args.action == "run" else inspect(args.evidence)
+    if args.action == "prepare":
+        case = load_persistent_case(args.persistent_case) if args.persistent_case else None
+        result = prepare(args, persistent_case=case)
+    elif args.action == "run":
+        result = run_persistent(args) if load_manifest(args.evidence).get("entryProtocol") == "exec-resume" else run(args)
+    else:
+        result = inspect(args.evidence)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
