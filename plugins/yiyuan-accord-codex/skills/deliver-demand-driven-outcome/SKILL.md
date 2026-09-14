@@ -216,12 +216,15 @@ evidence; repeat checks for new changes, failures or unresolved risks, not merel
 to restate a pass. Do not replace necessary source checks with agreement between
 outputs, omit anomaly detection, or reduce required outcomes to fit a budget.
 
-Release attributable task allocations and temporary exposure; verify post-state
-while preserving shared/unknown resources and still-needed effects. Stopping use,
-disabling, uninstalling and retiring differ. Completion grants no permission to
-remove user-owned tools. For uncertain reuse, prefer supported reversible inactive
-states; weigh reuse, expiry and upkeep before authorized retirement. Recheck fit
-and trust after material drift.
+Before cleanup, classify ownership against starting files and current authority.
+Being unused this phase does not establish task-created residue; output-only
+limits constrain new artifacts. Verify every protected original, not just the
+inputs analyzed this phase. Release attributable allocations and temporary
+exposure; verify post-state and preserve shared/unknown resources and needed
+effects. Stopping use, disabling, uninstalling and retiring differ. Completion
+grants no user-tool removal permission. For uncertain reuse, prefer reversible
+inactivity; weigh reuse, expiry and upkeep before authorized retirement. Recheck
+fit and trust after drift.
 
 Before ending, reconcile unfinished responsibilities with the goal and continue
 safe authorized work. Otherwise name the actual decision, wait or execution limit.
