@@ -186,7 +186,7 @@ class DevelopmentContractTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(report["currentHostBehavior"], "unverified")
-        self.assertEqual(report["releaseIntent"], "not-authorized")
+        self.assertEqual(report["releaseIntent"], "conditional-v3.3-release-after-acceptance")
 
     def test_conditional_release_requires_commit_push_and_remaining_evidence(self):
         altered = copy.deepcopy(self.contract)

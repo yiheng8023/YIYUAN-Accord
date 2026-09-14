@@ -1749,4 +1749,8 @@ Root及独立Agent核对dispatch为41字节、east-01/12、west-02/7、south-04/
 
 该链的触发依据是定性风险判断，无原生数值余量；归档请求被用户中止，源停写不能改称源进程卸载或资源回收，尚未证明旧Harness安装机制的因果贡献。此前GT-21预编排、未启用carrier_hook及只读continuation投影仍保持各自原始结论。私有live-owner超累计预算、native-recovery在90秒截止前未final等原失败不改写；有效局部成果仍可在原条件下复用。
 
-当前代码回溯还须纠正另一项旧判断：官方Codex core使用last_token_usage.total_tokens作为最近响应边界的上下文基值，不能与累计total_token_usage一并丢弃；后续新增内容、压缩、轮次或模型变化仍需重新观察。get_context_remaining另按原生压缩/完整窗口的较紧约束计算余量。本机0.154.0的token_budget仍为开发中且关闭，本次没有启用该功能或运行新模型实验；支持该回执的实现不能冒充本机已通过普通入口验收。
+当前代码回溯还须纠正另一项旧判断：官方Codex core的[活动上下文计算](https://github.com/openai/codex/blob/5b1d6560181680f95cde95c14ed042acc02248ed/codex-rs/core/src/context_manager/history.rs#L680-L699)使用last_token_usage.total_tokens作为最近响应边界基值并估计之后增量，不能与累计total_token_usage一并丢弃；后续新增内容、压缩、轮次或模型变化仍需重新观察。[剩余预算计算](https://github.com/openai/codex/blob/5b1d6560181680f95cde95c14ed042acc02248ed/codex-rs/core/src/session/context_window.rs#L52-L120)另取原生压缩/完整窗口的较紧约束；[工具注册](https://github.com/openai/codex/blob/5b1d6560181680f95cde95c14ed042acc02248ed/codex-rs/core/src/tools/spec_plan.rs#L1207-L1209)受TokenBudget开关控制。本机0.154.0的token_budget仍为开发中且关闭，本次没有启用该功能或运行新模型实验；支持该回执的实现不能冒充本机已通过普通入口验收。
+
+本次集成将上下文修正落实到两份运行时及旧测试，并修复“已知余量→未知窗口→已知窗口”复活旧余量的缺陷。持久执行复用现有observe_codex_entry及inspect_coordination：正常exec首轮、同ID的exec resume后续轮次，每轮核对原生终态/最后消息并保存文件及阶段检查，失败停止后续输入。CLI恢复分支仍调用[共同的配置输出](https://github.com/openai/codex/blob/5b1d6560181680f95cde95c14ed042acc02248ed/codex-rs/exec/src/lib.rs#L979-L1103)，JSON处理器由此[输出thread.started](https://github.com/openai/codex/blob/5b1d6560181680f95cde95c14ed042acc02248ed/codex-rs/exec/src/event_processor_with_jsonl_output.rs#L599-L606)；这一协议疑点由源码回答，未新增模型探针。普通CLI隔离案例的场景声明与暂停恢复case同步纠正，结构检查、原生执行、语义评审和正式准入保持区分。
+
+本地验证：原生信号全文件111项通过，随后窗口失效修复的6项定向回归通过；入口/阶段检查39项通过。准入/开发组合120项首轮119项通过，一项仍要求not-authorized的旧断言失败，按最新用户条件发布授权修正后单项通过，不重跑整组。产品与Codex包校验通过；代码/测试预算仅从1640000调至1660000，保留5%余量、138文件及原指令上限。两条实现工作树及其源码副本、零模型预检目录和缓存已回收。本轮没有真实模型实验、插件启用、用户对话归档或正式发布；功能覆盖不由这些本地检查升级。

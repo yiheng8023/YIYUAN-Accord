@@ -272,6 +272,9 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(result["threadId"], "native-thread")
             self.assertTrue(result["sourceThreadIdKnown"])
             self.assertFalse(result["nativeResumeSucceeded"])
+            fresh = entry.inspect(manifest["evidence"])
+            self.assertEqual(fresh["entryProtocol"], "exec-resume")
+            self.assertEqual(fresh["currentFileObservation"]["decision"], "fail")
 
     def test_persistent_cli_stops_before_agreement_when_required_plan_is_missing(self):
         with tempfile.TemporaryDirectory() as tmp:

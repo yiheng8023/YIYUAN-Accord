@@ -322,9 +322,10 @@ not autonomous detection. Prior user rescue remains a failed autonomous result.
 Unknown capacity/efficiency signals require short work spans and early checkpoints;
 that fallback rule is not proof of historical prediction or an optimal margin.
 The helper's `assess-context` keeps `capacityFit` separate from its combined
-`decision`. With valid, current evidence, `capacityFit` compares the sourced
-context and next-work upper bounds plus transfer, recovery and safety reserves
-against the hard native window. It can be `fits` while efficiency remains unknown
+`decision`. A fresh first-party remaining-budget receipt is compared directly
+with the next span and transfer/recovery/safety reserves. Later context changes
+invalidate it. Without that receipt, the sourced context and next-work upper
+bounds plus reserves are compared against the hard native window. It can be `fits` while efficiency remains unknown
 or a stricter evidenced efficiency ceiling still calls for handoff or recovery.
 Invalid assessment evidence, pauses and stale bindings leave it unknown.
 `remainingAfterReserves` continues to use the tighter applicable ceiling.

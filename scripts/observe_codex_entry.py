@@ -1,8 +1,9 @@
 """Prepare/run a bounded Codex CLI observation or prepare an App Server case.
 
-No model is called by prepare or inspect. Run uses the existing CODEX_HOME auth,
-one ephemeral exec, explicit model/effort, workspace-write, and reviewed task-local
-hooks. It does not establish installed-plugin, multi-turn or full resource acceptance.
+No model is called by prepare or inspect. Run uses existing CODEX_HOME auth,
+explicit model/effort, workspace-write and reviewed task-local hooks. The default
+case is ephemeral; a persistent coordination case uses native exec/resume and the
+existing stage oracle. Neither establishes full plugin or resource acceptance.
 Windows Job Objects contain descendants before the suspended CLI starts executing.
 The caller must select an existing Windows sandbox backend explicitly; this runner
 does not initialize/install a sandbox or directly edit shared configuration.
@@ -379,6 +380,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
         manifest["promptSha256"] = digest(evidence / "prompt.txt")
         manifest["command"] = build_command(manifest)
     elif protocol == "exec-resume":
+        manifest.pop("expected")
         manifest.update({"entryProtocol": protocol,
                          "prompts": [stage["prompt"] for stage in case["stages"]],
                          "promptSha256s": [digest(evidence / f"prompt-{index + 1}.txt")
@@ -767,8 +769,29 @@ does not identify a resume. Saved logs are diagnostic, not attestations.
     return result
 
 
+def coordination_observer():
+    project = str(Path(__file__).resolve().parents[1])
+    if project not in sys.path:
+        sys.path.insert(0, project)
+    from scripts import inspect_coordination
+    return inspect_coordination
+
+
 def inspect(evidence):
     manifest = load_manifest(evidence)
+    if manifest.get("entryProtocol") == "exec-resume":
+        evidence = Path(evidence)
+        recorded = json.loads(read_regular(evidence / "result.json"))
+        if not recorded["stages"]:
+            raise ValueError("no persistent stage was observed")
+        stage_id = recorded["stages"][-1]["fileObservation"]["stage"]
+        current = coordination_observer().inspect_stage(
+            manifest["workspace"], stage_id,
+            originals=json.loads(read_regular(evidence / "originals.json")),
+            history=json.loads(read_regular(evidence / "history.json")), fixture_path=manifest["case"])
+        return {"entryProtocol": "exec-resume", "recordedExecution": recorded,
+                "currentFileObservation": current,
+                "claimLimit": "Fresh file check and retained execution receipts; no automatic admission."}
     root, evidence = Path(manifest["workspace"]), Path(evidence)
     unchanged = {}
     for name, expected in manifest["inputs"].items():
@@ -921,10 +944,7 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline):
 
 def run_persistent(args):
     # Reuse the existing case oracle, including pause and original-file protection.
-    project = str(Path(__file__).resolve().parents[1])
-    if project not in sys.path:
-        sys.path.insert(0, project)
-    from scripts.inspect_coordination import inspect_stage, snapshot
+    observer = coordination_observer()
 
     manifest = load_manifest(args.evidence)
     if manifest.get("entryProtocol") != "exec-resume":
@@ -952,7 +972,7 @@ def run_persistent(args):
     shared_config = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "config.toml"
     config_before = shared_config_snapshot(shared_config, manifest["workspace"])
     fixture = json.loads(read_regular(manifest["case"]))
-    originals = snapshot(manifest["workspace"], fixture["inputs"])
+    originals = observer.snapshot(manifest["workspace"], fixture["inputs"])
     save(evidence / "originals.json", originals)
     thread_id, stages, history = None, [], {}
     for stage in range(len(manifest["prompts"])):
@@ -960,8 +980,8 @@ def run_persistent(args):
             break
         observed = _run_persistent_stage(manifest, stage, thread_id, env, deadline)
         stage_id = fixture["stages"][stage]["id"]
-        files = inspect_stage(manifest["workspace"], stage_id, originals=originals,
-                              history=history, fixture_path=manifest["case"])
+        files = observer.inspect_stage(manifest["workspace"], stage_id, originals=originals,
+                                       history=history, fixture_path=manifest["case"])
         retained = evidence / f"stage-{stage + 1}"
         retained.mkdir()
         try:
@@ -972,6 +992,7 @@ def run_persistent(args):
             files["observationErrors"].append(str(error))
         save(retained / "inspection.json", files)
         history[stage_id] = files["files"]
+        save(evidence / "history.json", history)
         observed["fileObservation"] = files
         observed["valid"] &= files["decision"] == "pass"
         stages.append(observed)
