@@ -741,7 +741,10 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(old["status"], "candidate-frozen")
         self.assertEqual(old["authority"]["conditionalRelease"]["decision"],
                          "user-authorized-after-acceptance")
-        self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"], "not-authorized")
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"],
+                         "user-authorized-after-acceptance")
+        self.assertFalse(self.contract["authority"]["conditionalRelease"]["ready"])
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.0")
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})
@@ -762,7 +765,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                 changed = copy.deepcopy(self.contract)
                 changed[section][field] = value
                 self.assertTrue(self.errors(changed))
-        for field, value in (("decision", "user-authorized-after-acceptance"), ("ready", True)):
+        for field, value in (("decision", "automatically-authorized"), ("ready", True)):
             changed = copy.deepcopy(self.contract)
             changed["authority"]["conditionalRelease"][field] = value
             self.assertTrue(self.errors(changed))

@@ -48,7 +48,7 @@ _BASELINE_DUTIES = set(
     "resources-and-cleanup package-lifecycle native-replacement-and-retirement "
     "verification-and-value".split()
 )
-# Bound v3.2 publication conditions, not an immutable global workflow.
+# Retained publication conditions, distinct from the current user's authority.
 _RELEASE_CONDITIONS = {
     "all-in-scope-changes-committed-and-exact-candidate-pushed": "完整改动已提交并推送精确候选",
     "all-required-functional-and-quality-acceptance": "必要功能与质量验收全部成立",
@@ -241,10 +241,11 @@ def development_contract_errors(contract, golden_task_ids):
     if successor:
         granted.difference_update({"conditional-v3.2-release",
                                    "conditional-existing-accord-upgrade-after-v3.2-release"})
-        granted.add("chatgpt-codex-functional-development")
+        granted.update({"chatgpt-codex-functional-development", "conditional-v3.3-release"})
     release = authority.get("conditionalRelease")
     require(isinstance(release, dict) and release.get("target") in (("3.3.0",) if successor else ("3.2.0", "3.2.1"))
-            and release.get("decision") == ("not-authorized" if successor else "user-authorized-after-acceptance")
+            and release.get("decision") in (("not-authorized", "user-authorized-after-acceptance")
+                                            if successor else ("user-authorized-after-acceptance",))
             and release.get("ready") is False
             and _strings(release.get("conditions")) and _text(release.get("rule"))
             and _RELEASE_CONDITIONS.keys() <= set(release["conditions"]),
@@ -261,7 +262,7 @@ def development_contract_errors(contract, golden_task_ids):
         require(contract.get("status") == "in-development"
                 and cycle.get("targetVersion") == "3.3.0"
                 and cycle.get("versionState") == "development-target-not-published",
-                "3.3 development is not a frozen or authorized release")
+                "3.3 development is not a frozen or completed release")
         require(contract.get("previousDevelopmentSnapshot") == PREVIOUS_DEVELOPMENT,
                 "3.2.1 development evidence must retain its immutable identity")
         require(cycle.get("priorityHosts") == ["chatgpt", "codex"]
@@ -559,7 +560,10 @@ def development_contract_errors(contract, golden_task_ids):
             and ceiling.get("currentHostBehavior") == "unverified"
             and ceiling.get("incrementalValue") == "unverified"
             and ceiling.get("candidateEligible") is False
-            and ceiling.get("releaseIntent") == ("not-authorized" if successor else "conditional-v3.2-release-after-acceptance"),
+            and ceiling.get("releaseIntent") == (
+                ("conditional-v3.3-release-after-acceptance"
+                 if isinstance(release, dict) and release.get("decision") == "user-authorized-after-acceptance"
+                 else "not-authorized") if successor else "conditional-v3.2-release-after-acceptance"),
             "source-phase checks cannot establish behavior, value or release eligibility")
     return errors
 
