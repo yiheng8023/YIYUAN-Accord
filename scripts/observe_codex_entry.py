@@ -13,8 +13,8 @@ Evidence and deliverables are retained for review; owned live processes are rele
 The Python prepare API accepts an explicit app_server_case for a caller-owned
 dispatcher; inspect then checks that protocol and its actual input receipts.
 Optional limits.usageCaps names native cumulative token dimensions explicitly.
-Inspection reports those limits without changing them or controlling execution;
-the dispatcher still owns prospective time, cost, interruption and cleanup bounds.
+The persistent CLI runner enforces observed cumulative caps while retaining its
+independent time, output, interruption and cleanup bounds.
 """
 
 import argparse
@@ -875,10 +875,7 @@ def persistent_cli_usage_budget(stream, caps):
     to add to earlier turns. This protects only the prebound observed limits;
     it does not predict future usage, context occupancy, or monetary cost.
     """
-    caps = _usage_caps(caps)
-    result = {"decision": "unknown", "observed": None, "caps": caps, "exceeded": [],
-              "contextOccupancy": None, "monetaryCost": None,
-              "scope": "native reported cumulative thread usage; not per-turn cost or future usage"}
+    result = _usage_from_native_counters(None, caps)
     try:
         if len(stream.encode("utf-8")) > 32 * 1024 * 1024:
             return result
@@ -886,11 +883,23 @@ def persistent_cli_usage_budget(stream, caps):
         terminals = [event for event in terminals if event.get("type") == "turn.completed"]
         if len(terminals) != 1:
             return result
-        usage = terminals[0]["usage"]
-        if not isinstance(usage, dict):
-            return result
+        return _usage_from_native_counters(terminals[0]["usage"], caps)
+    except (ValueError, UnicodeError, AttributeError, KeyError, TypeError):
+        pass
+    return result
+
+
+def _usage_from_native_counters(usage, caps, *, source=None, observed_at=None):
+    """Apply the existing cumulative caps to one native usage counter set."""
+    caps = _usage_caps(caps)
+    result = {"decision": "unknown", "observed": None, "caps": caps, "exceeded": [],
+              "contextOccupancy": None, "monetaryCost": None,
+              "scope": "native reported cumulative thread usage; not per-turn cost or future usage"}
+    if source is not None:
+        result.update(source=source, observedAt=observed_at)
+    try:
         names = ("input_tokens", "cached_input_tokens", "output_tokens")
-        if any(type(usage.get(name)) is not int or usage[name] < 0 for name in names):
+        if not isinstance(usage, dict) or any(type(usage.get(name)) is not int or usage[name] < 0 for name in names):
             return result
         if usage["cached_input_tokens"] > usage["input_tokens"]:
             return result
@@ -899,12 +908,159 @@ def persistent_cli_usage_budget(stream, caps):
                     "outputTokens": usage["output_tokens"]}
         observed["uncachedInputTokens"] = observed["inputTokens"] - observed["cachedInputTokens"]
         observed["totalTokens"] = observed["inputTokens"] + observed["outputTokens"]
+        if "total_tokens" in usage and usage["total_tokens"] != observed["totalTokens"]:
+            return result
         result["observed"] = observed
         result["exceeded"] = sorted(key for key, limit in caps.items() if observed[key] > limit)
         result["decision"] = "over-limit" if result["exceeded"] else "within-observed-limits"
-    except (ValueError, UnicodeError, AttributeError, KeyError, TypeError):
+    except (KeyError, TypeError):
         pass
     return result
+
+
+class _IncrementalLines:
+    """Read appended ordinary-file bytes once, retaining an incomplete final line."""
+
+    def __init__(self, path, *, limit, chunk=256 * 1024):
+        self.path, self.limit, self.chunk = Path(path), limit, chunk
+        self.offset, self.pending, self.unavailable = 0, b"", None
+
+    def read(self):
+        if self.unavailable:
+            return []
+        try:
+            before = self.path.lstat()
+            if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or self.path.is_symlink()
+                    or getattr(before, "st_file_attributes", 0) & 0x400
+                    or before.st_size < self.offset or before.st_size > self.limit):
+                raise ValueError("not a bounded ordinary incremental source")
+            with self.path.open("rb") as stream:
+                opened = os.fstat(stream.fileno())
+                if opened.st_ino != before.st_ino:
+                    raise ValueError("incremental source changed")
+                stream.seek(self.offset)
+                data = stream.read(min(self.chunk, before.st_size - self.offset))
+            self.offset += len(data)
+            data = self.pending + data
+            lines = data.split(b"\n")
+            self.pending = lines.pop()
+            if len(self.pending) > self.chunk:
+                raise ValueError("oversized incomplete native record")
+            return [line.rstrip(b"\r") for line in lines]
+        except (OSError, ValueError) as error:
+            self.unavailable = type(error).__name__
+            return []
+
+
+def _rust_string(value):
+    return json.loads('"' + value + '"')
+
+
+def _session_configuration(lines):
+    for raw in lines:
+        try:
+            line = raw.decode("utf-8")
+        except UnicodeError:
+            continue
+        if "Codex initialized with event: SessionConfiguredEvent" not in line:
+            continue
+        identity = re.search(r"session_id: SessionId \{ uuid: ([0-9a-f-]+) \}", line)
+        cwd = re.search(r'cwd: AbsolutePathBuf\("((?:[^"\\]|\\.)*)"\)', line)
+        rollout = re.search(r'rollout_path: Some\("((?:[^"\\]|\\.)*)"\)', line)
+        try:
+            if identity and cwd and rollout:
+                return {"threadId": identity.group(1), "cwd": _rust_string(cwd.group(1)),
+                        "rolloutPath": _rust_string(rollout.group(1))}
+        except (ValueError, UnicodeError):
+            return None
+    return None
+
+
+def _stdout_thread(lines):
+    for raw in lines:
+        try:
+            event = json.loads(raw)
+            if event.get("type") == "thread.started" and isinstance(event.get("thread_id"), str):
+                return event["thread_id"]
+        except (ValueError, UnicodeError, AttributeError):
+            continue
+    return None
+
+
+def _ordinary_rollout(path, sessions_root):
+    root = ordinary_dir(sessions_root)
+    candidate = Path(path).absolute()
+    try:
+        relative = candidate.relative_to(root)
+    except ValueError as error:
+        raise ValueError("native rollout is outside the sessions root") from error
+    current = root
+    for part in relative.parts[:-1]:
+        current /= part
+        info = current.lstat()
+        if (not stat.S_ISDIR(info.st_mode) or current.is_symlink()
+                or getattr(info, "st_file_attributes", 0) & 0x400):
+            raise ValueError("native rollout parent is not ordinary")
+    info = candidate.lstat()
+    if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or candidate.is_symlink()
+            or getattr(info, "st_file_attributes", 0) & 0x400):
+        raise ValueError("native rollout is not an ordinary file")
+    return candidate
+
+
+class NativeRolloutUsage:
+    """Task-bound incremental reader for the native persisted usage stream."""
+
+    def __init__(self, path, *, sessions_root, thread_id, cwd, caps):
+        self.path = _ordinary_rollout(path, sessions_root)
+        self.thread_id, self.cwd, self.caps = thread_id, os.path.normcase(os.path.abspath(cwd)), _usage_caps(caps)
+        self.lines = _IncrementalLines(self.path, limit=32 * 1024 * 1024, chunk=1024 * 1024)
+        self.meta_bound, self.last_counters, self.last_ordinal = False, None, -1
+        self.result = _usage_from_native_counters(None, self.caps,
+            source={"kind": "native-rollout-token-count", "path": str(self.path)}, observed_at=None)
+
+    def matches(self, configuration):
+        return (configuration["threadId"] == self.thread_id
+                and os.path.normcase(os.path.abspath(configuration["cwd"])) == self.cwd
+                and Path(configuration["rolloutPath"]).absolute() == self.path)
+
+    def poll(self):
+        if self.result["decision"] == "over-limit":
+            return dict(self.result)
+        for raw in self.lines.read():
+            try:
+                event = json.loads(raw)
+                if not self.meta_bound:
+                    payload = event["payload"]
+                    if (event.get("type") != "session_meta"
+                            or payload.get("id", payload.get("session_id")) != self.thread_id
+                            or os.path.normcase(os.path.abspath(payload["cwd"])) != self.cwd):
+                        raise ValueError("native rollout task binding mismatch")
+                    self.meta_bound = True
+                if event.get("type") != "event_msg" or event.get("payload", {}).get("type") != "token_count":
+                    continue
+                ordinal = event.get("ordinal")
+                usage = event["payload"]["info"]["total_token_usage"]
+                checked = _usage_from_native_counters(usage, self.caps,
+                    source={"kind": "native-rollout-token-count", "path": str(self.path),
+                            "ordinal": ordinal}, observed_at=event.get("timestamp"))
+                if (type(ordinal) is not int or ordinal <= self.last_ordinal
+                        or checked["decision"] == "unknown"
+                        or self.last_counters is not None
+                        and any(checked["observed"][key] < self.last_counters[key] for key in self.last_counters)):
+                    raise ValueError("invalid native cumulative usage record")
+                self.last_ordinal, self.last_counters, self.result = ordinal, checked["observed"], checked
+            except (KeyError, TypeError, ValueError, UnicodeError, AttributeError) as error:
+                if self.result["decision"] != "over-limit":
+                    self.result = _usage_from_native_counters(None, self.caps,
+                        source={"kind": "native-rollout-token-count", "path": str(self.path)}, observed_at=None)
+                    self.result["unavailableReason"] = type(error).__name__
+                self.lines.unavailable = type(error).__name__
+                break
+        if self.lines.unavailable and self.result["decision"] != "over-limit":
+            self.result["decision"], self.result["observed"], self.result["observedAt"] = "unknown", None, None
+            self.result["unavailableReason"] = self.lines.unavailable
+        return dict(self.result)
 
 
 def persistent_cli_turn_receipt(stream, last_message, *, expected_thread_id=None, usage_caps=None):
@@ -938,13 +1094,17 @@ def persistent_cli_turn_receipt(stream, last_message, *, expected_thread_id=None
     return result
 
 
-def _run_persistent_stage(manifest, stage, thread_id, env, deadline):
+def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage=None):
     evidence = Path(manifest["evidence"])
     command = build_command(manifest, stage=stage, thread_id=thread_id)
     prompt_path = evidence / f"prompt-{stage + 1}.txt"
     stdout_path = evidence / f"stdout-{stage + 1}.jsonl"
     stderr_path = evidence / f"stderr-{stage + 1}.txt"
     process, job, samples = None, WindowsJob(), []
+    stdout_lines = _IncrementalLines(stdout_path, limit=32 * 1024 * 1024)
+    stderr_lines = _IncrementalLines(stderr_path, limit=32 * 1024 * 1024)
+    configured, started_thread = None, None
+    live_usage = None
     forced, failure, after = False, None, {"activeProcesses": None}
     started = time.monotonic()
     stage_deadline = min(deadline, started + manifest["turnTimeoutSeconds"])
@@ -956,6 +1116,33 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline):
             job.attach_and_resume(process)
             while process.poll() is None:
                 samples.append(job.sample())
+                configured = configured or _session_configuration(stderr_lines.read())
+                started_thread = started_thread or _stdout_thread(stdout_lines.read())
+                if configured and started_thread:
+                    if (configured["threadId"] != started_thread
+                            or thread_id is not None and started_thread != thread_id
+                            or os.path.normcase(os.path.abspath(configured["cwd"]))
+                               != os.path.normcase(os.path.abspath(manifest["workspace"]))):
+                        failure = "native-rollout-binding-mismatch"
+                        break
+                    if native_usage is not None and "observer" not in native_usage:
+                        try:
+                            sessions = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "sessions"
+                            native_usage["observer"] = NativeRolloutUsage(
+                                configured["rolloutPath"], sessions_root=sessions,
+                                thread_id=started_thread, cwd=manifest["workspace"],
+                                caps=manifest["limits"]["usageCaps"])
+                        except (OSError, ValueError):
+                            native_usage["unavailable"] = "native-rollout-unavailable"
+                    observer = native_usage.get("observer") if native_usage is not None else None
+                    if observer is not None:
+                        if not observer.matches(configured):
+                            failure = "native-rollout-binding-mismatch"
+                            break
+                        live_usage = observer.poll()
+                        if live_usage["decision"] == "over-limit":
+                            failure = "usage-limit"
+                            break
                 if (time.monotonic() >= stage_deadline
                         or stdout_path.stat().st_size + stderr_path.stat().st_size > 32 * 1024 * 1024):
                     forced, failure = True, "turn-time-or-output-limit"
@@ -1003,6 +1190,18 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline):
     except (OSError, ValueError, UnicodeError):
         receipt = {"valid": False, "threadId": thread_id, "terminal": None,
                    "finalMessageSha256": None, "usageObservation": None}
+    if native_usage is not None:
+        observer = native_usage.get("observer")
+        if observer is not None:
+            live_usage = observer.poll()
+        elif live_usage is None:
+            live_usage = _usage_from_native_counters(None, manifest["limits"]["usageCaps"],
+                source={"kind": "native-rollout-token-count", "path": None}, observed_at=None)
+            live_usage["unavailableReason"] = native_usage.get("unavailable", "native-rollout-not-bound")
+        receipt["runningUsageObservation"] = live_usage
+        if (receipt.get("usageObservation") is None
+                or receipt["usageObservation"].get("decision") == "unknown"):
+            receipt["usageObservation"] = live_usage
     receipt.update({"stage": stage + 1, "command": command, "exitCode": process.returncode if process else None,
                     "forced": forced, "failure": failure, "elapsedSeconds": time.monotonic() - started,
                     "remainingOwnedProcesses": after["activeProcesses"], "samples": samples})
@@ -1043,11 +1242,11 @@ def run_persistent(args):
     fixture = json.loads(read_regular(manifest["case"]))
     originals = observer.snapshot(manifest["workspace"], fixture["inputs"])
     save(evidence / "originals.json", originals)
-    thread_id, stages, history = None, [], {}
+    thread_id, stages, history, native_usage = None, [], {}, {}
     for stage in range(len(manifest["prompts"])):
         if time.monotonic() >= deadline:
             break
-        observed = _run_persistent_stage(manifest, stage, thread_id, env, deadline)
+        observed = _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage)
         stage_id = fixture["stages"][stage]["id"]
         files = observer.inspect_stage(manifest["workspace"], stage_id, originals=originals,
                                        history=history, fixture_path=manifest["case"])
