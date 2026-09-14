@@ -107,6 +107,7 @@
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
       "product/acceptance.json",
       "product/cases/coordination-v3.3.json",
+      "product/cases/release-readiness-v3.3.json",
       "product/constitution.json",
       "product/development.json",
       "product/program.json",
@@ -148,9 +149,9 @@
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 1800000,
-      "maxTrackedFiles": 143,
+      "maxTrackedFiles": 144,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The public lifecycle entry replaces private execution scripts. The native-context adapter adds one implementation, its distribution copy and focused tests to connect existing Hook metadata to existing budget assessment; it adds no watcher, model call or handoff executor. Allow 143 tracked files and a 1800000 product-code/test ceiling with five-percent reserve, retaining the primary-instruction ceiling. This metric excludes some maintainer scripts and does not measure product value. The distribution now contains thirteen files; changed package evidence must be rebound by affected scope."
+      "rationale": "The public lifecycle entry replaces private execution scripts. The native-context adapter connects existing Hook metadata to existing budget assessment without a watcher or handoff executor. One additional recorded release-readiness case reuses persistent native transport for ordinary delivery and later scope correction; it is not a new scheduler or another full historical episode. Allow 144 tracked files and a 1800000 product-code/test ceiling with five-percent reserve, retaining the primary-instruction ceiling. This metric excludes some maintainer scripts and does not measure product value. The distribution remains thirteen files; changed execution sources and package evidence are checked by affected scope."
     }
   },
   "source": {
