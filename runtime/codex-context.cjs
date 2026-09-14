@@ -81,6 +81,11 @@ function completeLines(buffer, baseOffset, dropLeadingPartial) {
   return rows;
 }
 
+function hasUnterminatedRecord(buffer) {
+  const lastNewline = buffer.lastIndexOf(0x0a);
+  return buffer.subarray(lastNewline + 1).toString('utf8').trim().length > 0;
+}
+
 function parseRow(row) {
   try {
     return JSON.parse(row.bytes.toString('utf8'));
@@ -154,6 +159,17 @@ function observeNativeTranscript(binding, options = {}) {
   const identity = statIdentity(before);
   if (canonical(suppliedIdentity) !== canonical(identity)) return empty('transcript-changed-before-read');
   if (canonical(identity) !== canonical(statIdentity(after))) return empty('transcript-changed-during-read');
+  try {
+    const supplied = path.resolve(binding.transcriptPath);
+    const finalPathStat = fs.lstatSync(supplied, {bigint: true});
+    if (finalPathStat.isSymbolicLink() || !finalPathStat.isFile() ||
+        canonical(statIdentity(finalPathStat)) !== canonical(identity) ||
+        !samePath(fs.realpathSync(supplied), transcriptPath)) {
+      return empty('transcript-path-changed-after-read');
+    }
+  } catch (_) {
+    return empty('transcript-path-changed-after-read');
+  }
 
   const headRows = completeLines(head, 0, false);
   if (headRows.length === 0) return empty('session-meta-unavailable');
@@ -164,6 +180,7 @@ function observeNativeTranscript(binding, options = {}) {
   }
   if (!samePath(meta.cwd, binding.cwd)) return empty('session-cwd-mismatch');
 
+  if (hasUnterminatedRecord(tail)) return empty('unterminated-tail-record');
   const tailRows = completeLines(tail, tailOffset, tailOffset > 0);
   if (tailRows.length === 0) return empty('bounded-tail-unavailable');
   let currentTurn = null;
@@ -247,7 +264,8 @@ function observeNativeTranscript(binding, options = {}) {
     hostVersion: meta.cli_version,
     model: binding.model,
     contextGeneration: sha({threadId: meta.id, turnId: binding.turnId, hostVersion: meta.cli_version,
-      model: binding.model, turnContextOffset: targetContext.offset, generationEvents}),
+      model: binding.model, sourceIdentity: {dev: identity.dev, ino: identity.ino},
+      windowTokens: latestToken.window, turnContextOffset: targetContext.offset, generationEvents}),
   };
   const sourceRef = `codex-rollout:${relative.split(path.sep).join('/')}#byte=${latestToken.offset}`;
   const observationId = sha({conditions, identity, latestToken, sourceRef});

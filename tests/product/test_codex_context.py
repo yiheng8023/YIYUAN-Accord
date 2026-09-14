@@ -125,11 +125,16 @@ class CodexContextTests(unittest.TestCase):
         reroute = self.line({"type": "event_msg", "payload": {
             "type": "model_rerouted", "to_model": "gpt-5.6-terra"}})
 
+        self.write(self.meta(), self.context(), self.usage())
+        before = self.observe()
         self.write(self.meta(), self.context(), self.usage(), compact)
         self.assertEqual(self.observe()["reason"], "compaction")
         self.write(self.meta(), self.context(), self.usage(), compact,
                    self.usage(last=1000, cumulative=51000))
-        self.assertEqual(self.observe()["state"], "observed")
+        after = self.observe()
+        self.assertEqual(after["state"], "observed")
+        self.assertNotEqual(before["conditions"]["contextGeneration"],
+                            after["conditions"]["contextGeneration"])
 
         self.write(self.meta(), self.context(), self.usage(), reroute,
                    self.usage(last=1000, cumulative=51000))
@@ -139,7 +144,7 @@ class CodexContextTests(unittest.TestCase):
         self.write(self.meta(), self.context(), self.usage(), unknown)
         self.assertEqual(self.observe()["reason"], "unknown-token-count")
 
-    def test_rejects_expired_future_or_contradictory_token_evidence_and_ignores_partial_tail(self):
+    def test_rejects_expired_future_contradictory_or_unterminated_token_evidence(self):
         self.write(self.meta(), self.context(), self.usage(timestamp="2026-09-14T11:00:00Z"))
         self.assertEqual(self.observe()["reason"], "token-count-expired")
         self.write(self.meta(), self.context(), self.usage(timestamp="2026-09-14T12:00:01Z"))
@@ -148,7 +153,58 @@ class CodexContextTests(unittest.TestCase):
         self.assertEqual(self.observe()["reason"], "invalid-token-count")
 
         self.write(self.meta(), self.context(), self.usage(), '{"unfinished":', trailing_newline=False)
-        self.assertEqual(self.observe()["state"], "observed")
+        self.assertEqual(self.observe()["reason"], "unterminated-tail-record")
+
+    def test_generation_is_stable_for_usage_growth_and_changes_with_window_or_file_identity(self):
+        self.write(self.meta(), self.context(), self.usage())
+        first = self.observe()
+        with self.rollout.open("a", encoding="utf-8") as stream:
+            stream.write(self.usage(last=4500, cumulative=54500,
+                                    timestamp="2026-09-14T11:59:55Z") + "\n")
+        grown = self.observe()
+        self.assertEqual(first["conditions"]["contextGeneration"],
+                         grown["conditions"]["contextGeneration"])
+        self.assertNotEqual(first["observationId"], grown["observationId"])
+
+        with self.rollout.open("a", encoding="utf-8") as stream:
+            stream.write(self.usage(last=4600, cumulative=59100, window=12000,
+                                    timestamp="2026-09-14T11:59:56Z") + "\n")
+        resized = self.observe()
+        self.assertNotEqual(grown["conditions"]["contextGeneration"],
+                            resized["conditions"]["contextGeneration"])
+
+        content = self.rollout.read_bytes()
+        replacement = self.rollout.with_suffix(".replacement")
+        replacement.write_bytes(content)
+        replacement.replace(self.rollout)
+        replaced = self.observe()
+        self.assertEqual(replaced["state"], "observed")
+        self.assertNotEqual(resized["conditions"]["contextGeneration"],
+                            replaced["conditions"]["contextGeneration"])
+
+    def test_rejects_path_replacement_after_bounded_read(self):
+        self.write(self.meta(), self.context(), self.usage())
+        replacement = self.rollout.with_suffix(".replacement")
+        replacement.write_bytes(self.rollout.read_bytes())
+        old = self.rollout.with_suffix(".old")
+        script = (
+            "const fs=require('node:fs');"
+            "const {observeNativeTranscript}=require(process.argv[1]);"
+            "const x=JSON.parse(fs.readFileSync(0,'utf8'));"
+            "const close=fs.closeSync;let swapped=false;"
+            "fs.closeSync=(fd)=>{close(fd);if(!swapped){swapped=true;"
+            "fs.renameSync(x.binding.transcriptPath,x.old);"
+            "fs.renameSync(x.replacement,x.binding.transcriptPath);}};"
+            "process.stdout.write(JSON.stringify(observeNativeTranscript(x.binding,x.options)));"
+        )
+        request = {"binding": self.binding, "replacement": str(replacement), "old": str(old),
+                   "options": {"now": NOW, "maxAgeMs": 30000,
+                               "sessionsRoot": str(self.sessions)}}
+        result = subprocess.run([self.node, "-e", script, str(RUNTIME)], input=json.dumps(request),
+                                text=True, encoding="utf-8", capture_output=True, timeout=10,
+                                cwd=ROOT)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)["reason"], "transcript-path-changed-after-read")
 
     def test_bounded_tail_does_not_search_older_history_for_a_missing_turn_context(self):
         huge = self.line({"type": "response_item", "payload": {
