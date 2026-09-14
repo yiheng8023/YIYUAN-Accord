@@ -64,6 +64,26 @@ class CodexLifecycleTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "running Python differs"):
                 lifecycle._validate_prebound(manifest)
 
+    def test_owned_cleanup_removes_readonly_git_objects(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            owned = Path(tmp).resolve() / "owned"
+            pack = owned / ".git/objects/pack/fixture.pack"
+            pack.parent.mkdir(parents=True)
+            pack.write_bytes(b"task-owned fixture")
+            lifecycle.os.chmod(pack, lifecycle.stat.S_IREAD)
+            lifecycle._remove_owned_tree(owned)
+            self.assertFalse(owned.exists())
+
+    def test_only_the_interrupted_request_may_end_without_a_complete_response(self):
+        peer_closed = {"ordinal": 3, "transportStatus": "peer-closed",
+                       "response": {"id": "resp_fixture_3", "status": "in_progress", "output": []}}
+        self.assertTrue(lifecycle._provider_response_matches(peer_closed, 3))
+        for ordinal in (1, 2, 4):
+            changed = {**peer_closed, "ordinal": ordinal,
+                       "response": {**peer_closed["response"], "id": f"resp_fixture_{ordinal}"}}
+            self.assertFalse(lifecycle._provider_response_matches(changed, ordinal))
+        self.assertFalse(lifecycle._provider_response_matches({**peer_closed, "transportStatus": "hold-timeout"}, 3))
+
     def test_owned_environment_does_not_forward_credentials_endpoints_or_proxies(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, manifest = self.fixture(Path(tmp).resolve())
@@ -180,11 +200,14 @@ class CodexLifecycleTests(unittest.TestCase):
                 (root / "stderr.txt").write_text("", encoding="utf-8")
             installed = str(Path(manifest["ownedRoots"]["home"]) / "plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.3.0-dev.1")
             (evidence / "commands/package-add/stdout.json").write_text(json.dumps({"installedPath": installed}), encoding="utf-8")
+            lifecycle.save(evidence / "retained/skills-before.json", {"data": [{"skills": [
+                {"name": "exposure-control", "path": manifest["standaloneSkill"]["path"], "enabled": True}]}]})
             with (evidence / "retained/provider-requests.jsonl").open("w", encoding="utf-8") as stream:
                 for ordinal in range(1, 5):
                     stream.write(json.dumps({"ordinal": ordinal, "request": {"id": ordinal}}) + "\n")
                     lifecycle.save(evidence / "retained" / f"provider-response-{ordinal}.json", {
-                        "ordinal": ordinal, "response": {"id": f"resp_fixture_{ordinal}",
+                        "ordinal": ordinal, "transportStatus": "completed",
+                        "response": {"id": f"resp_fixture_{ordinal}", "status": "completed",
                         "output": [{"id": f"msg_fixture_{ordinal}"}]}})
             (evidence / "retained/helper.jsonl").write_text(
                 json.dumps({"phase": "request", "request": {"op": "bind", "session_id": paused_thread}}) + "\n"
@@ -216,6 +239,7 @@ class CodexLifecycleTests(unittest.TestCase):
                 "protectedSharedFilesUnchanged": True,
                 "sharedSettingsAndSelectionsPreserved": True,
                 "protectedFileHashesAfter": manifest["protectedFiles"],
+                "sourceHashAfter": source_hash,
                 "installedPathReturned": installed, "loadedObject": {"installedPath": installed,
                     "hookSourcePaths": [str(Path(installed) / "hooks/hooks.json")],
                     "skillPaths": [str(Path(installed) / "skills/demo/SKILL.md")]}}
@@ -224,13 +248,24 @@ class CodexLifecycleTests(unittest.TestCase):
                     "nativeUninstallRemovesCacheAndDiscovery", "unfinishedStatePreservedAcrossExitAndUninstall",
                     "exactPackageLoadedAndTrusted", "sessionEndEnabledDisabledContrast",
                     "nativeInterruptInvalidatesReadiness", "nativeResumePreservesPausedBinding",
-                    "continueReceiptDoesNotResumeBinding", "selectedPathsDisabledInOwnedProcess"):
+                    "continueReceiptDoesNotResumeBinding", "selectedPathsDisabledInOwnedProcess", "standaloneCatalogEntryAbsent"):
                 facts[key] = True
             lifecycle.save(evidence / "result.json", facts)
             lifecycle.save(evidence / "run-started.json", {"manifestSha256": lifecycle.digest(evidence / "manifest.json"),
                 "nativeResourceLabels": list(lifecycle.RESOURCE_LABELS),
                 "nativeCommandLabels": list(lifecycle.COMMAND_LABELS)})
             self.assertEqual(lifecycle.inspect(evidence)["decision"], "pass")
+            provider_file = evidence / "retained/provider-requests.jsonl"
+            original_provider = provider_file.read_text(encoding="utf-8")
+            leaked = [json.loads(line) for line in original_provider.splitlines()]
+            leaked[0]["request"]["instructions"] = "Available Skill: exposure-control"
+            provider_file.write_text("\n".join(json.dumps(row) for row in leaked), encoding="utf-8")
+            self.assertEqual(lifecycle.inspect(evidence)["decision"], "fail")
+            provider_file.write_text(original_provider, encoding="utf-8")
+            facts["sourceHashAfter"] = "different-source"
+            lifecycle.save(evidence / "result.json", facts)
+            self.assertEqual(lifecycle.inspect(evidence)["decision"], "fail")
+            facts["sourceHashAfter"] = source_hash
             facts.pop("healthyRetryExact")
             lifecycle.save(evidence / "result.json", facts)
             self.assertEqual(lifecycle.inspect(evidence)["decision"], "fail")

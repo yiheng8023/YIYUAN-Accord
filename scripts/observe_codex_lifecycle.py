@@ -189,6 +189,40 @@ def _root_hashes(path):
     return _tree_hashes(path) if any(path.iterdir()) else {}
 
 
+def _remove_owned_tree(path):
+    root = _validate_tree(path)
+
+    def readonly_retry(function, failed, error):
+        target = Path(failed).absolute()
+        if not target.is_relative_to(root):
+            raise error
+        target = _regular_file(target)
+        info = target.stat()
+        if os.name != "nt" or not getattr(info, "st_file_attributes", 0) & 1:
+            raise error
+        os.chmod(target, info.st_mode | stat.S_IWRITE)
+        function(target)
+
+    # https://docs.python.org/3/library/shutil.html#rmtree-example
+    if sys.version_info >= (3, 12):
+        shutil.rmtree(root, onexc=readonly_retry)
+    else:
+        shutil.rmtree(root, onerror=lambda function, failed, info: readonly_retry(function, failed, info[1]))
+
+
+def _provider_response_matches(receipt, ordinal):
+    response = receipt.get("response", {})
+    transport = receipt.get("transportStatus")
+    if receipt.get("ordinal") != ordinal or response.get("id") != f"resp_fixture_{ordinal}":
+        return False
+    if ordinal == 3 and transport == "peer-closed":
+        return True  # Native interruption is checked separately.
+    output = response.get("output")
+    return (transport == "completed" and response.get("status") == "completed"
+            and isinstance(output, list) and len(output) == 1
+            and output[0].get("id") == f"msg_fixture_{ordinal}")
+
+
 def _owned_environment(manifest):
     # Pass only host process essentials. Provider endpoints, proxies, tokens and
     # unrelated credentials from the launching shell cannot reach the fixture.
@@ -204,7 +238,8 @@ def _owned_environment(manifest):
     env["PATH"] = bound_node + os.pathsep + env.get("PATH", "")
     env.update(CODEX_HOME=manifest["ownedRoots"]["home"], CODEX_SQLITE_HOME=manifest["ownedRoots"]["home"],
         YIYUAN_ACCORD_TASK_STATE_DIR=manifest["ownedRoots"]["state"], TEMP=manifest["ownedRoots"]["temp"],
-        TMP=manifest["ownedRoots"]["temp"], NO_PROXY="127.0.0.1,localhost", no_proxy="127.0.0.1,localhost")
+        TMP=manifest["ownedRoots"]["temp"], NO_PROXY="127.0.0.1,localhost", no_proxy="127.0.0.1,localhost",
+        GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull, GIT_TERMINAL_PROMPT="0")
     return env
 
 
@@ -422,6 +457,10 @@ class _Fixture:
         self.receipt = Path(manifest["evidence"]) / "retained/provider-requests.jsonl"
 
         class Handler(http.server.BaseHTTPRequestHandler):
+            def setup(self):
+                super().setup()
+                self.connection.settimeout(manifest["limits"]["recoverySeconds"])
+
             def log_message(self, *_args):
                 pass
 
@@ -440,20 +479,22 @@ class _Fixture:
                 with owner.receipt.open("a", encoding="utf-8") as stream:
                     stream.write(json.dumps({"ordinal": ordinal, "request": body}, ensure_ascii=False) + "\n")
                 owner.received.set()
-                self.send_response(200)
-                self.send_header("Content-Type", "text/event-stream")
-                self.end_headers()
                 response = {"id": f"resp_fixture_{ordinal}", "object": "response", "created_at": int(time.time()),
                             "status": "in_progress", "output": []}
+                transport = "started"
 
                 def emit(kind, **data):
                     self.wfile.write(("data: " + json.dumps({"type": kind, **data}) + "\n\n").encode())
                     self.wfile.flush()
                 try:
+                    self.send_response(200)
+                    self.send_header("Content-Type", "text/event-stream")
+                    self.end_headers()
                     emit("response.created", response=response)
                     if owner.hold_next:
                         owner.hold_next = False
                         if not owner.release.wait(25):
+                            transport = "hold-timeout"
                             return
                     text = "受控固定响应；不代表模型判断或任务交付。"
                     item = {"id": f"msg_fixture_{ordinal}", "type": "message", "role": "assistant", "status": "completed",
@@ -463,13 +504,18 @@ class _Fixture:
                     emit("response.output_item.done", output_index=0, item=item)
                     response.update(status="completed", output=[item], usage={"input_tokens": 1, "output_tokens": 1, "total_tokens": 2})
                     emit("response.completed", response=response)
-                    save(Path(owner.receipt).parent / f"provider-response-{ordinal}.json",
-                         {"ordinal": ordinal, "response": response})
+                    transport = "completed"
                 except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError):
-                    pass
+                    transport = "peer-closed"
+                except TimeoutError:
+                    transport = "socket-timeout"
+                finally:
+                    save(Path(owner.receipt).parent / f"provider-response-{ordinal}.json",
+                         {"ordinal": ordinal, "response": response, "transportStatus": transport,
+                          "claimLimit": "server transport attempt; native receipts determine consumer outcome"})
 
         self.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
-        self.server.daemon_threads = True
+        self.server.daemon_threads = False  # server_close joins workers after release.
         self.thread = threading.Thread(target=self.server.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True)
         self.thread.start()
 
@@ -831,6 +877,9 @@ def run(args):
 
         result["providerRequests"] = len(fixture.requests)
         result["standaloneSkillPathAbsentFromProviderInput"] = not _contains_path(fixture.requests, standalone_path)
+        result["standaloneCatalogEntryAbsent"] = (
+            result["standaloneSkillPathAbsentFromProviderInput"]
+            and not any(controls[0]["name"].casefold() in text.casefold() for text in _strings(fixture.requests)))
         result["accordCatalogPresent"] = all("deliver-demand-driven-outcome" in json.dumps(body) for body in fixture.requests)
         result["selectedPathsDisabledInOwnedProcess"] = result["standaloneSkillPathAbsentFromProviderInput"]
 
@@ -882,9 +931,10 @@ def run(args):
         app.close(manifest); apps.remove(app)
         result["unfinishedStatePreservedAcrossExitAndUninstall"] = _tree_hashes(manifest["ownedRoots"]["state"]) == state_before
         save(evidence / "retained/state-after-uninstall.json", _tree_hashes(manifest["ownedRoots"]["state"]))
-        result["sourceUnchanged"] = digest(Path(manifest["ownedRoots"]["workspace"]) / "source.json") == hashlib.sha256(b'{"total":140}\n').hexdigest()
+        result["sourceHashAfter"] = digest(Path(manifest["ownedRoots"]["workspace"]) / "source.json")
+        result["sourceUnchanged"] = result["sourceHashAfter"] == manifest["initialRootHashes"]["workspace"]["source.json"]
         result["providerBound"] = len(fixture.requests) == manifest["limits"]["providerRequests"] and not fixture.auth_seen
-        result["mechanismComplete"] = all((result.get("standaloneSkillPathAbsentFromProviderInput"), result.get("accordCatalogPresent"),
+        result["mechanismComplete"] = all((result.get("standaloneCatalogEntryAbsent"), result.get("accordCatalogPresent"),
             result.get("originalExposureRestored"), result.get("standaloneExposureCleared"),
             result.get("standaloneSkillBytesUnchanged"),
             result.get("malformedCandidateRejectedWithoutReplacement"), result.get("healthyRetryExact"),
@@ -923,9 +973,9 @@ def run(args):
             path = Path(manifest["ownedRoots"][name])
             if path.exists():
                 try:
-                    shutil.rmtree(path)
-                except OSError:
-                    result.setdefault("cleanupErrors", []).append(name)
+                    _remove_owned_tree(path)
+                except (OSError, ValueError) as error:
+                    result.setdefault("cleanupErrors", []).append({"root": name, "reason": str(error)[:1024]})
         result["ownedRootsAbsent"] = {name: not Path(manifest["ownedRoots"][name]).exists() for name in OWNED_ROOTS}
         protected_after = {}
         for path, expected in manifest["protectedFiles"].items():
@@ -998,11 +1048,15 @@ def inspect(evidence):
         if ([row.get("ordinal") for row in provider_rows] != [1, 2, 3, 4]
                 or any(not isinstance(row.get("request"), dict) for row in provider_rows)):
             raise ValueError("provider receipts differ")
+        controls = [skill for skill in _skill_rows(json.loads(read_regular(root / "retained/skills-before.json")))
+                    if skill.get("path") == manifest["standaloneSkill"]["path"]]
+        if (len(controls) != 1 or not controls[0].get("name")
+                or _contains_path(provider_rows, manifest["standaloneSkill"]["path"])
+                or any(controls[0]["name"].casefold() in text.casefold() for text in _strings(provider_rows))):
+            raise ValueError("standalone control remains in provider input")
         provider_responses = [json.loads(read_regular(root / "retained" / f"provider-response-{ordinal}.json"))
                               for ordinal in range(1, 5)]
-        if any(row.get("ordinal") != ordinal
-               or row.get("response", {}).get("id") != f"resp_fixture_{ordinal}"
-               or row["response"].get("output", [{}])[0].get("id") != f"msg_fixture_{ordinal}"
+        if any(not _provider_response_matches(row, ordinal)
                for ordinal, row in enumerate(provider_responses, 1)):
             raise ValueError("provider response receipts differ")
         helper_rows = [json.loads(line) for line in read_regular(root / "retained/helper.jsonl").decode("utf-8").splitlines() if line]
@@ -1022,6 +1076,8 @@ def inspect(evidence):
                            for row in resumed_requests)):
             raise ValueError("native resume identity differs")
         source_hash = manifest["initialRootHashes"]["workspace"]["source.json"]
+        if result.get("sourceHashAfter") != source_hash:
+            raise ValueError("protected source poststate differs")
         snapshots = {name: json.loads(read_regular(root / "retained" / (name + ".json"))) for name in
             ("before-pause", "after-interrupt", "after-exit", "resumed-before-continue", "after-resume")}
         expected_counts = {"before-pause": 1, "after-interrupt": 1, "after-exit": 1,
@@ -1045,7 +1101,7 @@ def inspect(evidence):
         "exactPackageLoadedAndTrusted", "sessionEndEnabledDisabledContrast",
         "nativeInterruptInvalidatesReadiness", "nativeResumePreservesPausedBinding",
         "continueReceiptDoesNotResumeBinding", "selectedPathsDisabledInOwnedProcess",
-        "protectedSharedFilesUnchanged", "sharedSettingsAndSelectionsPreserved")
+        "protectedSharedFilesUnchanged", "sharedSettingsAndSelectionsPreserved", "standaloneCatalogEntryAbsent")
     decision = (result.get("failure") is None and result.get("modelCalls") == 0
         and result.get("credentialHeaderSeen") is False and resources_ok and command_raw_complete
         and all(result.get(key) is True for key in required_true)
