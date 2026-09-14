@@ -1020,6 +1020,15 @@ function handleHook(event) {
       });
       return {}; // Keep unfinished work for an explicitly bound resume/recovery.
     }
+    // A continuation can keep human authority while entering a new native turn.
+    const turnOf = (value) => value?.hostObservation?.turnId ??
+      (value?.inputSource === 'host-continuation' ? null : value?.turnId);
+    const currentTurn = turnOf(input);
+    if (text(event.turn_id) && text(currentTurn) && event.turn_id !== currentTurn) return {};
+    const sameInput = () => {
+      const current = readInput(where);
+      return current?.epoch === input.epoch && turnOf(current) === currentTurn;
+    };
     if (!state || state.mode !== 'active' || !state.canContinue || input.interrupted || needsInput(input) ||
         state.epoch !== input.epoch) return {};
     const result = inspect(where, state);
@@ -1031,9 +1040,9 @@ function handleHook(event) {
       `Recheck the bound task with ${__filename}; then ${state.nextAction}. ` +
       'Reconcile stale inputs before dependent effects. This callback grants no new authority; honor user changes or stop.';
     return inputLocked(where, () => {
-      if (readInput(where)?.epoch !== input.epoch) return {};
+      if (!sameInput()) return {};
       atomic(where.state, {...state, lastBlock: key, continuation: reason});
-      if (readInput(where)?.epoch !== input.epoch) return {};
+      if (!sameInput()) return {};
       return {decision: 'block', reason};
     });
   });

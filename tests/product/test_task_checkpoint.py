@@ -744,6 +744,49 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertIn('not a new user decision', reply['hookSpecificOutput']['additionalContext'])
         self.assertEqual(self.event('Stop'), {})
 
+    def test_late_stop_cannot_consume_a_new_user_turn_continuation(self):
+        self.event('UserPromptSubmit', prompt='Deliver the original request.', turn_id='old-turn')
+        self.bind()
+        self.event('UserPromptSubmit', prompt='Use this updated request.', turn_id='new-turn')
+        self.bind()
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.assertEqual(self.event('Stop', turn_id='old-turn'), {})
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+        self.assertEqual(self.event('Stop', turn_id='new-turn')['decision'], 'block')
+
+    def test_stop_correlates_to_host_continuation_turn_without_new_user_authority(self):
+        self.event('UserPromptSubmit', prompt='Deliver the approved result.', turn_id='user-turn')
+        self.bind()
+        reason = self.event('Stop', turn_id='user-turn')['reason']
+        retained = self.invoke({'op': 'read-native-input'})['entries']
+        self.event('UserPromptSubmit', prompt=reason, turn_id='continuation-turn')
+        self.write_outputs(total=59)
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.assertEqual(self.event('Stop', turn_id='user-turn'), {})
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+        self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'], retained)
+        self.assertEqual(self.event('Stop', turn_id='continuation-turn')['decision'], 'block')
+
+    def test_stop_rechecks_execution_turn_before_publishing_continuation(self):
+        self.event('UserPromptSubmit', prompt='Deliver the approved result.', turn_id='old-turn')
+        self.bind()
+        receipt = next(self.state.glob('*.input.json'))
+        before = {p.name: p.read_bytes() for p in self.state.iterdir() if p != receipt}
+        self.preload = self.root / 'concurrent-execution-turn.cjs'
+        self.preload.write_text(
+            "const fs=require('node:fs'),open=fs.openSync;let changed=false;"
+            f"const receipt={json.dumps(str(receipt))},source={json.dumps(str(self.work / 'source.json'))};"
+            "fs.openSync=function(file,...args){if(!changed&&String(file)===source){changed=true;"
+            "const input=JSON.parse(fs.readFileSync(receipt,'utf8'));"
+            "input.hostObservation.turnId='new-turn';input.inputSource='host-continuation';"
+            "fs.writeFileSync(receipt,JSON.stringify(input));}return open.call(this,file,...args);};",
+            encoding='utf-8')
+        self.assertEqual(self.event('Stop', turn_id='old-turn'), {})
+        del self.preload
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir() if p != receipt})
+        self.assertEqual(json.loads(receipt.read_text(encoding='utf-8'))['hostObservation']['turnId'], 'new-turn')
+        self.assertEqual(self.event('Stop', turn_id='new-turn')['decision'], 'block')
+
     def context_request(self):
         current = self.status()
         scope = dict(threadId="native-thread", turnId="native-turn", hostVersion="observed-host",
