@@ -17,6 +17,14 @@
     "keep.txt": "Unrelated original. Preserve exactly.\n"
   },
   "deliverables": ["plan.md", "schedule.csv", "budget.json", "notice.md", "materials.md"],
+  "limits": {
+    "usageCaps": {
+      "totalTokens": 900000,
+      "uncachedInputTokens": 200000,
+      "outputTokens": 14000
+    },
+    "usageScope": "Guard the native CLI turn.completed cumulative thread totals observed at each stage. Do not sum values across resume turns or treat them as a prediction of future usage or exact monetary cost."
+  },
   "schedule_header": ["id", "title", "time", "participants", "venue"],
   "stages": [
     {

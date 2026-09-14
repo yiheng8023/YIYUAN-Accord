@@ -200,7 +200,7 @@ def load_manifest(evidence):
     if protocol == "app-server" and ("command" in manifest or "promptSha256" in manifest
                                      or manifest.get("tracePath") != "native/stdout.jsonl"):
         raise ValueError("App Server manifest contains incompatible CLI or trace metadata")
-    if protocol == "app-server" and "usageCaps" in manifest["limits"]:
+    if "usageCaps" in manifest["limits"]:
         _usage_caps(manifest["limits"]["usageCaps"])
     ordinary_dir(manifest["workspace"])
     return manifest
@@ -241,7 +241,9 @@ def build_command(manifest, *, stage=0, thread_id=None):
                     "--add-dir", str(Path(manifest["evidence"]) / "state"), *config, "-"]
         if not isinstance(thread_id, str) or not thread_id:
             raise ValueError("persistent resume requires the observed thread id")
-        return [manifest["codex"], "exec", "resume", "--json", "--output-last-message", output,
+        return [manifest["codex"], "exec", "-C", manifest["workspace"],
+                "--add-dir", str(Path(manifest["evidence"]) / "state"),
+                "resume", "--json", "--output-last-message", output,
                 "--dangerously-bypass-hook-trust", "--skip-git-repo-check", *config, thread_id, "-"]
     return [manifest["codex"], "exec", "--ignore-user-config", "--disable", "plugins", "--disable", "apps", "--enable", "hooks",
             "--ephemeral", "--skip-git-repo-check", "--sandbox", "workspace-write", "--json", "--color", "never",
@@ -299,6 +301,12 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
                 or not 1 <= turn_timeout <= args.timeout <= 3600
                 or not 1 <= recovery_timeout <= 300):
             raise ValueError("persistent case requires per-instance work, turn and recovery deadlines")
+        if (not isinstance(case.get("limits"), dict)
+                or set(case["limits"]) != {"usageCaps", "usageScope"}
+                or not isinstance(case["limits"]["usageScope"], str)
+                or not case["limits"]["usageScope"].strip()):
+            raise ValueError("persistent case must prebind native cumulative usage limits")
+        usage_caps = _usage_caps(case["limits"]["usageCaps"])
     evidence, workspace = Path(args.evidence).absolute(), Path(args.workspace).absolute()
     package = ordinary_dir(args.package)
     if not args.model.strip() or not args.reasoning.strip():
@@ -392,6 +400,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
                          "limits": {"interaction": "persistent native exec followed by exact-id exec resume",
                                     "workSeconds": args.timeout, "turnSeconds": turn_timeout,
                                     "recoverySeconds": recovery_timeout,
+                                    "usageCaps": usage_caps,
+                                    "usageScope": case["limits"]["usageScope"],
                                     "acceptance": "native execution receipt; business semantics and admission remain separate"},
                          "initialCommand": build_command({**manifest, "entryProtocol": protocol,
                                                           "prompts": [stage["prompt"] for stage in case["stages"]]})})
@@ -857,9 +867,51 @@ def inspect(evidence):
             "limits": manifest["limits"]}
 
 
-def persistent_cli_turn_receipt(stream, last_message, *, expected_thread_id=None):
+def persistent_cli_usage_budget(stream, caps):
+    """Read one native CLI turn's reported cumulative thread usage.
+
+    Native exec emits the thread total on ``turn.completed``. A resumed turn is
+    therefore another observation of the same cumulative value, not an amount
+    to add to earlier turns. This protects only the prebound observed limits;
+    it does not predict future usage, context occupancy, or monetary cost.
+    """
+    caps = _usage_caps(caps)
+    result = {"decision": "unknown", "observed": None, "caps": caps, "exceeded": [],
+              "contextOccupancy": None, "monetaryCost": None,
+              "scope": "native reported cumulative thread usage; not per-turn cost or future usage"}
+    try:
+        if len(stream.encode("utf-8")) > 32 * 1024 * 1024:
+            return result
+        terminals = [json.loads(line) for line in stream.splitlines() if line.strip()]
+        terminals = [event for event in terminals if event.get("type") == "turn.completed"]
+        if len(terminals) != 1:
+            return result
+        usage = terminals[0]["usage"]
+        if not isinstance(usage, dict):
+            return result
+        names = ("input_tokens", "cached_input_tokens", "output_tokens")
+        if any(type(usage.get(name)) is not int or usage[name] < 0 for name in names):
+            return result
+        if usage["cached_input_tokens"] > usage["input_tokens"]:
+            return result
+        observed = {"inputTokens": usage["input_tokens"],
+                    "cachedInputTokens": usage["cached_input_tokens"],
+                    "outputTokens": usage["output_tokens"]}
+        observed["uncachedInputTokens"] = observed["inputTokens"] - observed["cachedInputTokens"]
+        observed["totalTokens"] = observed["inputTokens"] + observed["outputTokens"]
+        result["observed"] = observed
+        result["exceeded"] = sorted(key for key, limit in caps.items() if observed[key] > limit)
+        result["decision"] = "over-limit" if result["exceeded"] else "within-observed-limits"
+    except (ValueError, UnicodeError, AttributeError, KeyError, TypeError):
+        pass
+    return result
+
+
+def persistent_cli_turn_receipt(stream, last_message, *, expected_thread_id=None, usage_caps=None):
     """Read the native exec JSON terminal for one initial or resumed turn."""
-    result = {"valid": False, "threadId": None, "terminal": None, "finalMessageSha256": None}
+    usage = persistent_cli_usage_budget(stream, usage_caps) if usage_caps is not None else None
+    result = {"valid": False, "threadId": None, "terminal": None, "finalMessageSha256": None,
+              "usageObservation": usage}
     try:
         if len(stream.encode("utf-8")) > 32 * 1024 * 1024:
             return result
@@ -878,7 +930,8 @@ def persistent_cli_turn_receipt(stream, last_message, *, expected_thread_id=None
                 or not messages or messages[-1].rstrip("\r\n") != last_message.rstrip("\r\n")):
             return result
         final_message = last_message.rstrip("\r\n")
-        result.update(valid=True, threadId=starts[0], terminal="completed",
+        result.update(valid=usage is None or usage["decision"] == "within-observed-limits",
+                      threadId=starts[0], terminal="completed",
                       finalMessageSha256=hashlib.sha256(final_message.encode("utf-8")).hexdigest())
     except (ValueError, UnicodeError, AttributeError):
         pass
@@ -912,28 +965,44 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline):
         failure = type(error).__name__ + ": " + str(error)
     finally:
         try:
+            recovery_deadline = time.monotonic() + manifest["recoveryTimeoutSeconds"]
             before = job.sample()
-            if before["activeProcesses"]:
+            naturally_exited = process is not None and process.poll() is not None and failure is None
+            after = before
+            while naturally_exited and after["activeProcesses"] and time.monotonic() < recovery_deadline:
+                time.sleep(0.1)
+                after = job.sample()
+            if after["activeProcesses"]:
                 forced = True
                 job.terminate()
             if process is not None:
-                if process.poll() is None and not before["activeProcesses"]:
+                if process.poll() is None and not after["activeProcesses"]:
                     forced = True
                     process.kill()
-                process.wait(timeout=manifest["recoveryTimeoutSeconds"])
-            recovery_deadline = time.monotonic() + manifest["recoveryTimeoutSeconds"]
+                try:
+                    process.wait(timeout=max(0, recovery_deadline - time.monotonic()))
+                except subprocess.TimeoutExpired:
+                    forced = True
+                    if failure is None:
+                        failure = "recovery-time-limit"
+                    if process.poll() is None:
+                        process.kill()
             after = job.sample()
             while after["activeProcesses"] and time.monotonic() < recovery_deadline:
                 time.sleep(0.1)
                 after = job.sample()
+            if after["activeProcesses"] and failure is None:
+                failure = "recovery-time-limit"
         finally:
             job.close()
     try:
         stream = read_regular(stdout_path, 32 * 1024 * 1024).decode("utf-8")
         final = read_regular(evidence / f"last-message-{stage + 1}.txt").decode("utf-8")
-        receipt = persistent_cli_turn_receipt(stream, final, expected_thread_id=thread_id)
+        receipt = persistent_cli_turn_receipt(stream, final, expected_thread_id=thread_id,
+                                              usage_caps=manifest["limits"]["usageCaps"])
     except (OSError, ValueError, UnicodeError):
-        receipt = {"valid": False, "threadId": thread_id, "terminal": None, "finalMessageSha256": None}
+        receipt = {"valid": False, "threadId": thread_id, "terminal": None,
+                   "finalMessageSha256": None, "usageObservation": None}
     receipt.update({"stage": stage + 1, "command": command, "exitCode": process.returncode if process else None,
                     "forced": forced, "failure": failure, "elapsedSeconds": time.monotonic() - started,
                     "remainingOwnedProcesses": after["activeProcesses"], "samples": samples})
