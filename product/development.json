@@ -243,7 +243,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "本地项目/工作树或委派云端，按任务区分",
           "environment": "界面入口、内嵌引擎与独立 CLI 版本分别识别。",
-          "observation": "2026-09-14只读核对：安装和运行中的OpenAI.Codex均为26.908.4834.0；主ChatGPT.exe直接启动npm目录的Codex后端，该可执行文件当前版本0.154.0。后台进程及同源实现不证明具体GUI任务已采用当前包、Hook执行或全链路通过。旧版本、截图与任务局部指导观察保留原身份；当前Desktop实际加载、任务参与及生命周期仍需按所选入口验证。",
+          "observation": "2026-09-15只读刷新：OpenAI.Codex安装版本26.908.4834.0，运行中的ChatGPT父进程直接带起npm路径的Codex后端，该可执行文件--version为0.154.0。共享Accord选择仍disabled，配置SHA保持9cd9f34d；进程及同源实现不证明当前任务加载了待测包、Hook已执行或GUI职责通过。当前入口加载/权限/交互和生命周期差异仍需证据。",
           "currentEffect": "unverified"
         },
         {
@@ -253,7 +253,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
           "execution": "本地交互或云端委派",
           "environment": "编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。",
-          "observation": "2026-09-14只读核对：openai.chatgpt扩展仍为26.908.40401，当前无运行中的Code进程。2026-09-12的实际UI插件管理/市场/Hook入口和扩展自带0.154.0-alpha.6.2后端观察仍有效于当时构建；官方插件页概括性不支持IDE表述与该本机观察的冲突保留，不扩展为所有版本/账户结论。当前包加载、Hook执行、完整生命周期和兼容编辑器尚未验收；不为检查重启用户已有任务。",
+          "observation": "2026-09-15只读刷新：openai.chatgpt扩展26.908.40401，自带windows-x86_64/codex.exe为0.154.0-alpha.6.2，当前无Code进程；不能当作桌面正在使用的0.154.0同一构建。9月12日真实插件管理、市场/Hook界面及普通交付保留原条件；通用插件文档的不支持表述与该本机观察仍冲突。当前包的实际加载、权限/Hook参与及退出须按这个入口的实际后端核对。",
           "currentEffect": "unverified"
         },
         {
