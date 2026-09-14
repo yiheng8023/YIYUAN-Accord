@@ -287,6 +287,114 @@ class EntryTests(unittest.TestCase):
                 self.assertFalse(receipt["valid"])
                 self.assertEqual(receipt["usageObservation"]["decision"], decision)
 
+    def test_native_rollout_usage_binds_task_and_retains_partial_line(self):
+        caps = {"totalTokens": 900000, "uncachedInputTokens": 200000, "outputTokens": 14000}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            sessions, workspace = root / "sessions", root / "work"
+            sessions.mkdir()
+            workspace.mkdir()
+            rollout = sessions / "rollout.jsonl"
+            meta = {"type": "session_meta", "payload": {
+                "id": "native-thread", "cwd": str(workspace)}}
+            first = {"ordinal": 2, "timestamp": "2026-09-14T08:00:00Z", "type": "event_msg",
+                     "payload": {"type": "token_count", "info": {"total_token_usage": {
+                         "input_tokens": 700000, "cached_input_tokens": 550000,
+                         "output_tokens": 10000, "total_tokens": 710000}}}}
+            second = {"ordinal": 3, "timestamp": "2026-09-14T08:01:00Z", "type": "event_msg",
+                      "payload": {"type": "token_count", "info": {"total_token_usage": {
+                          "input_tokens": 850000, "cached_input_tokens": 660000,
+                          "output_tokens": 13000, "total_tokens": 863000}}}}
+            rollout.write_text(json.dumps(meta) + "\n" + json.dumps(first) + "\n", encoding="utf-8")
+            observer = entry.NativeRolloutUsage(rollout, sessions_root=sessions,
+                thread_id="native-thread", cwd=workspace, caps=caps)
+            observed = observer.poll()
+            self.assertEqual(observed["decision"], "within-observed-limits")
+            self.assertEqual(observed["observed"]["totalTokens"], 710000)
+            encoded = json.dumps(second).encode()
+            with rollout.open("ab") as stream:
+                stream.write(encoded[:len(encoded) // 2])
+            unchanged = observer.poll()
+            self.assertEqual(unchanged["observedAt"], "2026-09-14T08:00:00Z")
+            with rollout.open("ab") as stream:
+                stream.write(encoded[len(encoded) // 2:] + b"\n")
+            resumed = observer.poll()
+            self.assertEqual(resumed["observed"]["totalTokens"], 863000)
+            self.assertEqual(resumed["observed"]["uncachedInputTokens"], 190000)
+            self.assertEqual(resumed["source"]["ordinal"], 3)
+            replacement = sessions / "replacement.jsonl"
+            replacement.write_bytes(rollout.read_bytes() + b"{}\n")
+            replacement.replace(rollout)
+            self.assertEqual(observer.poll()["decision"], "unknown")
+
+    def test_native_rollout_usage_rejects_foreign_task_and_outside_path(self):
+        caps = {"totalTokens": 900000}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            sessions, workspace = root / "sessions", root / "work"
+            sessions.mkdir()
+            workspace.mkdir()
+            rollout = sessions / "rollout.jsonl"
+            rollout.write_text(json.dumps({"type": "session_meta", "payload": {
+                "id": "foreign-thread", "cwd": str(workspace)}}) + "\n", encoding="utf-8")
+            observer = entry.NativeRolloutUsage(rollout, sessions_root=sessions,
+                thread_id="native-thread", cwd=workspace, caps=caps)
+            self.assertEqual(observer.poll()["decision"], "unknown")
+            outside = root / "outside.jsonl"
+            outside.write_text("{}\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "outside the sessions root"):
+                entry.NativeRolloutUsage(outside, sessions_root=sessions,
+                    thread_id="native-thread", cwd=workspace, caps=caps)
+            with self.assertRaisesRegex(ValueError, "outside the sessions root"):
+                entry.NativeRolloutUsage(sessions / ".." / "outside.jsonl", sessions_root=sessions,
+                    thread_id="native-thread", cwd=workspace, caps=caps)
+
+    def test_persistent_stage_stops_on_running_usage_without_terminal(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            evidence = Path(manifest["evidence"])
+            identity = "01a09f0c-7449-7400-8632-b5e6d27057b5"
+            configuration = ('Codex initialized with event: SessionConfiguredEvent { '
+                'session_id: SessionId { uuid: ' + identity + ' }, '
+                'thread_id: ThreadId { uuid: ' + identity + ' }, '
+                'cwd: AbsolutePathBuf("' + manifest["workspace"].replace("\\", "\\\\") + '"), '
+                'rollout_path: Some("C:\\\\fake\\\\rollout.jsonl") }\n')
+            other = "01a09f0c-7449-7400-8632-b5e6d27057b6"
+            changed = configuration.replace('thread_id: ThreadId { uuid: ' + identity,
+                                            'thread_id: ThreadId { uuid: ' + other)
+            self.assertEqual(entry._session_configuration([changed.encode()])["threadId"], other)
+            process = Mock(returncode=124)
+            process.poll.return_value = None
+            process.wait.return_value = 124
+            job = Mock()
+            job.sample.side_effect = [
+                {"activeProcesses": 1}, {"activeProcesses": 1}, {"activeProcesses": 0}]
+            observer = Mock()
+            observer.matches.return_value = True
+            observer.poll.return_value = {
+                "decision": "over-limit", "observed": {"totalTokens": 1344768},
+                "caps": manifest["limits"]["usageCaps"], "exceeded": ["totalTokens"],
+                "source": {"kind": "native-rollout-token-count", "path": "bound-rollout", "ordinal": 182},
+                "observedAt": "2026-09-14T08:37:24.439Z"}
+            def spawn(*_, **kwargs):
+                kwargs["stdout"].write((json.dumps({"type": "thread.started", "thread_id": identity}) + "\n").encode())
+                kwargs["stdout"].flush()
+                kwargs["stderr"].write(configuration.encode())
+                kwargs["stderr"].flush()
+                return process
+            with patch.object(entry, "WindowsJob", return_value=job), \
+                    patch.object(entry.subprocess, "Popen", side_effect=spawn), \
+                    patch.object(entry.time, "sleep"):
+                receipt = entry._run_persistent_stage(
+                    manifest, 0, None, {}, time.monotonic() + 10, {"observer": observer})
+            self.assertFalse(receipt["valid"])
+            self.assertTrue(receipt["forced"])
+            self.assertEqual(receipt["failure"], "usage-limit")
+            self.assertIsNone(receipt["terminal"])
+            self.assertEqual(receipt["usageObservation"]["observed"]["totalTokens"], 1344768)
+            self.assertEqual(receipt["usageObservation"]["source"]["ordinal"], 182)
+            job.terminate.assert_called_once_with()
+
     def test_persistent_case_rejects_workspace_escape_names(self):
         source = SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
         case = json.loads(source.read_text(encoding="utf-8"))
