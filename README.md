@@ -6,7 +6,7 @@
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub stars"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub forks"></a>
   <img src="https://img.shields.io/badge/Python-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10 through 3.14 CI">
-  <img src="https://img.shields.io/badge/CI-Ubuntu%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="CI on Ubuntu, Windows, and macOS">
+  <img src="https://img.shields.io/badge/CI-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="CI on Linux, Windows, and macOS">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 license"></a>
 </p>
 
@@ -102,7 +102,7 @@ python -B -m yiyuan_accord verify --root . --json
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 ```
 
-Use `python3` where that is the available launcher. CI exercises Python 3.10–3.14 across Ubuntu, Windows and macOS, with Node 24 for Hook checks. That is maintainer validation, not cross-host behavior acceptance or an end-user Python requirement.
+Use `python3` where that is the available launcher. CI exercises Python 3.10–3.14 across Linux, Windows and macOS, with Node 24 for Hook checks. That is maintainer validation, not cross-host behavior acceptance or an end-user Python requirement.
 
 Publication requires matching release notes, committed and pushed in-scope changes, necessary functional/lifecycle/impact evidence, independent review and hosted checks, followed by publication and public verification of the same commit under the bound human authorization. A frozen candidate is not a release receipt.
 

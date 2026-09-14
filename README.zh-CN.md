@@ -6,7 +6,7 @@
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub Stars"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub Forks"></a>
   <img src="https://img.shields.io/badge/Python-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10 至 3.14 CI">
-  <img src="https://img.shields.io/badge/CI-Ubuntu%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="Ubuntu、Windows 与 macOS CI">
+  <img src="https://img.shields.io/badge/CI-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="Linux、Windows 与 macOS CI">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 许可证"></a>
 </p>
 
@@ -102,7 +102,7 @@ python -B -m yiyuan_accord verify --root . --json
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 ```
 
-只有 `python3` 时替换启动器即可。CI 覆盖 Ubuntu、Windows、macOS 上的 Python 3.10–3.14，并使用 Node 24 检查 Hook。这是维护工具验证，不是跨宿主行为验收，也不是用户必须安装 Python 的要求。
+只有 `python3` 时替换启动器即可。CI 覆盖 Linux、Windows、macOS 上的 Python 3.10–3.14，并使用 Node 24 检查 Hook。这是维护工具验证，不是跨宿主行为验收，也不是用户必须安装 Python 的要求。
 
 发布要求更新日志、提交推送的版本内变更、必要功能/生命周期/净影响证据、独立评审与托管检查相符，再按已绑定的人工授权发布同一提交并核验公共后态。冻结候选不是发布凭证。
 
