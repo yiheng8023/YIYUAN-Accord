@@ -77,7 +77,12 @@ is not a new user decision.
 
 After failure, inspect actual post-state, including partial outputs. Recover
 through a supported route, then reconcile affected artifacts and explanations
-with later verification and cleanup facts. A requested account of encountered
+with later verification and cleanup facts. Separate missing evidence from a known
+missed prerequisite or ordering condition. Later checks can verify current results,
+but cannot satisfy a required earlier condition that never held. Keep that failed
+sequence distinct from recovery, reuse valid effects for remaining work, and bind
+any new validation to its actual conditions and applicable authority while
+protecting prior results. A requested account of encountered
 issues retains resolved failures; a report of current blockers distinguishes
 what remains pending. Without a changed premise or a discriminating check,
 another identical attempt adds no evidence. Execute and verify the correction;
