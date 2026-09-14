@@ -208,11 +208,29 @@ class CodexContextTests(unittest.TestCase):
 
     def test_bounded_tail_does_not_search_older_history_for_a_missing_turn_context(self):
         huge = self.line({"type": "response_item", "payload": {
-            "type": "message", "role": "assistant", "content": "x" * (1024 * 1024 + 64)}})
+            "type": "message", "role": "assistant", "content": "x" * (16 * 1024 * 1024 + 64)}})
         self.write(self.meta(), self.context(), huge, self.usage())
         result = self.observe()
         self.assertEqual(result["state"], "unknown")
         self.assertEqual(result["reason"], "current-turn-context-not-in-bounded-tail")
+
+    def test_long_turn_extends_read_without_losing_its_generation_or_usage(self):
+        self.write(self.meta(), self.context(), self.usage())
+        before = self.observe()
+        large = self.line({"type": "response_item", "payload": {
+            "type": "message", "role": "assistant", "content": "x" * (2 * 1024 * 1024)}})
+        with self.rollout.open('a', encoding='utf-8') as stream:
+            stream.write(large + '\n' + self.usage(last=5000, cumulative=55000) + '\n')
+        after = self.observe()
+        self.assertEqual(after['state'], 'observed')
+        self.assertEqual(after['lastResponseTokens'], 5000)
+        self.assertEqual(after['conditions'], before['conditions'])
+        # A compaction before the initial 1 MiB tail still invalidates the basis.
+        compact = self.line({'type': 'compacted', 'payload': {'message': 'fixture'}})
+        self.write(self.meta(), self.context(), compact, large, self.usage(last=5000, cumulative=55000))
+        compacted = self.observe()
+        self.assertEqual(compacted['state'], 'observed')
+        self.assertNotEqual(compacted['conditions']['contextGeneration'], before['conditions']['contextGeneration'])
 
 
 if __name__ == "__main__":

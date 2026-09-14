@@ -1808,3 +1808,13 @@ Desktop安装与运行版本为26.908.4834.0，主ChatGPT.exe直接启动npm位�
 两位未实现该入口的独立评审者分别覆盖product/specification和implementation/standards，使用继承历史的独立上下文及共享环境，明确披露Accord指导可见。规范评审曾将父提交误填为tree，已由评审者用加引号的Git对象表达式和cat-file亲自更正；错误身份未用于准入。评审只支持该增量及两个SDK子案例，不认证整个仓库、普通Agent、GUI、全环境或发布。
 
 随后由调用方根据实际回执、文件摘要、当前条件和上述评审输入执行既有assess_development_evidence的observe/recheck，未从expected复制事实、未改动被评对象。1879ae6上acceptedCases为v33-codex-sdk-lifecycle-01和v33-codex-sdk-scoped-exposure-01，errors为空；coverageVerified=2/17，四项定义待验、十一项未绑定，整项A完成0/8，functionalCompletion/candidateEligible仍false。外部binding、inspection、review-provenance、admission-observation和admission-report保存在该私有实例目录，仓内记录只是导航。未提供外部observer的默认CLI不消费这份经验评估，历史已验范围与新的候选复核保持区分。
+
+## 普通Hook上下文来源接入（2026-09-14）
+
+原生0.154.0的UserPromptSubmit实际回执包含transcript_path、session/turn、cwd与model；既有普通入口未将该来源接到已实现的上下文评估。新增codex-context模块，从Hook保存的单一sessions路径读取64KiB头部及初始1MiB尾部；长轮次缺少关联时在同一文件快照内按需扩大至16MiB读取上限，核对session_meta、最新turn_context、后续token_count、文件身份与时效。最近响应量仅作为响应边界基值，累计量不当占用；不读取其它任务，不输出对话正文，不新增后台扫描、逐工具Hook或模型调用。
+
+observe-context提供带条件的来源观察；assess-context的nativeContext=true在本次判断内重读计数，再加调用者有来源的尾部及工作/交接/恢复估计。正常追加保持上下文代次，避免先观察后判断被自然响应增长反复打断；窗口、压缩、换模、轮次及文件替换使代次失效。未完成尾行、关联缺失、并发变更、未来或过期记录保持未知。原输入修订、暂停、恢复核对及sourceReleaseAllowed=false保持。
+
+模块在独立工作树完成并经主线整合审阅；9项模块测试与116项检查点回归通过，78项开发契约回归通过。指定的既有持久原生rollout只读回放取得last=114928、cumulative=2446314、window=828400，只证明旧文件格式可读，不是当前实时占用或新增行为验收。核心格式依据[0.154.0协议来源](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/protocol/src/protocol.rs)，不将内部格式提升为上游公开稳定接口。
+
+本次完成普通感知与条件判断的可调用连接；Agent是否无提醒调用、何时选择宿主交接、目标多轮核对/续做与源恢复释放仍需实际链路证据。1879ae6生命周期两项准入继续绑定原包99ca350，不能迁移为本次变更包的通过。

@@ -841,6 +841,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertIn("caller-rechecks-authority", current_checkpoint.pop("resumeReconciliation"))
         self.assertIn("native-window-not-occupancy", current_checkpoint.pop("contextAssessment"))
         self.assertIn("connection-and-turn-bound", current_checkpoint.pop("contextSignals"))
+        self.assertIn("missing-is-unknown", current_checkpoint.pop("nativeContext"))
         self.assertIn("missing-is-unknown", current_checkpoint.pop("nativeHostObservation"))
         storage = current_checkpoint.pop("storage")
         self.assertEqual(storage["override"], "YIYUAN_ACCORD_TASK_STATE_DIR")
@@ -1122,9 +1123,11 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         for locator, data, fragment in (
             ("plugins/yiyuan-accord-codex/hidden-state.txt", b"undeclared", "undeclared"),
             ("plugins/yiyuan-accord-codex/LICENSE", b"changed license", "LICENSE"),
+            ("plugins/yiyuan-accord-codex/runtime/codex-context.cjs", b"changed module", "canonical bytes"),
         ):
             declaration = copy.deepcopy(self.contract)
-            declaration["changeBoundary"]["allowedPaths"].append(locator)
+            if locator not in declaration["changeBoundary"]["allowedPaths"]:
+                declaration["changeBoundary"]["allowedPaths"].append(locator)
             with self.subTest(locator=locator), self.changed(
                     DEVELOPMENT_FILE, json.dumps(declaration, ensure_ascii=False).encode()), self.changed(locator, data):
                 report = self.report()

@@ -143,8 +143,10 @@ Before large reads or long work, use available native context/budget observation
 and sourced estimates to size the next useful unit, reserving capacity for
 verification, handoff and failed-transfer recovery. With unknown capacity or loss, shorten spans
 and checkpoint early; do not invent universal percentages or wait for exhaustion.
-The helper's `--context-signals` and `assess-context` interfaces are documented in
-`--help`; they require genuine bound native observations and do not dispatch.
+Use helper `observe-context` for Hook-bound recent usage, then `assess-context`
+with `nativeContext: true` and sourced tail/work/recovery forecasts to consume
+fresh counters atomically. See `--help`; caller-owned App Server observations
+remain available through `--context-signals`. These interfaces do not dispatch.
 
 Choose supported summarization, same-task context renewal or a fresh zero-history
 task by the needed effect and authority. Copied-history forks serve causal branches.

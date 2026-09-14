@@ -180,6 +180,36 @@ function readNativeInputSnapshot(request, where) {
   return result;
 }
 
+function nativeContextSource(event) {
+  if (!text(event.transcript_path) || !path.isAbsolute(event.transcript_path) ||
+      !text(event.session_id) || !text(event.turn_id) || !text(event.model) || !text(event.cwd)) return null;
+  return {transcriptPath: event.transcript_path, sessionId: event.session_id,
+    turnId: event.turn_id, cwd: event.cwd, model: event.model};
+}
+
+function observeStoredContext(input, request, now = Date.now()) {
+  if (!input || needsInput(input) || input.interrupted || !input.nativeContextSource) {
+    return {state: 'unknown', reason: 'current-native-context-source-unavailable',
+      scope: 'native-last-response-context-basis', sourceReleaseAllowed: false};
+  }
+  const {observeNativeTranscript} = require('./codex-context.cjs');
+  return observeNativeTranscript(input.nativeContextSource, {now, maxAgeMs: request.maxAgeMs ?? 30000});
+}
+
+function readNativeContextSnapshot(request, where) {
+  const read = () => {
+    if (fs.existsSync(where.lock) || fs.existsSync(where.input + '.lock')) fail('input-read-busy');
+    const input = readInput(where);
+    if (!input) fail('native-user-input-receipt-missing');
+    if (fs.existsSync(where.lock) || fs.existsSync(where.input + '.lock')) fail('input-read-busy');
+    return input;
+  };
+  const input = read();
+  const observation = observeStoredContext(input, request);
+  if (canonical(input) !== canonical(read())) fail('input-changed-during-read');
+  return {...observation, epoch: input.epoch, sourceReleaseAllowed: false};
+}
+
 function relative(root, name) {
   if (!text(name) || path.isAbsolute(name) || process.platform === 'win32' && path.win32.parse(name).root ||
       name.split(/[\\/]/).some((part) => part === '.' || part === '..' || !part)) {
@@ -456,7 +486,7 @@ function observeContext(request, now = Date.now()) {
 
 // Read-only, caller-bound planning evidence. Native last usage is a response-boundary
 // context basis, not timeless occupancy; a forecast cannot authorize host actions.
-function assessContext(request, prior, input, now = Date.now()) {
+function assessContext(request, prior, input, now = Date.now(), transcriptObservation = null) {
   const result = {decision: 'unknown', capacityFit: 'unknown', sourceReleaseAllowed: false,
     scope: 'conditional-context-budget-only', reasons: [], windowTokens: null,
     remainingAfterReserves: null, efficiencyCeilingTokens: null};
@@ -476,6 +506,16 @@ function assessContext(request, prior, input, now = Date.now()) {
     return stop('reassess', 'assessment-binding-missing-or-changed');
   }
   let nativeRemaining = null;
+  let transcript = null;
+  if (request.nativeContext === true) {
+    transcript = transcriptObservation;
+    if (Object.hasOwn(request, 'signals') || transcript?.state !== 'observed' ||
+        canonical(transcript.conditions) !== canonical(scope) || transcript.validUntilMs <= now) {
+      return stop('reassess', 'native-transcript-observation-changed-or-unavailable');
+    }
+    result.observationId = transcript.observationId;
+    result.nativeSourceRef = transcript.sourceRef;
+  }
   if (Object.hasOwn(request, 'signals')) {
     const current = observeContext(request.signals, now);
     if (current.state !== 'window-observed' || current.observationId !== assessment.observationId ||
@@ -492,15 +532,24 @@ function assessContext(request, prior, input, now = Date.now()) {
   if (assessment.integrity === 'degraded') return stop('reassess', 'resolve-observed-context-loss-or-drift');
   if (assessment.integrity !== 'verified') return stop('unknown', 'inheritance-integrity-unknown');
   const native = assessment.usageEvent;
-  if (native?.method !== 'thread/tokenUsage/updated' || native.params?.threadId !== scope.threadId ||
-      native.params?.turnId !== scope.turnId) return stop('unknown', 'matching-native-usage-unavailable');
+  if (!transcript && (native?.method !== 'thread/tokenUsage/updated' || native.params?.threadId !== scope.threadId ||
+      native.params?.turnId !== scope.turnId)) return stop('unknown', 'matching-native-usage-unavailable');
   const count = (n) => Number.isSafeInteger(n) && n >= 0;
-  const window = native.params.tokenUsage?.modelContextWindow;
+  const window = transcript ? transcript.windowTokens : native.params.tokenUsage?.modelContextWindow;
   if (!count(window) || window === 0) return stop('unknown', 'native-window-unknown');
   result.windowTokens = window;
   // total is cumulative. last is the native response-boundary context basis,
   // while get_context_remaining includes the tighter native compaction/window budget.
-  const estimate = assessment.estimates;
+  let estimate = assessment.estimates;
+  if (transcript) {
+    if (!count(estimate?.contextTailUpperBoundTokens) || !count(transcript.lastResponseTokens) ||
+        !Number.isSafeInteger(transcript.lastResponseTokens + estimate.contextTailUpperBoundTokens)) {
+      return stop('unknown', 'sourced-unaccounted-context-tail-required');
+    }
+    // Read and assess together. An intervening model response may legitimately
+    // grow last usage; consume fresh counters rather than repeatedly reject it.
+    estimate = {...estimate, contextUpperBoundTokens: transcript.lastResponseTokens + estimate.contextTailUpperBoundTokens};
+  }
   const common = ['nextWorkTokens', 'handoffTokens', 'recoveryTokens', 'safetyMarginTokens'];
   if (!estimate || !text(estimate.sourceRef) || !common.every((key) => count(estimate[key])) ||
       estimate.handoffTokens === 0 || estimate.recoveryTokens === 0 || estimate.safetyMarginTokens === 0) {
@@ -519,6 +568,10 @@ function assessContext(request, prior, input, now = Date.now()) {
   }
   if (!count(estimate.contextUpperBoundTokens)) {
     return stop('unknown', 'sourced-context-upper-bound-required-without-native-remaining-budget');
+  }
+  const responseBasis = transcript ? transcript.lastResponseTokens : native.params.tokenUsage?.last?.totalTokens;
+  if (count(responseBasis) && estimate.contextUpperBoundTokens < responseBasis) {
+    return stop('reassess', 'context-forecast-below-observed-response-basis');
   }
   const efficiency = estimate.efficiencyCeilingTokens;
   if (efficiency != null && (!count(efficiency) || efficiency === 0 || !text(estimate.efficiencySourceRef))) {
@@ -662,16 +715,24 @@ function operate(request) {
   }
   if (!where) fail('native-user-input-receipt-missing');
   if (request.op === 'read-native-input') return readNativeInputSnapshot(request, where);
+  if (request.op === 'observe-context') return readNativeContextSnapshot(request, where);
   return locked(where, () => {
     const currentInput = inputLocked(where, () => readInput(where));
     if (!currentInput) fail('native-user-input-receipt-missing');
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
-    if (request.op === 'assess-context') return assessContext(request, prior, currentInput);
+    if (request.op === 'assess-context') {
+      const observation = request.nativeContext === true ? observeStoredContext(currentInput, request) : null;
+      const result = assessContext(request, prior, currentInput, Date.now(), observation);
+      const after = inputLocked(where, () => readInput(where));
+      return canonical(after) === canonical(currentInput) ? result
+        : {...result, decision: 'reassess', sourceReleaseAllowed: false, reasons: ['input-changed-during-assessment']};
+    }
     if (request.op === 'status') return {epoch: currentInput.epoch, revision: prior?.revision || 0,
       storage: where.storage,
       recoveryInputs: {available: Array.isArray(currentInput.nativeInputs), count: currentInput.nativeInputs?.length || 0},
       inputSource: currentInput.inputSource || 'unspecified-legacy-receipt',
       hostObservation: currentInput.hostObservation || null,
+      nativeContextSourceAvailable: Boolean(currentInput.nativeContextSource) && !needsInput(currentInput) && !currentInput.interrupted,
       hostObservationCurrent: Boolean(currentInput.hostObservation) && !needsInput(currentInput) && !currentInput.interrupted,
       needsNativeReplay: currentInput.needsNativeReplay === true,
       needsResumeReconciliation: currentInput.needsResumeReconciliation === true,
@@ -766,6 +827,7 @@ function hint(event, where, currentInput, prior = null) {
     'A stopped turn is not task completion. Before context renewal can omit history, preserve the current goal, authority, pauses, reusable verified results with source and verification references, observed effects, uncertainties and remaining work; reconcile these before further effects. If repeated reads or renewals stop advancing verified results, reassess work-unit size, representation and permitted topology; change the route when evidence warrants it. ' +
     'For needed handoff, quiesce source writes but retain recovery until the exact target accepts the reconciled goal, authority, effects and unfinished work and demonstrates safe continuation; unresolved loss or a receipt alone cannot authorize source release. ' +
     'Before large reads or long work, use available native context/budget signals to size the next useful unit and reserve verification, handoff and recovery capacity. Use assess-context via helper help only with bound signals and sourced estimates. Reassess material host/model/context changes; unknown signals require short spans and early checkpoints, never guessed percentages. ' +
+    'When context-dependent work needs it, observe-context reads recent usage only from this task\'s Hook-bound native transcript; assess-context with nativeContext=true re-reads it while applying your sourced forecasts. It provides evidence and conditional budget judgment, not permission or a handoff executor. ' +
     'Ask briefly only for an unresolved necessary decision, authorization or personal action; respect actual pauses and keep standalone answers lightweight. ' +
     'Complete the full collaboration and delivery loop without Plan or Goal mode. Enable either only on explicit user selection or request; ordinary continue/finish wording and internal plan records grant none. Preserve a selected mode and follow its effective host constraints, including in delegated work; reconcile the latest goal, pauses, budget and unfinished work without bypassing restrictions. ' +
     'Reassess affected assumptions when native host observations change or become unavailable. Respect explicit user choices and actual host constraints; confirm only a material unresolved intention, then correct and verify affected results. Do not restore user settings automatically or infer collaboration mode from permission mode. ' +
@@ -897,7 +959,8 @@ function handleHook(event) {
       // Loading stored history is not fresh authority. Keep the contract and
       // pause state. A new native input can enter normally; only actual input
       // loss needs token-bound replay. Do not clear a pre-existing quarantine.
-      publishInput(where, {...input, epoch: crypto.randomUUID(), needsResumeReconciliation: true, continuation: null});
+      publishInput(where, {...input, epoch: crypto.randomUUID(), needsResumeReconciliation: true,
+        nativeContextSource: null, continuation: null});
       return {hookSpecificOutput: {hookEventName: name, additionalContext:
         'Accord: stored task evidence needs recovery reconciliation. Read checkpoint status and inspect current user/host authority, prior effects and writer ownership. A new native user input enters normally; if no new input arrives, use recovery_epoch to replay actual current input retained by the host. Existing input-loss quarantine still requires token-bound replay. Preserve pauses; inherited history grants no permission or writer ownership.'}};
     }, true);
@@ -918,7 +981,7 @@ function handleHook(event) {
       const changed = canonical(hostObservation.values) !== canonical(previous.hostObservation?.values || {model: null, permissionMode: null});
       // Condition drift obsoletes the old continuation decision. Preserve the
       // original prompt identity: a host callback cannot create user authority.
-      const refreshed = {...previous, hostObservation, inputSource: 'host-continuation',
+      const refreshed = {...previous, hostObservation, inputSource: 'host-continuation', nativeContextSource: nativeContextSource(event),
         ...(changed ? {epoch: crypto.randomUUID(), continuation: null} : {})};
       publishInput(where, refreshed);
       return hint(event, where, refreshed, prior);
@@ -926,7 +989,8 @@ function handleHook(event) {
     if (previous?.needsNativeReplay && !Object.hasOwn(event, 'recovery_epoch')) fail('input-receipt-needs-native-replay');
     const input = {schema: 1, epoch: crypto.randomUUID(), promptSha256: sha(event.prompt),
       turnId: event.turn_id || null, continuation: null, failures: previous?.failures || {},
-      inputSource: 'native-input-event', hostObservation: observeNativeHost(event, previous)};
+      inputSource: 'native-input-event', hostObservation: observeNativeHost(event, previous),
+      nativeContextSource: nativeContextSource(event)};
     input.nativeInputs = [...(retainedInputs(previous) || []), {epoch: input.epoch, turnId: input.turnId,
       source: Object.hasOwn(event, 'recovery_epoch') ? 'retained-native-replay' : 'native-input-event',
       ...(Object.hasOwn(event, 'recovery_epoch') ? {recoveryEpoch: event.recovery_epoch} : {}),
@@ -995,7 +1059,13 @@ const HELP = {
   scope: 'Root-task file evidence and supported native Stop continuation; no command, archive or handoff executor. Native subagent events carry agent_id because session_id is shared with the root. They leave root state unchanged; subagent continuation uses native task state. This helper does not provide independent subagent checkpoints or enforce caller authorization.',
   input: 'One JSON object on piped stdin, not an interactive terminal. In PowerShell, pipe $request through ConvertTo-Json -Depth 8 -Compress to node <helper-path>. Use --hook only for native events; other calls need the current native session/cwd receipt.',
   storage: 'YIYUAN_ACCORD_TASK_STATE_DIR selects an explicit scoped directory. Otherwise use ~/.yiyuan-accord/task-state. Exact-session legacy temporary records remain at their original location; competing locations fail without merge. status.storage reports the selected path and kind. No automatic migration, cross-session adoption, scheduler or power-loss guarantee. State file contents are flushed before atomic replacement; filesystem and directory-entry durability need separate validation.',
-  operations: ['status', 'read-native-input', 'assess-context', 'bind', 'pause', 'retire', 'recover-lock'],
+  operations: ['status', 'read-native-input', 'observe-context', 'assess-context', 'bind', 'pause', 'retire', 'recover-lock'],
+  nativeContext: {
+    read: {op: 'observe-context', session_id: 'native-session-id', cwd: 'absolute-workspace', maxAgeMs: 30000},
+    source: 'Only the native transcript binding retained from a root UserPromptSubmit event is read; request-supplied paths are ignored. Reads are bounded to that file and do not scan other task history. Missing, stale, changing or unbound metadata is unknown.',
+    assessment: 'Use assess-context with nativeContext=true, current epoch/revision, observation.conditions and your independently sourced integrity/time/estimate claims. Provide estimates.contextTailUpperBoundTokens for unaccounted history after the latest response, plus nextWorkTokens/handoffTokens/recoveryTokens/safetyMarginTokens and sourceRef. The operation reads fresh counters and derives contextUpperBoundTokens from lastResponseTokens plus the tail estimate; normal response growth does not force an observe/assess retry loop. Changed model/turn/context generation still requires reassessment. Returned observationId/nativeSourceRef identify the facts actually used.',
+    limit: 'Native last usage is a recent response-boundary basis, cumulative usage is not occupancy, and neither proves inheritance integrity or authority. Existing pauses, input recovery, forecast and ownership checks remain; no automatic mode activation, dispatch or source release.'
+  },
   status: {op: 'status', session_id: 'native-session-id', cwd: 'absolute-workspace'},
   retainedInputs: {
     read: {op: 'read-native-input', session_id: 'native-session-id', cwd: 'absolute-workspace', index: 0, offset: 0, maxChars: 4000},
@@ -1032,7 +1102,7 @@ const HELP = {
   resume: 'SessionStart/resume sets needsResumeReconciliation without changing the contract or pause state. New native user input enters normally; absent new input, the native caller may replay actual current retained input with recovery_epoch. Neither route resumes paused work or reconciles the saved binding automatically. Existing needsNativeReplay quarantine from real input loss remains strict. Inspect current authority, effects and writer ownership before binding. No cross-task adoption, writer lock or host permission enforcement.',
   replay: 'After input failure or recovery, replay the actual current UserPromptSubmit event through --hook UserPromptSubmit with recovery_epoch from status. The derived token binds the receipt and failure watermarks, including a missing receipt. Use null only when no receipt or failure watermark exists. A later uncaptured native input changes the token; ordinary inputs cannot silently clear quarantine. Never reconstruct missing human intent from the old checkpoint.',
   inputFailure: 'Input loss is conservatively latched outside the input lock. Unidentified input transport failure invalidates helper freshness only in the native caller working directory. Recovery acknowledges it per session. Small failure watermarks remain until the owning state directory is safely retired. If the watermark itself cannot persist, cross-process protection is unknown and the native caller must hold continuation; this helper is not a host permission barrier.',
-  limits: 'Existence checks prove only existence; JSON pointers and hashes share observed file bytes, followed by a stability recheck. External writers are not locked: this is local evidence, not an atomic workspace transaction. Caller owns goal, source trust, authority, predicate adequacy and external acceptance. No transcript parsing or extra model call.',
+  limits: 'Existence checks prove only existence; JSON pointers and hashes share observed file bytes, followed by a stability recheck. External writers are not locked: this is local evidence, not an atomic workspace transaction. Caller owns goal, source trust, authority, predicate adequacy and external acceptance. Native context reads only bounded metadata from the Hook-bound transcript and returns no conversation text; no extra model call.',
 };
 if (require.main === module) {
   if (process.argv.includes('--help')) process.stdout.write(JSON.stringify(HELP) + '\n');

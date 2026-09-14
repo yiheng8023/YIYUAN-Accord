@@ -439,7 +439,7 @@ def plugin_file_locators(root, plugin_root):
 def activation_mechanism_errors(
     root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
     task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
-    resume_reconciliation=False, context_reentry=False,
+    resume_reconciliation=False, context_reentry=False, native_context=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -459,6 +459,18 @@ def activation_mechanism_errors(
         f"plugins/yiyuan-accord-{package}/runtime/accord-hook.cjs",
     ]
     checkpoint_locator = f"plugins/yiyuan-accord-{package}/runtime/task-checkpoint.cjs"
+    if native_context:
+        context_locator = f"plugins/yiyuan-accord-{package}/runtime/codex-context.cjs"
+        additional_mechanisms = [*additional_mechanisms, context_locator]
+        try:
+            context_path = repository_relative_path(root, context_locator)
+            canonical_context = repository_relative_path(root, "runtime/codex-context.cjs")
+            if (adapter_id != "codex" or context_path is None or canonical_context is None
+                    or context_path.is_symlink() or canonical_context.is_symlink()
+                    or _owned_bytes(context_path) != _owned_bytes(canonical_context)):
+                errors.append(f"{prefix} native-context module differs from canonical bytes")
+        except OSError:
+            errors.append(f"{prefix} native-context module is unreadable")
     if task_checkpoint:
         additional_mechanisms = [*additional_mechanisms, checkpoint_locator]
     if mechanism_locators != expected_locators + list(additional_mechanisms):
@@ -706,6 +718,7 @@ def validate_host_projection(
         retained_checkpoint_revision=retained_checkpoint_revision,
         resume_reconciliation=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("resumeReconciliation")),
         context_reentry=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("contextReentry")),
+        native_context=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("nativeContext")),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,

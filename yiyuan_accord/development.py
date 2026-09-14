@@ -112,6 +112,7 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
         contract["optionalTaskCheckpoint"]["resumeReconciliation"] = "SessionStart/resume-gates-old-binding; new-native-input-or-retained-input-replay; caller-rechecks-authority-effects-and-writer; input-loss-replay-remains-strict"
         contract["optionalTaskCheckpoint"]["contextAssessment"] = "assess-context: read-only caller-bound forecasts; native-window-not-occupancy; reserve-takeover-and-recovery; unknown-without-evidence; no-dispatch-or-release-authority"
         contract["optionalTaskCheckpoint"]["contextSignals"] = "--context-signals: caller-owned App Server notifications; connection-and-turn-bound capacity; invalidate-on-reroute-compaction-disconnect-expiry; no-live-occupancy-inference"
+        contract["optionalTaskCheckpoint"]["nativeContext"] = "observe-context: bounded read of Hook-bound current rollout metadata; assess-context nativeContext=true consumes fresh response counters with sourced tail forecasts; changed-generation-reassess; missing-is-unknown; no-transcript-text-or-dispatch"
         contract["optionalTaskCheckpoint"]["nativeHostObservation"] = "UserPromptSubmit model/permission_mode snapshots; missing-is-unknown; changed-host-continuation-invalidates-old-readiness-without-new-user-authority; no-collaboration-mode-or-all-settings-inference"
         contract["optionalTaskCheckpoint"]["storage"] = {
             "default": "user-home/.yiyuan-accord/task-state",

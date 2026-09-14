@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "99ca350fff70e678429bd4e568ee17675ebfd34075405892a82fb2beaa4a94df",
+        "packageSha256": "a5c93304d0ae6d3ab21ad11176ca3370a830be5499194669759f5b99469e8112",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -57,6 +57,7 @@
         "mechanismFiles": [
           "plugins/yiyuan-accord-codex/hooks/hooks.json",
           "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+          "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",
           "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs"
         ],
         "activationContext": "SessionStart hints are advisory. Input Hooks maintain receipts even without a bound checkpoint. Caller-selected file checks can request supported Stop continuation once per changed observation. New input invalidates old decisions. Failed capture requires current native replay with a derived epoch. Unbound reconciled receipts retire on session end or matched caller action. Failure watermarks outlive task retirement. Unpersistable failure is unknown and the native caller must hold continuation. The Agent owns intent, predicate adequacy and execution. Dev.17 local checks are not native admission. Codex also connects Interrupt.",
@@ -100,6 +101,7 @@
       "plugins/yiyuan-accord-codex/adapter.json",
       "plugins/yiyuan-accord-codex/hooks/hooks.json",
       "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+      "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",
       "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
@@ -111,6 +113,7 @@
       "product/reshaping-guidance.json",
       "research/PROTOTYPE-dynamic-relation-graph.html",
       "runtime/accord-hook.cjs",
+      "runtime/codex-context.cjs",
       "runtime/task-checkpoint.cjs",
       "scripts/codex_rpc.py",
       "scripts/codex_events.py",
@@ -121,6 +124,7 @@
       "tests/product/test_admission.py",
       "tests/product/test_claude_entry.py",
       "tests/product/test_codex_entry.py",
+      "tests/product/test_codex_context.py",
       "tests/product/test_codex_rpc.py",
       "tests/product/test_codex_events.py",
       "tests/product/test_coordination_observer.py",
@@ -143,10 +147,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1700000,
-      "maxTrackedFiles": 140,
+      "maxProductCodeAndTestBytes": 1800000,
+      "maxTrackedFiles": 143,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The public lifecycle entry replaces the need to execute private backup scripts and adds necessary source, path, deadline, raw-evidence and cleanup counterexamples. The integrated product-code/test measurement is about 1.61 million bytes; use a 1700000 ceiling to retain at least five-percent reserve, and 140 tracked files for the two new maintainer files. Keep the existing primary-instruction ceiling. This metric does not count every maintainer script byte or measure product value; assess the complete added execution path by its purpose and maintenance burden. The twelve-file runtime package is unchanged."
+      "rationale": "The public lifecycle entry replaces private execution scripts. The native-context adapter adds one implementation, its distribution copy and focused tests to connect existing Hook metadata to existing budget assessment; it adds no watcher, model call or handoff executor. Allow 143 tracked files and a 1800000 product-code/test ceiling with five-percent reserve, retaining the primary-instruction ceiling. This metric excludes some maintainer scripts and does not measure product value. The distribution now contains thirteen files; changed package evidence must be rebound by affected scope."
     }
   },
   "source": {

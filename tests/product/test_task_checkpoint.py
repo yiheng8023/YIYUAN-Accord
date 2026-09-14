@@ -9,6 +9,7 @@ import tempfile
 import unittest
 import copy
 import time
+from datetime import datetime, timezone
 
 
 RUNTIME = Path(__file__).resolve().parents[2] / "runtime/task-checkpoint.cjs"
@@ -30,7 +31,7 @@ class TaskCheckpointTests(unittest.TestCase):
         self.event("UserPromptSubmit", prompt="Deliver both files from the source and preserve the input.")
 
     def invoke(self, request, *, hook=False, success=True):
-        request = {"session_id": "test-session", "cwd": str(self.work), **request}
+        request = {"session_id": getattr(self, 'session', 'test-session'), "cwd": str(self.work), **request}
         preload = ['--require', str(self.preload)] if hasattr(self, 'preload') else []
         result = subprocess.run([self.node, *preload, str(RUNTIME), *(["--hook", request['hook_event_name']] if hook else [])],
                                 input=json.dumps(request), text=True, encoding="utf-8",
@@ -771,6 +772,88 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
             self.assertEqual(answer["decision"], expected)
             self.assertFalse(answer["sourceReleaseAllowed"])
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+
+    def native_transcript(self):
+        self.session = '11111111-2222-4333-8444-555555555555'
+        self.environment['CODEX_HOME'] = str(self.root / 'codex-home')
+        self.transcript = Path(self.environment['CODEX_HOME']) / 'sessions/2026/09/14' / (
+            'rollout-2026-09-14T12-00-00-' + self.session + '.jsonl')
+        self.transcript.parent.mkdir(parents=True)
+        self.transcript.write_text('', encoding='utf-8')
+        self.append_native('session_meta', dict(id=self.session, cwd=str(self.work), cli_version='0.154.0'))
+        self.append_native('turn_context', dict(turn_id='native-turn', cwd=str(self.work), model='fixture-model'))
+        self.append_usage(4000)
+        self.event('UserPromptSubmit', prompt='Continue the authorized delivery.', turn_id='native-turn',
+                   model='fixture-model', transcript_path=str(self.transcript))
+        self.bind()
+
+    def append_native(self, kind, payload):
+        with self.transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps(dict(type=kind, payload=payload,
+                timestamp=datetime.now(timezone.utc).isoformat())) + '\n')
+
+    def append_usage(self, last, window=10000):
+        self.append_native('event_msg', dict(type='token_count', info=dict(
+            last_token_usage=dict(total_tokens=last), total_token_usage=dict(total_tokens=1000000),
+            model_context_window=window)))
+
+    def transcript_request(self, observation):
+        request = self.context_request()
+        request.update(nativeContext=True, conditions=observation['conditions'])
+        request['assessment'].update(conditions=observation['conditions'], observationId=observation['observationId'])
+        request['assessment'].pop('usageEvent')
+        request['assessment']['estimates'].update(contextTailUpperBoundTokens=1000)
+        return request
+
+    def test_native_context_reads_only_hook_source_without_state_mutation(self):
+        self.native_transcript()
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        result = self.invoke(dict(op='observe-context', transcript_path=str(self.root / 'wrong.jsonl')))
+        self.assertEqual(result['state'], 'observed')
+        self.assertEqual(result['lastResponseTokens'], 4000)
+        self.assertEqual(result['cumulativeScope'], 'session-cumulative-not-occupancy')
+        self.assertNotIn('authorized delivery', json.dumps(result))
+        self.assertFalse(result['sourceReleaseAllowed'])
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+
+    def test_native_context_assessment_consumes_growth_and_rejects_changed_generation(self):
+        self.native_transcript()
+        observed = self.invoke(dict(op='observe-context'))
+        request = self.transcript_request(observed)
+        self.assertEqual(self.invoke(request)['decision'], 'continue-bounded')
+        self.append_usage(5000)
+        grown = self.invoke(request)
+        self.assertNotEqual(grown['observationId'], observed['observationId'])
+        self.assertEqual(grown['decision'], 'prepare-handoff')
+        self.assertFalse(grown['sourceReleaseAllowed'])
+        self.append_native('compacted', dict(message='native fixture'))
+        self.append_usage(4000)
+        self.assertEqual(self.invoke(request)['decision'], 'reassess')
+
+    def test_native_context_requires_tail_evidence_and_preserves_pause_and_resume(self):
+        self.native_transcript()
+        observed = self.invoke(dict(op='observe-context'))
+        request = self.transcript_request(observed)
+        request['assessment']['estimates'].pop('contextTailUpperBoundTokens')
+        self.assertEqual(self.invoke(request)['decision'], 'unknown')
+        self.pause('User paused the work.')
+        self.assertEqual(self.invoke(self.transcript_request(observed))['decision'], 'paused')
+        self.event('SessionStart', source='resume')
+        self.assertFalse(self.status()['nativeContextSourceAvailable'])
+        self.assertEqual(self.invoke(dict(op='observe-context'))['state'], 'unknown')
+        self.assertEqual(self.status()['mode'], 'paused')
+
+    def test_native_context_missing_or_interrupted_is_unknown(self):
+        self.assertEqual(self.invoke(dict(op='observe-context'))['state'], 'unknown')
+        self.native_transcript()
+        self.event('Interrupt')
+        self.assertEqual(self.invoke(dict(op='observe-context'))['state'], 'unknown')
+        self.assertFalse(self.status()['nativeContextSourceAvailable'])
+
+    def test_context_forecast_cannot_be_lower_than_native_response_basis(self):
+        request = self.context_request()
+        request['assessment']['estimates']['contextUpperBoundTokens'] = 100
+        self.assertEqual(self.invoke(request)['decision'], 'reassess')
 
     def test_context_budget_does_not_invent_occupancy_efficiency_or_loss(self):
         for field, value, expected in (("contextUpperBoundTokens", None, "unknown"),
