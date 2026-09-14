@@ -760,6 +760,8 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                 ("claimCeiling", "releaseIntent", "conditional-v3.2-release-after-acceptance"),
                 ("acceptance", "currentQualification", "qualified"),
                 ("ordinaryUser", "manualRescueAcceptance", True),
+                ("ordinaryUser", "modePrerequisites", ["goal"]),
+                ("ordinaryUser", "modeActivation", "automatic"),
                 ("ordinaryUser", "technicalOrchestration", "user-owned")):
             with self.subTest(section=section, field=field):
                 changed = copy.deepcopy(self.contract)

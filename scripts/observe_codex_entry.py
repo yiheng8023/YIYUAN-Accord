@@ -1011,6 +1011,8 @@ def _ordinary_rollout(path, sessions_root):
     if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or candidate.is_symlink()
             or getattr(info, "st_file_attributes", 0) & 0x400):
         raise ValueError("native rollout is not an ordinary file")
+    if not candidate.resolve(strict=True).is_relative_to(root.resolve(strict=True)):
+        raise ValueError("native rollout is outside the sessions root")
     return candidate
 
 

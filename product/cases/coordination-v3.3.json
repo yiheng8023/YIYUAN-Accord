@@ -19,7 +19,7 @@
   "deliverables": ["plan.md", "schedule.csv", "budget.json", "notice.md", "materials.md"],
   "limits": {
     "usageCaps": {
-      "totalTokens": 900000,
+      "totalTokens": 2500000,
       "uncachedInputTokens": 200000,
       "outputTokens": 14000
     },

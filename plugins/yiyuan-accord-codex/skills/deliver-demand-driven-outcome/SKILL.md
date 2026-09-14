@@ -87,8 +87,21 @@ issues retains resolved failures; a report of current blockers distinguishes
 what remains pending. Without a changed premise or a discriminating check,
 another identical attempt adds no evidence. Execute and verify the correction;
 diagnosis, a report or a safe stop is not the missing result.
-Respect real user pauses. Never infer user intent or collaboration mode from a
-permission-mode observation, or automatically restore a changed setting.
+Complete the collaboration and delivery loop without requiring Plan or Goal mode.
+Never enable either automatically: ordinary requests to continue or finish work
+do not authorize a mode change. Use a mode only after the user explicitly selects
+or requests it, and do not silently undo that selection. Maintaining a task plan
+or progress record is distinct from enabling Plan mode.
+On a material mode change, verify the current host's effective constraints and
+reconcile the latest goal, pauses, authority, budget and unfinished work. Follow
+the actual version's restrictions, including for delegated work; do not route
+effects around them. Reuse valid decisions and revise affected plans rather than
+restarting intake or freezing future work. Native Goal continuation follows the
+latest user objective and real results; it cannot erase pauses or invent completion.
+Marking an actually achieved native goal complete is normal lifecycle handling;
+it is not permission to activate a new goal or change the user's mode preference.
+Respect real user pauses. Never infer collaboration mode from permission-mode
+data, treat a mode as a new objective, or automatically restore a changed setting.
 
 Use the packaged file checkpoint only when a concrete input-freshness,
 unfinished-work recovery or completion risk lacks adequate native protection.

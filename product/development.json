@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "aac8795f576ac6e49873f1f6e514c5bf7ec2d8684d82fc463c8ead22a46b361a",
+        "packageSha256": "e6b00ececa2435cf194a992d0e080bc90e9beede730521729a2da390b67e1b96",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -63,7 +63,7 @@
         "interfaceDefaultPrompt": [
           "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
         ],
-        "maxSkillBytes": 14500,
+        "maxSkillBytes": 16000,
         "requiredSkillMarkers": [],
         "forbiddenPaths": []
       }
@@ -148,7 +148,7 @@
     }
   },
   "source": {
-    "purpose": "Drive the host and Agent to fulfill responsibilities needed for an authorized outcome. Reuse available host resources and maintained alternatives; compose or build when justified by required effects and total lifecycle burden. Own supported mechanics across functions, settings, configuration, interaction, resources, context, handoff and lifecycle. Human decision authority is distinct from manual operation; preserve intervention and revocation. Visible controls are not automatically actionable or authorized. No unmeasured majority-of-controls claim is made. Reduce avoidable user orchestration, correction and recovery; owning every implementation is not the product goal. Machine-suited representations, parallelism and automation may serve human goals without imitating human work routines. Judge them by observable effect, relevant lookup and adaptation cost, evidence, inspectability and necessary human control, not assumed machine superiority. Accord owns the collaboration policy between user intent, host capabilities and surrounding extensions. Customizable environments are ordinary operating conditions, not an excuse for drift. Across every necessary duty, retain the control needed to preserve user-owned goals and authority, reconcile relevant variables, validate claims and reach the promised failure post-state. Host mechanisms may implement delegated operations, but their mere availability cannot discharge Accord’s declared responsibility. Noncommercial open source does not lower the agreed industrial or commercial production delivery standard; that standard requires concrete effect, compatibility, recoverability and maintenance evidence, not a label or a certification claim.",
+    "purpose": "Drive the host and Agent to fulfill responsibilities needed for an authorized outcome. Reuse available host resources and maintained alternatives; compose or build when justified by required effects and total lifecycle burden. Own supported mechanics across functions, settings, configuration, interaction, resources, context, handoff and lifecycle. Human decision authority is distinct from manual operation; preserve intervention and revocation. Visible controls are not automatically actionable or authorized. No unmeasured majority-of-controls claim is made. Reduce avoidable user orchestration, correction and recovery; owning every implementation is not the product goal. Machine-suited representations, parallelism and automation may serve human goals without imitating human work routines. Judge them by observable effect, relevant lookup and adaptation cost, evidence, inspectability and necessary human control, not assumed machine superiority. Accord owns the collaboration policy between user intent, host capabilities and surrounding extensions. Customizable environments are ordinary operating conditions, not an excuse for drift. Across every necessary duty, retain the control needed to preserve user-owned goals and authority, reconcile relevant variables, validate claims and reach the promised failure post-state. Host mechanisms may implement delegated operations, but their mere availability cannot discharge Accord’s declared responsibility. Noncommercial open source does not lower the agreed industrial or commercial production delivery standard; that standard requires concrete effect, compatibility, recoverability and maintenance evidence, not a label or a certification claim. Complete the full applicable collaboration and delivery loop without requiring Plan or Goal mode. These remain optional upstream controls, compatible when the user explicitly chooses them; ordinary work requests do not authorize automatic activation. Follow effective current-version constraints without allowing mode templates or stored goals to replace the latest user objective, pauses and unfinished responsibilities.",
     "hypothesis": "Context-selected intervention can improve bounded outcomes and total collaboration burden. A correct design, isolated success or safe stop alone does not establish that incremental value.",
     "bootstrapBoundary": "Bootstrap through an available, authorized host entry and observable conditions. Reuse supported discovery, execution, state and recovery; Accord intervention need not supply a duplicate executor or runtime. Add only justified missing means or material improvement. Injection or self-bootstrapping creates neither authority, hidden-state access, physical feasibility nor a surviving recovery actor after all components fail. Retire redundant assets after checking callers, still-needed effects and affected acceptance; historical receipts keep their original scope. Accord is an open collaboration layer across host and extension boundaries, not a universal proxy or a new authority above them. Resolve conflicts by authenticated origin, applicable scope, freshness and explicit authorization, never by installation order, text volume or capability presence. Host-enforced limits remain limits; extension output is evidence or advice, not user authorization. Hook guards cover only supported observed paths; uncovered paths cannot inherit their guarantee.",
     "globalInvariants": [
@@ -4400,7 +4400,9 @@
             "userConfig": "ignore-user-config",
             "extensions": "plugins/apps disabled; four reviewed task-local source Hooks",
             "input": "exact scripts/observe_codex_entry.py PROMPT; no Accord or Skill name",
-            "source": "fresh case after immutable candidate binding; previous observations excluded"
+            "source": "fresh case after immutable candidate binding; previous observations excluded",
+            "collaborationMode": "default",
+            "goalModeActive": false
           },
           "id": "v33-codex-cli-ordinary-delivery",
           "rule": "Only the fresh source-level CLI delivery/retry and owned post-state; this scope is a partial contribution to A01/A03/A07, not their complete acceptance."
@@ -4520,7 +4522,9 @@
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "collaborationMode": "default",
+            "goalModeActive": false
           },
           "duties": [
             "goal-authority-correction",
@@ -4567,7 +4571,9 @@
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "collaborationMode": "default",
+            "goalModeActive": false
           },
           "duties": [
             "goal-authority-correction",
@@ -4614,7 +4620,9 @@
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "collaborationMode": "default",
+            "goalModeActive": false
           },
           "duties": [
             "premise-and-consistency",
@@ -4665,9 +4673,11 @@
             "source": "fresh case after immutable candidate binding; previous observations excluded",
             "modelBinding": "requested and native-bootstrap resolved; complete mid-turn backend routing is not established by the CLI JSON projection",
             "diagnostics": "error,codex_exec=info bootstrap log and native --output-last-message; no HTTP debug logging",
-            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted by App Server before Agent execution; observe and exactly restore it without changing unrelated user choices"
+            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted by App Server before Agent execution; observe and exactly restore it without changing unrelated user choices",
+            "collaborationMode": "default",
+            "goalModeActive": false
           },
-          "oracle": "Before execution, bind the immutable candidate, exact package, observer source and actual host/config/model readback. Refresh model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks; changed routing revises this case, not a global model ladder. Independently read the exact prompt and native input, paired commands, source/output bytes, report meaning, input preservation and final process/state/config observations. Correlate the native bootstrap configuration with this thread and the current model directory; requested arguments alone are not readback, and bootstrap is not proof of every backend routing decision. Inspect the host-written last-message and completed turn together; this CLI projection omits message phase, so do not fabricate App Server fields. Check that this bounded simple task uses no unnecessary delegation or additional workflow. A source failure must precede a successful retry without evaluator rescue. Existence or matching words do not prove report meaning. The runner only prepares and observes a source-level CLI mechanism: it does not establish installed-package lifecycle, Desktop, ChatGPT, continuity, resource-pressure response or value. Invalid/missing raw evidence fails the dependent facet. Expected facts are predicates, never observation data. Review and current-condition recheck remain required.",
+          "oracle": "Before execution, bind the immutable candidate, exact package, observer source and actual host/config/model readback. Refresh model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks; changed routing revises this case, not a global model ladder. Independently read the exact prompt and native input, paired commands, source/output bytes, report meaning, input preservation and final process/state/config observations. Correlate the native bootstrap configuration with this thread and the current model directory; requested arguments alone are not readback, and bootstrap is not proof of every backend routing decision. Inspect the host-written last-message and completed turn together; this CLI projection omits message phase, so do not fabricate App Server fields. Check that this bounded simple task uses no unnecessary delegation or additional workflow. A source failure must precede a successful retry without evaluator rescue. Existence or matching words do not prove report meaning. The runner only prepares and observes a source-level CLI mechanism: it does not establish installed-package lifecycle, Desktop, ChatGPT, continuity, resource-pressure response or value. Invalid/missing raw evidence fails the dependent facet. Expected facts are predicates, never observation data. Review and current-condition recheck remain required. This ordinary-execution baseline must complete without Plan mode or an active native Goal. Inspect actual mode/goal state and activation effects; a plan document, update_plan checklist, available Goal feature or missing UI field is not proof of an active/inactive mode. Compatibility with a user-selected mode is assessed separately and does not replace this baseline.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -4693,12 +4703,14 @@
               "originalInputsUnchanged": true,
               "ordinaryInputMatched": true,
               "noEvaluatorRescue": true,
-              "noOutOfScopeEffects": true
+              "noOutOfScopeEffects": true,
+              "unrequestedModeActivation": false
             },
             "poststate": {
               "deliveryRechecked": true,
               "currentModelAndConditionsVerified": true,
-              "unfinishedCheckpointAbsentAfterCompletion": true
+              "unfinishedCheckpointAbsentAfterCompletion": true,
+              "completedWithoutPlanOrGoalMode": true
             },
             "cleanup": {
               "ownedProcesses": 0,
@@ -4896,7 +4908,9 @@
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "collaborationMode": "default",
+            "goalModeActive": false
           },
           "duties": [
             "goal-authority-correction",
@@ -4905,7 +4919,7 @@
           ],
           "id": "v33-goal-authority-correction-01",
           "scope": "v33-goal-authority-correction",
-          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases. This ordinary-execution baseline must complete without Plan mode or an active native Goal. Inspect actual mode/goal state and activation effects; a plan document, update_plan checklist, available Goal feature or missing UI field is not proof of an active/inactive mode. Compatibility with a user-selected mode is assessed separately and does not replace this baseline.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -4928,7 +4942,8 @@
               "ordinaryInputsMatched": true,
               "originalInputsUnchanged": true,
               "noEvaluatorRescue": true,
-              "noOutOfScopeEffects": true
+              "noOutOfScopeEffects": true,
+              "unrequestedModeActivation": false
             },
             "poststate": {
               "deliveryRechecked": true,
@@ -4936,7 +4951,8 @@
               "currentModelAndConditionsVerified": true,
               "noUnresolvedBusinessDuty": true,
               "sourceThreadIdKnown": true,
-              "nativeResumeSucceeded": true
+              "nativeResumeSucceeded": true,
+              "completedWithoutPlanOrGoalMode": true
             },
             "cleanup": {
               "ownedProcesses": 0,
@@ -4984,7 +5000,9 @@
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "collaborationMode": "default",
+            "goalModeActive": false
           },
           "duties": [
             "goal-authority-correction",
@@ -4993,7 +5011,7 @@
           ],
           "id": "v33-paused-work-recovery-01",
           "scope": "v33-paused-work-recovery",
-          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases. This ordinary-execution baseline must complete without Plan mode or an active native Goal. Inspect actual mode/goal state and activation effects; a plan document, update_plan checklist, available Goal feature or missing UI field is not proof of an active/inactive mode. Compatibility with a user-selected mode is assessed separately and does not replace this baseline.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5015,7 +5033,8 @@
               "ordinaryInputsMatched": true,
               "originalInputsUnchanged": true,
               "noEvaluatorRescue": true,
-              "noOutOfScopeEffects": true
+              "noOutOfScopeEffects": true,
+              "unrequestedModeActivation": false
             },
             "poststate": {
               "deliveryRechecked": true,
@@ -5023,7 +5042,8 @@
               "currentModelAndConditionsVerified": true,
               "sourceThreadIdKnown": true,
               "nativeResumeSucceeded": true,
-              "noUnresolvedBusinessDuty": true
+              "noUnresolvedBusinessDuty": true,
+              "completedWithoutPlanOrGoalMode": true
             },
             "cleanup": {
               "ownedProcesses": 0,
@@ -5071,7 +5091,9 @@
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "collaborationMode": "default",
+            "goalModeActive": false
           },
           "duties": [
             "premise-and-consistency",
@@ -5080,7 +5102,7 @@
           ],
           "id": "v33-systemic-correction-01",
           "scope": "v33-systemic-correction",
-          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases. This ordinary-execution baseline must complete without Plan mode or an active native Goal. Inspect actual mode/goal state and activation effects; a plan document, update_plan checklist, available Goal feature or missing UI field is not proof of an active/inactive mode. Compatibility with a user-selected mode is assessed separately and does not replace this baseline.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5104,7 +5126,8 @@
               "ordinaryInputsMatched": true,
               "originalInputsUnchanged": true,
               "noEvaluatorRescue": true,
-              "noOutOfScopeEffects": true
+              "noOutOfScopeEffects": true,
+              "unrequestedModeActivation": false
             },
             "poststate": {
               "deliveryRechecked": true,
@@ -5112,7 +5135,8 @@
               "currentModelAndConditionsVerified": true,
               "noUnresolvedBusinessDuty": true,
               "sourceThreadIdKnown": true,
-              "nativeResumeSucceeded": true
+              "nativeResumeSucceeded": true,
+              "completedWithoutPlanOrGoalMode": true
             },
             "cleanup": {
               "ownedProcesses": 0,
@@ -5299,7 +5323,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Follow N33-20260909 r19. Existing references have resolved the native resume protocol and three execution blockers: preserve cwd/state writable roots on each invocation, allow bounded graceful child cleanup, and check native reported cumulative usage without summing repeated observations. Integrate the committed fixes and run the existing five-stage coordination episode once for its three prospectively bound CLI scopes: goal/authority correction, paused-work recovery and systemic correction. The exact episode selects gpt-5.6-sol/medium and the current user-config baseline; these are not product defaults. Obtain independent semantic, effect, resource and current-condition review before supplying actual records to the existing admission observer API. Do not copy expected facts into evidence. Current PLAN/ACCEPTANCE documents remain required for fresh candidate review, while progress prose and non-executed tests no longer force new host execution. Changed substantive case/duty/quality requirements, executable oracles, conditions or package bytes still invalidate affected reuse. Preserve original observation digests and failed trials. Keep all 17 required scopes and quality floors; do not equate code size with value or publish before necessary acceptance.",
+    "work": "Follow N33-20260909 r20. Full applicable delivery must work without Plan or Goal; never enable either from ordinary continue/finish wording, and respect explicit user selection with effective upstream constraints. The first frozen five-stage observation failed at its 180-second stage boundary and exceeded the former cumulative cap in its raw rollout; preserve it unchanged. Live task-bound usage observation has been added and checked against the original log. Before any new run, bind the current package, explicit default/no-active-goal conditions, actual model/effort/config and the revised workload-based envelope: the same 600-second overall work deadline, 200000 uncached input and 14000 output, with a 2500000 cumulative processing allowance for the observed user-profile workflow. Do not add an arbitrary shorter per-turn deadline. Run only the existing necessary scenario once under those prospective conditions, then independently inspect semantics, modes, actual effects, resources and source identity before admission. Retain all 17 required scopes and no-mode prerequisites; useful partial results and inherited assets stay reusable without rewriting original failures.",
     "requires": "Continue authorized development and integration in the bound main checkout, outside Goal mode, using isolated worktrees for independent writers. Complete and publish 3.3.0 after all necessary acceptance and exact-candidate checks, as requested on 2026-09-14; readiness remains false. Preserve user IDE/cloud/development conversations and immutable historical identity, and retire unneeded task-owned resources. New accounts, trust, data, meaningful cost and unrelated shared or external writes retain their separate boundaries. Prefer official and existing reliable sources before experiments; the plan and latest user decisions own authority."
   },
   "claimCeiling": {
@@ -5319,6 +5343,8 @@
   "ordinaryUser": {
     "input": "natural-language-only",
     "technicalOrchestration": "agent-owned",
+    "modePrerequisites": [],
+    "modeActivation": "explicit-user-selection-or-request-only",
     "manualRescueAcceptance": false,
     "rule": "Assume users cannot assess feasibility and will keep speaking in one conversation. The Agent researches official sources and mature implementations, explains material tradeoffs, operates tools, detects failures and continuity needs, and performs recovery, resource management and closure. Users need not read documentation, learn controls, switch tasks, or prompt continuation.",
     "necessaryHumanAction": "Prepare the concrete result or choice first, then briefly request the necessary accountable decision, authorization or personal action in ordinary language."
@@ -5326,7 +5352,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r19",
+    "revision": "r20",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

@@ -226,7 +226,7 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(manifest["turnTimeoutSeconds"], 180)
             self.assertEqual(manifest["recoveryTimeoutSeconds"], 20)
             self.assertEqual(manifest["limits"]["usageCaps"], {
-                "totalTokens": 900000, "uncachedInputTokens": 200000, "outputTokens": 14000})
+                "totalTokens": 2500000, "uncachedInputTokens": 200000, "outputTokens": 14000})
             self.assertEqual(len(manifest["prompts"]), 5)
             self.assertEqual(json.loads((Path(manifest["workspace"]) / "source.json").read_text(encoding="utf-8"))["venue"], "A厅")
 
@@ -372,7 +372,7 @@ class EntryTests(unittest.TestCase):
             observer = Mock()
             observer.matches.return_value = True
             observer.poll.return_value = {
-                "decision": "over-limit", "observed": {"totalTokens": 1344768},
+                "decision": "over-limit", "observed": {"totalTokens": manifest["limits"]["usageCaps"]["totalTokens"] + 1},
                 "caps": manifest["limits"]["usageCaps"], "exceeded": ["totalTokens"],
                 "source": {"kind": "native-rollout-token-count", "path": "bound-rollout", "ordinal": 182},
                 "observedAt": "2026-09-14T08:37:24.439Z"}
@@ -391,7 +391,8 @@ class EntryTests(unittest.TestCase):
             self.assertTrue(receipt["forced"])
             self.assertEqual(receipt["failure"], "usage-limit")
             self.assertIsNone(receipt["terminal"])
-            self.assertEqual(receipt["usageObservation"]["observed"]["totalTokens"], 1344768)
+            self.assertEqual(receipt["usageObservation"]["observed"]["totalTokens"],
+                             manifest["limits"]["usageCaps"]["totalTokens"] + 1)
             self.assertEqual(receipt["usageObservation"]["source"]["ordinal"], 182)
             job.terminate.assert_called_once_with()
 

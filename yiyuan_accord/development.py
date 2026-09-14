@@ -283,7 +283,9 @@ def development_contract_errors(contract, golden_task_ids):
         user = section("ordinaryUser", ("rule", "necessaryHumanAction"))
         require(user.get("input") == "natural-language-only"
                 and user.get("technicalOrchestration") == "agent-owned"
-                and user.get("manualRescueAcceptance") is False,
+                and user.get("manualRescueAcceptance") is False
+                and user.get("modePrerequisites") == []
+                and user.get("modeActivation") == "explicit-user-selection-or-request-only",
                 "ordinary users cannot supply technical orchestration or rescue acceptance")
     require(cycle.get("existingHosts") == (["codex"] if successor else ["codex", "claude-code"])
             and cycle.get("additionalHostAdaptation") == "deferred",
