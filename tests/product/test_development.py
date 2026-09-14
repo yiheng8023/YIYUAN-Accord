@@ -3,6 +3,7 @@
 import copy
 from contextlib import contextmanager
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -733,6 +734,18 @@ class SuccessorDevelopmentTests(unittest.TestCase):
 
     def errors(self, contract):
         return development_contract_errors(contract, self.tasks)
+
+    def test_cli_reports_unicode_as_utf8_under_legacy_output_encoding(self):
+        for options in ([], ['--json']):
+            with self.subTest(options=options):
+                result = subprocess.run(
+                    [sys.executable, '-B', '-m', 'yiyuan_accord', 'verify', *options],
+                    cwd=ROOT, env={**os.environ, 'PYTHONIOENCODING': 'cp1252'},
+                    capture_output=True, timeout=30)
+                self.assertEqual(result.returncode, 0, result.stderr.decode('utf-8', errors='replace'))
+                output = result.stdout.decode('utf-8')
+                self.assertIn('纳入开发', output)
+                self.assertTrue(json.loads(output)['valid'])
 
     def test_current_and_historical_contracts_keep_separate_authority(self):
         self.assertEqual(self.errors(self.contract), [])

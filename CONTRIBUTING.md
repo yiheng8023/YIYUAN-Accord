@@ -64,11 +64,14 @@ do not change settings to manufacture a pass. Additional host adaptation remains
 Run current development and package admission from the repository root:
 
 ~~~powershell
-python -B -X utf8 -m yiyuan_accord verify-development --root . --json
-python -B -X utf8 -m yiyuan_accord verify --root . --json
-python -B -X utf8 -m yiyuan_accord host-check --adapter codex --root . --json
+python -B -m yiyuan_accord verify-development --root . --json
+python -B -m yiyuan_accord verify --root . --json
+python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -X utf8 -m unittest discover -s tests/product -v
 ~~~
+
+CLI reports use UTF-8 on standard output, including redirected output. Decode
+captured report bytes as UTF-8; callers need not change their system locale.
 
 These checks are maintainer tooling, not ordinary-user prerequisites. The
 current validator controls admission; test counts or green static checks do not

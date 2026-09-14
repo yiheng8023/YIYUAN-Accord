@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from .control import host_check, verify_product
@@ -12,6 +13,8 @@ def _emit(report, as_json):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(prog="python -m yiyuan_accord")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
