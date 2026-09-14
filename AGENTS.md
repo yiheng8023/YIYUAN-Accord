@@ -45,7 +45,9 @@ A new release still requires its own authorization.
   context renewal or a verified fresh zero-history task by the needed effect;
   copied-history forks serve causal branches. Preserve recoverable state before
   history is omitted and verify restoration before resuming effects. Keep the bound
-  checkout; confirm takeover and one writer before releasing source recovery. Archiving
+  checkout unless transfer is authorized; rebind destination authority, paths and state.
+  Confirm takeover and one writer for transferred shared effects before releasing
+  source recovery; independent work may continue. Archiving
   requires explicit user authorization; handoff, completion and cleanup grant none.
 - Do not infer a missing source, target, scope, authority, account, data, cost,
   or irreversible effect. Ask only when the missing condition changes the next

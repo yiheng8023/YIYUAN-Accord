@@ -141,11 +141,12 @@ from unresolved questions. On recovery, reuse unchanged verified results and
 recheck affected or missing facts before further effects, retaining recovery until
 then. If repeated reading or renewal stops advancing results, reconsider work-unit
 size, evidence organization or permitted topology before another expensive span.
-Keep the bound checkout. For task transfer, quiesce source writes while
+Keep the bound checkout unless transfer is authorized; rebind destination
+authority, paths and state. Quiesce only transferred work and shared writes,
 retaining recovery capacity. The exact target must inspect and accept the latest
 goal, authority, decisions, completed effects and unfinished obligations, resolve
 consequential inheritance loss, and demonstrate safe continuation before commit
-to one writer and source release. Check how the proposed release affects the
+to one writer for shared effects and source release. Check how the proposed release affects the
 target, coordinator and recovery path: a parent close can terminate descendants.
 Preserve necessary support or choose a suitable topology before release, then
 verify the target can still continue. A receipt or summary is not completed takeover.
