@@ -28,6 +28,7 @@ _SCOPE_FIELDS = set("id host entry duties qualityAxes scenarios claims condition
 _RECORD_FIELDS = set("case evaluatedRevision definitionSha256 packageSha256 observedAt conditions observerId sourceRef episodeId facts".split())
 _TRUST = ("Conditional on the caller's authenticated, independent, bounded read-only observer "
           "and review provenance; callable shape and this verifier do not authenticate external facts.")
+_CURRENT_REVIEW_FILES = {"docs/operations/ACCEPTANCE-v3.3.md", "docs/operations/PLAN-v3.3.md"}
 
 
 def _json(value):
@@ -146,7 +147,7 @@ def admission_contract_errors(contract):
                     or (set(case["claims"]) & {"incremental-value", "impact-assessment"} and "comparison" not in case["expected"])):
                 return ["evidence case must bind its applicable need, entry, oracle, conditions and post-state"]
             ids.add(case["id"])
-            if current and not {"docs/operations/ACCEPTANCE-v3.3.md", "docs/operations/PLAN-v3.3.md"} <= set(case["oracleFiles"]):
+            if current and not _CURRENT_REVIEW_FILES <= set(case["oracleFiles"]):
                 return ["current cases must bind the acceptance document and its consensus/criteria source as oracle dependencies"]
             scope = scopes.get(case.get("scope"))
             if (scope is None or any(case[k] != scope[k] for k in ("host", "entry"))
@@ -191,10 +192,22 @@ def _reuse_definition(contract, case):
             or projections[0]["maxSkillBytes"] <= 0):
         raise ValueError("invalid Skill budget")
     projection = {k: v for k, v in projections[0].items() if k != "maxSkillBytes"}
-    # The current static validator still enforces the actual Skill byte limit.
-    return _definition({**contract, "delivery": {
-        **contract["delivery"], "hostProjections": [projection],
-    }}, case)
+    # Keep stored-record identity intact. Progress descriptions are not criteria;
+    # the current subject still needs a fresh independent review and recheck.
+    current = copy.deepcopy(contract)
+    current["delivery"]["hostProjections"] = [projection]
+    if current["acceptance"]["admission"]["schema"] == CURRENT_SCHEMA:
+        for row in current["acceptance"]["duties"]:
+            row.pop("assessment", None)
+            row.pop("evidence", None)
+        for row in current["systemOptimization"]["qualityAxes"]:
+            row.pop("assessment", None)
+        for row in current["capabilityMap"]["entrySurfaces"]["rows"]:
+            row.pop("observation", None)
+            row.pop("currentEffect", None)
+    # Static validation still enforces the actual Skill byte limit. All case,
+    # scope, package, authority and substantive criteria remain bound.
+    return _definition(current, case)
 
 
 def _git(root, *args):
@@ -309,9 +322,16 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                             or record["packageSha256"] != bound["packageSha256"]):
                         raise ValueError("definition or package identity changed")
                     package = Path(hosts[case["host"]]["manifest"]).parents[1].as_posix()
-                    _git(root, "diff", "--quiet", "--no-ext-diff", "--no-textconv", revision, "--", package, *case["oracleFiles"])
+                    # Current normative documents belong to the fresh candidate
+                    # review. New prose alone does not require repeating execution;
+                    # changed case/quality criteria still fail the definition check.
+                    review_files = _CURRENT_REVIEW_FILES if policy["schema"] == CURRENT_SCHEMA else set()
+                    execution_files = [path for path in case["oracleFiles"] if path not in review_files]
+                    _git(root, "diff", "--quiet", "--no-ext-diff", "--no-textconv", revision, "--", package, *execution_files)
                     for path in case["oracleFiles"]:
                         _git(root, "cat-file", "blob", f"{revision}:{path}")
+                        if path in review_files:
+                            _git(root, "cat-file", "blob", f"{subject['revision']}:{path}")
                     committed = int(_git(root, "show", "-s", "--format=%ct", revision).strip())
                     if at.timestamp() < committed:
                         raise ValueError("unbound capture time")

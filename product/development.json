@@ -141,10 +141,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1660000,
+      "maxProductCodeAndTestBytes": 1680000,
       "maxTrackedFiles": 138,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Raise only the revisable code/test ceiling from 1640000 to 1660000 for native context semantics, stale-budget regression coverage and persistent exec/resume integration with the existing coordination oracle. Retain 138 tracked files, 36000 primary-instruction bytes and the five-percent code/test reserve. No new runtime framework, dependency, model experiment or quality waiver is introduced. Historical limits remain at 754597b2560434e23f9a760aa35108c5ff7e2ecc:product/development.json; record the final measured size after integration rather than including untracked caches."
+      "rationale": "The current source/criteria reuse correction, persistent writable-root preservation, graceful cleanup and cumulative-usage protection require the measured code and tests. Raise the revisable code/test ceiling to 1680000 while retaining the five-percent reserve, 138 tracked files and existing instruction limits. Size is a planning signal, not a reason to omit necessary functionality or retain redundant code; adjust the bound on demonstrated need. Current package bytes are unchanged by these developer execution and acceptance changes."
     }
   },
   "source": {
@@ -4219,7 +4219,7 @@
   "acceptance": {
     "admission": {
       "schema": "yiyuan-accord-evidence-admission/v5",
-      "rule": "Current v3.3 cases use the existing immutable-source observe/recheck and independent-review mechanism. All A01-A08 requirements remain explicit, with absent scope definitions and absent evidence reported separately. Retained v3.2.1 policy and observations remain at previousDevelopmentSnapshot and are not current cases. A partial case cannot establish whole-system completion. Required delivery host codex identifies the current distribution family, not a commitment to every interface. v33-openai-entry-applicability must bind candidate dispositions, their evidence and the selected delivery set, including actual mode, executor, authority and state boundaries. Unknown is not inapplicable. v33-admitted-entry-delivery and v33-admitted-entry-lifecycle must cover that same selected set; CLI/App Server child cases cannot stand in for the parent coverage. Ordinary Chat has no default standalone delivery obligation. Shared implementations can be reused, but relevant differences need evidence. Hook absence requires analysis of native, Agent, MCP or other duty-equivalent alternatives, not automatic exclusion. The decision must preserve necessary reliability, recovery and lifecycle duties and record justified deferrals. All three renamed ranges remain unbound; no functional requirement, historical failure or unknown is converted into a pass. Claude is excluded from the current distribution and acceptance scope; retained historical observations are not current support. No incremental-value claim is made; complete independent impact assessment is required. No publication authority is created. Explicit App Server lifecycle and scoped-exposure child scopes refine already required responsibilities. Parent host/environment scopes stay open; no App Server result substitutes for CLI/Desktop/ChatGPT or for autonomous behavior. Counts change because scope decomposition is now explicit, not because new product duties were added.",
+      "rule": "Current v3.3 cases use the existing immutable-source observe/recheck and independent-review mechanism. All A01-A08 requirements remain explicit, with absent scope definitions and absent evidence reported separately. Retained v3.2.1 policy and observations remain at previousDevelopmentSnapshot and are not current cases. A partial case cannot establish whole-system completion. Required delivery host codex identifies the current distribution family, not a commitment to every interface. v33-openai-entry-applicability must bind candidate dispositions, their evidence and the selected delivery set, including actual mode, executor, authority and state boundaries. Unknown is not inapplicable. v33-admitted-entry-delivery and v33-admitted-entry-lifecycle must cover that same selected set; CLI/App Server child cases cannot stand in for the parent coverage. Ordinary Chat has no default standalone delivery obligation. Shared implementations can be reused, but relevant differences need evidence. Hook absence requires analysis of native, Agent, MCP or other duty-equivalent alternatives, not automatic exclusion. The decision must preserve necessary reliability, recovery and lifecycle duties and record justified deferrals. All three renamed ranges remain unbound; no functional requirement, historical failure or unknown is converted into a pass. Claude is excluded from the current distribution and acceptance scope; retained historical observations are not current support. No incremental-value claim is made; complete independent impact assessment is required. No publication authority is created. Explicit App Server lifecycle and scoped-exposure child scopes refine already required responsibilities. Parent host/environment scopes stay open; no App Server result substitutes for CLI/Desktop/ChatGPT or for autonomous behavior. Counts change because scope decomposition is now explicit, not because new product duties were added. Execution evidence binds the actual case, scope, conditions, quality criteria, package and executed oracle sources. Planning prose, progress descriptions and non-executed tests are reviewed against the current candidate without automatically requiring new host execution. A substantive requirement or oracle change must revise its affected binding and invalidate dependent evidence; original observation digests remain immutable. One prospectively bound episode may support several applicable cases through independently assessed records, not through duplicate execution or automatic copying of expected facts.",
       "reviewPolicy": {
         "requiredAxes": [
           "product",
@@ -4485,7 +4485,7 @@
         },
         {
           "host": "codex",
-          "entry": "cx-sdk",
+          "entry": "cx-cli",
           "qualityAxes": [
             "compliance-and-safety",
             "functional-coverage",
@@ -4505,19 +4505,22 @@
           ],
           "conditions": {
             "codexVersion": "0.154.0",
-            "entryProtocol": "app-server",
+            "entryProtocol": "exec-resume",
             "model": "gpt-5.6-sol",
-            "reasoning": "high",
-            "ephemeral": true,
+            "reasoning": "medium",
+            "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
-            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
-            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
+            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
+            "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
+            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
-            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
+            "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
+            "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
           },
           "duties": [
             "goal-authority-correction",
@@ -4550,12 +4553,13 @@
           "conditions": {
             "codexVersion": "0.154.0",
             "entryProtocol": "exec-resume",
-            "model": "current supported model selected for this case and passed explicitly to every invocation",
-            "reasoning": "task-fit supported effort selected for this case and passed explicitly to every invocation",
+            "model": "gpt-5.6-sol",
+            "reasoning": "medium",
             "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
             "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
+            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
             "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
             "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
@@ -4575,7 +4579,7 @@
         },
         {
           "host": "codex",
-          "entry": "cx-sdk",
+          "entry": "cx-cli",
           "qualityAxes": [
             "compliance-and-safety",
             "functional-coverage",
@@ -4595,19 +4599,22 @@
           ],
           "conditions": {
             "codexVersion": "0.154.0",
-            "entryProtocol": "app-server",
+            "entryProtocol": "exec-resume",
             "model": "gpt-5.6-sol",
-            "reasoning": "high",
-            "ephemeral": true,
+            "reasoning": "medium",
+            "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
-            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
-            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
+            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
+            "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
+            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
-            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
+            "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
+            "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
           },
           "duties": [
             "premise-and-consistency",
@@ -4665,9 +4672,7 @@
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
             "scripts/observe_codex_entry.py",
-            "tests/product/test_codex_entry.py",
-            "runtime/task-checkpoint.cjs",
-            "yiyuan_accord/admission.py"
+            "runtime/task-checkpoint.cjs"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -4748,10 +4753,7 @@
             "docs/operations/ACCEPTANCE-v3.3.md",
             "plugins/yiyuan-accord-codex/hooks/hooks.json",
             "runtime/task-checkpoint.cjs",
-            "tests/product/test_task_checkpoint.py",
-            "yiyuan_accord/admission.py",
-            "scripts/inspect_native_resources.py",
-            "tests/product/test_native_resources.py"
+            "scripts/inspect_native_resources.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -4829,10 +4831,7 @@
             "docs/operations/ACCEPTANCE-v3.3.md",
             "plugins/yiyuan-accord-codex/hooks/hooks.json",
             "runtime/task-checkpoint.cjs",
-            "tests/product/test_task_checkpoint.py",
-            "yiyuan_accord/admission.py",
-            "scripts/inspect_native_resources.py",
-            "tests/product/test_native_resources.py"
+            "scripts/inspect_native_resources.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -4862,7 +4861,7 @@
         },
         {
           "host": "codex",
-          "entry": "cx-sdk",
+          "entry": "cx-cli",
           "qualityAxes": [
             "compliance-and-safety",
             "functional-coverage",
@@ -4882,19 +4881,22 @@
           ],
           "conditions": {
             "codexVersion": "0.154.0",
-            "entryProtocol": "app-server",
+            "entryProtocol": "exec-resume",
             "model": "gpt-5.6-sol",
-            "reasoning": "high",
-            "ephemeral": true,
+            "reasoning": "medium",
+            "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
-            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
-            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
+            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
+            "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
+            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
-            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
+            "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
+            "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
           },
           "duties": [
             "goal-authority-correction",
@@ -4903,17 +4905,14 @@
           ],
           "id": "v33-goal-authority-correction-01",
           "scope": "v33-goal-authority-correction",
-          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
             "product/cases/coordination-v3.3.json",
             "scripts/inspect_coordination.py",
             "scripts/observe_codex_entry.py",
-            "scripts/codex_rpc.py",
-            "tests/product/test_coordination_observer.py",
             "runtime/task-checkpoint.cjs",
-            "yiyuan_accord/admission.py",
             "yiyuan_accord/identity.py"
           ],
           "maxAgeSeconds": 86400,
@@ -4935,12 +4934,14 @@
               "deliveryRechecked": true,
               "finalAnswerMatchesArtifacts": true,
               "currentModelAndConditionsVerified": true,
-              "noUnresolvedBusinessDuty": true
+              "noUnresolvedBusinessDuty": true,
+              "sourceThreadIdKnown": true,
+              "nativeResumeSucceeded": true
             },
             "cleanup": {
               "ownedProcesses": 0,
               "sharedConfigurationPreserved": true,
-              "ephemeralConversation": true,
+              "userTaskNotArchivedOrDeleted": true,
               "unownedResourcesPreserved": true,
               "noUnresolvedTaskResource": true
             }
@@ -4969,12 +4970,13 @@
           "conditions": {
             "codexVersion": "0.154.0",
             "entryProtocol": "exec-resume",
-            "model": "current supported model selected for this case and passed explicitly to every invocation",
-            "reasoning": "task-fit supported effort selected for this case and passed explicitly to every invocation",
+            "model": "gpt-5.6-sol",
+            "reasoning": "medium",
             "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
             "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
+            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
             "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
             "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
@@ -4991,17 +4993,14 @@
           ],
           "id": "v33-paused-work-recovery-01",
           "scope": "v33-paused-work-recovery",
-          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify native model/effort, six exact trusted Hooks, package/Skill exposure and process-scoped exclusions; configuration alone is not participation. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
             "product/cases/coordination-v3.3.json",
             "scripts/inspect_coordination.py",
             "scripts/observe_codex_entry.py",
-            "scripts/codex_rpc.py",
-            "tests/product/test_coordination_observer.py",
             "runtime/task-checkpoint.cjs",
-            "yiyuan_accord/admission.py",
             "yiyuan_accord/identity.py"
           ],
           "maxAgeSeconds": 86400,
@@ -5037,7 +5036,7 @@
         },
         {
           "host": "codex",
-          "entry": "cx-sdk",
+          "entry": "cx-cli",
           "qualityAxes": [
             "compliance-and-safety",
             "functional-coverage",
@@ -5057,19 +5056,22 @@
           ],
           "conditions": {
             "codexVersion": "0.154.0",
-            "entryProtocol": "app-server",
+            "entryProtocol": "exec-resume",
             "model": "gpt-5.6-sol",
-            "reasoning": "high",
-            "ephemeral": true,
+            "reasoning": "medium",
+            "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
-            "context": "catalog default 272000 window / 244800 compaction / 258400 effective; no dependence on personal enlarged context",
-            "extensions": "one exact task-scoped Accord package with six reviewed Hooks and its Skill; other discovered selectable extensions disabled in this process; native/system entries and global AGENTS may remain",
+            "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
+            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
+            "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
+            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one ephemeral native thread; no process-death or autonomous handoff claim",
-            "questionRoute": "Default mode with default_mode_request_user_input=false; necessary questions use final text in this bounded noninteractive transport",
+            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
+            "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
+            "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one episode; 600-second work budget, 180 seconds per turn, 20-second recovery; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
+            "limits": "one episode; caller binds a fresh 600-second work deadline, 180 seconds per turn and 20-second recovery reserve for this instance; 900000 cumulative / 200000 uncached input / 14000 output token observation caps; no actor budget-governance claim"
           },
           "duties": [
             "premise-and-consistency",
@@ -5078,17 +5080,14 @@
           ],
           "id": "v33-systemic-correction-01",
           "scope": "v33-systemic-correction",
-          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify native model/effort, six exact trusted Hooks, package/Skill exposure and process-scoped exclusions; configuration alone is not participation. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
             "product/cases/coordination-v3.3.json",
             "scripts/inspect_coordination.py",
             "scripts/observe_codex_entry.py",
-            "scripts/codex_rpc.py",
-            "tests/product/test_coordination_observer.py",
             "runtime/task-checkpoint.cjs",
-            "yiyuan_accord/admission.py",
             "yiyuan_accord/identity.py"
           ],
           "maxAgeSeconds": 86400,
@@ -5111,12 +5110,14 @@
               "deliveryRechecked": true,
               "finalAnswerMatchesArtifacts": true,
               "currentModelAndConditionsVerified": true,
-              "noUnresolvedBusinessDuty": true
+              "noUnresolvedBusinessDuty": true,
+              "sourceThreadIdKnown": true,
+              "nativeResumeSucceeded": true
             },
             "cleanup": {
               "ownedProcesses": 0,
               "sharedConfigurationPreserved": true,
-              "ephemeralConversation": true,
+              "userTaskNotArchivedOrDeleted": true,
               "unownedResourcesPreserved": true,
               "noUnresolvedTaskResource": true
             }
@@ -5298,7 +5299,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Follow N33-20260909 r18. Correct affected existing implementations, tests, acceptance assumptions and active historical conclusions, rather than only adding future rules. Use the recovered predecessor automatic fork/takeover chain and official Codex context and persisted-resume semantics. The two bounded worktree implementations are integrated: native last-response/remaining context signals in the existing checkpoint helper, and persistent continuation through the existing ordinary-entry driver. Duplicate observation code and unused draft scaffolding were removed; the existing stage oracle now checks and retains each executed stage before later inputs. Both implementation worktrees are retired. Observe the concentrated CI run, then advance only the unresolved necessary qualification evidence. Preserve historical failures and useful partial results under their original conditions; do not rerun settled private cases. Use references first and run experiments only for consequential unanswered questions. Reconcile the existing 17 scopes and case definitions, then use representative normal execution for necessary acceptance. Advance entry/lifecycle, system impact and release preparation alongside continuity; no quality or functionality reduction, no invented completion percentage.",
+    "work": "Follow N33-20260909 r19. Existing references have resolved the native resume protocol and three execution blockers: preserve cwd/state writable roots on each invocation, allow bounded graceful child cleanup, and check native reported cumulative usage without summing repeated observations. Integrate the committed fixes and run the existing five-stage coordination episode once for its three prospectively bound CLI scopes: goal/authority correction, paused-work recovery and systemic correction. The exact episode selects gpt-5.6-sol/medium and the current user-config baseline; these are not product defaults. Obtain independent semantic, effect, resource and current-condition review before supplying actual records to the existing admission observer API. Do not copy expected facts into evidence. Current PLAN/ACCEPTANCE documents remain required for fresh candidate review, while progress prose and non-executed tests no longer force new host execution. Changed substantive case/duty/quality requirements, executable oracles, conditions or package bytes still invalidate affected reuse. Preserve original observation digests and failed trials. Keep all 17 required scopes and quality floors; do not equate code size with value or publish before necessary acceptance.",
     "requires": "Continue authorized development and integration in the bound main checkout, outside Goal mode, using isolated worktrees for independent writers. Complete and publish 3.3.0 after all necessary acceptance and exact-candidate checks, as requested on 2026-09-14; readiness remains false. Preserve user IDE/cloud/development conversations and immutable historical identity, and retire unneeded task-owned resources. New accounts, trust, data, meaningful cost and unrelated shared or external writes retain their separate boundaries. Prefer official and existing reliable sources before experiments; the plan and latest user decisions own authority."
   },
   "claimCeiling": {
@@ -5325,7 +5326,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r18",
+    "revision": "r19",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

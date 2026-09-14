@@ -927,7 +927,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 self.assertFalse(report["candidateEligible"])
                 self.assertTrue(report["errors"])
 
-    def test_changed_acceptance_document_invalidates_retained_current_case(self):
+    def test_changed_executable_oracle_invalidates_only_dependent_current_cases(self):
         retained = None
         def capture(request):
             nonlocal retained
@@ -936,16 +936,19 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             return result
         self.assertTrue(self.assess(observer=capture)["acceptedCases"])
         with self.history():
-            path = self.root / "docs/operations/ACCEPTANCE-v3.3.md"
+            locator = "scripts/observe_codex_entry.py"
+            path = self.root / locator
             path.write_text(path.read_text(encoding="utf-8") + "\nChanged synthetic acceptance dependency.\n", encoding="utf-8")
             self.commit(self.contract)
             def replay(request):
                 result = self.observer(request)
                 if request["phase"] == "observe": result["records"] = retained
                 return result
-            self.assertEqual(self.assess(observer=replay)["acceptedCases"], [])
+            expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
+                              if locator not in case["oracleFiles"])
+            self.assertEqual(self.assess(observer=replay)["acceptedCases"], expected)
 
-    def test_history_append_preserves_current_evidence_but_plan_change_does_not(self):
+    def test_navigation_updates_preserve_evidence_but_changed_case_criteria_do_not(self):
         retained = None
         def capture(request):
             nonlocal retained
@@ -959,7 +962,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             if request["phase"] == "observe": result["records"] = copy.deepcopy(retained)
             return result
         with self.history():
-            for name in ("PROCEDURE-v3.3.md", "CONTINUATION.md"):
+            for name in ("PROCEDURE-v3.3.md", "CONTINUATION.md", "PLAN-v3.3.md", "ACCEPTANCE-v3.3.md"):
                 path = self.root / "docs/operations" / name
                 path.write_text(path.read_text(encoding="utf-8") + "\nSynthetic historical observation only.\n", encoding="utf-8")
             self.commit(self.contract)
@@ -967,10 +970,34 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             self.assertEqual(report["errors"], [])
             self.assertEqual(report["acceptedCases"], expected)
             self.assertFalse(report["candidateEligible"])
-            plan = self.root / "docs/operations/PLAN-v3.3.md"
-            plan.write_text(plan.read_text(encoding="utf-8") + "\nChanged synthetic normative decision.\n", encoding="utf-8")
-            self.commit(self.contract)
-            self.assertEqual(self.assess(observer=replay)["acceptedCases"], [])
+            changed = copy.deepcopy(self.contract)
+            case = changed["acceptance"]["admission"]["cases"][0]
+            case["oracle"] += " Changed synthetic normative decision."
+            self.commit(changed)
+            self.assertEqual(self.assess(changed, observer=replay)["acceptedCases"],
+                             [key for key in expected if key != case["id"]])
+
+    def test_progress_descriptions_do_not_change_reuse_but_quality_floors_do(self):
+        from yiyuan_accord.admission import _definition, _reuse_definition
+        case = self.contract["acceptance"]["admission"]["cases"][0]
+        old = _definition(self.contract, case)
+        reusable = _reuse_definition(self.contract, case)
+        changed = copy.deepcopy(self.contract)
+        entry = next(row for row in changed["capabilityMap"]["entrySurfaces"]["rows"] if row["id"] == case["entry"])
+        entry["observation"] = "Updated progress; no execution condition changed."
+        entry["currentEffect"] = "described-in-current-progress"
+        duty = next(row for row in changed["acceptance"]["duties"] if row["id"] in case["duties"])
+        duty["assessment"] = "progress-update"
+        duty["evidence"] = ["new-observation-pointer"]
+        floor = next(row for row in changed["systemOptimization"]["qualityAxes"] if row["id"] in case["qualityAxes"])
+        floor["assessment"] = "progress-update"
+        self.assertNotEqual(_definition(changed, case), old)
+        self.assertEqual(_reuse_definition(changed, case), reusable)
+        duty["requiredOutcome"] += " A new necessary outcome."
+        self.assertNotEqual(_reuse_definition(changed, case), reusable)
+        duty["requiredOutcome"] = next(row for row in self.contract["acceptance"]["duties"] if row["id"] == duty["id"])["requiredOutcome"]
+        floor["floor"] += " A new necessary condition."
+        self.assertNotEqual(_reuse_definition(changed, case), reusable)
 
     def test_complete_synthetic_coverage_uses_existing_review_and_recheck_chain(self):
         contract = copy.deepcopy(self.contract)
