@@ -1798,3 +1798,13 @@ Desktop安装与运行版本为26.908.4834.0，主ChatGPT.exe直接启动npm位�
 修正沿用已有手段：对照预绑原件摘要并保存最终值，记录每个服务端响应的传输后态、以独立原生中断回执判断第三请求；按[Python标准库方法](https://docs.python.org/3/library/shutil.html#rmtree-example)在已核对自有树内清除只读位再删除，兼容3.10/3.11与3.12+回调接口，其他错误继续上报。同时检查禁用样本的目录路径和目录项名称均未进入provider输入。没有补造旧响应、改旧预算或运行真实模型。
 
 运行结果保存时14份共享文件摘要均保持；之后再次核对发现共享缓存由停用的3.3.0-dev.1换成3.2.1，符合已登记Git市场的源版本，主配置与停用选择未变。具体触发者未证实，不能把结束时检查扩大为此后永不变化，也不擅自恢复旧缓存；后续观察重新绑定实际存在的共享对象。
+
+## 公开生命周期有界通过与两个SDK子案例准入（2026-09-14）
+
+1879ae6（tree 8c635d11eb0031851c9b58f5f55a37627667b042）冻结修复后的执行器，在`accord-public-lifecycle-20260914-02`重新预绑当前14个共享对象、99ca35包、四个执行源、三种解释器/原生程序和原有180/30/10秒界限。没有真实模型或模型账户调用，四份本地固定响应中第三份如实记录peer-closed/in_progress，并由原生interrupted终态独立确认中断。请求、回执、五个关键状态快照及原件指纹相互一致；固定Skill样本的路径与名称均从受控provider输入排除，恢复与清空也有原生回读。
+
+安装、逐文件包核对、进程级精确信任、SessionEnd对照、同ID暂停恢复、继续不解暂停、坏manifest拒绝、健康重试和卸载均有证据。七份App Server最终所属进程均为0，其中interrupted的forced=true，其余六份为false；六个CLI仅预定坏候选返回1，其余退出0，均无强制终止。五个临时工作根已回收，14项共享摘要在运行尾部及独立再核对中保持。初始发现的Hook仍为untrusted，信任只在指定进程中按精确key/hash配置；Hook的permissionMode字段不代验实际线程权限或用户意图。
+
+两位未实现该入口的独立评审者分别覆盖product/specification和implementation/standards，使用继承历史的独立上下文及共享环境，明确披露Accord指导可见。规范评审曾将父提交误填为tree，已由评审者用加引号的Git对象表达式和cat-file亲自更正；错误身份未用于准入。评审只支持该增量及两个SDK子案例，不认证整个仓库、普通Agent、GUI、全环境或发布。
+
+随后由调用方根据实际回执、文件摘要、当前条件和上述评审输入执行既有assess_development_evidence的observe/recheck，未从expected复制事实、未改动被评对象。1879ae6上acceptedCases为v33-codex-sdk-lifecycle-01和v33-codex-sdk-scoped-exposure-01，errors为空；coverageVerified=2/17，四项定义待验、十一项未绑定，整项A完成0/8，functionalCompletion/candidateEligible仍false。外部binding、inspection、review-provenance、admission-observation和admission-report保存在该私有实例目录，仓内记录只是导航。未提供外部observer的默认CLI不消费这份经验评估，历史已验范围与新的候选复核保持区分。
