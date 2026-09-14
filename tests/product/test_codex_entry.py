@@ -11,7 +11,7 @@ import sys
 import tempfile
 import time
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 # The preparer binds resolved executable bytes; synthetic traces must use
 # that same identity even when the interpreter was launched through a symlink.
@@ -217,10 +217,16 @@ class EntryTests(unittest.TestCase):
                 self.assertEqual(command[command.index("-m") + 1], "explicit-offline-model")
                 self.assertIn('sandbox_mode="workspace-write"', command)
                 self.assertIn('model_reasoning_effort="high"', command)
+                self.assertEqual(command[command.index("-C") + 1], manifest["workspace"])
+                self.assertEqual(command[command.index("--add-dir") + 1], str(Path(manifest["evidence"]) / "state"))
+            self.assertLess(resumed.index("-C"), resumed.index("resume"))
+            self.assertLess(resumed.index("--add-dir"), resumed.index("resume"))
             self.assertEqual(resumed[-2:], ["native-thread", "-"])
             self.assertEqual(manifest["timeoutSeconds"], 600)
             self.assertEqual(manifest["turnTimeoutSeconds"], 180)
             self.assertEqual(manifest["recoveryTimeoutSeconds"], 20)
+            self.assertEqual(manifest["limits"]["usageCaps"], {
+                "totalTokens": 900000, "uncachedInputTokens": 200000, "outputTokens": 14000})
             self.assertEqual(len(manifest["prompts"]), 5)
             self.assertEqual(json.loads((Path(manifest["workspace"]) / "source.json").read_text(encoding="utf-8"))["venue"], "A厅")
 
@@ -242,6 +248,44 @@ class EntryTests(unittest.TestCase):
         ):
             with self.subTest(name=name):
                 self.assertFalse(entry.persistent_cli_turn_receipt(encode(changed), final, expected_thread_id=identity)["valid"])
+
+    def test_persistent_cli_usage_is_cumulative_and_never_summed_across_resume_turns(self):
+        caps = {"totalTokens": 900000, "uncachedInputTokens": 200000, "outputTokens": 14000}
+        def trace(input_tokens, cached_tokens, output_tokens):
+            return json.dumps({"type": "turn.completed", "usage": {
+                "input_tokens": input_tokens, "cached_input_tokens": cached_tokens,
+                "output_tokens": output_tokens}})
+        first = entry.persistent_cli_usage_budget(trace(700000, 550000, 10000), caps)
+        resumed = entry.persistent_cli_usage_budget(trace(850000, 660000, 13000), caps)
+        self.assertEqual(first["decision"], "within-observed-limits")
+        self.assertEqual(resumed["decision"], "within-observed-limits")
+        self.assertEqual(resumed["observed"]["totalTokens"], 863000)
+        self.assertEqual(resumed["observed"]["uncachedInputTokens"], 190000)
+        self.assertIn("cumulative", resumed["scope"])
+        self.assertIsNone(resumed["monetaryCost"])
+
+    def test_persistent_cli_usage_missing_malformed_or_over_limit_blocks_receipt(self):
+        caps = {"totalTokens": 900000, "uncachedInputTokens": 200000, "outputTokens": 14000}
+        base = [{"type": "thread.started", "thread_id": "native-thread"},
+                {"type": "turn.started"},
+                {"type": "item.completed", "item": {"type": "agent_message", "text": "done"}}]
+        for name, usage, decision in (
+                ("missing", None, "unknown"),
+                ("missing-counter", {"input_tokens": 4, "output_tokens": 1}, "unknown"),
+                ("boolean", {"input_tokens": 4, "cached_input_tokens": 2, "output_tokens": True}, "unknown"),
+                ("cached-over-input", {"input_tokens": 4, "cached_input_tokens": 5, "output_tokens": 1}, "unknown"),
+                ("over-total", {"input_tokens": 899000, "cached_input_tokens": 800000, "output_tokens": 2000}, "over-limit"),
+                ("over-uncached", {"input_tokens": 850000, "cached_input_tokens": 649999, "output_tokens": 1000}, "over-limit"),
+                ("over-output", {"input_tokens": 100000, "cached_input_tokens": 90000, "output_tokens": 14001}, "over-limit")):
+            terminal = {"type": "turn.completed"}
+            if usage is not None:
+                terminal["usage"] = usage
+            stream = "\n".join(map(json.dumps, base + [terminal]))
+            with self.subTest(name=name):
+                receipt = entry.persistent_cli_turn_receipt(
+                    stream, "done", expected_thread_id="native-thread", usage_caps=caps)
+                self.assertFalse(receipt["valid"])
+                self.assertEqual(receipt["usageObservation"]["decision"], decision)
 
     def test_persistent_case_rejects_workspace_escape_names(self):
         source = SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
@@ -285,6 +329,58 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(stages.call_count, 1)
             self.assertFalse(result["caseComplete"])
             self.assertIn("required file missing: plan.md", result["stages"][0]["fileObservation"]["violations"])
+
+    def test_persistent_stage_allows_natural_job_drain_before_termination(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            evidence = Path(manifest["evidence"])
+            usage = {"input_tokens": 1000, "cached_input_tokens": 800, "output_tokens": 50}
+            events = [{"type": "thread.started", "thread_id": "native-thread"},
+                      {"type": "turn.started"},
+                      {"type": "item.completed", "item": {"type": "agent_message", "text": "done"}},
+                      {"type": "turn.completed", "usage": usage}]
+            process = Mock(returncode=0)
+            process.poll.return_value = 0
+            process.wait.return_value = 0
+            job = Mock()
+            job.sample.side_effect = [
+                {"activeProcesses": 1}, {"activeProcesses": 0}, {"activeProcesses": 0}]
+            def spawn(*_, **kwargs):
+                kwargs["stdout"].write("\n".join(map(json.dumps, events)).encode())
+                kwargs["stdout"].flush()
+                (evidence / "last-message-1.txt").write_text("done", encoding="utf-8")
+                return process
+            with patch.object(entry, "WindowsJob", return_value=job), \
+                    patch.object(entry.subprocess, "Popen", side_effect=spawn), \
+                    patch.object(entry.time, "sleep"):
+                receipt = entry._run_persistent_stage(
+                    manifest, 0, None, {}, time.monotonic() + 10)
+            self.assertTrue(receipt["valid"])
+            self.assertFalse(receipt["forced"])
+            self.assertEqual(receipt["remainingOwnedProcesses"], 0)
+            self.assertEqual(receipt["usageObservation"]["decision"], "within-observed-limits")
+            job.terminate.assert_not_called()
+
+    def test_persistent_stage_forces_timeout_without_a_second_recovery_window(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            process = Mock(returncode=124)
+            process.poll.return_value = None
+            process.wait.return_value = 124
+            job = Mock()
+            job.sample.side_effect = [
+                {"activeProcesses": 1}, {"activeProcesses": 1}, {"activeProcesses": 0}]
+            with patch.object(entry, "WindowsJob", return_value=job), \
+                    patch.object(entry.subprocess, "Popen", return_value=process), \
+                    patch.object(entry.time, "sleep"):
+                receipt = entry._run_persistent_stage(manifest, 0, None, {}, time.monotonic() - 1)
+            self.assertFalse(receipt["valid"])
+            self.assertTrue(receipt["forced"])
+            self.assertEqual(receipt["failure"], "turn-time-or-output-limit")
+            job.terminate.assert_called_once_with()
+            wait_timeout = process.wait.call_args.kwargs["timeout"]
+            self.assertGreaterEqual(wait_timeout, 0)
+            self.assertLessEqual(wait_timeout, manifest["recoveryTimeoutSeconds"])
 
     def app_case(self):
         return {"prompts": ["Pause delivery; explain only.", "Resume: deliver id,status,units CSV and summary."],
