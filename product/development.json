@@ -233,7 +233,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/cli",
           "execution": "本地终端；远程终端仍由该机器执行",
           "environment": "绑定该 CLI 的配置、权限、提供商与工作目录。",
-          "observation": "2026-09-14只读核对：独立CLI为0.154.0，原生plugin list/marketplace list支持JSON；Accord登记为installed=true、enabled=false、version=3.3.0-dev.1。注册Git市场位于用户Codex临时市场目录，HEAD cf13486、源manifest 3.2.1；唯一安装缓存为3.3.0-dev.1，runtime/Skill与当前99ca35包不同。此次共享配置散列未变，没有安装或启用。既有exec/resume及普通交付结果保留各自原条件；当前包的完整安装态行为与正式准入仍未验证。",
+          "observation": "2026-09-15有界回读：CLI 0.154.0，现有共享13文件3.3.0-dev.1缓存仍逐文件匹配历史a5c93304包；用户选择保持disabled，注册Git市场仍保留cf13486/3.2.1身份，已有对话实际加载及缓存异步写者未确定。当前执行候选为cc3243ea，不把缓存同版本视为同字节。9a8e010下任务作用域源Hook的两轮exec/resume报告链完成，四个输入保持、范围修订和语义复核通过；这不是安装态或完整入口准入。",
           "currentEffect": "unverified"
         },
         {
@@ -1070,6 +1070,43 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "codex-release-readiness-forward-two-turn-20260915",
+      "observedAt": "2026-09-14T17:07:58Z",
+      "scope": "development-behavior-observation-not-formal-admission",
+      "subject": {
+        "revision": "9a8e010fbdcc2623c7e3f4377e8676e9225c4274",
+        "tree": "c4950d1029920c8e18baf347c1a272c0ccc12e91",
+        "packageSha256": "cc3243ea05c3359bef174e5de2c3daf97739b99b87652df502090de110688d06"
+      },
+      "case": "product/cases/release-readiness-v3.3.json",
+      "conditions": "One forward observation after preserved-input guidance was corrected. Native CLI 0.154.0 exec/resume, observed Terra/medium, existing shared configuration and four invocation-scoped source Hooks, workspace-write/elevated, no sandbox bypass. Whole/turn/recovery bounds 360/180/15 seconds, native cumulative caps 400000 total and 12000 output. Hook trust bypass is explicit; no installed-package or full Skill-body participation claim.",
+      "observed": {
+        "caseComplete": true,
+        "completedStages": 2,
+        "sameNativeTaskResumed": true,
+        "semanticReview": "independent subagent pass within the bound case; root-transcribed receipt, not formal authenticated admission",
+        "fourOriginalInputsUnchanged": true,
+        "reportScope": "candidate-only then candidate-and-local-installation",
+        "reportsConsistent": true,
+        "releaseReady": false,
+        "localUseReady": false,
+        "actualCollaborationModes": [
+          "default",
+          "default"
+        ],
+        "exactNativeGoalRows": 0,
+        "elapsedSeconds": 155.7811451000016,
+        "nativeForced": false,
+        "ownedJobProcessesAfterExit": 0,
+        "nativeCumulativeTokens": 272971,
+        "nativeUncachedInputTokens": 32643,
+        "nativeOutputTokens": 5064
+      },
+      "poststate": "Only native-created exact workspace trust table differed; root removed it after exact scoped byte comparison and exclusive readback, restoring config SHA 9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b. All 15 protected files then match, no additional shared cache files. Empty state/temp roots and redundant runner output removed; raw result stays unchanged. Native conversation and necessary evidence retained.",
+      "evidence": "Private accord-release-readiness-20260915-02: prospective binding/manifest/original case, two native streams and stage snapshots, result SHA 56b2ce715707f0d34e1891ac16f1555c2581fc80038e1a3b9bf2432364fc6f4b, semantic-review.json, native-mode-observation.json and post-episode-review.json.",
+      "limits": "Evaluated business snapshots remain 8d3e2f9/a5c93304. One source-entry success does not qualify installed loading, GUI/IDE, autonomous handoff, causal improvement, full modes, parent lifecycle or release. Prior bb6cb95 deletion failure unchanged; no retry of that episode and no formal coverage count increase."
+    },
     {
       "id": "v3.2.1-claude-dev3-native-two-turn-correction",
       "observedAt": "2026-09-08",

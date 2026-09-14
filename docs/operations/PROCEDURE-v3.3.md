@@ -1831,3 +1831,11 @@ bb6cb95/a5c93304使用现有persistent exec/resume循环，新的有界文件sch
 另见三次记忆查询；首条Get-Content -Raw再接Select-String使完整记忆库进入输出，约359KB，其余查询继续增加重处理。共享指导/记忆条件已披露，不能把它当纯四文件输入环境；没有足够证据将删除直接归因于记忆。原生记录仅有default模式，Goal事件/工具和该thread的Goal表记录未见。没有因讨论创建Goal，也不据此宣称Goal交接兼容通过。
 
 当前改动仅针对已见误判：清理前核对文件起始状态、归属和当前授权；当前阶段不用不等于任务自产残留，输出数量限制不覆盖原件保留，保全应检查全部受保护原件。未来案例明确包括cache.json在内的既有文件均保留，原bb6cb95提示及负例保持。未增加新的拦截器，未运行新的模型观察；修正后的行为、第二轮范围更新与正式准入均未通过。私有证据在accord-release-readiness-20260914-01，含binding、原始流、阶段文件、native-mode-observation及post-episode-review。
+
+## 修正后的普通两轮范围更新（2026-09-15）
+
+在9a8e010/cc3243ea下，复用公开persistent exec/resume入口另绑一次修正后观察；原案例失败不重放。首个模型请求前保存源码/tree、13文件包、原case、输入、15个保护对象、Terra/medium和360/180/15秒及400000累计/12000输出限额。任务继承现有共享配置，四个作用域源Hook调用当前helper；UserPromptSubmit注入职责及Skill路径，未见完整Skill正文读取。此前接续中“完整Skill显式投影”不适用于这两次发布就绪核对，源Hook参与不等于安装态或隐式Skill加载。
+
+两轮均自然completed、exit0、无forced、所属Job进程0，同一原生任务resume成功；总计155.781秒，最终原生累计272971（未缓存输入32643、输出5064）。第一轮只判断candidate-only；第二轮按预先绑定的后续用户消息扩展至candidate-and-local-installation，真实更新两份报告、保留旧有效事实并替换已完成待办。独立子代理逐轮检查原始命令/文件变化和报告语义，未发现业务或保全问题；四个原输入SHA与mtime均保持。报告正确保留8d3e2f9/a5c93304评估对象，未将其混为执行包；缓存匹配、选中启用false和现有对话加载未知分别表达，local_use_ready及release_ready均false。两轮turn_context均为default、Terra/medium，限定任务Goal表0行；这不是Goal迁移或全部模式验收。
+
+原生启动只新增本工作区trusted表。Root验证删除该表即可逐字节恢复原配置，排他句柄内再次比较后恢复9cd9f34d；最终15个保护对象保持、缓存无新增文件。空state/temp根和重复runner输出已回收，原始result的配置变化记录未改，必要证据及原生对话保留在accord-release-readiness-20260915-02。独立语义复核与Root资源复核分开保存在semantic-review、native-mode-observation、post-episode-review及配置恢复回执。此例补足一次普通两轮范围修订与输入保护行为，不证明因果增益、当前包安装态、GUI/IDE、自动交接或17项正式准入；后续不重复此小链，转向入口适用性及父级范围、真实连续性与系统组合缺口。
