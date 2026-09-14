@@ -874,7 +874,8 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
                             "threadId": "thread", "turn": {"id": "turn"}}}),
                         dict(receivedAtMs=now, event={"method": "thread/tokenUsage/updated", "params": {
                             "threadId": "thread", "turnId": "turn", "tokenUsage": {
-                                "modelContextWindow": 10000, "total": {"totalTokens": 1000000}}}})])
+                                "modelContextWindow": 10000, "total": {"totalTokens": 1000000},
+                                "last": {"totalTokens": 4000}}}})])
 
     def signals(self, request):
         result = subprocess.run([self.node, str(RUNTIME), "--context-signals"], input=json.dumps(request),
@@ -883,12 +884,16 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)
 
-    def test_native_signals_keep_capacity_separate_from_occupancy_and_connection(self):
+    def test_native_signals_use_last_not_cumulative_usage_for_boundary_occupancy(self):
         request = self.signal_request()
         before = {p.name: p.read_bytes() for p in self.state.iterdir()}
         result = self.signals(request)
         self.assertEqual(result["windowTokens"], 10000)
-        self.assertIsNone(result["occupancy"])
+        self.assertEqual(result["occupancy"], 4000)
+        self.assertEqual(result["occupancyScope"], "last-response-boundary")
+        self.assertNotEqual(result["occupancy"],
+                            request["events"][-1]["event"]["params"]["tokenUsage"]["total"]["totalTokens"])
+        self.assertIsNone(result["remainingTokens"])
         self.assertIsNone(result["efficiency"])
         self.assertEqual(result["integrity"], "unknown")
         changed = copy.deepcopy(request)
@@ -898,6 +903,83 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         request["connected"] = False
         self.assertEqual(self.signals(request)["state"], "unknown")
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+
+    def append_native_remaining(self, request, tokens):
+        output = (f"You have {tokens} tokens left in this context window."
+                  if tokens is not None else "You have unknown tokens left in this context window.")
+        at = request["events"][-1]["receivedAtMs"]
+        request["events"] += [
+            dict(receivedAtMs=at, event={"method": "rawResponseItem/completed", "params": {
+                "threadId": "thread", "turnId": "turn", "item": {"type": "function_call",
+                "id": "remaining-call-item", "call_id": "remaining-call", "name": "get_context_remaining",
+                "namespace": None, "arguments": "{}"}}}),
+            dict(receivedAtMs=at, event={"method": "rawResponseItem/completed", "params": {
+                "threadId": "thread", "turnId": "turn", "item": {"type": "function_call_output",
+                "id": "remaining-output-item", "call_id": "remaining-call", "output": output}}}),
+        ]
+
+    def native_remaining_context_request(self, tokens):
+        request = self.context_request()
+        signals = self.signal_request()
+        self.append_native_remaining(signals, tokens)
+        observed = self.signals(signals)
+        request["signals"] = signals
+        request["conditions"] = observed["conditions"]
+        request["assessment"].update(conditions=observed["conditions"],
+                                     observationId=observed["observationId"],
+                                     usageEvent=observed["usageEvent"])
+        request["assessment"]["estimates"].pop("contextUpperBoundTokens")
+        request["assessment"]["estimates"].pop("efficiencyCeilingTokens")
+        request["assessment"]["estimates"].pop("efficiencySourceRef")
+        return request
+
+    def test_native_remaining_budget_drives_bounded_span_without_private_occupancy_estimate(self):
+        for remaining, decision, fit in ((4000, "continue-bounded", "fits"),
+                                         (2000, "prepare-handoff", "does-not-fit"),
+                                         (1500, "preserve-recovery", "does-not-fit")):
+            with self.subTest(remaining=remaining):
+                request = self.native_remaining_context_request(remaining)
+                answer = self.invoke(request)
+                self.assertEqual(answer["decision"], decision)
+                self.assertEqual(answer["capacityFit"], fit)
+                self.assertFalse(answer["sourceReleaseAllowed"])
+
+    def test_native_remaining_is_tight_budget_not_full_window_and_stales_after_more_output(self):
+        signals = self.signal_request()
+        self.append_native_remaining(signals, 3200)
+        result = self.signals(signals)
+        self.assertEqual(result["remainingTokens"], 3200)
+        self.assertEqual(result["remainingScope"], "native-auto-compact-or-full-window-minimum")
+        self.assertEqual(result["windowTokens"], 10000)
+
+        refreshed = copy.deepcopy(signals)
+        for window in (None, 10000):
+            refreshed["events"].append(dict(receivedAtMs=signals["events"][-1]["receivedAtMs"], event={
+                "method": "thread/tokenUsage/updated", "params": {"threadId": "thread", "turnId": "turn",
+                    "tokenUsage": {"modelContextWindow": window, "last": {"totalTokens": 4000}}}}))
+        self.assertEqual(self.signals(refreshed)["state"], "window-observed")
+        self.assertIsNone(self.signals(refreshed)["remainingTokens"])
+
+        signals["events"].append(dict(receivedAtMs=signals["events"][-1]["receivedAtMs"], event={
+            "method": "item/completed", "params": {"threadId": "thread", "turnId": "turn", "item": {
+                "type": "functionCallOutput", "id": "later", "name": "another_tool",
+                "namespace": None, "output": "more context"}}}))
+        stale = self.signals(signals)
+        self.assertIsNone(stale["remainingTokens"])
+        self.assertEqual(stale["occupancy"], 4000)
+
+    def test_native_remaining_rejects_spoofed_or_malformed_core_tool_output(self):
+        request = self.signal_request()
+        self.append_native_remaining(request, 3000)
+        request["events"][-2]["event"]["params"]["item"]["namespace"] = "apps"
+        self.assertIsNone(self.signals(request)["remainingTokens"])
+
+        request = self.signal_request()
+        self.append_native_remaining(request, 3000)
+        request["events"][-1]["event"]["params"]["item"]["output"] = "3000"
+        result = self.signals(request)
+        self.assertEqual(result["state"], "unknown")
+        self.assertEqual(result["reason"], "invalid-native-remaining-output")
 
     def test_native_signals_require_new_usage_after_reroute_and_compaction(self):
         for event in (

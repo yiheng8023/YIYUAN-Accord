@@ -345,7 +345,8 @@ function observeContext(request, now = Date.now()) {
   const b = request.binding;
   const integer = (v) => Number.isSafeInteger(v) && v >= 0;
   const result = {state: 'unknown', conditions: null, observationId: null, usageEvent: null,
-    observedAtMs: null, validUntilMs: null, windowTokens: null, occupancy: null,
+    observedAtMs: null, validUntilMs: null, windowTokens: null, remainingTokens: null,
+    remainingScope: null, occupancy: null, occupancyScope: null,
     efficiency: null, integrity: 'unknown', sourceReleaseAllowed: false};
   const unknown = (reason) => ({...result, reason});
   if (!b || !['connectionId', 'threadId', 'hostVersion', 'model'].every((k) => text(b[k])) ||
@@ -353,9 +354,21 @@ function observeContext(request, now = Date.now()) {
   if (request.connected !== true) return unknown('connection-not-live');
   if (!Array.isArray(request.events)) return unknown('notification-stream-unavailable');
   let turn = null, nextModel = b.model, model = b.model, generation = sha(canonical(b)), usage = null, observed = null;
+  let remaining = null, remainingObserved = null;
+  let remainingCalls = new Set();
   let active = false, compacting = false, lastTime = -1;
   const invalidate = (kind, identity) => {
     generation = sha(canonical({generation, kind, identity})); usage = null; observed = null;
+    remaining = null; remainingObserved = null; remainingCalls = new Set();
+  };
+  const parseRemaining = (output) => {
+    if (typeof output !== 'string') return undefined;
+    const match = /^You have ([0-9]+) tokens left in this context window\.$/.exec(output);
+    if (match) {
+      const tokens = Number(match[1]);
+      return integer(tokens) ? tokens : undefined;
+    }
+    return output === 'You have unknown tokens left in this context window.' ? null : undefined;
   };
   for (const [sequence, envelope] of request.events.entries()) {
     const event = envelope?.event, at = envelope?.receivedAtMs;
@@ -384,14 +397,40 @@ function observeContext(request, now = Date.now()) {
       } else if (['item/started', 'item/completed'].includes(event.method) && p.item?.type === 'contextCompaction') {
         compacting = event.method === 'item/started';
         invalidate(event.method, {item: p.item.id, sequence});
+      } else if (event.method === 'item/completed' && p.item?.type === 'functionCallOutput' &&
+          p.item.name === 'get_context_remaining' && p.item.namespace == null) {
+        const tokens = parseRemaining(p.item.output);
+        if (tokens === undefined) return unknown('invalid-native-remaining-output');
+        remaining = tokens;
+        remainingObserved = tokens == null ? null : {at, sequence, item: p.item.id};
+      } else if (event.method === 'item/completed') {
+        // Any later model-visible input or output makes an earlier remaining
+        // budget stale. The response-boundary usage remains explicitly scoped.
+        remaining = null; remainingObserved = null;
+      } else if (event.method === 'rawResponseItem/completed') {
+        const item = p.item;
+        remaining = null; remainingObserved = null;
+        if (item?.type === 'function_call' && item.name === 'get_context_remaining' &&
+            item.namespace == null && text(item.call_id)) remainingCalls.add(item.call_id);
+        else if (item?.type === 'function_call_output' && text(item.call_id) && remainingCalls.has(item.call_id)) {
+          const tokens = parseRemaining(item.output);
+          if (tokens === undefined) return unknown('invalid-native-remaining-output');
+          remaining = tokens;
+          remainingObserved = tokens == null ? null : {at, sequence, item: item.id ?? item.call_id};
+          remainingCalls.delete(item.call_id);
+        }
       } else if (event.method === 'thread/compacted') {
         invalidate('legacy-compaction-notification', sequence);
       } else if (event.method === 'thread/tokenUsage/updated' && !compacting) {
         const window = p.tokenUsage?.modelContextWindow;
+        // A newer response boundary invalidates earlier remaining-budget evidence.
+        remaining = null; remainingObserved = null; remainingCalls = new Set();
         // Do not retain an earlier known capacity after a newer unknown value.
-        if (!integer(window) || window === 0) { usage = null; observed = null; continue; }
+        if (!integer(window) || window === 0) { invalidate('unknown-capacity', sequence); continue; }
+        const boundary = p.tokenUsage?.last?.totalTokens;
+        if (boundary != null && !integer(boundary)) return unknown('invalid-native-boundary-usage');
         usage = {method: event.method, params: {threadId: p.threadId, turnId: p.turnId,
-          tokenUsage: {modelContextWindow: window}}};
+          tokenUsage: {modelContextWindow: window, ...(boundary == null ? {} : {last: {totalTokens: boundary}})}}};
         observed = {at, sequence};
       }
     }
@@ -400,15 +439,23 @@ function observeContext(request, now = Date.now()) {
   result.conditions = {threadId: b.threadId, turnId: turn, hostVersion: b.hostVersion,
     model, contextGeneration: generation};
   if (compacting || !usage) return unknown('fresh-post-change-usage-unavailable');
-  if (!integer(observed.at + request.maxAgeMs) || now >= observed.at + request.maxAgeMs) return unknown('usage-observation-expired');
-  return {...result, state: 'window-observed', reason: 'native-capacity-only-not-occupancy-or-quality',
-    observationId: sha(canonical({generation, observed, usage})), usageEvent: usage,
-    observedAtMs: observed.at, validUntilMs: observed.at + request.maxAgeMs,
-    windowTokens: usage.params.tokenUsage.modelContextWindow};
+  const validUntil = Math.min(observed.at + request.maxAgeMs,
+    remainingObserved ? remainingObserved.at + request.maxAgeMs : Number.MAX_SAFE_INTEGER);
+  if (!integer(validUntil) || now >= validUntil) return unknown('usage-observation-expired');
+  const occupancy = usage.params.tokenUsage.last?.totalTokens ?? null;
+  const reason = remaining != null ? 'native-remaining-budget-and-response-boundary-occupancy' :
+    occupancy != null ? 'native-response-boundary-occupancy-not-unobserved-tail-or-quality' :
+      'native-capacity-only-not-occupancy-or-quality';
+  return {...result, state: 'window-observed', reason,
+    observationId: sha(canonical({generation, observed, usage, remaining, remainingObserved})), usageEvent: usage,
+    observedAtMs: Math.max(observed.at, remainingObserved?.at ?? observed.at), validUntilMs: validUntil,
+    windowTokens: usage.params.tokenUsage.modelContextWindow, remainingTokens: remaining,
+    remainingScope: remaining == null ? null : 'native-auto-compact-or-full-window-minimum',
+    occupancy, occupancyScope: occupancy == null ? null : 'last-response-boundary'};
 }
 
-// Read-only, caller-bound planning evidence. Native usage is not live occupancy;
-// a forecast cannot authorize a transfer, clear a pause or trigger host actions.
+// Read-only, caller-bound planning evidence. Native last usage is a response-boundary
+// context basis, not timeless occupancy; a forecast cannot authorize host actions.
 function assessContext(request, prior, input, now = Date.now()) {
   const result = {decision: 'unknown', capacityFit: 'unknown', sourceReleaseAllowed: false,
     scope: 'conditional-context-budget-only', reasons: [], windowTokens: null,
@@ -428,6 +475,7 @@ function assessContext(request, prior, input, now = Date.now()) {
   if (!assessment || canonical(assessment.conditions) !== canonical(scope) || assessment.epoch !== input.epoch) {
     return stop('reassess', 'assessment-binding-missing-or-changed');
   }
+  let nativeRemaining = null;
   if (Object.hasOwn(request, 'signals')) {
     const current = observeContext(request.signals, now);
     if (current.state !== 'window-observed' || current.observationId !== assessment.observationId ||
@@ -435,6 +483,7 @@ function assessContext(request, prior, input, now = Date.now()) {
         canonical(current.usageEvent) !== canonical(assessment.usageEvent)) {
       return stop('reassess', 'native-observation-changed-or-unavailable');
     }
+    nativeRemaining = current.remainingTokens;
   }
   if (!Number.isSafeInteger(assessment.observedAtMs) || !Number.isSafeInteger(assessment.validUntilMs) ||
       assessment.observedAtMs > now || assessment.validUntilMs <= now ||
@@ -449,12 +498,27 @@ function assessContext(request, prior, input, now = Date.now()) {
   const window = native.params.tokenUsage?.modelContextWindow;
   if (!count(window) || window === 0) return stop('unknown', 'native-window-unknown');
   result.windowTokens = window;
-  // last/total, cached tokens and compaction counts cannot fill these estimates.
+  // total is cumulative. last is the native response-boundary context basis,
+  // while get_context_remaining includes the tighter native compaction/window budget.
   const estimate = assessment.estimates;
-  const quantities = ['contextUpperBoundTokens', 'nextWorkTokens', 'handoffTokens', 'recoveryTokens', 'safetyMarginTokens'];
-  if (!estimate || !text(estimate.sourceRef) || !quantities.every((key) => count(estimate[key])) ||
+  const common = ['nextWorkTokens', 'handoffTokens', 'recoveryTokens', 'safetyMarginTokens'];
+  if (!estimate || !text(estimate.sourceRef) || !common.every((key) => count(estimate[key])) ||
       estimate.handoffTokens === 0 || estimate.recoveryTokens === 0 || estimate.safetyMarginTokens === 0) {
-    return stop('unknown', 'sourced-context-and-work-transfer-recovery-estimates-required');
+    return stop('unknown', 'sourced-work-transfer-recovery-estimates-required');
+  }
+  const transferReserve = estimate.handoffTokens + estimate.recoveryTokens + estimate.safetyMarginTokens;
+  if (!Number.isSafeInteger(transferReserve + estimate.nextWorkTokens)) return stop('unknown', 'forecast-overflow');
+  if (nativeRemaining != null) {
+    result.capacityFit = transferReserve + estimate.nextWorkTokens < nativeRemaining ? 'fits' : 'does-not-fit';
+    result.remainingAfterReserves = nativeRemaining - transferReserve;
+    if (result.remainingAfterReserves <= 0) return stop('preserve-recovery', 'transfer-reserve-already-at-risk');
+    if (estimate.nextWorkTokens >= result.remainingAfterReserves) {
+      return stop('prepare-handoff', 'next-span-would-consume-transfer-reserve');
+    }
+    return stop('continue-bounded', 'forecast-fits-native-remaining-budget-recheck-before-next-span');
+  }
+  if (!count(estimate.contextUpperBoundTokens)) {
+    return stop('unknown', 'sourced-context-upper-bound-required-without-native-remaining-budget');
   }
   const efficiency = estimate.efficiencyCeilingTokens;
   if (efficiency != null && (!count(efficiency) || efficiency === 0 || !text(estimate.efficiencySourceRef))) {
@@ -462,7 +526,7 @@ function assessContext(request, prior, input, now = Date.now()) {
   }
   const limit = efficiency == null ? window : Math.min(window, efficiency);
   result.efficiencyCeilingTokens = efficiency ?? null;
-  const reserve = estimate.contextUpperBoundTokens + estimate.handoffTokens + estimate.recoveryTokens + estimate.safetyMarginTokens;
+  const reserve = estimate.contextUpperBoundTokens + transferReserve;
   if (!Number.isSafeInteger(reserve + estimate.nextWorkTokens)) return stop('unknown', 'forecast-overflow');
   // Capacity uses the hard window; a stricter efficiency range still controls
   // the combined decision below. A fit is conditional arithmetic, not permission.
@@ -941,15 +1005,15 @@ const HELP = {
   contextBudget: {
     operation: 'assess-context',
     binding: 'Use status session/cwd/epoch/expectedRevision plus current conditions: threadId, turnId, hostVersion, model, contextGeneration. The native caller must independently bind these; shared session is not thread/writer identity.',
-    assessment: 'Provide assessment with matching conditions and epoch, observedAtMs/validUntilMs, sourceRef, integrity (verified/degraded/unknown), and the actual matching thread/tokenUsage/updated notification as usageEvent. Never restamp old evidence as fresh. Change contextGeneration after compaction or other material context changes and recheck affected estimates.',
-    estimates: 'assessment.estimates needs sourceRef and nonnegative integer token upper bounds for contextUpperBoundTokens and nextWorkTokens, positive handoffTokens (including takeover verification), recoveryTokens and safetyMarginTokens. Optional efficiencyCeilingTokens requires efficiencySourceRef. Estimates include additions since the usage event; all bounds must apply to current source-carrier conditions. Target capacity needs its own assessment.',
-    result: 'capacityFit compares all sourced upper bounds and reserves with the hard native window: fits, does-not-fit, or unknown. It is independent of efficiency; decision and remainingAfterReserves also honor any stricter evidenced efficiency ceiling. Missing efficiency can leave decision unknown with capacityFit fits, supporting a caller-selected short span and early checkpoint within existing authority, not a claim of efficient or unrestricted continuation. Never override a pause, reassessment or recovery/handoff recommendation with capacityFit.',
-    limits: 'Read-only advisory arithmetic; does not authenticate caller evidence, measure live occupancy, dispatch, compact, transfer, release or change checkpoint state. Native last/total/cached usage and compression count never substitute for occupancy, efficiency or integrity. Missing data returns unknown; shorten spans and checkpoint early. Never treat a fit as permission or evidence of completed handoff.',
+    assessment: 'Provide assessment with matching conditions and epoch, observedAtMs/validUntilMs, sourceRef, integrity (verified/degraded/unknown), and the actual matching thread/tokenUsage/updated notification as usageEvent. With signals, the helper re-observes any first-party get_context_remaining output before using it. Never restamp old evidence as fresh. Change contextGeneration after compaction or other material context changes and recheck affected estimates.',
+    estimates: 'assessment.estimates needs sourceRef, a nonnegative nextWorkTokens bound, and positive handoffTokens (including takeover verification), recoveryTokens and safetyMarginTokens. A bound first-party get_context_remaining result supplies the tighter native compaction/window remainder. Without it, also provide contextUpperBoundTokens; optional efficiencyCeilingTokens requires efficiencySourceRef. All bounds apply to current source-carrier conditions. Target capacity needs its own assessment.',
+    result: 'With a fresh native remaining budget, capacityFit and remainingAfterReserves compare the next span with transfer and recovery reserves inside that tighter budget. The value is not the full model window. Without it, the legacy forecast compares sourced context/work/reserve bounds with the hard native window and any evidenced efficiency ceiling. Never override a pause, reassessment or recovery/handoff recommendation with capacityFit.',
+    limits: 'Read-only advisory arithmetic; does not authenticate caller evidence, dispatch, compact, transfer, release or change checkpoint state. Native last.totalTokens is only the response-boundary context basis; cumulative total, cached usage and compression count are not occupancy. Later inputs or outputs make remaining-budget evidence stale. Missing data returns unknown; shorten spans and checkpoint early. Never treat a fit as permission or completed handoff.',
   },
   contextSignals: {
     invocation: '--context-signals reads one JSON object; no input receipt or state write is required',
-    input: 'binding {connectionId, threadId, hostVersion, model} from the actual current connection and thread/start result; turnId from the active native call; connected from live transport; maxAgeMs chosen for the task; events [{receivedAtMs, event}] in receive order from this connection. Preserve thread/settings/updated, turn/started and turn/completed, model/rerouted, contextCompaction item starts/completions, legacy thread/compacted and thread/tokenUsage/updated. Settings snapshots update the next-turn model; reroutes belong to their active turn. Do not mix connections or remove invalidations.',
-    output: 'Capacity-only observation plus condition generation and observationId. New turn, reroute, compaction or unknown capacity discards old usage; a post-change matching observation is required. Disconnection, expired or missing data stays unknown. Never restamp historical events. A reconnection gets a new connectionId.',
+    input: 'binding {connectionId, threadId, hostVersion, model} from the actual current connection and thread/start result; turnId from the active native call; connected from live transport; maxAgeMs chosen for the task; events [{receivedAtMs, event}] in receive order from this connection. Preserve thread/settings/updated, turn/started and turn/completed, model/rerouted, contextCompaction item starts/completions, rawResponseItem/completed call/output pairs or named functionCallOutput completions for first-party get_context_remaining, legacy thread/compacted and thread/tokenUsage/updated. Settings snapshots update the next-turn model; reroutes belong to their active turn. Do not mix connections, remove invalidations or detach outputs from call IDs.',
+    output: 'The native window, last-response-boundary occupancy when reported, optional tighter native remaining budget, condition generation and observationId. New turn, reroute, compaction, later model-visible output or unknown capacity invalidates affected evidence; obtain a matching observation after change. Disconnection, expiry or missing data stays unknown. Never restamp historical events. A reconnection gets a new connectionId.',
     integration: 'The owning App Server client may expose this through native dynamic tools. For assess-context pass signals containing the current observation request and assessment.observationId from the earlier query; the helper re-observes and rejects changed/unavailable evidence. Keep current input epoch and independently inspected integrity/forecasts. The helper does not subscribe itself, authenticate supplied transport records or establish an efficiency range. No installed Desktop event integration is implied.',
   },
   readback: 'status.checkpoint returns the saved contract or null. Its epoch belongs to the old binding; the top-level epoch belongs to the current input. Readback grants no authority, does not reconcile input, resume paused work or clear quarantine. Stored canContinue is a historical caller decision, not current permission; verify current user and host authority before effects. Never reconstruct missing user input from the contract.',
