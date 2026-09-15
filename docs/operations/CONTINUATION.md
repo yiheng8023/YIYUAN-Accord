@@ -43,9 +43,11 @@ Plan/Goal不构成完整交付的前置条件；仅在用户明确选择或请�
 
 ## 当前路线与下一实际动作
 
+用户指出“继续至”仍显示harness；已查到VSCode globalStorage中persisted-atom-state/environment保留旧对象。当前客户端仅在选中ID失效时自动替换，因此环境改名但ID未变会留旧名称。GitHub旧/新地址实读均返回仓库1304939826；经用户在现有列表重选Accord并切回本地，环境ID6a870b3542cc819199cff184a2e06f37不变，label、repo name/full_name及clone_url均已回读为Accord。未改数据库、重建云环境、删除历史或请求云任务，具体回执在accord-entry-applicability-20260915/environment-name-refresh.json。此问题已关闭，不再重演；历史harness身份仍按原边界保留。
+
 用户已纠正详情页可打开，当前问题是旧版本与Hook就绪。现已查明市场固定在v3.2.1标签，native upgrade无变化符合该固定引用；按用户要求通过原生marketplace remove/add切到精确1429f2a，再plugin add安装当前cc3243ea。13个缓存文件逐项匹配、显示名YIYUAN Accord、版本3.3.0-dev.1。执行前已读到用户将全局选择改为enabled=true，保留此最新选择，不恢复早前停用。IDE后端0.154.0-alpha.6.2回读6Hook，原5项trusted、新增resume/compact项untrusted；仅补该项当前hash后新进程确认6项enabled/trusted，Skill亦enabled。宿主配置API拒绝项目文件写入；模型/权限使用标准项目配置文件，Hook信任按原生规则写用户配置，未扩大到其它插件。用户配置变更仅为本市场ref、测试目录trust和新增Hook信任。
 
-IDE待用户发送消息的工作区：C:\Users\15521\.codex\backups\accord-ide-validation-20260915-01\workspace；同级message.txt是精确提示，evidence/ready.json、original-inputs.json与test-binding.json保存就绪、保全和验收条件。工作区已有snapshot.json、keep.txt及.codex/config.toml；原生回读模型Terra/medium、workspace-write/on-request。准备未发模型请求，5个辅助原生进程均自然exit0、各自Job归零。用户打开该目录并重载IDE、新建聊天后发送提示；结果只支持当前IDE入口小链，不代验自主交接或整体验收。前态备份保留供有界回退，测试结束后处理该目录信任与残留；不覆盖用户其它修改。
+IDE实际小链已完成（01a0a306-22c5-73c0-989e-1f14564eaa3d）：原生source/originator为vscode/codex_vscode、0.154.0-alpha.6.2、Terra/medium、default、on-request/workspace-write，64.487秒自然task_complete。两报告正确且一致，3个原文件SHA保持；实际4次exec只读/哈希/新增两报告/复核。6403字节Accord developer注入与对应输入回执证明UserPromptSubmit实际参与；其它Hook执行及整项资格不据此通过。用户从界面提交的消息多了2个下划线转义及末尾LF，语义相同但不称逐字匹配，原binding不改。独立子代理语义复核通过，精确Goal表0行，累计198953 token（未缓存输入36160、输出2281）。证据在accord-ide-validation-20260915-01/evidence/observed-result.json与冻结原件；Root已通过helper退役无未完checkpoint的该输入回执，并另记维护者收尾，不冒充模型自主清理。用户仍查看的测试目录/项目配置/信任暂保留，待退出该工作区后退役；原生对话不归档。
 
 Windows界面控制入口实际存在于node_repl/@oai/sky，先前从统一浏览器接口限制外推整个会话无桌面控制能力需要撤回。经用户授权VSCode窗口可读可操作；用户已停止自动界面操作并改为手动配合，此后不自动接管。IDE确有插件/Hook界面。两后端导出的426份含实验声明的协议文件逐字节相同，可复用接口代码而不声称行为等价；冗余导出已回收，单份schema与摘要在accord-entry-applicability-20260915/backend-schema。
 

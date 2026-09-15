@@ -253,7 +253,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
           "execution": "本地交互或云端委派",
           "environment": "编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。",
-          "observation": "2026-09-15已使用Computer Use实际打开IDE的Codex插件与Hook设置，用户随后停止自动操作并改为手动配合。原详情3.2.1来自固定v3.2.1的Git市场，缓存当时仍是旧A5开发包；现按用户要求将本市场切至1429f2a并原生重装，13文件匹配cc3243ea，名称YIYUAN Accord、版本3.3.0-dev.1。用扩展自带0.154.0-alpha.6.2新进程确认6项Hook启用/受信任及Skill启用，只有新增恢复Hook补了用户级信任；测试模型/权限与工作区已准备，等待用户新IDE聊天实际执行。此次不代验GUI任务已加载、Hook已执行或交付完成。",
+          "observation": "2026-09-15实际IDE小链已完成：用户在准备目录发送普通消息，原生source=vscode/originator=codex_vscode、0.154.0-alpha.6.2、Terra/medium/default，64.487秒task_complete。当前1429f2a/cc3243ea安装包的UserPromptSubmit产生6403字节developer指导及对应原始回执；两报告一致、3原件SHA保持，独立语义复核通过。消息仅有Markdown转义/末尾换行差异，不报逐字一致。此为一次已配置环境的输入参与/交付证据，不覆盖全部Hook、安装全生命周期、自动交接、所有IDE或整体准入。旧云环境显示缓存已由用户重新选择同一环境刷新，仓库ID不变。",
           "currentEffect": "unverified"
         },
         {
@@ -1070,6 +1070,39 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "codex-vscode-installed-input-delivery-20260915",
+      "observedAt": "2026-09-15T03:05:56Z",
+      "scope": "bounded-IDE-behavior-observation-not-whole-admission",
+      "subject": {
+        "revision": "1429f2abd3b4a45e209a2dcb926ea0208366ed9e",
+        "packageSha256": "cc3243ea05c3359bef174e5de2c3daf97739b99b87652df502090de110688d06"
+      },
+      "conditions": "User opened the prepared workspace and submitted one ordinary IDE message; installed enabled 3.3.0-dev.1 and six currently trusted Hook definitions were preflighted with the IDE backend. Existing shared guidance remains; project settings select Terra/medium, workspace-write and on-request. No new Plan/Goal was activated.",
+      "observed": {
+        "nativeSource": "vscode",
+        "nativeOriginator": "codex_vscode",
+        "nativeVersion": "0.154.0-alpha.6.2",
+        "model": "gpt-5.6-terra",
+        "reasoning": "medium",
+        "mode": "default",
+        "taskComplete": true,
+        "durationMs": 64487,
+        "inputHookDeveloperBytes": 6403,
+        "originalFilesUnchanged": 3,
+        "reportsConsistent": true,
+        "releaseReady": false,
+        "exactGoalRows": 0,
+        "nativeTotalTokens": 198953,
+        "nativeUncachedInputTokens": 36160,
+        "nativeOutputTokens": 2281
+      },
+      "inputVariation": "Native input adds two Markdown underscore escapes and a final LF to the prebound message. Independent review confirmed unchanged meaning, not literal equality; original hashes and binding remain intact.",
+      "review": "Independent native_continuity_impl checked actual files, source claims and visible operations. Root retained raw native rollout, receipt, original/output copies and observed-result; this is not a formal authenticated admission bundle.",
+      "poststate": "Root retired only this completed task unbound input receipt through the installed helper with matching epoch; original native receipt remains in evidence. This is maintainer cleanup, not native SessionEnd/model-owned cleanup. User conversation and currently viewed test workspace/config/trust remain for review.",
+      "evidence": "Private accord-ide-validation-20260915-01/evidence: native-ide-rollout.jsonl, native-input-receipt.json, observed-files, observed-result.json and input-retirement.json.",
+      "limits": "One installed input participation and report-delivery chain only; not all Hooks, clean/default profile, autonomous handoff, global residue absence, causal value, whole lifecycle or release. The original strict prompt binding is not retrospectively rewritten."
+    },
     {
       "id": "codex-release-readiness-forward-two-turn-20260915",
       "observedAt": "2026-09-14T17:07:58Z",
