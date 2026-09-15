@@ -59,3 +59,95 @@ jobs:
         run: python -B -m yiyuan_accord host-check --adapter codex --root . --json
       - name: Test current product seam
         run: python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['minimumTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun>=e and not r.skipped and not r.expectedFailures))"
+
+  native-lifecycle:
+    name: Native lifecycle / ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up observation interpreter
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+      - name: Set up native package runtime
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "24"
+      - name: Bind a fresh job-owned directory
+        id: storage
+        shell: python
+        run: |
+          import os, pathlib
+          root = pathlib.Path(os.environ["RUNNER_TEMP"]).resolve(strict=True) / "accord-native-lifecycle"
+          root.mkdir()
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as stream:
+              stream.write(f"ACCORD_NATIVE_ROOT={root}\n")
+      - name: Install version-bound official CLI in job-owned storage
+        run: npm install --prefix "$ACCORD_NATIVE_ROOT/cli" --ignore-scripts --no-audit --no-fund --package-lock=false @openai/codex@0.154.0
+      - name: Freeze native lifecycle inputs and limits
+        id: prepare
+        shell: python
+        run: |
+          import os, pathlib, shutil, subprocess, sys
+          root = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]).resolve(strict=True)
+          binaries = [p for p in (root / "cli/node_modules/@openai").rglob("codex")
+                      if p.is_file() and p.parent.name == "bin" and "vendor" in p.parts]
+          if len(binaries) != 1:
+              raise RuntimeError("Expected one platform-native Codex binary")
+          subprocess.run([str(binaries[0]), "--version"], check=True)
+          subprocess.run([sys.executable, "-B", "scripts/observe_codex_lifecycle.py", "prepare",
+              "--package", str(pathlib.Path("plugins/yiyuan-accord-codex").resolve()),
+              "--marketplace-manifest", str(pathlib.Path(".agents/plugins/marketplace.json").resolve()),
+              "--evidence", str(root / "episode"), "--codex", str(binaries[0]),
+              "--node", str(pathlib.Path(shutil.which("node")).resolve()),
+              "--protected-file", str(pathlib.Path("AGENTS.md").resolve()),
+              "--timeout", "600", "--request-timeout", "60", "--recovery-timeout", "15"], check=True)
+      - name: Observe native lifecycle using only fixed local responses
+        run: python -B scripts/observe_codex_lifecycle.py run --evidence "$ACCORD_NATIVE_ROOT/episode"
+      - name: Independently re-read the native episode
+        if: always() && steps.prepare.outcome == 'success'
+        shell: python
+        run: |
+          import os, pathlib, subprocess, sys
+          evidence = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]) / "episode"
+          result = subprocess.run([sys.executable, "-B", "scripts/observe_codex_lifecycle.py",
+              "inspect", "--evidence", str(evidence)], capture_output=True)
+          (evidence / "inspection.json").write_bytes(result.stdout)
+          (evidence / "inspection.stderr.txt").write_bytes(result.stderr)
+          sys.stdout.buffer.write(result.stdout)
+          sys.stderr.buffer.write(result.stderr)
+          sys.exit(result.returncode)
+      - name: Retain bounded native diagnostics
+        if: always() && steps.prepare.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-lifecycle-${{ matrix.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            ${{ env.ACCORD_NATIVE_ROOT }}/episode/*.json
+            ${{ env.ACCORD_NATIVE_ROOT }}/episode/inspection.stderr.txt
+            ${{ env.ACCORD_NATIVE_ROOT }}/episode/native
+            ${{ env.ACCORD_NATIVE_ROOT }}/episode/commands
+            ${{ env.ACCORD_NATIVE_ROOT }}/episode/retained
+            ${{ env.ACCORD_NATIVE_ROOT }}/episode/source-package
+            ${{ env.ACCORD_NATIVE_ROOT }}/episode/standalone-skills
+      - name: Release job-owned installation and episode files
+        if: always() && steps.storage.outcome == 'success'
+        shell: python
+        run: |
+          import os, pathlib, shutil
+          parent = pathlib.Path(os.environ["RUNNER_TEMP"]).resolve(strict=True)
+          target = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]).resolve()
+          if target.parent != parent or target.name != "accord-native-lifecycle":
+              raise RuntimeError("Refusing cleanup outside the exact job-owned directory")
+          if target.exists():
+              shutil.rmtree(target)

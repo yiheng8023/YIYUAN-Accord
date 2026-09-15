@@ -83,6 +83,26 @@ complete, prospectively bound set of process-record labels. It rejects missing,
 unexpected or malformed records; valid record shape does not prove process
 ownership, successful exit or protection of unobserved filesystem locations.
 
+The native lifecycle CI jobs run the existing
+[package lifecycle observer](scripts/observe_codex_lifecycle.py) on Linux and
+macOS with a version-bound official Codex CLI, an isolated configuration home
+and four fixed loopback responses. They do not call a model service or use a
+ChatGPT account. The 600-second episode, 60-second request and 15-second recovery
+bounds apply to this CI observation, not to product defaults. Package installation,
+actual Hook/Skill exposure, interruption/resume and cleanup are checked within
+the recorded episode. A POSIX process group is not a Windows Job or a sandbox:
+its result cannot prove that a descendant which starts another session was
+contained. The observer records its controller and the scope it can observe.
+
+The workflow retains source-package, raw diagnostics and its separate readback
+for 14 days, then removes the job-owned installation and working files. Preserve
+any evidence needed for a release decision before the CI artifacts expire;
+CI success alone does not grant formal admission. These jobs provide native
+macOS/Linux mechanism evidence; they do not run the Xcode interface. Xcode's
+dedicated configuration, permissions, loading and interaction remain distinct
+integration checks. Lack of a local Mac is not a reason to stop implementation
+or omit feasible hosted verification.
+
 The [native lifecycle observer](scripts/observe_codex_lifecycle.py) reuses Codex's
 plugin and App Server controls for a bounded, credential-free protocol fixture.
 Use `prepare --help` to bind the current package, marketplace manifest, native
