@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "fda3f1cd619a7631f371dd93bb177c8e2d98c0f82571bd6719bf27214db2069f",
+        "packageSha256": "4eddb309ee70060fa324d54467668e319672537e9ee1def6c5f0b21603cf03af",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -991,7 +991,7 @@
           "package-lifecycle",
           "native-replacement-and-retirement"
         ],
-        "procedure": "当前3.3只绑定适用OpenAI入口。区分源码、注册、启用、缓存、任务实际加载及已有未完责任；以执行前的新鲜来源核对为准。早前Codex和Claude停用的观察仅保留历史效力，不作为当前安装状态。开发候选可在已有授权内隔离验证；共享安装、更新及发布后部署分别核对实际权限、精确包、宿主差异和恢复者。旧单次安装例外不授予新权限。",
+        "procedure": "当前3.3只绑定适用OpenAI入口。区分源码、注册、启用、缓存、任务实际加载及已有未完责任；以执行前的新鲜来源核对为准。早前Codex和Claude停用的观察仅保留历史效力，不作为当前安装状态。开发候选可在已有授权内隔离验证；共享安装、更新及发布后部署分别核对实际权限、精确包、宿主差异和恢复者。旧单次安装例外不授予新权限。 安装前按身份/来源、适用版本、执行位置和作用域查询现有盘点；健康匹配复用，停用/失联、升级/修复及异环境部署分别判断，库存未知不当作缺失，相关条件变化后在副作用前复核。普通查重行为另验，不由有意重试的隔离生命周期案例代替。",
         "exit": "用户所需生命周期与失败后态成立，且变更/卸载后仍有可用执行者完成必要恢复与核验。安装登记、实际激活、市场缓存和受影响配置分别取证；未更新而旧包不变不能证明保护。该项未通过只约束依赖它的工作与整版资格。",
         "qualityAxes": [
           "functional-coverage",

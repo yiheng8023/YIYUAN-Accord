@@ -10,7 +10,14 @@ already available, first read the [brief entry](../deliver-demand-driven-outcome
 Read other specialist Skills only for a concrete dependency; invoking this
 Skill grants no new work or permission.
 
-Start with adequate native means. Compare maintained external options for a
+Start with suitable native and already available capabilities. Use the host's
+inventory and relevant live checks before proposing setup: distinguish reuse,
+enablement, reconnection, update, repair and a new installation. An existing usable
+match needs no installation; unknown inventory is not evidence of absence. Refresh
+affected facts when the host, user or another component changes them, rather than
+rescanning the whole system for every request.
+
+Compare maintained external options for a
 material gap, uncertainty, domain shift or plausible net benefit, even if native
 can finish. Check actual capability, evidence, fit, upkeep, licensing, authority,
 and total adoption/use/recovery/exit cost. Search beyond installed tools when that

@@ -10,6 +10,18 @@ already available, first read the [brief entry](../deliver-demand-driven-outcome
 Read other specialist Skills only for a concrete dependency; invoking this
 Skill grants no new work or permission.
 
+Before installing, query supported native inventory for the candidate's canonical
+identity and source, applicable version/build, execution location and installation
+scope. Confirm availability in the actual task. Reuse a compatible healthy
+installation; avoid duplicate copies for aliases or repeat requests. A disabled
+or disconnected component is not absent: preserve the user's choice and establish
+only the authorized missing condition. An incompatible version, damaged install
+or different execution environment needs its own evidenced update, repair or
+deployment decision. Unknown inventory holds dependent installation until resolved.
+Recheck affected facts immediately before mutation when concurrent changes could
+invalidate them. An intentional repair, upgrade or verification retry retains its
+specific purpose and authority; it is not ordinary duplicate installation.
+
 Preserve prior source/state and a recovery actor outside the changed component.
 Reconcile requested and host-selected sources before mutation. If supported
 inspection proves the selected source invalid, reject that change, verify healthy
