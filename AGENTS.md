@@ -20,7 +20,8 @@ Version 3.3 distributes only the applicable ChatGPT/Codex adaptation. Preserve
 vendor-independent design and immutable historical identities. Reconcile all
 editable or usable host surfaces, including UI-only controls, settings and
 commands; discovery is not enablement, and unobserved coverage remains unknown.
-A new release still requires its own authorization.
+Honor the current release authorization and its conditions without asking for
+the same authorization again. Other release targets require their own authority.
 
 - Treat the user's latest bound goal, corrections, sources, targets, and
   explicit boundaries as the task authority. Do not invent work, reopen a
