@@ -63,6 +63,71 @@ class TaskCheckpointTests(unittest.TestCase):
         (self.work / "summary.json").write_text(json.dumps({"total": total}), encoding="utf-8")
         (self.work / "details.csv").write_text(f"id,units\nA,{total}\n", encoding="utf-8")
 
+    def startup_guidance(self, source):
+        result = subprocess.run([self.node, str(RUNTIME.with_name('accord-hook.cjs'))],
+            input=json.dumps({'hook_event_name': 'SessionStart', 'source': source}),
+            text=True, encoding='utf-8', capture_output=True, env=self.environment,
+            cwd=self.work, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)['hookSpecificOutput']['additionalContext']
+
+    def test_startup_guidance_survives_state_path_that_is_a_file(self):
+        blocked = self.root / 'blocked-state'
+        blocked.write_bytes(b'protected original')
+        self.environment['YIYUAN_ACCORD_TASK_STATE_DIR'] = str(blocked)
+        for source in ['startup', 'clear']:
+            context = self.startup_guidance(source)
+            self.assertIn('loading a Skill is not a prerequisite', context)
+            self.assertIn('keep standalone answers lightweight', context)
+            self.assertNotIn('Native input receipt:', context)
+            self.assertIn(str(RUNTIME), context)
+            self.assertIn(str(RUNTIME.parent.parent / 'skills/deliver-demand-driven-outcome/SKILL.md'), context)
+            self.assertLess(len(context.encode('utf-8')), 2500 * 4)
+        error = self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Continue.'},
+                            hook=True, success=False)
+        self.assertIn('freshness is unknown', error)
+        self.assertEqual(blocked.read_bytes(), b'protected original')
+
+    def test_startup_guidance_does_not_touch_unwritable_state_or_clear_quarantine(self):
+        self.bind()
+        self.pause('User paused.')
+        before_checkpoint = self.status()['checkpoint']
+        self.preload = self.root / 'fail-input.cjs'
+        self.preload.write_text("const fs=require('node:fs'), rename=fs.renameSync; "
+            "fs.renameSync=(a,b)=>{if(b.endsWith('.input.json'))throw Error('input-write-failed');return rename(a,b)};",
+            encoding='utf-8')
+        self.assertIn('input-write-failed', self.invoke(
+            {'hook_event_name': 'UserPromptSubmit', 'prompt': 'Changed request.'},
+            hook=True, success=False))
+        del self.preload
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        # Deterministic permission fault avoids administrator/root bypass of chmod.
+        self.preload = self.root / 'deny-state.cjs'
+        self.preload.write_text("const fs=require('node:fs'); "
+            "for(const k of ['realpathSync','statSync','lstatSync','mkdirSync','readFileSync','openSync']) "
+            "{const original=fs[k];fs[k]=(...args)=>{if(String(args[0]).startsWith(process.env.YIYUAN_ACCORD_TASK_STATE_DIR)) "
+            "throw Object.assign(Error('denied-state-access'),{code:'EACCES'});return original(...args)}};",
+            encoding='utf-8')
+        for source in ['startup', 'clear']:
+            result = subprocess.run([self.node, '--require', str(self.preload),
+                str(RUNTIME.with_name('accord-hook.cjs'))],
+                input=json.dumps({'hook_event_name': 'SessionStart', 'source': source}),
+                text=True, encoding='utf-8', capture_output=True, env=self.environment,
+                cwd=self.work, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('Accord task entry:', json.loads(result.stdout)['hookSpecificOutput']['additionalContext'])
+        error = self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Continue.'},
+                            hook=True, success=False)
+        self.assertIn('unbound-native-input', error)
+        self.assertIn('freshness is unknown', error)
+        del self.preload
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+        self.invoke({'op': 'recover-lock', 'lock': 'input'})
+        current = self.status()
+        self.assertTrue(current['needsNativeReplay'])
+        self.assertEqual(current['checkpoint'], before_checkpoint)
+        self.assertEqual(self.event('Stop'), {})
+
     def test_subagent_user_input_preserves_root_receipt_and_paused_checkpoint(self):
         self.bind(unresolved=['Root approval is still required.'])
         self.pause('Root user paused this work.')

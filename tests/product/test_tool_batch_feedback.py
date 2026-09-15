@@ -95,7 +95,10 @@ class ToolBatchFeedbackTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='accord-batch-feedback-') as folder:
             event = {'hook_event_name': 'SessionStart', 'source': 'startup',
                      'tool_calls': [{'tool_name': 'Bash', 'tool_response': REFUSAL}]}
-            self.assertIsNone(self.run_hook(folder, event))
+            startup = self.run_hook(folder, event)['hookSpecificOutput']
+            self.assertEqual(startup['hookEventName'], 'SessionStart')
+            self.assertIn('Accord task entry:', startup['additionalContext'])
+            self.assertNotIn('no-approval-surface', startup['additionalContext'])
             event['source'] = 'resume'
             output = self.run_hook(folder, event)['hookSpecificOutput']
             self.assertEqual(output['hookEventName'], 'SessionStart')

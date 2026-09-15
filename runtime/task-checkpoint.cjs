@@ -812,10 +812,10 @@ function observeNativeHost(event, previous) {
     scope: 'reported-fields-at-input-only; other-settings-and-mid-turn-state-unknown; no-user-intent-or-collaboration-mode-inference'};
 }
 
-function hint(event, where, currentInput, prior = null) {
+// Pure startup guidance: no task storage access or receipt/authority claim.
+function entryGuidance() {
   const skill = path.join(__dirname, '..', 'skills', 'deliver-demand-driven-outcome', 'SKILL.md');
-  return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
-    'Accord task entry: apply these duties directly; loading a Skill is not a prerequisite. ' +
+  return 'Accord task entry: apply these duties directly; loading a Skill is not a prerequisite. ' +
     'The user may only express an idea and may not know feasibility or technical operations. ' +
     'For authorized work, assess feasibility, inspect current facts, research uncertain facts and compare suitable capabilities when it can improve the route. ' +
     'When model or subagent selection matters, discover current account and dispatch-path support, honor user restrictions, and match task needs; do not hardcode model names, versions, tiers or effort ladders. Recheck material availability changes and actual execution. ' +
@@ -832,8 +832,14 @@ function hint(event, where, currentInput, prior = null) {
     'Ask briefly only for an unresolved necessary decision, authorization or personal action; respect actual pauses and keep standalone answers lightweight. ' +
     'Complete the full collaboration and delivery loop without Plan or Goal mode. Enable either only on explicit user selection or request; ordinary continue/finish wording and internal plan records grant none. Preserve a selected mode and follow its effective host constraints, including in delegated work; reconcile the latest goal, pauses, budget and unfinished work without bypassing restrictions. ' +
     'Reassess affected assumptions when native host observations change or become unavailable. Respect explicit user choices and actual host constraints; confirm only a material unresolved intention, then correct and verify affected results. Do not restore user settings automatically or infer collaboration mode from permission mode. ' +
-    (currentInput.inputSource === 'host-continuation' ? 'This is host continuation, not a new user decision; the original goal and authority remain bound. ' : '') +
     `Detailed guidance for an unresolved coordination gap: "${skill}". Do not read it just to start work already covered by these duties; reuse applicable guidance. ` +
+    `Optional runtime helper: node "${__filename}" --help. Native task receipt and runtime conditions must actually be available for its state operations; this startup guidance claims no receipt, recovered goal or fresh authority.`;
+}
+
+function hint(event, where, currentInput, prior = null) {
+  return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
+    entryGuidance() +
+    (currentInput.inputSource === 'host-continuation' ? 'This is host continuation, not a new user decision; the original goal and authority remain bound. ' : '') +
     `Native input receipt: session=${event.session_id}; epoch=${currentInput.epoch}. ` +
     (prior ? `An existing ${prior.mode === 'paused' ? 'paused' : 'unfinished'} checkpoint remains. Read status.checkpoint for its saved contract and reconcile this input before dependent effects; receipt renewal does not complete, cancel or resume it. ` : '') +
     `When a concrete input-freshness, unfinished-work recovery or completion risk lacks adequate native protection, use node "${__filename}" --help ` +
@@ -1160,4 +1166,4 @@ if (require.main === module) {
     });
   }
 }
-module.exports = {operate, hook, assessContext, observeContext};
+module.exports = {operate, hook, assessContext, observeContext, entryGuidance};

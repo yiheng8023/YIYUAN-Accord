@@ -7,8 +7,7 @@
           {
             "type": "command",
             "command": "node \"${PLUGIN_ROOT}/runtime/accord-hook.cjs\"",
-            "timeout": 3,
-            "additionalContextLimit": 700
+            "timeout": 3
           }
         ]
       },

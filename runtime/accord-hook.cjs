@@ -50,6 +50,10 @@ process.stdin.on('end', () => {
     return;
   }
   if (['startup', 'clear'].includes(event.source)) {
+    const {entryGuidance} = require('./task-checkpoint.cjs');
+    process.stdout.write(JSON.stringify({hookSpecificOutput: {
+      hookEventName: 'SessionStart', additionalContext: entryGuidance(),
+    }}));
     return;
   }
   const eventHint = (field, value, sourceRef) => {
