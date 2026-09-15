@@ -3,11 +3,12 @@
   "productId": "yiyuan-accord",
   "packageId": "yiyuan-accord-codex",
   "adapterId": "codex",
-  "entry": "direct-native-input-duties",
+  "entry": "direct-native-startup-and-input-duties",
   "ordinaryPrerequisites": [
     "host-path-node",
     "supported-native-task-hooks",
-    "enabled-currently-trusted-input-hook"
+    "enabled-currently-trusted-input-hook",
+    "enabled-currently-trusted-startup-hook"
   ],
   "optionalContinuityHint": "session-start-invalidation",
   "optionalHintDependency": "host-path-node",
@@ -54,6 +55,7 @@
     "existingCheckpoint": "inspect-status-and-reconcile-current-input-before-continuing-unfinished-or-paused-work",
     "limits": "advisory-agent-guidance; no-state-transition-or-stop-gate-change; prerequisites-must-hold-in-actual-execution-environment; skill-only-use-does-not-prove-ordinary-input-participation",
     "detailGuidance": "demand-driven-host-skill",
-    "contextReentry": "SessionStart/compact restores task duties and a source-recovery cue; preserves input identity, pauses and quarantine; no restored-goal, fresh-authority or completed-takeover claim"
+    "contextReentry": "SessionStart/compact restores task duties and a source-recovery cue; preserves input identity, pauses and quarantine; no restored-goal, fresh-authority or completed-takeover claim",
+    "startupEntry": "SessionStart/startup and clear inject shared core guidance and same-package detail paths without reading or writing task-state storage; no receipt, restored state or new authority. Node and current Hook trust remain prerequisites."
   }
 }

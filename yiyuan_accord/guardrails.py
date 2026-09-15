@@ -440,6 +440,7 @@ def activation_mechanism_errors(
     root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
     task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
     resume_reconciliation=False, context_reentry=False, native_context=False,
+    startup_entry=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -499,7 +500,7 @@ def activation_mechanism_errors(
         "command": f'node "${{{root_variable}}}/runtime/accord-hook.cjs"',
         "timeout": 3,
     }
-    if adapter_id == "codex":
+    if adapter_id == "codex" and not startup_entry:
         handler["additionalContextLimit"] = 700
     expected_value = {
         "hooks": {
@@ -552,6 +553,7 @@ def activation_mechanism_errors(
 def validate_projection_package(
     root, adapter_id, manifest_locator, contract_locator, skill_locator,
     metadata_locators, legal_locators, asset_locators, mechanism_locators=None,
+    reference_locators=None,
 ):
     errors = []
     prefix = f"adapter {adapter_id}"
@@ -567,6 +569,7 @@ def validate_projection_package(
             manifest_locator, contract_locator, skill_locator,
             *metadata_locators, *legal_locators, *asset_locators,
             *(mechanism_locators or []),
+            *(reference_locators or []),
         )
         if isinstance(locator, str)
     ]
@@ -582,6 +585,19 @@ def validate_projection_package(
         )
         return None, errors
     if isinstance(skill_locator, str):
+        reference_parent = Path(skill_locator).parent / "references"
+        for locator in reference_locators or []:
+            relative = Path(locator)
+            path = repository_relative_path(root, locator)
+            if (relative.parent != reference_parent or relative.suffix != ".md"
+                    or path is None or not path.is_file()):
+                errors.append(f"{prefix} Skill reference file is invalid: {locator}")
+            else:
+                try:
+                    if not _owned_text(path).strip():
+                        errors.append(f"{prefix} Skill reference is empty: {locator}")
+                except (OSError, UnicodeError) as exc:
+                    errors.append(f"{prefix} Skill reference is unreadable: {exc}")
         metadata_parent = Path(skill_locator).parent / "agents"
         for locator in metadata_locators:
             path = repository_relative_path(root, locator)
@@ -649,6 +665,12 @@ def validate_host_projection(
         "claude-code": {"marketplace"},
     }
     expected_shape = _PROJECTION_FIELDS | projection_fields.get(adapter_id, set())
+    if "referenceFiles" in projection:
+        expected_shape |= {"referenceFiles"}
+    if "startupEntry" in projection:
+        expected_shape |= {"startupEntry"}
+        if type(projection["startupEntry"]) is not bool:
+            errors.append(f"{prefix} startup entry declaration must be boolean")
     if adapter_id not in ("codex", "claude-code") or not _exact(projection, expected_shape):
         errors.append(f"{prefix} program projection shape is invalid")
     manifest_locator, marketplace_locator = projection.get("manifest"), projection.get("marketplace")
@@ -665,6 +687,13 @@ def validate_host_projection(
     mechanism_locators = mechanisms if isinstance(mechanisms, list) and all(
         isinstance(item, str) for item in mechanisms
     ) else []
+    references = projection.get("referenceFiles", [])
+    valid_references = (isinstance(references, list)
+                        and all(_nonempty_string(item) for item in references)
+                        and len(references) == len(set(references)))
+    if not valid_references:
+        errors.append(f"{prefix} Skill references must be distinct file locators")
+    reference_locators = references if valid_references else []
     activation_context = projection.get("activationContext")
     manifest = read_json(root, manifest_locator, errors) if isinstance(manifest_locator, str) else {}
     contract = read_json(root, contract_locator, errors) if isinstance(contract_locator, str) else {}
@@ -719,6 +748,7 @@ def validate_host_projection(
         resume_reconciliation=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("resumeReconciliation")),
         context_reentry=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("contextReentry")),
         native_context=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("nativeContext")),
+        startup_entry=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("startupEntry")),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,
@@ -771,6 +801,7 @@ def validate_host_projection(
     package_digest, package_errors = validate_projection_package(
         root, adapter_id, manifest_locator, contract_locator, skill_locator,
         metadata_locators, legal_locators, asset_locators, mechanism_locators,
+        reference_locators,
     )
     errors.extend(package_errors)
     if package_digest != projection.get("packageSha256"):

@@ -78,7 +78,7 @@ def _strings(value, *, empty=False):
             and len(value) == len(set(value)))
 
 
-def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None):
+def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False):
     """Describe this development package, not a mandatory product mechanism."""
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
@@ -129,6 +129,14 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
             "detailGuidance": "demand-driven-host-skill",
             "contextReentry": "SessionStart/compact restores task duties and a source-recovery cue; preserves input identity, pauses and quarantine; no restored-goal, fresh-authority or completed-takeover claim",
         }
+        if startup_entry:
+            contract["entry"] = "direct-native-startup-and-input-duties"
+            contract["ordinaryPrerequisites"].append("enabled-currently-trusted-startup-hook")
+            contract["ordinaryInputParticipation"]["startupEntry"] = (
+                "SessionStart/startup and clear inject shared core guidance and same-package detail paths "
+                "without reading or writing task-state storage; no receipt, restored state or new authority. "
+                "Node and current Hook trust remain prerequisites."
+            )
     if adapter_id == "claude-code":
         contract["optionalToolBatchFeedback"] = {
             "entry": "runtime/accord-hook.cjs", "nativeEvent": "PostToolBatch",

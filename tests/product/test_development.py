@@ -27,6 +27,71 @@ def historical_development():
         ["git", "show", f"{V4_REVISION}:{DEVELOPMENT_FILE}"], cwd=ROOT))
 
 
+class SkillReferencePackageTests(unittest.TestCase):
+    @contextmanager
+    def package(self):
+        from yiyuan_accord.guardrails import validate_projection_package
+        definition = json.loads((ROOT / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
+        projection = definition["delivery"]["hostProjections"][0]
+        package_path = Path(projection["manifest"]).parent.parent
+        manifest = json.loads((ROOT / projection["manifest"]).read_text(encoding="utf-8"))
+        assets = [(package_path / manifest["interface"][key][2:]).as_posix()
+                  for key in ("composerIcon", "logo", "logoDark")]
+        with tempfile.TemporaryDirectory(prefix="accord-skill-ref-tests-") as temporary:
+            root = Path(temporary)
+            shutil.copytree(ROOT / package_path, root / package_path)
+            for name in ("LICENSE", "NOTICE"):
+                shutil.copy2(ROOT / name, root / name)
+
+            def check(references=None):
+                return validate_projection_package(root, "codex", projection["manifest"],
+                    projection["contract"], projection["skill"], projection["metadataFiles"],
+                    projection["legalFiles"], assets, projection["mechanismFiles"],
+                    projection["referenceFiles"] if references is None else references)
+
+            yield root, projection, check
+
+    def test_reference_changes_change_the_exact_package_identity(self):
+        with self.package() as (root, projection, check):
+            original, errors = check()
+            self.assertEqual(errors, [])
+            self.assertEqual(original, projection["packageSha256"])
+            reference = root / projection["referenceFiles"][0]
+            reference.write_text(reference.read_text(encoding="utf-8") + "\nChanged duty.\n", encoding="utf-8")
+            changed, errors = check()
+            self.assertEqual(errors, [])
+            self.assertNotEqual(changed, original)
+
+    def test_missing_or_undeclared_reference_is_rejected(self):
+        with self.package() as (root, projection, check):
+            _, errors = check([])
+            self.assertTrue(errors)
+            reference = root / projection["referenceFiles"][0]
+            reference.unlink()
+            digest, errors = check()
+            self.assertIsNone(digest)
+            self.assertTrue(errors)
+
+    def test_reference_must_be_nonempty_readable_markdown_in_its_declared_directory(self):
+        with self.package() as (root, projection, check):
+            reference = root / projection["referenceFiles"][0]
+            for invalid in (b"", b"\xff\xfe"):
+                with self.subTest(content=invalid):
+                    reference.write_bytes(invalid)
+                    self.assertTrue(check()[1])
+            self.assertTrue(check([projection["manifest"]])[1])
+
+    def test_startup_guidance_is_an_explicit_variant_not_a_relabelled_predecessor(self):
+        from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract
+        previous = delivery_adapter_contract("codex", "yiyuan-accord-codex", development_schema=V5_SCHEMA)
+        current = delivery_adapter_contract("codex", "yiyuan-accord-codex",
+                                            development_schema=V5_SCHEMA, startup_entry=True)
+        self.assertNotIn("startupEntry", previous["ordinaryInputParticipation"])
+        self.assertIn("startupEntry", current["ordinaryInputParticipation"])
+        self.assertIn("enabled-currently-trusted-startup-hook", current["ordinaryPrerequisites"])
+        self.assertEqual(previous["optionalTaskCheckpoint"], current["optionalTaskCheckpoint"])
+
+
 class ClaudeUpdateInspectionTests(unittest.TestCase):
     def run_fixture(self, **conditions):
         expected_validations = conditions.pop("expectedValidations", 1)

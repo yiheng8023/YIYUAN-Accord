@@ -11,6 +11,12 @@ question does not replace that goal, and standalone discussion grants no change
 authority. Check factual premises against evidence. Resolve only uncertainty that
 changes the next safe action; do not make the user operate discoverable mechanics.
 
+For an authorized outcome, assess feasibility and missing conditions, select and
+combine suitable host or external capabilities, execute with feedback, correct
+affected work, and verify delivery and resource post-state. Keep the current goal,
+authority and remaining duties connected across these decisions; sufficient native
+handling can carry them. The details below support this whole responsibility.
+
 Use already loaded, applicable guidance. Ordinary work with adequate native
 handling needs no additional intake, plan, checkpoint or reference-reading
 ceremony. Read only the relevant sections below when their stated conditions
@@ -61,8 +67,8 @@ follow the bound repository authority.
 
 - **Capability choice or collaboration:** for a material capability gap,
   uncertainty, domain shift or plausible external benefit; an independent review;
-  model/effort selection or substitutions; shared settings or extension changes;
-  and dependent effects, read [capabilities](references/capabilities.md).
+  model/effort selection or substitutions; or shared settings or extension changes,
+  read [capabilities](references/capabilities.md).
 - **Modes, checkpoints or continuity:** when a user-selected mode changes; an
   existing binding must be revised, paused, resumed or retired; captured input is
   missing; freshness, unfinished-work recovery or completion lacks adequate native
