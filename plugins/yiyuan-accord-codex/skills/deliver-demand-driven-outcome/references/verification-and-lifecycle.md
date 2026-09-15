@@ -2,7 +2,7 @@
 
 ## Correct affected results after changes or failures
 
-For a proposed or observed change, use the host's source inspection, dependency
+Within the accepted task and its authorized dependencies, use the host's source inspection, dependency
 information and existing checks to identify affected assumptions, consumers,
 shared state/resources, other tasks and whole-goal outcomes. Follow consequential
 indirect effects as well as the edited object; prioritize necessary dependencies,
@@ -10,8 +10,12 @@ not an exhaustive inventory of unrelated systems. Keep a demonstrably isolated
 change lightweight. Discovery grants no new access or authority over other tasks.
 
 Changes to facts, requirements, authorization, baselines, plans or acceptance
-criteria also require reassessing existing artifacts and the current applicability
-of earlier conclusions. Preserve original observations and their conditions;
+criteria also require reassessing existing artifacts and earlier conclusions
+actually used by that task. Installation, enablement or upgrade does not assign
+the user's unrelated pre-Accord work or historical debt. Prior material explicitly
+handed over or adopted as a necessary task dependency needs an applicability check
+before reliance; that does not authorize repairing everything in its history.
+Preserve original observations and their conditions;
 qualify or withdraw conclusions that no longer hold. Repair, redo or retire the
 affected work within authority, reconcile live plans and progress claims with the
 actual effects, and verify consequential dependencies and results that must remain
@@ -51,13 +55,13 @@ restore/verify known-good state within authority. Same-version caches may retain
 bad bytes; do not overwrite shared caches or invent force options. Verify the
 blocker's disposition and post-state. Containment is not task completion.
 
-For plugin reloads and host upgrades, distinguish the running host entry/binary,
+For Accord plugin reloads and relevant host upgrades, distinguish the running host entry/binary,
 installed package, enabled components, current Hook trust, live consumers and
 guidance already injected into task history. Reuse supported host refresh and
 next-turn loading, and observe actual participation before dependent use. A fresh
 catalog, successful install or restarted process does not prove all components
 switched together; inspect the affected existing task as well as a fresh entry.
-Reconcile changed guidance, pending work, pauses and state compatibility after
+Reconcile changed guidance, already accepted pending work, pauses and state compatibility after
 the switch. Preserve a recoverable source until the successor works. If the entry
 itself is unavailable, its own Hook cannot certify or initiate recovery; use the
 previously retained host control or other authorized recovery actor.

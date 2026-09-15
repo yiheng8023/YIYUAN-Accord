@@ -814,8 +814,8 @@ function observeNativeHost(event, previous) {
 
 // Shared host judgment duty survives ordinary entry and context restoration.
 function changeImpactGuidance() {
-  return 'Before any change, assess its effect on the whole goal and affected users, upstream/downstream consumers, shared state/resources, and other tasks. Include changed assumptions, baselines, plans and acceptance criteria. ' +
-    'Use available dependency evidence to trace direct and consequential indirect effects, including earlier outputs and the current validity of historical conclusions; then repair and verify affected work, current claims and future steps while preserving valid results and original evidence. ' +
+  return 'Before any change, assess its effect on the whole goal within the accepted task and its authorized dependencies, including affected users, upstream/downstream consumers and shared state/resources. Include changed assumptions, baselines, plans and acceptance criteria. Installing or updating Accord does not adopt the user\'s unrelated prior history or other tasks. ' +
+    'Use available dependency evidence to trace direct and consequential indirect effects, including earlier outputs and the current validity of historical conclusions used by this task; then repair and verify affected work within authority while preserving valid results and original evidence. Preventing harm to other tasks does not take ownership of their history or debt. ' +
     'Scale inspection to risk and scope; a demonstrably isolated change needs only a bounded check. Uncertain consequential effects hold dependent actions, not unrelated safe work. Carry them as unfinished duties in native task state or an existing checkpoint unresolved list until evidence resolves them; matching local files alone cannot close them. ';
 }
 

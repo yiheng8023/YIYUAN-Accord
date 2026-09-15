@@ -32,11 +32,13 @@ effects to their target, executor, authority, observation and recovery boundary;
 keep one writer per target. Unknown or conflicting conditions hold only dependent
 actions while safe independent work continues.
 
-Before any change, judge its effect on the whole goal, affected users and consumers,
-shared state/resources and other tasks. Follow consequential dependencies back to
-existing results and evidence and forward to current and future work. Repair and
-verify affected parts while preserving valid work; keep unresolved impacts as
-unfinished duties. A bounded check suffices for an evidenced isolated change.
+Before any change, judge its effect on the whole accepted task and its authorized
+dependencies, including affected consumers and shared resources. Follow relevant
+existing results and evidence through current and future work; repair and verify
+affected parts within authority, preserving valid work and unresolved duties.
+Installation or update does not adopt unrelated history predating Accord. Protecting
+other tasks from this work does not take ownership of their history or debt.
+A bounded check suffices for an evidenced isolated change.
 
 Complete the collaboration and delivery loop without requiring Plan or Goal mode.
 Enable a mode only after the user explicitly selects or requests it, and preserve

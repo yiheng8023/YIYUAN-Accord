@@ -1,6 +1,7 @@
 import argparse
 from contextlib import redirect_stdout
 import io
+import http.client
 import json
 import os
 from pathlib import Path
@@ -22,16 +23,18 @@ class CodexLifecycleTests(unittest.TestCase):
                      "rootPid": 123, "processGroupState": "absent", "rootExitCode": exit_code}
         return {"controller": controller, "exitCode": exit_code, "forced": False, "after": after}
 
-    def fixture(self, root):
+    def fixture(self, root, hot_reload=False, adapter=None, hooks=None):
         package = root / "package"
         (package / ".codex-plugin").mkdir(parents=True)
         (package / "hooks").mkdir()
         (package / "runtime").mkdir()
         (package / "skills/demo").mkdir(parents=True)
         (package / ".codex-plugin/plugin.json").write_text('{"name":"yiyuan-accord-codex","version":"3.3.0-dev.1"}', encoding="utf-8")
-        (package / "hooks/hooks.json").write_text('{"hooks":{}}', encoding="utf-8")
+        (package / "hooks/hooks.json").write_text(hooks or '{"hooks":{}}', encoding="utf-8")
         (package / "runtime/task-checkpoint.cjs").write_text("// fixture", encoding="utf-8")
         (package / "skills/demo/SKILL.md").write_text("---\nname: demo\n---\n", encoding="utf-8")
+        if adapter is not None:
+            (package / "adapter.json").write_text(adapter, encoding="utf-8")
         marketplace = root / "marketplace.json"
         marketplace.write_text(json.dumps({"name": "yiyuan-accord", "plugins": [{"name": "yiyuan-accord-codex",
             "source": {"source": "local", "path": "./plugins/yiyuan-accord-codex"}}]}), encoding="utf-8")
@@ -43,7 +46,7 @@ class CodexLifecycleTests(unittest.TestCase):
         args = argparse.Namespace(package=str(package.resolve()), evidence=str((root / "evidence").resolve()),
             marketplace_manifest=str(marketplace.resolve()), codex=str(codex.resolve()), node=str(node.resolve()),
             protected_file=[str(protected.resolve())],
-            timeout=180, request_timeout=30, recovery_timeout=10)
+            timeout=180, request_timeout=30, recovery_timeout=10, hot_reload=hot_reload)
         lifecycle.prepare(args)
         return args, lifecycle._load(args.evidence)
 
@@ -61,6 +64,15 @@ class CodexLifecycleTests(unittest.TestCase):
             self.assertEqual(len(manifest["protectedFiles"]), 1)
             self.assertFalse((Path(args.evidence) / "run-started.json").exists())
             self.assertEqual(json.loads((Path(args.evidence) / "workspace/source.json").read_text()), {"total": 140})
+
+    def test_manifest_root_is_checked_before_following_variant_paths(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, manifest = self.fixture(Path(tmp).resolve())
+            manifest.update(case=lifecycle.HOT_CASE, evidence=str(Path(tmp) / 'unrelated-root'))
+            (Path(args.evidence) / 'manifest.json').write_text(json.dumps(manifest), encoding='utf-8')
+            with self.assertRaises(ValueError):
+                lifecycle._load(args.evidence)
+            self.assertFalse((Path(tmp) / 'unrelated-root').exists())
 
     def test_changed_direct_dependency_is_rejected_before_execution(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -89,11 +101,199 @@ class CodexLifecycleTests(unittest.TestCase):
         peer_closed = {"ordinal": 3, "transportStatus": "peer-closed",
                        "response": {"id": "resp_fixture_3", "status": "in_progress", "output": []}}
         self.assertTrue(lifecycle._provider_response_matches(peer_closed, 3))
-        for ordinal in (1, 2, 4):
+        for ordinal in (1, 2, 4, 5, 6):
             changed = {**peer_closed, "ordinal": ordinal,
                        "response": {**peer_closed["response"], "id": f"resp_fixture_{ordinal}"}}
             self.assertFalse(lifecycle._provider_response_matches(changed, ordinal))
         self.assertFalse(lifecycle._provider_response_matches({**peer_closed, "transportStatus": "hold-timeout"}, 3))
+
+    def test_hot_reload_freezes_only_existing_version_fields_and_binds_six_responses(self):
+        for adapter, changed in ((None, [".codex-plugin/plugin.json"]),
+                ('{ "schema": 2, "entry": "unchanged" }\n', [".codex-plugin/plugin.json"]),
+                ('{ "packageVersion" : "3.3.0-dev.1", "entry": "unchanged" }\n',
+                 [".codex-plugin/plugin.json", "adapter.json"])):
+            with self.subTest(adapter=adapter), tempfile.TemporaryDirectory() as tmp:
+                args, manifest = self.fixture(Path(tmp).resolve(), hot_reload=True, adapter=adapter)
+                hot = manifest["hotReload"]
+                self.assertEqual(manifest["case"], lifecycle.HOT_CASE)
+                self.assertEqual(hot["changedFiles"], changed)
+                self.assertEqual(hot["upgradeVersion"], "3.3.0-dev.1+codex.hot-reload-observation")
+                self.assertEqual(tuple(manifest["nativeCommandLabels"]), lifecycle.HOT_COMMAND_LABELS)
+                self.assertEqual(tuple(manifest["nativeResourceLabels"]), lifecycle.RESOURCE_LABELS)
+                self.assertEqual(manifest["limits"]["providerRequests"], 6)
+                lifecycle._validate_prebound(manifest)
+                snapshot, upgraded = Path(args.evidence) / "source-package", Path(hot["snapshot"])
+                for name in manifest["packageHashes"]:
+                    if name not in changed:
+                        self.assertEqual((snapshot / name).read_bytes(), (upgraded / name).read_bytes())
+                if adapter and "packageVersion" in adapter:
+                    self.assertEqual((upgraded / "adapter.json").read_text(),
+                        adapter.replace("3.3.0-dev.1", hot["upgradeVersion"]))
+                (upgraded / "runtime/task-checkpoint.cjs").write_text("// changed runtime", encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "frozen bytes differ"):
+                    lifecycle._load(args.evidence)
+
+    def test_default_episode_cannot_be_relabelled_as_hot_reload_by_result_or_limit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, manifest = self.fixture(Path(tmp).resolve())
+            self.assertNotIn("case", manifest)
+            self.assertNotIn("hotReload", manifest)
+            manifest["limits"]["providerRequests"] = 6
+            lifecycle.save(Path(args.evidence) / "manifest.json", manifest)
+            with self.assertRaisesRegex(ValueError, "manifest binding mismatch"):
+                lifecycle._load(args.evidence)
+
+    def test_provider_enforces_prepared_four_or_six_response_ceiling(self):
+        for hot_reload, ceiling in ((False, 4), (True, 6)):
+            with self.subTest(hot_reload=hot_reload), tempfile.TemporaryDirectory() as tmp:
+                args, manifest = self.fixture(Path(tmp).resolve(), hot_reload=hot_reload)
+                fixture = lifecycle._Fixture(manifest)
+                try:
+                    for ordinal in range(1, ceiling + 2):
+                        connection = http.client.HTTPConnection("127.0.0.1", fixture.port, timeout=5)
+                        try:
+                            connection.request("POST", "/responses", body=b'{"input":[]}',
+                                headers={"Content-Type": "application/json"})
+                            response = connection.getresponse()
+                            self.assertEqual(response.status, 200 if ordinal <= ceiling else 429)
+                            response.read()
+                        finally:
+                            connection.close()
+                finally:
+                    fixture.close()
+                self.assertEqual(len(fixture.requests), ceiling)
+                for ordinal in range(1, ceiling + 1):
+                    receipt = json.loads((Path(args.evidence) / "retained" / f"provider-response-{ordinal}.json").read_text(encoding="utf-8"))
+                    self.assertTrue(lifecycle._provider_response_matches(receipt, ordinal))
+
+    def test_hot_reload_rejects_same_build_and_duplicate_version_tokens(self):
+        with self.assertRaisesRegex(ValueError, "exactly one version field"):
+            lifecycle._version_bytes(b'{"version":"old","version":"old"}', "version", "old", "new")
+        with tempfile.TemporaryDirectory() as tmp:
+            package = Path(tmp).resolve()
+            (package / ".codex-plugin").mkdir()
+            (package / ".codex-plugin/plugin.json").write_text(
+                '{"version":"3.3.0-dev.1+codex.hot-reload-observation"}', encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "distinct original package version"):
+                lifecycle._hot_variant(package)
+
+    def test_current_input_context_uses_last_developer_receipt_not_historical_path(self):
+        first = "Accord task entry: Native input receipt: session=task; epoch=old. use node /old/runtime/task-checkpoint.cjs"
+        last = "Accord task entry: Native input receipt: session=task; epoch=new. use node /new/runtime/task-checkpoint.cjs"
+        request = {"input": [{"role": "developer", "content": [{"text": first}]},
+            {"role": "user", "content": [{"text": first}]},
+            {"role": "developer", "content": [{"text": last}]}]}
+        self.assertEqual(lifecycle._latest_input_context(request), last)
+        self.assertFalse(lifecycle._contains_path(lifecycle._latest_input_context(request), "/old/runtime/task-checkpoint.cjs"))
+
+    def test_hot_reload_inspection_recomputes_packages_turns_trust_and_native_receipts(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as tmp:
+            args, manifest = self.fixture(Path(tmp).resolve(), hot_reload=True,
+                hooks='{"hooks":{"UserPromptSubmit":[{"hooks":[{"type":"command","command":"unchanged"}]}]}}')
+            evidence, hot = Path(args.evidence), manifest["hotReload"]
+            old = str(Path(manifest["ownedRoots"]["home"]) / "plugins/cache/original")
+            new = str(Path(manifest["ownedRoots"]["home"]) / "plugins/cache/upgrade")
+            thread, source_hash = "paused-thread", manifest["initialRootHashes"]["workspace"]["source.json"]
+            key = lifecycle.PLUGIN_ID + ":hooks/hooks.json:user_prompt_submit:0:0"
+            trust = {key: {"enabled": True, "trusted_hash": "unchanged-declaration-hash"}}
+            def hooks(path):
+                return {"data": [{"hooks": [{"key": key, "currentHash": trust[key]["trusted_hash"],
+                    "enabled": True, "trustStatus": "trusted", "sourcePath": str(Path(path) / "hooks/hooks.json")}]}]}
+            lifecycle.save(evidence / "retained/hooks-before.json", hooks(old))
+            argv = [manifest["codex"], "app-server", "-c", "hooks.state=" + lifecycle._toml(trust)]
+            lifecycle.save(evidence / "retained/hot-reload-launch.json", {"arguments": argv, "trust": trust})
+            resources = {"resumed": {"arguments": argv}}
+            checkpoint = {"epoch": "binding-epoch", "result": "Deliver pending.json only after an explicit later decision",
+                "nextAction": "retain pause and wait for decision", "canContinue": False,
+                "reason": "user explicitly paused pending decision",
+                "inputs": [{"path": "source.json", "observed": {"present": True, "sha256": source_hash}}],
+                "outputs": [{"path": "pending.json", "json": {"/total": 140}}]}
+            def status(epoch, count, turn):
+                return {"mode": "paused", "revision": 2, "epoch": epoch, "checkpoint": checkpoint,
+                    "recoveryInputs": {"available": True, "count": count}, "currentInputReconciled": False,
+                    "hostObservationCurrent": True, "hostObservation": {"turnId": turn},
+                    "inspection": {"inputs": [{"path": "source.json", "current": {"present": True, "sha256": source_hash},
+                        "unchanged": True, "stable": True}], "outputs": [{"path": "pending.json",
+                        "current": {"present": False}, "matched": False, "stable": True}]}}
+            prior = status("fourth-input", 2, "fourth-turn")
+            current_prior = prior
+            inputs = [{"epoch": "original-input", "turnId": "third-turn", "prompt": lifecycle.PROMPT},
+                      {"epoch": "fourth-input", "turnId": "fourth-turn", "prompt": "继续。"}]
+            request_rows = [{"id": 1, "method": "turn/start", "params": {"threadId": thread}}]
+            provider_rows = [{"ordinal": ordinal, "request": {}} for ordinal in range(1, 7)]
+            commands, native = {}, []
+            previous_after = None
+            for index, (label, path, snapshot) in enumerate((
+                    ("hot-reload-upgrade", new, Path(hot["snapshot"])),
+                    ("hot-reload-rollback", old, evidence / "source-package"))):
+                retained = evidence / "retained" / label
+                retained.mkdir()
+                shutil.copytree(snapshot, retained / "installed-package")
+                before_root = retained / "before-install-state"
+                if previous_after is None:
+                    before_root.mkdir()
+                    lifecycle.save(before_root / "task.state.json", {"session": thread, "mode": "paused", "checkpoint": checkpoint})
+                    lifecycle.save(before_root / "task.input.json", {"epoch": "fourth-input", "turnId": "fourth-turn",
+                        "inputSource": "native-input-event", "nativeInputs": inputs})
+                else:
+                    shutil.copytree(previous_after, before_root)
+                shutil.copytree(before_root, retained / "after-install-state")
+                shutil.copytree(before_root, retained / "after-turn-state")
+                epoch, turn = f"hot-input-{index}", f"hot-turn-{index}"
+                inputs = [*inputs, {"epoch": epoch, "turnId": turn, "source": "native-input-event",
+                    "promptSha256": lifecycle.hashlib.sha256(lifecycle.HOT_PROMPTS[index].encode()).hexdigest(),
+                    "prompt": lifecycle.HOT_PROMPTS[index]}]
+                lifecycle.save(retained / "after-turn-state/task.input.json", {"epoch": epoch, "turnId": turn,
+                    "inputSource": "native-input-event", "nativeInputs": inputs})
+                after = status(epoch, index + 3, turn)
+                lifecycle.save(retained / "observation.json", {"installedPath": path, "threadId": thread,
+                    "turnId": turn, "providerOrdinal": index + 5, "beforeTurn": current_prior,
+                    "afterTurn": after, "hooks": hooks(path)})
+                command_root = evidence / "commands" / label
+                command_root.mkdir()
+                lifecycle.save(command_root / "stdout.json", {"installedPath": path})
+                commands[label] = {"arguments": ["-c", 'cli_auth_credentials_store="file"', "plugin", "add", lifecycle.PLUGIN_ID, "--json"]}
+                request_id, hook_id = index * 2 + 2, index * 2 + 3
+                request_rows.extend([{"id": request_id, "method": "turn/start", "params": {"threadId": thread,
+                    "input": [{"type": "text", "text": lifecycle.HOT_PROMPTS[index]}]}},
+                    {"id": hook_id, "method": "hooks/list", "params": {"cwds": [manifest["ownedRoots"]["workspace"]]}}])
+                native.extend([{"id": request_id, "result": {"turn": {"id": turn}}},
+                    {"method": "turn/completed", "params": {"threadId": thread, "turn": {"id": turn, "status": "completed"}}},
+                    {"id": hook_id, "result": hooks(path)}])
+                context = f'Accord task entry: Native input receipt: session={thread}; epoch={epoch}. use node "{Path(path) / "runtime/task-checkpoint.cjs"}" --help'
+                provider_rows[index + 4]["request"] = {"input": [{"role": "developer", "content": [{"text": context}]}]}
+                current_prior, previous_after = after, retained / "after-turn-state"
+            request_rows.append({"method": "thread/unsubscribe", "params": {"threadId": thread}})
+            native_root = evidence / "native/resumed"
+            native_root.mkdir()
+            (native_root / "stdout.jsonl").write_text("\n".join(json.dumps(row) for row in native), encoding="utf-8")
+            def check():
+                lifecycle._inspect_hot_reload(manifest, old, thread, prior, provider_rows, request_rows, commands, resources)
+            check()
+            # A wrong historical path is rejected even though the new path remains elsewhere in the request.
+            original_request = provider_rows[4]["request"]
+            provider_rows[4]["request"] = {"input": [*original_request["input"],
+                {"role": "developer", "content": [{"text": original_request["input"][0]["content"][0]["text"].replace(new, old)}]}]}
+            with self.assertRaisesRegex(ValueError, "current input"):
+                check()
+            provider_rows[4]["request"] = original_request
+            request_rows.insert(1, {"method": "skills/list", "params": {"forceReload": True}})
+            with self.assertRaisesRegex(ValueError, "native reload"):
+                check()
+            request_rows.pop(1)
+            upgraded_file = evidence / "retained/hot-reload-upgrade/installed-package/runtime/task-checkpoint.cjs"
+            original = upgraded_file.read_bytes()
+            upgraded_file.write_bytes(b"wrong installed bytes")
+            with self.assertRaisesRegex(ValueError, "identity, CLI or bytes"):
+                check()
+            upgraded_file.write_bytes(original)
+            receipt_file = evidence / "retained/hot-reload-rollback/after-turn-state/task.input.json"
+            receipt = json.loads(receipt_file.read_text(encoding="utf-8"))
+            receipt["nativeInputs"][0]["prompt"] = "lost original responsibility"
+            lifecycle.save(receipt_file, receipt)
+            with self.assertRaisesRegex(ValueError, "receipt content"):
+                check()
 
     def test_owned_environment_does_not_forward_credentials_endpoints_or_proxies(self):
         with tempfile.TemporaryDirectory() as tmp:

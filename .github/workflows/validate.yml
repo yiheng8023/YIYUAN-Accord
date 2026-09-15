@@ -109,8 +109,8 @@ jobs:
               "--evidence", str(root / "episode"), "--codex", str(binaries[0]),
               "--node", str(pathlib.Path(shutil.which("node")).resolve()),
               "--protected-file", str(pathlib.Path("AGENTS.md").resolve()),
-              "--timeout", "600", "--request-timeout", "60", "--recovery-timeout", "15"], check=True)
-      - name: Observe native lifecycle using only fixed local responses
+              "--timeout", "600", "--request-timeout", "60", "--recovery-timeout", "15", "--hot-reload"], check=True)
+      - name: Observe native lifecycle and hot reload using fixed local responses
         run: python -B scripts/observe_codex_lifecycle.py run --evidence "$ACCORD_NATIVE_ROOT/episode"
       - name: Independently re-read the native episode
         if: always() && steps.prepare.outcome == 'success'
@@ -140,6 +140,7 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/commands
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/retained
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/source-package
+            ${{ env.ACCORD_NATIVE_ROOT }}/episode/hot-reload-package
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/standalone-skills
       - name: Release job-owned installation and episode files
         if: always() && steps.storage.outcome == 'success'

@@ -21,6 +21,7 @@ import json
 import os
 from pathlib import Path
 import queue
+import re
 import shutil
 import stat
 import subprocess
@@ -45,6 +46,10 @@ RESOURCE_LABELS = (
 )
 COMMAND_LABELS = ("marketplace-add", "package-add", "invalid-candidate", "healthy-retry",
                   "package-remove", "package-list-after-remove")
+HOT_CASE = "loaded-accord-paused-thread-upgrade-rollback/v1"
+HOT_BUILD = "codex.hot-reload-observation"
+HOT_COMMAND_LABELS = (*COMMAND_LABELS, "hot-reload-upgrade", "hot-reload-rollback")
+HOT_PROMPTS = ("保持已绑定任务暂停；观察插件新构建生效。", "保持已绑定任务暂停；观察插件原构建恢复。")
 OWNED_ROOTS = ("home", "marketplace", "workspace", "state", "temp")
 PROMPT = "本地材料已提供。保持暂停，不生成 pending.json，也不修改原始材料。"
 
@@ -152,6 +157,69 @@ def _tree_hashes(root):
     if not result:
         raise ValueError("package cannot be empty")
     return result
+
+
+def _version_bytes(data, field, old, new):
+    document = json.loads(data)
+    if document.get(field) != old:
+        raise ValueError("hot-reload version field differs")
+    pattern = rb'("' + field.encode("ascii") + rb'"\s*:\s*)' + re.escape(json.dumps(old).encode())
+    changed, count = re.subn(pattern, lambda match: match[1] + json.dumps(new).encode(), data)
+    if count != 1 or json.loads(changed) != {**document, field: new}:
+        raise ValueError("hot-reload requires exactly one version field")
+    return changed
+
+
+def _hot_variant(snapshot):
+    """Change version tokens only; do not add product fields or runtime hooks."""
+    path = Path(snapshot) / ".codex-plugin/plugin.json"
+    old = json.loads(read_regular(path)).get("version")
+    if not isinstance(old, str) or not old:
+        raise ValueError("hot-reload requires an original package version")
+    new = old.split("+", 1)[0] + "+" + HOT_BUILD
+    if old == new:
+        raise ValueError("hot-reload requires a distinct original package version")
+    changes = {".codex-plugin/plugin.json": _version_bytes(read_regular(path), "version", old, new)}
+    adapter = Path(snapshot) / "adapter.json"
+    if adapter.exists() and "packageVersion" in json.loads(read_regular(adapter)):
+        changes["adapter.json"] = _version_bytes(read_regular(adapter), "packageVersion", old, new)
+    return old, new, changes
+
+
+def _hot_binding(manifest):
+    root = Path(manifest["evidence"])
+    hot = manifest.get("hotReload")
+    if manifest.get("case") != HOT_CASE:
+        if "case" in manifest or hot is not None:
+            raise ValueError("unknown lifecycle case")
+        return None
+    old, new, changes = _hot_variant(root / "source-package")
+    if (not isinstance(hot, dict) or set(hot) != {"originalVersion", "upgradeVersion", "snapshot", "hashes", "changedFiles", "prompts"}
+            or hot["originalVersion"] != old or hot["upgradeVersion"] != new
+            or hot["snapshot"] != str(root / "hot-reload-package")
+            or hot["changedFiles"] != sorted(changes) or hot["prompts"] != list(HOT_PROMPTS)):
+        raise ValueError("hot-reload case binding mismatch")
+    original = _tree_hashes(root / "source-package")
+    upgraded = _tree_hashes(hot["snapshot"])
+    expected = {**original, **{name: hashlib.sha256(data).hexdigest() for name, data in changes.items()}}
+    if original != manifest["snapshotHashes"] or upgraded != expected or hot["hashes"] != expected:
+        raise ValueError("hot-reload frozen bytes differ")
+    for name in original:
+        expected_bytes = changes.get(name, read_regular(root / "source-package" / name))
+        if read_regular(Path(hot["snapshot"]) / name) != expected_bytes:
+            raise ValueError("hot-reload changed non-version bytes")
+    return hot
+
+
+def _latest_input_context(request):
+    contexts = []
+    for item in request.get("input", []):
+        if isinstance(item, dict) and item.get("role") == "developer":
+            for content in item.get("content", []):
+                if isinstance(content, dict) and isinstance(content.get("text"), str):
+                    if "Accord task entry:" in content["text"] and "Native input receipt: session=" in content["text"]:
+                        contexts.append(content["text"])
+    return contexts[-1] if contexts else ""
 
 
 def _declared_hook_count(package):
@@ -340,11 +408,21 @@ def prepare(args):
         raise ValueError("bind the Node executable used by package Hooks")
     if not 1 <= args.timeout <= 1800 or not 1 <= args.request_timeout <= 120 or not 1 <= args.recovery_timeout <= 120:
         raise ValueError("invalid lifecycle deadlines")
+    variant = _hot_variant(package) if getattr(args, "hot_reload", False) else None
     evidence.mkdir()
     for name in (*OWNED_ROOTS, "native", "commands", "retained"):
         (evidence / name).mkdir()
     snapshot = evidence / "source-package"
     shutil.copytree(package, snapshot)
+    hot = None
+    if variant is not None:
+        old, new, changes = variant
+        upgrade = evidence / "hot-reload-package"
+        shutil.copytree(snapshot, upgrade)
+        for name, data in changes.items():
+            (upgrade / name).write_bytes(data)
+        hot = {"originalVersion": old, "upgradeVersion": new, "snapshot": str(upgrade),
+               "hashes": _tree_hashes(upgrade), "changedFiles": sorted(changes), "prompts": list(HOT_PROMPTS)}
     market = evidence / "marketplace"
     (market / ".agents/plugins").mkdir(parents=True)
     (market / "plugins").mkdir()
@@ -390,6 +468,10 @@ def prepare(args):
         "resourceController": controller,
         "resourceEvidenceScope": _resource_scope(controller),
     }
+    if hot is not None:
+        manifest.update(case=HOT_CASE, hotReload=hot, nativeCommandLabels=list(HOT_COMMAND_LABELS))
+        manifest["limits"]["providerRequests"] = 6
+        manifest["claimLimit"] += "; hot-reload applies only to this case's already Accord-bound paused task; unchanged Hook declarations and trust; no prior-user-history takeover, same-version replacement, host upgrade or autonomous Agent update claim"
     save(evidence / "manifest.json", manifest)
     return {"prepared": True, "modelCalls": 0, "evidence": str(evidence)}
 
@@ -397,11 +479,14 @@ def prepare(args):
 def _load(evidence):
     evidence = _ordinary_dir(evidence)
     manifest = json.loads(read_regular(evidence / "manifest.json"))
+    if not isinstance(manifest, dict) or manifest.get("evidence") != str(evidence):
+        raise ValueError("lifecycle manifest evidence root mismatch")
+    hot = _hot_binding(manifest)
     if (manifest.get("schema") != SCHEMA or manifest.get("evidence") != str(evidence)
             or manifest.get("pluginId") != PLUGIN_ID
             or manifest.get("promptSha256") != hashlib.sha256(PROMPT.encode("utf-8")).hexdigest()
             or tuple(manifest.get("nativeResourceLabels", ())) != RESOURCE_LABELS
-            or tuple(manifest.get("nativeCommandLabels", ())) != COMMAND_LABELS
+            or tuple(manifest.get("nativeCommandLabels", ())) != (HOT_COMMAND_LABELS if hot else COMMAND_LABELS)
             or set(manifest.get("ownedRoots", {})) != set(OWNED_ROOTS)
             or set(manifest.get("initialRootHashes", {})) != set(OWNED_ROOTS)
             or set(manifest.get("binaryHashes", {})) != {"codex", "node", "python"}
@@ -410,7 +495,7 @@ def _load(evidence):
                                                     "providerRequests", "providerRequestBytes"}
             or any(type(manifest["limits"][name]) is not int or manifest["limits"][name] <= 0
                    for name in ("workSeconds", "requestSeconds", "recoverySeconds"))
-            or manifest["limits"].get("providerRequests") != 4
+            or manifest["limits"].get("providerRequests") != (6 if hot else 4)
             or manifest["limits"].get("providerRequestBytes") != 2 * 1024 * 1024
             or any(manifest["ownedRoots"][name] != str(evidence / name) for name in OWNED_ROOTS)):
         raise ValueError("lifecycle manifest binding mismatch")
@@ -423,6 +508,7 @@ def _load(evidence):
 
 
 def _validate_prebound(manifest):
+    _hot_binding(manifest)
     if manifest.get("resourceController", "windows-job-object") != _controller_kind():
         raise ValueError("prepared resource controller differs from this host")
     evidence = Path(manifest["evidence"])
@@ -557,7 +643,7 @@ class _Fixture:
                     self.send_error(400, "fixture refuses credentials")
                     return
                 length = int(self.headers.get("Content-Length", "0"))
-                if length <= 0 or length > limit or len(owner.requests) >= 4:
+                if length <= 0 or length > limit or len(owner.requests) >= manifest["limits"]["providerRequests"]:
                     self.send_error(429, "fixture bound exceeded")
                     return
                 body = json.loads(self.rfile.read(length))
@@ -626,6 +712,7 @@ class _App:
         self.root.mkdir()
         self.job, self.events, self.queue = _new_controller(), [], queue.Queue()
         self.manifest, self.work_deadline = manifest, work_deadline
+        self.hot_arguments = list(argv) if label == "resumed" and manifest.get("case") == HOT_CASE else None
         self._closed, self._close_record = False, None
         self.stderr = (self.root / "stderr.txt").open("xb")
         self.stdout = (self.root / "stdout.jsonl").open("xb")
@@ -740,6 +827,8 @@ class _App:
             self.reader.join(timeout=max(0, recovery_deadline - time.monotonic()))
             record = _resource_record(manifest, self.process, forced, after)
             record["readerStopped"] = not self.reader.is_alive()
+            if self.hot_arguments is not None:
+                record["arguments"] = self.hot_arguments
             save(self.root / "resources.json", record)
             self._close_record = record
             if not _record_released(record, manifest):
@@ -805,13 +894,79 @@ def _start_turn(app, ephemeral, prompt):
     return thread, turn
 
 
+def _hot_hooks_match(hooks, trust, installed):
+    rows = [row for row in _hook_rows(hooks) if row.get("key", "").startswith(PLUGIN_ID + ":")]
+    return (len(rows) == len(trust) and {row.get("key") for row in rows} == set(trust)
+            and all(row.get("currentHash") == trust[row["key"]]["trusted_hash"]
+                    and row.get("enabled") is True and row.get("trustStatus") == "trusted"
+                    and isinstance(row.get("sourcePath"), str)
+                    and Path(row["sourcePath"]).is_relative_to(installed) for row in rows))
+
+
+def _run_hot_reload(manifest, app, fixture, installed, env, work_deadline, thread, prior, trust):
+    hot, evidence = manifest["hotReload"], Path(manifest["evidence"])
+    source = Path(manifest["ownedRoots"]["marketplace"]) / "plugins/yiyuan-accord-codex"
+    current = installed
+    source_hash = manifest["initialRootHashes"]["workspace"]["source.json"]
+    for index, (label, snapshot, hashes) in enumerate((
+            ("hot-reload-upgrade", Path(hot["snapshot"]), hot["hashes"]),
+            ("hot-reload-rollback", evidence / "source-package", manifest["packageHashes"]))):
+        retained = evidence / "retained" / label
+        retained.mkdir()
+        shutil.copytree(manifest["ownedRoots"]["state"], retained / "before-install-state")
+        for name in hot["changedFiles"]:
+            (source / name).write_bytes(read_regular(snapshot / name))
+        if _tree_hashes(source) != hashes:
+            raise RuntimeError("selected hot-reload marketplace bytes differ")
+        record, payload = _run_cli(manifest, label, ["plugin", "add", manifest["pluginId"], "--json"], env, work_deadline)
+        if record["exitCode"] or not isinstance(payload, dict) or not payload.get("installedPath"):
+            raise RuntimeError("hot-reload package install failed")
+        selected = _ordinary_dir(payload["installedPath"])
+        if (Path(manifest["ownedRoots"]["home"]) not in selected.parents
+                or index == 0 and selected == installed or index == 1 and selected != installed
+                or _tree_hashes(selected) != hashes):
+            raise RuntimeError("hot-reload installed identity or bytes differ")
+        shutil.copytree(selected, retained / "installed-package")
+        shutil.copytree(manifest["ownedRoots"]["state"], retained / "after-install-state")
+        before = _helper(manifest, selected, env, work_deadline, thread, "status")
+        if (before != prior or _tree_hashes(retained / "before-install-state")
+                != _tree_hashes(retained / "after-install-state")):
+            raise RuntimeError("package install changed the bound paused task")
+        turn = app.rpc("turn/start", {"threadId": thread,
+            "input": [{"type": "text", "text": HOT_PROMPTS[index]}]})["turn"]["id"]
+        if app.wait_turn(thread, turn) != "completed" or len(fixture.requests) != index + 5:
+            raise RuntimeError("hot-reload bounded turn did not complete")
+        after = _helper(manifest, selected, env, work_deadline, thread, "status")
+        context = _latest_input_context(fixture.requests[-1])
+        if (not _checkpoint_matches(after, source_hash, index + 3)
+                or after.get("checkpoint") != prior.get("checkpoint")
+                or after.get("epoch") == prior.get("epoch")
+                or after.get("currentInputReconciled") is not False
+                or after.get("hostObservationCurrent") is not True
+                or after.get("hostObservation", {}).get("turnId") != turn
+                or not _contains_path(context, selected / "runtime/task-checkpoint.cjs")
+                or f"Native input receipt: session={thread}; epoch={after['epoch']}." not in context
+                or digest(Path(app.workspace) / "source.json") != source_hash
+                or (Path(app.workspace) / "pending.json").exists()):
+            raise RuntimeError("hot-reload native input or paused checkpoint differs")
+        # Observe trust only AFTER the turn; this list cannot refresh the tested turn.
+        hooks = app.rpc("hooks/list", {"cwds": [app.workspace]})
+        if not _hot_hooks_match(hooks, trust, selected):
+            raise RuntimeError("hot-reload changed Hook declaration identity or trust")
+        shutil.copytree(manifest["ownedRoots"]["state"], retained / "after-turn-state")
+        save(retained / "observation.json", {"installedPath": str(selected), "threadId": thread,
+            "turnId": turn, "providerOrdinal": index + 5, "beforeTurn": before, "afterTurn": after, "hooks": hooks})
+        prior, current = after, selected
+    return current
+
+
 def run(args):
     manifest = _load(args.evidence)
     _validate_prebound(manifest)
     evidence = Path(manifest["evidence"])
     with (evidence / "run-started.json").open("x", encoding="utf-8") as stream:
         json.dump({"time": time.time(), "manifestSha256": digest(evidence / "manifest.json"),
-                   "nativeResourceLabels": list(RESOURCE_LABELS), "nativeCommandLabels": list(COMMAND_LABELS),
+                   "nativeResourceLabels": list(RESOURCE_LABELS), "nativeCommandLabels": manifest["nativeCommandLabels"],
                    "resourceController": manifest.get("resourceController", "windows-job-object")}, stream)
     env = _owned_environment(manifest)
     work_deadline = time.monotonic() + manifest["limits"]["workSeconds"]
@@ -870,6 +1025,9 @@ def run(args):
         def launch(label, states=trust):
             result["failureStage"] = label
             app = _App(manifest, label, _argv(manifest, fixture, (*common, "-c", "hooks.state=" + _toml(states))), env, work_deadline)
+            if label == "resumed" and manifest.get("case") == HOT_CASE:
+                save(evidence / "retained/hot-reload-launch.json", {"arguments": _argv(manifest, fixture,
+                    (*common, "-c", "hooks.state=" + _toml(states))), "trust": states})
             apps.append(app); app.initialize()
             app.rpc("skills/extraRoots/set", {"extraRoots": [manifest["standaloneSkill"]["root"]]})
             checked = _hook_rows(app.rpc("hooks/list", {"cwds": [manifest["ownedRoots"]["workspace"]]}))
@@ -971,6 +1129,10 @@ def run(args):
         save(evidence / "retained/after-resume.json", after_resume)
         save(evidence / "retained/paused-thread.json", {"threadId": thread})
         result["continueReceiptDoesNotResumeBinding"] = True
+        if manifest.get("case") == HOT_CASE:
+            result["failureStage"] = "hot-reload-upgrade-rollback"
+            installed = _run_hot_reload(manifest, app, fixture, installed, env, work_deadline, thread, after_resume, trust)
+            result["hotReloadObserved"] = True
         app.rpc("thread/unsubscribe", {"threadId": thread}); app.close(manifest); apps.remove(app)
 
         result["providerRequests"] = len(fixture.requests)
@@ -1099,6 +1261,87 @@ def run(args):
     return result
 
 
+def _inspect_hot_reload(manifest, installed, thread, prior, provider_rows, requests, commands, resources):
+    """Recompute optional-case predicates from CLI, native, package and receipt bytes."""
+    root, hot = Path(manifest["evidence"]), _hot_binding(manifest)
+    original_hooks = [row for row in _hook_rows(json.loads(read_regular(root / "retained/hooks-before.json")))
+                      if row.get("key", "").startswith(PLUGIN_ID + ":")]
+    trust = {row["key"]: {"enabled": True, "trusted_hash": row["currentHash"]} for row in original_hooks}
+    launch = json.loads(read_regular(root / "retained/hot-reload-launch.json"))
+    argv = resources["resumed"].get("arguments", [])
+    if (not trust or len(trust) != manifest["declaredHookRegistrations"] or launch.get("trust") != trust
+            or launch.get("arguments") != argv or argv[:2] != [manifest["codex"], "app-server"]
+            or argv.count("hooks.state=" + _toml(trust)) != 1):
+        raise ValueError("hot-reload original invocation or trust differs")
+    starts = [index for index, row in enumerate(requests) if row.get("method") == "turn/start"]
+    if (len(starts) != 3 or [row.get("method") for row in requests[starts[0]:]]
+            != ["turn/start", "turn/start", "hooks/list", "turn/start", "hooks/list", "thread/unsubscribe"]
+            or any(row.get("method") in {"config/write", "config/batchWrite", "plugin/install"} for row in requests)):
+        raise ValueError("hot-reload adds native reload, trust mutation or another turn")
+    native = [json.loads(line) for line in read_regular(root / "native/resumed/stdout.jsonl").decode().splitlines() if line]
+    source_hash = manifest["initialRootHashes"]["workspace"]["source.json"]
+    previous_tree = None
+    for index, (label, hashes) in enumerate((("hot-reload-upgrade", hot["hashes"]),
+                                            ("hot-reload-rollback", manifest["packageHashes"]))):
+        retained = root / "retained" / label
+        observed = json.loads(read_regular(retained / "observation.json"))
+        payload = json.loads(read_regular(root / "commands" / label / "stdout.json"))
+        selected, turn = payload.get("installedPath"), observed.get("turnId")
+        if (not isinstance(selected, str) or not isinstance(turn, str) or not turn
+                or not Path(selected).is_relative_to(manifest["ownedRoots"]["home"])
+                or index == 0 and selected == installed or index == 1 and selected != installed
+                or _tree_hashes(retained / "installed-package") != hashes
+                or observed.get("installedPath") != selected or observed.get("threadId") != thread
+                or observed.get("providerOrdinal") != index + 5
+                or commands[label].get("arguments") != ["-c", 'cli_auth_credentials_store="file"',
+                    "plugin", "add", PLUGIN_ID, "--json"]):
+            raise ValueError("hot-reload installed identity, CLI or bytes differ")
+        request = requests[starts[index + 1]]
+        if (request.get("params") != {"threadId": thread, "input": [{"type": "text", "text": HOT_PROMPTS[index]}]}
+                or not any(row.get("id") == request.get("id") and row.get("result", {}).get("turn", {}).get("id") == turn for row in native)
+                or not any(row.get("method") == "turn/completed" and row.get("params", {}).get("threadId") == thread
+                    and row["params"].get("turn", {}).get("id") == turn
+                    and row["params"]["turn"].get("status") == "completed" for row in native)):
+            raise ValueError("hot-reload native turn identity or terminal differs")
+        before, after = observed["beforeTurn"], observed["afterTurn"]
+        context = _latest_input_context(provider_rows[index + 4]["request"])
+        if (before != prior or not _checkpoint_matches(after, source_hash, index + 3)
+                or after.get("checkpoint") != prior.get("checkpoint") or after.get("epoch") == prior.get("epoch")
+                or after.get("currentInputReconciled") is not False or after.get("hostObservationCurrent") is not True
+                or after.get("hostObservation", {}).get("turnId") != turn
+                or not _contains_path(context, Path(selected) / "runtime/task-checkpoint.cjs")
+                or f"Native input receipt: session={thread}; epoch={after['epoch']}." not in context
+                or not _hot_hooks_match(observed["hooks"], trust, Path(selected))):
+            raise ValueError("hot-reload current input, checkpoint or unchanged trust differs")
+        hook_request = requests[starts[index + 1] + 1]
+        if not any(row.get("id") == hook_request.get("id") and row.get("result") == observed["hooks"] for row in native):
+            raise ValueError("hot-reload Hook list has no native response")
+        before_hashes = _tree_hashes(retained / "before-install-state")
+        if (before_hashes != _tree_hashes(retained / "after-install-state")
+                or previous_tree is not None and before_hashes != previous_tree):
+            raise ValueError("hot-reload installation changed owned task state")
+        after_hashes = _tree_hashes(retained / "after-turn-state")
+        state_files = {name: value for name, value in before_hashes.items() if name.endswith(".state.json")}
+        if not state_files or state_files != {name: value for name, value in after_hashes.items() if name.endswith(".state.json")}:
+            raise ValueError("hot-reload changed saved paused responsibility bytes")
+        receipts = [json.loads(read_regular(retained / "after-turn-state" / name))
+                    for name in after_hashes if name.endswith(".input.json")]
+        current = [row for row in receipts if row.get("epoch") == after["epoch"] and row.get("turnId") == turn]
+        if len(current) != 1:
+            raise ValueError("hot-reload native input receipt missing")
+        receipt = current[0]
+        inputs = receipt.get("nativeInputs", [])
+        previous_receipts = [json.loads(read_regular(retained / "before-install-state" / name))
+                             for name in before_hashes if name.endswith(".input.json")]
+        previous = [row for row in previous_receipts if row.get("epoch") == prior["epoch"]]
+        if (receipt.get("inputSource") != "native-input-event" or len(inputs) != index + 3
+                or len(previous) != 1 or previous[0].get("nativeInputs") != inputs[:-1]
+                or inputs[-1] != {"epoch": after["epoch"], "turnId": turn, "source": "native-input-event",
+                    "promptSha256": hashlib.sha256(HOT_PROMPTS[index].encode()).hexdigest(), "prompt": HOT_PROMPTS[index]}):
+            raise ValueError("hot-reload native receipt content differs")
+        prior, previous_tree = after, after_hashes
+
+
 def inspect(evidence):
     manifest = _load(evidence)
     root = Path(manifest["evidence"])
@@ -1106,7 +1349,7 @@ def inspect(evidence):
     started = json.loads(read_regular(root / "run-started.json"))
     if (started.get("manifestSha256") != digest(root / "manifest.json")
             or tuple(started.get("nativeResourceLabels", ())) != RESOURCE_LABELS
-            or tuple(started.get("nativeCommandLabels", ())) != COMMAND_LABELS):
+            or tuple(started.get("nativeCommandLabels", ())) != tuple(manifest["nativeCommandLabels"])):
         raise ValueError("execution does not match prepared manifest")
     controller = manifest.get("resourceController", "windows-job-object")
     if ("resourceController" in manifest
@@ -1132,7 +1375,7 @@ def inspect(evidence):
         for label in manifest["nativeCommandLabels"]:
             _regular_file(root / "commands" / label / "stdout.json")
             _regular_file(root / "commands" / label / "stderr.txt")
-        if (any(command_records[label].get("exitCode") != 0 for label in COMMAND_LABELS if label != "invalid-candidate")
+        if (any(command_records[label].get("exitCode") != 0 for label in manifest["nativeCommandLabels"] if label != "invalid-candidate")
                 or command_records["invalid-candidate"].get("exitCode") in (None, 0)):
             raise ValueError("command terminal differs")
         if any(not _record_released(record, manifest) for record in command_records.values()):
@@ -1155,7 +1398,7 @@ def inspect(evidence):
             for name in ("stdout.jsonl", "stderr.txt", "requests.jsonl", "resources.json"):
                 _regular_file(root / "native" / label / name)
         provider_rows = [json.loads(line) for line in read_regular(root / "retained/provider-requests.jsonl").decode("utf-8").splitlines() if line]
-        if ([row.get("ordinal") for row in provider_rows] != [1, 2, 3, 4]
+        if ([row.get("ordinal") for row in provider_rows] != list(range(1, manifest["limits"]["providerRequests"] + 1))
                 or any(not isinstance(row.get("request"), dict) for row in provider_rows)):
             raise ValueError("provider receipts differ")
         controls = [skill for skill in _skill_rows(json.loads(read_regular(root / "retained/skills-before.json")))
@@ -1165,7 +1408,7 @@ def inspect(evidence):
                 or any(controls[0]["name"].casefold() in text.casefold() for text in _strings(provider_rows))):
             raise ValueError("standalone control remains in provider input")
         provider_responses = [json.loads(read_regular(root / "retained" / f"provider-response-{ordinal}.json"))
-                              for ordinal in range(1, 5)]
+                              for ordinal in range(1, manifest["limits"]["providerRequests"] + 1)]
         if any(not _provider_response_matches(row, ordinal)
                for ordinal, row in enumerate(provider_responses, 1)):
             raise ValueError("provider response receipts differ")
@@ -1201,6 +1444,9 @@ def inspect(evidence):
         after_uninstall = json.loads(read_regular(root / "retained/state-after-uninstall.json"))
         if preserved.get("package") != manifest["packageHashes"] or preserved.get("state") != after_uninstall:
             raise ValueError("package or unfinished state evidence differs")
+        if manifest.get("case") == HOT_CASE:
+            _inspect_hot_reload(manifest, installed_path, paused_thread, snapshots["after-resume"],
+                                provider_rows, resumed_requests, command_records, records)
         command_raw_complete = True
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError, UnicodeError):
         command_records, command_raw_complete = {}, False
@@ -1231,6 +1477,8 @@ def main():
         prep.add_argument("--" + name, required=True)
     prep.add_argument("--protected-file", action="append", required=True,
                       help="repeat for each necessary shared file; hashes only, contents are not copied")
+    prep.add_argument("--hot-reload", action="store_true",
+                      help="bind a version-only isolated build and rollback in one already Accord-bound paused thread; six fixed responses and two extra CLI commands")
     prep.add_argument("--timeout", type=int, required=True,
                       help="prospectively justified whole-episode limit; no product default")
     prep.add_argument("--request-timeout", type=int, required=True,
