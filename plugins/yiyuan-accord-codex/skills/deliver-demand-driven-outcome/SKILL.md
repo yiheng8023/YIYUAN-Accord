@@ -87,7 +87,7 @@ follow the bound repository authority.
   or a missed earlier prerequisite;
   required outcomes have a material verification gap; a reusable checker or
   consequential gate needs validation; a benefit is claimed; a package is installed,
-  updated or recovered; or cleanup ownership, resource release or closeout is
+  updated or recovered; a host restarts or upgrades; or cleanup ownership, resource release or closeout is
   uncertain, read [verification and lifecycle](references/verification-and-lifecycle.md).
 
 If a needed reference or helper is missing, invalid or unsupported, preserve these

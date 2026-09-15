@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "010e5228750ce1f5a20cdfc5c3c3e25b960dc65ae1c6041c556d021256743419",
+        "packageSha256": "e7a589b9458b5f6d1570f8a8e860a62d912a1572dcaf9ff04a9d30d39fcb2155",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -6149,7 +6149,7 @@
   "changePolicy": {
     "materialVariables": ["goal-and-quality", "host-client-model-and-reasoning", "interfaces-and-exposure", "active-package-and-configuration", "trust-and-permission", "data-state-and-resources", "execution-state-and-failure-topology", "evaluator-and-claim"],
     "rule": "Treat change as normal. Re-sense decision-relevant facts from supported current sources, invalidate only dependent applicability, routes and claims, and revalidate the affected boundary. Missing signals justify just-in-time checks, not silent monitoring or a universal watcher. Topology is also context-selected: keep it when sufficient, change it for an evidenced fit, failure or benefit, and reconcile actors, state ownership, permissions, surviving recovery and acceptance. Conversation, execution, code and deployment topology are distinct; a change to one does not authorize changes to the others or new consequential effects.",
-    "versionRule": "Installed, enabled, cached and actually loaded versions are distinct observations. Evidence remains true of its original composition; changed assumptions require new applicability evidence before current reuse.",
+    "versionRule": "Installed, enabled, cached and actually loaded versions are distinct observations. Evidence remains true of its original composition; changed assumptions require new applicability evidence before current reuse. Plugin reload and host upgrade require separate evidence for live consumers, trust, affected existing tasks, fresh entry and preserved state. Reuse supported native next-turn/configuration refresh and restart paths; same-version content replacement and whole-entry failure retain explicit recovery gaps. A declaration trust hash does not verify script bytes, fixed-host CI does not prove cross-version upgrade, and an unavailable Hook cannot be the sole recovery actor.",
     "replacementRule": "A new host capability may replace an exact duty after sufficient same-duty effect and lifecycle evidence. An unavailable mechanism restores uncertainty, not product retirement or a reduced requirement.",
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
