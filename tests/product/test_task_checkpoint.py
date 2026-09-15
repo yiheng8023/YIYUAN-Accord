@@ -690,6 +690,31 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertNotIn('decision', self.event('Stop'), 'unchanged unknowns must not cause endless retries')
         self.assertEqual(self.status()['checkpoint']['unresolved'], [question])
 
+    def test_global_impact_duty_survives_reentry_and_keeps_declared_gap_open(self):
+        gap = 'Reassess prior approval and downstream packages against the revised acceptance baseline.'
+        self.bind(unresolved=[gap], canContinue=False)
+        self.write_outputs()  # Local file predicates do not cover the declared downstream impact.
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        contexts = [self.startup_guidance(source) for source in ('startup', 'clear')]
+        contexts.append(self.event('SessionStart', source='compact')['hookSpecificOutput']['additionalContext'])
+        self.assertEqual(self.compact_snapshot()['checkpoint']['value']['unresolved'], [gap])
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+        contexts.append(self.event('SessionStart', source='resume')['hookSpecificOutput']['additionalContext'])
+        contexts.append(self.event('UserPromptSubmit',
+            prompt='Apply the revised acceptance baseline to the existing release and its consumers.'
+            )['hookSpecificOutput']['additionalContext'])
+        for context in contexts:
+            self.assertIn('Before any change, assess its effect on the whole goal', context)
+            self.assertIn('current validity of historical conclusions', context)
+            self.assertIn('existing checkpoint unresolved list', context)
+        self.bind()  # A refreshed input cannot silently drop the inherited impact gap.
+        current = self.status()
+        self.assertTrue(all(row['matched'] for row in current['inspection']['outputs']))
+        self.assertEqual(current['inspection']['status'], 'unresolved')
+        self.assertEqual(current['checkpoint']['unresolved'], [gap])
+        self.assertIn('unmet-output-cannot-retire', self.invoke(dict(op='retire', epoch=current['epoch'],
+                       expectedRevision=current['revision']), success=False))
+
     def test_rebinding_inherits_unknowns_and_removal_requires_explicit_disposition(self):
         question = 'Actual save behavior is not yet evidenced.'
         self.bind(unresolved=[question], canContinue=False)

@@ -32,6 +32,12 @@ effects to their target, executor, authority, observation and recovery boundary;
 keep one writer per target. Unknown or conflicting conditions hold only dependent
 actions while safe independent work continues.
 
+Before any change, judge its effect on the whole goal, affected users and consumers,
+shared state/resources and other tasks. Follow consequential dependencies back to
+existing results and evidence and forward to current and future work. Repair and
+verify affected parts while preserving valid work; keep unresolved impacts as
+unfinished duties. A bounded check suffices for an evidenced isolated change.
+
 Complete the collaboration and delivery loop without requiring Plan or Goal mode.
 Enable a mode only after the user explicitly selects or requests it, and preserve
 that selection. Maintaining a task plan or progress record is distinct from Plan
@@ -75,8 +81,10 @@ follow the bound repository authority.
   protection; before large reads or long work; after material host/model/context
   changes; or for context renewal, transfer, takeover or failed-transfer recovery,
   read [continuity](references/continuity.md).
-- **Correction, verification or lifecycle:** when facts, requirements or authority
-  change; a failure leaves partial results or a missed earlier prerequisite;
+- **Correction, verification or lifecycle:** when change impact crosses a component,
+  output, task or shared-resource boundary, or facts, requirements, baselines,
+  plans, acceptance criteria or authority change; a failure leaves partial results
+  or a missed earlier prerequisite;
   required outcomes have a material verification gap; a reusable checker or
   consequential gate needs validation; a benefit is claimed; a package is installed,
   updated or recovered; or cleanup ownership, resource release or closeout is

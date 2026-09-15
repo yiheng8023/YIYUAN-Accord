@@ -67,10 +67,10 @@ F05的连续性不以同一项目或执行位置为前提；跨项目、同仓�
 | 基线项 | 当前依据 | 能说明什么／不能说明什么 |
 |---|---|---|
 | 产品发布与开发起点 | v3.2.1 发布身份 `cf13486db9e5d0e9a6eef2d9df187d5e0405ee88`；2026-09-09开发起点为`22d01083462966d83c77ee6b02d914b90083edf3`；当前main/upstream及工作区以实时Git核对为准 | 发布身份、提交起点和滚动开发字节分别绑定；局部检查不是全部使命完成证明。详见 [续作记录](CONTINUATION.md)。 |
-| 当前 Codex 安装 | 2026-09-09本轮读到缓存3.3.0-dev.1仍显示YIYUAN Accord for Codex，当前源包已统一为YIYUAN Accord并新增assess-context | 同版本不等于同字节；先前12文件一致仅为历史时点。本轮未更新缓存或验证新包加载，不能宣称安装界面和行为已经改变。 |
+| Codex 安装与候选身份 | 2026-09-09的旧名称/12文件观察属于历史；滚动安装、市场来源和实际IDE准备状态见[当前接续](CONTINUATION.md#当前事实)。本轮候选已变为16文件，不能沿用13文件包的安装或参与结论 | 同版本不等于同字节；安装、Hook信任、实际暴露及结果分别绑定。候选代码更新不代表用户共享安装已更新，已有IDE交付按原身份保留。 |
 | 当前实现 | [Codex Hook](../../plugins/yiyuan-accord-codex/runtime/accord-hook.cjs)、[Skill](../../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md)、[检查点](../../plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs)；其它宿主旧包仅属于历史 | 有指导、事件提示、文件状态和受支持续做连接；不能据此推断所有职责已自主履行。 |
 | 历史用户体验 | 用户报告 前身系统 可高度自动化地交接、推进并减少操心，当前体验较弱 | 是需要追溯的结果基准与回归线索，不能因缺少统计而丢弃；已从2026-08-17/18原始Codex Desktop记录定位自主判断风险、同目录fork、投递、目标核验及源停写后目标续作；不再把成功链当未定位。安装机制的因果归属和源进程卸载仍未证明，详见[回溯更正](PROCEDURE-v3.3.md#既有交接判断的回溯更正2026-09-14)。 |
-| 历史机制差异 | 提交 65466c565096b5c175c8b3b1242aa5bf6439b82d 的 [历史 Harness Hook 源码](https://github.com/yiheng8023/YIYUAN-Accord/blob/65466c565096b5c175c8b3b1242aa5bf6439b82d/adapters/agent-autonomy-harness-codex/scripts/carrier_hook.py) 有持久生命周期计数和迁移建议；当前 SessionStart Hook 为无状态提示 | 差异已查到；该历史脚本标为候选，尚未证明它是用户成功体验的实际执行版本，也未建立因果归因。不能整代回滚。 |
+| 历史机制差异 | 提交 65466c565096b5c175c8b3b1242aa5bf6439b82d 的 [历史 Harness Hook 源码](https://github.com/yiheng8023/YIYUAN-Accord/blob/65466c565096b5c175c8b3b1242aa5bf6439b82d/adapters/agent-autonomy-harness-codex/scripts/carrier_hook.py) 有持久生命周期计数和迁移建议；当前startup/clear提供不依赖状态存储的整体职责，resume/compact另有持久输入与检查点恢复提示，不能再统称为无状态提示 | 差异已查到；该历史脚本标为候选，尚未证明它是用户成功体验的实际执行版本，也未建立因果归因。当前恢复提示仍需按实际恢复行为验收，不能整代回滚或因有Hook就认定交接已完成。 |
 | 连续性验收缺口 | [架构说明](../architecture.md)区分用户要求的接管、健康压缩后的续做和自主时机判断 | 前两者不能代验最后一项；当前对话经用户提醒后的判断属于辅助行为。 |
 | 系统性使用反馈 | 本次开发与传播中用户多次提醒推进、工具选择、纠偏、交接和收尾，并指出功能优先及宿主覆盖未落实 | 足以重开相关结果审查；不把所有开发失误直接归为插件缺陷。每个问题再分宿主、Agent、Accord、配置、观察器或其组合。 |
 | 宿主与自定义环境 | 已有普通入口及安装观察均有时间、版本、入口范围 | 不假设当前宿主为初始环境；Desktop、CLI、IDE、Web、云端等不互相代验。未测入口保持未验证。 |

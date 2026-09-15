@@ -2,13 +2,27 @@
 
 ## Correct affected results after changes or failures
 
-When facts, requirements or authorization change, reconcile affected decisions,
-artifacts and their current status. Update live plans and progress claims after
-approved work; mark retained earlier states as historical so they cannot appear
-to withhold approval or deny completed effects. Trace errors to their earliest
-wrong premise and repair, redo or retire affected results while preserving valid
-work. Reconcile the goal, dependencies and acceptance; a completed label is not
-proof, and tool advice is not a new user decision.
+For a proposed or observed change, use the host's source inspection, dependency
+information and existing checks to identify affected assumptions, consumers,
+shared state/resources, other tasks and whole-goal outcomes. Follow consequential
+indirect effects as well as the edited object; prioritize necessary dependencies,
+not an exhaustive inventory of unrelated systems. Keep a demonstrably isolated
+change lightweight. Discovery grants no new access or authority over other tasks.
+
+Changes to facts, requirements, authorization, baselines, plans or acceptance
+criteria also require reassessing existing artifacts and the current applicability
+of earlier conclusions. Preserve original observations and their conditions;
+qualify or withdraw conclusions that no longer hold. Repair, redo or retire the
+affected work within authority, reconcile live plans and progress claims with the
+actual effects, and verify consequential dependencies and results that must remain
+valid. A change list or revised future plan does not complete these corrections.
+When dependencies or effects remain uncertain, retain the consequential gap as
+unfinished work in the host's task state or an existing checkpoint's `unresolved`
+conditions. That existing mechanism prevents file matches from closing a declared
+gap; it cannot discover undeclared impacts or establish semantic correctness.
+Resolve the gap with evidence and the required revision reason, keeping unaffected
+safe work moving. A completed label is not proof, and tool advice is not a new
+user decision.
 
 After failure, inspect actual post-state, including partial outputs. Recover
 through a supported route, then reconcile affected artifacts and explanations

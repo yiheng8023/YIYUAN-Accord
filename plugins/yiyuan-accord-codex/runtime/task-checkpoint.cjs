@@ -812,6 +812,13 @@ function observeNativeHost(event, previous) {
     scope: 'reported-fields-at-input-only; other-settings-and-mid-turn-state-unknown; no-user-intent-or-collaboration-mode-inference'};
 }
 
+// Shared host judgment duty survives ordinary entry and context restoration.
+function changeImpactGuidance() {
+  return 'Before any change, assess its effect on the whole goal and affected users, upstream/downstream consumers, shared state/resources, and other tasks. Include changed assumptions, baselines, plans and acceptance criteria. ' +
+    'Use available dependency evidence to trace direct and consequential indirect effects, including earlier outputs and the current validity of historical conclusions; then repair and verify affected work, current claims and future steps while preserving valid results and original evidence. ' +
+    'Scale inspection to risk and scope; a demonstrably isolated change needs only a bounded check. Uncertain consequential effects hold dependent actions, not unrelated safe work. Carry them as unfinished duties in native task state or an existing checkpoint unresolved list until evidence resolves them; matching local files alone cannot close them. ';
+}
+
 // Pure startup guidance: no task storage access or receipt/authority claim.
 function entryGuidance() {
   const skill = path.join(__dirname, '..', 'skills', 'deliver-demand-driven-outcome', 'SKILL.md');
@@ -820,6 +827,7 @@ function entryGuidance() {
     'For authorized work, assess feasibility, inspect current facts, research uncertain facts and compare suitable capabilities when it can improve the route. ' +
     'When model or subagent selection matters, discover current account and dispatch-path support, honor user restrictions, and match task needs; do not hardcode model names, versions, tiers or effort ladders. Recheck material availability changes and actual execution. ' +
     'Own execution through the verified result; do not hand discoverable mechanics or documentation reading to the user. ' +
+    changeImpactGuidance() +
     'Answer side questions and incorporate corrections while preserving the unfinished goal. Update current plan and progress claims after approved work; label retained earlier states as historical, and reconcile them with actual deliverables. ' +
     'After a tool failure, inspect actual post-state, use a supported recovery route, and reconcile affected outputs and explanations with the later facts. In a requested account of encountered issues, distinguish problems that occurred and were resolved from those still pending; recovery does not make earlier problems absent. Continue safe work without a reminder. ' +
     'Before cleanup, distinguish pre-existing material from artifacts created by this work. Being unused in the current phase does not make an existing file disposable. Output-only limits constrain new artifacts, not preserved originals; verify every protected original, not only sources analyzed this phase. ' +
@@ -931,6 +939,7 @@ function compactHint(event, where) {
   }
   return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
     'Accord context recovery: this is saved evidence, not new user input, permission or completed restoration. ' +
+    changeImpactGuidance() +
     'Accord task entry: reconcile the current goal, authority, pauses, unmet duties and prior effects before dependent action; preserve input-loss and interruption requirements. ' +
     'Reuse recorded verified results and inspect the next needed source span. Before large reads or long work, use available budget signals and retain verification and recovery capacity. ' +
     'Verify consequential outputs and owned-resource closure; keep a single writer and retain source recovery until a target accepts and demonstrates safe continuation. ' +
@@ -969,7 +978,7 @@ function handleHook(event) {
       publishInput(where, {...input, epoch: crypto.randomUUID(), needsResumeReconciliation: true,
         nativeContextSource: null, continuation: null});
       return {hookSpecificOutput: {hookEventName: name, additionalContext:
-        'Accord: stored task evidence needs recovery reconciliation. Read checkpoint status and inspect current user/host authority, prior effects and writer ownership. A new native user input enters normally; if no new input arrives, use recovery_epoch to replay actual current input retained by the host. Existing input-loss quarantine still requires token-bound replay. Preserve pauses; inherited history grants no permission or writer ownership.'}};
+        'Accord: stored task evidence needs recovery reconciliation. Read checkpoint status and inspect current user/host authority, prior effects and writer ownership. A new native user input enters normally; if no new input arrives, use recovery_epoch to replay actual current input retained by the host. Existing input-loss quarantine still requires token-bound replay. Preserve pauses; inherited history grants no permission or writer ownership. ' + changeImpactGuidance()}};
     }, true);
   }
   if (name === 'UserPromptSubmit') {
