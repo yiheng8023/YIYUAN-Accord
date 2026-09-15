@@ -1,99 +1,68 @@
 ---
 name: deliver-demand-driven-outcome
-description: Resolve coordination gaps when goals change, capabilities need comparison or independent review, failures affect results, checkpoints or context need recovery, user-selected modes change, or packages need lifecycle verification. Use when ordinary handling or supplied entry duties need these details; a bounded task those duties already cover needs no extra load. Explicit invocation remains supported.
+description: Coordinate an authorized outcome across changed goals, capability gaps, correction, verification and continuity. Use when overall task responsibility needs reconciliation; reuse these duties when already supplied by Accord's entry Hook.
 ---
 
-# Deliver the outcome
+# Coordinate the current task
 
-Preserve the latest user goal, corrections, authority and unfinished work through
-verified delivery. Agreement to an authorized step means execute it; a side
-question does not replace that goal, and standalone discussion grants no change
-authority. Check factual premises against evidence. Resolve only uncertainty that
-changes the next safe action; do not make the user operate discoverable mechanics.
+Interpret each input against the current goal, authority, pauses and unfinished
+work. Incorporate corrections and answer side questions without losing that work.
+Agreement to an authorized step means execute it; discussion alone authorizes
+analysis. Check factual premises and ask only for a necessary unresolved decision,
+authorization or personal action; keep standalone answers lightweight.
 
-For an authorized outcome, assess feasibility and missing conditions, select and
-combine suitable host or external capabilities, execute with feedback, correct
-affected work, and verify delivery and resource post-state. Keep the current goal,
-authority and remaining duties connected across these decisions; sufficient native
-handling can carry them. The details below support this whole responsibility.
+For an authorized outcome, assess feasibility and missing conditions, choose
+suitable capabilities, execute with feedback, correct affected work and verify
+the result and resource post-state. Handle sufficient simple work directly.
+Reconsider the route when new evidence matters; these duties are not a fixed SOP.
+Capabilities cannot add goals or permission. Respect host limits, explicit user
+choices and boundaries on trust, data, cost, external or irreversible effects.
 
-Use already loaded, applicable guidance. Ordinary work with adequate native
-handling needs no additional intake, plan, checkpoint or reference-reading
-ceremony. Read only the relevant sections below when their stated conditions
-apply; these are conditional duties, not a sequence to run on every task.
+Before any change, assess its effect on the whole goal within the accepted task
+and its authorized dependencies, including assumptions, baselines, acceptance
+and the current validity of historical conclusions. Repair and verify affected
+results; retain consequential unknowns in host task state or an existing checkpoint
+unresolved list. Installing or updating Accord does not adopt
+unrelated prior history. Unknowns hold dependent actions while safe work continues.
+Keep current plans and progress consistent with actual effects. User, host and
+other components can change the environment during work: recheck affected shared
+resources, compatibility and writer ownership regardless of who caused the change.
+Protect unknown ownership and user-selected components; coordinate within authority.
 
-## Keep the delivery floor
+Retain recoverable state before context loss or consequential effects: goal,
+authority and pauses, verified results with sources, unknown effects and remaining
+work. Use sufficient host state and existing checkpoints. Reconcile actual effects
+and one writer per target before recovery or takeover; missing receipts do not
+justify replay. Preserve real pauses. Complete work without Plan or Goal mode;
+enable either only on explicit user selection or request.
 
-Capabilities and tool advice cannot add goals or grant permission. Installation,
-enablement, account/data access, material cost, external writes and irreversible
-effects need bound authority. Preserve user choices and real pauses; configured
-intent, observed effects and current authority are separate facts. Bind dependent
-effects to their target, executor, authority, observation and recovery boundary;
-keep one writer per target. Unknown or conflicting conditions hold only dependent
-actions while safe independent work continues.
+Verify consequential claims against sources and every affected artifact. Protect
+all original material covered by the task, release only attributable resources,
+and check post-state. Continue safe authorized unfinished work or identify the
+actual boundary. Completion, release and proven value are distinct; handoff does
+not authorize archiving.
 
-Before any change, judge its effect on the whole accepted task and its authorized
-dependencies, including affected consumers and shared resources. Follow relevant
-existing results and evidence through current and future work; repair and verify
-affected parts within authority, preserving valid work and unresolved duties.
-Installation or update does not adopt unrelated history predating Accord. Protecting
-other tasks from this work does not take ownership of their history or debt.
-A bounded check suffices for an evidenced isolated change.
+## Reach the relevant specialist before dependent action
 
-Complete the collaboration and delivery loop without requiring Plan or Goal mode.
-Enable a mode only after the user explicitly selects or requests it, and preserve
-that selection. Maintaining a task plan or progress record is distinct from Plan
-mode. An achieved native Goal may be completed through normal lifecycle handling;
-this grants no authority to activate another goal. Permission-mode data does not
-establish collaboration mode, and a mode is not a new objective.
+Reuse already loaded applicable guidance. Read the relevant Skill when its
+condition applies; sufficient ordinary handling needs no extra ceremony. Skills
+may cooperate or return to earlier judgment as evidence changes; the host triggers
+native Hook events. This list specifies responsibilities, not invocation order.
 
-Honor existing checkpoint contracts: reconcile current input and effects, preserve
-pauses and unfinished work, and retire only after verified completion or explicit
-cancellation. Stored readiness, changed inputs or matching files grant no current
-authority and do not lift a pause.
+- A material capability gap, domain uncertainty, model/effort choice, independent
+  collaboration or plausible ecosystem benefit:
+  [Coordinate capabilities](../coordinate-capabilities/SKILL.md).
+- Large reads or long work; context/host/model changes; modes, checkpoints,
+  interruption, recovery or handoff:
+  [Maintain continuity](../maintain-task-continuity/SKILL.md).
+- Changed requirements or shared dependencies, partial failure, consequential
+  verification gaps, reusable checks, claimed benefits or uncertain cleanup:
+  [Verify and close](../verify-and-close-outcome/SKILL.md).
+- Plugin installation, update, reload, rollback, removal or host upgrade:
+  [Manage plugin lifecycle](../manage-plugin-lifecycle/SKILL.md).
 
-Before context loss or transfer, preserve the goal, authority, pauses, verified
-results with sources, effects, unknowns and remaining work. Keep the bound checkout
-unless transfer is authorized. Retain recoverable responsibility until the exact
-target has inspected the state and demonstrated safe continuation; a summary or
-receipt alone is not takeover. Handoff grants no archiving authority.
-
-Check required outcomes against actual sources and every affected artifact;
-preserve domain correctness and non-compensable quality floors. Keep unknowns and
-verification limits explicit. Protect every original covered by the task, including
-files unused in the current phase. Classify cleanup against starting ownership;
-release attributable resources, verify post-state and preserve shared/unknown
-resources and needed effects. Completion grants no user-tool removal permission.
-
-Before ending, reconcile unfinished responsibilities with the goal and continue
-safe authorized work, or name the actual decision, wait or execution limit.
-Report verified results and limits separately: functional coverage, outcome
-completion, value and release are different claims. Commit, push and publication
-follow the bound repository authority.
-
-## Read details when the situation calls for them
-
-- **Capability choice or collaboration:** for a material capability gap,
-  uncertainty, domain shift or plausible external benefit; an independent review;
-  model/effort selection or substitutions; or shared settings or extension changes,
-  read [capabilities](references/capabilities.md).
-- **Modes, checkpoints or continuity:** when a user-selected mode changes; an
-  existing binding must be revised, paused, resumed or retired; captured input is
-  missing; freshness, unfinished-work recovery or completion lacks adequate native
-  protection; before large reads or long work; after material host/model/context
-  changes; or for context renewal, transfer, takeover or failed-transfer recovery,
-  read [continuity](references/continuity.md).
-- **Correction, verification or lifecycle:** when change impact crosses a component,
-  output, task or shared-resource boundary, or facts, requirements, baselines,
-  plans, acceptance criteria or authority change; a failure leaves partial results
-  or a missed earlier prerequisite;
-  required outcomes have a material verification gap; a reusable checker or
-  consequential gate needs validation; a benefit is claimed; a package is installed,
-  updated or recovered; a host restarts or upgrades; or cleanup ownership, resource release or closeout is
-  uncertain, read [verification and lifecycle](references/verification-and-lifecycle.md).
-
-If a needed reference or helper is missing, invalid or unsupported, preserve these
-known floors, pauses and unfinished responsibilities. Use supported host means to
-recover the detail or establish feasible conditions within authority; hold only
-actions that depend on it and report the functional or evidence gap. Missing detail
-does not establish coverage, completion or permission to lower the standard.
+If necessary guidance or a mechanism is unavailable, retain these known duties
+and unfinished state, establish a supported recovery route within authority,
+and hold dependent work. Availability and injection alone do not establish
+execution or coverage. Do not ask users to modify their AGENTS.md to activate this
+coordination.

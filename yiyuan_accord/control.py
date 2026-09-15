@@ -3229,7 +3229,7 @@ def _exact_package_subject_files(root, program, errors, revision=None):
             locator = projection.get(field)
             if isinstance(locator, str):
                 declared.add(locator)
-        for field in ("metadataFiles", "legalFiles", "mechanismFiles", "referenceFiles"):
+        for field in ("metadataFiles", "legalFiles", "mechanismFiles", "referenceFiles", "supportingSkills"):
             value = projection.get(field)
             if isinstance(value, list):
                 declared.update(item for item in value if isinstance(item, str))
@@ -6695,7 +6695,7 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
             for projection in previous["delivery"]["hostProjections"]:
                 if projection["id"] not in current_ids:
                     retired_files.update(projection[key] for key in ("manifest", "marketplace", "contract", "skill"))
-                    for key in ("legalFiles", "metadataFiles", "mechanismFiles", "referenceFiles"):
+                    for key in ("legalFiles", "metadataFiles", "mechanismFiles", "referenceFiles", "supportingSkills"):
                         retired_files.update(projection.get(key, []))
             files = [locator for locator in files if locator not in retired_files]
             program["complexityBudget"]["primaryInstructionPaths"] = [

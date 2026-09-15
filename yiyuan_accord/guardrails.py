@@ -553,7 +553,7 @@ def activation_mechanism_errors(
 def validate_projection_package(
     root, adapter_id, manifest_locator, contract_locator, skill_locator,
     metadata_locators, legal_locators, asset_locators, mechanism_locators=None,
-    reference_locators=None,
+    reference_locators=None, supporting_skill_locators=None,
 ):
     errors = []
     prefix = f"adapter {adapter_id}"
@@ -570,6 +570,7 @@ def validate_projection_package(
             *metadata_locators, *legal_locators, *asset_locators,
             *(mechanism_locators or []),
             *(reference_locators or []),
+            *(supporting_skill_locators or []),
         )
         if isinstance(locator, str)
     ]
@@ -585,6 +586,29 @@ def validate_projection_package(
         )
         return None, errors
     if isinstance(skill_locator, str):
+        skills_parent = Path(skill_locator).parent.parent
+        for locator in supporting_skill_locators or []:
+            relative = Path(locator)
+            path = repository_relative_path(root, locator)
+            if (relative.parent.parent != skills_parent or relative.name != "SKILL.md"
+                    or locator == skill_locator or path is None or not path.is_file()
+                    or re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", relative.parent.name) is None):
+                errors.append(f"{prefix} supporting Skill locator is invalid: {locator}")
+                continue
+            try:
+                text = _owned_text(path)
+                parts = text.split("---", 2)
+                lines = parts[1].strip().splitlines() if len(parts) == 3 and not parts[0] else []
+                pairs = [line.split(": ", 1) for line in lines if ": " in line]
+                fields = dict(pairs)
+                if (len(parts) != 3 or parts[0] or not parts[2].strip()
+                        or len(lines) != len(pairs) or len(fields) != len(lines)
+                        or set(fields) != {"name", "description"}
+                        or fields.get("name") != relative.parent.name
+                        or not _nonempty_string(fields.get("description"))):
+                    errors.append(f"{prefix} supporting Skill identity is invalid: {locator}")
+            except (OSError, UnicodeError) as exc:
+                errors.append(f"{prefix} supporting Skill is unreadable: {exc}")
         reference_parent = Path(skill_locator).parent / "references"
         for locator in reference_locators or []:
             relative = Path(locator)
@@ -620,6 +644,20 @@ def validate_projection_package(
     if plugin_root is None or not plugin_root.is_dir():
         errors.append(f"{prefix} plugin root is invalid")
         return None, errors
+    if supporting_skill_locators:
+        declared_paths = {repository_relative_path(root, locator).resolve() for locator in declared}
+        for locator in [skill_locator, *supporting_skill_locators]:
+            source = repository_relative_path(root, locator)
+            try:
+                for target in re.findall(r"\[[^\]]*\]\(([^)]+)\)", _owned_text(source)):
+                    if target.startswith(("https://", "http://", "#")):
+                        continue
+                    linked = (source.parent / target.split("#", 1)[0]).resolve()
+                    if (not linked.is_relative_to(plugin_root.resolve())
+                            or linked not in declared_paths or not linked.is_file()):
+                        errors.append(f"{prefix} Skill link is unavailable or outside its package: {locator}: {target}")
+            except (OSError, UnicodeError) as exc:
+                errors.append(f"{prefix} Skill links are unreadable: {exc}")
     for package_locator, authority_locator in zip(
         expected_legal_locators, ("LICENSE", "NOTICE"), strict=True,
     ):
@@ -665,8 +703,9 @@ def validate_host_projection(
         "claude-code": {"marketplace"},
     }
     expected_shape = _PROJECTION_FIELDS | projection_fields.get(adapter_id, set())
-    if "referenceFiles" in projection:
-        expected_shape |= {"referenceFiles"}
+    for field in ("referenceFiles", "supportingSkills"):
+        if field in projection:
+            expected_shape |= {field}
     if "startupEntry" in projection:
         expected_shape |= {"startupEntry"}
         if type(projection["startupEntry"]) is not bool:
@@ -694,6 +733,13 @@ def validate_host_projection(
     if not valid_references:
         errors.append(f"{prefix} Skill references must be distinct file locators")
     reference_locators = references if valid_references else []
+    supporting = projection.get("supportingSkills", [])
+    valid_supporting = (isinstance(supporting, list)
+                        and all(_nonempty_string(item) for item in supporting)
+                        and len(supporting) == len(set(supporting)))
+    if not valid_supporting:
+        errors.append(f"{prefix} supporting Skills must be distinct file locators")
+    supporting_locators = supporting if valid_supporting else []
     activation_context = projection.get("activationContext")
     manifest = read_json(root, manifest_locator, errors) if isinstance(manifest_locator, str) else {}
     contract = read_json(root, contract_locator, errors) if isinstance(contract_locator, str) else {}
@@ -801,9 +847,14 @@ def validate_host_projection(
     package_digest, package_errors = validate_projection_package(
         root, adapter_id, manifest_locator, contract_locator, skill_locator,
         metadata_locators, legal_locators, asset_locators, mechanism_locators,
-        reference_locators,
+        reference_locators, supporting_locators,
     )
     errors.extend(package_errors)
+    if valid_skill_budget:
+        for locator in supporting_locators:
+            path = repository_relative_path(root, locator)
+            if path is not None and path.is_file() and path.stat().st_size > max_bytes:
+                errors.append(f"{prefix} supporting Skill exceeds budget: {locator}")
     if package_digest != projection.get("packageSha256"):
         errors.append(f"{prefix} package digest is not approved by program")
     forbidden = projection.get("forbiddenPaths")

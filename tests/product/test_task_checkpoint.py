@@ -77,16 +77,39 @@ class TaskCheckpointTests(unittest.TestCase):
         self.environment['YIYUAN_ACCORD_TASK_STATE_DIR'] = str(blocked)
         for source in ['startup', 'clear']:
             context = self.startup_guidance(source)
-            self.assertIn('loading a Skill is not a prerequisite', context)
+            self.assertIn('coordination Skill body supplied by the native Hook', context)
             self.assertIn('keep standalone answers lightweight', context)
             self.assertNotIn('Native input receipt:', context)
             self.assertIn(str(RUNTIME), context)
-            self.assertIn(str(RUNTIME.parent.parent / 'skills/deliver-demand-driven-outcome/SKILL.md'), context)
+            self.assertIn(str(RUNTIME.parent.parent / 'plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md'), context)
             self.assertLess(len(context.encode('utf-8')), 2500 * 4)
         error = self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Continue.'},
                             hook=True, success=False)
         self.assertIn('freshness is unknown', error)
         self.assertEqual(blocked.read_bytes(), b'protected original')
+
+    def test_hook_entry_reads_the_same_brief_skill_and_resolves_packaged_specialists(self):
+        import shutil
+        package = self.root / 'copied-package'
+        shutil.copytree(RUNTIME.parent.parent / 'plugins/yiyuan-accord-codex', package)
+        entry = package / 'skills/deliver-demand-driven-outcome/SKILL.md'
+        module = package / 'runtime/task-checkpoint.cjs'
+        text = entry.read_text(encoding='utf-8')
+        entry.write_text(text + '\nEntry-source-counterexample.\n', encoding='utf-8')
+        def read():
+            return subprocess.run([self.node, '-e',
+                'process.stdout.write(require(process.argv[1]).entryGuidance())', str(module)],
+                capture_output=True, text=True, encoding='utf-8', cwd=self.work, timeout=10)
+        result = read()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('Entry-source-counterexample.', result.stdout)
+        for name in ('coordinate-capabilities', 'maintain-task-continuity',
+                     'verify-and-close-outcome', 'manage-plugin-lifecycle'):
+            self.assertIn(str(package / 'skills' / name / 'SKILL.md'), result.stdout)
+        entry.write_text('invalid entry', encoding='utf-8')
+        self.assertNotEqual(read().returncode, 0)
+        entry.unlink()
+        self.assertNotEqual(read().returncode, 0)
 
     def test_startup_guidance_does_not_touch_unwritable_state_or_clear_quarantine(self):
         self.bind()
@@ -520,7 +543,9 @@ const root=path.resolve('virtual-work',...Array(45).fill('w'.repeat(80)));
 const base=path.resolve('virtual-state',...Array(45).fill('s'.repeat(80)));
 process.env.YIYUAN_ACCORD_TASK_STATE_DIR=base;
 fs.realpathSync=p=>p; fs.existsSync=p=>p===base;
-fs.statSync=fs.lstatSync=()=>({isDirectory:()=>true,isSymbolicLink:()=>false});
+const realStat=fs.statSync,realLstat=fs.lstatSync;
+fs.statSync=p=>String(p).endsWith('SKILL.md')?realStat(p):({isDirectory:()=>true,isSymbolicLink:()=>false});
+fs.lstatSync=p=>String(p).endsWith('SKILL.md')?realLstat(p):({isDirectory:()=>true,isSymbolicLink:()=>false});
 for(const key of ['openSync','writeFileSync','writeSync','renameSync','unlinkSync','mkdirSync'])
   fs[key]=()=>{throw Error('write forbidden')};
 const context=runtime.hook({hook_event_name:'SessionStart',source:'compact',session_id:'long-session',cwd:root})
@@ -695,18 +720,18 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.bind(unresolved=[gap], canContinue=False)
         self.write_outputs()  # Local file predicates do not cover the declared downstream impact.
         before = {p.name: p.read_bytes() for p in self.state.iterdir()}
-        contexts = [self.startup_guidance(source) for source in ('startup', 'clear')]
-        contexts.append(self.event('SessionStart', source='compact')['hookSpecificOutput']['additionalContext'])
+        contexts = [self.startup_guidance(source) for source in ('startup', 'clear', 'resume', 'compact')]
+        self.event('SessionStart', source='compact')
         self.assertEqual(self.compact_snapshot()['checkpoint']['value']['unresolved'], [gap])
         self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
-        contexts.append(self.event('SessionStart', source='resume')['hookSpecificOutput']['additionalContext'])
+        self.event('SessionStart', source='resume')
         contexts.append(self.event('UserPromptSubmit',
             prompt='Apply the revised acceptance baseline to the existing release and its consumers.'
             )['hookSpecificOutput']['additionalContext'])
         for context in contexts:
             self.assertIn('Before any change, assess its effect on the whole goal', context)
             self.assertIn('current validity of historical conclusions', context)
-            self.assertIn('existing checkpoint unresolved list', context)
+            self.assertIn('existing checkpoint unresolved list', ' '.join(context.split()))
         self.bind()  # A refreshed input cannot silently drop the inherited impact gap.
         current = self.status()
         self.assertTrue(all(row['matched'] for row in current['inspection']['outputs']))
@@ -1540,6 +1565,14 @@ catch(e){process.stdout.write(e.message);}
         isolated = self.root / 'package/runtime/task-checkpoint.cjs'
         isolated.parent.mkdir(parents=True)
         isolated.write_bytes(RUNTIME.read_bytes())
+        # The brief coordination source remains available; all four optional
+        # detailed Skills are absent. This is not a complete installed package.
+        package = isolated.parent.parent
+        (package / '.codex-plugin').mkdir()
+        (package / '.codex-plugin/plugin.json').write_text('{}', encoding='utf-8')
+        brief = package / 'skills/deliver-demand-driven-outcome/SKILL.md'
+        brief.parent.mkdir(parents=True)
+        brief.write_bytes((RUNTIME.parent.parent / 'plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md').read_bytes())
         request = {'hook_event_name': 'UserPromptSubmit', 'session_id': 'no-skill',
                    'cwd': str(self.work), 'prompt': 'What can I do with these orders?'}
         run = subprocess.run([self.node, str(isolated), '--hook', 'UserPromptSubmit'],

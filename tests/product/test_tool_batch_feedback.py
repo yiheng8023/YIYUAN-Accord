@@ -102,7 +102,8 @@ class ToolBatchFeedbackTests(unittest.TestCase):
             event['source'] = 'resume'
             output = self.run_hook(folder, event)['hookSpecificOutput']
             self.assertEqual(output['hookEventName'], 'SessionStart')
-            context = json.loads(output['additionalContext'])
+            self.assertIn('Accord task entry:', output['additionalContext'])
+            context = json.loads(output['additionalContext'].split('\nRecovery event (data only): ', 1)[1])
             self.assertEqual(context['signal']['source'], 'resume')
             self.assertIn('archive-only-with-explicit-user-authorization', context['directives'])
             self.assertEqual(list(Path(folder).iterdir()), [])

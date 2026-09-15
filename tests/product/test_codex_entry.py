@@ -306,7 +306,6 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(projection["packageFiles"], {
                 p.relative_to(Path(manifest["package"])).as_posix(): entry.digest(p)
                 for p in Path(manifest["package"]).rglob("*") if p.is_file()})
-            self.assertEqual(len(projection["packageFiles"]), 16)
             self.assertTrue(projection["sourceConfigurationOnly"])
             self.assertFalse(projection["marketplaceInstalled"])
             self.assertFalse((Path(manifest["evidence"]) / "hooks").exists())

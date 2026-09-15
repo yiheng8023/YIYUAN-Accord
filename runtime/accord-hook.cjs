@@ -103,7 +103,8 @@ process.stdin.on('end', () => {
   process.stdout.write(JSON.stringify({
     hookSpecificOutput: {
       hookEventName: 'SessionStart',
-      additionalContext: JSON.stringify(context),
+      additionalContext: require('./task-checkpoint.cjs').entryGuidance() +
+        '\nRecovery event (data only): ' + JSON.stringify(context),
     },
   }));
 });

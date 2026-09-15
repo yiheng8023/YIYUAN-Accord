@@ -452,8 +452,11 @@ class CodexLifecycleTests(unittest.TestCase):
                 (root / "stderr.txt").write_text("", encoding="utf-8")
             installed = str(Path(manifest["ownedRoots"]["home"]) / "plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.3.0-dev.1")
             (evidence / "commands/package-add/stdout.json").write_text(json.dumps({"installedPath": installed}), encoding="utf-8")
-            lifecycle.save(evidence / "retained/skills-before.json", {"data": [{"skills": [
-                {"name": "exposure-control", "path": manifest["standaloneSkill"]["path"], "enabled": True}]}]})
+            package_skill_paths = sorted(lifecycle._expected_skill_paths(manifest, installed))
+            skill_catalog = {"data": [{"skills": [
+                {"name": "exposure-control", "path": manifest["standaloneSkill"]["path"], "enabled": True},
+                *[{"name": Path(path).parent.name, "path": path, "enabled": True} for path in package_skill_paths]]}]}
+            lifecycle.save(evidence / "retained/skills-before.json", skill_catalog)
             with (evidence / "retained/provider-requests.jsonl").open("w", encoding="utf-8") as stream:
                 for ordinal in range(1, 5):
                     stream.write(json.dumps({"ordinal": ordinal, "request": {"id": ordinal}}) + "\n")
@@ -494,7 +497,7 @@ class CodexLifecycleTests(unittest.TestCase):
                 "sourceHashAfter": source_hash,
                 "installedPathReturned": installed, "loadedObject": {"installedPath": installed,
                     "hookSourcePaths": [str(Path(installed) / "hooks/hooks.json")],
-                    "skillPaths": [str(Path(installed) / "skills/demo/SKILL.md")]}}
+                    "skillPaths": package_skill_paths}}
             for key in ("mechanismComplete", "loopbackListenerClosed", "providerBound",
                     "malformedCandidateRejectedWithoutReplacement", "healthyRetryExact",
                     "nativeUninstallRemovesCacheAndDiscovery", "unfinishedStatePreservedAcrossExitAndUninstall",
@@ -509,6 +512,13 @@ class CodexLifecycleTests(unittest.TestCase):
                 "nativeResourceLabels": list(lifecycle.RESOURCE_LABELS),
                 "nativeCommandLabels": list(lifecycle.COMMAND_LABELS), "resourceController": manifest["resourceController"]})
             self.assertEqual(lifecycle.inspect(evidence)["decision"], "pass")
+            for invalid in ("missing", "disabled"):
+                changed_catalog = json.loads(json.dumps(skill_catalog))
+                if invalid == "missing": changed_catalog["data"][0]["skills"].pop()
+                else: changed_catalog["data"][0]["skills"][-1]["enabled"] = False
+                lifecycle.save(evidence / "retained/skills-before.json", changed_catalog)
+                self.assertEqual(lifecycle.inspect(evidence)["decision"], "fail")
+            lifecycle.save(evidence / "retained/skills-before.json", skill_catalog)
             provider_file = evidence / "retained/provider-requests.jsonl"
             original_provider = provider_file.read_text(encoding="utf-8")
             leaked = [json.loads(line) for line in original_provider.splitlines()]

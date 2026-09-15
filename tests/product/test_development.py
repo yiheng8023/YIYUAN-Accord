@@ -43,11 +43,12 @@ class SkillReferencePackageTests(unittest.TestCase):
             for name in ("LICENSE", "NOTICE"):
                 shutil.copy2(ROOT / name, root / name)
 
-            def check(references=None):
+            def check(references=None, supporting=None):
                 return validate_projection_package(root, "codex", projection["manifest"],
                     projection["contract"], projection["skill"], projection["metadataFiles"],
                     projection["legalFiles"], assets, projection["mechanismFiles"],
-                    projection["referenceFiles"] if references is None else references)
+                    projection["referenceFiles"] if references is None else references,
+                    projection.get("supportingSkills", []) if supporting is None else supporting)
 
             yield root, projection, check
 
@@ -56,7 +57,7 @@ class SkillReferencePackageTests(unittest.TestCase):
             original, errors = check()
             self.assertEqual(errors, [])
             self.assertEqual(original, projection["packageSha256"])
-            reference = root / projection["referenceFiles"][0]
+            reference = root / projection["supportingSkills"][0]
             reference.write_text(reference.read_text(encoding="utf-8") + "\nChanged duty.\n", encoding="utf-8")
             changed, errors = check()
             self.assertEqual(errors, [])
@@ -64,9 +65,9 @@ class SkillReferencePackageTests(unittest.TestCase):
 
     def test_missing_or_undeclared_reference_is_rejected(self):
         with self.package() as (root, projection, check):
-            _, errors = check([])
+            _, errors = check(supporting=[])
             self.assertTrue(errors)
-            reference = root / projection["referenceFiles"][0]
+            reference = root / projection["supportingSkills"][0]
             reference.unlink()
             digest, errors = check()
             self.assertIsNone(digest)
@@ -74,12 +75,34 @@ class SkillReferencePackageTests(unittest.TestCase):
 
     def test_reference_must_be_nonempty_readable_markdown_in_its_declared_directory(self):
         with self.package() as (root, projection, check):
-            reference = root / projection["referenceFiles"][0]
+            reference = root / projection["supportingSkills"][0]
             for invalid in (b"", b"\xff\xfe"):
                 with self.subTest(content=invalid):
                     reference.write_bytes(invalid)
                     self.assertTrue(check()[1])
-            self.assertTrue(check([projection["manifest"]])[1])
+            self.assertTrue(check(supporting=[projection["manifest"]])[1])
+
+    def test_supporting_skill_identity_and_links_cannot_borrow_another_package(self):
+        with self.package() as (root, projection, check):
+            target = root / projection["supportingSkills"][0]
+            original = target.read_text(encoding="utf-8")
+            for invalid in (original.replace("name: coordinate-capabilities", "name: other"),
+                            original.replace("../deliver-demand-driven-outcome/SKILL.md", "../../../outside/SKILL.md")):
+                target.write_text(invalid, encoding="utf-8")
+                self.assertTrue(check()[1])
+            target.write_text(original, encoding="utf-8")
+            self.assertEqual(check()[1], [])
+
+    def test_optional_plain_references_remain_supported_and_bounded(self):
+        with self.package() as (root, projection, check):
+            locator = (Path(projection["skill"]).parent / "references/example.md").as_posix()
+            target = root / locator
+            target.parent.mkdir(exist_ok=True)
+            target.write_text("A conditional detail.\n", encoding="utf-8")
+            self.assertEqual(check(references=[locator])[1], [])
+            self.assertTrue(check(references=[])[1])
+            target.write_bytes(b"")
+            self.assertTrue(check(references=[locator])[1])
 
     def test_startup_guidance_is_an_explicit_variant_not_a_relabelled_predecessor(self):
         from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract

@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "YIYUAN Accord",
     "shortDescription": "Adaptive outcome delivery with human authority",
-    "longDescription": "One coordinating Skill preserves the user goal, authority, pauses and unfinished work, with task-specific references for capability collaboration, checkpoints and continuity, verification and package lifecycle. Use the relevant details when ordinary handling or entry duties leave a coordination gap; bounded work already covered needs no additional workflow. Explicit invocation remains supported.",
+    "longDescription": "A brief coordination Skill preserves the goal, authority, pauses and unfinished work. Four independently discoverable Skills cover capability collaboration, continuity and recovery, outcome verification, and plugin lifecycle. Native entry and recovery Hooks supply the same brief coordination body; use specialist details only when their conditions apply. Reconcile user, host and other-component changes across shared dependencies. Explicit invocation remains supported.",
     "developerName": "yiheng8023",
     "category": "Developer Tools",
     "capabilities": [

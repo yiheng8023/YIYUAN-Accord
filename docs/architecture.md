@@ -81,10 +81,14 @@ records this code observation and its limits; no deletion experiment was run.
 ### Current candidate and scoped connections
 
 The current Codex package targets `3.3.0-dev.1`; versioning is not publication
-evidence. It exposes one coordinator Skill with conditional references, shared
-core duties through native startup/clear and UserPromptSubmit, resume/compact
-recovery guidance, and a Node task checkpoint. Startup/clear guidance requires no
-task-state access; necessary participation does not depend on selecting the Skill.
+evidence. It exposes one brief coordinator and four independently discoverable specialist
+Skills for capabilities, continuity, verification and plugin lifecycle. Native
+SessionStart and UserPromptSubmit read the same brief Skill body and resolve its
+package-local pointers; selection of a Skill is not the delivery mechanism.
+SessionStart supplies the coordination body separately from the companion
+checkpoint Hook's recovery evidence, preserving its bounded snapshot budget.
+Startup guidance reads the packaged brief, with no task-state access. A missing
+brief is an entry failure; unavailable optional details hold only dependent work.
 The checkpoint connects UserPromptSubmit, Stop, SessionEnd and Interrupt. These
 connections establish available mechanisms, not demonstrated ordinary-task adoption
 or end-to-end completion. The Agent binds necessary file inputs, output predicates and

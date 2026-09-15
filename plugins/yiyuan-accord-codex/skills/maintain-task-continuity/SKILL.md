@@ -1,0 +1,79 @@
+---
+name: maintain-task-continuity
+description: Preserve task state through context pressure, interruption, reconnect, user-selected mode changes and handoff. Use before large reads or long work, on material context changes, or when recovery and unfinished-state protection are needed.
+---
+
+# Maintain task continuity
+
+Use the current goal and authority. If Accord's coordination duties are absent,
+read the [brief entry](../deliver-demand-driven-outcome/SKILL.md). Invoke other
+specialists only for an actual dependency; this Skill grants no new authority.
+
+## Modes and saved task state
+
+Preserve the user's explicit mode choice and actual host constraints. Reconcile
+changed modes with the latest goal, pauses, budget and unfinished work; permission
+mode is not collaboration mode. Ordinary continuation does not enable Plan/Goal,
+create a new goal, reset its budget or lift a pause. A genuinely achieved Goal may
+be completed through its normal lifecycle. Task plans remain revisable artifacts.
+
+Use sufficient native state. Bind a file checkpoint when input freshness,
+unfinished-work recovery or completion needs protection the host does not supply;
+file creation alone is not a trigger. Honor existing bindings and pauses, and
+reconcile current input, effects and authority before revising or resuming them.
+Use current helper `--help` from the plugin root for status, binding, revision,
+`unresolved`, pause and retirement; readback or file matches do not grant authority.
+Retain known unmet conditions until evidenced resolution or authorized cancellation.
+
+For missing captured input, `read-native-input` exposes only retained native
+input, not all history or progress. Replay the actual current input using the
+recovery token from status; never reconstruct it from a checkpoint or hash.
+Prove dead ownership before lock recovery, preserving other sessions and failure
+watermarks. Unavailable or incompatible storage leaves freshness unknown and holds
+dependent effects; use a surviving authorized host recovery path. Helper state is
+local evidence, not a semantic verifier, permission barrier or autonomous executor.
+
+## Interruptions and changed surroundings
+
+A lost connection does not establish whether an operation stopped or succeeded.
+Retain action identity and inspect the actual target to distinguish not dispatched,
+in flight, applied, verified and unknown effects. Use supported queries or
+idempotency before retry or compensation; a missing receipt is not retry permission.
+Reconcile current authority, pauses and the responsible writer before proceeding.
+
+New tools, extensions, settings or external actors can change shared resources,
+outputs or credentials during an interruption. Recheck affected dependencies,
+compatibility and ownership even when Accord did not cause the change. Preserve
+unrelated user components and unresolved conflicts; old state cannot override them.
+Confirm a live authorized actor can resume through a supported startup/reconnect
+route. Saved files do not wake execution, and normal restart survival does not
+prove power-loss or remote-effect durability.
+
+## Context capacity and handoff
+
+Before large reads or long work, use available native signals and sourced forecasts
+to reserve verification, handoff, takeover and failure-recovery capacity. Distinguish
+current occupancy, cumulative usage, configured window and compaction threshold.
+Unknown signals require smaller useful spans and earlier state preservation, not
+guessed percentages. Reassess material host/model/context changes and stale signals.
+For an actual gap, `observe-context` reads the Hook-bound transcript; `assess-context`
+with `nativeContext: true` re-reads counters with sourced tail/work/reserve forecasts.
+App Server callers may supply bound signals through `--context-signals`. These
+operations provide evidence and advisory arithmetic, not dispatch or permission.
+
+Choose supported compaction, same-task renewal or a fresh task by the needed effect;
+context-copying forks serve causal branches. Before history can be omitted, retain
+the goal, authority and pauses, verified results with source references, observed
+or unknown effects and unfinished work. On recovery, reuse valid results, reconcile
+loss and inspect the next necessary source. Repeated reads or renewals without
+progress call for changing the work unit, representation or permitted topology.
+
+Keep the bound checkout unless transfer is authorized. Quiesce transferred writes,
+rebind the exact destination's authority, paths and state, and keep recovery until
+it has inspected the handoff and demonstrated safe continuation or the required
+pause. A summary or receipt alone is not takeover. Commit to one writer for shared
+effects; independent work may continue. Parent release may terminate descendants,
+so verify the successor and its required support can survive release. After target
+effects begin, reconcile them before rollback to avoid duplication. Handoff grants
+no archiving authority. Source and destination must respect user-selected budgets
+and pauses throughout.

@@ -230,6 +230,12 @@ def _declared_hook_count(package):
         raise ValueError("invalid package Hook declaration") from None
 
 
+def _expected_skill_paths(manifest, installed):
+    return {str((Path(installed) / name).resolve()) for name in manifest["packageHashes"]
+            if len(Path(name).parts) == 3 and Path(name).parts[0] == "skills"
+            and Path(name).name == "SKILL.md"}
+
+
 def _validate_marketplace_manifest(path):
     document = json.loads(read_regular(path))
     try:
@@ -1006,10 +1012,13 @@ def run(args):
         result["discoveryResources"] = app.close(manifest); apps.remove(app)
         owned = [hook for hook in _hook_rows(hooks) if hook.get("key", "").startswith(manifest["pluginId"] + ":")]
         package_skills = [skill for skill in _skill_rows(skills) if Path(skill["path"]).is_relative_to(installed)]
+        expected_skills = _expected_skill_paths(manifest, installed)
         hook_sources = [hook.get("sourcePath") for hook in owned if isinstance(hook.get("sourcePath"), str)]
-        if (len(owned) != manifest["declaredHookRegistrations"] or not package_skills or not hook_sources
+        if (len(owned) != manifest["declaredHookRegistrations"] or not expected_skills or not hook_sources
+                or {str(Path(skill["path"]).resolve()) for skill in package_skills} != expected_skills
+                or len(package_skills) != len(expected_skills) or any(not skill.get("enabled") for skill in package_skills)
                 or any(not Path(path).is_relative_to(installed) for path in hook_sources)):
-            raise RuntimeError("installed hooks absent")
+            raise RuntimeError("installed hooks or complete Skill inventory absent")
         result["loadedObject"] = {"installedPath": str(installed), "hookSourcePaths": hook_sources,
                                   "skillPaths": [skill["path"] for skill in package_skills]}
         result["exactPackageLoadedAndTrusted"] = True
@@ -1394,6 +1403,16 @@ def inspect(evidence):
                 or any(not Path(path).is_relative_to(Path(installed_path))
                        for path in (*loaded["hookSourcePaths"], *loaded["skillPaths"]))):
             raise ValueError("installed and loaded package identities differ")
+        expected_skills = _expected_skill_paths(manifest, installed_path)
+        catalog = json.loads(read_regular(root / "retained/skills-before.json"))
+        package_skills = [skill for skill in _skill_rows(catalog)
+                          if Path(skill["path"]).is_relative_to(Path(installed_path))]
+        if (not expected_skills or len(loaded["skillPaths"]) != len(expected_skills)
+                or {str(Path(path).resolve()) for path in loaded["skillPaths"]} != expected_skills
+                or len(package_skills) != len(expected_skills)
+                or {str(Path(skill["path"]).resolve()) for skill in package_skills} != expected_skills
+                or any(not skill.get("enabled") for skill in package_skills)):
+            raise ValueError("complete packaged Skill inventory differs from native discovery")
         for label in RESOURCE_LABELS:
             for name in ("stdout.jsonl", "stderr.txt", "requests.jsonl", "resources.json"):
                 _regular_file(root / "native" / label / name)
