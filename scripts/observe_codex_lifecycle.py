@@ -5,6 +5,11 @@ temporary roots.  ``prepare`` freezes every executable source before ``run``;
 ``run`` is exclusive and retains raw native traffic; ``inspect`` never repairs
 or fills missing observations.  This is a mechanism observation, not Agent
 behaviour, Desktop/IDE equivalence, product value or release acceptance.
+Windows uses pre-execution Job containment. POSIX uses a new session/process
+group and observes direct-child exit and group disappearance only; descendants
+can escape that group. Controller identity and this evidence limit are frozen
+at preparation and retained in execution/inspection. Unknown or live process
+post-state retains owned roots rather than claiming cleanup.
 """
 
 from __future__ import annotations
@@ -28,8 +33,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.codex_rpc import BoundedRpc
-from scripts.inspect_native_resources import read_native_resource_records
-from scripts.observe_codex_entry import WindowsJob, digest, read_regular, save
+from scripts.inspect_native_resources import native_processes_released, read_native_resource_records
+from scripts.observe_codex_entry import PosixProcessGroup, WindowsJob, digest, read_regular, save
 
 
 SCHEMA = "accord-codex-lifecycle/v1"
@@ -42,6 +47,72 @@ COMMAND_LABELS = ("marketplace-add", "package-add", "invalid-candidate", "health
                   "package-remove", "package-list-after-remove")
 OWNED_ROOTS = ("home", "marketplace", "workspace", "state", "temp")
 PROMPT = "本地材料已提供。保持暂停，不生成 pending.json，也不修改原始材料。"
+
+
+def _controller_kind():
+    if os.name == "nt":
+        return "windows-job-object"
+    if os.name == "posix":
+        return "posix-session-process-group"
+    raise ValueError("lifecycle process control requires Windows or POSIX")
+
+
+def _new_controller():
+    return WindowsJob() if _controller_kind() == "windows-job-object" else PosixProcessGroup()
+
+
+def _spawn_options():
+    if _controller_kind() == "windows-job-object":
+        return {"creationflags": subprocess.CREATE_NO_WINDOW | 4}  # CREATE_SUSPENDED
+    return {"start_new_session": True}
+
+
+def _resource_scope(controller):
+    if controller == "windows-job-object":
+        return "Windows Job assigned before execution; Job process counts and working sets"
+    return "POSIX direct child exit and same process group only; escaped descendants, process counts, CPU and memory unobserved; no kill-on-close guarantee"
+
+
+def _released(sample):
+    return native_processes_released(sample, sample.get("controller", "windows-job-object"))
+
+
+def _resource_record(manifest, process, forced, after, failure=None):
+    controller = manifest.get("resourceController", "windows-job-object")
+    state = ("released-within-controller-scope" if _released(after) else
+             "not-started" if process is None else
+             "unobservable" if after.get("processGroupState") in {"unobservable", "not-started"} else "still-alive")
+    return {"exitCode": process.returncode if process else None, "forced": forced,
+            "failure": failure, "after": after, "controller": controller,
+            "evidenceScope": _resource_scope(controller), "cleanupState": state}
+
+
+def _record_released(record, manifest):
+    if not isinstance(record, dict) or not isinstance(record.get("after"), dict):
+        return False
+    controller = manifest.get("resourceController", "windows-job-object")
+    return (record.get("controller", "windows-job-object") == controller
+            and type(record.get("exitCode")) is int
+            and type(record.get("forced")) is bool
+            and record.get("readerStopped", True) is True
+            and (controller != "posix-session-process-group"
+                 or record["exitCode"] == record["after"].get("rootExitCode"))
+            and native_processes_released(record.get("after"), controller))
+
+
+def _invoked_processes_released(evidence, manifest):
+    # Never remove the owned workspace/home beneath a still alive or unknown
+    # invocation. Missing receipts do not establish release.
+    for area, filename in (("native", "resources.json"), ("commands", "record.json")):
+        for directory in (Path(evidence) / area).iterdir():
+            if directory.is_dir():
+                try:
+                    record = json.loads(read_regular(directory / filename))
+                    if not _record_released(record, manifest):
+                        return False
+                except (OSError, ValueError, TypeError):
+                    return False
+    return True
 
 
 def _regular_file(path):
@@ -240,10 +311,17 @@ def _owned_environment(manifest):
         YIYUAN_ACCORD_TASK_STATE_DIR=manifest["ownedRoots"]["state"], TEMP=manifest["ownedRoots"]["temp"],
         TMP=manifest["ownedRoots"]["temp"], NO_PROXY="127.0.0.1,localhost", no_proxy="127.0.0.1,localhost",
         GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull, GIT_TERMINAL_PROMPT="0")
+    if os.name == "posix":
+        # No inherited HOME/XDG roots, proxy, provider or credential variables.
+        home = manifest["ownedRoots"]["home"]
+        env.update(HOME=home, XDG_CONFIG_HOME=str(Path(home) / "config"),
+            XDG_CACHE_HOME=str(Path(home) / "cache"), XDG_DATA_HOME=str(Path(home) / "data"),
+            TMPDIR=manifest["ownedRoots"]["temp"], LANG="C", LC_ALL="C", PYTHONUTF8="1")
     return env
 
 
 def prepare(args):
+    controller = _controller_kind()
     evidence = Path(args.evidence).absolute()
     package = _ordinary_dir(args.package)
     marketplace_manifest = _regular_file(args.marketplace_manifest)
@@ -309,6 +387,8 @@ def prepare(args):
                    "recoverySeconds": args.recovery_timeout, "providerRequests": 4,
                    "providerRequestBytes": 2 * 1024 * 1024},
         "claimLimit": "no-model native mechanism only; no Agent, Desktop, IDE, value or release claim",
+        "resourceController": controller,
+        "resourceEvidenceScope": _resource_scope(controller),
     }
     save(evidence / "manifest.json", manifest)
     return {"prepared": True, "modelCalls": 0, "evidence": str(evidence)}
@@ -334,10 +414,17 @@ def _load(evidence):
             or manifest["limits"].get("providerRequestBytes") != 2 * 1024 * 1024
             or any(manifest["ownedRoots"][name] != str(evidence / name) for name in OWNED_ROOTS)):
         raise ValueError("lifecycle manifest binding mismatch")
+    controller = manifest.get("resourceController", "windows-job-object")
+    if (controller not in {"windows-job-object", "posix-session-process-group"}
+            or "resourceController" in manifest
+            and manifest.get("resourceEvidenceScope") != _resource_scope(controller)):
+        raise ValueError("lifecycle resource controller binding mismatch")
     return manifest
 
 
 def _validate_prebound(manifest):
+    if manifest.get("resourceController", "windows-job-object") != _controller_kind():
+        raise ValueError("prepared resource controller differs from this host")
     evidence = Path(manifest["evidence"])
     sources = _source_paths()
     if (set(manifest.get("sourceHashes", {})) != set(sources)
@@ -379,7 +466,7 @@ def _validate_prebound(manifest):
 
 def _wait_job(job, deadline):
     sample = job.sample()
-    while sample["activeProcesses"] and time.monotonic() < deadline:
+    while not _released(sample) and time.monotonic() < deadline:
         time.sleep(0.05)
         sample = job.sample()
     return sample
@@ -389,14 +476,14 @@ def _run_cli(manifest, label, arguments, env, work_deadline):
     evidence = Path(manifest["evidence"])
     root = evidence / "commands" / label
     root.mkdir()
-    job, process, forced, failure, recovery_deadline = WindowsJob(), None, False, None, None
+    job, process, forced, failure, recovery_deadline = _new_controller(), None, False, None, None
     stdout_path, stderr_path = root / "stdout.json", root / "stderr.txt"
     arguments = ["-c", 'cli_auth_credentials_store="file"', *arguments]
     try:
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
             process = subprocess.Popen([manifest["codex"], *arguments], cwd=manifest["ownedRoots"]["workspace"],
                 env=env, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
-                creationflags=subprocess.CREATE_NO_WINDOW | 4)
+                **_spawn_options())
             try:
                 job.attach_and_resume(process)
             except BaseException:
@@ -417,13 +504,14 @@ def _run_cli(manifest, label, arguments, env, work_deadline):
         if process is not None and process.poll() is None:
             process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
         after = _wait_job(job, recovery_deadline)
-        if after["activeProcesses"]:
+        if not _released(after):
             forced = True
             job.terminate()
             after = _wait_job(job, recovery_deadline)
-        record = {"arguments": arguments, "exitCode": process.returncode if process else None,
-                  "forced": forced, "failure": failure, "after": after}
+        record = {"arguments": arguments, **_resource_record(manifest, process, forced, after, failure)}
         save(root / "record.json", record)
+        if not _record_released(record, manifest):
+            raise RuntimeError("native command process release unobserved within recovery deadline")
         raw = read_regular(stdout_path, 4 * 1024 * 1024)
         parsed = json.loads(raw) if raw.strip() else None
         return record, parsed
@@ -442,8 +530,7 @@ def _run_cli(manifest, label, arguments, env, work_deadline):
                 pass
         after = _wait_job(job, recovery_deadline)
         save(root / "record.json", {"arguments": arguments,
-            "exitCode": process.returncode if process else None, "forced": forced,
-            "failure": failure or "native-command", "after": after})
+            **_resource_record(manifest, process, forced, after, failure or "native-command")})
         raise
     finally:
         job.close()
@@ -537,7 +624,7 @@ class _App:
         self.workspace = manifest["ownedRoots"]["workspace"]
         self.request_timeout = manifest["limits"]["requestSeconds"]
         self.root.mkdir()
-        self.job, self.events, self.queue = WindowsJob(), [], queue.Queue()
+        self.job, self.events, self.queue = _new_controller(), [], queue.Queue()
         self.manifest, self.work_deadline = manifest, work_deadline
         self._closed, self._close_record = False, None
         self.stderr = (self.root / "stderr.txt").open("xb")
@@ -546,7 +633,7 @@ class _App:
         try:
             self.process = subprocess.Popen(argv, cwd=manifest["ownedRoots"]["workspace"], env=env,
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.stderr,
-                creationflags=subprocess.CREATE_NO_WINDOW | 4)
+                **_spawn_options())
             self.job.attach_and_resume(self.process)
         except BaseException:
             if self.process is not None and self.process.poll() is None:
@@ -560,8 +647,11 @@ class _App:
                 except subprocess.TimeoutExpired:
                     pass
             after = self.job.sample()
-            save(self.root / "resources.json", {"exitCode": self.process.returncode if self.process else None,
-                "forced": True, "failure": "job-attach", "after": after})
+            save(self.root / "resources.json", _resource_record(manifest, self.process, True, after, "job-attach"))
+            for name in ("stdin", "stdout"):
+                pipe = getattr(self.process, name, None)
+                if pipe is not None:
+                    pipe.close()
             self.job.close(); self.stderr.close(); self.stdout.close()
             raise
 
@@ -643,18 +733,23 @@ class _App:
                 except subprocess.TimeoutExpired:
                     pass
             after = _wait_job(self.job, recovery_deadline)
-            if after["activeProcesses"]:
+            if not _released(after):
                 forced = True
                 self.job.terminate()
                 after = _wait_job(self.job, recovery_deadline)
             self.reader.join(timeout=max(0, recovery_deadline - time.monotonic()))
-            record = {"exitCode": self.process.returncode, "forced": forced, "after": after}
+            record = _resource_record(manifest, self.process, forced, after)
+            record["readerStopped"] = not self.reader.is_alive()
             save(self.root / "resources.json", record)
             self._close_record = record
+            if not _record_released(record, manifest):
+                raise RuntimeError("native app process release unobserved within recovery deadline")
             return record
         finally:
             self._closed = True
             self.job.close()
+            if not self.reader.is_alive():
+                self.process.stdout.close()
             self.stderr.close()
             self.stdout.close()
 
@@ -716,10 +811,13 @@ def run(args):
     evidence = Path(manifest["evidence"])
     with (evidence / "run-started.json").open("x", encoding="utf-8") as stream:
         json.dump({"time": time.time(), "manifestSha256": digest(evidence / "manifest.json"),
-                   "nativeResourceLabels": list(RESOURCE_LABELS), "nativeCommandLabels": list(COMMAND_LABELS)}, stream)
+                   "nativeResourceLabels": list(RESOURCE_LABELS), "nativeCommandLabels": list(COMMAND_LABELS),
+                   "resourceController": manifest.get("resourceController", "windows-job-object")}, stream)
     env = _owned_environment(manifest)
     work_deadline = time.monotonic() + manifest["limits"]["workSeconds"]
-    result = {"failure": None, "failureStage": None, "modelCalls": 0, "claimLimit": manifest["claimLimit"]}
+    result = {"failure": None, "failureStage": None, "modelCalls": 0, "claimLimit": manifest["claimLimit"],
+              "resourceController": manifest.get("resourceController", "windows-job-object"),
+              "resourceEvidenceScope": _resource_scope(manifest.get("resourceController", "windows-job-object"))}
     fixture, apps = None, []
     installed = None
     try:
@@ -969,7 +1067,11 @@ def run(args):
                 shutil.copytree(state, retained_state)
             except OSError:
                 result.setdefault("cleanupErrors", []).append("retain-state")
-        for name in OWNED_ROOTS:
+        processes_released = _invoked_processes_released(evidence, manifest)
+        result["invokedProcessesReleasedWithinControllerScope"] = processes_released
+        if not processes_released:
+            result.setdefault("cleanupErrors", []).append("process-release-unobserved; owned roots retained")
+        for name in OWNED_ROOTS if processes_released else ():
             path = Path(manifest["ownedRoots"][name])
             if path.exists():
                 try:
@@ -1006,10 +1108,16 @@ def inspect(evidence):
             or tuple(started.get("nativeResourceLabels", ())) != RESOURCE_LABELS
             or tuple(started.get("nativeCommandLabels", ())) != COMMAND_LABELS):
         raise ValueError("execution does not match prepared manifest")
+    controller = manifest.get("resourceController", "windows-job-object")
+    if ("resourceController" in manifest
+            and (started.get("resourceController") != controller
+                 or result.get("resourceController") != controller
+                 or result.get("resourceEvidenceScope") != _resource_scope(controller))):
+        raise ValueError("execution resource controller differs from prepared scope")
     resource_error = None
     try:
         records = read_native_resource_records(root / "native", manifest["nativeResourceLabels"])
-        resources_ok = all(record["exitCode"] == 0 and record["after"]["activeProcesses"] == 0
+        resources_ok = all(record["exitCode"] == 0 and _record_released(record, manifest)
                            for record in records.values())
     except (OSError, ValueError, json.JSONDecodeError):
         records, resources_ok = {}, False
@@ -1027,6 +1135,8 @@ def inspect(evidence):
         if (any(command_records[label].get("exitCode") != 0 for label in COMMAND_LABELS if label != "invalid-candidate")
                 or command_records["invalid-candidate"].get("exitCode") in (None, 0)):
             raise ValueError("command terminal differs")
+        if any(not _record_released(record, manifest) for record in command_records.values()):
+            raise ValueError("command process release unobserved or controller differs")
         if any(record.get("arguments", [])[:2] != ["-c", 'cli_auth_credentials_store="file"']
                for record in command_records.values()):
             raise ValueError("command credential-store boundary differs")
@@ -1109,7 +1219,8 @@ def inspect(evidence):
         and result.get("ownedRootsAbsent") == {name: True for name in OWNED_ROOTS})
     return {"decision": "pass" if decision else "fail", "nativeResources": records,
         "resourceError": resource_error, "nativeCommands": command_records, "rawEvidenceError": raw_error,
-        "recorded": result, "claimLimit": manifest["claimLimit"]}
+        "recorded": result, "claimLimit": manifest["claimLimit"],
+        "resourceController": controller, "resourceEvidenceScope": _resource_scope(controller)}
 
 
 def main():

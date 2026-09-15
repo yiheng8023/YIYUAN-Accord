@@ -27,6 +27,7 @@ import os
 from pathlib import Path
 import re
 import shlex
+import signal
 import stat
 import subprocess
 import sys
@@ -549,6 +550,63 @@ class WindowsJob:
         if self.handle:
             self.k.CloseHandle(self.handle)
             self.handle = None
+
+
+class PosixProcessGroup:
+    """A caller-created session/group, not kernel descendant containment.
+
+    Popen must use start_new_session=True: Python calls setsid before exec.
+    killpg observes/signals only this group; descendants can leave it. Counts,
+    CPU and memory are deliberately unknown, and no close-time kill is implied.
+    https://docs.python.org/3/library/subprocess.html#subprocess.Popen
+    https://docs.python.org/3/library/os.html#os.killpg
+    """
+    def __init__(self):
+        if os.name != "posix":
+            raise ValueError("POSIX process groups require POSIX")
+        self.process, self.pgid, self.absent = None, None, False
+
+    def attach_and_resume(self, process):
+        if self.process is not None or type(process.pid) is not int or process.pid <= 0:
+            raise ValueError("one newly created positive process id required")
+        if process.pid == os.getpgrp():
+            raise ValueError("refusing the caller process group")
+        # start_new_session establishes both identities before Popen returns.
+        # A fast exiting leader can already be reaped while its group survives.
+        try:
+            if os.getpgid(process.pid) != process.pid or os.getsid(process.pid) != process.pid:
+                raise ValueError("owned process did not start a new session/group")
+        except ProcessLookupError:
+            if process.poll() is None:
+                raise
+        self.process, self.pgid = process, process.pid
+
+    def sample(self):
+        exit_code = self.process.poll() if self.process is not None else None
+        state = "not-started" if self.pgid is None else "absent" if self.absent else "alive"
+        if self.pgid is not None and not self.absent:
+            try:
+                os.killpg(self.pgid, 0)
+            except ProcessLookupError:
+                self.absent, state = True, "absent"
+            except OSError:
+                state = "unobservable"
+        return {"time": time.time(), "controller": "posix-session-process-group",
+                "activeProcesses": None, "cpuSeconds": None, "totalProcesses": None,
+                "processes": None, "processGroupId": self.pgid,
+                "processGroupState": state, "rootPid": self.process.pid if self.process else None,
+                "rootExitCode": exit_code,
+                "evidenceScope": "direct child exit and same process group only; escaped descendants, CPU and memory unobserved"}
+
+    def terminate(self):
+        if self.pgid is not None and not self.absent:
+            try:
+                os.killpg(self.pgid, signal.SIGKILL)
+            except ProcessLookupError:
+                self.absent = True
+
+    def close(self):
+        pass  # POSIX has no Job handle or kill-on-close guarantee.
 
 
 def source_recovery_from_events(stream, python, *, protocol="exec", request_stream=None, workspace=None):

@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from scripts.inspect_native_resources import read_native_resource_records
+from scripts.inspect_native_resources import native_processes_released, read_native_resource_records
 
 
 class NativeResourceRecordsTest(unittest.TestCase):
@@ -55,6 +55,32 @@ class NativeResourceRecordsTest(unittest.TestCase):
             self.write("resumed", {"exitCode": 0, "forced": False, "after": after})
             with self.assertRaises(ValueError):
                 read_native_resource_records(self.root, self.labels)
+
+    def test_posix_group_records_preserve_unknown_counts_and_observation_failures(self):
+        after = {"controller": "posix-session-process-group", "activeProcesses": None,
+                 "processGroupId": 42, "rootPid": 42, "rootExitCode": 0,
+                 "processGroupState": "absent"}
+        for state in ("alive", "absent", "unobservable"):
+            with self.subTest(state=state):
+                sample = {**after, "processGroupState": state}
+                self.write("resumed", {"controller": "posix-session-process-group", "exitCode": 0,
+                                      "forced": state != "absent", "after": sample})
+                records = read_native_resource_records(self.root, self.labels)
+                self.assertIsNone(records["resumed"]["after"]["activeProcesses"])
+                self.assertEqual(native_processes_released(sample, "posix-session-process-group"), state == "absent")
+                self.assertFalse(native_processes_released(sample, "windows-job-object"))
+        self.assertFalse(native_processes_released({**after, "rootExitCode": None}, "posix-session-process-group"))
+        self.assertFalse(native_processes_released({"activeProcesses": 0}, "posix-session-process-group"))
+        self.assertFalse(native_processes_released({**after, "rootPid": 43}, "posix-session-process-group"))
+        missing_count = dict(after)
+        missing_count.pop("activeProcesses")
+        self.write("resumed", {"controller": "posix-session-process-group", "exitCode": 0,
+                               "forced": False, "after": missing_count})
+        with self.assertRaises(ValueError):
+            read_native_resource_records(self.root, self.labels)
+        self.write("resumed", {"exitCode": 0, "forced": False, "after": after})
+        with self.assertRaises(ValueError):
+            read_native_resource_records(self.root, self.labels)
 
 
 if __name__ == "__main__":

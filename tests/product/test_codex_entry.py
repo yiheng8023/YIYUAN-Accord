@@ -1005,6 +1005,73 @@ class EntryTests(unittest.TestCase):
                 process.kill()
                 process.wait(timeout=5)
 
+    def posix_controller_observes_direct_root_and_never_claims_process_counts(self):
+        group = entry.PosixProcessGroup()
+        process = subprocess.Popen([PYTHON, "-c", "import time; time.sleep(30)"], start_new_session=True)
+        try:
+            group.attach_and_resume(process)
+            observed = group.sample()
+            self.assertEqual(observed["processGroupId"], process.pid)
+            self.assertNotEqual(process.pid, os.getpgrp())
+            self.assertEqual(observed["processGroupState"], "alive")
+            self.assertIsNone(observed["activeProcesses"])
+            self.assertIsNone(observed["cpuSeconds"])
+            self.assertIn("escaped descendants", observed["evidenceScope"])
+            with patch.object(entry.os, "killpg", side_effect=PermissionError):
+                self.assertEqual(group.sample()["processGroupState"], "unobservable")
+            group.terminate()
+            process.wait(timeout=5)
+            self.assertEqual(group.sample()["processGroupState"], "absent")
+            # Once disappearance is observed, a recycled numerical id is not
+            # queried/signalled again by this controller.
+            with patch.object(entry.os, "killpg") as signal_group:
+                group.sample(); group.terminate(); group.close()
+            signal_group.assert_not_called()
+        finally:
+            if process.poll() is None:
+                process.kill(); process.wait(timeout=5)
+
+    def posix_controller_rejects_unisolated_process_without_signalling_caller_group(self):
+        group = entry.PosixProcessGroup()
+        process = subprocess.Popen([PYTHON, "-c", "import time; time.sleep(30)"])
+        try:
+            with self.assertRaisesRegex(ValueError, "new session/group"):
+                group.attach_and_resume(process)
+            with patch.object(entry.os, "killpg") as signal_group:
+                group.terminate()
+            signal_group.assert_not_called()
+        finally:
+            process.kill(); process.wait(timeout=5)
+
+    def posix_descendant_can_leave_group_and_is_not_counted_as_contained(self):
+        code = ("import subprocess,sys; child=subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)'],"
+                "start_new_session=True,stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);"
+                "print(child.pid,flush=True); sys.stdin.readline(); child.terminate(); child.wait()")
+        process = subprocess.Popen([PYTHON, "-u", "-c", code], start_new_session=True,
+                                   stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        group = entry.PosixProcessGroup()
+        try:
+            group.attach_and_resume(process)
+            child_pid = int(process.stdout.readline())
+            self.assertNotEqual(os.getpgid(child_pid), group.pgid)
+            self.assertIsNone(group.sample()["activeProcesses"])
+        finally:
+            # Ask the parent to reap its escaped child; do not orphan test work.
+            process.stdin.write(b"\n"); process.stdin.flush(); process.stdin.close()
+            process.wait(timeout=5)
+            process.stdout.close()
+            group.close()
+        self.assertEqual(group.sample()["processGroupState"], "absent")
+
+
+# Register actual POSIX syscall cases only where they apply. Shared record and
+# failure tests remain discovered everywhere; Windows keeps its native Job case.
+if os.name == "posix":
+    for case in ("posix_controller_observes_direct_root_and_never_claims_process_counts",
+                 "posix_controller_rejects_unisolated_process_without_signalling_caller_group",
+                 "posix_descendant_can_leave_group_and_is_not_counted_as_contained"):
+        setattr(EntryTests, "test_" + case, getattr(EntryTests, case))
+
 
 if __name__ == "__main__":
     unittest.main()

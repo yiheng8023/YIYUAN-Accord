@@ -2,16 +2,26 @@ import argparse
 from contextlib import redirect_stdout
 import io
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
 import sys
+import time
 
 from scripts import observe_codex_lifecycle as lifecycle
 
 
 class CodexLifecycleTests(unittest.TestCase):
+    def resource_record(self, manifest, exit_code=0):
+        controller = manifest["resourceController"]
+        after = {"activeProcesses": 0}
+        if controller == "posix-session-process-group":
+            after = {"controller": controller, "activeProcesses": None, "processGroupId": 123,
+                     "rootPid": 123, "processGroupState": "absent", "rootExitCode": exit_code}
+        return {"controller": controller, "exitCode": exit_code, "forced": False, "after": after}
+
     def fixture(self, root):
         package = root / "package"
         (package / ".codex-plugin").mkdir(parents=True)
@@ -47,6 +57,7 @@ class CodexLifecycleTests(unittest.TestCase):
             self.assertEqual(set(manifest["binaryHashes"]), {"codex", "node", "python"})
             self.assertEqual(tuple(manifest["nativeCommandLabels"]), lifecycle.COMMAND_LABELS)
             self.assertEqual(manifest["standaloneSkill"]["role"], "task-owned-fixed-control")
+            self.assertEqual(manifest["resourceController"], lifecycle._controller_kind())
             self.assertEqual(len(manifest["protectedFiles"]), 1)
             self.assertFalse((Path(args.evidence) / "run-started.json").exists())
             self.assertEqual(json.loads((Path(args.evidence) / "workspace/source.json").read_text()), {"total": 140})
@@ -90,6 +101,9 @@ class CodexLifecycleTests(unittest.TestCase):
             env = lifecycle._owned_environment(manifest)
             self.assertEqual(env["CODEX_HOME"], manifest["ownedRoots"]["home"])
             self.assertEqual(env["NO_PROXY"], "127.0.0.1,localhost")
+            if os.name == "posix":
+                self.assertEqual(env["HOME"], manifest["ownedRoots"]["home"])
+                self.assertEqual(env["TMPDIR"], manifest["ownedRoots"]["temp"])
             self.assertTrue(env["PATH"].startswith(str(Path(manifest["node"]).parent)))
             for key in ("OPENAI_API_KEY", "OPENAI_BASE_URL", "CODEX_API_KEY", "HTTP_PROXY", "HTTPS_PROXY"):
                 self.assertNotIn(key, env)
@@ -99,6 +113,46 @@ class CodexLifecycleTests(unittest.TestCase):
         self.assertTrue(lifecycle._contains_path({"tools": [{"path": path}]}, path))
         self.assertTrue(lifecycle._contains_path({"context": "source C:/owned/standalone-skills/exposure-control/SKILL.md"}, path))
         self.assertFalse(lifecycle._contains_path({"context": r"C:\other\SKILL.md"}, path))
+
+    def test_platform_spawn_options_preserve_suspended_windows_and_isolated_posix(self):
+        with patch.object(lifecycle, "_controller_kind", return_value="windows-job-object"), \
+                patch.object(lifecycle.subprocess, "CREATE_NO_WINDOW", 0x08000000, create=True):
+            self.assertEqual(lifecycle._spawn_options(), {"creationflags": 0x08000004})
+        with patch.object(lifecycle, "_controller_kind", return_value="posix-session-process-group"):
+            self.assertEqual(lifecycle._spawn_options(), {"start_new_session": True})
+
+    def test_unknown_or_live_process_receipt_prevents_owned_root_removal(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, manifest = self.fixture(Path(tmp).resolve())
+            evidence = Path(manifest["evidence"])
+            command = evidence / "commands/marketplace-add"
+            command.mkdir()
+            self.assertFalse(lifecycle._invoked_processes_released(evidence, manifest))
+            record = self.resource_record(manifest)
+            lifecycle.save(command / "record.json", record)
+            self.assertTrue(lifecycle._invoked_processes_released(evidence, manifest))
+            for state in ("alive", "unobservable"):
+                if manifest["resourceController"] == "posix-session-process-group":
+                    record["after"]["processGroupState"] = state
+                else:
+                    record["after"]["activeProcesses"] = 1
+                lifecycle.save(command / "record.json", record)
+                self.assertFalse(lifecycle._invoked_processes_released(evidence, manifest))
+            self.assertTrue(Path(manifest["ownedRoots"]["home"]).exists())
+
+    def posix_app_closes_native_stdin_and_observes_limited_release(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, manifest = self.fixture(Path(tmp).resolve())
+            app = lifecycle._App(manifest, "discovery", [sys.executable, "-u", "-c",
+                "import sys; sys.stdin.buffer.read()"], lifecycle._owned_environment(manifest), time.monotonic() + 10)
+            record = app.close()
+            self.assertEqual(record["exitCode"], 0)
+            self.assertFalse(record["forced"])
+            self.assertEqual(record["controller"], "posix-session-process-group")
+            self.assertIsNone(record["after"]["activeProcesses"])
+            self.assertEqual(record["after"]["processGroupState"], "absent")
+            self.assertTrue(record["readerStopped"])
+            self.assertEqual(app.close(), record)
 
     def test_prepare_rejects_nested_evidence_and_run_rejects_changed_owned_home(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -135,7 +189,7 @@ class CodexLifecycleTests(unittest.TestCase):
             process = Process()
             with patch.object(lifecycle.subprocess, "Popen", return_value=process), \
                     patch.object(lifecycle.subprocess, "CREATE_NO_WINDOW", 0, create=True), \
-                    patch.object(lifecycle, "WindowsJob", return_value=Job()), \
+                    patch.object(lifecycle, "_new_controller", return_value=Job()), \
                     self.assertRaisesRegex(RuntimeError, "attach failed"):
                 lifecycle._run_cli(manifest, "attach-control", ["plugin", "list", "--json"], {},
                                    lifecycle.time.monotonic() + 10)
@@ -160,7 +214,7 @@ class CodexLifecycleTests(unittest.TestCase):
             process = Process()
             with patch.object(lifecycle.subprocess, "Popen", return_value=process), \
                     patch.object(lifecycle.subprocess, "CREATE_NO_WINDOW", 0, create=True), \
-                    patch.object(lifecycle, "WindowsJob", return_value=Job()), \
+                    patch.object(lifecycle, "_new_controller", return_value=Job()), \
                     self.assertRaisesRegex(RuntimeError, "attach failed"):
                 lifecycle._App(manifest, "discovery", [manifest["codex"], "app-server"], {},
                                lifecycle.time.monotonic() + 10)
@@ -180,8 +234,7 @@ class CodexLifecycleTests(unittest.TestCase):
             for label in lifecycle.RESOURCE_LABELS:
                 root = evidence / "native" / label
                 root.mkdir()
-                lifecycle.save(root / "resources.json", {"exitCode": 0, "forced": False,
-                    "after": {"activeProcesses": 0}})
+                lifecycle.save(root / "resources.json", self.resource_record(manifest))
                 (root / "stdout.jsonl").write_text("", encoding="utf-8")
                 (root / "stderr.txt").write_text("", encoding="utf-8")
                 (root / "requests.jsonl").write_text("", encoding="utf-8")
@@ -193,9 +246,8 @@ class CodexLifecycleTests(unittest.TestCase):
             for label in lifecycle.COMMAND_LABELS:
                 root = evidence / "commands" / label
                 root.mkdir()
-                lifecycle.save(root / "record.json", {"exitCode": 1 if label == "invalid-candidate" else 0,
-                    "forced": False, "arguments": ["-c", 'cli_auth_credentials_store="file"'],
-                    "after": {"activeProcesses": 0}})
+                lifecycle.save(root / "record.json", {**self.resource_record(manifest, 1 if label == "invalid-candidate" else 0),
+                    "arguments": ["-c", 'cli_auth_credentials_store="file"']})
                 (root / "stdout.json").write_text("", encoding="utf-8")
                 (root / "stderr.txt").write_text("", encoding="utf-8")
             installed = str(Path(manifest["ownedRoots"]["home"]) / "plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.3.0-dev.1")
@@ -250,10 +302,12 @@ class CodexLifecycleTests(unittest.TestCase):
                     "nativeInterruptInvalidatesReadiness", "nativeResumePreservesPausedBinding",
                     "continueReceiptDoesNotResumeBinding", "selectedPathsDisabledInOwnedProcess", "standaloneCatalogEntryAbsent"):
                 facts[key] = True
+            facts.update(resourceController=manifest["resourceController"],
+                         resourceEvidenceScope=manifest["resourceEvidenceScope"])
             lifecycle.save(evidence / "result.json", facts)
             lifecycle.save(evidence / "run-started.json", {"manifestSha256": lifecycle.digest(evidence / "manifest.json"),
                 "nativeResourceLabels": list(lifecycle.RESOURCE_LABELS),
-                "nativeCommandLabels": list(lifecycle.COMMAND_LABELS)})
+                "nativeCommandLabels": list(lifecycle.COMMAND_LABELS), "resourceController": manifest["resourceController"]})
             self.assertEqual(lifecycle.inspect(evidence)["decision"], "pass")
             provider_file = evidence / "retained/provider-requests.jsonl"
             original_provider = provider_file.read_text(encoding="utf-8")
@@ -272,17 +326,17 @@ class CodexLifecycleTests(unittest.TestCase):
 
     def test_inspect_rejects_missing_or_extra_native_resource_receipt(self):
         with tempfile.TemporaryDirectory() as tmp:
-            args, _ = self.fixture(Path(tmp).resolve())
+            args, manifest = self.fixture(Path(tmp).resolve())
             evidence = Path(args.evidence)
             for label in lifecycle.RESOURCE_LABELS[:-1]:
                 root = evidence / "native" / label
                 root.mkdir()
-                lifecycle.save(root / "resources.json", {"exitCode": 0, "forced": False,
-                    "after": {"activeProcesses": 0}})
-            lifecycle.save(evidence / "result.json", {})
+                lifecycle.save(root / "resources.json", self.resource_record(manifest))
+            lifecycle.save(evidence / "result.json", {"resourceController": manifest["resourceController"],
+                "resourceEvidenceScope": manifest["resourceEvidenceScope"]})
             lifecycle.save(evidence / "run-started.json", {"manifestSha256": lifecycle.digest(evidence / "manifest.json"),
                 "nativeResourceLabels": list(lifecycle.RESOURCE_LABELS),
-                "nativeCommandLabels": list(lifecycle.COMMAND_LABELS)})
+                "nativeCommandLabels": list(lifecycle.COMMAND_LABELS), "resourceController": manifest["resourceController"]})
             checked = lifecycle.inspect(evidence)
             self.assertEqual(checked["decision"], "fail")
             self.assertEqual(checked["resourceError"], "native resource record set incomplete or invalid")
@@ -296,6 +350,13 @@ class CodexLifecycleTests(unittest.TestCase):
                     redirect_stdout(io.StringIO()):
                 lifecycle.main()
             self.assertEqual(stopped.exception.code, 1)
+
+
+# This real-process case is applicable only to POSIX; no skip or empty Windows
+# pass stands in for its syscalls. All shared lifecycle tests remain registered.
+if os.name == "posix":
+    CodexLifecycleTests.test_posix_app_closes_native_stdin_and_observes_limited_release = (
+        CodexLifecycleTests.posix_app_closes_native_stdin_and_observes_limited_release)
 
 
 if __name__ == "__main__":
