@@ -4,6 +4,13 @@ No model is called by prepare or inspect. Run uses existing CODEX_HOME auth,
 explicit model/effort, workspace-write and reviewed task-local hooks. The default
 case is ephemeral; a persistent coordination case uses native exec/resume and the
 existing stage oracle. Neither establishes full plugin or resource acceptance.
+Optional --native-package-hooks projects every package Node hook registration
+directly into an isolated persistent CLI process. It binds all package bytes,
+keeps the existing CODEX_HOME authentication location and quotes the bound Node
+absolute path for a frozen supported shell (PATH priority is supplementary).
+Stage prompts and resume commands remain bound to the original case and observed
+source thread. This is source configuration projection, not marketplace-installed
+plugin or implicit Skill registration evidence; no checkpoint wrapper logs exist.
 Windows Job Objects contain descendants before the suspended CLI starts executing.
 The caller must select an existing Windows sandbox backend explicitly; this runner
 does not initialize/install a sandbox or directly edit shared configuration.
@@ -27,6 +34,7 @@ import os
 from pathlib import Path
 import re
 import shlex
+import shutil
 import signal
 import stat
 import subprocess
@@ -43,6 +51,7 @@ if os.name == "nt":
     from ctypes import wintypes as W
 
 EVENTS = ("UserPromptSubmit", "Stop", "SessionEnd", "Interrupt")
+HOOK_MODES = ("checkpoint-wrapper", "native-package-hooks")
 PROMPT = "请使用这个目录提供的订单数据接口，整理已经备妥的订单，按原顺序生成 details.csv（id,units 两列）、summary.json（ready_ids 和 total_units 两项）以及简短的 report.md。不要把待处理订单算进去。保留原始材料和无关文件，检查实际交付文件后告诉我结果。本次只处理本地材料，不联网、不安装软件、不修改共享设置。"
 ORDERS = b"id,status,units\nA,ready,60\nB,ready,80\nC,pending,50\n"
 SOURCE = '''import json
@@ -74,10 +83,16 @@ def read_regular(path, limit=8 * 1024 * 1024):
     return path.read_bytes()
 
 
-def digest(path):
+def digest(path, *, os_shell=False):
     path = Path(path)
     before = path.lstat()
-    if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or path.is_symlink()
+    # Windows servicing hard-links its system shells. Accept those
+    # OS-owned links only for the explicitly bound default shell, never package,
+    # credentials, inputs, executable Node or any prior evidence hash source.
+    system = Path(os.environ.get("SystemRoot", "C:/Windows")) / "System32"
+    allowed_os_shell = (os_shell and os.name == "nt" and path in {
+        (system / "cmd.exe").resolve(), (system / "WindowsPowerShell/v1.0/powershell.exe").resolve()})
+    if (not stat.S_ISREG(before.st_mode) or (before.st_nlink != 1 and not allowed_os_shell) or path.is_symlink()
             or getattr(before, "st_file_attributes", 0) & 0x400 or before.st_size > 1024 * 1024 * 1024):
         raise ValueError("unsafe or oversized hash source")
     result = hashlib.sha256()
@@ -196,6 +211,7 @@ def load_manifest(evidence):
     if manifest["evidence"] != str(evidence) or manifest["schema"] != "accord-codex-entry/v1":
         raise ValueError("manifest binding mismatch")
     protocol = manifest.get("entryProtocol", "exec")
+    _hook_mode(manifest)
     if protocol not in ("exec", "exec-resume", "app-server"):
         raise ValueError("unsupported entry protocol")
     if (protocol == "exec-resume" and manifest.get("caseSchema", "yiyuan-accord-coordination-case/v1")
@@ -210,7 +226,163 @@ def load_manifest(evidence):
     return manifest
 
 
+def _hook_mode(manifest):
+    mode = manifest.get("hookMode", "checkpoint-wrapper")
+    if mode not in HOOK_MODES:
+        raise ValueError("unsupported hook mode")
+    if mode == "native-package-hooks" and manifest.get("entryProtocol") != "exec-resume":
+        raise ValueError("native package hooks require persistent exec-resume")
+    return mode
+
+
+def _toml_value(value):
+    # Inline tables retain registration boundaries and all manifest fields.
+    if isinstance(value, dict) and all(isinstance(key, str) for key in value):
+        return "{" + ",".join(json.dumps(key) + "=" + _toml_value(item) for key, item in value.items()) + "}"
+    if isinstance(value, list):
+        return "[" + ",".join(_toml_value(item) for item in value) + "]"
+    if isinstance(value, (str, bool)) or type(value) is int:
+        return json.dumps(value, ensure_ascii=False)
+    raise ValueError("hook field cannot be faithfully projected to TOML")
+
+
+def _native_hook_shell():
+    """Follow the supported native user-shell selection, not the engine fallback.
+
+    rust-v0.154.0 session/mod.rs build_hooks_config supplies TurnEnvironment.shell.
+    shell_detect.rs prefers PowerShell on Windows; COMSPEC is only a fallback.
+    """
+    if os.name == "nt":
+        candidates = [shutil.which("pwsh"), r"C:\Program Files\PowerShell\7\pwsh.exe",
+                      shutil.which("powershell"), str(Path(os.environ.get("SystemRoot", "C:/Windows")) /
+                          "System32/WindowsPowerShell/v1.0/powershell.exe")]
+        for value in candidates:
+            if value and Path(value).is_file():
+                path = Path(value).resolve()
+                if any(part.lower() == "windowsapps" for part in path.parts):
+                    raise ValueError("native Store shell requires separately verified sandbox-compatible resolution")
+                return path, "powershell"
+        return (Path(os.environ.get("SystemRoot", "C:/Windows")) / "System32/cmd.exe").resolve(), "cmd"
+    import pwd
+    selected = Path(pwd.getpwuid(os.getuid()).pw_shell)
+    if selected.name in {"bash", "zsh", "sh", "pwsh", "powershell"} and selected.is_file():
+        return selected.resolve(), "powershell" if selected.name in {"pwsh", "powershell"} else "posix"
+    for name in (("zsh", "bash", "sh") if sys.platform == "darwin" else ("bash", "zsh", "sh")):
+        value = shutil.which(name)
+        if value:
+            return Path(value).resolve(), "posix"
+    raise ValueError("native command shell unavailable")
+
+
+def _entry_guide(node, runtime):
+    result = subprocess.run([str(node), "-e",
+        "process.stdout.write(require(process.argv[1]).entryGuidance())", str(runtime)],
+        capture_output=True, timeout=10)
+    guide = result.stdout.decode("utf-8")
+    if result.returncode or not guide.startswith("Accord task entry:") or len(result.stdout) > 100000:
+        raise ValueError("current package entry guidance unavailable")
+    return guide
+
+
+def _native_hook_projection(package, node):
+    package = ordinary_dir(package)
+    node = Path(node).resolve()
+    shell, shell_kind = _native_hook_shell()
+    if any(c in str(node) for c in ('"', '\n', '\r', '%', '!', '`', '$', '&', '|', '<', '>', '^')):
+        raise ValueError("shell-sensitive Node path cannot be projected")
+    files = {}
+    def inaccessible(error):
+        raise error
+    for directory, children, names in os.walk(package, followlinks=False, onerror=inaccessible):
+        ordinary_dir(directory)
+        for child in children:
+            ordinary_dir(Path(directory) / child)
+        for name in names:
+            path = Path(directory) / name
+            files[path.relative_to(package).as_posix()] = digest(path)
+    metadata = json.loads(read_regular(package / ".codex-plugin/plugin.json"))
+    # These surfaces require plugin loading semantics, not a hooks override.
+    if (not isinstance(metadata, dict)
+            or set(metadata) - {"name", "version", "description", "author", "homepage", "repository",
+                                "license", "keywords", "skills", "interface"}
+            or metadata.get("skills", "./skills/") != "./skills/"
+            or any(name in files for name in (".mcp.json", ".app.json"))):
+        raise ValueError("unsupported plugin manifest override or non-hook component")
+    definition = json.loads(read_regular(package / "hooks/hooks.json"))
+    if not isinstance(definition, dict) or set(definition) != {"hooks"} or not isinstance(definition["hooks"], dict):
+        raise ValueError("unsupported hook definition")
+    projected = json.loads(json.dumps(definition["hooks"]))
+    sources = set()
+    for event, registrations in projected.items():
+        if event not in (*EVENTS, "SessionStart") or not isinstance(registrations, list) or not registrations:
+            raise ValueError("unsupported hook event or registrations")
+        for registration in registrations:
+            if not isinstance(registration, dict) or not isinstance(registration.get("hooks"), list) or not registration["hooks"]:
+                raise ValueError("unsupported hook registration")
+            for handler in registration["hooks"]:
+                if not isinstance(handler, dict) or handler.get("type") != "command":
+                    raise ValueError("only native Node command hooks can be projected")
+                command = handler.get("command", "")
+                match = re.fullmatch(r'node "\$\{PLUGIN_ROOT\}/(runtime/[A-Za-z0-9_.-]+\.cjs)"(?: --hook ([A-Za-z]+))?', command)
+                if not match or match[2] not in (None, event) or match[1] not in files:
+                    raise ValueError("unsupported native Node hook command or source")
+                sources.add(match[1])
+                # The core supplies its detected user shell. A quoted executable
+                # is a string in PowerShell until the call operator invokes it.
+                handler["command"] = ("& " if shell_kind == "powershell" else "") + '"' + node.as_posix() + '"' + command[len("node"):].replace("${PLUGIN_ROOT}", package.as_posix())
+    configuration = "hooks=" + _toml_value(projected)
+    return {"sourceConfigurationOnly": True, "marketplaceInstalled": False,
+            "definition": definition, "hooks": projected, "configuration": configuration,
+            "sourceFiles": sorted(sources), "packageFiles": dict(sorted(files.items())), "node": str(node),
+            "hookShell": str(shell), "shellKind": shell_kind,
+            "commandShellContract": "rust-v0.154.0: core TurnEnvironment user shell; PowerShell call operator or POSIX/cmd absolute invocation, not COMSPEC/SHELL fallback inference",
+            "claimLimit": "source configuration projection of native hooks only; no marketplace installation, implicit Skill registration or complete plugin acceptance"}
+
+
+def _verify_prepared_sources(manifest):
+    mode = _hook_mode(manifest)
+    for key, expected in manifest["sourceHashes"].items():
+        if digest(manifest[key], os_shell=key == "hookShell") != expected:
+            raise ValueError("prepared source changed; prepare a fresh observation: " + key)
+    if mode == "native-package-hooks" and _native_hook_projection(manifest["package"], manifest["node"]) != manifest.get("nativeHookProjection"):
+        raise ValueError("prepared package or native hook projection changed; prepare a fresh observation")
+    if mode == "native-package-hooks":
+        guide = manifest.get("entryGuide")
+        if (not isinstance(guide, str) or not guide.startswith("Accord task entry:")
+                or hashlib.sha256(guide.encode("utf-8")).hexdigest() != manifest.get("entryGuideSha256")):
+            raise ValueError("prepared entry guide changed")
+
+
+def _verify_native_stage(manifest, stage, thread_id):
+    _verify_prepared_sources(manifest)
+    case = json.loads(read_regular(manifest["case"]))
+    if type(stage) is not int or not 0 <= stage < len(case["stages"]):
+        raise ValueError("invalid native persistent stage")
+    raw = read_regular(Path(manifest["evidence"]) / f"prompt-{stage + 1}.txt")
+    prompt = case["stages"][stage]["prompt"]
+    if (hashlib.sha256(raw).hexdigest() != manifest["promptSha256s"][stage]
+            or raw != prompt.encode("utf-8") or manifest["prompts"][stage] != prompt):
+        raise ValueError("prepared stage prompt changed or differs from bound case")
+    if stage:
+        stream = read_regular(Path(manifest["evidence"]) / "stdout-1.jsonl", 32 * 1024 * 1024)
+        starts = [event.get("thread_id") for event in (json.loads(line) for line in stream.splitlines() if line.strip())
+                  if isinstance(event, dict) and event.get("type") == "thread.started"]
+        if len(starts) != 1 or not isinstance(starts[0], str) or not starts[0] or starts[0] != thread_id:
+            raise ValueError("resume thread id is not the uniquely observed initial source")
+    command = build_command(manifest, stage=stage, thread_id=thread_id)
+    expected = list(manifest["stageCommandTemplates"][stage])
+    if stage:
+        if expected[-2] != "__OBSERVED_NATIVE_THREAD_ID__":
+            raise ValueError("prepared stage command template changed")
+        expected[-2] = thread_id
+    if command != expected or (stage == 0 and command != manifest["initialCommand"]):
+        raise ValueError("prepared stage command changed")
+    return raw, command
+
+
 def _hook_configuration(manifest):
+    if _hook_mode(manifest) == "native-package-hooks":
+        return manifest["nativeHookProjection"]["configuration"]
     hooks = []
     for event in EVENTS:
         parts = [manifest["python"], "-B", manifest["runner"], "hook", "--evidence", manifest["evidence"], "--event", event]
@@ -226,6 +398,8 @@ def build_command(manifest, *, stage=0, thread_id=None):
     if protocol not in ("exec", "exec-resume"):
         raise ValueError("CLI command cannot represent an App Server case")
     hooks = _hook_configuration(manifest)
+    isolation = (["--ignore-user-config", "--disable", "plugins", "--disable", "apps"]
+                 if _hook_mode(manifest) == "native-package-hooks" else [])
     if protocol == "exec-resume":
         if type(stage) is not int or not 0 <= stage < len(manifest["prompts"]):
             raise ValueError("invalid persistent stage")
@@ -239,13 +413,13 @@ def build_command(manifest, *, stage=0, thread_id=None):
         if stage == 0:
             if thread_id is not None:
                 raise ValueError("initial persistent stage cannot resume a thread")
-            return [manifest["codex"], "exec", "--skip-git-repo-check", "--sandbox", "workspace-write",
+            return [manifest["codex"], "exec", *isolation, "--skip-git-repo-check", "--sandbox", "workspace-write",
                     "--json", "--color", "never", "--output-last-message", output,
                     "--dangerously-bypass-hook-trust", "-C", manifest["workspace"],
                     "--add-dir", str(Path(manifest["evidence"]) / "state"), *config, "-"]
         if not isinstance(thread_id, str) or not thread_id:
             raise ValueError("persistent resume requires the observed thread id")
-        return [manifest["codex"], "exec", "-C", manifest["workspace"],
+        return [manifest["codex"], "exec", *isolation, "-C", manifest["workspace"],
                 "--add-dir", str(Path(manifest["evidence"]) / "state"),
                 "resume", "--json", "--output-last-message", output,
                 "--dangerously-bypass-hook-trust", "--skip-git-repo-check", *config, thread_id, "-"]
@@ -276,6 +450,9 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     """
     if app_server_case is not None and persistent_case is not None:
         raise ValueError("choose one App Server or persistent CLI case")
+    native_hooks = getattr(args, "native_package_hooks", False)
+    if native_hooks and persistent_case is None:
+        raise ValueError("native package hooks require persistent exec-resume")
     if app_server_case is not None:
         if (not isinstance(app_server_case, dict) or set(app_server_case) != {"prompts", "expected", "limits"}
                 or not isinstance(app_server_case["prompts"], list) or not 1 <= len(app_server_case["prompts"]) <= 16
@@ -304,6 +481,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
         usage_caps = _usage_caps(case["limits"]["usageCaps"])
     evidence, workspace = Path(args.evidence).absolute(), Path(args.workspace).absolute()
     package = ordinary_dir(args.package)
+    projection = _native_hook_projection(package, args.node) if native_hooks else None
     if not args.model.strip() or not args.reasoning.strip():
         raise ValueError("explicit nonempty model and reasoning required")
     if args.windows_sandbox not in ("elevated", "unelevated"):
@@ -316,16 +494,18 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     paths = {"codex": Path(args.codex).resolve(), "node": Path(args.node).resolve(),
              "python": Path(sys.executable).resolve(), "runner": Path(__file__).resolve(),
              "runtime": package / "runtime/task-checkpoint.cjs"}
+    if native_hooks:
+        paths["hookShell"] = Path(projection["hookShell"])
     if persistent_case is not None:
         paths["case"] = case_path
         observer_key = ("coordinationObserver" if case["schema"] == "yiyuan-accord-coordination-case/v1"
                         else "scopedTaskObserver")
         paths[observer_key] = Path(__file__).with_name("inspect_coordination.py").resolve()
-    if any(any(c in str(p) for c in ('"', '\n', '\r', '%', '!', '`', '$', '&', '|', '<', '>', '^')) for p in (*paths.values(), evidence, workspace)):
+    if any(any(c in str(p) for c in ('"', '\n', '\r', '%', '!', '`', '$', '&', '|', '<', '>', '^')) for p in (*paths.values(), package, evidence, workspace)):
         raise ValueError("shell-sensitive path cannot be used in hook command")
     if os.name == "nt" and paths["codex"].suffix.lower() != ".exe":
         raise ValueError("bind the native codex.exe, not an npm shell wrapper")
-    hashes = {k: digest(p) for k, p in paths.items()}
+    hashes = {k: digest(p, os_shell=k == "hookShell") for k, p in paths.items()}
     protocol = "app-server" if app_server_case is not None else "exec-resume" if persistent_case is not None else "exec"
     help_protocol = "app-server" if protocol == "app-server" else "exec"
     help_run = subprocess.run([str(paths["codex"]), help_protocol, "--help"], capture_output=True, timeout=15)
@@ -333,6 +513,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     required = (("--ephemeral", "--ignore-user-config", "--dangerously-bypass-hook-trust", "--sandbox", "--output-last-message")
                 if protocol == "exec" else ("--dangerously-bypass-hook-trust", "--sandbox", "--output-last-message")
                 if protocol == "exec-resume" else ("app-server",))
+    if native_hooks:
+        required += ("--ignore-user-config", "--disable")
     if help_run.returncode or any(flag not in help_text for flag in required):
         raise ValueError("native CLI help does not support required boundary")
     resume_help = None
@@ -344,11 +526,14 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     version = subprocess.run([str(paths["codex"]), "--version"], capture_output=True, timeout=15)
     if version.returncode:
         raise ValueError("native version probe failed")
+    entry_guide = _entry_guide(paths["node"], paths["runtime"]) if native_hooks else None
     evidence.mkdir()
     workspace.mkdir()
     ordinary_dir(evidence)
     ordinary_dir(workspace)
     for name in ("hooks", "state", "temp"):
+        if name == "hooks" and native_hooks:
+            continue
         (evidence / name).mkdir()
     if persistent_case is not None:
         inputs = {name: ((json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8")
@@ -381,6 +566,11 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
                              "summary": {"ready_ids": ["A", "B"], "total_units": 140}}, "limits": LIMITS,
                 "docs": ["https://learn.chatgpt.com/docs/hooks", "https://learn.chatgpt.com/docs/config-file/config-reference",
                          "https://learn.chatgpt.com/docs/config-file/config-basic#windows-sandbox-mode"]}
+    manifest["hookMode"] = "native-package-hooks" if native_hooks else "checkpoint-wrapper"
+    if native_hooks:
+        manifest["nativeHookProjection"] = projection
+        manifest["entryGuide"] = entry_guide
+        manifest["entryGuideSha256"] = hashlib.sha256(entry_guide.encode("utf-8")).hexdigest()
     if protocol == "exec":
         manifest["promptSha256"] = digest(evidence / "prompt.txt")
         manifest["command"] = build_command(manifest)
@@ -404,6 +594,10 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
                                     "acceptance": "native execution receipt; business semantics and admission remain separate"},
                          "initialCommand": build_command({**manifest, "entryProtocol": protocol,
                                                           "prompts": [stage["prompt"] for stage in case["stages"]]})})
+        if native_hooks:
+            manifest["stageCommandTemplates"] = [build_command(manifest, stage=index,
+                thread_id="__OBSERVED_NATIVE_THREAD_ID__" if index else None)
+                for index in range(len(manifest["prompts"]))]
     else:
         manifest.update(app_server_case)
         manifest["entryProtocol"] = "app-server"
@@ -415,6 +609,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
 
 def hook(args):
     manifest = load_manifest(args.evidence)
+    if _hook_mode(manifest) == "native-package-hooks":
+        raise ValueError("native package hooks cannot use the checkpoint wrapper")
     if digest(manifest["runtime"]) != manifest["sourceHashes"]["runtime"]:
         raise ValueError("prepared runtime changed")
     raw = sys.stdin.buffer.read(1024 * 1024 + 1)
@@ -1166,9 +1362,56 @@ def persistent_cli_turn_receipt(stream, last_message, *, expected_thread_id=None
     return result
 
 
+def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
+    """Require the current input Hook's full guide before model activity.
+
+    Native role, hook provenance and turn identity prevent prior context or an
+    assistant echo from being mistaken for this turn's upstream participation.
+    This observes delivery, not semantic adoption or business completion.
+    """
+    result = {"valid": False, "decision": "not-observed", "threadId": thread_id,
+              "turnId": turn_id, "limit": "full native input guidance before model activity; not adoption or outcome acceptance"}
+    try:
+        rows = [json.loads(line) for line in stream.splitlines() if line.strip()]
+        metadata = [row["payload"] for row in rows if row.get("type") == "session_meta"]
+        if (len(metadata) != 1 or metadata[0].get("id") != thread_id
+                or os.path.normcase(os.path.abspath(metadata[0].get("cwd", ""))) != os.path.normcase(os.path.abspath(workspace))
+                or not isinstance(guide, str) or not guide.startswith("Accord task entry:")):
+            raise ValueError("native entry source binding differs")
+        starts = [i for i, row in enumerate(rows) if row.get("type") == "event_msg"
+                  and row.get("payload", {}).get("type") == "task_started"
+                  and row["payload"].get("turn_id") == turn_id]
+        if len(starts) != 1:
+            raise ValueError("native turn boundary unavailable")
+        for i in range(starts[0] + 1, len(rows)):
+            row, payload = rows[i], rows[i].get("payload", {})
+            if row.get("type") == "event_msg" and payload.get("type") == "task_started":
+                break
+            if row.get("type") != "response_item":
+                continue
+            if payload.get("type") in {"reasoning", "function_call", "custom_tool_call"} or payload.get("role") == "assistant":
+                break
+            origin = payload.get("internal_chat_message_metadata_passthrough") or {}
+            if (payload.get("role") != "developer" or origin.get("turn_id") != turn_id
+                    or "hooks.additional_context" not in origin.get("content_item_kinds", [])):
+                continue
+            text = "".join(item.get("text", "") for item in payload.get("content", []) if isinstance(item, dict))
+            if text.startswith(guide) and f"Native input receipt: session={thread_id}; epoch=" in text:
+                result.update(valid=True, decision="observed", line=i + 1,
+                              guideSha256=hashlib.sha256(guide.encode("utf-8")).hexdigest())
+                break
+    except (ValueError, UnicodeError, TypeError, KeyError, AttributeError):
+        result["decision"] = "unknown"
+    return result
+
+
 def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage=None):
+    native_hooks = _hook_mode(manifest) == "native-package-hooks"
+    bound_prompt, bound_command = _verify_native_stage(manifest, stage, thread_id) if native_hooks else (None, None)
     evidence = Path(manifest["evidence"])
     command = build_command(manifest, stage=stage, thread_id=thread_id)
+    if native_hooks and command != bound_command:
+        raise ValueError("prepared stage command changed before dispatch")
     prompt_path = evidence / f"prompt-{stage + 1}.txt"
     stdout_path = evidence / f"stdout-{stage + 1}.jsonl"
     stderr_path = evidence / f"stderr-{stage + 1}.txt"
@@ -1182,6 +1425,10 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
     stage_deadline = min(deadline, started + manifest["turnTimeoutSeconds"])
     try:
         with prompt_path.open("rb") as stdin, stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+            if native_hooks:
+                if stdin.read() != bound_prompt:
+                    raise ValueError("prepared stage prompt changed before dispatch")
+                stdin.seek(0)
             process = subprocess.Popen(command, cwd=manifest["workspace"], env=env, stdin=stdin,
                                        stdout=stdout, stderr=stderr,
                                        creationflags=subprocess.CREATE_NO_WINDOW | 4)
@@ -1279,6 +1526,27 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
                     "remainingOwnedProcesses": after["activeProcesses"], "samples": samples})
     receipt["valid"] &= (receipt["exitCode"] == 0 and not forced and failure is None
                          and receipt["remainingOwnedProcesses"] == 0)
+    if native_hooks:
+        entry = {"valid": False, "decision": "unknown"}
+        try:
+            stderr = read_regular(stderr_path, 32 * 1024 * 1024)
+            source = _session_configuration(stderr.splitlines())
+            turns = re.findall(rb"Sent prompt with event ID: ([0-9a-f-]{36})", stderr)
+            if (source is None or source["threadId"] != receipt["threadId"] or len(turns) != 1
+                    or os.path.normcase(os.path.abspath(source["cwd"])) != os.path.normcase(os.path.abspath(manifest["workspace"]))):
+                raise ValueError("native entry turn source unavailable")
+            sessions = Path(env.get("CODEX_HOME", str(Path.home() / ".codex"))) / "sessions"
+            rollout = _ordinary_rollout(source["rolloutPath"], sessions)
+            entry = native_entry_observation(read_regular(rollout, 32 * 1024 * 1024),
+                thread_id=receipt["threadId"], turn_id=turns[0].decode("ascii"),
+                workspace=manifest["workspace"], guide=manifest["entryGuide"])
+            entry["sourcePath"] = str(rollout)
+        except (OSError, ValueError, UnicodeError, TypeError, KeyError):
+            pass
+        receipt["entryObservation"] = entry
+        receipt["valid"] &= entry["valid"]
+        if not entry["valid"] and receipt["failure"] is None:
+            receipt["failure"] = "required-native-entry-not-observed"
     return receipt
 
 
@@ -1290,9 +1558,7 @@ def run_persistent(args):
     if manifest.get("entryProtocol") != "exec-resume":
         raise ValueError("persistent runner requires an exec-resume case")
     evidence = Path(args.evidence)
-    for key, expected in manifest["sourceHashes"].items():
-        if digest(manifest[key]) != expected:
-            raise ValueError("prepared source changed; prepare a fresh observation: " + key)
+    _verify_prepared_sources(manifest)
     for index, expected in enumerate(manifest["promptSha256s"]):
         if digest(evidence / f"prompt-{index + 1}.txt") != expected:
             raise ValueError("prepared prompt changed")
@@ -1309,37 +1575,53 @@ def run_persistent(args):
                    "nativeCliInvocationsAllowed": len(manifest["prompts"])}, receipt)
     env = dict(os.environ, YIYUAN_ACCORD_TASK_STATE_DIR=str(evidence / "state"),
                TEMP=str(evidence / "temp"), TMP=str(evidence / "temp"), RUST_LOG="error,codex_exec=info")
+    if _hook_mode(manifest) == "native-package-hooks":
+        env["PATH"] = str(Path(manifest["node"]).parent) + os.pathsep + env.get("PATH", "")
+        # Native core selects the user shell itself; COMSPEC/SHELL cannot force
+        # it. Keep its bound executable first in discovery without changing the
+        # user's persistent shell or environment configuration.
+        env["PATH"] = str(Path(manifest["hookShell"]).parent) + os.pathsep + env["PATH"]
     shared_config = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "config.toml"
     config_before = shared_config_snapshot(shared_config, manifest["workspace"])
     fixture = json.loads(read_regular(manifest["case"]))
     originals = observer.snapshot(manifest["workspace"], fixture["inputs"])
     save(evidence / "originals.json", originals)
     thread_id, stages, history, native_usage = None, [], {}, {}
-    for stage in range(len(manifest["prompts"])):
-        if time.monotonic() >= deadline:
-            break
-        observed = _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage)
-        stage_id = fixture["stages"][stage]["id"]
-        files = observer.inspect_stage(manifest["workspace"], stage_id, originals=originals,
-                                       history=history, fixture_path=manifest["case"])
-        retained = evidence / f"stage-{stage + 1}"
-        retained.mkdir()
-        try:
-            for name in files["files"]:
-                (retained / name).write_bytes(read_regular(Path(manifest["workspace"]) / name))
-        except (OSError, ValueError) as error:
-            files["decision"] = "unknown"
-            files["observationErrors"].append(str(error))
-        save(retained / "inspection.json", files)
-        history[stage_id] = files["files"]
-        save(evidence / "history.json", history)
-        observed["fileObservation"] = files
-        observed["valid"] &= files["decision"] == "pass"
-        stages.append(observed)
-        thread_id = observed.get("threadId") or thread_id
-        if not observed["valid"]:
-            break
-    config_after = shared_config_snapshot(shared_config, manifest["workspace"])
+    try:
+        for stage in range(len(manifest["prompts"])):
+            if time.monotonic() >= deadline:
+                break
+            if _hook_mode(manifest) == "native-package-hooks":
+                _verify_native_stage(manifest, stage, thread_id)
+            observed = _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage)
+            stage_id = fixture["stages"][stage]["id"]
+            files = observer.inspect_stage(manifest["workspace"], stage_id, originals=originals,
+                                           history=history, fixture_path=manifest["case"])
+            retained = evidence / f"stage-{stage + 1}"
+            retained.mkdir()
+            try:
+                for name in files["files"]:
+                    (retained / name).write_bytes(read_regular(Path(manifest["workspace"]) / name))
+            except (OSError, ValueError) as error:
+                files["decision"] = "unknown"
+                files["observationErrors"].append(str(error))
+            save(retained / "inspection.json", files)
+            history[stage_id] = files["files"]
+            save(evidence / "history.json", history)
+            observed["fileObservation"] = files
+            observed["valid"] &= files["decision"] == "pass"
+            stages.append(observed)
+            thread_id = observed.get("threadId") or thread_id
+            if not observed["valid"]:
+                break
+    finally:
+        config_after = shared_config_snapshot(shared_config, manifest["workspace"])
+        if _hook_mode(manifest) == "native-package-hooks":
+            # Retain poststate even when source drift or business inspection
+            # rejects continuation; process cleanup remains stage-owned.
+            save(evidence / "shared-config.json", {"before": config_before, "after": config_after,
+                "unchanged": (config_before["sha256"] == config_after["sha256"]
+                              if config_before["state"] == config_after["state"] == "observed" else None)})
     result = {"schema": "accord-codex-persistent-exec/v1", "episode": manifest["episode"],
               "threadId": thread_id, "stages": stages,
               "completedStages": sum(bool(stage["valid"]) for stage in stages),
@@ -1351,6 +1633,10 @@ def run_persistent(args):
                   "unchanged": (config_before["sha256"] == config_after["sha256"]
                                 if config_before["state"] == config_after["state"] == "observed" else None)},
               "claimLimit": "native persistent execution receipt only; business semantics and formal admission remain independently reviewed"}
+    result["hookMode"] = _hook_mode(manifest)
+    if result["hookMode"] == "native-package-hooks":
+        result["nativeHookProjection"] = {"sourceConfigurationOnly": True, "marketplaceInstalled": False,
+                                          "claimLimit": manifest["nativeHookProjection"]["claimLimit"]}
     save(evidence / "result.json", result)
     return result
 
@@ -1450,6 +1736,8 @@ def main():
         prep.add_argument("--" + name, required=True)
     prep.add_argument("--timeout", type=int, required=True, help="one invocation wall-clock cap, 1..900 seconds")
     prep.add_argument("--persistent-case", help="existing coordination case to run through native exec/resume")
+    prep.add_argument("--native-package-hooks", action="store_true",
+                      help="persistent CLI only: project all source Node hooks; isolate process config, not a marketplace-installed plugin")
     prep.add_argument("--turn-timeout", type=int, help="per-turn cap for a persistent case")
     prep.add_argument("--recovery-timeout", type=int, help="owned process recovery cap for a persistent case")
     prep.add_argument("--windows-sandbox", choices=("elevated", "unelevated"), required=True,

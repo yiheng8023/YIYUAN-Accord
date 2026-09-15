@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import shlex
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -190,19 +191,29 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(calls.call_args_list[1].args[0][-1], "--version")
         return entry.load_manifest(args.evidence)
 
-    def prepared_persistent(self, root, case_path=None):
+    def prepared_persistent(self, root, case_path=None, *, native_hooks=False):
         package = root / "package"
-        (package / "runtime").mkdir(parents=True)
-        (package / "runtime/task-checkpoint.cjs").write_text("// fixture", encoding="utf-8")
+        if native_hooks:
+            shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
+        else:
+            (package / "runtime").mkdir(parents=True)
+            (package / "runtime/task-checkpoint.cjs").write_text("// fixture", encoding="utf-8")
         args = argparse.Namespace(
             package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
-            codex=PYTHON, node=PYTHON, model="explicit-offline-model", reasoning="high",
-            timeout=600, turn_timeout=180, recovery_timeout=20, windows_sandbox="elevated")
+            codex=PYTHON, node=shutil.which("node") if native_hooks else PYTHON, model="explicit-offline-model", reasoning="high",
+            timeout=600, turn_timeout=180, recovery_timeout=20, windows_sandbox="elevated",
+            native_package_hooks=native_hooks)
         case_path = case_path or SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
-        help_exec = subprocess.CompletedProcess([], 0, b"--dangerously-bypass-hook-trust --sandbox --output-last-message", b"")
+        help_exec = subprocess.CompletedProcess([], 0, b"--dangerously-bypass-hook-trust --sandbox --output-last-message --ignore-user-config --disable", b"")
         help_resume = subprocess.CompletedProcess([], 0, b"--json --output-last-message --model", b"")
         version = subprocess.CompletedProcess([], 0, b"codex-cli fixture", b"")
-        with patch.object(entry.subprocess, "run", side_effect=[help_exec, help_resume, version]):
+        native_run = entry.subprocess.run
+        cli_results = iter([help_exec, help_resume, version])
+        def prepared_calls(command, **kwargs):
+            if native_hooks and Path(command[0]) == Path(args.node).resolve() and "-e" in command:
+                return native_run(command, **kwargs)
+            return next(cli_results)
+        with patch.object(entry.subprocess, "run", side_effect=prepared_calls):
             entry.prepare(args, persistent_case=entry.load_persistent_case(case_path))
         return entry.load_manifest(args.evidence)
 
@@ -276,6 +287,353 @@ class EntryTests(unittest.TestCase):
                 "totalTokens": 2500000, "uncachedInputTokens": 200000, "outputTokens": 14000})
             self.assertEqual(len(manifest["prompts"]), 5)
             self.assertEqual(json.loads((Path(manifest["workspace"]) / "source.json").read_text(encoding="utf-8"))["venue"], "A厅")
+
+    def test_native_package_hooks_preserve_all_registrations_and_isolate_exec_before_resume(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+            projection = manifest["nativeHookProjection"]
+            definition = json.loads((Path(manifest["package"]) / "hooks/hooks.json").read_text(encoding="utf-8"))
+            expected = json.loads(json.dumps(definition["hooks"]))
+            for registrations in expected.values():
+                for registration in registrations:
+                    for handler in registration["hooks"]:
+                        handler["command"] = ("& " if projection["shellKind"] == "powershell" else "") + '"' + Path(manifest["node"]).as_posix() + '"' + handler["command"][len("node"):].replace("${PLUGIN_ROOT}", Path(manifest["package"]).as_posix())
+            self.assertEqual(projection["definition"], definition)
+            self.assertEqual(projection["hooks"], expected)
+            self.assertEqual(len(expected["SessionStart"]), 2)
+            self.assertEqual(sum(len(r["hooks"]) for rows in expected.values() for r in rows), 6)
+            self.assertEqual(projection["sourceFiles"], ["runtime/accord-hook.cjs", "runtime/task-checkpoint.cjs"])
+            self.assertEqual(projection["packageFiles"], {
+                p.relative_to(Path(manifest["package"])).as_posix(): entry.digest(p)
+                for p in Path(manifest["package"]).rglob("*") if p.is_file()})
+            self.assertEqual(len(projection["packageFiles"]), 16)
+            self.assertTrue(projection["sourceConfigurationOnly"])
+            self.assertFalse(projection["marketplaceInstalled"])
+            self.assertFalse((Path(manifest["evidence"]) / "hooks").exists())
+            for command in (manifest["initialCommand"], entry.build_command(manifest, stage=1, thread_id="native-thread")):
+                self.assertNotIn("--ephemeral", command)
+                self.assertEqual(command[2:8], ["--ignore-user-config", "--disable", "plugins", "--disable", "apps", "-C"]
+                                 if "resume" in command else ["--ignore-user-config", "--disable", "plugins", "--disable", "apps", "--skip-git-repo-check"])
+                if "resume" in command:
+                    self.assertLess(command.index("--ignore-user-config"), command.index("resume"))
+                configuration = next(value for value in command if value.startswith("hooks="))
+                self.assertEqual(configuration, projection["configuration"])
+                if entry.tomllib is not None:
+                    self.assertEqual(entry.tomllib.loads(configuration)["hooks"], expected)
+                self.assertNotIn(" hook --evidence", configuration)
+                self.assertEqual(command[command.index("-m") + 1], manifest["model"])
+                self.assertIn('model_reasoning_effort="high"', command)
+            with self.assertRaisesRegex(ValueError, "cannot use the checkpoint wrapper"):
+                entry.hook(argparse.Namespace(evidence=manifest["evidence"], event="Stop"))
+
+    def test_native_projection_preserves_extra_fields_and_rejects_unsupported_surfaces(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared_persistent(root, native_hooks=True)
+            package = Path(manifest["package"])
+            hooks_path = package / "hooks/hooks.json"
+            definition = json.loads(hooks_path.read_text(encoding="utf-8"))
+            definition["hooks"]["SessionStart"][0]["customRegistration"] = {"enabled": True, "labels": ["a", "b"]}
+            definition["hooks"]["SessionStart"][0]["hooks"][0]["customHandler"] = "retained"
+            entry.save(hooks_path, definition)
+            projected = entry._native_hook_projection(package, manifest["node"])
+            if entry.tomllib:
+                self.assertEqual(entry.tomllib.loads(projected["configuration"])["hooks"], projected["hooks"])
+            self.assertEqual(projected["hooks"]["SessionStart"][0]["customRegistration"], {"enabled": True, "labels": ["a", "b"]})
+            for change in ("manifest-override", "mcp", "prompt-handler", "shell-command", "null-field", "unknown-event"):
+                metadata_path = package / ".codex-plugin/plugin.json"
+                original_metadata = metadata_path.read_bytes()
+                altered = json.loads(json.dumps(definition))
+                if change == "manifest-override":
+                    metadata = json.loads(original_metadata)
+                    metadata["hooks"] = "./other-hooks.json"
+                    entry.save(metadata_path, metadata)
+                elif change == "mcp":
+                    (package / ".mcp.json").write_text("{}", encoding="utf-8")
+                elif change == "prompt-handler":
+                    altered["hooks"]["Stop"][0]["hooks"][0]["type"] = "prompt"
+                elif change == "shell-command":
+                    altered["hooks"]["Stop"][0]["hooks"][0]["command"] += "; echo forged"
+                elif change == "null-field":
+                    altered["hooks"]["Stop"][0]["hooks"][0]["extra"] = None
+                elif change == "unknown-event":
+                    altered["hooks"]["Unknown"] = altered["hooks"]["Stop"]
+                entry.save(hooks_path, altered)
+                with self.subTest(change=change), self.assertRaises(ValueError):
+                    entry._native_hook_projection(package, manifest["node"])
+                metadata_path.write_bytes(original_metadata)
+                (package / ".mcp.json").unlink(missing_ok=True)
+
+    def test_native_package_drift_is_rejected_before_receipt_and_each_stage(self):
+        for mutation in ("runtime", "skill", "add", "delete", "projection"):
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest = self.prepared_persistent(root, native_hooks=True)
+                package = Path(manifest["package"])
+                if mutation == "runtime":
+                    (package / "runtime/codex-context.cjs").write_text("// changed", encoding="utf-8")
+                elif mutation == "skill":
+                    (package / "skills/deliver-demand-driven-outcome/SKILL.md").write_text("changed", encoding="utf-8")
+                elif mutation == "add":
+                    (package / "new.txt").write_text("new", encoding="utf-8")
+                elif mutation == "delete":
+                    (package / "NOTICE").unlink()
+                else:
+                    manifest["nativeHookProjection"]["hooks"]["SessionStart"].pop()
+                    entry.save(root / "evidence/manifest.json", manifest)
+                with self.subTest(mutation=mutation), patch.object(entry.subprocess, "Popen") as process:
+                    with self.assertRaisesRegex(ValueError, "prepared package"):
+                        entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+                    self.assertFalse((root / "evidence/run-started.json").exists())
+                    with self.assertRaisesRegex(ValueError, "prepared package"):
+                        entry._run_persistent_stage(manifest, 1, "native-thread", {}, time.monotonic() + 1)
+                    process.assert_not_called()
+
+    def test_native_execution_env_keeps_codex_home_and_bound_node_first(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared_persistent(root, self.scoped_case(root), native_hooks=True)
+            shared = root / "shared"
+            shared.mkdir()
+            (shared / "config.toml").write_text("model = 'private-offline'\n", encoding="utf-8")
+            (shared / "auth.json").write_text("must not read or copy", encoding="utf-8")
+            def execute(manifest, stage, thread, env, *_):
+                self.assertEqual(env["CODEX_HOME"], str(shared))
+                self.assertEqual(env["PATH"].split(os.pathsep)[:2], [str(Path(manifest["hookShell"]).parent), str(Path(manifest["node"]).parent)])
+                (Path(manifest["workspace"]) / "report.json").write_text('{"candidate":"abc"}', encoding="utf-8")
+                return {"valid": True, "threadId": "native-thread"}
+            ordinary_read = entry.read_regular
+            def no_auth_read(path, *args, **kwargs):
+                self.assertNotEqual(Path(path).name, "auth.json")
+                return ordinary_read(path, *args, **kwargs)
+            with patch.dict(os.environ, {"CODEX_HOME": str(shared), "PATH": "original-path"}), \
+                    patch.object(entry, "_run_persistent_stage", side_effect=execute), \
+                    patch.object(entry, "read_regular", side_effect=no_auth_read):
+                result = entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            self.assertTrue(result["caseComplete"])
+            self.assertTrue(result["sharedConfigObservation"]["unchanged"])
+            self.assertTrue(result["nativeHookProjection"]["sourceConfigurationOnly"])
+            self.assertEqual((shared / "auth.json").read_text(), "must not read or copy")
+            self.assertFalse(any(p.name == "auth.json" for p in (root / "evidence").rglob("*")))
+
+    def test_native_runner_rechecks_package_between_completed_stages(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+            observer = Mock()
+            observer.snapshot.return_value = {}
+            observer.inspect_stage.return_value = {"files": {}, "decision": "pass"}
+            def execute(*_):
+                (Path(manifest["package"]) / "runtime/codex-context.cjs").write_text("// changed after first turn", encoding="utf-8")
+                return {"valid": True, "threadId": "native-thread"}
+            with patch.object(entry, "coordination_observer", return_value=observer), \
+                    patch.object(entry, "_run_persistent_stage", side_effect=execute) as stage:
+                with self.assertRaisesRegex(ValueError, "prepared package"):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            self.assertEqual(stage.call_count, 1)
+            saved = json.loads((Path(manifest["evidence"]) / "shared-config.json").read_text(encoding="utf-8"))
+            self.assertIn("after", saved)
+
+    def test_native_stage_rejects_prompt_case_command_and_observed_thread_substitutions(self):
+        for mutation in ("prompt-file", "prompt-and-hash", "manifest-prompt", "model", "template", "thread", "duplicate-source"):
+            with tempfile.TemporaryDirectory() as tmp:
+                manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+                evidence = Path(manifest["evidence"])
+                source = {"type": "thread.started", "thread_id": "observed-source"}
+                (evidence / "stdout-1.jsonl").write_text(json.dumps(source) + "\n", encoding="utf-8")
+                raw, command = entry._verify_native_stage(manifest, 1, "observed-source")
+                self.assertEqual(raw, manifest["prompts"][1].encode("utf-8"))
+                self.assertEqual(command[-2:], ["observed-source", "-"])
+                thread_id = "observed-source"
+                if mutation in ("prompt-file", "prompt-and-hash"):
+                    (evidence / "prompt-2.txt").write_text("substituted prompt", encoding="utf-8")
+                    if mutation == "prompt-and-hash":
+                        manifest["promptSha256s"][1] = entry.digest(evidence / "prompt-2.txt")
+                elif mutation == "manifest-prompt":
+                    manifest["prompts"][1] = "substituted prompt"
+                elif mutation == "model":
+                    manifest["model"] = "different-model"
+                elif mutation == "template":
+                    manifest["stageCommandTemplates"][1][-2] = "hardcoded-other-thread"
+                elif mutation == "thread":
+                    thread_id = "unobserved-thread"
+                else:
+                    (evidence / "stdout-1.jsonl").write_text((json.dumps(source) + "\n") * 2, encoding="utf-8")
+                with self.subTest(mutation=mutation), patch.object(entry.subprocess, "Popen") as forbidden:
+                    with self.assertRaises(ValueError):
+                        entry._run_persistent_stage(manifest, 1, thread_id, {}, time.monotonic() + 1)
+                    forbidden.assert_not_called()
+
+    def test_native_runner_rechecks_next_prompt_after_first_completed_stage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+            observer = Mock()
+            observer.snapshot.return_value = {}
+            observer.inspect_stage.return_value = {"files": {}, "decision": "pass"}
+            def execute(*_):
+                evidence = Path(manifest["evidence"])
+                (evidence / "stdout-1.jsonl").write_text('{"type":"thread.started","thread_id":"observed-source"}\n', encoding="utf-8")
+                (evidence / "prompt-2.txt").write_text("drift after first turn", encoding="utf-8")
+                return {"valid": True, "threadId": "observed-source"}
+            with patch.object(entry, "coordination_observer", return_value=observer), \
+                    patch.object(entry, "_run_persistent_stage", side_effect=execute) as stage:
+                with self.assertRaisesRegex(ValueError, "prepared stage prompt"):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            self.assertEqual(stage.call_count, 1)
+
+    def test_native_stage_checks_the_opened_prompt_before_starting_a_process(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+            original = entry._verify_native_stage
+            def changed_after_verification(*args):
+                bound = original(*args)
+                (Path(manifest["evidence"]) / "prompt-1.txt").write_text("changed before stdin open", encoding="utf-8")
+                return bound
+            with patch.object(entry, "_verify_native_stage", side_effect=changed_after_verification), \
+                    patch.object(entry, "WindowsJob") as job, patch.object(entry.subprocess, "Popen") as forbidden:
+                job.return_value.sample.return_value = {"activeProcesses": 0}
+                receipt = entry._run_persistent_stage(manifest, 0, None, {}, time.monotonic() + 10)
+            self.assertFalse(receipt["valid"])
+            self.assertIn("prepared stage prompt changed before dispatch", receipt["failure"])
+            forbidden.assert_not_called()
+
+    def test_os_shell_hash_exception_does_not_accept_hardlinked_package_or_node(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            source = root / "node.exe"
+            source.write_bytes(b"ordinary test runtime")
+            os.link(source, root / "linked.exe")
+            for override in (False, True):
+                with self.subTest(os_shell=override), self.assertRaisesRegex(ValueError, "unsafe"):
+                    entry.digest(source, os_shell=override)
+
+    def test_native_node_projection_binds_an_absolute_renamed_executable(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared_persistent(root, native_hooks=True)
+            renamed = root / "runtime with spaces" / ("bound-runtime.exe" if os.name == "nt" else "bound-runtime")
+            renamed.parent.mkdir()
+            renamed.write_bytes(b"synthetic executable for projection only")
+            projected = entry._native_hook_projection(manifest["package"], renamed)
+            for registrations in projected["hooks"].values():
+                for registration in registrations:
+                    for handler in registration["hooks"]:
+                        self.assertTrue(handler["command"].startswith(("& " if projected["shellKind"] == "powershell" else "") + '"' + renamed.as_posix() + '" "'))
+                        self.assertFalse(handler["command"].startswith("node "))
+
+    def test_native_projection_executes_in_the_detected_user_shell(self):
+        node = shutil.which("node")
+        self.assertIsNotNone(node)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            runtime = root / 'runtime with spaces'
+            runtime.mkdir()
+            renamed = runtime / ('bound-runtime.exe' if os.name == 'nt' else 'bound-runtime')
+            shutil.copy2(node, renamed)
+            package = root / 'package'
+            (package / '.codex-plugin').mkdir(parents=True)
+            (package / 'hooks').mkdir()
+            (package / 'runtime').mkdir()
+            (package / '.codex-plugin/plugin.json').write_text('{"name":"test","version":"1"}', encoding='utf-8')
+            (package / 'runtime/check-runtime.cjs').write_text(
+                'console.log(JSON.stringify({execPath:process.execPath,args:process.argv.slice(2)}));', encoding='utf-8')
+            (package / 'hooks/hooks.json').write_text(json.dumps({'hooks': {'Stop': [{'hooks': [{
+                'type': 'command', 'command': 'node "${PLUGIN_ROOT}/runtime/check-runtime.cjs" --hook Stop'}]}]}}), encoding='utf-8')
+            (root / 'node.cmd').write_text('@echo shadow\r\nexit /B 91\r\n', encoding='utf-8')
+            projection = entry._native_hook_projection(package, renamed)
+            shell, kind = Path(projection['hookShell']), projection['shellKind']
+            command = projection['hooks']['Stop'][0]['hooks'][0]['command']
+            if kind == 'cmd':
+                actual = subprocess.run('"' + str(shell) + '" /C "' + command + '"', executable=str(shell),
+                    cwd=root, capture_output=True, timeout=10)
+            else:
+                args = ['-NoLogo', '-NoProfile', '-Command'] if kind == 'powershell' else ['-c']
+                actual = subprocess.run([str(shell), *args, command], cwd=root, capture_output=True, timeout=10)
+            self.assertEqual(actual.returncode, 0, actual.stderr)
+            observed = json.loads(actual.stdout)
+            self.assertEqual(Path(observed['execPath']).resolve(), renamed)
+            self.assertEqual(observed['args'], ['--hook', 'Stop'])
+
+    def test_native_entry_gate_rejects_absent_stale_echoed_truncated_and_late_guidance(self):
+        guide = 'Accord task entry: complete current source duties. '
+        thread, turn, workspace = 'thread', 'turn', str(Path.cwd())
+        core = {'type': 'response_item', 'payload': {'type': 'message', 'role': 'developer',
+            'internal_chat_message_metadata_passthrough': {'turn_id': turn, 'content_item_kinds': ['hooks.additional_context']},
+            'content': [{'type': 'input_text', 'text': guide + 'Native input receipt: session=thread; epoch=one.'}]}}
+        start = [{'type': 'session_meta', 'payload': {'id': thread, 'cwd': workspace}},
+                 {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': turn}}]
+        action = {'type': 'response_item', 'payload': {'type': 'custom_tool_call'}}
+        def check(rows, selected_turn=turn):
+            return entry.native_entry_observation('\n'.join(json.dumps(x) for x in rows),
+                thread_id=thread, turn_id=selected_turn, workspace=workspace, guide=guide)
+        self.assertTrue(check([*start, core, action])['valid'])
+        self.assertFalse(check([*start, action])['valid'])
+        self.assertFalse(check([*start, action, core])['valid'])
+        self.assertFalse(check([*start, core, action], 'another-turn')['valid'])
+        for mutation in ('assistant', 'stale', 'truncated'):
+            altered = json.loads(json.dumps(core))
+            if mutation == 'assistant':
+                altered['payload']['role'] = 'assistant'
+            elif mutation == 'stale':
+                altered['payload']['internal_chat_message_metadata_passthrough']['turn_id'] = 'earlier-turn'
+            else:
+                altered['payload']['content'][0]['text'] = 'Accord task entry: Native input receipt: session=thread; epoch=one.'
+            self.assertFalse(check([*start, altered, action])['valid'], mutation)
+
+    if os.name == "nt":
+        def test_windows_native_cmd_runs_bound_renamed_node_despite_cwd_shadow(self):
+            node = shutil.which("node")
+            self.assertIsNotNone(node)
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                runtime = root / "runtime with spaces"
+                runtime.mkdir()
+                renamed = runtime / "bound-runtime.exe"
+                shutil.copy2(node, renamed)
+                workspace = root / "work"
+                workspace.mkdir()
+                (workspace / "node.cmd").write_text("@echo shadow\r\nexit /B 91\r\n", encoding="utf-8")
+                source = workspace / "check-runtime.cjs"
+                source.write_text("console.log(JSON.stringify({execPath:process.execPath,args:process.argv.slice(2)}));", encoding="utf-8")
+                shell = Path(os.environ.get("SystemRoot", "C:/Windows")) / "System32/cmd.exe"
+                # Reproduce command_runner.rs's raw_arg, without list2cmdline/shlex:
+                # cmd receives /C followed by an extra outer quote pair around the
+                # already quoted absolute executable and its quoted source argument.
+                command = '"' + renamed.as_posix() + '" "' + source.as_posix() + '" --hook Stop'
+                actual = subprocess.run('"' + str(shell) + '" /C "' + command + '"', executable=str(shell),
+                    cwd=workspace, capture_output=True, timeout=10)
+                self.assertEqual(actual.returncode, 0, actual.stderr)
+                observed = json.loads(actual.stdout)
+                self.assertEqual(Path(observed["execPath"]).resolve(), renamed)
+                self.assertEqual(observed["args"], ["--hook", "Stop"])
+
+    def test_native_prepare_rejects_missing_exec_configuration_isolation_before_creating_roots(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            package = root / "package"
+            shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
+            args = argparse.Namespace(package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
+                codex=PYTHON, node=PYTHON, model="explicit-offline-model", reasoning="high", timeout=600,
+                turn_timeout=180, recovery_timeout=20, windows_sandbox="elevated", native_package_hooks=True)
+            unsupported = subprocess.CompletedProcess([], 0, b"--dangerously-bypass-hook-trust --sandbox --output-last-message", b"")
+            with patch.object(entry.subprocess, "run", return_value=unsupported) as native:
+                with self.assertRaisesRegex(ValueError, "required boundary"):
+                    entry.prepare(args, persistent_case=entry.load_persistent_case(SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"))
+            self.assertEqual(native.call_count, 1)
+            self.assertFalse((root / "evidence").exists())
+            self.assertFalse((root / "work").exists())
+
+    def test_hook_mode_validation_rejects_unknown_or_nonpersistent_native_projection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared(Path(tmp).resolve())
+            for mode in ("unknown", "native-package-hooks"):
+                manifest["hookMode"] = mode
+                entry.save(Path(manifest["evidence"]) / "manifest.json", manifest)
+                with self.subTest(mode=mode), self.assertRaises(ValueError):
+                    entry.load_manifest(manifest["evidence"])
+                with self.assertRaises(ValueError):
+                    entry.build_command(manifest)
+            with self.assertRaisesRegex(ValueError, "require persistent"):
+                entry.prepare(argparse.Namespace(native_package_hooks=True))
 
     def test_persistent_cli_receipt_requires_same_thread_completed_terminal_and_final(self):
         events = [
