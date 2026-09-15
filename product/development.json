@@ -253,7 +253,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
           "execution": "本地交互或云端委派",
           "environment": "编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。",
-          "observation": "2026-09-15只读刷新：openai.chatgpt扩展26.908.40401，自带windows-x86_64/codex.exe为0.154.0-alpha.6.2，当前无Code进程；不能当作桌面正在使用的0.154.0同一构建。9月12日真实插件管理、市场/Hook界面及普通交付保留原条件；通用插件文档的不支持表述与该本机观察仍冲突。当前包的实际加载、权限/Hook参与及退出须按这个入口的实际后端核对。",
+          "observation": "2026-09-15已使用Computer Use实际打开IDE的Codex插件与Hook设置，用户随后停止自动操作并改为手动配合。原详情3.2.1来自固定v3.2.1的Git市场，缓存当时仍是旧A5开发包；现按用户要求将本市场切至1429f2a并原生重装，13文件匹配cc3243ea，名称YIYUAN Accord、版本3.3.0-dev.1。用扩展自带0.154.0-alpha.6.2新进程确认6项Hook启用/受信任及Skill启用，只有新增恢复Hook补了用户级信任；测试模型/权限与工作区已准备，等待用户新IDE聊天实际执行。此次不代验GUI任务已加载、Hook已执行或交付完成。",
           "currentEffect": "unverified"
         },
         {
