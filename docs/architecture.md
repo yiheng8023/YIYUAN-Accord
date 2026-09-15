@@ -81,9 +81,13 @@ records this code observation and its limits; no deletion experiment was run.
 ### Current candidate and scoped connections
 
 The current Codex package targets `3.3.0-dev.1`; versioning is not publication
-evidence. It exposes one host Skill, the existing resume/compact hint, and a Node task checkpoint
-connected to supported UserPromptSubmit, Stop and SessionEnd events. Codex also
-connects Interrupt. The Agent binds necessary file inputs, output predicates and
+evidence. It exposes one coordinator Skill with conditional references, shared
+core duties through native startup/clear and UserPromptSubmit, resume/compact
+recovery guidance, and a Node task checkpoint. Startup/clear guidance requires no
+task-state access; necessary participation does not depend on selecting the Skill.
+The checkpoint connects UserPromptSubmit, Stop, SessionEnd and Interrupt. These
+connections establish available mechanisms, not demonstrated ordinary-task adoption
+or end-to-end completion. The Agent binds necessary file inputs, output predicates and
 the next authorized action against the current native input receipt. The helper
 checks actual file hashes and specified JSON facts, detects stale inputs, and
 can request native continuation when results remain unmet. An unchanged failure
@@ -183,9 +187,10 @@ AGENTS.md files are external conditions, not a delivered dependency or a
 substitute for Accord's responsibility.
 
 The current package supplies its entry and recovery duties through supported
-native events, without requiring user or project instruction files. An isolated
-no-model native probe with no `AGENTS.md` confirmed those connections, including
-retained input and renewed recovery hints after native context renewal. This
+native events, without requiring user or project instruction files. The historical
+2026-09-11 isolated no-model probe with no `AGENTS.md` confirmed the source-Hook
+entry/recovery variant it bound, including retained input and renewed recovery
+hints after native context renewal; it does not validate every later entry variant. This
 does not prove autonomous restoration or a complete user outcome. The earlier
 Windows probe lacked an enabled sandbox backend, so managed read-only permissions
 with approval disabled could not admit the command. With a real restricted-token
