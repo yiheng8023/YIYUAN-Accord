@@ -323,7 +323,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex-sdk",
           "execution": "调用方与目标 Codex 执行器",
           "environment": "SDK、协议与直接模型 API 不等同；版本、身份、配置及会话路由需绑定。",
-          "observation": "较早0.153.4/dev.7本地App Server记录保留原身份。2026-09-15公开观察器已从Windows Job扩展POSIX session/process-group，CI34927715779在macOS和Linux使用官方CLI0.154.0与cc3243ea包各完成一条固定本地响应的生命周期链；7段App Server、6条原生命令及独立回读通过，真实模型0。直接进程退出、同进程组消失及五个owned root回收已观察，逃逸后代/CPU/RAM仍unknown，不等价Windows Job完整子树。安装13文件散列全部匹配，Hook/Skill加载信任、中断/恢复、更新失败保护及卸载/未完状态保存得到有界事实。artifact默认漏收隐藏manifest已记录并修正后续上传，旧原件不改。现有两个SDK子范围仍按原包/Windows条件保留；新增平台机制不直接取得其准入，不代验Xcode GUI、SDK库、普通自主交接、云端或完整入口。",
+          "observation": "较早0.153.4/dev.7本地App Server记录保留原身份。2026-09-15公开观察器已从Windows Job扩展POSIX session/process-group，CI34927715779在macOS和Linux使用官方CLI0.154.0与cc3243ea包各完成一条固定本地响应的生命周期链；7段App Server、6条原生命令及独立回读通过，真实模型0。直接进程退出、同进程组消失及五个owned root回收已观察，逃逸后代/CPU/RAM仍unknown，不等价Windows Job完整子树。安装13文件散列全部匹配，Hook/Skill加载信任、中断/恢复、更新失败保护及卸载/未完状态保存得到有界事实。首份artifact默认漏收隐藏manifest已记录且旧原件不改；bf00a77/CI34928079618修正上传后两平台同链通过，Root下载回读确认各13文件快照完整且与预绑/安装散列一致。现有两个SDK子范围仍按原包/Windows条件保留；新增平台机制不直接取得其准入，不代验Xcode GUI、SDK库、普通自主交接、云端或完整入口。",
           "currentEffect": "unverified"
         },
         {
