@@ -81,11 +81,13 @@ Agent 执行入口承担生产交付主线。入口先经过下述适用性判�
 
 当前Codex CLI、Desktop及已绑定App Server工作继续，保持各自原有角色和证据边界；ChatGPT Work与Codex云端具备官方执行能力依据，保留为适用性待判候选，不因官方能力自动承诺Accord全链路支持。2026-09-10核对的[网页模式说明](https://learn.chatgpt.com/docs/web)、[Work执行机制](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview)、[Codex云端](https://learn.chatgpt.com/docs/cloud)及[插件机制](https://learn.chatgpt.com/docs/plugins)支持这些区分；网页安装不会部署Hook脚本，只是当前包直接复用的前提差异。所有已纳入目标入口的可编辑、可使用功能、按钮和设置仍须完整核对。
 
-2026-09-15将现有工作明确为职责分工：CLI承担本地普通业务交付；App Server承担协议、持久状态和生命周期连接，不因接口不同再复制业务试验。Desktop和VS Code继续纳入开发；核实相同后端后复用有效核心语义，补验各自加载、Hook/Skill参与、有效设置、权限、交互及退出差异，版本不同时重审受影响机制。JetBrains/Xcode、Work/云端及外部触发入口的必要条件仍待判；普通Chat/移动仅考虑实际承担的辅助或转交职责，不能从移动界面推断执行能力。该分工不构成最终交付集合或当前包通过；先补入口适用性，再确定父级交付/生命周期需要覆盖的组合。已绑定SDK子范围可独立保留，未绑定父级阻止的是整项完成，不能据此反复重跑子范围。
+2026-09-15将现有工作明确为职责分工：CLI承担本地普通业务交付；App Server承担协议、持久状态和生命周期连接，不因接口不同再复制业务试验。Desktop和VS Code继续纳入开发；核实相同后端后复用有效核心语义，补验各自加载、Hook/Skill参与、有效设置、权限、交互及退出差异，版本不同时重审受影响机制。JetBrains/Xcode、Work/云端及外部触发入口的必要条件仍待判；普通Chat/移动仅考虑实际承担的辅助或转交职责，不能从移动界面推断执行能力。该分工不构成最终交付集合或当前包通过；先补入口适用性，再确定父级交付/生命周期需要覆盖的组合。已绑定SDK子范围可独立保留，父级尚未准入阻止的是整项完成，不能据此反复重跑子范围。
 
 同日限定复核补足可行路线的事实：[Codex云环境](https://learn.chatgpt.com/docs/environments/cloud-environment)提供仓库检出、初始化与缓存维护通道；本项目现有环境仍绑定改名后的仓库和/workspace/YIYUAN-Accord，界面为universal、自动初始化、Agent网络关闭、缓存开启，三项历史任务保留。只读核对没有启动任务、连接终端或修改环境；这些设置不证明当前包已加载。[Work云端](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-cloud-security)由平台管理运行环境，不直接继承设备文件和会话；[插件说明](https://learn.chatgpt.com/docs/plugins)明确网页安装不部署Hook脚本。因此分别比较仓库/任务文件引入、现成执行器状态与获准的工具连接，未验证前不声称本地包可原样运行，也不直接排除云端。
 
 [JetBrains当前官方说明](https://www.jetbrains.com/help/ai-assistant/codex-agent.html)明确支持Skill、AGENTS.md和经设置传入的MCP，以及自己的权限/模式与上下文显示；这提供了复用或组合的候选路线，尚未证明Accord Hook参与。OpenAI的[IDE说明](https://learn.chatgpt.com/docs/codex/ide)区分VS Code兼容扩展与JetBrains/Xcode自有集成，不能跨集成直接借用证据。通用插件页仍称IDE不支持插件，与既有本机VS Code实测冲突继续保留；按实际构建和功能区分处理，不回退为统一排除。上述来源复核不是完整支持声明或新增安装授权。
+
+9月15日补核三项具体路线，继续沿现有职责判断，不另造执行器：[Apple文档](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)明确Xcode专用Codex配置根、命令/工具权限与Skill/MCP/插件组件导入；可比较复用现有包，Hook和恢复仍待核。[移动Remote](https://learn.chatgpt.com/docs/remote-connections)使用连接桌面主机的任务、文件、插件与权限，应复用主机执行链并验证远端输入/审批/断线重连，不能把移动端一律当普通Chat，也不宣称手机本地执行。[Slack](https://learn.chatgpt.com/docs/third-party/slack)和[Linear](https://learn.chatgpt.com/docs/third-party/linear)触发Codex云任务，可共用云执行基础，分别补来源、选仓、续接及回传权限差异；这不代验GitHub/GitLab。本轮仅查官方来源，未安装、连接、配对或发送消息；这些可行组件尚不证明整条Accord职责路线完成，原待判状态不冒充最终支持。
 
 验收沿用A01–A08：A02先核验候选处置、已纳入入口集合和对应依据，再绑定该集合的普通交付与生命周期；A01/A03/A06核验实际承诺，A08检查组合后的完整性与净影响。三个父范围现已定义，保留17个必要claim/scope及全部质量底线。观察载体entry与被验入口subjectEntries分开：适用性覆盖当前全部11个OpenAI入口，后两范围严格对应同一选定集合，结果按入口逐项核对。当前4项selected表示继续纳入开发，其余7项pending，selectionFinal=false；这三项因此尚不能准入，定义数量增加不计为通过。待判不等于不适用；没有集合的有效最终判断与实际证据，整体资格仍不成立。
 
