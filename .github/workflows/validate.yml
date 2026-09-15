@@ -132,6 +132,7 @@ jobs:
           name: native-lifecycle-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14
           if-no-files-found: error
+          include-hidden-files: true
           path: |
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/*.json
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/inspection.stderr.txt

@@ -48,6 +48,12 @@ Plan/Goal不构成完整交付的前置条件；仅在用户明确选择或请�
 
 ## 当前路线与下一实际动作
 
+用户明确接受跨额度重置周期继续，额度不改变功能和质量底线；没有本地Mac不作为搁置macOS/Xcode适配的理由。本轮实际补上公开生命周期观察器的POSIX进程控制，复用原有prepare/run/inspect及固定本地响应，未新增准入层或调度器。已合入7a550b8；Windows相关61项、WSL/Linux65项通过且无skip，四项仅POSIX适用的实进程测试按平台发现，原Windows测试和最低数量不变。开发/产品/Codex静态校验与actionlint通过，插件13文件cc3243ea不变。
+
+CI34927715779的macOS和Linux原生生命周期两job均通过，分别取得7段App Server记录、6条原生命令、4次固定响应；真实模型调用0。安装文件散列与当前13文件完全相同，加载/信任、SessionEnd对照、Interrupt/resume、失败更新保护、卸载及未完状态保存均在既定有界episode中回读。每段直接进程退出0、同进程组已不存在、五个owned root回收、保护文件保持；POSIX的逃逸后代和CPU/RAM不可由此证明，activeProcesses保持unknown，不能平移为Windows Job完整子树或Xcode GUI证据。原始artifact和独立本地回读保存在accord-posix-lifecycle-20260915；上传器默认遗漏source-package/.codex-plugin/plugin.json已如实记录，原artifact未改写，精确Git原件与预绑/安装散列相符；CI已补include-hidden-files以保全后续完整快照。九组合常规回归与修正后CI按最新运行状态核对，不由两job通过宣布整个CI或发布通过。
+
+下一实际工作先核对修正后的CI回执与资源后态，继续沿官方Xcode专用配置/插件通道和已有macOS原生执行基础补集成差异，兼顾原有连续性及其余范围；没有缺口前不再造执行器。自动连续性scope仍未绑定：现有固定阶段exec/resume不能证明主Agent自主择时交权与失败回退，本轮没有为凑定义数量新增一层事前绑定框架，也没有把主持者推动升级为自主行为。
+
 用户指出“继续至”仍显示harness；已查到VSCode globalStorage中persisted-atom-state/environment保留旧对象。当前客户端仅在选中ID失效时自动替换，因此环境改名但ID未变会留旧名称。GitHub旧/新地址实读均返回仓库1304939826；经用户在现有列表重选Accord并切回本地，环境ID6a870b3542cc819199cff184a2e06f37不变，label、repo name/full_name及clone_url均已回读为Accord。未改数据库、重建云环境、删除历史或请求云任务，具体回执在accord-entry-applicability-20260915/environment-name-refresh.json。此问题已关闭，不再重演；历史harness身份仍按原边界保留。
 
 用户已纠正详情页可打开，当时的旧版本与Hook就绪问题已处理。已查明市场固定在v3.2.1标签，native upgrade无变化符合该固定引用；按用户要求通过原生marketplace remove/add切到精确1429f2a，再plugin add安装当前cc3243ea。13个缓存文件逐项匹配、显示名YIYUAN Accord、版本3.3.0-dev.1。执行前已读到用户将全局选择改为enabled=true，保留此最新选择，不恢复早前停用。IDE后端0.154.0-alpha.6.2回读6Hook，原5项trusted、新增resume/compact项untrusted；仅补该项当前hash后新进程确认6项enabled/trusted，Skill亦enabled。宿主配置API拒绝项目文件写入；模型/权限使用标准项目配置文件，Hook信任按原生规则写用户配置，未扩大到其它插件。用户配置变更仅为本市场ref、测试目录trust和新增Hook信任。

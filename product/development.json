@@ -323,7 +323,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex-sdk",
           "execution": "调用方与目标 Codex 执行器",
           "environment": "SDK、协议与直接模型 API 不等同；版本、身份、配置及会话路由需绑定。",
-          "observation": "2026-09-06：较早的 0.153.4 本地 App Server 零模型探测仅观察到 standalone Skill 临时暴露及撤销。随后使用既有认证、精确 dev.7 安装包运行直接 App Server 双轮诊断，完成 140→60，原生目录列出准确 Skill，但未观察到正文读取；详见 codex-installed-dev7-and-recovery。未安装或测试 SDK 库，未完成整项职责、完整生命周期或云端验收。",
+          "observation": "较早0.153.4/dev.7本地App Server记录保留原身份。2026-09-15公开观察器已从Windows Job扩展POSIX session/process-group，CI34927715779在macOS和Linux使用官方CLI0.154.0与cc3243ea包各完成一条固定本地响应的生命周期链；7段App Server、6条原生命令及独立回读通过，真实模型0。直接进程退出、同进程组消失及五个owned root回收已观察，逃逸后代/CPU/RAM仍unknown，不等价Windows Job完整子树。安装13文件散列全部匹配，Hook/Skill加载信任、中断/恢复、更新失败保护及卸载/未完状态保存得到有界事实。artifact默认漏收隐藏manifest已记录并修正后续上传，旧原件不改。现有两个SDK子范围仍按原包/Windows条件保留；新增平台机制不直接取得其准入，不代验Xcode GUI、SDK库、普通自主交接、云端或完整入口。",
           "currentEffect": "unverified"
         },
         {
