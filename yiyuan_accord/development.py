@@ -78,7 +78,7 @@ def _strings(value, *, empty=False):
             and len(value) == len(set(value)))
 
 
-def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False):
+def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False):
     """Describe this development package, not a mandatory product mechanism."""
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
@@ -103,6 +103,16 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
         },
     }
     if adapter_id == "codex" and development_schema == V5_SCHEMA:
+        if carrier_handoff:
+            contract["optionalCarrierHandoff"] = {
+                "entry": "runtime/carrier-handoff.cjs",
+                "kind": "caller-injected-native-adapter",
+                "prerequisites": ["host-path-node", "surviving-authorized-app-server-controller",
+                    "bounded-ordered-native-transport", "durable-scope-aware-cas-recorder",
+                    "independent-current-authority-and-effect-verifier"],
+                "effect": "quiesce-source; fresh-read-only-intake; verified-writer-transfer; bounded-continuation; verified-source-unsubscribe",
+                "limits": "no-process-or-hook-startup; no-automatic-timing-or-default-Desktop-control; no-goal-activation; no-archive-or-delete; ambiguous-effects-require-reconciliation; unsubscribe-is-not-unload",
+            }
         contract["entry"] = "direct-native-input-duties"
         contract["ordinaryPrerequisites"] = [
             "host-path-node", "supported-native-task-hooks",

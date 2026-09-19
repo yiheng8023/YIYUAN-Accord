@@ -440,7 +440,7 @@ def activation_mechanism_errors(
     root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
     task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
     resume_reconciliation=False, context_reentry=False, native_context=False,
-    startup_entry=False,
+    startup_entry=False, carrier_handoff=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -474,6 +474,18 @@ def activation_mechanism_errors(
             errors.append(f"{prefix} native-context module is unreadable")
     if task_checkpoint:
         additional_mechanisms = [*additional_mechanisms, checkpoint_locator]
+    if carrier_handoff:
+        handoff_locator = f"plugins/yiyuan-accord-{package}/runtime/carrier-handoff.cjs"
+        additional_mechanisms = [*additional_mechanisms, handoff_locator]
+        try:
+            handoff_path = repository_relative_path(root, handoff_locator)
+            canonical_handoff = repository_relative_path(root, "runtime/carrier-handoff.cjs")
+            if (adapter_id != "codex" or handoff_path is None or canonical_handoff is None
+                    or handoff_path.is_symlink() or canonical_handoff.is_symlink()
+                    or _owned_bytes(handoff_path) != _owned_bytes(canonical_handoff)):
+                errors.append(f"{prefix} carrier-handoff module differs from canonical bytes")
+        except OSError:
+            errors.append(f"{prefix} carrier-handoff module is unreadable")
     if mechanism_locators != expected_locators + list(additional_mechanisms):
         return errors + [f"{prefix} activation mechanism locator is invalid"]
     path = repository_relative_path(root, mechanism_locators[0])
@@ -710,6 +722,12 @@ def validate_host_projection(
         expected_shape |= {"startupEntry"}
         if type(projection["startupEntry"]) is not bool:
             errors.append(f"{prefix} startup entry declaration must be boolean")
+    if "carrierHandoff" in projection:
+        expected_shape |= {"carrierHandoff"}
+        if type(projection["carrierHandoff"]) is not bool:
+            errors.append(f"{prefix} carrier handoff declaration must be boolean")
+        if projection["carrierHandoff"] and not (expected_contract and "optionalCarrierHandoff" in expected_contract):
+            errors.append(f"{prefix} carrier handoff is outside the declared adapter")
     if adapter_id not in ("codex", "claude-code") or not _exact(projection, expected_shape):
         errors.append(f"{prefix} program projection shape is invalid")
     manifest_locator, marketplace_locator = projection.get("manifest"), projection.get("marketplace")
@@ -795,6 +813,7 @@ def validate_host_projection(
         context_reentry=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("contextReentry")),
         native_context=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("nativeContext")),
         startup_entry=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("startupEntry")),
+        carrier_handoff=bool(expected_contract and expected_contract.get("optionalCarrierHandoff")),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,

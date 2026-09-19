@@ -1225,6 +1225,7 @@ class DevelopmentDeliveryTests(unittest.TestCase):
             ("plugins/yiyuan-accord-codex/hidden-state.txt", b"undeclared", "undeclared"),
             ("plugins/yiyuan-accord-codex/LICENSE", b"changed license", "LICENSE"),
             ("plugins/yiyuan-accord-codex/runtime/codex-context.cjs", b"changed module", "canonical bytes"),
+            ("plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs", b"changed handoff", "canonical bytes"),
         ):
             declaration = copy.deepcopy(self.contract)
             if locator not in declaration["changeBoundary"]["allowedPaths"]:

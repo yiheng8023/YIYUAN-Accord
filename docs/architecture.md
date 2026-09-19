@@ -334,6 +334,77 @@ useful continuation after healthy automatic compaction. The latter exercises the
 permitted same-carrier branch; no newly necessary forced migration was observed.
 The former verifies receipt, transfer of writing responsibility and actual work,
 not autonomous detection. Prior user rescue remains a failed autonomous result.
+
+### Host-owned native handoff
+
+The optional `runtime/carrier-handoff.cjs` ships with the Codex package and exports
+`handoff(plan, {transport, recorder, verify})`. It creates no process, Hook,
+scheduler, account or connection. A surviving authorized integration must already
+own the source and destination execution and supply three capabilities:
+
+- `transport`: a fixed controller/connection identity and host version, bounded
+  native `request` and exact ordered `waitTerminal` callbacks. These are receiver-free
+  or pre-bound; declaration checks cannot authenticate hidden routing. Reconnection
+  requires reconciliation. Retain raw requests/responses correlated with transfer
+  and recorder revision.
+- `recorder`: durable atomic scope ownership, not just one record per transfer.
+  `begin(id, digest, state)` compares the already-authorized source writer and excludes
+  an in-flight transfer for `scopeRef`, returning a created revision and a lease
+  `{scopeRef, transferId, token, writerThreadId}`. `compareAndSet(id, revision,
+  nextState, expectedLease)` checks both transfer revision and scope lease atomically
+  and returns the new revision/lease. Target ownership persists after handoff.
+  Cooperating controllers share this authority; it is not an OS lock. The host owns
+  recovery reads, protected storage and retirement of completed records.
+- `verify(stage, facts, deadline)`: independent current authority, state, effects,
+  mode/budget compatibility and writer checks. An allowance echoes `authorityRef`,
+  `stateRef`, `scopeRef`, a sourced `sourceRef` and `sourceRecoveryReady: true`.
+  A boolean or reference from an untrusted party is not proof.
+
+The plan binds those references, source thread/optional active turn, destination
+cwd/model/optional provider, handoff text, first bounded continuation input and
+sandbox policy, and work/recovery deadlines. UTC millisecond input deadlines convert
+once to `performance.now()` budgets. Callback deadlines use this Node monotonic
+domain; a process bridge translates remaining duration to its own clock. Timeout
+means uncertain effects, not cancellation or retry rights.
+
+Intent is recorded before native effects. The adapter quiesces the exact source
+turn and uses `thread/start` for a persistent fresh target, then checks actual
+settings/effects before intake. Every intake requests native filesystem read-only
+policy. The `accepted` verifier may request sourced `additionalInput` using
+`decision: "request-context"`; current references, source idleness and intake effects
+remain required. Extra rounds retain the source writer and original budgets. Final
+acceptance allows an atomic writer transfer and a separately verified bounded
+continuation. Only then does source `thread/unsubscribe` run. Its positive receipt
+proves subscription release, not unload, deletion or resource savings.
+
+Filesystem read-only does not constrain every Hook, MCP, network or host effect.
+`prepare` requires `targetInitializationSafe`; `target-created` requires
+`targetSettingsMatch` and `initializationEffectsVerified`; each accepted intake
+requires `intakeEffectsVerified`. Other gates require their declared quiescence,
+acceptance, single-writer and effect predicates. Unknown exposure holds dependent
+actions. These host checks also cover user-selected modes; the adapter never enables
+Goal or Plan. The payload and scope lease may contain sensitive task data, so the
+recorder must protect them rather than publish routine diagnostics.
+
+Recorder/binding uncertainty prevents further state or native mutations. An unknown
+native request prevents another native action; a still-known recorder may preserve
+its unresolved intent for reconciliation. A known
+owned target turn may be stopped inside the original recovery budget only while
+ownership and routing remain known. Late, malformed or rejected results preserve
+the plan, known identities and unresolved effect for the surviving caller; they
+never permit blind replay, writer rollback, source release or archiving. The host
+reconciles durable state and actual effects before another action. No independent
+recovery service is implemented here.
+
+This is a callable integration seam. Ordinary Desktop/IDE Hooks do not acquire a
+control connection by installation. The native test caller in
+`tests/product/test_carrier_handoff.py` reuses existing App Server/process controls,
+local fixed responses and SQLite transactions. It checks protocol effects, refusal
+and extra intake; it does not prove model judgment, autonomous timing, a production
+verifier or ordinary GUI adoption.
+
+### Context timing
+
 Unknown capacity/efficiency signals require short work spans and early checkpoints;
 that fallback rule is not proof of historical prediction or an optimal margin.
 The helper's `assess-context` keeps `capacityFit` separate from its combined

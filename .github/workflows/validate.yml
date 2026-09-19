@@ -142,6 +142,26 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/source-package
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/hot-reload-package
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/standalone-skills
+      - name: Exercise the shipped carrier adapter with native fixed-response tasks
+        shell: python
+        run: |
+          import os, pathlib, subprocess, sys
+          root = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]).resolve(strict=True)
+          manifest = __import__("json").loads((root / "episode/manifest.json").read_text())
+          subprocess.run([sys.executable, "-B", "tests/product/test_carrier_handoff.py",
+              "--native-codex", manifest["codex"], "--evidence", str(root / "carrier")], check=True)
+      - name: Retain carrier protocol evidence
+        if: always() && steps.storage.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-carrier-${{ matrix.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          include-hidden-files: true
+          path: |
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier/*.json
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier/native
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier/retained
       - name: Release job-owned installation and episode files
         if: always() && steps.storage.outcome == 'success'
         shell: python

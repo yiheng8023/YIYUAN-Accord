@@ -235,7 +235,7 @@ class EntryTests(unittest.TestCase):
                 manifest = self.prepared_persistent(root, installed=True)
                 self.assertEqual(manifest["hookMode"], "installed-plugin")
                 self.assertNotIn("nativeHookProjection", manifest)
-                self.assertEqual(len(manifest["installedPlugin"]["packageFiles"]), 17)
+                self.assertEqual(len(manifest["installedPlugin"]["packageFiles"]), 18)
                 self.assertFalse((root / "evidence/hooks").exists())
                 for command in (manifest["initialCommand"], entry.build_command(manifest, stage=1, thread_id="native-thread")):
                     for flag in ("--ignore-user-config", "--disable", "--enable", "--dangerously-bypass-hook-trust", "--ephemeral"):

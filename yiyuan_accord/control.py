@@ -6672,7 +6672,8 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
                 root, projection, {}, "yiyuan-accord", identity, local_errors,
                 _read_json, GOLDEN_TASKS_FILE,
                 expected_contract=delivery_adapter_contract(projection["id"], projection.get("packageId"),
-                    development_schema=contract.get("schema"), startup_entry=projection.get("startupEntry") is True),
+                    development_schema=contract.get("schema"), startup_entry=projection.get("startupEntry") is True,
+                    carrier_handoff=projection.get("carrierHandoff") is True),
                 unified_name=contract.get("schema") == "yiyuan-accord-development/v5",
                 retained_checkpoint_revision=(contract["previousDevelopmentSnapshot"].split(":", 1)[0]
                     if contract.get("schema") == "yiyuan-accord-development/v5"

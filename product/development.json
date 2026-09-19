@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "88cdf5ff71397984beaa89090b1a0972c1cb4892567797aad684de5e164f28c1",
+        "packageSha256": "b6a79921989c55ae678824234047c8359749c1bb9d4b7c29e9765c62ddb0eb37",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -58,13 +58,15 @@
           "plugins/yiyuan-accord-codex/hooks/hooks.json",
           "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
           "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",
-          "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs"
+          "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
+          "plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs"
         ],
         "activationContext": "SessionStart supplies the brief coordination Skill body independently of task-state writes. UserPromptSubmit supplies the same body. Four specialist Skills are independently discoverable and read only for applicable dependencies. Recovery state remains in the existing companion Hook. Input Hooks maintain freshness, pauses and caller-bound Stop continuation. Node and enabled trusted Hooks remain required. Injection is not behavior, complete bootstrap or outcome acceptance.",
         "interfaceDefaultPrompt": [
           "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
         ],
         "startupEntry": true,
+        "carrierHandoff": true,
       "referenceFiles": [],
       "supportingSkills": [
         "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
@@ -111,6 +113,7 @@
       "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
       "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",
       "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
+      "plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
       "product/acceptance.json",
@@ -124,6 +127,7 @@
       "runtime/accord-hook.cjs",
       "runtime/codex-context.cjs",
       "runtime/task-checkpoint.cjs",
+      "runtime/carrier-handoff.cjs",
       "scripts/codex_rpc.py",
       "scripts/codex_events.py",
       "scripts/inspect_coordination.py",
@@ -140,6 +144,8 @@
       "tests/product/test_development.py",
       "tests/product/test_product_control.py",
       "tests/product/test_task_checkpoint.py",
+      "tests/product/test_carrier_handoff.py",
+      "tests/product/carrier_handoff_host.cjs",
       "tests/product/test_tool_batch_feedback.py",
       "yiyuan_accord/__main__.py",
       "yiyuan_accord/admission.py",
@@ -160,10 +166,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 1900000,
-      "maxTrackedFiles": 148,
+      "maxProductCodeAndTestBytes": 2020000,
+      "maxTrackedFiles": 152,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "One brief coordination Skill and four independently discoverable specialists replace the former entry and three references. Hooks read the same brief body, removing the separately maintained full core prompt. Seventeen package files require a 148-file tracked ceiling, one above the prior 147; retain the 36000 primary-instruction ceiling and five-percent code reserve. The read-only status implementation reused the existing recovery snapshot and shared check validation, with targeted corruption, access and concurrent-change regressions, raising the former code/test ceiling to 1880000. The installed-plugin observation route now reuses the same case, native entry receipt and lifecycle process controller, adding identity/drift/retained-evidence regressions instead of a separate observation system. The resulting ceiling is 1900000 (20000 above the previous ceiling), preserving five-percent headroom without removing necessary checks. No product-package change, dependency, service, scheduler or tracked file is introduced by this observation extension. Supporting Skill identity, bounded links, source delivery and complete native discovery have focused regressions. Smaller individual bodies do not prove lower total runtime cost or error-free behavior; changed package and loading conditions require affected acceptance."
+      "rationale": "One brief coordination Skill and four specialists remain, with the same 36000 primary-instruction ceiling. The optional carrier handoff module adds one distributed Node file, its canonical source and two test-caller files: 18 package files and a 152-file tracked ceiling. It reuses host-injected native transport, a caller-owned durable CAS recorder and independent current verification; no daemon, Hook, authentication layer, dependency or default activation is added. Its explicit deadline, identity, ambiguity and source-recovery controls plus offline/native failure tests require a 2020000 code/test ceiling, 120000 above the former 1900000, preserving five-percent reserve. The native integration reuses existing App Server, fixed localhost response and process-ownership utilities. The earlier read-only status and installed-entry checks remain; necessary checks are not removed to fit a size target. Smaller bodies or successful dispatch do not prove lower total runtime cost, semantic takeover, ordinary-host adoption or autonomous timing; changed package and loading conditions require affected acceptance."
     }
   },
   "source": {
