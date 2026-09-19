@@ -198,10 +198,18 @@ class EntryTests(unittest.TestCase):
         row.update(changes)
         return subprocess.CompletedProcess([], 0, json.dumps({"installed": [row]}).encode(), b"")
 
+    def copy_hook_only_fixture(self, package):
+        # A source-Hook projection fixture is not the complete installed plugin.
+        # Keep native plugin loading (including MCP) in the installed-mode tests.
+        shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
+        (package / ".mcp.json").unlink()
+
     def prepared_persistent(self, root, case_path=None, *, native_hooks=False, installed=False):
         package = (root / "home/plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.3.0-dev.1"
                    if installed else root / "package")
-        if native_hooks or installed:
+        if native_hooks:
+            self.copy_hook_only_fixture(package)
+        elif installed:
             shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
         else:
             (package / "runtime").mkdir(parents=True)
@@ -235,7 +243,11 @@ class EntryTests(unittest.TestCase):
                 manifest = self.prepared_persistent(root, installed=True)
                 self.assertEqual(manifest["hookMode"], "installed-plugin")
                 self.assertNotIn("nativeHookProjection", manifest)
-                self.assertEqual(len(manifest["installedPlugin"]["packageFiles"]), 19)
+                source = SCRIPT.parents[1] / "plugins/yiyuan-accord-codex"
+                self.assertEqual(manifest["installedPlugin"]["packageFiles"], {
+                    p.relative_to(source).as_posix(): entry.digest(p)
+                    for p in source.rglob("*") if p.is_file()})
+                self.assertIn(".mcp.json", manifest["installedPlugin"]["packageFiles"])
                 self.assertFalse((root / "evidence/hooks").exists())
                 for command in (manifest["initialCommand"], entry.build_command(manifest, stage=1, thread_id="native-thread")):
                     for flag in ("--ignore-user-config", "--disable", "--enable", "--dangerously-bypass-hook-trust", "--ephemeral"):
@@ -451,6 +463,11 @@ class EntryTests(unittest.TestCase):
                 self.assertIn('model_reasoning_effort="high"', command)
             with self.assertRaisesRegex(ValueError, "cannot use the checkpoint wrapper"):
                 entry.hook(argparse.Namespace(evidence=manifest["evidence"], event="Stop"))
+
+    def test_complete_plugin_requires_native_loading_not_hook_projection(self):
+        source = SCRIPT.parents[1] / "plugins/yiyuan-accord-codex"
+        with self.assertRaisesRegex(ValueError, "non-hook component"):
+            entry._native_hook_projection(source, shutil.which("node"))
 
     def test_native_projection_preserves_extra_fields_and_rejects_unsupported_surfaces(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -737,7 +754,7 @@ class EntryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
             package = root / "package"
-            shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
+            self.copy_hook_only_fixture(package)
             args = argparse.Namespace(package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
                 codex=PYTHON, node=PYTHON, model="explicit-offline-model", reasoning="high", timeout=600,
                 turn_timeout=180, recovery_timeout=20, windows_sandbox="elevated", native_package_hooks=True)
