@@ -1937,3 +1937,11 @@ Root逐文件复核阶段快照字节与原始记录：source.json和keep.txt的
 实际CLI0.155.1的03运行在执行前保留源码，复用原App Server/SQLite/进程控制及本地固定Responses服务，成功、拒绝、补交和新源提议四案均通过，共13次本地响应、零模型调用。新案在原生source thread注册动态工具，处理真实item/tool/call，再提交queued响应；原始事件的request、tool-completed、source-terminal顺序成立。begin恰好一次，dispatch前没有适配器原生命令、源写者保持；接管后首次有界续作及源取消订阅通过，未对完成源重复interrupt。主控制者及四个Node调用方均正常退出归零，原件keep.txt保持，4个所属运行根回收，SQLite/原生会话/原始流及执行源留存。01–03分别绑定各自实现，不改写旧结果。
 
 该结果支持可分发源提议接口和真实协议执行链，不能以固定source输出或测试verifier证明模型自主择时、实际语义接管、普通Desktop/IDE接入或整体A05。上述才是下一实际缺口；不继续重复此固定小链充当功能闭环。前轮c06b0447的35459249905已11项全绿，含POSIX跨版本恢复；新提议增量由其自己的后续CI验证。
+
+## 源原生历史与其它恢复依据分开（2026-09-20）
+
+清理已放弃的活动待办后继续核对成功声明，发现3483054c只核对source id，却在退订后无条件写native-history-retained及nativeHistoryRetained=true。现有持久来源的观察仍支持自身，但不能外推到允许输入的ephemeral或未知来源。新增直接回归复现临时/未知/末次未重观察仍被报true，以及已知持久性冲突未被发现的问题。
+
+只修正来源事实：四类source thread/read先核对ID，再读取当前ephemeral布尔元数据；当前缺失/不可用即unknown，保留前次已知bool仅用于冲突检测。已知值冲突要求核对后再做；最终record和两处结果统一返回true/false/null，sourceRecovery恢复中性retained，通用sourceRecoveryRetained仍由既有独立verifier支持。临时来源可依赖其它充分恢复依据，并未被禁止。文档同时区分适配器未执行归档/删除与其它行为者造成的后态。
+
+19项模块回归及85项开发契约检查通过。当前ab1b2755在原生0.155.1上完成五案，新增ephemeral来源实际交接成功且history=false，持久来源为true；共16次本地固定响应、零模型调用，独立只读复核未见阻断问题。七份执行源码预先保留于accord-source-persistence-20260920-01，保护原件和资源后态成立。旧提议及宿主升级观察保留原绑定；不把此次事实修正提升为模型自主连续性或整版通过。

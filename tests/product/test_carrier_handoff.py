@@ -51,6 +51,23 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertLess(methods.index('turn/interrupt'),methods.index('waitTerminal'))
         self.assertLess(methods.index('waitTerminal'),methods.index('thread/start'))
 
+    def test_history_retention_uses_current_native_metadata_not_generic_recovery(self):
+        for scenario, expected in (('success', True), ('ephemeral-source', False),
+                                   ('unknown-persistence', None), ('persistence-not-reobserved', None)):
+            with self.subTest(scenario=scenario):
+                r=self.run_case(scenario)
+                self.assertIsNone(r['error'])
+                self.assertIs(r['result']['source']['nativeHistoryRetained'], expected)
+                self.assertIs(r['result']['sourceRecovery']['nativeHistoryRetained'], expected)
+                self.assertIs(r['snapshots'][-1]['nativeHistoryRetained'], expected)
+                self.assertEqual(r['snapshots'][-1]['sourceRecovery'], 'retained')
+                self.assertTrue(r['result']['sourceRecoveryRetained'])
+
+    def test_conflicting_source_persistence_requires_reconciliation_before_release(self):
+        r=self.run_case('source-persistence-changed')
+        self.assertIsNotNone(r['error'])
+        self.assertFalse(any(c['method'] in ('thread/start','thread/unsubscribe') for c in r['calls']))
+
     def test_unknown_denied_or_partial_results_never_release_source(self):
         for scenario in ('duplicate','wrong-source','wrong-authority','same-target','ambiguous-start',
                          'invalid-settings','reject-intake','changed-authority','ambiguous-commit',
@@ -239,7 +256,7 @@ def native_integration(codex, evidence):
     version = subprocess.check_output([str(codex),'--version'],timeout=10,text=True).strip()
     manifest={'evidence':str(root),'codex':str(codex),'node':str(node),
         'ownedRoots':{name:str(root/name) for name in ('home','workspace','state','temp')},
-        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':14},
+        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':17},
         'resourceController':'windows-job-object' if os.name=='nt' else 'posix-session-process-group'}
     sources=[ROOT/'runtime/carrier-handoff.cjs',DRIVER,Path(__file__),ROOT/'scripts/observe_codex_lifecycle.py',
              ROOT/'scripts/observe_codex_entry.py',ROOT/'scripts/codex_rpc.py',ROOT/'scripts/inspect_native_resources.py']
@@ -260,7 +277,7 @@ def native_integration(codex, evidence):
     app=None
     results=[]
     owned_threads=set()
-    deadline=time.monotonic()+220
+    deadline=time.monotonic()+260
     ledger_db=sqlite3.connect(root/'retained/recorder.sqlite',isolation_level=None)
     ledger_db.execute('PRAGMA synchronous=FULL')
     ledger_db.execute('CREATE TABLE scopes (scope TEXT PRIMARY KEY, owner TEXT, active TEXT, token TEXT)')
@@ -336,9 +353,10 @@ def native_integration(codex, evidence):
     try:
         app=_App(manifest,'carrier-controller',_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false')),env,deadline)
         app.initialize()
-        for scenario in ('success','reject-intake','extra-context','source-proposal'):
+        for scenario in ('success','reject-intake','extra-context','source-proposal','ephemeral-source'):
             source_settings={'model':'fixture-no-model','modelProvider':'accord_fixture',
                 'cwd':manifest['ownedRoots']['workspace'],'sandbox':'read-only','approvalPolicy':'never'}
+            if scenario=='ephemeral-source': source_settings['ephemeral']=True
             if scenario=='source-proposal':
                 source_settings['dynamicTools']=[{'type':'function','name':PROPOSAL_TOOL,
                     'description':'Submit a handoff proposal; the controller records it before acknowledgement and dispatches after this turn ends.',
@@ -448,7 +466,13 @@ def native_integration(codex, evidence):
             stored=ledger_db.execute('SELECT revision,state FROM transfers WHERE id=?',(scenario,)).fetchone()
             if stored: save(ledger,{'revision':stored[0],'state':json.loads(stored[1])})
             save(root/'retained'/f'{scenario}-result.json',result);results.append(result)
-            if scenario in ('success','extra-context','source-proposal') and (result['error'] or result['result']['status']!='handed-off'): raise RuntimeError('native handoff failed; inspect retained result')
+            if scenario in ('success','extra-context','source-proposal','ephemeral-source'):
+                if result['error'] or result['result']['status']!='handed-off':
+                    raise RuntimeError('native handoff failed; inspect retained result')
+                expected_history=scenario!='ephemeral-source'
+                if (result['result']['source']['nativeHistoryRetained'] is not expected_history
+                        or result['result']['sourceRecovery']['nativeHistoryRetained'] is not expected_history):
+                    raise RuntimeError('source history claim differs from native persistence')
             if scenario=='reject-intake' and (result['error'] is None or any(c['method']=='thread/unsubscribe' for c in result['calls'])): raise RuntimeError('rejected intake released source')
     finally:
         try:
@@ -460,13 +484,13 @@ def native_integration(codex, evidence):
         save(root/'poststate.json',{'providerRequests':len(fixture.requests),'credentialsObserved':fixture.auth_seen,
             'keepPreserved':hashlib.sha256((root/'workspace/keep.txt').read_bytes()).hexdigest()==original,
             'completedCases':len(results),'claimLimit':manifest['claimLimit']})
-    if fixture.auth_seen or len(results)!=4: raise RuntimeError('native integration incomplete')
+    if fixture.auth_seen or len(results)!=5: raise RuntimeError('native integration incomplete')
     for name in ('home','workspace','state','temp'):
         target=(root/name).resolve(strict=True)
         if target.parent!=root: raise ValueError('owned cleanup root mismatch')
         _remove_owned_tree(target)
     save(root/'cleanup.json',{'ownedRootsRemoved':True,'nativeSessionEvidenceRetained':True})
-    print(json.dumps({'nativeCases':4,'modelCalls':0,'providerRequests':len(fixture.requests),'evidence':str(root)}))
+    print(json.dumps({'nativeCases':5,'modelCalls':0,'providerRequests':len(fixture.requests),'evidence':str(root)}))
 
 
 if __name__=='__main__':

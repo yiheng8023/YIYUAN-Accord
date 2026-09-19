@@ -159,10 +159,22 @@ user intervention or shared state invalidates dependent prior allowances.
 The module records intent, stops the exact source turn if supplied, checks source
 quiescence, creates a persistent fresh read-only target, verifies intake, atomically
 transfers writer ownership, runs and verifies the first bounded continuation, then
-unsubscribes the source. It retains native history and never enables Plan/Goal or
-archives/deletes a task. `status: "handed-off"` includes target/turn identities,
+unsubscribes the source. It never enables Plan/Goal or issues archive/delete
+operations. `status: "handed-off"` includes target/turn identities,
 recorder revision/lease and evidence references. Subscription release does not
 prove process unload, resource savings or completion of the overall user goal.
+`source.archived` and `source.deleted` describe this adapter's actions; they do not
+inspect changes made by other actors or guarantee that an ephemeral source exists.
+
+`source.ephemeral` and `nativeHistoryRetained` follow the current source
+`thread/read` metadata. An explicitly persistent source reports retained native
+history; an ephemeral source reports false; missing or unavailable persistence
+metadata reports null, even if an earlier read was known. Conflicting known values
+require reconciliation. The final record preserves these facts separately from
+`sourceRecovery: "retained"`. General `sourceRecoveryRetained` still depends on the
+independent verifier and may be supported by a caller-owned checkpoint; it does
+not establish native history or power-loss durability. Ephemeral or unknown
+sources remain usable when that independent recovery requirement is met.
 
 On failure retain `CarrierHandoffError.code`, `stage`, `reconciliationRequired`,
 `details` and `state`, alongside the durable recorder and raw native receipts.

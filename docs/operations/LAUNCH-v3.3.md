@@ -1,6 +1,6 @@
 # 3.3 发布材料工作稿
 
-状态：准备中，未排期、未提交，3.3尚未完成验收或正式发布。本文复用[共识计划](PLAN-v3.3.md)的W08/S5，不新增产品验收或发布日期。2026-09-12用户确认参赛可选，项目优先；错过活动的材料继续用于后续发布。
+状态：通用发布准备，未排期、未提交，3.3尚未完成验收或正式发布。本文复用[共识计划](PLAN-v3.3.md)的W08/S5，不新增产品验收或发布日期。
 
 ## 文案底稿
 
@@ -12,15 +12,15 @@
 | Tagline | Keep human-AI work aligned from intent to delivery | 让人与AI的协作从意图到交付保持一致 |
 | Description | An open-source collaboration reliability system for AI agents. Designed to preserve goals, handle changes, coordinate capabilities, and verify delivery throughout ongoing work. | 面向AI Agent的开源协作可靠性系统，旨在持续工作中承接目标、处理变化、协调能力并核验交付。 |
 
-Maker comment底稿：
+项目发布说明底稿：
 
 > We started YIYUAN Accord after repeated collaboration failures: an interruption could displace the original goal, a handoff could lose constraints, and passing checks could still leave the actual job unfinished.
 >
 > The project explores how agents can carry those responsibilities through real work, combining host capabilities with scoped coordination and verification. Users keep control over their decisions and changes of direction.
 >
-> We have used Astra in Codex to develop and investigate the system. The project remains independent and vendor-neutral. For the release, we will show the exact supported environment, a reproducible task, the verified outcome, and the remaining limitations.
+> The project remains independent and vendor-neutral. For the release, we will show the exact supported environment, a reproducible task, the verified outcome, and the remaining limitations.
 
-正式稿须将最后一句替换为已验版本、实际使用入口和演示链接。Astra在开发、审查和实际演示中的作用分别据实说明；不能声称全部历史由同一模型构建，不能把模型或赛事名称写入通用调度规则。参赛资格仍以活动有效规则及实际提交对象为准。
+正式稿须填入已验版本、实际使用入口和演示链接，并按实际成品校准能力与限制。涉及工具或模型的致谢须据实说明其作用，不能声称全部历史由同一模型构建。
 
 ## 演示与可复用素材
 
@@ -38,18 +38,9 @@ Maker comment底稿：
 | 内容 | 当前情况 | 完成条件 |
 |---|---|---|
 | 精确发行与更新日志 | 3.3开发中 | 验收、候选审查、正式发布授权及同版本公开后态成立 |
-| README整体修订 | 用户2026-09-14要求当前仅将Ubuntu称谓改为Linux，其余暂不修改 | 发布前按实际成品整体复核中英文定位、能力及限制、安装使用、示例、徽章与链接，不能仅沿用开发期文案 |
+| README整体修订 | 用户已授权按最新共识按需更新，发布前仍需整体校准 | 发布前按实际成品整体复核中英文定位、能力及限制、安装使用、示例、徽章与链接，不能仅沿用开发期文案 |
 | 安装与使用入口 | 待正式版本绑定 | 新用户能取得精确包，按真实支持条件完成安装和使用；市场收录不冒充必需前提 |
 | 演示及效果说明 | 已有局部试验，不是完整演示 | 同版本真实完整任务、可复验成品、参与边界及限制 |
 | 发布页面 | 本文仅底稿 | 更新文案、缩略图、截图、视频、关联工具致谢和可用链接；在实际发布表单重新检查限制 |
-| 活动专项资格 | 已读公开活动页与指南 | 对既有开源插件和Codex/Astra参与方式核对实际规则；不得用未见排除项代替资格确认 |
 
 2026-09-14用户提议增加知乎和Reddit，当前作为传播候选，尚未排期或发布。建议知乎以中文案例解释问题、设计取舍和适用边界；Reddit以英文演示、复现材料及具体问题征求社区反馈。优先复用同一真实成果并按平台改写；以项目为传播主体，明确作者关系，不将渠道数量或曝光作为产品质量。Reddit的[官方反垃圾信息规则](https://support.reddithelp.com/hc/en-us/articles/360043504051-Spam)要求避免重复群发，并检查各社区具体规则；实际选定社区和发布前再核对。具体平台规则在实际发布前核对。渠道选择不改变项目优先、版本验收及正式对外提交的原有边界。
-
-## 可选活动信息
-
-来源核对日：2026-09-12。[官方公告](https://x.com/ProductHunt/status/2098436252861395369)、[活动页](https://www.producthunt.com/contests/gpt-6-astra-challenge)、[发布指南](https://app.notion.com/p/teamhome1431/GPT-6-Astra-Challenge-Product-Hunt-Launch-Guide-3d62e1256c9e80f39bccdd2ab93bb306)要求将Product Hunt发布安排在2026年9月18日；指南给出的00:01 Pacific对应当日北京时间15:01。具体投稿截止和表单条件在实际准备提交时回读，不用搜索缓存的零倒计时判断关闭。
-
-指南要求清晰描述、实际演示和可使用产品；通用[收录指南](https://help.producthunt.com/en/articles/9883485-product-hunt-featuring-guidelines)不推荐仅模板、报告或待开放产品。展示产品实际效果和原创价值，不以模板集合包装替代实现，不索要或交换投票。个人Maker账号与项目产品页、代码归属和治理分别处理，遵守平台账户规则同时保持YIYUAN Accord的项目主体。
-
-如活动窗口到达时3.3仍未发布，关闭本次参赛机会即可，继续既定开发和通用发布准备；本文的日期、奖项或排期不进入产品必要验收。

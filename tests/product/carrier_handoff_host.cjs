@@ -16,7 +16,7 @@ function remote(kind, args) {
 async function run(config) {
   const calls = [], snapshots = [], verdicts = [];
   let revision = -1, state = null, target = null, turn = 0, sourceActive = config.scenario === 'active-source';
-  let lease = null, scopeBusy = false;
+  let lease = null, scopeBusy = false, sourceReads = 0;
   const scenario = config.scenario || 'success';
   // Inject only the two late-ack fixture clocks. Advance at the exact callback,
   // so host scheduling cannot expire an earlier, unrelated operation instead.
@@ -41,8 +41,16 @@ async function run(config) {
       calls.push({method, params: clone(params)});
       if (config.mode === 'native') return remote('request', [method, params, Math.max(0, deadline - performance.now())]);
       if (scenario === 'ambiguous-start' && method === 'thread/start') throw new Error('start response lost');
-      if (method === 'thread/read') return {thread: {id: scenario === 'wrong-source' ? 'foreign' : params.threadId,
-        status: {type: params.threadId === 'source-1' && sourceActive ? 'active' : 'idle'}}};
+      if (method === 'thread/read') {
+        const source = params.threadId === 'source-1';
+        if (source) sourceReads++;
+        const omitPersistence = source && (scenario === 'unknown-persistence' ||
+          scenario === 'persistence-not-reobserved' && sourceReads === 4);
+        return {thread: {id: scenario === 'wrong-source' ? 'foreign' : params.threadId,
+          ...(!omitPersistence ? {ephemeral: source && (scenario === 'ephemeral-source' ||
+            scenario === 'source-persistence-changed' && sourceReads > 1)} : {}),
+          status: {type: source && sourceActive ? 'active' : 'idle'}}};
+      }
       if (method === 'turn/interrupt') {sourceActive = false; return {};}
       if (method === 'thread/start') {
         target = scenario === 'same-target' ? 'source-1' : 'target-1';

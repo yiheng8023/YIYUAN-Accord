@@ -445,6 +445,7 @@ function createExecution(rawPlan, rawDependencies) {
   let targetThreadId = null;
   let targetTurnId = null;
   let targetTurnTerminal = false;
+  let sourceEphemeral = null, knownSourceEphemeral = null;
   let stage = 'begin';
   let proposalRequest = null;
   let proposalResponse = null;
@@ -454,6 +455,21 @@ function createExecution(rawPlan, rawDependencies) {
 
   const ensureWork = (name) => before(workDeadlineMs, name, transferId);
   const ensureRecovery = (name) => before(recoveryDeadlineMs, name, transferId);
+
+  function observeSourceThread(value, readStage) {
+    const source = threadFrom(value, plan.source.threadId, readStage, transferId);
+    const observed = typeof source.ephemeral === 'boolean' ? source.ephemeral : null;
+    if (observed !== null && knownSourceEphemeral !== null && observed !== knownSourceEphemeral) {
+      fail('SOURCE_PERSISTENCE_CHANGED', 'native source persistence changed during handoff', {
+        stage: readStage, transferId, reconciliationRequired: true,
+        details: {previousEphemeral: knownSourceEphemeral, observedEphemeral: observed},
+      });
+    }
+    if (observed !== null) knownSourceEphemeral = observed;
+    // Missing current metadata cannot borrow an earlier positive observation.
+    sourceEphemeral = observed;
+    return source;
+  }
 
   function ensureBinding(name) {
     if (transport.connectionId !== connectionBinding.connectionId ||
@@ -810,7 +826,7 @@ function createExecution(rawPlan, rawDependencies) {
       stage = 'prepare';
       const sourceReadBefore = await request('thread/read', {threadId: plan.source.threadId},
         'prepare:source-read');
-    threadFrom(sourceReadBefore, plan.source.threadId, stage, transferId);
+    observeSourceThread(sourceReadBefore, stage);
     const prepared = await verifyStage('prepare', {
       connectionId: transport.connectionId,
       hostVersion: transport.hostVersion,
@@ -835,7 +851,7 @@ function createExecution(rawPlan, rawDependencies) {
     stage = 'quiesced';
     const sourceReadAfter = await request('thread/read', {threadId: plan.source.threadId},
       'quiesced:source-read');
-    threadFrom(sourceReadAfter, plan.source.threadId, stage, transferId);
+    observeSourceThread(sourceReadAfter, stage);
     const quiesced = await verifyStage('quiesced', {
       connectionId: transport.connectionId,
       hostVersion: transport.hostVersion,
@@ -943,7 +959,7 @@ function createExecution(rawPlan, rawDependencies) {
           threadId: plan.source.threadId}});
       sourceReadAccepted = await request('thread/read', {threadId: plan.source.threadId},
         'accepted:source-read');
-      threadFrom(sourceReadAccepted, plan.source.threadId, stage, transferId);
+      observeSourceThread(sourceReadAccepted, stage);
       accepted = await verifyStage('accepted', {
         connectionId: transport.connectionId,
         hostVersion: transport.hostVersion,
@@ -1043,7 +1059,7 @@ function createExecution(rawPlan, rawDependencies) {
     }});
     const releaseSourceRead = await request('thread/read', {threadId: plan.source.threadId},
       'release:source-read');
-    threadFrom(releaseSourceRead, plan.source.threadId, stage, transferId);
+    observeSourceThread(releaseSourceRead, stage);
     const releaseTargetRead = await request('thread/read', {threadId: targetThreadId},
       'release:target-read');
     threadFrom(releaseTargetRead, targetThreadId, stage, transferId);
@@ -1071,8 +1087,9 @@ function createExecution(rawPlan, rawDependencies) {
         stage: 'release:source-unsubscribe', transferId, reconciliationRequired: true,
       });
     }
+    const nativeHistoryRetained = sourceEphemeral === null ? null : !sourceEphemeral;
     await record({...recordState, phase: 'source-subscription-released',
-      sourceRecovery: 'native-history-retained', pendingEffect: null,
+      sourceRecovery: 'retained', sourceEphemeral, nativeHistoryRetained, pendingEffect: null,
       subscriptionRelease: {threadId: plan.source.threadId, observed: true}});
 
     return immutable({
@@ -1088,7 +1105,8 @@ function createExecution(rawPlan, rawDependencies) {
         threadId: plan.source.threadId,
         turnId: plan.source.turnId || null,
         subscriptionReleased: true,
-        nativeHistoryRetained: true,
+        ephemeral: sourceEphemeral,
+        nativeHistoryRetained,
         archived: false,
         deleted: false,
       },
@@ -1106,7 +1124,7 @@ function createExecution(rawPlan, rawDependencies) {
       lease,
       sourceRecovery: {
         ready: release.sourceRecoveryReady,
-        nativeHistoryRetained: true,
+        nativeHistoryRetained,
         subscriptionReleased: true,
       },
       evidence: {

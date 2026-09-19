@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "32faf88d582b1dee9037c1ea0196cd5602f11b7a5c52d2fe4811c76816101161",
+        "packageSha256": "d148f9e4e4fd33864ce3eedb5f3140b13ec086ee347833d6497fadce67d0c7a1",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
