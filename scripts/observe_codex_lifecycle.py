@@ -516,6 +516,71 @@ def _root_hashes(path):
     return _tree_hashes(path) if any(path.iterdir()) else {}
 
 
+def _probe_symlink_allowed(info):
+    return os.name != "nt" and not getattr(info, "st_file_attributes", 0) & 0x400
+
+
+def _probe_lstat(entry):
+    return Path(entry.path).lstat()
+
+
+def _probe_root_inventory(path):
+    root = _ordinary_dir(path)
+    result = {}
+
+    def visit(directory):
+        with os.scandir(directory) as entries:
+            for entry in entries:
+                target = Path(entry.path)
+                info = _probe_lstat(entry)
+                relative = target.relative_to(root).as_posix()
+                reparse = bool(getattr(info, "st_file_attributes", 0) & 0x400)
+                if entry.is_symlink():
+                    if not _probe_symlink_allowed(info):
+                        raise ValueError("version probe residue contains unsupported redirected content")
+                    result[relative] = {"type": "symlink", "target": os.readlink(entry.path)}
+                elif reparse:
+                    raise ValueError("version probe residue contains unsupported redirected content")
+                elif stat.S_ISDIR(info.st_mode):
+                    visit(target)
+                elif stat.S_ISREG(info.st_mode) and info.st_nlink == 1:
+                    result[relative] = digest(target)
+                else:
+                    raise ValueError("version probe residue contains non-ordinary content: "
+                                     + f"{relative}; mode={info.st_mode}; links={info.st_nlink}; attrs="
+                                     + str(getattr(info, "st_file_attributes", 0)))
+
+    visit(root)
+    return result
+
+
+def _clear_probe_root(path):
+    root = _ordinary_dir(path)
+
+    def clear(directory):
+        with os.scandir(directory) as entries:
+            for entry in entries:
+                target = Path(entry.path)
+                info = _probe_lstat(entry)
+                reparse = bool(getattr(info, "st_file_attributes", 0) & 0x400)
+                if entry.is_symlink():
+                    if not _probe_symlink_allowed(info):
+                        raise ValueError("version probe residue contains unsupported redirected content")
+                    os.unlink(entry.path)
+                elif reparse:
+                    raise ValueError("version probe residue contains unsupported redirected content")
+                elif stat.S_ISDIR(info.st_mode):
+                    clear(target)
+                    os.rmdir(entry.path)
+                elif stat.S_ISREG(info.st_mode) and info.st_nlink == 1:
+                    os.unlink(entry.path)
+                else:
+                    raise ValueError("version probe residue contains non-ordinary content: "
+                                     + target.relative_to(root).as_posix())
+
+    clear(root)
+
+
 def _remove_owned_tree(path):
     root = _validate_tree(path)
 
@@ -622,13 +687,26 @@ def prepare(args):
         # Native arg0 setup can leave helper files even for --version. Both probe
         # controllers have released; retain the inventory before clearing only
         # their newly created roots, then freeze the lifecycle's empty baseline.
-        residue = {name: _root_hashes(probe_manifest["ownedRoots"][name]) for name in OWNED_ROOTS}
+        for role in ("source", "replacement"):
+            probe_record = json.loads(read_regular(
+                evidence / "retained/version-probes" / role / "record.json"))
+            if not _record_released(probe_record, probe_manifest):
+                raise ValueError("version probe process release is unconfirmed")
+        residue = {name: _probe_root_inventory(probe_manifest["ownedRoots"][name])
+                   for name in OWNED_ROOTS}
         save(evidence / "retained/version-probes/owned-root-residue.json", residue)
         for name in OWNED_ROOTS:
             owned = evidence / name
             if owned.resolve() != owned or owned.parent != evidence:
                 raise ValueError("version probe cleanup root differs")
-            _remove_owned_tree(owned)
+            if os.name == "nt":
+                # Keep the existing reparse rejection and readonly-file cleanup.
+                _remove_owned_tree(owned)
+            else:
+                _clear_probe_root(owned)
+                if _probe_root_inventory(owned):
+                    raise ValueError("version probe cleanup left owned residue")
+                owned.rmdir()
             owned.mkdir()
         if any(digest(path) != protected_before[str(path)] for path in protected):
             raise ValueError("version probe changed a protected file")

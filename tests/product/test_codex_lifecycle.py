@@ -314,6 +314,71 @@ class CodexLifecycleTests(unittest.TestCase):
                     self.assertIn('native-arg0.txt', residue['home'])
                     self.assertFalse((evidence / 'home/native-arg0.txt').exists())
 
+    def test_probe_cleanup_records_link_text_without_reading_or_removing_external_targets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp).resolve()
+            owned, external = base / "owned", base / "external"
+            owned.mkdir(); external.mkdir()
+            outside_file = external / "outside.txt"
+            outside_file.write_text("external content", encoding="utf-8")
+            outside_dir = external / "directory"
+            outside_dir.mkdir(); (outside_dir / "keep.txt").write_text("keep", encoding="utf-8")
+
+            if os.name == "posix":
+                ordinary = owned / "ordinary.txt"
+                ordinary.write_text("owned", encoding="utf-8")
+                os.symlink(outside_file, owned / "file-link")
+                os.symlink(outside_dir, owned / "dir-link")
+                seen = []
+                original_digest = lifecycle.digest
+                with patch.object(lifecycle, "digest",
+                        side_effect=lambda path: (seen.append(Path(path)), original_digest(path))[1]):
+                    inventory = lifecycle._probe_root_inventory(owned)
+                self.assertEqual(inventory["file-link"], {"type": "symlink", "target": str(outside_file)})
+                self.assertEqual(inventory["dir-link"], {"type": "symlink", "target": str(outside_dir)})
+                self.assertIn("ordinary.txt", inventory)
+                self.assertNotIn(outside_file, seen)
+                self.assertNotIn(outside_dir / "keep.txt", seen)
+                lifecycle._clear_probe_root(owned)
+                self.assertEqual(list(owned.iterdir()), [])
+                self.assertEqual(outside_file.read_text(encoding="utf-8"), "external content")
+                self.assertEqual((outside_dir / "keep.txt").read_text(encoding="utf-8"), "keep")
+                redirected = base / "redirected-root"
+                os.symlink(outside_dir, redirected)
+                with self.assertRaisesRegex(ValueError, "ordinary directory required"):
+                    lifecycle._probe_root_inventory(redirected)
+            else:
+                info = type("Info", (), {"st_mode": lifecycle.stat.S_IFLNK, "st_file_attributes": 0})()
+                entries = [type("Entry", (), {"name": "file-link", "path": str(owned / "file-link"),
+                    "stat": lambda self, follow_symlinks=False: info,
+                    "is_symlink": lambda self: True})()]
+                class Scan:
+                    def __enter__(self): return iter(entries)
+                    def __exit__(self, *_args): return False
+                with patch.object(lifecycle.os, "scandir", return_value=Scan()), \
+                        patch.object(lifecycle, "_probe_lstat", return_value=info), \
+                        patch.object(lifecycle, "_probe_symlink_allowed", return_value=True), \
+                        patch.object(lifecycle.os, "readlink", return_value=str(outside_file)):
+                    inventory = lifecycle._probe_root_inventory(owned)
+                self.assertEqual(inventory["file-link"]["target"], str(outside_file))
+                with patch.object(lifecycle.os, "scandir", return_value=Scan()), \
+                        patch.object(lifecycle, "_probe_lstat", return_value=info), \
+                        patch.object(lifecycle, "_probe_symlink_allowed", return_value=True), \
+                        patch.object(lifecycle.os, "unlink") as unlink:
+                    lifecycle._clear_probe_root(owned)
+                unlink.assert_called_once_with(str(owned / "file-link"))
+                reparse = type("Info", (), {"st_mode": lifecycle.stat.S_IFDIR,
+                    "st_file_attributes": 0x400})()
+                entries[0] = type("Entry", (), {"name": "junction", "path": str(owned / "junction"),
+                    "stat": lambda self, follow_symlinks=False: reparse,
+                    "is_symlink": lambda self: False})()
+                with patch.object(lifecycle.os, "scandir", return_value=Scan()), \
+                        patch.object(lifecycle, "_probe_lstat", return_value=reparse), \
+                        self.assertRaisesRegex(ValueError, "unsupported redirected content"):
+                    lifecycle._probe_root_inventory(owned)
+                self.assertTrue(outside_file.exists())
+                self.assertTrue((outside_dir / "keep.txt").exists())
+
     def test_shared_callers_keep_their_manifest_contract_and_rejected_launch_owns_no_job(self):
         # Entry inventory and the carrier caller supply their own source bindings.
         self.assertEqual(lifecycle._codex_identity({'codex': 'caller-bound-executable'})['path'],
