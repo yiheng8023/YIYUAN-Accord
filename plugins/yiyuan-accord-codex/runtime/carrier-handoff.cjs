@@ -111,6 +111,21 @@ function digest(value) {
   return crypto.createHash('sha256').update(canonical(value)).digest('hex');
 }
 
+const HANDOFF_PROPOSAL_TOOL = immutable({
+  type: 'function',
+  name: 'accord_request_handoff',
+  description: 'Request a carrier handoff. On queued acknowledgement, finish this source turn without further actions on the transferred work; responsibility remains with the source until verified takeover.',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      reason: {type: 'string', minLength: 1, maxLength: MAX_REF},
+      checkpointRef: {type: 'string', minLength: 1, maxLength: MAX_REF},
+    },
+    required: ['reason'],
+    additionalProperties: false,
+  },
+});
+
 function text(value, name, limit = MAX_REF) {
   if (typeof value !== 'string' || !value.trim() || value.length > limit) {
     throw new TypeError(`${name} must be a nonempty bounded string`);
@@ -180,6 +195,41 @@ function validateInterfaces(dependencies) {
   }
   if (typeof verify !== 'function') throw new TypeError('verify callback is required');
   return {transport, recorder, verify};
+}
+
+function validateProposalRequest(value, plan, connectionBinding) {
+  exactKeys(value, ['connectionId', 'hostVersion', 'id', 'method', 'params'], ['jsonrpc'],
+    'nativeRequest');
+  if (Object.hasOwn(value, 'jsonrpc') && value.jsonrpc !== '2.0') {
+    throw new TypeError('nativeRequest.jsonrpc must be 2.0 when supplied');
+  }
+  if (!((typeof value.id === 'string' && value.id.trim() && value.id.length <= MAX_REF) ||
+      Number.isSafeInteger(value.id))) {
+    throw new TypeError('nativeRequest.id must be a bounded string or safe integer');
+  }
+  if (value.connectionId !== connectionBinding.connectionId ||
+      value.hostVersion !== connectionBinding.hostVersion) {
+    throw new TypeError('nativeRequest host/controller binding differs');
+  }
+  if (value.method !== 'item/tool/call') throw new TypeError('nativeRequest.method must be item/tool/call');
+  exactKeys(value.params, ['threadId', 'turnId', 'callId', 'tool', 'arguments'], ['namespace'],
+    'nativeRequest.params');
+  if (value.params.threadId !== plan.source.threadId || value.params.turnId !== plan.source.turnId) {
+    throw new TypeError('nativeRequest source identity differs from the plan');
+  }
+  text(value.params.callId, 'nativeRequest.params.callId');
+  if (value.params.tool !== HANDOFF_PROPOSAL_TOOL.name) {
+    throw new TypeError('nativeRequest.params.tool is not the handoff proposal tool');
+  }
+  if (Object.hasOwn(value.params, 'namespace') && value.params.namespace !== null) {
+    throw new TypeError('nativeRequest.params.namespace differs from the unnamespaced proposal tool');
+  }
+  exactKeys(value.params.arguments, ['reason'], ['checkpointRef'], 'nativeRequest.params.arguments');
+  text(value.params.arguments.reason, 'nativeRequest.params.arguments.reason');
+  if (Object.hasOwn(value.params.arguments, 'checkpointRef')) {
+    text(value.params.arguments.checkpointRef, 'nativeRequest.params.arguments.checkpointRef');
+  }
+  return immutable(value);
 }
 
 function before(deadlineMs, stage, transferId) {
@@ -271,6 +321,52 @@ function requireCompleted(value, threadId, turnId, stage, transferId) {
   }
 }
 
+function validateProposalDispatch(value, plan, proposalRequest, response, transferId) {
+  exactKeys(value, ['toolCompleted', 'sourceTerminal', 'current'], [], 'dispatch');
+  exactKeys(value.current, ['scopeRef', 'authorityRef', 'stateRef', 'writerThreadId'], [],
+    'dispatch.current');
+  if (value.current.scopeRef !== plan.scopeRef || value.current.authorityRef !== plan.authorityRef ||
+      value.current.stateRef !== plan.stateRef ||
+      value.current.writerThreadId !== plan.source.threadId) {
+    fail('PROPOSAL_CURRENT_STATE_CHANGED', 'proposal dispatch current state differs', {
+      stage: 'proposal-dispatch', transferId, reconciliationRequired: true,
+    });
+  }
+
+  const completed = value.toolCompleted;
+  exactKeys(completed, ['method', 'params'], ['emittedAtMs'], 'dispatch.toolCompleted');
+  if (completed.method !== 'item/completed') {
+    fail('INVALID_PROPOSAL_COMPLETION', 'proposal tool completion method differs', {
+      stage: 'proposal-dispatch', transferId, reconciliationRequired: true,
+    });
+  }
+  exactKeys(completed.params, ['item', 'threadId', 'turnId'], ['completedAtMs'],
+    'dispatch.toolCompleted.params');
+  const item = completed.params.item;
+  exactKeys(item, ['type', 'id', 'tool', 'status', 'contentItems', 'success'],
+    ['namespace', 'arguments', 'durationMs'], 'dispatch.toolCompleted.params.item');
+  const requestParams = proposalRequest.params;
+  const namespace = Object.hasOwn(requestParams, 'namespace') ? requestParams.namespace : null;
+  const completedNamespace = Object.hasOwn(item, 'namespace') ? item.namespace : null;
+  if (completed.params.threadId !== requestParams.threadId ||
+      completed.params.turnId !== requestParams.turnId || item.type !== 'dynamicToolCall' ||
+      item.id !== requestParams.callId || item.tool !== requestParams.tool ||
+      completedNamespace !== namespace ||
+      (Object.hasOwn(item, 'arguments') && canonical(item.arguments) !== canonical(requestParams.arguments)) ||
+      item.status !== 'completed' || item.success !== true ||
+      canonical(item.contentItems) !== canonical(response.result.contentItems)) {
+    fail('INVALID_PROPOSAL_COMPLETION', 'proposal tool completion identity or result differs', {
+      stage: 'proposal-dispatch', transferId, reconciliationRequired: true,
+    });
+  }
+
+  exactTerminal(value.sourceTerminal, plan.source.threadId, plan.source.turnId,
+    'proposal-dispatch:source-terminal', transferId);
+  requireCompleted(value.sourceTerminal, plan.source.threadId, plan.source.turnId,
+    'proposal-dispatch:source-terminal', transferId);
+  return immutable(value);
+}
+
 function summarizeThread(value) {
   const thread = value.thread;
   return immutable({id: thread.id});
@@ -295,7 +391,7 @@ function verificationRequirements(stage) {
   return requirements;
 }
 
-async function handoff(rawPlan, rawDependencies) {
+function createExecution(rawPlan, rawDependencies) {
   const entryClock = {wallMs: Date.now(), monotonicMs: performance.now()};
   let plan;
   let dependencies;
@@ -350,6 +446,9 @@ async function handoff(rawPlan, rawDependencies) {
   let targetTurnId = null;
   let targetTurnTerminal = false;
   let stage = 'begin';
+  let proposalRequest = null;
+  let proposalResponse = null;
+  let dispatchStarted = false;
   const verificationSourceRefs = {};
   const evidence = {};
 
@@ -372,10 +471,11 @@ async function handoff(rawPlan, rawDependencies) {
     }
   }
 
-  async function begin() {
+  async function begin(initialEffect = {method: 'thread/read', threadId: plan.source.threadId},
+      initialPhase = 'prepared') {
     ensureWork('begin');
     const initial = immutable({
-      phase: 'prepared',
+      phase: initialPhase,
       transferId,
       planDigest,
       scopeRef: plan.scopeRef,
@@ -392,7 +492,7 @@ async function handoff(rawPlan, rawDependencies) {
       continuationTurn: null,
       expectedLease: null,
       observedLease: null,
-      pendingEffect: {method: 'thread/read', threadId: plan.source.threadId},
+      pendingEffect: initialEffect,
     });
     let result;
     try {
@@ -634,12 +734,82 @@ async function handoff(rawPlan, rawDependencies) {
     return immutable(recovery);
   }
 
-  try {
-    await begin();
+  async function handleFailure(cause) {
+    const original = cause instanceof CarrierHandoffError ? cause :
+      new CarrierHandoffError('HANDOFF_FAILED', 'carrier handoff failed', {
+        stage, transferId, reconciliationRequired: nativeMutation || unresolvedEffect !== null,
+        details: {cause: errorData(cause)},
+      });
+    const recovery = await bestEffortTargetStop();
+    const reconciliationRequired = original.reconciliationRequired || nativeMutation ||
+      unresolvedEffect !== null || writerTransferred || targetThreadId !== null ||
+      !recorderCertain || !bindingCertain;
+    const retainedPendingEffect = unresolvedEffect;
+    if (recorderCertain && bindingCertain && revision !== null) {
+      try {
+        await record({...recordState,
+          phase: reconciliationRequired ? 'reconciliation-required' : 'held',
+          sourceRecovery: 'retained',
+          pendingEffect: retainedPendingEffect,
+          failure: {
+            code: original.code,
+            stage: original.stage,
+            targetThreadId,
+            targetTurnId,
+            targetTurnTerminal,
+            writerTransferred,
+            recovery,
+          }}, true);
+      } catch (_) {
+        recorderCertain = false;
+      }
+    }
+    throw new CarrierHandoffError(original.code, original.message, {
+      stage: original.stage,
+      transferId,
+      reconciliationRequired,
+      state: {
+        targetThreadId,
+        targetTurnId,
+        targetTurnTerminal,
+        writer: writerTransferred ? 'target-or-unknown' : 'source-or-unknown',
+        sourceRecovery: 'retained',
+        recorderRevision: recorderCertain ? revision : null,
+        scopeRef: plan.scopeRef,
+        lease,
+        bindingCertain,
+        nativeRequestUnresolved,
+        pendingEffect: retainedPendingEffect,
+      },
+      details: {
+        planDigest,
+        scopeRef: plan.scopeRef,
+        lease,
+        connectionId: connectionBinding.connectionId,
+        hostVersion: connectionBinding.hostVersion,
+        recorderRevision: recorderCertain ? revision : null,
+        recorderCertain,
+        bindingCertain,
+        writer: writerTransferred ? 'target-or-unknown' : 'source-or-unknown',
+        sourceRecovery: 'retained',
+        targetThreadId,
+        targetTurnId,
+        targetTurnTerminal,
+        nativeRequestUnresolved,
+        pendingEffect: retainedPendingEffect,
+        recovery,
+        original: original.details,
+      },
+    });
+  }
 
-    stage = 'prepare';
-    const sourceReadBefore = await request('thread/read', {threadId: plan.source.threadId},
-      'prepare:source-read');
+  async function runCore(observedSourceTerminal = null, beginRequired = true) {
+    try {
+      if (beginRequired) await begin();
+
+      stage = 'prepare';
+      const sourceReadBefore = await request('thread/read', {threadId: plan.source.threadId},
+        'prepare:source-read');
     threadFrom(sourceReadBefore, plan.source.threadId, stage, transferId);
     const prepared = await verifyStage('prepare', {
       connectionId: transport.connectionId,
@@ -650,8 +820,8 @@ async function handoff(rawPlan, rawDependencies) {
     await record({...recordState, phase: 'prepared', pendingEffect: null,
       sourceRead: summarizeThread(sourceReadBefore), verification: {prepare: prepared.sourceRef}});
 
-    let sourceTerminal = null;
-    if (plan.source.turnId) {
+    let sourceTerminal = observedSourceTerminal;
+    if (plan.source.turnId && !sourceTerminal) {
       stage = 'quiesce-source';
       await record({...recordState, phase: 'quiescing-source',
         pendingEffect: {method: 'turn/interrupt', threadId: plan.source.threadId,
@@ -951,73 +1121,131 @@ async function handoff(rawPlan, rawDependencies) {
       },
       claimLimit: 'host-controller-bound handoff only; no autonomous or default-Desktop claim',
     });
-  } catch (cause) {
-    const original = cause instanceof CarrierHandoffError ? cause :
-      new CarrierHandoffError('HANDOFF_FAILED', 'carrier handoff failed', {
-        stage, transferId, reconciliationRequired: nativeMutation,
-        details: {cause: errorData(cause)},
-      });
-    const recovery = await bestEffortTargetStop();
-    const reconciliationRequired = original.reconciliationRequired || nativeMutation ||
-      writerTransferred || targetThreadId !== null || !recorderCertain || !bindingCertain;
-    const retainedPendingEffect = unresolvedEffect;
-    if (recorderCertain && bindingCertain && revision !== null) {
-      try {
-        await record({...recordState,
-          phase: reconciliationRequired ? 'reconciliation-required' : 'held',
-          sourceRecovery: 'retained',
-          pendingEffect: retainedPendingEffect,
-          failure: {
-            code: original.code,
-            stage: original.stage,
-            targetThreadId,
-            targetTurnId,
-            targetTurnTerminal,
-            writerTransferred,
-            recovery,
-          }}, true);
-      } catch (_) {
-        recorderCertain = false;
-      }
+    } catch (cause) {
+      return handleFailure(cause);
     }
-    throw new CarrierHandoffError(original.code, original.message, {
-      stage: original.stage,
-      transferId,
-      reconciliationRequired,
-      state: {
-        targetThreadId,
-        targetTurnId,
-        targetTurnTerminal,
-        writer: writerTransferred ? 'target-or-unknown' : 'source-or-unknown',
-        sourceRecovery: 'retained',
-        recorderRevision: recorderCertain ? revision : null,
-        scopeRef: plan.scopeRef,
-        lease,
-        bindingCertain,
-        nativeRequestUnresolved,
-        pendingEffect: retainedPendingEffect,
-      },
-      details: {
-        planDigest,
-        scopeRef: plan.scopeRef,
-        lease,
-        connectionId: connectionBinding.connectionId,
-        hostVersion: connectionBinding.hostVersion,
-        recorderRevision: recorderCertain ? revision : null,
-        recorderCertain,
-        bindingCertain,
-        writer: writerTransferred ? 'target-or-unknown' : 'source-or-unknown',
-        sourceRecovery: 'retained',
-        targetThreadId,
-        targetTurnId,
-        targetTurnTerminal,
-        nativeRequestUnresolved,
-        pendingEffect: retainedPendingEffect,
-        recovery,
-        original: original.details,
-      },
-    });
   }
+
+  async function prepareProposal(rawNativeRequest) {
+    if (!plan.source.turnId) {
+      fail('PROPOSAL_SOURCE_TURN_REQUIRED', 'handoff proposal requires an exact active source turn', {
+        stage: 'proposal-prepare', transferId,
+      });
+    }
+    if (proposalRequest || revision !== null) {
+      fail('PROPOSAL_ALREADY_PREPARED', 'handoff proposal has already been prepared', {
+        stage: 'proposal-prepare', transferId, reconciliationRequired: true,
+      });
+    }
+    try {
+      stage = 'proposal-prepare';
+      proposalRequest = validateProposalRequest(rawNativeRequest, plan, connectionBinding);
+      const queued = immutable({
+        status: 'queued',
+        transferId,
+        scopeRef: plan.scopeRef,
+        takeoverStarted: false,
+        sourceWriterRetained: true,
+        message: 'Proposal recorded. Finish this source turn without further actions on the transferred work; takeover has not started and source responsibility is retained.',
+      });
+      proposalResponse = immutable({
+        ...(proposalRequest.jsonrpc === '2.0' ? {jsonrpc: '2.0'} : {}),
+        id: proposalRequest.id,
+        result: {success: true, contentItems: [{type: 'inputText', text: JSON.stringify(queued)}]},
+      });
+      const pendingEffect = immutable({
+        type: 'tool-response',
+        requestId: proposalRequest.id,
+        method: proposalRequest.method,
+        threadId: proposalRequest.params.threadId,
+        turnId: proposalRequest.params.turnId,
+        callId: proposalRequest.params.callId,
+        tool: proposalRequest.params.tool,
+        responseDigest: digest(proposalResponse.result),
+      });
+      unresolvedEffect = pendingEffect;
+      await begin(pendingEffect, 'proposal-preparing');
+      await record({...recordState,
+        phase: 'proposal-response-pending',
+        pendingEffect,
+        proposal: {
+          connection: connectionBinding,
+          nativeRequest: proposalRequest,
+          argumentsDigest: digest(proposalRequest.params.arguments),
+          reason: proposalRequest.params.arguments.reason,
+          checkpointRef: proposalRequest.params.arguments.checkpointRef || null,
+          packet,
+          responseDigest: pendingEffect.responseDigest,
+        },
+      });
+      stage = 'proposal-response-pending';
+
+      const dispatch = async (rawDispatch) => {
+        if (dispatchStarted) {
+          throw new CarrierHandoffError('PROPOSAL_DISPATCH_ALREADY_USED',
+            'handoff proposal dispatcher is one-shot', {
+              stage: 'proposal-dispatch', transferId, reconciliationRequired: true,
+              state: {pendingEffect: unresolvedEffect, lease, recorderRevision: revision},
+            });
+        }
+        dispatchStarted = true;
+        try {
+          ensureWork('proposal-dispatch');
+          ensureBinding('proposal-dispatch');
+          let observed;
+          try {
+            observed = validateProposalDispatch(rawDispatch, plan, proposalRequest,
+              proposalResponse, transferId);
+          } catch (cause) {
+            if (cause instanceof CarrierHandoffError) throw cause;
+            throw new CarrierHandoffError('INVALID_PROPOSAL_DISPATCH',
+              'handoff proposal dispatch evidence is invalid', {
+                stage: 'proposal-dispatch', transferId, reconciliationRequired: true,
+                details: {cause: errorData(cause)},
+              });
+          }
+          await record({...recordState,
+            phase: 'proposal-response-observed',
+            pendingEffect: null,
+            proposal: {...recordState.proposal,
+              completionDigest: digest(observed.toolCompleted),
+              completion: {
+                method: observed.toolCompleted.method,
+                threadId: observed.toolCompleted.params.threadId,
+                turnId: observed.toolCompleted.params.turnId,
+                callId: observed.toolCompleted.params.item.id,
+                status: observed.toolCompleted.params.item.status,
+                success: observed.toolCompleted.params.item.success,
+              },
+              sourceTerminalDigest: digest(observed.sourceTerminal),
+              sourceTerminal: terminalView(observed.sourceTerminal),
+              current: observed.current,
+            },
+          });
+          unresolvedEffect = null;
+          return runCore(observed.sourceTerminal, false);
+        } catch (cause) {
+          return handleFailure(cause);
+        }
+      };
+      return Object.freeze({response: proposalResponse, dispatch});
+    } catch (cause) {
+      return handleFailure(cause);
+    }
+  }
+
+  return Object.freeze({
+    runImmediate: () => runCore(null, true),
+    prepareProposal,
+  });
+}
+
+async function handoff(rawPlan, rawDependencies) {
+  return createExecution(rawPlan, rawDependencies).runImmediate();
+}
+
+async function prepareHandoff(rawPlan, rawDependencies, nativeRequest) {
+  return createExecution(rawPlan, rawDependencies).prepareProposal(nativeRequest);
 }
 
 function errorData(error) {
@@ -1030,4 +1258,4 @@ function errorData(error) {
   return data;
 }
 
-module.exports = {handoff, CarrierHandoffError};
+module.exports = {HANDOFF_PROPOSAL_TOOL, prepareHandoff, handoff, CarrierHandoffError};

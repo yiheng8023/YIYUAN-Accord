@@ -1925,3 +1925,15 @@ Root逐文件复核阶段快照字节与原始记录：source.json和keep.txt的
 728f8305 / 35458090991的Linux/macOS新增升级prepare均在探针残留盘点处失败：原生arg0辅助项是符号链接，不能套用严格包内容规则。仅对两探针已确认释放、空基线且归属确定的独占根增加不跟随链接的盘点/清理；POSIX链接记录目标文本并仅删除链接本身，不读取或删除外部目标。Windows继续使用既有严格reparse拒绝与只读文件清理；包、共享目录及正式状态的规则保持。普通文件/目录、外部文件/目录链接、错误根和未知reparse均有定向反例；Windows以离线模拟核对POSIX链接分支，实际差异交托管CI复验，原平台失败与Windows02结果保留各自身份。
 
 新增边界代码和反例使原预算5%余量不足，代码/测试上限由2020000调整为2040000，预留比例、文件数量和主指导预算不变；不删除保护或回归来凑旧上限。此修复不改变分发包、Jev试验数据或任何功能验收状态。
+
+## 源原生提议到同一交接记录的执行连接（2026-09-20）
+
+在c06b0447上复用已核原生动态工具往返和现有读取队列，实现prepareHandoff与HANDOFF_PROPOSAL_TOOL。现有handoff及新增提议共用一个私有执行核心、同一recorder revision和作用域lease；没有新增proposal表、消息服务或常驻调度器。prepare绑定实际item/tool/call与连接/thread/turn/call身份，只begin/CAS保存proposal-response-pending，返回queued；不发原生交接命令、不释放源。工具参数只含reason及可选checkpointRef，不携带新权限或目的地。
+
+外层控制者答复后，只有匹配的成功dynamicToolCall完成项、源自然completed及当前scope/authority/state/source writer通过，单次dispatcher才承接原record并走既有目标接收/续作/退订。工具返回内容也须匹配；未知CAS、过期、重连、失败回执及状态变化保留pending，不补偿或另起transfer绕过。原直接调用仍能按其既有条件停稳活动源；本次提议接口不把interrupted当成功，也不提供跨controller崩溃的自动重建/重放。独立审查发现任意namespace可被接纳，现收紧到导出工具的缺省/null命名空间并加入反例，避免同名外部组件混淆。
+
+17项模块测试包含错误命名空间、外来request、额外权限字段、错tool/turn/响应内容、失败source/tool、过期、current/连接漂移及重复dispatch；与入口/生命周期/开发契约合计190项通过，三项静态检查通过。最终模块024437c4源/包一致；包19文件、32faf88d。必要实现和回归将代码/测试预算调整为2080000，保留153文件、36000主指导及5%余量；未加运行依赖或新状态层。
+
+实际CLI0.155.1的03运行在执行前保留源码，复用原App Server/SQLite/进程控制及本地固定Responses服务，成功、拒绝、补交和新源提议四案均通过，共13次本地响应、零模型调用。新案在原生source thread注册动态工具，处理真实item/tool/call，再提交queued响应；原始事件的request、tool-completed、source-terminal顺序成立。begin恰好一次，dispatch前没有适配器原生命令、源写者保持；接管后首次有界续作及源取消订阅通过，未对完成源重复interrupt。主控制者及四个Node调用方均正常退出归零，原件keep.txt保持，4个所属运行根回收，SQLite/原生会话/原始流及执行源留存。01–03分别绑定各自实现，不改写旧结果。
+
+该结果支持可分发源提议接口和真实协议执行链，不能以固定source输出或测试verifier证明模型自主择时、实际语义接管、普通Desktop/IDE接入或整体A05。上述才是下一实际缺口；不继续重复此固定小链充当功能闭环。前轮c06b0447的35459249905已11项全绿，含POSIX跨版本恢复；新提议增量由其自己的后续CI验证。

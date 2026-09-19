@@ -960,7 +960,7 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
 
 
 class _Fixture:
-    def __init__(self, manifest):
+    def __init__(self, manifest, response_item=None):
         self.requests, self.auth_seen = [], False
         self.release, self.received, self.hold_next = threading.Event(), threading.Event(), False
         owner, limit = self, manifest["limits"]["providerRequestBytes"]
@@ -1007,10 +1007,14 @@ class _Fixture:
                             transport = "hold-timeout"
                             return
                     text = "受控固定响应；不代表模型判断或任务交付。"
-                    item = {"id": f"msg_fixture_{ordinal}", "type": "message", "role": "assistant", "status": "completed",
-                            "content": [{"type": "output_text", "text": text, "annotations": []}]}
-                    emit("response.output_item.added", output_index=0, item={**item, "status": "in_progress", "content": []})
-                    emit("response.output_text.delta", item_id=item["id"], output_index=0, content_index=0, delta=text)
+                    item = response_item(body, ordinal) if response_item is not None else None
+                    if item is None:
+                        item = {"id": f"msg_fixture_{ordinal}", "type": "message", "role": "assistant", "status": "completed",
+                                "content": [{"type": "output_text", "text": text, "annotations": []}]}
+                        emit("response.output_item.added", output_index=0, item={**item, "status": "in_progress", "content": []})
+                        emit("response.output_text.delta", item_id=item["id"], output_index=0, content_index=0, delta=text)
+                    else:
+                        emit("response.output_item.added", output_index=0, item={**item, "status": "in_progress"})
                     emit("response.output_item.done", output_index=0, item=item)
                     response.update(status="completed", output=[item], usage={"input_tokens": 1, "output_tokens": 1, "total_tokens": 2})
                     emit("response.completed", response=response)

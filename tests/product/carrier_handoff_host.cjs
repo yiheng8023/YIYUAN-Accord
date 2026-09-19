@@ -3,7 +3,7 @@
 // Python App Server controller; mock mode exercises failure paths without a model.
 const readline = require('node:readline');
 const {performance} = require('node:perf_hooks');
-const {handoff} = require('../../runtime/carrier-handoff.cjs');
+const {handoff, prepareHandoff, HANDOFF_PROPOSAL_TOOL} = require('../../runtime/carrier-handoff.cjs');
 const rl = readline.createInterface({input: process.stdin});
 const pending = new Map();
 let sequence = 0, started = false;
@@ -24,8 +24,9 @@ async function run(config) {
   if (config.mode !== 'native' && ['late-cas-active', 'late-verifier'].includes(scenario)) {
     Object.defineProperty(performance, 'now', {value: () => fixtureNow, configurable: true});
   }
+  const proposalCase = scenario.startsWith('proposal-');
   const plan = config.plan || {transferId: 'transfer-1', scopeRef: 'fixture-scope', authorityRef: 'authority-1', stateRef: 'state-1',
-    source: {threadId: 'source-1', ...(sourceActive ? {turnId: 'source-turn'} : {})},
+    source: {threadId: 'source-1', ...(sourceActive || proposalCase ? {turnId: 'source-turn'} : {})},
     target: {cwd: '/bound-workspace', model: 'fixture-model'},
     handoffText: 'Retain the authorized task and protected original; current pause is absent.',
     continuation: {input: 'Perform the next authorized bounded step.', sandboxPolicy: {type: 'readOnly'}},
@@ -117,9 +118,46 @@ async function run(config) {
     if (scenario === 'mutate-plan' && stage === 'prepare') {plan.target.cwd = '/foreign'; plan.handoffText = 'changed';}
     return verdict;
   };
-  let result = null, error = null, concurrent = null;
+  let result = null, error = null, concurrent = null, proposal = null;
   try {
-    if (scenario==='same-scope-concurrent') {
+    if (config.nativeProposal || proposalCase) {
+      const nativeRequest = config.nativeProposal || {
+        connectionId: transport.connectionId, hostVersion: transport.hostVersion,
+        id: 42, method: 'item/tool/call', params: {threadId: 'source-1', turnId: 'source-turn',
+          callId: 'source-proposal-call', tool: HANDOFF_PROPOSAL_TOOL.name, namespace: null,
+          arguments: {reason: 'Preserve the bound responsibility in a fresh carrier.'}},
+      };
+      if (scenario === 'proposal-foreign-request') nativeRequest.params.threadId = 'foreign';
+      if (scenario === 'proposal-foreign-namespace') nativeRequest.params.namespace = 'unrelated-component';
+      if (scenario === 'proposal-injected-authority') nativeRequest.params.arguments.scopeRef = 'foreign';
+      const prepared = await prepareHandoff(plan, {transport, recorder, verify}, nativeRequest);
+      proposal = {response: prepared.response, callsBeforeDispatch: clone(calls), snapshotsBeforeDispatch: clone(snapshots)};
+      const readiness = config.mode === 'native' ? await remote('proposalEvidence', [prepared.response]) : {
+        toolCompleted: {method: 'item/completed', params: {threadId: 'source-1', turnId: 'source-turn',
+          item: {type: 'dynamicToolCall', id: 'source-proposal-call', tool: HANDOFF_PROPOSAL_TOOL.name,
+            namespace: null, status: 'completed', success: true, contentItems: prepared.response.result.contentItems}}},
+        sourceTerminal: {method: 'turn/completed', params: {threadId: 'source-1', turn: {id: 'source-turn', status: 'completed'}}},
+        current: {scopeRef: plan.scopeRef, authorityRef: plan.authorityRef, stateRef: plan.stateRef,
+          writerThreadId: plan.source.threadId},
+      };
+      if (scenario === 'proposal-wrong-tool') readiness.toolCompleted.params.item.id = 'unrelated-call';
+      if (scenario === 'proposal-wrong-turn') readiness.sourceTerminal.params.turn.id = 'unrelated-turn';
+      if (scenario === 'proposal-failed-tool') readiness.toolCompleted.params.item.success = false;
+      if (scenario === 'proposal-wrong-response') readiness.toolCompleted.params.item.contentItems = [{type:'inputText',text:'another response'}];
+      if (scenario === 'proposal-failed-source') readiness.sourceTerminal.params.turn.status = 'failed';
+      if (scenario === 'proposal-changed-state') readiness.current.stateRef = 'new-state';
+      if (scenario === 'proposal-connection-drift') transport.connectionId = 'reconnected';
+      if (scenario === 'proposal-expired') {
+        const expiredNow = performance.now() + 7000;
+        Object.defineProperty(performance, 'now', {value: () => expiredNow, configurable: true});
+      }
+      result = await prepared.dispatch(readiness);
+      if (scenario === 'proposal-double-dispatch') {
+        const before = calls.length;
+        try { await prepared.dispatch(readiness); } catch (e) { proposal.duplicateError = e.code; }
+        proposal.callsAfterDuplicate = calls.length - before;
+      }
+    } else if (scenario==='same-scope-concurrent') {
       concurrent=await Promise.allSettled([handoff(plan,{transport,recorder,verify}),
         handoff({...plan,transferId:'transfer-2'},{transport,recorder,verify})]);
       result=concurrent.find(r=>r.status==='fulfilled')?.value || null;
@@ -127,7 +165,7 @@ async function run(config) {
     } else result = await handoff(plan, {transport, recorder, verify});
   }
   catch (e) {error = {name:e.name, message:e.message, code:e.code, reconciliationRequired:e.reconciliationRequired, state:e.state};}
-  process.stdout.write(JSON.stringify({kind:'done', result, error, calls, snapshots, verdicts, concurrent}) + '\n');
+  process.stdout.write(JSON.stringify({kind:'done', result, error, calls, snapshots, verdicts, concurrent, proposal}) + '\n');
   rl.close(); process.stdin.destroy();
 }
 rl.on('line', line => {

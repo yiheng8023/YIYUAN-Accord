@@ -15,6 +15,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 DRIVER = Path(__file__).with_name('carrier_handoff_host.cjs')
+PROPOSAL_TOOL = 'accord_request_handoff'
 
 
 class CarrierHandoffTests(unittest.TestCase):
@@ -159,6 +160,60 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertEqual((ROOT/'runtime/carrier-handoff.cjs').read_bytes(),
                          (ROOT/'plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs').read_bytes())
 
+    def test_proposal_only_records_before_response_and_reuses_one_transfer(self):
+        r = self.run_case('proposal-success')
+        self.assertIsNone(r['error'])
+        self.assertEqual(r['proposal']['callsBeforeDispatch'], [])
+        self.assertEqual(r['proposal']['response']['id'], 42)
+        self.assertTrue(r['proposal']['response']['result']['success'])
+        queued = json.loads(r['proposal']['response']['result']['contentItems'][0]['text'])
+        self.assertEqual(queued['status'], 'queued')
+        self.assertEqual(queued['transferId'], 'transfer-1')
+        before = r['proposal']['snapshotsBeforeDispatch'][-1]
+        self.assertEqual(before['phase'], 'proposal-response-pending')
+        self.assertEqual(before['writerThreadId'], 'source-1')
+        self.assertEqual(r['result']['status'], 'handed-off')
+        self.assertFalse(any(c['method']=='turn/interrupt' for c in r['calls']))
+
+    def test_proposal_requires_its_exact_native_receipts_and_current_binding(self):
+        for scenario in ('proposal-foreign-request', 'proposal-foreign-namespace', 'proposal-injected-authority', 'proposal-wrong-tool',
+                         'proposal-wrong-turn', 'proposal-failed-tool', 'proposal-failed-source',
+                         'proposal-wrong-response', 'proposal-expired', 'proposal-changed-state',
+                         'proposal-connection-drift'):
+            with self.subTest(scenario=scenario):
+                r = self.run_case(scenario)
+                self.assertIsNotNone(r['error'])
+                self.assertEqual(r['calls'], [])
+                if r['proposal'] and scenario!='proposal-connection-drift':
+                    self.assertEqual(r['snapshots'][-1]['pendingEffect']['type'], 'tool-response')
+
+    def test_proposal_dispatch_is_single_use(self):
+        r = self.run_case('proposal-double-dispatch')
+        self.assertIsNone(r['error'])
+        self.assertTrue(r['proposal']['duplicateError'])
+        self.assertEqual(r['proposal']['callsAfterDuplicate'], 0)
+
+
+def proposal_fixture_item(body, ordinal, state):
+    """Reuse the previously observed direct/Code Mode native tool shapes."""
+    if not state.get('next'):
+        return None
+    state['next'] = False
+    tools = body.get('tools', []) + [t for row in body.get('input', [])
+        if row.get('type') == 'additional_tools' for t in row.get('tools', [])]
+    arguments = {'reason': 'Preserve the fixed task in the already authorized fresh carrier.'}
+    direct = [t for t in tools if t.get('type') == 'function' and t.get('name') == PROPOSAL_TOOL]
+    if len(direct) == 1:
+        return {'id':f'proposal_{ordinal}', 'type':'function_call', 'call_id':f'proposal_call_{ordinal}',
+                'name':PROPOSAL_TOOL, 'arguments':json.dumps(arguments), 'status':'completed'}
+    wrappers = [f for t in tools if t.get('type')=='namespace' and t.get('name')=='functions'
+                for f in t.get('tools',[]) if f.get('name')=='exec']
+    if len(wrappers)!=1 or PROPOSAL_TOOL not in wrappers[0].get('description',''):
+        raise ValueError('prepared native proposal tool is not exposed')
+    return {'id':f'proposal_{ordinal}', 'type':'custom_tool_call', 'call_id':f'proposal_call_{ordinal}',
+            'namespace':'functions', 'name':'exec', 'status':'completed',
+            'input':'text(await tools.'+PROPOSAL_TOOL+'('+json.dumps(arguments)+'));'}
+
 
 def native_integration(codex, evidence):
     """Explicit model-free integration; reuse existing transport/fixture/jobs.
@@ -184,7 +239,7 @@ def native_integration(codex, evidence):
     version = subprocess.check_output([str(codex),'--version'],timeout=10,text=True).strip()
     manifest={'evidence':str(root),'codex':str(codex),'node':str(node),
         'ownedRoots':{name:str(root/name) for name in ('home','workspace','state','temp')},
-        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':10},
+        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':14},
         'resourceController':'windows-job-object' if os.name=='nt' else 'posix-session-process-group'}
     sources=[ROOT/'runtime/carrier-handoff.cjs',DRIVER,Path(__file__),ROOT/'scripts/observe_codex_lifecycle.py',
              ROOT/'scripts/observe_codex_entry.py',ROOT/'scripts/codex_rpc.py',ROOT/'scripts/inspect_native_resources.py']
@@ -200,11 +255,12 @@ def native_integration(codex, evidence):
     manifest['claimLimit']='Native method execution with fixed localhost replies and a test verifier; no model judgment, ordinary Desktop control, autonomous timing or whole acceptance.'
     save(root/'manifest.json',manifest)
     env=_owned_environment(manifest)
-    fixture=_Fixture(manifest)
+    proposal_state = {'next':False}
+    fixture=_Fixture(manifest, lambda body, ordinal: proposal_fixture_item(body, ordinal, proposal_state))
     app=None
     results=[]
     owned_threads=set()
-    deadline=time.monotonic()+160
+    deadline=time.monotonic()+220
     ledger_db=sqlite3.connect(root/'retained/recorder.sqlite',isolation_level=None)
     ledger_db.execute('PRAGMA synchronous=FULL')
     ledger_db.execute('CREATE TABLE scopes (scope TEXT PRIMARY KEY, owner TEXT, active TEXT, token TEXT)')
@@ -233,6 +289,19 @@ def native_integration(codex, evidence):
             event=app._receive(limit);app.events.append(event)
             if matches(event): return event
         raise TimeoutError('exact terminal missing before deadline')
+    def source_proposal(thread_id, turn_id):
+        limit = min(deadline, time.monotonic()+30)
+        def matches(event):
+            params = event.get('params', {})
+            return (event.get('method')=='item/tool/call' and 'id' in event
+                    and params.get('threadId')==thread_id and params.get('turnId')==turn_id
+                    and params.get('tool')==PROPOSAL_TOOL)
+        for event in app.events:
+            if matches(event): return event
+        while time.monotonic()<limit:
+            event=app._receive(limit);app.events.append(event)
+            if matches(event): return event
+        raise TimeoutError('source did not submit its native proposal')
     def record_begin(transfer_id,digest,initial):
         ledger_db.execute('BEGIN IMMEDIATE')
         try:
@@ -267,15 +336,25 @@ def native_integration(codex, evidence):
     try:
         app=_App(manifest,'carrier-controller',_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false')),env,deadline)
         app.initialize()
-        for scenario in ('success','reject-intake','extra-context'):
-            source=request('thread/start',{'model':'fixture-no-model','modelProvider':'accord_fixture',
-                'cwd':manifest['ownedRoots']['workspace'],'sandbox':'read-only','approvalPolicy':'never'})['thread']['id']
-            turn=request('turn/start',{'threadId':source,'input':[{'type':'text','text':'Retain the fixed fixture task; do not call tools.'}]})['turn']['id']
-            if terminal(source,turn)['params']['turn']['status']!='completed':
+        for scenario in ('success','reject-intake','extra-context','source-proposal'):
+            source_settings={'model':'fixture-no-model','modelProvider':'accord_fixture',
+                'cwd':manifest['ownedRoots']['workspace'],'sandbox':'read-only','approvalPolicy':'never'}
+            if scenario=='source-proposal':
+                source_settings['dynamicTools']=[{'type':'function','name':PROPOSAL_TOOL,
+                    'description':'Submit a handoff proposal; the controller records it before acknowledgement and dispatches after this turn ends.',
+                    'inputSchema':{'type':'object','properties':{'reason':{'type':'string'}},
+                                   'required':['reason'],'additionalProperties':False}}]
+                proposal_state['next']=True
+            source=request('thread/start',source_settings)['thread']['id']
+            source_prompt = ('Submit one handoff proposal for the bound fixed task, then finish this source turn without other actions.'
+                             if scenario=='source-proposal' else 'Retain the fixed fixture task; do not call tools.')
+            turn=request('turn/start',{'threadId':source,'input':[{'type':'text','text':source_prompt}]})['turn']['id']
+            proposed=source_proposal(source,turn) if scenario=='source-proposal' else None
+            if proposed is None and terminal(source,turn)['params']['turn']['status']!='completed':
                 raise RuntimeError('source fixture turn did not complete')
             now=int(time.time()*1000)
             plan={'transferId':scenario,'scopeRef':'fixture-'+scenario,'authorityRef':'fixture-authority-v1','stateRef':'fixture-source-v1',
-                'source':{'threadId':source},'target':{'cwd':manifest['ownedRoots']['workspace'],'model':'fixture-no-model','modelProvider':'accord_fixture'},
+                'source':{'threadId':source, **({'turnId':turn} if proposed else {})},'target':{'cwd':manifest['ownedRoots']['workspace'],'model':'fixture-no-model','modelProvider':'accord_fixture'},
                 'handoffText':'Read-only intake of the fixed fixture task; preserve keep.txt and do not call tools.',
                 'continuation':{'input':'Continue the accepted read-only fixture task; preserve keep.txt and do not call tools.','sandboxPolicy':{'type':'readOnly'}},
                 'deadlineMs':now+60000,'recoveryDeadlineMs':now+75000}
@@ -297,7 +376,10 @@ def native_integration(codex, evidence):
                         except BaseException as error: inbox.put(error)
                         finally: inbox.put(None)
                     reader=threading.Thread(target=consume,daemon=True);reader.start()
-                    proc.stdin.write((json.dumps({'mode':'native','plan':plan,'binding':{'connectionId':app.root.name,'hostVersion':version}})+'\n').encode());proc.stdin.flush()
+                    binding={'connectionId':app.root.name,'hostVersion':version}
+                    config={'mode':'native','plan':plan,'binding':binding}
+                    if proposed is not None: config['nativeProposal']={**binding,**proposed}
+                    proc.stdin.write((json.dumps(config)+'\n').encode());proc.stdin.flush()
                     while True:
                         message=inbox.get(timeout=max(0.01,min(40,deadline-time.monotonic())))
                         if message is None: raise RuntimeError('bridge exited before result')
@@ -312,6 +394,22 @@ def native_integration(codex, evidence):
                                 value=record_begin(*args)
                             elif message['kind']=='compareAndSet':
                                 value=record_cas(*args)
+                            elif message['kind']=='proposalEvidence':
+                                if proposed is None or args[0].get('id')!=proposed['id']:
+                                    raise ValueError('unbound native proposal response')
+                                app._send(args[0])
+                                source_terminal=terminal(source,turn)
+                                tool_events=[e for e in app.events if e.get('method')=='item/completed'
+                                    and e.get('params',{}).get('threadId')==source
+                                    and e.get('params',{}).get('turnId')==turn
+                                    and e.get('params',{}).get('item',{}).get('type')=='dynamicToolCall'
+                                    and e['params']['item'].get('id')==proposed['params']['callId']]
+                                if len(tool_events)!=1: raise ValueError('exact native tool completion missing')
+                                value={'toolCompleted':tool_events[0],'sourceTerminal':source_terminal,
+                                    'current':{k:plan[k] for k in ('scopeRef','authorityRef','stateRef')}}
+                                value['current']['writerThreadId']=source
+                                save(root/'retained/source-proposal-receipts.json',{'request':proposed,
+                                    'response':args[0], **value})
                             elif message['kind']=='verify':
                                 stage,facts=args[:2]
                                 unchanged=hashlib.sha256((root/'workspace/keep.txt').read_bytes()).hexdigest()==original
@@ -350,7 +448,7 @@ def native_integration(codex, evidence):
             stored=ledger_db.execute('SELECT revision,state FROM transfers WHERE id=?',(scenario,)).fetchone()
             if stored: save(ledger,{'revision':stored[0],'state':json.loads(stored[1])})
             save(root/'retained'/f'{scenario}-result.json',result);results.append(result)
-            if scenario in ('success','extra-context') and (result['error'] or result['result']['status']!='handed-off'): raise RuntimeError('native handoff failed; inspect retained result')
+            if scenario in ('success','extra-context','source-proposal') and (result['error'] or result['result']['status']!='handed-off'): raise RuntimeError('native handoff failed; inspect retained result')
             if scenario=='reject-intake' and (result['error'] is None or any(c['method']=='thread/unsubscribe' for c in result['calls'])): raise RuntimeError('rejected intake released source')
     finally:
         try:
@@ -362,13 +460,13 @@ def native_integration(codex, evidence):
         save(root/'poststate.json',{'providerRequests':len(fixture.requests),'credentialsObserved':fixture.auth_seen,
             'keepPreserved':hashlib.sha256((root/'workspace/keep.txt').read_bytes()).hexdigest()==original,
             'completedCases':len(results),'claimLimit':manifest['claimLimit']})
-    if fixture.auth_seen or len(results)!=3: raise RuntimeError('native integration incomplete')
+    if fixture.auth_seen or len(results)!=4: raise RuntimeError('native integration incomplete')
     for name in ('home','workspace','state','temp'):
         target=(root/name).resolve(strict=True)
         if target.parent!=root: raise ValueError('owned cleanup root mismatch')
         _remove_owned_tree(target)
     save(root/'cleanup.json',{'ownedRootsRemoved':True,'nativeSessionEvidenceRetained':True})
-    print(json.dumps({'nativeCases':3,'modelCalls':0,'providerRequests':len(fixture.requests),'evidence':str(root)}))
+    print(json.dumps({'nativeCases':4,'modelCalls':0,'providerRequests':len(fixture.requests),'evidence':str(root)}))
 
 
 if __name__=='__main__':

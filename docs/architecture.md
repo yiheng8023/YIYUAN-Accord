@@ -344,10 +344,15 @@ which owns the plan, callback, verification and recovery contract. Consumers nee
 no development checkout to read it. The adapter composes a surviving authorized
 controller's native transport, durable scope ownership and independent verification;
 it supplies no default Desktop/IDE control connection or automatic timing.
+`prepareHandoff` connects an actual source dynamic-tool request to that same
+record and execution core. Preparation only records a queued proposal; an outer,
+single-use dispatcher requires the exact tool result, completed source turn and
+current bindings before native takeover. Interrupted sources and controller loss
+remain reconciliation cases, not automatic replay.
 
 The native test caller in `tests/product/test_carrier_handoff.py` reuses existing
 App Server/process controls, local fixed responses and SQLite transactions. It
-checks protocol effects, refusal and extra intake; it does not prove model judgment,
+checks protocol effects, refusal, extra intake and source-tool dispatch; it does not prove model judgment,
 autonomous timing, a production verifier or ordinary GUI adoption.
 
 ### Context timing

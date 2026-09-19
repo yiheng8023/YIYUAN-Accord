@@ -7,12 +7,63 @@ plugin: [adapter contract](../../../adapter.json) and
 compaction and causal forks do not require this interface.
 
 The CommonJS module exports `handoff(plan, {transport, recorder, verify})` and
-`CarrierHandoffError`. It opens no process, connection, account or recovery service.
+`CarrierHandoffError`, plus `HANDOFF_PROPOSAL_TOOL` and `prepareHandoff` for the
+[source proposal path](#source-proposal-and-outer-dispatch). It opens no process,
+connection, account or recovery service.
 Use an existing suitable controller or establish one within current authority;
 installation does not give ordinary Desktop/IDE Hooks control of those tasks.
 The caller decides when a transfer is needed from current evidence and owns the
 semantic checks, native configuration, authentication, budgets and recovery route.
 This module performs the bounded transfer after those conditions are established.
+
+## Source proposal and outer dispatch
+
+For a controller-owned source to request transfer, register the exported
+`HANDOFF_PROPOSAL_TOOL` in its native `thread/start.dynamicTools` with the host's
+experimental API enabled. Its unnamespaced tool is `accord_request_handoff`;
+arguments contain a bounded `reason` and optional `checkpointRef`. Treat these as
+proposal data; the controller binds the plan, authority, scope, destination and
+budgets. A source request is neither a takeover nor a new permission.
+
+Pass the actual `item/tool/call` JSON-RPC request to
+`prepareHandoff(plan, {transport, recorder, verify}, nativeRequest)`, adding the
+bound `connectionId` and `hostVersion` to its envelope. The plan must identify the
+same source thread and turn. Preparation performs only the existing recorder's
+begin/CAS, retains the source writer and records `proposal-response-pending` with
+the request identity, argument digest and pending tool response. It sends no native
+request. The returned `{response, dispatch}` handle has no extra queue or store.
+
+Send `response` as the answer to that server request. It acknowledges only `queued`
+and asks the source to finish its current turn without further actions on the
+transferred work. Preserve raw ordered events in the existing controller loop.
+Do not run handoff inside the still-pending tool callback or nest requests on a
+serialized receiver. After the exact successful dynamic tool `item/completed` and
+source `turn/completed`, re-read current scope/authority/state/writer evidence and
+invoke the handle once:
+
+```js
+await prepared.dispatch({
+  toolCompleted,
+  sourceTerminal,
+  current: {scopeRef, authorityRef, stateRef, writerThreadId},
+});
+```
+
+The tool receipt must match thread, turn, call, tool, namespace and returned
+content, with `success: true`. This proposal path requires source status
+`completed`; interruption or failure retains pending responsibility for
+reconciliation, rather than being interpreted as permission to proceed. Dispatch
+uses the original record/revision/lease and deadlines, and runs the existing
+handoff checks without interrupting an already completed source. Current-reference
+strings still require the independent `verify` checks below.
+
+The handle is single-use, including after failed validation. Concurrent or repeated
+dispatch cannot start a second transfer. Connection change, expired budgets or
+uncertain CAS preserve unresolved state. This interface does not rebuild a handle
+after controller failure or replay a tool response: the surviving authorized caller
+must reconcile the durable record and actual native effects first. Existing
+`handoff()` remains available for a separately bound direct transfer, including its
+supported active-source quiescence; do not use it to bypass an unresolved proposal.
 
 ## Plan and call
 
