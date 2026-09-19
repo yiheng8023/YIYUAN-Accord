@@ -1983,3 +1983,13 @@ readiness.json从保留的原生文件读取输出恢复，readiness.md依据保
 连续性Skill与随包native-handoff参考已补入这些版本绑定事实、无关请求保留及恢复主体要求；明确上游App Server/传输的实验性支持限制。未新增运行时、MCP、转发协议或默认启用。包仍19文件、3.3.0-dev.1，摘要更新为b566c0e2，运行代码和Hook保持；共享安装与既有证据仍绑定d148f9e4等原包。此增量防止错误接线推断，不证明普通入口已自动交接，也不放宽基线或验收。
 
 独立审查将“单订阅释放不阻止未来输入”的宽泛表述收紧为不证明线程卸载、后续宿主授权输入须重新协调。首次85项契约检查出现3处失败，其中一处为bounded Git capture failed；两个相关方法单独复核通过，随后保持源文件不变的完整85项重跑通过（119.769秒）。初次失败原因未锁定，不改断言或放宽边界来追认；原记录保留并由本次远端CI继续核验。Skill结构校验及三项静态检查通过，整版准入保持未完成。
+
+## 普通插件的原生调用身份与只读状态入口（2026-09-20）
+
+a88824fa的11项CI全部通过后，沿固定be2951ea源码发现可复用入口：[mcp_tool_call.rs](https://github.com/openai/codex/blob/be2951ea34f0d295ed0becf97079f92fa5f6950e/codex-rs/core/src/mcp_tool_call.rs)为每次MCP请求注入callId和x-codex-turn-metadata；[turn_metadata.rs](https://github.com/openai/codex/blob/be2951ea34f0d295ed0becf97079f92fa5f6950e/codex-rs/core/src/turn_metadata.rs)提供session/thread/turn。Hook沿session_id记录，而该身份在根及后代间共享；它不是每个子任务各自的检查点身份。插件原生支持默认.mcp.json及相对插件根cwd，无需改用户配置或创造路径宏。元数据分离于模型参数但不构成认证，工作区富化也不证明当前cwd。
+
+新增inspect_task_state(cwd)，仅以实际调用元数据绑定根任务、复用task-checkpoint的status；模型只能选择绝对工作目录，不能覆写身份、操作或状态目录。子任务与共享会话身份不一致时不读取祖先状态，缺输入/检查点保持unknown，保留暂停及恢复待核。协议采用有界UTF-8 JSONL、初始化握手和EOF退出，无网络监听、控制连接、写入、派发或新状态引擎。新增宿主管理的stdio进程已同步adapter生命周期声明、基线/计划/验收和双语README；不是零资源成本或全链路完成。
+
+主任务独占accord-native-state-mcp-20260920-run-01执行并预冻结26份源码，独立Agent仅只读复核。真实Windows CLI0.155.1从隔离市场安装候选并加载MCP，readOnly源实际调用；返回thread/session/turn/callId与原生回执分别匹配，无receipt正确保留未知。只用2次本地固定响应、零模型调用/认证；原件保持、状态目录未新增文件，两个安装阶段及App Server控制域正常退出，App Server Job最终activeProcesses=0。原始回执及源码保留，核验后仅回收home/workspace/state/temp/marketplace。该运行证明原生注册和身份往返，不证明模型自主采用、GUI、子任务实机读取、已有检查点正向原生读取或自动交接。
+
+原生运行之后收紧initialize的clientInfo字段校验、补反例及连续性Skill，未重标原始运行源码；最新10项MCP测试和86项开发契约检查全部通过（96项，126.407秒）。最终包21文件、51ae6e41，预算2100000字节/158文件，保留5%余量和36000主指导上限。Linux/macOS CI复用既有原生安装新增同一MCP检查并保留原始工件，负责精确新候选；共享安装仍为19文件d148f9e4，未静默启用新组件。必要scope和A01–A08完整准入保持原未完状态。

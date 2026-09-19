@@ -78,7 +78,7 @@ def _strings(value, *, empty=False):
             and len(value) == len(set(value)))
 
 
-def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False):
+def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False):
     """Describe this development package, not a mandatory product mechanism."""
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
@@ -103,6 +103,18 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
         },
     }
     if adapter_id == "codex" and development_schema == V5_SCHEMA:
+        if native_state_mcp:
+            contract["persistentProcessAdded"] = True
+            contract["nativeTaskStateMcp"] = {
+                "configuration": ".mcp.json", "entry": "runtime/native-state-mcp.cjs",
+                "transport": "host-managed-stdio", "tool": "inspect_task_state",
+                "scope": "calling-thread-metadata-and-explicit-caller-selected-workspace",
+                "effect": "read-existing-checkpoint-status-without-state-mutation",
+                "identity": "Codex callId and x-codex-turn-metadata; root-thread-only-checkpoint-read; descendant-shared-session-remains-unavailable; metadata-is-not-authentication",
+                "storage": "existing-task-checkpoint-only",
+                "lifecycle": "host-start-reload-and-close; process-exits-on-stdin-end; no-listener-or-daemon",
+                "limits": "no-argument-identity-or-operation-override; no-input-replay; no-freshness-authority-or-completion-claim; no-app-server-control-or-handoff-dispatch",
+            }
         if carrier_handoff:
             contract["optionalCarrierHandoff"] = {
                 "entry": "runtime/carrier-handoff.cjs",

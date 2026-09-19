@@ -89,6 +89,16 @@ SessionStart supplies the coordination body separately from the companion
 checkpoint Hook's recovery evidence, preserving its bounded snapshot budget.
 Startup guidance reads the packaged brief, with no task-state access. A missing
 brief is an entry failure; unavailable optional details hold only dependent work.
+The package also registers one host-managed stdio MCP process with
+`inspect_task_state(cwd)`. It reuses checkpoint `status` and returns a selected
+subset of the caller's native MCP metadata separately from that snapshot. The
+caller selects an absolute workspace; the tool does not attest it as the host's
+current cwd. It neither writes state nor opens a control connection or dispatches
+a task. Missing input/state remains unavailable. In the inspected host, Hook
+session identity is shared by descendants: when native session and thread IDs
+differ, the reader holds checkpoint lookup instead of adopting ancestor state.
+This adds a host-owned process lifetime, not a separate storage engine or remote
+service. Installation, actual tool use and resource release remain separate checks.
 The checkpoint connects UserPromptSubmit, Stop, SessionEnd and Interrupt. These
 connections establish available mechanisms, not demonstrated ordinary-task adoption
 or end-to-end completion. The Agent binds necessary file inputs, output predicates and

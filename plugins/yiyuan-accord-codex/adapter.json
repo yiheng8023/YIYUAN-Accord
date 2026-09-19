@@ -12,7 +12,7 @@
   ],
   "optionalContinuityHint": "session-start-invalidation",
   "optionalHintDependency": "host-path-node",
-  "persistentProcessAdded": false,
+  "persistentProcessAdded": true,
   "persistentStateAdded": true,
   "requiresFixedHostVersion": false,
   "behaviorEvidenceState": "unverified",
@@ -48,6 +48,18 @@
       "write": "flush-file-before-atomic-replacement",
       "limits": "no-cross-session-adoption-wakeup-or-power-loss-guarantee; stored-state-grants-no-authority"
     }
+  },
+  "nativeTaskStateMcp": {
+    "configuration": ".mcp.json",
+    "entry": "runtime/native-state-mcp.cjs",
+    "transport": "host-managed-stdio",
+    "tool": "inspect_task_state",
+    "scope": "calling-thread-metadata-and-explicit-caller-selected-workspace",
+    "effect": "read-existing-checkpoint-status-without-state-mutation",
+    "identity": "Codex callId and x-codex-turn-metadata; root-thread-only-checkpoint-read; descendant-shared-session-remains-unavailable; metadata-is-not-authentication",
+    "storage": "existing-task-checkpoint-only",
+    "lifecycle": "host-start-reload-and-close; process-exits-on-stdin-end; no-listener-or-daemon",
+    "limits": "no-argument-identity-or-operation-override; no-input-replay; no-freshness-authority-or-completion-claim; no-app-server-control-or-handoff-dispatch"
   },
   "optionalCarrierHandoff": {
     "entry": "runtime/carrier-handoff.cjs",

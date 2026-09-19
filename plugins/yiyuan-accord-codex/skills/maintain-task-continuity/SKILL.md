@@ -21,7 +21,12 @@ Use sufficient native state. Bind a file checkpoint when input freshness,
 unfinished-work recovery or completion needs protection the host does not supply;
 file creation alone is not a trigger. Honor existing bindings and pauses, and
 reconcile current input, effects and authority before revising or resuming them.
-Use current helper `--help` from the plugin root for status, binding, revision,
+When the host exposes `inspect_task_state`, use it for read-only inspection of
+the existing root-session checkpoint at an explicit workspace. Call identity
+comes from host MCP metadata; the workspace remains caller-selected. Missing
+metadata/state or a descendant's shared session remains unavailable, not adopted
+parent state. The host owns this stdio process; no control connection is created.
+Use current helper `--help` from the plugin root for other status, binding, revision,
 `unresolved`, pause and retirement; readback or file matches do not grant authority.
 Retain known unmet conditions until evidenced resolution or authorized cancellation.
 

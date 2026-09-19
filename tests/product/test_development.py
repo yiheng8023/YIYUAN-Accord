@@ -1180,6 +1180,18 @@ class DevelopmentDeliveryTests(unittest.TestCase):
                     self.assertFalse(report["valid"])
                     self.assertTrue(any("package" in error for error in report["errors"]))
 
+    def test_mcp_reader_registration_and_process_claim_cannot_drift(self):
+        configuration = 'plugins/yiyuan-accord-codex/.mcp.json'
+        altered = json.loads((self.root / configuration).read_text(encoding='utf-8'))
+        altered['mcpServers']['accord-state']['args'] = ['foreign-script.cjs']
+        with self.changed(configuration, json.dumps(altered).encode()):
+            self.assertTrue(any('native-state MCP configuration' in error for error in self.report()['errors']))
+        locator = 'plugins/yiyuan-accord-codex/adapter.json'
+        adapter = json.loads((self.root / locator).read_text(encoding='utf-8'))
+        adapter['persistentProcessAdded'] = False
+        with self.changed(locator, json.dumps(adapter).encode()):
+            self.assertFalse(self.report()['valid'])
+
     def test_admission_consumes_checked_source_not_a_second_worktree_read(self):
         from yiyuan_accord import control
         original = control._read_json

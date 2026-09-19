@@ -440,7 +440,7 @@ def activation_mechanism_errors(
     root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
     task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
     resume_reconciliation=False, context_reentry=False, native_context=False,
-    startup_entry=False, carrier_handoff=False,
+    startup_entry=False, carrier_handoff=False, native_state_mcp=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -486,6 +486,26 @@ def activation_mechanism_errors(
                 errors.append(f"{prefix} carrier-handoff module differs from canonical bytes")
         except OSError:
             errors.append(f"{prefix} carrier-handoff module is unreadable")
+    if native_state_mcp:
+        config_locator = f"plugins/yiyuan-accord-{package}/.mcp.json"
+        mcp_locator = f"plugins/yiyuan-accord-{package}/runtime/native-state-mcp.cjs"
+        additional_mechanisms = [*additional_mechanisms, config_locator, mcp_locator]
+        try:
+            delivered = repository_relative_path(root, mcp_locator)
+            canonical_mcp = repository_relative_path(root, "runtime/native-state-mcp.cjs")
+            config_path = repository_relative_path(root, config_locator)
+            expected_mcp = {"mcpServers": {"accord-state": {"command": "node",
+                "args": ["runtime/native-state-mcp.cjs"], "cwd": ".",
+                "startup_timeout_sec": 10, "tool_timeout_sec": 10}}}
+            if (adapter_id != "codex" or delivered is None or canonical_mcp is None
+                    or delivered.is_symlink() or canonical_mcp.is_symlink()
+                    or _owned_bytes(delivered) != _owned_bytes(canonical_mcp)):
+                errors.append(f"{prefix} native-state MCP module differs from canonical bytes")
+            if (config_path is None or config_path.is_symlink()
+                    or json.loads(_owned_text(config_path)) != expected_mcp):
+                errors.append(f"{prefix} native-state MCP configuration differs")
+        except (OSError, UnicodeError, ValueError):
+            errors.append(f"{prefix} native-state MCP package is unreadable")
     if mechanism_locators != expected_locators + list(additional_mechanisms):
         return errors + [f"{prefix} activation mechanism locator is invalid"]
     path = repository_relative_path(root, mechanism_locators[0])
@@ -728,6 +748,12 @@ def validate_host_projection(
             errors.append(f"{prefix} carrier handoff declaration must be boolean")
         if projection["carrierHandoff"] and not (expected_contract and "optionalCarrierHandoff" in expected_contract):
             errors.append(f"{prefix} carrier handoff is outside the declared adapter")
+    if "nativeStateMcp" in projection:
+        expected_shape |= {"nativeStateMcp"}
+        if type(projection["nativeStateMcp"]) is not bool:
+            errors.append(f"{prefix} native-state MCP declaration must be boolean")
+        if projection["nativeStateMcp"] and not (expected_contract and "nativeTaskStateMcp" in expected_contract):
+            errors.append(f"{prefix} native-state MCP is outside the declared adapter")
     if adapter_id not in ("codex", "claude-code") or not _exact(projection, expected_shape):
         errors.append(f"{prefix} program projection shape is invalid")
     manifest_locator, marketplace_locator = projection.get("manifest"), projection.get("marketplace")
@@ -814,6 +840,7 @@ def validate_host_projection(
         native_context=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("nativeContext")),
         startup_entry=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("startupEntry")),
         carrier_handoff=bool(expected_contract and expected_contract.get("optionalCarrierHandoff")),
+        native_state_mcp=bool(expected_contract and expected_contract.get("nativeTaskStateMcp")),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,

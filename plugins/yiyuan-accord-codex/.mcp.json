@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "accord-state": {
+      "command": "node",
+      "args": ["runtime/native-state-mcp.cjs"],
+      "cwd": ".",
+      "startup_timeout_sec": 10,
+      "tool_timeout_sec": 10
+    }
+  }
+}
