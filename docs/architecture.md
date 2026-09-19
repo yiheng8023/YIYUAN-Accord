@@ -350,6 +350,15 @@ single-use dispatcher requires the exact tool result, completed source turn and
 current bindings before native takeover. Interrupted sources and controller loss
 remain reconciliation cases, not automatic replay.
 
+The packaged reference also distinguishes official daemon/proxy attachment from
+embedded clients and from starting an unrelated server. In the source-bound 0.155.1
+path, loaded-thread resume subscribes and replays pending requests but cannot add
+a new dynamic tool. Other clients can answer a shared dynamic request; protocol
+routing therefore does not replace scope ownership or authorize handling unrelated
+requests. The reference carries the upstream experimental-support limit. These
+conditions guide integration; no ordinary Desktop/IDE connection is installed by
+this documentation or inferred from a successful inventory.
+
 The native test caller in `tests/product/test_carrier_handoff.py` reuses existing
 App Server/process controls, local fixed responses and SQLite transactions. It
 checks protocol effects, refusal, extra intake and source-tool dispatch; it does not prove model judgment,

@@ -74,6 +74,10 @@ before integration. The adapter coordinates caller-supplied transport, durable
 writer ownership and independent verification; the caller owns timing and recovery.
 For other host surfaces, discover an applicable supported control path within
 current authority. Installation alone supplies no Desktop/IDE control connection.
+Use the reference's version-bound connection distinctions before attachment;
+connection and source-tool registration are separate prerequisites.
+Discovery is read-only: queueing messages or starting shared infrastructure
+requires its own bound task authority. Preserve unrelated clients and requests.
 
 Keep the bound checkout unless transfer is authorized. Quiesce transferred writes,
 rebind the exact destination's authority, paths and state, and keep recovery until

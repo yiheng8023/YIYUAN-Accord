@@ -16,6 +16,49 @@ The caller decides when a transfer is needed from current evidence and owns the
 semantic checks, native configuration, authentication, budgets and recovery route.
 This module performs the bounded transfer after those conditions are established.
 
+## Find a usable host connection
+
+First distinguish a host's native continuation controls, an already owned App
+Server connection, and an embedded client with no exposed control endpoint. Use
+sufficient native continuity without adding a server. The presence of this module,
+a saved thread id or an installed MCP server does not establish control of that
+thread or register the proposal tool.
+
+In the inspected Codex 0.155.1 implementation, `codex app-server daemon version`
+only probes the default official control endpoint. `codex app-server proxy`
+connects stdio to an already running control socket; `--sock` selects an explicitly
+bound endpoint. Connection failure leaves that route unavailable or unknown; it
+does not authorize starting, bootstrapping, restarting or pairing a shared service.
+`codex queue` sends a user message and can initialize a session-command runtime;
+it is not a read-only discovery command or a transfer acknowledgment. Preserve the
+user's selected configuration rather than removing overrides to force daemon reuse.
+
+On a suitable shared App Server, official `thread/resume` can attach a new client
+to a loaded thread and replay its pending server requests. The inspected resume
+schema cannot add `dynamicTools`: the source proposal tool must already have been
+registered at `thread/start`. Do not turn an MCP call or shell result into a forged
+`item/tool/call` envelope to bypass that requirement. A separately authorized direct
+`handoff()` still needs its own source quiescence, writer and recovery evidence.
+
+Multiple clients can receive the same pending dynamic-tool request. A responding
+client is not thereby its task owner. Before answering, bind the exact source,
+turn, call and scope; leave unrelated tool, permission and input requests for
+their responsible clients. Reconcile already resolved requests instead of replying
+again. Keep the recovery controller subscribed/alive through takeover. Releasing
+one subscription does not by itself close other clients or prove the thread has
+unloaded. Reconcile any later host-authorized source input as a state change;
+all writers must honor the scoped handoff before continuing shared writes.
+
+These are version-bound implementation facts, not GUI adoption evidence. Recheck
+material host changes against the actual entry. Sources: [daemon probe](https://github.com/openai/codex/blob/be2951ea34f0d295ed0becf97079f92fa5f6950e/codex-rs/app-server-daemon/src/lib.rs#L547),
+[queue](https://github.com/openai/codex/blob/be2951ea34f0d295ed0becf97079f92fa5f6950e/codex-rs/tui/src/session_queue_commands.rs#L29),
+[subscription and replay](https://github.com/openai/codex/blob/be2951ea34f0d295ed0becf97079f92fa5f6950e/codex-rs/app-server/src/request_processors/thread_lifecycle.rs#L696),
+[resume input](https://github.com/openai/codex/blob/be2951ea34f0d295ed0becf97079f92fa5f6950e/codex-rs/app-server/src/request_processors/thread_processor.rs#L3701).
+The [official interface](https://learn.chatgpt.com/docs/app-server) labels App Server
+and WebSocket transport experimental and unsupported for production workloads;
+retain this upstream limit in any integration/support claim. It is not evidence
+that every other native continuity route is unsuitable.
+
 ## Source proposal and outer dispatch
 
 For a controller-owned source to request transfer, register the exported
