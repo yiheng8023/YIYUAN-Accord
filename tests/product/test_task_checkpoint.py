@@ -1197,7 +1197,7 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
 
     def test_context_budget_does_not_invent_occupancy_efficiency_or_loss(self):
         for field, value, expected in (("contextUpperBoundTokens", None, "unknown"),
-                                       ("efficiencyCeilingTokens", None, "unknown"),
+                                       ("efficiencyCeilingTokens", None, "continue-bounded"),
                                        ("recoveryTokens", 0, "unknown"),
                                        ("safetyMarginTokens", -1, "unknown"),
                                        ("handoffTokens", True, "unknown"),
@@ -1218,7 +1218,7 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.bind()
         before = {p.name: p.read_bytes() for p in self.state.iterdir()}
         for efficiency, work, context, decision, capacity in (
-            (None, 1000, 5000, "unknown", "fits"),
+            (None, 1000, 5000, "continue-bounded", "fits"),
             (8000, 1000, 5000, "continue-bounded", "fits"),
             (7000, 1000, 5000, "prepare-handoff", "fits"),
             (6000, 1000, 5000, "preserve-recovery", "fits"),
@@ -1234,6 +1234,30 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
                 self.assertEqual(answer["capacityFit"], capacity)
                 self.assertEqual(answer["efficiencyCeilingTokens"], efficiency)
                 self.assertFalse(answer["sourceReleaseAllowed"])
+                if efficiency is None and decision == 'continue-bounded':
+                    self.assertIn('unknown-efficiency-and-compaction-threshold', answer['reasons'][0])
+                    self.assertIn('preserve-state-and-recheck', answer['reasons'][0])
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+
+    def test_native_context_without_efficiency_range_keeps_bounded_work_and_reserves_separate(self):
+        self.native_transcript()
+        observed = self.invoke(dict(op='observe-context'))
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        for work, tail, decision in ((1000, 1000, 'continue-bounded'),
+                                     (3499, 1000, 'continue-bounded'),
+                                     (3500, 1000, 'prepare-handoff'),
+                                     (4000, 1000, 'prepare-handoff'),
+                                     (0, 4500, 'preserve-recovery')):
+            with self.subTest(work=work, tail=tail):
+                request = self.transcript_request(observed)
+                estimates = request['assessment']['estimates']
+                estimates.pop('efficiencyCeilingTokens')
+                estimates.pop('efficiencySourceRef')
+                estimates.update(nextWorkTokens=work, contextTailUpperBoundTokens=tail)
+                result = self.invoke(request)
+                self.assertEqual(result['decision'], decision)
+                self.assertIsNone(result['efficiencyCeilingTokens'])
+                self.assertFalse(result['sourceReleaseAllowed'])
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
 
     def test_capacity_fit_requires_fresh_intact_bound_evidence(self):

@@ -607,7 +607,11 @@ function assessContext(request, prior, input, now = Date.now(), transcriptObserv
   result.remainingAfterReserves = limit - reserve;
   if (result.remainingAfterReserves <= 0) return stop('preserve-recovery', 'transfer-reserve-already-at-risk');
   if (estimate.nextWorkTokens >= result.remainingAfterReserves) return stop('prepare-handoff', 'next-span-would-consume-transfer-reserve');
-  if (efficiency == null) return stop('unknown', 'hard-capacity-fit-does-not-establish-efficient-range');
+  // Efficiency and the native compaction threshold can remain unknown without
+  // making a sourced, bounded capacity forecast unknowable. Preserve state
+  // first: the host may compact sooner than this hard-window estimate.
+  if (efficiency == null) return stop('continue-bounded',
+    'forecast-fits-hard-window-preserve-state-and-recheck-unknown-efficiency-and-compaction-threshold');
   return stop('continue-bounded', 'forecast-fits-sourced-range-recheck-before-next-span');
 }
 
@@ -1187,7 +1191,7 @@ const HELP = {
     binding: 'Use status session/cwd/epoch/expectedRevision plus current conditions: threadId, turnId, hostVersion, model, contextGeneration. The native caller must independently bind these; shared session is not thread/writer identity.',
     assessment: 'Provide assessment with matching conditions and epoch, observedAtMs/validUntilMs, sourceRef, integrity (verified/degraded/unknown), and the actual matching thread/tokenUsage/updated notification as usageEvent. With signals, the helper re-observes any first-party get_context_remaining output before using it. Never restamp old evidence as fresh. Change contextGeneration after compaction or other material context changes and recheck affected estimates.',
     estimates: 'assessment.estimates needs sourceRef, a nonnegative nextWorkTokens bound, and positive handoffTokens (including takeover verification), recoveryTokens and safetyMarginTokens. A bound first-party get_context_remaining result supplies the tighter native compaction/window remainder. Without it, also provide contextUpperBoundTokens; optional efficiencyCeilingTokens requires efficiencySourceRef. All bounds apply to current source-carrier conditions. Target capacity needs its own assessment.',
-    result: 'With a fresh native remaining budget, capacityFit and remainingAfterReserves compare the next span with transfer and recovery reserves inside that tighter budget. The value is not the full model window. Without it, the legacy forecast compares sourced context/work/reserve bounds with the hard native window and any evidenced efficiency ceiling. Never override a pause, reassessment or recovery/handoff recommendation with capacityFit.',
+    result: 'With a fresh native remaining budget, capacityFit and remainingAfterReserves compare the next span with transfer and recovery reserves inside that tighter budget. The value is not the full model window. Without it, sourced context/work/reserve bounds are compared with the hard native window and any evidenced efficiency ceiling. A strict fit with unknown efficiency permits only bounded continuation after preserving critical state; it does not prove efficiency or prevent earlier native compaction. Reassess after context changes and before the next span. Never override a pause, reassessment or recovery/handoff recommendation with capacityFit.',
     limits: 'Read-only advisory arithmetic; does not authenticate caller evidence, dispatch, compact, transfer, release or change checkpoint state. Native last.totalTokens is only the response-boundary context basis; cumulative total, cached usage and compression count are not occupancy. Later inputs or outputs make remaining-budget evidence stale. Missing data returns unknown; shorten spans and checkpoint early. Never treat a fit as permission or completed handoff.',
   },
   contextSignals: {

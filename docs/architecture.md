@@ -340,8 +340,12 @@ The helper's `assess-context` keeps `capacityFit` separate from its combined
 `decision`. A fresh first-party remaining-budget receipt is compared directly
 with the next span and transfer/recovery/safety reserves. Later context changes
 invalidate it. Without that receipt, the sourced context and next-work upper
-bounds plus reserves are compared against the hard native window. It can be `fits` while efficiency remains unknown
-or a stricter evidenced efficiency ceiling still calls for handoff or recovery.
+bounds plus reserves are compared against the hard native window. A strict fit
+permits `continue-bounded` after critical state is preserved, even when efficiency
+is unknown. This forecasts capacity only: an unknown native compaction threshold
+may cause earlier compaction, requiring restoration and reassessment. It neither
+proves an efficient range nor guarantees an uninterrupted span. A stricter evidenced
+efficiency ceiling can still call for handoff or recovery.
 Invalid assessment evidence, pauses and stale bindings leave it unknown.
 `remainingAfterReserves` continues to use the tighter applicable ceiling.
 A capacity fit neither measures live occupancy nor overrides the combined
