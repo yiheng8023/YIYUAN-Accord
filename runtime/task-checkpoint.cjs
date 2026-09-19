@@ -18,6 +18,11 @@ const text = (value) => typeof value === 'string' && value.trim().length > 0;
 const needsInput = (input) => input?.needsNativeReplay || input?.needsResumeReconciliation;
 const INPUT_RECEIPT_LIMIT = 8 * 1024 * 1024;
 
+function present(file) {
+  try { fs.lstatSync(file); return true; }
+  catch (error) { if (error.code === 'ENOENT') return false; throw error; }
+}
+
 function regular(file, limit = 8 * 1024 * 1024) {
   const stat = fs.lstatSync(file);
   if (!stat.isFile() || stat.isSymbolicLink() || stat.size > limit ||
@@ -58,11 +63,11 @@ function location(session, cwd, create = false) {
   const id = sha(canonical({session, cwd: process.platform === 'win32' ? root.toLowerCase() : root}));
   const workspaceId = sha(process.platform === 'win32' ? root.toLowerCase() : root);
   const relevant = (base) => {
-    if (!fs.existsSync(base)) return false;
+    if (!present(base)) return false;
     if (!samePath(fs.realpathSync(base), base) || fs.lstatSync(base).isSymbolicLink()) fail('unsafe-state-directory');
     return [`${id}.input.json`, `${id}.input.json.lock`, `${id}.state.json`, `${id}.lock`, `${id}.lock.recovery`,
             `${id}.input-failure.json`, `${workspaceId}.workspace-input-failure.json`]
-      .some((name) => fs.existsSync(path.join(base, name)));
+      .some((name) => present(path.join(base, name)));
   };
   const override = process.env.YIYUAN_ACCORD_TASK_STATE_DIR;
   let base = path.resolve(override || path.join(os.homedir(), '.yiyuan-accord', 'task-state'));
@@ -86,7 +91,7 @@ function location(session, cwd, create = false) {
         !samePath(fs.realpathSync(ancestor), ancestor)) fail('unsafe-state-directory');
     fs.mkdirSync(base, {recursive: true, mode: 0o700});
   }
-  if (!fs.existsSync(base)) return null;
+  if (!present(base)) return null;
   if (!samePath(fs.realpathSync(base), base) || fs.lstatSync(base).isSymbolicLink()) fail('unsafe-state-directory');
   return {root, input: path.join(base, `${id}.input.json`),
           state: path.join(base, `${id}.state.json`), lock: path.join(base, `${id}.lock`),
@@ -210,11 +215,15 @@ function readNativeContextSnapshot(request, where) {
   return {...observation, epoch: input.epoch, sourceReleaseAllowed: false};
 }
 
-function relative(root, name) {
+function relativeName(name) {
   if (!text(name) || path.isAbsolute(name) || process.platform === 'win32' && path.win32.parse(name).root ||
       name.split(/[\\/]/).some((part) => part === '.' || part === '..' || !part)) {
     fail('reference-must-be-workspace-relative');
   }
+}
+
+function relative(root, name) {
+  relativeName(name);
   const file = path.resolve(root, name);
   if (file === root || !file.startsWith(root + path.sep)) fail('reference-outside-workspace');
   // Also reject a symlink in a parent of a not-yet-created output.
@@ -257,6 +266,17 @@ function unresolvedConditions(value) {
 
 function savedUnresolved(state) {
   return unresolvedConditions(state && Object.hasOwn(state, 'unresolved') ? state.unresolved : []);
+}
+
+function validateOutputCheck(output) {
+  if (!output || !text(output.path) ||
+      Object.keys(output).some((key) => !['path', 'sha256', 'json'].includes(key))) fail('invalid-output-check');
+  relativeName(output.path);
+  if (Object.hasOwn(output, 'sha256') && !/^[a-f0-9]{64}$/.test(output.sha256)) fail('invalid-output-hash');
+  if (Object.hasOwn(output, 'json') && (!output.json || typeof output.json !== 'object' || Array.isArray(output.json))) {
+    fail('invalid-output-json-check');
+  }
+  for (const key of Object.keys(output.json || {})) pointer({}, key);
 }
 
 function inspect(where, state) {
@@ -649,17 +669,12 @@ function binding(request, where, prior, currentInput) {
   }
   const names = new Set();
   const outputs = request.outputs.map((output) => {
+    validateOutputCheck(output);
     const key = typeof output?.path === 'string' && process.platform === 'win32'
       ? output.path.replace(/\\/g, '/').toLowerCase() : output?.path;
-    if (!output || !text(output.path) || names.has(key) ||
-        Object.keys(output).some((key) => !['path', 'sha256', 'json'].includes(key))) fail('invalid-output-check');
+    if (names.has(key)) fail('invalid-output-check');
     names.add(key);
     relative(where.root, output.path);
-    if (Object.hasOwn(output, 'sha256') && !/^[a-f0-9]{64}$/.test(output.sha256)) fail('invalid-output-hash');
-    if (Object.hasOwn(output, 'json') && (!output.json || typeof output.json !== 'object' || Array.isArray(output.json))) {
-      fail('invalid-output-json-check');
-    }
-    for (const key of Object.keys(output.json || {})) pointer({}, key);
     return output;
   });
   if (prior && canonical(prior.outputs) !== canonical(outputs) && !text(request.revisionReason)) {
@@ -714,6 +729,27 @@ function operate(request) {
       () => inputRecovery ? locked(where, recover) : recover());
   }
   if (!where) fail('native-user-input-receipt-missing');
+  if (request.op === 'status') return recoveryBasis(where, ({input: currentInput, state: prior}) => {
+    validateRecoveryIdentity(request, where, currentInput, prior);
+    if (!currentInput) fail('native-user-input-receipt-missing');
+    const captured = retainedInputs(currentInput);
+    return {epoch: currentInput.epoch, revision: prior?.revision || 0,
+      storage: where.storage,
+      recoveryInputs: {available: captured !== null, count: captured?.length || 0},
+      inputSource: currentInput.inputSource || 'unspecified-legacy-receipt',
+      hostObservation: currentInput.hostObservation ? projectHostObservation(currentInput.hostObservation) : null,
+      nativeContextSourceAvailable: Boolean(currentInput.nativeContextSource) && !needsInput(currentInput) && !currentInput.interrupted,
+      hostObservationCurrent: Boolean(currentInput.hostObservation) && !needsInput(currentInput) && !currentInput.interrupted,
+      needsNativeReplay: currentInput.needsNativeReplay === true,
+      needsResumeReconciliation: currentInput.needsResumeReconciliation === true,
+      mode: prior?.mode || 'unbound', currentInputReconciled: !needsInput(currentInput) && prior?.epoch === currentInput.epoch,
+      checkpoint: prior ? {epoch: prior.epoch, result: prior.result, inputs: prior.inputs, outputs: prior.outputs,
+        nextAction: prior.nextAction, canContinue: prior.canContinue, unresolved: savedUnresolved(prior),
+        inputRevisions: (prior.inputRevisions || []).map((item) => Object.fromEntries(
+          ['path', 'previous', 'observed', 'disposition', 'reason', 'epoch'].map((key) => [key, item[key]]))),
+        revisionReason: prior.revisionReason, reason: prior.reason || null, resumeReason: prior.resumeReason || null} : null,
+      inspection: prior ? inspectDiagnostic(where, prior) : null};
+  });
   if (request.op === 'read-native-input') return readNativeInputSnapshot(request, where);
   if (request.op === 'observe-context') return readNativeContextSnapshot(request, where);
   return locked(where, () => {
@@ -727,21 +763,6 @@ function operate(request) {
       return canonical(after) === canonical(currentInput) ? result
         : {...result, decision: 'reassess', sourceReleaseAllowed: false, reasons: ['input-changed-during-assessment']};
     }
-    if (request.op === 'status') return {epoch: currentInput.epoch, revision: prior?.revision || 0,
-      storage: where.storage,
-      recoveryInputs: {available: Array.isArray(currentInput.nativeInputs), count: currentInput.nativeInputs?.length || 0},
-      inputSource: currentInput.inputSource || 'unspecified-legacy-receipt',
-      hostObservation: currentInput.hostObservation || null,
-      nativeContextSourceAvailable: Boolean(currentInput.nativeContextSource) && !needsInput(currentInput) && !currentInput.interrupted,
-      hostObservationCurrent: Boolean(currentInput.hostObservation) && !needsInput(currentInput) && !currentInput.interrupted,
-      needsNativeReplay: currentInput.needsNativeReplay === true,
-      needsResumeReconciliation: currentInput.needsResumeReconciliation === true,
-      mode: prior?.mode || 'unbound', currentInputReconciled: !needsInput(currentInput) && prior?.epoch === currentInput.epoch,
-      checkpoint: prior ? {epoch: prior.epoch, result: prior.result, inputs: prior.inputs, outputs: prior.outputs,
-        nextAction: prior.nextAction, canContinue: prior.canContinue, unresolved: savedUnresolved(prior),
-        inputRevisions: prior.inputRevisions || [],
-        revisionReason: prior.revisionReason, reason: prior.reason || null, resumeReason: prior.resumeReason || null} : null,
-      inspection: prior ? inspectDiagnostic(where, prior) : null};
     if (request.op === 'bind') {
       const state = binding(request, where, prior, currentInput);
       const inspection = inspect(where, state);
@@ -812,6 +833,14 @@ function observeNativeHost(event, previous) {
     scope: 'reported-fields-at-input-only; other-settings-and-mid-turn-state-unknown; no-user-intent-or-collaboration-mode-inference'};
 }
 
+function projectHostObservation(observation) {
+  const pick = (value, keys) => Object.fromEntries(keys.map((key) => [key, value[key]]));
+  return {...pick(observation, ['schema', 'event', 'turnId', 'comparison', 'scope']),
+    values: pick(observation.values, ['model', 'permissionMode']),
+    sourceRefs: pick(observation.sourceRefs, ['model', 'permissionMode']),
+    changes: observation.changes.map((change) => pick(change, ['field', 'previous', 'current', 'kind']))};
+}
+
 // Shared host judgment duty survives ordinary entry and context restoration.
 // The brief Skill is the sole maintained entry body. Hook delivery resolves its
 // package-local links; reading guidance never touches task state.
@@ -849,28 +878,103 @@ function hint(event, where, currentInput, prior = null) {
 
 // Optimistic recovery evidence only. Parse the captured bytes, not a separate
 // mid-read version; compare every complete source and detect overlapping locks.
-function recoveryBasis(where) {
-  const sources = [[where.input, INPUT_RECEIPT_LIMIT], [where.state, 128 * 1024],
-    [where.failure, 128 * 1024], [where.workspaceFailure, 128 * 1024]];
+function recoveryBasis(where, project = (basis) => basis) {
+  const sources = [[where.input, INPUT_RECEIPT_LIMIT, 'input'], [where.state, 128 * 1024, 'checkpoint'],
+    [where.failure, 128 * 1024, 'input-failure'], [where.workspaceFailure, 128 * 1024, 'workspace-input-failure']];
   const idle = () => {
-    if ([where.lock, where.input + '.lock', where.lock + '.recovery'].some((file) => fs.existsSync(file))) {
+    if ([where.lock, where.input + '.lock', where.lock + '.recovery'].some((file) => present(file))) {
       fail('recovery-read-busy');
     }
   };
   const capture = () => {
     idle();
-    const bytes = sources.map(([file, limit]) => fs.existsSync(file) ? regular(file, limit) : null);
+    const bytes = sources.map(([file, limit, label]) => {
+      try { return regular(file, limit); }
+      catch (error) {
+        if (error.code === 'ENOENT') return null;
+        fail(`recovery-source-unavailable:${label}:${error.code || 'unsafe-or-unreadable'}`);
+      }
+    });
     idle();
     return bytes;
   };
   const before = capture(), stored = new Map(sources.map(([file], index) => [file, before[index]]));
-  const input = readInput(where, (file) => jsonObject(stored.get(file)), (file) => stored.get(file) !== null);
-  const state = before[1] ? jsonObject(before[1]) : null;
+  const parse = (file) => {
+    try { return jsonObject(stored.get(file)); }
+    catch (_) { fail(`invalid-recovery-json:${sources.find(([source]) => source === file)[2]}`); }
+  };
+  const input = readInput(where, parse, (file) => stored.get(file) !== null);
+  const state = before[1] ? parse(where.state) : null;
+  // Status includes outcome inspection inside this read interval. Never return
+  // a completed inspection paired with checkpoint/input bytes changed meanwhile.
+  const result = project({input, state, inputHash: before[0] ? sha(before[0]) : null,
+    stateHash: before[1] ? sha(before[1]) : null});
   const after = capture();
   if (before.some((bytes, index) => bytes === null ? after[index] !== null : !after[index]?.equals(bytes))) {
     fail('recovery-source-changed');
   }
-  return {input, state, inputHash: before[0] ? sha(before[0]) : null, stateHash: before[1] ? sha(before[1]) : null};
+  return result;
+}
+
+function validateRecoveryIdentity(request, where, input, state) {
+  if (input && !text(input.epoch)) fail('invalid-recovery-input');
+  if (input && Object.hasOwn(input, 'schema') && input.schema !== 1) fail('invalid-recovery-input');
+  if (input && Object.hasOwn(input, 'inputSource') &&
+      (!text(input.inputSource) || input.inputSource.length > 256)) fail('invalid-recovery-input-source');
+  if (input && ['interrupted', 'needsNativeReplay', 'needsResumeReconciliation'].some((key) =>
+    Object.hasOwn(input, key) && typeof input[key] !== 'boolean')) fail('invalid-recovery-flags');
+  if (state && (state.schema !== 1 || state.session !== request.session_id || !text(state.cwd) || !samePath(state.cwd, where.root) ||
+      !text(state.epoch) || !Number.isSafeInteger(state.revision) || state.revision < 1 ||
+      !['active', 'paused'].includes(state.mode) || typeof state.canContinue !== 'boolean' ||
+      !text(state.result) || !text(state.nextAction) || !Array.isArray(state.inputs) || !Array.isArray(state.outputs) ||
+      !state.outputs.length || state.inputs.length + state.outputs.length > 100)) {
+    fail('invalid-recovery-checkpoint');
+  }
+  if (input?.hostObservation != null) {
+    const observation = input.hostObservation;
+    const value = (v) => v === null || typeof v === 'string' && v.length <= 256 && /^[A-Za-z0-9][A-Za-z0-9._:/-]*$/.test(v);
+    if (observation.schema !== 'yiyuan-accord-native-host-observation/v1' || observation.event !== 'UserPromptSubmit' ||
+        !observation.values || Object.keys(observation.values).sort().join(',') !== 'model,permissionMode' ||
+        !Object.values(observation.values).every(value) || !value(observation.turnId) ||
+        !['previous-input-receipt', 'no-current-prior-observation'].includes(observation.comparison) ||
+        !text(observation.scope) || observation.scope.length > 512 ||
+        observation.sourceRefs?.model !== 'UserPromptSubmit.model' ||
+        observation.sourceRefs?.permissionMode !== 'UserPromptSubmit.permission_mode' ||
+        !Array.isArray(observation.changes) || observation.changes.some((change) => !change ||
+          !['model', 'permissionMode'].includes(change.field) || !value(change.previous) || !value(change.current) ||
+          !['available', 'unavailable', 'changed'].includes(change.kind))) fail('invalid-recovery-host-observation');
+  }
+  if (state) {
+    savedUnresolved(state);
+    const names = new Set();
+    const reference = (name) => {
+      relativeName(name);
+      const key = process.platform === 'win32' ? name.replace(/\\/g, '/').toLowerCase() : name;
+      if (names.has(key)) fail('invalid-recovery-checkpoint-references');
+      names.add(key);
+    };
+    const observed = (value) => value && typeof value.present === 'boolean' &&
+      Object.keys(value).sort().join(',') === (value.present ? 'present,sha256' : 'present') &&
+      (!value.present || typeof value.sha256 === 'string' && /^[a-f0-9]{64}$/.test(value.sha256));
+    for (const output of state.outputs) { validateOutputCheck(output); reference(output.path); }
+    for (const input of state.inputs) {
+      if (!input || Object.keys(input).sort().join(',') !== 'observed,path' ||
+          !observed(input.observed) || !input.observed.present) fail('invalid-recovery-input-baseline');
+      reference(input.path);
+    }
+    if (Object.hasOwn(state, 'inputRevisions') && (!Array.isArray(state.inputRevisions) || state.inputRevisions.length > 100 ||
+        state.inputRevisions.some((item) => !item || !text(item.path) || !observed(item.previous) || !observed(item.observed) ||
+          !['refresh', 'remove'].includes(item.disposition) || !text(item.reason) || item.reason.length > 2048 || !text(item.epoch)))) {
+      fail('invalid-recovery-input-revisions');
+    }
+    const revisedNames = new Set();
+    for (const item of state.inputRevisions || []) {
+      relativeName(item.path);
+      const key = process.platform === 'win32' ? item.path.replace(/\\/g, '/').toLowerCase() : item.path;
+      if (revisedNames.has(key)) fail('invalid-recovery-input-revisions');
+      revisedNames.add(key);
+    }
+  }
 }
 
 function compactHint(event, where) {
@@ -883,16 +987,7 @@ function compactHint(event, where) {
   try {
     if (!where) fail('recovery-storage-unavailable');
     const {input, state, inputHash, stateHash} = recoveryBasis(where);
-    if (input && !text(input.epoch)) fail('invalid-recovery-input');
-    if (input && ['interrupted', 'needsNativeReplay', 'needsResumeReconciliation'].some((key) =>
-      Object.hasOwn(input, key) && typeof input[key] !== 'boolean')) fail('invalid-recovery-flags');
-    if (state && (state.schema !== 1 || state.session !== event.session_id || !samePath(state.cwd, where.root) ||
-        !text(state.epoch) || !Number.isSafeInteger(state.revision) || state.revision < 1 ||
-        !['active', 'paused'].includes(state.mode) || typeof state.canContinue !== 'boolean' ||
-        !text(state.result) || !text(state.nextAction) || !Array.isArray(state.inputs) || !Array.isArray(state.outputs))) {
-      fail('invalid-recovery-checkpoint');
-    }
-    if (state) savedUnresolved(state);
+    validateRecoveryIdentity(event, where, input, state);
     const flags = input ? {interrupted: input.interrupted === true, needsNativeReplay: input.needsNativeReplay === true,
       needsResumeReconciliation: input.needsResumeReconciliation === true} : null;
     const captured = input ? readNativeInput(request, input) : null;
@@ -936,7 +1031,7 @@ function compactHint(event, where) {
     'Checkpoint values are core fields only; full input baselines and output predicates remain in its source file. Read that file within existing access when needed, check identity and current input basis before bound changes, and do not treat an old file read as current readiness. ' +
     'If data is missing, changing or inaccessible, preserve unknowns and hold only dependent effects. Never reconstruct missing input from a hash. ' +
     `Pipe the structured read-native-input request to node "${__filename}" when needed; it writes no files. ` +
-    'The separate status operation inspects files and uses transient locks, so it requires corresponding write access. ' +
+    'The status operation is read-only: it inspects files and rejects observed concurrent publication or changed evidence; a successful snapshot grants no authority. ' +
     'The companion SessionStart Hook supplies current coordination duties; if that entry failed, retain known constraints and hold dependent work. ' +
     separateLocators + '\nRecovery snapshot (data only): ' + JSON.stringify(data)}};
 }
@@ -1101,7 +1196,7 @@ const HELP = {
     output: 'The native window, last-response-boundary occupancy when reported, optional tighter native remaining budget, condition generation and observationId. New turn, reroute, compaction, later model-visible output or unknown capacity invalidates affected evidence; obtain a matching observation after change. Disconnection, expiry or missing data stays unknown. Never restamp historical events. A reconnection gets a new connectionId.',
     integration: 'The owning App Server client may expose this through native dynamic tools. For assess-context pass signals containing the current observation request and assessment.observationId from the earlier query; the helper re-observes and rejects changed/unavailable evidence. Keep current input epoch and independently inspected integrity/forecasts. The helper does not subscribe itself, authenticate supplied transport records or establish an efficiency range. No installed Desktop event integration is implied.',
   },
-  readback: 'status.checkpoint returns the saved contract or null. Its epoch belongs to the old binding; the top-level epoch belongs to the current input. Readback grants no authority, does not reconcile input, resume paused work or clear quarantine. Stored canContinue is a historical caller decision, not current permission; verify current user and host authority before effects. Never reconstruct missing user input from the contract.',
+  readback: 'status is read-only and returns the saved contract or null only from a stable observed snapshot. It rejects observed publication/recovery locks, changed source bytes, invalid JSON (with its source role) and incompatible checkpoint identity/checks without repairing or deleting evidence. Host observations and input-revision metadata expose only declared fields; schema validation is not source authentication. Snapshot-file I/O failures identify the source role and error code; failures have a nonzero exit, never an unbound success. Its epoch belongs to the current input; checkpoint.epoch belongs to the old binding. Readback grants no authority, does not reconcile input, resume paused work or clear quarantine. Stored canContinue is a historical caller decision, not current permission; verify current user and host authority before effects. Never reconstruct missing user input from the contract.',
   hostObservation: 'UserPromptSubmit model and permission_mode are bounded event observations. Missing fields become unknown; resume, interruption or input loss makes stored observations historical. Condition changes on our host continuation invalidate old readiness without creating a new user decision. Other settings, collaboration mode and mid-turn effects are not inferred; the caller checks intent and affected results within current authority.',
   references: 'bind.inputs are workspace-relative path strings; each outputs.path is workspace-relative too. Input fingerprints are observed by the helper. cwd alone is absolute.',
   bind: {op: 'bind', session_id: 'native-session-id', cwd: 'absolute-workspace', epoch: 'from-status', expectedRevision: 0,

@@ -48,6 +48,188 @@ class TaskCheckpointTests(unittest.TestCase):
     def status(self):
         return self.invoke({"op": "status"})
 
+    def test_status_is_read_only_even_when_all_state_writes_are_denied(self):
+        self.bind()
+        self.pause('Keep the user pause.')
+        before = self.status()
+        files = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.preload = self.root / 'deny-writes.cjs'
+        self.preload.write_text("const fs=require('node:fs'),open=fs.openSync;"
+            "const denied=()=>{throw Object.assign(Error('read-only-state'),{code:'EACCES'})};"
+            "fs.openSync=(p,f,...a)=>f==='r'?open(p,f,...a):denied();"
+            "for(const k of ['mkdirSync','writeFileSync','appendFileSync','renameSync','unlinkSync','writeSync','fsyncSync'])fs[k]=denied;",
+            encoding='utf-8')
+        self.assertEqual(self.status(), before)
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, files)
+
+    def test_status_reports_corrupt_snapshot_sources_without_repair_or_content_leak(self):
+        self.bind()
+        self.pause('Keep the user pause.')
+        receipt = next(self.state.glob('*.input.json'))
+        checkpoint = next(self.state.glob('*.state.json'))
+        marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'synthetic-failure'}), encoding='utf-8')
+        for source, label in ((receipt, 'input'), (checkpoint, 'checkpoint'), (marker, 'input-failure')):
+            with self.subTest(source=label):
+                original = source.read_bytes()
+                source.write_bytes(b'{PRIVATE_CORRUPT_CONTENT')
+                before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+                error = self.invoke({'op': 'status'}, success=False)
+                self.assertIn('invalid-recovery-json:' + label, error)
+                self.assertNotIn('PRIVATE_CORRUPT_CONTENT', error)
+                self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+                source.write_bytes(original)
+        self.assertEqual(self.status()['mode'], 'paused')
+        self.assertTrue(self.status()['needsNativeReplay'])
+
+    def test_status_rejects_foreign_checkpoint_without_rewriting_it(self):
+        self.bind()
+        checkpoint = next(self.state.glob('*.state.json'))
+        data = json.loads(checkpoint.read_text(encoding='utf-8'))
+        data['session'] = 'another-task'
+        checkpoint.write_text(json.dumps(data), encoding='utf-8')
+        before = checkpoint.read_bytes()
+        self.assertIn('invalid-recovery-checkpoint', self.invoke({'op': 'status'}, success=False))
+        self.assertEqual(checkpoint.read_bytes(), before)
+
+    def test_status_reports_unreadable_checkpoint_instead_of_unbound_success(self):
+        self.bind()
+        checkpoint = next(self.state.glob('*.state.json'))
+        before = checkpoint.read_bytes()
+        self.preload = self.root / 'unreadable-checkpoint.cjs'
+        self.preload.write_text("const fs=require('node:fs'),stat=fs.lstatSync,exists=fs.existsSync;"
+            "fs.existsSync=p=>String(p).endsWith('.state.json')?false:exists(p);"
+            "fs.lstatSync=(p,...a)=>{if(String(p).endsWith('.state.json'))"
+            "throw Object.assign(Error('unreadable-checkpoint'),{code:'EACCES'});return stat(p,...a)};", encoding='utf-8')
+        self.assertIn('recovery-source-unavailable:checkpoint:EACCES', self.invoke({'op': 'status'}, success=False))
+        self.assertEqual(checkpoint.read_bytes(), before)
+
+    def test_status_rejects_state_changed_while_inspecting_outputs(self):
+        self.bind()
+        self.write_outputs()
+        checkpoint = next(self.state.glob('*.state.json'))
+        self.preload = self.root / 'change-during-inspection.cjs'
+        self.preload.write_text("const fs=require('node:fs'),read=fs.readFileSync;let changed=false;"
+            "fs.readFileSync=(p,...a)=>{const value=read(p,...a);"
+            "if(!changed&&String(p).endsWith('summary.json')){changed=true;"
+            f"const file={json.dumps(str(checkpoint))};const state=JSON.parse(read(file,'utf8'));"
+            "state.revision++;state.mode='paused';state.reason='Later user pause.';"
+            "fs.writeFileSync(file,JSON.stringify(state));}return value;};", encoding='utf-8')
+        self.assertIn('recovery-source-changed', self.invoke({'op': 'status'}, success=False))
+        del self.preload
+        self.assertEqual(self.status()['mode'], 'paused')
+
+    def test_status_preserves_active_recovery_gate_and_reads_no_claimed_state(self):
+        self.bind()
+        checkpoint = next(self.state.glob('*.state.json'))
+        gate = checkpoint.with_name(checkpoint.name.replace('.state.json', '.lock.recovery'))
+        gate.write_text(json.dumps({'pid': os.getpid()}), encoding='utf-8')
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.assertIn('recovery-read-busy', self.invoke({'op': 'status'}, success=False))
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_status_rejects_structurally_invalid_saved_checks(self):
+        self.bind()
+        self.write_outputs()
+        checkpoint = next(self.state.glob('*.state.json'))
+        original = checkpoint.read_bytes()
+        baseline = json.loads(original)
+        mutations = {
+            'empty-outputs': lambda s: s.update(outputs=[]),
+            'unexpected-output-fields': lambda s: s['outputs'][0].update(extra='untrusted'),
+            'invalid-output-hash': lambda s: s['outputs'][0].update(sha256='wrong'),
+            'overlapping-input-output': lambda s: s['outputs'][0].update(path='source.json'),
+            'invalid-input-baseline': lambda s: s['inputs'][0].update(observed={'present': False}),
+            'invalid-revision-history': lambda s: s.update(inputRevisions=[{'unexpected': 'untrusted'}]),
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(case=name):
+                altered = copy.deepcopy(baseline)
+                mutate(altered)
+                checkpoint.write_text(json.dumps(altered), encoding='utf-8')
+                before = checkpoint.read_bytes()
+                try:
+                    self.invoke({'op': 'status'}, success=False)
+                    self.assertEqual(checkpoint.read_bytes(), before)
+                finally:
+                    checkpoint.write_bytes(original)
+        self.assertEqual(self.status()['inspection']['status'], 'verified-local')
+
+    def test_status_rejects_malformed_receipt_metadata(self):
+        receipt = next(self.state.glob('*.input.json'))
+        original = receipt.read_bytes()
+        for field, value in (('schema', 999), ('hostObservation', {'values': {'model': ['injected']}}),
+                             ('inputSource', {'unexpected': 'untrusted'})):
+            with self.subTest(field=field):
+                altered = json.loads(original)
+                altered[field] = value
+                receipt.write_text(json.dumps(altered), encoding='utf-8')
+                before = receipt.read_bytes()
+                try:
+                    self.assertIn('invalid-recovery-', self.invoke({'op': 'status'}, success=False))
+                    self.assertEqual(receipt.read_bytes(), before)
+                finally:
+                    receipt.write_bytes(original)
+
+    def test_status_does_not_forward_unrelated_metadata_extensions(self):
+        self.bind()
+        receipt = next(self.state.glob('*.input.json'))
+        data = json.loads(receipt.read_text(encoding='utf-8'))
+        observation = data['hostObservation']
+        observation['private'] = 'UNRELATED_EXTENSION'
+        observation['sourceRefs']['private'] = 'UNRELATED_EXTENSION'
+        observation['changes'] = [{'field': 'model', 'previous': None, 'current': 'sample-model',
+                                  'kind': 'available', 'private': 'UNRELATED_EXTENSION'}]
+        observation['values']['model'] = 'sample-model'
+        receipt.write_text(json.dumps(data), encoding='utf-8')
+        checkpoint = next(self.state.glob('*.state.json'))
+        state = json.loads(checkpoint.read_text(encoding='utf-8'))
+        baseline = state['inputs'][0]
+        state['inputRevisions'] = [{'path': baseline['path'], 'previous': baseline['observed'],
+            'observed': baseline['observed'], 'disposition': 'refresh', 'reason': 'Synthetic revision.',
+            'epoch': state['epoch'], 'private': 'UNRELATED_EXTENSION'}]
+        checkpoint.write_text(json.dumps(state), encoding='utf-8')
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        result = self.status()
+        self.assertNotIn('UNRELATED_EXTENSION', json.dumps(result))
+        self.assertEqual(result['hostObservation']['values']['model'], 'sample-model')
+        self.assertEqual(len(result['checkpoint']['inputRevisions']), 1)
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_status_reports_inaccessible_state_directory_without_calling_it_missing(self):
+        self.bind()
+        self.preload = self.root / 'inaccessible-directory.cjs'
+        self.preload.write_text("const fs=require('node:fs'),stat=fs.lstatSync,exists=fs.existsSync;"
+            f"const target={json.dumps(str(self.state))};"
+            "fs.existsSync=p=>String(p)===target?false:exists(p);"
+            "fs.lstatSync=(p,...a)=>{if(String(p)===target)throw Object.assign(Error('denied'),{code:'EACCES'});return stat(p,...a)};",
+            encoding='utf-8')
+        error = self.invoke({'op': 'status'}, success=False)
+        self.assertIn('EACCES', error)
+        self.assertNotIn('receipt-missing', error)
+
+    def test_status_rejects_unreadable_publication_lock_metadata(self):
+        self.bind()
+        checkpoint = next(self.state.glob('*.state.json'))
+        prefix = checkpoint.name.removesuffix('.state.json')
+        for suffix in ('.lock', '.input.json.lock', '.lock.recovery'):
+            with self.subTest(lock=suffix):
+                lock = self.state / (prefix + suffix)
+                lock.write_text(json.dumps({'pid': os.getpid()}), encoding='utf-8')
+                before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+                self.preload = self.root / 'unreadable-lock.cjs'
+                self.preload.write_text("const fs=require('node:fs'),stat=fs.lstatSync,exists=fs.existsSync;"
+                    f"const target={json.dumps(str(lock))};"
+                    "fs.existsSync=p=>String(p)===target?false:exists(p);"
+                    "fs.lstatSync=(p,...a)=>{if(String(p)===target)throw Object.assign(Error('denied'),{code:'EACCES'});return stat(p,...a)};",
+                    encoding='utf-8')
+                try:
+                    self.assertIn('EACCES', self.invoke({'op': 'status'}, success=False))
+                    self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+                finally:
+                    del self.preload
+                    lock.unlink()
+
     def pause(self, reason='User paused.'):
         current = self.status()
         return self.invoke(dict(op='pause', epoch=current['epoch'], expectedRevision=current['revision'], reason=reason))
@@ -351,7 +533,7 @@ class TaskCheckpointTests(unittest.TestCase):
         self.assertIn('receipt-write-failed', self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Still paused.'}, hook=True, success=False))
         del self.preload
         self.assertEqual(path.read_bytes(), before)
-        self.assertIn('EEXIST', self.invoke({'op': 'status'}, success=False))
+        self.assertIn('recovery-read-busy', self.invoke({'op': 'status'}, success=False))
         self.invoke({'op': 'recover-lock', 'lock': 'input'})
         page = self.invoke({'op': 'read-native-input', 'index': 2, 'maxChars': 1})
         self.assertEqual(page['entries'][0]['text'], 'b')
@@ -391,7 +573,7 @@ class TaskCheckpointTests(unittest.TestCase):
         before = path.read_bytes()
         self.assertIn('oversize-state-object', self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt}, hook=True, success=False))
         self.assertEqual(path.read_bytes(), before)
-        self.assertIn('EEXIST', self.invoke({'op': 'status'}, success=False))
+        self.assertIn('recovery-read-busy', self.invoke({'op': 'status'}, success=False))
         self.invoke({'op': 'recover-lock', 'lock': 'input'})
         self.assertTrue(self.status()['needsNativeReplay'])
         self.assertEqual(self.status()['recoveryInputs']['count'], 69)
@@ -2529,7 +2711,7 @@ fs.renameSync = function(from, to) {
         self.assertEqual(result.stdout, '')
         self.assertIn('EPERM', result.stderr)
         self.assertTrue(list(self.state.glob('*.input.json.lock')))
-        self.assertIn('EEXIST', self.invoke({'op': 'status'}, success=False))
+        self.assertIn('recovery-read-busy', self.invoke({'op': 'status'}, success=False))
         self.assertIn('EEXIST', self.invoke({'hook_event_name': 'Stop'}, hook=True, success=False))
         self.invoke({'op': 'recover-lock', 'lock': 'input'})
         current = self.status()

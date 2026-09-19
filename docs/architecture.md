@@ -157,9 +157,15 @@ metadata falls back to unknown with retrieval locators; when exact paths alone
 exceed the snapshot budget, those locators are emitted separately and intact.
 This is optimistic evidence delivery, not completed restoration, current authority
 or a transaction with external writers. Pauses, interruption, replay requirements
-and epoch differences remain explicit. The separate `status` operation still
-uses transient write locks. Resume reconciliation and input publication retain
-their existing lifecycle semantics.
+and epoch differences remain explicit. `status` reuses the same optimistic
+read boundary, including outcome inspection before the second source read. It
+needs no write access and rejects observed publication/recovery locks, changed
+bytes and incompatible checkpoint identity. Invalid JSON or unavailable files
+identify their source role without echoing stored content; failure has a nonzero
+exit and never becomes an unbound success or automatic repair. This is not a
+transaction over external files and grants no authority for later actions.
+Resume reconciliation and input publication retain their existing write locks
+and lifecycle semantics.
 Failure watermarks remain until their owning
 state directory can safely be retired, without clearing another task's uncertainty.
 SessionEnd removes only unbound receipts with no pending input recovery or

@@ -58,7 +58,7 @@ Adaptation addresses the environment actually encountered. Accord should use the
 
 Knowing its own conditions, maintaining coherence, governing its work, learning, correcting errors, recovering, providing verifiable evidence and improving over time are supporting capability dimensions. Cognitive monitoring and adjustment need working execution, feedback and recovery; engineering bootstrap does not require subjective consciousness. Experience must be validated before reuse, judgments and results remain open to counterevidence, and improvements must detect regressions and allow harmful changes to be reversed. These are [design and acceptance directions](docs/operations/PLAN-v3.3.md#自举的能力维度与证据), not a claim that all eight are implemented.
 
-The current development package participates through a Skill, native event hints and optional task-state mechanisms; repository tools check contracts and evidence. Visibility, invocation, execution and reliable effects are separate. Component count, runtime needs and implementation form follow demonstrated gaps and lifecycle costs.
+The current development package uses one concise entry Skill, four specialist Skills, native event hints and optional task-state mechanisms; repository tools check contracts and evidence. Visibility, invocation, execution and reliable effects are separate. Component count, runtime needs and implementation form follow demonstrated gaps and lifecycle costs.
 
 Users do not need to create or replace `AGENTS.md` to supply Accord's entry duties. Existing user and project instructions remain external conditions to respect and reconcile; earlier Skills can contribute particular responsibilities without defining the entire collaboration chain.
 
@@ -66,7 +66,7 @@ When its input Hook is enabled, the development package retains root-task native
 
 Host buttons, menus, shortcuts, settings, task and project operations, models, permissions, memory, automations, execution environments and extensions all belong in discovery. The currently exposed tool list is not its boundary. The Agent assesses each capability's purpose and conditions, activates it when useful, and verifies effects and exit state. Coverage does not require enabling everything; unknown is not covered.
 
-Managing the ecosystem is also a core duty: plugins, Apps, Skills and MCP capabilities have combinations, dependencies, conflicts and lifecycles. Check installation, context exposure, connections and running resources separately; choose suitable scope, activate and reuse when needed, and retire unnecessary exposure or activity instead of accumulating global residency. Preserve user choices and dependencies still serving other tasks, and verify actual release. Uninstalling does not establish that content already loaded into context has disappeared.
+Managing the ecosystem is also a core duty: plugins, Apps, Skills and MCP capabilities have combinations, dependencies, conflicts and lifecycles. Check installation, context exposure, connections and running resources separately; choose suitable scope, activate and reuse when needed, and retire unnecessary exposure or activity instead of accumulating global residency. Reduce dependencies that add no practical value, while reusing capable host features, tools and mature implementations instead of treating in-house construction as the default. Preserve user choices and dependencies still serving other tasks, and verify actual release. Uninstalling does not establish that content already loaded into context has disappeared.
 
 ## Capability limits and current evidence
 
@@ -74,7 +74,9 @@ Managing the ecosystem is also a core duty: plugins, Apps, Skills and MCP capabi
 
 Accord does not train models, expand native context windows or bypass host permissions and interfaces. The Agent investigates feasible alternatives and missing conditions; real limits must still be reported with unfinished responsibilities preserved. A reference core or prompt alone cannot guarantee execution or enforce permissions.
 
-Intervention can add context load, latency, cost, instruction conflict and maintenance burden. Assess net effects on real outcomes; prefer lower burden for equivalent results, narrowing, replacing or retiring intervention when warranted. Trace and correct effects already caused by a faulty component.
+The current development package requires no separate evaluation-model account or service. The host's normal requirements and costs still apply.
+
+Intervention can add context load, latency, compute cost, instruction conflict and maintenance burden. Assess net effects on real outcomes; prefer lower burden for equivalent results, narrowing, replacing or retiring intervention when warranted. Necessary automation does not promise zero tokens, CPU time or elapsed time. Trace and correct effects already caused by a faulty component.
 
 See the [consensus node](docs/operations/PLAN-v3.3.md) for outstanding work, the [acceptance view](docs/operations/ACCEPTANCE-v3.3.md) for criteria and the [historical trial record](docs/operations/PROCEDURE-v3.3.md) for qualified observations. The [changelog](CHANGELOG.md) and versioned releases preserve history; old PASS results do not validate changed bytes.
 
