@@ -62,7 +62,11 @@ the same authorization again. Other release targets require their own authority.
   Discover beyond installed tools for a material gap or plausible net benefit;
   keep comparison bounded and release task exposure when it ends. A capability
   cannot add goals, deliverables, approvals, or authority.
-- Release task-created resources and residue before closeout. Require explicit
+- Release task-created resources and residue before closeout. Task ownership
+  does not make retained evidence disposable. Recheck current writers, execution
+  phase and retention immediately before cleanup; a child Agent's final response
+  alone does not settle queued mutations. Transfer reviewed artifacts to a
+  distinct executor-owned path when pending writers cannot be excluded. Require explicit
   bounded authority before installation, enablement, account connection, new
   trust or data access, meaningful cost, external writes, publication,
   deployment, cleanup beyond task-owned resources or residue, or irreversible
