@@ -18,9 +18,9 @@ DRIVER = Path(__file__).with_name('carrier_handoff_host.cjs')
 
 
 class CarrierHandoffTests(unittest.TestCase):
-    def run_case(self, scenario='success'):
+    def run_case(self, scenario='success', **options):
         result = subprocess.run([shutil.which('node'), str(DRIVER)],
-            input=json.dumps({'scenario':scenario})+'\n', capture_output=True,
+            input=json.dumps({'scenario':scenario, **options})+'\n', capture_output=True,
             text=True, encoding='utf-8', timeout=15)
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)
@@ -77,12 +77,14 @@ class CarrierHandoffTests(unittest.TestCase):
     def test_late_cas_or_changed_binding_cannot_trigger_recovery_effects(self):
         for scenario in ('late-cas-active','malformed-cas-active','connection-drift'):
             with self.subTest(scenario=scenario):
-                r=self.run_case(scenario)
+                r=self.run_case(scenario, beforeContinuationDelayMs=200 if scenario=='late-cas-active' else 0)
                 self.assertIsNotNone(r['error'])
                 self.assertTrue(r['error']['reconciliationRequired'])
                 self.assertFalse(any(c['method'] in ('turn/interrupt','thread/unsubscribe') for c in r['calls']))
                 if scenario in ('late-cas-active','malformed-cas-active'):
                     self.assertEqual(r['snapshots'][-1]['phase'],'continuation-started')
+                if scenario == 'late-cas-active':
+                    self.assertEqual(r['error']['code'],'RECORDER_COMMIT_UNKNOWN')
 
     def test_unknown_begin_cannot_be_treated_as_a_fresh_retry(self):
         for scenario in ('duplicate','bad-begin','begin-null'):
@@ -117,6 +119,12 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertFalse(any(c['method']=='thread/start' for c in r['calls']))
         r=self.run_case('clock-jump')
         self.assertIsNone(r['error'])
+
+    def test_unreturned_verifier_is_bounded_by_the_real_timer(self):
+        r=self.run_case('stalled-verifier')
+        self.assertEqual(r['verdicts'], ['prepare'])
+        self.assertEqual(r['error']['code'], 'VERIFIER_FAILED')
+        self.assertFalse(any(c['method']=='thread/start' for c in r['calls']))
 
     def test_additional_intake_stays_read_only_and_requires_current_authority(self):
         r=self.run_case('extra-context')

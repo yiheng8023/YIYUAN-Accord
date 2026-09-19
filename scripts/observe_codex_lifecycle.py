@@ -50,6 +50,22 @@ HOT_CASE = "loaded-accord-paused-thread-upgrade-rollback/v1"
 HOT_BUILD = "codex.hot-reload-observation"
 HOT_COMMAND_LABELS = (*COMMAND_LABELS, "hot-reload-upgrade", "hot-reload-rollback")
 HOT_PROMPTS = ("保持已绑定任务暂停；观察插件新构建生效。", "保持已绑定任务暂停；观察插件原构建恢复。")
+REPLACEMENT_CASE = "paused-thread-cross-version-host-replacement/v1"
+REPLACEMENT_LAUNCH_PLAN = (
+    ("commands", "marketplace-add", "source"),
+    ("commands", "package-add", "source"),
+    ("native", "discovery", "source"),
+    ("native", "end-enabled", "source"),
+    ("native", "end-disabled", "source"),
+    ("native", "interrupted", "source"),
+    ("native", "resumed", "replacement"),
+    ("native", "restored-exposure", "replacement"),
+    ("commands", "invalid-candidate", "replacement"),
+    ("commands", "healthy-retry", "replacement"),
+    ("commands", "package-remove", "replacement"),
+    ("commands", "package-list-after-remove", "replacement"),
+    ("native", "after-remove", "replacement"),
+)
 OWNED_ROOTS = ("home", "marketplace", "workspace", "state", "temp")
 PROMPT = "本地材料已提供。保持暂停，不生成 pending.json，也不修改原始材料。"
 
@@ -190,7 +206,7 @@ def _hot_binding(manifest):
     root = Path(manifest["evidence"])
     hot = manifest.get("hotReload")
     if manifest.get("case") != HOT_CASE:
-        if "case" in manifest or hot is not None:
+        if manifest.get("case") not in (None, REPLACEMENT_CASE) or hot is not None:
             raise ValueError("unknown lifecycle case")
         return None
     old, new, changes = _hot_variant(root / "source-package")
@@ -322,6 +338,172 @@ def _source_paths():
     }
 
 
+def _codex_version(path, manifest, role, env):
+    path = _regular_file(path)
+    root = Path(manifest["evidence"]) / "retained/version-probes" / role
+    root.mkdir(parents=True)
+    stdout_path, stderr_path = root / "stdout.txt", root / "stderr.txt"
+    arguments, binary_hash = [str(path), "--version"], digest(path)
+    job, process, forced, failure = _new_controller(), None, False, None
+    recovery_deadline = None
+    try:
+        with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+            process = subprocess.Popen(arguments, cwd=manifest["ownedRoots"]["workspace"], env=env,
+                stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr, **_spawn_options())
+            try:
+                job.attach_and_resume(process)
+            except BaseException:
+                forced, failure = True, "job-attach"
+                try:
+                    job.terminate()
+                finally:
+                    if process.poll() is None:
+                        process.kill()
+                raise
+            work_deadline = time.monotonic() + min(10, manifest["limits"]["requestSeconds"])
+            while process.poll() is None:
+                if stdout_path.stat().st_size + stderr_path.stat().st_size > 64 * 1024:
+                    forced, failure = True, "output-limit"
+                    job.terminate()
+                    break
+                if time.monotonic() >= work_deadline:
+                    forced, failure = True, "work-deadline"
+                    job.terminate()
+                    break
+                time.sleep(0.01)
+        recovery_deadline = time.monotonic() + manifest["limits"]["recoverySeconds"]
+        if process.poll() is None:
+            process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
+        after = _wait_job(job, recovery_deadline)
+        if not _released(after):
+            forced = True
+            job.terminate()
+            after = _wait_job(job, recovery_deadline)
+        raw = read_regular(stdout_path, 64 * 1024).decode("utf-8", "replace")
+        lines = raw.splitlines()
+        version = lines[0].strip() if len(lines) == 1 else ""
+        record = {"arguments": arguments, "executable": str(path), "sha256": binary_hash,
+                  "version": version or None,
+                  **_resource_record(manifest, process, forced, after, failure)}
+        save(root / "record.json", record)
+        if (not _record_released(record, manifest) or record["exitCode"] != 0 or failure is not None
+                or not version or len(version) > 1024 or digest(path) != binary_hash):
+            raise ValueError("Codex version probe returned an invalid identity")
+        return version
+    except BaseException as error:
+        recovery_deadline = recovery_deadline or time.monotonic() + manifest["limits"]["recoverySeconds"]
+        if process is not None and process.poll() is None:
+            forced = True
+            try:
+                job.terminate()
+            finally:
+                if process.poll() is None:
+                    process.kill()
+            try:
+                process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
+            except subprocess.TimeoutExpired:
+                pass
+        after = _wait_job(job, recovery_deadline)
+        if not (root / "record.json").exists():
+            save(root / "record.json", {"arguments": arguments, "executable": str(path),
+                "sha256": binary_hash, "version": None,
+                **_resource_record(manifest, process, forced, after, failure or "version-probe")})
+        if isinstance(error, ValueError):
+            raise
+        raise ValueError("Codex version probe failed") from error
+    finally:
+        job.close()
+
+
+def _replacement_binding(manifest):
+    binding = manifest.get("hostReplacement")
+    if binding is None:
+        if manifest.get("case") == REPLACEMENT_CASE:
+            raise ValueError("host replacement case lacks its binding")
+        return None
+    expected = {"source", "replacement", "launchPlan"}
+    if (manifest.get("case") != REPLACEMENT_CASE or set(binding) != expected
+            or binding.get("launchPlan") != [list(row) for row in REPLACEMENT_LAUNCH_PLAN]):
+        raise ValueError("host replacement binding differs")
+    for role in ("source", "replacement"):
+        identity = binding.get(role)
+        if (not isinstance(identity, dict) or set(identity) != {"path", "sha256", "version"}
+                or not isinstance(identity.get("path"), str) or not identity["path"]
+                or not isinstance(identity.get("sha256"), str) or len(identity["sha256"]) != 64
+                or not isinstance(identity.get("version"), str) or not identity["version"]):
+            raise ValueError("host replacement executable identity differs")
+    source, replacement = binding["source"], binding["replacement"]
+    if (source["path"] != manifest.get("codex") or source["sha256"] != manifest.get("binaryHashes", {}).get("codex")
+            or source["path"] == replacement["path"] or source["sha256"] == replacement["sha256"]
+            or source["version"] == replacement["version"]):
+        raise ValueError("host replacement source and successor are not distinct")
+    return binding
+
+
+def _codex_identity(manifest, role="source"):
+    binding = _replacement_binding(manifest)
+    if binding is None:
+        if role != "source":
+            raise ValueError("replacement executable is unavailable")
+        # Shared entry/carrier callers bind their binaries in their own manifests.
+        # Preserve their existing contract when no replacement case is requested.
+        return {"path": manifest["codex"], "sha256": None, "version": None}
+    identity = binding[role]
+    path = _regular_file(identity["path"])
+    if digest(path) != identity["sha256"]:
+        raise ValueError("prepared Codex executable changed: " + role)
+    return identity
+
+
+def _version_probe_records(manifest, binding=None):
+    binding = binding or _replacement_binding(manifest)
+    if binding is None:
+        return {}
+    probe_root = _ordinary_dir(Path(manifest["evidence"]) / "retained/version-probes")
+    if {path.name for path in probe_root.iterdir() if path.is_dir()} != {"source", "replacement"}:
+        raise ValueError("Codex version probe set differs")
+    records = {}
+    for role in ("source", "replacement"):
+        root = Path(manifest["evidence"]) / "retained/version-probes" / role
+        record = json.loads(read_regular(root / "record.json"))
+        version = read_regular(root / "stdout.txt", 64 * 1024).decode("utf-8", "replace").strip()
+        _regular_file(root / "stderr.txt")
+        identity = binding[role]
+        if (not isinstance(record, dict) or record.get("arguments") != [identity["path"], "--version"]
+                or record.get("executable") != identity["path"] or record.get("sha256") != identity["sha256"]
+                or record.get("version") != identity["version"] or version != identity["version"]
+                or record.get("exitCode") != 0 or not _record_released(record, manifest)):
+            raise ValueError("Codex version probe receipt differs: " + role)
+        records[role] = record
+    return records
+
+
+def _launch_rows(manifest):
+    path = Path(manifest["evidence"]) / "retained/host-launches.jsonl"
+    if not path.exists():
+        return []
+    return [json.loads(line) for line in read_regular(path, 1024 * 1024).decode("utf-8").splitlines() if line]
+
+
+def _record_host_launch(manifest, area, label, role, arguments):
+    binding = _replacement_binding(manifest)
+    if binding is None:
+        return
+    rows = _launch_rows(manifest)
+    ordinal = len(rows) + 1
+    if ordinal > len(REPLACEMENT_LAUNCH_PLAN) or REPLACEMENT_LAUNCH_PLAN[ordinal - 1] != (area, label, role):
+        raise ValueError("host replacement launch order differs")
+    identity = _codex_identity(manifest, role)
+    arguments = [str(value) for value in arguments]
+    if not arguments or arguments[0] != identity["path"]:
+        raise ValueError("host replacement launch executable differs")
+    row = {"ordinal": ordinal, "area": area, "label": label, "role": role,
+           "executable": identity["path"], "sha256": identity["sha256"],
+           "version": identity["version"], "arguments": arguments}
+    with (Path(manifest["evidence"]) / "retained/host-launches.jsonl").open("a", encoding="utf-8") as stream:
+        stream.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
 def _remaining(deadline):
     remaining = deadline - time.monotonic()
     if remaining <= 0:
@@ -401,10 +583,13 @@ def prepare(args):
     marketplace_manifest = _regular_file(args.marketplace_manifest)
     _validate_marketplace_manifest(marketplace_manifest)
     codex, node = _regular_file(args.codex), _regular_file(args.node)
+    replacement_arg = getattr(args, "replacement_codex", None)
+    replacement = _regular_file(replacement_arg) if replacement_arg else None
     python = _regular_file(sys.executable)
     protected = [_regular_file(path) for path in args.protected_file]
     if not protected or len({str(path) for path in protected}) != len(protected):
         raise ValueError("at least one distinct protected file must be bound")
+    protected_before = {str(path): digest(path) for path in protected}
     if evidence.exists() or not evidence.parent.is_dir() or evidence.parent.resolve() != evidence.parent:
         raise ValueError("evidence must be a fresh root with an ordinary parent")
     if evidence == package or package in evidence.parents or evidence in package.parents:
@@ -414,10 +599,52 @@ def prepare(args):
         raise ValueError("bind the Node executable used by package Hooks")
     if not 1 <= args.timeout <= 1800 or not 1 <= args.request_timeout <= 120 or not 1 <= args.recovery_timeout <= 120:
         raise ValueError("invalid lifecycle deadlines")
+    if replacement is not None and getattr(args, "hot_reload", False):
+        raise ValueError("host replacement cannot be combined with hot-reload")
+    replacement_binding = None
+    if replacement is not None:
+        evidence.mkdir()
+        for name in (*OWNED_ROOTS, "native", "commands", "retained"):
+            (evidence / name).mkdir()
+        probe_manifest = {
+            "evidence": str(evidence), "node": str(node), "resourceController": controller,
+            "ownedRoots": {name: str(evidence / name) for name in OWNED_ROOTS},
+            "limits": {"requestSeconds": args.request_timeout, "recoverySeconds": args.recovery_timeout},
+        }
+        probe_env = _owned_environment(probe_manifest)
+        source_hash, replacement_hash = digest(codex), digest(replacement)
+        if codex == replacement or source_hash == replacement_hash:
+            raise ValueError("replacement Codex must use a different path and bytes")
+        source_version = _codex_version(codex, probe_manifest, "source", probe_env)
+        replacement_version = _codex_version(replacement, probe_manifest, "replacement", probe_env)
+        if digest(codex) != source_hash or digest(replacement) != replacement_hash:
+            raise ValueError("Codex executable changed during version binding")
+        # Native arg0 setup can leave helper files even for --version. Both probe
+        # controllers have released; retain the inventory before clearing only
+        # their newly created roots, then freeze the lifecycle's empty baseline.
+        residue = {name: _root_hashes(probe_manifest["ownedRoots"][name]) for name in OWNED_ROOTS}
+        save(evidence / "retained/version-probes/owned-root-residue.json", residue)
+        for name in OWNED_ROOTS:
+            owned = evidence / name
+            if owned.resolve() != owned or owned.parent != evidence:
+                raise ValueError("version probe cleanup root differs")
+            _remove_owned_tree(owned)
+            owned.mkdir()
+        if any(digest(path) != protected_before[str(path)] for path in protected):
+            raise ValueError("version probe changed a protected file")
+        if source_version == replacement_version:
+            raise ValueError("replacement Codex must report a different version")
+        replacement_binding = {
+            "source": {"path": str(codex), "sha256": source_hash, "version": source_version},
+            "replacement": {"path": str(replacement), "sha256": replacement_hash,
+                            "version": replacement_version},
+            "launchPlan": [list(row) for row in REPLACEMENT_LAUNCH_PLAN],
+        }
     variant = _hot_variant(package) if getattr(args, "hot_reload", False) else None
-    evidence.mkdir()
-    for name in (*OWNED_ROOTS, "native", "commands", "retained"):
-        (evidence / name).mkdir()
+    if not evidence.exists():
+        evidence.mkdir()
+        for name in (*OWNED_ROOTS, "native", "commands", "retained"):
+            (evidence / name).mkdir()
     snapshot = evidence / "source-package"
     shutil.copytree(package, snapshot)
     hot = None
@@ -458,7 +685,7 @@ def prepare(args):
         "preparedMarketplaceHashes": _tree_hashes(market),
         "sourceHashes": {name: digest(path) for name, path in sources.items()},
         "sourcePaths": {name: str(path) for name, path in sources.items()},
-        "protectedFiles": {str(path): digest(path) for path in protected},
+        "protectedFiles": protected_before,
         "nativeResourceLabels": list(RESOURCE_LABELS),
         "nativeCommandLabels": list(COMMAND_LABELS),
         "ownedRoots": {name: str(evidence / name) for name in OWNED_ROOTS},
@@ -478,6 +705,10 @@ def prepare(args):
         manifest.update(case=HOT_CASE, hotReload=hot, nativeCommandLabels=list(HOT_COMMAND_LABELS))
         manifest["limits"]["providerRequests"] = 6
         manifest["claimLimit"] += "; hot-reload applies only to this case's already Accord-bound paused task; unchanged Hook declarations and trust; no prior-user-history takeover, same-version replacement, host upgrade or autonomous Agent update claim"
+    if replacement_binding is not None:
+        manifest.update(case=REPLACEMENT_CASE, hostReplacement=replacement_binding)
+        manifest["claimLimit"] += "; host replacement applies only after observed source-process release in this paused thread; no automatic upgrade, GUI adoption or arbitrary state migration claim"
+        _version_probe_records(manifest, replacement_binding)
     save(evidence / "manifest.json", manifest)
     return {"prepared": True, "modelCalls": 0, "evidence": str(evidence)}
 
@@ -488,6 +719,9 @@ def _load(evidence):
     if not isinstance(manifest, dict) or manifest.get("evidence") != str(evidence):
         raise ValueError("lifecycle manifest evidence root mismatch")
     hot = _hot_binding(manifest)
+    replacement = _replacement_binding(manifest)
+    if replacement is not None:
+        _version_probe_records(manifest, replacement)
     if (manifest.get("schema") != SCHEMA or manifest.get("evidence") != str(evidence)
             or manifest.get("pluginId") != PLUGIN_ID
             or manifest.get("promptSha256") != hashlib.sha256(PROMPT.encode("utf-8")).hexdigest()
@@ -515,6 +749,7 @@ def _load(evidence):
 
 def _validate_prebound(manifest):
     _hot_binding(manifest)
+    replacement = _replacement_binding(manifest)
     if manifest.get("resourceController", "windows-job-object") != _controller_kind():
         raise ValueError("prepared resource controller differs from this host")
     evidence = Path(manifest["evidence"])
@@ -527,6 +762,9 @@ def _validate_prebound(manifest):
     for name in ("codex", "node", "python"):
         if digest(_regular_file(manifest[name])) != manifest["binaryHashes"][name]:
             raise ValueError("prepared native binary changed: " + name)
+    if replacement is not None:
+        _codex_identity(manifest, "source")
+        _codex_identity(manifest, "replacement")
     for path, expected in manifest["protectedFiles"].items():
         if digest(_regular_file(path)) != expected:
             raise ValueError("prepared protected file changed")
@@ -564,17 +802,22 @@ def _wait_job(job, deadline):
     return sample
 
 
-def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_override="file"):
+def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_override="file", codex_role="source"):
     evidence = Path(manifest["evidence"])
     root = evidence / "commands" / label
     root.mkdir()
-    job, process, forced, failure, recovery_deadline = _new_controller(), None, False, None, None
     stdout_path, stderr_path = root / "stdout.json", root / "stderr.txt"
     if auth_store_override is not None:
         arguments = ["-c", "cli_auth_credentials_store=" + json.dumps(auth_store_override), *arguments]
+    identity = _codex_identity(manifest, codex_role)
+    full_arguments = [identity["path"], *arguments]
+    _record_host_launch(manifest, "commands", label, codex_role, full_arguments)
+    launch_fields = ({"executable": identity["path"], "hostVersion": identity["version"]}
+                     if _replacement_binding(manifest) is not None else {})
+    job, process, forced, failure, recovery_deadline = _new_controller(), None, False, None, None
     try:
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
-            process = subprocess.Popen([manifest["codex"], *arguments], cwd=manifest["ownedRoots"]["workspace"],
+            process = subprocess.Popen(full_arguments, cwd=manifest["ownedRoots"]["workspace"],
                 env=env, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
                 **_spawn_options())
             try:
@@ -609,7 +852,8 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
             forced = True
             job.terminate()
             after = _wait_job(job, recovery_deadline)
-        record = {"arguments": arguments, **_resource_record(manifest, process, forced, after, failure)}
+        record = {"arguments": arguments, **launch_fields,
+                  **_resource_record(manifest, process, forced, after, failure)}
         save(root / "record.json", record)
         if not _record_released(record, manifest):
             raise RuntimeError("native command process release unobserved within recovery deadline")
@@ -630,7 +874,7 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
             except subprocess.TimeoutExpired:
                 pass
         after = _wait_job(job, recovery_deadline)
-        save(root / "record.json", {"arguments": arguments,
+        save(root / "record.json", {"arguments": arguments, **launch_fields,
             **_resource_record(manifest, process, forced, after, failure or "native-command")})
         raise
     finally:
@@ -719,7 +963,7 @@ class _Fixture:
 
 
 class _App:
-    def __init__(self, manifest, label, argv, env, work_deadline):
+    def __init__(self, manifest, label, argv, env, work_deadline, codex_role="source"):
         evidence = Path(manifest["evidence"])
         self.root = evidence / "native" / label
         self.workspace = manifest["ownedRoots"]["workspace"]
@@ -727,12 +971,14 @@ class _App:
         self.root.mkdir()
         self.job, self.events, self.queue = _new_controller(), [], queue.Queue()
         self.manifest, self.work_deadline = manifest, work_deadline
+        self.arguments, self.codex_role = list(argv), codex_role
         self.hot_arguments = list(argv) if label == "resumed" and manifest.get("case") == HOT_CASE else None
         self._closed, self._close_record = False, None
         self.stderr = (self.root / "stderr.txt").open("xb")
         self.stdout = (self.root / "stdout.jsonl").open("xb")
         self.process = None
         try:
+            _record_host_launch(manifest, "native", label, codex_role, argv)
             self.process = subprocess.Popen(argv, cwd=manifest["ownedRoots"]["workspace"], env=env,
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.stderr,
                 **_spawn_options())
@@ -844,6 +1090,9 @@ class _App:
             record["readerStopped"] = not self.reader.is_alive()
             if self.hot_arguments is not None:
                 record["arguments"] = self.hot_arguments
+            if _replacement_binding(manifest) is not None:
+                identity = _codex_identity(manifest, self.codex_role)
+                record.update(arguments=self.arguments, executable=identity["path"], hostVersion=identity["version"])
             save(self.root / "resources.json", record)
             self._close_record = record
             if not _record_released(record, manifest):
@@ -864,8 +1113,8 @@ def _provider(manifest, fixture):
             "request_max_retries": 0, "stream_max_retries": 0, "stream_idle_timeout_ms": 25000}
 
 
-def _argv(manifest, fixture, extra=()):
-    return [manifest["codex"], "app-server", "-c", "features.plugins=true", "-c", "features.hooks=true",
+def _argv(manifest, fixture, extra=(), codex_role="source"):
+    return [_codex_identity(manifest, codex_role)["path"], "app-server", "-c", "features.plugins=true", "-c", "features.hooks=true",
             "-c", "features.apps=false", "-c", 'web_search="disabled"', "-c", 'cli_auth_credentials_store="file"',
             "-c", 'model_provider="accord_fixture"', "-c", 'model="fixture-no-model"', "-c",
             "model_providers.accord_fixture=" + _toml(_provider(manifest, fixture)), *extra]
@@ -975,9 +1224,87 @@ def _run_hot_reload(manifest, app, fixture, installed, env, work_deadline, threa
     return current
 
 
+def _launch_record(manifest, row):
+    root = Path(manifest["evidence"])
+    filename = "resources.json" if row["area"] == "native" else "record.json"
+    return json.loads(read_regular(root / row["area"] / row["label"] / filename))
+
+
+def _validate_host_launch_rows(manifest, rows, resources=None, commands=None):
+    binding = _replacement_binding(manifest)
+    if binding is None or len(rows) > len(REPLACEMENT_LAUNCH_PLAN):
+        raise ValueError("host replacement launch ledger differs")
+    for ordinal, row in enumerate(rows, 1):
+        area, label, role = REPLACEMENT_LAUNCH_PLAN[ordinal - 1]
+        identity = binding[role]
+        if (not isinstance(row, dict)
+                or set(row) != {"ordinal", "area", "label", "role", "executable", "sha256", "version", "arguments"}
+                or row.get("ordinal") != ordinal
+                or (row.get("area"), row.get("label"), row.get("role")) != (area, label, role)
+                or row.get("executable") != identity["path"] or row.get("sha256") != identity["sha256"]
+                or row.get("version") != identity["version"] or not isinstance(row.get("arguments"), list)
+                or not row["arguments"] or row["arguments"][0] != identity["path"]):
+            raise ValueError("host replacement launch identity or order differs")
+        record = ((resources or {}).get(label) if area == "native" else (commands or {}).get(label))
+        if record is not None:
+            expected_arguments = row["arguments"] if area == "native" else row["arguments"][1:]
+            if (record.get("arguments") != expected_arguments or record.get("executable") != identity["path"]
+                    or record.get("hostVersion") != identity["version"] or not _record_released(record, manifest)):
+                raise ValueError("host replacement process receipt differs")
+
+
+def _activate_host_replacement(manifest, thread_id):
+    binding = _replacement_binding(manifest)
+    if binding is None:
+        return
+    _codex_identity(manifest, "source")
+    _codex_identity(manifest, "replacement")
+    rows = _launch_rows(manifest)
+    if len(rows) != 6:
+        raise ValueError("host replacement source launch prefix differs")
+    _validate_host_launch_rows(manifest, rows)
+    resources, commands = {}, {}
+    for row in rows:
+        record = _launch_record(manifest, row)
+        (resources if row["area"] == "native" else commands)[row["label"]] = record
+    try:
+        _validate_host_launch_rows(manifest, rows, resources, commands)
+    except ValueError as error:
+        if any(not _record_released(record, manifest) for record in (*resources.values(), *commands.values())):
+            raise RuntimeError("source host process release unobserved before replacement") from error
+        raise
+    save(Path(manifest["evidence"]) / "retained/host-replacement-switch.json", {
+        "sequenceThrough": len(rows), "threadId": thread_id,
+        "lastSource": {"area": rows[-1]["area"], "label": rows[-1]["label"]},
+        "nextReplacement": {"area": "native", "label": "resumed"},
+        "source": binding["source"], "replacement": binding["replacement"],
+    })
+
+
+def _inspect_host_replacement(manifest, resources, commands, paused_thread):
+    binding = _replacement_binding(manifest)
+    if binding is None:
+        return {}
+    probes = _version_probe_records(manifest, binding)
+    rows = _launch_rows(manifest)
+    if len(rows) != len(REPLACEMENT_LAUNCH_PLAN):
+        raise ValueError("host replacement launch ledger is incomplete")
+    _validate_host_launch_rows(manifest, rows, resources, commands)
+    switched = json.loads(read_regular(Path(manifest["evidence"]) / "retained/host-replacement-switch.json"))
+    if (not isinstance(switched, dict)
+            or set(switched) != {"sequenceThrough", "threadId", "lastSource", "nextReplacement", "source", "replacement"}
+            or switched.get("sequenceThrough") != 6 or switched.get("threadId") != paused_thread
+            or switched.get("lastSource") != {"area": "native", "label": "interrupted"}
+            or switched.get("nextReplacement") != {"area": "native", "label": "resumed"}
+            or switched.get("source") != binding["source"] or switched.get("replacement") != binding["replacement"]):
+        raise ValueError("host replacement switch receipt differs")
+    return probes
+
+
 def run(args):
     manifest = _load(args.evidence)
     _validate_prebound(manifest)
+    replacement = _replacement_binding(manifest)
     evidence = Path(manifest["evidence"])
     with (evidence / "run-started.json").open("x", encoding="utf-8") as stream:
         json.dump({"time": time.time(), "manifestSha256": digest(evidence / "manifest.json"),
@@ -988,6 +1315,8 @@ def run(args):
     result = {"failure": None, "failureStage": None, "modelCalls": 0, "claimLimit": manifest["claimLimit"],
               "resourceController": manifest.get("resourceController", "windows-job-object"),
               "resourceEvidenceScope": _resource_scope(manifest.get("resourceController", "windows-job-object"))}
+    if replacement is not None:
+        result["hostReplacementVersionProbesReleased"] = True
     fixture, apps = None, []
     installed = None
     try:
@@ -1009,7 +1338,8 @@ def run(args):
         result["installedPathReturned"] = str(installed)
         result["installedPackageHashes"] = _tree_hashes(installed)
         fixture = _Fixture(manifest)
-        base = _argv(manifest, fixture)
+        codex_role = "source"
+        base = _argv(manifest, fixture, codex_role=codex_role)
 
         result["failureStage"] = "discovery"
         app = _App(manifest, "discovery", base, env, work_deadline); apps.append(app); app.initialize()
@@ -1042,7 +1372,9 @@ def run(args):
 
         def launch(label, states=trust):
             result["failureStage"] = label
-            app = _App(manifest, label, _argv(manifest, fixture, (*common, "-c", "hooks.state=" + _toml(states))), env, work_deadline)
+            arguments = _argv(manifest, fixture, (*common, "-c", "hooks.state=" + _toml(states)),
+                              codex_role=codex_role)
+            app = _App(manifest, label, arguments, env, work_deadline, codex_role=codex_role)
             if label == "resumed" and manifest.get("case") == HOT_CASE:
                 save(evidence / "retained/hot-reload-launch.json", {"arguments": _argv(manifest, fixture,
                     (*common, "-c", "hooks.state=" + _toml(states))), "trust": states})
@@ -1123,6 +1455,9 @@ def run(args):
             raise RuntimeError("unfinished paused state did not survive exit")
         save(evidence / "retained/after-exit.json", after_exit)
 
+        if replacement is not None:
+            _activate_host_replacement(manifest, thread)
+            codex_role = "replacement"
         app = launch("resumed")
         resumed = app.rpc("thread/resume", {"threadId": thread, "cwd": manifest["ownedRoots"]["workspace"],
             "model": "fixture-no-model", "modelProvider": "accord_fixture", "sandbox": "read-only",
@@ -1147,6 +1482,8 @@ def run(args):
         save(evidence / "retained/after-resume.json", after_resume)
         save(evidence / "retained/paused-thread.json", {"threadId": thread})
         result["continueReceiptDoesNotResumeBinding"] = True
+        if replacement is not None:
+            result["hostReplacementObserved"] = True
         if manifest.get("case") == HOT_CASE:
             result["failureStage"] = "hot-reload-upgrade-rollback"
             installed = _run_hot_reload(manifest, app, fixture, installed, env, work_deadline, thread, after_resume, trust)
@@ -1162,7 +1499,9 @@ def run(args):
         result["selectedPathsDisabledInOwnedProcess"] = result["standaloneSkillPathAbsentFromProviderInput"]
 
         result["failureStage"] = "restored-exposure"
-        app = _App(manifest, "restored-exposure", base, env, work_deadline); apps.append(app); app.initialize()
+        current_base = _argv(manifest, fixture, codex_role=codex_role)
+        app = _App(manifest, "restored-exposure", current_base, env, work_deadline,
+                   codex_role=codex_role); apps.append(app); app.initialize()
         app.rpc("skills/extraRoots/set", {"extraRoots": [manifest["standaloneSkill"]["root"]]})
         restored = [s for s in _skill_rows(app.rpc("skills/list", {
             "cwds": [manifest["ownedRoots"]["workspace"]], "forceReload": True}))
@@ -1179,7 +1518,8 @@ def run(args):
         try:
             source.write_bytes(b"{invalid candidate")
             result["failureStage"] = "invalid-candidate"
-            bad, _ = _run_cli(manifest, "invalid-candidate", ["plugin", "add", manifest["pluginId"], "--json"], env, work_deadline)
+            bad, _ = _run_cli(manifest, "invalid-candidate", ["plugin", "add", manifest["pluginId"], "--json"],
+                              env, work_deadline, codex_role=codex_role)
             if bad["exitCode"] == 0 or _tree_hashes(installed) != installed_before or _tree_hashes(manifest["ownedRoots"]["state"]) != state_before:
                 raise RuntimeError("malformed candidate changed healthy state")
             save(evidence / "retained/invalid-candidate-preserved.json",
@@ -1188,20 +1528,24 @@ def run(args):
         finally:
             source.write_bytes(original)
         result["failureStage"] = "healthy-retry"
-        healthy, _ = _run_cli(manifest, "healthy-retry", ["plugin", "add", manifest["pluginId"], "--json"], env, work_deadline)
+        healthy, _ = _run_cli(manifest, "healthy-retry", ["plugin", "add", manifest["pluginId"], "--json"],
+                              env, work_deadline, codex_role=codex_role)
         result["healthyRetryExact"] = healthy["exitCode"] == 0 and _tree_hashes(installed) == installed_before
         result["failureStage"] = "package-remove"
-        removed, _ = _run_cli(manifest, "package-remove", ["plugin", "remove", manifest["pluginId"], "--json"], env, work_deadline)
+        removed, _ = _run_cli(manifest, "package-remove", ["plugin", "remove", manifest["pluginId"], "--json"],
+                              env, work_deadline, codex_role=codex_role)
         if removed["exitCode"] or installed.exists():
             raise RuntimeError("native uninstall failed")
         result["failureStage"] = "package-list-after-remove"
-        listed, inventory = _run_cli(manifest, "package-list-after-remove", ["plugin", "list", "--json"], env, work_deadline)
+        listed, inventory = _run_cli(manifest, "package-list-after-remove", ["plugin", "list", "--json"],
+                                     env, work_deadline, codex_role=codex_role)
         if (listed["exitCode"] or not isinstance(inventory, dict) or not isinstance(inventory.get("installed"), list)
                 or any(row.get("pluginId") == manifest["pluginId"] for row in inventory["installed"]
                        if isinstance(row, dict))):
             raise RuntimeError("removed plugin remains in native inventory")
         result["failureStage"] = "after-remove"
-        app = _App(manifest, "after-remove", base, env, work_deadline); apps.append(app); app.initialize()
+        app = _App(manifest, "after-remove", current_base, env, work_deadline,
+                   codex_role=codex_role); apps.append(app); app.initialize()
         hooks_after = _hook_rows(app.rpc("hooks/list", {"cwds": [manifest["ownedRoots"]["workspace"]]}))
         skills_after = _skill_rows(app.rpc("skills/list", {"cwds": [manifest["ownedRoots"]["workspace"]], "forceReload": True}))
         result["nativeUninstallRemovesCacheAndDiscovery"] = (not any(h.get("key", "").startswith(manifest["pluginId"] + ":") for h in hooks_after)
@@ -1212,12 +1556,23 @@ def run(args):
         result["sourceHashAfter"] = digest(Path(manifest["ownedRoots"]["workspace"]) / "source.json")
         result["sourceUnchanged"] = result["sourceHashAfter"] == manifest["initialRootHashes"]["workspace"]["source.json"]
         result["providerBound"] = len(fixture.requests) == manifest["limits"]["providerRequests"] and not fixture.auth_seen
+        if replacement is not None:
+            result["hostReplacementVersionProbeCount"] = len(_version_probe_records(manifest, replacement))
+            result["hostReplacementLaunchCount"] = len(_launch_rows(manifest))
+            result["hostReplacementEvidenceCountsExact"] = (
+                result["hostReplacementVersionProbeCount"] == 2
+                and result["hostReplacementLaunchCount"] == len(REPLACEMENT_LAUNCH_PLAN))
         result["mechanismComplete"] = all((result.get("standaloneCatalogEntryAbsent"), result.get("accordCatalogPresent"),
             result.get("originalExposureRestored"), result.get("standaloneExposureCleared"),
             result.get("standaloneSkillBytesUnchanged"),
             result.get("malformedCandidateRejectedWithoutReplacement"), result.get("healthyRetryExact"),
             result.get("nativeUninstallRemovesCacheAndDiscovery"), result.get("unfinishedStatePreservedAcrossExitAndUninstall"),
             result.get("sourceUnchanged"), result.get("providerBound")))
+        if replacement is not None:
+            result["mechanismComplete"] = (result["mechanismComplete"]
+                and result.get("hostReplacementObserved") is True
+                and result.get("hostReplacementVersionProbesReleased") is True
+                and result.get("hostReplacementEvidenceCountsExact") is True)
         if not result["mechanismComplete"]:
             raise RuntimeError("one or more observed lifecycle predicates failed")
         result["failureStage"] = "retain-state"
@@ -1376,6 +1731,7 @@ def inspect(evidence):
                  or result.get("resourceEvidenceScope") != _resource_scope(controller))):
         raise ValueError("execution resource controller differs from prepared scope")
     resource_error = None
+    replacement_probe_records = {}
     try:
         records = read_native_resource_records(root / "native", manifest["nativeResourceLabels"])
         resources_ok = all(record["exitCode"] == 0 and _record_released(record, manifest)
@@ -1472,6 +1828,12 @@ def inspect(evidence):
         after_uninstall = json.loads(read_regular(root / "retained/state-after-uninstall.json"))
         if preserved.get("package") != manifest["packageHashes"] or preserved.get("state") != after_uninstall:
             raise ValueError("package or unfinished state evidence differs")
+        if _replacement_binding(manifest) is not None:
+            replacement_probe_records = _inspect_host_replacement(
+                manifest, records, command_records, paused_thread)
+            if (result.get("hostReplacementVersionProbeCount") != len(replacement_probe_records)
+                    or result.get("hostReplacementLaunchCount") != len(REPLACEMENT_LAUNCH_PLAN)):
+                raise ValueError("host replacement evidence counts differ")
         if manifest.get("case") == HOT_CASE:
             _inspect_hot_reload(manifest, installed_path, paused_thread, snapshots["after-resume"],
                                 provider_rows, resumed_requests, command_records, records)
@@ -1486,12 +1848,16 @@ def inspect(evidence):
         "nativeInterruptInvalidatesReadiness", "nativeResumePreservesPausedBinding",
         "continueReceiptDoesNotResumeBinding", "selectedPathsDisabledInOwnedProcess",
         "protectedSharedFilesUnchanged", "sharedSettingsAndSelectionsPreserved", "standaloneCatalogEntryAbsent")
+    if _replacement_binding(manifest) is not None:
+        required_true = (*required_true, "hostReplacementObserved", "hostReplacementVersionProbesReleased",
+                         "hostReplacementEvidenceCountsExact")
     decision = (result.get("failure") is None and result.get("modelCalls") == 0
         and result.get("credentialHeaderSeen") is False and resources_ok and command_raw_complete
         and all(result.get(key) is True for key in required_true)
         and result.get("protectedFileHashesAfter") == manifest["protectedFiles"]
         and result.get("ownedRootsAbsent") == {name: True for name in OWNED_ROOTS})
     return {"decision": "pass" if decision else "fail", "nativeResources": records,
+        "hostReplacementVersionProbes": replacement_probe_records,
         "resourceError": resource_error, "nativeCommands": command_records, "rawEvidenceError": raw_error,
         "recorded": result, "claimLimit": manifest["claimLimit"],
         "resourceController": controller, "resourceEvidenceScope": _resource_scope(controller)}
@@ -1507,6 +1873,8 @@ def main():
                       help="repeat for each necessary shared file; hashes only, contents are not copied")
     prep.add_argument("--hot-reload", action="store_true",
                       help="bind a version-only isolated build and rollback in one already Accord-bound paused thread; six fixed responses and two extra CLI commands")
+    prep.add_argument("--replacement-codex",
+                      help="bind a distinct later Codex CLI for the resumed and remaining lifecycle steps; incompatible with --hot-reload")
     prep.add_argument("--timeout", type=int, required=True,
                       help="prospectively justified whole-episode limit; no product default")
     prep.add_argument("--request-timeout", type=int, required=True,

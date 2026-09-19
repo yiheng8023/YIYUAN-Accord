@@ -23,7 +23,20 @@ class CodexLifecycleTests(unittest.TestCase):
                      "rootPid": 123, "processGroupState": "absent", "rootExitCode": exit_code}
         return {"controller": controller, "exitCode": exit_code, "forced": False, "after": after}
 
-    def fixture(self, root, hot_reload=False, adapter=None, hooks=None):
+    def fake_version_probe(self, path, manifest, role, _env, versions):
+        version = versions[role]
+        root = Path(manifest["evidence"]) / "retained/version-probes" / role
+        root.mkdir(parents=True)
+        (root / "stdout.txt").write_text(version + "\n", encoding="utf-8")
+        (root / "stderr.txt").write_text("", encoding="utf-8")
+        lifecycle.save(root / "record.json", {"arguments": [str(path), "--version"],
+            "executable": str(path), "sha256": lifecycle.digest(path), "version": version,
+            **self.resource_record(manifest)})
+        return version
+
+    def fixture(self, root, hot_reload=False, adapter=None, hooks=None, replacement=False,
+                prepare=True, versions=("codex-cli 1.0.0", "codex-cli 2.0.0")):
+        root.mkdir(parents=True, exist_ok=True)
         package = root / "package"
         (package / ".codex-plugin").mkdir(parents=True)
         (package / "hooks").mkdir()
@@ -39,16 +52,28 @@ class CodexLifecycleTests(unittest.TestCase):
         marketplace.write_text(json.dumps({"name": "yiyuan-accord", "plugins": [{"name": "yiyuan-accord-codex",
             "source": {"source": "local", "path": "./plugins/yiyuan-accord-codex"}}]}), encoding="utf-8")
         codex, node = root / "codex.exe", root / "node.exe"
+        replacement_codex = root / "codex-replacement.exe"
         codex.write_bytes(b"codex fixture")
+        if replacement:
+            replacement_codex.write_bytes(b"replacement codex fixture")
         node.write_bytes(b"node fixture")
         protected = root / "protected-config.toml"
         protected.write_text("[projects]\n", encoding="utf-8")
         args = argparse.Namespace(package=str(package.resolve()), evidence=str((root / "evidence").resolve()),
             marketplace_manifest=str(marketplace.resolve()), codex=str(codex.resolve()), node=str(node.resolve()),
+            replacement_codex=str(replacement_codex.resolve()) if replacement else None,
             protected_file=[str(protected.resolve())],
             timeout=180, request_timeout=30, recovery_timeout=10, hot_reload=hot_reload)
-        lifecycle.prepare(args)
-        return args, lifecycle._load(args.evidence)
+        if prepare:
+            if replacement:
+                identities = {"source": versions[0], "replacement": versions[1]}
+                with patch.object(lifecycle, "_codex_version",
+                        side_effect=lambda path, manifest, role, env:
+                            self.fake_version_probe(path, manifest, role, env, identities)):
+                    lifecycle.prepare(args)
+            else:
+                lifecycle.prepare(args)
+        return args, lifecycle._load(args.evidence) if prepare else None
 
     def test_prepare_binds_package_binaries_dependencies_and_seven_resources(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -176,6 +201,201 @@ class CodexLifecycleTests(unittest.TestCase):
                 '{"version":"3.3.0-dev.1+codex.hot-reload-observation"}', encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "distinct original package version"):
                 lifecycle._hot_variant(package)
+
+    def test_prepare_binds_distinct_replacement_identity_and_rejects_aliases_or_drift(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            args, manifest = self.fixture(root / "valid", replacement=True)
+            binding = manifest["hostReplacement"]
+            self.assertEqual(manifest["case"], lifecycle.REPLACEMENT_CASE)
+            self.assertEqual(binding["source"]["path"], args.codex)
+            self.assertEqual(binding["replacement"]["path"], args.replacement_codex)
+            self.assertNotEqual(binding["source"]["sha256"], binding["replacement"]["sha256"])
+            self.assertNotEqual(binding["source"]["version"], binding["replacement"]["version"])
+            lifecycle._validate_prebound(manifest)
+            binding["replacement"]["version"] = "codex-cli forged"
+            with self.assertRaisesRegex(ValueError, "version probe receipt differs: replacement"):
+                lifecycle._version_probe_records(manifest, binding)
+            binding["replacement"]["version"] = "codex-cli 2.0.0"
+            Path(args.replacement_codex).write_bytes(b"drifted replacement")
+            with self.assertRaisesRegex(ValueError, "prepared Codex executable changed: replacement"):
+                lifecycle._validate_prebound(manifest)
+            Path(args.replacement_codex).write_bytes(b"replacement codex fixture")
+            Path(args.codex).write_bytes(b"drifted source")
+            with self.assertRaisesRegex(ValueError, "prepared native binary changed: codex"):
+                lifecycle._validate_prebound(manifest)
+
+            args, _ = self.fixture(root / "same-path", replacement=True, prepare=False)
+            args.replacement_codex = args.codex
+            with self.assertRaisesRegex(ValueError, "different path and bytes"):
+                lifecycle.prepare(args)
+
+            args, _ = self.fixture(root / "same-bytes", replacement=True, prepare=False)
+            Path(args.replacement_codex).write_bytes(Path(args.codex).read_bytes())
+            with self.assertRaisesRegex(ValueError, "different path and bytes"):
+                lifecycle.prepare(args)
+
+            args, _ = self.fixture(root / "same-version", replacement=True, prepare=False)
+            with patch.object(lifecycle, "_codex_version", side_effect=lambda path, manifest, role, env:
+                    self.fake_version_probe(path, manifest, role, env,
+                        {"source": "codex-cli 1.0.0", "replacement": "codex-cli 1.0.0"})), \
+                    self.assertRaisesRegex(ValueError, "different version"):
+                lifecycle.prepare(args)
+
+            args, _ = self.fixture(root / "hot", replacement=True, hot_reload=True, prepare=False)
+            with self.assertRaisesRegex(ValueError, "cannot be combined"):
+                lifecycle.prepare(args)
+
+    def test_version_probe_uses_owned_controller_minimal_environment_and_separate_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            evidence = Path(tmp).resolve()
+            for name in (*lifecycle.OWNED_ROOTS, "retained"):
+                (evidence / name).mkdir()
+            binary = evidence / "fixture-codex.exe"
+            binary.write_bytes(b"version probe fixture")
+            manifest = {"evidence": str(evidence), "resourceController": lifecycle._controller_kind(),
+                "ownedRoots": {name: str(evidence / name) for name in lifecycle.OWNED_ROOTS},
+                "limits": {"requestSeconds": 2, "recoverySeconds": 2}}
+            after = self.resource_record(manifest)["after"]
+
+            class Process:
+                returncode = 0
+                def poll(self): return self.returncode
+                def wait(self, timeout=None): return self.returncode
+                def kill(self): self.returncode = 1
+
+            class Controller:
+                def __init__(self): self.attached = False; self.closed = False
+                def attach_and_resume(self, _process): self.attached = True
+                def terminate(self): pass
+                def sample(self): return after
+                def close(self): self.closed = True
+
+            process, controller, probe_env = Process(), Controller(), {"PATH": "minimal-probe-path"}
+            def popen(arguments, **kwargs):
+                self.assertEqual(kwargs["env"], probe_env)
+                self.assertEqual(kwargs["cwd"], manifest["ownedRoots"]["workspace"])
+                kwargs["stdout"].write(b"codex-cli 1.2.3\n"); kwargs["stdout"].flush()
+                return process
+
+            with patch.object(lifecycle, "_new_controller", return_value=controller), \
+                    patch.object(lifecycle, "_spawn_options", return_value={}), \
+                    patch.object(lifecycle.subprocess, "Popen", side_effect=popen):
+                self.assertEqual(lifecycle._codex_version(binary, manifest, "source", probe_env),
+                                 "codex-cli 1.2.3")
+            self.assertTrue(controller.attached)
+            self.assertTrue(controller.closed)
+            receipt = json.loads((evidence / "retained/version-probes/source/record.json").read_text())
+            self.assertTrue(lifecycle._record_released(receipt, manifest))
+            self.assertEqual(receipt["arguments"], [str(binary), "--version"])
+            self.assertEqual(receipt["version"], "codex-cli 1.2.3")
+            self.assertFalse((evidence / "retained/host-launches.jsonl").exists())
+
+    def test_version_probe_residue_is_retained_then_cleared_without_rebaselining_protected_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for changes_protected in (False, True):
+                with self.subTest(changes_protected=changes_protected):
+                    args, _ = self.fixture(Path(tmp).resolve() / str(changes_protected),
+                                           replacement=True, prepare=False)
+                    def probe(path, manifest, role, env):
+                        (Path(manifest['ownedRoots']['home']) / 'native-arg0.txt').write_text('owned residue')
+                        if changes_protected:
+                            Path(args.protected_file[0]).write_text('changed during version probe')
+                        return self.fake_version_probe(path, manifest, role, env,
+                            {'source': 'codex-cli 1.0.0', 'replacement': 'codex-cli 2.0.0'})
+                    with patch.object(lifecycle, '_codex_version', side_effect=probe):
+                        if changes_protected:
+                            with self.assertRaisesRegex(ValueError, 'version probe changed a protected file'):
+                                lifecycle.prepare(args)
+                        else:
+                            lifecycle.prepare(args)
+                    evidence = Path(args.evidence)
+                    residue = json.loads((evidence / 'retained/version-probes/owned-root-residue.json').read_text())
+                    self.assertIn('native-arg0.txt', residue['home'])
+                    self.assertFalse((evidence / 'home/native-arg0.txt').exists())
+
+    def test_shared_callers_keep_their_manifest_contract_and_rejected_launch_owns_no_job(self):
+        # Entry inventory and the carrier caller supply their own source bindings.
+        self.assertEqual(lifecycle._codex_identity({'codex': 'caller-bound-executable'})['path'],
+                         'caller-bound-executable')
+        with tempfile.TemporaryDirectory() as tmp:
+            args, manifest = self.fixture(Path(tmp).resolve(), replacement=True)
+            Path(args.replacement_codex).write_bytes(b'changed before launch')
+            with patch.object(lifecycle, '_new_controller') as controller:
+                with self.assertRaisesRegex(ValueError, 'prepared Codex executable changed'):
+                    lifecycle._run_cli(manifest, 'rejected-before-job', [], {}, 1,
+                                       codex_role='replacement')
+                controller.assert_not_called()
+
+    def test_replacement_switch_requires_released_source_and_inspects_exact_launch_order(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, manifest = self.fixture(Path(tmp).resolve(), replacement=True)
+            evidence = Path(args.evidence)
+            resources, commands = {}, {}
+            binding = manifest["hostReplacement"]
+
+            def add_launch(area, label, role):
+                identity = manifest["hostReplacement"][role]
+                arguments = ([identity["path"], "app-server", "-c", "fixture=true"] if area == "native"
+                             else [identity["path"], "-c", 'cli_auth_credentials_store="file"', label])
+                lifecycle._record_host_launch(manifest, area, label, role, arguments)
+                record = {**self.resource_record(manifest), "executable": identity["path"],
+                          "hostVersion": identity["version"],
+                          "arguments": arguments if area == "native" else arguments[1:]}
+                target = evidence / area / label
+                target.mkdir()
+                lifecycle.save(target / ("resources.json" if area == "native" else "record.json"), record)
+                (resources if area == "native" else commands)[label] = record
+
+            for area, label, role in lifecycle.REPLACEMENT_LAUNCH_PLAN[:6]:
+                add_launch(area, label, role)
+            ledger = evidence / "retained/host-launches.jsonl"
+            original_ledger = ledger.read_text(encoding="utf-8")
+            damaged = [json.loads(line) for line in original_ledger.splitlines()]
+            damaged[0]["area"] = "../outside"
+            ledger.write_text("\n".join(json.dumps(row) for row in damaged) + "\n", encoding="utf-8")
+            with patch.object(lifecycle, "_launch_record") as read_record, \
+                    self.assertRaisesRegex(ValueError, "identity or order differs"):
+                lifecycle._activate_host_replacement(manifest, "paused-thread")
+            read_record.assert_not_called()
+            ledger.write_text(original_ledger, encoding="utf-8")
+            interrupted = evidence / "native/interrupted/resources.json"
+            original = json.loads(interrupted.read_text(encoding="utf-8"))
+            replacement_path = Path(manifest["hostReplacement"]["replacement"]["path"])
+            replacement_path.write_bytes(b"replacement changed after prepare")
+            with self.assertRaisesRegex(ValueError, "prepared Codex executable changed: replacement"):
+                lifecycle._activate_host_replacement(manifest, "paused-thread")
+            replacement_path.write_bytes(b"replacement codex fixture")
+            changed = json.loads(json.dumps(original))
+            if manifest["resourceController"] == "posix-session-process-group":
+                changed["after"]["processGroupState"] = "present"
+            else:
+                changed["after"]["activeProcesses"] = 1
+            lifecycle.save(interrupted, changed)
+            with self.assertRaisesRegex(RuntimeError, "release unobserved"):
+                lifecycle._activate_host_replacement(manifest, "paused-thread")
+            lifecycle.save(interrupted, original)
+            resources["interrupted"] = original
+            lifecycle._activate_host_replacement(manifest, "paused-thread")
+
+            for area, label, role in lifecycle.REPLACEMENT_LAUNCH_PLAN[6:]:
+                add_launch(area, label, role)
+            Path(args.codex).unlink()
+            Path(args.replacement_codex).unlink()
+            lifecycle._inspect_host_replacement(manifest, resources, commands, "paused-thread")
+
+            probe = evidence / "retained/version-probes/replacement/record.json"
+            probe_record = json.loads(probe.read_text(encoding="utf-8"))
+            lifecycle.save(probe, {**probe_record, "version": "codex-cli forged"})
+            with self.assertRaisesRegex(ValueError, "version probe receipt differs"):
+                lifecycle._inspect_host_replacement(manifest, resources, commands, "paused-thread")
+            lifecycle.save(probe, probe_record)
+
+            rows = [json.loads(line) for line in ledger.read_text(encoding="utf-8").splitlines()]
+            rows[6]["version"] = manifest["hostReplacement"]["source"]["version"]
+            ledger.write_text("\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "identity or order differs"):
+                lifecycle._inspect_host_replacement(manifest, resources, commands, "paused-thread")
 
     def test_current_input_context_uses_last_developer_receipt_not_historical_path(self):
         first = "Accord task entry: Native input receipt: session=task; epoch=old. use node /old/runtime/task-checkpoint.cjs"

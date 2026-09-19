@@ -162,6 +162,56 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/carrier/*.json
             ${{ env.ACCORD_NATIVE_ROOT }}/carrier/native
             ${{ env.ACCORD_NATIVE_ROOT }}/carrier/retained
+      - name: Install replacement host in job-owned storage
+        run: npm install --prefix "$ACCORD_NATIVE_ROOT/replacement-cli" --ignore-scripts --no-audit --no-fund --package-lock=false @openai/codex@0.155.1
+      - name: Freeze cross-version host upgrade inputs
+        id: prepare_upgrade
+        shell: python
+        run: |
+          import json, os, pathlib, shutil, subprocess, sys
+          root = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]).resolve(strict=True)
+          base = json.loads((root / "episode/manifest.json").read_text(encoding="utf-8"))
+          binaries = [p for p in (root / "replacement-cli/node_modules/@openai").rglob("codex")
+                      if p.is_file() and p.parent.name == "bin" and "vendor" in p.parts]
+          if len(binaries) != 1:
+              raise RuntimeError("Expected one replacement platform-native Codex binary")
+          subprocess.run([sys.executable, "-B", "scripts/observe_codex_lifecycle.py", "prepare",
+              "--package", str(pathlib.Path("plugins/yiyuan-accord-codex").resolve()),
+              "--marketplace-manifest", str(pathlib.Path(".agents/plugins/marketplace.json").resolve()),
+              "--evidence", str(root / "host-upgrade"), "--codex", base["codex"],
+              "--replacement-codex", str(binaries[0]),
+              "--node", str(pathlib.Path(shutil.which("node")).resolve()),
+              "--protected-file", str(pathlib.Path("AGENTS.md").resolve()),
+              "--timeout", "600", "--request-timeout", "60", "--recovery-timeout", "15"], check=True)
+      - name: Observe same paused task through host upgrade
+        run: python -B scripts/observe_codex_lifecycle.py run --evidence "$ACCORD_NATIVE_ROOT/host-upgrade"
+      - name: Independently re-read the host upgrade episode
+        if: always() && steps.prepare_upgrade.outcome == 'success'
+        shell: python
+        run: |
+          import os, pathlib, subprocess, sys
+          evidence = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]) / "host-upgrade"
+          result = subprocess.run([sys.executable, "-B", "scripts/observe_codex_lifecycle.py",
+              "inspect", "--evidence", str(evidence)], capture_output=True)
+          (evidence / "inspection.json").write_bytes(result.stdout)
+          (evidence / "inspection.stderr.txt").write_bytes(result.stderr)
+          sys.stdout.buffer.write(result.stdout)
+          sys.stderr.buffer.write(result.stderr)
+          sys.exit(result.returncode)
+      - name: Retain host upgrade evidence
+        if: always() && steps.prepare_upgrade.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-host-upgrade-${{ matrix.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          include-hidden-files: true
+          path: |
+            ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/*.json
+            ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/commands
+            ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/native
+            ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/retained
+            ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/source-package
       - name: Release job-owned installation and episode files
         if: always() && steps.storage.outcome == 'success'
         shell: python

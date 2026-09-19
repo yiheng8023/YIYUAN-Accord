@@ -2,6 +2,7 @@
 // Test caller, not a shipped controller. Native mode delegates to the existing
 // Python App Server controller; mock mode exercises failure paths without a model.
 const readline = require('node:readline');
+const {performance} = require('node:perf_hooks');
 const {handoff} = require('../../runtime/carrier-handoff.cjs');
 const rl = readline.createInterface({input: process.stdin});
 const pending = new Map();
@@ -17,22 +18,25 @@ async function run(config) {
   let revision = -1, state = null, target = null, turn = 0, sourceActive = config.scenario === 'active-source';
   let lease = null, scopeBusy = false;
   const scenario = config.scenario || 'success';
+  // Inject only the two late-ack fixture clocks. Advance at the exact callback,
+  // so host scheduling cannot expire an earlier, unrelated operation instead.
+  let fixtureNow = performance.now(), requestDeadline = null;
+  if (config.mode !== 'native' && ['late-cas-active', 'late-verifier'].includes(scenario)) {
+    Object.defineProperty(performance, 'now', {value: () => fixtureNow, configurable: true});
+  }
   const plan = config.plan || {transferId: 'transfer-1', scopeRef: 'fixture-scope', authorityRef: 'authority-1', stateRef: 'state-1',
     source: {threadId: 'source-1', ...(sourceActive ? {turnId: 'source-turn'} : {})},
     target: {cwd: '/bound-workspace', model: 'fixture-model'},
     handoffText: 'Retain the authorized task and protected original; current pause is absent.',
     continuation: {input: 'Perform the next authorized bounded step.', sandboxPolicy: {type: 'readOnly'}},
     deadlineMs: Date.now() + 5000, recoveryDeadlineMs: Date.now() + 6000};
-  if (scenario === 'late-cas-active' || scenario === 'late-verifier') {
-    plan.deadlineMs = Date.now() + 100;
-    plan.recoveryDeadlineMs = Date.now() + 500;
-  }
   const reply = (stage) => ({decision: 'allow', scopeRef: plan.scopeRef, authorityRef: plan.authorityRef, stateRef: plan.stateRef,
     sourceRef: 'mock-evidence:' + stage, sourceRecoveryReady: true, quiesced: true, noOtherWriters: true,
     targetInitializationSafe: true, initializationEffectsVerified:true, intakeEffectsVerified:true,
     targetSettingsMatch: true, accepted: true, sourceIdle: true, singleWriter: true, effectsVerified: true});
   const transport = {connectionId: config.binding?.connectionId || 'test-connection', hostVersion: config.binding?.hostVersion || 'fixture-host',
     async request(method, params, deadline) {
+      requestDeadline = deadline;
       calls.push({method, params: clone(params)});
       if (config.mode === 'native') return remote('request', [method, params, Math.max(0, deadline - performance.now())]);
       if (scenario === 'ambiguous-start' && method === 'thread/start') throw new Error('start response lost');
@@ -47,6 +51,9 @@ async function run(config) {
       }
       if (method === 'turn/start') {
         turn++;
+        if (turn === 2 && config.beforeContinuationDelayMs) {
+          Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, config.beforeContinuationDelayMs);
+        }
         if (scenario === 'lost-continuation-ack' && turn === 2) throw new Error('continuation response lost');
         return {turn: {id: 'turn-' + (scenario === 'reused-turn' || scenario === 'reuse-first-intake' && turn===3 ? 1 : turn), status: 'inProgress'}};
       }
@@ -81,7 +88,7 @@ async function run(config) {
       if (state.phase==='source-subscription-released') scopeBusy=false;
       if (scenario === 'ambiguous-commit' && state.writer === 'target') throw new Error('commit acknowledgement lost');
       if (scenario === 'late-cas-active' && state.phase === 'continuation-started') {
-        await new Promise(resolve => setTimeout(resolve, 200));
+        fixtureNow = requestDeadline + 1;
       }
       if (scenario === 'malformed-cas-active' && state.phase === 'continuation-started') {
         const broken={...lease};broken.self=broken;return {revision,lease:broken};
@@ -103,7 +110,8 @@ async function run(config) {
       delete verdict.accepted;
     }
     if (scenario === 'clock-jump' && stage === 'prepare') { const old=Date.now; Date.now=()=>old()+1000000; }
-    if (scenario === 'late-verifier' && stage === 'prepare') await new Promise(resolve=>setTimeout(resolve,200));
+    if (scenario === 'late-verifier' && stage === 'prepare') fixtureNow = deadline + 1;
+    if (scenario === 'stalled-verifier' && stage === 'prepare') await new Promise(() => {});
     if (scenario === 'unsafe-startup' && stage === 'prepare') delete verdict.targetInitializationSafe;
     if (scenario === 'unknown-intake-effect' && stage === 'accepted') delete verdict.intakeEffectsVerified;
     if (scenario === 'mutate-plan' && stage === 'prepare') {plan.target.cwd = '/foreign'; plan.handoffText = 'changed';}
