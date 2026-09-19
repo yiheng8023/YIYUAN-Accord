@@ -191,18 +191,26 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(calls.call_args_list[1].args[0][-1], "--version")
         return entry.load_manifest(args.evidence)
 
-    def prepared_persistent(self, root, case_path=None, *, native_hooks=False):
-        package = root / "package"
-        if native_hooks:
+    def installed_listing(self, **changes):
+        row = {"pluginId": "yiyuan-accord-codex@yiyuan-accord", "name": "yiyuan-accord-codex",
+               "marketplaceName": "yiyuan-accord", "version": "3.3.0-dev.1", "installed": True,
+               "enabled": True, "source": {"source": "local", "path": "fixture-marketplace"}}
+        row.update(changes)
+        return subprocess.CompletedProcess([], 0, json.dumps({"installed": [row]}).encode(), b"")
+
+    def prepared_persistent(self, root, case_path=None, *, native_hooks=False, installed=False):
+        package = (root / "home/plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.3.0-dev.1"
+                   if installed else root / "package")
+        if native_hooks or installed:
             shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
         else:
             (package / "runtime").mkdir(parents=True)
             (package / "runtime/task-checkpoint.cjs").write_text("// fixture", encoding="utf-8")
         args = argparse.Namespace(
             package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
-            codex=PYTHON, node=shutil.which("node") if native_hooks else PYTHON, model="explicit-offline-model", reasoning="high",
+            codex=PYTHON, node=shutil.which("node") if native_hooks or installed else PYTHON, model="explicit-offline-model", reasoning="high",
             timeout=600, turn_timeout=180, recovery_timeout=20, windows_sandbox="elevated",
-            native_package_hooks=native_hooks)
+            native_package_hooks=native_hooks, installed_plugin="yiyuan-accord-codex@yiyuan-accord" if installed else None)
         case_path = case_path or SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
         help_exec = subprocess.CompletedProcess([], 0, b"--dangerously-bypass-hook-trust --sandbox --output-last-message --ignore-user-config --disable", b"")
         help_resume = subprocess.CompletedProcess([], 0, b"--json --output-last-message --model", b"")
@@ -210,12 +218,130 @@ class EntryTests(unittest.TestCase):
         native_run = entry.subprocess.run
         cli_results = iter([help_exec, help_resume, version])
         def prepared_calls(command, **kwargs):
-            if native_hooks and Path(command[0]) == Path(args.node).resolve() and "-e" in command:
+            if command[1:3] == ["plugin", "list"]:
+                return self.installed_listing()
+            if (native_hooks or installed) and Path(command[0]) == Path(args.node).resolve() and "-e" in command:
                 return native_run(command, **kwargs)
             return next(cli_results)
-        with patch.object(entry.subprocess, "run", side_effect=prepared_calls):
+        with patch.object(entry.subprocess, "run", side_effect=prepared_calls), \
+                patch.object(entry, "_native_inventory", return_value=json.loads(self.installed_listing().stdout)):
             entry.prepare(args, persistent_case=entry.load_persistent_case(case_path))
         return entry.load_manifest(args.evidence)
+
+    def test_installed_entry_preserves_native_discovery_trust_and_configuration(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}):
+                manifest = self.prepared_persistent(root, installed=True)
+                self.assertEqual(manifest["hookMode"], "installed-plugin")
+                self.assertNotIn("nativeHookProjection", manifest)
+                self.assertEqual(len(manifest["installedPlugin"]["packageFiles"]), 17)
+                self.assertFalse((root / "evidence/hooks").exists())
+                for command in (manifest["initialCommand"], entry.build_command(manifest, stage=1, thread_id="native-thread")):
+                    for flag in ("--ignore-user-config", "--disable", "--enable", "--dangerously-bypass-hook-trust", "--ephemeral"):
+                        self.assertNotIn(flag, command)
+                    self.assertFalse(any(value.startswith("hooks=") for value in command))
+                    self.assertIn('sandbox_mode="workspace-write"', command)
+                with self.assertRaisesRegex(ValueError, "native hook discovery"):
+                    entry._hook_configuration(manifest)
+                with self.assertRaisesRegex(ValueError, "cannot use the checkpoint wrapper"):
+                    entry.hook(argparse.Namespace(evidence=manifest["evidence"], event="Stop"))
+
+    def test_installed_binding_rejects_catalog_or_package_drift_without_model_dispatch(self):
+        for mutation in ("disabled", "absent", "version", "source", "skill", "added-file", "home", "copy"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}):
+                    manifest = self.prepared_persistent(root, installed=True)
+                    reply = self.installed_listing()
+                    if mutation == "disabled": reply = self.installed_listing(enabled=False)
+                    elif mutation == "absent": reply = subprocess.CompletedProcess([], 0, b'{"installed":[]}', b'')
+                    elif mutation == "version": reply = self.installed_listing(version="other")
+                    elif mutation == "source": reply = self.installed_listing(source={"source": "local", "path": "other-market"})
+                    elif mutation == "skill": (Path(manifest["package"]) / "skills/coordinate-capabilities/SKILL.md").write_text("changed")
+                    elif mutation == "added-file": (Path(manifest["package"]) / "extra.txt").write_text("new")
+                    elif mutation == "home":
+                        (root / "other-home").mkdir()
+                        os.environ["CODEX_HOME"] = str(root / "other-home")
+                    elif mutation == "copy":
+                        shutil.copytree(manifest["package"], root / "copied-package")
+                        manifest["package"] = str(root / "copied-package")
+                    entry.save(root / "evidence/manifest.json", manifest)
+                    with patch.object(entry, "_native_inventory", return_value=json.loads(reply.stdout)), patch.object(entry.subprocess, "Popen") as process:
+                        with self.assertRaises(ValueError):
+                            entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+                        self.assertFalse((root / "evidence/run-started.json").exists())
+                        process.assert_not_called()
+
+    def test_installed_mode_requires_persistent_case_and_cannot_mix_source_projection(self):
+        for args in (argparse.Namespace(installed_plugin="p@m"),
+                     argparse.Namespace(installed_plugin="p@m", native_package_hooks=True)):
+            with self.assertRaises(ValueError):
+                entry.prepare(args)
+
+    def test_installed_stage_retains_before_and_after_even_for_last_or_failed_turn(self):
+        for changed, exit_code in ((False, 0), (True, 0), (True, 1)):
+            with self.subTest(changed=changed, exit=exit_code), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}):
+                    manifest = self.prepared_persistent(root, self.scoped_case(root), installed=True)
+                    evidence = Path(manifest["evidence"])
+                    rollout = evidence / "fake-rollout.jsonl"
+                    rollout.write_text('{}\n')
+                    process = Mock(returncode=exit_code)
+                    process.poll.return_value = exit_code
+                    def spawn(_command, **kwargs):
+                        kwargs['stdout'].write(b'{}\n')
+                        kwargs['stderr'].write(b'Sent prompt with event ID: 11111111-1111-1111-1111-111111111111\n')
+                        (evidence / 'last-message-1.txt').write_text('done')
+                        if changed:
+                            (Path(manifest['package']) / 'NOTICE').write_text('changed during turn')
+                        return process
+                    receipt = {'valid': True, 'threadId': 'native-thread', 'terminal': 'completed'}
+                    with patch.object(entry, '_native_inventory', return_value=json.loads(self.installed_listing().stdout)), \
+                            patch.object(entry.subprocess, 'Popen', side_effect=spawn), \
+                            patch.object(entry, 'WindowsJob') as job, \
+                            patch.object(entry, 'persistent_cli_turn_receipt', return_value=receipt), \
+                            patch.object(entry, '_session_configuration', return_value={'threadId':'native-thread','cwd':manifest['workspace'],'rolloutPath':str(rollout)}), \
+                            patch.object(entry, '_ordinary_rollout', return_value=rollout), \
+                            patch.object(entry, 'native_entry_observation', return_value={'valid':True}):
+                        job.return_value.sample.return_value = {'activeProcesses':0}
+                        observed = entry._run_persistent_stage(manifest, 0, None, dict(os.environ), time.monotonic()+30)
+                    self.assertEqual(observed['installedBefore'], manifest['installedPlugin'])
+                    self.assertEqual(observed['installedPackageStable'], not changed)
+                    self.assertEqual(observed['valid'], not changed and exit_code == 0)
+                    if changed:
+                        self.assertIn('error', observed['installedAfter'])
+                    else:
+                        self.assertEqual(observed['installedAfter'], manifest['installedPlugin'])
+
+    def test_installed_retained_inspection_requires_linked_complete_native_receipts(self):
+        for mutation in (None, 'missing', 'extra', 'swapped', 'live-process', 'auth-override', 'config-change'):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                with patch.dict(os.environ, {'CODEX_HOME':str(root/'home')}):
+                    manifest = self.prepared_persistent(root, installed=True)
+                binding = manifest['installedPlugin']
+                stages = [{'stage':1, 'installedBefore':binding, 'installedAfter':binding, 'entryObservation':{'valid':True}}]
+                command_root = root/'evidence/installed-inventory/commands'
+                for label in ('prepare','run-preflight','stage-1-before','stage-1-after'):
+                    path = command_root/label
+                    path.mkdir(parents=True)
+                    entry.save(path/'record.json', {'arguments':['plugin','list','--marketplace','yiyuan-accord','--json'],
+                        'exitCode':0,'forced':False,'failure':None,'controller':'windows-job-object','after':{'activeProcesses':0}})
+                    entry.save(path/'stdout.json', json.loads(self.installed_listing().stdout))
+                    entry.save(path/'shared-config.json', {'unchanged':True,'before':{'state':'observed','sha256':'same'},'after':{'state':'observed','sha256':'same'}})
+                path = command_root/'stage-1-after'
+                if mutation == 'missing': (path/'record.json').unlink()
+                elif mutation == 'extra': (command_root/'unbound').mkdir()
+                elif mutation == 'swapped': entry.save(path/'stdout.json', json.loads(self.installed_listing(version='other').stdout))
+                elif mutation == 'live-process':
+                    record = json.loads((path/'record.json').read_text()); record['after']['activeProcesses']=1; entry.save(path/'record.json',record)
+                elif mutation == 'auth-override':
+                    record = json.loads((path/'record.json').read_text()); record['arguments']=['-c','cli_auth_credentials_store="file"']+record['arguments']; entry.save(path/'record.json',record)
+                elif mutation == 'config-change':
+                    config = json.loads((path/'shared-config.json').read_text()); config['after']['sha256']='changed'; entry.save(path/'shared-config.json',config)
+                self.assertEqual(entry._installed_evidence_valid(manifest, {'stages':stages}), mutation is None)
 
     def scoped_case(self, root):
         case = {
@@ -439,7 +565,8 @@ class EntryTests(unittest.TestCase):
                 evidence = Path(manifest["evidence"])
                 source = {"type": "thread.started", "thread_id": "observed-source"}
                 (evidence / "stdout-1.jsonl").write_text(json.dumps(source) + "\n", encoding="utf-8")
-                raw, command = entry._verify_native_stage(manifest, 1, "observed-source")
+                raw, command, installed = entry._verify_native_stage(manifest, 1, "observed-source")
+                self.assertIsNone(installed)
                 self.assertEqual(raw, manifest["prompts"][1].encode("utf-8"))
                 self.assertEqual(command[-2:], ["observed-source", "-"])
                 thread_id = "observed-source"

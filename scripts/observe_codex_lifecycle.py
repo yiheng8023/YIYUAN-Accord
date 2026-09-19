@@ -564,13 +564,14 @@ def _wait_job(job, deadline):
     return sample
 
 
-def _run_cli(manifest, label, arguments, env, work_deadline):
+def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_override="file"):
     evidence = Path(manifest["evidence"])
     root = evidence / "commands" / label
     root.mkdir()
     job, process, forced, failure, recovery_deadline = _new_controller(), None, False, None, None
     stdout_path, stderr_path = root / "stdout.json", root / "stderr.txt"
-    arguments = ["-c", 'cli_auth_credentials_store="file"', *arguments]
+    if auth_store_override is not None:
+        arguments = ["-c", "cli_auth_credentials_store=" + json.dumps(auth_store_override), *arguments]
     try:
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
             process = subprocess.Popen([manifest["codex"], *arguments], cwd=manifest["ownedRoots"]["workspace"],
@@ -588,7 +589,15 @@ def _run_cli(manifest, label, arguments, env, work_deadline):
                         process.kill()
                 raise
             try:
-                process.wait(timeout=min(manifest["limits"]["requestSeconds"], _remaining(work_deadline)))
+                query_deadline = min(work_deadline, time.monotonic() + manifest["limits"]["requestSeconds"])
+                while process.poll() is None:
+                    if stdout_path.stat().st_size + stderr_path.stat().st_size > 4 * 1024 * 1024:
+                        forced, failure = True, "output-limit"
+                        job.terminate()
+                        break
+                    if time.monotonic() >= query_deadline:
+                        raise TimeoutError("native command work deadline")
+                    time.sleep(0.05)
             except (subprocess.TimeoutExpired, TimeoutError):
                 forced, failure = True, "work-deadline"
                 job.terminate()

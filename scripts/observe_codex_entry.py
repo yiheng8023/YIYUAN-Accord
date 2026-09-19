@@ -11,6 +11,9 @@ absolute path for a frozen supported shell (PATH priority is supplementary).
 Stage prompts and resume commands remain bound to the original case and observed
 source thread. This is source configuration projection, not marketplace-installed
 plugin or implicit Skill registration evidence; no checkpoint wrapper logs exist.
+Optional --installed-plugin instead uses the existing native installation and
+user configuration without injecting hooks or bypassing trust. Bind the native
+inventory and installed bytes, then independently require actual entry delivery.
 Windows Job Objects contain descendants before the suspended CLI starts executing.
 The caller must select an existing Windows sandbox backend explicitly; this runner
 does not initialize/install a sandbox or directly edit shared configuration.
@@ -51,7 +54,7 @@ if os.name == "nt":
     from ctypes import wintypes as W
 
 EVENTS = ("UserPromptSubmit", "Stop", "SessionEnd", "Interrupt")
-HOOK_MODES = ("checkpoint-wrapper", "native-package-hooks")
+HOOK_MODES = ("checkpoint-wrapper", "native-package-hooks", "installed-plugin")
 PROMPT = "请使用这个目录提供的订单数据接口，整理已经备妥的订单，按原顺序生成 details.csv（id,units 两列）、summary.json（ready_ids 和 total_units 两项）以及简短的 report.md。不要把待处理订单算进去。保留原始材料和无关文件，检查实际交付文件后告诉我结果。本次只处理本地材料，不联网、不安装软件、不修改共享设置。"
 ORDERS = b"id,status,units\nA,ready,60\nB,ready,80\nC,pending,50\n"
 SOURCE = '''import json
@@ -230,9 +233,13 @@ def _hook_mode(manifest):
     mode = manifest.get("hookMode", "checkpoint-wrapper")
     if mode not in HOOK_MODES:
         raise ValueError("unsupported hook mode")
-    if mode == "native-package-hooks" and manifest.get("entryProtocol") != "exec-resume":
+    if mode in ("native-package-hooks", "installed-plugin") and manifest.get("entryProtocol") != "exec-resume":
         raise ValueError("native package hooks require persistent exec-resume")
     return mode
+
+
+def _direct_package_hooks(manifest):
+    return _hook_mode(manifest) in ("native-package-hooks", "installed-plugin")
 
 
 def _toml_value(value):
@@ -284,12 +291,8 @@ def _entry_guide(node, runtime):
     return guide
 
 
-def _native_hook_projection(package, node):
+def _package_hashes(package):
     package = ordinary_dir(package)
-    node = Path(node).resolve()
-    shell, shell_kind = _native_hook_shell()
-    if any(c in str(node) for c in ('"', '\n', '\r', '%', '!', '`', '$', '&', '|', '<', '>', '^')):
-        raise ValueError("shell-sensitive Node path cannot be projected")
     files = {}
     def inaccessible(error):
         raise error
@@ -300,6 +303,73 @@ def _native_hook_projection(package, node):
         for name in names:
             path = Path(directory) / name
             files[path.relative_to(package).as_posix()] = digest(path)
+    return dict(sorted(files.items()))
+
+
+def _native_inventory(codex, market, workspace, evidence, label):
+    # Reuse lifecycle command containment and receipts. This lazy import avoids
+    # loading its fixture machinery for the established source-projection modes.
+    repo = str(Path(__file__).resolve().parents[1])
+    if repo not in sys.path:
+        sys.path.insert(0, repo)
+    from scripts.observe_codex_lifecycle import _run_cli
+    root = Path(evidence) / "installed-inventory"
+    (root / "commands").mkdir(parents=True, exist_ok=True)
+    if (root / "commands" / label).exists():
+        raise ValueError("inventory receipt already exists; preserve the original attempt")
+    manifest = {"codex": str(codex), "evidence": str(root),
+                "ownedRoots": {"workspace": str(workspace)},
+                "limits": {"requestSeconds": 20, "recoverySeconds": 15},
+                "resourceController": "windows-job-object" if os.name == "nt" else "posix-session-process-group"}
+    config = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "config.toml"
+    before = shared_config_snapshot(config, workspace)
+    try:
+        record, data = _run_cli(manifest, label, ["plugin", "list", "--marketplace", market, "--json"],
+                               dict(os.environ), time.monotonic() + 20, auth_store_override=None)
+    finally:
+        after = shared_config_snapshot(config, workspace)
+        unchanged = before["state"] == after["state"] == "observed" and before["sha256"] == after["sha256"]
+        save(root / "commands" / label / "shared-config.json", {"before": before, "after": after, "unchanged": unchanged})
+    if record["exitCode"] != 0 or record["forced"] or record["failure"]:
+        raise ValueError("native installed plugin inventory failed; inspect retained command receipt")
+    if not unchanged:
+        raise ValueError("native inventory shared configuration changed or is unknown")
+    return data
+
+
+def _installed_plugin_binding(package, codex, plugin_id, workspace, evidence, label):
+    if not isinstance(plugin_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]+@[A-Za-z0-9_-]+', plugin_id):
+        raise ValueError("explicit installed plugin name@marketplace required")
+    name, market = plugin_id.split("@")
+    package = ordinary_dir(package)
+    codex_home = ordinary_dir(os.environ.get("CODEX_HOME", str(Path.home() / ".codex")))
+    metadata = json.loads(read_regular(package / ".codex-plugin/plugin.json"))
+    version = metadata.get("version") if isinstance(metadata, dict) else None
+    if (not isinstance(version, str) or not re.fullmatch(r'[A-Za-z0-9_.+-]+', version)
+            or metadata.get("name") != name
+            or package != codex_home / "plugins/cache" / market / name / version):
+        raise ValueError("package is not the named native installed cache root")
+    data = _native_inventory(codex, market, workspace, evidence, label)
+    if not isinstance(data, dict) or not isinstance(data.get("installed"), list):
+        raise ValueError("native installed plugin inventory unavailable")
+    rows = [row for row in data["installed"] if isinstance(row, dict) and row.get("pluginId") == plugin_id]
+    if (len(rows) != 1 or rows[0].get("enabled") is not True or rows[0].get("installed") is not True
+            or rows[0].get("version") != version or rows[0].get("name") != name
+            or rows[0].get("marketplaceName") != market or not isinstance(rows[0].get("source"), dict)
+            or rows[0]["source"].get("source") not in ("local", "git", "npm")):
+        raise ValueError("native installed plugin is absent, disabled or differs")
+    return {"codexHome": str(codex_home), "pluginId": plugin_id, "inventory": rows[0],
+            "packageFiles": _package_hashes(package),
+            "claimLimit": "installed catalog and byte binding; actual entry delivery and behavior require separate native receipts; existing user configuration and other components remain active"}
+
+
+def _native_hook_projection(package, node):
+    package = ordinary_dir(package)
+    node = Path(node).resolve()
+    shell, shell_kind = _native_hook_shell()
+    if any(c in str(node) for c in ('"', '\n', '\r', '%', '!', '`', '$', '&', '|', '<', '>', '^')):
+        raise ValueError("shell-sensitive Node path cannot be projected")
+    files = _package_hashes(package)
     metadata = json.loads(read_regular(package / ".codex-plugin/plugin.json"))
     # These surfaces require plugin loading semantics, not a hooks override.
     if (not isinstance(metadata, dict)
@@ -339,22 +409,29 @@ def _native_hook_projection(package, node):
             "claimLimit": "source configuration projection of native hooks only; no marketplace installation, implicit Skill registration or complete plugin acceptance"}
 
 
-def _verify_prepared_sources(manifest):
+def _verify_prepared_sources(manifest, *, inventory_label="run-preflight"):
     mode = _hook_mode(manifest)
+    installed_observation = None
     for key, expected in manifest["sourceHashes"].items():
         if digest(manifest[key], os_shell=key == "hookShell") != expected:
             raise ValueError("prepared source changed; prepare a fresh observation: " + key)
     if mode == "native-package-hooks" and _native_hook_projection(manifest["package"], manifest["node"]) != manifest.get("nativeHookProjection"):
         raise ValueError("prepared package or native hook projection changed; prepare a fresh observation")
-    if mode == "native-package-hooks":
+    if mode == "installed-plugin":
+        binding = manifest["installedPlugin"]
+        installed_observation = _installed_plugin_binding(manifest["package"], manifest["codex"], binding["pluginId"], manifest["workspace"], manifest["evidence"], inventory_label)
+        if installed_observation != binding:
+            raise ValueError("prepared installed plugin changed; prepare a fresh observation")
+    if _direct_package_hooks(manifest):
         guide = manifest.get("entryGuide")
         if (not isinstance(guide, str) or not guide.startswith("Accord task entry:")
                 or hashlib.sha256(guide.encode("utf-8")).hexdigest() != manifest.get("entryGuideSha256")):
             raise ValueError("prepared entry guide changed")
+    return installed_observation
 
 
 def _verify_native_stage(manifest, stage, thread_id):
-    _verify_prepared_sources(manifest)
+    installed_observation = _verify_prepared_sources(manifest, inventory_label=f"stage-{stage + 1}-before")
     case = json.loads(read_regular(manifest["case"]))
     if type(stage) is not int or not 0 <= stage < len(case["stages"]):
         raise ValueError("invalid native persistent stage")
@@ -377,10 +454,12 @@ def _verify_native_stage(manifest, stage, thread_id):
         expected[-2] = thread_id
     if command != expected or (stage == 0 and command != manifest["initialCommand"]):
         raise ValueError("prepared stage command changed")
-    return raw, command
+    return raw, command, installed_observation
 
 
 def _hook_configuration(manifest):
+    if _hook_mode(manifest) == "installed-plugin":
+        raise ValueError("installed plugin must use native hook discovery")
     if _hook_mode(manifest) == "native-package-hooks":
         return manifest["nativeHookProjection"]["configuration"]
     hooks = []
@@ -397,32 +476,35 @@ def build_command(manifest, *, stage=0, thread_id=None):
     protocol = manifest.get("entryProtocol", "exec")
     if protocol not in ("exec", "exec-resume"):
         raise ValueError("CLI command cannot represent an App Server case")
-    hooks = _hook_configuration(manifest)
+    installed = _hook_mode(manifest) == "installed-plugin"
+    hooks = None if installed else _hook_configuration(manifest)
+    trust = [] if installed else ["--dangerously-bypass-hook-trust"]
     isolation = (["--ignore-user-config", "--disable", "plugins", "--disable", "apps"]
                  if _hook_mode(manifest) == "native-package-hooks" else [])
     if protocol == "exec-resume":
         if type(stage) is not int or not 0 <= stage < len(manifest["prompts"]):
             raise ValueError("invalid persistent stage")
         output = str(Path(manifest["evidence"]) / f"last-message-{stage + 1}.txt")
-        config = ["--enable", "hooks", "-m", manifest["model"],
+        config = ([] if installed else ["--enable", "hooks"]) + ["-m", manifest["model"],
                   "-c", "approval_policy=\"never\"",
                   "-c", "sandbox_mode=\"workspace-write\"",
                   "-c", "model_reasoning_effort=" + json.dumps(manifest["reasoning"]),
-                  "-c", "windows.sandbox=" + json.dumps(manifest["windowsSandbox"]),
-                  "-c", hooks]
+                  "-c", "windows.sandbox=" + json.dumps(manifest["windowsSandbox"])]
+        if hooks is not None:
+            config += ["-c", hooks]
         if stage == 0:
             if thread_id is not None:
                 raise ValueError("initial persistent stage cannot resume a thread")
             return [manifest["codex"], "exec", *isolation, "--skip-git-repo-check", "--sandbox", "workspace-write",
                     "--json", "--color", "never", "--output-last-message", output,
-                    "--dangerously-bypass-hook-trust", "-C", manifest["workspace"],
+                    *trust, "-C", manifest["workspace"],
                     "--add-dir", str(Path(manifest["evidence"]) / "state"), *config, "-"]
         if not isinstance(thread_id, str) or not thread_id:
             raise ValueError("persistent resume requires the observed thread id")
         return [manifest["codex"], "exec", *isolation, "-C", manifest["workspace"],
                 "--add-dir", str(Path(manifest["evidence"]) / "state"),
                 "resume", "--json", "--output-last-message", output,
-                "--dangerously-bypass-hook-trust", "--skip-git-repo-check", *config, thread_id, "-"]
+                *trust, "--skip-git-repo-check", *config, thread_id, "-"]
     return [manifest["codex"], "exec", "--ignore-user-config", "--disable", "plugins", "--disable", "apps", "--enable", "hooks",
             "--ephemeral", "--skip-git-repo-check", "--sandbox", "workspace-write", "--json", "--color", "never",
             "--output-last-message", str(Path(manifest["evidence"]) / "last-message.txt"),
@@ -451,7 +533,11 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     if app_server_case is not None and persistent_case is not None:
         raise ValueError("choose one App Server or persistent CLI case")
     native_hooks = getattr(args, "native_package_hooks", False)
-    if native_hooks and persistent_case is None:
+    installed_id = getattr(args, "installed_plugin", None)
+    direct_hooks = native_hooks or installed_id is not None
+    if native_hooks and installed_id is not None:
+        raise ValueError("source projection and installed plugin are mutually exclusive")
+    if direct_hooks and persistent_case is None:
         raise ValueError("native package hooks require persistent exec-resume")
     if app_server_case is not None:
         if (not isinstance(app_server_case, dict) or set(app_server_case) != {"prompts", "expected", "limits"}
@@ -496,6 +582,10 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
              "runtime": package / "runtime/task-checkpoint.cjs"}
     if native_hooks:
         paths["hookShell"] = Path(projection["hookShell"])
+    if installed_id is not None:
+        paths.update({key: Path(__file__).with_name(name) for key, name in (
+            ("inventoryRunner", "observe_codex_lifecycle.py"), ("inventoryResources", "inspect_native_resources.py"),
+            ("inventoryRpc", "codex_rpc.py"))})
     if persistent_case is not None:
         paths["case"] = case_path
         observer_key = ("coordinationObserver" if case["schema"] == "yiyuan-accord-coordination-case/v1"
@@ -515,6 +605,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
                 if protocol == "exec-resume" else ("app-server",))
     if native_hooks:
         required += ("--ignore-user-config", "--disable")
+    if installed_id is not None:
+        required = ("--sandbox", "--output-last-message")
     if help_run.returncode or any(flag not in help_text for flag in required):
         raise ValueError("native CLI help does not support required boundary")
     resume_help = None
@@ -526,13 +618,15 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     version = subprocess.run([str(paths["codex"]), "--version"], capture_output=True, timeout=15)
     if version.returncode:
         raise ValueError("native version probe failed")
-    entry_guide = _entry_guide(paths["node"], paths["runtime"]) if native_hooks else None
+    entry_guide = _entry_guide(paths["node"], paths["runtime"]) if direct_hooks else None
     evidence.mkdir()
     workspace.mkdir()
     ordinary_dir(evidence)
     ordinary_dir(workspace)
+    installed = (_installed_plugin_binding(package, paths["codex"], installed_id, workspace, evidence, "prepare")
+                 if installed_id is not None else None)
     for name in ("hooks", "state", "temp"):
-        if name == "hooks" and native_hooks:
+        if name == "hooks" and direct_hooks:
             continue
         (evidence / name).mkdir()
     if persistent_case is not None:
@@ -566,9 +660,12 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
                              "summary": {"ready_ids": ["A", "B"], "total_units": 140}}, "limits": LIMITS,
                 "docs": ["https://learn.chatgpt.com/docs/hooks", "https://learn.chatgpt.com/docs/config-file/config-reference",
                          "https://learn.chatgpt.com/docs/config-file/config-basic#windows-sandbox-mode"]}
-    manifest["hookMode"] = "native-package-hooks" if native_hooks else "checkpoint-wrapper"
+    manifest["hookMode"] = "installed-plugin" if installed is not None else "native-package-hooks" if native_hooks else "checkpoint-wrapper"
     if native_hooks:
         manifest["nativeHookProjection"] = projection
+    if installed is not None:
+        manifest["installedPlugin"] = installed
+    if direct_hooks:
         manifest["entryGuide"] = entry_guide
         manifest["entryGuideSha256"] = hashlib.sha256(entry_guide.encode("utf-8")).hexdigest()
     if protocol == "exec":
@@ -594,7 +691,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
                                     "acceptance": "native execution receipt; business semantics and admission remain separate"},
                          "initialCommand": build_command({**manifest, "entryProtocol": protocol,
                                                           "prompts": [stage["prompt"] for stage in case["stages"]]})})
-        if native_hooks:
+        if direct_hooks:
             manifest["stageCommandTemplates"] = [build_command(manifest, stage=index,
                 thread_id="__OBSERVED_NATIVE_THREAD_ID__" if index else None)
                 for index in range(len(manifest["prompts"]))]
@@ -609,7 +706,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
 
 def hook(args):
     manifest = load_manifest(args.evidence)
-    if _hook_mode(manifest) == "native-package-hooks":
+    if _direct_package_hooks(manifest):
         raise ValueError("native package hooks cannot use the checkpoint wrapper")
     if digest(manifest["runtime"]) != manifest["sourceHashes"]["runtime"]:
         raise ValueError("prepared runtime changed")
@@ -1039,6 +1136,38 @@ def coordination_observer():
     return inspect_coordination
 
 
+def _installed_evidence_valid(manifest, recorded):
+    repo = str(Path(__file__).resolve().parents[1])
+    if repo not in sys.path:
+        sys.path.insert(0, repo)
+    from scripts.inspect_native_resources import native_processes_released
+    try:
+        binding = manifest["installedPlugin"]
+        stages = recorded["stages"]
+        labels = {"prepare", "run-preflight"} | {f"stage-{i + 1}-{phase}"
+            for i in range(len(stages)) for phase in ("before", "after")}
+        root = Path(manifest["evidence"]) / "installed-inventory/commands"
+        if {path.name for path in root.iterdir()} != labels:
+            return False
+        for label in labels:
+            record = json.loads(read_regular(root / label / "record.json"))
+            config = json.loads(read_regular(root / label / "shared-config.json"))
+            data = json.loads(read_regular(root / label / "stdout.json", 4 * 1024 * 1024))
+            rows = [row for row in data["installed"] if row.get("pluginId") == binding["pluginId"]]
+            if (rows != [binding["inventory"]] or config.get("unchanged") is not True
+                    or config["before"]["state"] != "observed" or config["after"]["state"] != "observed"
+                    or config["before"]["sha256"] != config["after"]["sha256"]
+                    or record.get("arguments") != ["plugin", "list", "--marketplace", binding["inventory"]["marketplaceName"], "--json"]
+                    or record.get("exitCode") != 0 or record.get("forced") is not False or record.get("failure") is not None
+                    or not native_processes_released(record["after"], record["controller"])):
+                return False
+        return all(stage.get("stage") == i + 1 and stage.get("installedBefore") == binding
+            and stage.get("installedAfter") == binding and stage.get("entryObservation", {}).get("valid") is True
+            for i, stage in enumerate(stages))
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return False
+
+
 def inspect(evidence):
     manifest = load_manifest(evidence)
     if manifest.get("entryProtocol") == "exec-resume":
@@ -1058,8 +1187,14 @@ def inspect(evidence):
             manifest["workspace"], stage_id,
             originals=json.loads(read_regular(evidence / "originals.json")),
             history=json.loads(read_regular(evidence / "history.json")), fixture_path=manifest["case"])
+        installed_checks = None
+        if _hook_mode(manifest) == "installed-plugin":
+            # Review retained observations, not a cache that may have legitimately
+            # advanced after this run. These remain caller-recorded evidence.
+            installed_checks = _installed_evidence_valid(manifest, recorded)
         return {"entryProtocol": "exec-resume", "caseSchema": manifest.get("caseSchema"),
                 "recordedExecution": recorded,
+                "retainedInstalledChecksValid": installed_checks,
                 "currentFileObservation": current,
                 "claimLimit": "Fresh file check and retained execution receipts; no automatic admission."}
     root, evidence = Path(manifest["workspace"]), Path(evidence)
@@ -1406,8 +1541,9 @@ def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
 
 
 def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage=None):
-    native_hooks = _hook_mode(manifest) == "native-package-hooks"
-    bound_prompt, bound_command = _verify_native_stage(manifest, stage, thread_id) if native_hooks else (None, None)
+    native_hooks = _direct_package_hooks(manifest)
+    bound_prompt, bound_command, installed_before = (_verify_native_stage(manifest, stage, thread_id)
+                                                     if native_hooks else (None, None, None))
     evidence = Path(manifest["evidence"])
     command = build_command(manifest, stage=stage, thread_id=thread_id)
     if native_hooks and command != bound_command:
@@ -1446,7 +1582,8 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
                         break
                     if native_usage is not None and "observer" not in native_usage:
                         try:
-                            sessions = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "sessions"
+                            sessions = Path(manifest.get("installedPlugin", {}).get("codexHome",
+                                env.get("CODEX_HOME", str(Path.home() / ".codex")))) / "sessions"
                             native_usage["observer"] = NativeRolloutUsage(
                                 configured["rolloutPath"], sessions_root=sessions,
                                 thread_id=started_thread, cwd=manifest["workspace"],
@@ -1526,6 +1663,16 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
                     "remainingOwnedProcesses": after["activeProcesses"], "samples": samples})
     receipt["valid"] &= (receipt["exitCode"] == 0 and not forced and failure is None
                          and receipt["remainingOwnedProcesses"] == 0)
+    if _hook_mode(manifest) == "installed-plugin":
+        receipt["installedBefore"] = installed_before
+        try:
+            receipt["installedAfter"] = _verify_prepared_sources(manifest, inventory_label=f"stage-{stage + 1}-after")
+            receipt["installedPackageStable"] = True
+        except (OSError, ValueError, RuntimeError, subprocess.TimeoutExpired) as error:
+            receipt["installedPackageStable"] = False
+            receipt["installedAfter"] = {"error": type(error).__name__}
+            receipt["valid"] = False
+            receipt["failure"] = receipt["failure"] or "installed-plugin-poststate: " + str(error)
     if native_hooks:
         entry = {"valid": False, "decision": "unknown"}
         try:
@@ -1535,7 +1682,8 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
             if (source is None or source["threadId"] != receipt["threadId"] or len(turns) != 1
                     or os.path.normcase(os.path.abspath(source["cwd"])) != os.path.normcase(os.path.abspath(manifest["workspace"]))):
                 raise ValueError("native entry turn source unavailable")
-            sessions = Path(env.get("CODEX_HOME", str(Path.home() / ".codex"))) / "sessions"
+            sessions = Path(manifest.get("installedPlugin", {}).get("codexHome",
+                env.get("CODEX_HOME", str(Path.home() / ".codex")))) / "sessions"
             rollout = _ordinary_rollout(source["rolloutPath"], sessions)
             entry = native_entry_observation(read_regular(rollout, 32 * 1024 * 1024),
                 thread_id=receipt["threadId"], turn_id=turns[0].decode("ascii"),
@@ -1572,7 +1720,10 @@ def run_persistent(args):
         json.dump({"time": time.time(), "deadlineSeconds": manifest["timeoutSeconds"],
                    "turnTimeoutSeconds": manifest["turnTimeoutSeconds"],
                    "recoveryTimeoutSeconds": manifest["recoveryTimeoutSeconds"],
-                   "nativeCliInvocationsAllowed": len(manifest["prompts"])}, receipt)
+                   "nativeCliInvocationsAllowed": len(manifest["prompts"]),
+                   "additionalModelFreeInventoryCalls": (1 + 2 * len(manifest["prompts"])
+                       if _hook_mode(manifest) == "installed-plugin" else 0),
+                   "inventoryScope": "each model-free query uses the existing lifecycle controller, 20-second work plus 15-second recovery bounds, and retained command/resource receipts"}, receipt)
     env = dict(os.environ, YIYUAN_ACCORD_TASK_STATE_DIR=str(evidence / "state"),
                TEMP=str(evidence / "temp"), TMP=str(evidence / "temp"), RUST_LOG="error,codex_exec=info")
     if _hook_mode(manifest) == "native-package-hooks":
@@ -1616,7 +1767,7 @@ def run_persistent(args):
                 break
     finally:
         config_after = shared_config_snapshot(shared_config, manifest["workspace"])
-        if _hook_mode(manifest) == "native-package-hooks":
+        if _direct_package_hooks(manifest):
             # Retain poststate even when source drift or business inspection
             # rejects continuation; process cleanup remains stage-owned.
             save(evidence / "shared-config.json", {"before": config_before, "after": config_after,
@@ -1637,6 +1788,8 @@ def run_persistent(args):
     if result["hookMode"] == "native-package-hooks":
         result["nativeHookProjection"] = {"sourceConfigurationOnly": True, "marketplaceInstalled": False,
                                           "claimLimit": manifest["nativeHookProjection"]["claimLimit"]}
+    if result["hookMode"] == "installed-plugin":
+        result["installedPlugin"] = manifest["installedPlugin"]
     save(evidence / "result.json", result)
     return result
 
@@ -1738,6 +1891,7 @@ def main():
     prep.add_argument("--persistent-case", help="existing coordination case to run through native exec/resume")
     prep.add_argument("--native-package-hooks", action="store_true",
                       help="persistent CLI only: project all source Node hooks; isolate process config, not a marketplace-installed plugin")
+    prep.add_argument("--installed-plugin", help="persistent CLI only: existing enabled name@marketplace; retain native discovery, user configuration and Hook trust")
     prep.add_argument("--turn-timeout", type=int, help="per-turn cap for a persistent case")
     prep.add_argument("--recovery-timeout", type=int, help="owned process recovery cap for a persistent case")
     prep.add_argument("--windows-sandbox", choices=("elevated", "unelevated"), required=True,
