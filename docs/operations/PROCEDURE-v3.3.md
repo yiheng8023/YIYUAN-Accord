@@ -1851,3 +1851,13 @@ Root逐文件复核阶段快照字节与原始记录：source.json和keep.txt的
 首次独立复核指出证据目录没有执行源副本。随后从cd291da不可变提交补齐case/runner/runtime/observer及17个包文件，21份字节均与运行前manifest摘要一致；记录明确标注执行后留存，不虚构运行前复制或改写原result。独立回读后来源封装未知解除，语义结论不变。源码摘要绑定、执行前检查及晚留存的时间关系分别保持。
 
 每阶段所属进程均归零。原生只增加本次工作区的trusted注册，Root在语义差异核对和独占文件句柄内恢复原配置并回读一致，私有原配置副本删除。重复工作区、state及temp目录已回收，原生对话、原始流、阶段成果、执行源及独立复核保留于accord-ordinary-entry-20260919-01。该例仍是task-local源Hook投影，不是市场安装、完整隐式Skill发现、自动交接、因果增益或整版准入；不重复此已完成小链。
+
+## 共享Git市场与安装字节同步（2026-09-19）
+
+当前3e7e60dc包的cd291da CI 35440154247已11项全绿。检查共享安装时发现：原生市场清单只显示Git源，但config及市场元数据仍固定1429f2a，快照只有13文件；缓存已有17文件，与当前包仅checkpoint运行时不同。版本号均为3.3.0-dev.1，不能据版本相同认为已同步。
+
+保留原配置私有副本、安装包和市场来源后，按0.155.1官方支持的marketplace remove/add将同一Git源重新绑定5005723，再执行指定yiyuan-accord的marketplace upgrade。原生刷新报告无错误；源、市场、缓存17文件逐字节一致，共享配置语义差异仅marketplaces.yiyuan-accord.ref，插件启用、其它设置及原Hook信任不变。未手写共享缓存、未修改其它市场，也未增加模型服务或调用模型。
+
+复用已有App Server连接及Windows Job资源控制器，只执行initialize、hooks/list与skills/list。真实0.155.1新进程返回5个已启用Skill与6条已启用且trusted的Hook，路径均来自当前安装缓存；随后自然exit0、所属进程归零。更新后的helper只读status仍为unbound/revision0，保留needsNativeReplay及needsResumeReconciliation，不伪造缺失输入或恢复完成。配置副本核对完成后回收，旧包和回退Git来源保留于accord-shared-plugin-update-20260919-01。
+
+本次证明共享来源、字节、原生发现和信任的一致性，尚不证明已运行的Desktop/IDE任务整体采用、必要Skill执行、普通成果或热更新全验。Hook声明未变而脚本字节改变，原信任只覆盖声明；原生upgrade对同版本缓存的成功刷新也不证明所有运行中缓存已刷新。后续沿真实安装态行为继续，不重复已完成的源投影案例。
