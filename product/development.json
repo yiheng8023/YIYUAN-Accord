@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "b6a79921989c55ae678824234047c8359749c1bb9d4b7c29e9765c62ddb0eb37",
+        "packageSha256": "b23323ff8ba6f51a0b83a0bc5a6d66c2aeb0d7185f0e8e9ad76f07cfa57fccc3",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -67,7 +67,9 @@
         ],
         "startupEntry": true,
         "carrierHandoff": true,
-      "referenceFiles": [],
+      "referenceFiles": [
+        "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md"
+      ],
       "supportingSkills": [
         "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
         "plugins/yiyuan-accord-codex/skills/maintain-task-continuity/SKILL.md",
@@ -160,6 +162,7 @@
       "scripts/observe_codex_lifecycle.py",
       "tests/product/test_codex_lifecycle.py",
       "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+      "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md",
       "plugins/yiyuan-accord-codex/skills/maintain-task-continuity/SKILL.md",
       "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md",
       "plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md"
@@ -167,9 +170,9 @@
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 2020000,
-      "maxTrackedFiles": 152,
+      "maxTrackedFiles": 153,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "One brief coordination Skill and four specialists remain, with the same 36000 primary-instruction ceiling. The optional carrier handoff module adds one distributed Node file, its canonical source and two test-caller files: 18 package files and a 152-file tracked ceiling. It reuses host-injected native transport, a caller-owned durable CAS recorder and independent current verification; no daemon, Hook, authentication layer, dependency or default activation is added. Its explicit deadline, identity, ambiguity and source-recovery controls plus offline/native failure tests require a 2020000 code/test ceiling, 120000 above the former 1900000, preserving five-percent reserve. The native integration reuses existing App Server, fixed localhost response and process-ownership utilities. The earlier read-only status and installed-entry checks remain; necessary checks are not removed to fit a size target. Smaller bodies or successful dispatch do not prove lower total runtime cost, semantic takeover, ordinary-host adoption or autonomous timing; changed package and loading conditions require affected acceptance."
+      "rationale": "One brief coordination Skill and four specialists remain, with the same 36000 primary-instruction ceiling. The optional carrier handoff module adds one distributed Node file, its canonical source and two test-caller files. A conditionally reached interface reference brings the package to 19 files and raises the tracked ceiling from 152 to 153; it replaces the duplicated development-only API description so installed consumers can find the same contract. It reuses host-injected native transport, a caller-owned durable CAS recorder and independent current verification; no daemon, Hook, authentication layer, dependency or default activation is added. Its explicit deadline, identity, ambiguity and source-recovery controls plus offline/native failure tests require a 2020000 code/test ceiling, 120000 above the former 1900000, preserving five-percent reserve. The native integration reuses existing App Server, fixed localhost response and process-ownership utilities. The earlier read-only status and installed-entry checks remain; necessary checks are not removed to fit a size target. Smaller bodies or successful dispatch do not prove lower total runtime cost, semantic takeover, ordinary-host adoption or autonomous timing; changed package and loading conditions require affected acceptance."
     }
   },
   "source": {

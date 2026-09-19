@@ -99,10 +99,11 @@ class SkillReferencePackageTests(unittest.TestCase):
             target = root / locator
             target.parent.mkdir(exist_ok=True)
             target.write_text("A conditional detail.\n", encoding="utf-8")
-            self.assertEqual(check(references=[locator])[1], [])
+            references = [*projection["referenceFiles"], locator]
+            self.assertEqual(check(references=references)[1], [])
             self.assertTrue(check(references=[])[1])
             target.write_bytes(b"")
-            self.assertTrue(check(references=[locator])[1])
+            self.assertTrue(check(references=references)[1])
 
     def test_startup_guidance_is_an_explicit_variant_not_a_relabelled_predecessor(self):
         from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract
