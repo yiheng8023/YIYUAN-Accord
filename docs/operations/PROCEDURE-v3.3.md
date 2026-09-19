@@ -1945,3 +1945,13 @@ Root逐文件复核阶段快照字节与原始记录：source.json和keep.txt的
 只修正来源事实：四类source thread/read先核对ID，再读取当前ephemeral布尔元数据；当前缺失/不可用即unknown，保留前次已知bool仅用于冲突检测。已知值冲突要求核对后再做；最终record和两处结果统一返回true/false/null，sourceRecovery恢复中性retained，通用sourceRecoveryRetained仍由既有独立verifier支持。临时来源可依赖其它充分恢复依据，并未被禁止。文档同时区分适配器未执行归档/删除与其它行为者造成的后态。
 
 19项模块回归及85项开发契约检查通过。当前ab1b2755在原生0.155.1上完成五案，新增ephemeral来源实际交接成功且history=false，持久来源为true；共16次本地固定响应、零模型调用，独立只读复核未见阻断问题。七份执行源码预先保留于accord-source-persistence-20260920-01，保护原件和资源后态成立。旧提议及宿主升级观察保留原绑定；不把此次事实修正提升为模型自主连续性或整版通过。
+
+## 真实模型在能力缺口下提出交接并完成报告（2026-09-20）
+
+9d56e0bd上的ab1b2755模块在私有accord-semantic-handoff-20260920-01完成一次真实模型验证，未改产品代码或验收底线。复用原App Server、BoundedRpc、Windows Job、Node调用桥和SQLite事务；执行前冻结七份源码、普通目标、业务快照与独立oracle。model/list确认Terra/medium可用，再使用现有ChatGPT登录；控制器不读取或复制认证文件。整例600秒上限、最多一次交接及有界累计用量只是试验限制，不是产品默认规格。私有调用脚本的事件游标、原目标传递、阶段识别和语义判据均在模型执行前审查修正。
+
+原始目标只要求从冻结快照生成readiness.json/readiness.md并保全原件、禁止发布/联网/安装，没有要求交接或点名工具。真实readOnly源看到有受限报告写入能力的目标可用后，先读取快照，再自行调用accord_request_handoff，明确缺少落盘能力并携带保护限制。queued答复后源自然completed，单次dispatcher沿同一记录创建目标。目标先只读分析原始目标、原件身份、动作限制及未完条件，独立核验结构化分析；随后SQLite写者转移，目标才调用受限write_reports。该调用者使用两次官方fs/writeFile和两次fs/readFile生成并读回报告，验证成功后才退订源，无interrupt或人工追加提示。
+
+业务快照为合成数据：代码检查9/9、必要验收2/3、一个外部写入效果未知，且release_authorized=true。目标正确判定release_ready=false，保留缺项、先查询未知效果、禁止重放及发布。它不是Accord当前的正式验收统计，也不模拟真实外部写入故障；两报告共享经过核验的结构化事实，Markdown由受限工具渲染。三个模型轮次均completed，累计110287 tokens、其中未缓存输入37806、输出1569，未超过预绑上限；这些是原生处理量，不是当前上下文占用、账单或包含准备审阅的总成本。
+
+源/目标身份与实际model/provider/effort/cwd/readOnly/network/approval回读符合绑定，原件哈希、三个共享保护文件保持。App Server和Node桥均exit0且所属进程归零，原生两任务历史保留，未归档或删除；源是否卸载仍为unknown。独立复核确认原始事件、交权顺序、SQLite完整性和报告内容，业务文件逐字节留存后回收workspace/temp/state三个临时运行根。插件、Hook、Apps、MCP等仅在该进程覆盖为关闭；这证明合格调用者条件下的自主需要发现、提议和自动业务接管，不证明默认安装态参与、上下文压力择时、无需要时不调用、任意任务语义核验、Desktop/IDE连接或控制者崩溃后的恢复。A01–A08完整准入状态保持；不以这次通过要求重复既有普通五轮或固定小链。
