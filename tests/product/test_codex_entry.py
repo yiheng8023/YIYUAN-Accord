@@ -300,6 +300,7 @@ class EntryTests(unittest.TestCase):
                     receipt = {'valid': True, 'threadId': 'native-thread', 'terminal': 'completed'}
                     with patch.object(entry, '_native_inventory', return_value=json.loads(self.installed_listing().stdout)), \
                             patch.object(entry.subprocess, 'Popen', side_effect=spawn), \
+                            patch.object(entry.subprocess, 'CREATE_NO_WINDOW', 0, create=True), \
                             patch.object(entry, 'WindowsJob') as job, \
                             patch.object(entry, 'persistent_cli_turn_receipt', return_value=receipt), \
                             patch.object(entry, '_session_configuration', return_value={'threadId':'native-thread','cwd':manifest['workspace'],'rolloutPath':str(rollout)}), \
