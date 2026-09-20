@@ -292,6 +292,29 @@ class EntryTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 entry.prepare(args)
 
+    def test_invalid_installed_identity_fails_before_native_probes_or_root_creation(self):
+        case = entry.load_persistent_case(SCRIPT.parents[1] / "product/cases/coordination-v3.3.json")
+        for plugin_id in ("invalid/name@market", "yiyuan-accord-codex@yiyuan-accord"):
+            with self.subTest(plugin_id=plugin_id), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                package = root / "source-package"
+                shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
+                (root / "home").mkdir()
+                args = argparse.Namespace(package=str(package), evidence=str(root / "evidence"),
+                    workspace=str(root / "work"), codex=PYTHON, node=PYTHON,
+                    model="unused", reasoning="medium", timeout=30, turn_timeout=10,
+                    recovery_timeout=2, windows_sandbox="elevated", installed_plugin=plugin_id)
+                before = entry._package_hashes(package)
+                with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}), \
+                        patch.object(entry.subprocess, "run", side_effect=AssertionError("unexpected native probe")) as process:
+                    with self.assertRaisesRegex(ValueError, "installed plugin|installed cache root"):
+                        entry.prepare(args, persistent_case=case)
+                    process.assert_not_called()
+                self.assertFalse((root / "evidence").exists())
+                self.assertFalse((root / "work").exists())
+                self.assertEqual(entry._package_hashes(package), before)
+                self.assertEqual(list((root / "home").iterdir()), [])
+
     def test_installed_stage_retains_before_and_after_even_for_last_or_failed_turn(self):
         for changed, exit_code in ((False, 0), (True, 0), (True, 1)):
             with self.subTest(changed=changed, exit=exit_code), tempfile.TemporaryDirectory() as tmp:

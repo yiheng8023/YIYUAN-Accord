@@ -337,7 +337,8 @@ def _native_inventory(codex, market, workspace, evidence, label):
     return data
 
 
-def _installed_plugin_binding(package, codex, plugin_id, workspace, evidence, label):
+def _installed_package_identity(package, plugin_id):
+    """Validate local identity without starting a process or creating fixture roots."""
     if not isinstance(plugin_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]+@[A-Za-z0-9_-]+', plugin_id):
         raise ValueError("explicit installed plugin name@marketplace required")
     name, market = plugin_id.split("@")
@@ -349,6 +350,11 @@ def _installed_plugin_binding(package, codex, plugin_id, workspace, evidence, la
             or metadata.get("name") != name
             or package != codex_home / "plugins/cache" / market / name / version):
         raise ValueError("package is not the named native installed cache root")
+    return package, codex_home, name, market, version
+
+
+def _installed_plugin_binding(package, codex, plugin_id, workspace, evidence, label):
+    package, codex_home, name, market, version = _installed_package_identity(package, plugin_id)
     data = _native_inventory(codex, market, workspace, evidence, label)
     if not isinstance(data, dict) or not isinstance(data.get("installed"), list):
         raise ValueError("native installed plugin inventory unavailable")
@@ -567,6 +573,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
         usage_caps = _usage_caps(case["limits"]["usageCaps"])
     evidence, workspace = Path(args.evidence).absolute(), Path(args.workspace).absolute()
     package = ordinary_dir(args.package)
+    if installed_id is not None:
+        _installed_package_identity(package, installed_id)
     projection = _native_hook_projection(package, args.node) if native_hooks else None
     if not args.model.strip() or not args.reasoning.strip():
         raise ValueError("explicit nonempty model and reasoning required")
