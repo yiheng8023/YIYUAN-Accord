@@ -73,6 +73,10 @@ For an actual gap, `observe-context` reads the Hook-bound transcript; `assess-co
 with `nativeContext: true` re-reads counters with sourced tail/work/reserve forecasts.
 App Server callers may supply bound signals through `--context-signals`. These
 operations provide evidence and advisory arithmetic, not dispatch or permission.
+On an owned App Server source that exposes `accord_inspect_context`, use that
+read-only native-call route for needed signals. It may be unknown before the
+first usage event; preserve state and choose a smaller justified next step instead
+of polling unchanged evidence. Arguments cannot choose another thread or model.
 
 Choose supported compaction, same-task renewal or a fresh task by the needed effect;
 context-copying forks serve causal branches. Before history can be omitted, retain

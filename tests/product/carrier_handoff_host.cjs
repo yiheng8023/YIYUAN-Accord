@@ -20,7 +20,7 @@ async function runOwnedConnection(config) {
   const fs = require('node:fs');
   const {spawn} = require('node:child_process');
   const {Writable} = require('node:stream');
-  const {createOwnedAppServerConnection} = require('../../runtime/codex-connection.cjs');
+  const {createOwnedAppServerConnection,CONTEXT_OBSERVATION_TOOL} = require('../../runtime/codex-connection.cjs');
   const log = config.nativeLogRoot;
   const stderr = fs.openSync(log + '/stderr.txt', 'wx');
   const stdout = fs.openSync(log + '/stdout.jsonl', 'wx');
@@ -41,6 +41,7 @@ async function runOwnedConnection(config) {
   const connection=createOwnedAppServerConnection({stdin:outgoing,stdout:native.stdout,
     connectionId:config.binding.connectionId,hostVersion:config.binding.hostVersion});
   let result=null,error=null,context=null,exitCode=null,closeState=null;
+  const contextReplies=[];
   const ended=new Promise((resolve,reject)=>{native.once('exit',code=>{exitCode=code;resolve(code);});native.once('error',reject);});
   try {
     const deadline=performance.now()+45000;
@@ -49,14 +50,21 @@ async function runOwnedConnection(config) {
       capabilities:{experimentalApi:true}},deadline);
     await t.notify('initialized',{},deadline);
     const source=await t.request('thread/start',{model:'fixture-no-model',modelProvider:'accord_fixture',
-      cwd:config.plan.target.cwd,sandbox:'read-only',approvalPolicy:'never',dynamicTools:[HANDOFF_PROPOSAL_TOOL]},deadline);
+      cwd:config.plan.target.cwd,sandbox:'read-only',approvalPolicy:'never',
+      dynamicTools:[HANDOFF_PROPOSAL_TOOL,...(config.contextRead?[CONTEXT_OBSERVATION_TOOL]:[])]},deadline);
     const turn=await t.request('turn/start',{threadId:source.thread.id,
       input:[{type:'text',text:'Submit one handoff proposal for the bound fixed task, then finish without other actions.'}]},deadline);
     const plan={...config.plan,source:{threadId:source.thread.id,turnId:turn.turn.id}};
     await remote('sourceReady',[source,turn]);
-    const proposal=await connection.receiveRequest(value=>value.method==='item/tool/call' &&
-      value.params?.threadId===source.thread.id && value.params?.turnId===turn.turn.id &&
-      value.params?.tool===HANDOFF_PROPOSAL_TOOL.name,deadline);
+    let proposal;
+    for (;;) {
+      const received=await connection.receiveRequest(value=>value.method==='item/tool/call' &&
+        value.params?.threadId===source.thread.id && value.params?.turnId===turn.turn.id &&
+        [HANDOFF_PROPOSAL_TOOL.name,CONTEXT_OBSERVATION_TOOL.name].includes(value.params?.tool),deadline);
+      if(received.params.tool===HANDOFF_PROPOSAL_TOOL.name){proposal=received;break;}
+      if(!config.contextRead || contextReplies.length>=2) throw new Error('unexpected fixture context request');
+      contextReplies.push(await connection.replyContext(received,deadline));
+    }
     context=connection.context(source.thread.id,turn.turn.id,30000);
     await remote('sourceContext',[context]);
     const channel=connection.proposalChannel(proposal,async()=>({scopeRef:plan.scopeRef,
@@ -73,7 +81,7 @@ async function runOwnedConnection(config) {
     try {await Promise.race([ended,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('native EOF exit timed out')),10000);})]);}
     finally {clearTimeout(timer);native.stdout.off('data',capture);fs.closeSync(stderr);fs.closeSync(stdout);fs.closeSync(requests);}
   }
-  process.stdout.write(JSON.stringify({kind:'done',result,error,context,exitCode,closeState,rawBytes})+'\n');
+  process.stdout.write(JSON.stringify({kind:'done',result,error,context,contextReplies,exitCode,closeState,rawBytes})+'\n');
   rl.close();process.stdin.destroy();
 }
 async function run(config) {

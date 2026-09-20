@@ -12,6 +12,16 @@ const copy = (v) => JSON.parse(JSON.stringify(v));
 function frozen(v) { if (v && typeof v === 'object' && !Object.isFrozen(v)) { for (const x of Object.values(v)) frozen(x); Object.freeze(v); } return v; }
 function canonical(v) { if (Array.isArray(v)) return `[${v.map(canonical).join(',')}]`; if (v && typeof v === 'object') return `{${Object.keys(v).sort().map(k => `${JSON.stringify(k)}:${canonical(v[k])}`).join(',')}}`; return JSON.stringify(v); }
 
+const CONTEXT_OBSERVATION_TOOL = frozen({
+  type: 'function',
+  name: 'accord_inspect_context',
+  description: 'Read native context signals for this calling thread and turn before a substantial work span or continuity decision. Unknown signals are not capacity or transfer permission; avoid unchanged polling.',
+  inputSchema: {type: 'object', properties: {
+    maxAgeMs: {type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER,
+      description: 'Maximum observation age appropriate to this work; default 30000 ms. A larger age does not make evidence newer.'},
+  }, additionalProperties: false},
+});
+
 // The streams are supplied by an already-authorized owner. This object never
 // spawns, initializes, discovers, authenticates, closes, or persists a host.
 function createOwnedAppServerConnection(options) {
@@ -113,21 +123,41 @@ function createOwnedAppServerConnection(options) {
     return journal.find(record => record.message.method === 'item/tool/call' &&
       canonical(record.message) === canonical(payload)) || null;
   }
+  function respondOwned(nativeRequest, response, deadline) {
+    assertLive();
+    const remaining = deadline - performance.now();
+    if (!Number.isFinite(deadline) || remaining <= 0 || remaining > 0x7fffffff) return Promise.reject(new Error('proposal response deadline is invalid or exceeded'));
+    const anchor = requestAnchor(nativeRequest);
+    if (!anchor || !response || response.id !== nativeRequest.id || answeredAnchors.has(anchor)) return Promise.reject(new Error('proposal response is not available'));
+    answeredAnchors.add(anchor);
+    return write(response, deadline, 'proposal response write');
+  }
   function proposalChannel(nativeRequest, current) { if (typeof current !== 'function') throw new TypeError('proposal current reader is required'); return frozen({
     subscribe(listener, suppliedAnchor) { assertLive(); const anchor = requestAnchor(nativeRequest); if (!anchor) throw new Error('proposal anchor is unavailable'); if (typeof listener !== 'function' || requestAnchor(suppliedAnchor) !== anchor) throw new Error('proposal anchor differs from request'); const start = journal.indexOf(anchor) + 1; const live = (event) => listener(event); listeners.add(live); try { for (let i = start; i < journal.length; i++) { const message = journal[i].message; if (text(message.method) && !Object.hasOwn(message, 'id')) live(frozen({connectionId, hostVersion, method: message.method, params: message.params})); } } catch (error) { listeners.delete(live); throw error; } return () => listeners.delete(live); },
-    respond(response, deadline) {
-      assertLive();
-      const remaining = deadline - performance.now();
-      if (!Number.isFinite(deadline) || remaining <= 0 || remaining > 0x7fffffff) return Promise.reject(new Error('proposal response deadline is invalid or exceeded'));
-      const anchor = requestAnchor(nativeRequest);
-      if (!anchor || !response || response.id !== nativeRequest.id || answeredAnchors.has(anchor)) return Promise.reject(new Error('proposal response is not available'));
-      answeredAnchors.add(anchor);
-      return write(response, deadline, 'proposal response write');
-    },
+    respond: (response, deadline) => respondOwned(nativeRequest, response, deadline),
     current(deadline) { assertLive(); if (!Number.isFinite(deadline) || performance.now() >= deadline) return Promise.reject(new Error('proposal current deadline exceeded')); return Promise.resolve(current(deadline)); },
   }); }
   function context(threadId, turnId, maxAgeMs) { if (closed || broken) return frozen({state: 'unknown', reason: 'native-connection-unavailable', sourceReleaseAllowed: false}); const binding = threadModels.get(threadId); if (!binding || !journal.includes(binding.record)) return frozen({state: 'unknown', reason: 'thread-model-response-unavailable', sourceReleaseAllowed: false}); const events = journal.filter((r) => text(r.message.method) && !Object.hasOwn(r.message, 'id')).map((r) => frozen({receivedAtMs: r.receivedAtMs, event: r.message})); return frozen(observeContext({binding: {connectionId, threadId, hostVersion, model: binding.model}, turnId, connected: true, maxAgeMs, events})); }
+  async function replyContext(nativeRequest, deadline) {
+    assertLive();
+    const anchor = requestAnchor(nativeRequest), params = anchor?.message.params;
+    if (!anchor || params?.tool !== CONTEXT_OBSERVATION_TOOL.name || params.namespace != null ||
+        !text(params.threadId) || !text(params.turnId)) throw new Error('exact owned context request is required');
+    const args = params.arguments;
+    const valid = args && typeof args === 'object' && !Array.isArray(args) &&
+      Object.keys(args).every(key => key === 'maxAgeMs') &&
+      (!Object.hasOwn(args, 'maxAgeMs') || Number.isSafeInteger(args.maxAgeMs) && args.maxAgeMs > 0);
+    const observation = valid ? context(params.threadId, params.turnId, args.maxAgeMs ?? 30000) :
+      frozen({state: 'unknown', reason: 'invalid-context-arguments', sourceReleaseAllowed: false});
+    const payload = frozen({schema: 'yiyuan-accord-native-context-reply/v1', observation,
+      claimLimit: 'Current native-call signals only. No task text, authorization, semantic integrity, forecast, checkpoint change or transfer is supplied.'});
+    const response = {id: nativeRequest.id, result: {success: Boolean(valid),
+      contentItems: [{type: 'inputText', text: JSON.stringify(payload)}]}};
+    if (nativeRequest.jsonrpc === '2.0') response.jsonrpc = '2.0';
+    await respondOwned(nativeRequest, response, deadline);
+    return payload;
+  }
   function close() { if (closed) return; closed = true; input = Buffer.alloc(0); detach(); fail('owned connection is closed'); listeners.clear(); inbound.length = 0; journal.length = 0; journalBytes = 0; threadModels.clear(); for (const timer of [...timers]) stopTimer(timer); }
-  return frozen({transport: frozen({connectionId, hostVersion, request, notify, waitTerminal}), receiveRequest, proposalChannel, context, close});
+  return frozen({transport: frozen({connectionId, hostVersion, request, notify, waitTerminal}), receiveRequest, proposalChannel, context, replyContext, close});
 }
-module.exports = {createOwnedAppServerConnection};
+module.exports = {createOwnedAppServerConnection, CONTEXT_OBSERVATION_TOOL};

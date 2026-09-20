@@ -255,21 +255,24 @@ def proposal_fixture_item(body, ordinal, state):
     """Reuse the previously observed direct/Code Mode native tool shapes."""
     if not state.get('next'):
         return None
-    state['next'] = False
+    context_read = state.get('contextRemaining', 0) > 0
+    if context_read: state['contextRemaining'] -= 1
+    else: state['next'] = False
+    tool_name = 'accord_inspect_context' if context_read else PROPOSAL_TOOL
     tools = body.get('tools', []) + [t for row in body.get('input', [])
         if row.get('type') == 'additional_tools' for t in row.get('tools', [])]
-    arguments = {'reason': 'Preserve the fixed task in the already authorized fresh carrier.'}
-    direct = [t for t in tools if t.get('type') == 'function' and t.get('name') == PROPOSAL_TOOL]
+    arguments = {} if context_read else {'reason': 'Preserve the fixed task in the already authorized fresh carrier.'}
+    direct = [t for t in tools if t.get('type') == 'function' and t.get('name') == tool_name]
     if len(direct) == 1:
         return {'id':f'proposal_{ordinal}', 'type':'function_call', 'call_id':f'proposal_call_{ordinal}',
-                'name':PROPOSAL_TOOL, 'arguments':json.dumps(arguments), 'status':'completed'}
+                'name':tool_name, 'arguments':json.dumps(arguments), 'status':'completed'}
     wrappers = [f for t in tools if t.get('type')=='namespace' and t.get('name')=='functions'
                 for f in t.get('tools',[]) if f.get('name')=='exec']
-    if len(wrappers)!=1 or PROPOSAL_TOOL not in wrappers[0].get('description',''):
+    if len(wrappers)!=1 or tool_name not in wrappers[0].get('description',''):
         raise ValueError('prepared native proposal tool is not exposed')
     return {'id':f'proposal_{ordinal}', 'type':'custom_tool_call', 'call_id':f'proposal_call_{ordinal}',
             'namespace':'functions', 'name':'exec', 'status':'completed',
-            'input':'text(await tools.'+PROPOSAL_TOOL+'('+json.dumps(arguments)+'));'}
+            'input':'text(await tools.'+tool_name+'('+json.dumps(arguments)+'));'}
 
 
 def native_integration(codex, evidence, scenario=None):
@@ -282,8 +285,8 @@ def native_integration(codex, evidence, scenario=None):
     from scripts.observe_codex_lifecycle import (_App, _Fixture, _argv, _owned_environment,
         _new_controller, _spawn_options, _wait_job, _released, _remove_owned_tree, save)
     from scripts.codex_rpc import BoundedRpc
-    scenarios = (scenario,) if scenario else ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection')
-    if any(s not in ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection') for s in scenarios):
+    scenarios = (scenario,) if scenario else ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection','source-context')
+    if any(s not in ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection','source-context') for s in scenarios):
         raise ValueError('unknown native handoff scenario')
     root = Path(evidence).absolute()
     if root.exists() or not root.parent.is_dir() or root.parent.resolve() != root.parent:
@@ -299,11 +302,11 @@ def native_integration(codex, evidence, scenario=None):
     version = subprocess.check_output([str(codex),'--version'],timeout=10,text=True).strip()
     manifest={'evidence':str(root),'codex':str(codex),'node':str(node),
         'ownedRoots':{name:str(root/name) for name in ('home','workspace','state','temp')},
-        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':25},
+        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':31},
         'resourceController':'windows-job-object' if os.name=='nt' else 'posix-session-process-group'}
     sources=[ROOT/'runtime/carrier-handoff.cjs',DRIVER,Path(__file__),ROOT/'scripts/observe_codex_lifecycle.py',
              ROOT/'scripts/observe_codex_entry.py',ROOT/'scripts/codex_rpc.py',ROOT/'scripts/inspect_native_resources.py']
-    if 'owned-connection' in scenarios:
+    if any(s in ('owned-connection','source-context') for s in scenarios):
         sources.extend(ROOT/'runtime'/name for name in ('codex-connection.cjs','task-checkpoint.cjs','codex-context.cjs'))
     manifest['sourceHashes']={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}
     source_snapshot=root/'retained/executed-sources'
@@ -396,10 +399,11 @@ def native_integration(codex, evidence, scenario=None):
         except BaseException:
             ledger_db.execute('ROLLBACK');raise
     try:
-        if scenarios != ('owned-connection',):
+        if not all(s in ('owned-connection','source-context') for s in scenarios):
             app=_App(manifest,'carrier-controller',_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false')),env,deadline)
             app.initialize()
         for scenario in scenarios:
+            direct_connection = scenario in ('owned-connection','source-context')
             proposal_case = scenario in ('source-proposal','source-event-proposal')
             source_settings={'model':'fixture-no-model','modelProvider':'accord_fixture',
                 'cwd':manifest['ownedRoots']['workspace'],'sandbox':'read-only','approvalPolicy':'never'}
@@ -410,10 +414,11 @@ def native_integration(codex, evidence, scenario=None):
                     'inputSchema':{'type':'object','properties':{'reason':{'type':'string'}},
                                    'required':['reason'],'additionalProperties':False}}]
                 proposal_state['next']=True
-            if scenario=='owned-connection':
+            if direct_connection:
                 source,turn,proposed='pending-source','pending-turn',{'direct':True}
                 proposal_state['next']=True
-                native_log=root/'native/owned-connection'
+                proposal_state['contextRemaining']=2 if scenario=='source-context' else 0
+                native_log=root/'native'/scenario
                 native_log.mkdir()
             else:
                 source=request('thread/start',source_settings)['thread']['id']
@@ -447,12 +452,13 @@ def native_integration(codex, evidence, scenario=None):
                         except BaseException as error: inbox.put(error)
                         finally: inbox.put(None)
                     reader=threading.Thread(target=consume,daemon=True);reader.start()
-                    binding={'connectionId':'owned-connection' if scenario=='owned-connection' else app.root.name,'hostVersion':version}
+                    binding={'connectionId':scenario if direct_connection else app.root.name,'hostVersion':version}
                     config={'mode':'native','plan':plan,'binding':binding}
                     if proposed is not None: config['nativeProposal']={**binding,**proposed}
                     if scenario=='source-event-proposal': config['nativeEventProposal']=True
-                    if scenario=='owned-connection':
+                    if direct_connection:
                         config={'mode':'native-connection','plan':plan,'binding':binding,'nativeLogRoot':str(native_log),
+                            'contextRead':scenario=='source-context',
                             'argv':_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false'))}
                     proc.stdin.write((json.dumps(config)+'\n').encode());proc.stdin.flush()
                     while True:
@@ -464,7 +470,7 @@ def native_integration(codex, evidence, scenario=None):
                         args=message['args']
                         try:
                             if message['kind']=='sourceReady':
-                                if scenario!='owned-connection' or source!='pending-source':
+                                if not direct_connection or source!='pending-source':
                                     raise ValueError('source binding is not available')
                                 observed_source,observed_turn=args
                                 if (observed_source.get('cwd')!=plan['target']['cwd']
@@ -552,7 +558,7 @@ def native_integration(codex, evidence, scenario=None):
             stored=ledger_db.execute('SELECT revision,state FROM transfers WHERE id=?',(scenario,)).fetchone()
             if stored: save(ledger,{'revision':stored[0],'state':json.loads(stored[1])})
             save(root/'retained'/f'{scenario}-result.json',result);results.append(result)
-            if scenario in ('success','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection'):
+            if scenario in ('success','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection','source-context'):
                 if result['error'] or result['result']['status']!='handed-off':
                     raise RuntimeError('native handoff failed; inspect retained result')
                 expected_history=scenario!='ephemeral-source'
@@ -562,8 +568,14 @@ def native_integration(codex, evidence, scenario=None):
                 if scenario=='source-event-proposal' and (result['proposal']['respondCount']!=1
                         or result['proposal']['releaseCount']!=1 or result['proposal']['currentCount']!=1):
                     raise RuntimeError('native event dispatcher lifecycle mismatch')
-                if scenario=='owned-connection' and result.get('exitCode')!=0:
+                if direct_connection and result.get('exitCode')!=0:
                     raise RuntimeError('owned native connection failed to exit naturally')
+                if scenario=='source-context':
+                    observations=[v['observation'] for v in result.get('contextReplies',[])]
+                    if (len(observations)!=2 or observations[0]['state']!='unknown'
+                            or observations[1]['state']!='window-observed'
+                            or any(v['sourceReleaseAllowed'] is not False for v in observations)):
+                        raise RuntimeError('source context tool did not preserve unknown then observe fresh native usage')
             if scenario=='reject-intake' and (result['error'] is None or any(c['method']=='thread/unsubscribe' for c in result['calls'])): raise RuntimeError('rejected intake released source')
     finally:
         try:

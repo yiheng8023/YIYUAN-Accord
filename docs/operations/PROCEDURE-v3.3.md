@@ -2085,3 +2085,13 @@ accord-proposal-events-20260920-01只运行新增source-event-proposal案，未�
 同一组三个现有测试分别用于旧源码、当前源码和实际安装dev：missing_delivery_continues_then_real_files_allow_retirement、new_user_input_and_interrupt_cannot_inherit_a_continue_decision、unchanged_failure_does_not_loop_but_changed_observation_can_continue。各3/3通过，分别3.373/3.779/3.904秒。旧helper SHA927ba0d29f92272fb739fbf573ca8529f602ff965c94ed38a18453de1b934193；当前与安装helper均为c0936648a36d013a3ba692b8a81e826adf50707a6924012c8d19d61eda40e03c。对照使用任务临时目录，未修改共享安装、用户配置或旧标签，无模型调用；临时目录随测试回收。
 
 结论仅是这三类局部保护在两版都成立。未取得同事真实宿主/模型/任务/Hook记录，不能归因到具体机制，也不能宣称3.3已修复其反馈。现行目标仍是不依赖Plan/Goal的自主交付，并尊重用户选择、讨论/执行授权、进度反馈及必要决策和暂停；本项目多次等待“继续”的节奏不能自动当作产品标准。将反馈保留在既有A01/A03/A08普通任务与用户负担验证范围，不增加固定回合数、全局每步确认或未经确认的行为改动。
+
+## 推进节奏共识与源侧上下文查询（2026-09-20）
+
+用户进一步认可当前dev节奏，确认执行跨度应随不确定性、后果、反馈和参与意图调整；目标确定不等于路径/环境/权限确定。Agent负责主动校准，可自主解决的工作继续，必要判断交还用户，不以固定逐步确认或用户不断提醒实现连续性。已同步PLAN、F01/F03/F08基线、A01/A03/A08验收及实际入口Skill；同事3.2.1体验仍未归因，用户主观错误减少不被冒充版本因果证明。
+
+沿332fdb57具体连接的现有context和一次应答逻辑增加CONTEXT_OBSERVATION_TOOL/accord_inspect_context及replyContext。实际native请求锚定thread/turn，模型参数只准maxAgeMs，命名空间不符不应答，非法参数返回失败工具结果且不读其它身份；复用原answered锚和deadline，重复回复被拒。只读journal，不访问任务正文、checkpoint、权限或派发；unknown是可用查询的未知结果，不是容量或交接放行。连续性Skill和随包接口已说明首次事件时机及禁止不变轮询。
+
+accord-source-context-20260920-01预冻结10份执行源，真实CLI0.155.1源先调用context得到unknown，原生usage随后出现，第二个有界查询得到同一thread/turn/model的window-observed，之后固定授权提议沿原接管核心完成。6次本地固定响应、零真实模型/凭据，原件keep保持，ledger revision18、writer=target、pendingEffect=null并释放源订阅，3所属进程自然归零、4运行根回收。独立只读审查验证精确调用、参数/namespace、双次观察时序、源码hash链和后态；该案不证明模型自主择时、指导有效性或净价值。
+
+19项连接测试通过；最终开发/入口/交接/连接191项全部通过（164.973秒）。22文件候选3.3.0-dev.1+codex.20260920050306，SHA93b5c565a2fada8ac64722b39ea625e3cc32ba637668b9df4d9a1a4b49baccf1；共享安装仍为556ddfd4。没有新增外部依赖、状态服务、Goal/Plan激活或固定确认门槛；现有2220000/161/36000及5%字节余量保持。新构建和指导按新的源码CI核对，整体功能和发布验收仍未完成。

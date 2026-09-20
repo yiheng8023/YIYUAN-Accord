@@ -12,7 +12,7 @@ MODULE = ROOT / 'runtime' / 'codex-connection.cjs'
 NODE_SCENARIO = r'''
 const {PassThrough, Writable} = require('node:stream');
 const {performance} = require('node:perf_hooks');
-const {createOwnedAppServerConnection} = require(process.argv[1]);
+const {createOwnedAppServerConnection,CONTEXT_OBSERVATION_TOOL} = require(process.argv[1]);
 const out = new PassThrough(); let writes=[];
 const input = new Writable({write(c,e,done){writes.push(c.toString());done();}});
 const options={stdin:input,stdout:out,connectionId:'c1',hostVersion:'v1',maxJournalBytes:process.argv[2]?Number(process.argv[2]):undefined,maxMessageBytes:process.argv[3]==='oversize'?128:undefined};
@@ -33,6 +33,19 @@ const emit=(v, split=false)=>{const b=Buffer.from(JSON.stringify(v)+'\n'); if(sp
  } else if(process.argv[3]==='close-pending'){const rpc=c.transport.request('thread/read',{},until(60000)).catch(e=>e.message);const terminal=c.transport.waitTerminal('t','u',until(60000)).catch(e=>e.message);c.close();r={rpc:await rpc,terminal:await terminal};
  } else if(process.argv[3]==='stdin-error'){try{await c.transport.notify('x',{},NaN)}catch(e){r.invalid=e.message};input.destroy(new Error('write failed'));try{await c.transport.notify('initialized',{},until())}catch(e){r.error=e.message}
  } else if(process.argv[3]==='evict'){emit({jsonrpc:'2.0',id:3,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x',tool:'a',arguments:{reason:'r'}}});const q=await c.receiveRequest(()=>true,until());emit({method:'notice',params:{padding:'x'.repeat(100)}});try{const ch=c.proposalChannel(q,()=>({}));ch.subscribe(()=>{},q)}catch(e){r.error=e.message}
+ } else if(process.argv[3].startsWith('context-tool')){
+  const scenario=process.argv[3];
+  if(scenario!=='context-tool-unknown'){
+    const p=c.transport.request('thread/start',{},until());emit({id:'accord-owned:1',result:{thread:{id:'t'},model:'native-model'}});await p;
+    emit({method:'turn/started',params:{threadId:'t',turn:{id:'u'}}});emit({method:'thread/tokenUsage/updated',params:{threadId:'t',turnId:'u',tokenUsage:{modelContextWindow:1000,last:{totalTokens:100}}}});
+  }
+  const argumentsValue=scenario==='context-tool-override'?{threadId:'foreign',maxAgeMs:1000}:scenario==='context-tool-invalid-age'?{maxAgeMs:-1}:{};
+  emit({id:9,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x',tool:CONTEXT_OBSERVATION_TOOL.name,namespace:scenario==='context-tool-namespace'?'foreign':null,arguments:argumentsValue}});
+  const q=await c.receiveRequest(()=>true,until());const before=writes.length;
+  try{r.payload=await c.replyContext(q,until());}catch(e){r.error=e.message}
+  r.sent=writes.length-before;
+  if(r.sent){r.response=JSON.parse(writes[writes.length-1]);try{await c.replyContext(q,until())}catch(e){r.duplicate=e.message}}
+  r.totalAfter=writes.length-before;
  } else if(process.argv[3]==='expired-reply'){emit({id:9,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x'}});const q=await c.receiveRequest(()=>true,until());const ch=c.proposalChannel(q,()=>({}));try{await ch.respond({id:9,result:{}},performance.now()-1)}catch(e){r.expired=e.message}r.before=writes.length;await ch.respond({id:9,result:{}},until());r.after=writes.length;
  } else if(process.argv[3]==='null-error'){const p=c.transport.request('thread/read',{},until()).catch(e=>e.message);emit({id:'accord-owned:1',error:null});r={error:await p};
  } else if(process.argv[3]==='oversize'){out.write(Buffer.alloc(1024*1024,65));r={reason:c.context('t','u',100).reason,attached:out.listenerCount('data')};
@@ -120,3 +133,32 @@ class CodexConnectionTests(unittest.TestCase):
 
     def test_oversize_single_chunk_fails_before_frame_accumulation(self):
         self.assertEqual(self.run_case('oversize'), {'reason': 'native-connection-unavailable', 'attached': 0})
+
+    def test_context_tool_replies_once_using_native_request_identity(self):
+        result = self.run_case('context-tool-known')
+        observation = result['payload']['observation']
+        self.assertEqual(observation['conditions']['threadId'], 't')
+        self.assertEqual(observation['conditions']['model'], 'native-model')
+        self.assertEqual(observation['windowTokens'], 1000)
+        self.assertFalse(observation['sourceReleaseAllowed'])
+        self.assertTrue(result['response']['result']['success'])
+        self.assertEqual((result['sent'], result['totalAfter']), (1, 1))
+
+    def test_context_tool_preserves_absent_signals_as_unknown(self):
+        result = self.run_case('context-tool-unknown')
+        self.assertEqual(result['payload']['observation']['state'], 'unknown')
+        self.assertTrue(result['response']['result']['success'])
+        self.assertEqual(result['sent'], 1)
+
+    def test_context_arguments_cannot_override_identity_or_request_a_negative_age(self):
+        for scenario in ('context-tool-override', 'context-tool-invalid-age'):
+            with self.subTest(scenario=scenario):
+                result = self.run_case(scenario)
+                self.assertFalse(result['response']['result']['success'])
+                self.assertEqual(result['payload']['observation']['reason'], 'invalid-context-arguments')
+                self.assertNotIn('conditions', result['payload']['observation'])
+
+    def test_context_tool_does_not_answer_an_unrelated_namespace(self):
+        result = self.run_case('context-tool-namespace')
+        self.assertEqual(result['sent'], 0)
+        self.assertIn('exact owned context request', result['error'])

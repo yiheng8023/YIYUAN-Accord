@@ -383,6 +383,11 @@ ordered journal, provides exact-anchor replay/live delivery and derives context
 observations from the same native stream. It leaves process startup, initialization,
 durable ownership and semantic judgment with the authorized caller. Closing this
 module detaches its listeners and rejects waits without destroying injected streams.
+Controllers may expose its optional `accord_inspect_context` dynamic tool to the
+source. The connection replies from the actual request identity and native journal;
+model arguments cannot select another task or operation. Unknown first-use signals
+remain unknown. Source access to observations enables judgment but does not supply
+the judgment, permission, forecast or semantic verification itself.
 
 The packaged reference also distinguishes official daemon/proxy attachment from
 embedded clients and from starting an unrelated server. In the source-bound 0.155.1

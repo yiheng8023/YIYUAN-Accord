@@ -127,6 +127,7 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "sourceProposal": "prepareHandoff records a bound native tool proposal without dispatch; one-shot outer dispatch requires exact successful tool and source-turn receipts plus current bindings; same recorder and lease; no automatic crash replay",
                 "proposalEvents": "runHandoffProposal subscribes from the exact request anchor, replies once, correlates ordered native receipts and dispatches through the same core; monitors source drift through completion; releases only its listener; caller retains journal and connection",
                 "ownedConnection": "runtime/codex-connection.cjs accepts caller-owned Node stdio streams; bounded JSONL RPC, exact request-anchor replay and live events, native context from the same journal; no spawn, authentication, durable recorder, semantic verifier or automatic timing",
+                "sourceContextQuery": "optional CONTEXT_OBSERVATION_TOOL and replyContext expose read-only signals to the actual calling source; argument identity overrides and unrelated namespaces are rejected; unknown remains unknown and cannot authorize transfer",
                 "limits": "no-process-or-hook-startup; no-automatic-timing-or-default-Desktop-control; no-goal-activation; no-archive-or-delete; ambiguous-effects-require-reconciliation; unsubscribe-is-not-unload",
             }
         contract["entry"] = "direct-native-input-duties"

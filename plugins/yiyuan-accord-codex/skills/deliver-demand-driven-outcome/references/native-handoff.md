@@ -89,6 +89,24 @@ disconnect, reroute, compaction or expiry leaves affected observations unknown;
 it does not infer authority, current-input reconciliation or a need to transfer.
 Use the existing assessment with independently checked task state and forecasts.
 
+To expose those observations to a source Agent, register the exported
+`CONTEXT_OBSERVATION_TOOL` (`accord_inspect_context`) alongside any required
+dynamic tools at `thread/start`. Its only optional argument is `maxAgeMs`;
+the default is 30000 ms. On the exact corresponding native tool request, call
+`connection.replyContext(request, deadline)`. It derives the thread/turn from
+that retained request, reads the same native journal and replies once with
+`yiyuan-accord-native-context-reply/v1`. It returns the sent payload to the
+controller as well. Invalid arguments receive a failed tool result without
+identity or operation overrides; foreign requests/namespaces are not answered.
+
+An unknown observation is a successful read of unavailable evidence, not known
+capacity. The first dynamic call may precede the first native usage event; later
+completed responses may supply new signals. Do not poll an unchanged absence or
+relabel the sample time. This query supplies no task text, semantics, forecast,
+permission or handoff decision. The Agent/controller must still decide the next
+useful span and satisfy the existing transfer conditions. Ordinary Desktop/IDE
+installations do not acquire this tool through the plugin's MCP registration.
+
 Frames default to 1 MiB and the in-memory journal to 4 MiB; pending work and
 retained request handling are also bounded. These are transport limits, not model
 capacity. An evicted anchor cannot be replayed; the caller must reconcile instead
