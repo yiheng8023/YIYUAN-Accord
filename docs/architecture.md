@@ -378,6 +378,12 @@ record and execution core. Preparation only records a queued proposal; an outer,
 single-use dispatcher requires the exact tool result, completed source turn and
 current bindings before native takeover. Interrupted sources and controller loss
 remain reconciliation cases, not automatic replay.
+`reconcileContinuation` closes only a bound first-continuation acknowledgement loss:
+it correlates original RPC evidence and current native state, obtains independent
+authority/effect verification, and uses the existing recorder CAS with readback.
+The original failure is retained, the target writer is unchanged, and a matching
+repeat returns a stored snapshot. Neither path authorizes new work or source release.
+The host read may refresh its own history projection; this is not a new native turn.
 `runHandoffProposal` provides the corresponding event coordination for an owned
 ordered receiver: subscribe from the exact request, send once, correlate native
 receipts, re-read current bindings and invoke the same dispatcher. Source activity

@@ -159,7 +159,7 @@ function exactKeys(value, required, optional, name) {
   }
 }
 
-function validatePlan(raw, wallNowMs) {
+function validatePlan(raw, wallNowMs, historical = false) {
   exactKeys(raw,
     ['transferId', 'scopeRef', 'authorityRef', 'stateRef', 'source', 'target', 'handoffText',
       'continuation', 'deadlineMs', 'recoveryDeadlineMs'], [], 'plan');
@@ -183,10 +183,10 @@ function validatePlan(raw, wallNowMs) {
   }
   cloneData(raw.continuation.sandboxPolicy);
   for (const name of ['deadlineMs', 'recoveryDeadlineMs']) {
-    if (!Number.isSafeInteger(raw[name]) || raw[name] <= wallNowMs) {
+    if (!Number.isSafeInteger(raw[name]) || raw[name] <= 0 || (!historical && raw[name] <= wallNowMs)) {
       throw new TypeError(`plan.${name} must be a future absolute millisecond deadline`);
     }
-    if (raw[name] - wallNowMs > MAX_TIMER_MS) {
+    if (!historical && raw[name] - wallNowMs > MAX_TIMER_MS) {
       throw new TypeError(`plan.${name} exceeds the supported callback timer range`);
     }
   }
@@ -1418,6 +1418,177 @@ async function runHandoffProposal(rawPlan, rawDependencies, nativeRequest, chann
   return createExecution(rawPlan, rawDependencies).runProposal(nativeRequest, channel);
 }
 
+// Resolve only an acknowledged-by-native first continuation whose callback lost
+// the receipt. No native mutation method, new writer, release or storage engine;
+// the host's read API may refresh its own persisted history projection.
+async function reconcileContinuation(rawInput, dependencies) {
+  const clock = {wall: Date.now(), monotonic: performance.now()};
+  let input, transport, recorder, verify;
+  try {
+    input = immutable(rawInput);
+    exactKeys(input, ['transferId', 'scopeRef', 'authorityRef', 'stateRef', 'deadlineMs', 'receipt'], [], 'recovery');
+    for (const key of ['transferId', 'scopeRef', 'authorityRef', 'stateRef']) text(input[key], key);
+    if (!Number.isSafeInteger(input.deadlineMs) || input.deadlineMs <= clock.wall ||
+        input.deadlineMs - clock.wall > MAX_TIMER_MS) throw new TypeError('fresh bounded recovery deadline required');
+    exactKeys(input.receipt, ['requestRef', 'request', 'response'], [], 'receipt');
+    exactKeys(input.receipt.request, ['id', 'method', 'params'], ['jsonrpc'], 'receipt.request');
+    exactKeys(input.receipt.response, ['id', 'result'], ['jsonrpc'], 'receipt.response');
+    for (const frame of [input.receipt.request, input.receipt.response]) {
+      if (Object.hasOwn(frame, 'jsonrpc') && frame.jsonrpc !== '2.0') throw new TypeError('invalid JSON-RPC version');
+    }
+    exactKeys(dependencies, ['transport', 'recorder', 'verify'], [], 'dependencies');
+    ({transport, recorder, verify} = dependencies);
+    if (!plainObject(transport) || !plainObject(recorder) || typeof transport.request !== 'function' ||
+        typeof recorder.read !== 'function' || typeof recorder.compareAndSet !== 'function' ||
+        typeof verify !== 'function') throw new TypeError('bound reader, CAS, transport and verifier required');
+    text(transport.connectionId, 'connectionId'); text(transport.hostVersion, 'hostVersion');
+  } catch (error) {
+    throw new CarrierHandoffError('INVALID_INPUT', error.message);
+  }
+  const {transferId} = input;
+  const deadline = clock.monotonic + input.deadlineMs - clock.wall;
+  const binding = immutable({connectionId: transport.connectionId, hostVersion: transport.hostVersion});
+  const callbacks = {request: transport.request, read: recorder.read, cas: recorder.compareAndSet, verify};
+  let commitAttempted = false;
+  const reject = (code, message) => fail(code, message, {stage: 'continuation-reconcile', transferId, reconciliationRequired: true});
+  const checkBinding = () => {
+    if (transport.connectionId !== binding.connectionId || transport.hostVersion !== binding.hostVersion ||
+        transport.request !== callbacks.request || recorder.read !== callbacks.read ||
+        recorder.compareAndSet !== callbacks.cas || dependencies.verify !== callbacks.verify) {
+      reject('RECOVERY_BINDING_CHANGED', 'recovery callbacks or connection changed');
+    }
+  };
+  async function call(name, args) {
+    checkBinding(); before(deadline, name, transferId);
+    const value = immutable(await bounded(() => Reflect.apply(callbacks[name], undefined, args), deadline, name));
+    checkBinding(); before(deadline, name, transferId);
+    return value;
+  }
+  function snapshot(value) {
+    exactKeys(value, ['revision', 'state', 'lease'], [], 'recorder snapshot');
+    const {state, lease, revision} = value;
+    if (!Number.isSafeInteger(revision) || revision < 0 || !plainObject(state) || !plainObject(lease)) {
+      reject('INVALID_RECOVERY_STATE', 'invalid recorder revision/state/lease');
+    }
+    const plan = validatePlan(state.plan, clock.wall, true);
+    if (!plainObject(state.connection)) reject('INVALID_RECOVERY_STATE', 'original connection is unavailable');
+    text(state.connection.connectionId, 'original connection'); text(state.connection.hostVersion, 'original host version');
+    for (const key of ['transferId', 'scopeRef', 'authorityRef', 'stateRef']) {
+      if (state[key] !== input[key] || plan[key] !== input[key]) reject('RECOVERY_BINDING_MISMATCH', 'record and current references differ');
+    }
+    if (state.planDigest !== digest(plan) || canonical(state.source) !== canonical(plan.source) || state.writer !== 'target' ||
+        !plainObject(state.target) || state.target.threadId === plan.source.threadId ||
+        state.writerThreadId !== state.target.threadId || lease.writerThreadId !== state.target.threadId ||
+        lease.scopeRef !== input.scopeRef || lease.transferId !== transferId || state.sourceRecovery !== 'retained') {
+      reject('INVALID_RECOVERY_STATE', 'target writer or original plan is not bound');
+    }
+    text(state.target.threadId, 'target thread'); text(lease.token, 'lease token');
+    return plan;
+  }
+  const receiptDigest = digest(input.receipt);
+  try {
+    const current = await call('read', [transferId, input.scopeRef, deadline]);
+    const plan = snapshot(current);
+    const {state, lease, revision} = current;
+    const targetId = state.target.threadId;
+    const result = (status, observed) => immutable({status, transferId, scopeRef: input.scopeRef,
+      recorderRevision: observed.revision, lease: observed.lease, writer: 'target',
+      targetThreadId: targetId, continuationTurnId: observed.state.reconciliation.turn.turnId,
+      sourceReleaseAllowed: false, continuationAllowed: false,
+      currentNativeStateChecked: status === 'continuation-reconciled',
+      claimLimit: 'Observed recorder transition only; no new execution, source release or task completion permission.'});
+    const already = state.phase === 'continuation-reconciled';
+    const pending = already ? state.reconciliation?.originalPendingEffect : state.pendingEffect;
+    const reference = nativeRequestReference({rpcRequest: input.receipt.requestRef}, 'turn/start', state.connection || {});
+    const expectedParams = {threadId: targetId, input: [{type: 'text', text: plan.continuation.input}],
+      ...(Object.hasOwn(plan.target, 'effort') ? {effort: plan.target.effort} : {}), sandboxPolicy: plan.continuation.sandboxPolicy};
+    if ((!already && state.phase !== 'reconciliation-required') || state.continuationTurn !== null ||
+        state.failure?.code !== 'NATIVE_EFFECT_UNKNOWN' || state.failure?.stage !== 'continuation:turn-start' ||
+        state.failure.targetThreadId !== targetId || state.failure.targetTurnId !== null || state.failure.targetTurnTerminal !== false ||
+        !plainObject(pending) || pending.method !== 'turn/start' || !reference ||
+        canonical(reference) !== canonical(pending.requestRef) || canonical(pending.params) !== canonical(expectedParams) ||
+        input.receipt.request.id !== reference.requestId || input.receipt.request.method !== reference.method ||
+        canonical(input.receipt.request.params) !== canonical(expectedParams) || input.receipt.response.id !== reference.requestId ||
+        (!already && Object.hasOwn(state, 'reconciliation'))) {
+      reject('RECOVERY_NOT_APPLICABLE', 'only the bound unknown first continuation can be reconciled');
+    }
+    const turnId = turnFrom(input.receipt.response.result, targetId, 'continuation-reconcile', transferId).id;
+    text(turnId, 'continuation turn');
+    if (!Array.isArray(state.intakeTurns) || state.intakeTurns.length === 0 ||
+        state.intakeTurns.some(t => !plainObject(t) || t.threadId !== targetId || typeof t.turnId !== 'string')) {
+      reject('INVALID_RECOVERY_STATE', 'intake turn identities unavailable');
+    }
+    const ids = [...state.intakeTurns.map(t => t.turnId), turnId];
+    if (new Set(ids).size !== ids.length) reject('RECOVERY_EVIDENCE_CONFLICT', 'continuation reused an intake identity');
+    if (already) {
+      const saved = state.reconciliation;
+      exactKeys(saved, ['kind', 'receiptDigest', 'requestRef', 'originalPendingEffect', 'originalFailure',
+        'turn', 'targetReadDigest', 'verificationSourceRef', 'connection'], [], 'stored reconciliation');
+      exactKeys(saved.connection, ['connectionId', 'hostVersion'], [], 'stored recovery connection');
+      exactKeys(saved.turn, ['threadId', 'turnId', 'status'], [], 'stored recovery turn');
+      text(saved.connection.connectionId, 'stored recovery connection');
+      text(saved.connection.hostVersion, 'stored recovery version');
+      if (typeof saved.targetReadDigest !== 'string' || !/^[a-f0-9]{64}$/.test(saved.targetReadDigest)) {
+        reject('RECOVERY_EVIDENCE_CONFLICT', 'stored native read digest is unavailable or malformed');
+      }
+      if (state.pendingEffect !== null || saved.kind !== 'first-continuation' || saved.receiptDigest !== receiptDigest ||
+          canonical(saved.requestRef) !== canonical(reference) || canonical(saved.originalFailure) !== canonical(state.failure) ||
+          saved.turn?.threadId !== targetId || saved.turn?.turnId !== turnId || saved.turn?.status !== 'completed') {
+        reject('RECOVERY_EVIDENCE_CONFLICT', 'stored reconciliation does not match this receipt');
+      }
+      text(saved.verificationSourceRef, 'stored verification source');
+      return result('already-reconciled', current);
+    }
+    const targetRead = await call('request', ['thread/read', {threadId: targetId, includeTurns: true}, deadline]);
+    const thread = threadFrom(targetRead, targetId, 'continuation-reconcile', transferId);
+    if (!['idle', 'notLoaded'].includes(thread.status?.type) || !Array.isArray(thread.turns) ||
+        thread.turns.length !== ids.length || thread.turns.some((t, i) => t.id !== ids[i] || t.status !== 'completed')) {
+      reject('RECOVERY_NATIVE_MISMATCH', 'native target is active, changed or lacks the exact completed turns');
+    }
+    const observedTurn = thread.turns[thread.turns.length - 1];
+    const inputs = Array.isArray(observedTurn.items) ? observedTurn.items.filter(i => i.type === 'userMessage') : [];
+    if (inputs.length !== 1 || inputs[0].content?.length !== 1 || inputs[0].content[0]?.type !== 'text' ||
+        inputs[0].content[0].text !== plan.continuation.input) {
+      reject('RECOVERY_NATIVE_MISMATCH', 'native continuation input does not match the bound action');
+    }
+    const verdict = await call('verify', ['continuation-reconcile', immutable({input, ledger: current,
+      currentConnection: binding, originalConnection: state.connection, targetRead, observedTurn}), deadline]);
+    if (verdict.decision !== 'allow' || ['scopeRef', 'authorityRef', 'stateRef'].some(k => verdict[k] !== input[k]) ||
+        ['sourceRecoveryReady', 'singleWriter', 'effectsVerified', 'priorAttemptQuiesced',
+          'receiptVerified', 'reconciliationAuthorized'].some(k => verdict[k] !== true)) {
+      reject('VERIFICATION_DENIED', 'current recovery authority, effects or writer verification denied');
+    }
+    text(verdict.sourceRef, 'verification source');
+    const next = immutable({...state, phase: 'continuation-reconciled', pendingEffect: null,
+      expectedLease: lease, observedLease: lease,
+      reconciliation: {kind: 'first-continuation', receiptDigest, requestRef: reference,
+        originalPendingEffect: pending, originalFailure: state.failure,
+        turn: {threadId: targetId, turnId, status: 'completed'},
+        targetReadDigest: digest(targetRead), verificationSourceRef: verdict.sourceRef, connection: binding}});
+    checkBinding(); before(deadline, 'reconciliation commit', transferId);
+    commitAttempted = true;
+    const committed = await call('cas', [transferId, revision, next, lease, deadline]);
+    if (!Number.isSafeInteger(committed.revision) || committed.revision <= revision || !plainObject(committed.lease) ||
+        committed.lease.scopeRef !== input.scopeRef || committed.lease.transferId !== transferId ||
+        committed.lease.writerThreadId !== targetId) reject('INVALID_RECORDER_LEASE', 'reconciliation changed scope/writer or returned an invalid revision');
+    text(committed.lease.token, 'committed lease token');
+    const confirmed = await call('read', [transferId, input.scopeRef, deadline]);
+    snapshot(confirmed);
+    if (confirmed.revision !== committed.revision || canonical(confirmed.lease) !== canonical(committed.lease) ||
+        canonical(confirmed.state) !== canonical(next)) reject('RECORDER_READBACK_CHANGED', 'committed reconciliation was not read back exactly');
+    return result('continuation-reconciled', confirmed);
+  } catch (cause) {
+    if (commitAttempted) throw new CarrierHandoffError('RECORDER_COMMIT_UNKNOWN', 'reconciliation commit requires a fresh read; do not replay', {
+      stage: 'continuation-reconcile', transferId, reconciliationRequired: true,
+      details: {receiptDigest, cause: errorData(cause)},
+    });
+    if (cause instanceof CarrierHandoffError) throw cause;
+    throw new CarrierHandoffError('RECONCILIATION_HELD', 'recovery conditions could not be verified', {
+      stage: 'continuation-reconcile', transferId, reconciliationRequired: true, details: {cause: errorData(cause)},
+    });
+  }
+}
+
 function errorData(error) {
   if (!error || typeof error !== 'object') return {name: typeof error, message: String(error)};
   const data = {
@@ -1428,4 +1599,4 @@ function errorData(error) {
   return data;
 }
 
-module.exports = {HANDOFF_PROPOSAL_TOOL, prepareHandoff, runHandoffProposal, handoff, CarrierHandoffError};
+module.exports = {HANDOFF_PROPOSAL_TOOL, prepareHandoff, runHandoffProposal, handoff, reconcileContinuation, CarrierHandoffError};

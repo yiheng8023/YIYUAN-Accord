@@ -3,7 +3,7 @@
 // Python App Server controller; mock mode exercises failure paths without a model.
 const readline = require('node:readline');
 const {performance} = require('node:perf_hooks');
-const {handoff, prepareHandoff, runHandoffProposal, HANDOFF_PROPOSAL_TOOL} = require('../../runtime/carrier-handoff.cjs');
+const {handoff, prepareHandoff, runHandoffProposal, reconcileContinuation, HANDOFF_PROPOSAL_TOOL} = require('../../runtime/carrier-handoff.cjs');
 const rl = readline.createInterface({input: process.stdin});
 const pending = new Map();
 let sequence = 0, started = false;
@@ -33,7 +33,7 @@ async function runOwnedConnection(config) {
     fs.writeSync(stdout,chunk);
   };
   let result=null,error=null,context=null,exitCode=null,closeState=null;
-  let lastRpcRequest=null,fault=null,recovery=null;
+  let lastRpcRequest=null,fault=null,recovery=null,reconciliation=null;
   const deadline=performance.now()+45000;
   const contextReplies=[];
   const captureMessage=event=>capture(Buffer.from(String(event.data)+'\n','utf8'));
@@ -114,7 +114,18 @@ async function runOwnedConnection(config) {
         const targetRead=await t.request('thread/read',{threadId,includeTurns:true},deadline);
         recovery={requestRef:fault.requestRef,originalRequest:fault.request,originalResponse:fault.response,
           terminal,targetRead,scope:'surviving caller readback; no replay, lease change or source unsubscribe'};
-      }catch(e){recovery={error:e.message};}
+        const remaining=Math.floor(deadline-performance.now());
+        if(remaining<=0)throw Error('native recovery observation deadline expired');
+        const input={...Object.fromEntries(['transferId','scopeRef','authorityRef','stateRef'].map(k=>[k,config.plan[k]])),
+          deadlineMs:Date.now()+remaining,
+          receipt:{requestRef:fault.requestRef,request:fault.request,
+            response:{id:fault.request.id,result:fault.response}}};
+        const dependencies={transport:t,recorder:{read:(...args)=>remote('readRecord',args.slice(0,2)),
+          compareAndSet:(...args)=>remote('compareAndSet',args.slice(0,4))},
+          verify:(stage,facts,limit)=>remote('verify',[stage,facts,Math.max(0,limit-performance.now())])};
+        reconciliation={first:await reconcileContinuation(input,dependencies)};
+        reconciliation.repeated=await reconcileContinuation(input,dependencies);
+      }catch(e){recovery={...(recovery||{}),error:e.message,errorCode:e.code};}
     }
   } finally {
     closeState=connection?.close();
@@ -130,7 +141,7 @@ async function runOwnedConnection(config) {
       if(ended)await Promise.race([ended,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('owned transport exit timed out')),10000)})]);
     } finally {clearTimeout(timer);native?.stdout.off('data',capture);fs.closeSync(stderr);fs.closeSync(stdout);fs.closeSync(requests);}
   }
-  process.stdout.write(JSON.stringify({kind:'done',result,error,recovery,context,contextReplies,exitCode,socketCloseCode,
+  process.stdout.write(JSON.stringify({kind:'done',result,error,recovery,reconciliation,context,contextReplies,exitCode,socketCloseCode,
     transportKind:socket?'websocket':'stdio',closeState,rawBytes})+'\n');
   rl.close();process.stdin.destroy();
 }
@@ -372,7 +383,69 @@ async function run(config) {
     } else result = await handoff(plan, {transport, recorder, verify});
   }
     catch (e) {error = {name:e.name, message:e.message, code:e.code, reconciliationRequired:e.reconciliationRequired, state:e.state, details:e.details};}
-  process.stdout.write(JSON.stringify({kind:'done', result, error, calls, snapshots, verdicts, concurrent, proposal}) + '\n');
+  let reconciled=null;
+  if(config.reconcile){
+    const mode=config.reconcile, originalState=clone(state), originalNow=Date.now;
+    Date.now=()=>originalNow()+10000; // Original transfer deadlines are now expired.
+    const requestRef=state.pendingEffect?.requestRef;
+    const input={transferId:plan.transferId,scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+      deadlineMs:Date.now()+2000,receipt:{requestRef,request:{id:requestRef?.requestId,method:'turn/start',params:clone(state.pendingEffect.params)},
+        response:{id:requestRef?.requestId,result:{turn:{id:'turn-2',status:'inProgress'}}}}};
+    const recoveryCalls=[];let reads=0,commits=0,checks=0;
+    const recoveryTransport={connectionId:'recovered-connection',hostVersion:'fixture-host',async request(method,params){
+      recoveryCalls.push({method,params});
+      const turns=[...state.intakeTurns.map(t=>({id:t.turnId,status:'completed',items:[]})),
+        {id:'turn-2',status:'completed',items:[{type:'userMessage',content:[{type:'text',text:plan.continuation.input}]}]}];
+      if(mode==='extra-turn')turns.push({id:'other-turn',status:'completed',items:[]});
+      if(mode==='wrong-input')turns[turns.length-1].items[0].content[0].text='Another action';
+      if(mode==='failed-turn')turns[turns.length-1].status='failed';
+      return {thread:{id:params.threadId,status:{type:mode==='active-target'?'active':mode==='idle-target'?'idle':'notLoaded'},turns}};
+    }};
+    const recoveryRecorder={async read(){
+      reads++;const value={revision,state:clone(state),lease:clone(lease)};
+      if(mode==='readback-changed' && commits)value.state.reconciliation.verificationSourceRef='changed';
+      return value;
+    },async compareAndSet(...args){
+      commits++;
+      if(mode==='race')revision++;
+      if(mode==='false-ack')return {revision:revision+1,lease:clone(lease)};
+      const committed=await recorder.compareAndSet(...args);
+      if(mode==='lost-cas-ack')throw Error('CAS acknowledgement lost after durable write');
+      if(mode==='rotate-lease'){lease={...lease,token:'rotated-token'};committed.lease=clone(lease);}
+      if(mode==='foreign-lease')committed.lease.writerThreadId='foreign';
+      return committed;
+    }};
+    const recoveryVerify=async()=>{
+      checks++;const value={decision:'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+        sourceRef:'independent-recovery-evidence',sourceRecoveryReady:true,singleWriter:true,effectsVerified:true,
+        priorAttemptQuiesced:true,receiptVerified:true,reconciliationAuthorized:true};
+      if(['effectsVerified','priorAttemptQuiesced','receiptVerified','reconciliationAuthorized'].includes(mode))value[mode]=false;
+      if(mode==='binding-drift')recoveryTransport.connectionId='foreign';
+      return value;
+    };
+    if(mode==='foreign-request')input.receipt.request.id='other-request';
+    if(mode==='foreign-response')input.receipt.response.id='other-response';
+    if(mode==='foreign-scope')input.scopeRef='other-scope';
+    if(mode==='wrong-writer')lease.writerThreadId='source-1';
+    if(mode==='wrong-phase')state.phase='prepared';
+    if(mode==='altered-plan')state.plan.continuation.input='Changed old plan';
+    if(mode==='intake-reused')input.receipt.response.result.turn.id=state.intakeTurns[0].turnId;
+    const invoke=async()=>{try{return {result:await reconcileContinuation(input,{transport:recoveryTransport,
+      recorder:recoveryRecorder,verify:recoveryVerify})};}catch(e){return {error:{code:e.code,message:e.message,reconciliationRequired:e.reconciliationRequired}};}};
+    const first=await invoke();let second=null;
+    if(mode.startsWith('corrupt-')){
+      if(mode==='corrupt-missing-digest')delete state.reconciliation.targetReadDigest;
+      if(mode==='corrupt-digest')state.reconciliation.targetReadDigest='not-a-digest';
+      if(mode==='corrupt-connection')state.reconciliation.connection.hostVersion='';
+      if(mode==='corrupt-extra')state.reconciliation.extra=true;
+      if(mode==='corrupt-turn')state.reconciliation.turn.turnId='foreign-turn';
+      second=await invoke();
+    }
+    if(mode==='success'||mode==='lost-cas-ack')second=await invoke();
+    if(mode==='different-receipt'){input.receipt.response.result.turn.id='other-turn';second=await invoke();}
+    reconciled={first,second,reads,commits,checks,calls:recoveryCalls,originalState,state:clone(state),lease:clone(lease)};
+  }
+  process.stdout.write(JSON.stringify({kind:'done', result, error, calls, snapshots, verdicts, concurrent, proposal,reconciled}) + '\n');
   rl.close(); process.stdin.destroy();
 }
 rl.on('line', line => {

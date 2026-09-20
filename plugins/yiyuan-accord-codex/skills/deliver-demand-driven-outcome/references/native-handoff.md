@@ -11,6 +11,8 @@ The CommonJS module exports `handoff(plan, {transport, recorder, verify})` and
 `runHandoffProposal` for the
 [source proposal path](#source-proposal-and-outer-dispatch). It opens no process,
 connection, account or recovery service.
+`reconcileContinuation` resolves only a verified first-continuation acknowledgement
+loss in the existing recorder, as described below; it does not resume a handoff.
 Use an existing suitable controller or establish one within current authority;
 installation does not give ordinary Desktop/IDE Hooks control of those tasks.
 The caller decides when a transfer is needed from current evidence and owns the
@@ -367,6 +369,56 @@ JSONL files alone does not relocate those references. Use an evidenced native
 migration/restore route with resolvable lineage; do not rewrite database paths to
 manufacture acceptance. A fresh process reading restored state does not establish
 a resumed writer, a valid business workspace or current permission to continue.
+
+## Reconcile a verified first continuation
+
+Call `reconcileContinuation(input, {transport, recorder, verify})` only for an
+existing `reconciliation-required` record whose writer already is the target and
+whose pending effect is the first continuation's failed `turn/start` acknowledgement.
+It does not resolve arbitrary effects, change writer, start/resume a native task,
+enable modes, unsubscribe the source or authorize subsequent execution.
+
+`input` has exactly `transferId`, `scopeRef`, `authorityRef`, `stateRef`, a fresh
+absolute UTC `deadlineMs`, and `receipt: {requestRef, request, response}`. Supply
+the retained original JSON-RPC request and successful response, not reconstructed
+model reports. Current references must match the frozen plan and record. The old
+plan's expired deadlines are evidence only; they cannot renew work or authority.
+
+The ordinary `handoff` recorder contract is unchanged. This operation needs:
+
+- `read(transferId, scopeRef, deadline)` returns an atomic current snapshot
+  `{revision, state, lease}`, including the actual active scope lease.
+- `compareAndSet(transferId, revision, nextState, expectedLease, deadline)` uses
+  the existing atomic revision/lease fence. Scope, transfer and target writer stay
+  fixed; the store may rotate its lease token. Persist the supplied state before
+  acknowledging. Deadlines use the same monotonic clock as the other callbacks.
+
+The helper correlates the pending reference, full request parameters and response,
+then requests the target's full turns with `thread/read`. Exactly the recorded
+intake turns and this completed continuation must be present, with matching input
+and no additional/active turn. It uses no native mutation method; the host read
+may itself refresh a persisted history projection for a loaded thread.
+
+`verify("continuation-reconcile", facts, deadline)` receives the current input,
+atomic ledger snapshot, original/current connections, native target read and
+observed turn. Return matching scope/authority/state, a sourced `sourceRef`,
+`decision: "allow"`, and true `sourceRecoveryReady`, `singleWriter`, `effectsVerified`,
+`priorAttemptQuiesced`, `receiptVerified`, `reconciliationAuthorized`. Independently
+verify original receipt provenance, consequential effects including native read
+housekeeping, current pauses/authority, ownership and that the prior attempt can
+no longer dispatch. The controller process itself need not be killed. Booleans
+without evidence are not a verifier.
+
+One CAS records `continuation-reconciled`, clears only this active pending effect
+and preserves its original pending/failure evidence in `reconciliation`. A final
+atomic read must match the commit. Conflicts, late or malformed acknowledgements
+hold with no automatic retry. After uncertain commit, a fresh invocation with the
+same receipt can return `already-reconciled` from an exact stored transition;
+different evidence cannot replace it. That shortcut checks storage only, not
+current native/business state. Both results leave `sourceReleaseAllowed` and
+`continuationAllowed` false. These flags do not revoke existing user authorization;
+they prevent deriving it from this record alone. The caller establishes any later
+action from current authority and conditions, without inventing another human gate.
 
 ## Event-driven proposal dispatch
 

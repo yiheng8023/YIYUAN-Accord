@@ -85,7 +85,7 @@ or unknown effects and unfinished work. On recovery, reuse valid results, reconc
 loss and inspect the next necessary source. Repeated reads or renewals without
 progress call for changing the work unit, representation or permitted topology.
 
-For a fresh-task transfer through an owned App Server controller, read the
+For a fresh-task transfer or its unresolved effects through an owned App Server controller, read the
 [native handoff interface](../deliver-demand-driven-outcome/references/native-handoff.md)
 before integration. The adapter coordinates caller-supplied transport, durable
 writer ownership and independent verification; the caller owns timing and recovery.

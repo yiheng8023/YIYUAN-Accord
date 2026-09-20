@@ -27,6 +27,62 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)
 
+    def recovery_case(self, mode):
+        return self.run_case('lost-continuation-ack',reconcile=mode,rpcFailureRef={
+            'connectionId':'test-connection','hostVersion':'fixture-host',
+            'requestId':'original-continuation-request','method':'turn/start'})['reconciled']
+
+    def test_recovery_reconciles_one_completed_effect_and_retains_failure_evidence(self):
+        r=self.recovery_case('success')
+        self.assertEqual(r['first']['result']['status'],'continuation-reconciled')
+        self.assertEqual(r['second']['result']['status'],'already-reconciled')
+        self.assertFalse(r['second']['result']['currentNativeStateChecked'])
+        self.assertEqual((r['commits'],r['checks']), (1,1))
+        self.assertEqual([c['method'] for c in r['calls']],['thread/read'])
+        self.assertEqual(r['state']['writerThreadId'],r['originalState']['writerThreadId'])
+        self.assertIsNone(r['state']['pendingEffect'])
+        self.assertEqual(r['state']['reconciliation']['originalPendingEffect'],r['originalState']['pendingEffect'])
+        self.assertEqual(r['state']['reconciliation']['originalFailure'],r['originalState']['failure'])
+        for key in ['sourceReleaseAllowed','continuationAllowed']:
+            self.assertFalse(r['first']['result'][key])
+
+    def test_recovery_holds_conflicting_identity_current_state_and_missing_verification(self):
+        modes=['foreign-request','foreign-response','foreign-scope','wrong-writer','wrong-phase',
+               'altered-plan','intake-reused','extra-turn','wrong-input','failed-turn','active-target',
+               'effectsVerified','priorAttemptQuiesced','receiptVerified','reconciliationAuthorized','binding-drift']
+        for mode in modes:
+            with self.subTest(mode=mode):
+                r=self.recovery_case(mode)
+                self.assertIn('error',r['first'])
+                self.assertEqual(r['commits'],0)
+                self.assertIsNotNone(r['state']['pendingEffect'])
+                self.assertTrue(all(c['method']=='thread/read' for c in r['calls']))
+
+    def test_recovery_unknown_commit_is_not_replayed_and_readback_catches_false_receipts(self):
+        for mode in ['race','false-ack','readback-changed','foreign-lease']:
+            with self.subTest(mode=mode):
+                r=self.recovery_case(mode)
+                self.assertEqual(r['first']['error']['code'],'RECORDER_COMMIT_UNKNOWN')
+                self.assertEqual(r['commits'],1)
+                self.assertEqual(len(r['calls']),1)
+        r=self.recovery_case('lost-cas-ack')
+        self.assertEqual(r['first']['error']['code'],'RECORDER_COMMIT_UNKNOWN')
+        self.assertEqual(r['second']['result']['status'],'already-reconciled')
+        self.assertEqual((r['commits'],len(r['calls'])),(1,1))
+        r=self.recovery_case('rotate-lease')
+        self.assertEqual(r['first']['result']['lease']['token'],'rotated-token')
+        self.assertEqual(self.recovery_case('idle-target')['first']['result']['status'],'continuation-reconciled')
+        r=self.recovery_case('different-receipt')
+        self.assertEqual(r['first']['result']['status'],'continuation-reconciled')
+        self.assertIn('error',r['second'])
+        self.assertEqual(r['commits'],1)
+        for mode in ['corrupt-missing-digest','corrupt-digest','corrupt-connection','corrupt-extra','corrupt-turn']:
+            with self.subTest(mode=mode):
+                r=self.recovery_case(mode)
+                self.assertEqual(r['first']['result']['status'],'continuation-reconciled')
+                self.assertIn('error',r['second'])
+                self.assertEqual((r['commits'],len(r['calls'])),(1,1))
+
     def test_event_channel_drives_one_dispatch_and_releases_only_its_listener(self):
         r = self.run_case('proposal-event-success')
         self.assertIsNone(r['error'])
@@ -568,7 +624,23 @@ def native_integration(codex, evidence, scenario=None):
                             elif message['kind']=='waitTerminal': value=terminal(args[0],args[1],args[2])
                             elif message['kind']=='begin':
                                 value=record_begin(*args)
+                            elif message['kind']=='readRecord':
+                                transfer_id,scope_ref=args
+                                if transfer_id!=scenario or scope_ref!=plan['scopeRef']:
+                                    raise ValueError('foreign recovery record')
+                                ledger_db.execute('BEGIN')
+                                try:
+                                    row=ledger_db.execute('SELECT revision,state FROM transfers WHERE id=?',(transfer_id,)).fetchone()
+                                    owner,active,token=ledger_db.execute('SELECT owner,active,token FROM scopes WHERE scope=?',(scope_ref,)).fetchone()
+                                    value={'revision':row[0],'state':json.loads(row[1]),'lease':{
+                                        'scopeRef':scope_ref,'transferId':active,'token':token,'writerThreadId':owner}}
+                                    ledger_db.execute('COMMIT')
+                                except BaseException:
+                                    ledger_db.execute('ROLLBACK');raise
                             elif message['kind']=='compareAndSet':
+                                if args[2].get('phase')=='continuation-reconciled':
+                                    before=ledger_db.execute('SELECT revision,state FROM transfers WHERE id=?',(scenario,)).fetchone()
+                                    save(root/'retained/reconciliation-before.json',{'revision':before[0],'state':json.loads(before[1])})
                                 value=record_cas(*args)
                             elif message['kind'] in ('proposalEvidence','proposalEvents'):
                                 if proposed is None or args[0].get('id')!=proposed['id']:
@@ -600,6 +672,10 @@ def native_integration(codex, evidence, scenario=None):
                                     'sourceRecoveryReady':True,'quiesced':True,'noOtherWriters':True,'targetSettingsMatch':True,
                                     'accepted':True,'sourceIdle':True,'singleWriter':True,'effectsVerified':unchanged}
                                 value.update(targetInitializationSafe=True,initializationEffectsVerified=True,intakeEffectsVerified=unchanged)
+                                if stage=='continuation-reconcile':
+                                    value.update(priorAttemptQuiesced=True,receiptVerified=True,reconciliationAuthorized=True)
+                                    save(root/'retained/reconciliation-verification.json',{'facts':facts,'verdict':value,
+                                        'claimLimit':'Controlled fixed-response verifier; effects checks include protected original and task-owned native read projection. Not production semantic verification.'})
                                 if stage=='target-created':
                                     actual=facts['startResponse']
                                     value['targetSettingsMatch']=(actual.get('model')==plan['target']['model']
@@ -653,10 +729,20 @@ def native_integration(codex, evidence, scenario=None):
                 state=json.loads(stored[1]) if stored else {}
                 ref=recovered.get('requestRef')
                 if (result.get('error',{}).get('code')!='NATIVE_EFFECT_UNKNOWN' or result.get('result') is not None
-                        or not ref or result.get('exitCode')!=0 or state.get('phase')!='reconciliation-required'
-                        or state.get('pendingEffect',{}).get('requestRef')!=ref
+                        or not ref or result.get('exitCode')!=0 or state.get('phase')!='continuation-reconciled'
+                        or state.get('pendingEffect') is not None
+                        or state.get('reconciliation',{}).get('originalPendingEffect',{}).get('requestRef')!=ref
                         or state.get('writer')!='target' or state.get('sourceRecovery')!='retained'):
                     raise RuntimeError('lost acknowledgement was not retained under the target writer')
+                pending=state['reconciliation']['originalPendingEffect']
+                before=json.loads((root/'retained/reconciliation-before.json').read_text(encoding='utf-8'))
+                if (before['state']['phase']!='reconciliation-required' or before['state']['pendingEffect']!=pending
+                        or state['reconciliation']['originalFailure']!=before['state']['failure']
+                        or stored[0]!=before['revision']+1
+                        or result['reconciliation']['first']['status']!='continuation-reconciled'
+                        or result['reconciliation']['repeated']['status']!='already-reconciled'
+                        or result['reconciliation']['repeated']['currentNativeStateChecked'] is not False):
+                    raise RuntimeError('reconciliation did not preserve failure or repeated the state transition')
                 sent=[json.loads(line) for line in (native_log/'requests.jsonl').read_text(encoding='utf-8').splitlines()]
                 received=[json.loads(line) for line in (native_log/'stdout.jsonl').read_text(encoding='utf-8').splitlines()]
                 matching=[v for v in sent if v.get('id')==ref['requestId']]
@@ -664,7 +750,7 @@ def native_integration(codex, evidence, scenario=None):
                 if (ref.get('connectionId')!=binding['connectionId'] or ref.get('hostVersion')!=version
                         or ref.get('method')!='turn/start' or matching!=[recovered['originalRequest']]
                         or len(responses)!=1 or responses[0].get('result')!=recovered['originalResponse']
-                        or matching[0]['params']!=state['pendingEffect']['params']):
+                        or matching[0]['params']!=pending['params']):
                     raise RuntimeError('native request reference did not locate the exact raw receipt')
                 target=matching[0]['params']['threadId'];turn_id=responses[0]['result']['turn']['id']
                 observed=recovered['targetRead']['thread']
@@ -678,6 +764,8 @@ def native_integration(codex, evidence, scenario=None):
                 save(root/'retained/recovery-readback.json',{'requestRef':ref,'targetThreadId':target,
                     'continuationTurnId':turn_id,'nativeTurnCompleted':True,'targetWriterRetained':True,
                     'targetTurnStarts':len(native_turns),'sourceSubscriptionReleased':False,
+                    'reconciledRevision':stored[0],'pendingEffectCleared':True,'originalFailureRetained':True,
+                    'repeatedReconciliation':'already-reconciled',
                     'claimLimit':manifest['faultInjection']})
             if scenario=='reject-intake' and (result['error'] is None or any(c['method']=='thread/unsubscribe' for c in result['calls'])): raise RuntimeError('rejected intake released source')
     finally:
