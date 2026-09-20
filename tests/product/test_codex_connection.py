@@ -1,0 +1,122 @@
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import unittest
+
+
+ROOT = Path(__file__).resolve().parents[2]
+MODULE = ROOT / 'runtime' / 'codex-connection.cjs'
+
+
+NODE_SCENARIO = r'''
+const {PassThrough, Writable} = require('node:stream');
+const {performance} = require('node:perf_hooks');
+const {createOwnedAppServerConnection} = require(process.argv[1]);
+const out = new PassThrough(); let writes=[];
+const input = new Writable({write(c,e,done){writes.push(c.toString());done();}});
+const options={stdin:input,stdout:out,connectionId:'c1',hostVersion:'v1',maxJournalBytes:process.argv[2]?Number(process.argv[2]):undefined,maxMessageBytes:process.argv[3]==='oversize'?128:undefined};
+const c=createOwnedAppServerConnection(options);
+const until=(ms=300)=>performance.now()+ms;
+const emit=(v, split=false)=>{const b=Buffer.from(JSON.stringify(v)+'\n'); if(split){out.write(b.subarray(0,3));out.write(b.subarray(3));}else out.write(b)};
+(async()=>{let r={}; try {
+ if(process.argv[3]==='success'){
+  const p=c.transport.request('thread/start',{},until()); emit({jsonrpc:'2.0',id:'accord-owned:1',result:{thread:{id:'t1'},model:'m1'}},true); await p;
+  await c.transport.notify('initialized',{},until()); emit({method:'turn/started',params:{threadId:'t1',turn:{id:'u1'}}}); emit({method:'thread/tokenUsage/updated',params:{threadId:'t1',turnId:'u1',tokenUsage:{modelContextWindow:1000,last:{totalTokens:100}}}}); const context=c.context('t1','u1',1000);
+  emit({jsonrpc:'2.0',id:9,method:'item/tool/call',params:{threadId:'t1',turnId:'u1',callId:'x',tool:'accord_request_handoff',arguments:{reason:'r'}}});
+  const q=await c.receiveRequest(x=>x.id===9,until()); let got=[]; const ch=c.proposalChannel(q,()=>({scopeRef:'s',authorityRef:'a',stateRef:'z',writerThreadId:'t1'})); const clone=JSON.parse(JSON.stringify(q)); const stop=ch.subscribe(x=>got.push(x.method),clone);
+  await ch.respond({jsonrpc:'2.0',id:9,result:{ok:true}},until()); emit({method:'item/completed',params:{threadId:'t1',turnId:'u1',item:{id:'x'}}}); emit({method:'turn/completed',params:{threadId:'t1',turn:{id:'u1',status:'completed'}}});
+  const term=await c.transport.waitTerminal('t1','u1',until()); stop(); let duplicate=null; try{await ch.respond({id:9,result:{}},until())}catch(e){duplicate=e.message}; r={got,term,writes,duplicate,context};
+ } else if(process.argv[3]==='timeout'){try{await c.receiveRequest(()=>true,until(5))}catch(e){r.timeout=e.message}; out.end(); await new Promise(x=>setTimeout(x,5)); r.broken=c.context('x','y',5).reason;
+ } else if(process.argv[3]==='bad'){out.write(Buffer.from('{bad}\n')); await new Promise(x=>setTimeout(x,5)); r={reason:c.context('x','y',5).reason};
+ } else if(process.argv[3]==='context-missing'){emit({method:'turn/started',params:{threadId:'t1',turn:{id:'u1'}}}); emit({method:'thread/tokenUsage/updated',params:{threadId:'t1',turnId:'u1',tokenUsage:{modelContextWindow:1000,last:{totalTokens:2}}}}); r={reason:c.context('t1','u1',1000).reason};
+ } else if(process.argv[3]==='close-pending'){const rpc=c.transport.request('thread/read',{},until(60000)).catch(e=>e.message);const terminal=c.transport.waitTerminal('t','u',until(60000)).catch(e=>e.message);c.close();r={rpc:await rpc,terminal:await terminal};
+ } else if(process.argv[3]==='stdin-error'){try{await c.transport.notify('x',{},NaN)}catch(e){r.invalid=e.message};input.destroy(new Error('write failed'));try{await c.transport.notify('initialized',{},until())}catch(e){r.error=e.message}
+ } else if(process.argv[3]==='evict'){emit({jsonrpc:'2.0',id:3,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x',tool:'a',arguments:{reason:'r'}}});const q=await c.receiveRequest(()=>true,until());emit({method:'notice',params:{padding:'x'.repeat(100)}});try{const ch=c.proposalChannel(q,()=>({}));ch.subscribe(()=>{},q)}catch(e){r.error=e.message}
+ } else if(process.argv[3]==='expired-reply'){emit({id:9,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x'}});const q=await c.receiveRequest(()=>true,until());const ch=c.proposalChannel(q,()=>({}));try{await ch.respond({id:9,result:{}},performance.now()-1)}catch(e){r.expired=e.message}r.before=writes.length;await ch.respond({id:9,result:{}},until());r.after=writes.length;
+ } else if(process.argv[3]==='null-error'){const p=c.transport.request('thread/read',{},until()).catch(e=>e.message);emit({id:'accord-owned:1',error:null});r={error:await p};
+ } else if(process.argv[3]==='oversize'){out.write(Buffer.alloc(1024*1024,65));r={reason:c.context('t','u',100).reason,attached:out.listenerCount('data')};
+ } else if(process.argv[3]==='stream-replacement'){let foreignWrites=0;options.stdin=new Writable({write(c,e,done){foreignWrites++;done();}});await c.transport.notify('initialized',{},until());r={original:writes.length,foreign:foreignWrites};
+ } else if(process.argv[3]==='listener-error'){emit({id:9,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x'}});const q=await c.receiveRequest(()=>true,until());c.proposalChannel(q,()=>({})).subscribe(()=>{throw new Error('caller listener failed')},q);emit({method:'notice',params:{threadId:'t'}});r={reason:c.context('t','u',100).reason,attached:out.listenerCount('data')};
+ } else if(process.argv[3]==='expired'){for(const method of ['request','notify']){try{await c.transport[method]('thread/start',{},performance.now()-1)}catch(e){r[method]=e.message}}r.writes=writes.length;
+ } else if(process.argv[3]==='bad-cleanup'){out.write(Buffer.from('{}\n'));r={data:out.listenerCount('data'),end:out.listenerCount('end'),stdinError:input.listenerCount('error')};
+ } else if(process.argv[3]==='close'){c.close(); r={destroyed:input.destroyed||out.destroyed,writeEnded:input.writableEnded};}
+ }catch(e){r.error=e.message} console.log(JSON.stringify(r));})()
+'''
+
+
+class CodexConnectionTests(unittest.TestCase):
+    def run_case(self, case, journal=None):
+        command = [shutil.which('node'), '-e', NODE_SCENARIO, str(MODULE), '' if journal is None else str(journal), case]
+        result = subprocess.run(command, capture_output=True, text=True, encoding='utf-8', timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def test_owned_transport_anchor_replay_response_and_terminal(self):
+        result = self.run_case('success')
+        self.assertEqual(result['got'], ['item/completed', 'turn/completed'])
+        self.assertEqual(result['context']['state'], 'window-observed')
+        self.assertEqual(result['term']['params']['turn']['status'], 'completed')
+        self.assertEqual(len(result['writes']), 3)
+        self.assertIn('accord-owned:1', result['writes'][0])
+        self.assertIn('"method":"initialized"', result['writes'][1])
+        self.assertIn('"id":9', result['writes'][2])
+        self.assertIn('not available', result['duplicate'])
+
+    def test_timeout_and_eof_become_unknown_without_writes(self):
+        result = self.run_case('timeout')
+        self.assertIn('deadline exceeded', result['timeout'])
+        self.assertEqual(result['broken'], 'native-connection-unavailable')
+
+    def test_invalid_frame_breaks_connection(self):
+        result = self.run_case('bad')
+        self.assertEqual(result['reason'], 'native-connection-unavailable')
+
+    def test_context_requires_an_unevicted_native_model_response(self):
+        result = self.run_case('context-missing')
+        self.assertEqual(result['reason'], 'thread-model-response-unavailable')
+
+    def test_evicted_anchor_cannot_be_replayed(self):
+        result = self.run_case('evict', 256)
+        self.assertEqual(result['error'], 'proposal anchor is unavailable')
+
+    def test_close_detaches_without_destroying_injected_streams(self):
+        result = self.run_case('close')
+        self.assertFalse(result['destroyed'])
+        self.assertFalse(result['writeEnded'])
+
+    def test_close_rejects_pending_rpc_and_terminal_without_leaving_waiters(self):
+        result = self.run_case('close-pending')
+        self.assertIn('owned connection is closed', result['rpc'])
+        self.assertIn('owned connection is closed', result['terminal'])
+
+    def test_stdin_error_and_invalid_deadline_are_rejected(self):
+        result = self.run_case('stdin-error')
+        self.assertIn('write failed', result['error'])
+        self.assertIn('deadline is invalid', result['invalid'])
+
+    def test_expired_calls_do_not_write_even_before_the_timer_turn(self):
+        result = self.run_case('expired')
+        self.assertEqual(result['writes'], 0)
+        self.assertIn('deadline exceeded', result['request'])
+        self.assertIn('deadline exceeded', result['notify'])
+
+    def test_bad_frame_detaches_owned_listeners(self):
+        self.assertEqual(self.run_case('bad-cleanup'), {'data': 0, 'end': 0, 'stdinError': 0})
+
+    def test_options_mutation_cannot_reroute_the_bound_stream(self):
+        self.assertEqual(self.run_case('stream-replacement'), {'original': 1, 'foreign': 0})
+
+    def test_live_listener_failure_breaks_connection_without_crashing_host(self):
+        self.assertEqual(self.run_case('listener-error'), {'reason': 'native-connection-unavailable', 'attached': 0})
+
+    def test_expired_unsent_response_can_be_reconciled_before_a_single_send(self):
+        result = self.run_case('expired-reply')
+        self.assertEqual((result['before'], result['after']), (0, 1))
+        self.assertIn('deadline', result['expired'])
+
+    def test_null_error_is_not_a_successful_result(self):
+        self.assertIn('native RPC returned an error', self.run_case('null-error')['error'])
+
+    def test_oversize_single_chunk_fails_before_frame_accumulation(self):
+        self.assertEqual(self.run_case('oversize'), {'reason': 'native-connection-unavailable', 'attached': 0})

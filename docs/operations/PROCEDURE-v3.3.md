@@ -2065,3 +2065,13 @@ accord-proposal-events-20260920-01只运行新增source-event-proposal案，未�
 候选版本3.3.0-dev.1+codex.20260920031559、21文件9bbe5555d8e97342fca87490703f2957dcaa7b15da41a3ed2d770d47cbd1a999；共享安装仍为556ddfd4，未重复更新。预算调整为2160000代码/测试字节、158文件，保留5%余量及36000主指导字节，用于该实际编排和反例。基线、接口、架构和验收受影响说明同步，计划目标/工序及整版未验状态不变；下一继续具体控制者、择时与实际入口连接。
 
 本轮最终110项开发契约/交接检查全部通过（137.110秒），旧0e20670d CI已11/11通过。官方cachebuster写出的manifest按仓库LF规则归一并重算候选摘要，避免Windows工作区字节与Git分发不一致；原生执行源独立冻结，不重标为新包整体验收。
+
+## 具体Node原生连接与组合验证（2026-09-20）
+
+从1817e9f6继续，沿官方App Server JSONL协议和已有BoundedRpc职责选择注入既有Node streams的实现，而非把会自行启动测试fixture的Python观察器分发给用户。新增codex-connection.cjs直接承担解析、RPC关联、原生终态、exact request-anchor回放/live接收及同journal的context；源model只采纳实际thread/start或resume响应。模块不spawn、初始化、认证、关闭外部流或建立持久存储；现有carrier、recorder和semantic verifier保持各自职责，官方experimental适用性限制仍保留。
+
+独立实施后，主任务审查修正计时器/监听未释放、immutable请求复制不兼容、无界队列、截止前置等问题；独立复核另核对固定stream引用、listener异常、error:null、分帧前内存上限及未发送过期响应。15项连接反例通过，125项开发/交接/连接回归全部通过（152.135秒）；新增包内模块的canonical字节和声明校验。初次静态校验发现测试常量名包含前身禁用标识，改为中性NODE_SCENARIO，未放宽身份门禁。
+
+原生测试只运行新增owned-connection案，Node caller启动任务私有CLI0.155.1后注入streams，产品实际解析所有原生消息；Python仅保留已有固定响应、SQLite CAS及fixture verifier。01错误预期首次dynamic call前已有usage而失败，raw确认此时未发tokenUsage，模块unknown及null容量是正确结果；保留失败，不改时间戳或强加模型窗口。02修正测试前提后接管成功，后续审查修复由新03留证，旧执行源不改写。03执行前冻结10份源，4次本地响应、零真实模型/凭据，最终ledger revision18、writer=target、pendingEffect=null并释放源订阅，keep保持、三个所属进程自然归零、4运行根回收，独立只读复核通过。首个context仍unknown，故不宣称本例基于容量自主择时。01退出/留证确认后，仅其4个任务运行根被主任务精确回收，失败、原始输入与native历史仍留存。
+
+当前主任务另以真实MCP宿主身份和helper只读原生上下文，结合本工作段显式尾部/工作/接管/恢复估计得到continue-bounded；这只支撑当时有界推进，sourceReleaseAllowed=false且效率/压缩阈值未知，不构造无必要迁移。当前共享安装556ddfd4未变化；新候选22文件、3.3.0-dev.1+codex.20260920042359、SHA 9e2e794ade3760f9ee6fe787f46feb587be6a78234872970947687be4f32e79b。预算2220000代码/测试字节、161文件、5%字节余量及36000指导上限，未新增外部依赖。基线/架构/接口/验收/接续同步，现行目标与非线性工序不变；1817e9f6 CI已11/11通过，新代码以新CI核对，整版仍未验收。

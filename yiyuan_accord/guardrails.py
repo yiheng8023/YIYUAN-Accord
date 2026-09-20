@@ -486,6 +486,17 @@ def activation_mechanism_errors(
                 errors.append(f"{prefix} carrier-handoff module differs from canonical bytes")
         except OSError:
             errors.append(f"{prefix} carrier-handoff module is unreadable")
+        connection_locator = f"plugins/yiyuan-accord-{package}/runtime/codex-connection.cjs"
+        additional_mechanisms = [*additional_mechanisms, connection_locator]
+        try:
+            delivered = repository_relative_path(root, connection_locator)
+            canonical_connection = repository_relative_path(root, "runtime/codex-connection.cjs")
+            if (adapter_id != "codex" or delivered is None or canonical_connection is None
+                    or delivered.is_symlink() or canonical_connection.is_symlink()
+                    or _owned_bytes(delivered) != _owned_bytes(canonical_connection)):
+                errors.append(f"{prefix} owned-connection module differs from canonical bytes")
+        except OSError:
+            errors.append(f"{prefix} owned-connection module is unreadable")
     if native_state_mcp:
         config_locator = f"plugins/yiyuan-accord-{package}/.mcp.json"
         mcp_locator = f"plugins/yiyuan-accord-{package}/runtime/native-state-mcp.cjs"

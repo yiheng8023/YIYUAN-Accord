@@ -377,6 +377,12 @@ receipts, re-read current bindings and invoke the same dispatcher. Source activi
 is monitored through dispatch; only this listener is released. The caller retains
 its journal and connection, including request-to-subscription replay. This removes
 manual receipt assembly without adding storage, a service or automatic timing.
+The optional `runtime/codex-connection.cjs` implements that connection for injected
+caller-owned Node stdio streams. One bounded reader correlates RPC, retains an
+ordered journal, provides exact-anchor replay/live delivery and derives context
+observations from the same native stream. It leaves process startup, initialization,
+durable ownership and semantic judgment with the authorized caller. Closing this
+module detaches its listeners and rejects waits without destroying injected streams.
 
 The packaged reference also distinguishes official daemon/proxy attachment from
 embedded clients and from starting an unrelated server. In the source-bound 0.155.1

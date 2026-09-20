@@ -62,6 +62,46 @@ that every other native continuity route is unsuitable.
 
 ## Source proposal and outer dispatch
 
+### Reuse an owned Node stdio connection
+
+For a caller that already owns a suitable process, the accompanying
+`runtime/codex-connection.cjs` exports `createOwnedAppServerConnection({stdin,
+stdout, connectionId, hostVersion, maxMessageBytes?, maxJournalBytes?})`.
+Pass that process's Node writable/readable streams and its actual connection and
+version identity. Attach before initialization or other requests; this module
+is the exclusive protocol reader, while a caller may separately retain raw bytes.
+It does not discover, spawn, initialize, authenticate, restart or close a process.
+
+The returned `transport` supplies `request`, `notify` and `waitTerminal` using
+absolute `performance.now()` deadlines. The caller sends the native `initialize`
+request and `initialized` notification and registers the proposal tool at source
+thread creation. Unmatched server requests, including approvals, remain for their
+authorized handler; this connection never grants them automatically.
+`receiveRequest(predicate, deadline)` returns an actual retained server request
+with the fixed connection metadata. Pass that object to both `runHandoffProposal`
+and `proposalChannel(request, current)`; the latter implements the channel below
+with exact request-anchor replay and live events from its single reader.
+
+`context(threadId, turnId, maxAgeMs)` feeds the same originally timed journal to
+the existing context reader. Its initial model comes only from this connection's
+actual thread start/resume response. Missing or evicted identity/history,
+disconnect, reroute, compaction or expiry leaves affected observations unknown;
+it does not infer authority, current-input reconciliation or a need to transfer.
+Use the existing assessment with independently checked task state and forecasts.
+
+Frames default to 1 MiB and the in-memory journal to 4 MiB; pending work and
+retained request handling are also bounded. These are transport limits, not model
+capacity. An evicted anchor cannot be replayed; the caller must reconcile instead
+of treating a truncated journal as complete. `close()` detaches only this module's
+listeners and rejects its pending waits; process termination, durable evidence,
+scope storage and recovery remain with the caller. No ambiguous send is retried.
+
+This reuses the [official Node stdio protocol](https://learn.chatgpt.com/docs/app-server#protocol)
+and built-in Node streams without a new package dependency. It is a usable
+connection for an already authorized controller, not a default Desktop connection
+or an autonomous timing/semantic-verification engine. Preserve the upstream
+experimental support qualification described above.
+
 For a controller-owned source to request transfer, register the exported
 `HANDOFF_PROPOSAL_TOOL` in its native `thread/start.dynamicTools` with the host's
 experimental API enabled. Its unnamespaced tool is `accord_request_handoff`;

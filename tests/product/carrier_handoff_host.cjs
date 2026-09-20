@@ -13,6 +13,69 @@ function remote(kind, args) {
   process.stdout.write(JSON.stringify({kind, id, args}) + '\n');
   return new Promise((resolve, reject) => pending.set(id, {resolve, reject}));
 }
+
+async function runOwnedConnection(config) {
+  // The test owns and launches the process. The shipped connection only receives
+  // its streams; Python provides the existing fixture/recorder/verifier, not RPC.
+  const fs = require('node:fs');
+  const {spawn} = require('node:child_process');
+  const {Writable} = require('node:stream');
+  const {createOwnedAppServerConnection} = require('../../runtime/codex-connection.cjs');
+  const log = config.nativeLogRoot;
+  const stderr = fs.openSync(log + '/stderr.txt', 'wx');
+  const stdout = fs.openSync(log + '/stdout.jsonl', 'wx');
+  const requests = fs.openSync(log + '/requests.jsonl', 'wx');
+  const native = spawn(config.argv[0], config.argv.slice(1), {
+    cwd:config.plan.target.cwd, stdio:['pipe','pipe',stderr], windowsHide:true,
+  });
+  let rawBytes=0;
+  const capture = chunk => {
+    rawBytes+=chunk.length;
+    if (rawBytes>8*1024*1024) throw new Error('native fixture output exceeded bound');
+    fs.writeSync(stdout,chunk);
+  };
+  native.stdout.on('data',capture);
+  const outgoing = new Writable({write(chunk,encoding,done) {
+    fs.writeSync(requests,chunk); native.stdin.write(chunk,encoding,done);
+  }});
+  const connection=createOwnedAppServerConnection({stdin:outgoing,stdout:native.stdout,
+    connectionId:config.binding.connectionId,hostVersion:config.binding.hostVersion});
+  let result=null,error=null,context=null,exitCode=null,closeState=null;
+  const ended=new Promise((resolve,reject)=>{native.once('exit',code=>{exitCode=code;resolve(code);});native.once('error',reject);});
+  try {
+    const deadline=performance.now()+45000;
+    const t=connection.transport;
+    await t.request('initialize',{clientInfo:{name:'accord_connection_fixture',version:'1'},
+      capabilities:{experimentalApi:true}},deadline);
+    await t.notify('initialized',{},deadline);
+    const source=await t.request('thread/start',{model:'fixture-no-model',modelProvider:'accord_fixture',
+      cwd:config.plan.target.cwd,sandbox:'read-only',approvalPolicy:'never',dynamicTools:[HANDOFF_PROPOSAL_TOOL]},deadline);
+    const turn=await t.request('turn/start',{threadId:source.thread.id,
+      input:[{type:'text',text:'Submit one handoff proposal for the bound fixed task, then finish without other actions.'}]},deadline);
+    const plan={...config.plan,source:{threadId:source.thread.id,turnId:turn.turn.id}};
+    await remote('sourceReady',[source,turn]);
+    const proposal=await connection.receiveRequest(value=>value.method==='item/tool/call' &&
+      value.params?.threadId===source.thread.id && value.params?.turnId===turn.turn.id &&
+      value.params?.tool===HANDOFF_PROPOSAL_TOOL.name,deadline);
+    context=connection.context(source.thread.id,turn.turn.id,30000);
+    await remote('sourceContext',[context]);
+    const channel=connection.proposalChannel(proposal,async()=>({scopeRef:plan.scopeRef,
+      authorityRef:plan.authorityRef,stateRef:plan.stateRef,writerThreadId:source.thread.id}));
+    result=await runHandoffProposal(plan,{transport:t,
+      recorder:{begin:(...args)=>remote('begin',args),compareAndSet:(...args)=>remote('compareAndSet',args)},
+      verify:(stage,facts,limit)=>remote('verify',[stage,facts,Math.max(0,limit-performance.now())])},proposal,channel);
+  } catch (e) {
+    error={name:e.name,message:e.message,code:e.code,state:e.state,details:e.details};
+  } finally {
+    closeState=connection.close();
+    native.stdin.end();
+    let timer;
+    try {await Promise.race([ended,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('native EOF exit timed out')),10000);})]);}
+    finally {clearTimeout(timer);native.stdout.off('data',capture);fs.closeSync(stderr);fs.closeSync(stdout);fs.closeSync(requests);}
+  }
+  process.stdout.write(JSON.stringify({kind:'done',result,error,context,exitCode,closeState,rawBytes})+'\n');
+  rl.close();process.stdin.destroy();
+}
 async function run(config) {
   const calls = [], snapshots = [], verdicts = [];
   let eventListener = null;
@@ -243,7 +306,7 @@ async function run(config) {
 }
 rl.on('line', line => {
   const value = JSON.parse(line);
-  if (!started) {started = true; run(value).catch(e => {process.stderr.write(String(e.stack)); process.exitCode=1; rl.close(); process.stdin.destroy();}); return;}
+  if (!started) {started = true; (value.mode==='native-connection'?runOwnedConnection(value):run(value)).catch(e => {process.stderr.write(String(e.stack)); process.exitCode=1; rl.close(); process.stdin.destroy();}); return;}
   const waiting = pending.get(value.id);
   if (!waiting) throw new Error('unmatched host reply');
   pending.delete(value.id);

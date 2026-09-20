@@ -282,8 +282,8 @@ def native_integration(codex, evidence, scenario=None):
     from scripts.observe_codex_lifecycle import (_App, _Fixture, _argv, _owned_environment,
         _new_controller, _spawn_options, _wait_job, _released, _remove_owned_tree, save)
     from scripts.codex_rpc import BoundedRpc
-    scenarios = (scenario,) if scenario else ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source')
-    if any(s not in ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source') for s in scenarios):
+    scenarios = (scenario,) if scenario else ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection')
+    if any(s not in ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection') for s in scenarios):
         raise ValueError('unknown native handoff scenario')
     root = Path(evidence).absolute()
     if root.exists() or not root.parent.is_dir() or root.parent.resolve() != root.parent:
@@ -299,10 +299,12 @@ def native_integration(codex, evidence, scenario=None):
     version = subprocess.check_output([str(codex),'--version'],timeout=10,text=True).strip()
     manifest={'evidence':str(root),'codex':str(codex),'node':str(node),
         'ownedRoots':{name:str(root/name) for name in ('home','workspace','state','temp')},
-        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':21},
+        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':25},
         'resourceController':'windows-job-object' if os.name=='nt' else 'posix-session-process-group'}
     sources=[ROOT/'runtime/carrier-handoff.cjs',DRIVER,Path(__file__),ROOT/'scripts/observe_codex_lifecycle.py',
              ROOT/'scripts/observe_codex_entry.py',ROOT/'scripts/codex_rpc.py',ROOT/'scripts/inspect_native_resources.py']
+    if 'owned-connection' in scenarios:
+        sources.extend(ROOT/'runtime'/name for name in ('codex-connection.cjs','task-checkpoint.cjs','codex-context.cjs'))
     manifest['sourceHashes']={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}
     source_snapshot=root/'retained/executed-sources'
     source_snapshot.mkdir()
@@ -394,8 +396,9 @@ def native_integration(codex, evidence, scenario=None):
         except BaseException:
             ledger_db.execute('ROLLBACK');raise
     try:
-        app=_App(manifest,'carrier-controller',_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false')),env,deadline)
-        app.initialize()
+        if scenarios != ('owned-connection',):
+            app=_App(manifest,'carrier-controller',_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false')),env,deadline)
+            app.initialize()
         for scenario in scenarios:
             proposal_case = scenario in ('source-proposal','source-event-proposal')
             source_settings={'model':'fixture-no-model','modelProvider':'accord_fixture',
@@ -407,13 +410,19 @@ def native_integration(codex, evidence, scenario=None):
                     'inputSchema':{'type':'object','properties':{'reason':{'type':'string'}},
                                    'required':['reason'],'additionalProperties':False}}]
                 proposal_state['next']=True
-            source=request('thread/start',source_settings)['thread']['id']
-            source_prompt = ('Submit one handoff proposal for the bound fixed task, then finish this source turn without other actions.'
-                             if proposal_case else 'Retain the fixed fixture task; do not call tools.')
-            turn=request('turn/start',{'threadId':source,'input':[{'type':'text','text':source_prompt}]})['turn']['id']
-            proposed=source_proposal(source,turn) if proposal_case else None
-            if proposed is None and terminal(source,turn)['params']['turn']['status']!='completed':
-                raise RuntimeError('source fixture turn did not complete')
+            if scenario=='owned-connection':
+                source,turn,proposed='pending-source','pending-turn',{'direct':True}
+                proposal_state['next']=True
+                native_log=root/'native/owned-connection'
+                native_log.mkdir()
+            else:
+                source=request('thread/start',source_settings)['thread']['id']
+                source_prompt = ('Submit one handoff proposal for the bound fixed task, then finish this source turn without other actions.'
+                                 if proposal_case else 'Retain the fixed fixture task; do not call tools.')
+                turn=request('turn/start',{'threadId':source,'input':[{'type':'text','text':source_prompt}]})['turn']['id']
+                proposed=source_proposal(source,turn) if proposal_case else None
+                if proposed is None and terminal(source,turn)['params']['turn']['status']!='completed':
+                    raise RuntimeError('source fixture turn did not complete')
             now=int(time.time()*1000)
             plan={'transferId':scenario,'scopeRef':'fixture-'+scenario,'authorityRef':'fixture-authority-v1','stateRef':'fixture-source-v1',
                 'source':{'threadId':source, **({'turnId':turn} if proposed else {})},'target':{'cwd':manifest['ownedRoots']['workspace'],'model':'fixture-no-model','modelProvider':'accord_fixture'},
@@ -438,10 +447,13 @@ def native_integration(codex, evidence, scenario=None):
                         except BaseException as error: inbox.put(error)
                         finally: inbox.put(None)
                     reader=threading.Thread(target=consume,daemon=True);reader.start()
-                    binding={'connectionId':app.root.name,'hostVersion':version}
+                    binding={'connectionId':'owned-connection' if scenario=='owned-connection' else app.root.name,'hostVersion':version}
                     config={'mode':'native','plan':plan,'binding':binding}
                     if proposed is not None: config['nativeProposal']={**binding,**proposed}
                     if scenario=='source-event-proposal': config['nativeEventProposal']=True
+                    if scenario=='owned-connection':
+                        config={'mode':'native-connection','plan':plan,'binding':binding,'nativeLogRoot':str(native_log),
+                            'argv':_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false'))}
                     proc.stdin.write((json.dumps(config)+'\n').encode());proc.stdin.flush()
                     while True:
                         message=inbox.get(timeout=max(0.01,min(40,deadline-time.monotonic())))
@@ -451,7 +463,30 @@ def native_integration(codex, evidence, scenario=None):
                         if message.get('kind')=='done': result=message;break
                         args=message['args']
                         try:
-                            if message['kind']=='request': value=request(args[0],args[1],args[2])
+                            if message['kind']=='sourceReady':
+                                if scenario!='owned-connection' or source!='pending-source':
+                                    raise ValueError('source binding is not available')
+                                observed_source,observed_turn=args
+                                if (observed_source.get('cwd')!=plan['target']['cwd']
+                                        or observed_source.get('model')!=plan['target']['model']):
+                                    raise ValueError('native source settings differ')
+                                source=observed_source['thread']['id'];turn=observed_turn['turn']['id']
+                                plan['source']={'threadId':source,'turnId':turn}
+                                ledger_db.execute('UPDATE scopes SET owner=? WHERE scope=? AND owner=?',
+                                    (source,plan['scopeRef'],'pending-source'))
+                                save(root/'retained/owned-source-binding.json',{'start':observed_source,'turn':observed_turn})
+                                value={'bound':True}
+                            elif message['kind']=='sourceContext':
+                                value=args[0]
+                                save(root/'retained/owned-source-context.json',value)
+                                # The first pending dynamic call can precede the
+                                # host's first usage event. Do not invent capacity.
+                                if (value.get('state') not in ('unknown','window-observed')
+                                        or value.get('sourceReleaseAllowed') is not False):
+                                    raise ValueError('native source context contract differs')
+                                if value.get('state')=='unknown' and value.get('windowTokens') is not None:
+                                    raise ValueError('unknown native capacity must not be promoted')
+                            elif message['kind']=='request': value=request(args[0],args[1],args[2])
                             elif message['kind']=='waitTerminal': value=terminal(args[0],args[1],args[2])
                             elif message['kind']=='begin':
                                 value=record_begin(*args)
@@ -517,7 +552,7 @@ def native_integration(codex, evidence, scenario=None):
             stored=ledger_db.execute('SELECT revision,state FROM transfers WHERE id=?',(scenario,)).fetchone()
             if stored: save(ledger,{'revision':stored[0],'state':json.loads(stored[1])})
             save(root/'retained'/f'{scenario}-result.json',result);results.append(result)
-            if scenario in ('success','extra-context','source-proposal','source-event-proposal','ephemeral-source'):
+            if scenario in ('success','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection'):
                 if result['error'] or result['result']['status']!='handed-off':
                     raise RuntimeError('native handoff failed; inspect retained result')
                 expected_history=scenario!='ephemeral-source'
@@ -527,6 +562,8 @@ def native_integration(codex, evidence, scenario=None):
                 if scenario=='source-event-proposal' and (result['proposal']['respondCount']!=1
                         or result['proposal']['releaseCount']!=1 or result['proposal']['currentCount']!=1):
                     raise RuntimeError('native event dispatcher lifecycle mismatch')
+                if scenario=='owned-connection' and result.get('exitCode')!=0:
+                    raise RuntimeError('owned native connection failed to exit naturally')
             if scenario=='reject-intake' and (result['error'] is None or any(c['method']=='thread/unsubscribe' for c in result['calls'])): raise RuntimeError('rejected intake released source')
     finally:
         try:
