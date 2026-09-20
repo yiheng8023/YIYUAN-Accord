@@ -2075,3 +2075,13 @@ accord-proposal-events-20260920-01只运行新增source-event-proposal案，未�
 原生测试只运行新增owned-connection案，Node caller启动任务私有CLI0.155.1后注入streams，产品实际解析所有原生消息；Python仅保留已有固定响应、SQLite CAS及fixture verifier。01错误预期首次dynamic call前已有usage而失败，raw确认此时未发tokenUsage，模块unknown及null容量是正确结果；保留失败，不改时间戳或强加模型窗口。02修正测试前提后接管成功，后续审查修复由新03留证，旧执行源不改写。03执行前冻结10份源，4次本地响应、零真实模型/凭据，最终ledger revision18、writer=target、pendingEffect=null并释放源订阅，keep保持、三个所属进程自然归零、4运行根回收，独立只读复核通过。首个context仍unknown，故不宣称本例基于容量自主择时。01退出/留证确认后，仅其4个任务运行根被主任务精确回收，失败、原始输入与native历史仍留存。
 
 当前主任务另以真实MCP宿主身份和helper只读原生上下文，结合本工作段显式尾部/工作/接管/恢复估计得到continue-bounded；这只支撑当时有界推进，sourceReleaseAllowed=false且效率/压缩阈值未知，不构造无必要迁移。当前共享安装556ddfd4未变化；新候选22文件、3.3.0-dev.1+codex.20260920042359、SHA 9e2e794ade3760f9ee6fe787f46feb587be6a78234872970947687be4f32e79b。预算2220000代码/测试字节、161文件、5%字节余量及36000指导上限，未新增外部依赖。基线/架构/接口/验收/接续同步，现行目标与非线性工序不变；1817e9f6 CI已11/11通过，新代码以新CI核对，整版仍未验收。
+
+## 3.2.1持续执行反馈的范围澄清（2026-09-20）
+
+用户报告同事在3.2.1中输入需求后Agent持续运行，像Goal模式，较少交还对话回合；随后明确纠正“输出”为“输入”。此反馈不等于已证实死循环、任务完成后扩张或不尊重停止，也未证明实际开启Goal。先前为区分三类停止风险而做的检查保留其有限用途，不把它们冒充对真实节奏的复现。
+
+对照v3.2.1标签cf13486db9e5d0e9a6eef2d9df187d5e0405ee88及当前332fdb57：两版Skill均要求继续安全、获准且未完成的工作；旧版也有已满足结果不续跑、相同检查快照去重、新输入/中断使旧继续决定失效等机制。原生Stop依赖本地checkpoint条件，只抑制该回调，不强制宿主每个回合停下，也不判断所有语义或用户期望。
+
+同一组三个现有测试分别用于旧源码、当前源码和实际安装dev：missing_delivery_continues_then_real_files_allow_retirement、new_user_input_and_interrupt_cannot_inherit_a_continue_decision、unchanged_failure_does_not_loop_but_changed_observation_can_continue。各3/3通过，分别3.373/3.779/3.904秒。旧helper SHA927ba0d29f92272fb739fbf573ca8529f602ff965c94ed38a18453de1b934193；当前与安装helper均为c0936648a36d013a3ba692b8a81e826adf50707a6924012c8d19d61eda40e03c。对照使用任务临时目录，未修改共享安装、用户配置或旧标签，无模型调用；临时目录随测试回收。
+
+结论仅是这三类局部保护在两版都成立。未取得同事真实宿主/模型/任务/Hook记录，不能归因到具体机制，也不能宣称3.3已修复其反馈。现行目标仍是不依赖Plan/Goal的自主交付，并尊重用户选择、讨论/执行授权、进度反馈及必要决策和暂停；本项目多次等待“继续”的节奏不能自动当作产品标准。将反馈保留在既有A01/A03/A08普通任务与用户负担验证范围，不增加固定回合数、全局每步确认或未经确认的行为改动。
