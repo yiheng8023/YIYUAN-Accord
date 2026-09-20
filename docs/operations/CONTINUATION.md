@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-09-20 · N33-20260909 / r28。核对起点为9bcfad1c5af9eaf4d48304dbfba38c82689eed32；后续接续仍先读取实时Git，不把本行当最新HEAD。
+更新：2026-09-20 · N33-20260909 / r28。核对起点为e585f455372365f81cb1fc8e3ae0b07204912837；后续接续仍先读取实时Git，不把本行当最新HEAD。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有当前共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)和product/development.json分别展开结果、判据及机器投影。
 
 ## 目标、共识和授权
@@ -22,13 +22,13 @@
 | 项目 | 已核事实与边界 |
 |---|---|
 | 仓库与写入归属 | 核对时main与origin/main一致、工作树干净；仅一个检出和main分支，无遗留开发工作树/分支。当前集成写者为任务01a09602-a44d-79f2-8ad6-d104863ca7d1；旧分支已完成集成，原源任务已释放写入职责。 |
-| 开发包 | 21文件、3.3.0-dev.1，SHA 213116ec1c3d24e0c60c2a4377c83215a9f8b72008b7fac3fed22551438a1fcf。相对已安装51ae6e41仅修改插件简介、默认提示和入口Skill的UI文字：说明当前用途、只读状态工具及自动交接仍在开发；默认提示改为用户请求。运行时、Hook、Skill正文和触发条件保持。正在运行的9bcfad1c CI仍绑定51ae6e41，不冒充新文案的整包验证。 |
+| 开发包 | 21文件、3.3.0-dev.1，SHA 213116ec1c3d24e0c60c2a4377c83215a9f8b72008b7fac3fed22551438a1fcf。已沿原生市场安装；相对前包51ae6e41仅修改插件简介、默认提示和入口Skill的UI文字，说明当前用途、只读状态工具及自动交接仍在开发，默认提示改为用户请求。运行时、Hook、Skill正文和触发条件保持。正在运行的9bcfad1c CI仍绑定51ae6e41，不冒充新文案的整包验证。 |
 | 原生MCP状态入口 | 真实0.155.1从隔离市场加载候选，调用inspect_task_state；宿主注入的thread/session/turn/callId与独立原生回执一致，无receipt正确保留unknown。2次本地固定响应、零模型调用；源只读，原件与状态目录保持，进程自然退出/归零，5个运行根回收。10项MCP及86项开发契约检查通过。Windows原生运行绑定其预冻结源码；之后仅初始化参数校验及随包指导有增量，精确最终候选交给本次CI核验。不代验真实模型/GUI采用、子任务实机读取或交接派发。 |
 | 接线与检查 | 源提议及单次dispatch继续复用同一记录。19项模块及85项开发契约回归通过，三项静态检查通过；原生0.155.1固定响应五案通过，共16次本地响应、零模型调用，临时来源可交接但nativeHistoryRetained=false。缺失当前字段不复用旧肯定事实，已知值冲突先核对；不代验自主择时、真实语义核验器或GUI采用。 |
 | 真实源提议与接管 | 当时完成的ab1b2755报告案例随后发生开发证据事故：子代理旧清理删除原始RPC/bridge/SQLite/verifier及预冻结源，控制器也被执行后改写。已暂停其完整控制链验收引用；原生两任务历史仍在，独立恢复支持自主提议、只读接收、3轮完成及与原哈希一致的两报告。原结果/复核摘要保留但不替代已丢原始记录；详见incident-01。产品代码和其它案例未受删除影响，不重跑本例掩盖损失。 |
 | 宿主升级 | b23323ff包在Windows由真实0.154.0切到0.155.1，复用同一原生暂停任务、owned CODEX_HOME、包和Hook信任；源释放后目标恢复，暂停/原件及后续失败候选拒绝、重试、卸载后状态保持，run及独立inspect通过。2次版本探针+13次生命周期启动全部自然释放、5根回收、3项共享保护保持。固定响应、零真实模型，不代验自动升级、GUI、任意状态迁移或整体A06；CI补Linux/macOS同一机制。 |
-| 当前CI | eea99226的[原CI](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35473404424)原生任务通过，9个测试矩阵因Hook-only夹具和旧文件数断言失败，原始日志保留。修复未改变运行器拒绝或候选字节，72项入口/MCP检查及独立审查通过。[9bcfad1c / 35477357242](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35477357242)核对时两项原生任务再次通过，9个完整矩阵仍运行；不能提前称全绿。 |
-| 共享安装 | 同一Git市场经原生remove/add --ref/upgrade由e758f0df更新到9bcfad1c；市场及安装缓存21文件与51ae6e41源码包逐字节一致。配置语义仅市场ref变化，其余插件清单、启用选择和Hook信任保持。跨更新保留的App Server与新进程都列出5个已启用Skill及6条已启用/受信任Hook；5个CLI阶段与2个读取进程正常退出/归零，零模型轮次。当前任务工具目录尚未暴露inspect_task_state，现有Desktop/IDE采用未知；不把清单或另一个App Server视为当前GUI采用。 |
+| 当前CI | eea99226的[原CI](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35473404424)原生任务通过，9个测试矩阵因Hook-only夹具和旧文件数断言失败，原始日志保留。修复未改变运行器拒绝或候选字节，72项入口/MCP检查及独立审查通过。[9bcfad1c / 35477357242](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35477357242)核对时7项通过、4项完整矩阵仍运行，无失败；不能提前称全绿。 |
+| 共享安装 | 同一Git市场现绑定e585f455，市场/缓存21文件与213116ec源码包逐字节一致。最近仅两份介绍/UI文件变动；配置语义只变市场ref，其余插件清单、启用和Hook信任保持。跨更新App Server及新进程均见5个启用Skill/6条受信任Hook；5个CLI阶段与2个读取进程正常退出/归零，零模型轮次。当前Desktop对话仍未暴露inspect_task_state；现有接口不能刷新该任务的工具目录，需宿主重载后再核，不以另一个App Server代验。 |
 | 旧本地receipt | 上次status为unbound、无保存checkpoint，needsNativeReplay及needsResumeReconciliation为true，缺少可用捕获输入。未伪造重放或就绪许可。当前目标/权限由原生对话和实时仓库承接；后续依赖该helper时先核对兼容执行者和真实当前输入。 |
 | 云环境 | 最近只读核对为YIYUAN-Accord、目录/workspace/YIYUAN-Accord，三个历史任务保留；universal、自动初始化、Agent网络关闭、缓存开启。当前新包在云端的实际运行未验证。 |
 | 验收 | 17项必要scope，9项有定义、8项未绑定；9个案例定义不是9项通过。4个OpenAI入口纳入开发、7个待判，selectionFinal=false。A01–A08整项完成仍0/8，functionalCompletion及candidateEligible仍false；早期两个SDK子范围只绑定其原包。 |
@@ -61,6 +61,7 @@
 | accord-shared-plugin-update-20260919-01 | 同一Git市场从1429f2a绑定到5005723，经官方upgrade刷新当前17文件；缓存只变checkpoint运行时。配置语义差异仅市场ref，原生发现5个Skill/6条受信任Hook、只读status仍保留unbound/replay未知，检查进程自然退出且归零。保留旧包及回退源；不证明现有GUI任务完整热采用或普通交付。 |
 | accord-shared-plugin-update-20260920-01 | 同一市场从5005723绑定e758f0df，经原生命令刷新到当前19文件；源码/市场/缓存一致。保持一个原App Server跨更新读取，再核对新进程，均发现5个启用Skill/6条受信任Hook。仅市场ref发生配置语义变化，其余插件清单保持，7个受控阶段全部正常退出/归零，零模型轮次。before.json和17文件旧包提供回退依据，没有复制凭据或完整配置。 |
 | accord-shared-plugin-update-20260920-02 | 同一Git市场从e758f0df绑定9bcfad1c，升级至21文件51ae6e41；执行前冻结27份源码。源码/市场/缓存及外部配置语义独立回读一致，5个CLI与2个清单读取进程自然释放，保留19文件旧包和原生回退命令。新增MCP已安装但当前Desktop任务工具未暴露，不宣称已采用；勿重跑一次性脚本。 |
+| accord-shared-plugin-update-20260920-03 | 按用户要求校对描述，插件简介和入口Skill UI两文件更新到213116ec，经同一Git市场采用e585f455；格式/长度/静态契约校验通过。27份执行源预冻结，源码/市场/缓存一致，原有启用与信任及外部配置保持，7个原生进程阶段自然释放。保留旧包作回退；描述更清晰不证明功能或当前GUI采用完成。 |
 | accord-installed-entry-20260919-01 | 56855b4观察器、3e7e60dc现装包、CLI0.155.1及Terra/medium。无Hook投影/信任绕过，五轮实际送达和业务/独立语义均通过；阶段5读取安装态核验Skill。错误哈希比较原件保留，输入/暂停/材料保全由独立状态证据核对。5次模型进程及12次清单进程归零，仅本工作区信任登记已精确恢复，重复workspace/temp/state回收；不代验默认宿主、GUI、自动交接或整版。 |
 | accord-carrier-native-20260920-01 | a703f215模块、CLI0.155.1，三案、9次本地固定响应，无真实模型/凭据。成功与多轮补交后才取消源订阅，拒绝接管保持源；SQL作用域记录与原生回执保留。控制进程与三个Node调用方均正常退出、所属进程归零；测试home/workspace/state/temp回收，原生会话证据保留。不证明生产语义核验器、自主触发、GUI调用或整版验收。9月19日01–03分别绑定较早源码，后续修复不改写原件。 |
 | accord-ordinary-entry-20260915-01 | 164febb2、CLI0.154.0、Terra/medium，194.595秒、累计211200 tokens/输出4901，5/5结构检查；源Hook实际全失败，阶段2计划仍为待同意，因此不是Accord或业务全验通过。原result、review、阶段快照、实际执行源码和cleanup记录保留。 |
