@@ -90,7 +90,7 @@ checkpoint Hook's recovery evidence, preserving its bounded snapshot budget.
 Startup guidance reads the packaged brief, with no task-state access. A missing
 brief is an entry failure; unavailable optional details hold only dependent work.
 The package also registers one host-managed stdio MCP process with
-`inspect_task_state(cwd)`. It reuses checkpoint `status` and returns a selected
+`inspect_task_state(cwd, includeContext?, contextMaxAgeMs?)`. It reuses checkpoint `status` and returns a selected
 subset of the caller's native MCP metadata separately from that snapshot. The
 caller selects an absolute workspace; the tool does not attest it as the host's
 current cwd. It neither writes state nor opens a control connection or dispatches
@@ -99,6 +99,14 @@ session identity is shared by descendants: when native session and thread IDs
 differ, the reader holds checkpoint lookup instead of adopting ancestor state.
 This adds a host-owned process lifetime, not a separate storage engine or remote
 service. Installation, actual tool use and resource release remain separate checks.
+Context reads are opt-in. They reuse the Hook-bound transcript reader and match
+its thread, turn and model to this call's native metadata; the recorded session
+version remains separate from the current host version. Different input epochs
+are not combined. The caller may select an appropriate age limit; original sample
+time, expired-state diagnostics and unobserved-tail uncertainty remain. Without
+current host evidence, raw transcript counters do not establish assessment identity.
+The MCP implementation version is captured from package metadata at startup;
+development source execution uses the development projection as its version source.
 Standalone startup resolves configured state/session/home/temp paths against its
 original cwd, then leaves the plugin cache directory before serving. This avoids
 pinning a Windows cache directory during native replacement without rebinding

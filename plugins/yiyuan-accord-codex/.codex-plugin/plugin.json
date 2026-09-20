@@ -1,6 +1,6 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "3.3.0-dev.1",
+  "version": "3.3.0-dev.1+codex.20260920015610",
   "description": "Helps Codex coordinate goals, capabilities, correction, task continuity and delivery checks within the user's authority.",
   "author": {
     "name": "yiheng8023",
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "YIYUAN Accord",
     "shortDescription": "Coordinate tasks, recovery and verified delivery",
-    "longDescription": "Tell Codex the outcome you need. YIYUAN Accord helps it choose and combine available capabilities, adapt to changes, check results and preserve unfinished work. This development package includes task guidance, lifecycle Hooks and a read-only tool for saved task state. Operation depends on supported host interfaces and user permissions. Automatic handoff is still in development.",
+    "longDescription": "Tell Codex the outcome you need. YIYUAN Accord helps it choose and combine available capabilities, adapt to changes, check results and preserve unfinished work. This development package includes task guidance, lifecycle Hooks and a read-only tool for saved task state and native context observations. Operation depends on supported host interfaces and user permissions. Automatic handoff is still in development.",
     "developerName": "yiheng8023",
     "category": "Developer Tools",
     "capabilities": [

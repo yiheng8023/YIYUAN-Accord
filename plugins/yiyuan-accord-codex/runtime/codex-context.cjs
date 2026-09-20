@@ -13,9 +13,34 @@ const ROLLOUT_NAME = new RegExp(
   `^rollout-(\\d{4})-(\\d{2})-(\\d{2})T\\d{2}-\\d{2}-\\d{2}-(${UUID})(?:_(${UUID}))?\\.jsonl$`,
   'i',
 );
+const CURRENT_HOST_FIELDS = ['threadId', 'turnId', 'model', 'hostVersion', 'sourceRef'];
 
 function text(value) {
   return typeof value === 'string' && value.length > 0;
+}
+
+function boundedText(value, limit) {
+  return text(value) && value.trim().length > 0 && value.length <= limit &&
+    !/[\u0000-\u001f\u007f]/u.test(value);
+}
+
+function currentHost(binding, options) {
+  if (!Object.prototype.hasOwnProperty.call(options, 'currentHost')) {
+    return {host: null, reason: null};
+  }
+  const host = options.currentHost;
+  if (!host || typeof host !== 'object' || Array.isArray(host) ||
+      Object.keys(host).length !== CURRENT_HOST_FIELDS.length ||
+      !CURRENT_HOST_FIELDS.every((key) => Object.prototype.hasOwnProperty.call(host, key)) ||
+      !boundedText(host.threadId, 200) || !boundedText(host.turnId, 200) ||
+      !boundedText(host.model, 200) || !boundedText(host.hostVersion, 100) ||
+      !boundedText(host.sourceRef, 2048)) {
+    return {host: null, reason: 'current-host-fields-invalid'};
+  }
+  if (host.threadId !== binding.sessionId) return {host: null, reason: 'current-host-thread-mismatch'};
+  if (host.turnId !== binding.turnId) return {host: null, reason: 'current-host-turn-mismatch'};
+  if (host.model !== binding.model) return {host: null, reason: 'current-host-model-mismatch'};
+  return {host, reason: null};
 }
 
 function integer(value) {
@@ -40,7 +65,7 @@ function empty(reason) {
     lastResponseTokens: null, lastResponseScope: null,
     cumulativeTokens: null, cumulativeScope: null,
     windowTokens: null, observedAtMs: null, validUntilMs: null,
-    observationId: null, sourceRef: null,
+    observationId: null, sourceRef: null, recordedHostVersion: null, hostSourceRef: null,
   };
 }
 
@@ -114,6 +139,8 @@ function observeNativeTranscript(binding, options = {}) {
   const now = options.now;
   const maxAgeMs = options.maxAgeMs;
   if (!integer(now) || !integer(maxAgeMs) || maxAgeMs === 0) return empty('observation-time-invalid');
+  const liveHost = currentHost(binding, options);
+  if (liveHost.reason) return empty(liveHost.reason);
 
   let sessionsRoot;
   let transcriptPath;
@@ -273,25 +300,36 @@ function observeNativeTranscript(binding, options = {}) {
   if (!latestToken) return empty(pendingGeneration || 'current-turn-token-count-unavailable');
   if (latestToken.observedAtMs > now) return empty('token-count-from-future');
   const validUntilMs = latestToken.observedAtMs + maxAgeMs;
-  if (!Number.isSafeInteger(validUntilMs) || validUntilMs <= now) return empty('token-count-expired');
+  if (!Number.isSafeInteger(validUntilMs) || validUntilMs <= now) {
+    return {...empty('token-count-expired'), observedAtMs: latestToken.observedAtMs,
+      validUntilMs: Number.isSafeInteger(validUntilMs) ? validUntilMs : null,
+      sampleAgeMs: now - latestToken.observedAtMs};
+  }
 
   const conditions = {
     threadId: meta.id,
     turnId: binding.turnId,
-    hostVersion: meta.cli_version,
+    hostVersion: liveHost.host?.hostVersion ?? null,
     model: binding.model,
-    contextGeneration: sha({threadId: meta.id, turnId: binding.turnId, hostVersion: meta.cli_version,
+    contextGeneration: sha({threadId: meta.id, turnId: binding.turnId,
+      recordedHostVersion: meta.cli_version, currentHost: liveHost.host && {
+        threadId: liveHost.host.threadId, turnId: liveHost.host.turnId,
+        model: liveHost.host.model, hostVersion: liveHost.host.hostVersion,
+      },
       model: binding.model, sourceIdentity: {dev: identity.dev, ino: identity.ino},
       windowTokens: latestToken.window, turnContextOffset: targetContext.offset, generationEvents}),
   };
   const sourceRef = `codex-rollout:${relative.split(path.sep).join('/')}#byte=${latestToken.offset}`;
-  const observationId = sha({conditions, identity, latestToken, sourceRef});
+  const observationId = sha({conditions, identity, latestToken, sourceRef,
+    recordedHostVersion: meta.cli_version, hostSourceRef: liveHost.host?.sourceRef ?? null});
   return {
     state: 'observed', reason: 'native-last-response-boundary', conditions,
     lastResponseTokens: latestToken.last, lastResponseScope: 'last-native-response-boundary',
     cumulativeTokens: latestToken.cumulative, cumulativeScope: 'session-cumulative-not-occupancy',
     windowTokens: latestToken.window, observedAtMs: latestToken.observedAtMs, validUntilMs,
-    observationId, sourceRef,
+    sampleAgeMs: now - latestToken.observedAtMs,
+    observationId, sourceRef, recordedHostVersion: meta.cli_version,
+    hostSourceRef: liveHost.host?.sourceRef ?? null,
   };
 }
 

@@ -198,7 +198,8 @@ function observeStoredContext(input, request, now = Date.now()) {
       scope: 'native-last-response-context-basis', sourceReleaseAllowed: false};
   }
   const {observeNativeTranscript} = require('./codex-context.cjs');
-  return observeNativeTranscript(input.nativeContextSource, {now, maxAgeMs: request.maxAgeMs ?? 30000});
+  return observeNativeTranscript(input.nativeContextSource, {now, maxAgeMs: request.maxAgeMs ?? 30000,
+    ...(Object.hasOwn(request, 'currentHost') ? {currentHost: request.currentHost} : {})});
 }
 
 function readNativeContextSnapshot(request, where) {
@@ -1175,8 +1176,8 @@ const HELP = {
   operations: ['status', 'read-native-input', 'observe-context', 'assess-context', 'bind', 'pause', 'retire', 'recover-lock'],
   nativeContext: {
     read: {op: 'observe-context', session_id: 'native-session-id', cwd: 'absolute-workspace', maxAgeMs: 30000},
-    source: 'Only the native transcript binding retained from a root UserPromptSubmit event is read; request-supplied paths are ignored. Reads are bounded to that file and do not scan other task history. Missing, stale, changing or unbound metadata is unknown.',
-    assessment: 'Use assess-context with nativeContext=true, current epoch/revision, observation.conditions and your independently sourced integrity/time/estimate claims. Provide estimates.contextTailUpperBoundTokens for unaccounted history after the latest response, plus nextWorkTokens/handoffTokens/recoveryTokens/safetyMarginTokens and sourceRef. The operation reads fresh counters and derives contextUpperBoundTokens from lastResponseTokens plus the tail estimate; normal response growth does not force an observe/assess retry loop. Changed model/turn/context generation still requires reassessment. Returned observationId/nativeSourceRef identify the facts actually used.',
+    source: 'Only the native transcript binding retained from a root UserPromptSubmit event is read; request-supplied paths are ignored. Reads are bounded to that file and do not scan other task history. Missing, stale, changing or unbound metadata is unknown. recordedHostVersion is session metadata, not live identity. For current host conditions pass currentHost {threadId, turnId, model, hostVersion, sourceRef} from an actual matching native observation, or use the MCP includeContext option. Without it conditions.hostVersion stays null; caller data is not authentication.',
+    assessment: 'Use assess-context with nativeContext=true, the same independently sourced currentHost and chosen maxAgeMs, current epoch/revision, observation.conditions and your inspected integrity/time/estimate claims. Provide estimates.contextTailUpperBoundTokens for unaccounted history after the latest response, plus nextWorkTokens/handoffTokens/recoveryTokens/safetyMarginTokens and sourceRef. The operation reads counters within that age limit and derives contextUpperBoundTokens from lastResponseTokens plus the tail estimate; normal response growth does not force an observe/assess retry loop. Changed model/turn/context generation still requires reassessment. Returned observationId/nativeSourceRef identify the facts actually used.',
     limit: 'Native last usage is a recent response-boundary basis, cumulative usage is not occupancy, and neither proves inheritance integrity or authority. Existing pauses, input recovery, forecast and ownership checks remain; no automatic mode activation, dispatch or source release.'
   },
   status: {op: 'status', session_id: 'native-session-id', cwd: 'absolute-workspace'},

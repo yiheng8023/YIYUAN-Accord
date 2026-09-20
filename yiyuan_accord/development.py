@@ -109,9 +109,10 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "configuration": ".mcp.json", "entry": "runtime/native-state-mcp.cjs",
                 "transport": "host-managed-stdio", "tool": "inspect_task_state",
                 "scope": "calling-thread-metadata-and-explicit-caller-selected-workspace",
-                "effect": "read-existing-checkpoint-status-without-state-mutation",
+                "effect": "read-existing-checkpoint-status-with-optional-hook-bound-context-without-state-mutation",
                 "identity": "Codex callId and x-codex-turn-metadata; root-thread-only-checkpoint-read; descendant-shared-session-remains-unavailable; metadata-is-not-authentication",
                 "storage": "existing-task-checkpoint-only",
+                "context": "includeContext boolean defaults false; current identity from MCP metadata; recordedHostVersion remains separate; mismatched input stays unknown",
                 "lifecycle": "host-start-reload-and-close; releases-plugin-cache-cwd-before-serving; process-exits-on-stdin-end; no-listener-or-daemon",
                 "limits": "no-argument-identity-or-operation-override; no-input-replay; no-freshness-authority-or-completion-claim; no-app-server-control-or-handoff-dispatch",
             }
@@ -326,7 +327,7 @@ def development_contract_errors(contract, golden_task_ids):
     version = delivery.get("version")
     target = cycle.get("targetVersion")
     development_version = (isinstance(version, str) and isinstance(target, str)
-                           and re.fullmatch(re.escape(target) + r"-dev\.[1-9][0-9]*", version) is not None)
+                           and re.fullmatch(re.escape(target) + r"-dev\.[1-9][0-9]*(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?", version) is not None)
     final_version = (isinstance(target, str) and isinstance(release, dict)
                      and version == target == release.get("target"))
     require((development_version and contract.get("status") == "in-development"

@@ -4,6 +4,7 @@
 // Codex supplies call metadata separately from model-chosen tool arguments.
 const {once} = require('node:events');
 const path = require('node:path');
+const fs = require('node:fs');
 const {TextDecoder} = require('node:util');
 const {operate} = require('./task-checkpoint.cjs');
 
@@ -12,9 +13,12 @@ const MAX_FRAME = 128 * 1024;
 const MAX_RESULT = 128 * 1024;
 const TOOL = Object.freeze({
   name: 'inspect_task_state',
-  description: 'Read the saved Accord state for the calling Codex thread at an explicitly selected workspace. Inspect pauses, unresolved work and recovery conditions before relying on saved state. This does not establish permission, current-input freshness, completion or a handoff control connection.',
+  description: 'Read saved Accord task state; request includeContext for bounded native context observations before long work or continuity decisions. Current host identity comes from call metadata, separately from recorded session metadata. No permission, completion or handoff control is established.',
   inputSchema: {type: 'object', properties: {cwd: {type: 'string', minLength: 1, maxLength: 4096,
-    description: 'Absolute existing workspace directory. Caller-selected scope, not host-attested current cwd.'}},
+    description: 'Absolute existing workspace directory. Caller-selected scope, not host-attested current cwd.'},
+    includeContext: {type: 'boolean', description: 'Also read current Hook-bound context counters. Defaults to false; missing or stale evidence remains unknown.'},
+    contextMaxAgeMs: {type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER,
+      description: 'Requires includeContext. Caller-selected age limit for the last native response boundary; defaults to 30000 ms. Original sample time and unobserved-tail uncertainty remain.'}},
     required: ['cwd'], additionalProperties: false},
   annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false},
 });
@@ -28,9 +32,19 @@ function unavailable(reason) {
   return {schema: 'yiyuan-accord-native-state/v1', state: 'unavailable', reason, claimLimit: CLAIM_LIMIT};
 }
 
+function inspectionReason(error) {
+  const code = error?.code || error?.message;
+  return typeof code === 'string' && /^[A-Za-z][A-Za-z0-9_-]{0,95}$/.test(code)
+    ? code : 'state-inspection-unavailable';
+}
+
 function inspectNativeState(params) {
   if (!record(params) || params.name !== TOOL.name || !record(params.arguments)
-      || Object.keys(params.arguments).length !== 1 || !own(params.arguments, 'cwd')
+      || Object.keys(params.arguments).some(key => !['cwd', 'includeContext', 'contextMaxAgeMs'].includes(key))
+      || !own(params.arguments, 'cwd')
+      || own(params.arguments, 'includeContext') && typeof params.arguments.includeContext !== 'boolean'
+      || own(params.arguments, 'contextMaxAgeMs') && (params.arguments.includeContext !== true
+        || !Number.isSafeInteger(params.arguments.contextMaxAgeMs) || params.arguments.contextMaxAgeMs <= 0)
       || !text(params.arguments.cwd, 4096) || !path.isAbsolute(params.arguments.cwd)) {
     return {isError: true, value: unavailable('explicit-workspace-required')};
   }
@@ -56,20 +70,45 @@ function inspectNativeState(params) {
       checkpoint = {state: 'observed', snapshot: operate({op: 'status',
         session_id: source.sessionTreeId, cwd: params.arguments.cwd})};
     } catch (error) {
-      const code = error?.code || error?.message;
-      checkpoint = {state: 'unavailable', reason: typeof code === 'string'
-        && /^[A-Za-z][A-Za-z0-9_-]{0,95}$/.test(code) ? code : 'state-inspection-unavailable'};
+      checkpoint = {state: 'unavailable', reason: inspectionReason(error)};
     }
   }
   const value = {schema: 'yiyuan-accord-native-state/v1', state: 'observed-call-context',
     source, workspace, checkpoint, claimLimit: CLAIM_LIMIT};
+  if (params.arguments.includeContext === true) {
+    const unknown = reason => ({state: 'unknown', reason, sourceReleaseAllowed: false});
+    if (checkpoint.state !== 'observed') value.context = unknown(checkpoint.reason);
+    else if (!source.model || !source.hostVersion) value.context = unknown('current-host-binding-missing');
+    else {
+      try {
+        const currentHost = {threadId: source.threadId, turnId: source.turnId,
+          model: source.model, hostVersion: source.hostVersion,
+          sourceRef: `codex-mcp-call:${source.callId}`};
+        const observed = operate({op: 'observe-context', session_id: source.sessionTreeId,
+          cwd: params.arguments.cwd, currentHost,
+          maxAgeMs: params.arguments.contextMaxAgeMs ?? 30000});
+        value.context = observed.epoch === checkpoint.snapshot.epoch
+          ? observed : unknown('input-changed-between-state-and-context');
+      } catch (error) { value.context = unknown(inspectionReason(error)); }
+    }
+  }
   if (Buffer.byteLength(JSON.stringify(value)) > MAX_RESULT) {
     return {isError: true, value: unavailable('bounded-state-result-exceeded')};
   }
   return {isError: false, value};
 }
 
-function createHandler() {
+function runtimeVersion() {
+  const root = path.resolve(__dirname, '..');
+  const manifest = path.join(root, '.codex-plugin', 'plugin.json');
+  const packaged = fs.existsSync(manifest);
+  const data = JSON.parse(fs.readFileSync(packaged ? manifest : path.join(root, 'product', 'development.json'), 'utf8'));
+  const version = packaged ? data.version : data.delivery?.version;
+  if (!text(version, 200)) throw new Error('package-version-unavailable');
+  return version;
+}
+
+function createHandler(version = runtimeVersion()) {
   let initialized = false, ready = false;
   const error = (id, code, message) => ({jsonrpc: '2.0', id, error: {code, message}});
   const result = (id, value) => ({jsonrpc: '2.0', id, result: value});
@@ -93,7 +132,7 @@ function createHandler() {
       }
       initialized = true;
       return result(id, {protocolVersion: PROTOCOL, capabilities: {tools: {listChanged: false}},
-        serverInfo: {name: 'yiyuan-accord-native-state', version: '3.3.0-dev.1'}});
+        serverInfo: {name: 'yiyuan-accord-native-state', version}});
     }
     if (!ready) return error(id, -32002, 'Initialization required');
     if (request.method === 'tools/list') {
@@ -114,8 +153,8 @@ function createHandler() {
   };
 }
 
-async function serve(input = process.stdin, output = process.stdout) {
-  const handle = createHandler();
+async function serve(input = process.stdin, output = process.stdout, version = runtimeVersion()) {
+  const handle = createHandler(version);
   const decoder = new TextDecoder('utf-8', {fatal: true});
   let pending = Buffer.alloc(0);
   for await (const chunk of input) {
@@ -137,6 +176,7 @@ async function serve(input = process.stdin, output = process.stdout) {
 
 if (require.main === module) {
   Promise.resolve().then(() => {
+    const version = runtimeVersion();
     // Windows cannot replace a cache directory held as a live process cwd.
     // Modules are loaded; every task workspace is supplied as an absolute path.
     // Preserve the original base of configured state, session, home and temp paths.
@@ -144,7 +184,7 @@ if (require.main === module) {
       if (process.env[key]) process.env[key] = path.resolve(process.env[key]);
     }
     process.chdir(require('node:os').homedir());
-    return serve();
+    return serve(process.stdin, process.stdout, version);
   }).catch(() => {
     process.stderr.write('Accord native-state transport stopped; no state mutation was requested.\n');
     process.exitCode = 1;

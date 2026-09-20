@@ -19,6 +19,7 @@ from unittest.mock import Mock, patch
 PYTHON = str(Path(sys.executable).resolve())
 
 SCRIPT = Path(__file__).resolve().parents[2] / "scripts/observe_codex_entry.py"
+PACKAGE_VERSION = json.loads((SCRIPT.parents[1] / "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json").read_text(encoding="utf-8"))["version"]
 spec = importlib.util.spec_from_file_location("observe_codex_entry", SCRIPT)
 entry = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(entry)
@@ -193,7 +194,7 @@ class EntryTests(unittest.TestCase):
 
     def installed_listing(self, **changes):
         row = {"pluginId": "yiyuan-accord-codex@yiyuan-accord", "name": "yiyuan-accord-codex",
-               "marketplaceName": "yiyuan-accord", "version": "3.3.0-dev.1", "installed": True,
+               "marketplaceName": "yiyuan-accord", "version": PACKAGE_VERSION, "installed": True,
                "enabled": True, "source": {"source": "local", "path": "fixture-marketplace"}}
         row.update(changes)
         return subprocess.CompletedProcess([], 0, json.dumps({"installed": [row]}).encode(), b"")
@@ -205,7 +206,7 @@ class EntryTests(unittest.TestCase):
         (package / ".mcp.json").unlink()
 
     def prepared_persistent(self, root, case_path=None, *, native_hooks=False, installed=False):
-        package = (root / "home/plugins/cache/yiyuan-accord/yiyuan-accord-codex/3.3.0-dev.1"
+        package = (root / "home/plugins/cache/yiyuan-accord/yiyuan-accord-codex" / PACKAGE_VERSION
                    if installed else root / "package")
         if native_hooks:
             self.copy_hook_only_fixture(package)

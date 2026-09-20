@@ -26,6 +26,14 @@ the existing root-session checkpoint at an explicit workspace. Call identity
 comes from host MCP metadata; the workspace remains caller-selected. Missing
 metadata/state or a descendant's shared session remains unavailable, not adopted
 parent state. The host owns this stdio process; no control connection is created.
+For long work or a continuity decision, request `includeContext: true` to join
+Hook-bound counters with current call identity. `recordedHostVersion` belongs to
+the old session header; use the separately sourced current conditions. Unknown
+or changed input, turn, model or version holds dependent assessment. Ordinary
+status reads omit this additional file read.
+`contextMaxAgeMs` can bind an age limit appropriate to the actual work; retain the
+original sample time and account for the unobserved tail. A larger limit alone
+does not make old evidence current or allow a transfer.
 Use current helper `--help` from the plugin root for other status, binding, revision,
 `unresolved`, pause and retirement; readback or file matches do not grant authority.
 Retain known unmet conditions until evidenced resolution or authorized cancellation.

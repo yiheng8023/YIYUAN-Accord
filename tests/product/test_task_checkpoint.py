@@ -1115,6 +1115,8 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
 
     def native_transcript(self):
         self.session = '11111111-2222-4333-8444-555555555555'
+        self.native_host = dict(threadId=self.session, turnId='native-turn', model='fixture-model',
+                                hostVersion='current-fixture-host', sourceRef='native-fixture-call')
         self.environment['CODEX_HOME'] = str(self.root / 'codex-home')
         self.transcript = Path(self.environment['CODEX_HOME']) / 'sessions/2026/09/14' / (
             'rollout-2026-09-14T12-00-00-' + self.session + '.jsonl')
@@ -1139,7 +1141,7 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
 
     def transcript_request(self, observation):
         request = self.context_request()
-        request.update(nativeContext=True, conditions=observation['conditions'])
+        request.update(nativeContext=True, currentHost=self.native_host, conditions=observation['conditions'])
         request['assessment'].update(conditions=observation['conditions'], observationId=observation['observationId'])
         request['assessment'].pop('usageEvent')
         request['assessment']['estimates'].update(contextTailUpperBoundTokens=1000)
@@ -1151,6 +1153,8 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         result = self.invoke(dict(op='observe-context', transcript_path=str(self.root / 'wrong.jsonl')))
         self.assertEqual(result['state'], 'observed')
         self.assertEqual(result['lastResponseTokens'], 4000)
+        self.assertIsNone(result['conditions']['hostVersion'])
+        self.assertEqual(result['recordedHostVersion'], '0.154.0')
         self.assertEqual(result['cumulativeScope'], 'session-cumulative-not-occupancy')
         self.assertNotIn('authorized delivery', json.dumps(result))
         self.assertFalse(result['sourceReleaseAllowed'])
@@ -1158,7 +1162,7 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
 
     def test_native_context_assessment_consumes_growth_and_rejects_changed_generation(self):
         self.native_transcript()
-        observed = self.invoke(dict(op='observe-context'))
+        observed = self.invoke(dict(op='observe-context', currentHost=self.native_host))
         request = self.transcript_request(observed)
         self.assertEqual(self.invoke(request)['decision'], 'continue-bounded')
         self.append_usage(5000)
@@ -1172,7 +1176,7 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
 
     def test_native_context_requires_tail_evidence_and_preserves_pause_and_resume(self):
         self.native_transcript()
-        observed = self.invoke(dict(op='observe-context'))
+        observed = self.invoke(dict(op='observe-context', currentHost=self.native_host))
         request = self.transcript_request(observed)
         request['assessment']['estimates'].pop('contextTailUpperBoundTokens')
         self.assertEqual(self.invoke(request)['decision'], 'unknown')
@@ -1189,6 +1193,19 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.event('Interrupt')
         self.assertEqual(self.invoke(dict(op='observe-context'))['state'], 'unknown')
         self.assertFalse(self.status()['nativeContextSourceAvailable'])
+
+    def test_history_version_alone_cannot_supply_current_assessment_identity(self):
+        self.native_transcript()
+        raw = self.invoke(dict(op='observe-context'))
+        result = self.invoke(self.transcript_request(raw))
+        self.assertEqual(result['decision'], 'unknown')
+        self.assertIn('current-host-conditions-missing', result['reasons'])
+        observed = self.invoke(dict(op='observe-context', currentHost=self.native_host))
+        changed = self.transcript_request(observed)
+        changed['currentHost'] = {**self.native_host, 'hostVersion': 'changed-live-host'}
+        result = self.invoke(changed)
+        self.assertEqual(result['decision'], 'reassess')
+        self.assertFalse(result['sourceReleaseAllowed'])
 
     def test_context_forecast_cannot_be_lower_than_native_response_basis(self):
         request = self.context_request()
@@ -1241,7 +1258,7 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
 
     def test_native_context_without_efficiency_range_keeps_bounded_work_and_reserves_separate(self):
         self.native_transcript()
-        observed = self.invoke(dict(op='observe-context'))
+        observed = self.invoke(dict(op='observe-context', currentHost=self.native_host))
         before = {p.name: p.read_bytes() for p in self.state.iterdir()}
         for work, tail, decision in ((1000, 1000, 'continue-bounded'),
                                      (3499, 1000, 'continue-bounded'),

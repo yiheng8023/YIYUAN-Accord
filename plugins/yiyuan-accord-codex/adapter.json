@@ -55,9 +55,10 @@
     "transport": "host-managed-stdio",
     "tool": "inspect_task_state",
     "scope": "calling-thread-metadata-and-explicit-caller-selected-workspace",
-    "effect": "read-existing-checkpoint-status-without-state-mutation",
+    "effect": "read-existing-checkpoint-status-with-optional-hook-bound-context-without-state-mutation",
     "identity": "Codex callId and x-codex-turn-metadata; root-thread-only-checkpoint-read; descendant-shared-session-remains-unavailable; metadata-is-not-authentication",
     "storage": "existing-task-checkpoint-only",
+    "context": "includeContext boolean defaults false; current identity from MCP metadata; recordedHostVersion remains separate; mismatched input stays unknown",
     "lifecycle": "host-start-reload-and-close; releases-plugin-cache-cwd-before-serving; process-exits-on-stdin-end; no-listener-or-daemon",
     "limits": "no-argument-identity-or-operation-override; no-input-replay; no-freshness-authority-or-completion-claim; no-app-server-control-or-handoff-dispatch"
   },

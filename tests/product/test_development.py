@@ -619,6 +619,22 @@ class DevelopmentContractTests(unittest.TestCase):
         altered["status"] = "candidate-frozen"
         self.assertTrue(self.errors(altered))
 
+    def test_development_build_metadata_never_promotes_publication_or_accepts_paths(self):
+        for suffix, valid in (("+codex.20260920015610", True), ("+build-1.0", True),
+                              ("+", False), ("+codex..x", False), ("+../escape", False)):
+            with self.subTest(suffix=suffix):
+                altered = copy.deepcopy(self.contract)
+                altered['status'] = 'in-development'
+                altered['cycle']['versionState'] = 'development-target-not-published'
+                version = altered['cycle']['targetVersion'] + '-dev.1' + suffix
+                altered['delivery']['version'] = version
+                for projection in altered['delivery']['hostProjections']:
+                    projection['packageVersion'] = version
+                self.assertEqual(not self.errors(altered), valid)
+                if valid:
+                    altered['status'] = 'candidate-frozen'
+                    self.assertTrue(self.errors(altered))
+
     def test_system_floors_cannot_be_deleted_averaged_or_promoted(self):
         for field, value in (("aggregation", "weighted-average"),
                              ("qualityAxes", self.contract["systemOptimization"]["qualityAxes"][:-1]),

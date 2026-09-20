@@ -58,7 +58,16 @@ class CodexContextTests(unittest.TestCase):
         content = "\n".join(lines) + ("\n" if trailing_newline else "")
         self.rollout.write_text(content, encoding="utf-8")
 
-    def observe(self, binding=None, now=NOW, max_age=30000, sessions=None, namespaced=False):
+    def current_host(self, binding=None, **changes):
+        binding = binding or self.binding
+        host = {"threadId": binding["sessionId"], "turnId": binding["turnId"],
+                "model": binding["model"], "hostVersion": "0.155.1",
+                "sourceRef": "codex-mcp-request-metadata:fixture"}
+        host.update(changes)
+        return host
+
+    def observe(self, binding=None, now=NOW, max_age=30000, sessions=None, namespaced=False,
+                current_host=True):
         script = (
             "const fs=require('node:fs');"
             "const {observeNativeTranscript}=require(process.argv[1]);"
@@ -68,8 +77,13 @@ class CodexContextTests(unittest.TestCase):
             "if(x.namespaced==='both')x.options.sessionsRoot=p.toNamespacedPath(x.options.sessionsRoot);}"
             "process.stdout.write(JSON.stringify(observeNativeTranscript(x.binding,x.options)));"
         )
-        request = {"binding": binding or self.binding, "namespaced": namespaced, "options": {
+        effective_binding = binding or self.binding
+        request = {"binding": effective_binding, "namespaced": namespaced, "options": {
             "now": now, "maxAgeMs": max_age, "sessionsRoot": str(sessions or self.sessions)}}
+        if current_host is True:
+            request["options"]["currentHost"] = self.current_host(effective_binding)
+        elif current_host is not False:
+            request["options"]["currentHost"] = current_host
         result = subprocess.run([self.node, "-e", script, str(RUNTIME)], input=json.dumps(request),
                                 text=True, encoding="utf-8", capture_output=True, timeout=10,
                                 cwd=ROOT)
@@ -81,8 +95,10 @@ class CodexContextTests(unittest.TestCase):
         result = self.observe()
         self.assertEqual(result["state"], "observed")
         self.assertEqual(result["conditions"], {
-            "threadId": SESSION, "turnId": TURN, "hostVersion": "0.154.0",
+            "threadId": SESSION, "turnId": TURN, "hostVersion": "0.155.1",
             "model": "gpt-5.6-sol", "contextGeneration": result["conditions"]["contextGeneration"]})
+        self.assertEqual(result["recordedHostVersion"], "0.154.0")
+        self.assertEqual(result["hostSourceRef"], "codex-mcp-request-metadata:fixture")
         self.assertEqual(result["lastResponseTokens"], 4000)
         self.assertEqual(result["lastResponseScope"], "last-native-response-boundary")
         self.assertEqual(result["cumulativeTokens"], 50000)
@@ -247,6 +263,52 @@ class CodexContextTests(unittest.TestCase):
         compacted = self.observe()
         self.assertEqual(compacted['state'], 'observed')
         self.assertNotEqual(compacted['conditions']['contextGeneration'], before['conditions']['contextGeneration'])
+
+    def test_raw_history_version_is_not_current_host_identity(self):
+        self.write(self.meta(), self.context(), self.usage())
+        without_host = self.observe(current_host=False)
+        self.assertEqual(without_host["state"], "observed")
+        self.assertIsNone(without_host["conditions"]["hostVersion"])
+        self.assertEqual(without_host["recordedHostVersion"], "0.154.0")
+        self.assertIsNone(without_host["hostSourceRef"])
+
+        current = self.observe(current_host=self.current_host(hostVersion="0.155.1",
+                                                               sourceRef="current-mcp:one"))
+        self.assertEqual(current["conditions"]["hostVersion"], "0.155.1")
+        self.assertEqual(current["recordedHostVersion"], "0.154.0")
+        self.assertEqual(current["hostSourceRef"], "current-mcp:one")
+
+    def test_rejects_invalid_or_mismatched_current_host_without_history_fallback(self):
+        self.write(self.meta(), self.context(), self.usage())
+        cases = (
+            (self.current_host(threadId="other-thread"), "current-host-thread-mismatch"),
+            (self.current_host(turnId="other-turn"), "current-host-turn-mismatch"),
+            (self.current_host(model="other-model"), "current-host-model-mismatch"),
+            ({**self.current_host(), "unexpected": "field"}, "current-host-fields-invalid"),
+            (self.current_host(hostVersion=" "), "current-host-fields-invalid"),
+        )
+        for host, reason in cases:
+            with self.subTest(reason=reason):
+                result = self.observe(current_host=host)
+                self.assertEqual(result["state"], "unknown")
+                self.assertEqual(result["reason"], reason)
+                self.assertIsNone(result["conditions"])
+
+    def test_live_host_version_changes_observation_identity(self):
+        self.write(self.meta(), self.context(), self.usage())
+        first = self.observe(current_host=self.current_host(hostVersion="0.155.1",
+                                                            sourceRef="current-mcp:one"))
+        repeated = self.observe(current_host=self.current_host(hostVersion="0.155.1",
+                                                               sourceRef="current-mcp:two"))
+        changed = self.observe(current_host=self.current_host(hostVersion="0.155.2",
+                                                              sourceRef="current-mcp:three"))
+        self.assertEqual(first["conditions"]["contextGeneration"],
+                         repeated["conditions"]["contextGeneration"])
+        self.assertNotEqual(first["observationId"], repeated["observationId"])
+        self.assertNotEqual(first["conditions"]["contextGeneration"],
+                            changed["conditions"]["contextGeneration"])
+        self.assertNotEqual(first["observationId"], changed["observationId"])
+        self.assertEqual(changed["conditions"]["hostVersion"], "0.155.2")
 
 
 if __name__ == "__main__":

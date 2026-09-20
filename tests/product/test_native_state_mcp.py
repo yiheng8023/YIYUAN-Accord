@@ -9,6 +9,7 @@ import sys
 import tempfile
 import threading
 import queue
+from datetime import datetime, timezone
 import unittest
 import time
 
@@ -50,6 +51,84 @@ class NativeStateMcpTests(unittest.TestCase):
     def files(self):
         return {p.relative_to(self.root).as_posix(): p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
 
+    def native_context(self, age=0):
+        session = '11111111-2222-4333-8444-555555555555'
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        meta.update(thread_id=session, session_id=session)
+        self.env['CODEX_HOME'] = str(self.root / 'codex-home')
+        transcript = Path(self.env['CODEX_HOME']) / 'sessions/2026/09/20' / (
+            'rollout-2026-09-20T00-00-00-' + session + '.jsonl')
+        transcript.parent.mkdir(parents=True, exist_ok=True)
+        stamp = datetime.fromtimestamp(time.time()-age, timezone.utc).isoformat()
+        records = [
+            {'type': 'session_meta', 'payload': {'id': session, 'cwd': str(self.work), 'cli_version': 'recorded-old-version'}},
+            {'type': 'turn_context', 'payload': {'turn_id': meta['turn_id'], 'model': meta['model'], 'cwd': str(self.work)}},
+            {'type': 'event_msg', 'payload': {'type': 'token_count', 'info': {
+                'last_token_usage': {'total_tokens': 4000}, 'total_token_usage': {'total_tokens': 500000},
+                'model_context_window': 12000}}},
+        ]
+        transcript.write_text(''.join(json.dumps({'timestamp': stamp, **row})+'\n' for row in records), encoding='utf-8')
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Continue this work.',
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+            session=session, hook='UserPromptSubmit')
+
+    def test_context_is_opt_in_and_current_version_comes_from_native_call(self):
+        self.native_context()
+        before = self.files()
+        self.assertNotIn('context', self.inspect()['value'])
+        self.params['arguments']['includeContext'] = True
+        result = self.inspect()['value']
+        context = result['context']
+        self.assertEqual(context['state'], 'observed')
+        self.assertEqual(context['conditions']['hostVersion'], 'observed-version')
+        self.assertEqual(context['recordedHostVersion'], 'recorded-old-version')
+        self.assertEqual(context['hostSourceRef'], 'codex-mcp-call:native-call-1')
+        self.assertEqual(context['lastResponseTokens'], 4000)
+        self.assertEqual(context['epoch'], result['checkpoint']['snapshot']['epoch'])
+        self.assertFalse(context['sourceReleaseAllowed'])
+        self.assertEqual(self.files(), before)
+
+    def test_context_missing_stale_or_mismatched_remains_unknown(self):
+        self.params['arguments']['includeContext'] = True
+        self.assertEqual(self.inspect()['value']['context']['reason'], 'native-user-input-receipt-missing')
+        self.native_context(age=120)
+        expired = self.inspect()['value']['context']
+        self.assertEqual(expired['reason'], 'token-count-expired')
+        self.assertGreater(expired['sampleAgeMs'], 110000)
+        self.assertIsNone(expired['lastResponseTokens'])
+        self.params['arguments']['contextMaxAgeMs'] = 180000
+        older = self.inspect()['value']['context']
+        self.assertEqual(older['state'], 'observed')
+        self.assertGreater(time.time()*1000-older['observedAtMs'], 110000)
+        self.assertEqual(older['validUntilMs']-older['observedAtMs'], 180000)
+        self.native_context()
+        self.params['_meta']['x-codex-turn-metadata']['turn_id'] = 'other-turn'
+        self.assertEqual(self.inspect()['value']['context']['reason'], 'current-host-turn-mismatch')
+
+    def test_context_flag_and_current_identity_cannot_be_supplied_as_arguments(self):
+        for value in (None, 1, 'true'):
+            self.params['arguments']['includeContext'] = value
+            self.assertTrue(self.inspect()['isError'])
+        self.params['arguments']['includeContext'] = True
+        for age in (0, -1, True, '30000'):
+            self.params['arguments']['contextMaxAgeMs'] = age
+            self.assertTrue(self.inspect()['isError'])
+        self.params['arguments'].pop('contextMaxAgeMs')
+        self.native_context()
+        self.params['arguments']['includeContext'] = True
+        self.params['_meta']['x-codex-turn-metadata'].pop('codex_version')
+        self.assertEqual(self.inspect()['value']['context']['reason'], 'current-host-binding-missing')
+        self.params['arguments']['currentHost'] = {'hostVersion': 'pretended'}
+        self.assertTrue(self.inspect()['isError'])
+
+    def test_context_input_change_during_state_read_is_not_combined(self):
+        self.params['arguments']['includeContext'] = True
+        script = "const h=require(process.argv[1]);h.operate=x=>x.op==='status'?{epoch:'one'}:{state:'observed',epoch:'two'};const m=require(process.argv[2]);let s='';process.stdin.on('data',x=>s+=x);process.stdin.on('end',()=>process.stdout.write(JSON.stringify(m.inspectNativeState(JSON.parse(s)))));"
+        p = subprocess.run([self.node, '-e', script, str(CHECKPOINT), str(BRIDGE)],
+            input=json.dumps(self.params), capture_output=True, encoding='utf-8', env=self.env, timeout=10)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        self.assertEqual(json.loads(p.stdout)['value']['context']['reason'], 'input-changed-between-state-and-context')
+
     def test_missing_native_metadata_never_uses_argument_identity_or_creates_state(self):
         body = {'name': 'inspect_task_state', 'arguments': {'cwd': str(self.work)}}
         result = self.inspect(body)
@@ -81,11 +160,13 @@ class NativeStateMcpTests(unittest.TestCase):
         self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Root responsibility.'},
             session='ancestor-root', hook='UserPromptSubmit')
         self.params['_meta']['x-codex-turn-metadata']['session_id'] = 'ancestor-root'
+        self.params['arguments']['includeContext'] = True
         before = self.files()
         value = self.inspect()['value']
         self.assertEqual(value['source']['threadId'], 'current-thread')
         self.assertEqual(value['source']['sessionTreeId'], 'ancestor-root')
         self.assertEqual(value['checkpoint'], {'state': 'unavailable', 'reason': 'shared-session-scope-requires-reconciliation'})
+        self.assertEqual(value['context']['reason'], 'shared-session-scope-requires-reconciliation')
         self.assertEqual(self.files(), before)
 
     def test_pause_and_resume_unknowns_survive_without_writes(self):
@@ -148,6 +229,8 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual([row['id'] for row in rows], [0, 1, 2, 3, 4])
         self.assertEqual(rows[0]['error']['code'], -32002)
         self.assertEqual(rows[1]['result']['protocolVersion'], '2025-06-18')
+        package_version = json.loads((ROOT/'plugins/yiyuan-accord-codex/.codex-plugin/plugin.json').read_text(encoding='utf-8'))['version']
+        self.assertEqual(rows[1]['result']['serverInfo']['version'], package_version)
         self.assertTrue(rows[2]['result']['tools'][0]['annotations']['readOnlyHint'])
         self.assertEqual(rows[3]['result']['structuredContent']['source']['threadId'], 'current-thread')
         self.assertEqual(rows[4]['error']['code'], -32601)
@@ -314,7 +397,7 @@ def native_integration(codex, evidence):
         namespace, name = matches[0]
         return {'type':'function_call', 'id':'state_tool_call', 'call_id':'native_state_call',
             'name':name, **({'namespace':namespace} if namespace else {}),
-            'arguments':json.dumps({'cwd':str(root/'workspace')})}
+            'arguments':json.dumps({'cwd':str(root/'workspace'), 'includeContext':True})}
 
     fixture = host._Fixture(manifest, response)
     app = None
@@ -349,6 +432,8 @@ def native_integration(codex, evidence):
             raise RuntimeError('metadata differs from native thread/turn/call receipts')
         if value['checkpoint'] != {'state':'unavailable','reason':'native-user-input-receipt-missing'}:
             raise RuntimeError('absent hook receipt was not preserved as unknown')
+        if value.get('context', {}).get('reason') != 'native-user-input-receipt-missing':
+            raise RuntimeError('optional context must preserve absent input as unknown')
         if sha(original) != manifest['protectedSha256'] or list((root/'state').iterdir()):
             raise RuntimeError('inspection changed protected files or task state')
         status_request = {'threadId': thread, 'detail': 'toolsAndAuthOnly'}
@@ -356,6 +441,9 @@ def native_integration(codex, evidence):
         servers = [s for s in live['data'] if s.get('pluginId') == 'yiyuan-accord-codex@yiyuan-accord']
         if len(servers) != 1 or servers[0]['runtimeStatus'] != 'connected':
             raise RuntimeError('installed MCP must be connected before cache replacement')
+        package_version = json.loads((package/'.codex-plugin/plugin.json').read_text(encoding='utf-8'))['version']
+        if servers[0]['serverInfo']['version'] != package_version:
+            raise RuntimeError('MCP implementation identity differs from the installed package')
         cache = root/'home/plugins/cache/yiyuan-accord/yiyuan-accord-codex'
         before_cache = cache.stat()
         # Local fixture markets use native add/reinstall; marketplace upgrade is Git-only.
