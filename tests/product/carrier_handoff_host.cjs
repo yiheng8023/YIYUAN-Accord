@@ -33,10 +33,11 @@ async function runOwnedConnection(config) {
     fs.writeSync(stdout,chunk);
   };
   let result=null,error=null,context=null,exitCode=null,closeState=null;
+  let lastRpcRequest=null,fault=null,recovery=null;
+  const deadline=performance.now()+45000;
   const contextReplies=[];
   const captureMessage=event=>capture(Buffer.from(String(event.data)+'\n','utf8'));
   try {
-    const deadline=performance.now()+45000;
     if(config.websocketEndpoint){
       const token=process.env.ACCORD_TEST_CONTROL_TOKEN;
       if(!token)throw new Error('fixture WebSocket token missing');
@@ -55,7 +56,11 @@ async function runOwnedConnection(config) {
       native=spawn(config.argv[0],config.argv.slice(1),{cwd:config.plan.target.cwd,
         stdio:['pipe','pipe',stderr],windowsHide:true});
       native.stdout.on('data',capture);
-      const outgoing=new Writable({write(chunk,encoding,done){fs.writeSync(requests,chunk);native.stdin.write(chunk,encoding,done)}});
+      const outgoing=new Writable({write(chunk,encoding,done){
+        fs.writeSync(requests,chunk);
+        if(config.recoverReceipt){const frame=JSON.parse(chunk.toString('utf8'));if(frame.method && Object.hasOwn(frame,'id'))lastRpcRequest=frame;}
+        native.stdin.write(chunk,encoding,done);
+      }});
       connection=createOwnedAppServerConnection({stdin:outgoing,stdout:native.stdout,...config.binding});
       ended=new Promise((resolve,reject)=>{native.once('exit',code=>{exitCode=code;resolve(code)});native.once('error',reject)});
     }
@@ -83,11 +88,34 @@ async function runOwnedConnection(config) {
     await remote('sourceContext',[context]);
     const channel=connection.proposalChannel(proposal,async()=>({scopeRef:plan.scopeRef,
       authorityRef:plan.authorityRef,stateRef:plan.stateRef,writerThreadId:source.thread.id}));
-    result=await runHandoffProposal(plan,{transport:t,
+    let targetTurns=0;
+    const transport=config.recoverReceipt?{...t,async request(method,params,limit){
+      const value=await t.request(method,params,limit);
+      if(method==='turn/start' && ++targetTurns===2){
+        if(lastRpcRequest?.method!==method || JSON.stringify(lastRpcRequest.params)!==JSON.stringify(params))throw Error('fault request binding differs');
+        const requestRef={...config.binding,requestId:lastRpcRequest.id,method};
+        fault={request:clone(lastRpcRequest),response:clone(value),requestRef};
+        // Only this adapter callback loses the acknowledgement. The original
+        // native response remains in the caller's raw journal for reconciliation.
+        const lost=Error('controlled continuation acknowledgement loss');
+        lost.rpcRequest=Object.freeze(requestRef);throw lost;
+      }
+      return value;
+    }}:t;
+    result=await runHandoffProposal(plan,{transport,
       recorder:{begin:(...args)=>remote('begin',args),compareAndSet:(...args)=>remote('compareAndSet',args)},
       verify:(stage,facts,limit)=>remote('verify',[stage,facts,Math.max(0,limit-performance.now())])},proposal,channel);
   } catch (e) {
     error={name:e.name,message:e.message,code:e.code,state:e.state,details:e.details};
+    if(config.recoverReceipt && fault){
+      try{
+        const t=connection.transport,threadId=fault.request.params.threadId,turnId=fault.response.turn.id;
+        const terminal=await t.waitTerminal(threadId,turnId,deadline);
+        const targetRead=await t.request('thread/read',{threadId,includeTurns:true},deadline);
+        recovery={requestRef:fault.requestRef,originalRequest:fault.request,originalResponse:fault.response,
+          terminal,targetRead,scope:'surviving caller readback; no replay, lease change or source unsubscribe'};
+      }catch(e){recovery={error:e.message};}
+    }
   } finally {
     closeState=connection?.close();
     let timer;
@@ -102,7 +130,7 @@ async function runOwnedConnection(config) {
       if(ended)await Promise.race([ended,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('owned transport exit timed out')),10000)})]);
     } finally {clearTimeout(timer);native?.stdout.off('data',capture);fs.closeSync(stderr);fs.closeSync(stdout);fs.closeSync(requests);}
   }
-  process.stdout.write(JSON.stringify({kind:'done',result,error,context,contextReplies,exitCode,socketCloseCode,
+  process.stdout.write(JSON.stringify({kind:'done',result,error,recovery,context,contextReplies,exitCode,socketCloseCode,
     transportKind:socket?'websocket':'stdio',closeState,rawBytes})+'\n');
   rl.close();process.stdin.destroy();
 }

@@ -194,6 +194,28 @@ jobs:
           subprocess.run([sys.executable, "-B", "tests/product/test_native_state_mcp.py",
               "--native-codex", manifest["hostReplacement"]["replacement"]["path"],
               "--evidence", str(root / "native-state-mcp")], check=True)
+      - name: Reconcile a lost carrier acknowledgement without replay
+        if: always() && steps.prepare_upgrade.outcome == 'success'
+        shell: python
+        run: |
+          import json, os, pathlib, subprocess, sys
+          root = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]).resolve(strict=True)
+          manifest = json.loads((root / "host-upgrade/manifest.json").read_text(encoding="utf-8"))
+          subprocess.run([sys.executable, "-B", "tests/product/test_carrier_handoff.py",
+              "--native-codex", manifest["hostReplacement"]["replacement"]["path"],
+              "--evidence", str(root / "carrier-recovery"), "--scenario", "recover-receipt"], check=True)
+      - name: Retain native carrier recovery evidence
+        if: always() && steps.storage.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-carrier-recovery-${{ matrix.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          include-hidden-files: true
+          path: |
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier-recovery/*.json
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier-recovery/native
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier-recovery/retained
       - name: Retain native MCP state evidence
         if: always() && steps.storage.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

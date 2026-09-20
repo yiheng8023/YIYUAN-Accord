@@ -333,7 +333,7 @@ def native_integration(codex, evidence, scenario=None):
         _new_controller, _spawn_options, _wait_job, _released, _remove_owned_tree, save)
     from scripts.codex_rpc import BoundedRpc
     scenarios = (scenario,) if scenario else ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection','source-context')
-    if any(s not in ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection','source-context','websocket-connection') for s in scenarios):
+    if any(s not in ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source','owned-connection','source-context','websocket-connection','recover-receipt') for s in scenarios):
         raise ValueError('unknown native handoff scenario')
     root = Path(evidence).absolute()
     if root.exists() or not root.parent.is_dir() or root.parent.resolve() != root.parent:
@@ -351,11 +351,11 @@ def native_integration(codex, evidence, scenario=None):
         'ownedRoots':{name:str(root/name) for name in ('home','workspace','state','temp')},
         'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':31},
         'resourceController':'windows-job-object' if os.name=='nt' else 'posix-session-process-group'}
-    if scenarios==('websocket-connection',):
+    if scenarios in (('websocket-connection',),('recover-receipt',)):
         manifest['limits']['providerRequests']=4
     sources=[ROOT/'runtime/carrier-handoff.cjs',DRIVER,Path(__file__),ROOT/'scripts/observe_codex_lifecycle.py',
              ROOT/'scripts/observe_codex_entry.py',ROOT/'scripts/codex_rpc.py',ROOT/'scripts/inspect_native_resources.py']
-    if any(s in ('owned-connection','source-context','websocket-connection') for s in scenarios):
+    if any(s in ('owned-connection','source-context','websocket-connection','recover-receipt') for s in scenarios):
         sources.extend(ROOT/'runtime'/name for name in ('codex-connection.cjs','task-checkpoint.cjs','codex-context.cjs'))
     manifest['sourceHashes']={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}
     source_snapshot=root/'retained/executed-sources'
@@ -367,6 +367,8 @@ def native_integration(codex, evidence, scenario=None):
         if hashlib.sha256(destination.read_bytes()).hexdigest()!=manifest['sourceHashes'][str(path)]:
             raise ValueError('execution source changed during preparation')
     manifest['claimLimit']='Native method execution with fixed localhost replies and a test verifier; no model judgment, ordinary Desktop control, autonomous timing or whole acceptance.'
+    if 'recover-receipt' in scenarios:
+        manifest['faultInjection']='After native continuation start returns, the adapter callback reports acknowledgement loss. Raw native response and surviving caller remain available; not a network disconnect or controller/power loss.'
     save(root/'manifest.json',manifest)
     env=_owned_environment(manifest)
     proposal_state = {'next':False}
@@ -449,11 +451,11 @@ def native_integration(codex, evidence, scenario=None):
         except BaseException:
             ledger_db.execute('ROLLBACK');raise
     try:
-        if not all(s in ('owned-connection','source-context','websocket-connection') for s in scenarios):
+        if not all(s in ('owned-connection','source-context','websocket-connection','recover-receipt') for s in scenarios):
             app=_App(manifest,'carrier-controller',_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false')),env,deadline)
             app.initialize()
         for scenario in scenarios:
-            direct_connection = scenario in ('owned-connection','source-context','websocket-connection')
+            direct_connection = scenario in ('owned-connection','source-context','websocket-connection','recover-receipt')
             websocket_endpoint = None
             if scenario=='websocket-connection':
                 token=secrets.token_urlsafe(32)
@@ -527,7 +529,7 @@ def native_integration(codex, evidence, scenario=None):
                     if scenario=='source-event-proposal': config['nativeEventProposal']=True
                     if direct_connection:
                         config={'mode':'native-connection','plan':plan,'binding':binding,'nativeLogRoot':str(native_log),
-                            'contextRead':scenario=='source-context',
+                            'contextRead':scenario=='source-context','recoverReceipt':scenario=='recover-receipt',
                             'argv':_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false'))}
                         if websocket_endpoint: config['websocketEndpoint']=websocket_endpoint
                     proc.stdin.write((json.dumps(config)+'\n').encode());proc.stdin.flush()
@@ -646,6 +648,37 @@ def native_integration(codex, evidence, scenario=None):
                             or observations[1]['state']!='window-observed'
                             or any(v['sourceReleaseAllowed'] is not False for v in observations)):
                         raise RuntimeError('source context tool did not preserve unknown then observe fresh native usage')
+            if scenario=='recover-receipt':
+                recovered=result.get('recovery') or {}
+                state=json.loads(stored[1]) if stored else {}
+                ref=recovered.get('requestRef')
+                if (result.get('error',{}).get('code')!='NATIVE_EFFECT_UNKNOWN' or result.get('result') is not None
+                        or not ref or result.get('exitCode')!=0 or state.get('phase')!='reconciliation-required'
+                        or state.get('pendingEffect',{}).get('requestRef')!=ref
+                        or state.get('writer')!='target' or state.get('sourceRecovery')!='retained'):
+                    raise RuntimeError('lost acknowledgement was not retained under the target writer')
+                sent=[json.loads(line) for line in (native_log/'requests.jsonl').read_text(encoding='utf-8').splitlines()]
+                received=[json.loads(line) for line in (native_log/'stdout.jsonl').read_text(encoding='utf-8').splitlines()]
+                matching=[v for v in sent if v.get('id')==ref['requestId']]
+                responses=[v for v in received if v.get('id')==ref['requestId'] and 'method' not in v]
+                if (ref.get('connectionId')!=binding['connectionId'] or ref.get('hostVersion')!=version
+                        or ref.get('method')!='turn/start' or matching!=[recovered['originalRequest']]
+                        or len(responses)!=1 or responses[0].get('result')!=recovered['originalResponse']
+                        or matching[0]['params']!=state['pendingEffect']['params']):
+                    raise RuntimeError('native request reference did not locate the exact raw receipt')
+                target=matching[0]['params']['threadId'];turn_id=responses[0]['result']['turn']['id']
+                observed=recovered['targetRead']['thread']
+                turns=[v for v in observed['turns'] if v['id']==turn_id]
+                native_turns=[v for v in sent if v.get('method')=='turn/start' and v.get('params',{}).get('threadId')==target]
+                scope=ledger_db.execute('SELECT owner,active FROM scopes WHERE scope=?',(plan['scopeRef'],)).fetchone()
+                if (observed['id']!=target or len(turns)!=1 or turns[0]['status']!='completed'
+                        or len(native_turns)!=2 or scope!=(target,scenario)
+                        or any(v.get('method') in ('thread/unsubscribe','turn/interrupt') for v in sent)):
+                    raise RuntimeError('recovery replayed work or lost original turn/writer ownership')
+                save(root/'retained/recovery-readback.json',{'requestRef':ref,'targetThreadId':target,
+                    'continuationTurnId':turn_id,'nativeTurnCompleted':True,'targetWriterRetained':True,
+                    'targetTurnStarts':len(native_turns),'sourceSubscriptionReleased':False,
+                    'claimLimit':manifest['faultInjection']})
             if scenario=='reject-intake' and (result['error'] is None or any(c['method']=='thread/unsubscribe' for c in result['calls'])): raise RuntimeError('rejected intake released source')
     finally:
         try:
@@ -655,7 +688,7 @@ def native_integration(codex, evidence, scenario=None):
             fixture.close()
             ledger_db.close()
         if (root/'home/sessions').exists(): shutil.copytree(root/'home/sessions',root/'retained/native-sessions')
-        if websocket_listener:
+        if websocket_listener or 'recover-receipt' in scenarios:
             native_state=root/'retained/native-home'
             native_state.mkdir()
             retained={}
@@ -672,16 +705,17 @@ def native_integration(codex, evidence, scenario=None):
             if set(native_files())!=set(before_files):
                 raise RuntimeError('native state files changed during retention')
             save(root/'retained/native-home-sha256.json',retained)
+            shutil.copyfile(root/'workspace/keep.txt',root/'retained/keep.txt')
         save(root/'poststate.json',{'providerRequests':len(fixture.requests),'credentialsObserved':fixture.auth_seen,
             'keepPreserved':hashlib.sha256((root/'workspace/keep.txt').read_bytes()).hexdigest()==original,
             'completedCases':len(results),'claimLimit':manifest['claimLimit']})
     if fixture.auth_seen or len(results)!=len(scenarios): raise RuntimeError('native integration incomplete')
-    if scenarios==('websocket-connection',):
+    if scenarios in (('websocket-connection',),('recover-receipt',)):
         responses=sorted((root/'retained').glob('provider-response-*.json'))
         if (len(fixture.requests)!=4 or {p.name for p in responses}!={f'provider-response-{i}.json' for i in range(1,5)}
                 or any(json.loads(p.read_text(encoding='utf-8'))['transportStatus']!='completed' for p in responses)
-                or results[0].get('transportKind')!='websocket'):
-            raise RuntimeError('native WebSocket composition or fixed-response receipts incomplete')
+                or results[0].get('transportKind')!=('websocket' if scenarios==('websocket-connection',) else 'stdio')):
+            raise RuntimeError('native composition or fixed-response receipts incomplete')
     for name in ('home','workspace','state','temp'):
         target=(root/name).resolve(strict=True)
         if target.parent!=root: raise ValueError('owned cleanup root mismatch')
