@@ -58,7 +58,105 @@ const emit=(v, split=false)=>{const b=Buffer.from(JSON.stringify(v)+'\n'); if(sp
 '''
 
 
+WEBSOCKET_SCENARIO = r'''
+const {EventEmitter} = require('node:events');
+const {performance} = require('node:perf_hooks');
+const {createOwnedAppServerWebSocketConnection} = require(process.argv[1]);
+class Socket extends EventEmitter {
+ constructor(){super();this.readyState=1;this.bufferedAmount=0;this.sent=[];this.closes=0;}
+ addEventListener(n,f){this.on(n,f)} removeEventListener(n,f){this.off(n,f)}
+ send(data){if(this.throwSend)throw Error('native send failed');this.sent.push(JSON.parse(data));}
+ close(){this.closes++}
+ message(value){this.emit('message',{data:JSON.stringify(value,null,2)})}
+}
+(async()=>{
+ const s=new Socket(), foreign=()=>{}; s.on('message',foreign);
+ const mode=process.argv[2], until=()=>performance.now()+60000;
+ if(mode==='not-open'){s.readyState=0;try{createOwnedAppServerWebSocketConnection({socket:s,connectionId:'c',hostVersion:'v'})}catch(e){console.log(JSON.stringify({error:e.message,listeners:s.listenerCount('message')}));}return;}
+ const c=createOwnedAppServerWebSocketConnection({socket:s,connectionId:'c',hostVersion:'v',maxMessageBytes:512,maxBufferedBytes:600});
+ let result={};
+ if(mode==='success'){
+  const p=c.transport.request('thread/start',{},until());
+  s.message({id:s.sent[0].id,result:{thread:{id:'t'},model:'m'}}); await p;
+  s.message({method:'turn/started',params:{threadId:'t',turn:{id:'u'}}});
+  s.message({method:'thread/tokenUsage/updated',params:{threadId:'t',turnId:'u',tokenUsage:{modelContextWindow:1000,last:{totalTokens:100}}}});
+  result.context=c.context('t','u',1000);
+  s.message({id:9,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x',tool:'accord_request_handoff',arguments:{reason:'r'}}});
+  const request=await c.receiveRequest(()=>true,until());
+  const channel=c.proposalChannel(request,()=>({scopeRef:'s',authorityRef:'a',stateRef:'z',writerThreadId:'t'}));
+  result.events=[];const off=channel.subscribe(x=>result.events.push(x.method),request);
+  await channel.respond({id:9,result:{success:true}},until());
+  s.message({method:'turn/completed',params:{threadId:'t',turn:{id:'u',status:'completed'}}});
+  result.terminal=await c.transport.waitTerminal('t','u',until());off();
+ }else if(['buffer','unknown-buffer','send-error'].includes(mode)){
+  if(mode==='buffer')s.bufferedAmount=600;if(mode==='unknown-buffer')s.bufferedAmount=undefined;if(mode==='send-error')s.throwSend=true;
+  try{await c.transport.request('thread/read',{},until())}catch(e){result.error=e.message}
+ }else{
+  const rpc=c.transport.request('thread/read',{},until()).catch(e=>e.message);
+  const terminal=c.transport.waitTerminal('t','u',until()).catch(e=>e.message);
+  const inbound=c.receiveRequest(()=>true,until()).catch(e=>e.message);
+  if(mode==='close')c.close();
+  if(mode==='disconnect'){s.readyState=3;s.emit('close',{})}
+  if(mode==='error')s.emit('error',{});
+  if(mode==='bad')s.emit('message',{data:'{bad}'});
+  if(mode==='binary')s.emit('message',{data:Buffer.from('{}')});
+  if(mode==='oversize')s.emit('message',{data:' '.repeat(513)});
+  if(mode==='closing-context'){s.readyState=2;result.context=c.context('t','u',1000);}
+  if(mode==='concurrent-send-error'||mode==='concurrent-not-open'){
+   if(mode==='concurrent-send-error')s.throwSend=true;else s.readyState=2;
+   try{await c.transport.notify('initialized',{},until())}catch(e){result.failure=e.message}
+  }
+  result.rpc=await rpc;result.terminal=await terminal;result.inbound=await inbound;
+  result.listenersBeforeClose={message:s.listenerCount('message'),close:s.listenerCount('close'),error:s.listenerCount('error')};
+ }
+ c.close();result.sent=s.sent;result.closes=s.closes;
+ result.listeners={message:s.listenerCount('message'),close:s.listenerCount('close'),error:s.listenerCount('error')};
+ console.log(JSON.stringify(result));
+})().catch(error=>{console.error(error);process.exitCode=1});
+'''
+
+
 class CodexConnectionTests(unittest.TestCase):
+    def websocket_case(self, mode):
+        result = subprocess.run([shutil.which('node'), '-e', WEBSOCKET_SCENARIO, str(MODULE), mode],
+                                capture_output=True, text=True, encoding='utf-8', timeout=5)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def test_websocket_reuses_rpc_context_and_proposal_with_whole_json_messages(self):
+        result = self.websocket_case('success')
+        self.assertEqual(result['context']['state'], 'window-observed')
+        self.assertIn('turn/completed', result['events'])
+        self.assertEqual(result['terminal']['params']['turn']['status'], 'completed')
+        self.assertEqual(result['sent'][1]['id'], 9)
+        self.assertEqual(result['closes'], 0)
+        self.assertEqual(result['listeners'], {'message': 1, 'close': 0, 'error': 0})
+
+    def test_websocket_failure_or_close_rejects_pending_work_and_releases_only_owned_listeners(self):
+        for mode in ('close', 'disconnect', 'error', 'bad', 'binary', 'oversize', 'closing-context',
+                     'concurrent-send-error', 'concurrent-not-open'):
+            with self.subTest(mode=mode):
+                result = self.websocket_case(mode)
+                self.assertIsInstance(result['rpc'], str)
+                self.assertIsInstance(result['terminal'], str)
+                self.assertIsInstance(result['inbound'], str)
+                self.assertEqual(result['closes'], 0)
+                self.assertEqual(result['listenersBeforeClose'], {'message': 1, 'close': 0, 'error': 0})
+                self.assertEqual(result['listeners'], {'message': 1, 'close': 0, 'error': 0})
+                if mode == 'closing-context':
+                    self.assertEqual(result['context']['state'], 'unknown')
+
+    def test_websocket_rejects_unavailable_capacity_and_send_failure_without_retry(self):
+        for mode in ('buffer', 'unknown-buffer', 'send-error'):
+            with self.subTest(mode=mode):
+                result = self.websocket_case(mode)
+                self.assertIn('buffer' if mode != 'send-error' else 'send failed', result['error'])
+                self.assertEqual(result['sent'], [])
+                self.assertEqual(result['closes'], 0)
+        result = self.websocket_case('not-open')
+        self.assertIn('already-open', result['error'])
+        self.assertEqual(result['listeners'], 1)
+
     def run_case(self, case, journal=None):
         command = [shutil.which('node'), '-e', NODE_SCENARIO, str(MODULE), '' if journal is None else str(journal), case]
         result = subprocess.run(command, capture_output=True, text=True, encoding='utf-8', timeout=10)

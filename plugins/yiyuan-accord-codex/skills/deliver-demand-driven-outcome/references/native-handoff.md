@@ -27,8 +27,11 @@ thread or register the proposal tool.
 
 In the inspected Codex 0.155.1 implementation, `codex app-server daemon version`
 only probes the default official control endpoint. `codex app-server proxy`
-connects stdio to an already running control socket; `--sock` selects an explicitly
-bound endpoint. Connection failure leaves that route unavailable or unknown; it
+connects raw stdio bytes to an already running control socket; `--sock` selects an
+explicitly bound endpoint. It is a byte tunnel, not a JSONL-to-WebSocket converter:
+its peer must perform the WebSocket handshake and framing expected by that socket.
+Do not feed the plain JSONL connection below directly into the proxy.
+Connection failure leaves that route unavailable or unknown; it
 does not authorize starting, bootstrapping, restarting or pairing a shared service.
 `codex queue` sends a user message and can initialize a session-command runtime;
 it is not a read-only discovery command or a transfer acknowledgment. Preserve the
@@ -119,6 +122,42 @@ and built-in Node streams without a new package dependency. It is a usable
 connection for an already authorized controller, not a default Desktop connection
 or an autonomous timing/semantic-verification engine. Preserve the upstream
 experimental support qualification described above.
+
+### Reuse an owned WebSocket
+
+`createOwnedAppServerWebSocketConnection({socket, connectionId, hostVersion,
+maxMessageBytes?, maxJournalBytes?, maxBufferedBytes?})` accepts an already-open
+standard WebSocket supplied by the caller. It exposes the same transport,
+context, request and proposal interfaces as the stdio connection. Reuse a supported
+WebSocket implementation for handshakes, authentication headers, fragmentation and
+network I/O, such as [Node's implementation](https://github.com/nodejs/undici/blob/main/docs/docs/api/WebSocket.md)
+where available; Accord adds no WebSocket dependency or framing implementation.
+The caller binds the actual endpoint, authorization and host version before passing
+the socket and supplies one RPC reader/writer owner per connection; separate clients
+use separate sockets. This adapter never discovers, opens, authenticates or closes a socket,
+starts a listener, or attaches to an ordinary Desktop task by itself.
+
+One text message carries one JSON RPC object; valid whitespace is normalized for
+the existing bounded reader. Binary, malformed or oversized messages invalidate
+the bridge. Closing, socket errors or failed sends reject pending work and detach
+only the adapter's listeners. A local send-buffer limit rejects the unsent call
+without retry. The default outbound buffer cap is 4 MiB; unknown buffered capacity
+is not zero. A successful send only means local queuing, not delivery, an accepted
+effect or transfer authority. The message limit applies after the supplied
+WebSocket assembles a message; it does not bound that library's internal buffering.
+The caller remains responsible for socket shutdown and recovery.
+
+An authorized `app-server --listen ws://127.0.0.1:0` can select a local port and
+reports its actual endpoint. Bind its supported authentication and verify access
+rather than assuming loopback is sufficient. On Windows, a `unix://PATH` listener
+requires a private socket directory: the native implementation creates a new
+directory with a user-only DACL and rejects an unsafe existing one without repair.
+Do not weaken that check or modify unrelated directory ACLs. A newly created task
+also needs a materialized native history before `thread/resume` by id; creation
+alone is not evidence of a resumable source. These are connection prerequisites,
+not a requirement to start another service for adequate native continuity.
+Sources: [raw proxy dispatch](https://github.com/openai/codex/blob/be2951ea34f0d295ed0becf97079f92fa5f6950e/codex-rs/cli/src/main.rs#L1427)
+and [private-directory creation](https://github.com/openai/codex/blob/be2951ea34f0d295ed0becf97079f92fa5f6950e/codex-rs/uds/src/windows_security.rs#L54).
 
 For a controller-owned source to request transfer, register the exported
 `HANDOFF_PROPOSAL_TOOL` in its native `thread/start.dynamicTools` with the host's

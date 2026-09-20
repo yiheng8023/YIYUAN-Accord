@@ -1,5 +1,6 @@
 'use strict';
 const {performance} = require('node:perf_hooks');
+const {EventEmitter} = require('node:events');
 const {observeContext} = require('./task-checkpoint.cjs');
 const DEFAULT_MESSAGE_BYTES = 1024 * 1024, DEFAULT_JOURNAL_BYTES = 4 * 1024 * 1024, MAX_PENDING = 64;
 const text = (v) => typeof v === 'string' && v.trim().length > 0;
@@ -160,4 +161,62 @@ function createOwnedAppServerConnection(options) {
   function close() { if (closed) return; closed = true; input = Buffer.alloc(0); detach(); fail('owned connection is closed'); listeners.clear(); inbound.length = 0; journal.length = 0; journalBytes = 0; threadModels.clear(); for (const timer of [...timers]) stopTimer(timer); }
   return frozen({transport: frozen({connectionId, hostVersion, request, notify, waitTerminal}), receiveRequest, proposalChannel, context, replyContext, close});
 }
-module.exports = {createOwnedAppServerConnection, CONTEXT_OBSERVATION_TOOL};
+// The owner supplies an already-connected standard WebSocket. Its implementation
+// owns handshakes, fragmentation and network I/O; this bridge owns only JSON RPC
+// message adaptation and its listeners. It never opens or closes the socket.
+function createOwnedAppServerWebSocketConnection(options) {
+  const socket = options?.socket;
+  if (!socket || socket.readyState !== 1 || typeof socket.send !== 'function' ||
+      typeof socket.addEventListener !== 'function' || typeof socket.removeEventListener !== 'function') {
+    throw new TypeError('an already-open owned WebSocket is required');
+  }
+  const maxMessageBytes = positive(options.maxMessageBytes, DEFAULT_MESSAGE_BYTES);
+  const maxBufferedBytes = positive(options.maxBufferedBytes, DEFAULT_JOURNAL_BYTES);
+  const stdin = new EventEmitter(), stdout = new EventEmitter();
+  let released = false;
+  function detach() {
+    socket.removeEventListener('message', onMessage);
+    socket.removeEventListener('close', onClose);
+    socket.removeEventListener('error', onError);
+  }
+  function stop(reason) {
+    if (released) return;
+    released = true; detach();
+    stdin.emit('error', new Error(reason));
+  }
+  stdin.write = (bytes, done) => {
+    if (released || socket.readyState !== 1) {
+      stop('owned WebSocket is not open'); return done(new Error('owned WebSocket is not open'));
+    }
+    if (!Number.isSafeInteger(socket.bufferedAmount) || socket.bufferedAmount < 0 ||
+        socket.bufferedAmount > maxBufferedBytes - bytes.length) {
+      return done(new Error('owned WebSocket send buffer limit exceeded or unavailable'));
+    }
+    try { socket.send(bytes.toString('utf8')); done(); }
+    catch (error) { stop('native WebSocket send failed'); done(error); }
+  };
+  const connection = createOwnedAppServerConnection({...options, stdin, stdout});
+  function onMessage(event) {
+    if (released) return;
+    if (typeof event.data !== 'string' || Buffer.byteLength(event.data, 'utf8') > maxMessageBytes) {
+      stop('native WebSocket message is non-text or exceeds the message limit'); return;
+    }
+    let value;
+    try { value = JSON.parse(event.data); } catch (_) { stop('invalid native WebSocket JSON message'); return; }
+    stdout.emit('data', Buffer.from(JSON.stringify(value) + '\n', 'utf8'));
+    if (stdout.listenerCount('data') === 0) { released = true; detach(); }
+  }
+  function onClose() { stop('native WebSocket closed'); }
+  function onError() { stop('native WebSocket failed'); }
+  socket.addEventListener('message', onMessage);
+  socket.addEventListener('close', onClose);
+  socket.addEventListener('error', onError);
+  return frozen({...connection,
+    context(...args) {
+      if (!released && socket.readyState !== 1) stop('native WebSocket is not open');
+      return connection.context(...args);
+    },
+    close() { if (!released) { released = true; detach(); } connection.close(); },
+  });
+}
+module.exports = {createOwnedAppServerConnection, createOwnedAppServerWebSocketConnection, CONTEXT_OBSERVATION_TOOL};

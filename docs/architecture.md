@@ -385,11 +385,17 @@ is monitored through dispatch; only this listener is released. The caller retain
 its journal and connection, including request-to-subscription replay. This removes
 manual receipt assembly without adding storage, a service or automatic timing.
 The optional `runtime/codex-connection.cjs` implements that connection for injected
-caller-owned Node stdio streams. One bounded reader correlates RPC, retains an
+caller-owned Node stdio streams or an already-open standard WebSocket. The latter
+reuses the supplied implementation for handshake/framing and adapts complete JSON
+messages to the same reader; it adds no network library or connection setup. One
+bounded reader correlates RPC, retains an
 ordered journal, provides exact-anchor replay/live delivery and derives context
 observations from the same native stream. It leaves process startup, initialization,
 durable ownership and semantic judgment with the authorized caller. Closing this
-module detaches its listeners and rejects waits without destroying injected streams.
+module detaches its listeners and rejects waits without destroying injected streams
+or closing the caller's socket. Failed WebSocket sends invalidate pending work;
+local buffer-limit rejection does not retry. Its message limit applies after the
+supplied socket has assembled a message, not to that implementation's whole memory.
 Controllers may expose its optional `accord_inspect_context` dynamic tool to the
 source. The connection replies from the actual request identity and native journal;
 model arguments cannot select another task or operation. Unknown first-use signals
