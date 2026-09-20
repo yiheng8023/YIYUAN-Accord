@@ -116,6 +116,16 @@ time, expired-state diagnostics and unobserved-tail uncertainty remain. Without
 current host evidence, raw transcript counters do not establish assessment identity.
 The MCP implementation version is captured from package metadata at startup;
 development source execution uses the development projection as its version source.
+The ordinary CLI development observer separately reports Hook guidance delivery
+and native turn configuration. The latter requires one matching `turn_context`
+between the bound turn start and the next turn, before model work or other
+non-user native items; missing,
+duplicate, conflicting or late records remain unknown. Model, effort, workspace
+and collaboration mode are reported configuration, not proof of provider execution.
+The session header version remains recorded history. Goal state stays unknown
+without its own evidence. Byte length, hash, line and source path retain the
+observed snapshot boundary; this projection does not grant case admission or
+change an execution receipt's validity.
 Standalone startup resolves configured state/session/home/temp paths against its
 original cwd, then leaves the plugin cache directory before serving. This avoids
 pinning a Windows cache directory during native replacement without rebinding

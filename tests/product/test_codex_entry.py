@@ -3,6 +3,7 @@
 import argparse
 import importlib.util
 import json
+import hashlib
 import os
 from pathlib import Path
 import shlex
@@ -347,6 +348,7 @@ class EntryTests(unittest.TestCase):
                     self.assertEqual(observed['installedBefore'], manifest['installedPlugin'])
                     self.assertEqual(observed['installedPackageStable'], not changed)
                     self.assertEqual(observed['valid'], not changed and exit_code == 0)
+                    self.assertIsNone(observed['nativeTurnConditions']['goalModeActive'])
                     if changed:
                         self.assertIn('error', observed['installedAfter'])
                     else:
@@ -721,6 +723,66 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(Path(observed['execPath']).resolve(), renamed)
             self.assertEqual(observed['args'], ['--hook', 'Stop'])
 
+    def turn_context_rows(self, mode='default'):
+        workspace = str(Path.cwd())
+        return [
+            {'type': 'session_meta', 'payload': {'id': 'thread', 'cwd': workspace, 'cli_version': 'recorded-version'}},
+            {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': 'turn'}},
+            {'type': 'turn_context', 'payload': {'turn_id': 'turn', 'cwd': workspace,
+                'model': 'reported-model', 'effort': 'medium', 'collaboration_mode': {'mode': mode}}},
+            {'type': 'response_item', 'payload': {'type': 'reasoning'}},
+        ]
+
+    def observe_turn_context(self, rows, **binding):
+        # Leading blank line checks that the reported ordinal addresses the original.
+        stream = '\n' + '\n'.join(json.dumps(row) for row in rows) + '\n'
+        observed = entry.native_turn_context_observation(stream,
+            **{'thread_id': 'thread', 'turn_id': 'turn', 'workspace': str(Path.cwd()), **binding})
+        self.assertEqual(observed['sourceSha256'], hashlib.sha256(stream.encode()).hexdigest())
+        self.assertEqual(observed['sourceBytes'], len(stream.encode()))
+        return observed
+
+    def test_native_turn_conditions_preserve_reported_mode_and_leave_goal_unknown(self):
+        for mode in ('default', 'plan'):
+            rows = self.turn_context_rows(mode)
+            rows[2]['payload']['goal_mode_active'] = False  # Not a consumed native Goal receipt.
+            result = self.observe_turn_context(rows)
+            self.assertEqual(result['state'], 'observed')
+            self.assertEqual(result['line'], 4)
+            self.assertEqual(result['conditions'], {'model': 'reported-model', 'effort': 'medium',
+                'cwd': str(Path.cwd()), 'collaborationMode': mode})
+            self.assertEqual(result['recordedHostVersion'], 'recorded-version')
+            self.assertIsNone(result['goalModeActive'])
+
+    def test_native_turn_conditions_reject_missing_conflicting_and_late_context(self):
+        base = self.turn_context_rows()
+        cases = [base[:2] + base[3:], base[:3] + [base[2]] + base[3:],
+                 base[:2] + [base[3], base[2]], base + [base[1]]]
+        cases += [base[:2] + [{'type': 'event_msg', 'payload': {'type': 'item_completed',
+                  'item': {'type': kind}}}] + base[2:] for kind in ('Reasoning', 'AgentMessage', 'CommandExecution', 'FileChange', 'UnknownNativeItem')]
+        for field, value in (('turn_id', 'other'), ('cwd', str(Path.cwd().parent)),
+                             ('model', ''), ('effort', None), ('collaboration_mode', None)):
+            rows = json.loads(json.dumps(base)); rows[2]['payload'][field] = value; cases.append(rows)
+        changed = json.loads(json.dumps(base[2])); changed['payload']['model'] = 'changed-model'
+        cases.append(base + [changed])
+        for rows in cases:
+            with self.subTest(rows=rows):
+                result = self.observe_turn_context(rows)
+                self.assertEqual(result['state'], 'unknown')
+                self.assertIsNone(result['conditions'])
+                self.assertIsNone(result['goalModeActive'])
+        for binding in ({'thread_id': 'foreign'}, {'turn_id': 'foreign'}, {'workspace': str(Path.cwd().parent)}):
+            self.assertEqual(self.observe_turn_context(base, **binding)['state'], 'unknown')
+
+    def test_native_turn_conditions_do_not_join_a_later_turn(self):
+        base = self.turn_context_rows()
+        following = json.loads(json.dumps(base[1:]))
+        following[0]['payload']['turn_id'] = 'following'
+        following[1]['payload'].update(turn_id='following', model='different-model')
+        self.assertEqual(self.observe_turn_context(base + following)['conditions']['model'], 'reported-model')
+        user_item = {'type': 'event_msg', 'payload': {'type': 'item_completed', 'item': {'type': 'UserMessage'}}}
+        self.assertEqual(self.observe_turn_context(base[:2] + [user_item] + base[2:])['state'], 'observed')
+
     def test_native_entry_gate_rejects_absent_stale_echoed_truncated_and_late_guidance(self):
         guide = 'Accord task entry: complete current source duties. '
         thread, turn, workspace = 'thread', 'turn', str(Path.cwd())
@@ -737,6 +799,13 @@ class EntryTests(unittest.TestCase):
         self.assertFalse(check([*start, action])['valid'])
         self.assertFalse(check([*start, action, core])['valid'])
         self.assertFalse(check([*start, core, action], 'another-turn')['valid'])
+        for event in ('agent_reasoning', 'agent_message', 'item_completed'):
+            early = {'type': 'event_msg', 'payload': {'type': event, 'item': {'type': 'Reasoning'}}}
+            self.assertFalse(check([*start, early, core, action])['valid'])
+            self.assertTrue(check([*start, core, early, action])['valid'])
+        for kind in ('UserMessage', 'CommandExecution', 'FileChange', 'UnknownNativeItem'):
+            native_item = {'type': 'event_msg', 'payload': {'type': 'item_completed', 'item': {'type': kind}}}
+            self.assertEqual(check([*start, native_item, core, action])['valid'], kind == 'UserMessage')
         for mutation in ('assistant', 'stale', 'truncated'):
             altered = json.loads(json.dumps(core))
             if mutation == 'assistant':

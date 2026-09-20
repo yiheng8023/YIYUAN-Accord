@@ -1505,6 +1505,74 @@ def persistent_cli_turn_receipt(stream, last_message, *, expected_thread_id=None
     return result
 
 
+def _native_activity_barrier(row):
+    payload = row.get("payload", {})
+    if row.get("type") == "response_item":
+        return (payload.get("type") in {"reasoning", "function_call", "custom_tool_call"}
+                or payload.get("role") == "assistant")
+    if row.get("type") == "event_msg":
+        if payload.get("type") in {"item_started", "item_completed"}:
+            # Only UserMessage is known input here. Other or malformed items
+            # end the known-input prefix; this need not prove model execution.
+            item = payload.get("item")
+            return not isinstance(item, dict) or item.get("type") != "UserMessage"
+        return payload.get("type") in {"agent_message", "agent_reasoning"}
+    return False
+
+
+def native_turn_context_observation(stream, *, thread_id, turn_id, workspace):
+    """Project native reported turn conditions, never infer Goal or provider execution."""
+    result = {"state": "unknown", "threadId": thread_id, "turnId": turn_id,
+              "conditions": None, "recordedHostVersion": None, "line": None,
+              "goalModeActive": None, "goalSource": "not-observed-by-this-projection",
+              "limit": "native reported turn configuration only; not provider execution, Goal state, authority or case admission"}
+    try:
+        if not all(isinstance(value, str) and value.strip() for value in (thread_id, turn_id)) or not os.path.isabs(workspace):
+            return result
+        raw = stream.encode("utf-8") if isinstance(stream, str) else stream
+        result["sourceSha256"] = hashlib.sha256(raw).hexdigest()
+        result["sourceBytes"] = len(raw)
+        rows = [(i, json.loads(line)) for i, line in enumerate(raw.splitlines(), 1) if line.strip()]
+        headers = [row["payload"] for _, row in rows if row.get("type") == "session_meta"]
+        same_workspace = lambda value: (isinstance(value, str) and os.path.isabs(value)
+            and os.path.normcase(os.path.abspath(value)) == os.path.normcase(os.path.abspath(workspace)))
+        if len(headers) != 1 or headers[0].get("id") != thread_id or not same_workspace(headers[0].get("cwd")):
+            return result
+        starts = [i for i, (_, row) in enumerate(rows) if row.get("type") == "event_msg"
+                  and row.get("payload", {}).get("type") == "task_started"
+                  and row["payload"].get("turn_id") == turn_id]
+        if len(starts) != 1:
+            return result
+        context, activity_barrier = [], False
+        for line, row in rows[starts[0] + 1:]:
+            payload = row.get("payload", {})
+            if row.get("type") == "event_msg" and payload.get("type") == "task_started":
+                break
+            if _native_activity_barrier(row):
+                activity_barrier = True
+            if row.get("type") == "turn_context":
+                # A changed/duplicate context or a late record cannot stand in for
+                # one bound configuration supplied before this turn's model work.
+                if activity_barrier or payload.get("turn_id") != turn_id:
+                    return result
+                context.append((line, payload))
+        if len(context) != 1:
+            return result
+        line, payload = context[0]
+        mode = payload.get("collaboration_mode", {}).get("mode")
+        if (not same_workspace(payload.get("cwd"))
+                or not all(isinstance(v, str) and v.strip() for v in (payload.get("model"), payload.get("effort"), mode))):
+            return result
+        version = headers[0].get("cli_version")
+        result.update(state="observed", line=line,
+            recordedHostVersion=version if isinstance(version, str) and version.strip() else None,
+            conditions={"model": payload["model"], "effort": payload["effort"],
+                        "cwd": payload["cwd"], "collaborationMode": mode})
+    except (ValueError, UnicodeError, TypeError, KeyError, AttributeError):
+        pass
+    return result
+
+
 def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
     """Require the current input Hook's full guide before model activity.
 
@@ -1530,10 +1598,10 @@ def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
             row, payload = rows[i], rows[i].get("payload", {})
             if row.get("type") == "event_msg" and payload.get("type") == "task_started":
                 break
+            if _native_activity_barrier(row):
+                break
             if row.get("type") != "response_item":
                 continue
-            if payload.get("type") in {"reasoning", "function_call", "custom_tool_call"} or payload.get("role") == "assistant":
-                break
             origin = payload.get("internal_chat_message_metadata_passthrough") or {}
             if (payload.get("role") != "developer" or origin.get("turn_id") != turn_id
                     or "hooks.additional_context" not in origin.get("content_item_kinds", [])):
@@ -1683,6 +1751,8 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
             receipt["failure"] = receipt["failure"] or "installed-plugin-poststate: " + str(error)
     if native_hooks:
         entry = {"valid": False, "decision": "unknown"}
+        conditions = {"state": "unknown", "goalModeActive": None,
+                      "goalSource": "not-observed-by-this-projection"}
         try:
             stderr = read_regular(stderr_path, 32 * 1024 * 1024)
             source = _session_configuration(stderr.splitlines())
@@ -1693,13 +1763,18 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
             sessions = Path(manifest.get("installedPlugin", {}).get("codexHome",
                 env.get("CODEX_HOME", str(Path.home() / ".codex")))) / "sessions"
             rollout = _ordinary_rollout(source["rolloutPath"], sessions)
-            entry = native_entry_observation(read_regular(rollout, 32 * 1024 * 1024),
+            stream = read_regular(rollout, 32 * 1024 * 1024)
+            entry = native_entry_observation(stream,
                 thread_id=receipt["threadId"], turn_id=turns[0].decode("ascii"),
                 workspace=manifest["workspace"], guide=manifest["entryGuide"])
             entry["sourcePath"] = str(rollout)
+            conditions = native_turn_context_observation(stream, thread_id=receipt["threadId"],
+                turn_id=turns[0].decode("ascii"), workspace=manifest["workspace"])
+            conditions["sourcePath"] = str(rollout)
         except (OSError, ValueError, UnicodeError, TypeError, KeyError):
             pass
         receipt["entryObservation"] = entry
+        receipt["nativeTurnConditions"] = conditions
         receipt["valid"] &= entry["valid"]
         if not entry["valid"] and receipt["failure"] is None:
             receipt["failure"] = "required-native-entry-not-observed"
