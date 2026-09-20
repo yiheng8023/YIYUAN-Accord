@@ -198,6 +198,26 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertFalse(r['error']['state']['targetTurnTerminal'])
         self.assertFalse(any(c['method']=='turn/interrupt' for c in r['calls']))
 
+    def test_unknown_effect_keeps_only_a_matching_native_request_reference(self):
+        reference={'connectionId':'test-connection','hostVersion':'fixture-host',
+                   'requestId':'native-request-17','method':'turn/start'}
+        r=self.run_case('lost-continuation-ack',rpcFailureRef=reference)
+        self.assertEqual(r['snapshots'][-1]['pendingEffect']['requestRef'],reference)
+        self.assertEqual(r['error']['state']['pendingEffect']['requestRef'],reference)
+        self.assertEqual(r['error']['details']['original']['requestRef'],reference)
+        self.assertFalse(any(c['method'] in ('turn/interrupt','thread/unsubscribe') for c in r['calls']))
+        for change in ({'connectionId':'foreign'},{'hostVersion':'foreign'},
+                       {'method':'thread/start'},{'requestId':''},{'requestId':True},
+                       {'requestId':'x'*4097},
+                       {'extra':'untrusted'}):
+            with self.subTest(change=change):
+                r=self.run_case('lost-continuation-ack',rpcFailureRef={**reference,**change})
+                self.assertNotIn('requestRef',r['error']['state']['pendingEffect'])
+                self.assertTrue(r['error']['reconciliationRequired'])
+        r=self.run_case('lost-continuation-ack',inheritedRpcRef=True)
+        self.assertNotIn('requestRef',r['error']['state']['pendingEffect'])
+        self.assertTrue(r['error']['reconciliationRequired'])
+
     def test_monotonic_budget_rejects_late_callback_but_ignores_wall_clock_jump(self):
         r=self.run_case('late-verifier')
         self.assertIsNotNone(r['error'])

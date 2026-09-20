@@ -111,6 +111,21 @@ function digest(value) {
   return crypto.createHash('sha256').update(canonical(value)).digest('hex');
 }
 
+function nativeRequestReference(error, method, binding) {
+  try {
+    const value = error?.rpcRequest;
+    exactKeys(value, ['connectionId', 'hostVersion', 'requestId', 'method'], [], 'rpcRequest');
+    const ref = {connectionId: value.connectionId, hostVersion: value.hostVersion,
+      requestId: value.requestId, method: value.method};
+    if (ref.connectionId !== binding.connectionId || ref.hostVersion !== binding.hostVersion ||
+        ref.method !== method ||
+        !((typeof ref.requestId === 'string' && ref.requestId.trim() && ref.requestId.length <= MAX_REF) ||
+          Number.isSafeInteger(ref.requestId))) return null;
+    return immutable({connectionId: ref.connectionId, hostVersion: ref.hostVersion,
+      requestId: ref.requestId, method: ref.method});
+  } catch (_) { return null; }
+}
+
 const HANDOFF_PROPOSAL_TOOL = immutable({
   type: 'function',
   name: 'accord_request_handoff',
@@ -642,14 +657,18 @@ function createExecution(rawPlan, rawDependencies) {
       if (plannedEffect) unresolvedEffect = null;
       return result;
     } catch (cause) {
-      if (mutating) nativeRequestUnresolved = true;
+      const requestRef = nativeRequestReference(cause, method, connectionBinding);
+      if (mutating) {
+        nativeRequestUnresolved = true;
+        if (requestRef) unresolvedEffect = immutable({...plannedEffect, requestRef});
+      }
       if (cause instanceof CarrierHandoffError) throw cause;
       throw new CarrierHandoffError(mutating ? 'NATIVE_EFFECT_UNKNOWN' : 'NATIVE_READ_FAILED',
         `${effectStage} failed`, {
           stage: effectStage,
           transferId,
           reconciliationRequired: mutating || nativeMutation,
-          details: {method, cause: errorData(cause)},
+          details: {method, cause: errorData(cause), ...(requestRef ? {requestRef} : {})},
         });
     }
   }

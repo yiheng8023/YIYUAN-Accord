@@ -74,6 +74,8 @@ Pass that process's Node writable/readable streams and its actual connection and
 version identity. Attach before initialization or other requests; this module
 is the exclusive protocol reader, while a caller may separately retain raw bytes.
 It does not discover, spawn, initialize, authenticate, restart or close a process.
+Give each connection lifetime its own `connectionId`; reconnecting must not reuse
+the old identity merely because the endpoint and host version stayed the same.
 
 The returned `transport` supplies `request`, `notify` and `waitTerminal` using
 absolute `performance.now()` deadlines. The caller sends the native `initialize`
@@ -336,6 +338,26 @@ Late or malformed results require the surviving caller to reconcile actual effec
 and writer ownership before retry, rollback or source release. The module does not
 resume an interrupted transfer; reconcile first rather than blindly calling it
 again with either the same or a new transfer identity.
+
+The owned connection attaches a frozen `rpcRequest` to a failed allocated call:
+`{connectionId, hostVersion, requestId, method}`. It does not duplicate parameters
+or claim that the call was sent or executed. The handoff adapter copies a bounded
+reference into `pendingEffect.requestRef` and error details only when the connection,
+version and method match the failing call. Foreign or malformed references do not
+resolve uncertainty. The normal recorder persists that pending effect when available;
+this does not close a hard-crash window before the failure record is saved.
+A caller deadline that expires before the transport reports its failure may also
+leave no reference; retain the original journal and the unresolved effect.
+
+The surviving recovery owner first reads the current scope, revision and writer
+lease. Correlate the reference with the retained original RPC request/response and
+ordered native events, then query the exact target using `thread/read` with
+`includeTurns: true` or supported paginated turn/item reads. Verify the identified
+turn and actual effects through the existing verifier. Reconcile the original
+operation instead of repeating `turn/start` to obtain another receipt. A missing
+reference or an incomplete log is not proof that nothing ran. If the target owns
+the scope, retain that writer while resolving uncertainty; a new transfer id is
+not a bypass. Do not release source recovery from a locator or model report alone.
 
 ## Event-driven proposal dispatch
 

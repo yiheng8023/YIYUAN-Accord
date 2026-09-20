@@ -51,6 +51,11 @@ const emit=(v, split=false)=>{const b=Buffer.from(JSON.stringify(v)+'\n'); if(sp
  } else if(process.argv[3]==='oversize'){out.write(Buffer.alloc(1024*1024,65));r={reason:c.context('t','u',100).reason,attached:out.listenerCount('data')};
  } else if(process.argv[3]==='stream-replacement'){let foreignWrites=0;options.stdin=new Writable({write(c,e,done){foreignWrites++;done();}});await c.transport.notify('initialized',{},until());r={original:writes.length,foreign:foreignWrites};
  } else if(process.argv[3]==='listener-error'){emit({id:9,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x'}});const q=await c.receiveRequest(()=>true,until());c.proposalChannel(q,()=>({})).subscribe(()=>{throw new Error('caller listener failed')},q);emit({method:'notice',params:{threadId:'t'}});r={reason:c.context('t','u',100).reason,attached:out.listenerCount('data')};
+ } else if(process.argv[3]==='rpc-error-reference'){
+  const result=p=>p.catch(e=>({message:e.message,reference:e.rpcRequest,frozen:Object.isFrozen(e.rpcRequest)}));
+  const first=result(c.transport.request('turn/start',{threadId:'t'},until()));
+  const second=result(c.transport.request('thread/read',{threadId:'t'},until()));
+  out.end();r.errors=await Promise.all([first,second]);r.requests=writes;
  } else if(process.argv[3]==='expired'){for(const method of ['request','notify']){try{await c.transport[method]('thread/start',{},performance.now()-1)}catch(e){r[method]=e.message}}r.writes=writes.length;
  } else if(process.argv[3]==='bad-cleanup'){out.write(Buffer.from('{}\n'));r={data:out.listenerCount('data'),end:out.listenerCount('end'),stdinError:input.listenerCount('error')};
  } else if(process.argv[3]==='close'){c.close(); r={destroyed:input.destroyed||out.destroyed,writeEnded:input.writableEnded};}
@@ -211,6 +216,17 @@ class CodexConnectionTests(unittest.TestCase):
         self.assertEqual(result['writes'], 0)
         self.assertIn('deadline exceeded', result['request'])
         self.assertIn('deadline exceeded', result['notify'])
+
+    def test_each_failed_rpc_keeps_its_own_frozen_request_reference(self):
+        result=self.run_case('rpc-error-reference')
+        sent=[json.loads(line) for line in result['requests']]
+        self.assertEqual(len(result['errors']),2)
+        for error, request in zip(result['errors'],sent):
+            self.assertEqual(error['reference'],{'connectionId':'c1','hostVersion':'v1',
+                'requestId':request['id'],'method':request['method']})
+            self.assertTrue(error['frozen'])
+        self.assertNotEqual(result['errors'][0]['reference']['requestId'],
+                            result['errors'][1]['reference']['requestId'])
 
     def test_bad_frame_detaches_owned_listeners(self):
         self.assertEqual(self.run_case('bad-cleanup'), {'data': 0, 'end': 0, 'stdinError': 0})

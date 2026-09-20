@@ -159,7 +159,18 @@ async function run(config) {
         if (turn === 2 && config.beforeContinuationDelayMs) {
           Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, config.beforeContinuationDelayMs);
         }
-        if (scenario === 'lost-continuation-ack' && turn === 2) throw new Error('continuation response lost');
+        if (scenario === 'lost-continuation-ack' && turn === 2) {
+          const error = new Error('continuation response lost');
+          if (Object.hasOwn(config,'rpcFailureRef')) error.rpcRequest=clone(config.rpcFailureRef);
+          if (config.inheritedRpcRef) {
+            for (const [name,value] of Object.entries({connectionId:transport.connectionId,
+              hostVersion:transport.hostVersion,method:'turn/start'})) {
+              Object.defineProperty(Object.prototype,name,{value,configurable:true});
+            }
+            error.rpcRequest={requestId:'native-request-17',one:1,two:2,three:3};
+          }
+          throw error;
+        }
         return {turn: {id: 'turn-' + (scenario === 'reused-turn' || scenario === 'reuse-first-intake' && turn===3 ? 1 : turn), status: 'inProgress'}};
       }
       if (method === 'thread/unsubscribe') return scenario === 'invalid-unsubscribe' ? {} : {status:'unsubscribed'};

@@ -110,8 +110,20 @@ function createOwnedAppServerConnection(options) {
   async function request(method, params, deadline) {
     assertLive(); if (!text(method) || pending.size >= MAX_PENDING) throw new Error('native request is unavailable');
     const id = `accord-owned:${++nextId}`; let entry; const reply = bounded(deadline, 'native request', (finish) => { entry = {method, finish}; pending.set(id, entry); return () => pending.delete(id); }); reply.catch(() => {});
-    if (!entry) return reply;
-    try { await write({id, method, params}, deadline, 'native request write'); } catch (error) { entry.finish(error); throw error; } return reply;
+    try {
+      if (!entry) return await reply;
+      try { await write({id, method, params}, deadline, 'native request write'); }
+      catch (error) { entry.finish(error); throw error; }
+      return await reply;
+    } catch (error) {
+      // fail() can reject several calls with the same Error. Do not mutate it.
+      // This is a log locator, not proof that a write or remote effect occurred.
+      const failure = new Error(error instanceof Error ? error.message : String(error), {cause: error});
+      if (typeof error?.code === 'string' || typeof error?.code === 'number') failure.code = error.code;
+      Object.defineProperty(failure, 'rpcRequest', {enumerable: true,
+        value: frozen({connectionId, hostVersion, requestId: id, method})});
+      throw failure;
+    }
   }
   function notify(method, params, deadline) { assertLive(); if (!text(method)) return Promise.reject(new Error('native notification is unavailable')); return write({method, params}, deadline, 'native notification write'); }
   function terminalMatches(message, threadId, turnId) { return message?.method === 'turn/completed' && message.params?.threadId === threadId && message.params?.turn?.id === turnId; }
