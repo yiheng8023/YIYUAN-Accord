@@ -41,12 +41,133 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(p.returncode, 0, p.stderr)
         return json.loads(p.stdout)
 
-    def inspect(self, params=None):
-        code = "const m=require(process.argv[1]);let s='';process.stdin.setEncoding('utf8');process.stdin.on('data',x=>s+=x);process.stdin.on('end',()=>process.stdout.write(JSON.stringify(m.inspectNativeState(JSON.parse(s)))));"
-        p = subprocess.run([self.node, '-e', code, str(BRIDGE)], input=json.dumps(params or self.params),
+    def inspect(self, params=None, *, operation='inspectNativeState'):
+        code = "const m=require(process.argv[1]);let s='';process.stdin.setEncoding('utf8');process.stdin.on('data',x=>s+=x);process.stdin.on('end',()=>process.stdout.write(JSON.stringify(m[process.argv[2]](JSON.parse(s)))));"
+        p = subprocess.run([self.node, '-e', code, str(BRIDGE), operation], input=json.dumps(params or self.params),
             capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
         self.assertEqual(p.returncode, 0, p.stderr)
         return json.loads(p.stdout)
+
+    def read_input(self, **arguments):
+        params = {**self.params, 'name': 'read_task_input',
+                  'arguments': {**self.params['arguments'], **arguments}}
+        return self.inspect(params, operation='readTaskInput')
+
+    def test_captured_input_pages_preserve_unicode_hashes_and_read_only_state(self):
+        expected = ['甲🌱乙\n"quoted"', '', 'Preserve the pause.']
+        for prompt in expected:
+            self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt}, hook='UserPromptSubmit')
+        before = self.files()
+        cursor = {}
+        restored = {i: '' for i in range(len(expected))}
+        epoch = self.helper({'op': 'status'})['epoch']
+        while cursor is not None:
+            result = self.read_input(maxChars=2, **cursor)
+            self.assertFalse(result['isError'], result)
+            self.assertEqual(result['value']['source']['threadId'], 'current-thread')
+            page = result['value']['input']
+            self.assertEqual(page['receiptEpoch'], epoch)
+            self.assertEqual(page['coverage'], 'captured-hook-inputs-only')
+            for row in page['entries']:
+                restored[row['index']] += row['text']
+                self.assertEqual(row['promptSha256'], hashlib.sha256(expected[row['index']].encode()).hexdigest())
+            if page['next']:
+                self.assertEqual(page['next']['expectedReceiptEpoch'], epoch)
+                self.assertNotEqual(page['next'], cursor)
+            cursor = page['next']
+        self.assertEqual(list(restored.values()), expected)
+        self.assertEqual(self.files(), before)
+
+    def test_captured_input_cursor_rejects_later_receipt_without_returning_text(self):
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Initial source.'}, hook='UserPromptSubmit')
+        cursor = self.read_input(maxChars=2)['value']['input']['next']
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Later correction.'}, hook='UserPromptSubmit')
+        before = self.files()
+        for unbound in ({'offset': cursor['offset']}, {'index': 1}, {'index': 0, 'offset': 1}):
+            missing_basis = self.read_input(**unbound)
+            self.assertTrue(missing_basis['isError'])
+            self.assertEqual(missing_basis['value']['reason'], 'captured-input-basis-required')
+            self.assertNotIn('input', missing_basis['value'])
+        rejected = self.read_input(**cursor)
+        self.assertTrue(rejected['isError'])
+        self.assertEqual(rejected['value']['reason'], 'captured-input-basis-changed')
+        self.assertNotIn('input', rejected['value'])
+        self.assertEqual(self.files(), before)
+
+    def test_captured_input_rejects_identity_and_operation_overrides_or_bad_pages(self):
+        for key, value in [('session_id', 'foreign'), ('op', 'retire'), ('recovery_epoch', 'invented'),
+                           ('text', 'invented'), ('_meta', self.params['_meta']), ('index', -1),
+                           ('index', 2**53), ('offset', True), ('offset', '0'), ('maxChars', 0),
+                           ('maxChars', 16001), ('expectedReceiptEpoch', '')]:
+            with self.subTest(argument=key, value=value):
+                self.assertTrue(self.read_input(**{key: value})['isError'])
+        self.assertTrue(self.read_input(cwd='.')['isError'])
+        self.params.pop('_meta')
+        self.assertEqual(self.read_input()['value']['reason'], 'native-call-metadata-unavailable')
+        self.assertFalse(self.state.exists())
+
+    def test_captured_input_never_reads_ancestor_or_invents_missing_text(self):
+        missing = self.read_input()
+        self.assertTrue(missing['isError'])
+        self.assertFalse(self.state.exists())
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'ANCESTOR_PRIVATE'},
+                    session='ancestor-root', hook='UserPromptSubmit')
+        self.params['_meta']['x-codex-turn-metadata']['session_id'] = 'ancestor-root'
+        before = self.files()
+        result = self.read_input()
+        self.assertEqual(result['value']['reason'], 'shared-session-scope-requires-reconciliation')
+        self.assertNotIn('ANCESTOR_PRIVATE', json.dumps(result))
+        self.assertEqual(self.files(), before)
+        self.params['_meta']['x-codex-turn-metadata']['thread_id'] = 'ancestor-root'
+        receipt = next(self.state.glob('*.input.json'))
+        data = json.loads(receipt.read_text(encoding='utf-8'))
+        del data['nativeInputs']
+        receipt.write_text(json.dumps(data), encoding='utf-8')
+        before = self.files()
+        page = self.read_input()['value']['input']
+        self.assertFalse(page['available'])
+        self.assertEqual(page['entries'], [])
+        self.assertEqual(self.files(), before)
+
+    def test_captured_input_preserves_locks_quarantine_and_bounded_results(self):
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Captured before interruption.'}, hook='UserPromptSubmit')
+        receipt = next(self.state.glob('*.input.json'))
+        original = receipt.read_bytes()
+        lock = receipt.with_name(receipt.name + '.lock')
+        lock.write_text(json.dumps({'pid': os.getpid()}), encoding='utf-8')
+        before = self.files()
+        self.assertEqual(self.read_input()['value']['reason'], 'input-read-busy')
+        self.assertEqual(self.files(), before)
+        lock.unlink()
+        failure = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        failure.write_text(json.dumps({'schema': 1, 'generation': 'uncaptured-input'}), encoding='utf-8')
+        before = self.files()
+        page = self.read_input()['value']['input']
+        self.assertTrue(page['inputStatus']['needsNativeReplay'])
+        self.assertEqual(page['entries'][0]['text'], 'Captured before interruption.')
+        self.assertEqual(self.files(), before)
+        # Even valid captured text cannot cause an unbounded response via corrupt metadata.
+        data = json.loads(original)
+        data['nativeInputs'][0]['epoch'] = 'x' * (128*1024)
+        receipt.write_text(json.dumps(data), encoding='utf-8')
+        before = self.files()
+        self.assertEqual(self.read_input()['value']['reason'], 'bounded-input-result-exceeded')
+        self.assertEqual(self.files(), before)
+
+    def test_captured_input_rejects_concurrent_receipt_change(self):
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Protected recorded input.'}, hook='UserPromptSubmit')
+        receipt = next(self.state.glob('*.input.json'))
+        params = {**self.params, 'name': 'read_task_input'}
+        script = ("const fs=require('node:fs'),m=require(process.argv[1]),read=fs.readFileSync;let n=0;"
+                  "fs.readFileSync=(p,...a)=>{let b=read(p,...a);if(String(p)===process.argv[2]&&++n===2){"
+                  "const v=JSON.parse(b);v.epoch='changed';b=Buffer.from(JSON.stringify(v));}return b;};"
+                  "process.stdout.write(JSON.stringify(m.readTaskInput(JSON.parse(read(0,'utf8')))));" )
+        before = self.files()
+        p = subprocess.run([self.node, '-e', script, str(BRIDGE), str(receipt)], input=json.dumps(params),
+                           capture_output=True, encoding='utf-8', env=self.env, timeout=10)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        self.assertEqual(json.loads(p.stdout)['value']['reason'], 'input-changed-during-read')
+        self.assertEqual(self.files(), before)
 
     def files(self):
         return {p.relative_to(self.root).as_posix(): p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
@@ -227,6 +348,9 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(snapshot['mode'], 'paused')
         self.assertTrue(snapshot['needsResumeReconciliation'])
         self.assertFalse(snapshot['currentInputReconciled'])
+        page = self.read_input()['value']['input']
+        self.assertEqual(page['entries'][0]['text'], 'Create report.')
+        self.assertTrue(page['inputStatus']['needsResumeReconciliation'])
         self.assertEqual(self.files(), before)
 
     def test_missing_receipt_remains_unknown_and_mutation_arguments_are_rejected(self):
@@ -265,18 +389,25 @@ class NativeStateMcpTests(unittest.TestCase):
             {'jsonrpc': '2.0', 'id': 2, 'method': 'tools/list'},
             {'jsonrpc': '2.0', 'id': 3, 'method': 'tools/call', 'params': self.params},
             {'jsonrpc': '2.0', 'id': 4, 'method': 'retire'},
+            {'jsonrpc': '2.0', 'id': 5, 'method': 'tools/call',
+             'params': {**self.params, 'name': 'read_task_input'}},
         ]
         p = self.run_wire(('\n'.join(map(json.dumps, messages))+'\n').encode())
         self.assertEqual(p.returncode, 0, p.stderr)
         rows = [json.loads(line) for line in p.stdout.splitlines()]
-        self.assertEqual([row['id'] for row in rows], [0, 1, 2, 3, 4])
+        self.assertEqual([row['id'] for row in rows], [0, 1, 2, 3, 4, 5])
         self.assertEqual(rows[0]['error']['code'], -32002)
         self.assertEqual(rows[1]['result']['protocolVersion'], '2025-06-18')
         package_version = json.loads((ROOT/'plugins/yiyuan-accord-codex/.codex-plugin/plugin.json').read_text(encoding='utf-8'))['version']
         self.assertEqual(rows[1]['result']['serverInfo']['version'], package_version)
         self.assertTrue(rows[2]['result']['tools'][0]['annotations']['readOnlyHint'])
+        self.assertEqual([tool['name'] for tool in rows[2]['result']['tools']],
+                         ['inspect_task_state', 'read_task_input'])
+        self.assertTrue(rows[2]['result']['tools'][1]['annotations']['readOnlyHint'])
         self.assertEqual(rows[3]['result']['structuredContent']['source']['threadId'], 'current-thread')
         self.assertEqual(rows[4]['error']['code'], -32601)
+        self.assertTrue(rows[5]['result']['isError'])
+        self.assertEqual(rows[5]['result']['structuredContent']['reason'], 'native-user-input-receipt-missing')
         self.assertFalse(self.state.exists())
 
     def test_invalid_utf8_oversize_and_truncated_input_have_no_state_effect(self):

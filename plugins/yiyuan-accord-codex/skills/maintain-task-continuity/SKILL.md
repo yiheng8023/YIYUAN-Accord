@@ -38,9 +38,14 @@ Use current helper `--help` from the plugin root for other status, binding, revi
 `unresolved`, pause and retirement; readback or file matches do not grant authority.
 Retain known unmet conditions until evidenced resolution or authorized cancellation.
 
-For missing captured input, `read-native-input` exposes only retained native
-input, not all history or progress. Replay the actual current input using the
-recovery token from status; never reconstruct it from a checkpoint or hash.
+For missing captured input, use an available `read_task_input` tool or the helper's
+`read-native-input`. Both expose only captured input, not complete history,
+attachments or progress. The MCP tool binds identity from the native call; pass
+its returned `next` cursor, including `expectedReceiptEpoch`, for subsequent pages.
+On a changed basis, reconcile the new receipt and needed text instead of combining
+pages. Preserve reported input-loss, resume and interruption flags; reading clears
+none of them. Replay only the actual current input through the helper using the
+recovery token from status when required; never reconstruct it from a checkpoint or hash.
 Prove dead ownership before lock recovery, preserving other sessions and failure
 watermarks. Unavailable or incompatible storage leaves freshness unknown and holds
 dependent effects; use a surviving authorized host recovery path. Helper state is

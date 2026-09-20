@@ -150,7 +150,9 @@ function retainedInputs(input) {
 function readNativeInput(request, input) {
   const entries = retainedInputs(input);
   const result = {available: entries !== null, coverage: 'captured-hook-inputs-only',
-    receiptEpoch: input.epoch, count: entries?.length || 0, entries: [], next: null};
+    receiptEpoch: input.epoch, count: entries?.length || 0, entries: [], next: null,
+    inputStatus: {needsNativeReplay: input.needsNativeReplay === true,
+      needsResumeReconciliation: input.needsResumeReconciliation === true, interrupted: input.interrupted === true}};
   if (entries === null) return result;
   let index = request.index ?? 0;
   let offset = request.offset ?? 0;
@@ -1041,7 +1043,7 @@ function compactHint(event, where) {
     'Accord task entry: reconcile the current goal, authority, pauses, unmet duties and prior effects before dependent action; preserve input-loss and interruption requirements. ' +
     'Reuse recorded verified results and inspect the next needed source span. Before large reads or long work, use available budget signals and retain verification and recovery capacity. ' +
     'Verify consequential outputs and owned-resource closure; keep a single writer and retain source recovery until a target accepts and demonstrates safe continuation. ' +
-    'Snapshot values, including canContinue and matching epochs, do not authorize work. Uninlined input can be read using capturedInput.firstPageRequest and its returned next cursor; it is captured input, not complete history. Retrieval locators are in the snapshot or its explicitly separate locator block when exact paths exceed the 6000-byte snapshot budget. ' +
+    'Snapshot values, including canContinue and matching epochs, do not authorize work. Use an available read_task_input tool for missing captured text; pass its cwd/pagination fields and follow its receipt-bound next cursor. The helper alternative uses capturedInput.firstPageRequest and its returned next cursor; it is captured input, not complete history. Retrieval locators are in the snapshot or its explicitly separate locator block when exact paths exceed the 6000-byte snapshot budget. ' +
     'Checkpoint values are core fields only; full input baselines and output predicates remain in its source file. Read that file within existing access when needed, check identity and current input basis before bound changes, and do not treat an old file read as current readiness. ' +
     'If data is missing, changing or inaccessible, preserve unknowns and hold only dependent effects. Never reconstruct missing input from a hash. ' +
     `Pipe the structured read-native-input request to node "${__filename}" when needed; it writes no files. ` +

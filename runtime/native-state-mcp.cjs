@@ -22,7 +22,21 @@ const TOOL = Object.freeze({
     required: ['cwd'], additionalProperties: false},
   annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false},
 });
+const INPUT_TOOL = Object.freeze({
+  name: 'read_task_input',
+  description: 'Read a bounded page of this root task\'s Hook-captured input when needed for recovery. Follow the returned next cursor and retain receipt/hash identity; recorded text is not new input, complete history or permission. No replay or state change.',
+  inputSchema: {type: 'object', properties: {
+    cwd: TOOL.inputSchema.properties.cwd,
+    index: {type: 'integer', minimum: 0, maximum: Number.MAX_SAFE_INTEGER, description: 'Captured input index; defaults to zero. Nonzero pagination requires expectedReceiptEpoch.'},
+    offset: {type: 'integer', minimum: 0, maximum: Number.MAX_SAFE_INTEGER, description: 'Unicode code-point offset within that input; defaults to zero. Nonzero pagination requires expectedReceiptEpoch.'},
+    maxChars: {type: 'integer', minimum: 1, maximum: 16000, description: 'Page character budget; defaults to 4000.'},
+    expectedReceiptEpoch: {type: 'string', minLength: 1, maxLength: 256,
+      description: 'Use the returned next cursor or prior inspection epoch to reject a changed input basis. This is a read condition, not a recovery token or authorization.'},
+  }, required: ['cwd'], additionalProperties: false},
+  annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false},
+});
 const CLAIM_LIMIT = 'Native-call metadata is received context, not authentication or permission. The workspace is caller-selected. Saved state and canContinue do not prove current intent, freshness, completion, takeover or control of this thread. No state mutation or task dispatch is performed.';
+const INPUT_CLAIM_LIMIT = 'Captured Hook input is recorded data, not new input or permission, complete history, attachments or work progress. A stable page does not establish that the latest input was captured, restore a task, clear quarantine or resume a pause. Reconcile current native input and authority separately. ' + CLAIM_LIMIT;
 const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const text = (value, max = 200) => typeof value === 'string' && value.trim().length > 0
   && value.length <= max && !/[\u0000-\u001f\u007f]/u.test(value);
@@ -38,6 +52,17 @@ function inspectionReason(error) {
     ? code : 'state-inspection-unavailable';
 }
 
+function nativeCallSource(params) {
+  const meta = params._meta;
+  const native = record(meta) && meta['x-codex-turn-metadata'];
+  if (!record(native) || !text(meta.callId, 1024) || !text(native.thread_id)
+      || !text(native.session_id) || !text(native.turn_id)) return null;
+  return {kind: 'codex-mcp-request-metadata', callId: meta.callId,
+    threadId: native.thread_id, sessionTreeId: native.session_id, turnId: native.turn_id,
+    model: text(native.model, 200) ? native.model : null,
+    hostVersion: text(native.codex_version, 100) ? native.codex_version : null};
+}
+
 function inspectNativeState(params) {
   if (!record(params) || params.name !== TOOL.name || !record(params.arguments)
       || Object.keys(params.arguments).some(key => !['cwd', 'includeContext', 'contextMaxAgeMs'].includes(key))
@@ -49,16 +74,10 @@ function inspectNativeState(params) {
     return {isError: true, value: unavailable('explicit-workspace-required')};
   }
   // The argument schema exposes no identity, operation, receipt or storage path.
-  const meta = params._meta;
-  const native = record(meta) && meta['x-codex-turn-metadata'];
-  if (!record(native) || !text(meta.callId, 1024) || !text(native.thread_id)
-      || !text(native.session_id) || !text(native.turn_id)) {
+  const source = nativeCallSource(params);
+  if (!source) {
     return {isError: true, value: unavailable('native-call-metadata-unavailable')};
   }
-  const source = {kind: 'codex-mcp-request-metadata', callId: meta.callId,
-    threadId: native.thread_id, sessionTreeId: native.session_id, turnId: native.turn_id,
-    model: text(native.model, 200) ? native.model : null,
-    hostVersion: text(native.codex_version, 100) ? native.codex_version : null};
   const workspace = {cwd: params.arguments.cwd, binding: 'caller-selected'};
   let checkpoint;
   if (source.threadId !== source.sessionTreeId) {
@@ -95,6 +114,40 @@ function inspectNativeState(params) {
   if (Buffer.byteLength(JSON.stringify(value)) > MAX_RESULT) {
     return {isError: true, value: unavailable('bounded-state-result-exceeded')};
   }
+  return {isError: false, value};
+}
+
+function readTaskInput(params) {
+  const rejected = reason => ({isError: true, value: {
+    schema: 'yiyuan-accord-native-input/v1', state: 'unavailable', reason, claimLimit: INPUT_CLAIM_LIMIT}});
+  if (!record(params) || params.name !== INPUT_TOOL.name || !record(params.arguments)
+      || Object.keys(params.arguments).some(key => !own(INPUT_TOOL.inputSchema.properties, key))
+      || !own(params.arguments, 'cwd') || !text(params.arguments.cwd, 4096)
+      || !path.isAbsolute(params.arguments.cwd)) return rejected('explicit-workspace-required');
+  const args = params.arguments;
+  if (['index', 'offset'].some(key => own(args, key) && (!Number.isSafeInteger(args[key]) || args[key] < 0))
+      || own(args, 'maxChars') && (!Number.isSafeInteger(args.maxChars) || args.maxChars < 1 || args.maxChars > 16000)
+      || own(args, 'expectedReceiptEpoch') && !text(args.expectedReceiptEpoch, 256)) return rejected('invalid-input-page');
+  if (['index', 'offset'].some(key => own(args, key) && args[key] !== 0)
+      && !own(args, 'expectedReceiptEpoch')) return rejected('captured-input-basis-required');
+  const source = nativeCallSource(params);
+  if (!source) return rejected('native-call-metadata-unavailable');
+  if (source.threadId !== source.sessionTreeId) return rejected('shared-session-scope-requires-reconciliation');
+  let input;
+  try {
+    input = operate({op: 'read-native-input', session_id: source.sessionTreeId, cwd: args.cwd,
+      index: own(args, 'index') ? args.index : undefined,
+      offset: own(args, 'offset') ? args.offset : undefined,
+      maxChars: own(args, 'maxChars') ? args.maxChars : undefined});
+  } catch (error) { return rejected(inspectionReason(error)); }
+  if (own(args, 'expectedReceiptEpoch') && args.expectedReceiptEpoch !== input.receiptEpoch) {
+    return rejected('captured-input-basis-changed');
+  }
+  // Pin subsequent pages to this observed basis; never rewrite or replay it.
+  if (input.next) input = {...input, next: {...input.next, expectedReceiptEpoch: input.receiptEpoch}};
+  const value = {schema: 'yiyuan-accord-native-input/v1', state: 'observed-input-page',
+    source, workspace: {cwd: args.cwd, binding: 'caller-selected'}, input, claimLimit: INPUT_CLAIM_LIMIT};
+  if (Buffer.byteLength(JSON.stringify(value)) > MAX_RESULT) return rejected('bounded-input-result-exceeded');
   return {isError: false, value};
 }
 
@@ -139,13 +192,13 @@ function createHandler(version = runtimeVersion()) {
       if (request.params != null && (!record(request.params) || request.params.cursor != null)) {
         return error(id, -32602, 'Invalid tool-list parameters');
       }
-      return result(id, {tools: [TOOL]});
+      return result(id, {tools: [TOOL, INPUT_TOOL]});
     }
     if (request.method === 'tools/call') {
-      if (!record(request.params) || request.params.name !== TOOL.name) {
+      if (!record(request.params) || ![TOOL.name, INPUT_TOOL.name].includes(request.params.name)) {
         return error(id, -32602, 'Unknown tool');
       }
-      const inspected = inspectNativeState(request.params);
+      const inspected = request.params.name === TOOL.name ? inspectNativeState(request.params) : readTaskInput(request.params);
       return result(id, {isError: inspected.isError, structuredContent: inspected.value,
         content: [{type: 'text', text: JSON.stringify(inspected.value)}]});
     }
@@ -190,4 +243,4 @@ if (require.main === module) {
     process.exitCode = 1;
   });
 }
-module.exports = {inspectNativeState, createHandler, serve};
+module.exports = {inspectNativeState, readTaskInput, createHandler, serve};

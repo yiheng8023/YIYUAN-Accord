@@ -108,6 +108,8 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
             contract["nativeTaskStateMcp"] = {
                 "configuration": ".mcp.json", "entry": "runtime/native-state-mcp.cjs",
                 "transport": "host-managed-stdio", "tool": "inspect_task_state",
+                "inputTool": "read_task_input",
+                "inputRead": "root-native-metadata-bound read-native-input; bounded Unicode pages with receipt-bound next cursor; preserve input-loss/resume/interruption flags; captured input is not complete history, replay or authority",
                 "scope": "calling-thread-metadata-and-explicit-caller-selected-workspace",
                 "effect": "read-existing-checkpoint-status-with-optional-hook-bound-context-without-state-mutation",
                 "identity": "Codex callId and x-codex-turn-metadata; root-thread-only-checkpoint-read; descendant-shared-session-remains-unavailable; metadata-is-not-authentication",

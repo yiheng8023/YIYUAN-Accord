@@ -99,6 +99,15 @@ session identity is shared by descendants: when native session and thread IDs
 differ, the reader holds checkpoint lookup instead of adopting ancestor state.
 This adds a host-owned process lifetime, not a separate storage engine or remote
 service. Installation, actual tool use and resource release remain separate checks.
+The same process exposes `read_task_input(cwd, index?, offset?, maxChars?,
+expectedReceiptEpoch?)` for recovery text. It reuses `read-native-input` without
+another store or control connection, selects only the root session from native
+call metadata and returns captured-input pages with their original hashes and
+input-loss/resume/interruption flags. The returned next cursor pins the observed
+receipt epoch; a changed epoch rejects that page instead of joining different
+bases. Captured input is not complete history, attachments, work progress or new
+authority. Reading does not replay input, clear quarantine, resume pauses or
+establish restoration. The command helper remains available where this tool is not.
 Context reads are opt-in. They reuse the Hook-bound transcript reader and match
 its thread, turn and model to this call's native metadata; the recorded session
 version remains separate from the current host version. Different input epochs
