@@ -218,7 +218,7 @@ plain data with these exact keys (only fields marked optional may be omitted):
 | `scopeRef` | Shared effects whose already-authorized writer the recorder arbitrates. |
 | `authorityRef`, `stateRef` | Current authority and recoverable task-state references. |
 | `source` | `{threadId, turnId?}`; supply the exact active turn when it must be stopped. |
-| `target` | `{cwd, model, modelProvider?}`; explicitly bound destination and suitable model. |
+| `target` | `{cwd, model, modelProvider?, effort?}`; explicitly bound destination, model and optional reasoning effort. |
 | `handoffText` | Authorized intake context, including goal, pauses, evidence and unfinished work. |
 | `continuation` | `{input, sandboxPolicy}` for the first bounded continuation after acceptance. |
 | `deadlineMs`, `recoveryDeadlineMs` | Future absolute UTC millisecond deadlines; recovery must be at least the work deadline. |
@@ -228,6 +228,16 @@ code units; this is an API size ceiling, not a token budget. Sandbox policy is a
 native structured object, not an authorization grant. Preserve user-selected modes
 and pauses when choosing the destination and continuation. A paused responsibility
 requires an authorized preservation action, not resuming its effects.
+
+When an effort choice must survive transfer, bind `target.effort` to the current
+authorized choice after checking the host model's supported values. The adapter
+forwards it unchanged to every read-only intake and the first continuation via
+the official [turn/start effort field](https://learn.chatgpt.com/docs/app-server#turns).
+Omission adds no override; it is not proof of inheriting the source's selection.
+The adapter neither maintains a model/effort catalogue nor retries a rejected value
+with another value. Requested settings are not actual adoption evidence: verify
+the native target context through the existing verifier. A later user choice or
+changed support invalidates dependent allowances; do not restore a stale selection.
 
 UTC deadlines convert once to Node `performance.now()` budgets. Every callback
 deadline below uses that monotonic clock domain. A cross-process bridge translates

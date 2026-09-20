@@ -149,7 +149,7 @@ function validatePlan(raw, wallNowMs) {
     ['transferId', 'scopeRef', 'authorityRef', 'stateRef', 'source', 'target', 'handoffText',
       'continuation', 'deadlineMs', 'recoveryDeadlineMs'], [], 'plan');
   exactKeys(raw.source, ['threadId'], ['turnId'], 'plan.source');
-  exactKeys(raw.target, ['cwd', 'model'], ['modelProvider'], 'plan.target');
+  exactKeys(raw.target, ['cwd', 'model'], ['modelProvider', 'effort'], 'plan.target');
   exactKeys(raw.continuation, ['input', 'sandboxPolicy'], [], 'plan.continuation');
   text(raw.transferId, 'plan.transferId');
   text(raw.scopeRef, 'plan.scopeRef');
@@ -160,6 +160,7 @@ function validatePlan(raw, wallNowMs) {
   text(raw.target.cwd, 'plan.target.cwd', 32768);
   text(raw.target.model, 'plan.target.model');
   if (Object.hasOwn(raw.target, 'modelProvider')) text(raw.target.modelProvider, 'plan.target.modelProvider');
+  if (Object.hasOwn(raw.target, 'effort')) text(raw.target.effort, 'plan.target.effort');
   text(raw.handoffText, 'plan.handoffText', MAX_TEXT);
   text(raw.continuation.input, 'plan.continuation.input', MAX_TEXT);
   if (!plainObject(raw.continuation.sandboxPolicy)) {
@@ -920,6 +921,7 @@ function createExecution(rawPlan, rawDependencies) {
       const intakeParams = immutable({
         threadId: targetThreadId,
         input: [{type: 'text', text: nextIntakeInput}],
+        ...(Object.hasOwn(plan.target, 'effort') ? {effort: plan.target.effort} : {}),
         sandboxPolicy: {type: 'readOnly'},
       });
       await record({...recordState, phase: 'starting-intake', intakeTurns,
@@ -1015,6 +1017,7 @@ function createExecution(rawPlan, rawDependencies) {
     const continuationParams = immutable({
       threadId: targetThreadId,
       input: [{type: 'text', text: plan.continuation.input}],
+      ...(Object.hasOwn(plan.target, 'effort') ? {effort: plan.target.effort} : {}),
       sandboxPolicy: plan.continuation.sandboxPolicy,
     });
     targetTurnId = null;

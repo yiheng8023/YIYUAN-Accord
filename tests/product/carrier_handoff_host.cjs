@@ -125,6 +125,7 @@ async function run(config) {
     handoffText: 'Retain the authorized task and protected original; current pause is absent.',
     continuation: {input: 'Perform the next authorized bounded step.', sandboxPolicy: {type: 'readOnly'}},
     deadlineMs: Date.now() + 5000, recoveryDeadlineMs: Date.now() + 6000};
+  if (Object.hasOwn(config, 'targetEffort')) plan.target.effort = config.targetEffort;
   const reply = (stage) => ({decision: 'allow', scopeRef: plan.scopeRef, authorityRef: plan.authorityRef, stateRef: plan.stateRef,
     sourceRef: 'mock-evidence:' + stage, sourceRecoveryReady: true, quiesced: true, noOtherWriters: true,
     targetInitializationSafe: true, initializationEffectsVerified:true, intakeEffectsVerified:true,
@@ -153,6 +154,7 @@ async function run(config) {
           approvalPolicy: 'never', sandbox: {type: 'readOnly'}};
       }
       if (method === 'turn/start') {
+        if (scenario === 'unsupported-effort') throw new Error('native effort unsupported');
         turn++;
         if (turn === 2 && config.beforeContinuationDelayMs) {
           Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, config.beforeContinuationDelayMs);

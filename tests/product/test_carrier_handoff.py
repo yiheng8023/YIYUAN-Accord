@@ -92,6 +92,32 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertLess(methods.index('turn/interrupt'),methods.index('waitTerminal'))
         self.assertLess(methods.index('waitTerminal'),methods.index('thread/start'))
 
+    def test_bound_effort_reaches_every_intake_and_continuation_without_defaulting(self):
+        r=self.run_case('extra-context',targetEffort='medium')
+        self.assertIsNone(r['error'])
+        turns=[c['params'] for c in r['calls'] if c['method']=='turn/start']
+        self.assertEqual(len(turns),3)
+        self.assertTrue(all(t['effort']=='medium' for t in turns))
+        self.assertEqual(r['snapshots'][0]['plan']['target']['effort'],'medium')
+        r=self.run_case('lost-continuation-ack',targetEffort='high')
+        self.assertEqual(r['error']['state']['pendingEffect']['params']['effort'],'high')
+        self.assertFalse(any(c['method']=='thread/unsubscribe' for c in r['calls']))
+        r=self.run_case()
+        self.assertTrue(all('effort' not in c['params'] for c in r['calls']))
+
+    def test_invalid_or_native_rejected_effort_does_not_silently_fall_back(self):
+        for effort in ('', ' ', None, 42):
+            with self.subTest(effort=effort):
+                r=self.run_case(targetEffort=effort)
+                self.assertEqual(r['error']['code'],'INVALID_INPUT')
+                self.assertEqual(r['calls'],[])
+        r=self.run_case('unsupported-effort',targetEffort='host-specific-effort')
+        self.assertIsNotNone(r['error'])
+        turns=[c['params'] for c in r['calls'] if c['method']=='turn/start']
+        self.assertEqual(len(turns),1)
+        self.assertEqual(turns[0]['effort'],'host-specific-effort')
+        self.assertFalse(any(c['method']=='thread/unsubscribe' for c in r['calls']))
+
     def test_history_retention_uses_current_native_metadata_not_generic_recovery(self):
         for scenario, expected in (('success', True), ('ephemeral-source', False),
                                    ('unknown-persistence', None), ('persistence-not-reobserved', None)):
