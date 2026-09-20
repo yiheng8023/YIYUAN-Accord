@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "e23911658489d016b41fba67885ab2aaca9a2f8300ed2d312eb4658e0032eee8",
+        "packageSha256": "b02f694a510a49c14f602947f7e3a5148adab8058281b1437ff3bb6b9d2f4396",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -176,10 +176,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 2100000,
+      "maxProductCodeAndTestBytes": 2110000,
       "maxTrackedFiles": 158,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The current 2100000 code/test-byte and 158-file ceilings cover the existing runtime, carrier adapter and the native-state MCP reader with its canonical/package copies, registration and tests. The reader reuses checkpoint status and host-managed stdio lifetime; it adds no storage engine, account, remote service or handoff controller. Five-percent byte reserve and the 36000 primary-instruction ceiling remain. Necessary identity, recovery, protocol, failure and cleanup checks are retained. Package visibility and local checks do not prove model adoption, semantic takeover or net benefit. Historical budget changes remain in the source-bound operations record."
+      "rationale": "The current 2110000 code/test-byte and 158-file ceilings cover the existing runtime, carrier adapter and the native-state MCP reader with its canonical/package copies, registration and tests. The reader reuses checkpoint status and host-managed stdio lifetime, releases its plugin-cache working directory before serving, and tests live cache replacement; it adds no storage engine, account, remote service or handoff controller. Five-percent byte reserve and the 36000 primary-instruction ceiling remain. Necessary identity, recovery, protocol, failure and cleanup checks are retained. Package visibility and local checks do not prove model adoption, semantic takeover or net benefit. Historical budget changes remain in the source-bound operations record."
     }
   },
   "source": {

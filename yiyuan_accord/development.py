@@ -112,7 +112,7 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "effect": "read-existing-checkpoint-status-without-state-mutation",
                 "identity": "Codex callId and x-codex-turn-metadata; root-thread-only-checkpoint-read; descendant-shared-session-remains-unavailable; metadata-is-not-authentication",
                 "storage": "existing-task-checkpoint-only",
-                "lifecycle": "host-start-reload-and-close; process-exits-on-stdin-end; no-listener-or-daemon",
+                "lifecycle": "host-start-reload-and-close; releases-plugin-cache-cwd-before-serving; process-exits-on-stdin-end; no-listener-or-daemon",
                 "limits": "no-argument-identity-or-operation-override; no-input-replay; no-freshness-authority-or-completion-claim; no-app-server-control-or-handoff-dispatch",
             }
         if carrier_handoff:

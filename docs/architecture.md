@@ -99,6 +99,10 @@ session identity is shared by descendants: when native session and thread IDs
 differ, the reader holds checkpoint lookup instead of adopting ancestor state.
 This adds a host-owned process lifetime, not a separate storage engine or remote
 service. Installation, actual tool use and resource release remain separate checks.
+Standalone startup resolves configured state/session/home/temp paths against its
+original cwd, then leaves the plugin cache directory before serving. This avoids
+pinning a Windows cache directory during native replacement without rebinding
+relative state paths. It does not itself reload code already held by an old process.
 The checkpoint connects UserPromptSubmit, Stop, SessionEnd and Interrupt. These
 connections establish available mechanisms, not demonstrated ordinary-task adoption
 or end-to-end completion. The Agent binds necessary file inputs, output predicates and

@@ -136,7 +136,16 @@ async function serve(input = process.stdin, output = process.stdout) {
 }
 
 if (require.main === module) {
-  serve().catch(() => {
+  Promise.resolve().then(() => {
+    // Windows cannot replace a cache directory held as a live process cwd.
+    // Modules are loaded; every task workspace is supplied as an absolute path.
+    // Preserve the original base of configured state, session, home and temp paths.
+    for (const key of ['YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME', 'HOME', 'USERPROFILE', 'TMPDIR', 'TMP', 'TEMP']) {
+      if (process.env[key]) process.env[key] = path.resolve(process.env[key]);
+    }
+    process.chdir(require('node:os').homedir());
+    return serve();
+  }).catch(() => {
     process.stderr.write('Accord native-state transport stopped; no state mutation was requested.\n');
     process.exitCode = 1;
   });

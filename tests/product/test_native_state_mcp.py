@@ -7,6 +7,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
+import queue
 import unittest
 import time
 
@@ -182,6 +184,66 @@ class NativeStateMcpTests(unittest.TestCase):
         adapter = json.loads((package / 'adapter.json').read_text(encoding='utf-8'))
         self.assertTrue(adapter['persistentProcessAdded'])
         self.assertEqual(adapter['nativeTaskStateMcp']['storage'], 'existing-task-checkpoint-only')
+
+    def test_running_stdio_server_does_not_pin_plugin_cache_directory(self):
+        cache = self.root / 'cache'
+        package = cache / 'version'
+        shutil.copytree(ROOT / 'plugins/yiyuan-accord-codex', package)
+        readers = []
+        process = subprocess.Popen([self.node, 'runtime/native-state-mcp.cjs'], cwd=package,
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=self.env)
+        def exchange(request):
+            process.stdin.write((json.dumps(request) + '\n').encode())
+            process.stdin.flush()
+            output = queue.Queue()
+            reader = threading.Thread(target=lambda: output.put(process.stdout.readline()), daemon=True)
+            readers.append(reader)
+            reader.start()
+            return json.loads(output.get(timeout=5))
+        try:
+            initialized = exchange({'jsonrpc': '2.0', 'id': 1, 'method': 'initialize', 'params': {
+                'protocolVersion': '2025-06-18', 'capabilities': {},
+                'clientInfo': {'name': 'cache-lifecycle-test', 'version': '1'}}})
+            self.assertIn('serverInfo', initialized['result'])
+            cache.rename(self.root / 'cache-backup')
+            self.assertEqual(exchange({'jsonrpc': '2.0', 'id': 2, 'method': 'ping'})['result'], {})
+        finally:
+            try:
+                process.stdin.close()
+            except OSError:
+                pass
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait(timeout=5)
+            for reader in readers:
+                reader.join(timeout=5)
+            process.stdout.close()
+            process.stderr.close()
+        self.assertEqual(process.returncode, 0)
+        self.assertTrue(all(not reader.is_alive() for reader in readers))
+
+    def test_relative_state_override_keeps_its_startup_directory_base(self):
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Current input.'}, hook='UserPromptSubmit')
+        expected = self.helper({'op': 'status'})
+        profile = self.root / 'native-home/profile'
+        profile.mkdir(parents=True)
+        self.env.update(HOME=str(profile), USERPROFILE=str(profile),
+            YIYUAN_ACCORD_TASK_STATE_DIR=os.path.relpath(self.state, self.work))
+        before = self.files()
+        messages = [
+            {'jsonrpc': '2.0', 'id': 1, 'method': 'initialize', 'params': {
+                'protocolVersion': '2025-06-18', 'capabilities': {},
+                'clientInfo': {'name': 'relative-state-test', 'version': '1'}}},
+            {'jsonrpc': '2.0', 'method': 'notifications/initialized'},
+            {'jsonrpc': '2.0', 'id': 2, 'method': 'tools/call', 'params': self.params},
+        ]
+        p = self.run_wire(('\n'.join(map(json.dumps, messages))+'\n').encode())
+        self.assertEqual(p.returncode, 0, p.stderr)
+        result = json.loads(p.stdout.splitlines()[-1])['result']['structuredContent']
+        self.assertEqual(result['checkpoint'], {'state': 'observed', 'snapshot': expected})
+        self.assertEqual(self.files(), before)
 
 
 def native_integration(codex, evidence):
