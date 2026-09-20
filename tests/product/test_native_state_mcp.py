@@ -290,7 +290,9 @@ def native_integration(codex, evidence):
     deadline = time.monotonic()+150
     def command(label, arguments):
         record, value = host._run_cli(manifest, label, arguments, env, deadline)
-        if record['exitCode'] or record['forced']: raise RuntimeError('native registration failed')
+        if (record['exitCode'] or record['forced'] or record['failure']
+                or not host._released(record['after'])):
+            raise RuntimeError('native plugin operation failed')
         return value
     command('marketplace-add', ['plugin','marketplace','add', str(root/'marketplace'),'--json'])
     command('plugin-add', ['plugin','add','yiyuan-accord-codex@yiyuan-accord','--json'])
@@ -349,6 +351,30 @@ def native_integration(codex, evidence):
             raise RuntimeError('absent hook receipt was not preserved as unknown')
         if sha(original) != manifest['protectedSha256'] or list((root/'state').iterdir()):
             raise RuntimeError('inspection changed protected files or task state')
+        status_request = {'threadId': thread, 'detail': 'toolsAndAuthOnly'}
+        live = app.rpc('mcpServerStatus/list', status_request)
+        servers = [s for s in live['data'] if s.get('pluginId') == 'yiyuan-accord-codex@yiyuan-accord']
+        if len(servers) != 1 or servers[0]['runtimeStatus'] != 'connected':
+            raise RuntimeError('installed MCP must be connected before cache replacement')
+        cache = root/'home/plugins/cache/yiyuan-accord/yiyuan-accord-codex'
+        before_cache = cache.stat()
+        # Local fixture markets use native add/reinstall; marketplace upgrade is Git-only.
+        upgrade = command('reinstall-live-mcp', ['plugin','add','yiyuan-accord-codex@yiyuan-accord','--json'])
+        after_cache = cache.stat()
+        if (upgrade.get('errors') or (before_cache.st_dev, before_cache.st_ino)
+                == (after_cache.st_dev, after_cache.st_ino)):
+            raise RuntimeError('native cache replacement was not established')
+        after_status = app.rpc('mcpServerStatus/list', status_request)
+        after_servers = [s for s in after_status['data'] if s.get('pluginId') == 'yiyuan-accord-codex@yiyuan-accord']
+        if (len(after_servers) != 1 or after_servers[0]['runtimeStatus'] != 'connected'
+                or 'inspect_task_state' not in after_servers[0]['tools']):
+            raise RuntimeError('MCP connection or state tool lost after replacement')
+        result['liveCacheUpgrade'] = {'beforeMcp': servers, 'result': upgrade,
+            'beforeIdentity': [str(before_cache.st_dev), str(before_cache.st_ino)],
+            'afterIdentity': [str(after_cache.st_dev), str(after_cache.st_ino)],
+            'afterMcp': after_status}
+        if sha(original) != manifest['protectedSha256'] or list((root/'state').iterdir()):
+            raise RuntimeError('cache replacement changed original or task state')
         if len(fixture.requests) != 2 or fixture.auth_seen: raise RuntimeError('provider bounds differ')
         result.update(status='passed', threadId=thread, turnId=turn, nativeCall=call,
             providerRequests=len(fixture.requests), sourceSettings=started,
