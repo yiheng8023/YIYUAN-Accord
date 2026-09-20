@@ -2005,3 +2005,13 @@ eea99226的CI 35473404424中，两项原生生命周期任务通过，含新MCP�
 9bcfad1c修复测试夹具后，沿已有开发安装授权复用上次原生Git市场更新路线；本轮运行代码51ae6e41保持，已有精确包Linux/macOS原生机制证据，完整矩阵仍由CI核对。主任务独占accord-shared-plugin-update-20260920-02，先保存19文件旧包、市场来源和外部配置语义摘要，冻结27份脚本/依赖/候选源码。原生remove/add --ref/upgrade将同一市场从e758f0df指向9bcfad1c，未手改缓存或制造新插件身份。
 
 源码、市场快照及安装缓存的21文件完全相同；配置语义只变该市场ref，其余插件清单/启用及Hook声明和信任保持。跨更新原读取进程及新进程都返回5个启用Skill、6条受信任Hook，5个CLI阶段与2个App Server均exit0、非强制并归零；零模型轮次。独立回读核对旧包、执行源和后态，原件留存用于实际采用及必要回退，不清理唯一恢复依据。当前主任务工具目录未暴露inspect_task_state；这是完整包安装及清单刷新证据，MCP在现有Desktop/IDE任务中的实际加载与使用仍未知，不以普通MCP全量状态查询启动无关组件来补成采用结论。
+
+## 重启后的真实Desktop状态采用和当前输入恢复（2026-09-20）
+
+当前源码0f68a563、安装213116ec；用户重启后继续本任务，原生Hook报告SessionStart/resume。本任务工具目录首次提供inspect_task_state，真实模型按连续性指导调用成功。原始元数据返回主任务thread/session、当前turn及调用ID，并回传宿主0.155.0-alpha.9.2和gpt-6-astra；旧rollout头中的0.155.1不能覆盖当前调用的版本来源。工具读出unbound、无checkpoint、捕获输入缺失、needsNativeReplay/needsResumeReconciliation为true，未据旧状态宣布就绪。
+
+主任务独占accord-desktop-state-adoption-20260920-01保留三次MCP原件、原输入记录与相关失败水印。仅在原生当前任务尾段定位匹配turn的task_started和最新user item，实际原文为“继续。”加换行，SHA 4c1242ee。当前目标、权限、原有效果与单写者由可见对话及实时Git/接续核对；在新鲜恢复令牌下通过既有helper显式重放该原文，记录retained-native-replay。没有从哈希重构旧历史、手改状态、删除失败水印或创建结果检查点，也未补造缺少的原生上下文路径或模型/权限事件字段。
+
+helper正常退出；随后真实MCP回读捕获输入1条、两项恢复标记为false，仍无checkpoint且currentInputReconciled=false。故只证明当前输入回执的受控恢复和实际Desktop诊断/反馈闭环，不证明语义绑定已核、全部历史恢复、下一次原生输入捕获、自主交接或整版验收。本次复用正在进行的开发任务，没有新增模型试验、App Server或用户任务；宿主管理的MCP仍服务当前任务，不把单次读取完成写成进程回收。
+
+只读独立复核先指出缺少原生片段及after原件，主任务随后补留两段原始JSONL及源偏移/长度/hash、稍后after字节和采集时间；没有重跑恢复。复核者对指定当前任务日志定长seek，确认两段逐字节匹配；前后失败水印相同、after receipt明确保留原文/turn/recoveryEpoch与retained-native-replay，无checkpoint。稍后回读的epoch与MCP一致，但不是同一原子事务。恢复锁已消失，候选安装字节保持；无新阻断，既有验收边界保持。
