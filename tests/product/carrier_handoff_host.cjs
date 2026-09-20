@@ -20,31 +20,45 @@ async function runOwnedConnection(config) {
   const fs = require('node:fs');
   const {spawn} = require('node:child_process');
   const {Writable} = require('node:stream');
-  const {createOwnedAppServerConnection,CONTEXT_OBSERVATION_TOOL} = require('../../runtime/codex-connection.cjs');
+  const {createOwnedAppServerConnection,createOwnedAppServerWebSocketConnection,CONTEXT_OBSERVATION_TOOL} = require('../../runtime/codex-connection.cjs');
   const log = config.nativeLogRoot;
   const stderr = fs.openSync(log + '/stderr.txt', 'wx');
   const stdout = fs.openSync(log + '/stdout.jsonl', 'wx');
   const requests = fs.openSync(log + '/requests.jsonl', 'wx');
-  const native = spawn(config.argv[0], config.argv.slice(1), {
-    cwd:config.plan.target.cwd, stdio:['pipe','pipe',stderr], windowsHide:true,
-  });
+  let native=null,socket=null,connection=null,ended=null,socketCloseCode=null;
   let rawBytes=0;
   const capture = chunk => {
     rawBytes+=chunk.length;
     if (rawBytes>8*1024*1024) throw new Error('native fixture output exceeded bound');
     fs.writeSync(stdout,chunk);
   };
-  native.stdout.on('data',capture);
-  const outgoing = new Writable({write(chunk,encoding,done) {
-    fs.writeSync(requests,chunk); native.stdin.write(chunk,encoding,done);
-  }});
-  const connection=createOwnedAppServerConnection({stdin:outgoing,stdout:native.stdout,
-    connectionId:config.binding.connectionId,hostVersion:config.binding.hostVersion});
   let result=null,error=null,context=null,exitCode=null,closeState=null;
   const contextReplies=[];
-  const ended=new Promise((resolve,reject)=>{native.once('exit',code=>{exitCode=code;resolve(code);});native.once('error',reject);});
+  const captureMessage=event=>capture(Buffer.from(String(event.data)+'\n','utf8'));
   try {
     const deadline=performance.now()+45000;
+    if(config.websocketEndpoint){
+      const token=process.env.ACCORD_TEST_CONTROL_TOKEN;
+      if(!token)throw new Error('fixture WebSocket token missing');
+      socket=new WebSocket(config.websocketEndpoint,{headers:{Authorization:'Bearer '+token}});
+      await new Promise((resolve,reject)=>{
+        const timer=setTimeout(()=>finish(new Error('native WebSocket open timed out')),10000);
+        const ready=()=>finish(),failed=()=>finish(new Error('native WebSocket open rejected'));
+        function finish(error){clearTimeout(timer);socket.removeEventListener('open',ready);socket.removeEventListener('error',failed);error?reject(error):resolve();}
+        socket.addEventListener('open',ready);socket.addEventListener('error',failed);
+      });
+      socket.addEventListener('message',captureMessage);
+      const send=socket.send.bind(socket);
+      socket.send=data=>{fs.writeSync(requests,String(data).trimEnd()+'\n');return send(data)};
+      connection=createOwnedAppServerWebSocketConnection({socket,...config.binding});
+    }else{
+      native=spawn(config.argv[0],config.argv.slice(1),{cwd:config.plan.target.cwd,
+        stdio:['pipe','pipe',stderr],windowsHide:true});
+      native.stdout.on('data',capture);
+      const outgoing=new Writable({write(chunk,encoding,done){fs.writeSync(requests,chunk);native.stdin.write(chunk,encoding,done)}});
+      connection=createOwnedAppServerConnection({stdin:outgoing,stdout:native.stdout,...config.binding});
+      ended=new Promise((resolve,reject)=>{native.once('exit',code=>{exitCode=code;resolve(code)});native.once('error',reject)});
+    }
     const t=connection.transport;
     await t.request('initialize',{clientInfo:{name:'accord_connection_fixture',version:'1'},
       capabilities:{experimentalApi:true}},deadline);
@@ -75,13 +89,21 @@ async function runOwnedConnection(config) {
   } catch (e) {
     error={name:e.name,message:e.message,code:e.code,state:e.state,details:e.details};
   } finally {
-    closeState=connection.close();
-    native.stdin.end();
+    closeState=connection?.close();
     let timer;
-    try {await Promise.race([ended,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('native EOF exit timed out')),10000);})]);}
-    finally {clearTimeout(timer);native.stdout.off('data',capture);fs.closeSync(stderr);fs.closeSync(stdout);fs.closeSync(requests);}
+    try {
+      if(socket){
+        socket.removeEventListener('message',captureMessage);
+        if(socket.readyState!==WebSocket.CLOSED){
+          ended=new Promise(resolve=>socket.addEventListener('close',event=>{socketCloseCode=event.code;resolve()},{once:true}));
+          socket.close(1000);
+        }else ended=Promise.resolve();
+      }else native?.stdin.end();
+      if(ended)await Promise.race([ended,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('owned transport exit timed out')),10000)})]);
+    } finally {clearTimeout(timer);native?.stdout.off('data',capture);fs.closeSync(stderr);fs.closeSync(stdout);fs.closeSync(requests);}
   }
-  process.stdout.write(JSON.stringify({kind:'done',result,error,context,contextReplies,exitCode,closeState,rawBytes})+'\n');
+  process.stdout.write(JSON.stringify({kind:'done',result,error,context,contextReplies,exitCode,socketCloseCode,
+    transportKind:socket?'websocket':'stdio',closeState,rawBytes})+'\n');
   rl.close();process.stdin.destroy();
 }
 async function run(config) {

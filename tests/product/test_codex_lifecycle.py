@@ -639,6 +639,22 @@ class CodexLifecycleTests(unittest.TestCase):
             self.assertTrue(record["readerStopped"])
             self.assertEqual(app.close(), record)
 
+    def test_owned_process_shutdown_reserves_recovery_and_supports_listener_stop(self):
+        for persistent, stop_owned in ((False, False), (True, False), (True, True)):
+            with self.subTest(persistent=persistent, stop_owned=stop_owned), tempfile.TemporaryDirectory() as tmp:
+                _, manifest = self.fixture(Path(tmp).resolve())
+                manifest['limits']['recoverySeconds'] = 4
+                command = ('import time; time.sleep(30)' if persistent else
+                           'import sys; sys.stdin.buffer.read()')
+                app = lifecycle._App(manifest, 'owned-close', [sys.executable, '-u', '-c', command],
+                    lifecycle._owned_environment(manifest), time.monotonic() + 10)
+                record = app.close(stop_owned=stop_owned)
+                self.assertIsInstance(record['exitCode'], int)
+                self.assertEqual(record['forced'], persistent)
+                self.assertTrue(record['readerStopped'])
+                self.assertTrue(lifecycle._record_released(record, manifest))
+                self.assertEqual(app.close(), record)
+
     def test_prepare_rejects_nested_evidence_and_run_rejects_changed_owned_home(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()

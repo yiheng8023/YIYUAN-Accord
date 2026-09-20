@@ -1145,7 +1145,9 @@ class _App:
                     and event["params"].get("turn", {}).get("id") == turn_id):
                 return event["params"]["turn"].get("status")
 
-    def close(self, manifest=None):
+    def close(self, manifest=None, *, stop_owned=False):
+        if type(stop_owned) is not bool:
+            raise ValueError("owned process stop must be explicit boolean")
         if self._closed:
             return self._close_record
         manifest = self.manifest if manifest is None else manifest
@@ -1153,8 +1155,16 @@ class _App:
         try:
             self.process.stdin.close()
             recovery_deadline = time.monotonic() + manifest["limits"]["recoverySeconds"]
+            # EOF is the normal stdio shutdown signal. Leave part of the same
+            # deadline for forced termination, exit-status collection and readers.
+            # An owned listener has no EOF exit contract: its caller requests stop.
+            graceful_deadline = recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
+            if stop_owned and self.process.poll() is None:
+                forced = True
+                self.job.terminate()
             try:
-                self.process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
+                wait_until = recovery_deadline if stop_owned else graceful_deadline
+                self.process.wait(timeout=max(0.001, wait_until - time.monotonic()))
             except subprocess.TimeoutExpired:
                 forced = True
                 self.job.terminate()
