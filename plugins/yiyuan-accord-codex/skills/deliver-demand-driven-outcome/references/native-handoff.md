@@ -359,6 +359,15 @@ reference or an incomplete log is not proof that nothing ran. If the target owns
 the scope, retain that writer while resolving uncertainty; a new transfer id is
 not a bypass. Do not release source recovery from a locator or model report alone.
 
+Preserve the native storage needed by the chosen recovery route, not just a copy
+of its visible files. In inspected Codex 0.155.1 paginated history, full turn reads
+validate [rollout lineage](https://github.com/openai/codex/blob/be2951ea34f0d295ed0becf97079f92fa5f6950e/codex-rs/thread-store/src/local/rollout_lineage.rs)
+against selected rollout paths as well as SQLite history. Moving DB/WAL/SHM and
+JSONL files alone does not relocate those references. Use an evidenced native
+migration/restore route with resolvable lineage; do not rewrite database paths to
+manufacture acceptance. A fresh process reading restored state does not establish
+a resumed writer, a valid business workspace or current permission to continue.
+
 ## Event-driven proposal dispatch
 
 Controllers with an ordered native event receiver can instead call
