@@ -36,10 +36,15 @@ blocker's disposition and post-state. Containment is not task completion.
 
 For Accord plugin reloads and relevant host upgrades, distinguish the running host entry/binary,
 installed package, enabled components, current Hook trust, live consumers and
-guidance already injected into task history. Reuse supported host refresh and
-next-turn loading, and observe actual participation before dependent use. A fresh
-catalog, successful install or restarted process does not prove all components
-switched together; inspect the affected existing task as well as a fresh entry.
+guidance already injected into task history. Use supported refresh for the affected
+component and observe participation before dependent use. A new Hook message does
+not establish that an existing MCP worker or tool catalog refreshed. Compare the
+affected existing task with a fresh entry; use an available native refresh on the
+host that owns the task, within current authority. Starting a separate controller
+does not refresh the original host. If the needed control is unavailable, preserve
+work and request only the necessary user action. Repeated unchanged installations
+or waits do not resolve stale exposure. Successful installation, discovery or a
+restart alone does not prove that all components adopted the change.
 Reconcile changed guidance, already accepted pending work, pauses and state compatibility after
 the switch. Preserve a recoverable source until the successor works. If the entry
 itself is unavailable, its own Hook cannot certify or initiate recovery; use the
