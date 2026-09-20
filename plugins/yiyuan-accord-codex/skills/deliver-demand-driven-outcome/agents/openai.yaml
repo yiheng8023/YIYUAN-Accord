@@ -1,7 +1,7 @@
 interface:
-  display_name: "Demand-Driven Outcome Delivery"
-  short_description: "Own task delivery, continuous correction and continuity"
-  default_prompt: "Use $deliver-demand-driven-outcome to complete this goal while owning capability, continuity, correction, verification, and cleanup."
+  display_name: "Task Coordination"
+  short_description: "Coordinate work, check results and preserve continuity"
+  default_prompt: "Use $deliver-demand-driven-outcome to coordinate this task, verify the result and preserve unfinished work within my instructions."
 
 policy:
   allow_implicit_invocation: true

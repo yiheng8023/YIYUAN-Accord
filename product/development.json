@@ -42,7 +42,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1",
-        "packageSha256": "51ae6e415f0bf56322bd04085b3f978490c0d9f8c520fc01c6a02f958b4c72f7",
+        "packageSha256": "213116ec1c3d24e0c60c2a4377c83215a9f8b72008b7fac3fed22551438a1fcf",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -65,7 +65,7 @@
         ],
         "activationContext": "SessionStart supplies the brief coordination Skill body independently of task-state writes. UserPromptSubmit supplies the same body. Four specialist Skills are independently discoverable and read only for applicable dependencies. Recovery state remains in the existing companion Hook. Input Hooks maintain freshness, pauses and caller-bound Stop continuation. Node and enabled trusted Hooks remain required. Injection is not behavior, complete bootstrap or outcome acceptance.",
         "interfaceDefaultPrompt": [
-          "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
+          "Help me complete this task, choose suitable capabilities, verify the result and preserve unfinished work for continuation."
         ],
         "startupEntry": true,
         "carrierHandoff": true,

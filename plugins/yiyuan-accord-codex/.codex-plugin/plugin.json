@@ -1,7 +1,7 @@
 {
   "name": "yiyuan-accord-codex",
   "version": "3.3.0-dev.1",
-  "description": "YIYUAN Accord resolves task coordination gaps in goals, capability choice, correction, continuity, verification and authorized package lifecycle alongside domain Skills in Codex.",
+  "description": "Helps Codex coordinate goals, capabilities, correction, task continuity and delivery checks within the user's authority.",
   "author": {
     "name": "yiheng8023",
     "url": "https://github.com/yiheng8023"
@@ -17,8 +17,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "YIYUAN Accord",
-    "shortDescription": "Adaptive outcome delivery with human authority",
-    "longDescription": "A brief coordination Skill preserves the goal, authority, pauses and unfinished work. Four independently discoverable Skills cover capability collaboration, continuity and recovery, outcome verification, and plugin lifecycle. Native entry and recovery Hooks supply the same brief coordination body; use specialist details only when their conditions apply. Reconcile user, host and other-component changes across shared dependencies. Explicit invocation remains supported.",
+    "shortDescription": "Coordinate tasks, recovery and verified delivery",
+    "longDescription": "Tell Codex the outcome you need. YIYUAN Accord helps it choose and combine available capabilities, adapt to changes, check results and preserve unfinished work. This development package includes task guidance, lifecycle Hooks and a read-only tool for saved task state. Operation depends on supported host interfaces and user permissions. Automatic handoff is still in development.",
     "developerName": "yiheng8023",
     "category": "Developer Tools",
     "capabilities": [
@@ -27,7 +27,7 @@
     ],
     "websiteURL": "https://github.com/yiheng8023/YIYUAN-Accord",
     "defaultPrompt": [
-      "Tell me the outcome; I will own its supported route, correction, verification, continuity and cleanup within your authority."
+      "Help me complete this task, choose suitable capabilities, verify the result and preserve unfinished work for continuation."
     ],
     "brandColor": "#DE2910",
     "composerIcon": "./assets/yiyuan-nexus-icon-red.svg",
