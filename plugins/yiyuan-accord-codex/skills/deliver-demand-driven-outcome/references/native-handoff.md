@@ -7,7 +7,8 @@ plugin: [adapter contract](../../../adapter.json) and
 compaction and causal forks do not require this interface.
 
 The CommonJS module exports `handoff(plan, {transport, recorder, verify})` and
-`CarrierHandoffError`, plus `HANDOFF_PROPOSAL_TOOL` and `prepareHandoff` for the
+`CarrierHandoffError`, plus `HANDOFF_PROPOSAL_TOOL`, `prepareHandoff` and
+`runHandoffProposal` for the
 [source proposal path](#source-proposal-and-outer-dispatch). It opens no process,
 connection, account or recovery service.
 Use an existing suitable controller or establish one within current authority;
@@ -228,3 +229,51 @@ Late or malformed results require the surviving caller to reconcile actual effec
 and writer ownership before retry, rollback or source release. The module does not
 resume an interrupted transfer; reconcile first rather than blindly calling it
 again with either the same or a new transfer identity.
+
+## Event-driven proposal dispatch
+
+Controllers with an ordered native event receiver can instead call
+`runHandoffProposal(plan, dependencies, nativeRequest, channel)`. It uses the same
+proposal record, one-shot dispatcher and verification core. The controller still
+decides whether the proposal serves the authorized task; this function does not
+choose a context threshold or discover a control connection.
+
+`channel` has exactly three receiver-free or pre-bound callbacks:
+
+- `subscribe(listener, requestAnchor)` synchronously subscribes and returns a
+  synchronous function that removes only this listener. Bind to the supplied
+  validated request identity on the same connection. Replay the ordered journal
+  **after that request** and join live delivery without a gap, including events
+  between receiving the request and invoking this function. If that continuity
+  cannot be established, throw before acknowledging the proposal. Supply each
+  native notification with `connectionId` and `hostVersion` beside `method` and
+  `params`. These labels are caller provenance, not authentication. Keep the raw
+  journal independently; only two correlated receipts (each bounded to the
+  adapter's text ceiling) are retained here.
+- `respond(response, deadline)` sends the exact native tool response once and
+  resolves when that local send completes. Keep the receiver pumping while it
+  runs. A send acknowledgment alone is not native tool success; rejection or
+  timeout never causes an automatic resend.
+- `current(deadline)` independently re-reads and returns
+  `{scopeRef, authorityRef, stateRef, writerThreadId}` after both receipts arrive.
+  These references do not replace the existing semantic verifier or source-state
+  reads. Connection identity and callbacks remain bound throughout the operation.
+
+All deadlines use the monotonic clock described below. Subscription happens before
+preparation and sending. Unrelated tasks are ignored; identical duplicate receipts
+do not create another dispatch. Conflicting receipts, a new source turn from the
+request anchor onward, a mismatched connection or out-of-order source terminal
+hold the operation for reconciliation. An unordered event source must first supply
+its own evidenced ordering; arrival alone must not be relabeled causal order.
+Missing receipts expire under the existing plan deadline. Once both arrive, the
+module rechecks current references and invokes the same dispatcher automatically.
+Listening continues through intake, continuation and source release, so later
+source activity invalidates subsequent dependent actions as well.
+
+The listener is removed on success or failure; the shared native connection is
+not closed. A failed listener release reports `PROPOSAL_CHANNEL_RELEASE_FAILED`;
+when transfer already completed, `details.completedResult` retains that result.
+Reconcile the listener and actual effects, never replay the transfer. Failure
+before record creation leaves responsibility with the caller's retained request;
+later failures preserve the existing record and pending effect. This adapter does
+not provide a journal, survive controller loss itself or prove GUI integration.

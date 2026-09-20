@@ -26,6 +26,46 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)
 
+    def test_event_channel_drives_one_dispatch_and_releases_only_its_listener(self):
+        r = self.run_case('proposal-event-success')
+        self.assertIsNone(r['error'])
+        self.assertEqual(r['result']['status'], 'handed-off')
+        self.assertEqual(r['proposal']['callsBeforeDispatch'], [])
+        self.assertEqual(r['proposal']['respondCount'], 1)
+        self.assertEqual(r['proposal']['currentCount'], 1)
+        self.assertEqual(r['proposal']['releaseCount'], 1)
+        self.assertEqual(r['proposal']['subscriptionAnchor']['params']['callId'], 'source-proposal-call')
+        self.assertEqual(sum(c['method']=='thread/start' for c in r['calls']), 1)
+
+    def test_event_channel_does_not_dispatch_on_uncertain_source_or_response(self):
+        for suffix in ('new-turn-before-response', 'new-turn-after-response',
+                       'new-turn-during-current', 'connection-drift',
+                       'response-unknown', 'missing-terminal', 'source-failed',
+                       'tool-failed', 'wrong-response', 'changed-state',
+                       'conflicting-replay', 'early-terminal'):
+            with self.subTest(suffix=suffix):
+                r = self.run_case('proposal-event-' + suffix)
+                self.assertIsNotNone(r['error'])
+                self.assertTrue(r['error']['reconciliationRequired'])
+                self.assertEqual(r['proposal']['releaseCount'], 1)
+                self.assertFalse(any(c['method']=='thread/start' for c in r['calls']))
+                self.assertIsNone(r['result'])
+
+    def test_event_channel_remains_attached_through_intake_verification(self):
+        r = self.run_case('proposal-event-new-turn-during-intake')
+        self.assertIsNotNone(r['error'])
+        self.assertEqual(r['proposal']['releaseCount'], 1)
+        self.assertEqual(sum(c['method']=='turn/start' for c in r['calls']), 1)
+        self.assertFalse(any(c['method']=='thread/unsubscribe' for c in r['calls']))
+
+    def test_listener_release_failure_retains_completed_transfer_not_retry_permission(self):
+        r = self.run_case('proposal-event-release-error')
+        self.assertEqual(r['error']['code'], 'PROPOSAL_CHANNEL_RELEASE_FAILED')
+        self.assertEqual(r['error']['details']['completedResult']['status'], 'handed-off')
+        self.assertTrue(r['error']['reconciliationRequired'])
+        self.assertEqual(r['snapshots'][-1]['phase'], 'source-subscription-released')
+        self.assertEqual(sum(c['method']=='thread/start' for c in r['calls']), 1)
+
     def test_success_proves_continuation_before_releasing_only_source_subscription(self):
         r=self.run_case()
         self.assertIsNone(r['error'])
@@ -232,7 +272,7 @@ def proposal_fixture_item(body, ordinal, state):
             'input':'text(await tools.'+PROPOSAL_TOOL+'('+json.dumps(arguments)+'));'}
 
 
-def native_integration(codex, evidence):
+def native_integration(codex, evidence, scenario=None):
     """Explicit model-free integration; reuse existing transport/fixture/jobs.
 
     The test controller supplies a scoped durable ledger and fixture verdicts.
@@ -242,6 +282,9 @@ def native_integration(codex, evidence):
     from scripts.observe_codex_lifecycle import (_App, _Fixture, _argv, _owned_environment,
         _new_controller, _spawn_options, _wait_job, _released, _remove_owned_tree, save)
     from scripts.codex_rpc import BoundedRpc
+    scenarios = (scenario,) if scenario else ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source')
+    if any(s not in ('success','reject-intake','extra-context','source-proposal','source-event-proposal','ephemeral-source') for s in scenarios):
+        raise ValueError('unknown native handoff scenario')
     root = Path(evidence).absolute()
     if root.exists() or not root.parent.is_dir() or root.parent.resolve() != root.parent:
         raise ValueError('fresh ordinary evidence root required')
@@ -256,7 +299,7 @@ def native_integration(codex, evidence):
     version = subprocess.check_output([str(codex),'--version'],timeout=10,text=True).strip()
     manifest={'evidence':str(root),'codex':str(codex),'node':str(node),
         'ownedRoots':{name:str(root/name) for name in ('home','workspace','state','temp')},
-        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':17},
+        'limits':{'requestSeconds':30,'recoverySeconds':15,'providerRequestBytes':2*1024*1024,'providerRequests':21},
         'resourceController':'windows-job-object' if os.name=='nt' else 'posix-session-process-group'}
     sources=[ROOT/'runtime/carrier-handoff.cjs',DRIVER,Path(__file__),ROOT/'scripts/observe_codex_lifecycle.py',
              ROOT/'scripts/observe_codex_entry.py',ROOT/'scripts/codex_rpc.py',ROOT/'scripts/inspect_native_resources.py']
@@ -353,11 +396,12 @@ def native_integration(codex, evidence):
     try:
         app=_App(manifest,'carrier-controller',_argv(manifest,fixture,('-c','features.plugins=false','-c','features.hooks=false')),env,deadline)
         app.initialize()
-        for scenario in ('success','reject-intake','extra-context','source-proposal','ephemeral-source'):
+        for scenario in scenarios:
+            proposal_case = scenario in ('source-proposal','source-event-proposal')
             source_settings={'model':'fixture-no-model','modelProvider':'accord_fixture',
                 'cwd':manifest['ownedRoots']['workspace'],'sandbox':'read-only','approvalPolicy':'never'}
             if scenario=='ephemeral-source': source_settings['ephemeral']=True
-            if scenario=='source-proposal':
+            if proposal_case:
                 source_settings['dynamicTools']=[{'type':'function','name':PROPOSAL_TOOL,
                     'description':'Submit a handoff proposal; the controller records it before acknowledgement and dispatches after this turn ends.',
                     'inputSchema':{'type':'object','properties':{'reason':{'type':'string'}},
@@ -365,9 +409,9 @@ def native_integration(codex, evidence):
                 proposal_state['next']=True
             source=request('thread/start',source_settings)['thread']['id']
             source_prompt = ('Submit one handoff proposal for the bound fixed task, then finish this source turn without other actions.'
-                             if scenario=='source-proposal' else 'Retain the fixed fixture task; do not call tools.')
+                             if proposal_case else 'Retain the fixed fixture task; do not call tools.')
             turn=request('turn/start',{'threadId':source,'input':[{'type':'text','text':source_prompt}]})['turn']['id']
-            proposed=source_proposal(source,turn) if scenario=='source-proposal' else None
+            proposed=source_proposal(source,turn) if proposal_case else None
             if proposed is None and terminal(source,turn)['params']['turn']['status']!='completed':
                 raise RuntimeError('source fixture turn did not complete')
             now=int(time.time()*1000)
@@ -397,6 +441,7 @@ def native_integration(codex, evidence):
                     binding={'connectionId':app.root.name,'hostVersion':version}
                     config={'mode':'native','plan':plan,'binding':binding}
                     if proposed is not None: config['nativeProposal']={**binding,**proposed}
+                    if scenario=='source-event-proposal': config['nativeEventProposal']=True
                     proc.stdin.write((json.dumps(config)+'\n').encode());proc.stdin.flush()
                     while True:
                         message=inbox.get(timeout=max(0.01,min(40,deadline-time.monotonic())))
@@ -412,7 +457,7 @@ def native_integration(codex, evidence):
                                 value=record_begin(*args)
                             elif message['kind']=='compareAndSet':
                                 value=record_cas(*args)
-                            elif message['kind']=='proposalEvidence':
+                            elif message['kind'] in ('proposalEvidence','proposalEvents'):
                                 if proposed is None or args[0].get('id')!=proposed['id']:
                                     raise ValueError('unbound native proposal response')
                                 app._send(args[0])
@@ -428,6 +473,12 @@ def native_integration(codex, evidence):
                                 value['current']['writerThreadId']=source
                                 save(root/'retained/source-proposal-receipts.json',{'request':proposed,
                                     'response':args[0], **value})
+                                if message['kind']=='proposalEvents':
+                                    anchor=next(i for i,e in enumerate(app.events) if e is proposed)
+                                    # Preserve the whole ordered native suffix; the product
+                                    # selects correlated receipts, not this test controller.
+                                    value=app.events[anchor+1:]
+                                    save(root/'retained/source-proposal-events.json',value)
                             elif message['kind']=='verify':
                                 stage,facts=args[:2]
                                 unchanged=hashlib.sha256((root/'workspace/keep.txt').read_bytes()).hexdigest()==original
@@ -466,13 +517,16 @@ def native_integration(codex, evidence):
             stored=ledger_db.execute('SELECT revision,state FROM transfers WHERE id=?',(scenario,)).fetchone()
             if stored: save(ledger,{'revision':stored[0],'state':json.loads(stored[1])})
             save(root/'retained'/f'{scenario}-result.json',result);results.append(result)
-            if scenario in ('success','extra-context','source-proposal','ephemeral-source'):
+            if scenario in ('success','extra-context','source-proposal','source-event-proposal','ephemeral-source'):
                 if result['error'] or result['result']['status']!='handed-off':
                     raise RuntimeError('native handoff failed; inspect retained result')
                 expected_history=scenario!='ephemeral-source'
                 if (result['result']['source']['nativeHistoryRetained'] is not expected_history
                         or result['result']['sourceRecovery']['nativeHistoryRetained'] is not expected_history):
                     raise RuntimeError('source history claim differs from native persistence')
+                if scenario=='source-event-proposal' and (result['proposal']['respondCount']!=1
+                        or result['proposal']['releaseCount']!=1 or result['proposal']['currentCount']!=1):
+                    raise RuntimeError('native event dispatcher lifecycle mismatch')
             if scenario=='reject-intake' and (result['error'] is None or any(c['method']=='thread/unsubscribe' for c in result['calls'])): raise RuntimeError('rejected intake released source')
     finally:
         try:
@@ -484,18 +538,19 @@ def native_integration(codex, evidence):
         save(root/'poststate.json',{'providerRequests':len(fixture.requests),'credentialsObserved':fixture.auth_seen,
             'keepPreserved':hashlib.sha256((root/'workspace/keep.txt').read_bytes()).hexdigest()==original,
             'completedCases':len(results),'claimLimit':manifest['claimLimit']})
-    if fixture.auth_seen or len(results)!=5: raise RuntimeError('native integration incomplete')
+    if fixture.auth_seen or len(results)!=len(scenarios): raise RuntimeError('native integration incomplete')
     for name in ('home','workspace','state','temp'):
         target=(root/name).resolve(strict=True)
         if target.parent!=root: raise ValueError('owned cleanup root mismatch')
         _remove_owned_tree(target)
     save(root/'cleanup.json',{'ownedRootsRemoved':True,'nativeSessionEvidenceRetained':True})
-    print(json.dumps({'nativeCases':5,'modelCalls':0,'providerRequests':len(fixture.requests),'evidence':str(root)}))
+    print(json.dumps({'nativeCases':len(scenarios),'modelCalls':0,'providerRequests':len(fixture.requests),'evidence':str(root)}))
 
 
 if __name__=='__main__':
     if '--native-codex' in sys.argv:
         import argparse
         p=argparse.ArgumentParser();p.add_argument('--native-codex',required=True);p.add_argument('--evidence',required=True)
-        a=p.parse_args();native_integration(a.native_codex,a.evidence)
+        p.add_argument('--scenario')
+        a=p.parse_args();native_integration(a.native_codex,a.evidence,a.scenario)
     else: unittest.main()

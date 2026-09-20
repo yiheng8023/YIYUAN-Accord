@@ -371,6 +371,12 @@ record and execution core. Preparation only records a queued proposal; an outer,
 single-use dispatcher requires the exact tool result, completed source turn and
 current bindings before native takeover. Interrupted sources and controller loss
 remain reconciliation cases, not automatic replay.
+`runHandoffProposal` provides the corresponding event coordination for an owned
+ordered receiver: subscribe from the exact request, send once, correlate native
+receipts, re-read current bindings and invoke the same dispatcher. Source activity
+is monitored through dispatch; only this listener is released. The caller retains
+its journal and connection, including request-to-subscription replay. This removes
+manual receipt assembly without adding storage, a service or automatic timing.
 
 The packaged reference also distinguishes official daemon/proxy attachment from
 embedded clients and from starting an unrelated server. In the source-bound 0.155.1

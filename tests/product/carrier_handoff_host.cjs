@@ -3,7 +3,7 @@
 // Python App Server controller; mock mode exercises failure paths without a model.
 const readline = require('node:readline');
 const {performance} = require('node:perf_hooks');
-const {handoff, prepareHandoff, HANDOFF_PROPOSAL_TOOL} = require('../../runtime/carrier-handoff.cjs');
+const {handoff, prepareHandoff, runHandoffProposal, HANDOFF_PROPOSAL_TOOL} = require('../../runtime/carrier-handoff.cjs');
 const rl = readline.createInterface({input: process.stdin});
 const pending = new Map();
 let sequence = 0, started = false;
@@ -15,6 +15,7 @@ function remote(kind, args) {
 }
 async function run(config) {
   const calls = [], snapshots = [], verdicts = [];
+  let eventListener = null;
   let revision = -1, state = null, target = null, turn = 0, sourceActive = config.scenario === 'active-source';
   let lease = null, scopeBusy = false, sourceReads = 0;
   const scenario = config.scenario || 'success';
@@ -108,6 +109,10 @@ async function run(config) {
     verdicts.push(stage);
     if (config.mode === 'native') return remote('verify', [stage, facts, Math.max(0, deadline - performance.now())]);
     const verdict = reply(stage);
+    if (scenario === 'proposal-event-new-turn-during-intake' && stage === 'accepted') {
+      eventListener({connectionId:transport.connectionId,hostVersion:transport.hostVersion,
+        method:'turn/started',params:{threadId:plan.source.threadId,turn:{id:'new-source-turn'}}});
+    }
     if (scenario === 'reject-intake' && stage === 'accepted' || scenario === 'changed-authority' && stage === 'continue') verdict.decision = 'hold';
     if (scenario === 'wrong-authority') verdict.authorityRef = 'stale';
     if (scenario === 'invalid-settings' && stage === 'target-created') verdict.targetSettingsMatch = false;
@@ -138,6 +143,65 @@ async function run(config) {
       if (scenario === 'proposal-foreign-request') nativeRequest.params.threadId = 'foreign';
       if (scenario === 'proposal-foreign-namespace') nativeRequest.params.namespace = 'unrelated-component';
       if (scenario === 'proposal-injected-authority') nativeRequest.params.arguments.scopeRef = 'foreign';
+      if (scenario.startsWith('proposal-event-') || config.nativeEventProposal) {
+        proposal = {respondCount:0, currentCount:0, releaseCount:0};
+        const envelope = event => ({connectionId:transport.connectionId,hostVersion:transport.hostVersion,...event});
+        const newTurn = () => envelope({method:'turn/started',params:{threadId:plan.source.threadId,turn:{id:'new-source-turn'}}});
+        const channel = {
+          subscribe(listener, anchor) {
+            proposal.subscriptionAnchor=clone(anchor);
+            eventListener=listener;
+            if (scenario === 'proposal-event-new-turn-before-response') listener(newTurn());
+            return () => {
+              proposal.releaseCount++; eventListener=null;
+              if (scenario === 'proposal-event-release-error') throw new Error('listener removal uncertain');
+            };
+          },
+          async respond(response) {
+            proposal.respondCount++;
+            proposal.callsBeforeDispatch=clone(calls);
+            if (config.mode === 'native') {
+              const observed = await remote('proposalEvents', [response]);
+              for (const event of observed) eventListener(envelope(event));
+              return;
+            }
+            const tool = envelope({method:'item/completed',params:{threadId:plan.source.threadId,turnId:plan.source.turnId,
+              item:{type:'dynamicToolCall',id:nativeRequest.params.callId,tool:HANDOFF_PROPOSAL_TOOL.name,
+                namespace:null,status:'completed',success:true,contentItems:response.result.contentItems}}});
+            const terminal = envelope({method:'turn/completed',params:{threadId:plan.source.threadId,
+              turn:{id:plan.source.turnId,status:'completed'}}});
+            const foreign=clone(tool); foreign.params.threadId='foreign';
+            eventListener(foreign);
+            if (scenario === 'proposal-event-source-failed') terminal.params.turn.status='failed';
+            if (scenario === 'proposal-event-tool-failed') tool.params.item.success=false;
+            if (scenario === 'proposal-event-wrong-response') tool.params.item.contentItems=[];
+            if (scenario === 'proposal-event-connection-drift') tool.connectionId='other-connection';
+            if (scenario === 'proposal-event-early-terminal') eventListener(terminal);
+            eventListener(tool);
+            eventListener(tool); // duplicate replay is harmless, never another dispatch
+            if (scenario === 'proposal-event-conflicting-replay') {
+              const conflict=clone(tool); conflict.params.item.success=false; eventListener(conflict);
+            }
+            if (scenario === 'proposal-event-missing-terminal') {
+              // Simulate the work deadline at the exact wait, not host timing.
+              const end = performance.now()+7000;
+              Object.defineProperty(performance,'now',{value:()=>end,configurable:true});
+              return;
+            }
+            eventListener(terminal);
+            if (scenario === 'proposal-event-new-turn-after-response') eventListener(newTurn());
+            if (scenario === 'proposal-event-response-unknown') throw new Error('response write acknowledgement lost');
+          },
+          async current() {
+            proposal.currentCount++;
+            if (scenario === 'proposal-event-new-turn-during-current') eventListener(newTurn());
+            return {scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,
+              stateRef:scenario==='proposal-event-changed-state'?'changed-state':plan.stateRef,
+              writerThreadId:plan.source.threadId};
+          },
+        };
+        result=await runHandoffProposal(plan,{transport,recorder,verify},nativeRequest,channel);
+      } else {
       const prepared = await prepareHandoff(plan, {transport, recorder, verify}, nativeRequest);
       proposal = {response: prepared.response, callsBeforeDispatch: clone(calls), snapshotsBeforeDispatch: clone(snapshots)};
       const readiness = config.mode === 'native' ? await remote('proposalEvidence', [prepared.response]) : {
@@ -165,6 +229,7 @@ async function run(config) {
         try { await prepared.dispatch(readiness); } catch (e) { proposal.duplicateError = e.code; }
         proposal.callsAfterDuplicate = calls.length - before;
       }
+      }
     } else if (scenario==='same-scope-concurrent') {
       concurrent=await Promise.allSettled([handoff(plan,{transport,recorder,verify}),
         handoff({...plan,transferId:'transfer-2'},{transport,recorder,verify})]);
@@ -172,7 +237,7 @@ async function run(config) {
       concurrent=concurrent.map(r=>({status:r.status,code:r.reason?.code}));
     } else result = await handoff(plan, {transport, recorder, verify});
   }
-  catch (e) {error = {name:e.name, message:e.message, code:e.code, reconciliationRequired:e.reconciliationRequired, state:e.state};}
+    catch (e) {error = {name:e.name, message:e.message, code:e.code, reconciliationRequired:e.reconciliationRequired, state:e.state, details:e.details};}
   process.stdout.write(JSON.stringify({kind:'done', result, error, calls, snapshots, verdicts, concurrent, proposal}) + '\n');
   rl.close(); process.stdin.destroy();
 }

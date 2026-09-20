@@ -125,6 +125,7 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                     "independent-current-authority-and-effect-verifier"],
                 "effect": "quiesce-source; fresh-read-only-intake; verified-writer-transfer; bounded-continuation; verified-source-unsubscribe",
                 "sourceProposal": "prepareHandoff records a bound native tool proposal without dispatch; one-shot outer dispatch requires exact successful tool and source-turn receipts plus current bindings; same recorder and lease; no automatic crash replay",
+                "proposalEvents": "runHandoffProposal subscribes from the exact request anchor, replies once, correlates ordered native receipts and dispatches through the same core; monitors source drift through completion; releases only its listener; caller retains journal and connection",
                 "limits": "no-process-or-hook-startup; no-automatic-timing-or-default-Desktop-control; no-goal-activation; no-archive-or-delete; ambiguous-effects-require-reconciliation; unsubscribe-is-not-unload",
             }
         contract["entry"] = "direct-native-input-duties"

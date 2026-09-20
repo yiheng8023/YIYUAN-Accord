@@ -450,6 +450,7 @@ function createExecution(rawPlan, rawDependencies) {
   let proposalRequest = null;
   let proposalResponse = null;
   let dispatchStarted = false;
+  let proposalChannelCheck = null;
   const verificationSourceRefs = {};
   const evidence = {};
 
@@ -472,6 +473,7 @@ function createExecution(rawPlan, rawDependencies) {
   }
 
   function ensureBinding(name) {
+    if (proposalChannelCheck) proposalChannelCheck();
     if (transport.connectionId !== connectionBinding.connectionId ||
         transport.hostVersion !== connectionBinding.hostVersion ||
         transport.request !== callbackBinding.request ||
@@ -1252,9 +1254,133 @@ function createExecution(rawPlan, rawDependencies) {
     }
   }
 
+  async function runProposal(nativeRequest, channel) {
+    exactKeys(channel, ['subscribe', 'respond', 'current'], [], 'proposal channel');
+    const callbacks = {};
+    for (const key of ['subscribe', 'respond', 'current']) {
+      if (typeof channel[key] !== 'function') throw new TypeError(`channel.${key} must be a function`);
+      callbacks[key] = channel[key];
+    }
+    // Only two correlated receipts are retained. The owning receiver continues
+    // pumping RPC replies and keeps the original ordered journal independently.
+    let toolCompleted = null, sourceTerminal = null, fault = null, boundRequest;
+    let responseStarted = false, accepting = true, unsubscribe = null;
+    let wake;
+    const ready = new Promise(resolve => { wake = resolve; });
+    const channelError = (code, message) => new CarrierHandoffError(code, message, {
+      stage: 'proposal-channel', transferId, reconciliationRequired: true,
+    });
+    function checkChannelCallbacks() {
+      if (Object.keys(callbacks).some(key => callbacks[key] !== channel[key])) {
+        bindingCertain = false;
+        throw channelError('PROPOSAL_CHANNEL_CHANGED', 'proposal channel callbacks changed');
+      }
+      if (fault) { bindingCertain = false; throw fault; }
+    }
+    function checkChannel() {
+      ensureBinding('proposal-channel');
+      checkChannelCallbacks();
+    }
+    function observe(envelope) {
+      if (!accepting || fault || !plainObject(envelope)) return;
+      const params = envelope.params;
+      if (!plainObject(params) || params.threadId !== plan.source.threadId) return;
+      const tool = envelope.method === 'item/completed' &&
+        params.turnId === plan.source.turnId && params.item?.id === boundRequest.params.callId;
+      const terminal = envelope.method === 'turn/completed' && params.turn?.id === plan.source.turnId;
+      const newTurn = envelope.method === 'turn/started' &&
+        params.turn?.id !== plan.source.turnId;
+      if (!tool && !terminal && !newTurn) return;
+      try {
+        checkChannel();
+        if (envelope.connectionId !== connectionBinding.connectionId ||
+            envelope.hostVersion !== connectionBinding.hostVersion) {
+          throw channelError('PROPOSAL_EVENT_BINDING_CHANGED', 'proposal event connection differs');
+        }
+        if (!responseStarted || newTurn) {
+          throw channelError('PROPOSAL_SOURCE_CHANGED', 'source events do not belong to the queued response');
+        }
+        const event = immutable({method: envelope.method, params});
+        if (canonical(event).length > MAX_TEXT) {
+          throw channelError('PROPOSAL_EVENT_TOO_LARGE', 'proposal receipt exceeds the bounded event size');
+        }
+        const prior = tool ? toolCompleted : sourceTerminal;
+        if (prior && digest(prior) !== digest(event)) {
+          throw channelError('PROPOSAL_EVENT_CONFLICT', 'conflicting completion for the same native operation');
+        }
+        if (tool) toolCompleted = event;
+        else {
+          if (!toolCompleted) {
+            throw channelError('PROPOSAL_EVENT_ORDER', 'source terminal arrived before the tool receipt');
+          }
+          sourceTerminal = event;
+        }
+        if (toolCompleted && sourceTerminal) wake();
+      } catch (error) {
+        fault = error;
+        wake();
+      }
+    }
+    let prepared, result, failure;
+    try {
+      // Validate before exposing the receiver or recording a response intent.
+      boundRequest = validateProposalRequest(nativeRequest, plan, connectionBinding);
+      proposalChannelCheck = checkChannelCallbacks;
+      // subscribe must replay the caller's ordered journal from this exact
+      // request and attach live delivery without a gap (including reconnects).
+      unsubscribe = Reflect.apply(callbacks.subscribe, undefined, [observe, boundRequest]);
+      if (typeof unsubscribe !== 'function') {
+        throw channelError('INVALID_PROPOSAL_SUBSCRIPTION', 'subscribe must return its exact synchronous release function');
+      }
+      checkChannel();
+      prepared = await prepareProposal(boundRequest);
+      checkChannel();
+      responseStarted = true;
+      await bounded(() => Reflect.apply(callbacks.respond, undefined,
+        [prepared.response, workDeadlineMs]), workDeadlineMs, 'proposal.respond');
+      checkChannel();
+      await bounded(() => ready, workDeadlineMs, 'proposal.events');
+      checkChannel();
+      const current = await bounded(() => Reflect.apply(callbacks.current, undefined,
+        [workDeadlineMs]), workDeadlineMs, 'proposal.current');
+      checkChannel();
+      // dispatch owns all existing receipt, CAS, semantic and recovery gates.
+      result = await prepared.dispatch({toolCompleted, sourceTerminal, current});
+    } catch (error) {
+      // Preparation/dispatch already preserve their own failures. Channel
+      // failures retain the unanswered/uncertain tool response in the same log.
+      if (!prepared || dispatchStarted) failure = error;
+      else {
+        try { await handleFailure(error); } catch (retained) { failure = retained; }
+      }
+    } finally {
+      accepting = false;
+      proposalChannelCheck = null;
+      if (unsubscribe) {
+        try {
+          const released = Reflect.apply(unsubscribe, undefined, []);
+          if (released && typeof released.then === 'function') {
+            throw new TypeError('subscription release must be synchronous');
+          }
+        } catch (cause) {
+          failure = new CarrierHandoffError('PROPOSAL_CHANNEL_RELEASE_FAILED',
+            'proposal listener release is unconfirmed; reconcile without replay', {
+              stage: 'proposal-channel-release', transferId, reconciliationRequired: true,
+              details: {cause: errorData(cause), priorFailure: failure ? errorData(failure) : null,
+                completedResult: result || null},
+              state: failure?.state || recordState || {},
+            });
+        }
+      }
+    }
+    if (failure) throw failure;
+    return result;
+  }
+
   return Object.freeze({
     runImmediate: () => runCore(null, true),
     prepareProposal,
+    runProposal,
   });
 }
 
@@ -1264,6 +1390,10 @@ async function handoff(rawPlan, rawDependencies) {
 
 async function prepareHandoff(rawPlan, rawDependencies, nativeRequest) {
   return createExecution(rawPlan, rawDependencies).prepareProposal(nativeRequest);
+}
+
+async function runHandoffProposal(rawPlan, rawDependencies, nativeRequest, channel) {
+  return createExecution(rawPlan, rawDependencies).runProposal(nativeRequest, channel);
 }
 
 function errorData(error) {
@@ -1276,4 +1406,4 @@ function errorData(error) {
   return data;
 }
 
-module.exports = {HANDOFF_PROPOSAL_TOOL, prepareHandoff, handoff, CarrierHandoffError};
+module.exports = {HANDOFF_PROPOSAL_TOOL, prepareHandoff, runHandoffProposal, handoff, CarrierHandoffError};

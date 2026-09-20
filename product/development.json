@@ -35,14 +35,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20260920015610",
+    "version": "3.3.0-dev.1+codex.20260920031559",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20260920015610",
-        "packageSha256": "556ddfd4ad290060d20a3d70f133f63df37369ea062249d69dc2609da86d73e0",
+        "packageVersion": "3.3.0-dev.1+codex.20260920031559",
+        "packageSha256": "9bbe5555d8e97342fca87490703f2957dcaa7b15da41a3ed2d770d47cbd1a999",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -176,10 +176,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 2130000,
+      "maxProductCodeAndTestBytes": 2160000,
       "maxTrackedFiles": 158,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The current 2130000 code/test-byte and 158-file ceilings cover the existing runtime, carrier adapter and the native-state MCP reader with its canonical/package copies, registration and tests. The reader reuses checkpoint status and host-managed stdio lifetime, releases its plugin-cache working directory before serving, tests live cache replacement, and optionally joins Hook-bound context counters to current native call identity without treating historical session versions as live identity; it adds no storage engine, account, remote service or handoff controller. Five-percent byte reserve and the 36000 primary-instruction ceiling remain. Necessary identity, recovery, protocol, failure and cleanup checks are retained. Package visibility and local checks do not prove model adoption, semantic takeover or net benefit. Historical budget changes remain in the source-bound operations record."
+      "rationale": "The current 2160000 code/test-byte and 158-file ceilings cover the existing runtime, carrier adapter and the native-state MCP reader with its canonical/package copies, registration and tests. The reader reuses checkpoint status and host-managed stdio lifetime, releases its plugin-cache working directory before serving, tests live cache replacement, and optionally joins Hook-bound context counters to current native call identity without treating historical session versions as live identity; it adds no storage engine, account, remote service or handoff controller. The carrier adapter now also correlates the caller-owned ordered proposal stream and drives the existing single-use dispatcher, with source-drift and listener-release counterexamples; it reuses the same recorder and semantic verifier. Five-percent byte reserve and the 36000 primary-instruction ceiling remain. Necessary identity, recovery, protocol, failure and cleanup checks are retained. Package visibility and local checks do not prove model adoption, semantic takeover or net benefit. Historical budget changes remain in the source-bound operations record."
     }
   },
   "source": {
