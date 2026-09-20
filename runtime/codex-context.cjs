@@ -50,6 +50,11 @@ function samePath(left, right) {
   return process.platform === 'win32' ? a.toLowerCase() === b.toLowerCase() : a === b;
 }
 
+function realPath(file) {
+  // Native Windows Hooks may supply the extended-length path namespace.
+  return process.platform === 'win32' ? fs.realpathSync.native(file) : fs.realpathSync(file);
+}
+
 function statIdentity(stat) {
   return {
     dev: stat.dev.toString(), ino: stat.ino.toString(), size: stat.size.toString(),
@@ -114,12 +119,12 @@ function observeNativeTranscript(binding, options = {}) {
   let transcriptPath;
   let suppliedIdentity;
   try {
-    sessionsRoot = fs.realpathSync(options.sessionsRoot || defaultSessionsRoot());
+    sessionsRoot = realPath(options.sessionsRoot || defaultSessionsRoot());
     const supplied = path.resolve(binding.transcriptPath);
     const suppliedStat = fs.lstatSync(supplied, {bigint: true});
     if (suppliedStat.isSymbolicLink() || !suppliedStat.isFile()) return empty('transcript-not-regular-file');
     suppliedIdentity = statIdentity(suppliedStat);
-    transcriptPath = fs.realpathSync(supplied);
+    transcriptPath = realPath(supplied);
   } catch (_) {
     return empty('transcript-unavailable');
   }
@@ -176,7 +181,7 @@ function observeNativeTranscript(binding, options = {}) {
     const finalPathStat = fs.lstatSync(supplied, {bigint: true});
     if (finalPathStat.isSymbolicLink() || !finalPathStat.isFile() ||
         canonical(statIdentity(finalPathStat)) !== canonical(identity) ||
-        !samePath(fs.realpathSync(supplied), transcriptPath)) {
+        !samePath(realPath(supplied), transcriptPath)) {
       return empty('transcript-path-changed-after-read');
     }
   } catch (_) {

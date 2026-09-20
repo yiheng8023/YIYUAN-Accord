@@ -2015,3 +2015,13 @@ eea99226的CI 35473404424中，两项原生生命周期任务通过，含新MCP�
 helper正常退出；随后真实MCP回读捕获输入1条、两项恢复标记为false，仍无checkpoint且currentInputReconciled=false。故只证明当前输入回执的受控恢复和实际Desktop诊断/反馈闭环，不证明语义绑定已核、全部历史恢复、下一次原生输入捕获、自主交接或整版验收。本次复用正在进行的开发任务，没有新增模型试验、App Server或用户任务；宿主管理的MCP仍服务当前任务，不把单次读取完成写成进程回收。
 
 只读独立复核先指出缺少原生片段及after原件，主任务随后补留两段原始JSONL及源偏移/长度/hash、稍后after字节和采集时间；没有重跑恢复。复核者对指定当前任务日志定长seek，确认两段逐字节匹配；前后失败水印相同、after receipt明确保留原文/turn/recoveryEpoch与retained-native-replay，无checkpoint。稍后回读的epoch与MCP一致，但不是同一原子事务。恢复锁已消失，候选安装字节保持；无新阻断，既有验收边界保持。
+
+## 正常输入后的Windows上下文路径修复（2026-09-20）
+
+用户继续开发后，真实UserPromptSubmit自动追加第二条输入，模型/权限和transcript绑定均由当前Hook提供，MCP回读确认，不再需要重放。然而旧安装的observe-context返回transcript-unavailable。定点检查显示默认sessions根及文件lstat都正常；原生Hook提供的Windows扩展路径使fs.realpathSync报EISDIR，fs.realpathSync.native可解析。同一回归在修复前失败，证明不是单纯信号缺失或需要扩大扫描范围。
+
+仅在Windows复用[Node原生realpath接口](https://nodejs.org/api/fs.html#fsrealpathsyncnativepath-options)，POSIX保留旧实现及其环境要求。读取前、路径解析和读取后的三处调用保持一致；原sessions范围、规范文件名、会话/工作目录身份、symlink/regular-file、inode和并发/替换检查不变。145项上下文/检查点测试通过；独立只读审查未发现实现边界退化，指出测试需覆盖“仅transcript扩展路径、sessions普通根”，补齐后10项上下文测试通过。候选21文件e2391165，预算不变，静态契约有效。
+
+主任务独占accord-desktop-context-20260920-01保存旧安装和候选源、当前正常输入回执、实际读取及原生token_count的精确字节来源。旧安装失败，新候选可读取真实原生占用/窗口；其间一次超过既定30秒观测寿命的读取保持token-count-expired，未放宽寿命或伪造时间。输入回执未变，没有写入状态、派发或新模型试验。rollout头记录的0.155.1与当前MCP回传0.155.0-alpha.9.2属于不同来源，不能把头版本当当前宿主身份。采样值是本用户当次配置和响应边界，不锁为产品默认规格，也不证明交接时机或权限。
+
+此前9bcfad1c的CI 35477357242已11/11通过，解除旧Hook夹具回归；新路径修复仍需新提交的CI。健康原任务继续/压缩与有必要时换载体的路线原已覆盖，本轮据真实断点修复，不新增固定SOP、控制服务或一套替代计划。

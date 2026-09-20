@@ -58,14 +58,17 @@ class CodexContextTests(unittest.TestCase):
         content = "\n".join(lines) + ("\n" if trailing_newline else "")
         self.rollout.write_text(content, encoding="utf-8")
 
-    def observe(self, binding=None, now=NOW, max_age=30000, sessions=None):
+    def observe(self, binding=None, now=NOW, max_age=30000, sessions=None, namespaced=False):
         script = (
             "const fs=require('node:fs');"
             "const {observeNativeTranscript}=require(process.argv[1]);"
             "const x=JSON.parse(fs.readFileSync(0,'utf8'));"
+            "if(x.namespaced){const p=require('node:path');"
+            "x.binding.transcriptPath=p.toNamespacedPath(x.binding.transcriptPath);"
+            "if(x.namespaced==='both')x.options.sessionsRoot=p.toNamespacedPath(x.options.sessionsRoot);}"
             "process.stdout.write(JSON.stringify(observeNativeTranscript(x.binding,x.options)));"
         )
-        request = {"binding": binding or self.binding, "options": {
+        request = {"binding": binding or self.binding, "namespaced": namespaced, "options": {
             "now": now, "maxAgeMs": max_age, "sessionsRoot": str(sessions or self.sessions)}}
         result = subprocess.run([self.node, "-e", script, str(RUNTIME)], input=json.dumps(request),
                                 text=True, encoding="utf-8", capture_output=True, timeout=10,
@@ -90,6 +93,19 @@ class CodexContextTests(unittest.TestCase):
         self.assertTrue(result["observationId"])
         self.assertIn("#byte=", result["sourceRef"])
         self.assertNotIn(str(self.root), result["sourceRef"])
+
+    def test_accepts_host_namespaced_paths_without_relaxing_session_scope(self):
+        self.write(self.meta(), self.context(), self.usage())
+        before = self.rollout.read_bytes()
+        outside = self.root / "outside.jsonl"
+        outside.write_bytes(before)
+        for paths in ("transcript", "both"):
+            with self.subTest(namespaced=paths):
+                self.assertEqual(self.observe(namespaced=paths), self.observe())
+                self.assertEqual(self.observe(namespaced=paths)["state"], "observed")
+                result = self.observe({**self.binding, "transcriptPath": str(outside)}, namespaced=paths)
+                self.assertEqual(result["reason"], "transcript-outside-sessions-root")
+        self.assertEqual(self.rollout.read_bytes(), before)
 
     def test_rejects_noncanonical_path_and_session_or_workspace_identity_drift(self):
         self.write(self.meta(), self.context(), self.usage())
