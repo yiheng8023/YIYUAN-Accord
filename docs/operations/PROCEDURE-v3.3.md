@@ -2095,3 +2095,15 @@ accord-proposal-events-20260920-01只运行新增source-event-proposal案，未�
 accord-source-context-20260920-01预冻结10份执行源，真实CLI0.155.1源先调用context得到unknown，原生usage随后出现，第二个有界查询得到同一thread/turn/model的window-observed，之后固定授权提议沿原接管核心完成。6次本地固定响应、零真实模型/凭据，原件keep保持，ledger revision18、writer=target、pendingEffect=null并释放源订阅，3所属进程自然归零、4运行根回收。独立只读审查验证精确调用、参数/namespace、双次观察时序、源码hash链和后态；该案不证明模型自主择时、指导有效性或净价值。
 
 19项连接测试通过；最终开发/入口/交接/连接191项全部通过（164.973秒）。22文件候选3.3.0-dev.1+codex.20260920050306，SHA93b5c565a2fada8ac64722b39ea625e3cc32ba637668b9df4d9a1a4b49baccf1；共享安装仍为556ddfd4。没有新增外部依赖、状态服务、Goal/Plan激活或固定确认门槛；现有2220000/161/36000及5%字节余量保持。新构建和指导按新的源码CI核对，整体功能和发布验收仍未完成。
+
+## 当前完整安装的真实普通行为与加载断点纠偏（2026-09-20）
+
+本轮按用户“适时纠偏”回到实际行为：停止继续堆叠协议/固定响应切片，复用既有coordination-v3.3五阶段案例检验当前完整安装。07原生更新将同一市场由0e20670d绑定到828cb848，安装93b5c565/50306；旧21文件包、29份更新执行源及完整回执保留，源码/市场/缓存22文件一致，5Skill/6受信任Hook，其他插件及配置外部语义保持。原生model/list在行动前确认Terra/medium可用，更新/读取进程全部自然退出，不代表所有既有任务已同时采用。
+
+accord-installed-cadence-20260920-01在执行前冻结31份源和原五条输入，使用既有账号/普通配置、实际完整安装、原生Hook信任及既有elevated workspace-write；无source Hook投影、信任绕过或补救提示。原生历史确认OpenAI、CLI0.155.1和五轮Terra/medium。5/5结构及独立完整语义复核通过：首轮只出计划等待同意；同意+侧问后直接产出四文件；明确暂停后保持；缺场地/费用的继续只提出必要决定；确认修订后计划/日程/预算/通知同步为B厅/120元/取消讲座/8人工作坊/360元，解释较660减少300，保留materials原字节和mtime。source/keep全阶段hash和mtime保持。阶段2计划条件措辞是已发生计划阶段的叙述，不按事后新增规则判为当前文件不存在。
+
+运行总298.097秒，原生累计input773474、cached695808、uncached77666、output6372、total779846，均在预绑限额内；不是上下文占用、各resume数相加或货币成本。五阶段自然退出、控制域余进程0；源码/输出/原始native历史留存，源码Hash、实例身份、字节/mtime由主执行者独立核对。测试仅新增其workspace信任登记，经精确语义比较和独占句柄恢复原配置；确认后主任务回收重复workspace/temp，state为空，未删除或归档原生任务历史。独立语义reviewer只读、不清理。这是93b5当前安装普通行为证据，不是版本因果、GUI、自主交接、全局资源或整版验收。大型run/inspect记录原件入文件，后续仅提取必要摘要。
+
+收尾时当前Desktop任务已出现MCP新参数，但实际includeContext返回unknown/MODULE_NOT_FOUND，status仍有效，原件在07。源码observeStoredContext直到首次查询才require codex-context；可在加载MCP后退休其目录、再首次读context的测试准确复现（初版测试先修正value封装取值错误，再出现与实测一致的MODULE_NOT_FOUND）。修复在运行时启动捕获可选reader或其加载错误，转录数据仍按需读；同例现在返回4000/12000模拟计数且state字节不变，缺可选reader仍不破坏普通status。独立窄审查无阻断，31项定向及254项checkpoint/MCP/context/开发回归通过（268.029秒），不重复真实业务模型运行。
+
+当前旧worker未被原地换码或强杀；独立helper配合fresh MCP身份已实际读到本任务原生计数，作为现有支持路径保留，不能改写原MCP失败。修复候选22文件、3.3.0-dev.1+codex.20260920055234，SHA f8af71ca16efdb18279023db1c55958fd0f347784ea33b73790355efbef6e74f，尚未二次更新共享93b5安装。既有828cb848 CI已11/11通过；新修复需自身CI。后续将有效真实结果接回既有准入并验证真实择时/恢复，不继续以接口数量替代交付。

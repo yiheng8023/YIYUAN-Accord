@@ -359,6 +359,13 @@ not autonomous detection. Prior user rescue remains a failed autonomous result.
 
 ### Host-owned native handoff
 
+Long-lived state readers retain their optional context-reader code when the
+runtime loads. Native updates may retire the original package directory before
+the first context query; that query must not resolve code from the retired path.
+Transcript data is still read only on demand. A missing optional module leaves
+ordinary status usable and is reported when context is requested; code loading
+does not establish permissions or adopt a newer on-disk runtime generation.
+
 The optional `runtime/carrier-handoff.cjs` is a callable integration seam supplied
 in the Codex package. The continuity Skill routes applicable callers to its
 [packaged interface](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md),

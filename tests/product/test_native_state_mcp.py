@@ -72,6 +72,49 @@ class NativeStateMcpTests(unittest.TestCase):
             'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
             session=session, hook='UserPromptSubmit')
 
+    def test_first_context_read_survives_retirement_of_the_loaded_package_path(self):
+        self.native_context()
+        cached = self.root / 'cached-package'
+        retired = self.root / 'retired-package'
+        shutil.copytree(ROOT / 'plugins/yiyuan-accord-codex', cached)
+        self.params['arguments']['includeContext'] = True
+        state_before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        script = (
+            "const fs=require('node:fs');const m=require(process.argv[1]);"
+            "const request=JSON.parse(fs.readFileSync(0,'utf8'));"
+            "fs.renameSync(process.argv[2],process.argv[3]);"
+            "process.stdout.write(JSON.stringify(m.inspectNativeState(request)));"
+        )
+        p = subprocess.run([self.node, '-e', script, str(cached / 'runtime/native-state-mcp.cjs'),
+            str(cached), str(retired)], input=json.dumps(self.params), text=True,
+            encoding='utf-8', capture_output=True, env=self.env, cwd=self.work, timeout=10)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        context = json.loads(p.stdout)['value']['context']
+        self.assertEqual(context['state'], 'observed', context)
+        self.assertEqual(context['lastResponseTokens'], 4000)
+        self.assertEqual(context['windowTokens'], 12000)
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, state_before)
+
+    def test_missing_optional_reader_does_not_break_ordinary_status(self):
+        self.native_context()
+        cached = self.root / 'package-without-reader'
+        shutil.copytree(ROOT / 'plugins/yiyuan-accord-codex', cached)
+        (cached / 'runtime/codex-context.cjs').unlink()
+        script = (
+            "const fs=require('node:fs');const m=require(process.argv[1]);"
+            "const request=JSON.parse(fs.readFileSync(0,'utf8'));"
+            "const status=m.inspectNativeState(request);request.arguments.includeContext=true;"
+            "process.stdout.write(JSON.stringify({status,context:m.inspectNativeState(request)}));"
+        )
+        p = subprocess.run([self.node, '-e', script, str(cached / 'runtime/native-state-mcp.cjs')],
+            input=json.dumps(self.params), text=True, encoding='utf-8', capture_output=True,
+            env=self.env, cwd=self.work, timeout=10)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        result = json.loads(p.stdout)
+        self.assertEqual(result['status']['value']['checkpoint']['state'], 'observed')
+        self.assertNotIn('context', result['status']['value'])
+        self.assertEqual(result['context']['value']['context']['reason'], 'MODULE_NOT_FOUND')
+
     def test_context_is_opt_in_and_current_version_comes_from_native_call(self):
         self.native_context()
         before = self.files()

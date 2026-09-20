@@ -6,6 +6,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const crypto = require('node:crypto');
+
+// Keep optional reader code with this process's loaded runtime generation.
+// A long-lived MCP may outlive its old package directory during native update.
+// Loading code here performs no transcript read; missing optional code is still
+// reported only when a context operation actually needs it.
+let nativeContextReader, nativeContextLoadError;
+try { nativeContextReader = require('./codex-context.cjs').observeNativeTranscript; }
+catch (error) { nativeContextLoadError = error; }
 const sha = (value) => crypto.createHash('sha256').update(value).digest('hex');
 const canonical = (value) => JSON.stringify(value, function (_, child) {
   return child && typeof child === 'object' && !Array.isArray(child)
@@ -197,8 +205,9 @@ function observeStoredContext(input, request, now = Date.now()) {
     return {state: 'unknown', reason: 'current-native-context-source-unavailable',
       scope: 'native-last-response-context-basis', sourceReleaseAllowed: false};
   }
-  const {observeNativeTranscript} = require('./codex-context.cjs');
-  return observeNativeTranscript(input.nativeContextSource, {now, maxAgeMs: request.maxAgeMs ?? 30000,
+  if (nativeContextLoadError) throw nativeContextLoadError;
+  if (typeof nativeContextReader !== 'function') fail('native-context-reader-unavailable');
+  return nativeContextReader(input.nativeContextSource, {now, maxAgeMs: request.maxAgeMs ?? 30000,
     ...(Object.hasOwn(request, 'currentHost') ? {currentHost: request.currentHost} : {})});
 }
 
