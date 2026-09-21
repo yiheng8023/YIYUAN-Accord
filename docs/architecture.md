@@ -477,8 +477,15 @@ verification and decisions for other server requests. A single activity wait
 handles either a request or the matching terminal event; it leaves no losing
 waiter that could consume a later request. Unscoped requests require explicit
 ownership. Failure retains the source/turn and RPC references for reconciliation
-and cannot be retried through the failed session. A successful transfer ends this
-source session; repeated target-side automatic handoff remains unconnected.
+and cannot be retried through the failed session. A successful transfer stops
+writes to that source. The controller can explicitly adopt its own verified target
+after checking the final ledger, native idle/persistent state, current authority
+and effects; settlement preserves history and fences the old lease. The target
+then serves as the next source in the same scope. Target context/proposal tools
+are bound before native creation, and requests during intake are pumped as well;
+a nested proposal while a transfer is in progress is refused without queuing.
+This is a same-controller path, not automatic cold recovery or arbitrary thread
+adoption. Project/sidebar association alone establishes none of these bindings.
 
 `runtime/carrier-recorder.cjs` provides the previously test-only scope ledger
 using Node's built-in SQLite, opened explicitly at a caller-owned file. It checks

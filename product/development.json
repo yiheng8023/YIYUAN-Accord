@@ -35,14 +35,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20260921082457",
+    "version": "3.3.0-dev.1+codex.20260921100216",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20260921082457",
-        "packageSha256": "125b5bd01078e7486ea5b41489ce8557d759211ba6fb326040e5b8554d7e7a2c",
+        "packageVersion": "3.3.0-dev.1+codex.20260921100216",
+        "packageSha256": "08e506628461895460e7ccf48fe965bebb0977bc6b9f004ccb778948fb3a83a1",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -192,10 +192,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 2600000,
+      "maxProductCodeAndTestBytes": 2650000,
       "maxTrackedFiles": 171,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The 2600000 code/test-byte ceiling and 171 tracked-file ceiling cover the existing runtime plus the real SDK source caller and durable scope recorder, their package mirrors and bounded failure/concurrency tests. This replaces test-only assembly with optional production modules using Node built-in SQLite, not another daemon, storage engine, account or model service. Atomic request-or-terminal waits prevent a stale consumer from losing later requests. Existing Hooks/MCP do not load SQLite; its availability is required only when the recorder is explicitly opened. Primary instructions remain capped at 36000 bytes. Earlier source and failed observations remain in Git/evidence; mechanism checks do not establish whole A05, GUI adoption or net value."
+      "rationale": "The 2650000 code/test-byte ceiling and 171 tracked-file ceiling retain the required reserve after adding same-controller target adoption, target-side request pumping and meaningful repeated-transfer/failure checks to the existing SDK modules. The implementation reuses the existing SQLite scope recorder and native tools; no new files, daemon, account or model service are introduced in this slice. Ordinary Hook/MCP entry still does not open SQLite. Primary instructions remain capped at 36000 bytes. Input ceilings bound adapter data, not model capacity or native support. Earlier failures and evidence remain immutable; protocol checks do not establish autonomous timing, cold recovery, whole A05 or GUI adoption."
     }
   },
   "source": {

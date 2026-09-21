@@ -19,7 +19,7 @@ const {openCarrierRecorder} = require(process.argv[2]);
 const {createCodexSourceSession} = require(process.argv[3]);
 const mode = process.argv[4], databasePath = process.argv[5];
 const output = new PassThrough(), sent = [], starts = [], serverResponses = [];
-let targetTurn = 0, sourceTurn = 0, sourceStarted = false;
+let targetTurn = 0, sourceTurn = 0, targetCreated = 0, sourceUnsubscribed = 0, sourceStarted = false;
 const emit = value => output.write(Buffer.from(JSON.stringify(value) + '\n'));
 const response = (frame, result) => queueMicrotask(() => emit({jsonrpc:'2.0', id:frame.id, result}));
 function serverRequest(id, method, params) { emit({jsonrpc:'2.0', id, method, params}); }
@@ -41,6 +41,26 @@ function handle(frame) {
       emit({method:'turn/completed', params:{threadId:'source-1',
         turn:{id:'source-turn-1', status:'completed', items:[]}}});
     });
+    if (frame.id === 200) queueMicrotask(() => serverRequest(201, 'item/tool/call', {
+      threadId:'target-1', turnId:'target-turn-1', callId:'nested-handoff-call',
+      tool:'accord_request_handoff', namespace:null,
+      arguments:{reason:'This must wait until adoption.'}}));
+    if (frame.id === 201) queueMicrotask(() => {
+      emit({method:'item/completed', params:{threadId:'target-1', turnId:'target-turn-1',
+        item:{type:'dynamicToolCall', id:'nested-handoff-call', tool:'accord_request_handoff',
+          namespace:null, status:'completed', success:false,
+          contentItems:frame.result.contentItems}}});
+      emit({method:'turn/completed', params:{threadId:'target-1',
+        turn:{id:'target-turn-1', status:'completed', items:[]}}});
+    });
+    if (frame.id === 300) queueMicrotask(() => {
+      emit({method:'item/completed', params:{threadId:'target-1', turnId:'target-turn-3',
+        item:{type:'dynamicToolCall', id:'second-handoff-call', tool:'accord_request_handoff',
+          namespace:null, status:'completed', success:true,
+          contentItems:frame.result.contentItems}}});
+      emit({method:'turn/completed', params:{threadId:'target-1',
+        turn:{id:'target-turn-3', status:'completed', items:[]}}});
+    });
     return;
   }
   if (frame.method === 'thread/start') {
@@ -52,9 +72,12 @@ function handle(frame) {
         result:{thread:{id:'source-1', status:{type:'idle'}, ephemeral:false},
           model:frame.params.model}});
       if (mode === 'concurrent') setTimeout(answer, 20); else queueMicrotask(answer);
-    } else response(frame, {thread:{id:'target-1', status:{type:'idle'}, ephemeral:false},
+    } else {
+      const id = `target-${++targetCreated}`;
+      response(frame, {thread:{id, status:{type:'idle'}, ephemeral:false},
       cwd:frame.params.cwd, model:frame.params.model, approvalPolicy:frame.params.approvalPolicy,
       sandbox:{type:'readOnly'}});
+    }
     return;
   }
   if (frame.method === 'turn/start') {
@@ -76,14 +99,24 @@ function handle(frame) {
     } else {
       const id = `target-turn-${++targetTurn}`;
       response(frame, {turn:{id, status:'inProgress'}});
-      queueMicrotask(() => emit({method:'turn/completed', params:{threadId:'target-1',
-        turn:{id, status:'completed', items:[]}}}));
+      queueMicrotask(() => {
+        if (mode === 'adopt-chain' && frame.params.input?.[0]?.text === 'second source carrier') {
+          serverRequest(300, 'item/tool/call', {threadId:frame.params.threadId, turnId:id,
+            callId:'second-handoff-call', tool:'accord_request_handoff', namespace:null,
+            arguments:{reason:'Continue to the next fresh carrier.'}});
+        } else if (mode === 'adopt-chain' && targetTurn === 1) {
+          serverRequest(200, 'item/tool/call', {threadId:frame.params.threadId, turnId:id,
+            callId:'target-context-call', tool:'accord_inspect_context', namespace:null,
+            arguments:{maxAgeMs:30000}});
+        } else emit({method:'turn/completed', params:{threadId:frame.params.threadId,
+          turn:{id, status:'completed', items:[]}}});
+      });
     }
     return;
   }
   if (frame.method === 'thread/read') return response(frame, {thread:{id:frame.params.threadId,
-    status:{type:'idle'}, ephemeral:false}});
-  if (frame.method === 'thread/unsubscribe') return response(frame, {status:'unsubscribed'});
+    status:{type:mode==='adopt-busy' && sourceUnsubscribed>0 && frame.params.threadId==='target-1'?'active':'idle'}, ephemeral:false}});
+  if (frame.method === 'thread/unsubscribe') { sourceUnsubscribed++; return response(frame, {status:'unsubscribed'}); }
   if (frame.method === 'turn/interrupt') return response(frame, {});
   throw new Error('unexpected native method: ' + frame.method);
 }
@@ -100,10 +133,28 @@ const input = new Writable({write(chunk, encoding, done) {
 const connection = createOwnedAppServerConnection({stdin:input, stdout:output,
   connectionId:'fixture-connection', hostVersion:'fixture-host'});
 const recorder = openCarrierRecorder({path:databasePath, create:true});
-let scopeReads = 0;
-const sessionRecorder = ['scope-active','scope-after-terminal'].includes(mode) ? {
+let scopeReads = 0, recordReads = 0, settleCalls = 0;
+const wrappedRecorder = ['scope-active','scope-after-terminal','adopt-old-lease',
+  'adopt-missing-tools','adopt-settle-loss','adopt-bad-settle',
+  'adopt-deadline-before-settle'].includes(mode);
+const sessionRecorder = wrappedRecorder ? {
   bindScope:recorder.bindScope, begin:recorder.begin, compareAndSet:recorder.compareAndSet,
-  read:recorder.read, settle:recorder.settle,
+  read(...args) {
+    recordReads++;
+    const value = recorder.read(...args);
+    if (recordReads !== 2) return value;
+    const changed = JSON.parse(JSON.stringify(value));
+    if (mode === 'adopt-old-lease') changed.lease.token = 'stale-lease-token';
+    if (mode === 'adopt-missing-tools') delete changed.state.plan.target.dynamicTools;
+    return changed;
+  },
+  settle(...args) {
+    settleCalls++;
+    const value = recorder.settle(...args);
+    if (mode === 'adopt-settle-loss') throw new Error('settle acknowledgement lost');
+    if (mode === 'adopt-bad-settle') return {...value, revision:'unknown'};
+    return value;
+  },
   readScope(scopeRef) {
     scopeReads++;
     const scope = recorder.readScope(scopeRef);
@@ -115,6 +166,7 @@ const sessionRecorder = ['scope-active','scope-after-terminal'].includes(mode) ?
   },
 } : recorder;
 const planCalls = [], ownerCalls = [], currentCalls = [], verifyCalls = [];
+let adoptionVerifyCalls = 0;
 const session = createCodexSourceSession({connection, recorder:sessionRecorder, scopeRef:'fixture-scope',
   threadStart:{cwd:'C:/fixture', model:'owner-model', effort:'owner-effort',
     sandbox:'workspace-write', approvalPolicy:'on-request', dynamicTools:[{
@@ -122,26 +174,34 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
       inputSchema:{type:'object', properties:{}, additionalProperties:false}}]},
   planResolver(request, context) {
     planCalls.push({request, context:{...context, signal:undefined}});
+    const ordinal = planCalls.length;
     const now = Date.now();
-    return {transferId:'transfer-1', scopeRef:'fixture-scope', authorityRef:'authority-1',
+    return {transferId:`transfer-${ordinal}`, scopeRef:'fixture-scope', authorityRef:'authority-1',
       stateRef:'state-1', source:{threadId:context.threadId, turnId:context.turnId},
-      target:{cwd:'C:/fixture', model:'target-model', effort:'target-effort'},
+      target:{cwd:'C:/fixture', model:`target-model-${ordinal}`, effort:'target-effort'},
       handoffText:'Retain the fixed authorized task and protected inputs.',
       continuation:{input:'Perform the next bounded step.', sandboxPolicy:{type:'readOnly'}},
       deadlineMs:now+4000, recoveryDeadlineMs:now+4500};
   },
   verify(stage, facts) {
     verifyCalls.push(stage);
+    if (stage === 'adopt-target') {
+      adoptionVerifyCalls++;
+      if (mode === 'adopt-deadline-before-settle' && adoptionVerifyCalls === 1)
+        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 30);
+    }
     return {decision:'allow', scopeRef:'fixture-scope', authorityRef:'authority-1',
-      stateRef:'state-1', sourceRef:'fixture:'+stage, sourceRecoveryReady:true,
+      stateRef:mode==='adopt-stale-ref' && stage==='adopt-target'?'stale-state':'state-1',
+      sourceRef:'fixture:'+stage, sourceRecoveryReady:true,
       targetInitializationSafe:true, quiesced:true, noOtherWriters:true,
       targetSettingsMatch:true, initializationEffectsVerified:true, accepted:true,
-      sourceIdle:true, intakeEffectsVerified:true, singleWriter:true, effectsVerified:true};
+      sourceIdle:true, intakeEffectsVerified:true, singleWriter:true, effectsVerified:true,
+      adoptionAuthorized:true};
   },
   current(context) {
     currentCalls.push({...context, signal:undefined});
     return {scopeRef:'fixture-scope', authorityRef:'authority-1', stateRef:'state-1',
-      writerThreadId:'source-1'};
+      writerThreadId:context.sourceThreadId};
   },
   ownerRequest(request) { ownerCalls.push(request); return {result:{decision:'denied-by-owner'}}; },
 });
@@ -166,6 +226,27 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
       recorder.bindScope('fixture-scope', 'foreign-writer');
       try { await session.run({input:'must not create source', deadlineMs:Date.now()+3000}); }
       catch (error) { result.error = {code:error.code, phase:error.phase, state:error.state}; }
+    } else if (mode === 'adopt-chain') {
+      result.first = await session.run({input:'one source turn', deadlineMs:Date.now()+6000});
+      result.adopted = await session.adoptTarget({deadlineMs:Date.now()+3000});
+      result.secondTransfer = await session.run({input:'second source carrier',
+        deadlineMs:Date.now()+6000});
+      try { await session.run({input:'must wait for second adoption', deadlineMs:Date.now()+1000}); }
+      catch (error) { result.second = error.code; }
+    } else if (mode.startsWith('adopt-')) {
+      result.first = await session.run({input:'one source turn', deadlineMs:Date.now()+6000});
+      const adoptionDeadline = mode === 'adopt-deadline-before-settle' ? 10 : 3000;
+      try { result.adopted = await session.adoptTarget({deadlineMs:Date.now()+adoptionDeadline}); }
+      catch (error) { result.adoptionError = {code:error.code, state:error.state}; }
+      if (mode === 'adopt-deadline-before-settle') {
+        result.settleCallsAfterDeadline = settleCalls;
+        result.statusAfterDeadline = session.snapshot().status;
+        result.adopted = await session.adoptTarget({deadlineMs:Date.now()+3000});
+      }
+      if (mode === 'adopt-settle-loss' || mode === 'adopt-bad-settle') {
+        try { await session.adoptTarget({deadlineMs:Date.now()+1000}); }
+        catch (error) { result.retry = error.code; }
+      }
     } else {
       try { result.first = await session.run({input:'one source turn',
         turn:{effort:'turn-owner-effort', sandboxPolicy:{type:'workspaceWrite'}},
@@ -178,7 +259,8 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     result.snapshot = session.snapshot(); result.sent = sent; result.starts = starts;
     result.serverResponses = serverResponses; result.planCalls = planCalls.length;
     result.ownerCalls = ownerCalls.length; result.currentCalls = currentCalls.length;
-    result.verifyCalls = verifyCalls;
+    result.verifyCalls = verifyCalls; result.recordReads = recordReads;
+    result.settleCalls = settleCalls;
     console.log(JSON.stringify(result));
   } finally { connection.close(); recorder.close(); }
 })().catch(error=>{console.error(error);process.exitCode=1});
@@ -204,7 +286,7 @@ class CodexSourceSessionTests(unittest.TestCase):
         self.assertEqual(result["first"]["status"], "transferred")
         self.assertEqual(result["first"]["target"], {
             "threadId": "target-1", "ownedWriter": True,
-            "automaticHandoffToolRegistered": False})
+            "automaticHandoffToolRegistered": True})
         self.assertFalse(result["first"]["sourceWritable"])
         self.assertEqual(result["second"], "SOURCE_TRANSFERRED")
         self.assertEqual(result["snapshot"]["status"], "transferred")
@@ -222,6 +304,9 @@ class CodexSourceSessionTests(unittest.TestCase):
                          ("owner-model", "owner-effort", "workspace-write", "on-request"))
         self.assertEqual([tool["name"] for tool in source_start["dynamicTools"]],
                          ["owner_tool", "accord_request_handoff", "accord_inspect_context"])
+        target_start = result["starts"][1]
+        self.assertEqual([tool["name"] for tool in target_start["dynamicTools"]],
+                         ["accord_request_handoff", "accord_inspect_context"])
         source_turn = next(frame for frame in result["sent"]
                            if frame.get("method") == "turn/start"
                            and frame["params"]["threadId"] == "source-1")
@@ -284,8 +369,74 @@ class CodexSourceSessionTests(unittest.TestCase):
 
     def test_reserved_dynamic_tool_conflict_is_rejected_before_native_work(self):
         result = self.run_case("conflict")
-        self.assertIn("dynamic tool name conflict", result["conflict"])
+        self.assertIn("dynamic tool identity conflict", result["conflict"])
         self.assertEqual(result["sent"], [])
+
+    def test_same_controller_adopts_target_then_completes_a_second_real_transfer(self):
+        result = self.run_case("adopt-chain")
+        self.assertEqual(result["first"]["target"]["threadId"], "target-1")
+        self.assertTrue(result["first"]["target"]["automaticHandoffToolRegistered"])
+        self.assertEqual(result["adopted"]["status"], "adopted")
+        self.assertEqual(result["adopted"]["sourceThreadId"], "target-1")
+        self.assertEqual(result["secondTransfer"]["target"]["threadId"], "target-2")
+        self.assertTrue(result["secondTransfer"]["target"]["automaticHandoffToolRegistered"])
+        self.assertEqual(result["second"], "SOURCE_TRANSFERRED")
+        self.assertEqual(result["planCalls"], 2)
+        self.assertEqual(result["currentCalls"], 2)
+        self.assertEqual(len(result["starts"]), 3)
+        self.assertEqual([item["settled"] for item in result["snapshot"]["transfers"]],
+                         [True, False])
+        self.assertEqual(result["snapshot"]["sourceThreadId"], "target-1")
+        self.assertEqual(result["snapshot"]["targetThreadId"], "target-2")
+        replies = {frame["id"]: frame for frame in result["serverResponses"]}
+        self.assertTrue(replies[200]["result"]["success"])
+        nested = json.loads(replies[201]["result"]["contentItems"][0]["text"])
+        self.assertFalse(replies[201]["result"]["success"])
+        self.assertEqual(nested["code"], "TRANSFER_IN_PROGRESS")
+        self.assertTrue(replies[300]["result"]["success"])
+        self.assertEqual([tool["name"] for tool in result["starts"][2]["dynamicTools"]],
+                         ["accord_request_handoff", "accord_inspect_context"])
+
+    def test_adoption_preconditions_leave_the_transferred_target_read_only(self):
+        cases = {
+            "adopt-old-lease": "TARGET_RECORD_STALE",
+            "adopt-stale-ref": "TARGET_ADOPTION_DENIED",
+            "adopt-busy": "TARGET_NOT_ADOPTABLE",
+            "adopt-missing-tools": "TARGET_CONTINUITY_TOOLS_UNAVAILABLE",
+        }
+        for mode, code in cases.items():
+            with self.subTest(mode=mode):
+                result = self.run_case(mode)
+                self.assertEqual(result["adoptionError"]["code"], code)
+                self.assertEqual(result["snapshot"]["status"], "transferred")
+                self.assertEqual(result["settleCalls"], 0)
+                self.assertEqual(result["snapshot"]["sourceThreadId"], "source-1")
+                self.assertEqual(result["snapshot"]["targetThreadId"], "target-1")
+
+    def test_unknown_or_malformed_settle_locks_without_replay(self):
+        for mode in ("adopt-settle-loss", "adopt-bad-settle"):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode)
+                self.assertEqual(result["adoptionError"]["code"], "TARGET_SETTLE_UNKNOWN")
+                self.assertEqual(result["snapshot"]["status"], "failed")
+                self.assertEqual(result["retry"], "SESSION_FAILED")
+                self.assertEqual(result["settleCalls"], 1)
+                adoption = result["adoptionError"]["state"]["adoption"]
+                self.assertIn("targetRead", adoption)
+                self.assertTrue(adoption["verdict"]["adoptionAuthorized"])
+                if mode == "adopt-bad-settle":
+                    self.assertIn("settleReceipt", adoption)
+                else:
+                    self.assertNotIn("settleReceipt", adoption)
+
+    def test_deadline_before_settle_invocation_remains_retryable(self):
+        result = self.run_case("adopt-deadline-before-settle")
+        self.assertEqual(result["adoptionError"]["code"], "TARGET_ADOPTION_FAILED")
+        self.assertEqual(result["settleCallsAfterDeadline"], 0)
+        self.assertEqual(result["statusAfterDeadline"], "transferred")
+        self.assertEqual(result["adopted"]["status"], "adopted")
+        self.assertEqual(result["settleCalls"], 1)
+        self.assertEqual(result["snapshot"]["status"], "ready")
 
     def test_distributed_runtime_matches_canonical_source(self):
         self.assertEqual(MODULE.read_bytes(),

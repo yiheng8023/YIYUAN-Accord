@@ -3,9 +3,10 @@
 // Source-side Codex SDK session. The caller owns an already initialized native
 // connection, its authentication, the durable recorder, and all policy choices.
 // This adapter never starts/discovers/closes a host, initializes a connection,
-// retries an ambiguous native effect, settles a transfer, or archives/deletes a
-// thread. One session creates one source thread, serializes ordinary turns, and
-// may perform at most one verified fresh handoff through carrier-handoff.cjs.
+// retries an ambiguous native effect, or archives/deletes a thread. Only the
+// explicit, validated adoptTarget path settles its current transfer. One session
+// creates one source thread, serializes ordinary turns, and may perform at most
+// one verified fresh handoff per adopted carrier through carrier-handoff.cjs.
 
 const {performance} = require('node:perf_hooks');
 const {
@@ -83,6 +84,32 @@ function immutable(value) {
   return freezeDeep(cloneData(value));
 }
 
+function canonical(value) {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).sort().map(key =>
+      `${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function continuityTools(rawTools, name) {
+  if (rawTools !== undefined && !Array.isArray(rawTools)) throw new TypeError(`${name} must be an array`);
+  const tools = cloneData(rawTools || []);
+  for (const tool of tools) {
+    if (!plainObject(tool)) throw new TypeError(`${name} entries must be objects`);
+    if (tool.namespace == null && RESERVED_TOOLS.has(tool.name)) {
+      throw new TypeError(`dynamic tool identity conflict: ${tool.name}`);
+    }
+  }
+  return cloneData([...tools, HANDOFF_PROPOSAL_TOOL, CONTEXT_OBSERVATION_TOOL]);
+}
+
+function hasContinuityTools(tools) {
+  return Array.isArray(tools) && [HANDOFF_PROPOSAL_TOOL, CONTEXT_OBSERVATION_TOOL].every(expected =>
+    tools.some(actual => actual?.namespace == null && canonical(actual) === canonical(expected)));
+}
+
 function callbackDeadline(deadline, label) {
   const remaining = deadline - performance.now();
   if (!Number.isFinite(deadline) || remaining <= 0 || remaining > MAX_TIMER_MS) {
@@ -152,8 +179,13 @@ function requestBody(value) {
 }
 
 function validatePlanForRun(rawPlan, sourceThreadId, turnId, scopeRef, wallDeadlineMs) {
-  const plan = immutable(rawPlan);
-  if (!plainObject(plan) || !plainObject(plan.source)) throw new TypeError('planResolver must return a handoff plan');
+  const candidate = cloneData(rawPlan);
+  if (!plainObject(candidate) || !plainObject(candidate.source) || !plainObject(candidate.target)) {
+    throw new TypeError('planResolver must return a handoff plan');
+  }
+  candidate.target.dynamicTools = continuityTools(candidate.target.dynamicTools,
+    'plan.target.dynamicTools');
+  const plan = immutable(candidate);
   if (plan.source.threadId !== sourceThreadId || plan.source.turnId !== turnId || plan.scopeRef !== scopeRef) {
     throw new TypeError('handoff plan source or scope differs from the active source turn');
   }
@@ -185,7 +217,8 @@ function createCodexSourceSession(options) {
   text(connection.transport.hostVersion, 'connection.transport.hostVersion');
   if (!plainObject(recorder) || typeof recorder.readScope !== 'function' ||
       typeof recorder.bindScope !== 'function' || typeof recorder.begin !== 'function' ||
-      typeof recorder.compareAndSet !== 'function' || typeof recorder.read !== 'function') {
+      typeof recorder.compareAndSet !== 'function' || typeof recorder.read !== 'function' ||
+      typeof recorder.settle !== 'function') {
     throw new TypeError('a borrowed durable carrier recorder is required');
   }
   for (const name of ['planResolver', 'verify', 'current', 'ownerRequest']) {
@@ -200,19 +233,8 @@ function createCodexSourceSession(options) {
   text(sourceStart.model, 'threadStart.model');
   if (sourceStart.ephemeral === true) throw new TypeError('threadStart.ephemeral cannot be true for a recoverable source');
   if (Object.hasOwn(sourceStart, 'threadId')) throw new TypeError('threadStart cannot select an existing thread');
-  if (!Array.isArray(sourceStart.dynamicTools) && Object.hasOwn(sourceStart, 'dynamicTools')) {
-    throw new TypeError('threadStart.dynamicTools must be an array');
-  }
-  const dynamicTools = sourceStart.dynamicTools || [];
-  for (const tool of dynamicTools) {
-    if (!plainObject(tool)) throw new TypeError('threadStart.dynamicTools entries must be objects');
-    if (RESERVED_TOOLS.has(tool.name)) throw new TypeError(`dynamic tool name conflict: ${tool.name}`);
-  }
-  sourceStart.dynamicTools = cloneData([
-    ...dynamicTools,
-    HANDOFF_PROPOSAL_TOOL,
-    CONTEXT_OBSERVATION_TOOL,
-  ]);
+  sourceStart.dynamicTools = continuityTools(sourceStart.dynamicTools,
+    'threadStart.dynamicTools');
   const bound = Object.freeze({
     request: connection.transport.request,
     waitTerminal: connection.transport.waitTerminal,
@@ -227,19 +249,20 @@ function createCodexSourceSession(options) {
     begin: recorder.begin,
     compareAndSet: recorder.compareAndSet,
     readRecord: recorder.read,
+    settle: recorder.settle,
     planResolver: options.planResolver,
     verify: options.verify,
     current: options.current,
     ownerRequest: options.ownerRequest,
   });
   const handoffTransport = Object.freeze({connectionId: bound.connectionId,
-    hostVersion: bound.hostVersion, request: bound.request, waitTerminal: bound.waitTerminal});
+    hostVersion: bound.hostVersion, request: bound.request, waitTerminal: pumpHandoffTerminal});
   const handoffRecorder = Object.freeze({begin: bound.begin, compareAndSet: bound.compareAndSet});
   const ownUnscopedRequests = options.ownUnscopedRequests === true;
   let busy = false;
   let state = {
     status: 'new', phase: 'new', scopeRef, sourceThreadId: null, lastTurnId: null,
-    turnCount: 0, transferCount: 0, lastSafeReceipt: null, pendingRequest: null,
+    turnCount: 0, transferCount: 0, transfers: [], lastSafeReceipt: null, pendingRequest: null,
   };
 
   const snapshot = () => immutable(state);
@@ -252,7 +275,8 @@ function createCodexSourceSession(options) {
         connection.replyContext !== bound.replyContext || connection.proposalChannel !== bound.proposalChannel ||
         recorder.readScope !== bound.readScope || recorder.bindScope !== bound.bindScope ||
         recorder.begin !== bound.begin || recorder.compareAndSet !== bound.compareAndSet ||
-        recorder.read !== bound.readRecord || options.planResolver !== bound.planResolver ||
+        recorder.read !== bound.readRecord || recorder.settle !== bound.settle ||
+        options.planResolver !== bound.planResolver ||
         options.verify !== bound.verify || options.current !== bound.current ||
         options.ownerRequest !== bound.ownerRequest) {
       throw new Error('source session owner binding changed');
@@ -284,6 +308,40 @@ function createCodexSourceSession(options) {
     ensureBindings();
     callbackDeadline(deadline, label);
     return value;
+  }
+
+  async function pumpHandoffTerminal(threadId, turnId, deadline) {
+    for (;;) {
+      ensureBindings();
+      const activity = await Reflect.apply(bound.receive, undefined,
+        [threadId, turnId, deadline, {includeUnscoped: ownUnscopedRequests}]);
+      ensureBindings();
+      if (activity?.type === 'terminal') return immutable(activity.terminal);
+      if (activity?.type !== 'request' || !plainObject(activity.request)) {
+        throw new Error('connection returned invalid handoff target activity');
+      }
+      const nativeRequest = immutable(activity.request);
+      state = {...state, pendingRequest: nativeRequest};
+      if (nativeRequest.method === 'item/tool/call' &&
+          nativeRequest.params?.tool === CONTEXT_OBSERVATION_TOOL.name &&
+          nativeRequest.params?.namespace == null) {
+        await Reflect.apply(bound.replyContext, undefined, [nativeRequest, deadline]);
+      } else if (nativeRequest.method === 'item/tool/call' &&
+          nativeRequest.params?.tool === HANDOFF_PROPOSAL_TOOL.name &&
+          nativeRequest.params?.namespace == null) {
+        const payload = immutable({schema: 'yiyuan-accord-nested-handoff-reply/v1',
+          code: 'TRANSFER_IN_PROGRESS', accepted: false,
+          message: 'The current transfer must be adopted and settled before this target can request another handoff.'});
+        await Reflect.apply(bound.respond, undefined, [nativeRequest, {result: {success: false,
+          contentItems: [{type: 'inputText', text: JSON.stringify(payload)}]}}, deadline]);
+      } else {
+        const ownerContext = {threadId, turnId, scopeRef, deadline, phase: 'handoff-target'};
+        const body = requestBody(await callOwner(bound.ownerRequest,
+          [nativeRequest, ownerContext], deadline, 'ownerRequest'));
+        await Reflect.apply(bound.respond, undefined, [nativeRequest, body, deadline]);
+      }
+      state = {...state, pendingRequest: null};
+    }
   }
 
   async function ensureSource(deadline) {
@@ -464,13 +522,20 @@ function createCodexSourceSession(options) {
               return lockFailure('TRANSFER_RECORD_UNAVAILABLE', 'handoff completed but its recovery record is unavailable', error,
                 {phase: 'transferred-record-unavailable', state: {handoff: immutable(handoff)}});
             }
+            const targetContinuityToolsRegistered = hasContinuityTools(
+              record?.state?.plan?.target?.dynamicTools);
+            const transferSummary = immutable({transferId: handoff.transferId,
+              sourceThreadId, targetThreadId: handoff.target.threadId,
+              revision: record.revision, settled: false});
             state = {...state, status: 'transferred', phase: 'transferred', pendingRequest: null,
-              targetThreadId: handoff.target.threadId, handoff: immutable(handoff), record: immutable(record)};
+              targetThreadId: handoff.target.threadId, handoff: immutable(handoff),
+              record: immutable(record), targetContinuityToolsRegistered,
+              transfers: [...state.transfers, transferSummary]};
             return immutable({status: 'transferred', scopeRef, sourceThreadId, turnId,
               target: {threadId: handoff.target.threadId, ownedWriter: true,
-                automaticHandoffToolRegistered: false}, handoff, record,
+                automaticHandoffToolRegistered: targetContinuityToolsRegistered}, handoff, record,
               sourceWritable: false,
-              claimLimit: 'Verified caller-owned fresh transfer only. The source session is closed to writes; the target has no SDK-registered automatic handoff tool.'});
+              claimLimit: 'Verified caller-owned fresh transfer only. The source session is closed to writes; target adoption and another handoff require a separate durable settle and a new run.'});
           }
           const ownerContext = {threadId: sourceThreadId, turnId, scopeRef,
             deadline: budget.monotonicDeadline};
@@ -494,7 +559,122 @@ function createCodexSourceSession(options) {
     }
   }
 
-  return Object.freeze({run, snapshot});
+  async function adoptTarget(raw) {
+    if (busy) throw new CodexSourceSessionError('RUN_IN_PROGRESS', 'source session already has an active run or adoption', {phase: state.phase, state: snapshot()});
+    if (state.status === 'failed') throw new CodexSourceSessionError('SESSION_FAILED', 'failed source session requires owner reconciliation', {phase: state.phase, state: snapshot(), rpcRequest: state.failure?.cause?.rpcRequest});
+    if (state.status !== 'transferred') throw new CodexSourceSessionError('TARGET_ADOPTION_UNAVAILABLE', 'only this session\'s current transferred target can be adopted', {phase: state.phase, state: snapshot()});
+    if (!plainObject(raw) || Object.keys(raw).some(key => key !== 'deadlineMs')) {
+      throw new TypeError('adoptTarget requires only deadlineMs');
+    }
+    const budget = toRunBudget(raw.deadlineMs);
+    const retained = state;
+    let settleInvoked = false;
+    busy = true;
+    state = {...state, phase: 'adopt-target-check'};
+    try {
+      ensureBindings();
+      const handoff = retained.handoff, previous = retained.record;
+      const transferId = handoff?.transferId, targetThreadId = handoff?.target?.threadId;
+      text(transferId, 'retained transfer id');
+      text(targetThreadId, 'retained target thread id');
+      const record = immutable(await boundedOperation(bound.readRecord,
+        [transferId, scopeRef], budget.monotonicDeadline, 'recorder.read'));
+      ensureBindings();
+      const ledger = record.state, plan = ledger?.plan;
+      if (!plainObject(record) || !Number.isSafeInteger(record.revision) || !plainObject(record.lease) ||
+          !plainObject(ledger) || !plainObject(plan) || record.revision !== previous?.revision ||
+          canonical(record.lease) !== canonical(previous?.lease) || ledger.phase !== 'source-subscription-released' ||
+          ledger.pendingEffect !== null || ledger.transferId !== transferId || ledger.scopeRef !== scopeRef ||
+          ledger.writer !== 'target' || ledger.writerThreadId !== targetThreadId ||
+          ledger.target?.threadId !== targetThreadId || record.lease.scopeRef !== scopeRef ||
+          record.lease.transferId !== transferId || record.lease.writerThreadId !== targetThreadId ||
+          plan.scopeRef !== scopeRef || plan.authorityRef !== ledger.authorityRef ||
+          plan.stateRef !== ledger.stateRef || ledger.connection?.connectionId !== bound.connectionId ||
+          ledger.connection?.hostVersion !== bound.hostVersion) {
+        throw Object.assign(new Error('durable transfer record or lease is stale'), {code: 'TARGET_RECORD_STALE'});
+      }
+      if (!hasContinuityTools(plan.target?.dynamicTools)) {
+        throw Object.assign(new Error('target continuity tools are absent from the durable plan'),
+          {code: 'TARGET_CONTINUITY_TOOLS_UNAVAILABLE'});
+      }
+      const targetRead = immutable(await Reflect.apply(bound.request, undefined,
+        ['thread/read', {threadId: targetThreadId}, budget.monotonicDeadline]));
+      ensureBindings();
+      if (targetRead?.thread?.id !== targetThreadId || targetRead.thread?.status?.type !== 'idle' ||
+          targetRead.thread?.ephemeral !== false) {
+        throw Object.assign(new Error('target is not the exact idle persistent writer'),
+          {code: 'TARGET_NOT_ADOPTABLE'});
+      }
+      const facts = immutable({connectionId: bound.connectionId, hostVersion: bound.hostVersion,
+        scopeRef, authorityRef: ledger.authorityRef, stateRef: ledger.stateRef,
+        transferId, target: {threadId: targetThreadId}, record, targetRead});
+      const verdict = immutable(await boundedOperation(bound.verify,
+        ['adopt-target', facts, budget.monotonicDeadline], budget.monotonicDeadline,
+        'verify:adopt-target'));
+      ensureBindings();
+      if (verdict?.decision !== 'allow' || verdict.scopeRef !== scopeRef ||
+          verdict.authorityRef !== ledger.authorityRef || verdict.stateRef !== ledger.stateRef ||
+          typeof verdict.sourceRef !== 'string' || !verdict.sourceRef.trim() ||
+          verdict.adoptionAuthorized !== true || verdict.singleWriter !== true ||
+          verdict.effectsVerified !== true) {
+        throw Object.assign(new Error('adopt-target verifier did not authorize the current target'),
+          {code: 'TARGET_ADOPTION_DENIED'});
+      }
+      state = {...state, phase: 'adopt-target-settle-pending', adoption: {
+        transferId, targetThreadId, recordRevision: record.revision,
+        verificationSourceRef: verdict.sourceRef, targetRead, verdict}};
+      const settled = immutable(await boundedOperation(() => {
+        settleInvoked = true;
+        return Reflect.apply(bound.settle, undefined,
+          [transferId, record.revision, record.lease]);
+      }, [], budget.monotonicDeadline, 'recorder.settle'));
+      state = {...state, adoption: {...state.adoption, settleReceipt: settled}};
+      ensureBindings();
+      if (!Number.isSafeInteger(settled?.revision) || settled.revision <= record.revision ||
+          settled.scope?.scopeRef !== scopeRef || settled.scope?.writerThreadId !== targetThreadId ||
+          settled.scope?.activeTransferId !== null || typeof settled.scope?.token !== 'string' ||
+          !settled.scope.token.trim() || settled.scope.token === record.lease.token) {
+        throw Object.assign(new Error('settle acknowledgement is malformed'),
+          {code: 'TARGET_SETTLE_UNKNOWN'});
+      }
+      const currentScope = immutable(await boundedOperation(bound.readScope, [scopeRef],
+        budget.monotonicDeadline, 'recorder.readScope after settle'));
+      ensureBindings();
+      if (canonical(currentScope) !== canonical(settled.scope)) {
+        throw Object.assign(new Error('settled scope readback differs'),
+          {code: 'TARGET_SETTLE_UNKNOWN'});
+      }
+      const transfers = retained.transfers.map(item => item.transferId === transferId ? immutable({
+        ...item, settled: true, settleRevision: settled.revision,
+        verificationSourceRef: verdict.sourceRef,
+      }) : item);
+      const {handoff: ignoredHandoff, record: ignoredRecord, targetThreadId: ignoredTarget,
+        targetContinuityToolsRegistered: ignoredTools, adoption: ignoredAdoption,
+        lastAdoptionFailure: ignoredFailure, ...rest} = state;
+      state = {...rest, status: 'ready', phase: 'ready', sourceThreadId: targetThreadId,
+        lastTurnId: null, transferCount: 0, pendingRequest: null, scope: currentScope,
+        lastSafeReceipt: settled, transfers, adoptedFromTransferId: transferId};
+      return immutable({status: 'adopted', scopeRef, sourceThreadId: targetThreadId,
+        transferId, settle: settled, scope: currentScope,
+        claimLimit: 'Same-controller hot adoption after durable settle only; no cold recovery, archive, deletion or cross-controller takeover is implied.'});
+    } catch (error) {
+      if (settleInvoked) {
+        if (error instanceof CodexSourceSessionError) throw error;
+        return lockFailure(error?.code || 'TARGET_SETTLE_UNKNOWN',
+          'target settlement outcome is unknown and must not be replayed', error,
+          {phase: 'adopt-target-settle-unknown'});
+      }
+      const code = typeof error?.code === 'string' ? error.code : 'TARGET_ADOPTION_FAILED';
+      state = {...retained, status: 'transferred', phase: 'transferred',
+        lastAdoptionFailure: {code, message: error?.message || String(error)}};
+      throw new CodexSourceSessionError(code, error?.message || 'target adoption failed', {
+        cause: error, phase: state.phase, state: snapshot(), rpcRequest: error?.rpcRequest});
+    } finally {
+      busy = false;
+    }
+  }
+
+  return Object.freeze({run, adoptTarget, snapshot});
 }
 
 module.exports = {

@@ -165,6 +165,7 @@ async function run(config) {
     continuation: {input: 'Perform the next authorized bounded step.', sandboxPolicy: {type: 'readOnly'}},
     deadlineMs: Date.now() + 5000, recoveryDeadlineMs: Date.now() + 6000};
   if (Object.hasOwn(config, 'targetEffort')) plan.target.effort = config.targetEffort;
+  if (Object.hasOwn(config, 'targetTools')) plan.target.dynamicTools = config.targetTools;
   const reply = (stage) => ({decision: 'allow', scopeRef: plan.scopeRef, authorityRef: plan.authorityRef, stateRef: plan.stateRef,
     sourceRef: 'mock-evidence:' + stage, sourceRecoveryReady: true, quiesced: true, noOtherWriters: true,
     targetInitializationSafe: true, initializationEffectsVerified:true, intakeEffectsVerified:true,

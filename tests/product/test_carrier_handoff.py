@@ -141,6 +141,27 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertEqual(start['approvalPolicy'],'never')
         self.assertFalse(any(m in methods for m in ('thread/fork','thread/archive','thread/delete','thread/goal/set')))
 
+    def test_target_tools_are_explicitly_bound_and_preserved_in_start_and_record(self):
+        tools = [{"name": "owner_tool", "description": "Owner-selected task capability",
+                  "inputSchema": {"type": "object", "properties": {}}, "deferLoading": True},
+                 {"name": "owner_tool", "namespace": "separate_owner",
+                  "description": "Different explicit namespace", "inputSchema": {"type": "object"}}]
+        result = self.run_case(targetTools=tools)
+        self.assertIsNone(result['error'])
+        start = next(call['params'] for call in result['calls'] if call['method'] == 'thread/start')
+        self.assertEqual(start['dynamicTools'], tools)
+        self.assertEqual(result['snapshots'][-1]['plan']['target']['dynamicTools'], tools)
+
+    def test_invalid_target_tools_are_rejected_before_native_effects(self):
+        tool = {"name": "t", "description": "Bound tool", "inputSchema": {"type": "object"}}
+        for tools in ({}, [tool, tool], [dict(tool, inputSchema=[])], [dict(tool, description="")],
+                      [dict(tool, name=str(i)) for i in range(65)]):
+            with self.subTest(tools=tools):
+                result = self.run_case(targetTools=tools)
+                self.assertIsNotNone(result['error'])
+                self.assertEqual(result['calls'], [])
+                self.assertEqual(result['snapshots'], [])
+
     def test_active_source_must_reach_exact_terminal_before_fresh_target(self):
         r=self.run_case('active-source')
         self.assertIsNone(r['error'])

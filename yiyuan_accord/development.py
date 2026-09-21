@@ -139,9 +139,10 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
             if carrier_session:
                 contract["optionalCarrierHandoff"]["sourceSession"] = {
                     "entry": "runtime/codex-session.cjs",
-                    "effect": "create-source-with-context-and-proposal-tools; bind-scope; start-owner-selected-turns; pump-bound-requests; dispatch-one-verified-transfer",
+                    "effect": "create-source-with-context-and-proposal-tools; bind-scope; start-owner-selected-turns; pump-source-and-intake-requests; dispatch-verified-transfer; explicitly-adopt-verified-target-for-next-transfer",
                     "ownership": "borrow-initialized-authorized-connection-and-recorder; preserve-other-tools; owner-handles-other-requests; do-not-close-borrowed-resources",
-                    "limits": "caller-supplies-current-authority-plan-and-independent-verifier; failure-requires-reconciliation-not-retry; target-repeat-handoff-not-registered; no-ordinary-GUI-control-or-whole-A05-acceptance",
+                    "targetAdoption": "same-controller-own-completed-transfer-only; exact-final-record-and-tools; fresh-idle-persistent-native-target; independent-current-authority-and-effect-verdict; once-only-settle-with-readback; retain-history-and-fence-old-lease",
+                    "limits": "caller-supplies-current-authority-plan-and-independent-verifier; uncertain-effects-require-reconciliation-not-retry; no-cold-controller-recovery-or-arbitrary-thread-adoption; no-ordinary-GUI-control-or-whole-A05-acceptance",
                 }
                 contract["optionalCarrierHandoff"]["durableRecorder"] = {
                     "entry": "runtime/carrier-recorder.cjs",

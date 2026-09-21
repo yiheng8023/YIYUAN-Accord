@@ -164,7 +164,7 @@ function validatePlan(raw, wallNowMs, historical = false) {
     ['transferId', 'scopeRef', 'authorityRef', 'stateRef', 'source', 'target', 'handoffText',
       'continuation', 'deadlineMs', 'recoveryDeadlineMs'], [], 'plan');
   exactKeys(raw.source, ['threadId'], ['turnId'], 'plan.source');
-  exactKeys(raw.target, ['cwd', 'model'], ['modelProvider', 'effort'], 'plan.target');
+  exactKeys(raw.target, ['cwd', 'model'], ['modelProvider', 'effort', 'dynamicTools'], 'plan.target');
   exactKeys(raw.continuation, ['input', 'sandboxPolicy'], [], 'plan.continuation');
   text(raw.transferId, 'plan.transferId');
   text(raw.scopeRef, 'plan.scopeRef');
@@ -176,6 +176,21 @@ function validatePlan(raw, wallNowMs, historical = false) {
   text(raw.target.model, 'plan.target.model');
   if (Object.hasOwn(raw.target, 'modelProvider')) text(raw.target.modelProvider, 'plan.target.modelProvider');
   if (Object.hasOwn(raw.target, 'effort')) text(raw.target.effort, 'plan.target.effort');
+  if (Object.hasOwn(raw.target, 'dynamicTools')) {
+    const tools = raw.target.dynamicTools;
+    if (!Array.isArray(tools) || tools.length > 64) throw new TypeError('plan.target.dynamicTools must be a bounded array');
+    const names = new Set();
+    for (const tool of tools) {
+      if (!plainObject(tool) || !plainObject(tool.inputSchema)) throw new TypeError('target dynamic tool and inputSchema must be objects');
+      text(tool.name, 'target dynamic tool name');
+      text(tool.description, 'target dynamic tool description', MAX_TEXT);
+      if (tool.namespace != null) text(tool.namespace, 'target dynamic tool namespace');
+      const name = JSON.stringify([tool.namespace ?? null, tool.name]);
+      if (names.has(name)) throw new TypeError('target dynamic tool identity is duplicated');
+      names.add(name);
+    }
+    if (Buffer.byteLength(JSON.stringify(cloneData(tools)), 'utf8') > MAX_TEXT) throw new TypeError('target dynamic tools exceed the plan size bound');
+  }
   text(raw.handoffText, 'plan.handoffText', MAX_TEXT);
   text(raw.continuation.input, 'plan.continuation.input', MAX_TEXT);
   if (!plainObject(raw.continuation.sandboxPolicy)) {
@@ -895,6 +910,7 @@ function createExecution(rawPlan, rawDependencies) {
       cwd: plan.target.cwd,
       model: plan.target.model,
       ...(plan.target.modelProvider ? {modelProvider: plan.target.modelProvider} : {}),
+      ...(Object.hasOwn(plan.target, 'dynamicTools') ? {dynamicTools: plan.target.dynamicTools} : {}),
       ephemeral: false,
       sandbox: 'read-only',
       approvalPolicy: 'never',

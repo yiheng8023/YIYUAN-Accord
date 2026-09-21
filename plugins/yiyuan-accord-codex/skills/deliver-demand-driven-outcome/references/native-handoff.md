@@ -98,9 +98,33 @@ failed sessions and writes after a successful transfer are rejected. Read
 `session.snapshot()` and the thrown error's state/RPC reference to reconcile an
 unknown effect. Persist necessary receipts in the owner's existing evidence path;
 the in-memory session does not automatically reconstruct itself after a crash.
-After one transfer, the returned target remains the writer; this session has not
-registered tools for another automatic target-side transfer. Do not reopen a new
-source to evade an unresolved scope, missing receipt or retained pause.
+The session appends its context/proposal tools to the explicitly bound target
+tool list before the core's preparation and target-settings checks. Other target
+tools come only from `plan.target.dynamicTools`; source tools are not silently
+copied. During intake and first continuation, context requests are answered and
+other requests go to their owner. A nested handoff proposal receives
+`TRANSFER_IN_PROGRESS` without dispatch or queued replay.
+
+After a successful transfer, use `session.adoptTarget({deadlineMs})` to continue
+with this session's own target under the same controller. It accepts no arbitrary
+thread or directory. The adapter rechecks the exact final durable record/lease,
+registered tools and current native idle/persistent target, then invokes
+`verify('adopt-target', facts, deadline)`. The verdict must bind the same current
+scope/authority/state, identify its evidence with `sourceRef`, allow adoption and
+affirm `adoptionAuthorized`, `singleWriter` and `effectsVerified`. The verifier
+must inspect actual current permission, pauses and effects; stored strings are
+not new authority. A stale record, missing tools, busy target or denied verdict
+leaves the target unadopted and the old source unwritable.
+
+Only then does the adapter settle the completed transfer once and re-read its
+scope before making the target the next source. A later `run` uses a new transfer
+identity if another handoff is needed. Ambiguous settlement or failed readback
+locks the session for owner reconciliation and preserves receipts; it cannot be
+retried as another settlement. Full history stays in the recorder. Do not reopen
+a new source to evade an unresolved scope, missing receipt or retained pause.
+Adoption keeps the target's native settings; it does not restore the former
+source's model, approval policy or sandbox implicitly. Bind any authorized next
+turn settings through `run.turn` and verify the effective environment as needed.
 The source connection owner must serialize its writes through this session;
 scope reads before and after a turn do not create an OS lock or eliminate a
 check-to-send race against an unrelated controller that ignores this ownership.
@@ -279,7 +303,7 @@ plain data with these exact keys (only fields marked optional may be omitted):
 | `scopeRef` | Shared effects whose already-authorized writer the recorder arbitrates. |
 | `authorityRef`, `stateRef` | Current authority and recoverable task-state references. |
 | `source` | `{threadId, turnId?}`; supply the exact active turn when it must be stopped. |
-| `target` | `{cwd, model, modelProvider?, effort?}`; explicitly bound destination, model and optional reasoning effort. |
+| `target` | `{cwd, model, modelProvider?, effort?, dynamicTools?}`; explicitly bound destination, model, optional reasoning effort and native tool specifications. |
 | `handoffText` | Authorized intake context, including goal, pauses, evidence and unfinished work. |
 | `continuation` | `{input, sandboxPolicy}` for the first bounded continuation after acceptance. |
 | `deadlineMs`, `recoveryDeadlineMs` | Future absolute UTC millisecond deadlines; recovery must be at least the work deadline. |
@@ -289,6 +313,13 @@ code units; this is an API size ceiling, not a token budget. Sandbox policy is a
 native structured object, not an authorization grant. Preserve user-selected modes
 and pauses when choosing the destination and continuation. A paused responsibility
 requires an authorized preservation action, not resuming its effects.
+
+The optional `target.dynamicTools` list is part of the immutable plan and target
+settings checked by the verifier. It allows at most 64 unique `(namespace, name)`
+identities and 1 MiB of encoded JSON. These are adapter input ceilings; the full
+RPC envelope and host validation may impose lower usable limits. The controller
+must handle their requests throughout intake and continuation. Direct core users
+who omit this field retain the previous target behavior; it grants no tool action.
 
 When an effort choice must survive transfer, bind `target.effort` to the current
 authorized choice after checking the host model's supported values. The adapter
