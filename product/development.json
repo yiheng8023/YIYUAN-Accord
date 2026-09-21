@@ -35,14 +35,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20260921142123",
+    "version": "3.3.0-dev.1+codex.20260921082457",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20260921142123",
-        "packageSha256": "80a0442173358a02ffe67bd984ffd570a35728d36eb4a2c45386c990c1ad0367",
+        "packageVersion": "3.3.0-dev.1+codex.20260921082457",
+        "packageSha256": "125b5bd01078e7486ea5b41489ce8557d759211ba6fb326040e5b8554d7e7a2c",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -61,6 +61,8 @@
           "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
           "plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs",
           "plugins/yiyuan-accord-codex/runtime/codex-connection.cjs",
+          "plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs",
+          "plugins/yiyuan-accord-codex/runtime/codex-session.cjs",
           "plugins/yiyuan-accord-codex/.mcp.json",
           "plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs"
         ],
@@ -70,6 +72,7 @@
         ],
         "startupEntry": true,
         "carrierHandoff": true,
+        "carrierSession": true,
         "nativeStateMcp": true,
       "referenceFiles": [
         "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md"
@@ -123,6 +126,8 @@
       "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
       "plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs",
       "plugins/yiyuan-accord-codex/runtime/codex-connection.cjs",
+      "plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs",
+      "plugins/yiyuan-accord-codex/runtime/codex-session.cjs",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
       "product/acceptance.json",
@@ -139,6 +144,8 @@
       "runtime/task-checkpoint.cjs",
       "runtime/carrier-handoff.cjs",
       "runtime/codex-connection.cjs",
+      "runtime/carrier-recorder.cjs",
+      "runtime/codex-session.cjs",
       "scripts/codex_rpc.py",
       "scripts/codex_events.py",
       "scripts/inspect_coordination.py",
@@ -150,6 +157,8 @@
       "tests/product/test_codex_entry.py",
       "tests/product/test_codex_context.py",
       "tests/product/test_codex_connection.py",
+      "tests/product/test_carrier_recorder.py",
+      "tests/product/test_codex_session.py",
       "tests/product/test_native_state_mcp.py",
       "tests/product/test_codex_rpc.py",
       "tests/product/test_codex_events.py",
@@ -183,10 +192,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 2420000,
-      "maxTrackedFiles": 164,
+      "maxProductCodeAndTestBytes": 2600000,
+      "maxTrackedFiles": 171,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The 2420000 code/test-byte ceiling retains five-percent reserve for the existing runtime, native adapters, lifecycle observers and meaningful counterexamples. Three new tracked files prospectively bind a joined resource/environment case and reuse the existing Windows Job controller with two bounded fixture scripts; no shipped service, scheduler or additional state store is introduced. The tracked-file ceiling is 164 and primary instructions remain 36000 bytes. The fixture observes an owned-worker capacity transition, source-bound partial-result reuse and resource poststate; it does not manufacture MemoryError or require an avoidable failure. Earlier source, original failed observations and budget history remain in Git and retained evidence. Local conformance and fixture execution are not ordinary-host acceptance or net value."
+      "rationale": "The 2600000 code/test-byte ceiling and 171 tracked-file ceiling cover the existing runtime plus the real SDK source caller and durable scope recorder, their package mirrors and bounded failure/concurrency tests. This replaces test-only assembly with optional production modules using Node built-in SQLite, not another daemon, storage engine, account or model service. Atomic request-or-terminal waits prevent a stale consumer from losing later requests. Existing Hooks/MCP do not load SQLite; its availability is required only when the recorder is explicitly opened. Primary instructions remain capped at 36000 bytes. Earlier source and failed observations remain in Git/evidence; mechanism checks do not establish whole A05, GUI adoption or net value."
     }
   },
   "source": {

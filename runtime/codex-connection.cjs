@@ -129,12 +129,66 @@ function createOwnedAppServerConnection(options) {
   function terminalMatches(message, threadId, turnId) { return message?.method === 'turn/completed' && message.params?.threadId === threadId && message.params?.turn?.id === turnId; }
   function waitTerminal(threadId, turnId, deadline) { assertLive(); for (const record of journal) if (terminalMatches(record.message, threadId, turnId)) return Promise.resolve(frozen(copy(record.message))); return bounded(deadline, 'native terminal', (finish) => { const listener = (event) => { if (terminalMatches(event, threadId, turnId)) finish(null, frozen({method: event.method, params: event.params})); }; listeners.add(listener); return () => listeners.delete(listener); }); }
   function receiveRequest(predicate, deadline) { assertLive(); if (typeof predicate !== 'function') return Promise.reject(new Error('request predicate is required')); const index = inbound.findIndex((value) => { try { return predicate(value); } catch (_) { return false; } }); if (index >= 0) return Promise.resolve(inbound.splice(index, 1)[0]); if (waiters.length >= maxEntries) return Promise.reject(new Error('server request waiter limit exceeded')); return bounded(deadline, 'server request', (finish) => { const waiter = {predicate, finish}; waiters.push(waiter); return () => { const i = waiters.indexOf(waiter); if (i >= 0) waiters.splice(i, 1); }; }); }
-  function requestAnchor(request) {
+  // One waiter owns both alternatives. Racing receiveRequest with waitTerminal
+  // would leave the losing waiter alive and able to consume a later request.
+  function receiveTurnActivity(threadId, turnId, deadline, {includeUnscoped = false} = {}) {
+    assertLive();
+    if (!text(threadId) || !text(turnId) || typeof includeUnscoped !== 'boolean') throw new TypeError('bound thread/turn and explicit unscoped request ownership are required');
+    const remaining = deadline - performance.now();
+    if (!Number.isFinite(deadline) || remaining <= 0 || remaining > 0x7fffffff) return Promise.reject(new Error('turn activity deadline is invalid or exceeded'));
+    const predicate = request => request.params?.threadId === threadId &&
+      (request.params?.turnId == null || request.params.turnId === turnId) ||
+      includeUnscoped && request.params?.threadId == null;
+    const terminal = journal.find(record => terminalMatches(record.message, threadId, turnId));
+    const index = inbound.findIndex(predicate);
+    if (index >= 0) {
+      const anchor = serverRequestAnchor(inbound[index]);
+      if (!anchor) return Promise.reject(new Error('turn activity request anchor is unavailable'));
+      if (!terminal || anchor.sequence < terminal.sequence) return Promise.resolve(frozen({type: 'request', request: inbound.splice(index, 1)[0]}));
+    }
+    if (terminal) return Promise.resolve(frozen({type: 'terminal', terminal: copy(terminal.message)}));
+    if (waiters.length >= maxEntries) return Promise.reject(new Error('server request waiter limit exceeded'));
+    return bounded(deadline, 'turn activity', finish => {
+      const waiter = {predicate, finish: (error, request) => finish(error, frozen({type: 'request', request}))};
+      const listener = event => { if (terminalMatches(event, threadId, turnId)) finish(null, frozen({type: 'terminal', terminal: {method: event.method, params: event.params}})); };
+      waiters.push(waiter); listeners.add(listener);
+      return () => { const i = waiters.indexOf(waiter); if (i >= 0) waiters.splice(i, 1); listeners.delete(listener); };
+    });
+  }
+  function serverRequestAnchor(request) {
     if (!request || request.connectionId !== connectionId || request.hostVersion !== hostVersion ||
-        request.method !== 'item/tool/call' || !Object.hasOwn(request, 'id')) return null;
+        !text(request.method) || !Object.hasOwn(request, 'id')) return null;
     const {connectionId: ignoredConnection, hostVersion: ignoredVersion, ...payload} = request;
-    return journal.find(record => record.message.method === 'item/tool/call' &&
+    return journal.find(record => record.message.method === request.method &&
       canonical(record.message) === canonical(payload)) || null;
+  }
+  function requestAnchor(request) { return request?.method === 'item/tool/call' ? serverRequestAnchor(request) : null; }
+  function respondRequest(nativeRequest, body, deadline) {
+    assertLive();
+    const remaining = deadline - performance.now();
+    if (!Number.isFinite(deadline) || remaining <= 0 || remaining > 0x7fffffff) return Promise.reject(new Error('server response deadline is invalid or exceeded'));
+    const anchor = serverRequestAnchor(nativeRequest);
+    if (!anchor || answeredAnchors.has(anchor) || !body || typeof body !== 'object' || Array.isArray(body) ||
+        Object.keys(body).length !== 1 || !(Object.hasOwn(body, 'result') !== Object.hasOwn(body, 'error')) ||
+        Object.values(body)[0] === undefined) return Promise.reject(new Error('owned server response is not available'));
+    // Validate before consuming the anchor. JSON.stringify otherwise silently
+    // drops undefined/functions/symbols, producing an invalid unanswered RPC.
+    const encoded = JSON.stringify(body, (_key, value) => {
+      if (value === undefined || typeof value === 'function' || typeof value === 'symbol' ||
+          typeof value === 'bigint' || typeof value === 'number' && !Number.isFinite(value)) {
+        throw new TypeError('server response must contain JSON data');
+      }
+      return value;
+    });
+    const data = JSON.parse(encoded);
+    if (!data || typeof data !== 'object' || Array.isArray(data) || Object.keys(data).length !== 1 ||
+        !(Object.hasOwn(data, 'result') !== Object.hasOwn(data, 'error'))) throw new TypeError('server response must retain its result or error');
+    const response = {id: nativeRequest.id, ...data};
+    if (nativeRequest.jsonrpc === '2.0') response.jsonrpc = '2.0';
+    if (Buffer.byteLength(JSON.stringify(response) + '\n', 'utf8') > maxMessageBytes) throw new Error('outbound JSONL frame exceeds the message limit');
+    // Mark before I/O: an uncertain write is not permission to answer twice.
+    answeredAnchors.add(anchor);
+    return write(response, deadline, 'server response write');
   }
   function respondOwned(nativeRequest, response, deadline) {
     assertLive();
@@ -171,7 +225,7 @@ function createOwnedAppServerConnection(options) {
     return payload;
   }
   function close() { if (closed) return; closed = true; input = Buffer.alloc(0); detach(); fail('owned connection is closed'); listeners.clear(); inbound.length = 0; journal.length = 0; journalBytes = 0; threadModels.clear(); for (const timer of [...timers]) stopTimer(timer); }
-  return frozen({transport: frozen({connectionId, hostVersion, request, notify, waitTerminal}), receiveRequest, proposalChannel, context, replyContext, close});
+  return frozen({transport: frozen({connectionId, hostVersion, request, notify, waitTerminal}), receiveRequest, receiveTurnActivity, respondRequest, proposalChannel, context, replyContext, close});
 }
 // The owner supplies an already-connected standard WebSocket. Its implementation
 // owns handshakes, fragmentation and network I/O; this bridge owns only JSON RPC

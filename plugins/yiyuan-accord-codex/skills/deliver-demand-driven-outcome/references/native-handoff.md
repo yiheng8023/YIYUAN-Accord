@@ -67,6 +67,63 @@ that every other native continuity route is unsuitable.
 
 ## Source proposal and outer dispatch
 
+### Use the SDK source session and durable recorder
+
+`runtime/codex-session.cjs` exports `createCodexSourceSession(options)`. This is
+the caller for a newly created source on an already initialized, authorized
+connection; it is not an attachment to an existing GUI task. Supply `connection`,
+`recorder`, `scopeRef`, explicit native `threadStart` settings, `planResolver`,
+`verify`, `current` and `ownerRequest`. Use receiver-free or pre-bound callbacks.
+It preserves the owner's other dynamic tools and appends context/proposal tools;
+conflicting names are rejected before source creation.
+
+Call `session.run({input, deadlineMs, turn?})` with a nonempty text/native input and
+an absolute Unix millisecond deadline. `turn` carries the owner's explicit native
+turn settings; it cannot replace the source identity or input. The session
+creates and binds the source, starts the turn, answers context observations and
+dispatches a proposal through the existing handoff core. `planResolver(request,
+context)` must return the bound plan described below. `current(context)` returns
+current scope/authority/state/writer references, and `verify` retains the core's
+independent stage-by-stage contract. The session supplies no semantic verdict.
+
+Other server requests go to `ownerRequest(request, context)`, which returns
+exactly `{result}` or `{error}` according to the owner's authority. Contexts carry
+a deadline and cancellation signal; callback timeout does not forcibly terminate
+the owner's asynchronous work or permit replay. Threadless requests stay with
+their existing owner unless `ownUnscopedRequests: true` explicitly assigns them
+to this session. The borrowed connection remains the sole protocol reader.
+
+Completed ordinary turns can continue through the same session. Concurrent runs,
+failed sessions and writes after a successful transfer are rejected. Read
+`session.snapshot()` and the thrown error's state/RPC reference to reconcile an
+unknown effect. Persist necessary receipts in the owner's existing evidence path;
+the in-memory session does not automatically reconstruct itself after a crash.
+After one transfer, the returned target remains the writer; this session has not
+registered tools for another automatic target-side transfer. Do not reopen a new
+source to evade an unresolved scope, missing receipt or retained pause.
+The source connection owner must serialize its writes through this session;
+scope reads before and after a turn do not create an OS lock or eliminate a
+check-to-send race against an unrelated controller that ignores this ownership.
+
+`runtime/carrier-recorder.cjs` exports
+`openCarrierRecorder({path, create?, busyTimeoutMs?})`. The path must be an
+absolute, ordinary caller-owned database file; `create: true` exclusively creates
+a new file, while the default requires this exact recorder schema. No directory,
+database migration, account or background service is created implicitly.
+`readScope` throws `SCOPE_NOT_FOUND` for an unbound scope. `bindScope`, `begin`,
+`compareAndSet` and `read` implement the core's existing durable recorder contract.
+Explicit `settle(transferId, revision, lease)` only releases an active transfer
+whose stored state has the verified source-release shape; it preserves the target
+writer and history, rotates the token and does not grant another action.
+
+The recorder lazily uses [Node's built-in SQLite](https://nodejs.org/download/release/v24.8.0/docs/api/sqlite.html)
+`DatabaseSync`, available in the tested Node 24 runtime. That optional API remains
+version-sensitive; absence is an explicit error, not a silent volatile fallback.
+Hook/MCP loading does not open SQLite. Close the recorder and the owned host through
+their respective owners after preserving unfinished state; the session closes
+neither borrowed resource. Ledger CAS coordinates cooperating controllers, not
+arbitrary external writers or user authority.
+
 ### Reuse an owned Node stdio connection
 
 For a caller that already owns a suitable process, the accompanying

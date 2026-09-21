@@ -469,6 +469,32 @@ requests. The reference carries the upstream experimental-support limit. These
 conditions guide integration; no ordinary Desktop/IDE connection is installed by
 this documentation or inferred from a successful inventory.
 
+The optional `runtime/codex-session.cjs` supplies the SDK source caller: it borrows
+an initialized, authorized connection, creates a source with context/proposal
+tools alongside the owner's tools, binds the source writer and pumps its turns.
+The owner supplies current authority, the handoff plan, independent effect
+verification and decisions for other server requests. A single activity wait
+handles either a request or the matching terminal event; it leaves no losing
+waiter that could consume a later request. Unscoped requests require explicit
+ownership. Failure retains the source/turn and RPC references for reconciliation
+and cannot be retried through the failed session. A successful transfer ends this
+source session; repeated target-side automatic handoff remains unconnected.
+
+`runtime/carrier-recorder.cjs` provides the previously test-only scope ledger
+using Node's built-in SQLite, opened explicitly at a caller-owned file. It checks
+database identity/schema and reads related rows in one snapshot; transactions
+compare scope, writer, revision and fencing token together. Settlement is explicit
+and preserves the target writer and history. This storage coordinates cooperating
+writers; it is neither an OS writer lock nor permission to replay native effects.
+SQLite is loaded only when the optional recorder is opened, so existing Hooks
+and MCP do not acquire this dependency. Node must provide `node:sqlite`
+`DatabaseSync`; the owner retains connection, database and process shutdown.
+
+These shipped components close source registration, event pumping and storage
+assembly gaps for an authorized SDK controller. They do not give an ordinary GUI
+plugin a control connection, provide universal semantic verification or qualify
+automatic handoff as complete. The native test caller below remains test evidence.
+
 The native test caller in `tests/product/test_carrier_handoff.py` reuses existing
 App Server/process controls, local fixed responses and SQLite transactions. It
 checks protocol effects, refusal, extra intake and source-tool dispatch; it does not prove model judgment,

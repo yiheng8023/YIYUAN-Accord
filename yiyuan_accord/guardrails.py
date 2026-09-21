@@ -440,7 +440,7 @@ def activation_mechanism_errors(
     root, adapter_id, mechanism_locators, activation_context, additional_mechanisms=(),
     task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
     resume_reconciliation=False, context_reentry=False, native_context=False,
-    startup_entry=False, carrier_handoff=False, native_state_mcp=False,
+    startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -497,6 +497,19 @@ def activation_mechanism_errors(
                 errors.append(f"{prefix} owned-connection module differs from canonical bytes")
         except OSError:
             errors.append(f"{prefix} owned-connection module is unreadable")
+    if carrier_session:
+        for name in ("carrier-recorder", "codex-session"):
+            locator = f"plugins/yiyuan-accord-{package}/runtime/{name}.cjs"
+            additional_mechanisms = [*additional_mechanisms, locator]
+            try:
+                delivered = repository_relative_path(root, locator)
+                canonical = repository_relative_path(root, f"runtime/{name}.cjs")
+                if (adapter_id != "codex" or delivered is None or canonical is None
+                        or delivered.is_symlink() or canonical.is_symlink()
+                        or _owned_bytes(delivered) != _owned_bytes(canonical)):
+                    errors.append(f"{prefix} {name} module differs from canonical bytes")
+            except OSError:
+                errors.append(f"{prefix} {name} module is unreadable")
     if native_state_mcp:
         config_locator = f"plugins/yiyuan-accord-{package}/.mcp.json"
         mcp_locator = f"plugins/yiyuan-accord-{package}/runtime/native-state-mcp.cjs"
@@ -759,6 +772,12 @@ def validate_host_projection(
             errors.append(f"{prefix} carrier handoff declaration must be boolean")
         if projection["carrierHandoff"] and not (expected_contract and "optionalCarrierHandoff" in expected_contract):
             errors.append(f"{prefix} carrier handoff is outside the declared adapter")
+    if "carrierSession" in projection:
+        expected_shape |= {"carrierSession"}
+        if type(projection["carrierSession"]) is not bool:
+            errors.append(f"{prefix} carrier session declaration must be boolean")
+        if projection["carrierSession"] and not (expected_contract and expected_contract.get("optionalCarrierHandoff", {}).get("sourceSession")):
+            errors.append(f"{prefix} carrier session is outside the declared adapter")
     if "nativeStateMcp" in projection:
         expected_shape |= {"nativeStateMcp"}
         if type(projection["nativeStateMcp"]) is not bool:
@@ -851,6 +870,7 @@ def validate_host_projection(
         native_context=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("nativeContext")),
         startup_entry=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("startupEntry")),
         carrier_handoff=bool(expected_contract and expected_contract.get("optionalCarrierHandoff")),
+        carrier_session=bool(expected_contract and expected_contract.get("optionalCarrierHandoff", {}).get("sourceSession")),
         native_state_mcp=bool(expected_contract and expected_contract.get("nativeTaskStateMcp")),
     ))
     expected_contract = expected_contract if expected_contract is not None else {

@@ -78,7 +78,7 @@ def _strings(value, *, empty=False):
             and len(value) == len(set(value)))
 
 
-def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False):
+def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False):
     """Describe this development package, not a mandatory product mechanism."""
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
@@ -136,6 +136,19 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "sourceContextQuery": "optional CONTEXT_OBSERVATION_TOOL and replyContext expose read-only signals to the actual calling source; argument identity overrides and unrelated namespaces are rejected; unknown remains unknown and cannot authorize transfer",
                 "limits": "no-process-or-hook-startup; no-automatic-timing-or-default-Desktop-control; no-goal-activation; no-archive-or-delete; ambiguous-effects-require-reconciliation; unsubscribe-is-not-unload",
             }
+            if carrier_session:
+                contract["optionalCarrierHandoff"]["sourceSession"] = {
+                    "entry": "runtime/codex-session.cjs",
+                    "effect": "create-source-with-context-and-proposal-tools; bind-scope; start-owner-selected-turns; pump-bound-requests; dispatch-one-verified-transfer",
+                    "ownership": "borrow-initialized-authorized-connection-and-recorder; preserve-other-tools; owner-handles-other-requests; do-not-close-borrowed-resources",
+                    "limits": "caller-supplies-current-authority-plan-and-independent-verifier; failure-requires-reconciliation-not-retry; target-repeat-handoff-not-registered; no-ordinary-GUI-control-or-whole-A05-acceptance",
+                }
+                contract["optionalCarrierHandoff"]["durableRecorder"] = {
+                    "entry": "runtime/carrier-recorder.cjs",
+                    "storage": "explicit-caller-owned-SQLite-file; lazy-Node-built-in-node:sqlite; synchronous-FULL; bounded-busy-timeout",
+                    "effect": "scope-writer-and-transfer-revision-CAS; fencing-token-rotation; consistent-reopen; explicit-verified-shape-settlement-preserves-target-and-history",
+                    "limits": "requires-available-DatabaseSync; no-background-service-or-automatic-replay; records-are-not-authorization-or-OS-writer-exclusion; no-unknown-schema-migration",
+                }
         contract["entry"] = "direct-native-input-duties"
         contract["ordinaryPrerequisites"] = [
             "host-path-node", "supported-native-task-hooks",

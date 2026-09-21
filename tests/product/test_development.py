@@ -1256,6 +1256,8 @@ class DevelopmentDeliveryTests(unittest.TestCase):
             ("plugins/yiyuan-accord-codex/runtime/codex-context.cjs", b"changed module", "canonical bytes"),
             ("plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs", b"changed handoff", "canonical bytes"),
             ("plugins/yiyuan-accord-codex/runtime/codex-connection.cjs", b"changed connection", "canonical bytes"),
+            ("plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs", b"changed recorder", "canonical bytes"),
+            ("plugins/yiyuan-accord-codex/runtime/codex-session.cjs", b"changed session", "canonical bytes"),
         ):
             declaration = copy.deepcopy(self.contract)
             if locator not in declaration["changeBoundary"]["allowedPaths"]:

@@ -121,7 +121,102 @@ class Socket extends EventEmitter {
 '''
 
 
+ACTIVITY_SCENARIO = r'''
+const {PassThrough, Writable} = require('node:stream');
+const {performance} = require('node:perf_hooks');
+const {createOwnedAppServerConnection} = require(process.argv[1]);
+const out = new PassThrough(), writes=[];
+const input = new Writable({write(c,e,done){writes.push(JSON.parse(c));done();}});
+const c=createOwnedAppServerConnection({stdin:input,stdout:out,connectionId:'c',hostVersion:'v'});
+const until=(ms=500)=>performance.now()+ms;
+const emit=x=>out.write(JSON.stringify(x)+'\n');
+const req=(id,threadId='t',turnId='u')=>({jsonrpc:'2.0',id,method:'item/commandExecution/requestApproval',params:{threadId,turnId}});
+const terminal=(turnId='u')=>({method:'turn/completed',params:{threadId:'t',turn:{id:turnId,status:'completed'}}});
+(async()=>{let r={};try{
+ const mode=process.argv[2];
+ if(mode==='terminal-wins'){
+  const pending=c.receiveTurnActivity('t','u',until());emit(terminal());r.first=await pending;
+  emit(req(1));r.next=await c.receiveRequest(()=>true,until());
+ }else if(mode==='request-wins'){
+  const pending=c.receiveTurnActivity('t','u',until());emit(req(1));r.first=await pending;
+  const second=c.receiveTurnActivity('t','v',until());emit(terminal());emit(req(2,'t','v'));r.second=await second;
+ }else if(mode==='ordering'){
+  emit(req(1));emit(terminal());emit(req(2));
+  r.first=await c.receiveTurnActivity('t','u',until());r.second=await c.receiveTurnActivity('t','u',until());
+  r.last=await c.receiveRequest(()=>true,until());
+ }else if(mode==='scope'){
+  emit(req(1,'other'));emit(req(2,'t','other'));emit(req(3,null,null));emit(req(4));
+  r.bound=await c.receiveTurnActivity('t','u',until());
+  r.global=await c.receiveTurnActivity('t','u',until(),{includeUnscoped:true});
+  r.foreign=[];for(let i=0;i<2;i++)r.foreign.push(await c.receiveRequest(()=>true,until()));
+ }else if(mode==='timeout'){
+  try{await c.receiveTurnActivity('t','u',until(5))}catch(e){r.timeout=e.message}
+  emit(req(1));r.next=await c.receiveRequest(()=>true,until());
+ }else if(mode==='close'){
+  const p=c.receiveTurnActivity('t','u',until(60000)).catch(e=>e.message);c.close();r.error=await p;
+ }else if(mode==='reply'){
+  emit(req(1));const request=await c.receiveRequest(()=>true,until());
+  try{await c.respondRequest({...request,params:{threadId:'other'}},{result:{decision:'decline'}},until())}catch(e){r.forged=e.message}
+  try{await c.respondRequest(request,{id:1,result:{}},until())}catch(e){r.badBody=e.message}
+  r.badData=[];
+  for(const value of [Symbol('missing'), {missing:undefined}, ()=>{}, NaN, 1n]){
+   try{await c.respondRequest(request,{result:value},until())}catch(e){r.badData.push(e.message)}
+  }
+  try{await c.respondRequest(request,{result:{}},performance.now()-1)}catch(e){r.expired=e.message}
+  await c.respondRequest(request,{result:{decision:'decline'}},until());
+  try{await c.respondRequest(request,{result:{decision:'accept'}},until())}catch(e){r.duplicate=e.message}
+  r.writes=writes;
+ }else if(mode==='reply-shared-once'){
+  const request={id:1,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x',tool:'accord_inspect_context',arguments:{}}};
+  emit(request);const q=await c.receiveRequest(()=>true,until());await c.replyContext(q,until());
+  try{await c.respondRequest(q,{result:{}},until())}catch(e){r.duplicate=e.message}r.writes=writes;
+ }
+ }finally{c.close()}console.log(JSON.stringify(r));
+})().catch(e=>{console.error(e);process.exitCode=1});
+'''
+
+
 class CodexConnectionTests(unittest.TestCase):
+    def activity_case(self, mode):
+        result = subprocess.run([shutil.which('node'), '-e', ACTIVITY_SCENARIO, str(MODULE), mode],
+                                capture_output=True, text=True, encoding='utf-8', timeout=5)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def test_activity_waiter_releases_both_alternatives_and_preserves_later_requests(self):
+        result = self.activity_case('terminal-wins')
+        self.assertEqual(result['first']['type'], 'terminal')
+        self.assertEqual(result['next']['id'], 1)
+        result = self.activity_case('request-wins')
+        self.assertEqual(result['first']['request']['id'], 1)
+        self.assertEqual(result['second']['request']['id'], 2)
+        result = self.activity_case('timeout')
+        self.assertIn('deadline exceeded', result['timeout'])
+        self.assertEqual(result['next']['id'], 1)
+        self.assertIn('owned connection is closed', self.activity_case('close')['error'])
+
+    def test_activity_uses_event_order_and_leaves_other_owners_requests_queued(self):
+        result = self.activity_case('ordering')
+        self.assertEqual(result['first']['request']['id'], 1)
+        self.assertEqual(result['second']['type'], 'terminal')
+        self.assertEqual(result['last']['id'], 2)
+        result = self.activity_case('scope')
+        self.assertEqual(result['bound']['request']['id'], 4)
+        self.assertEqual(result['global']['request']['id'], 3)
+        self.assertEqual([r['id'] for r in result['foreign']], [1, 2])
+
+    def test_owner_response_cannot_change_anchor_or_answer_twice(self):
+        result = self.activity_case('reply')
+        for key in ('forged', 'badBody', 'duplicate'):
+            self.assertIn('not available', result[key])
+        self.assertIn('deadline', result['expired'])
+        self.assertEqual(len(result['badData']), 5)
+        self.assertTrue(all('JSON data' in error for error in result['badData']))
+        self.assertEqual(result['writes'], [{'jsonrpc': '2.0', 'id': 1, 'result': {'decision': 'decline'}}])
+        result = self.activity_case('reply-shared-once')
+        self.assertEqual(len(result['writes']), 1)
+        self.assertIn('not available', result['duplicate'])
+
     def websocket_case(self, mode):
         result = subprocess.run([shutil.which('node'), '-e', WEBSOCKET_SCENARIO, str(MODULE), mode],
                                 capture_output=True, text=True, encoding='utf-8', timeout=5)
