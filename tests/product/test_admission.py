@@ -927,17 +927,18 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A04"})
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A04", "A07"})
         self.assertNotIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
         self.assertIn("v33-openai-entry-applicability",
                       report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 6)
-        self.assertEqual(report["progress"]["requirementsComplete"], 1)
-        # SDK sub-scopes cannot discharge other entries or autonomous adaptation.
+        self.assertEqual(report["progress"]["coverageVerified"], 8)
+        self.assertEqual(report["progress"]["requirementsComplete"], 2)
+        # The explicit adaptation case is now covered by this synthetic observer;
+        # SDK sub-scopes still cannot discharge selected-entry lifecycle parents.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
         self.assertIn("v33-codex-lifecycle", missing["package-lifecycle"])
-        self.assertIn("v33-environment-adaptation", missing["function"])
+        self.assertNotIn("v33-environment-adaptation", missing["function"])
         self.assertNotIn("v33-codex-sdk-lifecycle", missing["package-lifecycle"])
         self.assertNotIn("v33-codex-sdk-scoped-exposure", missing["function"])
 
@@ -950,10 +951,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report["progress"], {
             "scope": "acceptance-evidence-coverage-not-effort-or-implementation-completion",
             "requirementsTotal": 8, "requirementsComplete": 0,
-            "coverageTotal": 17, "coverageDefined": 9, "coverageVerified": 0,
+            "coverageTotal": 17, "coverageDefined": 11, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
-            "coverageUnbound": 8, "coverageDefinedButUnverified": 9,
-            "casesDefined": 9, "casesAccepted": 0,
+            "coverageUnbound": 6, "coverageDefinedButUnverified": 11,
+            "casesDefined": 11, "casesAccepted": 0,
         })
 
     def test_incomplete_mapping_or_old_policy_cannot_dispatch_current_observer(self):

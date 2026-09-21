@@ -176,14 +176,17 @@
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md",
       "plugins/yiyuan-accord-codex/skills/maintain-task-continuity/SKILL.md",
       "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md",
-      "plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md"
+      "plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md",
+      "product/cases/resource-change-v3.3.json",
+      "tests/product/fixtures/resource_change/batch_tool.py",
+      "tests/product/fixtures/resource_change/batch_worker.py"
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 2400000,
-      "maxTrackedFiles": 161,
+      "maxProductCodeAndTestBytes": 2420000,
+      "maxTrackedFiles": 164,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The 2400000 code/test-byte ceiling retains five-percent reserve for the existing checkpoint/runtime, native stdio and WebSocket adapters, owned lifecycle observers and meaningful identity/recovery/resource counterexamples. This work adds the existing native-state tool's sourced context-assessment path and prospective dependency-scoped function evidence reuse, including stale revision/generation, full-package release boundaries and bounded historical Git-read tests. It reuses current host processes, helper arithmetic, recorders and validation; no controller, storage service or additional model experiment is introduced. The 161-file and 36000-primary-instruction ceilings remain. Earlier budget increments and original failed observations remain in Git and retained execution evidence; the rationale records current scope rather than repeating every historical increment. The current addition exposes existing checkpoint lifecycle operations through native MCP, guards late same-input-turn mutations at publication, and tests applied-effect receipts and malformed transport; it adds no state store or business-file executor. Local conformance is not functional acceptance or net-value evidence."
+      "rationale": "The 2420000 code/test-byte ceiling retains five-percent reserve for the existing runtime, native adapters, lifecycle observers and meaningful counterexamples. Three new tracked files prospectively bind a joined resource/environment case and reuse the existing Windows Job controller with two bounded fixture scripts; no shipped service, scheduler or additional state store is introduced. The tracked-file ceiling is 164 and primary instructions remain 36000 bytes. The fixture observes an owned-worker capacity transition, source-bound partial-result reuse and resource poststate; it does not manufacture MemoryError or require an avoidable failure. Earlier source, original failed observations and budget history remain in Git and retained evidence. Local conformance and fixture execution are not ordinary-host acceptance or net value."
     }
   },
   "source": {
@@ -5015,6 +5018,106 @@
             "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
           },
           "rule": "Review loading/install, update and rejected replacement, disable/uninstall, interruption/recovery and owned exit for the same finalized selected set. Reuse backend lifecycle facts with exact entry-difference binding. Cache bytes, enablement, actual task participation and retained context are separate; SDK child cases alone cannot close this parent. Pending decisions or selectionFinal=false prevent parent acceptance."
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.155.1",
+            "entryProtocol": "app-server",
+            "operatingSystem": "Windows",
+            "model": "gpt-5.6-terra",
+            "reasoning": "medium",
+            "ephemeral": false,
+            "permissionPolicy": "workspace-write/never; business network disabled",
+            "windowsSandbox": "elevated",
+            "userConfig": "Existing effective user configuration and already trusted installed plugin; before/after hashes and exact owned-workspace registration recovery retained privately. No source Hook injection or tool-preapproval bypass.",
+            "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
+            "input": "One ordinary prompt in product/cases/resource-change-v3.3.json; no Accord/Skill/checkpoint cue or evaluator rescue.",
+            "interaction": "One persistent task and one model turn. The observer sends the bound prompt and reads events/state; worker concurrency and continuation are Agent decisions.",
+            "resourceTransition": "Owned worker Job from 160 MiB to 96 MiB after two valid results, 10 percent CPU rate. Partial results remain reusable. Capacity transition is not a fabricated allocation failure.",
+            "nativeBootstrapEffects": "Only this fresh workspace registration may be persisted by native startup; record and exactly restore it after verifying no other config change.",
+            "limits": "One prospective episode; 600-second work plus 20-second recovery, native cumulative total/input/output limits from the public case. Worker invocations have 45-second work and 10-second recovery bounds. Stop on unknown effects or exhausted limits without automatic rerun.",
+            "collaborationMode": "default",
+            "goalModeActive": false,
+            "modeEvidence": "Native thread/goal/get before and after plus full intervening events and actual turn configuration; unavailable remains unknown, never enable a mode to inspect it."
+          },
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "id": "v33-resource-pressure-and-exit",
+          "rule": "Complete necessary local work through a real owned-worker capacity transition with preserved partial results, adequate concurrency and verified process/resource exit. This bounded case does not establish all-machine/GPU/VRAM or every entry coverage."
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.155.1",
+            "entryProtocol": "app-server",
+            "operatingSystem": "Windows",
+            "model": "gpt-5.6-terra",
+            "reasoning": "medium",
+            "ephemeral": false,
+            "permissionPolicy": "workspace-write/never; business network disabled",
+            "windowsSandbox": "elevated",
+            "userConfig": "Existing effective user configuration and already trusted installed plugin; before/after hashes and exact owned-workspace registration recovery retained privately. No source Hook injection or tool-preapproval bypass.",
+            "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
+            "input": "One ordinary prompt in product/cases/resource-change-v3.3.json; no Accord/Skill/checkpoint cue or evaluator rescue.",
+            "interaction": "One persistent task and one model turn. The observer sends the bound prompt and reads events/state; worker concurrency and continuation are Agent decisions.",
+            "resourceTransition": "Owned worker Job from 160 MiB to 96 MiB after two valid results, 10 percent CPU rate. Partial results remain reusable. Capacity transition is not a fabricated allocation failure.",
+            "nativeBootstrapEffects": "Only this fresh workspace registration may be persisted by native startup; record and exactly restore it after verifying no other config change.",
+            "limits": "One prospective episode; 600-second work plus 20-second recovery, native cumulative total/input/output limits from the public case. Worker invocations have 45-second work and 10-second recovery bounds. Stop on unknown effects or exhausted limits without automatic rerun.",
+            "collaborationMode": "default",
+            "goalModeActive": false,
+            "modeEvidence": "Native thread/goal/get before and after plus full intervening events and actual turn configuration; unavailable remains unknown, never enable a mode to inspect it."
+          },
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "id": "v33-environment-adaptation",
+          "rule": "In the same ordinary task, reconcile changed execution capacity through an existing interface, continue within current authority, and preserve unrelated user environment and truthful delivery. Other component, trust and entry differences retain their separate required coverage."
         }
       ],
       "cases": [
@@ -6000,6 +6103,223 @@
               "ownedTemporaryResourcesReleased": true
             }
           }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.155.1",
+            "entryProtocol": "app-server",
+            "operatingSystem": "Windows",
+            "model": "gpt-5.6-terra",
+            "reasoning": "medium",
+            "ephemeral": false,
+            "permissionPolicy": "workspace-write/never; business network disabled",
+            "windowsSandbox": "elevated",
+            "userConfig": "Existing effective user configuration and already trusted installed plugin; before/after hashes and exact owned-workspace registration recovery retained privately. No source Hook injection or tool-preapproval bypass.",
+            "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
+            "input": "One ordinary prompt in product/cases/resource-change-v3.3.json; no Accord/Skill/checkpoint cue or evaluator rescue.",
+            "interaction": "One persistent task and one model turn. The observer sends the bound prompt and reads events/state; worker concurrency and continuation are Agent decisions.",
+            "resourceTransition": "Owned worker Job from 160 MiB to 96 MiB after two valid results, 10 percent CPU rate. Partial results remain reusable. Capacity transition is not a fabricated allocation failure.",
+            "nativeBootstrapEffects": "Only this fresh workspace registration may be persisted by native startup; record and exactly restore it after verifying no other config change.",
+            "limits": "One prospective episode; 600-second work plus 20-second recovery, native cumulative total/input/output limits from the public case. Worker invocations have 45-second work and 10-second recovery bounds. Stop on unknown effects or exhausted limits without automatic rerun.",
+            "collaborationMode": "default",
+            "goalModeActive": false,
+            "modeEvidence": "Native thread/goal/get before and after plus full intervening events and actual turn configuration; unavailable remains unknown, never enable a mode to inspect it."
+          },
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "id": "v33-resource-pressure-and-exit-01",
+          "packageFiles": [
+            "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+            "plugins/yiyuan-accord-codex/.mcp.json",
+            "plugins/yiyuan-accord-codex/adapter.json",
+            "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+            "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",
+            "plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs",
+            "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
+            "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md",
+            "plugins/yiyuan-accord-codex/skills/maintain-task-continuity/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md"
+          ],
+          "scope": "v33-resource-pressure-and-exit",
+          "oracle": "Before execution freeze the exact package, installed discovery/trust, public case, worker sources, native caller and every observer/recovery import. Use only the bound ordinary prompt; no prebound checkpoint, concurrency selection, business-file repair or rescue prompt by the evaluator. Verify actual entry guidance, model/effort, mode/Goal and current configuration. Follow the public case observation clauses: distinguish the first capacity-change exit from genuine worker errors; independently inspect Job limits and process exit, cache identity/mtime across invocations, original gzip bytes and all output rows/prose. A conservative initial route need not be changed when still adequate. Record original failures, missing signals, any observer cleanup and remaining duties; do not count post-hoc rescue as Agent completion. Read actual observations before evaluating predicates. The two case records may share this episode but have separate effect findings; it provides neither whole-system acceptance, fresh handoff nor incremental-value proof.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "product/cases/resource-change-v3.3.json",
+            "tests/product/fixtures/resource_change/batch_tool.py",
+            "tests/product/fixtures/resource_change/batch_worker.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py",
+            "scripts/inspect_native_resources.py",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "capacityTransitionObserved": true,
+              "adequateRouteAfterChange": true,
+              "partialResultsReusedWithoutRewrite": true,
+              "allEightResultsVerified": true,
+              "resourceLimitsAndExitVerified": true
+            },
+            "authority": {
+              "ordinaryInputMatched": true,
+              "originalsUnchanged": true,
+              "noEvaluatorRescue": true,
+              "noOutOfScopeEffects": true,
+              "unrequestedModeActivation": false
+            },
+            "poststate": {
+              "deliveryRechecked": true,
+              "finalAnswerMatchesArtifacts": true,
+              "currentModelAndConditionsVerified": true,
+              "noUnresolvedBusinessDuty": true,
+              "completedWithoutPlanOrGoalMode": true
+            },
+            "cleanup": {
+              "ownedProcesses": 0,
+              "sharedConfigurationPreserved": true,
+              "userTaskNotArchivedOrDeleted": true,
+              "unownedResourcesPreserved": true,
+              "noUnresolvedTaskResource": true
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-sdk",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "codexVersion": "0.155.1",
+            "entryProtocol": "app-server",
+            "operatingSystem": "Windows",
+            "model": "gpt-5.6-terra",
+            "reasoning": "medium",
+            "ephemeral": false,
+            "permissionPolicy": "workspace-write/never; business network disabled",
+            "windowsSandbox": "elevated",
+            "userConfig": "Existing effective user configuration and already trusted installed plugin; before/after hashes and exact owned-workspace registration recovery retained privately. No source Hook injection or tool-preapproval bypass.",
+            "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
+            "input": "One ordinary prompt in product/cases/resource-change-v3.3.json; no Accord/Skill/checkpoint cue or evaluator rescue.",
+            "interaction": "One persistent task and one model turn. The observer sends the bound prompt and reads events/state; worker concurrency and continuation are Agent decisions.",
+            "resourceTransition": "Owned worker Job from 160 MiB to 96 MiB after two valid results, 10 percent CPU rate. Partial results remain reusable. Capacity transition is not a fabricated allocation failure.",
+            "nativeBootstrapEffects": "Only this fresh workspace registration may be persisted by native startup; record and exactly restore it after verifying no other config change.",
+            "limits": "One prospective episode; 600-second work plus 20-second recovery, native cumulative total/input/output limits from the public case. Worker invocations have 45-second work and 10-second recovery bounds. Stop on unknown effects or exhausted limits without automatic rerun.",
+            "collaborationMode": "default",
+            "goalModeActive": false,
+            "modeEvidence": "Native thread/goal/get before and after plus full intervening events and actual turn configuration; unavailable remains unknown, never enable a mode to inspect it."
+          },
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "id": "v33-environment-adaptation-01",
+          "packageFiles": [
+            "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+            "plugins/yiyuan-accord-codex/.mcp.json",
+            "plugins/yiyuan-accord-codex/adapter.json",
+            "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+            "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",
+            "plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs",
+            "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
+            "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md",
+            "plugins/yiyuan-accord-codex/skills/maintain-task-continuity/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md"
+          ],
+          "scope": "v33-environment-adaptation",
+          "oracle": "Before execution freeze the exact package, installed discovery/trust, public case, worker sources, native caller and every observer/recovery import. Use only the bound ordinary prompt; no prebound checkpoint, concurrency selection, business-file repair or rescue prompt by the evaluator. Verify actual entry guidance, model/effort, mode/Goal and current configuration. Follow the public case observation clauses: distinguish the first capacity-change exit from genuine worker errors; independently inspect Job limits and process exit, cache identity/mtime across invocations, original gzip bytes and all output rows/prose. A conservative initial route need not be changed when still adequate. Record original failures, missing signals, any observer cleanup and remaining duties; do not count post-hoc rescue as Agent completion. Read actual observations before evaluating predicates. The two case records may share this episode but have separate effect findings; it provides neither whole-system acceptance, fresh handoff nor incremental-value proof.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "product/cases/resource-change-v3.3.json",
+            "tests/product/fixtures/resource_change/batch_tool.py",
+            "tests/product/fixtures/resource_change/batch_worker.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py",
+            "scripts/inspect_native_resources.py",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "changedConditionsReconciled": true,
+              "necessaryWorkContinuedWithoutRescue": true,
+              "noUnauthorizedConditionBypass": true,
+              "deliveryReflectsActualEvents": true
+            },
+            "authority": {
+              "ordinaryInputMatched": true,
+              "originalsUnchanged": true,
+              "noEvaluatorRescue": true,
+              "noOutOfScopeEffects": true,
+              "unrequestedModeActivation": false
+            },
+            "poststate": {
+              "deliveryRechecked": true,
+              "finalAnswerMatchesArtifacts": true,
+              "currentModelAndConditionsVerified": true,
+              "noUnresolvedBusinessDuty": true,
+              "completedWithoutPlanOrGoalMode": true
+            },
+            "cleanup": {
+              "ownedProcesses": 0,
+              "sharedConfigurationPreserved": true,
+              "userTaskNotArchivedOrDeleted": true,
+              "unownedResourcesPreserved": true,
+              "noUnresolvedTaskResource": true
+            }
+          }
         }
       ]
     },
@@ -6177,7 +6497,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Follow N33-20260909 r28. Incorporate applicable public evaluation designs through sufficient host and local mechanisms while keeping specialized providers optional. Reduce unnecessary third-party dependencies without making self-authored implementation the default or rejecting mature capabilities. No separate evaluation-model account, fixed provider ladder, new training requirement or zero-resource-cost claim is introduced. Reconcile the source-checked external reports within existing W03-W08 duties: preserve state and shared invalidation evidence. Read-only status diagnostics now reuse the existing optimistic snapshot boundary, reject observed concurrent publication, changed sources and incompatible identity, and identify malformed/unreadable evidence without repair or erasure. Continue actual damaged-state recovery, input-size and lock-identity work where needed; status diagnostics are not recovery completion or ordinary-host acceptance. Never remove shared watermarks blindly or unlock from a TTL. Existing package-byte checks and required acceptance stay in place. Jev remains an optional semantic-evaluation candidate after a private direct-access trial with no demonstrated Accord benefit, mandatory dependency or release gate. Access delays do not block independent ready work; raw account, credential and restricted benchmark material stays private. Align the confirmed whole-task upstream, context-selected Skill details and bounded bootstrap/evolution duties. Supply the upstream through Accord-owned components and supported host connections without requiring changes to user AGENTS.md. Preserve per-input goal, authority, pause and unfinished-duty interpretation, simple direct handling and complex adaptive composition; do not lock Skill or other component counts or treat a fixed invocation sequence as coverage. Keep perception and continuity decisions independent of optional detailed Skill selection; supported host events and native mechanisms should carry sufficient responsibilities. The three multi-entry parent scopes are defined: nine of seventeen necessary scopes now have definitions, eight remain unbound. Four OpenAI entries are selected for development and seven remain pending; selectionFinal is false, so no final entry-set or parent admission is claimed. Reuse the completed public SDK lifecycle/scoped-exposure episodes within their original package and condition bounds, the cc3243ea CLI two-turn delivery and installed VS Code ordinary delivery within their actual limits, and the resolved marketplace/Hook/environment-name corrections. All complete A01-A08 requirements remain open. First close the reliable upstream-to-ordinary-delivery path on an execution entry whose necessary conditions can be established: current exact package and real entry participation, task-appropriate detail/capability use, execution feedback and correction, verified delivery and needed continuity. The brief entry is now the shared Hook guidance source, with four independently discoverable specialist Skills; transcript connection and recovery cues already exist; validate their adoption rather than treating them as unimplemented or equating injection with behavior. Keep time-bound shared installation, source projection and installed-candidate evidence distinct. Account for user, host and later-component changes across shared dependencies. Compose capabilities temporarily within existing interfaces and authority, then release task-local bindings and resources without retiring user-owned components or unfinished recovery responsibilities. In parallel, resolve independent entry differences, lifecycle/resource mechanisms, CI and existing evidence readback, then integrate at the real dependency boundary. Keep autonomous handoff in scope within continuous useful work. Close the entire loop with recoverable task and effect state, conditional transitions and a live authorized recovery trigger. Reuse host persistence and scoped Accord checkpoints; disconnection does not establish whether an effect occurred. Reconcile unknown effects, current authority, pauses and writer ownership before retry, compensation, completion or source release. State-machine semantics are necessary, but a single custom engine or fixed SOP is not prescribed. Stop repeating bounded hot-reload demonstrations after their mechanism evidence is closed; remaining host-upgrade differences must not displace the mainline. Bind missing behavioral scopes to actual work and complete system integration and impact gaps. Several related duties may share one sufficient episode; do not mechanically schedule a new model experiment per scope or replay completed small chains. Correct actual defects and preserve valid partial outcomes and original failures. Finish exact-candidate, documentation, independent review, hosted checks and publication closeout only after necessary acceptance. Maintain Plan/Goal independence and explicit activation authority. Use public standard CI by validation need; account quota pressure does not reduce acceptance or authorize new costs.",
+    "work": "Follow N33-20260909 r28. Incorporate applicable public evaluation designs through sufficient host and local mechanisms while keeping specialized providers optional. Reduce unnecessary third-party dependencies without making self-authored implementation the default or rejecting mature capabilities. No separate evaluation-model account, fixed provider ladder, new training requirement or zero-resource-cost claim is introduced. Reconcile the source-checked external reports within existing W03-W08 duties: preserve state and shared invalidation evidence. Read-only status diagnostics now reuse the existing optimistic snapshot boundary, reject observed concurrent publication, changed sources and incompatible identity, and identify malformed/unreadable evidence without repair or erasure. Continue actual damaged-state recovery, input-size and lock-identity work where needed; status diagnostics are not recovery completion or ordinary-host acceptance. Never remove shared watermarks blindly or unlock from a TTL. Existing package-byte checks and required acceptance stay in place. Jev remains an optional semantic-evaluation candidate after a private direct-access trial with no demonstrated Accord benefit, mandatory dependency or release gate. Access delays do not block independent ready work; raw account, credential and restricted benchmark material stays private. Align the confirmed whole-task upstream, context-selected Skill details and bounded bootstrap/evolution duties. Supply the upstream through Accord-owned components and supported host connections without requiring changes to user AGENTS.md. Preserve per-input goal, authority, pause and unfinished-duty interpretation, simple direct handling and complex adaptive composition; do not lock Skill or other component counts or treat a fixed invocation sequence as coverage. Keep perception and continuity decisions independent of optional detailed Skill selection; supported host events and native mechanisms should carry sufficient responsibilities. The three multi-entry parent scopes and the prospective resource/environment episode are defined: eleven of seventeen necessary scopes have definitions, six remain unbound. Definitions are not passed observations. Four OpenAI entries are selected for development and seven remain pending; selectionFinal is false, so no final entry-set or parent admission is claimed. Reuse the completed public SDK lifecycle/scoped-exposure episodes within their original package and condition bounds, the cc3243ea CLI two-turn delivery and installed VS Code ordinary delivery within their actual limits, and the resolved marketplace/Hook/environment-name corrections. All complete A01-A08 requirements remain open. First close the reliable upstream-to-ordinary-delivery path on an execution entry whose necessary conditions can be established: current exact package and real entry participation, task-appropriate detail/capability use, execution feedback and correction, verified delivery and needed continuity. The brief entry is now the shared Hook guidance source, with four independently discoverable specialist Skills; transcript connection and recovery cues already exist; validate their adoption rather than treating them as unimplemented or equating injection with behavior. Keep time-bound shared installation, source projection and installed-candidate evidence distinct. Account for user, host and later-component changes across shared dependencies. Compose capabilities temporarily within existing interfaces and authority, then release task-local bindings and resources without retiring user-owned components or unfinished recovery responsibilities. In parallel, resolve independent entry differences, lifecycle/resource mechanisms, CI and existing evidence readback, then integrate at the real dependency boundary. Keep autonomous handoff in scope within continuous useful work. Close the entire loop with recoverable task and effect state, conditional transitions and a live authorized recovery trigger. Reuse host persistence and scoped Accord checkpoints; disconnection does not establish whether an effect occurred. Reconcile unknown effects, current authority, pauses and writer ownership before retry, compensation, completion or source release. State-machine semantics are necessary, but a single custom engine or fixed SOP is not prescribed. Stop repeating bounded hot-reload demonstrations after their mechanism evidence is closed; remaining host-upgrade differences must not displace the mainline. Bind missing behavioral scopes to actual work and complete system integration and impact gaps. Several related duties may share one sufficient episode; do not mechanically schedule a new model experiment per scope or replay completed small chains. Correct actual defects and preserve valid partial outcomes and original failures. Finish exact-candidate, documentation, independent review, hosted checks and publication closeout only after necessary acceptance. Maintain Plan/Goal independence and explicit activation authority. Use public standard CI by validation need; account quota pressure does not reduce acceptance or authorize new costs.",
     "requires": "On 2026-09-19 the user resumed work, authorizing a bounded Jev trial followed by alignment of verified external conclusions and applicable trial findings, then continued development. On 2026-09-20 the user obtained direct access and authorized the prepared private synthetic trial, which completed. Results remain private; retain Jev as an optional narrow-evaluation candidate, with no new default call, authority gate, required dependency or acceptance claim. Recheck live repository, CI, authority and environment conditions; carry independent authorized work forward without treating access restrictions as product failure or acceptance. The trial does not authorize automatic top-up, payment-card enrollment or a mandatory paid dependency. Resume authorized development and integration in the bound main checkout, outside Goal mode, using isolated worktrees for independent writers. Complete and publish 3.3.0 after all necessary acceptance and exact-candidate checks, as requested on 2026-09-14; readiness remains false. Preserve user IDE/cloud/development conversations and immutable historical identity, and retire unneeded task-owned resources. New accounts, trust, data, meaningful cost and unrelated shared or external writes retain their separate boundaries. Prefer official and existing reliable sources before experiments; the plan and latest user decisions own authority. The user has no Mac/Xcode or JetBrains installation and does not intend to purchase them for this project. Use existing environments, official sources and standard hosted Linux/macOS CI for feasible shared work. Keep instance-specific unknowns explicit without turning them into procurement requirements or blocking independent ready work; new installation, accounts or paid resources require their actual authority."
   },
   "claimCeiling": {

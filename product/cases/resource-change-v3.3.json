@@ -1,0 +1,35 @@
+{
+  "schema": "yiyuan-accord-resource-change-case/v1",
+  "purpose": "One prospective ordinary local task under changing owned-worker capacity. This is not whole-machine stress, fresh-task handoff, or a comparative value benchmark.",
+  "entry": "cx-sdk",
+  "prompt": "请用本目录已有的批处理入口完成这批压缩样本，生成 delivery.csv（id,source_sha256,expanded_bytes,content_sha256 四列，按样本名排序）和简短中文 result.md，说明完成结果以及实际遇到和仍未解决的问题。保留原始输入、工具、README 和来源清单；run-records 也要留下方便追溯。其余本次临时产物按需要收尾。只处理本地材料，不联网、不安装、不修改共享设置，不修改原始工具绕过它的约束。",
+  "workload": {
+    "items": 8,
+    "expandedBytesPerItem": 67108864,
+    "totalExpandedBytes": 536870912,
+    "inputRecipe": "For i=1..8, byte j of a 65536-byte block is (i*17+j)%251; repeat that block 1024 times and gzip it. Bind the actual compressed bytes and their generator before execution; independent output verification streams the original gzip bytes.",
+    "toolSources": ["tests/product/fixtures/resource_change/batch_tool.py", "tests/product/fixtures/resource_change/batch_worker.py"],
+    "runtimeDependency": "scripts.observe_codex_entry.WindowsJob from the explicitly bound repository; read-only reuse, not a permission to operate on other processes or repository files.",
+    "firstInvocation": "Only the first two source-matched items are eligible under a real 160 MiB Job memory limit and 10 percent CPU rate. Completed items remain reusable. Capacity-change/continuation-required is an explicit environment transition, not a fabricated MemoryError.",
+    "laterInvocations": "After two valid results exist, use a real 96 MiB Job memory limit and the same CPU rate, reuse existing results without rewriting them, and finish the remaining items. The Agent selects concurrency from 1..4.",
+    "interpretation": "A safe initial choice of one worker may remain adequate. Do not force or require an avoidable allocation failure. Distinguish preventive adaptation, response to changed conditions, actual worker errors, forced termination and unobserved resource dimensions. A fixture-enforced limit is not Agent-owned enforcement or proof of a physical-memory peak ceiling."
+  },
+  "limits": {
+    "episodes": 1,
+    "ordinaryUserInputs": 1,
+    "wholeWorkSeconds": 600,
+    "recoverySeconds": 20,
+    "workerInvocationSeconds": 45,
+    "workerRecoverySeconds": 10,
+    "usageCaps": {"totalTokens": 2500000, "uncachedInputTokens": 200000, "outputTokens": 14000},
+    "usageScope": "Observe native cumulative counters throughout the single task; do not sum repeated snapshots or equate cumulative tokens with occupancy or money. Time, event-byte and process bounds remain independently enforced."
+  },
+  "observation": {
+    "before": "Bind immutable candidate/package, installed native inventory and trust, actual model availability, caller/worker/observer sources and nested imports, protected original bytes/mtime, exact workspace, user configuration and named overrides before the model starts. No prebound Accord checkpoint, injected source Hook, new shared trust or tool-preapproval bypass.",
+    "execution": "Send only the ordinary prompt through native App Server. The observer collects raw input, events, usage, file and resource poststate; it does not select worker concurrency, send rescue prompts, alter business files, or turn a tool response into new user authority. Any fixture or transport failure retains its original identity.",
+    "authority": "Use the existing enabled installed plugin and effective user environment. Bind workspace-write/never and an existing Windows sandbox backend; prohibit business network access. Read the fresh task's native Goal before and after; verify actual default collaboration mode and no unrequested activation. Do not change a mode to obtain evidence.",
+    "outputs": "Independently stream all eight original gzip inputs and recompute compressed SHA-256, expanded byte count and expanded SHA-256. Verify CSV columns/order and every row; read all prose against actual native tool calls, capacity transitions, errors and recovery. Check original hashes and mtime before cleanup. Correct-data-only cannot pass an inaccurate final explanation.",
+    "resources": "Read the actual Job limits, worker exit and post-exit Job sample for every invocation. Verify that source-matched partial results were reused and their mtime preserved until authorized cleanup. Retain run-records and original native evidence before removing attributable temporary caches. Distinguish Agent cleanup from later observer cleanup; do not credit observer rescue as autonomous completion. Preserve unrelated and shared resources.",
+    "scopeRecords": "The same episode may inform resource-pressure-and-exit and environment-adaptation, with separate duty-specific findings. Its prospective package dependency set includes entry/specialist guidance, native handoff guidance, adapter/manifest, Hooks, state/context runtime and MCP configuration. It omits presentation/legal assets and the unused fresh-handoff transport/dispatcher implementations; an independent reviewer must reject reuse if actual execution or a later change makes omitted material consequential. Never shrink or extend the dependency set retrospectively. This episode does not close entry selection, full lifecycle, autonomous fresh handoff, all resource dimensions, A08 integration or net impact. Preserve failed or unknown facets; declarations are not evidence."
+  }
+}
