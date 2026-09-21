@@ -17,6 +17,12 @@ mode is not collaboration mode. Ordinary continuation does not enable Plan/Goal,
 create a new goal, reset its budget or lift a pause. A genuinely achieved Goal may
 be completed through its normal lifecycle. Task plans remain revisable artifacts.
 
+When mode state matters, use the host's read-only Goal query (`get_goal` or
+`thread/goal/get` on an existing owned connection), independently of collaboration
+mode. Bind task and time: null is absence at that read only; unavailable or failed
+reads stay unknown. Preserve status, budget and unfinished work; do not enable a
+mode to observe it.
+
 Use sufficient native state. Bind a file checkpoint when input freshness,
 unfinished-work recovery or completion needs protection the host does not supply;
 file creation alone is not a trigger. Honor existing bindings and pauses, and

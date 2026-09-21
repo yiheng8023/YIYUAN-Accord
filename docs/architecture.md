@@ -126,6 +126,13 @@ The session header version remains recorded history. Goal state stays unknown
 without its own evidence. Byte length, hash, line and source path retain the
 observed snapshot boundary; this projection does not grant case admission or
 change an execution receipt's validity.
+The continuity Skill obtains decision-relevant Goal state separately through an
+available native current-task query or an already-owned App Server connection.
+The latter's `thread/goal/get` reads persisted Goal state without resuming a task
+in the inspected Codex 0.155.1 source; its Goals-feature gate can reject the read.
+A null response establishes absence at the observation time only. Unsupported or
+failed reads remain unknown, and this guidance creates neither a control service
+nor permission to enable a mode. Existing CLI condition projection stays unchanged.
 Standalone startup resolves configured state/session/home/temp paths against its
 original cwd, then leaves the plugin cache directory before serving. This avoids
 pinning a Windows cache directory during native replacement without rebinding
