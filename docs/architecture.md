@@ -507,6 +507,17 @@ App Server/process controls, local fixed responses and SQLite transactions. It
 checks protocol effects, refusal, extra intake and source-tool dispatch; it does not prove model judgment,
 autonomous timing, a production verifier or ordinary GUI adoption.
 
+`tests/product/test_codex_session_native.py` reuses that fixture and OS controller
+to exercise the shipped source session, connection and recorder against the real
+App Server. Its bounded sequence covers two handoffs, intake context and nested
+proposal handling, two target adoptions, retained native histories and natural
+process exit. The independent artifact reader correlates raw requests/receipts
+with the SQLite ledger and preserves the exact execution sources. It reads a
+closed, checkpointed ledger with SQLite's immutable option: read-only mode alone
+can create WAL/SHM sidecars. The Windows 0.155.1 observation is protocol evidence
+with fixed responses, not model judgment or performance evidence; context remained
+unknown, and full-history hydration carried a paginated-thread deprecation notice.
+
 ### Context timing
 
 Unknown capacity/efficiency signals require short work spans and early checkpoints;

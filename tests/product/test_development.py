@@ -1061,12 +1061,13 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         self.assertTrue(any("primaryInstructionBytes=" in error for error in report["errors"]))
         self.assertFalse(report["repositoryCandidateReady"])
 
-    def test_current_cost_includes_runtime_sources_and_delivered_copies(self):
+    def test_current_cost_includes_runtime_copies_and_node_test_fixtures(self):
         report = self.report()
         python_bytes = sum(p.stat().st_size for folder in ("yiyuan_accord", "tests/product")
                            for p in (self.root / folder).rglob("*.py"))
-        runtime_bytes = sum(p.stat().st_size for folder in ("runtime", "plugins")
-                            for p in (self.root / folder).rglob("*.cjs"))
+        runtime_bytes = sum(p.stat().st_size for folder in ("runtime", "plugins", "tests/product")
+                            for p in (self.root / folder).rglob("*")
+                            if p.suffix in (".js", ".mjs", ".cjs") and p.is_file())
         self.assertGreater(runtime_bytes, 0)
         self.assertEqual(report["complexity"]["productCodeAndTestBytes"], python_bytes + runtime_bytes)
         self.assertFalse(report["repositoryCandidateReady"])

@@ -6719,7 +6719,8 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
         complexity = _validate_complexity(root, {"complexityBudget": program["complexityBudget"]},
                                           identity["pythonModule"], files, errors,
                                           runtime_code_files=[locator for locator in files
-                                              if Path(locator).parts[0] in ("runtime", "plugins")
+                                              if (Path(locator).parts[0] in ("runtime", "plugins")
+                                                  or Path(locator).parts[:2] == ("tests", "product"))
                                               and Path(locator).suffix in (".js", ".mjs", ".cjs")])
         residue = known_task_residue(root)
         if residue:

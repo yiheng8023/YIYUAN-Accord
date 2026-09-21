@@ -159,6 +159,8 @@
       "tests/product/test_codex_connection.py",
       "tests/product/test_carrier_recorder.py",
       "tests/product/test_codex_session.py",
+      "tests/product/test_codex_session_native.py",
+      "tests/product/codex_session_native.cjs",
       "tests/product/test_native_state_mcp.py",
       "tests/product/test_codex_rpc.py",
       "tests/product/test_codex_events.py",
@@ -192,10 +194,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 2650000,
+      "maxProductCodeAndTestBytes": 2700000,
       "maxTrackedFiles": 171,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The 2650000 code/test-byte ceiling and 171 tracked-file ceiling retain the required reserve after adding same-controller target adoption, target-side request pumping and meaningful repeated-transfer/failure checks to the existing SDK modules. The implementation reuses the existing SQLite scope recorder and native tools; no new files, daemon, account or model service are introduced in this slice. Ordinary Hook/MCP entry still does not open SQLite. Primary instructions remain capped at 36000 bytes. Input ceilings bound adapter data, not model capacity or native support. Earlier failures and evidence remain immutable; protocol checks do not establish autonomous timing, cold recovery, whole A05 or GUI adoption."
+      "rationale": "The 2700000 code/test-byte ceiling and 171 tracked-file ceiling retain the required reserve for product-module and tests/product Python plus runtime/plugin/test JavaScript, including both previously omitted Node test callers. Development-only scripts outside those roots remain outside this metric; it is not total repository size. Two native fixture files reuse the existing localhost provider, owned environment, native protocol and OS process controller to verify successive SDK handoffs, adding no product service or model call. Execution sources and raw RPC/ledger/session/exit evidence are retained. Primary instructions remain capped at 36000 bytes. Earlier byte totals keep their original measurement scope; the current candidate is recalculated without changing historical behavior or claiming timing, cold recovery, whole A05 or GUI adoption."
     }
   },
   "source": {
