@@ -487,6 +487,18 @@ a nested proposal while a transfer is in progress is refused without queuing.
 This is a same-controller path, not automatic cold recovery or arbitrary thread
 adoption. Project/sidebar association alone establishes none of these bindings.
 
+For a new controller, `restoreCodexSourceSession` handles only a completed,
+settled target with reconciled prior effects. The caller supplies an acknowledged
+inactive scope receipt and current authority; the verifier establishes prior
+controller quiescence and safe initialization. The existing recorder rotates the
+scope token before native resume, so an uncertain resume cannot be replayed with
+the old basis. Native settings, necessary history and actual tool-restoration
+evidence are checked before readiness, followed by a final token readback.
+Ordinary turns check that same held token. This reuses the current schema and
+host persistence; it adds no service or timeout-based takeover. Failed restore
+executors cannot create a replacement task, and active/uncertain transfers remain
+unreconciled rather than being forced into this settled-target path.
+
 `runtime/carrier-recorder.cjs` provides the previously test-only scope ledger
 using Node's built-in SQLite, opened explicitly at a caller-owned file. It checks
 database identity/schema and reads related rows in one snapshot; transactions

@@ -89,12 +89,14 @@
       "effect": "create-source-with-context-and-proposal-tools; bind-scope; start-owner-selected-turns; pump-source-and-intake-requests; dispatch-verified-transfer; explicitly-adopt-verified-target-for-next-transfer",
       "ownership": "borrow-initialized-authorized-connection-and-recorder; preserve-other-tools; owner-handles-other-requests; do-not-close-borrowed-resources",
       "targetAdoption": "same-controller-own-completed-transfer-only; exact-final-record-and-tools; fresh-idle-persistent-native-target; independent-current-authority-and-effect-verdict; once-only-settle-with-readback; retain-history-and-fence-old-lease",
-      "limits": "caller-supplies-current-authority-plan-and-independent-verifier; uncertain-effects-require-reconciliation-not-retry; no-cold-controller-recovery-or-arbitrary-thread-adoption; no-ordinary-GUI-control-or-whole-A05-acceptance"
+      "controllerRestoration": "settled-transfer-only; explicit-acknowledged-inactive-scope-basis; independently-quiesced-prior-controller-and-reconciled-effects; claim-and-readback-before-native-resume; summary-reads-and-excludeTurns; verified-current-settings-history-and-native-tools; final-token-readback; old-basis-and-stale-executor-rejected",
+      "limits": "caller-supplies-current-authority-plan-and-independent-verifier; uncertain-effects-require-reconciliation-not-retry; no-active-transfer-or-arbitrary-crash-replay; no-arbitrary-thread-adoption; no-ordinary-GUI-control-or-whole-A05-acceptance"
     },
     "durableRecorder": {
       "entry": "runtime/carrier-recorder.cjs",
       "storage": "explicit-caller-owned-SQLite-file; lazy-Node-built-in-node:sqlite; synchronous-FULL; bounded-busy-timeout",
       "effect": "scope-writer-and-transfer-revision-CAS; fencing-token-rotation; consistent-reopen; explicit-verified-shape-settlement-preserves-target-and-history",
+      "controllerClaim": "claimScope-CAS-matches-an-acknowledged-inactive-scope-and-rotates-only-its-token; preserves-writer-and-history; no-timeout-takeover-or-active-transfer-clear",
       "limits": "requires-available-DatabaseSync; no-background-service-or-automatic-replay; records-are-not-authorization-or-OS-writer-exclusion; no-unknown-schema-migration"
     }
   },

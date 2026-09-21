@@ -231,6 +231,47 @@ jobs:
           sys.stdout.buffer.write(result.stdout)
           sys.stderr.buffer.write(result.stderr)
           sys.exit(result.returncode)
+      - name: Restore the settled SDK writer on a new controller
+        id: sdk_session_restore
+        if: always() && steps.sdk_session.outcome == 'success'
+        shell: python
+        run: |
+          import json, os, pathlib, subprocess, sys
+          root = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]).resolve(strict=True)
+          manifest = json.loads((root / "host-upgrade/manifest.json").read_text(encoding="utf-8"))
+          subprocess.run([sys.executable, "-B", "tests/product/test_codex_session_native.py",
+              "--native-codex", manifest["hostReplacement"]["replacement"]["path"],
+              "--evidence", str(root / "sdk-session-restore"),
+              "--restore-from", str(root / "sdk-session")], check=True)
+      - name: Independently inspect restored SDK state and original preservation
+        if: always() && steps.sdk_session.outcome == 'success'
+        shell: python
+        run: |
+          import os, pathlib, subprocess, sys
+          evidence = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]) / "sdk-session-restore"
+          if not (evidence / "manifest.json").is_file():
+              raise RuntimeError("SDK restore manifest is unavailable")
+          result = subprocess.run([sys.executable, "-B", "tests/product/test_codex_session_native.py",
+              "--inspect-evidence", str(evidence)], capture_output=True)
+          (evidence / "inspection.json").write_bytes(result.stdout)
+          (evidence / "inspection.stderr.txt").write_bytes(result.stderr)
+          sys.stdout.buffer.write(result.stdout)
+          sys.stderr.buffer.write(result.stderr)
+          sys.exit(result.returncode)
+      - name: Retain SDK restoration evidence
+        if: always() && steps.storage.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-sdk-restore-${{ matrix.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          include-hidden-files: true
+          path: |
+            ${{ env.ACCORD_NATIVE_ROOT }}/sdk-session-restore/*.json
+            ${{ env.ACCORD_NATIVE_ROOT }}/sdk-session-restore/inspection.stderr.txt
+            ${{ env.ACCORD_NATIVE_ROOT }}/sdk-session-restore/native
+            ${{ env.ACCORD_NATIVE_ROOT }}/sdk-session-restore/retained
+            ${{ env.ACCORD_NATIVE_ROOT }}/sdk-session-restore/workspace
       - name: Retain SDK native protocol evidence
         if: always() && steps.storage.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

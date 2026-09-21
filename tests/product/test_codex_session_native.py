@@ -5,7 +5,7 @@ import argparse
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import shutil
 import sqlite3
 import stat
@@ -30,6 +30,7 @@ from tests.product.test_carrier_handoff import proposal_fixture_item
 
 SCHEMA = "accord-codex-session-native-evidence/v1"
 PROVIDER_REQUESTS = 10
+COLD_PROVIDER_REQUESTS = 2
 SOURCE_FILES = (
     "tests/product/test_codex_session_native.py",
     "tests/product/codex_session_native.cjs",
@@ -66,6 +67,19 @@ def _fresh_root(value) -> Path:
     return root
 
 
+def _restore_roots(evidence_value, prior_value=None):
+    root = _fresh_root(evidence_value)
+    if prior_value is None:
+        return root, None
+    prior = _ordinary_dir(Path(prior_value).absolute())
+    candidate = root.resolve(strict=False)
+    prior_resolved = prior.resolve(strict=True)
+    if (candidate == prior_resolved or prior_resolved in candidate.parents
+            or candidate in prior_resolved.parents):
+        raise ValueError("restore evidence root and prior root must not be nested")
+    return root, prior
+
+
 def _file_observation(path: Path) -> dict:
     if not path.exists():
         return {"path": str(path), "present": False}
@@ -73,6 +87,33 @@ def _file_observation(path: Path) -> dict:
     info = path.stat()
     return {"path": str(path), "present": True, "sha256": digest(path),
             "size": info.st_size, "mode": stat.S_IMODE(info.st_mode)}
+
+
+def _recorded_relative(value, manifest: dict):
+    pure = (PureWindowsPath if manifest.get("resourceController") == "windows-job-object"
+            else PurePosixPath)
+    recorded_root = pure(manifest.get("evidence", ""))
+    candidate = pure(value)
+    if not recorded_root.is_absolute() or not candidate.is_absolute():
+        raise ValueError("recorded native path is not absolute")
+    try:
+        relative = candidate.relative_to(recorded_root)
+    except ValueError:
+        raise ValueError("recorded native path is outside its evidence root") from None
+    if not relative.parts:
+        raise ValueError("recorded native path must name an evidence child")
+    return relative.parts
+
+
+def _portable_path(root: Path, recorded, manifest: dict) -> Path:
+    return root.joinpath(*_recorded_relative(recorded, manifest))
+
+
+def _retained_session_path(root: Path, recorded, manifest: dict) -> Path:
+    relative = _recorded_relative(recorded, manifest)
+    if relative[:2] != ("home", "sessions") or len(relative) < 3:
+        raise ValueError("recorded native session path is outside home/sessions")
+    return root.joinpath("retained", "native-sessions", *relative[2:])
 
 
 def _shared_config_observation() -> dict:
@@ -83,6 +124,38 @@ def _shared_config_observation() -> dict:
 
 def _source_hashes(root=ROOT) -> dict:
     return {name: _sha(Path(root) / name) for name in SOURCE_FILES}
+
+
+def _input_inventory(root: Path) -> dict:
+    root = _ordinary_dir(root)
+    inventory = {}
+    def visit(directory: Path):
+        with os.scandir(directory) as entries:
+            for entry in entries:
+                path_value = Path(entry.path)
+                info = path_value.lstat()
+                relative = path_value.relative_to(root).as_posix()
+                reparse = bool(getattr(info, "st_file_attributes", 0) & 0x400)
+                if entry.is_symlink():
+                    inventory[relative] = {"type": "symlink", "target": os.readlink(entry.path)}
+                elif reparse:
+                    try:
+                        target = os.readlink(entry.path)
+                    except OSError:
+                        target = None
+                    inventory[relative] = {"type": "reparse", "target": target,
+                                           "attributes": getattr(info, "st_file_attributes", 0)}
+                elif stat.S_ISDIR(info.st_mode):
+                    inventory[relative] = {"type": "directory", "mode": stat.S_IMODE(info.st_mode)}
+                    visit(path_value)
+                elif stat.S_ISREG(info.st_mode) and info.st_nlink == 1:
+                    inventory[relative] = {"type": "file", "sha256": digest(path_value),
+                                           "size": info.st_size, "mode": stat.S_IMODE(info.st_mode)}
+                else:
+                    inventory[relative] = {"type": "other", "mode": info.st_mode,
+                                           "links": info.st_nlink}
+    visit(root)
+    return inventory
 
 
 def _snapshot_sources(evidence: Path, hashes: dict) -> Path:
@@ -126,6 +199,17 @@ def fixed_provider_item(body, ordinal):
     return item
 
 
+def cold_provider_item(body, ordinal):
+    if not 1 <= ordinal <= COLD_PROVIDER_REQUESTS:
+        raise ValueError("cold provider request ordinal exceeds fixed sequence")
+    if ordinal == 2:
+        return None
+    item = proposal_fixture_item(body, ordinal, {"next": True, "contextRemaining": 1})
+    if item is None or _provider_tool(item) != "accord_inspect_context":
+        raise ValueError("restored context tool is unavailable in provider request")
+    return item
+
+
 def _read_json(path: Path, limit=8 * 1024 * 1024):
     return json.loads(read_regular(path, limit))
 
@@ -163,6 +247,92 @@ def _open_retained_ledger(path):
     return sqlite3.connect(database_path.as_uri() + "?mode=ro&immutable=1", uri=True)
 
 
+def _validate_restore_ledger_sidecars(path: Path):
+    ledger = _regular_file(path)
+    for suffix in ("-wal", "-journal"):
+        sidecar = ledger.with_name(ledger.name + suffix)
+        if sidecar.is_symlink() or sidecar.exists() and _regular_file(sidecar).stat().st_size:
+            raise ValueError("native ledger has uncheckpointed or unsafe sidecar data")
+    shared_memory = ledger.with_name(ledger.name + "-shm")
+    if shared_memory.is_symlink():
+        raise ValueError("native ledger SHM is redirected")
+    if shared_memory.exists():
+        _regular_file(shared_memory)
+    return ledger
+
+
+def _copy_file(source: Path, destination: Path) -> str:
+    source = _regular_file(source)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, destination)
+    if _sha(source) != _sha(destination):
+        raise ValueError("copied restore input differs: " + str(source))
+    return _sha(destination)
+
+
+def _prepare_restore_inputs(prior_value, root: Path) -> dict:
+    prior = _ordinary_dir(Path(prior_value).absolute())
+    root_resolved, prior_resolved = root.resolve(strict=True), prior.resolve(strict=True)
+    if (root_resolved == prior_resolved or prior_resolved in root_resolved.parents
+            or root_resolved in prior_resolved.parents):
+        raise ValueError("restore evidence root and prior root must not be nested")
+    prior_inventory = _input_inventory(prior)
+    inspection = inspect_evidence(prior)
+    prior_manifest = _read_json(prior / "manifest.json")
+    prior_post = _read_json(prior / "poststate.json")
+    envelope = _read_json(prior / "retained/node-result.json", 16 * 1024 * 1024)
+    result = envelope.get("result", {})
+    expected_scope = result.get("adoptedSecond", {}).get("scope")
+    transfer_id = result.get("adoptedSecond", {}).get("transferId")
+    if (inspection.get("valid") is not True or transfer_id != "native-transfer-2"
+            or not isinstance(expected_scope, dict)
+            or expected_scope.get("scopeRef") != "native-session-scope"
+            or expected_scope.get("activeTransferId") is not None
+            or expected_scope.get("writerThreadId") != result.get("threadIds", {}).get("target2")):
+        raise ValueError("prior successful adoption scope is not a cold restore basis")
+    resources = read_native_resource_records(prior / "native", ("codex-session-controller",))
+    resource = resources["codex-session-controller"]
+    if not _record_released(resource, prior_manifest):
+        raise ValueError("prior controller release is not quiescent evidence")
+    ledger = _validate_restore_ledger_sidecars(prior / "retained/carrier.sqlite")
+    sessions = _ordinary_dir(prior / "retained/native-sessions")
+    session_hashes = _tree_hashes(sessions)
+    if session_hashes != prior_post.get("nativeSessions", {}).get("hashes"):
+        raise ValueError("prior retained native sessions differ")
+
+    portable = root / "retained/prior-evidence"
+    portable.mkdir()
+    files = {
+        "manifest.json": prior / "manifest.json",
+        "poststate.json": prior / "poststate.json",
+        "node-result.json": prior / "retained/node-result.json",
+        "controller-config.json": prior / "retained/controller-config.json",
+        "controller-done.json": prior / "retained/controller-done.json",
+        "native-sessions-sha256.json": prior / "retained/native-sessions-sha256.json",
+        "controller-resource.json": prior / "native/codex-session-controller/resources.json",
+        "workspace/keep.txt": prior / "workspace/keep.txt",
+    }
+    for name, source in files.items():
+        _copy_file(source, portable / name)
+    save(portable / "inspection.json", inspection)
+    _copy_file(ledger, portable / "carrier.sqlite")
+    _copy_file(ledger, root / "retained/carrier.sqlite")
+    shutil.copytree(sessions, portable / "native-sessions")
+    shutil.copytree(sessions, root / "home/sessions")
+    if (_tree_hashes(portable / "native-sessions") != session_hashes
+            or _tree_hashes(root / "home/sessions") != session_hashes):
+        raise ValueError("cold native session copies differ")
+    _copy_file(prior / "workspace/keep.txt", root / "workspace/keep.txt")
+    portable_hashes = _tree_hashes(portable)
+    return {"priorPath": str(prior), "priorInventoryBefore": prior_inventory,
+            "portableRoot": str(portable), "portableHashes": portable_hashes,
+            "transferId": transfer_id, "scopeRef": expected_scope["scopeRef"],
+            "expectedScope": json.loads(json.dumps(expected_scope)),
+            "writerThreadId": expected_scope["writerThreadId"],
+            "threadIds": result["threadIds"], "sessionHashes": session_hashes,
+            "keepSha256": digest(root / "workspace/keep.txt")}
+
+
 def _version_record_ok(root: Path, manifest: dict, role: str, identity_name: str) -> bool:
     record = _read_json(root / f"retained/version-probes/{role}/record.json")
     stdout = read_regular(root / f"retained/version-probes/{role}/stdout.txt", 64 * 1024).decode().strip()
@@ -175,6 +345,282 @@ def _version_record_ok(root: Path, manifest: dict, role: str, identity_name: str
             and _record_released(record, manifest))
 
 
+def _inspect_restore_evidence(root: Path, manifest: dict, post: dict,
+                              envelope: dict, controller_config: dict):
+    controller_done = _read_json(root / "retained/controller-done.json")
+    if (manifest.get("schema") != SCHEMA or manifest.get("mode") != "restore"
+            or manifest.get("providerRequests") != COLD_PROVIDER_REQUESTS
+            or envelope.get("schema") != "accord-codex-session-native-envelope/v1"
+            or envelope.get("success") is not True or envelope.get("failure") is not None
+            or controller_config.get("schema") != "accord-codex-session-native-config/v2"
+            or controller_config.get("mode") != "restore"):
+        raise ValueError("cold restore evidence identity or result differs")
+    restore = manifest.get("restore", {})
+    portable = _ordinary_dir(root / "retained/prior-evidence")
+    if (_tree_hashes(portable) != restore.get("portableHashes")
+            or _recorded_relative(restore.get("portableRoot", ""), manifest) != ("retained", "prior-evidence")
+            or _recorded_relative(controller_config.get("restore", {}).get("priorRoot", ""), manifest)
+                != ("retained", "prior-evidence")
+            or _recorded_relative(controller_config.get("restore", {}).get("sessionsRoot", ""), manifest)
+                != ("home", "sessions")
+            or _recorded_relative(controller_config.get("workspace", ""), manifest) != ("workspace",)
+            or _recorded_relative(controller_config.get("recorderPath", ""), manifest)
+                != ("retained", "carrier.sqlite")):
+        raise ValueError("portable prior evidence hashes or controller binding differ")
+    prior_manifest = _read_json(portable / "manifest.json")
+    prior_post = _read_json(portable / "poststate.json")
+    prior_envelope = _read_json(portable / "node-result.json", 16 * 1024 * 1024)
+    prior_resource = _read_json(portable / "controller-resource.json")
+    prior_result = prior_envelope.get("result", {})
+    expected_scope = prior_result.get("adoptedSecond", {}).get("scope")
+    transfer_id = prior_result.get("adoptedSecond", {}).get("transferId")
+    if (prior_envelope.get("success") is not True or prior_envelope.get("failure") is not None
+            or prior_post.get("executionFailure") is not None or prior_post.get("cleanupFailure") is not None
+            or not _record_released(prior_resource, prior_manifest)
+            or expected_scope != restore.get("expectedScope")
+            or transfer_id != restore.get("transferId")
+            or expected_scope != controller_config.get("restore", {}).get("expectedScope")):
+        raise ValueError("portable prior release or exact adopted scope differs")
+    for identity in ("codex", "node"):
+        if any(prior_manifest.get("identities", {}).get(identity, {}).get(field)
+               != manifest.get("identities", {}).get(identity, {}).get(field)
+               for field in ("sha256", "version")):
+            raise ValueError("cold executable identity differs from the prior carrier")
+    if (controller_done.get("kind") != "done" or controller_done.get("success") is not True
+            or controller_done.get("threadIds") != prior_result.get("threadIds")):
+        raise ValueError("cold controller completion receipt differs")
+    prior_sessions = _ordinary_dir(portable / "native-sessions")
+    prior_session_hashes = _tree_hashes(prior_sessions)
+    target_session_names = [name for name in prior_session_hashes if name.endswith(
+        expected_scope["writerThreadId"] + ".jsonl")]
+    if (prior_session_hashes != restore.get("sessionHashes")
+            or prior_session_hashes != _read_json(portable / "native-sessions-sha256.json")
+            or len(prior_session_hashes) != 3 or len(target_session_names) != 1):
+        raise ValueError("portable prior native sessions differ")
+    _validate_restore_ledger_sidecars(root / "retained/carrier.sqlite")
+
+    if (not isinstance(manifest.get("sourceHashes"), dict)
+            or set(manifest["sourceHashes"]) != set(SOURCE_FILES)):
+        raise ValueError("cold frozen execution source set differs")
+    snapshot = _ordinary_dir(root / "retained/executed-sources")
+    for name, expected in manifest["sourceHashes"].items():
+        if _sha(snapshot / name) != expected:
+            raise ValueError("cold frozen execution source differs: " + name)
+    if (post.get("sourceHashesAfter") != manifest["sourceHashes"]
+            or post.get("keepSha256After") != manifest["keepSha256Before"]
+            or post.get("sharedConfigAfter") != manifest["sharedConfigBefore"]
+            or post.get("codexSha256After") != manifest["identities"]["codex"]["sha256"]
+            or post.get("nodeSha256After") != manifest["identities"]["node"]["sha256"]
+            or post.get("fixtureThreadStopped") is not True or post.get("cleanupFailure") is not None
+            or post.get("executionFailure") is not None or post.get("resourceRecorded") is not True
+            or post.get("priorInputUnchanged") is not True
+            or post.get("priorInputInventoryAfter") != restore.get("priorInventoryBefore")
+            or post.get("nativeSessions", {}).get("preserved") is not True):
+        raise ValueError("cold execution source, prior input or protected poststate differs")
+    if (not _version_record_ok(root, manifest, "source", "codex")
+            or not _version_record_ok(root, manifest, "node", "node")):
+        raise ValueError("cold executable version identity differs")
+    resources = read_native_resource_records(root / "native", ("codex-session-restore-controller",))
+    resource = resources["codex-session-restore-controller"]
+    if (resource.get("exitCode") != 0 or resource.get("forced") is not False
+            or resource.get("readerStopped") is not True or not _record_released(resource, manifest)):
+        raise ValueError("cold Node controller did not exit naturally")
+    close = envelope.get("close", {})
+    if (close.get("connectionClosed") is not True or close.get("stdoutEnded") is not True
+            or close.get("closeFailure") is not None
+            or close.get("nativeExit") != {"code": 0, "signal": None}):
+        raise ValueError("cold borrowed connection or native stdio close differs")
+
+    result = envelope.get("result", {})
+    if (result.get("schema") != "accord-codex-session-native-restore-result/v1"
+            or result.get("success") is not True
+            or result.get("providerRequestsExpected") != COLD_PROVIDER_REQUESTS
+            or result.get("keepSha256") != manifest["keepSha256Before"]
+            or result.get("ownerRequests") != [] or result.get("contextRefs") != []
+            or result.get("claimLimit") != "Controlled quiescent-controller restore using copied native history and durable ledger; no crash simulation, new thread, handoff, Goal or other host-state migration, model judgment or product acceptance."):
+        raise ValueError("cold result or claim boundary differs")
+    identities = result.get("identities", {})
+    if (identities.get("codex") != manifest["identities"]["codex"]
+            or identities.get("node") != manifest["identities"]["node"]):
+        raise ValueError("cold executing identities differ")
+    writer = expected_scope["writerThreadId"]
+    claimed = result.get("scopeAfter", {})
+    restored = result.get("restoredState", {})
+    final_state = result.get("sessionState", {})
+    if (result.get("prior", {}).get("expectedScope") != expected_scope
+            or result.get("prior", {}).get("transferId") != transfer_id
+            or result.get("scopeBefore") != expected_scope
+            or claimed.get("writerThreadId") != writer or claimed.get("activeTransferId") is not None
+            or claimed.get("token") == expected_scope["token"]
+            or result.get("verifyStages") != ["restore-prepare", "restore-resumed"]
+            or restored.get("status") != "ready" or restored.get("sourceThreadId") != writer
+            or restored.get("turnCount") != 0 or len(restored.get("transfers", [])) != 1
+            or restored["transfers"][0].get("restored") is not True
+            or final_state.get("status") != "ready" or final_state.get("sourceThreadId") != writer
+            or final_state.get("turnCount") != 1 or len(final_state.get("transfers", [])) != 1):
+        raise ValueError("cold scope claim or restored source state differs")
+    claims, receipts = result.get("claimRequests"), result.get("claimReceipts")
+    if (claims != [{"scopeRef": expected_scope["scopeRef"], "expectedScope": expected_scope}]
+            or not isinstance(receipts, list) or len(receipts) != 1
+            or receipts[0].get("scope") != claimed):
+        raise ValueError("cold claim request or receipt differs")
+    for transfer in ("native-transfer-1", "native-transfer-2"):
+        before = result.get("recordsBefore", {}).get(transfer, {})
+        after = result.get("recordsAfter", {}).get(transfer, {})
+        prior_record = prior_result.get("records", {}).get(transfer, {})
+        if (before != prior_record or before.get("revision") != after.get("revision")
+                or before.get("state") != after.get("state")
+                or after.get("lease", {}).get("writerThreadId") != writer
+                or after.get("lease", {}).get("token") != claimed.get("token")):
+            raise ValueError("cold restore changed settled transfer history")
+    database = _open_retained_ledger(root / "retained/carrier.sqlite")
+    try:
+        scopes = database.execute(
+            "SELECT scope_ref,writer_thread_id,active_transfer_id,fence_token FROM scopes").fetchall()
+        transfers = database.execute(
+            "SELECT transfer_id,scope_ref,revision,state_json,settled FROM transfers ORDER BY transfer_id").fetchall()
+    finally:
+        database.close()
+    if (scopes != [(expected_scope["scopeRef"], writer, None, claimed.get("token"))]
+            or len(transfers) != 2):
+        raise ValueError("cold durable scope differs from the claimed receipt")
+    for transfer_id, scope_ref, revision, state_json, settled in transfers:
+        recorded = result["recordsAfter"].get(transfer_id, {})
+        if (scope_ref != expected_scope["scopeRef"] or settled != 1
+                or revision != recorded.get("revision")
+                or json.loads(state_json) != recorded.get("state")):
+            raise ValueError("cold durable transfer row differs")
+    prior_turns = prior_result.get("histories", {}).get(writer, {}).get("thread", {}).get("turns")
+    before_turns = result.get("historyBefore", {}).get("thread", {}).get("turns")
+    after_thread = result.get("historyAfter", {}).get("thread", {})
+    if (not isinstance(prior_turns, list) or before_turns != prior_turns
+            or after_thread.get("id") != writer
+            or after_thread.get("path") != result.get("nativeSession", {}).get("path")
+            or after_thread.get("turns", [])[:len(prior_turns)] != prior_turns
+            or len(after_thread.get("turns", [])) != len(prior_turns) + 1
+            or after_thread["turns"][-1].get("status") != "completed"):
+        raise ValueError("cold native history preservation or appended turn differs")
+    prepare_evidence = result.get("verifyEvidence", {}).get("prepare", {})
+    prepare_path = _retained_session_path(root, prepare_evidence.get("threadPath", ""), manifest)
+    evidence = result.get("verifyEvidence", {}).get("resumed", {})
+    recorded_native_path = result.get("nativeSession", {}).get("path", "")
+    native_path = _retained_session_path(root, recorded_native_path, manifest)
+    sessions_root = _ordinary_dir(root / "retained/native-sessions")
+    actual = evidence.get("actual", {})
+    thread_read = evidence.get("threadRead", {})
+    if (sessions_root not in prepare_path.parents or prepare_path.resolve(strict=True) != prepare_path
+            or prepare_evidence.get("sessionRelativePath") != target_session_names[0]
+            or prepare_evidence.get("tools") != ["accord_request_handoff", "accord_inspect_context"]
+            or sessions_root not in native_path.parents or native_path.resolve(strict=True) != native_path
+            or evidence.get("threadPath") != recorded_native_path
+            or evidence.get("sessionRelativePath") != target_session_names[0]
+            or evidence.get("tools") != ["accord_request_handoff", "accord_inspect_context"]
+            or _recorded_relative(actual.get("cwd", ""), manifest) != ("workspace",)
+            or {key: actual.get(key) for key in ("model", "modelProvider", "sandbox", "approvalPolicy")} != {
+                "model": "fixture-no-model", "modelProvider": "accord_fixture",
+                "sandbox": "readOnly", "approvalPolicy": "never"}
+            or _recorded_relative(thread_read.get("cwd", ""), manifest) != ("workspace",)
+            or {key: thread_read.get(key) for key in ("model", "modelProvider")} != {
+                "model": "fixture-no-model", "modelProvider": "accord_fixture"}):
+        raise ValueError("cold restored native path, tools or settings differ")
+    session_rows = _json_lines(native_path)
+    metas = [row for row in session_rows if row.get("type") == "session_meta"
+             and row.get("payload", {}).get("id") == writer]
+    contexts = [row.get("payload", {}) for row in session_rows if row.get("type") == "turn_context"]
+    expected_tools = prior_result.get("records", {}).get(transfer_id, {}).get(
+        "state", {}).get("plan", {}).get("target", {}).get("dynamicTools")
+    if (len(metas) != 1 or metas[0].get("payload", {}).get("dynamic_tools") != expected_tools
+            or not contexts or _recorded_relative(contexts[-1].get("cwd", ""), manifest) != ("workspace",)
+            or contexts[-1].get("model") != "fixture-no-model"
+            or contexts[-1].get("approval_policy") != "never"
+            or contexts[-1].get("sandbox_policy", {}).get("type") != "read-only"):
+        raise ValueError("cold final persistent session metadata differs")
+    retained_sessions = _tree_hashes(sessions_root)
+    if (retained_sessions != post.get("nativeSessions", {}).get("hashes")
+            or len(retained_sessions) != 3):
+        raise ValueError("cold final native session retention differs")
+
+    requests = _json_lines(root / "native/app-server/requests.jsonl")
+    received = _json_lines(root / "native/app-server/stdout.jsonl")
+    methods = [row.get("method") for row in requests if isinstance(row.get("method"), str)]
+    resumes = [row for row in requests if row.get("method") == "thread/resume"]
+    starts = [row for row in requests if row.get("method") == "thread/start"]
+    turns = [row for row in requests if row.get("method") == "turn/start"]
+    resume_params = resumes[0].get("params", {}) if len(resumes) == 1 else {}
+    if (len(resumes) != 1 or starts or len(turns) != 1 or methods.count("initialize") != 1
+            or _recorded_relative(resume_params.get("cwd", ""), manifest) != ("workspace",)
+            or {key: resume_params.get(key) for key in ("threadId", "excludeTurns", "sandbox",
+                "approvalPolicy", "model", "modelProvider")} != {"threadId": writer,
+                "excludeTurns": True, "sandbox": "read-only", "approvalPolicy": "never",
+                "model": "fixture-no-model", "modelProvider": "accord_fixture"}
+            or turns[0].get("params", {}).get("threadId") != writer
+            or any(method in {"thread/start", "thread/unsubscribe", "thread/archive",
+                              "thread/delete", "thread/fork"} for method in methods)):
+        raise ValueError("cold native resume/start sequence differs")
+    client_requests = [row for row in requests if isinstance(row.get("method"), str) and "id" in row]
+    raw_responses = [row for row in received if "id" in row and "method" not in row]
+    response_by_id = {}
+    for row in raw_responses:
+        response_by_id.setdefault(_rpc_id(row["id"]), []).append(row)
+    for request in client_requests:
+        matched = response_by_id.get(_rpc_id(request["id"]), [])
+        if len(matched) != 1 or "result" not in matched[0] or "error" in matched[0]:
+            raise ValueError("cold native RPC response is missing, duplicated or failed")
+    resume_receipt = response_by_id[_rpc_id(resumes[0]["id"])][0]["result"]
+    if (_recorded_relative(resume_receipt.get("cwd", ""), manifest) != ("workspace",)
+            or {key: resume_receipt.get(key) for key in ("model", "modelProvider", "approvalPolicy")} != {
+                "model": "fixture-no-model", "modelProvider": "accord_fixture",
+                "approvalPolicy": "never"}
+            or resume_receipt.get("sandbox", {}).get("type") != "readOnly"
+            or actual != {"cwd": resume_receipt.get("cwd"), "model": resume_receipt.get("model"),
+                "modelProvider": resume_receipt.get("modelProvider"), "sandbox": "readOnly",
+                "approvalPolicy": resume_receipt.get("approvalPolicy")}):
+        raise ValueError("cold native resume receipt settings differ")
+    turn_id = response_by_id[_rpc_id(turns[0]["id"])][0]["result"].get("turn", {}).get("id")
+    terminals = [row for row in received if row.get("method") == "turn/completed"
+                 and row.get("params", {}).get("threadId") == writer
+                 and row.get("params", {}).get("turn", {}).get("id") == turn_id]
+    if len(terminals) != 1 or terminals[0]["params"]["turn"].get("status") != "completed":
+        raise ValueError("cold turn terminal differs")
+    tool_requests = [row for row in received if row.get("method") == "item/tool/call"]
+    replies = {_rpc_id(row["id"]): row for row in requests if "method" not in row and "id" in row}
+    if (len(tool_requests) != 1 or tool_requests[0].get("params", {}).get("tool") != "accord_inspect_context"
+            or tool_requests[0].get("params", {}).get("threadId") != writer
+            or tool_requests[0].get("params", {}).get("turnId") != turn_id
+            or replies.get(_rpc_id(tool_requests[0]["id"]), {}).get("result", {}).get("success") is not True):
+        raise ValueError("cold context tool request/reply identity differs")
+    provider_rows = _json_lines(root / "retained/provider-requests.jsonl")
+    provider_responses = [_read_json(root / f"retained/provider-response-{ordinal}.json")
+                          for ordinal in range(1, COLD_PROVIDER_REQUESTS + 1)]
+    if (len(provider_rows) != COLD_PROVIDER_REQUESTS
+            or post.get("providerRequests") != COLD_PROVIDER_REQUESTS
+            or post.get("credentialsObserved") is not False
+            or _provider_tool(provider_responses[0]["response"]["output"][0]) != "accord_inspect_context"
+            or _provider_tool(provider_responses[1]["response"]["output"][0]) is not None
+            or any(row.get("transportStatus") != "completed" for row in provider_responses)):
+        raise ValueError("cold fixed provider receipts differ")
+    second_input = provider_rows[1].get("request", {}).get("input", [])
+    provider_calls = [row for row in second_input if _provider_tool(row) == "accord_inspect_context"]
+    provider_outputs = [row for row in second_input
+                        if row.get("type") in {"function_call_output", "custom_tool_call_output"}]
+    if (len(provider_calls) != 1 or len(provider_outputs) != 1
+            or provider_calls[0].get("call_id") != provider_outputs[0].get("call_id")):
+        raise ValueError("cold provider tool call/output identity differs")
+    try:
+        provider_context = json.loads(provider_outputs[0].get("output", ""))
+    except (TypeError, json.JSONDecodeError):
+        raise ValueError("cold provider context output is not structured") from None
+    conditions = provider_context.get("observation", {}).get("conditions", {})
+    if (provider_context.get("schema") != "yiyuan-accord-native-context-reply/v1"
+            or conditions.get("threadId") != writer or conditions.get("turnId") != turn_id):
+        raise ValueError("cold provider context source identity differs")
+    if [p.name for p in (root / "workspace").iterdir()] != ["keep.txt"]:
+        raise ValueError("cold workspace contains an unexpected output")
+    return {"valid": True, "mode": "restore", "providerRequests": COLD_PROVIDER_REQUESTS,
+            "threadId": writer, "transfers": 2,
+            "claimLimit": "Read-only cold artifact inspection; no crash, Goal or other host-state migration, model or product acceptance claim."}
+
+
 def inspect_evidence(value):
     """Read-only independent inspection; never repairs or creates evidence."""
     root = _ordinary_dir(Path(value).absolute())
@@ -182,6 +628,11 @@ def inspect_evidence(value):
     post = _read_json(root / "poststate.json")
     envelope = _read_json(root / "retained/node-result.json", 16 * 1024 * 1024)
     controller_config = _read_json(root / "retained/controller-config.json")
+    mode = manifest.get("mode", "hot")
+    if mode == "restore":
+        return _inspect_restore_evidence(root, manifest, post, envelope, controller_config)
+    if mode != "hot":
+        raise ValueError("unknown native session evidence mode")
     if (manifest.get("schema") != SCHEMA or not isinstance(manifest.get("evidence"), str)
             or manifest.get("providerRequests") != PROVIDER_REQUESTS
             or envelope.get("schema") != "accord-codex-session-native-envelope/v1"
@@ -408,8 +859,9 @@ def inspect_evidence(value):
             "claimLimit": "Read-only artifact inspection; execution-time external identities rely on retained before/after receipts."}
 
 
-def native_integration(codex_value, evidence_value):
-    root = _fresh_root(evidence_value)
+def native_integration(codex_value, evidence_value, restore_from=None):
+    root, prior = _restore_roots(evidence_value, restore_from)
+    restore_mode = prior is not None
     codex = _regular_file(Path(codex_value).resolve(strict=True))
     if os.name == "nt" and codex.suffix.lower() != ".exe":
         raise ValueError("existing native Codex executable required")
@@ -421,23 +873,31 @@ def native_integration(codex_value, evidence_value):
     for name in ("home", "workspace", "state", "temp", "native", "retained"):
         (root / name).mkdir()
     keep = root / "workspace/keep.txt"
-    keep.write_bytes(b"Preserve this fixed native session original.\n")
+    restore_inputs = _prepare_restore_inputs(prior, root) if restore_mode else None
+    if not restore_mode:
+        keep.write_bytes(b"Preserve this fixed native session original.\n")
     keep_hash = digest(keep)
     source_hashes = _source_hashes()
     snapshot = _snapshot_sources(root, source_hashes)
     codex_hash, node_hash = digest(codex), digest(node)
     shared_before = _shared_config_observation()
+    provider_requests = COLD_PROVIDER_REQUESTS if restore_mode else PROVIDER_REQUESTS
     manifest = {"schema": SCHEMA, "evidence": str(root), "codex": str(codex), "node": str(node),
         "ownedRoots": {name: str(root / name) for name in ("home", "workspace", "state", "temp")},
         "limits": {"requestSeconds": 30, "recoverySeconds": 15,
-                   "providerRequestBytes": 2 * 1024 * 1024, "providerRequests": PROVIDER_REQUESTS},
+                   "providerRequestBytes": 2 * 1024 * 1024, "providerRequests": provider_requests},
         "resourceController": "windows-job-object" if os.name == "nt" else "posix-session-process-group",
-        "providerRequests": PROVIDER_REQUESTS, "sourceHashes": source_hashes,
+        "providerRequests": provider_requests, "sourceHashes": source_hashes,
         "sourceSnapshot": str(snapshot), "keepSha256Before": keep_hash,
         "sharedConfigBefore": shared_before,
         "environmentBoundary": ("Isolated CODEX_HOME/SQLITE/state/temp; Windows process essentials may retain USERPROFILE/APPDATA."
                                 if os.name == "nt" else "Isolated CODEX_HOME/HOME/XDG/SQLITE/state/temp."),
-        "claimLimit": "Fixed localhost responses and test verifier; no real model, shared Desktop control, cold recovery or product acceptance."}
+        "claimLimit": ("Controlled restore from copied quiescent native evidence; no crash simulation, real model, new thread, handoff, Goal or other host-state migration, or product acceptance."
+                       if restore_mode else
+                       "Fixed localhost responses and test verifier; no real model, shared Desktop control, cold recovery or product acceptance.")}
+    if restore_mode:
+        manifest["mode"] = "restore"
+        manifest["restore"] = restore_inputs
     env = _owned_environment(manifest)
     version = _codex_version(codex, manifest, "source", env)
     node_version = _codex_version(node, manifest, "node", env)
@@ -446,7 +906,7 @@ def native_integration(codex_value, evidence_value):
     manifest["identities"] = {"codex": {"path": str(codex), "sha256": codex_hash, "version": version},
                               "node": {"path": str(node), "sha256": node_hash, "version": node_version}}
     save(root / "manifest.json", manifest)
-    fixture = _Fixture(manifest, fixed_provider_item)
+    fixture = _Fixture(manifest, cold_provider_item if restore_mode else fixed_provider_item)
     app = None
     resource = None
     fixture_stopped = False
@@ -454,18 +914,28 @@ def native_integration(codex_value, evidence_value):
     deadline = time.monotonic() + 180
     try:
         native_argv = _argv(manifest, fixture, ("-c", "features.plugins=false", "-c", "features.hooks=false"))
-        config = {"schema": "accord-codex-session-native-config/v1", "evidence": str(root),
+        config = {"schema": ("accord-codex-session-native-config/v2" if restore_mode else
+                             "accord-codex-session-native-config/v1"), "evidence": str(root),
             "argv": native_argv, "workspace": str(root / "workspace"),
             "nativeLogRoot": str(root / "native/app-server"),
             "recorderPath": str(root / "retained/carrier.sqlite"),
             "resultPath": str(root / "retained/node-result.json"),
-            "binding": {"connectionId": "accord-native-session-controller", "hostVersion": version},
+            "binding": {"connectionId": ("accord-native-session-restore-controller" if restore_mode else
+                                           "accord-native-session-controller"), "hostVersion": version},
             "keepPath": str(keep), "keepSha256": keep_hash,
             "overallDeadlineMs": int(time.time() * 1000) + 165000,
             "identities": manifest["identities"]}
+        if restore_mode:
+            config.update(mode="restore", restore={
+                "priorRoot": restore_inputs["portableRoot"],
+                "sessionsRoot": str(root / "home/sessions"),
+                "scopeRef": restore_inputs["scopeRef"],
+                "transferId": restore_inputs["transferId"],
+                "expectedScope": restore_inputs["expectedScope"]})
         save(root / "retained/controller-config.json", config)
         caller = snapshot / "tests/product/codex_session_native.cjs"
-        app = _App(manifest, "codex-session-controller", [str(node), str(caller)], env, deadline)
+        resource_name = "codex-session-restore-controller" if restore_mode else "codex-session-controller"
+        app = _App(manifest, resource_name, [str(node), str(caller)], env, deadline)
         app._send(config)
         done = app._receive(deadline)
         save(root / "retained/controller-done.json", done)
@@ -496,6 +966,7 @@ def native_integration(codex_value, evidence_value):
         fixture_stopped = not fixture.thread.is_alive()
         post = None
         try:
+            prior_after = (_input_inventory(Path(restore_inputs["priorPath"])) if restore_mode else None)
             post = {"providerRequests": len(fixture.requests), "credentialsObserved": fixture.auth_seen,
                 "fixtureThreadStopped": fixture_stopped, "keepSha256After": digest(keep),
                 "sourceHashesAfter": _source_hashes(), "sharedConfigAfter": _shared_config_observation(),
@@ -504,7 +975,10 @@ def native_integration(codex_value, evidence_value):
                     {"type": type(cleanup_error).__name__, "message": str(cleanup_error)} if cleanup_error else None),
                 "executionFailure": ({"type": type(execution_error).__name__,
                     "message": str(execution_error)} if execution_error else None),
-                "nativeSessions": native_sessions}
+                "nativeSessions": native_sessions,
+                **({"priorInputInventoryAfter": prior_after,
+                    "priorInputUnchanged": prior_after == restore_inputs["priorInventoryBefore"]}
+                   if restore_mode else {})}
             save(root / "poststate.json", post)
         except BaseException as error:
             cleanup_error = cleanup_error or error
@@ -513,7 +987,7 @@ def native_integration(codex_value, evidence_value):
     if cleanup_error is not None:
         raise RuntimeError("native integration cleanup failed; evidence retained") from cleanup_error
     result = inspect_evidence(root)
-    print(json.dumps({"executed": True, "modelCalls": 0, "providerRequests": PROVIDER_REQUESTS,
+    print(json.dumps({"executed": True, "modelCalls": 0, "providerRequests": provider_requests,
                       "evidence": str(root), "inspection": result}, ensure_ascii=False))
     return result
 
@@ -542,6 +1016,19 @@ class CodexSessionNativeOfflineTests(unittest.TestCase):
                 _open_retained_ledger(path)
             self.assertEqual(sidecar.read_bytes(), b'unresolved journal evidence')
 
+    def test_restore_ledger_ignores_ordinary_shm_but_rejects_pending_wal(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "carrier.sqlite"
+            database = sqlite3.connect(path)
+            database.execute("CREATE TABLE original(value TEXT)")
+            database.commit()
+            database.close()
+            path.with_name(path.name + "-shm").write_bytes(b"transient shared memory metadata")
+            self.assertEqual(_validate_restore_ledger_sidecars(path), path)
+            path.with_name(path.name + "-wal").write_bytes(b"pending transaction")
+            with self.assertRaisesRegex(ValueError, "uncheckpointed"):
+                _validate_restore_ledger_sidecars(path)
+
     def test_fixed_provider_items_support_direct_and_code_mode_shapes(self):
         direct = {"tools": [{"type": "function", "name": "accord_request_handoff"}]}
         self.assertEqual(fixed_provider_item(direct, 1)["type"], "function_call")
@@ -553,10 +1040,41 @@ class CodexSessionNativeOfflineTests(unittest.TestCase):
         self.assertEqual(fixed_provider_item(wrapper, 4)["type"], "custom_tool_call")
         self.assertIsNone(fixed_provider_item({}, 2))
 
+    def test_cold_provider_uses_one_context_call_then_final(self):
+        direct = {"tools": [{"type": "function", "name": "accord_inspect_context"}]}
+        item = cold_provider_item(direct, 1)
+        self.assertEqual((_provider_tool(item), item["type"]),
+                         ("accord_inspect_context", "function_call"))
+        self.assertIsNone(cold_provider_item({}, 2))
+        with self.assertRaisesRegex(ValueError, "ordinal"):
+            cold_provider_item({}, 3)
+
     def test_fresh_evidence_root_rejects_reuse_before_execution(self):
         with tempfile.TemporaryDirectory() as directory:
             with self.assertRaisesRegex(ValueError, "fresh root"):
                 _fresh_root(directory)
+
+    def test_restore_root_nesting_is_rejected_before_creation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            prior = Path(directory) / "prior"
+            prior.mkdir()
+            (prior / "keep.txt").write_bytes(b"preserve")
+            evidence = prior / "new-evidence"
+            before = _input_inventory(prior)
+            with self.assertRaisesRegex(ValueError, "must not be nested"):
+                _restore_roots(evidence, prior)
+            self.assertFalse(evidence.exists())
+            self.assertEqual(_input_inventory(prior), before)
+
+    def test_recorded_native_paths_are_portable_locators(self):
+        windows = {"resourceController": "windows-job-object", "evidence": r"C:\old\evidence"}
+        self.assertEqual(_recorded_relative(r"C:\old\evidence\home\sessions\one.jsonl", windows),
+                         ("home", "sessions", "one.jsonl"))
+        posix = {"resourceController": "posix-session-process-group", "evidence": "/old/evidence"}
+        self.assertEqual(_recorded_relative("/old/evidence/retained/carrier.sqlite", posix),
+                         ("retained", "carrier.sqlite"))
+        with self.assertRaisesRegex(ValueError, "outside"):
+            _recorded_relative(r"D:\foreign\one.jsonl", windows)
 
 
 if __name__ == "__main__":
@@ -564,8 +1082,9 @@ if __name__ == "__main__":
         parser = argparse.ArgumentParser()
         parser.add_argument("--native-codex", required=True)
         parser.add_argument("--evidence", required=True)
+        parser.add_argument("--restore-from")
         args = parser.parse_args()
-        native_integration(args.native_codex, args.evidence)
+        native_integration(args.native_codex, args.evidence, args.restore_from)
     elif "--inspect-evidence" in sys.argv:
         parser = argparse.ArgumentParser()
         parser.add_argument("--inspect-evidence", required=True)

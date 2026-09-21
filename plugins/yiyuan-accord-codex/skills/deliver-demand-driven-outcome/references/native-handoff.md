@@ -129,6 +129,59 @@ The source connection owner must serialize its writes through this session;
 scope reads before and after a turn do not create an OS lock or eliminate a
 check-to-send race against an unrelated controller that ignores this ownership.
 
+### Restore a settled target on a new controller
+
+`await restoreCodexSourceSession(options, {transferId, expectedScope, deadlineMs,
+resume})` reuses the same session executor after a completed, settled transfer.
+`options` supplies the connection, recorder, scope and existing callbacks; it must
+not contain `threadStart`. `expectedScope` is the exact inactive scope receipt
+previously acknowledged by adoption/restoration, with `scopeRef`, `writerThreadId`,
+`activeTransferId: null` and `token`. Retain that receipt in the owner's recovery
+state. Reading the newest token after an uncertain attempt is not a replacement
+for reconciling its effects.
+
+The adapter derives the native target from the retained transfer. It rejects
+active transfers, pending effects, mismatched receipts and reused controller
+identity. A summary `thread/read` may show an idle or unloaded persistent target;
+`notLoaded` on this connection does not prove another controller stopped.
+`verify('restore-prepare', facts, deadline)` must bind the current scope/authority/
+state and evidence source, allow restoration, and affirm prior-controller
+quiescence, reconciled pending effects, single-writer ownership and safe resume
+initialization. Missing current authority or a retained pause holds restoration.
+The required affirmative fields are `pauseStateVerified`,
+`priorControllerQuiesced`, `pendingEffectsReconciled`, `restorationAuthorized`,
+`singleWriter` and `resumeInitializationSafe`, alongside `decision: "allow"` and
+the matching references above.
+
+Only after that check does `claimScope` atomically rotate the acknowledged token,
+followed by readback and native `thread/resume`. This order consumes the old basis
+before resume can cause initialization effects. A lost claim/resume receipt
+cannot be retried by opening a new executor with the old basis. Any uncertain
+effect requires owner reconciliation; the adapter never refreshes the basis or
+replays automatically. Failed restoration executors cannot fall back to creating
+a new source.
+
+`resume` explicitly supplies `cwd`, `sandbox` and `approvalPolicy`. Optional
+`model`/`modelProvider` are forwarded; omission uses native restoration behavior
+and does not establish that the current user choice is satisfied. Explicit
+`effort` maps to the version-supported `config.model_reasoning_effort` override.
+The fixed 0.155.1 resume API has no direct `effort` field. No arbitrary config,
+history, path or dynamic-tool replacement is accepted. `excludeTurns: true` and
+summary reads avoid mandatory full-history hydration; the verifier retrieves the
+necessary history through suitable bounded native sources.
+
+After resume, `verify('restore-resumed', facts, deadline)` must verify actual
+settings, retained history, effects and restored continuity tools, including a
+`nativeToolEvidenceRef`. The saved Accord plan alone is not evidence that the
+host restored tools. A final scope read must still match the claimed token before
+the session becomes ready. Ordinary turns also recheck their held token, so a
+stale cooperating executor cannot continue after a new claim. This covers a
+settled target with reconciled effects; active-transfer/crash recovery and
+arbitrary external writes require their own reconciliation path.
+The resumed verdict requires matching references, `decision: "allow"`,
+`continuityToolsRestored`, `targetSettingsMatch`, `historyRetained`, `singleWriter`
+and `effectsVerified` all true, plus the nonempty native tool evidence reference.
+
 `runtime/carrier-recorder.cjs` exports
 `openCarrierRecorder({path, create?, busyTimeoutMs?})`. The path must be an
 absolute, ordinary caller-owned database file; `create: true` exclusively creates
@@ -136,6 +189,9 @@ a new file, while the default requires this exact recorder schema. No directory,
 database migration, account or background service is created implicitly.
 `readScope` throws `SCOPE_NOT_FOUND` for an unbound scope. `bindScope`, `begin`,
 `compareAndSet` and `read` implement the core's existing durable recorder contract.
+`claimScope(scopeRef, expectedScope)` rotates only an unchanged inactive scope's
+token in one transaction, preserving its writer and transfer history. It cannot
+clear an active transfer, change writers, expire another owner or grant authority.
 Explicit `settle(transferId, revision, lease)` only releases an active transfer
 whose stored state has the verified source-release shape; it preserves the target
 writer and history, rotates the token and does not grant another action.

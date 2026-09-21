@@ -148,6 +148,32 @@ function token() {
   return crypto.randomBytes(32).toString('hex');
 }
 
+function rotatedToken(previous) {
+  let next = token();
+  while (next === previous) next = token();
+  return next;
+}
+
+function inactiveScopeSnapshot(value, scopeRef) {
+  if (!plainObject(value)) throw new TypeError('expectedScope must be an object');
+  const keys = Object.keys(value).sort();
+  const expected = ['activeTransferId', 'scopeRef', 'token', 'writerThreadId'].sort();
+  if (keys.length !== expected.length || keys.some((key, index) => key !== expected[index])) {
+    throw new TypeError('expectedScope has unsupported fields');
+  }
+  const snapshot = immutable({
+    scopeRef: text(value.scopeRef, 'expectedScope.scopeRef'),
+    writerThreadId: text(value.writerThreadId, 'expectedScope.writerThreadId'),
+    activeTransferId: value.activeTransferId,
+    token: text(value.token, 'expectedScope.token'),
+  });
+  if (snapshot.scopeRef !== scopeRef) throw new TypeError('expectedScope scope differs');
+  if (snapshot.activeTransferId !== null) {
+    throw new TypeError('expectedScope must describe an inactive scope');
+  }
+  return snapshot;
+}
+
 function loadDatabaseSync() {
   try {
     const {DatabaseSync} = require('node:sqlite');
@@ -443,6 +469,32 @@ function openCarrierRecorder(options) {
     return scopeView(row);
   }
 
+  function claimScope(scopeRef, expectedScope) {
+    // The caller separately verifies that the previous controller is quiescent.
+    // This rotates a cooperating-controller fence; it grants no writer authority.
+    ensureOpen();
+    text(scopeRef, 'scopeRef');
+    const expected = inactiveScopeSnapshot(expectedScope, scopeRef);
+    return transaction(database, 'IMMEDIATE', () => {
+      const current = getScope.get(scopeRef);
+      if (!current) reject('CLAIM_CONFLICT', 'scope changed since the expected snapshot');
+      if (current.active_transfer_id !== null) reject('SCOPE_BUSY', 'scope has an active transfer');
+      if (current.writer_thread_id !== expected.writerThreadId ||
+          current.fence_token !== expected.token) {
+        reject('CLAIM_CONFLICT', 'scope changed since the expected snapshot');
+      }
+      const nextToken = rotatedToken(expected.token);
+      const updated = database.prepare(
+        'UPDATE scopes SET fence_token = ? WHERE scope_ref = ? AND writer_thread_id = ? AND active_transfer_id IS NULL AND fence_token = ?',
+      ).run(nextToken, scopeRef, expected.writerThreadId, expected.token);
+      if (updated.changes !== 1) reject('CLAIM_CONFLICT', 'scope changed during claim');
+      return immutable({scope: {
+        scopeRef, writerThreadId: expected.writerThreadId,
+        activeTransferId: null, token: nextToken,
+      }});
+    });
+  }
+
   function begin(transferId, planDigest, initialState) {
     ensureOpen();
     text(transferId, 'transferId');
@@ -580,7 +632,7 @@ function openCarrierRecorder(options) {
     database.close();
   }
 
-  return Object.freeze({bindScope, readScope, begin, compareAndSet, read, settle, close});
+  return Object.freeze({bindScope, readScope, claimScope, begin, compareAndSet, read, settle, close});
 }
 
 module.exports = {openCarrierRecorder, CarrierRecorderError};

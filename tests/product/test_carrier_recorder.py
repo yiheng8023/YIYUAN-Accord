@@ -37,6 +37,17 @@ try {
     const recorder = openCarrierRecorder({path: request.path, busyTimeoutMs: 3000});
     const value = recorder.readScope(request.scopeRef);
     recorder.close(); reply(value);
+  } else if (request.action === 'claim' || request.action === 'waitClaim') {
+    if (request.action === 'waitClaim') {
+      const until = Date.now() + 5000;
+      while (!fs.existsSync(request.gate) && Date.now() < until) {
+        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 10);
+      }
+      if (!fs.existsSync(request.gate)) throw new Error('gate timeout');
+    }
+    const recorder = openCarrierRecorder({path: request.path, busyTimeoutMs: 3000});
+    const value = recorder.claimScope(request.scopeRef, request.expectedScope);
+    recorder.close(); reply(value);
   } else if (request.action === 'begin' || request.action === 'waitBegin') {
     if (request.action === 'waitBegin') {
       const until = Date.now() + 5000;
@@ -194,6 +205,120 @@ class CarrierRecorderTests(unittest.TestCase):
         scope = self.request("scope", path=str(self.db), scopeRef="scope-a")
         self.assertIn(scope["activeTransferId"], requests)
         self.assertEqual(scope["writerThreadId"], "source")
+
+    def test_two_processes_claim_one_inactive_scope_only_once(self):
+        self.create()
+        expected = self.request("scope", path=str(self.db), scopeRef="scope-a")
+        gate = self.root / "claim.gate"
+        processes = []
+        for _ in range(2):
+            encoded = self.encoded_request(
+                "waitClaim", path=str(self.db), gate=str(gate),
+                scopeRef="scope-a", expectedScope=expected,
+            )
+            processes.append(subprocess.Popen(
+                ["node", str(self.runner), encoded], cwd=ROOT, text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            ))
+        gate.write_text("go", encoding="ascii")
+        results = []
+        for process in processes:
+            stdout, stderr = process.communicate(timeout=15)
+            self.assertEqual(process.returncode, 0, stderr)
+            results.append(json.loads(stdout))
+        successes = [result["value"] for result in results if result["ok"]]
+        conflicts = [result for result in results if not result["ok"]]
+        self.assertEqual(len(successes), 1, results)
+        self.assertEqual(len(conflicts), 1, results)
+        self.assertEqual(conflicts[0]["code"], "CLAIM_CONFLICT")
+        claimed = successes[0]["scope"]
+        self.assertEqual(claimed["scopeRef"], expected["scopeRef"])
+        self.assertEqual(claimed["writerThreadId"], expected["writerThreadId"])
+        self.assertIsNone(claimed["activeTransferId"])
+        self.assertNotEqual(claimed["token"], expected["token"])
+        reopened = self.request("scope", path=str(self.db), scopeRef="scope-a")
+        self.assertEqual(reopened, claimed)
+        stale = self.request(
+            "claim", check=False, path=str(self.db), scopeRef="scope-a",
+            expectedScope=expected,
+        )
+        self.assertEqual(json.loads(stale.stdout)["code"], "CLAIM_CONFLICT")
+
+    def test_claim_requires_the_exact_inactive_scope_snapshot(self):
+        self.create()
+        expected = self.request("scope", path=str(self.db), scopeRef="scope-a")
+        cases = (
+            ({**expected, "writerThreadId": "other"}, "CLAIM_CONFLICT"),
+            ({**expected, "activeTransferId": "transfer"}, None),
+            ({**expected, "extra": True}, None),
+        )
+        for candidate, code in cases:
+            with self.subTest(candidate=candidate):
+                rejected = self.request(
+                    "claim", check=False, path=str(self.db), scopeRef="scope-a",
+                    expectedScope=candidate,
+                )
+                result = json.loads(rejected.stdout)
+                self.assertFalse(result["ok"])
+                self.assertEqual(result["code"], code)
+                if code is None:
+                    self.assertEqual(result["name"], "TypeError")
+                self.assertEqual(
+                    self.request("scope", path=str(self.db), scopeRef="scope-a"), expected,
+                )
+
+    def test_claim_refuses_active_transfer_and_preserves_settled_history(self):
+        self.create()
+        initial_scope = self.request("scope", path=str(self.db), scopeRef="scope-a")
+        active_state = self.initial("transfer-active")
+        active = self.request(
+            "begin", path=str(self.db), transferId="transfer-active",
+            planDigest=active_state["planDigest"], state=active_state,
+        )
+        rejected = self.request(
+            "claim", check=False, path=str(self.db), scopeRef="scope-a",
+            expectedScope=initial_scope,
+        )
+        self.assertEqual(json.loads(rejected.stdout)["code"], "SCOPE_BUSY")
+        self.assertEqual(
+            self.request("scope", path=str(self.db), scopeRef="scope-a"),
+            {"scopeRef": "scope-a", "writerThreadId": "source",
+             "activeTransferId": "transfer-active", "token": active["lease"]["token"]},
+        )
+
+        transferred = {
+            **active_state, "phase": "source-subscription-released", "writer": "target",
+            "writerThreadId": "target", "target": {"threadId": "target"},
+            "continuationTurn": {"threadId": "target", "turnId": "turn-1"},
+            "pendingEffect": None, "verification": {"release": "evidence-release"},
+            "subscriptionRelease": {"threadId": "source", "observed": True},
+        }
+        committed = self.request(
+            "cas", path=str(self.db), transferId="transfer-active", revision=0,
+            state=transferred, lease=active["lease"],
+        )
+        settled = self.request(
+            "settle", path=str(self.db), transferId="transfer-active",
+            revision=committed["revision"], lease=committed["lease"],
+        )
+        history_before = self.request(
+            "read", path=str(self.db), transferId="transfer-active", scopeRef="scope-a",
+        )
+        claimed = self.request(
+            "claim", path=str(self.db), scopeRef="scope-a", expectedScope=settled["scope"],
+        )["scope"]
+        history_after = self.request(
+            "read", path=str(self.db), transferId="transfer-active", scopeRef="scope-a",
+        )
+        self.assertEqual(claimed["writerThreadId"], "target")
+        self.assertIsNone(claimed["activeTransferId"])
+        self.assertNotEqual(claimed["token"], settled["scope"]["token"])
+        self.assertEqual(history_after["revision"], history_before["revision"])
+        self.assertEqual(history_after["state"], history_before["state"])
+        self.assertEqual(history_after["lease"], {
+            "scopeRef": "scope-a", "transferId": None,
+            "token": claimed["token"], "writerThreadId": "target",
+        })
 
     def test_cas_fences_stale_revision_and_lease_and_reopens(self):
         self.create()

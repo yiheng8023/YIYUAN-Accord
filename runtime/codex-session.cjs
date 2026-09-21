@@ -5,8 +5,8 @@
 // This adapter never starts/discovers/closes a host, initializes a connection,
 // retries an ambiguous native effect, or archives/deletes a thread. Only the
 // explicit, validated adoptTarget path settles its current transfer. One session
-// creates one source thread, serializes ordinary turns, and may perform at most
-// one verified fresh handoff per adopted carrier through carrier-handoff.cjs.
+// creates or explicitly restores one source thread, serializes ordinary turns,
+// and may perform at most one verified fresh handoff per adopted carrier.
 
 const {performance} = require('node:perf_hooks');
 const {
@@ -21,6 +21,7 @@ const RESERVED_TOOLS = new Set([
   HANDOFF_PROPOSAL_TOOL.name,
   CONTEXT_OBSERVATION_TOOL.name,
 ]);
+const RESTORE_SESSION = Symbol('accord.restoreCodexSourceSession');
 
 class CodexSourceSessionError extends Error {
   constructor(code, message, options = {}) {
@@ -197,7 +198,39 @@ function validatePlanForRun(rawPlan, sourceThreadId, turnId, scopeRef, wallDeadl
   return plan;
 }
 
-function createCodexSourceSession(options) {
+function validateRestoreInput(raw, scopeRef) {
+  if (!plainObject(raw) || Object.keys(raw).sort().join('|') !==
+      ['deadlineMs', 'expectedScope', 'resume', 'transferId'].sort().join('|')) {
+    throw new TypeError('restore requires transferId, expectedScope, deadlineMs and resume');
+  }
+  text(raw.transferId, 'restore.transferId');
+  const expected = raw.expectedScope;
+  if (!plainObject(expected) || Object.keys(expected).sort().join('|') !==
+      ['activeTransferId', 'scopeRef', 'token', 'writerThreadId'].sort().join('|') ||
+      expected.scopeRef !== scopeRef || expected.activeTransferId !== null) {
+    throw new TypeError('restore.expectedScope must be an exact inactive scope receipt');
+  }
+  text(expected.writerThreadId, 'restore.expectedScope.writerThreadId');
+  text(expected.token, 'restore.expectedScope.token');
+  const resume = cloneData(raw.resume);
+  const allowed = new Set(['cwd', 'sandbox', 'approvalPolicy', 'model', 'modelProvider', 'effort']);
+  if (!plainObject(resume) || Object.keys(resume).some(key => !allowed.has(key))) {
+    throw new TypeError('restore.resume contains unsupported fields');
+  }
+  for (const name of ['cwd', 'sandbox', 'approvalPolicy']) text(resume[name], `restore.resume.${name}`, name === 'cwd' ? 32768 : MAX_REF);
+  for (const name of ['model', 'modelProvider', 'effort']) {
+    if (Object.hasOwn(resume, name)) text(resume[name], `restore.resume.${name}`);
+  }
+  const params = {cwd: resume.cwd, sandbox: resume.sandbox,
+    approvalPolicy: resume.approvalPolicy,
+    ...(resume.model ? {model: resume.model} : {}),
+    ...(resume.modelProvider ? {modelProvider: resume.modelProvider} : {}),
+    ...(resume.effort ? {config: {model_reasoning_effort: resume.effort}} : {})};
+  return immutable({transferId: raw.transferId, expectedScope: expected,
+    deadlineMs: raw.deadlineMs, resume, params});
+}
+
+function createSession(options, restoreMode = false) {
   if (!plainObject(options)) throw new TypeError('options must be an object');
   const allowed = new Set(['connection', 'recorder', 'scopeRef', 'threadStart', 'planResolver',
     'verify', 'current', 'ownerRequest', 'ownUnscopedRequests']);
@@ -218,7 +251,8 @@ function createCodexSourceSession(options) {
   if (!plainObject(recorder) || typeof recorder.readScope !== 'function' ||
       typeof recorder.bindScope !== 'function' || typeof recorder.begin !== 'function' ||
       typeof recorder.compareAndSet !== 'function' || typeof recorder.read !== 'function' ||
-      typeof recorder.settle !== 'function') {
+      typeof recorder.settle !== 'function' ||
+      restoreMode && typeof recorder.claimScope !== 'function') {
     throw new TypeError('a borrowed durable carrier recorder is required');
   }
   for (const name of ['planResolver', 'verify', 'current', 'ownerRequest']) {
@@ -227,14 +261,17 @@ function createCodexSourceSession(options) {
   if (Object.hasOwn(options, 'ownUnscopedRequests') && typeof options.ownUnscopedRequests !== 'boolean') {
     throw new TypeError('ownUnscopedRequests must be a boolean');
   }
-  if (!plainObject(options.threadStart)) throw new TypeError('threadStart must be explicit native parameters');
-  const sourceStart = cloneData(options.threadStart);
-  text(sourceStart.cwd, 'threadStart.cwd', 32768);
-  text(sourceStart.model, 'threadStart.model');
-  if (sourceStart.ephemeral === true) throw new TypeError('threadStart.ephemeral cannot be true for a recoverable source');
-  if (Object.hasOwn(sourceStart, 'threadId')) throw new TypeError('threadStart cannot select an existing thread');
-  sourceStart.dynamicTools = continuityTools(sourceStart.dynamicTools,
-    'threadStart.dynamicTools');
+  if (restoreMode && Object.hasOwn(options, 'threadStart')) throw new TypeError('restore options cannot include threadStart');
+  if (!restoreMode && !plainObject(options.threadStart)) throw new TypeError('threadStart must be explicit native parameters');
+  const sourceStart = restoreMode ? null : cloneData(options.threadStart);
+  if (sourceStart) {
+    text(sourceStart.cwd, 'threadStart.cwd', 32768);
+    text(sourceStart.model, 'threadStart.model');
+    if (sourceStart.ephemeral === true) throw new TypeError('threadStart.ephemeral cannot be true for a recoverable source');
+    if (Object.hasOwn(sourceStart, 'threadId')) throw new TypeError('threadStart cannot select an existing thread');
+    sourceStart.dynamicTools = continuityTools(sourceStart.dynamicTools,
+      'threadStart.dynamicTools');
+  }
   const bound = Object.freeze({
     request: connection.transport.request,
     waitTerminal: connection.transport.waitTerminal,
@@ -250,6 +287,7 @@ function createCodexSourceSession(options) {
     compareAndSet: recorder.compareAndSet,
     readRecord: recorder.read,
     settle: recorder.settle,
+    claimScope: recorder.claimScope,
     planResolver: options.planResolver,
     verify: options.verify,
     current: options.current,
@@ -261,7 +299,9 @@ function createCodexSourceSession(options) {
   const ownUnscopedRequests = options.ownUnscopedRequests === true;
   let busy = false;
   let state = {
-    status: 'new', phase: 'new', scopeRef, sourceThreadId: null, lastTurnId: null,
+    status: restoreMode ? 'restore-required' : 'new',
+    phase: restoreMode ? 'restore-required' : 'new',
+    scopeRef, sourceThreadId: null, lastTurnId: null,
     turnCount: 0, transferCount: 0, transfers: [], lastSafeReceipt: null, pendingRequest: null,
   };
 
@@ -276,6 +316,7 @@ function createCodexSourceSession(options) {
         recorder.readScope !== bound.readScope || recorder.bindScope !== bound.bindScope ||
         recorder.begin !== bound.begin || recorder.compareAndSet !== bound.compareAndSet ||
         recorder.read !== bound.readRecord || recorder.settle !== bound.settle ||
+        restoreMode && recorder.claimScope !== bound.claimScope ||
         options.planResolver !== bound.planResolver ||
         options.verify !== bound.verify || options.current !== bound.current ||
         options.ownerRequest !== bound.ownerRequest) {
@@ -346,6 +387,8 @@ function createCodexSourceSession(options) {
 
   async function ensureSource(deadline) {
     if (state.sourceThreadId) return state.sourceThreadId;
+    if (!sourceStart) return lockFailure('RESTORED_SOURCE_MISSING',
+      'restored session cannot create a replacement source', null, {phase: 'restored-source-missing'});
     state = {...state, status: 'starting', phase: 'scope-check'};
     try {
       let prior, missing = false;
@@ -415,7 +458,8 @@ function createCodexSourceSession(options) {
         {phase});
     }
     if (!observed || observed.scopeRef !== scopeRef ||
-        observed.writerThreadId !== sourceThreadId || observed.activeTransferId !== null) {
+        observed.writerThreadId !== sourceThreadId || observed.activeTransferId !== null ||
+        typeof state.scope?.token !== 'string' || observed.token !== state.scope.token) {
       return lockFailure('SOURCE_SCOPE_CHANGED', 'source scope no longer grants an idle single writer', null,
         {phase, state: {observedScope: immutable(observed || {})}});
     }
@@ -425,6 +469,9 @@ function createCodexSourceSession(options) {
 
   async function run(raw) {
     if (busy) throw new CodexSourceSessionError('RUN_IN_PROGRESS', 'source session already has an active run', {phase: state.phase, state: snapshot()});
+    if (state.status === 'restore-required') throw new CodexSourceSessionError(
+      'RESTORE_REQUIRED', 'restore executor cannot run before successful restoration',
+      {phase: state.phase, state: snapshot()});
     if (state.status === 'failed') throw new CodexSourceSessionError('SESSION_FAILED', 'failed source session requires owner reconciliation', {phase: state.phase, state: snapshot(), rpcRequest: state.failure?.cause?.rpcRequest});
     if (state.status === 'transferred') throw new CodexSourceSessionError('SOURCE_TRANSFERRED', 'source ownership has transferred; this session cannot write again', {phase: state.phase, state: snapshot()});
     if (!plainObject(raw)) throw new TypeError('run must be an object');
@@ -674,10 +721,223 @@ function createCodexSourceSession(options) {
     }
   }
 
-  return Object.freeze({run, adoptTarget, snapshot});
+  async function restoreSettled(raw) {
+    if (busy || state.status !== 'restore-required') throw new CodexSourceSessionError(
+      'RESTORE_UNAVAILABLE', 'restore requires a fresh source-session executor',
+      {phase: state.phase, state: snapshot()});
+    const input = validateRestoreInput(raw, scopeRef);
+    const budget = toRunBudget(input.deadlineMs);
+    let claimInvoked = false;
+    busy = true;
+    state = {...state, status: 'restoring', phase: 'restore-read',
+      restoration: {transferId: input.transferId, expectedScope: input.expectedScope,
+        requestedResume: input.resume}};
+    try {
+      ensureBindings();
+      const record = immutable(await boundedOperation(bound.readRecord,
+        [input.transferId, scopeRef], budget.monotonicDeadline, 'recorder.read'));
+      const observedScope = immutable(await boundedOperation(bound.readScope,
+        [scopeRef], budget.monotonicDeadline, 'recorder.readScope'));
+      ensureBindings();
+      const ledger = record?.state, plan = ledger?.plan;
+      const targetThreadId = ledger?.target?.threadId;
+      if (!plainObject(record) || !Number.isSafeInteger(record.revision) ||
+          !plainObject(ledger) || !plainObject(plan) ||
+          canonical(observedScope) !== canonical(input.expectedScope) ||
+          record.lease?.scopeRef !== input.expectedScope.scopeRef ||
+          record.lease?.writerThreadId !== input.expectedScope.writerThreadId ||
+          record.lease?.transferId !== null ||
+          record.lease?.token !== input.expectedScope.token ||
+          ledger.phase !== 'source-subscription-released' || ledger.pendingEffect !== null ||
+          ledger.transferId !== input.transferId || ledger.scopeRef !== scopeRef ||
+          ledger.writer !== 'target' || ledger.writerThreadId !== targetThreadId ||
+          ledger.sourceRecovery !== 'retained' ||
+          ledger.subscriptionRelease?.observed !== true ||
+          ledger.subscriptionRelease?.threadId !== ledger.source?.threadId ||
+          plan.scopeRef !== scopeRef || plan.authorityRef !== ledger.authorityRef ||
+          plan.stateRef !== ledger.stateRef || input.expectedScope.writerThreadId !== targetThreadId ||
+          input.expectedScope.activeTransferId !== null ||
+          ledger.observedLease?.scopeRef !== scopeRef ||
+          ledger.observedLease?.transferId !== input.transferId ||
+          ledger.observedLease?.writerThreadId !== targetThreadId ||
+          ledger.observedLease?.token === input.expectedScope.token ||
+          typeof ledger.verification?.release !== 'string' ||
+          !ledger.verification.release.trim() ||
+          ledger.connection?.connectionId === bound.connectionId ||
+          !hasContinuityTools(plan.target?.dynamicTools)) {
+        return lockFailure('RESTORE_PRECONDITION_FAILED',
+          'durable transfer, explicit scope receipt or fresh controller binding is not restorable', null,
+          {phase: 'restore-precondition-failed', state: {record, observedScope}});
+      }
+      text(targetThreadId, 'restored target thread id');
+      const before = immutable(await Reflect.apply(bound.request, undefined,
+        ['thread/read', {threadId: targetThreadId},
+          budget.monotonicDeadline]));
+      ensureBindings();
+      const beforeStatus = before?.thread?.status?.type;
+      if (before?.thread?.id !== targetThreadId || before.thread?.ephemeral !== false ||
+          !['idle', 'notLoaded'].includes(beforeStatus)) {
+        return lockFailure('RESTORE_TARGET_UNAVAILABLE',
+          'native target is not the exact persistent idle or unloaded thread', null,
+          {phase: 'restore-target-unavailable', state: {record, observedScope, before}});
+      }
+      const prepareFacts = immutable({connectionId: bound.connectionId,
+        hostVersion: bound.hostVersion, transferId: input.transferId, scopeRef,
+        authorityRef: ledger.authorityRef, stateRef: ledger.stateRef,
+        target: {threadId: targetThreadId}, record, expectedScope: input.expectedScope,
+        observedScope, threadRead: before, requestedResume: input.resume,
+        nativeResumeParams: {threadId: targetThreadId, excludeTurns: true, ...input.params}});
+      const prepared = immutable(await boundedOperation(bound.verify,
+        ['restore-prepare', prepareFacts, budget.monotonicDeadline],
+        budget.monotonicDeadline, 'verify:restore-prepare'));
+      ensureBindings();
+      if (prepared?.decision !== 'allow' || prepared.scopeRef !== scopeRef ||
+          prepared.authorityRef !== ledger.authorityRef || prepared.stateRef !== ledger.stateRef ||
+          typeof prepared.sourceRef !== 'string' || !prepared.sourceRef.trim() ||
+          prepared.pauseStateVerified !== true || prepared.priorControllerQuiesced !== true ||
+          prepared.pendingEffectsReconciled !== true || prepared.restorationAuthorized !== true ||
+          prepared.singleWriter !== true || prepared.resumeInitializationSafe !== true) {
+        return lockFailure('RESTORE_PREPARE_DENIED',
+          'restore-prepare verifier did not authorize initialization', null,
+          {phase: 'restore-prepare-denied', state: {record, observedScope, before, prepared}});
+      }
+      state = {...state, phase: 'restore-claim-pending', restoration: {
+        ...state.restoration, targetThreadId, recordRevision: record.revision,
+        prepareSourceRef: prepared.sourceRef, threadReadBefore: before,
+        prepareVerdict: prepared}};
+      let claim;
+      try {
+        claim = immutable(await boundedOperation(() => {
+          claimInvoked = true;
+          return Reflect.apply(bound.claimScope, undefined,
+            [scopeRef, input.expectedScope]);
+        }, [], budget.monotonicDeadline, 'recorder.claimScope'));
+      } catch (error) {
+        return lockFailure(claimInvoked ? 'RESTORE_CLAIM_UNKNOWN' : 'RESTORE_CLAIM_NOT_INVOKED',
+          claimInvoked ? 'scope claim outcome is unknown and must not be replayed' :
+            'scope claim deadline elapsed before invocation', error,
+          {phase: claimInvoked ? 'restore-claim-unknown' : 'restore-claim-not-invoked'});
+      }
+      state = {...state, restoration: {...state.restoration, claimReceipt: claim}};
+      ensureBindings();
+      if (claim?.scope?.scopeRef !== scopeRef ||
+          claim.scope.writerThreadId !== targetThreadId || claim.scope.activeTransferId !== null ||
+          typeof claim.scope.token !== 'string' || !claim.scope.token.trim() ||
+          claim.scope.token === input.expectedScope.token) {
+        return lockFailure('RESTORE_CLAIM_UNKNOWN',
+          'scope claim acknowledgement is malformed and must not be replayed', null,
+          {phase: 'restore-claim-unknown'});
+      }
+      const claimedScope = immutable(await boundedOperation(bound.readScope, [scopeRef],
+        budget.monotonicDeadline, 'recorder.readScope after claim'));
+      ensureBindings();
+      if (canonical(claimedScope) !== canonical(claim.scope)) {
+        return lockFailure('RESTORE_CLAIM_UNKNOWN',
+          'scope claim readback differs and must not be replayed', null,
+          {phase: 'restore-claim-unknown', state: {claimedScope}});
+      }
+      state = {...state, phase: 'restore-resume-pending', scope: claimedScope,
+        sourceThreadId: targetThreadId,
+        restoration: {...state.restoration, claimedScope}};
+      const resumeParams = immutable({threadId: targetThreadId, excludeTurns: true, ...input.params});
+      let resumed;
+      try {
+        resumed = immutable(await Reflect.apply(bound.request, undefined,
+          ['thread/resume', resumeParams, budget.monotonicDeadline]));
+      } catch (error) {
+        return lockFailure('RESTORE_RESUME_UNKNOWN',
+          'native thread resume outcome is unknown and must not be replayed', error,
+          {phase: 'restore-resume-unknown', state: {resumeParams}});
+      }
+      state = {...state, phase: 'restore-resumed-check', lastSafeReceipt: resumed,
+        restoration: {...state.restoration, resumeReceipt: resumed}};
+      if (resumed?.thread?.id !== targetThreadId || resumed.thread?.ephemeral !== false) {
+        return lockFailure('RESTORE_RESUME_UNKNOWN',
+          'native thread resume acknowledgement has an invalid identity', null,
+          {phase: 'restore-resume-unknown'});
+      }
+      const after = immutable(await Reflect.apply(bound.request, undefined,
+        ['thread/read', {threadId: targetThreadId},
+          budget.monotonicDeadline]));
+      ensureBindings();
+      if (after?.thread?.id !== targetThreadId || after.thread?.ephemeral !== false ||
+          after.thread?.status?.type !== 'idle') {
+        return lockFailure('RESTORE_POSTCHECK_FAILED',
+          'resumed target is not the exact idle persistent thread', null,
+          {phase: 'restore-postcheck-failed', state: {threadReadAfter: after}});
+      }
+      const restoredFacts = immutable({...prepareFacts, claimedScope,
+        resumeParams, resumeReceipt: resumed, threadReadAfter: after});
+      const restored = immutable(await boundedOperation(bound.verify,
+        ['restore-resumed', restoredFacts, budget.monotonicDeadline],
+        budget.monotonicDeadline, 'verify:restore-resumed'));
+      ensureBindings();
+      if (restored?.decision !== 'allow' || restored.scopeRef !== scopeRef ||
+          restored.authorityRef !== ledger.authorityRef || restored.stateRef !== ledger.stateRef ||
+          typeof restored.sourceRef !== 'string' || !restored.sourceRef.trim() ||
+          typeof restored.nativeToolEvidenceRef !== 'string' ||
+          !restored.nativeToolEvidenceRef.trim() ||
+          restored.continuityToolsRestored !== true ||
+          restored.targetSettingsMatch !== true || restored.historyRetained !== true ||
+          restored.singleWriter !== true || restored.effectsVerified !== true) {
+        return lockFailure('RESTORE_POSTCHECK_DENIED',
+          'restore-resumed verifier did not accept native settings, tools and history', null,
+          {phase: 'restore-postcheck-denied', state: {threadReadAfter: after, restored}});
+      }
+      const finalScope = immutable(await boundedOperation(bound.readScope, [scopeRef],
+        budget.monotonicDeadline, 'recorder.readScope after restore verification'));
+      ensureBindings();
+      if (canonical(finalScope) !== canonical(claimedScope)) {
+        return lockFailure('RESTORE_SCOPE_CHANGED',
+          'claimed source scope changed before restoration could become ready', null,
+          {phase: 'restore-scope-changed', state: {finalScope}});
+      }
+      state = {status: 'ready', phase: 'ready', scopeRef,
+        sourceThreadId: targetThreadId, lastTurnId: null, turnCount: 0, transferCount: 0,
+        transfers: [immutable({transferId: input.transferId,
+          sourceThreadId: ledger.source.threadId, targetThreadId, revision: record.revision,
+          settled: true, restored: true})], lastSafeReceipt: resumed,
+        pendingRequest: null, scope: finalScope,
+        restoration: immutable({transferId: input.transferId, targetThreadId,
+          priorConnectionId: ledger.connection.connectionId,
+          connectionId: bound.connectionId, expectedScope: input.expectedScope,
+          claimedScope: finalScope, resumeParams, prepareSourceRef: prepared.sourceRef,
+          restoredSourceRef: restored.sourceRef,
+          nativeToolEvidenceRef: restored.nativeToolEvidenceRef})};
+      return immutable({status: 'restored', scopeRef, sourceThreadId: targetThreadId,
+        transferId: input.transferId, scope: finalScope,
+        claimLimit: 'Settled-transfer restoration on one fresh bound controller only; no active-effect, arbitrary-thread or complete cold-recovery claim.'});
+    } catch (error) {
+      if (error instanceof CodexSourceSessionError) throw error;
+      return lockFailure(error?.code || 'RESTORE_FAILED',
+        'settled source-session restoration failed', error, {phase: state.phase});
+    } finally {
+      busy = false;
+    }
+  }
+
+  return Object.freeze({run, adoptTarget, snapshot, [RESTORE_SESSION]: restoreSettled});
+}
+
+function createCodexSourceSession(options) {
+  return createSession(options, false);
+}
+
+async function restoreCodexSourceSession(options, raw) {
+  const session = createSession(options, true);
+  try {
+    await session[RESTORE_SESSION](raw);
+    return session;
+  } catch (error) {
+    if (error && typeof error === 'object') {
+      Object.defineProperty(error, 'session', {value: session, enumerable: false});
+    }
+    throw error;
+  }
 }
 
 module.exports = {
   createCodexSourceSession,
+  restoreCodexSourceSession,
   CodexSourceSessionError,
 };
