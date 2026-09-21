@@ -29,8 +29,13 @@ After failure, inspect actual effects and partial artifacts before selecting a
 supported recovery. Distinguish missing evidence from an earlier prerequisite that
 never held: later verification cannot retroactively satisfy it. Preserve the failed
 sequence, reuse valid effects and bind further checks to their actual conditions.
-Keep resolved failures in an account of encountered issues and distinguish current
-blockers. Repeat an attempt only for a changed premise or a discriminating check.
+When the requested artifact reports completion, encountered issues or final state,
+its claims depend on subsequent verification, recovery and resource observations.
+Reopen and correct affected claims in that artifact when later facts change the
+account; a conversation update does not amend a saved report. Include material
+resolved problems and their handling, distinguish current blockers and expected
+continuation events, and omit irrelevant debugging detail. Repeat an attempt only
+for a changed premise or a discriminating check.
 Execute and verify the correction while independent safe work continues.
 
 ## Verify the required result

@@ -43,9 +43,11 @@ and one writer per target before recovery or takeover; missing receipts do not
 justify replay. Preserve real pauses. Complete work without Plan or Goal mode;
 enable either only on explicit user selection or request.
 
-Verify consequential claims against sources and every affected artifact. Protect
-all original material covered by the task, release only attributable resources,
-and check post-state. Continue safe authorized unfinished work or identify the
+Verify consequential claims in saved artifacts and replies against current sources.
+Later verification, recovery or cleanup can change the account; reconcile affected
+artifacts themselves before delivery. Protect all original material covered by the
+task, release only attributable resources and check post-state. Continue safe
+authorized unfinished work or identify the
 actual boundary. Completion, release and proven value are distinct; handoff does
 not authorize archiving.
 
