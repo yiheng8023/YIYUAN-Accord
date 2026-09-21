@@ -35,6 +35,19 @@ _ENTRY_DISPOSITIONS = {"selected", "pending", "deferred", "inapplicable"}
 _TRUST = ("Conditional on the caller's authenticated, independent, bounded read-only observer "
           "and review provenance; callable shape and this verifier do not authenticate external facts.")
 _CURRENT_REVIEW_FILES = {"docs/operations/ACCEPTANCE-v3.3.md", "docs/operations/PLAN-v3.3.md"}
+_CODEX_CACHE_VERSION = re.compile(
+    r"^(?P<base>[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?)(?:\+codex\.[0-9]{14})$"
+)
+_PACKAGE_TREE_FILES = 256
+_PACKAGE_BLOB_BYTES = 1_048_576
+_PACKAGE_TREE_BYTES = 4_194_304
+_PACKAGE_BATCH_CAPTURE = _PACKAGE_TREE_BYTES + _PACKAGE_TREE_FILES * 128
+_PACKAGE_ASSESSMENT_CALLS = 64
+_PACKAGE_ASSESSMENT_FILES = 4096
+_PACKAGE_ASSESSMENT_BYTES = 67_108_864
+_PROJECTION_FILE_FIELDS = {
+    "legalFiles", "metadataFiles", "mechanismFiles", "referenceFiles", "supportingSkills",
+}
 
 
 def _json(value):
@@ -61,6 +74,52 @@ def _locator(value):
     return (_text(value) and not any(c in value for c in "\\:\0\n\r")
             and not value.startswith("/") and PurePosixPath(value).as_posix() == value
             and not {".", ".."} & set(PurePosixPath(value).parts))
+
+
+def _projection_package_files(projection):
+    files = {projection.get(key) for key in ("manifest", "contract", "skill")}
+    for key in _PROJECTION_FILE_FIELDS:
+        values = projection.get(key, [])
+        if isinstance(values, list):
+            files.update(values)
+    return {value for value in files if isinstance(value, str)}
+
+
+def _sparse_package_files(contract, case):
+    """Return a valid v5 pure-function dependency set, otherwise None.
+
+    This is an invalidation boundary, not proof that the declared files are a
+    complete behavioral dependency graph; the episode and review retain that duty.
+    """
+    if "packageFiles" not in case:
+        return None
+    if contract["acceptance"]["admission"]["schema"] != CURRENT_SCHEMA:
+        raise ValueError("package file dependencies require current admission")
+    scopes = {row["id"]: row for row in contract["acceptance"]["admission"]["scopes"]}
+    scope = scopes.get(case.get("scope"))
+    files = case["packageFiles"]
+    requirements = contract["acceptance"]["admission"].get("acceptanceRequirements", [])
+    a08_function = set(next((row["requiredCoverage"].get("function", []) for row in requirements
+                             if row.get("id") == "A08"), []))
+    projections = [row for row in contract["delivery"]["hostProjections"]
+                   if row.get("id") == case.get("host")]
+    if (len(projections) != 1 or scope is None or set(case.get("claims", [])) != {"function"}
+            or set(scope.get("claims", [])) != {"function"} or "subjectEntries" in case
+            or case.get("scope") in _ENTRY_PARENT_SCOPES or case.get("scope") in a08_function
+            or not isinstance(files, list) or not files or len(files) != len(set(files))
+            or any(not _locator(value) for value in files)):
+        raise ValueError("package file dependencies require one pure function entry")
+    projection = projections[0]
+    manifest = projection.get("manifest")
+    if not isinstance(manifest, str):
+        raise ValueError("package manifest is unavailable")
+    package = Path(manifest).parents[1].as_posix()
+    declared = _projection_package_files(projection)
+    required = {manifest, projection.get("contract"), projection.get("skill")}
+    if (not required <= set(files) or not set(files) <= declared
+            or any(not value.startswith(package + "/") for value in files)):
+        raise ValueError("package file dependencies must include the host activation contract")
+    return sorted(files)
 
 
 def _entry_selection(policy, entries):
@@ -183,7 +242,10 @@ def admission_contract_errors(contract):
         ids = set()
         for case in policy["cases"]:
             parent = case.get("scope") if isinstance(case, dict) else None
-            fields = _CASE_FIELDS | ({"subjectEntries"} if current and parent in _ENTRY_PARENT_SCOPES else set())
+            fields = (_CASE_FIELDS
+                      | ({"subjectEntries"} if current and parent in _ENTRY_PARENT_SCOPES else set())
+                      | ({"packageFiles"} if current and isinstance(case, dict)
+                         and "packageFiles" in case else set()))
             if (not isinstance(case, dict) or set(case) != fields
                     or not _text(case.get("id")) or case["id"] in ids
                     or not isinstance(case.get("host"), str) or case["host"] not in hosts
@@ -216,6 +278,8 @@ def admission_contract_errors(contract):
                     or any(k not in case["conditions"] or _json(case["conditions"][k]) != _json(v)
                            for k, v in scope["conditions"].items())):
                 return ["evidence case differs from its declared claim scope"]
+            if "packageFiles" in case:
+                _sparse_package_files(contract, case)
         try:
             _entry_selection(policy, entries) if current else None
         except ValueError as error:
@@ -230,7 +294,7 @@ def _definition(contract, case):
         return sorted((v for v in rows if v["id"] in ids), key=lambda v: v["id"])
     definition = {
         "schema": contract["acceptance"]["admission"]["schema"], "case": {**case, **{k: sorted(case[k]) for k in
-            ("duties", "qualityAxes", "scenarios", "claims", "oracleFiles")}},
+            ("duties", "qualityAxes", "scenarios", "claims", "oracleFiles", "packageFiles") if k in case}},
         "shared": {k: contract[k] for k in ("schema", "productId", "predecessorSnapshot", "authority",
                    "baselineRole", "cycle", "source", "applicability", "implementation",
                    "supportingPrinciples", "changePolicy")},
@@ -264,6 +328,12 @@ def _reuse_definition(contract, case):
     # Keep stored-record identity intact. Progress descriptions are not criteria;
     # the current subject still needs a fresh independent review and recheck.
     current = copy.deepcopy(contract)
+    if _sparse_package_files(contract, case) is not None:
+        # The selected package files, not an unrelated package change or the
+        # development cache stamp, determine whether this execution still applies.
+        current["delivery"]["version"] = _normalized_cache_version(current["delivery"]["version"])
+        projection["packageVersion"] = _normalized_cache_version(projection["packageVersion"])
+        projection.pop("packageSha256", None)
     current["delivery"]["hostProjections"] = [projection]
     if current["acceptance"]["admission"]["schema"] == CURRENT_SCHEMA:
         for row in current["acceptance"]["duties"]:
@@ -281,6 +351,101 @@ def _reuse_definition(contract, case):
 
 def _git(root, *args):
     return _bounded_git_bytes(root, ("--no-replace-objects", "--literal-pathspecs", *args), _LIMIT)
+
+
+def _batch_blobs(root, requests):
+    encoded = [request.encode("utf-8") for request in requests]
+    capture = _bounded_git_bytes(
+        root, ("--no-replace-objects", "cat-file", "--batch"), _PACKAGE_BATCH_CAPTURE,
+        b"".join(request + b"\n" for request in encoded),
+    )
+    blobs, offset, total = [], 0, 0
+    for _request in encoded:
+        end = capture.find(b"\n", offset)
+        if end < 0:
+            raise ValueError("invalid package batch header")
+        fields = capture[offset:end].split()
+        offset = end + 1
+        if len(fields) != 3 or fields[1] != b"blob":
+            raise ValueError("invalid package batch object")
+        size = int(fields[2])
+        if size < 0 or size > _PACKAGE_BLOB_BYTES or total + size > _PACKAGE_TREE_BYTES:
+            raise ValueError("package batch byte bound exceeded")
+        content = capture[offset:offset + size]
+        offset += size + 1
+        if len(content) != size or capture[offset - 1:offset] != b"\n":
+            raise ValueError("invalid package batch body")
+        total += size
+        blobs.append(content)
+    if offset != len(capture):
+        raise ValueError("unexpected package batch suffix")
+    return blobs, total
+
+
+def _revision_package_snapshot(root, revision, package, budget):
+    """Read one complete revision package under per-tree and shared assessment bounds."""
+    if budget["calls"] + 1 > _PACKAGE_ASSESSMENT_CALLS:
+        raise ValueError("package assessment call bound exceeded")
+    budget["calls"] += 1
+    listing = _git(root, "ls-tree", "-r", "-z", revision, "--", package)
+    locators = []
+    for row in (item for item in listing.split(b"\0") if item):
+        metadata, separator, raw_locator = row.partition(b"\t")
+        fields = metadata.split()
+        locator = raw_locator.decode("utf-8")
+        if (not separator or len(fields) != 3 or fields[0] not in {b"100644", b"100755"}
+                or fields[1] != b"blob" or not locator.startswith(package + "/")):
+            raise ValueError("revision package tree is invalid")
+        locators.append(locator)
+    if (not locators or len(locators) != len(set(locators))
+            or len(locators) > _PACKAGE_TREE_FILES
+            or budget["files"] + len(locators) > _PACKAGE_ASSESSMENT_FILES):
+        raise ValueError("revision package file set is invalid")
+    if (budget["calls"] + 1 > _PACKAGE_ASSESSMENT_CALLS
+            or budget["bytes"] + _PACKAGE_TREE_BYTES > _PACKAGE_ASSESSMENT_BYTES):
+        raise ValueError("package assessment batch bound exceeded")
+    budget["calls"] += 1
+    budget["files"] += len(locators)
+    budget["bytes"] += _PACKAGE_TREE_BYTES
+    blobs, total = _batch_blobs(root, [f"{revision}:{locator}" for locator in sorted(locators)])
+    if total > _PACKAGE_TREE_BYTES:
+        raise ValueError("package assessment byte bound exceeded")
+    budget["bytes"] -= _PACKAGE_TREE_BYTES - total
+    digest = sha256()
+    files = {}
+    for locator, content in zip(sorted(locators), blobs, strict=True):
+        digest.update(locator.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(sha256(content).digest())
+        files[locator] = content
+    return {"sha256": digest.hexdigest(), "files": files}
+
+
+def _normalized_cache_version(value):
+    if not isinstance(value, str):
+        raise ValueError("package version is unavailable")
+    match = _CODEX_CACHE_VERSION.fullmatch(value)
+    return match.group("base") if match else value
+
+
+def _normalized_manifest(raw):
+    value = _strict_json_object(raw.decode("utf-8"))
+    value["version"] = _normalized_cache_version(value.get("version"))
+    return _json(value)
+
+
+def _selected_package_files_unchanged(original, current, files, manifest):
+    for locator in files:
+        if locator not in original["files"] or locator not in current["files"]:
+            raise ValueError("selected package dependency is unavailable")
+        original_bytes = original["files"][locator]
+        current_bytes = current["files"][locator]
+        if locator == manifest:
+            if _normalized_manifest(original_bytes) != _normalized_manifest(current_bytes):
+                return False
+        elif original_bytes != current_bytes:
+            return False
+    return True
 
 
 def evidence_subject(root):
@@ -309,7 +474,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     report = {"scope": "caller-observed-development-candidate", "trustBoundary": _TRUST,
               "acceptedCases": [], "openCoverage": {}, "unboundCoverage": {}, "functionalCompletion": False,
               "incrementalValue": "unverified", "candidateEligible": False,
-              "checkoutClean": None, "errors": []}
+              "checkoutClean": None, "packageReuse": {}, "errors": []}
     successor = contract.get("schema") == "yiyuan-accord-development/v5"
     if successor and contract.get("acceptance", {}).get("admission", {}).get("schema") != CURRENT_SCHEMA:
         # Retained v4 case definitions are regression inputs, not the new
@@ -339,7 +504,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
         # Keep this axis so each scope still requires its selected case evidence.
         "scenarios": set(),
     }
-    admitted = set()
+    admitted, package_reuse = set(), {}
     if observer is not None:
         try:
             if not callable(observer):
@@ -361,7 +526,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             if set(data) != {"records", "reviewBundle"} or not isinstance(data["records"], list):
                 raise ValueError("invalid observation envelope")
             now = datetime.now(timezone.utc)
-            prior, seen = {}, set()
+            prior, package_snapshots, seen = {}, {}, set()
+            package_budget = {"calls": 0, "files": 0, "bytes": 0}
             for record in data["records"]:
                 if (not isinstance(record, dict) or set(record) != _RECORD_FIELDS
                         or not isinstance(record.get("case"), str) or record["case"] not in cases):
@@ -389,17 +555,54 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                             raise ValueError("evaluated admission declaration is invalid")
                         prior[revision] = original_contract
                     original = next(v for v in prior[revision]["acceptance"]["admission"]["cases"] if v["id"] == key)
-                    if (record["definitionSha256"] != _definition(prior[revision], original)
-                            or _reuse_definition(prior[revision], original) != _reuse_definition(contract, case)
-                            or record["packageSha256"] != bound["packageSha256"]):
+                    original_hosts = {v["id"]: v for v in prior[revision]["delivery"]["hostProjections"]}
+                    original_host = original_hosts[original["host"]]
+                    current_host = hosts[case["host"]]
+                    original_package = Path(original_host["manifest"]).parents[1].as_posix()
+                    current_package = Path(current_host["manifest"]).parents[1].as_posix()
+                    original_hash_key = (revision, original_package)
+                    current_hash_key = (subject["revision"], current_package)
+                    if original_hash_key not in package_snapshots:
+                        package_snapshots[original_hash_key] = _revision_package_snapshot(
+                            root, revision, original_package, package_budget)
+                    if current_hash_key not in package_snapshots:
+                        package_snapshots[current_hash_key] = _revision_package_snapshot(
+                            root, subject["revision"], current_package, package_budget)
+                    original_snapshot = package_snapshots[original_hash_key]
+                    current_snapshot = package_snapshots[current_hash_key]
+                    checks = {
+                        "record-definition": record["definitionSha256"] == _definition(prior[revision], original),
+                        "reuse-definition": _reuse_definition(prior[revision], original) == _reuse_definition(contract, case),
+                        "record-declared-package": record["packageSha256"] == original_host["packageSha256"],
+                        "record-actual-package": record["packageSha256"] == original_snapshot["sha256"],
+                        "current-actual-package": bound["packageSha256"] == current_snapshot["sha256"],
+                    }
+                    if not all(checks.values()):
                         raise ValueError("definition or package identity changed")
-                    package = Path(hosts[case["host"]]["manifest"]).parents[1].as_posix()
+                    package_files = _sparse_package_files(contract, case)
+                    if package_files is None:
+                        if record["packageSha256"] != bound["packageSha256"]:
+                            raise ValueError("complete package identity changed")
+                    else:
+                        if not _selected_package_files_unchanged(
+                                original_snapshot, current_snapshot, package_files, current_host["manifest"]):
+                            raise ValueError("selected package dependency changed")
+                        if record["packageSha256"] != bound["packageSha256"]:
+                            package_reuse[key] = {
+                                "evaluatedRevision": revision,
+                                "evaluatedPackageSha256": record["packageSha256"],
+                                "currentRevision": subject["revision"],
+                                "currentPackageSha256": bound["packageSha256"],
+                                "packageFiles": package_files,
+                                "claimLimit": "selected-files-unchanged-not-dependency-completeness",
+                            }
                     # Current normative documents belong to the fresh candidate
                     # review. New prose alone does not require repeating execution;
                     # changed case/quality criteria still fail the definition check.
                     review_files = _CURRENT_REVIEW_FILES if policy["schema"] == CURRENT_SCHEMA else set()
                     execution_files = [path for path in case["oracleFiles"] if path not in review_files]
-                    _git(root, "diff", "--quiet", "--no-ext-diff", "--no-textconv", revision, "--", package, *execution_files)
+                    diff_files = execution_files if package_files is not None else [current_package, *execution_files]
+                    _git(root, "diff", "--quiet", "--no-ext-diff", "--no-textconv", revision, "--", *diff_files)
                     for path in case["oracleFiles"]:
                         _git(root, "cat-file", "blob", f"{revision}:{path}")
                         if path in review_files:
@@ -477,6 +680,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
         report["entrySelection"] = {"final": entry_selection["final"],
                                     "selected": sorted(entry_selection["selected"])}
     report["acceptedCases"] = sorted(admitted)
+    report["packageReuse"] = {key: package_reuse[key] for key in sorted(admitted & set(package_reuse))}
     bound = {claim: {key for key in ids if key in scopes and claim in scopes[key]["claims"]}
              for claim, ids in policy["requiredCoverage"].items()}
     report["unboundCoverage"] = {claim: sorted(set(ids) - bound[claim])

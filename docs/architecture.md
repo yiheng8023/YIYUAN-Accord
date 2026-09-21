@@ -90,10 +90,10 @@ checkpoint Hook's recovery evidence, preserving its bounded snapshot budget.
 Startup guidance reads the packaged brief, with no task-state access. A missing
 brief is an entry failure; unavailable optional details hold only dependent work.
 The package also registers one host-managed stdio MCP process with
-`inspect_task_state(cwd, includeContext?, contextMaxAgeMs?)`. It reuses checkpoint `status` and returns a selected
+`inspect_task_state(cwd, includeContext?, contextMaxAgeMs?, contextAssessment?)`. It reuses checkpoint `status` and returns a selected
 subset of the caller's native MCP metadata separately from that snapshot. The
 caller selects an absolute workspace; the tool does not attest it as the host's
-current cwd. It neither writes state nor opens a control connection or dispatches
+current cwd. It neither changes saved task state nor opens a control connection or dispatches
 a task. Missing input/state remains unavailable. In the inspected host, Hook
 session identity is shared by descendants: when native session and thread IDs
 differ, the reader holds checkpoint lookup instead of adopting ancestor state.
@@ -114,6 +114,14 @@ version remains separate from the current host version. Different input epochs
 are not combined. The caller may select an appropriate age limit; original sample
 time, expired-state diagnostics and unobserved-tail uncertainty remain. Without
 current host evidence, raw transcript counters do not establish assessment identity.
+The optional `contextAssessment` closes the same tool's forecast path by calling
+the existing `assess-context` helper. It binds a prior receipt epoch, checkpoint
+revision and context generation to the caller's original times, integrity evidence
+and sourced tail/work/transfer/recovery/safety estimates. Current native identity
+cannot be supplied in arguments. Fresh counters in the same generation may grow;
+changed input, revision or generation instead requires reassessment. Assessment
+uses existing transient locks, preserves saved state and pauses, and grants no
+dispatch or source release. The default status-only call does not read context.
 The MCP implementation version is captured from package metadata at startup;
 development source execution uses the development projection as its version source.
 The ordinary CLI development observer separately reports Hook guidance delivery
@@ -530,7 +538,18 @@ E. At candidate B, the verifier binds HEAD/tree before static reads, verifies A
 is an ancestor, and checks the full affected package and oracle files. Case
 digests bind shared goal/authority/acceptance semantics and selected dependencies;
 progress-only or unrelated case changes do not invalidate unaffected observations.
-Changed shared rules, packages or relevant oracles do. Reviews bind exact B/tree,
+Changed shared rules, packages or relevant oracles do. Current v5 single-entry
+pure-function cases may prospectively bind `packageFiles`, including the manifest,
+adapter contract and primary Skill. Their original full package hash is verified
+at A; declared dependencies are then compared with B, normalizing only the default
+Codex cache timestamp within an unchanged manifest base version. Other manifest
+fields stay significant. The dependency set is part of the definition and cannot
+be narrowed retrospectively; independent review must establish its completeness.
+Unselected Skill discovery metadata can still affect routing. Reuse reports keep
+original and current package identities separate. Cases without this opt-in,
+lifecycle, multi-entry, impact and A08 integration cases retain full-package checks.
+Current whole-package integration and release review remain mandatory; valid older
+function evidence is not relabeled as a new execution. Reviews bind exact B/tree,
 must postdate B and remain current. No observer result can switch the subject.
 
 The observer receives `phase: observe`, the verifier's subject and computed case,

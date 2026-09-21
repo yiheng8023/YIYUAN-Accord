@@ -11,14 +11,49 @@ const {operate} = require('./task-checkpoint.cjs');
 const PROTOCOL = '2025-06-18';
 const MAX_FRAME = 128 * 1024;
 const MAX_RESULT = 128 * 1024;
+const TOKEN_BOUND = {type: 'integer', minimum: 0, maximum: Number.MAX_SAFE_INTEGER};
+const CONTEXT_ASSESSMENT = Object.freeze({
+  type: 'object',
+  description: 'Assess one bounded next work span against a previously observed receipt epoch and context generation. Identity comes only from current native call metadata. Times and sourced estimates are caller evidence and are not refreshed by the adapter.',
+  properties: {
+    epoch: {type: 'string', minLength: 1, maxLength: 256,
+      description: 'Exact receipt epoch returned by the prior inspection; a later input requires reassessment.'},
+    expectedRevision: {...TOKEN_BOUND,
+      description: 'Exact checkpoint revision returned by the same prior inspection; a later revision requires reassessment.'},
+    contextGeneration: {type: 'string', pattern: '^[a-f0-9]{64}$',
+      description: 'Exact context generation returned by the prior native context observation. Turn, model, host and compaction changes invalidate it.'},
+    observedAtMs: {...TOKEN_BOUND, description: 'Original observation time for the caller evidence; never restamped.'},
+    validUntilMs: {...TOKEN_BOUND, description: 'Original exclusive expiry for the caller evidence; never extended.'},
+    sourceRef: {type: 'string', minLength: 1, maxLength: 2048,
+      description: 'Inspectible source for the integrity and time claims.'},
+    integrity: {type: 'string', enum: ['verified', 'degraded', 'unknown'],
+      description: 'Inheritance completeness under the bound receipt and context conditions.'},
+    estimates: {type: 'object', properties: {
+      sourceRef: {type: 'string', minLength: 1, maxLength: 2048,
+        description: 'Inspectible source or derivation for every token estimate below.'},
+      contextTailUpperBoundTokens: {...TOKEN_BOUND,
+        description: 'Upper bound for unaccounted context after the latest native response boundary.'},
+      nextWorkTokens: {...TOKEN_BOUND, description: 'Upper bound for the next bounded work span.'},
+      handoffTokens: {type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER,
+        description: 'Reserve for handoff preparation and takeover verification.'},
+      recoveryTokens: {type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER,
+        description: 'Reserve for failure recovery.'},
+      safetyMarginTokens: {type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER,
+        description: 'Additional uncertainty margin.'},
+    }, required: ['sourceRef', 'contextTailUpperBoundTokens', 'nextWorkTokens', 'handoffTokens',
+      'recoveryTokens', 'safetyMarginTokens'], additionalProperties: false},
+  }, required: ['epoch', 'expectedRevision', 'contextGeneration', 'observedAtMs', 'validUntilMs', 'sourceRef',
+    'integrity', 'estimates'], additionalProperties: false,
+});
 const TOOL = Object.freeze({
   name: 'inspect_task_state',
-  description: 'Read saved Accord task state; request includeContext for bounded native context observations before long work or continuity decisions. Current host identity comes from call metadata, separately from recorded session metadata. No permission, completion or handoff control is established.',
+  description: 'Read saved Accord task state; request includeContext for bounded native context observations, or contextAssessment to assess one sourced work span against a prior observation. Current host identity comes from call metadata, separately from recorded session metadata. A fit is advice only; no permission, completion, takeover or handoff control is established.',
   inputSchema: {type: 'object', properties: {cwd: {type: 'string', minLength: 1, maxLength: 4096,
     description: 'Absolute existing workspace directory. Caller-selected scope, not host-attested current cwd.'},
     includeContext: {type: 'boolean', description: 'Also read current Hook-bound context counters. Defaults to false; missing or stale evidence remains unknown.'},
     contextMaxAgeMs: {type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER,
-      description: 'Requires includeContext. Caller-selected age limit for the last native response boundary; defaults to 30000 ms. Original sample time and unobserved-tail uncertainty remain.'}},
+      description: 'Requires includeContext or contextAssessment. Caller-selected age limit for the native response boundary; defaults to 30000 ms and does not extend caller evidence.'},
+    contextAssessment: CONTEXT_ASSESSMENT},
     required: ['cwd'], additionalProperties: false},
   annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false},
 });
@@ -41,6 +76,28 @@ const record = value => value !== null && typeof value === 'object' && !Array.is
 const text = (value, max = 200) => typeof value === 'string' && value.trim().length > 0
   && value.length <= max && !/[\u0000-\u001f\u007f]/u.test(value);
 const own = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
+
+function validContextAssessment(value) {
+  const keys = ['contextGeneration', 'epoch', 'estimates', 'expectedRevision', 'integrity', 'observedAtMs', 'sourceRef', 'validUntilMs'];
+  const estimateKeys = ['contextTailUpperBoundTokens', 'handoffTokens', 'nextWorkTokens',
+    'recoveryTokens', 'safetyMarginTokens', 'sourceRef'];
+  const count = n => Number.isSafeInteger(n) && n >= 0;
+  const estimates = value?.estimates;
+  return record(value) && Object.keys(value).sort().join(',') === keys.join(',')
+    && text(value.epoch, 256) && /^[a-f0-9]{64}$/.test(value.contextGeneration)
+    && count(value.expectedRevision) && count(value.observedAtMs) && count(value.validUntilMs)
+    && text(value.sourceRef, 2048) && ['verified', 'degraded', 'unknown'].includes(value.integrity)
+    && record(estimates) && Object.keys(estimates).sort().join(',') === estimateKeys.join(',')
+    && text(estimates.sourceRef, 2048)
+    && ['contextTailUpperBoundTokens', 'nextWorkTokens'].every(key => count(estimates[key]))
+    && ['handoffTokens', 'recoveryTokens', 'safetyMarginTokens'].every(key => count(estimates[key]) && estimates[key] > 0);
+}
+
+function unavailableAssessment(reason, decision = 'unknown') {
+  return {decision, capacityFit: 'unknown', sourceReleaseAllowed: false,
+    scope: 'conditional-context-budget-only', reasons: [reason], windowTokens: null,
+    remainingAfterReserves: null, efficiencyCeilingTokens: null};
+}
 
 function unavailable(reason) {
   return {schema: 'yiyuan-accord-native-state/v1', state: 'unavailable', reason, claimLimit: CLAIM_LIMIT};
@@ -65,15 +122,18 @@ function nativeCallSource(params) {
 
 function inspectNativeState(params) {
   if (!record(params) || params.name !== TOOL.name || !record(params.arguments)
-      || Object.keys(params.arguments).some(key => !['cwd', 'includeContext', 'contextMaxAgeMs'].includes(key))
+      || Object.keys(params.arguments).some(key => !['cwd', 'includeContext', 'contextMaxAgeMs', 'contextAssessment'].includes(key))
       || !own(params.arguments, 'cwd')
       || own(params.arguments, 'includeContext') && typeof params.arguments.includeContext !== 'boolean'
+      || own(params.arguments, 'contextAssessment') && !validContextAssessment(params.arguments.contextAssessment)
       || own(params.arguments, 'contextMaxAgeMs') && (params.arguments.includeContext !== true
+        && !own(params.arguments, 'contextAssessment')
         || !Number.isSafeInteger(params.arguments.contextMaxAgeMs) || params.arguments.contextMaxAgeMs <= 0)
       || !text(params.arguments.cwd, 4096) || !path.isAbsolute(params.arguments.cwd)) {
     return {isError: true, value: unavailable('explicit-workspace-required')};
   }
-  // The argument schema exposes no identity, operation, receipt or storage path.
+  // The argument schema exposes no selectable identity, operation or storage path;
+  // an epoch can only bind advisory evidence to an already observed receipt.
   const source = nativeCallSource(params);
   if (!source) {
     return {isError: true, value: unavailable('native-call-metadata-unavailable')};
@@ -94,21 +154,42 @@ function inspectNativeState(params) {
   }
   const value = {schema: 'yiyuan-accord-native-state/v1', state: 'observed-call-context',
     source, workspace, checkpoint, claimLimit: CLAIM_LIMIT};
+  const currentHost = source.model && source.hostVersion ? {threadId: source.threadId, turnId: source.turnId,
+    model: source.model, hostVersion: source.hostVersion,
+    sourceRef: `codex-mcp-call:${source.callId}`} : null;
   if (params.arguments.includeContext === true) {
     const unknown = reason => ({state: 'unknown', reason, sourceReleaseAllowed: false});
     if (checkpoint.state !== 'observed') value.context = unknown(checkpoint.reason);
-    else if (!source.model || !source.hostVersion) value.context = unknown('current-host-binding-missing');
+    else if (!currentHost) value.context = unknown('current-host-binding-missing');
     else {
       try {
-        const currentHost = {threadId: source.threadId, turnId: source.turnId,
-          model: source.model, hostVersion: source.hostVersion,
-          sourceRef: `codex-mcp-call:${source.callId}`};
         const observed = operate({op: 'observe-context', session_id: source.sessionTreeId,
           cwd: params.arguments.cwd, currentHost,
           maxAgeMs: params.arguments.contextMaxAgeMs ?? 30000});
         value.context = observed.epoch === checkpoint.snapshot.epoch
           ? observed : unknown('input-changed-between-state-and-context');
       } catch (error) { value.context = unknown(inspectionReason(error)); }
+    }
+  }
+  if (own(params.arguments, 'contextAssessment')) {
+    const supplied = params.arguments.contextAssessment;
+    if (checkpoint.state !== 'observed') {
+      value.contextAssessment = unavailableAssessment(checkpoint.reason);
+    } else {
+      const conditions = currentHost ? {threadId: currentHost.threadId, turnId: currentHost.turnId,
+        hostVersion: currentHost.hostVersion, model: currentHost.model,
+        contextGeneration: supplied.contextGeneration} : null;
+      try {
+        value.contextAssessment = operate({op: 'assess-context', session_id: source.sessionTreeId,
+          cwd: params.arguments.cwd, epoch: supplied.epoch,
+          expectedRevision: supplied.expectedRevision, conditions, nativeContext: true,
+          ...(currentHost ? {currentHost} : {}), maxAgeMs: params.arguments.contextMaxAgeMs ?? 30000,
+          assessment: {conditions, epoch: supplied.epoch, observedAtMs: supplied.observedAtMs,
+            validUntilMs: supplied.validUntilMs, sourceRef: supplied.sourceRef,
+            integrity: supplied.integrity, estimates: supplied.estimates}});
+      } catch (error) {
+        value.contextAssessment = unavailableAssessment(inspectionReason(error));
+      }
     }
   }
   if (Buffer.byteLength(JSON.stringify(value)) > MAX_RESULT) {

@@ -61,6 +61,7 @@
     "identity": "Codex callId and x-codex-turn-metadata; root-thread-only-checkpoint-read; descendant-shared-session-remains-unavailable; metadata-is-not-authentication",
     "storage": "existing-task-checkpoint-only",
     "context": "includeContext boolean defaults false; current identity from MCP metadata; recordedHostVersion remains separate; mismatched input stays unknown",
+    "assessment": "optional contextAssessment reuses assess-context with caller-bound epoch/revision/generation, original times and sourced forecasts; fresh native counters; existing transient locks only; no persisted-state mutation or dispatch",
     "lifecycle": "host-start-reload-and-close; releases-plugin-cache-cwd-before-serving; pins-available-context-reader-code-at-runtime-load; process-exits-on-stdin-end; no-listener-or-daemon",
     "limits": "no-argument-identity-or-operation-override; no-input-replay; no-freshness-authority-or-completion-claim; no-app-server-control-or-handoff-dispatch"
   },

@@ -193,6 +193,39 @@ class NativeStateMcpTests(unittest.TestCase):
             'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
             session=session, hook='UserPromptSubmit')
 
+    def context_assessment(self, inspection, **changes):
+        observation = inspection['context']
+        now = int(time.time() * 1000)
+        assessment = {
+            'epoch': observation['epoch'],
+            'expectedRevision': inspection['checkpoint']['snapshot']['revision'],
+            'contextGeneration': observation['conditions']['contextGeneration'],
+            'observedAtMs': now - 100,
+            'validUntilMs': now + 30000,
+            'sourceRef': 'inspected-inheritance-and-time-fixture',
+            'integrity': 'verified',
+            'estimates': {
+                'sourceRef': 'bounded-work-and-reserve-fixture',
+                'contextTailUpperBoundTokens': 500,
+                'nextWorkTokens': 1000,
+                'handoffTokens': 500,
+                'recoveryTokens': 500,
+                'safetyMarginTokens': 500,
+            },
+        }
+        assessment.update(changes)
+        return assessment
+
+    def append_context_usage(self, total_tokens):
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        record = {'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'event_msg',
+                  'payload': {'type': 'token_count', 'info': {
+                      'last_token_usage': {'total_tokens': total_tokens},
+                      'total_token_usage': {'total_tokens': 600000},
+                      'model_context_window': 12000}}}
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps(record) + '\n')
+
     def test_first_context_read_survives_retirement_of_the_loaded_package_path(self):
         self.native_context()
         cached = self.root / 'cached-package'
@@ -292,6 +325,131 @@ class NativeStateMcpTests(unittest.TestCase):
             input=json.dumps(self.params), capture_output=True, encoding='utf-8', env=self.env, timeout=10)
         self.assertEqual(p.returncode, 0, p.stderr)
         self.assertEqual(json.loads(p.stdout)['value']['context']['reason'], 'input-changed-between-state-and-context')
+
+    def test_context_assessment_uses_prior_basis_and_consumes_same_generation_growth(self):
+        self.native_context()
+        self.params['arguments']['includeContext'] = True
+        inspection = self.inspect()['value']
+        observation = inspection['context']
+        assessment = self.context_assessment(inspection)
+        self.params['arguments'] = {'cwd': str(self.work), 'contextAssessment': assessment,
+                                    'contextMaxAgeMs': 30000}
+        before = self.files()
+        state_before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        first = self.inspect()['value']
+        self.assertNotIn('context', first)
+        self.assertEqual(first['contextAssessment']['decision'], 'continue-bounded')
+        self.assertEqual(first['contextAssessment']['capacityFit'], 'fits')
+        self.assertEqual(first['contextAssessment']['windowTokens'], 12000)
+        self.assertFalse(first['contextAssessment']['sourceReleaseAllowed'])
+        self.assertEqual(self.files(), before)
+
+        # A later response boundary in the same generation is consumed by the
+        # assessment itself; the caller does not need an observe/assess retry loop.
+        self.append_context_usage(9000)
+        grown = self.inspect()['value']['contextAssessment']
+        self.assertEqual(grown['decision'], 'prepare-handoff')
+        self.assertEqual(grown['capacityFit'], 'does-not-fit')
+        self.assertNotEqual(grown['observationId'], observation['observationId'])
+        self.assertFalse(grown['sourceReleaseAllowed'])
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, state_before)
+
+    def test_context_assessment_preserves_stale_input_generation_pause_and_missing_identity(self):
+        self.native_context()
+        self.params['arguments']['includeContext'] = True
+        inspection = self.inspect()['value']
+        assessment = self.context_assessment(inspection)
+        self.params['arguments'] = {'cwd': str(self.work), 'contextAssessment': assessment}
+        before = self.files()
+
+        stale_time = json.loads(json.dumps(self.params))
+        stale_time['arguments']['contextAssessment']['validUntilMs'] = 0
+        self.assertEqual(self.inspect(stale_time)['value']['contextAssessment']['decision'], 'reassess')
+
+        changed_generation = json.loads(json.dumps(self.params))
+        changed_generation['arguments']['contextAssessment']['contextGeneration'] = '0' * 64
+        self.assertEqual(self.inspect(changed_generation)['value']['contextAssessment']['decision'], 'reassess')
+
+        unknown_integrity = json.loads(json.dumps(self.params))
+        unknown_integrity['arguments']['contextAssessment']['integrity'] = 'unknown'
+        self.assertEqual(self.inspect(unknown_integrity)['value']['contextAssessment']['decision'], 'unknown')
+
+        changed_model = json.loads(json.dumps(self.params))
+        changed_model['_meta']['x-codex-turn-metadata']['model'] = 'rerouted-model'
+        self.assertEqual(self.inspect(changed_model)['value']['contextAssessment']['decision'], 'reassess')
+
+        missing_identity = json.loads(json.dumps(self.params))
+        missing_identity['_meta']['x-codex-turn-metadata'].pop('codex_version')
+        unknown = self.inspect(missing_identity)['value']['contextAssessment']
+        self.assertEqual(unknown['decision'], 'unknown')
+        self.assertIn('current-host-conditions-missing', unknown['reasons'])
+        self.assertEqual(self.files(), before)
+
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(),
+                                     'type': 'compacted', 'payload': {'kind': 'fixture'}}) + '\n')
+        self.append_context_usage(4000)
+        compacted = self.inspect()['value']['contextAssessment']
+        self.assertEqual(compacted['decision'], 'reassess')
+        self.assertFalse(compacted['sourceReleaseAllowed'])
+
+        session = self.params['_meta']['x-codex-turn-metadata']['session_id']
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Changed task input.'},
+                    session=session, hook='UserPromptSubmit')
+        changed_input = self.inspect()['value']['contextAssessment']
+        self.assertEqual(changed_input['decision'], 'reassess')
+        self.assertFalse(changed_input['sourceReleaseAllowed'])
+
+    def test_context_assessment_cannot_override_pause_or_supply_identity(self):
+        self.native_context()
+        session = self.params['_meta']['x-codex-turn-metadata']['session_id']
+        (self.work / 'source.txt').write_text('protected', encoding='utf-8')
+        status = self.helper({'op': 'status'}, session=session)
+        self.helper({'op': 'bind', 'epoch': status['epoch'], 'expectedRevision': status['revision'],
+            'result': 'Continue protected work', 'inputs': ['source.txt'],
+            'outputs': [{'path': 'report.txt'}], 'nextAction': 'Complete one bounded span',
+            'canContinue': True}, session=session)
+        status = self.helper({'op': 'status'}, session=session)
+        self.helper({'op': 'pause', 'epoch': status['epoch'], 'expectedRevision': status['revision'],
+                     'reason': 'User paused.'}, session=session)
+        self.params['arguments']['includeContext'] = True
+        inspection = self.inspect()['value']
+        assessment = self.context_assessment(inspection)
+        self.params['arguments'] = {'cwd': str(self.work), 'contextAssessment': assessment}
+        before = self.files()
+        paused = self.inspect()['value']['contextAssessment']
+        self.assertEqual((paused['decision'], paused['capacityFit']), ('paused', 'unknown'))
+        self.assertFalse(paused['sourceReleaseAllowed'])
+        self.assertEqual(self.files(), before)
+
+        for key, value in [('conditions', {'threadId': 'other'}), ('op', 'bind'),
+                           ('efficiencyCeilingTokens', 12000)]:
+            with self.subTest(argument=key):
+                body = json.loads(json.dumps(self.params))
+                body['arguments']['contextAssessment'][key] = value
+                self.assertTrue(self.inspect(body)['isError'])
+
+    def test_context_assessment_rejects_checkpoint_revision_change_with_same_input_epoch(self):
+        self.native_context()
+        session = self.params['_meta']['x-codex-turn-metadata']['session_id']
+        self.params['arguments']['includeContext'] = True
+        inspection = self.inspect()['value']
+        assessment = self.context_assessment(inspection)
+        (self.work / 'source.txt').write_text('protected', encoding='utf-8')
+        status = self.helper({'op': 'status'}, session=session)
+        self.assertEqual(status['epoch'], assessment['epoch'])
+        self.helper({'op': 'bind', 'epoch': status['epoch'], 'expectedRevision': status['revision'],
+            'result': 'Bind changed work state', 'inputs': ['source.txt'],
+            'outputs': [{'path': 'report.txt'}], 'nextAction': 'Continue carefully',
+            'canContinue': True}, session=session)
+        self.params['arguments'] = {'cwd': str(self.work), 'contextAssessment': assessment}
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        result = self.inspect()['value']['contextAssessment']
+        self.assertEqual(result['decision'], 'reassess')
+        self.assertIn('task-revision-or-input-conflict', result['reasons'])
+        self.assertFalse(result['sourceReleaseAllowed'])
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
 
     def test_missing_native_metadata_never_uses_argument_identity_or_creates_state(self):
         body = {'name': 'inspect_task_state', 'arguments': {'cwd': str(self.work)}}
@@ -401,6 +559,7 @@ class NativeStateMcpTests(unittest.TestCase):
         package_version = json.loads((ROOT/'plugins/yiyuan-accord-codex/.codex-plugin/plugin.json').read_text(encoding='utf-8'))['version']
         self.assertEqual(rows[1]['result']['serverInfo']['version'], package_version)
         self.assertTrue(rows[2]['result']['tools'][0]['annotations']['readOnlyHint'])
+        self.assertIn('contextAssessment', rows[2]['result']['tools'][0]['inputSchema']['properties'])
         self.assertEqual([tool['name'] for tool in rows[2]['result']['tools']],
                          ['inspect_task_state', 'read_task_input'])
         self.assertTrue(rows[2]['result']['tools'][1]['annotations']['readOnlyHint'])

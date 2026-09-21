@@ -3,6 +3,7 @@
 import copy
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -859,6 +860,56 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
                  "commit", "--quiet", "-m", "Revise synthetic current subject")
 
+    def sparse_contract(self):
+        contract = copy.deepcopy(self.contract)
+        projection = contract["delivery"]["hostProjections"][0]
+        case = next(row for row in contract["acceptance"]["admission"]["cases"]
+                    if row["id"] == "v33-goal-authority-correction-01")
+        case["packageFiles"] = [
+            projection["manifest"],
+            projection["contract"],
+            projection["skill"],
+            "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
+            "plugins/yiyuan-accord-codex/skills/maintain-task-continuity/SKILL.md",
+        ]
+        return contract, case
+
+    def update_package_identity(self, contract):
+        projection = contract["delivery"]["hostProjections"][0]
+        package = Path(projection["manifest"]).parents[1].as_posix()
+        self.git("add", package)
+        listing = subprocess.check_output(
+            ["git", "-C", str(self.root), "ls-files", "-s", "-z", "--", package], timeout=30)
+        digest = hashlib.sha256()
+        for row in (item for item in listing.split(b"\0") if item):
+            metadata, locator = row.split(b"\t", 1)
+            blob = metadata.split()[1].decode("ascii")
+            digest.update(locator)
+            digest.update(b"\0")
+            digest.update(hashlib.sha256(subprocess.check_output(
+                ["git", "-C", str(self.root), "cat-file", "blob", blob], timeout=30)).digest())
+        projection["packageSha256"] = digest.hexdigest()
+
+    def capture(self):
+        records = None
+        def observer(request):
+            nonlocal records
+            result = self.observer(request)
+            if request["phase"] == "observe":
+                records = copy.deepcopy(result["records"])
+            return result
+        return observer, lambda: records
+
+    def replay(self, records, mutate=None):
+        def observer(request):
+            result = self.observer(request)
+            if request["phase"] == "observe":
+                result["records"] = copy.deepcopy(records)
+                if mutate is not None:
+                    mutate(result["records"], request)
+            return result
+        return observer
+
     def test_current_case_can_be_admitted_without_closing_missing_requirements(self):
         report = self.assess(observer=self.observer)
         self.assertEqual(report["errors"], [])
@@ -1039,6 +1090,197 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 self.assertNotIn(self.contract["acceptance"]["admission"]["cases"][0]["id"], report["acceptedCases"])
                 self.assertFalse(report["candidateEligible"])
                 self.assertTrue(report["errors"])
+
+    def test_sparse_package_contract_rejects_invalid_or_broad_dependency_sets(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        contract, case = self.sparse_contract()
+        projection = contract["delivery"]["hostProjections"][0]
+        valid = list(case["packageFiles"])
+        variants = (
+            [],
+            [projection["manifest"], projection["manifest"]],
+            ["README.md", projection["manifest"]],
+            [projection["manifest"], "plugins/yiyuan-accord-codex/not-declared.txt"],
+            [value for value in valid if value != projection["manifest"]],
+            [value for value in valid if value != projection["contract"]],
+            [value for value in valid if value != projection["skill"]],
+        )
+        for package_files in variants:
+            changed = copy.deepcopy(contract)
+            target = next(row for row in changed["acceptance"]["admission"]["cases"]
+                          if row["id"] == case["id"])
+            target["packageFiles"] = package_files
+            with self.subTest(packageFiles=package_files):
+                self.assertTrue(admission_contract_errors(changed))
+        for claim in ("package-lifecycle", "impact-assessment"):
+            changed = copy.deepcopy(contract)
+            target = next(row for row in changed["acceptance"]["admission"]["cases"]
+                          if row["id"] == case["id"])
+            target["claims"] = [claim]
+            with self.subTest(claim=claim):
+                self.assertTrue(admission_contract_errors(changed))
+        a08 = copy.deepcopy(contract)
+        a08_requirement = next(row for row in a08["acceptance"]["admission"]["acceptanceRequirements"]
+                               if row["id"] == "A08")
+        a08_requirement["requiredCoverage"]["function"].append(case["scope"])
+        self.assertTrue(admission_contract_errors(a08))
+        aggregate = copy.deepcopy(self.contract)
+        parent = next(row for row in aggregate["acceptance"]["admission"]["cases"]
+                      if row["scope"] == "v33-admitted-entry-delivery")
+        parent["packageFiles"] = valid
+        self.assertTrue(admission_contract_errors(aggregate))
+
+    def test_sparse_package_dependencies_are_definition_bound(self):
+        from yiyuan_accord.admission import _reuse_definition
+        contract, case = self.sparse_contract()
+        original = _reuse_definition(contract, case)
+        for action in ("add", "remove"):
+            changed = copy.deepcopy(contract)
+            target = next(row for row in changed["acceptance"]["admission"]["cases"]
+                          if row["id"] == case["id"])
+            if action == "add":
+                target["packageFiles"].append(
+                    "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md")
+            else:
+                target["packageFiles"].remove(
+                    "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs")
+            with self.subTest(action=action):
+                self.assertNotEqual(original, _reuse_definition(changed, target))
+
+    def test_revision_package_snapshot_rejects_shared_assessment_budget_exhaustion(self):
+        from yiyuan_accord import admission
+        revision = self.git("rev-parse", "HEAD")
+        projection = self.contract["delivery"]["hostProjections"][0]
+        package = Path(projection["manifest"]).parents[1].as_posix()
+        budgets = (
+            {"calls": admission._PACKAGE_ASSESSMENT_CALLS, "files": 0, "bytes": 0},
+            {"calls": 0, "files": admission._PACKAGE_ASSESSMENT_FILES, "bytes": 0},
+            {"calls": 0, "files": 0, "bytes": admission._PACKAGE_ASSESSMENT_BYTES},
+        )
+        for budget in budgets:
+            with self.subTest(budget=budget), self.assertRaises(ValueError):
+                admission._revision_package_snapshot(self.root, revision, package, budget)
+
+    def test_failed_package_reads_consume_the_shared_assessment_budget(self):
+        from yiyuan_accord import admission
+        revision = self.git("rev-parse", "HEAD")
+        projection = self.contract["delivery"]["hostProjections"][0]
+        package = Path(projection["manifest"]).parents[1].as_posix()
+        missing_budget = {"calls": 0, "files": 0, "bytes": 0}
+        for _ in range(2):
+            with self.assertRaises(ValueError):
+                admission._revision_package_snapshot(
+                    self.root, revision, package + "-missing", missing_budget)
+        self.assertEqual(missing_budget, {"calls": 2, "files": 0, "bytes": 0})
+        batch_budget = {"calls": 0, "files": 0, "bytes": 0}
+        with patch.object(admission, "_batch_blobs", side_effect=ValueError("fixture batch failure")):
+            for _ in range(2):
+                with self.assertRaises(ValueError):
+                    admission._revision_package_snapshot(
+                        self.root, revision, package, batch_budget)
+        self.assertEqual(batch_budget["calls"], 4)
+        self.assertGreater(batch_budget["files"], 0)
+        self.assertEqual(batch_budget["bytes"], 2 * admission._PACKAGE_TREE_BYTES)
+
+    def test_sparse_package_reuses_unselected_skill_and_manifest_version_only(self):
+        for change in ("unselected-skill", "manifest-version"):
+            with self.subTest(change=change), self.history():
+                contract, case = self.sparse_contract()
+                self.commit(contract)
+                capture, records = self.capture()
+                self.assertIn(case["id"], self.assess(contract, capture)["acceptedCases"])
+                original_records = records()
+                old_package = next(row for row in original_records if row["case"] == case["id"])["packageSha256"]
+                if change == "unselected-skill":
+                    path = self.root / "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md"
+                    path.write_text(path.read_text(encoding="utf-8") + "\nUnselected fixture change.\n", encoding="utf-8")
+                else:
+                    projection = contract["delivery"]["hostProjections"][0]
+                    manifest_path = self.root / projection["manifest"]
+                    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                    version = "3.3.0-dev.1+codex.20260921123456"
+                    manifest["version"] = version
+                    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                    contract["delivery"]["version"] = version
+                    projection["packageVersion"] = version
+                self.update_package_identity(contract)
+                self.commit(contract)
+                report = self.assess(contract, self.replay(original_records))
+                self.assertIn(case["id"], report["acceptedCases"], report["errors"])
+                reuse = report["packageReuse"][case["id"]]
+                self.assertEqual(reuse["evaluatedPackageSha256"], old_package)
+                self.assertEqual(reuse["currentPackageSha256"],
+                                 contract["delivery"]["hostProjections"][0]["packageSha256"])
+                self.assertNotEqual(reuse["evaluatedPackageSha256"], reuse["currentPackageSha256"])
+                self.assertEqual(reuse["packageFiles"], sorted(case["packageFiles"]))
+                self.assertEqual(reuse["claimLimit"],
+                                 "selected-files-unchanged-not-dependency-completeness")
+
+    def test_sparse_package_rejects_selected_bytes_and_relabelled_record(self):
+        changes = {
+            "skill": "plugins/yiyuan-accord-codex/skills/maintain-task-continuity/SKILL.md",
+            "runtime": "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
+            "manifest-description": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+            "manifest-base-version": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+            "manifest-custom-cache": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+        }
+        for change, locator in changes.items():
+            with self.subTest(change=change), self.history():
+                contract, case = self.sparse_contract()
+                self.commit(contract)
+                capture, records = self.capture()
+                self.assertIn(case["id"], self.assess(contract, capture)["acceptedCases"])
+                original_records = records()
+                path = self.root / locator
+                if change in {"manifest-description", "manifest-base-version", "manifest-custom-cache"}:
+                    value = json.loads(path.read_text(encoding="utf-8"))
+                    if change == "manifest-description":
+                        value["description"] += " Changed."
+                    else:
+                        value["version"] = ("4.0.0-dev.1+codex.20260921123456"
+                                            if change == "manifest-base-version"
+                                            else "3.3.0-dev.1+codex.fixture")
+                        contract["delivery"]["version"] = value["version"]
+                        contract["delivery"]["hostProjections"][0]["packageVersion"] = value["version"]
+                    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                else:
+                    path.write_text(path.read_text(encoding="utf-8") + "\nSelected fixture change.\n", encoding="utf-8")
+                self.update_package_identity(contract)
+                self.commit(contract)
+                report = self.assess(contract, self.replay(original_records))
+                self.assertNotIn(case["id"], report["acceptedCases"])
+                self.assertTrue(report["errors"])
+        with self.history():
+            contract, case = self.sparse_contract()
+            self.commit(contract)
+            capture, records = self.capture()
+            self.assess(contract, capture)
+            original_records = records()
+            path = self.root / "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md"
+            path.write_text(path.read_text(encoding="utf-8") + "\nUnselected fixture change.\n", encoding="utf-8")
+            self.update_package_identity(contract)
+            self.commit(contract)
+            current_hash = contract["delivery"]["hostProjections"][0]["packageSha256"]
+            def relabel(rows, _request):
+                next(row for row in rows if row["case"] == case["id"])["packageSha256"] = current_hash
+            report = self.assess(contract, self.replay(original_records, relabel))
+            self.assertNotIn(case["id"], report["acceptedCases"])
+            self.assertTrue(report["errors"])
+
+    def test_default_and_lifecycle_cases_keep_complete_package_binding(self):
+        with self.history():
+            capture, records = self.capture()
+            self.assess(self.contract, capture)
+            original_records = records()
+            changed = copy.deepcopy(self.contract)
+            path = self.root / "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md"
+            path.write_text(path.read_text(encoding="utf-8") + "\nWhole-package fixture change.\n", encoding="utf-8")
+            self.update_package_identity(changed)
+            self.commit(changed)
+            report = self.assess(changed, self.replay(original_records))
+            self.assertNotIn("v33-goal-authority-correction-01", report["acceptedCases"])
+            self.assertNotIn("v33-codex-sdk-lifecycle-01", report["acceptedCases"])
+            self.assertTrue(report["errors"])
 
     def test_changed_executable_oracle_invalidates_only_dependent_current_cases(self):
         retained = None

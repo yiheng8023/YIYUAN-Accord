@@ -27,19 +27,19 @@ Use sufficient native state. Bind a file checkpoint when input freshness,
 unfinished-work recovery or completion needs protection the host does not supply;
 file creation alone is not a trigger. Honor existing bindings and pauses, and
 reconcile current input, effects and authority before revising or resuming them.
-When the host exposes `inspect_task_state`, use it for read-only inspection of
-the existing root-session checkpoint at an explicit workspace. Call identity
-comes from host MCP metadata; the workspace remains caller-selected. Missing
-metadata/state or a descendant's shared session remains unavailable, not adopted
-parent state. The host owns this stdio process; no control connection is created.
-For long work or a continuity decision, request `includeContext: true` to join
-Hook-bound counters with current call identity. `recordedHostVersion` belongs to
-the old session header; use the separately sourced current conditions. Unknown
-or changed input, turn, model or version holds dependent assessment. Ordinary
-status reads omit this additional file read.
-`contextMaxAgeMs` can bind an age limit appropriate to the actual work; retain the
-original sample time and account for the unobserved tail. A larger limit alone
-does not make old evidence current or allow a transfer.
+Use available `inspect_task_state` at an explicit workspace; identity comes from
+native call metadata, not workspace selection. Missing state or a descendant's
+shared session cannot establish ownership of the parent's checkpoint.
+For long work or continuity, request `includeContext: true`. The old header's
+`recordedHostVersion` is separate from current host conditions.
+Its optional `contextAssessment` reuses `assess-context`: supply the prior epoch,
+expectedRevision and contextGeneration, original observation/expiry times,
+integrity evidence and sourced tail/work/handoff/recovery/safety estimates.
+The helper consumes fresh counters; changed input, revision or generation requires
+reassessment. A fit grants neither permission nor takeover. Choose `contextMaxAgeMs`
+for the work without restamping evidence or ignoring the unobserved tail.
+Default status reads omit context I/O; assessment uses existing short-lived locks
+without changing saved task state or creating a control connection.
 Use current helper `--help` from the plugin root for other status, binding, revision,
 `unresolved`, pause and retirement; readback or file matches do not grant authority.
 Retain known unmet conditions until evidenced resolution or authorized cancellation.
