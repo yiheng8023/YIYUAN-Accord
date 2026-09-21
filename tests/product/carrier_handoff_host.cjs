@@ -3,7 +3,8 @@
 // Python App Server controller; mock mode exercises failure paths without a model.
 const readline = require('node:readline');
 const {performance} = require('node:perf_hooks');
-const {handoff, prepareHandoff, runHandoffProposal, reconcileContinuation, HANDOFF_PROPOSAL_TOOL} = require('../../runtime/carrier-handoff.cjs');
+const {handoff, prepareHandoff, runHandoffProposal, reconcileContinuation,
+  finalizeReconciledHandoff, HANDOFF_PROPOSAL_TOOL} = require('../../runtime/carrier-handoff.cjs');
 const rl = readline.createInterface({input: process.stdin});
 const pending = new Map();
 let sequence = 0, started = false;
@@ -143,6 +144,80 @@ async function runOwnedConnection(config) {
   }
   process.stdout.write(JSON.stringify({kind:'done',result,error,recovery,reconciliation,context,contextReplies,exitCode,socketCloseCode,
     transportKind:socket?'websocket':'stdio',closeState,rawBytes})+'\n');
+  rl.close();process.stdin.destroy();
+}
+
+async function runFinalizationSqlite(config) {
+  const crypto=require('node:crypto');
+  const {openCarrierRecorder}=require('../../runtime/carrier-recorder.cjs');
+  const {restoreCodexSourceSession}=require('../../runtime/codex-session.cjs');
+  const {CONTEXT_OBSERVATION_TOOL}=require('../../runtime/codex-connection.cjs');
+  const canonical=value=>Array.isArray(value)?`[${value.map(canonical).join(',')}]`:
+    value&&typeof value==='object'?`{${Object.keys(value).sort().map(k=>`${JSON.stringify(k)}:${canonical(value[k])}`).join(',')}}`:JSON.stringify(value);
+  const digest=value=>crypto.createHash('sha256').update(canonical(value)).digest('hex');
+  const recorder=openCarrierRecorder({path:config.database,create:true});
+  const calls=[];let resumed=false;
+  const plan={transferId:'sqlite-transfer',scopeRef:'sqlite-scope',authorityRef:'sqlite-authority',stateRef:'sqlite-state',
+    source:{threadId:'source-1',turnId:'source-turn'},target:{cwd:'/fixture',model:'fixture-model',dynamicTools:[HANDOFF_PROPOSAL_TOOL,CONTEXT_OBSERVATION_TOOL]},
+    handoffText:'fixed',continuation:{input:'fixed continuation',sandboxPolicy:{type:'readOnly'}},
+    deadlineMs:Date.now()+5000,recoveryDeadlineMs:Date.now()+6000};
+  const started=recorder.bindScope(plan.scopeRef,plan.source.threadId);
+  const initial={phase:'reconciliation-required',transferId:plan.transferId,planDigest:digest(plan),scopeRef:plan.scopeRef,
+    authorityRef:plan.authorityRef,stateRef:plan.stateRef,connection:{connectionId:'old-connection',hostVersion:'fixture-host'},plan,
+    writer:'source',writerThreadId:plan.source.threadId,sourceRecovery:'retained',source:plan.source,target:null,
+    intakeTurn:null,continuationTurn:null,expectedLease:null,observedLease:null,pendingEffect:null};
+  const begun=recorder.begin(plan.transferId,initial.planDigest,initial);
+  const reconciled={...initial,phase:'continuation-reconciled',writer:'target',writerThreadId:'target-1',
+    target:{threadId:'target-1'},intakeTurn:{threadId:'target-1',turnId:'intake-turn'},
+    intakeTurns:[{threadId:'target-1',turnId:'intake-turn',input:'fixed',inputDigest:digest('fixed')}],
+    intakeTerminals:[{threadId:'target-1',turnId:'intake-turn',status:'completed'}],
+    expectedLease:begun.lease,observedLease:begun.lease,pendingEffect:null,
+    verification:{accepted:['fixture:accepted'],continue:'fixture:continue'},
+    reconciliation:{kind:'first-continuation',receiptDigest:'a'.repeat(64),requestRef:{connectionId:'old-connection',hostVersion:'fixture-host',requestId:'turn-request',method:'turn/start'},
+      originalPendingEffect:{method:'turn/start'},originalFailure:{code:'NATIVE_EFFECT_UNKNOWN'},
+      turn:{threadId:'target-1',turnId:'continuation-turn',status:'completed'},targetReadDigest:'b'.repeat(64),
+      verificationSourceRef:'fixture:reconciled',connection:{connectionId:'recovery-connection',hostVersion:'fixture-host'}}};
+  const committed=recorder.compareAndSet(plan.transferId,begun.revision,reconciled,begun.lease);
+  const connection={transport:{connectionId:'recovery-connection',hostVersion:'fixture-host',async request(method,params){
+    calls.push({method,params:clone(params)});
+    if(method==='thread/read'){
+      const target=params.threadId==='target-1';
+      return {thread:{id:params.threadId,ephemeral:false,status:{type:resumed?'idle':'notLoaded'},
+        ...(target&&params.includeTurns?{turns:[{id:'intake-turn',status:'completed'},{id:'continuation-turn',status:'completed'}]}:{})}};
+    }
+    if(method==='thread/resume'){resumed=true;return {thread:{id:params.threadId,ephemeral:false,status:{type:'idle'}}};}
+    throw Error('unexpected sqlite native method:'+method);},async waitTerminal(){throw Error('unused')}},
+    async receiveTurnActivity(){throw Error('unused')},async respondRequest(){throw Error('unused')},
+    async replyContext(){throw Error('unused')},proposalChannel(){throw Error('unused')}};
+  const verify=async(stage,facts)=>{
+    if(stage==='reconciled-release')return {decision:'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+      sourceRef:'sqlite:release',pauseStateVerified:true,sourceRecoveryReady:true,singleWriter:true,effectsVerified:true,
+      receiptVerified:true,reconciliationAuthorized:true,releaseAuthorized:true,priorControllerClosed:true,
+      priorControllerQuiesced:true,sourceConnectionReleased:true,subscriptionReleaseVerified:true,
+      subscriptionReleaseEvidenceRef:'sqlite:old-controller-close'};
+    if(stage==='restore-prepare')return {decision:'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+      sourceRef:'sqlite:restore-prepare',pauseStateVerified:true,priorControllerQuiesced:true,pendingEffectsReconciled:true,
+      restorationAuthorized:true,singleWriter:true,resumeInitializationSafe:true};
+    if(stage==='restore-resumed')return {decision:'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+      sourceRef:'sqlite:restore-resumed',nativeToolEvidenceRef:'sqlite:persisted-tools',continuityToolsRestored:true,
+      targetSettingsMatch:facts.resumeParams.cwd==='/fixture',historyRetained:true,singleWriter:true,effectsVerified:true};
+    throw Error('unexpected sqlite verifier:'+stage);
+  };
+  try{
+    const finalized=await finalizeReconciledHandoff({transferId:plan.transferId,scopeRef:plan.scopeRef,
+      authorityRef:plan.authorityRef,stateRef:plan.stateRef,deadlineMs:Date.now()+4000,
+      expectedRevision:committed.revision,expectedLease:committed.lease,
+      receiptDigest:'a'.repeat(64),releaseKind:'prior-controller-closed'},
+      {transport:connection.transport,recorder,verify});
+    const settled=recorder.settle(finalized.settle.transferId,finalized.settle.revision,finalized.settle.lease);
+    const session=await restoreCodexSourceSession({connection,recorder,scopeRef:plan.scopeRef,verify,
+      planResolver(){throw Error('unused')},current(){throw Error('unused')},ownerRequest(){throw Error('unused')}},
+      {transferId:plan.transferId,expectedScope:settled.scope,deadlineMs:Date.now()+4000,
+        resume:{cwd:'/fixture',sandbox:'read-only',approvalPolicy:'never'}});
+    const record=recorder.read(plan.transferId,plan.scopeRef),scope=recorder.readScope(plan.scopeRef);
+    process.stdout.write(JSON.stringify({kind:'done',started,finalized,settled,
+      restored:session.snapshot(),record,scope,calls})+'\n');
+  }finally{recorder.close();}
   rl.close();process.stdin.destroy();
 }
 async function run(config) {
@@ -392,16 +467,38 @@ async function run(config) {
     const input={transferId:plan.transferId,scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
       deadlineMs:Date.now()+2000,receipt:{requestRef,request:{id:requestRef?.requestId,method:'turn/start',params:clone(state.pendingEffect.params)},
         response:{id:requestRef?.requestId,result:{turn:{id:'turn-2',status:'inProgress'}}}}};
-    const recoveryCalls=[];let reads=0,commits=0,checks=0;
+    const recoveryCalls=[];let reads=0,commits=0,checks=0,finalFaultUsed=false;
+    const finalMode=config.finalize || null;
+    const nativeFinal=finalMode?.startsWith('same')||
+      ['observed-denied','observation-cas-loss'].includes(finalMode);
     const recoveryTransport={connectionId:'recovered-connection',hostVersion:'fixture-host',async request(method,params){
       recoveryCalls.push({method,params});
+      if(method==='thread/unsubscribe'){
+        if(finalMode?.startsWith('same-unknown')){
+          const failure=Error('unsubscribe acknowledgement lost');
+          failure.rpcRequest={connectionId:recoveryTransport.connectionId,
+            hostVersion:recoveryTransport.hostVersion,requestId:'unsubscribe-1',method};
+          throw failure;
+        }
+        if(finalMode==='same-not-subscribed')return {status:'notSubscribed'};
+        if(finalMode==='same-not-loaded')return {status:'notLoaded'};
+        if(finalMode==='same-invalid')return {status:'unknown'};
+        return {status:'unsubscribed'};
+      }
       const turns=[...state.intakeTurns.map(t=>({id:t.turnId,status:'completed',items:[]})),
         {id:'turn-2',status:'completed',items:[{type:'userMessage',content:[{type:'text',text:plan.continuation.input}]}]}];
       if(mode==='extra-turn')turns.push({id:'other-turn',status:'completed',items:[]});
       if(mode==='wrong-input')turns[turns.length-1].items[0].content[0].text='Another action';
       if(mode==='failed-turn')turns[turns.length-1].status='failed';
-      return {thread:{id:params.threadId,status:{type:mode==='active-target'?'active':mode==='idle-target'?'idle':'notLoaded'},turns}};
+      const target=params.threadId===state.target?.threadId;
+      return {thread:{id:params.threadId,
+        ephemeral:finalMode==='cross-ephemeral'&&!target?true:false,
+        status:{type:mode==='active-target'&&target?'active':mode==='idle-target'?'idle':'notLoaded'},
+        ...(target?{turns}:{})}};
     }};
+    if(nativeFinal){
+      recoveryTransport.connectionId='test-connection';
+    }
     const recoveryRecorder={async read(){
       reads++;const value={revision,state:clone(state),lease:clone(lease)};
       if(mode==='readback-changed' && commits)value.state.reconciliation.verificationSourceRef='changed';
@@ -412,15 +509,47 @@ async function run(config) {
       if(mode==='false-ack')return {revision:revision+1,lease:clone(lease)};
       const committed=await recorder.compareAndSet(...args);
       if(mode==='lost-cas-ack')throw Error('CAS acknowledgement lost after durable write');
+      if(!finalFaultUsed&&((['authorization-cas-loss','authorization-cas-loss-third',
+          'third-finalizer-cas-loss','third-finalizer-cas-loss-denied'].includes(finalMode)&&commits===2)||
+          (finalMode==='final-cas-loss'&&commits===3)||
+          (finalMode==='observation-cas-loss'&&commits===3))){
+        finalFaultUsed=true;throw Error('finalization CAS acknowledgement lost after durable write');
+      }
       if(mode==='rotate-lease'){lease={...lease,token:'rotated-token'};committed.lease=clone(lease);}
       if(mode==='foreign-lease')committed.lease.writerThreadId='foreign';
       return committed;
     }};
-    const recoveryVerify=async()=>{
+    const recoveryVerify=async(stage)=>{
       checks++;const value={decision:'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
         sourceRef:'independent-recovery-evidence',sourceRecoveryReady:true,singleWriter:true,effectsVerified:true,
         priorAttemptQuiesced:true,receiptVerified:true,reconciliationAuthorized:true};
+      if(stage==='reconciled-release')Object.assign(value,{pauseStateVerified:true,
+        releaseAuthorized:true,subscriptionReleaseVerified:true,
+        subscriptionReleaseEvidenceRef:'independent-subscription-release-evidence',
+        priorControllerClosed:true,priorControllerQuiesced:true,sourceConnectionReleased:true});
+      if(stage==='reconciled-release-observed')Object.assign(value,{
+        sourceRef:'independent-native-release-receipt',subscriptionReleaseVerified:true,
+        subscriptionReleaseEvidenceRef:'native-unsubscribe-receipt',
+        sameConnectionSubscriptionReleased:true});
+      if(stage==='reconciled-release-recover')Object.assign(value,{
+        sourceRef:'independent-recovered-release-receipt',subscriptionReleaseVerified:true,
+        subscriptionReleaseEvidenceRef:'recovered-native-unsubscribe-receipt',
+        sameConnectionSubscriptionReleased:true,nativeStatus:'unsubscribed'});
       if(['effectsVerified','priorAttemptQuiesced','receiptVerified','reconciliationAuthorized'].includes(mode))value[mode]=false;
+      if(finalMode==='cross-denied'&&stage==='reconciled-release')value.priorControllerClosed=false;
+      if(finalMode==='same-unknown-cross-denied'&&stage==='reconciled-release')value.priorControllerClosed=false;
+      if(finalMode==='observed-denied'&&stage==='reconciled-release-observed')value.subscriptionReleaseVerified=false;
+      if(['third-proven','authorization-cas-loss-third','third-finalizer-cas-loss',
+          'third-finalizer-cas-loss-denied'].includes(finalMode)&&stage==='reconciled-release')Object.assign(value,{
+        reconciliationControllerClosed:true,reconciliationControllerQuiesced:true,
+        reconciliationControllerEvidenceRef:'reconciliation-controller-close-receipt'});
+      if(finalMode==='third-finalizer-cas-loss'&&stage==='reconciled-release')Object.assign(value,{
+        releaseIntentControllerClosed:true,releaseIntentControllerQuiesced:true,
+        releaseIntentControllerEvidenceRef:'release-intent-controller-close-receipt'});
+      if(finalMode==='deadline-before-cas'&&stage==='reconciled-release'){
+        const expired=performance.now()+5000;
+        Object.defineProperty(performance,'now',{value:()=>expired,configurable:true});
+      }
       if(mode==='binding-drift')recoveryTransport.connectionId='foreign';
       return value;
     };
@@ -444,14 +573,61 @@ async function run(config) {
     }
     if(mode==='success'||mode==='lost-cas-ack')second=await invoke();
     if(mode==='different-receipt'){input.receipt.response.result.turn.id='other-turn';second=await invoke();}
-    reconciled={first,second,reads,commits,checks,calls:recoveryCalls,originalState,state:clone(state),lease:clone(lease)};
+    let finalized=null;
+    if(finalMode&&first.result?.status==='continuation-reconciled'){
+      if(finalMode==='third-missing'||finalMode==='third-proven'){
+        recoveryTransport.connectionId='third-connection';
+      }
+      if(finalMode==='third-finalizer-cas-loss'||finalMode==='third-finalizer-cas-loss-denied'){
+        recoveryTransport.connectionId='third-finalizer-connection';
+      }
+      const finalInput=()=>({transferId:plan.transferId,scopeRef:plan.scopeRef,
+        authorityRef:plan.authorityRef,stateRef:plan.stateRef,deadlineMs:Date.now()+2000,
+        expectedRevision:revision,expectedLease:clone(lease),
+        receiptDigest:state.reconciliation.receiptDigest,
+        releaseKind:finalMode?.startsWith('same-unknown-cross')&&
+          recoveryTransport.connectionId!=='test-connection'?
+          'prior-controller-closed':nativeFinal?
+          'native-unsubscribe':'prior-controller-closed'});
+      if(finalInput().releaseKind==='native-unsubscribe'){
+        recoveryTransport.connectionId=state.connection.connectionId;
+      }
+      const finish=async input=>{try{return {result:await finalizeReconciledHandoff(input,{
+        transport:recoveryTransport,recorder:recoveryRecorder,verify:recoveryVerify})};}
+        catch(e){return {error:{code:e.code,message:e.message,state:e.state,details:e.details}};}};
+      if(finalMode==='concurrent'){
+        const basis=finalInput();
+        finalized=(await Promise.all([finish(clone(basis)),finish(clone(basis))]));
+      }else{
+        finalized={first:await finish(finalInput())};
+        if((finalMode==='repeated'&&finalized.first.result)||
+            ['authorization-cas-loss','authorization-cas-loss-third','third-finalizer-cas-loss',
+              'third-finalizer-cas-loss-denied','final-cas-loss','observation-cas-loss','same-unknown','same-invalid',
+              'same-unknown-cross','same-unknown-cross-denied'].includes(finalMode)){
+          finalized.afterFirst={revision,state:clone(state),lease:clone(lease)};
+          if(finalMode?.startsWith('same-unknown-cross')){
+            recoveryTransport.connectionId='recovered-after-source-close';
+          }
+          if(finalMode==='authorization-cas-loss-third'){
+            recoveryTransport.connectionId='third-after-finalizer-close';
+          }
+          if(finalMode==='third-finalizer-cas-loss'||finalMode==='third-finalizer-cas-loss-denied'){
+            recoveryTransport.connectionId='fourth-after-finalizer-close';
+          }
+          finalized.second=await finish(finalInput());
+        }
+      }
+    }
+    reconciled={first,second,finalized,reads,commits,checks,calls:recoveryCalls,
+      originalState,state:clone(state),revision,lease:clone(lease)};
   }
   process.stdout.write(JSON.stringify({kind:'done', result, error, calls, snapshots, verdicts, concurrent, proposal,reconciled}) + '\n');
   rl.close(); process.stdin.destroy();
 }
 rl.on('line', line => {
   const value = JSON.parse(line);
-  if (!started) {started = true; (value.mode==='native-connection'?runOwnedConnection(value):run(value)).catch(e => {process.stderr.write(String(e.stack)); process.exitCode=1; rl.close(); process.stdin.destroy();}); return;}
+  if (!started) {started = true; (value.mode==='native-connection'?runOwnedConnection(value):
+    value.mode==='finalize-sqlite'?runFinalizationSqlite(value):run(value)).catch(e => {process.stderr.write(String(e.stack)); process.exitCode=1; rl.close(); process.stdin.destroy();}); return;}
   const waiting = pending.get(value.id);
   if (!waiting) throw new Error('unmatched host reply');
   pending.delete(value.id);

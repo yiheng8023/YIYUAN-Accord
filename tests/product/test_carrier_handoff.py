@@ -12,6 +12,7 @@ import threading
 import sqlite3
 import secrets
 import re
+import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -31,6 +32,11 @@ class CarrierHandoffTests(unittest.TestCase):
         return self.run_case('lost-continuation-ack',reconcile=mode,rpcFailureRef={
             'connectionId':'test-connection','hostVersion':'fixture-host',
             'requestId':'original-continuation-request','method':'turn/start'})['reconciled']
+
+    def finalization_case(self, mode):
+        return self.run_case('lost-continuation-ack', reconcile='success', finalize=mode,
+            rpcFailureRef={'connectionId':'test-connection','hostVersion':'fixture-host',
+                           'requestId':'original-continuation-request','method':'turn/start'})['reconciled']
 
     def test_recovery_reconciles_one_completed_effect_and_retains_failure_evidence(self):
         r=self.recovery_case('success')
@@ -82,6 +88,143 @@ class CarrierHandoffTests(unittest.TestCase):
                 self.assertEqual(r['first']['result']['status'],'continuation-reconciled')
                 self.assertIn('error',r['second'])
                 self.assertEqual((r['commits'],len(r['calls'])),(1,1))
+
+    def test_reconciled_cross_controller_release_records_closed_prior_connection_without_unsubscribe(self):
+        result=self.finalization_case('cross')
+        final=result['finalized']['first']['result']
+        self.assertEqual(final['status'],'finalized')
+        self.assertEqual(final['subscriptionRelease']['kind'],'prior-controller-closed')
+        self.assertIsNone(final['subscriptionRelease']['nativeStatus'])
+        self.assertTrue(final['sourceSubscriptionReleased'])
+        self.assertFalse(any(call['method']=='thread/unsubscribe' for call in result['calls']))
+        self.assertEqual(result['state']['phase'],'source-subscription-released')
+        self.assertIsNone(result['state']['pendingEffect'])
+        self.assertEqual(result['state']['expectedLease'],result['state']['observedLease'])
+        self.assertEqual(final['settle']['revision'],result['revision'])
+        ephemeral=self.finalization_case('cross-ephemeral')
+        self.assertTrue(ephemeral['state']['sourceEphemeral'])
+        self.assertFalse(ephemeral['state']['nativeHistoryRetained'])
+
+    def test_same_source_connection_records_each_native_unsubscribe_status_once(self):
+        for mode,status in [('same','unsubscribed'),('same-not-subscribed','notSubscribed'),
+                            ('same-not-loaded','notLoaded')]:
+            with self.subTest(mode=mode):
+                result=self.finalization_case(mode)
+                final=result['finalized']['first']['result']
+                self.assertEqual(final['subscriptionRelease']['kind'],'native-unsubscribe')
+                self.assertEqual(final['subscriptionRelease']['nativeStatus'],status)
+                self.assertEqual(sum(c['method']=='thread/unsubscribe' for c in result['calls']),1)
+                self.assertEqual(result['state']['verification']['release'],
+                                 'independent-native-release-receipt')
+
+    def test_release_authorization_rejects_missing_prior_or_reconciliation_controller_evidence(self):
+        denied=self.finalization_case('cross-denied')
+        self.assertEqual(denied['finalized']['first']['error']['code'],'VERIFICATION_DENIED')
+        self.assertEqual(denied['state']['phase'],'continuation-reconciled')
+        third=self.finalization_case('third-missing')
+        self.assertEqual(third['finalized']['first']['error']['code'],'VERIFICATION_DENIED')
+        allowed=self.finalization_case('third-proven')
+        self.assertEqual(allowed['finalized']['first']['result']['status'],'finalized')
+
+    def test_unknown_or_unrecognized_unsubscribe_is_never_replayed(self):
+        unknown=self.finalization_case('same-unknown')
+        self.assertEqual(unknown['finalized']['first']['error']['code'],'NATIVE_EFFECT_UNKNOWN')
+        self.assertEqual(unknown['finalized']['second']['result']['status'],'finalized')
+        self.assertEqual(sum(c['method']=='thread/unsubscribe' for c in unknown['calls']),1)
+        pending=unknown['finalized']['afterFirst']['state']['pendingEffect']
+        self.assertEqual(pending['requestRef']['method'],'thread/unsubscribe')
+        self.assertEqual(unknown['finalized']['afterFirst']['state']['failure']['code'],
+                         'NATIVE_EFFECT_UNKNOWN')
+        self.assertEqual(unknown['state']['subscriptionRelease']['evidenceRef'],
+                         'recovered-native-unsubscribe-receipt')
+        held=self.finalization_case('same-invalid')
+        self.assertEqual(held['finalized']['first']['error']['code'],'SOURCE_RELEASE_UNVERIFIED')
+        self.assertEqual(held['finalized']['second']['result']['status'],'finalized')
+        self.assertEqual(sum(c['method']=='thread/unsubscribe' for c in held['calls']),1)
+        cross=self.finalization_case('same-unknown-cross')
+        self.assertEqual(cross['finalized']['first']['error']['code'],'NATIVE_EFFECT_UNKNOWN')
+        self.assertEqual(cross['finalized']['second']['result']['status'],'finalized')
+        self.assertEqual(sum(c['method']=='thread/unsubscribe' for c in cross['calls']),1)
+        release=cross['state']['subscriptionRelease']
+        self.assertEqual(release['kind'],'prior-controller-closed')
+        self.assertEqual(release['originalIntentKind'],'native-unsubscribe')
+        self.assertIsNone(release['nativeStatus'])
+        denied=self.finalization_case('same-unknown-cross-denied')
+        self.assertEqual(denied['finalized']['second']['error']['code'],'VERIFICATION_DENIED')
+        self.assertEqual(sum(c['method']=='thread/unsubscribe' for c in denied['calls']),1)
+
+    def test_finalization_cas_ack_loss_and_repeat_use_readback_without_duplicate_effects(self):
+        for mode,second_status in [('authorization-cas-loss','finalized'),
+                                   ('authorization-cas-loss-third','finalized'),
+                                   ('observation-cas-loss','finalized'),
+                                   ('final-cas-loss','already-finalized')]:
+            with self.subTest(mode=mode):
+                result=self.finalization_case(mode)
+                self.assertEqual(result['finalized']['first']['error']['code'],
+                                 'RECORDER_COMMIT_UNKNOWN')
+                self.assertEqual(result['finalized']['second']['result']['status'],second_status)
+                expected_unsubscribe=1 if mode=='observation-cas-loss' else 0
+                self.assertEqual(sum(c['method']=='thread/unsubscribe' for c in result['calls']),
+                                 expected_unsubscribe)
+        repeated=self.finalization_case('repeated')
+        self.assertEqual(repeated['finalized']['first']['result']['status'],'finalized')
+        self.assertEqual(repeated['finalized']['second']['result']['status'],'already-finalized')
+        third=self.finalization_case('third-finalizer-cas-loss')
+        self.assertEqual(third['finalized']['first']['error']['code'],'RECORDER_COMMIT_UNKNOWN')
+        self.assertEqual(third['finalized']['second']['result']['status'],'finalized')
+        self.assertFalse(any(c['method']=='thread/unsubscribe' for c in third['calls']))
+        denied=self.finalization_case('third-finalizer-cas-loss-denied')
+        self.assertEqual(denied['finalized']['second']['error']['code'],'VERIFICATION_DENIED')
+        self.assertEqual(denied['state']['phase'],'release-authorized')
+
+    def test_concurrent_finalizers_have_one_winner_and_expired_pre_cas_is_not_commit_unknown(self):
+        concurrent=self.finalization_case('concurrent')['finalized']
+        statuses=sorted('result' if 'result' in row else row['error']['code'] for row in concurrent)
+        self.assertIn('result',statuses)
+        self.assertEqual(statuses.count('result'),1)
+        expired=self.finalization_case('deadline-before-cas')
+        self.assertNotEqual(expired['finalized']['first']['error']['code'],'RECORDER_COMMIT_UNKNOWN')
+        self.assertEqual(expired['commits'],1) # reconciliation CAS only
+
+    def test_reconciled_finalization_settle_and_sdk_restore_compose_with_real_sqlite(self):
+        with tempfile.TemporaryDirectory() as directory:
+            database=Path(directory)/'carrier.sqlite'
+            completed=subprocess.run([shutil.which('node'),str(DRIVER)],
+                input=json.dumps({'mode':'finalize-sqlite','database':str(database)})+'\n',
+                capture_output=True,text=True,encoding='utf-8',timeout=15)
+            self.assertEqual(completed.returncode,0,completed.stderr)
+            result=json.loads(completed.stdout)
+            self.assertEqual(result['finalized']['status'],'finalized')
+            self.assertEqual(result['finalized']['subscriptionRelease']['kind'],
+                             'prior-controller-closed')
+            self.assertEqual(result['restored']['status'],'ready')
+            self.assertEqual(result['restored']['sourceThreadId'],'target-1')
+            self.assertEqual(result['record']['state']['phase'],'source-subscription-released')
+            self.assertIsNone(result['record']['state']['pendingEffect'])
+            self.assertEqual(result['record']['state']['observedLease'],
+                             result['record']['state']['expectedLease'])
+            self.assertNotEqual(result['record']['state']['observedLease']['token'],
+                                result['finalized']['lease']['token'])
+            self.assertNotEqual(result['record']['state']['observedLease']['token'],
+                                result['settled']['scope']['token'])
+            self.assertNotEqual(result['settled']['scope']['token'],result['scope']['token'])
+            methods=[call['method'] for call in result['calls']]
+            self.assertEqual(methods.count('thread/resume'),1)
+            self.assertFalse(any(method in methods for method in
+                                 ('thread/start','turn/start','thread/unsubscribe')))
+            connection=sqlite3.connect(database)
+            try:
+                transfer=connection.execute(
+                    'SELECT revision,settled,state_json FROM transfers WHERE transfer_id=?',
+                    ('sqlite-transfer',)).fetchone()
+                scope=connection.execute(
+                    'SELECT writer_thread_id,active_transfer_id,fence_token FROM scopes WHERE scope_ref=?',
+                    ('sqlite-scope',)).fetchone()
+            finally:
+                connection.close()
+            self.assertEqual(transfer[1],1)
+            self.assertEqual(json.loads(transfer[2])['phase'],'source-subscription-released')
+            self.assertEqual((scope[0],scope[1]),('target-1',None))
 
     def test_event_channel_drives_one_dispatch_and_releases_only_its_listener(self):
         r = self.run_case('proposal-event-success')

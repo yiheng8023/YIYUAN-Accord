@@ -564,6 +564,61 @@ current native/business state. Both results leave `sourceReleaseAllowed` and
 they prevent deriving it from this record alone. The caller establishes any later
 action from current authority and conditions, without inventing another human gate.
 
+## Finish a reconciled continuation
+
+`reconcileContinuation` does not itself finish the handoff. After its receipt and
+current effects have been checked, call
+`finalizeReconciledHandoff(input, {transport, recorder, verify})` to connect that
+state to the existing settlement and restoration path. It never starts another
+continuation or resumes the source merely to obtain a subscription.
+
+The exact input fields are `transferId`, `scopeRef`, `authorityRef`, `stateRef`,
+fresh absolute `deadlineMs`, `expectedRevision`, `expectedLease`, `receiptDigest`
+and `releaseKind`. The lease has `scopeRef`, `transferId`, `token` and
+`writerThreadId`; initially use the acknowledged reconciled record's revision,
+lease and receipt digest. For an interrupted finalization, inspect its actual
+record and pending effects before binding the current revision and lease to the
+same reconciliation digest. A newly read token cannot replace missing
+reconciliation or permission. `releaseKind` selects one of two evidenced cases:
+
+- `native-unsubscribe`: the original connection remains available. Verify that
+  its prior attempt is quiescent and release is currently authorized, then inspect
+  the actual unsubscribe response. A recognized absence belongs to that exact
+  connection; it does not establish that all other controllers are stopped.
+- `prior-controller-closed`: this is a different controller, and an independent
+  source proves that the old connection has closed and cannot dispatch, while
+  source recovery remains available. Do not create or resume a source subscription
+  to remove it. This branch makes no unsubscribe call.
+
+The `reconciled-release` verifier receives the bound input and ledger, original,
+reconciliation and current connections, source and target reads, and the completed
+continuation. Check current authority, pauses, effects, receipt provenance, writer
+ownership and recoverability. The second branch also needs actual old-controller
+closure evidence. A `notSubscribed` or `notLoaded` response from a new connection
+cannot supply that evidence. Permission to release and proof of an already
+released subscription are different facts.
+
+The native branch checks the actual response through
+`reconciled-release-observed`; a missing or unrecognized response instead remains
+pending until `reconciled-release-recover` has independent evidence. Neither
+callback may invent a native status. A different recovery controller can use
+proven old-controller closure without repeating the pending unsubscribe; retain
+the original release intent separately from the actual completion basis.
+When a distinct reconciliation controller also existed, verify its closure and
+quiescence rather than silently assuming only the original controller mattered.
+Apply the same rule to the controller recorded in an interrupted release intent;
+reuse evidence for identical connections, and never require the current controller
+to prove that it has itself closed.
+
+An atomic revision/lease transition precedes dependent release effects; final
+readback preserves the original reconciliation and actual release basis.
+Unknown native or commit results remain held for inspection, never replayed.
+Pass the result's exact `settle` arguments to the existing recorder; only its
+actual acknowledged scope receipt can then be used with
+`restoreCodexSourceSession` where that operation's own prerequisites hold.
+Neither release nor a repeated stored result proves current readiness,
+business completion, arbitrary crash recovery or permission for a new turn.
+
 ## Event-driven proposal dispatch
 
 Controllers with an ordered native event receiver can instead call

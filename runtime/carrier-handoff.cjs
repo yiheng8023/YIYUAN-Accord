@@ -1605,6 +1605,432 @@ async function reconcileContinuation(rawInput, dependencies) {
   }
 }
 
+// Finish only the release tail of an exactly reconciled first continuation.
+// No turn is started or resumed. A same-connection caller may remove its own
+// source subscription once; a different controller must instead prove that the
+// prior source connection is closed and can no longer dispatch.
+async function finalizeReconciledHandoff(rawInput, rawDependencies) {
+  const clock = {wall: Date.now(), monotonic: performance.now()};
+  let input, transport, recorder, verify;
+  try {
+    input = immutable(rawInput);
+    exactKeys(input, ['transferId', 'scopeRef', 'authorityRef', 'stateRef',
+      'deadlineMs', 'expectedRevision', 'expectedLease', 'receiptDigest',
+      'releaseKind'], [], 'finalization');
+    for (const key of ['transferId', 'scopeRef', 'authorityRef', 'stateRef']) {
+      text(input[key], `finalization.${key}`);
+    }
+    if (!Number.isSafeInteger(input.deadlineMs) || input.deadlineMs <= clock.wall ||
+        input.deadlineMs - clock.wall > MAX_TIMER_MS) {
+      throw new TypeError('fresh bounded finalization deadline required');
+    }
+    if (!Number.isSafeInteger(input.expectedRevision) || input.expectedRevision < 0) {
+      throw new TypeError('finalization.expectedRevision must be nonnegative');
+    }
+    exactKeys(input.expectedLease,
+      ['scopeRef', 'transferId', 'token', 'writerThreadId'], [],
+      'finalization.expectedLease');
+    if (input.expectedLease.scopeRef !== input.scopeRef ||
+        input.expectedLease.transferId !== input.transferId) {
+      throw new TypeError('finalization expected lease differs');
+    }
+    text(input.expectedLease.token, 'finalization.expectedLease.token');
+    text(input.expectedLease.writerThreadId,
+      'finalization.expectedLease.writerThreadId');
+    if (typeof input.receiptDigest !== 'string' ||
+        !/^[a-f0-9]{64}$/.test(input.receiptDigest)) {
+      throw new TypeError('finalization.receiptDigest is invalid');
+    }
+    if (!['native-unsubscribe', 'prior-controller-closed'].includes(input.releaseKind)) {
+      throw new TypeError('finalization.releaseKind is unsupported');
+    }
+    exactKeys(rawDependencies, ['transport', 'recorder', 'verify'], [], 'dependencies');
+    ({transport, recorder, verify} = rawDependencies);
+    if (!plainObject(transport) || typeof transport.request !== 'function' ||
+        !plainObject(recorder) || typeof recorder.read !== 'function' ||
+        typeof recorder.compareAndSet !== 'function' || typeof verify !== 'function') {
+      throw new TypeError('bound transport, recorder and verifier are required');
+    }
+    text(transport.connectionId, 'transport.connectionId');
+    text(transport.hostVersion, 'transport.hostVersion');
+  } catch (error) {
+    throw new CarrierHandoffError('INVALID_INPUT', error.message, {
+      transferId: rawInput && typeof rawInput.transferId === 'string' ? rawInput.transferId : null,
+    });
+  }
+  const deadline = clock.monotonic + input.deadlineMs - clock.wall;
+  const binding = immutable({connectionId: transport.connectionId,
+    hostVersion: transport.hostVersion});
+  const callbacks = {request: transport.request, read: recorder.read,
+    cas: recorder.compareAndSet, verify};
+  let commitInFlight = false;
+  const reject = (code, message, details = {}) => fail(code, message, {
+    stage: 'reconciled-finalization', transferId: input.transferId,
+    reconciliationRequired: true, details,
+  });
+  const checkBinding = () => {
+    if (transport.connectionId !== binding.connectionId ||
+        transport.hostVersion !== binding.hostVersion ||
+        transport.request !== callbacks.request || recorder.read !== callbacks.read ||
+        recorder.compareAndSet !== callbacks.cas || rawDependencies.verify !== callbacks.verify) {
+      reject('FINALIZATION_BINDING_CHANGED', 'finalization callbacks or connection changed');
+    }
+  };
+  async function call(name, args) {
+    checkBinding(); before(deadline, name, input.transferId);
+    const value = immutable(await bounded(
+      () => Reflect.apply(callbacks[name], undefined, args), deadline, name));
+    checkBinding(); before(deadline, name, input.transferId);
+    return value;
+  }
+  function snapshot(value) {
+    exactKeys(value, ['revision', 'state', 'lease'], [], 'finalization snapshot');
+    if (!Number.isSafeInteger(value.revision) || value.revision < 0 ||
+        !plainObject(value.state) || !plainObject(value.lease)) {
+      reject('INVALID_FINALIZATION_STATE', 'invalid recorder revision, state or lease');
+    }
+    const plan = validatePlan(value.state.plan, clock.wall, true);
+    if (value.state.transferId !== input.transferId ||
+        value.state.scopeRef !== input.scopeRef ||
+        value.state.authorityRef !== input.authorityRef ||
+        value.state.stateRef !== input.stateRef ||
+        plan.transferId !== input.transferId || plan.scopeRef !== input.scopeRef ||
+        plan.authorityRef !== input.authorityRef || plan.stateRef !== input.stateRef ||
+        value.state.planDigest !== digest(plan) || value.state.writer !== 'target' ||
+        value.state.writerThreadId !== value.state.target?.threadId ||
+        value.lease.scopeRef !== input.scopeRef ||
+        value.lease.transferId !== input.transferId ||
+        value.lease.writerThreadId !== value.state.target?.threadId ||
+        value.state.sourceRecovery !== 'retained') {
+      reject('INVALID_FINALIZATION_STATE', 'reconciled target writer or plan differs');
+    }
+    text(value.lease.token, 'finalization lease token');
+    return plan;
+  }
+  async function commit(current, next, label) {
+    checkBinding(); before(deadline, label, input.transferId);
+    const nextSnapshot = immutable({...next, expectedLease: current.lease,
+      observedLease: current.lease});
+    let invoked = false;
+    let committed;
+    try {
+      committed = immutable(await bounded(() => {
+        invoked = true;
+        commitInFlight = true;
+        return Reflect.apply(callbacks.cas, undefined, [input.transferId,
+          current.revision, nextSnapshot, current.lease, deadline]);
+      }, deadline, label));
+      checkBinding(); before(deadline, label, input.transferId);
+    } catch (error) {
+      if (!invoked) commitInFlight = false;
+      throw error;
+    }
+    if (!Number.isSafeInteger(committed?.revision) ||
+        committed.revision <= current.revision || !plainObject(committed.lease) ||
+        committed.lease.scopeRef !== input.scopeRef ||
+        committed.lease.transferId !== input.transferId ||
+        committed.lease.writerThreadId !== current.state.target.threadId ||
+        typeof committed.lease.token !== 'string' || !committed.lease.token.trim()) {
+      throw new TypeError(`${label} returned an invalid recorder lease`);
+    }
+    const confirmed = await call('read', [input.transferId, input.scopeRef, deadline]);
+    snapshot(confirmed);
+    if (confirmed.revision !== committed.revision ||
+        canonical(confirmed.lease) !== canonical(committed.lease) ||
+        canonical(confirmed.state) !== canonical(nextSnapshot)) {
+      throw new TypeError(`${label} readback differs`);
+    }
+    commitInFlight = false;
+    return confirmed;
+  }
+  try {
+    let current = await call('read', [input.transferId, input.scopeRef, deadline]);
+    const plan = snapshot(current);
+    if (current.revision !== input.expectedRevision ||
+        canonical(current.lease) !== canonical(input.expectedLease)) {
+      reject('FINALIZATION_BASIS_CHANGED', 'expected revision or lease changed');
+    }
+    const {state} = current;
+    const sourceId = state.source?.threadId, targetId = state.target?.threadId;
+    text(sourceId, 'finalization source thread');
+    text(targetId, 'finalization target thread');
+    const result = (status, observed) => immutable({status,
+      transferId: input.transferId, scopeRef: input.scopeRef,
+      recorderRevision: observed.revision, lease: observed.lease,
+      writer: 'target', sourceThreadId: sourceId, targetThreadId: targetId,
+      sourceSubscriptionReleased: true,
+      subscriptionRelease: observed.state.subscriptionRelease,
+      settle: {transferId: input.transferId, revision: observed.revision,
+        lease: observed.lease},
+      claimLimit: 'Reconciled continuation release only; no new turn, source resume, task completion or general crash-recovery claim.',
+    });
+    if (state.phase === 'source-subscription-released') {
+      if (state.pendingEffect !== null ||
+          state.reconciliation?.receiptDigest !== input.receiptDigest ||
+          state.subscriptionRelease?.kind !== input.releaseKind ||
+          state.subscriptionRelease?.threadId !== sourceId ||
+          state.subscriptionRelease?.observed !== true ||
+          typeof state.verification?.release !== 'string' ||
+          !state.verification.release.trim()) {
+        reject('FINALIZATION_EVIDENCE_CONFLICT',
+          'stored released state differs from this finalization basis');
+      }
+      return result('already-finalized', current);
+    }
+    const initial = state.phase === 'continuation-reconciled';
+    const recovering = ['release-authorized', 'release-observed',
+      'release-held'].includes(state.phase);
+    if ((!initial && !recovering) ||
+        initial && (state.pendingEffect !== null || state.continuationTurn !== null) ||
+        state.reconciliation?.kind !== 'first-continuation' ||
+        state.reconciliation?.receiptDigest !== input.receiptDigest ||
+        state.reconciliation?.turn?.threadId !== targetId ||
+        state.reconciliation?.turn?.status !== 'completed') {
+      reject('FINALIZATION_NOT_APPLICABLE',
+        'only an exact reconciled first continuation can be finalized');
+    }
+    const originalConnection = state.connection;
+    if (!plainObject(originalConnection)) {
+      reject('INVALID_FINALIZATION_STATE', 'original source connection is unavailable');
+    }
+    const sameConnection = binding.connectionId === originalConnection.connectionId;
+    if ((input.releaseKind === 'native-unsubscribe') !== sameConnection) {
+      reject('FINALIZATION_RELEASE_KIND_MISMATCH',
+        'release kind does not match the current/source connection relationship');
+    }
+    const nativeIntentClosedByNewController = recovering &&
+      state.releaseIntent?.kind === 'native-unsubscribe' &&
+      input.releaseKind === 'prior-controller-closed' && !sameConnection;
+    const priorIntentMovedToNewController = recovering &&
+      state.releaseIntent?.kind === 'prior-controller-closed' &&
+      input.releaseKind === 'prior-controller-closed' &&
+      state.releaseIntent?.currentConnectionId !== binding.connectionId;
+    const releaseIntentMatches = !recovering ||
+      (state.releaseIntent?.kind === input.releaseKind &&
+        (input.releaseKind === 'prior-controller-closed' ||
+          state.releaseIntent?.currentConnectionId === binding.connectionId)) ||
+      (nativeIntentClosedByNewController &&
+        state.releaseIntent?.currentConnectionId === originalConnection.connectionId);
+    if (recovering && (!releaseIntentMatches ||
+        state.releaseIntent?.threadId !== sourceId ||
+        state.releaseIntent?.sourceConnectionId !== originalConnection.connectionId ||
+        state.releaseIntent?.receiptDigest !== input.receiptDigest ||
+        (state.releaseIntent?.kind === 'native-unsubscribe' &&
+          (state.pendingEffect?.method !== 'thread/unsubscribe' ||
+            state.pendingEffect?.params?.threadId !== sourceId)))) {
+      reject('FINALIZATION_EVIDENCE_CONFLICT',
+        'stored release intent differs from this finalization basis');
+    }
+    const sourceRead = await call('request', ['thread/read',
+      {threadId: sourceId}, deadline]);
+    const targetRead = await call('request', ['thread/read',
+      {threadId: targetId, includeTurns: true}, deadline]);
+    const sourceThread = threadFrom(sourceRead, sourceId,
+      'reconciled-finalization:source-read', input.transferId);
+    const targetThread = threadFrom(targetRead, targetId,
+      'reconciled-finalization:target-read', input.transferId);
+    const sourceStatus = plainObject(sourceThread.status) ? sourceThread.status.type : null;
+    const targetStatus = plainObject(targetThread.status) ? targetThread.status.type : null;
+    if (!['idle', 'notLoaded'].includes(sourceStatus) ||
+        !['idle', 'notLoaded'].includes(targetStatus)) {
+      reject('FINALIZATION_THREAD_ACTIVE', 'source or target is not quiescent');
+    }
+    const ids = [...state.intakeTurns.map(item => item.turnId),
+      state.reconciliation.turn.turnId];
+    if (!Array.isArray(targetThread.turns) || targetThread.turns.length !== ids.length ||
+        targetThread.turns.some((turn, index) =>
+          turn.id !== ids[index] || turn.status !== 'completed')) {
+      reject('FINALIZATION_NATIVE_MISMATCH',
+        'target history changed after continuation reconciliation');
+    }
+    const facts = immutable({input, ledger: current, plan,
+      currentConnection: binding, originalConnection,
+      reconciliationConnection: state.reconciliation.connection,
+      releaseKind: input.releaseKind, sourceRead, targetRead,
+      continuationTurn: state.reconciliation.turn});
+    const verdict = await call('verify',
+      ['reconciled-release', facts, deadline]);
+    const common = verdict?.decision === 'allow' &&
+      verdict.scopeRef === input.scopeRef &&
+      verdict.authorityRef === input.authorityRef &&
+      verdict.stateRef === input.stateRef &&
+      typeof verdict.sourceRef === 'string' && verdict.sourceRef.trim() &&
+      verdict.pauseStateVerified === true &&
+      verdict.sourceRecoveryReady === true && verdict.singleWriter === true &&
+      verdict.effectsVerified === true && verdict.receiptVerified === true &&
+      verdict.reconciliationAuthorized === true &&
+      verdict.releaseAuthorized === true;
+    const branch = input.releaseKind === 'native-unsubscribe' ?
+      verdict.priorAttemptQuiesced === true :
+      verdict.priorControllerClosed === true &&
+        verdict.priorControllerQuiesced === true &&
+        verdict.sourceConnectionReleased === true &&
+        verdict.subscriptionReleaseVerified === true &&
+        typeof verdict.subscriptionReleaseEvidenceRef === 'string' &&
+        verdict.subscriptionReleaseEvidenceRef.trim();
+    const reconciliationConnectionId = state.reconciliation.connection?.connectionId;
+    const reconciliationBranch = reconciliationConnectionId === binding.connectionId ||
+      reconciliationConnectionId === originalConnection.connectionId ||
+      verdict.reconciliationControllerClosed === true &&
+        verdict.reconciliationControllerQuiesced === true &&
+        typeof verdict.reconciliationControllerEvidenceRef === 'string' &&
+        verdict.reconciliationControllerEvidenceRef.trim();
+    const priorIntentControllerId = state.releaseIntent?.currentConnectionId;
+    const releaseIntentControllerBranch = !priorIntentMovedToNewController ||
+      priorIntentControllerId === originalConnection.connectionId ||
+      priorIntentControllerId === reconciliationConnectionId ||
+      verdict.releaseIntentControllerClosed === true &&
+        verdict.releaseIntentControllerQuiesced === true &&
+        typeof verdict.releaseIntentControllerEvidenceRef === 'string' &&
+        verdict.releaseIntentControllerEvidenceRef.trim();
+    if (!common || !branch || !reconciliationBranch ||
+        !releaseIntentControllerBranch) {
+      reject('VERIFICATION_DENIED',
+        'current authority, effects or subscription release verification denied');
+    }
+    const intent = nativeIntentClosedByNewController || priorIntentMovedToNewController ? immutable({
+      kind: 'prior-controller-closed', threadId: sourceId,
+      sourceConnectionId: originalConnection.connectionId,
+      currentConnectionId: binding.connectionId,
+      receiptDigest: input.receiptDigest,
+      evidenceRef: verdict.subscriptionReleaseEvidenceRef,
+      originalIntentKind: state.releaseIntent.kind}) : recovering ? state.releaseIntent : immutable({
+      kind: input.releaseKind, threadId: sourceId,
+      sourceConnectionId: originalConnection.connectionId,
+      currentConnectionId: binding.connectionId,
+      receiptDigest: input.receiptDigest,
+      evidenceRef: input.releaseKind === 'prior-controller-closed' ?
+        verdict.subscriptionReleaseEvidenceRef : null});
+    const plannedEffect = input.releaseKind === 'native-unsubscribe' ?
+      {method: 'thread/unsubscribe', params: {threadId: sourceId}} : null;
+    if (initial) {
+      current = await commit(current, {...state,
+        phase: 'release-authorized',
+        continuationTurn: {threadId: targetId,
+          turnId: state.reconciliation.turn.turnId},
+        pendingEffect: plannedEffect,
+        releaseIntent: intent,
+        verification: {...state.verification,
+          reconciledRelease: verdict.sourceRef}}, 'release authorization');
+    }
+    let nativeStatus = null;
+    let releaseEvidenceRef = intent.evidenceRef;
+    let releaseSourceRef = verdict.sourceRef;
+    if (input.releaseKind === 'native-unsubscribe') {
+      let response = current.state.releaseObservation?.response || null;
+      nativeStatus = current.state.releaseObservation?.nativeStatus || null;
+      if (initial) {
+        try {
+          response = await call('request', ['thread/unsubscribe',
+            {threadId: sourceId}, deadline]);
+      } catch (cause) {
+        const details = {cause: errorData(cause)};
+        const reference = nativeRequestReference(cause,
+          'thread/unsubscribe', binding);
+        if (reference) {
+          details.requestRef = reference;
+          const failure = {code: 'NATIVE_EFFECT_UNKNOWN',
+            stage: 'reconciled-finalization:unsubscribe', nativeStatus: null,
+            cause: errorData(cause), requestRef: reference};
+          current = await commit(current, {...current.state,
+            phase: 'release-authorized', pendingEffect: {
+              ...current.state.pendingEffect, requestRef: reference}, failure},
+          'unsubscribe failure evidence');
+        }
+          throw new CarrierHandoffError('NATIVE_EFFECT_UNKNOWN',
+            'source unsubscribe outcome is unknown; do not replay', {
+              stage: 'reconciled-finalization:unsubscribe',
+              transferId: input.transferId, reconciliationRequired: true,
+              state: {pendingEffect: current.state.pendingEffect,
+                recorderRevision: current.revision, lease: current.lease},
+              details,
+            });
+        }
+        nativeStatus = response?.status;
+        const recognized = ['unsubscribed', 'notSubscribed', 'notLoaded']
+          .includes(nativeStatus);
+        current = await commit(current, {...current.state,
+          phase: recognized ? 'release-observed' : 'release-held',
+          pendingEffect: current.state.pendingEffect,
+          releaseObservation: {response: response || null,
+            nativeStatus: nativeStatus || null},
+          ...(!recognized ? {failure: {code: 'SOURCE_RELEASE_UNVERIFIED',
+            stage: 'reconciled-finalization:unsubscribe',
+            nativeStatus: nativeStatus || null}} : {})},
+        recognized ? 'release observation' : 'release hold');
+        if (!recognized) {
+          reject('SOURCE_RELEASE_UNVERIFIED',
+            'native unsubscribe returned no recognized current-connection status',
+            {nativeStatus: nativeStatus || null,
+              recorderRevision: current.revision});
+        }
+      }
+      let observedVerdict;
+      if (['unsubscribed', 'notSubscribed', 'notLoaded'].includes(nativeStatus)) {
+        observedVerdict = await call('verify',
+          ['reconciled-release-observed', immutable({...facts,
+            ledger: current, nativeResponse: response, nativeStatus}), deadline]);
+      } else {
+        observedVerdict = await call('verify',
+          ['reconciled-release-recover', immutable({...facts,
+            ledger: current, releaseObservation: current.state.releaseObservation || null}),
+          deadline]);
+        nativeStatus = observedVerdict?.nativeStatus || null;
+      }
+      if (observedVerdict?.decision !== 'allow' ||
+          observedVerdict.scopeRef !== input.scopeRef ||
+          observedVerdict.authorityRef !== input.authorityRef ||
+          observedVerdict.stateRef !== input.stateRef ||
+          typeof observedVerdict.sourceRef !== 'string' ||
+          !observedVerdict.sourceRef.trim() ||
+          typeof observedVerdict.subscriptionReleaseEvidenceRef !== 'string' ||
+          !observedVerdict.subscriptionReleaseEvidenceRef.trim() ||
+          !['unsubscribed', 'notSubscribed', 'notLoaded'].includes(nativeStatus) ||
+          observedVerdict.subscriptionReleaseVerified !== true ||
+          observedVerdict.sameConnectionSubscriptionReleased !== true ||
+          observedVerdict.singleWriter !== true) {
+        reject('SOURCE_RELEASE_RECONCILIATION_REQUIRED',
+          'native unsubscribe is pending independent release reconciliation',
+          {nativeStatus: nativeStatus || null,
+            recorderRevision: current.revision});
+      }
+      releaseEvidenceRef = observedVerdict.subscriptionReleaseEvidenceRef;
+      releaseSourceRef = observedVerdict.sourceRef;
+    }
+    const observedSourceEphemeral = typeof sourceThread.ephemeral === 'boolean' ?
+      sourceThread.ephemeral : state.sourceEphemeral;
+    const subscriptionRelease = immutable({...intent, observed: true,
+      nativeStatus, evidenceRef: releaseEvidenceRef,
+      ...(nativeIntentClosedByNewController || priorIntentMovedToNewController ?
+        {originalReleaseIntent: state.releaseIntent} : {})});
+    const released = immutable({...current.state,
+      phase: 'source-subscription-released', pendingEffect: null,
+      sourceRecovery: 'retained', sourceEphemeral: observedSourceEphemeral,
+      nativeHistoryRetained: typeof observedSourceEphemeral === 'boolean' ?
+        !observedSourceEphemeral : state.nativeHistoryRetained ?? null,
+      subscriptionRelease,
+      sourceRead: summarizeThread(sourceRead),
+      verification: {...current.state.verification,
+        release: releaseSourceRef}});
+    current = await commit(current, released, 'source subscription release');
+    return result('finalized', current);
+  } catch (cause) {
+    if (commitInFlight) {
+      throw new CarrierHandoffError('RECORDER_COMMIT_UNKNOWN',
+        'finalization commit requires a fresh read; do not replay', {
+          stage: 'reconciled-finalization', transferId: input.transferId,
+          reconciliationRequired: true, details: {cause: errorData(cause)},
+        });
+    }
+    if (cause instanceof CarrierHandoffError) throw cause;
+    throw new CarrierHandoffError('FINALIZATION_HELD',
+      'reconciled finalization conditions could not be verified', {
+        stage: 'reconciled-finalization', transferId: input.transferId,
+        reconciliationRequired: true, details: {cause: errorData(cause)},
+      });
+  }
+}
+
 function errorData(error) {
   if (!error || typeof error !== 'object') return {name: typeof error, message: String(error)};
   const data = {
@@ -1615,4 +2041,5 @@ function errorData(error) {
   return data;
 }
 
-module.exports = {HANDOFF_PROPOSAL_TOOL, prepareHandoff, runHandoffProposal, handoff, reconcileContinuation, CarrierHandoffError};
+module.exports = {HANDOFF_PROPOSAL_TOOL, prepareHandoff, runHandoffProposal, handoff,
+  reconcileContinuation, finalizeReconciledHandoff, CarrierHandoffError};
