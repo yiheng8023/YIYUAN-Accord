@@ -1018,7 +1018,8 @@ class CodexSessionNativeOfflineTests(unittest.TestCase):
 
     def test_restore_ledger_ignores_ordinary_shm_but_rejects_pending_wal(self):
         with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "carrier.sqlite"
+            # Runner temp roots can use Windows short names or macOS /var aliases.
+            path = Path(directory).resolve(strict=True) / "carrier.sqlite"
             database = sqlite3.connect(path)
             database.execute("CREATE TABLE original(value TEXT)")
             database.commit()
@@ -1056,7 +1057,7 @@ class CodexSessionNativeOfflineTests(unittest.TestCase):
 
     def test_restore_root_nesting_is_rejected_before_creation(self):
         with tempfile.TemporaryDirectory() as directory:
-            prior = Path(directory) / "prior"
+            prior = Path(directory).resolve(strict=True) / "prior"
             prior.mkdir()
             (prior / "keep.txt").write_bytes(b"preserve")
             evidence = prior / "new-evidence"

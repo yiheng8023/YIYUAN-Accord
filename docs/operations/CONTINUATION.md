@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-09-21 · N33-20260909 / r28。ac5dd3e8完整CI已11/11通过；两平台原生交接artifact已独立回读。本批已settle目标的新controller恢复在Windows真实宿主单次通过，原件保持，独立回读及可搬迁检查通过；Linux/macOS恢复检查随本批CI执行。资源/环境原案报告遗漏仍不准入，指导修正仍待必要行为核验。以实时Git、工具目录和当前receipt为准。
+更新：2026-09-21 · N33-20260909 / r28。47d8e606的CI已结束，7项成功、4项失败；四个失败均为新增离线测试未规范化系统临时目录别名，已本地真实复现并修正，修复后的完整CI待核。Linux/macOS原生冷恢复及其独立artifact回读通过，原生结果与整个CI状态分开。资源/环境原案报告遗漏仍不准入，指导修正仍待必要行为核验。以实时Git、工具目录和当前receipt为准。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)与product/development.json分别展开结果、判据及机器投影。
 
 ## 目标、共识和授权
@@ -19,18 +19,18 @@
 - 用户已明确授权按最新共识按需更新README；旧“暂只改Ubuntu→Linux”限制已被本次指令替代。本轮仅作必要现状与依赖说明，发布前仍整体核对。知乎/Reddit等仅是[传播候选](LAUNCH-v3.3.md)，没有排期或发帖授权。
 - 2026-09-20用户撤去已放弃活动的专项资格、排期和投稿事项；当前计划仅保留通用发布素材及其它传播候选，不恢复旧活动待办。
 
-CI节奏共识已按9月20日用户确认写入计划：本地小改/针对性核验与提交可以及时进行，相关变更形成完整工作段后再集中推送，避免尚未完成的有效全矩阵反复被取消。必要平台覆盖和最终候选门槛不变；纯接续记录不触发无价值重跑。当前ac5dd3e8完整CI已11/11通过，此后是否推送仍按工作段及实际验证需要判断，不回到每个对话小片立即推送。
+CI节奏共识已按9月20日用户确认写入计划：本地小改/针对性核验与提交可以及时进行，相关变更形成完整工作段后再集中推送，避免尚未完成的有效全矩阵反复被取消。必要平台覆盖和最终候选门槛不变；纯接续记录不触发无价值重跑。最近完整绿色仍为ac5dd3e8；47d8e606失败与本批修复分别保留。后续推送按工作段及实际验证需要判断，不回到每个对话小片立即推送。
 
 ## 当前事实
 
 | 项目 | 已核事实与边界 |
 |---|---|
-| 仓库与写者 | 本批起点main与origin/main均为ac5dd3e8、工作区干净。root负责连接/契约/文档集成；SDK实现与独立复核两个Sol子代理已交付并停止写入；本批纠正settle尚未被调用时的超时误判，已调用后的未知效果仍不重放。相关实现、修复和记录集中推送，不按每轮小改触发矩阵。 |
+| 仓库与写者 | 本批起点main与origin/main均为47d8e606、工作区干净。root修复两项测试的临时目录准备并增加轻量CI前置检查；Sol子代理独立回读成功的两平台冷恢复artifact后停止。产品runtime、安全检查与当前包身份均不变，相关修复和记录集中推送。 |
 | 已安装开发包 | 3.3.0-dev.1+codex.20260921033628，22文件，SHA 8f749addccd25d111ebb6feaab7287009d2072dcaad109facdd48ff9ffe75213，Git市场ref=f3cf8951；5启用Skill/6受信任Hook。9月21日04安装完成，fresh MCP目录3工具；现存Desktop工具面仍2个只读工具，旧worker本轮读取当前context成功。不要求为本次CLI验证重启Desktop，不把fresh目录当GUI采用。 |
 | 当前源候选 | 3.3.0-dev.1+codex.20260921132343，24文件，SHA 81c5ccd5426a9f60ef315e75cecae90ec006d2b789efbc19373f18fce2b94d07。增加已settle目标的新controller恢复与旧执行者标记失效；共享安装仍33628，源级机制与实际模型/安装采用分开。原资源/环境报告失败不改标。 |
 | 实际采用 | 前轮用户重启后原任务调用inspect_task_state(contextAssessment)返回continue-bounded，sourceReleaseAllowed=false；旧epoch反例返回reassess。输入/状态字节保持。首次缺原生计数的unknown和之后有据评估分别留证。当时实际Goal读为null，仅证明当时无Goal。 |
 | 当前任务状态 | session=01a09602-a44d-79f2-8ad6-d104863ca7d1；前轮快照turn=01a0c254-fad6-7e20-8d34-5ca30d315948、epoch=21f132d6-76b4-4091-a28a-7d136abec733；Astra/0.155.0-alpha.9.2，checkpoint unbound，35条捕获输入，needsNativeReplay/needsResumeReconciliation=false。上述是快照，后续写入须重读。自定义828400窗口不作为默认规格。 |
-| 已完成CI | 精确ac5dd3e8的[35595120028](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35595120028)已11/11成功；e22fba76的[35586935086](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35586935086)已11/11成功；268ae48b的[35578392461](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35578392461)已11/11成功；b5bc28fb的[35569973358](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35569973358)已11/11成功；f3cf8951的[35560235516](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35560235516)已11/11成功，两平台MCP原件另行独立回读通过；前批7e08773c也11/11成功。前批Windows/macOS完整回归约38–43分钟；不因正常等待另触发矩阵。下一批精确状态按GitHub回查。 |
+| 已完成CI | 精确47d8e606的[35606566345](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35606566345)为7成功/4失败：5个Linux Python job及两个Native lifecycle通过，Windows/macOS的3.10/3.14均仅新增两项离线路径测试失败；原失败保留，修复CI另核。精确ac5dd3e8的[35595120028](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35595120028)已11/11成功；e22fba76的[35586935086](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35586935086)已11/11成功；268ae48b的[35578392461](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35578392461)已11/11成功；b5bc28fb的[35569973358](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35569973358)已11/11成功；f3cf8951的[35560235516](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35560235516)已11/11成功，两平台MCP原件另行独立回读通过；前批7e08773c也11/11成功。前批Windows/macOS完整回归约38–43分钟；不因正常等待另触发矩阵。下一批精确状态按GitHub回查。 |
 | 前批本地回归 | helper完整140/140；MCP完整37/37；开发契约87/87（185.942秒）。三项静态检查、插件/Skill校验、actionlint及源码/随包一致性通过。实际代码/测试2273747字节、160文件、主指导13654字节；局部通过不等于正式准入。 |
 | 当前原生SDK组合 | accord-sdk-native-20260921-01的单次真实宿主固定响应组合通过，原始记录与独立复核保留；3项离线夹具与19项交付契约检查共22项通过，三项静态契约和actionlint通过。修正Node测试漏计后当前实际2555271代码/测试字节、171文件、主指导13785字节。两平台原生artifact已独立回读，13份冻结源码均逐字节匹配ac5dd3e8；各2次交接/10固定响应，exit0/forced=false/所属进程组absent，不将POSIX未知进程计数填成0。 |
 | 当前SDK后续交接检查 | 同一connection + carrier + SQLite两次transfer、目标接收期context/nested拒绝、adopt当前refs/lease/idle目标、settle前后超时与不重放已检查；carrier31 + session12 + 包/交付契约25，共68项通过，三项静态契约通过。实际2472548代码/测试字节、169文件、主指导13785字节。零真实模型/宿主新实验，不作普通自主行为或完整A05判定。 |
@@ -42,6 +42,8 @@ CI节奏共识已按9月20日用户确认写入计划：本地小改/针对性�
 | 正式验收 | 17项必要scope，11项有定义、6项未绑定；定义不等于通过。4个OpenAI入口纳入开发、7个待判，selectionFinal=false。A01–A08整项完成仍0/8，functionalCompletion/candidateEligible=false；早期SDK子范围保留其原包身份。 |
 
 ## 本批实现与下一实际动作
+
+CI修复：Windows RUNNER~1与macOS /var均是系统临时根的别名。两项新离线测试把别名直接送入严格ordinary目录检查，或与已解析文件路径比较，导致每个受影响job各1 error/1 failure。真实Windows短路径复现同样两错；仅将两项自建临时根resolve(strict=True)，同一复现2/2、完整离线组7/7及静态检查通过。安全检查、产品runtime和包身份未改。CI在完整回归前运行该轻量组，提前报相同准备错误；不跳过平台、用例或完整矩阵。此时计量2666313代码/测试字节、171文件、主指导13785字节；原批2666188保留原身份。诊断原件在accord-ci-diagnosis-20260921-01，空复现目录已清理。
 
 新增manage_task_state复用既有bind/pause/retire和状态存储，不增加服务或业务文件执行器。原生元数据绑定根任务和turn，调用者保留已观察epoch/revision；helper在最终发布/删除前再次核对turn，涵盖人类输入epoch未变而宿主续作换轮次的情况。绑定保留暂停；解除用户暂停或取消仍需实际用户决定。理由、注解和metadata不是授权证明，不通过关键词或自报布尔值推断权限。
 
@@ -78,6 +80,8 @@ fresh核心已有carrier-handoff.cjs、runHandoffProposal和stdio/WebSocket连�
 | 定位 | 可复用范围和限制 |
 |---|---|
 | accord-sdk-restore-20260921-01 | 单次真实宿主恢复旧01第三任务，旧根不写；新scope标记、原生resume和一次context调用及进程后态独立回读通过。retained含原生历史、13份执行源及必要prior副本，workspace原件随portable artifact保留；首次漏workspace的回读失败和修正另记。不是故障注入或完整A05；不要原地重跑。 |
+| accord-sdk-restore-hosted-20260921-01 | 47d8e606的Ubuntu/macOS冷恢复artifact各55文件，13份执行源码与原Git逐字节匹配；冻结checker和独立RPC/ledger/session/退出核对通过，0start/1resume/1turn/2固定响应，旧原件inventory保持、进程组absent。两个Native job通过不等于整体CI成功。 |
+| accord-ci-diagnosis-20260921-01 | 保留35606566345的四个失败job日志、短路径真实复现脚本及修复后结果；原问题为测试目录别名，未改原生机制或放宽安全检查。空复现根已清理；修复后托管结论另核。 |
 | accord-sdk-hosted-20260921-01 | ac5dd3e8的Linux/macOS原生SDK artifact本地独立回读：每端13份冻结源码匹配原Git，2交接/2adopt/10固定响应；CLI0.155.1/Node24.20、natural exit0/readerStopped/所属PG absent。属于固定协议范围，未推断POSIX全局进程数、性能或模型判断。 |
 | accord-sdk-native-20260921-01 | 单次真实0.155.1/Node24.20固定响应两轮SDK交接；原始RPC、SQLite、verifier、13份冻结源、3份原生rollout及进程回执保留。独立检查器初版mode=ro产生空WAL/SHM，修正为已关闭且checkpointed库的immutable只读后仅离线复核，原执行源和结果不改写；副作用与定向清理另有回执。隔离native home与keep工作区为后续恢复依据保留，空state/temp和派生pyc已回收；不要原地重新执行。 |
 | accord-project-assignment-observation-20260921-01 | 用户提供的两张原图及hash：同一批处理对话从最近移至Playground。后续09:51:12Z只读接口仍返回原cwd、projectId=null/notLoaded；不猜测中间操作，不把界面移动当执行迁移/上下文减负。未移动或重跑该任务，原场景判定不变。 |
