@@ -55,15 +55,17 @@
     "transport": "host-managed-stdio",
     "tool": "inspect_task_state",
     "inputTool": "read_task_input",
+    "stateTool": "manage_task_state",
+    "stateWrite": "root-native-metadata-bound bind/pause/retire; caller epoch/revision retained; native turn checked at read and publication; reasons are not authorization; no business-file write or host-mode change",
     "inputRead": "root-native-metadata-bound read-native-input; bounded Unicode pages with receipt-bound next cursor; preserve input-loss/resume/interruption flags; captured input is not complete history, replay or authority",
     "scope": "calling-thread-metadata-and-explicit-caller-selected-workspace",
-    "effect": "read-existing-checkpoint-status-with-optional-hook-bound-context-without-state-mutation",
-    "identity": "Codex callId and x-codex-turn-metadata; root-thread-only-checkpoint-read; descendant-shared-session-remains-unavailable; metadata-is-not-authentication",
+    "effect": "read-or-manage-existing-task-checkpoint; optional-context-assessment-is-read-only",
+    "identity": "Codex callId and x-codex-turn-metadata; root-thread-only-checkpoint-access; descendant-shared-session-remains-unavailable; metadata-is-not-authentication",
     "storage": "existing-task-checkpoint-only",
     "context": "includeContext boolean defaults false; current identity from MCP metadata; recordedHostVersion remains separate; mismatched input stays unknown",
     "assessment": "optional contextAssessment reuses assess-context with caller-bound epoch/revision/generation, original times and sourced forecasts; fresh native counters; existing transient locks only; no persisted-state mutation or dispatch",
     "lifecycle": "host-start-reload-and-close; releases-plugin-cache-cwd-before-serving; pins-available-context-reader-code-at-runtime-load; process-exits-on-stdin-end; no-listener-or-daemon",
-    "limits": "no-argument-identity-or-operation-override; no-input-replay; no-freshness-authority-or-completion-claim; no-app-server-control-or-handoff-dispatch"
+    "limits": "no-identity-storage-or-arbitrary-operation-override; no-input-replay-or-lock-recovery-tool; no-authority-or-whole-completion-claim; no-app-server-control-or-handoff-dispatch"
   },
   "optionalCarrierHandoff": {
     "entry": "runtime/carrier-handoff.cjs",

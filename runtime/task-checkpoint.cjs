@@ -372,15 +372,24 @@ function publishInput(where, input) {
   try { atomic(where.input, input, INPUT_RECEIPT_LIMIT); }
   catch (error) { error.inputPublicationFailed = true; throw error; }
 }
-function currentEpoch(where, epoch) {
+function requireNativeTurn(request, input) {
+  if (!request || !Object.hasOwn(request, 'nativeTurnId')) return;
+  const expected = request.nativeTurnId;
+  const observed = input?.hostObservation?.turnId ??
+    (input?.inputSource === 'host-continuation' ? null : input?.turnId);
+  if (!text(expected) || expected.length > 200 || expected !== observed) fail('native-call-turn-conflict');
+}
+
+function currentEpoch(where, epoch, request = null) {
   const input = readInput(where);
   if (input?.epoch !== epoch) fail('latest-user-input-not-reconciled');
+  requireNativeTurn(request, input);
   return input;
 }
 
-function retireFiles(where, epoch, prior = null) {
+function retireFiles(where, epoch, prior = null, request = null) {
   return inputLocked(where, () => {
-    const input = currentEpoch(where, epoch);
+    const input = currentEpoch(where, epoch, request);
     const receipt = fs.existsSync(where.input) ? readJson(where.input, INPUT_RECEIPT_LIMIT) : null;
     const files = [[where.state, prior], [where.input, receipt]].filter(([, value]) => value !== null);
     try {
@@ -772,6 +781,7 @@ function operate(request) {
     const currentInput = inputLocked(where, () => readInput(where));
     if (!currentInput) fail('native-user-input-receipt-missing');
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
+    if (['bind', 'pause', 'retire'].includes(request.op)) requireNativeTurn(request, currentInput);
     if (request.op === 'assess-context') {
       const observation = request.nativeContext === true ? observeStoredContext(currentInput, request) : null;
       const result = assessContext(request, prior, currentInput, Date.now(), observation);
@@ -788,7 +798,7 @@ function operate(request) {
         if (canonical(fingerprint(where.root, item.path)) !== canonical(item.observed)) fail('input-revision-unstable');
       }
       return inputLocked(where, () => {
-        currentEpoch(where, currentInput.epoch);
+        currentEpoch(where, currentInput.epoch, request);
         atomic(where.state, state);
         return {revision: state.revision, mode: state.mode, inspection};
       });
@@ -799,7 +809,7 @@ function operate(request) {
       if (request.expectedRevision !== 0 || request.epoch !== currentInput.epoch || !text(request.reason)) {
         fail('unbound-retirement-needs-current-receipt-and-reason');
       }
-      retireFiles(where, currentInput.epoch);
+      retireFiles(where, currentInput.epoch, null, request);
       return {retired: true, scope: 'unbound-input-receipt-only', inspection: null};
     }
     if (!prior || request.expectedRevision !== prior.revision || request.epoch !== currentInput.epoch) {
@@ -809,7 +819,7 @@ function operate(request) {
       if (!text(request.reason)) fail('pause-reason-required');
       const pending = inspectDiagnostic(where, prior);
       return inputLocked(where, () => {
-        currentEpoch(where, currentInput.epoch);
+        currentEpoch(where, currentInput.epoch, request);
         atomic(where.state, {...prior, revision: prior.revision + 1, mode: 'paused', reason: request.reason});
         return {mode: 'paused', revision: prior.revision + 1, pending};
       });
@@ -822,7 +832,7 @@ function operate(request) {
         ? inspectDiagnostic(where, prior) : inspect(where, prior);
       if (result.status !== 'verified-local' && request.disposition !== 'user-cancelled') fail('unmet-output-cannot-retire');
       if (request.disposition === 'user-cancelled' && !text(request.reason)) fail('cancellation-reason-required');
-      retireFiles(where, currentInput.epoch, prior);
+      retireFiles(where, currentInput.epoch, prior, request);
       return {retired: true, scope: 'task-checkpoint-files-only', inspection: result};
     }
     fail('unknown-operation');
@@ -1185,6 +1195,7 @@ const HELP = {
   input: 'One JSON object on piped stdin, not an interactive terminal. In PowerShell, pipe $request through ConvertTo-Json -Depth 8 -Compress to node <helper-path>. Use --hook only for native events; other calls need the current native session/cwd receipt.',
   storage: 'YIYUAN_ACCORD_TASK_STATE_DIR selects an explicit scoped directory. Otherwise use ~/.yiyuan-accord/task-state. Exact-session legacy temporary records remain at their original location; competing locations fail without merge. status.storage reports the selected path and kind. No automatic migration, cross-session adoption, scheduler or power-loss guarantee. State file contents are flushed before atomic replacement; filesystem and directory-entry durability need separate validation.',
   operations: ['status', 'read-native-input', 'observe-context', 'assess-context', 'bind', 'pause', 'retire', 'recover-lock'],
+  nativeMutationIdentity: 'A native caller may supply nativeTurnId for bind/pause/retire. It must match the current input host observation at initial read and final publication/deletion, including a new host-continuation turn with unchanged human-input epoch. The MCP writer supplies it from native metadata; legacy callers without it retain their existing identity responsibility. This is local correlation, not authentication or user authority.',
   nativeContext: {
     read: {op: 'observe-context', session_id: 'native-session-id', cwd: 'absolute-workspace', maxAgeMs: 30000},
     source: 'Only the native transcript binding retained from a root UserPromptSubmit event is read; request-supplied paths are ignored. Reads are bounded to that file and do not scan other task history. Missing, stale, changing or unbound metadata is unknown. recordedHostVersion is session metadata, not live identity. For current host conditions pass currentHost {threadId, turnId, model, hostVersion, sourceRef} from an actual matching native observation, or use the MCP includeContext option. Without it conditions.hostVersion stays null; caller data is not authentication.',

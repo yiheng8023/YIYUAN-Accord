@@ -185,7 +185,7 @@ jobs:
               "--timeout", "600", "--request-timeout", "60", "--recovery-timeout", "15"], check=True)
       - name: Observe same paused task through host upgrade
         run: python -B scripts/observe_codex_lifecycle.py run --evidence "$ACCORD_NATIVE_ROOT/host-upgrade"
-      - name: Verify native plugin MCP identity and read-only state inspection
+      - name: Verify native plugin MCP identity and rejected state mutation
         shell: python
         run: |
           import json, os, pathlib, subprocess, sys
@@ -193,7 +193,8 @@ jobs:
           manifest = json.loads((root / "host-upgrade/manifest.json").read_text(encoding="utf-8"))
           subprocess.run([sys.executable, "-B", "tests/product/test_native_state_mcp.py",
               "--native-codex", manifest["hostReplacement"]["replacement"]["path"],
-              "--evidence", str(root / "native-state-mcp")], check=True)
+              "--evidence", str(root / "native-state-mcp"),
+              "--preapprove-owned-manage-tool"], check=True)
       - name: Reconcile a lost carrier acknowledgement without replay
         if: always() && steps.prepare_upgrade.outcome == 'success'
         shell: python

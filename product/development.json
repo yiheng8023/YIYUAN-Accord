@@ -35,14 +35,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20260921014633",
+    "version": "3.3.0-dev.1+codex.20260921033628",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20260921014633",
-        "packageSha256": "90f494f941dac0f3c95e76a71655103ea86a7d6430a9139fb57389073a471e14",
+        "packageVersion": "3.3.0-dev.1+codex.20260921033628",
+        "packageSha256": "8f749addccd25d111ebb6feaab7287009d2072dcaad109facdd48ff9ffe75213",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -180,10 +180,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 2345000,
+      "maxProductCodeAndTestBytes": 2400000,
       "maxTrackedFiles": 161,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The 2345000 code/test-byte ceiling retains five-percent reserve for the existing checkpoint/runtime, native stdio and WebSocket adapters, owned lifecycle observers and meaningful identity/recovery/resource counterexamples. This work adds the existing native-state tool's sourced context-assessment path and prospective dependency-scoped function evidence reuse, including stale revision/generation, full-package release boundaries and bounded historical Git-read tests. It reuses current host processes, helper arithmetic, recorders and validation; no controller, storage service or additional model experiment is introduced. The 161-file and 36000-primary-instruction ceilings remain. Earlier budget increments and original failed observations remain in Git and retained execution evidence; the rationale records current scope rather than repeating every historical increment. Local conformance is not functional acceptance or net-value evidence."
+      "rationale": "The 2400000 code/test-byte ceiling retains five-percent reserve for the existing checkpoint/runtime, native stdio and WebSocket adapters, owned lifecycle observers and meaningful identity/recovery/resource counterexamples. This work adds the existing native-state tool's sourced context-assessment path and prospective dependency-scoped function evidence reuse, including stale revision/generation, full-package release boundaries and bounded historical Git-read tests. It reuses current host processes, helper arithmetic, recorders and validation; no controller, storage service or additional model experiment is introduced. The 161-file and 36000-primary-instruction ceilings remain. Earlier budget increments and original failed observations remain in Git and retained execution evidence; the rationale records current scope rather than repeating every historical increment. The current addition exposes existing checkpoint lifecycle operations through native MCP, guards late same-input-turn mutations at publication, and tests applied-effect receipts and malformed transport; it adds no state store or business-file executor. Local conformance is not functional acceptance or net-value evidence."
     }
   },
   "source": {

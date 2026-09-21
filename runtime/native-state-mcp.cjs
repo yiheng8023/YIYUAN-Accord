@@ -70,8 +70,50 @@ const INPUT_TOOL = Object.freeze({
   }, required: ['cwd'], additionalProperties: false},
   annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false},
 });
+const OUTPUT_CHECK = Object.freeze({type: 'object', properties: {
+  path: {type: 'string', minLength: 1, maxLength: 4096,
+    description: 'Workspace-relative file path. The checkpoint helper inspects it; this tool does not write it.'},
+  sha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
+  json: {type: 'object', description: 'JSON Pointer keys mapped to exact expected values.'},
+}, required: ['path'], additionalProperties: false});
+const OBSERVED_FILE = Object.freeze({type: 'object', properties: {
+  present: {type: 'boolean'}, sha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
+}, required: ['present'], additionalProperties: false});
+const MANAGE_TOOL = Object.freeze({
+  name: 'manage_task_state',
+  description: 'Bind, pause or retire this root task\'s existing Accord checkpoint using the exact observed receipt epoch and revision. Identity and current turn come only from native call metadata. Bind inspects declared workspace files but never writes business files. Pause preserves unfinished conditions. Retire deletes only this task\'s owned checkpoint/receipt state when the helper\'s existing predicates allow it. Results, reasons, metadata and annotations are observations, not proof of task completion, user permission, current intent, writer ownership or takeover; the Agent must verify the actual user decision or applicable host-approved source.',
+  inputSchema: {type: 'object', properties: {
+    cwd: TOOL.inputSchema.properties.cwd,
+    action: {type: 'string', enum: ['bind', 'pause', 'retire']},
+    epoch: {type: 'string', minLength: 1, maxLength: 256,
+      description: 'Exact current receipt epoch from inspect_task_state. The adapter never refreshes it automatically.'},
+    expectedRevision: {...TOKEN_BOUND,
+      description: 'Exact current checkpoint revision from inspect_task_state. The adapter never refreshes it automatically.'},
+    result: {type: 'string', minLength: 1, maxLength: 16384},
+    inputs: {type: 'array', maxItems: 100, items: {type: 'string', minLength: 1, maxLength: 4096}},
+    outputs: {type: 'array', minItems: 1, maxItems: 100, items: OUTPUT_CHECK},
+    nextAction: {type: 'string', minLength: 1, maxLength: 16384},
+    canContinue: {type: 'boolean'},
+    revisionReason: {type: 'string', minLength: 1, maxLength: 2048},
+    inputRevisions: {type: 'array', maxItems: 100, items: {type: 'object', properties: {
+      path: {type: 'string', minLength: 1, maxLength: 4096}, observed: OBSERVED_FILE,
+      reason: {type: 'string', minLength: 1, maxLength: 2048},
+    }, required: ['path', 'observed', 'reason'], additionalProperties: false}},
+    unresolved: {type: 'array', maxItems: 32,
+      items: {type: 'string', minLength: 1, maxLength: 2048}},
+    resumeReason: {type: 'string', minLength: 1, maxLength: 2048},
+    reason: {type: 'string', minLength: 1, maxLength: 2048,
+      description: 'Required for pause, unbound receipt retirement and user-cancelled retirement.'},
+    disposition: {type: 'string', enum: ['user-cancelled'],
+      description: 'Explicit cancellation disposition for retire only; it is a caller claim, not proof of a user decision.'},
+  }, required: ['cwd', 'action', 'epoch', 'expectedRevision'], additionalProperties: false},
+  // Retire can remove this task's own checkpoint and receipt. Other actions
+  // still write checkpoint state, so this is intentionally not read-only.
+  annotations: {readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false},
+});
 const CLAIM_LIMIT = 'Native-call metadata is received context, not authentication or permission. The workspace is caller-selected. Saved state and canContinue do not prove current intent, freshness, completion, takeover or control of this thread. No state mutation or task dispatch is performed.';
 const INPUT_CLAIM_LIMIT = 'Captured Hook input is recorded data, not new input or permission, complete history, attachments or work progress. A stable page does not establish that the latest input was captured, restore a task, clear quarantine or resume a pause. Reconcile current native input and authority separately. ' + CLAIM_LIMIT;
+const MANAGE_CLAIM_LIMIT = 'This operation records or retires only the existing root-task checkpoint state under the supplied stale-write conditions. Caller-provided reasons, native metadata, tool annotations and returned inspection are observations, not proof of task completion, user permission, current intent, writer ownership, takeover or external acceptance. The Agent must verify the actual user decision or applicable host-approved source; this adapter performs no keyword or semantic authorization judgment. Bind may read declared workspace files but does not write business outputs, dispatch work, replay input, recover locks or change a host mode.';
 const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const text = (value, max = 200) => typeof value === 'string' && value.trim().length > 0
   && value.length <= max && !/[\u0000-\u001f\u007f]/u.test(value);
@@ -232,6 +274,81 @@ function readTaskInput(params) {
   return {isError: false, value};
 }
 
+function manageTaskState(params) {
+  const rejected = (reason, effect = 'not-requested') => ({isError: true, value: {
+    schema: 'yiyuan-accord-native-state-mutation/v1', state: 'unavailable', reason,
+    effect, claimLimit: MANAGE_CLAIM_LIMIT}});
+  const args = params?.arguments;
+  const common = ['action', 'cwd', 'epoch', 'expectedRevision'];
+  const byAction = {
+    bind: ['canContinue', 'inputRevisions', 'inputs', 'nextAction', 'outputs', 'result',
+      'resumeReason', 'revisionReason', 'unresolved'],
+    pause: ['reason'],
+    retire: ['disposition', 'reason'],
+  };
+  const boundedText = (value, max) => typeof value === 'string' && value.trim().length > 0
+    && value.length <= max;
+  if (!record(params) || params.name !== MANAGE_TOOL.name || !record(args)
+      || !['bind', 'pause', 'retire'].includes(args.action)
+      || Object.keys(args).some(key => !common.includes(key) && !byAction[args.action].includes(key))
+      || !common.every(key => own(args, key)) || !boundedText(args.cwd, 4096)
+      || !path.isAbsolute(args.cwd) || !text(args.epoch, 256)
+      || !Number.isSafeInteger(args.expectedRevision) || args.expectedRevision < 0
+      || Buffer.byteLength(JSON.stringify(args)) > MAX_FRAME) return rejected('invalid-task-state-operation');
+  if (args.action === 'bind') {
+    const required = ['result', 'inputs', 'outputs', 'nextAction', 'canContinue'];
+    const observed = value => record(value) && typeof value.present === 'boolean'
+      && Object.keys(value).sort().join(',') === (value.present ? 'present,sha256' : 'present')
+      && (!value.present || typeof value.sha256 === 'string' && /^[a-f0-9]{64}$/.test(value.sha256));
+    const output = value => record(value) && Object.keys(value).every(key => ['path', 'sha256', 'json'].includes(key))
+      && boundedText(value.path, 4096)
+      && (!own(value, 'sha256') || typeof value.sha256 === 'string' && /^[a-f0-9]{64}$/.test(value.sha256))
+      && (!own(value, 'json') || record(value.json));
+    const revision = value => record(value)
+      && Object.keys(value).sort().join(',') === 'observed,path,reason'
+      && boundedText(value.path, 4096) && observed(value.observed) && boundedText(value.reason, 2048);
+    if (!required.every(key => own(args, key)) || !boundedText(args.result, 16384)
+        || !boundedText(args.nextAction, 16384) || typeof args.canContinue !== 'boolean'
+        || !Array.isArray(args.inputs) || !Array.isArray(args.outputs) || args.outputs.length === 0
+        || args.inputs.length + args.outputs.length > 100
+        || args.inputs.some(value => !boundedText(value, 4096)) || args.outputs.some(value => !output(value))
+        || own(args, 'revisionReason') && !boundedText(args.revisionReason, 2048)
+        || own(args, 'resumeReason') && !boundedText(args.resumeReason, 2048)
+        || own(args, 'inputRevisions') && (!Array.isArray(args.inputRevisions)
+          || args.inputRevisions.length > 100 || args.inputRevisions.some(value => !revision(value)))
+        || own(args, 'unresolved') && (!Array.isArray(args.unresolved) || args.unresolved.length > 32
+          || args.unresolved.some(value => !boundedText(value, 2048)))) {
+      return rejected('invalid-task-state-binding');
+    }
+  } else if (args.action === 'pause') {
+    if (!own(args, 'reason') || !boundedText(args.reason, 2048)) return rejected('invalid-task-state-pause');
+  } else if (own(args, 'reason') && !boundedText(args.reason, 2048)
+      || own(args, 'disposition') && (args.disposition !== 'user-cancelled' || !boundedText(args.reason, 2048))) {
+    return rejected('invalid-task-state-retirement');
+  }
+  const source = nativeCallSource(params);
+  if (!source) return rejected('native-call-metadata-unavailable');
+  if (source.threadId !== source.sessionTreeId) return rejected('shared-session-scope-requires-reconciliation');
+  const request = {op: args.action, session_id: source.sessionTreeId, cwd: args.cwd,
+    epoch: args.epoch, expectedRevision: args.expectedRevision, nativeTurnId: source.turnId};
+  for (const key of byAction[args.action]) if (own(args, key)) request[key] = args[key];
+  let observation;
+  try { observation = operate(request); }
+  catch (error) { return rejected(inspectionReason(error), 'unknown-check-post-state'); }
+  let value = {schema: 'yiyuan-accord-native-state-mutation/v1', state: 'observed-operation',
+    action: args.action, source, workspace: {cwd: args.cwd, binding: 'caller-selected'},
+    observation, claimLimit: MANAGE_CLAIM_LIMIT};
+  if (Buffer.byteLength(JSON.stringify(value)) > MAX_RESULT) {
+    const summary = Object.fromEntries(['revision', 'mode', 'retired', 'scope']
+      .filter(key => own(observation, key)).map(key => [key, observation[key]]));
+    const status = observation.inspection?.status ?? observation.pending?.status;
+    if (typeof status === 'string') summary.inspection = {status};
+    summary.details = 'omitted-bounded-result';
+    value = {...value, observation: summary};
+  }
+  return {isError: false, value};
+}
+
 function runtimeVersion() {
   const root = path.resolve(__dirname, '..');
   const manifest = path.join(root, '.codex-plugin', 'plugin.json');
@@ -273,13 +390,14 @@ function createHandler(version = runtimeVersion()) {
       if (request.params != null && (!record(request.params) || request.params.cursor != null)) {
         return error(id, -32602, 'Invalid tool-list parameters');
       }
-      return result(id, {tools: [TOOL, INPUT_TOOL]});
+      return result(id, {tools: [TOOL, INPUT_TOOL, MANAGE_TOOL]});
     }
     if (request.method === 'tools/call') {
-      if (!record(request.params) || ![TOOL.name, INPUT_TOOL.name].includes(request.params.name)) {
+      if (!record(request.params) || ![TOOL.name, INPUT_TOOL.name, MANAGE_TOOL.name].includes(request.params.name)) {
         return error(id, -32602, 'Unknown tool');
       }
-      const inspected = request.params.name === TOOL.name ? inspectNativeState(request.params) : readTaskInput(request.params);
+      const inspected = request.params.name === TOOL.name ? inspectNativeState(request.params)
+        : request.params.name === INPUT_TOOL.name ? readTaskInput(request.params) : manageTaskState(request.params);
       return result(id, {isError: inspected.isError, structuredContent: inspected.value,
         content: [{type: 'text', text: JSON.stringify(inspected.value)}]});
     }
@@ -320,8 +438,8 @@ if (require.main === module) {
     process.chdir(require('node:os').homedir());
     return serve(process.stdin, process.stdout, version);
   }).catch(() => {
-    process.stderr.write('Accord native-state transport stopped; no state mutation was requested.\n');
+    process.stderr.write('Accord native-state transport stopped; inspect task state for prior operation effects before retrying.\n');
     process.exitCode = 1;
   });
 }
-module.exports = {inspectNativeState, readTaskInput, createHandler, serve};
+module.exports = {inspectNativeState, readTaskInput, manageTaskState, createHandler, serve};

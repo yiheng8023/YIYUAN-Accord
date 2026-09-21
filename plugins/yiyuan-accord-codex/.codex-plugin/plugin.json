@@ -1,6 +1,6 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "3.3.0-dev.1+codex.20260921014633",
+  "version": "3.3.0-dev.1+codex.20260921033628",
   "description": "Helps agents coordinate goals, capabilities, correction, task continuity and delivery checks within the user's authority.",
   "author": {
     "name": "yiheng8023",
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "YIYUAN Accord",
     "shortDescription": "Coordinate tasks, recovery and verified delivery",
-    "longDescription": "Tell your agent the outcome you need. YIYUAN Accord helps it choose and combine available capabilities, adapt to changes, check results and preserve unfinished work. Accord's general collaboration design is separate from its host adapters. Version 3.3 focuses on OpenAI execution environments; this package provides the Codex adaptation. This development package includes task guidance, lifecycle Hooks and read-only tools for saved task state, captured input and context capacity assessment. Operation depends on supported host interfaces and user permissions. Automatic handoff is still in development.",
+    "longDescription": "Tell your agent the outcome you need. YIYUAN Accord helps it choose and combine available capabilities, adapt to changes, check results and preserve unfinished work. Accord's general collaboration design is separate from its host adapters. Version 3.3 focuses on OpenAI execution environments; this package provides the Codex adaptation. This development package includes task guidance, lifecycle Hooks and tools for preserving task state, recovering captured input and assessing context capacity. Operation depends on supported host interfaces and user permissions. Automatic handoff is still in development.",
     "developerName": "yiheng8023",
     "category": "Developer Tools",
     "capabilities": [

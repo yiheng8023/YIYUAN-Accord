@@ -1,4 +1,4 @@
-"""Read-only MCP entry; native host metadata delivery is checked separately."""
+"""Bounded MCP task-state entry; native host metadata delivery is checked separately."""
 import json
 import hashlib
 import os
@@ -16,6 +16,55 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 BRIDGE = ROOT / 'runtime/native-state-mcp.cjs'
 CHECKPOINT = ROOT / 'runtime/task-checkpoint.cjs'
+
+
+def native_tool_result(call):
+    reply = call.get('result') or {}
+    value = reply.get('structuredContent')
+    if value is None:
+        content = [x.get('text') for x in reply.get('content', []) if x.get('type') == 'text']
+        value = json.loads(content[0]) if len(content) == 1 else None
+    return reply, value
+
+
+def native_manage_disposition(call, *, preapproved):
+    # App Server maps MCP isError to item.status and omits isError from result.
+    # Tool rejection retains result; host/transport denial instead has error.
+    if preapproved:
+        _, value = native_tool_result(call)
+        if (call.get('status') != 'failed' or call.get('error') is not None
+                or not isinstance(value, dict)
+                or value.get('schema') != 'yiyuan-accord-native-state-mutation/v1'
+                or value.get('state') != 'unavailable'
+                or value.get('reason') != 'native-user-input-receipt-missing'
+                or value.get('effect') != 'unknown-check-post-state'):
+            raise RuntimeError('manage tool did not preserve the expected adapter rejection')
+        return 'expected-adapter-rejection-not-business-success'
+    if (call.get('result') is not None or call.get('status') != 'failed'
+            or (call.get('error') or {}).get('message')
+            != 'MCP tool call requires approval, but approval policy is never'):
+        raise RuntimeError('native approval boundary differs from the fixed case')
+    return 'expected-host-denial-no-adapter-call'
+
+
+class NativeMcpEventTests(unittest.TestCase):
+    def test_host_denial_and_normalized_tool_rejection_are_distinct(self):
+        denied = {'status': 'failed', 'result': None, 'error': {
+            'message': 'MCP tool call requires approval, but approval policy is never'}}
+        rejected = {'status': 'failed', 'error': None, 'result': {'structuredContent': {
+            'schema': 'yiyuan-accord-native-state-mutation/v1', 'state': 'unavailable',
+            'reason': 'native-user-input-receipt-missing', 'effect': 'unknown-check-post-state'}}}
+        self.assertEqual(native_manage_disposition(denied, preapproved=False),
+                         'expected-host-denial-no-adapter-call')
+        self.assertEqual(native_manage_disposition(rejected, preapproved=True),
+                         'expected-adapter-rejection-not-business-success')
+        for call, preapproved in [(denied, True), (rejected, False),
+                ({**rejected, 'status': 'completed'}, True),
+                ({**rejected, 'error': {'message': 'transport failed'}}, True),
+                ({**rejected, 'result': None}, True),
+                ({**denied, 'error': {'message': 'different host failure'}}, False)]:
+            with self.subTest(call=call, preapproved=preapproved), self.assertRaises(RuntimeError):
+                native_manage_disposition(call, preapproved=preapproved)
 
 
 class NativeStateMcpTests(unittest.TestCase):
@@ -52,6 +101,17 @@ class NativeStateMcpTests(unittest.TestCase):
         params = {**self.params, 'name': 'read_task_input',
                   'arguments': {**self.params['arguments'], **arguments}}
         return self.inspect(params, operation='readTaskInput')
+
+    def manage(self, **arguments):
+        params = {**self.params, 'name': 'manage_task_state',
+                  'arguments': {'cwd': str(self.work), **arguments}}
+        return self.inspect(params, operation='manageTaskState')
+
+    def receive_current_input(self, prompt='Continue this task.'):
+        turn = self.params['_meta']['x-codex-turn-metadata']['turn_id']
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt, 'turn_id': turn},
+                    hook='UserPromptSubmit')
+        return self.helper({'op': 'status'})
 
     def test_captured_input_pages_preserve_unicode_hashes_and_read_only_state(self):
         expected = ['甲🌱乙\n"quoted"', '', 'Preserve the pause.']
@@ -167,6 +227,202 @@ class NativeStateMcpTests(unittest.TestCase):
                            capture_output=True, encoding='utf-8', env=self.env, timeout=10)
         self.assertEqual(p.returncode, 0, p.stderr)
         self.assertEqual(json.loads(p.stdout)['value']['reason'], 'input-changed-during-read')
+        self.assertEqual(self.files(), before)
+
+    def test_manage_bind_pause_inheritance_explicit_resume_and_verified_retirement(self):
+        source = self.work / 'source.txt'
+        output = self.work / 'report.txt'
+        source.write_text('protected input', encoding='utf-8')
+        status = self.receive_current_input('Create and verify the report.')
+        contract = {'result': 'Deliver the verified report', 'inputs': ['source.txt'],
+                    'outputs': [{'path': 'report.txt'}], 'nextAction': 'Create and verify report.txt',
+                    'canContinue': True}
+        bound = self.manage(action='bind', epoch=status['epoch'], expectedRevision=status['revision'],
+                            **contract)
+        self.assertFalse(bound['isError'], bound)
+        self.assertEqual(bound['value']['observation']['mode'], 'active')
+        self.assertEqual(bound['value']['observation']['inspection']['status'], 'incomplete')
+        self.assertFalse(output.exists())
+
+        current = self.receive_current_input('Pause this task and preserve its unfinished state.')
+        paused = self.manage(action='pause', epoch=current['epoch'], expectedRevision=current['revision'],
+                             reason='The user explicitly paused this task.')
+        self.assertEqual(paused['value']['observation']['mode'], 'paused')
+        current = self.helper({'op': 'status'})
+        inherited = self.manage(action='bind', epoch=current['epoch'], expectedRevision=current['revision'],
+                                **contract)
+        self.assertFalse(inherited['isError'], inherited)
+        self.assertEqual(inherited['value']['observation']['mode'], 'paused')
+        snapshot = self.helper({'op': 'status'})
+        self.assertEqual(snapshot['mode'], 'paused')
+        self.assertEqual(snapshot['checkpoint']['reason'], 'The user explicitly paused this task.')
+        blocked = self.manage(action='retire', epoch=snapshot['epoch'], expectedRevision=snapshot['revision'])
+        self.assertTrue(blocked['isError'])
+        self.assertEqual(blocked['value']['reason'], 'paused-task-cannot-retire')
+
+        resume = self.receive_current_input('Resume this task and complete the report now.')
+        resumed = self.manage(action='bind', epoch=resume['epoch'], expectedRevision=resume['revision'],
+                              resumeReason='The latest user instruction explicitly resumes the paused work.',
+                              **contract)
+        self.assertFalse(resumed['isError'], resumed)
+        self.assertEqual(resumed['value']['observation']['mode'], 'active')
+        output.write_text('verified result', encoding='utf-8')
+        current = self.helper({'op': 'status'})
+        retired = self.manage(action='retire', epoch=current['epoch'], expectedRevision=current['revision'])
+        self.assertFalse(retired['isError'], retired)
+        self.assertEqual(retired['value']['observation']['scope'], 'task-checkpoint-files-only')
+        self.assertEqual(source.read_text(encoding='utf-8'), 'protected input')
+        self.assertEqual(output.read_text(encoding='utf-8'), 'verified result')
+        self.assertFalse(any(p.name.endswith(('.state.json', '.input.json')) for p in self.state.iterdir()))
+
+    def test_manage_unresolved_or_unmet_outputs_block_retirement_but_explicit_cancellation_is_bounded(self):
+        (self.work / 'source.txt').write_text('protected input', encoding='utf-8')
+        status = self.receive_current_input('Investigate the unresolved condition.')
+        contract = {'result': 'Deliver report only after the external fact is resolved',
+                    'inputs': ['source.txt'], 'outputs': [{'path': 'report.txt'}],
+                    'unresolved': ['External acceptance is still unavailable.'],
+                    'nextAction': 'Wait for the necessary external fact', 'canContinue': False}
+        bound = self.manage(action='bind', epoch=status['epoch'], expectedRevision=status['revision'],
+                            **contract)
+        self.assertEqual(bound['value']['observation']['inspection']['status'], 'incomplete')
+        current = self.helper({'op': 'status'})
+        self.assertEqual(self.manage(action='retire', epoch=current['epoch'],
+                                     expectedRevision=current['revision'])['value']['reason'],
+                         'unmet-output-cannot-retire')
+        (self.work / 'report.txt').write_text('local output exists', encoding='utf-8')
+        current = self.helper({'op': 'status'})
+        unresolved = self.manage(action='retire', epoch=current['epoch'], expectedRevision=current['revision'])
+        self.assertTrue(unresolved['isError'])
+        self.assertEqual(unresolved['value']['reason'], 'unmet-output-cannot-retire')
+        current = self.helper({'op': 'status'})
+        self.assertEqual(current['inspection']['status'], 'unresolved')
+        cancellation = self.receive_current_input('Cancel this scoped task and retire only its owned state.')
+        missing_reason = self.manage(action='retire', epoch=cancellation['epoch'],
+                                     expectedRevision=cancellation['revision'], disposition='user-cancelled')
+        self.assertTrue(missing_reason['isError'])
+        self.assertEqual(missing_reason['value']['reason'], 'invalid-task-state-retirement')
+        cancelled = self.manage(action='retire', epoch=cancellation['epoch'],
+                                expectedRevision=cancellation['revision'],
+                                disposition='user-cancelled',
+                                reason='The latest user instruction explicitly cancels this scoped task.')
+        self.assertFalse(cancelled['isError'], cancelled)
+        self.assertEqual(cancelled['value']['observation']['inspection']['status'], 'unresolved')
+        self.assertTrue((self.work / 'source.txt').exists())
+        self.assertTrue((self.work / 'report.txt').exists())
+
+    def test_manage_unbound_retirement_removes_only_the_current_receipt(self):
+        protected = self.work / 'keep.txt'
+        protected.write_text('preserve business data', encoding='utf-8')
+        status = self.receive_current_input('No checkpoint is needed; retire only this input receipt.')
+        self.assertEqual(status['mode'], 'unbound')
+        retired = self.manage(action='retire', epoch=status['epoch'], expectedRevision=0,
+                              reason='The current task has no bound checkpoint to preserve.')
+        self.assertFalse(retired['isError'], retired)
+        self.assertEqual(retired['value']['observation']['scope'], 'unbound-input-receipt-only')
+        self.assertEqual(protected.read_text(encoding='utf-8'), 'preserve business data')
+        self.assertFalse(any(p.name.endswith(('.state.json', '.input.json')) for p in self.state.iterdir()))
+
+    def test_manage_compacts_oversize_success_without_hiding_the_written_binding(self):
+        status = self.receive_current_input('Bind the large local inspection contract.')
+        stem = '/'.join(('segment-' + str(i) + '-' + 'p' * 78) for i in range(7))
+        outputs = [{'path': f'{stem}/result-{i:03d}.json'} for i in range(100)]
+        unresolved = [f'condition-{i:02d}-' + 'u' * 1900 for i in range(32)]
+        arguments = {'action': 'bind', 'epoch': status['epoch'],
+                     'expectedRevision': status['revision'], 'result': 'Retain the bounded contract',
+                     'inputs': [], 'outputs': outputs, 'unresolved': unresolved,
+                     'nextAction': 'Resolve conditions and produce the declared outputs',
+                     'canContinue': True}
+        self.assertLess(len(json.dumps({'cwd': str(self.work), **arguments}).encode()), 128 * 1024)
+        result = self.manage(**arguments)
+        self.assertFalse(result['isError'], result)
+        observation = result['value']['observation']
+        self.assertEqual(observation['revision'], 1)
+        self.assertEqual(observation['mode'], 'active')
+        self.assertEqual(observation['inspection']['status'], 'incomplete')
+        self.assertEqual(observation['details'], 'omitted-bounded-result')
+        self.assertLess(len(json.dumps(result['value']).encode()), 128 * 1024)
+        saved = self.helper({'op': 'status'})
+        self.assertEqual(saved['revision'], 1)
+        self.assertEqual(saved['checkpoint']['result'], 'Retain the bounded contract')
+
+    def test_manage_rejects_stale_epoch_revision_and_native_turn_without_rebinding(self):
+        (self.work / 'source.txt').write_text('protected input', encoding='utf-8')
+        first = self.receive_current_input('Create report version one.')
+        contract = {'result': 'Deliver report version one', 'inputs': ['source.txt'],
+                    'outputs': [{'path': 'report.txt'}], 'nextAction': 'Create report.txt',
+                    'canContinue': True}
+        bound = self.manage(action='bind', epoch=first['epoch'], expectedRevision=first['revision'],
+                            **contract)
+        self.assertFalse(bound['isError'], bound)
+        current = self.helper({'op': 'status'})
+        before = self.files()
+        stale_revision = self.manage(action='pause', epoch=current['epoch'], expectedRevision=0,
+                                     reason='Attempt using an old revision.')
+        self.assertEqual(stale_revision['value']['reason'], 'task-revision-or-input-conflict')
+        self.assertEqual(stale_revision['value']['effect'], 'unknown-check-post-state')
+        self.assertEqual(self.files(), before)
+
+        second = self.receive_current_input('Create report version two.')
+        before = self.files()
+        stale_epoch = self.manage(action='pause', epoch=current['epoch'], expectedRevision=current['revision'],
+                                  reason='Attempt using an old epoch.')
+        self.assertEqual(stale_epoch['value']['reason'], 'task-revision-or-input-conflict')
+        self.assertEqual(self.files(), before)
+        self.params['_meta']['x-codex-turn-metadata']['turn_id'] = 'different-current-turn'
+        turn_conflict = self.manage(action='pause', epoch=second['epoch'], expectedRevision=second['revision'],
+                                    reason='Attempt from a different native turn.')
+        self.assertEqual(turn_conflict['value']['reason'], 'native-call-turn-conflict')
+        self.assertEqual(self.files(), before)
+
+    def test_manage_forwards_only_explicit_input_revision_evidence(self):
+        source = self.work / 'source.txt'
+        source.write_text('version one', encoding='utf-8')
+        status = self.receive_current_input('Create the report from the current source.')
+        contract = {'result': 'Deliver report from the current source', 'inputs': ['source.txt'],
+                    'outputs': [{'path': 'report.txt'}], 'nextAction': 'Update and verify report.txt',
+                    'canContinue': True}
+        self.assertFalse(self.manage(action='bind', epoch=status['epoch'],
+                                     expectedRevision=status['revision'], **contract)['isError'])
+        source.write_text('version two', encoding='utf-8')
+        current = self.receive_current_input('Use the inspected version two source and update the report.')
+        observed = current['inspection']['inputs'][0]['current']
+        before = self.files()
+        missing = self.manage(action='bind', epoch=current['epoch'], expectedRevision=current['revision'],
+                              revisionReason='The current source changed the affected result.', **contract)
+        self.assertEqual(missing['value']['reason'], 'input-revision-required')
+        self.assertEqual(self.files(), before)
+        accepted = self.manage(action='bind', epoch=current['epoch'], expectedRevision=current['revision'],
+            revisionReason='The latest user instruction adopts the inspected source revision.',
+            inputRevisions=[{'path': 'source.txt', 'observed': observed,
+                             'reason': 'The report must follow the inspected source revision.'}], **contract)
+        self.assertFalse(accepted['isError'], accepted)
+        saved = self.helper({'op': 'status'})['checkpoint']['inputRevisions'][0]
+        self.assertEqual(saved['disposition'], 'refresh')
+        self.assertEqual(saved['observed'], observed)
+
+    def test_manage_rejects_descendants_identity_overrides_and_action_foreign_fields(self):
+        status = self.receive_current_input('Keep state scoped to this root task.')
+        base = {'action': 'pause', 'epoch': status['epoch'], 'expectedRevision': status['revision'],
+                'reason': 'Scoped pause.'}
+        before = self.files()
+        self.params['_meta']['x-codex-turn-metadata']['session_id'] = 'ancestor-root'
+        descendant = self.manage(**base)
+        self.assertEqual(descendant['value']['reason'], 'shared-session-scope-requires-reconciliation')
+        self.assertEqual(self.files(), before)
+        self.params['_meta']['x-codex-turn-metadata']['session_id'] = 'current-thread'
+        for key, value in [('op', 'recover-lock'), ('session_id', 'foreign'), ('storage', 'foreign'),
+                           ('recovery_epoch', 'invented'), ('replay', True), ('turnId', 'invented'),
+                           ('nativeTurnId', 'invented'), ('result', 'foreign-to-pause')]:
+            with self.subTest(field=key):
+                rejected = self.manage(**base, **{key: value})
+                self.assertTrue(rejected['isError'])
+                self.assertEqual(rejected['value']['reason'], 'invalid-task-state-operation')
+                self.assertEqual(rejected['value']['effect'], 'not-requested')
+                self.assertEqual(self.files(), before)
+        invalid_binding = self.manage(action='bind', epoch=status['epoch'], expectedRevision=status['revision'],
+            result='Deliver report', inputs=[], outputs=[{'path': 'report.txt', 'op': 'write'}],
+            nextAction='Create report.txt', canContinue=True)
+        self.assertEqual(invalid_binding['value']['reason'], 'invalid-task-state-binding')
         self.assertEqual(self.files(), before)
 
     def files(self):
@@ -549,11 +805,15 @@ class NativeStateMcpTests(unittest.TestCase):
             {'jsonrpc': '2.0', 'id': 4, 'method': 'retire'},
             {'jsonrpc': '2.0', 'id': 5, 'method': 'tools/call',
              'params': {**self.params, 'name': 'read_task_input'}},
+            {'jsonrpc': '2.0', 'id': 6, 'method': 'tools/call', 'params': {
+                **self.params, 'name': 'manage_task_state', 'arguments': {'cwd': str(self.work),
+                    'action': 'pause', 'epoch': 'unobserved-epoch', 'expectedRevision': 0,
+                    'reason': 'No receipt exists for this request.'}}},
         ]
         p = self.run_wire(('\n'.join(map(json.dumps, messages))+'\n').encode())
         self.assertEqual(p.returncode, 0, p.stderr)
         rows = [json.loads(line) for line in p.stdout.splitlines()]
-        self.assertEqual([row['id'] for row in rows], [0, 1, 2, 3, 4, 5])
+        self.assertEqual([row['id'] for row in rows], [0, 1, 2, 3, 4, 5, 6])
         self.assertEqual(rows[0]['error']['code'], -32002)
         self.assertEqual(rows[1]['result']['protocolVersion'], '2025-06-18')
         package_version = json.loads((ROOT/'plugins/yiyuan-accord-codex/.codex-plugin/plugin.json').read_text(encoding='utf-8'))['version']
@@ -561,12 +821,18 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertTrue(rows[2]['result']['tools'][0]['annotations']['readOnlyHint'])
         self.assertIn('contextAssessment', rows[2]['result']['tools'][0]['inputSchema']['properties'])
         self.assertEqual([tool['name'] for tool in rows[2]['result']['tools']],
-                         ['inspect_task_state', 'read_task_input'])
+                         ['inspect_task_state', 'read_task_input', 'manage_task_state'])
         self.assertTrue(rows[2]['result']['tools'][1]['annotations']['readOnlyHint'])
+        self.assertFalse(rows[2]['result']['tools'][2]['annotations']['readOnlyHint'])
+        self.assertTrue(rows[2]['result']['tools'][2]['annotations']['destructiveHint'])
+        self.assertEqual(rows[2]['result']['tools'][2]['inputSchema']['properties']['action']['enum'],
+                         ['bind', 'pause', 'retire'])
         self.assertEqual(rows[3]['result']['structuredContent']['source']['threadId'], 'current-thread')
         self.assertEqual(rows[4]['error']['code'], -32601)
         self.assertTrue(rows[5]['result']['isError'])
         self.assertEqual(rows[5]['result']['structuredContent']['reason'], 'native-user-input-receipt-missing')
+        self.assertTrue(rows[6]['result']['isError'])
+        self.assertEqual(rows[6]['result']['structuredContent']['reason'], 'native-user-input-receipt-missing')
         self.assertFalse(self.state.exists())
 
     def test_invalid_utf8_oversize_and_truncated_input_have_no_state_effect(self):
@@ -577,6 +843,30 @@ class NativeStateMcpTests(unittest.TestCase):
             self.assertNotEqual(p.returncode, 0)
             self.assertFalse(p.stdout)
         self.assertFalse(self.state.exists())
+
+    def test_transport_failure_after_valid_write_requires_poststate_check(self):
+        status = self.receive_current_input('Bind this state before the transport closes.')
+        manage = {**self.params, 'name': 'manage_task_state', 'arguments': {
+            'cwd': str(self.work), 'action': 'bind', 'epoch': status['epoch'],
+            'expectedRevision': status['revision'], 'result': 'Preserve the applied binding',
+            'inputs': [], 'outputs': [{'path': 'report.txt'}],
+            'nextAction': 'Create and verify report.txt', 'canContinue': True}}
+        messages = [
+            {'jsonrpc': '2.0', 'id': 1, 'method': 'initialize', 'params': {
+                'protocolVersion': '2025-06-18', 'capabilities': {},
+                'clientInfo': {'name': 'poststate-test', 'version': '1'}}},
+            {'jsonrpc': '2.0', 'method': 'notifications/initialized'},
+            {'jsonrpc': '2.0', 'id': 2, 'method': 'tools/call', 'params': manage},
+        ]
+        raw = ('\n'.join(map(json.dumps, messages)) + '\n{').encode()
+        process = self.run_wire(raw)
+        self.assertNotEqual(process.returncode, 0)
+        rows = [json.loads(line) for line in process.stdout.splitlines()]
+        self.assertFalse(rows[-1]['result']['isError'], rows[-1])
+        self.assertNotIn(b'no state mutation was requested', process.stderr)
+        self.assertIn(b'inspect task state for prior operation effects before retrying', process.stderr)
+        saved = self.helper({'op': 'status'})
+        self.assertEqual(saved['checkpoint']['result'], 'Preserve the applied binding')
 
     def test_incomplete_initialize_does_not_activate_tools(self):
         messages = [
@@ -662,8 +952,8 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(self.files(), before)
 
 
-def native_integration(codex, evidence):
-    """Native MCP metadata and read-only delivery; fixed local replies, no model."""
+def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
+    """Native metadata and host denial or adapter rejection; fixed replies, no model."""
     sys.path.insert(0, str(ROOT))
     from scripts import observe_codex_lifecycle as host
     from scripts import observe_codex_entry, codex_rpc, inspect_native_resources
@@ -687,10 +977,11 @@ def native_integration(codex, evidence):
     original.write_bytes(b'Preserve this original.\n')
     sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
     manifest = {'evidence': str(root), 'codex': str(codex), 'node': str(node),
+        'manageApproval': 'requested-process-scoped-fixture-preapproval' if preapprove_owned_manage_tool else 'native-default-with-never-policy',
         'binarySha256': sha(codex), 'protectedSha256': sha(original),
         'ownedRoots': {name: str(root/name) for name in ('home','workspace','state','temp')},
         'limits': {'requestSeconds': 30, 'recoverySeconds': 15,
-                   'providerRequestBytes': 2*1024*1024, 'providerRequests': 2},
+                   'providerRequestBytes': 2*1024*1024, 'providerRequests': 3},
         'resourceController': 'windows-job-object' if os.name == 'nt' else 'posix-session-process-group'}
     source_files = [Path(__file__), Path(host.__file__), Path(observe_codex_entry.__file__),
         Path(codex_rpc.__file__), Path(inspect_native_resources.__file__)]
@@ -713,8 +1004,7 @@ def native_integration(codex, evidence):
     command('marketplace-add', ['plugin','marketplace','add', str(root/'marketplace'),'--json'])
     command('plugin-add', ['plugin','add','yiyuan-accord-codex@yiyuan-accord','--json'])
 
-    def response(body, ordinal):
-        if ordinal != 1: return None
+    def exposed_tool(body, suffix):
         tools = list(body.get('tools', []))
         for item in body.get('input', []):
             if isinstance(item, dict) and item.get('type') == 'additional_tools': tools += item.get('tools', [])
@@ -722,21 +1012,42 @@ def native_integration(codex, evidence):
         def collect(items, namespace=None):
             for tool in items:
                 if tool.get('type') == 'namespace': collect(tool.get('tools', []), tool.get('name'))
-                elif tool.get('type') == 'function' and tool.get('name', '').endswith('inspect_task_state'):
+                elif tool.get('type') == 'function' and tool.get('name', '').endswith(suffix):
                     matches.append((namespace, tool['name']))
         collect(tools)
         matches = list(dict.fromkeys(matches))
-        if len(matches) != 1: raise ValueError('one directly exposed state tool required')
-        namespace, name = matches[0]
-        return {'type':'function_call', 'id':'state_tool_call', 'call_id':'native_state_call',
+        if len(matches) != 1: raise ValueError('one directly exposed ' + suffix + ' tool required')
+        return matches[0]
+
+    def response(body, ordinal):
+        if ordinal == 1:
+            namespace, name = exposed_tool(body, 'inspect_task_state')
+            arguments = {'cwd':str(root/'workspace'), 'includeContext':True}
+            identity = ('state_tool_call', 'native_state_call')
+        elif ordinal == 2:
+            namespace, name = exposed_tool(body, 'manage_task_state')
+            arguments = {'cwd':str(root/'workspace'), 'action':'pause',
+                'epoch':'fixture-unobserved-receipt', 'expectedRevision':0,
+                'reason':'Fixture checks missing-receipt rejection only; do not create task state.'}
+            identity = ('manage_tool_call', 'native_manage_call')
+        else:
+            return None
+        return {'type':'function_call', 'id':identity[0], 'call_id':identity[1],
             'name':name, **({'namespace':namespace} if namespace else {}),
-            'arguments':json.dumps({'cwd':str(root/'workspace'), 'includeContext':True})}
+            'arguments':json.dumps(arguments)}
 
     fixture = host._Fixture(manifest, response)
     app = None
     result = {'realModelCalls': 0, 'status': 'pending'}
     try:
-        argv = host._argv(manifest, fixture, ('-c','features.hooks=false','-c','features.code_mode_host=false'))
+        extra = ['-c','features.hooks=false','-c','features.code_mode_host=false']
+        if preapprove_owned_manage_tool:
+            # Official per-tool setting, only in this isolated test process. The
+            # rejected pause has no receipt and cannot create checkpoint state.
+            # 0.155.1 CLI override paths split on dots; quotes on the left are
+            # literal key characters, unlike a TOML table header.
+            extra += ['-c', 'plugins.yiyuan-accord-codex@yiyuan-accord.mcp_servers.accord-state.tools.manage_task_state.approval_mode="approve"']
+        argv = host._argv(manifest, fixture, tuple(extra))
         app = host._App(manifest, 'mcp-state', argv, env, deadline)
         app.initialize()
         started = app.rpc('thread/start', {'cwd':str(root/'workspace'), 'model':'fixture-no-model',
@@ -744,20 +1055,19 @@ def native_integration(codex, evidence):
         thread = started['thread']['id']
         if started.get('sandbox', {}).get('type') != 'readOnly': raise RuntimeError('source is not read-only')
         turn = app.rpc('turn/start', {'threadId':thread,
-            'input':[{'type':'text','text':'Inspect the saved state for this workspace.'}]})['turn']['id']
+            'input':[{'type':'text','text':'Inspect this workspace state and check that a state-management request with an unobserved receipt is rejected. Preserve files and do not create task state.'}]})['turn']['id']
         terminal = app.wait_turn(thread, turn)
         calls = [e['params']['item'] for e in app.events if e.get('method') == 'item/completed'
             and e.get('params', {}).get('threadId') == thread
             and e.get('params', {}).get('turnId') == turn
             and e.get('params', {}).get('item', {}).get('type') == 'mcpToolCall']
-        if terminal != 'completed' or len(calls) != 1: raise RuntimeError('one completed MCP call required')
-        call = calls[0]
-        reply = call.get('result') or {}
-        value = reply.get('structuredContent')
-        if value is None:
-            content = [x.get('text') for x in reply.get('content', []) if x.get('type') == 'text']
-            value = json.loads(content[0]) if len(content) == 1 else None
-        if not value or reply.get('isError') is True or call.get('error'):
+        if terminal != 'completed' or len(calls) != 2: raise RuntimeError('two completed MCP calls required')
+        indexed = {call.get('id'): call for call in calls}
+        if set(indexed) != {'native_state_call', 'native_manage_call'}:
+            raise RuntimeError('native MCP call identities differ')
+        call = indexed['native_state_call']
+        reply, value = native_tool_result(call)
+        if not value or call.get('status') != 'completed' or call.get('error'):
             raise RuntimeError('state tool result unavailable')
         source = value['source']
         if (source['threadId'] != thread or source['sessionTreeId'] != thread
@@ -767,8 +1077,11 @@ def native_integration(codex, evidence):
             raise RuntimeError('absent hook receipt was not preserved as unknown')
         if value.get('context', {}).get('reason') != 'native-user-input-receipt-missing':
             raise RuntimeError('optional context must preserve absent input as unknown')
+        manage_call = indexed['native_manage_call']
+        manage_disposition = native_manage_disposition(manage_call,
+            preapproved=preapprove_owned_manage_tool)
         if sha(original) != manifest['protectedSha256'] or list((root/'state').iterdir()):
-            raise RuntimeError('inspection changed protected files or task state')
+            raise RuntimeError('native state calls changed protected files or created task state')
         status_request = {'threadId': thread, 'detail': 'toolsAndAuthOnly'}
         live = app.rpc('mcpServerStatus/list', status_request)
         servers = [s for s in live['data'] if s.get('pluginId') == 'yiyuan-accord-codex@yiyuan-accord']
@@ -788,7 +1101,7 @@ def native_integration(codex, evidence):
         after_status = app.rpc('mcpServerStatus/list', status_request)
         after_servers = [s for s in after_status['data'] if s.get('pluginId') == 'yiyuan-accord-codex@yiyuan-accord']
         if (len(after_servers) != 1 or after_servers[0]['runtimeStatus'] != 'connected'
-                or 'inspect_task_state' not in after_servers[0]['tools']):
+                or not {'inspect_task_state','manage_task_state'}.issubset(after_servers[0]['tools'])):
             raise RuntimeError('MCP connection or state tool lost after replacement')
         result['liveCacheUpgrade'] = {'beforeMcp': servers, 'result': upgrade,
             'beforeIdentity': [str(before_cache.st_dev), str(before_cache.st_ino)],
@@ -796,10 +1109,11 @@ def native_integration(codex, evidence):
             'afterMcp': after_status}
         if sha(original) != manifest['protectedSha256'] or list((root/'state').iterdir()):
             raise RuntimeError('cache replacement changed original or task state')
-        if len(fixture.requests) != 2 or fixture.auth_seen: raise RuntimeError('provider bounds differ')
+        if len(fixture.requests) != 3 or fixture.auth_seen: raise RuntimeError('provider bounds differ')
         result.update(status='passed', threadId=thread, turnId=turn, nativeCall=call,
+            nativeManageCall=manage_call, manageDisposition=manage_disposition,
             providerRequests=len(fixture.requests), sourceSettings=started,
-            claimLimit='Native plugin MCP registration, actual metadata and read-only unknown-state behavior; no real model judgment, GUI adoption or handoff dispatch.')
+            claimLimit='Native plugin MCP registration and declared host-approval boundary. A denied/rejected write request is neither business success nor a completed state change; no real model judgment, GUI adoption or handoff dispatch. Process-scoped fixture preapproval, when selected, is not a user permission or product default.')
     except BaseException as error:
         result.update(status='failed', failure=type(error).__name__, reason=str(error))
         raise
@@ -828,7 +1142,10 @@ if __name__ == '__main__':
         parser = argparse.ArgumentParser()
         parser.add_argument('--native-codex', required=True)
         parser.add_argument('--evidence', required=True)
+        parser.add_argument('--preapprove-owned-manage-tool', action='store_true',
+            help='isolated fixture process only: prebind official approval of this one missing-receipt rejection probe')
         arguments = parser.parse_args()
-        native_integration(arguments.native_codex, arguments.evidence)
+        native_integration(arguments.native_codex, arguments.evidence,
+            preapprove_owned_manage_tool=arguments.preapprove_owned_manage_tool)
     else:
         unittest.main()

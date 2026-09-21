@@ -5,9 +5,8 @@ description: Preserve task state through context pressure, interruption, reconne
 
 # Maintain task continuity
 
-Use the current goal and authority. If Accord's coordination duties are absent,
-read the [brief entry](../deliver-demand-driven-outcome/SKILL.md). Invoke other
-specialists only for an actual dependency; this Skill grants no new authority.
+Use current goal and authority. If coordination duties are absent, read the
+[brief entry](../deliver-demand-driven-outcome/SKILL.md); reach specialists as needed.
 
 ## Modes and saved task state
 
@@ -40,22 +39,24 @@ reassessment. A fit grants neither permission nor takeover. Choose `contextMaxAg
 for the work without restamping evidence or ignoring the unobserved tail.
 Default status reads omit context I/O; assessment uses existing short-lived locks
 without changing saved task state or creating a control connection.
-Use current helper `--help` from the plugin root for other status, binding, revision,
-`unresolved`, pause and retirement; readback or file matches do not grant authority.
-Retain known unmet conditions until evidenced resolution or authorized cancellation.
+For necessary checkpoint changes, use available `manage_task_state` with the
+inspected epoch/revision and current authority. `bind` preserves input baselines,
+output predicates and unresolved work; revisions need the required reasons and
+dispositions. Pauses survive binding unless an actual authorized resume is recorded.
+Retire only state whose responsibilities are resolved or explicitly cancelled.
+Reasons and local file matches do not prove user permission or whole-task completion.
+Inspect uncertain effects before retry. Honor host approval; do not bypass denial.
+If absent, use helper `--help`; replay and lock recovery stay separate.
 
-For missing captured input, use an available `read_task_input` tool or the helper's
-`read-native-input`. Both expose only captured input, not complete history,
-attachments or progress. The MCP tool binds identity from the native call; pass
-its returned `next` cursor, including `expectedReceiptEpoch`, for subsequent pages.
-On a changed basis, reconcile the new receipt and needed text instead of combining
-pages. Preserve reported input-loss, resume and interruption flags; reading clears
-none of them. Replay only the actual current input through the helper using the
-recovery token from status when required; never reconstruct it from a checkpoint or hash.
-Prove dead ownership before lock recovery, preserving other sessions and failure
-watermarks. Unavailable or incompatible storage leaves freshness unknown and holds
-dependent effects; use a surviving authorized host recovery path. Helper state is
-local evidence, not a semantic verifier, permission barrier or autonomous executor.
+Retrieve missing captured text through `read_task_input` or `read-native-input`;
+these contain Hook inputs, not full history, attachments or progress. Pass each
+returned `next` cursor with its `expectedReceiptEpoch`; reconcile changed receipts
+instead of joining pages. Reading clears no input-loss, resume or interruption
+flags. When required, replay only host-retained current input through the helper
+using the status recovery token. A hash cannot reconstruct missing text.
+Prove dead ownership before lock recovery; preserve other sessions and failure
+watermarks. Missing/incompatible storage holds dependent effects until a surviving
+authorized host route restores sufficient evidence.
 
 ## Interruptions and changed surroundings
 

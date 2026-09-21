@@ -99,6 +99,24 @@ session identity is shared by descendants: when native session and thread IDs
 differ, the reader holds checkpoint lookup instead of adopting ancestor state.
 This adds a host-owned process lifetime, not a separate storage engine or remote
 service. Installation, actual tool use and resource release remain separate checks.
+The separate `manage_task_state` tool reuses `bind`, `pause` and `retire` in that
+same runtime and storage. It accepts only their declared fields, caller-observed
+epoch/revision and workspace; native root identity and `nativeTurnId` come from
+MCP metadata. The helper checks the turn initially and again under the input lock
+before publication/deletion, including host continuation that retains the human
+input epoch. Legacy helper callers without this optional turn guard retain their
+own identity responsibility. No business output, host mode, replay or lock recovery
+is changed through the tool. Pauses and unresolved conditions retain their existing
+rules; reasons are caller claims, not proof of authorization. Mutating/destructive
+annotations are accurate hints, not a guarantee of approval or server authorization.
+The host may require approval for this tool; a `never` policy can reject it before
+the adapter runs. Inspect the actual disposition and retain unfinished work;
+do not change policy or switch routes merely to bypass a denial. In the inspected
+App Server, a tool error is a failed item with a result, whereas a host denial has
+an error and no result. Raw MCP `isError` is not repeated in that normalized result.
+An execution error requires post-state inspection; a successful operation with
+oversized inspection details returns a compact success receipt rather than hiding
+the applied mutation. Transport failure does not establish absence of prior effects.
 The same process exposes `read_task_input(cwd, index?, offset?, maxChars?,
 expectedReceiptEpoch?)` for recovery text. It reuses `read-native-input` without
 another store or control connection, selects only the root session from native

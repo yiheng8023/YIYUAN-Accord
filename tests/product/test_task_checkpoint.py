@@ -1064,6 +1064,83 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'], retained)
         self.assertEqual(self.event('Stop', turn_id='continuation-turn')['decision'], 'block')
 
+    def test_native_mutation_guard_rejects_wrong_turn_without_changing_state(self):
+        self.event('UserPromptSubmit', prompt='Deliver the approved result.', turn_id='current-turn')
+        self.bind(nativeTurnId='current-turn')
+        self.write_outputs()
+        current = self.status()
+        binding = dict(result='Verified local files', inputs=['source.json', 'keep.txt'],
+            outputs=[{'path':'summary.json', 'json':{'/total':60}}, {'path':'details.csv'}],
+            nextAction='Verify before completion', canContinue=True)
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        for action in ('bind', 'pause', 'retire'):
+            for turn in ('old-turn', None, 1, ''):
+                with self.subTest(action=action, turn=turn):
+                    request = dict(op=action, epoch=current['epoch'], expectedRevision=current['revision'],
+                        nativeTurnId=turn, **(binding if action == 'bind' else {'reason':'Reviewed current result'}))
+                    self.assertIn('native-call-turn-conflict', self.invoke(request, success=False))
+                    self.assertEqual(before, {p.name:p.read_bytes() for p in self.state.iterdir()})
+        self.invoke(dict(op='pause', epoch=current['epoch'], expectedRevision=current['revision'],
+                         nativeTurnId='current-turn', reason='User requested pause.'))
+        self.assertEqual(self.bind(nativeTurnId='current-turn')['mode'], 'paused')
+
+    def test_native_mutation_guard_uses_continuation_turn_with_same_human_epoch(self):
+        self.event('UserPromptSubmit', prompt='Deliver the approved result.', turn_id='user-turn')
+        self.bind(nativeTurnId='user-turn')
+        reason = self.event('Stop', turn_id='user-turn')['reason']
+        original = self.status()
+        self.event('UserPromptSubmit', prompt=reason, turn_id='continuation-turn')
+        self.assertEqual(self.status()['epoch'], original['epoch'])
+        self.assertIn('native-call-turn-conflict', self.invoke(dict(op='pause',
+            epoch=original['epoch'], expectedRevision=original['revision'],
+            nativeTurnId='user-turn', reason='Late old-turn request'), success=False))
+        self.assertEqual(self.bind(nativeTurnId='continuation-turn')['mode'], 'active')
+
+    def test_native_mutation_guard_rechecks_turn_before_publication(self):
+        for action in ('bind', 'pause', 'retire'):
+            with self.subTest(action=action):
+                self.event('UserPromptSubmit', prompt='Deliver current files.', turn_id='old-turn')
+                self.bind(nativeTurnId='old-turn')
+                self.write_outputs()
+                current = self.status()
+                receipt = next(self.state.glob('*.input.json'))
+                before = {p.name:p.read_bytes() for p in self.state.iterdir() if p != receipt}
+                self.preload = self.root / 'mutation-turn-race.cjs'
+                self.preload.write_text("const fs=require('node:fs'),open=fs.openSync;let changed=false;"
+                    f"const receipt={json.dumps(str(receipt))},source={json.dumps(str(self.work/'source.json'))};"
+                    "fs.openSync=function(file,...args){if(!changed&&String(file)===source){changed=true;"
+                    "const input=JSON.parse(fs.readFileSync(receipt,'utf8'));"
+                    "input.hostObservation.turnId='new-turn';input.inputSource='host-continuation';"
+                    "fs.writeFileSync(receipt,JSON.stringify(input));}return open.call(this,file,...args);};",
+                    encoding='utf-8')
+                fields = dict(result='Local files', inputs=['source.json', 'keep.txt'],
+                    outputs=[{'path':'summary.json', 'json':{'/total':60}}, {'path':'details.csv'}],
+                    nextAction='Review', canContinue=True, revisionReason='New checks') if action == 'bind' else {'reason':'Current decision'}
+                try:
+                    self.assertIn('native-call-turn-conflict', self.invoke(dict(op=action,
+                        epoch=current['epoch'], expectedRevision=current['revision'], nativeTurnId='old-turn', **fields), success=False))
+                finally:
+                    del self.preload
+                self.assertEqual(before, {p.name:p.read_bytes() for p in self.state.iterdir() if p != receipt})
+
+    def test_native_mutation_guard_rechecks_unbound_retirement(self):
+        self.event('UserPromptSubmit', prompt='Current task.', turn_id='old-turn')
+        current = self.status()
+        receipt = next(self.state.glob('*.input.json'))
+        self.preload = self.root / 'retirement-turn-race.cjs'
+        self.preload.write_text("const fs=require('node:fs'),open=fs.openSync;let count=0;"
+            f"const receipt={json.dumps(str(receipt))};"
+            "fs.openSync=function(file,...args){if(String(file)===receipt+'.lock'&&++count===2){"
+            "const input=JSON.parse(fs.readFileSync(receipt,'utf8'));"
+            "input.hostObservation.turnId='new-turn';input.inputSource='host-continuation';"
+            "fs.writeFileSync(receipt,JSON.stringify(input));}return open.call(this,file,...args);};",
+            encoding='utf-8')
+        self.assertIn('native-call-turn-conflict', self.invoke(dict(op='retire', epoch=current['epoch'],
+            expectedRevision=0, nativeTurnId='old-turn', reason='Late retirement'), success=False))
+        del self.preload
+        self.assertTrue(receipt.exists())
+        self.assertEqual(self.status()['hostObservation']['turnId'], 'new-turn')
+
     def test_stop_rechecks_execution_turn_before_publishing_continuation(self):
         self.event('UserPromptSubmit', prompt='Deliver the approved result.', turn_id='old-turn')
         self.bind()
