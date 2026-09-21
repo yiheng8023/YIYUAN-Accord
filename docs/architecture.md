@@ -17,6 +17,14 @@ Judge them by effect, decision quality, total lifecycle burden and necessary
 human intervention. Neither architectural elegance nor a passing lower-level
 test proves that the premise or composition is sufficient.
 
+Version 3.3 internalizes applicable question decomposition, typed results,
+uncertainty handling and feedback designs through host models, supported tools
+and necessary Accord components. Dedicated third-party decision-model provider
+integrations are deferred for evaluation in later versions; no additional user model deployment,
+training program or hosted model service is introduced. This boundary preserves
+ordinary ecosystem reuse and does not prescribe a fixed model sequence or claim
+superiority over specialized models.
+
 ### Responsibility before packaging
 
 The inherited duties are coverage indexes, not thirteen modules or a fixed

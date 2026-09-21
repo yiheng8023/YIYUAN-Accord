@@ -76,7 +76,7 @@ Managing the ecosystem is also a core duty: plugins, Apps, Skills and MCP capabi
 
 Accord does not train models, expand native context windows or bypass host permissions and interfaces. The Agent investigates feasible alternatives and missing conditions; real limits must still be reported with unfinished responsibilities preserved. A reference core or prompt alone cannot guarantee execution or enforce permissions.
 
-The current development package requires no separate evaluation-model account or service. The host's normal requirements and costs still apply.
+Version 3.3 uses the host's existing models, supported tools and Accord components for task-specific judgment and verification. Dedicated third-party decision-model integrations are left for future-version evaluation; users are not required to deploy an additional model or open a separate evaluation-model account. Existing ecosystem capabilities remain available for appropriate reuse. The host's normal requirements and costs still apply.
 
 Intervention can add context load, latency, compute cost, instruction conflict and maintenance burden. Assess net effects on real outcomes; prefer lower burden for equivalent results, narrowing, replacing or retiring intervention when warranted. Necessary automation does not promise zero tokens, CPU time or elapsed time. Trace and correct effects already caused by a faulty component.
 
