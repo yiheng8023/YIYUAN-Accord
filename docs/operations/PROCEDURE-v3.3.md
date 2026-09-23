@@ -2140,3 +2140,19 @@ accord-finalize-receipt-native-20260923-01的真实原案完成续作回执找�
 144项受影响Windows本地检查通过；复用已安装WSL/Ubuntu执行3项真实POSIX进程组测试通过，未安装依赖，未运行新原生宿主MCP/模型试验。WSL启动提示localhost代理不支持当前NAT模式，未改代理设置，三个本地测试均exit0。这些修正使后续故障可诊断并保护收尾，不证明macOS运行时根因已消除；保留正在执行的其余CI，不为局部修复抢先取消有效检查。
 
 旧轮最终10项成功/1项失败。同步核对产物保留：MCP原生场景的keep.txt通常在成功退出后复制到retained；关闭失败会跳过该复制。CI上传范围现补原workspace/keep.txt，成功时沿用retained副本，失败时保全原件。没有扩大到凭据或完整home目录；原失败产物不回填。
+
+
+## 修正后托管退出与当前安装对齐（2026-09-23）
+
+精确9aae2880的CI35819020213为11/11成功。macOS native-state-mcp原件独立回读：29份冻结执行源与Git逐字节匹配，result passed/3固定响应/0真实模型，root exit0、forced=false、readerStopped、processGroupState=absent、observationError与lastObservationError均null。旧51aafb31异常没有被改标，也未据此推断其OS根因。新原件在accord-ci-diagnosis-20260923-02。
+
+普通行为验证前发现本机仍安装33628，遂在accord-shared-plugin-update-20260923-01备份原配置及22文件旧包，核对目标包与已通过CI的9aae2880。首次原生marketplace add精确新ref被“同名不同来源”拒绝，命令exit1但所属进程自然释放，config哈希和旧安装保持。根据固定0.156.0源码的marketplace_remove与marketplace_edit实现，确认移除市场条目/受管快照不卸载已安装缓存；先核对原快照为普通目录、Git HEAD与旧ref一致、唯一未跟踪文件为原生安装元数据，再通过原生remove、add同一仓库精确9aae2880及plugin add更新。
+
+安装34028的24个文件与源码逐字节一致；新原生读取域显示5个启用Skill和6个启用且trusted Hook，所有路径指向新缓存，声明字节与旧包相同。除目标市场ref外共享配置语义相同，无真实模型、新信任或模式启用。五条CLI命令（含首次拒绝）和一个只读发现域均forced=false、所属进程0，发现reader停止；空验证工作区回收，原配置/旧包/回执保留。update.py与rebind.py为一次性脚本；首次失败后通过新步骤检查后态再继续，没有原地重跑。此为安装和发现层证据，不证明既有Desktop任务采用、Skill语义选择、普通闭环或自主交接。
+
+
+## 有限材料的内部交接说明（2026-09-23）
+
+在安装更新完成后，将五份安全事实记录交给不继承旧对话的子代理，要求仅写中文JSON/Markdown安装交接说明；请求Luna/medium，未自动改变主代理设置。此为真实开发说明任务，不是正式普通入口或自主连续性验收。原材料缺少恢复定位及实际修复步骤，子代理没有编造；root补充已存在事实并保留原五文件，接续修订后独立核对两份成品、全部输入hash与五个恢复/证据位置。配置备份只核对路径存在，未读取内容。
+
+第一次措辞修订产生的重复字段/句子由root去重；观察器一次字面短语检查产生假阴性，改由完整来源对照核实，不重跑原生试验。此前核验与补充绑定、最终verification-revision-2.json均保留在accord-install-handoff-20260923-01。最终说明保留首次安装拒绝、后续修复、旧macOS根因未知、普通行为/桌面采用/自主交接未验证及releaseReady=false。原配置、旧包与原始回执是必要恢复材料，不因说明完成删除；一次性脚本不重跑。没有转交活跃业务写者，也未证明自动择时、完整历史继承、模型性价比或A05完成；正式范围与完成计数不变。
