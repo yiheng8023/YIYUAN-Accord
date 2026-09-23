@@ -2227,3 +2227,15 @@ fresh原生hooks/list与skills/list显示5启用Skill及6启用trusted Hook均�
 当前Accord的下一原生输入/resume使旧绑定失效，迟到Stop与状态写入按turn/epoch约束；已有retire可供核实完成/取消及写者后的存活调用方回收所属状态。没有SessionEnd且没有调用方时仍不能承诺自动回收。取消不撤销外部效果，session shutdown中的进程/MCP清理不代指每次中途取消；可用CLI版本也不冒认原云控制者。
 
 7项既有定向helper检查9.387秒通过，范围为旧轮次Stop、新输入/恢复、错误turn写入拒绝、有存活调用方退休和未完状态保护；没有新增模型调用、云安装或信任。判断是复用已有职责承担者，暂无新增运行时的实证理由。原六项试验及回滚证据不改标；下一四项真实事件授信、原任务下一输入采用、回滚方案已准备但未执行。完整来源/审查在私有accord-cloud-route-20260923-01/missing-event-duty-review.md；架构、计划、接续和机器观察已对齐，基线/验收按结果定义，无需改变r31或17项必要范围。
+
+## 四项授信成立但原云任务未采用，已回滚（2026-09-24）
+
+用户明确确认新方案后，复用原云任务执行。准备阶段因/opt/codex/backups父目录不存在而mkdir失败，此时尚无安装/信任效果；root限定补齐本次所属恢复路径并继续同一授权，保留该失败。实际检出9b7c2f40；CLI0.144.0-alpha.4，74845包24文件/750f9ef8身份不变。原生命令注册/启用成功，安装逐字节一致；hooks/list读回四个唯一目标key全部enabled=true、trusted，未改声明的enabled值。短时AppServer PID5455自然exit0/forced=false，后验不存在。
+
+下一次原生输入仍在eeb6d2169a69容器、保留89fe03d9授信后配置及恢复根，但原任务报告当前入口没有Accord指导/Skill，实际可调用工具没有inspect_task_state/read_task_input/manage_task_state，未以手动读Skill、模拟Hook或另起控制者补证。因此临时注册与授信成功，原任务采用未成立；既不能归因于这两轮容器状态丢失，也不能推成所有云端路线不支持。
+
+公开原始RPC流水的安全回读关联7个request/result和1个initialized通知：initialize一次、hooks/list三次、config/read两次、config/batchWrite一次，无thread/start或turn/start；公开流水缺写入参数，执行者报告采用expectedVersion，但该具体值尚未由父任务独立核到私有原件。配置影响检查的onlyAllowedPaths=false来自检查器将marketplaces误写成plugin_marketplaces；八个实际叶子差异均属授权目标。原false保留为检查器错误，不当作产品越界，也不以新自写true字段代证。
+
+原生移除插件/市场后只剩四个本次trusted_hash，核明无其它差异后恢复私有前态，最终配置SHA为fee056706e3e29d09240fd55a18ff27c4270fd5bd44c92957c3895cd6d5d6acf并逐字节一致。原生安装/市场列表为空、目标信任无残留、MCP只保留make_pr，Git干净；仅回收确认所属的空插件缓存目录。未发现可绑定的Accord协议回执，因此没有执行retire或直接删协议文件。所属PID已退出的证据不外推整个容器资源审计。
+
+必要证据留在/opt/codex/backups/yiyuan-accord-cloud-adoption-20260923T161725Z（0700），未来平台保留时长未知，私人配置不输出；本地有限回读及来源限制在accord-cloud-route-20260923-01/cloud-adoption-result.json。恢复根缺失的旧观察与本次相邻两轮延续分别保留，不推测是谁删除。下一核对宿主支持的装载/刷新和初始化时机，不重复本次试验、不擅改永久环境；17项范围、A01–A08完成及发布判定不变。
