@@ -94,6 +94,8 @@ accord-sdk-restore-20260921-01由root独占执行一次：旧01只读复制ledge
 
 本批原生SDK组合已执行一次：新增两个fixture复用既有_Fixture/_App/OS控制，13份执行源事前冻结；11份原有实现逐字节匹配e22fba76，2份新观察器按原执行字节保全。CLI0.155.1/Node24.20.0实际完成3任务、6个completed turn、2次transfer及2次adopt；29个RPC各有唯一成功回执，2次退订仅指向前两任务，两record均revision19/settled1且最终writer为第三任务。10次localhost固定响应、零真实模型；Job自然exit0/进程0、reader与fixture均停止，源码/keep/可执行文件/共享config前后hash保持。独立raw/SQLite/rollout回读通过；可搬迁artifact通过，重复响应/错误terminal/重复工具reply/错误writer四个副本反例被拒。原始context实际unknown，6个虚拟模型metadata fallback警告和3个分页全历史展开弃用提示保留；不作动态压力择时、语义/性能或GUI通过结论。
 
+待用户明确授权的下一动作：现有云端主页已只读核实yiheng8023/YIYUAN-Accord环境及main均已选中，拟新建一个只读任务核对实际运行时/插件/Skill/Hook/MCP条件，不安装、不改设置、不写仓库、不创建其它任务。完整请求及来源核对在accord-entry-route-review-20260923-01/cloud-task-brief.md，尚未发送。官方Plugins页与changelog对IDE插件支持仍互相冲突，保留既有实例证据；不能据文档或目录推定云端实际采用。此项用真实执行环境缩小入口适用性未知，不重复已有协议或报告试验；既有17项范围和准入状态不变。当前新版原生输入已自动捕获，count=2、两恢复标记false，本轮无需再次replay。
+
 下一按依赖推进：
 
 1. **沿剩余实际入口与恢复缺口推进。** target创建期工具绑定、接收阶段事件泵及显式adoptTarget已经接通，同一scope连续两次transfer、旧lease和未知settle不重放已有固定协议检查。Windows真实0.155.1组合已按冻结条件检查；Linux/macOS同项与已settle新controller恢复已通过原生CI及独立回读。后续按必要业务范围补真实择时/语义接管，已找回首轮回执后的finalize→settle→restore连接及其自身中断恢复已通过本地组合，新增原生组合已在9月23日02核对；完成本批集成与托管验证后，绑定路线中立的普通自主连续性；不得重复已闭合协议链或把干净退出后的恢复外推到所有断线情况。
