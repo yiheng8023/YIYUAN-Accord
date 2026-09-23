@@ -1600,6 +1600,40 @@ class EntryTests(unittest.TestCase):
                 process.kill()
                 process.wait(timeout=5)
 
+    def test_posix_observation_error_keeps_os_cause_and_cannot_prove_release(self):
+        from scripts.inspect_native_resources import native_processes_released
+        group = object.__new__(entry.PosixProcessGroup)
+        group.process, group.pgid, group.absent = Mock(pid=43210), 43210, False
+        group.last_observation_error = None
+        group.process.poll.return_value = 0
+        with patch.object(entry.os, "killpg", create=True,
+                          side_effect=PermissionError(1, "Operation not permitted")):
+            sample = group.sample()
+        self.assertEqual(sample["processGroupState"], "unobservable")
+        self.assertEqual(sample["observationError"]["errno"], 1)
+        self.assertEqual(sample["observationError"]["type"], "PermissionError")
+        self.assertIn("Operation not permitted", sample["observationError"]["message"])
+        self.assertEqual(sample["lastObservationError"], sample["observationError"])
+        self.assertFalse(native_processes_released(sample, "posix-session-process-group"))
+        self.assertIsNone(sample["activeProcesses"])
+
+    def test_posix_disappearance_retains_prior_observation_error_without_signalling_again(self):
+        group = object.__new__(entry.PosixProcessGroup)
+        group.process, group.pgid, group.absent = Mock(pid=43210), 43210, False
+        group.last_observation_error = None
+        group.process.poll.return_value = 0
+        with patch.object(entry.os, "killpg", create=True,
+                          side_effect=[OSError(4, "Interrupted system call"),
+                                       ProcessLookupError(3, "No such process")]) as killpg:
+            failed = group.sample()
+            disappeared = group.sample()
+            group.sample()
+            group.terminate()
+        self.assertEqual(killpg.call_count, 2)
+        self.assertEqual(disappeared["processGroupState"], "absent")
+        self.assertIsNone(disappeared["observationError"])
+        self.assertEqual(disappeared["lastObservationError"], failed["observationError"])
+
     def posix_controller_observes_direct_root_and_never_claims_process_counts(self):
         group = entry.PosixProcessGroup()
         process = subprocess.Popen([PYTHON, "-c", "import time; time.sleep(30)"], start_new_session=True)

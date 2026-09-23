@@ -2129,3 +2129,12 @@ accord-finalize-receipt-native-20260923-01的真实原案完成续作回执找�
 这只证明原生加载的机制，不证明语义选择质量、委托来源认证或普通Desktop/CLI对当前轮次的控制能力。协调者必须有真实选择委托、适用入口与目标控制权，并保留原需求及自身选择来源；不能用格式化用户输入制造授权。r31据此校准计划、基线、验收、机器投影、源Skill及接续；明确源码默认策略并非永久限制，也不把已有调用限制静默改成全局自动化。第三方原件、CC Switch设置与共享安装均未更改。
 
 独立审查核对同一声明策略、两次native listing、请求正文及单一Skill注入片段，限定上述加载结论。审查结束后调用者复制并核对控制Skill至retained/control-skill，回收home/state/temp/workspace/skill-root；manifest、原请求/响应、退出及cleanup回执保留。此动作不归功于固定响应的Agent。
+
+
+## macOS原生MCP退出观察失败与回执保护（2026-09-23）
+
+51aafb31的CI35815649409中，macOS Native lifecycle在Verify native plugin MCP identity and rejected state mutation步骤失败；该job107036484536的原始log/artifact及29份执行源与精确Git匹配，保留在accord-ci-diagnosis-20260923-01。原生工具及缓存状态已有完成回执；退出为主进程exit0/readerStopped=true、forced=true、进程组unobservable，故不能证明自然释放。旧sample捕获OSError但未记录errno或消息，不能事后推断具体OS根因，也不改标通过。
+
+离线回归先复现OS异常信息丢失；修正保留当前/最近异常，同时继续保留未知计数，只有实际ProcessLookupError才标absent，确认消失后不再查询/发送信号给可能复用的ID。发现MCP调用者的finally中app.close异常会跳过fixture.close及result.json；新增有界收尾保证两者被尝试，已有资源回执入失败结果，自然释放判定在保存passed之前进行，正文失败不会被收尾异常替换。强制退出及未知后态仍失败。
+
+144项受影响Windows本地检查通过；复用已安装WSL/Ubuntu执行3项真实POSIX进程组测试通过，未安装依赖，未运行新原生宿主MCP/模型试验。WSL启动提示localhost代理不支持当前NAT模式，未改代理设置，三个本地测试均exit0。这些修正使后续故障可诊断并保护收尾，不证明macOS运行时根因已消除；保留正在执行的其余CI，不为局部修复抢先取消有效检查。

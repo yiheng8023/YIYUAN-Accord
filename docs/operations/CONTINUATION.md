@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-09-23 · N33-20260909 / r31。f0ec857b的CI35809832184已11/11成功，先前测试失败保持其历史记录。已settle目标的新controller恢复已有三平台原生结果及独立回读；已reconcile后的收尾连接通过93项本地检查及精确45507f46托管回归；当前用既有失ACK夹具补其必要原生组合；9月23日01原案因测试夹具作用域错误失败并保留；修复后的02原生收尾组合及可搬迁回读通过，固定4响应、零模型，独立原始RPC/SQLite/资源回读通过；新增收尾组合Linux/macOS artifact也已独立回读通过。资源/环境原案报告遗漏仍不准入，指导修正仍待必要行为核验。以实时Git、工具目录和当前receipt为准。
+更新：2026-09-23 · N33-20260909 / r31。f0ec857b的CI35809832184已11/11成功，先前测试失败保持其历史记录。已settle目标的新controller恢复已有三平台原生结果及独立回读；已reconcile后的收尾连接通过93项本地检查及精确45507f46托管回归；当前用既有失ACK夹具补其必要原生组合；9月23日01原案因测试夹具作用域错误失败并保留；修复后的02原生收尾组合及可搬迁回读通过，固定4响应、零模型，独立原始RPC/SQLite/资源回读通过；新增收尾组合Linux/macOS artifact也已独立回读通过。后续51aafb31的CI35815649409出现macOS原生MCP退出观察失败；该轮其余结果以实时CI为准。资源/环境原案报告遗漏仍不准入，指导修正仍待必要行为核验。以实时Git、工具目录和当前receipt为准。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)与product/development.json分别展开结果、判据及机器投影。
 
 ## 目标、共识和授权
@@ -45,6 +45,12 @@ CI节奏共识已按9月20日用户确认写入计划：本地小改/针对性�
 | 9月23日收尾组合 | CLI0.156.0/Node24.20.0；02实际2次thread/start、3次turn/start、4次本地固定响应、1次source unsubscribe，SQLite revision19/settled且writer为目标。keep、共享配置、可执行文件与执行源码保持；Job自然exit0/forced=false/readerStopped/activeProcesses0，home/state/temp已回收。原件及CI同形搬迁副本回读通过，缺配置观察、额外native-home文件、重复RPC回执三个反例拒绝；临时副本已清理。独立审查另核15个RPC的唯一成功响应、实际idle/terminal与SQLite，未仅复跑检查器。38项离线carrier及2项路由/共识定向检查通过。此为固定协议组合，不证明自主择时、普通模型行为、完整A05或GUI采用。 |
 
 ## 本批实现与下一实际动作
+
+CI故障处理（51aafb31）：macOS原生MCP主体返回completed、状态工具完成/无回执写入按预期拒绝、缓存替换前后MCP均connected；退出回执exit0/readerStopped=true，但forced=true且processGroupState=unobservable，整案保持失败。原始29份执行源已与该提交Git字节逐一对齐，原件和诊断在accord-ci-diagnosis-20260923-01。旧观察器吞掉具体OSError，无法据此确认权限、瞬时错误或进程残留的根因。
+
+本地已修两处观察/收尾缺陷：POSIX sample保留当前及最近OS错误；MCP测试即使app.close抛错仍尝试fixture.close并保存失败结果/可用资源回执，正文失败与收尾失败分别保留。未知或强制释放仍拒绝通过，超时与资源判据不变。144项受影响Windows回归及现有WSL/Linux上的3项真实进程组测试通过，静态开发校验通过；没有新原生宿主MCP或模型试验。修正不是macOS根因已解决的证明；先保留当前CI其余检查，结果收齐后推送本批并验证远端。
+
+
 
 原生机制核对：官方0.156.0固定源码fe74a774及其选择器测试确认显式加载不受allow_implicit_invocation=false排除，但enabled=false仍拒绝。私有accord-skill-invocation-native-20260923-01隔离两次固定响应：普通请求无控制Skill名称/描述/正文，显式Skill输入后正文送达；2固定响应/0真实模型，Skill、源码及共享配置hash保持，两个应用进程均自然exit0/forced=false/readerStopped/activeProcesses0。调用者预选不代验Agent语义选择或委托来源；当前Desktop/CLI任务是否具备同等调度路径仍未知，不能据此宣称Matt Skills已全面自动调用。独立源码/原件复核通过；调用者在审查结束后保全控制Skill副本与原始请求，再回收home/state/temp/workspace/skill-root五个自有目录，cleanup.json保留该人工观察器动作，不计Agent自主收尾。
 

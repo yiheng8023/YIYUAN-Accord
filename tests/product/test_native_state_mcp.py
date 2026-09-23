@@ -11,6 +11,7 @@ import threading
 import queue
 from datetime import datetime, timezone
 import unittest
+from unittest import mock
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -65,6 +66,93 @@ class NativeMcpEventTests(unittest.TestCase):
                 ({**denied, 'error': {'message': 'different host failure'}}, False)]:
             with self.subTest(call=call, preapproved=preapproved), self.assertRaises(RuntimeError):
                 native_manage_disposition(call, preapproved=preapproved)
+
+
+class NativeIntegrationFinalizeTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(prefix='accord-native-finalize-')
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.host = mock.Mock()
+        self.host.save.side_effect = lambda path, value: path.write_text(
+            json.dumps(value), encoding='utf-8')
+        self.fixture = mock.Mock()
+
+    def result(self):
+        return json.loads((self.root/'result.json').read_text(encoding='utf-8'))
+
+    def test_natural_close_preserves_the_successful_body_result(self):
+        record = {'exitCode': 0, 'forced': False,
+                  'after': {'processGroupState': 'absent'}}
+        app = mock.Mock()
+        app.close.return_value = record
+        self.host._released.return_value = True
+        _finalize_native_integration({'status': 'passed', 'providerRequests': 3},
+                                     app, self.fixture, self.root, self.host,
+                                     body_failed=False)
+        self.fixture.close.assert_called_once_with()
+        self.assertEqual(self.result(), {'status': 'passed', 'providerRequests': 3,
+                                         'resources': record})
+
+    def test_close_exception_still_closes_fixture_and_saves_resource_receipt(self):
+        record = {'exitCode': 0, 'forced': True,
+                  'after': {'processGroupState': 'unobservable'}}
+        app = mock.Mock(_close_record=record)
+        app.close.side_effect = RuntimeError('native app process release unobserved')
+        with self.assertRaisesRegex(RuntimeError, 'cleanup failed'):
+            _finalize_native_integration({'status': 'passed'}, app, self.fixture,
+                                         self.root, self.host, body_failed=False)
+        self.fixture.close.assert_called_once_with()
+        saved = self.result()
+        self.assertEqual(saved['status'], 'failed')
+        self.assertEqual(saved['resources'], record)
+        self.assertEqual([item['stage'] for item in saved['cleanupFailures']],
+                         ['app.close', 'resource.release'])
+
+    def test_forced_close_record_cannot_be_saved_as_passed(self):
+        app = mock.Mock()
+        app.close.return_value = {'exitCode': 0, 'forced': True, 'after': {'released': True}}
+        with self.assertRaisesRegex(RuntimeError, 'cleanup failed'):
+            _finalize_native_integration({'status': 'passed'}, app, self.fixture,
+                                         self.root, self.host, body_failed=False)
+        self.fixture.close.assert_called_once_with()
+        self.assertEqual(self.result()['status'], 'failed')
+        self.assertEqual(self.result()['cleanupFailures'][0]['stage'], 'resource.release')
+        self.host._released.assert_not_called()
+
+    def test_unobserved_release_cannot_be_saved_as_passed(self):
+        app = mock.Mock()
+        after = {'processGroupState': 'unobservable'}
+        app.close.return_value = {'exitCode': 0, 'forced': False, 'after': after}
+        self.host._released.return_value = False
+        with self.assertRaisesRegex(RuntimeError, 'cleanup failed'):
+            _finalize_native_integration({'status': 'passed'}, app, self.fixture,
+                                         self.root, self.host, body_failed=False)
+        self.host._released.assert_called_once_with(after)
+        self.assertEqual(self.result()['status'], 'failed')
+        self.assertEqual(self.result()['resources'], app.close.return_value)
+
+    def test_body_failure_survives_both_close_failures(self):
+        app = mock.Mock(_close_record={'exitCode': 0, 'forced': True,
+                                      'after': {'processGroupState': 'unobservable'}})
+        app.close.side_effect = RuntimeError('app close failed')
+        self.fixture.close.side_effect = OSError('fixture close failed')
+        result = {'status': 'pending'}
+        with self.assertRaisesRegex(ValueError, 'body failed'):
+            try:
+                raise ValueError('body failed')
+            except BaseException as error:
+                result.update(status='failed', failure=type(error).__name__, reason=str(error))
+                raise
+            finally:
+                _finalize_native_integration(result, app, self.fixture,
+                                             self.root, self.host, body_failed=True)
+        self.fixture.close.assert_called_once_with()
+        saved = self.result()
+        self.assertEqual((saved['failure'], saved['reason']), ('ValueError', 'body failed'))
+        self.assertEqual([item['stage'] for item in saved['cleanupFailures']],
+                         ['app.close', 'fixture.close', 'resource.release'])
+        self.assertEqual(saved['resources'], app._close_record)
 
 
 class NativeStateMcpTests(unittest.TestCase):
@@ -952,6 +1040,48 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(self.files(), before)
 
 
+def _finalize_native_integration(result, app, fixture, root, host, *, body_failed):
+    """Retain the body outcome and every available native release receipt."""
+    cleanup_failures = []
+
+    def failed(stage, error):
+        cleanup_failures.append({'stage': stage, 'failure': type(error).__name__,
+                                 'reason': str(error)})
+
+    if app is not None:
+        try:
+            result['resources'] = app.close()
+        except BaseException as error:
+            failed('app.close', error)
+            if getattr(app, '_close_record', None) is not None:
+                result['resources'] = app._close_record
+    try:
+        fixture.close()
+    except BaseException as error:
+        failed('fixture.close', error)
+
+    if app is not None:
+        record = result.get('resources')
+        try:
+            if (not isinstance(record, dict) or record.get('forced') is not False
+                    or not isinstance(record.get('after'), dict)
+                    or not host._released(record['after'])):
+                raise RuntimeError('native process domain was not naturally released')
+        except BaseException as error:
+            failed('resource.release', error)
+    if cleanup_failures:
+        result['status'] = 'failed'
+        result['cleanupFailures'] = cleanup_failures
+    try:
+        host.save(root/'result.json', result)
+    except BaseException:
+        if not body_failed:
+            raise
+    if cleanup_failures and not body_failed:
+        raise RuntimeError('native integration cleanup failed: ' +
+                           ', '.join(item['stage'] for item in cleanup_failures))
+
+
 def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
     """Native metadata and host denial or adapter rejection; fixed replies, no model."""
     sys.path.insert(0, str(ROOT))
@@ -1039,6 +1169,7 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
     fixture = host._Fixture(manifest, response)
     app = None
     result = {'realModelCalls': 0, 'status': 'pending'}
+    body_failed = False
     try:
         extra = ['-c','features.hooks=false','-c','features.code_mode_host=false']
         if preapprove_owned_manage_tool:
@@ -1115,14 +1246,12 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
             providerRequests=len(fixture.requests), sourceSettings=started,
             claimLimit='Native plugin MCP registration and declared host-approval boundary. A denied/rejected write request is neither business success nor a completed state change; no real model judgment, GUI adoption or handoff dispatch. Process-scoped fixture preapproval, when selected, is not a user permission or product default.')
     except BaseException as error:
+        body_failed = True
         result.update(status='failed', failure=type(error).__name__, reason=str(error))
         raise
     finally:
-        if app is not None: result['resources'] = app.close()
-        fixture.close()
-        host.save(root/'result.json',result)
-    if result['resources']['forced'] or not host._released(result['resources']['after']):
-        raise RuntimeError('native process domain was not naturally released')
+        _finalize_native_integration(result, app, fixture, root, host,
+                                     body_failed=body_failed)
     if any(sha(ROOT/name) != digest for name,digest in manifest['sources'].items()):
         raise RuntimeError('execution sources changed during the episode')
     shutil.copy2(original, root/'retained/keep.txt')

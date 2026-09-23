@@ -866,6 +866,7 @@ class PosixProcessGroup:
         if os.name != "posix":
             raise ValueError("POSIX process groups require POSIX")
         self.process, self.pgid, self.absent = None, None, False
+        self.last_observation_error = None
 
     def attach_and_resume(self, process):
         if self.process is not None or type(process.pid) is not int or process.pid <= 0:
@@ -885,18 +886,25 @@ class PosixProcessGroup:
     def sample(self):
         exit_code = self.process.poll() if self.process is not None else None
         state = "not-started" if self.pgid is None else "absent" if self.absent else "alive"
+        observation_error = None
         if self.pgid is not None and not self.absent:
             try:
                 os.killpg(self.pgid, 0)
             except ProcessLookupError:
                 self.absent, state = True, "absent"
-            except OSError:
+            except OSError as error:
                 state = "unobservable"
+                observation_error = {"operation": "killpg", "signal": 0,
+                                     "type": type(error).__name__, "errno": error.errno,
+                                     "message": str(error)[:1024], "observedAt": time.time()}
+                self.last_observation_error = observation_error
         return {"time": time.time(), "controller": "posix-session-process-group",
                 "activeProcesses": None, "cpuSeconds": None, "totalProcesses": None,
                 "processes": None, "processGroupId": self.pgid,
                 "processGroupState": state, "rootPid": self.process.pid if self.process else None,
                 "rootExitCode": exit_code,
+                "observationError": observation_error,
+                "lastObservationError": self.last_observation_error,
                 "evidenceScope": "direct child exit and same process group only; escaped descendants, CPU and memory unobserved"}
 
     def terminate(self):
