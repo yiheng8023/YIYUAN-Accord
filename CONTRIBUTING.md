@@ -73,6 +73,12 @@ python -B -X utf8 -m unittest discover -s tests/product -v
 CLI reports use UTF-8 on standard output, including redirected output. Decode
 captured report bytes as UTF-8; callers need not change their system locale.
 
+After changing a package, verify the committed candidate in a fresh checkout
+before pushing. Repository text uses LF through `.gitattributes`; a Windows
+editor or generator can leave CRLF in the working tree until Git normalizes it.
+Bind the package digest to the bytes that will actually be distributed, and keep
+local, committed and installed package identities distinct.
+
 These checks are maintainer tooling, not ordinary-user prerequisites. The
 current validator controls admission; test counts or green static checks do not
 prove normal-entry behavior, value, cross-host coverage or production readiness.
