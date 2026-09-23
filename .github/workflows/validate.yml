@@ -165,7 +165,7 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/carrier/native
             ${{ env.ACCORD_NATIVE_ROOT }}/carrier/retained
       - name: Install replacement host in job-owned storage
-        run: npm install --prefix "$ACCORD_NATIVE_ROOT/replacement-cli" --ignore-scripts --no-audit --no-fund --package-lock=false @openai/codex@0.155.1
+        run: npm install --prefix "$ACCORD_NATIVE_ROOT/replacement-cli" --ignore-scripts --no-audit --no-fund --package-lock=false @openai/codex@0.156.0
       - name: Freeze cross-version host upgrade inputs
         id: prepare_upgrade
         shell: python
@@ -207,6 +207,47 @@ jobs:
           subprocess.run([sys.executable, "-B", "tests/product/test_carrier_handoff.py",
               "--native-codex", manifest["hostReplacement"]["replacement"]["path"],
               "--evidence", str(root / "carrier-recovery"), "--scenario", "recover-receipt"], check=True)
+      - name: Finalize a reconciled native handoff without replay
+        id: carrier_finalization
+        if: always() && steps.prepare_upgrade.outcome == 'success'
+        shell: python
+        run: |
+          import json, os, pathlib, subprocess, sys
+          root = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]).resolve(strict=True)
+          manifest = json.loads((root / "host-upgrade/manifest.json").read_text(encoding="utf-8"))
+          subprocess.run([sys.executable, "-B", "tests/product/test_carrier_handoff.py",
+              "--native-codex", manifest["hostReplacement"]["replacement"]["path"],
+              "--evidence", str(root / "carrier-finalization"),
+              "--scenario", "finalize-receipt"], check=True)
+      - name: Independently inspect native finalization evidence
+        if: always() && steps.prepare_upgrade.outcome == 'success'
+        shell: python
+        run: |
+          import os, pathlib, subprocess, sys
+          evidence = pathlib.Path(os.environ["ACCORD_NATIVE_ROOT"]) / "carrier-finalization"
+          if not (evidence / "manifest.json").is_file():
+              raise RuntimeError("Native finalization manifest is unavailable")
+          result = subprocess.run([sys.executable, "-B", "tests/product/test_carrier_handoff.py",
+              "--inspect-evidence", str(evidence)], capture_output=True)
+          (evidence / "inspection.json").write_bytes(result.stdout)
+          (evidence / "inspection.stderr.txt").write_bytes(result.stderr)
+          sys.stdout.buffer.write(result.stdout)
+          sys.stderr.buffer.write(result.stderr)
+          sys.exit(result.returncode)
+      - name: Retain native finalization evidence
+        if: always() && steps.storage.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-carrier-finalization-${{ matrix.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          include-hidden-files: true
+          path: |
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier-finalization/*.json
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier-finalization/inspection.stderr.txt
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier-finalization/native
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier-finalization/retained
+            ${{ env.ACCORD_NATIVE_ROOT }}/carrier-finalization/workspace
       - name: Exercise two SDK handoffs on the existing native host
         id: sdk_session
         if: always() && steps.prepare_upgrade.outcome == 'success'

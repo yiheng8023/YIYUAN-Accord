@@ -33,8 +33,8 @@ async function runOwnedConnection(config) {
     if (rawBytes>8*1024*1024) throw new Error('native fixture output exceeded bound');
     fs.writeSync(stdout,chunk);
   };
-  let result=null,error=null,context=null,exitCode=null,closeState=null;
-  let lastRpcRequest=null,fault=null,recovery=null,reconciliation=null;
+  let result=null,error=null,context=null,exitCode=null,closeState=null,recorderCloseError=null;
+  let lastRpcRequest=null,fault=null,recovery=null,reconciliation=null,finalization=null,durableRecorder=null,plan=null;
   const deadline=performance.now()+45000;
   const contextReplies=[];
   const captureMessage=event=>capture(Buffer.from(String(event.data)+'\n','utf8'));
@@ -74,8 +74,16 @@ async function runOwnedConnection(config) {
       dynamicTools:[HANDOFF_PROPOSAL_TOOL,...(config.contextRead?[CONTEXT_OBSERVATION_TOOL]:[])]},deadline);
     const turn=await t.request('turn/start',{threadId:source.thread.id,
       input:[{type:'text',text:'Submit one handoff proposal for the bound fixed task, then finish without other actions.'}]},deadline);
-    const plan={...config.plan,source:{threadId:source.thread.id,turnId:turn.turn.id}};
+    plan={...config.plan,source:{threadId:source.thread.id,turnId:turn.turn.id}};
     await remote('sourceReady',[source,turn]);
+    if(config.finalizeReceipt){
+      const {openCarrierRecorder}=require('../../runtime/carrier-recorder.cjs');
+      durableRecorder=openCarrierRecorder({path:config.recorderPath,create:true,busyTimeoutMs:5000});
+      const bound=durableRecorder.bindScope(plan.scopeRef,source.thread.id);
+      if(bound?.scope?.writerThreadId!==source.thread.id||bound.scope.activeTransferId!==null){
+        throw new Error('durable source scope binding differs');
+      }
+    }
     let proposal;
     for (;;) {
       const received=await connection.receiveRequest(value=>value.method==='item/tool/call' &&
@@ -103,8 +111,10 @@ async function runOwnedConnection(config) {
       }
       return value;
     }}:t;
+    const handoffRecorder=durableRecorder||{
+      begin:(...args)=>remote('begin',args),compareAndSet:(...args)=>remote('compareAndSet',args)};
     result=await runHandoffProposal(plan,{transport,
-      recorder:{begin:(...args)=>remote('begin',args),compareAndSet:(...args)=>remote('compareAndSet',args)},
+      recorder:handoffRecorder,
       verify:(stage,facts,limit)=>remote('verify',[stage,facts,Math.max(0,limit-performance.now())])},proposal,channel);
   } catch (e) {
     error={name:e.name,message:e.message,code:e.code,state:e.state,details:e.details};
@@ -121,15 +131,31 @@ async function runOwnedConnection(config) {
           deadlineMs:Date.now()+remaining,
           receipt:{requestRef:fault.requestRef,request:fault.request,
             response:{id:fault.request.id,result:fault.response}}};
-        const dependencies={transport:t,recorder:{read:(...args)=>remote('readRecord',args.slice(0,2)),
+        const dependencies={transport:t,recorder:durableRecorder||{read:(...args)=>remote('readRecord',args.slice(0,2)),
           compareAndSet:(...args)=>remote('compareAndSet',args.slice(0,4))},
           verify:(stage,facts,limit)=>remote('verify',[stage,facts,Math.max(0,limit-performance.now())])};
         reconciliation={first:await reconcileContinuation(input,dependencies)};
         reconciliation.repeated=await reconcileContinuation(input,dependencies);
+        if(config.finalizeReceipt){
+          const basis=durableRecorder.read(plan.transferId,plan.scopeRef);
+          const finalized=await finalizeReconciledHandoff({transferId:plan.transferId,
+            scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+            deadlineMs:Date.now()+Math.floor(deadline-performance.now()),
+            expectedRevision:basis.revision,expectedLease:basis.lease,
+            receiptDigest:basis.state.reconciliation.receiptDigest,releaseKind:'native-unsubscribe'},
+            {transport:t,recorder:durableRecorder,
+              verify:(stage,facts,limit)=>remote('verify',[stage,facts,Math.max(0,limit-performance.now())])});
+          const settled=durableRecorder.settle(finalized.settle.transferId,
+            finalized.settle.revision,finalized.settle.lease);
+          finalization={finalized,settled,
+            record:durableRecorder.read(plan.transferId,plan.scopeRef),
+            scope:durableRecorder.readScope(plan.scopeRef)};
+        }
       }catch(e){recovery={...(recovery||{}),error:e.message,errorCode:e.code};}
     }
   } finally {
     closeState=connection?.close();
+    try{durableRecorder?.close();}catch(e){recorderCloseError={name:e.name,message:e.message};}
     let timer;
     try {
       if(socket){
@@ -142,7 +168,7 @@ async function runOwnedConnection(config) {
       if(ended)await Promise.race([ended,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('owned transport exit timed out')),10000)})]);
     } finally {clearTimeout(timer);native?.stdout.off('data',capture);fs.closeSync(stderr);fs.closeSync(stdout);fs.closeSync(requests);}
   }
-  process.stdout.write(JSON.stringify({kind:'done',result,error,recovery,reconciliation,context,contextReplies,exitCode,socketCloseCode,
+  process.stdout.write(JSON.stringify({kind:'done',result,error,recovery,reconciliation,finalization,context,contextReplies,exitCode,socketCloseCode,recorderCloseError,
     transportKind:socket?'websocket':'stdio',closeState,rawBytes})+'\n');
   rl.close();process.stdin.destroy();
 }

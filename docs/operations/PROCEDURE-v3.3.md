@@ -2107,3 +2107,14 @@ accord-installed-cadence-20260920-01在执行前冻结31份源和原五条输入
 收尾时当前Desktop任务已出现MCP新参数，但实际includeContext返回unknown/MODULE_NOT_FOUND，status仍有效，原件在07。源码observeStoredContext直到首次查询才require codex-context；可在加载MCP后退休其目录、再首次读context的测试准确复现（初版测试先修正value封装取值错误，再出现与实测一致的MODULE_NOT_FOUND）。修复在运行时启动捕获可选reader或其加载错误，转录数据仍按需读；同例现在返回4000/12000模拟计数且state字节不变，缺可选reader仍不破坏普通status。独立窄审查无阻断，31项定向及254项checkpoint/MCP/context/开发回归通过（268.029秒），不重复真实业务模型运行。
 
 当前旧worker未被原地换码或强杀；独立helper配合fresh MCP身份已实际读到本任务原生计数，作为现有支持路径保留，不能改写原MCP失败。修复候选22文件、3.3.0-dev.1+codex.20260920055234，SHA f8af71ca16efdb18279023db1c55958fd0f347784ea33b73790355efbef6e74f，尚未二次更新共享93b5安装。既有828cb848 CI已11/11通过；新修复需自身CI。后续将有效真实结果接回既有准入并验证真实择时/恢复，不继续以接口数量替代交付。
+
+
+## 配额中断后的收尾组合验证（2026-09-23）
+
+恢复时main=cecdcc47、origin/main=45507f46，保留五项未提交修改。CLI已由用户更新至0.156.0，Node24.20.0；本轮均为隔离、只读、固定本地响应，零真实模型。此前0.155.1结果保持原身份，CI替换宿主改为0.156.0以验证当前组合。
+
+accord-finalize-receipt-native-20260923-01的真实原案完成续作回执找回及reconcile，但Node夹具catch路径引用try内plan，未进入finalize，原案失败保留。资源回执为exit0/forced=false/readerStopped/activeProcesses0，poststate和完整运行根作为诊断证据保留。修复仅提升plan的词法作用域；没有修改产品runtime或在旧根重放。
+
+新02执行一次，实际2次thread/start、3次turn/start、4固定响应、一次source thread/unsubscribe，reconcile重复查询不重复执行；SQLite最终revision19、settled、writer为目标且无pendingEffect。保护原件、共享config、宿主可执行文件和执行源码hash保持，Job自然退出、余进程0，home/state/temp回收，workspace与原生证据保留。这只证明受控callback失ACK后的原生协议收尾，不证明自动择时、网络/进程崩溃、模型判断或完整A05。
+
+首次离线回读暴露检查器缺ROOT导入，以及把owned config.toml当必需文件的错误前提；实际设置由冻结argv提供。修正检查器并验证native-home完整清单/hash，未重跑宿主、未改原执行源。原件和仅包含CI上传范围的搬迁副本均通过；缺owned配置观察、增加未记录native-home文件、重复RPC回执三个反例均被拒，临时副本已清理。独立回读和最终托管状态按当前接续页记录。
