@@ -35,14 +35,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20260923034028",
+    "version": "3.3.0-dev.1+codex.20260923074845",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20260923034028",
-        "packageSha256": "7fd0788774663bd017285ed6322ad6663351a47f02b8e359dccc6da89971234d",
+        "packageVersion": "3.3.0-dev.1+codex.20260923074845",
+        "packageSha256": "138f65ae2a1d4bf12d4448040e9af0624835b9ada492976d4112138447c81f01",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",

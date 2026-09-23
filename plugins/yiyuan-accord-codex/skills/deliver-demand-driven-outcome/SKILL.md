@@ -43,13 +43,14 @@ and one writer per target before recovery or takeover; missing receipts do not
 justify replay. Preserve real pauses. Complete work without Plan or Goal mode;
 enable either only on explicit user selection or request.
 
-Verify consequential claims in saved artifacts and replies against current sources.
-Later verification, recovery or cleanup can change the account; reconcile affected
-artifacts themselves before delivery. Protect all original material covered by the
-task, release only attributable resources and check post-state. Continue safe
-authorized unfinished work or identify the
-actual boundary. Completion, release and proven value are distinct; handoff does
-not authorize archiving.
+Support consequential verdicts with source observations and meaningful checks;
+self-written success flags or agreement between outputs are not corroboration.
+Keep the evidence's subject, time and scope attached to the verdict. Reconcile
+affected artifacts when verification, recovery or cleanup changes the account.
+Protect the task's original material, release only attributable resources and
+check post-state. Continue safe authorized work or identify the actual boundary.
+Completion, release and proven value are distinct; handoff does not authorize
+archiving.
 
 ## Reach the relevant specialist before dependent action
 
@@ -64,8 +65,8 @@ native Hook events. This list specifies responsibilities, not invocation order.
 - Large reads or long work; context/host/model changes; modes, checkpoints,
   interruption, recovery or handoff:
   [Maintain continuity](../maintain-task-continuity/SKILL.md).
-- Changed requirements or shared dependencies, partial failure, consequential
-  verification gaps, reusable checks, claimed benefits or uncertain cleanup:
+- Reviewing or reconciling results; changed dependencies, partial failure,
+  consequential verification gaps, reusable checks, claimed benefits or uncertain cleanup:
   [Verify and close](../verify-and-close-outcome/SKILL.md).
 - Plugin installation, update, reload, rollback, removal or host upgrade:
   [Manage plugin lifecycle](../manage-plugin-lifecycle/SKILL.md).

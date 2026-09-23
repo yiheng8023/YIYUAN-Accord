@@ -1,6 +1,6 @@
 ---
 name: verify-and-close-outcome
-description: Correct affected results after changes or failures, verify consequential claims and reusable checks, and close owned resources. Use for material verification, dependency impact or cleanup gaps; preserve domain-specific validation.
+description: Review or reconcile results against source evidence, correct affected work after changes or failures, and close owned resources. Use for result audits, consequential checks, dependency impact or cleanup gaps; preserve domain-specific validation.
 ---
 
 # Verify and close the outcome
@@ -18,8 +18,10 @@ results and conclusions this task relies on. Include user, host and other-compon
 changes; ownership of Accord is not the boundary of impact. New findings grant no
 rights over unrelated tasks or their historical debt.
 
-Preserve original observations and their conditions. Qualify or withdraw invalid
-conclusions, repair affected work within authority, reconcile plans and progress,
+Preserve original observations and their conditions. A limited current view does
+not by itself contradict an earlier result; identify changed evidence or conditions
+before invalidating that result. Qualify unsupported claims at their actual scope,
+repair affected work within authority, reconcile plans and progress,
 and verify the results and dependencies that must remain valid. A future plan or
 change list does not complete correction. Carry consequential unknowns in native
 task state or an existing checkpoint's `unresolved` list; file matches cannot close
