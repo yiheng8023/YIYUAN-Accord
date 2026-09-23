@@ -2208,3 +2208,14 @@ fresh原生hooks/list与skills/list显示5启用Skill及6启用trusted Hook均�
 按云任务实际发现的CLI标签读取同名官方源码rust-v0.144.0-alpha.4，解析annotated tag到049586f41571e74b44c841868bca3a2233214a71，并核对所用14份blob；该绑定不证明云控制者实际使用这份代码。独立审查核对CLI参数及目标配置写入；父任务补核本地SOURCE必须为目录、规范化路径及不能附Git ref的限制。Hook状态仅来自用户/会话层，插件/项目配置不能自授信任；上游hooks_list测试给出读取currentHash、config/batchWrite trusted_hash及回读的链条。没有运行新的CLI、模型或云安装试验。
 
 官方云环境说明setup先于agent、shell export不自动延续、缓存及maintenance另有生命周期。因此先准备当前任务容器内的一次可回滚接入验证，不直接更改持久环境设置；原云任务实际采用与独立App Server发现必须分别证明。方案及固定来源保留accord-cloud-route-20260923-01。用户先前授权明确为只读，注册/启用/Hook信任属于新增效果，方案待单独确认；不使用信任绕过开关、不修改AGENTS.md、不新建其它模型任务，也不因未安装就排除云端入口。基线r31、必要验收范围和通过计数不变。
+
+
+## 云端四项事件发现、门槛停止与回滚（2026-09-23）
+
+用户明确回复“确认”后，在同一云任务追加一次受限接入指令；未新建云任务、未修改永久环境。平台本轮检出d625d1d4，包仍是74845/750f9ef8，注册与启用成功，24份安装文件的定位和字节核对相同。当前原生hooks/list跨视图有重复行，按key去重仅四项：两个SessionStart、UserPromptSubmit、Stop，均enabled但untrusted，缺少SessionEnd/Interrupt。本次预绑门槛要求完整六项后才写精确信任，执行者据此停止并自行撤回注册/安装，未进行原云任务采用检查。该门槛保护本次授权，却不能上升为所有宿主的一般数量要求；产品职责与充分替代机制仍需逐项判断，原结果不追认通过。
+
+父任务读取工作日志中的实际原生移除回执：plugin_remove_rc=0、marketplace_remove_rc=0，installed/marketplaces两列表为空，原有make_pr保留。配置比较config_cmp_rc=0，前后SHA256均fee056706e3e29d09240fd55a18ff27c4270fd5bd44c92957c3895cd6d5d6acf；仓库保持干净。所属检查AppServer PID4888自然exit0/forced=false，后续PID检查不存在；此前宿主AppServer不是本次资源，未停止。此为所属PID退出证据，不外推全容器子树均已审计。空的本次缓存残留已核对后清理。
+
+随后仅要求核对已保存请求/退出回执，没有重做安装、授信、发现或启动模型任务。native-discovery-private.json仅保存pid/initialize/hooks/config结果，没有原始RPC请求流水；客户端源码表示预定调用，不能替代实际方法/次数记录。因此执行者报告未调用config/batchWrite/thread/start/turn/start，但精确次数不能独立核证，保持未知；已取得的发现、退出和回滚回执各保留其支持范围，不一并作废，也不补造缺失流水。原退出记录和公开发现输出分别有SHA256回读。
+
+私有恢复根为/opt/codex/backups/yiyuan-accord-cloud-pilot-20260923T124850Z、权限0700；原配置副本不输出。保留原始安装/发现/退出/回滚材料和当前用于版本差异分析的schema/客户端诊断，未归档或删除云任务。父任务将有限证据及限制存于accord-cloud-route-20260923-01/cloud-pilot-result.json；当前安装配置已恢复，本次授权的试验已收尾。后续先按中断、恢复与退休职责审查兼容路线，不重复固定协议或把忽略两个事件当作功能等价。
