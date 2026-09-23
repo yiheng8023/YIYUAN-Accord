@@ -261,6 +261,20 @@ exit can retire only the matching unbound receipt using its current epoch,
 revision zero and a reason. This operation cannot retire a bound checkpoint or
 establish task completion. Without a callback or surviving caller, automatic
 retirement is not established; the helper does not supply its own scheduler.
+Event availability is not a universal Hook-count requirement. The source at
+Codex `rust-v0.144.0-alpha.4` lacks Interrupt and SessionEnd Hook events, but its
+[native cancellation path](https://github.com/openai/codex/blob/049586f41571e74b44c841868bca3a2233214a71/codex-rs/core/src/tasks/mod.rs#L829)
+cancels and aborts the running task and emits TurnAborted; its
+[turn loop](https://github.com/openai/codex/blob/049586f41571e74b44c841868bca3a2233214a71/codex-rs/core/src/session/turn.rs#L372)
+does not route cancellation errors through normal Stop continuation. A retained
+checkpoint cannot start execution. Without Interrupt, that receipt remains
+historical until the next native input or resume invalidates its old binding;
+inspect prior effects and writers before dependent work. Native cancellation
+does not undo external effects, and session-shutdown resource cleanup must not be
+assumed for every mid-turn cancellation. Without SessionEnd, use the existing
+authorized surviving-caller retirement route; absence of that caller leaves
+cleanup unverified. These source-level alternatives do not identify a running
+cloud controller or prove its plugin adoption, cancellation behavior or admission.
 The default durable directory is `~/.yiyuan-accord/task-state`; an explicit scoped
 directory can override it. Exact-session legacy temporary data stays in place;
 conflicting locations are not merged. An empty state directory is not an installed

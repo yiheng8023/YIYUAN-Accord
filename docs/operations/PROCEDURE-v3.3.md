@@ -2219,3 +2219,11 @@ fresh原生hooks/list与skills/list显示5启用Skill及6启用trusted Hook均�
 随后仅要求核对已保存请求/退出回执，没有重做安装、授信、发现或启动模型任务。native-discovery-private.json仅保存pid/initialize/hooks/config结果，没有原始RPC请求流水；客户端源码表示预定调用，不能替代实际方法/次数记录。因此执行者报告未调用config/batchWrite/thread/start/turn/start，但精确次数不能独立核证，保持未知；已取得的发现、退出和回滚回执各保留其支持范围，不一并作废，也不补造缺失流水。原退出记录和公开发现输出分别有SHA256回读。
 
 私有恢复根为/opt/codex/backups/yiyuan-accord-cloud-pilot-20260923T124850Z、权限0700；原配置副本不输出。保留原始安装/发现/退出/回滚材料和当前用于版本差异分析的schema/客户端诊断，未归档或删除云任务。父任务将有限证据及限制存于accord-cloud-route-20260923-01/cloud-pilot-result.json；当前安装配置已恢复，本次授权的试验已收尾。后续先按中断、恢复与退休职责审查兼容路线，不重复固定协议或把忽略两个事件当作功能等价。
+
+## 缺失事件职责与原生取消路径复核（2026-09-23）
+
+复用原云端证据，补读并核验官方rust-v0.144.0-alpha.4对应049586f4的Git blob，未再次调用云任务。protocol事件枚举没有Interrupt/SessionEnd；tasks/mod.rs取消token、最多等待100ms后abort当前任务、记录并刷新TurnAborted，正常完成分支在取消后跳过；session/turn.rs遇取消直接返回，不走正常Stop。旧Accord canContinue记录自身不启动任务。独立审查最初提出的取消后Stop继续执行是假设，读取该源码后修正，不能当作已观察缺陷继续扩实现。
+
+当前Accord的下一原生输入/resume使旧绑定失效，迟到Stop与状态写入按turn/epoch约束；已有retire可供核实完成/取消及写者后的存活调用方回收所属状态。没有SessionEnd且没有调用方时仍不能承诺自动回收。取消不撤销外部效果，session shutdown中的进程/MCP清理不代指每次中途取消；可用CLI版本也不冒认原云控制者。
+
+7项既有定向helper检查9.387秒通过，范围为旧轮次Stop、新输入/恢复、错误turn写入拒绝、有存活调用方退休和未完状态保护；没有新增模型调用、云安装或信任。判断是复用已有职责承担者，暂无新增运行时的实证理由。原六项试验及回滚证据不改标；下一四项真实事件授信、原任务下一输入采用、回滚方案已准备但未执行。完整来源/审查在私有accord-cloud-route-20260923-01/missing-event-duty-review.md；架构、计划、接续和机器观察已对齐，基线/验收按结果定义，无需改变r31或17项必要范围。
