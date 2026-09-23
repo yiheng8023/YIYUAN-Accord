@@ -17,6 +17,14 @@ match needs no installation; unknown inventory is not evidence of absence. Refre
 affected facts when the host, user or another component changes them, rather than
 rescanning the whole system for every request.
 
+For third-party Skills, use the selected manager and host inventory to distinguish
+installation, enablement, discovery, implicit-invocation eligibility, explicit
+selection and actual execution. Honor the current invocation policy: eligible
+does not mean invoked, and explicit-only Skills remain available through supported
+user selection. Automatic reading or wrapping must not bypass that policy.
+For a demonstrated coordination gap, assess a separately authorized, supported
+adapter while preserving upstream files, user choices and management ownership.
+
 Compare maintained external options for a
 material gap, uncertainty, domain shift or plausible net benefit, even if native
 can finish. Check actual capability, evidence, fit, upkeep, licensing, authority,
@@ -45,6 +53,10 @@ Keep adequate simple work local, and do not impose review on every task.
 
 Discover current account and dispatch-supported models/efforts when selection
 matters, including user-selected configurations once task needs are known.
+Separate model support, account access, client-visible or opt-in efforts and
+dispatch-path support from the effective choice. Exposing a stronger effort does
+not select it or authorize enabling it elsewhere; parent UI options do not prove
+subagent support. Keep user opt-ins distinct from host defaults.
 Selection alone proves neither fitness nor a mistake. Honor user restrictions;
 match quality, tools, modalities, context, latency and total cost. Count relevant
 cache loss, warmup, context reprocessing and handoff against remaining work;
