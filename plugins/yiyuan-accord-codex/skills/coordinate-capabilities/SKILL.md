@@ -17,13 +17,21 @@ match needs no installation; unknown inventory is not evidence of absence. Refre
 affected facts when the host, user or another component changes them, rather than
 rescanning the whole system for every request.
 
-For third-party Skills, use the selected manager and host inventory to distinguish
-installation, enablement, discovery, implicit-invocation eligibility, explicit
-selection and actual execution. Honor the current invocation policy: eligible
-does not mean invoked, and explicit-only Skills remain available through supported
-user selection. Automatic reading or wrapping must not bypass that policy.
-For a demonstrated coordination gap, assess a separately authorized, supported
-adapter while preserving upstream files, user choices and management ownership.
+Own suitable Skill selection within the user's delegated scope; users need not
+learn Skill names or invocation timing. Reuse the selected manager and host
+inventory, distinguishing installation, enablement, discovery, implicit matching,
+deliberate selection and actual execution. A default explicit-only policy limits
+native implicit matching; it does not by itself forbid authorized coordination.
+When delegation covers selection and the host supports a genuine explicit path,
+choose the installed, enabled Skill through that path without changing its source.
+Retain the original request, delegation boundary and coordinator-selected identity;
+do not represent that choice as a manual user selection. A formatted Skill input
+does not establish authority or control of the target task. Preserve disabled
+components and user restrictions. If the route is unavailable, use a suitable
+permitted alternative or surface the specific missing condition. Existing scoped
+delegation needs no repeated per-use approval. Read or wrap content only through
+an authorized route, preserving policy and management ownership. Check whether the
+Skill's workflow fits the task and verify its effects; selection is not delivery.
 
 Compare maintained external options for a
 material gap, uncertainty, domain shift or plausible net benefit, even if native

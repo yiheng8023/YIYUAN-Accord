@@ -2118,3 +2118,14 @@ accord-finalize-receipt-native-20260923-01的真实原案完成续作回执找�
 新02执行一次，实际2次thread/start、3次turn/start、4固定响应、一次source thread/unsubscribe，reconcile重复查询不重复执行；SQLite最终revision19、settled、writer为目标且无pendingEffect。保护原件、共享config、宿主可执行文件和执行源码hash保持，Job自然退出、余进程0，home/state/temp回收，workspace与原生证据保留。这只证明受控callback失ACK后的原生协议收尾，不证明自动择时、网络/进程崩溃、模型判断或完整A05。
 
 首次离线回读暴露检查器缺ROOT导入，以及把owned config.toml当必需文件的错误前提；实际设置由冻结argv提供。修正检查器并验证native-home完整清单/hash，未重跑宿主、未改原执行源。原件和仅包含CI上传范围的搬迁副本均通过；缺owned配置观察、增加未记录native-home文件、重复RPC回执三个反例均被拒，临时副本已清理。独立回读和最终托管状态按当前接续页记录。
+
+
+## 第三方Skill显式加载与委托边界（2026-09-23）
+
+用户确认普通需求下的能力选择负担应由获准协调者承担。官方App Server文档及0.156.0固定源码fe74a774532af67b5a4a3dec03ce9469e17f89af分别核对原生隐式元数据与显式选择、停用选择器和配置字段；显式路径允许已启用且implicit=false的原Skill，disabled路径由上游已有测试覆盖，无需重复原生试验。初始按旧目录抓取的三个404保留，随后使用完整Git tree定位现路径并核对blob SHA。
+
+一次预先绑定的隔离机制观察复用现有App Server、固定响应、进程控制和凭据隔离。自有测试Skill的原生策略为allow_implicit_invocation=false；普通请求不含其名字、描述或正文，显式text+skill输入载入完整正文，原Skill未改。两个独立ephemeral任务均completed，2固定本地响应/0真实模型/未观察凭据，共享配置和5份调用源码hash保持；两个执行域及版本探针自然exit0/forced=false/余进程0，reader停止。原件在accord-skill-invocation-native-20260923-01，源码审查在accord-skill-coordination-review-20260923-01。
+
+这只证明原生加载的机制，不证明语义选择质量、委托来源认证或普通Desktop/CLI对当前轮次的控制能力。协调者必须有真实选择委托、适用入口与目标控制权，并保留原需求及自身选择来源；不能用格式化用户输入制造授权。r31据此校准计划、基线、验收、机器投影、源Skill及接续；明确源码默认策略并非永久限制，也不把已有调用限制静默改成全局自动化。第三方原件、CC Switch设置与共享安装均未更改。
+
+独立审查核对同一声明策略、两次native listing、请求正文及单一Skill注入片段，限定上述加载结论。审查结束后调用者复制并核对控制Skill至retained/control-skill，回收home/state/temp/workspace/skill-root；manifest、原请求/响应、退出及cleanup回执保留。此动作不归功于固定响应的Agent。
