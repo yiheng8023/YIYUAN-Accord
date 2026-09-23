@@ -94,7 +94,7 @@ accord-sdk-restore-20260921-01由root独占执行一次：旧01只读复制ledge
 
 本批原生SDK组合已执行一次：新增两个fixture复用既有_Fixture/_App/OS控制，13份执行源事前冻结；11份原有实现逐字节匹配e22fba76，2份新观察器按原执行字节保全。CLI0.155.1/Node24.20.0实际完成3任务、6个completed turn、2次transfer及2次adopt；29个RPC各有唯一成功回执，2次退订仅指向前两任务，两record均revision19/settled1且最终writer为第三任务。10次localhost固定响应、零真实模型；Job自然exit0/进程0、reader与fixture均停止，源码/keep/可执行文件/共享config前后hash保持。独立raw/SQLite/rollout回读通过；可搬迁artifact通过，重复响应/错误terminal/重复工具reply/错误writer四个副本反例被拒。原始context实际unknown，6个虚拟模型metadata fallback警告和3个分页全历史展开弃用提示保留；不作动态压力择时、语义/性能或GUI通过结论。
 
-待用户明确授权的下一动作：现有云端主页已只读核实yiheng8023/YIYUAN-Accord环境及main均已选中，拟新建一个只读任务核对实际运行时/插件/Skill/Hook/MCP条件，不安装、不改设置、不写仓库、不创建其它任务。完整请求及来源核对在accord-entry-route-review-20260923-01/cloud-task-brief.md，尚未发送。官方Plugins页与changelog对IDE插件支持仍互相冲突，保留既有实例证据；不能据文档或目录推定云端实际采用。此项用真实执行环境缩小入口适用性未知，不重复已有协议或报告试验；既有17项范围和准入状态不变。当前新版原生输入已自动捕获，count=2、两恢复标记false，本轮无需再次replay。
+云端只读核对已按用户明确同意单次完成（约3分2秒），任务为“检查 YIYUAN Accord 开发包接入条件”。实际检出8e6015fd、平台work分支、/workspace/YIYUAN-Accord；原生命令回执确认可用CLI为0.144.0-alpha.4、plugin list为空、MCP仅make_pr、无Accord Skill，Git结束时干净。Node24.15.0/SQLite/WebSocket是云端报告值，保持证据来源层级；CLI文件版本不当作当前控制者版本。现有包在该云任务未装载，不代表云端不可适配；下一准备与该版本相容的原生注册、信任及加载/恢复方案，涉及安装/启用/信任或设置变更时另需具体授权。本次授权没有覆盖这些动作，也不允许重建或重复发送已结束任务。原件与结果在accord-entry-route-review-20260923-01，正式准入与17项范围保持不变。
 
 下一按依赖推进：
 
