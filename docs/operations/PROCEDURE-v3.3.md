@@ -2201,3 +2201,10 @@ fresh原生hooks/list与skills/list显示5启用Skill及6启用trusted Hook均�
 父任务读取任务报告和工作日志。可见原始回执显示实际HEAD为8e6015fd、cwd=/workspace/YIYUAN-Accord、执行分支work、Git最终干净；/opt/codex/bin/codex --version为0.144.0-alpha.4，plugin list返回No marketplace plugins found，MCP列表仅启用make_pr，公开Skill路径只有5个宿主系统Skill。上游未配置及直接codex命令不在PATH的错误保留，后者通过已经存在的绝对路径只读发现；没有改PATH。云端报告Ubuntu24.04.4、Node24.15.0及SQLite/WebSocket可用，但本次取得的界面日志未分别展示所有正向运行时回执，保留报告来源，不上升为独立复验。可用CLI文件版本不证明运行当前任务的控制者版本。
 
 这是既有执行环境的前置调查：仓库带有并读取项目AGENTS.md，Accord插件未实际装载，不能计普通安装态参与或自动交接准入，也不能把未安装当宿主不可适配。当前只读授权已经执行完成，下一在现有原生插件管理器及实际云端版本上准备具体接入/信任/持久化路径；新的安装、信任或环境设置变更不从调查授权推导。原请求、一次提交回执、界面命令摘录及结论限制保留accord-entry-route-review-20260923-01；不归档或删除云任务。
+
+
+## 云端临时接入方案的来源核对（2026-09-23）
+
+按云任务实际发现的CLI标签读取同名官方源码rust-v0.144.0-alpha.4，解析annotated tag到049586f41571e74b44c841868bca3a2233214a71，并核对所用14份blob；该绑定不证明云控制者实际使用这份代码。独立审查核对CLI参数及目标配置写入；父任务补核本地SOURCE必须为目录、规范化路径及不能附Git ref的限制。Hook状态仅来自用户/会话层，插件/项目配置不能自授信任；上游hooks_list测试给出读取currentHash、config/batchWrite trusted_hash及回读的链条。没有运行新的CLI、模型或云安装试验。
+
+官方云环境说明setup先于agent、shell export不自动延续、缓存及maintenance另有生命周期。因此先准备当前任务容器内的一次可回滚接入验证，不直接更改持久环境设置；原云任务实际采用与独立App Server发现必须分别证明。方案及固定来源保留accord-cloud-route-20260923-01。用户先前授权明确为只读，注册/启用/Hook信任属于新增效果，方案待单独确认；不使用信任绕过开关、不修改AGENTS.md、不新建其它模型任务，也不因未安装就排除云端入口。基线r31、必要验收范围和通过计数不变。
