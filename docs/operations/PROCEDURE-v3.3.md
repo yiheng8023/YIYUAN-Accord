@@ -2183,3 +2183,12 @@ accord-report-reconcile-20260923-01前瞻绑定旧资源案只读副本的派生
 05cd9359的CI35834166597整体失败：2项原生生命周期通过，9项Python验证全部在产品契约检查返回同一个package digest错误，后续测试没有运行。逐项读取失败日志；独立干净worktree在同一提交复现相同错误。差异仅为plugin.json：版本更新工具在Windows工作区写入37处CRLF，本地摘要据此计算；Git按现有.gitattributes提交为LF，实际包摘要为750f9ef8a76e03224d7d2fae1ef2de4335c0c81c914eb960c34c8c717d5fdae9。本地自洽通过掩盖了提交字节差异，不能归因于九个平台或产品行为分别失败。
 
 保留错误工作区清单及失败日志，将本地清单恢复为其已提交的等义LF字节，校正机器投影和接续中的摘要。已提交的24份包文件、74845版本及运行时不变，不需要为摘要声明修正另造安装版本。CONTRIBUTING补充提交后新检出核验，保持真实分发字节身份，不归一化校验结果或放宽摘要匹配。原件位于accord-ci-diagnosis-20260923-03；修复提交经全新检出验证后推送，远端新结果独立记录。
+
+
+## 当前输入恢复与网络更新失败后的本地取数（2026-09-23）
+
+68f44925的CI35836060018已11/11成功，main/remote一致。根任务resume后MCP状态仍为unbound、捕获输入不可用及两个恢复标记true。只读定位该根任务当前rollout，确认最近原生turn_context与MCP的thread/turn/model/cwd一致，本轮原始用户内容为441字符且包含真实“继续”。备份限定旧状态后，使用现有恢复epoch沿helper支持的显式retained-native-replay路径恢复；原生read_task_input回读文本/hash、原recoveryEpoch一致，needsNativeReplay/needsResumeReconciliation=false。上下文来源恢复后可读取响应边界计数；默认30秒窗口首次按过期返回unknown，后续为有限观察选择120秒读取并保留原时间，不重标新鲜度或据此准许接管。没有重构早期缺失输入、绑定虚假的项目完成状态或启用Goal/Plan；原件在accord-live-input-recovery-20260923-01。
+
+更新前确认当前已安装34028及Git市场来源、精确目标68f44925/74845、Hook声明相同并保留配置/旧包。原生移除旧市场条目后，重新添加时GitHub克隆发生curl28低速超时与early EOF；命令exit1但自然释放，旧包仍完整，新缓存不存在、市场条目为空。核对该后态后采用[Git官方进程级配置与URL映射](https://git-scm.com/docs/git-config)：仅当前安装进程的url.insteadOf把同一GitHub URL映射到已核对的本机Git库；只读ls-remote预检匹配目标，原生重新添加和安装成功，持久市场来源仍为原GitHub URL。没有改共享Git配置、关闭证书验证、放宽协议限制或强制写缓存。仅目标市场ref变化，其余Codex配置语义保持，24个安装文件与原Git blob逐字节一致。
+
+fresh原生hooks/list与skills/list显示5启用Skill及6启用trusted Hook均指向74845，没有thread/start或模型调用；6个命令域（含原克隆失败）和1个发现域均自然退出，reader停止。失败克隆留下一个空staging目录，父执行者重核确切路径/无链接/无内容及所属进程释放后，与空验证workspace一并移除；原包备份、配置及失败/恢复回执保留在accord-shared-plugin-update-20260923-02。此为真实本任务的恢复和安装后态，不是默认无损继承、完整自动交接或新候选普通语义通过。
