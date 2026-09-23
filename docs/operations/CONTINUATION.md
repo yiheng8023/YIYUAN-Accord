@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-09-23 · N33-20260909 / r31。9aae2880的CI35819020213已11/11成功，先前测试失败保持其历史记录。已settle目标的新controller恢复已有三平台原生结果及独立回读；已reconcile后的收尾连接通过93项本地检查及精确45507f46托管回归；当前用既有失ACK夹具补其必要原生组合；9月23日01原案因测试夹具作用域错误失败并保留；修复后的02原生收尾组合及可搬迁回读通过，固定4响应、零模型，独立原始RPC/SQLite/资源回读通过；新增收尾组合Linux/macOS artifact也已独立回读通过。51aafb31的CI35815649409原失败保持；新macOS退出回执自然释放、当前/最近OS错误均null，未复现但不宣称旧根因已确定。资源/环境原案报告遗漏仍不准入，指导修正仍待必要行为核验。以实时Git、工具目录和当前receipt为准。
+更新：2026-09-23 · N33-20260909 / r31。9aae2880的CI35819020213已11/11成功，先前测试失败保持其历史记录。已settle目标的新controller恢复已有三平台原生结果及独立回读；已reconcile后的收尾连接通过93项本地检查及精确45507f46托管回归；当前用既有失ACK夹具补其必要原生组合；9月23日01原案因测试夹具作用域错误失败并保留；修复后的02原生收尾组合及可搬迁回读通过，固定4响应、零模型，独立原始RPC/SQLite/资源回读通过；新增收尾组合Linux/macOS artifact也已独立回读通过。51aafb31的CI35815649409原失败保持；新macOS退出回执自然释放、当前/最近OS错误均null，未复现但不宣称旧根因已确定。资源/环境原案报告遗漏仍不准入；34028/CLI0.156.1普通派生报告修订已观察，首次成品混淆副本可见性与历史未决状态，经root及独立审查修正，不计自主通过。以实时Git、工具目录和当前receipt为准。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)与product/development.json分别展开结果、判据及机器投影。
 
 ## 目标、共识和授权
@@ -29,7 +29,7 @@ CI节奏共识已按9月20日用户确认写入计划：本地小改/针对性�
 |---|---|
 | 仓库与写者 | 9月23日恢复时main=cecdcc47，origin/main=45507f46，ahead 1/behind 0；配额中断前五个文件的未提交修改保留。root集成文档及执行；限定审查者已完成相应源码与原件复核，root为当前唯一仓库写者。本批开始时main与origin/main在9aae2880一致，CI11/11通过；r31源候选共享安装已对齐。root为唯一仓库写者，限定子代理仅写私有交接说明。 |
 | 已安装开发包 | 3.3.0-dev.1+codex.20260923034028，24文件，SHA 7fd0788774663bd017285ed6322ad6663351a47f02b8e359dccc6da89971234d；Git市场ref=9aae2880。9月23日通过原生移除旧市场条目/重新绑定精确Git提交/安装完成；源码与缓存逐字节一致，新读取域显示5启用Skill、6启用且trusted Hook。仅该市场ref变化，其余共享配置语义保持。已有桌面任务实际采用另核，不以目录读取代验行为。 |
-| 当前源候选 | 3.3.0-dev.1+codex.20260923034028，24文件，SHA 7fd0788774663bd017285ed6322ad6663351a47f02b8e359dccc6da89971234d。落实r31的授权内Skill代选与原生显式加载边界，同时保留r30推理选项分层；宿主机制未改。共享安装已对齐34028，尚无本候选普通采用或行为通过结论。原f0ec857b/21160501结果保留其身份。 |
+| 当前源候选 | 3.3.0-dev.1+codex.20260923034028，24文件，SHA 7fd0788774663bd017285ed6322ad6663351a47f02b8e359dccc6da89971234d。落实r31的授权内Skill代选与原生显式加载边界，同时保留r30推理选项分层；宿主机制未改。共享安装已对齐34028；9月23日CLI0.156.1普通报告任务确认完整入口职责在动作前送达，首次成品仍需外部纠正，没有完整自主通过结论。原f0ec857b/21160501结果保留其身份。 |
 | 实际采用 | 前轮用户重启后原任务调用inspect_task_state(contextAssessment)返回continue-bounded，sourceReleaseAllowed=false；旧epoch反例返回reassess。输入/状态字节保持。首次缺原生计数的unknown和之后有据评估分别留证。当时实际Goal读为null，仅证明当时无Goal。 |
 | 当前任务状态 | 9月23日当前原生调用确认根任务01a09602-a44d-79f2-8ad6-d104863ca7d1、Astra/0.155.0-alpha.16；checkpoint unbound、捕获输入不可用、needsNativeReplay/needsResumeReconciliation=true，context unknown。当前用户消息与仓库工作状态仍可直接核对，不能宣称旧checkpoint已恢复或把旧epoch用于状态写入。用户自定义窗口及手动开放Max/Ultra均不作为默认规格。 |
 | 已完成CI | 精确9aae2880的[35819020213](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35819020213)11/11成功；macOS MCP原件29份执行源匹配该Git，result passed、exit0/forced=false/readerStopped、进程组absent、两个OS错误字段null。51aafb31的[35815649409](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35815649409)10成功/1失败及原诊断保留；f0ec857b的35809832184为11/11成功。更早完整CI回执与限制保留在[前态记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/9aae2880eba561eb477edddd087e5cb2b7656799/docs/operations/CONTINUATION.md)，避免当前接续重复堆叠。 |
@@ -59,6 +59,8 @@ CI故障处理（51aafb31）：macOS原生MCP主体返回completed、状态工�
 原生机制核对：官方0.156.0固定源码fe74a774及其选择器测试确认显式加载不受allow_implicit_invocation=false排除，但enabled=false仍拒绝。私有accord-skill-invocation-native-20260923-01隔离两次固定响应：普通请求无控制Skill名称/描述/正文，显式Skill输入后正文送达；2固定响应/0真实模型，Skill、源码及共享配置hash保持，两个应用进程均自然exit0/forced=false/readerStopped/activeProcesses0。调用者预选不代验Agent语义选择或委托来源；当前Desktop/CLI任务是否具备同等调度路径仍未知，不能据此宣称Matt Skills已全面自动调用。独立源码/原件复核通过；调用者在审查结束后保全控制Skill副本与原始请求，再回收home/state/temp/workspace/skill-root五个自有目录，cleanup.json保留该人工观察器动作，不计Agent自主收尾。
 
 r31实施增量：非技术用户无需知道Skill名称和时机；由Agent在真实委托内判断适用性并复用宿主/原管理器盘点。纠正刚提交的r30指导中只能用户亲自选择的过度收紧：默认关闭隐式匹配不等于永久禁止授权协调；当前入口支持且目标控制权、启用状态、委托与选择来源成立时，沿原生显式路径代选。格式化Skill输入不制造授权或伪称用户亲选；停用/排除和新增副作用边界仍有效，已有委托无需每次确认。当前源候选经Skill/插件校验、8项包身份/模型路由/共识检查及三项静态校验通过。本轮已按下述原生路径对齐共享安装，普通语义选路与完整链行为仍待验。
+
+本轮普通任务：accord-report-reconcile-20260923-01保留旧资源批次原件，使用其成品/运行记录和后续可见调用副本生成修订说明，未重跑批处理。实际CLI已更新0.156.1，模型目录及原生配置核对为Luna/medium、default、Goal前后null；34028入口完整送达，100.469秒/一轮自然完成。原稿补记清理拒绝，却将有限副本缺文件误列为历史未解决工作，且JSON漏记Markdown已写的校验常量笔误；首次结果needs-correction保留。root修订后独立来源审查通过，原始输入/hash/mtime、35份冻结执行源和共享配置保持，进程自然exit0/forced=false/所属进程0、reader停止，临时缓存和空state已回收。此为有评估者纠正的普通报告交付，不冒充原案重验、自主通过、压力响应或自动交接；正式计数不变。现有指导已要求保留有效历史、核对关联成品，不为此样本再堆一条规则；后续按实际普通链的复核与承担者缺口推进，不重复报告或批处理试验。
 
 本轮开发自用：以独立有限材料委派子代理整理安装交接说明，请求Luna/medium且不继承旧对话。原材料遗漏恢复定位与实际处理步骤，root补充已有事实后接续修订；两份成品及五份原输入/补充hash已独立回读。仅说明这一内部说明任务的材料承接与修订，不证明模型成本优势、原生Hook采用、自主择时或完整A05；正式计数不变。原件在accord-install-handoff-20260923-01。下一仍按既有普通任务与A07剩余需求前瞻绑定，不能为交接本身制造工作。
 
@@ -112,6 +114,7 @@ fresh核心已有carrier-handoff.cjs、runHandoffProposal和stdio/WebSocket连�
 
 | 定位 | 可复用范围和限制 |
 |---|---|
+| accord-report-reconcile-20260923-01 | 当前安装34028/CLI0.156.1/Luna medium普通报告修订；原生入口参与、原件保护、自然退出有证据，首稿语义需外部修正；初稿及独立审查后成品分别保留。不改旧资源案失败，不计完整自主行为或交接验收。 |
 | accord-install-handoff-20260923-01 | 内部安装交接说明：五份保护输入、补充恢复事实、两份交付及两次独立核验保留；源材料缺项经补充修订。仅有限材料承接，不计自主交接、模型比较或整项验收。 |
 | accord-ci-diagnosis-20260923-02 | 新9aae2880 macOS MCP artifact：原件29份执行源匹配Git，status passed/3固定响应/零模型；自然释放且observationError/lastObservationError=null。只说明本次未复现，不能补造旧异常原因。 |
 | accord-shared-plugin-update-20260923-01 | 真实现有Git市场对齐9aae2880/34028，首次同名异ref拒绝与恢复路径均保留；24文件一致，5启用Skill/6trusted Hook，仅目标ref改变，6个所属执行域自然退出。原配置、旧包与原生回执保留；一次性脚本勿重跑，不代表原有GUI任务已采用或普通功能通过。 |
