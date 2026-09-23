@@ -353,6 +353,7 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp/commands
             ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp/native
             ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp/retained
+            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp/workspace/keep.txt
       - name: Independently re-read the host upgrade episode
         if: always() && steps.prepare_upgrade.outcome == 'success'
         shell: python

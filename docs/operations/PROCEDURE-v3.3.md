@@ -2138,3 +2138,5 @@ accord-finalize-receipt-native-20260923-01的真实原案完成续作回执找�
 离线回归先复现OS异常信息丢失；修正保留当前/最近异常，同时继续保留未知计数，只有实际ProcessLookupError才标absent，确认消失后不再查询/发送信号给可能复用的ID。发现MCP调用者的finally中app.close异常会跳过fixture.close及result.json；新增有界收尾保证两者被尝试，已有资源回执入失败结果，自然释放判定在保存passed之前进行，正文失败不会被收尾异常替换。强制退出及未知后态仍失败。
 
 144项受影响Windows本地检查通过；复用已安装WSL/Ubuntu执行3项真实POSIX进程组测试通过，未安装依赖，未运行新原生宿主MCP/模型试验。WSL启动提示localhost代理不支持当前NAT模式，未改代理设置，三个本地测试均exit0。这些修正使后续故障可诊断并保护收尾，不证明macOS运行时根因已消除；保留正在执行的其余CI，不为局部修复抢先取消有效检查。
+
+旧轮最终10项成功/1项失败。同步核对产物保留：MCP原生场景的keep.txt通常在成功退出后复制到retained；关闭失败会跳过该复制。CI上传范围现补原workspace/keep.txt，成功时沿用retained副本，失败时保全原件。没有扩大到凭据或完整home目录；原失败产物不回填。
