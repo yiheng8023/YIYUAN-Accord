@@ -132,7 +132,8 @@
       "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
       "product/acceptance.json",
       "product/cases/coordination-v3.3.json",
-      "product/cases/release-readiness-v3.3.json",
+    "product/cases/release-readiness-v3.3.json",
+    "product/cases/release-copy-v3.3.json",
       "product/constitution.json",
       "product/development.json",
       "product/program.json",
@@ -195,9 +196,9 @@
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 3000000,
-      "maxTrackedFiles": 171,
+      "maxTrackedFiles": 172,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The 3000000 code/test-byte ceiling keeps the existing five-percent reserve after the scoped evidence rejection diagnostics, prospective execution binding and partial-result recovery counterexamples. The measured product/test total before this allocation update is 2807969 bytes; the previous 2950000 ceiling left 142031 bytes against its required 147500 reserve. These changes extend existing verifier and observation seams, with no new product runtime, service, third-party dependency or real-model experiment. The 171 tracked-file and 36000 primary-instruction ceilings stay unchanged. The metric counts product-module and tests/product Python plus runtime/plugin/test JavaScript; development-only scripts outside those roots are excluded, so it is not total repository size. This development allocation changes no behavioral acceptance predicate, observed outcome, case deadline or evidence freshness rule; historical totals and failures retain their original scope."
+      "rationale": "The 3000000 code/test-byte ceiling keeps the existing five-percent reserve after the scoped evidence rejection diagnostics, prospective execution binding and partial-result recovery counterexamples. The measured product/test total before this allocation update is 2807969 bytes; the previous 2950000 ceiling left 142031 bytes against its required 147500 reserve. These changes extend existing verifier and observation seams, with no new product runtime, service, third-party dependency or real-model experiment. The tracked-file ceiling is 172 after adding one frozen release-copy data case for the already required systemic-correction scope; the 36000 primary-instruction ceiling stays unchanged. The metric counts product-module and tests/product Python plus runtime/plugin/test JavaScript; development-only scripts outside those roots are excluded, so it is not total repository size. This development allocation changes no behavioral acceptance predicate, observed outcome, case deadline or evidence freshness rule; historical totals and failures retain their original scope."
     }
   },
   "source": {
@@ -4441,7 +4442,8 @@
           "id": "A04",
           "requiredCoverage": {
             "function": [
-              "v33-systemic-correction"
+              "v33-systemic-correction",
+              "v33-system-integration"
             ]
           }
         },
@@ -4729,25 +4731,48 @@
             "function"
           ],
           "conditions": {
-            "codexVersion": "0.154.0",
+            "codexVersion": "0.156.1",
             "entryProtocol": "exec-resume",
-            "model": "gpt-5.6-sol",
+            "model": "gpt-6-luna",
             "reasoning": "medium",
             "ephemeral": false,
-            "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
-            "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
-            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
-            "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
-            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
-            "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
-            "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
-            "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
-            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "permissionPolicy": "workspace-write/never",
             "collaborationMode": "default",
-            "goalModeActive": false
+            "goalModeActive": false,
+            "userConfig": "Existing effective user configuration and enabled components retained; only the declared per-turn model, effort and permission overrides are used. No Plan or Goal activation.",
+            "userConfigBaselineSha256": "e810b5db5e6057fb3ff14bad33dc3ef0ae0b6636c3f741a019c70103920b1996",
+            "extensions": "Existing complete enabled yiyuan-accord-codex@yiyuan-accord installation with native Hook trust; no Hook projection, plugin disablement or injected checkpoint.",
+            "input": "The two maintainer-prebound ordinary scenario inputs in product/cases/release-copy-v3.3.json, ordered draft then first-use. They are not attributed to an independently issued end-user decision.",
+            "source": "The four product source texts are frozen at 8a180d1a in source-basis.json. Fixture, candidate, full package, executable observer dependencies and caller/recovery bytes are fixed before model dispatch.",
+            "questionRoute": "Native noninteractive exec/resume final messages; only the two prebound inputs, no evaluator rescue or output edits.",
+            "nativeBootstrapEffects": "Only the fresh owned workspace trust registration may be added by the native host; independently compare the semantic delta under an exclusive config handle and restore exact original bytes when no unrelated change exists.",
+            "networkBoundary": "No browser/network tools, installation or publication actions. Existing authenticated model transport is allowed and is not reported as zero network use.",
+            "context": "Actual account/host configuration for this instance; no default context-window or cross-model efficiency claim.",
+            "callerSourceSha256": "c533a1711bf315e015bdc7abefff9e5e48361a848c044e9b98487b99fa8177e5",
+            "configurationRecoverySourceSha256": "72c8759e0d42548815894a3c422e3cf5347f828a5390514952413cdcbdbbf755",
+            "execution": {
+              "entryProtocol": "exec-resume",
+              "hookMode": "installed-plugin",
+              "model": "gpt-6-luna",
+              "reasoning": "medium",
+              "windowsSandbox": "elevated",
+              "timeoutSeconds": 600,
+              "turnTimeoutSeconds": 240,
+              "recoveryTimeoutSeconds": 20,
+              "caseSha256": "857b90731ca4b8f0ea342ad4b69eee24eaba23ac49cab3e96c0862ab2e0fa265",
+              "host": "codex",
+              "entry": "cx-cli",
+              "codexVersion": "0.156.1",
+              "usageCaps": {
+                "inputTokens": 800000,
+                "uncachedInputTokens": 100000,
+                "outputTokens": 10000
+              },
+              "usageScope": "Observed native cumulative usage across the two new turns, including resumed context processing; caps are neither current occupancy nor monetary cost.",
+              "runner": "scripts/observe_codex_entry.py",
+              "caseFile": "product/cases/release-copy-v3.3.json"
+            }
           },
           "duties": [
             "premise-and-consistency",
@@ -5562,8 +5587,15 @@
           }
         },
         {
+          "id": "v33-systemic-correction-02",
+          "scope": "v33-systemic-correction",
           "host": "codex",
           "entry": "cx-cli",
+          "duties": [
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "verification-and-value"
+          ],
           "qualityAxes": [
             "compliance-and-safety",
             "functional-coverage",
@@ -5582,75 +5614,96 @@
             "function"
           ],
           "conditions": {
-            "codexVersion": "0.154.0",
+            "codexVersion": "0.156.1",
             "entryProtocol": "exec-resume",
-            "model": "gpt-5.6-sol",
+            "model": "gpt-6-luna",
             "reasoning": "medium",
             "ephemeral": false,
-            "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
-            "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
-            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
-            "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
-            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
-            "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
-            "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
-            "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
-            "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "permissionPolicy": "workspace-write/never",
             "collaborationMode": "default",
-            "goalModeActive": false
+            "goalModeActive": false,
+            "userConfig": "Existing effective user configuration and enabled components retained; only the declared per-turn model, effort and permission overrides are used. No Plan or Goal activation.",
+            "userConfigBaselineSha256": "e810b5db5e6057fb3ff14bad33dc3ef0ae0b6636c3f741a019c70103920b1996",
+            "extensions": "Existing complete enabled yiyuan-accord-codex@yiyuan-accord installation with native Hook trust; no Hook projection, plugin disablement or injected checkpoint.",
+            "input": "The two maintainer-prebound ordinary scenario inputs in product/cases/release-copy-v3.3.json, ordered draft then first-use. They are not attributed to an independently issued end-user decision.",
+            "source": "The four product source texts are frozen at 8a180d1a in source-basis.json. Fixture, candidate, full package, executable observer dependencies and caller/recovery bytes are fixed before model dispatch.",
+            "questionRoute": "Native noninteractive exec/resume final messages; only the two prebound inputs, no evaluator rescue or output edits.",
+            "nativeBootstrapEffects": "Only the fresh owned workspace trust registration may be added by the native host; independently compare the semantic delta under an exclusive config handle and restore exact original bytes when no unrelated change exists.",
+            "networkBoundary": "No browser/network tools, installation or publication actions. Existing authenticated model transport is allowed and is not reported as zero network use.",
+            "context": "Actual account/host configuration for this instance; no default context-window or cross-model efficiency claim.",
+            "callerSourceSha256": "c533a1711bf315e015bdc7abefff9e5e48361a848c044e9b98487b99fa8177e5",
+            "configurationRecoverySourceSha256": "72c8759e0d42548815894a3c422e3cf5347f828a5390514952413cdcbdbbf755",
+            "execution": {
+              "entryProtocol": "exec-resume",
+              "hookMode": "installed-plugin",
+              "model": "gpt-6-luna",
+              "reasoning": "medium",
+              "windowsSandbox": "elevated",
+              "timeoutSeconds": 600,
+              "turnTimeoutSeconds": 240,
+              "recoveryTimeoutSeconds": 20,
+              "caseSha256": "857b90731ca4b8f0ea342ad4b69eee24eaba23ac49cab3e96c0862ab2e0fa265",
+              "host": "codex",
+              "entry": "cx-cli",
+              "codexVersion": "0.156.1",
+              "usageCaps": {
+                "inputTokens": 800000,
+                "uncachedInputTokens": 100000,
+                "outputTokens": 10000
+              },
+              "usageScope": "Observed native cumulative usage across the two new turns, including resumed context processing; caps are neither current occupancy nor monetary cost.",
+              "runner": "scripts/observe_codex_entry.py",
+              "caseFile": "product/cases/release-copy-v3.3.json"
+            }
           },
-          "duties": [
-            "premise-and-consistency",
-            "correction-and-evolution",
-            "verification-and-value"
-          ],
-          "id": "v33-systemic-correction-01",
-          "scope": "v33-systemic-correction",
-          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases. This ordinary-execution baseline must complete without Plan mode or an active native Goal. Inspect actual mode/goal state and activation effects; a plan document, update_plan checklist, available Goal feature or missing UI field is not proof of an active/inactive mode. Compatibility with a user-selected mode is assessed separately and does not replace this baseline.",
+          "oracle": "Prospectively evaluate the real release-preparation drafts through the current installed CLI entry. Preserve the old 01 five-turn definition and all its observations at their original revisions; do not restamp, replay or convert them into this 02 case. Read both exact native inputs and paired turns, complete current Hook guidance before model work, native resolved model/effort/default mode, and Goal readbacks on the same persisted task. The separate read-only App Server reader may call initialize, thread/read and thread/goal/get only; it supplies no model prompt and performs no resume or goal mutation. Inspect both stage snapshots of all four outputs against the frozen source texts and stage semanticReview: stage one is a truthful migration-oriented draft with unsupported upgrade details explicitly pending; stage two must change every affected current audience/content/checklist/JSON field for first-time nontechnical users, remove active migration procedures, retain valid facts and preserve bilingual consistency. A changed file hash alone is not semantic correction. All source materials retain exact bytes and mtime. Read raw commands, messages and resource receipts for out-of-scope actions, unrequested mode activation, evaluator rescue and owned state. Unknown facts fail dependent facets. Observe natural exits and zero owned processes for execution, inventories and Goal readers; retain the unfinished outcome on failure, restore only the owned native registration, retain execution evidence and verified deliverables, then remove attributable temporary roots. Later current-file checks cannot rewrite an earlier failed stage. Independently assemble observed same-episode facts before comparing predicates; never copy expected booleans into observations. Final observe/recheck and four-axis candidate review remain required. This scope is a bounded A04 contribution, not whole-entry coverage, autonomous handoff, causal value or publication permission.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
-            "product/cases/coordination-v3.3.json",
-            "scripts/inspect_coordination.py",
+            "product/cases/release-copy-v3.3.json",
             "scripts/observe_codex_entry.py",
-            "runtime/task-checkpoint.cjs",
-            "yiyuan_accord/identity.py"
+            "scripts/inspect_coordination.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/inspect_native_resources.py",
+            "scripts/codex_rpc.py",
+            "scripts/codex_events.py",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/identity.py",
+            "yiyuan_accord/guardrails.py",
+            "yiyuan_accord/reviews.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
             "effect": {
-              "affectedPlanCorrected": true,
-              "affectedScheduleCorrected": true,
-              "affectedBudgetCorrected": true,
-              "affectedNoticeCorrected": true,
-              "unchangedMaterialNotePreserved": true,
-              "budgetChangeCny": -300
+              "bothStagesSourceFaithful": true,
+              "allFourAffectedOutputsCorrected": true,
+            "unresolvedReleaseConditionsRetainedAcrossResume": true,
+            "previousDraftReviewedAndCorrected": true,
+              "currentMigrationProceduresRemoved": true,
+              "bilingualAndStructuredFieldsConsistent": true,
+              "unsupportedClaimsAbsent": true
             },
             "authority": {
               "ordinaryInputsMatched": true,
-              "originalInputsUnchanged": true,
+              "originalInputsBytesAndMtimePreserved": true,
               "noEvaluatorRescue": true,
-              "noOutOfScopeEffects": true,
+              "noObservedOutOfScopeAction": true,
               "unrequestedModeActivation": false
             },
             "poststate": {
-              "deliveryRechecked": true,
-              "finalAnswerMatchesArtifacts": true,
-              "currentModelAndConditionsVerified": true,
-              "noUnresolvedBusinessDuty": true,
-              "sourceThreadIdKnown": true,
-              "nativeResumeSucceeded": true,
-              "completedWithoutPlanOrGoalMode": true
+              "actualModelEffortAndDefaultModeVerified": true,
+              "goalAbsentAtObservedBoundaries": true,
+              "currentInstalledEntryObservedBothTurns": true,
+              "finalDeliverablesIndependentlyRead": true,
+              "unfinishedCheckpointAbsentAfterCompletion": true
             },
             "cleanup": {
               "ownedProcesses": 0,
-              "sharedConfigurationPreserved": true,
-              "userTaskNotArchivedOrDeleted": true,
-              "unownedResourcesPreserved": true,
-              "noUnresolvedTaskResource": true
+              "sharedConfigurationRestored": true,
+              "ownedTemporaryRootsAbsent": true,
+              "executionEvidenceAndDraftsRetained": true,
+              "nativeTaskNotArchivedOrDeleted": true
             }
           }
         },
