@@ -50,6 +50,14 @@ _PROJECTION_FILE_FIELDS = {
 }
 
 
+class _CaseRejection(ValueError):
+    """Only verifier-owned reason codes may cross the diagnostic boundary."""
+
+    def __init__(self, *codes):
+        super().__init__("evidence case rejected")
+        self.codes = codes
+
+
 def _json(value):
     text = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
     if len(text.encode("utf-8")) > _LIMIT:
@@ -474,7 +482,11 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     report = {"scope": "caller-observed-development-candidate", "trustBoundary": _TRUST,
               "acceptedCases": [], "openCoverage": {}, "unboundCoverage": {}, "functionalCompletion": False,
               "incrementalValue": "unverified", "candidateEligible": False,
-              "checkoutClean": None, "packageReuse": {}, "errors": []}
+              "checkoutClean": None, "packageReuse": {}, "caseRejections": {}, "errors": []}
+
+    def reject_case(key, *codes):
+        reasons = report["caseRejections"].setdefault(key, [])
+        reasons.extend(code for code in codes if code not in reasons)
     successor = contract.get("schema") == "yiyuan-accord-development/v5"
     if successor and contract.get("acceptance", {}).get("admission", {}).get("schema") != CURRENT_SCHEMA:
         # Retained v4 case definitions are regression inputs, not the new
@@ -536,6 +548,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 key = record["case"]
                 if key in seen:
                     admitted.discard(key)
+                    reject_case(key, "duplicate-observation")
                     errors.append(f"{key}: duplicate or conflicting observations")
                     continue
                 seen.add(key)
@@ -543,18 +556,20 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 try:
                     at = _fresh(record["observedAt"], float("inf"), now)
                     if at is None:
-                        raise ValueError("future, undated or expired observation")
+                        raise _CaseRejection("observation-time-invalid")
                     revision = record["evaluatedRevision"]
                     if not isinstance(revision, str) or re.fullmatch(r"[0-9a-f]{40}", revision) is None:
-                        raise ValueError("invalid evaluated revision")
+                        raise _CaseRejection("evaluated-revision-invalid")
                     _git(root, "merge-base", "--is-ancestor", revision, subject["revision"])
                     if revision not in prior:
                         original_contract = _strict_json_object(_git(root, "show", f"{revision}:product/development.json").decode("utf-8"))
                         if (original_contract.get("schema") != contract["schema"]
                                 or admission_contract_errors(original_contract)):
-                            raise ValueError("evaluated admission declaration is invalid")
+                            raise _CaseRejection("evaluated-admission-invalid")
                         prior[revision] = original_contract
-                    original = next(v for v in prior[revision]["acceptance"]["admission"]["cases"] if v["id"] == key)
+                    original = next((v for v in prior[revision]["acceptance"]["admission"]["cases"] if v["id"] == key), None)
+                    if original is None:
+                        raise _CaseRejection("case-not-prebound")
                     original_hosts = {v["id"]: v for v in prior[revision]["delivery"]["hostProjections"]}
                     original_host = original_hosts[original["host"]]
                     current_host = hosts[case["host"]]
@@ -578,15 +593,15 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                         "current-actual-package": bound["packageSha256"] == current_snapshot["sha256"],
                     }
                     if not all(checks.values()):
-                        raise ValueError("definition or package identity changed")
+                        raise _CaseRejection(*(f"{name}-mismatch" for name, valid in checks.items() if not valid))
                     package_files = _sparse_package_files(contract, case)
                     if package_files is None:
                         if record["packageSha256"] != bound["packageSha256"]:
-                            raise ValueError("complete package identity changed")
+                            raise _CaseRejection("complete-package-changed")
                     else:
                         if not _selected_package_files_unchanged(
                                 original_snapshot, current_snapshot, package_files, current_host["manifest"]):
-                            raise ValueError("selected package dependency changed")
+                            raise _CaseRejection("selected-package-dependency-changed")
                         if record["packageSha256"] != bound["packageSha256"]:
                             package_reuse[key] = {
                                 "evaluatedRevision": revision,
@@ -602,31 +617,42 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     review_files = _CURRENT_REVIEW_FILES if policy["schema"] == CURRENT_SCHEMA else set()
                     execution_files = [path for path in case["oracleFiles"] if path not in review_files]
                     diff_files = execution_files if package_files is not None else [current_package, *execution_files]
-                    _git(root, "diff", "--quiet", "--no-ext-diff", "--no-textconv", revision, "--", *diff_files)
+                    # The bounded Git helper deliberately hides subprocess error
+                    # details. Ask for bounded names so drift differs from I/O
+                    # failure without exporting file names or exception text.
+                    if _git(root, "diff", "--name-only", "-z", "--no-ext-diff", "--no-textconv", revision, "--", *diff_files):
+                        raise _CaseRejection("execution-dependency-changed")
                     for path in case["oracleFiles"]:
                         _git(root, "cat-file", "blob", f"{revision}:{path}")
                         if path in review_files:
                             _git(root, "cat-file", "blob", f"{subject['revision']}:{path}")
                     committed = int(_git(root, "show", "-s", "--format=%ct", revision).strip())
                     if at.timestamp() < committed:
-                        raise ValueError("unbound capture time")
+                        raise _CaseRejection("observation-predates-candidate")
                     if not all(_text(record[k]) for k in ("episodeId", "sourceRef", "observerId")):
-                        raise ValueError("source, observer and episode must be bound")
+                        raise _CaseRejection("provenance-missing")
                     facts = record["facts"]
                     if not isinstance(facts, dict) or set(facts) != set(case["expected"]):
-                        raise ValueError("incomplete effect and post-state facets")
+                        raise _CaseRejection("facet-shape-invalid")
                     for actual in facts.values():
                         if (not isinstance(actual, dict) or set(actual) != {"episodeId", "value"}
                                 or actual["episodeId"] != record["episodeId"]):
-                            raise ValueError("unbound effect/post-state")
+                            raise _CaseRejection("facet-episode-mismatch")
                     # Only attributable consequences can leave independent claims intact.
-                    if (_fresh(record["observedAt"], case["maxAgeSeconds"], now) is None
-                            or _json(record["conditions"]) != _json(case["conditions"])
-                            or any(_json(facts[k]["value"]) != _json(v) for k, v in case["expected"].items())):
+                    unmet = []
+                    if _fresh(record["observedAt"], case["maxAgeSeconds"], now) is None:
+                        unmet.append("observation-expired")
+                    if _json(record["conditions"]) != _json(case["conditions"]):
+                        unmet.append("execution-conditions-mismatch")
+                    if any(_json(facts[k]["value"]) != _json(v) for k, v in case["expected"].items()):
+                        unmet.append("consequence-mismatch")
+                    if unmet:
+                        reject_case(key, *unmet)
                         case_errors.append(f"{key}: freshness, conditions or consequence not admitted")
                     else:
                         admitted.add(key)
-                except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration):
+                except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration) as error:
+                    reject_case(key, *(error.codes if isinstance(error, _CaseRejection) else ("source-evidence-unavailable",)))
                     errors.append(f"{key}: source, identity, freshness, conditions or consequence not admitted")
             review = data["reviewBundle"]
             if review_bundle is not None and _json(review_bundle) != _json(review):
@@ -651,6 +677,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             for key in list(admitted):
                 if _json(recheck["conditions"].get(key)) != _json(cases[key]["conditions"]):
                     admitted.remove(key)
+                    reject_case(key, "current-conditions-changed")
                     case_errors.append(f"{key}: current conditions changed or unavailable")
             if evidence_subject(root) != subject:
                 raise ValueError("subject changed during observation")
@@ -664,6 +691,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     key = record["case"]
                     if _fresh(record["observedAt"], cases[key]["maxAgeSeconds"], final_now) is None:
                         admitted.remove(key)
+                        reject_case(key, "observation-expired")
                         case_errors.append(f"{key}: observation expired before final qualification")
             if review_result["decision"] == "pass" and any(
                     _fresh(v["reviewedAt"], contract["acceptance"]["admission"]["reviewMaxAgeSeconds"], final_now) is None
@@ -676,6 +704,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     if entry_selection is not None and not entry_selection["final"]:
         for key in sorted(admitted & entry_selection["caseIds"]):
             admitted.remove(key)
+            reject_case(key, "entry-selection-pending")
     if entry_selection is not None:
         report["entrySelection"] = {"final": entry_selection["final"],
                                     "selected": sorted(entry_selection["selected"])}

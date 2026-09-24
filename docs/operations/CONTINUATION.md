@@ -46,6 +46,8 @@ CI节奏共识已按9月20日用户确认写入计划：本地小改/针对性�
 
 ## 本批实现与下一实际动作
 
+9月24日普通证据接回准入的核对已完成：accord-installed-cadence-20260920-01的31份冻结源和5条输入Hash仍匹配，原五轮正确行为继续保留；它的CLI0.155.1/Terra、完整安装Hook、900秒条件与旧正式case的0.154/Sol、源Hook、600秒不一致，也没有对应v5观察记录/当前候选审查包，原时点已超86400秒。因此不改标通过、不重标时间、不为变绿重跑原五轮。准入器新增caseRejections固定原因码，区分定义/包/依赖、时效、条件和实际结果等拒绝；旧errors、准入条件及计数保持。完整准入54项回归通过，独立复核通过；旧原件与差异依据在accord-evidence-admission-review-20260924-01。后续必要普通工作段须在执行前把实际条件、候选/依赖及正式observe/recheck和审查连接一并绑定；开发观察不自动成为正式准入。插件包和安装保持01947，不另更新缓存或要求重启。
+
 当前0.156.1的完整experimental公开Schema已核：thread/start没有客户指定threadId或创建幂等键，thread/started通知只有thread，thread/read需要精确ID。SDK当前日志未提供可按原请求ID取回迟到ACK的入口；回执从未收到时更不能猜测最近任务。保留SOURCE_START_UNKNOWN和owner对账符合现有边界，不因此追加推断式认领/通用恢复框架或宣称完整A05。原件在accord-source-recovery-interface-20260924-01，重复导出已清理，保留完整v2及ClientRequest Schema；无新模型或原生执行试验。
 
 9月24日本批独立推进SDK源任务持久性边界：新增两个固定回执反例（ephemeral为true、缺失），修复前均未被拒绝；修复后保留sourceThreadId/原回执且SQLite尚无writer、无turn/start，重复run保持失败。源会话21、原生夹具单测7、开发契约87，共115项通过，插件校验/语法/产品契约通过，限定独立复核通过。既有0.155.1原生源回执已核字段为false，仅证字段可用；未新增原生或模型试验。完全丢失初次ACK仍须owner对账，A05整项与17范围完成计数不变。私有记录在accord-source-persistence-20260924-01；精确提交包字节与CI已通过，开发安装/原生发现及所属进程收尾已完成（accord-shared-plugin-update-20260924-01）。下一回到既定有真实交付价值的普通工作段与必要连续性，不重复固定协议，云端403保持独立待处理。

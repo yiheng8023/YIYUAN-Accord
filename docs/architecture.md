@@ -645,6 +645,15 @@ callable or a JSON record does not establish those properties. The CLI neither
 loads observer code from data nor accepts a receipt file as authentication.
 No new executor, service, database or host dependency is installed.
 
+`evidenceAdmission.caseRejections` explains completed case checks with controlled
+reason codes: definition/package or dependency changes, invalid or expired
+observation time, condition drift and unmet consequences. It exposes no observed
+private values, file names or external exception text. This diagnostic is not an
+exhaustive blocker list: missing records, observer/review failures and unbound
+coverage retain their existing outputs. An absent reason is not admission; use
+`acceptedCases` and the complete report. Diagnostics do not refresh timestamps,
+change predicates or convert historical observations into current acceptance.
+
 Commit the implementation, case definition and oracle files as A before observing
 E. At candidate B, the verifier binds HEAD/tree before static reads, verifies A
 is an ancestor, and checks the full affected package and oracle files. Case

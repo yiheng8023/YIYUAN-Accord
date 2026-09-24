@@ -154,6 +154,7 @@ class DevelopmentEvidenceTests(unittest.TestCase):
     def test_bound_observer_results_are_admitted_but_external_release_gates_remain(self):
         report = verify_product(self.root, evidence=self.observer)
         self.assertEqual(report["evidenceAdmission"]["acceptedCases"], ["claude-code", "codex"])
+        self.assertEqual(report["evidenceAdmission"]["caseRejections"], {})
         self.assertTrue(report["repositoryCandidateReady"], report["errors"])
         self.assertTrue(report["functionalCompletion"])
         self.assertEqual(set(report["externalGates"].values()), {"not-evaluated-by-verifier"})
@@ -286,6 +287,7 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["repositoryCandidateReady"])
         self.assertEqual(report["evidenceAdmission"]["acceptedCases"], [])
         self.assertTrue(any("expired" in e for e in report["errors"]))
+        self.assertEqual(report["evidenceAdmission"]["caseRejections"]["codex"], ["observation-expired"])
 
     def test_static_checks_cannot_be_combined_with_a_later_subject(self):
         original = subprocess.Popen
@@ -562,13 +564,24 @@ class DevelopmentEvidenceTests(unittest.TestCase):
             "unknown-revision": lambda r: r.update(evaluatedRevision="0" * 40),
             "future": lambda r: r.update(observedAt=(stamp + timedelta(days=1)).isoformat()),
             "expired": lambda r: r.update(observedAt=(stamp - timedelta(days=1)).isoformat()),
-            "conditions": lambda r: r["conditions"].update(hostVersion="different"),
+            "conditions": lambda r: r["conditions"].update(hostVersion="fixture-private-condition"),
             "no-observer": lambda r: r.update(observerId=""),
             "no-source": lambda r: r.update(sourceRef=""),
             "cross-episode": lambda r: r["facts"]["poststate"].update(episodeId="another"),
             "missing-poststate": lambda r: r["facts"].pop("poststate"),
             "residue": lambda r: r["facts"]["cleanup"].update(value={"taskResidue": ["live-process"]}),
             "false-comparison": lambda r: r["facts"]["comparison"]["value"].update(matchedConditions=False),
+        }
+        reasons = {
+            "wrong-package": "record-declared-package-mismatch",
+            "wrong-definition": "record-definition-mismatch",
+            "unknown-revision": "source-evidence-unavailable",
+            "future": "observation-time-invalid",
+            "expired": "observation-predates-candidate",
+            "conditions": "execution-conditions-mismatch",
+            "no-observer": "provenance-missing", "no-source": "provenance-missing",
+            "cross-episode": "facet-episode-mismatch", "missing-poststate": "facet-shape-invalid",
+            "residue": "consequence-mismatch", "false-comparison": "consequence-mismatch",
         }
         for name, change in changes.items():
             with self.subTest(reason=name):
@@ -580,6 +593,9 @@ class DevelopmentEvidenceTests(unittest.TestCase):
                 report = verify_product(self.root, evidence=observer)
                 self.assertFalse(report["repositoryCandidateReady"])
                 self.assertEqual(report["evidenceAdmission"]["acceptedCases"], ["claude-code"])
+                self.assertIn(reasons[name], report["evidenceAdmission"]["caseRejections"]["codex"])
+                self.assertNotIn("claude-code", report["evidenceAdmission"]["caseRejections"])
+                self.assertNotIn("fixture-private-condition", json.dumps(report))
 
     def test_duplicate_and_missing_records_never_close_coverage(self):
         for duplicate in (True, False):
@@ -606,6 +622,7 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         report = verify_product(self.root, evidence=observer)
         self.assertFalse(report["repositoryCandidateReady"])
         self.assertEqual(report["evidenceAdmission"]["acceptedCases"], ["claude-code"])
+        self.assertEqual(report["evidenceAdmission"]["caseRejections"]["codex"], ["current-conditions-changed"])
 
     def test_nonsemantic_progress_can_reuse_a_but_final_review_binds_b(self):
         with self.history():
@@ -744,6 +761,7 @@ class DevelopmentEvidenceTests(unittest.TestCase):
             report = self.replay(records)
         self.assertFalse(report["repositoryCandidateReady"])
         self.assertEqual(report["evidenceAdmission"]["acceptedCases"], [])
+        self.assertEqual(report["evidenceAdmission"]["caseRejections"]["codex"], ["execution-dependency-changed"])
 
     def test_oracle_paths_are_literal_even_when_they_contain_glob_characters(self):
         with self.history():
@@ -1251,6 +1269,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 report = self.assess(contract, self.replay(original_records))
                 self.assertNotIn(case["id"], report["acceptedCases"])
                 self.assertTrue(report["errors"])
+                reason = ("reuse-definition-mismatch"
+                          if change in {"manifest-base-version", "manifest-custom-cache"}
+                          else "selected-package-dependency-changed")
+                self.assertIn(reason, report["caseRejections"][case["id"]])
         with self.history():
             contract, case = self.sparse_contract()
             self.commit(contract)
