@@ -281,7 +281,8 @@ RESTORE_SCENARIO = r'''
 const {performance} = require('node:perf_hooks');
 const {openCarrierRecorder} = require(process.argv[2]);
 const {createCodexSourceSession,restoreCodexSourceSession} = require(process.argv[1]);
-const databasePath=process.argv[3], mode=process.argv[4];
+const databasePath=process.argv[3], rawMode=process.argv[4];
+const sourceMode=rawMode.startsWith('source-'), mode=sourceMode?rawMode.slice(7):rawMode;
 const until=ms=>Date.now()+ms, mono=()=>performance.now()+5000;
 let threadStarts=0, targetTurn=0, proposalUsed=false;
 const oldCalls=[];
@@ -294,7 +295,7 @@ const oldConnection={transport:{connectionId:'old-connection',hostVersion:'fixtu
     throw Error('unexpected old request:'+method);},
   async waitTerminal(threadId,turnId){return {method:'turn/completed',params:{threadId,turn:{id:turnId,status:'completed',items:[]}}};}},
   async receiveTurnActivity(threadId,turnId){
-    if(threadId==='source-1'&&!proposalUsed){proposalUsed=true;return {type:'request',request:{connectionId:'old-connection',hostVersion:'fixture-host',id:41,
+    if(threadId==='source-1'&&!proposalUsed&&(!sourceMode||mode==='active')){proposalUsed=true;return {type:'request',request:{connectionId:'old-connection',hostVersion:'fixture-host',id:41,
       method:'item/tool/call',params:{threadId,turnId,callId:'proposal-call',tool:'accord_request_handoff',namespace:null,arguments:{reason:'fixed'}}}};}
     return {type:'terminal',terminal:{method:'turn/completed',params:{threadId,turn:{id:turnId,status:'completed',items:[]}}}};
   },
@@ -323,7 +324,7 @@ const oldSession=createCodexSourceSession({connection:oldConnection,recorder,sco
 let resumeCalls=0,claimCalls=0,restoredTurnStarts=0,resumed=false,resumeParamsSeen=null,effects=[],restoreReadParams=[];
 function restoreConnection(id){return {transport:{connectionId:id,hostVersion:'fixture-host',
   async request(method,params){
-    if(method==='thread/read'){restoreReadParams.push(JSON.parse(JSON.stringify(params)));return {thread:{id:params.threadId,ephemeral:false,status:{type:resumed?'idle':'notLoaded'},
+    if(method==='thread/read'){restoreReadParams.push(JSON.parse(JSON.stringify(params)));return {thread:{id:params.threadId,ephemeral:mode==='ephemeral',status:{type:mode==='native-active'?'active':resumed?'idle':'notLoaded'},
       cwd:'C:/restored',model:'restored-model',reasoningEffort:'high'}};}
     if(method==='thread/resume'){resumeCalls++;effects.push('resume');resumeParamsSeen=JSON.parse(JSON.stringify(params));resumed=true;if(mode==='resume-loss'){const e=Error('resume ack lost');e.rpcRequest={connectionId:id,hostVersion:'fixture-host',requestId:'resume-1',method};throw e;}
       return {thread:{id:params.threadId,ephemeral:false,status:{type:'idle'}},cwd:params.cwd,model:params.model,reasoningEffort:params.config?.model_reasoning_effort};}
@@ -336,8 +337,9 @@ function restoreConnection(id){return {transport:{connectionId:id,hostVersion:'f
 const persistedNativeEvidence={checkpointRef:'persisted-checkpoint',tools:['accord_request_handoff','accord_inspect_context']};
 function restoreVerifier(stage,facts){
   if(stage==='restore-prepare')return {decision:'allow',scopeRef:facts.scopeRef,authorityRef:facts.authorityRef,stateRef:facts.stateRef,
-    sourceRef:'restore:prepare',pauseStateVerified:true,priorControllerQuiesced:true,pendingEffectsReconciled:true,
-    restorationAuthorized:true,singleWriter:true,resumeInitializationSafe:true};
+    sourceRef:'restore:prepare',pauseStateVerified:mode!=='pause-unverified',priorControllerQuiesced:true,pendingEffectsReconciled:true,
+    restorationAuthorized:true,singleWriter:true,resumeInitializationSafe:true,
+    sourceOriginVerified:mode!=='origin-unverified',sourceOriginEvidenceRef:mode==='origin-ref-missing'?'':'fixture:original-start-and-scope-ack-and-native-tools'};
   if(stage==='restore-resumed'){const toolsOk=persistedNativeEvidence.tools.includes('accord_request_handoff')&&persistedNativeEvidence.tools.includes('accord_inspect_context');
     if(mode==='scope-changed'){effects.push('verifier-claim');recorder.claimScope('fixture-scope',facts.claimedScope)}
     return {decision:'allow',scopeRef:facts.scopeRef,authorityRef:facts.authorityRef,stateRef:facts.stateRef,
@@ -348,7 +350,9 @@ function restoreVerifier(stage,facts){
 }
 function options(connection,rec=recorder){return {connection,recorder:rec,scopeRef:'fixture-scope',verify:restoreVerifier,
   planResolver(){throw Error('unused plan')},current(){throw Error('unused current')},ownerRequest(){return {error:{code:-1,message:'unused'}}}};}
-const restoreArgs=(basis)=>({transferId:'settled-transfer',expectedScope:basis,deadlineMs:until(5000),
+const restoreArgs=(basis)=>({...sourceMode?{source:{threadId:mode==='wrong-id'?'foreign':'source-1',
+  connectionId:mode==='same-connection'?'new-connection':'old-connection',authorityRef:'authority-1',stateRef:'state-1'}}:
+  {transferId:'settled-transfer'},expectedScope:basis,deadlineMs:until(5000),
   resume:{cwd:'C:/restored',sandbox:'read-only',approvalPolicy:'never',model:'restored-model',modelProvider:'fixture',effort:'high'}});
 (async()=>{let out={};try{
   const transfer=await oldSession.run({input:'propose',deadlineMs:until(5000)});
@@ -356,7 +360,9 @@ const restoreArgs=(basis)=>({transferId:'settled-transfer',expectedScope:basis,d
   if(mode==='active'){
     try{await restoreCodexSourceSession(options(restoreConnection('new-active')),restoreArgs(preAdoptScope))}catch(e){out.error={code:e.code,state:e.state};out.failedSession=e.session.snapshot()}
   }else{
-    const adopted=await oldSession.adoptTarget({deadlineMs:until(5000)}),basis=adopted.scope;
+    const adopted=sourceMode?null:await oldSession.adoptTarget({deadlineMs:until(5000)});
+    const basis=sourceMode?oldSession.snapshot().scope:adopted.scope;
+    out.original=transfer;
     let restoreRecorder=recorder;
     if(mode==='claim-loss')restoreRecorder={bindScope:recorder.bindScope,readScope:recorder.readScope,begin:recorder.begin,
       compareAndSet:recorder.compareAndSet,read:recorder.read,settle:recorder.settle,close:recorder.close,
@@ -365,6 +371,7 @@ const restoreArgs=(basis)=>({transferId:'settled-transfer',expectedScope:basis,d
       compareAndSet:recorder.compareAndSet,read:recorder.read,settle:recorder.settle,close:recorder.close,
       claimScope(...args){claimCalls++;effects.push('claim');return recorder.claimScope(...args)}};
     let requestedRestore=restoreArgs(basis);
+    if(mode==='ambiguous-origin')requestedRestore.transferId='settled-transfer';
     if(mode==='invalid-restore')delete requestedRestore.resume;
     if(mode==='expired-restore')requestedRestore.deadlineMs=Date.now()-1;
     try{
@@ -615,6 +622,55 @@ class CodexSourceSessionTests(unittest.TestCase):
         self.assertEqual(result["error"]["code"], "RESTORE_PRECONDITION_FAILED")
         self.assertEqual(result["failedSession"]["status"], "failed")
         self.assertEqual((result["claimCalls"], result["resumeCalls"]), (0, 0))
+
+    def test_ordinary_source_restores_without_fabricating_a_transfer_or_new_thread(self):
+        result = self.restore_case("source-success")
+        self.assertNotIn("error", result)
+        self.assertEqual(result["original"]["status"], "completed")
+        self.assertEqual(result["restored"]["sourceThreadId"], "source-1")
+        self.assertEqual(result["restored"]["transfers"], [])
+        self.assertIsNone(result["adopted"])
+        self.assertEqual(result["resumeCalls"], 1)
+        self.assertEqual(result["claimCalls"], 1)
+        self.assertEqual(result["restoredTurnStarts"], 1)
+        self.assertEqual(result["effects"], ["claim", "resume"])
+        self.assertEqual(result["restoreReadParams"], [{"threadId": "source-1"}, {"threadId": "source-1"}])
+        self.assertEqual(sum(x["method"] == "thread/start" for x in result["oldCalls"]), 1)
+        self.assertEqual(result["oldWriterExtraTurns"], 0)
+        self.assertEqual(result["oldWriter"], "SOURCE_SCOPE_CHANGED")
+
+    def test_source_restore_requires_identity_origin_and_native_quiescence_before_claim(self):
+        for mode in ("wrong-id", "same-connection", "ambiguous-origin", "origin-unverified", "origin-ref-missing",
+                     "pause-unverified", "native-active", "ephemeral", "active"):
+            with self.subTest(mode=mode):
+                result = self.restore_case("source-" + mode)
+                self.assertIn("error", result)
+                self.assertEqual(result["claimCalls"], 0)
+                self.assertEqual(result["resumeCalls"], 0)
+                self.assertEqual(result["restoredTurnStarts"], 0)
+
+    def test_source_restore_uncertain_effects_consume_the_old_basis_without_replay(self):
+        for mode, code, resumes in (("claim-loss", "RESTORE_CLAIM_UNKNOWN", 0),
+                                    ("resume-loss", "RESTORE_RESUME_UNKNOWN", 1)):
+            with self.subTest(mode=mode):
+                result = self.restore_case("source-" + mode)
+                self.assertEqual(result["error"]["code"], code)
+                self.assertEqual(result["retry"], "RESTORE_PRECONDITION_FAILED")
+                self.assertEqual(result["claimCalls"], 1)
+                self.assertEqual(result["resumeCalls"], resumes)
+                self.assertEqual(result["restoredTurnStarts"], 0)
+                self.assertNotEqual(result["basis"]["token"], result["currentScope"]["token"])
+
+    def test_source_restore_post_verification_holds_tools_and_concurrent_scope_changes(self):
+        for mode, code in (("tools-denied", "RESTORE_POSTCHECK_DENIED"),
+                           ("scope-changed", "RESTORE_SCOPE_CHANGED")):
+            with self.subTest(mode=mode):
+                result = self.restore_case("source-" + mode)
+                self.assertEqual(result["error"]["code"], code)
+                self.assertEqual(result["failedSession"]["status"], "failed")
+                self.assertEqual(result["resumeCalls"], 1)
+                self.assertEqual(result["restoredTurnStarts"], 0)
+                self.assertEqual(result["locked"], "SESSION_FAILED")
 
     def test_unknown_resume_claims_first_then_old_basis_cannot_replay(self):
         result = self.restore_case("resume-loss")

@@ -199,11 +199,20 @@ function validatePlanForRun(rawPlan, sourceThreadId, turnId, scopeRef, wallDeadl
 }
 
 function validateRestoreInput(raw, scopeRef) {
+  const sourceRestore = plainObject(raw) && Object.hasOwn(raw, 'source');
   if (!plainObject(raw) || Object.keys(raw).sort().join('|') !==
-      ['deadlineMs', 'expectedScope', 'resume', 'transferId'].sort().join('|')) {
-    throw new TypeError('restore requires transferId, expectedScope, deadlineMs and resume');
+      ['deadlineMs', 'expectedScope', 'resume', sourceRestore ? 'source' : 'transferId'].sort().join('|')) {
+    throw new TypeError('restore requires one source or transferId, expectedScope, deadlineMs and resume');
   }
-  text(raw.transferId, 'restore.transferId');
+  if (sourceRestore) {
+    if (!plainObject(raw.source) || Object.keys(raw.source).sort().join('|') !==
+        ['authorityRef', 'connectionId', 'stateRef', 'threadId'].sort().join('|')) {
+      throw new TypeError('restore.source must identify the retained source, connection and current references');
+    }
+    for (const name of ['threadId', 'connectionId', 'authorityRef', 'stateRef']) {
+      text(raw.source[name], `restore.source.${name}`);
+    }
+  } else text(raw.transferId, 'restore.transferId');
   const expected = raw.expectedScope;
   if (!plainObject(expected) || Object.keys(expected).sort().join('|') !==
       ['activeTransferId', 'scopeRef', 'token', 'writerThreadId'].sort().join('|') ||
@@ -226,7 +235,8 @@ function validateRestoreInput(raw, scopeRef) {
     ...(resume.model ? {model: resume.model} : {}),
     ...(resume.modelProvider ? {modelProvider: resume.modelProvider} : {}),
     ...(resume.effort ? {config: {model_reasoning_effort: resume.effort}} : {})};
-  return immutable({transferId: raw.transferId, expectedScope: expected,
+  return immutable({transferId: sourceRestore ? null : raw.transferId,
+    source: sourceRestore ? raw.source : null, expectedScope: expected,
     deadlineMs: raw.deadlineMs, resume, params});
 }
 
@@ -732,7 +742,7 @@ function createSession(options, restoreMode = false) {
     }
   }
 
-  async function restoreSettled(raw) {
+  async function restoreExisting(raw) {
     if (busy || state.status !== 'restore-required') throw new CodexSourceSessionError(
       'RESTORE_UNAVAILABLE', 'restore requires a fresh source-session executor',
       {phase: state.phase, state: snapshot()});
@@ -742,17 +752,26 @@ function createSession(options, restoreMode = false) {
     busy = true;
     state = {...state, status: 'restoring', phase: 'restore-read',
       restoration: {transferId: input.transferId, expectedScope: input.expectedScope,
+        ...(input.source ? {source: input.source} : {}),
         requestedResume: input.resume}};
     try {
       ensureBindings();
-      const record = immutable(await boundedOperation(bound.readRecord,
+      const record = input.source ? null : immutable(await boundedOperation(bound.readRecord,
         [input.transferId, scopeRef], budget.monotonicDeadline, 'recorder.read'));
       const observedScope = immutable(await boundedOperation(bound.readScope,
         [scopeRef], budget.monotonicDeadline, 'recorder.readScope'));
       ensureBindings();
       const ledger = record?.state, plan = ledger?.plan;
-      const targetThreadId = ledger?.target?.threadId;
-      if (!plainObject(record) || !Number.isSafeInteger(record.revision) ||
+      const targetThreadId = input.source?.threadId ?? ledger?.target?.threadId;
+      if (input.source) {
+        if (canonical(observedScope) !== canonical(input.expectedScope) ||
+            input.source.threadId !== input.expectedScope.writerThreadId ||
+            input.source.connectionId === bound.connectionId) {
+          return lockFailure('RESTORE_PRECONDITION_FAILED',
+            'source identity, acknowledged scope or fresh controller binding differs', null,
+            {phase: 'restore-precondition-failed', state: {observedScope}});
+        }
+      } else if (!plainObject(record) || !Number.isSafeInteger(record.revision) ||
           !plainObject(ledger) || !plainObject(plan) ||
           canonical(observedScope) !== canonical(input.expectedScope) ||
           record.lease?.scopeRef !== input.expectedScope.scopeRef ||
@@ -780,6 +799,9 @@ function createSession(options, restoreMode = false) {
           'durable transfer, explicit scope receipt or fresh controller binding is not restorable', null,
           {phase: 'restore-precondition-failed', state: {record, observedScope}});
       }
+      const authorityRef = input.source?.authorityRef ?? ledger.authorityRef;
+      const stateRef = input.source?.stateRef ?? ledger.stateRef;
+      const priorConnectionId = input.source?.connectionId ?? ledger.connection.connectionId;
       text(targetThreadId, 'restored target thread id');
       const before = immutable(await Reflect.apply(bound.request, undefined,
         ['thread/read', {threadId: targetThreadId},
@@ -794,7 +816,7 @@ function createSession(options, restoreMode = false) {
       }
       const prepareFacts = immutable({connectionId: bound.connectionId,
         hostVersion: bound.hostVersion, transferId: input.transferId, scopeRef,
-        authorityRef: ledger.authorityRef, stateRef: ledger.stateRef,
+        authorityRef, stateRef, ...(input.source ? {source: input.source} : {}),
         target: {threadId: targetThreadId}, record, expectedScope: input.expectedScope,
         observedScope, threadRead: before, requestedResume: input.resume,
         nativeResumeParams: {threadId: targetThreadId, excludeTurns: true, ...input.params}});
@@ -803,17 +825,19 @@ function createSession(options, restoreMode = false) {
         budget.monotonicDeadline, 'verify:restore-prepare'));
       ensureBindings();
       if (prepared?.decision !== 'allow' || prepared.scopeRef !== scopeRef ||
-          prepared.authorityRef !== ledger.authorityRef || prepared.stateRef !== ledger.stateRef ||
+          prepared.authorityRef !== authorityRef || prepared.stateRef !== stateRef ||
           typeof prepared.sourceRef !== 'string' || !prepared.sourceRef.trim() ||
           prepared.pauseStateVerified !== true || prepared.priorControllerQuiesced !== true ||
           prepared.pendingEffectsReconciled !== true || prepared.restorationAuthorized !== true ||
-          prepared.singleWriter !== true || prepared.resumeInitializationSafe !== true) {
+          prepared.singleWriter !== true || prepared.resumeInitializationSafe !== true ||
+          input.source && (prepared.sourceOriginVerified !== true ||
+            typeof prepared.sourceOriginEvidenceRef !== 'string' || !prepared.sourceOriginEvidenceRef.trim())) {
         return lockFailure('RESTORE_PREPARE_DENIED',
           'restore-prepare verifier did not authorize initialization', null,
           {phase: 'restore-prepare-denied', state: {record, observedScope, before, prepared}});
       }
       state = {...state, phase: 'restore-claim-pending', restoration: {
-        ...state.restoration, targetThreadId, recordRevision: record.revision,
+        ...state.restoration, targetThreadId, recordRevision: record?.revision ?? null,
         prepareSourceRef: prepared.sourceRef, threadReadBefore: before,
         prepareVerdict: prepared}};
       let claim;
@@ -884,7 +908,7 @@ function createSession(options, restoreMode = false) {
         budget.monotonicDeadline, 'verify:restore-resumed'));
       ensureBindings();
       if (restored?.decision !== 'allow' || restored.scopeRef !== scopeRef ||
-          restored.authorityRef !== ledger.authorityRef || restored.stateRef !== ledger.stateRef ||
+          restored.authorityRef !== authorityRef || restored.stateRef !== stateRef ||
           typeof restored.sourceRef !== 'string' || !restored.sourceRef.trim() ||
           typeof restored.nativeToolEvidenceRef !== 'string' ||
           !restored.nativeToolEvidenceRef.trim() ||
@@ -905,29 +929,34 @@ function createSession(options, restoreMode = false) {
       }
       state = {status: 'ready', phase: 'ready', scopeRef,
         sourceThreadId: targetThreadId, lastTurnId: null, turnCount: 0, transferCount: 0,
-        transfers: [immutable({transferId: input.transferId,
+        // Counts and transfer receipts belong to this executor; an empty list
+        // never asserts that the persisted source has no earlier history.
+        transfers: input.source ? [] : [immutable({transferId: input.transferId,
           sourceThreadId: ledger.source.threadId, targetThreadId, revision: record.revision,
           settled: true, restored: true})], lastSafeReceipt: resumed,
         pendingRequest: null, scope: finalScope,
         restoration: immutable({transferId: input.transferId, targetThreadId,
-          priorConnectionId: ledger.connection.connectionId,
+          ...(input.source ? {source: input.source, sourceOriginEvidenceRef: prepared.sourceOriginEvidenceRef} : {}),
+          priorConnectionId,
           connectionId: bound.connectionId, expectedScope: input.expectedScope,
           claimedScope: finalScope, resumeParams, prepareSourceRef: prepared.sourceRef,
           restoredSourceRef: restored.sourceRef,
           nativeToolEvidenceRef: restored.nativeToolEvidenceRef})};
       return immutable({status: 'restored', scopeRef, sourceThreadId: targetThreadId,
         transferId: input.transferId, scope: finalScope,
-        claimLimit: 'Settled-transfer restoration on one fresh bound controller only; no active-effect, arbitrary-thread or complete cold-recovery claim.'});
+        claimLimit: input.source
+          ? 'Owner-reconciled known source on a fresh controller; no created thread, fabricated transfer, effect replay or complete cold-recovery claim.'
+          : 'Settled-transfer restoration on one fresh bound controller only; no active-effect, arbitrary-thread or complete cold-recovery claim.'});
     } catch (error) {
       if (error instanceof CodexSourceSessionError) throw error;
       return lockFailure(error?.code || 'RESTORE_FAILED',
-        'settled source-session restoration failed', error, {phase: state.phase});
+        'source-session restoration failed', error, {phase: state.phase});
     } finally {
       busy = false;
     }
   }
 
-  return Object.freeze({run, adoptTarget, snapshot, [RESTORE_SESSION]: restoreSettled});
+  return Object.freeze({run, adoptTarget, snapshot, [RESTORE_SESSION]: restoreExisting});
 }
 
 function createCodexSourceSession(options) {

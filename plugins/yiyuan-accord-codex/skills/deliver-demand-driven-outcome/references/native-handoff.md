@@ -187,6 +187,35 @@ The resumed verdict requires matching references, `decision: "allow"`,
 `continuityToolsRestored`, `targetSettingsMatch`, `historyRetained`, `singleWriter`
 and `effectsVerified` all true, plus the nonempty native tool evidence reference.
 
+### Restore a known ordinary source before a handoff
+
+The same `restoreCodexSourceSession` also accepts
+`{source: {threadId, connectionId, authorityRef, stateRef}, expectedScope,
+deadlineMs, resume}` instead of `transferId`. This restores the session executor
+for an already acknowledged ordinary source; it creates neither a task nor a
+transfer record. `threadId` must equal the acknowledged inactive scope's writer,
+and the retained source connection must differ from the new owner connection.
+The four source fields locate evidence; they do not authenticate it.
+Verifier facts contain this `source`, with `record: null` and `transferId: null`;
+there is no settled-transfer record to infer for this branch.
+
+The shared prepare verifier must additionally return `sourceOriginVerified: true`
+and a nonempty `sourceOriginEvidenceRef`. Establish the original native creation,
+acknowledged scope binding and actual continuity-tool initialization from retained
+receipts or independent native records. A scope token or caller-supplied fields
+alone are insufficient. Unknown first creation/binding acknowledgements remain
+owner-reconciliation cases; never guess a task or substitute the latest token.
+
+All existing pause, prior-controller quiescence, pending-effect reconciliation,
+single-writer and resume-initialization checks still precede the atomic claim.
+The native source must be persistent and idle or unloaded; `notLoaded` alone does
+not show that another controller stopped. Claim/readback, resume and post-resume
+tool/history/settings/effect verification use the same path as settled-target
+restoration. Lost receipts remain non-replayable with the old scope basis.
+The new executor's turn/transfer counts start locally; an empty `transfers` list
+does not erase or deny earlier native history. This is explicit caller-owned
+restoration, not an automatic crash detector or arbitrary-thread adoption.
+
 `runtime/carrier-recorder.cjs` exports
 `openCarrierRecorder({path, create?, busyTimeoutMs?})`. The path must be an
 absolute, ordinary caller-owned database file; `create: true` exclusively creates

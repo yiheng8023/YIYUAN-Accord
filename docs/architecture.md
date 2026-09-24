@@ -513,8 +513,12 @@ a nested proposal while a transfer is in progress is refused without queuing.
 This is a same-controller path, not automatic cold recovery or arbitrary thread
 adoption. Project/sidebar association alone establishes none of these bindings.
 
-For a new controller, `restoreCodexSourceSession` handles only a completed,
-settled target with reconciled prior effects. The caller supplies an acknowledged
+For a new controller, `restoreCodexSourceSession` handles a completed,
+settled target, or an acknowledged ordinary source with reconciled prior effects.
+The source route supplies its retained thread/connection identity and current
+authority/state references instead of a transfer ID; it creates no transfer ledger.
+Its verifier also establishes the original creation, acknowledged binding and
+continuity-tool initialization from independent evidence. The caller supplies an acknowledged
 inactive scope receipt and current authority; the verifier establishes prior
 controller quiescence and safe initialization. The existing recorder rotates the
 scope token before native resume, so an uncertain resume cannot be replayed with
