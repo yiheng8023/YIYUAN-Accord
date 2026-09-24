@@ -29,6 +29,8 @@
 
 ## 本批完成与实际未完项
 
+**保留与回读修复**：已复现业务文件inspection.json被内部记录覆盖，以及工作区回收后默认检查报FileNotFound。新manifest前瞻声明stage-files-v1和阶段ID，业务副本与记录分目录，复制前后校验Hash；显式`inspect --retained`核对原生回执、inspection/history、阶段链及副本一致性，不执行冻结代码或重建工作区。86项完整入口回归通过、独立复核无阻断；旧发布02的120份原件逐字节未变，两阶段保留记录均匹配，原caseComplete仍false。仅保留字节核对，业务/原mtime/安装/清理与正式准入未新增。原件导航accord-retained-inspection-20260925-01。公有observer源码已变，私有cloud repair仍绑定旧helper Hash，不能直接执行；实际需要时先复核并重绑，不生成新云端试验。
+
 **云启动原案**：用户批准一次临时setup、一个接入任务及最多一次清理续作。投递脚本网页回读Hash一致，任务[Verify native task access status](https://chatgpt.com/codex/cloud/tasks/task_e_6ab59bee8ac0832b8c4455c7279289ba)在环境准备32秒后退出，stdout只有RuntimeError，尚未进入受测Agent阶段。没有重试/清理续作，也没有归档/删除任务。临时setup已清空并保存为自动，环境其余前态核对保持。失败页没有原容器读取入口，因此具体失败断言、安装/信任及资源后态保留未知；不能声称原容器完整回滚。
 
 恢复后另一个官方诊断容器观察到：启动期默认配置位置/root/.codex没有config.toml，已知CLI文件存在但PATH无codex，Node24.15.0路径可见，原试验包目录不存在。这不是原失败容器，只能说明启动期前提必须单独核对。原脚本已经使用绝对CLI路径，PATH现象不能单独解释失败。
@@ -50,6 +52,7 @@
 
 | 目录 | 内容与限制 |
 |---|---|
+| accord-retained-inspection-20260925-01 | 86项入口回归、只读代码复核与旧发布02的retained回读；120原件未变，旧案仍失败。 |
 | accord-cloud-startup-20260925-01 | execution.json为原失败及环境恢复；as-run保存实际投递源；repair保存17项本地修复与边界。旧试验不可重放。 |
 | accord-readiness-review-20260925-01 | 粗估及独立源码复核、编辑页403解除；unbound不是缺陷的纠正。不计功能通过。 |
 | accord-shared-plugin-update-20260925-01 | 162230精确原生安装、5CLI+1发现域自然释放、配置和旧包恢复备份；空工作目录已回收。 |

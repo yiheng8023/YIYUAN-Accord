@@ -16,6 +16,9 @@ user configuration without injecting hooks or bypassing trust. Bind the native
 inventory and installed bytes, then independently require actual entry delivery.
 Optional --admission-case checks a committed case's conditions.execution against
 the prepared run and exact package before dispatch. It creates no admission facts.
+Inspect --retained reads persistent stage copies after workspace cleanup without
+calling a model or replaying the original checker. It verifies retained byte and
+record consistency, leaving original outcomes and semantic/admission verdicts intact.
 Windows Job Objects contain descendants before the suspended CLI starts executing.
 The caller must select an existing Windows sandbox backend explicitly; this runner
 does not initialize/install a sandbox or directly edit shared configuration.
@@ -210,7 +213,7 @@ def ordinary_dir(path):
     return path
 
 
-def load_manifest(evidence):
+def load_manifest(evidence, *, require_workspace=True):
     evidence = ordinary_dir(evidence)
     manifest = json.loads(read_regular(evidence / "manifest.json"))
     if manifest["evidence"] != str(evidence) or manifest["schema"] != "accord-codex-entry/v1":
@@ -227,7 +230,10 @@ def load_manifest(evidence):
         raise ValueError("App Server manifest contains incompatible CLI or trace metadata")
     if "usageCaps" in manifest["limits"]:
         _usage_caps(manifest["limits"]["usageCaps"])
-    ordinary_dir(manifest["workspace"])
+    if manifest.get("retainedLayout") not in (None, "stage-files-v1"):
+        raise ValueError("unsupported retained layout")
+    if require_workspace:
+        ordinary_dir(manifest["workspace"])
     return manifest
 
 
@@ -724,8 +730,10 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     elif protocol == "exec-resume":
         manifest.pop("expected")
         manifest.update({"entryProtocol": protocol,
+                          "retainedLayout": "stage-files-v1",
                          "caseSchema": case["schema"],
-                         "casePurpose": case["purpose"],
+                          "casePurpose": case["purpose"],
+                          "stageIds": [stage["id"] for stage in case["stages"]],
                          "prompts": [stage["prompt"] for stage in case["stages"]],
                          "promptSha256s": [digest(evidence / f"prompt-{index + 1}.txt")
                                            for index in range(len(case["stages"]))],
@@ -1239,8 +1247,146 @@ def _installed_evidence_valid(manifest, recorded):
         return False
 
 
-def inspect(evidence):
-    manifest = load_manifest(evidence)
+def _retained_leaf(name):
+    if (not isinstance(name, str) or not name or name in (".", "..")
+            or any(c in name for c in '/\\:') or name.endswith((' ', '.'))
+            or any(ord(c) < 32 for c in name)):
+        return False
+    # Prevent Windows device aliases even when reading a manifest on POSIX.
+    stem = name.split('.', 1)[0].upper()
+    return stem not in {'CON', 'PRN', 'AUX', 'NUL',
+                        *(f'COM{i}' for i in range(1, 10)), *(f'LPT{i}' for i in range(1, 10))}
+
+
+def _inspect_retained(evidence, manifest):
+    """Check retained bytes/record links; never replay an old checker or run."""
+    if manifest.get("entryProtocol") != "exec-resume":
+        raise ValueError("retained inspection requires persistent exec-resume evidence")
+    evidence = ordinary_dir(evidence)
+    before, directories = {}, {}
+
+    def read(path):
+        ordinary_dir(path.parent)
+        raw = read_regular(path)
+        before[path] = hashlib.sha256(raw).hexdigest()
+        return raw
+
+    def read_json(path):
+        def unique(pairs):
+            result = {}
+            for key, value in pairs:
+                if key in result:
+                    raise ValueError("duplicate retained metadata key")
+                result[key] = value
+            return result
+        return json.loads(read(path), object_pairs_hook=unique)
+
+    def same(left, right):
+        return json.dumps(left, sort_keys=True) == json.dumps(right, sort_keys=True)
+
+    if not same(read_json(evidence / "manifest.json"), manifest):
+        raise ValueError("retained manifest changed during inspection")
+    recorded = read_json(evidence / "result.json")
+    if not isinstance(recorded, dict):
+        raise ValueError("persistent result binding mismatch")
+    stages = recorded.get("stages")
+    if (recorded.get("schema") != "accord-codex-persistent-exec/v1"
+            or recorded.get("episode") != manifest["episode"]
+            or not isinstance(stages, list) or len(stages) > len(manifest["prompts"])
+            or not stages and not isinstance(recorded.get("executionFailure"), dict)):
+        raise ValueError("persistent result binding mismatch")
+    history = read_json(evidence / "history.json")
+    if not isinstance(history, dict):
+        raise ValueError("invalid retained history")
+    stage_ids = manifest.get("stageIds")
+    if stage_ids is not None and (not isinstance(stage_ids, list)
+            or len(stage_ids) != len(manifest["prompts"])
+            or any(not isinstance(value, str) or not value for value in stage_ids)
+            or len(set(stage_ids)) != len(stage_ids)):
+        raise ValueError("invalid prospective retained stage identities")
+    results, seen = [], set()
+    for index, stage in enumerate(stages, 1):
+        errors, missing, matched = [], [], {}
+        observation = stage.get("fileObservation", {}) if isinstance(stage, dict) else {}
+        if not isinstance(observation, dict):
+            raise ValueError("retained stage observation is malformed")
+        stage_id = observation.get("stage")
+        if not isinstance(stage_id, str) or not stage_id or stage_id in seen:
+            raise ValueError("retained stage identity mismatch")
+        seen.add(stage_id)
+        if stage_ids is not None and stage_id != stage_ids[index - 1]:
+            errors.append("prospective-stage-mismatch")
+        root = evidence / f"stage-{index}"
+        data_root = root / "files" if manifest.get("retainedLayout") == "stage-files-v1" else root
+        try:
+            native = read_json(evidence / f"native-receipt-{index}.json")
+            native_part = {key: value for key, value in stage.items() if key not in {"valid", "fileObservation"}}
+            if (not isinstance(native, dict) or type(native.get("valid")) is not bool
+                    or not same({key: value for key, value in native.items() if key != "valid"}, native_part)
+                    or stage.get("valid") is not (native.get("valid") and observation.get("decision") == "pass")
+                    or native.get("threadId") not in (None, recorded.get("threadId"))
+                    or "stage" in native and native["stage"] != index):
+                errors.append("native-receipt-mismatch")
+        except (OSError, ValueError, TypeError):
+            missing.append("native-receipt-unavailable")
+        try:
+            ordinary_dir(root)
+            inspection = read_json(root / "inspection.json")
+            if not same(inspection, observation):
+                errors.append("inspection-record-mismatch")
+            if not same(history.get(stage_id), observation.get("files")):
+                errors.append("history-record-mismatch")
+            if not isinstance(observation.get("files"), dict):
+                errors.append("invalid-file-identities")
+            else:
+                ordinary_dir(data_root)
+                directories[data_root] = {p.name for p in data_root.iterdir()}
+                for name, identity in observation["files"].items():
+                    if (not _retained_leaf(name) or not isinstance(identity, dict)
+                            or not re.fullmatch(r"[0-9a-f]{64}", str(identity.get("sha256", "")))):
+                        errors.append("unsafe-or-invalid-file-identity")
+                        continue
+                    if data_root == root and name == "inspection.json":
+                        errors.append("legacy-metadata-name-conflict")
+                        matched[name] = False
+                        continue
+                    try:
+                        matched[name] = hashlib.sha256(read(data_root / name)).hexdigest() == identity["sha256"]
+                        if not matched[name]:
+                            errors.append("retained-content-mismatch")
+                    except (OSError, ValueError):
+                        matched[name] = False
+                        missing.append("retained-file-unavailable")
+                expected_names = set(observation["files"]) | ({"inspection.json"} if data_root == root else set())
+                if directories[data_root] - expected_names:
+                    errors.append("retained-file-set-mismatch")
+        except (OSError, ValueError, TypeError):
+            missing.append("retained-inspection-unavailable")
+        results.append({"stage": stage_id, "state": "mismatch" if errors else "incomplete" if missing else "verified",
+                        "errors": sorted(set(errors + missing)), "files": matched,
+                        "recordedExecutionValid": stage.get("valid"),
+                        "recordedFileDecision": observation.get("decision")})
+    if set(history) - seen:
+        raise ValueError("retained history references unrecorded stages")
+    for path, expected in before.items():
+        ordinary_dir(path.parent)
+        if hashlib.sha256(read_regular(path)).hexdigest() != expected:
+            raise ValueError("retained evidence changed during inspection")
+    for path, expected in directories.items():
+        ordinary_dir(path)
+        if {p.name for p in path.iterdir()} != expected:
+            raise ValueError("retained evidence changed during inspection")
+    return {"entryProtocol": "exec-resume", "inspectionMode": "retained-only",
+            "recordedExecution": recorded, "retainedStages": results,
+            "currentFileObservation": {"decision": "unknown", "reason": "retained-only-no-live-workspace-check",
+                                       "semanticDecision": "unreviewed", "files": {}},
+            "claimLimit": "Retained byte hashes and record consistency only; no authentication of caller records, live workspace check, original mtime verification, semantic verdict, installed-state or resource recheck, or admission. Original results are unchanged."}
+
+
+def inspect(evidence, *, retained=False):
+    manifest = load_manifest(evidence, require_workspace=not retained)
+    if retained:
+        return _inspect_retained(evidence, manifest)
     if manifest.get("entryProtocol") == "exec-resume":
         evidence = Path(evidence)
         observer_key = ("coordinationObserver" if manifest.get("caseSchema", "yiyuan-accord-coordination-case/v1")
@@ -1915,9 +2061,21 @@ def run_persistent(args):
             phase = "file-retention"
             retained = evidence / f"stage-{stage + 1}"
             retained.mkdir()
+            retained_files = retained / "files" if manifest.get("retainedLayout") == "stage-files-v1" else retained
+            if retained_files != retained:
+                retained_files.mkdir()
             try:
                 for name in files["files"]:
-                    (retained / name).write_bytes(read_regular(Path(manifest["workspace"]) / name))
+                    if not _retained_leaf(name) or retained_files == retained and name == "inspection.json":
+                        raise ValueError("unsafe retained filename or legacy metadata collision")
+                    data = read_regular(Path(manifest["workspace"]) / name)
+                    expected = files["files"][name]["sha256"]
+                    if hashlib.sha256(data).hexdigest() != expected:
+                        raise ValueError("workspace content changed before retention")
+                    copy = retained_files / name
+                    copy.write_bytes(data)
+                    if hashlib.sha256(read_regular(copy)).hexdigest() != expected:
+                        raise ValueError("retained content changed while writing")
             except (OSError, ValueError) as error:
                 files["decision"] = "unknown"
                 files["observationErrors"].append(str(error))
@@ -2088,6 +2246,9 @@ def main():
     for name in ("run", "inspect", "hook"):
         item = sub.add_parser(name)
         item.add_argument("--evidence", required=True)
+        if name == "inspect":
+            item.add_argument("--retained", action="store_true",
+                              help="check persistent retained copies after workspace cleanup; no live or semantic verdict")
         if name == "hook":
             item.add_argument("--event", choices=EVENTS, required=True)
     args = parser.parse_args()
@@ -2101,7 +2262,7 @@ def main():
     elif args.action == "run":
         result = run_persistent(args) if load_manifest(args.evidence).get("entryProtocol") == "exec-resume" else run(args)
     else:
-        result = inspect(args.evidence)
+        result = inspect(args.evidence, retained=args.retained)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

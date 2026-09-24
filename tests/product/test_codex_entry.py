@@ -480,6 +480,276 @@ class EntryTests(unittest.TestCase):
         path.write_text(json.dumps(case), encoding="utf-8")
         return path
 
+    def test_persistent_retention_keeps_business_inspection_json_separate_from_metadata(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            case_path = self.scoped_case(root)
+            case = json.loads(case_path.read_text(encoding="utf-8"))
+            case["allowedPaths"].append("inspection.json")
+            case["deliverables"].append("inspection.json")
+            case["stages"][0]["files"]["inspection.json"] = {
+                "state": "required", "format": "json", "jsonType": "object",
+                "requiredKeys": ["business"]}
+            case_path.write_text(json.dumps(case), encoding="utf-8")
+            manifest = self.prepared_persistent(root, case_path)
+            business = b'{"business":"original output"}'
+
+            def execute(prepared, *_):
+                workspace = Path(prepared["workspace"])
+                (workspace / "report.json").write_text('{"candidate":"abc"}', encoding="utf-8")
+                (workspace / "inspection.json").write_bytes(business)
+                return {"valid": True, "threadId": "native-thread"}
+
+            with patch.object(entry, "_run_persistent_stage", side_effect=execute):
+                result = entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            self.assertTrue(result["caseComplete"])
+            retained = Path(manifest["evidence"]) / "stage-1"
+            business_copy = (retained / "files/inspection.json" if manifest.get("retainedLayout") == "stage-files-v1"
+                             else retained / "inspection.json")
+            self.assertEqual(business_copy.read_bytes(), business)
+            self.assertEqual(manifest.get("retainedLayout"), "stage-files-v1")
+            metadata = json.loads((retained / "inspection.json").read_text(encoding="utf-8"))
+            self.assertEqual(metadata["files"]["inspection.json"]["sha256"], hashlib.sha256(business).hexdigest())
+            # Simulate the old flat writer overwriting this business copy. It
+            # must remain a missing/conflicting original, never be reconstructed.
+            for name in metadata["files"]:
+                copy = retained / "files" / name
+                if name == "inspection.json":
+                    copy.unlink()
+                else:
+                    copy.replace(retained / name)
+            (retained / "files").rmdir()
+            manifest.pop("retainedLayout")
+            manifest.pop("stageIds")
+            entry.save(Path(manifest["evidence"]) / "manifest.json", manifest)
+            checked = entry.inspect(manifest["evidence"], retained=True)
+            self.assertEqual(checked["retainedStages"][0]["state"], "mismatch")
+            self.assertIn("legacy-metadata-name-conflict", checked["retainedStages"][0]["errors"])
+            self.assertEqual(checked["recordedExecution"], result)
+
+    def test_persistent_retention_marks_changed_source_copy_unknown(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared_persistent(root, self.scoped_case(root))
+            observer = entry.coordination_observer()
+            original_inspect = observer.inspect_stage
+
+            def execute(prepared, *_):
+                (Path(prepared["workspace"]) / "report.json").write_text(
+                    '{"candidate":"observed"}', encoding="utf-8")
+                return {"valid": True, "threadId": "native-thread"}
+
+            def change_after_inspection(*args, **kwargs):
+                result = original_inspect(*args, **kwargs)
+                (Path(manifest["workspace"]) / "report.json").write_text(
+                    '{"candidate":"changed-after-observation"}', encoding="utf-8")
+                return result
+
+            with patch.object(entry, "_run_persistent_stage", side_effect=execute), \
+                    patch.object(observer, "inspect_stage", side_effect=change_after_inspection):
+                result = entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            self.assertFalse(result["caseComplete"])
+            observed = result["stages"][0]["fileObservation"]
+            self.assertEqual(observed["decision"], "unknown")
+            self.assertIn("workspace content changed before retention", observed["observationErrors"])
+            self.assertFalse((Path(manifest["evidence"]) / "stage-1/files/report.json").exists())
+
+    def test_retained_inspection_after_workspace_cleanup_keeps_failed_execution_and_default_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared_persistent(root)
+            evidence = Path(manifest["evidence"])
+            native = {"valid": True, "threadId": "native-thread", "remainingOwnedProcesses": 0}
+            observer = entry.coordination_observer()
+            with patch.object(entry, "_run_persistent_stage", return_value=native), \
+                    patch.object(observer, "inspect_stage", side_effect=ValueError("offline business failure")):
+                with self.assertRaisesRegex(ValueError, "offline business failure"):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            frozen = {path.relative_to(evidence): path.read_bytes()
+                      for path in evidence.rglob("*") if path.is_file()}
+            shutil.rmtree(manifest["workspace"])
+            with self.assertRaises((OSError, ValueError)):
+                entry.inspect(evidence)
+            with patch.object(entry, "_run_persistent_stage") as native_call:
+                with self.assertRaises((OSError, ValueError)):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+                native_call.assert_not_called()
+            checked = entry.inspect(evidence, retained=True)
+            self.assertEqual(checked["inspectionMode"], "retained-only")
+            self.assertEqual(checked["recordedExecution"], json.loads(frozen[Path("result.json")]))
+            self.assertFalse(checked["recordedExecution"]["caseComplete"])
+            self.assertEqual(checked["recordedExecution"]["executionFailure"]["phase"], "file-inspection")
+            self.assertEqual(checked["currentFileObservation"]["decision"], "unknown")
+            self.assertEqual({path.relative_to(evidence): path.read_bytes()
+                              for path in evidence.rglob("*") if path.is_file()}, frozen)
+
+    def retained_scoped_fixture(self, root):
+        manifest = self.prepared_persistent(root, self.scoped_case(root))
+
+        def execute(prepared, *_):
+            (Path(prepared["workspace"]) / "report.json").write_text(
+                '{"candidate":"abc"}', encoding="utf-8")
+            return {"valid": True, "threadId": "native-thread"}
+
+        with patch.object(entry, "_run_persistent_stage", side_effect=execute):
+            result = entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+        self.assertTrue(result["caseComplete"])
+        return manifest, result
+
+    def test_retained_inspection_verifies_current_and_legacy_flat_stage_copies(self):
+        for legacy in (False, True):
+            with self.subTest(legacy=legacy), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest, result = self.retained_scoped_fixture(root)
+                evidence = Path(manifest["evidence"])
+                stage = evidence / "stage-1"
+                if legacy:
+                    for name in ("source.json", "report.json"):
+                        shutil.move(str(stage / "files" / name), str(stage / name))
+                    (stage / "files").rmdir()
+                    manifest.pop("retainedLayout", None)
+                    entry.save(evidence / "manifest.json", manifest)
+                shutil.rmtree(manifest["workspace"])
+                before = {path.relative_to(evidence): path.read_bytes()
+                          for path in evidence.rglob("*") if path.is_file()}
+                checked = entry.inspect(evidence, retained=True)
+                self.assertEqual(checked["recordedExecution"], result)
+                self.assertEqual(checked["retainedStages"][0]["state"], "verified")
+                self.assertTrue(all(checked["retainedStages"][0]["files"].values()))
+                self.assertEqual(checked["currentFileObservation"]["decision"], "unknown")
+                self.assertEqual({path.relative_to(evidence): path.read_bytes()
+                                  for path in evidence.rglob("*") if path.is_file()}, before)
+
+    def test_retained_inspection_reports_changed_and_missing_business_copies(self):
+        for mutation, state in (("changed", "mismatch"), ("missing", "incomplete")):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest, result = self.retained_scoped_fixture(root)
+                retained = Path(manifest["evidence"]) / "stage-1/files/report.json"
+                if mutation == "changed":
+                    retained.write_text('{"candidate":"altered"}', encoding="utf-8")
+                else:
+                    retained.unlink()
+                shutil.rmtree(manifest["workspace"])
+                checked = entry.inspect(manifest["evidence"], retained=True)
+                self.assertEqual(checked["recordedExecution"], result)
+                self.assertEqual(checked["retainedStages"][0]["state"], state)
+                self.assertFalse(checked["retainedStages"][0]["files"]["report.json"])
+
+    def test_retained_inspection_rejects_contradictory_stage_records(self):
+        for mutation in ("metadata", "history", "native-receipt"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest, result = self.retained_scoped_fixture(root)
+                evidence = Path(manifest["evidence"])
+                if mutation == "metadata":
+                    path = evidence / "stage-1/inspection.json"
+                    data = json.loads(path.read_text(encoding="utf-8"))
+                    data["files"]["report.json"]["sha256"] = "0" * 64
+                elif mutation == "history":
+                    path = evidence / "history.json"
+                    data = json.loads(path.read_text(encoding="utf-8"))
+                    data["report"]["report.json"]["sha256"] = "0" * 64
+                else:
+                    path = evidence / "native-receipt-1.json"
+                    data = json.loads(path.read_text(encoding="utf-8"))
+                    data["threadId"] = "foreign-thread"
+                entry.save(path, data)
+                shutil.rmtree(manifest["workspace"])
+                checked = entry.inspect(evidence, retained=True)
+                self.assertEqual(checked["recordedExecution"], result)
+                self.assertEqual(checked["retainedStages"][0]["state"], "mismatch")
+
+    def test_retained_inspection_rejects_self_consistent_stage_rename_against_manifest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest, _ = self.retained_scoped_fixture(root)
+            evidence = Path(manifest["evidence"])
+            self.assertEqual(manifest["stageIds"], ["report"])
+            result_path = evidence / "result.json"
+            result = json.loads(result_path.read_text(encoding="utf-8"))
+            result["stages"][0]["fileObservation"]["stage"] = "renamed"
+            entry.save(result_path, result)
+            inspection_path = evidence / "stage-1/inspection.json"
+            inspection = json.loads(inspection_path.read_text(encoding="utf-8"))
+            inspection["stage"] = "renamed"
+            entry.save(inspection_path, inspection)
+            history_path = evidence / "history.json"
+            history = json.loads(history_path.read_text(encoding="utf-8"))
+            history["renamed"] = history.pop("report")
+            entry.save(history_path, history)
+            shutil.rmtree(manifest["workspace"])
+            checked = entry.inspect(evidence, retained=True)
+            self.assertEqual(checked["recordedExecution"], result)
+            self.assertEqual(checked["retainedStages"][0]["state"], "mismatch")
+
+    def test_retained_inspection_rejects_evidence_content_or_directory_change_during_read(self):
+        for mutation in ("content", "directory"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest, _ = self.retained_scoped_fixture(root)
+                evidence = Path(manifest["evidence"])
+                shutil.rmtree(manifest["workspace"])
+                original_read = entry.read_regular
+                changed = False
+
+                def mutate_after_read(path):
+                    nonlocal changed
+                    raw = original_read(path)
+                    if not changed and Path(path) == evidence / "stage-1/files/report.json":
+                        changed = True
+                        if mutation == "content":
+                            (evidence / "stage-1/inspection.json").write_text("{}", encoding="utf-8")
+                        else:
+                            (evidence / "stage-1/files/late.txt").write_text("late", encoding="utf-8")
+                    return raw
+
+                with patch.object(entry, "read_regular", side_effect=mutate_after_read):
+                    with self.assertRaises(ValueError):
+                        entry.inspect(evidence, retained=True)
+                self.assertTrue(changed)
+
+    def test_retained_inspection_rejects_unsafe_business_leaf_names(self):
+        for name in ("../outside.txt", str(Path("C:/outside.txt"))):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest, result = self.retained_scoped_fixture(root)
+                evidence = Path(manifest["evidence"])
+                inspection = evidence / "stage-1/inspection.json"
+                data = json.loads(inspection.read_text(encoding="utf-8"))
+                data["files"][name] = {"sha256": "0" * 64, "mtimeNs": 0}
+                entry.save(inspection, data)
+                shutil.rmtree(manifest["workspace"])
+                checked = entry.inspect(evidence, retained=True)
+                self.assertEqual(checked["recordedExecution"], result)
+                self.assertNotEqual(checked["retainedStages"][0]["state"], "verified")
+
+    def test_retained_inspection_keeps_partial_file_retention_unknown(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared_persistent(root, self.scoped_case(root))
+
+            def execute(prepared, *_):
+                (Path(prepared["workspace"]) / "report.json").write_text(
+                    '{"candidate":"abc"}', encoding="utf-8")
+                return {"valid": True, "threadId": "native-thread"}
+
+            regular = entry.read_regular
+            def fail_retention(path):
+                if Path(path) == Path(manifest["workspace"]) / "report.json":
+                    raise OSError("fixture copy failure")
+                return regular(path)
+
+            with patch.object(entry, "_run_persistent_stage", side_effect=execute), \
+                    patch.object(entry, "read_regular", side_effect=fail_retention):
+                result = entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            self.assertFalse(result["caseComplete"])
+            self.assertEqual(result["stages"][0]["fileObservation"]["decision"], "unknown")
+            shutil.rmtree(manifest["workspace"])
+            checked = entry.inspect(manifest["evidence"], retained=True)
+            self.assertEqual(checked["recordedExecution"], result)
+            self.assertEqual(checked["retainedStages"][0]["state"], "incomplete")
+
     def test_scoped_case_reuses_persistent_transport_and_inspect_is_read_only(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
