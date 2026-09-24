@@ -864,6 +864,76 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         return assess_development_evidence(self.root, contract or self.contract, observer,
                                             subject=evidence_subject(self.root))
 
+    def execution_fixture(self):
+        contract = copy.deepcopy(self.contract)
+        case = next(row for row in contract["acceptance"]["admission"]["cases"]
+                    if row["id"] == "v33-paused-work-recovery-01")
+        execution = {key: case["conditions"][key] for key in (
+            "entryProtocol", "model", "reasoning", "windowsSandbox", "codexVersion")}
+        execution.update(host=case["host"], entry=case["entry"],
+                         runner="scripts/observe_codex_entry.py",
+                         caseFile="product/cases/coordination-v3.3.json",
+                         hookMode="native-package-hooks", timeoutSeconds=600,
+                         turnTimeoutSeconds=180, recoveryTimeoutSeconds=20,
+                         usageCaps={"outputTokens": 14000}, usageScope="synthetic test only")
+        fixture = subprocess.check_output(["git", "-C", str(self.root), "show",
+                                            "HEAD:" + execution["caseFile"]], timeout=30)
+        execution["caseSha256"] = hashlib.sha256(fixture).hexdigest()
+        case["conditions"]["execution"] = copy.deepcopy(execution)
+        from yiyuan_accord.admission import _revision_package_snapshot
+        snapshot = _revision_package_snapshot(self.root, self.git("rev-parse", "HEAD"),
+            "plugins/yiyuan-accord-codex", {"calls": 0, "files": 0, "bytes": 0})
+        files = {path.removeprefix("plugins/yiyuan-accord-codex/"): hashlib.sha256(raw).hexdigest()
+                 for path, raw in snapshot["files"].items()}
+        return contract, case, execution, files
+
+    def test_execution_prebinding_uses_committed_identity_without_admitting_facts(self):
+        from yiyuan_accord.admission import bind_evidence_execution, _definition
+        with self.history():
+            contract, case, execution, files = self.execution_fixture()
+            with self.assertRaisesRegex(ValueError, "prebound case conditions"):
+                bind_evidence_execution(self.root, case["id"], execution, files)
+            self.commit(contract)
+            bound = bind_evidence_execution(self.root, case["id"], execution, files)
+            self.assertEqual(bound["subject"]["revision"], self.git("rev-parse", "HEAD"))
+            self.assertEqual(bound["definitionSha256"], _definition(contract, case))
+            self.assertEqual(bound["execution"], execution)
+            self.assertIn("goalModeActive", bound["remainingConditions"])
+            self.assertFalse({"observedAt", "facts", "reviewBundle", "acceptedCases"} & bound.keys())
+
+    def test_execution_prebinding_rejects_drift_and_uncommitted_declarations(self):
+        from yiyuan_accord.admission import bind_evidence_execution
+        with self.history():
+            contract, case, execution, files = self.execution_fixture()
+            self.commit(contract)
+            for key, value in (("model", "other"), ("hookMode", "installed-plugin"),
+                               ("timeoutSeconds", 900), ("usageCaps", {"outputTokens": 99999})):
+                with self.subTest(key=key), self.assertRaisesRegex(ValueError, "prebound case conditions"):
+                    bind_evidence_execution(self.root, case["id"], {**execution, key: value}, files)
+            with self.assertRaisesRegex(ValueError, "package differs"):
+                bind_evidence_execution(self.root, case["id"], execution, {**files, "extra.txt": "0" * 64})
+            dirty = self.root / "uncommitted-execution.txt"
+            dirty.write_text("no dispatch")
+            try:
+                with self.assertRaisesRegex(ValueError, "clean committed"):
+                    bind_evidence_execution(self.root, case["id"], execution, files)
+            finally:
+                dirty.unlink()
+
+    def test_execution_prebinding_rejects_conflicting_or_uncommitted_fixture_identity(self):
+        from yiyuan_accord.admission import bind_evidence_execution
+        with self.history():
+            for key, value, reason in (("model", "other", "contradicts"),
+                                       ("entry", "cx-sdk", "host entry"),
+                                       ("caseSha256", "0" * 64, "fixture differs"),
+                                       ("caseFile", "README.md", "oracle dependencies")):
+                contract, case, execution, files = self.execution_fixture()
+                execution[key] = value
+                case["conditions"]["execution"] = copy.deepcopy(execution)
+                self.commit(contract)
+                with self.subTest(key=key), self.assertRaisesRegex(ValueError, reason):
+                    bind_evidence_execution(self.root, case["id"], execution, files)
+
     def observer(self, request):
         result = DevelopmentEvidenceTests.observer(self, request)
         if request["phase"] == "observe":

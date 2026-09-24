@@ -14,6 +14,8 @@ plugin or implicit Skill registration evidence; no checkpoint wrapper logs exist
 Optional --installed-plugin instead uses the existing native installation and
 user configuration without injecting hooks or bypassing trust. Bind the native
 inventory and installed bytes, then independently require actual entry delivery.
+Optional --admission-case checks a committed case's conditions.execution against
+the prepared run and exact package before dispatch. It creates no admission facts.
 Windows Job Objects contain descendants before the suspended CLI starts executing.
 The caller must select an existing Windows sandbox backend explicitly; this runner
 does not initialize/install a sandbox or directly edit shared configuration.
@@ -433,7 +435,30 @@ def _verify_prepared_sources(manifest, *, inventory_label="run-preflight"):
         if (not isinstance(guide, str) or not guide.startswith("Accord task entry:")
                 or hashlib.sha256(guide.encode("utf-8")).hexdigest() != manifest.get("entryGuideSha256")):
             raise ValueError("prepared entry guide changed")
+    if "admissionBinding" in manifest:
+        bound = manifest["admissionBinding"]
+        if _admission_binding(manifest, bound["case"]) != bound:
+            raise ValueError("prepared admission binding changed")
     return installed_observation
+
+
+def _admission_binding(manifest, case_id):
+    project = Path(__file__).resolve().parents[1]
+    if str(project) not in sys.path:
+        sys.path.insert(0, str(project))
+    from yiyuan_accord.admission import bind_evidence_execution
+    version = manifest["nativeVersion"]
+    match = re.fullmatch(r"codex-cli ([0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?)", version)
+    if not match:
+        raise ValueError("admission binding requires an exact native version receipt")
+    execution = {key: manifest[key] for key in (
+        "entryProtocol", "hookMode", "model", "reasoning", "windowsSandbox",
+        "timeoutSeconds", "turnTimeoutSeconds", "recoveryTimeoutSeconds", "caseSha256")}
+    execution.update(host="codex", entry="cx-cli", codexVersion=match[1],
+                     usageCaps=manifest["limits"]["usageCaps"], usageScope=manifest["limits"]["usageScope"],
+                     runner=Path(manifest["runner"]).relative_to(project).as_posix(),
+                     caseFile=Path(manifest["case"]).relative_to(project).as_posix())
+    return bind_evidence_execution(project, case_id, execution, _package_hashes(manifest["package"]))
 
 
 def _verify_native_stage(manifest, stage, thread_id):
@@ -541,6 +566,9 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     native_hooks = getattr(args, "native_package_hooks", False)
     installed_id = getattr(args, "installed_plugin", None)
     direct_hooks = native_hooks or installed_id is not None
+    admission_case = getattr(args, "admission_case", None)
+    if admission_case is not None and (persistent_case is None or not direct_hooks):
+        raise ValueError("admission binding requires a persistent native Hook or installed-plugin case")
     if native_hooks and installed_id is not None:
         raise ValueError("source projection and installed plugin are mutually exclusive")
     if direct_hooks and persistent_case is None:
@@ -626,6 +654,19 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     version = subprocess.run([str(paths["codex"]), "--version"], capture_output=True, timeout=15)
     if version.returncode:
         raise ValueError("native version probe failed")
+    native_version = version.stdout.decode("utf-8", "strict").strip()
+    admission_binding = None
+    if admission_case is not None:
+        # Reject incompatible candidates before creating fixtures or querying
+        # the installed inventory. Help/version probes above call no model.
+        admission_binding = _admission_binding({
+            "package": str(package), "runner": str(paths["runner"]), "case": str(case_path),
+            "nativeVersion": native_version, "entryProtocol": protocol,
+            "hookMode": "installed-plugin" if installed_id is not None else "native-package-hooks",
+            "model": args.model, "reasoning": args.reasoning, "windowsSandbox": args.windows_sandbox,
+            "timeoutSeconds": args.timeout, "turnTimeoutSeconds": turn_timeout,
+            "recoveryTimeoutSeconds": recovery_timeout, "caseSha256": hashlib.sha256(case_bytes).hexdigest(),
+            "limits": {"usageCaps": usage_caps, "usageScope": case["limits"]["usageScope"]}}, admission_case)
     entry_guide = _entry_guide(paths["node"], paths["runtime"]) if direct_hooks else None
     evidence.mkdir()
     workspace.mkdir()
@@ -661,6 +702,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
                 "evidence": str(evidence), "workspace": str(workspace), "package": str(package),
                 **{k: str(p) for k, p in paths.items()}, "sourceHashes": hashes,
                 "model": args.model, "reasoning": args.reasoning, "timeoutSeconds": args.timeout,
+                "nativeVersion": native_version,
                 "windowsSandbox": args.windows_sandbox,
                 "sandboxSetup": "caller-selected existing backend; no setup/install or direct shared config mutation by runner; native workspace trust requires caller-authorized recovery",
                 "inputs": {k: hashlib.sha256(v).hexdigest() for k, v in inputs.items()},
@@ -708,6 +750,19 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
         manifest["entryProtocol"] = "app-server"
         manifest["tracePath"] = "native/stdout.jsonl"
         manifest["executionOwner"] = "caller-owned native App Server; no CLI run command"
+    if admission_case is not None:
+        manifest["admissionBinding"] = admission_binding
+        try:
+            if _admission_binding(manifest, admission_case) != admission_binding:
+                raise ValueError("admission subject changed while preparing the observation")
+        except (OSError, ValueError, subprocess.SubprocessError):
+            # Retain any model-free inventory receipts for caller-owned recovery;
+            # do not leave an apparently runnable manifest or erase evidence.
+            save(evidence / "preparation-failed.json", {
+                "state": "failed", "reason": "admission-binding-recheck-failed", "modelCalled": False,
+                "retainedRoots": {"evidence": str(evidence), "workspace": str(workspace)},
+                "recovery": "Caller must review retained preparation/inventory receipts and release these owned roots; no run manifest was published."})
+            raise
     save(evidence / "manifest.json", manifest)
     return {"prepared": True, "evidence": str(evidence), "workspace": str(workspace), "modelCalled": False}
 
@@ -1980,6 +2035,7 @@ def main():
         prep.add_argument("--" + name, required=True)
     prep.add_argument("--timeout", type=int, required=True, help="one invocation wall-clock cap, 1..900 seconds")
     prep.add_argument("--persistent-case", help="existing coordination case to run through native exec/resume")
+    prep.add_argument("--admission-case", help="optional committed admission case ID; requires matching conditions.execution, not an admission verdict")
     prep.add_argument("--native-package-hooks", action="store_true",
                       help="persistent CLI only: project all source Node hooks; isolate process config, not a marketplace-installed plugin")
     prep.add_argument("--installed-plugin", help="persistent CLI only: existing enabled name@marketplace; retain native discovery, user configuration and Hook trust")

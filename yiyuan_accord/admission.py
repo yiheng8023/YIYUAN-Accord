@@ -463,6 +463,58 @@ def evidence_subject(root):
     return {"revision": revision, "tree": tree}
 
 
+def bind_evidence_execution(root, case_id, execution, package_files):
+    """Preflight a caller's execution plan, not observed facts or admission.
+
+    The optional runner contract lives in the existing case conditions. It must
+    already be committed; this function never creates or changes a case. Other
+    conditions, actual execution, provenance and independent review remain the
+    caller's observation duties. Returned hashes are identity, not attestation.
+    """
+    root = Path(root)
+    if not clean_git_checkout(root):
+        raise ValueError("execution binding requires a clean committed checkout")
+    subject = evidence_subject(root)
+    contract = _strict_json_object(_git(
+        root, "show", f"{subject['revision']}:product/development.json").decode("utf-8"))
+    if admission_contract_errors(contract):
+        raise ValueError("execution binding requires a valid admission contract")
+    cases = [case for case in contract["acceptance"]["admission"]["cases"] if case["id"] == case_id]
+    if len(cases) != 1:
+        raise ValueError("execution case was not prebound")
+    case = cases[0]
+    planned = case["conditions"].get("execution")
+    if not isinstance(planned, dict) or not planned or _json(planned) != _json(execution):
+        raise ValueError("execution differs from the prebound case conditions")
+    # Older prose conditions stay meaningful: a new structured block cannot
+    # silently contradict the scalar settings already bound in that case.
+    for key in ("entryProtocol", "model", "reasoning", "windowsSandbox", "codexVersion"):
+        if key in case["conditions"] and _json(case["conditions"][key]) != _json(execution.get(key)):
+            raise ValueError("execution contradicts an existing case condition")
+    if any(execution.get(key) not in case["oracleFiles"] for key in ("runner", "caseFile")):
+        raise ValueError("execution runner and fixture must be declared oracle dependencies")
+    if any(execution.get(key) != case[key] for key in ("host", "entry")):
+        raise ValueError("execution differs from the case host entry")
+    fixture = _git(root, "show", f"{subject['revision']}:{execution['caseFile']}")
+    if sha256(fixture).hexdigest() != execution.get("caseSha256"):
+        raise ValueError("execution fixture differs from the committed candidate")
+    projection = next(row for row in contract["delivery"]["hostProjections"] if row["id"] == case["host"])
+    package = Path(projection["manifest"]).parents[1].as_posix()
+    snapshot = _revision_package_snapshot(root, subject["revision"], package,
+                                          {"calls": 0, "files": 0, "bytes": 0})
+    expected_files = {path[len(package) + 1:]: sha256(raw).hexdigest()
+                      for path, raw in snapshot["files"].items()}
+    if snapshot["sha256"] != projection["packageSha256"] or _json(expected_files) != _json(package_files):
+        raise ValueError("execution package differs from the committed candidate")
+    if evidence_subject(root) != subject or not clean_git_checkout(root):
+        raise ValueError("execution subject changed during binding")
+    return {"subject": subject, "case": case_id, "scope": case["scope"],
+            "definitionSha256": _definition(contract, case), "packageSha256": snapshot["sha256"],
+            "execution": copy.deepcopy(execution),
+            "remainingConditions": sorted(set(case["conditions"]) - {"execution"}),
+            "claimLimit": "Prepared execution identity only; actual conditions, facts, observe/recheck and independent review remain required."}
+
+
 def _fresh(value, seconds, now):
     try:
         at = datetime.fromisoformat(value.replace("Z", "+00:00"))

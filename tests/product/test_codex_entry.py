@@ -206,7 +206,7 @@ class EntryTests(unittest.TestCase):
         shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
         (package / ".mcp.json").unlink()
 
-    def prepared_persistent(self, root, case_path=None, *, native_hooks=False, installed=False):
+    def prepared_persistent(self, root, case_path=None, *, native_hooks=False, installed=False, admission_case=None):
         package = (root / "home/plugins/cache/yiyuan-accord/yiyuan-accord-codex" / PACKAGE_VERSION
                    if installed else root / "package")
         if native_hooks:
@@ -220,7 +220,8 @@ class EntryTests(unittest.TestCase):
             package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
             codex=PYTHON, node=shutil.which("node") if native_hooks or installed else PYTHON, model="explicit-offline-model", reasoning="high",
             timeout=600, turn_timeout=180, recovery_timeout=20, windows_sandbox="elevated",
-            native_package_hooks=native_hooks, installed_plugin="yiyuan-accord-codex@yiyuan-accord" if installed else None)
+            native_package_hooks=native_hooks, installed_plugin="yiyuan-accord-codex@yiyuan-accord" if installed else None,
+            admission_case=admission_case)
         case_path = case_path or SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
         help_exec = subprocess.CompletedProcess([], 0, b"--dangerously-bypass-hook-trust --sandbox --output-last-message --ignore-user-config --disable", b"")
         help_resume = subprocess.CompletedProcess([], 0, b"--json --output-last-message --model", b"")
@@ -237,6 +238,84 @@ class EntryTests(unittest.TestCase):
                 patch.object(entry, "_native_inventory", return_value=json.loads(self.installed_listing().stdout)):
             entry.prepare(args, persistent_case=entry.load_persistent_case(case_path))
         return entry.load_manifest(args.evidence)
+
+    def test_admission_preparation_rejects_before_fixture_writes_or_dispatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}), \
+                    patch.object(entry, "_admission_binding", side_effect=ValueError("case mismatch")), \
+                    patch.object(entry, "_native_inventory") as inventory, \
+                    patch.object(entry.subprocess, "Popen") as process:
+                with self.assertRaisesRegex(ValueError, "case mismatch"):
+                    self.prepared_persistent(root, installed=True, admission_case="formal-case")
+                inventory.assert_not_called()
+                process.assert_not_called()
+            self.assertFalse((root / "evidence").exists())
+            self.assertFalse((root / "work").exists())
+
+    def test_admission_binding_rechecked_before_model_and_each_native_stage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            binding = {"case": "formal-case", "subject": {"revision": "frozen"}}
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}), \
+                    patch.object(entry, "_admission_binding", return_value=binding) as bind:
+                manifest = self.prepared_persistent(root, installed=True, admission_case="formal-case")
+                self.assertEqual(bind.call_count, 2)
+                self.assertEqual(manifest["admissionBinding"], binding)
+                bind.return_value = {**binding, "subject": {"revision": "changed"}}
+                with patch.object(entry, "_native_inventory", return_value=json.loads(self.installed_listing().stdout)), \
+                        patch.object(entry.subprocess, "Popen") as process:
+                    for action in (lambda: entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"])),
+                                   lambda: entry._verify_native_stage(manifest, 0, None)):
+                        with self.assertRaisesRegex(ValueError, "admission binding changed"):
+                            action()
+                    process.assert_not_called()
+                self.assertFalse((root / "evidence/run-started.json").exists())
+
+    def test_admission_bridge_derives_execution_settings_without_copying_expected_conditions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}):
+                manifest = self.prepared_persistent(root, installed=True)
+            with patch("yiyuan_accord.admission.bind_evidence_execution", return_value={}) as bind:
+                with self.assertRaisesRegex(ValueError, "exact native version"):
+                    entry._admission_binding(manifest, "formal-case")
+                bind.assert_not_called()
+                manifest["nativeVersion"] = "codex-cli 0.156.1"
+                entry._admission_binding(manifest, "formal-case")
+                project, case_id, execution, package_files = bind.call_args.args
+                self.assertEqual(project, SCRIPT.parents[1])
+                self.assertEqual(case_id, "formal-case")
+                self.assertEqual(execution, {
+                    "host": "codex", "entry": "cx-cli", "codexVersion": "0.156.1",
+                    "entryProtocol": "exec-resume", "hookMode": "installed-plugin",
+                    "model": "explicit-offline-model", "reasoning": "high", "windowsSandbox": "elevated",
+                    "timeoutSeconds": 600, "turnTimeoutSeconds": 180, "recoveryTimeoutSeconds": 20,
+                    "caseSha256": manifest["caseSha256"], "usageCaps": manifest["limits"]["usageCaps"],
+                    "usageScope": manifest["limits"]["usageScope"],
+                    "runner": "scripts/observe_codex_entry.py", "caseFile": "product/cases/coordination-v3.3.json"})
+                self.assertEqual(package_files, manifest["installedPlugin"]["packageFiles"])
+
+    def test_admission_prepare_drift_retains_failed_receipt_without_runnable_manifest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}), \
+                    patch.object(entry, "_admission_binding", side_effect=[
+                        {"case": "formal-case"}, ValueError("private-external-detail")]), \
+                    patch.object(entry, "_entry_guide", return_value="Accord task entry: fixture"), \
+                    patch.object(entry.subprocess, "Popen") as process:
+                with self.assertRaises(ValueError):
+                    self.prepared_persistent(root, installed=True, admission_case="formal-case")
+                process.assert_not_called()
+            receipt = json.loads((root / "evidence/preparation-failed.json").read_text())
+            self.assertEqual(receipt["state"], "failed")
+            self.assertFalse(receipt["modelCalled"])
+            self.assertEqual(receipt["retainedRoots"], {"evidence": str(root / "evidence"),
+                                                       "workspace": str(root / "work")})
+            self.assertNotIn("private-external-detail", json.dumps(receipt))
+            self.assertFalse((root / "evidence/manifest.json").exists())
+            self.assertFalse((root / "evidence/run-started.json").exists())
+            self.assertTrue((root / "work/keep.txt").is_file())
 
     def test_installed_entry_preserves_native_discovery_trust_and_configuration(self):
         with tempfile.TemporaryDirectory() as tmp:

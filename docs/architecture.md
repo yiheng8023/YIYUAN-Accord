@@ -645,6 +645,24 @@ callable or a JSON record does not establish those properties. The CLI neither
 loads observer code from data nor accepts a receipt file as authentication.
 No new executor, service, database or host dependency is installed.
 
+For a prospective persistent CLI observation, `observe_codex_entry.py prepare
+--admission-case <id>` optionally binds the existing case before model dispatch.
+The case must already declare a matching `conditions.execution` object in a clean,
+committed candidate: host/entry, CLI version, Hook mode, model/effort, sandbox,
+work/turn/recovery deadlines, usage caps/scope, runner and fixture identities.
+The runner derives these settings from its actual preparation; it does not copy
+expected conditions to manufacture a match. Fixture Git bytes and the complete
+executed package file set must match that candidate. It rechecks the binding
+before the first dispatch and every subsequent turn. A changed candidate holds
+execution; preparation-time drift after directory creation leaves an explicit
+failed receipt, retained roots for caller recovery, and no runnable manifest.
+Prepared settings do not prove actual native execution, semantic conditions,
+cleanup or model/Goal state. The returned `remainingConditions` preserves those
+observation duties; this path creates no facts, observation timestamp, review or
+accepted case. Existing exploration mode remains available. Old cases lacking
+the structured execution binding are rejected by this opt-in, never backfilled
+from their historical results; formal observe/recheck and review are still needed.
+
 `evidenceAdmission.caseRejections` explains completed case checks with controlled
 reason codes: definition/package or dependency changes, invalid or expired
 observation time, condition drift and unmet consequences. It exposes no observed
