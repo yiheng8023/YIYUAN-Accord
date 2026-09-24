@@ -1015,13 +1015,18 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A04", "A07"})
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A07"})
+        # A bounded correction case may pass without discharging the historical
+        # and recovery consequences still owned by the required integration scope.
+        self.assertIn("v33-systemic-correction-02", report["acceptedCases"])
+        self.assertEqual(report["acceptanceRequirements"]["A04"]["missingScopes"]["function"],
+                         ["v33-system-integration"])
         self.assertNotIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
         self.assertIn("v33-openai-entry-applicability",
                       report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
         self.assertEqual(report["progress"]["coverageVerified"], 8)
-        self.assertEqual(report["progress"]["requirementsComplete"], 2)
+        self.assertEqual(report["progress"]["requirementsComplete"], 1)
         # The explicit adaptation case is now covered by this synthetic observer;
         # SDK sub-scopes still cannot discharge selected-entry lifecycle parents.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
