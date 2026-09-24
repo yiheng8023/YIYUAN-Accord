@@ -28,7 +28,7 @@ CI节奏共识已按9月20日用户确认写入计划：本地小改/针对性�
 | 项目 | 已核事实与边界 |
 |---|---|
 | 仓库与写者 | 9月23日恢复时main=cecdcc47，origin/main=45507f46，ahead 1/behind 0；配额中断前五个文件的未提交修改保留。root集成文档及执行；限定审查者已完成相应源码与原件复核，root为当前唯一仓库写者。本批开始时main与origin/main在9aae2880一致，CI11/11通过；r31源候选共享安装已对齐。root为唯一仓库写者，限定子代理仅写私有交接说明。 |
-| 已安装开发包 | 3.3.0-dev.1+codex.20260923074845，24文件，SHA 750f9ef8a76e03224d7d2fae1ef2de4335c0c81c914eb960c34c8c717d5fdae9；Git市场ref=68f44925。原生更新的网络克隆超时后，从已核验本地Git提交完成取数，注册来源仍是原GitHub URL；源码/Git/缓存逐字节一致，fresh读取5启用Skill/6启用trusted Hook，其余共享配置及持久Git配置保持。当前任务已注入旧指导不因此宣称刷新；新候选普通行为仍待验。 |
+| 已安装开发包 | 3.3.0-dev.1+codex.20260923074845，24文件，SHA 750f9ef8a76e03224d7d2fae1ef2de4335c0c81c914eb960c34c8c717d5fdae9；Git市场ref=68f44925。原生更新的网络克隆超时后，从已核验本地Git提交完成取数，注册来源仍是原GitHub URL；源码/Git/缓存逐字节一致，fresh读取5启用Skill/6启用trusted Hook，其余共享配置及持久Git配置保持。当前任务原生Hook已按74845入口注入协调指导；这不证明所有既有MCP实例自动刷新，新候选普通行为仍待验。 |
 | 当前源候选 | 3.3.0-dev.1+codex.20260923074845，24文件，SHA 750f9ef8a76e03224d7d2fae1ef2de4335c0c81c914eb960c34c8c717d5fdae9。基于34028的实际反例改写已有来源核验职责，明确结果审查路由及证据对象/时点/范围；Stop/runtime未改。共享安装已对齐74845，新候选尚无普通行为改善证据，旧结果保留原包身份。 |
 | 实际采用 | 前轮用户重启后原任务调用inspect_task_state(contextAssessment)返回continue-bounded，sourceReleaseAllowed=false；旧epoch反例返回reassess。输入/状态字节保持。首次缺原生计数的unknown和之后有据评估分别留证。当时实际Goal读为null，仅证明当时无Goal。 |
 | 当前任务状态 | 9月23日resume后原native状态仍标输入恢复。root从当前任务rollout确认本轮原文、turn/model/cwd，与实时MCP元数据一致后，沿已有令牌绑定replay恢复当前输入；原生read_task_input回读441字符/hash一致，source=retained-native-replay，两恢复标记false。根任务仍unbound，无完整项目checkpoint；旧缺失输入未重建。原生上下文来源恢复可观察，计数仅响应边界和本机实际设置，不作默认规格或接管许可。 |
@@ -98,7 +98,7 @@ accord-sdk-restore-20260921-01由root独占执行一次：旧01只读复制ledge
 
 本次获准的云端接入验证已停止并完成回滚：原任务临时注册/安装74845及24文件核对成功，但0.144.0-alpha.4原生目录只有4个唯一Hook（两个SessionStart、UserPromptSubmit、Stop），缺SessionEnd/Interrupt，未达到预绑6项授信门槛，未进入原任务采用阶段。可见原生命令证实插件/市场移除、列表为空，config恢复前态相同字节、Git干净；所属AppServer PID4888 exit0/forced=false且后验不存在，原有宿主进程保持。最后只读回执核对发现原始RPC请求流水未保存，精确方法次数未知；不把预定客户端代码当实际调用记录。私有备份与版本差异诊断材料保留，结果在accord-cloud-route-20260923-01/cloud-pilot-result.json；不要重跑旧方案。下一按实际事件职责评估已有替代路径，六项仅属本次门槛，不等于所有宿主通用必备数量，也不能凭四项发现宣称整链通过。
 
-缺失事件职责审查已完成：官方0.144.0-alpha.4源码表明原生取消终止本轮并记录TurnAborted，不经正常Stop续行；现有输入/resume更新epoch、迟到回调约束及显式retire分别承担后续核对和有责任者的回收。7项既有本地检查通过；没有仅为补事件名新增运行时的理由。旧回执不等于仍在执行，外部效果/写者和原云控制者实际采用仍未知，未提高准入。9月24日新的有界授权已执行收尾：四项真实Hook授信成功；同容器下一原生输入未获得指导/状态工具，原任务采用未成立。前后容器和配置延续，因此转查受支持的原控制者装载/刷新与初始化时机，不循环重装。已原生移除本次插件/市场，撤去四项信任，配置逐字节恢复fee05670前态，make_pr与仓库保持；所属PID5455自然exit0且后验不存在。新方案已结束，原六项试验同样不重跑。结果在accord-cloud-route-20260923-01/cloud-adoption-result.json。证据在accord-cloud-route-20260923-01/missing-event-duty-review.md及cloud-adoption-proposal.md。计划/架构/机器观察同步；基线与验收结果判据不变。
+缺失事件职责审查已完成：官方0.144.0-alpha.4源码表明原生取消终止本轮并记录TurnAborted，不经正常Stop续行；现有输入/resume更新epoch、迟到回调约束及显式retire分别承担后续核对和有责任者的回收。7项既有本地检查通过；没有仅为补事件名新增运行时的理由。旧回执不等于仍在执行，外部效果/写者和原云控制者实际采用仍未知，未提高准入。9月24日新的有界授权已执行收尾：四项真实Hook授信成功；同容器下一原生输入未获得指导/状态工具，原任务采用未成立。前后容器和配置延续，因此转查受支持的原控制者装载/刷新与初始化时机，不循环重装。已原生移除本次插件/市场，撤去四项信任，配置逐字节恢复fee05670前态，make_pr与仓库保持；所属PID5455自然exit0且后验不存在。新方案已结束，原六项试验同样不重跑。结果在accord-cloud-route-20260923-01/cloud-adoption-result.json。证据在accord-cloud-route-20260923-01/missing-event-duty-review.md及cloud-adoption-proposal.md。计划/架构/机器观察同步；基线与验收结果判据不变。 装载源码复核已完成：0.144每轮复用会话配置及插件缓存；同server的安装/配置刷新只通知自己的线程，不能由独立检查server刷新原云任务。当前没有原控制者受支持连接；官方环境详情可读，但点击编辑到/edit后返回403，未更改设置，已请用户仅确认其手动访问。下一先核入口可用性和启动前装载条件，不循环安装或预先编造新运行时。详见私有loading-path-review.md。
 
 下一按依赖推进：
 
