@@ -494,6 +494,10 @@ this documentation or inferred from a successful inventory.
 The optional `runtime/codex-session.cjs` supplies the SDK source caller: it borrows
 an initialized, authorized connection, creates a source with context/proposal
 tools alongside the owner's tools, binds the source writer and pumps its turns.
+Source creation explicitly requests `ephemeral: false` and requires the returned
+thread to confirm that mode before binding a writer or dispatching work. Missing
+or contrary persistence metadata retains the created ID/receipt for owner
+reconciliation without retry; this does not establish crash durability.
 The owner supplies current authority, the handoff plan, independent effect
 verification and decisions for other server requests. A single activity wait
 handles either a request or the matching terminal event; it leaves no losing

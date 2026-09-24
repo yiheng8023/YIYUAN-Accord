@@ -76,6 +76,11 @@ connection; it is not an attachment to an existing GUI task. Supply `connection`
 `verify`, `current` and `ownerRequest`. Use receiver-free or pre-bound callbacks.
 It preserves the owner's other dynamic tools and appends context/proposal tools;
 conflicting names are rejected before source creation.
+The source request explicitly uses `ephemeral: false`. The returned thread must
+also report `ephemeral: false` before its writer scope is bound or work is sent.
+Missing or contrary persistence metadata raises `SOURCE_PERSISTENCE_UNVERIFIED`,
+retaining the created thread ID and receipt for owner reconciliation without
+retrying creation. This confirms the host's declared mode, not crash durability.
 
 Call `session.run({input, deadlineMs, turn?})` with a nonempty text/native input and
 an absolute Unix millisecond deadline. `turn` carries the owner's explicit native

@@ -68,6 +68,10 @@ function handle(frame) {
     if (!sourceStarted) {
       sourceStarted = true;
       if (mode === 'start-loss') return queueMicrotask(() => output.end());
+      if (mode === 'source-ephemeral') return response(frame,
+        {thread:{id:'source-1', ephemeral:true}, model:frame.params.model});
+      if (mode === 'source-persistence-missing') return response(frame,
+        {thread:{id:'source-1'}, model:frame.params.model});
       const answer = () => emit({jsonrpc:'2.0', id:frame.id,
         result:{thread:{id:'source-1', status:{type:'idle'}, ephemeral:false},
           model:frame.params.model}});
@@ -263,6 +267,10 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     result.ownerCalls = ownerCalls.length; result.currentCalls = currentCalls.length;
     result.verifyCalls = verifyCalls; result.recordReads = recordReads;
     result.settleCalls = settleCalls;
+    if (mode === 'source-ephemeral' || mode === 'source-persistence-missing') {
+      try { recorder.readScope('fixture-scope'); result.scopeReadCode = 'present'; }
+      catch (error) { result.scopeReadCode = error.code; }
+    }
     console.log(JSON.stringify(result));
   } finally { connection.close(); recorder.close(); }
 })().catch(error=>{console.error(error);process.exitCode=1});
@@ -420,6 +428,7 @@ class CodexSourceSessionTests(unittest.TestCase):
         self.assertEqual(result["verifyCalls"], ["prepare", "quiesced", "target-created",
                                                  "accepted", "continue", "continued", "release"])
         source_start = result["starts"][0]
+        self.assertIs(source_start["ephemeral"], False)
         self.assertEqual((source_start["model"], source_start["effort"],
                           source_start["sandbox"], source_start["approvalPolicy"]),
                          ("owner-model", "owner-effort", "workspace-write", "on-request"))
@@ -452,6 +461,21 @@ class CodexSourceSessionTests(unittest.TestCase):
                          result["error"]["rpcRequest"])
         self.assertEqual(result["second"], "SESSION_FAILED")
         self.assertEqual(sum(frame.get("method") == "thread/start" for frame in result["sent"]), 1)
+
+    def test_unconfirmed_source_persistence_preserves_identity_without_dispatching_work(self):
+        for mode in ("source-ephemeral", "source-persistence-missing"):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode)
+                self.assertTrue("error" in result, "Unconfirmed persistence must hold source dispatch")
+                self.assertEqual(result["error"]["code"], "SOURCE_PERSISTENCE_UNVERIFIED")
+                state = result["error"]["state"]
+                self.assertEqual(state["sourceThreadId"], "source-1")
+                self.assertEqual(state["lastSafeReceipt"]["thread"]["id"], "source-1")
+                self.assertNotIn("scope", state)
+                self.assertEqual(result["scopeReadCode"], "SCOPE_NOT_FOUND")
+                self.assertEqual(result["second"], "SESSION_FAILED")
+                self.assertEqual(sum(frame.get("method") == "thread/start" for frame in result["sent"]), 1)
+                self.assertFalse(any(frame.get("method") == "turn/start" for frame in result["sent"]))
 
     def test_concurrent_run_is_rejected_without_poisoning_the_active_turn(self):
         result = self.run_case("concurrent")

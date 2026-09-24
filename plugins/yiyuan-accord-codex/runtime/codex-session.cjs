@@ -267,7 +267,10 @@ function createSession(options, restoreMode = false) {
   if (sourceStart) {
     text(sourceStart.cwd, 'threadStart.cwd', 32768);
     text(sourceStart.model, 'threadStart.model');
-    if (sourceStart.ephemeral === true) throw new TypeError('threadStart.ephemeral cannot be true for a recoverable source');
+    if (Object.hasOwn(sourceStart, 'ephemeral') && sourceStart.ephemeral !== false) {
+      throw new TypeError('threadStart.ephemeral must be false for a recoverable source');
+    }
+    sourceStart.ephemeral = false;
     if (Object.hasOwn(sourceStart, 'threadId')) throw new TypeError('threadStart cannot select an existing thread');
     sourceStart.dynamicTools = continuityTools(sourceStart.dynamicTools,
       'threadStart.dynamicTools');
@@ -418,7 +421,15 @@ function createSession(options, restoreMode = false) {
         return lockFailure('SOURCE_START_UNKNOWN', 'source thread start acknowledgement is malformed', error,
           {phase: 'source-start-unknown', state: {lastSafeReceipt: immutable(receipt)}});
       }
-      state = {...state, sourceThreadId, phase: 'scope-bind-pending', lastSafeReceipt: immutable(receipt)};
+      // Retain the created identity for owner reconciliation even when the host
+      // has not confirmed that the source can survive this connection.
+      state = {...state, sourceThreadId, phase: 'source-persistence-check'};
+      if (receipt.thread.ephemeral !== false) {
+        return lockFailure('SOURCE_PERSISTENCE_UNVERIFIED',
+          'source acknowledgement did not confirm a persistent thread', null,
+          {phase: 'source-persistence-unverified'});
+      }
+      state = {...state, phase: 'scope-bind-pending'};
       try {
         const binding = await boundedOperation(bound.bindScope, [scopeRef, sourceThreadId],
           deadline, 'recorder.bindScope');

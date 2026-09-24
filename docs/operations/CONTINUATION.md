@@ -29,7 +29,7 @@ CI节奏共识已按9月20日用户确认写入计划：本地小改/针对性�
 |---|---|
 | 仓库与写者 | 9月23日恢复时main=cecdcc47，origin/main=45507f46，ahead 1/behind 0；配额中断前五个文件的未提交修改保留。root集成文档及执行；限定审查者已完成相应源码与原件复核，root为当前唯一仓库写者。本批开始时main与origin/main在9aae2880一致，CI11/11通过；r31源候选共享安装已对齐。root为唯一仓库写者，限定子代理仅写私有交接说明。 |
 | 已安装开发包 | 3.3.0-dev.1+codex.20260923074845，24文件，SHA 750f9ef8a76e03224d7d2fae1ef2de4335c0c81c914eb960c34c8c717d5fdae9；Git市场ref=68f44925。原生更新的网络克隆超时后，从已核验本地Git提交完成取数，注册来源仍是原GitHub URL；源码/Git/缓存逐字节一致，fresh读取5启用Skill/6启用trusted Hook，其余共享配置及持久Git配置保持。当前任务原生Hook已按74845入口注入协调指导；这不证明所有既有MCP实例自动刷新，新候选普通行为仍待验。 |
-| 当前源候选 | 3.3.0-dev.1+codex.20260923074845，24文件，SHA 750f9ef8a76e03224d7d2fae1ef2de4335c0c81c914eb960c34c8c717d5fdae9。基于34028的实际反例改写已有来源核验职责，明确结果审查路由及证据对象/时点/范围；Stop/runtime未改。共享安装已对齐74845，新候选尚无普通行为改善证据，旧结果保留原包身份。 |
+| 当前源候选 | 3.3.0-dev.1+codex.20260924001947，24文件，SHA c10422444c4c75e73cb0724b7da5f7b4b538433b0d4f62e6db2762851023a8f7。基于74845补SDK源创建的实际持久性确认：明确请求ephemeral=false，回执未明确为false则保留ID/原回执，停止writer绑定和首轮发送。普通入口指导与Stop未改；开发安装仍为74845，待该候选检查后按必要工作段同步。旧宿主/行为证据保持原包身份，不因本地检查移为新候选通过。 |
 | 实际采用 | 前轮用户重启后原任务调用inspect_task_state(contextAssessment)返回continue-bounded，sourceReleaseAllowed=false；旧epoch反例返回reassess。输入/状态字节保持。首次缺原生计数的unknown和之后有据评估分别留证。当时实际Goal读为null，仅证明当时无Goal。 |
 | 当前任务状态 | 9月23日resume后原native状态仍标输入恢复。root从当前任务rollout确认本轮原文、turn/model/cwd，与实时MCP元数据一致后，沿已有令牌绑定replay恢复当前输入；原生read_task_input回读441字符/hash一致，source=retained-native-replay，两恢复标记false。根任务仍unbound，无完整项目checkpoint；旧缺失输入未重建。原生上下文来源恢复可观察，计数仅响应边界和本机实际设置，不作默认规格或接管许可。 |
 | 已完成CI | 精确68f44925的[35836060018](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/35836060018)11/11成功。05cd9359的35834166597为2项原生通过/9项包摘要失败；工作区换行与Git提交字节不同的原因及干净检出修正已保留。更早9aae2880原件回读、51aafb31退出失败及历史CI边界保留在[前态记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/68f4492520700365d44d182dc00d70aa14c7b7d1/docs/operations/CONTINUATION.md)。 |
@@ -45,6 +45,8 @@ CI节奏共识已按9月20日用户确认写入计划：本地小改/针对性�
 | 9月23日收尾组合 | CLI0.156.0/Node24.20.0；02实际2次thread/start、3次turn/start、4次本地固定响应、1次source unsubscribe，SQLite revision19/settled且writer为目标。keep、共享配置、可执行文件与执行源码保持；Job自然exit0/forced=false/readerStopped/activeProcesses0，home/state/temp已回收。原件及CI同形搬迁副本回读通过，缺配置观察、额外native-home文件、重复RPC回执三个反例拒绝；临时副本已清理。独立审查另核15个RPC的唯一成功响应、实际idle/terminal与SQLite，未仅复跑检查器。38项离线carrier及2项路由/共识定向检查通过。此为固定协议组合，不证明自主择时、普通模型行为、完整A05或GUI采用。 |
 
 ## 本批实现与下一实际动作
+
+9月24日本批独立推进SDK源任务持久性边界：新增两个固定回执反例（ephemeral为true、缺失），修复前均未被拒绝；修复后保留sourceThreadId/原回执且SQLite尚无writer、无turn/start，重复run保持失败。源会话21、原生夹具单测7、开发契约87，共115项通过，插件校验/语法/产品契约通过，限定独立复核通过。既有0.155.1原生源回执已核字段为false，仅证字段可用；未新增原生或模型试验。完全丢失初次ACK仍须owner对账，A05整项与17范围完成计数不变。私有记录在accord-source-persistence-20260924-01；下一先核精确提交包字节与CI，再接普通任务/必要恢复，云端403不阻断此段。
 
 当前安装对齐已完成：原CLI直接add不同固定ref被拒，原config哈希与旧安装保持；核对0.156.0官方源码确认市场remove仅移除该条目/快照后，按原生remove→add精确9aae2880→plugin add完成。旧22文件包和原配置留可恢复备份；24文件与源码一致，5Skill/6trusted Hook来自新缓存路径。五条CLI命令（含首次被拒）与一个只读读取域自然退出、所属进程0；没有真实模型、额外信任或模式启用。空验证工作区已移除，update.py/rebind.py均为一次性脚本，不得重跑。
 
