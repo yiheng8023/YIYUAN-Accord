@@ -663,6 +663,17 @@ accepted case. Existing exploration mode remains available. Old cases lacking
 the structured execution binding are rejected by this opt-in, never backfilled
 from their historical results; formal observe/recheck and review are still needed.
 
+The persistent CLI observer retains each returned native receipt before business
+inspection. If a later preflight, inspection or retention step fails, it preserves
+the known thread identity and partial execution result before propagating the
+original error. Interrupted inspection stays unknown; a missing native receipt
+does not establish absence of effects. Configuration observation or receipt-write
+failures remain separate and cannot replace an earlier execution failure.
+The existing exclusive run-start marker still prevents replay. Read-only inspection
+may find that current files now pass, but does not rewrite the failed execution or
+its completion count. These are observer recovery records, not autonomous recovery
+or admission evidence by themselves.
+
 `evidenceAdmission.caseRejections` explains completed case checks with controlled
 reason codes: definition/package or dependency changes, invalid or expired
 observation time, condition drift and unmet consequences. It exposes no observed

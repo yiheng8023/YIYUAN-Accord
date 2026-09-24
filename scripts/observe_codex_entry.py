@@ -1251,13 +1251,17 @@ def inspect(evidence):
         recorded = json.loads(read_regular(evidence / "result.json"))
         if (recorded.get("schema") != "accord-codex-persistent-exec/v1"
                 or recorded.get("episode") != manifest["episode"]
-                or not isinstance(recorded.get("stages"), list) or not recorded["stages"]):
+                or not isinstance(recorded.get("stages"), list)
+                or not recorded["stages"] and not isinstance(recorded.get("executionFailure"), dict)):
             raise ValueError("persistent result binding mismatch")
-        stage_id = recorded["stages"][-1]["fileObservation"]["stage"]
-        current = coordination_observer().inspect_stage(
-            manifest["workspace"], stage_id,
-            originals=json.loads(read_regular(evidence / "originals.json")),
-            history=json.loads(read_regular(evidence / "history.json")), fixture_path=manifest["case"])
+        current = {"decision": "unknown", "reason": "no-native-stage-receipt",
+                   "semanticDecision": "unreviewed", "files": {}}
+        if recorded["stages"]:
+            stage_id = recorded["stages"][-1]["fileObservation"]["stage"]
+            current = coordination_observer().inspect_stage(
+                manifest["workspace"], stage_id,
+                originals=json.loads(read_regular(evidence / "originals.json")),
+                history=json.loads(read_regular(evidence / "history.json")), fixture_path=manifest["case"])
         installed_checks = None
         if _hook_mode(manifest) == "installed-plugin":
             # Review retained observations, not a cache that may have legitimately
@@ -1267,7 +1271,7 @@ def inspect(evidence):
                 "recordedExecution": recorded,
                 "retainedInstalledChecksValid": installed_checks,
                 "currentFileObservation": current,
-                "claimLimit": "Fresh file check and retained execution receipts; no automatic admission."}
+                "claimLimit": "Fresh file check and retained execution receipts; a current file pass does not revise an earlier failed or unverified execution. No automatic admission."}
     root, evidence = Path(manifest["workspace"]), Path(evidence)
     unchanged = {}
     for name, expected in manifest["inputs"].items():
@@ -1884,16 +1888,31 @@ def run_persistent(args):
     originals = observer.snapshot(manifest["workspace"], fixture["inputs"])
     save(evidence / "originals.json", originals)
     thread_id, stages, history, native_usage = None, [], {}, {}
+    save(evidence / "history.json", history)
+    failure, phase, active_stage = None, "preflight", 0
+    poststate_retention_failed = False
+    poststate_observation_failed = False
     try:
         for stage in range(len(manifest["prompts"])):
+            active_stage, phase = stage + 1, "preflight"
             if time.monotonic() >= deadline:
                 break
             if _hook_mode(manifest) == "native-package-hooks":
                 _verify_native_stage(manifest, stage, thread_id)
-            observed = _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage)
+            phase = "native-execution"
+            native = _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage)
             stage_id = fixture["stages"][stage]["id"]
+            thread_id = native.get("threadId") or thread_id
+            observed = {**native, "valid": False, "fileObservation": {
+                "stage": stage_id, "decision": "unknown", "semanticDecision": "unreviewed",
+                "files": {}, "violations": [], "observationErrors": ["file-inspection-incomplete"]}}
+            stages.append(observed)
+            phase = "native-receipt-retention"
+            save(evidence / f"native-receipt-{stage + 1}.json", native)
+            phase = "file-inspection"
             files = observer.inspect_stage(manifest["workspace"], stage_id, originals=originals,
                                            history=history, fixture_path=manifest["case"])
+            phase = "file-retention"
             retained = evidence / f"stage-{stage + 1}"
             retained.mkdir()
             try:
@@ -1906,23 +1925,36 @@ def run_persistent(args):
             history[stage_id] = files["files"]
             save(evidence / "history.json", history)
             observed["fileObservation"] = files
-            observed["valid"] &= files["decision"] == "pass"
-            stages.append(observed)
-            thread_id = observed.get("threadId") or thread_id
+            observed["valid"] = native["valid"] and files["decision"] == "pass"
             if not observed["valid"]:
                 break
+    except (Exception, KeyboardInterrupt) as error:
+        # Preserve already-observed effects before propagating the original
+        # failure. A missing later receipt never permits replay of earlier work.
+        failure = error
     finally:
-        config_after = shared_config_snapshot(shared_config, manifest["workspace"])
+        try:
+            config_after = shared_config_snapshot(shared_config, manifest["workspace"])
+        except (Exception, KeyboardInterrupt) as error:
+            config_after = {"state": "unavailable", "reason": "poststate-observation-failed"}
+            poststate_observation_failed = True
+            if failure is None:
+                failure, phase = error, "shared-config-observation"
         if _direct_package_hooks(manifest):
             # Retain poststate even when source drift or business inspection
             # rejects continuation; process cleanup remains stage-owned.
-            save(evidence / "shared-config.json", {"before": config_before, "after": config_after,
-                "unchanged": (config_before["sha256"] == config_after["sha256"]
-                              if config_before["state"] == config_after["state"] == "observed" else None)})
+            try:
+                save(evidence / "shared-config.json", {"before": config_before, "after": config_after,
+                    "unchanged": (config_before["sha256"] == config_after["sha256"]
+                                  if config_before["state"] == config_after["state"] == "observed" else None)})
+            except (Exception, KeyboardInterrupt) as error:
+                poststate_retention_failed = True
+                if failure is None:
+                    failure, phase = error, "shared-config-retention"
     result = {"schema": "accord-codex-persistent-exec/v1", "episode": manifest["episode"],
               "threadId": thread_id, "stages": stages,
               "completedStages": sum(bool(stage["valid"]) for stage in stages),
-              "caseComplete": len(stages) == len(manifest["prompts"]) and all(stage["valid"] for stage in stages),
+              "caseComplete": failure is None and len(stages) == len(manifest["prompts"]) and all(stage["valid"] for stage in stages),
               "sourceThreadIdKnown": bool(thread_id),
               "nativeResumeSucceeded": any(stage["valid"] for stage in stages[1:]),
               "elapsedSeconds": time.monotonic() - started,
@@ -1936,7 +1968,17 @@ def run_persistent(args):
                                           "claimLimit": manifest["nativeHookProjection"]["claimLimit"]}
     if result["hookMode"] == "installed-plugin":
         result["installedPlugin"] = manifest["installedPlugin"]
+    if failure is not None:
+        result["executionFailure"] = {"stage": active_stage, "phase": phase,
+            "reason": "interrupted" if isinstance(failure, KeyboardInterrupt) else "execution-error"}
+        result["recoveryLimit"] = "Retained receipts only; later unobserved effects remain unknown. Reconcile before any continuation; this result authorizes no replay."
+    if poststate_retention_failed:
+        result["poststateRetentionFailure"] = "shared-config-receipt-unwritten"
+    if poststate_observation_failed:
+        result["poststateObservationFailure"] = "shared-config-observation-unavailable"
     save(evidence / "result.json", result)
+    if failure is not None:
+        raise failure
     return result
 
 

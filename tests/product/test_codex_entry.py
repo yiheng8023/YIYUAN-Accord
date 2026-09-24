@@ -680,6 +680,12 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(stage.call_count, 1)
             saved = json.loads((Path(manifest["evidence"]) / "shared-config.json").read_text(encoding="utf-8"))
             self.assertIn("after", saved)
+            partial = json.loads((Path(manifest["evidence"]) / "result.json").read_text(encoding="utf-8"))
+            self.assertFalse(partial["caseComplete"])
+            self.assertEqual(partial["completedStages"], 1)
+            self.assertEqual(partial["threadId"], "native-thread")
+            self.assertEqual(partial["executionFailure"]["stage"], 2)
+            self.assertEqual(partial["executionFailure"]["phase"], "preflight")
 
     def test_native_stage_rejects_prompt_case_command_and_observed_thread_substitutions(self):
         for mutation in ("prompt-file", "prompt-and-hash", "manifest-prompt", "model", "template", "thread", "duplicate-source"):
@@ -716,8 +722,9 @@ class EntryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
             observer = Mock()
-            observer.snapshot.return_value = {}
-            observer.inspect_stage.return_value = {"files": {}, "decision": "pass"}
+            observer.snapshot.return_value = entry.coordination_observer().snapshot(
+                manifest["workspace"], json.loads(Path(manifest["case"]).read_text(encoding="utf-8"))["inputs"])
+            observer.inspect_stage.return_value = {"stage": "plan", "files": {}, "decision": "pass"}
             def execute(*_):
                 evidence = Path(manifest["evidence"])
                 (evidence / "stdout-1.jsonl").write_text('{"type":"thread.started","thread_id":"observed-source"}\n', encoding="utf-8")
@@ -728,6 +735,98 @@ class EntryTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "prepared stage prompt"):
                     entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
             self.assertEqual(stage.call_count, 1)
+            partial = entry.inspect(manifest["evidence"])["recordedExecution"]
+            self.assertFalse(partial["caseComplete"])
+            self.assertEqual(partial["threadId"], "observed-source")
+            self.assertEqual(partial["completedStages"], 1)
+            self.assertEqual(partial["executionFailure"]["phase"], "preflight")
+
+    def test_persistent_business_inspection_failure_keeps_native_receipt_and_unverified_result(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            observer = entry.coordination_observer()
+            native = {"valid": True, "threadId": "native-thread", "remainingOwnedProcesses": 0}
+            with patch.object(entry, "_run_persistent_stage", return_value=native) as stage, \
+                    patch.object(observer, "inspect_stage", side_effect=ValueError("private-probe-detail")):
+                with self.assertRaisesRegex(ValueError, "private-probe-detail"):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            stage.assert_called_once()
+            evidence = Path(manifest["evidence"])
+            self.assertEqual(json.loads((evidence / "native-receipt-1.json").read_text()), native)
+            partial = entry.inspect(evidence)["recordedExecution"]
+            self.assertFalse(partial["caseComplete"])
+            self.assertEqual(partial["completedStages"], 0)
+            self.assertEqual(partial["threadId"], "native-thread")
+            self.assertEqual(partial["executionFailure"]["phase"], "file-inspection")
+            self.assertEqual(partial["stages"][0]["fileObservation"]["decision"], "unknown")
+            self.assertNotIn("private-probe-detail", json.dumps(partial))
+            frozen_result = (evidence / "result.json").read_bytes()
+            (Path(manifest["workspace"]) / "plan.md").write_text("A later file, not the original execution.")
+            fresh = entry.inspect(evidence)
+            self.assertEqual(fresh["currentFileObservation"]["decision"], "pass")
+            self.assertFalse(fresh["recordedExecution"]["caseComplete"])
+            self.assertEqual(fresh["recordedExecution"]["completedStages"], 0)
+            self.assertEqual((evidence / "result.json").read_bytes(), frozen_result)
+            with patch.object(entry, "_run_persistent_stage") as replay:
+                with self.assertRaises(FileExistsError):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+                replay.assert_not_called()
+
+    def test_persistent_failure_before_receipt_keeps_effects_unknown_and_does_not_replay(self):
+        for error in (ValueError("private-detail"), KeyboardInterrupt()):
+            with self.subTest(error=type(error).__name__), tempfile.TemporaryDirectory() as tmp:
+                manifest = self.prepared_persistent(Path(tmp).resolve())
+                with patch.object(entry, "_run_persistent_stage", side_effect=error) as stage:
+                    with self.assertRaises(type(error)):
+                        entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+                stage.assert_called_once()
+                checked = entry.inspect(manifest["evidence"])
+                partial = checked["recordedExecution"]
+                self.assertFalse(partial["caseComplete"])
+                self.assertIsNone(partial["threadId"])
+                self.assertEqual(partial["stages"], [])
+                self.assertEqual(partial["executionFailure"]["phase"], "native-execution")
+                self.assertEqual(partial["executionFailure"]["reason"],
+                    "interrupted" if isinstance(error, KeyboardInterrupt) else "execution-error")
+                self.assertEqual(checked["currentFileObservation"]["decision"], "unknown")
+                self.assertNotIn("private-detail", json.dumps(checked))
+                with patch.object(entry, "_run_persistent_stage") as replay:
+                    with self.assertRaises(FileExistsError):
+                        entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+                    replay.assert_not_called()
+
+    def test_persistent_result_survives_separate_config_receipt_write_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+            original_save = entry.save
+            def fail_config(path, value):
+                if Path(path).name == "shared-config.json":
+                    raise OSError("private-storage-detail")
+                return original_save(path, value)
+            with patch.object(entry, "save", side_effect=fail_config), \
+                    patch.object(entry, "_run_persistent_stage", side_effect=ValueError("original-failure")):
+                with self.assertRaisesRegex(ValueError, "original-failure"):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            partial = entry.inspect(manifest["evidence"])["recordedExecution"]
+            self.assertFalse(partial["caseComplete"])
+            self.assertEqual(partial["executionFailure"]["phase"], "native-execution")
+            self.assertEqual(partial["poststateRetentionFailure"], "shared-config-receipt-unwritten")
+            self.assertNotIn("private-storage-detail", json.dumps(partial))
+
+    def test_persistent_poststate_observation_failure_preserves_original_error_and_unknown(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+            with patch.object(entry, "shared_config_snapshot", side_effect=[
+                    {"state": "observed", "sha256": "original"}, KeyboardInterrupt()]), \
+                    patch.object(entry, "_run_persistent_stage", side_effect=ValueError("original-failure")):
+                with self.assertRaisesRegex(ValueError, "original-failure"):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            partial = entry.inspect(manifest["evidence"])["recordedExecution"]
+            self.assertFalse(partial["caseComplete"])
+            self.assertEqual(partial["executionFailure"]["phase"], "native-execution")
+            self.assertEqual(partial["sharedConfigObservation"]["after"]["state"], "unavailable")
+            self.assertIsNone(partial["sharedConfigObservation"]["unchanged"])
+            self.assertEqual(partial["poststateObservationFailure"], "shared-config-observation-unavailable")
 
     def test_native_stage_checks_the_opened_prompt_before_starting_a_process(self):
         with tempfile.TemporaryDirectory() as tmp:
