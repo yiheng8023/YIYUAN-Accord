@@ -2267,3 +2267,13 @@ fresh原生hooks/list与skills/list显示5启用Skill及6启用trusted Hook均�
 只读独立复核从原rollout定点确认了该消息身份，并核对原消息、实际请求、MCP回读和当前输入回执四处原文逐字一致、SHA一致。另确认当前水印仍在且没有绑定checkpoint；其历史字节一致性限于执行脚本的前后比较，不冒称另有独立前置字节副本。
 
 CI结束后的同任务MCP再读确认当前回执仍可读、needsNativeReplay=false、mode=unbound；上下文因最后计数超出原30秒年龄返回token-count-expired/unknown，旧占用及窗口没有作为当前值输出。未延长年龄、刷新旧观察时间或复用旧计数作许可；该结果保留在native-mcp-after-ci.json。
+
+## 只读云端配置来源诊断（2026-09-25）
+
+用户明确批准“允许一次只读云端诊断”后，在既有YIYUAN-Accord环境/main创建[执行只读环境诊断](https://chatgpt.com/codex/cloud/tasks/task_e_6ab65d086c20832bac6668dfc63a03b1)。准备prompt.md的SHA为ee7f886f1877ae0ba4de437ed63c6dc7a88dc3bf485c1043533ff8287204a3e4，网页发送前正文回读一致。一个任务URL共有三条输入：初始诊断、禁止再执行的历史命令正文取回、一次仅补祖先进程角色/参数名的只读诊断；两轮实际命令，分别2分10秒、43秒，中间正文取回41秒。界面任务数从9增至12，不能说只执行了一轮，也不能据此说创建了三个任务URL。没有发送第四条探针。
+
+首轮Work Log直接输出cwd=/workspace/YIYUAN-Accord、HOME=/root、CODEX_HOME=/opt/codex；Ubuntu24.04.4、Python3.14.4、Node24.15.0，PATH未发现codex。自身祖先链为Python3942→Bash3941→/opt/codex/bin/codex的3450，最上层PPID为0；三者可见HOME/CODEX_HOME相同。候选/opt/codex/config.toml为普通文件；只检测不区分大小写的accord子串，结果未发现。这既不证明文件被当前控制者读取，也不证明所有插件配置不存在。另启动该已存在执行文件的--version得到codex-cli 0.144.0-alpha.4/exit0，不能将其当作活跃模型控制者的版本证明。
+
+正文回读发现初始config_switches只过滤了部分长参数，遗漏-c/-p及角色。后续单次检查自己最多八层父进程，仅报告白名单角色/参数名：另一个PID4641、PPID0、/opt/codex/bin/codex，出现app-server及-c，其余指定项未出现，没有输出参数值。两轮PID不同，不合并为一个同时态快照；撤回从首轮空列表推断没有启动覆盖的解释。App Server角色及覆盖参数存在，不足以确定模型控制者身份、覆盖内容、实际配置加载或受支持刷新路径。独立复核确认这些证据尚不足以选择安装目标；不据此安装到/opt/codex，也不归因原启动前失败。
+
+初轮Git状态输出为空，所属探针PID3941/3942已退出；3450当时仍在。后续内存脚本无写文件/新Codex进程命令，执行者报告已结束；不外推为整容器退出或字节不变证明。最终环境页仍为universal、自动setup、Agent网络关闭、缓存开启，维护脚本/环境变量/密钥区域没有显示条目；未检查密钥值、修改设置、安装或授信。临时环境核对页已关闭，诊断结果页保留，任务没有归档/删除。旧失败容器、旧安装/回滚和资源未知保持原范围。私有prestate/dispatch/observation/role-observation/poststate保留在accord-cloud-controller-provenance-20260925-01；浏览器完整导出不支持，观察来源为实际页面Work Log及显示的命令正文，不冒称完整原生RPC记录。诊断收束，不新增支持/验收结论。
