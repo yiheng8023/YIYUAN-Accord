@@ -11,6 +11,7 @@
 const {performance} = require('node:perf_hooks');
 const {
   HANDOFF_PROPOSAL_TOOL,
+  validateProposalRequest,
   runHandoffProposal,
 } = require('./carrier-handoff.cjs');
 const {CONTEXT_OBSERVATION_TOOL} = require('./codex-connection.cjs');
@@ -568,10 +569,35 @@ function createSession(options, restoreMode = false) {
               nativeRequest.params?.tool === HANDOFF_PROPOSAL_TOOL.name &&
               nativeRequest.params?.namespace == null) {
             if (state.transferCount !== 0) throw new Error('source session handoff proposal is already used');
+            validateProposalRequest(nativeRequest,
+              {source: {threadId: sourceThreadId, turnId}}, bound);
             const resolverContext = {threadId: sourceThreadId, turnId, scopeRef,
               deadlineMs: budget.wallDeadlineMs};
             const rawPlan = await callOwner(bound.planResolver,
               [nativeRequest, resolverContext], budget.monotonicDeadline, 'planResolver');
+            if (plainObject(rawPlan) && Object.hasOwn(rawPlan, 'decision')) {
+              const decision = immutable(rawPlan);
+              if (Object.keys(decision).sort().join('|') !== 'decision|reason|sourceRef' ||
+                  decision.decision !== 'continue-source') {
+                throw new TypeError('planResolver continuation must contain only decision, reason and sourceRef');
+              }
+              text(decision.reason, 'planResolver.reason');
+              text(decision.sourceRef, 'planResolver.sourceRef');
+              // Only a deliberate owner decision before any transfer is reversible.
+              // Unknown callbacks, lost ownership and uncertain sends still lock.
+              await requireWritableScope(sourceThreadId, budget.monotonicDeadline,
+                'source-scope-before-decline');
+              state = {...state, phase: 'handoff-decline-pending'};
+              const payload = immutable({code: 'HANDOFF_DECLINED', accepted: false,
+                ...decision});
+              await Reflect.apply(bound.respond, undefined, [nativeRequest, {result: {
+                success: false, contentItems: [{type: 'inputText', text: JSON.stringify(payload)}],
+              }}, budget.monotonicDeadline]);
+              await requireWritableScope(sourceThreadId, budget.monotonicDeadline,
+                'source-scope-after-decline');
+              state = {...state, phase: 'turn-running', pendingRequest: null};
+              continue;
+            }
             const plan = validatePlanForRun(rawPlan, sourceThreadId, turnId, scopeRef,
               budget.wallDeadlineMs);
             const current = deadline => callOwner(bound.current, [{nativeRequest, sourceThreadId,

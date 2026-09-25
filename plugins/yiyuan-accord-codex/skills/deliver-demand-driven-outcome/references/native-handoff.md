@@ -86,8 +86,22 @@ Call `session.run({input, deadlineMs, turn?})` with a nonempty text/native input
 an absolute Unix millisecond deadline. `turn` carries the owner's explicit native
 turn settings; it cannot replace the source identity or input. The session
 creates and binds the source, starts the turn, answers context observations and
-dispatches a proposal through the existing handoff core. `planResolver(request,
-context)` must return the bound plan described below. `current(context)` returns
+dispatches a proposal through the existing handoff core. The source validates the
+proposal's native connection, thread, turn, call ID and arguments before calling
+`planResolver(request, context)`, which returns the bound plan described below.
+If a fresh carrier is unnecessary and current source work remains authorized,
+the owner may instead return exactly `{decision: "continue-source", reason,
+sourceRef}` with nonempty bounded strings. This is the owner's affirmative
+decision to continue within current permission and pauses; it is not a fallback
+for uncertainty, revoked authority or an actual pause. The adapter checks its
+held writer scope before and after sending one `HANDOFF_DECLINED` tool reply
+(`success: false`, `accepted: false`) and continues the same turn. It creates no
+transfer, preserves the source, and permits a later newly justified proposal.
+An invalid decision, callback failure, changed scope or uncertain send still
+locks the session with the pending request retained. The post-send scope check
+cannot retract a reply already delivered; the owner must serialize authority
+changes and retain native responses. A reference or successful local send does
+not prove model compliance or renewed permission. `current(context)` returns
 current scope/authority/state/writer references, and `verify` retains the core's
 independent stage-by-stage contract. The session supplies no semantic verdict.
 

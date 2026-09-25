@@ -25,7 +25,7 @@
 | 项目 | 已核事实与限制 |
 |---|---|
 | 仓库 | 本次记录前main/HEAD与origin/main均为dc63f904，干净、0/0；后续以实时Git为准。接管基点及源任务责任转交见上。 |
-| 源与本机安装 | 源码与新安装均为3.3.0-dev.1+codex.20260925115917，24文件、SHA 1235ddfa0a946ace214d19dd9558d8b0b5abf47abc7932b55783c05e4996ed26，marketplace ref=48c97c0e。沿已有开发安装授权完成原生更新，独立逐文件核对Git原字节；仅市场ref变化，未增信任。新0.157.0 CLI进程发现5启用Skill/6可信Hook并自然释放；直接helper已读到新诊断字段和当前输入。已有Desktop/MCP消费者采用尚不由独立进程代验。旧包与配置恢复备份保留，空更新工作目录已回收。 |
+| 源与本机安装 | 源码为3.3.0-dev.1+codex.20260925202615，24文件、SHA 6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f；本批只变更SDK及其按需参考、包版本。本机安装仍为115917、SHA 1235ddfa0a946ace214d19dd9558d8b0b5abf47abc7932b55783c05e4996ed26、marketplace ref=48c97c0e，不借旧安装证明新SDK采用。115917原生更新及5启用Skill/6可信Hook、配置备份与进程自然退出证据保留原范围。本批未更改共享安装、信任或第三方Skill。 |
 | 托管检查 | 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本次只读诊断授权已自然捕获，原生MCP读回inputSource=native-input-event、输入数10、needsNativeReplay/needsResumeReconciliation=false，checkpoint仍unbound；此前retained-native-replay恢复保持历史身份。无需继续恢复或调查压缩。独立0.157.0原生只读查询的goal=null仅说明原读取时点；当前MCP宿主仍报告Desktop0.155.0-alpha.16.4，不混为同一版本。 |
@@ -34,6 +34,8 @@
 | 进度口径 | 先前50–65%功能/20–30%发布就绪是缺少稳定分母的工程粗估，不作为跨任务可比较总进度。当前按可用功能、已消除断点和剩余关键路径报告，正式A01–A08事实另列。 |
 
 ## 本批完成与实际未完项
+
+**源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；新源码包202615尚未安装，托管结果待绑定提交核对。
 
 **本批托管检查已闭合**：dc63f904的[CI36128555843](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36128555843)完整11/11成功，精确headSha与各job已回读；包括活动案例处置后的九个OS/Python组合及两个原生生命周期job。14aada0c的前次11/11保持原范围。仅说明相应提交的托管检查通过，不代替普通行为、云采用或正式准入。
 

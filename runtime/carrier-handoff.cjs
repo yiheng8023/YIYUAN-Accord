@@ -2041,5 +2041,5 @@ function errorData(error) {
   return data;
 }
 
-module.exports = {HANDOFF_PROPOSAL_TOOL, prepareHandoff, runHandoffProposal, handoff,
+module.exports = {HANDOFF_PROPOSAL_TOOL, validateProposalRequest, prepareHandoff, runHandoffProposal, handoff,
   reconcileContinuation, finalizeReconciledHandoff, CarrierHandoffError};

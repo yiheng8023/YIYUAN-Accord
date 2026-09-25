@@ -25,20 +25,40 @@ const output = new PassThrough(), sent = [], starts = [], serverResponses = [];
 let targetTurn = 0, sourceTurn = 0, targetCreated = 0, sourceUnsubscribed = 0, sourceStarted = false;
 const emit = value => output.write(Buffer.from(JSON.stringify(value) + '\n'));
 const response = (frame, result) => queueMicrotask(() => emit({jsonrpc:'2.0', id:frame.id, result}));
-function serverRequest(id, method, params) { emit({jsonrpc:'2.0', id, method, params}); }
+function serverRequest(id, method, params) {
+  if (id === 102) {
+    if (mode === 'proposal-no-turn') delete params.turnId;
+    if (mode === 'proposal-unscoped') delete params.threadId;
+    if (mode === 'proposal-no-call') delete params.callId;
+    if (mode === 'proposal-bad-args') params.arguments = {};
+  }
+  emit({jsonrpc:'2.0', id, method, params});
+}
 function handle(frame) {
   sent.push(frame);
   if (!frame.method) {
     serverResponses.push(frame);
+    if (mode === 'decline-send-loss' && frame.id === 102)
+      throw new Error('decline response send outcome is unknown');
     if (frame.id === 100) queueMicrotask(() => serverRequest(101, 'approval/request', {
       threadId:'source-1', turnId:'source-turn-1', reason:'fixture-owner-decision'}));
     if (frame.id === 101) queueMicrotask(() => serverRequest(102, 'item/tool/call', {
       threadId:'source-1', turnId:'source-turn-1', callId:'handoff-call',
       tool:'accord_request_handoff', namespace:null,
       arguments:{reason:'Move the fixed task to a fresh carrier.'}}));
-    if (frame.id === 102) queueMicrotask(() => {
+    if (frame.id === 102 && frame.result?.success === false) {
+      queueMicrotask(() => mode === 'decline-then-transfer'
+        ? serverRequest(103, 'item/tool/call', {threadId:'source-1', turnId:'source-turn-1',
+            callId:'later-handoff-call', tool:'accord_request_handoff', namespace:null,
+            arguments:{reason:'New conditions now require a fresh carrier.'}})
+        : serverRequest(104, 'owner/work', {threadId:'source-1', turnId:'source-turn-1'}));
+      return;
+    }
+    if (frame.id === 104) queueMicrotask(() => emit({method:'turn/completed',
+      params:{threadId:'source-1', turn:{id:'source-turn-1', status:'completed', items:[]}}}));
+    if (frame.id === 102 || frame.id === 103) queueMicrotask(() => {
       emit({method:'item/completed', params:{threadId:'source-1', turnId:'source-turn-1',
-        item:{type:'dynamicToolCall', id:'handoff-call', tool:'accord_request_handoff',
+        item:{type:'dynamicToolCall', id:frame.id === 103 ? 'later-handoff-call' : 'handoff-call', tool:'accord_request_handoff',
           namespace:null, status:'completed', success:true,
           contentItems:frame.result.contentItems}}});
       emit({method:'turn/completed', params:{threadId:'source-1',
@@ -97,7 +117,8 @@ function handle(frame) {
         emit({method:'thread/tokenUsage/updated', params:{threadId:'source-1',
           turnId:id, tokenUsage:{modelContextWindow:1000,
             last:{totalTokens:100}}}});
-        if (mode === 'concurrent' || mode === 'scope-after-terminal') emit({method:'turn/completed', params:{threadId:'source-1',
+        if (mode === 'concurrent' || mode === 'scope-after-terminal' ||
+            mode === 'decline' && sourceTurn > 1) emit({method:'turn/completed', params:{threadId:'source-1',
           turn:{id, status:'completed', items:[]}}});
         else serverRequest(100, 'item/tool/call', {threadId:'source-1',
           turnId:'source-turn-1', callId:'context-call', tool:'accord_inspect_context',
@@ -147,7 +168,8 @@ const recorder = {...storedRecorder, compareAndSet(...args) {
 }};
 let scopeReads = 0, recordReads = 0, settleCalls = 0;
 let adoptionStarted = false, adoptionRecordChanged = false;
-const wrappedRecorder = ['scope-active','scope-after-terminal','adopt-old-lease',
+const wrappedRecorder = ['scope-active','scope-after-terminal','decline-scope-change',
+  'decline-scope-after-send','adopt-old-lease',
   'adopt-missing-tools','adopt-settle-loss','adopt-bad-settle',
   'adopt-deadline-before-settle','no-claim-recorder'].includes(mode);
 const sessionRecorder = wrappedRecorder ? {
@@ -177,6 +199,10 @@ const sessionRecorder = wrappedRecorder ? {
       return {...scope, activeTransferId:'foreign-transfer'};
     if (mode === 'scope-after-terminal' && scopeReads >= 3)
       return {...scope, writerThreadId:'foreign-writer'};
+    if (mode === 'decline-scope-change' && scopeReads >= 3)
+      return {...scope, writerThreadId:'foreign-writer'};
+    if (mode === 'decline-scope-after-send' && serverResponses.some(frame => frame.id === 102))
+      return {...scope, writerThreadId:'foreign-writer'};
     return scope;
   },
 } : recorder;
@@ -184,6 +210,7 @@ if(mode==='no-claim-recorder')delete sessionRecorder.claimScope;
 const planCalls = [], ownerCalls = [], currentCalls = [], verifyCalls = [];
 let adoptionVerifyCalls = 0;
 const session = createCodexSourceSession({connection, recorder:sessionRecorder, scopeRef:'fixture-scope',
+  ownUnscopedRequests:mode === 'proposal-unscoped',
   threadStart:{cwd:'C:/fixture', model:'owner-model', effort:'owner-effort',
     sandbox:'workspace-write', approvalPolicy:'on-request', dynamicTools:[{
       type:'function', name:'owner_tool', description:'owner tool',
@@ -191,6 +218,15 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
   planResolver(request, context) {
     planCalls.push({request, context:{...context, signal:undefined}});
     const ordinal = planCalls.length;
+    if (mode === 'resolver-null') return null;
+    if (mode === 'resolver-throws') throw new Error('current authority cannot be established');
+    if ((mode.startsWith('decline') || mode.startsWith('proposal-')) && ordinal === 1) {
+      const decision = {decision:'continue-source', reason:'Current work fits this source.',
+        sourceRef:'owner-current-task-observation'};
+      if (mode === 'decline-invalid') decision.reason = '';
+      if (mode === 'decline-extra') decision.target = {cwd:'C:/foreign'};
+      return decision;
+    }
     const now = Date.now();
     return {transferId:`transfer-${ordinal}`, scopeRef:'fixture-scope', authorityRef:'authority-1',
       stateRef:'state-1', source:{threadId:context.threadId, turnId:context.turnId},
@@ -245,6 +281,12 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
       recorder.bindScope('fixture-scope', 'foreign-writer');
       try { await session.run({input:'must not create source', deadlineMs:Date.now()+3000}); }
       catch (error) { result.error = {code:error.code, phase:error.phase, state:error.state}; }
+    } else if (mode === 'decline') {
+      try {
+        result.first = await session.run({input:'one ordinary turn', deadlineMs:Date.now()+3000});
+        result.secondOrdinary = await session.run({input:'continue without a transfer',
+          deadlineMs:Date.now()+3000});
+      } catch (error) { result.error = {code:error.code, phase:error.phase, state:error.state}; }
     } else if (mode === 'adopt-chain') {
       result.first = await session.run({input:'one source turn', deadlineMs:Date.now()+6000});
       result.adopted = await session.adoptTarget({deadlineMs:Date.now()+3000});
@@ -283,6 +325,8 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     result.ownerCalls = ownerCalls.length; result.currentCalls = currentCalls.length;
     result.verifyCalls = verifyCalls; result.recordReads = recordReads;
     result.settleCalls = settleCalls;
+    if (mode.startsWith('decline') || mode.startsWith('resolver-') || mode.startsWith('proposal-'))
+      result.finalScope = recorder.readScope('fixture-scope');
     if (mode === 'source-ephemeral' || mode === 'source-persistence-missing') {
       try { recorder.readScope('fixture-scope'); result.scopeReadCode = 'present'; }
       catch (error) { result.scopeReadCode = error.code; }
@@ -491,6 +535,76 @@ class CodexSourceSessionTests(unittest.TestCase):
         self.assertEqual(methods.count("thread/unsubscribe"), 1)
         self.assertNotIn("thread/archive", methods)
         self.assertNotIn("thread/delete", methods)
+
+    def test_declined_handoff_finishes_work_and_keeps_the_same_source_usable(self):
+        result = self.run_case("decline")
+        self.assertNotIn("error", result)
+        self.assertEqual(result["first"]["status"], "completed")
+        self.assertEqual(result["secondOrdinary"]["sourceThreadId"], "source-1")
+        self.assertEqual(result["snapshot"]["status"], "ready")
+        self.assertEqual(result["snapshot"]["transferCount"], 0)
+        self.assertEqual(result["snapshot"]["transfers"], [])
+        self.assertEqual(result["ownerCalls"], 2)  # ordinary work after the refusal
+        self.assertEqual(result["verifyCalls"], [])
+        self.assertEqual(result["finalScope"]["writerThreadId"], "source-1")
+        self.assertIsNone(result["finalScope"]["activeTransferId"])
+        replies = [frame for frame in result["serverResponses"] if frame["id"] == 102]
+        self.assertEqual(len(replies), 1)
+        self.assertFalse(replies[0]["result"]["success"])
+        reply = json.loads(replies[0]["result"]["contentItems"][0]["text"])
+        self.assertFalse(reply["accepted"])
+        self.assertEqual(reply["decision"], "continue-source")
+        self.assertEqual(reply["sourceRef"], "owner-current-task-observation")
+        methods = [frame["method"] for frame in result["sent"] if "method" in frame]
+        self.assertEqual(methods.count("thread/start"), 1)
+        self.assertNotIn("turn/interrupt", methods)
+        self.assertNotIn("thread/unsubscribe", methods)
+        self.assertEqual(result["settleCalls"], 0)
+
+    def test_decline_does_not_consume_a_later_valid_handoff(self):
+        result = self.run_case("decline-then-transfer")
+        self.assertNotIn("error", result)
+        self.assertEqual(result["first"]["status"], "transferred")
+        self.assertEqual(result["planCalls"], 2)
+        self.assertEqual(result["snapshot"]["transferCount"], 1)
+        self.assertEqual(len(result["snapshot"]["transfers"]), 1)
+        self.assertEqual(result["second"], "SOURCE_TRANSFERRED")
+        self.assertEqual(result["finalScope"]["writerThreadId"], "target-1")
+        self.assertEqual(len(result["starts"]), 2)
+
+    def test_decline_does_not_hide_invalid_decisions_or_unknown_effects(self):
+        for mode in ("decline-invalid", "decline-extra", "resolver-null", "resolver-throws",
+                     "decline-scope-change", "decline-send-loss"):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode)
+                expected = "SOURCE_SCOPE_CHANGED" if mode == "decline-scope-change" else "SERVER_REQUEST_FAILED"
+                self.assertEqual(result["error"]["code"], expected)
+                self.assertEqual(result["second"], "SESSION_FAILED")
+                self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 102)
+                self.assertEqual(result["snapshot"]["transferCount"], 0)
+                self.assertEqual(len(result["starts"]), 1)
+                self.assertEqual(result["verifyCalls"], [])
+                self.assertIsNone(result["finalScope"]["activeTransferId"])
+                replies = [frame for frame in result["serverResponses"] if frame["id"] == 102]
+                self.assertEqual(len(replies), 1 if mode == "decline-send-loss" else 0)
+
+    def test_decline_validates_proposal_identity_before_calling_the_owner(self):
+        for mode in ("proposal-no-turn", "proposal-unscoped", "proposal-no-call", "proposal-bad-args"):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode)
+                self.assertEqual(result.get("error", {}).get("code"), "SERVER_REQUEST_FAILED")
+                self.assertEqual(result["planCalls"], 0)
+                self.assertEqual(result["second"], "SESSION_FAILED")
+                self.assertFalse(any(frame["id"] == 102 for frame in result["serverResponses"]))
+                self.assertEqual(len(result["starts"]), 1)
+
+    def test_decline_rechecks_ownership_before_processing_following_work(self):
+        result = self.run_case("decline-scope-after-send")
+        self.assertEqual(result["error"]["code"], "SOURCE_SCOPE_CHANGED")
+        self.assertEqual(result["error"]["phase"], "source-scope-after-decline")
+        self.assertEqual(result["ownerCalls"], 1)
+        self.assertEqual(result["second"], "SESSION_FAILED")
+        self.assertEqual(len([frame for frame in result["serverResponses"] if frame["id"] == 102]), 1)
 
     def test_source_start_ack_loss_is_not_retried_and_locks_the_session(self):
         result = self.run_case("start-loss")
