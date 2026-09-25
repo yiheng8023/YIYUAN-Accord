@@ -246,6 +246,13 @@ bytes and incompatible checkpoint identity. Invalid JSON or unavailable files
 identify their source role without echoing stored content; failure has a nonzero
 exit and never becomes an unbound success or automatic repair. This is not a
 transaction over external files and grants no authority for later actions.
+The status field `inputReceipt.present` reports whether that same snapshot contains
+a stored input receipt file. A missing file with a failure watermark is labelled
+`missing-stored-input-receipt`, rather than a legacy receipt. The separate
+`inputReceipt.failureWatermarkScopes` lists only `session` and/or `workspace`;
+acknowledged markers remain listed. These fields do not establish which input
+failed, when it failed, native message delivery or permission to replay. Existing
+replay, pause and input-reconciliation requirements continue to govern state changes.
 Resume reconciliation and input publication retain their existing write locks
 and lifecycle semantics.
 Failure watermarks remain until their owning

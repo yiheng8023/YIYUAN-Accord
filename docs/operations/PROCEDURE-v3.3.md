@@ -2239,3 +2239,11 @@ fresh原生hooks/list与skills/list显示5启用Skill及6启用trusted Hook均�
 原生移除插件/市场后只剩四个本次trusted_hash，核明无其它差异后恢复私有前态，最终配置SHA为fee056706e3e29d09240fd55a18ff27c4270fd5bd44c92957c3895cd6d5d6acf并逐字节一致。原生安装/市场列表为空、目标信任无残留、MCP只保留make_pr，Git干净；仅回收确认所属的空插件缓存目录。未发现可绑定的Accord协议回执，因此没有执行retire或直接删协议文件。所属PID已退出的证据不外推整个容器资源审计。
 
 必要证据留在/opt/codex/backups/yiyuan-accord-cloud-adoption-20260923T161725Z（0700），未来平台保留时长未知，私人配置不输出；本地有限回读及来源限制在accord-cloud-route-20260923-01/cloud-adoption-result.json。恢复根缺失的旧观察与本次相邻两轮延续分别保留，不推测是谁删除。下一核对宿主支持的装载/刷新和初始化时机，不重复本次试验、不擅改永久环境；17项范围、A01–A08完成及发布判定不变。
+
+## 接管时的缺回执诊断修正（2026-09-25）
+
+主线程23按用户要求在13d45375的原main检出完成只读接收，源主线程22明确转交业务写入后接管。原生状态工具报告unbound、捕获输入不可用、needsNativeReplay及上下文来源不可用；只读核对发现本任务没有存储回执或检查点，工作区却保留9月12日的失效水印。两条交接消息在当前原生记录中为codex_app的function_call_output；已有入口指导不能证明UserPromptSubmit捕获，历史水印也不能证明本轮输入丢失。没有回放、删除共享标记、修改配置或切换模式，压缩频繁/耗时反馈的原因仍未知。
+
+实际源码断点是status将无回执文件时由水印合成的隔离状态误标为unspecified-legacy-receipt。沿原recoveryBasis稳定快照修正为missing-stored-input-receipt，并仅投影inputReceipt.present与session/workspace水印范围；真实旧回执保留原标签，已承认标记继续保留，不泄漏generation/输入内容，也不改变epoch、回放、绑定、暂停及隔离判定。两项回归先重现三类误标及缺字段，修复后通过；完整状态/MCP套件184项通过，verify、verify-development和host-check均valid=true。独立源码审查未见阻断。新源码只读核对当前真实任务得到缺文件/工作区水印，epoch及needsNativeReplay不变、水印字节未改。
+
+源码包更新为3.3.0-dev.1+codex.20260925115917，24文件，SHA 1235ddfa0a946ace214d19dd9558d8b0b5abf47abc7932b55783c05e4996ed26；仅manifest版本及task-checkpoint.cjs两份包内文件变化。本机162230安装未更新；当前消费者采用、托管检查、回执恢复及普通交付全链不由本地诊断修复代验。正式scope、旧失败和A01–A08结论保持。这是接管中真实暴露的问题修正，不是事后绑定的普通行为验收或自主交接成功。

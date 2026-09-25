@@ -48,6 +48,57 @@ class TaskCheckpointTests(unittest.TestCase):
     def status(self):
         return self.invoke({"op": "status"})
 
+    def test_status_distinguishes_missing_stored_receipt_from_failure_watermarks(self):
+        receipt = next(self.state.glob('*.input.json'))
+        session_marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        workspace_key = str(self.work).lower() if os.name == 'nt' else str(self.work)
+        workspace_marker = self.state / (hashlib.sha256(workspace_key.encode()).hexdigest()
+                                        + '.workspace-input-failure.json')
+        receipt.unlink()  # No native input was captured for this task.
+        for scopes in (('session',), ('workspace',), ('session', 'workspace')):
+            with self.subTest(scopes=scopes):
+                for scope, marker in (('session', session_marker), ('workspace', workspace_marker)):
+                    if scope in scopes:
+                        marker.write_text(json.dumps({'schema': 1, 'generation': 'private-' + scope}),
+                                          encoding='utf-8')
+                    elif marker.exists():
+                        marker.unlink()
+                before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+                current = self.status()
+                self.assertEqual(current['inputSource'], 'missing-stored-input-receipt')
+                self.assertEqual(current['inputReceipt'], {
+                    'present': False, 'failureWatermarkScopes': list(scopes)})
+                self.assertTrue(current['needsNativeReplay'])
+                self.assertFalse(current['recoveryInputs']['available'])
+                self.assertNotIn('private-', json.dumps(current))
+                self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+                self.assertIn('native-replay', self.invoke({
+                    'op': 'bind', 'epoch': current['epoch'], 'expectedRevision': 0}, success=False))
+
+    def test_status_receipt_presence_and_markers_do_not_claim_current_input(self):
+        receipt = next(self.state.glob('*.input.json'))
+        saved = json.loads(receipt.read_text(encoding='utf-8'))
+        saved.pop('inputSource')
+        saved.pop('nativeInputs')
+        receipt.write_text(json.dumps(saved), encoding='utf-8')
+        legacy = self.status()
+        self.assertEqual(legacy['inputSource'], 'unspecified-legacy-receipt')
+        self.assertEqual(legacy['inputReceipt'], {'present': True, 'failureWatermarkScopes': []})
+        self.assertFalse(legacy['recoveryInputs']['available'])
+        marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'private-failure'}), encoding='utf-8')
+        invalidated = self.status()
+        self.assertEqual(invalidated['inputReceipt'], {'present': True, 'failureWatermarkScopes': ['session']})
+        self.assertTrue(invalidated['needsNativeReplay'])
+        marker_bytes = marker.read_bytes()
+        self.event('UserPromptSubmit', prompt='The actual retained current input.',
+                   recovery_epoch=invalidated['epoch'])
+        recovered = self.status()
+        self.assertEqual(recovered['inputReceipt'], invalidated['inputReceipt'])
+        self.assertFalse(recovered['needsNativeReplay'])
+        self.assertEqual(marker.read_bytes(), marker_bytes)
+        self.assertNotIn('private-failure', json.dumps(recovered))
+
     def test_status_is_read_only_even_when_all_state_writes_are_denied(self):
         self.bind()
         self.pause('Keep the user pause.')

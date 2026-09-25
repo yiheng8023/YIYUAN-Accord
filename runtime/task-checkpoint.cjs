@@ -754,14 +754,20 @@ function operate(request) {
       () => inputRecovery ? locked(where, recover) : recover());
   }
   if (!where) fail('native-user-input-receipt-missing');
-  if (request.op === 'status') return recoveryBasis(where, ({input: currentInput, state: prior}) => {
+  if (request.op === 'status') return recoveryBasis(where, ({input: currentInput, state: prior, inputHash}) => {
     validateRecoveryIdentity(request, where, currentInput, prior);
     if (!currentInput) fail('native-user-input-receipt-missing');
     const captured = retainedInputs(currentInput);
     return {epoch: currentInput.epoch, revision: prior?.revision || 0,
       storage: where.storage,
       recoveryInputs: {available: captured !== null, count: captured?.length || 0},
-      inputSource: currentInput.inputSource || 'unspecified-legacy-receipt',
+      // A watermark can synthesize quarantine without a stored receipt. File
+      // presence and retained marker scopes do not establish current input or
+      // which event failed; acknowledged watermarks also remain on disk.
+      inputReceipt: {present: inputHash !== null,
+        failureWatermarkScopes: ['session', 'workspace'].filter((scope) => Object.hasOwn(currentInput.failures || {}, scope))},
+      inputSource: inputHash === null ? 'missing-stored-input-receipt'
+        : currentInput.inputSource || 'unspecified-legacy-receipt',
       hostObservation: currentInput.hostObservation ? projectHostObservation(currentInput.hostObservation) : null,
       nativeContextSourceAvailable: Boolean(currentInput.nativeContextSource) && !needsInput(currentInput) && !currentInput.interrupted,
       hostObservationCurrent: Boolean(currentInput.hostObservation) && !needsInput(currentInput) && !currentInput.interrupted,
