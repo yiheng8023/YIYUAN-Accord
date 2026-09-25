@@ -2277,3 +2277,19 @@ CI结束后的同任务MCP再读确认当前回执仍可读、needsNativeReplay=
 正文回读发现初始config_switches只过滤了部分长参数，遗漏-c/-p及角色。后续单次检查自己最多八层父进程，仅报告白名单角色/参数名：另一个PID4641、PPID0、/opt/codex/bin/codex，出现app-server及-c，其余指定项未出现，没有输出参数值。两轮PID不同，不合并为一个同时态快照；撤回从首轮空列表推断没有启动覆盖的解释。App Server角色及覆盖参数存在，不足以确定模型控制者身份、覆盖内容、实际配置加载或受支持刷新路径。独立复核确认这些证据尚不足以选择安装目标；不据此安装到/opt/codex，也不归因原启动前失败。
 
 初轮Git状态输出为空，所属探针PID3941/3942已退出；3450当时仍在。后续内存脚本无写文件/新Codex进程命令，执行者报告已结束；不外推为整容器退出或字节不变证明。最终环境页仍为universal、自动setup、Agent网络关闭、缓存开启，维护脚本/环境变量/密钥区域没有显示条目；未检查密钥值、修改设置、安装或授信。临时环境核对页已关闭，诊断结果页保留，任务没有归档/删除。旧失败容器、旧安装/回滚和资源未知保持原范围。私有prestate/dispatch/observation/role-observation/poststate保留在accord-cloud-controller-provenance-20260925-01；浏览器完整导出不支持，观察来源为实际页面Work Log及显示的命令正文，不冒称完整原生RPC记录。诊断收束，不新增支持/验收结论。
+
+## 原生显式Skill协调与复盘结果（2026-09-25）
+
+源会话正常拒绝交接的f2ad9285完整CI36135273441已11/11通过。沿已有更新授权，以原生命令将现装包从115917更新到202615，24文件逐一与9a879596 Git原字节核对，完整包SHA为6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f；共享配置仅市场ref改变，无新增信任，5个CLI域及1个发现域均自然退出。旧包/配置恢复材料保留在accord-shared-plugin-update-20260925-24；新进程发现5启用Skill/6可信Hook，不能代验已有Desktop/MCP消费者刷新。
+
+用户早先要求检查计划与工序、合理则不改；root据此选择现装CC Switch的retro，保留disable-model-invocation及allow_implicit_invocation:false。原生目录确认retro及writing-for-agents启用，模型目录确认gpt-6-sol/high；主模型未变。以8a27b707先提交一轮普通复盘的fixture、源/角色/权限/限额及正式准入连接，冻结12份9a879596业务源、用户决定摘录和精确CI结果。宿主/Skill/memory指导可读但不作为业务事实，worker只写report.md；root选择不伪称用户手动点名或worker自主选型。
+
+第一次准备误传源码包路径、继而缺少临时父目录，均在写工作区或执行模型前被前置检查拒绝。修正参数后，episode a778e89dee9d40cdb0de8526714855b9又在Agent启动前被严格prompt校验拒绝：Windows write_text将LF转成CRLF，准备文件517字节而case原文516字节。原threadId=null、stages/history为空，无模型阶段文件；三次目录查询自然退出，输入、配置和第三方源保持。e74c4a4f仅将两处prompt写入改为原UTF-8字节，并在已有CI前置检查加入LF/CRLF/混合中文及篡改反例；94项入口检查、Python3.10两项、actionlint和独立复核通过。原失败及原prompt/hash未改，新提交、新evidence/workspace重新绑定后才首次派发Agent。
+
+e74c4a4f下实际episode 94a52d8b8ce64cf2addc369769f32875、原生任务01a0d8d5-8e61-7081-8417-7956ac14532d，用时约376秒完成一轮。原rollout第13行包含完整retro正文及原路径，早于第18行首个模型工具；worker读取writing-for-agents和Accord核验指导，核对12份原件，产出并回读报告。一次PowerShell上游引用未加引号的只读命令失败后，worker自行加引号核实。原生累计1183929 tokens、未缓存输入127419、输出13182，均在预绑限额内，不推算费用或占用。原生turn_context为gpt-6-sol/high/default；独立Goal读进程的thread/read和thread/goal/get原始请求/响应唯一匹配正确线程，goal=null仅限读取时点；完整动作记录未见模式激活。
+
+独立语义核对确认报告事实、问题排序和未完边界，但report.md第21–23行仍把下一任务/成果留待主协调者另选，不满足nextWorkSegmentConcreteAndBounded。报告未被评估者补写；四轴候选审查通过后，正式observe/recheck仍返回consequence-mismatch、acceptedCases=[]。这次确有“协调者代选→原生显式加载→依赖采用→有源报告”的实际观察，不能把它升级为整案通过、worker隐式匹配、自动交接、全部Skills或整版完成。CLI还报告一项Desktop相关配置键不识别，原配置保持；本案没有使用其对应的计算机操作能力。
+
+四个目录查询域、CLI及Goal读取六域均自然退出，所属进程为0；四输入字节/mtime、共享配置和第三方五文件集合/hash保持，保留副本回读为verified。所属workspace/temp/state及本次创建的空.tmp父目录已回收；temp中的五个空原生临时/Node缓存子目录经目录集检查后精确清理，没有删除报告、原件或原生任务历史。独立末次检查补齐原始mtime等30份证据绑定及Skill目录集重查；私有调用器明确UTF-8后，只读重查结果不变，早先GBK原输出及转码依据保留。
+
+按既有结束实例处置规则，retro案从活动cases转为带不可变定义/执行引用的历史。原预算、判据、任务内容、失败及有效子事实保持；其它10活动案、17必要范围与F/A底线不变，缺合格的effective-user-environment证据仍阻止准入。原件及最终只读判定位于accord-ordinary-retro-20260925-01/admission-final.json，原报告在episode-fixed/stage-1/files/report.md；不重放该业务求绿。

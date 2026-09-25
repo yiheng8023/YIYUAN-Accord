@@ -24,7 +24,7 @@
 
 | 项目 | 已核事实与限制 |
 |---|---|
-| 仓库 | 本次记录前main/HEAD与origin/main均为dc63f904，干净、0/0；后续以实时Git为准。接管基点及源任务责任转交见上。 |
+| 仓库 | 本批实现与回归候选e74c4a4f已推送，执行/准入记录均绑定该精确对象；后续结果记录另行提交，恢复时以实时Git为准。 |
 | 源与本机安装 | 源与本机安装均为3.3.0-dev.1+codex.20260925202615，24文件、SHA 6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f、marketplace ref=9a879596。原生命令更新后逐文件独立核对Git原字节，仅市场ref改变，无新增信任；新0.157.0进程发现5启用Skill/6可信Hook并自然退出。旧包与配置恢复材料保留，空更新工作区已回收。已有Desktop/MCP消费者采用不由独立发现代验；第三方Skill未改。 |
 | 托管检查 | 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
@@ -35,9 +35,11 @@
 
 ## 本批完成与实际未完项
 
-**普通环境中的原生Skill复盘前瞻绑定**：按用户既有工序审查要求，由root选择现装explicit-only的retro，保留原CC Switch源和策略；worker通过原生精确名称调用并用writing-for-agents依赖，唯一成品report.md。已冻结12份9a879596业务源码、用户决定摘录和精确CI结果；必要宿主/Skill/memory指导可读取但不充当项目事实，不扫描其它会话。新案v33-codex-cli-ordinary-retro-01只贡献effective-user-environment，原10案、17范围和所有底线不变；一个必要fixture使跟踪文件分配173→174，不抬业务限额。首份预备实例绑定8a27b707，在Agent启动前被严格输入校验拒绝：Windows的write_text把LF转成CRLF，517字节与case原文516字节不符。原threadId=null、stages/history为空且模型阶段文件未创建；三次目录查询自然退出，四输入字节/mtime、配置及第三方Skill均保持。已改为按原UTF-8字节写prompt，LF/CRLF/混合回归先红后绿，94项入口检查、Python3.10两项及actionlint通过，独立复核无阻断；旧实例和失败不改标。后续使用修复的新提交及全新evidence/workspace前瞻重绑，完成首次Agent执行；任务内容、预算和准入判据不变，不声称worker隐式匹配、自主选型或自动交接。原件accord-ordinary-retro-20260925-01。
+**原生显式Skill协调已实际执行，整案未准入**：root按用户委托代选现装explicit-only retro，原生CLI0.157.0/gpt-6-sol/high/default在首个工具前加载完整Skill正文，并读取writing-for-agents依赖、交付report.md。第三方源/策略未改；不是worker隐式匹配或自主选型。独立核实12份冻结业务源及报告：事实、问题排序和未完边界成立，但下一工作段仍是泛化流程，未给具体任务/成果，正式observe/recheck因此保留consequence-mismatch、acceptedCases为空。原报告不补写求绿；该结束实例按既有规则转历史，原10活动案、17必要范围和底线保持，有效用户环境的合格贡献仍缺。六域自然退出，四输入字节/mtime、配置和Skill文件集保持；所属workspace/temp/state及空父目录已回收，原生任务/历史和报告保留。此前多行prompt准备失败发生在Agent前，原件未改；两行UTF-8字节修复、94项入口回归和独立复核已闭合。详细范围见[记录](PROCEDURE-v3.3.md#原生显式skill协调与复盘结果2026-09-25)；原件accord-ordinary-retro-20260925-01。
 
 **源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；[CI36135273441](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36135273441)已按精确f2ad9285及各job回读，11/11成功；新202615包也已原生更新，普通行为仍需下述实际工作核验。
+
+**当前托管检查仍在途**：[CI36143582663](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36143582663)绑定e74c4a4f的多行prompt修复；九组OS/Python前置检查全部通过，最近回读7/11完整job成功，Windows/macOS四项仍运行、未见失败。后续结果记录不取消此运行；最终结论须按该SHA继续回读，不能借前轮绿色代验。
 
 **本批托管检查已闭合**：dc63f904的[CI36128555843](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36128555843)完整11/11成功，精确headSha与各job已回读；包括活动案例处置后的九个OS/Python组合及两个原生生命周期job。14aada0c的前次11/11保持原范围。仅说明相应提交的托管检查通过，不代替普通行为、云采用或正式准入。
 
@@ -89,7 +91,7 @@
 
 | 目录 | 内容与限制 |
 |---|---|
-| accord-ordinary-retro-20260925-01 | 当前普通复盘的来源/角色/Skill选择与正式预绑定；执行结果须另读，旧失败不重放。 |
+| accord-ordinary-retro-20260925-01 | e74c4a4f的真实原生retro/依赖采用、原报告及独立语义核对；admission-final.json保留下一工作段不具体的拒绝，30份绑定原件、六域退出和回收后态。episode是Agent前失败，episode-fixed是唯一实际Agent执行，均不重放。 |
 | accord-shared-plugin-update-20260925-24 | 202615精确原生更新、24文件Git字节独立核对、5CLI与1发现域自然退出，配置/旧包恢复材料及现装retro/依赖/模型目录；空工作区已回收。 |
 | accord-cloud-controller-provenance-20260925-01 | 一次获准只读云端诊断：一个任务URL、三输入、两轮命令；进程/配置候选与后续app-server/-c观察、前后设置、界面计数及解释纠正。实际装载未知，原案不重放。 |
 | accord-ordinary-integration-20260925-01 | 7b1a66c7预绑的真实普通CLI审查、64个原生事件、Goal双回执、报告与完整保留输入；读取范围不匹配的原准入拒绝、两名独立评审和六域退出/清理。原案不重放。 |

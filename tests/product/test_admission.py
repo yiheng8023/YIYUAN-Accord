@@ -1015,21 +1015,22 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A07"})
-        # Historical executions do not supply a replacement correction episode;
-        # the new installed-environment case needs its own observer evidence.
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, set())
+        # Historical executions do not supply replacement correction or
+        # installed-environment evidence, even when a component worked.
         self.assertNotIn("v33-systemic-correction-02", report["acceptedCases"])
         self.assertNotIn("v33-codex-cli-review-delivery-01", report["acceptedCases"])
+        self.assertNotIn("v33-codex-cli-ordinary-retro-01", report["acceptedCases"])
         self.assertEqual(set(report["acceptanceRequirements"]["A04"]["missingScopes"]["function"]),
                          {"v33-systemic-correction", "v33-system-integration"})
         self.assertEqual(report["openCoverage"]["v33-codex-cli-ordinary-delivery"]
-                         ["claims"]["function"]["scenarios"], [])
+                         ["claims"]["function"]["scenarios"], ["effective-user-environment"])
         self.assertNotIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
         self.assertIn("v33-openai-entry-applicability",
                       report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 7)
-        self.assertEqual(report["progress"]["requirementsComplete"], 1)
+        self.assertEqual(report["progress"]["coverageVerified"], 6)
+        self.assertEqual(report["progress"]["requirementsComplete"], 0)
         # The explicit adaptation case is now covered by this synthetic observer;
         # SDK sub-scopes still cannot discharge selected-entry lifecycle parents.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
@@ -1037,16 +1038,6 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertNotIn("v33-environment-adaptation", missing["function"])
         self.assertNotIn("v33-codex-sdk-lifecycle", missing["package-lifecycle"])
 
-        def missing_current_environment(request):
-            observed = self.observer(request)
-            if request["phase"] == "observe":
-                observed["records"] = [row for row in observed["records"]
-                                       if row["case"] != "v33-codex-cli-ordinary-retro-01"]
-            return observed
-        missing_environment = self.assess(observer=missing_current_environment)
-        self.assertFalse(missing_environment["acceptanceRequirements"]["A07"]["complete"])
-        self.assertEqual(missing_environment["openCoverage"]["v33-codex-cli-ordinary-delivery"]
-                         ["claims"]["function"]["scenarios"], ["effective-user-environment"])
         self.assertNotIn("v33-codex-sdk-scoped-exposure", missing["function"])
 
     def test_current_declaration_without_observer_reports_actual_missing_coverage(self):
