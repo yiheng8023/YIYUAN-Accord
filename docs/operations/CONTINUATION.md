@@ -26,16 +26,16 @@
 |---|---|
 | 仓库 | 主线程23接管时main、origin/main和远端main均为13d45375，干净、0/0；本批修正真实状态诊断误标并更新交接记录，后续以实时HEAD为准。 |
 | 源与本机安装 | 当前源码包为3.3.0-dev.1+codex.20260925115917，24文件，SHA 1235ddfa0a946ace214d19dd9558d8b0b5abf47abc7932b55783c05e4996ed26。本机安装仍为先前核对的162230包，SHA e667ff71218975889e00b21e16ff4a9da42e6cfc5ff8603ba9c04b897456f0c1、市场ref=687947a5；本批未安装或要求重启。先前新进程5启用Skill/6可信Hook的证据保持原范围，不能代验本次源码或所有GUI/MCP消费者。旧01947缓存已不在，完整私有恢复备份仍保留。 |
-| 托管检查 | 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)正在运行，完整结果待回读。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11成功、Windows/Python3.14复制exe清理WinError32失败，占用者未知。两个原生生命周期任务均通过。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及Linux/macOS四份artifact独立回读保持原范围，不能代验新提交。 |
+| 托管检查 | 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
-| 根任务状态 | 当前任务已从宿主保留的本条“继续”原文，通过现有helper恢复当前输入回执；真实MCP读回retained-native-replay及相同SHA，needsNativeReplay=false，checkpoint仍unbound，两项失效水印保留。原生最近响应边界上下文已有一次有时效的读数，自动压缩阈值仍未知。这是助手执行的恢复，不是原Hook自动捕获或全史恢复；下次真实输入的自然捕获仍待观察。继续用原生历史与接续承接目标，每次重读当前receipt，不复用旧epoch、canContinue或计数作许可。 |
+| 根任务状态 | 当前任务已从宿主保留的本条“继续”原文，通过现有helper恢复当前输入回执；真实MCP读回retained-native-replay及相同SHA，needsNativeReplay=false，checkpoint仍unbound，两项失效水印保留。原生上下文曾取得有时效的响应边界读数；CI结束后读取因token-count-expired返回unknown，未重标时间或延长年龄求绿，自动压缩阈值仍未知。这是助手执行的恢复，不是原Hook自动捕获或全史恢复；下次真实输入的自然捕获仍待观察。继续用原生历史与接续承接目标，每次重读当前receipt，不复用旧epoch、canContinue或计数作许可。 |
 | 云环境 | 启动前试验失败后已恢复universal、自动setup、Agent网络关闭、缓存开启，目录/workspace/YIYUAN-Accord；界面任务数9。原失败容器细部后态与诊断shell远端退出未独立确认，不能由新容器或关闭页面代验。 |
 | 正式验收 | 17必要scope，11有定义、6未绑定；4个OpenAI入口纳入开发、7个待判，selectionFinal=false。A01–A08整项0/8，functionalCompletion/candidateEligible=false。定义和局部PASS不等于完成。 |
 | 进度估计 | 9月25日工程判断：功能实现50–65%，发布就绪20–30%；不是验收分数、时间或配额承诺，不因新增检查/记录自动增长。 |
 
 ## 本批完成与实际未完项
 
-**Windows复制运行时测试收尾**：80ad291e已修复两个复制Node执行测试的进程归属、退出和精确文件有界清理，保留持续失败及异常链。真实Win32共享锁复现先红后绿；90项入口回归、Python3.10六项定向检查及静态检查通过，独立复核未见阻断。早期本地负向夹具的暂停进程与三处临时目录已按精确归属回收；原托管锁占用者仍未知。过程、反例修正和恢复限制见[历史记录](PROCEDURE-v3.3.md#windows复制运行时的测试退出与清理2026-09-25)及accord-ci-cleanup-20260925-01。产品runtime、115917包、业务限额及验收判据未改，新CI未结案。
+**Windows复制运行时测试收尾**：80ad291e已修复两个复制Node执行测试的进程归属、退出和精确文件有界清理，保留持续失败及异常链。真实Win32共享锁复现先红后绿；90项入口回归、Python3.10六项定向检查、静态检查及该提交CI11/11通过，独立复核未见阻断。早期本地负向夹具的暂停进程与三处临时目录已按精确归属回收；原托管锁占用者仍未知。过程、反例修正和恢复限制见[历史记录](PROCEDURE-v3.3.md#windows复制运行时的测试退出与清理2026-09-25)及accord-ci-cleanup-20260925-01。产品runtime、115917包、业务限额及验收判据未改，本次测试修复已闭合。
 
 **普通入口状态诊断纠偏**：实际接管中发现status把“无存储回执、仅有失效水印”的合成隔离状态标为旧回执。沿原稳定快照增加inputReceipt.present及failureWatermarkScopes，缺文件明确标为missing-stored-input-receipt；水印范围只说明标记保留，已承认的标记仍列出，不证明当前消息丢失或回放权限。两项新增回归先红后绿，184项状态/MCP检查及verify、verify-development、host-check通过，独立源码审查未见阻断。新源码只读检查当前真实任务得到缺文件/工作区水印，epoch及needsNativeReplay不变、水印字节未改；不改回放/暂停/绑定/水印语义。源码与安装身份分开，宿主采用、托管检查及完整普通交付不由这些本地结果代验，正式scope与A01–A08未升格。
 
@@ -56,7 +56,7 @@
 ## 下一实际动作与工序
 
 1. **普通调用者采用与组合**是主要缺口。SDK接口和固定协议已实现，本批普通source恢复的三平台验证已闭合，不继续复制相同夹具。普通插件主线应检验宿主Agent、入口指导、必要状态与真实工作结果的组合；新增App Server调用者或启动器不是所有入口的共同前提，只有具体fresh路径确需时再判断。为下一项确有必要的真实工作事先绑定主代理、worker、内部核验与独立评估者、实际包/条件及observe/recheck；发现调用断点再做最小接线，不制造业务任务填计数。
-   接管后的独立源码核对确认，现有bind_evidence_execution、调用方observe/recheck和独立reviewBundle已有连接入口，尚未发现须另建通用调用器的依据。80ad291e的托管结果待核；本机162230的当前输入恢复与115917源码包身份分开，后续按实际工作需要和完整功能段安排更新，不把当前宿主恢复直接计为新包或正式准入。
+   接管后的独立源码核对确认，现有bind_evidence_execution、调用方observe/recheck和独立reviewBundle已有连接入口，尚未发现须另建通用调用器的依据。80ad291e的托管修复已闭合，不重复该夹具；本机162230的当前输入恢复与115917源码包身份分开，后续按实际工作需要和完整功能段安排更新，不把当前宿主恢复直接计为新包或正式准入。下一条真实输入自然捕获时先核对回执，无需制造额外输入来填验收。
 2. **云端仅继续条件核实**：需要受支持来源确认实际Agent/控制者的配置归属及启动装载路径。配置来源字符串、历史安装路径、独立App Server或诊断终端不是原控制者证明；不要猜定/root/.codex或/opt/codex、改AGENTS、升级宿主或重放旧案。原一次性授权已结束，新设置/信任/任务要有相应具体授权。
 3. **连续性和资源剩余结果**：复用原生压缩、已有SDK和旧机制有效证据，完成必要自主择时/交权、目标真实续做、未知效果对账与失败回退，连同环境变化、压力后续做和退出后态。不把source连接缺失推广为所有入口不可用，也不强制健康任务迁移。
 4. **正式准入和发布**：补未绑定的entry-coverage、dynamic-model-routing、autonomous-continuity、system-integration、codex-lifecycle、system-impact-assessment六scope；这不意味着各造一套试验。A08的完整组合仍须同一episode，不能拼散案冒充；必要验收、独立审查和精确候选条件满足后依既有授权发布。
