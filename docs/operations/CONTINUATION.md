@@ -35,7 +35,7 @@
 
 ## 本批完成与实际未完项
 
-**源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；新源码包202615尚未安装，托管结果待绑定提交核对。
+**源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；新源码包202615尚未安装。[CI36135273441](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36135273441)已绑定f2ad9285并在途，后续普通对话或记录推送不取消它，须按精确headSha继续回读最终结果。
 
 **本批托管检查已闭合**：dc63f904的[CI36128555843](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36128555843)完整11/11成功，精确headSha与各job已回读；包括活动案例处置后的九个OS/Python组合及两个原生生命周期job。14aada0c的前次11/11保持原范围。仅说明相应提交的托管检查通过，不代替普通行为、云采用或正式准入。
 
