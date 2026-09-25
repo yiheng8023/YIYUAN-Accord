@@ -302,7 +302,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
           "execution": "本地交互或云端委派",
           "environment": "编辑器版本、远程工作区、扩展实际加载与云端环境分别核对。",
-          "observation": "2026-09-15实际IDE小链已完成：用户在准备目录发送普通消息，原生source=vscode/originator=codex_vscode、0.154.0-alpha.6.2、Terra/medium/default，64.487秒task_complete。当前1429f2a/cc3243ea安装包的UserPromptSubmit产生6403字节developer指导及对应原始回执；两报告一致、3原件SHA保持，独立语义复核通过。消息仅有Markdown转义/末尾换行差异，不报逐字一致。此为一次已配置环境的输入参与/交付证据，不覆盖全部Hook、安装全生命周期、自动交接、所有IDE或整体准入。旧云环境显示缓存已由用户重新选择同一环境刷新，仓库ID不变。",
+          "observation": "2026-09-15实际IDE小链已完成：用户在准备目录发送普通消息，原生source=vscode/originator=codex_vscode、0.154.0-alpha.6.2、Terra/medium/default，64.487秒task_complete。该次1429f2a/cc3243ea安装包的UserPromptSubmit产生6403字节developer指导及对应原始回执；两报告一致、3原件SHA保持，独立语义复核通过。消息仅有Markdown转义/末尾换行差异，不报逐字一致。此为一次已配置环境的输入参与/交付证据，不覆盖全部Hook、安装全生命周期、自动交接、所有IDE或整体准入。旧云环境显示缓存已由用户重新选择同一环境刷新，仓库ID不变。 2026-09-26另一次必要的用户说明审查已完成：准备后实际扩展变为26.917.62051、后端0.155.0-alpha.16.3，原生source=vscode/originator=codex_vscode，Luna/max/default、on-request/danger-full-access。现装202615的完整入口正文（仅相对链接解析为实际路径）两次位于首个工具前，Agent读取核验Skill并交付review.md/claims.json；六原件Hash与mtime保持，独立复核后由主线程在主仓落实文案清晰度修订。实际输入含Markdown转义和末尾换行差异，不称逐字匹配；共享配置模型/推理与本工作区信任发生变化，保留实际用户环境，不盲目还原。此为该条件下的入口参与和有源交付，不证明全部Hook/MCP、自动交接、完整IDE生命周期、资源退出或正式准入。原件位于accord-ide-copy-review-20260926-01。",
           "currentEffect": "unverified"
         },
         {

@@ -1,6 +1,6 @@
 # 3.3 发布材料工作稿
 
-状态：通用发布准备，未排期、未提交，3.3尚未完成验收或正式发布。本文复用[共识计划](PLAN-v3.3.md)的W08/S5，不新增产品验收或发布日期。
+状态：发布准备工作稿，3.3尚未完成验收或正式发布；本文不是发布或日期通知。本文复用[共识计划](PLAN-v3.3.md)的W08/S5，不新增产品验收或发布日期。
 
 ## 文案底稿
 
@@ -42,6 +42,8 @@ Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和
 
 ### 哪些决定仍由你掌握
 
+你明确选择的模型、推理强度和使用限制应持续生效，适用的现有配置应保持稳定。Agent 可在已有授权和宿主支持范围内调度子任务，但这不自动授权更改主模型。对于既有授权未涵盖的变更，包括改变你固定的选择或跨越服务商、账户、数据访问、重大费用边界，Agent 应先说明影响并取得必要决定；已有明确授权无需重复确认。
+
 你决定要达成什么、是否改变方向，以及是否授权会产生实质影响的操作。Agent 应在授权范围内行动；需要你的判断、授权或本人操作时，应把具体事项交还给你。Agent 负责核验交付并纠正已发现的问题；你可以审阅和纠正结果，决定是否接受，而不必替 Agent 承担每一步检查。能力协调不会绕过宿主权限，也不意味着每一步都自动完成；自动交接仍在开发中。
 
 ### 条件、成本与尚待核实
@@ -66,6 +68,8 @@ The current 3.3 focus is OpenAI execution environments with practical delivery v
 
 ### Decisions that remain yours
 
+Your explicit choices of model and reasoning effort, and your usage restrictions, remain in force; an adequate configuration should stay stable. The Agent may delegate subtasks within existing authority and host support; that does not itself authorize changing the main model. If a change is not already covered by your authorization, the Agent should explain its impact and obtain the necessary decision before acting. This includes changing a pinned choice or crossing boundaries involving providers, accounts, data access or significant cost. Existing explicit authorization does not require repeated confirmation.
+
 You decide what outcome you want, whether to change direction, and whether to authorize actions with material consequences. The Agent should act within its authorization and bring specific decisions, permissions, or actions back to you when needed. The Agent is responsible for checking its deliverables and correcting identified problems. You can review and challenge the result and decide whether to accept it, without taking over every verification step. Coordinating capabilities does not bypass host permissions or mean every step happens automatically; automatic handoff remains in development.
 
 ### Conditions, costs, and what remains unverified
@@ -89,7 +93,7 @@ Version 3.3 remains in development and has not completed acceptance or publicati
   "scope": {
     "purpose": "Designed to help an Agent understand a goal, assess feasibility and missing conditions, coordinate available host capabilities and Accord components within authorization, adapt to changes, check results, correct affected work, and preserve unfinished items.",
     "howToStart": "State the desired outcome in everyday language; optionally add background, constraints, priorities, and how to check the result. No technical setup knowledge is assumed in this introductory explanation.",
-    "userDecisions": "The user retains decisions about the desired outcome, changes of direction, authorizations with material consequences, and acceptance. The Agent owns verification and correction; users may inspect and challenge outputs without taking over each verification step.",
+    "userDecisions": "The user retains decisions about the desired outcome, changes of direction, authorizations with material consequences, and acceptance. Explicit choices of model and reasoning effort, and usage restrictions, remain in force; keep an adequate configuration stable. Subtask delegation does not itself authorize changing the main model. A change not already covered by existing authorization, including changing a pinned choice or crossing provider, account, data access or significant cost boundaries, requires explaining its impact and obtaining the necessary user decision. Existing explicit authorization does not require repeated confirmation. The Agent owns verification and correction; users may inspect and challenge outputs without taking over each verification step.",
     "focus": "OpenAI execution environments with practical delivery value and a feasible way to fulfill necessary collaboration duties; the current development package provides the Codex adaptation.",
     "limits": [
       "These are design aims, not accepted results across all entry points.",

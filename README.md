@@ -14,7 +14,7 @@
   <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
 </p>
 
-Accord provides coordination and reliability support for long-term human–AI collaboration. When a user presents a goal or initial idea, the Agent clarifies the requirements, assesses feasibility, establishes necessary conditions, and owns authorized execution, correction, recovery and result verification. Users should not need to learn tool coordination, configuration, model routing or task handoff first; experienced users retain control over their own actions and changes of direction.
+YIYUAN Accord is designed to support reliable long-term human–AI collaboration. Its goal is for the Agent to clarify a user's requirements, assess feasibility, establish necessary conditions, and own authorized execution, correction, recovery and result verification. Users should not need to learn tool coordination, configuration, model routing or task handoff first; experienced users retain control over their own actions and changes of direction.
 
 The project is open source and not driven by profit. It aims for industrial and commercial production quality, equitable access and user autonomy. Project decisions are guided by user interests, verifiable value and sustainable maintenance. Commercial funding and platform relationships do not change its supplier independence. Its general collaboration design is separate from host adapters; native and mature external capabilities are used according to their actual value.
 
@@ -53,6 +53,8 @@ This overview shows Accord's coordination duties and their feedback relationship
 Starting conditions, process and results form relationships that can run in parallel, nest and feed back. Semantics explains changes, events trigger relevant reassessment, and negative boundaries protect goals, authority and evidence. Routes remain task-dependent. Deterministic local procedures can be standardized without prescribing one fixed end-to-end SOP.
 
 A plugin is the delivery form for a particular host. Accord's responsibilities span user intent, the host and surrounding capabilities, and actual results. Important decisions, state changes and feedback need working connections, without requiring every call to pass through one proxy or granting authority above the user or host. Confirm the intended outcome when a user action has material consequences and ambiguous intent; respect clear choices and do not silently restore user settings.
+
+Your explicit choices of model and reasoning effort, and your usage restrictions, should remain in force; an adequate configuration should stay stable. Subtask delegation does not itself authorize changing the main model. If a change is not already covered by your authorization, the Agent should explain its impact and obtain the necessary decision before acting. This includes changing a pinned choice or crossing boundaries involving providers, accounts, data access or significant cost. Existing explicit authorization does not require repeated confirmation.
 
 Adaptation addresses the environment actually encountered. Accord should use the host's existing authorized capabilities to establish missing conditions, verify that they work and provide recovery paths: a host-assisted bootstrap. Users should not have to reset to default settings. Development isolation helps identify causes; adaptation and bootstrap still require evidence from real tasks.
 
