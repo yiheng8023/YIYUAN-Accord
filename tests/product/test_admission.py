@@ -1015,18 +1015,21 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A07"})
-        # A bounded correction case may pass without discharging the historical
-        # and recovery consequences still owned by the required integration scope.
-        self.assertIn("v33-systemic-correction-02", report["acceptedCases"])
-        self.assertEqual(report["acceptanceRequirements"]["A04"]["missingScopes"]["function"],
-                         ["v33-system-integration"])
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, set())
+        # Retaining ended executions as history does not supply a replacement
+        # correction episode or the ordinary installed-environment contribution.
+        self.assertNotIn("v33-systemic-correction-02", report["acceptedCases"])
+        self.assertNotIn("v33-codex-cli-review-delivery-01", report["acceptedCases"])
+        self.assertEqual(set(report["acceptanceRequirements"]["A04"]["missingScopes"]["function"]),
+                         {"v33-systemic-correction", "v33-system-integration"})
+        self.assertIn("effective-user-environment", report["openCoverage"]
+                      ["v33-codex-cli-ordinary-delivery"]["claims"]["function"]["scenarios"])
         self.assertNotIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
         self.assertIn("v33-openai-entry-applicability",
                       report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 8)
-        self.assertEqual(report["progress"]["requirementsComplete"], 1)
+        self.assertEqual(report["progress"]["coverageVerified"], 6)
+        self.assertEqual(report["progress"]["requirementsComplete"], 0)
         # The explicit adaptation case is now covered by this synthetic observer;
         # SDK sub-scopes still cannot discharge selected-entry lifecycle parents.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
@@ -1047,7 +1050,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 11, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 6, "coverageDefinedButUnverified": 11,
-            "casesDefined": 12, "casesAccepted": 0,
+            "casesDefined": 10, "casesAccepted": 0,
         })
 
     def test_incomplete_mapping_or_old_policy_cannot_dispatch_current_observer(self):
@@ -1523,6 +1526,24 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             self.assertFalse(report["candidateEligible"])
             self.assertFalse(report["acceptanceRequirements"]["A08"]["complete"])
             self.assertTrue(report["acceptanceRequirements"]["A01"]["complete"])
+
+        # Even if every remaining case is admitted, removing an execution
+        # instance cannot vacuously discharge its still-required scope.
+        for empty_scope, requirement in (("v33-systemic-correction", "A04"),
+                                         ("v33-codex-cli-ordinary-delivery", "A07")):
+            missing_case = copy.deepcopy(contract)
+            remaining = missing_case["acceptance"]["admission"]["cases"]
+            remaining[:] = [case for case in remaining if case["scope"] != empty_scope]
+            with self.subTest(empty_scope=empty_scope), self.history():
+                self.commit(missing_case)
+                report = self.assess(missing_case, self.observer)
+                self.assertEqual(report["errors"], [])
+                self.assertEqual(len(report["acceptedCases"]), len(remaining))
+                self.assertFalse(report["candidateEligible"])
+                self.assertFalse(report["functionalCompletion"])
+                self.assertIn(empty_scope, report["acceptanceRequirements"]
+                              [requirement]["missingScopes"]["function"])
+                self.assertFalse(report["acceptanceRequirements"]["A08"]["complete"])
 
         # Individually valid episodes cannot be unioned into an integrated run.
         integration = next(c for c in policy["cases"] if c["scope"] == "v33-system-integration")

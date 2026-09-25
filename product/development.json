@@ -4161,6 +4161,48 @@
         }
       ],
       "disposition": "Retain as task-relevant external candidates, not dependencies or an additional native capability database. Native sufficient paths need no SDK wrapper. Any adoption must establish actual current-host compatibility, complete required effects, authority, dependencies and total lifecycle burden; source and license metadata alone do not prove safety, optimality or autonomous failure recovery."
+    },
+    {
+      "id": "closed-v33-execution-instance-disposition-20260925",
+      "observedAt": "2026-09-25",
+      "scope": "current-applicability-disposition-not-behavior-acceptance",
+      "cases": [
+        {
+          "caseId": "v33-systemic-correction-02",
+          "scopeId": "v33-systemic-correction",
+          "declarationSnapshot": "d6c27f6b699cb51506401fbae0f9626db898c2e4:product/development.json",
+          "declarationSelector": {
+            "caseId": "v33-systemic-correction-02"
+          },
+          "caseObjectSha256": "f8f340dab835bb4ec6b996daf19486c88a775246a1696f34e3e8a142502f17b9",
+          "executedRevision": "01397fbecf8887db7a26b7c1aa24310d236f8149",
+          "episodeId": "da98e440e53e4377a8b8af4ad507b715",
+          "evidence": "accord-release-copy-20260924-01/admission-observation.json",
+          "outcome": "failed-not-admitted",
+          "disposition": "closed-execution-retained-as-history-not-current-required-instance",
+          "reason": "The bounded release-copy episode ended with source/role errors and a prebound cumulative output limit failure. Evaluator-corrected launch drafts do not change the subject outcome.",
+          "remainingObligation": "A future current episode must still correct every affected artifact under real steering, preserve valid work and original material, and verify the wider integration/recovery consequences required by A04."
+        },
+        {
+          "caseId": "v33-codex-cli-review-delivery-01",
+          "scopeId": "v33-codex-cli-ordinary-delivery",
+          "declarationSnapshot": "d6c27f6b699cb51506401fbae0f9626db898c2e4:product/development.json",
+          "declarationSelector": {
+            "caseId": "v33-codex-cli-review-delivery-01"
+          },
+          "caseObjectSha256": "3a8063feb758edc10b415fd56cafbf53d550696eec283e4600b2bae8bdea572b",
+          "executedRevision": "7b1a66c7d2b88982140bce150a0d0bf6b5596760",
+          "episodeId": "d4a74e85d4c047aaaae8148d8ef896cb",
+          "evidence": "accord-ordinary-integration-20260925-01/admission-observation.json",
+          "outcome": "failed-not-admitted",
+          "disposition": "closed-execution-retained-as-history-not-current-required-instance",
+          "reason": "The necessary review was delivered and found a real defect, but the executed read set differed from its prebound source list. Its declaration/result stays failed; compatibility between required host guidance and business-data boundaries remains a prospective design obligation.",
+          "remainingObligation": "The installed effective-user-environment contribution remains unaccepted. A future ordinary episode must prebind a workable guidance/data boundary and prove its required duties, authority, delivery and resource effects."
+        }
+      ],
+      "preserved": "Original definitions, expected results, budgets, times, records, case input files and failures retain their immutable identities. No replay, budget increase or success relabeling.",
+      "currentEffect": "Only these two ended execution instances leave the active admission case list. All 17 required scope/claim pairs, F/A outcomes, duties, quality axes, scenarios, conditions and all remaining active cases are preserved. Missing current evidence continues to block the affected scopes and candidate qualification.",
+      "rule": "Bind a new necessary real episode prospectively when one is ready; a missing replacement is unfinished coverage, not permission to pass or a reason to keep a non-replayable execution permanently active."
     }
   ],
   "environmentControl": {
@@ -4521,7 +4563,7 @@
             "collaborationMode": "default",
             "goalModeActive": false
           },
-          "rule": "This scope retains the ordinary default-mode, no-unrequested-Goal baseline across case-specific CLI conditions. The original source-level fresh delivery/retry case remains necessary under its complete original conditions and expected result. A second installed-plugin, persistent CLI case can contribute a real independent code-review deliverable under its own exact conditions. Both cases are partial A01/A03/A07 contributions; neither substitutes for the other, any selected-entry parent range, autonomous continuity, A04 systemic correction, A08 integration or product completion. Unknown native mode or Goal evidence does not satisfy the applicable case."
+          "rule": "The ordinary default-mode and no-unrequested-Goal baseline remains across case-specific CLI conditions. The original source-level fresh delivery/retry case remains required with its complete original conditions and expected result. The ended installed-plugin review instance is retained as failed history; effective-user-environment coverage remains unaccepted until a suitable new real episode is bound prospectively. Every required duty, quality axis and scenario still needs evidence; historical reports cannot replace that evidence or close A01/A03/A07, autonomous continuity, A04, A08 or the product. Unknown native mode or Goal evidence remains insufficient."
         },
         {
           "id": "v33-codex-sdk-lifecycle",
@@ -5578,127 +5620,6 @@
           }
         },
         {
-          "id": "v33-systemic-correction-02",
-          "scope": "v33-systemic-correction",
-          "host": "codex",
-          "entry": "cx-cli",
-          "duties": [
-            "premise-and-consistency",
-            "correction-and-evolution",
-            "verification-and-value"
-          ],
-          "qualityAxes": [
-            "compliance-and-safety",
-            "functional-coverage",
-            "normal-entry-integration",
-            "recovery-and-lifecycle",
-            "change-adaptation",
-            "evidence-integrity",
-            "user-burden-and-interference"
-          ],
-          "scenarios": [
-            "mid-task-user-steering",
-            "effective-user-environment",
-            "native-sufficient"
-          ],
-          "claims": [
-            "function"
-          ],
-          "conditions": {
-            "codexVersion": "0.156.1",
-            "entryProtocol": "exec-resume",
-            "model": "gpt-6-luna",
-            "reasoning": "medium",
-            "ephemeral": false,
-            "windowsSandbox": "elevated",
-            "permissionPolicy": "workspace-write/never",
-            "collaborationMode": "default",
-            "goalModeActive": false,
-            "userConfig": "Existing effective user configuration and enabled components retained; only the declared per-turn model, effort and permission overrides are used. No Plan or Goal activation.",
-            "userConfigBaselineSha256": "e810b5db5e6057fb3ff14bad33dc3ef0ae0b6636c3f741a019c70103920b1996",
-            "extensions": "Existing complete enabled yiyuan-accord-codex@yiyuan-accord installation with native Hook trust; no Hook projection, plugin disablement or injected checkpoint.",
-            "input": "The two maintainer-prebound ordinary scenario inputs in product/cases/release-copy-v3.3.json, ordered draft then first-use. They are not attributed to an independently issued end-user decision.",
-            "source": "The four product source texts are frozen at 8a180d1a in source-basis.json. Fixture, candidate, full package, executable observer dependencies and caller/recovery bytes are fixed before model dispatch.",
-            "questionRoute": "Native noninteractive exec/resume final messages; only the two prebound inputs, no evaluator rescue or output edits.",
-            "nativeBootstrapEffects": "Only the fresh owned workspace trust registration may be added by the native host; independently compare the semantic delta under an exclusive config handle and restore exact original bytes when no unrelated change exists.",
-            "networkBoundary": "No browser/network tools, installation or publication actions. Existing authenticated model transport is allowed and is not reported as zero network use.",
-            "context": "Actual account/host configuration for this instance; no default context-window or cross-model efficiency claim.",
-            "callerSourceSha256": "c533a1711bf315e015bdc7abefff9e5e48361a848c044e9b98487b99fa8177e5",
-            "configurationRecoverySourceSha256": "72c8759e0d42548815894a3c422e3cf5347f828a5390514952413cdcbdbbf755",
-            "execution": {
-              "entryProtocol": "exec-resume",
-              "hookMode": "installed-plugin",
-              "model": "gpt-6-luna",
-              "reasoning": "medium",
-              "windowsSandbox": "elevated",
-              "timeoutSeconds": 600,
-              "turnTimeoutSeconds": 240,
-              "recoveryTimeoutSeconds": 20,
-              "caseSha256": "857b90731ca4b8f0ea342ad4b69eee24eaba23ac49cab3e96c0862ab2e0fa265",
-              "host": "codex",
-              "entry": "cx-cli",
-              "codexVersion": "0.156.1",
-              "usageCaps": {
-                "inputTokens": 800000,
-                "uncachedInputTokens": 100000,
-                "outputTokens": 10000
-              },
-              "usageScope": "Observed native cumulative usage across the two new turns, including resumed context processing; caps are neither current occupancy nor monetary cost.",
-              "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/release-copy-v3.3.json"
-            }
-          },
-          "oracle": "Prospectively evaluate the real release-preparation drafts through the current installed CLI entry. Preserve the old 01 five-turn definition and all its observations at their original revisions; do not restamp, replay or convert them into this 02 case. Read both exact native inputs and paired turns, complete current Hook guidance before model work, native resolved model/effort/default mode, and Goal readbacks on the same persisted task. The separate read-only App Server reader may call initialize, thread/read and thread/goal/get only; it supplies no model prompt and performs no resume or goal mutation. Inspect both stage snapshots of all four outputs against the frozen source texts and stage semanticReview: stage one is a truthful migration-oriented draft with unsupported upgrade details explicitly pending; stage two must change every affected current audience/content/checklist/JSON field for first-time nontechnical users, remove active migration procedures, retain valid facts and preserve bilingual consistency. A changed file hash alone is not semantic correction. All source materials retain exact bytes and mtime. Read raw commands, messages and resource receipts for out-of-scope actions, unrequested mode activation, evaluator rescue and owned state. Unknown facts fail dependent facets. Observe natural exits and zero owned processes for execution, inventories and Goal readers; retain the unfinished outcome on failure, restore only the owned native registration, retain execution evidence and verified deliverables, then remove attributable temporary roots. Later current-file checks cannot rewrite an earlier failed stage. Independently assemble observed same-episode facts before comparing predicates; never copy expected booleans into observations. Final observe/recheck and four-axis candidate review remain required. This scope is a bounded A04 contribution, not whole-entry coverage, autonomous handoff, causal value or publication permission.",
-          "oracleFiles": [
-            "docs/operations/PLAN-v3.3.md",
-            "docs/operations/ACCEPTANCE-v3.3.md",
-            "product/cases/release-copy-v3.3.json",
-            "scripts/observe_codex_entry.py",
-            "scripts/inspect_coordination.py",
-            "scripts/observe_codex_lifecycle.py",
-            "scripts/inspect_native_resources.py",
-            "scripts/codex_rpc.py",
-            "scripts/codex_events.py",
-            "yiyuan_accord/admission.py",
-            "yiyuan_accord/identity.py",
-            "yiyuan_accord/guardrails.py",
-            "yiyuan_accord/reviews.py"
-          ],
-          "maxAgeSeconds": 86400,
-          "expected": {
-            "effect": {
-              "bothStagesSourceFaithful": true,
-              "allFourAffectedOutputsCorrected": true,
-            "unresolvedReleaseConditionsRetainedAcrossResume": true,
-            "previousDraftReviewedAndCorrected": true,
-              "currentMigrationProceduresRemoved": true,
-              "bilingualAndStructuredFieldsConsistent": true,
-              "unsupportedClaimsAbsent": true
-            },
-            "authority": {
-              "ordinaryInputsMatched": true,
-              "originalInputsBytesAndMtimePreserved": true,
-              "noEvaluatorRescue": true,
-              "noObservedOutOfScopeAction": true,
-              "unrequestedModeActivation": false
-            },
-            "poststate": {
-              "actualModelEffortAndDefaultModeVerified": true,
-              "goalAbsentAtObservedBoundaries": true,
-              "currentInstalledEntryObservedBothTurns": true,
-              "finalDeliverablesIndependentlyRead": true,
-              "unfinishedCheckpointAbsentAfterCompletion": true
-            },
-            "cleanup": {
-              "ownedProcesses": 0,
-              "sharedConfigurationRestored": true,
-              "ownedTemporaryRootsAbsent": true,
-              "executionEvidenceAndDraftsRetained": true,
-              "nativeTaskNotArchivedOrDeleted": true
-            }
-          }
-        },
-        {
           "id": "v33-openai-entry-applicability-01",
           "host": "codex",
           "entry": "cx-desktop",
@@ -6373,116 +6294,6 @@
               "userTaskNotArchivedOrDeleted": true,
               "unownedResourcesPreserved": true,
               "noUnresolvedTaskResource": true
-            }
-          }
-        },
-        {
-          "id": "v33-codex-cli-review-delivery-01",
-          "scope": "v33-codex-cli-ordinary-delivery",
-          "host": "codex",
-          "entry": "cx-cli",
-          "duties": [
-            "goal-authority-correction",
-            "verification-and-value"
-          ],
-          "qualityAxes": [
-            "compliance-and-safety",
-            "functional-coverage",
-            "normal-entry-integration",
-            "evidence-integrity"
-          ],
-          "scenarios": [
-            "effective-user-environment"
-          ],
-          "claims": [
-            "function"
-          ],
-          "conditions": {
-            "collaborationMode": "default",
-            "goalModeActive": false,
-            "codexVersion": "0.157.0",
-            "entryProtocol": "exec-resume",
-            "model": "gpt-6-sol",
-            "reasoning": "high",
-            "ephemeral": false,
-            "windowsSandbox": "elevated",
-            "permissionPolicy": "workspace-write/never",
-            "userConfig": "Existing effective user configuration retained; exact permitted per-turn model, effort, permission and sandbox overrides only. No shared-setting edit.",
-            "extensions": "Already installed enabled yiyuan-accord-codex@yiyuan-accord package 3.3.0-dev.1+codex.20260925115917 with native Hook trust; no source Hook injection or trust bypass. Native inventory and actual loaded byte identity must be read back before and during the case.",
-            "installedPackageSha256": "1235ddfa0a946ace214d19dd9558d8b0b5abf47abc7932b55783c05e4996ed26",
-            "input": "One ordinary, prebound independent code-review request from product/cases/ordinary-review-v3.3.json. requirements.md, change.patch and source-map.json are protected inputs; the exact candidate source files and tests are read-only review subjects. No instruction to use Accord or Goal as a task goal.",
-            "source": "Fresh, clean committed candidate after the current observer/test correction is integrated. The review directly informs that integration decision; prior release-copy-02 and resource-change episodes are excluded.",
-            "questionRoute": "One normal persisted CLI turn with no evaluator rescue or follow-up input. Native final message and review.md are both checked. The reviewer works directly without further delegation or executing tests/source code.",
-            "nativeGoalReadback": "The existing observer automatically reads thread/goal/get after this completed admission-bound stage. The read is for that instant only, on the bound persisted thread, and must retain the raw thread/read and thread/goal/get RPC pair and reader resource receipt. CLI turn context separately supplies model, effort and collaboration mode; neither source substitutes for the other.",
-            "networkBoundary": "No browser or network tools, installation, publication, source editing or shared-setting changes. Authenticated model transport already required for the task is allowed and is not described as zero network activity.",
-            "workspaceBoundary": "Fresh exclusive, ignored workspace inside the trusted repository root; only review.md is an allowed business output. No new workspace trust registration or global configuration reset. The reviewer may read only the prospectively listed repository code/test paths and source documents.",
-            "execution": {
-              "entryProtocol": "exec-resume",
-              "hookMode": "installed-plugin",
-              "model": "gpt-6-sol",
-              "reasoning": "high",
-              "windowsSandbox": "elevated",
-              "timeoutSeconds": 600,
-              "turnTimeoutSeconds": 480,
-              "recoveryTimeoutSeconds": 20,
-              "caseSha256": "ec1f6f5451d1c176a57ab2bd8b34e63037e9ee9282234bce0ea6fecb402fccb0",
-              "host": "codex",
-              "entry": "cx-cli",
-              "codexVersion": "0.157.0",
-              "usageCaps": {
-                "totalTokens": 2500000,
-                "uncachedInputTokens": 250000,
-                "outputTokens": 16000
-              },
-              "usageScope": "Native cumulative usage across one persisted CLI turn; cost and occupancy are separate.",
-              "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/ordinary-review-v3.3.json"
-            }
-          },
-          "oracle": "Before dispatch freeze the exact committed fixture, observer/caller dependencies, Git tree, full package and native installed inventory; refresh the real account/model directory and user exclusions, and verify the CLI actually accepts gpt-6-sol/high. Read the exact ordinary prompt, native UserMessage, current-turn installed Hook guide delivered before model action, native turn_context model/effort/default mode and full tool trace. Independently inspect requirements.md, change.patch, source-map.json, the exact changed code and tests, review.md and final message. The reviewer must identify material implementation/specification errors with precise source support, or explain a bounded no-finding conclusion, and state test/evidence limits; a structurally present file or matching keywords do not prove a valid review. Native post-stage Goal null establishes only that read instant; require raw bound thread/read plus thread/goal/get receipts and no observed unrequested Goal activation, but do not infer prior/intervening Goal history from null. Failure, unobservable mode/Goal, missing guide, incorrect semantics, unsupported claim, source mutation, evaluator rescue, over-limit usage or unknown cleanup leaves the affected facet unaccepted. Root separately verifies the report against source, input/code/config preservation, native task and owned process exit, then supplies an independent authenticated reviewBundle and caller-owned read-only observe/recheck. This case is a bounded installed CLI review delivery, not a second source/retry test, package lifecycle completion, dynamic model-routing proof, A04 correction, A05 handoff or A08 whole-system acceptance.",
-          "oracleFiles": [
-            "docs/operations/PLAN-v3.3.md",
-            "docs/operations/ACCEPTANCE-v3.3.md",
-            "product/cases/ordinary-review-v3.3.json",
-            "scripts/observe_codex_entry.py",
-            "scripts/observe_codex_lifecycle.py",
-            "scripts/inspect_coordination.py",
-            "scripts/inspect_native_resources.py",
-            "scripts/codex_rpc.py",
-            "yiyuan_accord/admission.py",
-            "tests/product/test_codex_entry.py"
-          ],
-          "maxAgeSeconds": 86400,
-          "expected": {
-            "effect": {
-              "reviewMdExistsAndSubstantive": true,
-              "materialFindingsOrNoFindingSupportedByExactSources": true,
-              "reportUsableForCurrentIntegrationDecision": true,
-              "installedEntryGuideObservedBeforeModelAction": true
-            },
-            "authority": {
-              "oneOrdinaryInputMatched": true,
-              "requirementsPatchAndSourceMapPreserved": true,
-              "candidateCodeAndTestsReadOnly": true,
-              "noEvaluatorRescue": true,
-              "noOutOfScopeEffect": true,
-              "noObservedUnrequestedGoalActivation": true
-            },
-            "poststate": {
-              "nativeModelEffortAndDefaultModeObserved": true,
-              "nativeGoalReadObservedOnBoundThreadAtPostStage": true,
-              "goalAbsentAtObservedReadInstant": true,
-              "reviewAndFinalMessageIndependentlyChecked": true,
-              "exactInstalledPackageAndCurrentConditionsRechecked": true,
-              "earlierGoalHistoryNotClaimed": true
-            },
-            "cleanup": {
-              "ownedProcesses": 0,
-              "sharedConfigurationPreserved": true,
-              "onlyReviewMdBusinessOutput": true,
-              "nativeTaskAndReviewEvidenceRetained": true,
-              "taskOwnedTemporaryResourcesReleasedWhenSafe": true,
-              "unownedResourcesPreserved": true
             }
           }
         }

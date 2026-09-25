@@ -35,7 +35,9 @@
 
 ## 本批完成与实际未完项
 
-**Goal读回测试的Windows临时目录别名修复**：36118841418的Windows/Python3.14在Goal正例的observed断言失败。以GetShortPathNameW建立同一自有临时目录的真实8.3别名后，原测试稳定复现unknown及cli-source-unavailable:ValueError；在生成全部回执前统一解析临时根目录后，Python3.14与3.10的相同复现均通过。仅修夹具并增加失败原因显示，产品路径/身份守卫未改。该轻量用例加入已有CI路径前置检查，11项前置用例及actionlint通过，独立审查未见阻断；原运行最终为7/11，Windows与macOS四项均为同一正例失败。修正提交14aada0c的[CI36123114636](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36123114636)已在全部九个OS/Python组合通过该前置检查；完整矩阵仍运行，不提前宣称11/11。按SHA保留CI策略不变。
+**活动案例与历史责任分开**：两个不可重放的失败实例已从admission.cases转入developmentObservations的不可变定义/执行引用，活动案例12→10。准入器未改；requiredCoverage、F/A、职责、质量、场景及条件未降低，systemic-correction的当前正例和ordinary的有效用户环境贡献仍缺，functionalCompletion/candidateEligible保持false。保留空范围与缺场景的拒绝反例，历史材料没有删除或重标通过。
+
+**Goal读回测试的Windows临时目录别名修复**：36118841418的Windows/Python3.14在Goal正例的observed断言失败。以GetShortPathNameW建立同一自有临时目录的真实8.3别名后，原测试稳定复现unknown及cli-source-unavailable:ValueError；在生成全部回执前统一解析临时根目录后，Python3.14与3.10的相同复现均通过。仅修夹具并增加失败原因显示，产品路径/身份守卫未改。该轻量用例加入已有CI路径前置检查，11项前置用例及actionlint通过，独立审查未见阻断；原运行最终为7/11，Windows与macOS四项均为同一正例失败。修正提交14aada0c的[CI36123114636](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36123114636)已在全部九个OS/Python组合通过该前置检查；完整矩阵现已11/11成功，精确headSha和各job均已回读。按SHA保留CI策略不变。
 
 **CI责任续接与漏项修复**：0a6f925c已将push/manual按提交SHA分组并保留运行，PR仍按引用替换旧候选；矩阵与测试步骤未减。原5eb0e698托管Linux失败是新增案例后测试仍写11，而实际为12；已修为12，原失败单测、完整57项准入回归及actionlint通过，独立复核无阻断。新[CI36118841418](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36118841418)已运行，推送后旧36115837538仍运行，未被新候选取消；两者结果各按自身SHA核对，不把旧失败升格。
 
@@ -68,7 +70,7 @@
 ## 下一实际动作与工序
 
 1. **普通调用者采用与组合**是主要缺口。SDK接口和固定协议已实现，本批普通source恢复的三平台验证已闭合，不继续复制相同夹具。普通插件主线应检验宿主Agent、入口指导、必要状态与真实工作结果的组合；新增App Server调用者或启动器不是所有入口的共同前提，只有具体fresh路径确需时再判断。为下一项确有必要的真实工作事先绑定主代理、worker、内部核验与独立评估者、实际包/条件及observe/recheck；发现调用断点再做最小接线，不制造业务任务填计数。
-   接管后的独立源码核对确认，现有bind_evidence_execution、调用方observe/recheck和独立reviewBundle已有连接入口，尚未发现须另建通用调用器的依据。80ad291e的托管修复已闭合，不重复该夹具；115917已原生安装并独立回读，新输入自然捕获也已确认。真实普通审查已交付并找出有效源码问题，原案读取范围不匹配保持不准入；两处观察器修正已以5eb0e698推送；[精确CI36115837538](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36115837538)的已完成Linux检查暴露同一漏改断言：当前案例数12，测试仍为11。已按实际定义纠正，并改为push/manual按SHA保留运行、PR按引用替换；本批最终结果以精确提交回读为准。下一步先处置普通CLI与系统性纠偏范围的活动案例适用性：当前清单中的所有案例都须通过，新增案例不会替代仍列其中的旧实例或已失败审查案。保留原失败、预算和Git身份，为仍必要的职责、默认环境及反例先绑定实际可执行的等效覆盖，再版本化修订活动清单；不得把合取改为任一通过，也不因有用报告直接退休失败风险。当前只读判断已确认这是投影的历史处置工作，不需另造观察器或重复模型试验。
+   接管后的独立源码核对确认，现有bind_evidence_execution、调用方observe/recheck和独立reviewBundle已有连接入口，尚未发现须另建通用调用器的依据。80ad291e的托管修复已闭合，不重复该夹具；115917已原生安装并独立回读，新输入自然捕获也已确认。真实普通审查已交付并找出有效源码问题，原案读取范围不匹配保持不准入；两处观察器修正已以5eb0e698推送；[精确CI36115837538](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36115837538)的已完成Linux检查暴露同一漏改断言：当前案例数12，测试仍为11。已按实际定义纠正，并改为push/manual按SHA保留运行、PR按引用替换；本批最终结果以精确提交回读为准。两项结束实例的当前适用性处置已完成：发布准备02和普通审查01已转为版本化历史，旧定义、预算、原件、失败和未完风险均保留；原CLI01暂留。17项必要范围及完整职责/质量/场景不变，无当前案例或缺有效环境贡献仍不能通过。下一步围绕确有必要的普通交付和纠偏工作，前瞻绑定可执行的当前实例；先核对宿主必需指导与业务数据边界，避免不可满足的测试前提，不制造业务填计数或另造观察器。
 2. **云端仅继续条件核实**：需要受支持来源确认实际Agent/控制者的配置归属及启动装载路径。配置来源字符串、历史安装路径、独立App Server或诊断终端不是原控制者证明；不要猜定/root/.codex或/opt/codex、改AGENTS、升级宿主或重放旧案。原一次性授权已结束，新设置/信任/任务要有相应具体授权。
 3. **连续性和资源剩余结果**：复用原生压缩、已有SDK和旧机制有效证据，完成必要自主择时/交权、目标真实续做、未知效果对账与失败回退，连同环境变化、压力后续做和退出后态。不把source连接缺失推广为所有入口不可用，也不强制健康任务迁移。
 4. **正式准入和发布**：补未绑定的entry-coverage、dynamic-model-routing、autonomous-continuity、system-integration、codex-lifecycle、system-impact-assessment六scope；这不意味着各造一套试验。A08的完整组合仍须同一episode，不能拼散案冒充；必要验收、独立审查和精确候选条件满足后依既有授权发布。
