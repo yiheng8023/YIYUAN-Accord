@@ -1322,9 +1322,11 @@ def _inspect_retained(evidence, manifest):
             errors.append("prospective-stage-mismatch")
         root = evidence / f"stage-{index}"
         data_root = root / "files" if manifest.get("retainedLayout") == "stage-files-v1" else root
+        goal_path = evidence / f"native-goal-{index}.json"
         try:
             native = read_json(evidence / f"native-receipt-{index}.json")
-            native_part = {key: value for key, value in stage.items() if key not in {"valid", "fileObservation"}}
+            native_part = {key: value for key, value in stage.items()
+                           if key not in {"valid", "fileObservation", "nativeGoalObservation"}}
             if (not isinstance(native, dict) or type(native.get("valid")) is not bool
                     or not same({key: value for key, value in native.items() if key != "valid"}, native_part)
                     or stage.get("valid") is not (native.get("valid") and observation.get("decision") == "pass")
@@ -1333,6 +1335,18 @@ def _inspect_retained(evidence, manifest):
                 errors.append("native-receipt-mismatch")
         except (OSError, ValueError, TypeError):
             missing.append("native-receipt-unavailable")
+        if "nativeGoalObservation" in stage:
+            try:
+                goal = read_json(goal_path)
+                attached = stage["nativeGoalObservation"]
+                if (not isinstance(goal, dict) or not same(goal, attached)
+                        or goal.get("stage") != index
+                        or goal.get("threadId") != stage.get("threadId")):
+                    errors.append("native-goal-mismatch")
+            except (OSError, ValueError, TypeError):
+                missing.append("native-goal-unavailable")
+        elif goal_path.exists() or goal_path.is_symlink():
+            errors.append("native-goal-unlinked")
         try:
             ordinary_dir(root)
             inspection = read_json(root / "inspection.json")
@@ -1848,6 +1862,9 @@ def _native_goal_readback(manifest, native, *, stage, env, deadline):
     stderr_path = evidence / f"stderr-{stage}.txt"
     try:
         thread_id = native.get("threadId")
+        if native.get("terminal") != "completed":
+            result["reason"] = "cli-turn-not-completed"
+            return result
         if (not isinstance(thread_id, str) or not thread_id.strip()
                 or native.get("remainingOwnedProcesses") != 0
                 or not isinstance(manifest.get("codex"), str)

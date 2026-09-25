@@ -704,6 +704,56 @@ class EntryTests(unittest.TestCase):
                 self.assertEqual(checked["retainedStages"][0]["state"], state)
                 self.assertFalse(checked["retainedStages"][0]["files"]["report.json"])
 
+    def test_retained_inspection_binds_separate_goal_observation_after_cleanup(self):
+        for mutation, expected in ((None, "verified"), ("changed", "mismatch"),
+                                   ("missing", "incomplete"), ("foreign-thread", "mismatch"),
+                                   ("unlinked", "mismatch")):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest = self.prepared_persistent(root, self.scoped_case(root))
+                evidence = Path(manifest["evidence"])
+                native = {"valid": True, "threadId": "native-thread", "terminal": "completed",
+                          "remainingOwnedProcesses": 0}
+                goal = {"state": "observed", "threadId": "native-thread", "stage": 1,
+                        "goalPresent": False, "goalModeActive": False, "goalStatus": None}
+
+                def execute(prepared, *_):
+                    (Path(prepared["workspace"]) / "report.json").write_text(
+                        '{"candidate":"abc"}', encoding="utf-8")
+                    return native
+
+                with patch.object(entry, "_run_persistent_stage", side_effect=execute), \
+                        patch.object(entry, "_native_goal_readback", return_value=goal):
+                    result = entry.run_persistent(argparse.Namespace(
+                        evidence=manifest["evidence"], observe_native_goal=True))
+                self.assertTrue(result["caseComplete"])
+                self.assertEqual(json.loads((evidence / "native-receipt-1.json").read_text()), native)
+                self.assertEqual(json.loads((evidence / "native-goal-1.json").read_text()), goal)
+                goal_path = evidence / "native-goal-1.json"
+                if mutation == "changed":
+                    changed = {**goal, "goalStatus": "active"}
+                    entry.save(goal_path, changed)
+                elif mutation == "missing":
+                    goal_path.unlink()
+                elif mutation == "foreign-thread":
+                    changed = {**goal, "threadId": "foreign"}
+                    entry.save(goal_path, changed)
+                    result["stages"][0]["nativeGoalObservation"] = changed
+                    entry.save(evidence / "result.json", result)
+                elif mutation == "unlinked":
+                    result["stages"][0].pop("nativeGoalObservation")
+                    entry.save(evidence / "result.json", result)
+                shutil.rmtree(manifest["workspace"])
+                checked = entry.inspect(evidence, retained=True)
+                self.assertEqual(checked["retainedStages"][0]["state"], expected)
+                if mutation is None:
+                    self.assertEqual(checked["recordedExecution"], result)
+                else:
+                    reason = ("unavailable" if mutation == "missing" else
+                              "unlinked" if mutation == "unlinked" else "mismatch")
+                    self.assertIn("native-goal-" + reason,
+                                  checked["retainedStages"][0]["errors"])
+
     def test_retained_inspection_rejects_contradictory_stage_records(self):
         for mutation in ("metadata", "history", "native-receipt"):
             with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
@@ -1347,7 +1397,7 @@ class EntryTests(unittest.TestCase):
             manifest = {'evidence': str(evidence), 'workspace': str(workspace), 'codex': str(codex),
                 'sourceHashes': {'codex': entry.digest(codex)}, 'recoveryTimeoutSeconds': 5}
             env = {'CODEX_HOME': str(root / 'home')}
-            native = {'threadId': thread_id, 'remainingOwnedProcesses': 0}
+            native = {'threadId': thread_id, 'terminal': 'completed', 'remainingOwnedProcesses': 0}
             calls, closed = [], []
             controller = 'windows-job-object' if os.name == 'nt' else 'posix-session-process-group'
             after = ({'activeProcesses': 0} if os.name == 'nt' else
@@ -1505,6 +1555,14 @@ class EntryTests(unittest.TestCase):
                 unbound = entry._native_goal_readback(manifest, native, stage=7, env=env,
                                                      deadline=time.monotonic() + 30)
             self.assertEqual(unbound['state'], 'unknown')
+            self.assertEqual(calls, [])
+            native['threadId'] = thread_id
+            native.pop('terminal')
+            with patch('scripts.observe_codex_lifecycle._App', Reader):
+                no_current_turn = entry._native_goal_readback(manifest, native, stage=16, env=env,
+                                                              deadline=time.monotonic() + 30)
+            self.assertEqual(no_current_turn['state'], 'unknown')
+            self.assertEqual(no_current_turn['reason'], 'cli-turn-not-completed')
             self.assertEqual(calls, [])
 
     def test_native_entry_gate_rejects_absent_stale_echoed_truncated_and_late_guidance(self):
