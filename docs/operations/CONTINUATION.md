@@ -18,10 +18,10 @@
 
 | 项目 | 已核事实与限制 |
 |---|---|
-| 仓库 | 本批开始main=origin/main=8064aac6，干净；原生测试两文件由有界worker完成后交还Root，最终整合与提交由Root独占。后续以实时HEAD为准。 |
+| 仓库 | 本批开始main=origin/main=b49dd36a，干净；本次仅回读已完成CI与保留证据，Root维护对齐记录。后续以实时HEAD为准。 |
 | 源与本机安装 | 9月25日核对均为3.3.0-dev.1+codex.20260924162230，24文件，SHA e667ff71218975889e00b21e16ff4a9da42e6cfc5ff8603ba9c04b897456f0c1；市场ref=687947a5。新进程5启用Skill/6可信Hook，本任务后续输入已获得新入口，状态工具可用；不代表所有既有GUI/MCP消费者均刷新。旧01947缓存已不在，完整私有恢复备份仍保留。 |
-| 托管检查 | 精确8064aac6的[CI36075844067](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36075844067)11/11成功，上一轮两个Windows测试准备失败已获托管复核；本批新增普通source原生分支尚待新提交CI，不将旧成功外推。 |
-| 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支新增Windows固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
+| 托管检查 | 精确b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11成功。Linux/macOS普通source两阶段artifact已在本机独立回读；每阶段13份执行源码与该提交的Git原始字节一致。 |
+| 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 原生历史、计划和接续继续承接当前工作；根checkpoint仍unbound，本身不是缺陷，不为填计数强绑。9月23日缺失输入已按真实rollout回放并核对，不重建更早缺失文字。每次恢复重读当前receipt/必要来源，不复用旧epoch、canContinue或计数作许可。 |
 | 云环境 | 启动前试验失败后已恢复universal、自动setup、Agent网络关闭、缓存开启，目录/workspace/YIYUAN-Accord；界面任务数9。原失败容器细部后态与诊断shell远端退出未独立确认，不能由新容器或关闭页面代验。 |
 | 正式验收 | 17必要scope，11有定义、6未绑定；4个OpenAI入口纳入开发、7个待判，selectionFinal=false。A01–A08整项0/8，functionalCompletion/candidateEligible=false。定义和局部PASS不等于完成。 |
@@ -29,7 +29,7 @@
 
 ## 本批完成与实际未完项
 
-**普通source原生恢复**：复用既有测试入口增加source-start/source-restore，固定localhost响应，模型调用0。本机0.156.1确认原创建ACK、持久工具、原件及旧controller退出后，同一任务完成第二轮；scope token轮换、旧依据恢复实测拒绝、无新thread/transfer。首次独立回读因误计历史工具回执而失败，原件保留；按本轮追加输入修正后，新隔离副本通过。两阶段及原失败实例的进程自然退出、Job活动进程0，9个临时profile/state/temp目录已回收，保留文件仍可只读复核。测试准备shadow变量与claim前副本Hash/相对路径问题也在独立审查中修正。原件导航accord-native-source-restore-20260925-01；Linux/macOS接入原CI，结果待核。97项开发/原生离线检查、另一个Python3.10的10项检查及actionlint通过，独立审查未见剩余阻断。产品runtime和安装包未改，A05及正式验收未升格。
+**普通source原生恢复**：复用既有测试入口增加source-start/source-restore，固定localhost响应，模型调用0。本机0.156.1确认原创建ACK、持久工具、原件及旧controller退出后，同一任务完成第二轮；scope token轮换、旧依据恢复实测拒绝、无新thread/transfer。首次独立回读因误计历史工具回执而失败，原件保留；按本轮追加输入修正后，新隔离副本通过。两阶段及原失败实例的进程自然退出、Job活动进程0，9个临时profile/state/temp目录已回收，保留文件仍可只读复核。测试准备shadow变量与claim前副本Hash/相对路径问题也在独立审查中修正。原件导航accord-native-source-restore-20260925-01；Linux/macOS原CI及四份保留episode独立回读均通过，每份13个源码Hash与b49dd36a一致；POSIX退出证据限于所属进程组，不扩张为全系统进程证明。97项开发/原生离线检查、另一个Python3.10的10项检查及actionlint通过，独立审查未见剩余阻断。产品runtime和安装包未改，A05及正式验收未升格。
 
 **CI测试准备修复**：0839eb87的[CI36072048902](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36072048902)已结束，9/11成功；两个Windows任务共四个子用例在接管/恢复被测条件之前的交接阶段报RECORDER_COMMIT_UNKNOWN，原日志深层原因被折叠。本地给真实SQLite提交回调加入4.2秒延迟，在两类夹具均复现DEADLINE_EXCEEDED；仅调整这些准备阶段的有限预算，接管反例改在交接成功后注入，保留产品及专门超时反例。Python3.10/3.14各27项会话测试通过，修复后8064aac6托管11/11成功。仅测试与接续变化，包、基线、计划、机器投影和行为验收判据不变。
 
@@ -45,7 +45,7 @@
 
 ## 下一实际动作与工序
 
-1. **普通调用者采用与组合**是主要缺口。SDK接口和固定协议已实现，不能继续复制原生夹具替代实际采用。为下一项确有必要的真实工作事先绑定主代理、worker、内部核验与独立评估者、实际包/条件及observe/recheck；发现调用断点再做最小接线，不制造业务任务填计数。
+1. **普通调用者采用与组合**是主要缺口。SDK接口和固定协议已实现，本批普通source恢复的三平台验证已闭合，不继续复制相同夹具。普通插件主线应检验宿主Agent、入口指导、必要状态与真实工作结果的组合；新增App Server调用者或启动器不是所有入口的共同前提，只有具体fresh路径确需时再判断。为下一项确有必要的真实工作事先绑定主代理、worker、内部核验与独立评估者、实际包/条件及observe/recheck；发现调用断点再做最小接线，不制造业务任务填计数。
 2. **云端仅继续条件核实**：需要受支持来源确认实际Agent/控制者的配置归属及启动装载路径。配置来源字符串、历史安装路径、独立App Server或诊断终端不是原控制者证明；不要猜定/root/.codex或/opt/codex、改AGENTS、升级宿主或重放旧案。原一次性授权已结束，新设置/信任/任务要有相应具体授权。
 3. **连续性和资源剩余结果**：复用原生压缩、已有SDK和旧机制有效证据，完成必要自主择时/交权、目标真实续做、未知效果对账与失败回退，连同环境变化、压力后续做和退出后态。不把source连接缺失推广为所有入口不可用，也不强制健康任务迁移。
 4. **正式准入和发布**：补未绑定的entry-coverage、dynamic-model-routing、autonomous-continuity、system-integration、codex-lifecycle、system-impact-assessment六scope；这不意味着各造一套试验。A08的完整组合仍须同一episode，不能拼散案冒充；必要验收、独立审查和精确候选条件满足后依既有授权发布。
@@ -56,7 +56,7 @@
 
 | 目录 | 内容与限制 |
 |---|---|
-| accord-native-source-restore-20260925-01 | Windows普通source两阶段、初次回读误判及新副本复验；原始执行与review.json保留，临时环境已回收。 |
+| accord-native-source-restore-20260925-01 | Windows普通source两阶段、初次回读误判及新副本复验；hosted保存b49dd36a的Linux/macOS原始artifact与只读复核，临时运行环境已回收。 |
 | accord-retained-inspection-20260925-01 | 86项入口回归、只读代码复核与旧发布02的retained回读；120原件未变，旧案仍失败。 |
 | accord-cloud-startup-20260925-01 | execution.json为原失败及环境恢复；as-run保存实际投递源；repair保存17项本地修复与边界。旧试验不可重放。 |
 | accord-readiness-review-20260925-01 | 粗估及独立源码复核、编辑页403解除；unbound不是缺陷的纠正。不计功能通过。 |
