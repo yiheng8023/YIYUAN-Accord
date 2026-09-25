@@ -60,7 +60,7 @@ jobs:
       - name: Verify Codex projection
         run: python -B -m yiyuan_accord host-check --adapter codex --root . --json
       - name: Check native fixture path assumptions before the full suite
-        run: python -B -m unittest -v tests.product.test_codex_session_native tests.product.test_codex_entry.EntryTests.test_native_goal_readback_binds_persisted_thread_and_releases_reader tests.product.test_codex_entry.EntryTests.test_persistent_preparation_preserves_multiline_prompt_bytes
+        run: python -B -m unittest -v tests.product.test_codex_session_native tests.product.test_codex_entry.EntryTests.test_native_goal_readback_binds_persisted_thread_and_releases_reader tests.product.test_codex_entry.EntryTests.test_persistent_preparation_preserves_multiline_prompt_bytes tests.product.test_codex_entry.EntryTests.test_failure_after_agent_popen_keeps_native_execution_phase
       - name: Test current product seam
         run: python -B -c "import json,sys,unittest; e=json.load(open('product/program.json',encoding='utf-8'))['complexityBudget']['minimumTestCount']; s=unittest.defaultTestLoader.discover('tests/product'); r=unittest.TextTestRunner(verbosity=2).run(s); sys.exit(not(r.wasSuccessful() and r.testsRun>=e and not r.skipped and not r.expectedFailures))"
 

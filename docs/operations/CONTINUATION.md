@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-09-25 · N33-20260909 / r31。
+更新：2026-09-26 · N33-20260909 / r31。
 以实时Git、当前原生输入和受影响资源为准；本页只保留接续必需状态。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)和[机器投影](../../product/development.json)分别展开结果、判据和验证投影。
 
@@ -34,6 +34,8 @@
 | 进度口径 | 先前50–65%功能/20–30%发布就绪是缺少稳定分母的工程粗估，不作为跨任务可比较总进度。当前按可用功能、已消除断点和剩余关键路径报告，正式A01–A08事实另列。 |
 
 ## 本批完成与实际未完项
+
+**本批CI跨平台夹具修复**：efc84337的[CI36157692681](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36157692681)出现Linux失败；已回读Python3.11原始日志，唯一断言为新增“Popen后失败”测试实际未调用Popen。WSL/Linux同案稳定复现：模拟WindowsJob却遗漏CREATE_NO_WINDOW，参数求值先失败，随后模拟的close异常掩盖原因。仅补测试常量并断言启动参数及attach_and_resume实际调用；Linux同案先红后绿，Windows/Python3.10与3.14均通过。加入现有CI前置检查后13项本地通过，actionlint通过；产品代码与验收判据保持，新提交需按自身SHA核对托管结果，原失败不改标。本机WSL未提供可用Node，扩展全入口套件因此不能作为Linux全套通过证据；跨平台完整检查由配置Node的托管矩阵承担。
 
 **原生显式Skill协调已实际执行，整案未准入**：root按用户委托代选现装explicit-only retro，原生CLI0.157.0/gpt-6-sol/high/default在首个工具前加载完整Skill正文，并读取writing-for-agents依赖、交付report.md。第三方源/策略未改；不是worker隐式匹配或自主选型。独立核实12份冻结业务源及报告：事实、问题排序和未完边界成立，但下一工作段仍是泛化流程，未给具体任务/成果，正式observe/recheck因此保留consequence-mismatch、acceptedCases为空。原报告不补写求绿；该结束实例按既有规则转历史，原10活动案、17必要范围和底线保持，有效用户环境的合格贡献仍缺。六域自然退出，四输入字节/mtime、配置和Skill文件集保持；所属workspace/temp/state及空父目录已回收，原生任务/历史和报告保留。此前多行prompt准备失败发生在Agent前，原件未改；两行UTF-8字节修复、94项入口回归和独立复核已闭合。详细范围见[记录](PROCEDURE-v3.3.md#原生显式skill协调与复盘结果2026-09-25)；原件accord-ordinary-retro-20260925-01。
 

@@ -1302,10 +1302,13 @@ class EntryTests(unittest.TestCase):
             job.sample.return_value = {"activeProcesses": 0}
             job.close.side_effect = ValueError("after-dispatch")
             with patch.object(entry, "WindowsJob", return_value=job), \
+                    patch.object(entry.subprocess, "CREATE_NO_WINDOW", 0, create=True), \
                     patch.object(entry.subprocess, "Popen", return_value=process) as agent:
                 with self.assertRaisesRegex(ValueError, "after-dispatch"):
                     entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
             agent.assert_called_once()
+            self.assertEqual(agent.call_args.kwargs["creationflags"], 4)
+            job.attach_and_resume.assert_called_once_with(process)
             partial = json.loads((Path(manifest["evidence"]) / "result.json").read_text(encoding="utf-8"))
             self.assertEqual(partial["executionFailure"], {
                 "stage": 1, "phase": "native-execution", "reason": "execution-error"})
