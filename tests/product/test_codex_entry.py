@@ -1150,6 +1150,167 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(partial["completedStages"], 1)
             self.assertEqual(partial["executionFailure"]["phase"], "preflight")
 
+    def test_installed_first_stage_internal_preflight_failure_keeps_agent_undispatched(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}):
+                manifest = self.prepared_persistent(root, installed=True)
+                (root / "home/config.toml").write_text("", encoding="utf-8")
+                listing = json.loads(self.installed_listing().stdout)
+                changed = json.loads(self.installed_listing(enabled=False).stdout)
+                with patch.object(entry, "_native_inventory", side_effect=[listing, changed]) as inventory, \
+                        patch.object(entry.subprocess, "Popen") as agent:
+                    with self.assertRaisesRegex(ValueError, "native installed plugin"):
+                        entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+                self.assertEqual(inventory.call_count, 2)
+                agent.assert_not_called()
+                evidence = Path(manifest["evidence"])
+                partial = json.loads((evidence / "result.json").read_text(encoding="utf-8"))
+                self.assertEqual(partial["executionFailure"], {
+                    "stage": 1, "phase": "preflight", "reason": "execution-error"})
+                self.assertFalse(partial["caseComplete"])
+                self.assertEqual(partial["stages"], [])
+                self.assertFalse((evidence / "native-receipt-1.json").exists())
+                self.assertTrue(partial["sharedConfigObservation"]["unchanged"])
+                with patch.object(entry, "_native_inventory", return_value=listing), \
+                        patch.object(entry, "_run_persistent_stage") as replay:
+                    with self.assertRaises(FileExistsError):
+                        entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+                    replay.assert_not_called()
+
+    def test_stage_internal_prompt_and_command_rechecks_remain_preflight(self):
+        for mutation in ("prompt", "command"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+                original_verify = entry._verify_native_stage
+                original_command = entry.build_command
+                command_calls = 0
+                verification_calls = 0
+
+                def verify(prepared, stage, thread_id):
+                    nonlocal verification_calls
+                    verification_calls += 1
+                    if mutation == "prompt" and verification_calls == 2:
+                        prepared["prompts"][stage] = "drift after outer preflight"
+                    return original_verify(prepared, stage, thread_id)
+
+                def command(*args, **kwargs):
+                    nonlocal command_calls
+                    command_calls += 1
+                    built = original_command(*args, **kwargs)
+                    return built + ["drift"] if mutation == "command" and command_calls == 4 else built
+
+                with patch.object(entry, "_verify_native_stage", side_effect=verify if mutation == "prompt" else original_verify), \
+                        patch.object(entry, "build_command", side_effect=command), \
+                        patch.object(entry.subprocess, "Popen") as agent:
+                    with self.assertRaisesRegex(ValueError, "prepared stage (prompt|command)"):
+                        entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+                agent.assert_not_called()
+                if mutation == "prompt":
+                    self.assertEqual(verification_calls, 2)
+                partial = json.loads((Path(manifest["evidence"]) / "result.json").read_text(encoding="utf-8"))
+                self.assertEqual(partial["executionFailure"]["phase"], "preflight")
+                self.assertFalse(partial["caseComplete"])
+
+    def test_second_stage_internal_preflight_keeps_first_stage_history(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+            evidence = Path(manifest["evidence"])
+            observer = Mock()
+            observer.snapshot.return_value = entry.coordination_observer().snapshot(
+                manifest["workspace"], json.loads(Path(manifest["case"]).read_text(encoding="utf-8"))["inputs"])
+            observer.inspect_stage.return_value = {"stage": "plan", "files": {}, "decision": "pass"}
+            original_stage = entry._run_persistent_stage
+            original_verify = entry._verify_native_stage
+            second_checks = 0
+
+            def stage(prepared, index, *args):
+                if index == 0:
+                    (evidence / "stdout-1.jsonl").write_text(
+                        '{"type":"thread.started","thread_id":"observed-source"}\n', encoding="utf-8")
+                    return {"valid": True, "threadId": "observed-source"}
+                return original_stage(prepared, index, *args)
+
+            def verify(prepared, index, thread_id):
+                nonlocal second_checks
+                if index == 1:
+                    second_checks += 1
+                    if second_checks == 2:
+                        prepared["prompts"][1] = "drift inside second stage"
+                return original_verify(prepared, index, thread_id)
+
+            with patch.object(entry, "coordination_observer", return_value=observer), \
+                    patch.object(entry, "_run_persistent_stage", side_effect=stage), \
+                    patch.object(entry, "_verify_native_stage", side_effect=verify), \
+                    patch.object(entry.subprocess, "Popen") as agent:
+                with self.assertRaisesRegex(ValueError, "prepared stage prompt"):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            agent.assert_not_called()
+            partial = json.loads((evidence / "result.json").read_text(encoding="utf-8"))
+            self.assertEqual(partial["executionFailure"], {
+                "stage": 2, "phase": "preflight", "reason": "execution-error"})
+            self.assertEqual(partial["completedStages"], 1)
+            self.assertEqual(partial["threadId"], "observed-source")
+            self.assertEqual(partial["stages"][0]["threadId"], "observed-source")
+            self.assertEqual(json.loads((evidence / "history.json").read_text(encoding="utf-8")), {"plan": {}})
+            self.assertTrue((evidence / "native-receipt-1.json").exists())
+            self.assertFalse((evidence / "native-receipt-2.json").exists())
+            self.assertFalse(partial["caseComplete"])
+
+    def test_stage_resource_creation_failure_keeps_native_execution_phase(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            with patch.object(entry, "WindowsJob", side_effect=KeyboardInterrupt()), \
+                    patch.object(entry.subprocess, "Popen") as agent:
+                with self.assertRaises(KeyboardInterrupt):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            agent.assert_not_called()
+            partial = json.loads((Path(manifest["evidence"]) / "result.json").read_text(encoding="utf-8"))
+            self.assertEqual(partial["executionFailure"], {
+                "stage": 1, "phase": "native-execution", "reason": "interrupted"})
+            self.assertFalse(partial["caseComplete"])
+
+    def test_internal_preflight_interrupt_keeps_interrupted_reason(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
+            original = entry._verify_native_stage
+            checks = 0
+
+            def verify(*args):
+                nonlocal checks
+                checks += 1
+                if checks == 2:
+                    raise KeyboardInterrupt()
+                return original(*args)
+
+            with patch.object(entry, "_verify_native_stage", side_effect=verify), \
+                    patch.object(entry.subprocess, "Popen") as agent:
+                with self.assertRaises(KeyboardInterrupt):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            agent.assert_not_called()
+            partial = json.loads((Path(manifest["evidence"]) / "result.json").read_text(encoding="utf-8"))
+            self.assertEqual(partial["executionFailure"], {
+                "stage": 1, "phase": "preflight", "reason": "interrupted"})
+            self.assertFalse(partial["caseComplete"])
+
+    def test_failure_after_agent_popen_keeps_native_execution_phase(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            process = Mock(returncode=1)
+            process.poll.return_value = 1
+            job = Mock()
+            job.sample.return_value = {"activeProcesses": 0}
+            job.close.side_effect = ValueError("after-dispatch")
+            with patch.object(entry, "WindowsJob", return_value=job), \
+                    patch.object(entry.subprocess, "Popen", return_value=process) as agent:
+                with self.assertRaisesRegex(ValueError, "after-dispatch"):
+                    entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
+            agent.assert_called_once()
+            partial = json.loads((Path(manifest["evidence"]) / "result.json").read_text(encoding="utf-8"))
+            self.assertEqual(partial["executionFailure"], {
+                "stage": 1, "phase": "native-execution", "reason": "execution-error"})
+            self.assertFalse(partial["caseComplete"])
+
     def test_persistent_business_inspection_failure_keeps_native_receipt_and_unverified_result(self):
         with tempfile.TemporaryDirectory() as tmp:
             manifest = self.prepared_persistent(Path(tmp).resolve())

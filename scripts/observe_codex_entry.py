@@ -2003,14 +2003,22 @@ def _native_goal_readback(manifest, native, *, stage, env, deadline):
     return result
 
 
-def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage=None):
+def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage=None,
+                          preflight_failure=None):
     native_hooks = _direct_package_hooks(manifest)
-    bound_prompt, bound_command, installed_before = (_verify_native_stage(manifest, stage, thread_id)
-                                                     if native_hooks else (None, None, None))
-    evidence = Path(manifest["evidence"])
-    command = build_command(manifest, stage=stage, thread_id=thread_id)
-    if native_hooks and command != bound_command:
-        raise ValueError("prepared stage command changed before dispatch")
+    try:
+        bound_prompt, bound_command, installed_before = (_verify_native_stage(manifest, stage, thread_id)
+                                                         if native_hooks else (None, None, None))
+        evidence = Path(manifest["evidence"])
+        command = build_command(manifest, stage=stage, thread_id=thread_id)
+        if native_hooks and command != bound_command:
+            raise ValueError("prepared stage command changed before dispatch")
+    except (Exception, KeyboardInterrupt):
+        # Only this region proves this stage's Agent has not been dispatched.
+        # Installed-plugin inventory may already have run, as may earlier stages.
+        if preflight_failure is not None:
+            preflight_failure.append(True)
+        raise
     prompt_path = evidence / f"prompt-{stage + 1}.txt"
     stdout_path = evidence / f"stdout-{stage + 1}.jsonl"
     stderr_path = evidence / f"stderr-{stage + 1}.txt"
@@ -2210,17 +2218,20 @@ def run_persistent(args):
     thread_id, stages, history, native_usage = None, [], {}, {}
     save(evidence / "history.json", history)
     failure, phase, active_stage = None, "preflight", 0
+    stage_preflight_failure = []
     poststate_retention_failed = False
     poststate_observation_failed = False
     try:
         for stage in range(len(manifest["prompts"])):
             active_stage, phase = stage + 1, "preflight"
+            stage_preflight_failure = []
             if time.monotonic() >= deadline:
                 break
             if _hook_mode(manifest) == "native-package-hooks":
                 _verify_native_stage(manifest, stage, thread_id)
             phase = "native-execution"
-            native = _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage)
+            native = _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage,
+                                           stage_preflight_failure)
             stage_id = fixture["stages"][stage]["id"]
             thread_id = native.get("threadId") or thread_id
             observed = {**native, "valid": False, "fileObservation": {
@@ -2271,6 +2282,8 @@ def run_persistent(args):
         # Preserve already-observed effects before propagating the original
         # failure. A missing later receipt never permits replay of earlier work.
         failure = error
+        if stage_preflight_failure:
+            phase = "preflight"
     finally:
         try:
             config_after = shared_config_snapshot(shared_config, manifest["workspace"])

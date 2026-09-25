@@ -2293,3 +2293,15 @@ e74c4a4f下实际episode 94a52d8b8ce64cf2addc369769f32875、原生任务01a0d8d5
 四个目录查询域、CLI及Goal读取六域均自然退出，所属进程为0；四输入字节/mtime、共享配置和第三方五文件集合/hash保持，保留副本回读为verified。所属workspace/temp/state及本次创建的空.tmp父目录已回收；temp中的五个空原生临时/Node缓存子目录经目录集检查后精确清理，没有删除报告、原件或原生任务历史。独立末次检查补齐原始mtime等30份证据绑定及Skill目录集重查；私有调用器明确UTF-8后，只读重查结果不变，早先GBK原输出及转码依据保留。
 
 按既有结束实例处置规则，retro案从活动cases转为带不可变定义/执行引用的历史。原预算、判据、任务内容、失败及有效子事实保持；其它10活动案、17必要范围与F/A底线不变，缺合格的effective-user-environment证据仍阻止准入。原件及最终只读判定位于accord-ordinary-retro-20260925-01/admission-final.json，原报告在episode-fixed/stage-1/files/report.md；不重放该业务求绿。
+
+## 真实SDK源开发与预检诊断修复（2026-09-25）
+
+基于aa297aa4的必要修复使用隔离检出，仅授权改动scripts/observe_codex_entry.py和tests/product/test_codex_entry.py，主线程负责审查、集成与提交。任务内私有调用者复用现装202615的connection/source session/SQLite记录器，不作为新增产品服务。派发前核对真实Codex0.157.0、gpt-6-sol/high/default、ephemeral=false、workspace-write及启用的implement；原生Skill输入由root依既有委托选择，不伪称用户点名或worker隐式匹配。用户选定的主模型/推理保持。
+
+原生源任务01a0d92c-0231-7153-b7e6-9a3eb96e0b47、轮次01a0d92d-4119-7680-8f5a-c64e0f50bb26完成。原始rollout包含implement正文；模型自行调用一次accord_inspect_context，返回fresh-post-change-usage-unavailable，窗口与占用未知，不从累计用量推算。没有交接提议或transfer。原生累计1882151 tokens、未缓存输入89896、输出12543，在预绑3000000/300000/24000额度内；不据此宣称成本优势。
+
+修复仅在内部校验/命令绑定的明确未派发区传递preflight失败来源，保留原异常；资源创建、Popen后或未知来源仍保留native-execution，历史与中断判据不变。原生commandExecution回执独立回读确认完整入口100项、exit0。root发现一个prompt反例过早命中外层检查，改为第二次校验才注入并断言调用次数；修正后的六项新增检查加一项原未知效果反例，在Python3.10.20及3.14各7项通过。独立最终diff审查无阻断。worker原补丁与root修正后的补丁分别冻结，不能将root改动追认为worker自主结果；worker关于本机不存在Python3.10的说法已由实际运行纠正。
+
+源SDK已返回completed/ready后，root审查超过私有调用者240秒答复期限。保留Owner response deadline or cancellation及未答asks/0003.json；没有第二轮或重放。原生进程exit0，外层调用者exit1，connectionClosed=true、forced=false、所属Windows Job活动进程0；finalReads为空，未获末次Goal读回，不用请求配置证明最终模式。status文件曾在已消费答复后继续显示awaiting-owner，诊断以原生流、消费记录和实际结果共同判断，不能据旧显示再答复。后续真实调用者应将外部集成审查与已完成源轮次的连接退出分开，不能要求所有人工/协调者核验在短RPC等待内结束；此处不追加通用控制器。
+
+派发授权已关闭，主线程在确认所属进程为0后接管修正并按字节核对集成。共享config.toml及implement/tdd/code-review八份保护文件Hash保持；任务状态目录为空。两版补丁保留后已移除隔离worktree及空.tmp，任务自有临时缓存/空状态已回收；调用者离线检查和原生schema归档后逐文件Hash复核，保留的原件、失败、源历史、SQLite、补丁及核验材料位于accord-sdk-owner-integration-20260925-01。首次产品检查只因尚存.tmp被拒，按原计划回收后重查，不改检查器。本次是实际SDK源执行及协调交付观察，没有前瞻绑定新的正式准入实例，A05、17必要范围及functionalCompletion/candidateEligible不升格。

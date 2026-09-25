@@ -39,7 +39,9 @@
 
 **源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；[CI36135273441](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36135273441)已按精确f2ad9285及各job回读，11/11成功；新202615包也已原生更新，普通行为仍需下述实际工作核验。
 
-**当前托管检查仍在途**：[CI36143582663](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36143582663)绑定e74c4a4f的多行prompt修复；九组OS/Python前置检查全部通过，最近回读7/11完整job成功，Windows/macOS四项仍运行、未见失败。后续结果记录不取消此运行；最终结论须按该SHA继续回读，不能借前轮绿色代验。
+**多行prompt修复的托管检查已闭合**：[CI36143582663](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36143582663)绑定精确e74c4a4fcfc0a18b06c0ed39ecc8a20629b2a765，已回读11/11成功；原失败及各轮证据保持原范围。
+
+**真实SDK源任务已交付代码，主线程完成接管核验**：现装202615包通过任务内持有的0.157.0 App Server连接与SQLite完成一轮实际开发；root按既有委托选择原生implement Skill，第三方源/策略未改。worker修正入口内部预检失败误记为native-execution，原生完整入口套件100项通过；root纠正一个测试未命中内部复查的问题，Python3.10与3.14各7项通过，独立源码审查无阻断。模型主动查询一次上下文，实际响应为unknown，未提出交接；不能算自主转移或整个SDK生命周期通过。worker已完成，但root审查超过私有调用者240秒答复期限，调用者保留失败；原生exit0、外层exit1、无强制终止、所属Job进程0。原worker补丁与root修正后补丁分别保留，无第二轮或重放。原件accord-sdk-owner-integration-20260925-01；详细边界见[记录](PROCEDURE-v3.3.md#真实sdk源开发与预检诊断修复2026-09-25)。
 
 **本批托管检查已闭合**：dc63f904的[CI36128555843](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36128555843)完整11/11成功，精确headSha与各job已回读；包括活动案例处置后的九个OS/Python组合及两个原生生命周期job。14aada0c的前次11/11保持原范围。仅说明相应提交的托管检查通过，不代替普通行为、云采用或正式准入。
 
