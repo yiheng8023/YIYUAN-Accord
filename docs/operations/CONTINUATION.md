@@ -35,6 +35,8 @@
 
 ## 本批完成与实际未完项
 
+**Goal读回测试的Windows临时目录别名修复**：36118841418的Windows/Python3.14在Goal正例的observed断言失败。以GetShortPathNameW建立同一自有临时目录的真实8.3别名后，原测试稳定复现unknown及cli-source-unavailable:ValueError；在生成全部回执前统一解析临时根目录后，Python3.14与3.10的相同复现均通过。仅修夹具并增加失败原因显示，产品路径/身份守卫未改。该轻量用例加入已有CI路径前置检查，11项前置用例及actionlint通过，独立审查未见阻断；完整矩阵与按SHA保留CI策略不变，新托管结果仍须按修正提交核对。
+
 **CI责任续接与漏项修复**：0a6f925c已将push/manual按提交SHA分组并保留运行，PR仍按引用替换旧候选；矩阵与测试步骤未减。原5eb0e698托管Linux失败是新增案例后测试仍写11，而实际为12；已修为12，原失败单测、完整57项准入回归及actionlint通过，独立复核无阻断。新[CI36118841418](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36118841418)已运行，推送后旧36115837538仍运行，未被新候选取消；两者结果各按自身SHA核对，不把旧失败升格。
 
 **第三方Skill与交接接线核实**：Matt源文件、调用策略与CC Switch管理归属未改。当前0.157.0原生目录列出implement/to-spec/wayfinder等已启用但显式调用的项；已有受控source会话run接受原生Skill输入，交接续做纯Text也可在名称唯一且无同名连接器冲突时通过准确$名称选择，无需为这组条件扩runtime。当前V2子代理消息是InterAgentCommunication，不能借用UserInput选择结论；实际采用须在对应目标轮次观察。SDK机械交接至首轮续做已完整，后续由既有adoptTarget承接；普通入口的真实调用者、模型自主择时和组合结果仍是未完项。目录/源码核实不是新的模型行为通过，不重做已闭合固定协议演示。

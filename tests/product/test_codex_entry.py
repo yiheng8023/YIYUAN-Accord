@@ -1378,7 +1378,9 @@ class EntryTests(unittest.TestCase):
     def test_native_goal_readback_binds_persisted_thread_and_releases_reader(self):
         thread_id = '11111111-1111-4111-8111-111111111111'
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            # Hosted Windows TEMP may use an 8.3 alias. The observer requires
+            # canonical source paths; bind the fixture before recording them.
+            root = Path(temporary).resolve()
             evidence, workspace, sessions = root / 'evidence', root / 'workspace', root / 'home' / 'sessions'
             evidence.mkdir(); workspace.mkdir(); sessions.mkdir(parents=True)
             rollout = sessions / 'rollout.jsonl'
@@ -1459,7 +1461,7 @@ class EntryTests(unittest.TestCase):
             with patch('scripts.observe_codex_lifecycle._App', Reader):
                 result = entry._native_goal_readback(manifest, native, stage=1, env=env,
                                                      deadline=time.monotonic() + 30)
-                self.assertEqual(result['state'], 'observed')
+                self.assertEqual(result['state'], 'observed', result)
                 self.assertIs(result['goalPresent'], False)
                 self.assertIs(result['goalModeActive'], False)
                 self.assertEqual([call[0] for call in calls],
