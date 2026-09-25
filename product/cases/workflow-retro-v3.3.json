@@ -1,0 +1,228 @@
+{
+  "schema": "yiyuan-accord-scoped-task-case/v1",
+  "purpose": "A necessary read-only workflow retrospective requested by the user, using a coordinator-selected installed explicit-only Skill through native CLI input. Selection belongs to root; worker execution and independent outcome review are distinct. No worker implicit matching or autonomous handoff claim.",
+  "inputs": {
+    "requirements.md": "任务：对这次 YIYUAN Accord 3.3 开发工作的当前工序做一次必要的只读复盘，判断还剩什么实质瓶颈，是否有重复检查、不可执行前提或本可合并的工作段拖慢完成。使用 session.md 指定的用户决定和工程事实来源，不把本次新worker的短会话当作复盘对象。\n交付 report.md：先给结论；最多五个有实证、按影响排序的问题（没有可靠问题可明确写无须改动）；每项给精确来源/位置、对真实功能收尾的影响、最小改进及保留条件。区分已验证机械链、真实业务采用、正式准入和发布。提出一个可连续完成的下一工作段及其完成条件，避免又造一套台账或为凑案例制造业务。认可合理现状，不为了复盘必须找错；不把强度降级或旧失败改标当提速。\n业务事实只取 source-map.json 的 Git 原件及 ci.json、session.md；宿主要求的 AGENTS/配置指导、必要 memory 指导、已选 retro 及其 writing-for-agents 依赖和已安装 Accord 指导可按需读取，只作为执行指导，不能当作项目事实，也不能据此扩大审查对象。不要读取配置中的凭据或输出私人配置。需要验证项目命题而来源不足时明确未知，不搜索其它会话或外部材料补齐。\n仅写 report.md；保护本目录所有输入、源仓库、共享配置及所有第三方 Skill。不要执行项目代码或测试、安装、联网检索、发表内容、开PR/issue、提交、更改模式、归档或删除任务。不要再委派其他Agent。原生必要只读状态查询允许，Goal/Plan不启用。最终报告由独立评估者核对，任何修改建议需由主协调者另行结合原用户授权判断，本worker不实施环境改动。\n",
+    "session.md": "来源与对象：以下为主任务01a0d6a8-d302-7081-ab25-b1b4281dd924中保留的用户决定摘录；工程执行事实以source-map.json指定的9a879596记录和原始Git源码、ci.json为准。本摘录不是完整聊天，也不声称测得整体耗时/净收益。\n用户原话：“自动交接、云端、隐式调用、ci中断（新手用户不懂ci，可能会持续对话，导致ci中断）都没完成吧？”\n用户原话：“好好看看计划和工序有没问题？有啥阻塞能不能集中攻关不磨叽？”\n用户原话：“我就抱怨抱怨发发牢骚，不是非要改啥，如果基线、计划、工序、验收标准、机器投影、接续记录本身很合理，那就不改，要注意持续纠偏。”\n用户原话：“matt的skills咱们不能直接改。”\n用户原话：“工序上你看着安排即可，我觉得咱们已经做了大量工作，有很强的基础，而且基线、计划、工序、验收、机器投影、接续记录也做得井井有条，所以理论上后续收尾应该不会太难或拖太久才对。”\n用户原话：“Matt skills只是举例，其实雷同的只能显式调用的skills都同理。”\n角色：root是获委托的协调者，它根据此必要复盘选择现装retro，通过原生显式名称投递；用户没有亲自点名retro。worker按该Skill完成报告，root对照原件核对建议；正式独立评估者不得替worker重写报告再追认自主成功。该工作不测试worker隐式匹配、自主选型、交接或故障恢复。\n",
+    "source-map.json": {
+      "repositoryRoot": "C:\\Projects\\YIYUAN-Accord",
+      "revision": "9a87959607f2d01b2378759c399e7f953a097b23",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "blob": "40ccfa3d720c022ae38a1316e25f67e71d807795",
+          "sha256": "56cd309a8d9a3611e5125ed1471cde7b0396b6553c4fd945017bedde58663cc5",
+          "bytes": 6716,
+          "lines": 97
+        },
+        {
+          "path": "docs/operations/PLAN-v3.3.md",
+          "blob": "b5d2d94e20f1d809f044d307ca08714dfe57be91",
+          "sha256": "49dbefd01475a5288603c368d1a8b45be202b174e4be72587f4a8c6141ffd9d9",
+          "bytes": 139487,
+          "lines": 597
+        },
+        {
+          "path": "docs/operations/BASELINE-v3.3.md",
+          "blob": "3b0f3b7118ec87d4eeacb31313dc4f641e00da07",
+          "sha256": "3111795096fc70c7943ffd19f603fc71cbfdfb2fb1c0a5c14304491f4f290493",
+          "bytes": 41122,
+          "lines": 173
+        },
+        {
+          "path": "docs/operations/ACCEPTANCE-v3.3.md",
+          "blob": "4209b50a6cdc22b96f8f496d1ae00ad4d73bb3fc",
+          "sha256": "2f3f250ce441a4a1ad23a70a029e4544071830646540f6ba5d593ec283a58ed2",
+          "bytes": 70709,
+          "lines": 253
+        },
+        {
+          "path": "docs/operations/CONTINUATION.md",
+          "blob": "c4173677e08bbab6c83536bb0e315cf18045bbde",
+          "sha256": "70cf2c8cd458ee4bd86203002d47baf48939fb03972dc80a8f41ccb184a8c5b4",
+          "bytes": 26925,
+          "lines": 106
+        },
+        {
+          "path": "product/development.json",
+          "blob": "7d7ee8e0b4b9e2258b7631f761b0514ab31da540",
+          "sha256": "0bacf49511c1bf114a1492efcc0fb7b88b74449e68ed0c9cc18599a099252c88",
+          "bytes": 605279,
+          "lines": 6516
+        },
+        {
+          "path": ".github/workflows/validate.yml",
+          "blob": "43940a5e5dc4d96f873b2b408e36ae68d05a01e2",
+          "sha256": "4f4b881fddd169a0cc7628c7640f5ed5ed1a1c06767be7e3b236044e005ea514",
+          "bytes": 25251,
+          "lines": 456
+        },
+        {
+          "path": "runtime/codex-session.cjs",
+          "blob": "51b65c4aac03597102c33b97d9294acee5c0e219",
+          "sha256": "821b681d0180b8f87bff4472dfde44dc36ee1b791843ffc681219bdd294750a0",
+          "bytes": 55690,
+          "lines": 1009
+        },
+        {
+          "path": "runtime/carrier-handoff.cjs",
+          "blob": "f551adc701727afdbafec469e52be6d9a0a4fbb2",
+          "sha256": "ba4078c6b9dbdbcf222ec2f95a2ee985391af6672a0fcd1624f568c9ca2debb5",
+          "bytes": 98388,
+          "lines": 2045
+        },
+        {
+          "path": "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+          "blob": "7067d4b4c4f3abcb5c41d83af4f3cf0df437ba8f",
+          "sha256": "fb8c76e243c8b24d6a6e9b50f972834837f3c07f3111c9916c44b2724ea201d8",
+          "bytes": 7204,
+          "lines": 106
+        },
+        {
+          "path": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md",
+          "blob": "e56f4979c780c08894649311a7c50af6aeeed945",
+          "sha256": "e3e0177cb2706b75005c3a5cc6050d13bcd9877ce085c769c00afa96d58482ea",
+          "bytes": 47986,
+          "lines": 716
+        },
+        {
+          "path": "scripts/observe_codex_entry.py",
+          "blob": "689aeacdb5ad176b22941caa6d80679fb486fb4c",
+          "sha256": "e50f36f1cf61cd1c8213fa15883da0fe4e528e457ea1ee7c046d3bef05906198",
+          "bytes": 147146,
+          "lines": 2457
+        }
+      ],
+      "readRule": "Read immutable Git blobs from this trusted repository by argv git show <revision>:<path>, verify SHA before relying on contents, then inspect bounded sections. Do not use current working-tree bytes as the frozen source. No whole-session log scan is needed or authorized."
+    },
+    "ci.json": {
+      "conclusion": "success",
+      "headSha": "f2ad9285d34483daf0cd31f9c13868e277193035",
+      "jobs": [
+        {
+          "name": "Native lifecycle / ubuntu-latest",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:09Z",
+          "completedAt": "2026-09-25T12:31:11Z"
+        },
+        {
+          "name": "macos-latest / Python 3.10",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:19Z",
+          "completedAt": "2026-09-25T13:15:31Z"
+        },
+        {
+          "name": "Native lifecycle / macos-latest",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:14Z",
+          "completedAt": "2026-09-25T12:37:27Z"
+        },
+        {
+          "name": "macos-latest / Python 3.14",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:15Z",
+          "completedAt": "2026-09-25T13:15:08Z"
+        },
+        {
+          "name": "windows-latest / Python 3.10",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:11Z",
+          "completedAt": "2026-09-25T13:03:39Z"
+        },
+        {
+          "name": "ubuntu-latest / Python 3.12",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:11Z",
+          "completedAt": "2026-09-25T12:44:29Z"
+        },
+        {
+          "name": "ubuntu-latest / Python 3.13",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:10Z",
+          "completedAt": "2026-09-25T12:44:26Z"
+        },
+        {
+          "name": "windows-latest / Python 3.14",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:11Z",
+          "completedAt": "2026-09-25T13:12:06Z"
+        },
+        {
+          "name": "ubuntu-latest / Python 3.14",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:11Z",
+          "completedAt": "2026-09-25T12:44:27Z"
+        },
+        {
+          "name": "ubuntu-latest / Python 3.10",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:10Z",
+          "completedAt": "2026-09-25T12:44:52Z"
+        },
+        {
+          "name": "ubuntu-latest / Python 3.11",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-09-25T12:30:12Z",
+          "completedAt": "2026-09-25T12:44:19Z"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36135273441"
+    }
+  },
+  "allowedPaths": [
+    "report.md"
+  ],
+  "deliverables": [
+    "report.md"
+  ],
+  "limits": {
+    "usageCaps": {
+      "totalTokens": 2500000,
+      "uncachedInputTokens": 250000,
+      "outputTokens": 18000
+    },
+    "usageScope": "Native cumulative usage across one persisted CLI turn; cost and occupancy are separate."
+  },
+  "stages": [
+    {
+      "id": "workflow-retrospective",
+      "prompt": "$retro\n这是主协调者根据原用户关于工序和进度的委托所作的能力选择，不代表用户亲自点名Skill。请按 requirements.md、session.md 和 source-map.json 对指定的这段 YIYUAN Accord 3.3 开发工作做一次有证据的复盘，核对 ci.json，交付 report.md。复盘对象和可读/可写边界均已明确在要求中；不要默认扫描本机其它会话。需要时调用 writing-for-agents 依赖；所有第三方源文件和策略保持原样。完成后简短报告。",
+      "files": {
+        "requirements.md": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "session.md": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "source-map.json": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "ci.json": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "report.md": {
+          "state": "required",
+          "format": "utf8",
+          "nonempty": true
+        }
+      },
+      "semanticReview": "Independently verify each material report claim against the frozen sources and distinguish actionable current blockers from unsupported process changes. No finding count or self-verdict establishes quality."
+    }
+  ]
+}

@@ -25,7 +25,7 @@
 | 项目 | 已核事实与限制 |
 |---|---|
 | 仓库 | 本次记录前main/HEAD与origin/main均为dc63f904，干净、0/0；后续以实时Git为准。接管基点及源任务责任转交见上。 |
-| 源与本机安装 | 源码为3.3.0-dev.1+codex.20260925202615，24文件、SHA 6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f；本批只变更SDK及其按需参考、包版本。本机安装仍为115917、SHA 1235ddfa0a946ace214d19dd9558d8b0b5abf47abc7932b55783c05e4996ed26、marketplace ref=48c97c0e，不借旧安装证明新SDK采用。115917原生更新及5启用Skill/6可信Hook、配置备份与进程自然退出证据保留原范围。本批未更改共享安装、信任或第三方Skill。 |
+| 源与本机安装 | 源与本机安装均为3.3.0-dev.1+codex.20260925202615，24文件、SHA 6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f、marketplace ref=9a879596。原生命令更新后逐文件独立核对Git原字节，仅市场ref改变，无新增信任；新0.157.0进程发现5启用Skill/6可信Hook并自然退出。旧包与配置恢复材料保留，空更新工作区已回收。已有Desktop/MCP消费者采用不由独立发现代验；第三方Skill未改。 |
 | 托管检查 | 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本次只读诊断授权已自然捕获，原生MCP读回inputSource=native-input-event、输入数10、needsNativeReplay/needsResumeReconciliation=false，checkpoint仍unbound；此前retained-native-replay恢复保持历史身份。无需继续恢复或调查压缩。独立0.157.0原生只读查询的goal=null仅说明原读取时点；当前MCP宿主仍报告Desktop0.155.0-alpha.16.4，不混为同一版本。 |
@@ -35,7 +35,9 @@
 
 ## 本批完成与实际未完项
 
-**源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；新源码包202615尚未安装。[CI36135273441](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36135273441)已绑定f2ad9285并在途，后续普通对话或记录推送不取消它，须按精确headSha继续回读最终结果。
+**普通环境中的原生Skill复盘前瞻绑定**：按用户既有工序审查要求，由root选择现装explicit-only的retro，保留原CC Switch源和策略；worker通过原生精确名称调用并用writing-for-agents依赖，唯一成品report.md。已冻结12份9a879596业务源码、用户决定摘录和精确CI结果；必要宿主/Skill/memory指导可读取但不充当项目事实，不扫描其它会话。新案v33-codex-cli-ordinary-retro-01只贡献effective-user-environment，原10案、17范围和所有底线不变；一个必要fixture使跟踪文件分配173→174，不抬业务限额。新案在执行前提交后使用现有installed-plugin/Goal/observe/recheck链，尚无执行或准入结果；不声称worker隐式匹配、自主选型或自动交接。原件accord-ordinary-retro-20260925-01。
+
+**源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；[CI36135273441](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36135273441)已按精确f2ad9285及各job回读，11/11成功；新202615包也已原生更新，普通行为仍需下述实际工作核验。
 
 **本批托管检查已闭合**：dc63f904的[CI36128555843](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36128555843)完整11/11成功，精确headSha与各job已回读；包括活动案例处置后的九个OS/Python组合及两个原生生命周期job。14aada0c的前次11/11保持原范围。仅说明相应提交的托管检查通过，不代替普通行为、云采用或正式准入。
 
@@ -87,6 +89,8 @@
 
 | 目录 | 内容与限制 |
 |---|---|
+| accord-ordinary-retro-20260925-01 | 当前普通复盘的来源/角色/Skill选择与正式预绑定；执行结果须另读，旧失败不重放。 |
+| accord-shared-plugin-update-20260925-24 | 202615精确原生更新、24文件Git字节独立核对、5CLI与1发现域自然退出，配置/旧包恢复材料及现装retro/依赖/模型目录；空工作区已回收。 |
 | accord-cloud-controller-provenance-20260925-01 | 一次获准只读云端诊断：一个任务URL、三输入、两轮命令；进程/配置候选与后续app-server/-c观察、前后设置、界面计数及解释纠正。实际装载未知，原案不重放。 |
 | accord-ordinary-integration-20260925-01 | 7b1a66c7预绑的真实普通CLI审查、64个原生事件、Goal双回执、报告与完整保留输入；读取范围不匹配的原准入拒绝、两名独立评审和六域退出/清理。原案不重放。 |
 | accord-shared-plugin-update-20260925-23 | 115917精确原生更新、24文件Git字节核对、0.157.0新发现与自然退出；旧包和配置备份保留。 |
