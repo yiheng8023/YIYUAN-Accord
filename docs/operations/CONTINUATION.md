@@ -37,6 +37,12 @@
 
 **本批CI跨平台夹具修复**：efc84337的[CI36157692681](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36157692681)出现Linux失败；已回读Python3.11原始日志，唯一断言为新增“Popen后失败”测试实际未调用Popen。WSL/Linux同案稳定复现：模拟WindowsJob却遗漏CREATE_NO_WINDOW，参数求值先失败，随后模拟的close异常掩盖原因。仅补测试常量并断言启动参数及attach_and_resume实际调用；Linux同案先红后绿，Windows/Python3.10与3.14均通过。加入现有CI前置检查后13项本地通过，actionlint通过；产品代码与验收判据保持，新提交需按自身SHA核对托管结果，原失败不改标。本机WSL未提供可用Node，扩展全入口套件因此不能作为Linux全套通过证据；跨平台完整检查由配置Node的托管矩阵承担。
 
+修正提交77ac713c2ea50f5aa31f8a2bff96d10512eea532的[CI36159820207](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36159820207)已按精确headSha及全部job回读，11/11成功；九组OS/Python前置检查及完整矩阵通过，原失败保持。
+
+**已完成子范围的接续纠偏**：机器投影nextBoundary仍残留“优先完成中断的finalize-receipt组合”提示，与已完成的原件和既有工序冲突。本次只读回看Windows02及Linux/macOS托管三份原件，均确认既有受控失ACK收尾、目标writer及settled revision19；详见[原范围](PROCEDURE-v3.3.md#配额中断后的收尾组合验证2026-09-23)。已纠正这一陈旧下一步，不重跑原生试验。固定响应、原夹具失败和非一般crash恢复边界保持；自主择时、语义接管及完整A05仍未由此通过。
+
+同次只读核对0.157.0原生schema：thread/start没有调用方创建ID，thread/list提供目录/标题等筛选但没有按创建请求ID认领的接口；首次ACK完全丢失时仍须保留unknown，不能按近邻任务猜测或复制同一试验。VS Code现装扩展26.908.40401及捆绑后端0.154.0-alpha.6.2仍与历史观察版本一致；检查时没有Code/该扩展后端进程，不能将CLI0.157.0或已更新的共享包代验为IDE当前采用。未启动IDE任务、修改配置或重开云端；所缺的是实际入口参与证据。独立入口审查确认七个pending尚无可据现有材料整项关闭的条目；已定的普通Chat辅助、移动Remote复用主机、外部触发复用云执行器模式保留，不因未测试或缺设备删除必要职责。
+
 **原生显式Skill协调已实际执行，整案未准入**：root按用户委托代选现装explicit-only retro，原生CLI0.157.0/gpt-6-sol/high/default在首个工具前加载完整Skill正文，并读取writing-for-agents依赖、交付report.md。第三方源/策略未改；不是worker隐式匹配或自主选型。独立核实12份冻结业务源及报告：事实、问题排序和未完边界成立，但下一工作段仍是泛化流程，未给具体任务/成果，正式observe/recheck因此保留consequence-mismatch、acceptedCases为空。原报告不补写求绿；该结束实例按既有规则转历史，原10活动案、17必要范围和底线保持，有效用户环境的合格贡献仍缺。六域自然退出，四输入字节/mtime、配置和Skill文件集保持；所属workspace/temp/state及空父目录已回收，原生任务/历史和报告保留。此前多行prompt准备失败发生在Agent前，原件未改；两行UTF-8字节修复、94项入口回归和独立复核已闭合。详细范围见[记录](PROCEDURE-v3.3.md#原生显式skill协调与复盘结果2026-09-25)；原件accord-ordinary-retro-20260925-01。
 
 **源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；[CI36135273441](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36135273441)已按精确f2ad9285及各job回读，11/11成功；新202615包也已原生更新，普通行为仍需下述实际工作核验。
