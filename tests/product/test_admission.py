@@ -1047,7 +1047,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 11, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 6, "coverageDefinedButUnverified": 11,
-            "casesDefined": 11, "casesAccepted": 0,
+            "casesDefined": 12, "casesAccepted": 0,
         })
 
     def test_incomplete_mapping_or_old_policy_cannot_dispatch_current_observer(self):

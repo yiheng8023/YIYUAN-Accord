@@ -9,8 +9,10 @@ permissions:
   contents: read
 
 concurrency:
-  group: validate-product-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Preserve each immutable push/manual candidate while newer work continues.
+  # A superseded PR merge candidate can still be replaced by the newer PR run.
+  group: validate-product-${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   validate:
