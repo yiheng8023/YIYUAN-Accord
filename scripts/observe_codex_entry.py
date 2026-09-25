@@ -700,10 +700,10 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     for name, data in inputs.items():
         (workspace / name).write_bytes(data)
     if protocol == "exec":
-        (evidence / "prompt.txt").write_text(PROMPT, encoding="utf-8")
+        (evidence / "prompt.txt").write_bytes(PROMPT.encode("utf-8"))
     elif protocol == "exec-resume":
         for index, stage in enumerate(case["stages"]):
-            (evidence / f"prompt-{index + 1}.txt").write_text(stage["prompt"], encoding="utf-8")
+            (evidence / f"prompt-{index + 1}.txt").write_bytes(stage["prompt"].encode("utf-8"))
     (evidence / "native-help.txt").write_bytes(help_run.stdout + help_run.stderr)
     if resume_help is not None:
         (evidence / "native-resume-help.txt").write_bytes(resume_help.stdout + resume_help.stderr)

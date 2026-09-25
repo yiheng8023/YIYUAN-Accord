@@ -1075,6 +1075,27 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(partial["executionFailure"]["stage"], 2)
             self.assertEqual(partial["executionFailure"]["phase"], "preflight")
 
+    def test_persistent_preparation_preserves_multiline_prompt_bytes(self):
+        for prompt in ("$retro\n审查当前工序。\n", "第一行\r\n第二行\r\n", "甲\n乙\r\n丙\n"):
+            with self.subTest(prompt=repr(prompt)), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                case = json.loads((SCRIPT.parents[1] / "product/cases/coordination-v3.3.json").read_text(encoding="utf-8"))
+                case["stages"][0]["prompt"] = prompt
+                case_path = root / "multiline-case.json"
+                case_path.write_bytes(json.dumps(case, ensure_ascii=False).encode("utf-8"))
+                manifest = self.prepared_persistent(root, case_path=case_path, native_hooks=True)
+                prepared = Path(manifest["evidence"]) / "prompt-1.txt"
+                self.assertEqual(prepared.read_bytes(), prompt.encode("utf-8"))
+                with patch.object(entry.subprocess, "Popen") as forbidden:
+                    raw, _, _ = entry._verify_native_stage(manifest, 0, None)
+                    self.assertEqual(raw, prompt.encode("utf-8"))
+                    # Updating only the prepared hash cannot legitimize a newline change.
+                    prepared.write_bytes(b"\n" + raw)
+                    manifest["promptSha256s"][0] = entry.digest(prepared)
+                    with self.assertRaisesRegex(ValueError, "stage prompt changed"):
+                        entry._verify_native_stage(manifest, 0, None)
+                    forbidden.assert_not_called()
+
     def test_native_stage_rejects_prompt_case_command_and_observed_thread_substitutions(self):
         for mutation in ("prompt-file", "prompt-and-hash", "manifest-prompt", "model", "template", "thread", "duplicate-source"):
             with tempfile.TemporaryDirectory() as tmp:

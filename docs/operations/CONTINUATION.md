@@ -35,7 +35,7 @@
 
 ## 本批完成与实际未完项
 
-**普通环境中的原生Skill复盘前瞻绑定**：按用户既有工序审查要求，由root选择现装explicit-only的retro，保留原CC Switch源和策略；worker通过原生精确名称调用并用writing-for-agents依赖，唯一成品report.md。已冻结12份9a879596业务源码、用户决定摘录和精确CI结果；必要宿主/Skill/memory指导可读取但不充当项目事实，不扫描其它会话。新案v33-codex-cli-ordinary-retro-01只贡献effective-user-environment，原10案、17范围和所有底线不变；一个必要fixture使跟踪文件分配173→174，不抬业务限额。新案在执行前提交后使用现有installed-plugin/Goal/observe/recheck链，尚无执行或准入结果；不声称worker隐式匹配、自主选型或自动交接。原件accord-ordinary-retro-20260925-01。
+**普通环境中的原生Skill复盘前瞻绑定**：按用户既有工序审查要求，由root选择现装explicit-only的retro，保留原CC Switch源和策略；worker通过原生精确名称调用并用writing-for-agents依赖，唯一成品report.md。已冻结12份9a879596业务源码、用户决定摘录和精确CI结果；必要宿主/Skill/memory指导可读取但不充当项目事实，不扫描其它会话。新案v33-codex-cli-ordinary-retro-01只贡献effective-user-environment，原10案、17范围和所有底线不变；一个必要fixture使跟踪文件分配173→174，不抬业务限额。首份预备实例绑定8a27b707，在Agent启动前被严格输入校验拒绝：Windows的write_text把LF转成CRLF，517字节与case原文516字节不符。原threadId=null、stages/history为空且模型阶段文件未创建；三次目录查询自然退出，四输入字节/mtime、配置及第三方Skill均保持。已改为按原UTF-8字节写prompt，LF/CRLF/混合回归先红后绿，94项入口检查、Python3.10两项及actionlint通过，独立复核无阻断；旧实例和失败不改标。后续使用修复的新提交及全新evidence/workspace前瞻重绑，完成首次Agent执行；任务内容、预算和准入判据不变，不声称worker隐式匹配、自主选型或自动交接。原件accord-ordinary-retro-20260925-01。
 
 **源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；[CI36135273441](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36135273441)已按精确f2ad9285及各job回读，11/11成功；新202615包也已原生更新，普通行为仍需下述实际工作核验。
 
