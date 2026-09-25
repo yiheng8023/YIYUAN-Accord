@@ -18,6 +18,9 @@ const {createOwnedAppServerConnection} = require(process.argv[1]);
 const {openCarrierRecorder} = require(process.argv[2]);
 const {createCodexSourceSession} = require(process.argv[3]);
 const mode = process.argv[4], databasePath = process.argv[5];
+const slowRecordMs = Number(process.argv[6] || 0);
+const adoptionPrecondition = ['adopt-old-lease', 'adopt-stale-ref',
+  'adopt-busy', 'adopt-missing-tools'].includes(mode);
 const output = new PassThrough(), sent = [], starts = [], serverResponses = [];
 let targetTurn = 0, sourceTurn = 0, targetCreated = 0, sourceUnsubscribed = 0, sourceStarted = false;
 const emit = value => output.write(Buffer.from(JSON.stringify(value) + '\n'));
@@ -136,8 +139,14 @@ const input = new Writable({write(chunk, encoding, done) {
 }});
 const connection = createOwnedAppServerConnection({stdin:input, stdout:output,
   connectionId:'fixture-connection', hostVersion:'fixture-host'});
-const recorder = openCarrierRecorder({path:databasePath, create:true});
+const storedRecorder = openCarrierRecorder({path:databasePath, create:true});
+const recorder = {...storedRecorder, compareAndSet(...args) {
+  if (slowRecordMs && args[2].phase === 'writer-transferred')
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, slowRecordMs);
+  return storedRecorder.compareAndSet(...args);
+}};
 let scopeReads = 0, recordReads = 0, settleCalls = 0;
+let adoptionStarted = false, adoptionRecordChanged = false;
 const wrappedRecorder = ['scope-active','scope-after-terminal','adopt-old-lease',
   'adopt-missing-tools','adopt-settle-loss','adopt-bad-settle',
   'adopt-deadline-before-settle','no-claim-recorder'].includes(mode);
@@ -147,7 +156,8 @@ const sessionRecorder = wrappedRecorder ? {
   read(...args) {
     recordReads++;
     const value = recorder.read(...args);
-    if (recordReads !== 2) return value;
+    if (!adoptionStarted || adoptionRecordChanged) return value;
+    adoptionRecordChanged = true;
     const changed = JSON.parse(JSON.stringify(value));
     if (mode === 'adopt-old-lease') changed.lease.token = 'stale-lease-token';
     if (mode === 'adopt-missing-tools') delete changed.state.plan.target.dynamicTools;
@@ -187,7 +197,10 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
       target:{cwd:'C:/fixture', model:`target-model-${ordinal}`, effort:'target-effort'},
       handoffText:'Retain the fixed authorized task and protected inputs.',
       continuation:{input:'Perform the next bounded step.', sandboxPolicy:{type:'readOnly'}},
-      deadlineMs:now+4000, recoveryDeadlineMs:now+4500};
+      // These modes test adoption guards after successful real SQLite work,
+      // not disk speed. Reserve recovery and outer-run time from one deadline.
+      deadlineMs:adoptionPrecondition ? context.deadlineMs-8000 : now+4000,
+      recoveryDeadlineMs:adoptionPrecondition ? context.deadlineMs-6000 : now+4500};
   },
   verify(stage, facts) {
     verifyCalls.push(stage);
@@ -240,8 +253,11 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
       try { await session.run({input:'must wait for second adoption', deadlineMs:Date.now()+1000}); }
       catch (error) { result.second = error.code; }
     } else if (mode.startsWith('adopt-')) {
-      result.first = await session.run({input:'one source turn', deadlineMs:Date.now()+6000});
-      const adoptionDeadline = mode === 'adopt-deadline-before-settle' ? 10 : 3000;
+      result.first = await session.run({input:'one source turn',
+        deadlineMs:Date.now()+(adoptionPrecondition ? 20000 : 6000)});
+      adoptionStarted = true;
+      const adoptionDeadline = mode === 'adopt-deadline-before-settle' ? 10 :
+        adoptionPrecondition ? 8000 : 3000;
       try { result.adopted = await session.adoptTarget({deadlineMs:Date.now()+adoptionDeadline}); }
       catch (error) { result.adoptionError = {code:error.code, state:error.state}; }
       if (mode === 'adopt-deadline-before-settle') {
@@ -273,7 +289,10 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     }
     console.log(JSON.stringify(result));
   } finally { connection.close(); recorder.close(); }
-})().catch(error=>{console.error(error);process.exitCode=1});
+})().catch(error=>{console.error(error);
+  const detail=error.cause?.details?.original;
+  console.error('recorder failure:',detail?.attemptedPhase,detail?.cause?.code);
+  process.exitCode=1});
 '''
 
 
@@ -282,6 +301,7 @@ const {performance} = require('node:perf_hooks');
 const {openCarrierRecorder} = require(process.argv[2]);
 const {createCodexSourceSession,restoreCodexSourceSession} = require(process.argv[1]);
 const databasePath=process.argv[3], rawMode=process.argv[4];
+const slowRecordMs=Number(process.argv[5]||0);
 const sourceMode=rawMode.startsWith('source-'), mode=sourceMode?rawMode.slice(7):rawMode;
 const until=ms=>Date.now()+ms, mono=()=>performance.now()+5000;
 let threadStarts=0, targetTurn=0, proposalUsed=false;
@@ -308,16 +328,22 @@ const oldConnection={transport:{connectionId:'old-connection',hostVersion:'fixtu
         threadId:request.params.threadId,turn:{id:request.params.turnId,status:'completed',items:[]}}});},
     current};}
 };
-const recorder=openCarrierRecorder({path:databasePath,create:true});
+const storedRecorder=openCarrierRecorder({path:databasePath,create:true});
+const recorder={...storedRecorder,compareAndSet(...args){
+  if(slowRecordMs&&args[2].phase==='writer-transferred')
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,slowRecordMs);
+  return storedRecorder.compareAndSet(...args);
+}};
 const verdict=(stage,refs)=>({decision:'allow',scopeRef:refs.scopeRef||'fixture-scope',authorityRef:refs.authorityRef||'authority-1',
   stateRef:refs.stateRef||'state-1',sourceRef:'fixture:'+stage,sourceRecoveryReady:true,targetInitializationSafe:true,
   quiesced:true,noOtherWriters:true,targetSettingsMatch:true,initializationEffectsVerified:true,accepted:true,sourceIdle:true,
   intakeEffectsVerified:true,singleWriter:true,effectsVerified:true,adoptionAuthorized:true});
 const oldSession=createCodexSourceSession({connection:oldConnection,recorder,scopeRef:'fixture-scope',
   threadStart:{cwd:'C:/fixture',model:'fixture-model',sandbox:'read-only',approvalPolicy:'never'},
-  planResolver(request,context){const now=Date.now();return {transferId:'settled-transfer',scopeRef:'fixture-scope',authorityRef:'authority-1',stateRef:'state-1',
+  planResolver(request,context){return {transferId:'settled-transfer',scopeRef:'fixture-scope',authorityRef:'authority-1',stateRef:'state-1',
     source:{threadId:context.threadId,turnId:context.turnId},target:{cwd:'C:/fixture',model:'fixture-model'},handoffText:'fixed intake',
-    continuation:{input:'fixed continuation',sandboxPolicy:{type:'readOnly'}},deadlineMs:now+4000,recoveryDeadlineMs:now+4500}},
+    continuation:{input:'fixed continuation',sandboxPolicy:{type:'readOnly'}},
+    deadlineMs:context.deadlineMs-8000,recoveryDeadlineMs:context.deadlineMs-6000}},
   verify(stage,facts){return verdict(stage,facts.packet?.plan||facts)},
   current(){const scope=recorder.readScope('fixture-scope');return {scopeRef:'fixture-scope',authorityRef:'authority-1',stateRef:'state-1',writerThreadId:scope.writerThreadId}},
   ownerRequest(){return {error:{code:-1,message:'unexpected'}}}});
@@ -355,7 +381,8 @@ const restoreArgs=(basis)=>({...sourceMode?{source:{threadId:mode==='wrong-id'?'
   {transferId:'settled-transfer'},expectedScope:basis,deadlineMs:until(5000),
   resume:{cwd:'C:/restored',sandbox:'read-only',approvalPolicy:'never',model:'restored-model',modelProvider:'fixture',effort:'high'}});
 (async()=>{let out={};try{
-  const transfer=await oldSession.run({input:'propose',deadlineMs:until(5000)});
+  // Build the settled source before exercising restore guards or lost receipts.
+  const transfer=await oldSession.run({input:'propose',deadlineMs:until(20000)});
   const preAdoptScope=oldSession.snapshot().scope;
   if(mode==='active'){
     try{await restoreCodexSourceSession(options(restoreConnection('new-active')),restoreArgs(preAdoptScope))}catch(e){out.error={code:e.code,state:e.state};out.failedSession=e.session.snapshot()}
@@ -390,29 +417,35 @@ const restoreArgs=(basis)=>({...sourceMode?{source:{threadId:mode==='wrong-id'?'
     out.basis=basis;out.currentScope=recorder.readScope('fixture-scope');out.adopted=adopted;
   }
   out.resumeCalls=resumeCalls;out.claimCalls=claimCalls;out.restoredTurnStarts=restoredTurnStarts;out.resumeParamsSeen=resumeParamsSeen;out.restoreReadParams=restoreReadParams;out.effects=effects;out.oldCalls=oldCalls;
-}finally{recorder.close()}console.log(JSON.stringify(out))})().catch(e=>{console.error(e);process.exitCode=1});
+}finally{recorder.close()}console.log(JSON.stringify(out))})().catch(e=>{console.error(e);
+  const detail=e.cause?.details?.original;
+  console.error('recorder failure:',detail?.attemptedPhase,detail?.cause?.code);
+  process.exitCode=1});
 '''
 
 
 class CodexSourceSessionTests(unittest.TestCase):
-    def run_case(self, mode):
+    def run_case(self, mode, *, slow_record_ms=0):
         with tempfile.TemporaryDirectory() as temp:
             database = Path(temp) / "carrier.sqlite"
             command = [shutil.which("node"), "-e", NODE_SCENARIO,
                        str(ROOT / "runtime" / "codex-connection.cjs"),
                        str(ROOT / "runtime" / "carrier-recorder.cjs"),
-                       str(MODULE), mode, str(database)]
+                       str(MODULE), mode, str(database), str(slow_record_ms)]
             completed = subprocess.run(command, capture_output=True, text=True,
-                                       encoding="utf-8", timeout=15)
+                                       encoding="utf-8", timeout=30 if mode in {
+                                           "adopt-old-lease", "adopt-stale-ref", "adopt-busy",
+                                           "adopt-missing-tools"} else 15)
             self.assertEqual(completed.returncode, 0, completed.stderr)
             return json.loads(completed.stdout)
 
-    def restore_case(self, mode):
+    def restore_case(self, mode, *, slow_record_ms=0):
         with tempfile.TemporaryDirectory() as temp:
             database = Path(temp) / "restore.sqlite"
             completed = subprocess.run([shutil.which("node"), "-e", RESTORE_SCENARIO,
                 str(MODULE), str(ROOT / "runtime" / "carrier-recorder.cjs"),
-                str(database), mode], capture_output=True, text=True, encoding="utf-8", timeout=15)
+                str(database), mode, str(slow_record_ms)], capture_output=True, text=True,
+                encoding="utf-8", timeout=30)
             self.assertEqual(completed.returncode, 0, completed.stderr)
             return json.loads(completed.stdout)
 
@@ -564,11 +597,21 @@ class CodexSourceSessionTests(unittest.TestCase):
         for mode, code in cases.items():
             with self.subTest(mode=mode):
                 result = self.run_case(mode)
+                self.assertEqual(result["first"]["status"], "transferred")
                 self.assertEqual(result["adoptionError"]["code"], code)
                 self.assertEqual(result["snapshot"]["status"], "transferred")
                 self.assertEqual(result["settleCalls"], 0)
                 self.assertEqual(result["snapshot"]["sourceThreadId"], "source-1")
                 self.assertEqual(result["snapshot"]["targetThreadId"], "target-1")
+
+    def test_adoption_guard_runs_after_slow_completed_handoff(self):
+        # A slow real SQLite transition must not turn this guard check into a
+        # handoff-timeout test. Dedicated deadline tests retain their short clocks.
+        result = self.run_case("adopt-old-lease", slow_record_ms=4200)
+        self.assertEqual(result["first"]["status"], "transferred")
+        self.assertEqual(result["adoptionError"]["code"], "TARGET_RECORD_STALE")
+        self.assertEqual(result["snapshot"]["status"], "transferred")
+        self.assertEqual(result["settleCalls"], 0)
 
     def test_unknown_or_malformed_settle_locks_without_replay(self):
         for mode in ("adopt-settle-loss", "adopt-bad-settle"):
@@ -685,6 +728,15 @@ class CodexSourceSessionTests(unittest.TestCase):
         self.assertEqual(result["error"]["code"], "RESTORE_CLAIM_UNKNOWN")
         self.assertEqual(result["locked"], "SESSION_FAILED")
         self.assertEqual(result["effects"], ["claim"])
+        self.assertEqual(result["retry"], "RESTORE_PRECONDITION_FAILED")
+        self.assertEqual(result["resumeCalls"], 0)
+
+    def test_claim_loss_guard_runs_after_slow_completed_handoff(self):
+        result = self.restore_case("claim-loss", slow_record_ms=4200)
+        self.assertEqual(result["original"]["status"], "transferred")
+        self.assertEqual(result["error"]["code"], "RESTORE_CLAIM_UNKNOWN")
+        self.assertEqual(result["claimCalls"], 1)
+        self.assertNotEqual(result["basis"]["token"], result["currentScope"]["token"])
         self.assertEqual(result["retry"], "RESTORE_PRECONDITION_FAILED")
         self.assertEqual(result["resumeCalls"], 0)
 

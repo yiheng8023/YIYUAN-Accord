@@ -29,6 +29,8 @@
 
 ## 本批完成与实际未完项
 
+**CI测试准备修复**：0839eb87的[CI36072048902](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36072048902)已结束，9/11成功；两个Windows任务共四个子用例在接管/恢复被测条件之前的交接阶段报RECORDER_COMMIT_UNKNOWN，原日志深层原因被折叠。本地给真实SQLite提交回调加入4.2秒延迟，在两类夹具均复现DEADLINE_EXCEEDED；仅调整这些准备阶段的有限预算，接管反例改在交接成功后注入，保留产品及专门超时反例。Python3.10/3.14各27项会话测试通过，修复后托管结果待核。仅测试与接续变化，包、基线、计划、机器投影和行为验收判据不变。
+
 **保留与回读修复**：已复现业务文件inspection.json被内部记录覆盖，以及工作区回收后默认检查报FileNotFound。新manifest前瞻声明stage-files-v1和阶段ID，业务副本与记录分目录，复制前后校验Hash；显式`inspect --retained`核对原生回执、inspection/history、阶段链及副本一致性，不执行冻结代码或重建工作区。86项完整入口回归通过、独立复核无阻断；旧发布02的120份原件逐字节未变，两阶段保留记录均匹配，原caseComplete仍false。仅保留字节核对，业务/原mtime/安装/清理与正式准入未新增。原件导航accord-retained-inspection-20260925-01。公有observer源码已变，私有cloud repair仍绑定旧helper Hash，不能直接执行；实际需要时先复核并重绑，不生成新云端试验。
 
 **云启动原案**：用户批准一次临时setup、一个接入任务及最多一次清理续作。投递脚本网页回读Hash一致，任务[Verify native task access status](https://chatgpt.com/codex/cloud/tasks/task_e_6ab59bee8ac0832b8c4455c7279289ba)在环境准备32秒后退出，stdout只有RuntimeError，尚未进入受测Agent阶段。没有重试/清理续作，也没有归档/删除任务。临时setup已清空并保存为自动，环境其余前态核对保持。失败页没有原容器读取入口，因此具体失败断言、安装/信任及资源后态保留未知；不能声称原容器完整回滚。
