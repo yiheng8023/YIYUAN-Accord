@@ -2247,3 +2247,13 @@ fresh原生hooks/list与skills/list显示5启用Skill及6启用trusted Hook均�
 实际源码断点是status将无回执文件时由水印合成的隔离状态误标为unspecified-legacy-receipt。沿原recoveryBasis稳定快照修正为missing-stored-input-receipt，并仅投影inputReceipt.present与session/workspace水印范围；真实旧回执保留原标签，已承认标记继续保留，不泄漏generation/输入内容，也不改变epoch、回放、绑定、暂停及隔离判定。两项回归先重现三类误标及缺字段，修复后通过；完整状态/MCP套件184项通过，verify、verify-development和host-check均valid=true。独立源码审查未见阻断。新源码只读核对当前真实任务得到缺文件/工作区水印，epoch及needsNativeReplay不变、水印字节未改。
 
 源码包更新为3.3.0-dev.1+codex.20260925115917，24文件，SHA 1235ddfa0a946ace214d19dd9558d8b0b5abf47abc7932b55783c05e4996ed26；仅manifest版本及task-checkpoint.cjs两份包内文件变化。本机162230安装未更新；当前消费者采用、托管检查、回执恢复及普通交付全链不由本地诊断修复代验。正式scope、旧失败和A01–A08结论保持。这是接管中真实暴露的问题修正，不是事后绑定的普通行为验收或自主交接成功。
+
+## Windows复制运行时的测试退出与清理（2026-09-25）
+
+96abd156的CI36092865977最终10/11成功。唯一失败为Windows/Python3.14：696项检查中的原生cmd路径绑定用例在TemporaryDirectory退出时删除bound-runtime.exe报WinError32，功能断言没有报错。原始failed-job日志保留在私有accord-ci-cleanup-20260925-01，SHA 18e369be7cb2d32502fa5a0d768e456e1673dd57372f639311a54276e4740f34；原托管锁占用者仍未知，不直接归因为杀毒软件或本次产品运行时改动。
+
+本地同用例单次通过；随后在精确复制文件的删除点用真实Win32句柄禁止共享删除，原路径两次尝试后复现同类失败，新路径在第三次释放后通过。两个执行复制Node的测试共用小型测试辅助，复用已有WindowsJob在暂停创建之后纳入所属进程，保留原cmd raw_arg/绝对路径/影子node断言及10秒执行限额；另有界等待Job归零，异常只回收该Job和未分配的自己直属进程，关闭句柄后删除精确复制文件。共享删除及映像释放分别按实际WinError32/5等待，持续错误仍抛出；[Windows映像说明](https://learn.microsoft.com/en-us/windows-hardware/drivers/ifs/executable-images)及[DeleteFile契约](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-deletefile)说明映射和打开句柄会阻止删除，不能由shell返回推断文件可回收。
+
+新增后代反例初版未使子进程脱离父Node的正常退出约束，未形成所需存活窗口，改为明确detached后才观察延迟退出及超时终止。该条件下暴露Job归零后的短暂WinError5，单关直属句柄不足以消除，纳入精确文件的有界释放等待后通过。独立审查发现Job终止失败会跳过未分配直属进程回收及文件清理，已分别修正；新反例先红后绿，并在helper返回错误时检查其已清理复制文件。反例自身持有独立复制的原始进程句柄，保护红路径的恢复。早期负向夹具曾遗留暂停进程，CIM/普通Path不可读的观察不足以判定退出；以同一原生句柄QueryFullProcessImageNameW确认本次临时映像后终止、等候退出并关闭，三处已知临时目录已回收，原配方与恢复后态保留。该本地恢复不解释或代验原托管失败。
+
+最终Windows/Python3.14入口套件90项、既有Python3.10六项相关检查、verify和verify-development通过；独立复核未见剩余阻断。仅测试及记录变化，115917包的24文件/SHA保持，安装、业务预算、正式准入与A01–A08未改变；修复提交托管结果另行核对。

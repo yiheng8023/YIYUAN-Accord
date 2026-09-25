@@ -26,6 +26,74 @@ entry = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(entry)
 
 
+def _unlink_copied_runtime(runtime, owned_root, *, timeout=5):
+    runtime, owned_root = Path(runtime), Path(owned_root).resolve()
+    if runtime.is_symlink() or not runtime.resolve().is_relative_to(owned_root):
+        raise ValueError("runtime cleanup must stay inside the owned fixture")
+    deadline = time.monotonic() + timeout
+    while True:
+        try:
+            runtime.unlink(missing_ok=True)
+            return
+        except PermissionError as error:
+            # Job/process exit can precede image deletion readiness (5), as well
+            # as external delete-sharing release (32). Persistent errors fail.
+            if getattr(error, 'winerror', None) not in (5, 32) or time.monotonic() >= deadline:
+                raise
+            time.sleep(0.025)
+
+
+def _wait_fixture_job_empty(job, timeout):
+    deadline = time.monotonic() + timeout
+    while job.sample()['activeProcesses']:
+        if time.monotonic() >= deadline:
+            raise AssertionError("copied-runtime fixture left live processes")
+        time.sleep(0.025)
+
+
+def _run_copied_runtime(command, *, runtime, owned_root, cwd, executable=None, exit_timeout=5):
+    if os.name != 'nt':
+        return subprocess.run(command, executable=executable, cwd=cwd, capture_output=True, timeout=10)
+    if Path(runtime).is_symlink() or not Path(runtime).resolve().is_relative_to(Path(owned_root).resolve()):
+        raise ValueError("copied runtime must belong to this fixture")
+    job, process, natural_exit = entry.WindowsJob(), None, False
+    try:
+        process = subprocess.Popen(command, executable=executable, cwd=cwd,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            creationflags=subprocess.CREATE_NO_WINDOW | 4)  # CREATE_SUSPENDED
+        job.attach_and_resume(process)
+        stdout, stderr = process.communicate(timeout=10)
+        _wait_fixture_job_empty(job, exit_timeout)
+        natural_exit = True
+        return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+    finally:
+        try:
+            try:
+                if not natural_exit:
+                    try:
+                        job.terminate()
+                    finally:
+                        # Reap our direct child even if Job assignment/termination
+                        # failed before that suspended child could be contained.
+                        if process is not None:
+                            try:
+                                if process.poll() is None:
+                                    process.kill()
+                            finally:
+                                process.communicate(timeout=5)
+                    _wait_fixture_job_empty(job, 5)
+            finally:
+                try:
+                    job.close()
+                finally:
+                    if process is not None and process.returncode is not None:
+                        process._handle.Close()
+        finally:
+            # Attempt exact-file cleanup on failure too. Python's exception
+            # chain retains any original execution/recovery error if this fails.
+            _unlink_copied_runtime(runtime, owned_root)
+
+
 class EntryTests(unittest.TestCase):
     def usage_event(self, **changes):
         counters = {"totalTokens": 360404, "inputTokens": 355272,
@@ -1161,11 +1229,12 @@ class EntryTests(unittest.TestCase):
             shell, kind = Path(projection['hookShell']), projection['shellKind']
             command = projection['hooks']['Stop'][0]['hooks'][0]['command']
             if kind == 'cmd':
-                actual = subprocess.run('"' + str(shell) + '" /C "' + command + '"', executable=str(shell),
-                    cwd=root, capture_output=True, timeout=10)
+                actual = _run_copied_runtime('"' + str(shell) + '" /C "' + command + '"', executable=str(shell),
+                    cwd=root, runtime=renamed, owned_root=root)
             else:
                 args = ['-NoLogo', '-NoProfile', '-Command'] if kind == 'powershell' else ['-c']
-                actual = subprocess.run([str(shell), *args, command], cwd=root, capture_output=True, timeout=10)
+                actual = _run_copied_runtime([str(shell), *args, command], cwd=root,
+                    runtime=renamed, owned_root=root)
             self.assertEqual(actual.returncode, 0, actual.stderr)
             observed = json.loads(actual.stdout)
             self.assertEqual(Path(observed['execPath']).resolve(), renamed)
@@ -1284,12 +1353,141 @@ class EntryTests(unittest.TestCase):
                 # cmd receives /C followed by an extra outer quote pair around the
                 # already quoted absolute executable and its quoted source argument.
                 command = '"' + renamed.as_posix() + '" "' + source.as_posix() + '" --hook Stop'
-                actual = subprocess.run('"' + str(shell) + '" /C "' + command + '"', executable=str(shell),
-                    cwd=workspace, capture_output=True, timeout=10)
+                actual = _run_copied_runtime('"' + str(shell) + '" /C "' + command + '"', executable=str(shell),
+                    cwd=workspace, runtime=renamed, owned_root=root)
                 self.assertEqual(actual.returncode, 0, actual.stderr)
                 observed = json.loads(actual.stdout)
                 self.assertEqual(Path(observed["execPath"]).resolve(), renamed)
                 self.assertEqual(observed["args"], ["--hook", "Stop"])
+
+        def test_windows_copied_runtime_cleanup_retries_only_the_owned_sharing_lock(self):
+            k = entry.ctypes.WinDLL('kernel32', use_last_error=True)
+            k.CreateFileW.argtypes = [entry.W.LPCWSTR, entry.W.DWORD, entry.W.DWORD,
+                entry.ctypes.c_void_p, entry.W.DWORD, entry.W.DWORD, entry.W.HANDLE]
+            k.CreateFileW.restype = entry.W.HANDLE
+            k.CloseHandle.argtypes, k.CloseHandle.restype = [entry.W.HANDLE], entry.W.BOOL
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                runtime, keep = root / 'bound-runtime.exe', root / 'keep.txt'
+                runtime.write_bytes(b'owned image fixture')
+                keep.write_bytes(b'preserve')
+                handle = k.CreateFileW(str(runtime), 0x80000000, 3, None, 3, 0, None)
+                self.assertNotEqual(handle, entry.ctypes.c_void_p(-1).value)
+                original, attempts = Path.unlink, 0
+                def release_on_third_attempt(path, **kwargs):
+                    nonlocal handle, attempts
+                    self.assertEqual(path, runtime)
+                    attempts += 1
+                    if attempts == 3:
+                        self.assertTrue(k.CloseHandle(handle))
+                        handle = None
+                    return original(path, **kwargs)
+                try:
+                    with patch.object(Path, 'unlink', autospec=True, side_effect=release_on_third_attempt):
+                        _unlink_copied_runtime(runtime, root)
+                finally:
+                    if handle is not None:
+                        k.CloseHandle(handle)
+                self.assertEqual(attempts, 3)
+                self.assertFalse(runtime.exists())
+                self.assertEqual(keep.read_bytes(), b'preserve')
+
+        def test_windows_copied_runtime_cleanup_preserves_errors_and_scope(self):
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                runtime = root / 'bound-runtime.exe'
+                runtime.write_bytes(b'owned image fixture')
+                for code in (32, 5, 19):
+                    error = PermissionError('persistent sharing lock or unrelated access denial')
+                    error.winerror = code
+                    with self.subTest(code=code), patch.object(Path, 'unlink', side_effect=error) as unlink:
+                        with self.assertRaises(PermissionError) as caught:
+                            _unlink_copied_runtime(runtime, root, timeout=0 if code in (32, 5) else 5)
+                        self.assertIs(caught.exception, error)
+                        self.assertEqual(unlink.call_count, 1)
+                    self.assertTrue(runtime.exists())
+                with patch.object(Path, 'unlink') as unlink, self.assertRaises(ValueError):
+                    _unlink_copied_runtime(runtime, root / 'different-owned-root')
+                unlink.assert_not_called()
+
+        def test_windows_copied_runtime_waits_for_descendants_and_bounds_cleanup(self):
+            node = shutil.which('node')
+            self.assertIsNotNone(node)
+            for delayed_exit in (True, False):
+                with self.subTest(delayed_exit=delayed_exit), tempfile.TemporaryDirectory() as tmp:
+                    root = Path(tmp).resolve()
+                    runtime = root / 'bound-runtime.exe'
+                    shutil.copy2(node, runtime)
+                    marker = root / 'child-finished.txt'
+                    child = ("setTimeout(()=>require('node:fs').writeFileSync(" + json.dumps(str(marker))
+                             + ",'finished')," + ('250' if delayed_exit else '30000') + ");")
+                    script = root / 'parent.cjs'
+                    script.write_text("require('node:child_process').spawn(process.execPath,['-e',"
+                        + json.dumps(child) + "],{detached:true,stdio:'ignore'}).unref();console.log('parent-finished');",
+                        encoding='utf-8')
+                    command = [str(runtime), str(script)]
+                    if delayed_exit:
+                        result = _run_copied_runtime(command, runtime=runtime, owned_root=root, cwd=root)
+                        self.assertEqual(result.returncode, 0, result.stderr)
+                        self.assertEqual(marker.read_text(), 'finished')
+                    else:
+                        with self.assertRaisesRegex(AssertionError, 'left live processes'):
+                            _run_copied_runtime(command, runtime=runtime, owned_root=root,
+                                cwd=root, exit_timeout=0.05)
+                        self.assertFalse(marker.exists())
+                    self.assertFalse(runtime.exists())
+
+        def test_windows_copied_runtime_reaps_unassigned_child_if_job_termination_fails(self):
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                runtime = root / 'bound-runtime.exe'
+                shutil.copy2(shutil.which('node'), runtime)
+                job, created, native_popen = entry.WindowsJob(), [], subprocess.Popen
+                recovery_handles, api = {}, subprocess._winapi
+                def spawn(*args, **kwargs):
+                    process = native_popen(*args, **kwargs)
+                    created.append(process)
+                    try:
+                        owner = api.GetCurrentProcess()
+                        recovery_handles[process.pid] = api.DuplicateHandle(owner, process._handle,
+                            owner, 0, False, api.DUPLICATE_SAME_ACCESS)
+                    except Exception:
+                        process.kill()
+                        process.communicate(timeout=5)
+                        process._handle.Close()
+                        raise
+                    return process
+                try:
+                    with patch.object(entry, 'WindowsJob', return_value=job), \
+                            patch.object(job, 'attach_and_resume', side_effect=OSError('assignment failed')), \
+                            patch.object(job, 'terminate', side_effect=OSError('Job termination failed')), \
+                            patch.object(subprocess, 'Popen', side_effect=spawn):
+                        with self.assertRaisesRegex(OSError, 'Job termination failed'):
+                            _run_copied_runtime([str(runtime), '-e', 'setTimeout(()=>{},30000)'],
+                                runtime=runtime, owned_root=root, cwd=root)
+                    self.assertEqual(len(created), 1)
+                    self.assertIsNotNone(created[0].returncode, 'unassigned suspended child was not reaped')
+                    self.assertTrue(created[0]._handle.closed)
+                    self.assertIsNone(job.handle)
+                    self.assertFalse(runtime.exists(), 'helper skipped image cleanup after recovery failure')
+                finally:
+                    for process in created:
+                        handle = recovery_handles.get(process.pid)
+                        try:
+                            if process.returncode is None and handle is not None:
+                                # The tested failure may close Popen's handle.
+                                # This independent owned handle keeps a red test safe.
+                                api.TerminateProcess(handle, 1)
+                                self.assertEqual(api.WaitForSingleObject(handle, 5000), 0)
+                                process.returncode = api.GetExitCodeProcess(handle)
+                                process.communicate(timeout=5)
+                        finally:
+                            if handle is not None:
+                                api.CloseHandle(handle)
+                            if process.returncode is not None:
+                                process._handle.Close()
+                    job.close()
+                    _unlink_copied_runtime(runtime, root)
 
     def test_native_prepare_rejects_missing_exec_configuration_isolation_before_creating_roots(self):
         with tempfile.TemporaryDirectory() as tmp:
