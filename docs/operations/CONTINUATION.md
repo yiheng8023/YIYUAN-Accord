@@ -8,7 +8,7 @@
 
 9月25日用户明确要求从“主线程22”交接到同项目、沿用当前检出的全新上下文任务，旧任务保留。“主线程23”（01a0d6a8-d302-7081-ab25-b1b4281dd924）已只读核对目标、授权、已验范围与未完项，以及干净的main、HEAD/本地与远端main均为13d4537515a5a5f2faaff96c0f4a31c4871c7688、0/0。源任务01a09602-a44d-79f2-8ad6-d104863ca7d1确认推送后未再修改仓库，并明确转交原检出的业务写入责任；主线程23已确认接管，源任务不再并行写入，保留历史。
 
-用户已纠正：自动压缩只是线程过长，要求继续并加快进度。停止追加压缩原因调查，不把阈值未知作为确认门槛。接管时输入回执缺失的历史观察与后续恢复保留原范围；最新真实输入已自然经过UserPromptSubmit捕获，MCP读回inputSource=native-input-event、recoveryInputs.available=true、needsNativeReplay=false。checkpoint仍unbound，不复用旧epoch或过期计数。当前目标与授权连续有效，继续普通交付主线。
+用户已纠正：自动压缩只是线程过长，要求继续并加快进度。停止追加压缩原因调查，不把阈值未知作为确认门槛。接管时输入回执缺失的历史观察与后续恢复保留原范围；最新真实输入已自然经过UserPromptSubmit捕获，MCP读回inputSource=native-input-event、recoveryInputs.available=true、needsNativeReplay=false。当时checkpoint仍unbound；后续最新状态已绑定rev5，仅作未完责任接续且canContinue=false，不请求额外Stop自动续轮。复用前须核对真实epoch与输入。当前目标与授权连续有效，继续普通交付主线。
 
 ## 目标与有效边界
 
@@ -24,18 +24,24 @@
 
 | 项目 | 已核事实与限制 |
 |---|---|
-| 仓库 | 本批实现与回归候选e74c4a4f已推送，执行/准入记录均绑定该精确对象；后续结果记录另行提交，恢复时以实时Git为准。 |
+| 仓库 | 当前两案执行/准入绑定已推送候选60219fff；结果记录另行提交。其它历史证据保留各自精确对象，恢复时以实时Git为准。 |
 | 源与本机安装 | 源与本机安装均为3.3.0-dev.1+codex.20260925202615，24文件、SHA 6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f、marketplace ref=9a879596。原生命令更新后逐文件独立核对Git原字节，仅市场ref改变，无新增信任；新0.157.0进程发现5启用Skill/6可信Hook并自然退出。旧包与配置恢复材料保留，空更新工作区已回收。已有Desktop/MCP消费者采用不由独立发现代验；第三方Skill未改。 |
 | 托管检查 | 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
-| 根任务状态 | 本次只读诊断授权已自然捕获，原生MCP读回inputSource=native-input-event、输入数10、needsNativeReplay/needsResumeReconciliation=false，checkpoint仍unbound；此前retained-native-replay恢复保持历史身份。无需继续恢复或调查压缩。独立0.157.0原生只读查询的goal=null仅说明原读取时点；当前MCP宿主仍报告Desktop0.155.0-alpha.16.4，不混为同一版本。 |
+| 根任务状态 | 本次只读诊断授权已自然捕获，原生MCP读回inputSource=native-input-event、输入数10、needsNativeReplay/needsResumeReconciliation=false，checkpoint仍unbound；此前retained-native-replay恢复保持历史身份。无需继续恢复或调查压缩。独立0.157.0原生只读查询的goal=null仅说明原读取时点；该次MCP宿主报告Desktop0.155.0-alpha.16.4；9月26日宿主resume后原生MCP报告0.158.0-alpha.2、Astra，输入正常捕获且无需回放。rev5接续保持canContinue=false，不将未完项目变为隐式Goal。 |
 | 云环境 | 新获准只读诊断已完成；universal、自动setup、Agent网络关闭、缓存开启均保持。一个新任务URL内提交三条输入（两轮只读命令、一条仅取回历史命令正文），界面任务数9→12；不称一次执行或三个新任务URL。运行期可见CODEX_HOME=/opt/codex；后续另一个PID具有app-server/-c，实际配置加载与Accord采用仍未证实。没有安装、设置/信任修改或旧案重放；原失败容器后态仍不能由本案代验。 |
 | 正式验收 | 17必要scope，11有定义、6未绑定；4个OpenAI入口纳入开发、7个待判，selectionFinal=false。A01–A08整项0/8，functionalCompletion/candidateEligible=false。定义和局部PASS不等于完成。 |
 | 进度口径 | 先前50–65%功能/20–30%发布就绪是缺少稳定分母的工程粗估，不作为跨任务可比较总进度。当前按可用功能、已消除断点和剩余关键路径报告，正式A01–A08事实另列。 |
 
 ## 本批完成与实际未完项
 
-**当前普通案例执行绑定已校准，尚未实跑**：两个目标/授权更正与暂停恢复案例仍引用0.154、旧用户配置Hash和临时source Hook路线，且没有现有准备器要求的conditions.execution；按当前完整安装参数调用既有绑定入口时，两案均在模型派发前明确拒绝。现为新的执行更新到已核CLI0.157.0/Sol-medium、完整installed-plugin和逐轮完成后的原生Goal读回，补齐声明的调用依赖。旧声明以60c2a979及对象Hash保留；原五条输入、全部业务判据、职责/质量/场景、17必要范围、600秒全程及token上限不变，不借新条件改标旧结果。fixture旧说明仅允许case-bound覆盖，不给本次增添source Hook或信任绕过权限。准备中发现桌面升级后MCP路径及主模型/推理配置变化，按实际新前态核对并保留；只读目录进程自然退出，未创建业务任务。独立准备审查无阻断，实际运行与正式observe/recheck仍须分别完成。原件accord-current-cadence-20260926-01。
+**当前完整安装的两项普通案例已正式准入**：60219ffff83524523d373517d6ad4bbb851d2ff9预先绑定CLI0.157.0/Sol-medium/default、202615完整安装包和原五条输入；原600秒总限额及token上限未变。一次同任务五阶段在323.81秒内完成：同意及侧问后交付四文件，明确暂停与未决“继续”均保留五文件，取得新决定后同步修正四成果至B厅/8人/360元并说明减少300元；原输入及通用材料Hash/mtime保持。
+
+两位独立评估者完成product/specification/implementation/standards四轴复核；原生五轮输入、回答、完整入口加载、实际模式/模型和逐轮Goal读取均核对。既有assess_development_evidence的observe/recheck已返回acceptedCases=[v33-goal-authority-correction-01, v33-paused-work-recovery-01]、errors=[]、caseRejections={}，这两个声明范围的职责/质量/场景缺项为空。首次汇总因审查时间带毫秒、不符合canonical UTC格式被拒；按原始时点截至秒后仅重做只读复查，初始拒绝与原消息保留，未重跑场景或改变审查结论。
+
+五轮后Goal均为null，仅代表读取时点；实际历史无Plan/Goal激活。5个CLI Job和19个目录/读取进程自然退出，配置字节一致；Root回收经副本核对的工作区及空temp/state，143份episode证据字节保持、原生任务/历史保留。这是调用方资源收尾，不计为Agent自主清理。宿主注入通用Idea-Driven AGENTS，既有记忆与其它Skill仍有效，不归因于Accord单独收益、不外推自主fresh交接或完整入口。原件accord-current-cadence-20260926-01；旧声明、旧实例及失败保持原身份。
+
+本次57项完整admission回归通过，静态verify/verify-development通过。该精确执行候选的[CI36191959588](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36191959588)仍在运行，已完成7/11且均成功，4项运行中；不提前报全绿，也不因后续对话取消。17必要范围、7项入口待判、6个未绑定范围及A01–A08整项0/8保持；功能整体验收与发布资格仍未完成。当前两案已闭合，后续转向未验连续性、入口与整体影响，不重复同一五阶段。
 
 **本批CI跨平台夹具修复**：efc84337的[CI36157692681](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36157692681)出现Linux失败；已回读Python3.11原始日志，唯一断言为新增“Popen后失败”测试实际未调用Popen。WSL/Linux同案稳定复现：模拟WindowsJob却遗漏CREATE_NO_WINDOW，参数求值先失败，随后模拟的close异常掩盖原因。仅补测试常量并断言启动参数及attach_and_resume实际调用；Linux同案先红后绿，Windows/Python3.10与3.14均通过。加入现有CI前置检查后13项本地通过，actionlint通过；产品代码与验收判据保持，新提交需按自身SHA核对托管结果，原失败不改标。本机WSL未提供可用Node，扩展全入口套件因此不能作为Linux全套通过证据；跨平台完整检查由配置Node的托管矩阵承担。
 
