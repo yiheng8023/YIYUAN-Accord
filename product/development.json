@@ -190,15 +190,16 @@
       "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md",
       "plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md",
       "product/cases/resource-change-v3.3.json",
+      "product/cases/ordinary-review-v3.3.json",
       "tests/product/fixtures/resource_change/batch_tool.py",
       "tests/product/fixtures/resource_change/batch_worker.py"
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 3100000,
-      "maxTrackedFiles": 172,
+      "maxTrackedFiles": 173,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The 3100000 code/test-byte ceiling preserves the existing five-percent reserve after the persistent native Goal reader counterexamples were added. The measured product/test total is 2909881 bytes; the former 3050000 ceiling leaves 140119 bytes, below its required 152500 reserve. The reader reuses the existing native controller and RPC transport and adds no product runtime, service or third-party dependency. The tracked-file ceiling remains 172 and the primary-instruction ceiling remains 36000. This metric counts product-module and tests/product Python plus runtime/plugin/test JavaScript; development-only scripts outside those roots are excluded. This development allocation changes no behavioral acceptance predicate, observed outcome, case deadline, usage limit or evidence freshness rule; historical totals and failures retain their original scope."
+      "rationale": "The 3100000 code/test-byte ceiling preserves the existing five-percent reserve after the persistent native Goal reader counterexamples were added. The measured product/test total is 2909881 bytes; the former 3050000 ceiling leaves 140119 bytes, below its required 152500 reserve. The reader reuses the existing native controller and RPC transport and adds no product runtime, service or third-party dependency. The tracked-file ceiling increases from 172 to 173 only for the exact ordinary-review fixture, which protects three inputs and binds a necessary real review to admission; existing files are preserved. The primary-instruction ceiling remains 36000. This metric counts product-module and tests/product Python plus runtime/plugin/test JavaScript; development-only scripts outside those roots are excluded. This development allocation changes no behavioral acceptance predicate, observed outcome, case deadline, usage limit or evidence freshness rule; historical totals and failures retain their original scope."
     }
   },
   "source": {
@@ -4492,6 +4493,7 @@
       ],
       "scopes": [
         {
+          "id": "v33-codex-cli-ordinary-delivery",
           "host": "codex",
           "entry": "cx-cli",
           "duties": [
@@ -4509,28 +4511,17 @@
             "evidence-integrity"
           ],
           "scenarios": [
-            "default-host-without-extra-extensions"
+            "default-host-without-extra-extensions",
+            "effective-user-environment"
           ],
           "claims": [
             "function"
           ],
           "conditions": {
-            "codexVersion": "0.154.0",
-            "entryProtocol": "exec",
-            "model": "gpt-5.6-terra",
-            "reasoning": "medium",
-            "ephemeral": true,
-            "windowsSandbox": "elevated",
-            "permissionPolicy": "workspace-write/never",
-            "userConfig": "ignore-user-config",
-            "extensions": "plugins/apps disabled; four reviewed task-local source Hooks",
-            "input": "exact scripts/observe_codex_entry.py PROMPT; no Accord or Skill name",
-            "source": "fresh case after immutable candidate binding; previous observations excluded",
             "collaborationMode": "default",
             "goalModeActive": false
           },
-          "id": "v33-codex-cli-ordinary-delivery",
-          "rule": "Only the fresh source-level CLI delivery/retry and owned post-state; this scope is a partial contribution to A01/A03/A07, not their complete acceptance."
+          "rule": "This scope retains the ordinary default-mode, no-unrequested-Goal baseline across case-specific CLI conditions. The original source-level fresh delivery/retry case remains necessary under its complete original conditions and expected result. A second installed-plugin, persistent CLI case can contribute a real independent code-review deliverable under its own exact conditions. Both cases are partial A01/A03/A07 contributions; neither substitutes for the other, any selected-entry parent range, autonomous continuity, A04 systemic correction, A08 integration or product completion. Unknown native mode or Goal evidence does not satisfy the applicable case."
         },
         {
           "id": "v33-codex-sdk-lifecycle",
@@ -6382,6 +6373,116 @@
               "userTaskNotArchivedOrDeleted": true,
               "unownedResourcesPreserved": true,
               "noUnresolvedTaskResource": true
+            }
+          }
+        },
+        {
+          "id": "v33-codex-cli-review-delivery-01",
+          "scope": "v33-codex-cli-ordinary-delivery",
+          "host": "codex",
+          "entry": "cx-cli",
+          "duties": [
+            "goal-authority-correction",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "evidence-integrity"
+          ],
+          "scenarios": [
+            "effective-user-environment"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "collaborationMode": "default",
+            "goalModeActive": false,
+            "codexVersion": "0.157.0",
+            "entryProtocol": "exec-resume",
+            "model": "gpt-6-sol",
+            "reasoning": "high",
+            "ephemeral": false,
+            "windowsSandbox": "elevated",
+            "permissionPolicy": "workspace-write/never",
+            "userConfig": "Existing effective user configuration retained; exact permitted per-turn model, effort, permission and sandbox overrides only. No shared-setting edit.",
+            "extensions": "Already installed enabled yiyuan-accord-codex@yiyuan-accord package 3.3.0-dev.1+codex.20260925115917 with native Hook trust; no source Hook injection or trust bypass. Native inventory and actual loaded byte identity must be read back before and during the case.",
+            "installedPackageSha256": "1235ddfa0a946ace214d19dd9558d8b0b5abf47abc7932b55783c05e4996ed26",
+            "input": "One ordinary, prebound independent code-review request from product/cases/ordinary-review-v3.3.json. requirements.md, change.patch and source-map.json are protected inputs; the exact candidate source files and tests are read-only review subjects. No instruction to use Accord or Goal as a task goal.",
+            "source": "Fresh, clean committed candidate after the current observer/test correction is integrated. The review directly informs that integration decision; prior release-copy-02 and resource-change episodes are excluded.",
+            "questionRoute": "One normal persisted CLI turn with no evaluator rescue or follow-up input. Native final message and review.md are both checked. The reviewer works directly without further delegation or executing tests/source code.",
+            "nativeGoalReadback": "The existing observer automatically reads thread/goal/get after this completed admission-bound stage. The read is for that instant only, on the bound persisted thread, and must retain the raw thread/read and thread/goal/get RPC pair and reader resource receipt. CLI turn context separately supplies model, effort and collaboration mode; neither source substitutes for the other.",
+            "networkBoundary": "No browser or network tools, installation, publication, source editing or shared-setting changes. Authenticated model transport already required for the task is allowed and is not described as zero network activity.",
+            "workspaceBoundary": "Fresh exclusive, ignored workspace inside the trusted repository root; only review.md is an allowed business output. No new workspace trust registration or global configuration reset. The reviewer may read only the prospectively listed repository code/test paths and source documents.",
+            "execution": {
+              "entryProtocol": "exec-resume",
+              "hookMode": "installed-plugin",
+              "model": "gpt-6-sol",
+              "reasoning": "high",
+              "windowsSandbox": "elevated",
+              "timeoutSeconds": 600,
+              "turnTimeoutSeconds": 480,
+              "recoveryTimeoutSeconds": 20,
+              "caseSha256": "ec1f6f5451d1c176a57ab2bd8b34e63037e9ee9282234bce0ea6fecb402fccb0",
+              "host": "codex",
+              "entry": "cx-cli",
+              "codexVersion": "0.157.0",
+              "usageCaps": {
+                "totalTokens": 2500000,
+                "uncachedInputTokens": 250000,
+                "outputTokens": 16000
+              },
+              "usageScope": "Native cumulative usage across one persisted CLI turn; cost and occupancy are separate.",
+              "runner": "scripts/observe_codex_entry.py",
+              "caseFile": "product/cases/ordinary-review-v3.3.json"
+            }
+          },
+          "oracle": "Before dispatch freeze the exact committed fixture, observer/caller dependencies, Git tree, full package and native installed inventory; refresh the real account/model directory and user exclusions, and verify the CLI actually accepts gpt-6-sol/high. Read the exact ordinary prompt, native UserMessage, current-turn installed Hook guide delivered before model action, native turn_context model/effort/default mode and full tool trace. Independently inspect requirements.md, change.patch, source-map.json, the exact changed code and tests, review.md and final message. The reviewer must identify material implementation/specification errors with precise source support, or explain a bounded no-finding conclusion, and state test/evidence limits; a structurally present file or matching keywords do not prove a valid review. Native post-stage Goal null establishes only that read instant; require raw bound thread/read plus thread/goal/get receipts and no observed unrequested Goal activation, but do not infer prior/intervening Goal history from null. Failure, unobservable mode/Goal, missing guide, incorrect semantics, unsupported claim, source mutation, evaluator rescue, over-limit usage or unknown cleanup leaves the affected facet unaccepted. Root separately verifies the report against source, input/code/config preservation, native task and owned process exit, then supplies an independent authenticated reviewBundle and caller-owned read-only observe/recheck. This case is a bounded installed CLI review delivery, not a second source/retry test, package lifecycle completion, dynamic model-routing proof, A04 correction, A05 handoff or A08 whole-system acceptance.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "product/cases/ordinary-review-v3.3.json",
+            "scripts/observe_codex_entry.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/inspect_coordination.py",
+            "scripts/inspect_native_resources.py",
+            "scripts/codex_rpc.py",
+            "yiyuan_accord/admission.py",
+            "tests/product/test_codex_entry.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "reviewMdExistsAndSubstantive": true,
+              "materialFindingsOrNoFindingSupportedByExactSources": true,
+              "reportUsableForCurrentIntegrationDecision": true,
+              "installedEntryGuideObservedBeforeModelAction": true
+            },
+            "authority": {
+              "oneOrdinaryInputMatched": true,
+              "requirementsPatchAndSourceMapPreserved": true,
+              "candidateCodeAndTestsReadOnly": true,
+              "noEvaluatorRescue": true,
+              "noOutOfScopeEffect": true,
+              "noObservedUnrequestedGoalActivation": true
+            },
+            "poststate": {
+              "nativeModelEffortAndDefaultModeObserved": true,
+              "nativeGoalReadObservedOnBoundThreadAtPostStage": true,
+              "goalAbsentAtObservedReadInstant": true,
+              "reviewAndFinalMessageIndependentlyChecked": true,
+              "exactInstalledPackageAndCurrentConditionsRechecked": true,
+              "earlierGoalHistoryNotClaimed": true
+            },
+            "cleanup": {
+              "ownedProcesses": 0,
+              "sharedConfigurationPreserved": true,
+              "onlyReviewMdBusinessOutput": true,
+              "nativeTaskAndReviewEvidenceRetained": true,
+              "taskOwnedTemporaryResourcesReleasedWhenSafe": true,
+              "unownedResourcesPreserved": true
             }
           }
         }
