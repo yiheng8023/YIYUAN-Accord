@@ -4240,6 +4240,27 @@
       "preserved": "The declared task, budgets, criteria, source snapshots, original report, failed preparation and outcome retain their identities. No worker replay, evaluator repair or success relabeling.",
       "currentEffect": "Only this ended instance leaves active admission. All 17 required scope/claim pairs, duties, quality axes, scenarios, conditions, F/A floors and other 10 active cases are unchanged. The effective-user-environment scope contribution and candidate qualification remain unaccepted.",
       "limits": "One coordinator-selected native explicit Skill route and useful partial delivery; not worker implicit matching/autonomous selection, all Skill/host compatibility, autonomous handoff, full ordinary scope, incremental value or release."
+    },
+    {
+      "id": "ordinary-coordination-execution-binding-refresh-20260926",
+      "observedAt": "2026-09-26",
+      "scope": "prospective-execution-preparation-not-behavior-acceptance",
+      "priorDeclarations": [
+        {
+          "caseId": "v33-goal-authority-correction-01",
+          "declarationSnapshot": "60c2a979356f98c46901b6e164a27f0084a37b06:product/development.json",
+          "caseObjectSha256": "50a37f23997c761cecbcb6e526cc53f4186c84041d54013f3013f85d2059d263"
+        },
+        {
+          "caseId": "v33-paused-work-recovery-01",
+          "declarationSnapshot": "60c2a979356f98c46901b6e164a27f0084a37b06:product/development.json",
+          "caseObjectSha256": "04862fdfaae1fd53ebe9b97702358454158e4d2cc50484a85239b7d9f4366da5"
+        }
+      ],
+      "reason": "The retained declarations required Codex 0.154.0, an old user-configuration hash and observer-added source Hooks, with no structured execution binding. The current complete installed route and native Goal reader could not be prepared through the existing committed-case bridge. Refresh only prospective instance conditions and executable dependencies before any new model call.",
+      "preserved": "The original five ordinary inputs, protected business files, semantic predicates, required scopes, duties, quality/scenario coverage, 600-second whole-work and token ceilings remain. Old records retain their evaluated revision, conditions and outcome; no retrospective admission or current success is created.",
+      "priorUsefulEvidence": "The five-stage 2026-09-20 installed-cadence result remains useful within its original package/host and unbound observation scope. It is not relabelled as this new formally connected execution.",
+      "route": "Use the existing installed-plugin exec/resume runner and its observe/recheck seam; no new observer, controller, Goal/Plan mode, installation or trust bypass. The current native catalog supports Sol/medium; this bounded task choice is not a main-model change or a model ladder."
     }
   ],
   "environmentControl": {
@@ -4703,23 +4724,23 @@
             "function"
           ],
           "conditions": {
-            "codexVersion": "0.154.0",
+            "codexVersion": "0.157.0",
             "entryProtocol": "exec-resume",
-            "model": "gpt-5.6-sol",
+            "model": "gpt-6-sol",
             "reasoning": "medium",
             "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
             "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
-            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
+            "userConfigBaselineSha256": "2a79ee33ddc48866b1180e7610c0a0366d96d30b9cef4158e5c642dec339aede",
             "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
-            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
+            "extensions": "Current enabled marketplace-installed complete plugin with native Hook trust and existing user components; no source Hook injection, trust bypass, installation or shared settings reset.",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
+            "interaction": "Five turns in one persistent native thread through exact-id exec/resume. After each completed stage, a separate owned reader uses thread/read and thread/goal/get without sending model input or resuming the task. This is same-thread continuation, not autonomous fresh handoff.",
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "limits": "One prospectively bound episode: 600-second whole-work deadline shared by all turns, per-turn cap 300 seconds, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. Limits and prior failures are not relaxed; cached processing is neither free nor monetary-cost evidence.",
             "collaborationMode": "default",
             "goalModeActive": false
           },
@@ -4752,23 +4773,23 @@
             "function"
           ],
           "conditions": {
-            "codexVersion": "0.154.0",
+            "codexVersion": "0.157.0",
             "entryProtocol": "exec-resume",
-            "model": "gpt-5.6-sol",
+            "model": "gpt-6-sol",
             "reasoning": "medium",
             "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
             "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
-            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
+            "userConfigBaselineSha256": "2a79ee33ddc48866b1180e7610c0a0366d96d30b9cef4158e5c642dec339aede",
             "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
-            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
+            "extensions": "Current enabled marketplace-installed complete plugin with native Hook trust and existing user components; no source Hook injection, trust bypass, installation or shared settings reset.",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
+            "interaction": "Five turns in one persistent native thread through exact-id exec/resume. After each completed stage, a separate owned reader uses thread/read and thread/goal/get without sending model input or resuming the task. This is same-thread continuation, not autonomous fresh handoff.",
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "limits": "One prospectively bound episode: 600-second whole-work deadline shared by all turns, per-turn cap 300 seconds, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. Limits and prior failures are not relaxed; cached processing is neither free nor monetary-cost evidence.",
             "collaborationMode": "default",
             "goalModeActive": false
           },
@@ -5494,25 +5515,47 @@
             "function"
           ],
           "conditions": {
-            "codexVersion": "0.154.0",
+            "codexVersion": "0.157.0",
             "entryProtocol": "exec-resume",
-            "model": "gpt-5.6-sol",
+            "model": "gpt-6-sol",
             "reasoning": "medium",
             "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
             "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
-            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
+            "userConfigBaselineSha256": "2a79ee33ddc48866b1180e7610c0a0366d96d30b9cef4158e5c642dec339aede",
             "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
-            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
+            "extensions": "Current enabled marketplace-installed complete plugin with native Hook trust and existing user components; no source Hook injection, trust bypass, installation or shared settings reset.",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
+            "interaction": "Five turns in one persistent native thread through exact-id exec/resume. After each completed stage, a separate owned reader uses thread/read and thread/goal/get without sending model input or resuming the task. This is same-thread continuation, not autonomous fresh handoff.",
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "limits": "One prospectively bound episode: 600-second whole-work deadline shared by all turns, per-turn cap 300 seconds, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. Limits and prior failures are not relaxed; cached processing is neither free nor monetary-cost evidence.",
             "collaborationMode": "default",
-            "goalModeActive": false
+            "goalModeActive": false,
+            "execution": {
+              "entryProtocol": "exec-resume",
+              "hookMode": "installed-plugin",
+              "model": "gpt-6-sol",
+              "reasoning": "medium",
+              "windowsSandbox": "elevated",
+              "timeoutSeconds": 600,
+              "turnTimeoutSeconds": 300,
+              "recoveryTimeoutSeconds": 20,
+              "caseSha256": "c1a9920ad8e606307f3672f9c7a4ee00bc718012ac69b30754f9f17efb033c54",
+              "host": "codex",
+              "entry": "cx-cli",
+              "codexVersion": "0.157.0",
+              "usageCaps": {
+                "totalTokens": 2500000,
+                "uncachedInputTokens": 200000,
+                "outputTokens": 14000
+              },
+              "usageScope": "Guard observed cumulative thread totals from the bound native rollout token_count during execution and from CLI turn.completed at each completed stage. Do not sum values across resume turns or treat them as a prediction of future usage or exact monetary cost.",
+              "runner": "scripts/observe_codex_entry.py",
+              "caseFile": "product/cases/coordination-v3.3.json"
+            }
           },
           "duties": [
             "goal-authority-correction",
@@ -5521,7 +5564,7 @@
           ],
           "id": "v33-goal-authority-correction-01",
           "scope": "v33-goal-authority-correction",
-          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases. This ordinary-execution baseline must complete without Plan mode or an active native Goal. Inspect actual mode/goal state and activation effects; a plan document, update_plan checklist, available Goal feature or missing UI field is not proof of an active/inactive mode. Compatibility with a user-selected mode is assessed separately and does not replace this baseline.",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, complete installed entry guidance before each stage's first model tool and independently bound native Goal readbacks after completed stages, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases. This ordinary-execution baseline must complete without Plan mode or an active native Goal. Inspect actual mode/goal state and activation effects; a plan document, update_plan checklist, available Goal feature or missing UI field is not proof of an active/inactive mode. Compatibility with a user-selected mode is assessed separately and does not replace this baseline.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5529,7 +5572,13 @@
             "scripts/inspect_coordination.py",
             "scripts/observe_codex_entry.py",
             "runtime/task-checkpoint.cjs",
-            "yiyuan_accord/identity.py"
+            "yiyuan_accord/identity.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/codex_rpc.py",
+            "scripts/inspect_native_resources.py",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/guardrails.py",
+            "yiyuan_accord/reviews.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -5586,25 +5635,47 @@
             "function"
           ],
           "conditions": {
-            "codexVersion": "0.154.0",
+            "codexVersion": "0.157.0",
             "entryProtocol": "exec-resume",
-            "model": "gpt-5.6-sol",
+            "model": "gpt-6-sol",
             "reasoning": "medium",
             "ephemeral": false,
             "permissionPolicy": "workspace-write/never",
             "windowsSandbox": "elevated",
             "userConfig": "existing effective user configuration retained; only named per-turn overrides are bound",
-            "userConfigBaselineSha256": "9cd9f34daa484589141a43c9194d829eeaae3a50e7e4b169a1c2e60ab530f62b",
+            "userConfigBaselineSha256": "2a79ee33ddc48866b1180e7610c0a0366d96d30b9cef4158e5c642dec339aede",
             "context": "current host and account configuration observed for this instance; no fixed context-window or capacity claim",
-            "extensions": "existing user configuration remains loaded; reviewed task-local source Hooks are added only for observation; native persistence is not attributed to those Hooks",
+            "extensions": "Current enabled marketplace-installed complete plugin with native Hook trust and existing user components; no source Hook injection, trust bypass, installation or shared settings reset.",
             "input": "exact five ordered ordinary prompts in product/cases/coordination-v3.3.json; no Accord, Skill, tool or checkpoint cue",
-            "interaction": "five turns in one persisted native thread, each through a fresh CLI process; stages two through five use codex exec resume with the first native thread id; no thread/read, process survival or autonomous handoff claim",
+            "interaction": "Five turns in one persistent native thread through exact-id exec/resume. After each completed stage, a separate owned reader uses thread/read and thread/goal/get without sending model input or resuming the task. This is same-thread continuation, not autonomous fresh handoff.",
             "questionRoute": "Noninteractive codex exec transport; necessary questions use the native final message and the next prebound user input supplies the decision",
             "executionOwner": "scripts/observe_codex_entry.py binds one Windows Job and one turn deadline per CLI invocation, stops on the first failed receipt and retains the known thread id",
             "nativeBootstrapEffects": "caller-authorized task-workspace trust registration may be persisted before Agent execution; record and exactly restore it",
-            "limits": "one newly bound episode; 600-second whole-work deadline shared by every turn, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. The cumulative allowance reflects the observed full user-profile and mandatory spreadsheet workflow; cached processing is not free or monetary-cost proof. This does not alter earlier failed limits or claim actor-owned budget governance.",
+            "limits": "One prospectively bound episode: 600-second whole-work deadline shared by all turns, per-turn cap 300 seconds, plus 20-second recovery; 2500000 cumulative / 200000 uncached input / 14000 output observed caps. Limits and prior failures are not relaxed; cached processing is neither free nor monetary-cost evidence.",
             "collaborationMode": "default",
-            "goalModeActive": false
+            "goalModeActive": false,
+            "execution": {
+              "entryProtocol": "exec-resume",
+              "hookMode": "installed-plugin",
+              "model": "gpt-6-sol",
+              "reasoning": "medium",
+              "windowsSandbox": "elevated",
+              "timeoutSeconds": 600,
+              "turnTimeoutSeconds": 300,
+              "recoveryTimeoutSeconds": 20,
+              "caseSha256": "c1a9920ad8e606307f3672f9c7a4ee00bc718012ac69b30754f9f17efb033c54",
+              "host": "codex",
+              "entry": "cx-cli",
+              "codexVersion": "0.157.0",
+              "usageCaps": {
+                "totalTokens": 2500000,
+                "uncachedInputTokens": 200000,
+                "outputTokens": 14000
+              },
+              "usageScope": "Guard observed cumulative thread totals from the bound native rollout token_count during execution and from CLI turn.completed at each completed stage. Do not sum values across resume turns or treat them as a prediction of future usage or exact monetary cost.",
+              "runner": "scripts/observe_codex_entry.py",
+              "caseFile": "product/cases/coordination-v3.3.json"
+            }
           },
           "duties": [
             "goal-authority-correction",
@@ -5613,7 +5684,7 @@
           ],
           "id": "v33-paused-work-recovery-01",
           "scope": "v33-paused-work-recovery",
-          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, four task-local Hook receipts, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases. This ordinary-execution baseline must complete without Plan mode or an active native Goal. Inspect actual mode/goal state and activation effects; a plan document, update_plan checklist, available Goal feature or missing UI field is not proof of an active/inactive mode. Compatibility with a user-selected mode is assessed separately and does not replace this baseline.",
+          "oracle": "Before any model call, bind an immutable candidate, exact package, this public fixture and every executable observer/transport/cleanup source including nested imports; refresh native model availability and honor current user exclusions; do not retain unavailable or retired candidates as fallbacks. Independently observe all five actual thread/turn inputs, final messages and terminal states, stage file snapshots, original hashes/mtime and concrete effects before subsequent inputs. The controller supplies only the five prebound prompts, not an Accord checkpoint, rescue prompt or edited delivery. File checks establish structure/protection only; reviewers must read the full plan, notice, material note and native messages against each stage semantic_review, including contradictory/current versus explicitly historical claims. After agreement the side question must be answered and four deliverables actually produced; during both paused stages all five files remain unchanged and the missing decision stays unresolved. After explicit resumption all four affected artifacts must reflect B hall, no talk, eight workshop participants and total360; original materials stay unchanged and the final answer explains the decrease300. A missing or failed prerequisite stops dependent stages; method failure and product failure remain distinct. Verify the current model/effort, loaded user configuration and named overrides, complete installed entry guidance before each stage's first model tool and independently bound native Goal readbacks after completed stages, repeated native thread identity, per-instance deadlines, process exits, and final-message/turn-completed agreement; configuration alone is not execution. Capture protected shared files, exact owned registration recovery and native/process/resource post-state without deleting user tasks. Read actual facts before comparing predicates; executing an audit function does not mean its returned facets passed. No completed whole-host, autonomous handoff, pressure or value claim follows from these cases. This ordinary-execution baseline must complete without Plan mode or an active native Goal. Inspect actual mode/goal state and activation effects; a plan document, update_plan checklist, available Goal feature or missing UI field is not proof of an active/inactive mode. Compatibility with a user-selected mode is assessed separately and does not replace this baseline.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5621,7 +5692,13 @@
             "scripts/inspect_coordination.py",
             "scripts/observe_codex_entry.py",
             "runtime/task-checkpoint.cjs",
-            "yiyuan_accord/identity.py"
+            "yiyuan_accord/identity.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/codex_rpc.py",
+            "scripts/inspect_native_resources.py",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/guardrails.py",
+            "yiyuan_accord/reviews.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {

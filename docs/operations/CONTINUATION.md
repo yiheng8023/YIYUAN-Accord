@@ -35,6 +35,8 @@
 
 ## 本批完成与实际未完项
 
+**当前普通案例执行绑定已校准，尚未实跑**：两个目标/授权更正与暂停恢复案例仍引用0.154、旧用户配置Hash和临时source Hook路线，且没有现有准备器要求的conditions.execution；按当前完整安装参数调用既有绑定入口时，两案均在模型派发前明确拒绝。现为新的执行更新到已核CLI0.157.0/Sol-medium、完整installed-plugin和逐轮完成后的原生Goal读回，补齐声明的调用依赖。旧声明以60c2a979及对象Hash保留；原五条输入、全部业务判据、职责/质量/场景、17必要范围、600秒全程及token上限不变，不借新条件改标旧结果。fixture旧说明仅允许case-bound覆盖，不给本次增添source Hook或信任绕过权限。准备中发现桌面升级后MCP路径及主模型/推理配置变化，按实际新前态核对并保留；只读目录进程自然退出，未创建业务任务。独立准备审查无阻断，实际运行与正式observe/recheck仍须分别完成。原件accord-current-cadence-20260926-01。
+
 **本批CI跨平台夹具修复**：efc84337的[CI36157692681](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36157692681)出现Linux失败；已回读Python3.11原始日志，唯一断言为新增“Popen后失败”测试实际未调用Popen。WSL/Linux同案稳定复现：模拟WindowsJob却遗漏CREATE_NO_WINDOW，参数求值先失败，随后模拟的close异常掩盖原因。仅补测试常量并断言启动参数及attach_and_resume实际调用；Linux同案先红后绿，Windows/Python3.10与3.14均通过。加入现有CI前置检查后13项本地通过，actionlint通过；产品代码与验收判据保持，新提交需按自身SHA核对托管结果，原失败不改标。本机WSL未提供可用Node，扩展全入口套件因此不能作为Linux全套通过证据；跨平台完整检查由配置Node的托管矩阵承担。
 
 修正提交77ac713c2ea50f5aa31f8a2bff96d10512eea532的[CI36159820207](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36159820207)已按精确headSha及全部job回读，11/11成功；九组OS/Python前置检查及完整矩阵通过，原失败保持。
