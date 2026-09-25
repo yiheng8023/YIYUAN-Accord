@@ -1110,6 +1110,31 @@ class EntryTests(unittest.TestCase):
                     entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
                 replay.assert_not_called()
 
+    def test_persistent_goal_read_interrupt_keeps_completed_cli_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = self.prepared_persistent(Path(tmp).resolve())
+            native = {"valid": True, "threadId": "native-thread", "remainingOwnedProcesses": 0}
+            with patch.object(entry, "_run_persistent_stage", return_value=native) as stage, \
+                    patch.object(entry, "_native_goal_readback", side_effect=KeyboardInterrupt()) as readback:
+                with self.assertRaises(KeyboardInterrupt):
+                    entry.run_persistent(argparse.Namespace(
+                        evidence=manifest["evidence"], observe_native_goal=True))
+            stage.assert_called_once(); readback.assert_called_once()
+            evidence = Path(manifest["evidence"])
+            self.assertEqual(json.loads((evidence / "native-receipt-1.json").read_text()), native)
+            partial = json.loads((evidence / "result.json").read_text())
+            self.assertEqual(partial["threadId"], "native-thread")
+            self.assertEqual(partial["stages"][0]["threadId"], "native-thread")
+            self.assertEqual(partial["stages"][0]["fileObservation"]["decision"], "unknown")
+            self.assertEqual(partial["executionFailure"], {"stage": 1, "phase": "native-goal-readback",
+                "reason": "interrupted"})
+            self.assertFalse((evidence / "native-goal-1.json").exists())
+            with patch.object(entry, "_run_persistent_stage") as replay:
+                with self.assertRaises(FileExistsError):
+                    entry.run_persistent(argparse.Namespace(
+                        evidence=manifest["evidence"], observe_native_goal=True))
+                replay.assert_not_called()
+
     def test_persistent_failure_before_receipt_keeps_effects_unknown_and_does_not_replay(self):
         for error in (ValueError("private-detail"), KeyboardInterrupt()):
             with self.subTest(error=type(error).__name__), tempfile.TemporaryDirectory() as tmp:
@@ -1299,6 +1324,188 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(self.observe_turn_context(base + following)['conditions']['model'], 'reported-model')
         user_item = {'type': 'event_msg', 'payload': {'type': 'item_completed', 'item': {'type': 'UserMessage'}}}
         self.assertEqual(self.observe_turn_context(base[:2] + [user_item] + base[2:])['state'], 'observed')
+
+    def test_native_goal_readback_binds_persisted_thread_and_releases_reader(self):
+        thread_id = '11111111-1111-4111-8111-111111111111'
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            evidence, workspace, sessions = root / 'evidence', root / 'workspace', root / 'home' / 'sessions'
+            evidence.mkdir(); workspace.mkdir(); sessions.mkdir(parents=True)
+            rollout = sessions / 'rollout.jsonl'
+            rollout.write_text(json.dumps({'type': 'session_meta', 'payload':
+                {'id': thread_id, 'cwd': str(workspace)}}) + '\n', encoding='utf-8')
+            codex = root / 'codex.exe'; codex.write_bytes(b'fixed executable')
+            (evidence / 'stderr-1.txt').write_text(
+                'Codex initialized with event: SessionConfiguredEvent { thread_id: ThreadId { uuid: '
+                + thread_id + ' }, cwd: AbsolutePathBuf(' + json.dumps(str(workspace))
+                + '), rollout_path: Some(' + json.dumps(str(rollout)) + ') }\n', encoding='utf-8')
+            (evidence / 'stdout-1.jsonl').write_text(json.dumps(
+                {'type': 'thread.started', 'thread_id': thread_id}) + '\n', encoding='utf-8')
+            for stage in range(2, 17):
+                (evidence / f'stderr-{stage}.txt').write_bytes((evidence / 'stderr-1.txt').read_bytes())
+                (evidence / f'stdout-{stage}.jsonl').write_bytes((evidence / 'stdout-1.jsonl').read_bytes())
+            manifest = {'evidence': str(evidence), 'workspace': str(workspace), 'codex': str(codex),
+                'sourceHashes': {'codex': entry.digest(codex)}, 'recoveryTimeoutSeconds': 5}
+            env = {'CODEX_HOME': str(root / 'home')}
+            native = {'threadId': thread_id, 'remainingOwnedProcesses': 0}
+            calls, closed = [], []
+            controller = 'windows-job-object' if os.name == 'nt' else 'posix-session-process-group'
+            after = ({'activeProcesses': 0} if os.name == 'nt' else
+                {'controller': controller, 'activeProcesses': None, 'processGroupState': 'absent',
+                 'processGroupId': 1234, 'rootPid': 1234, 'rootExitCode': 0})
+            normal_release = {'controller': controller, 'exitCode': 0, 'forced': False,
+                'failure': None, 'readerStopped': True, 'after': after}
+
+            class Reader:
+                goal_result = {'goal': None}
+                read_path = str(rollout)
+                ephemeral = False
+                raw_override = {}
+                duplicate_response = False
+                duplicate_request_id = False
+                raw_error = False
+                release = normal_release
+
+                def __init__(self, reader_manifest, label, argv, reader_env, deadline):
+                    self.root = Path(reader_manifest['evidence']) / 'native' / label
+                    self.root.mkdir()
+                    (self.root / 'stdout.jsonl').write_text('', encoding='utf-8')
+                    calls.append(('launch', argv, reader_env['CODEX_HOME']))
+
+                def initialize(self):
+                    calls.append(('initialize',))
+                    with (self.root / 'requests.jsonl').open('a', encoding='utf-8') as stream:
+                        stream.write(json.dumps({'id': 'init', 'method': 'initialize',
+                            'params': {'clientInfo': {'name': 'accord_lifecycle_observer', 'version': '1'},
+                                       'capabilities': {'experimentalApi': True}}}) + '\n')
+                        stream.write(json.dumps({'method': 'initialized', 'params': {}}) + '\n')
+                    with (self.root / 'stdout.jsonl').open('a', encoding='utf-8') as stream:
+                        stream.write(json.dumps({'id': 'init', 'result': {}}) + '\n')
+
+                def rpc(self, method, params):
+                    calls.append((method, params))
+                    request_id = 'same' if self.duplicate_request_id else str(len(calls))
+                    with (self.root / 'requests.jsonl').open('a', encoding='utf-8') as stream:
+                        stream.write(json.dumps({'id': request_id, 'method': method, 'params': params}) + '\n')
+                    if method == 'thread/read':
+                        result = {'thread': {'id': thread_id, 'cwd': str(workspace),
+                            'ephemeral': self.ephemeral, 'path': self.read_path}}
+                    else:
+                        result = self.goal_result
+                    wire_result = self.raw_override.get(method, result)
+                    response = {'id': request_id, 'result': wire_result}
+                    if self.raw_error and method == 'thread/goal/get':
+                        response['error'] = {'code': -1, 'message': 'ambiguous'}
+                    with (self.root / 'stdout.jsonl').open('a', encoding='utf-8') as stream:
+                        stream.write(json.dumps(response) + '\n')
+                        if self.duplicate_response and method == 'thread/goal/get':
+                            stream.write(json.dumps(response) + '\n')
+                    return result
+
+                def close(self):
+                    closed.append(True)
+                    return self.release
+
+            with patch('scripts.observe_codex_lifecycle._App', Reader):
+                result = entry._native_goal_readback(manifest, native, stage=1, env=env,
+                                                     deadline=time.monotonic() + 30)
+                self.assertEqual(result['state'], 'observed')
+                self.assertIs(result['goalPresent'], False)
+                self.assertIs(result['goalModeActive'], False)
+                self.assertEqual([call[0] for call in calls],
+                                 ['launch', 'initialize', 'thread/read', 'thread/goal/get'])
+                self.assertEqual(calls[-1][1], {'threadId': thread_id})
+                self.assertEqual(len(closed), 1)
+                self.assertEqual(result['cliSource']['rolloutPath'], str(rollout))
+                self.assertEqual(result['rpcEvidence']['requestIds'].keys(), {'thread/read', 'thread/goal/get'})
+
+                calls.clear(); Reader.read_path = str(root / 'foreign.jsonl')
+                mismatch = entry._native_goal_readback(manifest, native, stage=2, env=env,
+                                                       deadline=time.monotonic() + 30)
+                self.assertEqual(mismatch['state'], 'unknown')
+                self.assertEqual(mismatch['reason'], 'thread-read-persistent-binding-mismatch')
+                self.assertNotIn('thread/goal/get', [call[0] for call in calls])
+                self.assertEqual(len(closed), 2)
+
+                calls.clear(); Reader.read_path = str(rollout); Reader.ephemeral = True
+                ephemeral = entry._native_goal_readback(manifest, native, stage=3, env=env,
+                                                       deadline=time.monotonic() + 30)
+                self.assertEqual(ephemeral['state'], 'unknown')
+                self.assertNotIn('thread/goal/get', [call[0] for call in calls])
+
+                calls.clear(); Reader.read_path = str(rollout)
+                Reader.ephemeral = False
+                Reader.goal_result = {'goal': {'threadId': 'foreign', 'status': 'active'}}
+                foreign = entry._native_goal_readback(manifest, native, stage=4, env=env,
+                                                      deadline=time.monotonic() + 30)
+                self.assertEqual(foreign['state'], 'unknown')
+                self.assertIsNone(foreign['goalPresent'])
+                self.assertIsNone(foreign['goalModeActive'])
+                Reader.goal_result = {}
+                missing = entry._native_goal_readback(manifest, native, stage=5, env=env,
+                                                      deadline=time.monotonic() + 30)
+                self.assertEqual(missing['state'], 'unknown')
+                self.assertEqual(missing['reason'], 'goal-response-missing')
+                Reader.goal_result = {'goal': None}
+                Reader.release = {**normal_release, 'forced': True}
+                unreleased = entry._native_goal_readback(manifest, native, stage=6, env=env,
+                                                         deadline=time.monotonic() + 30)
+                self.assertEqual(unreleased['state'], 'unknown')
+                self.assertEqual(unreleased['reason'], 'reader-release-unobserved')
+
+                Reader.release = normal_release
+                Reader.raw_override = {'thread/read': {'thread': {'id': thread_id, 'cwd': str(workspace),
+                    'ephemeral': False, 'path': str(root / 'foreign.jsonl')}}}
+                tampered_thread = entry._native_goal_readback(manifest, native, stage=8, env=env,
+                                                             deadline=time.monotonic() + 30)
+                self.assertEqual(tampered_thread['state'], 'unknown')
+                self.assertEqual(tampered_thread['reason'], 'raw-reader-receipt-unavailable')
+                Reader.raw_override = {'thread/goal/get': {'goal': {'threadId': thread_id, 'status': 'active'}}}
+                tampered_goal = entry._native_goal_readback(manifest, native, stage=9, env=env,
+                                                           deadline=time.monotonic() + 30)
+                self.assertEqual(tampered_goal['state'], 'unknown')
+                Reader.raw_override = {}
+                Reader.duplicate_response = True
+                duplicate = entry._native_goal_readback(manifest, native, stage=10, env=env,
+                                                        deadline=time.monotonic() + 30)
+                self.assertEqual(duplicate['state'], 'unknown')
+                Reader.duplicate_response = False
+                Reader.raw_error = True
+                error = entry._native_goal_readback(manifest, native, stage=11, env=env,
+                                                    deadline=time.monotonic() + 30)
+                self.assertEqual(error['state'], 'unknown')
+                Reader.raw_error = False
+                Reader.release = {**Reader.release, 'exitCode': 1}
+                failed_exit = entry._native_goal_readback(manifest, native, stage=12, env=env,
+                                                          deadline=time.monotonic() + 30)
+                self.assertEqual(failed_exit['state'], 'unknown')
+                Reader.release = {**Reader.release, 'exitCode': 0, 'readerStopped': False}
+                live_reader = entry._native_goal_readback(manifest, native, stage=13, env=env,
+                                                          deadline=time.monotonic() + 30)
+                self.assertEqual(live_reader['state'], 'unknown')
+                Reader.release = {'controller': 'posix-session-process-group', 'exitCode': 0,
+                    'forced': False, 'failure': None, 'readerStopped': True,
+                    'after': {'controller': 'posix-session-process-group', 'activeProcesses': None,
+                        'processGroupState': 'absent', 'processGroupId': 1234, 'rootPid': 1234, 'rootExitCode': 0}}
+                with patch('scripts.observe_codex_lifecycle._controller_kind', return_value='posix-session-process-group'):
+                    posix = entry._native_goal_readback(manifest, native, stage=14, env=env,
+                                                       deadline=time.monotonic() + 30)
+                self.assertEqual(posix['state'], 'observed')
+                self.assertIs(posix['goalModeActive'], False)
+                Reader.release = normal_release
+                Reader.duplicate_request_id = True
+                duplicate_request = entry._native_goal_readback(manifest, native, stage=15, env=env,
+                                                                deadline=time.monotonic() + 30)
+                self.assertEqual(duplicate_request['state'], 'unknown')
+                Reader.duplicate_request_id = False
+
+            calls.clear()
+            native['threadId'] = 'foreign'
+            with patch('scripts.observe_codex_lifecycle._App', Reader):
+                unbound = entry._native_goal_readback(manifest, native, stage=7, env=env,
+                                                     deadline=time.monotonic() + 30)
+            self.assertEqual(unbound['state'], 'unknown')
+            self.assertEqual(calls, [])
 
     def test_native_entry_gate_rejects_absent_stale_echoed_truncated_and_late_guidance(self):
         guide = 'Accord task entry: complete current source duties. '

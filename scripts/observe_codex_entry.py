@@ -16,6 +16,10 @@ user configuration without injecting hooks or bypassing trust. Bind the native
 inventory and installed bytes, then independently require actual entry delivery.
 Optional --admission-case checks a committed case's conditions.execution against
 the prepared run and exact package before dispatch. It creates no admission facts.
+Persistent run --observe-native-goal reads Goal after each completed CLI stage on
+the same persisted thread. Admission-bound runs request this read automatically.
+The reader uses a separate owned App Server process for thread/read and
+thread/goal/get only; its post-stage result cannot prove earlier Goal history.
 Inspect --retained reads persistent stage copies after workspace cleanup without
 calling a model or replaying the original checker. It verifies retained byte and
 record consistency, leaving original outcomes and semantic/admission verdicts intact.
@@ -624,7 +628,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
              "runtime": package / "runtime/task-checkpoint.cjs"}
     if native_hooks:
         paths["hookShell"] = Path(projection["hookShell"])
-    if installed_id is not None:
+    if installed_id is not None or persistent_case is not None:
         paths.update({key: Path(__file__).with_name(name) for key, name in (
             ("inventoryRunner", "observe_codex_lifecycle.py"), ("inventoryResources", "inspect_native_resources.py"),
             ("inventoryRpc", "codex_rpc.py"))})
@@ -1829,6 +1833,159 @@ def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
     return result
 
 
+def _native_goal_readback(manifest, native, *, stage, env, deadline):
+    """Read Goal on the just-observed persisted CLI thread, without resuming it.
+
+    The separate reader has no model input. Its answer describes only the read
+    instant; CLI turn configuration and earlier Goal history remain separate.
+    """
+    result = {"state": "unknown", "threadId": native.get("threadId"),
+              "stage": stage, "goalPresent": None, "goalStatus": None,
+              "goalModeActive": None,
+              "source": "native-thread-goal-get", "scope": "post-stage read instant only; not prior or intervening Goal history"}
+    evidence = Path(manifest["evidence"])
+    label = f"goal-stage-{stage}"
+    stderr_path = evidence / f"stderr-{stage}.txt"
+    try:
+        thread_id = native.get("threadId")
+        if (not isinstance(thread_id, str) or not thread_id.strip()
+                or native.get("remainingOwnedProcesses") != 0
+                or not isinstance(manifest.get("codex"), str)
+                or digest(manifest["codex"]) != manifest["sourceHashes"]["codex"]):
+            result["reason"] = "cli-thread-or-host-unbound"
+            return result
+        source = _session_configuration(read_regular(stderr_path, 32 * 1024 * 1024).splitlines())
+        stdout_thread = _stdout_thread(read_regular(evidence / f"stdout-{stage}.jsonl", 32 * 1024 * 1024).splitlines())
+        if (source is None or source["threadId"] != thread_id or stdout_thread != thread_id
+                or os.path.normcase(os.path.abspath(source["cwd"]))
+                   != os.path.normcase(os.path.abspath(manifest["workspace"]))):
+            result["reason"] = "cli-session-binding-unavailable"
+            return result
+        sessions = Path(manifest.get("installedPlugin", {}).get("codexHome",
+            env.get("CODEX_HOME", str(Path.home() / ".codex")))) / "sessions"
+        rollout = _ordinary_rollout(source["rolloutPath"], sessions)
+        raw_rollout = read_regular(rollout, 32 * 1024 * 1024)
+        first = next((json.loads(line) for line in raw_rollout.splitlines() if line.strip()), None)
+        header = first.get("payload", {}) if isinstance(first, dict) and first.get("type") == "session_meta" else {}
+        if (header.get("id") != thread_id or not isinstance(header.get("cwd"), str)
+                or os.path.normcase(os.path.abspath(header["cwd"]))
+                   != os.path.normcase(os.path.abspath(manifest["workspace"]))):
+            result["reason"] = "persisted-rollout-binding-unavailable"
+            return result
+        result["cliSource"] = {"rolloutPath": str(rollout),
+            "rolloutSha256AtRead": hashlib.sha256(raw_rollout).hexdigest(),
+            "stderrPath": str(stderr_path), "stderrSha256": digest(stderr_path),
+            "stdoutPath": str(evidence / f"stdout-{stage}.jsonl"),
+            "stdoutSha256": digest(evidence / f"stdout-{stage}.jsonl")}
+    except (OSError, ValueError, UnicodeError, TypeError, KeyError, StopIteration) as error:
+        result["reason"] = "cli-source-unavailable:" + type(error).__name__
+        return result
+
+    app, thread_read, goal_read = None, None, None
+    try:
+        if time.monotonic() >= deadline:
+            result["reason"] = "observation-deadline"
+            return result
+        from scripts.observe_codex_lifecycle import _App, _controller_kind
+        from scripts.inspect_native_resources import native_processes_released
+        (evidence / "native").mkdir(exist_ok=True)
+        reader_manifest = {"evidence": str(evidence), "codex": manifest["codex"],
+            "ownedRoots": {"workspace": manifest["workspace"]},
+            "resourceController": _controller_kind(),
+            "limits": {"requestSeconds": min(10, manifest["recoveryTimeoutSeconds"]),
+                       "recoverySeconds": manifest["recoveryTimeoutSeconds"]}}
+        app = _App(reader_manifest, label, [manifest["codex"], "app-server", "--stdio"],
+                   env, min(deadline, time.monotonic() + 25))
+        app.initialize()
+        thread_read = app.rpc("thread/read", {"threadId": thread_id, "includeTurns": False})
+        thread = thread_read.get("thread") if isinstance(thread_read, dict) else None
+        if (not isinstance(thread, dict) or thread.get("id") != thread_id
+                or thread.get("ephemeral") is not False
+                or not isinstance(thread.get("cwd"), str) or not os.path.isabs(thread["cwd"])
+                or os.path.normcase(os.path.abspath(thread["cwd"]))
+                   != os.path.normcase(os.path.abspath(manifest["workspace"]))
+                or not isinstance(thread.get("path"), str) or not os.path.isabs(thread["path"])
+                or os.path.normcase(os.path.abspath(thread["path"]))
+                   != os.path.normcase(os.path.abspath(rollout))):
+            result["reason"] = "thread-read-persistent-binding-mismatch"
+            return result
+        result["threadRead"] = {key: thread.get(key) for key in ("id", "cwd", "ephemeral", "path", "cliVersion")}
+        result["readStartedAtUnixSeconds"] = time.time()
+        goal_read = app.rpc("thread/goal/get", {"threadId": thread_id})
+        result["readFinishedAtUnixSeconds"] = time.time()
+        if not isinstance(goal_read, dict) or "goal" not in goal_read:
+            result["reason"] = "goal-response-missing"
+            return result
+        goal = goal_read["goal"]
+        if goal is not None and (not isinstance(goal, dict) or goal.get("threadId") != thread_id
+                or goal.get("status") not in {"active", "paused", "blocked", "usageLimited", "budgetLimited", "complete"}):
+            result["reason"] = "goal-response-binding-mismatch"
+            return result
+        result.update(state="observed", goalPresent=goal is not None,
+                      goalModeActive=False if goal is None else True if goal["status"] == "active" else None,
+                      goalStatus=goal["status"] if goal is not None else None,
+                      goalRead=goal_read)
+    except Exception as error:
+        result["reason"] = "reader-error:" + type(error).__name__
+    finally:
+        if app is not None:
+            try:
+                released = app.close()
+                result["readerResources"] = released
+                if (released.get("controller") != reader_manifest["resourceController"]
+                        or type(released.get("exitCode")) is not int or released["exitCode"] != 0
+                        or released.get("forced") is not False
+                        or released.get("failure") is not None or released.get("readerStopped") is not True
+                        or not native_processes_released(released.get("after"), reader_manifest["resourceController"])):
+                    result.update(state="unknown", goalPresent=None, goalStatus=None, goalModeActive=None)
+                    result.setdefault("reason", "reader-release-unobserved")
+            except Exception as error:
+                result.update(state="unknown", goalPresent=None, goalStatus=None, goalModeActive=None,
+                              readerReleaseError=type(error).__name__)
+                result.setdefault("reason", "reader-release-error")
+            request_path = evidence / "native" / label / "requests.jsonl"
+            response_path = evidence / "native" / label / "stdout.jsonl"
+            result["rpcEvidence"] = {"directory": str(evidence / "native" / label),
+                "requests": str(request_path), "responses": str(response_path)}
+            try:
+                requests_raw = read_regular(request_path, 1024 * 1024)
+                responses_raw = read_regular(response_path, 8 * 1024 * 1024)
+                requests = [json.loads(line) for line in requests_raw.splitlines() if line.strip()]
+                responses = [json.loads(line) for line in responses_raw.splitlines() if line.strip()]
+                if any(not isinstance(row, dict) for row in (*requests, *responses)):
+                    raise ValueError("reader traffic is not JSON objects")
+                request_ids = [row["id"] for row in requests if "id" in row]
+                if (any(not isinstance(value, str) or not value for value in request_ids)
+                        or len(set(request_ids)) != len(request_ids)):
+                    raise ValueError("reader request IDs unavailable or repeated")
+                bound = {}
+                for method, params, consumed in (
+                        ("thread/read", {"threadId": thread_id, "includeTurns": False}, thread_read),
+                        ("thread/goal/get", {"threadId": thread_id}, goal_read)):
+                    matched = [row for row in requests if row.get("method") == method]
+                    if len(matched) > 1 or matched and matched[0].get("params") != params:
+                        raise ValueError("reader request binding differs")
+                    if matched:
+                        request_id = matched[0].get("id")
+                        if not isinstance(request_id, str) or not request_id:
+                            raise ValueError("bound reader request ID unavailable")
+                        replies = [row for row in responses if row.get("id") == request_id and "method" not in row]
+                        if (len(replies) != 1 or "result" not in replies[0]
+                                or "error" in replies[0] or replies[0]["result"] != consumed):
+                            raise ValueError("reader response binding differs")
+                        bound[method] = request_id
+                if result["state"] == "observed" and set(bound) != {"thread/read", "thread/goal/get"}:
+                    raise ValueError("observed Goal lacks raw RPC pair")
+                result["rpcEvidence"].update(requestSha256=hashlib.sha256(requests_raw).hexdigest(),
+                    responseSha256=hashlib.sha256(responses_raw).hexdigest(), requestIds=bound)
+            except (OSError, ValueError, UnicodeError, TypeError, AttributeError):
+                result["rawReceiptError"] = "raw-reader-receipt-unavailable"
+                if result["state"] == "observed":
+                    result.update(state="unknown", goalPresent=None, goalStatus=None, goalModeActive=None,
+                                  reason="raw-reader-receipt-unavailable")
+    return result
+
+
 def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage=None):
     native_hooks = _direct_package_hooks(manifest)
     bound_prompt, bound_command, installed_before = (_verify_native_stage(manifest, stage, thread_id)
@@ -2055,6 +2212,13 @@ def run_persistent(args):
             stages.append(observed)
             phase = "native-receipt-retention"
             save(evidence / f"native-receipt-{stage + 1}.json", native)
+            if getattr(args, "observe_native_goal", False) or manifest.get("admissionBinding") is not None:
+                phase = "native-goal-readback"
+                goal_observation = _native_goal_readback(
+                    manifest, native, stage=stage + 1, env=env, deadline=deadline)
+                phase = "native-goal-retention"
+                save(evidence / f"native-goal-{stage + 1}.json", goal_observation)
+                observed["nativeGoalObservation"] = goal_observation
             phase = "file-inspection"
             files = observer.inspect_stage(manifest["workspace"], stage_id, originals=originals,
                                            history=history, fixture_path=manifest["case"])
@@ -2246,6 +2410,9 @@ def main():
     for name in ("run", "inspect", "hook"):
         item = sub.add_parser(name)
         item.add_argument("--evidence", required=True)
+        if name == "run":
+            item.add_argument("--observe-native-goal", action="store_true",
+                help="persistent CLI only: read bound persisted thread Goal after each stage without model input or resume; admission-bound runs do this automatically")
         if name == "inspect":
             item.add_argument("--retained", action="store_true",
                               help="check persistent retained copies after workspace cleanup; no live or semantic verdict")
@@ -2260,7 +2427,10 @@ def main():
         case = load_persistent_case(args.persistent_case) if args.persistent_case else None
         result = prepare(args, persistent_case=case)
     elif args.action == "run":
-        result = run_persistent(args) if load_manifest(args.evidence).get("entryProtocol") == "exec-resume" else run(args)
+        protocol = load_manifest(args.evidence).get("entryProtocol")
+        if args.observe_native_goal and protocol != "exec-resume":
+            parser.error("--observe-native-goal requires a persistent exec-resume case")
+        result = run_persistent(args) if protocol == "exec-resume" else run(args)
     else:
         result = inspect(args.evidence, retained=args.retained)
     print(json.dumps(result, ensure_ascii=False, indent=2))
