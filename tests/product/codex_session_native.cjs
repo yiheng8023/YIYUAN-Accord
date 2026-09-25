@@ -93,10 +93,12 @@ function validateConfig(raw) {
     'resultPath', 'binding', 'keepPath', 'keepSha256', 'overallDeadlineMs', 'identities'];
   if (!plain(raw)) throw new TypeError('invalid native caller config');
   const mode = raw.mode ?? 'hot';
-  const keys = mode === 'restore' ? [...baseKeys, 'mode', 'restore'] : baseKeys;
+  const keys = ['restore', 'source-restore'].includes(mode) ? [...baseKeys, 'mode', 'restore'] :
+    mode === 'source-start' ? [...baseKeys, 'mode'] : baseKeys;
   if (Object.keys(raw).sort().join('|') !== keys.sort().join('|') ||
-      raw.schema !== (mode === 'restore' ? 'accord-codex-session-native-config/v2' :
-        'accord-codex-session-native-config/v1') || !['hot', 'restore'].includes(mode)) {
+      raw.schema !== (['restore', 'source-restore'].includes(mode) ?
+        'accord-codex-session-native-config/v2' : 'accord-codex-session-native-config/v1') ||
+      !['hot', 'restore', 'source-start', 'source-restore'].includes(mode)) {
     throw new TypeError('invalid native caller config');
   }
   const evidence = path.resolve(text(raw.evidence, 'evidence'));
@@ -112,16 +114,27 @@ function validateConfig(raw) {
   if (!Number.isSafeInteger(raw.overallDeadlineMs) || raw.overallDeadlineMs <= Date.now() ||
       raw.overallDeadlineMs - Date.now() > 180000) throw new TypeError('bounded overall deadline required');
   let restore = null;
-  if (mode === 'restore') {
+  if (['restore', 'source-restore'].includes(mode)) {
     const value = raw.restore;
-    const restoreKeys = ['priorRoot', 'sessionsRoot', 'scopeRef', 'transferId', 'expectedScope'];
+    const restoreKeys = mode === 'source-restore' ?
+      ['priorRoot', 'sessionsRoot', 'scopeRef', 'source', 'expectedScope', 'portableHashes'] :
+      ['priorRoot', 'sessionsRoot', 'scopeRef', 'transferId', 'expectedScope'];
     if (!plain(value) || Object.keys(value).sort().join('|') !== restoreKeys.sort().join('|') ||
         !plain(value.expectedScope) || Object.keys(value.expectedScope).sort().join('|') !==
           ['activeTransferId', 'scopeRef', 'token', 'writerThreadId'].sort().join('|') ||
         value.expectedScope.scopeRef !== value.scopeRef || value.expectedScope.activeTransferId !== null) {
       throw new TypeError('invalid restore binding');
     }
-    for (const name of ['scopeRef', 'transferId']) text(value[name], `restore.${name}`);
+    text(value.scopeRef, 'restore.scopeRef');
+    if (mode === 'source-restore') {
+      if (!plain(value.portableHashes) || !plain(value.source) || Object.keys(value.source).sort().join('|') !==
+          ['authorityRef', 'connectionId', 'stateRef', 'threadId'].sort().join('|') ||
+          value.source.threadId !== value.expectedScope.writerThreadId ||
+          value.source.connectionId === raw.binding.connectionId) {
+        throw new TypeError('invalid acknowledged source binding');
+      }
+      for (const name of Object.keys(value.source)) text(value.source[name], `restore.source.${name}`);
+    } else text(value.transferId, 'restore.transferId');
     for (const name of ['scopeRef', 'token', 'writerThreadId']) {
       text(value.expectedScope[name], `restore.expectedScope.${name}`);
     }
@@ -175,6 +188,245 @@ function releasedResource(record, manifest) {
   if (controller === 'windows-job-object') return record.after?.activeProcesses === 0;
   return controller === 'posix-session-process-group' && record.after?.activeProcesses === null &&
     record.after?.processGroupState === 'absent' && record.after?.rootExitCode === record.exitCode;
+}
+
+function sourceOriginProof(priorRoot, source, scope, sessionsRoot) {
+  const requests = readJsonLines(path.join(priorRoot, 'native-requests.jsonl'));
+  const received = readJsonLines(path.join(priorRoot, 'native-stdout.jsonl'));
+  const starts = requests.filter(row => row.method === 'thread/start');
+  const start = starts[0];
+  const responses = received.filter(row => row.id === start?.id && !row.method);
+  const receipt = responses[0]?.result;
+  const threadId = source.threadId;
+  if (starts.length !== 1 || responses.length !== 1 || responses[0].error ||
+      receipt?.thread?.id !== threadId || receipt.thread.ephemeral !== false ||
+      starts[0].params?.model !== 'fixture-no-model' ||
+      starts[0].params?.modelProvider !== 'accord_fixture' ||
+      path.resolve(starts[0].params?.cwd || '') !== path.resolve(source.cwd || '') ||
+      scope.writerThreadId !== threadId || scope.activeTransferId !== null) {
+    throw new Error('raw original source creation is not confirmed');
+  }
+  const session = sessionFileEvidence(source.sessionPath, sessionsRoot, threadId);
+  if (canonical(session.tools) !== canonical(['accord_request_handoff', 'accord_inspect_context']) ||
+      canonical(session.meta.payload.dynamic_tools) !== canonical(starts[0].params.dynamicTools)) {
+    throw new Error('original source native tools are not confirmed');
+  }
+  return {requestId: start.id, threadId, sessionRelativePath: session.relativePath,
+    tools: session.tools};
+}
+
+async function runSourceStart(config, connection, recorder, mono, wall) {
+  const scopeRef = 'native-source-scope';
+  const source = {connectionId: config.binding.connectionId,
+    authorityRef: 'native-source-authority', stateRef: 'native-source-state'};
+  const session = createCodexSourceSession({connection, recorder, scopeRef,
+    threadStart: {cwd: config.workspace, model: 'fixture-no-model',
+      modelProvider: 'accord_fixture', sandbox: 'read-only', approvalPolicy: 'never'},
+    planResolver() { throw new Error('ordinary source must not plan a handoff'); },
+    verify() { throw new Error('ordinary source must not invoke transfer verifier'); },
+    current(context) {
+      const scope = recorder.readScope(scopeRef);
+      return {scopeRef, authorityRef: source.authorityRef, stateRef: source.stateRef,
+        writerThreadId: scope.writerThreadId};
+    },
+    ownerRequest() { throw new Error('unexpected ordinary source owner request'); }});
+  const run = await session.run({input: 'Inspect current context once, then finish this original source turn.',
+    deadlineMs: wall()});
+  const threadId = run.sourceThreadId;
+  const history = await connection.transport.request('thread/read',
+    {threadId, includeTurns: true}, mono());
+  const scope = recorder.readScope(scopeRef);
+  const nativeSession = sessionFileEvidence(history?.thread?.path,
+    path.join(config.evidence, 'home', 'sessions'), threadId);
+  const state = session.snapshot();
+  if (run.status !== 'completed' || !idleThread(history, threadId) ||
+      history.thread.turns?.length !== 1 || history.thread.turns[0].status !== 'completed' ||
+      state.status !== 'ready' || state.turnCount !== 1 || state.transfers.length !== 0 ||
+      scope.writerThreadId !== threadId || scope.activeTransferId !== null ||
+      canonical(nativeSession.tools) !== canonical(['accord_request_handoff', 'accord_inspect_context'])) {
+    throw new Error('original ordinary source or native persistence differs');
+  }
+  return {schema: 'accord-codex-session-native-source-start-result/v1', success: true,
+    binding: config.binding, source: {...source, threadId, cwd: config.workspace,
+      sessionPath: nativeSession.path}, run, history, scope, sessionState: state,
+    nativeSession: {path: nativeSession.path, relativePath: nativeSession.relativePath,
+      tools: nativeSession.tools, rowCount: nativeSession.rowCount},
+    identities: {node: {path: config.identities.node.path, sha256: sha256(process.execPath),
+      version: process.version}, codex: {path: config.argv[0], sha256: sha256(config.argv[0]),
+      version: config.binding.hostVersion}}, keepSha256: sha256(config.keepPath),
+    providerRequestsExpected: 2,
+    claimLimit: 'Fixed original source and real native protocol only; no model judgment, transfer, crash or product acceptance.'};
+}
+
+async function runSourceRestore(config, connection, recorder, mono, wall, claimRequests, claimReceipts) {
+  const priorRoot = config.restore.priorRoot;
+  const portableHashes = Object.fromEntries(walkFiles(priorRoot).map(file =>
+    [path.relative(priorRoot, file).split(path.sep).join('/'), sha256(file)]));
+  if (canonical(portableHashes) !== canonical(config.restore.portableHashes)) {
+    throw new Error('prepared original source evidence changed');
+  }
+  const priorManifest = readJson(path.join(priorRoot, 'manifest.json'));
+  const priorPost = readJson(path.join(priorRoot, 'poststate.json'));
+  const priorEnvelope = readJson(path.join(priorRoot, 'node-result.json'));
+  const priorResource = readJson(path.join(priorRoot, 'controller-resource.json'));
+  const priorHashes = readJson(path.join(priorRoot, 'native-sessions-sha256.json'));
+  const prior = priorEnvelope.result;
+  const source = config.restore.source;
+  const expectedScope = config.restore.expectedScope;
+  const threadId = source.threadId;
+  if (priorManifest.mode !== 'source-start' || priorEnvelope.success !== true ||
+      priorPost.executionFailure !== null || priorPost.cleanupFailure !== null ||
+      !releasedResource(priorResource, priorManifest) ||
+      priorEnvelope.close?.nativeExit?.code !== 0 ||
+      priorEnvelope.close?.connectionClosed !== true ||
+      priorEnvelope.close?.stdoutEnded !== true ||
+      canonical(prior?.scope) !== canonical(expectedScope) ||
+      canonical(prior?.source) !== canonical({...source, cwd: prior.source.cwd,
+        sessionPath: prior.source.sessionPath}) ||
+      priorManifest.identities?.codex?.sha256 !== config.identities.codex.sha256 ||
+      priorManifest.identities?.node?.sha256 !== config.identities.node.sha256 ||
+      priorManifest.identities?.codex?.version !== config.identities.codex.version ||
+      priorManifest.identities?.node?.version !== config.identities.node.version ||
+      Object.keys(priorHashes).length !== 1) {
+    throw new Error('portable original source or released controller differs');
+  }
+  const priorSource = {...source, cwd: prior.source.cwd,
+    sessionPath: path.join(config.restore.sessionsRoot, ...prior.nativeSession.relativePath.split('/'))};
+  const relative = prior.nativeSession.relativePath;
+  if (Object.keys(priorHashes)[0] !== relative ||
+      sha256(existingInside(config.restore.sessionsRoot, priorSource.sessionPath,
+        'copied original source')) !== priorHashes[relative]) {
+    throw new Error('copied original source bytes differ before claim');
+  }
+  const proof = sourceOriginProof(priorRoot, priorSource, expectedScope, config.restore.sessionsRoot);
+  const stages = [], evidence = {};
+  let historyBefore;
+  async function verify(stage, facts, deadline) {
+    if (!Number.isFinite(deadline) || performance.now() >= deadline ||
+        sha256(config.keepPath) !== config.keepSha256) throw new Error('source restore verifier boundary differs');
+    stages.push(stage);
+    const base = {decision: 'allow', scopeRef: config.restore.scopeRef,
+      authorityRef: source.authorityRef, stateRef: source.stateRef,
+      sourceRef: `native:${stage}:${threadId}`};
+    if (stage === 'restore-prepare') {
+      const native = sessionFileEvidence(facts.threadRead?.thread?.path,
+        config.restore.sessionsRoot, threadId);
+      if (facts.connectionId !== config.binding.connectionId ||
+          facts.hostVersion !== config.binding.hostVersion ||
+          canonical(facts.source) !== canonical(source) ||
+          canonical(facts.expectedScope) !== canonical(expectedScope) ||
+          canonical(facts.observedScope) !== canonical(expectedScope) ||
+          facts.record !== null || facts.target?.threadId !== threadId ||
+          facts.threadRead?.thread?.id !== threadId ||
+          facts.threadRead.thread.ephemeral !== false ||
+          !['idle', 'notLoaded'].includes(facts.threadRead.thread.status?.type) ||
+          native.relativePath !== proof.sessionRelativePath) {
+        throw new Error('source restore prepare facts differ');
+      }
+      evidence.prepare = {origin: proof, threadPath: facts.threadRead.thread.path,
+        tools: native.tools};
+      return {...base, pauseStateVerified: true, priorControllerQuiesced: true,
+        pendingEffectsReconciled: true, restorationAuthorized: true, singleWriter: true,
+        resumeInitializationSafe: true, sourceOriginVerified: true,
+        sourceOriginEvidenceRef: `raw-thread-start:${proof.requestId}`};
+    }
+    if (stage === 'restore-resumed') {
+      const after = facts.threadReadAfter?.thread;
+      const receipt = facts.resumeReceipt;
+      const native = sessionFileEvidence(after?.path, config.restore.sessionsRoot, threadId);
+      historyBefore = await connection.transport.request('thread/read',
+        {threadId, includeTurns: true}, deadline);
+      if (facts.claimedScope?.writerThreadId !== threadId ||
+          facts.claimedScope?.token === expectedScope.token ||
+          facts.claimedScope?.activeTransferId !== null ||
+          facts.resumeParams?.threadId !== threadId ||
+          facts.resumeParams?.excludeTurns !== true ||
+          path.resolve(facts.resumeParams?.cwd || '') !== config.workspace ||
+          after?.id !== threadId || after.ephemeral !== false ||
+          after.status?.type !== 'idle' ||
+          path.resolve(after.cwd || '') !== config.workspace ||
+          after.model !== 'fixture-no-model' || after.modelProvider !== 'accord_fixture' ||
+          receipt?.model !== 'fixture-no-model' ||
+          receipt?.modelProvider !== 'accord_fixture' ||
+          receipt?.sandbox?.type !== 'readOnly' || receipt?.approvalPolicy !== 'never' ||
+          native.relativePath !== proof.sessionRelativePath ||
+          canonical(historyBefore?.thread?.turns) !== canonical(prior.history.thread.turns)) {
+        throw new Error('source restore resumed facts differ');
+      }
+      evidence.resumed = {threadPath: after.path, tools: native.tools,
+        historyTurns: historyBefore.thread.turns.length,
+        actual: {cwd: receipt.cwd, model: receipt.model,
+          modelProvider: receipt.modelProvider, sandbox: receipt.sandbox.type,
+          approvalPolicy: receipt.approvalPolicy}};
+      return {...base, nativeToolEvidenceRef: `native-session-meta:${native.relativePath}`,
+        continuityToolsRestored: true, targetSettingsMatch: true,
+        historyRetained: true, singleWriter: true, effectsVerified: true};
+    }
+    throw new Error('unexpected source restore stage');
+  }
+  const options = {connection, recorder, scopeRef: config.restore.scopeRef,
+    planResolver() { throw new Error('source restore must not create transfer'); }, verify,
+    current() {
+      const scope = recorder.readScope(config.restore.scopeRef);
+      return {scopeRef: config.restore.scopeRef, authorityRef: source.authorityRef,
+        stateRef: source.stateRef, writerThreadId: scope.writerThreadId};
+    },
+    ownerRequest() { throw new Error('unexpected restored source owner request'); }};
+  const scopeBefore = recorder.readScope(config.restore.scopeRef);
+  const session = await restoreCodexSourceSession(options, {source, expectedScope,
+    deadlineMs: wall(), resume: {cwd: config.workspace, model: 'fixture-no-model',
+      modelProvider: 'accord_fixture', sandbox: 'read-only', approvalPolicy: 'never'}});
+  const restoredState = session.snapshot();
+  if (claimRequests.length !== 1 || claimReceipts.length !== 1) {
+    throw new Error('source restore must claim scope exactly once');
+  }
+  const run = await session.run({input: 'Inspect current context once, then finish this restored ordinary source turn.',
+    deadlineMs: wall()});
+  const historyAfter = await connection.transport.request('thread/read',
+    {threadId, includeTurns: true}, mono());
+  const scopeAfter = recorder.readScope(config.restore.scopeRef);
+  const state = session.snapshot();
+  const native = sessionFileEvidence(historyAfter?.thread?.path,
+    config.restore.sessionsRoot, threadId);
+  const oldTurns = prior.history.thread.turns;
+  if (run.status !== 'completed' || historyAfter.thread.id !== threadId ||
+      canonical(historyAfter.thread.turns.slice(0, oldTurns.length)) !== canonical(oldTurns) ||
+      historyAfter.thread.turns.length !== oldTurns.length + 1 ||
+      historyAfter.thread.turns.at(-1)?.status !== 'completed' ||
+      restoredState.sourceThreadId !== threadId || restoredState.turnCount !== 0 ||
+      restoredState.transfers.length !== 0 || state.sourceThreadId !== threadId ||
+      state.turnCount !== 1 || state.transfers.length !== 0 ||
+      scopeAfter.writerThreadId !== threadId || scopeAfter.activeTransferId !== null ||
+      scopeAfter.token === expectedScope.token || native.relativePath !== proof.sessionRelativePath ||
+      canonical(native.tools) !== canonical(proof.tools)) {
+    throw new Error('source restore ordinary turn or scope differs');
+  }
+  const before = fs.readFileSync(path.join(priorRoot, 'native-sessions', ...proof.sessionRelativePath.split('/')));
+  const after = fs.readFileSync(native.path);
+  if (after.length <= before.length || !after.subarray(0, before.length).equals(before)) {
+    throw new Error('source restore did not append to original history');
+  }
+  let staleBasisError;
+  try {
+    await restoreCodexSourceSession(options, {source, expectedScope, deadlineMs: wall(),
+      resume: {cwd: config.workspace, model: 'fixture-no-model', modelProvider: 'accord_fixture',
+        sandbox: 'read-only', approvalPolicy: 'never'}});
+  } catch (error) { staleBasisError = error.code; }
+  if (staleBasisError !== 'RESTORE_PRECONDITION_FAILED' || claimRequests.length !== 1 ||
+      canonical(recorder.readScope(config.restore.scopeRef)) !== canonical(scopeAfter)) {
+    throw new Error('old acknowledged scope was not rejected without mutation');
+  }
+  return {schema: 'accord-codex-session-native-source-restore-result/v1', success: true,
+    binding: config.binding, source, origin: proof, priorScope: expectedScope,
+    restoredState, run, historyBefore, historyAfter, scopeBefore, scopeAfter,
+    sessionState: state, verifyStages: stages, verifyEvidence: evidence,
+    claimRequests, claimReceipts, staleBasisError, nativeSession: {path: native.path,
+      relativePath: native.relativePath, tools: native.tools, rowCount: native.rowCount},
+    identities: {node: {path: config.identities.node.path, sha256: sha256(process.execPath),
+      version: process.version}, codex: {path: config.argv[0], sha256: sha256(config.argv[0]),
+      version: config.binding.hostVersion}}, keepSha256: sha256(config.keepPath),
+    providerRequestsExpected: 2,
+    claimLimit: 'Owner-reconciled original source via real native protocol; no transfer, new thread, effect replay, model judgment or product acceptance.'};
 }
 
 async function runRestore(config, connection, recorder, mono, wall, claimRequests, claimReceipts) {
@@ -445,8 +697,8 @@ async function run(rawConfig) {
       connectionId: config.binding.connectionId, hostVersion: config.binding.hostVersion,
       maxMessageBytes: 2 * 1024 * 1024, maxJournalBytes: 12 * 1024 * 1024});
     const openedRecorder = openCarrierRecorder({path: config.recorderPath,
-      create: config.mode !== 'restore', busyTimeoutMs: 5000});
-    if (config.mode === 'restore') {
+      create: !['restore', 'source-restore'].includes(config.mode), busyTimeoutMs: 5000});
+    if (['restore', 'source-restore'].includes(config.mode)) {
       recorder = Object.freeze({
         bindScope: openedRecorder.bindScope, readScope: openedRecorder.readScope,
         begin: openedRecorder.begin, compareAndSet: openedRecorder.compareAndSet,
@@ -465,7 +717,12 @@ async function run(rawConfig) {
       capabilities: {experimentalApi: true}}, mono());
     await connection.transport.notify('initialized', {}, mono());
 
-    if (config.mode === 'restore') {
+    if (config.mode === 'source-start') {
+      result = await runSourceStart(config, connection, recorder, mono, wall);
+    } else if (config.mode === 'source-restore') {
+      result = await runSourceRestore(config, connection, recorder, mono, wall,
+        claimRequests, claimReceipts);
+    } else if (config.mode === 'restore') {
       result = await runRestore(config, connection, recorder, mono, wall, claimRequests, claimReceipts);
     } else {
     function verifier(stage, facts, deadline) {

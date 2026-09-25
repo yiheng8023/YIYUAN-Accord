@@ -18,10 +18,10 @@
 
 | 项目 | 已核事实与限制 |
 |---|---|
-| 仓库 | 本批开始main=origin/main=a74351dc，干净；root是唯一写者，本批独立审查仅只读。后续以实时HEAD为准。 |
+| 仓库 | 本批开始main=origin/main=8064aac6，干净；原生测试两文件由有界worker完成后交还Root，最终整合与提交由Root独占。后续以实时HEAD为准。 |
 | 源与本机安装 | 9月25日核对均为3.3.0-dev.1+codex.20260924162230，24文件，SHA e667ff71218975889e00b21e16ff4a9da42e6cfc5ff8603ba9c04b897456f0c1；市场ref=687947a5。新进程5启用Skill/6可信Hook，本任务后续输入已获得新入口，状态工具可用；不代表所有既有GUI/MCP消费者均刷新。旧01947缓存已不在，完整私有恢复备份仍保留。 |
-| 托管检查 | 精确687947a5的[CI36028874148](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36028874148)11/11成功。后续记录提交未修改该包，也未把旧CI覆盖外推到所有行为。 |
-| 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；新分支只有离线证据。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
+| 托管检查 | 精确8064aac6的[CI36075844067](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36075844067)11/11成功，上一轮两个Windows测试准备失败已获托管复核；本批新增普通source原生分支尚待新提交CI，不将旧成功外推。 |
+| 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支新增Windows固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 原生历史、计划和接续继续承接当前工作；根checkpoint仍unbound，本身不是缺陷，不为填计数强绑。9月23日缺失输入已按真实rollout回放并核对，不重建更早缺失文字。每次恢复重读当前receipt/必要来源，不复用旧epoch、canContinue或计数作许可。 |
 | 云环境 | 启动前试验失败后已恢复universal、自动setup、Agent网络关闭、缓存开启，目录/workspace/YIYUAN-Accord；界面任务数9。原失败容器细部后态与诊断shell远端退出未独立确认，不能由新容器或关闭页面代验。 |
 | 正式验收 | 17必要scope，11有定义、6未绑定；4个OpenAI入口纳入开发、7个待判，selectionFinal=false。A01–A08整项0/8，functionalCompletion/candidateEligible=false。定义和局部PASS不等于完成。 |
@@ -29,7 +29,9 @@
 
 ## 本批完成与实际未完项
 
-**CI测试准备修复**：0839eb87的[CI36072048902](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36072048902)已结束，9/11成功；两个Windows任务共四个子用例在接管/恢复被测条件之前的交接阶段报RECORDER_COMMIT_UNKNOWN，原日志深层原因被折叠。本地给真实SQLite提交回调加入4.2秒延迟，在两类夹具均复现DEADLINE_EXCEEDED；仅调整这些准备阶段的有限预算，接管反例改在交接成功后注入，保留产品及专门超时反例。Python3.10/3.14各27项会话测试通过，修复后托管结果待核。仅测试与接续变化，包、基线、计划、机器投影和行为验收判据不变。
+**普通source原生恢复**：复用既有测试入口增加source-start/source-restore，固定localhost响应，模型调用0。本机0.156.1确认原创建ACK、持久工具、原件及旧controller退出后，同一任务完成第二轮；scope token轮换、旧依据恢复实测拒绝、无新thread/transfer。首次独立回读因误计历史工具回执而失败，原件保留；按本轮追加输入修正后，新隔离副本通过。两阶段及原失败实例的进程自然退出、Job活动进程0，9个临时profile/state/temp目录已回收，保留文件仍可只读复核。测试准备shadow变量与claim前副本Hash/相对路径问题也在独立审查中修正。原件导航accord-native-source-restore-20260925-01；Linux/macOS接入原CI，结果待核。97项开发/原生离线检查、另一个Python3.10的10项检查及actionlint通过，独立审查未见剩余阻断。产品runtime和安装包未改，A05及正式验收未升格。
+
+**CI测试准备修复**：0839eb87的[CI36072048902](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36072048902)已结束，9/11成功；两个Windows任务共四个子用例在接管/恢复被测条件之前的交接阶段报RECORDER_COMMIT_UNKNOWN，原日志深层原因被折叠。本地给真实SQLite提交回调加入4.2秒延迟，在两类夹具均复现DEADLINE_EXCEEDED；仅调整这些准备阶段的有限预算，接管反例改在交接成功后注入，保留产品及专门超时反例。Python3.10/3.14各27项会话测试通过，修复后8064aac6托管11/11成功。仅测试与接续变化，包、基线、计划、机器投影和行为验收判据不变。
 
 **保留与回读修复**：已复现业务文件inspection.json被内部记录覆盖，以及工作区回收后默认检查报FileNotFound。新manifest前瞻声明stage-files-v1和阶段ID，业务副本与记录分目录，复制前后校验Hash；显式`inspect --retained`核对原生回执、inspection/history、阶段链及副本一致性，不执行冻结代码或重建工作区。86项完整入口回归通过、独立复核无阻断；旧发布02的120份原件逐字节未变，两阶段保留记录均匹配，原caseComplete仍false。仅保留字节核对，业务/原mtime/安装/清理与正式准入未新增。原件导航accord-retained-inspection-20260925-01。公有observer源码已变，私有cloud repair仍绑定旧helper Hash，不能直接执行；实际需要时先复核并重绑，不生成新云端试验。
 
@@ -54,6 +56,7 @@
 
 | 目录 | 内容与限制 |
 |---|---|
+| accord-native-source-restore-20260925-01 | Windows普通source两阶段、初次回读误判及新副本复验；原始执行与review.json保留，临时环境已回收。 |
 | accord-retained-inspection-20260925-01 | 86项入口回归、只读代码复核与旧发布02的retained回读；120原件未变，旧案仍失败。 |
 | accord-cloud-startup-20260925-01 | execution.json为原失败及环境恢复；as-run保存实际投递源；repair保存17项本地修复与边界。旧试验不可重放。 |
 | accord-readiness-review-20260925-01 | 粗估及独立源码复核、编辑页403解除；unbound不是缺陷的纠正。不计功能通过。 |
