@@ -45,7 +45,11 @@
 
 **既有SDK机制的前瞻准入连接**：独立源码/离线复核确认source完成后的writer/token回查、失败/未知效果保留、交接期间状态更正及恢复门槛已有实现，未发现须另加runtime的依据；真实调用方的自主判断与语义接管仍待实际工作证明。当前Desktop0.158.0-alpha.2.1及独立CLI0.157.1含实验字段的原生schema均未提供resume补注册dynamicTools，不据宽泛文档猜测已有GUI任务可接入。
 
-本批另一可执行尾项是Windows基础生命周期与作用域暴露两案。复用现有公开runner和bind_evidence_execution，从一次手动CI的实际manifest绑定两案及不可变候选，再在run前重建执行条件并核对完整case集合、manifest Hash与绑定全等；原Windows/0.154、七原生进程/六命令/四固定响应及全部业务判据保持。原validate的POSIX hot-reload不改也不冒充两案。原生调用前不额外运行CLI；计划版本与实际initialize回执须分开复核。失败时保留的五个owned目录随原件上传，成功上传且进程已退出后才回收job所属CLI。只新增一个手动CI调用文件，机器投影列明该路径及一个文件的维护额度；没有新增产品runtime、观察器或夹具。当前仅接线与本地校验，托管执行及正式observe/recheck仍待完成，不能据准备或CI绿灯提前准入。
+本批已完成Windows基础生命周期与作用域暴露两案。复用现有公开runner和bind_evidence_execution，从一次手动CI的实际manifest绑定两案及不可变候选，再在run前重建执行条件并核对完整case集合、manifest Hash与绑定全等；原Windows/0.154、七原生进程/六命令/四固定响应记录及全部业务判据保持。原validate的POSIX hot-reload不改也不冒充两案。独立审查发现的缺绑定真空放行和失败目录漏上传均已修正；真实workflow段的一条正例及七条拒绝反例、29项lifecycle回归、actionlint和静态检查通过。只新增一个手动CI调用文件及其精确维护额度，没有新产品runtime、观察器或夹具。
+
+唯一[托管运行36255885596](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36255885596)绑定029a1c584139e3f54b59ed396c4d6b112fbc3335，全部步骤成功。95份下载原件与API摘要一致的ZIP逐字节核对；七initialize实际报告0.154.0/Windows，24包文件和四执行源码均匹配Git原字节。四份响应中的第三份是预绑中断的in_progress/peer-closed，不报四轮全部完成。暂停、失效输入、同线程恢复且“继续”不解除暂停、坏包拒绝/原件保持、健康重试、卸载及未完状态保留，以及Skill路径禁用/新进程恢复/清空均得到原生和状态原件支持。SessionEnd仅是控制器与源码/保留状态共同支持的启停对照，没有原生事件通知或单独即时树快照，不扩张该观察层次。
+
+两位独立评估者完成四轴复核；既有observe/recheck返回acceptedCases=[v33-codex-sdk-lifecycle-01, v33-codex-sdk-scoped-exposure-01]、errors=[]、caseRejections={}。十三进程均无强停且Job后态为0；五自有根、loopback及保留材料核对后上传，再完成精确job CLI路径清理。共享文件保护明确限于AGENTS.md及所列源/状态，不能泛化为整机；此为受控无模型机制准入，不代验普通Agent自主交接、Skill自主选型、GUI/云端或A01–A08整项。先前普通两案保留各自候选/条件，不机械叠加为当前完整覆盖。原件accord-continuity-interface-20260927-01，本实例不重放；029a1c58的标准[CI36255868953](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36255868953)记录时2成功/9运行中、未见失败，仍须回读最终结果。
 
 **本批CI跨平台夹具修复**：efc84337的[CI36157692681](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36157692681)出现Linux失败；已回读Python3.11原始日志，唯一断言为新增“Popen后失败”测试实际未调用Popen。WSL/Linux同案稳定复现：模拟WindowsJob却遗漏CREATE_NO_WINDOW，参数求值先失败，随后模拟的close异常掩盖原因。仅补测试常量并断言启动参数及attach_and_resume实际调用；Linux同案先红后绿，Windows/Python3.10与3.14均通过。加入现有CI前置检查后13项本地通过，actionlint通过；产品代码与验收判据保持，新提交需按自身SHA核对托管结果，原失败不改标。本机WSL未提供可用Node，扩展全入口套件因此不能作为Linux全套通过证据；跨平台完整检查由配置Node的托管矩阵承担。
 
@@ -117,6 +121,8 @@
 
 | 目录 | 内容与限制 |
 |---|---|
+| accord-continuity-interface-20260927-01 | 当前宿主schema只读对照；029a1c58唯一Windows基础CI36255885596、95份原件、ZIP来源Hash、独立四轴复核及两SDK案例正式observe/recheck。受控无模型，不是自主Agent验收；实例已结束，不重放。 |
+| accord-current-cadence-20260926-01 | 60219fff当前完整安装的五阶段普通协调与暂停恢复、原生Goal时点、业务原件、两case准入及资源后态；保持原候选/条件，不重跑或无据归因于Accord单独效果。 |
 | accord-ordinary-retro-20260925-01 | e74c4a4f的真实原生retro/依赖采用、原报告及独立语义核对；admission-final.json保留下一工作段不具体的拒绝，30份绑定原件、六域退出和回收后态。episode是Agent前失败，episode-fixed是唯一实际Agent执行，均不重放。 |
 | accord-shared-plugin-update-20260925-24 | 202615精确原生更新、24文件Git字节独立核对、5CLI与1发现域自然退出，配置/旧包恢复材料及现装retro/依赖/模型目录；空工作区已回收。 |
 | accord-cloud-controller-provenance-20260925-01 | 一次获准只读云端诊断：一个任务URL、三输入、两轮命令；进程/配置候选与后续app-server/-c观察、前后设置、界面计数及解释纠正。实际装载未知，原案不重放。 |
