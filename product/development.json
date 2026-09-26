@@ -92,6 +92,7 @@
   "changeBoundary": {
     "allowedPaths": [
       ".claude-plugin/marketplace.json",
+      ".github/workflows/sdk-lifecycle-case.yml",
       ".github/workflows/validate.yml",
       "AGENTS.md",
       "CHANGELOG.md",
@@ -198,9 +199,9 @@
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 3100000,
-      "maxTrackedFiles": 174,
+      "maxTrackedFiles": 175,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "The 3100000 code/test-byte ceiling preserves the existing five-percent reserve after the persistent native Goal reader counterexamples were added. The measured product/test total is 2909881 bytes; the former 3050000 ceiling leaves 140119 bytes, below its required 152500 reserve. The reader reuses the existing native controller and RPC transport and adds no product runtime, service or third-party dependency. The tracked-file ceiling increases from 172 to 173 only for the exact ordinary-review fixture, which protects three inputs and binds a necessary real review to admission; existing files are preserved. The primary-instruction ceiling remains 36000. This metric counts product-module and tests/product Python plus runtime/plugin/test JavaScript; development-only scripts outside those roots are excluded. This development allocation changes no behavioral acceptance predicate, observed outcome, case deadline, usage limit or evidence freshness rule; historical totals and failures retain their original scope. The tracked-file allocation is now 174 for one additional prospectively bound workflow-retrospective fixture, including the coordinator/worker distinction and protected source inputs; no historical fixture is deleted and no acceptance or execution budget is relaxed."
+      "rationale": "The 3100000 code/test-byte ceiling preserves the existing five-percent reserve after the persistent native Goal reader counterexamples were added. The measured product/test total is 2909881 bytes; the former 3050000 ceiling leaves 140119 bytes, below its required 152500 reserve. The reader reuses the existing native controller and RPC transport and adds no product runtime, service or third-party dependency. The tracked-file ceiling increases from 172 to 173 only for the exact ordinary-review fixture, which protects three inputs and binds a necessary real review to admission; existing files are preserved. The primary-instruction ceiling remains 36000. This metric counts product-module and tests/product Python plus runtime/plugin/test JavaScript; development-only scripts outside those roots are excluded. This development allocation changes no behavioral acceptance predicate, observed outcome, case deadline, usage limit or evidence freshness rule; historical totals and failures retain their original scope. The tracked-file allocation is now 174 for one additional prospectively bound workflow-retrospective fixture, including the coordinator/worker distinction and protected source inputs; no historical fixture is deleted and no acceptance or execution budget is relaxed. The allocation is 175 for one manually dispatched Windows base-lifecycle CI caller that binds the two existing cases through the existing API. It avoids changing or repeating the distinct POSIX hot-reload and carrier jobs; no runtime, fixture, behavioral predicate or execution limit is added or relaxed."
     }
   },
   "source": {
@@ -4288,6 +4289,27 @@
       "methodDisposition": "Initial formal aggregate rejected millisecond review timestamps because its schema requires second-precision canonical UTC. Original messages, initial rejection and truncated timestamp mapping retained; reran only read-only observe/recheck, without scenario replay or altered verdicts. Two readback caller assertions were likewise corrected against original receipt conventions; business sources unchanged.",
       "evidence": "Private retained originals: accord-current-cadence-20260926-01; admission-final.json, evaluation-sources.json, reviewer-originals.json, semantic-review.md and cleanup-after.json.",
       "remaining": "Both declared function scopes have no missing duties/quality/scenarios for this evaluated composition. All 17 required scope/claim pairs, 10 active cases, 7 pending entry dispositions and 6 unbound scopes remain; whole A01-A08, functionalCompletion and candidateEligible remain incomplete. Do not replay these two completed cases to fill other scopes."
+    },
+    {
+      "id": "sdk-lifecycle-ci-admission-binding-20260927",
+      "observedAt": "2026-09-27",
+      "scope": "prospective-two-case-execution-binding-not-acceptance",
+      "priorDeclarations": [
+        {
+          "caseId": "v33-codex-sdk-lifecycle-01",
+          "declarationSnapshot": "9f6bcc354e4110bb77a9c344fd58a309692500cf:product/development.json",
+          "caseObjectSha256": "0d39217d73c68d20a585d8cf540fde77020b09acb55ba35bece58d4c87db2cd0"
+        },
+        {
+          "caseId": "v33-codex-sdk-scoped-exposure-01",
+          "declarationSnapshot": "9f6bcc354e4110bb77a9c344fd58a309692500cf:product/development.json",
+          "caseObjectSha256": "49d357d0f19d07c98ff78918b696796dd5b3cdc2d02a1840cb9891c9f40357e6"
+        }
+      ],
+      "reason": "The existing lifecycle runner already supplies the no-model mechanism. Bind its Windows base episode through the existing admission API from one manually dispatched CI caller; no new runner or observer API. The default validate workflow keeps its distinct POSIX hot-reload scope unchanged.",
+      "preserved": "Original Windows/CLI0.154.0 conditions, all effect/authority/poststate/cleanup predicates, seven native processes, six commands, four provider responses, all required coverage and historical outcomes remain. Structured fields prospectively fix 600/60/15-second limits and exact embedded fixture/source identity before native execution.",
+      "route": "sdk-lifecycle-case.yml prepares a fresh job-owned default episode, binds both case identities and manifest hash, then independently rebinds before run. CLI version is planned from the pinned npm input; actual initialize receipts and current conditions still need independent observation. No bare preflight CLI process, account, model or shared installation is used.",
+      "claimLimit": "Bindings and hosted PASS are not formal admission. Retain raw traffic/resources, verify provenance and actual version, and use independent reviews plus observe/recheck before admitting either case."
     }
   ],
   "environmentControl": {
@@ -5397,7 +5419,43 @@
             "trust": "only exact installed Hook keys/current hashes; process-scoped overrides",
             "authority": "controlled maintainer mechanism observation, never autonomous Agent behavior",
             "source": "fresh immutable candidate; public lifecycle runner plus actual entry, RPC and resource-reader dependencies, Python/Node/Codex binaries, complete package and copied marketplace are frozen before the first native process; prior private observations remain historical",
-            "skillControl": "a task-owned fixed standalone Skill outside dedicated CODEX_HOME is exposed with skills/extraRoots/set, disabled only through process-scoped skills.config, and restored in a fresh process; this tests supported controls, not discovery or protection of the full real user Skill environment"
+            "skillControl": "a task-owned fixed standalone Skill outside dedicated CODEX_HOME is exposed with skills/extraRoots/set, disabled only through process-scoped skills.config, and restored in a fresh process; this tests supported controls, not discovery or protection of the full real user Skill environment",
+            "execution": {
+              "host": "codex",
+              "entry": "cx-sdk",
+              "entryProtocol": "app-server",
+              "model": "fixture-no-model",
+              "codexVersion": "0.154.0",
+              "caseVariant": "base",
+              "resourceController": "windows-job-object",
+              "limits": {
+                "workSeconds": 600,
+                "requestSeconds": 60,
+                "recoverySeconds": 15,
+                "providerRequests": 4,
+                "providerRequestBytes": 2097152
+              },
+              "nativeResourceLabels": [
+                "discovery",
+                "end-enabled",
+                "end-disabled",
+                "interrupted",
+                "resumed",
+                "restored-exposure",
+                "after-remove"
+              ],
+              "nativeCommandLabels": [
+                "marketplace-add",
+                "package-add",
+                "invalid-candidate",
+                "healthy-retry",
+                "package-remove",
+                "package-list-after-remove"
+              ],
+              "runner": "scripts/observe_codex_lifecycle.py",
+              "caseFile": "scripts/observe_codex_lifecycle.py",
+              "caseSha256": "fe8c76f27f77c2ae0266d1a9622c54073a4bf333749b45a73c8687eb2fae9f8d"
+            }
           },
           "id": "v33-codex-sdk-lifecycle-01",
           "scope": "v33-codex-sdk-lifecycle",
@@ -5410,7 +5468,12 @@
             "scripts/inspect_native_resources.py",
             "scripts/observe_codex_lifecycle.py",
             "scripts/observe_codex_entry.py",
-            "scripts/codex_rpc.py"
+            "scripts/codex_rpc.py",
+            ".github/workflows/sdk-lifecycle-case.yml",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/guardrails.py",
+            "yiyuan_accord/identity.py",
+            "yiyuan_accord/reviews.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -5479,7 +5542,43 @@
             "trust": "only exact installed Hook keys/current hashes; process-scoped overrides",
             "authority": "controlled maintainer mechanism observation, never autonomous Agent behavior",
             "source": "fresh immutable candidate; public lifecycle runner plus actual entry, RPC and resource-reader dependencies, Python/Node/Codex binaries, complete package and copied marketplace are frozen before the first native process; prior private observations remain historical",
-            "skillControl": "a task-owned fixed standalone Skill outside dedicated CODEX_HOME is exposed with skills/extraRoots/set, disabled only through process-scoped skills.config, and restored in a fresh process; this tests supported controls, not discovery or protection of the full real user Skill environment"
+            "skillControl": "a task-owned fixed standalone Skill outside dedicated CODEX_HOME is exposed with skills/extraRoots/set, disabled only through process-scoped skills.config, and restored in a fresh process; this tests supported controls, not discovery or protection of the full real user Skill environment",
+            "execution": {
+              "host": "codex",
+              "entry": "cx-sdk",
+              "entryProtocol": "app-server",
+              "model": "fixture-no-model",
+              "codexVersion": "0.154.0",
+              "caseVariant": "base",
+              "resourceController": "windows-job-object",
+              "limits": {
+                "workSeconds": 600,
+                "requestSeconds": 60,
+                "recoverySeconds": 15,
+                "providerRequests": 4,
+                "providerRequestBytes": 2097152
+              },
+              "nativeResourceLabels": [
+                "discovery",
+                "end-enabled",
+                "end-disabled",
+                "interrupted",
+                "resumed",
+                "restored-exposure",
+                "after-remove"
+              ],
+              "nativeCommandLabels": [
+                "marketplace-add",
+                "package-add",
+                "invalid-candidate",
+                "healthy-retry",
+                "package-remove",
+                "package-list-after-remove"
+              ],
+              "runner": "scripts/observe_codex_lifecycle.py",
+              "caseFile": "scripts/observe_codex_lifecycle.py",
+              "caseSha256": "fe8c76f27f77c2ae0266d1a9622c54073a4bf333749b45a73c8687eb2fae9f8d"
+            }
           },
           "id": "v33-codex-sdk-scoped-exposure-01",
           "scope": "v33-codex-sdk-scoped-exposure",
@@ -5492,7 +5591,12 @@
             "scripts/inspect_native_resources.py",
             "scripts/observe_codex_lifecycle.py",
             "scripts/observe_codex_entry.py",
-            "scripts/codex_rpc.py"
+            "scripts/codex_rpc.py",
+            ".github/workflows/sdk-lifecycle-case.yml",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/guardrails.py",
+            "yiyuan_accord/identity.py",
+            "yiyuan_accord/reviews.py"
           ],
           "maxAgeSeconds": 86400,
           "expected": {

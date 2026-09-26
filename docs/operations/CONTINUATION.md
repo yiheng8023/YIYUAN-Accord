@@ -41,7 +41,11 @@
 
 五轮后Goal均为null，仅代表读取时点；实际历史无Plan/Goal激活。5个CLI Job和19个目录/读取进程自然退出，配置字节一致；Root回收经副本核对的工作区及空temp/state，143份episode证据字节保持、原生任务/历史保留。这是调用方资源收尾，不计为Agent自主清理。宿主注入通用Idea-Driven AGENTS，既有记忆与其它Skill仍有效，不归因于Accord单独收益、不外推自主fresh交接或完整入口。原件accord-current-cadence-20260926-01；旧声明、旧实例及失败保持原身份。
 
-本次57项完整admission回归通过，静态verify/verify-development通过。该精确执行候选的[CI36191959588](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36191959588)仍在运行，已完成7/11且均成功，4项运行中；不提前报全绿，也不因后续对话取消。17必要范围、7项入口待判、6个未绑定范围及A01–A08整项0/8保持；功能整体验收与发布资格仍未完成。当前两案已闭合，后续转向未验连续性、入口与整体影响，不重复同一五阶段。
+本次57项完整admission回归通过，静态verify/verify-development通过。该精确执行候选的[CI36191959588](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36191959588)已于9月27日按headSha及全部job回读，11/11成功，期间后续对话与记录提交未取消它。17必要范围、7项入口待判、6个未绑定范围及A01–A08整项0/8保持；功能整体验收与发布资格仍未完成。当前两案已闭合，后续转向未验连续性、入口与整体影响，不重复同一五阶段。
+
+**既有SDK机制的前瞻准入连接**：独立源码/离线复核确认source完成后的writer/token回查、失败/未知效果保留、交接期间状态更正及恢复门槛已有实现，未发现须另加runtime的依据；真实调用方的自主判断与语义接管仍待实际工作证明。当前Desktop0.158.0-alpha.2.1及独立CLI0.157.1含实验字段的原生schema均未提供resume补注册dynamicTools，不据宽泛文档猜测已有GUI任务可接入。
+
+本批另一可执行尾项是Windows基础生命周期与作用域暴露两案。复用现有公开runner和bind_evidence_execution，从一次手动CI的实际manifest绑定两案及不可变候选，再在run前重建执行条件并核对完整case集合、manifest Hash与绑定全等；原Windows/0.154、七原生进程/六命令/四固定响应及全部业务判据保持。原validate的POSIX hot-reload不改也不冒充两案。原生调用前不额外运行CLI；计划版本与实际initialize回执须分开复核。失败时保留的五个owned目录随原件上传，成功上传且进程已退出后才回收job所属CLI。只新增一个手动CI调用文件，机器投影列明该路径及一个文件的维护额度；没有新增产品runtime、观察器或夹具。当前仅接线与本地校验，托管执行及正式observe/recheck仍待完成，不能据准备或CI绿灯提前准入。
 
 **本批CI跨平台夹具修复**：efc84337的[CI36157692681](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36157692681)出现Linux失败；已回读Python3.11原始日志，唯一断言为新增“Popen后失败”测试实际未调用Popen。WSL/Linux同案稳定复现：模拟WindowsJob却遗漏CREATE_NO_WINDOW，参数求值先失败，随后模拟的close异常掩盖原因。仅补测试常量并断言启动参数及attach_and_resume实际调用；Linux同案先红后绿，Windows/Python3.10与3.14均通过。加入现有CI前置检查后13项本地通过，actionlint通过；产品代码与验收判据保持，新提交需按自身SHA核对托管结果，原失败不改标。本机WSL未提供可用Node，扩展全入口套件因此不能作为Linux全套通过证据；跨平台完整检查由配置Node的托管矩阵承担。
 

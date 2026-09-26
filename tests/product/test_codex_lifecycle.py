@@ -1,6 +1,7 @@
 import argparse
 from contextlib import redirect_stdout
 import io
+import hashlib
 import http.client
 import json
 import os
@@ -10,11 +11,67 @@ import unittest
 from unittest.mock import patch
 import sys
 import time
+import textwrap
 
 from scripts import observe_codex_lifecycle as lifecycle
 
 
 class CodexLifecycleTests(unittest.TestCase):
+    def test_ci_case_binding_rejects_incomplete_or_changed_execution_before_dispatch(self):
+        workflow = (lifecycle.ROOT / ".github/workflows/sdk-lifecycle-case.yml").read_text(encoding="utf-8")
+        step = workflow.split("      - name: Recheck bindings before native execution\n", 1)[1]
+        code = textwrap.dedent(step.split("        run: |\n", 1)[1].split("      - name:", 1)[0])
+        contract = json.loads((lifecycle.ROOT / "product/development.json").read_text(encoding="utf-8"))
+        ids = ["v33-codex-sdk-lifecycle-01", "v33-codex-sdk-scoped-exposure-01"]
+        execution = next(c["conditions"]["execution"] for c in
+                         contract["acceptance"]["admission"]["cases"] if c["id"] == ids[0])
+        baseline = {k: execution[k] for k in
+                    ("resourceController", "limits", "nativeResourceLabels", "nativeCommandLabels")}
+        baseline["packageHashes"] = {"fixed-package-input": "fixture-hash"}
+
+        def binding(_root, case, planned, package):
+            if planned != execution or package != baseline["packageHashes"]:
+                raise ValueError("execution differs from the committed fixture")
+            return {"case": case, "execution": planned, "subject": {"revision": "fixed-subject"}}
+
+        originals = [binding(lifecycle.ROOT, case, execution, baseline["packageHashes"]) for case in ids]
+        for mode in ("valid", "empty", "missing", "duplicate", "changed-subject",
+                     "changed-limits", "hot-reload", "changed-manifest"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as tmp:
+                evidence = Path(tmp) / "episode"
+                evidence.mkdir()
+                manifest = json.loads(json.dumps(baseline))
+                saved = json.loads(json.dumps(originals))
+                if mode == "empty":
+                    saved = []
+                elif mode == "missing":
+                    saved.pop()
+                elif mode == "duplicate":
+                    saved[1] = saved[0]
+                elif mode == "changed-subject":
+                    saved[0]["subject"]["revision"] = "another-subject"
+                elif mode == "changed-limits":
+                    manifest["limits"]["workSeconds"] += 1
+                elif mode == "hot-reload":
+                    manifest["case"] = lifecycle.HOT_CASE
+                raw = json.dumps(manifest).encode("utf-8")
+                (evidence / "manifest.json").write_bytes(raw + (b" " if mode == "changed-manifest" else b""))
+                (evidence / "admission-bindings.json").write_text(json.dumps({
+                    "manifestSha256": hashlib.sha256(raw).hexdigest(), "bindings": saved}), encoding="utf-8")
+                with patch.dict(os.environ, {"ACCORD_CASE_ROOT": tmp}), \
+                        patch("yiyuan_accord.admission.bind_evidence_execution", side_effect=binding), \
+                        patch("subprocess.run") as dispatch, \
+                        patch.object(sys, "path", list(sys.path)), \
+                        patch.object(sys, "dont_write_bytecode", sys.dont_write_bytecode), \
+                        patch("pathlib.Path.cwd", return_value=lifecycle.ROOT):
+                    if mode == "valid":
+                        exec(compile(code, "sdk-lifecycle-case.yml", "exec"), {})
+                        dispatch.assert_called_once()
+                    else:
+                        with self.assertRaises((RuntimeError, ValueError)):
+                            exec(compile(code, "sdk-lifecycle-case.yml", "exec"), {})
+                        dispatch.assert_not_called()
+
     def resource_record(self, manifest, exit_code=0):
         controller = manifest["resourceController"]
         after = {"activeProcesses": 0}

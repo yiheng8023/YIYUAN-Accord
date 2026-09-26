@@ -1,0 +1,161 @@
+name: sdk-lifecycle-case
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sdk-lifecycle-case-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  windows-base:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.14"
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: "24"
+      - name: Create isolated job storage
+        id: storage
+        shell: python
+        run: |
+          import os, pathlib
+          root = pathlib.Path(os.environ["RUNNER_TEMP"]).resolve(strict=True) / "accord-sdk-lifecycle-case"
+          root.mkdir()
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as stream:
+              stream.write(f"ACCORD_CASE_ROOT={root}\n")
+      - name: Install the declared official CLI in job-owned storage
+        shell: pwsh
+        run: npm install --prefix "$env:ACCORD_CASE_ROOT/cli" --ignore-scripts --no-audit --no-fund --package-lock=false @openai/codex@0.154.0
+      - name: Prepare the base episode and bind both declared cases
+        id: prepare
+        shell: python
+        run: |
+          import hashlib, json, os, pathlib, shutil, subprocess, sys
+          sys.dont_write_bytecode = True
+          sys.path.insert(0, str(pathlib.Path.cwd()))
+          from yiyuan_accord.admission import bind_evidence_execution
+          root = pathlib.Path(os.environ["ACCORD_CASE_ROOT"]).resolve(strict=True)
+          evidence = root / "episode"
+          binaries = [p for p in (root / "cli/node_modules/@openai").rglob("codex.exe")
+                      if p.is_file() and p.parent.name == "bin" and "vendor" in p.parts]
+          if len(binaries) != 1:
+              raise RuntimeError("Expected one platform-native CLI executable")
+          subprocess.run([sys.executable, "-B", "scripts/observe_codex_lifecycle.py", "prepare",
+              "--package", str(pathlib.Path("plugins/yiyuan-accord-codex").resolve()),
+              "--marketplace-manifest", str(pathlib.Path(".agents/plugins/marketplace.json").resolve()),
+              "--evidence", str(evidence), "--codex", str(binaries[0]),
+              "--node", str(pathlib.Path(shutil.which("node")).resolve()),
+              "--protected-file", str(pathlib.Path("AGENTS.md").resolve()),
+              "--timeout", "600", "--request-timeout", "60", "--recovery-timeout", "15"], check=True)
+          raw = (evidence / "manifest.json").read_bytes()
+          manifest = json.loads(raw)
+          if "case" in manifest or "hotReload" in manifest or "hostReplacement" in manifest:
+              raise RuntimeError("These declared cases require the base episode")
+          fixture = "scripts/observe_codex_lifecycle.py"
+          execution = {
+              "host": "codex", "entry": "cx-sdk", "entryProtocol": "app-server",
+              "model": "fixture-no-model", "codexVersion": "0.154.0",
+              "caseVariant": "base", "resourceController": manifest["resourceController"],
+              "limits": manifest["limits"], "nativeResourceLabels": manifest["nativeResourceLabels"],
+              "nativeCommandLabels": manifest["nativeCommandLabels"],
+              "runner": fixture, "caseFile": fixture,
+              "caseSha256": hashlib.sha256(pathlib.Path(fixture).read_bytes()).hexdigest(),
+          }
+          cases = ["v33-codex-sdk-lifecycle-01", "v33-codex-sdk-scoped-exposure-01"]
+          bindings = [bind_evidence_execution(pathlib.Path.cwd(), case, execution,
+                      manifest["packageHashes"]) for case in cases]
+          (evidence / "admission-bindings.json").write_bytes((json.dumps({
+              "manifestSha256": hashlib.sha256(raw).hexdigest(), "bindings": bindings,
+              "claimLimit": "Preflight execution identity only. Version is planned from the pinned CLI installation; actual initialize receipts, effects, independent review and observe/recheck remain required."
+          }, indent=2) + "\n").encode("utf-8"))
+      - name: Recheck bindings before native execution
+        shell: python
+        run: |
+          import hashlib, json, os, pathlib, subprocess, sys
+          sys.dont_write_bytecode = True
+          sys.path.insert(0, str(pathlib.Path.cwd()))
+          from yiyuan_accord.admission import bind_evidence_execution
+          evidence = pathlib.Path(os.environ["ACCORD_CASE_ROOT"]) / "episode"
+          saved = json.loads((evidence / "admission-bindings.json").read_bytes())
+          raw = (evidence / "manifest.json").read_bytes()
+          if hashlib.sha256(raw).hexdigest() != saved["manifestSha256"]:
+              raise RuntimeError("Prepared manifest changed after case binding")
+          manifest = json.loads(raw)
+          if "case" in manifest or "hotReload" in manifest or "hostReplacement" in manifest:
+              raise RuntimeError("These declared cases require the base episode")
+          fixture = "scripts/observe_codex_lifecycle.py"
+          execution = {
+              "host": "codex", "entry": "cx-sdk", "entryProtocol": "app-server",
+              "model": "fixture-no-model", "codexVersion": "0.154.0",
+              "caseVariant": "base", "resourceController": manifest["resourceController"],
+              "limits": manifest["limits"], "nativeResourceLabels": manifest["nativeResourceLabels"],
+              "nativeCommandLabels": manifest["nativeCommandLabels"],
+              "runner": fixture, "caseFile": fixture,
+              "caseSha256": hashlib.sha256(pathlib.Path(fixture).read_bytes()).hexdigest(),
+          }
+          cases = ["v33-codex-sdk-lifecycle-01", "v33-codex-sdk-scoped-exposure-01"]
+          current = [bind_evidence_execution(pathlib.Path.cwd(), case, execution,
+                     manifest["packageHashes"]) for case in cases]
+          if current != saved["bindings"]:
+              raise RuntimeError("Candidate, complete case set or execution binding changed")
+          subprocess.run([sys.executable, "-B", "scripts/observe_codex_lifecycle.py", "run",
+                          "--evidence", str(evidence)], check=True)
+      - name: Re-read retained native results
+        if: always() && steps.prepare.outcome == 'success'
+        shell: python
+        run: |
+          import os, pathlib, subprocess, sys
+          evidence = pathlib.Path(os.environ["ACCORD_CASE_ROOT"]) / "episode"
+          result = subprocess.run([sys.executable, "-B", "scripts/observe_codex_lifecycle.py",
+              "inspect", "--evidence", str(evidence)], capture_output=True)
+          (evidence / "inspection.json").write_bytes(result.stdout)
+          (evidence / "inspection.stderr.txt").write_bytes(result.stderr)
+          sys.stdout.buffer.write(result.stdout)
+          sys.stderr.buffer.write(result.stderr)
+          sys.exit(result.returncode)
+      - name: Retain binding and raw source evidence
+        if: always() && steps.storage.outcome == 'success'
+        id: evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sdk-lifecycle-case-windows-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          include-hidden-files: true
+          path: |
+            ${{ env.ACCORD_CASE_ROOT }}/episode/*.json
+            ${{ env.ACCORD_CASE_ROOT }}/episode/inspection.stderr.txt
+            ${{ env.ACCORD_CASE_ROOT }}/episode/native
+            ${{ env.ACCORD_CASE_ROOT }}/episode/commands
+            ${{ env.ACCORD_CASE_ROOT }}/episode/retained
+            ${{ env.ACCORD_CASE_ROOT }}/episode/source-package
+            ${{ env.ACCORD_CASE_ROOT }}/episode/standalone-skills
+            ${{ env.ACCORD_CASE_ROOT }}/episode/home
+            ${{ env.ACCORD_CASE_ROOT }}/episode/marketplace
+            ${{ env.ACCORD_CASE_ROOT }}/episode/workspace
+            ${{ env.ACCORD_CASE_ROOT }}/episode/state
+            ${{ env.ACCORD_CASE_ROOT }}/episode/temp
+      - name: Release the job-owned CLI after verified execution and evidence upload
+        if: success() && steps.evidence.outcome == 'success'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $caseRoot = (Resolve-Path -LiteralPath $env:ACCORD_CASE_ROOT).ProviderPath
+          $cliRoot = (Resolve-Path -LiteralPath (Join-Path $caseRoot 'cli')).ProviderPath
+          if ($cliRoot -ne [IO.Path]::GetFullPath((Join-Path $caseRoot 'cli')) -or
+              -not $cliRoot.StartsWith($caseRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'CLI cleanup target differs' }
+          $items = @((Get-Item -LiteralPath $cliRoot)) + @(Get-ChildItem -LiteralPath $cliRoot -Force -Recurse)
+          if (@($items | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint }).Count) { throw 'Redirected CLI cleanup content' }
+          if (@(Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -and $_.ExecutablePath.StartsWith($cliRoot + '\', [StringComparison]::OrdinalIgnoreCase) }).Count) { throw 'Owned CLI process remains' }
+          Remove-Item -LiteralPath $cliRoot -Recurse -Force
+          if (Test-Path -LiteralPath $cliRoot) { throw 'Owned CLI files remained' }
