@@ -58,6 +58,12 @@
 
 2026-09-27更新/恢复说明交付已完成：[两轮工作段](../../product/cases/upgrade-guidance-v3.3.json)在用户批准后执行一次，三份成品按后来Stop反馈同步纠偏。既有准入器接受v33-codex-cli-update-guidance-01与v33-systemic-correction-03；详见[实际记录](PROCEDURE-v3.3.md#更新说明交付与反馈纠偏的实际准入2026-09-27)。独立备份与后置Hook路径的区别、安全更新时机和执行者责任已提炼到两语README；这是Root随后整合，模型原件保持。旧systemic scope的已结束实例条件仍留在7ae3bac5历史身份，新实例保持自己的候选与有效用户环境条件，不归因于Accord单独收益。该段及所属资源责任已闭合；后续沿上述工作线推进未定义范围、实际入口与自主连续性的必要工作，不重复这两轮或制造交接压力。后续用户截图已显示自然Stop完成，原单次失败的具体原因仍未知；完整验收与发布资格仍未成立。
 
+2026-09-27 Work职责组合判断：**Work本地子模式确定复用现有Accord包，不另建执行器。** [插件说明](https://learn.chatgpt.com/docs/plugins)明确Hook适用于包含Work的Codex runtime，但脚本须存在于实际执行环境并经信任；[MCP说明](https://learn.chatgpt.com/docs/extend/mcp)区分同主机配置与网页远程工具。当前安装的桌面26.924.2738.0代码保留Work插件选择、local配置读取及原生thread/start路径，支持该工程选择，不能据静态分支证明当前账号可用或已执行。组合职责由Hook供应输入/恢复指导、Skill协调、同主机stdio状态MCP核对状态、原生线程承担执行/暂停/持久化；现有检查点按真实需要采用。
+
+下一项关键核验收敛为**实际root Work轮次的共同绑定**：UserPromptSubmit回执、MCP提供的原生thread/session/turn身份、cwd及状态目录须相符。当前MCP缺元数据即不可用，非同一根会话不能采用共享状态；上下文观察还依赖Hook绑定且位于对应CODEX_HOME/sessions的转录。先核这一组合，再沿必要普通任务验证采用、暂停/续作和退出，只修实际断点。当前没有要求放宽身份守卫或先改runtime的证据。
+
+Work云端继续待判：[云安全说明](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-cloud-security)允许任务/项目文件、获准工具以及环境复用或替换，但不保证Accord状态目录属于可保留状态。插件Skill、任务文件与获准remote MCP可组成候选路线；网页不读本机config且安装不部署Hook，原包stdio不能只改成HTTP就获得原控制者身份、事件或状态。需先找到受支持的实际加载与持续绑定方式，缺失职责可由充分原生机制承担，不能凭相同核心默认成立。本次不增加远程服务、安装器或Cloud重试。桌面聚合行仍因云子模式未决保持pending；4selected/7pending、selectionFinal=false与父级验收集合不变，开发路线确定不等于功能准入。
+
 ## 全维度动态评价框架
 
 评价就是对现有 A01–A08 验收条件作具体量化，不在验收外新增一套评分体系。共识/需求是否自洽、实现是否符合要求、真实用途是否满足，分别核对；同一组判据也用于当前开发、历史重审和 Accord 的实际应用。

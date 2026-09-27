@@ -33,7 +33,11 @@
 | 正式验收 | 17必要scope，11有定义、6未绑定，活动case共12；caseBindingGaps为空只说明声明齐全。48d4dbeb上的普通CLI有效用户环境文稿交付与systemic-correction两案已实际准入，保留精确候选与条件。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08及functionalCompletion/candidateEligible仍未完成。 |
 | 进度口径 | 先前50–65%功能/20–30%发布就绪是缺少稳定分母的工程粗估，不作为跨任务可比较总进度。当前按可用功能、已消除断点和剩余关键路径报告，正式A01–A08事实另列。 |
 
+2026-09-27，入口模式记录a7c6d8b0的[CI36321744769](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36321744769)已按精确headSha和全部11项job回读成功，核验责任闭合。
+
 ## 本批完成与实际未完项
+
+Work本地子模式已确定复用现包Hook/Skill、同主机stdio状态MCP与原生持久任务。下一核验集中于真实root Work轮次的输入回执、原生MCP身份、cwd/状态目录共同绑定，再验必要采用、续作及退出；官方能力和当前26.924.2738.0静态代码不代替实际加载。Work云端仍缺实际控制者的受支持加载/绑定与状态存续依据，不将本机config、文件搬运或remote MCP视为自动补足。桌面/网页两个入口的六份父scope/case条件已同步；整体4selected/7pending及完整验收未完。详见PLAN的Work职责组合判断；私有accord-work-entry-composition-20260927-01保留来源、代码片段和独立复核，没有新增Work/Cloud任务、连接、信任或runtime修改。
 
 **当前完整安装的两项普通案例已正式准入**：60219ffff83524523d373517d6ad4bbb851d2ff9预先绑定CLI0.157.0/Sol-medium/default、202615完整安装包和原五条输入；原600秒总限额及token上限未变。一次同任务五阶段在323.81秒内完成：同意及侧问后交付四文件，明确暂停与未决“继续”均保留五文件，取得新决定后同步修正四成果至B厅/8人/360元并说明减少300元；原输入及通用材料Hash/mtime保持。
 
