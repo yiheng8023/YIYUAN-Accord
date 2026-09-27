@@ -835,6 +835,25 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                          for claim, ids in row["missingScopes"].items() for scope in ids}
         defined_pairs = {(claim, scope) for claim, ids in bound.items() for scope in ids}
         verified_pairs = required_pairs - missing_pairs if not global_errors else set()
+        # Planning gaps are derived from active declarations, not observations.
+        # A complete case binding supplies no evidence and changes no gate.
+        binding_gaps, without_cases = {}, set()
+        for claim, scope_id in sorted(required_pairs & defined_pairs):
+            scope = scopes[scope_id]
+            relevant = sorted(key for key, case in cases.items()
+                              if case['scope'] == scope_id and claim in case['claims'])
+            missing_dimensions = {
+                field: sorted(set(scope[field]) - {value for key in relevant for value in cases[key][field]})
+                for field in required}
+            joint_missing = claim == 'function' and scope_id in joint_scopes and not any(
+                all(set(scope[field]) <= set(cases[key][field]) for field in required) for key in relevant)
+            if not relevant:
+                without_cases.add((claim, scope_id))
+            if not relevant or any(missing_dimensions.values()) or joint_missing:
+                binding_gaps.setdefault(scope_id, {})[claim] = {
+                    'caseIds': relevant, 'missingDimensions': missing_dimensions,
+                    'jointCaseMissing': joint_missing}
+        report['caseBindingGaps'] = binding_gaps
         report["progress"] = {
             "scope": "acceptance-evidence-coverage-not-effort-or-implementation-completion",
             "requirementsTotal": len(requirements),
@@ -845,6 +864,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             "coverageScorePercent": round(100 * len(verified_pairs) / len(required_pairs), 2) if required_pairs else None,
             "coverageUnbound": len(required_pairs - defined_pairs),
             "coverageDefinedButUnverified": len((required_pairs & defined_pairs) - verified_pairs),
+            "coverageWithoutCases": len(without_cases),
+            "coverageWithCaseBindingGaps": sum(len(claims) for claims in binding_gaps.values()),
             "casesDefined": len(cases),
             "casesAccepted": len(admitted),
         }

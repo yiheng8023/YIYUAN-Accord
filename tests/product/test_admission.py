@@ -1052,8 +1052,31 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 11, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 6, "coverageDefinedButUnverified": 11,
+            "coverageWithoutCases": 1, "coverageWithCaseBindingGaps": 2,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
+        gaps = report['caseBindingGaps']
+        self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery'})
+        correction = gaps['v33-systemic-correction']['function']
+        self.assertEqual(correction['caseIds'], [])
+        self.assertTrue(correction['missingDimensions']['duties'])
+        delivery = gaps['v33-codex-cli-ordinary-delivery']['function']
+        self.assertEqual(delivery['caseIds'], ['v33-codex-cli-ordinary-delivery-01'])
+        self.assertEqual(delivery['missingDimensions']['scenarios'], ['effective-user-environment'])
+        self.assertFalse(delivery['jointCaseMissing'])
+
+    def test_case_bindings_do_not_count_as_accepted_evidence(self):
+        contract = copy.deepcopy(self.contract)
+        case = next(c for c in contract['acceptance']['admission']['cases']
+                    if c['scope'] == 'v33-codex-cli-ordinary-delivery')
+        case['scenarios'].append('effective-user-environment')
+        report = self.assess(contract)
+        self.assertEqual(report['errors'], [])
+        self.assertNotIn('v33-codex-cli-ordinary-delivery', report['caseBindingGaps'])
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 1)
+        self.assertEqual(report['progress']['coverageVerified'], 0)
+        self.assertEqual(report['acceptedCases'], [])
+        self.assertFalse(report['candidateEligible'])
 
     def test_incomplete_mapping_or_old_policy_cannot_dispatch_current_observer(self):
         from yiyuan_accord.admission import admission_contract_errors
@@ -1493,6 +1516,20 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 policy["scopes"].append({**{k: copy.deepcopy(case[k]) for k in
                     ("host", "entry", "duties", "qualityAxes", "scenarios", "claims", "conditions")},
                     "id": scope_id, "rule": "Synthetic scope for algorithm exercise, not actual coverage."})
+        split = copy.deepcopy(contract)
+        split_cases = split['acceptance']['admission']['cases']
+        first = next(c for c in split_cases if c['scope'] == 'v33-system-integration')
+        second = copy.deepcopy(first)
+        second['id'] += '-remaining-duties'
+        first['duties'], second['duties'] = first['duties'][:1], second['duties'][1:]
+        split_cases.append(second)
+        planned = self.assess(split)
+        self.assertEqual(planned['errors'], [])
+        gap = planned['caseBindingGaps']['v33-system-integration']['function']
+        self.assertFalse(any(gap['missingDimensions'].values()))
+        self.assertTrue(gap['jointCaseMissing'])
+        self.assertEqual(planned['progress']['coverageWithoutCases'], 0)
+        self.assertFalse(planned['candidateEligible'])
         with self.history():
             self.commit(contract)
             phases = []
@@ -1507,6 +1544,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             self.assertEqual(report["incrementalValue"], "unverified")
             self.assertEqual(report["progress"]["requirementsComplete"], 8)
             self.assertEqual(report["progress"]["coverageVerified"], 17)
+            self.assertEqual(report['caseBindingGaps'], {})
             def missing_continuity(request):
                 result = self.observer(request)
                 if request["phase"] == "observe":
