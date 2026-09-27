@@ -4371,6 +4371,17 @@
       "restoration": "Saved and independently re-read automatic setup plus empty manual/maintenance scripts. Image universal, agent network off and cache-enabled setting preserved. This settings restoration is not full container rollback or native process-release proof.",
       "disposition": "Original task/logs and local evidence retained. No follow-up input, retry, rollback, host kill, archive or deletion; no claim that Cloud cannot support Accord. Future cloud actions require separately bound evidence and authority; do not replay this ended instance.",
       "evidence": "accord-cloud-preload-20260927-01: approval-state.json, setup-saved.sh, task-prompt-submitted.txt, setup-log-visible.txt, prestate.json, poststate.json, execution-result.json and screenshots. Independent read-only reconciliation supports these bounded conclusions."
+    },
+    {
+      "id": "cloud-preparation-close-diagnostic-repair-20260927",
+      "observedAt": "2026-09-27",
+      "scope": "local-preparation-wrapper-diagnostics-only",
+      "finding": "The as-run wrapper collapsed distinct close failures and could replace the first close exception during finally cleanup. Offline regressions reproduced this information loss; they do not identify the original Cloud process failure.",
+      "change": "A separate diagnostic-repair copy exposes only constrained primitive receipt fields, fixed phase and error type. It preserves the first close diagnostic across repeated finally-close, includes the real alive enum and keeps direct helper interruptions unchanged. Release predicate, process controls, deadlines and target-effect uncertainty are unchanged.",
+      "verification": "13 focused regressions and 18 original offline checks pass with native process startup blocked. Independent read-only review found no remaining blocker after targeted corrections. All 33 original files and prepared/executed evidence hashes were checked unchanged; the owned offline test directory was removed.",
+      "identity": "diagnostic-repair/bootstrap.py SHA256 877438de7fee034311b5f7586ccd4bc6e2c23fa7fd24a8d91ba889c8a7f00f6e; shipped Accord package and third-party Skills unchanged.",
+      "limits": "No new setup bundle, Cloud input, native/model execution, install, trust change or rollback. Original Cloud root cause and native resource post-state remain unknown; actual Agent adoption was not reached. The consumed one-time authorization and acceptance boundaries remain unchanged.",
+      "evidence": "accord-cloud-preload-20260927-01/diagnostic-repair: provenance.json, red-test.txt, review-red-test.txt, test_close_diagnostics-green.txt, test_repair-green.txt, originals-verified.json, review.md, result.json and README.md."
     }
   ],
   "environmentControl": {
