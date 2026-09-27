@@ -363,8 +363,8 @@
           "name": "ChatGPT iOS / Android",
           "officialSource": "https://help.openai.com/en/collections/3742473-chatgpt",
           "execution": "普通Chat辅助、Work云执行、Remote连接主机执行分别核对",
-          "environment": "Remote由桌面宿主执行并使用其项目、文件、插件和权限；需相同账号/工作区及在线主机，当前文档要求从桌面App设置，不能从CLI或IDE建立移动连接。手机操作界面不等于手机本地执行器；Chat/Work另判。",
-          "observation": "2026-09-15实读https://learn.chatgpt.com/docs/remote-connections：iOS/Android的Remote可继续任务、补充/纠正、审批和查看结果，使用连接主机的工具/状态。其候选路线应复用已验证主机的执行链，再补远端输入、审批、断线/重连及后态差异；不能仅按普通Chat辅助对待，也不能推成手机加载本地Hook。尚未配对、启用远程访问或做当前Accord行为验收；未由文档宣称支持。",
+          "environment": "按Chat/Work云/Remote区分：Remote复用已纳入开发的Codex Desktop本地项目任务，手机不成为本地执行器；具体账户、配对、有效主机条件和控制面差异仍须核验。Work云不继承这一判断；不把同一chat的跨设备访问、跨主机搬运与fresh低继承接续混为一谈。",
+          "observation": "2026-09-15实读https://learn.chatgpt.com/docs/remote-connections：iOS/Android的Remote可继续任务、补充/纠正、审批和查看结果，使用连接主机的工具/状态。其候选路线应复用已验证主机的执行链，再补远端输入、审批、断线/重连及后态差异；不能仅按普通Chat辅助对待，也不能推成手机加载本地Hook。尚未配对、启用远程访问或做当前Accord行为验收；未由文档宣称支持。 2026-09-27再读官方Remote页及Work执行/本地安全页，结合既有职责作出工程选择：上述限定Remote开发路线已定，整体mobile因其它模式未决仍pending，currentEffect仍unverified。当前未配对、启用、迁移或执行实例；断连后须核同一任务、暂停/撤权、已知及未知效果与执行者归属，不能重派发求确认。",
           "currentEffect": "unverified"
         },
         {
@@ -384,7 +384,7 @@
           "officialSource": "https://learn.chatgpt.com/docs/cloud",
           "execution": "外部触发与结果回传；复用已绑定的云执行者",
           "environment": "组织授权、连接和任务环境另验；入口目录不授权连接或发布。",
-          "observation": "2026-09-15实读https://learn.chatgpt.com/docs/third-party/slack及https://learn.chatgpt.com/docs/third-party/linear：两者将消息/issue交给Codex云任务，依赖GitHub、云环境和各自连接/组织权限，回传进度与结果；Linear后续评论可继续同一chat。可复用云端执行与验收基础，另核输入来源/授权、仓库选择、续接及回传权限，不为每个前端复制执行器。本次未实测、连接或发送消息；GitHub/GitLab各自的触发语义不能由Slack/Linear资料代验。",
+          "observation": "2026-09-15实读https://learn.chatgpt.com/docs/third-party/slack及https://learn.chatgpt.com/docs/third-party/linear：两者将消息/issue交给Codex云任务，依赖GitHub、云环境和各自连接/组织权限，回传进度与结果；Linear后续评论可继续同一chat。可复用云端执行与验收基础，另核输入来源/授权、仓库选择、续接及回传权限，不为每个前端复制执行器。本次未实测、连接或发送消息；GitHub/GitLab各自的触发语义不能由Slack/Linear资料代验。 2026-09-27复读Slack官方页：环境选择有歧义时可回退到最近环境，任务使用映射中首仓库默认分支；这不能替代用户目标中的精确环境/仓库/ref。结果回复受设置影响，须核回传范围；本次只形成该前端的必要核验点，不新建连接、发消息或外推其它前端。",
           "currentEffect": "unverified"
         },
         {
@@ -5056,7 +5056,7 @@
               },
               "chatgpt-mobile": {
                 "status": "pending",
-                "basis": "待判（控制面）：普通Chat辅助、Work云执行、Remote主机执行分别核对。Remote复用已绑定主机，补输入身份、审批、断连恢复及回传差异；尚缺具体主机/账户/连接条件，不要求手机本地加载插件。"
+                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
               },
               "chatgpt-web": {
                 "status": "pending",
@@ -5076,7 +5076,7 @@
               },
               "cx-integrations": {
                 "status": "pending",
-                "basis": "待判（触发与回传）：复用已绑定云执行者，先明确具体前端的输入、仓库选择、权限来源、续接及回传责任。共享执行事实不代验这些差异，也不按前端数量复制执行试验或默认新增连接。"
+                "basis": "待判（触发与回传）：承接云执行者后再验具体前端。Slack的环境回退及首仓库默认分支可能偏离目标，须核精确环境/仓库/ref与回传范围；任务链接不证明授权或完成。其它前端保留各自输入/续接/权限差异，不由Slack资料代验。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -5146,7 +5146,7 @@
               },
               "chatgpt-mobile": {
                 "status": "pending",
-                "basis": "待判（控制面）：普通Chat辅助、Work云执行、Remote主机执行分别核对。Remote复用已绑定主机，补输入身份、审批、断连恢复及回传差异；尚缺具体主机/账户/连接条件，不要求手机本地加载插件。"
+                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
               },
               "chatgpt-web": {
                 "status": "pending",
@@ -5166,7 +5166,7 @@
               },
               "cx-integrations": {
                 "status": "pending",
-                "basis": "待判（触发与回传）：复用已绑定云执行者，先明确具体前端的输入、仓库选择、权限来源、续接及回传责任。共享执行事实不代验这些差异，也不按前端数量复制执行试验或默认新增连接。"
+                "basis": "待判（触发与回传）：承接云执行者后再验具体前端。Slack的环境回退及首仓库默认分支可能偏离目标，须核精确环境/仓库/ref与回传范围；任务链接不证明授权或完成。其它前端保留各自输入/续接/权限差异，不由Slack资料代验。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -5235,7 +5235,7 @@
               },
               "chatgpt-mobile": {
                 "status": "pending",
-                "basis": "待判（控制面）：普通Chat辅助、Work云执行、Remote主机执行分别核对。Remote复用已绑定主机，补输入身份、审批、断连恢复及回传差异；尚缺具体主机/账户/连接条件，不要求手机本地加载插件。"
+                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
               },
               "chatgpt-web": {
                 "status": "pending",
@@ -5255,7 +5255,7 @@
               },
               "cx-integrations": {
                 "status": "pending",
-                "basis": "待判（触发与回传）：复用已绑定云执行者，先明确具体前端的输入、仓库选择、权限来源、续接及回传责任。共享执行事实不代验这些差异，也不按前端数量复制执行试验或默认新增连接。"
+                "basis": "待判（触发与回传）：承接云执行者后再验具体前端。Slack的环境回退及首仓库默认分支可能偏离目标，须核精确环境/仓库/ref与回传范围；任务链接不证明授权或完成。其它前端保留各自输入/续接/权限差异，不由Slack资料代验。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -5998,7 +5998,7 @@
               },
               "chatgpt-mobile": {
                 "status": "pending",
-                "basis": "待判（控制面）：普通Chat辅助、Work云执行、Remote主机执行分别核对。Remote复用已绑定主机，补输入身份、审批、断连恢复及回传差异；尚缺具体主机/账户/连接条件，不要求手机本地加载插件。"
+                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
               },
               "chatgpt-web": {
                 "status": "pending",
@@ -6018,7 +6018,7 @@
               },
               "cx-integrations": {
                 "status": "pending",
-                "basis": "待判（触发与回传）：复用已绑定云执行者，先明确具体前端的输入、仓库选择、权限来源、续接及回传责任。共享执行事实不代验这些差异，也不按前端数量复制执行试验或默认新增连接。"
+                "basis": "待判（触发与回传）：承接云执行者后再验具体前端。Slack的环境回退及首仓库默认分支可能偏离目标，须核精确环境/仓库/ref与回传范围；任务链接不证明授权或完成。其它前端保留各自输入/续接/权限差异，不由Slack资料代验。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -6170,7 +6170,7 @@
               },
               "chatgpt-mobile": {
                 "status": "pending",
-                "basis": "待判（控制面）：普通Chat辅助、Work云执行、Remote主机执行分别核对。Remote复用已绑定主机，补输入身份、审批、断连恢复及回传差异；尚缺具体主机/账户/连接条件，不要求手机本地加载插件。"
+                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
               },
               "chatgpt-web": {
                 "status": "pending",
@@ -6190,7 +6190,7 @@
               },
               "cx-integrations": {
                 "status": "pending",
-                "basis": "待判（触发与回传）：复用已绑定云执行者，先明确具体前端的输入、仓库选择、权限来源、续接及回传责任。共享执行事实不代验这些差异，也不按前端数量复制执行试验或默认新增连接。"
+                "basis": "待判（触发与回传）：承接云执行者后再验具体前端。Slack的环境回退及首仓库默认分支可能偏离目标，须核精确环境/仓库/ref与回传范围；任务链接不证明授权或完成。其它前端保留各自输入/续接/权限差异，不由Slack资料代验。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -6310,7 +6310,7 @@
               },
               "chatgpt-mobile": {
                 "status": "pending",
-                "basis": "待判（控制面）：普通Chat辅助、Work云执行、Remote主机执行分别核对。Remote复用已绑定主机，补输入身份、审批、断连恢复及回传差异；尚缺具体主机/账户/连接条件，不要求手机本地加载插件。"
+                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
               },
               "chatgpt-web": {
                 "status": "pending",
@@ -6330,7 +6330,7 @@
               },
               "cx-integrations": {
                 "status": "pending",
-                "basis": "待判（触发与回传）：复用已绑定云执行者，先明确具体前端的输入、仓库选择、权限来源、续接及回传责任。共享执行事实不代验这些差异，也不按前端数量复制执行试验或默认新增连接。"
+                "basis": "待判（触发与回传）：承接云执行者后再验具体前端。Slack的环境回退及首仓库默认分支可能偏离目标，须核精确环境/仓库/ref与回传范围；任务链接不证明授权或完成。其它前端保留各自输入/续接/权限差异，不由Slack资料代验。"
               },
               "cx-jetbrains": {
                 "status": "pending",

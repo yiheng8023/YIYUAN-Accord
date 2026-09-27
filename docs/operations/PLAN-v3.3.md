@@ -50,6 +50,12 @@
 
 本轮实际重读的官方来源：[IDE入口](https://learn.chatgpt.com/docs/codex/ide)区分独立IDE集成；[Work执行边界](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview)区分本地与托管执行；[Remote连接](https://learn.chatgpt.com/docs/remote-connections)说明连接主机的复用关系。以上三条工作线是据此及既有项目事实作出的工程分工，不是官方给出的Accord支持结论。七个pending的依据已细化为具体条件，selected集合和selectionFinal=false保持；没有据缺少实际验收自动排除或晋升入口。条件充分的普通开发继续前瞻绑定一个连贯工作段，按实际职责组合补相关定义和案例；不等待所有入口调查结束，也不制造交接压力来填A05。
 
+2026-09-27模式判断：Remote复用已纳入开发的Codex Desktop本地项目任务，作为该限定子模式的开发方案；不新增手机执行器。[官方Remote说明](https://learn.chatgpt.com/docs/remote-connections)提供输入/审批、主机资源与同一对话跨设备访问的可行路径，接续职责继续由执行主机承担。此为据来源作出的工程选择，实际账户/配对、有效主机/包、暂停或撤权、断连后的任务与效果对账、结果权限及退出责任仍须核验；不可达不等于执行已停止，更不授权重新派发。原生跨主机搬运会迁移原chat与Git状态，不能替代fresh低继承接续，也不提供当前chat自迁移或云端搬运。本次未启用连接或执行迁移。
+
+普通Chat的辅助角色保持；[Work本地安全边界](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-local-security)和[Work执行位置](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview)分别约束本地及托管模式，不能由Remote选择推出Work云适用。故mobile整体仍pending，三个父scope及三个case同步限定basis，父范围4个入口selected/7个pending和selectionFinal=false不变，不增加父级subjectEntries或验收通过。
+
+[Slack入口说明](https://learn.chatgpt.com/docs/third-party/slack)还给出具体目标绑定风险：环境有歧义时的最近环境回退、首映射仓库默认分支及设置相关的结果回复。实际采用须核用户意图对应的环境/仓库/ref与回传范围，链接或自动选择不替代这些检查；其它前端的权限与续接语义分别核对。cx-integrations继续依赖托管执行者判断，不为本次来源审查新增连接、外部消息或模型场景。
+
 2026-09-27更新/恢复说明交付已完成：[两轮工作段](../../product/cases/upgrade-guidance-v3.3.json)在用户批准后执行一次，三份成品按后来Stop反馈同步纠偏。既有准入器接受v33-codex-cli-update-guidance-01与v33-systemic-correction-03；详见[实际记录](PROCEDURE-v3.3.md#更新说明交付与反馈纠偏的实际准入2026-09-27)。独立备份与后置Hook路径的区别、安全更新时机和执行者责任已提炼到两语README；这是Root随后整合，模型原件保持。旧systemic scope的已结束实例条件仍留在7ae3bac5历史身份，新实例保持自己的候选与有效用户环境条件，不归因于Accord单独收益。该段及所属资源责任已闭合；后续沿上述工作线推进未定义范围、实际入口与自主连续性的必要工作，不重复这两轮或制造交接压力。后续用户截图已显示自然Stop完成，原单次失败的具体原因仍未知；完整验收与发布资格仍未成立。
 
 ## 全维度动态评价框架
