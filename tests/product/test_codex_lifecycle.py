@@ -17,6 +17,178 @@ from scripts import observe_codex_lifecycle as lifecycle
 
 
 class CodexLifecycleTests(unittest.TestCase):
+    def legacy_native_config_preflight_close(self):
+        """An opt-in native compatibility observation, never a Cloud replay."""
+        binary = Path(os.environ['ACCORD_LEGACY_CLOSE_BINARY']).resolve(strict=True)
+        evidence = Path(os.environ['ACCORD_LEGACY_CLOSE_EVIDENCE']).resolve(strict=True)
+        helpers = {
+            'scripts/observe_codex_lifecycle.py': 'fe8c76f27f77c2ae0266d1a9622c54073a4bf333749b45a73c8687eb2fae9f8d',
+            'scripts/observe_codex_entry.py': '6130b87757a4b6a8662af59e8f50d6ccb0b6beb3c63f04d9f19ecc5e6b680ee9',
+            'scripts/codex_rpc.py': 'f6313887469f57a793cd17bdd7e1f8fea1a8e7be06630ab96ec75ad6648bf64e',
+            'scripts/inspect_native_resources.py': 'fdc4aa4e2f5789c7dac2c03b3c9d3bfbf2940f696a35d601a708dcf912af2e54',
+        }
+        for name, expected in helpers.items():
+            self.assertEqual(hashlib.sha256((lifecycle.ROOT / name).read_bytes()).hexdigest(), expected)
+        release = json.loads((evidence / 'release.json').read_text())
+        self.assertEqual(hashlib.sha256(binary.read_bytes()).hexdigest(), release['binarySha256'])
+        rows = []
+        deadline = time.monotonic() + 120
+        def section(data, key):
+            value = data.get(key)
+            if value is None:
+                return {}
+            self.assertIsInstance(value, dict)
+            return value
+        for profile in ('absent-config', 'empty-config'):
+            root = evidence / profile
+            for directory in ('home', 'workspace', 'temp', 'native', 'commands', 'retained'):
+                (root / directory).mkdir(parents=True)
+            home, workspace = root / 'home', root / 'workspace'
+            config = home / 'config.toml'
+            if profile == 'empty-config':
+                config.write_text('', encoding='utf-8')
+            before = config.read_bytes() if config.exists() else None
+            env = {key: os.environ[key] for key in ('PATH', 'LANG', 'LC_ALL') if key in os.environ}
+            env.update(HOME=str(home), CODEX_HOME=str(home), TMPDIR=str(root / 'temp'),
+                       XDG_CONFIG_HOME=str(home / '.config'), XDG_CACHE_HOME=str(home / '.cache'),
+                       XDG_DATA_HOME=str(home / '.local/share'))
+            manifest = {'evidence': str(root), 'codex': str(binary),
+                        'ownedRoots': {'workspace': str(workspace)},
+                        'resourceController': 'posix-session-process-group',
+                        'limits': {'requestSeconds': 20, 'recoverySeconds': 15}}
+            row = {'profile': profile, 'precedingPhase': 'version', 'precedingErrorType': None,
+                   'closeErrorType': None, 'resourceReceipt': None, 'accepted': False}
+            app = None
+            interruption = None
+            try:
+                self.assertLess(time.monotonic(), deadline)
+                version = lifecycle._codex_version(binary, manifest, 'source', env)
+                self.assertEqual(version, 'codex-cli 0.144.0-alpha.4')
+                row['version'] = version
+                row['precedingPhase'] = 'initialize'
+                self.assertLess(time.monotonic(), deadline)
+                app = lifecycle._App(manifest, 'preflight', [str(binary), 'app-server'], env, deadline)
+                app.initialize()
+                row['precedingPhase'] = 'user-config/read'
+                first = app.rpc('config/read', {'includeLayers': True, 'cwd': str(workspace)})
+                layers = first.get('layers')
+                self.assertIsInstance(layers, list)
+                user = [v for v in layers if isinstance(v.get('name'), dict)
+                        and v['name'].get('type') == 'user' and v['name'].get('profile') is None]
+                self.assertEqual(len(user), 1)
+                self.assertEqual(user[0]['name'].get('file'), str(config))
+                self.assertIsNone(user[0].get('disabledReason'))
+                self.assertIsInstance(user[0].get('version'), str)
+                self.assertTrue(user[0]['version'])
+                self.assertFalse(any(k.startswith('yiyuan-accord-codex@yiyuan-accord:')
+                                     for k in user[0]['config'].get('hooks', {}).get('state', {})))
+                row['precedingPhase'] = 'effective-config/read'
+                effective = app.rpc('config/read', {'includeLayers': True, 'cwd': str(workspace)})['config']
+                for data in (user[0]['config'], effective):
+                    self.assertNotIn('yiyuan-accord', section(data, 'marketplaces'))
+                    self.assertNotIn('yiyuan-accord-codex@yiyuan-accord', section(data, 'plugins'))
+                self.assertFalse(any(k.startswith('yiyuan-accord-codex@yiyuan-accord:')
+                                     for k in section(section(effective, 'hooks'), 'state')))
+                self.assertIsNot(section(effective, 'features').get('hooks'), False)
+                self.assertIsNot(section(effective, 'features').get('plugins'), False)
+                row['precedingPhase'] = 'preflight-read-complete'
+            except BaseException as error:
+                # Raw traffic retains details; the summary never replaces a
+                # preceding error with a later close failure.
+                row['precedingErrorType'] = type(error).__name__
+                if not isinstance(error, Exception):
+                    interruption = error
+            finally:
+                if app is not None:
+                    try:
+                        row['resourceReceipt'] = app.close()
+                    except BaseException as error:
+                        row['closeErrorType'] = type(error).__name__
+                        row['resourceReceipt'] = app._close_record
+                        if interruption is None and not isinstance(error, Exception):
+                            interruption = error
+                record = row['resourceReceipt']
+                row['released'] = lifecycle._record_released(record, manifest)
+                row['originalClosePredicate'] = (row['released'] and record['exitCode'] == 0
+                    and record.get('forced') is False and record.get('failure') is None)
+                row['configReadErrorType'] = None
+                try:
+                    row['configUnchanged'] = (config.read_bytes() if config.exists() else None) == before
+                except OSError as error:
+                    row['configUnchanged'] = None
+                    row['configReadErrorType'] = type(error).__name__
+                row['accepted'] = (row['precedingPhase'] == 'preflight-read-complete'
+                                   and row['precedingErrorType'] is None and row['closeErrorType'] is None
+                                   and row['originalClosePredicate'] and row['configUnchanged'] is True)
+                rows.append(row)
+                lifecycle.save(evidence / 'result.json', {
+                    'profiles': rows, 'helperSha256': helpers, 'limits': manifest['limits'],
+                    'workBudgetSeconds': 120, 'perProcessRecoverySeconds': 15,
+                    'versionProbeWorkSeconds': 10, 'jobTimeoutSeconds': 300,
+                    'plannedProfiles': ['absent-config', 'empty-config'],
+                    'claimLimit': 'No model/thread, account, plugin install, trust write or Cloud execution. '
+                                  'POSIX evidence covers root exit and process-group disappearance only.'})
+            if interruption is not None:
+                raise interruption
+            if not row['released'] or row['configUnchanged'] is not True:
+                break  # Unknown release/config post-state holds further native dispatch.
+        self.assertEqual(len(rows), 2, 'Native release/config post-state not confirmed; next profile held')
+        self.assertTrue(all(row['accepted'] for row in rows), json.dumps(rows, indent=2))
+
+    def test_legacy_close_probe_preserves_interruptions_without_successful_row(self):
+        for phase in ('initialize', 'close', 'config-read'):
+            with self.subTest(phase=phase), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                binary = root / 'codex'
+                binary.write_bytes(b'no executable is started by this test')
+                evidence = root / 'evidence'
+                evidence.mkdir()
+                (evidence / 'release.json').write_text(json.dumps({
+                    'binarySha256': hashlib.sha256(binary.read_bytes()).hexdigest()}))
+
+                state = {'closed': False}
+                original_exists = Path.exists
+
+                def exists(path):
+                    if phase == 'config-read' and state['closed'] and path.name == 'config.toml':
+                        raise PermissionError('post-state unavailable')
+                    return original_exists(path)
+
+                class App:
+                    def __init__(self, _manifest, _label, _args, env, _deadline):
+                        self.config = Path(env['CODEX_HOME']) / 'config.toml'
+                        self._close_record = {'exitCode': 0, 'forced': False, 'failure': None}
+
+                    def initialize(self):
+                        if phase == 'initialize':
+                            raise KeyboardInterrupt('original interruption')
+
+                    def rpc(self, _method, _params):
+                        return {'config': {}, 'layers': [{'name': {'type': 'user', 'file': str(self.config)},
+                                                        'version': 'bound-version', 'config': {}}]}
+
+                    def close(self):
+                        state['closed'] = True
+                        if phase == 'close':
+                            raise KeyboardInterrupt('close interruption')
+                        return self._close_record
+
+                with patch.dict(os.environ, {'ACCORD_LEGACY_CLOSE_BINARY': str(binary),
+                                             'ACCORD_LEGACY_CLOSE_EVIDENCE': str(evidence)}), \
+                        patch.object(lifecycle, '_App', App), \
+                        patch.object(lifecycle, '_codex_version', return_value='codex-cli 0.144.0-alpha.4'), \
+                        patch.object(lifecycle, '_record_released', return_value=True), \
+                        patch.object(Path, 'exists', exists), \
+                        self.assertRaises(AssertionError if phase == 'config-read' else KeyboardInterrupt):
+                    self.legacy_native_config_preflight_close()
+                rows = json.loads((evidence / 'result.json').read_text())['profiles']
+                self.assertEqual(len(rows), 1)
+                self.assertFalse(rows[0]['accepted'])
+                field = {'initialize': 'precedingErrorType', 'close': 'closeErrorType',
+                         'config-read': 'configReadErrorType'}[phase]
+                self.assertEqual(rows[0][field], 'PermissionError' if phase == 'config-read' else 'KeyboardInterrupt')
+                self.assertFalse((evidence / 'empty-config').exists())
+
     def test_ci_case_binding_rejects_incomplete_or_changed_execution_before_dispatch(self):
         workflow = (lifecycle.ROOT / ".github/workflows/sdk-lifecycle-case.yml").read_text(encoding="utf-8")
         step = workflow.split("      - name: Recheck bindings before native execution\n", 1)[1]
@@ -925,6 +1097,10 @@ class CodexLifecycleTests(unittest.TestCase):
 if os.name == "posix":
     CodexLifecycleTests.test_posix_app_closes_native_stdin_and_observes_limited_release = (
         CodexLifecycleTests.posix_app_closes_native_stdin_and_observes_limited_release)
+
+if sys.platform == 'linux' and os.environ.get('ACCORD_LEGACY_CLOSE_BINARY'):
+    CodexLifecycleTests.test_legacy_native_config_preflight_close = (
+        CodexLifecycleTests.legacy_native_config_preflight_close)
 
 
 if __name__ == "__main__":
