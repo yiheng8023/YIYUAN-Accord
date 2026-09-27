@@ -26,13 +26,15 @@
 | 项目 | 已核事实与限制 |
 |---|---|
 | 仓库 | `main`的日常开发与记录持续推进，当前HEAD/上游及工作区以实时Git核对。最新文稿两案准入绑定48d4dbeb，较早五阶段普通两案绑定60219fff，SDK基础机制两案绑定029a1c58；这些是各自执行/准入对象，不是永久当前HEAD，不能机械合并其验收效力。 |
-| 源与本机安装 | 源码候选为3.3.0-dev.1+codex.20260927233529（24文件、SHA e214b2170ea61a6c9a8eeb114ea919f5d0f5f1cdecdf62913bcb37f952869ca6）；本机现装仍为3.3.0-dev.1+codex.20260927100450（24文件、SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57，市场固定f8ecac46）。以下安装观察保持原包身份：原生安装、逐文件Git字节与新进程5Skill/6可信Hook路径均核实。旧包原件独立备份保持，无关配置不变；宿主管理的旧缓存已按原生替换退出。当前MCP与新helper可读取同一未完状态，仍不声称所有既有Desktop/MCP消费者已刷新。 |
+| 源与本机安装 | 源码候选为3.3.0-dev.1+codex.20260928040031（24文件、SHA fcb12be58f01593dfb2fd3832fe6c4270da462f9573446c32be7285c86400f43）；本机现装仍为3.3.0-dev.1+codex.20260927100450（24文件、SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57，市场固定f8ecac46）。以下安装观察保持原包身份：原生安装、逐文件Git字节与新进程5Skill/6可信Hook路径均核实。旧包原件独立备份保持，无关配置不变；宿主管理的旧缓存已按原生替换退出。当前MCP与新helper可读取同一未完状态，仍不声称所有既有Desktop/MCP消费者已刷新。 |
 | 托管检查 | 最新声明/文稿执行候选48d4dbeb的[CI36299563573](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36299563573)已按精确headSha及全部11个job回读成功，核验责任闭合。运行时修复f8ecac46的[CI36287689800](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36287689800)已按精确headSha及全部job核对，11/11成功；包括Windows/Linux/macOS回归与Linux/macOS原生生命周期。此批托管责任闭合，未重放旧失败运行。 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本线程已有未完检查点；回放需求、输入覆盖、修订号及宿主条件按每次实际原生读取核对。此前unbound、10条输入、rev5和旧宿主版本都是历史观察，不再作为当前值使用。检查点、Goal及协作模式分别判断；canContinue=false不等于项目暂停/取消或隐式Goal，完整Goal与模式状态不能从检查点推断。 |
 | 云环境 | 最近一次获准的启动前接入任务已在setup的native-resource-close检查处停止，实际Agent采用核对未到达；targetMutationDispatched=false仅指尚未派发脚本目标写入，不代表容器零效果。上次已核验setup恢复automatic，universal、Agent网络off及缓存开启保持；原容器资源后态仍未知。该次授权已消费，原任务/日志保留，不重放或追加输入。更早只读诊断的目录/配置/控制者观察保持原时点身份，不能代替实际装载；新Cloud动作须另有具体依据与授权。 |
 | 正式验收 | 17必要scope，11有定义、6未绑定，活动case共12；caseBindingGaps为空只说明声明齐全。48d4dbeb上的普通CLI有效用户环境文稿交付与systemic-correction两案已实际准入，保留精确候选与条件。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08及functionalCompletion/candidateEligible仍未完成。 |
 | 进度口径 | 截止3.3正式发布及公共对象核验；后续部署、传播、市场及治理不计。先前50–65%功能/20–30%发布就绪缺少稳定分母，不能作为可比较总进度。按现有工作包的实际成果、剩余断点和关键路径评估，正式A01–A08事实另列。取消Claude后续适配不减少当前17范围。 |
+
+735a5919范围/债务对齐的[CI36343293965](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36343293965)已按精确SHA和11个job读回成功。其后退役当前runtime及包内副本未注册的Claude PostToolBatch分支；源码包更新为28040031，仅manifest与accord-hook两文件改变，SessionStart及状态/MCP实现保持。8项不支持事件/无写入、启动、暂停与压缩恢复回归、verify及host-check通过；本机仍27100450，未安装或刷新已有消费者，新包的行为采用和托管结果另验。原233529候选和原准入保留原条件，旧UPDATE-PREPARATION不能直接用于此新候选。
 
 ### 到正式发布的进度评估（2026-09-28）
 
