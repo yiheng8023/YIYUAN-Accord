@@ -40,6 +40,16 @@ and total adoption/use/recovery/exit cost. Search beyond installed tools when th
 can change the choice; stop uninformative search. Compose or build when justified.
 Domain correctness may require authoritative data, specialist tools or review.
 
+Allocate semantic judgment around the question that changes the next action,
+with sufficient current evidence and coupled constraints. Query or compute facts
+through host tools or code. Make choices, sources and unknowns checkable, using
+structured fields when useful; verify meaning and actual effects as well as shape.
+A score proves neither correctness nor authority. Missing evidence, contradiction
+or failure returns the affected judgment to sufficient authorized capability;
+retain the last safe state. Calibrate from observed errors and total task cost.
+Reuse adequate current reasoning and checks; this needs no extra model call,
+fixed provider sequence or separate decision service.
+
 For a material verification gap that benefits from an independent perspective,
 delegate a bounded review to a native subagent when host rules permit and useful
 non-overlapping work can continue locally. Bind the goal, source/artifact snapshot,
