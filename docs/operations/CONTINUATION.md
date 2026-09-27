@@ -30,7 +30,7 @@
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本次只读诊断授权已自然捕获，原生MCP读回inputSource=native-input-event、输入数10、needsNativeReplay/needsResumeReconciliation=false，checkpoint仍unbound；此前retained-native-replay恢复保持历史身份。无需继续恢复或调查压缩。独立0.157.0原生只读查询的goal=null仅说明原读取时点；该次MCP宿主报告Desktop0.155.0-alpha.16.4；9月26日宿主resume后原生MCP报告0.158.0-alpha.2、Astra，输入正常捕获且无需回放。rev5接续保持canContinue=false，不将未完项目变为隐式Goal。 |
 | 云环境 | 新获准只读诊断已完成；universal、自动setup、Agent网络关闭、缓存开启均保持。一个新任务URL内提交三条输入（两轮只读命令、一条仅取回历史命令正文），界面任务数9→12；不称一次执行或三个新任务URL。运行期可见CODEX_HOME=/opt/codex；后续另一个PID具有app-server/-c，实际配置加载与Accord采用仍未证实。没有安装、设置/信任修改或旧案重放；原失败容器后态仍不能由本案代验。 |
-| 正式验收 | 17必要scope，11有定义、6未绑定；另有1个已定义范围无活动case，2个范围存在case绑定缺口（前者包含在后者中）：systemic-correction无活动case，ordinary CLI缺effective-user-environment贡献。校验器caseBindingGaps现明确列出；声明齐全仍不等于通过。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08整项及functionalCompletion/candidateEligible仍未完成。 |
+| 正式验收 | 17必要scope，11有定义、6未绑定。已为普通CLI有效用户环境与systemic-correction前瞻绑定同一更新说明交付段，活动case共12；已有范围的caseBindingGaps现为空，仅说明声明齐全，实际新贡献尚未执行/准入。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08及functionalCompletion/candidateEligible仍未完成。 |
 | 进度口径 | 先前50–65%功能/20–30%发布就绪是缺少稳定分母的工程粗估，不作为跨任务可比较总进度。当前按可用功能、已消除断点和剩余关键路径报告，正式A01–A08事实另列。 |
 
 ## 本批完成与实际未完项
@@ -126,7 +126,9 @@
 
 **更新后Stop失败仍待原生后态闭合**：用户随后提供Hook统计，两个UserPromptSubmit完成、一个Stop未成功；展开只有`hook exited with code 1`，没有命令路径或stderr。新版自然输入已进入27100450路径，当前MCP可读；新版安装目录的三个既有Stop隔离回归通过。旧202615路径缺失且只读启动对照为MODULE_NOT_FOUND，但这不是该Stop的原回执，原根因不定案、不改标成功。独立复核纠正前轮判断范围：长驻MCP预加载可存活，不能证明稍后另起进程的Stop仍有可执行旧路径。后续按既有消费者保护责任，先核对绑定旧根的在途轮次与后置Hook结束，再由不依赖旧根的获准执行者在宿主支持的空闲边界替换；无法确认时保留准备成果，不再于受影响轮内自更新。无需永久并存缓存，也不重装求绿。当前仅纠正本项目更新工序，未改运行时/Skill、验收或共享配置；原安装/CI有限事实保持，Hook闭合缺口不能被它们抵销。原件与限定诊断在accord-stop-update-diagnosis-20260927-01。
 
-**收尾依赖核对已落地**：未发现必须先整项验收才允许开发的结构性循环，未改17范围或8项底线。修正PLAN仍将已完成的受控失ACK组合列为“下一步”的陈旧语句；原三平台局部证据复用，不重跑。校验器新增纯诊断caseBindingGaps，按活动case区分无案例、职责/质量轴/场景缺口和A08缺完整组合case；既有observe/recheck、准入及候选条件不变，23项当前准入回归通过。七个pending依据在三scope/三case共六份投影同步细化为具体可行条件，按本地/远程主机、托管执行、交互/控制/触发聚合作业；Work本地/云端与Remote主机复用各有边界，独立IDE保留集成差异。selected集合不变，未把未验证改成通过或排除，也未安排七个独立模型试验。独立复核无阻断；相关源码、定义和记录构成一个集成批次，尚需对应托管检查。
+**收尾依赖核对已落地**：未发现必须先整项验收才允许开发的结构性循环，未改17范围或8项底线。修正PLAN仍将已完成的受控失ACK组合列为“下一步”的陈旧语句；原三平台局部证据复用，不重跑。校验器新增纯诊断caseBindingGaps，按活动case区分无案例、职责/质量轴/场景缺口和A08缺完整组合case；既有observe/recheck、准入及候选条件不变，23项当前准入回归通过。七个pending依据在三scope/三case共六份投影同步细化为具体可行条件，按本地/远程主机、托管执行、交互/控制/触发聚合作业；Work本地/云端与Remote主机复用各有边界，独立IDE保留集成差异。selected集合不变，未把未验证改成通过或排除，也未安排七个独立模型试验。独立复核无阻断；该批7ae3bac5的CI36294719722已按精确SHA及全部11个job读回成功，核验责任闭合。
+
+**下一交付段已具体绑定，尚未派发模型**：product/cases/upgrade-guidance-v3.3.json以六份冻结输入生成中英文更新/恢复说明与一致JSON，第二轮按真实后取得的Stop反馈修订三份成品；一次episode分别评价普通有效用户环境和系统性纠偏。旧systemic scope残留已结束02例的版本/配置/执行条件，已留7ae3bac5原声明及Hash，scope保留默认模式和原纠偏职责，新03例独立绑定当前条件。当前只读原生预检确认CLI0.157.1、现装27100450、Sol/medium及5Skill/6可信Hook，配置未变且进程已释放。采用既有执行器，不另建控制框架。24项当前准入回归通过；私有配置恢复器经红绿反例修正为预绑备份Hash、唯一新增登记的字节证明及排它读写，3方法7子例通过并独立复核。一次600秒、两轮、250万总/20万uncached/1.4万输出上限已预绑，不借此改变主线程模型或模式。确切工作目录的原生临时信任/恢复尚需明确授权，未启动模型任务。准备与恢复源码在accord-upgrade-guidance-20260927-01；先完成当前不可变准备和此有限授权，再执行/独立审查/observe-recheck，不能把定义计为通过。
 
 ## 原件与历史导航
 

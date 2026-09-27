@@ -1015,22 +1015,22 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, set())
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {'A07'})
         # Historical executions do not supply replacement correction or
         # installed-environment evidence, even when a component worked.
         self.assertNotIn("v33-systemic-correction-02", report["acceptedCases"])
         self.assertNotIn("v33-codex-cli-review-delivery-01", report["acceptedCases"])
         self.assertNotIn("v33-codex-cli-ordinary-retro-01", report["acceptedCases"])
         self.assertEqual(set(report["acceptanceRequirements"]["A04"]["missingScopes"]["function"]),
-                         {"v33-systemic-correction", "v33-system-integration"})
+                         {"v33-system-integration"})
         self.assertEqual(report["openCoverage"]["v33-codex-cli-ordinary-delivery"]
-                         ["claims"]["function"]["scenarios"], ["effective-user-environment"])
+                         ["claims"]["function"]["scenarios"], [])
         self.assertNotIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
         self.assertIn("v33-openai-entry-applicability",
                       report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 6)
-        self.assertEqual(report["progress"]["requirementsComplete"], 0)
+        self.assertEqual(report["progress"]["coverageVerified"], 8)
+        self.assertEqual(report["progress"]["requirementsComplete"], 1)
         # The explicit adaptation case is now covered by this synthetic observer;
         # SDK sub-scopes still cannot discharge selected-entry lifecycle parents.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
@@ -1052,9 +1052,24 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 11, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 6, "coverageDefinedButUnverified": 11,
-            "coverageWithoutCases": 1, "coverageWithCaseBindingGaps": 2,
+            "coverageWithoutCases": 0, "coverageWithCaseBindingGaps": 0,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
+        self.assertEqual(report['caseBindingGaps'], {})
+
+    def without_correction_and_user_environment_cases(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract['acceptance']['admission']
+        policy['cases'] = [c for c in policy['cases'] if c['scope'] != 'v33-systemic-correction'
+                           and not (c['scope'] == 'v33-codex-cli-ordinary-delivery'
+                                    and 'effective-user-environment' in c['scenarios'])]
+        return contract
+
+    def test_diagnostic_retains_unplanned_scope_and_scenario_gaps(self):
+        report = self.assess(self.without_correction_and_user_environment_cases())
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(report['progress']['coverageWithoutCases'], 1)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 2)
         gaps = report['caseBindingGaps']
         self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery'})
         correction = gaps['v33-systemic-correction']['function']
@@ -1066,7 +1081,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(delivery['jointCaseMissing'])
 
     def test_case_bindings_do_not_count_as_accepted_evidence(self):
-        contract = copy.deepcopy(self.contract)
+        contract = self.without_correction_and_user_environment_cases()
         case = next(c for c in contract['acceptance']['admission']['cases']
                     if c['scope'] == 'v33-codex-cli-ordinary-delivery')
         case['scenarios'].append('effective-user-environment')
