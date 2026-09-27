@@ -353,8 +353,8 @@
           "name": "ChatGPT 桌面 Chat / Work",
           "officialSource": "https://learn.chatgpt.com/docs/app",
           "execution": "交互面按Chat/Work区分；Work本地与云端绑定各自执行者",
-          "environment": "按Chat/Work及执行位置分别判断。Work本地子模式采用同主机现有包与原生持久任务的组合；云端不继承该判断。当前安装的桌面26.924.2738.0代码保留Work插件选择、local配置及thread/start路径，仅证明可复用的实现通路。实际账户许可、原Work控制者的Hook/MCP共同身份、包加载、恢复和退出尚待该入口核验。",
-          "observation": "2026-09-06 复核 https://learn.chatgpt.com/docs/plugins 与 https://learn.chatgpt.com/docs/enterprise/skills：Chat、Work 与 Codex 支持插件并共享公共目录，但本地文件分发、工作区 Skill 和各入口安装/授权仍有边界。本机 26.901.5280.0 的 composer-work-home-plugins-control 与 plugin-picker-menu-content 接入插件选择及宿主路由。界面代码和官方能力不证明某个 Work 会话已加载 Accord；正文使用、Hook 执行、实际效果及云端安装仍未验证。 用户随后提供同一客户端的 Chat 与 Work 插件选择器截图，两处均直接显示 YIYUAN Accord for Codex；本机两入口的可发现/可选状态已确认。截图不包含调用后结果，不能单独证明正文加载、Hook 执行或交付效果。 随后客户端更新为 26.901.6511.0，运行路径已核对；共享 Accord 已按后续用户方向卸载，旧截图仅保留历史可发现性。此次未调用 Chat/Work 候选，不把客户端升级或 App Server 诊断当成其当前加载/效果。 2026-09-27按官方Plugins/MCP/Work安全正文及当前26.924.2738.0安装代码复核，确定Work本地子模式复用现包的开发路线；静态源码不当作运行账户或实际采用证据。最小接入核验为同一root Work turn的UserPromptSubmit输入回执、MCP原生thread/session/turn元数据及一致cwd/状态目录；上下文读取另需Hook转录位于该CODEX_HOME/sessions。云端子模式仍待判，整行currentEffect保持unverified。原件accord-work-entry-composition-20260927-01，未创建Work任务或改设置。",
+          "environment": "Work本地子模式复用同主机现有包与原生持久任务。2026-09-27用户发起的projectless Work会话（codex_work_desktop、0.158.0-alpha.2.1）实际收到Accord入口指导并调用状态MCP一次；同轮原生身份及实际cwd输入回执已独立对账。Root诊断prompt指定的repo cwd与实际cwd不同，原查询未读到回执，不能将事后文件核对冒充正确cwd的MCP联读。普通交付、恢复、退出和云端仍保留各自未验条件。",
+          "observation": "2026-09-06 复核 https://learn.chatgpt.com/docs/plugins 与 https://learn.chatgpt.com/docs/enterprise/skills：Chat、Work 与 Codex 支持插件并共享公共目录，但本地文件分发、工作区 Skill 和各入口安装/授权仍有边界。本机 26.901.5280.0 的 composer-work-home-plugins-control 与 plugin-picker-menu-content 接入插件选择及宿主路由。界面代码和官方能力不证明某个 Work 会话已加载 Accord；正文使用、Hook 执行、实际效果及云端安装仍未验证。 用户随后提供同一客户端的 Chat 与 Work 插件选择器截图，两处均直接显示 YIYUAN Accord for Codex；本机两入口的可发现/可选状态已确认。截图不包含调用后结果，不能单独证明正文加载、Hook 执行或交付效果。 随后客户端更新为 26.901.6511.0，运行路径已核对；共享 Accord 已按后续用户方向卸载，旧截图仅保留历史可发现性。此次未调用 Chat/Work 候选，不把客户端升级或 App Server 诊断当成其当前加载/效果。 2026-09-27按官方Plugins/MCP/Work安全正文及当前26.924.2738.0安装代码复核，确定Work本地子模式复用现包的开发路线；静态源码不当作运行账户或实际采用证据。最小接入核验为同一root Work turn的UserPromptSubmit输入回执、MCP原生thread/session/turn元数据及一致cwd/状态目录；上下文读取另需Hook转录位于该CODEX_HOME/sessions。云端子模式仍待判，整行currentEffect保持unverified。原件accord-work-entry-composition-20260927-01，未创建Work任务或改设置。 随后用户已在Work本地发出一次只读核验，原生01a0e34c-7118-7621-a149-4142d960438f/turn01a0e34c-879a-7761-b848-a59de3df1e00于200971ms完成。原生历史确认codex_work_desktop、Accord入口/UserPromptSubmit指导和一次inspect调用；保存MCP对象与原生事件一致。Root提示词固定repo cwd，实际新对话位于Documents/Codex生成目录；按session+真实cwd定位的输入回执存在且epoch/turn相符，repo对应键不存在。原报告的missing回执保持，路径归因由Root事后只读核对，不归责用户、不重试、不声称正确cwd工具联读或完整验收。两报告及native-evidence/actual-cwd-input/reconciliation原件保留同私有目录，未改状态、配置或第三方Skill。",
           "currentEffect": "unverified"
         },
         {
@@ -5052,7 +5052,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地子模式已确定复用同主机现有Accord包的Hook/Skill、stdio状态MCP及原生持久任务；须在实际Work控制者核对同一root turn的输入回执、MCP原生thread/session/turn元数据与cwd/状态目录，再验采用/恢复/退出。普通Chat辅助、Work云仍另判，不由静态代码推账户许可或跨入口验收。"
+                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
               },
               "chatgpt-mobile": {
                 "status": "pending",
@@ -5142,7 +5142,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地子模式已确定复用同主机现有Accord包的Hook/Skill、stdio状态MCP及原生持久任务；须在实际Work控制者核对同一root turn的输入回执、MCP原生thread/session/turn元数据与cwd/状态目录，再验采用/恢复/退出。普通Chat辅助、Work云仍另判，不由静态代码推账户许可或跨入口验收。"
+                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
               },
               "chatgpt-mobile": {
                 "status": "pending",
@@ -5231,7 +5231,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地子模式已确定复用同主机现有Accord包的Hook/Skill、stdio状态MCP及原生持久任务；须在实际Work控制者核对同一root turn的输入回执、MCP原生thread/session/turn元数据与cwd/状态目录，再验采用/恢复/退出。普通Chat辅助、Work云仍另判，不由静态代码推账户许可或跨入口验收。"
+                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
               },
               "chatgpt-mobile": {
                 "status": "pending",
@@ -5994,7 +5994,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地子模式已确定复用同主机现有Accord包的Hook/Skill、stdio状态MCP及原生持久任务；须在实际Work控制者核对同一root turn的输入回执、MCP原生thread/session/turn元数据与cwd/状态目录，再验采用/恢复/退出。普通Chat辅助、Work云仍另判，不由静态代码推账户许可或跨入口验收。"
+                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
               },
               "chatgpt-mobile": {
                 "status": "pending",
@@ -6166,7 +6166,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地子模式已确定复用同主机现有Accord包的Hook/Skill、stdio状态MCP及原生持久任务；须在实际Work控制者核对同一root turn的输入回执、MCP原生thread/session/turn元数据与cwd/状态目录，再验采用/恢复/退出。普通Chat辅助、Work云仍另判，不由静态代码推账户许可或跨入口验收。"
+                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
               },
               "chatgpt-mobile": {
                 "status": "pending",
@@ -6306,7 +6306,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地子模式已确定复用同主机现有Accord包的Hook/Skill、stdio状态MCP及原生持久任务；须在实际Work控制者核对同一root turn的输入回执、MCP原生thread/session/turn元数据与cwd/状态目录，再验采用/恢复/退出。普通Chat辅助、Work云仍另判，不由静态代码推账户许可或跨入口验收。"
+                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
               },
               "chatgpt-mobile": {
                 "status": "pending",

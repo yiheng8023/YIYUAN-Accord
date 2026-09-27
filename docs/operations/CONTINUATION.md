@@ -37,7 +37,9 @@
 
 ## 本批完成与实际未完项
 
-Work本地子模式已确定复用现包Hook/Skill、同主机stdio状态MCP与原生持久任务。下一核验集中于真实root Work轮次的输入回执、原生MCP身份、cwd/状态目录共同绑定，再验必要采用、续作及退出；官方能力和当前26.924.2738.0静态代码不代替实际加载。Work云端仍缺实际控制者的受支持加载/绑定与状态存续依据，不将本机config、文件搬运或remote MCP视为自动补足。桌面/网页两个入口的六份父scope/case条件已同步；整体4selected/7pending及完整验收未完。详见PLAN的Work职责组合判断；私有accord-work-entry-composition-20260927-01保留来源、代码片段和独立复核，没有新增Work/Cloud任务、连接、信任或runtime修改。
+Work本地子模式复用现包路线已有真实初步采用：用户发送的唯一只读任务01a0e34c-7118-7621-a149-4142d960438f已完成，原生历史确认入口指导、UserPromptSubmit及一次状态MCP调用；同轮thread/session/turn和实际cwd输入回执已对账。Root诊断提示词错误固定repo cwd，实际projectless对话在生成目录，原查询因此查到另一键；原missing回执与报告保留，不将事后文件对账冒充正确cwd的MCP联读。下一真实Work任务应区分Hook绑定cwd与业务目录，再验必要交付、续作及退出，不重跑本次诊断。Work云端加载/绑定与状态存续仍待判；整体4selected/7pending及完整验收未完。原件见私有accord-work-entry-composition-20260927-01的work-local-readback与root-readback，未安装、授信或改runtime。当前工具已能识别和只读跟进该Work本地任务；其kind=codex不能单独用来否定Work入口。
+
+CI无需阻塞这些独立工作。当前工作流对push/manual按提交SHA保留运行，只有PR替换检查设置cancel-in-progress；正常对话不取消CI，也不因等待检查要求用户反复输入“继续”。新运行的最终回读责任持续保留，必要失败回归和发布仍受各自门槛约束。
 
 **当前完整安装的两项普通案例已正式准入**：60219ffff83524523d373517d6ad4bbb851d2ff9预先绑定CLI0.157.0/Sol-medium/default、202615完整安装包和原五条输入；原600秒总限额及token上限未变。一次同任务五阶段在323.81秒内完成：同意及侧问后交付四文件，明确暂停与未决“继续”均保留五文件，取得新决定后同步修正四成果至B厅/8人/360元并说明减少300元；原输入及通用材料Hash/mtime保持。
 

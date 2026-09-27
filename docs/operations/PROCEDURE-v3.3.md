@@ -2411,3 +2411,11 @@ Root另行完成接续当前段落与四表行的最小修订，历史案例/授
 独立只读复核进一步将下一验证缩到实际root Work控制者的输入Hook回执、MCP原生身份、cwd与状态目录共同绑定；现包缺元数据或根身份冲突时拒绝状态采用，上下文读取限当前Hook转录与CODEX_HOME/sessions。云端文件、Skill和远程工具是候选，尚不提供这条组合绑定；平台环境替换也不保证Accord目录保留。当前无已证运行时代码缺陷，未放宽守卫或追加猜测性接入程序。两个入口的六份条件同步，聚合状态、subjectEntries、expected及质量底线保持。
 
 前序a7c6d8b0的标准CI36321744769已按精确SHA及全部11个job核对成功。本次私有accord-work-entry-composition-20260927-01保存该最终回执、变更前原件、官方来源判断、带摘要与位置的本地片段和独立评审；无新Work/Cloud任务、安装、信任、配对或外部消息，未重放旧案例。开发选择不作当前Work功能准入或完整A项完成。
+
+## Work本地实际入口与查询目录对账（2026-09-27）
+
+用户按已准备提示词创建Work本地只读核验，任务01a0e34c-7118-7621-a149-4142d960438f、原生turn01a0e34c-879a-7761-b848-a59de3df1e00，200971ms后完成/idle。原生历史标记originator=codex_work_desktop、0.158.0-alpha.2.1，实际cwd为Documents/Codex下的projectless生成目录；原生developer内容包含现装Accord入口指导、UserPromptSubmit及epoch b579bb90-738c-4ff3-a934-ede9057ca548。唯一状态MCP调用的thread/session/turn相符，模型为gpt-6-sol；这是新Work任务的原生设置，不是更换主线程模型。
+
+Root准备的提示词把inspect的cwd固定为C:\Projects\YIYUAN-Accord，原调用因此查询同一session的另一个cwd键，返回missing-stored-input-receipt。Work正确保留缺口并完成两份报告。Root随后直接核原生item_completed.result与报告native-state.json解析对象完全相等，再按现有location算法只读核实际cwd对应输入文件：回执存在、epoch和turn与本轮Hook一致，而repo cwd对应输入键不存在。该归因属于Root事后原件核对；原调用和报告未改写，不能称正确cwd的MCP联读通过，也不把缺口归责用户或据此判为Work加载失败。无需重跑原案或放宽身份守卫。
+
+私有accord-work-entry-composition-20260927-01保留work-local-readback两报告及其摘要，root-readback保存原生身份/Hook/MCP事件/终态切片、实际cwd输入快照及对账。独立只读复核确认原件Hash、原生事件和两目录键差异；原查询的needsNativeReplay还带有repo工作区failure watermark，不能解释为此次Work捕获失败。实际cwd回执仍保留且没有绑定检查点，轮次结束不等于状态退休或资源生命周期已验。后续真实任务区分宿主状态目录与业务文件目录；本次只支持实际入口指导、工具参与及有限绑定事实，未新增正式准入、完整恢复、自动交接或资源退出结论。未向原任务追加消息，未创建其它执行器、安装、授信、修改共享配置、状态退休或归档历史。
