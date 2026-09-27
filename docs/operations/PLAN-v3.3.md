@@ -132,13 +132,15 @@ VS Code兼容编辑器优先作为同一扩展适配族，Xcode、JetBrains等�
 
 同日限定复核补足可行路线的事实：[Codex云环境](https://learn.chatgpt.com/docs/environments/cloud-environment)提供仓库检出、初始化与缓存维护通道；本项目现有环境仍绑定改名后的仓库和/workspace/YIYUAN-Accord，界面为universal、自动初始化、Agent网络关闭、缓存开启，三项历史任务保留。只读核对没有启动任务、连接终端或修改环境；这些设置不证明当前包已加载。[Work云端](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-cloud-security)由平台管理运行环境，不直接继承设备文件和会话；[插件说明](https://learn.chatgpt.com/docs/plugins)明确网页安装不部署Hook脚本。因此分别比较仓库/任务文件引入、现成执行器状态与获准的工具连接，未验证前不声称本地包可原样运行，也不直接排除云端。
 
-[JetBrains当前官方说明](https://www.jetbrains.com/help/ai-assistant/codex-agent.html)明确支持Skill、AGENTS.md和经设置传入的MCP，以及自己的权限/模式与上下文显示；这提供了复用或组合的候选路线，尚未证明Accord Hook参与。OpenAI的[IDE说明](https://learn.chatgpt.com/docs/codex/ide)区分VS Code兼容扩展与JetBrains/Xcode自有集成，不能跨集成直接借用证据。通用插件页仍称IDE不支持插件，与既有本机VS Code实测冲突继续保留；按实际构建和功能区分处理，不回退为统一排除。上述来源复核不是完整支持声明或新增安装授权。
+[JetBrains当前官方说明](https://www.jetbrains.com/help/ai-assistant/codex-agent.html)明确支持Skill、AGENTS.md和经设置传入的MCP，以及自己的权限/模式与上下文显示；这提供了复用或组合的候选路线，尚未证明Accord Hook参与。OpenAI的[IDE说明](https://learn.chatgpt.com/docs/codex/ide)区分VS Code兼容扩展与JetBrains/Xcode自有集成，不能跨集成直接借用证据。此前通用插件页与本机VS Code有限参与观察的分歧保留为历史记录；当前按2026-09-28补核分别处理官方支持边界、历史参与和实际加载未知；按实际构建和功能区分处理，不回退为统一排除。上述来源复核不是完整支持声明或新增安装授权。
 
 9月15日补核三项具体路线，继续沿现有职责判断，不另造执行器：[Apple文档](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)明确Xcode专用Codex配置根、命令/工具权限与Skill/MCP/插件组件导入；可比较复用现有包，Hook和恢复仍待核。[移动Remote](https://learn.chatgpt.com/docs/remote-connections)使用连接桌面主机的任务、文件、插件与权限，应复用主机执行链并验证远端输入/审批/断线重连，不能把移动端一律当普通Chat，也不宣称手机本地执行。[Slack](https://learn.chatgpt.com/docs/third-party/slack)和[Linear](https://learn.chatgpt.com/docs/third-party/linear)触发Codex云任务，可共用云执行基础，分别补来源、选仓、续接及回传权限差异；这不代验GitHub/GitLab。本轮仅查官方来源，未安装、连接、配对或发送消息；这些可行组件尚不证明整条Accord职责路线完成，原待判状态不冒充最终支持。
 
 验收沿用A01–A08：A02先核验候选处置、已纳入入口集合和对应依据，再绑定该集合的普通交付与生命周期；A01/A03/A06核验实际承诺，A08检查组合后的完整性与净影响。三个父范围现已定义，保留17个必要claim/scope及全部质量底线。观察载体entry与被验入口subjectEntries分开：适用性覆盖当前全部11个OpenAI入口，后两范围严格对应同一选定集合，结果按入口逐项核对。当前4项selected表示继续纳入开发，其余7项pending，selectionFinal=false；这三项因此尚不能准入，定义数量增加不计为通过。待判不等于不适用；没有集合的有效最终判断与实际证据，整体资格仍不成立。
 
 2026-09-27将IDE内置Agent与外部执行者调用IDE工具分开判断，避免把组件发现当整包接通：
+
+2026-09-28补核VS Code：现行[官方插件说明](https://learn.chatgpt.com/docs/plugins)明确IDE扩展不属于插件受支持入口；历史发布说明和两次原生参与观察保留各自日期/版本，不能覆盖当前支持边界。本机26.917.62051扩展的普通app-server启动、initialize及请求转发未见全局plugins/hooks关闭，查到的关闭项只用于临时标题/描述生成；这仍不证明后端加载。附带0.155.0-alpha.16.3也不能代替实际后端身份，因为扩展允许CLI路径覆盖和WSL执行。cx-vscode继续作为开发目标，入口、Hook/MCP和安装路径须按实际构建补证，不按CLI插件等效宣称支持；准备一次限定的实际IDE只读核对，没有启用、安装或调整用户配置。
 
 | 路线 | 复用与职责 | 当前决定及最小未完条件 |
 |---|---|---|

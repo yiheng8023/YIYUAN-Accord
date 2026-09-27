@@ -2482,3 +2482,13 @@ Root从执行日志及最终回答交叉取回结构化摘要：4e44e52a、CLI 0
 移除三项已退出功能的当前执行测试，新增canonical及包内入口均拒绝PostToolBatch/UnknownEvent、无stdout/权限/文件副作用的反例，保留SessionStart不受工具结果文本影响及历史注册对照。反例先观察旧两副本仍返回0，再验证退役后的拒绝与原件保护；连同启动、暂停、压缩恢复共8项回归通过，verify及host-check有效。独立审查核对实际调用者、历史测试主题、两副本字节和24文件摘要，未见代码阻断。
 
 新源码候选3.3.0-dev.1+codex.20260928040031，24文件SHA fcb12be58f01593dfb2fd3832fe6c4270da462f9573446c32be7285c86400f43，仅manifest版本及accord-hook两项包文件改变；原233529候选保持历史身份。本次未操作本机27100450缓存、登记、信任或共享设置，没有安装或刷新消费者。新包的托管及实际采用须另核，先前通过不自动继承；旧UPDATE-PREPARATION需按新精确候选、当前配置与安全执行者重新核对后才可使用。原件、红绿日志、包前后Hash及独立复核材料在accord-hook-scope-20260928-01。此清理不改变17范围、A01–A08或任何功能通过状态。
+
+## IDE现行支持边界与采用前提核对（2026-09-28）
+
+当前[官方插件页](https://learn.chatgpt.com/docs/plugins)明确IDE扩展不属于插件受支持入口；历史通用发布说明与已取回的两次IDE原生参与证据保持原日期/版本，不能据此抹去新支持限制，也不能用当前文档倒写历史失败。[IDE说明](https://learn.chatgpt.com/docs/codex/ide)另区分VS Code兼容扩展、Xcode和JetBrains集成，品牌共用不能代验控制者。只读下载三份官方正文并记录Hash，未按网页内容安装、授信或执行任务。
+
+独立静态核对本机扩展26.917.62051，extension.js SHA 7ba6208c447c393e050a8ba46893e9e1aa4abd718cb4a8610fa87b12942633bc：普通wM.startCodexProcess只添加features.code_mode_host=true，initialize及mcp-request转发没有全局plugins/hooks关闭；两个false位于YOe/YP的ephemeral标题和描述生成，不属于主会话。download-internal-plugins明确不支持、reload-bundled-plugins被忽略，只证明这两项管理能力未提供。附带CLI清单是0.155.0-alpha.16.3；CLI可覆盖、可经WSL执行，因此不以清单代验实际后端、有效开关或当前加载。
+
+保持cx-vscode作为开发目标，并在三个父scope、三个case的六份处置依据同步此限制；入口集合、必要范围、质量和预期结果不变，没有宣称新的支持或准入。准备一份新的IDE只读核对文本，SHA f3bfa8c78db6838bb31c5722316a34d8310c7cc19984734d7ba295812f57d301，用户在真实IDE新会话发送后才有执行；当前界面控制仅支持浏览器，不能由另起CLI/App Server替代。核对只使用当前环境/宿主注入及至多一次inspect_task_state，唯一成品在任务专属.tmp目录，缺失直接报unknown；未授权或派发安装、配置、信任、Cloud或旧案重放。独立复核还收紧了计划旧段落中把有限参与称作支持冲突的表述；任务修订稿33b6958ba928062bfb7bcc180205fd8c3ba2e64246b70ed8b35ae0a663565e4d只澄清宿主仍可能产生正常日志/状态/回执，不增加主动操作。初稿保持原字节；如果已经发送初稿就沿用那一次结果，不重发修订稿。当前尚未收到发送确认或新IDE结果，文件暂缺不证明未执行。
+
+本机采用前提另读回：当前Accord启用、Git来源及f8ecac46引用匹配，27100450的24文件/ee962ced包摘要与独立恢复副本一致；配置摘要已变为804f0d13…0a84cd，两次读取稳定，本轮无共享写入。只记录漂移，不输出私有配置或用旧基线恢复。官方[本地插件更新说明](https://developers.openai.com/plugins/build/plugins#install-a-local-plugin-manually)和CLI新会话说明没有保证活动轮次、延后Hook的安全热替换，因此共享更新仍须当前具体权限、健康执行者和已核实的旧回调结束条件。原件在accord-entry-current-20260928-01，两个现有契约检查及verify通过。
