@@ -4407,6 +4407,16 @@
       "resources": "16 recorded CLI and two discovery domains exited naturally with zero active Job processes; readers stopped and two owned empty workspaces removed. User-owned native history, package backups and all original receipts retained.",
       "limits": "No model task, Cloud replay, third-party Skill change, new trust or mode/model change. Current state access does not prove old MCP code refreshed or all existing Desktop/Hook consumers adopted the new candidate; complete autonomous behavior and release remain unverified.",
       "evidence": "accord-shared-plugin-update-20260927-01: approval-state, original update/poststate, update-failure-reconciled, rollback receipts, corrected-update, verification.json and execution-result.json; PROCEDURE-v3.3.md 2026-09-27."
+    },
+    {
+      "id": "post-update-stop-failure-boundary-20260927",
+      "observedAt": "2026-09-27",
+      "scope": "reported-hook-failure-and-updater-consumer-gap",
+      "observed": "User screenshots show two completed UserPromptSubmit runs and one failed Stop, with only hook exited with code 1. The original resolved command and stderr are unavailable. Current natural input uses the new package path; three existing isolated Stop regressions pass against the installed 27100450 helper.",
+      "counterevidence": "The old 202615 helper path is absent and its read-only help invocation fails with MODULE_NOT_FOUND while new help succeeds. This is a path comparison, not the original Stop receipt; neither it nor new input success establishes the original root cause or current natural Stop success.",
+      "correction": "Preloaded MCP survival does not cover late command Hooks that still need a bound executable path. Apply existing live-consumer responsibility to pending old-root callbacks before native cache replacement. Use an observed supported idle boundary and an authorized independent executor; if unavailable, retain preparation rather than self-update inside an affected active turn. Independent package backups protect recovery, not callback path reachability.",
+      "limits": "Original Stop remains failed with specific cause unresolved. No runtime/Skill/config modification, reinstall, real-root Hook replay, model task or Cloud action. Installation and CI facts keep their bounded scope; no new behavior admission or release claim.",
+      "evidence": "accord-stop-update-diagnosis-20260927-01: user-stop-error.png, installed-stop-isolated-tests.txt and diagnosis.json; independent source review and original main-thread tool observations."
     }
   ],
   "environmentControl": {
