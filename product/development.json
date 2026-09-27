@@ -4348,6 +4348,29 @@
       "recoveryCorrection": "Preparation process exit does not prove actual Cloud Agent/MCP/Hook release. The new rollback CLI defers before target access or native calls; the old internal routine is reference only and is excluded from the setup payload. No promise of automatic same-task uninstall or whole-container rollback. Installation commands have no cross-process CAS: avoid known concurrent writers; detected drift preserves unknown effects without replay or overwrite-restoration.",
       "authorization": "Pending new explicit authority for one temporary setup change, one new cloud adoption observation, restoring setup prestate, and retaining candidate registration/trust/cache, this task's normal Hook input/lock/failure records and recovery material when actual consumer release cannot be verified. No new cloud write, install, trust, task, cleanup continuation, host kill or archive/delete has occurred.",
       "remaining": "Actual controller consumption, override effects and supported release remain unverified. All original required scopes, predicates, failures and release gates remain; local preparation is not acceptance."
+    },
+    {
+      "id": "cloud-preload-authorized-attempt-stopped-20260927",
+      "observedAt": "2026-09-27",
+      "scope": "one-authorized-loading-attempt-not-agent-acceptance",
+      "authorization": "User explicitly approved the already reviewed proposal, including temporary setup, one new task, setup restoration and retention when original consumer release is unverified. That single attempt is now consumed.",
+      "taskUrl": "https://chatgpt.com/codex/cloud/tasks/task_e_6ab867c52264832bb91d46d78bcb35bb",
+      "environmentId": "6a870b3542cc819199cff184a2e06f37",
+      "submissions": 1,
+      "visibleEnvironmentCount": {
+        "before": 12,
+        "after": 13
+      },
+      "sourceIdentity": {
+        "approvedSetupSha256": "36c9e7a04c328db50c8e0d6de8e499bdfe25415f319a7617b0fa8c5f56acd557",
+        "savedSetupSha256": "84645ac0a45a44b1f6d9fdad88fe54cc9f27814fcf8839c6f7883f736bcbca9c",
+        "uiDifference": "Both submitted setup and task prompt contain exactly one extra trailing LF. Approved originals and exact submitted bytes retained; executable payload unchanged."
+      },
+      "result": "Setup stopped with PreparationError at native-resource-close: native app process release unobserved. targetMutationDispatched=false is the scoped marker that no target market/plugin/Hook write had been dispatched. Actual Agent adoption observation was not reached.",
+      "limits": "The marker does not establish zero filesystem/bootstrap effects. The composite close predicate does not identify timeout, forced termination, a surviving process or another root cause, nor prove all earlier preflight conditions passed. No original-container resource receipt was retrieved.",
+      "restoration": "Saved and independently re-read automatic setup plus empty manual/maintenance scripts. Image universal, agent network off and cache-enabled setting preserved. This settings restoration is not full container rollback or native process-release proof.",
+      "disposition": "Original task/logs and local evidence retained. No follow-up input, retry, rollback, host kill, archive or deletion; no claim that Cloud cannot support Accord. Future cloud actions require separately bound evidence and authority; do not replay this ended instance.",
+      "evidence": "accord-cloud-preload-20260927-01: approval-state.json, setup-saved.sh, task-prompt-submitted.txt, setup-log-visible.txt, prestate.json, poststate.json, execution-result.json and screenshots. Independent read-only reconciliation supports these bounded conclusions."
     }
   ],
   "environmentControl": {
