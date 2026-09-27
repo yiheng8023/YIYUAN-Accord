@@ -422,6 +422,75 @@ class TaskCheckpointTests(unittest.TestCase):
                 self.assertEqual(after['entries'], before['entries'])
                 self.assertNotEqual(after['receiptEpoch'], before['receiptEpoch'])
 
+    def test_native_hook_stream_error_preserves_input_loss_quarantine(self):
+        self.bind()
+        checkpoint = next(self.state.glob('*.state.json'))
+        before = checkpoint.read_bytes()
+        preload = self.root / 'failed-stdin.cjs'
+        preload.write_text("process.nextTick(() => process.stdin.destroy(new Error('private-transport-detail')));",
+                           encoding='utf-8')
+        result = subprocess.run([self.node, '--require', str(preload), str(RUNTIME),
+                                 '--hook', 'UserPromptSubmit'],
+            input='{}', text=True, encoding='utf-8', capture_output=True,
+            env=self.environment, cwd=self.work, timeout=10)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, '')
+        self.assertTrue(self.status()['needsNativeReplay'])
+        self.assertNotIn('private-transport-detail', result.stderr)
+        self.assertEqual(checkpoint.read_bytes(), before)
+        self.assertNotEqual(self.event('Stop').get('decision'), 'block')
+
+    def test_native_hook_premature_stream_close_is_not_clean_eof(self):
+        self.bind()
+        preload = self.root / 'closed-stdin.cjs'
+        preload.write_text("process.nextTick(() => process.stdin.destroy());", encoding='utf-8')
+        result = subprocess.run([self.node, '--require', str(preload), str(RUNTIME),
+                                 '--hook', 'UserPromptSubmit'],
+            input='{}', text=True, encoding='utf-8', capture_output=True,
+            env=self.environment, cwd=self.work, timeout=10)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, '')
+        self.assertTrue(self.status()['needsNativeReplay'])
+        self.assertNotEqual(self.event('Stop').get('decision'), 'block')
+
+    def test_non_hook_stream_failure_does_not_invalidate_native_input(self):
+        self.bind()
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        for error in (False, True):
+            with self.subTest(error=error):
+                preload = self.root / 'query-stdin.cjs'
+                payload = "new Error('private-transport-detail')" if error else ''
+                preload.write_text(f"process.nextTick(() => process.stdin.destroy({payload}));",
+                                   encoding='utf-8')
+                result = subprocess.run([self.node, '--require', str(preload), str(RUNTIME)],
+                    input='{}', text=True, encoding='utf-8', capture_output=True,
+                    env=self.environment, cwd=self.work, timeout=10)
+                self.assertEqual(result.returncode, 1)
+                self.assertNotIn('private-transport-detail', result.stderr)
+                self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_failed_hook_stream_ignores_late_data_and_reports_loss_once(self):
+        receipt = next(self.state.glob('*.input.json'))
+        before = receipt.read_bytes()
+        event = json.dumps({'hook_event_name': 'UserPromptSubmit', 'session_id': 'test-session',
+                            'cwd': str(self.work), 'prompt': 'Must not be captured.'})
+        preload = self.root / 'late-stdin.cjs'
+        preload.write_text("process.nextTick(() => {"
+            "process.stdin.emit('error', new Error('private-transport-detail'));"
+            "process.stdin.emit('error', new Error('private-transport-detail'));"
+            f"process.stdin.emit('data', {json.dumps(event)});"
+            "process.stdin.emit('end'); process.stdin.destroy(); });", encoding='utf-8')
+        result = subprocess.run([self.node, '--require', str(preload), str(RUNTIME),
+                                 '--hook', 'UserPromptSubmit'],
+            input='{}', text=True, encoding='utf-8', capture_output=True,
+            env=self.environment, cwd=self.work, timeout=10)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.stdout, '')
+        self.assertEqual(result.stderr.count('native-input-read-failed'), 1)
+        self.assertNotIn('private-transport-detail', result.stderr)
+        self.assertEqual(receipt.read_bytes(), before)
+        self.assertTrue(self.status()['needsNativeReplay'])
+
     def test_interactive_stdin_fails_promptly_without_waiting_or_mutating_task_state(self):
         preload = self.root / 'interactive-stdin.cjs'
         preload.write_text("Object.defineProperty(process.stdin,'isTTY',{value:true});", encoding='utf-8')

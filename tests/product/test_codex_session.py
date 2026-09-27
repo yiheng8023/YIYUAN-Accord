@@ -16,7 +16,7 @@ const {PassThrough, Writable} = require('node:stream');
 const {performance} = require('node:perf_hooks');
 const {createOwnedAppServerConnection} = require(process.argv[1]);
 const {openCarrierRecorder} = require(process.argv[2]);
-const {createCodexSourceSession} = require(process.argv[3]);
+const {createCodexSourceSession,CodexSourceSessionError} = require(process.argv[3]);
 const mode = process.argv[4], databasePath = process.argv[5];
 const slowRecordMs = Number(process.argv[6] || 0);
 const adoptionPrecondition = ['adopt-old-lease', 'adopt-stale-ref',
@@ -170,7 +170,7 @@ let scopeReads = 0, recordReads = 0, settleCalls = 0;
 let adoptionStarted = false, adoptionRecordChanged = false;
 const wrappedRecorder = ['scope-active','scope-after-terminal','decline-scope-change',
   'decline-scope-after-send','adopt-old-lease',
-  'adopt-missing-tools','adopt-settle-loss','adopt-bad-settle',
+  'adopt-missing-tools','adopt-settle-loss','adopt-bad-settle','adopt-session-error',
   'adopt-deadline-before-settle','no-claim-recorder'].includes(mode);
 const sessionRecorder = wrappedRecorder ? {
   bindScope:recorder.bindScope, begin:recorder.begin, compareAndSet:recorder.compareAndSet,
@@ -189,6 +189,7 @@ const sessionRecorder = wrappedRecorder ? {
     settleCalls++;
     const value = recorder.settle(...args);
     if (mode === 'adopt-settle-loss') throw new Error('settle acknowledgement lost');
+    if (mode === 'adopt-session-error') throw new CodexSourceSessionError('CALLBACK_FAILURE', 'settle acknowledgement lost');
     if (mode === 'adopt-bad-settle') return {...value, revision:'unknown'};
     return value;
   },
@@ -258,7 +259,11 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     return {scopeRef:'fixture-scope', authorityRef:'authority-1', stateRef:'state-1',
       writerThreadId:context.sourceThreadId};
   },
-  ownerRequest(request) { ownerCalls.push(request); return {result:{decision:'denied-by-owner'}}; },
+  ownerRequest(request) {
+    ownerCalls.push(request);
+    if (mode === 'owner-reentrant') return session.run({input:'nested turn', deadlineMs:Date.now()+1000});
+    return {result:{decision:'denied-by-owner'}};
+  },
 });
 (async()=>{
   const result = {};
@@ -307,7 +312,7 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
         result.statusAfterDeadline = session.snapshot().status;
         result.adopted = await session.adoptTarget({deadlineMs:Date.now()+3000});
       }
-      if (mode === 'adopt-settle-loss' || mode === 'adopt-bad-settle') {
+      if (['adopt-settle-loss', 'adopt-bad-settle', 'adopt-session-error'].includes(mode)) {
         try { await session.adoptTarget({deadlineMs:Date.now()+1000}); }
         catch (error) { result.retry = error.code; }
       }
@@ -325,7 +330,7 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     result.ownerCalls = ownerCalls.length; result.currentCalls = currentCalls.length;
     result.verifyCalls = verifyCalls; result.recordReads = recordReads;
     result.settleCalls = settleCalls;
-    if (mode.startsWith('decline') || mode.startsWith('resolver-') || mode.startsWith('proposal-'))
+    if (mode.startsWith('decline') || mode.startsWith('resolver-') || mode.startsWith('proposal-') || mode.startsWith('adopt-'))
       result.finalScope = recorder.readScope('fixture-scope');
     if (mode === 'source-ephemeral' || mode === 'source-persistence-missing') {
       try { recorder.readScope('fixture-scope'); result.scopeReadCode = 'present'; }
@@ -343,7 +348,7 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
 RESTORE_SCENARIO = r'''
 const {performance} = require('node:perf_hooks');
 const {openCarrierRecorder} = require(process.argv[2]);
-const {createCodexSourceSession,restoreCodexSourceSession} = require(process.argv[1]);
+const {createCodexSourceSession,restoreCodexSourceSession,CodexSourceSessionError} = require(process.argv[1]);
 const databasePath=process.argv[3], rawMode=process.argv[4];
 const slowRecordMs=Number(process.argv[5]||0);
 const sourceMode=rawMode.startsWith('source-'), mode=sourceMode?rawMode.slice(7):rawMode;
@@ -411,6 +416,7 @@ function restoreVerifier(stage,facts){
     restorationAuthorized:true,singleWriter:true,resumeInitializationSafe:true,
     sourceOriginVerified:mode!=='origin-unverified',sourceOriginEvidenceRef:mode==='origin-ref-missing'?'':'fixture:original-start-and-scope-ack-and-native-tools'};
   if(stage==='restore-resumed'){const toolsOk=persistedNativeEvidence.tools.includes('accord_request_handoff')&&persistedNativeEvidence.tools.includes('accord_inspect_context');
+    if(mode==='verifier-session-error')throw new CodexSourceSessionError('CALLBACK_FAILURE','restored effects unverified');
     if(mode==='scope-changed'){effects.push('verifier-claim');recorder.claimScope('fixture-scope',facts.claimedScope)}
     return {decision:'allow',scopeRef:facts.scopeRef,authorityRef:facts.authorityRef,stateRef:facts.stateRef,
     sourceRef:'restore:resumed',nativeToolEvidenceRef:toolsOk?'fixture-persisted-native-metadata:tools':'',continuityToolsRestored:mode!=='tools-denied'&&toolsOk,
@@ -879,6 +885,39 @@ class CodexSourceSessionTests(unittest.TestCase):
                 self.assertEqual(result["locked"], "RESTORE_REQUIRED")
                 self.assertEqual((result["claimCalls"], result["resumeCalls"]), (0, 0))
                 self.assertEqual(result["restoreReadParams"], [])
+
+
+    def test_reentrant_owner_callback_failure_locks_outer_run(self):
+        result = self.run_case('owner-reentrant')
+        self.assertEqual(result['error']['state']['status'], 'failed')
+        self.assertEqual(result['error']['code'], 'SERVER_REQUEST_FAILED')
+        self.assertEqual(result['snapshot']['failure']['cause']['code'], 'RUN_IN_PROGRESS')
+        self.assertEqual(result['snapshot']['pendingRequest']['method'], 'approval/request')
+        self.assertEqual(result['second'], 'SESSION_FAILED')
+        self.assertEqual(sum(frame.get('method') == 'turn/start' for frame in result['sent']), 1)
+
+    def test_same_class_restore_verifier_error_cannot_authorize_a_turn(self):
+        for mode in ('verifier-session-error', 'source-verifier-session-error'):
+            with self.subTest(mode=mode):
+                result = self.restore_case(mode)
+                self.assertEqual(result['failedSession']['status'], 'failed')
+                self.assertEqual(result['locked'], 'SESSION_FAILED')
+                self.assertEqual(result['failedSession']['failure']['cause']['code'], 'CALLBACK_FAILURE')
+                self.assertEqual(result['claimCalls'], 1)
+                self.assertEqual(result['resumeCalls'], 1)
+                self.assertEqual(result['restoredTurnStarts'], 0)
+                self.assertEqual(result['failedSession']['lastSafeReceipt']['thread']['id'],
+                                 'source-1' if mode.startswith('source-') else 'target-1')
+
+    def test_same_class_settle_error_does_not_allow_settle_replay(self):
+        result = self.run_case('adopt-session-error')
+        self.assertEqual(result['snapshot']['status'], 'failed')
+        self.assertEqual(result['snapshot']['failure']['cause']['code'], 'CALLBACK_FAILURE')
+        self.assertEqual(result['retry'], 'SESSION_FAILED')
+        self.assertEqual(result['settleCalls'], 1)
+        self.assertEqual(result['snapshot']['adoption']['transferId'], 'transfer-1')
+        self.assertNotIn('settleReceipt', result['snapshot']['adoption'])
+        self.assertIsNone(result['finalScope']['activeTransferId'])
 
 
 if __name__ == "__main__":

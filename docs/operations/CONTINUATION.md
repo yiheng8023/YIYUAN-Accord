@@ -25,7 +25,7 @@
 | 项目 | 已核事实与限制 |
 |---|---|
 | 仓库 | 当前两案执行/准入绑定已推送候选60219fff；结果记录另行提交。其它历史证据保留各自精确对象，恢复时以实时Git为准。 |
-| 源与本机安装 | 源与本机安装均为3.3.0-dev.1+codex.20260925202615，24文件、SHA 6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f、marketplace ref=9a879596。原生命令更新后逐文件独立核对Git原字节，仅市场ref改变，无新增信任；新0.157.0进程发现5启用Skill/6可信Hook并自然退出。旧包与配置恢复材料保留，空更新工作区已回收。已有Desktop/MCP消费者采用不由独立发现代验；第三方Skill未改。 |
+| 源与本机安装 | 源码候选已更新为3.3.0-dev.1+codex.20260927100450，24文件、SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57，修复输入流失效遗漏与会话同类异常绕过失败锁。本机现装仍为202615/SHA 6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f、marketplace ref=9a879596；未安装新候选，不把源码测试当作现装采用。第三方Skill未改。 |
 | 托管检查 | 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本次只读诊断授权已自然捕获，原生MCP读回inputSource=native-input-event、输入数10、needsNativeReplay/needsResumeReconciliation=false，checkpoint仍unbound；此前retained-native-replay恢复保持历史身份。无需继续恢复或调查压缩。独立0.157.0原生只读查询的goal=null仅说明原读取时点；该次MCP宿主报告Desktop0.155.0-alpha.16.4；9月26日宿主resume后原生MCP报告0.158.0-alpha.2、Astra，输入正常捕获且无需回放。rev5接续保持canContinue=false，不将未完项目变为隐式Goal。 |
@@ -121,6 +121,8 @@
    后续本地诊断已重现准备器的信息丢失：不同退出/强停/读取线程/进程组条件被折叠成同一错误，finally再关闭还可能覆盖首次异常。仅在diagnostic-repair独立副本修复，公开经类型和白名单约束的关闭字段、前序阶段/异常类型，并保留首次完整诊断；中断、目标效果未知语义、退出判据及原生控制不变。13项针对性回归与原18项离线检查通过，独立复核发现的重复关闭、阶段名和alive枚举遗漏均修正。33份原材料Hash保持，测试目录已回收，红/绿日志与评审保留。未改投递原件、生成新setup或执行云端；这只补诊断能力，原Cloud根因、资源后态及Agent采用缺口保持，不能以本地测试代验或重放。
 3. **连续性和资源剩余结果**：复用原生压缩、已有SDK和旧机制有效证据，完成必要自主择时/交权、目标真实续做、未知效果对账与失败回退，连同环境变化、压力后续做和退出后态。不把source连接缺失推广为所有入口不可用，也不强制健康任务迁移。
 4. **正式准入和发布**：补未绑定的entry-coverage、dynamic-model-routing、autonomous-continuity、system-integration、codex-lifecycle、system-impact-assessment六scope；这不意味着各造一套试验。A08的完整组合仍须同一episode，不能拼散案冒充；必要验收、独立审查和精确候选条件满足后依既有授权发布。
+
+本轮两处普通连续性源码缺陷已修复：输入流error/提前close现会保留输入丢失隔离；会话执行器只透传自己实际锁定的异常，外部同类异常不能绕过run/恢复/settle失败处理。七项新增反例、181项checkpoint/session及42项MCP回归通过，独立复核无阻断；原有正常EOF、非Hook只读查询、settle前重试及未知效果边界保持。见[本轮记录](PROCEDURE-v3.3.md#普通连续性失败路径修复2026-09-27)。这是已消除的功能断点，不代验完整自主交接；新源码候选待托管检查，现装与既有证据仍绑定原版本。
 
 ## 原件与历史导航
 

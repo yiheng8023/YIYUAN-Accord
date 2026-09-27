@@ -337,6 +337,9 @@ function createSession(options, restoreMode = false) {
       throw new Error('source session owner binding changed');
     }
   }
+  // Owner callbacks can throw the exported error class too. Only errors from
+  // this executor's actual failure transition may bypass another transition.
+  const lockedFailures = new WeakSet();
   function lockFailure(code, message, cause, extra = {}) {
     let causeView = null;
     if (cause) {
@@ -352,10 +355,12 @@ function createSession(options, restoreMode = false) {
     state = {...state, status: 'failed', phase: extra.phase || state.phase,
       pendingRequest: extra.nativeRequest ? immutable(extra.nativeRequest) : state.pendingRequest,
       failure: {code, message, cause: causeView}, ...extra.state};
-    throw new CodexSourceSessionError(code, message, {
+    const failure = new CodexSourceSessionError(code, message, {
       cause, phase: state.phase, state: snapshot(), rpcRequest: causeView?.rpcRequest,
       nativeRequest: extra.nativeRequest,
     });
+    lockedFailures.add(failure);
+    throw failure;
   }
   async function callOwner(callback, args, deadline, label) {
     ensureBindings();
@@ -461,7 +466,7 @@ function createSession(options, restoreMode = false) {
             lastSafeReceipt: immutable(receipt), observedScope}});
       }
     } catch (error) {
-      if (error instanceof CodexSourceSessionError) throw error;
+      if (lockedFailures.has(error)) throw error;
       return lockFailure(error?.code || 'SOURCE_SETUP_FAILED', 'source session setup failed', error,
         {phase: state.phase});
     }
@@ -639,13 +644,13 @@ function createSession(options, restoreMode = false) {
             [nativeRequest, body, budget.monotonicDeadline]);
           state = {...state, phase: 'turn-running', pendingRequest: null};
         } catch (error) {
-          if (error instanceof CodexSourceSessionError) throw error;
+          if (lockedFailures.has(error)) throw error;
           return lockFailure('SERVER_REQUEST_FAILED', 'source server request was not safely completed', error,
             {phase: state.phase, nativeRequest});
         }
       }
     } catch (error) {
-      if (error instanceof CodexSourceSessionError) throw error;
+      if (lockedFailures.has(error)) throw error;
       return lockFailure('SESSION_RUN_FAILED', 'source session run failed and requires owner reconciliation',
         error, {phase: state.phase});
     } finally {
@@ -753,7 +758,7 @@ function createSession(options, restoreMode = false) {
         claimLimit: 'Same-controller hot adoption after durable settle only; no cold recovery, archive, deletion or cross-controller takeover is implied.'});
     } catch (error) {
       if (settleInvoked) {
-        if (error instanceof CodexSourceSessionError) throw error;
+        if (lockedFailures.has(error)) throw error;
         return lockFailure(error?.code || 'TARGET_SETTLE_UNKNOWN',
           'target settlement outcome is unknown and must not be replayed', error,
           {phase: 'adopt-target-settle-unknown'});
@@ -974,7 +979,7 @@ function createSession(options, restoreMode = false) {
           ? 'Owner-reconciled known source on a fresh controller; no created thread, fabricated transfer, effect replay or complete cold-recovery claim.'
           : 'Settled-transfer restoration on one fresh bound controller only; no active-effect, arbitrary-thread or complete cold-recovery claim.'});
     } catch (error) {
-      if (error instanceof CodexSourceSessionError) throw error;
+      if (lockedFailures.has(error)) throw error;
       return lockFailure(error?.code || 'RESTORE_FAILED',
         'source-session restoration failed', error, {phase: state.phase});
     } finally {

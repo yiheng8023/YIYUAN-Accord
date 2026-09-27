@@ -2305,3 +2305,9 @@ e74c4a4f下实际episode 94a52d8b8ce64cf2addc369769f32875、原生任务01a0d8d5
 源SDK已返回completed/ready后，root审查超过私有调用者240秒答复期限。保留Owner response deadline or cancellation及未答asks/0003.json；没有第二轮或重放。原生进程exit0，外层调用者exit1，connectionClosed=true、forced=false、所属Windows Job活动进程0；finalReads为空，未获末次Goal读回，不用请求配置证明最终模式。status文件曾在已消费答复后继续显示awaiting-owner，诊断以原生流、消费记录和实际结果共同判断，不能据旧显示再答复。后续真实调用者应将外部集成审查与已完成源轮次的连接退出分开，不能要求所有人工/协调者核验在短RPC等待内结束；此处不追加通用控制器。
 
 派发授权已关闭，主线程在确认所属进程为0后接管修正并按字节核对集成。共享config.toml及implement/tdd/code-review八份保护文件Hash保持；任务状态目录为空。两版补丁保留后已移除隔离worktree及空.tmp，任务自有临时缓存/空状态已回收；调用者离线检查和原生schema归档后逐文件Hash复核，保留的原件、失败、源历史、SQLite、补丁及核验材料位于accord-sdk-owner-integration-20260925-01。首次产品检查只因尚存.tmp被拒，按原计划回收后重查，不改检查器。本次是实际SDK源执行及协调交付观察，没有前瞻绑定新的正式准入实例，A05、17必要范围及functionalCompletion/candidateEligible不升格。
+
+## 普通连续性失败路径修复（2026-09-27）
+
+本轮源审查与离线反例确认两处实际断点。task-checkpoint CLI的stdin读取错误未进入既有输入失效保护，提前close且无end还会退出0；修复后错误与不完整关闭只发布一次既有失效标记，后续data/end不派发操作，正常EOF与非Hook查询语义保持。codex-session把外部回调抛出的CodexSourceSessionError误作本执行器已锁定失败，导致普通run或claim/resume后的恢复可继续派发；settle已提交后同类错误也可能允许再次调用。现仅透传当前执行器lockFailure实际登记的异常对象，五处处理一致；原cause、待处理请求、已知claim/resume及settle意图保留，settle尚未调用前的可重试边界保持。
+
+新增七项回归先失败后通过，覆盖错误/提前关闭、重复事件与迟到输入、普通查询，以及owner回调重入、两类恢复、已提交settle失回执。checkpoint与session共181项、原生状态MCP42项离线测试通过；独立只读复核无剩余阻断。源码和分发副本已同步为3.3.0-dev.1+codex.20260927100450（24文件，SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57），本机现装202615未变。代码/测试实测2949106字节，原3100000额度的余量150894低于155000预留，工程容量调至3150000并保持5%预留算法；文件175、指导36000、业务验收及执行预算不变。原失败记录保留于accord-continuity-failure-repair-20260927-01。没有模型或原生App Server执行、安装或Cloud重放，不升级完整自主交接或发布资格；新候选仍须托管检查及实际入口采用。

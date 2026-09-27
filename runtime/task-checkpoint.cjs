@@ -1250,9 +1250,14 @@ if (require.main === module) {
   if (process.argv.includes('--help')) process.stdout.write(JSON.stringify(HELP) + '\n');
   else {
     let input = '';
+    let inputEnded = false;
+    let transportFailed = false;
     const hookIndex = process.argv.indexOf('--hook');
     const hookName = hookIndex === -1 ? null : process.argv[hookIndex + 1];
     const transportFailure = (reason) => {
+      if (transportFailed) return;
+      transportFailed = true;
+      input = '';
       if (hookIndex !== -1 && (!hookName || ['UserPromptSubmit', 'Interrupt', 'SessionStart'].includes(hookName))) {
         try { markInputFailure(location('unidentified-native-input', process.cwd(), true), true); }
         catch (_) { process.stderr.write('Accord: unidentified input loss could not be persisted; caller workspace freshness is unknown.\n'); }
@@ -1265,7 +1270,12 @@ if (require.main === module) {
       return;
     }
     process.stdin.setEncoding('utf8');
+    process.stdin.on('error', () => transportFailure('native-input-read-failed'));
+    process.stdin.on('close', () => {
+      if (!inputEnded) transportFailure('incomplete-native-input');
+    });
     process.stdin.on('data', (chunk) => {
+      if (transportFailed) return;
       input += chunk;
       if (Buffer.byteLength(input) > 128 * 1024) {
         transportFailure('oversize-native-input');
@@ -1273,6 +1283,8 @@ if (require.main === module) {
       }
     });
     process.stdin.on('end', () => {
+      inputEnded = true;
+      if (transportFailed) return;
       let request;
       try { request = JSON.parse(input); }
       catch (_) { transportFailure('invalid-json-input'); return; }
