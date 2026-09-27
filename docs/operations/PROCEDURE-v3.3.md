@@ -2339,3 +2339,18 @@ e74c4a4f下实际episode 94a52d8b8ce64cf2addc369769f32875、原生任务01a0d8d5
 7ae3bac5的CI36294719722完整11个job均成功，精确head与结论已回读。随后选定确有用途的双语更新/恢复说明任务：六冻结输入、三个成品、两轮既定输入，第二轮使用后来真实取得的通用Stop失败反馈。输入是维护者前瞻安排，不冒充用户另行原话；不操作安装/回滚/外部系统或声称自主交接。新增普通CLI有效用户环境case和systemic-correction-03共享一个episode，各有独立效果判据。旧systemic scope还携带结束02例的旧Luna/0.156.1等条件，已保留原声明/Hash并将其从通用scope分离；默认模式、无Goal、纠偏职责、质量/场景及17范围保持。
 
 只读预检确认当前0.157.1原生目录提供Sol/medium、27100450包的5Skill/6可信Hook，配置字节未变，所属进程自然退出活动0。公共现有执行器和私有薄调用者/恢复代码在派发前绑定；实例限额600秒、每轮300、恢复20，累计250万总/20万未缓存输入/1.4万输出。24项当前准入回归通过。独立预审修正语义判据中“备份保证恢复”的过度表述；恢复器旧语义比较可能覆盖用户后加注释/格式、且未验证备份身份，已用真实CLI隔离副本复现4项失败，再修为预绑Hash、原字节不变及唯一独立插入的自有trusted表证明，3方法7子例通过。没有改用户配置或重放旧业务。准备原件在accord-upgrade-guidance-20260927-01；模型执行仍等待确切任务目录的临时信任/恢复授权，案例声明齐全不增加行为覆盖或发布资格。
+
+
+## 更新说明交付与反馈纠偏的实际准入（2026-09-27）
+
+前瞻准备取得用户“确认。”后执行一次，固定源码48d4dbeb78a3f37d4479609969abfcac057e6589/tree d7725dafed5e210087436ed175010c8e2f7b2ac5，episode a44e6953d8684b83916175466ba1abab，原生线程01a0e198-44e1-7012-b63b-c4ce47c0cdff。实际CLI0.157.1、Sol/medium/default、现装27100450保持，两条维护者预绑输入分别要求文稿交付和根据后来真实Stop反馈全面纠偏，不冒充用户另外自然发出的原话。第一轮形成update.zh-CN.md、update.en.md与update-status.json；第二轮三份均实质修改且一致，六个输入的Hash和mtime保持，目录只有指定九文件。
+
+成品保留24文件安装、5Skill/6可信Hook新发现、旧缓存缺失及独立备份事实；区别预加载MCP可运行与后置Hook仍需可执行路径。通用退出1、原命令/stderr缺失、具体原因未知、隔离检查不证明真实Stop恢复均写入双语与JSON。实际更新由不依赖待改插件的获准健康执行者选择可核验的安全时机，未知则保留准备，用户不承担内部协调。备份保留原包字节但不保证活跃路径、任务状态或回调结果；不要求永久缓存并存，也不虚构调度工具。Root随后将通用说明提炼进两语README，模型两阶段原件保持，不归为模型自行发布。
+
+完整原生轨迹仅有host AGENTS及两条精确业务输入、13次exec工具调用；第一轮实际查询MEMORY.md并读取verify-and-close-outcome，第二轮读取manage-plugin-lifecycle。业务主张逐项由密封材料/后来反馈支持，但既有AGENTS、记忆、Skills与共享环境暴露须披露，不作Accord独立因果或无定制环境结论。第一轮自检抄错keep.txt预期Hash而失败；模型只读重新取得完整Hash后在同轮纠正，原件未变、失败保留，没有外部救援或额外模型轮次。两次Goal原生读回均null，完整轨迹无创建/切换模式调用；不扩大为连续时点观测。
+
+一次345.5133秒，最终累计665934 tokens，其中61514未缓存输入、13060输出，满足600秒/每轮300秒及预绑usage上限；这些不是占用或货币成本值。Root逐项核对2个CLI Job、6个安装目录进程、2个Goal读取器和1个目录预检进程的原生正常退出/无强停/活动0，三个读取器明确已停。CLI最后的周期采样仍可能有活动进程，退出结论来自finally内自然退出后的再次Job采样，不以周期样本冒充终态。
+
+配置原备份、执行前后与恢复器排它读回Hash均b478d82459ae668f313ebe77a66069aaa7b1ae5374d5bbb1936264cfffbaa48e；本次没有原生临时信任登记，恢复器removedOnlyOwnedRegistration为空、没有实际配置恢复写。Root完成路径归属/无reparse/工作区与最终副本一致核对后，回收准确workspace、temp和空state三个路径；73份episode保留证据不变，原生任务及历史、49份执行来源和批准/恢复材料仍保留。资源结论限本段所属Job与读取器，清理由调用方承担，不计自主Agent清理或整机影响通过。
+
+两名零继承上下文、共享环境/Accord暴露明确的独立评估者分别完成product/specification与implementation/standards审查，均无阻断项；原生审查消息及Root源码复核保留。既有assess_development_evidence经observe/recheck接受v33-codex-cli-update-guidance-01、v33-systemic-correction-03，caseRejections={}、errors=[]；原件accord-upgrade-guidance-20260927-01的admission-final.json绑定上述精确候选。完整A01–A08、functionalCompletion/candidateEligible、原根线程Stop根因与恢复、全部消费者刷新和自主交接仍未成立。该实例已结束，不重放；托管CI36299563573记录时7成功/4在途，终态另按精确SHA核验。

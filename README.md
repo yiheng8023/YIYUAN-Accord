@@ -96,6 +96,10 @@ An Agent with suitable capabilities can own installation:
 
 Check registration, installed bytes, visibility in the actual task, participation and effects separately. Hooks require their runtime, native events and host trust. Update, rollback and removal need a healthy executor and recovery path; loaded context, installed state and runtime resources have distinct lifecycles. Historical commands and boundaries remain in the [v3.2.1 README](https://github.com/yiheng8023/YIYUAN-Accord/blob/v3.2.1/README.md); recheck current host support before execution.
 
+Before switching versions, the executor should check unfinished work and any Hooks that will start later. Already loaded components continuing to work does not prove that a later Hook can still find its executable files. Use a healthy executor independent of the plugin being changed, at a safe time the host supports and the executor can verify. If that boundary is unknown, keep the prepared update pending. An independent backup preserves the original package; actual recovery also requires usable tools, authority and verification of the resulting state.
+
+The executor handles these checks and coordination. Users should only need to supply a necessary decision, authorization or personal action, with its concrete impact explained; existing clear authorization need not be requested again. Fresh-process discovery and isolated checks do not establish that existing sessions or a previously failed real Hook have recovered.
+
 ## Develop, evaluate or contribute
 
 For this branch, start with the [consensus node and plan](docs/operations/PLAN-v3.3.md) and [continuation](docs/operations/CONTINUATION.md); consult the [machine projection](product/development.json) and [architecture](docs/architecture.md) as needed. Frozen 3.1 authority and Golden Tasks are historical inputs, not current development acceptance.

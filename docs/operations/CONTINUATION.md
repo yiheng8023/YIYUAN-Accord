@@ -30,7 +30,7 @@
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本次只读诊断授权已自然捕获，原生MCP读回inputSource=native-input-event、输入数10、needsNativeReplay/needsResumeReconciliation=false，checkpoint仍unbound；此前retained-native-replay恢复保持历史身份。无需继续恢复或调查压缩。独立0.157.0原生只读查询的goal=null仅说明原读取时点；该次MCP宿主报告Desktop0.155.0-alpha.16.4；9月26日宿主resume后原生MCP报告0.158.0-alpha.2、Astra，输入正常捕获且无需回放。rev5接续保持canContinue=false，不将未完项目变为隐式Goal。 |
 | 云环境 | 新获准只读诊断已完成；universal、自动setup、Agent网络关闭、缓存开启均保持。一个新任务URL内提交三条输入（两轮只读命令、一条仅取回历史命令正文），界面任务数9→12；不称一次执行或三个新任务URL。运行期可见CODEX_HOME=/opt/codex；后续另一个PID具有app-server/-c，实际配置加载与Accord采用仍未证实。没有安装、设置/信任修改或旧案重放；原失败容器后态仍不能由本案代验。 |
-| 正式验收 | 17必要scope，11有定义、6未绑定。已为普通CLI有效用户环境与systemic-correction前瞻绑定同一更新说明交付段，活动case共12；已有范围的caseBindingGaps现为空，仅说明声明齐全，实际新贡献尚未执行/准入。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08及functionalCompletion/candidateEligible仍未完成。 |
+| 正式验收 | 17必要scope，11有定义、6未绑定，活动case共12；caseBindingGaps为空只说明声明齐全。48d4dbeb上的普通CLI有效用户环境文稿交付与systemic-correction两案已实际准入，保留精确候选与条件。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08及functionalCompletion/candidateEligible仍未完成。 |
 | 进度口径 | 先前50–65%功能/20–30%发布就绪是缺少稳定分母的工程粗估，不作为跨任务可比较总进度。当前按可用功能、已消除断点和剩余关键路径报告，正式A01–A08事实另列。 |
 
 ## 本批完成与实际未完项
@@ -128,7 +128,13 @@
 
 **收尾依赖核对已落地**：未发现必须先整项验收才允许开发的结构性循环，未改17范围或8项底线。修正PLAN仍将已完成的受控失ACK组合列为“下一步”的陈旧语句；原三平台局部证据复用，不重跑。校验器新增纯诊断caseBindingGaps，按活动case区分无案例、职责/质量轴/场景缺口和A08缺完整组合case；既有observe/recheck、准入及候选条件不变，23项当前准入回归通过。七个pending依据在三scope/三case共六份投影同步细化为具体可行条件，按本地/远程主机、托管执行、交互/控制/触发聚合作业；Work本地/云端与Remote主机复用各有边界，独立IDE保留集成差异。selected集合不变，未把未验证改成通过或排除，也未安排七个独立模型试验。独立复核无阻断；该批7ae3bac5的CI36294719722已按精确SHA及全部11个job读回成功，核验责任闭合。
 
-**下一交付段已具体绑定，尚未派发模型**：product/cases/upgrade-guidance-v3.3.json以六份冻结输入生成中英文更新/恢复说明与一致JSON，第二轮按真实后取得的Stop反馈修订三份成品；一次episode分别评价普通有效用户环境和系统性纠偏。旧systemic scope残留已结束02例的版本/配置/执行条件，已留7ae3bac5原声明及Hash，scope保留默认模式和原纠偏职责，新03例独立绑定当前条件。当前只读原生预检确认CLI0.157.1、现装27100450、Sol/medium及5Skill/6可信Hook，配置未变且进程已释放。采用既有执行器，不另建控制框架。24项当前准入回归通过；私有配置恢复器经红绿反例修正为预绑备份Hash、唯一新增登记的字节证明及排它读写，3方法7子例通过并独立复核。一次600秒、两轮、250万总/20万uncached/1.4万输出上限已预绑，不借此改变主线程模型或模式。确切工作目录的原生临时信任/恢复尚需明确授权，未启动模型任务。准备与恢复源码在accord-upgrade-guidance-20260927-01；先完成当前不可变准备和此有限授权，再执行/独立审查/observe-recheck，不能把定义计为通过。
+**更新说明同段两案已实际准入**：用户明确确认后，48d4dbeb78a3f37d4479609969abfcac057e6589/tree d7725dafed5e210087436ed175010c8e2f7b2ac5上只执行一次episode a44e6953d8684b83916175466ba1abab。当前CLI0.157.1/Sol-medium/default与现装27100450完成两轮：先交付中英文更新/恢复草稿及JSON，再依据后来真实Stop反馈同步修订三份成品；六原件Hash/mtime保持。345.51秒，累计665934总/61514未缓存输入/13060输出，均在预绑上限内。两位全新上下文评估者完成四轴只读复核，原生输入、实际模型/模式、两次Goal=null、完整入口及工具轨迹相符；既有observe/recheck接受v33-codex-cli-update-guidance-01与v33-systemic-correction-03，errors=[]、caseRejections={}。
+
+真实有效环境包含既有AGENTS、记忆和Skills，模型实际查询过MEMORY.md并按需读两项Accord指导；成品业务主张均由密封输入与第二消息支持，不是无记忆对照或Accord独立收益证明。第一轮一次手抄预期Hash错误在同轮核对后纠正，失败原回执保留，无额外救援提示或重跑。原根线程Stop的具体原因与真实恢复仍未知，独立隔离检查、安装与本次文稿通过均不能抵销。
+
+Root先核对2个CLI Job及9个目录/Goal/预检进程全部自然退出、三个读取器已停，再调用已批准的恢复器；本次未产生临时信任登记，配置始终与原备份字节一致，没有实际恢复写入。三个自有workspace/temp/state路径回收前验证归属、无reparse与成品副本一致，73份episode证据Hash保持；原生任务/历史和恢复原件保留。这是调用方收尾。两语README已由Root提炼整合通用安全更新时间、备份边界及普通用户无需承担内部协调；模型原件未改，未更新本机插件、第三方Skill、主模型、模式或Cloud。
+
+该段不再作为下一待执行案例。后续沿计划的三条工作线推进六个未定义必要范围、实际入口及自主连续性，不靠重放本例增加覆盖。48d4dbeb的CI36299563573最新回读8项成功、3项运行中、无失败，仍需按精确SHA回读最终结果；functionalCompletion/candidateEligible仍为false。
 
 ## 原件与历史导航
 
@@ -136,6 +142,7 @@
 
 | 目录 | 内容与限制 |
 |---|---|
+| accord-upgrade-guidance-20260927-01 | 48d4dbeb精确前绑与用户批准、一次两轮原生文稿交付/反馈纠偏、两个阶段三成品及六原件、49份执行来源、独立四轴评审、正式两case准入及11进程域后态。配置未变，三自有路径已回收，73份episode证据和原生历史保留；不重放，不代验原根线程Stop恢复或完整发布资格。 |
 | accord-shared-plugin-update-20260927-01 | 用户明确批准的20260927100450本机更新、首个过严缓存门槛停止及已核验原生恢复、纠正后的精确安装/新发现、原旧包与新包备份、18域后态和未完状态回读。原件保持，非普通自主交接验收。 |
 | accord-cloud-preload-20260927-01 | 获准后唯一task_e_6ab867c52264832bb91d46d78bcb35bb、实际setup/prompt字节、原始停止日志、前后设置及截图、execution-result.json。setup在准备进程收尾检查处停止，目标写入尚未派发，Agent未到达；setup已恢复，容器资源后态未知。授权已消耗，不重放、不运行rollback。 |
 | accord-continuity-interface-20260927-01 | 当前宿主schema只读对照；029a1c58唯一Windows基础CI36255885596、95份原件、ZIP来源Hash、独立四轴复核及两SDK案例正式observe/recheck。受控无模型，不是自主Agent验收；实例已结束，不重放。 |

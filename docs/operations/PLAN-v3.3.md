@@ -38,7 +38,7 @@
 
 技术判断不因表达强烈或双方认同而成为事实。源码公开和多端复用降低调研与实现成本，但不证明所有客户端暴露同样的控制、权限和恢复接口；当前[Work官方说明](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview)也将共享核心与按执行位置、工具和策略决定的能力区分；关键状态交接可采用简单闭环，也不代表提前触发便保证接管或失败恢复。Plan/Goal的适用性按下文的当前上游规则及具体任务判断，不作“绝对不适合复杂工程”的断言。现有证据尚未证明核心目标根本不可行，也不足以保证任意需求、入口和故障都可实现；按具体缺口、替代路径和实际结果推进。
 
-2026-09-27收尾依赖核对：17个必要claim/scope没有重复；11个有定义、6个无定义是真实定义缺口，不等于六项功能均未实现。当时另有systemic-correction没有活动case、普通CLI交付的活动case未覆盖effective-user-environment；这些已由后续前瞻定义的更新说明同一交付段补上声明，真实执行/准入仍未完成，不能埋在“已定义未验证”总数中。CLI校验的caseBindingGaps现按活动case列明无案例、职责/质量轴/场景未覆盖，以及A08是否缺少单个完整组合case；它只诊断声明缺口，不判断案例充分性、不提供执行证据、不增加通过条件。无observer仍不准入。
+2026-09-27收尾依赖核对：17个必要claim/scope没有重复；11个有定义、6个无定义是真实定义缺口，不等于六项功能均未实现。当时另有systemic-correction没有活动case、普通CLI交付的活动case未覆盖effective-user-environment；后续更新说明同一交付段已补上前瞻声明，并在48d4dbeb精确候选上完成两轮交付、独立四轴审查及两case的observe/recheck准入。该实例不重放，不扩展为完整范围通过。CLI校验的caseBindingGaps按活动case列明无案例、职责/质量轴/场景未覆盖，以及A08是否缺少单个完整组合case；它只诊断声明缺口，不判断案例充分性、不提供执行证据、不增加通过条件。无observer仍不准入。
 
 入口处置按下列三条工作线聚合，沿现有entrySurfaces及三个父scope记录，不新增入口名册或按界面数量复制试验：
 
@@ -50,7 +50,7 @@
 
 本轮实际重读的官方来源：[IDE入口](https://learn.chatgpt.com/docs/codex/ide)区分独立IDE集成；[Work执行边界](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview)区分本地与托管执行；[Remote连接](https://learn.chatgpt.com/docs/remote-connections)说明连接主机的复用关系。以上三条工作线是据此及既有项目事实作出的工程分工，不是官方给出的Accord支持结论。七个pending的依据已细化为具体条件，selected集合和selectionFinal=false保持；没有据缺少实际验收自动排除或晋升入口。条件充分的普通开发继续前瞻绑定一个连贯工作段，按实际职责组合补相关定义和案例；不等待所有入口调查结束，也不制造交接压力来填A05。
 
-2026-09-27选定的下一实际工作是更新/恢复用户说明：本次真实更新和后来Stop失败暴露了“原包可恢复保留”与“待执行回调仍需旧路径”两类依赖，现有说明需形成准确、可理解的中英文草稿与一致状态清单。[两轮工作段](../../product/cases/upgrade-guidance-v3.3.json)在执行前分别绑定普通CLI有效用户环境和系统性纠偏两个case，复用一个episode，不制造额外业务或交接压力。旧systemic scope的已结束实例条件留在7ae3bac5历史身份，scope职责/质量/场景不变，新实例独立绑定当前版本、环境、来源及限额。原生新增本次自有目录信任与精确恢复是具体授权边界；定义和预检不授权派发，也不构成执行通过。
+2026-09-27更新/恢复说明交付已完成：[两轮工作段](../../product/cases/upgrade-guidance-v3.3.json)在用户批准后执行一次，三份成品按后来Stop反馈同步纠偏。既有准入器接受v33-codex-cli-update-guidance-01与v33-systemic-correction-03；详见[实际记录](PROCEDURE-v3.3.md#更新说明交付与反馈纠偏的实际准入2026-09-27)。独立备份与后置Hook路径的区别、安全更新时机和执行者责任已提炼到两语README；这是Root随后整合，模型原件保持。旧systemic scope的已结束实例条件仍留在7ae3bac5历史身份，新实例保持自己的候选与有效用户环境条件，不归因于Accord单独收益。该段及所属资源责任已闭合；后续沿上述工作线推进未定义范围、实际入口与自主连续性的必要工作，不重复这两轮或制造交接压力。完整验收、原根线程Stop恢复与发布资格仍未成立。
 
 ## 全维度动态评价框架
 
