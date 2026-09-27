@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-09-26 · N33-20260909 / r31。
+更新：2026-09-27 · N33-20260909 / r31。
 以实时Git、当前原生输入和受影响资源为准；本页只保留接续必需状态。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)和[机器投影](../../product/development.json)分别展开结果、判据和验证投影。
 
@@ -26,7 +26,7 @@
 |---|---|
 | 仓库 | 当前两案执行/准入绑定已推送候选60219fff；结果记录另行提交。其它历史证据保留各自精确对象，恢复时以实时Git为准。 |
 | 源与本机安装 | 源码候选已更新为3.3.0-dev.1+codex.20260927100450，24文件、SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57，修复输入流失效遗漏与会话同类异常绕过失败锁。本机现装仍为202615/SHA 6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f、marketplace ref=9a879596；未安装新候选，不把源码测试当作现装采用。第三方Skill未改。 |
-| 托管检查 | 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
+| 托管检查 | 当前f8ecac46的[CI36287689800](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36287689800)已按精确headSha及全部job核对，11/11成功；包括Windows/Linux/macOS回归与Linux/macOS原生生命周期。此批托管责任闭合，未重放旧失败运行。 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本次只读诊断授权已自然捕获，原生MCP读回inputSource=native-input-event、输入数10、needsNativeReplay/needsResumeReconciliation=false，checkpoint仍unbound；此前retained-native-replay恢复保持历史身份。无需继续恢复或调查压缩。独立0.157.0原生只读查询的goal=null仅说明原读取时点；该次MCP宿主报告Desktop0.155.0-alpha.16.4；9月26日宿主resume后原生MCP报告0.158.0-alpha.2、Astra，输入正常捕获且无需回放。rev5接续保持canContinue=false，不将未完项目变为隐式Goal。 |
 | 云环境 | 新获准只读诊断已完成；universal、自动setup、Agent网络关闭、缓存开启均保持。一个新任务URL内提交三条输入（两轮只读命令、一条仅取回历史命令正文），界面任务数9→12；不称一次执行或三个新任务URL。运行期可见CODEX_HOME=/opt/codex；后续另一个PID具有app-server/-c，实际配置加载与Accord采用仍未证实。没有安装、设置/信任修改或旧案重放；原失败容器后态仍不能由本案代验。 |
@@ -122,7 +122,7 @@
 3. **连续性和资源剩余结果**：复用原生压缩、已有SDK和旧机制有效证据，完成必要自主择时/交权、目标真实续做、未知效果对账与失败回退，连同环境变化、压力后续做和退出后态。不把source连接缺失推广为所有入口不可用，也不强制健康任务迁移。
 4. **正式准入和发布**：补未绑定的entry-coverage、dynamic-model-routing、autonomous-continuity、system-integration、codex-lifecycle、system-impact-assessment六scope；这不意味着各造一套试验。A08的完整组合仍须同一episode，不能拼散案冒充；必要验收、独立审查和精确候选条件满足后依既有授权发布。
 
-本轮两处普通连续性源码缺陷已修复：输入流error/提前close现会保留输入丢失隔离；会话执行器只透传自己实际锁定的异常，外部同类异常不能绕过run/恢复/settle失败处理。七项新增反例、181项checkpoint/session及42项MCP回归通过，独立复核无阻断；原有正常EOF、非Hook只读查询、settle前重试及未知效果边界保持。见[本轮记录](PROCEDURE-v3.3.md#普通连续性失败路径修复2026-09-27)。这是已消除的功能断点，不代验完整自主交接；新源码候选待托管检查，现装与既有证据仍绑定原版本。
+本轮两处普通连续性源码缺陷已修复：输入流error/提前close现会保留输入丢失隔离；会话执行器只透传自己实际锁定的异常，外部同类异常不能绕过run/恢复/settle失败处理。七项新增反例、181项checkpoint/session及42项MCP回归通过，独立复核无阻断；原有正常EOF、非Hook只读查询、settle前重试及未知效果边界保持。见[本轮记录](PROCEDURE-v3.3.md#普通连续性失败路径修复2026-09-27)。这是已消除的功能断点，不代验完整自主交接；新源码候选f8ecac46的CI36287689800已11/11通过，现装与既有证据仍绑定原版本。本机原生清单读回仍为启用的202615；已准备一次切换到20260927100450的精确方案（accord-shared-plugin-update-20260927-01），尚未更改共享安装，等待具体本机更新授权。该范围不含Cloud、第三方Skill、主模型或模式变更。
 
 ## 原件与历史导航
 
