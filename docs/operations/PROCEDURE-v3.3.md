@@ -2492,3 +2492,15 @@ Root从执行日志及最终回答交叉取回结构化摘要：4e44e52a、CLI 0
 保持cx-vscode作为开发目标，并在三个父scope、三个case的六份处置依据同步此限制；入口集合、必要范围、质量和预期结果不变，没有宣称新的支持或准入。准备一份新的IDE只读核对文本，SHA f3bfa8c78db6838bb31c5722316a34d8310c7cc19984734d7ba295812f57d301，用户在真实IDE新会话发送后才有执行；当前界面控制仅支持浏览器，不能由另起CLI/App Server替代。核对只使用当前环境/宿主注入及至多一次inspect_task_state，唯一成品在任务专属.tmp目录，缺失直接报unknown；未授权或派发安装、配置、信任、Cloud或旧案重放。独立复核还收紧了计划旧段落中把有限参与称作支持冲突的表述；任务修订稿33b6958ba928062bfb7bcc180205fd8c3ba2e64246b70ed8b35ae0a663565e4d只澄清宿主仍可能产生正常日志/状态/回执，不增加主动操作。初稿保持原字节；如果已经发送初稿就沿用那一次结果，不重发修订稿。当前尚未收到发送确认或新IDE结果，文件暂缺不证明未执行。
 
 本机采用前提另读回：当前Accord启用、Git来源及f8ecac46引用匹配，27100450的24文件/ee962ced包摘要与独立恢复副本一致；配置摘要已变为804f0d13…0a84cd，两次读取稳定，本轮无共享写入。只记录漂移，不输出私有配置或用旧基线恢复。官方[本地插件更新说明](https://developers.openai.com/plugins/build/plugins#install-a-local-plugin-manually)和CLI新会话说明没有保证活动轮次、延后Hook的安全热替换，因此共享更新仍须当前具体权限、健康执行者和已核实的旧回调结束条件。原件在accord-entry-current-20260928-01，两个现有契约检查及verify通过。
+
+## 指定IDE只读会话的原生回读（2026-09-28）
+
+用户确认已发送，并说明以[核对 Accord IDE 入口状态](codex://threads/01a0e4dd-45c9-7a82-97f3-2d7bc0e9ae1a)为v2主对象，首轮误发后由用户删除。Root按指定对象读取原生记录：source=vscode、originator=codex_vscode、CLI0.155.0-alpha.16.3，记录的模型/推理为gpt-6-sol/xhigh，协作模式default、on-request/danger-full-access。该轮74.323秒completed；实际cwd正是Accord工作区，Windows路径大小写和分隔符归一化没有造成状态键错配。
+
+原生developer上下文在首次工具前包含27100450的Accord入口。唯一一次inspect_task_state的MCP元数据thread/turn/hostVersion与会话对应，返回observed-call-context且isError=false；checkpoint为revision0、missing-stored-input-receipt、present=false、needsNativeReplay=true及session/workspace水印。工具参与已观察，但输入捕获/恢复未闭合。该诊断明确禁止replay，不能把未执行恢复当成正常自主恢复必定失败，也不能把工具调用成功当完整入口验收或官方支持证明。
+
+路径问题属于任务交付边界：准备稿把含反斜杠的Windows路径裸写在Markdown，实际收到的目标已变为C:/Projects/YIYUAN-Accord.tmp/ide-entry-readonly-20260928-01/diagnostic.json，少了.tmp前分隔符，与Markdown转义相符。首轮在该位置写出文件并回读；v2命中EXISTS/exit3，未覆盖。Root保留该首轮文件和实际输入差异，不把它改名补成v2交付。首轮原始日志曾只读核对，随后在原归档及活动位置均缺失；按用户删除边界不恢复、不重构，仅保留此前已观察的有限来源事实。v2独立回读保存在私有ide-native-readback.json，明确由Root从原生记录抽取。没有v3、追加提示或原案重跑。
+
+只读定位确认v2会话失败水印在v2本轮开始附近创建，共享workspace水印来自9月12日；扩展日志证明本会话为new_thread/prewarmed。扩展日志与限定SQLite查询没有给出首个Hook错误回执，故根因保持未定。独立源码复核及不接触现场的合成检查证明：既有workspace水印可使后来session的普通UserPrompt报input-receipt-needs-native-replay，随后出现session水印；无水印对照可捕获，其它会话隔离和workspace水印字节保持。该机制能产生当前形态，但不能代替现场首错。现场协议文件未删除、改写或重放；不能按缺文件、mtime或随机ID推断新会话并绕开隔离。后续正常入口工作须核实恢复连接，不继续泛搜或反复执行只读诊断。
+
+fcf88bdf/CI36346771569与562ee280/CI36349275184均已按精确SHA及全部11个job读回success，相关托管责任闭合。以上只增加版本限定观察和接续事实；17范围、A01–A08、当前候选包及既有案例判据未改。

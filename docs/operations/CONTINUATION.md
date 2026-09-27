@@ -34,11 +34,17 @@
 | 正式验收 | 17必要scope，11有定义、6未绑定，活动case共12；caseBindingGaps为空只说明声明齐全。48d4dbeb上的普通CLI有效用户环境文稿交付与systemic-correction两案已实际准入，保留精确候选与条件。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08及functionalCompletion/candidateEligible仍未完成。 |
 | 进度口径 | 截止3.3正式发布及公共对象核验；后续部署、传播、市场及治理不计。先前50–65%功能/20–30%发布就绪缺少稳定分母，不能作为可比较总进度。按现有工作包的实际成果、剩余断点和关键路径评估，正式A01–A08事实另列。取消Claude后续适配不减少当前17范围。 |
 
-735a5919范围/债务对齐的[CI36343293965](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36343293965)已按精确SHA和11个job读回成功。其后退役当前runtime及包内副本未注册的Claude PostToolBatch分支；源码包更新为28040031，仅manifest与accord-hook两文件改变，SessionStart及状态/MCP实现保持。8项不支持事件/无写入、启动、暂停与压缩恢复回归、verify及host-check通过；本机仍27100450，未安装或刷新已有消费者，新包的行为采用和托管结果另验。原233529候选和原准入保留原条件，旧UPDATE-PREPARATION不能直接用于此新候选。
+735a5919范围/债务对齐的[CI36343293965](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36343293965)已按精确SHA和11个job读回成功。其后退役当前runtime及包内副本未注册的Claude PostToolBatch分支；源码包更新为28040031，仅manifest与accord-hook两文件改变，SessionStart及状态/MCP实现保持。8项不支持事件/无写入、启动、暂停与压缩恢复回归、verify及host-check通过；本机仍27100450，未安装或刷新已有消费者，新包实际采用仍待核实，托管结果见下文。原233529候选和原准入保留原条件，旧UPDATE-PREPARATION不能直接用于此新候选。
 
-**当前入口/采用核对**：官方现行Plugins页不支持将IDE扩展列为插件受支持入口；本机扩展26.917.62051普通启动与转发未见全局plugins/hooks禁用，但附带CLI不等于实际控制者，临时标题/描述生成的禁用项不能推广为主会话。历史两次IDE参与保持原身份，未取消开发目标或升为完整支持。六份父scope/case处置依据已一致补入该限制，4selected/7pending及selectionFinal=false保持。一次新的IDE只读任务已准备在私有accord-entry-current-20260928-01/TASK-IDE-READONLY-v2.md，待用户在IDE发送；若已发送初稿则沿用该次结果，不追加派发；只核当前入口和一次状态工具，输出限定于.tmp/ide-entry-readonly-20260928-01/diagnostic.json，不改安装/配置、不重放文稿任务。当前界面控制接口仅开放浏览器，不能代替该IDE输入动作。
+**当前IDE核对已结束**：用户指定[核对 Accord IDE 入口状态](codex://threads/01a0e4dd-45c9-7a82-97f3-2d7bc0e9ae1a)为v2对象；实际cwd正确，原生vscode/codex_vscode、CLI0.155.0-alpha.16.3、Sol/xhigh/default，74.323秒completed。原生developer上下文在首个工具前包含27100450入口；唯一一次状态MCP的thread/turn/hostVersion均与会话对应。返回present=false、revision0、needsNativeReplay=true及两级失败水印，没有工具调用错误；这证明有限入口/工具参与，不证明输入恢复或完整IDE支持。官方支持边界、4selected/7pending、预期结果和selectionFinal=false保持。
+
+原准备稿未保护Windows路径的Markdown转义，实际收到的路径少了.tmp前的分隔符，变成C:/Projects/YIYUAN-Accord.tmp/ide-entry-readonly-20260928-01/diagnostic.json。用户说明首轮误发后删除，指定v2重发；首轮文件已在该路径写出，v2按存在性守卫停止且未覆盖。工作区选择正确，首轮文件不能算v2成品。Root只从原生历史抽取v2回执，原文件保持；首轮日志曾读到、随后已不在原归档或活动路径，不恢复或重构已删除对话。实际输入与准备稿的字节差异保留，不再发送v3或重跑。
+
+现场共享workspace水印来自9月12日，v2会话水印在v2本轮开始附近生成；未找到该次Hook首错回执。隔离合成检查确认旧workspace水印可阻止后来session捕获首条普通输入，同时保留其它会话隔离；这只是可产生该形态的机制，不冒充现场根因。诊断主动禁止replay，因此尚未验证正常任务的自主恢复。不得删水印或以缺文件/mtime猜测新会话来求通过。完整回读、现场定位与合成结果在accord-entry-current-20260928-01/ide-native-readback.json及watermark-mechanism.json。
 
 同次只读核对现装27100450的24文件/ee962ced摘要、Git市场f8ecac46/启用状态及独立恢复副本均匹配；配置当前摘要804f0d138c0b539bd7a7b8068c0f0601c29196f0b878aa2102b7b7d15f0a84cd与旧21b7记录不同，期间两次读取稳定，未追查或覆盖无关变化。新28040031仍未安装。官方本地插件说明要求更新后重启、CLI新会话采用，未提供活动轮次及后置Hook可安全热切换的保证；不能据此省去健康执行者、结束旧回调和新鲜恢复材料。共享更新/Cloud的新执行权限仍须对应具体动作，旧单次授权不复用。
+
+fcf88bdf源码候选的CI36346771569与562ee280记录/判定对齐的CI36349275184，现已分别按完整SHA及全部11个job回读success；这两项责任闭合，不再轮询。
 
 ### 到正式发布的进度评估（2026-09-28）
 
