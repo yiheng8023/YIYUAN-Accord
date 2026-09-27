@@ -4394,6 +4394,19 @@
       "packageSha256": "ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57",
       "limits": "Installed candidate remains 20260925202615. No Cloud replay, model/native App Server execution, shared installation, third-party Skill change, new mode, complete acceptance or release claim.",
       "evidence": "Current source/tests and PROCEDURE-v3.3.md 2026-09-27; private accord-continuity-failure-repair-20260927-01 retains the initial capacity-check failure."
+    },
+    {
+      "id": "local-shared-candidate-adoption-20260927",
+      "observedAt": "2026-09-27",
+      "scope": "authorized-native-update-and-bounded-loading",
+      "packageVersion": "3.3.0-dev.1+codex.20260927100450",
+      "sourceCommit": "f8ecac46461e5137e2faed2ba94f38dc1f3efe2d",
+      "packageSha256": "ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57",
+      "result": "User explicitly approved the prepared local update. Exact 24 installed files match Git; fresh CLI 0.157.1 discovery observes five enabled Skills and six trusted Hooks at the new path. Unrelated configuration and independent original-package backups remain unchanged. Current MCP and new helper read the same unfinished checkpoint/input basis.",
+      "correction": "The initial executor incorrectly required the old native cache to coexist. Native installation succeeded and replaced that cache; the observed stop and verified native rollback remain recorded. Existing preloading implementation and regression evidence support preserving original package bytes in independent recovery storage instead. After verified restoration, the corrected executor completed the same authorized update; old cache absence is separately reported, not hidden.",
+      "resources": "16 recorded CLI and two discovery domains exited naturally with zero active Job processes; readers stopped and two owned empty workspaces removed. User-owned native history, package backups and all original receipts retained.",
+      "limits": "No model task, Cloud replay, third-party Skill change, new trust or mode/model change. Current state access does not prove old MCP code refreshed or all existing Desktop/Hook consumers adopted the new candidate; complete autonomous behavior and release remain unverified.",
+      "evidence": "accord-shared-plugin-update-20260927-01: approval-state, original update/poststate, update-failure-reconciled, rollback receipts, corrected-update, verification.json and execution-result.json; PROCEDURE-v3.3.md 2026-09-27."
     }
   ],
   "environmentControl": {

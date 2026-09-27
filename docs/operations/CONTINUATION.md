@@ -25,7 +25,7 @@
 | 项目 | 已核事实与限制 |
 |---|---|
 | 仓库 | 当前两案执行/准入绑定已推送候选60219fff；结果记录另行提交。其它历史证据保留各自精确对象，恢复时以实时Git为准。 |
-| 源与本机安装 | 源码候选已更新为3.3.0-dev.1+codex.20260927100450，24文件、SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57，修复输入流失效遗漏与会话同类异常绕过失败锁。本机现装仍为202615/SHA 6dda1526d6d633741ee79d1f402375917f6db769125ae938db24cbecec15464f、marketplace ref=9a879596；未安装新候选，不把源码测试当作现装采用。第三方Skill未改。 |
+| 源与本机安装 | 源与本机现装均为3.3.0-dev.1+codex.20260927100450，24文件、SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57，市场固定f8ecac46；原生安装、逐文件Git字节与新进程5Skill/6可信Hook路径均核实。旧包原件独立备份保持，无关配置不变；宿主管理的旧缓存已按原生替换退出。当前MCP与新helper可读取同一未完状态，仍不声称所有既有Desktop/MCP消费者已刷新。 |
 | 托管检查 | 当前f8ecac46的[CI36287689800](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36287689800)已按精确headSha及全部job核对，11/11成功；包括Windows/Linux/macOS回归与Linux/macOS原生生命周期。此批托管责任闭合，未重放旧失败运行。 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本次只读诊断授权已自然捕获，原生MCP读回inputSource=native-input-event、输入数10、needsNativeReplay/needsResumeReconciliation=false，checkpoint仍unbound；此前retained-native-replay恢复保持历史身份。无需继续恢复或调查压缩。独立0.157.0原生只读查询的goal=null仅说明原读取时点；该次MCP宿主报告Desktop0.155.0-alpha.16.4；9月26日宿主resume后原生MCP报告0.158.0-alpha.2、Astra，输入正常捕获且无需回放。rev5接续保持canContinue=false，不将未完项目变为隐式Goal。 |
@@ -122,7 +122,7 @@
 3. **连续性和资源剩余结果**：复用原生压缩、已有SDK和旧机制有效证据，完成必要自主择时/交权、目标真实续做、未知效果对账与失败回退，连同环境变化、压力后续做和退出后态。不把source连接缺失推广为所有入口不可用，也不强制健康任务迁移。
 4. **正式准入和发布**：补未绑定的entry-coverage、dynamic-model-routing、autonomous-continuity、system-integration、codex-lifecycle、system-impact-assessment六scope；这不意味着各造一套试验。A08的完整组合仍须同一episode，不能拼散案冒充；必要验收、独立审查和精确候选条件满足后依既有授权发布。
 
-本轮两处普通连续性源码缺陷已修复：输入流error/提前close现会保留输入丢失隔离；会话执行器只透传自己实际锁定的异常，外部同类异常不能绕过run/恢复/settle失败处理。七项新增反例、181项checkpoint/session及42项MCP回归通过，独立复核无阻断；原有正常EOF、非Hook只读查询、settle前重试及未知效果边界保持。见[本轮记录](PROCEDURE-v3.3.md#普通连续性失败路径修复2026-09-27)。这是已消除的功能断点，不代验完整自主交接；新源码候选f8ecac46的CI36287689800已11/11通过，现装与既有证据仍绑定原版本。本机原生清单读回仍为启用的202615；已准备一次切换到20260927100450的精确方案（accord-shared-plugin-update-20260927-01），尚未更改共享安装，等待具体本机更新授权。该范围不含Cloud、第三方Skill、主模型或模式变更。
+本轮两处普通连续性源码缺陷已修复：输入流error/提前close现会保留输入丢失隔离；会话执行器只透传自己实际锁定的异常，外部同类异常不能绕过run/恢复/settle失败处理。七项新增反例、181项checkpoint/session及42项MCP回归通过，独立复核无阻断；原有正常EOF、非Hook只读查询、settle前重试及未知效果边界保持。见[本轮记录](PROCEDURE-v3.3.md#普通连续性失败路径修复2026-09-27)。这是已消除的功能断点，不代验完整自主交接；新源码候选f8ecac46的CI36287689800已11/11通过，既有行为证据仍绑定原版本。用户明确允许本机更新后，20260927100450已原生安装并核验。首次安装后的旧缓存并存检查过严而停止，已先恢复原版本/配置并核验；按既有预加载设计与回归纠正该工程门槛后，在同一授权范围内完成更新。原旧包及恢复材料在独立备份中逐字节保持；18份所属进程域均自然退出/活动0，两处空工作目录已回收，失败与恢复原件保留于accord-shared-plugin-update-20260927-01。未变更第三方Skill、主模型、模式或Cloud；当前状态可访问不等于全部既有消费者刷新。
 
 ## 原件与历史导航
 
@@ -130,6 +130,7 @@
 
 | 目录 | 内容与限制 |
 |---|---|
+| accord-shared-plugin-update-20260927-01 | 用户明确批准的20260927100450本机更新、首个过严缓存门槛停止及已核验原生恢复、纠正后的精确安装/新发现、原旧包与新包备份、18域后态和未完状态回读。原件保持，非普通自主交接验收。 |
 | accord-cloud-preload-20260927-01 | 获准后唯一task_e_6ab867c52264832bb91d46d78bcb35bb、实际setup/prompt字节、原始停止日志、前后设置及截图、execution-result.json。setup在准备进程收尾检查处停止，目标写入尚未派发，Agent未到达；setup已恢复，容器资源后态未知。授权已消耗，不重放、不运行rollback。 |
 | accord-continuity-interface-20260927-01 | 当前宿主schema只读对照；029a1c58唯一Windows基础CI36255885596、95份原件、ZIP来源Hash、独立四轴复核及两SDK案例正式observe/recheck。受控无模型，不是自主Agent验收；实例已结束，不重放。 |
 | accord-current-cadence-20260926-01 | 60219fff当前完整安装的五阶段普通协调与暂停恢复、原生Goal时点、业务原件、两case准入及资源后态；保持原候选/条件，不重跑或无据归因于Accord单独效果。 |
