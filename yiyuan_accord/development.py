@@ -325,8 +325,8 @@ def development_contract_errors(contract, golden_task_ids):
         require(contract.get("previousDevelopmentSnapshot") == PREVIOUS_DEVELOPMENT,
                 "3.2.1 development evidence must retain its immutable identity")
         require(cycle.get("priorityHosts") == ["chatgpt", "codex"]
-                and cycle.get("claudeAdaptation") == "next-version-not-in-v3.3-distribution",
-                "3.3 distributes only OpenAI adaptation; other adaptation belongs to a later version")
+                and cycle.get("claudeAdaptation") == "cancelled-by-user",
+                "3.3 distributes only OpenAI adaptation; the subsequent Claude plan is cancelled")
         require(contract.get("navigation") == V5_DOCUMENTS,
                 "3.3 development must resolve the plan and its result, acceptance and historical views")
         node = section("consensusNode", ("id", "revision", "path", "evaluation", "procedures",

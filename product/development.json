@@ -5,7 +5,7 @@
   "status": "in-development",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "The user authorized 3.3 functional development in the bound checkout, prioritizing actual ChatGPT and Codex entries including first-class CLI. Users provide natural-language ideas, accountable judgments and necessary authorization; the Agent researches feasibility and official or mature ecosystem sources, chooses and operates tools, corrects and recovers, owns continuity and OS/host resource management, and closes work without technical rescue. The latest bound consensus limits 3.3 delivery to OpenAI; Claude adaptation belongs to a subsequent version and is excluded from current distribution and support claims. Historical assets retain their original identity. Prefer reversible task-local isolation; necessary shared changes require known scope, backup, affected tasks and recovery. On 2026-09-14 the user requested completing and publishing 3.3 promptly without reducing functionality or quality. This authorizes release 3.3.0 only after the retained necessary acceptance and exact-candidate conditions; it is not present readiness. Previous 3.2 publication and one-use installation permissions are historical, not standing 3.3 authority. On 2026-09-13 the user authorized disabling Accord if it interferes with development, and required the plan and continuation state to stay flexible and current; this does not grant unrelated configuration changes, account or trust access, social publication, or releases outside this target.",
+    "basis": "The user authorized 3.3 functional development in the bound checkout, prioritizing actual ChatGPT and Codex entries including first-class CLI. Users provide natural-language ideas, accountable judgments and necessary authorization; the Agent researches feasibility and official or mature ecosystem sources, chooses and operates tools, corrects and recovers, owns continuity and OS/host resource management, and closes work without technical rescue. The latest bound consensus limits 3.3 delivery to OpenAI. On 2026-09-28 the user cancelled the planned subsequent Claude adaptation; other future plans remain unchanged. Release progress ends at verified publication of 3.3.0 and excludes later deployment, promotion, marketplace submission and governance. The user also authorized removing obsolete packages, data and paths with negative effects or historical debt after checking current consumers, ownership, evidence and recovery needs. Claude is excluded from current distribution and support claims. Historical assets retain their original identity. Prefer reversible task-local isolation; necessary shared changes require known scope, backup, affected tasks and recovery. On 2026-09-14 the user requested completing and publishing 3.3 promptly without reducing functionality or quality. This authorizes release 3.3.0 only after the retained necessary acceptance and exact-candidate conditions; it is not present readiness. Previous 3.2 publication and one-use installation permissions are historical, not standing 3.3 authority. On 2026-09-13 the user authorized disabling Accord if it interferes with development, and required the plan and continuation state to stay flexible and current; this does not grant unrelated configuration changes, account or trust access, social publication, or releases outside this target.",
     "scope": ["source-semantics", "full-function-acceptance-mapping", "local-contract-validation", "matching-navigation-and-glossary", "whole-system-optimization", "existing-host-functional-closure", "next-version-development", "controlled-existing-host-evaluation", "chatgpt-codex-functional-development", "conditional-v3.3-release"],
     "notGranted": ["other-host-experiments", "new-trust-data-or-material-cost", "unrelated-external-writes", "rewrite-historical-tags-or-releases", "publication-outside-current-conditional-release-authority", "blind-process-termination-or-global-environment-reset"],
     "conditionalRelease": {
@@ -26,9 +26,9 @@
       "codex"
     ],
     "additionalHostAdaptation": "deferred",
-    "scopeRule": "Version 3.3 develops only the OpenAI adaptation. Select execution entries by real user value, a feasible end-to-end duty composition and lifecycle burden before binding a delivery commitment; verify actual behavior before making support claims. Web/cloud location, brand, plugin installation or Hook support alone cannot establish or rule out suitability. Ordinary Chat is not a default standalone deliverable; any auxiliary dialogue or transfer role needs a concrete use and its own accountability. ChatGPT Work and Codex cloud remain execution candidates with unresolved Accord suitability. Reuse common implementations and verify consequential differences. Claude remains outside current distribution and support; historical identity and vendor independence are preserved. Organize applicability by product or work form, execution location, access surface and operating system. IDE brands are integration instances, not automatically separate implementation projects. Reuse verified common mechanisms and retain consequential differences; preserving discovery IDs does not establish equivalence or remove necessary outcomes.",
+    "scopeRule": "Version 3.3 develops only the OpenAI adaptation. Select execution entries by real user value, a feasible end-to-end duty composition and lifecycle burden before binding a delivery commitment; verify actual behavior before making support claims. Web/cloud location, brand, plugin installation or Hook support alone cannot establish or rule out suitability. Ordinary Chat is not a default standalone deliverable; any auxiliary dialogue or transfer role needs a concrete use and its own accountability. ChatGPT Work and Codex cloud remain execution candidates with unresolved Accord suitability. Reuse common implementations and verify consequential differences. The previously planned subsequent Claude adaptation is cancelled, and Claude remains outside current distribution and support; historical identity and vendor independence are preserved. Organize applicability by product or work form, execution location, access surface and operating system. IDE brands are integration instances, not automatically separate implementation projects. Reuse verified common mechanisms and retain consequential differences; preserving discovery IDs does not establish equivalence or remove necessary outcomes.",
     "sourceDecision": "Implement ordinary-input functional slices, including autonomous tool-failure recovery and correction of delivered artifacts, while retaining complete system, continuity, ecosystem and OS/host resource obligations. Across applicable capabilities the Agent owns need detection, timing, execution feedback, recovery, verification and exit; fork is only one example. Ordinary cases do not tell the Agent which tool to use. Unnecessary or premature invocation, missed needs and incomplete follow-through remain failures; always-on functionality is not the goal. Absorb applicable engineering principles across Agent tasks: internalize necessary judgment, contracts or feedback connections and reuse sufficient host execution/state capabilities. Evaluate both against the same outcomes; neither an existing host capability nor a custom component proves coverage. Adaptive practice does not remove domain-specific correctness checks. System coupling, failure propagation, shared-state ownership and non-compensable quality floors are implementation and acceptance obligations throughout, not a final polish stage. Before any change, the host Agent uses source and dependency evidence to assess whole-goal and consequential cross-boundary effects; Accord carries this duty through entry and recovery guidance. Changed assumptions, baselines, plans or acceptance criteria also reopen affected existing outputs and the current applicability of historical conclusions. Native task state or existing checkpoint unresolved conditions retain consequential unknowns; neither file matches nor a revised future plan closes them. Inspection depth follows actual risk, and discovery grants no new access or authority. Prioritize consequential weak dependencies and verify composed episodes as well as individual functions. Local checks are not ordinary-host acceptance; 3.3 publication is conditionally authorized by the latest user decision and remains dependent on full necessary acceptance. The user-confirmed N33-20260909 node in PLAN-v3.3.md owns current consensus, source consistency, dynamic evaluation and nonlinear procedures. Review source contradictions before dependent implementation; reconcile affected historical and current results. All editable or usable host UI, settings, commands and interfaces need discovered dispositions, including unknowns; coverage does not authorize enablement.",
-    "claudeAdaptation": "next-version-not-in-v3.3-distribution",
+    "claudeAdaptation": "cancelled-by-user",
     "priorityHosts": [
       "chatgpt",
       "codex"
@@ -151,11 +151,8 @@
       "scripts/codex_rpc.py",
       "scripts/codex_events.py",
       "scripts/inspect_coordination.py",
-      "scripts/observe-claude-entry.ps1",
-      "scripts/observe_claude_entry.py",
       "scripts/observe_codex_entry.py",
       "tests/product/test_admission.py",
-      "tests/product/test_claude_entry.py",
       "tests/product/test_codex_entry.py",
       "tests/product/test_codex_context.py",
       "tests/product/test_codex_connection.py",
@@ -197,7 +194,7 @@
       "tests/product/fixtures/resource_change/batch_tool.py",
       "tests/product/fixtures/resource_change/batch_worker.py"
     ],
-    "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; Claude adaptation belongs to a subsequent version. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
+    "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The planned subsequent Claude adaptation was cancelled by the user on 2026-09-28; other future plans remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 3150000,
       "maxTrackedFiles": 176,
@@ -494,7 +491,7 @@
     "representation": "One versioned semantic source owns outcomes and evidence requirements; workSequence owns procedures and exits. Duty ids join the review views without a second authority. Indexes, graphs, matrices and caches are replaceable representations justified by actual consumers and decision or maintenance benefit, not required product modules. Direct task-time queries may suffice. dependsOn is implementation-order review, not a live feedback or execution graph. This dated inventory is not every vendor or host/model/tool combination; model, host and composed capability remain distinct.",
     "refreshRule": "At a relevant decision, inspect the running client, actual provider/model, policy and exposed interface. Version/feature/configuration/package/permission changes, a supported invalidation event, source contradiction, missing observation or failed effect reopen affected applicability. Re-read supported state and only the needed official documentation; no automatic network watcher or fixed global expiry is installed. Retain the dated observation as history, never as permanently current support. Compare official command, settings and capability indexes with supported current UI, schema and callable interfaces. Account for aliases, per-entry differences, new/removed controls and all unexplained differences; do not claim exhaustive current visibility from docs or a tool list alone.",
     "allocationRule": "Allocate by bound effects, evidence, fit and full adoption/use/recovery/exit cost. Reuse host discovery and lifecycle; compare beyond installed tools for a material gap or plausible net benefit. Native preference resolves comparable fit, not a better external candidate. Retire verified duplicates; a necessary duty survives implementation retirement, while an unnecessary duty needs revised need and acceptance. Symbiosis is a goal, not value evidence.",
-    "runtimeGap": "The current host Skill supplies adaptive guidance, not a proven system executor. Historical dev.2 native repair and same-session resume observations do not qualify this candidate, incremental value, surviving failure ownership, zero-history handoff or package lifecycle. closure.py remains a no-I/O reference core: callers supply candidates and comparison facts; it does not discover tools or establish their truth. Keeping that reference outside the ordinary entry is not itself a defect. The uncalled simulated graph demonstration has been retired from the current tree; its historical paths resolve at their original revisions. Needed discovery, decisions and effects still require sufficient observable host or composed execution. Native Codex CLI dev.13/dev.14 episodes now connect scoped file checks to Agent decisions, stale-binding correction, actual artifact repair and checkpoint retirement. The host supplies execution; the no-I/O reference need not be wired into that path solely for architectural uniformity. Claude ordinary checkpoint use, native forced continuation and wider cross-function effects remain open. These observations retain their exact packages and CLI entry; they are not App Server, Desktop, whole-function or value admission. Review the necessary control allocation across all duties and implement the smallest real path before claiming production sufficiency. A simple order-file diagnostic does not close customized-environment adaptation or that allocation.",
+    "runtimeGap": "The current host Skill supplies adaptive guidance, not a proven system executor. Historical dev.2 native repair and same-session resume observations do not qualify this candidate, incremental value, surviving failure ownership, zero-history handoff or package lifecycle. closure.py remains a no-I/O reference core: callers supply candidates and comparison facts; it does not discover tools or establish their truth. Keeping that reference outside the ordinary entry is not itself a defect. The uncalled simulated graph demonstration has been retired from the current tree; its historical paths resolve at their original revisions. Needed discovery, decisions and effects still require sufficient observable host or composed execution. Native Codex CLI dev.13/dev.14 episodes now connect scoped file checks to Agent decisions, stale-binding correction, actual artifact repair and checkpoint retirement. The host supplies execution; the no-I/O reference need not be wired into that path solely for architectural uniformity. Claude ordinary checkpoint use remains historically unverified and is no longer a planned adaptation obligation. Native Codex continuation and wider cross-function effects still require evidence for their applicable current scope. These observations retain their exact packages and CLI entry; they are not App Server, Desktop, whole-function or value admission. Review the necessary control allocation across all duties and implement the smallest real path before claiming production sufficiency. A simple order-file diagnostic does not close customized-environment adaptation or that allocation.",
     "localObservations": [
       {
         "id": "codex-continuity-history-review",
@@ -954,7 +951,7 @@
           "premise-and-consistency",
           "verification-and-value"
         ],
-        "procedure": "核对 3.2.0 不可变发布、用户普通入口反馈与原始调用。当前修复目标为 3.2.1；保留原发布和失败事实。先恢复必要功能，再做相关质量、成本与证据对齐；持续纠偏贯穿全程。",
+        "procedure": "以当前3.3共识、用户目标及已观察效果核对来源、范围和下一依赖；3.2.1及更早版本留在不可变历史。先补必要功能和实际断点，再闭合质量、成本与证据；持续纠偏贯穿全程。只计算到3.3正式发布及其公共对象核验，发布后部署、传播、市场和治理保持后续计划，不计入本次进度。",
         "exit": "本轮方向偏移、原因、保留与停止的工作及下一选择依据明确；源、计划和交接一致并完成受影响检查。进度以必要缺口闭合衡量，不能由提交数、测试数、局部 PASS 或关闭发布门禁代替。此出口仅关闭本轮启动核对；持续纠偏贯穿全部后续工作，没有一次性完成状态。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -979,8 +976,8 @@
           "resources-and-cleanup",
           "verification-and-value"
         ],
-        "procedure": "当前 dev.2 已补完整 Skill 的适用入口提示、已加载复用、简单回答轻量与在途插问保持，以及完成核验后的退役。隔离 Codex CLI 普通任务实际读取完整 Skill、bind、自验并 retire，同会话纠偏至 1 单 / 4 件 / 100.00，输入保留且状态清空。Claude Code 当前 DeepSeek 路由两轮产物正确，但无完整 Skill/helper 调用，触发仍未闭合；不能由 Codex 或正确产物代验。继续定位实际必要职责，简单独立问答保持低介入。",
-        "exit": "两宿主各自必要结果与适用故障后态均有独立可观察证据，按受影响依赖复用历史事实。加载、工具可调用、原生完成或评估器救援分别记账，不冒充 Accord 效果；未满足的结果保持未完成。 暂停不能使旧产物合同自动满足新要求；输入捕获失败不得沿用旧回执续做或完成。文件谓词须来自同一份字节并检测采集期间变化，恢复重放不得覆盖更新的原生输入。",
+        "procedure": "复用当前OpenAI适用入口已有状态/MCP、普通多轮协调与暂停恢复、成品纠偏和受控SDK机制证据，按各自版本和依赖保留有效性。下一步聚焦真实普通工作中的能力采用、失败恢复与完整组合；不为每个范围重复派发同一业务。旧dev.2及Claude路由观察只保留历史身份，不作为当前待办或跨入口代验。",
+        "exit": "所选OpenAI入口各自必要结果与适用故障后态均有独立可观察证据，按受影响依赖复用历史事实。加载、工具可调用、原生完成或评估器救援分别记账，不冒充 Accord 效果；未满足的结果保持未完成。 暂停不能使旧产物合同自动满足新要求；输入捕获失败不得沿用旧回执续做或完成。文件谓词须来自同一份字节并检测采集期间变化，恢复重放不得覆盖更新的原生输入。",
         "qualityAxes": [
           "compliance-and-safety",
           "functional-coverage",
@@ -995,7 +992,7 @@
       {
         "id": "desktop-continuity",
         "title": "Desktop 连续性与归档授权边界",
-        "state": "pending",
+        "state": "active",
         "duties": [
             "goal-authority-correction",
             "premise-and-consistency",
@@ -1006,7 +1003,7 @@
             "research-learning-and-reuse",
             "native-replacement-and-retirement"
           ],
-        "procedure": "在真实 Codex Desktop 入口复核新候选的适用选择、跨轮纠正与必要继续；CLI 结果不能替代 Desktop。旧 19→20 交接、压缩后继续及历史归档失败保留原身份，按实际改动重评依赖。当前 3.2.0 两轮普通交付与纠正成立但未观察到 Accord 调用，候选效果待验；不为填表制造归档或迁移实验。",
+        "procedure": "复用已实现的原生压缩恢复、状态/MCP、SDK源事件循环与已确认身份的目标恢复，在确有必要的普通工作中闭合自主择时、继承、接管、未知效果对账及失败回退。Desktop、CLI、Work和远程执行按实际宿主边界判断，不用共享组件代验入口效果。旧交接及归档失败保留历史身份；不制造压力、迁移或归档来填验收计数。",
         "exit": "适用的动态上下文变化与继续/接管结果同次闭合；发生转移时目的端已核对且来源健康状态受保护。无归档授权便无归档动作，不能用归档作为清理步骤。若执行条件尚缺，记录具体缺口并继续其他独立工作，不伪造范围已绑定。",
         "qualityAxes": [
             "compliance-and-safety",
@@ -1021,7 +1018,7 @@
       {
         "id": "package-lifecycle",
         "title": "OpenAI交付入口的安装、更新与独立恢复",
-        "state": "pending",
+        "state": "active",
         "duties": [
           "environment-and-self-exposure",
           "relations-routing-and-form",
@@ -1045,8 +1042,8 @@
       },
       {
         "id": "cross-function-and-failure-validation",
-        "title": "功能完成后的净影响、质量与成本对齐",
-        "state": "pending",
+        "title": "贯穿功能收敛的净影响、质量与成本核对",
+        "state": "active",
         "duties": [
           "environment-and-self-exposure",
           "correction-and-evolution",
@@ -1056,7 +1053,7 @@
           "package-lifecycle",
           "verification-and-value"
         ],
-        "procedure": "必要功能成立后，复核改动影响的八项质量底线、负面干扰和负担，尤其选择遗漏、过度触发与恢复后态。保留旧有限对照未观察到可靠性增益的结论；不重跑求胜，不把使用次数或输出正确当作收益。旧准入、运行时回归和新行为证据按实际依赖分别判断。",
+        "procedure": "随实际功能变更复核受影响的八项质量底线、负面干扰和负担，尤其选择遗漏、过度触发与恢复后态；必要功能成立后完成充分的系统净影响判断。保留旧有限对照未观察到可靠性增益的结论；不重跑求胜，不把使用次数或输出正确当作收益。旧准入、运行时回归和新行为证据按实际依赖分别判断。",
         "exit": "所声明收益有匹配条件和独立结果支持，必要质量底线不被平均分掩盖；原生充分、外援、负面干扰与救援成本均被识别。联合核对适用的纠正、恢复及资源后态，仅对实际转移检查目的端和来源释放。证据不足则保持净价值未验证。",
         "qualityAxes": [
           "compliance-and-safety",
@@ -1068,7 +1065,7 @@
       },
       {
         "id": "version-and-release-qualification",
-        "title": "3.2.1 定版、发布、重新启用与收尾",
+        "title": "3.3精确候选、正式发布与发布核验",
         "state": "pending",
         "duties": [
           "goal-authority-correction",
@@ -1078,8 +1075,8 @@
           "recovery-and-rollback",
           "premise-and-consistency"
         ],
-        "procedure": "按用户最新决定先完成 3.2.1 修复版，不等待 3.3。功能与验收稳定后统一双语 README、CHANGELOG、版本与精确包，提交推送同一候选，完成独立评审及托管检查，再按条件授权发布。随后核对公共后态、重新安装启用和实际使用，再恢复传播。旧标签、发布、失败与传播问题均保留；3.3 只保留未来纸面规划，不扩大当前修复或绕过验收。",
-        "exit": "精确 SHA、包、版本与公共发布对应；发布后检查及任务残留闭环；既有标签、发布与失败历史保持原样。另核验本机选定 Accord 的安装版本、实际激活和普通入口效果，不把缓存更新当生效；更新失败须恢复最后安全版本并披露未完成项，未经验证不关闭本机升级。",
+        "procedure": "必要功能、所选入口与A01–A07适用验收及A08的S4系统组合/净影响判断成立后，统一双语README、CHANGELOG、版本与精确整包，提交推送同一候选，完成当前独立评审及必要托管检查，依既有条件授权发布3.3.0并核对公共发布对象。发布后宿主部署、传播、市场提交和治理保留后续计划，既不作为发布前已完成条件，也不计入到正式发布的进度。Claude后续适配已取消，其它计划保持。",
+        "exit": "精确SHA、包、版本与公开发布对象对应，下载/链接及任务所属发布残留核验完成；历史标签、发布和失败保持原身份。这是发布动作的完成证据，不能预先要求，也不替代发布后宿主安装、实际采用、传播或市场审核的独立结果。",
         "qualityAxes": [
           "compliance-and-safety",
           "evidence-integrity",
@@ -7075,7 +7072,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r31",
+    "revision": "r32",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

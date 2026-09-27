@@ -27,6 +27,45 @@ def historical_development():
         ["git", "show", f"{V4_REVISION}:{DEVELOPMENT_FILE}"], cwd=ROOT))
 
 
+def overlay_current_tree(destination):
+    """Carry working-tree deletions into a task-owned clone before overlaying it."""
+    destination = Path(destination).resolve()
+    tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=destination).decode("utf-8")
+    removed = []
+    for locator in filter(None, tracked.split("\0")):
+        source = ROOT / locator
+        if source.exists() or source.is_symlink():
+            continue
+        if not (destination / locator).resolve().is_relative_to(destination):
+            raise ValueError("fixture cleanup escaped the owned repository")
+        removed.append(locator)
+    if removed:
+        # Removing from the clone's index also keeps active-tree inventory honest.
+        subprocess.run(["git", "rm", "--quiet", "--force", "--", *removed],
+                       cwd=destination, check=True, timeout=30)
+    shutil.copytree(ROOT, destination, dirs_exist_ok=True, ignore=shutil.ignore_patterns(
+        ".git", ".tmp", ".remember", "__pycache__", "*.pyc"))
+
+
+class WorkingTreeOverlayTests(unittest.TestCase):
+    def test_deleted_sources_are_not_restored_by_a_clone_overlay(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            source, clone = Path(temporary) / "source", Path(temporary) / "clone"
+            source.mkdir()
+            clone.mkdir()
+            (source / "keep.txt").write_text("current")
+            (clone / "keep.txt").write_text("old")
+            (clone / "retired.txt").write_text("old-only")
+            subprocess.run(["git", "init", "--quiet", str(clone)], check=True, timeout=30)
+            subprocess.run(["git", "add", "."], cwd=clone, check=True, timeout=30)
+            with patch(__name__ + ".ROOT", source):
+                overlay_current_tree(clone)
+            self.assertEqual((clone / "keep.txt").read_text(), "current")
+            self.assertFalse((clone / "retired.txt").exists())
+            self.assertNotIn(b"retired.txt", subprocess.check_output(["git", "ls-files"], cwd=clone))
+            self.assertEqual((source / "keep.txt").read_text(), "current")
+
+
 class SkillReferencePackageTests(unittest.TestCase):
     @contextmanager
     def package(self):
@@ -866,12 +905,14 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})
+        self.assertEqual(self.contract["cycle"]["claudeAdaptation"], "cancelled-by-user")
 
     def test_development_cannot_borrow_publication_or_expand_hosts(self):
         for section, field, value in (
                 ("authority", "scope", self.contract["authority"]["scope"] + ["conditional-v3.2-release"]),
                 ("cycle", "priorityHosts", ["codex"]),
                 ("cycle", "claudeAdaptation", "automatically-enabled"),
+                ("cycle", "claudeAdaptation", "next-version-not-in-v3.3-distribution"),
                 ("cycle", "existingHosts", ["codex", "claude-code", "new-host"]),
                 ("cycle", "versionState", "final-candidate-not-publication-proof"),
                 ("claimCeiling", "functionalCompletion", True),
@@ -991,16 +1032,7 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         cls.root = Path(temporary.name) / "repository"
         subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(ROOT), str(cls.root)],
                        check=True, timeout=60)
-        shutil.copytree(ROOT, cls.root, dirs_exist_ok=True, ignore=shutil.ignore_patterns(
-            ".git", ".tmp", ".remember", "__pycache__", "*.pyc"))
-        # A working-tree overlay must also carry deletions, not resurrect old packages.
-        for locator in ("plugins/yiyuan-accord-claude", ".claude-plugin"):
-            if not (ROOT / locator).exists():
-                target = (cls.root / locator).resolve()
-                if not target.is_relative_to(cls.root.resolve()):
-                    raise ValueError("fixture cleanup escaped the owned repository")
-                if target.exists():
-                    shutil.rmtree(target)
+        overlay_current_tree(cls.root)
         cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
 
     @contextmanager

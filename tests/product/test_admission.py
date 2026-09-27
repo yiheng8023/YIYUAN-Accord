@@ -845,15 +845,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         cls.root = Path(temporary.name) / "repository"
         subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(development_fixtures.ROOT), str(cls.root)],
                        check=True, timeout=60)
-        shutil.copytree(development_fixtures.ROOT, cls.root, dirs_exist_ok=True,
-                        ignore=shutil.ignore_patterns(".git", ".tmp", ".remember", "__pycache__", "*.pyc"))
-        for locator in ("plugins/yiyuan-accord-claude", ".claude-plugin"):
-            if not (development_fixtures.ROOT / locator).exists():
-                target = (cls.root / locator).resolve()
-                if not target.is_relative_to(cls.root.resolve()):
-                    raise ValueError("fixture cleanup escaped the owned repository")
-                if target.exists():
-                    shutil.rmtree(target)
+        development_fixtures.overlay_current_tree(cls.root)
         cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
         cls.git("add", ".")
         cls.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
