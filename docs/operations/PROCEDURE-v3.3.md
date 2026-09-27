@@ -2354,3 +2354,21 @@ e74c4a4f下实际episode 94a52d8b8ce64cf2addc369769f32875、原生任务01a0d8d5
 配置原备份、执行前后与恢复器排它读回Hash均b478d82459ae668f313ebe77a66069aaa7b1ae5374d5bbb1936264cfffbaa48e；本次没有原生临时信任登记，恢复器removedOnlyOwnedRegistration为空、没有实际配置恢复写。Root完成路径归属/无reparse/工作区与最终副本一致核对后，回收准确workspace、temp和空state三个路径；73份episode保留证据不变，原生任务及历史、49份执行来源和批准/恢复材料仍保留。资源结论限本段所属Job与读取器，清理由调用方承担，不计自主Agent清理或整机影响通过。
 
 两名零继承上下文、共享环境/Accord暴露明确的独立评估者分别完成product/specification与implementation/standards审查，均无阻断项；原生审查消息及Root源码复核保留。既有assess_development_evidence经observe/recheck接受v33-codex-cli-update-guidance-01、v33-systemic-correction-03，caseRejections={}、errors=[]；原件accord-upgrade-guidance-20260927-01的admission-final.json绑定上述精确候选。完整A01–A08、functionalCompletion/candidateEligible、原根线程Stop根因与恢复、全部消费者刷新和自主交接仍未成立。该实例已结束，不重放；托管CI36299563573记录时7成功/4在途，终态另按精确SHA核验。
+
+
+## 后续自然Stop完成与托管检查终态（2026-09-27）
+
+用户说明Stop只出现过此前一次问题，最新截图显示4次运行、0阻止、0未成功，UserPromptSubmit、两次SessionStart与Stop均已完成。原图逐字节保留于accord-stop-update-diagnosis-20260927-01/later-stop-success-20260927.png，并与当前输入回执绑定；这是后续真实界面完成证据，纠正此前“尚无真实Stop成功后态”的现行记录。原失败的命令/stderr缺失、根因未知保持，不据此归因或保证全部消费者/未来事件。原隔离检查及两轮文稿实例不改写、不重放；当前没有持续故障证据，不继续围绕该单次异常阻塞开发。
+
+同轮回读48d4dbeb78a3f37d4479609969abfcac057e6589的CI36299563573：workflow completed/success、11个job全部success，精确JSON保留accord-upgrade-guidance-20260927-01/ci-final.json。其托管核验责任闭合，既有条件/案例及完整发布门槛保持。
+
+
+## 真实SDK调用者的完成与退出边界修复（2026-09-27）
+
+沿普通入口与自主连续性关键路径只读核对，确认SDK的源会话、提议、目标采用/恢复机制已有实现，且9月25日存在真实任务内薄调用者，不能把调用范围说成仅tests；普通分发MCP仍只提供状态能力，既有GUI连接条件未提供自动迁移路径。未新增共享daemon、模型场景或通用控制器。此次选择修复既有真实业务使用中已记录的具体断点：源run已completed/ready，外层却等待Root集成审查240秒，超时后报失败且缺最终读回；答复消费后状态也曾仍显示awaiting-owner。
+
+保留accord-sdk-owner-integration-20260925-01的55份原文件，在accord-sdk-owner-closeout-20260927-01建立只含调用者/离线检查的修复副本，不复制旧live配置或权限。先以实际原owner和本地Node JSONL假对端复现：源ready、已完成轮次、外层Owner response deadline or cancellation、已消费请求仍显示等待。修复让原生run及必要adopt成功后先落盘completed-turn身份/scope/原始回执、待集成审查与后续接续责任，再进行最终thread/Goal读回及进程关闭；不等待外部审查、不自动下一turn。maxTurns作为上限不再意味着保持连接等待后来输入；后续须据当前权限及已发生效果接入已有restore接口。result/status中的integrationReview=pending保持，正常连接退出不是业务验收。消费答复后立即写入owner-response-consumed及request=null。
+
+最终14项无模型检查通过：包括完成后无答复、消费状态、真正原生请求未答、启动/派发/来源拒绝、响应身份不符、用量缺失、输出界限、最后读回失败及原生异常退出。后两者仍非零并保留已经完成的轮次；未答原生请求仍failed且待请求保留，没有completed-turn文件。独立只读复核重算旧55文件及最终调用者Hash并核原始Job回执，无阻断；固定owner SHA2aed0ffbae280e1ed2ba3aa492abec259fdd5438cd1641fcf66693a191809ab3。红1/初绿14/最终14共29个所属fake Job自然退出、无强停、活动0。实际假对端源码逐例留存后，回收准确116个自有work/temp/state/空HOME目录；578份日志/请求/响应/SQLite/结果材料Hash不变，旧55原件仍不变。
+
+这是私有实际消费者的本地修复，非原生业务重试、新的正式准入或产品包升级；原真实任务失败保持其时点身份。尚未在真实宿主上执行修复后的迁移、transferred/adoptTarget或自主择时，A05及其余必要范围仍不能由此升格。

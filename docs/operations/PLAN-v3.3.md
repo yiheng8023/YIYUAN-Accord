@@ -50,7 +50,7 @@
 
 本轮实际重读的官方来源：[IDE入口](https://learn.chatgpt.com/docs/codex/ide)区分独立IDE集成；[Work执行边界](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview)区分本地与托管执行；[Remote连接](https://learn.chatgpt.com/docs/remote-connections)说明连接主机的复用关系。以上三条工作线是据此及既有项目事实作出的工程分工，不是官方给出的Accord支持结论。七个pending的依据已细化为具体条件，selected集合和selectionFinal=false保持；没有据缺少实际验收自动排除或晋升入口。条件充分的普通开发继续前瞻绑定一个连贯工作段，按实际职责组合补相关定义和案例；不等待所有入口调查结束，也不制造交接压力来填A05。
 
-2026-09-27更新/恢复说明交付已完成：[两轮工作段](../../product/cases/upgrade-guidance-v3.3.json)在用户批准后执行一次，三份成品按后来Stop反馈同步纠偏。既有准入器接受v33-codex-cli-update-guidance-01与v33-systemic-correction-03；详见[实际记录](PROCEDURE-v3.3.md#更新说明交付与反馈纠偏的实际准入2026-09-27)。独立备份与后置Hook路径的区别、安全更新时机和执行者责任已提炼到两语README；这是Root随后整合，模型原件保持。旧systemic scope的已结束实例条件仍留在7ae3bac5历史身份，新实例保持自己的候选与有效用户环境条件，不归因于Accord单独收益。该段及所属资源责任已闭合；后续沿上述工作线推进未定义范围、实际入口与自主连续性的必要工作，不重复这两轮或制造交接压力。完整验收、原根线程Stop恢复与发布资格仍未成立。
+2026-09-27更新/恢复说明交付已完成：[两轮工作段](../../product/cases/upgrade-guidance-v3.3.json)在用户批准后执行一次，三份成品按后来Stop反馈同步纠偏。既有准入器接受v33-codex-cli-update-guidance-01与v33-systemic-correction-03；详见[实际记录](PROCEDURE-v3.3.md#更新说明交付与反馈纠偏的实际准入2026-09-27)。独立备份与后置Hook路径的区别、安全更新时机和执行者责任已提炼到两语README；这是Root随后整合，模型原件保持。旧systemic scope的已结束实例条件仍留在7ae3bac5历史身份，新实例保持自己的候选与有效用户环境条件，不归因于Accord单独收益。该段及所属资源责任已闭合；后续沿上述工作线推进未定义范围、实际入口与自主连续性的必要工作，不重复这两轮或制造交接压力。后续用户截图已显示自然Stop完成，原单次失败的具体原因仍未知；完整验收与发布资格仍未成立。
 
 ## 全维度动态评价框架
 
