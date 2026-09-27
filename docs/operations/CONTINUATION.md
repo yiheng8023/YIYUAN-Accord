@@ -37,7 +37,7 @@
 
 ## 本批完成与实际未完项
 
-cb359d42的[CI36330545111](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36330545111)已按精确headSha与全部11个job回读成功，托管责任闭合；本机仍27100450，新包未安装。下一独立切片是公开0.144.0-alpha.4在Linux中的配置读取/stdio关闭检查，沿现有手动工作流增加legacy-stdio-close变体，原Windows默认分支保持。它只检验旧版与原准备helper的机械相容性，不使用账号/模型、不派发Cloud或安装插件/信任，不复刻或重放旧容器。
+cb359d42的[CI36330545111](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36330545111)已按精确headSha与全部11个job回读成功，托管责任闭合；本机仍27100450，新包未安装。随后公开0.144.0-alpha.4的定向Linux检查已完成：[CI36334881373](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36334881373)绑定cd2157c8，缺失/空配置两条件均完成原读取前缀及自然退出；27份artifact与ZIP摘要、四份进程/组退出回执及配置不变已独立核对。该机械支线闭合，不再换平台重复探测或盲改helper。旧Cloud仍需自身的结构化关闭条件/前序异常；原容器后态和二进制等同性未知，没有新Cloud授权或实际Agent采用结论。
 
 源码候选233529仅补足状态目录的可发现性：输入Hook把真实绑定cwd作为JSON数据给出，MCP三工具的共用参数说明提示核对Hook/恢复定位，并说明该目录也是checkpoint文件相对路径的基准。正文中的业务目录不自动替代它，显式其它目录查询也不被重定向；状态键、身份守卫、输入/暂停和compact定位均未改。这针对本次Work提示词暴露的误用风险，不把原案改判为捕获故障或行为成功。本机未更新，新的模型行为与完整恢复仍未验。
 
