@@ -2372,3 +2372,14 @@ e74c4a4f下实际episode 94a52d8b8ce64cf2addc369769f32875、原生任务01a0d8d5
 最终14项无模型检查通过：包括完成后无答复、消费状态、真正原生请求未答、启动/派发/来源拒绝、响应身份不符、用量缺失、输出界限、最后读回失败及原生异常退出。后两者仍非零并保留已经完成的轮次；未答原生请求仍failed且待请求保留，没有completed-turn文件。独立只读复核重算旧55文件及最终调用者Hash并核原始Job回执，无阻断；固定owner SHA2aed0ffbae280e1ed2ba3aa492abec259fdd5438cd1641fcf66693a191809ab3。红1/初绿14/最终14共29个所属fake Job自然退出、无强停、活动0。实际假对端源码逐例留存后，回收准确116个自有work/temp/state/空HOME目录；578份日志/请求/响应/SQLite/结果材料Hash不变，旧55原件仍不变。
 
 这是私有实际消费者的本地修复，非原生业务重试、新的正式准入或产品包升级；原真实任务失败保持其时点身份。尚未在真实宿主上执行修复后的迁移、transferred/adoptTarget或自主择时，A05及其余必要范围仍不能由此升格。
+
+
+## 任务内SDK调用者的显式恢复接线（2026-09-27）
+
+继续处理已完成轮次退出后的必要接续。旧薄调用者只有create源入口；无模型反例确认给定恢复配置仍会走thread/start。新私有副本accord-sdk-owner-resume-20260927-01仅扩展调用者，复用现有restoreCodexSourceSession、connection与recorder，不改产品runtime或另建控制器。config.restore明确选择已知source或已settled transferId之一、原expectedScope和与本次调用者一致的resume设置；绝对recorderPath以create:false打开原库。预派发向Root展示恢复身份和当前新输入，原verify回调仍要求独立核对权限/暂停、旧控制者静止、源/工具/历史及实际效果，不默认allow。缺记录器、混合来源、旧token或核验失败均不新建替代源。
+
+restore失败时显式保留不可枚举的error.session及RPC引用，覆盖claim/resume已经发生而赋值未成功的情况；成功先保存restored-session，再核对当时权限并派发一条当前输入，落盘失败或后来暂停均停止依赖动作。保留完成后退出及integrationReview=pending，不把原生完成或连接退出算业务验收。原始线程累计用量100、恢复后105时报告105，不重复加成205、不冒充本轮新增费用。
+
+独立复核发现源创建检查标志无条件false，恢复通过thread/resume后未改变标志，后来handoff目标thread/start会误入source-created；真实调用者路由反例先红，随后以显式restoring来源初始化该标志，创建源仍走原确认，交接目标仍由核心target-created verifier负责。测试代理仅在真实source恢复后的run连接处发出只读目标创建探针，证明拦截路由，不证明完整transfer/adopt或目标语义核验。初审发现及最终通过消息均保留。
+
+最终13项恢复检查及14项既有关闭回归通过，涵盖已知源成功、旧token、错源、缺库、prepare/post拒绝、resume ACK丢失、快照落盘失败、后来暂停、混合来源、缺transfer记录、配置不符与目标路由。缺transfer的负例不替代新成功settled-target恢复证据。固定owner SHA92f092000a3d1a2a0cf6b27a0bdcec8812478c198825b68cbd874efb06a35f0d，最终独立只读复核无阻断。所有红/绿及回归共62个本地检查Job无强停、活动0；逐例保留真实假对端源码后，回收224个准确自有工作/缓存/状态/空HOME路径，1232份本批材料Hash不变，前稿597文件保护清单无差异。无真实Codex任务或模型派发、Cloud、共享配置写入和旧实例重放。此为实际SDK消费者恢复入口的本地实现，不是新准入、普通GUI接线、自主交接或完整A05通过。
