@@ -22,7 +22,7 @@ class CodexLifecycleTests(unittest.TestCase):
         binary = Path(os.environ['ACCORD_LEGACY_CLOSE_BINARY']).resolve(strict=True)
         evidence = Path(os.environ['ACCORD_LEGACY_CLOSE_EVIDENCE']).resolve(strict=True)
         helpers = {
-            'scripts/observe_codex_lifecycle.py': 'fe8c76f27f77c2ae0266d1a9622c54073a4bf333749b45a73c8687eb2fae9f8d',
+            'scripts/observe_codex_lifecycle.py': '0844c21dbe6cb5f305143dc77933291732094a6ab84f75a7691460775e412907',
             'scripts/observe_codex_entry.py': '6130b87757a4b6a8662af59e8f50d6ccb0b6beb3c63f04d9f19ecc5e6b680ee9',
             'scripts/codex_rpc.py': 'f6313887469f57a793cd17bdd7e1f8fea1a8e7be06630ab96ec75ad6648bf64e',
             'scripts/inspect_native_resources.py': 'fdc4aa4e2f5789c7dac2c03b3c9d3bfbf2940f696a35d601a708dcf912af2e54',
@@ -136,7 +136,7 @@ class CodexLifecycleTests(unittest.TestCase):
         self.assertTrue(all(row['accepted'] for row in rows), json.dumps(rows, indent=2))
 
     def test_legacy_close_probe_preserves_interruptions_without_successful_row(self):
-        for phase in ('initialize', 'close', 'config-read'):
+        for phase in ('initialize', 'close', 'config-read', 'forced-release'):
             with self.subTest(phase=phase), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 binary = root / 'codex'
@@ -157,7 +157,7 @@ class CodexLifecycleTests(unittest.TestCase):
                 class App:
                     def __init__(self, _manifest, _label, _args, env, _deadline):
                         self.config = Path(env['CODEX_HOME']) / 'config.toml'
-                        self._close_record = {'exitCode': 0, 'forced': False, 'failure': None}
+                        self._close_record = {'exitCode': 0, 'forced': phase == 'forced-release', 'failure': None}
 
                     def initialize(self):
                         if phase == 'initialize':
@@ -179,9 +179,16 @@ class CodexLifecycleTests(unittest.TestCase):
                         patch.object(lifecycle, '_codex_version', return_value='codex-cli 0.144.0-alpha.4'), \
                         patch.object(lifecycle, '_record_released', return_value=True), \
                         patch.object(Path, 'exists', exists), \
-                        self.assertRaises(AssertionError if phase == 'config-read' else KeyboardInterrupt):
+                        self.assertRaises(KeyboardInterrupt if phase in ('initialize', 'close') else AssertionError):
                     self.legacy_native_config_preflight_close()
                 rows = json.loads((evidence / 'result.json').read_text())['profiles']
+                if phase == 'forced-release':
+                    self.assertEqual(len(rows), 2)
+                    for row in rows:
+                        self.assertTrue(row['released'])
+                        self.assertFalse(row['originalClosePredicate'])
+                        self.assertFalse(row['accepted'])
+                    continue
                 self.assertEqual(len(rows), 1)
                 self.assertFalse(rows[0]['accepted'])
                 field = {'initialize': 'precedingErrorType', 'close': 'closeErrorType',
@@ -197,6 +204,10 @@ class CodexLifecycleTests(unittest.TestCase):
         ids = ["v33-codex-sdk-lifecycle-01", "v33-codex-sdk-scoped-exposure-01"]
         execution = next(c["conditions"]["execution"] for c in
                          contract["acceptance"]["admission"]["cases"] if c["id"] == ids[0])
+        # This guard fixture models a fresh binding. The actual completed cases
+        # retain their original source hash and are not authorized for replay.
+        execution = {**execution, "caseSha256": hashlib.sha256(
+            (lifecycle.ROOT / execution["caseFile"]).read_bytes()).hexdigest()}
         baseline = {k: execution[k] for k in
                     ("resourceController", "limits", "nativeResourceLabels", "nativeCommandLabels")}
         baseline["packageHashes"] = {"fixed-package-input": "fixture-hash"}
@@ -208,7 +219,7 @@ class CodexLifecycleTests(unittest.TestCase):
 
         originals = [binding(lifecycle.ROOT, case, execution, baseline["packageHashes"]) for case in ids]
         for mode in ("valid", "empty", "missing", "duplicate", "changed-subject",
-                     "changed-limits", "hot-reload", "changed-manifest"):
+                     "changed-limits", "hot-reload", "changed-manifest", "changed-source"):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as tmp:
                 evidence = Path(tmp) / "episode"
                 evidence.mkdir()
@@ -222,6 +233,9 @@ class CodexLifecycleTests(unittest.TestCase):
                     saved[1] = saved[0]
                 elif mode == "changed-subject":
                     saved[0]["subject"]["revision"] = "another-subject"
+                elif mode == "changed-source":
+                    for row in saved:
+                        row["execution"]["caseSha256"] = "0" * 64
                 elif mode == "changed-limits":
                     manifest["limits"]["workSeconds"] += 1
                 elif mode == "hot-reload":
@@ -883,6 +897,93 @@ class CodexLifecycleTests(unittest.TestCase):
                 self.assertTrue(record['readerStopped'])
                 self.assertTrue(lifecycle._record_released(record, manifest))
                 self.assertEqual(app.close(), record)
+
+    def test_root_exit_leaves_time_to_observe_group_termination(self):
+        # The root has exited but its group needs time after termination to vanish.
+        # Exercise the real callers, polling loop, resource predicate and records.
+        for caller in ('app', 'cli', 'version'):
+            for disposition in ('natural', 'delayed', 'alive', 'unobservable'):
+                with self.subTest(caller=caller, disposition=disposition), tempfile.TemporaryDirectory() as tmp:
+                    root = Path(tmp).resolve()
+                    (root / 'commands').mkdir()
+                    binary = root / 'codex'
+                    binary.write_bytes(b'fixture: never executed')
+                    manifest = {'evidence': str(root), 'codex': str(binary),
+                                'ownedRoots': {'workspace': str(root)},
+                                'limits': {'requestSeconds': 1, 'recoverySeconds': 2},
+                                'resourceController': 'posix-session-process-group'}
+                    clock, kills = [0.0], []
+
+                    def sleep(seconds):
+                        clock[0] += seconds
+
+                    class Process:
+                        returncode = 0
+                        stdin, stdout = io.BytesIO(), io.BytesIO()
+                        def poll(self): return self.returncode
+                        def wait(self, timeout=None): return self.returncode
+
+                    class Job:
+                        closed = False
+                        def attach_and_resume(self, process): pass
+                        def terminate(self): kills.append(clock[0])
+                        def sample(self):
+                            state = ('absent' if disposition == 'natural' or
+                                     (disposition == 'delayed' and kills and clock[0] >= kills[0] + 0.2)
+                                     else 'unobservable' if disposition == 'unobservable' else 'alive')
+                            return {'controller': 'posix-session-process-group', 'activeProcesses': None,
+                                    'processGroupId': 1234, 'rootPid': 1234,
+                                    'rootExitCode': 0, 'processGroupState': state}
+                        def close(self): self.closed = True
+
+                    class Reader:
+                        def is_alive(self):
+                            return disposition != 'natural' and (not kills or clock[0] < kills[0] + 0.3)
+                        def join(self, timeout):
+                            if self.is_alive() and kills:
+                                sleep(min(timeout, max(0, kills[0] + 0.3 - clock[0])))
+
+                    process, job = Process(), Job()
+
+                    def popen(_args, **kwargs):
+                        kwargs['stdout'].write(b'codex-cli fixture\n' if caller == 'version' else b'{}')
+                        return process
+
+                    with patch.object(lifecycle.time, 'monotonic', side_effect=lambda: clock[0]), \
+                            patch.object(lifecycle.time, 'sleep', side_effect=sleep), \
+                            patch.object(lifecycle.subprocess, 'Popen', side_effect=popen), \
+                            patch.object(lifecycle, '_new_controller', return_value=job), \
+                            patch.object(lifecycle, '_spawn_options', return_value={}):
+                        if caller == 'app':
+                            app = lifecycle._App.__new__(lifecycle._App)
+                            app.manifest, app.root, app.process, app.job = manifest, root, process, job
+                            app.reader, app.stderr, app.stdout = Reader(), io.BytesIO(), io.BytesIO()
+                            app._closed, app._close_record, app.hot_arguments = False, None, None
+                            invoke, record_path = app.close, root / 'resources.json'
+                        elif caller == 'cli':
+                            invoke = lambda: lifecycle._run_cli(manifest, 'probe', [], {}, 10)
+                            record_path = root / 'commands/probe/record.json'
+                        else:
+                            invoke = lambda: lifecycle._codex_version(binary, manifest, 'source', {})
+                            record_path = root / 'retained/version-probes/source/record.json'
+                        if disposition in ('alive', 'unobservable'):
+                            with self.assertRaises(ValueError if caller == 'version' else RuntimeError):
+                                invoke()
+                        else:
+                            invoke()
+                    record = json.loads(record_path.read_text())
+                    self.assertEqual(lifecycle._record_released(record, manifest),
+                                     disposition in ('natural', 'delayed'))
+                    self.assertEqual(record['forced'], disposition != 'natural')
+                    self.assertTrue(job.closed)
+                    self.assertLessEqual(clock[0], 2.05 + 1e-9)  # Existing 50 ms polling resolution.
+                    if disposition != 'natural':
+                        self.assertLess(kills[0], 2)
+                    else:
+                        self.assertEqual(kills, [])
+                    if caller == 'app':
+                        self.assertTrue(record['readerStopped'])
+                        self.assertEqual(app.close(), record)
 
     def test_prepare_rejects_nested_evidence_and_run_rejects_changed_owned_home(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -374,7 +374,8 @@ def _codex_version(path, manifest, role, env):
         recovery_deadline = time.monotonic() + manifest["limits"]["recoverySeconds"]
         if process.poll() is None:
             process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
-        after = _wait_job(job, recovery_deadline)
+        graceful_deadline = recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
+        after = _wait_job(job, recovery_deadline if forced else graceful_deadline)
         if not _released(after):
             forced = True
             job.terminate()
@@ -925,7 +926,8 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
         recovery_deadline = time.monotonic() + manifest["limits"]["recoverySeconds"]
         if process is not None and process.poll() is None:
             process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
-        after = _wait_job(job, recovery_deadline)
+        graceful_deadline = recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
+        after = _wait_job(job, recovery_deadline if forced else graceful_deadline)
         if not _released(after):
             forced = True
             job.terminate()
@@ -1172,7 +1174,9 @@ class _App:
                     self.process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
                 except subprocess.TimeoutExpired:
                     pass
-            after = _wait_job(self.job, recovery_deadline)
+            # The root can exit before its group. Its unforced group wait must
+            # share the graceful deadline, reserving recovery after termination.
+            after = _wait_job(self.job, recovery_deadline if forced else graceful_deadline)
             if not _released(after):
                 forced = True
                 self.job.terminate()

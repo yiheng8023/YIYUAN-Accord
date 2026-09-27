@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-09-27 · N33-20260909 / r31。
+更新：2026-09-28 · N33-20260909 / r31。
 以实时Git、当前原生输入和受影响资源为准；本页只保留接续必需状态。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)和[机器投影](../../product/development.json)分别展开结果、判据和验证投影。
 
@@ -37,7 +37,9 @@
 
 ## 本批完成与实际未完项
 
-cb359d42的[CI36330545111](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36330545111)已按精确headSha与全部11个job回读成功，托管责任闭合；本机仍27100450，新包未安装。随后公开0.144.0-alpha.4的定向Linux检查已完成：[CI36334881373](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36334881373)绑定cd2157c8，缺失/空配置两条件均完成原读取前缀及自然退出；27份artifact与ZIP摘要、四份进程/组退出回执及配置不变已独立核对。该机械支线闭合，不再换平台重复探测或盲改helper。旧Cloud仍需自身的结构化关闭条件/前序异常；原容器后态和二进制等同性未知，没有新Cloud授权或实际Agent采用结论。
+cb359d42的[CI36330545111](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36330545111)已按精确headSha与全部11个job回读成功，托管责任闭合；本机仍27100450，新包未安装。随后公开0.144.0-alpha.4的定向Linux检查已完成：[CI36334881373](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36334881373)绑定cd2157c8，缺失/空配置两条件均完成原读取前缀及自然退出；27份artifact与ZIP摘要、四份进程/组退出回执及配置不变已独立核对。该机械支线闭合，不再换平台重复探测。
+
+随后用户批准的一次只读Cloud诊断已执行并结束：[执行只读运行期诊断](https://chatgpt.com/codex/cloud/tasks/task_e_6ab952faf8cc832bb968dbee906a7c99)在4e44e52a完成两次config/read，报告当前CLI摘要与上述公开件相同、config.toml前后摘要不变；根进程exit0且reader停止，但forced=true、group=alive、recordReleased=false。Root交叉读取界面执行日志和最终摘要；原RPC/resource仍在Cloud私有目录，未独立取回，组成员性质及旧setup根因未知。单次权限已用完，无追加输入、重试或清理。由此定位并用本地假时钟单独重现helper缺口：根已退出时首次组等待耗尽回收预算，终止后仅剩立即采样。三处调用已改为共享原优雅截止点，为终止后观察保留原总预算；这不证明本次Cloud必由该缺口引起。原自然退出判据、旧案例/源码绑定及未完验收保持，详见[诊断与修复](PROCEDURE-v3.3.md#cloud运行期关闭诊断与回收时限修复2026-09-28)。
 
 源码候选233529仅补足状态目录的可发现性：输入Hook把真实绑定cwd作为JSON数据给出，MCP三工具的共用参数说明提示核对Hook/恢复定位，并说明该目录也是checkpoint文件相对路径的基准。正文中的业务目录不自动替代它，显式其它目录查询也不被重定向；状态键、身份守卫、输入/暂停和compact定位均未改。这针对本次Work提示词暴露的误用风险，不把原案改判为捕获故障或行为成功。本机未更新，新的模型行为与完整恢复仍未验。
 
