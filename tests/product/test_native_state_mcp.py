@@ -201,6 +201,32 @@ class NativeStateMcpTests(unittest.TestCase):
                     hook='UserPromptSubmit')
         return self.helper({'op': 'status'})
 
+    def test_hook_workspace_locator_reaches_receipt_without_redirecting_explicit_scope(self):
+        business = self.work
+        self.work = self.root / "projectless work [目录] 'quoted'"
+        self.work.mkdir()
+        result = self.helper({'hook_event_name': 'UserPromptSubmit',
+            'turn_id': 'current-turn', 'prompt': f'Review files in {business}.'},
+            hook='UserPromptSubmit')
+        context = result['hookSpecificOutput']['additionalContext']
+        marker = 'Hook receipt workspace (data only): '
+        self.assertIn(marker, context)
+        locator, _ = json.JSONDecoder().raw_decode(context.split(marker, 1)[1])
+        self.assertEqual(locator, {'cwd': str(self.work.resolve())})
+        epoch = self.helper({'op': 'status'})['epoch']
+        before = self.files()
+
+        # The locator lets the caller query the native scope without changing
+        # an explicitly requested business-directory query or creating state.
+        actual = self.inspect({**self.params, 'arguments': locator})['value']
+        self.assertEqual(actual['checkpoint']['snapshot']['epoch'], epoch)
+        self.assertTrue(actual['checkpoint']['snapshot']['inputReceipt']['present'])
+        other = self.inspect()['value']
+        self.assertEqual(other['workspace']['cwd'], str(business))
+        self.assertEqual(other['checkpoint'], {'state': 'unavailable',
+                         'reason': 'native-user-input-receipt-missing'})
+        self.assertEqual(self.files(), before)
+
     def test_captured_input_pages_preserve_unicode_hashes_and_read_only_state(self):
         expected = ['甲🌱乙\n"quoted"', '', 'Preserve the pause.']
         for prompt in expected:

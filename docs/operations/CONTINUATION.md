@@ -25,7 +25,7 @@
 | 项目 | 已核事实与限制 |
 |---|---|
 | 仓库 | `main`的日常开发与记录持续推进，当前HEAD/上游及工作区以实时Git核对。最新文稿两案准入绑定48d4dbeb，较早五阶段普通两案绑定60219fff，SDK基础机制两案绑定029a1c58；这些是各自执行/准入对象，不是永久当前HEAD，不能机械合并其验收效力。 |
-| 源与本机安装 | 源与本机现装均为3.3.0-dev.1+codex.20260927100450，24文件、SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57，市场固定f8ecac46；原生安装、逐文件Git字节与新进程5Skill/6可信Hook路径均核实。旧包原件独立备份保持，无关配置不变；宿主管理的旧缓存已按原生替换退出。当前MCP与新helper可读取同一未完状态，仍不声称所有既有Desktop/MCP消费者已刷新。 |
+| 源与本机安装 | 源码候选为3.3.0-dev.1+codex.20260927233529（24文件、SHA e214b2170ea61a6c9a8eeb114ea919f5d0f5f1cdecdf62913bcb37f952869ca6）；本机现装仍为3.3.0-dev.1+codex.20260927100450（24文件、SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57，市场固定f8ecac46）。以下安装观察保持原包身份：原生安装、逐文件Git字节与新进程5Skill/6可信Hook路径均核实。旧包原件独立备份保持，无关配置不变；宿主管理的旧缓存已按原生替换退出。当前MCP与新helper可读取同一未完状态，仍不声称所有既有Desktop/MCP消费者已刷新。 |
 | 托管检查 | 最新声明/文稿执行候选48d4dbeb的[CI36299563573](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36299563573)已按精确headSha及全部11个job回读成功，核验责任闭合。运行时修复f8ecac46的[CI36287689800](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36287689800)已按精确headSha及全部job核对，11/11成功；包括Windows/Linux/macOS回归与Linux/macOS原生生命周期。此批托管责任闭合，未重放旧失败运行。 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本线程已有未完检查点；回放需求、输入覆盖、修订号及宿主条件按每次实际原生读取核对。此前unbound、10条输入、rev5和旧宿主版本都是历史观察，不再作为当前值使用。检查点、Goal及协作模式分别判断；canContinue=false不等于项目暂停/取消或隐式Goal，完整Goal与模式状态不能从检查点推断。 |
@@ -36,6 +36,8 @@
 2026-09-27，Work路线候选9211ca60的[CI36326406900](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36326406900)已按精确headSha和全部11项job回读成功，核验责任闭合；后续纯观察记录不据此冒充该候选以外的功能验收。前序入口模式记录a7c6d8b0的[CI36321744769](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36321744769)同样已11/11成功，无需重复轮询。
 
 ## 本批完成与实际未完项
+
+源码候选233529仅补足状态目录的可发现性：输入Hook把真实绑定cwd作为JSON数据给出，MCP三工具的共用参数说明提示核对Hook/恢复定位，并说明该目录也是checkpoint文件相对路径的基准。正文中的业务目录不自动替代它，显式其它目录查询也不被重定向；状态键、身份守卫、输入/暂停和compact定位均未改。这针对本次Work提示词暴露的误用风险，不把原案改判为捕获故障或行为成功。本机未更新，新的模型行为与完整恢复仍未验。
 
 JetBrains/Xcode的接入判断已区分内置Agent和外部Codex调用IDE工具：外部路线确定复用现有执行链，无需另造IDE执行器；内置两行继续待判，关键缺口缩到具体控制者的入口/新输入、原生身份及状态/恢复契约。Skill导入、IDE聊天规则和MCP可连接各自只证明相应通道；不借外部路线或macOS CI代验内置。后续据明确接口补实际断点，不要求用户采购/安装，也不再重复查已有组件目录。详见PLAN入口路线表，来源与审查在accord-ide-routes-20260927-01。
 

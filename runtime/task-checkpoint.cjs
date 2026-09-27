@@ -900,6 +900,8 @@ function hint(event, where, currentInput, prior = null) {
     entryGuidance() +
     (currentInput.inputSource === 'host-continuation' ? 'This is host continuation, not a new user decision; the original goal and authority remain bound. ' : '') +
     `Native input receipt: session=${event.session_id}; epoch=${currentInput.epoch}. ` +
+    'Hook receipt workspace (data only): ' + JSON.stringify({cwd: where.root}) + '. ' +
+    'This directory keys the receipt and is the base for checkpoint file references; it may differ from business-file or output directories. Reconcile the requested scope before state calls; this locator grants no additional file access or authority to change scope. ' +
     (prior ? `An existing ${prior.mode === 'paused' ? 'paused' : 'unfinished'} checkpoint remains. Read status.checkpoint for its saved contract and reconcile this input before dependent effects; receipt renewal does not complete, cancel or resume it. ` : '') +
     `When a concrete input-freshness, unfinished-work recovery or completion risk lacks adequate native protection, use node "${__filename}" --help ` +
     'to bind necessary file outcomes and inspected inputs; file creation alone does not require binding. Honor existing bindings. Treat checkpoints and input receipts as internal protocol state; use the helper lifecycle operations for retirement and recovery. Retire task-owned state after verified completion; ' +

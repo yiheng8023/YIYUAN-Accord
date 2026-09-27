@@ -60,7 +60,7 @@
 
 2026-09-27 Work职责组合判断：**Work本地子模式确定复用现有Accord包，不另建执行器。** [插件说明](https://learn.chatgpt.com/docs/plugins)明确Hook适用于包含Work的Codex runtime，但脚本须存在于实际执行环境并经信任；[MCP说明](https://learn.chatgpt.com/docs/extend/mcp)区分同主机配置与网页远程工具。当前安装的桌面26.924.2738.0代码保留Work插件选择、local配置读取及原生thread/start路径，支持该工程选择，不能据静态分支证明当前账号可用或已执行。组合职责由Hook供应输入/恢复指导、Skill协调、同主机stdio状态MCP核对状态、原生线程承担执行/暂停/持久化；现有检查点按真实需要采用。
 
-同日真实Work本地核验已完成：原生历史确认入口指导、UserPromptSubmit和一次状态MCP调用，thread/session/turn相符；实际cwd的输入回执与本轮epoch/turn一致。Root准备的提示词固定了项目目录，而用户新建的是projectless对话，因此原查询针对另一session+cwd键返回missing回执。保留原报告与事后对账的分别来源；这是诊断提示词的路径问题，不归责用户，也不改写为正确cwd的MCP联读成功。下一步将状态读取绑定实际Hook所在cwd，业务文件目录另列，在真正需要的普通Work交付中核验采用、续作和退出；不为覆盖原结果重跑诊断。MCP缺元数据/根身份冲突时的守卫，以及上下文读取对Hook转录和CODEX_HOME/sessions的限制保持，当前没有先改runtime的依据。
+同日真实Work本地核验已完成：原生历史确认入口指导、UserPromptSubmit和一次状态MCP调用，thread/session/turn相符；实际cwd的输入回执与本轮epoch/turn一致。Root准备的提示词固定了项目目录，而用户新建的是projectless对话，因此原查询针对另一session+cwd键返回missing回执。保留原报告与事后对账的分别来源；这是诊断提示词的路径问题，不归责用户，也不改写为正确cwd的MCP联读成功。下一步将状态读取绑定实际Hook所在cwd，业务文件目录另列，在真正需要的普通Work交付中核验采用、续作和退出；不为覆盖原结果重跑诊断。MCP缺元数据/根身份冲突时的守卫，以及上下文读取对Hook转录和CODEX_HOME/sessions的限制保持。原查询不构成状态处理缺陷；后续只补足可发现性：输入回执提示给出JSON编码的实际绑定cwd，状态工具说明指向该定位并明确checkpoint文件也以此为基准，不自动改域或新增独立业务目录参数。
 
 Work云端继续待判：[云安全说明](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-cloud-security)允许任务/项目文件、获准工具以及环境复用或替换，但不保证Accord状态目录属于可保留状态。插件Skill、任务文件与获准remote MCP可组成候选路线；网页不读本机config且安装不部署Hook，原包stdio不能只改成HTTP就获得原控制者身份、事件或状态。需先找到受支持的实际加载与持续绑定方式，缺失职责可由充分原生机制承担，不能凭相同核心默认成立。本次不增加远程服务、安装器或Cloud重试。桌面聚合行仍因云子模式未决保持pending；4selected/7pending、selectionFinal=false与父级验收集合不变，开发路线确定不等于功能准入。
 

@@ -49,7 +49,7 @@ const TOOL = Object.freeze({
   name: 'inspect_task_state',
   description: 'Read saved Accord task state; request includeContext for bounded native context observations, or contextAssessment to assess one sourced work span against a prior observation. Current host identity comes from call metadata, separately from recorded session metadata. A fit is advice only; no permission, completion, takeover or handoff control is established.',
   inputSchema: {type: 'object', properties: {cwd: {type: 'string', minLength: 1, maxLength: 4096,
-    description: 'Absolute existing workspace directory. Caller-selected scope, not host-attested current cwd.'},
+    description: 'Absolute existing workspace directory. Reconcile the cwd in the native Hook receipt or recovery locators: it keys task state and is the base for checkpoint file references, which may differ from the directory containing business files. Caller-selected scope, not host-attested current cwd; do not silently substitute another scope.'},
     includeContext: {type: 'boolean', description: 'Also read current Hook-bound context counters. Defaults to false; missing or stale evidence remains unknown.'},
     contextMaxAgeMs: {type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER,
       description: 'Requires includeContext or contextAssessment. Caller-selected age limit for the native response boundary; defaults to 30000 ms and does not extend caller evidence.'},
