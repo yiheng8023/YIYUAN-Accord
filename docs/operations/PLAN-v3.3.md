@@ -136,6 +136,16 @@ VS Code兼容编辑器优先作为同一扩展适配族，Xcode、JetBrains等�
 
 验收沿用A01–A08：A02先核验候选处置、已纳入入口集合和对应依据，再绑定该集合的普通交付与生命周期；A01/A03/A06核验实际承诺，A08检查组合后的完整性与净影响。三个父范围现已定义，保留17个必要claim/scope及全部质量底线。观察载体entry与被验入口subjectEntries分开：适用性覆盖当前全部11个OpenAI入口，后两范围严格对应同一选定集合，结果按入口逐项核对。当前4项selected表示继续纳入开发，其余7项pending，selectionFinal=false；这三项因此尚不能准入，定义数量增加不计为通过。待判不等于不适用；没有集合的有效最终判断与实际证据，整体资格仍不成立。
 
+2026-09-27将IDE内置Agent与外部执行者调用IDE工具分开判断，避免把组件发现当整包接通：
+
+| 路线 | 复用与职责 | 当前决定及最小未完条件 |
+|---|---|---|
+| JetBrains内置Codex | [Skill导入](https://www.jetbrains.com/help/ai-assistant/agent-skills.html)和[Agents的MCP传入](https://www.jetbrains.com/help/ai-assistant/codex-agent.html)提供组件通道；[聊天Project rules](https://www.jetbrains.com/help/ai-assistant/configure-agent-behavior.html)不替代所选Codex的指导 | 保持待判。需要实际控制者的入口/新输入、原生身份与状态/恢复对应；不要求用户改AGENTS.md，不以导入技能推定Hook已部署 |
+| Xcode内置Codex | [专用配置与组件导入](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)作用于Xcode启动的Agent | 保持待判。需具体构建的入口/事件、MCP身份、转录及恢复契约；配置根不证明这些条件，不能借用普通CLI或macOS CI |
+| 外部Codex使用IDE工具 | [JetBrains IDE MCP](https://www.jetbrains.com/help/idea/mcp-server.html)与[Apple mcpbridge](https://developer.apple.com/documentation/xcode/giving-external-agents-access-to-xcode/)均提供官方连接路线 | 确定复用已有Codex执行链的组合开发路线：Accord与任务接续留在外部执行者，IDE提供获准项目工具。实际连接、目标、效果和退出仍待验证，不改变两项内置入口的pending状态 |
+
+这项选择不新增IDE控制器、身份合成或Hook转换层。内置入口缺失的职责可由充分原生机制承担，但须有明确对应；外部组合不绕过内置的不确定性，也不要求先完成整项验收才能开发。IDE MCP的启动cwd与业务项目分别绑定；启用或自动配置会启动服务、改变连接或客户端设置，需具体授权和恢复责任，不能用当前来源审查代替。项目工具暴露和执行确认保留用户选择；停止客户端或回滚文件不自动撤销IDE内已发生的全部效果。用户没有Mac/JetBrains仍沿官方契约和可靠既有证据推进，不要求采购或为取证安装。本次仅收敛工程路线，4selected/7pending、父级集合和既有质量底线不变。
+
 ## 跨项目与执行位置的连续性
 
 2026-09-21用户两张截图直接显示同一批处理对话从“最近”移到Playground项目下，确认该客户端的手动归属调整入口。后续只读接口对同一task返回projectId=null、原批处理cwd和notLoaded；它与截图之间的具体操作序列未观测，不推断移动失败或已经回退。侧栏归属、对话历史、cwd/仓库、权限及实际进程分别核对；项目移动可作为保留原对话的接续候选，但不据位置变化宣称上下文减负或代码/执行状态迁移。当前调用工具未暴露任意项目移动接口，不以改本地配置或数据库代替受支持操作。原图与限定元数据保存在私有accord-project-assignment-observation-20260921-01；本观察不改变原批处理结果判定，也不移动或重新运行该任务。

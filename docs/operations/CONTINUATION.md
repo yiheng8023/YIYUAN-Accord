@@ -33,9 +33,11 @@
 | 正式验收 | 17必要scope，11有定义、6未绑定，活动case共12；caseBindingGaps为空只说明声明齐全。48d4dbeb上的普通CLI有效用户环境文稿交付与systemic-correction两案已实际准入，保留精确候选与条件。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08及functionalCompletion/candidateEligible仍未完成。 |
 | 进度口径 | 先前50–65%功能/20–30%发布就绪是缺少稳定分母的工程粗估，不作为跨任务可比较总进度。当前按可用功能、已消除断点和剩余关键路径报告，正式A01–A08事实另列。 |
 
-2026-09-27，入口模式记录a7c6d8b0的[CI36321744769](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36321744769)已按精确headSha和全部11项job回读成功，核验责任闭合。
+2026-09-27，Work路线候选9211ca60的[CI36326406900](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36326406900)已按精确headSha和全部11项job回读成功，核验责任闭合；后续纯观察记录不据此冒充该候选以外的功能验收。前序入口模式记录a7c6d8b0的[CI36321744769](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36321744769)同样已11/11成功，无需重复轮询。
 
 ## 本批完成与实际未完项
+
+JetBrains/Xcode的接入判断已区分内置Agent和外部Codex调用IDE工具：外部路线确定复用现有执行链，无需另造IDE执行器；内置两行继续待判，关键缺口缩到具体控制者的入口/新输入、原生身份及状态/恢复契约。Skill导入、IDE聊天规则和MCP可连接各自只证明相应通道；不借外部路线或macOS CI代验内置。后续据明确接口补实际断点，不要求用户采购/安装，也不再重复查已有组件目录。详见PLAN入口路线表，来源与审查在accord-ide-routes-20260927-01。
 
 Work本地子模式复用现包路线已有真实初步采用：用户发送的唯一只读任务01a0e34c-7118-7621-a149-4142d960438f已完成，原生历史确认入口指导、UserPromptSubmit及一次状态MCP调用；同轮thread/session/turn和实际cwd输入回执已对账。Root诊断提示词错误固定repo cwd，实际projectless对话在生成目录，原查询因此查到另一键；原missing回执与报告保留，不将事后文件对账冒充正确cwd的MCP联读。下一真实Work任务应区分Hook绑定cwd与业务目录，再验必要交付、续作及退出，不重跑本次诊断。Work云端加载/绑定与状态存续仍待判；整体4selected/7pending及完整验收未完。原件见私有accord-work-entry-composition-20260927-01的work-local-readback与root-readback，未安装、授信或改runtime。当前工具已能识别和只读跟进该Work本地任务；其kind=codex不能单独用来否定Work入口。
 

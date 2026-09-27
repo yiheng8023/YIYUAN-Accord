@@ -2419,3 +2419,13 @@ Root另行完成接续当前段落与四表行的最小修订，历史案例/授
 Root准备的提示词把inspect的cwd固定为C:\Projects\YIYUAN-Accord，原调用因此查询同一session的另一个cwd键，返回missing-stored-input-receipt。Work正确保留缺口并完成两份报告。Root随后直接核原生item_completed.result与报告native-state.json解析对象完全相等，再按现有location算法只读核实际cwd对应输入文件：回执存在、epoch和turn与本轮Hook一致，而repo cwd对应输入键不存在。该归因属于Root事后原件核对；原调用和报告未改写，不能称正确cwd的MCP联读通过，也不把缺口归责用户或据此判为Work加载失败。无需重跑原案或放宽身份守卫。
 
 私有accord-work-entry-composition-20260927-01保留work-local-readback两报告及其摘要，root-readback保存原生身份/Hook/MCP事件/终态切片、实际cwd输入快照及对账。独立只读复核确认原件Hash、原生事件和两目录键差异；原查询的needsNativeReplay还带有repo工作区failure watermark，不能解释为此次Work捕获失败。实际cwd回执仍保留且没有绑定检查点，轮次结束不等于状态退休或资源生命周期已验。后续真实任务区分宿主状态目录与业务文件目录；本次只支持实际入口指导、工具参与及有限绑定事实，未新增正式准入、完整恢复、自动交接或资源退出结论。未向原任务追加消息，未创建其它执行器、安装、授信、修改共享配置、状态退休或归档历史。
+
+## IDE内置与外部工具组合的路线收敛（2026-09-27）
+
+按当前入口缺口实际读取JetBrains 2026.2的Codex、Skill、Agent instructions、MCP及IDE MCP Server正文；Apple两篇组件定制和外部Agent接入正文通过官方Markdown读取，另由独立只读评审核对Xcode职责。源码与来源支持复用现有Codex执行链调用IDE工具：外部执行者保留Accord入口、状态与原生恢复，IDE提供获准项目能力。该组合路线与IDE内置Codex分别判断，不将外部方式或macOS CI用于关闭内置入口。
+
+JetBrains的技能导入、MCP工作目录/暴露范围及Agents传入设置分别核对，AI Assistant聊天Project rules不能替代所选Codex指导。Xcode专用配置及组件导入不证明Hook事件、MCP原生身份或转录布局；既有mcpbridge按其自身许可和打开项目条件判断，不混入其它预览服务。两项内置的最小决定条件明确为具体控制者的入口/新输入、身份与状态/恢复契约，可来自官方接口、源码或可靠既有记录，不要求先有整项PASS或采购设备。
+
+三父scope/三case的两IDE basis及入口说明同步，原历史观察保留；状态、subjectEntries、expected、17必要范围和验收底线不改。没有已证缺陷要求新增runtime、身份合成、控制器或安装器，因此本批仅修正路线和证据定位。未安装、连接、改配置、启用权限或派发模型试验；没有改变用户/第三方Skill。私有accord-ide-routes-20260927-01保留变更前原件、实际来源和Apple正文、独立审查及本地核验。
+
+本批六视图一致性、既有入口契约检查和verify均通过，独立来源/路线复核无阻断。推进期间前序9211ca60的CI36326406900完成，精确headSha及11个job均已回读success，原回执保留ci-9211ca60.json，该托管责任闭合。当前仅来源/路线观察同步，没有代码或判据变化，按记录类工序不重跑整套矩阵。

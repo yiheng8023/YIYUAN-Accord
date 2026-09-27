@@ -313,8 +313,8 @@
           "name": "Codex JetBrains 集成",
           "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
           "execution": "JetBrains自有Codex执行集成；保留具体后端差异",
-          "environment": "不是 VS Code 扩展的同一入口；不继承其配置或插件效果。",
-          "observation": "2026-09-15通过OpenAI IDE页核对JetBrains官方Codex说明（https://www.jetbrains.com/help/ai-assistant/codex-agent.html，页标2026-08-05）：支持AGENTS.md、Skill发现/调用、受设置控制的MCP传入及独立权限/模式。存在可比较的复用路线；未安装或运行本机集成，Accord整包/Hook及持久恢复仍未验证，不借用VS Code证据。",
+          "environment": "IDE内置Codex与外部Codex使用IDE工具分别判断。内置Skill可导入IDE/项目/全局存储；MCP须选择正确进程cwd、暴露范围并由Agents设置传入，不自动获得Accord Hook回执或原生身份。AI Assistant聊天Project rules不等于所选Codex的指令。外部组合让既有Codex保留协调和恢复，IDE提供获准项目工具，不能替代内置入口验收。",
+          "observation": "2026-09-15通过OpenAI IDE页核对JetBrains官方Codex说明（https://www.jetbrains.com/help/ai-assistant/codex-agent.html，页标2026-08-05）：支持AGENTS.md、Skill发现/调用、受设置控制的MCP传入及独立权限/模式。存在可比较的复用路线；未安装或运行本机集成，Accord整包/Hook及持久恢复仍未验证，不借用VS Code证据。 2026-09-27实读JetBrains 2026.2 Codex、Skills、Agent instructions、MCP与IDE MCP Server正文，明确导入技能、配置工具和整包采用分离。内置最小待核条件收敛到实际控制者的入口/输入、MCP元数据、状态与恢复对应，不先写猜测性适配器。外部Codex接IDE MCP可作为既有执行者的组合开发路线；自动配置会改客户端设置，授权、目标项目、暴露工具、取消后效果和进程归属需实际绑定。无安装/启用/连接，保持内置pending/unverified；来源与边界见accord-ide-routes-20260927-01。",
           "currentEffect": "unverified"
         },
         {
@@ -323,8 +323,8 @@
           "name": "Codex Xcode 集成",
           "officialSource": "https://learn.chatgpt.com/docs/codex/ide",
           "execution": "Xcode自有Codex执行集成；保留专用配置与后端差异",
-          "environment": "官方配置根为~/Library/Developer/Xcode/CodingAssistant/codex，仅影响Xcode内启动的Agent；命令/工具权限和插件组件安装由Xcode管理，不默认继承普通CLI安装与信任。",
-          "observation": "2026-09-15限定复核OpenAI IDE页及Apple Extending and customizing agents（https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/，实读其DocC JSON）：支持专用Agent配置、MCP/自定义Skill和插件组件导入。可比较从现有Accord包复用指导/模块并通过Xcode权限接通的路径，无需先复制一套业务实现；文档未证明Accord整包或Hook支持、自动续作及恢复，仍待核具体构建和完整职责。未安装、运行或借用VSCode验收。",
+          "environment": "内置Codex使用~/Library/Developer/Xcode/CodingAssistant/codex专用配置和Xcode权限/组件导入，不能默认继承普通CLI整包。外部Codex通过官方mcpbridge调用Xcode是另一组合：协调、回执与恢复留在外部执行者，IDE提供项目工具；按该路径绑定Xcode许可和打开的项目，不与其它预览服务或内置Agent混判。",
+          "observation": "2026-09-15限定复核OpenAI IDE页及Apple Extending and customizing agents（https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/，实读其DocC JSON）：支持专用Agent配置、MCP/自定义Skill和插件组件导入。可比较从现有Accord包复用指导/模块并通过Xcode权限接通的路径，无需先复制一套业务实现；文档未证明Accord整包或Hook支持、自动续作及恢复，仍待核具体构建和完整职责。未安装、运行或借用VSCode验收。 2026-09-27实读Apple两篇组件定制/外部Agent正文（官方Markdown）并独立复核：内置组件入口存在，但未给出原包Hook、原生MCP身份和转录/状态契约；外部Codex+mcpbridge确定为复用现包的独立组合路线，不能把外部或macOS CI证据移给内置。当前缺口是具体构建的控制者接入契约，不是购买本机设备；无依据新增runtime、合成身份或新服务。未安装或执行，内置pending/unverified保持；私有来源accord-ide-routes-20260927-01。",
           "currentEffect": "unverified"
         },
         {
@@ -5080,7 +5080,7 @@
               },
               "cx-jetbrains": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：既有Skill/MCP资料提供候选通路；尚缺该后端上游指导或充分原生替代、暂停/未知效果保护、持久状态与退出责任映射。先补职责可行路线，再验真实入口；未安装不等于不适用。"
+                "basis": "待判（IDE内置）：Skill导入和MCP传入仅是组件通道，仍须核同一控制者的入口/输入、原生身份及恢复契约；AI Assistant聊天规则不能替代Codex指导。外部Codex接IDE MCP确定为复用现包的独立组合路线，不代验内置集成，不因未安装排除。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -5092,7 +5092,7 @@
               },
               "cx-xcode": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：专用配置根及组件导入是候选通道；尚需明确该后端的上游保障、暂停/状态恢复、权限与退出承担者。先补职责可行路线，再验实例；不借用VS Code，也不因缺本地设备排除。"
+                "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
             "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
@@ -5170,7 +5170,7 @@
               },
               "cx-jetbrains": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：既有Skill/MCP资料提供候选通路；尚缺该后端上游指导或充分原生替代、暂停/未知效果保护、持久状态与退出责任映射。先补职责可行路线，再验真实入口；未安装不等于不适用。"
+                "basis": "待判（IDE内置）：Skill导入和MCP传入仅是组件通道，仍须核同一控制者的入口/输入、原生身份及恢复契约；AI Assistant聊天规则不能替代Codex指导。外部Codex接IDE MCP确定为复用现包的独立组合路线，不代验内置集成，不因未安装排除。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -5182,7 +5182,7 @@
               },
               "cx-xcode": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：专用配置根及组件导入是候选通道；尚需明确该后端的上游保障、暂停/状态恢复、权限与退出承担者。先补职责可行路线，再验实例；不借用VS Code，也不因缺本地设备排除。"
+                "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
             "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
@@ -5259,7 +5259,7 @@
               },
               "cx-jetbrains": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：既有Skill/MCP资料提供候选通路；尚缺该后端上游指导或充分原生替代、暂停/未知效果保护、持久状态与退出责任映射。先补职责可行路线，再验真实入口；未安装不等于不适用。"
+                "basis": "待判（IDE内置）：Skill导入和MCP传入仅是组件通道，仍须核同一控制者的入口/输入、原生身份及恢复契约；AI Assistant聊天规则不能替代Codex指导。外部Codex接IDE MCP确定为复用现包的独立组合路线，不代验内置集成，不因未安装排除。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -5271,7 +5271,7 @@
               },
               "cx-xcode": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：专用配置根及组件导入是候选通道；尚需明确该后端的上游保障、暂停/状态恢复、权限与退出承担者。先补职责可行路线，再验实例；不借用VS Code，也不因缺本地设备排除。"
+                "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
             "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
@@ -6022,7 +6022,7 @@
               },
               "cx-jetbrains": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：既有Skill/MCP资料提供候选通路；尚缺该后端上游指导或充分原生替代、暂停/未知效果保护、持久状态与退出责任映射。先补职责可行路线，再验真实入口；未安装不等于不适用。"
+                "basis": "待判（IDE内置）：Skill导入和MCP传入仅是组件通道，仍须核同一控制者的入口/输入、原生身份及恢复契约；AI Assistant聊天规则不能替代Codex指导。外部Codex接IDE MCP确定为复用现包的独立组合路线，不代验内置集成，不因未安装排除。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -6034,7 +6034,7 @@
               },
               "cx-xcode": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：专用配置根及组件导入是候选通道；尚需明确该后端的上游保障、暂停/状态恢复、权限与退出承担者。先补职责可行路线，再验实例；不借用VS Code，也不因缺本地设备排除。"
+                "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
             "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
@@ -6194,7 +6194,7 @@
               },
               "cx-jetbrains": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：既有Skill/MCP资料提供候选通路；尚缺该后端上游指导或充分原生替代、暂停/未知效果保护、持久状态与退出责任映射。先补职责可行路线，再验真实入口；未安装不等于不适用。"
+                "basis": "待判（IDE内置）：Skill导入和MCP传入仅是组件通道，仍须核同一控制者的入口/输入、原生身份及恢复契约；AI Assistant聊天规则不能替代Codex指导。外部Codex接IDE MCP确定为复用现包的独立组合路线，不代验内置集成，不因未安装排除。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -6206,7 +6206,7 @@
               },
               "cx-xcode": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：专用配置根及组件导入是候选通道；尚需明确该后端的上游保障、暂停/状态恢复、权限与退出承担者。先补职责可行路线，再验实例；不借用VS Code，也不因缺本地设备排除。"
+                "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
             "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
@@ -6334,7 +6334,7 @@
               },
               "cx-jetbrains": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：既有Skill/MCP资料提供候选通路；尚缺该后端上游指导或充分原生替代、暂停/未知效果保护、持久状态与退出责任映射。先补职责可行路线，再验真实入口；未安装不等于不适用。"
+                "basis": "待判（IDE内置）：Skill导入和MCP传入仅是组件通道，仍须核同一控制者的入口/输入、原生身份及恢复契约；AI Assistant聊天规则不能替代Codex指导。外部Codex接IDE MCP确定为复用现包的独立组合路线，不代验内置集成，不因未安装排除。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -6346,7 +6346,7 @@
               },
               "cx-xcode": {
                 "status": "pending",
-                "basis": "待判（独立IDE集成）：专用配置根及组件导入是候选通道；尚需明确该后端的上游保障、暂停/状态恢复、权限与退出承担者。先补职责可行路线，再验实例；不借用VS Code，也不因缺本地设备排除。"
+                "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
             "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
