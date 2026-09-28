@@ -23,16 +23,16 @@
 
 ## 最近核实的状态
 
-本机采用准备（2026-09-28）：已为精确提交5ef062e9的28065830候选准备独立一次性执行器，复用已核Windows进程回收助手，冻结候选及执行源码；14项离线检查与独立审查通过。当前Codex界面实际为OpenAI.Codex路径下的ChatGPT.exe，不能只看codex.exe判断旧消费者退出。执行前要求相关客户端关闭，逐命令核消费者、阶段登记及无关配置；故障保留原异常和后态，不自动恢复旧配置或重放安装。原生新进程发现另核固定对象与实际CODEX_HOME，准备不代验采用。源码CI36357297098已按完整5ef062e9提交及11个job回读成功；执行还须具备新的共享更新许可及消费者退出条件；截至本次记录尚未安装或派发后台执行器。方案与证据在私有accord-local-adoption-20260928-01，不重放历史UPDATE-PREPARATION；后续只需要真正必要的一次本人操作，接续与完整验收保持。
+2026-09-28本机采用已完成并独立回读：用户在原许可下关闭客户端后运行修正版一次性入口，28065830的24文件逐字节匹配固定5ef062e9，旧包恢复副本24文件匹配f8ecac46。原始RPC确认5个启用Skill、6个启用且可信Hook来自新路径；5条原生命令及1次发现共6个进程域自然退出、无强停、域内活动0。当前主线程已收到新包入口及工作目录提示，MCP目录含新提示且实际调用成功，原检查点与未完责任保留；新worker在更新结束后创建，但精确cwd未独立读取，不外推全部消费者或其它入口。5ef062e9的[CI36357297098](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36357297098)已按完整SHA/11job成功闭合，不重复轮询。
 
-本次更新已获用户明确授权；用户返回后，独立读回仍为完整27100450旧包/旧登记，新缓存与安装回执未出现，不能把操作完成当成采用成功。当前可重现准备期配置总摘要变化导致停止，但原启动器没有早期日志，首次错误未知。私有准备器已改为核固定Accord目标后绑定执行时的新鲜配置，备份前及阶段中仍拒绝漂移；前台启动器保存每次尝试及子进程日志，异常后确认所属子进程退出才提示重开客户端。19项准备检查、3项Windows启动/中断检查和独立复核通过；原生只读plugin list另证当前CLI可读配置、旧包启用、配置不变及所属进程自然退出。原授权继续有效，同一目标待关闭客户端后的修正版一次启动；未执行安装或新增行为验收。原件与修正见accord-local-adoption-20260928-01/readback-repair.md。
+首次操作后的旧包读回、旧配置摘要阻断和早期日志缺失保留原身份，不能倒推首次具体错误；准备器修正及19+3检查、独立复核见[前一记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/1f2a6bf85844a945a6b565c3bb69f03c21f5ba9a/docs/operations/CONTINUATION.md)。当前配置出现的唯一后续语义变化是原生电脑控制管道目录，最新值保持；经原安装后摘要核对的派生副本证明安装时除Accord登记外与执行前配置相同，该副本不冒称新找到的原件。原配置、旧包和运行证据保留，空自有workspace已清理、79份受保护文件Hash未变。本次许可已消耗，不再运行该一次性更新器；旧preflight对孤立相对路径Node的覆盖局限须保留，未来不原样盲复用。私有原件：accord-local-adoption-20260928-01/ACTUAL-ADOPTION.md、root-adoption-readback.json、closeout.json。
 
-2026-09-28能力指导修正：既有r29的窄语义判断、必要状态、可计算事实查询、未知/置信/正确性分离及反馈职责，原先主要留在开发计划；现已接入分发的能力协调Skill。第三方Skill代选职责与原生输入数组执行能力本已存在，本轮保留而不另建调用器；自动选用与执行闭环仍沿既有普通任务验证。第三方源文件、安装与主模型保持；用户提醒只作防漏项，不改变现有关键依赖。此为最小指导连接修复，不是自动选型、普通行为或A项通过；继续原入口与连续性工序，避免另开同类试验。源码候选尚未安装，旧包和历史证据保持原身份。核验与审查原件：私有accord-capability-guidance-20260928-01。
+能力指导中的窄语义判断、必要状态、事实查询、未知/置信/正确性分离和反馈分工已随此包实际部署；第三方Skill的原生隐式匹配与协调者代选仍分开验证，不修改第三方源文件。用户提醒只作防漏项，继续既有入口与连续性普通工作组合，不另开同类试验。本次安装和同线程恢复不提升A01–A08、functionalCompletion或candidateEligible，也不证明普遍行为或发布通过。
 
 | 项目 | 已核事实与限制 |
 |---|---|
 | 仓库 | `main`的日常开发与记录持续推进，当前HEAD/上游及工作区以实时Git核对。最新文稿两案准入绑定48d4dbeb，较早五阶段普通两案绑定60219fff，SDK基础机制两案绑定029a1c58；这些是各自执行/准入对象，不是永久当前HEAD，不能机械合并其验收效力。 |
-| 源与本机安装 | 源码候选为3.3.0-dev.1+codex.20260928065830（24文件、SHA bfc40cf018bad0b6abbc91a17aa23ddb08770c5317fbd83772387d49f98e3e05）；本机现装仍为3.3.0-dev.1+codex.20260927100450（24文件、SHA ee962ced679b1cafb6babf92204bfe61d230df8b1fb64fd3956ce92832c14b57，市场固定f8ecac46）。以下安装观察保持原包身份：原生安装、逐文件Git字节与新进程5Skill/6可信Hook路径均核实。旧包原件独立备份保持，无关配置不变；宿主管理的旧缓存已按原生替换退出。当前MCP与新helper可读取同一未完状态，仍不声称所有既有Desktop/MCP消费者已刷新。 |
+| 源与本机安装 | 源码候选与本机现装均为3.3.0-dev.1+codex.20260928065830（24文件、SHA bfc40cf018bad0b6abbc91a17aa23ddb08770c5317fbd83772387d49f98e3e05），本机市场固定5ef062e9且启用。已独立核安装Git原始字节、新进程5Skill/6可信Hook、旧包恢复副本和6个执行域退出；当前线程新Hook/MCP参与已观察。旧27100450及更早安装记录保持各自时点和证据范围，不能外推全部消费者、普通行为或完整生命周期验收。 |
 | 托管检查 | 最新声明/文稿执行候选48d4dbeb的[CI36299563573](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36299563573)已按精确headSha及全部11个job回读成功，核验责任闭合。运行时修复f8ecac46的[CI36287689800](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36287689800)已按精确headSha及全部job核对，11/11成功；包括Windows/Linux/macOS回归与Linux/macOS原生生命周期。此批托管责任闭合，未重放旧失败运行。 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
 | 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
 | 根任务状态 | 本线程已有未完检查点；回放需求、输入覆盖、修订号及宿主条件按每次实际原生读取核对。此前unbound、10条输入、rev5和旧宿主版本都是历史观察，不再作为当前值使用。检查点、Goal及协作模式分别判断；canContinue=false不等于项目暂停/取消或隐式Goal，完整Goal与模式状态不能从检查点推断。 |
@@ -40,7 +40,7 @@
 | 正式验收 | 17必要scope，11有定义、6未绑定，活动case共12；caseBindingGaps为空只说明声明齐全。48d4dbeb上的普通CLI有效用户环境文稿交付与systemic-correction两案已实际准入，保留精确候选与条件。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08及functionalCompletion/candidateEligible仍未完成。 |
 | 进度口径 | 截止3.3正式发布及公共对象核验；后续部署、传播、市场及治理不计。先前50–65%功能/20–30%发布就绪缺少稳定分母，不能作为可比较总进度。按现有工作包的实际成果、剩余断点和关键路径评估，正式A01–A08事实另列。取消Claude后续适配不减少当前17范围。 |
 
-735a5919范围/债务对齐的[CI36343293965](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36343293965)已按精确SHA和11个job读回成功。其后退役当前runtime及包内副本未注册的Claude PostToolBatch分支；源码包更新为28040031，仅manifest与accord-hook两文件改变，SessionStart及状态/MCP实现保持。8项不支持事件/无写入、启动、暂停与压缩恢复回归、verify及host-check通过；本机仍27100450，未安装或刷新已有消费者，新包实际采用仍待核实，托管结果见下文。原233529候选和原准入保留原条件，旧UPDATE-PREPARATION不能直接用于此新候选。
+735a5919范围/债务对齐的[CI36343293965](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36343293965)已按精确SHA和11个job读回成功。其后退役当前runtime及包内副本未注册的Claude PostToolBatch分支；源码包更新为28040031，仅manifest与accord-hook两文件改变，SessionStart及状态/MCP实现保持。8项不支持事件/无写入、启动、暂停与压缩恢复回归、verify及host-check通过；该源码检查时本机仍27100450，未进行安装或刷新；后续28065830采用见当前状态，托管结果见下文。原233529候选和原准入保留原条件，旧UPDATE-PREPARATION不能直接用于此新候选。
 
 **当前IDE核对已结束**：用户指定[核对 Accord IDE 入口状态](codex://threads/01a0e4dd-45c9-7a82-97f3-2d7bc0e9ae1a)为v2对象；实际cwd正确，原生vscode/codex_vscode、CLI0.155.0-alpha.16.3、Sol/xhigh/default，74.323秒completed。原生developer上下文在首个工具前包含27100450入口；唯一一次状态MCP的thread/turn/hostVersion均与会话对应。返回present=false、revision0、needsNativeReplay=true及两级失败水印，没有工具调用错误；这证明有限入口/工具参与，不证明输入恢复或完整IDE支持。官方支持边界、4selected/7pending、预期结果和selectionFinal=false保持。
 
@@ -48,7 +48,7 @@
 
 现场共享workspace水印来自9月12日，v2会话水印在v2本轮开始附近生成；未找到该次Hook首错回执。隔离合成检查确认旧workspace水印可阻止后来session捕获首条普通输入，同时保留其它会话隔离；这只是可产生该形态的机制，不冒充现场根因。诊断主动禁止replay，因此尚未验证正常任务的自主恢复。不得删水印或以缺文件/mtime猜测新会话来求通过。完整回读、现场定位与合成结果在accord-entry-current-20260928-01/ide-native-readback.json及watermark-mechanism.json。
 
-同次只读核对现装27100450的24文件/ee962ced摘要、Git市场f8ecac46/启用状态及独立恢复副本均匹配；配置当前摘要804f0d138c0b539bd7a7b8068c0f0601c29196f0b878aa2102b7b7d15f0a84cd与旧21b7记录不同，期间两次读取稳定，未追查或覆盖无关变化。新28040031仍未安装。官方本地插件说明要求更新后重启、CLI新会话采用，未提供活动轮次及后置Hook可安全热切换的保证；不能据此省去健康执行者、结束旧回调和新鲜恢复材料。共享更新/Cloud的新执行权限仍须对应具体动作，旧单次授权不复用。
+同次只读核对现装27100450的24文件/ee962ced摘要、Git市场f8ecac46/启用状态及独立恢复副本均匹配；配置当前摘要804f0d138c0b539bd7a7b8068c0f0601c29196f0b878aa2102b7b7d15f0a84cd与旧21b7记录不同，期间两次读取稳定，未追查或覆盖无关变化。当时28040031未单独安装，后续采用28065830的结果见当前状态。官方本地插件说明要求更新后重启、CLI新会话采用，未提供活动轮次及后置Hook可安全热切换的保证；不能据此省去健康执行者、结束旧回调和新鲜恢复材料。共享更新/Cloud的新执行权限仍须对应具体动作，旧单次授权不复用。
 
 fcf88bdf源码候选的CI36346771569与562ee280记录/判定对齐的CI36349275184，现已分别按完整SHA及全部11个job回读success；这两项责任闭合，不再轮询。
 
@@ -74,7 +74,7 @@ fcf88bdf源码候选的CI36346771569与562ee280记录/判定对齐的CI363492751
 
 ## 本批完成与实际未完项
 
-cb359d42的[CI36330545111](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36330545111)已按精确headSha与全部11个job回读成功，托管责任闭合；本机仍27100450，新包未安装。随后公开0.144.0-alpha.4的定向Linux检查已完成：[CI36334881373](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36334881373)绑定cd2157c8，缺失/空配置两条件均完成原读取前缀及自然退出；27份artifact与ZIP摘要、四份进程/组退出回执及配置不变已独立核对。该机械支线闭合，不再换平台重复探测。
+cb359d42的[CI36330545111](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36330545111)已按精确headSha与全部11个job回读成功，托管责任闭合；该观察时本机仍27100450，新包未安装；后续采用见当前状态。随后公开0.144.0-alpha.4的定向Linux检查已完成：[CI36334881373](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36334881373)绑定cd2157c8，缺失/空配置两条件均完成原读取前缀及自然退出；27份artifact与ZIP摘要、四份进程/组退出回执及配置不变已独立核对。该机械支线闭合，不再换平台重复探测。
 
 随后用户批准的一次只读Cloud诊断已执行并结束：[执行只读运行期诊断](https://chatgpt.com/codex/cloud/tasks/task_e_6ab952faf8cc832bb968dbee906a7c99)在4e44e52a完成两次config/read，报告当前CLI摘要与上述公开件相同、config.toml前后摘要不变；根进程exit0且reader停止，但forced=true、group=alive、recordReleased=false。Root交叉读取界面执行日志和最终摘要；原RPC/resource仍在Cloud私有目录，未独立取回，组成员性质及旧setup根因未知。单次权限已用完，无追加输入、重试或清理。由此定位并用本地假时钟单独重现helper缺口：根已退出时首次组等待耗尽回收预算，终止后仅剩立即采样。三处调用已改为共享原优雅截止点，为终止后观察保留原总预算；这不证明本次Cloud必由该缺口引起。原自然退出判据、旧案例/源码绑定及未完验收保持，详见[诊断与修复](PROCEDURE-v3.3.md#cloud运行期关闭诊断与回收时限修复2026-09-28)。
 
